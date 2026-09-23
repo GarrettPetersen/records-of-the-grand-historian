@@ -36,6 +36,7 @@ const MODEL = process.env.PEOPLE_SPARK_MODEL ?? 'gpt-5.6-luna';
 const WORKER_MAX_BYTES = 48 * 1024;
 const INSTRUCTIONS = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'), 'utf8').trim();
 const COMPACT_SCHEMA = readJson(path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json'));
+const RESPONSE_SCHEMA = path.join(PEOPLE_DIR, 'schema', 'compact-extraction-envelope.schema.json');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -65,20 +66,31 @@ function args(argv) {
 function prompt(target, packet, chunk) {
   const worker = buildPeopleChunkWorkerPacket(packet, chunk);
   const seed = buildCompactPeopleExtractionSeed(buildPeopleChunkPacket(packet, chunk), MODEL);
-  return `Return ONLY one JSON object conforming to the supplied compact extraction schema. Perform person extraction for owned chunk ${chunk.id} of ${target.book}/${target.chapter}. This is sealed packet-only work: do not inspect files, browse, use subagents, or run shell commands. Do not propose edits to source translations; translationRepairs are evidence proposals only. Process every owned unit and candidate, preserve the seed input and run metadata exactly, and do not emit people or claims for read-only context units. Set coverage only when true.\n\n<instructions>\n${INSTRUCTIONS}\n</instructions>\n<schema>\n${JSON.stringify(COMPACT_SCHEMA)}\n</schema>\n<packet>\n${JSON.stringify(worker)}\n</packet>\n<seed>\n${JSON.stringify(seed)}\n</seed>`;
+  return `Return ONLY the required response envelope. Its \"extraction\" value must be one JSON serialization, with no Markdown, of a compact extraction conforming to the supplied compact extraction schema. Perform person extraction for owned chunk ${chunk.id} of ${target.book}/${target.chapter}. This is sealed packet-only work: do not inspect files, browse, use subagents, or run shell commands. Do not propose edits to source translations; translationRepairs are evidence proposals only. Process every owned unit and candidate, preserve the seed input and run metadata exactly, and do not emit people or claims for read-only context units. Set coverage only when true.\n\n<instructions>\n${INSTRUCTIONS}\n</instructions>\n<schema>\n${JSON.stringify(COMPACT_SCHEMA)}\n</schema>\n<packet>\n${JSON.stringify(worker)}\n</packet>\n<seed>\n${JSON.stringify(seed)}\n</seed>`;
 }
 
 function rejectPath(target) { return path.join(PEOPLE_DIR, 'generated', 'rejected-spark-extractions', target.book, `${target.chapter}.json`); }
 
 function runCodex(instructions) {
-  // --output-last-message enables a CLI-generated response schema. The current
-  // API rejects that schema, so capture the ordinary final stdout instead. Host
-  // validation below remains the authoritative full-schema acceptance gate.
-  const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
-  if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
-  if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
-  if (!result.stdout.trim()) throw new Error('Codex Spark returned no final JSON');
-  return { raw: result.stdout, compact: JSON.parse(result.stdout) };
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), '24histories-spark-'));
+  const output = path.join(temp, 'output.json');
+  let raw = null;
+  try {
+    // The API cannot express the compact schema's intentionally open fact-value
+    // objects. A closed envelope guarantees transport JSON; host validation below
+    // remains the authoritative full-schema acceptance gate for its payload.
+    const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--output-schema', RESPONSE_SCHEMA, '--output-last-message', output, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
+    if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
+    if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
+    if (!fs.existsSync(output)) throw new Error('Codex Spark returned no final JSON');
+    const envelope = JSON.parse(fs.readFileSync(output, 'utf8'));
+    if (typeof envelope.extraction !== 'string') throw new Error('Codex Spark envelope lacks an extraction string');
+    raw = envelope.extraction;
+    return { raw, compact: JSON.parse(raw) };
+  } catch (error) {
+    error.sparkOutput = raw;
+    throw error;
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 }
 
 function planSparkChunks(packet) {
