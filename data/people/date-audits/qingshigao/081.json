@@ -4,14 +4,21 @@
   "book": "qingshigao",
   "chapter": "081",
   "sourceHash": "sha256:2c274a843c8d5f4041eb7836553f519e6fe5008e2df071b51214d84ada8c455f",
-  "extractionHash": "sha256:3559a2b2f759fc0b26c60e4f2915c4d1f040190fddb0aef463cc426b3d336e3e",
-  "status": "needs-revision",
+  "extractionHash": "sha256:e2f6a6a04fc93371ac024a799863c9c4cb729828a54f1a52f66f95f03c25a5db",
+  "status": "research-blocked",
   "reviewer": {
-    "name": "Codex (independent manual source review)",
-    "independentOfExtractor": true
+    "name": "Codex independent source reviewer",
+    "independentOfExtractor": true,
+    "workers": [
+      {
+        "name": "Codex independent source reviewer",
+        "agentId": "fresh-audit-qingshigao081",
+        "independentOfExtractor": true
+      }
+    ]
   },
-  "reviewedAt": "2026-09-23T20:00:00.000Z",
-  "summary": "Read all 119 available Chinese units and checked all fourteen dated claims, five active-date hints, and five extracted people. The dated personal events for Buxi, Ligdan Khan, Kökege Erjen, and Burne are grounded in the five historical sentences at the chapter's opening. Two extracted dates are not personal life evidence: 明 in the Little Prince's genealogy dates the Ming Chahar reference, not the unnamed Little Prince's entire life, and 康熙十四年 dates Burne's rebellion, not his father Kökege Erjen. Those two claims and the paired Little Prince hint require removal or replacement with an explicitly nonpersonal genealogy context before fresh review.",
+  "reviewedAt": "2026-09-23T11:21:11.147Z",
+  "summary": "Fresh independent canonical chronology review after the Qingshigao 081 repair. All 119 Chinese units, all 19 temporal or active-hint items, and all five extracted people were checked against the current canonical extraction. Buxi’s Jiajing act, Ligdan Khan’s Tiancong 6 death, Kökege Erjen’s own 1632 submission, and Burne’s Kangxi 14 rebellion and execution have correct event ownership and year-level conversions. The repair correctly removes the false personal chronology formerly borrowed from the Little Prince’s Ming genealogy and from Burne’s later rebellion. Those source-context references remain explicit research holds, so this complete fresh audit is research-blocked rather than date approval. No source, extraction, candidate, curation, or publication edit was made.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -136,241 +143,245 @@
   "itemChecks": [
     {
       "id": "claim-5",
-      "verdict": "incorrect",
-      "event": "The Ming Chahar genealogy names an earlier Little Prince.",
-      "reason": "明 modifies the Chahar historical reference; 元裔小王子後 identifies descent from an earlier Yuan royal collateral line. It does not establish that this unnamed Little Prince was personally active through all AD 1368–1644.",
+      "verdict": "research-blocked",
+      "event": "Little Prince: Ming-period genealogical reference, not a personal life date.",
+      "reason": "The phrase 明 qualifies the historical genealogy of the Chahar name and its Yuan collateral descent. It neither names a personal act nor supplies an endpoint for the unnamed Little Prince; retaining the source-specific hold is correct.",
       "evidence": [
         {
           "unit": "s0006",
-          "quote": "明插漢，本元裔小王子後"
+          "quote": "明插漢，本元裔小王子後。"
         }
       ]
     },
     {
       "id": "claim-8",
       "verdict": "supported",
-      "event": "Buxi pastured at Chahar during the Jiajing reign.",
-      "reason": "嘉靖間 explicitly dates Buxi's named pastoral action to the Jiajing reign. The retained interval is a reign-level context, not an invented exact year.",
+      "event": "Buxi pastures his people in Chahar during Jiajing.",
+      "reason": "嘉靖間 directly modifies Buxi’s own pasturing act. The conventional Jiajing reign labels AD 1522–1566 are preserved as a broad reign window rather than a claim that he was active throughout every year.",
       "evidence": [
         {
           "unit": "s0007",
-          "quote": "嘉靖間，布希駐牧察哈爾之地"
+          "quote": "嘉靖間，布希駐牧察哈爾之地，因以名部。"
         }
       ]
     },
     {
       "id": "claim-9",
       "verdict": "supported",
-      "event": "Buxi is attested in the Jiajing-era pastoral event.",
-      "reason": "The named action and 嘉靖間 occur in the same source sentence, supporting a reign-level attestation without more precise endpoints.",
+      "event": "Buxi is personally attested by the dated Jiajing pasturing act.",
+      "reason": "This attestation is anchored in Buxi’s explicitly named action in 嘉靖間. The AD 1522–1566 interval represents the named reign’s possible timing, not a birth date or continuous life interval.",
       "evidence": [
         {
           "unit": "s0007",
-          "quote": "嘉靖間，布希駐牧察哈爾之地"
+          "quote": "嘉靖間，布希駐牧察哈爾之地，因以名部。"
         }
       ]
     },
     {
       "id": "claim-12",
       "verdict": "supported",
-      "event": "Ligdan Khan fled and died in Tiancong 6.",
-      "reason": "The sentence explicitly names 林丹汗 and says 走死 under 天聰六年. The supplied AD 1632 conversion is the standard year for Tiancong 6 and is only year-precise.",
+      "event": "Ligdan Khan flees and dies in Tiancong 6.",
+      "reason": "The sentence names Ligdan Khan as the target of the campaign and says 走死. Tiancong 6 conventionally corresponds to AD 1632; no finer Gregorian day or month is asserted.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年，征林丹汗，走死"
+          "quote": "天聰六年，征林丹汗，走死。"
         }
       ]
     },
     {
       "id": "claim-13",
       "verdict": "supported",
-      "event": "Ligdan Khan was the opponent in the Tiancong 6 campaign.",
-      "reason": "征林丹汗 places the campaign against Ligdan in the expressly stated Tiancong 6 context; this is his event, not a later retrospective allusion.",
+      "event": "Ligdan Khan is defeated and flees in Tiancong 6.",
+      "reason": "The dated military action is explicitly about Ligdan Khan, the sentence’s named object and subject of 走死. The AD 1632 conversion is appropriately limited to the stated regnal year.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年，征林丹汗，走死"
+          "quote": "天聰六年，征林丹汗，走死。"
         }
       ]
     },
     {
       "id": "claim-14",
       "verdict": "supported",
-      "event": "Ligdan Khan is attested in the Tiancong 6 death narrative.",
-      "reason": "His name and death action share the explicit Tiancong 6 date, supporting a single AD 1632 attestation.",
+      "event": "Ligdan Khan is personally attested in Tiancong 6.",
+      "reason": "His own named campaign, flight and death make this a genuine personal dated attestation, not a genealogy or later reception reference.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年，征林丹汗，走死"
+          "quote": "天聰六年，征林丹汗，走死。"
         }
       ]
     },
     {
       "id": "claim-19",
       "verdict": "supported",
-      "event": "Kökege Erjen submitted after Ligdan's death.",
-      "reason": "其子孔果爾額哲來降 immediately continues the explicitly dated Tiancong 6 sentence, identifying Ligdan's son as the submitter in that same event sequence.",
+      "event": "Kökege Erjen submits in Tiancong 6.",
+      "reason": "其子 immediately follows Ligdan Khan’s named death notice and identifies Kökege Erjen as the subject who 來降. The dated submission is his own act in AD 1632.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年，征林丹汗，走死"
+          "quote": "天聰六年，征林丹汗，走死。"
         },
         {
           "unit": "s0009",
-          "quote": "其子孔果爾額哲來降"
+          "quote": "其子孔果爾額哲來降，即其部編旗，駐義州。"
         }
       ]
     },
     {
       "id": "claim-20",
       "verdict": "supported",
-      "event": "Kökege Erjen's people were enrolled in banners and stationed at Yizhou.",
-      "reason": "即其部編旗，駐義州 continues Kökege Erjen's submission in the Tiancong 6 sequence, so the year context belongs to this administrative consequence.",
+      "event": "Kökege Erjen’s people are enrolled and stationed at Yizhou after his submission.",
+      "reason": "The enrollment and stationing follow the same Tiancong 6 submission clause and concern Kökege Erjen’s people; the record correctly treats him as the political subject rather than borrowing a later son’s rebellion date.",
       "evidence": [
         {
+          "unit": "s0008",
+          "quote": "天聰六年，征林丹汗，走死。"
+        },
+        {
           "unit": "s0009",
-          "quote": "即其部編旗，駐義州"
+          "quote": "其子孔果爾額哲來降，即其部編旗，駐義州。"
         }
       ]
     },
     {
       "id": "claim-21",
       "verdict": "supported",
-      "event": "Kökege Erjen is attested in the Tiancong 6 submission sequence.",
-      "reason": "The immediately preceding Tiancong 6 clause identifies the father, and the next sentence explicitly names his son Kökege Erjen as submitter. This supports AD 1632, without supplying a broader lifespan.",
+      "event": "Kökege Erjen is personally attested by his 1632 submission.",
+      "reason": "The combined sequence identifies Ligdan’s son, Kökege Erjen, as the man who came to submit in Tiancong 6. AD 1632 belongs to that direct event, not to genealogy alone.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年"
+          "quote": "天聰六年，征林丹汗，走死。"
         },
         {
           "unit": "s0009",
-          "quote": "其子孔果爾額哲來降"
+          "quote": "其子孔果爾額哲來降，即其部編旗，駐義州。"
         }
       ]
     },
     {
       "id": "claim-22",
-      "verdict": "incorrect",
-      "event": "Burne and his brothers rebelled in Kangxi 14.",
-      "reason": "康熙十四年 dates the actions of 布爾呢兄弟. Its 其子 refers back to Kökege Erjen as Burne's father, but a filial identification in a later event is not evidence that Kökege Erjen was alive in 1675.",
+      "verdict": "research-blocked",
+      "event": "Kökege Erjen: Kangxi 14 dates his son’s rebellion, not him.",
+      "reason": "The source names Burne as 其子 and makes Burne and his brothers the rebels and executed persons. It offers no 1675 action, survival, death, or other life attestation for Kökege Erjen; the unresolved source-context hold must remain.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "claim-25",
       "verdict": "supported",
-      "event": "Burne led a rebellion in Kangxi 14.",
-      "reason": "The sentence explicitly dates 布爾呢兄弟叛 to 康熙十四年, supporting the AD 1675 military participation claim.",
+      "event": "Burne leads a rebellion in Kangxi 14.",
+      "reason": "The Chinese names Burne and his brothers as the people who rebelled. Kangxi 14 conventionally corresponds to AD 1675, with no unsupported finer precision.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "claim-26",
       "verdict": "supported",
-      "event": "Burne's rebellion was suppressed and its leaders executed in Kangxi 14.",
-      "reason": "討誅之 follows the named rebel brothers in the same Kangxi 14 sentence; it supports the legal-action date without inferring a finer execution day.",
+      "event": "Burne is executed after the Kangxi 14 rebellion.",
+      "reason": "討誅之 resolves the immediately preceding named rebels, Burne and his brothers. The legal-action claim correctly stays with Burne’s 1675 rebellion sequence.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "claim-27",
       "verdict": "supported",
-      "event": "Burne died by execution after the Kangxi 14 rebellion.",
-      "reason": "誅之 in the explicitly dated sentence supports execution as the manner of death and the AD 1675 year context.",
+      "event": "Burne dies by execution in Kangxi 14.",
+      "reason": "The execution phrase is directed to Burne and his brothers after their explicitly dated rebellion. The death claim has the correct owner and year-level precision.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "claim-28",
       "verdict": "supported",
-      "event": "Burne is attested in the Kangxi 14 rebellion narrative.",
-      "reason": "Burne is directly named in the event that bears the 康熙十四年 date, so AD 1675 is a properly limited personal attestation.",
+      "event": "Burne is personally attested in Kangxi 14.",
+      "reason": "Burne’s own named rebellion and execution supply direct personal chronology in AD 1675, unlike the separate paternal genealogy reference.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "hints-p001",
-      "verdict": "incorrect",
-      "event": "The Little Prince's hint repeats a Ming-period ancestral reference.",
-      "reason": "The chapter's Ming wording dates Chahar's genealogical description rather than a personal event for the unnamed Little Prince. The active-date hint incorrectly turns that contextual ancestry into a lifetime interval.",
+      "verdict": "research-blocked",
+      "event": "Little Prince active-date hint remains an explicit research hold.",
+      "reason": "The hint accurately says that 明 is genealogy context rather than individual activity. No chapter evidence can turn that dynastic label into a date for this unnamed Little Prince.",
       "evidence": [
         {
           "unit": "s0006",
-          "quote": "明插漢，本元裔小王子後"
+          "quote": "明插漢，本元裔小王子後。"
         }
       ]
     },
     {
       "id": "hints-p002",
       "verdict": "supported",
-      "event": "Buxi's hint summarizes the Jiajing-era pastoral event.",
-      "reason": "The hint remains limited to the reign interval supplied by 嘉靖間 and does not assert birth or death dates.",
+      "event": "Buxi active-date hint reflects the Jiajing event window.",
+      "reason": "The hint AD 1522–1566 faithfully mirrors the source’s 嘉靖間 wording and is not stated as continuous life activity.",
       "evidence": [
         {
           "unit": "s0007",
-          "quote": "嘉靖間，布希駐牧察哈爾之地"
+          "quote": "嘉靖間，布希駐牧察哈爾之地，因以名部。"
         }
       ]
     },
     {
       "id": "hints-p003",
       "verdict": "supported",
-      "event": "Ligdan Khan's hint summarizes his Tiancong 6 death event.",
-      "reason": "The sole AD 1632 hint accurately reflects the explicit dated death event and does not overstate a life range.",
+      "event": "Ligdan Khan active-date hint reflects Tiancong 6.",
+      "reason": "The hint AD 1632 is supported by his own dated campaign, flight and death.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年，征林丹汗，走死"
+          "quote": "天聰六年，征林丹汗，走死。"
         }
       ]
     },
     {
       "id": "hints-p004",
-      "verdict": "supported",
-      "event": "Kökege Erjen's hint summarizes the Tiancong 6 submission sequence.",
-      "reason": "The AD 1632 hint is grounded in his explicitly named submission immediately following the Tiancong 6 clause; it does not adopt the later 1675 rebellion date.",
+      "verdict": "research-blocked",
+      "event": "Kökege Erjen’s hint retains only the supported 1632 event while the separate 1675 paternal reference stays held.",
+      "reason": "The active hint AD 1632 is supported by his own submission; the report’s unresolved finding separately prevents treating his son’s 1675 rebellion as Kökege Erjen chronology.",
       "evidence": [
         {
-          "unit": "s0008",
-          "quote": "天聰六年"
+          "unit": "s0009",
+          "quote": "其子孔果爾額哲來降，即其部編旗，駐義州。"
         },
         {
-          "unit": "s0009",
-          "quote": "其子孔果爾額哲來降"
+          "unit": "s0010",
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "hints-p005",
       "verdict": "supported",
-      "event": "Burne's hint summarizes the Kangxi 14 rebellion and execution.",
-      "reason": "The AD 1675 hint matches Burne's explicitly named rebellion in the Kangxi 14 sentence and is not a fabricated broader interval.",
+      "event": "Burne active-date hint reflects the Kangxi 14 rebellion and execution.",
+      "reason": "The hint AD 1675 follows Burne’s own named rebellion and execution sequence.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     }
@@ -378,60 +389,64 @@
   "personChecks": [
     {
       "id": "p001",
-      "verdict": "supported",
-      "reason": "All Chinese units were checked for an omitted personal birth, death, age, or dated activity for the Little Prince. The sole occurrence is a genealogy of Chahar in Ming times; after the unsupported personal interval is removed, the chapter supplies no defensible personal date.",
+      "verdict": "research-blocked",
+      "reason": "All 119 units were read. The only Little Prince evidence is the Ming/Yuan collateral genealogy in s0006; it contains no personal event, birth, death, age, or reliable life interval. The retained explicit research hold is therefore necessary.",
       "evidence": [
         {
           "unit": "s0006",
-          "quote": "本元裔小王子後"
+          "quote": "明插漢，本元裔小王子後。"
         }
       ]
     },
     {
       "id": "p002",
       "verdict": "supported",
-      "reason": "The complete chapter supplies Buxi's named Jiajing-era pastoral action and no conflicting birth, death, age, or later personal event. The reign-level date is appropriately limited.",
+      "reason": "All source units were read. Buxi appears in s0007, where 嘉靖間 directly dates his own pasturing of Chahar lands. No omitted birth, death, age, or other dated event is supplied by the chapter.",
       "evidence": [
         {
           "unit": "s0007",
-          "quote": "嘉靖間，布希駐牧察哈爾之地"
+          "quote": "嘉靖間，布希駐牧察哈爾之地，因以名部。"
         }
       ]
     },
     {
       "id": "p003",
       "verdict": "supported",
-      "reason": "The complete chapter gives Ligdan Khan's Tiancong 6 campaign, flight, and death. No omitted competing date or age appears elsewhere in the geography entries.",
+      "reason": "All source units were read. Ligdan Khan’s personal death and flight are explicitly dated Tiancong 6 in s0008, and his son’s later acts are not borrowed into his chronology. No omitted life date is supplied.",
       "evidence": [
         {
           "unit": "s0008",
-          "quote": "天聰六年，征林丹汗，走死"
+          "quote": "天聰六年，征林丹汗，走死。"
+        },
+        {
+          "unit": "s0009",
+          "quote": "其子孔果爾額哲來降，即其部編旗，駐義州。"
         }
       ]
     },
     {
       "id": "p004",
-      "verdict": "supported",
-      "reason": "Kökege Erjen is explicitly named as the submitting son in the Tiancong 6 sequence. The later description of Burne as his son is genealogy, not a second life attestation; no omitted personal dates appear elsewhere.",
+      "verdict": "research-blocked",
+      "reason": "All source units were read. Kökege Erjen’s own 1632 submission is supported, but s0010 gives only a filial identification before Burne’s dated rebellion. Chapter evidence cannot decide a 1675 life date for the father, so the separate source-context hold remains necessary.",
       "evidence": [
         {
           "unit": "s0009",
-          "quote": "其子孔果爾額哲來降"
+          "quote": "其子孔果爾額哲來降，即其部編旗，駐義州。"
         },
         {
           "unit": "s0010",
-          "quote": "其子布爾呢兄弟叛"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     },
     {
       "id": "p005",
       "verdict": "supported",
-      "reason": "Burne is directly named in the Kangxi 14 rebellion and execution sentence. The remaining units concern locations and waterways and add no birth, age, death, or conflicting personal chronology.",
+      "reason": "All source units were read. Burne is directly named as a rebel in Kangxi 14 and is included in the subsequent execution. No additional dated birth, age, or life event is omitted.",
       "evidence": [
         {
           "unit": "s0010",
-          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之"
+          "quote": "康熙十四年，其子布爾呢兄弟叛，討誅之，遷部眾駐牧宣化、大同邊外。"
         }
       ]
     }
@@ -440,17 +455,20 @@
     {
       "items": [
         "claim-5",
-        "hints-p001"
+        "hints-p001",
+        "p001"
       ],
-      "problem": "The Ming-period genealogical wording is wrongly encoded as the unnamed Little Prince's personal AD 1368–1644 attestation and active-date hint.",
-      "action": "Remove the personal interval claim and hint, or retain the genealogy only in a nonpersonal contextual claim; do not substitute an invented date."
+      "problem": "The Ming label in s0006 is a genealogy and polity context, not a dated personal event for the unnamed Little Prince; no chapter endpoint can be justified.",
+      "action": "Retain the source-specific unresolved hold and do not infer personal activity or a life interval without supplementary evidence."
     },
     {
       "items": [
-        "claim-22"
+        "claim-22",
+        "hints-p004",
+        "p004"
       ],
-      "problem": "A 1675 event involving Burne is incorrectly treated as an AD 1675 personal attestation for his father Kökege Erjen.",
-      "action": "Remove the father’s later attestation while preserving Burne’s dated rebellion, execution, and the source-backed father-son relationship."
+      "problem": "Kangxi 14 in s0010 dates Burne and his brothers, while Kökege Erjen appears only as Burne’s father; treating it as the father’s personal chronology would be an ownership error.",
+      "action": "Retain the 1632 submission as Kökege Erjen’s supported event and keep the 1675 paternal reference explicitly unresolved unless supplementary evidence establishes a personal event."
     }
   ],
   "references": []
