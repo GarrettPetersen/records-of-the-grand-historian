@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "houhanshu",
+  "chapter": "040",
+  "candidateCommit": "91006e3664",
+  "candidateFile": "staged-candidate-bd46bd4462eed463f9ce.json",
+  "sealedCandidateHash": "sha256:bd46bd4462eed463f9ce8706bf68fef6e147ea0dfdd655a06679f3c8ed33f7a0",
+  "candidateExtractionHash": "sha256:6a8865df149b99d0f95fa0d4c3f59ffa7dc5cf11e071a7099d35194042acb859",
+  "reviewer": {
+    "name": "Codex independent Houhanshu 040 sealed date-repair reviewer",
+    "agentId": "date_audit_hanshu003",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T10:37:21.114Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independent Chinese-source and sealed replay review. The proposal changes exactly claim-145/p004 and claim-146/p005, plus their paired hints, into explicit source-specific holds. 高祖父安世 names Zhang Anshi, whose Emperor Xuan office claims remain intact; 父放 names Zhang Fang, whose Emperor Cheng attestation remains intact. No generic intervening generation receives inferred activity chronology. This receipt does not mutate or approve the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:187f3db8ea831302e9e8f714f122a5466e76b5674810a61184805274114f96f0",
+    "canonicalExtractionHash": "sha256:0510a1389ef824fa81e856257d75467d2bf24382496ad9c817263dbd237b0049",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: claim-145/p004 and claim-146/p005 only.",
+    "sourceSoundness": "PASS: s0002 names Zhang Anshi; s0003 names Zhang Fang.",
+    "namedOfficeRetention": "PASS: Zhang Anshi and Zhang Fang claims preserved.",
+    "compactValidation": "PASS: 283 units, 137 people, 526 mentions, 1478 claims.",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0002",
+      "quote": "高祖父安世，宣帝時為大司馬衛將軍，封富平侯。",
+      "result": "The named Zhang Anshi, not a generic intervening ancestor, owns the Emperor Xuan office chronology."
+    },
+    {
+      "unit": "s0003",
+      "quote": "父放，為成帝侍中。",
+      "result": "The named Zhang Fang, not a generic intervening ancestor, owns the Emperor Cheng office chronology."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes still match this receipt.",
+    "Replay exactly the two reviewed claim replacements and two paired hint replacements.",
+    "Preserve named Zhang Anshi and Zhang Fang office claims.",
+    "Run scoped validation and require a fresh independent canonical audit after curation."
+  ]
+}
