@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "007",
+  "candidateFile": "staged-candidate-4c9fece57f94f62387ba.json",
+  "candidateHash": "sha256:4c9fece57f94f62387ba5b4a1d75b1f163da24138b3adae82ab8a73c571a09e9",
+  "reviewer": {"name": "Codex independent Chenshu 007 staged-candidate reviewer", "agentId": "date_audit_beiqishu007", "independentOfExtractor": true, "independentOfCandidateCurator": true},
+  "reviewedAt": "2026-09-23T03:35:00.000Z",
+  "disposition": "reject-for-revision",
+  "summary": "The proposal deterministically reconstructs the pinned candidate and the eight claim holds correctly preserve their gazetteer, textual-emendation, and variant-name facts without Western life dates. It has eight replace changes and zero kind:hints changes. p069, p070, p073, p074, p076, p077, p078, and p079 therefore retain all former broad date hints. The paired repair is incomplete.",
+  "validation": {"proposalReplay": "PASS: replay hash equals the pinned candidate and serialized output is byte-equivalent.", "claimHolds": "PASS: claims 295, 300, 315, 322, 331, 340, 348, and 354 preserve source facts without broad life dates.", "pairedHints": "FAIL: no active-date hint conversion is present for any of the eight affected people.", "canonicalMutation": "NONE"},
+  "sourceChecks": [
+    {"claims": ["claim-295", "claim-300"], "unit": "s0183", "quote": "《太平寰宇記》引雷次宗《豫章記》云：「漢高帝置。", "result": "Citation and quoted origin fact do not supply the retained broad hints."},
+    {"claims": ["claim-315", "claim-322", "claim-331"], "unit": "s0190", "quote": "太建三年納為皇太子妃 按「太建三年」當依", "result": "Disputed reading and correction require paired holds."},
+    {"claims": ["claim-340", "claim-348", "claim-354"], "unit": "s0198", "quote": "「蔡脫兒」《南史》作「蔡臨兒」", "result": "Variant/cross-reference notes do not supply retained broad hints."}
+  ],
+  "hostRequirements": ["Do not apply this candidate.", "Add exact kind:hints changes for p069, p070, p073, p074, p076, p077, p078, and p079.", "Replay corrected proposal and obtain independent review.", "Do not edit canonical extraction or audit status during this review."]
+}
