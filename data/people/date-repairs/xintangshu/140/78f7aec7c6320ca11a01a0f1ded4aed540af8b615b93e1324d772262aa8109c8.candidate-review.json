@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "xintangshu",
+  "chapter": "140",
+  "candidateFile": "staged-candidate-78f7aec7c6320ca11a01.json",
+  "candidateHash": "sha256:78f7aec7c6320ca11a01a0f1ded4aed540af8b615b93e1324d772262aa8109c8",
+  "reviewer": {
+    "name": "Independent Xintangshu 140 staged-candidate source reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T08:41:36.580Z",
+  "disposition": "reject",
+  "summary": "Rejected. Replay, compact validation, and geometry pass, and 58 of 60 proposed claim/hint changes correctly remove imported chronology from headings, genealogy, family lists, and retrospective exempla. However, claim-895 and hints-p091 incorrectly erase Lü Yin’s source-dated own event: s0168 explicitly says that in late Kaiyuan he entered the capital, passed the jinshi examination, and was appointed Ningling commandant. The candidate must retain source-faithful late-Kaiyuan chronology for Lü Yin while preserving the other source-sound corrections.",
+  "findings": [
+    {
+      "items": [
+        "claim-895",
+        "hints-p091",
+        "p091"
+      ],
+      "problem": "The candidate reclassifies an explicit personal event as an undated contextual reference. The Chinese states “開元末，入京師，第進士，調寧陵尉，采訪使韋陟署為支使,” which directly dates Lü Yin’s own entry, examination, appointment, and service to late Kaiyuan.",
+      "action": "Revise the candidate to leave claim-895 and its active-date hint source-faithful (a late-Kaiyuan range is permitted as the stated period) and retain the other 58 sound operations unchanged.",
+      "evidence": [
+        {
+          "unit": "s0168",
+          "quote": "開元末，入京師，第進士，調寧陵尉，采訪使韋陟署為支使。",
+          "sourceHash": "sha256:0112f65c35de3d7f5436956f80974ac2453f8fc47be28e7db35b1daa77f52424"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS",
+    "proposalReplay": "PASS",
+    "candidateHash": "PASS",
+    "compactValidation": "PASS: 242 units, 148 people, 755 mentions, 1911 claims.",
+    "chronologyGeometry": "PASS",
+    "sourceSoundness": "FAIL: claim-895 / hints-p091 erase explicit source-dated Lü Yin activity.",
+    "nonDateRetention": "PASS: proposal interface preserves non-temporal content.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": {
+    "total": 60,
+    "sourceSound": 58,
+    "rejected": 2
+  }
+}
