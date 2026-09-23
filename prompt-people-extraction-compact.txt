@@ -155,6 +155,10 @@ disposition group:
 [disposition, reason, [[candidateId, noteOrNull], ...]]
 ```
 
+Copy every `candidateId` character-for-character from the packet; never
+reconstruct, abbreviate, or transliterate an opaque `cand_...` identifier. A
+single wrong character makes an otherwise complete extraction unusable.
+
 Use the schema's disposition and reason codes. Do not turn a place, office,
 book, polity, reign, collective, ordinary capitalized phrase, or other false
 positive into a person merely to avoid a disposition. Use `ambiguous` or
@@ -462,5 +466,9 @@ Before finishing:
    `allChronologyCaptured`, `allPersonEventsCaptured`,
    `allClaimProvenanceCaptured`, `allFamilyRelationshipsCaptured`, and
    `editorialPassCompleted` to `true`; record genuine unresolved references.
+   `coverage.unresolvedReferences` is an array of objects, never prose strings:
+   use `[{"unit":"s0012","description":"Source-grounded explanation"}]`
+   or `[]`. Every unresolved note needs the owned source unit that gives rise
+   to it; do not replace a group of distinct holds with one chapter-wide string.
 6. Validate against the compact schema and write JSON only to the assigned
    output path. Then publish the artifact exactly as instructed by the runner.
