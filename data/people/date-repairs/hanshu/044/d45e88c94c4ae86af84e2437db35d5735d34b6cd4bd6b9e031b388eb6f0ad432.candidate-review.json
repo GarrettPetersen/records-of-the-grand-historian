@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "044",
+  "candidateFile": "staged-candidate-d45e88c94c4ae86af84e.json",
+  "candidateHash": "sha256:d45e88c94c4ae86af84e2437db35d5735d34b6cd4bd6b9e031b388eb6f0ad432",
+  "reviewer": {"name":"Codex independent Hanshu 044 date-repair reviewer","agentId":"date_audit_beiqishu006","independentOfExtractor":true,"independentOfCandidateCurator":true},
+  "reviewedAt":"2026-09-23T06:35:00.000Z",
+  "disposition":"accept-for-host-curation",
+  "expectedCanonicalAuditStatus":"research-blocked",
+  "summary":"Accepted. Fresh packet comparison confirms the candidate covers exactly all 38 audited temporal claims and 36 paired hints, with no extra targets. The source/audit problem is broad imported activity intervals; every claim preserves its subject, predicate, source wording, evidence, and non-date value while replacing only unsupported chronology with a source-specific hold.",
+  "validation":{"proposalReplay":"PASS: all 74 pinned operations replay byte-for-byte to the declared candidate hash against current pinned inputs.","coverage":"PASS: all 74 audit-listed claim/hint targets occur exactly once; no scope additions or omissions.","nonDateRetention":"PASS: all 38 replacements retain every non-date value field; only Western temporal containers and hold metadata differ.","compactValidation":"PASS: production compact validator succeeded (292 units, 81 people, 670 mentions, 874 claims, zero alias conflicts).","chronologyGeometry":"PASS: no date-audit geometry findings.","canonicalMutation":"NONE"},
+  "hostRequirements":["Apply only against matching pinned source and extraction hashes.","Apply all 74 operations exactly.","Do not restore broad activity intervals without independently source-qualified chronology.","Do not alter canonical audit status; require a fresh independent canonical audit after application."]
+}
