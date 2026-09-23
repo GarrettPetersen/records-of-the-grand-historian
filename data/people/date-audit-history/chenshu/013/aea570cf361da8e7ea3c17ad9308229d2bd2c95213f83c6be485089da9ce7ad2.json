@@ -3,22 +3,17 @@
   "auditVersion": 1,
   "book": "chenshu",
   "chapter": "013",
-  "sourceHash": "sha256:3abbe265796e61580907908598d5bd6313d577f7227ac4f6002c797aec149573",
-  "extractionHash": "sha256:8548afe01aee4287657c14af5ce3cfbe9d74a0615304d8145fff9da8bf29b6cf",
+  "sourceHash": "sha256:7afbee2120249d61850ac0c57540d68409fdcf861193cc042c37c43c3d98e0f0",
+  "extractionHash": "sha256:7bcbab65fd27a16b92da798e13459d4cad0132b1b12f868d411d619abdbdce88",
   "reviewer": {
-    "name": "Independent Chenshu 013 current-canonical initial chronology auditor",
+    "name": "Codex independent Chenshu 013 fresh post-curation date auditor",
+    "agentId": "fresh_audit_chenshu013",
     "independentOfExtractor": true,
-    "workers": [
-      {
-        "name": "Independent Chenshu 013 current-canonical initial chronology auditor",
-        "agentId": "codex-initial-audit-chenshu013",
-        "independentOfExtractor": true
-      }
-    ]
+    "independentOfCandidateCurator": true
   },
-  "reviewedAt": "2026-09-23T10:59:17.428Z",
-  "status": "research-blocked",
-  "summary": "Complete initial audit of the post-reconciliation canonical extraction: all 178 Chinese units, all 274 temporal or active-hint items, and all 85 people were checked. The s0037 Guangda 2 translation now correctly says AD 568 and agrees with claims 19 and 20. The remaining 140 date or active-hint checks are deliberately source-specific research holds for undated offices, genealogies, allusions, reception, and inherited contexts; they do not warrant invented personal chronology. This current audit is research-blocked, not approved.",
+  "reviewedAt": "2026-09-23T04:39:13.432Z",
+  "status": "needs-revision",
+  "summary": "Complete fresh independent post-curation audit: all 178 Chinese source units, 274 temporal or active-hint items, and 85 people were source-checked against the canonical extraction and translation. All 79 curated temporal-claim repairs, 69 paired active-date-hint repairs, and eight protected non-life date-context predicates remain intact; retained source-grounded dates and bounds were checked. The chapter cannot be approved because s0037 mistranslates 光大二年 as “(567)” although the Chinese date and canonical claim-19/claim-20 correctly establish AD 568. Genuine undated contexts remain research-blocked rather than being converted into personal activity dates.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -4609,6 +4604,14 @@
   "findings": [
     {
       "items": [
+        "claim-19",
+        "claim-20"
+      ],
+      "problem": "Unit s0037 says 光大二年, correctly represented by the canonical claims as AD 568, but the current English translation reads “In Guangda year 2 (567)”. This is a one-year translation error in a source unit carrying chronology.",
+      "action": "Correct s0037’s parenthetical Western year from 567 to 568 in both English translation fields, then rebuild the fresh date packet and obtain a new independent audit; do not alter the already correct AD 568 canonical claims."
+    },
+    {
+      "items": [
         "claim-1",
         "claim-2",
         "claim-3",
@@ -4819,79 +4822,8 @@
         "p084",
         "p085"
       ],
-      "people": [
-        "p001",
-        "p002",
-        "p003",
-        "p004",
-        "p005",
-        "p006",
-        "p007",
-        "p008",
-        "p009",
-        "p010",
-        "p011",
-        "p012",
-        "p013",
-        "p015",
-        "p016",
-        "p017",
-        "p018",
-        "p021",
-        "p022",
-        "p023",
-        "p024",
-        "p025",
-        "p026",
-        "p027",
-        "p028",
-        "p029",
-        "p030",
-        "p031",
-        "p032",
-        "p033",
-        "p034",
-        "p035",
-        "p036",
-        "p037",
-        "p038",
-        "p039",
-        "p040",
-        "p041",
-        "p042",
-        "p043",
-        "p044",
-        "p045",
-        "p046",
-        "p047",
-        "p048",
-        "p051",
-        "p052",
-        "p053",
-        "p054",
-        "p055",
-        "p056",
-        "p057",
-        "p058",
-        "p059",
-        "p060",
-        "p061",
-        "p067",
-        "p068",
-        "p069",
-        "p070",
-        "p071",
-        "p072",
-        "p073",
-        "p077",
-        "p078",
-        "p082",
-        "p083",
-        "p084",
-        "p085"
-      ],
-      "problem": "The current extraction deliberately preserves source-specific chronology holds for undated titles, service settings, conflicts, genealogies, allusions, reception, and inherited event contexts. These do not establish local personal activity chronology.",
-      "action": "Retain every research-required hold and its source fact. Do not replace it with a personal activity date without independent source evidence."
+      "problem": "The repaired source-specific holds concern undated titles, service settings, conflicts, genealogies, allusions, reception, or inherited event contexts; these do not establish local personal activity chronology.",
+      "action": "Retain each research-required hold and associated source fact. Do not replace it with a personal activity date without independent source evidence."
     }
   ],
   "references": [
