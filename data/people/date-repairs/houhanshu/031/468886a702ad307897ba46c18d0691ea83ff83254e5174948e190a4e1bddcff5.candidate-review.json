@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "houhanshu",
+  "chapter": "031",
+  "candidateCommit": "ce8b8a6400",
+  "candidateFile": "staged-candidate-468886a702ad307897ba.json",
+  "sourceHash": "sha256:a02588c91bbf94c9e5311e7de841bf187bd403c173756db1e27540b0a98696a6",
+  "originalExtractionHash": "sha256:db1a755d21af3dee44b5bda39db6e3509068b2b5015d84f326860c5364e44664",
+  "sealedCandidateHash": "sha256:468886a702ad307897ba46c18d0691ea83ff83254e5174948e190a4e1bddcff5",
+  "candidateExtractionHash": "sha256:e631641ed0e7e856dc2f34b1886ffc7e333770966a96f7b14c70a11a82387795",
+  "reviewer": {
+    "name": "Codex independent Houhanshu 031 complete date-repair reviewer",
+    "agentId": "review_houhanshu031_round3",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T18:15:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted for host curation. The sealed five-operation candidate changes no person, mention, non-temporal claim content, or active-date hint: it replaces the four misanchored Huan Tan attestations with their actual dated local passages and removes only the false Yuanhe living-attestation derived from a later tomb commemoration.",
+  "candidateValidation": {
+    "canonicalInputs": "PASS: current source and canonical extraction hashes equal the handoff pins.",
+    "sealedProposalIdentity": "PASS: sha256:468886a702ad307897ba46c18d0691ea83ff83254e5174948e190a4e1bddcff5.",
+    "candidateByteIdentity": "PASS: sha256:e631641ed0e7e856dc2f34b1886ffc7e333770966a96f7b14c70a11a82387795.",
+    "proposalReplay": "PASS: applyDateRepairProposal reconstructed the exact declared candidate.",
+    "scope": "PASS: exactly claim-173 through claim-176 have evidence-only replacements and claim-177 is removed; Huan Tan active-date hints are byte-identical.",
+    "compactValidation": "PASS: scoped compact validation found 87 people, 412 mentions, 563 claims, 379 candidates, and no alias-disposition conflicts.",
+    "temporalGeometry": "PASS: no candidate dateAuditDiagnostics findings.",
+    "scopedProductionValidation": "PASS: the current canonical chapter passed npm run people:validate -- --book houhanshu --chapter 031; the candidate itself also passed the strict scoped compact validator.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-173"],
+      "verdict": "source-sound",
+      "sourceEvidence": [{
+        "unit": "s0007",
+        "quote": "哀、平間，位不過郎。",
+        "translation": "Under Emperors Ai and Ping he never rose above gentleman cadet.",
+        "reason": "This is Huan Tan's local Ai/Ping-period office statement; unlike s0001 it directly supplies the temporal context of the attestation."
+      }],
+      "reason": "The replacement retains the existing interval and merely corrects its evidence anchor from the undated identity heading to the event passage."
+    },
+    {
+      "proposalItems": ["claim-174", "claim-175"],
+      "verdict": "source-sound",
+      "sourceEvidence": [
+        {
+          "unit": "s0023",
+          "quote": "當王莽居攝篡弑之際，天下之士，莫不竟褒稱德美，作符命以求容媚，譚獨自守，默然無言。",
+          "translation": "While Wang Mang acted as regent and seized the throne, every scholar vied to flatter him with forged prophecies; Huan Tan alone stayed silent and kept his integrity.",
+          "reason": "This directly situates Huan Tan in the Wang Mang usurpation context."
+        },
+        {
+          "unit": "s0024",
+          "quote": "莽時為掌樂大夫，更始立，召拜太中大夫。",
+          "translation": "Under Wang Mang he served as grandee for music; the Gengshi Emperor named him grandee of the palace.",
+          "reason": "This directly names both the Wang Mang and Gengshi offices and supports the shared Wang Mang anchor plus the Gengshi anchor."
+        }
+      ],
+      "reason": "The new evidence lists preserve each interval and point to the chapter's actual dated event passages rather than the undated identification sentence."
+    },
+    {
+      "proposalItems": ["claim-176"],
+      "verdict": "source-sound",
+      "sourceEvidence": [{
+        "unit": "s0082",
+        "quote": "初，譚著書言當世行事二十九篇，號曰《新論》，上書獻之，世祖善焉。",
+        "translation": "He had written twenty-nine essays on his own times, the New Discussions, which Emperor Guangwu praised.",
+        "reason": "The passage records Huan Tan presenting New Discussions to Shizu (Emperor Guangwu), the chapter's actual Guangwu-period event."
+      }],
+      "reason": "The evidence-only replacement correctly makes the Guangwu attestation inspectable at its source passage."
+    },
+    {
+      "proposalItems": ["claim-177"],
+      "verdict": "source-sound",
+      "sourceEvidence": [{
+        "unit": "s0085",
+        "quote": "元和中，肅宗行東巡狩，至沛，使使者祠譚塚，鄉里以為榮。",
+        "translation": "During Yuanhe, Emperor Zhang toured east to Pei and sent envoys to sacrifice at Huan Tan's tomb—a glory for his hometown.",
+        "reason": "Yuanhe dates Emperor Zhang's envoy worshipping Huan Tan's tomb, a posthumous commemoration, not Huan Tan's living activity."
+      }],
+      "reason": "Removal is required: retaining this as a living attestation would falsely extend Huan Tan's activity to AD 84–87."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the source, canonical extraction, sealed proposal, and candidate byte hashes still match this receipt.",
+    "Replay exactly these five operations, rerun strict scoped validation and chronology geometry, and retain the receipt with the curation artifact.",
+    "Do not alter Huan Tan active-date hints or any unrelated extraction content.",
+    "After curation, obtain a fresh independent canonical date audit before marking the chapter date-approved."
+  ]
+}
