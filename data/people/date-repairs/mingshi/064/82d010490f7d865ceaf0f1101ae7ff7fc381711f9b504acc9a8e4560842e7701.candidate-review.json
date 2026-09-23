@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "mingshi",
+  "chapter": "064",
+  "candidateFile": "staged-candidate-82d010490f7d865ceaf0.json",
+  "sealedCandidateHash": "sha256:82d010490f7d865ceaf0f1101ae7ff7fc381711f9b504acc9a8e4560842e7701",
+  "candidateExtractionHash": "sha256:35c367a6fa00160816d832c455101df8d8283d98def78e706264211d6011d3db",
+  "reviewer": {
+    "name": "Codex independent Mingshi 064 early-Ming chronology repair reviewer",
+    "agentId": "date_audit_substantive_thirtyfive",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:33:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent full-source, sealed-replay, scope, and source-ownership review. The opening phrase 明初 describes an undated early-Ming policy context and cannot support an exact AD 1368 personal attestation for the Hongwu Emperor. The candidate changes only that unsupported conversion. It preserves the separate, directly dated 洪武元年十月 AD 1368 attestation at s0029 and every other source-backed date.",
+  "validation": {
+    "canonicalSourceHash": "sha256:c7cd03efe8c8ceb6138a940976b64ee3c0e510e4523725c7aaab2e15cd3ff0fa",
+    "canonicalExtractionHash": "sha256:9f5dfc20b27901ec78a9dcee5bcedd56e3c803b22479769525a9889324f48303",
+    "canonicalInputs": "PASS: current source and extraction hashes exactly match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: the exact one-operation proposal hashes to 82d010490f7d865ceaf0f1101ae7ff7fc381711f9b504acc9a8e4560842e7701.",
+    "candidateExtractionIdentity": "PASS: the staged candidate hashes to 35c367a6fa00160816d832c455101df8d8283d98def78e706264211d6011d3db.",
+    "proposalReplay": "PASS: replay against the pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-10 changes; no source link, person identity, role, predicate, or non-date event field changes.",
+    "sourceSoundness": "PASS: s0011's 明初 is a non-point early-Ming context. By contrast, s0029 explicitly says 洪武元年十月 and independently retains the Hongwu Emperor's AD 1368 evidence unchanged.",
+    "directDateRetention": "PASS: claim-12, the separately supported s0029 洪武元年十月 AD 1368 attestation, and p002's resulting AD 1368 active-date hint remain unchanged.",
+    "compactValidation": "PASS: 133 units, 3 people, 7 mentions, 46 claims, and zero alias-disposition conflicts in the replayed candidate.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book mingshi --chapter 064 on current canonical inputs; candidate compact validation also passed.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0011",
+      "quote": "明初詔禮官，鹵簿彌文，務從省節，以示尚質去奢之意。",
+      "result": "明初 is an undated early-Ming policy label. It does not state the Hongwu Emperor's accession year or an exact AD 1368 personal event."
+    },
+    {
+      "unit": "s0029",
+      "quote": "洪武元年十月，定元旦朝賀儀：金吾衛於奉天門外分設旗幟。",
+      "result": "This is the separate explicit Hongwu first-year October record supporting AD 1368. The candidate does not alter it or the corresponding p002 hint."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the sealed handoff.",
+    "Replay only the claim-10 date-container replacement exactly; do not modify its source wording, identity, predicate, or evidence.",
+    "Retain s0029's separately explicit 洪武元年十月 AD 1368 claim and the resulting p002 AD 1368 hint unchanged.",
+    "Do not alter source or master from this review receipt; rerun scoped validation and require a fresh independent canonical audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}
