@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "beishi",
+  "chapter": "088",
+  "candidateFile": "staged-candidate-49d59707b0c4c26d6aea.json",
+  "candidateHash": "sha256:49d59707b0c4c26d6aeaf5fe18fb6fbfe468ee7d3fcd04c897b7e9050bcd11d2",
+  "sourceHash": "sha256:f449bc0e20d7ffdd11d613f99a83a809f74ac654d507ae06daea4e87599575cb",
+  "originalExtractionHash": "sha256:d4918ffae910c66f721cce5e0dcc62551feaae9b45ebef9cd3615f319faa436f",
+  "candidateExtractionHash": "sha256:49d59707b0c4c26d6aeaf5fe18fb6fbfe468ee7d3fcd04c897b7e9050bcd11d2",
+  "reviewer": {
+    "name": "Codex independent Beishi 088 staged-candidate reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T03:00:00.000Z",
+  "disposition": "reject-for-revision",
+  "summary": "The candidate correctly identifies why the former intervals are unsupported, and its holds for the parent-office and the four undated encomia are conservative. It is not acceptable as submitted because claim-397 still attributes Zhang Wenxu's end-Renshou/death chronology to p094, the Wife of Zhang Wenxu. Neither cited unit supplies that chronology: s0254 concerns Wenxu's injury and s0256 only records that he spoke to 妻子. A source-specific hold must preserve the wife's own source fact, not repeat dates and a death belonging to her husband.",
+  "candidateValidation": {
+    "canonicalMutation": "NONE: this review changes neither canonical extraction nor audit status.",
+    "candidateHash": "PASS: reviewed the pinned 49d59707b0c4c26d6aeaf5fe18fb6fbfe468ee7d3fcd04c897b7e9050bcd11d2 candidate.",
+    "scope": "PASS: proposal is confined to the seven reported chronology findings and their paired hints.",
+    "sourceOwnership": "FAIL: claim-397 and hints-p094 retain Zhang Wenxu chronology as a hold on his wife."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-365", "hints-p087"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{"unit": "s0239", "quote": "父琚，開皇中，為洹水令，以清正聞。"}],
+      "reason": "The Chinese explicitly assigns the Kaihuang magistracy to Wenxu's father Zhang Ju. It cannot establish Wenxu's AD 581–600 activity; removing that interval and retaining an ownership hold is conservative."
+    },
+    {
+      "proposalItems": ["claim-368", "hints-p087"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{"unit": "s0245", "quote": "仁壽末，學廢，文詡策杖而歸，灌園為業。"}, {"unit": "s0261", "quote": "終於家，鄉人為立碑頌，號曰張先生。"}],
+      "reason": "The source dates Wenxu's return at the end of Renshou but leaves his death undated. It does not support continuous activity through AD 618."
+    },
+    {
+      "proposalItems": ["claim-397", "hints-p094"],
+      "verdict": "incorrect-repair",
+      "sourceEvidence": [{"unit": "s0254", "quote": "文詡常有腰疾，會醫者自言善禁，文詡令禁之，遂為刀所傷，至於頓伏床枕。"}, {"unit": "s0256", "quote": "文詡遽遣之，因為隱，謂妻子曰：「吾昨風眩，落坑所致。」"}],
+      "reason": "p094 is the Wife of Zhang Wenxu. These passages concern Wenxu and only identify 妻子 as his addressee; neither contains 仁壽末 nor 終於家. The proposed hold's sourceDate and reason therefore still attach the husband's chronology to the wife."
+    },
+    {
+      "proposalItems": ["claim-410", "hints-p097"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{"unit": "s0264", "quote": "眭誇忘懷纓冕，畢志丘園，或隱不違親，貞不絕俗；"}],
+      "reason": "The encomium supplies no date endpoint for an AD 386–618 activity interval."
+    },
+    {
+      "proposalItems": ["claim-413", "hints-p098"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{"unit": "s0266", "quote": "然文詡見傷無慍，徐則志在沈冥，不可親疏，莫能貴賤，皆可謂抱樸之士矣。"}],
+      "reason": "The encomium supplies no date endpoint for an AD 581–618 activity interval."
+    },
+    {
+      "proposalItems": ["claim-419", "hints-p099"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{"unit": "s0267", "quote": "崔廓感於屈辱，遂以肥遁見稱；"}],
+      "reason": "The encomium supplies no date endpoint for an AD 386–618 activity interval."
+    },
+    {
+      "proposalItems": ["claim-423", "hints-p100"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [{"unit": "s0268", "quote": "祖浚文籍之美，足以克隆堂構。"}],
+      "reason": "The encomium supplies no date endpoint for an AD 386–618 activity interval."
+    }
+  ],
+  "hostRequirements": [
+    "Do not apply this candidate.",
+    "Rebuild claim-397 and hints-p094 from the wife's actual source fact, without sourceDate or active chronology borrowed from Zhang Wenxu.",
+    "Keep the other six conversions isolated and apply any corrected candidate only against matching canonical hashes.",
+    "Do not modify the canonical date audit during curation; a fresh independent canonical audit remains required."
+  ]
+}
