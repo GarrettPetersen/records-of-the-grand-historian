@@ -70,15 +70,19 @@ for (const hintId of hintIds) {
   const direct = [...new Set(extraction.claims
     .filter((claim, index) => claim[0] === personId && !claimIds.includes(`claim-${index + 1}`))
     .flatMap(claim => directWesternYears(claim[2]).map(yearLabel)))];
-  changes.push({
+  const change = {
     kind: 'hints', personId, before: person[4]?.a ?? [],
     after: direct.length ? direct : [`research required: ${researchReason(hintId, related[2])}`],
     reason: direct.length
       ? `Replace the inherited interval with direct source-attested year hints for ${personId}.`
       : `Replace the inherited activity hint with the source-specific research hold for ${personId}.`,
-  });
+  };
+  // A finding can identify a paired hint which is already the exact direct-date
+  // form required after its claim repair. Do not seal a byte-identical operation.
+  if (JSON.stringify(change.before) !== JSON.stringify(change.after)) changes.push(change);
 }
 if (new Set(changes.map(change => change.kind === 'hints' ? `hints-${change.personId}` : change.id)).size !== changes.length) throw new Error('Duplicate candidate operations');
+if (changes.length !== 133) throw new Error(`Unexpected non-noop Xintangshu 138 operation count: ${changes.length}`);
 const proposal = {
   schemaVersion: 1, kind: 'date-repair-proposal', book, chapter,
   sourceHash: packet.sourceHash, extractionHash: packet.extractionHash,
@@ -92,19 +96,23 @@ const geometry = dateAuditDiagnostics(dateAuditItems(candidate));
 if (geometry.length) throw new Error(`Candidate chronology geometry failure: ${JSON.stringify(geometry)}`);
 const candidatePacket = buildDateAuditPacket(book, chapter, { extraction: candidate });
 const candidateExtractionHash = sha256(JSON.stringify(candidate));
+const sealedCandidateHash = sha256(JSON.stringify(proposal));
 const dir = path.join(PEOPLE_DIR, 'date-repairs', book, chapter);
 fs.mkdirSync(dir, { recursive: true });
-const candidateFile = `staged-candidate-${candidateExtractionHash.slice(7, 27)}.json`;
+// Extraction bytes can be identical after removing an invalid no-op from a
+// proposal. Name the immutable handoff by its sealed proposal as well, so a
+// rejected proposal is never overwritten by a corrected replay of those bytes.
+const candidateFile = `staged-candidate-${sealedCandidateHash.slice(7, 27)}.json`;
 writeJsonAtomic(path.join(dir, candidateFile), {
   schemaVersion: 1, kind: 'date-repair-candidate-handoff', book, chapter,
   canonicalSourceHash: packet.sourceHash, canonicalExtractionHash: packet.extractionHash,
-  auditReportHash: sha256(JSON.stringify(audit)), author: proposal.author,
+  auditReportHash: sha256(JSON.stringify(audit)), author: proposal.author, sealedCandidateHash,
   validation: { status: 'passed', proposalReplay: 'PASS', compactValidation: 'PASS', chronologyGeometry: 'PASS', stats: validation.stats },
   proposal, candidateExtractionHash, candidate, candidatePacket, auditEvidence: { findings: audit.findings },
 });
-writeJsonAtomic(path.join(dir, `${candidateExtractionHash.slice(7)}.candidate-review-packet.json`), {
+writeJsonAtomic(path.join(dir, `${sealedCandidateHash.slice(7)}.candidate-review-packet.json`), {
   schemaVersion: 1, kind: 'independent-staged-date-repair-review-packet', book, chapter,
   candidateFile, sourceHash: packet.sourceHash, originalExtractionHash: packet.extractionHash,
   candidateExtractionHash, candidatePacket, auditEvidence: { findings: audit.findings },
 });
-console.log(JSON.stringify({ candidateExtractionHash, operations: changes.length, compact: validation.stats, serializedBytes: serializeCompactPeopleExtraction(candidate).length }));
+console.log(JSON.stringify({ sealedCandidateHash, candidateExtractionHash, operations: changes.length, compact: validation.stats, serializedBytes: serializeCompactPeopleExtraction(candidate).length }));
