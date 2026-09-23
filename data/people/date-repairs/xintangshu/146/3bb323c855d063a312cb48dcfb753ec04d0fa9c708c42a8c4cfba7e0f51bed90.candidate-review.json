@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "xintangshu",
+  "chapter": "146",
+  "candidateFile": "staged-candidate-3bb323c855d063a312cb.json",
+  "candidateHash": "sha256:3bb323c855d063a312cb48dcfb753ec04d0fa9c708c42a8c4cfba7e0f51bed90",
+  "reviewer": {
+    "name": "Independent Xintangshu 146 date-repair reviewer",
+    "agentId": "fresh_audit_xintangshu178",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T09:20:49.261Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The sealed candidate replays all 412 audited temporal operations (299 date containers and 113 paired hints), preserving all non-date content and replacing unsupported broad chronology with source-specific research holds. It retains p050 Dezong’s direct early-reign AD 780 attestation and diplomatic event from s0086, while correctly holding the separate 德宗以來 context in s0115.",
+  "sourceReview": {
+    "coverage": "Full source/audit review: 278 Chinese units, 667 temporal or hint items, and 156 people; all 412 repair targets correspond exactly to the initial audit finding.",
+    "p050": {
+      "units": [
+        "s0086",
+        "s0115"
+      ],
+      "finding": "德宗初 in s0086 supports the retained early-Dezong AD 780 event; 德宗以來 in s0115 supplies continuing context but no fixed personal interval, so its date context remains unresolved."
+    }
+  },
+  "validation": {
+    "canonicalSourceHash": "sha256:5513819750acbe04c406c9d1501d6598186f4d179a9caa41f031ef40398e3486",
+    "canonicalExtractionHash": "sha256:98cedf2e2ac2454c0ef771bc0c3f9090dfaccb71ee7a133a2e057c3dc4b05a94",
+    "proposalReplay": "PASS",
+    "candidateExtractionHash": "PASS",
+    "coverage": "PASS: 412/412 audited claim/hint targets",
+    "candidateHoldCoverage": "PASS: 411 source-specific holds plus p050 early-Dezong direct-date retention",
+    "p050EarlyDezongRetention": "PASS: AD 780 direct event retained; 德宗以來 held separately",
+    "compactValidation": "PASS: 278 units, 156 people, 793 mentions, 1830 claims",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if source and canonical extraction pins still match.",
+    "Replay all 412 operations and rerun scoped validation and date geometry.",
+    "Require a fresh independent canonical audit after curation."
+  ]
+}
