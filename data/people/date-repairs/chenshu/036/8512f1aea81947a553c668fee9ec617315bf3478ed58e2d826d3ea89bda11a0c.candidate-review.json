@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "036",
+  "candidateFile": "staged-candidate-8512f1aea81947a553c6.json",
+  "candidateHash": "sha256:8512f1aea81947a553c668fee9ec617315bf3478ed58e2d826d3ea89bda11a0c",
+  "reviewer": {
+    "name": "Codex independent Chenshu 036 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T07:35:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The candidate exactly repairs the eight audited claims and all seven paired hints: Qian Facheng/Jiqing, Xie An, Wang Zheng, Wei Can, and Confucius retain source-specific unresolved contexts without borrowed activity dates; the Deposed Emperor's accession is the discrete AD 566 event. Xie An's AD 579 old-tomb episode is retained only as a dated posthumous-reference reception event, not a life hint or attestation.",
+  "validation": {
+    "proposalReplay": "PASS: all 16 pinned operations replay byte-for-byte to sha256:8512f1aea81947a553c668fee9ec617315bf3478ed58e2d826d3ea89bda11a0c.",
+    "coverage": "PASS: all eight audit-listed claims (claim-150, claim-151, claim-153, claim-154, claim-155, claim-171, claim-173, claim-175) and all seven paired hints (p006, p007, p009, p010, p025, p027, p029) are covered exactly once. Xie An's claim-154 removal is accompanied by one explicitly classified reception addition.",
+    "sourceChecks": "PASS: s0044's old Xie An tomb and its AD 579 opening are posthumous reception; s0097's 廢帝嗣立 is retained as the source-grounded AD 566 accession rather than an AD 567–568 activity span. The remaining Chinese contexts are undated for their named subjects and their office, episode, quotation, and provenance fields remain intact.",
+    "scope": "PASS: only the eight audited temporal claims, their seven active-date hints, and the required Xie An reception event differ semantically; all people, source units, non-date claim fields, and unrelated valid chronology are preserved.",
+    "compactValidation": "PASS: scoped people validator passed for chenshu/036.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all 16 operations exactly, including the Xie An posthumous-reference addition.",
+    "Do not turn the AD 579 reception date into an Xie An active-date hint or life attestation.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}
