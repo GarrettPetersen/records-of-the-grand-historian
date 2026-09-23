@@ -70,18 +70,14 @@ function prompt(target, packet, chunk) {
 function rejectPath(target) { return path.join(PEOPLE_DIR, 'generated', 'rejected-spark-extractions', target.book, `${target.chapter}.json`); }
 
 function runCodex(instructions) {
-  const temp = fs.mkdtempSync(path.join(os.tmpdir(), '24histories-spark-'));
-  const output = path.join(temp, 'output.json');
-  try {
-    // The Codex structured-output subset rejects the compact schema's intentionally
-    // open fact-value objects. Host validation below remains mandatory and is the
-    // authoritative full-schema gate before any extraction is accepted.
-    const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--output-last-message', output, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
-    if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
-    if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
-    if (!fs.existsSync(output)) throw new Error('Codex Spark returned no final JSON');
-    return JSON.parse(fs.readFileSync(output, 'utf8'));
-  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+  // --output-last-message enables a CLI-generated response schema. The current
+  // API rejects that schema, so capture the ordinary final stdout instead. Host
+  // validation below remains the authoritative full-schema acceptance gate.
+  const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
+  if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
+  if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
+  if (!result.stdout.trim()) throw new Error('Codex Spark returned no final JSON');
+  return JSON.parse(result.stdout);
 }
 
 function planSparkChunks(packet) {
