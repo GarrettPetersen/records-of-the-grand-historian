@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "mingshi",
+  "chapter": "032",
+  "candidateCommit": "8fbbd0bdea",
+  "candidateFile": "staged-candidate-85bb46ee9527b5039788.json",
+  "sealedCandidateHash": "sha256:85bb46ee9527b5039788b60d4c482eb4374dc6f9c86c61b908e7fdbde06fb8f8",
+  "candidateExtractionHash": "sha256:5caab79cb688b4a892880e5786e941b1e4e81885376cbd42197b29a0f9512a07",
+  "reviewer": {
+    "name": "Codex independent Mingshi 032 sealed date-repair reviewer",
+    "agentId": "review_mingshi032",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T02:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after an independent Chinese-source, canonical-pin, and exact sealed-replay review. The six operations remove only the three false full-Zhiyuan-reign personal intervals and their paired active-date hints. The Chinese calls 《至元曆經》 a calendar classic in bibliographical discussion; it does not date Guo Shoujing, Qi Luqian, or Li Qian to AD 1264–1294. The candidate retains every bibliographical mention and evidence link as an explicit research hold. This receipt neither mutates nor approves the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:94cfba6bf8265b1ec2aa28921ce8e995c0808c46d62a030eb6e12d336f1123ef",
+    "canonicalExtractionHash": "sha256:7cc02884f1a910c83bb8421ed916bd7c5228b4686d333150b1820e89739b632d",
+    "sealedProposalIdentity": "PASS",
+    "candidateBytes": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: exactly claims 4, 12, and 17 plus paired hints p001-p003; no people, mention, evidence, predicate, or non-temporal claim-field change.",
+    "sourceOwnership": "PASS: the relevant Chinese is bibliographical discussion of persons and calendar texts, not a dated personal event or continuous personal activity interval.",
+    "historicalEvidenceRetention": "PASS: Guo Shoujing, Qi Luqian, Li Qian, their source wording, predicates, certainty, and evidence-unit links are retained; only the title-derived chronology is replaced by source-linked holds.",
+    "compactValidation": "PASS: 162 units, 3 people, 8 mentions, 41 claims.",
+    "chronologyGeometry": "PASS",
+    "scopedCanonicalValidation": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0007",
+      "quote": "郭守敬、齊履謙傳中，有書名可考。",
+      "result": "This is a bibliographical cross-reference to the biographies of Guo Shoujing and Qi Luqian; it supplies no date for either person."
+    },
+    {
+      "unit": "s0008",
+      "quote": "《元史》漫無採摭，僅存李謙之《議祿》、《曆經》之初稿。",
+      "result": "Li Qian is credited with drafts in a discussion of surviving texts, not dated to the whole Zhiyuan reign."
+    },
+    {
+      "unit": "s0115",
+      "quote": "顧《至元曆經》所載略，又誤以黃道矢度爲積差，黃道矢差爲率，今正之。",
+      "result": "《至元曆經》 is named as a calendar classic whose technical contents are being corrected; its title cannot establish a life or activity interval for any of the three people."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match this receipt.",
+    "Replay exactly the three reviewed claim replacements and three paired hint replacements.",
+    "Retain every named-person reference and source-unit link as the explicit bibliographical research holds in the sealed candidate; do not derive AD 1264–1294 from the calendar title.",
+    "Run scoped validation and require a fresh independent canonical date audit after host curation."
+  ]
+}
