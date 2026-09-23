@@ -21,7 +21,7 @@ import {
   splitPeopleExtractionChunk,
 } from './lib/people-extraction-chunks.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
-import { PEOPLE_DIR, REPO_ROOT, extractionPath, normalizedChapterId, writeTextAtomic } from './lib/people-content.mjs';
+import { PEOPLE_DIR, REPO_ROOT, extractionPath, normalizedChapterId, readJson, writeTextAtomic } from './lib/people-content.mjs';
 import { serializeCompactPeopleExtraction } from './lib/people-compact.mjs';
 import {
   DEFAULT_PEOPLE_QUEUE_BASE_REF, DEFAULT_PEOPLE_QUEUE_BRANCH, DEFAULT_PEOPLE_QUEUE_REMOTE,
@@ -35,6 +35,7 @@ import { validateCompactPeopleExtraction } from './validate-people-extraction.mj
 const MODEL = process.env.PEOPLE_SPARK_MODEL ?? 'gpt-5.6-luna';
 const WORKER_MAX_BYTES = 48 * 1024;
 const INSTRUCTIONS = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'), 'utf8').trim();
+const COMPACT_SCHEMA = readJson(path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json'));
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -64,7 +65,7 @@ function args(argv) {
 function prompt(target, packet, chunk) {
   const worker = buildPeopleChunkWorkerPacket(packet, chunk);
   const seed = buildCompactPeopleExtractionSeed(buildPeopleChunkPacket(packet, chunk), MODEL);
-  return `Return ONLY one JSON object conforming to the supplied compact extraction schema. Perform person extraction for owned chunk ${chunk.id} of ${target.book}/${target.chapter}. This is sealed packet-only work: do not inspect files, browse, use subagents, or run shell commands. Do not propose edits to source translations; translationRepairs are evidence proposals only. Process every owned unit and candidate, preserve the seed input and run metadata exactly, and do not emit people or claims for read-only context units. Set coverage only when true.\n\n<instructions>\n${INSTRUCTIONS}\n</instructions>\n<packet>\n${JSON.stringify(worker)}\n</packet>\n<seed>\n${JSON.stringify(seed)}\n</seed>`;
+  return `Return ONLY one JSON object conforming to the supplied compact extraction schema. Perform person extraction for owned chunk ${chunk.id} of ${target.book}/${target.chapter}. This is sealed packet-only work: do not inspect files, browse, use subagents, or run shell commands. Do not propose edits to source translations; translationRepairs are evidence proposals only. Process every owned unit and candidate, preserve the seed input and run metadata exactly, and do not emit people or claims for read-only context units. Set coverage only when true.\n\n<instructions>\n${INSTRUCTIONS}\n</instructions>\n<schema>\n${JSON.stringify(COMPACT_SCHEMA)}\n</schema>\n<packet>\n${JSON.stringify(worker)}\n</packet>\n<seed>\n${JSON.stringify(seed)}\n</seed>`;
 }
 
 function rejectPath(target) { return path.join(PEOPLE_DIR, 'generated', 'rejected-spark-extractions', target.book, `${target.chapter}.json`); }
@@ -77,7 +78,7 @@ function runCodex(instructions) {
   if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
   if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
   if (!result.stdout.trim()) throw new Error('Codex Spark returned no final JSON');
-  return JSON.parse(result.stdout);
+  return { raw: result.stdout, compact: JSON.parse(result.stdout) };
 }
 
 function planSparkChunks(packet) {
@@ -138,8 +139,14 @@ function main() {
   try {
     const parts = chunks.map((chunk) => {
       const ownedPacket = buildPeopleChunkPacket(packet, chunk);
-      const compact = runCodex(prompt(target, packet, chunk));
-      const validated = validateCompactPeopleExtraction(compact, ownedPacket, { strictAliasDispositions: true }).normalized;
+      const response = runCodex(prompt(target, packet, chunk));
+      let validated;
+      try {
+        validated = validateCompactPeopleExtraction(response.compact, ownedPacket, { strictAliasDispositions: true }).normalized;
+      } catch (error) {
+        error.sparkOutput = response.raw;
+        throw error;
+      }
       return { chunk, extraction: validated };
     });
     const compact = assembleCompactPeopleChunks(packet, parts, {
@@ -156,7 +163,7 @@ function main() {
     markRemotePeopleClaims([target], 'ready', { ...shared, lane: 'codex-spark', worker: o.worker });
     console.log(`[${o.book}/${o.chapter}] accepted host-validated Spark extraction; ${validated.translationRepairs.filter((r) => r.status === 'proposed').length} repair proposal(s) queued for independent review.`);
   } catch (error) {
-    if (error instanceof SyntaxError) writeTextAtomic(rejectPath(target), JSON.stringify({ error: error.message }, null, 2));
+    writeTextAtomic(rejectPath(target), JSON.stringify({ error: error.message, output: error.sparkOutput ?? null }, null, 2));
     markRemotePeopleClaims([target], 'failed', { ...shared, lane: 'codex-spark', worker: o.worker, note: error.message });
     throw error;
   }
