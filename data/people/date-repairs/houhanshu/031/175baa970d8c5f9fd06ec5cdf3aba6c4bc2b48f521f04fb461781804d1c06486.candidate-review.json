@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "houhanshu",
+  "chapter": "031",
+  "candidateCommit": "affd4c456e",
+  "candidateFile": "staged-candidate-db1a755d21af3dee44b5.json",
+  "sourceHash": "sha256:a02588c91bbf94c9e5311e7de841bf187bd403c173756db1e27540b0a98696a6",
+  "originalExtractionHash": "sha256:6f98c08c3ac2b1d71c7d6eae6a5a53e80d8aa182d65743c7a8d10e8442492fa9",
+  "sealedCandidateHash": "sha256:175baa970d8c5f9fd06ec5cdf3aba6c4bc2b48f521f04fb461781804d1c06486",
+  "candidateExtractionHash": "sha256:db1a755d21af3dee44b5bda39db6e3509068b2b5015d84f326860c5364e44664",
+  "reviewer": {
+    "name": "Codex independent Houhanshu 031 sealed date-repair reviewer",
+    "agentId": "date_audit_suishu086",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T10:35:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent Chinese-source, sealed-proposal, and exact-replay review. The candidate removes only p001 claim-173, the falsely inherited Emperor Cheng chronology for Huan Tan. It preserves p002 claim-179, the separate attestation for the father, byte-for-byte. The source distinguishes Huan Tan's identification in s0001 from his father's Cheng-era Grand Music office in s0002. This receipt authorizes no canonical mutation or audit approval.",
+  "candidateValidation": {
+    "canonicalInputs": "PASS: source and extraction hashes equal the handoff pins.",
+    "sealedProposalIdentity": "PASS: sha256:175baa970d8c5f9fd06ec5cdf3aba6c4bc2b48f521f04fb461781804d1c06486.",
+    "candidateByteIdentity": "PASS: sha256:db1a755d21af3dee44b5bda39db6e3509068b2b5015d84f326860c5364e44664.",
+    "proposalReplay": "PASS: applyDateRepairProposal reconstructed the exact declared candidate.",
+    "scope": "PASS: one non-no-op removal, claim-173 only; p002 claim-179 remains byte-identical.",
+    "compactValidation": "PASS: 87 people, 412 mentions, 564 claims, 379 candidates.",
+    "temporalGeometry": "PASS: no candidate dateAuditDiagnostics findings.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": [
+    {
+      "proposalItem": "claim-173",
+      "verdict": "source-sound-removal",
+      "sourceEvidence": [
+        {
+          "unit": "s0001",
+          "quote": "桓譚字君山，沛國相人也。",
+          "sourceHash": "sha256:d7dce9418e6be125e465a168dcd1dabc4207f9dd84bbdc785ce375bf6e850ae5",
+          "reason": "This unit identifies Huan Tan but contains no Cheng-era office or temporal assertion."
+        },
+        {
+          "unit": "s0002",
+          "quote": "父成帝時為太樂令。",
+          "sourceHash": "sha256:2ffbea41c5591db06bac7377854c52e38b8aabfad54525a3f46148e864b36494",
+          "reason": "The kinship subject 父 owns the Emperor Cheng office date; it cannot be transferred to Huan Tan."
+        }
+      ],
+      "reason": "Removing only Huan Tan's inherited Cheng-era attestation preserves the chapter evidence and avoids inventing a life date. The candidate deliberately does not alter Huan Tan's separately sourced chronology."
+    },
+    {
+      "proposalItem": "claim-179",
+      "verdict": "preserved-required-context",
+      "sourceEvidence": [
+        {
+          "unit": "s0002",
+          "quote": "父成帝時為太樂令。",
+          "sourceHash": "sha256:2ffbea41c5591db06bac7377854c52e38b8aabfad54525a3f46148e864b36494",
+          "reason": "The father’s separate record is the correct owner of the Cheng-era date and therefore must remain unchanged."
+        }
+      ],
+      "reason": "Exact comparison of the canonical and reconstructed candidate shows p002 claim-179 is byte-identical. Its preservation is necessary to retain the source’s correctly attributed chronology."
+    }
+  ],
+  "hostRequirements": [
+    "Recheck the canonical source and extraction hashes before applying the sealed proposal.",
+    "Apply only claim-173's reviewed removal; do not alter p002 claim-179 or unrelated claims.",
+    "Run scoped production validation after host curation.",
+    "Do not treat this receipt as date approval; perform a fresh independent audit of the changed canonical extraction."
+  ]
+}
