@@ -3,59 +3,27 @@
   "kind": "independent-staged-date-repair-review",
   "book": "xintangshu",
   "chapter": "138",
-  "candidateFile": "staged-candidate-65840c25493b39405806.json",
+  "candidateFile": "staged-candidate-32be1a1132d1e3fc303e.json",
   "candidateHash": "sha256:65840c25493b39405806b691ab433764c945cc49c8b69d651bae819f978699d4",
-  "sourceHash": "sha256:ba01a3aad9a19fad2fc6b3370ab2a23dd4a09a19645afe3c20fa6f78b3fd59e1",
-  "originalExtractionHash": "sha256:d124ea74e65635b228d87796a5bc902b8e87b1430a44ffb35f9871b1eed21801",
   "reviewer": {
-    "name": "Codex independent Xintangshu 138 regenerated-candidate reviewer",
-    "agentId": "date_audit_beiqishu005",
+    "name": "Independent reviewer",
+    "agentId": "date_audit_beiqishu007",
     "independentOfExtractor": true,
     "independentOfCandidateCurator": true
   },
-  "reviewedAt": "2026-09-23T23:15:00.000Z",
-  "disposition": "reject",
-  "summary": "Rejected narrowly. The candidate is source-faithful in its 92 interval removals, retains valid prior hold claims, handles the later p023 hint through its separate AD 759 succession attestation, and leaves no residual Western interval after replay. However, it includes three no-op hint operations: p061, p065, and p067 have identical direct-year before and after arrays. A sealed repair must not contain no-op operations; regenerate it without those three changes and preserve the other 133 source-sound operations.",
-  "reviewedChanges": [
-    {
-      "proposalItems": ["92 interval claim replacements", "hints-p023", "the 40 other non-no-op paired hint repairs"],
-      "verdict": "source-sound",
-      "sourceEvidence": [
-        { "unit": "s0003", "quote": "開元中，從安西都護來曜討十姓蘇祿，先登捕虜，累功署昭武校尉。", "sourceHash": "sha256:5bace023c700703583b125073dcb37b8a0eb6f2cb200324cd2fd1a02b9fee70c" },
-        { "unit": "s0050", "quote": "子佐國，襲爵，曆丹王府長史。", "sourceHash": "sha256:3414746e5523e60958d08e375d38311c02c1581891899d9b5574c9e4a337909b" },
-        { "unit": "s0051", "quote": "卒，推嗣業功，贈宋州刺史。", "sourceHash": "sha256:b0263d743154951a4b9dd3f3c82efc06039b3075f704d4416c93a600f3ef01ab" },
-        { "unit": "s0156", "quote": "天子下罪己詔，並赦群盜。", "sourceHash": "sha256:409c6f41d09f1d65312cf2087d4500cbbf48e3d512d819f9045000aa5329de72" },
-        { "unit": "s0170", "quote": "貞元初，朝京師，詔還所鎮。", "sourceHash": "sha256:8a09dd83b875f45e239aee2bf090aebff9dfea57b4e8f9c269be760a1c76dabe" }
-      ],
-      "reason": "The cited Chinese establishes particular episodes or direct regnal-year events, not continuous personal activity throughout imported intervals. The proposal removes each residual westernInterval, preserves underlying event payloads and prior holds, and p023's AD 759 hint is independently supported by the existing explicit succession attestation rather than the removed death interval."
-    },
-    {
-      "proposalItems": ["hints-p061", "hints-p065", "hints-p067"],
-      "verdict": "reject-no-op-operations",
-      "sourceEvidence": [
-        { "unit": "s0153", "quote": "興元初，檢校左僕射、同中書門下平章事，繇倪國公進義陽郡王。", "sourceHash": "sha256:23d6ef26e6989b79ea717f1227206d249fe6f5617f6c6c96f2770ebdb23f98b3" },
-        { "unit": "s0157", "quote": "抱真乃遣客賈林以大義說武俊，使合從擊滔，武俊許諾，而內猶豫。", "sourceHash": "sha256:c18841a861f364982de7fb36ef1cabf66c192cb319ef54f0b2b250907802aecf" },
-        { "unit": "s0170", "quote": "貞元初，朝京師，詔還所鎮。", "sourceHash": "sha256:8a09dd83b875f45e239aee2bf090aebff9dfea57b4e8f9c269be760a1c76dabe" }
-      ],
-      "reason": "p061 already has the source-backed direct hints AD 784 and AD 785; p065 already has AD 784 and AD 785; p067 already has AD 784. Their proposal before and after arrays are byte-identical, so these operations resolve no defect and must be omitted rather than retained under all-findings selection."
-    }
-  ],
-  "requiredRevision": [
-    "Remove only the three no-op hints operations for p061, p065, and p067.",
-    "Retain the remaining 92 claim replacements and 41 non-no-op hint repairs unchanged, including p023's separately evidenced AD 759 hint.",
-    "Replay and reseal the resulting 133-operation candidate; confirm no audited westernInterval remains and that all pre-existing hold claims are unchanged."
-  ],
+  "reviewedAt": "2026-09-23T10:01:37.371Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted: sealed proposal replayed exactly; 92 claims and 41 hints are scoped. Direct p023 AD759 remains supported; p061, p065, and p067 have no operations.",
   "validation": {
-    "canonicalInputs": "PASS",
     "proposalReplay": "PASS",
-    "candidateHash": "PASS",
-    "compactValidation": "PASS: 101 people, 553 mentions, 1242 claims",
+    "compactValidation": "PASS",
     "chronologyGeometry": "PASS",
-    "freshAuditResidualIntervals": "PASS: zero after replay",
-    "existingResearchHolds": "PASS: all 13 prior unresolved claim records unchanged",
-    "allFindingsSelection": "FAIL: three direct-year hint selections are no-ops",
+    "coverage": "PASS: 92 claims and 41 hints.",
     "canonicalMutation": "NONE"
   },
-  "publication": "staging-only",
-  "masterMutation": "NONE"
+  "hostRequirements": [
+    "Apply only matching pins.",
+    "Fresh independent audit after curation."
+  ]
 }
