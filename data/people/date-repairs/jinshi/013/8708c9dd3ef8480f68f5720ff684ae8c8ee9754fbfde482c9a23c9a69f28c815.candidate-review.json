@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "013",
+  "candidateCommit": "1ca4305c17",
+  "candidateFile": "staged-candidate-8708c9dd3ef8480f68f5.json",
+  "sealedCandidateHash": "sha256:8708c9dd3ef8480f68f5720ff684ae8c8ee9754fbfde482c9a23c9a69f28c815",
+  "candidateExtractionHash": "sha256:f13679371a97eb5c48c54dbd4aca69b366e229fec719753684c791a45e8e2327",
+  "reviewer": {
+    "name": "Codex independent Jinshi 013 sealed date-repair reviewer",
+    "agentId": "review_jinshi013",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T18:25:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independent Chinese-source and exact sealed-replay review. The proposal changes exactly three unsupported personal chronology claims and their three paired hints. s0001 dates a Zhangzong-era edict that changes Wei Shaowang's taboo name because of Xianzong; it is not an activity date for Xianzong. s0193 lists Yang Yunyi's and Old Chen's daily records among materials held in the History Office; it supplies no Daan or Chongqing personal date for either author. All named source evidence remains intact and is retained as explicit research-held context. This receipt does not mutate or approve the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:2601f166e56fc7364077b742fc52863a33f7e4a7e04a00e56501a77d525488cb",
+    "canonicalExtractionHash": "sha256:1e04da4e6cacdef2a17ce3f27fa828255c6edca2af2d9220c734182c2050e871",
+    "sealedProposalIdentity": "PASS",
+    "candidateBytes": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: claim-105/p003, claim-179/p069, claim-180/p070, and their paired hints only.",
+    "sourceOwnership": "PASS: s0001 is a Zhangzong-era naming edict; s0193 is an undated archival ownership list.",
+    "nonDateRetention": "PASS: names, predicates, source wording, evidence units, and archival/taboo context are retained.",
+    "compactValidation": "PASS: 220 units, 71 people, 372 mentions, 538 claims.",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0001",
+      "quote": "章宗時避顯宗諱，詔改「允」為「永」。",
+      "result": "The Zhangzong-era edict concerns Wei Shaowang's name; it cannot date Emperor Xianzong's personal activity."
+    },
+    {
+      "unit": "s0193",
+      "quote": "金禮部尚書楊雲翼日錄四十條，陳老日錄三十條，藏在史館。",
+      "result": "The passage records writings held in the History Office and supplies no personal Daan or Chongqing activity date for Yang Yunyi or Old Chen."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes still match this receipt.",
+    "Replay exactly the three reviewed claim replacements and three paired hint replacements.",
+    "Retain the taboo-edict and archival-record source context without deriving personal activity dates.",
+    "Run scoped validation and require a fresh independent canonical audit after curation."
+  ]
+}
