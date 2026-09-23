@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "018",
+  "candidateFile": "staged-candidate-559895841d6bbbbf87bf.json",
+  "candidateHash": "sha256:559895841d6bbbbf87bf6ddd58cdaef3d6c7a5fa6e58f206692487c2497539be",
+  "reviewer": {
+    "name": "Codex independent Chenshu 018 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:55:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The six claim replacements replay exactly and correctly retain the historian's named historical models as source-specific holds, but no paired p075–p080 active-date hints are repaired. Those stale hints would continue to present borrowed historical chronology as local activity.",
+  "validation": {
+    "proposalReplay": "PASS: the six pinned replacements replay byte-for-byte to sha256:559895841d6bbbbf87bf6ddd58cdaef3d6c7a5fa6e58f206692487c2497539be.",
+    "claimCoverage": "PASS: all six audit-listed claims are replaced exactly once, with no unlisted temporal-claim mutation.",
+    "sourceHolds": "PASS: each replacement retains the original source wording, named subject, provenance, and cited unit while removing borrowed Western chronology.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "pairedHints": "FAIL: the audit requires matching p075–p080 hint repairs, but the proposal has zero hints operations and all six affected hints are unchanged.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-412", "claim-417", "claim-422", "claim-427", "claim-432", "claim-437"],
+      "pairedHints": ["p075", "p076", "p077", "p078", "p079", "p080"],
+      "units": ["s0176", "s0177"],
+      "evidence": "昔鄧禹基於文學，杜預出自儒雅，卒致軍功，名著前代。 / 顧榮、郗鑒之輩，溫嶠、謝玄之倫…",
+      "result": "The historian invokes Deng Yu, Du Yu, Gu Rong, Xi Jian, Wen Jiao, and Xie Xuan as historical models. Their facts remain visible, but their dates are not chapter-local activity evidence; each corrected claim requires a matching active-hint hold."
+    }
+  ],
+  "requiredCorrections": {
+    "addHintOperationsFor": ["p075", "p076", "p077", "p078", "p079", "p080"],
+    "requirement": "Add one exact hints operation for each listed person, replacing the borrowed active-date text with the corresponding source-specific research-required historical-model hold. Preserve all non-temporal data and restage a new pinned candidate for fresh independent review."
+  }
+}
