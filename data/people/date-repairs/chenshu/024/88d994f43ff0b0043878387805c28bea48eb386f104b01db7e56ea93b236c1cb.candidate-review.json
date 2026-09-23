@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "024",
+  "candidateFile": "staged-candidate-88d994f43ff0b0043878.json",
+  "candidateHash": "sha256:88d994f43ff0b0043878387805c28bea48eb386f104b01db7e56ea93b236c1cb",
+  "reviewer": {"name": "Codex independent Chenshu 024 corrected-candidate reviewer", "agentId": "review_chenshu014_date_repair", "independentOfExtractor": true, "independentOfCandidateCurator": true},
+  "reviewedAt": "2026-09-23T06:05:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The corrected 23-change proposal exactly replays: all 12 schema-safe audited claim repairs retain non-life facts and all 11 paired active-date hints become matching source-specific holds, including the one person with two audited claims. No collateral changes.",
+  "validation": {
+    "proposalReplay": "PASS: applying all 23 pinned operations produces sha256:88d994f43ff0b0043878387805c28bea48eb386f104b01db7e56ea93b236c1cb, byte-equivalent to the staged candidate.",
+    "claimCoverage": "PASS: all 12 audit-listed claims are replaced exactly once.",
+    "pairedHints": "PASS: all 11 audit-listed hints are repaired exactly once; the duplicated-person claim pair is represented by one matching hint hold.",
+    "nonLifeValues": "PASS: all replacements preserve subjects, predicates, non-temporal values, source wording, provenance, and cited facts while changing only temporal metadata to source-specific holds.",
+    "scope": "PASS: only the 12 reviewed claims and 11 paired person hint records differ; all other extraction data is unchanged.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [{"claims": ["claim-142", "claim-143", "claim-145", "claim-146", "claim-147", "claim-262", "claim-286", "claim-287", "claim-288", "claim-538", "claim-539", "claim-910"], "pairedHints": ["p025", "p026", "p029", "p030", "p031", "p035", "p052", "p053", "p054", "p086", "p130"], "result": "Rhetorical, historical, and cited-work references retain their source facts but provide no chapter-local personal date evidence; all source-specific claim and hint holds are appropriate."}],
+  "hostRequirements": ["Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.", "Apply all 23 reviewed operations exactly; do not omit hint operations or alter non-temporal values.", "Do not alter canonical audit status during curation.", "Run a fresh independent canonical audit after application; retained research holds require research-blocked rather than audited status."]
+}
