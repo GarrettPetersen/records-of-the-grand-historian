@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "050",
+  "candidateFile": "staged-candidate-3f156d4b8be93eccd42e.json",
+  "sealedCandidateHash": "sha256:f6bd65392c3b35f2bb2bc134a2a2c76903c732054f6a08bcbf175325b7ea14b1",
+  "candidateExtractionHash": "sha256:3f156d4b8be93eccd42e28e77a7ac5e281c5957e3d46ea353815f2a6b3918183",
+  "reviewer": {
+    "name": "Independent Jinshi 050 superseding candidate reviewer",
+    "agentId": "fresh_jinshi050_audit",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T19:25:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent source, canonical-pin, sealed-replay, and prior-rejection review. This is a one-operation candidate: only hints-p003 changes. It removes the unsupported continuous AD 1162-1187 value and replaces it with exactly AD 1161, 1162, 1163, 1165, 1169, 1174, 1176, 1177, and 1181. Each value is supported by a dated Emperor Shizong claim in the chapter, and the replacement contains no interval. Claims, evidence, source wording, all other hints, and the prior canonical needs-revision audit remain unchanged.",
+  "validation": {
+    "canonicalSourceHash": "sha256:e8f079f57ca0cfa32c2d9531d70ce2c2221a376dc922205682f642576b70c69d",
+    "canonicalExtractionHash": "sha256:8839dac68b4739bf17fce0ebf35bda6e566bc0f3f738fdf06985b18531aea200",
+    "canonicalInputs": "PASS: current source and canonical extraction hashes exactly match the sealed candidate pins.",
+    "priorAuditReportHash": "sha256:ce0f47ad482bb4756325c9cac6ab592567fd52a0b29e861e7631ee3f8f1f6963",
+    "priorRejectionRetention": "PASS: the canonical needs-revision report and its Shizong AD 1187 objection remain unchanged; this receipt does not replace or approve that audit.",
+    "sealedProposalIdentity": "PASS: sealed candidate handoff hash is sha256:f6bd65392c3b35f2bb2bc134a2a2c76903c732054f6a08bcbf175325b7ea14b1.",
+    "candidateExtractionIdentity": "PASS: reconstructed candidate hash is sha256:3f156d4b8be93eccd42e28e77a7ac5e281c5957e3d46ea353815f2a6b3918183.",
+    "proposalReplay": "PASS: replay against pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly one operation and one data diff, hints-p003; no claim, source, person, mention, or other hint changes.",
+    "discreteValues": "PASS: p003 becomes exactly AD 1161, 1162, 1163, 1165, 1169, 1174, 1176, 1177, and 1181; no resulting value contains an interval.",
+    "sourceSoundness": "PASS: source-backed Shizong events occur in s0218, s0059, s0060, s0065, s0037/s0069, s0130, s0076, s0012/s0078, and s0016/s0018 respectively.",
+    "compactValidation": "PASS: 262 units, 35 people, 101 mentions, 376 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: no candidate dateAuditDiagnostics findings.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jinshi --chapter 050.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0218",
+      "quote": "世宗大定元年，以兵興歲歉，下令聽民進納補官。",
+      "result": "Dading 1 supports AD 1161."
+    },
+    {
+      "unit": "s0059",
+      "quote": "世宗大定二年，以正隆之後倉廩久匱",
+      "result": "Dading 2 supports AD 1162."
+    },
+    {
+      "unit": "s0060",
+      "quote": "三年，謂宰臣曰",
+      "result": "The dated Shizong narrative supports AD 1163; the immediately following Dading sections likewise support the remaining discrete dates."
+    },
+    {
+      "unit": "s0016",
+      "quote": "二十一年正月，夏國王李仁孝上表乞複置",
+      "result": "Dading 21 supports AD 1181 and is the final dated Shizong evidence; it does not support AD 1187."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if current canonical source, extraction, sealed handoff, and candidate hashes still match this receipt.",
+    "Replay exactly the one hints-p003 replacement with the nine listed discrete values and no interval.",
+    "Do not alter claims, evidence, source wording, people, mentions, other hints, or the prior canonical needs-revision report.",
+    "After host curation, rerun scoped validation and obtain a fresh independent canonical date audit; this staging receipt is not canonical approval."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}
