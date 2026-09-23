@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-// A deliberately narrow, host-validated lane for spare Codex Spark capacity.
-// Spark sees one sealed compact packet and returns JSON; it never receives a writable repo.
+// A deliberately narrow, host-validated lane for spare fast Codex capacity.
+// The worker sees one sealed compact packet and returns JSON; it never receives a writable repo.
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -30,7 +30,9 @@ import {
 } from './lib/people-work-queue.mjs';
 import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
 
-const MODEL = 'gpt-5.3-codex-spark';
+// GPT-5.3-Codex-Spark was retired in September 2026. Keep the legacy command name
+// for its queue ownership, but use the supported fast Codex model by default.
+const MODEL = process.env.PEOPLE_SPARK_MODEL ?? 'gpt-5.6-luna';
 const WORKER_MAX_BYTES = 48 * 1024;
 const INSTRUCTIONS = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'), 'utf8').trim();
 const SCHEMA = path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json');
