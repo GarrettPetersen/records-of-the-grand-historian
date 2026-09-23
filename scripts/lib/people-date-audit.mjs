@@ -45,6 +45,26 @@ export function dateAuditItems(extraction) {
   return { people, items };
 }
 
+// A repair candidate must cover every still-incorrect, repairable record named by
+// the audit, even when the reviewer separated related findings into later groups.
+// Keep this selection here rather than letting one-off staging scripts accidentally
+// treat the first finding as the entire repair scope.
+export function actionableDateAuditItems(report) {
+  if (!Array.isArray(report?.findings) || !Array.isArray(report?.itemChecks)) throw new Error('Date audit report lacks findings or item checks');
+  const verdictById = new Map(report.itemChecks.map(check => [check.id, check.verdict]));
+  const selected = [];
+  const seen = new Set();
+  for (const finding of report.findings) {
+    if (!Array.isArray(finding.items)) throw new Error('Date audit finding lacks item IDs');
+    for (const id of finding.items) {
+      if (!/^(claim-\d+|hints-p\d+)$/.test(id) || verdictById.get(id) !== 'incorrect' || seen.has(id)) continue;
+      seen.add(id);
+      selected.push(id);
+    }
+  }
+  return selected;
+}
+
 export function buildDateAuditPacket(book, chapter, { dataDir = DATA_DIR, peopleDir = PEOPLE_DIR, extraction: suppliedExtraction } = {}) {
   validateDateAuditScope(book, chapter);
   const source = readJson(path.join(dataDir, book, `${chapter}.json`));
