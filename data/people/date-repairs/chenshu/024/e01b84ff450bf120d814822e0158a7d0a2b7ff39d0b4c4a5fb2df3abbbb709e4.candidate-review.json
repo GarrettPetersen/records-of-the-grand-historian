@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "024",
+  "candidateFile": "staged-candidate-e01b84ff450bf120d814.json",
+  "candidateHash": "sha256:e01b84ff450bf120d814822e0158a7d0a2b7ff39d0b4c4a5fb2df3abbbb709e4",
+  "reviewer": {
+    "name": "Codex independent Chenshu 024 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T05:55:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The schema-safe candidate exactly replays, repairs all 12 audited claims, and preserves non-life values, but it omits every one of the 11 required paired active-date-hint repairs. Those unchanged hints would still publish borrowed allusion and cited-work chronology.",
+  "validation": {
+    "proposalReplay": "PASS: the 12 pinned replacements replay byte-for-byte to sha256:e01b84ff450bf120d814822e0158a7d0a2b7ff39d0b4c4a5fb2df3abbbb709e4.",
+    "claimCoverage": "PASS: every audit-listed claim is replaced exactly once (12 of 12), with no unlisted claim mutation.",
+    "nonLifeValues": "PASS: the reviewed replacements preserve non-temporal claim values, subjects, predicates, provenance, and source facts; only temporal metadata becomes a source-specific hold.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "pairedHints": "FAIL: the audit requires 11 paired hint repairs, but the proposal has zero hints operations and all listed hints remain unchanged.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-142", "claim-143", "claim-145", "claim-146", "claim-147", "claim-262", "claim-286", "claim-287", "claim-288", "claim-538", "claim-539", "claim-910"],
+      "pairedHints": ["p025", "p026", "p029", "p030", "p031", "p035", "p052", "p053", "p054", "p086", "p130"],
+      "result": "Liu/Xiang, earlier rulers and exemplars, Confucius, Han Fei, Liu Xin, Zhong Jun, and related cited figures are retained as rhetorical, historical, or work-reference facts, not chapter-local date evidence. Each repaired claim requires its paired active-hint hold."
+    }
+  ],
+  "requiredCorrections": {
+    "addHintOperationsFor": ["p025", "p026", "p029", "p030", "p031", "p035", "p052", "p053", "p054", "p086", "p130"],
+    "requirement": "Add one exact hints operation for each listed person, replacing borrowed active-date text with the paired source-specific research-required allusion/reference hold. Preserve independently supported dates in mixed records, make no non-temporal changes, and restage a new pinned candidate for fresh independent review."
+  }
+}
