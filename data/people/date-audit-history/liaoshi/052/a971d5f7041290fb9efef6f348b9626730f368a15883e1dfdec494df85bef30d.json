@@ -4,14 +4,14 @@
   "book": "liaoshi",
   "chapter": "052",
   "sourceHash": "sha256:cab5a32605de1646acf73ada1c34519e770fa8f74852a2c1398137a69683d8ae",
-  "extractionHash": "sha256:9cf221e0a983dd6d99702b9b122612c685d1ab6580319366bfacbc42d0e08e19",
-  "status": "research-blocked",
+  "extractionHash": "sha256:6af4d453253b2e90c2aca86db4260e8e8b4576eb483d3bc5c57346737353e075",
+  "status": "needs-revision",
   "reviewer": {
     "name": "Codex independent date reviewer",
     "independentOfExtractor": true
   },
-  "reviewedAt": "2026-09-22T00:00:00.000Z",
-  "summary": "Fresh full independent canonical audit after 701fbca1d2: all 273 Chinese ritual units, both current temporal or active-hint items, and Khan Zuowu’s person record were rechecked. The repaired extraction correctly preserves an explicitly unresolved, undated ritual-document attestation and a research-required hint. The sole occurrence names 阻午可汗 only in the title 柴冊禮 and provides no personal date, era, life event, birth, death, age, or antiquity attribution. Because the chapter itself cannot resolve that chronology, the complete audit is research-blocked; this report does not alter the separate historicity or editorial classifications.",
+  "reviewedAt": "2026-09-21T00:00:00.000Z",
+  "summary": "Complete independent review of all 273 Chinese units found a ritual treatise rather than a biographical chronology. The only asserted temporal information, ‘legendary antiquity’ for Khan Zuowu, is unsupported: the sole source merely names a Khitan investiture rite and says that it was compiled by combining its procedure with Tang rites. No date, era, life event, birth, death, age, or historical-antiquity attribution is supplied. The attestation and active-date hint require removal or replacement with an explicit unresolved non-date description; they cannot support a chronology.",
   "reviewedUnits": [
     "s0001",
     "s0003",
@@ -290,9 +290,9 @@
   "itemChecks": [
     {
       "id": "claim-8",
-      "verdict": "research-blocked",
-      "event": "The undated ritual-document attestation for Khan Zuowu.",
-      "reason": "The current claim correctly says that s0272 names Khan Zuowu only in the title of a Wood-Bundle Rite used when compiling a ceremony. This is neither a dated event nor evidence for an era, activity interval, birth, death, age, or legendary-antiquity assertion. No other one of the 273 Chinese units supplies personal chronology, so the unresolved attestation must remain a research hold.",
+      "verdict": "incorrect",
+      "event": "The asserted legendary-antiquity attestation of Khan Zuowu.",
+      "reason": "This is not a dated event or a statement about Khan Zuowu’s era. The source identifies the title only inside the name of an investiture rite, then describes how that rite’s procedure was compiled with Tang ritual. It supplies neither chronology nor an attribution of legendary antiquity to the named khan.",
       "evidence": [
         {
           "unit": "s0272",
@@ -302,9 +302,9 @@
     },
     {
       "id": "hints-p001",
-      "verdict": "research-blocked",
-      "event": "The research-required active-date hint for Khan Zuowu.",
-      "reason": "The current hint accurately records that this chapter supplies no personal chronology. The full ritual chapter contains procedural references to imperial, dowager, empress, heir, marriage, and princess ceremonies, but no further personal occurrence or date for Khan Zuowu. It cannot be converted to a Western year or active range without independent evidence.",
+      "verdict": "incorrect",
+      "event": "The active-date hint assigned to Khan Zuowu.",
+      "reason": "The hint ‘legendary antiquity’ repeats the unsupported claim. Reading the complete ritual chapter found no dated personal action, age, birth, death, reign, or temporal classification for this named title; it should not be retained as a chronological hint.",
       "evidence": [
         {
           "unit": "s0272",
@@ -316,8 +316,8 @@
   "personChecks": [
     {
       "id": "p001",
-      "verdict": "research-blocked",
-      "reason": "Khan Zuowu appears only in the ritual-document title in s0272. The complete current source supplies no personal life event or chronology for him. The date hold is therefore necessary; this audit leaves the record’s separate historicity and editorial classifications unchanged.",
+      "verdict": "incorrect",
+      "reason": "The chapter’s only reference to Khan Zuowu is the rite title in s0272. The surrounding and remaining units prescribe imperial, dowager, empress, heir, marriage, and princess ceremonies; none supplies a personal life event or chronology for him. The record’s ‘legendary’ historical classification and antiquity hint are therefore unsupported by this chapter’s evidence.",
       "evidence": [
         {
           "unit": "s0272",
@@ -333,8 +333,8 @@
         "hints-p001",
         "p001"
       ],
-      "problem": "The sole source occurrence is an undated ritual-document title, so the chapter cannot establish Khan Zuowu’s personal chronology or a historical-antiquity date.",
-      "action": "Retain the explicit unresolved attestation and research-required hint. Obtain independently source-hashed evidence identifying Khan Zuowu and dating a personal event before adding a Western date, interval, or active range; do not change historicity or editorial classification in this date audit."
+      "problem": "The only source occurrence is a ritual-document title; it does not establish that Khan Zuowu lived in legendary antiquity or provide any personal chronology.",
+      "action": "Remove the unsupported qualitative temporal attestation and active-date hint, and correct the unsupported legendary classification if the scoped extraction repair permits it; retain any non-temporal source mention separately without inventing dates."
     }
   ],
   "references": [
@@ -344,7 +344,7 @@
       "unit": "s0272",
       "quote": "又有《上契丹冊儀》，以阻午可汗柴冊禮合唐禮雜就之。",
       "sourceHash": "sha256:e3cfabd64b0bdfd44ee2f5a1512741a6a3f975ac585599eb30e4ca938049ea03",
-      "reason": "This is the chapter’s sole occurrence of Khan Zuowu. It establishes the ritual-document context and the absence of any personal date, era, or life-event assertion in the local source."
+      "reason": "The complete chapter was read as ritual context; this is the sole source unit naming Khan Zuowu and directly establishes the absence of the claimed temporal assertion."
     }
   ]
 }
