@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "liaoshi",
+  "chapter": "050",
+  "candidateFile": "staged-candidate-75ac4a165f56b7290baa.json",
+  "sealedCandidateHash": "sha256:75ac4a165f56b7290baa8768e64225fbe25b9f5f4c86df321d2651a499955baf",
+  "candidateExtractionHash": "sha256:a18ea29afc068627b87d48d9331f7ad1c3a15ae6a93ed91fa9d8ac4152b46833",
+  "reviewer": {
+    "name": "Independent Liaoshi 050 generic-title date-repair reviewer",
+    "agentId": "review_liaoshi050",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:16:08Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent source, canonical-pin, and sealed-replay review. The six exact operations replace only claims 69–71 and paired p007–p009 AD 1031–1101 hints. 皇太后, 太皇太后, and 南朝皇帝 are generic ritual or diplomatic titles in the cited formulary passages; neither their separate occurrences nor the dated deaths of named Liao rulers establish one title-holder's continuous personal activity. The candidate preserves all source wording and turns each affected record into a source-linked explicit research hold. The named death claims 32, 33, and 34 remain byte-identical.",
+  "validation": {
+    "canonicalSourceHash": "sha256:2892f9d543ce72dc6b6e44eb37ff93d20d330524a5efb467d47de1ee4897de75",
+    "canonicalExtractionHash": "sha256:692c06d53ce5ac9ae16c2c0832c0aee1c0a687ffc010896eb863ed48fce94846",
+    "canonicalInputs": "PASS: current source and canonical extraction hashes exactly match the handoff pins.",
+    "sealedProposalIdentity": "PASS: the exact six-operation proposal hashes to sha256:75ac4a165f56b7290baa8768e64225fbe25b9f5f4c86df321d2651a499955baf.",
+    "candidateExtractionIdentity": "PASS: the staged candidate hashes to sha256:a18ea29afc068627b87d48d9331f7ad1c3a15ae6a93ed91fa9d8ac4152b46833.",
+    "proposalReplay": "PASS: replay against the pinned canonical extraction reconstructs the candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-69, claim-70, claim-71, hints-p007, hints-p008, and hints-p009 change.",
+    "sourceSoundness": "PASS: s0062 is a 皇太后 ritual formula, s0069 a 太皇太后 ceremonial formula, and s0115 a 南朝皇帝 diplomatic formula; none identifies a single office-holder throughout AD 1031–1101.",
+    "namedDeathRetention": "PASS: claim-32 (Shengzong AD 1031), claim-33 (Xingzong AD 1055), and claim-34 (Daozong AD 1101) are byte-identical.",
+    "nonDateRetention": "PASS: each affected claim retains subject, predicate, sourceDate text, certainty, and evidence units; only unsupported Western intervals are replaced by explicit source-linked holds.",
+    "compactValidation": "PASS: 177 units, 9 people, 65 mentions, 102 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: no candidate dateAuditDiagnostics findings.",
+    "scopedValidator": "PASS: npm run people:validate -- --book liaoshi --chapter 050.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0062",
+      "quote": "若皇太后奠酒，依常儀。",
+      "result": "This formulary condition names the generic Empress Dowager role and provides no uniquely identified holder or personal date."
+    },
+    {
+      "unit": "s0069",
+      "quote": "宋使祭奠吊慰儀：太皇太后至菆塗殿，服喪服。",
+      "result": "This ceremonial formula names a Grand Empress Dowager role without identifying one person or establishing an AD 1031–1101 activity span."
+    },
+    {
+      "unit": "s0115",
+      "quote": "皇帝宣問「南朝皇帝聖躬萬福」，使者跪奏「來時皇帝聖躬萬福」起，退。",
+      "result": "This diplomatic exchange uses the generic Southern Court emperor title; it cannot identify one emperor across the chapter's Liao dates."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source, canonical extraction, sealed proposal, and candidate byte hashes still match this receipt.",
+    "Replay exactly the three claim replacements and three paired hint replacements; do not alter claims 32, 33, or 34.",
+    "Retain all three generic-title source contexts as explicit research holds rather than deriving a continuous personal interval.",
+    "Do not alter source or master from this review; rerun scoped validation and obtain a fresh independent canonical audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}
