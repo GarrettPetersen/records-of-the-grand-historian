@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "025",
+  "candidateFile": "staged-candidate-85fdb352acebdb181bc0.json",
+  "candidateHash": "sha256:85fdb352acebdb181bc0d30e875b800ac3b3f3e382e57b86f465f5a584537df7",
+  "canonicalSourceHash": "sha256:78fe0a012128b5fbb4f803996b70efc60c49b2835fce6b439c02cb6713152bc5",
+  "canonicalExtractionHash": "sha256:599cf757f074a70eb83c3431b4d6507eef829eecce9e4ef0b7fef8c82b094192",
+  "reviewer": {
+    "name": "Codex independent Hanshu 025 staged-candidate reviewer",
+    "agentId": "date_audit_beiqishu006",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-22T00:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. I independently checked all 165 pinned operations against the current 362-unit source packet. The candidate removes 84 imported Western chronology values from historical models, reign spans, and source-date contexts, while retaining every Chinese source-date phrase and event as a research hold. It replaces the exact 81 corresponding active hints, including the single shared hint for the three p086 claims. No source text supports the candidate's discarded Western precision by itself, and no non-temporal claim content is changed.",
+  "validation": {
+    "proposalReplay": "PASS: all 165 pinned operations replay byte-for-byte to sha256:85fdb352acebdb181bc0d30e875b800ac3b3f3e382e57b86f465f5a584537df7 against the matching source and canonical extraction hashes.",
+    "coverage": "PASS: all 84 audit-listed claims (claim-8 through claim-75, claim-353, claim-358 through claim-367, claim-369, claim-370, and claim-375 through claim-377) occur exactly once; all 81 listed paired hints occur exactly once, with p086 correctly shared by its three claims.",
+    "sourceReview": "PASS: I checked each altered claim's cited source unit. The source gives named historical exempla, reign/date-language, legal-history narration, or comparative appraisal, but no independently evidenced Western personal-life precision. Every replacement preserves the exact sourceDate, predicate, subject, provenance, and unit evidence and changes only the unsupported chronology to an explicit research hold.",
+    "scope": "PASS: proposal operations are limited to the audit-listed 84 claims and 81 active-hint arrays. Legendary-antiquity qualifiers remain as non-Western source classification; all dates, relationships, titles, events, and unrelated claims are otherwise untouched.",
+    "compactValidation": "PASS: compact extraction validation succeeded (362 units, 388 candidates, 101 people, 319 mentions, 657 claims, 10 applied repairs, and zero alias-disposition conflicts).",
+    "chronologyGeometry": "PASS: date-audit geometry diagnostics returned zero findings.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-8", "claim-9", "claim-10", "claim-11", "claim-12", "claim-13", "claim-14", "claim-15", "claim-16", "claim-17", "claim-18", "claim-19", "claim-20", "claim-21", "claim-22", "claim-23", "claim-24", "claim-25", "claim-26", "claim-27", "claim-28", "claim-29", "claim-30", "claim-31", "claim-32", "claim-33"],
+      "units": ["s0042", "s0047", "s0049", "s0052", "s0053", "s0058", "s0060", "s0062", "s0067", "s0069", "s0084", "s0086", "s0087", "s0089", "s0096", "s0100"],
+      "result": "Reviewed the ancient and Warring-States historical survey passages: Qi Huan and Guan Zhong, Jin Wen, Lu Cheng/Ai, Confucius and Zilu, the Sun/Wu/Shang/Yan exempla, legendary rulers, Chu Zhao and Helu, Bai Qi/Wang Jian, and Yi Yin/Lu Wang. These are historical comparisons or named precedents, not source-backed Western life-date attestations."
+    },
+    {
+      "claims": ["claim-34", "claim-35", "claim-36", "claim-37", "claim-38", "claim-39", "claim-40", "claim-41", "claim-42", "claim-43", "claim-44", "claim-45", "claim-46", "claim-47", "claim-48", "claim-49", "claim-50", "claim-51", "claim-52", "claim-53", "claim-54", "claim-55", "claim-56", "claim-57"],
+      "units": ["s0104", "s0105", "s0107", "s0108", "s0125", "s0128", "s0129", "s0136", "s0139", "s0151", "s0153", "s0155", "s0160"],
+      "result": "Reviewed the Han-founding and earlier legal-history comparisons. Phrases such as 漢興, 武帝時, 元帝時, 穆王時, 春秋之時, 戰國, and 孝惠、高后時 remain verbatim source context, but the packet contains no separate research evidence justifying the derived Western points or whole-reign intervals as each named person's active chronology."
+    },
+    {
+      "claims": ["claim-58", "claim-59", "claim-60", "claim-61", "claim-62", "claim-63", "claim-64", "claim-65", "claim-66", "claim-67", "claim-68", "claim-69", "claim-70", "claim-71", "claim-72", "claim-73", "claim-74", "claim-75"],
+      "units": ["s0340", "s0345", "s0346", "s0348", "s0162", "s0329", "s0335", "s0182", "s0188", "s0194", "s0196", "s0206", "s0212"],
+      "result": "Reviewed the local legal-history narration, including Wen's thirteenth year, Jing's first/middle years, and imperial-era references. The underlying dated occurrences and named actors remain fully visible in the holds; the proposed repair properly declines to treat an uncited conversion or a reign-wide interval as a personal life chronology."
+    },
+    {
+      "claims": ["claim-353", "claim-358", "claim-359", "claim-360", "claim-361", "claim-362", "claim-363", "claim-364", "claim-365", "claim-366", "claim-367", "claim-369", "claim-370", "claim-375", "claim-376", "claim-377"],
+      "units": ["s0269", "s0249", "s0241", "s0270", "s0244", "s0273", "s0289", "s0304"],
+      "result": "Reviewed the later comparative/statistical discussion: Gao/Hui, the Zhao-through-Ping six-reign aggregate, Cheng Hongjia, Cheng/Ai comparison, Confucius, Xun Qing, King Wu, and Cheng/Kang. These passages are aggregate reign references, quotations, or historical models; all dates remain source-specific unresolved context rather than unsupported personal Western active dates."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all 165 reviewed operations exactly, including all 81 hints operations.",
+    "Do not restore the discarded Western precision as person-life chronology without independently sourced chronology evidence.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}
