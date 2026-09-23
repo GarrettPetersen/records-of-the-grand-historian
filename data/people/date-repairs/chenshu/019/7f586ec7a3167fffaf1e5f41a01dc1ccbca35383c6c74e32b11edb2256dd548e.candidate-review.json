@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "019",
+  "candidateFile": "staged-candidate-7f586ec7a3167fffaf1e.json",
+  "candidateHash": "sha256:7f586ec7a3167fffaf1e5f41a01dc1ccbca35383c6c74e32b11edb2256dd548e",
+  "reviewer": {
+    "name": "Codex independent Chenshu 019 corrected-candidate reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T05:25:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The corrected 66-change proposal exactly replays: all 33 audit-listed precedent/allusion claims become source-specific holds and all 33 paired active-date hints become matching research-required holds. No unrelated extraction data changes.",
+  "validation": {
+    "proposalReplay": "PASS: applying all 66 pinned operations to the canonical extraction produces sha256:7f586ec7a3167fffaf1e5f41a01dc1ccbca35383c6c74e32b11edb2256dd548e, byte-equivalent to the staged candidate.",
+    "claimCoverage": "PASS: every audit-listed claim is replaced exactly once (33 of 33), with no unlisted claim mutation.",
+    "pairedHints": "PASS: every audit-listed active-date hint is replaced exactly once (33 of 33); every new hold text matches its paired claim reason.",
+    "scope": "PASS: only the 33 reviewed claims and their 33 paired person hint records differ; all names, roles, mentions, relationships, provenance, and other claims remain unchanged.",
+    "sourceHolds": "PASS: every hold retains original subject, predicate, source-date wording, provenance, and cited units while removing only borrowed Western chronology; source facts and independently supported information remain intact.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-209", "claim-210", "claim-211", "claim-216", "claim-217", "claim-218", "claim-238", "claim-239", "claim-242", "claim-243", "claim-244", "claim-245", "claim-247", "claim-248", "claim-253", "claim-254", "claim-255", "claim-256", "claim-262", "claim-263", "claim-264", "claim-265", "claim-266", "claim-267", "claim-268", "claim-269", "claim-272", "claim-273", "claim-274", "claim-275", "claim-278", "claim-282", "claim-361"],
+      "pairedHints": ["p018", "p019", "p020", "p025", "p026", "p027", "p047", "p048", "p051", "p052", "p053", "p054", "p056", "p057", "p062", "p063", "p064", "p065", "p071", "p072", "p073", "p074", "p075", "p076", "p077", "p078", "p081", "p082", "p083", "p084", "p087", "p091", "p112"],
+      "evidence": "s0024 invokes 漢武通天臺; s0111 invokes 文舉之對; s0259 invokes 支父 and 嚴子 as 千載美談.",
+      "result": "The legal, rhetorical, and historiographical passages preserve historical persons and episodes as precedents or models, not local personal-date evidence. All 33 claim and hint holds correctly prevent date borrowing."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply all 66 reviewed operations exactly; do not omit paired hint operations or alter independently supported chronology.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; retained research holds require research-blocked rather than audited status."
+  ]
+}
