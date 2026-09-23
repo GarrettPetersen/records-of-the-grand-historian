@@ -4,21 +4,21 @@
   "book": "beiqishu",
   "chapter": "005",
   "sourceHash": "sha256:8b6332afc3bdf7620362f5a4f86107a0efc7eb6c8b96fda993844aea5c396ff8",
-  "extractionHash": "sha256:932b786be3d75acaaab8959d4dafd4e94643a063a04154524986f94b2e525bdf",
-  "status": "needs-revision",
+  "extractionHash": "sha256:9fff9c2fdea899255c1732156f5af9b99df8924e4d74c1a2181f1598a1ddcd14",
+  "status": "research-blocked",
   "reviewer": {
-    "name": "Codex independent Beiqishu 005 chronology auditor",
+    "name": "Codex independent Beiqishu 005 canonical chronology auditor",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Codex independent Beiqishu 005 chronology auditor",
-        "agentId": "date-audit-beiqishu005",
+        "name": "Codex independent Beiqishu 005 canonical chronology auditor",
+        "agentId": "full-date-audit-beiqishu005-canonical",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-23T00:45:38.659Z",
-  "summary": "Complete independent audit of all 66 Chinese units, 166 temporal or active-hint items, and 38 people. Most Northern Qi annal dates retain correctly normalized year precision. Ten actionable defects prevent approval: an AD 562 burial/posthumous-title event is a false living attestation and active hint for Emperor Fei, while four undated/reign-wide narrative references were expanded into unsupported full activity intervals and their corresponding active hints. No date has been invented or repaired in this review; the exact source-backed repairs must be made and then independently re-audited.",
+  "reviewedAt": "2026-09-23T01:01:49.210Z",
+  "summary": "Fresh full independent canonical audit after 3146ed1130: all 66 Chinese units, all 167 current temporal or active-hint items, and all 38 person records were rechecked. The AD 562 burial and posthumous title for Emperor Fei is correctly retained as a separately classified posthumous commemoration, not a living attestation or active-date hint. Four undated contexts for the Prince of Taiyuan, Li Baoding, Xing Zhi, and Xing Shao are correctly preserved as explicit unresolved attestations with research-required hints. The chapter supplies no further chronology capable of resolving those four personal holds. Complete coverage is therefore research-blocked rather than approved; no date has been invented.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -174,7 +174,7 @@
     },
     {
       "id": "claim-56",
-      "verdict": "incorrect",
+      "verdict": "supported",
       "event": "Chronology assigned to Emperor Fei: attestation.",
       "reason": "The AD 562 event is the burial and posthumous title in s0059, not a living attestation by Emperor Fei. Recast it as a reception event and remove it from active chronology.",
       "evidence": [
@@ -318,9 +318,9 @@
     },
     {
       "id": "claim-68",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Prince of Taiyuan: attestation.",
-      "reason": "s0008 has no dated event for the Prince of Taiyuan. Wenxuan’s wish to replace the crown prince cannot establish activity throughout AD 550–559. Remove the interval or preserve only an explicitly unresolved context.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Prince of Taiyuan: attestation.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0008",
@@ -330,9 +330,9 @@
     },
     {
       "id": "claim-69",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Li Baoding: attestation.",
-      "reason": "s0009 says only that Li Baoding died before Xing Zhi was ordered to lecture; it supplies no Tianbao endpoint. Remove the invented AD 550–558 activity interval.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Li Baoding: attestation.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0009",
@@ -342,9 +342,9 @@
     },
     {
       "id": "claim-70",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Xing Zhi: attestation.",
-      "reason": "s0009 supplies no dated event for Xing Zhi. Remove the invented AD 550–558 activity interval.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Xing Zhi: attestation.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0009",
@@ -846,9 +846,9 @@
     },
     {
       "id": "claim-112",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Xing Shao: attestation.",
-      "reason": "s0060 relates an undated naming exchange under Wenxuan and cannot establish Xing Shao’s activity through every year AD 550–559. Replace with a source-faithful undated context or supported one-sided bound.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Xing Shao: attestation.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0060",
@@ -1625,8 +1625,20 @@
       ]
     },
     {
+      "id": "claim-237",
+      "verdict": "supported",
+      "event": "Posthumous burial and title event for Emperor Fei.",
+      "reason": "The current claim correctly classifies the AD 562 burial and posthumous title as posthumous commemoration, not an attestation of Emperor Fei being alive or active.",
+      "evidence": [
+        {
+          "unit": "s0059",
+          "quote": "大寧二年，葬於武寧之西北，諡閔悼王。"
+        }
+      ]
+    },
+    {
       "id": "hints-p001",
-      "verdict": "incorrect",
+      "verdict": "supported",
       "event": "Chronology assigned to Emperor Fei: active-date-hints.",
       "reason": "AD 562 derives from the posthumous burial/title event in s0059, not Emperor Fei’s activity. Remove AD 562 from the active-date hints.",
       "evidence": [
@@ -1686,9 +1698,9 @@
     },
     {
       "id": "hints-p006",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Prince of Taiyuan: active-date-hints.",
-      "reason": "The AD 550–559 active hint derives solely from the undated aspiration in s0008. Remove it.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Prince of Taiyuan: active-date-hints.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0008",
@@ -1698,9 +1710,9 @@
     },
     {
       "id": "hints-p007",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Li Baoding: active-date-hints.",
-      "reason": "The AD 550–558 active hint derives solely from the undated death notice in s0009. Remove it.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Li Baoding: active-date-hints.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0009",
@@ -1710,9 +1722,9 @@
     },
     {
       "id": "hints-p008",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Xing Zhi: active-date-hints.",
-      "reason": "The AD 550–558 active hint derives solely from the undated lecture appointment in s0009. Remove it.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Xing Zhi: active-date-hints.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0009",
@@ -2070,9 +2082,9 @@
     },
     {
       "id": "hints-p038",
-      "verdict": "incorrect",
-      "event": "Chronology assigned to Xing Shao: active-date-hints.",
-      "reason": "The AD 550–559 active hint derives solely from the undated naming exchange in s0060. Remove it.",
+      "verdict": "research-blocked",
+      "event": "Current undated chronology for Xing Shao: active-date-hints.",
+      "reason": "The current item correctly preserves an explicitly unresolved source context and a research-required hint rather than inventing a personal date, interval, or bound. This chapter supplies no further personal chronology that resolves the hold.",
       "evidence": [
         {
           "unit": "s0060",
@@ -2139,8 +2151,8 @@
     },
     {
       "id": "p006",
-      "verdict": "supported",
-      "reason": "All 66 Chinese units and this person’s temporal claims and active-date hints were independently checked. The person-level review records any unsupported chronology in the actionable item findings rather than treating an undated reference as a life date.",
+      "verdict": "research-blocked",
+      "reason": "The full chapter supplies this person only in an undated narrative context. The preserved explicit unresolved attestation and research-required hint are necessary; no source unit supports a point date, interval, or reliable one-sided personal bound.",
       "evidence": [
         {
           "unit": "s0008",
@@ -2150,8 +2162,8 @@
     },
     {
       "id": "p007",
-      "verdict": "supported",
-      "reason": "All 66 Chinese units and this person’s temporal claims and active-date hints were independently checked. The person-level review records any unsupported chronology in the actionable item findings rather than treating an undated reference as a life date.",
+      "verdict": "research-blocked",
+      "reason": "The full chapter supplies this person only in an undated narrative context. The preserved explicit unresolved attestation and research-required hint are necessary; no source unit supports a point date, interval, or reliable one-sided personal bound.",
       "evidence": [
         {
           "unit": "s0009",
@@ -2161,8 +2173,8 @@
     },
     {
       "id": "p008",
-      "verdict": "supported",
-      "reason": "All 66 Chinese units and this person’s temporal claims and active-date hints were independently checked. The person-level review records any unsupported chronology in the actionable item findings rather than treating an undated reference as a life date.",
+      "verdict": "research-blocked",
+      "reason": "The full chapter supplies this person only in an undated narrative context. The preserved explicit unresolved attestation and research-required hint are necessary; no source unit supports a point date, interval, or reliable one-sided personal bound.",
       "evidence": [
         {
           "unit": "s0009",
@@ -2491,8 +2503,8 @@
     },
     {
       "id": "p038",
-      "verdict": "supported",
-      "reason": "All 66 Chinese units and this person’s temporal claims and active-date hints were independently checked. The person-level review records any unsupported chronology in the actionable item findings rather than treating an undated reference as a life date.",
+      "verdict": "research-blocked",
+      "reason": "The full chapter supplies this person only in an undated narrative context. The preserved explicit unresolved attestation and research-required hint are necessary; no source unit supports a point date, interval, or reliable one-sided personal bound.",
       "evidence": [
         {
           "unit": "s0060",
@@ -2504,73 +2516,39 @@
   "findings": [
     {
       "items": [
-        "claim-56"
+        "claim-68",
+        "hints-p006",
+        "p006"
       ],
-      "problem": "The AD 562 event is the burial and posthumous title in s0059, not a living attestation by Emperor Fei. Recast it as a reception event and remove it from active chronology.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
+      "problem": "The undated proposal to install the Prince of Taiyuan supplies no personal date, interval, or reliable bound.",
+      "action": "Retain the explicit unresolved claim and research-required hint; obtain independent source-hashed chronology before adding a date or interval."
     },
     {
       "items": [
-        "claim-68"
+        "claim-69",
+        "hints-p007",
+        "p007"
       ],
-      "problem": "s0008 has no dated event for the Prince of Taiyuan. Wenxuan’s wish to replace the crown prince cannot establish activity throughout AD 550–559. Remove the interval or preserve only an explicitly unresolved context.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
+      "problem": "Li Baoding's undated death notice supplies no Tianbao endpoint or independently dated personal event.",
+      "action": "Retain the explicit unresolved claim and research-required hint; obtain independent source-hashed chronology before adding a date or interval."
     },
     {
       "items": [
-        "claim-69"
+        "claim-70",
+        "hints-p008",
+        "p008"
       ],
-      "problem": "s0009 says only that Li Baoding died before Xing Zhi was ordered to lecture; it supplies no Tianbao endpoint. Remove the invented AD 550–558 activity interval.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
+      "problem": "Xing Zhi's lecture appointment is undated and supplies no personal date, interval, or reliable bound.",
+      "action": "Retain the explicit unresolved claim and research-required hint; obtain independent source-hashed chronology before adding a date or interval."
     },
     {
       "items": [
-        "claim-70"
+        "claim-112",
+        "hints-p038",
+        "p038"
       ],
-      "problem": "s0009 supplies no dated event for Xing Zhi. Remove the invented AD 550–558 activity interval.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
-    },
-    {
-      "items": [
-        "claim-112"
-      ],
-      "problem": "s0060 relates an undated naming exchange under Wenxuan and cannot establish Xing Shao’s activity through every year AD 550–559. Replace with a source-faithful undated context or supported one-sided bound.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
-    },
-    {
-      "items": [
-        "hints-p001"
-      ],
-      "problem": "AD 562 derives from the posthumous burial/title event in s0059, not Emperor Fei’s activity. Remove AD 562 from the active-date hints.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
-    },
-    {
-      "items": [
-        "hints-p006"
-      ],
-      "problem": "The AD 550–559 active hint derives solely from the undated aspiration in s0008. Remove it.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
-    },
-    {
-      "items": [
-        "hints-p007"
-      ],
-      "problem": "The AD 550–558 active hint derives solely from the undated death notice in s0009. Remove it.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
-    },
-    {
-      "items": [
-        "hints-p008"
-      ],
-      "problem": "The AD 550–558 active hint derives solely from the undated lecture appointment in s0009. Remove it.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
-    },
-    {
-      "items": [
-        "hints-p038"
-      ],
-      "problem": "The AD 550–559 active hint derives solely from the undated naming exchange in s0060. Remove it.",
-      "action": "Make the indicated source-faithful temporal repair, rebuild the date packet, and obtain a fresh independent full-chapter audit before approval."
+      "problem": "Xing Shao's Wenxuan-era naming exchange is undated and cannot establish activity throughout the reign.",
+      "action": "Retain the explicit unresolved claim and research-required hint; obtain independent source-hashed chronology before adding a date or interval."
     }
   ],
   "references": []
