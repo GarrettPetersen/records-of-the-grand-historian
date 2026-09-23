@@ -35,7 +35,6 @@ import { validateCompactPeopleExtraction } from './validate-people-extraction.mj
 const MODEL = process.env.PEOPLE_SPARK_MODEL ?? 'gpt-5.6-luna';
 const WORKER_MAX_BYTES = 48 * 1024;
 const INSTRUCTIONS = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'), 'utf8').trim();
-const SCHEMA = path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json');
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 function usage() {
@@ -74,7 +73,10 @@ function runCodex(instructions) {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), '24histories-spark-'));
   const output = path.join(temp, 'output.json');
   try {
-    const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--output-schema', SCHEMA, '--output-last-message', output, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
+    // The Codex structured-output subset rejects the compact schema's intentionally
+    // open fact-value objects. Host validation below remains mandatory and is the
+    // authoritative full-schema gate before any extraction is accepted.
+    const result = spawnSync('codex', ['exec', '--ephemeral', '--sandbox', 'read-only', '--model', MODEL, '--output-last-message', output, '--color', 'never', instructions], { cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 2 * 1024 * 1024, timeout: 30 * 60 * 1000 });
     if (result.error) throw new Error(`Codex Spark failed to launch: ${result.error.message}`);
     if (result.status !== 0) throw new Error(`Codex Spark failed (${result.status}): ${(result.stderr || result.stdout).trim()}`);
     if (!fs.existsSync(output)) throw new Error('Codex Spark returned no final JSON');
