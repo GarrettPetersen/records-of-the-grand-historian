@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair } from './lib/people-date-workflow.mjs';
+import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
@@ -111,6 +111,17 @@ test('repairs reject wrong hashes, non-temporal claims and changed subjects',t=>
   let bad=structuredClone(p);bad.sourceHash='wrong';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Stale/);
   bad=structuredClone(p);bad.changes[0].id='claim-3';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/temporal claim/);
   bad=structuredClone(p);bad.changes[0].after[0]='p002';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/subject/);
+});
+test('staged review binds a sealed proposal even when candidate bytes are unchanged', t => {
+  const proposal = { sourceHash: 'sha256:source', extractionHash: 'sha256:base', changes: [{ kind: 'hints', personId: 'p001', before: ['AD 1'], after: ['AD 1'], reason: 'A deliberately distinct sealed proposal fixture.' }] };
+  const candidate = { schemaVersion: 2, book: 'fixture', chapter: '001', people: [], claims: [] };
+  const handoff = { kind: 'date-repair-candidate-handoff', book: 'fixture', chapter: '001', proposal, candidate, sealedCandidateHash: sealedDateRepairProposalHash(proposal), candidateExtractionHash: sha256(JSON.stringify(candidate)) };
+  const review = { kind: 'independent-staged-date-repair-review', book: 'fixture', chapter: '001', candidateFile: 'staged-candidate-sealed.json', sealedCandidateHash: handoff.sealedCandidateHash, candidateExtractionHash: handoff.candidateExtractionHash };
+  assert.deepEqual(validateStagedDateRepairReview(handoff, review, 'staged-candidate-sealed.json'), { sealedCandidateHash: handoff.sealedCandidateHash, candidateExtractionHash: handoff.candidateExtractionHash });
+  const collapsed = { ...review, candidateHash: handoff.candidateExtractionHash };
+  assert.throws(() => validateStagedDateRepairReview(handoff, collapsed, 'staged-candidate-sealed.json'), /Legacy candidateHash/);
+  const wrongProposal = { ...review, sealedCandidateHash: handoff.candidateExtractionHash };
+  assert.throws(() => validateStagedDateRepairReview(handoff, wrongProposal, 'staged-candidate-sealed.json'), /exact sealed proposal/);
 });
 test('sealed editorial amendments may replace only a reviewed date container',t=>{
   const original={id:'fixture:001:c0001',subject:'fixture:001:p001',predicate:'attestation',value:{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},certainty:'explicit',evidence:['fixture:001:s0001','fixture:001:s0002']};

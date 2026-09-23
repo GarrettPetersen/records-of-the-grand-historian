@@ -22,6 +22,27 @@ const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1]
 const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
   && same(withoutDates(before[2]), withoutDates(after[2]));
 
+// Candidate extraction bytes are not a sufficient review identity: removing a
+// sealed no-op can leave those bytes unchanged while changing the proposal a
+// reviewer must approve. New staged handoffs therefore bind reviews to both.
+export function sealedDateRepairProposalHash(proposal) {
+  if (!proposal || typeof proposal !== 'object') throw new Error('Date repair proposal is required for sealing');
+  return hash(proposal);
+}
+
+export function validateStagedDateRepairReview(handoff, review, candidateFile) {
+  if (handoff?.kind !== 'date-repair-candidate-handoff' || !handoff.proposal || !handoff.candidate) throw new Error('Invalid staged date-repair handoff');
+  const sealedCandidateHash = sealedDateRepairProposalHash(handoff.proposal);
+  const candidateExtractionHash = hash(handoff.candidate);
+  if (handoff.sealedCandidateHash !== sealedCandidateHash || handoff.candidateExtractionHash !== candidateExtractionHash) throw new Error('Staged date-repair handoff identity does not match its sealed proposal or candidate bytes');
+  if (!review || review.kind !== 'independent-staged-date-repair-review' || review.book !== handoff.book || review.chapter !== handoff.chapter ||
+      review.candidateFile !== candidateFile || review.sealedCandidateHash !== sealedCandidateHash || review.candidateExtractionHash !== candidateExtractionHash) {
+    throw new Error('Independent review must bind the exact sealed proposal, candidate bytes, and handoff file');
+  }
+  if (review.candidateHash !== undefined && review.candidateHash !== sealedCandidateHash) throw new Error('Legacy candidateHash cannot replace the sealed proposal identity');
+  return { sealedCandidateHash, candidateExtractionHash };
+}
+
 // A date candidate sometimes has to update a reviewed claim replacement: the
 // review can have preserved a now-rejected imported interval as part of the
 // replacement fact.  This is intentionally an in-memory, sealed amendment.

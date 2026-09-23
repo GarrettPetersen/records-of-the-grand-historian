@@ -113,6 +113,6 @@ writeJsonAtomic(path.join(dir, candidateFile), {
 writeJsonAtomic(path.join(dir, `${sealedCandidateHash.slice(7)}.candidate-review-packet.json`), {
   schemaVersion: 1, kind: 'independent-staged-date-repair-review-packet', book, chapter,
   candidateFile, sourceHash: packet.sourceHash, originalExtractionHash: packet.extractionHash,
-  candidateExtractionHash, candidatePacket, auditEvidence: { findings: audit.findings },
+  sealedCandidateHash, candidateExtractionHash, candidatePacket, auditEvidence: { findings: audit.findings },
 });
 console.log(JSON.stringify({ sealedCandidateHash, candidateExtractionHash, operations: changes.length, compact: validation.stats, serializedBytes: serializeCompactPeopleExtraction(candidate).length }));
