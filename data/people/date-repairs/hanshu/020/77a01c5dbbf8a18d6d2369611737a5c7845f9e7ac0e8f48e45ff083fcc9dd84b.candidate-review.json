@@ -1,0 +1,1123 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "020",
+  "candidateCommit": "2e63b27a2c",
+  "candidateFile": "staged-candidate-77a01c5dbbf8a18d6d23.json",
+  "sourceHash": "sha256:2eaa7f1b4785458e00627f75b8cb05a5dd4a297a61b53a411cdab1338001b94c",
+  "originalExtractionHash": "sha256:f031db3a99b804639015bbb560878a2f63c24e3bcc29c503ede5bce07b6478d9",
+  "candidateExtractionHash": "sha256:77a01c5dbbf8a18d6d2369611737a5c7845f9e7ac0e8f48e45ff083fcc9dd84b",
+  "reviewer": {
+    "name": "Codex independent Hanshu 020 staged-candidate reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T06:17:14.687Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after a fresh 794-unit source packet and an independent check of all 37 proposal changes: 19 unsupported Western temporal assertions and 18 derived active-date hints. The cited Chinese consists of quotations, commentary attributions, retrospective examples, and bibliographical context; it does not establish the imported personal intervals. The candidate retains every source, person, sourceDate label, and non-temporal reference while replacing only unsupported chronology with explicit research holds. This receipt does not curate or publish canonical data; a complete fresh audit is required after any host curation.",
+  "candidateValidation": {
+    "canonicalInputs": "PASS: fresh packet source and extraction hashes exactly match the staged candidate handoff.",
+    "proposalApplication": "PASS: applyDateRepairProposal reconstructed the exact declared candidate sha256:77a01c5dbbf8a18d6d2369611737a5c7845f9e7ac0e8f48e45ff083fcc9dd84b.",
+    "productionExtractionValidator": "PASS: reconstructed candidate has 123 people, 257 mentions, and 663 claims.",
+    "candidatePacket": "PASS: fresh canonical packet has 794 Chinese units, 251 current temporal/hint items, and 123 people; candidate geometry was independently checked in memory.",
+    "temporalGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(reconstructed candidate)) returned no findings.",
+    "canonicalMutation": "NONE: this review does not edit data/people/extractions/hanshu/020.json or data/people/date-audits/hanshu/020.json."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItem": "claim-2",
+      "personId": "p001",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "孔子曰（春秋）"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 551,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 479,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "孔子曰（春秋）"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0003",
+          "quote": "孔子曰：「若聖與仁，則吾豈敢？」",
+          "sourceHash": "sha256:04f4052689db8f665b86f3e02b26eeee06cf78c636124fe05042e13f90117e28",
+          "reason": "Confucius is quoted; the unit supplies no life interval."
+        }
+      ],
+      "reason": "Confucius is quoted; the unit supplies no life interval. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-3",
+      "personId": "p001",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "仲尼所師"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 551,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 479,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "仲尼所師"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "The commentator’s “teacher of Zhongni” is a literary attribution, not dated activity."
+        }
+      ],
+      "reason": "The commentator’s “teacher of Zhongni” is a literary attribution, not dated activity. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-57",
+      "personId": "p015",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "齊桓公"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 685,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 643,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "齊桓公"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0016",
+          "quote": "齊桓公，管仲相之則霸，豎貂輔之則亂。",
+          "sourceHash": "sha256:8a1be6db36a66fef8620f4f72905d5dd3cb119bda3dcfd9c75c52ab1530627cb",
+          "reason": "The Huan/Guan/Shu contrast is an evaluative allusion, not a reign-date attestation."
+        }
+      ],
+      "reason": "The Huan/Guan/Shu contrast is an evaluative allusion, not a reign-date attestation. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-64",
+      "personId": "p016",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "管仲相之"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 685,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 643,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "管仲相之"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0016",
+          "quote": "齊桓公，管仲相之則霸，豎貂輔之則亂。",
+          "sourceHash": "sha256:8a1be6db36a66fef8620f4f72905d5dd3cb119bda3dcfd9c75c52ab1530627cb",
+          "reason": "The Huan/Guan/Shu contrast is an evaluative allusion, not a personal activity date."
+        }
+      ],
+      "reason": "The Huan/Guan/Shu contrast is an evaluative allusion, not a personal activity date. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-68",
+      "personId": "p017",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "豎貂輔之"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 685,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 643,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "豎貂輔之"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0016",
+          "quote": "齊桓公，管仲相之則霸，豎貂輔之則亂。",
+          "sourceHash": "sha256:8a1be6db36a66fef8620f4f72905d5dd3cb119bda3dcfd9c75c52ab1530627cb",
+          "reason": "The Huan/Guan/Shu contrast is an evaluative allusion, not a personal activity date."
+        }
+      ],
+      "reason": "The Huan/Guan/Shu contrast is an evaluative allusion, not a personal activity date. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-71",
+      "personId": "p018",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "張晏曰"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 220,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 265,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "張晏曰"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "“Zhang Yan says” identifies a commentator but the unit establishes no AD 220–265 activity."
+        }
+      ],
+      "reason": "“Zhang Yan says” identifies a commentator but the unit establishes no AD 220–265 activity. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-76",
+      "personId": "p019",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "老子玄默，仲尼所師"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 600,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 500,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "老子玄默，仲尼所師"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "Laozi is invoked as Zhongni’s teacher; that comparative reference does not establish BC 600–500."
+        }
+      ],
+      "reason": "Laozi is invoked as Zhongni’s teacher; that comparative reference does not establish BC 600–500. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-81",
+      "personId": "p020",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "文伯之母"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 550,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 450,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "文伯之母"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "The mother of Wenbo is praised in Zhang Yan’s commentary; no absolute date is supplied."
+        }
+      ],
+      "reason": "The mother of Wenbo is praised in Zhang Yan’s commentary; no absolute date is supplied. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-84",
+      "personId": "p021",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "文伯之母達於禮典"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 550,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 450,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "文伯之母達於禮典"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "The same commentary preserves the mother’s ritual reputation, not BC 550–450 activity."
+        }
+      ],
+      "reason": "The same commentary preserves the mother’s ritual reputation, not BC 550–450 activity. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-90",
+      "personId": "p022",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "田單以即墨孤城復強齊"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 284,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 279,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "田單以即墨孤城復強齊"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "Tian Dan’s recovery of Qi is a retrospective exemplary comparison, not a dated chapter event."
+        }
+      ],
+      "reason": "Tian Dan’s recovery of Qi is a retrospective exemplary comparison, not a dated chapter event. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-95",
+      "personId": "p023",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "魯連之博通"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 284,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 250,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "魯連之博通"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "Lu Zhonglian’s indifference to profit is an evaluative allusion, not BC 284–250 activity."
+        }
+      ],
+      "reason": "Lu Zhonglian’s indifference to profit is an evaluative allusion, not BC 284–250 activity. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-99",
+      "personId": "p024",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "藺子申威秦王"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 283,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 279,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "藺子申威秦王"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "The Lin Xiangru reference is part of commentary, not a source-qualified BC 283–279 attestation."
+        }
+      ],
+      "reason": "The Lin Xiangru reference is part of commentary, not a source-qualified BC 283–279 attestation. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-105",
+      "personId": "p025",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "藺子申威秦王"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 283,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 279,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "藺子申威秦王"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "The Lin Xiangru reference is part of commentary, not a source-qualified BC 283–279 attestation."
+        }
+      ],
+      "reason": "The Lin Xiangru reference is part of commentary, not a source-qualified BC 283–279 attestation. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-109",
+      "personId": "p026",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "退讓廉頗"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 283,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 279,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "退讓廉頗"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "Lian Po appears in the retrospective comparison only; no individual date is stated."
+        }
+      ],
+      "reason": "Lian Po appears in the retrospective comparison only; no individual date is stated. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-113",
+      "personId": "p027",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "大姬巫怪"
+        },
+        "westernYear": {
+          "era": "BC",
+          "year": 1045,
+          "precision": "year"
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "大姬巫怪"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "Da Ji is an antiquarian comparison in commentary; the unit supplies no BC eleventh-century date."
+        }
+      ],
+      "reason": "Da Ji is an antiquarian comparison in commentary; the unit supplies no BC eleventh-century date. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-118",
+      "personId": "p028",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "寺人孟子"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 780,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 720,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "寺人孟子"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "The eunuch Mengzi is an allusion, not an attestation of BC 780–720 activity."
+        }
+      ],
+      "reason": "The eunuch Mengzi is an allusion, not an attestation of BC 780–720 activity. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-124",
+      "personId": "p029",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "嫪毐上烝"
+        },
+        "westernYear": {
+          "era": "BC",
+          "year": 238,
+          "precision": "year"
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "嫪毐上烝"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0019",
+          "quote": "張晏曰：「老子玄默，仲尼所師，雖不在聖，要為大賢，文伯之母達於禮典，動為聖人所歎，言為後世所則，而在第四。田單以即墨孤城復強齊之大，魯連之博通，忽於榮利，藺子申威秦王，退讓廉頗，乃在第五。大姬巫怪，好祭鬼神，陳人化之，國多淫祀，寺人孟子違於大雅，以保其身，旣被宮刑，怨刺而作，乃在第三。嫪毐上烝，昬亂禮度，惡不忍聞，乃在第七。其餘差違紛錯不少，略舉揚較，以起失謬。獨馳騖於數千歲之中，旁觀諸子，事業未究，而尋遇竇氏之難，使之然乎？」",
+          "sourceHash": "sha256:d6b3b4294a4ca34c6269f4e2e5c3adfeaf8ec9e80b540764919c5d2aad727a81",
+          "reason": "Lao Ai is a moral example in commentary, not a dated personal event in this text."
+        }
+      ],
+      "reason": "Lao Ai is a moral example in commentary, not a dated personal event in this text. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-129",
+      "personId": "p030",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "班史 / 古今人表"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 32,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 92,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "班史 / 古今人表"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0018",
+          "quote": "因茲以列九等之序，究極經傳，繼世相次，總備古今之略要云。",
+          "sourceHash": "sha256:cd2ca5046f1f8e8b93e647d1e54286b0c399572287dcb65636b9367ae0ec163e",
+          "reason": "“Ban history / Table of Ancient and Modern Persons” is bibliographical context, not Ban Gu’s AD 32–92 activity."
+        },
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0020",
+          "quote": "師古曰：「六家之論，輕重不同；百行所存，趣拾難壹。張氏輒申所見，掎摭班史，然其所論，又自差錯。且年代乆遠，墳典隟亡，學者舛駮，師論分異，是以表載古人名氏，或與諸書不同。今則特有發明，用暢厥旨。自女媧以下，帝鴻以前，諸子傳記，互有舛駮，敘說不同，無所取正，大要知其古帝之號而已。諸人士見於史傳，彰灼可知者，無待解釋，其間幽昧者，時復及焉。」",
+          "sourceHash": "sha256:0a248b983317dff05c056dc248e1668f171af23315eedd9b6ba2a2d17199655f",
+          "reason": "“Ban history / Table of Ancient and Modern Persons” is bibliographical context, not Ban Gu’s AD 32–92 activity."
+        }
+      ],
+      "reason": "“Ban history / Table of Ancient and Modern Persons” is bibliographical context, not Ban Gu’s AD 32–92 activity. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "claim-136",
+      "personId": "p031",
+      "verdict": "supported-research-hold",
+      "before": {
+        "sourceDate": {
+          "text": "師古曰"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 581,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 645,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "師古曰"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The cited unit is a quotation, evaluative allusion, commentator attribution, or relational reference. It does not date this person’s activity or establish the chosen life/reign interval. Preserve it as non-temporal reference or add a separately verified source-qualified chronology; do not use the literary reference as a date assertion.",
+        "event": "Source-specific quotation or commentary context retained; no Western personal activity date is asserted."
+      },
+      "sourceEvidence": [
+        {
+          "book": "hanshu",
+          "chapter": "020",
+          "unit": "s0020",
+          "quote": "師古曰：「六家之論，輕重不同；百行所存，趣拾難壹。張氏輒申所見，掎摭班史，然其所論，又自差錯。且年代乆遠，墳典隟亡，學者舛駮，師論分異，是以表載古人名氏，或與諸書不同。今則特有發明，用暢厥旨。自女媧以下，帝鴻以前，諸子傳記，互有舛駮，敘說不同，無所取正，大要知其古帝之號而已。諸人士見於史傳，彰灼可知者，無待解釋，其間幽昧者，時復及焉。」",
+          "sourceHash": "sha256:0a248b983317dff05c056dc248e1668f171af23315eedd9b6ba2a2d17199655f",
+          "reason": "“Shigu says” attributes commentary but gives no AD 581–645 personal chronology."
+        }
+      ],
+      "reason": "“Shigu says” attributes commentary but gives no AD 581–645 personal chronology. The candidate preserves sourceDate/evidence and replaces only the unsupported Western interval with an explicit source-specific hold."
+    },
+    {
+      "proposalItem": "hints-p001",
+      "personId": "p001",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 551-479"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-2",
+        "claim-3"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-2, claim-3. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p015",
+      "personId": "p015",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 685-643"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-57"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-57. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p016",
+      "personId": "p016",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 685-643"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-64"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-64. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p017",
+      "personId": "p017",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 685-643"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-68"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-68. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p018",
+      "personId": "p018",
+      "verdict": "supported-research-hold",
+      "before": [
+        "AD 220-265"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-71"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-71. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p019",
+      "personId": "p019",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 600-500"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-76"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-76. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p020",
+      "personId": "p020",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 550-450"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-81"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-81. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p021",
+      "personId": "p021",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 550-450"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-84"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-84. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p022",
+      "personId": "p022",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 284-279"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-90"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-90. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p023",
+      "personId": "p023",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 284-250"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-95"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-95. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p024",
+      "personId": "p024",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 283-279"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-99"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-99. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p025",
+      "personId": "p025",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 283-279"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-105"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-105. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p026",
+      "personId": "p026",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 283-244"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-109"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-109. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p027",
+      "personId": "p027",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 11th century"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-113"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-113. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p028",
+      "personId": "p028",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 780-720"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-118"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-118. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p029",
+      "personId": "p029",
+      "verdict": "supported-research-hold",
+      "before": [
+        "BC 238"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-124"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-124. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p030",
+      "personId": "p030",
+      "verdict": "supported-research-hold",
+      "before": [
+        "AD 32-92"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-129"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-129. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    },
+    {
+      "proposalItem": "hints-p031",
+      "personId": "p031",
+      "verdict": "supported-research-hold",
+      "before": [
+        "AD 581-645"
+      ],
+      "after": [
+        "research required: This active-date hint inherits a life interval not supported by the source unit; it must be removed or replaced only after a source-qualified historical reference establishes the individual chronology."
+      ],
+      "linkedClaims": [
+        "claim-136"
+      ],
+      "reason": "The previous active-date hint is derived solely from claim-136. Replacing it with the candidate’s explicit research-required hold prevents an allusion or attribution from becoming a personal activity range."
+    }
+  ],
+  "remainingHold": {
+    "items": [
+      "claim-2",
+      "claim-3",
+      "claim-57",
+      "claim-64",
+      "claim-68",
+      "claim-71",
+      "claim-76",
+      "claim-81",
+      "claim-84",
+      "claim-90",
+      "claim-95",
+      "claim-99",
+      "claim-105",
+      "claim-109",
+      "claim-113",
+      "claim-118",
+      "claim-124",
+      "claim-129",
+      "claim-136",
+      "hints-p001",
+      "hints-p015",
+      "hints-p016",
+      "hints-p017",
+      "hints-p018",
+      "hints-p019",
+      "hints-p020",
+      "hints-p021",
+      "hints-p022",
+      "hints-p023",
+      "hints-p024",
+      "hints-p025",
+      "hints-p026",
+      "hints-p027",
+      "hints-p028",
+      "hints-p029",
+      "hints-p030",
+      "hints-p031"
+    ],
+    "reason": "All 19 claims and 18 active hints intentionally remain source-specific research holds after application. They cannot be marked audited from the cited units alone."
+  },
+  "hostRequirements": [
+    "Apply only this exact reviewed proposal after rechecking source and canonical-extraction hashes.",
+    "Run the scoped production extraction validator after application; do not alter source chapter data or unrelated worktree changes.",
+    "Do not change data/people/date-audits/hanshu/020.json in the curation commit.",
+    "Commission a fresh complete independent canonical audit; it must record research-blocked unless separately sourced personal chronology resolves every hold."
+  ]
+}
