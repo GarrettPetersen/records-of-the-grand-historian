@@ -25,7 +25,7 @@
               { "type": "string", "minLength": 1 },
               { "type": "string", "pattern": "^[a-f0-9]{24}$" }
             ],
-            "items": false,
+            "items": { "not": {} },
             "minItems": 2,
             "maxItems": 2
           }
@@ -76,7 +76,7 @@
             { "type": ["string", "null"] },
             { "type": ["string", "null"] }
           ],
-          "items": false,
+          "items": { "not": {} },
           "minItems": 3,
           "maxItems": 3
         },
@@ -104,7 +104,7 @@
               { "$ref": "#/$defs/certainty" },
               { "$ref": "#/$defs/evidence" }
             ],
-            "items": false,
+            "items": { "not": {} },
             "minItems": 3,
             "maxItems": 3
           }
@@ -119,13 +119,13 @@
               { "$ref": "#/$defs/certainty" },
               { "$ref": "#/$defs/evidence" }
             ],
-            "items": false,
+            "items": { "not": {} },
             "minItems": 3,
             "maxItems": 3
           }
         }
       ],
-      "items": false,
+      "items": { "not": {} },
       "minItems": 7,
       "maxItems": 7
     },
@@ -145,13 +145,13 @@
               { "type": "string", "minLength": 1 },
               { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 0 } }
             ],
-            "items": false,
+            "items": { "not": {} },
             "minItems": 2,
             "maxItems": 2
           }
         }
       ],
-      "items": false,
+      "items": { "not": {} },
       "minItems": 5,
       "maxItems": 5
     },
@@ -164,7 +164,7 @@
         { "$ref": "#/$defs/certainty" },
         { "$ref": "#/$defs/evidence" }
       ],
-      "items": false,
+      "items": { "not": {} },
       "minItems": 5,
       "maxItems": 5
     },
@@ -179,7 +179,7 @@
         { "enum": ["high", "medium"] },
         { "enum": ["proposed", "applied"] }
       ],
-      "items": false,
+      "items": { "not": {} },
       "minItems": 7,
       "maxItems": 7
     },
@@ -196,13 +196,13 @@
               { "type": "string", "pattern": "^cand_[a-f0-9]{16}$" },
               { "type": ["string", "null"] }
             ],
-            "items": false,
+            "items": { "not": {} },
             "minItems": 2,
             "maxItems": 2
           }
         }
       ],
-      "items": false,
+      "items": { "not": {} },
       "minItems": 3,
       "maxItems": 3
     }
