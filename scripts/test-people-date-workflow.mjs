@@ -3,9 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { writeJsonAtomic, readJson } from './lib/people-content.mjs';
+import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair } from './lib/people-date-workflow.mjs';
+import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair } from './lib/people-date-workflow.mjs';
+import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
 function fixture(t) {
@@ -110,6 +111,24 @@ test('repairs reject wrong hashes, non-temporal claims and changed subjects',t=>
   let bad=structuredClone(p);bad.sourceHash='wrong';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Stale/);
   bad=structuredClone(p);bad.changes[0].id='claim-3';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/temporal claim/);
   bad=structuredClone(p);bad.changes[0].after[0]='p002';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/subject/);
+});
+test('sealed editorial amendments may replace only a reviewed date container',t=>{
+  const original={id:'fixture:001:c0001',subject:'fixture:001:p001',predicate:'attestation',value:{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},certainty:'explicit',evidence:['fixture:001:s0001','fixture:001:s0002']};
+  const held={...structuredClone(original),evidence:['fixture:001:s0002'],value:{sourceDate:{text:'元年'},unresolved:true,unresolvedReason:'The fixture source supplies only a dated context, not a continuous personal chronology.',event:'Source-specific context retained without a Western personal date.'}};
+  const repair={id:'fixture:001:r0001',unit:{id:'s0001',kind:'paragraph-sentence',blockIndex:0,collection:'sentences',itemIndex:0},field:'literal',before:'Jia died in year one.',after:'Jia was present in year one.',reason:'The source says Jia was present, rather than that he died.',confidence:'high'};
+  const candidate={book:'fixture',chapter:'001',input:{chapterFingerprint:`sha256:${'a'.repeat(64)}`},run:{agentId:'extractor'},people:[{localId:'fixture:001:p001'}],claims:[held],translationRepairs:[{...repair,status:'applied'}]};
+  const document=editorialDecisionSeed({...candidate,translationRepairs:[{...repair,status:'proposed'}]});
+  document.reviewer={kind:'human',name:'Independent editor',model:null,agentId:'reviewer',runId:null,completedAt:new Date(0).toISOString()};
+  document.decisions[0]={repairId:repair.id,decision:'accept',after:null,reason:repair.reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'元年'}};
+  const reviewedAfter={...structuredClone(original),evidence:['fixture:001:s0002']};
+  document.claimRevisions=[{repairId:repair.id,before:structuredClone(original),after:reviewedAfter,reason:'Preserve the reviewed fixture attestation while removing an unrelated evidence error.',sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'元年'}}];
+  const amendment={schemaVersion:1,kind:'date-repair-editorial-amendment',book:'fixture',chapter:'001',editorialDecisionHash:sha256(JSON.stringify(document)),claimRevisions:[{repairId:repair.id,claimId:original.id,before:structuredClone(reviewedAfter),after:structuredClone(held),reason:'The reviewed source wording is retained, while the imported Western date is replaced by a source-specific unresolved hold.'}]};
+  const amended=applyDateRepairEditorialAmendment(document,amendment,candidate);
+  assert.deepEqual(amended.claimRevisions[0].after,held);
+  const stale={...amendment,editorialDecisionHash:'sha256:stale'};
+  assert.throws(()=>applyDateRepairEditorialAmendment(document,stale,candidate),/stale/);
+  const unsafe=structuredClone(amendment);unsafe.claimRevisions[0].after.value.sourceDate.text='another year';
+  assert.throws(()=>applyDateRepairEditorialAmendment(document,unsafe,candidate),/only chronology/);
 });
 function receptionRepair(f) {
   const proposal=repair({packet:f.packet,extraction:f.extraction});

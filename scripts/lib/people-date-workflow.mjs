@@ -4,6 +4,10 @@ import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from '
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
+import {
+  validateAppliedEditorialDecisions,
+  validateEditorialDecisionDocument,
+} from './people-editorial-decisions.mjs';
 
 export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -17,6 +21,72 @@ const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1]
   && personReceptionErrors({ predicate: row[1], value: row[2] }).length === 0;
 const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
   && same(withoutDates(before[2]), withoutDates(after[2]));
+
+// A date candidate sometimes has to update a reviewed claim replacement: the
+// review can have preserved a now-rejected imported interval as part of the
+// replacement fact.  This is intentionally an in-memory, sealed amendment.
+// It never writes the live editorial decision; a host curator must replay the
+// same amendment and publish both artifacts together after independent review.
+const editorialAmendmentDateFields = new Set([
+  'westernYear', 'westernInterval', 'westernBounds', 'dateContext', 'startDate', 'endDate',
+  'unresolved', 'unresolvedReason', 'event',
+]);
+const withoutEditorialAmendmentDates = value => Array.isArray(value)
+  ? value.map(withoutEditorialAmendmentDates)
+  : value && typeof value === 'object'
+    ? Object.fromEntries(Object.entries(value)
+      .filter(([key]) => !editorialAmendmentDateFields.has(key))
+      .map(([key, item]) => [key, withoutEditorialAmendmentDates(item)]))
+    : value;
+
+function assertDateOnlyEditorialClaimAmendment(before, after) {
+  if (!before || !after || before.id !== after.id || before.subject !== after.subject ||
+      before.predicate !== after.predicate || before.certainty !== after.certainty ||
+      !same(before.evidence, after.evidence)) {
+    throw new Error('Editorial amendment must preserve the reviewed claim identity, certainty, and evidence');
+  }
+  if (!same(withoutEditorialAmendmentDates(before.value), withoutEditorialAmendmentDates(after.value))) {
+    throw new Error('Editorial amendment may change only chronology fields in the reviewed replacement fact');
+  }
+  if (before.value?.event !== undefined && before.value.event !== after.value?.event) {
+    throw new Error('Editorial amendment cannot alter an existing non-date event description');
+  }
+}
+
+export function applyDateRepairEditorialAmendment(document, amendment, candidate) {
+  if (!document || !amendment || !candidate) throw new Error('Editorial amendment requires decision, amendment, and expanded candidate');
+  validateEditorialDecisionDocument(document);
+  if (amendment.schemaVersion !== 1 || amendment.kind !== 'date-repair-editorial-amendment' ||
+      amendment.book !== document.book || amendment.chapter !== document.chapter ||
+      amendment.editorialDecisionHash !== hash(document) || !Array.isArray(amendment.claimRevisions) ||
+      amendment.claimRevisions.length === 0) {
+    throw new Error('Invalid or stale sealed editorial amendment');
+  }
+  const amended = structuredClone(document);
+  const seen = new Set();
+  for (const change of amendment.claimRevisions) {
+    if (typeof change.repairId !== 'string' || typeof change.claimId !== 'string' ||
+        typeof change.reason !== 'string' || change.reason.trim().length < 20) {
+      throw new Error('Editorial amendment requires a reviewed claim, repair ID, and source-based reason');
+    }
+    const key = `${change.repairId}:${change.claimId}`;
+    if (seen.has(key)) throw new Error('Duplicate editorial amendment target');
+    seen.add(key);
+    const matches = amended.claimRevisions.filter(revision =>
+      revision.repairId === change.repairId && revision.before?.id === change.claimId &&
+      revision.after?.id === change.claimId,
+    );
+    if (matches.length !== 1 || !same(matches[0].after, change.before)) {
+      throw new Error(`Editorial amendment target is missing or stale for ${key}`);
+    }
+    assertDateOnlyEditorialClaimAmendment(change.before, change.after);
+    matches[0].after = structuredClone(change.after);
+    matches[0].reason = change.reason;
+  }
+  validateEditorialDecisionDocument(amended);
+  validateAppliedEditorialDecisions(amended, candidate);
+  return amended;
+}
 
 export function dateWorkflowDirectory(book, chapter, peopleDir = PEOPLE_DIR) {
   return path.join(peopleDir, 'generated', 'date-workflow', book, chapter);
