@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "025",
+  "candidateFile": "staged-candidate-b0a490b44b289b2fb735.json",
+  "sourceHash": "sha256:5c621efe76c3132411fc7bafd88d507672255f6ba20a6f30f1530655006f5942",
+  "originalExtractionHash": "sha256:d7aa1b77d0288b7a81ec030bae3663813bbae42527a999f7af48b3669067089e",
+  "sealedCandidateHash": "sha256:b0a490b44b289b2fb7350b4d295adbc2fc34278ee97ca2d6ecf1401629566cb5",
+  "candidateExtractionHash": "sha256:d5698f4b90d83f7e6e873feafc7e7879cc3886ef76f79439a8321594d7f142a3",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 025 Prince of Zheng candidate reviewer",
+    "agentId": "review_jiuwudaishi025_prince_zheng",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T02:20:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed replay, source-ownership, scope, compact-validation, and chronology-geometry review. Exactly claim-107 changes: it removes the borrowed on-or-before AD 874 bound while retaining the source date text, Guochang lineage event, explicit provenance, and substantive unresolved reason. The source says that Guochang was enrolled in the Zheng-prince branch; it neither identifies nor dates an individual Prince of Zheng. p011 retains an explicit unresolved chronology hold and no date-bearing canonical claim.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-107"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0020",
+          "quote": "咸通中，討龐勳有功，入為金吾上將軍，賜姓李氏，名國昌，"
+        },
+        {
+          "unit": "s0023",
+          "quote": "仍係鄭王房。"
+        }
+      ],
+      "reason": "咸通中 and the AD 874 outer endpoint govern Li Guochang's military reward and identification. 仍係鄭王房 continues that identification as a lineage branch; it names no individual Prince of Zheng and supplies no date for p011. Removing the borrowed personal bound while preserving the attestation event, source text, provenance, and unresolved hold is the narrow source-supported repair."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:5c621efe76c3132411fc7bafd88d507672255f6ba20a6f30f1530655006f5942 and sha256:d7aa1b77d0288b7a81ec030bae3663813bbae42527a999f7af48b3669067089e.",
+    "Replay only the sealed claim-107 replacement; do not change p011's person record, non-temporal claims, source, mentions, translations, aliases, roles, evidence, or any other extraction content.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:5c621efe76c3132411fc7bafd88d507672255f6ba20a6f30f1530655006f5942",
+    "canonicalExtractionHash": "sha256:d7aa1b77d0288b7a81ec030bae3663813bbae42527a999f7af48b3669067089e",
+    "sealedProposalIdentity": "PASS: exact one-operation proposal seals to sha256:b0a490b44b289b2fb7350b4d295adbc2fc34278ee97ca2d6ecf1401629566cb5.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:d5698f4b90d83f7e6e873feafc7e7879cc3886ef76f79439a8321594d7f142a3.",
+    "proposalReplay": "PASS: exact replay from pinned canonical extraction reconstructed candidate byte-for-byte.",
+    "auditScope": "PASS: only claim-107's temporal container differs; the retained sourceDate, event, explicit provenance, all people, mentions, other claims, and non-date values are identical.",
+    "p011Ownership": "PASS: s0020 dates Guochang's action, and s0023 identifies Guochang's Zheng-prince lineage; the candidate leaves p011's individual chronology unresolved and no date-bearing p011 claim remains.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction passed against the rebuilt 248-unit chapter packet (153 people, 887 mentions, 970 claims).",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reported no geometry defects after replay.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 025 passed on the pinned current canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}
