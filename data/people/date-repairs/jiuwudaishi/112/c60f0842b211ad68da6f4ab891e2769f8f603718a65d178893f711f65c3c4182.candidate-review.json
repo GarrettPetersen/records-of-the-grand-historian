@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "112",
+  "candidateFile": "staged-candidate-c60f0842b211ad68da6f.json",
+  "sealedCandidateHash": "sha256:c60f0842b211ad68da6f4ab891e2769f8f603718a65d178893f711f65c3c4182",
+  "candidateExtractionHash": "sha256:f3feb7181e86d050914ec0ba126401a3e5109ef2a9a5db64ae04395219051a3a",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 112 staged-candidate source reviewer",
+    "agentId": "date_repair_review_jiuwudaishi112",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T06:55:23.000Z",
+  "disposition": "reject-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The six source-checked groups cover all 49 operations (28/4/2/3/6/6); their source classifications, one-sided bounds, retained non-life events, and source-only Kaiyun seal-transfer roles are otherwise sound. But operation 33 contradicts its audit instruction: it replaces duplicate claim-68 with a second Western-bearing Li Congcan attestation instead of removing it, while claim-151 already retains the source-supported before-AD-951 death bound. The candidate therefore duplicates the same chronology and cannot be curated.",
+  "validation": {
+    "canonicalInputs": "PASS: canonical source sha256:d4a1c6a20a9254dc289b64653e28f5e82a1e06582c50db704732e1464e6abcea and extraction sha256:ad1fe2b8b04ea92cc6d0e89a76145d8a9dd9e497944d872c4e7b9f8139f18432 match the handoff.",
+    "sealedProposalAndCandidatePins": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: 49/49 operations across audit groups 28/4/2/3/6/6 were reviewed.",
+    "sourceSoundness": "FAIL: operation 33 turns the duplicate Li Congcan attestation into another before-AD-951 Western-bearing chronology rather than removing it as the audit finding requires.",
+    "nonDateRetention": "PASS: retrospective authors, ancestors, offices, seal-history allusions, posthumous honors, and participant roles remain represented without fabricated life chronology.",
+    "compactValidation": "PASS: 281 units, 178 people, 598 mentions, 1083 claims.",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Do not apply this rejected candidate to the canonical extraction.",
+    "For Li Congcan, remove claim-68 and its active-date hint; preserve claim-151 as the sole source-supported before-AD-951 death bound, with no duplicate Western-bearing attestation.",
+    "Restage a newly sealed candidate, replay all operations, and obtain a fresh independent review before any host curation."
+  ]
+}
