@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "001",
+  "candidateFile": "staged-candidate-e171e2a39a5aefd17cfe.json",
+  "sourceHash": "sha256:a21a664bfd2de3dcfff69158f36e1019e5dfbf8fc9cafcfad33ba66e6f8ed357",
+  "originalExtractionHash": "sha256:b5733dec8d6eadd1fa42a835cc8035781c23c746933a943c6f80c3746243cc0a",
+  "sealedCandidateHash": "sha256:e171e2a39a5aefd17cfefdde67f2fe72711c6f063e595dc1242677292f11faba",
+  "candidateExtractionHash": "sha256:6f861402d4add3dedc37014e713f9de3cab4485e574dce13f6082fb100325241",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 001 undated-source candidate reviewer",
+    "agentId": "review_jiuwudaishi001_undated",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T01:09:45.350Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "The exact two-operation staged proposal reconstructs to its declared candidate bytes and is accepted for host-side curation. Unit s0119 names Scholar Jing and contains no temporal wording; the prior 光啟前後 source-date claim and active-date hint were fabricated. The replacement preserves the explicit source attestation as explicitly undated, and p057 has no remaining date-bearing claim, so the empty active-date-hint list is permitted by the undated-source-attestation policy. This receipt authorizes neither canonical mutation nor a date-audit status change; a fresh complete independent canonical audit remains required.",
+  "candidateValidation": {
+    "proposalApplication": "PASS: reconstructed from the pinned canonical source and extraction hashes; sealed proposal sha256:e171e2a39a5aefd17cfefdde67f2fe72711c6f063e595dc1242677292f11faba replayed exactly to sha256:6f861402d4add3dedc37014e713f9de3cab4485e574dce13f6082fb100325241.",
+    "productionExtractionValidator": "PASS: node scripts/validate-people-extraction.mjs /tmp/jwd001-candidate-extraction.json reported 156 people, 818 mentions, 838 claims, and 1013 candidates.",
+    "temporalGeometry": "PASS: dateAuditDiagnostics on the replayed candidate is empty.",
+    "undatedAttestationPolicy": "PASS: p057 has exactly one attestation with undatedSourceAttestation: true and zero claims carrying western year, interval, bounds, source date, date context, qualitative, or unresolved chronology; its empty active-date hints therefore cannot conceal a remaining date-bearing claim.",
+    "canonicalMutation": "NONE: this review neither changes data/people/extractions/jiuwudaishi/001.json nor records a new date-audit status."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-239",
+        "hints-p057"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "book": "jiuwudaishi",
+          "chapter": "001",
+          "unit": "s0119",
+          "quote": "時有薦敬秀才于門下，乃白梁祖曰：'明公方欲圖大事，輜重必為四境所侵。",
+          "sourceHash": "sha256:a108cd8f8858b1d43440c217437cd5752e6e67f4fa53fce53e1c7ebadfc229e5",
+          "reason": "This sentence names Scholar Jing and begins his recommendation, but it contains neither 光啟 nor any reign title, year, month, cyclical day, age, relative sequence, or other date-bearing expression."
+        },
+        {
+          "book": "jiuwudaishi",
+          "chapter": "001",
+          "unit": "s0120",
+          "quote": "但令麾下將士詐為叛者而逃，即明公奏於主上，及告四鄰，以自襲叛徒為名。",
+          "sourceHash": "sha256:7da7fd367a1c4d8745aa82081a6a35ea961a2ab5b144c20ff76ba35e04a0af37",
+          "reason": "The continuation of Scholar Jing’s attributed advice likewise has no temporal expression, so it supplies no separate active-date evidence."
+        }
+      ],
+      "reason": "The candidate changes only the temporal value of the retained p057 attestation and removes its matching synthetic hint. It retains person identity, Scholar role, s0119 attestation, and s0119–s0120 speech attribution. Since all p057 claims are now non-date-bearing, the explicit undated-source-attestation marker is the narrow policy-approved basis for an empty active-date-hint list."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only this sealed two-operation proposal after rechecking the pinned source and canonical extraction hashes.",
+    "Run the scoped production extraction validator after host curation.",
+    "Do not change data/people/date-audits/jiuwudaishi/001.json in the curation commit.",
+    "Record a fresh, complete independent audit of the resulting canonical extraction before treating the chapter as date-approved."
+  ]
+}
