@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-only-false-person-audit",
+  "book": "jiuwudaishi",
+  "chapter": "085",
+  "sourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+  "extractionHash": "sha256:1f56c504ceba755087a126084a0ff01af1a128ba2ee1d6e5fb2e60a816d9bacd",
+  "reviewedAt": "2026-09-23T23:45:00.000Z",
+  "reviewer": {
+    "name": "Codex source-only false-person auditor",
+    "agentId": "false_person_audit_jiuwudaishi085_p045",
+    "independentOfDateRepair": true
+  },
+  "decisions": [
+    {
+      "person": "jiuwudaishi:085:p045",
+      "verdict": "remove",
+      "reason": "not-a-name",
+      "sourceEvidence": [
+        {
+          "unit": "s0052",
+          "quote": "先人有田一成，有眾一旅，兵連禍結，力屈勢孤。",
+          "analysis": "先人 is an anonymous ancestral/kinship reference. It gives neither a personal name nor an individualizing title, and does not explicitly identify this forebear with the later 先君 or 先帝 references."
+        },
+        {
+          "unit": "s0058",
+          "quote": "旋屬天降鞠兇，先君即世，臣遵承遺旨，纘紹前基。",
+          "analysis": "Within the surrender memorial, 先君 identifies the memorialist's deceased predecessor/father by a relational office reference only. It is likely the same unnamed predecessor recalled later, but it is not a personal name."
+        },
+        {
+          "unit": "s0076",
+          "quote": "先帝受命，旋制此寶，在位臣僚，備知其事。",
+          "analysis": "先帝 is likewise a generic former-emperor reference in the same memorial. Its seal-making action is source-attested, but the passage supplies no individualizing name or title from which a named-person page can be made."
+        }
+      ],
+      "decision": "The extraction's 'Former Lord of Jin / 先君' record improperly turns generic kinship and former-office references into a named individual, and also conflates 先人 with the two office references without an explicit source equation. Even if 先君 and 先帝 are read as the same deceased predecessor, the chapter never names that person. Remove p045 as not-a-name; do not replace it with a guessed historical identity.",
+      "dependentScope": {
+        "mentions": [
+          "jiuwudaishi:085:m0157",
+          "jiuwudaishi:085:m0158",
+          "jiuwudaishi:085:m0163",
+          "jiuwudaishi:085:m0164",
+          "jiuwudaishi:085:m0207",
+          "jiuwudaishi:085:m0208"
+        ],
+        "subjectClaims": [
+          "jiuwudaishi:085:c0146",
+          "jiuwudaishi:085:c0147",
+          "jiuwudaishi:085:c0148",
+          "jiuwudaishi:085:c0149",
+          "jiuwudaishi:085:c0150",
+          "jiuwudaishi:085:c0315"
+        ],
+        "externalClaimsRequiringRemoval": [
+          "jiuwudaishi:085:c0345",
+          "jiuwudaishi:085:c0347",
+          "jiuwudaishi:085:c0354"
+        ],
+        "surfaces": [
+          { "language": "zh", "exact": "先人", "units": ["s0052"] },
+          { "language": "en", "exact": "forebear", "units": ["s0052"] },
+          { "language": "zh", "exact": "先君", "units": ["s0058"] },
+          { "language": "en", "exact": "my father", "units": ["s0058"] },
+          { "language": "zh", "exact": "先帝", "units": ["s0076"] },
+          { "language": "en", "exact": "My father", "units": ["s0076"] }
+        ]
+      }
+    }
+  ],
+  "nextStep": "A separate false-person-removal candidate must remove p045 with scripts/remove-false-people.mjs and first remove the three listed external family-relationship claims. This receipt makes no extraction or date change."
+}
