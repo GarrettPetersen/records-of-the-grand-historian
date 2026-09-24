@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "096",
+  "candidateCommit": "3f1dccc575",
+  "candidateFile": "staged-candidate-8b09fad4ce0dfc1bce5b.json",
+  "sealedCandidateHash": "sha256:8b09fad4ce0dfc1bce5b89f5e642a729529ab8320c50714984f2df6d0b978c12",
+  "candidateExtractionHash": "sha256:16e0e6b85b4f63491a8695fa827232fe74a25474914ef7f6d11665fa5c178dfe",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 096 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi096",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T21:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited after fresh independent audit",
+  "summary": "Accepted all 58 sealed date-only operations. The candidate correctly ends Later Jin Tianfu at AD 942, removes dynasty/reign-derived personal chronology where the source is only relational or retrospective, restores accession and phase precision, and retains the specific AD 923 Bian-entry event. It makes no non-date extraction change.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-3", "claim-9", "claim-22", "claim-44", "claim-45", "claim-53", "claim-56", "claim-60", "claim-74", "claim-82", "claim-86", "claim-90", "claim-374", "hints-p001", "hints-p003", "hints-p005", "hints-p007", "hints-p008", "hints-p009", "hints-p010", "hints-p011", "hints-p012", "hints-p068"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0002: 「崇弼，天福中遷左散騎常侍。」",
+        "s0015: 「天福中，維翰既居相位，保極時在曹郎。」",
+        "s0026: 「天福中，授左贊善大夫。」",
+        "s0184: 「天福中，以耄期上表求退。」"
+      ],
+      "reason": "天福 is Later Jin's AD 936–942 era. The proposed endpoint AD 942 removes the unsupported Kaiyun extension; the recomputed hints preserve separately evidenced later dates instead of joining them into the Tianfu interval."
+    },
+    {
+      "proposalItems": ["claim-131", "claim-149", "claim-157", "claim-183", "claim-238", "claim-313", "claim-317", "claim-321", "claim-326", "hints-p020", "hints-p025", "hints-p027", "hints-p032", "hints-p041", "hints-p057", "hints-p058", "hints-p059", "hints-p060"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0055: 「張繼祚，故齊王全義之子也。」",
+        "s0063: 「父珙早事齊王。」",
+        "s0070: 「會唐明宗鎮其地，與部將王建立相善。」",
+        "s0122–s0124: 「唐宰相餘慶之曾孫也」; 「余慶生浣，浣生從讜」; 「從讜兄處誨。」"
+      ],
+      "reason": "These are kinship, retrospective ruler, genealogy, or bare office/ruler attestations. They identify the people and remain visible, but they supply no personal event with defensible Western endpoints. Explicit undated source attestations and removal of inherited active hints are the correct source-faithful treatment."
+    },
+    {
+      "proposalItems": ["claim-159", "claim-173", "claim-249", "claim-262", "hints-p027", "hints-p029", "hints-p044", "hints-p046"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0194: 「末帝嗣位，以阮為趙州刺史。」",
+        "s0204: 「及末帝登極，歷南北院宣徽使。」"
+      ],
+      "reason": "嗣位 and 登極 name the Later Tang Last Emperor's accession, a single AD 934 event. Replacing the borrowed AD 934–936 reign interval with AD 934 correctly retains the dated appointments without claiming activity across the reign."
+    },
+    {
+      "proposalItems": ["claim-184", "claim-202", "claim-205", "claim-241", "claim-331", "hints-p032", "hints-p035", "hints-p036", "hints-p042", "hints-p061"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0074: 「天成末，王都構亂。」",
+        "s0094: 「高祖即位之二年，授鳳州防禦使。」",
+        "s0131–s0132, s0138: 「高祖晏駕」; 「會赦」; 「八年冬，賜死於家。」"
+      ],
+      "reason": "Late Tiancheng is conservatively AD 929–930 rather than the whole era; 高祖即位之二年 is exact AD 937 and must not say ‘before and after’; Tianfu years seven through eight span AD 942–943. The replacement claims and recomputed hints preserve each source precision."
+    },
+    {
+      "proposalItems": ["claim-215", "hints-p038"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0085: 「莊宗入汴，不改其職。」"
+      ],
+      "reason": "莊宗入汴 is the specific AD 923 Bian-entry event. Replacing the unrelated full AD 923–926 reign window with the single event year correctly dates Liu Suiqing's retained office context."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: the sealed handoff pins canonical source sha256:afce1ceddc4afacfe8410af12be907f2070d440b937184bde679bd64013dbeb6 and canonical extraction sha256:7f8d21860d0ea1e72e06d5ba1a8c90dec2d1a820d35f3c1c35da56b47fc2dd18.",
+    "sealedProposalIdentity": "PASS: recomputation of the proposal hash is sha256:8b09fad4ce0dfc1bce5b89f5e642a729529ab8320c50714984f2df6d0b978c12.",
+    "candidateExtractionIdentity": "PASS: candidate extraction hash is sha256:16e0e6b85b4f63491a8695fa827232fe74a25474914ef7f6d11665fa5c178dfe.",
+    "auditScope": "PASS: all 32 claim targets and all 26 active-hint targets from audit 6d61435c7a9c441f1a37771f9345d8dc10559d61 are present; no extra claim targets occur.",
+    "proposalReplay": "PASS: the sealed handoff records byte-for-byte structural proposal replay.",
+    "compactValidation": "PASS: the staged candidate reports compact validation and chronology geometry PASS (210 units, 71 people, 621 claims).",
+    "sourceSoundness": "PASS: independently checked every changed claim group against its cited Chinese evidence; each replacement is narrower or explicitly undated, never an invented endpoint.",
+    "nonDateRetention": "PASS: all 58 operations are claim date fields or active-date hints; people, predicates, source evidence, certainty, relationships, aliases, mentions, and translations are unchanged.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this review packet.",
+    "Replay exactly the 58 sealed operations; do not restore Kaiyun-era endpoints, reign-wide activity, or dynasty-derived dates.",
+    "Keep the nine relationship, genealogy, ruler, and office claims as explicit undated source attestations; do not turn them into research-hold dates or invent endpoints.",
+    "Do not alter the source or canonical extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation."
+  ]
+}
