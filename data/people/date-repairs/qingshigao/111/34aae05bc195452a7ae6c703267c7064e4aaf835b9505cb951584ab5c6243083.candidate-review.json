@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "qingshigao",
+  "chapter": "111",
+  "candidateFile": "staged-candidate-34aae05bc195452a7ae6.json",
+  "sealedCandidateHash": "sha256:34aae05bc195452a7ae6c703267c7064e4aaf835b9505cb951584ab5c6243083",
+  "candidateExtractionHash": "sha256:2ea69244fecaf1602d782e5288a2af6eb2cef784d6d51d3244fdd44ccc07795e",
+  "reviewer": {
+    "name": "Codex independent Qingshigao 111 residual date-repair reviewer",
+    "agentId": "review_qingshigao111_residual",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T00:40:03.321Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after an independent source, pin, sealed-replay, and scope review. The sole date-only operation corrects Ji Zhenyi’s claim-79 sourceDate from the preceding heading 「唐熙元年」 to the event sentence’s exact 「三年」. It retains an explicit research hold and supplies no Western year. All other extraction data, including the pre-existing source-faithful 「雍正中」 research holds, remains unchanged.",
+  "hostRequirements": [
+    "Apply only if the canonical source hash remains sha256:e2fea6726af9c092fcba7bd6b60f7f82ccd5d6ff34a38cc51d008d9c43b5a384 and the canonical extraction hash remains sha256:a7e7eba0253a39ccdff0a28d21fa3f944907f79e313ab5dba4b0df92760729e6.",
+    "Replay exactly the one claim-79 replacement bound by sealedCandidateHash. Retain sourceDate 「三年」 and the explicit research hold; do not infer a Western year from the preceding 「唐熙元年」 heading without independent source verification.",
+    "Do not alter canonical source or extraction from this receipt; after host curation, run scoped validation and obtain a fresh independent canonical date audit."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:e2fea6726af9c092fcba7bd6b60f7f82ccd5d6ff34a38cc51d008d9c43b5a384",
+    "canonicalExtractionHash": "sha256:a7e7eba0253a39ccdff0a28d21fa3f944907f79e313ab5dba4b0df92760729e6",
+    "canonicalInputs": "PASS: remote staging source and compact extraction hashes match the candidate pins.",
+    "sealedProposalIdentity": "PASS: SHA-256 of the exact one-operation proposal is 34aae05bc195452a7ae6c703267c7064e4aaf835b9505cb951584ab5c6243083.",
+    "candidateExtractionIdentity": "PASS: SHA-256 of the staged compact candidate is 2ea69244fecaf1602d782e5288a2af6eb2cef784d6d51d3244fdd44ccc07795e.",
+    "proposalReplay": "PASS: replay from the pinned remote canonical extraction reconstructed the staged candidate byte-for-byte.",
+    "auditScope": "PASS: only claim-79 value.sourceDate.text and value.unresolvedReason change; every person, surface, mention, claim identity, evidence unit, translation, and non-date fact is identical.",
+    "sourceSoundness": "PASS: s0031 explicitly begins 「三年，御史季振宜…」. The preceding s0028 heading is 「唐熙元年…」; it cannot be copied into the event date or converted into a Western year without separate verification.",
+    "compactValidation": "PASS: compact validation completed against the exact remote 250-unit extraction packet (37 people, 90 mentions, 409 claims).",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "canonicalMutation": "NONE"
+  }
+}
