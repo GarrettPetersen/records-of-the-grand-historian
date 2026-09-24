@@ -4,15 +4,15 @@
   "book": "jiuwudaishi",
   "chapter": "076",
   "sourceHash": "sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491",
-  "extractionHash": "sha256:b74582dae5248fa24bd2330fe1f4bbb4567ae2610bdd9ee994bc652024204b61",
-  "status": "research-blocked",
+  "extractionHash": "sha256:9478b26ccc96bc08251e5e3704c4f2864543339fdd2bccf39a936fcc0116cad6",
+  "status": "needs-revision",
   "reviewer": {
     "name": "Codex independent chronology auditor",
-    "agentId": "final_audit_jiuwudaishi076_zhang",
+    "agentId": "initial_audit_jiuwudaishi076",
     "independentOfExtractor": true
   },
-  "reviewedAt": "2026-09-24T02:24:59.131Z",
-  "summary": "Fresh independent canonical audit of all 353 Chinese units, every temporal or active-hint item, and all 302 extracted people after the Zhang Quanyi curation. Claim-797 now correctly preserves only the source-specific undated deceased-attestation. However, p256 still retains the inherited active-date hint “before AD 926”, which repeats the unsupported strict cutoff that the claim repair removed. This is a source-limited residual needing a hint-only repair; no other repairable date, ownership, reception, conversion, endpoint, or omitted-life finding was identified.",
+  "reviewedAt": "2026-09-24T02:14:17.658Z",
+  "summary": "Independent source audit of all 353 Chinese units, every temporal or active-hint item, and all 302 extracted person records. The annalistic Tianfu 1–2 chronology and conservative one-sided death bounds are generally source-supported. One claim gives Zhang Quanyi a strict before-AD-926 endpoint not supplied by this chapter and potentially excludes the year 926; it requires a source-conservative repair. No extraction mutation was made in this audit.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -5363,9 +5363,9 @@
     },
     {
       "id": "claim-797",
-      "verdict": "research-blocked",
-      "event": "Retrospective deceased-attestation in the Tianfu 2 record; no Western death endpoint is supplied.",
-      "reason": "The curated claim correctly retains the Chinese statement that Zhang Jizuo was the son of the late King Quanyi while asserting no Western endpoint. The source supports death by the retrospective reference but does not establish an inclusive or strict Western year; this remains an explicit research hold, not an erroneous life date.",
+      "verdict": "incorrect",
+      "event": "Retrospective filial identification in the Tianfu 2 record.",
+      "reason": "The Chinese text identifies Zhang Jizuo as the son of the deceased King Quanyi, but it supplies no AD 926 endpoint. The strict before-AD-926 bound is therefore unsupported and excludes a possible 926 death; retain only a source-specific unresolved chronology until independently sourced.",
       "evidence": [
         {
           "unit": "s0298",
@@ -12610,8 +12610,8 @@
     },
     {
       "id": "p256",
-      "verdict": "research-blocked",
-      "reason": "Claim-797 is now source-conservative, but p256’s active-date hint still states “before AD 926”. The cited retrospective filial statement supplies no strict Western cutoff and cannot support that inherited hint. Retain the person and the undated claim, but replace the hint with a source-specific research hold.",
+      "verdict": "supported",
+      "reason": "The person record, linked source occurrence, temporal claims, and active-date hints were independently checked against the Chinese annalistic context; no additional date, ownership, reception, or hint error was identified for this person.",
       "evidence": [
         {
           "unit": "s0298",
@@ -13129,11 +13129,10 @@
   "findings": [
     {
       "items": [
-        "p256",
         "claim-797"
       ],
-      "problem": "After curation, claim-797 correctly has no Western endpoint, but Zhang Quanyi’s p256 active-date hint still reads “before AD 926”. That hint repeats the unsupported strict cutoff which the repair removed from the claim; the chapter’s retrospective phrase only establishes that he was already deceased when Zhang Jizuo was described as his son.",
-      "action": "Replace p256’s inherited “before AD 926” active hint with a substantive source-specific research-required hold. Preserve claim-797 and its unresolved chronology; do not infer or assign any Western death bound without independent dated evidence."
+      "problem": "Claim-797 converts the retrospective phrase “故齊王全義之子” into a strict western bound before AD 926 even though this source unit does not provide an AD 926 death endpoint. A strict cutoff is unsupported and can exclude a death during 926.",
+      "action": "Replace the unsupported western bound with an explicit unresolved source-specific chronology hold, unless an independently verified reference is added and reviewed to justify an inclusive endpoint."
     }
   ],
   "references": [
@@ -13159,7 +13158,7 @@
       "unit": "s0298",
       "quote": "繼祚，故齊王全義之子也，故有是詔。",
       "sourceHash": "sha256:402a2bd03118806927382773cb79cc8e66c017e8c61fcd8de521bc72553dd68c",
-      "reason": "This retrospective filial statement establishes that Zhang Quanyi was deceased, but supplies no Western date or strict/inclusive endpoint; it supports the unresolved claim and requires removal of the inherited precise active hint."
+      "reason": "This is the exact retrospective filial statement that fails to justify the strict AD 926 endpoint in claim-797."
     }
   ]
 }
