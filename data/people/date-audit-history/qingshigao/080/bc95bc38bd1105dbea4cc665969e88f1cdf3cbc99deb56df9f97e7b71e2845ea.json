@@ -4,24 +4,24 @@
   "book": "qingshigao",
   "chapter": "080",
   "sourceHash": "sha256:1f72cf4d774f249ad7010f7c1cd1b7d1082b1b281513b98eaa44962385dc560e",
-  "extractionHash": "sha256:1b851f529772e6e5ecbf66fe96387bb6e2c03a0033652831465d78f4fb344f3c",
+  "extractionHash": "sha256:c9b5630b88f9acba48c18390d025d5b3dca86e23c668de8089abb02adedb03e0",
   "status": "research-blocked",
   "reviewer": {
-    "name": "Codex independent Qingshigao 080 final canonical date auditor",
-    "agentId": "final_audit_qingshigao080",
+    "name": "Codex independent Qingshigao 080 post-curation Chinese source date auditor",
+    "agentId": "fresh_qingshigao080_audit",
     "independentOfExtractor": true,
     "independentOfCandidateCurator": true,
     "independentOfInitialAuditor": true,
     "workers": [
       {
-        "name": "Codex independent Qingshigao 080 final canonical date auditor",
-        "agentId": "final_audit_qingshigao080",
+        "name": "Codex independent Qingshigao 080 post-curation Chinese source date auditor",
+        "agentId": "fresh_qingshigao080_audit",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-24T00:32:54.891Z",
-  "summary": "Fresh independent canonical Chinese source-date audit after the a8a72f8049abd post-repair extraction. All 290 source units, 54 temporal or active-hint items, and 18 people were checked. Güshi Khan’s former false AD 1642 point claims and active hint now correctly preserve the relative 未幾 sequence as explicit research holds. Eight other source-indeterminate contexts also remain explicit research holds. No chronology is invented and no canonical extraction data was changed by this audit; the unresolved holds require research before date approval.",
+  "reviewedAt": "2026-09-24T00:01:25.204Z",
+  "summary": "Fresh independent Chinese source-date audit after the c9b5630b88f9 post-curation extraction. All 290 source units, 54 temporal or active-hint items, and 18 people were checked. The curation correctly converts eight borrowed or reign-wide personal dates into research holds, but those holds preclude approval. Independently, Güshi Khan's seizure follows 崇德七年 only as 未幾, so its AD 1642 point claims and active hint require one-sided or unresolved repair. No extraction data was changed by this audit.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -365,9 +365,9 @@
     },
     {
       "id": "claim-36",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "The dated event is Güshi Khan’s seizure of Tibet after the tribute year, not an event fixed to that tribute year.",
-      "reason": "The repair correctly preserves 「未幾」 after 崇德七年 without a false AD 1642 point; the relative sequence remains an explicit research hold and cannot receive date approval.",
+      "reason": "「未幾」 follows 崇德七年 but does not say the seizure occurred in that same Western year; the AD 1642 point must be replaced by a supported one-sided or unresolved representation.",
       "evidence": [
         {
           "unit": "s0016",
@@ -545,9 +545,9 @@
     },
     {
       "id": "claim-55",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "The dated event is Güshi Khan’s seizure of Tibet after the tribute year, not an event fixed to that tribute year.",
-      "reason": "The repair correctly preserves 「未幾」 after 崇德七年 without a false AD 1642 point; the relative sequence remains an explicit research hold and cannot receive date approval.",
+      "reason": "「未幾」 follows 崇德七年 but does not say the seizure occurred in that same Western year; the AD 1642 point must be replaced by a supported one-sided or unresolved representation.",
       "evidence": [
         {
           "unit": "s0016",
@@ -825,9 +825,9 @@
     },
     {
       "id": "hints-p006",
-      "verdict": "research-blocked",
+      "verdict": "incorrect",
       "event": "The dated event is Güshi Khan’s seizure of Tibet after the tribute year, not an event fixed to that tribute year.",
-      "reason": "The repair correctly preserves 「未幾」 after 崇德七年 without a false AD 1642 point; the relative sequence remains an explicit research hold and cannot receive date approval.",
+      "reason": "「未幾」 follows 崇德七年 but does not say the seizure occurred in that same Western year; the AD 1642 point must be replaced by a supported one-sided or unresolved representation.",
       "evidence": [
         {
           "unit": "s0016",
@@ -1038,8 +1038,8 @@
     },
     {
       "id": "p006",
-      "verdict": "research-blocked",
-      "reason": "Güshi Khan is named as the taker of Tibet, but 「未幾」 after the 1642 tribute does not supply a precise seizure year; the corrected research-required hint properly blocks approval rather than inventing activity dates.",
+      "verdict": "incorrect",
+      "reason": "Güshi Khan is named as the taker of Tibet, but the only wording is 「未幾」 after the 1642 tribute; AD 1642 is not an exact activity year for his seizure.",
       "evidence": [
         {
           "unit": "s0016",
@@ -1183,6 +1183,16 @@
   "findings": [
     {
       "items": [
+        "claim-36",
+        "claim-55",
+        "hints-p006",
+        "p006"
+      ],
+      "problem": "「未幾，為蒙古顧實汗所據」 follows the AD 1642 tribute sentence but does not place Güshi Khan’s seizure in 1642. The claim, duplicate attestation, and active hint incorrectly turn a relative sequence into a same-year point date.",
+      "action": "Replace the AD 1642 point attribution and hint with a source-faithful one-sided chronology after 1642 if independently supportable, or an explicit research-required hold; retain the stated sequence and Güshi Khan’s ownership of the seizure."
+    },
+    {
+      "items": [
         "claim-47",
         "claim-48",
         "claim-56",
@@ -1206,14 +1216,10 @@
         "p012",
         "p013",
         "p015",
-        "p016",
-        "claim-36",
-        "claim-55",
-        "hints-p006",
-        "p006"
+        "p016"
       ],
-      "problem": "The canonical extraction accurately preserves nine source-indeterminate chronology contexts, including Güshi Khan’s relative 「未幾」 sequence after the 1642 tribute, as explicit unresolved records rather than inventing Western dates. Those research holds cannot pass independent date approval.",
-      "action": "Research only the nine unresolved contexts where a reliable, source-linked chronology is necessary; otherwise retain the explicit research holds and keep this chapter research-blocked rather than inventing precision."
+      "problem": "The post-curation extraction accurately preserves eight source-indeterminate contexts as unresolved rather than inventing dates, but unresolved chronology is a research hold and cannot pass an independent date approval.",
+      "action": "Research only the eight unresolved contexts where a reliable, source-linked chronology is necessary; otherwise retain their explicit research holds and keep this chapter research-blocked rather than inventing precision."
     }
   ],
   "references": [
