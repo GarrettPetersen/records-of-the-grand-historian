@@ -79,6 +79,7 @@ const UNION_CATEGORIES = new Set([
   'other',
   'uncertain',
 ]);
+const ATTESTATION_EQUIVALENT_LIFE_PREDICATES = new Set(['birth', 'death', 'age']);
 const RELATIONSHIP_STATES = new Set(['formed', 'active', 'ended', 'divorced', 'annulled', 'widowed', 'uncertain']);
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -215,6 +216,19 @@ function nestedPersonReferences(value, found = []) {
     }
   }
   return found;
+}
+
+// A dated birth, death, or age claim is itself direct source-backed evidence that
+// the person existed at that point. Do not require a duplicate activity claim
+// merely to restate that fact. Attestations remain the normal form for activity.
+function hasSourceBackedLifeChronology(claim) {
+  if (!ATTESTATION_EQUIVALENT_LIFE_PREDICATES.has(claim.predicate) || !Array.isArray(claim.evidence) || claim.evidence.length === 0) {
+    return false;
+  }
+  const temporalValues = [claim.value, ...['dateContext', 'startDate', 'endDate']
+    .flatMap((key) => nestedValuesWithKey(claim.value, key))];
+  return temporalValues.some((value) => value?.sourceDate &&
+    (value.westernYear || value.westernInterval || value.westernBounds));
 }
 
 function validateWesternYear(value, label, errors) {
@@ -655,26 +669,30 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
     }
     if (normalized.run.promptVersion >= 5) {
       const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const lifeChronology = personClaims.some(hasSourceBackedLifeChronology);
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
       if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence) {
         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
       }
-      if (!personClaims.some((claim) => claim.predicate === 'attestation') && !receptionOnlyEvidence) {
+      if (!attestations.length && !lifeChronology && !receptionOnlyEvidence) {
         errors.push(`${person.localId} has no evidence-backed attestation required by prompt v5`);
       }
     }
     if (normalized.run.promptVersion >= 7 && !['legendary', 'literary'].includes(person.historicity)) {
       const researchHold = personClaims.some(claim => claim.predicate === 'attestation' && claim.value?.unresolved === true && typeof claim.value?.unresolvedReason === 'string' && claim.value.unresolvedReason.trim().length >= 20);
       const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const lifeChronology = personClaims.some(hasSourceBackedLifeChronology);
+      const westernAttestation = attestations.some((claim) =>
+        claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds);
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
       if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !westernAttestation && !lifeChronology) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [
@@ -1116,6 +1134,30 @@ function selfTest() {
     westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
   };
   validatePeopleExtraction(oneSided, packet);
+
+  const datedDeath = structuredClone(comprehensive);
+  const datedDeathClaim = datedDeath.claims.find((claim) => claim.predicate === 'attestation');
+  datedDeathClaim.predicate = 'death';
+  datedDeathClaim.value = {
+    dateContext: {
+      sourceDate: { text: 'described as late before the second year' },
+      westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
+    },
+  };
+  validatePeopleExtraction(datedDeath, packet);
+
+  const unsourcedDeath = structuredClone(datedDeath);
+  delete unsourcedDeath.claims.find((claim) => claim.predicate === 'death').value.dateContext.sourceDate;
+  try {
+    validatePeopleExtraction(unsourcedDeath, packet);
+    throw new Error('A life-predicate chronology without a source date unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Western attestation must preserve sourceDate') ||
+        !error.message.includes('has no evidence-backed attestation')) {
+      throw error;
+    }
+  }
 
   const legendaryComprehensive = structuredClone(unresolvedComprehensive);
   legendaryComprehensive.people[0].historicity = 'legendary';
