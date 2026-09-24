@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "097",
+  "candidateCommit": "b12889fa81",
+  "candidateFile": "staged-candidate-21639613cf77f2ecfb78.json",
+  "sealedCandidateHash": "sha256:21639613cf77f2ecfb780f1460c45ec0a7eb521a45e3cf6d7d4af433f3128756",
+  "candidateExtractionHash": "sha256:d35c7129641c6768709a26d096dd3ea82ee7417a93ad50ac17eea8a8938633de",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 097 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi097",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T22:10:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited after fresh independent audit",
+  "summary": "Accepted all 26 sealed date-only operations. The candidate expands bare Tongguang-era claims to AD 923–926, bounds Zhang Yanbo's early-Tongguang posting to AD 923–924, and preserves retrospective commentary, literary allusions, and title-only references as substantive explicitly undated source attestations. It removes only their dependent synthetic active-date hints and makes no non-date extraction change.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-42", "claim-52", "claim-53", "claim-70", "claim-73", "claim-74", "claim-75", "hints-p001", "hints-p002", "hints-p003", "hints-p004", "hints-p005"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0003: 「同光中，明宗下鄆州」.",
+        "s0008: 「梁將王彥章攻馬家口所築新壘」.",
+        "s0009–s0010: 「為梁兵所獲，送夷門下獄」; 「在獄半年」."
+      ],
+      "reason": "同光中 denotes the Tongguang era period, AD 923–926, rather than its first year alone. The seven claim replacements preserve the source wording and correctly replace only the derivative AD 923 hints."
+    },
+    {
+      "proposalItems": ["claim-232", "hints-p042"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0277: 「唐同光初，明宗下其城，因收隸左右。」"
+      ],
+      "reason": "唐同光初 supplies an early-Tongguang phase, not an exact first-year date. AD 923–924 is a conservative phase interval and the recomputed hint matches it."
+    },
+    {
+      "proposalItems": ["claim-468", "claim-469", "hints-p121", "hints-p122"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0273: 「史臣曰：延光昔為唐臣……孟津之歿，乃取笑於千載也。」",
+        "s0274: 「從賓而下，俱怙亂以滅身，亦何足與議也。」"
+      ],
+      "reason": "These are substantive retrospective historian attestations but do not state a locally usable Western event date. Explicit undated source attestations retain the evidence without synthetic life/activity chronology."
+    },
+    {
+      "proposalItems": ["claim-197", "claim-430", "hints-p039", "hints-p100"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0075: 「非但爾言，蘇秦說予，亦不得也。」",
+        "s0214: 「石季倫之樂中，莫陳歸引。」"
+      ],
+      "reason": "Su Qin and Shi Jilun occur as literary allusions only. The chapter supplies neither their life intervals nor an independently cited chronological witness, so removing imported intervals and retaining explicitly undated attestations is correct."
+    },
+    {
+      "proposalItems": ["claim-246", "claim-247", "hints-p047", "hints-p048"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0085: 「父阿噔啜，後改名瑊，事唐武皇為隊長。」"
+      ],
+      "reason": "The sentence substantively attests Yang Jian's father and the ruler title 唐武皇, but gives no date for the service. Both records correctly remain explicitly undated, and the inherited before-AD-908 and AD-883–908 hints are removed."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: the sealed handoff pins canonical source sha256:d13cf31815babf2992eb43b7dd291336756169ba3a7c048b7d2d175eb1938f28 and canonical extraction sha256:0f1a81f3794bd6a785fc7cec06cc012a166d9ef4ef886a018c587ee3a32dc33d.",
+    "sealedProposalIdentity": "PASS: recomputation of the proposal hash is sha256:21639613cf77f2ecfb780f1460c45ec0a7eb521a45e3cf6d7d4af433f3128756.",
+    "candidateExtractionIdentity": "PASS: candidate extraction hash is sha256:d35c7129641c6768709a26d096dd3ea82ee7417a93ad50ac17eea8a8938633de.",
+    "auditScope": "PASS: all 14 changed claims and all 12 dependent active-hint targets correspond to the five findings in audit bd7c4e3212d42b488bd110a9216fe72615b26bce; no unrelated claims occur.",
+    "proposalReplay": "PASS: the staged handoff records byte-for-byte structural proposal replay.",
+    "compactValidation": "PASS: the staged candidate records compact validation and chronology geometry PASS (270 units, 123 people, 849 claims).",
+    "sourceSoundness": "PASS: independently checked every changed group against its cited Chinese evidence; all replacements preserve source precision or are explicitly undated rather than invented.",
+    "nonDateRetention": "PASS: all 26 operations change only claim chronology containers or dependent active-date hints; people, predicates, evidence, certainty, relationships, aliases, mentions, and translations are unchanged.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this review packet.",
+    "Replay exactly the 26 sealed operations; do not restore first-year precision to 同光中 or inherited endpoints to source-only attestations.",
+    "Keep the historian commentary, literary allusions, and Tang Wuhuang service/title records as explicitly undated source attestations; do not replace them with guessed or imported dates.",
+    "Do not alter the source or canonical extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation."
+  ]
+}
