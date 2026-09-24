@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-only-false-person-audit",
+  "book": "jiuwudaishi",
+  "chapter": "085",
+  "sourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+  "extractionHash": "sha256:1f56c504ceba755087a126084a0ff01af1a128ba2ee1d6e5fb2e60a816d9bacd",
+  "reviewedAt": "2026-09-23T21:00:00.000Z",
+  "reviewer": {
+    "name": "Codex source-only false-person auditor",
+    "agentId": "false_person_audit_jiuwudaishi085_relatives",
+    "independentOfDateRepair": true
+  },
+  "decisions": [
+    {
+      "person": "jiuwudaishi:085:p020",
+      "verdict": "remove",
+      "reason": "not-a-name",
+      "sourceEvidence": [
+        {
+          "unit": "s0013",
+          "quote": "觀以祖諱「義」，乞改官，尋授給事中。",
+          "analysis": "祖諱 identifies only Chen Guan’s grandfather through an ancestral name taboo. The passage supplies no personal name, title, office, or other individualizing evidence for that grandfather."
+        }
+      ],
+      "decision": "The record 'Grandfather of Chen Guan / 陳觀之祖' is an anonymous kinship reference, not a named individual; remove it with the false-person workflow.",
+      "dependentScope": {
+        "mentions": [
+          "jiuwudaishi:085:m0040",
+          "jiuwudaishi:085:m0043"
+        ],
+        "subjectClaims": [
+          "jiuwudaishi:085:c0062",
+          "jiuwudaishi:085:c0063",
+          "jiuwudaishi:085:c0280",
+          "jiuwudaishi:085:c0363"
+        ],
+        "externalClaimsRequiringRemoval": [
+          "jiuwudaishi:085:c0362"
+        ],
+        "surfaces": [
+          { "language": "zh", "exact": "祖", "units": ["s0013"] },
+          { "language": "en", "exact": "grandfather", "units": ["s0013"] }
+        ]
+      }
+    },
+    {
+      "person": "jiuwudaishi:085:p053",
+      "verdict": "remove",
+      "reason": "not-a-name",
+      "sourceEvidence": [
+        {
+          "unit": "s0087",
+          "quote": "戊子，殺鄭州防禦使楊承勛，責以背父之罪，令左右臠割而死。",
+          "analysis": "父 is an unnamed father in the accusation against Yang Chengxun; it does not identify a person."
+        },
+        {
+          "unit": "s0089",
+          "quote": "〈（《遼史》：以其弟承信為平盧軍節度使，襲父爵。）〉",
+          "analysis": "父爵 says Yang Chengxin inherited his father’s rank. Neither the father’s personal name nor an individualizing identifier is supplied."
+        }
+      ],
+      "decision": "The record 'Father of Yang Chengxun / 楊承勛之父' conflates two anonymous father references. The sibling relationship does not turn either unnamed father into a named person; remove it with the false-person workflow.",
+      "dependentScope": {
+        "mentions": [
+          "jiuwudaishi:085:m0232",
+          "jiuwudaishi:085:m0234",
+          "jiuwudaishi:085:m0236",
+          "jiuwudaishi:085:m0238"
+        ],
+        "subjectClaims": [
+          "jiuwudaishi:085:c0175",
+          "jiuwudaishi:085:c0176",
+          "jiuwudaishi:085:c0177",
+          "jiuwudaishi:085:c0330"
+        ],
+        "externalClaimsRequiringRemoval": [
+          "jiuwudaishi:085:c0364",
+          "jiuwudaishi:085:c0366"
+        ],
+        "surfaces": [
+          { "language": "zh", "exact": "父", "units": ["s0087", "s0089"] },
+          { "language": "en", "exact": "father", "units": ["s0087", "s0089"] }
+        ]
+      }
+    }
+  ],
+  "nextStep": "A separate candidate must remove both people with scripts/remove-false-people.mjs and must remove the six listed external family-relationship claims before validation. This receipt makes no extraction or date change."
+}
