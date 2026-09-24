@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "111",
+  "status": "accepted",
+  "accepted": true,
+  "stagingOnly": true,
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 111 posthumous-commemoration date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi111",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "candidate": {
+    "commit": "b0628a5ead23f4becac89fa30fdd7a57bab19e73",
+    "ref": "codex/jiuwudaishi111-posthumous-candidate",
+    "candidateFile": "staged-candidate-df7007c8e79ae8b4072e.json",
+    "sealedCandidateHash": "sha256:df7007c8e79ae8b4072ee61639859fcfa4daac8afe931bcb79b1d64b4ab29e27",
+    "candidateExtractionHash": "sha256:a07381684a4020323c166ffac94d801b39c0564b5867d9ee7ebf05c7136c4e4c"
+  },
+  "canonicalInputs": {
+    "auditCommit": "a7691c79ec322abc46a8073e5122273c2f885b41",
+    "auditReportHash": "sha256:241f2b462f0d7c8deab1aff6e6a65a6224e8135d7071244b7b189c638799cb30",
+    "canonicalSourceHash": "sha256:d555a5060528d11c0251a3328283407df27320b85029b4e21521354f053beea8",
+    "canonicalExtractionHash": "sha256:377514257817d0a13a39482bc5fec83318ceaacba3f628442596e124eb245b59"
+  },
+  "reviewedOperations": [
+    {
+      "result": "PASS",
+      "operation": "reclassify-reception-kind",
+      "claims": ["claim-111", "claim-118", "claim-127", "claim-135", "claim-143", "claim-156", "claim-163", "claim-171", "claim-179", "claim-187", "claim-195", "claim-732", "claim-1204", "claim-1214"],
+      "count": 14,
+      "review": "Each changes only event-participation kind from ritual to posthumous-commemoration, retaining person, role honoree, action, dateContext, certainty, and source evidence. Source units s0009-s0019, s0078, s0144, and s0146 use 故, 追贈, 贈, 追封, or 追立 and support posthumous commemoration rather than life activity."
+    },
+    {
+      "result": "PASS",
+      "operation": "remove-active-hint",
+      "people": ["p014", "p015", "p016", "p017", "p018", "p020", "p021", "p022", "p023", "p024", "p025", "p108", "p112", "p163", "p165"],
+      "count": 15,
+      "review": "Only AD 951 is removed from each ordinary hint array. Existing before AD 951 bounds remain; p112 retains independently explicit AD 950. No replacement life date is added."
+    },
+    {
+      "result": "PASS",
+      "operation": "p166-cross-person-reception-repair",
+      "operations": ["remove claim-1216", "reclassify claim-1219", "remove hints-p166"],
+      "count": 3,
+      "review": "claim-1216 is the cross-person AD 951 attestation borrowing Lady Yang's s0146 and is removed. claim-1219 retains only s0147, its dateContext, action, title, certainty, and person while becoming event-participation/posthumous-commemoration with role honoree. p166 loses only AD 951. Claims 1215, 1217, and 1218 are unchanged. s0147 explicitly identifies the already-deceased fifth imperial daughter and her posthumous enfeoffment."
+    }
+  ],
+  "validation": {
+    "sealedProposalIdentity": "PASS: independently recomputed proposal hash exactly matches the stated seal.",
+    "candidateExtractionIdentity": "PASS: independently recomputed compact candidate hash exactly matches the stated candidate hash.",
+    "auditBinding": "PASS: amended audit is an ancestor of the candidate commit and all source, extraction, and audit-report pins match the candidate handoff.",
+    "proposalReplay": "PASS: independent exact replay of all 32 operations from the pinned canonical extraction reproduces the candidate byte-for-byte.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction against a rebuilt Jiuwudaishi 111 packet reports 162 units, 762 candidates, 172 people, 447 mentions, 1780 claims, 20 repairs, 531 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) reports no geometry errors.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 111 passed on the pinned canonical inputs.",
+    "canonicalMutation": "NONE: this receipt neither changes canonical source nor extraction."
+  },
+  "publication": {
+    "master": "NOT_PUBLISHED",
+    "sharedQueue": "NOT_PUBLISHED",
+    "reviewReceipt": "STAGING_ONLY"
+  }
+}
