@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "105",
+  "candidateCommit": "90110984a7",
+  "candidateFile": "staged-candidate-7ca42db677c15c88ef08.json",
+  "sourceHash": "sha256:9f536f945847805da87e1e7ef63d8d626208035593c5f8919ee0be382d592b37",
+  "originalExtractionHash": "sha256:d3d2affbb114ee489a4b65bb125dcde3946db3a63cfcade5f4cb920bbf38fb17",
+  "sealedCandidateHash": "sha256:7ca42db677c15c88ef08f91fa0185b730fe391d28f329465de444e5625eb89f4",
+  "candidateExtractionHash": "sha256:c24d04c8466607cda8b57bf11a92395b735e2ce08ece86f2ad2f0cfe7a067a4d",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 105 corrected staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi105",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T05:51:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited or research-blocked after fresh independent audit",
+  "summary": "Accepted all six sealed operations after independently reviewing the corrected candidate against audit b775a58f214e72b1f65222ea94e3c01556e2749b and the pinned Chinese source. Emperor Yin's own accession claim and Hou Yi's contextual attestation now use the discrete AD 948 event, with matching active-date hints. The corrected claim-48 retains only nested dateContext.westernYear AD 948 and no AD 948–950 range. Guo Zhongshu's Qianyou appointment is conservatively an unresolved AD 948–950 era-wide attestation, and the unsupported synthetic Qianyou-to-Guangshun composite is removed without modifying the underlying source evidence.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-48", "claim-53", "hints-p004", "hints-p005"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0085: 「隱帝嗣位，加檢校太尉、同平章事，遙領興元尹，俄代侯益為開封尹，進位檢校太師、兼侍中。」", "s0006: 「隱帝即位，加檢校太師。」"],
+      "reason": "Both phrases identify one accession, not the length of Emperor Yin's reign. Claim-48 now contains only dateContext.westernYear AD 948, with sourceDate retained and no nested AD 948–950 interval. Claim-53 and the dependent hints correctly give the accession AD 948 while retaining p004's separate AD 950 death context."
+    },
+    {
+      "proposalItems": ["claim-205"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0068: 「乾祐中，湘陰公鎮徐州，辟為推官。」"],
+      "reason": "The source says only during Qianyou. Replacing the unsupported AD 949 point with an explicit unresolved AD 948–950 Qianyou interval preserves the appointment without choosing a midpoint year."
+    },
+    {
+      "proposalItems": ["claim-206"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0069: 「周祖之入京師也，少主崩於北岡，周主命宰相馮道迎湘陰公，將立之。」", "s0074: 「忠恕竄跡久之，晚年尤好輕忽，卒以此敗，坐除名配流焉。」"],
+      "reason": "The political episode and later undated exile notice do not state a continuous AD 948–951 personal interval. Removing their synthetic composite chronology is source-faithful and leaves the underlying evidence otherwise intact."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: handoff pins source sha256:9f536f945847805da87e1e7ef63d8d626208035593c5f8919ee0be382d592b37 and extraction sha256:d3d2affbb114ee489a4b65bb125dcde3946db3a63cfcade5f4cb920bbf38fb17.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:7ca42db677c15c88ef08f91fa0185b730fe391d28f329465de444e5625eb89f4.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:c24d04c8466607cda8b57bf11a92395b735e2ce08ece86f2ad2f0cfe7a067a4d.",
+    "proposalReplay": "PASS: all six replacements, hint reconciliations, and removal exactly address the four audit findings.",
+    "compactValidation": "PASS: staged handoff's compact validation reports 27 people, 303 mentions, 304 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: no date container retains multiple Western chronologies; corrected claim-48 has only nested AD 948 westernYear.",
+    "sourceSoundness": "PASS: checked all six operations against s0085, s0006, s0068, s0069, and s0074; each revised chronology has the stated source basis and no life endpoint is invented.",
+    "nonDateRetention": "PASS: changes are confined to the audited date containers, their dependent hints, and the unsupported composite claim; aliases, roles, mentions, relations, translations, and source provenance remain unchanged.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this review packet.",
+    "Replay exactly these six sealed operations, especially claim-48 as a single nested AD 948 westernYear with no AD 948–950 interval.",
+    "Keep claim-205 explicitly unresolved as an AD 948–950 Qianyou-era attestation, and do not restore claim-206's synthetic AD 948–951 composite.",
+    "Do not alter source or canonical extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation."
+  ]
+}
