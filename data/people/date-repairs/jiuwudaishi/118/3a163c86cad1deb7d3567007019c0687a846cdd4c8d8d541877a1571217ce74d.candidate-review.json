@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "118",
+  "candidateRef": "codex/jiuwudaishi118-claim700-corrective-candidate",
+  "candidateCommit": "421357160542658447b4022003e383d5e24f7482",
+  "auditCommit": "276e58c4667724f896ce002c79592527d4848cc0",
+  "candidateFile": "staged-candidate-3a163c86cad1deb7d356.json",
+  "sealedCandidateHash": "sha256:3a163c86cad1deb7d3567007019c0687a846cdd4c8d8d541877a1571217ce74d",
+  "candidateExtractionHash": "sha256:710727e058835f388f79b8e4a65cc540230de4e79df3e233cfdc95597af691e1",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 118 corrective date-repair reviewer",
+    "agentId": "fresh_audit_jiuwudaishi117",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T21:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent source and sealed-candidate review. The first operation removes claim-700’s duplicate retrospective classification for Tang Yue / Shang Chongyi; s0162 instead directly records his AD 958 tribute-envoy ritual, independently retained as the dated office and event claims. The second operation adds only the matching AD 958 active hint. s0165 confirms the later Tang Yue name for Shang Chongyi. No canonical extraction, source, master, or shared-tree state is mutated by this receipt.",
+  "scope": {
+    "canonicalSourceHash": "sha256:fe71712bfce73f223899014aade5c70426aa2a8b5c04522f9907800ec192cb52",
+    "canonicalExtractionHash": "sha256:a72989513e37d0698e1a10dc80994d7d5ba94b54a1bb441f32948bfac0337486",
+    "auditReportHash": "sha256:0c3c5f038b452530f5988b24cd83cbce121e691f392f14e29b26706e932ba350",
+    "stagingOnly": true,
+    "masterMutation": "NONE",
+    "sharedTreeMutation": "NONE"
+  },
+  "reviewedChanges": {
+    "auditGroups": 1,
+    "operations": 2,
+    "falseRetrospectiveClaimRemovals": 1,
+    "sourceBackedHintAdditions": 1
+  },
+  "validation": {
+    "canonicalInputs": "PASS: source and current extraction hashes equal the sealed pins",
+    "sealedReceiptBinding": "PASS",
+    "proposalReplay": "PASS: both exact operations byte-match the candidate",
+    "candidateHash": "PASS",
+    "sourceSoundness": "PASS: s0162 directly records the Jiangnan tribute envoy’s AD 958 ritual and s0165 identifies Tang Yue as the renamed Shang Chongyi",
+    "scope": "PASS: only people and claims differ",
+    "strictCompactValidation": "PASS: 195 units, 130 people, 484 mentions, 1580 claims, 15 repairs, 479 dispositions, zero alias conflicts",
+    "chronologyGeometry": "PASS: zero diagnostics",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only to matching canonical source and extraction pins.",
+    "Replay both operations exactly.",
+    "Run a fresh independent canonical date audit after curation."
+  ]
+}

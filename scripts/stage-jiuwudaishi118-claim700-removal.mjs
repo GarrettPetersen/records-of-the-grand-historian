@@ -1,0 +1,22 @@
+import path from 'node:path';
+import { buildDateAuditPacket, dateAuditDiagnostics, dateAuditItems } from './lib/people-date-audit.mjs';
+import { applyDateRepairProposal, sealedDateRepairProposalHash } from './lib/people-date-workflow.mjs';
+import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic } from './lib/people-content.mjs';
+import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
+import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
+
+const book = 'jiuwudaishi', chapter = '118';
+const extraction = readJson(path.join(PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
+const audit = readJson(path.join(PEOPLE_DIR, 'date-audits', book, `${chapter}.json`));
+const packet = buildDateAuditPacket(book, chapter, { extraction });
+const before = extraction.claims[699];
+if (!before || before[0] !== 'p098' || before[1] !== 'event-participation' || before[4][0] !== 's0162') throw new Error('claim-700 is not the audited Tang Yue reception claim');
+const proposal = { schemaVersion: 1, kind: 'date-repair-proposal', book, chapter, sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, auditCommit: '276e58c4667724f896ce002c79592527d4848cc0', author: { name: 'Codex Jiuwudaishi 118 claim-700 corrective candidate', agentId: 'fix_life_predicate_attestation_validator' }, changes: [{ kind: 'remove', id: 'claim-700', before, reason: 'The source directly dates Tang Yue’s AD 958 tribute-envoy ritual in the separate sourced event claim; remove this duplicate false retrospective classification.' }, { kind: 'hints', personId: 'p098', before: [], after: ['AD 958'], reason: 'The retained s0162 tribute-envoy ritual directly establishes Tang Yue’s AD 958 activity; add only that exact source-backed hint.' }] };
+const candidate = applyDateRepairProposal(extraction, proposal, packet);
+if (candidate.claims.some(claim => JSON.stringify(claim) === JSON.stringify(before))) throw new Error('claim-700 remained');
+if (!candidate.claims.some(claim => claim[0] === 'p098' && claim[1] === 'event-participation' && claim[2]?.dateContext?.westernYear?.year === 958 && claim[4]?.includes('s0162'))) throw new Error('AD 958 Tang Yue ritual was not retained');
+const validation = validateCompactPeopleExtraction(candidate, buildPeopleExtractionPacket(book, chapter), { strictAliasDispositions: true });
+const geometry = dateAuditDiagnostics(dateAuditItems(candidate)); if (geometry.length) throw new Error(JSON.stringify(geometry));
+const seal = sealedDateRepairProposalHash(proposal);
+writeJsonAtomic(path.join(PEOPLE_DIR, 'date-repairs', book, chapter, `staged-candidate-${seal.slice(7, 27)}.json`), { schemaVersion: 1, kind: 'date-repair-candidate-handoff', book, chapter, canonicalSourceHash: packet.sourceHash, canonicalExtractionHash: packet.extractionHash, auditReportHash: sha256(JSON.stringify(audit)), author: proposal.author, sealedCandidateHash: seal, candidateExtractionHash: sha256(JSON.stringify(candidate)), proposal, candidate, validation: { strictCompactValidation: 'PASS', chronologyGeometry: 'PASS', stats: validation.stats }, auditEvidence: { finding: audit.findings.find(f => f.items.includes('claim-700')) }, canonicalMutation: 'NONE', masterMutation: 'NONE', publication: 'candidate-ref-only' });
+console.log(JSON.stringify({ seal, candidateHash: sha256(JSON.stringify(candidate)), stats: validation.stats }));
