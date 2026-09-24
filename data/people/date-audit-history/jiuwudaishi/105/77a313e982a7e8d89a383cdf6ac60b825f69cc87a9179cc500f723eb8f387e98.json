@@ -4,21 +4,21 @@
   "book": "jiuwudaishi",
   "chapter": "105",
   "sourceHash": "sha256:9f536f945847805da87e1e7ef63d8d626208035593c5f8919ee0be382d592b37",
-  "extractionHash": "sha256:3b79bd86968292962f9430e3f77e72ed4fd0cd84c80b63c809bd46254af214c7",
+  "extractionHash": "sha256:c24d04c8466607cda8b57bf11a92395b735e2ce08ece86f2ad2f0cfe7a067a4d",
   "reviewer": {
-    "name": "Fresh final independent canonical Jiuwudaishi 105 date reviewer",
+    "name": "Fresh independent canonical Jiuwudaishi 105 date reviewer",
     "independentOfExtractor": true,
     "workers": [
       {
-        "name": "Fresh final independent canonical Jiuwudaishi 105 date reviewer",
-        "agentId": "final-canonical-audit-jiuwudaishi105",
+        "name": "Fresh independent canonical Jiuwudaishi 105 date reviewer",
+        "agentId": "final-audit-jiuwudaishi105",
         "independentOfExtractor": true
       }
     ]
   },
-  "reviewedAt": "2026-09-24T07:00:00.000Z",
-  "status": "audited",
-  "summary": "Fresh final independent canonical audit of the pinned post-residual-curation extraction. All 88 Chinese source units, all 81 temporal or active-date-hint items, and all 27 people were reviewed. Every temporal assertion and hint is source-supported. Emperor Yin’s accession remains the discrete AD 948 event, Guo Zhongshu’s Qianyou appointment remains the supported AD 948–950 interval without a midpoint, and no former synthetic claim 206 chronology remains.",
+  "reviewedAt": "2026-09-24T06:15:00.000Z",
+  "status": "needs-revision",
+  "summary": "Fresh independent canonical audit of the pinned post-curation extraction. All 88 Chinese source units, all 81 current temporal or active-hint items, and all 27 people were reviewed. Claims 48 and 53 now correctly record the discrete AD 948 accession, p004/p005 hints match it, and the invented former claim 206 is absent. Claim 205 faithfully preserves the Qianyou AD 948–950 interval, but its explicit unresolved chronology and p027’s non-hold active hint keep the chapter from approval.",
   "reviewedUnits": [
     "s0075",
     "s0076",
@@ -748,9 +748,9 @@
     },
     {
       "id": "claim-205",
-      "verdict": "supported",
+      "verdict": "research-blocked",
       "event": "Guo Zhongshu’s appointment as investigating officer during the Qianyou era.",
-      "reason": "乾祐中 identifies the Qianyou era. The retained AD 948–950 interval gives the era’s verified bounds without choosing AD 949 or asserting activity outside its source-supported range.",
+      "reason": "乾祐中 supports the verified Qianyou-era AD 948–950 interval and no midpoint year. The canonical claim deliberately declares this chronology unresolved, which the approval rule treats as an open research hold.",
       "evidence": [
         {
           "unit": "s0068",
@@ -1072,9 +1072,9 @@
     },
     {
       "id": "hints-p027",
-      "verdict": "supported",
-      "event": "Active-date hint for Guo Zhongshu’s Qianyou-era appointment.",
-      "reason": "The ordinary AD 948-950 active-date hint exactly mirrors the supported bounded Qianyou-era attestation and does not invent a point date, later-life interval, or separate endpoint.",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Guo Zhongshu’s unresolved Qianyou-era appointment.",
+      "reason": "p027’s only temporal claim is explicitly unresolved, but its active-date hint presents AD 948-950 as an ordinary asserted activity range. The protocol requires a substantive research-required hold for an unresolved attestation.",
       "evidence": [
         {
           "unit": "s0068",
@@ -1372,8 +1372,8 @@
     },
     {
       "id": "p027",
-      "verdict": "supported",
-      "reason": "Guo Zhongshu has a source-supported Qianyou-era AD 948–950 appointment interval without a chosen midpoint; the former synthetic AD 948–951 composite claim is absent and no later undated exile notice is converted into activity chronology.",
+      "verdict": "research-blocked",
+      "reason": "Guo Zhongshu’s Qianyou appointment is correctly bounded to AD 948–950 without choosing AD 949, and the former synthetic claim 206 is gone; nevertheless the retained unresolved chronology and non-hold hint prevent final date approval.",
       "evidence": [
         {
           "unit": "s0068",
@@ -1382,6 +1382,16 @@
       ]
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "items": [
+        "claim-205",
+        "hints-p027",
+        "p027"
+      ],
+      "problem": "The Qianyou appointment is now correctly bounded to AD 948–950 and claim 206’s invented composite range is absent, but claim-205 remains explicitly unresolved while p027’s active hint is not a substantive research-required hold. An audited report is prohibited while unresolved chronology remains.",
+      "action": "Retain the source-faithful AD 948–950 Qianyou interval without choosing a point year; replace p027’s active-date hint with a substantive research-required hold and obtain or deliberately document the evidence needed to clear claim-205’s unresolved status before requesting a new approval audit."
+    }
+  ],
   "references": []
 }
