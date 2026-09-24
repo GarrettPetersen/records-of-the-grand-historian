@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "109",
+  "candidateCommit": "e0b362f75ec23f19b8db45df373d9d65d315e31b",
+  "candidateFile": "staged-candidate-7d3e91de5e99098154f8.json",
+  "sourceHash": "sha256:7166abce0727d90e786d3fed6d28d100c900fa67f5d493ebc119d5f890965605",
+  "originalExtractionHash": "sha256:b0df24615853376cd9b71bf0c67ab4f7cfa1ba4032ce90c0abba0bf2b499dbf0",
+  "sealedCandidateHash": "sha256:7d3e91de5e99098154f84934c3423d7501123afd5eb74637c5a088429117d000",
+  "candidateExtractionHash": "sha256:795b74a0c1b74d18fe4dc1d2f518e5044f8546b9b469ee58e19e72ec47fe2f47",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 109 Ma Ling cited-authority date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi109",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T06:16:47Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked after fresh independent audit",
+  "summary": "Accepted the three sealed Ma Ling operations. s0145 is a parenthetical citation to Ma Ling's Southern Tang History, Zhu Yuan biography; it recounts Li Shouzhen's rebellion and does not date Ma Ling's personal activity. The candidate removes the false AD 1105 attestation container and active hint, keeps an explicitly unresolved author-chronology hold, and records the citation only as a retrospective cited-authority reception event.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-641", "hints-p084", "p084"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0145: 「馬令《南唐書·朱元傳》：守貞以河中反，漢命周太祖討之，元與李平奉守貞表來乞師，未復而守貞敗。」"
+      ],
+      "reason": "The citation identifies Ma Ling and his work but contains no date for him and narrates Li Shouzhen's rebellion. The replacement preserves bibliographic attribution and provenance without converting publication/reception into a Ma Ling life or activity date."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: pinned source and original extraction hashes match the sealed handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed proposal hash is sha256:7d3e91de5e99098154f84934c3423d7501123afd5eb74637c5a088429117d000.",
+    "candidateExtractionIdentity": "PASS: independently replayed all three sealed operations and recomputed candidate hash is sha256:795b74a0c1b74d18fe4dc1d2f518e5044f8546b9b469ee58e19e72ec47fe2f47.",
+    "proposalReplay": "PASS: exact replay matches the handoff candidate.",
+    "compactValidation": "PASS: scoped validation passes for Jiuwudaishi 109 (128 people, 751 mentions, 1,600 claims, zero alias-disposition conflicts).",
+    "chronologyGeometry": "PASS: independently recomputed date diagnostics are empty.",
+    "dateSoundness": "PASS: p084 has no westernYear, westernInterval, westernBounds, or active-date hint; the retained unresolved attestation is explicitly source-limited and the new reception event asserts no personal activity.",
+    "canonicalMutation": "NONE: this staging-only receipt neither curates nor modifies canonical source or extraction data, and does not authorize a master merge."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this receipt.",
+    "Replay exactly the three sealed operations; do not restore AD 1105 as a Ma Ling life or active-date assertion.",
+    "Keep the s0145 citation as bibliographic, retrospective cited-authority reception only; do not infer author chronology from it.",
+    "Do not alter canonical source or extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation before any publication decision."
+  ]
+}
