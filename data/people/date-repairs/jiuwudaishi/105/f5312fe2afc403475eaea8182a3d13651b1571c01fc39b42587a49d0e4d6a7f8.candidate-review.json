@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "105",
+  "candidateCommit": "68b6f94da6ae5d07d5760bd48c5475251174235e",
+  "candidateFile": "staged-candidate-f5312fe2afc403475eae.json",
+  "sourceHash": "sha256:9f536f945847805da87e1e7ef63d8d626208035593c5f8919ee0be382d592b37",
+  "originalExtractionHash": "sha256:d3d2affbb114ee489a4b65bb125dcde3946db3a63cfcade5f4cb920bbf38fb17",
+  "sealedCandidateHash": "sha256:f5312fe2afc403475eaea8182a3d13651b1571c01fc39b42587a49d0e4d6a7f8",
+  "candidateExtractionHash": "sha256:9b66a5df71da2e60e77b6b9d813c40b9081dc5c2210f2944e7d1b059e19359d5",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 105 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi105",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T05:45:00Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected after independently checking the six sealed operations against audit b775a58f214e72b1f65222ea94e3c01556e2749b and the pinned Chinese source. The p005 accession attestation and both dependent hint repairs are correct; Guo Zhongshu's Qianyou appointment is correctly widened to the AD 948–950 era interval; and the composite Qianyou-to-Guangshun claim is correctly removed. But claim-48, Emperor Yin's own accession claim, retains the rejected AD 948–950 reign interval inside dateContext while merely adding a separate AD 948 westernYear. The audit required the discrete accession event to use AD 948 rather than the reign window in both date containers. This residual interval means the sealed candidate cannot be curated.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-53", "hints-p004", "hints-p005"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0085: 「隱帝嗣位」.", "s0006: 「隱帝即位」."],
+      "reason": "The p005 contextual attestation is converted from the AD 948–950 reign interval to the specific AD 948 accession event; p004's AD 948/950 and p005's AD 948 hint lists then accurately distinguish the accession from Emperor Yin's separate AD 950 death context."
+    },
+    {
+      "proposalItems": ["claim-48"],
+      "verdict": "incorrect",
+      "sourceEvidence": ["s0085: 「隱帝嗣位，加檢校太尉、同平章事，遙領興元尹，俄代侯益為開封尹，進位檢校太師、兼侍中。」", "s0006: 「隱帝即位，加檢校太師。」"],
+      "reason": "The candidate adds westernYear AD 948 but leaves dateContext.westernInterval AD 948–950 intact. That interval is exactly the reign-length substitution identified by the audit; a discrete accession cannot retain it as a second chronology container. Replace the entire dateContext interval with the AD 948 westernYear (or otherwise remove the interval) while preserving sourceDate, predicate, event ownership, certainty, and evidence."
+    },
+    {
+      "proposalItems": ["claim-205"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0068: 「乾祐中，湘陰公鎮徐州，辟為推官。」"],
+      "reason": "The source supplies only an appointment during Qianyou. The candidate correctly removes the unsupported AD 949 point and retains an explicit unresolved AD 948–950 era interval with a source-specific explanation."
+    },
+    {
+      "proposalItems": ["claim-206"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0069: 「周祖之入京師也，少主崩於北岡，周主命宰相馮道迎湘陰公，將立之。」", "s0074: 「忠恕竄跡久之，晚年尤好輕忽，卒以此敗，坐除名配流焉。」"],
+      "reason": "The dated political episode and the later undated exile notice do not establish one AD 948–951 personal interval. Removing the synthetic composite claim preserves the separately evidenced material without invented continuity."
+    }
+  ],
+  "hostRequirements": [
+    "Do not curate sealed candidate sha256:f5312fe2afc403475eaea8182a3d13651b1571c01fc39b42587a49d0e4d6a7f8.",
+    "Prepare a newly sealed source- and extraction-fingerprinted proposal that changes only claim-48: remove dateContext.westernInterval AD 948–950 and retain the source-supported AD 948 accession chronology without a parallel reign interval.",
+    "Retain claim-53, both hint repairs, claim-205, and the claim-206 removal unchanged unless a new source-specific review justifies a change.",
+    "Obtain a new independent review, then scoped validation and a fresh complete canonical date audit after any host curation."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: handoff pins source sha256:9f536f945847805da87e1e7ef63d8d626208035593c5f8919ee0be382d592b37 and extraction sha256:d3d2affbb114ee489a4b65bb125dcde3946db3a63cfcade5f4cb920bbf38fb17.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:f5312fe2afc403475eaea8182a3d13651b1571c01fc39b42587a49d0e4d6a7f8.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:9b66a5df71da2e60e77b6b9d813c40b9081dc5c2210f2944e7d1b059e19359d5.",
+    "proposalReplay": "PASS: the staged candidate declares six changes matching the frozen audit groups.",
+    "compactValidation": "PASS: candidate handoff reports compact validation and chronology geometry passing; rejection is substantive, not structural.",
+    "sourceChronology": "FAIL: claim-48 retains the audit-rejected AD 948–950 reign interval within dateContext despite adding AD 948 as a second chronology field.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}
