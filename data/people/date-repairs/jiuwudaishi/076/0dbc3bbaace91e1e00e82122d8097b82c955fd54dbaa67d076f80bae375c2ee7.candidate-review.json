@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "076",
+  "candidateFile": "staged-candidate-0dbc3bbaace91e1e00e8.json",
+  "sourceHash": "sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491",
+  "originalExtractionHash": "sha256:9478b26ccc96bc08251e5e3704c4f2864543339fdd2bccf39a936fcc0116cad6",
+  "sealedCandidateHash": "sha256:0dbc3bbaace91e1e00e82122d8097b82c955fd54dbaa67d076f80bae375c2ee7",
+  "candidateExtractionHash": "sha256:b74582dae5248fa24bd2330fe1f4bbb4567ae2610bdd9ee994bc652024204b61",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 076 Zhang Quanyi candidate reviewer",
+    "agentId": "review_jiuwudaishi076_zhang",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T02:19:27.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed replay, source-context, scope, compact-validation, and chronology-geometry review. s0298 calls Zhang Jizuo the son of the late Prince of Qi, Zhang Quanyi, which attests that Zhang Quanyi had died but supplies no Western date or inclusive endpoint. The candidate removes only the unsupported strict pre-AD-926 bound from claim-797 and records an explicit unresolved source-specific chronology hold.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-797"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0298",
+          "quote": "繼祚，故齊王全義之子也，故有是詔。"
+        }
+      ],
+      "reason": "The source’s retrospective designation 故齊王全義 establishes that Zhang Quanyi was already deceased when this statement was made, and identifies Zhang Jizuo as his son. It contains no dated death event, no AD 926 endpoint, and no evidence that excludes death during AD 926. Removing westernBounds.before AD 926 while retaining the source text, event identity, evidence, certainty, and an explicit unresolved hold is the conservative supported repair."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491 and sha256:9478b26ccc96bc08251e5e3704c4f2864543339fdd2bccf39a936fcc0116cad6.",
+    "Replay only the sealed claim-797 replacement; do not alter p256, its aliases, roles, active hints, relationships, other claims, other people, mentions, source evidence, or translations.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit; retain the explicit unresolved source-backed chronology hold unless separately reviewed with independently verified endpoint evidence."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491",
+    "canonicalExtractionHash": "sha256:9478b26ccc96bc08251e5e3704c4f2864543339fdd2bccf39a936fcc0116cad6",
+    "sealedProposalIdentity": "PASS: exact one-operation proposal seals to sha256:0dbc3bbaace91e1e00e82122d8097b82c955fd54dbaa67d076f80bae375c2ee7.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:b74582dae5248fa24bd2330fe1f4bbb4567ae2610bdd9ee994bc652024204b61.",
+    "proposalReplay": "PASS: exact replay from the pinned canonical extraction reconstructed the candidate byte-for-byte.",
+    "auditScope": "PASS: only claim-797’s westernBounds and unresolved chronology fields differ; the person, its aliases, descriptor, hints, all other claims, mentions, source evidence, and translations are identical.",
+    "zhangQuanyiSourceOwnership": "PASS: s0298’s 故齊王全義之子 identifies Zhang Quanyi as a deceased father but supplies neither an AD 926 endpoint nor any inclusive Western date; the candidate retains exactly that bounded evidence as an unresolved attestation.",
+    "unresolvedHold": "PASS: the claim carries an explicit unresolved reason rather than an invented cutoff; p256’s unrelated active hint is intentionally outside this one-claim repair scope and is not approved or modified by this receipt.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction passed against the rebuilt 353-unit chapter packet (302 people, 729 mentions, 1657 claims).",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reported no geometry defects after replay.",
+    "scopedValidator": "PASS: compact integrated validation ran on the pinned current canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}
