@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "026",
+  "candidateFile": "staged-candidate-8058d67855c32140d437.json",
+  "sourceHash": "sha256:30557d72ceec8fd32d6322c29f7448f4695ed6c07ff065931d9b74ce2a3d9eba",
+  "originalExtractionHash": "sha256:7fc5a3718c4fa264d50e263a8a02127d8ee03ab94743db8c757f532e7c7844c7",
+  "sealedCandidateHash": "sha256:8058d67855c32140d437cf164419bb68b86f161963363a9a004d18d7d2e5f03f",
+  "candidateExtractionHash": "sha256:37663663bf203f3d8a56e15df2d9fa2c1488a26d963ea5d441f676ec18e5cabc",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 026 Wuhuang candidate reviewer",
+    "agentId": "review_jiuwudaishi026_wuhuang",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T01:46:39.633Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed replay, direct source-ownership, scope, compact-validation, and chronology-geometry review. The sole change narrows claim-477 to Wuhuang’s illness in s0253, Tianyou 5 (AD 908), removing the unrelated s0245 Tianyou 4 siege by Kang Huaiying. It preserves the exact AD 908 year for the Wuhuang-specific event and all unrelated source-backed unresolved chronology holds.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-477"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0245",
+          "quote": "五月，梁祖遣其將康懷英率兵十萬圍潞州，懷英驅率士眾，築壘環城，城中音信斷絕。"
+        },
+        {
+          "unit": "s0253",
+          "quote": "天祐五年正月戊子朔，武皇疾革。"
+        }
+      ],
+      "reason": "s0245 is the fifth-month siege of Lu by the Liang general Kang Huaiying and never names Wuhuang; it cannot attest Wuhuang’s life event. s0253 expressly names 武皇 and dates his critical illness to 天祐五年, whose supplied conversion is AD 908. The candidate removes only the unrelated s0245 provenance and combined Tianyou 4–5 wording, while retaining a precise source-specific AD 908 attestation."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:30557d72ceec8fd32d6322c29f7448f4695ed6c07ff065931d9b74ce2a3d9eba and sha256:7fc5a3718c4fa264d50e263a8a02127d8ee03ab94743db8c757f532e7c7844c7.",
+    "Replay only the sealed claim-477 replacement; do not alter p156, its aliases, roles, relationships, other claims, other people, mentions, source evidence, or translations.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit; retain all unresolved source-backed date holds unless separately reviewed."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:30557d72ceec8fd32d6322c29f7448f4695ed6c07ff065931d9b74ce2a3d9eba",
+    "canonicalExtractionHash": "sha256:7fc5a3718c4fa264d50e263a8a02127d8ee03ab94743db8c757f532e7c7844c7",
+    "sealedProposalIdentity": "PASS: exact one-operation proposal seals to sha256:8058d67855c32140d437cf164419bb68b86f161963363a9a004d18d7d2e5f03f.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:37663663bf203f3d8a56e15df2d9fa2c1488a26d963ea5d441f676ec18e5cabc.",
+    "proposalReplay": "PASS: exact replay from pinned canonical extraction reconstructed candidate byte-for-byte.",
+    "auditScope": "PASS: only claim-477’s sourceDate and evidence provenance differ; all people, mentions, hints, all other claims, and non-date values are identical.",
+    "wuhuangOwnership": "PASS: s0245 dates Kang Huaiying’s siege and does not name Wuhuang; s0253 explicitly states 武皇疾革 under Tianyou 5. The candidate retains only s0253 and AD 908.",
+    "unresolvedHolds": "PASS: existing research-required and legendary/undated active-date hints for p157–p163, p170–p174, and p178–p181 remain unchanged; no chronology was invented or cleared.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction passed against the rebuilt 305-unit chapter packet (181 people, 1038 mentions, 1030 claims).",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reported no geometry defects after replay.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 026 passed on the pinned current canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}
