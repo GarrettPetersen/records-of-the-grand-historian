@@ -4,15 +4,15 @@
   "book": "jiuwudaishi",
   "chapter": "085",
   "sourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
-  "extractionHash": "sha256:4e5686241876b2561cbf0d5e63724f6c710f37e0a4e60d12de38a61939b9a318",
-  "status": "research-blocked",
+  "extractionHash": "sha256:c2028467fd6ae62b0be17bb840caa09e02238bbc97a98e51a32b78dd7375efb6",
+  "status": "needs-revision",
   "reviewer": {
     "name": "Codex independent post-p045-removal chronology auditor",
     "agentId": "final_audit_jiuwudaishi085_after_p045",
     "independentOfExtractor": true
   },
   "reviewedAt": "2026-09-24T00:15:00.000Z",
-  "summary": "Fresh independent audit pinned after the p045 removal and the separately reviewed Xiande-bound curation read all 150 Chinese units, checked all 179 temporal/hint items and all 69 remaining people. The generic former-ruler record is absent with no dangling temporal dependency, and claim-50 now conservatively preserves 「周顯德初」 as an AD 954 lower bound. Wang Congke’s recalled self-immolation remains a source-supported research hold rather than borrowing the date of the 946 memorial.",
+  "summary": "Fresh independent audit pinned to the post-p045-removal canonical extraction read all 150 Chinese units, checked all 179 temporal/hint items and all 69 remaining people. The generic former-ruler record is absent with no dangling temporal dependency. One repairable precision defect remains: claim-50 turns the open expression 「周顯德初」 into an exact AD 954 year. Wang Congke’s recalled self-immolation remains correctly research-blocked rather than borrowing the date of the 946 memorial.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -636,9 +636,9 @@
     },
     {
       "id": "claim-50",
-      "verdict": "supported",
-      "event": "The cited source occurrence is the dated event or date-bearing narrative context for this person.",
-      "reason": "The cited Chinese unit was read against this record: it identifies the stated event or status, assigns it to this person, and supports the retained source chronology without adding a finer date.",
+      "verdict": "incorrect",
+      "event": "The report that Emperor Shao, his empress, and sons were alive at Jianzhou is the date-bearing event context.",
+      "reason": "「周顯德初」 says early in the Xiande era; it establishes an AD 954 lower bound but does not establish an exact AD 954 event year or a source-supported upper endpoint.",
       "evidence": [
         {
           "unit": "s0127",
@@ -2582,12 +2582,12 @@
     },
     {
       "id": "p026",
-      "verdict": "supported",
-      "reason": "The person’s individually identifying Chinese occurrence and every attached temporal item were reviewed against the complete chapter; no omitted personal date or unsupported inference was found.",
+      "verdict": "incorrect",
+      "reason": "The chapter identifies Emperor Shao and supports his dated events, but attached claim-50 gives an exact year for the open wording 「周顯德初」; that precision must be replaced by a supported lower bound.",
       "evidence": [
         {
-          "unit": "s0017",
-          "quote": "戊申，日南至，禦崇元殿受朝賀。"
+          "unit": "s0127",
+          "quote": "周顯德初，有漢人自塞北而至者，言帝與後及諸子俱無恙，猶在建州，其隨從職官役使人輩，自蕃中亡歸，物故者大半矣。"
         }
       ]
     },
@@ -3077,6 +3077,14 @@
     }
   ],
   "findings": [
+    {
+      "items": [
+        "claim-50",
+        "p026"
+      ],
+      "problem": "Claim-50 represents 「周顯德初」 as exact AD 954 even though early-in-era wording supplies only a verified lower bound, not a point year or source-supported endpoint.",
+      "action": "Apply the independently reviewed claim-50 repair against this post-removal extraction, using westernBounds.onOrAfter AD 954 while retaining the Chinese wording, then run a fresh independent audit."
+    },
     {
       "items": [
         "claim-84",
