@@ -36,7 +36,7 @@ const NON_PERSON_REASONS = new Set([
 
 function usage() {
   console.log(`Usage:
-  node scripts/remove-false-people.mjs --person BOOK:NNN:pNNN=REASON [--person ...] [--dry-run]
+  node scripts/remove-false-people.mjs --person BOOK:NNN:pNNN=REASON [--person ...] [--remove-claim BOOK:NNN:cNNNN ...] [--dry-run]
   node scripts/remove-false-people.mjs --self-test
 
 Removes source-audited false person records, classifies candidates previously
@@ -55,14 +55,25 @@ function parsePerson(value) {
   return { localId, book: match[1], chapter: match[2], reason };
 }
 
+function parseClaim(value) {
+  if (!/^[a-z0-9_-]+:\d{3}:c\d+$/u.test(value)) {
+    throw new Error(`Invalid --remove-claim value: ${value}`);
+  }
+  return value;
+}
+
 function parseArgs(argv) {
-  const opts = { people: [], dryRun: false, selfTest: false };
+  const opts = { people: [], removeClaims: [], dryRun: false, selfTest: false };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === '--person') {
       const value = argv[++index];
       if (!value || value.startsWith('--')) throw new Error('--person requires a value');
       opts.people.push(parsePerson(value));
+    } else if (arg === '--remove-claim') {
+      const value = argv[++index];
+      if (!value || value.startsWith('--')) throw new Error('--remove-claim requires a value');
+      opts.removeClaims.push(parseClaim(value));
     } else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -75,6 +86,10 @@ function parseArgs(argv) {
     opts.people.findIndex((other) => other.localId === item.localId) !== index
   ));
   if (duplicate) throw new Error(`Duplicate --person: ${duplicate.localId}`);
+  const duplicateClaim = opts.removeClaims.find((claim, index) => (
+    opts.removeClaims.indexOf(claim) !== index
+  ));
+  if (duplicateClaim) throw new Error(`Duplicate --remove-claim: ${duplicateClaim}`);
   return opts;
 }
 
@@ -87,7 +102,7 @@ function containsLocalPerson(value, localPeople) {
   return false;
 }
 
-function removePeople(extraction, targets) {
+function removePeople(extraction, targets, removeClaimIds) {
   const targetById = new Map(targets.map((target) => [target.localId, target]));
   const localPeople = new Set(targetById.keys());
   for (const localId of localPeople) {
@@ -99,8 +114,17 @@ function removePeople(extraction, targets) {
     }
   }
 
+  const requestedClaims = new Set(removeClaimIds);
+  for (const claimId of requestedClaims) {
+    const claim = extraction.claims.find((item) => item.id === claimId);
+    if (!claim) throw new Error(`Requested external claim was not found: ${claimId}`);
+    if (localPeople.has(claim.subject) || !containsLocalPerson(claim.value, localPeople)) {
+      throw new Error(`Requested claim is not an external dependency of a removed person: ${claimId}`);
+    }
+  }
   const externalClaims = extraction.claims.filter((claim) => (
     !localPeople.has(claim.subject) && containsLocalPerson(claim.value, localPeople)
+    && !requestedClaims.has(claim.id)
   ));
   if (externalClaims.length > 0) {
     throw new Error(
@@ -144,13 +168,16 @@ function removePeople(extraction, targets) {
           },
         })),
       mentions: extraction.mentions.filter((mention) => !localPeople.has(mention.person)),
-      claims: extraction.claims.filter((claim) => !localPeople.has(claim.subject)),
+      claims: extraction.claims.filter((claim) => (
+        !localPeople.has(claim.subject) && !requestedClaims.has(claim.id)
+      )),
       candidateDispositions: [...extraction.candidateDispositions, ...dispositions],
     },
     stats: {
       people: localPeople.size,
       mentions: removedMentions.length,
       claims: extraction.claims.filter((claim) => localPeople.has(claim.subject)).length,
+      externalClaims: requestedClaims.size,
       dispositions: dispositions.length,
     },
   };
@@ -166,7 +193,7 @@ function groupTargets(targets) {
   return groups;
 }
 
-function prepareChapter(book, chapter, targets) {
+function prepareChapter(book, chapter, targets, removeClaimIds) {
   const packet = buildPeopleExtractionPacket(book, chapter);
   const file = extractionPath(book, chapter);
   const compact = readJson(file);
@@ -174,7 +201,7 @@ function prepareChapter(book, chapter, targets) {
     throw new Error(`False-person removal requires compact extraction v2: ${path.relative(REPO_ROOT, file)}`);
   }
   const extraction = validateCompactPeopleExtraction(compact, packet).normalized;
-  const removed = removePeople(extraction, targets);
+  const removed = removePeople(extraction, targets, removeClaimIds);
   const revisedCompact = compactPeopleExtraction(removed.extraction, packet);
   validateCompactPeopleExtraction(revisedCompact, packet);
   return {
@@ -217,14 +244,17 @@ function main(argv) {
   const prepared = [];
   for (const [key, targets] of groupTargets(opts.people)) {
     const [book, chapter] = key.split(':');
-    prepared.push({ book, chapter, ...prepareChapter(book, chapter, targets) });
+    const prefix = `${key}:`;
+    const removeClaimIds = opts.removeClaims.filter((claim) => claim.startsWith(prefix));
+    prepared.push({ book, chapter, ...prepareChapter(book, chapter, targets, removeClaimIds) });
   }
 
   for (const item of prepared) {
     console.log(
       `${opts.dryRun ? 'Would update' : 'Updating'} ${item.book}/${item.chapter}: ` +
       `remove ${item.stats.people} people, ${item.stats.mentions} mentions, ` +
-      `${item.stats.claims} claims; classify ${item.stats.dispositions} candidates.`,
+      `${item.stats.claims} subject claims, ${item.stats.externalClaims} external claims; ` +
+      `classify ${item.stats.dispositions} candidates.`,
     );
     if (!opts.dryRun) writeTextAtomic(item.file, item.serialized);
   }
