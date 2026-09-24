@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "jiuwudaishi",
+  "chapter": "001",
+  "sourceHash": "sha256:a21a664bfd2de3dcfff69158f36e1019e5dfbf8fc9cafcfad33ba66e6f8ed357",
+  "extractionHash": "sha256:337f8b4261fd580a8d12b635dbb677e2f3dd16c5890b9ac027edae74d0fda471",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex independent date reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-24T00:42:53.914Z",
+  "summary": "Initial independent chronology audit found six linked actionable defects. Two claims that explicitly span Guangqi 3 through Wende 1 flatten AD 887–888 into AD 887; the related active hints repeat that loss. A separate 光啟前後 entry and its hint assert unsupported point-year precision. The canonical extraction is unchanged pending a date-only repair and a fresh independent audit.",
+  "reviewedUnits": [
+    "s0080",
+    "s0119"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-232",
+      "verdict": "incorrect",
+      "event": "Chronology of Yang Xingmi’s referenced activity.",
+      "reason": "The supplied source-date span explicitly runs from Guangqi 3 through Wende 1, but the stored western value is only AD 887. Guangqi 3 is AD 887 and Wende 1 is AD 888, so a point year loses the stated endpoint.",
+      "evidence": [
+        {
+          "unit": "s0080",
+          "quote": "三年春二月乙巳，承制以朱珍為淄州刺史，俾募兵於東道，且慮蔡人暴其麥苗，期以夏首回歸。"
+        }
+      ]
+    },
+    {
+      "id": "claim-239",
+      "verdict": "incorrect",
+      "event": "Chronology of Scholar Jing’s undated advice.",
+      "reason": "The source-date wording 光啟前後 means around the Guangqi era; the cited unit itself supplies no exact year. A point AD 887 is precision not warranted by this evidence.",
+      "evidence": [
+        {
+          "unit": "s0119",
+          "quote": "時有薦敬秀才于門下，乃白梁祖曰：'明公方欲圖大事，輜重必為四境所侵。"
+        }
+      ]
+    },
+    {
+      "id": "claim-240",
+      "verdict": "incorrect",
+      "event": "Chronology of Emperor Xizong’s referenced activity.",
+      "reason": "The supplied source-date span explicitly runs from Guangqi 3 through Wende 1, but the stored western value is only AD 887. Guangqi 3 is AD 887 and Wende 1 is AD 888, so a point year loses the stated endpoint.",
+      "evidence": [
+        {
+          "unit": "s0080",
+          "quote": "三年春二月乙巳，承制以朱珍為淄州刺史，俾募兵於東道，且慮蔡人暴其麥苗，期以夏首回歸。"
+        }
+      ]
+    },
+    {
+      "id": "hints-p050",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Yang Xingmi.",
+      "reason": "This hint inherits the defective point-year handling of the Guangqi 3 through Wende 1 claim. It must be regenerated only after the repaired claim preserves the AD 887–888 interval.",
+      "evidence": [
+        {
+          "unit": "s0080",
+          "quote": "三年春二月乙巳，承制以朱珍為淄州刺史，俾募兵於東道，且慮蔡人暴其麥苗，期以夏首回歸。"
+        }
+      ]
+    },
+    {
+      "id": "hints-p057",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Scholar Jing.",
+      "reason": "This hint inherits an unsupported point year from the loose 光啟前後 chronology. It must be removed or replaced only with independently supported bounded chronology.",
+      "evidence": [
+        {
+          "unit": "s0119",
+          "quote": "時有薦敬秀才于門下，乃白梁祖曰：'明公方欲圖大事，輜重必為四境所侵。"
+        }
+      ]
+    },
+    {
+      "id": "hints-p059",
+      "verdict": "incorrect",
+      "event": "Active-date hint for Emperor Xizong.",
+      "reason": "This hint inherits the defective point-year handling of the Guangqi 3 through Wende 1 claim. It must be regenerated only after the repaired claim preserves the AD 887–888 interval.",
+      "evidence": [
+        {
+          "unit": "s0080",
+          "quote": "三年春二月乙巳，承制以朱珍為淄州刺史，俾募兵於東道，且慮蔡人暴其麥苗，期以夏首回歸。"
+        }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": [
+        "claim-232",
+        "claim-240",
+        "hints-p050",
+        "hints-p059"
+      ],
+      "problem": "The source-date phrase 光啟三年至文德元年 spans Guangqi 3 (AD 887) through Wende 1 (AD 888), yet both claims and their derived active hints use only point AD 887.",
+      "action": "Submit a date-only repair replacing each point-year claim with the supported AD 887–888 interval and regenerate the two affected active-date hints."
+    },
+    {
+      "items": [
+        "claim-239",
+        "hints-p057"
+      ],
+      "problem": "The phrase 光啟前後 and its cited unit do not support exact AD 887, but the claim and derived hint encode that point year.",
+      "action": "Remove the unjustified point date and active hint, or preserve only independently sourced bounded chronology with explicit evidence; then obtain a fresh independent audit."
+    }
+  ],
+  "references": [
+    {
+      "book": "jiuwudaishi",
+      "chapter": "001",
+      "unit": "s0080",
+      "quote": "三年春二月乙巳，承制以朱珍為淄州刺史，俾募兵於東道，且慮蔡人暴其麥苗，期以夏首回歸。",
+      "sourceHash": "sha256:6195d480f9582ff29a9322f112ac2d024073dfa49e9337ca9191727aad7ae84d",
+      "reason": "Independent reading of the Chinese source unit for the reported chronology and precision defect."
+    },
+    {
+      "book": "jiuwudaishi",
+      "chapter": "001",
+      "unit": "s0119",
+      "quote": "時有薦敬秀才于門下，乃白梁祖曰：'明公方欲圖大事，輜重必為四境所侵。",
+      "sourceHash": "sha256:37da372eb5d691f464e49178a6c72cf298805b75bc6c81edb156069456bc7cc1",
+      "reason": "Independent reading of the Chinese source unit for the reported chronology and precision defect."
+    }
+  ]
+}
