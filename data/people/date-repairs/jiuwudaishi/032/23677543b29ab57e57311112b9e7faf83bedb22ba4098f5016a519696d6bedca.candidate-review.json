@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "032",
+  "candidateFile": "staged-candidate-23677543b29ab57e5731.json",
+  "sourceHash": "sha256:502f3b4021aeb6f876b69a1a4508e32c340c96b5373e7ecaf731d415f5eaa77a",
+  "originalExtractionHash": "sha256:4fc9f9e376d138c42f0aaa738de81a8c98b074c4a4ca24a96d8eb075cf5e4611",
+  "sealedCandidateHash": "sha256:23677543b29ab57e57311112b9e7faf83bedb22ba4098f5016a519696d6bedca",
+  "candidateExtractionHash": "sha256:8bf419a5eb44520ef0621aa07ceb9d6268328fa638acf1e275ad74863728bcc0",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 032 White Horse Post candidate reviewer",
+    "agentId": "review_jiuwudaishi032_white_horse",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T01:48:49.089Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted for host curation after an independent sealed replay, direct source-ownership review, exact scope comparison, compact-validation, and chronology-geometry review. Each of the six former Tang chief ministers is explicitly said to have been killed at White Horse Post, and their unmodified death claims date that event to AD 905. The candidate correctly replaces the contradictory strict before-AD-905 attestation bounds with inclusive on-or-before AD 905 bounds and synchronizes exactly the six paired active-date hints, without altering any death claim, source evidence, person identity, mention, or translation.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-319",
+        "claim-324",
+        "claim-329",
+        "claim-334",
+        "claim-339",
+        "claim-344",
+        "hints-p043",
+        "hints-p044",
+        "hints-p045",
+        "hints-p046",
+        "hints-p047",
+        "hints-p048"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0057",
+          "quote": "庚寅，故左僕射裴樞，右僕射裴贄、崔遠並贈司徒；"
+        },
+        {
+          "unit": "s0058",
+          "quote": "故靜海軍節度使獨孤損贈司空；"
+        },
+        {
+          "unit": "s0059",
+          "quote": "故吏部尚書陸扆贈右僕射；"
+        },
+        {
+          "unit": "s0060",
+          "quote": "故工部尚書王溥贈右僕射。"
+        },
+        {
+          "unit": "s0061",
+          "quote": "裴樞等六人皆前朝宰輔，為梁祖所害於白馬驛，至是追贈焉。"
+        }
+      ],
+      "reason": "s0057–s0060 identify the six recipients as deceased (故); s0061 identifies Pei Shu and the other six as former-dynasty chief ministers killed by the Liang founder at White Horse Post. The pinned canonical extraction has one AD 905 death claim for each of p043–p048, all citing s0061. A strict before AD 905 bound excludes that documented death year, whereas on-or-before AD 905 is a source-faithful compatible one-sided bound. The candidate changes only those six attestation bound keys and their matching display hints."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:502f3b4021aeb6f876b69a1a4508e32c340c96b5373e7ecaf731d415f5eaa77a and sha256:4fc9f9e376d138c42f0aaa738de81a8c98b074c4a4ca24a96d8eb075cf5e4611.",
+    "Replay only the sealed six attestation replacements and six paired hint replacements; do not alter p043–p048 identities, aliases, roles, mentions, relations, unrelated claims, the six AD 905 death claims, their evidence, source text, or translations.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:502f3b4021aeb6f876b69a1a4508e32c340c96b5373e7ecaf731d415f5eaa77a",
+    "canonicalExtractionHash": "sha256:4fc9f9e376d138c42f0aaa738de81a8c98b074c4a4ca24a96d8eb075cf5e4611",
+    "sealedProposalIdentity": "PASS: exact twelve-operation proposal seals to sha256:23677543b29ab57e57311112b9e7faf83bedb22ba4098f5016a519696d6bedca.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:8bf419a5eb44520ef0621aa07ceb9d6268328fa638acf1e275ad74863728bcc0.",
+    "proposalReplay": "PASS: exact replay from pinned canonical extraction reconstructed the candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claims 319, 324, 329, 334, 339, and 344 change westernBounds.before to westernBounds.onOrBefore; exactly p043–p048 active hints change from before AD 905 to on or before AD 905. All other claims, people, mentions, surfaces, repairs, dispositions, source evidence, and translations are identical.",
+    "whiteHorseOwnership": "PASS: s0057–s0060 identify the six deceased recipients and s0061 explicitly says Pei Shu and the other six were killed at White Horse Post. The unmodified companion death claims 320, 325, 330, 335, 340, and 345 each retain AD 905 and s0061 evidence.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction passed against the rebuilt 316-unit chapter packet (201 people, 579 mentions, 1627 claims).",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reported no geometry defects after replay.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 032 passed on the pinned canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}
