@@ -97,6 +97,11 @@ attestation with `unresolved: true` and a substantive `unresolvedReason`, and us
 `research required: ...` as its active hint. This preserves extraction work but
 blocks independent date approval; it is not a verified chronology. Coverage
 means all source chronology was captured, not that unresolved dates are correct.
+When a source unit establishes a person's attestation but contains no date-bearing
+temporal wording, use `undatedSourceAttestation: true` on that attestation and
+leave `a` empty only if it is the person's sole chronology evidence. Do not
+invent a source date, a qualitative era, or a research hold merely to fill a
+date field. This exceptional state is still subject to independent date audit.
 Use a qualitative marker such as `legendary
 antiquity` only for genuinely undatable legendary or literary figures. These
 are attested activity dates, not birth/death dates or asserted lifespans.
@@ -356,7 +361,8 @@ person row. Legal actions may similarly use `authorityPersonId`.
 Every temporal field above contains an attestation-shaped object: `sourceDate`
 plus `westernYear`, `westernInterval`, or `westernBounds`, an unresolved
 `sourceDate` with `unresolvedReason`, or a
-genuinely qualitative chronology. Do not put an unstructured date string in
+genuinely qualitative chronology. An attestation with no source date-bearing
+temporal wording may instead use `undatedSourceAttestation: true` alone. Do not put an unstructured date string in
 `dateContext`, `startDate`, or `endDate`.
 
 Preserve all date detail supplied by the text: reign and regnal year, season,
@@ -375,6 +381,7 @@ context. Use one of these value shapes:
 {"sourceDate":{"text":"元朔中"},"unresolved":true,"unresolvedReason":"The polity and ruler are not yet established; the era name alone is ambiguous."}
 {"sourceDate":{"text":"齊受禪後"},"westernBounds":{"onOrAfter":{"era":"AD","year":479,"precision":"year"}},"event":"Personal event after the Qi accession; no later endpoint is stated."}
 {"qualitative":"legendary antiquity"}
+{"undatedSourceAttestation":true,"event":"The source attests this person's action but supplies no temporal wording."}
 ```
 
 For an interval with two supported endpoints, use `westernInterval` with `start`

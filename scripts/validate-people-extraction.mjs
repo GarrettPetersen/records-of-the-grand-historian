@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { westernBoundsErrors } from './lib/people-date-values.mjs';
+import { hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
 import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
 import {
   buildPeopleChunkWorkerPacket,
@@ -245,6 +245,7 @@ function validateAttestationClaim(claim, errors) {
     'qualitative',
     'unresolved',
     'unresolvedReason',
+    'undatedSourceAttestation',
     'event',
   ]);
   for (const key of Object.keys(value)) {
@@ -282,15 +283,25 @@ function validateAttestationClaim(claim, errors) {
   if (value.unresolved !== undefined && typeof value.unresolved !== 'boolean') {
     errors.push(`${claim.id} unresolved must be boolean`);
   }
+  if (value.undatedSourceAttestation !== undefined && value.undatedSourceAttestation !== true) {
+    errors.push(`${claim.id} undatedSourceAttestation must be true when present`);
+  }
+  if (value.undatedSourceAttestation === true && (typeof value.event !== 'string' || value.event.trim().length < 20)) {
+    errors.push(`${claim.id} undatedSourceAttestation requires a substantive source-specific event`);
+  }
   if (value.event !== undefined && (typeof value.event !== 'string' || !value.event.trim())) errors.push(`${claim.id} event must identify whose event is dated`);
   if (value.westernBounds !== undefined) errors.push(...westernBoundsErrors(value.westernBounds).map(error => `${claim.id}: ${error}`));
   if (['westernYear', 'westernInterval', 'westernBounds'].filter(key => value[key] !== undefined).length > 1) {
     errors.push(`${claim.id} must use only one Western date representation`);
   }
-  const hasResolvedTime = value.westernYear !== undefined ||
+  const hasTemporalContext = value.westernYear !== undefined ||
     value.westernInterval !== undefined || value.westernBounds !== undefined || value.qualitative !== undefined;
-  if (!hasResolvedTime && !(value.sourceDate && value.unresolved === true)) {
-    errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, or unresolved sourceDate`);
+  if (value.undatedSourceAttestation === true &&
+      (hasTemporalContext || value.sourceDate !== undefined || value.unresolved !== undefined || value.unresolvedReason !== undefined)) {
+    errors.push(`${claim.id} undatedSourceAttestation cannot carry temporal or unresolved-date fields`);
+  }
+  if (!hasTemporalContext && !(value.sourceDate && value.unresolved === true) && value.undatedSourceAttestation !== true) {
+    errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, unresolved sourceDate, or explicit undated source attestation`);
   }
   if ((value.westernYear !== undefined || value.westernInterval !== undefined || value.westernBounds !== undefined) && !value.sourceDate) {
     errors.push(`${claim.id} Western attestation must preserve sourceDate`);
@@ -643,7 +654,11 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       errors.push(`${person.localId} has no role claim; use named-individual when the chapter establishes no narrower role`);
     }
     if (normalized.run.promptVersion >= 5) {
-      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence) {
+      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+        claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+        hasDateBearingChronology(claim.value));
+      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence) {
         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
       }
       if (!personClaims.some((claim) => claim.predicate === 'attestation') && !receptionOnlyEvidence) {
@@ -652,11 +667,14 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
     }
     if (normalized.run.promptVersion >= 7 && !['legendary', 'literary'].includes(person.historicity)) {
       const researchHold = personClaims.some(claim => claim.predicate === 'attestation' && claim.value?.unresolved === true && typeof claim.value?.unresolvedReason === 'string' && claim.value.unresolvedReason.trim().length >= 20);
-      if (!researchHold && !receptionOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+        claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+        hasDateBearingChronology(claim.value));
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
-      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
-      if (!researchHold && !receptionOnlyEvidence && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [

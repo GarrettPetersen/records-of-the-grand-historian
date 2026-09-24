@@ -4,6 +4,7 @@ import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from '
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
+import { hasDateBearingChronology } from './people-date-values.mjs';
 import {
   validateAppliedEditorialDecisions,
   validateEditorialDecisionDocument,
@@ -13,7 +14,7 @@ export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const hash = value => sha256(JSON.stringify(value));
 const lifePredicates = new Set(['attestation', 'birth', 'death', 'age']);
-const dateFields = new Set(['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'dateContext', 'startDate', 'endDate', 'unresolved', 'unresolvedReason']);
+const dateFields = new Set(['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'dateContext', 'startDate', 'endDate', 'unresolved', 'unresolvedReason', 'undatedSourceAttestation']);
 const withoutDates = value => Array.isArray(value) ? value.map(withoutDates) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).filter(([key])=>!dateFields.has(key)).map(([key,v])=>[key,withoutDates(v)])) : value;
 const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1] === 'event-participation'
@@ -226,8 +227,12 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       // must not retain invented life-date hints just to satisfy the ordinary
       // extraction invariant. The separately classified reception record is
       // still required, so an empty hint list cannot hide an ordinary person.
+      const noChronologyEvidence = change.after?.length === 0 && candidate.claims.some(claim =>
+        claim[0] === change.personId && claim[1] === 'attestation' &&
+        claim[2]?.undatedSourceAttestation === true) && !candidate.claims.some(claim =>
+        claim[0] === change.personId && hasDateBearingChronology(claim[2]));
       const receptionOnly = change.after?.length === 0 && candidate.claims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
-      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
+      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
       person[4] = { ...person[4], a: change.after };
     } else if (change.kind === 'replace' || change.kind === 'remove' || change.kind === 'date-context') {
       if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');

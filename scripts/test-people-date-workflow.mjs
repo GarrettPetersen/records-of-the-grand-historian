@@ -170,6 +170,29 @@ test('a reception-only person may clear fabricated active-date hints',t=>{
   const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
   assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
 });
+test('an undated source attestation may clear active-date hints without inventing chronology',t=>{
+  const f=fixture(t),before=f.extraction.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no temporal wording.'};
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'The cited source unit identifies Yi but has no temporal language, so its inherited first-year date must be removed.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'Clear the inherited date hint because this person has only an explicitly undated source attestation.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+  assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
+});
+test('an undated source attestation cannot clear hints when another claim supplies chronology',t=>{
+  const f=fixture(t),stored=structuredClone(f.extraction);
+  stored.claims.push(['p002','birth',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}},'explicit',['s0002']]);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:stored});
+  const before=stored.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no date-bearing temporal wording.'};
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'Remove the inherited first-year date because Yi is named here without a date-bearing temporal statement.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'This must be rejected because the person retains a separate dated birth claim.'},
+  ]};
+  assert.throws(()=>applyDateRepairProposal(stored,proposal,packet),/active-hint/);
+});
 test('reception additions reject non-reception events, life claims, conflicting labels and bad evidence',t=>{
   const f=fixture(t),proposal=receptionRepair(f);
   for(const mutate of [
