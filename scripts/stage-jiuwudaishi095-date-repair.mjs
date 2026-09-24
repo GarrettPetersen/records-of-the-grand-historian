@@ -72,7 +72,11 @@ const undate = (value, message, field = null) => {
 // 初 gives a source phase, not a calendar-year point.  Without a stated phase
 // endpoint the source-faithful rendering is the era's inclusive first-year
 // lower bound, retaining the Chinese wording and declining to invent a span.
-for (const id of ['claim-152', 'claim-153', 'claim-154']) replace(id, value => initialEraBound(value, null, 923));
+// The first two claims carry chronology in their nested dateContext; keeping
+// an exact year there while adding a top-level bound would leave the false
+// point assertion intact. Claim 154 is itself the date container.
+for (const id of ['claim-152', 'claim-153']) replace(id, value => initialEraBound(value, 'dateContext', 923));
+replace('claim-154', value => initialEraBound(value, null, 923));
 for (const id of ['claim-659', 'claim-660', 'claim-661', 'claim-680', 'claim-834', 'claim-835', 'claim-843', 'claim-844', 'claim-852']) replace(id, value => initialEraBound(value, value.dateContext ? 'dateContext' : null, 926));
 for (const id of ['claim-749', 'claim-750', 'claim-775', 'claim-787']) replace(id, value => initialEraBound(value, value.dateContext ? 'dateContext' : null, 930));
 hints('p015', ['on or after AD 923', 'AD 926-936', 'AD 936-945']);
