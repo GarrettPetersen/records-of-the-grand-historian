@@ -823,6 +823,19 @@ function prepareDossierFiles(dossiers, opts, corpus) {
   console.log(`Prepared ${repositoryPath(dossierManifestFile(opts))}`);
 }
 
+function localStartingRef(startingRef) {
+  if (startingRef.startsWith('origin/')) return startingRef;
+  const remoteRef = `origin/${startingRef}`;
+  try {
+    execFileSync('git', ['rev-parse', '--verify', `${remoteRef}^{commit}`], {
+      cwd: REPO_ROOT, stdio: 'ignore',
+    });
+    return remoteRef;
+  } catch {
+    return startingRef;
+  }
+}
+
 function verifyCommittedFile(file, expected, opts) {
   const relative = repositoryPath(file);
   if (!fs.existsSync(file)) throw new Error(`Missing resolver dossier ${relative}`);
@@ -831,7 +844,7 @@ function verifyCommittedFile(file, expected, opts) {
   }
   let committed;
   try {
-    committed = execFileSync('git', ['show', `${opts.startingRef}:${relative}`], {
+    committed = execFileSync('git', ['show', `${localStartingRef(opts.startingRef)}:${relative}`], {
       cwd: REPO_ROOT,
       encoding: 'utf8',
       maxBuffer: 64 * 1024 * 1024,
@@ -885,6 +898,7 @@ function baselineFromPreparedDossiers(dossiers) {
 }
 
 function loadPreparedDossiers(opts) {
+  const startingRef = localStartingRef(opts.startingRef);
   const manifestFile = dossierManifestFile(opts);
   if (!fs.existsSync(manifestFile)) {
     throw new Error(
@@ -922,7 +936,7 @@ function loadPreparedDossiers(opts) {
   }
   const changedSources = execFileSync(
     'git',
-    ['diff', '--name-only', opts.startingRef, '--', ...sourcePaths],
+    ['diff', '--name-only', startingRef, '--', ...sourcePaths],
     {
       cwd: REPO_ROOT,
       encoding: 'utf8',
@@ -935,7 +949,7 @@ function loadPreparedDossiers(opts) {
     try {
       startingValue = JSON.parse(execFileSync(
         'git',
-        ['show', `${opts.startingRef}:${source}`],
+        ['show', `${startingRef}:${source}`],
         {
           cwd: REPO_ROOT,
           encoding: 'utf8',
