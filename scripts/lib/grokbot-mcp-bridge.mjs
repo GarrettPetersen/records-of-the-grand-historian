@@ -22,6 +22,7 @@ import { REPO_ROOT, readJson } from './people-content.mjs';
 const WORKER_PATTERN = /^grokbot-[a-z0-9][a-z0-9-]{0,47}$/u;
 const BOOK_PATTERN = /^[a-z0-9_-]+$/u;
 const CHAPTER_PATTERN = /^\d{3}$/u;
+const LEDGER_CACHE_MS = 30_000;
 
 function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
@@ -230,6 +231,7 @@ export class GrokbotMcpBridge {
     }
     this.claimSecret = claimSecret;
     this.options = defaultGrokbotOptions(options);
+    this.ledgerCache = null;
     this.publisher = publisher ?? (githubToken && githubRepository
       ? new GitHubPublisher({
           token: githubToken,
@@ -239,9 +241,18 @@ export class GrokbotMcpBridge {
       : null);
   }
 
-  currentLedger() {
+  currentLedger({ fresh = false } = {}) {
+    if (!fresh && this.ledgerCache && Date.now() - this.ledgerCache.loadedAt < LEDGER_CACHE_MS) {
+      return this.ledgerCache.value;
+    }
     fetchPeopleQueueBase(queueOptions(this.options));
-    return readRemotePeopleWorkLedger(queueOptions(this.options));
+    const value = readRemotePeopleWorkLedger(queueOptions(this.options));
+    this.ledgerCache = { loadedAt: Date.now(), value };
+    return value;
+  }
+
+  invalidateLedger() {
+    this.ledgerCache = null;
   }
 
   currentClaim(worker) {
@@ -256,10 +267,10 @@ export class GrokbotMcpBridge {
     return rows[0] ?? null;
   }
 
-  verifiedClaim(token, allowedStatuses = ['claimed']) {
+  verifiedClaim(token, allowedStatuses = ['claimed'], { fresh = false } = {}) {
     const payload = parseClaimToken(this.claimSecret, token);
     const target = requireTarget(payload);
-    const claim = this.currentLedger().claims[chapterKey(target)];
+    const claim = this.currentLedger({ fresh }).claims[chapterKey(target)];
     if (!claimIsActive(claim) || claim.lane !== 'grokbot' || claim.worker !== payload.worker) {
       throw new Error('The claim token no longer names an active Grok Bot assignment');
     }
@@ -293,6 +304,7 @@ export class GrokbotMcpBridge {
         ...(book ? { book, chapter } : {}),
       }));
       prepared = claimed[0];
+      this.invalidateLedger();
     }
     const target = { book: prepared.assignment.book, chapter: prepared.assignment.chapter };
     const claim = this.currentLedger().claims[chapterKey(target)];
@@ -342,7 +354,7 @@ export class GrokbotMcpBridge {
   }
 
   async finalizeChapter({ claimToken }) {
-    const verified = this.verifiedClaim(claimToken, ['claimed', 'submitted']);
+    const verified = this.verifiedClaim(claimToken, ['claimed', 'submitted'], { fresh: true });
     if (verified.claim.status === 'submitted') {
       return {
         submitted: true,
@@ -378,6 +390,7 @@ export class GrokbotMcpBridge {
       note: `${completed.validated.stats.people} people, ${completed.validated.stats.mentions} mentions, ` +
         `${completed.validated.stats.claims} claims; sha256 ${sha256(bytes)}`,
     });
+    this.invalidateLedger();
     return {
       submitted: true,
       worker: verified.payload.worker,

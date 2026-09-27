@@ -41,6 +41,70 @@ The MCP tool surface is deliberately limited to `resume_or_claim`, `get_chunk`,
 `submit_chunk`, `finalize_chapter`, and `worker_status`. It provides no shell, arbitrary
 file access, source edits, claim release, editorial acceptance, or date-audit approval.
 
+## Headless inference dispatcher
+
+The MCP service is the data plane. `scripts/grokbot-headless-dispatch.mjs` is the local
+inference control plane for Grok Bot 0.61.0 or newer on macOS. It drives Grok Bot's own
+authenticated desktop renderer through Chrome DevTools Protocol DOM and input events,
+not through Cursor SDK and not through screen coordinates. It selects each durable bot
+by its stable `data-agent-id`, focuses the accessible prompt editor, inserts the campaign
+prompt, and verifies that Grok Bot accepted it. The DevTools control socket is bound to
+loopback, and the dispatcher refuses a non-loopback endpoint.
+
+Launch Grok Bot with its local debugging socket enabled:
+
+```sh
+open -na "Grok Bot" --args \
+  --remote-debugging-address=127.0.0.1 \
+  --remote-debugging-port=9229
+```
+
+Verify the control edge and all twelve durable workers, then run one dispatch cycle or
+the continuous watchdog:
+
+```sh
+npm run people:grokbot:headless:probe
+npm run people:grokbot:headless:once
+npm run people:grokbot:headless
+```
+
+For the production host, install the per-user launch agent instead of keeping a shell
+open:
+
+```sh
+npm run people:grokbot:headless:install
+```
+
+It starts at macOS login, keeps the watchdog alive, and relaunches Grok Bot with the
+loopback-only debugging flags if the app is not running. Logs and dispatcher state live
+under `~/.local/state/24histories-grokbot-headless/`. Remove it with
+`npm run people:grokbot:headless:uninstall`.
+
+The watchdog reads the durable local Grok Bot roster, requires the exact twelve agents
+`grokbot-24` through `grokbot-35`, skips agents reported as running, and applies a
+ten-minute per-worker dispatch cooldown. Each prompt requires `resume_or_claim`, sealed
+chunk retrieval, `submit_chunk`, and `finalize_chapter`. Its state is mode `0600` under
+`~/.local/state/24histories-grokbot-headless/`; no Grok Bot or MCP credential is copied
+there. Because this path controls the already-running renderer directly, dispatch continues
+while the screen is locked as long as the logged-in macOS session and app remain alive.
+
+Fail-fast checks:
+
+- Grok Bot must expose the 0.61.0+ renderer and its durable-agent sidebar.
+- All twelve durable worker IDs must be present; missing or conflicting identities stop
+  dispatch instead of silently reducing concurrency.
+- The DevTools endpoint must be loopback-only.
+- A missing worker button, prompt editor, focus failure, or unaccepted prompt fails the
+  cycle loudly.
+- Automatic app launch always binds DevTools to `127.0.0.1`; the launch agent contains
+  no Grok Bot or MCP credential.
+
+Run the offline controller tests with:
+
+```sh
+npm run people:grokbot:headless:self-test
+```
+
 ## Prerequisites
 
 - macOS on the always-on host. Apple Silicon uses native arm64 Node and `cloudflared`;
@@ -209,8 +273,10 @@ cd "$GROKBOT_MCP_RUNTIME_ROOT/repo"
 npm run people:grokbot:mcp:bootstrap
 ```
 
-The command prints one curl pipeline. Run it exactly once in the Grok Bot shared
-computer's terminal. It installs:
+The command prints one curl pipeline. Run it exactly once in one durable Grok Bot
+computer's terminal. Durable bots may have separate computers even when they appear in
+one desktop roster, so bootstrap and verify every stable worker independently. It
+installs:
 
 - `~/.local/bin/24histories-people` — a wrapper with mode `0700`;
 - `~/.local/lib/24histories/grokbot-mcp-client.mjs` — the client with mode `0700`;
@@ -225,6 +291,13 @@ installation is in flight.
 Approve only that exact one-time command. Do not create a permanent auto-approval rule
 for arbitrary curl installation scripts from this hostname. Never paste the durable
 bearer token or either host secret into chat.
+
+The installed client retries transient network failures and HTTP 429/502/503/504
+responses up to four times with bounded backoff. Tool errors, authentication failures,
+validation errors, and other non-transient responses still fail immediately. The MCP
+origin caches read-only queue snapshots briefly so concurrent chunk traffic does not run
+a blocking Git fetch for every request; claim and publication mutations invalidate that
+cache, and final publication always refreshes the ledger.
 
 ## Grok Bot operating procedure
 

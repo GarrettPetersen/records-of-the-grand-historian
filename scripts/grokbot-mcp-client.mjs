@@ -3,6 +3,8 @@
 import fs from 'node:fs';
 
 const DEFAULT_URL = 'https://grokbot-mcp.24histories.com/mcp';
+const RETRYABLE_HTTP_STATUSES = new Set([429, 502, 503, 504]);
+const MAX_HTTP_ATTEMPTS = 4;
 const COMMAND_TO_TOOL = new Map([
   ['status', 'worker_status'],
   ['resume', 'resume_or_claim'],
@@ -68,11 +70,47 @@ function parseMcpResponse(text) {
   return raw ? JSON.parse(raw) : null;
 }
 
+function retryDelayMs(response, text, attempt) {
+  const headerSeconds = Number(response.headers.get('retry-after'));
+  let bodySeconds;
+  try {
+    bodySeconds = Number(JSON.parse(text)?.retry_after);
+  } catch {
+    bodySeconds = NaN;
+  }
+  const requestedSeconds = Number.isFinite(headerSeconds) && headerSeconds > 0
+    ? headerSeconds
+    : Number.isFinite(bodySeconds) && bodySeconds > 0
+      ? bodySeconds
+      : 2 ** attempt;
+  return Math.min(requestedSeconds * 1000, 15_000);
+}
+
 async function post(url, headers, body) {
-  const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
-  const text = await response.text();
-  if (!response.ok) throw new Error(`MCP HTTP ${response.status}: ${text}`);
-  return parseMcpResponse(text);
+  let lastError;
+  for (let attempt = 0; attempt < MAX_HTTP_ATTEMPTS; attempt += 1) {
+    let response;
+    let text;
+    try {
+      response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(30_000),
+      });
+      text = await response.text();
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_HTTP_ATTEMPTS - 1) break;
+      await new Promise((resolve) => setTimeout(resolve, 2 ** attempt * 1000));
+      continue;
+    }
+    if (response.ok) return parseMcpResponse(text);
+    lastError = new Error(`MCP HTTP ${response.status}: ${text}`);
+    if (!RETRYABLE_HTTP_STATUSES.has(response.status) || attempt === MAX_HTTP_ATTEMPTS - 1) break;
+    await new Promise((resolve) => setTimeout(resolve, retryDelayMs(response, text, attempt)));
+  }
+  throw lastError;
 }
 
 async function main() {
