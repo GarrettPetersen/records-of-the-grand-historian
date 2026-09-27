@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "142",
+  "candidateCommit": "0255d1fd354e7edb6da2012bb986143dd68dd8f5",
+  "candidateFile": "staged-candidate-12a3aea563289fddb8c2.json",
+  "sealedCandidateHash": "sha256:12a3aea563289fddb8c25973098cdc7b425cfe0e1df902c675c10f2c9bf2331e",
+  "candidateExtractionHash": "sha256:604592d1538963acb082b0c3cc08211098e2405608829a5e6b4a6a70125da8d8",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 142 staged date-repair reviewer",
+    "agentId": "review_jwd142_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-26T19:20:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited after fresh independent audit",
+  "summary": "Accepted: all ten operations remove only unsupported personal chronology inferred from temple/tablet reception. The candidate preserves four explicit AD 942 posthumous temple-honoree events for Jingzu, Suzu, Ruizu, and Xianzu, and the explicit AD 953 posthumous receipt and enshrinement of Later Zhou Taizu's spirit tablet.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-447",
+        "claim-450",
+        "claim-453",
+        "claim-456",
+        "hints-p120",
+        "hints-p121",
+        "hints-p122",
+        "hints-p123"
+      ],
+      "verdict": "supported-removal-with-preserved-reception-events",
+      "sourceEvidence": [
+        "s0183: 七年七月，太常禮院奏：國朝見饗四廟：靖祖、肅祖、睿祖、憲祖。",
+        "s0184–s0187: the same memorial concerns enshrining the late emperor's tablet, not the personal dates of the four ancestral honorees."
+      ],
+      "reason": "The seventh-year, seventh-month date is an explicit AD 942 record of the four ancestral temples being honored. It does not establish personal activity, birth, or death chronology for any of the four honorees. The corresponding classified posthumous-commemoration events remain intact."
+    },
+    {
+      "proposalItems": [
+        "claim-541",
+        "hints-p146"
+      ],
+      "verdict": "supported-removal-with-preserved-reception-event",
+      "sourceEvidence": [
+        "s0226–s0234: 廣順三年九月 temple construction and reception protocol deliberation.",
+        "s0235–s0246: 廣順三年十月 records the arrival, reception, and enshrinement of 太祖神主."
+      ],
+      "reason": "The AD 953 date belongs to the posthumous arrival and enshrinement of Taizu's spirit tablet. It cannot support the removed AD 904–954 personal interval or active-date hint. The explicit AD 953 posthumous-commemoration event remains intact."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS",
+    "sealedProposal": "PASS",
+    "proposalReplay": "PASS",
+    "candidateByteHash": "PASS",
+    "compactValidation": "PASS: 260 units, 148 people, 508 mentions, 929 claims.",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against the matching canonical source and extraction hashes.",
+    "Preserve all five classified reception events while removing only the reviewed personal chronology and active hints.",
+    "Require a fresh independent canonical audit after host curation."
+  ]
+}
