@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "135",
+  "candidateCommit": "afc40d5b19dfd1962feac4f29b945e4f020caf06",
+  "candidateFile": "staged-candidate-4e2db27ccafbd542c70b.json",
+  "sealedCandidateHash": "sha256:4e2db27ccafbd542c70b1cb11aefd1110089d85d1c9349a1bce3358c5be7be44",
+  "candidateExtractionHash": "sha256:b04038337e048c2cebb9a021db44819067b3162ebd346816fc8603b16077ec21",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 135 date-repair reviewer",
+    "agentId": "review_jwd135_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T01:29:29Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent source, pin, exact-replay, strict-validation, and chronology-geometry review. All 112 repairs are the complete audited scope: four unsupported AD 900–905 contextual intervals and paired hints become source-limited; Liu Shouguang's relative Baixiang sequence becomes unresolved rather than AD 911; Sun He's execution becomes on-or-before AD 911; and fifty imported English-date attestations with their fifty paired hints become explicitly undated. The two Chinese-only records that need further research, p115 and p126, are preserved as explicit research holds rather than silently treated as approved chronology.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-114", "claim-126", "claim-127", "claim-128", "hints-p018", "hints-p029", "hints-p030", "hints-p031", "p018", "p029", "p030", "p031"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0044", "quote": "汴人乘勝攻滄州，仁恭率師援之，營於乾寧軍。"},
+        {"unit": "s0045", "quote": "汴將氏叔琮逆戰，燕軍逗撓，退保瓦橋，乃卑辭厚禮乞師於晉，武皇遣兵逼邢、洺以應之。"},
+        {"unit": "s0046", "quote": "十月，汴人陷瀛、鄚二州，晉將周德威將兵出飛狐，仁恭復修好於晉。"}
+      ],
+      "reason": "These connected narrative sentences supply a relative sequence and an October label, not a five-year AD 900–905 life interval. The candidate removes only the invented interval and derived endpoint presentation, preserving the Chinese attestations and separately retaining p018's directly dated AD 898–899 context."
+    },
+    {
+      "proposalItems": ["claim-261", "hints-p051", "p051"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0082", "quote": "及莊宗有柏鄉之捷，守光謀攻易、定，諷動鎮人，欲為河朔元帥。"}],
+      "reason": "The Baixiang wording is relative sequence (及), not an independently converted AD 911 point for Liu Shouguang's plan. The candidate keeps the distinct August accession chronology in the hint and correctly makes the Baixiang reference source-limited."
+    },
+    {
+      "proposalItems": ["claim-280", "hints-p052", "p052"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0100", "quote": "守光大怒，推之伏锧，令軍士割其肉生啖之。"},
+        {"unit": "s0102", "quote": "守光命窒其口，寸斬之，有識為之嗟惋。"}
+      ],
+      "reason": "The execution is preserved, while its sourceDate remains 僭號前. A death before the August 911 accession supports an inclusive on-or-before AD 911 bound, not a false point date; the candidate makes exactly that directional repair."
+    },
+    {
+      "proposalItems": ["claim-362…claim-388", "claim-402…claim-426", "claim-441…claim-458", "claim-468…claim-494", "hints-p088…hints-p138"],
+      "verdict": "supported",
+      "reason": "All fifty reviewed before-values use English AD labels or intervals in sourceDate fields rather than Chinese source chronology. The candidate removes every such imported date container and its one-for-one paired hint: 48 become undatedSourceAttestation records without Western chronology, while p115 and p126 retain Chinese source text as unresolved records with explicit research-required hint language. No people, claims, evidence links, non-date claim content, or source units are added or removed."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:43afafec21bcb7b826924e6cd30fe7a00bea7e2306fa4c7e66792cba031a347a",
+    "canonicalExtractionHash": "sha256:7c2b9e2e9c505f5caccb51abd3cbdef630a6bbf8025ff4f1b88bfb7d62412161",
+    "inputPins": "PASS: the candidate's source and extraction hashes match the complete initial audit at 61f6c7d919c051fb51be25b570754f293e54ec06.",
+    "sealedProposalIdentity": "PASS: the exact 112-operation proposal hashes to sha256:4e2db27ccafbd542c70b1cb11aefd1110089d85d1c9349a1bce3358c5be7be44.",
+    "candidateExtractionIdentity": "PASS: the compact candidate hashes to sha256:b04038337e048c2cebb9a021db44819067b3162ebd346816fc8603b16077ec21.",
+    "proposalReplay": "PASS: an isolated pinned replay of scripts/stage-jiuwudaishi135-audit-date-repair.mjs reconstructs the exact sealed proposal and candidate, with 246 units, 138 people, 783 mentions, 935 claims, four translation repairs, and zero alias-disposition conflicts.",
+    "auditScope": "PASS: exactly 56 claims and 56 paired hints change; claim and person cardinality remain 504 and 138, respectively.",
+    "importedDateCoverage": "PASS: all fifty imported before-claims have English AD sourceDate labels, all fifty paired hints are changed exactly once, and no resulting imported repair retains a Western date container.",
+    "researchHolds": "PASS: p115 and p126 retain sourceDate text with unresolved=true and substantive unresolvedReason; their hints explicitly require research, so they cannot be mistaken for chronology approval.",
+    "sourceSoundness": "PASS: s0044–s0046 support removing the invented Guanghua-sequence interval; s0082 supports removing the Baixiang AD 911 point; s0100 and s0102 support preserving Sun He's execution with directional, rather than point, chronology. No new Western date is introduced.",
+    "strictCompactValidation": "PASS: isolated pinned staging script completed validateCompactPeopleExtraction successfully.",
+    "chronologyGeometry": "PASS: isolated pinned staging script reports zero date-audit geometry diagnostics.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if canonical source hash remains sha256:43afafec21bcb7b826924e6cd30fe7a00bea7e2306fa4c7e66792cba031a347a and canonical extraction hash remains sha256:7c2b9e2e9c505f5caccb51abd3cbdef630a6bbf8025ff4f1b88bfb7d62412161.",
+    "Replay all 112 sealed operations exactly; do not reintroduce English sourceDate labels, the AD 900–905 intervals, the Baixiang AD 911 point, or a point date for Sun He's pre-accession execution.",
+    "Preserve p115 and p126 as explicit research holds and retain their source-limited Chinese attestations; do not invent Western dates to make them appear resolved.",
+    "Run scoped validation and chronology geometry after staging curation, then require a fresh complete independent canonical date audit before any audited approval or ebook-glossary gate."
+  ],
+  "publication": "staging-only"
+}
