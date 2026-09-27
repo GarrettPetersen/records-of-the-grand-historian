@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "130",
+  "candidateFile": "staged-candidate-7ea4e123684196eb34d4.json",
+  "sealedCandidateHash": "sha256:7ea4e123684196eb34d47e5ca2ebf0696fffe8573475952291202b99cfa05ad4",
+  "candidateExtractionHash": "sha256:35fcb811176c54d508d2ebcd33e45653e41db24bd0c11394a1d9803a4244e80a",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 130 Guangshun 2 residual date-repair reviewer",
+    "agentId": "review_jwd130_residual",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-27T00:37:42Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted. The six bounded changes faithfully correct Murong Yanchao's rebellion and the Cao Ying/Xiang Xun expedition to Guangshun 2 (AD 952), preserving the source attestations and no unsupported life chronology. The independent source witness explicitly headings the events under Zhou Taizu Guangshun 2 supports the point year, not the former AD 951 claim or intervals extending through AD 953.",
+  "validation": {
+    "canonicalInputs": "PASS: the sealed handoff's source sha256:a1edf62c065994adf6ebb5d57c599bce330d2d2a547714660565675a5387c0c6 and original extraction sha256:fafe39d26cbeec1095505e0a47d09e199b3bd55e1060288a68250999019d8c50 match independently rebuilt inputs.",
+    "sealedProposalIdentity": "PASS: independently recomputed proposal seal is sha256:7ea4e123684196eb34d47e5ca2ebf0696fffe8573475952291202b99cfa05ad4.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:35fcb811176c54d508d2ebcd33e45653e41db24bd0c11394a1d9803a4244e80a.",
+    "proposalReplay": "PASS: reconstructing the pinned canonical extraction by reversing the six sealed scoped changes, then replaying the proposal, reproduces the candidate byte-for-byte.",
+    "scopeAndRetention": "PASS: exactly four date-container replacements and two active-hint replacements are present; each retains person, predicate, source text, certainty, and evidence unchanged outside the necessary Western chronology and hint values.",
+    "sourceChronology": "PASS: the independently checked 大事記續編 volume 77 heading reads 周太祖廣順二年 and records 慕容彥超反, the Cao Ying Yanzhou command, and the campaign/defeat in that year. Guangshun 2 is AD 952, supporting all four AD 952 point dates and both narrowed hints.",
+    "compactValidation": "PASS: strict compact validation reports 157 units, 427 candidates, 48 people, 419 mentions, 423 claims, 7 repairs, 222 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: independently rerun date-item geometry diagnostics are empty.",
+    "canonicalMutation": "NONE: this receipt does not modify canonical source, extraction, or audit status."
+  },
+  "hostRequirements": [
+    "Curate only the sealed proposal sha256:7ea4e123684196eb34d47e5ca2ebf0696fffe8573475952291202b99cfa05ad4 against the matching canonical source and extraction fingerprints.",
+    "After curation, rerun strict scoped validation and chronology geometry checks, then obtain a fresh complete independent canonical date audit before marking the chapter audited."
+  ]
+}
