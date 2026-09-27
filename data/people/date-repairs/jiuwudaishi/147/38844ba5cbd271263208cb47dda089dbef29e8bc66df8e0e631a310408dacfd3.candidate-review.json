@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "147",
+  "candidateCommit": "7f5270397bbc1f88867dede92911260ec2260ff2",
+  "candidateRef": "codex/jiuwudaishi147-date-repair-candidate",
+  "candidateFile": "staged-candidate-38844ba5cbd271263208.json",
+  "sealedCandidateHash": "sha256:38844ba5cbd271263208cb47dda089dbef29e8bc66df8e0e631a310408dacfd3",
+  "candidateExtractionHash": "sha256:8b54953e9a3619f35e14fa26b357f2a970daa423b9c1a4c4e4510909578080a8",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 147 staged date-repair reviewer",
+    "agentId": "review_jwd147_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T03:32:00.939Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. The sealed six-operation candidate exactly replays the audited canonical extraction. It removes only dates borrowed from a Later Tang memorial and an undated fourth-month memorial, and corrects the Han-founder allusion from AD 206 to BC 206. Liang Taizu’s independently source-dated AD 909 and AD 910 chronology remains unchanged.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-92",
+        "claim-251"
+      ],
+      "verdict": "supported-source-faithful-undating",
+      "sourceEvidence": [
+        "s0010: 唐莊宗同光元年十二月，御史臺奏…自朱溫僭逆…"
+      ],
+      "reason": "Tongguang 1 and the memorial belong to Tang Zhuangzong’s Later Tang Censorate event. The phrase concerning Zhu Wen is retrospective, so the candidate correctly retains the identification and political content while removing only the false AD 923 personal attestation and event date for Liang Taizu."
+    },
+    {
+      "proposalItems": [
+        "claim-134",
+        "hints-p037"
+      ],
+      "verdict": "supported-source-faithful-undating",
+      "sourceEvidence": [
+        "s0107: 四月，前濮州錄事參軍崔琮上言…",
+        "s0106 is the preceding eighth-month edict and does not supply a year for Cui Cong’s memorial."
+      ],
+      "reason": "The source supplies only a fourth month. The candidate correctly preserves Cui Cong’s memorial and evidence as source-undated while deleting the unsupported AD 931–932 interval and its copied active-date hints."
+    },
+    {
+      "proposalItems": [
+        "claim-141",
+        "hints-p044"
+      ],
+      "verdict": "supported-era-correction",
+      "sourceEvidence": [
+        "s0181: 漢祖約三章之法，止有死刑。"
+      ],
+      "reason": "This is a retrospective early-Han allusion to the Han founder’s covenant of three articles. BC 206 is the correct era-qualified historical chronology; AD 206 is an era reversal. The candidate changes neither wording nor unsupported precision."
+    },
+    {
+      "proposalItems": [
+        "hints-p001"
+      ],
+      "verdict": "correctly-preserved-direct-personal-chronology",
+      "sourceEvidence": [
+        "s0004: 梁太祖開平三年十一月…",
+        "s0005: 四年十二月…"
+      ],
+      "reason": "The candidate leaves p001’s AD 909 and AD 910 hints intact because these are independently supported by direct Liang-era source events, rather than substituting the removed Later Tang AD 923 memorial date."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: independently rebuilt date packet binds canonical source sha256:9ce972ce1411691cb66bb3637a337c5fd2ea1c5063c085e6f475bc583d4eb354 and extraction sha256:8d8534858c990b25eea6f0419c5ba7b6e4cccafccaeb46e723a9de062a1a152b.",
+    "auditBinding": "PASS: candidate binds initial audit commit 77eea0d15fd2ebd497f53a0a4495996c4395d61c and precisely its three finding groups.",
+    "sealedProposal": "PASS: independently recomputed sha256:38844ba5cbd271263208cb47dda089dbef29e8bc66df8e0e631a310408dacfd3.",
+    "proposalReplay": "PASS: exact replay against the pinned canonical extraction reproduces the candidate byte-for-byte.",
+    "candidateByteHash": "PASS: independently recomputed sha256:8b54953e9a3619f35e14fa26b357f2a970daa423b9c1a4c4e4510909578080a8.",
+    "scopedMutation": "PASS: exactly four temporal-claim replacements and two dependent active-hint revisions; all non-date data is unchanged.",
+    "compactValidation": "PASS: strict compact validation passed with 228 units, 45 people, 116 mentions, 496 claims, 6 repairs, and 357 dispositions.",
+    "chronologyGeometry": "PASS: no date-audit geometry diagnostics.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against canonical source sha256:9ce972ce1411691cb66bb3637a337c5fd2ea1c5063c085e6f475bc583d4eb354 and canonical extraction sha256:8d8534858c990b25eea6f0419c5ba7b6e4cccafccaeb46e723a9de062a1a152b.",
+    "Replay only the six sealed operations and verify resulting extraction sha256:8b54953e9a3619f35e14fa26b357f2a970daa423b9c1a4c4e4510909578080a8.",
+    "Preserve p001’s direct AD 909 and AD 910 hints and source evidence; do not restore the removed AD 923 date.",
+    "Obtain a fresh independent final audit after host curation before counting Jiuwudaishi 147 as date-audited."
+  ]
+}
