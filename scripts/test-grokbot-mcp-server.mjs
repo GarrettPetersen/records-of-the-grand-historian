@@ -7,7 +7,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
-import { grokbotMcpTokenInternals } from './lib/grokbot-mcp-bridge.mjs';
+import { GitHubPublisher, grokbotMcpTokenInternals } from './lib/grokbot-mcp-bridge.mjs';
 import { startGrokbotMcpServer } from './grokbot-mcp-server.mjs';
 
 const AUTH_TOKEN = 'a'.repeat(48);
@@ -48,6 +48,40 @@ test('claim tokens reject tampering', () => {
     () => grokbotMcpTokenInternals.parseClaimToken(CLAIM_SECRET, `${token.slice(0, -1)}x`),
     /Invalid claim token signature/u,
   );
+});
+
+test('new Grok Bot publication branches start from the configured staging base', async t => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; });
+  const requests = [];
+  globalThis.fetch = async (url, init = {}) => {
+    const method = init.method ?? 'GET';
+    const route = new URL(url).pathname;
+    requests.push({ method, route, body: init.body ? JSON.parse(init.body) : null });
+    const json = value => new Response(JSON.stringify(value), { status: 200 });
+    if (method === 'GET' && route.endsWith('/git/ref/heads/grokbot/people-testbook-001-grokbot-01')) {
+      return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404 });
+    }
+    if (method === 'GET' && route.endsWith('/git/ref/heads/codex/people-glossary-staging-v2')) {
+      return json({ object: { sha: 'staging-parent' } });
+    }
+    if (method === 'GET' && route.endsWith('/git/commits/staging-parent')) return json({ tree: { sha: 'staging-tree' } });
+    if (method === 'POST' && route.endsWith('/git/blobs')) return json({ sha: 'blob' });
+    if (method === 'POST' && route.endsWith('/git/trees')) return json({ sha: 'tree' });
+    if (method === 'POST' && route.endsWith('/git/commits')) return json({ sha: 'commit' });
+    if (method === 'POST' && route.endsWith('/git/refs')) return json({ ref: 'refs/heads/grokbot/people-testbook-001-grokbot-01' });
+    throw new Error(`Unexpected GitHub request: ${method} ${route}`);
+  };
+  const publisher = new GitHubPublisher({
+    token: 'token', repository: 'example/repo', baseBranch: 'codex/people-glossary-staging-v2',
+  });
+  await publisher.ensureBranchFile(
+    'grokbot/people-testbook-001-grokbot-01',
+    'data/people/extractions/testbook/001.json', Buffer.from('{}'), 'fixture',
+  );
+  const commit = requests.find(request => request.method === 'POST' && request.route.endsWith('/git/commits'));
+  assert.deepEqual(commit.body.parents, ['staging-parent']);
+  assert.equal(requests.some(request => request.route.endsWith('/git/ref/heads/master')), false);
 });
 
 test('HTTP endpoint requires bearer auth and exposes only the narrow lane tools', async t => {

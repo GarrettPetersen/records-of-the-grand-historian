@@ -127,7 +127,7 @@ function jsonResult(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
-class GitHubPublisher {
+export class GitHubPublisher {
   constructor({ token, repository, baseBranch }) {
     this.token = token;
     this.repository = repository;
@@ -176,8 +176,8 @@ class GitHubPublisher {
   async ensureBranchFile(branch, file, bytes, message) {
     let branchRef = await this.ref(branch);
     if (branchRef && await this.branchContains(branch, file, bytes)) return branchRef.object.sha;
-    const parent = branchRef ?? await this.ref('master');
-    if (!parent) throw new Error('GitHub master branch is missing');
+    const parent = branchRef ?? await this.ref(this.baseBranch);
+    if (!parent) throw new Error(`GitHub staging branch is missing: ${this.baseBranch}`);
     const parentCommit = await this.request('GET', `/git/commits/${parent.object.sha}`);
     const blob = await this.request('POST', '/git/blobs', {
       content: bytes.toString('base64'),
