@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "131",
+  "candidateCommit": "293b691f328bdf45c8efa09c73d04f2e166466c4",
+  "candidateFile": "staged-candidate-cb95a385ec80d0e0f261.json",
+  "sourceHash": "sha256:c2a492e9c655ce7fa312120c955bdf5040928d7908b1c8abb82c32c8951bcadf",
+  "originalExtractionHash": "sha256:419c84b7dc9387fb9b1d67c0af41d82c7f00a5dbacf895dec6bcde5aff1168fc",
+  "sealedCandidateHash": "sha256:cb95a385ec80d0e0f2615d704fe485f53fcaaadcc42cb9e0f28b46ca3fb11c21",
+  "candidateExtractionHash": "sha256:ad3704c686145ba05631166a86c1b627ea0f0d8b3b399eedde74da1fdf0ed9f5",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 131 staged date-repair reviewer",
+    "agentId": "review_jwd131_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-27T00:45:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected despite an exact sealed replay and clean structural validators. The candidate leaves source-admitted chronology that it simultaneously calls unsupported: Liu Gun and Li Jianchong retain their inherited closed Western bounds, Li Zhisun retains an AD 956 upper bound inside dateContext, and the Jia Liang/Jia Jin research-held genealogy hints remain invented before-AD dates. It therefore neither removes all identified invented chronology nor preserves all six initial source-limited check records as research holds.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-250", "hints-p057"],
+      "verdict": "incorrect",
+      "sourceEvidence": ["s0140: \"神爽氣俊，富有文藻，繇進士第任左拾遺，與扈載齊名，年二十八而卒。\""],
+      "reason": "The source supplies Liu Gun's age at death but no Western-year anchor. The candidate properly replaces the hint with a research hold, but its after-value for claim-250 still retains westernBounds AD 951–959 inside dateContext. Marking the claim unresolved does not make that unsupported interval source-supported; remove the inherited bounds rather than retaining invented chronology."
+    },
+    {
+      "proposalItems": ["claim-408", "hints-p105"],
+      "verdict": "incorrect",
+      "sourceEvidence": ["s0229: \"世宗即位\"; s0231: \"命除名，配沙門島\"; s0233: \"後歲餘，卒於海中\""],
+      "reason": "The source sequence supports a one-sided lower chronology after the exile/accession sequence, but no AD 956 upper endpoint. The candidate's narrative and hint say no upper endpoint is asserted, yet claim-408 retains onOrBefore AD 956 inside dateContext and places a second westernBounds object at the claim's top level. The latter does not repair the dateContext. Replace dateContext with the single supported one-sided bound, using the schema's proper date container."
+    },
+    {
+      "proposalItems": ["claim-432", "hints-p121"],
+      "verdict": "incorrect",
+      "sourceEvidence": ["s0268: \"叛卒不得忌，乃殺都押衙李建崇而逸。\""],
+      "reason": "The supplementary anecdote records Li Jianchong's killing but supplies no AD 940–960 bound. The candidate sets unresolved true but leaves that same closed westernBounds interval inside claim-432's dateContext. Remove the unsupported bounds; an unresolved reason is not a license to retain them."
+    },
+    {
+      "proposalItems": ["claim-258", "hints-p060", "claim-259", "hints-p061"],
+      "verdict": "incorrect",
+      "sourceEvidence": ["s0144: \"五世祖諒，高祖瑾。\""],
+      "reason": "The initial audit's six research-blocked checks comprise claims and hints for Zhang the Eighteenth, Jia Liang, and Jia Jin. The candidate preserves Zhang the Eighteenth's source-limited hold but leaves Jia Liang's 'before AD 850' and Jia Jin's 'before AD 880' active hints unchanged. Generational labels alone do not establish these Western endpoints. Convert both hints to substantive research-required holds, or obtain independent supplementary evidence; do not present them as preserved holds."
+    }
+  ],
+  "hostRequirements": [
+    "Do not curate sealed proposal sha256:cb95a385ec80d0e0f2615d704fe485f53fcaaadcc42cb9e0f28b46ca3fb11c21.",
+    "Prepare a new sealed minimal proposal that removes the retained unsupported dateContext bounds in claims 250, 408, and 432 and turns both Jia Liang and Jia Jin hints into source-specific research holds.",
+    "Independently review the replacement candidate, then curate only that replacement against matching canonical fingerprints and obtain a fresh complete independent canonical date audit."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: pinned source and canonical extraction fingerprints match the handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed seal is sha256:cb95a385ec80d0e0f2615d704fe485f53fcaaadcc42cb9e0f28b46ca3fb11c21.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:ad3704c686145ba05631166a86c1b627ea0f0d8b3b399eedde74da1fdf0ed9f5.",
+    "proposalReplay": "PASS: all 31 operations replay byte-for-byte from the pinned canonical extraction.",
+    "compactValidation": "PASS: strict compact validation reports 290 units, 970 candidates, 131 people, 723 mentions, 829 claims, 25 repairs, 599 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: geometry scan is empty, but it is insufficient to authorize semantic acceptance because it does not reject unsupported inherited bounds or a duplicated, misplaced bounds container.",
+    "sourceChronology": "FAIL: the four listed groups retain or fail to replace chronology contradicted by the candidate's own source rationale.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}
