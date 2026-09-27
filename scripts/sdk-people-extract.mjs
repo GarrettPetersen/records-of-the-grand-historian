@@ -442,6 +442,12 @@ function orphanedOwnedClaimTargets(ledger, state, workerId) {
     .filter((target) => !recoveryOnlyTarget(target, state));
 }
 
+function freshClaimWindow(targets, concurrency) {
+  // A scheduler may continue to process later work in a future invocation, but it
+  // must not reserve the whole corpus while only this many workers can start now.
+  return targets.slice(0, Math.min(targets.length, concurrency));
+}
+
 function compareBookOrder(left, right) {
   return left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter);
 }
@@ -3955,6 +3961,14 @@ async function selfTest() {
   if (orphanedClaims.length !== 1 || orphanedClaims[0].chapter !== '001') {
     throw new Error('Scheduler restart did not isolate unstarted claims for release');
   }
+  const freshWindow = freshClaimWindow([
+    { book: 'fixture', chapter: '001' },
+    { book: 'fixture', chapter: '002' },
+    { book: 'fixture', chapter: '003' },
+  ], 2);
+  if (freshWindow.length !== 2 || freshWindow[1].chapter !== '002') {
+    throw new Error('Fresh extraction claims exceeded the live concurrency window');
+  }
   const currentStickyScope = planningScopeTargets([
     { book: 'fixture', chapter: '001' },
     { book: 'fixture', chapter: '002' },
@@ -4093,17 +4107,25 @@ async function main() {
     let targets = queue.selected;
     let claimedTargets = [];
     if (!opts.dryRun && !opts.recoverOnly && targets.length > 0) {
-      const reserved = claimRemotePeopleTargets(targets, {
+      const claimWindow = freshClaimWindow(targets, opts.concurrency);
+      const deferredFreshTargets = targets.length - claimWindow.length;
+      if (deferredFreshTargets > 0) {
+        console.log(
+          `Fresh-claim window limited to ${claimWindow.length} concurrent chapter(s); ` +
+          `${deferredFreshTargets} eligible chapter(s) remain available to other lanes.`,
+        );
+      }
+      const reserved = claimRemotePeopleTargets(claimWindow, {
         ...sharedQueueOptions,
         lane: 'cursor-sdk',
         worker: opts.workerId,
-        limit: targets.length,
+        limit: claimWindow.length,
       });
       const claimedKeys = new Set(reserved.result.claimed.map(workQueueChapterKey));
-      claimedTargets = targets.filter((target) => claimedKeys.has(workQueueChapterKey(target)));
-      if (claimedTargets.length !== targets.length) {
+      claimedTargets = claimWindow.filter((target) => claimedKeys.has(workQueueChapterKey(target)));
+      if (claimedTargets.length !== claimWindow.length) {
         console.warn(
-          `Shared queue race: reserved ${claimedTargets.length}/${targets.length}; ` +
+          `Shared queue race: reserved ${claimedTargets.length}/${claimWindow.length}; ` +
           'chapters claimed by the other lane were removed before inference.',
         );
       }
