@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "134",
+  "candidateFile": "staged-candidate-e0ca15ceda8e3bdf6509.json",
+  "sealedCandidateHash": "sha256:e0ca15ceda8e3bdf65094610878275d80aaa122094bd95daaa9b407b3303f855",
+  "candidateExtractionHash": "sha256:91e6c10af95633d56d470fedbd4b41a697591d9e9e14308793604bc5e7566982",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 134 final-residual source reviewer",
+    "agentId": "review_jwd134_residual",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-27T01:44:27Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "Accepted: the sealed one-operation candidate replaces only Yang Pu’s unsupported AD 921–922 installation interval with AD 921. Yang Wei’s death and Yang Pu’s sixth-month accession occur in the same eighteenth year; AD 922 has no source support. The candidate preserves the Chinese sequence wording and does not add, remove, or alter non-date content.",
+  "sourceChecks": [
+    {
+      "group": "Yang Pu installation after Yang Wei's death",
+      "operations": [
+        "claim-237"
+      ],
+      "verdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0308",
+          "quote": "十八年，渭死，溫聞之，自金陵馳歸揚州，夜入廣陵，議有所立。"
+        },
+        {
+          "unit": "s0310",
+          "quote": "由是群心乃定，遂迎丹陽王溥於潤州，以其年六月十八日即偽位，改元為順義。"
+        },
+        {
+          "unit": "s0068",
+          "quote": "初封丹陽王，渭卒，徐溫乃推溥為主，後僭偽號。"
+        }
+      ],
+      "reason": "The chapter explicitly puts Yang Wei’s death in the eighteenth year and Yang Pu’s installation on the eighteenth day of that same year’s sixth month. In the already-audited chronology this is Tianyou 18 (AD 921); no cited source evidence supports extending this installation to AD 922. A point year AD 921 is therefore the supported Western normalization, while the source’s sequencing remains intact."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:b63b7060ad552f947592ae25eb7d9bc42a5c0f7e1989f42ba99e0741da99f2f5",
+    "canonicalExtractionHash": "sha256:5aa5c4fd8f84382a8c244c767c65b10eb8df4b904d0d960596c8d691f5ed67c7",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: 1/1 sealed operation (claim-237)",
+    "sourceSoundness": "PASS",
+    "nonDateRetention": "PASS",
+    "compactValidation": "PASS",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the pinned values.",
+    "Replay the one sealed operation exactly and rerun scoped strict validation and chronology geometry checks.",
+    "Require a fresh complete independent canonical date audit after curation; this review is not date approval."
+  ]
+}
