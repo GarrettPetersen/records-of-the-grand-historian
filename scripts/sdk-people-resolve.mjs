@@ -93,6 +93,8 @@ Options:
   --max-run-cost DOLLARS
                         Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --max-run-tokens N    Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
+  --run-timeout-minutes N
+                        Cancel one active run after N minutes (default: 20).
   --model MODEL         Cursor model (default: ${DEFAULT_MODEL}).
   --effort LEVEL        low, medium, or high (default: medium).
   --fast                Enable the model's fast variant.
@@ -177,6 +179,7 @@ function parseArgs(argv) {
     maxAttempts: 4,
     maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
     maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
+    runTimeoutMs: 20 * 60_000,
     model: process.env.SDK_PEOPLE_RESOLUTION_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_RESOLUTION_EFFORT ?? 'medium',
     fast: false,
@@ -210,6 +213,7 @@ function parseArgs(argv) {
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
     else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
+    else if (arg === '--run-timeout-minutes') opts.runTimeoutMs = positiveInteger(next(), arg, 180) * 60_000;
     else if (arg === '--model') opts.model = next();
     else if (arg === '--effort') opts.effort = next();
     else if (arg === '--fast') opts.fast = true;
@@ -1433,6 +1437,7 @@ async function waitForTrackedRun(run, opts, control, label, agentId) {
       apiKey: opts.apiKey,
       label,
       pollMs: DEFAULT_RUN_POLL_MS,
+      timeoutMs: opts.runTimeoutMs,
       maxRawCostCents: opts.maxRunCostCents,
       maxTotalTokens: opts.maxRunTokens,
     });
