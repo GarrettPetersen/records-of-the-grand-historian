@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "133",
+  "candidateCommit": "f2fb15a8fd2dd5ec643cee30f045cdbf418d2485",
+  "candidateFile": "staged-candidate-564d6ffd73d15e623c67.json",
+  "sealedCandidateHash": "sha256:564d6ffd73d15e623c672bceb2a2d607b3036dce94da21f78db6d82bef89749f",
+  "candidateExtractionHash": "sha256:a835356cddd17e6b46ad41490677a512d80a4d2f0765da250216e5ad8c37ce3a",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 133 date-repair reviewer",
+    "agentId": "review_jwd133_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T01:18:03Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent source, pin, and exact-replay review. The seven operations remove only three unsupported imported date containers and their paired presentation hints, plus the narrator's false personal-activity presentation. The candidate preserves Ma Xifan's death narrative, Dong Chang's undated Luoping-kingship claim, Qian Chu's undated submission, and the distinct existing AD 870–980 chapter-attestation for Dong Chang; it does not turn that attestation into a date for the Luoping claim. The p224 historian/narrator label is explicitly retained as non-biographical narrative perspective, not personal activity.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-394", "hints-p113", "p113"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0533", "quote": "而希範血自鼻出，是夕遂卒。"}],
+      "reason": "The source narrates Ma Xifan's death without a reign-year or other Western-date anchor. Removing the imported AD 947 lower bound and its derived hint preserves the death and age evidence without inventing chronology."
+    },
+    {
+      "proposalItems": ["claim-541", "hints-p170", "p170"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0359", "quote": "昌漸驕貴，自言身應符讖，又為妖人王百藝所誑，僭稱尊號，乃於越州自稱羅平國王，年號大聖，偽命镠為兩浙都將。"}],
+      "reason": "The Luoping-kingship sentence contains neither 乾寧 nor a date anchor, so its fabricated date container and AD 897 upper bound must go. The distinct existing chapter-attestation claim for p170, with its own source unit and AD 870–980 bounds, remains unchanged and is expressly labelled separate from the undated Luoping claim."
+    },
+    {
+      "proposalItems": ["claim-666", "hints-p217", "p217"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0502", "quote": "後至曾孫俶，舉族入朝，因而國除。"}],
+      "reason": "The source records Qian Chu's eventual submission and the end of Wuyue without a Song reign-year. Removing the imported AD 978 lower bound and the paired presentation text preserves the source event without unsupported Western chronology."
+    },
+    {
+      "proposalItems": ["hints-p224", "p224"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0517", "quote": "史臣曰：自唐末亂離，海內分割，荊、湖、江、浙，各據一方，翼子貽孫，多歷年所。"}],
+      "reason": "史臣 is the chapter's narrative voice. Replacing the asserted Song-era active-life display with an explicit narrative-perspective label retains the historical framing while making no biographical activity assertion."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:75f1818d762151464972f20cbdad6651981be16792d2b50af561918ff0af64b6",
+    "canonicalExtractionHash": "sha256:1a5e5986d719c613833e1a1ed50a9967e10b494b9bbad7e6581b4fb90bbee45f",
+    "inputPins": "PASS: rebuilt candidate workflow reads the same source and extraction hashes as the initial audit and sealed handoff.",
+    "sealedProposalIdentity": "PASS: SHA-256 of the exact seven-operation proposal is sha256:564d6ffd73d15e623c672bceb2a2d607b3036dce94da21f78db6d82bef89749f.",
+    "candidateExtractionIdentity": "PASS: SHA-256 of the replayed compact candidate is sha256:a835356cddd17e6b46ad41490677a512d80a4d2f0765da250216e5ad8c37ce3a.",
+    "proposalReplay": "PASS: the candidate staging script deterministically reconstructs the sealed proposal and candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-394, claim-541, claim-666 and paired hints p113, p170, p217, p224 change; no people, claims, evidence, or source records are added or removed.",
+    "sourceSoundness": "PASS: s0533, s0359, s0502, and s0517 support removal of the asserted imported chronology and activity presentation; no new Western chronology is introduced.",
+    "p170Attestation": "PASS: existing p170 claim-549, the separate AD 870–980 chapter-attestation, remains byte-for-byte intact and is not used as chronology for claim-541.",
+    "p224NarrativePerspective": "PASS: p224's replacement hint explicitly classifies AD 960+ as narrative perspective rather than a biographical activity date.",
+    "strictCompactValidation": "PASS: staged candidate replay validates with 553 units, 224 people, 1,474 mentions, 1,347 claims, 33 repairs, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: candidate staging reports no date-audit geometry diagnostics.",
+    "scopedValidator": "PASS: people:validate --book jiuwudaishi --chapter 133 passes on the pinned canonical chapter.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if canonical source hash remains sha256:75f1818d762151464972f20cbdad6651981be16792d2b50af561918ff0af64b6 and canonical extraction hash remains sha256:1a5e5986d719c613833e1a1ed50a9967e10b494b9bbad7e6581b4fb90bbee45f.",
+    "Replay all seven sealed operations exactly; do not alter p170's separate chapter-attestation or use it to date the Luoping-kingship claim.",
+    "Keep p224's label as non-biographical narrative perspective and do not present it as a person's active-life chronology.",
+    "Run scoped validation and date geometry after curation, then require a fresh complete independent canonical date audit before any approval."
+  ],
+  "publication": "staging-only"
+}
