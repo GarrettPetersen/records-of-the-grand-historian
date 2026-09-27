@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "143",
+  "candidateCommit": "f0a991eb04efc8abf76c6b30f1b6c0d328d9b89a",
+  "candidateRef": "codex/jiuwudaishi143-date-repair-replacement",
+  "candidateFile": "staged-candidate-90501cc06e0c45f600d4.json",
+  "sealedCandidateHash": "sha256:90501cc06e0c45f600d45e293e9848a2bd65843f3c3bd98c6f9c5836fc284c08",
+  "candidateExtractionHash": "sha256:3a5d83e5fb92f01ac8eb55894fa45f6b540da7da16e042bd86177e62b7063438",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 143 corrected staged date-repair reviewer",
+    "agentId": "review_jwd143_replacement",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-27T02:55:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. The replacement exactly replays all 89 previously reviewed source-faithful corrections and adds the required correction for Mingzong: the Guangshun 3 (AD 953) memorial and its recollection of an earlier sacrifice become an explicitly undated retrospective attestation, while the sole remaining AD 929 hint is supported by Mingzong's own dated court action. No dated personal event is removed.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-1 through claim-18",
+        "claim-21",
+        "claim-24",
+        "claim-26 through claim-27",
+        "claim-30 through claim-32",
+        "claim-38 through claim-40",
+        "claim-42 through claim-47",
+        "claim-49",
+        "claim-51 through claim-61",
+        "claim-63 through claim-68",
+        "hints-p001 through hints-p060 as enumerated by the sealed proposal"
+      ],
+      "verdict": "supported-source-faithful-undating",
+      "sourceEvidence": [
+        "The 47 carried claim replacements cover later temple and ritual proceedings (s0002-s0018, s0123, s0172-s0184), cited texts and commentators (s0039, s0044, s0046, s0058, s0098, s0152), and comparative historical precedents (s0133, s0139, s0161-s0166).",
+        "Each cited unit names the historical person as honoree, precedent, quoted authority, or recalled ruler; its surrounding calendar date belongs to the current ritual, memorial, or authorial context rather than to that person's activity.",
+        "The corresponding 42 active-date-hint operations remove only labels derived from those reclassified attestations. They retain names, claims, source units, relationships, and every separately dated personal action."
+      ],
+      "reason": "I compared all 89 carried operations against the rejected candidate's sealed proposal. Apart from the mandated Mingzong correction, they are byte-identical. The listed source groups support undating the historical-reference attestations and removing only their dependent hints; they do not support a personal activity date for the named honorees or quoted authorities."
+    },
+    {
+      "proposalItems": [
+        "claim-20",
+        "hints-p016"
+      ],
+      "verdict": "supported-retrospective-reclassification-with-retained-direct-event-date",
+      "sourceEvidence": [
+        "s0019: 周廣順三年冬十月，禮儀使奏 — the AD 953 date opens a Later Zhou ritual official's memorial.",
+        "s0024: 梁朝依禮行之，至明宗郊天，又用竹冊。 — the memorial recalls that bamboo tablets were used at an earlier Mingzong sacrifice; it gives no date for that sacrifice.",
+        "s0156: 八月戊申，明宗服兗冕，禦文明殿，追冊昭宣光烈孝皇帝。 — Mingzong himself performs the enregistration action in the Tiancheng 4 / AD 929 sequence."
+      ],
+      "reason": "The new claim-20 preserves s0024 as an explicitly undated retrospective attestation, so it no longer makes Mingzong active in AD 953. The p016 hint removes AD 953, AD 934, AD 928, and AD 939 (all later reference dates) but retains AD 929 only for the direct Mingzong action in s0156. This fixes the prior review's precise rejection without erasing a genuine dated event."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: independently rebuilt packet source sha256:881d3c414c41c742a145b99d95a36cb4263ca9e0a56df90dae9507bd65f57f2e and extraction sha256:4826d197558c3c5c1defd6eeed454cd33a812306fbec5e77932debf17cdf2662 match the handoff pins.",
+    "auditBinding": "PASS: handoff retains initial audit commit d6c87c16b9d7a80764589330d0bfeb6b41468c19 and report sha256:63c91dbbe36f0809eeb1a3ca3936ce4978f07fc83fbb3513d6fa6d9981aa1593, and explicitly supersedes rejected review commit 8203703f4e2c108f466c8bc217378ec96a336a05.",
+    "sealedProposal": "PASS: independently recomputed sha256:90501cc06e0c45f600d45e293e9848a2bd65843f3c3bd98c6f9c5836fc284c08.",
+    "proposalReplay": "PASS: exact replay against the pinned canonical extraction reproduces the sealed candidate byte-for-byte.",
+    "candidateByteHash": "PASS: independently recomputed sha256:3a5d83e5fb92f01ac8eb55894fa45f6b540da7da16e042bd86177e62b7063438.",
+    "scopedMutation": "PASS: 48 attestation replacements and 42 dependent hint updates; all non-date top-level data is unchanged. The only difference from the previously rejected 89-operation proposal is added claim-20 reclassification and the p016 hint changing from AD 953 to AD 929.",
+    "compactValidation": "PASS: scoped people validation passed; compact replay validates 191 units, 60 people, 253 mentions, 379 claims, 4 repairs, and 395 dispositions.",
+    "chronologyGeometry": "PASS: no date-audit geometry diagnostics.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against canonical source sha256:881d3c414c41c742a145b99d95a36cb4263ca9e0a56df90dae9507bd65f57f2e and canonical extraction sha256:4826d197558c3c5c1defd6eeed454cd33a812306fbec5e77932debf17cdf2662.",
+    "Replay only the 90 sealed operations and verify the resulting extraction hash sha256:3a5d83e5fb92f01ac8eb55894fa45f6b540da7da16e042bd86177e62b7063438.",
+    "Keep claim-20 explicitly undated, keep claim-22's direct AD 929 Mingzong action, and do not reinstate AD 953 as Mingzong activity.",
+    "Obtain a fresh independent final audit after host curation before counting Jiuwudaishi 143 as date-audited."
+  ]
+}
