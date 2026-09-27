@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  capacityLimitMessage,
   parseArgs,
   mergeLiveWorkerState,
   rosterWorkersFromDocuments,
@@ -50,6 +51,15 @@ test('idle selection respects running state and cooldown', () => {
   assert.equal(eligible.some((row) => row.worker === 'grokbot-25'), false);
   assert.equal(eligible.some((row) => row.worker === 'grokbot-26'), false);
   assert.equal(eligible.some((row) => row.worker === 'grokbot-27'), true);
+});
+
+test('recognizes the visible weekly-capacity alert before prompting more workers', () => {
+  assert.equal(
+    capacityLimitMessage(['Weekly usage limit reached. It resets in 1 day.']),
+    'Weekly usage limit reached. It resets in 1 day.',
+  );
+  assert.equal(capacityLimitMessage(['You’re at 90% of your weekly usage limit.']), null);
+  assert.equal(capacityLimitMessage([]), null);
 });
 
 test('campaign prompt binds the worker and MCP workflow', () => {

@@ -307,6 +307,26 @@ async function liveRunningAgentIds(cdpUrl) {
   }
 }
 
+export function capacityLimitMessage(alerts) {
+  if (!Array.isArray(alerts)) throw new Error('Grok Bot capacity alerts were not an array');
+  const message = alerts
+    .map((alert) => String(alert ?? '').replace(/\s+/gu, ' ').trim())
+    .find((alert) => /(?:weekly|usage)\s+limit\s+reached/iu.test(alert));
+  return message || null;
+}
+
+async function liveCapacityLimitMessage(cdpUrl) {
+  const main = await grokBotMain(cdpUrl);
+  if (!main) throw new Error('Grok Bot main renderer is unavailable');
+  try {
+    const alerts = await main.session.evaluate(`Array.from(document.querySelectorAll('[role="alert"]'))
+      .map((node) => node.innerText || node.textContent || '')`);
+    return capacityLimitMessage(alerts);
+  } finally {
+    main.session.close();
+  }
+}
+
 export function mergeLiveWorkerState(workers, runningAgentIds) {
   return workers.map((worker) => ({
     ...worker,
@@ -398,6 +418,8 @@ export function workersEligibleForDispatch(workers, state, { force, cooldownMs, 
 async function dispatchCycle(options) {
   await ensureGrokBot(options);
   await probe(options.cdpUrl);
+  const capacityMessage = await liveCapacityLimitMessage(options.cdpUrl);
+  if (capacityMessage) throw new Error(`Grok Bot capacity unavailable: ${capacityMessage}`);
   const workers = mergeLiveWorkerState(
     readRosterWorkers(),
     await liveRunningAgentIds(options.cdpUrl),
