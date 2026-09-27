@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "139",
+  "candidateCommit": "0e37223fd77bd8d2af513a627bb12c3210007719",
+  "candidateFile": "staged-candidate-5f73aff03151f4c796f7.json",
+  "sealedCandidateHash": "sha256:5f73aff03151f4c796f74e902ac0bffbe616a76c25ba7eee8f8bc6f562dfafbd",
+  "candidateExtractionHash": "sha256:32a84b808fb7c1daa40dc6c3535eb8756ed84460c9583d97c028f6dca8859369",
+  "reviewer": {
+    "name": "Independent JWD139 live chronology repair reviewer",
+    "agentId": "review_jwd139_live_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T02:29:32Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after an independent source, canonical-pin, sealed-proposal, exact-replay, strict-validator, and chronology-geometry review. The three operations preserve the Han Gaozu eclipse allusion without treating it as personal activity, remove only its derived active hint, and limit Jin Gaozu to the chapter's explicit AD 937 and AD 941 personal attestations. The intervening Tianfu 8 entry does not name Jin Gaozu and cannot extend his personal active hint to AD 943.",
+  "validation": {
+    "canonicalSourceHash": "sha256:ae4fb524069706b4c6fd15d02c282667c2b239610a320b1ced6659dc0e1afa04",
+    "canonicalExtractionHash": "sha256:e6d9785a3db466d42d28ea577f4433d6e5e647e2d9cc7b319f5f763cffa63cd3",
+    "auditCommit": "55138bd4a05ccfab002b305164db31810eae5c37",
+    "auditReportHash": "sha256:cc3fac5813484ad88fe53372753c9c9c443dddb00ace3663a8ef60298401e358",
+    "inputPins": "PASS",
+    "sealedProposalIdentity": "PASS",
+    "proposalReplay": "PASS: all three exact operations byte-match the sealed candidate",
+    "sourceSoundness": "PASS: s0008 says that Liang Taizu's ministers invoked an eclipse from 漢高祖末年 as precedent; it is a retrospective allusion, not Han Gaozu activity. s0022 and s0054 explicitly name 晉高祖 in Tianfu 2 and Tianfu 6; the following Tianfu 8 record does not name him, so it cannot support an AD 943 personal endpoint.",
+    "preservation": "PASS: only claim-26 and active-hint fields for p004 and p008 differ; all other claims, people, mentions, aliases, and source evidence are byte-identical.",
+    "strictCompactValidation": "PASS: 195 units, 17 people, 82 mentions, 151 claims, 0 alias conflicts",
+    "chronologyGeometry": "PASS: zero diagnostics",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against the matching canonical source and extraction pins.",
+    "Replay all three operations exactly; do not alter unrelated historical allusions, claims, or people.",
+    "Run a fresh independent canonical date audit after curation."
+  ]
+}
