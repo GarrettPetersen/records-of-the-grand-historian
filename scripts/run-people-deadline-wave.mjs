@@ -286,6 +286,7 @@ export function phaseCommand(phase, plan, { dryRun = false, limit, summaryOut, o
       '--max-new-shards', String(shards), '--concurrency', String(plan.resolutionConcurrency),
       '--max-attempts', '3', '--max-run-cost', String(plan.resolutionMaxRunCostDollars),
       '--max-run-tokens', String(plan.resolutionMaxRunTokens),
+      '--run-timeout-minutes', String(plan.runTimeoutMinutes),
       '--model', CAMPAIGN_MODEL, '--effort', 'medium',
     ];
     if (plan.resolutionDossierReady || plan.prepareDossiers) {
