@@ -111,7 +111,10 @@ export function applyEditorialDecisions(opts) {
         chapter: target.chapter,
         extraction: null,
         decisions: null,
-        reconcileCurrent: false,
+        // An approved wording change can expose a previously unseen name-shaped
+        // surface in the rebuilt source packet. Reconcile it before validating
+        // the atomic application rather than rejecting every such repair.
+        reconcileCurrent: true,
         candidateDispositions: [],
         candidatePeople: [],
         selfTest: false,
