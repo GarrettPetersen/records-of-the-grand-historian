@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { createServer as createHttpServer } from 'node:http';
+import { fork } from 'node:child_process';
 import { timingSafeEqual } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -8,11 +9,13 @@ import { fileURLToPath } from 'node:url';
 import { McpServer, createMcpHandler } from '@modelcontextprotocol/server';
 import { toNodeHandler } from '@modelcontextprotocol/node';
 import * as z from 'zod/v4';
-import { GrokbotMcpBridge } from './lib/grokbot-mcp-bridge.mjs';
+import { configureGitHubGitAuthentication, positiveEnvironmentInteger } from './lib/grokbot-mcp-runtime-config.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const SERVER_VERSION = '1.0.0';
 const CLIENT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-client.mjs');
+const OPERATION_WORKER_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-operation-worker.mjs');
+const DEFAULT_OPERATION_TIMEOUT_MS = 120_000;
 
 function textResult(value) {
   return { content: [{ type: 'text', text: JSON.stringify(value) }] };
@@ -121,12 +124,6 @@ function commaSet(value) {
   return new Set(String(value ?? '').split(',').map((item) => item.trim().toLowerCase()).filter(Boolean));
 }
 
-function positiveEnvironmentInteger(value, name, fallback) {
-  const parsed = Number(value ?? fallback);
-  if (!Number.isSafeInteger(parsed) || parsed < 1) throw new Error(`${name} must be a positive integer`);
-  return parsed;
-}
-
 function bootstrapScript(authToken) {
   if (!/^[a-f0-9]{64}$/u.test(authToken)) throw new Error('Bootstrap auth token has an invalid format');
   return `#!/bin/sh
@@ -148,15 +145,64 @@ chmod 700 "$HOME/.local/bin/24histories-people"
 `;
 }
 
-function configureGitHubGitAuthentication(token) {
-  if (!token) return;
-  const count = Number(process.env.GIT_CONFIG_COUNT ?? 0);
-  if (!Number.isSafeInteger(count) || count < 0) throw new Error('Invalid inherited GIT_CONFIG_COUNT');
-  const credential = Buffer.from(`x-access-token:${token}`).toString('base64');
-  process.env.GIT_CONFIG_COUNT = String(count + 1);
-  process.env[`GIT_CONFIG_KEY_${count}`] = 'http.https://github.com/.extraheader';
-  process.env[`GIT_CONFIG_VALUE_${count}`] = `AUTHORIZATION: basic ${credential}`;
-  process.env.GIT_TERMINAL_PROMPT = '0';
+function runIsolatedOperation(env, operation, args) {
+  const timeoutMs = positiveEnvironmentInteger(
+    env.GROKBOT_MCP_OPERATION_TIMEOUT_MS,
+    'GROKBOT_MCP_OPERATION_TIMEOUT_MS',
+    DEFAULT_OPERATION_TIMEOUT_MS,
+  );
+  return new Promise((resolve, reject) => {
+    const child = fork(OPERATION_WORKER_FILE, [], {
+      env: { ...process.env, ...env },
+      execArgv: process.execArgv.filter((arg) => !arg.startsWith('--input-type')),
+      serialization: 'json',
+      silent: true,
+    });
+    let stderr = '';
+    child.stderr?.setEncoding('utf8');
+    child.stderr?.on('data', (chunk) => {
+      stderr = `${stderr}${chunk}`.slice(-4096);
+    });
+    let settled = false;
+    let timer;
+    const settle = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (child.connected) child.disconnect();
+      callback(value);
+    };
+    timer = setTimeout(() => {
+      child.kill();
+      settle(reject, new Error(`Grok Bot ${operation} operation timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+    child.once('error', (error) => settle(reject, error));
+    child.once('exit', (code, signal) => {
+      if (!settled) {
+        const detail = stderr.trim();
+        settle(reject, new Error(
+          `Grok Bot ${operation} worker exited before replying (${signal ?? code})${detail ? `: ${detail}` : ''}`,
+        ));
+      }
+    });
+    child.once('message', (message) => {
+      if (message?.ok === true) settle(resolve, message.result);
+      else settle(reject, new Error(message?.error ?? `Grok Bot ${operation} worker failed`));
+    });
+    child.send({ operation, args }, (error) => {
+      if (error) settle(reject, error);
+    });
+  });
+}
+
+function isolatedBridge(env) {
+  return {
+    resumeOrClaim: (args) => runIsolatedOperation(env, 'resumeOrClaim', args),
+    getChunk: (args) => runIsolatedOperation(env, 'getChunk', args),
+    submitChunk: (args) => runIsolatedOperation(env, 'submitChunk', args),
+    finalizeChapter: (args) => runIsolatedOperation(env, 'finalizeChapter', args),
+    status: (args) => runIsolatedOperation(env, 'status', args),
+  };
 }
 
 export function startGrokbotMcpServer({ env = process.env, bridge } = {}) {
@@ -179,25 +225,7 @@ export function startGrokbotMcpServer({ env = process.env, bridge } = {}) {
   }
 
   configureGitHubGitAuthentication(env.GITHUB_TOKEN);
-  const lane = bridge ?? new GrokbotMcpBridge({
-    claimSecret,
-    githubToken: env.GITHUB_TOKEN,
-    githubRepository: env.GITHUB_REPOSITORY,
-    options: {
-      order: 'deadline-balanced',
-      maxUnits: positiveEnvironmentInteger(env.GROKBOT_MCP_MAX_UNITS, 'GROKBOT_MCP_MAX_UNITS', 80),
-      maxCandidates: positiveEnvironmentInteger(
-        env.GROKBOT_MCP_MAX_CANDIDATES,
-        'GROKBOT_MCP_MAX_CANDIDATES',
-        200,
-      ),
-      maxWorkerBytes: positiveEnvironmentInteger(
-        env.GROKBOT_MCP_MAX_WORKER_KIB,
-        'GROKBOT_MCP_MAX_WORKER_KIB',
-        48,
-      ) * 1024,
-    },
-  });
+  const lane = bridge ?? isolatedBridge(env);
   const handler = createMcpHandler(() => createGrokbotMcpServer(lane), {
     responseMode: 'json',
     legacy: 'stateless',
