@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "131",
+  "candidateCommit": "4adee3f597d6fddc3d47ec4ac7794647f86c6236",
+  "candidateFile": "staged-candidate-b62c51980d8d073dd303.json",
+  "sourceHash": "sha256:c2a492e9c655ce7fa312120c955bdf5040928d7908b1c8abb82c32c8951bcadf",
+  "originalExtractionHash": "sha256:419c84b7dc9387fb9b1d67c0af41d82c7f00a5dbacf895dec6bcde5aff1168fc",
+  "sealedCandidateHash": "sha256:b62c51980d8d073dd30323c653df85419d3dc27ef74a6d3db582382341564b42",
+  "candidateExtractionHash": "sha256:cddd727099ec9f1891d4444911adfe92422731704e0387a0ec1864be3dbd273a",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 131 replacement staged date-repair reviewer",
+    "agentId": "review_jwd131_replacement",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T01:40:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. This replacement corrects every defect in the rejected predecessor: both Liu Gun claims lose their invented Zhou interval; Li Zhisun retains only the source-supported AD 955 lower bound; both Li Jianchong claims and their hint become explicit source-limited holds; and the Jia Liang and Jia Jin genealogy hints remain explicit source-limited holds. The complete 33-operation replay removes only unsupported chronology, preserves every cited non-date fact, and adds no new life date.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-175", "hints-p033"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0069: 「父達，累贈戶部侍郎。」"],
+      "reason": "The unit is an undated posthumous-promotion statement. Replacing the pre-AD-954 bound and its hint with a source-specific research hold is required."
+    },
+    {
+      "proposalItems": ["claim-249", "claim-250", "hints-p057"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0140: 「年二十八而卒。」"],
+      "reason": "Age at death supplies no Zhou-reign chronology. Both the attestation and death dateContext correctly lose their AD 951–959 bounds while the sui age survives."
+    },
+    {
+      "proposalItems": ["claim-257", "claim-260", "claim-261", "claim-264", "claim-296", "claim-309", "hints-p059", "hints-p062", "hints-p063", "hints-p065", "hints-p070", "hints-p081"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0143: 「唐司空魏國公耽」 and 「宋祁《景文集》」", "s0145: 「疾世方亂」", "s0149: 「自武宗已下闕而不紀」", "s0159: 「止於代宗」", "s0173: 「乾祐中……修漢高祖實錄」"],
+      "reason": "These are undated genealogy, characterisation, bibliographical, and retrospective-reception references for the named people. The candidate preserves them as source-specific unresolved attestations and removes imported personal lifespan or reign envelopes."
+    },
+    {
+      "proposalItems": ["claim-357", "claim-358", "hints-p086", "hints-p087"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0180: 「遇亂避地於蜀」", "s0181: 「黔中經略判官」"],
+      "reason": "Neither an unspecified disorder nor an office label supplies a Western endpoint. The replacement research holds correctly remove the before-880 and before-900 assertions."
+    },
+    {
+      "proposalItems": ["claim-407", "claim-408", "hints-p105"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0233: 「後歲餘，卒於海中」"],
+      "reason": "More than a year after Shizong's AD 954 accession supports an on-or-after AD 955 sequence, not an AD 956 upper endpoint. Both claims and the active hint now retain exactly that one-sided chronology."
+    },
+    {
+      "proposalItems": ["claim-417", "claim-423", "hints-p111", "hints-p114"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0241: 「其格致大抵如羅隱」", "s0249: 「畫唐詩人賈島像」"],
+      "reason": "A namesake comparison and a literary portrait do not attest the referents' lives in their imported date ranges. The candidate keeps the references but makes their chronology explicitly unresolved."
+    },
+    {
+      "proposalItems": ["claim-431", "claim-432", "hints-p121"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0268: 「殺都押衙李建崇而逸」"],
+      "reason": "The anecdote establishes a killing but no AD 940–960 range. Both the attestation and death claim correctly become source-limited holds, fixing the prior review's claim-432 failure."
+    },
+    {
+      "proposalItems": ["hints-p060", "hints-p061"],
+      "verdict": "supported",
+      "sourceEvidence": ["initial-audit research holds for claim-258 (Jia Liang) and claim-259 (Jia Jin)"],
+      "reason": "The undated fifth-generation and great-grandfather genealogies cannot support invented before-AD bounds. Both pre-existing source-limited holds are retained verbatim as research-required hints."
+    }
+  ],
+  "hostRequirements": [
+    "Curate only sealed proposal sha256:b62c51980d8d073dd30323c653df85419d3dc27ef74a6d3db582382341564b42 against the matching source and canonical extraction pins.",
+    "Replay all 33 operations exactly: 17 claim replacements and 16 paired active-hint changes. Do not restore any rejected closed interval or inherited endpoint.",
+    "Run strict scoped validation and chronology geometry checks after curation, then obtain a fresh complete independent canonical date audit before any audited status is recorded."
+  ],
+  "validation": {
+    "inputPins": "PASS: source and canonical extraction hashes match the sealed handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed seal is sha256:b62c51980d8d073dd30323c653df85419d3dc27ef74a6d3db582382341564b42.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:cddd727099ec9f1891d4444911adfe92422731704e0387a0ec1864be3dbd273a.",
+    "proposalReplay": "PASS: all 33 operations replay byte-for-byte from the pinned canonical extraction to the sealed candidate.",
+    "auditCoverage": "PASS: every initially incorrect chronology/hint element is repaired, while all six initial source-limited item holds are preserved.",
+    "strictCompactValidation": "PASS: scoped candidate validation reports 290 units, 970 candidates, 131 people, 723 mentions, 829 claims, 25 repairs, 599 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: the candidate chronology scan reports zero diagnostics.",
+    "sourceChronology": "PASS: cited Chinese evidence was reread; no new personal chronology is introduced.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  }
+}
