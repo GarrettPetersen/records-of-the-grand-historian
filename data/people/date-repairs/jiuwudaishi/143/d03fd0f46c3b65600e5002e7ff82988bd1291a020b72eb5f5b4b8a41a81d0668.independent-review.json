@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "143",
+  "status": "rejected",
+  "accepted": false,
+  "stagingOnly": true,
+  "reviewedAt": "2026-09-26T00:00:00Z",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 143 source-faithful date-repair reviewer",
+    "agentId": "review_jwd143_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "candidate": {
+    "commit": "e7b52adcebf6ad3ae8961c00dfcdc07bc81bcb57",
+    "ref": "codex/jiuwudaishi143-date-repair-candidate",
+    "candidateFile": "staged-candidate-d03fd0f46c3b65600e50.json",
+    "sealedCandidateHash": "sha256:d03fd0f46c3b65600e5002e7ff82988bd1291a020b72eb5f5b4b8a41a81d0668",
+    "candidateExtractionHash": "sha256:659858b669d86d311520baf43b27939d42a948da12110ffcca2cea5f56a79f57"
+  },
+  "canonicalInputs": {
+    "auditCommit": "d6c87c16b9d7a80764589330d0bfeb6b41468c19",
+    "auditReportHash": "sha256:63c91dbbe36f0809eeb1a3ca3936ce4978f07fc83fbb3513d6fa6d9981aa1593",
+    "canonicalSourceHash": "sha256:881d3c414c41c742a145b99d95a36cb4263ca9e0a56df90dae9507bd65f57f2e",
+    "canonicalExtractionHash": "sha256:4826d197558c3c5c1defd6eeed454cd33a812306fbec5e77932debf17cdf2662"
+  },
+  "summary": "Rejected. The candidate exactly replays and passes compact and geometry validation, and its removals of 47 dated later-reference attestations plus 42 inherited active-date hints are generally source-faithful. However, it retains claim-20 and the sole active hint AD 953 for Mingzong. The only source evidence is the AD 953 Later Zhou ritual memorial: it retrospectively says that when Mingzong performed a suburban sacrifice, bamboo tablets were used. It does not place Mingzong's sacrifice in AD 953. This remaining false personal-activity date prevents acceptance.",
+  "reviewedOperations": [
+    {
+      "result": "PASS",
+      "operation": "remove-later-reference-dates-and-dependent-hints",
+      "count": 89,
+      "review": "The 47 claim replacements preserve the cited historical-precedent, quotation, temple, posthumous-title, or later ritual attestations as explicitly undated. The 42 paired hint changes remove only derived activity labels. I independently sampled every source group: ancestral temple debates (s0002–s0018), quoted authorities and historical precedents (s0039–s0058 and s0098), current temple/posthumous actions (s0100, s0123, s0133, s0145, s0156), comparative precedents (s0139, s0152, s0161–s0166), and later temple installations (s0172–s0184). These removals do not discard a source-dated personal event."
+    },
+    {
+      "result": "FAIL",
+      "operation": "retain-Mingzong-AD-953",
+      "claims": ["claim-20", "hints-p016"],
+      "sourceEvidence": [
+        {
+          "unit": "s0019",
+          "quote": "周廣順三年冬十月，禮儀使奏",
+          "reason": "This opens a Later Zhou Guangshun 3 (AD 953) ritual-official's memorial."
+        },
+        {
+          "unit": "s0024",
+          "quote": "梁朝依禮行之，至明宗郊天，又用竹冊。",
+          "reason": "The memorial's retrospective sequence says only that bamboo tablets had been used at Mingzong's earlier suburban sacrifice; it supplies no date for that sacrifice and does not make Mingzong active in AD 953."
+        }
+      ],
+      "requiredCorrection": "Replace claim-20's AD 953 contextual attestation with an explicitly undated source attestation preserving the earlier Mingzong precedent, and remove AD 953 from hints-p016. Preserve genuinely dated Mingzong material separately only where its own source date belongs to his event."
+    }
+  ],
+  "validation": {
+    "sealedProposalIdentity": "PASS: independently recomputed proposal hash is sha256:d03fd0f46c3b65600e5002e7ff82988bd1291a020b72eb5f5b4b8a41a81d0668.",
+    "candidateExtractionIdentity": "PASS: independently recomputed compact candidate hash is sha256:659858b669d86d311520baf43b27939d42a948da12110ffcca2cea5f56a79f57.",
+    "auditBinding": "PASS: the candidate pins the initial needs-revision audit, source hash, and canonical extraction hash exactly.",
+    "proposalReplay": "PASS: independent exact replay of all 89 operations from the pinned canonical extraction reproduces the candidate byte-for-byte.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction against a rebuilt Jiuwudaishi 143 packet reports 191 units, 546 candidates, 60 people, 253 mentions, 379 claims, 4 repairs, 395 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) reports no geometry errors.",
+    "sourceReview": "FAIL: the retained AD 953 date and resulting Mingzong activity hint are contradicted by the ownership and retrospective wording of s0019/s0024.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  },
+  "publication": {
+    "master": "NOT_PUBLISHED",
+    "sharedQueue": "NOT_PUBLISHED",
+    "reviewReceipt": "STAGING_ONLY_REJECTED"
+  }
+}
