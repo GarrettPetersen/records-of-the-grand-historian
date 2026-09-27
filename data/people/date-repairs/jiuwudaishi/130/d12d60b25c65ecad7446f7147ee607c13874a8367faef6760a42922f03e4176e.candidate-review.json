@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "130",
+  "candidateCommit": "74e92e5d8a245d5989c95557d20dca4eb530366c",
+  "candidateFile": "staged-candidate-d12d60b25c65ecad7446.json",
+  "sourceHash": "sha256:a1edf62c065994adf6ebb5d57c599bce330d2d2a547714660565675a5387c0c6",
+  "originalExtractionHash": "sha256:45184c2f5caf9b809ce0428e54bffa92ae9216caaa397fd89b19496952fbe3c6",
+  "sealedCandidateHash": "sha256:d12d60b25c65ecad7446f7147ee607c13874a8367faef6760a42922f03e4176e",
+  "candidateExtractionHash": "sha256:fafe39d26cbeec1095505e0a47d09e199b3bd55e1060288a68250999019d8c50",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 130 staged date-repair reviewer",
+    "agentId": "final_audit_jwd129",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-27T00:25:00.000Z",
+  "disposition": "accept",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independent source and structural review of all 25 sealed operations in four audit groups. The candidate removes unsupported reign-wide and contextual life chronology, retains undated source attestations where appropriate, and records the documented AD 951 Confucius and Cui Zhoudu/Yan Honglu receptions as posthumous or retrospective events without restoring active-date hints.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-92", "hints-p035", "claim-179"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0089: 「昔安重誨授河中節，亦有此異焉。」"],
+      "reason": "The passage is an undated omen-comparison reference to An Chonghui, not a bounded life event. Removing its AD 926–933 active interval and hint while preserving a retrospective-reference event is correct."
+    },
+    {
+      "proposalItems": ["claim-96", "hints-p039", "claim-180"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0127–s0138: Taizu dreams of the Master during the AD 951 Yanzhou campaign, then visits the Confucius temple and orders honors."],
+      "reason": "The AD 951 material records a later dream and temple reception, not Confucius’s activity or a source-attested life span. The candidate correctly removes the BC 551–479 life attestation and hint and preserves the event as a posthumous commemoration."
+    },
+    {
+      "proposalItems": ["claim-105", "hints-p046", "claim-181", "claim-182"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0159–s0161: 「閻宏魯、崔周度，死義之臣」 and posthumous grants after Taizu pacified Yanzhou."],
+      "reason": "The AD 951 edict expressly concerns dead righteous ministers and posthumous grants. Removing Cui Zhoudu’s false living attestation and hint, and retaining both named honorees as posthumous-commemoration participants, preserves the dated historical reception without asserting life activity."
+    },
+    {
+      "proposalItems": ["claim-94", "claim-99", "claim-100", "claim-101", "claim-102", "claim-103", "claim-106", "claim-107", "hints-p037", "hints-p041", "hints-p042", "hints-p043", "hints-p044", "hints-p047", "hints-p048"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0104: 「彥超即漢高祖之同產弟也」.", "s0149: 「後唐邢州節度使寶之子也」.", "s0151: 「宏魯事唐明宗、晉高祖」.", "s0152: 「慕容彥超初臨」.", "s0156: 「光表，舉進士甲科，盧質節制橫海」."],
+      "reason": "These kinship, ruler-name, office, examination, and command descriptions lack the claimed point or reign-wide individual activity intervals. Each replacement preserves the source-attested non-date fact and removes its dependent active hint; no unrelated content is changed."
+    }
+  ],
+  "hostRequirements": [
+    "Curate only the sealed proposal sha256:d12d60b25c65ecad7446f7147ee607c13874a8367faef6760a42922f03e4176e against the matching canonical source and extraction fingerprints.",
+    "After curation, run strict scoped validation and chronology geometry checks, then obtain a fresh complete independent canonical date audit before marking the chapter audited."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: source sha256:a1edf62c065994adf6ebb5d57c599bce330d2d2a547714660565675a5387c0c6 and original extraction sha256:45184c2f5caf9b809ce0428e54bffa92ae9216caaa397fd89b19496952fbe3c6 match the sealed handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed seal is sha256:d12d60b25c65ecad7446f7147ee607c13874a8367faef6760a42922f03e4176e.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:fafe39d26cbeec1095505e0a47d09e199b3bd55e1060288a68250999019d8c50.",
+    "proposalReplay": "PASS: all 25 operations replay byte-for-byte from the pinned canonical extraction to the sealed candidate.",
+    "compactValidation": "PASS: strict compact validation reports 157 units, 427 candidates, 48 people, 419 mentions, 423 claims, 7 repairs, 222 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: date-item geometry scan is empty after replay.",
+    "sourceChronology": "PASS: each of the four frozen audit groups is source-supported; later reception is kept distinct from a person’s life chronology.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}
