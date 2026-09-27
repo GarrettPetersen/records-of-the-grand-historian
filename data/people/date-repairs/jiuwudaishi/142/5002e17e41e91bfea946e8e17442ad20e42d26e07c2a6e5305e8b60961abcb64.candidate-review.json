@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "142",
+  "candidateCommit": "82ccfc0cb1d71bcdf94943a4aa588b78ffd7c046",
+  "candidateFile": "staged-candidate-5002e17e41e91bfea946.json",
+  "sealedCandidateHash": "sha256:5002e17e41e91bfea946e8e17442ad20e42d26e07c2a6e5305e8b60961abcb64",
+  "candidateExtractionHash": "sha256:1c4d07d17372262542c2a48fd4ac384cf9d40982ec19072210beb04e4af8e383",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 142 residual staged date-repair reviewer",
+    "agentId": "review_jwd142_residual",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-26T20:05:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited after fresh independent audit",
+  "summary": "Accepted: the three scoped operations remove the unsupported AD 235–264 lifespan interval from Sun Xiu's cited accession and tablet-reception precedent while preserving the explicit source attestation, accession fact, and the distinct AD 953 retrospective-reference event in which the precedent is cited.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-525",
+        "claim-527",
+        "hints-p143"
+      ],
+      "verdict": "supported-removal-with-preserved-undated-attestation-and-retrospective-event",
+      "sourceEvidence": [
+        "s0233: 吳主孫休即位，迎祖父神主於吳郡，人祔太廟。",
+        "s0233 is introduced within 廣順三年 discussion, so AD 953 remains the date of the later citation/protocol context, not the date of Sun Xiu's accession."
+      ],
+      "reason": "The cited wording explicitly supports the historical fact that Sun Xiu acceded and received his grandfather's tablet, but supplies no Western accession year and no AD 235 or AD 264 endpoint. Removing the imported lifespan interval and paired active hints is source-faithful. The candidate retains a separate classified AD 953 retrospective-reference event, so it does not erase the date-bearing event actually present in this chapter."
+    }
+  ],
+  "validation": {
+    "rawInputs": "PASS: source sha256:335a13a34b7416e55f82d7a65a726261ac312e533d7dfe5103994091598cd3d5 and extraction sha256:8a4067840ba7f5ad276a20abc7dfe8085c7b4749468ccd22ac79026108a48171 match the handoff's raw-byte pins.",
+    "canonicalInputs": "PASS: source sha256:abb753c31962cfb675a065bc35727d66914f7b88c42505fe3e3345961eb01529 and extraction sha256:604592d1538963acb082b0c3cc08211098e2405608829a5e6b4a6a70125da8d8 match the canonical packet pins.",
+    "sealedProposal": "PASS",
+    "proposalReplay": "PASS",
+    "candidateByteHash": "PASS",
+    "scopedMutation": "PASS: exactly claim-525, claim-527, and hints-p143 differ from the canonical extraction.",
+    "compactValidation": "PASS: 260 units, 148 people, 508 mentions, 929 claims.",
+    "chronologyGeometry": "PASS: no date-audit geometry or reception-ownership diagnostics.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against canonical source sha256:abb753c31962cfb675a065bc35727d66914f7b88c42505fe3e3345961eb01529 and canonical extraction sha256:604592d1538963acb082b0c3cc08211098e2405608829a5e6b4a6a70125da8d8.",
+    "Replay only the three sealed operations; preserve claim-528's explicit AD 953 retrospective-reference classification and all unrelated posthumous/reception events.",
+    "Obtain a fresh independent final audit after host curation."
+  ]
+}
