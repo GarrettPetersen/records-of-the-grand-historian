@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { McpServer, createMcpHandler } from '@modelcontextprotocol/server';
 import { toNodeHandler } from '@modelcontextprotocol/node';
 import * as z from 'zod/v4';
-import { configureGitHubGitAuthentication, positiveEnvironmentInteger } from './lib/grokbot-mcp-runtime-config.mjs';
+import { positiveEnvironmentInteger } from './lib/grokbot-mcp-runtime-config.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const SERVER_VERSION = '1.0.0';
@@ -224,7 +224,6 @@ export function startGrokbotMcpServer({ env = process.env, bridge } = {}) {
     throw new Error('GROKBOT_MCP_ALLOWED_HOSTS is required when binding a public interface');
   }
 
-  configureGitHubGitAuthentication(env.GITHUB_TOKEN);
   const lane = bridge ?? isolatedBridge(env);
   const handler = createMcpHandler(() => createGrokbotMcpServer(lane), {
     responseMode: 'json',
