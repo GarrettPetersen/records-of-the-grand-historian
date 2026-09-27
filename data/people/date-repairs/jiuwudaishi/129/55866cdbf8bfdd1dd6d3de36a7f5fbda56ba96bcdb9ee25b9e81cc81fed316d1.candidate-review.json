@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "129",
+  "candidateCommit": "baa7ff91688f5acd3277cc5766c6bc2a6c63ee00",
+  "candidateFile": "staged-candidate-55866cdbf8bfdd1dd6d3.json",
+  "sealedCandidateHash": "sha256:55866cdbf8bfdd1dd6d3de36a7f5fbda56ba96bcdb9ee25b9e81cc81fed316d1",
+  "candidateExtractionHash": "sha256:cc0dd1909a77c2777c6a15a65df1c7516426d7a0d04f304929015bdad706b8d7",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 129 allusion candidate reviewer",
+    "agentId": "final_audit_jwd128",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T00:03:55.635Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent review of the exact nine-operation allusion repair. In s0054, 袁、許之術 is Zhao Yanyi’s comparison of skill, not a life event for Yuan Tiangang or Xu Fu; in s0200, 郤克之疾 is an allusive description of Zhang Yanchao’s lameness, not Xi Ke’s activity. The candidate removes only the invented personal chronology and paired active hints, adds explicitly classified undated retrospective references, and preserves the source-backed identity, skill, role, evidence, and non-temporal allusive facts.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-252",
+        "hints-p020",
+        "p020"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0054",
+          "quote": "光鄴膚革肥皙，善於攝養，故司天監趙延乂有袁、許之術，嘗謂人曰：「翟君外厚而內薄，雖貴而無壽。」"
+        }
+      ],
+      "reason": "袁、許之術 grammatically qualifies Zhao Yanyi’s divinatory method. It does not describe an event in Yuan Tiangang’s life, so removing the invented AD 617–627 attestation and retaining a date-free retrospective reference is source-faithful."
+    },
+    {
+      "proposalItems": [
+        "claim-255",
+        "hints-p021",
+        "p021"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0054",
+          "quote": "光鄴膚革肥皙，善於攝養，故司天監趙延乂有袁、許之術，嘗謂人曰：「翟君外厚而內薄，雖貴而無壽。」"
+        }
+      ],
+      "reason": "The same paired allusion invokes Xu Fu as a traditional exemplar of physiognomy rather than reporting a personal event. The candidate retains the non-temporal reference and removes the invented BC 200–180 chronology."
+    },
+    {
+      "proposalItems": [
+        "claim-911",
+        "hints-p087",
+        "p087"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0200",
+          "quote": "素有郤克之疾，時號為「跛子」。"
+        }
+      ],
+      "reason": "郤克之疾 is a classical allusive disease-name attached to Zhang Yanchao’s lameness. It supplies no dated activity by Xi Ke, so the candidate’s date-free retrospective-reference classification is required and preserves the source fact."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source hash remains sha256:1d9483070c225ad5ef135b6a08260d41a14c12f699014503f5a5e350f2ff0094 and canonical extraction hash remains sha256:ab3fe45c48f62a1c6c12f2fc8c573c18837820a6f3cd9244e505ed0804da22ed.",
+    "Replay exactly the nine sealed operations: remove the three false temporal attestations, add the three classified undated retrospective-reference event-participation records, and clear only the three paired active-date hint lists.",
+    "Retain the non-temporal allusions, identities, roles, skill claims, source evidence, and all other chapter data; do not reintroduce lifespan dates from these allusive expressions.",
+    "Run scoped validation after host curation and obtain a fresh complete independent canonical date audit before approval."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:1d9483070c225ad5ef135b6a08260d41a14c12f699014503f5a5e350f2ff0094",
+    "canonicalExtractionHash": "sha256:ab3fe45c48f62a1c6c12f2fc8c573c18837820a6f3cd9244e505ed0804da22ed",
+    "inputPins": "PASS: rebuilt date packet exactly matches the sealed source and canonical extraction hashes.",
+    "sealedProposalIdentity": "PASS: SHA-256 of the exact nine-operation proposal is sha256:55866cdbf8bfdd1dd6d3de36a7f5fbda56ba96bcdb9ee25b9e81cc81fed316d1.",
+    "candidateExtractionIdentity": "PASS: SHA-256 of the replayed staged compact candidate is sha256:cc0dd1909a77c2777c6a15a65df1c7516426d7a0d04f304929015bdad706b8d7.",
+    "proposalReplay": "PASS: applying the sealed proposal to the pinned canonical compact extraction reconstructed the candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-252, claim-255, claim-911 and the paired hints p020, p021, p087 change; additions are three explicitly classified retrospective-reference events with the original source units.",
+    "sourceOwnership": "PASS: s0054 makes Zhao Yanyi the subject of 袁、許之術, while s0200 makes Zhang Yanchao the subject of 郤克之疾; neither expression is an event owned by the historical exemplars.",
+    "nonDateRetention": "PASS: candidate preserves each allusive identity, role/skill, and evidence, adding an undated classified reception record instead of deleting the source fact.",
+    "strictCompactValidation": "PASS: rebuilt 245-unit extraction packet validated the replayed compact candidate (111 people, 565 mentions, 1607 claims, 0 alias conflicts).",
+    "chronologyGeometry": "PASS: date audit scan reports zero geometry findings on the canonical input; the candidate removes only date-bearing allusion fields.",
+    "scopedValidator": "PASS: people:validate --book jiuwudaishi --chapter 129 completed on pinned canonical inputs.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "publication": "staging-only"
+}
