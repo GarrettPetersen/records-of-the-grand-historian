@@ -81,6 +81,13 @@ stable local agent IDs and keeps the twelve durable workers `grokbot-24` through
 `grokbot-35` occupied; the MCP bridge remains the sealed queue, validation, and
 publication data plane.
 
+An incoming orchestrator should begin with the runbook's **Existing production host:
+orchestrator handoff** checklist. The dispatcher is a persistent LaunchAgent and does
+not need to appear as an MCP tool in the orchestrator's own session. Observe it through
+`launchctl`, its logs, `people:grokbot:headless:probe`, the shared queue, and resulting
+PRs. Never run a second dispatcher beside the LaunchAgent, and never manufacture claims
+to make the lane look busy.
+
 Do not assume one successful bootstrap covers the whole roster. Each durable Grok Bot
 can own a separate persistent computer. Bootstrap each stable worker once, verify
 `24histories-people status --worker grokbot-NN`, and preserve that computer. A worker

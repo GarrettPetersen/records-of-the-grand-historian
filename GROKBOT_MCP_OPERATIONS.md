@@ -51,6 +51,79 @@ by its stable `data-agent-id`, focuses the accessible prompt editor, inserts the
 prompt, and verifies that Grok Bot accepted it. The DevTools control socket is bound to
 loopback, and the dispatcher refuses a non-loopback endpoint.
 
+### Existing production host: orchestrator handoff
+
+The production installation is a host service, not a capability attached to the Codex
+orchestrator's current session. An incoming orchestrator does **not** need a Grok Bot MCP
+tool in its own tool list and should not create claims on behalf of the bots. The installed
+watchdog submits the standing prompt to each idle Grok Bot; that bot then uses its own
+installed `24histories-people` client to resume or claim, process sealed chunks, validate,
+and publish. The orchestrator observes the shared queue and resulting PRs.
+
+There must be exactly one dispatcher owner. On this Mac that owner is the installed
+`com.24histories.grokbot-headless` LaunchAgent. Do not also run
+`people:grokbot:headless`, `people:grokbot:headless:once`, or another GUI automation loop
+while the LaunchAgent is loaded. Likewise, only one orchestrator should run queue
+reconciliation at a time; reconciliation is separate from the watchdog and is not needed
+for every two-minute dispatch cycle.
+
+From any checkout containing the headless scripts, an incoming orchestrator can perform
+this read-only handoff check without reading or printing a credential:
+
+```bash
+launchctl print "gui/$(id -u)/com.24histories.grokbot-headless"
+launchctl print "gui/$(id -u)/com.24histories.grokbot-mcp"
+launchctl print "gui/$(id -u)/com.24histories.grokbot-tunnel"
+lsof -nP -iTCP:9229 -sTCP:LISTEN
+npm run people:grokbot:headless:probe
+curl -fsS http://127.0.0.1:3001/health
+curl -fsS https://grokbot-mcp.24histories.com/health
+tail -n 100 "$HOME/.local/state/24histories-grokbot-headless/daemon.log"
+tail -n 100 "$HOME/.local/state/24histories-grokbot-headless/daemon.error.log"
+npm run people:queue:status
+```
+
+A healthy handoff has all three LaunchAgents running (headless, MCP origin, and tunnel),
+port 9229 listening only on `127.0.0.1` or `::1`, `probe` reporting Grok Bot 0.61.0+
+plus all twelve workers, and both health endpoints returning `"ok":true`. Public health
+proves routing only; the queue status, bot reports, and published PRs prove useful work.
+`Cycle complete: dispatched=0` is not by itself a fault: every worker may be running or
+inside its ten-minute cooldown. Repeated cycle failures in `daemon.error.log`, a missing
+worker in `probe`, or no queue/PR progress while workers appear idle requires recovery.
+
+The installed plist embeds the absolute Node binary, script, and checkout paths that
+existed when `people:grokbot:headless:install` ran. Inspect it with:
+
+```bash
+plutil -p "$HOME/Library/LaunchAgents/com.24histories.grokbot-headless.plist"
+```
+
+After moving the checkout, changing Node installations, or updating the dispatcher,
+run `npm run people:grokbot:headless:install` from the intended reviewed checkout. The
+installer rewrites the plist, safely reloads the service, and prints the log directory.
+
+To deliberately pause dispatch without stopping in-flight Grok Bot turns, unload only
+the headless LaunchAgent. Leave the MCP origin and tunnel running so active workers can
+submit and finalize:
+
+```bash
+launchctl bootout "gui/$(id -u)/com.24histories.grokbot-headless"
+```
+
+Resume it from the existing plist with:
+
+```bash
+launchctl bootstrap "gui/$(id -u)" \
+  "$HOME/Library/LaunchAgents/com.24histories.grokbot-headless.plist"
+launchctl kickstart -k "gui/$(id -u)/com.24histories.grokbot-headless"
+```
+
+Use `people:grokbot:headless:once` only while the LaunchAgent is unloaded. Do not use
+`--force` merely to increase throughput: it bypasses the running-state and cooldown
+guards and can insert a duplicate campaign prompt into an active conversation. The
+state file is only a local cooldown record, not queue truth; do not delete or edit it to
+release work. Sticky ownership lives in the shared queue and is resumed by worker ID.
+
 Launch Grok Bot with its local debugging socket enabled:
 
 ```sh
@@ -367,11 +440,13 @@ tail -n 100 "$HOME/.local/state/24histories-grokbot-mcp/tunnel.log"
 
 The Mac must remain awake, logged in, and online while the user LaunchAgents serve work.
 The screen may be locked: locking does not stop the MCP server or tunnel while the user
-session remains logged in. A lock blocks GUI automation of the Grok Bot app, not MCP
-calls from the installed client. Do not pause an MCP handoff merely because the screen is
-locked; unlock only when the task actually requires GUI control. A public health response
-proves routing, not MCP authorization or queue health. Use the installed CLI's
-`status --worker grokbot-01` for an authenticated end-to-end check.
+session remains logged in. It also does not block this headless dispatcher because the
+dispatcher controls the live renderer through loopback DevTools rather than screen
+coordinates. Traditional mouse/keyboard computer use may still require an unlocked
+screen. Do not pause an MCP handoff merely because the screen is locked. A public health
+response proves routing, not MCP authorization or queue health. Use an installed client's
+`status --worker grokbot-NN` for an authenticated end-to-end check when operating inside
+that worker's durable computer; never extract its bearer token for a host-side probe.
 
 ## Upgrade procedure
 
@@ -419,6 +494,18 @@ claim-signing secret for GitHub or Cloudflare.
 
 ## Failure recovery
 
+- Headless LaunchAgent is absent: inspect the plist's embedded paths, then rerun
+  `npm run people:grokbot:headless:install` from the intended reviewed checkout. Do not
+  start an untracked second daemon in a shell.
+- Port 9229 is absent: the dispatcher normally relaunches Grok Bot with loopback-only
+  flags. If that fails, inspect `daemon.error.log`, confirm the user remains logged in,
+  and run the documented `open -na` command. Never bind DevTools to a LAN address.
+- `probe` reports a missing worker: restore or rename the durable Grok Bot agents so the
+  roster is exactly `24 Histories Glossary 24` through `35`. Do not reduce the expected
+  roster or silently dispatch fewer workers.
+- Repeated prompts but no completed work: inspect the affected bot's last report and
+  `people:queue:status`. Fix client/bootstrap, authentication, queue, or validation errors
+  at their source. Do not use `--force`, delete cooldown state, or make empty claims.
 - Local health fails: inspect `server.log`, check Node 22+, `gh auth status`, secret file
   presence/modes, and the runtime clone. The launcher fails loudly on missing state.
 - Local health works but public health fails: inspect `tunnel.log`, run
@@ -450,9 +537,12 @@ SHA-256, scoped validation, and shared-queue transition.
 Before committing or deploying connector changes:
 
 ```bash
+npm run people:grokbot:headless:self-test
 npm run people:grokbot:mcp:self-test
 npm run people:queue:self-test
 zsh -n scripts/run-grokbot-mcp-local.sh
+node --check scripts/grokbot-headless-dispatch.mjs
+node --check scripts/install-grokbot-headless-launch-agent.mjs
 node --check scripts/grokbot-mcp-server.mjs
 node --check scripts/grokbot-mcp-client.mjs
 node --check scripts/create-grokbot-mcp-bootstrap.mjs
