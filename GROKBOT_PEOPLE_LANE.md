@@ -75,6 +75,18 @@ The complete host setup, Grok Bot installation, operating, upgrade, recovery, an
 credential-rotation runbook is in [`GROKBOT_MCP_OPERATIONS.md`](GROKBOT_MCP_OPERATIONS.md).
 Use that runbook when provisioning a new machine or handing the lane to another agent.
 
+For unattended inference on the local Mac, use the loopback-only headless dispatcher
+documented there. It controls Grok Bot 0.61.0+'s own authenticated renderer through
+stable local agent IDs and keeps the twelve durable workers `grokbot-24` through
+`grokbot-35` occupied; the MCP bridge remains the sealed queue, validation, and
+publication data plane.
+
+Do not assume one successful bootstrap covers the whole roster. Each durable Grok Bot
+can own a separate persistent computer. Bootstrap each stable worker once, verify
+`24histories-people status --worker grokbot-NN`, and preserve that computer. A worker
+that reports the connector missing must stop before claiming; provision that worker
+rather than silently falling back to browser or terminal Git.
+
 The Grok Bot MCP bridge replaces terminal, clone, and attachment handling inside the
 Bot. It does not call the xAI API: Grok Bot still performs inference against its own
 Cursor-provided Grok Bot allowance, while the connector performs only deterministic
