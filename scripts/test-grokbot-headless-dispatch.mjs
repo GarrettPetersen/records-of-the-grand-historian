@@ -56,7 +56,7 @@ test('campaign prompt binds the worker and MCP workflow', () => {
   const prompt = workerPrompt('grokbot-31');
   assert.match(prompt, /resume_or_claim/u);
   assert.match(prompt, /grokbot-31/u);
-  assert.match(prompt, /submit_chunk/u);
-  assert.match(prompt, /finalize_chapter/u);
+  assert.match(prompt, /submit-chunk/u);
+  assert.match(prompt, /24histories-people finalize/u);
   assert.match(prompt, /not Cursor SDK/u);
 });
