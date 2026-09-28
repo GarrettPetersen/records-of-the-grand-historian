@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "songshu",
+  "chapter": "070",
+  "candidateCommit": "3cf4270e1bfeb22dc82e3da38acbb243268309cc",
+  "candidateFile": "staged-candidate-current-cc1371428e78c14aff19.json",
+  "sealedCandidateHash": "sha256:cc1371428e78c14aff191bd5e5ecebc4a3d9e76ee13b40050e83168376459529",
+  "candidateExtractionHash": "sha256:8617a3fb0f86578d4026e7b45205c5f64b12f68490a94f77e80f3a7bf805ace6",
+  "reviewer": {
+    "name": "Codex independent Songshu 070 current date-repair reviewer",
+    "agentId": "review_songshu070_current_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T00:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted conditionally for host curation. The current canonical source and extraction pins match the fresh audit. The sealed 52-operation proposal replays byte-for-byte: 26 unsupported Western personal chronology containers and their 26 paired active-date hints are replaced with source-specific research holds. Every repaired claim's cited Chinese passage occurs in the pinned source; the proposal changes no non-date claim field, invents no chronology, and leaves compact extraction validation and chronology geometry clean.",
+  "validation": {
+    "canonicalInputs": "PASS: source sha256:344cc525a4563b59d041e0e92d14987138e916293d7a79eb5e1058471732deb8 and extraction sha256:9e052c487576f4b00d63ad66eed79182d5a0cf67c373b19e2411157f977ea442 match the fresh audit and handoff.",
+    "sealedIdentity": "PASS: sealed proposal sha256:cc1371428e78c14aff191bd5e5ecebc4a3d9e76ee13b40050e83168376459529 and candidate bytes sha256:8617a3fb0f86578d4026e7b45205c5f64b12f68490a94f77e80f3a7bf805ace6 match the handoff.",
+    "proposalReplay": "PASS: exact replay equals the sealed candidate.",
+    "coverage": "PASS: 52/52 current audit targets (26 claims and 26 paired hints), with no extra targets.",
+    "sourceReview": "PASS: all 26 date-container replacements are tied to their quoted Chinese source passages; the biography context, descendant notices, and literary allusions do not establish the removed full Western personal intervals.",
+    "nonDateRetention": "PASS: every changed claim differs only in permitted chronology/hold fields; people, names, mentions, relationships, predicates, evidence, certainty, and non-date values are retained.",
+    "compactValidation": "PASS: 127 units, 41 people, 191 mentions, 315 claims, 5 translation repairs, and 73 dispositions.",
+    "chronologyGeometry": "PASS: no diagnostics.",
+    "canonicalMutation": "NONE: this review records an artifact only."
+  },
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction still match the sealed pins.",
+    "Replay all 52 operations exactly; do not alter non-date extraction content.",
+    "Archive the superseded needs-revision report and run a fresh, independent full canonical audit after curation.",
+    "Do not treat this conditional acceptance as date approval; retained research holds require the fresh audit to remain research-blocked unless separately resolved."
+  ]
+}
