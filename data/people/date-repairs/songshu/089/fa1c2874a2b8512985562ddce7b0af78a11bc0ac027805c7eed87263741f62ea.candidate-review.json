@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "songshu",
+  "chapter": "089",
+  "candidateCommit": "47d9d86a0c90acc525420705bd86306d9e5a68cc",
+  "candidateFile": "staged-candidate-fa1c2874a2b851298556.json",
+  "sealedCandidateHash": "sha256:fa1c2874a2b8512985562ddce7b0af78a11bc0ac027805c7eed87263741f62ea",
+  "candidateHash": "sha256:ae758c3facfc66bf8f199c0adc13c2bcce9f3eede90b9e281dbc1ba0f82b1205",
+  "reviewer": {
+    "name": "Codex independent Songshu 089 second-candidate reviewer",
+    "agentId": "review_songshu089_second_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T17:25:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted against the sealed historical pins. All 51 candidate operations replay byte-for-byte, repair exactly the 51 still-defective temporal claims and paired hints identified by the fresh audit, retain each claim's non-date content, and add no Western chronology. The separate claim-222/claim-223 and p021/p022 Yang Xiong/Yan Zun research holds are unchanged. This receipt authorizes curation only when the pinned source and extraction hashes still match; it is not a date-audit approval.",
+  "validation": {
+    "canonicalSourceHash": "sha256:58e0bc74286027728dee42c25f486961fec081f2c5434e189cd98c33c7eb4c27",
+    "canonicalExtractionHash": "sha256:e3d2890612a46325e2079f7124be73231012d653d6a2167b9f74ccd05836aede",
+    "proposalReplay": "PASS: 51 operations replay byte-for-byte to sha256:ae758c3facfc66bf8f199c0adc13c2bcce9f3eede90b9e281dbc1ba0f82b1205.",
+    "coverage": "PASS: all 23 audit-listed defective claims and 28 paired hints are repaired exactly once; no extra target was changed. claim-222, claim-223, hints-p021 and hints-p022 are preserved holds, not repair omissions.",
+    "sourceSoundness": "PASS: the checked Chinese units establish genealogy/kinship, literary comparison, succession narrative, retrospective example, or mourning context, not the imported personal Western dates or broad life ranges. Directly supported AD 455, AD 472, AD 473, and AD 477 hints remain narrowed to their independent event claims.",
+    "nonDateRetention": "PASS: every replace operation changes only temporal/unresolved container fields; names, people, claim kind, predicate, source units, and other non-date values are byte-identical. Hint operations change only active-date summaries.",
+    "holdRetention": "PASS: candidate preserves claim-222 and claim-223 unresolved sourceDate claims and the p021/p022 research-required hints unchanged.",
+    "compactValidation": "PASS: 121 units, 57 people, 333 mentions, 427 claims, 205 dispositions, zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: zero diagnostics.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only when both pinned canonical source and extraction hashes match exactly; otherwise reject as stale and prepare a new sealed candidate.",
+    "Replay all 51 operations exactly and rerun scoped validation and chronology geometry checks.",
+    "Preserve claim-222, claim-223, hints-p021 and hints-p022 as research holds.",
+    "Do not alter canonical audit status during curation; require a fresh independent complete audit afterward."
+  ]
+}
