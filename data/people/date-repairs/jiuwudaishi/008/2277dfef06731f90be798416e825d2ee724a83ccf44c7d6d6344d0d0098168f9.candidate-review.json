@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "008",
+  "candidateCommit": "1714e36e5c7af232ca26c7763a54d1dc75ae9cc6",
+  "candidateFile": "staged-candidate-2277dfef06731f90be79.json",
+  "sourceHash": "sha256:7c9f7effb432abc80505993ee2b0de95f66a06df1e59fc66d57f38b22142efa5",
+  "originalExtractionHash": "sha256:1972fdd99ecf47ac026213812e7b20a0eb2cd136a89b46dd1edddbb58d92c815",
+  "sealedCandidateHash": "sha256:2277dfef06731f90be798416e825d2ee724a83ccf44c7d6d6344d0d0098168f9",
+  "candidateExtractionHash": "sha256:3116ba9387aa8c20b5f8a08cffaac0c83ec7acdccc7e5fa2d68d881f86600b8e",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 008 residual posthumous-reception reviewer",
+    "agentId": "review_jiuwudaishi008_residual_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-28T22:05:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after an independent source reading, pin check, exact sealed replay, strict compact validation, and chronology-geometry review. The AD 913 s0048 order restores Zhu Youwen's office and title and orders his reburial after the AD 912 execution; it is a posthumous commemoration, not a new life-like noble-title action. Removing the duplicate unclassified noble-title claim leaves the same source evidence in the separately classified AD 913 posthumous-commemoration event, while retaining Zhu Youwen's AD 912 active-date hint and the original s0048 evidence on the death, planned burial, aliases, and reception event.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-167"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0001",
+          "quote": "乾化二年六月二日，庶人友珪弑逆，矯太祖詔，遣供奉官丁昭溥馳至東京，密令帝害博王友文。"
+        },
+        {
+          "unit": "s0048",
+          "quote": "博王宜復官爵，仍令有司擇日歸葬雲。"
+        }
+      ],
+      "reason": "s0001 fixes Zhu Youwen's killing in 乾化二年/AD 912. The AD 913 order in s0048 restores his honours and directs a later burial, which is necessarily a reception for the deceased. The candidate removes only the duplicate unclassified noble-title claim. It preserves the separately classified event-participation claim (posthumous-commemoration, receptionType posthumous, honoree, AD 913, s0048), the AD 912 hint, and all remaining s0048-backed evidence."
+    }
+  ],
+  "validation": {
+    "inputPins": "PASS: canonical source and extraction hashes match the residual-audit handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed seal is sha256:2277dfef06731f90be798416e825d2ee724a83ccf44c7d6d6344d0d0098168f9.",
+    "candidateExtractionIdentity": "PASS: isolated replay from the pinned canonical extraction hashes to sha256:3116ba9387aa8c20b5f8a08cffaac0c83ec7acdccc7e5fa2d68d881f86600b8e.",
+    "proposalReplay": "PASS: the sole remove operation replays byte-for-byte to the sealed candidate.",
+    "scope": "PASS: only claim-167 is removed; no source, people, names, mentions, aliases, roles, translations, or canonical files are mutated.",
+    "posthumousClassification": "PASS: no AD 913 p020 noble-title claim remains; exactly one p020 AD 913 s0048 posthumous-commemoration reception event remains; p020 retains AD 912 as its only active-date hint.",
+    "strictCompactValidation": "PASS: validateCompactPeopleExtraction with strictAliasDispositions=true reports 256 units, 979 candidates, 118 people, 572 mentions, 973 claims, 7 repairs, 712 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate only this sealed proposal while its source and canonical-extraction pins remain unchanged.",
+    "Remove exactly claim-167; retain the existing AD 913 s0048 posthumous-commemoration event and all other s0048 evidence.",
+    "Retain Zhu Youwen's AD 912 life hint; do not convert the AD 913 reception date into a life-date attestation.",
+    "After curation, run scoped strict validation and chronology geometry, then obtain a fresh complete independent canonical date audit before approval or any ebook-glossary gate."
+  ],
+  "publication": "staging-only"
+}
