@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "004",
+  "candidateFile": "staged-candidate-1e2a8d23dada7eb5cb64.json",
+  "sealedCandidateHash": "sha256:1e2a8d23dada7eb5cb64f86c7c4ef6ec5bc5adeb99fe1242d85148af3758f071",
+  "candidateExtractionHash": "sha256:2fdee1f588052832bb50b258689e86bf560f00c45636c33240e7510423bac8b3",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 004 staged date-repair reviewer",
+    "agentId": "review_jiuwudaishi004_date_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T21:01:42Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed-proposal replay, Chinese-source ownership review, scoped compact validation, and chronology-geometry review. Exactly six operations change claims 278, 279, 748, and 768 plus p031 and p076 active hints. The retrospective phrase 「西漢梁孝王之時」 identifies the Prince Xiao allusion at the Terrace of Song but does not prove continuous BC 168–144 activity. The Wang Jue notice records former offices and an undated killing by Wang Qiu; its separate eighth-month AD 908 posthumous honor is retained as Wang Jue's later reception, not borrowed to date either the offices or Wang Qiu's activity. Claim-748 therefore retains its source text and substantive research hold, while claim-768 remains an undated source attestation.",
+  "validation": {
+    "canonicalSourceHash": "sha256:f4438a13db20ee135318bccf20187b69c83a0002e9617e13e011202b79727820",
+    "canonicalExtractionHash": "sha256:515a6784f23b09716e1b88857856c48d9538ebdf822fbbcba021526d94599417",
+    "proposalReplay": "PASS: the sealed proposal reproduces sha256:2fdee1f588052832bb50b258689e86bf560f00c45636c33240e7510423bac8b3 byte-for-byte.",
+    "coverage": "PASS: claim-278, claim-279, hints-p031, claim-748, claim-768, and hints-p076 are each changed exactly once; no other claim or hint changes.",
+    "sourceSoundness": "PASS: s0083 and s0240 support each removal of an imported personal span while retaining the source-specific fact and the distinct AD 908 reception.",
+    "nonDateRetention": "PASS: all person IDs, predicates, actions, roles, places, evidence units, certainty values, and Wang Jue's sourceDate text are retained; only chronology fields and the two paired hints change.",
+    "compactValidation": "PASS: scoped compact validation reports 253 units, 80 people, 299 mentions, and 1,235 claims with no conflict.",
+    "chronologyGeometry": "PASS: date-audit diagnostics report no geometry defect.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-278", "claim-279"],
+      "unit": "s0083",
+      "quote": "是台西漢梁孝王之時，嘗按歌閱樂於此，當時因名曰吹台。",
+      "result": "This retrospective allusion reports the named prince's music review but supplies neither a dated personal event nor evidence of activity throughout the prince's reign."
+    },
+    {
+      "claims": ["claim-748", "claim-768"],
+      "unit": "s0240",
+      "quote": "玨，故河陽將，累以軍功為郡守，主留事於襄陽，為小將王求所殺。",
+      "result": "The notice supplies Wang Jue's former offices and the killing by Wang Qiu, but no calendar date for either; it cannot inherit the distinct later honor's date."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only against the matching pinned canonical source and extraction hashes.",
+    "Replay all six reviewed operations exactly and rerun scoped compact validation and chronology geometry.",
+    "Preserve Wang Jue's AD 908 posthumous reception separately; do not assign it to Wang Qiu or the undated killing.",
+    "Require a fresh independent canonical audit after curation."
+  ]
+}
