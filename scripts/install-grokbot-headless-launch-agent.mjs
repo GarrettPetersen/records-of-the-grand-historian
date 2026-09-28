@@ -8,6 +8,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const LABEL = 'com.24histories.grokbot-headless';
+const MAX_ACTIVE_WORKERS = 12;
 
 function xml(value) {
   return value
@@ -56,7 +57,7 @@ const document = `<?xml version="1.0" encoding="UTF-8"?>
     <string>daemon</string>
     <string>--launch-app</string>
     <string>--max-active</string>
-    <string>2</string>
+    <string>${MAX_ACTIVE_WORKERS}</string>
   </array>
   <key>WorkingDirectory</key><string>${xml(repoRoot)}</string>
   <key>RunAtLoad</key><true/>
