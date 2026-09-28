@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "002",
+  "candidateCommit": "eedb293251",
+  "candidateFile": "staged-candidate-46b2bc4181c3fa550b2e.json",
+  "candidateHash": "sha256:46b2bc4181c3fa550b2ef9d0bc55351024989694622939ad7fdf3620efe206bb",
+  "reviewer": {
+    "name": "Codex independent Hanshu 002 corrected omitted-annal-events reviewer",
+    "agentId": "review_hanshu002_corrected_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T19:40:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted. All 41 dated event additions cover the fresh audit's 22 affected people: 35 life attestations and 6 separately classified posthumous-reference reception events, plus exactly 16 associated active-date-hint updates. Source review confirms the corrected BC 199 s0170 ownership: s0150 identifies 韓王信 at 馬邑, s0151 continues the imperial campaign against 韓王信 at 銅鞮, and s0170's abbreviated 韓信 refers to that same remaining force at 東垣. Thus BC 199 belongs to p018 (Han Wang Xin), not p003 (the former Qi/Chu king Han Xin). p003 retains only its independently evidenced BC 202 and BC 201 events; p018 alone gains BC 199. The s0205 and s0311 decrees remain reception events and add no life-date hint.",
+  "validation": {
+    "canonicalInputs": "PASS: candidate source hash sha256:41e196f43c5d9afe495e9ca19047067c5522a40f07a816694dfd144f22b0c695 and canonical extraction hash sha256:54bc9dd26885a0c0302e1d0a90b6c8497ae1a1d6697ea4d8b9419da5c4649c58 match the pinned proposal.",
+    "proposalReplay": "PASS: independently replayed proposal and sealed hash to candidate extraction sha256:96428b486e35b4a664d8db47a3381f31d15a8aa1a62725ad079a8b11d06ad133.",
+    "coverage": "PASS: reviewed all 41 event operations against the 22 original omitted-event findings—35 attestation additions for p001, p002, p003, p004, p007, p009, p015, p018, p020, p021, p023, p024, p030, p040, p053 and p072; and six reception events for p044 and p075–p079. All 16 and only 16 active-hint changes correspond to persons with living annal attestations.",
+    "sourceChecks": "PASS: source date wording and year-level BC conversion were checked across every cited event/context unit. s0001/s0014/s0017/s0046/s0095/s0096/s0106/s0109/s0126/s0150/s0151/s0161/s0163/s0169/s0170/s0194/s0201/s0205/s0206/s0231/s0273/s0281/s0311/s0323/s0340/s0348 support the listed annal events. The exact s0170 text is 八年冬，上東擊韓信餘寇於東垣; s0150–s0151 make its owner Han Wang Xin (p018), not p003. s0205's 太上皇廟 decree and s0311's decree naming five deceased rulers are correctly retained as posthumous-reference event participation rather than life activity.",
+    "ownership": "PASS: p003 has no BC 199 s0170 attestation or BC 199 active hint; p018 has the sole s0170 attestation with s0150/s0151 contextual evidence and the sole BC 199 active hint.",
+    "nonDateRetention": "PASS: proposal is limited to temporal claims, classified reception events, and active hints; it makes no canonical mutation and alters no persons, names, mentions, relations, translation text, or non-temporal claims.",
+    "compactValidation": "PASS: stage replay's compact validation reports 379 units, 95 people, 745 mentions, 431 claims, 12 repairs and 693 dispositions; scoped people validator passed for hanshu/002.",
+    "chronologyGeometry": "PASS: independent dateAuditDiagnostics(dateAuditItems(candidate)) returned no geometry diagnostics.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all 57 operations exactly: 41 event operations and 16 active-hint operations.",
+    "Keep s0170 BC 199 solely with p018 Han Wang Xin, using s0150–s0151–s0170 context; do not restore it to p003 Han Xin or p003's active-date hint.",
+    "Keep p044 and p075–p079 as posthumous-reference reception events without living attestation or active-date hints.",
+    "Do not alter canonical audit status during curation; require a fresh independent full canonical audit after application."
+  ]
+}
