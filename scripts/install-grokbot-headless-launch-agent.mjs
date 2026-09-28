@@ -55,6 +55,8 @@ const document = `<?xml version="1.0" encoding="UTF-8"?>
     <string>${xml(dispatcher)}</string>
     <string>daemon</string>
     <string>--launch-app</string>
+    <string>--max-active</string>
+    <string>2</string>
   </array>
   <key>WorkingDirectory</key><string>${xml(repoRoot)}</string>
   <key>RunAtLoad</key><true/>
