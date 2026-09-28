@@ -8,6 +8,7 @@ import {
   rosterWorkersFromDocuments,
   workerPrompt,
   workersEligibleForDispatch,
+  workersToDispatch,
 } from './grokbot-headless-dispatch.mjs';
 
 function rosterRows() {
@@ -51,6 +52,18 @@ test('idle selection respects running state and cooldown', () => {
   assert.equal(eligible.some((row) => row.worker === 'grokbot-25'), false);
   assert.equal(eligible.some((row) => row.worker === 'grokbot-26'), false);
   assert.equal(eligible.some((row) => row.worker === 'grokbot-27'), true);
+});
+
+test('active-worker ceiling prevents a new dispatch burst after partial completion', () => {
+  const workers = rosterWorkersFromDocuments([{ value: { rows: rosterRows() } }]);
+  const selected = workersToDispatch(workers, { workers: {} }, {
+    force: false,
+    cooldownMs: 0,
+    maxActive: 2,
+    now: 10_000,
+  });
+  // Worker 24 is already running, so the two-worker cap leaves one slot only.
+  assert.deepEqual(selected.map((worker) => worker.worker), ['grokbot-25']);
 });
 
 test('recognizes the visible weekly-capacity alert before prompting more workers', () => {

@@ -10,6 +10,7 @@ import { pathToFileURL } from 'node:url';
 const DEFAULT_CDP_URL = 'http://127.0.0.1:9229';
 const DEFAULT_INTERVAL_MS = 2 * 60 * 1000;
 const DEFAULT_COOLDOWN_MS = 10 * 60 * 1000;
+const DEFAULT_MAX_ACTIVE = 12;
 const FIRST_WORKER = 24;
 const LAST_WORKER = 35;
 const WORKER_NAME_PREFIX = '24 Histories Glossary ';
@@ -24,6 +25,7 @@ Options:
   --cdp-url URL       Loopback Chrome DevTools endpoint (default: ${DEFAULT_CDP_URL})
   --interval-ms N     Daemon polling interval (default: ${DEFAULT_INTERVAL_MS})
   --cooldown-ms N     Minimum time between prompts to one idle worker (default: ${DEFAULT_COOLDOWN_MS})
+  --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
   --force             Dispatch even when the cached roster says a worker is running
   --launch-app        Start Grok Bot with the loopback endpoint when it is unavailable
 
@@ -43,6 +45,7 @@ export function parseArgs(argv) {
     cdpUrl: DEFAULT_CDP_URL,
     intervalMs: DEFAULT_INTERVAL_MS,
     cooldownMs: DEFAULT_COOLDOWN_MS,
+    maxActive: DEFAULT_MAX_ACTIVE,
     force: false,
     launchApp: false,
   };
@@ -56,6 +59,7 @@ export function parseArgs(argv) {
     if (arg === '--cdp-url') options.cdpUrl = next();
     else if (arg === '--interval-ms') options.intervalMs = positiveInteger(next(), arg);
     else if (arg === '--cooldown-ms') options.cooldownMs = positiveInteger(next(), arg);
+    else if (arg === '--max-active') options.maxActive = positiveInteger(next(), arg);
     else if (arg === '--force') options.force = true;
     else if (arg === '--launch-app') options.launchApp = true;
     else if (arg === '--help' || arg === '-h') options.command = 'help';
@@ -415,6 +419,12 @@ export function workersEligibleForDispatch(workers, state, { force, cooldownMs, 
   });
 }
 
+export function workersToDispatch(workers, state, options) {
+  const running = workers.filter((worker) => worker.isRunning).length;
+  const availableSlots = Math.max(0, options.maxActive - running);
+  return workersEligibleForDispatch(workers, state, options).slice(0, availableSlots);
+}
+
 async function dispatchCycle(options) {
   await ensureGrokBot(options);
   await probe(options.cdpUrl);
@@ -426,8 +436,8 @@ async function dispatchCycle(options) {
   );
   const state = readState();
   state.workers ??= {};
-  const eligible = workersEligibleForDispatch(workers, state, options);
-  for (const worker of eligible) {
+  const dispatchable = workersToDispatch(workers, state, options);
+  for (const worker of dispatchable) {
     await dispatchPrompt(options.cdpUrl, worker, workerPrompt(worker.worker));
     state.workers[worker.worker] = {
       agentId: worker.id,
@@ -437,8 +447,8 @@ async function dispatchCycle(options) {
     writeState(state);
     console.log(`Dispatched ${worker.worker} (${worker.id})`);
   }
-  console.log(`Cycle complete: dispatched=${eligible.length}, running=${workers.filter((row) => row.isRunning).length}`);
-  return { workers, eligible };
+  console.log(`Cycle complete: dispatched=${dispatchable.length}, running=${workers.filter((row) => row.isRunning).length}, maxActive=${options.maxActive}`);
+  return { workers, eligible: dispatchable };
 }
 
 async function daemon(options) {
