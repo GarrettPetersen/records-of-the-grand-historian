@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "011",
+  "candidateCommit": "06c367fe4f3db21fd74abe9b081d54299e931984",
+  "candidateFile": "staged-candidate-242cacb5f32328946d38.json",
+  "sourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+  "originalExtractionHash": "sha256:57ff699afdc17fe4cc4b3d31a3177078dd304f1393d61bbc0db402396150b544",
+  "sealedCandidateHash": "sha256:242cacb5f32328946d38fe9cee0f0ec2bbaa0d17175ef40fdf213ab1dbc0a7da",
+  "candidateExtractionHash": "sha256:45a32db209baba5559763efc1fddfbf9dee13af54b77101e326b07d3bd838d09",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 011 An Chongruan residual date-repair reviewer",
+    "agentId": "review_jiuwudaishi011_an_chongruan_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-28T23:13:16Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. The single sealed operation correctly changes only claim-156: s0048 expressly says that in Jin Tianfu 3 An Chongruan was dispatched with the consort to bury the Last Emperor's released head. This is an AD 938 discrete personal assignment, not a birth/death or lifespan inference. The candidate retains p023's sole AD 938 hint and leaves the Last Emperor's distinct posthumous burial reception and the existing Zhu Wen/princess external-primary safeguards untouched.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-156"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0048",
+          "quote": "晉天福三年，詔太社先藏罪人首級，許親屬收葬，乃出末帝首，遣右衛將軍安崇阮與妃同葬。",
+          "translation": "In Tianfu 3 of Jin, the order allowed relatives to reclaim stored criminals' heads for burial; the Last Emperor's head was released, and Right Palace Guard General An Chongruan was dispatched with the consort to bury it."
+        }
+      ],
+      "reason": "The named dispatch is a dated action by An Chongruan in the unit. It supports one AD 938 attestation only; it supplies no endpoint or interval for his life."
+    }
+  ],
+  "validation": {
+    "inputPins": "PASS: candidate source and canonical-extraction hashes match the residual-audit pins.",
+    "sealedProposalIdentity": "PASS: sealed candidate hash is sha256:242cacb5f32328946d38fe9cee0f0ec2bbaa0d17175ef40fdf213ab1dbc0a7da.",
+    "candidateExtractionIdentity": "PASS: replayed candidate hashes to sha256:45a32db209baba5559763efc1fddfbf9dee13af54b77101e326b07d3bd838d09.",
+    "proposalReplay": "PASS: exact one-operation replay; only claim-156 changes.",
+    "strictCompactValidation": "PASS: strict alias-disposition validation reports 57 units, 206 candidates, 34 people, 177 mentions, 347 claims, one repair, 89 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 011.",
+    "p023Hint": "PASS: p023 retains exactly [AD 938].",
+    "scopeIntegrity": "PASS: candidate commit changes only two candidate artefacts and its staging script; candidate versus canonical changes only claim-156. No source, canonical extraction, model, external-primary dossier, or publication output changed.",
+    "posthumousAndExternalSafeguards": "PASS: Last Emperor's AD 938 burial reception remains separate; Zhu Wen and princess external-primary/research-hold structures are unchanged.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate only this sealed claim-156 replacement while the source and canonical-extraction pins remain unchanged.",
+    "Keep p023's hint exactly AD 938 without adding a lifespan interval.",
+    "Keep the Last Emperor's AD 938 posthumous burial reception distinct from An Chongruan's assignment.",
+    "Do not alter the Zhu Wen or princess external-primary safeguards and research holds.",
+    "After curation obtain a fresh complete independent canonical date audit before approval."
+  ],
+  "publication": "staging-only; candidate remains subject to separate host curation and a fresh independent canonical date audit"
+}

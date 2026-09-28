@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-date-source-research",
+  "book": "jiuwudaishi",
+  "chapter": "011",
+  "canonicalAuditCommit": "6b5edf1bc9202b05079ace7ee9f6b2bb3866e588",
+  "researchedAt": "2026-09-28",
+  "researcher": "Independent source-research lane",
+  "scope": [
+    "p002 Zhu Wen",
+    "p026 Princess Changle",
+    "p028 Princess Puning"
+  ],
+  "method": "Read the final canonical audit, the complete local source units s0001-s0060, and independently located primary-text witnesses. This dossier does not change canonical extraction, source, model, publication, or audit status.",
+  "sources": [
+    {
+      "id": "jwd-001-birth",
+      "sourceType": "external-primary",
+      "work": "Jiu Wudai Shi 舊五代史, juan 1, Liang Taizu ji 梁太祖紀",
+      "url": "https://zh.wikisource.org/wiki/%E8%88%8A%E4%BA%94%E4%BB%A3%E5%8F%B2/%E5%8D%B71",
+      "quotation": "以唐大中六年嵗在壬申，十月二十一日夜，生于碭山縣午溝里。",
+      "finding": "This is a direct birth witness for Zhu Wen. Dazhong 6 is AD 852; it supports a year-precision birth datum. No day-level Gregorian normalization is proposed here.",
+      "chronologyWitness": {
+        "kind": "birth",
+        "westernYear": { "era": "AD", "year": 852, "precision": "year" }
+      }
+    },
+    {
+      "id": "xwd-002-death",
+      "sourceType": "external-primary",
+      "work": "Xin Wudai Shi 新五代史, juan 2, Liang benji 梁本紀",
+      "url": "https://zh.wikisource.org/wiki/%E6%96%B0%E4%BA%94%E4%BB%A3%E5%8F%B2/%E5%8D%B702",
+      "quotation": "六月，疾革，郢王友珪反。……戊寅，皇帝崩。〈年六十一。〉",
+      "finding": "Under Qianhua 2 (AD 912), this is a direct death witness for Zhu Wen. It supports an AD 912 year-precision death datum. It does not make the chapter's posthumous-title notices into life events.",
+      "chronologyWitness": {
+        "kind": "death",
+        "westernYear": { "era": "AD", "year": 912, "precision": "year" }
+      }
+    },
+    {
+      "id": "wdhy-002-princesses",
+      "work": "Wudai Huiyao 五代會要, juan 2, Gongzhu 公主",
+      "url": "https://zh.wikisource.org/wiki/%E4%BA%94%E4%BB%A3%E6%9C%83%E8%A6%81/%E5%8D%B7%E4%BA%8C",
+      "quotation": "長樂公主，降趙巖，開平元年五月十一日封。普寧公主，降王昭祚，開平元年五月十一日封。",
+      "finding": "The same primary source named by local units s0052 and s0053 records each princess's own enfeoffment. Kaiping 1 is AD 907. This proves two separate year-precision personal ceremony events, not either woman's birth, death, or continuous life interval. A Siku transcription displays a conflicting and impossible '開平九年' for Changle; the local chapter and the National Library critical-text scan both read 開平元年, so the latter is the witness used here.",
+      "corroboratingUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/NLC892-412000002888-65653_%E8%88%8A%E4%BA%94%E4%BB%A3%E5%8F%B2%E8%80%83%E7%95%B0_%E7%AC%AC1%E5%86%8A.pdf"
+    },
+    {
+      "id": "jwd-062-puning-survival",
+      "work": "Jiu Wudai Shi 舊五代史, juan 62, Zhang Wenli zhuan 張文禮傳",
+      "url": "https://zh.wikisource.org/wiki/%E8%88%8A%E4%BA%94%E4%BB%A3%E5%8F%B2/%E5%8D%B762",
+      "quotation": "是夜作亂，殺王鎔父子，舉族灰滅，惟留王昭祚妻朱氏通梁人；尋間道告於梁曰：『王氏喪於亂軍，普寧公主無恙。』",
+      "finding": "The account is in the 921 rebellion context and directly identifies Puning as alive/unharmed after the killing of Wang Rong and Wang Zhaozuo. It supports a discrete AD 921 survival attestation only. It does not justify an AD 907-921 interval, and this chapter's date-repair interface cannot add a new external-source event claim."
+    }
+  ],
+  "findings": [
+    {
+      "personId": "p002",
+      "person": "Zhu Wen 朱溫",
+      "heldItems": ["claim-14", "claim-15", "hints-p002", "p002"],
+      "conclusion": "Resolved by independent primary evidence: AD 852 birth and AD 912 death. The two retained source-specific attestations in s0001 and s0028 are about other people receiving posthumous titles; they are not Zhu Wen life events and should not remain as unresolved temporal claims merely to preserve a relationship/title context already carried by non-temporal claims.",
+      "recommendedMinimalOperations": [
+        {
+          "kind": "remove",
+          "id": "claim-14",
+          "reason": "Remove the duplicate non-life attestation for Wang's posthumous title. Do not relabel its Kaiping date as Zhu Wen activity."
+        },
+        {
+          "kind": "remove",
+          "id": "claim-15",
+          "reason": "Remove the duplicate non-life attestation for Empress Zhang's posthumous title. Do not relabel its Qianhua date as Zhu Wen activity."
+        },
+        {
+          "kind": "hints",
+          "personId": "p002",
+          "after": ["AD 852-912 (external primary birth and death witnesses; no chapter reception date treated as life activity)"],
+          "reason": "A bounded life summary is independently supported by the two cited dynastic histories."
+        }
+      ]
+    },
+    {
+      "personId": "p026",
+      "person": "Princess Changle 長樂公主",
+      "heldItems": ["claim-170", "hints-p026", "p026"],
+      "conclusion": "Resolved narrowly: the already retained honor claim-173 is an event of this person's own enfeoffment in AD 907. No external evidence found here establishes birth, death, or a continuous activity interval, and none should be inferred.",
+      "recommendedMinimalOperations": [
+        {
+          "kind": "remove",
+          "id": "claim-170",
+          "reason": "It duplicates claim-173's same personal ceremony while incorrectly retaining an unresolved research hold. The source fact remains represented by claim-173."
+        },
+        {
+          "kind": "hints",
+          "personId": "p026",
+          "after": ["AD 907 (enfeoffment only; no life-wide interval inferred)"],
+          "reason": "Expose only the already source-attested personal ceremony date."
+        }
+      ]
+    },
+    {
+      "personId": "p028",
+      "person": "Princess Puning 普寧公主",
+      "heldItems": ["claim-178", "hints-p028", "p028"],
+      "conclusion": "Resolved narrowly for the chapter claim: the already retained honor claim-181 is her own AD 907 enfeoffment. The independent 921 primary witness establishes survival at a later discrete point, but must not be converted to a continuous AD 907-921 life interval or silently added as a chapter-source event.",
+      "recommendedMinimalOperations": [
+        {
+          "kind": "remove",
+          "id": "claim-178",
+          "reason": "It duplicates claim-181's same personal ceremony while incorrectly retaining an unresolved research hold. The source fact remains represented by claim-181."
+        },
+        {
+          "kind": "hints",
+          "personId": "p028",
+          "after": ["AD 907 (enfeoffment only; no life-wide interval inferred)"],
+          "reason": "Keep the candidate scoped to this chapter's actual claim. Preserve the AD 921 external survival witness in this dossier unless a separately sourced event claim is introduced through an authorized non-date-extraction workflow."
+        }
+      ]
+    }
+  ],
+  "nonFindingsAndLimits": [
+    "No source found in this limited research establishes a birth or death date for Princess Changle.",
+    "No source found in this limited research establishes a birth or death date for Princess Puning.",
+    "The AD 921 Puning witness is survival evidence, not a continuous activity range and not evidence about Changle.",
+    "No Western month/day is proposed; all recommended chronology is year precision.",
+    "This dossier is evidence for a future candidate and independent review, not approval. A fresh full canonical audit remains required after any curation."
+  ]
+}

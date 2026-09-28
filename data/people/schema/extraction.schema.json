@@ -132,7 +132,11 @@
             "nativePlaces": { "type": "array", "items": { "type": "string" } },
             "relatedLocalPeople": { "type": "array", "items": { "type": "string" } },
             "activeDateHints": { "type": "array", "items": { "type": "string" } },
-            "polityHints": { "type": "array", "items": { "type": "string" } }
+            "polityHints": { "type": "array", "items": { "type": "string" } },
+            "externalPrimaryChronology": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/externalPrimaryChronology" }
+            }
           }
         },
         "mentionException": { "type": ["string", "null"], "minLength": 1 }
@@ -338,6 +342,70 @@
             }
           }
         }
+      }
+    },
+    "externalPrimaryChronology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "hint", "bounds", "sourceResearch", "witnesses"],
+      "properties": {
+        "kind": { "const": "bounded-life" },
+        "hint": { "type": "string", "minLength": 20 },
+        "bounds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "$ref": "#/$defs/westernYear" },
+            "end": { "$ref": "#/$defs/westernYear" }
+          }
+        },
+        "sourceResearch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "hash", "sourceIds"],
+          "properties": {
+            "path": { "type": "string", "pattern": "^data/people/date-repairs/[a-z0-9_-]+/[0-9]{3}/[^/]+\\.json$" },
+            "hash": { "$ref": "#/$defs/digest" },
+            "sourceIds": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 3 }
+            }
+          }
+        },
+        "witnesses": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["sourceType", "sourceId", "kind", "work", "citation", "url", "quotation", "westernYear"],
+            "properties": {
+              "sourceType": { "const": "external-primary" },
+              "sourceId": { "type": "string", "minLength": 3 },
+              "kind": { "enum": ["birth", "death"] },
+              "work": { "type": "string", "minLength": 3 },
+              "citation": { "type": "string", "minLength": 3 },
+              "url": { "type": "string", "pattern": "^https://" },
+              "quotation": { "type": "string", "minLength": 3 },
+              "westernYear": { "$ref": "#/$defs/westernYear" }
+            }
+          }
+        }
+      }
+    },
+    "westernYear": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["era", "year", "precision"],
+      "properties": {
+        "era": { "enum": ["BC", "AD"] },
+        "year": { "type": "integer", "minimum": 1 },
+        "precision": { "enum": ["year", "circa"] }
       }
     }
   }

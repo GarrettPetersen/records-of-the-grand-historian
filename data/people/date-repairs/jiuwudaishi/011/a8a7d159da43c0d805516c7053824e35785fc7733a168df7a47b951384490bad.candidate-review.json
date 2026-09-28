@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "011",
+  "candidateCommit": "550d4c1de3ecea4c7c3f406a8ccd0f99203d3b15",
+  "candidateFile": "staged-candidate-a8a7d159da43c0d80551.json",
+  "sourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+  "originalExtractionHash": "sha256:49c34802ba2dc99c1667760c0fe3e57e3bbb781d399a737005f852d810b7786c",
+  "sealedCandidateHash": "sha256:a8a7d159da43c0d805516c7053824e35785fc7733a168df7a47b951384490bad",
+  "candidateExtractionHash": "sha256:57ff699afdc17fe4cc4b3d31a3177078dd304f1393d61bbc0db402396150b544",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 011 external-primary binding reviewer",
+    "agentId": "review_jiuwudaishi011_corrected_external_binding",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-28T23:58:00Z",
+  "disposition": "accept",
+  "summary": "Accepted. The corrected candidate binds Zhu Wen's two external-primary lifecycle witnesses exactly to a SHA-256-pinned, chapter-scoped independent source-research dossier. Strict compact validation now fails closed for substituted dossier metadata and for every individual witness field, while retaining the earlier conservative ceremony and reception boundaries.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-14", "claim-15", "hints-p002", "external-primary-chronology-p002"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "sourceId": "jwd-001-birth",
+          "work": "Jiu Wudai Shi 舊五代史, juan 1, Liang Taizu ji 梁太祖紀",
+          "kind": "birth",
+          "westernYear": "AD 852"
+        },
+        {
+          "sourceId": "xwd-002-death",
+          "work": "Xin Wudai Shi 新五代史, juan 2, Liang benji 梁本紀",
+          "kind": "death",
+          "westernYear": "AD 912"
+        }
+      ],
+      "reason": "The candidate uses only the dossier's exact external-primary birth and death entries, whose identifiers, work, citation, URL, quotation, kind, and year are bound to the immutable hash. It does not reinterpret posthumous chapter material as Zhu Wen life activity."
+    },
+    {
+      "proposalItems": ["claim-170", "hints-p026", "claim-178", "hints-p028"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "units": ["s0052", "s0053"],
+          "westernYear": "AD 907",
+          "reason": "Each retained honor is that princess's own enfeoffment ceremony."
+        }
+      ],
+      "reason": "Princess Changle and Princess Puning remain ceremony-only. The candidate introduces neither a life span nor an AD 907-921 interval, and it preserves the separate AD 921 Puning survival witness only in the research dossier."
+    }
+  ],
+  "validation": {
+    "sealedProposalIdentity": "PASS: sha256:a8a7d159da43c0d805516c7053824e35785fc7733a168df7a47b951384490bad.",
+    "candidateExtractionIdentity": "PASS: sha256:57ff699afdc17fe4cc4b3d31a3177078dd304f1393d61bbc0db402396150b544.",
+    "proposalReplay": "PASS: the isolated stage script reproduced exactly eight operations and the sealed candidate hash.",
+    "strictCompactValidation": "PASS: 57 units, 206 candidates, 34 people, 177 mentions, 347 normalized claims, one repair, 89 dispositions, and zero alias conflicts.",
+    "scopedValidator": "PASS: jiuwudaishi/011.",
+    "chronologyGeometry": "PASS.",
+    "workflowSelfTest": "PASS: all 29 date-workflow tests.",
+    "externalEvidenceBinding": "PASS-FAIL-CLOSED: a foreign dossier path, a substituted dossier hash, and a substituted dossier source-ID pair each fail strict compact validation.",
+    "externalWitnessSubstitutions": "PASS-FAIL-CLOSED: each of sourceType, sourceId, kind, work, citation, URL, quotation, and westernYear was independently substituted in both birth and death witnesses; all sixteen witness substitutions failed strict compact validation.",
+    "genericValidation": "PASS: validate-people-extraction self-test passed with the binding checks; no alternate acceptance path was introduced.",
+    "ceremonyScope": "PASS: Zhu Wen is AD 852-912 by bound external primary evidence only; the princesses are AD 907 ceremony-only; no AD 921 interval, reception-to-life conversion, or new external chapter event is introduced.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "publication": "staging-only; candidate remains subject to separate host curation and a fresh independent canonical date audit"
+}
