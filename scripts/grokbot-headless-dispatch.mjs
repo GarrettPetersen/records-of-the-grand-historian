@@ -10,6 +10,7 @@ import { pathToFileURL } from 'node:url';
 const DEFAULT_CDP_URL = 'http://127.0.0.1:9229';
 const DEFAULT_INTERVAL_MS = 2 * 60 * 1000;
 const DEFAULT_COOLDOWN_MS = 10 * 60 * 1000;
+const DEFAULT_MAX_ACTIVE = 12;
 const FIRST_WORKER = 24;
 const LAST_WORKER = 35;
 const WORKER_NAME_PREFIX = '24 Histories Glossary ';
@@ -24,6 +25,7 @@ Options:
   --cdp-url URL       Loopback Chrome DevTools endpoint (default: ${DEFAULT_CDP_URL})
   --interval-ms N     Daemon polling interval (default: ${DEFAULT_INTERVAL_MS})
   --cooldown-ms N     Minimum time between prompts to one idle worker (default: ${DEFAULT_COOLDOWN_MS})
+  --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
   --force             Dispatch even when the cached roster says a worker is running
   --launch-app        Start Grok Bot with the loopback endpoint when it is unavailable
 
@@ -43,6 +45,7 @@ export function parseArgs(argv) {
     cdpUrl: DEFAULT_CDP_URL,
     intervalMs: DEFAULT_INTERVAL_MS,
     cooldownMs: DEFAULT_COOLDOWN_MS,
+    maxActive: DEFAULT_MAX_ACTIVE,
     force: false,
     launchApp: false,
   };
@@ -56,6 +59,7 @@ export function parseArgs(argv) {
     if (arg === '--cdp-url') options.cdpUrl = next();
     else if (arg === '--interval-ms') options.intervalMs = positiveInteger(next(), arg);
     else if (arg === '--cooldown-ms') options.cooldownMs = positiveInteger(next(), arg);
+    else if (arg === '--max-active') options.maxActive = positiveInteger(next(), arg);
     else if (arg === '--force') options.force = true;
     else if (arg === '--launch-app') options.launchApp = true;
     else if (arg === '--help' || arg === '-h') options.command = 'help';
@@ -162,7 +166,7 @@ function writeState(state, file = stateFile()) {
 }
 
 export function workerPrompt(worker) {
-  return `Continue the 24 Histories people-glossary campaign as stable worker ${worker}. You are authorized to use the locally installed 24histories-people client. It may read the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five 24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send that credential anywhere else. Use that client, not Cursor SDK and not terminal Git. Call resume_or_claim with worker ${worker} and no book or chapter so the central queue either resumes your exact sticky claim or assigns the next eligible chapter. Retrieve one sealed chunk at a time, complete it strictly from its supplied prompt, schema, packet, and draft, submit the entire extraction with submit_chunk, and call finalize_chapter only after every chunk is accepted. Preserve all recovery data. Do not create an untracked claim, weaken validation, git push, or substitute another inference provider. If the client, authentication, or a tool call fails, report the exact error and stop; otherwise finish the chapter and report its book/chapter, stats, SHA-256, and PR URL.`;
+  return `Continue the 24 Histories people-glossary campaign as stable worker ${worker}. You are authorized to use the locally installed 24histories-people client. It may read the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five 24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send that credential anywhere else. Use that client, not Cursor SDK and not terminal Git. Run \`24histories-people resume --worker ${worker}\` with no book or chapter; it invokes resume_or_claim so the central queue resumes your exact sticky claim or assigns the next eligible chapter. Preserve the returned claimToken. For each returned sealed chunk, run \`24histories-people get-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID\`, complete it strictly from that response's prompt, schema, packet, and draft, save the entire extraction JSON, and run \`24histories-people submit-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID --file OUTPUT_JSON\`. After every chunk is accepted, run \`24histories-people finalize --claim-token CLAIM_TOKEN\`. Preserve all recovery data. Do not create an untracked claim, weaken validation, git push, or substitute another inference provider. If the client, authentication, or a tool call fails after its built-in retries, report the exact error and stop; otherwise finish the chapter and report its book/chapter, stats, SHA-256, and PR URL.`;
 }
 
 async function fetchJson(url) {
@@ -307,6 +311,26 @@ async function liveRunningAgentIds(cdpUrl) {
   }
 }
 
+export function capacityLimitMessage(alerts) {
+  if (!Array.isArray(alerts)) throw new Error('Grok Bot capacity alerts were not an array');
+  const message = alerts
+    .map((alert) => String(alert ?? '').replace(/\s+/gu, ' ').trim())
+    .find((alert) => /(?:weekly|usage)\s+limit\s+reached/iu.test(alert));
+  return message || null;
+}
+
+async function liveCapacityLimitMessage(cdpUrl) {
+  const main = await grokBotMain(cdpUrl);
+  if (!main) throw new Error('Grok Bot main renderer is unavailable');
+  try {
+    const alerts = await main.session.evaluate(`Array.from(document.querySelectorAll('[role="alert"]'))
+      .map((node) => node.innerText || node.textContent || '')`);
+    return capacityLimitMessage(alerts);
+  } finally {
+    main.session.close();
+  }
+}
+
 export function mergeLiveWorkerState(workers, runningAgentIds) {
   return workers.map((worker) => ({
     ...worker,
@@ -395,17 +419,25 @@ export function workersEligibleForDispatch(workers, state, { force, cooldownMs, 
   });
 }
 
+export function workersToDispatch(workers, state, options) {
+  const running = workers.filter((worker) => worker.isRunning).length;
+  const availableSlots = Math.max(0, options.maxActive - running);
+  return workersEligibleForDispatch(workers, state, options).slice(0, availableSlots);
+}
+
 async function dispatchCycle(options) {
   await ensureGrokBot(options);
   await probe(options.cdpUrl);
+  const capacityMessage = await liveCapacityLimitMessage(options.cdpUrl);
+  if (capacityMessage) throw new Error(`Grok Bot capacity unavailable: ${capacityMessage}`);
   const workers = mergeLiveWorkerState(
     readRosterWorkers(),
     await liveRunningAgentIds(options.cdpUrl),
   );
   const state = readState();
   state.workers ??= {};
-  const eligible = workersEligibleForDispatch(workers, state, options);
-  for (const worker of eligible) {
+  const dispatchable = workersToDispatch(workers, state, options);
+  for (const worker of dispatchable) {
     await dispatchPrompt(options.cdpUrl, worker, workerPrompt(worker.worker));
     state.workers[worker.worker] = {
       agentId: worker.id,
@@ -415,8 +447,8 @@ async function dispatchCycle(options) {
     writeState(state);
     console.log(`Dispatched ${worker.worker} (${worker.id})`);
   }
-  console.log(`Cycle complete: dispatched=${eligible.length}, running=${workers.filter((row) => row.isRunning).length}`);
-  return { workers, eligible };
+  console.log(`Cycle complete: dispatched=${dispatchable.length}, running=${workers.filter((row) => row.isRunning).length}, maxActive=${options.maxActive}`);
+  return { workers, eligible: dispatchable };
 }
 
 async function daemon(options) {

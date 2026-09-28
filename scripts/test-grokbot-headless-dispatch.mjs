@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  capacityLimitMessage,
   parseArgs,
   mergeLiveWorkerState,
   rosterWorkersFromDocuments,
   workerPrompt,
   workersEligibleForDispatch,
+  workersToDispatch,
 } from './grokbot-headless-dispatch.mjs';
 
 function rosterRows() {
@@ -52,11 +54,32 @@ test('idle selection respects running state and cooldown', () => {
   assert.equal(eligible.some((row) => row.worker === 'grokbot-27'), true);
 });
 
+test('active-worker ceiling prevents a new dispatch burst after partial completion', () => {
+  const workers = rosterWorkersFromDocuments([{ value: { rows: rosterRows() } }]);
+  const selected = workersToDispatch(workers, { workers: {} }, {
+    force: false,
+    cooldownMs: 0,
+    maxActive: 2,
+    now: 10_000,
+  });
+  // Worker 24 is already running, so the two-worker cap leaves one slot only.
+  assert.deepEqual(selected.map((worker) => worker.worker), ['grokbot-25']);
+});
+
+test('recognizes the visible weekly-capacity alert before prompting more workers', () => {
+  assert.equal(
+    capacityLimitMessage(['Weekly usage limit reached. It resets in 1 day.']),
+    'Weekly usage limit reached. It resets in 1 day.',
+  );
+  assert.equal(capacityLimitMessage(['You’re at 90% of your weekly usage limit.']), null);
+  assert.equal(capacityLimitMessage([]), null);
+});
+
 test('campaign prompt binds the worker and MCP workflow', () => {
   const prompt = workerPrompt('grokbot-31');
   assert.match(prompt, /resume_or_claim/u);
   assert.match(prompt, /grokbot-31/u);
-  assert.match(prompt, /submit_chunk/u);
-  assert.match(prompt, /finalize_chapter/u);
+  assert.match(prompt, /submit-chunk/u);
+  assert.match(prompt, /24histories-people finalize/u);
   assert.match(prompt, /not Cursor SDK/u);
 });
