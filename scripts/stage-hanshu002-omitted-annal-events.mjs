@@ -32,7 +32,9 @@ const events = [
   ['p001', 's0340', '三月至四月', 195, ['s0323', 's0340', 's0348']],
   ['p002', 's0001', '五年冬十月', 202], ['p002', 's0017', '十二月', 202, ['s0001', 's0017']],
   ['p003', 's0001', '五年冬十月', 202], ['p003', 's0109', '六年十二月', 201, ['s0106', 's0109']],
-  ['p003', 's0170', '八年冬', 199], ['p004', 's0001', '五年冬十月', 202],
+  // s0150–s0151 establish that the abbreviated 韓信 in s0170 is Han Wang
+  // Xin, not the former Qi/Chu king Han Xin.
+  ['p018', 's0170', '八年冬', 199, ['s0150', 's0151', 's0170'], 'The s0170 references to 韓信 continue the Han Wang Xin campaign established by s0150–s0151; they attest p018, not the former Qi/Chu king p003.'], ['p004', 's0001', '五年冬十月', 202],
   ['p007', 's0014', '十一月', 202, ['s0001', 's0014']], ['p007', 's0126', '春正月丙午', 200],
   ['p015', 's0046', '二月甲午', 202, ['s0029', 's0046']], ['p023', 's0046', '二月甲午', 202, ['s0029', 's0046']],
   ['p021', 's0095', '秋七月', 202], ['p021', 's0096', '九月', 202],
@@ -60,13 +62,13 @@ const chronology = (date, year) => ({
   sourceDate: { text: date },
   westernYear: { era: 'BC', year, precision: 'year' },
 });
-const changes = events.map(([personId, unit, date, year, evidence = [unit]]) => ({
+const changes = events.map(([personId, unit, date, year, evidence = [unit], reason]) => ({
   kind: 'add',
   after: [personId, 'attestation', {
     ...chronology(date, year),
     event: 'Explicitly dated annal event naming this person; the Western conversion is retained at year precision only.',
   }, 'explicit', evidence],
-  reason: findingFor(personId).problem,
+  reason: reason ?? findingFor(personId).problem,
 }));
 
 for (const [personId, unit, date, year] of receptions) {
