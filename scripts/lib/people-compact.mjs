@@ -134,6 +134,7 @@ export function compactPeopleExtraction(extraction, packet) {
         r: person.identityHints.relatedLocalPeople.map((value) => shortLocalId(value, namespace)),
         a: person.identityHints.activeDateHints,
         p: person.identityHints.polityHints ?? [],
+        e: person.identityHints.externalPrimaryChronology ?? [],
         x: person.mentionException ?? null,
       },
       names,
@@ -195,6 +196,7 @@ function expandPeople(compact, namespace) {
       relatedLocalPeople: hints.r.map((value) => `${namespace}:${value}`),
       activeDateHints: hints.a,
       ...(hints.p.length > 0 ? { polityHints: hints.p } : {}),
+      ...(hints.e?.length > 0 ? { externalPrimaryChronology: hints.e } : {}),
     },
     ...(hints.x !== null ? { mentionException: hints.x } : {}),
   }));

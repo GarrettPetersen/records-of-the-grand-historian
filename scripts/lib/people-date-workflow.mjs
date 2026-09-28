@@ -234,6 +234,16 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       const receptionOnly = change.after?.length === 0 && candidate.claims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
       if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
       person[4] = { ...person[4], a: change.after };
+    } else if (change.kind === 'external-primary-chronology') {
+      const key = `external-primary-chronology-${change.personId}`;
+      if (seen.has(key)) throw new Error('Duplicate external-primary chronology repair target');
+      seen.add(key);
+      const person = candidate.people.find(p => p[0] === change.personId);
+      if (!person || !Array.isArray(change.after) || !same(person[4]?.e ?? [], change.before ?? []) ||
+          change.after.some(entry => !person[4]?.a?.includes(entry?.hint))) {
+        throw new Error('Invalid or stale external-primary chronology repair');
+      }
+      person[4] = { ...person[4], e: change.after };
     } else if (change.kind === 'replace' || change.kind === 'remove' || change.kind === 'date-context') {
       if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');
       const index = Number(change.id.slice(6))-1;
