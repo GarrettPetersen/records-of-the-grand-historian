@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiutangshu",
+  "chapter": "072",
+  "candidateCommit": "cc0dcc98d80eaea595b7f290a4ea7628dbfcab53",
+  "candidateFile": "staged-candidate-5a6eb268c910352eba76.json",
+  "sourceHash": "sha256:844c9124c181c7694cd6dce037d9a6b6044e887fd99a1cac23d8cb3c43c15a40",
+  "originalExtractionHash": "sha256:9be36c3cd89cc111fb95f465536670dfb048f6a53caab0ac5fa795b81bf7d354",
+  "sealedCandidateHash": "sha256:5a6eb268c910352eba7635f7d236d595dbe6692b47480e4af23eb26aa30e7673",
+  "candidateExtractionHash": "sha256:45406bd9b00929d53922a4d7a4e166b8a2cb6d97456e49aea14a36693d87e6ec",
+  "reviewer": {
+    "name": "Codex independent Jiutangshu 072 staged-candidate reviewer",
+    "agentId": "review_jiutangshu072_date_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T20:24:48.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted for host curation. All 39 and only the initial audit's incorrect temporal claim IDs are repaired by 54 exact operations: 30 Tang Wude 3 / same-day chronology containers are narrowed from AD 620-621 to AD 620; six biography-heading claims become explicit undated name attestations; and the undated \\u5352\\u5b98 death-in-office statement, Fan Ye literary citation, and Shubao martial appraisal become explicit undated attestations. The 15 active-date-hint changes remove only the dependent invented interval language and retain separately supported AD 620, AD 621, and AD 622 hints. No new dates, endpoints, persons, names, mentions, relationships, or prose are introduced.",
+  "candidateValidation": {
+    "proposalApplication": "PASS: independently replayed applyDateRepairProposal from the pinned canonical jiutangshu/072 extraction and date packet. The result exactly equals the sealed candidate and hashes to sha256:45406bd9b00929d53922a4d7a4e166b8a2cb6d97456e49aea14a36693d87e6ec.",
+    "sealedIdentity": "PASS: sealedDateRepairProposalHash is sha256:5a6eb268c910352eba7635f7d236d595dbe6692b47480e4af23eb26aa30e7673; candidate source hash remains sha256:844c9124c181c7694cd6dce037d9a6b6044e887fd99a1cac23d8cb3c43c15a40.",
+    "operationScope": "PASS: proposal has exactly 54 operations: 39 and only the initial audit's incorrect claim IDs plus 15 dependent active-hint operations. The 39 claims consist of 30 Wude-3/same-day narrowing replacements, six heading conversions, and three unsupported-date conversions.",
+    "productionExtractionValidator": "PASS: npm run people:validate -- --book jiutangshu --chapter 072 passed for the pinned canonical input. Independently reconstructed candidate passes compact validation with 310 units, 770 candidates, 147 people, 841 mentions, 1727 claims, 46 applied repairs, 270 dispositions, and zero alias-disposition conflicts.",
+    "temporalGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(reconstructedCandidate)) returned zero diagnostics.",
+    "canonicalMutation": "NONE: this review changes no canonical extraction and does not reuse the needs-revision initial audit as approval."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-35", "claim-55", "claim-61", "claim-62", "claim-64", "claim-65", "claim-66", "claim-67", "claim-68", "claim-111", "claim-112", "claim-113", "claim-114", "claim-115", "claim-116", "claim-117", "claim-123", "claim-124", "claim-127", "claim-128", "claim-131", "claim-132", "claim-133", "claim-134", "claim-137", "claim-138", "claim-140", "claim-142", "claim-173", "claim-175", "hints-p001", "hints-p014", "hints-p017", "hints-p018", "hints-p019", "hints-p020", "hints-p021", "hints-p022", "hints-p023"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0006", "quote": "\u6b66\u5fb7\u4e09\u5e74\uff0c\u592a\u5b97\u8a0e\u6b66\u5468\u65bc\u67cf\u58c1", "reason": "Tang Wude year 3 is AD 620; it is the calendar anchor for the ensuing episode."},
+        {"unit": "s0021", "quote": "\u662f\u65e5\uff0c\u56e0\u5f9e\u7375\u65bc\u6986\u7aa0", "reason": "\u662f\u65e5 inherits that Wude-3 episode rather than opening an AD 620-621 interval."},
+        {"unit": "s0011", "quote": "\u5f9e\u64ca\u738b\u4e16\u5145\u65bc\u6771\u90fd", "reason": "The Eastern Capital action belongs to the same calendar-bearing Wude-3 sequence."},
+        {"unit": "s0012", "quote": "\u65e2\u800c\u5c0b\u76f8\u8207\u6b66\u5468\u964d\u5c07\u7686\u53db", "reason": "The rebellion, Jingde's imprisonment, and the associated claims remain in that same episode."},
+        {"unit": "s0013", "quote": "\u884c\u53f0\u5de6\u50d5\u5c04\u5c48\u7a81\u901a\u3001\u5c1a\u66f8\u6bb7\u958b\u5c71", "reason": "The offices are attested in the Wude-3 narrative but do not support an additional 621 endpoint."},
+        {"unit": "s0029", "quote": "\u9f4a\u738b\u5143\u5409\u4ea6\u5584\u99ac\u69ca", "reason": "The sparring sequence remains part of the calendar-anchored episode and supports AD 620 only."}
+      ],
+      "reason": "All thirty changed Wude-3/same-day contexts correctly replace the invented AD 620-621 interval with the exact supported AD 620 year. The associated hints retain independently represented AD 620, AD 621, and AD 622 entries and remove only the duplicate invented range."
+    },
+    {
+      "proposalItems": ["claim-38", "claim-40", "claim-42", "claim-43", "claim-44", "claim-45", "hints-p004", "hints-p005", "hints-p006", "hints-p007"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0001", "quote": "\u5c09\u9072\u656c\u5fb7 \u79e6\u53d4\u5bf6 \u7a0b\u77e5\u7bc0 \u6bb5\u5fd7\u7384 \u5f35\u516c\u8b39 \u5b50\u5927\u7d20 \u5927\u5b89", "reason": "The heading identifies named people but contains no calendar-bearing personal event."}
+      ],
+      "reason": "The candidate retains the six name attestations, explicitly marks them undated, and replaces the four wholly dependent active-date ranges with a transparent no-date-bearing-event note."
+    },
+    {
+      "proposalItems": ["claim-1056", "claim-1145", "claim-1173", "hints-p141", "hints-p144"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0281", "quote": "\u5352\u5b98\uff0c\u5e74\u4e09\u5341\u4e5d\u3002", "reason": "Death in office and age do not state an AD 630-639 calendar event."},
+        {"unit": "s0293", "quote": "\u4ee4\u5927\u5b89\u8207\u592a\u5b50\u6d17\u99ac\u5289\u8a25\u8a00\u7b49\u6ce8\u8303\u66c4\u300a\u5f8c\u6f22\u66f8\u300b", "reason": "A literary citation does not attest Fan Ye's activity in AD 432-445."},
+        {"unit": "s0300", "quote": "\u53d4\u5bf6\u5584\u7528\u99ac\u69ca", "reason": "The appraisal supplies no calendar anchor for AD 618-621."}
+      ],
+      "reason": "All three source attestations remain visible but carry no invented chronology; the two resulting active-hint replacements likewise make no life-date assertion."
+    }
+  ],
+  "hostRequirements": [
+    "Recheck the pinned canonical source and extraction hashes, exact candidate bytes, sealed proposal hash, and this receipt before applying the proposal.",
+    "Apply all 54 and only these operations; then rerun scoped extraction validation and chronology geometry.",
+    "Keep the six heading claims as explicit undated name attestations and never restore their AD 617-622 active-date ranges.",
+    "Keep Wude 3 / same-day claims at AD 620 only; do not recreate an AD 621 endpoint from the source wording.",
+    "Commission a fresh independent complete canonical date audit after curation; this receipt does not approve the changed canonical extraction."
+  ]
+}
