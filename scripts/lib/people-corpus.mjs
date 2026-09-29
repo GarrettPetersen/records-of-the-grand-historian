@@ -85,11 +85,20 @@ export function loadValidatedPeopleCorpus() {
   const extractedChapterIds = new Set();
 
   for (const file of files) {
-    const raw = readJson(file);
-    const packet = buildPeopleExtractionPacket(raw.book, raw.chapter, { properNounMatcher: matcher });
-    const result = isCompactPeopleExtraction(raw)
-      ? validateCompactPeopleExtraction(raw, packet)
-      : validatePeopleExtraction(raw, packet);
+    let raw;
+    let result;
+    try {
+      raw = readJson(file);
+      const packet = buildPeopleExtractionPacket(raw.book, raw.chapter, { properNounMatcher: matcher });
+      result = isCompactPeopleExtraction(raw)
+        ? validateCompactPeopleExtraction(raw, packet)
+        : validatePeopleExtraction(raw, packet);
+    } catch (error) {
+      throw new Error(
+        `Invalid people extraction ${path.relative(REPO_ROOT, file)}: ${error.message}`,
+        { cause: error },
+      );
+    }
     const extraction = result.normalized;
     const chapterId = `${extraction.book}:${extraction.chapter}`;
     if (!expectedChapterSet.has(chapterId)) {
