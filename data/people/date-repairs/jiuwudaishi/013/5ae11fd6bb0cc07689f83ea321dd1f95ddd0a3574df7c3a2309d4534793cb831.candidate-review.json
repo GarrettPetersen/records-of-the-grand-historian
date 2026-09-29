@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "013",
+  "candidateCommit": "cc60d26818ec73d167c235b530288e4eda36b11d",
+  "candidateFile": "staged-candidate-5ae11fd6bb0cc07689f8.json",
+  "sourceHash": "sha256:696e9bc6cc32accdf42d127e06b9b96b594ae984e7144e49f4781c509b818b52",
+  "originalExtractionHash": "sha256:be9f5a14c21a3bfcbc0e52ed848bd60214823e593050f93243dad7ccb374ea9b",
+  "sealedCandidateHash": "sha256:5ae11fd6bb0cc07689f83ea321dd1f95ddd0a3574df7c3a2309d4534793cb831",
+  "candidateExtractionHash": "sha256:29ee39b60b9b9f1ec48ae40439518047c9bb6a60fe27f245f43156a55af925ce",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 013 residual citation-hold reviewer",
+    "agentId": "review_jwd013_residual_citation_holds",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-29T00:51:09Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. The sealed candidate makes exactly six atomic operations: it removes two malformed unresolved temporal attestations and their two paired research-required active hints, while preserving the two source citations as undated retrospective bibliographic-citation events. Direct chapter-primary reading confirms that s0061 and s0079 name an author and a work but assert no calendar-bearing author chronology. No author life date is inferred or attached.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-231",
+        "hints-p042",
+        "reception-p042"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0061",
+          "quote": "〈（陳彭年《江南別錄》云：徐知訓初學兵法於朱瑾，瑾悉心教之。",
+          "sourceHash": "sha256:d7da6d6afd4ad0afc99ac1458647dda1d44ed117008593453adbe0663b9f286c",
+          "reason": "The unit is a bibliographic attribution to Chen Pengnian's Separate Record of Jiangnan and then recounts Xu Zhixun's study under Zhu Jin. It contains no regnal, calendar, age, birth, death, or other date-bearing assertion about Chen Pengnian."
+        }
+      ],
+      "reason": "Removing the malformed unresolved attestation and its sole derived active-date hint is warranted. The replacement retains the explicit source citation as an undated retrospective bibliographic-citation event only; it does not imply Chen Pengnian's life dates or contemporary participation."
+    },
+    {
+      "proposalItems": [
+        "claim-233",
+        "hints-p044",
+        "reception-p044"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0079",
+          "quote": "〈（馬令《南唐書》云：初，宿衛將李球、馬謙挾楊隆演登樓，取庫兵以誅知訓，陣於門橋。",
+          "sourceHash": "sha256:97848fdbc9a803c7ce2c9cb7e03d5b238a2a415f4694f410f0667bacf107085f",
+          "reason": "The unit is a bibliographic attribution to Ma Ling's History of Southern Tang and then narrates the guards' action against Zhixun. It contains no regnal, calendar, age, birth, death, or other date-bearing assertion about Ma Ling."
+        }
+      ],
+      "reason": "Removing the malformed unresolved attestation and its sole derived active-date hint is warranted. The replacement retains the explicit source citation as an undated retrospective bibliographic-citation event only; it does not imply Ma Ling's life dates or contemporary participation."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: the independently rebuilt canonical date packet hashes to source sha256:696e9bc6cc32accdf42d127e06b9b96b594ae984e7144e49f4781c509b818b52 and extraction sha256:be9f5a14c21a3bfcbc0e52ed848bd60214823e593050f93243dad7ccb374ea9b, matching the sealed handoff.",
+    "sealedProposalIdentity": "PASS: sealedDateRepairProposalHash(proposal) independently recomputes sha256:5ae11fd6bb0cc07689f83ea321dd1f95ddd0a3574df7c3a2309d4534793cb831.",
+    "candidateExtractionIdentity": "PASS: independent deterministic replay exactly equals the stored candidate and hashes to sha256:29ee39b60b9b9f1ec48ae40439518047c9bb6a60fe27f245f43156a55af925ce.",
+    "atomicScope": "PASS: replay removes only claim-231 and claim-233, adds only two undated event-participation bibliographic-citation records, and changes only p042 and p044 by clearing their paired active-date hints. It does not modify names, people, roles, mentions, source units, translation fields, or prior date repairs.",
+    "previous24Repairs": "PASS: the candidate is based on the current canonical extraction produced by the already independently reviewed twenty-four-operation repair; the candidate commit does not modify its source, canonical extraction, or canonical audit report.",
+    "strictCompactValidation": "PASS: strict alias-disposition validation reports 305 units, 972 candidates, 166 people, 1031 mentions, 1157 claims, 9 applied repairs, 558 dispositions, and zero alias-disposition conflicts.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 013 passes in the isolated checkout against the pinned canonical chapter.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "chapterPrimaryEvidence": "PASS: direct source-unit strings exactly equal the two quoted evidence strings and their recorded SHA-256 hashes.",
+    "translationImplications": "PASS: both Chinese source units and their existing English translations correctly present a work attribution followed by the narrated event; the candidate changes no translation and this review identifies no translation repair.",
+    "scopeIntegrity": "PASS: the candidate commit changes only candidate-only research, handoff/review-packet artifacts, and its staging script; no source, canonical extraction, canonical audit, host curation, staging branch, or master artifact changed.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate exactly this sealed six-operation proposal only while its source and canonical extraction pins remain current.",
+    "Keep both replacement event-participation records undated and classified only as retrospective bibliographic citations.",
+    "Do not infer, add, or expose a life date for Chen Pengnian or Ma Ling from these citations.",
+    "Preserve all prior twenty-four chronology corrections unchanged.",
+    "After any host curation, obtain a fresh complete independent canonical date audit; this candidate receipt is not canonical approval."
+  ],
+  "publication": "staging-only; candidate remains subject to separate host curation and a fresh independent canonical date audit"
+}
