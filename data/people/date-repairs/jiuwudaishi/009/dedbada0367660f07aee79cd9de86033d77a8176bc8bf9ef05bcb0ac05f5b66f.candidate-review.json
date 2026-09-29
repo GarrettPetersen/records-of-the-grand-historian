@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "009",
+  "candidateCommit": "297ff27c2accc3be485139439569eba8959b6eec",
+  "candidateFile": "staged-candidate-dedbada0367660f07aee.json",
+  "sourceHash": "sha256:2f482b41c2fb2b5b44411d76d5fe84dbf04efba1947768832cd2fe161581fb07",
+  "originalExtractionHash": "sha256:5d38e2c0ba2dd8db1219c1bbcfcf93e0f5adfd1d82a8b94fbe9d77bd464c69d4",
+  "sealedCandidateHash": "sha256:dedbada0367660f07aee79cd9de86033d77a8176bc8bf9ef05bcb0ac05f5b66f",
+  "candidateExtractionHash": "sha256:0186c158ddb91a69f9871d7f30d20d6f2b20de615e4c934e61c73ac6ec578d6c",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 009 retrospective date-repair reviewer",
+    "agentId": "review_jiuwudaishi009_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-29T00:00:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. The sealed candidate makes exactly fourteen date-only repairs to two retrospective passages. The December AD 917 memorial says only that Liu Xun's loss of discipline had already occurred; the April AD 918 use of 初 says only that Dou Mengzheng's Qian Liu edict and resulting demotion were earlier. The candidate retains the Chinese wording and evidence while replacing each fabricated 917 lower endpoint with the corresponding one-sided upper bound.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-557", "claim-558", "claim-559", "hints-p063"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0053",
+          "quote": "國家自劉鄩失律以來",
+          "reason": "In the December section of Zhenming 3 (AD 917), 自…以來 states that Liu Xun's loss of discipline preceded the memorial. It does not state when it began, so AD 915 is not a source-supported lower bound."
+        }
+      ],
+      "reason": "The three claims preserve their subject, predicate, Chinese sourceDate, certainty, evidence, and non-date values while replacing only the invented AD 915–917 interval with on-or-before AD 917. The paired hint states the same one-sided chronology."
+    },
+    {
+      "proposalItems": ["claim-703", "claim-704", "claim-708", "claim-709", "claim-710", "claim-711", "claim-712", "claim-714", "hints-p079", "hints-p080"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0071",
+          "quote": "夏四月丁未",
+          "reason": "This begins the April section of Zhenming 4 (AD 918), which supplies the contemporaneous narrative context."
+        },
+        {
+          "unit": "s0076",
+          "quote": "初，學士竇夢征草錢鏐麻，貶蓬萊尉",
+          "reason": "初 introduces an earlier recalled episode: Dou Mengzheng drafted Qian Liu's appointment edict and was demoted to Penglai. It supplies no AD 917 lower endpoint."
+        }
+      ],
+      "reason": "All eight date containers and both active-date hints retain the recalled facts and source wording but replace AD 917–918 with on-or-before AD 918. No calendar detail or lower endpoint is introduced."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: the canonical source and extraction hashes equal the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: sealedDateRepairProposalHash(proposal) is sha256:dedbada0367660f07aee79cd9de86033d77a8176bc8bf9ef05bcb0ac05f5b66f.",
+    "candidateExtractionIdentity": "PASS: deterministic replay hashes the candidate as sha256:0186c158ddb91a69f9871d7f30d20d6f2b20de615e4c934e61c73ac6ec578d6c.",
+    "proposalReplay": "PASS: all fourteen operations replay individually and together; the candidate contains only the eleven audited claim-date replacements and three paired hint replacements.",
+    "strictCompactValidation": "PASS: strict alias-disposition validation reports 159 units, 856 candidates, 154 people, 421 mentions, 2452 claims, 49 applied repairs, 641 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 009 passes against the canonical chapter.",
+    "scopeIntegrity": "PASS: the candidate commit changes only the candidate handoff, its review packet, and candidate-only staging script. No source, canonical extraction, model output, or publication artifact changed.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate exactly the sealed fourteen-operation proposal only while the source and canonical extraction hashes remain pinned.",
+    "Keep claim-557, claim-558, claim-559, and p063's hint one-sided on-or-before AD 917; do not restore an AD 915 lower endpoint.",
+    "Keep claim-703, claim-704, claim-708 through claim-712, claim-714, and p079/p080's hints one-sided on-or-before AD 918; do not infer AD 917 or another lower endpoint from 初.",
+    "Obtain a fresh complete independent canonical date audit after host curation; this receipt is not canonical approval."
+  ],
+  "publication": "staging-only; candidate remains subject to separate host curation and a fresh independent canonical date audit"
+}
