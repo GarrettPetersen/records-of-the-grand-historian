@@ -3,8 +3,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { westernBoundsErrors } from './lib/people-date-values.mjs';
-import { personReceptionErrors } from './lib/people-reception.mjs';
+import { hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
+import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
 import {
   buildPeopleChunkWorkerPacket,
   buildPeopleExtractionPacket,
@@ -19,12 +19,14 @@ import {
   normalizedChapterId,
   occurrenceAt,
   readJson,
+  sha256,
   writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
 import {
   compactInputErrors,
+  compactPeopleExtraction,
   expandPeopleExtraction,
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
@@ -79,6 +81,7 @@ const UNION_CATEGORIES = new Set([
   'other',
   'uncertain',
 ]);
+const ATTESTATION_EQUIVALENT_LIFE_PREDICATES = new Set(['birth', 'death', 'age']);
 const RELATIONSHIP_STATES = new Set(['formed', 'active', 'ended', 'divorced', 'annulled', 'widowed', 'uncertain']);
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
@@ -217,6 +220,130 @@ function nestedPersonReferences(value, found = []) {
   return found;
 }
 
+// A dated birth, death, or age claim is itself direct source-backed evidence that
+// the person existed at that point. Do not require a duplicate activity claim
+// merely to restate that fact. Attestations remain the normal form for activity.
+function hasSourceBackedLifeChronology(claim) {
+  if (!ATTESTATION_EQUIVALENT_LIFE_PREDICATES.has(claim.predicate) || !Array.isArray(claim.evidence) || claim.evidence.length === 0) {
+    return false;
+  }
+  const temporalValues = [claim.value, ...['dateContext', 'startDate', 'endDate']
+    .flatMap((key) => nestedValuesWithKey(claim.value, key))];
+  return temporalValues.some((value) => value?.sourceDate &&
+    (value.westernYear || value.westernInterval || value.westernBounds));
+}
+
+// A personally dated enfeoffment establishes the recipient's presence at that
+// ceremony only. Reception claims remain excluded because they can be wholly
+// posthumous, and this helper never creates a life-wide interval.
+function hasSourceBackedPersonalCeremony(claim) {
+  if (claim.predicate !== 'honor' || claim.value?.action !== 'enfeoffed' ||
+      claim.value?.receptionType || !Array.isArray(claim.evidence) || claim.evidence.length === 0) return false;
+  const date = claim.value?.dateContext;
+  return Boolean(date?.sourceDate && (date.westernYear || date.westernInterval || date.westernBounds));
+}
+
+function externalPrimaryChronologyErrors(person, packet) {
+  const errors = [];
+  const entries = person.identityHints.externalPrimaryChronology ?? [];
+  for (const [index, entry] of entries.entries()) {
+    const label = `${person.localId} externalPrimaryChronology[${index}]`;
+    if (!person.identityHints.activeDateHints.includes(entry.hint)) {
+      errors.push(`${label} must attach to an exact activeDateHint`);
+    }
+    if (entry.kind !== 'bounded-life' || !/\bexternal primary\b/iu.test(entry.hint)) {
+      errors.push(`${label} must be an explicit bounded-life external primary chronology`);
+    }
+    const start = entry.bounds?.start;
+    const end = entry.bounds?.end;
+    if (!start || !end || start.era !== end.era || start.year > end.year) {
+      errors.push(`${label} must have ordered same-era start/end bounds`);
+    }
+    const sourceResearch = entry.sourceResearch;
+    const sourceRoot = path.join(PEOPLE_DIR, 'date-repairs', packet.book, packet.chapter);
+    let dossier;
+    if (!sourceResearch || typeof sourceResearch.path !== 'string' ||
+        !Array.isArray(sourceResearch.sourceIds) || sourceResearch.sourceIds.length !== 2) {
+      errors.push(`${label} must bind an exact two-item source-research dossier`);
+      continue;
+    }
+    const dossierPath = path.resolve(REPO_ROOT, sourceResearch.path);
+    if (!dossierPath.startsWith(`${sourceRoot}${path.sep}`) || path.extname(dossierPath) !== '.json') {
+      errors.push(`${label} source-research dossier must be inside its chapter date-repairs directory`);
+      continue;
+    }
+    try {
+      dossier = readJson(dossierPath);
+    } catch (error) {
+      errors.push(`${label} cannot load its source-research dossier: ${error.message}`);
+      continue;
+    }
+    if (sourceResearch.hash !== sha256(JSON.stringify(dossier))) {
+      errors.push(`${label} source-research dossier hash does not match immutable bytes`);
+      continue;
+    }
+    if (dossier?.schemaVersion !== 1 || dossier?.kind !== 'independent-date-source-research' ||
+        dossier.book !== packet.book || dossier.chapter !== packet.chapter || !Array.isArray(dossier.sources)) {
+      errors.push(`${label} source-research dossier has an invalid canonical scope or structure`);
+      continue;
+    }
+    const sourceIds = new Set(sourceResearch.sourceIds);
+    if (sourceIds.size !== sourceResearch.sourceIds.length) {
+      errors.push(`${label} source-research dossier repeats an evidence item`);
+      continue;
+    }
+    const sourceById = new Map(dossier.sources.map(source => [source?.id, source]));
+    const witnesses = entry.witnesses ?? [];
+    const kinds = witnesses.map(witness => witness.kind).sort();
+    if (!deepEqual(kinds, ['birth', 'death'])) {
+      errors.push(`${label} must supply exactly one external-primary birth witness and one death witness`);
+      continue;
+    }
+    for (const witness of witnesses) {
+      if (witness.sourceType !== 'external-primary' || typeof witness.work !== 'string' ||
+          typeof witness.citation !== 'string' || !/^https:\/\//u.test(witness.url ?? '') ||
+          typeof witness.quotation !== 'string' || !witness.westernYear) {
+        errors.push(`${label} has malformed external-primary witness evidence`);
+      }
+      const expected = witness.kind === 'birth' ? start : end;
+      if (!expected || witness.westernYear?.era !== expected.era || witness.westernYear?.year !== expected.year) {
+        errors.push(`${label} ${witness.kind} witness must match its declared life bound`);
+      }
+      const source = sourceById.get(witness.sourceId);
+      const expectedWitness = source?.chronologyWitness;
+      if (!sourceIds.has(witness.sourceId) || !source || !expectedWitness ||
+          source.sourceType !== 'external-primary' || source.id !== witness.citation ||
+          !deepEqual({
+            kind: witness.kind,
+            work: witness.work,
+            citation: witness.citation,
+            url: witness.url,
+            quotation: witness.quotation,
+            westernYear: witness.westernYear,
+          }, {
+            kind: expectedWitness.kind,
+            work: source.work,
+            citation: source.id,
+            url: source.url,
+            quotation: source.quotation,
+            westernYear: expectedWitness.westernYear,
+          })) {
+        errors.push(`${label} ${witness.kind} witness must exactly match its hash-pinned primary dossier evidence item`);
+      }
+    }
+    if (!deepEqual([...sourceIds].sort(), witnesses.map(witness => witness.sourceId).sort())) {
+      errors.push(`${label} source-research evidence items must exactly match the two witnesses`);
+    }
+  }
+  return errors;
+}
+
+function hasValidatedExternalPrimaryChronology(person, packet, errors) {
+  const validationErrors = externalPrimaryChronologyErrors(person, packet);
+  errors.push(...validationErrors);
+  return (person.identityHints.externalPrimaryChronology?.length ?? 0) > 0 && validationErrors.length === 0;
+}
+
 function validateWesternYear(value, label, errors) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     errors.push(`${label} must be an object`);
@@ -245,6 +372,7 @@ function validateAttestationClaim(claim, errors) {
     'qualitative',
     'unresolved',
     'unresolvedReason',
+    'undatedSourceAttestation',
     'event',
   ]);
   for (const key of Object.keys(value)) {
@@ -282,15 +410,25 @@ function validateAttestationClaim(claim, errors) {
   if (value.unresolved !== undefined && typeof value.unresolved !== 'boolean') {
     errors.push(`${claim.id} unresolved must be boolean`);
   }
+  if (value.undatedSourceAttestation !== undefined && value.undatedSourceAttestation !== true) {
+    errors.push(`${claim.id} undatedSourceAttestation must be true when present`);
+  }
+  if (value.undatedSourceAttestation === true && (typeof value.event !== 'string' || value.event.trim().length < 20)) {
+    errors.push(`${claim.id} undatedSourceAttestation requires a substantive source-specific event`);
+  }
   if (value.event !== undefined && (typeof value.event !== 'string' || !value.event.trim())) errors.push(`${claim.id} event must identify whose event is dated`);
   if (value.westernBounds !== undefined) errors.push(...westernBoundsErrors(value.westernBounds).map(error => `${claim.id}: ${error}`));
   if (['westernYear', 'westernInterval', 'westernBounds'].filter(key => value[key] !== undefined).length > 1) {
     errors.push(`${claim.id} must use only one Western date representation`);
   }
-  const hasResolvedTime = value.westernYear !== undefined ||
+  const hasTemporalContext = value.westernYear !== undefined ||
     value.westernInterval !== undefined || value.westernBounds !== undefined || value.qualitative !== undefined;
-  if (!hasResolvedTime && !(value.sourceDate && value.unresolved === true)) {
-    errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, or unresolved sourceDate`);
+  if (value.undatedSourceAttestation === true &&
+      (hasTemporalContext || value.sourceDate !== undefined || value.unresolved !== undefined || value.unresolvedReason !== undefined)) {
+    errors.push(`${claim.id} undatedSourceAttestation cannot carry temporal or unresolved-date fields`);
+  }
+  if (!hasTemporalContext && !(value.sourceDate && value.unresolved === true) && value.undatedSourceAttestation !== true) {
+    errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, unresolved sourceDate, or explicit undated source attestation`);
   }
   if ((value.westernYear !== undefined || value.westernInterval !== undefined || value.westernBounds !== undefined) && !value.sourceDate) {
     errors.push(`${claim.id} Western attestation must preserve sourceDate`);
@@ -634,6 +772,9 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
   }
   for (const person of normalized.people) {
     const personClaims = claimsByPerson.get(person.localId) ?? [];
+    const receptionOnlyEvidence = personClaims.some(claim =>
+      claim.predicate === 'event-participation' && personClaimReception(claim));
+    const externalPrimaryChronology = hasValidatedExternalPrimaryChronology(person, packet, errors);
     if (!personClaims.some((claim) => claim.predicate === 'name')) {
       errors.push(`${person.localId} has no name claim`);
     }
@@ -641,20 +782,33 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       errors.push(`${person.localId} has no role claim; use named-individual when the chapter establishes no narrower role`);
     }
     if (normalized.run.promptVersion >= 5) {
-      if (person.identityHints.activeDateHints.length === 0) {
+      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const lifeChronology = personClaims.some(hasSourceBackedLifeChronology);
+      const personalCeremony = personClaims.some(hasSourceBackedPersonalCeremony);
+      const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+        claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+        hasDateBearingChronology(claim.value));
+      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence) {
         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
       }
-      if (!personClaims.some((claim) => claim.predicate === 'attestation')) {
+      if (!attestations.length && !lifeChronology && !personalCeremony && !externalPrimaryChronology && !receptionOnlyEvidence) {
         errors.push(`${person.localId} has no evidence-backed attestation required by prompt v5`);
       }
     }
     if (normalized.run.promptVersion >= 7 && !['legendary', 'literary'].includes(person.historicity)) {
       const researchHold = personClaims.some(claim => claim.predicate === 'attestation' && claim.value?.unresolved === true && typeof claim.value?.unresolvedReason === 'string' && claim.value.unresolvedReason.trim().length >= 20);
-      if (!researchHold && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const lifeChronology = personClaims.some(hasSourceBackedLifeChronology);
+      const personalCeremony = personClaims.some(hasSourceBackedPersonalCeremony);
+      const westernAttestation = attestations.some((claim) =>
+        claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds);
+      const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+        claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+        hasDateBearingChronology(claim.value));
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
-      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
-      if (!researchHold && !attestations.some((claim) => claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds)) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [
@@ -1065,6 +1219,127 @@ function selfTest() {
   comprehensive.run.promptVersion = 7;
   Object.assign(comprehensive.coverage, Object.fromEntries(V7_COMPLETION_FLAGS.map((key) => [key, true])));
   validatePeopleExtraction(comprehensive, packet);
+
+  const externalPrimary = structuredClone(comprehensive);
+  externalPrimary.claims = externalPrimary.claims.filter((claim) => claim.predicate !== 'attestation');
+  externalPrimary.people[0].identityHints.activeDateHints = ['AD 1-2 (external primary birth and death witnesses; no chapter reception date treated as life activity)'];
+  const externalResearchPath = 'data/people/date-repairs/testbook/001/external-primary-self-test.json';
+  const externalResearchFile = path.join(REPO_ROOT, externalResearchPath);
+  const externalResearch = {
+    schemaVersion: 1,
+    kind: 'independent-date-source-research',
+    book: 'testbook',
+    chapter: '001',
+    sources: [
+      {
+        id: 'primary-birth', sourceType: 'external-primary', work: 'Primary annals',
+        url: 'https://example.test/birth', quotation: 'born',
+        chronologyWitness: { kind: 'birth', westernYear: { era: 'AD', year: 1, precision: 'year' } },
+      },
+      {
+        id: 'primary-death', sourceType: 'external-primary', work: 'Primary annals',
+        url: 'https://example.test/death', quotation: 'died',
+        chronologyWitness: { kind: 'death', westernYear: { era: 'AD', year: 2, precision: 'year' } },
+      },
+    ],
+  };
+  fs.mkdirSync(path.dirname(externalResearchFile), { recursive: true });
+  writeJsonAtomic(externalResearchFile, externalResearch);
+  externalPrimary.people[0].identityHints.externalPrimaryChronology = [{
+    kind: 'bounded-life',
+    hint: externalPrimary.people[0].identityHints.activeDateHints[0],
+    bounds: {
+      start: { era: 'AD', year: 1, precision: 'year' },
+      end: { era: 'AD', year: 2, precision: 'year' },
+    },
+    sourceResearch: {
+      path: externalResearchPath,
+      hash: sha256(JSON.stringify(externalResearch)),
+      sourceIds: ['primary-birth', 'primary-death'],
+    },
+    witnesses: [
+      { sourceType: 'external-primary', sourceId: 'primary-birth', kind: 'birth', work: 'Primary annals', citation: 'primary-birth', url: 'https://example.test/birth', quotation: 'born', westernYear: { era: 'AD', year: 1, precision: 'year' } },
+      { sourceType: 'external-primary', sourceId: 'primary-death', kind: 'death', work: 'Primary annals', citation: 'primary-death', url: 'https://example.test/death', quotation: 'died', westernYear: { era: 'AD', year: 2, precision: 'year' } },
+    ],
+  }];
+  try {
+    validatePeopleExtraction(externalPrimary, packet);
+    validateCompactPeopleExtraction(compactPeopleExtraction(externalPrimary, packet), packet);
+
+    const malformedExternalPrimary = structuredClone(externalPrimary);
+    malformedExternalPrimary.people[0].identityHints.externalPrimaryChronology[0].witnesses[1].sourceType = 'external-secondary';
+    try {
+      validatePeopleExtraction(malformedExternalPrimary, packet);
+      throw new Error('Malformed external-primary chronology unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('externalPrimaryChronology')) throw error;
+    }
+    const unlinkedExternalPrimary = structuredClone(externalPrimary);
+    unlinkedExternalPrimary.people[0].identityHints.externalPrimaryChronology[0].hint = 'AD 1-2 (external primary witness but not attached to an active hint)';
+    try {
+      validatePeopleExtraction(unlinkedExternalPrimary, packet);
+      throw new Error('Unlinked external-primary chronology unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('must attach to an exact activeDateHint')) throw error;
+    }
+    const dossierHashMutation = structuredClone(externalPrimary);
+    dossierHashMutation.people[0].identityHints.externalPrimaryChronology[0].sourceResearch.hash = `sha256:${'0'.repeat(64)}`;
+    try {
+      validatePeopleExtraction(dossierHashMutation, packet);
+      throw new Error('Mismatched external-primary dossier hash unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('dossier hash')) throw error;
+    }
+    const witnessMutations = [
+      ['sourceType', 'external-secondary'],
+      ['sourceId', 'primary-death'],
+      ['kind', 'death'],
+      ['work', 'Other primary annals'],
+      ['citation', 'primary-death'],
+      ['url', 'https://example.test/alternate-birth'],
+      ['quotation', 'was born elsewhere'],
+      ['westernYear', { era: 'AD', year: 2, precision: 'year' }],
+    ];
+    for (const [field, replacement] of witnessMutations) {
+      const substituted = structuredClone(externalPrimary);
+      substituted.people[0].identityHints.externalPrimaryChronology[0].witnesses[0][field] = replacement;
+      try {
+        validatePeopleExtraction(substituted, packet);
+        throw new Error(`External-primary ${field} substitution unexpectedly passed`);
+      } catch (error) {
+        if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('externalPrimaryChronology')) throw error;
+      }
+    }
+  } finally {
+    fs.rmSync(externalResearchFile, { force: true });
+    fs.rmdirSync(path.dirname(externalResearchFile));
+    fs.rmdirSync(path.dirname(path.dirname(externalResearchFile)));
+  }
+
+  const ceremonyOnly = structuredClone(comprehensive);
+  ceremonyOnly.claims = ceremonyOnly.claims.filter((claim) => claim.predicate !== 'attestation');
+  ceremonyOnly.people[0].identityHints.activeDateHints = ['AD 907 (enfeoffment only; no life-wide interval inferred)'];
+  ceremonyOnly.claims.push({
+    id: 'testbook:001:c0003',
+    subject: 'testbook:001:p001',
+    predicate: 'honor',
+    value: {
+      title: { en: 'Princess of Fixture', zh: '測試公主' },
+      action: 'enfeoffed',
+      dateContext: {
+        sourceDate: { text: 'first year' },
+        westernYear: { era: 'AD', year: 907, precision: 'year' },
+      },
+    },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  const ceremonyResult = validatePeopleExtraction(ceremonyOnly, packet);
+  if (!deepEqual(ceremonyResult.normalized.people[0].identityHints.activeDateHints,
+    ['AD 907 (enfeoffment only; no life-wide interval inferred)']) ||
+    ceremonyResult.normalized.claims.find((claim) => claim.predicate === 'honor').value.dateContext.westernInterval) {
+    throw new Error('Dated enfeoffment was expanded into a fabricated life interval');
+  }
   const incompleteComprehensive = structuredClone(comprehensive);
   incompleteComprehensive.coverage.allDurableFactsCaptured = false;
   try {
@@ -1096,6 +1371,30 @@ function selfTest() {
     westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
   };
   validatePeopleExtraction(oneSided, packet);
+
+  const datedDeath = structuredClone(comprehensive);
+  const datedDeathClaim = datedDeath.claims.find((claim) => claim.predicate === 'attestation');
+  datedDeathClaim.predicate = 'death';
+  datedDeathClaim.value = {
+    dateContext: {
+      sourceDate: { text: 'described as late before the second year' },
+      westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
+    },
+  };
+  validatePeopleExtraction(datedDeath, packet);
+
+  const unsourcedDeath = structuredClone(datedDeath);
+  delete unsourcedDeath.claims.find((claim) => claim.predicate === 'death').value.dateContext.sourceDate;
+  try {
+    validatePeopleExtraction(unsourcedDeath, packet);
+    throw new Error('A life-predicate chronology without a source date unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Western attestation must preserve sourceDate') ||
+        !error.message.includes('has no evidence-backed attestation')) {
+      throw error;
+    }
+  }
 
   const legendaryComprehensive = structuredClone(unresolvedComprehensive);
   legendaryComprehensive.people[0].historicity = 'legendary';

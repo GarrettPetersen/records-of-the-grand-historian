@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
 import { getBookMetadata } from './book-metadata.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
+import { chineseText, englishText, sourceUnitAt } from './lib/people-content.mjs';
 import {
   inferChapterTableHeaders,
   isSemanticTableHeader,
@@ -33,6 +34,7 @@ import {
   personDisplayName,
   personFullDisplayName,
   personLifeSummary,
+  personPublicAliases,
   personPublicDescription,
 } from './lib/people-presentation.mjs';
 import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
@@ -255,6 +257,12 @@ function escapeXml(value) {
 
 function textContent(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
+}
+
+// Table cells retain a small amount of source layout metadata in the JSON.
+// It is useful to the web renderer but should never leak into a reading excerpt.
+function visibleTableText(value) {
+  return String(value ?? '').replace(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/iu, '');
 }
 
 function formatList(values) {
@@ -2026,7 +2034,7 @@ function renderEbookGlossaryFamily(person, ebookPeople) {
   return rows.length ? `<h3>Family</h3><ul class="glossary-family">${rows.join('')}</ul>` : '';
 }
 
-function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout) {
+function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
   const groups = new Map();
   for (const reference of ebookGlossaryReferences(person, ebookPeople)) {
     if (!groups.has(reference.chapter)) groups.set(reference.chapter, []);
@@ -2035,16 +2043,42 @@ function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, conte
   if (!groups.size) return '';
   const rows = [...groups.entries()].sort((left, right) => left[0].localeCompare(right[0])).map(([chapter, refs]) => {
     const title = chapterTitles.get(chapter) || `Chapter ${Number.parseInt(chapter, 10)}`;
-    const links = refs.map((reference, index) =>
-      `<a class="glossary-mention-link" href="../${ebookSentenceHref(contentLayout, chapter, 'en', reference.unitId, 'text/')}">${index + 1}</a>`
-    ).join(', ');
-    return `<li><span>${escapeXml(title)}</span>: ${links}</li>`;
+    const chapterData = chapterDataById.get(chapter);
+    if (!chapterData) throw new Error(`Missing EPUB source chapter ${ebookPeople.book}/${chapter} for glossary reference`);
+    const snippets = refs.map((reference) => {
+      const unit = sourceUnitAt(chapterData, {
+        id: reference.unitId,
+        kind: reference.unitKind,
+        blockIndex: reference.blockIndex,
+        collection: reference.collection,
+        itemIndex: reference.itemIndex,
+      });
+      const href = `../${ebookSentenceHref(contentLayout, chapter, 'en', reference.unitId, 'text/')}`;
+      const zh = visibleTableText(chineseText(unit));
+      const en = visibleTableText(englishText(unit));
+      if (!zh && !en) throw new Error(`Empty EPUB glossary reference ${ebookPeople.book}:${chapter}:${reference.unitId}`);
+      return `<article class="glossary-mention-snippet">` +
+        `${zh ? `<a class="glossary-mention-source" lang="zh-Hant" href="${escapeXml(href)}">${escapeXml(zh)}</a>` : ''}` +
+        `${en ? `<a class="glossary-mention-link" href="${escapeXml(href)}">${escapeXml(en)}</a>` : ''}` +
+        `</article>`;
+    }).join('');
+    return `<li><h4>${escapeXml(title)}</h4>${snippets}</li>`;
   });
   return `<h3>Mentions</h3><ul class="glossary-mentions">${rows.join('')}</ul>`;
 }
 
-function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout) {
-  const aliases = personAlternateNames(person);
+function renderEbookAliasTable(person) {
+  const aliases = personPublicAliases(person);
+  if (!aliases.length) return '';
+  const rows = aliases.map((name) => `<tr><th>${escapeXml(humanizePeopleValue(name.kind || 'name'))}</th>` +
+    `<td>${escapeXml(name.en || '')}</td><td lang="zh-Hant">${escapeXml(name.zh || '')}</td>` +
+    `<td>${escapeXml(name.pinyin || '')}</td></tr>`).join('');
+  return `<h3>Other names</h3><div class="glossary-aliases"><table><thead><tr>` +
+    `<th>Type</th><th>English</th><th>Chinese</th><th>Pinyin</th>` +
+    `</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
   const roles = person.roles.map((role) => role.label);
   const lifeSummary = personLifeSummary(person);
   return `<section class="glossary-entry" id="${ebookPersonAnchor(person.id)}">
@@ -2052,9 +2086,9 @@ function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLay
   <p class="glossary-description">${escapeXml(personPublicDescription(person))}</p>
   ${lifeSummary ? `<p class="glossary-dates">${escapeXml(lifeSummary)}</p>` : ''}
   ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
-  ${aliases.length ? `<p><strong>Other names:</strong> ${escapeXml(formatList(aliases))}</p>` : ''}
+  ${renderEbookAliasTable(person)}
   ${renderEbookGlossaryFamily(person, ebookPeople)}
-  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout)}
+  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)}
 </section>`;
 }
 
@@ -2081,9 +2115,9 @@ function renderEbookPeopleIndex(ebookPeople) {
 </html>`;
 }
 
-function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout) {
+function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
   const entries = shard.people.map((person) =>
-    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout)
+    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)
   ).join('\n');
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
@@ -2381,6 +2415,43 @@ p {
 
 .glossary-dates {
   color: #59554b;
+}
+
+.glossary-aliases {
+  overflow-x: auto;
+  margin: 0.7em 0 1em;
+}
+
+.glossary-aliases table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.glossary-aliases th,
+.glossary-aliases td {
+  border: 1px solid #bbb;
+  padding: 0.35em 0.45em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.glossary-mentions h4 {
+  font-size: 0.95em;
+  margin: 0.75em 0 0.35em;
+}
+
+.glossary-mention-snippet {
+  margin: 0.5em 0;
+}
+
+.glossary-mention-source,
+.glossary-mention-link {
+  display: block;
+}
+
+.glossary-mention-source {
+  color: #555;
+  font-size: 0.9em;
 }
 
 .glossary-family,
@@ -2689,11 +2760,12 @@ function buildProduct(product) {
       chapter,
       data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`,
     ]));
+    const chapterDataById = new Map(chapters.map(({ chapter, data }) => [chapter, data]));
     writeFile(path.join(buildDir, 'EPUB', 'people', 'index.xhtml'), renderEbookPeopleIndex(ebookPeople));
     for (const shard of ebookPeople.shards) {
       writeFile(
         path.join(buildDir, 'EPUB', 'people', shard.file),
-        renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout),
+        renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout, chapterDataById),
       );
     }
   }

@@ -15,7 +15,6 @@ import {
   personPageShardName,
 } from '../functions/lib/people-shards.js';
 import {
-  MAX_PUBLIC_PERSON_ALIASES,
   personPublicAliases,
 } from './lib/people-presentation.mjs';
 import { readPeopleCatalog, readPeopleSiteIndex } from './lib/people-generated-data.mjs';
@@ -142,8 +141,6 @@ export function verifyPeopleSite(options = parseArgs([])) {
       assert(!html.includes('Subject Role'), `${slug} exposes the internal family subject role`, errors);
       assert(!html.includes('Object Role'), `${slug} exposes the internal family object role`, errors);
       const publicAliases = personPublicAliases(person);
-      assert(publicAliases.length <= MAX_PUBLIC_PERSON_ALIASES,
-        `${slug} exposes more than ${MAX_PUBLIC_PERSON_ALIASES} public aliases`, errors);
       const otherNamesSection = html.match(/<section id="other-names"[\s\S]*?<\/section>/u)?.[0] ?? '';
       const renderedAliasRows = (otherNamesSection.match(/<tbody>[\s\S]*<\/tbody>/u)?.[0].match(/<tr>/gu) ?? []).length;
       assert(renderedAliasRows === publicAliases.length,

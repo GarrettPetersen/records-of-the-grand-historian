@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "099",
+  "candidateCommit": "bc9eee4fe6d1eefea73cde9e37d7cb72b991d645",
+  "candidateFile": "staged-candidate-c0d65660ce9e1e438f09.json",
+  "sealedCandidateHash": "sha256:c0d65660ce9e1e438f0998aa3b1e6fdba98f52ed59be62a6f53af7c0632472a3",
+  "candidateExtractionHash": "sha256:c13e4773eb914cd567b1434ae66c6020233bc514fb0df3dc508f45abc28976e1",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 099 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi099",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T04:52:15Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited after fresh independent audit",
+  "summary": "Accepted all 20 sealed date-only operations. The candidate removes synthetic ancestral-generation, reign-wide, and Later Tang Wudi service intervals and their dependent hints. It retains the genealogy, descent, service, title, relationship, provenance, and source-attested posthumous-reception evidence without assigning those people invented personal chronology.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-42",
+        "claim-63",
+        "claim-68",
+        "claim-78",
+        "claim-82",
+        "claim-91",
+        "hints-p002",
+        "hints-p005",
+        "hints-p006",
+        "hints-p007",
+        "hints-p008",
+        "hints-p009"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0003: 「四代祖諱湍，帝有天下，追尊為明元皇帝，廟號文祖，陵曰懿陵」.",
+        "s0006–s0012: 「高祖母隴西李氏，追謚明貞皇后」; 「曾祖諱昂，晉贈太保」; 「曾祖母虢國太夫人楊氏，追謚恭惠皇后」; 「祖諱僎，晉贈太傅」; 「祖母魯國太夫人李氏，追謚為昭穆皇后」.",
+        "s0015: 「後以唐乾寧二年……生帝於太原」."
+      ],
+      "reason": "The dated event is Liu Zhiyuan's AD 895 birth, not an activity or life interval for any named ancestor. The Chinese provides relationships and later reception titles only. Each replacement removes the generation-derived interval, preserves the original evidence and relation, and records a source-specific research hold rather than borrowing Liu Zhiyuan's date."
+    },
+    {
+      "proposalItems": [
+        "claim-53",
+        "claim-59",
+        "hints-p003",
+        "hints-p004"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0005: 「湍為東漢顯宗第八子淮陽王丙之後。」"
+      ],
+      "reason": "This retrospective descent statement substantively attests Bing and Emperor Xianzong of Eastern Han, but it does not show either person acting throughout AD 57–75. Explicitly undated source attestations correctly preserve the descent evidence while removing the imported reign-wide chronology and dependent hints."
+    },
+    {
+      "proposalItems": [
+        "claim-95",
+        "claim-106",
+        "hints-p010",
+        "hints-p011"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0013: 「皇考諱琠，事後唐武皇帝為列校，晉贈太師，追尊為章聖皇帝，廟號顯祖，陵曰肅陵。」"
+      ],
+      "reason": "The source attests Liu Juan's service relation and later honors and retrospectively names Later Tang Wudi, but it supplies no local AD 890–908 activity interval for either. The candidate retains the relation, title, units, confidence, and provenance, replaces Liu Juan's synthetic interval with an honest research hold, and makes Later Tang Wudi's substantive source attestation explicitly undated."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: sealed handoff pins source sha256:2d84eb1e78f304bd155dd106d05aabbb9680784c0e47497c9bcd1826099756a4 and canonical extraction sha256:07c8e4fd2f668aeb63c5853e83cc13e5302bd787f4fbde78b4592bf824f49a6a.",
+    "sealedProposalIdentity": "PASS: independently recomputed proposal hash is sha256:c0d65660ce9e1e438f0998aa3b1e6fdba98f52ed59be62a6f53af7c0632472a3.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate extraction hash is sha256:c13e4773eb914cd567b1434ae66c6020233bc514fb0df3dc508f45abc28976e1.",
+    "auditScope": "PASS: all ten claim chronology containers and all ten dependent active-hint targets exactly cover the three findings in audit 780ffe5a7fe3487371239772cf5ca73faf855991; no unrelated claim is changed.",
+    "proposalReplay": "PASS: staged handoff records byte-for-byte structural proposal replay.",
+    "compactValidation": "PASS: staged candidate records compact validation and chronology geometry PASS (166 units, 131 people, 1515 claims).",
+    "sourceSoundness": "PASS: independently checked every changed group against the cited Chinese evidence; no reception date, descendant relation, or ruler title is treated as a personal life/activity date.",
+    "nonDateRetention": "PASS: all 20 operations alter only chronology containers or dependent active-date hints. Names, titles, roles, relations, source unit provenance, mentions, aliases, and translations remain unchanged.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this review packet.",
+    "Replay exactly the 20 sealed operations; do not restore generation-derived, reign-wide, or Later Tang Wudi intervals from reception or title evidence.",
+    "Keep genealogy, descent, service, posthumous-title, and relationship evidence intact; it is source-backed even when its personal chronology is unresolved or explicitly undated.",
+    "Do not alter the source or canonical extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation."
+  ]
+}

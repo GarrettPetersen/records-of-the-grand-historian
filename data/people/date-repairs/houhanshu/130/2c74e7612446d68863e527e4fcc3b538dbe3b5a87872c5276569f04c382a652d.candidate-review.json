@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "houhanshu",
+  "chapter": "130",
+  "candidateCommit": "5e4b2af7a6",
+  "candidateFile": "staged-candidate-2c74e7612446d68863e5.json",
+  "sealedCandidateHash": "sha256:2c74e7612446d68863e527e4fcc3b538dbe3b5a87872c5276569f04c382a652d",
+  "candidateExtractionHash": "sha256:683e2f54ec051c653a88c6221df28ccebebc3ba1ee46e2e5e506a53f5228e2d9",
+  "reviewer": {
+    "name": "Codex independent Houhanshu 130 sealed date-repair reviewer",
+    "agentId": "review_houhanshu130",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T19:15:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independent Chinese-source, canonical-pin, and exact sealed-replay review. The proposal changes exactly four pseudo-chronology attestations and their three paired active-date hints into source-linked research holds. s0037 and s0059 quote or retrospectively invoke Confucius, while s0124 cites a work entitled Military Methods of Wu and Sun; none dates a personal event in this chapter. King Yi's dated Zhou evidence, Xi Zhong's legendary office evidence, and Emperor Jing's Zhongyuan 5 edict remain intact. This receipt does not mutate or approve the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:471e9c1d5f34e6af62ff6db2c3fdcaba919a2d8f74a577c3d597465ea927ef0a",
+    "canonicalExtractionHash": "sha256:bb7dc57b71a6644e3b1f466628752e89ab63dbdb041f015251dad202baeab393",
+    "sealedProposalIdentity": "PASS",
+    "candidateBytes": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: claim-10/p002, claim-11/p002, claim-27/p005, claim-32/p006, and their three paired hints only.",
+    "sourceOwnership": "PASS: s0037 and s0059 are Confucius quotation/reception; s0124 is a bibliographic work-title citation, not a personal event.",
+    "historicalEvidenceRetention": "PASS: King Yi, Xi Zhong, and Emperor Jing evidence is untouched.",
+    "compactValidation": "PASS: 173 units, 6 people, 16 mentions, 56 claims.",
+    "chronologyGeometry": "PASS",
+    "scopedCanonicalValidation": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0037",
+      "quote": "孔子曰：「其或繼周者，行夏之正，乘殷之輅，服週之冕，樂則《韶》、《舞》。」",
+      "result": "This is a quotation preserved in the Later Han treatise, not an event dated within its narrative for Confucius."
+    },
+    {
+      "unit": "s0059",
+      "quote": "漢承秦制，禦為乘輿，所謂孔子乘殷之路者也。",
+      "result": "The Han institutional comparison retrospectively cites Confucius; it supplies no personal activity date in this chapter."
+    },
+    {
+      "unit": "s0124",
+      "quote": "吳、孫《兵法》云：「有巾有蓋，謂之武剛車。」",
+      "result": "The text attributes a definition to a joint work title. It neither resolves Wu or Sun as an individual nor dates either person."
+    },
+    {
+      "unit": "s0089",
+      "quote": "景帝中元五年，始詔六百石以上施車轓，得銅五末，軛有吉陽筩。",
+      "result": "Emperor Jing's explicit Zhongyuan 5 edict is separate historical evidence and is not changed."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes still match this receipt.",
+    "Replay exactly the four reviewed claim replacements and three paired hint replacements.",
+    "Retain quotation and bibliographic source context as explicit holds without deriving personal activity dates.",
+    "Preserve King Yi, Xi Zhong, and Emperor Jing evidence, run scoped validation, and require a fresh independent canonical audit after curation."
+  ]
+}

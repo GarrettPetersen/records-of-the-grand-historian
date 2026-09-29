@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "089",
+  "candidateFile": "staged-candidate-18f7e3870d0656b76659.json",
+  "sourceHash": "sha256:9c91700d732a1c1e84d1f855dae780f79c4796205a787c29c6f435939c752743",
+  "originalExtractionHash": "sha256:b9e5edec566f55da112d420e5ade15555d8b96c9aa550d76396c9948032ed8c5",
+  "sealedCandidateHash": "sha256:18f7e3870d0656b76659bab27dfdf490161f8c73893b99c8fee483946e66c794",
+  "candidateExtractionHash": "sha256:74b8c72b29c911133e4c7dbab43afcef7558600561cf71fda0d5d42c09d7f733",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 089 date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi089",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T03:37:29Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected after an independent sealed replay and source-context review of all fourteen operations. Thirteen operations correctly remove unsupported point precision: early Guangshun begins no earlier than AD 951; early Qingtai and Tianfu retain only their accession-year lower bounds; the Zhao Ying appraisal becomes a research hold; and paired hints are correspondingly rebuilt. Claim-20, however, changes the Tianfu 4 seventh-month appointment followed by 歲餘 into a strict after-AD-940 bound. More than a year after July AD 939 can occur during AD 940, so the supported bound is inclusive on-or-after AD 940. The current candidate would incorrectly exclude that possible year and cannot be curated.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-20", "hints-p001"],
+      "verdict": "incorrect",
+      "sourceEvidence": [
+        {"unit": "s0051", "quote": "時天福四年七月也。"},
+        {"unit": "s0059", "quote": "歲餘，移鎮兗州。"}
+      ],
+      "reason": "Tianfu 4 seventh month is in AD 939. 歲餘 means more than one year later, which permits a transfer in AD 940 after that month. A strict westernBounds.after AD 940 excludes AD 940; use westernBounds.onOrAfter AD 940, preserve the relative Chinese wording, and revise the paired hint to the same inclusive lower bound."
+    },
+    {
+      "proposalItems": ["claim-223", "hints-p046", "claim-244", "hints-p065"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0218", "quote": "周廣順初，遣尚書左丞田敏報命於契丹，遇瑩於幽州。"},
+        {"unit": "s0225", "quote": "未幾，瑩卒於幽州，時年六十七。"}
+      ],
+      "reason": "Early Guangshun begins in AD 951 but supplies no point year. The inclusive lower bounds for Tian Min's mission and Zhao Ying's ensuing death remove the unsupported AD 951/952 points without inventing an upper endpoint."
+    },
+    {
+      "proposalItems": ["claim-321", "hints-p090"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0250", "quote": "清泰初，兼判三司。"},
+        {"unit": "s0253", "quote": "唐末帝自鳳翔至，切於軍用，時王玫判三司。"}
+      ],
+      "reason": "The immediate narrative context places the Three Offices episode in early Qingtai. Retaining only an inclusive AD 934 lower bound preserves that contextual chronology while dropping the unsupported point year."
+    },
+    {
+      "proposalItems": ["claim-323", "hints-p092", "claim-324", "hints-p093"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0263", "quote": "天福初，張從賓作亂於洛陽，害皇子重乂。"}
+      ],
+      "reason": "Early Tianfu starts in AD 936. The inclusive AD 936 lower bounds preserve the source wording and remove the unsupported AD 937 point for both the rebel and Chongyi."
+    },
+    {
+      "proposalItems": ["claim-369", "hints-p108"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0311", "quote": "趙瑩際會風雲，優遊藩輔，雖易簀於絕域，終歸柩於故園。"}
+      ],
+      "reason": "This retrospective appraisal recalls Zhao Ying's career, exile death, and return of his coffin but gives no Western endpoint. The unresolved treatment and research-required hint correctly prevent the duplicate appraisal record from inheriting the separately dated biography's endpoint."
+    }
+  ],
+  "confirmedResearchHolds": ["claim-369", "hints-p108"],
+  "hostRequirements": [
+    "Do not curate this sealed candidate.",
+    "Prepare a new source-fingerprinted proposal replacing claim-20 westernBounds.after AD 940 with westernBounds.onOrAfter AD 940 and changing the paired p001 hint to the same inclusive lower bound.",
+    "Keep the other thirteen reviewed changes unchanged unless a new independent review identifies a source-specific reason to alter them.",
+    "After a corrected candidate is independently reviewed and curated, run scoped validation and a fresh complete canonical date audit; claim-369's unresolved research hold must remain visible and blocks audited approval absent further research."
+  ],
+  "validation": {
+    "sealedProposalIdentity": "PASS: proposal hashes to sha256:18f7e3870d0656b76659bab27dfdf490161f8c73893b99c8fee483946e66c794.",
+    "candidateExtractionIdentity": "PASS: compact candidate hashes to sha256:74b8c72b29c911133e4c7dbab43afcef7558600561cf71fda0d5d42c09d7f733.",
+    "proposalReplay": "PASS: the staged handoff records an exact fourteen-operation replay from the pinned canonical extraction.",
+    "coverage": "PASS: all seven audited claims and all seven paired active-date hints were independently reviewed.",
+    "chronology": "FAIL: claim-20 and hints-p001 use a strict after AD 940 lower bound, which excludes a source-permitted AD 940 transfer after the Tianfu 4 seventh month appointment.",
+    "scope": "PASS: no people, aliases, roles, relationships, mentions, translations, source evidence, or non-temporal claim content changes.",
+    "canonicalMutation": "NONE"
+  }
+}

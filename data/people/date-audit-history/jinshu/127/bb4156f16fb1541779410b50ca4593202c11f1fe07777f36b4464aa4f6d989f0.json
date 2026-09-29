@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "jinshu",
+  "chapter": "127",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:15e35a1356f1c327a2334770cfa59ee439f9964bcf848045af749a442cf77f25",
+  "reviewer": {
+    "name": "Independent Jinshu 127 date audit",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T00:00:00.000Z",
+  "status": "needs-revision",
+  "summary": "Targeted independent source audit of the deterministic chronology defects in Jinshu 127: the three cited historical attestations have reversed Western intervals, from AD 350 to AD 322. The Chinese passages identify historical episodes but do not themselves license a shared AD 350–322 activity interval. The affected records require a separately sourced repair and a fresh complete audit; this report does not approve the chapter or infer replacement dates.",
+  "reviewedUnits": [
+    "s0148",
+    "s0159",
+    "s0160"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-255",
+      "verdict": "incorrect",
+      "event": "Pi Lu Wei's recalled association with Duan Kan's rebellion.",
+      "reason": "The extracted Western interval is mechanically impossible because its asserted start is AD 350 and its asserted end is AD 322. The linked Chinese passage names Pi Lu Wei and the recalled suppression episode, but supplies no wording that could justify those reversed endpoints.",
+      "evidence": [
+        {
+          "unit": "s0148",
+          "quote": "逆賊辟閭渾父蔚，昔同段龕阻亂淄川"
+        }
+      ]
+    },
+    {
+      "id": "claim-256",
+      "verdict": "incorrect",
+      "event": "Duan Kan's recalled rebellion and destruction by the prior court.",
+      "reason": "The extracted Western interval is mechanically impossible because its asserted start is AD 350 and its asserted end is AD 322. The linked Chinese passages identify Duan Kan and describe the historical episode, but do not support a reversed shared interval.",
+      "evidence": [
+        {
+          "unit": "s0160",
+          "quote": "段龕幹紀，取滅於前朝"
+        }
+      ]
+    },
+    {
+      "id": "claim-262",
+      "verdict": "incorrect",
+      "event": "Cao Yi's capture by Later Zhao.",
+      "reason": "The extracted Western interval is mechanically impossible because its asserted start is AD 350 and its asserted end is AD 322. The Chinese passage identifies Cao Yi's capture by Later Zhao, but it does not support those reversed endpoints.",
+      "evidence": [
+        {
+          "unit": "s0159",
+          "quote": "曹嶷跋扈，見擒于後趙"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p085",
+      "verdict": "incorrect",
+      "reason": "Pi Lu Wei's only checked temporal attestation in this targeted audit carries an impossible AD 350-to-322 interval. The passage identifies a recalled association with Duan Kan, but the record must not retain invalid temporal geometry pending independent repair.",
+      "evidence": [
+        {
+          "unit": "s0148",
+          "quote": "逆賊辟閭渾父蔚，昔同段龕阻亂淄川"
+        }
+      ]
+    },
+    {
+      "id": "p086",
+      "verdict": "incorrect",
+      "reason": "Duan Kan's checked temporal attestation carries an impossible AD 350-to-322 interval. The source preserves a recalled rebellion and destruction, but an independently sourced repair must determine any defensible chronology rather than retaining reversed dates.",
+      "evidence": [
+        {
+          "unit": "s0160",
+          "quote": "段龕幹紀，取滅於前朝"
+        }
+      ]
+    },
+    {
+      "id": "p092",
+      "verdict": "incorrect",
+      "reason": "Cao Yi's checked temporal attestation carries an impossible AD 350-to-322 interval. The source only identifies his capture by Later Zhao in this chapter; it cannot validate reversed endpoints or a borrowed shared window.",
+      "evidence": [
+        {
+          "unit": "s0159",
+          "quote": "曹嶷跋扈，見擒于後趙"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-255",
+        "p085"
+      ],
+      "problem": "Pi Lu Wei's historical-attestation interval is reversed: AD 350 is recorded as its start and AD 322 as its end. The cited sentence supplies a recalled association, not evidence for that geometry.",
+      "action": "Replace or remove the invalid interval only after a separate repair review pins the relevant historical episode and its owner from source evidence; retain uncertainty rather than selecting a convenient endpoint. Submit the repaired extraction to a fresh independent whole-chapter audit."
+    },
+    {
+      "items": [
+        "claim-256",
+        "p086"
+      ],
+      "problem": "Duan Kan's historical-attestation interval is reversed: AD 350 is recorded as its start and AD 322 as its end. The cited passages name his episode but do not justify a shared reversed range.",
+      "action": "Use an independent source repair to identify whether a bounded event date is supportable, otherwise remove the invalid interval. Do not copy another person's chronology or infer an exact endpoint from the rhetorical retrospective; re-audit the resulting chapter independently."
+    },
+    {
+      "items": [
+        "claim-262",
+        "p092"
+      ],
+      "problem": "Cao Yi's historical-attestation interval is reversed: AD 350 is recorded as its start and AD 322 as its end. The source identifies capture by Later Zhao but supplies no basis for the reversed interval.",
+      "action": "Research and repair the capture chronology in a separate source-backed repair context, or remove the invalid interval if no defensible conversion is available. Preserve the source's event wording and submit the changed extraction to fresh independent review."
+    }
+  ],
+  "references": []
+}

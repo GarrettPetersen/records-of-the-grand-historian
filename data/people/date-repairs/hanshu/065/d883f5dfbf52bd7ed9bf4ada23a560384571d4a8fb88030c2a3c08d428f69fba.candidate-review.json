@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "065",
+  "candidateCommit": "2e7845b99e",
+  "candidateFile": "staged-candidate-d883f5dfbf52bd7ed9bf.json",
+  "sourceHash": "sha256:dd78cf374a684623e685f6536dd82de8a2d662f3e7eedfc78aa60fbf6371a8d0",
+  "originalExtractionHash": "sha256:c92d7c398961411014c908439af20267c23011da5ca34fd9241ac4501f8ed3d6",
+  "candidateExtractionHash": "sha256:d883f5dfbf52bd7ed9bf4ada23a560384571d4a8fb88030c2a3c08d428f69fba",
+  "reviewer": {
+    "name": "Codex independent Hanshu 065 date-repair reviewer",
+    "agentId": "date_audit_beiqishu005",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T09:14:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent source-packet and audit review. All 73 flagged temporal claims and 67 paired active-date hints are covered exactly once. The claim conversions retain the cited Chinese wording, person, predicate, confidence, and source-unit evidence while removing only unsupported imported Western activity intervals and adding source-specific unresolved holds. The 67 hints become research-required holds. No dates, people, claims, events, relationships, aliases, or other non-date content are added or rewritten.",
+  "validation": {
+    "canonicalInputs": "PASS: fresh 377-unit packet hashes match the handoff's pinned source and canonical extraction hashes.",
+    "sourceReview": "PASS: independently checked all 73 flagged claim checks against the audit's exact Chinese evidence across 79 source units; each cited audit quotation occurs in its referenced current source unit. The source supports retaining the contextual statement but not treating every year of the former imported interval as the person's activity.",
+    "proposalReplay": "PASS: applyDateRepairProposal reconstructed the declared sha256:d883f5dfbf52bd7ed9bf4ada23a560384571d4a8fb88030c2a3c08d428f69fba candidate byte-for-byte.",
+    "coverage": "PASS: all 140 audit-scoped targets are present exactly once (73 claims and 67 hints), with no omissions or out-of-audit additions.",
+    "nonDateRetention": "PASS: every claim replacement retains subject, predicate, sourceDate, confidence, and source-unit evidence; only Western date containers and unresolved-hold metadata change. Hint replacements only replace derived chronology text.",
+    "compactValidation": "PASS: reconstructed candidate validates with 377 units, 101 people, 397 mentions, 1,017 claims, and zero alias conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reports no candidate geometry findings.",
+    "canonicalMutation": "NONE: this receipt does not alter canonical source, extraction, or audit files."
+  },
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all 140 operations exactly; do not restore any broad Western personal-activity interval from the former extraction.",
+    "Keep each retained claim as a source-specific research hold until independently sourced chronology resolves it.",
+    "Do not change canonical audit status during curation; require a fresh complete independent audit of the curated canonical extraction."
+  ]
+}

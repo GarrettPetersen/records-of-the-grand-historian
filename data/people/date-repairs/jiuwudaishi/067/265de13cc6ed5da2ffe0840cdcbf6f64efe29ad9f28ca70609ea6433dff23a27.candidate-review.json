@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "067",
+  "candidateFile": "staged-candidate-265de13cc6ed5da2ffe0.json",
+  "sourceHash": "sha256:45978ead8ea8695b79ac5632af3ebb1d68b90ed1ff8b1a0c89d441752b3a0126",
+  "originalExtractionHash": "sha256:09972d1e8bbfdebbb224337dd34d8329f1cbc6447cb7b548001a1ca9ddf17dfd",
+  "sealedCandidateHash": "sha256:265de13cc6ed5da2ffe0840cdcbf6f64efe29ad9f28ca70609ea6433dff23a27",
+  "candidateExtractionHash": "sha256:d7a7fc3fc60dd7efe9ddaffa5f3b4d025c29fd7db6c2e3e0cc989a8d7a706b8f",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 067 chapter-wide chronology candidate reviewer",
+    "agentId": "review_jiuwudaishi067_chapterwide",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T02:03:37.419Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted for host curation after an independent sealed replay, complete action-count and scope comparison, source-ownership sampling across the chapter, compact-validation, chronology-geometry review, and scoped validator run. The candidate removes exactly the 87 synthetic chapter-wide AD 900–940 attestation windows and exactly the 81 matching active-date hints. Each replacement retains the source-unit link as an explicit undated source attestation; independent, source-specific chronology remains unchanged. This date-only repair neither creates nor removes people, mentions, aliases, relationships, claims other than the 87 named attestations, source text, or translations.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-230 through claim-402 (the 87 even-numbered attestation claims)",
+        "hints-p056 through hints-p111 and the remaining paired persons p120–p138 (81 hint operations)"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0111",
+          "quote": "趙鳳，幽州人也。"
+        },
+        {
+          "unit": "s0126",
+          "quote": "時任圜為宰相，為安重誨所傾，以至罷相歸磁州。"
+        },
+        {
+          "unit": "s0161",
+          "quote": "光化中，軍容劉季述、王奉先廢昭宗，立裕王，五月餘，諸侯無奔問者。"
+        },
+        {
+          "unit": "s0177",
+          "quote": "梁有禪代之謀，柳璨希旨殺害朝士，愚以衣冠自相殘害，乃避地河朔，與宗人李延光客於山東。"
+        },
+        {
+          "unit": "s0233",
+          "quote": "宰相劉句與馮道為婚家，道既出鎮，兩人在中書，或舊事不便要厘革者，對論不定。"
+        },
+        {
+          "unit": "s0262",
+          "quote": "明宗嘉其功，拜平章事，判三司。"
+        }
+      ],
+      "reason": "The sampled source units identify people or describe undated narrative relationships/offices; none supplies a personal AD 900–940 activity interval. The former shared bounds were synthetic. The candidate correctly preserves the existing source link while replacing each fabricated interval with the sanctioned undated-source-attestation marker. Direct comparison confirms that all independently sourced chronology—including accession, office, exile, death, and reception claims—remains byte-identical outside the sealed 168 operations."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:45978ead8ea8695b79ac5632af3ebb1d68b90ed1ff8b1a0c89d441752b3a0126 and sha256:09972d1e8bbfdebbb224337dd34d8329f1cbc6447cb7b548001a1ca9ddf17dfd.",
+    "Replay only the sealed 87 attestation replacements and 81 paired active-hint replacements; do not alter person identities, aliases, roles, mentions, relations, other claims, source text, translations, or editorial repairs.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit.",
+    "Treat generic title-only p129 “Heir Apparent” (s0275) as separate source-audit/false-person-removal work; it is outside this date-only proposal and must not be changed by this curation."
+  ],
+  "validation": {
+    "canonicalSourceHash": "PASS: rebuilt packet is sha256:45978ead8ea8695b79ac5632af3ebb1d68b90ed1ff8b1a0c89d441752b3a0126.",
+    "canonicalExtractionHash": "PASS: pinned compact extraction is sha256:09972d1e8bbfdebbb224337dd34d8329f1cbc6447cb7b548001a1ca9ddf17dfd.",
+    "sealedProposalIdentity": "PASS: exact 168-operation proposal seals to sha256:265de13cc6ed5da2ffe0840cdcbf6f64efe29ad9f28ca70609ea6433dff23a27.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:d7a7fc3fc60dd7efe9ddaffa5f3b4d025c29fd7db6c2e3e0cc989a8d7a706b8f.",
+    "proposalReplay": "PASS: exact replay from the pinned canonical extraction reconstructed the candidate byte-for-byte.",
+    "auditScope": "PASS: exactly 87 attestation claims with synthetic sourceDate “chapter narrative” plus AD 900–940 westernBounds become undatedSourceAttestation records; exactly 81 matching AD 900-940 active hints become empty. No other compact extraction fields differ.",
+    "sourceOwnership": "PASS: sampled early, middle, and late source units identify subjects or undated narrative context, not personal chapter-wide chronology. Existing independently dated claims remain unchanged.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction passed against the rebuilt 288-unit chapter packet (140 people, 516 mentions, 751 claims).",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reported no geometry defects after replay.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 067 passed in the isolated review worktree.",
+    "canonicalMutation": "NONE"
+  }
+}

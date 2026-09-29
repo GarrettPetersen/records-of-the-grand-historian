@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "091",
+  "candidateCommit": "0f12375b1e",
+  "candidateFile": "staged-candidate-251b8f101f2d310dd313.json",
+  "sealedCandidateHash": "sha256:251b8f101f2d310dd313e846ffec532e2a27be0b907e28d1d521e6bc4d7b0631",
+  "candidateExtractionHash": "sha256:b5ee48b61cdc8f6c5df3ba31e7dbef526e55c77f676a90a6f56a508736c10fdf",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 091 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi091",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T03:36:32.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited or research-blocked after fresh independent audit",
+  "summary": "Accepted all 19 sealed chronology-only operations. The candidate restores Guangqi (AD 885–888), Tianfu (AD 901–904), Tianfu-era Zhang Congxun death (AD 936–942), and Mingzong’s reign (AD 926–933) without changing event owners, wording, evidence, or unrelated chronology.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-461", "claim-465", "claim-466", "claim-467", "hints-p088", "hints-p089", "hints-p090", "hints-p091"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0200: 「唐光啟中，罕之與河南張全義為仇，交相攻擊，罕之兵敗，北投太原，武皇以澤州處之，罕之將赴任，留頃為質焉。」"],
+      "reason": "光啟 is the Tang era AD 885–888. The sentence dates the related hostaging, feud, and flight events only 中 (during) that era, so the four AD 885 point claims and corresponding active hints must be intervals rather than first-year assignments."
+    },
+    {
+      "proposalItems": ["claim-470", "claim-471", "claim-473", "hints-p093", "hints-p094", "hints-p096"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0204: 「天復中，梁祖自鳳翔送唐昭宗歸長安，留軍萬人，命侄友倫與頃總之，以宿衛為名。」"],
+      "reason": "天復 spans AD 901–904. The passage places Liang Zu’s escort, the retained force, and Youlun and Qing’s joint command during that era; it does not select AD 903. The proposal correctly retains the existing AD 904 and AD 907 independent hint events for p093."
+    },
+    {
+      "proposalItems": ["claim-391", "claim-416", "hints-p074"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0191: 「尋授絳州刺史、檢校太保，在任數年，天福中，卒於官，年五十二。」"],
+      "reason": "天福中 bounds Zhang Congxun’s death in office to Later Jin Tianfu, AD 936–942. Both the attestation and separately classified death dateContext need that same interval; a lower bound at AD 936 loses the explicit reign endpoint and a point year would overstate the source."
+    },
+    {
+      "proposalItems": ["claim-475", "hints-p098"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0209: 「明宗朝，授衍州刺史。」"],
+      "reason": "明宗朝 identifies Mingzong’s full AD 926–933 reign, not merely its accession year. The appointment and active-date hint therefore correctly change from an AD 926 lower bound/point to that interval."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: handoff pins canonical source sha256:4f634f33aa7c9b6b4e5da064a8bca2dd5059c776a78a3447c1597322c279947d and canonical extraction sha256:960fd3008d379de499a78c5bb38b1b40443b661cafad643fa751046c8591f506.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:251b8f101f2d310dd313e846ffec532e2a27be0b907e28d1d521e6bc4d7b0631.",
+    "candidateExtractionIdentity": "PASS: handoff candidate extraction hash is sha256:b5ee48b61cdc8f6c5df3ba31e7dbef526e55c77f676a90a6f56a508736c10fdf.",
+    "proposalReplay": "PASS: candidate records exactly 19 sealed replacements/hint synchronizations, with its own replay validation passed.",
+    "auditScope": "PASS: all and only the four initial-audit findings’ listed claims, required paired death context, and active-date hints change.",
+    "sourceSoundness": "PASS: independently read s0191, s0200, s0204, and s0209; each source phrase supports the corresponding complete reign interval.",
+    "nonDateRetention": "PASS: every replacement retains person, predicate, sourceDate text, event description, certainty, and unit evidence; only chronology geometry changes.",
+    "compactValidation": "PASS: candidate reports 285 units, 125 people, 753 mentions, 999 claims, and no alias disposition conflicts.",
+    "chronologyGeometry": "PASS: candidate reports no temporal diagnostics.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the source and canonical extraction hashes pinned by the sealed handoff remain current.",
+    "Replay exactly the 19 sealed operations; do not narrow any of the four source windows to a point date.",
+    "Do not alter source text, event ownership, non-date claim content, or unrelated active hints.",
+    "Require a fresh independent canonical date audit after host curation."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "117",
+  "candidateCommit": "5f425c6044e1fbea3a70d07279d2a46eb0ecc538",
+  "candidateFile": "staged-candidate-4a7e647952adbc39ff69.json",
+  "candidateHash": "sha256:8dc24cb81820800535be26dea6c6f59d5396525d828daea6b7fc2c30570f838e",
+  "sealedCandidateHash": "sha256:4a7e647952adbc39ff691bb7dcc4a8c09295c93013c28e277df31ffd27bb14a2",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 117 date-repair reviewer",
+    "agentId": "fix_life_predicate_attestation_validator",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T00:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent pinned-input, deterministic replay, source-context, reception, and strict-validator review. The candidate has exactly 21 operations: ten cited historical/bibliographical recollections become retrospective reception events, their ten derived active-date hints are removed, and Sun Sheng's source-supported execution remains an undated death because the text gives only its sequence before Zhong Mo's restoration. The retained source units identify historical subjects in a later memorial or retrospective account; they do not attest current activity. No operation alters a source unit, evidence ID, person identity, or canonical extraction.",
+  "evidence": {
+    "receptionClaims": ["claim-38", "claim-44", "claim-49", "claim-56", "claim-60", "claim-63", "claim-68", "claim-77", "claim-85", "claim-595"],
+    "pairedHintChanges": ["p003", "p004", "p005", "p006", "p007", "p008", "p009", "p010", "p011", "p085"],
+    "sunSheng": {
+      "claim": "claim-596",
+      "sourceUnit": "s0101",
+      "sourceText": "帝既誅孫晟（先於鐘謨復官）",
+      "finding": "The relative sequence supports execution but no Western point or interval."
+    }
+  },
+  "validation": {
+    "canonicalSourceHash": "sha256:ea6ddf1e9f77837d89b28542c63f0ebfa3727ce8324ac6c3e4b1326772679dbf",
+    "canonicalExtractionHash": "sha256:5f1d16722223cbc3a6c0e5996d728d59603c5497a9063a6bb5609db1572df319",
+    "auditReportHash": "sha256:14e7d517ef2e868d885fb7052ad9a3df02bd6679c064a64186a0d8ec45d43e18",
+    "inputPins": "PASS",
+    "proposalReplay": "PASS: independently reapplied all ten exact claim substitutions, ten exact hint substitutions, and the Sun Sheng death substitution; result byte-matches candidate hash",
+    "coverage": "PASS: 21/21 operations; 10 retrospective reclassifications, 10 dependent hint removals, 1 undated-death correction",
+    "sourceSoundness": "PASS",
+    "receptionClassification": "PASS",
+    "sunShengUndatedDeath": "PASS",
+    "strictCompactValidation": "PASS: 172 units, 132 people, 492 mentions, 1259 claims, 30 repairs, 451 dispositions, 0 alias conflicts",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only when all three canonical input pins match.",
+    "Replay all 21 operations exactly.",
+    "Run a fresh independent canonical date audit after host curation."
+  ]
+}

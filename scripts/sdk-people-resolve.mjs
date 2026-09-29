@@ -93,6 +93,8 @@ Options:
   --max-run-cost DOLLARS
                         Cancel one active run at this raw usage cost (default: $${(DEFAULT_MAX_RUN_COST_CENTS / 100).toFixed(2)}; use unlimited to disable).
   --max-run-tokens N    Cancel one active run at this token count (default: ${DEFAULT_MAX_RUN_TOKENS.toLocaleString('en-US')}; use unlimited to disable).
+  --run-timeout-minutes N
+                        Cancel one active run after N minutes (default: 20).
   --model MODEL         Cursor model (default: ${DEFAULT_MODEL}).
   --effort LEVEL        low, medium, or high (default: medium).
   --fast                Enable the model's fast variant.
@@ -177,6 +179,7 @@ function parseArgs(argv) {
     maxAttempts: 4,
     maxRunCostCents: DEFAULT_MAX_RUN_COST_CENTS,
     maxRunTokens: DEFAULT_MAX_RUN_TOKENS,
+    runTimeoutMs: 20 * 60_000,
     model: process.env.SDK_PEOPLE_RESOLUTION_MODEL ?? DEFAULT_MODEL,
     effort: process.env.SDK_PEOPLE_RESOLUTION_EFFORT ?? 'medium',
     fast: false,
@@ -210,6 +213,7 @@ function parseArgs(argv) {
     else if (arg === '--max-attempts') opts.maxAttempts = positiveInteger(next(), arg, 5);
     else if (arg === '--max-run-cost') opts.maxRunCostCents = parseCursorDollarLimit(next(), arg);
     else if (arg === '--max-run-tokens') opts.maxRunTokens = parseCursorIntegerLimit(next(), arg);
+    else if (arg === '--run-timeout-minutes') opts.runTimeoutMs = positiveInteger(next(), arg, 180) * 60_000;
     else if (arg === '--model') opts.model = next();
     else if (arg === '--effort') opts.effort = next();
     else if (arg === '--fast') opts.fast = true;
@@ -823,6 +827,19 @@ function prepareDossierFiles(dossiers, opts, corpus) {
   console.log(`Prepared ${repositoryPath(dossierManifestFile(opts))}`);
 }
 
+function localStartingRef(startingRef) {
+  if (startingRef.startsWith('origin/')) return startingRef;
+  const remoteRef = `origin/${startingRef}`;
+  try {
+    execFileSync('git', ['rev-parse', '--verify', `${remoteRef}^{commit}`], {
+      cwd: REPO_ROOT, stdio: 'ignore',
+    });
+    return remoteRef;
+  } catch {
+    return startingRef;
+  }
+}
+
 function verifyCommittedFile(file, expected, opts) {
   const relative = repositoryPath(file);
   if (!fs.existsSync(file)) throw new Error(`Missing resolver dossier ${relative}`);
@@ -831,7 +848,7 @@ function verifyCommittedFile(file, expected, opts) {
   }
   let committed;
   try {
-    committed = execFileSync('git', ['show', `${opts.startingRef}:${relative}`], {
+    committed = execFileSync('git', ['show', `${localStartingRef(opts.startingRef)}:${relative}`], {
       cwd: REPO_ROOT,
       encoding: 'utf8',
       maxBuffer: 64 * 1024 * 1024,
@@ -885,6 +902,7 @@ function baselineFromPreparedDossiers(dossiers) {
 }
 
 function loadPreparedDossiers(opts) {
+  const startingRef = localStartingRef(opts.startingRef);
   const manifestFile = dossierManifestFile(opts);
   if (!fs.existsSync(manifestFile)) {
     throw new Error(
@@ -922,7 +940,7 @@ function loadPreparedDossiers(opts) {
   }
   const changedSources = execFileSync(
     'git',
-    ['diff', '--name-only', opts.startingRef, '--', ...sourcePaths],
+    ['diff', '--name-only', startingRef, '--', ...sourcePaths],
     {
       cwd: REPO_ROOT,
       encoding: 'utf8',
@@ -935,7 +953,7 @@ function loadPreparedDossiers(opts) {
     try {
       startingValue = JSON.parse(execFileSync(
         'git',
-        ['show', `${opts.startingRef}:${source}`],
+        ['show', `${startingRef}:${source}`],
         {
           cwd: REPO_ROOT,
           encoding: 'utf8',
@@ -1419,6 +1437,7 @@ async function waitForTrackedRun(run, opts, control, label, agentId) {
       apiKey: opts.apiKey,
       label,
       pollMs: DEFAULT_RUN_POLL_MS,
+      timeoutMs: opts.runTimeoutMs,
       maxRawCostCents: opts.maxRunCostCents,
       maxTotalTokens: opts.maxRunTokens,
     });

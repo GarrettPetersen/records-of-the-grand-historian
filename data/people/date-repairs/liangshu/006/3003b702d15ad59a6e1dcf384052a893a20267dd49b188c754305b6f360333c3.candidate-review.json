@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "liangshu",
+  "chapter": "006",
+  "candidateFile": "staged-candidate-7ee7408e5013cf1b7c87.json",
+  "candidateHash": "sha256:3003b702d15ad59a6e1dcf384052a893a20267dd49b188c754305b6f360333c3",
+  "sealedCandidateHash": "sha256:7ee7408e5013cf1b7c8724d75a84d3f98f6a000382cb3a2c082f0bdd0a0b8e1d",
+  "reviewer": {
+    "name": "Independent Liangshu 006 replacement date-repair reviewer",
+    "agentId": "review_liangshu006_second_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T18:10:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted conditionally: the sealed candidate matches the current source and extraction pins, replays all nine direct chronology and active-hint changes, removes only the two Song/Qi polity records and their linked claims and mention surfaces, preserves the two genuine AD 556 appointment owners, and retains all 24 prior source-limited research holds unchanged. A fresh, complete independent audit remains required after host curation.",
+  "validation": {
+    "canonicalSourceHash": "sha256:f02cd5eb074030912578305a12cc6343351d1d4f077d27bf220bd900f43bb85e",
+    "canonicalExtractionHash": "sha256:78189d6bd9527293785c0cb7df94807d974db89d2d562ed307c865edd74e2c97",
+    "freshAuditCommit": "0ffca6ce1fcfa8236ec621c28f837a5aaf3a1e2c",
+    "proposalReplay": "PASS: 9/9 direct date and hint operations",
+    "falsePersonRemoval": "PASS: p072 and p073 removed with 4 linked claims and 4 mention surfaces; only p056 relationship cleanup changed",
+    "sourceSoundness": "PASS: s0072 retains Liu Rui (p055) and Xiao Dan (p056) as the named AD 556 appointment owners",
+    "researchHoldRetention": "PASS: 24/24 prior unresolved claim and hint values byte-identical",
+    "compactValidation": "PASS: 192 units, 86 people, 403 mentions, 625 claims",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only when the recorded source and canonical extraction hashes still match.",
+    "Replay the nine direct changes and the two source-audited false-person removals exactly; do not alter other people, claims, mentions, or translation data.",
+    "Run scoped validation and chronology geometry after curation.",
+    "Build a fresh packet and obtain a complete independent re-audit before changing the audit status."
+  ]
+}

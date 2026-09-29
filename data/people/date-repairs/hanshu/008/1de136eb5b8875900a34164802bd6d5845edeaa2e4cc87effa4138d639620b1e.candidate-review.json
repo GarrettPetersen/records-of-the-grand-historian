@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "008",
+  "candidateFile": "staged-candidate-1de136eb5b8875900a34.json",
+  "candidateHash": "sha256:1de136eb5b8875900a34164802bd6d5845edeaa2e4cc87effa4138d639620b1e",
+  "reviewer": {
+    "name": "Codex independent Hanshu 008 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T09:15:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The sole claim-166 change correctly replaces King Dai of Sishui's unsupported BC 80 point death with an on-or-before BC 81 bound. s0072 says 泗水戴王前薨 in the Yuanfeng 1 account: the source establishes death before that year, not an exact date.",
+  "validation": {
+    "proposalReplay": "PASS: the one pinned operation replays byte-for-byte to sha256:1de136eb5b8875900a34164802bd6d5845edeaa2e4cc87effa4138d639620b1e.",
+    "coverage": "PASS: only claim-166 is changed; no hint, person, source unit, or unrelated claim is altered.",
+    "sourceChecks": "PASS: s0072's 前薨 supplies the one-sided death relationship. 元鳳元年 is BC 80, so death before it is conservatively represented as on or before BC 81.",
+    "scope": "PASS: candidate differs only in claim-166's temporal container and explanatory event text.",
+    "compactValidation": "PASS: scoped people validator passed for hanshu/008.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against matching pinned source and canonical extraction hashes.",
+    "Apply only claim-166's one-sided bound replacement.",
+    "Do not turn the bound into a BC 80 point date or alter canonical audit status during curation.",
+    "Require a fresh independent canonical audit after application."
+  ]
+}

@@ -36,7 +36,7 @@
     "people:editorial-dossier": "node scripts/build-people-editorial-review.mjs",
     "people:editorial-review": "node scripts/sdk-people-editorial-review.mjs",
     "people:apply-repairs": "node scripts/apply-people-translation-repairs.mjs",
-    "people:apply-repairs:self-test": "node scripts/apply-people-translation-repairs.mjs --self-test",
+    "people:apply-repairs:self-test": "node --test scripts/test-people-repair-name-collisions.mjs scripts/test-people-editorial-rejections.mjs && node scripts/apply-people-translation-repairs.mjs --self-test",
     "people:apply-editorial": "node scripts/apply-people-editorial-decisions.mjs",
     "people:apply-editorial:self-test": "node scripts/apply-people-editorial-decisions.mjs --self-test",
     "people:remove-false": "node scripts/remove-false-people.mjs",
@@ -60,6 +60,8 @@
     "people:dates:self-test": "node --test scripts/test-people-date-audit.mjs scripts/test-people-reception.mjs",
     "people:dates:run": "node scripts/run-people-date-workflow.mjs",
     "people:dates:workflow:self-test": "node --test scripts/test-people-date-workflow.mjs",
+    "people:curation:publish": "node scripts/publish-people-combined-curation.mjs",
+    "people:curation:self-test": "node --test scripts/test-people-combined-curation.mjs",
     "people:extract:deadline-recovery": "node scripts/run-people-deadline-wave.mjs --phase recovery",
     "people:extract:deadline-wave": "node scripts/run-people-deadline-wave.mjs --phase extraction",
     "people:editorial:deadline-wave": "node scripts/run-people-deadline-wave.mjs --phase editorial",
@@ -86,6 +88,16 @@
     "people:grokbot:assemble": "node scripts/people-work-queue.mjs assemble-grokbot",
     "people:grokbot:accept": "node scripts/people-work-queue.mjs accept-grokbot",
     "people:grokbot:submit": "node scripts/people-work-queue.mjs submit-grokbot",
+    "people:grokbot:mcp": "node scripts/grokbot-mcp-server.mjs",
+    "people:grokbot:mcp:bootstrap": "node scripts/create-grokbot-mcp-bootstrap.mjs",
+    "people:grokbot:mcp:client": "node scripts/grokbot-mcp-client.mjs",
+    "people:grokbot:mcp:self-test": "node --test scripts/test-grokbot-mcp-server.mjs",
+    "people:grokbot:headless:probe": "node scripts/grokbot-headless-dispatch.mjs probe",
+    "people:grokbot:headless:once": "node scripts/grokbot-headless-dispatch.mjs once",
+    "people:grokbot:headless": "node scripts/grokbot-headless-dispatch.mjs daemon",
+    "people:grokbot:headless:install": "node scripts/install-grokbot-headless-launch-agent.mjs",
+    "people:grokbot:headless:uninstall": "node scripts/install-grokbot-headless-launch-agent.mjs uninstall",
+    "people:grokbot:headless:self-test": "node --test scripts/test-grokbot-headless-dispatch.mjs",
     "build:og": "node generate-og-images.js",
     "build:og:incremental": "node generate-og-images.js --incremental",
     "build:og:shiji": "node generate-og-images.js --book shiji",
@@ -229,12 +241,18 @@
   "description": "",
   "dependencies": {
     "@cursor/sdk": "^1.0.13",
+    "@modelcontextprotocol/node": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.0.0",
     "@resvg/resvg-js": "^2.6.2",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "cheerio": "^1.1.2",
     "family-chart": "^0.9.0",
     "react": "^19.2.5",
-    "satori": "^0.26.0"
+    "satori": "^0.26.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0"
   }
 }

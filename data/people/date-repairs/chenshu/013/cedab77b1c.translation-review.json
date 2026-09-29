@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-translation-repair-review",
+  "book": "chenshu",
+  "chapter": "013",
+  "reviewedCommit": "cedab77b1c03555e4972a80415b2c5e53189e075",
+  "reviewer": {
+    "name": "Independent Chenshu 013 Guangda translation reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfRepairAuthor": true
+  },
+  "reviewedAt": "2026-09-23T07:00:00.000Z",
+  "disposition": "accept",
+  "summary": "Accepted: s0037's Chinese 光大二年 is Guangda 2, AD 568. The repair changes only the erroneous idiomatic parenthetical from 567 to 568. The literal translation contains no Western-year parenthetical and correctly remains unchanged.",
+  "sourceCheck": {
+    "unit": "s0037",
+    "chinese": "光大二年，隸都督淳于量征華皎。",
+    "chronology": "Guangda began in AD 567; its second year is AD 568.",
+    "literalBeforeAndAfter": "In the second year of Guangda he served under Area Commander Chunyu Liang in campaigning against Hua Jiao.",
+    "idiomaticBefore": "In Guangda year 2 (567) he served under area commander Chunyu Liang against Hua Jiao.",
+    "idiomaticAfter": "In Guangda year 2 (568) he served under area commander Chunyu Liang against Hua Jiao."
+  },
+  "scopeCheck": {
+    "changedFiles": [
+      "data/chenshu/013.json"
+    ],
+    "substantiveChange": "Only s0037's idiomatic Western year changed from 567 to 568; the other diff line adds the final JSON newline.",
+    "literalWesternYearPresent": false,
+    "personExtractionChanged": false,
+    "editorialClaimsChanged": false
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book chenshu --chapter 013",
+    "result": "expected-stale-input-fingerprint",
+    "detail": "The scoped validator fails only because this accepted source-text correction changes the chapter fingerprint while the existing compact extraction still names the old input fingerprint. No extraction or claim file was changed in the repair. Rebuild the chapter packet/extraction and obtain a fresh independent date audit before treating the chapter as date-approved."
+  },
+  "followUp": "Refresh Chenshu 013's extraction packet and repeat the independent date audit; do not alter the already-correct canonical AD 568 claims merely to address this translation repair."
+}

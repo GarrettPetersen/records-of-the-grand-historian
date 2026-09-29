@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "qingshigao",
+  "chapter": "111",
+  "candidateFile": "staged-candidate-b42a2be3de3b4ac8fbc2.json",
+  "sealedCandidateHash": "sha256:b42a2be3de3b4ac8fbc2a4c2fc1eccb3668956dda321f4cda8104fb5b333a99b",
+  "candidateExtractionHash": "sha256:a7e7eba0253a39ccdff0a28d21fa3f944907f79e313ab5dba4b0df92760729e6",
+  "reviewer": {
+    "name": "Codex independent Qingshigao 111 staged date-repair reviewer",
+    "agentId": "review_qingshigao111_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T00:15:36Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after an independent source, pin, sealed-replay, and scope review. The exact 17 date-only operations resolve all six findings: seven overprecise chronology containers (claims 79, 83, 92–94, 97, and 108) are reduced to their actual source wording or an explicit research hold, and ten paired active-date hints no longer assert whole-reign activity. Directly dated actions—AD 1656, 1664, 1667, 1744, 1800, 1827, 1866, and 1881—remain unchanged for their actual owners. No identity, name, role, surface, predicate, evidence unit, translation, or non-date fact changes.",
+  "hostRequirements": [
+    "Apply only if the canonical source hash remains sha256:e2fea6726af9c092fcba7bd6b60f7f82ccd5d6ff34a38cc51d008d9c43b5a384 and the canonical extraction hash remains sha256:8762c794075e50c0feb2a9aa9f45ce14dc43db8ee5ec068840fbacfb02a36593.",
+    "Replay exactly the seven claim replacements and ten hint replacements bound by sealedCandidateHash; do not supply a new Western year for 唐熙元年, 康熙初, 雍正中, 仁宗初, or 沿及德宗 without separate source verification.",
+    "Do not alter canonical source or extraction from this receipt; after host curation, run scoped validation and obtain a fresh independent canonical date audit."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:e2fea6726af9c092fcba7bd6b60f7f82ccd5d6ff34a38cc51d008d9c43b5a384",
+    "canonicalExtractionHash": "sha256:8762c794075e50c0feb2a9aa9f45ce14dc43db8ee5ec068840fbacfb02a36593",
+    "canonicalInputs": "PASS: freshly rebuilt date-audit packet matched both sealed canonical pins.",
+    "sealedProposalIdentity": "PASS: SHA-256 of the exact 17-operation proposal is b42a2be3de3b4ac8fbc2a4c2fc1eccb3668956dda321f4cda8104fb5b333a99b.",
+    "candidateExtractionIdentity": "PASS: SHA-256 of the staged compact candidate is a7e7eba0253a39ccdff0a28d21fa3f944907f79e313ab5dba4b0df92760729e6.",
+    "proposalReplay": "PASS: replay from the pinned canonical extraction reconstructed the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claims 79, 83, 92, 93, 94, 97, and 108 plus hints for p003, p005, p008, p011, p012, p013, p015, p019, p021, and p023 change; all other compact extraction data is identical.",
+    "sourceSoundness": "PASS: 唐熙元年 is retained as unresolved; 康熙初 and 仁宗初 remain qualitative early-reign contexts; 雍正中 remains an explicit mid-reign research hold; 沿及德宗 remains a qualitative institutional-through-era context. These do not support the removed points or whole-reign personal activity spans.",
+    "directDateRetention": "PASS: the candidate retains the chapter's direct owner-specific AD 1656, 1664, 1667, 1744, 1800, 1827, 1866, and 1881 chronology.",
+    "compactValidation": "PASS: compact validation completed against a freshly rebuilt 250-unit extraction packet (37 people, 90 mentions, 409 claims).",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book qingshigao --chapter 111 on current canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}

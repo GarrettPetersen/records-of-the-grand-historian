@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "076",
+  "candidateFile": "staged-candidate-d6a7f39364070227c168.json",
+  "sourceHash": "sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491",
+  "originalExtractionHash": "sha256:b74582dae5248fa24bd2330fe1f4bbb4567ae2610bdd9ee994bc652024204b61",
+  "sealedCandidateHash": "sha256:d6a7f39364070227c1689b3ea7ea0123f9560e7b4662a499636dc74df5aff9c6",
+  "candidateExtractionHash": "sha256:f9c385e749af3b268c14cf201fd3362f89a6bc1b3eaeb7c5d89e5f07025dd147",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 076 Zhang Quanyi residual-hint reviewer",
+    "agentId": "review_jiuwudaishi076_zhang_hint",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T02:29:56Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed replay, source-context, exact-scope, compact-validation, and chronology-geometry review. The only operation replaces Zhang Quanyi’s inherited strict ‘before AD 926’ hint with a source-specific unresolved hold aligned with the already-curated claim-797. The retrospective phrase identifies him as deceased, but supplies neither a date nor an inclusive Western endpoint.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["hints-p256"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0298",
+          "quote": "繼祚，故齊王全義之子也，故有是詔。"
+        }
+      ],
+      "reason": "故齊王全義 establishes that Zhang Quanyi was already deceased in this retrospective designation of Zhang Jizuo as his son. It supplies no date, no AD 926 endpoint, and no evidence excluding death during AD 926. The candidate correctly removes only the unsupported inherited strict hint and replaces it with a substantive source-specific research hold. Claim-797 remains unchanged, retaining its explicit unresolved attestation and its source evidence."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491 and sha256:b74582dae5248fa24bd2330fe1f4bbb4567ae2610bdd9ee994bc652024204b61.",
+    "Replay exactly the sealed one-operation p256 hints replacement. Do not alter claim-797, person identity, aliases, roles, relationships, mentions, source evidence, translations, or any other claim or hint.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit. Retain the source-specific unresolved hold unless separately reviewed dated evidence supports a narrower chronology."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:90ba4c45de86403f1c5e089c45c48fdf2b230aaeef00a2e01437276bb4168491",
+    "canonicalExtractionHash": "sha256:b74582dae5248fa24bd2330fe1f4bbb4567ae2610bdd9ee994bc652024204b61",
+    "sealedProposalIdentity": "PASS: exact one-operation proposal seals to sha256:d6a7f39364070227c1689b3ea7ea0123f9560e7b4662a499636dc74df5aff9c6.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:f9c385e749af3b268c14cf201fd3362f89a6bc1b3eaeb7c5d89e5f07025dd147.",
+    "proposalReplay": "PASS: exact replay from the pinned canonical extraction reconstructed the candidate byte-for-byte.",
+    "auditScope": "PASS: only p256’s active-hint array changes. All claims including claim-797, aliases, descriptors, roles, relationships, mentions, source evidence, repairs, dispositions, and translations are identical.",
+    "zhangQuanyiSourceOwnership": "PASS: s0298’s 故齊王全義之子 attests death but neither a Western date nor an inclusive endpoint. The replacement hold makes no date assertion.",
+    "compactValidation": "PASS: validateCompactPeopleExtraction passed against the rebuilt 353-unit chapter packet (302 people, 729 mentions, 1657 claims).",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics reported no geometry defects after replay.",
+    "scopedValidator": "PASS: candidate compact integrated validation ran against the pinned current chapter packet.",
+    "canonicalMutation": "NONE"
+  }
+}

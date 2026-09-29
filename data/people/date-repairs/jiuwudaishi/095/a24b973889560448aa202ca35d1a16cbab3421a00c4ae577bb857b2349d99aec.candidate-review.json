@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "095",
+  "candidateFile": "staged-candidate-a24b973889560448aa20.json",
+  "sourceHash": "sha256:ef322c11c5a9dbb9c4dbe8af183ebb822b31292f12c3a83790da3dfe35f10c05",
+  "originalExtractionHash": "sha256:022c9c4734cc2ac313e2e3a8449a963b44866ff8ed946a0ecb5c57f1c5342ca9",
+  "sealedCandidateHash": "sha256:a24b973889560448aa202ca35d1a16cbab3421a00c4ae577bb857b2349d99aec",
+  "candidateExtractionHash": "sha256:a42f99ef061067bb0824635617ecb14ec42e2470c7c613feb3e59febcca5eaf4",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 095 date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi095",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T04:34:00Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected after independently replaying and reviewing all 39 sealed operations against audit 3b5ba39d3916d908d35227d8429a7beb4e4134f6 and the pinned source. The candidate correctly handles the Dai Siyuan/Lu Shunmi narrative, Zhai Zhang's one-sided death sequence, and the retrospective/evaluative synthetic ranges. It also correctly repairs the phase claims whose dates are nested in dateContext. But claim-152 and claim-153 retain their exact AD 923 westernYear inside dateContext while adding an unrelated top-level westernBounds container. Both therefore still assert the unsupported first-year point for 同光初, contrary to the audit. The sealed candidate must not be curated.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-152", "claim-153"],
+      "verdict": "incorrect",
+      "sourceEvidence": [
+        {
+          "unit": "s0040",
+          "quote": "同光初，從戰於河上有功，賜忠烈功臣。"
+        }
+      ],
+      "reason": "Both claims retain sourceDate 同光初 and retain dateContext.westernYear AD 923 in the candidate. The new westernBounds is written at the enclosing claim value instead of inside dateContext, so it neither removes nor qualifies the exact first-year assertion. The source supplies an early-Tongguang phase, not an exact AD 923 event or award."
+    },
+    {
+      "proposalItems": ["claim-154", "claim-659", "claim-660", "claim-661", "claim-680", "claim-749", "claim-750", "claim-775", "claim-787", "claim-834", "claim-835", "claim-843", "claim-844", "claim-852", "hints-p015", "hints-p066", "hints-p076"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0040 says 同光初; s0148 says 天成初; s0157 says 唐長興初; and s0202 says 後唐天成初.",
+        "For these operations the candidate removes the flattened westernYear from the actual date container, preserves the source-era wording, and uses a conservative inclusive lower bound with reconciled active-date hints."
+      ],
+      "reason": "These source-phase changes are conservative and preserve the attested office, event, place, polity, and honor content without manufacturing a phase endpoint."
+    },
+    {
+      "proposalItems": ["claim-501", "claim-517", "claim-524", "claim-526", "claim-528", "hints-p050", "hints-p051"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0110",
+          "quote": "初事梁將戴思遠為步校。"
+        },
+        {
+          "unit": "s0111",
+          "quote": "思遠為鄆州節度使，領部兵屯德勝渡，留順密守其城。"
+        }
+      ],
+      "reason": "The local account has no year or inherited dated campaign context. Removing the borrowed AD 923 values while retaining Lu Shunmi's independently dated later hints and recording Dai Siyuan as a research hold is source-faithful."
+    },
+    {
+      "proposalItems": ["claim-850", "hints-p083"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0207 establishes Gaozu's uprising before the subsequent Zhai Zhang narrative; s0208-s0210 then recount Zhang's later Khitan service, illness, and death.",
+        {
+          "unit": "s0210",
+          "quote": "璋郁郁不得志，遇疾尋卒焉。"
+        }
+      ],
+      "reason": "The candidate changes the false point date into an inclusive on-or-after AD 936 bound and does not invent an endpoint, matching the source sequence."
+    },
+    {
+      "proposalItems": ["claim-963", "claim-964", "claim-967", "claim-970", "claim-971", "claim-974", "hints-p096", "hints-p097"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0197",
+          "quote": "如皇甫遇憤激而沒，王清以血戰而亡，近世以來，幾人而已。"
+        }
+      ],
+      "reason": "近世 attests the historian's retrospective comparison and the reported deaths, but gives no AD 936-946 personal interval. The candidate keeps the source attestations and replaces only synthetic calendar claims and hints with research holds."
+    },
+    {
+      "proposalItems": ["claim-977", "claim-980", "hints-p098"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0199",
+          "quote": "唯順密遏滑臺之肇亂，救晉室之臨危，亦可謂之忠矣。"
+        }
+      ],
+      "reason": "This evaluative sentence preserves the Huatai loyalty assessment but supplies neither an AD 936-937 event interval nor a precise dated incident. The candidate correctly retains the attestation and removes the synthetic range and hint."
+    }
+  ],
+  "hostRequirements": [
+    "Do not curate sealed candidate sha256:a24b973889560448aa202ca35d1a16cbab3421a00c4ae577bb857b2349d99aec.",
+    "Prepare a new source- and extraction-fingerprinted proposal that changes claim-152 and claim-153 by deleting dateContext.westernYear AD 923 and placing the conservative on-or-after AD 923 bound, unresolved flag, and reason inside dateContext. Preserve the sourceDate 同光初, event or honor, and s0040 evidence.",
+    "Do not retain top-level westernBounds on those two claims unless independently justified by the schema and source; the chronology belongs to dateContext.",
+    "Keep the other 37 independently supported operations unchanged unless a new source-specific review justifies a change.",
+    "Obtain a new independent review, then scoped validation and a fresh complete canonical date audit after any host curation."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: source sha256:ef322c11c5a9dbb9c4dbe8af183ebb822b31292f12c3a83790da3dfe35f10c05 and original extraction sha256:022c9c4734cc2ac313e2e3a8449a963b44866ff8ed946a0ecb5c57f1c5342ca9 match the handoff and audit.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:a24b973889560448aa202ca35d1a16cbab3421a00c4ae577bb857b2349d99aec.",
+    "candidateExtractionIdentity": "PASS: independently replayed candidate hash is sha256:a42f99ef061067bb0824635617ecb14ec42e2470c7c613feb3e59febcca5eaf4.",
+    "proposalReplay": "PASS: exact replay matches the handoff candidate.",
+    "compactValidation": "PASS: compact validation reports 207 units, 98 people, 561 mentions, 1,358 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: independent date-audit geometry diagnostics found no structural contradictions.",
+    "sourceChronology": "FAIL: claim-152 and claim-153 retain exact AD 923 dateContext.westernYear despite the stated repair of 同光初 phase precision.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}

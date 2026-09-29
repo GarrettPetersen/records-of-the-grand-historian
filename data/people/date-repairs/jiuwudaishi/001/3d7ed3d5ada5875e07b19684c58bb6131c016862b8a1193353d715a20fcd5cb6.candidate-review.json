@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "001",
+  "candidateFile": "staged-candidate-3d7ed3d5ada5875e07b1.json",
+  "sealedCandidateHash": "sha256:3d7ed3d5ada5875e07b19684c58bb6131c016862b8a1193353d715a20fcd5cb6",
+  "candidateExtractionHash": "sha256:b5733dec8d6eadd1fa42a835cc8035781c23c746933a943c6f80c3746243cc0a",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 001 staged date-repair reviewer",
+    "agentId": "review_jiuwudaishi001_dates",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T00:51:05.596Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent pinned-source, sealed-replay, source-chronology, and date-only scope review. Claims 232 and 240 and the two related hints preserve the expressed Guangqi 3–Wende 1 span as AD 887–888 rather than a false one-year point. Claim 239 and its hint no longer turn 光啟前後 (around the Guangqi era) into AD 887; they retain an explicit research hold. No person, name, mention, relationship, role, source evidence, or non-temporal event content changes.",
+  "hostRequirements": [
+    "Apply only if the canonical source hash remains sha256:a21a664bfd2de3dcfff69158f36e1019e5dfbf8fc9cafcfad33ba66e6f8ed357 and the canonical extraction hash remains sha256:337f8b4261fd580a8d12b635dbb677e2f3dd16c5890b9ac027edae74d0fda471.",
+    "Replay exactly the two claim replacements and three active-date-hint replacements bound by sealedCandidateHash; preserve all direct dated facts and do not infer a Western bound for 光啟前後 without independent evidence.",
+    "Do not alter canonical source or extraction from this receipt; after host curation, run scoped validation and obtain a fresh independent canonical date audit."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:a21a664bfd2de3dcfff69158f36e1019e5dfbf8fc9cafcfad33ba66e6f8ed357",
+    "canonicalExtractionHash": "sha256:337f8b4261fd580a8d12b635dbb677e2f3dd16c5890b9ac027edae74d0fda471",
+    "canonicalInputs": "PASS: remote staging source and extraction hashes match the candidate pins.",
+    "sealedProposalIdentity": "PASS: SHA-256 of the exact six-operation proposal is 3d7ed3d5ada5875e07b19684c58bb6131c016862b8a1193353d715a20fcd5cb6.",
+    "candidateExtractionIdentity": "PASS: SHA-256 of the replayed staged compact candidate is b5733dec8d6eadd1fa42a835cc8035781c23c746933a943c6f80c3746243cc0a.",
+    "proposalReplay": "PASS: replay from the pinned canonical extraction reconstructed the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claims 232 and 239–240 plus hints for p050, p057, and p059 change; all other compact extraction data is identical.",
+    "sourceSoundness": "PASS: Guangqi 3 is AD 887 and Wende 1 is AD 888, so 光啟三年至文德元年 supports an AD 887–888 interval; 光啟前後 is approximate era context and supplies neither an exact AD 887 point nor a verified Western bound.",
+    "compactValidation": "PASS: compact validation completed against the freshly rebuilt pinned 283-unit extraction packet (156 people, 818 mentions, 838 claims).",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book jiuwudaishi --chapter 001 completed successfully against the pinned local-equivalent canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}

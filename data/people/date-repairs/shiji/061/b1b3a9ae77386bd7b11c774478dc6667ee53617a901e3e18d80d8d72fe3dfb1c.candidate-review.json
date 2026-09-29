@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "shiji",
+  "chapter": "061",
+  "candidateFile": "staged-candidate-b1b3a9ae77386bd7b11c.json",
+  "sealedCandidateHash": "sha256:b1b3a9ae77386bd7b11c774478dc6667ee53617a901e3e18d80d8d72fe3dfb1c",
+  "candidateExtractionHash": "sha256:fc4da82ce7a018dc788631d6a8820df5bcba89e907dd04e98bcf1585e81a45f3",
+  "sourceHash": "sha256:4e8bb8efe7bf4c8391e7aae3268309d09a810c0d524de73c18d42468f55f7359",
+  "originalExtractionHash": "sha256:6df804b6969bbb06e94c0c7a548a65dc04b994c1018e52a9b31fad614f63a608",
+  "reviewer": {
+    "name": "Codex independent Shiji 061 staged-date-candidate reviewer",
+    "agentId": "review_shiji061",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:17:43.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The sealed candidate covers exactly all 18 still-incorrect audit targets: seven undated quotation, authorial-narrative, traditional, or rhetorical attestations become source-linked research holds, and the corresponding eleven imported active-date hints become research holds. It retains each claim's person, predicate, certainty, evidence units, source wording, and every non-date fact; it adds no replacement Western chronology.",
+  "sourceReview": {
+    "coverage": "Read the complete initial audit and the cited Chinese source units for all seven changed claims and all eleven paired hints. The audit's 61 units, 50 temporal/hint items, and 21 people remain the candidate's unchanged scope.",
+    "findings": [
+      {
+        "items": ["claim-39", "hints-p007"],
+        "evidence": [
+          {"unit": "s0008", "quote": "太史公曰：余登箕山，其上蓋有許由冢云。", "sourceHash": "sha256:241450838dff57609afeeed1b20f6ff6a6ad3e5de884b0af5ebd08f0ba2b749d"},
+          {"unit": "s0047", "quote": "余甚惑焉，儻所謂天道，是邪非邪？", "sourceHash": "sha256:7ad6e04e2f2b0299ef0b082b5ef4ca25b328f64b88bb7f2acc5643c56e269891"}
+        ],
+        "finding": "The Grand Historian speaks in first person, but neither passage supplies a Western personal interval. Retaining the quotation as unresolved source-linked context is sound."
+      },
+      {
+        "items": ["claim-47", "hints-p008", "claim-60", "hints-p010", "claim-82", "hints-p011", "hints-p014", "hints-p015", "hints-p016", "hints-p017"],
+        "evidence": [
+          {"unit": "s0009", "quote": "孔子序列古之仁聖賢人，如吳太伯、伯夷之倫詳矣。", "sourceHash": "sha256:16ef5324e392412d6363e2957f1795c462606b11d57adec6f5e8638dbe863717"},
+          {"unit": "s0023", "quote": "伯夷、叔齊叩馬而諫曰：『父死不葬，爰及干戈，可謂孝乎？』", "sourceHash": "sha256:41a3a8e5715c0db1eaf3aad6776598a20d79e16d24dce01cd162334f31aadd40"},
+          {"unit": "s0028", "quote": "武王已平殷亂，天下宗周，而伯夷、叔齊恥之，義不食周粟，隱於首陽山，采薇而食之。", "sourceHash": "sha256:8fc2842fee8dc0c92ea7b21e8174e26aefeae07903262f834e1d3dc11d46725c"}
+        ],
+        "finding": "The passages name philosophical exempla and traditional conquest narrative, but state no Western years or continuous lifetimes. The candidate preserves their qualitative legendary and narrative facts while removing the imported BC ranges and hints."
+      },
+      {
+        "items": ["claim-154", "hints-p019", "claim-163", "hints-p020", "claim-169", "hints-p021"],
+        "evidence": [
+          {"unit": "s0040", "quote": "然回也屢空，糟糠不厭，而卒蚤夭。", "sourceHash": "sha256:88db016646a36071b640ba7170eccb72ee9121ad3a0d1fdf29b59415120db346"},
+          {"unit": "s0042", "quote": "盜蹠日殺不辜，肝人之肉，暴戾恣睢，聚黨數千人橫行天下，竟以壽終。", "sourceHash": "sha256:dc19f91e408d3149dd3dd492e05f45fcc295c770f7d81d5f990cb32b749453c6"},
+          {"unit": "s0055", "quote": "賈子曰：『貪夫徇財，烈士徇名，夸者死權，眾庶馮生。』", "sourceHash": "sha256:bb7be722a2ea28b25ab54d15383802a351476a7f6e043ba8a284cf244e10127d"}
+        ],
+        "finding": "Yan Yuan's death, Robber Zhi's narrative contrast, and Master Jia's quotation are retained. None gives a chapter-stated Western endpoint or life span, so research holds—not substituted chronology—are correct."
+      }
+    ]
+  },
+  "validation": {
+    "canonicalPins": "PASS",
+    "sealedProposalIdentity": "PASS",
+    "candidateExtractionIdentity": "PASS",
+    "proposalReplay": "PASS",
+    "auditCoverage": "PASS: 18/18 exact current claim/hint targets; no extra targets and no no-op operations",
+    "nonDateRetention": "PASS: all seven replacements preserve subject, predicate, certainty, evidence, sourceDate wording, and non-date claim content",
+    "compactValidation": "PASS: 61 units, 21 people, 112 mentions, 170 claims",
+    "chronologyGeometry": "PASS",
+    "scopedPeopleValidation": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction pins still match.",
+    "Replay all 18 operations, then rerun compact validation, chronology geometry, and scoped validation.",
+    "Require a fresh independent canonical date audit after host curation."
+  ]
+}

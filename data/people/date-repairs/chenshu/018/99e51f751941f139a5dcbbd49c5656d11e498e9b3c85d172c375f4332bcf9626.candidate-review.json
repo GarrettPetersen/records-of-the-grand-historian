@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "018",
+  "candidateFile": "staged-candidate-99e51f751941f139a5dc.json",
+  "candidateHash": "sha256:99e51f751941f139a5dcbbd49c5656d11e498e9b3c85d172c375f4332bcf9626",
+  "reviewer": {
+    "name": "Codex independent Chenshu 018 corrected-candidate reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T05:05:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The corrected 12-change proposal exactly replays: all six historical-model claims become source-specific allusion/reception holds and all six corresponding p075–p080 active-date hints become matching research-required holds. No unrelated data changes.",
+  "validation": {
+    "proposalReplay": "PASS: applying all 12 pinned operations to the canonical extraction produces sha256:99e51f751941f139a5dcbbd49c5656d11e498e9b3c85d172c375f4332bcf9626, byte-equivalent to the staged candidate.",
+    "claimCoverage": "PASS: every audit-listed claim is replaced exactly once (6 of 6), with no unlisted claim mutation.",
+    "pairedHints": "PASS: p075, p076, p077, p078, p079, and p080 are each repaired exactly once; every new hold text matches its paired claim reason.",
+    "scope": "PASS: only claims 412, 417, 422, 427, 432, and 437 plus their six corresponding person hint records differ; all other data is unchanged.",
+    "sourceHolds": "PASS: every replacement retains its original subject, predicate, source-date wording, provenance, and cited units while removing only borrowed Western chronology.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-412", "claim-417", "claim-422", "claim-427", "claim-432", "claim-437"],
+      "pairedHints": ["p075", "p076", "p077", "p078", "p079", "p080"],
+      "units": ["s0176", "s0177"],
+      "evidence": "昔鄧禹基於文學，杜預出自儒雅，卒致軍功，名著前代。 / 顧榮、郗鑒之輩，溫嶠、謝玄之倫…",
+      "result": "Deng Yu, Du Yu, Gu Rong, Xi Jian, Wen Jiao, and Xie Xuan remain visible as historical models in the historian's appraisal, but their chronology is not local active-date evidence. The paired allusion/reception holds preserve the facts without date borrowing."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply all 12 reviewed operations exactly; do not omit the p075–p080 hint operations or alter unrelated data.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; retained research holds require research-blocked rather than audited status."
+  ]
+}

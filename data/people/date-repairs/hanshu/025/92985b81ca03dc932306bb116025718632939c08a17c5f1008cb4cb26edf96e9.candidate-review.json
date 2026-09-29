@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "025",
+  "candidateFile": "staged-candidate-92985b81ca03dc932306.json",
+  "candidateHash": "sha256:92985b81ca03dc932306bb116025718632939c08a17c5f1008cb4cb26edf96e9",
+  "canonicalSourceHash": "sha256:78fe0a012128b5fbb4f803996b70efc60c49b2835fce6b439c02cb6713152bc5",
+  "canonicalExtractionHash": "sha256:85fdb352acebdb181bc0d30e875b800ac3b3f3e382e57b86f465f5a584537df7",
+  "reviewer": {
+    "name": "Codex independent Hanshu 025 residual-candidate reviewer",
+    "agentId": "date_audit_beiqishu006",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T06:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. Fresh source-packet review confirms all 13 operations are the exact residual defects from the current audit: 漢興之初 does not prove BC 196, and 其後（文帝時） does not prove BC 164. The six event date-context changes and four life attestations retain all source wording, owners, evidence, legal/political event content, and non-date values; the three paired active hints are replaced exactly. No collateral operation is proposed.",
+  "validation": {
+    "proposalReplay": "PASS: all 13 pinned operations replay byte-for-byte to sha256:92985b81ca03dc932306bb116025718632939c08a17c5f1008cb4cb26edf96e9 against matching canonical hashes.",
+    "coverage": "PASS: the six date-context operations (claim-298 through claim-301, claim-315, claim-316), four attestation replacements (claim-343, claim-344, claim-347, claim-351), and three paired hints (p076, p077, p082) exactly cover the fresh audit's residual finding.",
+    "sourceChecks": "PASS: s0308 calls the setting 漢興之初 and s0312 says only that Peng Yue and Han Xin suffered the punishment; s0326 says only 其後 before naming Xin Yuanping, while s0328 is retrospective commentary. None supports the precise imported BC 196 or BC 164 year. Holds are therefore the narrow source-faithful repair.",
+    "scope": "PASS: no person, predicate, unit evidence, sourceDate label, legal/political action, event role, or supported date changes. Emperor Wen's separately evidenced BC 178 dates and p079's supported hint are untouched.",
+    "compactValidation": "PASS: compact extraction validation succeeded (362 units, 388 candidates, 101 people, 319 mentions, 657 claims, and zero alias-disposition conflicts).",
+    "chronologyGeometry": "PASS: date-audit geometry diagnostics returned zero findings.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "operations": ["claim-298", "claim-299", "claim-300", "claim-301", "claim-343", "claim-344", "hints-p076", "hints-p077"],
+      "units": ["s0308", "s0311", "s0312"],
+      "evidence": "漢興之初，雖有約法三章…然其大辟，尚有夷三族之令。／故謂之具五刑。／彭越、韓信之屬皆受此誅。",
+      "result": "The text supplies early-Han context and the punishment, not an exact event year."
+    },
+    {
+      "operations": ["claim-315", "claim-316", "claim-347", "claim-351", "hints-p082"],
+      "units": ["s0326", "s0328"],
+      "evidence": "其後，新垣平謀為逆，復行三族之誅。／夫以孝文之仁，平、勃之知，猶有過刑謬論如此甚也…",
+      "result": "其後 and the retrospective Wen-era appraisal establish sequence/context only; neither source unit contains BC 164."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all 13 operations exactly and no others.",
+    "Do not restore BC 196 or BC 164 without separately sourced chronology evidence.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}

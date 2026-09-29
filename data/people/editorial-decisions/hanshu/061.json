@@ -1,0 +1,920 @@
+{
+  "schemaVersion": 4,
+  "book": "hanshu",
+  "chapter": "061",
+  "reviews": [
+    {
+      "input": {
+        "chapterFingerprint": "sha256:88d1e8d51f9b44ae2f0842d17ff6bf1794cd58a1253af45d93a093129dd3f899",
+        "proposalsFingerprint": "sha256:beaffd85877c892ff2f7ce082e8cf056d3d0a98182006c5c02d439ea76a2acab"
+      },
+      "reviewer": {
+        "kind": "codex",
+        "name": "Codex independent source reviewer",
+        "model": null,
+        "agentId": "019ea934-1759-7410-a2ad-48546e8db30a",
+        "runId": null,
+        "completedAt": "2026-09-14T21:14:45.388Z"
+      },
+      "proposals": [
+        {
+          "id": "hanshu:061:r0001",
+          "unit": {
+            "id": "s0002",
+            "kind": "paragraph-sentence",
+            "blockIndex": 1,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "literal",
+          "before": "Dou Ying, courtesy name Wangsun, was the son of a cousin of Empress Xiaowen.",
+          "after": "Dou Ying, courtesy name Wangsun, was the son of a paternal cousin of Empress Xiaowen.",
+          "reason": "Chinese 從兄子 specifically means son of a paternal male cousin; 'a cousin' is underspecified.",
+          "confidence": "medium"
+        },
+        {
+          "id": "hanshu:061:r0002",
+          "unit": {
+            "id": "s0018",
+            "kind": "paragraph-sentence",
+            "blockIndex": 3,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "idiomatic",
+          "before": "He appointed Dou Ying grand marshal and gave him a thousand catties of gold.",
+          "after": "He appointed Dou Ying general-in-chief (da jiangjun) and gave him a thousand catties of gold.",
+          "reason": "大將軍 is general-in-chief/grand general, not 'grand marshal' (太尉).",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0003",
+          "unit": {
+            "id": "s0024",
+            "kind": "paragraph-sentence",
+            "blockIndex": 3,
+            "collection": "sentences",
+            "itemIndex": 9
+          },
+          "field": "idiomatic",
+          "before": "At every weighty court debate, Marquis Zhou Yafu and Marquis Dou Ying were preeminent—no other marquis dared claim equal precedence with them.",
+          "after": "At every weighty court debate, the Marquis of Tiao and the Marquis of Weiqi stood so high that none of the other marquises dared match them in ceremony.",
+          "reason": "Chinese names them by titles 條侯、魏其; the idiomatic gloss invents 'Zhou Yafu' and 'Dou Ying' not present in this unit's Chinese.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0004",
+          "unit": {
+            "id": "s0400",
+            "kind": "paragraph-sentence",
+            "blockIndex": 17,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "He was summoned to court as grand marshal of the imperial stud.",
+          "after": "He was summoned to court as minister of the imperial coach-houses (taipu).",
+          "reason": "太僕 is the minister of the imperial stud/coach-houses, not 'grand marshal'.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0005",
+          "unit": {
+            "id": "s0161",
+            "kind": "paragraph-sentence",
+            "blockIndex": 24,
+            "collection": "sentences",
+            "itemIndex": 10
+          },
+          "field": "idiomatic",
+          "before": "Next he reached Marquis Guan Xian of Linying, who was whispering to Cheng Bushi and never rose from his mat.",
+          "after": "Next he reached Marquis Guan Xian of Linru, who was whispering to Cheng Bushi and never rose from his mat.",
+          "reason": "Chinese 臨汝侯 is Marquis of Linru; the idiomatic text has Linying.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "hanshu:061:r0001",
+          "decision": "revise",
+          "after": "Dou Ying, courtesy name Wangsun, was the son of an older paternal cousin of Empress Xiaowen.",
+          "reason": "Cong xiong zi identifies the son of her older male paternal cousin, not a direct nephew. Preserve the generation and relative age. The incorrect idiomatic counterpart needs a separately reviewed supplemental repair.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "data/hanshu/061.json s0002; Hanshu juan 52, https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "竇嬰字王孫，孝文皇后從兄子也。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0002",
+          "decision": "revise",
+          "after": "He appointed Dou Ying grand general and gave him a thousand catties of gold.",
+          "reason": "Da jiangjun is grand general, distinct from taiwei elsewhere in this chapter. Use the plain English office already supported by the extraction, without adding a pinyin gloss. The literal and s0037 repetition need separate review.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "data/hanshu/061.json s0018; Hanshu juan 52, https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "乃拜嬰為大將軍，賜金千斤。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0003",
+          "decision": "reject",
+          "after": null,
+          "reason": "The idiomatic names identify the Marquis of Tiao (Zhou Yafu) and Marquis of Weiqi (Dou Ying); they are contextual clarification, not invented people. The literal field already retains their territorial titles. Preserve the accurate existing English.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "data/hanshu/061.json s0024; Hanshu juan 52, https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "每朝議大事，條侯、魏其，列侯莫敢與亢禮。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0004",
+          "decision": "revise",
+          "after": "He was summoned to court as minister of the imperial stud.",
+          "reason": "Tai pu is the minister responsible for the imperial stud, not grand marshal. Keep the accurate remainder and the office wording supported by the existing claim. The literal counterpart is separately proposed.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "data/hanshu/061.json s0400; Hanshu juan 52, https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "入為太僕。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0005",
+          "decision": "accept",
+          "after": null,
+          "reason": "The source explicitly says Linru hou Guan Xian. Correct Linying to Linru; the title claim already records Linru correctly. Reconcile the changed title mention, without altering identity or chronology.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "data/hanshu/061.json s0161; Hanshu juan 52, https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "行酒次至臨汝侯灌賢，賢方與程不識耳語，又不避席。"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [],
+      "claimAdditions": []
+    },
+    {
+      "input": {
+        "chapterFingerprint": "sha256:14ddcf5648153ac8e6b35076c62642058a038a1413b191c1119a0f8a6b9a83d3",
+        "proposalsFingerprint": "sha256:ac22b1e14708dac16db2dd51c68a20e5216738f09e5885965c3fb47b737a887c"
+      },
+      "reviewer": {
+        "kind": "codex",
+        "name": "Independent Codex source reviewer",
+        "model": "GPT-5",
+        "agentId": "01a0a1c7-f3e1-74f1-a67f-afdf71f91e37",
+        "runId": null,
+        "completedAt": "2026-09-14T21:27:43.706Z"
+      },
+      "proposals": [
+        {
+          "id": "hanshu:061:r0005",
+          "unit": {
+            "id": "s0002",
+            "kind": "paragraph-sentence",
+            "blockIndex": 1,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "idiomatic",
+          "before": "Dou Ying, whose courtesy name was Wangsun, was a nephew of Empress Xiaowen.",
+          "after": "Dou Ying, whose courtesy name was Wangsun, was the son of an older paternal cousin of Empress Xiaowen.",
+          "reason": "The paired idiomatic field misstates the generation: cong xiong zi is the son of an older paternal cousin, not a direct nephew.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0006",
+          "unit": {
+            "id": "s0018",
+            "kind": "paragraph-sentence",
+            "blockIndex": 3,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "literal",
+          "before": "Then he appointed Ying grand marshal and bestowed a thousand catties of gold.",
+          "after": "Then he appointed Ying grand general and bestowed a thousand catties of gold.",
+          "reason": "Da jiangjun is grand general, matching the reviewed idiomatic correction; retain the distinct taiwei title elsewhere.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0007",
+          "unit": {
+            "id": "s0037",
+            "kind": "paragraph-sentence",
+            "blockIndex": 6,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "When Dou Ying had already become grand marshal and was flourishing, Fen was a gentleman of the various bureaus, not yet eminent; he would come and go to wait upon Ying at his wine parties, kneeling and rising like a son or nephew.",
+          "after": "When Dou Ying had already become grand general and was flourishing, Fen was a gentleman of the various bureaus, not yet eminent; he would come and go to wait upon Ying at his wine parties, kneeling and rising like a son or nephew.",
+          "reason": "Da jiangjun is grand general, matching the reviewed idiomatic correction; retain the distinct taiwei title elsewhere.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0008",
+          "unit": {
+            "id": "s0400",
+            "kind": "paragraph-sentence",
+            "blockIndex": 17,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "He entered court as grand marshal of the imperial stud.",
+          "after": "He entered court as minister of the imperial stud.",
+          "reason": "Tai pu is minister of the imperial stud; paired literal correction for the reviewed office repair.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0009",
+          "unit": {
+            "id": "s0161",
+            "kind": "paragraph-sentence",
+            "blockIndex": 24,
+            "collection": "sentences",
+            "itemIndex": 10
+          },
+          "field": "literal",
+          "before": "When passing the wine he next came to Marquis of Linying Guan Xian; Xian was whispering in Cheng Bushi's ear and did not leave his mat.",
+          "after": "When passing the wine he next came to Marquis of Linru Guan Xian; Xian was whispering in Cheng Bushi's ear and did not leave his mat.",
+          "reason": "Linru hou is the source title, not Linying. Correct the paired literal title without changing Guan Xian.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0010",
+          "unit": {
+            "id": "s0008",
+            "kind": "paragraph-sentence",
+            "blockIndex": 2,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "When the king of Liang came to court, he drank with the emperor and their cousins as family.",
+          "after": "When the king of Liang came to court, he and the emperor drank together as brothers.",
+          "reason": "The preceding unit identifies the emperor and his younger brother King Xiao. Kun di denotes the two brothers at the banquet, not additional cousins. Shiji 107 independently has yin kun di yan yin.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0011",
+          "unit": {
+            "id": "s0008",
+            "kind": "paragraph-sentence",
+            "blockIndex": 2,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "When King Xiao attended court, he joined in drinking with the emperor and their cousins as kin.",
+          "after": "When King Xiao attended court, the brothers drank together at a banquet.",
+          "reason": "The paired field adds cousins absent from the Chinese. Preserve the king and emperor as the brothers in context.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0012",
+          "unit": {
+            "id": "s0026",
+            "kind": "paragraph-sentence",
+            "blockIndex": 4,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "In the seventh year that heir was cast aside. Dou Ying argued in vain, then pleaded illness and shut himself away for months below Blue Field Mountain. Kinsmen, clients, and rhetoricians tried to coax him out; none succeeded.",
+          "after": "In the seventh year that heir was cast aside. Dou Ying argued in vain, then pleaded illness and shut himself away for months at the foot of the southern mountains in Lantian. Kinsmen, clients, and rhetoricians tried to coax him out; none succeeded.",
+          "reason": "Lantian is the place name, not an English mountain called Blue Field. Nan shan are the mountains south of it; do not invent Mount Lan.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0013",
+          "unit": {
+            "id": "s0026",
+            "kind": "paragraph-sentence",
+            "blockIndex": 4,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "In the seventh year, the Li heir apparent was deposed. Ying remonstrated but could not prevail; he pleaded illness, withdrew, and lived in seclusion for several months at the foot of Mount Lan in Lantian. Dou kinsmen, guests, and debaters urged him, but none could bring him back.",
+          "after": "In the seventh year, the Li heir apparent was deposed. Ying remonstrated but could not prevail; he pleaded illness, withdrew, and lived in seclusion for several months at the foot of the southern mountains in Lantian. Dou kinsmen, guests, and debaters urged him, but none could bring him back.",
+          "reason": "The paired geographical parsing invents Mount Lan. Preserve Lantian and the southern mountains.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0014",
+          "unit": {
+            "id": "s0036",
+            "kind": "paragraph-sentence",
+            "blockIndex": 6,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "idiomatic",
+          "before": "Tian Fen was Empress Wang's full brother—Emperor Jing's empress—and had grown up in Changling.",
+          "after": "Tian Fen was the younger maternal half-brother of Empress Wang, Emperor Jing's empress, and was born in Changling.",
+          "reason": "Full brother is wrong: they shared their mother. Hanshu Empresses biography states Zang Er remarried into the Tian family after Wang Zhong died. Sheng states birth, not a separate claim of upbringing.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0015",
+          "unit": {
+            "id": "s0036",
+            "kind": "paragraph-sentence",
+            "blockIndex": 6,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "literal",
+          "before": "Tian Fen was the uterine younger brother of Empress Wang of Emperor Jing; he was born and grew up in Changling.",
+          "after": "Tian Fen was the uterine younger brother of Empress Wang of Emperor Jing; he was born in Changling.",
+          "reason": "Sheng Changling gives birthplace, not separately attested upbringing; retain uterine younger brother.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0016",
+          "unit": {
+            "id": "s0402",
+            "kind": "paragraph-sentence",
+            "blockIndex": 17,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "idiomatic",
+          "before": "Dou Fu was Empress Dowager Dou's younger brother.",
+          "after": "Dou Fu was Empress Dowager Dou's brother.",
+          "reason": "Kun di establishes brotherhood, not relative age or full versus half sibling parentage; the dependent family claim must be reviewed too.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0017",
+          "unit": {
+            "id": "s0402",
+            "kind": "paragraph-sentence",
+            "blockIndex": 17,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "literal",
+          "before": "Fu was the empress dowager Dou's younger brother.",
+          "after": "Fu was the empress dowager Dou's brother.",
+          "reason": "Kun di establishes brotherhood, not relative age or full versus half sibling parentage; the dependent family claim must be reviewed too.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0018",
+          "unit": {
+            "id": "s0401",
+            "kind": "paragraph-sentence",
+            "blockIndex": 17,
+            "collection": "sentences",
+            "itemIndex": 2
+          },
+          "field": "literal",
+          "before": "In the second year, Fu drank with Chamberlain for the Changle Palace Guard Dou Fu; they could not match each other in weight of cups; Fu, drunk, struck Fu.",
+          "after": "In the second year, Fu drank with Chamberlain for the Changle Palace Guard Dou Fu; they could not match each other in weight of cups; Guan Fu, drunk, struck Dou Fu.",
+          "reason": "The distinct source names fu (husband character) and fu (fu character) are different people, not self-assault. Spell out their surnames for the literal reader.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0019",
+          "unit": {
+            "id": "s0292",
+            "kind": "paragraph-sentence",
+            "blockIndex": 37,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "idiomatic",
+          "before": "When Min and Eastern Yue went to war, the court sent Han Anguo and Grand Coach Wang Hui with an army.",
+          "after": "When Min and Eastern Yue went to war, the court sent Han Anguo and Grand Herald Wang Hui with an army.",
+          "reason": "Da xing is the Han grand herald, not the coachman; correct all occurrences of Wang Hui's office.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0020",
+          "unit": {
+            "id": "s0292",
+            "kind": "paragraph-sentence",
+            "blockIndex": 37,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "literal",
+          "before": "Min and Eastern Yue attacked each other; he sent Anguo and Grand Coach Wang Hui with troops.",
+          "after": "Min and Eastern Yue attacked each other; he sent Anguo and Grand Herald Wang Hui with troops.",
+          "reason": "Da xing is the Han grand herald, not the coachman; correct all occurrences of Wang Hui's office.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0021",
+          "unit": {
+            "id": "s0296",
+            "kind": "paragraph-sentence",
+            "blockIndex": 38,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "Grand Coach Wang Hui of Yan, a veteran frontier officer, argued: \"Every heqin with the Xiongnu lasts only a few years before they break it.",
+          "after": "Grand Herald Wang Hui of Yan, a veteran frontier officer, argued: \"Every heqin with the Xiongnu lasts only a few years before they break it.",
+          "reason": "Da xing is the Han grand herald, not the coachman; correct all occurrences of Wang Hui's office.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0022",
+          "unit": {
+            "id": "s0296",
+            "kind": "paragraph-sentence",
+            "blockIndex": 38,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "Grand Coach Wang Hui, a man of Yan, had repeatedly served as a border official and was versed in precedent; he argued, \"Han and the Xiongnu have made peace through marriage alliance, but as a rule within a few years they break the covenant.",
+          "after": "Grand Herald Wang Hui, a man of Yan, had repeatedly served as a border official and was versed in precedent; he argued, \"Han and the Xiongnu have made peace through marriage alliance, but as a rule within a few years they break the covenant.",
+          "reason": "Da xing is the Han grand herald, not the coachman; correct all occurrences of Wang Hui's office.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0023",
+          "unit": {
+            "id": "s0304",
+            "kind": "paragraph-sentence",
+            "blockIndex": 39,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "idiomatic",
+          "before": "The next year Nie Yi of Mayi in Yanmen, speaking through Grand Coach Wang Hui, said: \"The Xiongnu have just sealed a heqin and trust the frontier; bait them with loot, then spring an ambush—that will break them.\"",
+          "after": "The next year Nie Yi of Mayi in Yanmen, speaking through Grand Herald Wang Hui, said: \"The Xiongnu have just sealed a heqin and trust the frontier; bait them with loot, then spring an ambush—that will break them.\"",
+          "reason": "Da xing is the Han grand herald, not the coachman; correct all occurrences of Wang Hui's office.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0024",
+          "unit": {
+            "id": "s0304",
+            "kind": "paragraph-sentence",
+            "blockIndex": 39,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "literal",
+          "before": "The next year Nie Yi, a magnate of Mayi in Yanmen, spoke through Grand Coach Wang Hui: \"The Xiongnu have newly made peace through marriage alliance and trust the border; they can be lured with profit to come; ambush troops and strike them—it is the way surely to break them.\"",
+          "after": "The next year Nie Yi, a magnate of Mayi in Yanmen, spoke through Grand Herald Wang Hui: \"The Xiongnu have newly made peace through marriage alliance and trust the border; they can be lured with profit to come; ambush troops and strike them—it is the way surely to break them.\"",
+          "reason": "Da xing is the Han grand herald, not the coachman; correct all occurrences of Wang Hui's office.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0025",
+          "unit": {
+            "id": "s0308",
+            "kind": "paragraph-sentence",
+            "blockIndex": 40,
+            "collection": "sentences",
+            "itemIndex": 0
+          },
+          "field": "literal",
+          "before": "Grand Coach Hui replied, \"Though Your Majesty has not yet spoken, your servant has long wished to offer this.",
+          "after": "Grand Herald Hui replied, \"Though Your Majesty has not yet spoken, your servant has long wished to offer this.",
+          "reason": "Correct the repeated da xing title of Wang Hui. The idiomatic field uses only his name and needs no edit.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0026",
+          "unit": {
+            "id": "s0363",
+            "kind": "paragraph-sentence",
+            "blockIndex": 48,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "Commandant of the guards Li Guang led the swift cavalry; grand coachman Gongsun He the light chariots; grand coach Wang Hui the camp army; grand counselor Li Xi the specialist corps.",
+          "after": "Commandant of the guards Li Guang led the swift cavalry; grand coachman Gongsun He the light chariots; grand herald Wang Hui the camp army; grand counselor Li Xi the specialist corps.",
+          "reason": "Distinguish Wang Hui's da xing (grand herald) from the adjacent tai pu Gongsun He (grand coachman).",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0027",
+          "unit": {
+            "id": "s0363",
+            "kind": "paragraph-sentence",
+            "blockIndex": 48,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "Commandant of the guards Li Guang was general of fierce cavalry, Grand Coachman Gongsun He was general of light chariots, Grand Coach Wang Hui was general of encamped troops, Grand Counselor Li Xi was general of specialist troops.",
+          "after": "Commandant of the guards Li Guang was general of fierce cavalry, Grand Coachman Gongsun He was general of light chariots, Grand Herald Wang Hui was general of encamped troops, Grand Counselor Li Xi was general of specialist troops.",
+          "reason": "Correct only da xing; do not globally replace the neighboring correct Grand Coachman title.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0028",
+          "unit": {
+            "id": "s0216",
+            "kind": "paragraph-sentence",
+            "blockIndex": 28,
+            "collection": "sentences",
+            "itemIndex": 4
+          },
+          "field": "idiomatic",
+          "before": "When the document arrived, the archives of the Minister of Documents were searched; the office of the grand coach reported no such testament on file.",
+          "after": "When the memorial arrived, the imperial secretariat searched its records but found no such testamentary edict from the late emperor.",
+          "reason": "Da xing here means the deceased emperor, not an office. Shiji 107 Suoyin explicitly rejects Ru Chun's office reading; Zhengyi identifies the late emperor. This is a posthumous documentary reference, not new living activity.",
+          "confidence": "high"
+        },
+        {
+          "id": "hanshu:061:r0029",
+          "unit": {
+            "id": "s0216",
+            "kind": "paragraph-sentence",
+            "blockIndex": 28,
+            "collection": "sentences",
+            "itemIndex": 4
+          },
+          "field": "literal",
+          "before": "When the memorial was presented, they checked the Minister of Documents' archives; the Minister of Funerals reported there was no testamentary edict.",
+          "after": "When the memorial was presented, they examined the secretariat records: the late emperor had left no such testamentary edict.",
+          "reason": "The parallel text refers to the alleged edict of Emperor Jing, not a Minister of Funerals. Preserve the reported absence of the claimed testament in official records.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "hanshu:061:r0005",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. In s0002, cong xiong modifies the intermediary male cousin and zi identifies his son; s0003 continues with the father. Shiji 107 agrees. This is a cousin-once-removed generation, not a direct nephew. The literal field already has the proposed wording; existing c0374-c0376 retain the intermediary p006 without adding parentage.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0002; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "竇嬰字王孫，孝文皇后從兄子也。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0006",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The appointment in s0018 is da jiangjun, also in Shiji 107, not taiwei. Grand general matches the corrected idiomatic field and c0405. No date change is reviewed.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0018; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "乃拜嬰為大將軍，賜金千斤。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0007",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The retrospective da jiangjun in s0037 is Dou Ying's same office from s0018. Grand general repairs this repetition. The idiomatic head of the armies does not preserve the false grand marshal title; the simile does not create a family edge.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0037; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "竇嬰已為大將軍，方盛，蚡為諸曹郎，未貴，往來侍酒嬰所，跪起如子姓。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0008",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Tai pu in s0400 concerns Guan Fu, as s0399 and s0401 show. Hanshu 19 defines responsibility for imperial vehicles and horses. Minister of the imperial stud matches the idiomatic field and c0529; it is distinct from grand general and taiwei.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0400; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "入為太僕。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0009",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The Chinese is Linru hou Guan Xian, not Linying; Shiji 107 likewise reads Linru. Literal Linru now matches the idiomatic title and c0174. Preserve Guan Xian and Cheng Bushi as separate people.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0161; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "行酒次至臨汝侯灌賢，賢方與程不識耳語，又不避席。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0010",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. S0007 identifies King Xiao as the emperor's younger brother; s0008 describes their fraternal banquet, not an extra group of cousins. Shiji 107 has the same relationship in immediate context. The proposed idiomatic king of Liang retains the existing specific ruler reference.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0008; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "孝王朝，因燕昆弟飲。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0011",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The literal brothers are King Xiao and the emperor identified in s0007. No additional cousins occur in either primary parallel. This does not license any new full-sibling or parental classification.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0008; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "孝王朝，因燕昆弟飲。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0012",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Lantian is a place; nan shan supplies the southern mountains. Neither a Blue Field Mountain nor a Mount Lan is named. Shiji 107 also reads Lantian nan shan zhi xia. The topographical rendering is appropriately conservative.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0026; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "七年，栗太子廢，嬰爭弗能得，謝病，屏居藍田南山下數月，諸竇賓客辯士說，莫能來。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0013",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The literal field must retain Lantian and the southern mountains, not divide Lan out as a mountain name. The surrounding withdrawal episode agrees with Shiji 107. Existing persons and the deposition chronology are unchanged.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0026; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "七年，栗太子廢，嬰爭弗能得，謝病，屏居藍田南山下數月，諸竇賓客辯士說，莫能來。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0014",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept with external corroboration explicitly recorded. S0036 says same-mother younger brother and born at Changling. Hanshu 97A separately records Wang Zhong's children and Zang Er's remarriage into the Tian family followed by Fen and Sheng, establishing maternal half-sibling status. Do not infer other parental edges from this approval.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0036; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; external corroboration Hanshu 97A https://zh.wikisource.org/wiki/漢書/卷097上",
+            "excerpt": "田蚡，孝景王皇后同母弟也，生長陵。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0015",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Sheng Changling means born in Changling: Changling is the two-character place name, not sheng-zhang plus a remainder. Uterine younger brother correctly preserves tong mu di. The dependent birthplace revision removes unsupported upbringing without assigning a birth date.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0036; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; external corroboration Hanshu 97A https://zh.wikisource.org/wiki/漢書/卷097上",
+            "excerpt": "田蚡，孝景王皇后同母弟也，生長陵。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0016",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. S0402 and Shiji 107 say kun di, establishing Dou Fu as the dowager's brother but not specifying elder or younger. Hanshu 97A names other brothers but does not identify this Dou Fu with either of them. No age order or full parentage may be imported.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0402; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "甫，竇太后昆弟。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0017",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The literal field should agree with the idiomatic brother. Neither this sentence nor its banquet context supplies Dou Fu's relative age or whether the siblings shared both parents. Keep both unspecified.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0402; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "甫，竇太后昆弟。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0018",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept as a targeted identity disambiguation. In s0401 the acting fu is Guan Fu and the struck fu is Dou Fu, with different Chinese characters; s0399-s0403 and Shiji 107 establish the referents. The surnames prevent an apparent self-assault. This approval does not endorse the retained awkward weight-of-cups wording as a complete translation of qing zhong bu de.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0401; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "二年，夫與長樂衛尉竇甫飲，輕重不得，夫醉，搏甫。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0019",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Da xing Wang Hui in s0292 names an official accompanying Han Anguo. Hanshu 19 identifies da xing ling as the office succeeding dian ke and preceding da hong lu. Grand Herald distinguishes it from tai pu, the coachman.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0292; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "閩、東越相攻，遣安國、大行王恢將兵。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0020",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. The literal title in s0292 has the same da xing office and holder as the idiomatic field. Preserve the two commanders and do not reinterpret the title as an unnamed additional person.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0292; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "閩、東越相攻，遣安國、大行王恢將兵。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0021",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. S0296 repeats da xing Wang Hui. The office is Grand Herald; Yan and the border-service description do not turn it into a coachman post. The pinned text reads xi gu shi; the Wikisource base text has xi hu shi. This witness variant does not affect the reviewed office-only correction.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0296; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "大行王恢，燕人，數為邊吏，習故事，議曰：「漢與匈奴和親，率不過數歲即背約。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0022",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. S0296 literal must use Grand Herald consistently with s0292 and the Hanshu 19 office entry. The rest is retained against the pinned gu shi reading; no Chinese emendation is authorized.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0296; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "大行王恢，燕人，數為邊吏，習故事，議曰：「漢與匈奴和親，率不過數歲即背約。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0023",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. In s0304 Nie Yi speaks through da xing Wang Hui. The established office holder is retained, and Grand Herald corrects the repeated office without changing either man's identity or making Nie Yi the office holder.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0304; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "明年，雁門馬邑豪聶壹因大行王恢言：「匈奴初和親，親信邊，可誘以利致之，伏兵襲擊，必破之道也。」"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0024",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Literal s0304 has the same title-holder construction. Grand Herald restores consistency; preserve the separate Nie Yi and Wang Hui mentions and the existing Mayi place references.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0304; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "明年，雁門馬邑豪聶壹因大行王恢言：「匈奴初和親，親信邊，可誘以利致之，伏兵襲擊，必破之道也。」"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0025",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Da xing Hui in s0308 is the shortened callback to Wang Hui, the Grand Herald of s0296 and s0304. Idiomatic Wang Hui already names the speaker and needs no matching text change. This is not the posthumous use in s0216.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0308; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "大行恢對曰：「陛下雖未言，臣固願效之。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0026",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. S0363 explicitly contrasts tai pu Gongsun He with da xing Wang Hui. Only Wang Hui becomes grand herald; Gongsun He remains grand coachman. Preserve Li Guang and Li Xi and each man's assigned military command.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0363; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "衛尉李廣為驍騎將軍，太僕公孫賀為輕車將軍，大行王恢為將屯將軍，太中大夫李息為材官將軍。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0027",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. Literal s0363 retains four distinct officers. Tai pu and da xing are different offices, as Hanshu 19 confirms, so the surviving Grand Coachman for Gongsun He is correct and must not be bulk-replaced.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0363; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052; office definition Hanshu 19 https://zh.wikisource.org/wiki/漢書/卷019",
+            "excerpt": "衛尉李廣為驍騎將軍，太僕公孫賀為輕車將軍，大行王恢為將屯將軍，太中大夫李息為材官將軍。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0028",
+          "decision": "accept",
+          "after": null,
+          "reason": "Accept. S0213 names Emperor Jing as the purported edict giver; s0217 says the sole copy was at Dou Ying's house; s0218 charges forging the prior emperor's edict. Thus da xing in s0216 is the late Emperor Jing, not a reporting official. The idiomatic wording correctly limits the negative finding to the secretariat's records. A scoped p059 posthumous mention remains missing and is separately proposed, not approved here.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0216; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "書奏，案尚書，大行無遺詔。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0029",
+          "decision": "revise",
+          "after": "When the memorial was presented, they examined the secretariat records and found no such testamentary edict from the late emperor.",
+          "reason": "Revise. The identification of da xing as the late emperor is supported by s0213 and s0218, but had left no such edict overstates the archive search as an absolute fact. S0217 immediately reports a copy at Dou Ying's house. Preserve the distinction between no recorded copy and no edict ever issued; do not resolve the disputed document's authenticity or introduce a living date.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0216; Hanshu juan 52 https://zh.wikisource.org/wiki/漢書/卷052",
+            "excerpt": "書奏，案尚書，大行無遺詔。"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [
+        {
+          "repairId": "hanshu:061:r0016",
+          "before": {
+            "id": "hanshu:061:c0515",
+            "subject": "hanshu:061:p037",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "hanshu:061:p031",
+              "kinshipTerm": {
+                "zh": "昆弟",
+                "en": "younger brother"
+              },
+              "subjectRole": "younger-brother",
+              "objectRole": "elder-sister",
+              "subjectRelativeAge": "younger",
+              "sharedParentage": "full"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0402"
+            ]
+          },
+          "after": {
+            "id": "hanshu:061:c0515",
+            "subject": "hanshu:061:p037",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "hanshu:061:p031",
+              "kinshipTerm": {
+                "zh": "昆弟",
+                "en": "brother"
+              },
+              "subjectRole": "brother",
+              "objectRole": "sister"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0402"
+            ]
+          },
+          "reason": "Kun di supports brother and sister only. Remove age ordering and full shared parentage; retain the same two people and evidence. No parent or date is added.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0402; Hanshu 52 and parallel Shiji 107",
+            "excerpt": "甫，竇太后昆弟。"
+          }
+        },
+        {
+          "repairId": "hanshu:061:r0015",
+          "before": {
+            "id": "hanshu:061:c0397",
+            "subject": "hanshu:061:p002",
+            "predicate": "place-association",
+            "value": {
+              "place": {
+                "en": "Changling",
+                "zh": "長陵"
+              },
+              "relation": "born-and-raised"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0036"
+            ]
+          },
+          "after": {
+            "id": "hanshu:061:c0397",
+            "subject": "hanshu:061:p002",
+            "predicate": "place-association",
+            "value": {
+              "place": {
+                "en": "Changling",
+                "zh": "長陵"
+              },
+              "relation": "birthplace"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "hanshu:061:s0036"
+            ]
+          },
+          "reason": "Sheng governs the place name Changling. Record birthplace only, not upbringing; this is not a dated birth claim.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "Pinned hanshu/061 s0036; Hanshu 52 and parallel Shiji 107",
+            "excerpt": "田蚡，孝景王皇后同母弟也，生長陵。"
+          }
+        }
+      ],
+      "claimAdditions": []
+    }
+  ]
+}

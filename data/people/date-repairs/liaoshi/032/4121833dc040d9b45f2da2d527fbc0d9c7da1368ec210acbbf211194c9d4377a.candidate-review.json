@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "liaoshi",
+  "chapter": "032",
+  "candidateCommit": "0b4a567068",
+  "candidateFile": "staged-candidate-4121833dc040d9b45f2d.json",
+  "sealedCandidateHash": "sha256:4121833dc040d9b45f2da2d527fbc0d9c7da1368ec210acbbf211194c9d4377a",
+  "candidateExtractionHash": "sha256:79fe6dbfe9f4e6dda9e013d25bd54df950ed84c117877bea6b5ba6df21925f14",
+  "reviewer": {
+    "name": "Codex independent Liaoshi 032 sealed date-repair reviewer",
+    "agentId": "review_liaoshi032",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:02:13.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after an independent Chinese-source, canonical-pin, and exact sealed-replay review. The 30 operations remove two false living tomb-honoree attestations, add two source-linked posthumous-commemoration events, remove the conflated Ketuyu AD 696–720 chronology from both claim and event context, replace eleven Taizu-reign genealogical person intervals, and synchronize thirteen derived hints. Daozong's recurring tomb visit remains visible as reception of Shengzong and Xingzong; the Wanrong/Ketuyu retrospective and the clan genealogy remain visible as evidence-limited holds. This receipt neither mutates nor approves the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:3dc147b5ade5fb76b5f94ff0d2b6b89a80e4b5b7242c9bcedbeb6fa5bf3f2fde",
+    "canonicalExtractionHash": "sha256:179994c8d21eaf4ef223669c21baff36131d114ee76520178ec23e4d0380fe2b",
+    "canonicalInputs": "PASS: current source and extraction hashes exactly match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: sha256 of the exact 30-operation proposal equals 4121833dc040d9b45f2da2d527fbc0d9c7da1368ec210acbbf211194c9d4377a.",
+    "candidateExtractionIdentity": "PASS: replayed staged candidate sha256 equals 79fe6dbfe9f4e6dda9e013d25bd54df950ed84c117877bea6b5ba6df21925f14.",
+    "candidateBytes": "PASS: exact proposal replay reconstructs the staged candidate byte-for-byte.",
+    "auditScope": "PASS: only claims 36, 38, 43, and 48–58; event context claim 92; and paired hints p003, p007, and p010–p020 change. No person identity, mention, source link, non-temporal predicate, or unrelated claim changes.",
+    "sourceOwnership": "PASS: s0029 dates Daozong's annual visit to the tombs, so Shengzong and Xingzong are honorees rather than living actors; s0087 retrospectively groups Wanrong and Ketuyu without a separate Ketuyu AD 696–720 interval; s0093 is genealogy naming brothers and clan descent, not activity throughout Taizu's reign.",
+    "historicalEvidenceRetention": "PASS: every Chinese witness, person, source-unit link, predicate, and relevant non-date event content is retained. Tomb reception is explicit posthumous commemoration; the Ketuyu and genealogy material remains source-linked unresolved evidence.",
+    "compactValidation": "PASS: 159 units, 28 people, 84 mentions, and 195 claims.",
+    "chronologyGeometry": "PASS: no date-audit temporal geometry diagnostics.",
+    "scopedValidator": "PASS: people:validate --book liaoshi --chapter 032.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0029",
+      "quote": "道宗每歲先幸黑山，拜聖宗、興宗陵，賞金蓮。",
+      "result": "The grammatical actor is Daozong, who annually pays respects at the tombs of Shengzong and Xingzong. The cited date belongs to the visitor's recurring act; the two former emperors are correctly retained as posthumous honorees, not living AD 1055–1101 actors."
+    },
+    {
+      "unit": "s0087",
+      "quote": "遙輦氏承萬榮可突於散敗之餘，更為八部，然遙輦、叠刺別出，又十部也。",
+      "result": "This retrospective says the Yaolian inherited remnants after Wanrong and Ketuyu's defeat and dispersal. It does not isolate Ketuyu's date or establish personal activity across AD 696–720; the candidate retains the source-linked military context as unresolved."
+    },
+    {
+      "unit": "s0093",
+      "quote": "余五院、六院、乙室部止見益古、撒裏本、涅剌，烏古部止見撒裏卜、涅勒，突呂不、突舉部止見塔古裏、航斡，皆兄弟也。",
+      "result": "The passage enumerates named clan ancestors and says that they are brothers. It gives no date for any of them, and cannot make Taizu's AD 907–926 reign a personal activity interval."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match this receipt and sealed handoff.",
+    "Replay exactly the reviewed 30 operations: two tomb-attestation removals plus two reception-event additions, Ketuyu claim and date-context corrections plus its hint, eleven genealogy claim corrections plus their eleven hints, and the Xingzong hint removal.",
+    "Keep s0029 as explicit posthumous reception, and retain the s0087 and s0093 source wording as explicit evidence-limited holds; do not infer the removed full-period personal activity spans.",
+    "Do not alter source or master from this review receipt. Run scoped validation and require a fresh independent canonical date audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

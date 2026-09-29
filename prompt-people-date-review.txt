@@ -65,8 +65,12 @@ Each change has a substantive source-based reason and one of these forms:
 {kind:"remove",id:"claim-N",before:EXACT_INPUT_ROW,reason}
 {kind:"add",after:[personId,"attestation"|"birth"|"death"|"age",value,certainty,[unitIds]],reason}
 {kind:"add-reception-event",after:[personId,"event-participation",value,certainty,[unitIds]],reason}
+{kind:"date-context",id:"claim-N",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}
 {kind:"hints",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}
 Claim rows are compact five-element arrays. Replacements keep subject/predicate.
+Use date-context to add missing chronology to an existing non-life claim. It may
+change only date fields, certainty, and evidence; the subject, predicate, and all
+non-date value fields must remain identical. It cannot remove or invent an event.
 Do not modify names, roles, mentions, family links or translation text. Preserve
 legitimate posthumous reception as an event, but remove it from personal activity.
 Use add-reception-event with an explicit posthumous/retrospective classification

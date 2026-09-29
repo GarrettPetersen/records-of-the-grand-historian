@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-replay-review",
+  "book": "beishi",
+  "chapter": "088",
+  "candidateFile": "staged-candidate-71a244f9ff6879471c32.json",
+  "proposalPinnedBy": "9387842705800c33b0c20ec899c9af9d319868bc",
+  "candidateExtractionHash": "sha256:71a244f9ff6879471c3280d8427a358df40ea0ed98317c08ac699be053a42e31",
+  "canonicalSourceHash": "sha256:f449bc0e20d7ffdd11d613f99a83a809f74ac654d507ae06daea4e87599575cb",
+  "canonicalExtractionHash": "sha256:d4918ffae910c66f721cce5e0dcc62551feaae9b45ebef9cd3615f319faa436f",
+  "reviewer": {
+    "name": "Codex independent Beishi 088 replay reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T03:10:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "The pinned proposal deterministically reconstructs the candidate: applying it to the pinned canonical extraction produced sha256:71a244f9ff6879471c3280d8427a358df40ea0ed98317c08ac699be053a42e31 and byte-equivalent candidate JSON. claim-397 and p094's hint use only s0256's undated 妻子 reference and assert no Renshou chronology, death, or personal endpoint. The other six source-specific holds remain unchanged and source-sound.",
+  "validation": {
+    "proposalReplay": "PASS: applyDateRepairProposal hash equals the pinned candidate hash and serialized output equals the stored candidate.",
+    "p094Isolation": "PASS: only s0256 remains in claim-397 evidence; sourceDate is 張文詡妻 and the reason rejects inherited Renshou/death chronology.",
+    "otherSix": "PASS: claims 365, 368, 410, 413, 419, and 423 retain their previously reviewed source-specific holds without Western active intervals.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceEvidence": [
+    {"unit": "s0239", "quote": "父琚，開皇中，為洹水令，以清正聞。", "finding": "Kaihuang office belongs to Wenxu's father."},
+    {"unit": "s0245", "quote": "仁壽末，學廢，文詡策杖而歸，灌園為業。", "finding": "Wenxu's Renshou event is not a continuous-to-618 endpoint."},
+    {"unit": "s0256", "quote": "文詡遽遣之，因為隱，謂妻子曰：「吾昨風眩，落坑所致。」", "finding": "Wife reference is undated and contains no personal endpoint."},
+    {"unit": "s0264", "quote": "眭誇忘懷纓冕，畢志丘園，或隱不違親，貞不絕俗；", "finding": "Undated commentary."},
+    {"unit": "s0266", "quote": "然文詡見傷無慍，徐則志在沈冥，不可親疏，莫能貴賤，皆可謂抱樸之士矣。", "finding": "Undated commentary."},
+    {"unit": "s0267", "quote": "崔廓感於屈辱，遂以肥遁見稱；", "finding": "Undated commentary."},
+    {"unit": "s0268", "quote": "祖浚文籍之美，足以克隆堂構。", "finding": "Undated commentary."}
+  ],
+  "hostRequirements": [
+    "Apply only against matching canonical hashes.",
+    "Do not change canonical audit status during curation.",
+    "Require a fresh independent canonical audit after application; research holds prevent approval."
+  ]
+}

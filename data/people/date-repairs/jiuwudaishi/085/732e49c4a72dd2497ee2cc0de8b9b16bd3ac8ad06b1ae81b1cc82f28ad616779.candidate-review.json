@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "085",
+  "candidateFile": "staged-candidate-732e49c4a72dd2497ee2.json",
+  "sourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+  "originalExtractionHash": "sha256:6aa63630a5ee08f601ced7653550ef39f3b5c515fb4f9f4f69f6f15e059662b3",
+  "sealedCandidateHash": "sha256:732e49c4a72dd2497ee2cc0de8b9b16bd3ac8ad06b1ae81b1cc82f28ad616779",
+  "candidateExtractionHash": "sha256:dad6dae4d58807eafe3ade521fbcfd31c61d7261dfa5c2a66f8d473688832650",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 085 Xiande-bound date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi085_claim50",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T03:17:53Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed replay, direct Chinese source-context review, exact one-operation scope review, and chronology review. The phrase 周顯德初 places the report early in the Zhou Xiande era, whose first year is AD 954. It supports an inclusive lower bound of AD 954, but neither an exact event year nor an upper endpoint. The candidate makes precisely that replacement and leaves the separate Wang Congke research hold and former-ruler removal work unchanged.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-50"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0127",
+          "quote": "周顯德初，有漢人自塞北而至者"
+        }
+      ],
+      "reason": "周顯德初 means early in the Xiande era of Later Zhou. Xiande begins in AD 954, so the report cannot predate AD 954; 初 does not select a particular year within the early era and gives no terminating event. Replacing the spurious AD 954 point with an inclusive onOrAfter AD 954 bound retains the source wording without inventing exactness or an endpoint."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes remain sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d and sha256:6aa63630a5ee08f601ced7653550ef39f3b5c515fb4f9f4f69f6f15e059662b3.",
+    "Replay exactly the sealed one-operation claim-50 replacement. Do not alter people, aliases, roles, relationships, mentions, source evidence, translations, other claims, or active-date hints.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit. Preserve Wang Congke's unresolved claim-85 and the separately audited p045 false-person removal; neither is approved or changed by this receipt."
+  ],
+  "validation": {
+    "sealedProposalIdentity": "PASS: exact one-operation proposal seals to sha256:732e49c4a72dd2497ee2cc0de8b9b16bd3ac8ad06b1ae81b1cc82f28ad616779.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:dad6dae4d58807eafe3ade521fbcfd31c61d7261dfa5c2a66f8d473688832650.",
+    "proposalReplay": "PASS: the staged handoff records byte-exact replay from the pinned canonical extraction.",
+    "auditScope": "PASS: claim-50 is the sole proposal operation; the staged validation states that p045, claim-85, and p050 are byte-identical to the canonical extraction.",
+    "sourceChronology": "PASS: s0127 supplies early Xiande wording. Xiande starts in AD 954; onOrAfter AD 954 is inclusive and does not claim a point date or upper bound.",
+    "compactValidation": "PASS: the staged handoff records compact validation and chronology geometry passes after replay.",
+    "canonicalMutation": "NONE"
+  }
+}

@@ -26,8 +26,7 @@ export function peopleCatalogIsComplete(stats) {
 export function peopleCatalogIsPublishable(catalog) {
   const stats = catalog?.stats;
   return Array.isArray(catalog?.people) && catalog.people.length > 0 &&
-    Number.isInteger(stats?.extractedChapters) && stats.extractedChapters > 0 &&
-    Number.isInteger(stats?.pendingTranslationRepairs) && stats.pendingTranslationRepairs === 0;
+    catalog.complete === true && peopleCatalogIsComplete(stats);
 }
 
 export function assertPeopleCatalogPublicationState(catalog) {

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "songshi",
+  "chapter": "484",
+  "sourceHash": "sha256:3631077a5a79eef7f5def8957b2f7fa891529e2ffd42bc9d47a6bea08623c95b",
+  "extractionHash": "sha256:147715d1c75b36049e3e7719cd152b2460197b6aa88d20baf23d41b9e9ba908c",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Independent manual source auditor",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T23:18:00.000Z",
+  "summary": "Focused independent audit of the deterministic temporal-geometry finding: the two cited Chinese passages identify Zhou Taizu as the later Zhou founder, while claim-374 incorrectly puts its already supplied 951–954 interval in the BC era. The person-level AD 951–954 hint is internally consistent; the claim requires a separately reviewed, scoped era correction before this chapter can be approved.",
+  "reviewedUnits": [
+    "s0097",
+    "s0112"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-374",
+      "verdict": "incorrect",
+      "event": "Li Yun's later recollection of Zhou Taizu's portrait and favor.",
+      "reason": "Both cited passages identify 周祖 as the Zhou founder, but the record labels the 951–954 interval BC. In the BC era, 951 to 954 is chronologically reversed, triggering the deterministic defect; it also conflicts with this same person's AD 951–954 active-date hint. The error is the Western-era label, not evidence that the recalled favor lasted continuously across the interval.",
+      "evidence": [
+        {
+          "unit": "s0097",
+          "quote": "遽索周祖畫像懸壁"
+        },
+        {
+          "unit": "s0112",
+          "quote": "筠自言受周祖大恩"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p086",
+      "verdict": "supported",
+      "reason": "The person record's AD 951–954 hint has the correct era and identifies the same Zhou founder named in both reviewed source passages. This focused report does not treat the portrait or Li Yun's recollection as evidence of continuous personal activity throughout that window.",
+      "evidence": [
+        {
+          "unit": "s0097",
+          "quote": "周祖畫像"
+        },
+        {
+          "unit": "s0112",
+          "quote": "受周祖大恩"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-374"
+      ],
+      "problem": "claim-374 encodes the Later Zhou founder's 951–954 context as BC, producing a reversed Western interval and contradicting the person's AD active-date hint.",
+      "action": "Stage a scoped date repair that changes only the westernInterval era labels from BC to AD, retains year precision and the existing cited evidence, then obtain a fresh independent complete chapter audit before approval."
+    }
+  ],
+  "references": [
+    {
+      "book": "songshi",
+      "chapter": "484",
+      "unit": "s0097",
+      "quote": "遽索周祖畫像懸壁",
+      "sourceHash": "sha256:0cd217b2f5d3082d48ba54efcb0e1a60d54fff8038c224172c31f365ece2a63b",
+      "reason": "The chapter explicitly calls the commemorated figure Zhou Zu, the Zhou founder, rather than identifying a BC-era person."
+    },
+    {
+      "book": "songshi",
+      "chapter": "484",
+      "unit": "s0112",
+      "quote": "筠自言受周祖大恩",
+      "sourceHash": "sha256:b9dc1e087c13e20315a0aa777095fd00342b67c72e73fb62f2e90870d18e6540",
+      "reason": "Li Yun's statement repeats the same Zhou Zu identification, tying the faulty claim to the later-Zhou subject in this chapter."
+    }
+  ]
+}

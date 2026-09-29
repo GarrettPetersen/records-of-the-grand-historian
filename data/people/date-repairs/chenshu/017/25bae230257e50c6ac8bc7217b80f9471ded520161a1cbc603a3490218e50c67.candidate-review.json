@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "017",
+  "candidateFile": "staged-candidate-25bae230257e50c6ac8b.json",
+  "candidateHash": "sha256:25bae230257e50c6ac8bc7217b80f9471ded520161a1cbc603a3490218e50c67",
+  "reviewer": {
+    "name": "Codex independent Chenshu 017 corrected-candidate reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:45:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The corrected 48-change proposal exactly replays: all 24 audit-listed temporal claims become source-specific holds and all 24 corresponding active-date hints become matching research-required holds. It changes no other data and preserves independently supported chronology.",
+  "validation": {
+    "proposalReplay": "PASS: applying all 48 pinned operations to the canonical extraction produces sha256:25bae230257e50c6ac8bc7217b80f9471ded520161a1cbc603a3490218e50c67, byte-equivalent to the staged candidate.",
+    "claimCoverage": "PASS: every audit-listed claim is replaced exactly once (24 of 24), with no unlisted claim mutation.",
+    "pairedHints": "PASS: every audit-listed active-date hint is replaced exactly once (24 of 24), and each new hold text matches its paired claim reason.",
+    "scope": "PASS: only the 24 reviewed claims and their 24 paired person hint records differ; people, mentions, names, roles, relationships, provenance, and all other claims remain unchanged.",
+    "independentDates": "PASS: hints are changed only where all listed values are borrowed. The sole multi-value target p009 has no other temporal claim beyond repaired claim-80, so replacing AD 502, AD 537, and AD 545-546 does not discard independently sourced chronology.",
+    "sourceHolds": "PASS: every replacement preserves the original subject, predicate, source-date wording, provenance, and cited units, removing only unsupported Western chronology.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "group": "title and broad dynasty/reign references",
+      "claims": ["claim-77", "claim-78", "claim-80", "claim-81", "claim-82", "claim-83", "claim-84", "claim-85", "claim-99", "claim-102", "claim-105", "claim-106", "claim-109", "claim-110", "claim-117", "claim-130"],
+      "pairedHints": ["p006", "p007", "p009", "p010", "p011", "p012", "p013", "p014", "p028", "p031", "p034", "p035", "p038", "p039", "p046", "p061"],
+      "evidence": "s0005: 祖僧衍，齊侍中。",
+      "result": "Titles and broad dynasty or reign references identify people or offices but do not establish whole-period personal activity; all sixteen claim and hint holds are appropriate."
+    },
+    {
+      "group": "institutional precedent and allusion references",
+      "claims": ["claim-121", "claim-122", "claim-123", "claim-124", "claim-125", "claim-126"],
+      "pairedHints": ["p050", "p051", "p052", "p053", "p054", "p055"],
+      "evidence": "s0150: 駙馬都尉置由漢武…是以魏曹植表駙馬、奉車趣為一號。",
+      "result": "Han, Wei, and Jin persons occur as institutional precedents rather than current personal-date evidence; all six claim and hint holds are appropriate."
+    },
+    {
+      "group": "modern collation witnesses",
+      "claims": ["claim-206", "claim-207"],
+      "pairedHints": ["p059", "p060"],
+      "evidence": "s0180: 按錢大昕《廿二史考異》云此別一王琳。",
+      "result": "The editorial witnesses remain visible as apparatus references without unsupported generic modern active intervals; both claim and hint holds are appropriate."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply all 48 reviewed operations exactly; do not omit paired hint operations or alter independently sourced chronology.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; retained research holds require research-blocked rather than audited status."
+  ]
+}

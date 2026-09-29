@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "022",
+  "candidateFile": "staged-candidate-21c6f1bf590d30c90179.json",
+  "candidateHash": "sha256:21c6f1bf590d30c9017957b604559224f2763b9258868215c8ed36b0702eedec",
+  "reviewer": {
+    "name": "Codex independent Chenshu 022 corrected-candidate reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T05:45:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The corrected two-change proposal exactly replays and replaces claim-372's borrowed early-Han chronology and p042's matching active-date hint with the same source-specific Luo Ya/Zhang Liang rhetorical-comparison hold. No collateral data changes.",
+  "validation": {
+    "proposalReplay": "PASS: applying both pinned operations to the canonical extraction produces sha256:21c6f1bf590d30c9017957b604559224f2763b9258868215c8ed36b0702eedec, byte-equivalent to the staged candidate.",
+    "coverage": "PASS: claim-372 and p042 are the sole audit-listed targets and are each repaired exactly once.",
+    "pairedHint": "PASS: p042 replaces its early-Han active-date text with the matching source-specific research-required hold.",
+    "sourceHold": "PASS: Zhang Liang, the Luo Ya comparison, source wording, provenance, and s0094 remain intact while only borrowed chronology is removed.",
+    "scope": "PASS: only claim-372 and p042's hint record differ; all other extraction data is unchanged.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claim": "claim-372",
+      "pairedHint": "p042",
+      "unit": "s0094",
+      "quote": "駱牙識真有奉，知世祖天授之德，蓋張良之亞歟？",
+      "translation": "Luo Ya recognized true worth and served it; he knew Emperor Wen's heaven-granted virtue—was he not next to Zhang Liang?",
+      "result": "The sentence praises Luo Ya by comparison to Zhang Liang. It preserves the historical model but supplies no date-bearing Zhang Liang event in this chapter, so the paired allusion hold is correct."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply both reviewed operations exactly; do not omit the p042 hint repair or alter unrelated data.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; the retained research hold requires research-blocked rather than audited status."
+  ]
+}

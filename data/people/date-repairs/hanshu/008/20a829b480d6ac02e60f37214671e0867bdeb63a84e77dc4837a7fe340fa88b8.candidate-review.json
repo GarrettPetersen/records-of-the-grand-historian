@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "008",
+  "candidateFile": "staged-candidate-20a829b480d6ac02e60f.json",
+  "candidateHash": "sha256:20a829b480d6ac02e60f37214671e0867bdeb63a84e77dc4837a7fe340fa88b8",
+  "reviewer": {
+    "name": "Codex independent Hanshu 008 chronology-addition reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T09:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. Nine explicit dated attestations and seven matching hints capture the five source events identified by the fresh audit: Empress Shangguan at s0045 (BC 83), Emperor Zhao at s0061/s0098/s0112 (BC 81/79/77), and the five named or title-identified s0089 conspiracy-edict participants (BC 80). Existing source-specific holds and prior reception/bound repairs remain intact.",
+  "validation": {
+    "proposalReplay": "PASS: all sixteen pinned operations replay byte-for-byte to sha256:20a829b480d6ac02e60f37214671e0867bdeb63a84e77dc4837a7fe340fa88b8.",
+    "coverage": "PASS: exactly nine added attestations cover p020, p001 (three), p007, p010, p005, p025, and p035; exactly seven paired hint records cover those seven people.",
+    "sourceChecks": "PASS: s0045 explicitly dates the Empress's Gao Temple appearance to BC 83; s0061, s0098, and s0112 explicitly date Emperor Zhao's annal events to BC 81, 79, and 77; s0089's BC 80 edict identifies the five conspiracy participants. Each addition retains its unit, Chinese date wording, and discrete Western year.",
+    "preservation": "PASS: the six pre-existing source-specific holds (claim-107 and claim-214 through claim-218), the reception-only BC 87/82/77 records, and the one-sided death-bound repairs remain unchanged.",
+    "scope": "PASS: no claims, people, source units, or non-temporal values outside the nine additions and seven paired hints change.",
+    "compactValidation": "PASS: scoped people validator passed for hanshu/008.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against matching pinned source and canonical extraction hashes.",
+    "Apply all sixteen additions/hint changes exactly.",
+    "Do not disturb existing source-specific holds, reception classifications, or one-sided bounds.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}

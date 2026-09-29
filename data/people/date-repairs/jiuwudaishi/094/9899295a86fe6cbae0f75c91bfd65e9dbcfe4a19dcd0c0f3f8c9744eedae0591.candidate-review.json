@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "094",
+  "candidateFile": "staged-candidate-9899295a86fe6cbae0f7.json",
+  "sourceHash": "sha256:72ce5719c59b7f2891ba2bce63927f2b2a8d7fc722c37f1b8b9837db4ca1d870",
+  "originalExtractionHash": "sha256:bf6f40a27a98aabe60ef6a1d6d08987616fb318539915ec290c11eb8967c88e9",
+  "priorRejectedCandidateHash": "sha256:f187a69e5492f4977b7da50c67d214d8191060189a2e828bc9dadf2d8df06853",
+  "sealedCandidateHash": "sha256:9899295a86fe6cbae0f75c91bfd65e9dbcfe4a19dcd0c0f3f8c9744eedae0591",
+  "candidateExtractionHash": "sha256:0e7eee16b08e23a2ec57a475bf97ec528baed8d8a76b68d658486e05b6c0d09d",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 094 corrected date-repair reviewer",
+    "agentId": "date_repair_review2_jiuwudaishi094",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T05:00:00Z",
+  "disposition": "accept",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after a fresh independent replay of all 77 sealed operations against initial audit 3e6bf3d69d, the pinned Chinese source, and the prior rejection receipt. The 76 previously supported operations are byte-identical. The sole replacement, claim-137, now retains its s0054 sourceDate 開運初 and Yangcheng campaign evidence while replacing flattened AD 944 with the conservative Early Kaiyun interval AD 944–945. The candidate makes no source or canonical extraction mutation.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-7", "claim-8", "claim-10", "claim-49", "claim-97", "claim-132", "claim-151", "claim-343", "claim-521", "hints-p001", "hints-p002", "hints-p008", "hints-p011", "hints-p048", "hints-p095"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0039 identifies the Wei-Bo episode as Tianyou 10 / AD 913; retrospective Zhuangzong wording elsewhere does not independently prove a continuous AD 923–926 personal interval."],
+      "reason": "The preserved repair operations remove borrowed reign-wide chronology while retaining the distinct, source-specific event and conservative holds."
+    },
+    {
+      "proposalItems": ["claim-105", "claim-118", "claim-119", "claim-134", "claim-137", "claim-544", "claim-560", "claim-562", "claim-568", "claim-569", "claim-572", "hints-p102", "hints-p106", "hints-p107", "hints-p108", "hints-p109"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0054: 開運初，契丹入寇，王師北征，以環為北面行營步軍左廂排陣使，預破契丹於陽城。", "The source phase expressions distinguish 天成初, 開運初, and 清泰末; the candidate retains conservative AD 926–927, AD 944–945, and AD 935–936 phase intervals respectively."],
+      "reason": "Claim-137 corrects the exact defect in the rejected candidate: 開運初 is Early Kaiyun, AD 944–945, not Early Tiancheng. Its event, subject, certainty, sourceDate, and s0054 evidence remain unchanged. The other phase repairs remain byte-identical and source-faithful."
+    },
+    {
+      "proposalItems": ["claim-548", "claim-556", "claim-650", "hints-p104", "hints-p126"],
+      "verdict": "supported",
+      "sourceEvidence": ["The Wei-Bo-specific 唐天祐中 context is separately identified as Tianyou 10 / AD 913; remaining bare Tianyou contexts have no cited numbered year."],
+      "reason": "The candidate preserves AD 913 only for the identified event and retains source-specific unresolved holds where the text supplies no secure conversion."
+    },
+    {
+      "proposalItems": ["claim-333", "claim-337", "claim-441", "claim-445", "claim-481", "claim-482", "claim-507", "claim-554", "claim-576", "claim-577", "claim-603", "claim-629", "claim-655", "hints-p045", "hints-p046", "hints-p072", "hints-p073", "hints-p084", "hints-p093", "hints-p103", "hints-p112", "hints-p114", "hints-p121", "hints-p127"],
+      "verdict": "supported",
+      "sourceEvidence": ["The cited family, honor, mourning, death, and generic court-service wording remains source-backed but does not state the removed personal Western endpoints."],
+      "reason": "The operations preserve source provenance and use explicit source-limited holds rather than invented chronology."
+    },
+    {
+      "proposalItems": ["claim-403", "claim-404", "claim-660", "claim-668", "claim-670", "claim-672", "claim-674", "claim-677", "claim-679", "hints-p064", "hints-p129", "hints-p132", "hints-p133", "hints-p134", "hints-p135", "hints-p136", "hints-p137"],
+      "verdict": "supported",
+      "sourceEvidence": ["The cited composite narratives and retrospective labels do not independently state the removed reign-wide interval or synthesized life endpoint."],
+      "reason": "The repairs separate dated event context from undated narrative outcomes and preserve research holds without manufacturing lifespan or activity ranges."
+    }
+  ],
+  "hostRequirements": [
+    "Curate exactly sealed candidate sha256:9899295a86fe6cbae0f75c91bfd65e9dbcfe4a19dcd0c0f3f8c9744eedae0591 only after validating the pinned source and extraction fingerprints.",
+    "Do not curate rejected candidate sha256:f187a69e5492f4977b7da50c67d214d8191060189a2e828bc9dadf2d8df06853.",
+    "Run scoped validation and a fresh complete canonical date audit after host curation."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: independently rebuilt packet matches pinned source sha256:72ce5719c59b7f2891ba2bce63927f2b2a8d7fc722c37f1b8b9837db4ca1d870 and extraction sha256:bf6f40a27a98aabe60ef6a1d6d08987616fb318539915ec290c11eb8967c88e9.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:9899295a86fe6cbae0f75c91bfd65e9dbcfe4a19dcd0c0f3f8c9744eedae0591.",
+    "candidateExtractionIdentity": "PASS: independently replayed all 77 sealed operations and recomputed candidate hash is sha256:0e7eee16b08e23a2ec57a475bf97ec528baed8d8a76b68d658486e05b6c0d09d.",
+    "proposalReplay": "PASS: exact replay matches the handoff candidate.",
+    "preservedOperations": "PASS: all 76 operations other than claim-137 are byte-identical to rejected candidate sha256:f187a69e5492f4977b7da50c67d214d8191060189a2e828bc9dadf2d8df06853.",
+    "claim137": "PASS: s0054 開運初 is Early Kaiyun AD 944–945; the sourceDate, Yangcheng campaign event, and s0054 evidence are unchanged.",
+    "compactValidation": "PASS: candidate handoff records 323 units, 137 people, 896 mentions, 1,158 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: candidate handoff records no structural date-diagnostic contradictions.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}

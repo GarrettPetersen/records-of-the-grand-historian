@@ -4,17 +4,111 @@ import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from '
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
+import { hasDateBearingChronology } from './people-date-values.mjs';
+import {
+  validateAppliedEditorialDecisions,
+  validateEditorialDecisionDocument,
+} from './people-editorial-decisions.mjs';
 
 export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const hash = value => sha256(JSON.stringify(value));
 const lifePredicates = new Set(['attestation', 'birth', 'death', 'age']);
-const dateFields = new Set(['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'dateContext', 'startDate', 'endDate', 'unresolved', 'unresolvedReason']);
+const dateFields = new Set(['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'dateContext', 'startDate', 'endDate', 'unresolved', 'unresolvedReason', 'undatedSourceAttestation']);
 const withoutDates = value => Array.isArray(value) ? value.map(withoutDates) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).filter(([key])=>!dateFields.has(key)).map(([key,v])=>[key,withoutDates(v)])) : value;
 const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1] === 'event-participation'
   && Boolean(personClaimReception({ predicate: row[1], value: row[2] }))
   && personReceptionErrors({ predicate: row[1], value: row[2] }).length === 0;
+const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
+  && same(withoutDates(before[2]), withoutDates(after[2]));
+
+// Candidate extraction bytes are not a sufficient review identity: removing a
+// sealed no-op can leave those bytes unchanged while changing the proposal a
+// reviewer must approve. New staged handoffs therefore bind reviews to both.
+export function sealedDateRepairProposalHash(proposal) {
+  if (!proposal || typeof proposal !== 'object') throw new Error('Date repair proposal is required for sealing');
+  return hash(proposal);
+}
+
+export function validateStagedDateRepairReview(handoff, review, candidateFile) {
+  if (handoff?.kind !== 'date-repair-candidate-handoff' || !handoff.proposal || !handoff.candidate) throw new Error('Invalid staged date-repair handoff');
+  const sealedCandidateHash = sealedDateRepairProposalHash(handoff.proposal);
+  const candidateExtractionHash = hash(handoff.candidate);
+  if (handoff.sealedCandidateHash !== sealedCandidateHash || handoff.candidateExtractionHash !== candidateExtractionHash) throw new Error('Staged date-repair handoff identity does not match its sealed proposal or candidate bytes');
+  if (!review || review.kind !== 'independent-staged-date-repair-review' || review.book !== handoff.book || review.chapter !== handoff.chapter ||
+      review.candidateFile !== candidateFile || review.sealedCandidateHash !== sealedCandidateHash || review.candidateExtractionHash !== candidateExtractionHash) {
+    throw new Error('Independent review must bind the exact sealed proposal, candidate bytes, and handoff file');
+  }
+  if (review.candidateHash !== undefined && review.candidateHash !== sealedCandidateHash) throw new Error('Legacy candidateHash cannot replace the sealed proposal identity');
+  return { sealedCandidateHash, candidateExtractionHash };
+}
+
+// A date candidate sometimes has to update a reviewed claim replacement: the
+// review can have preserved a now-rejected imported interval as part of the
+// replacement fact.  This is intentionally an in-memory, sealed amendment.
+// It never writes the live editorial decision; a host curator must replay the
+// same amendment and publish both artifacts together after independent review.
+const editorialAmendmentDateFields = new Set([
+  'westernYear', 'westernInterval', 'westernBounds', 'dateContext', 'startDate', 'endDate',
+  'unresolved', 'unresolvedReason', 'event',
+]);
+const withoutEditorialAmendmentDates = value => Array.isArray(value)
+  ? value.map(withoutEditorialAmendmentDates)
+  : value && typeof value === 'object'
+    ? Object.fromEntries(Object.entries(value)
+      .filter(([key]) => !editorialAmendmentDateFields.has(key))
+      .map(([key, item]) => [key, withoutEditorialAmendmentDates(item)]))
+    : value;
+
+function assertDateOnlyEditorialClaimAmendment(before, after) {
+  if (!before || !after || before.id !== after.id || before.subject !== after.subject ||
+      before.predicate !== after.predicate || before.certainty !== after.certainty ||
+      !same(before.evidence, after.evidence)) {
+    throw new Error('Editorial amendment must preserve the reviewed claim identity, certainty, and evidence');
+  }
+  if (!same(withoutEditorialAmendmentDates(before.value), withoutEditorialAmendmentDates(after.value))) {
+    throw new Error('Editorial amendment may change only chronology fields in the reviewed replacement fact');
+  }
+  if (before.value?.event !== undefined && before.value.event !== after.value?.event) {
+    throw new Error('Editorial amendment cannot alter an existing non-date event description');
+  }
+}
+
+export function applyDateRepairEditorialAmendment(document, amendment, candidate) {
+  if (!document || !amendment || !candidate) throw new Error('Editorial amendment requires decision, amendment, and expanded candidate');
+  validateEditorialDecisionDocument(document);
+  if (amendment.schemaVersion !== 1 || amendment.kind !== 'date-repair-editorial-amendment' ||
+      amendment.book !== document.book || amendment.chapter !== document.chapter ||
+      amendment.editorialDecisionHash !== hash(document) || !Array.isArray(amendment.claimRevisions) ||
+      amendment.claimRevisions.length === 0) {
+    throw new Error('Invalid or stale sealed editorial amendment');
+  }
+  const amended = structuredClone(document);
+  const seen = new Set();
+  for (const change of amendment.claimRevisions) {
+    if (typeof change.repairId !== 'string' || typeof change.claimId !== 'string' ||
+        typeof change.reason !== 'string' || change.reason.trim().length < 20) {
+      throw new Error('Editorial amendment requires a reviewed claim, repair ID, and source-based reason');
+    }
+    const key = `${change.repairId}:${change.claimId}`;
+    if (seen.has(key)) throw new Error('Duplicate editorial amendment target');
+    seen.add(key);
+    const matches = amended.claimRevisions.filter(revision =>
+      revision.repairId === change.repairId && revision.before?.id === change.claimId &&
+      revision.after?.id === change.claimId,
+    );
+    if (matches.length !== 1 || !same(matches[0].after, change.before)) {
+      throw new Error(`Editorial amendment target is missing or stale for ${key}`);
+    }
+    assertDateOnlyEditorialClaimAmendment(change.before, change.after);
+    matches[0].after = structuredClone(change.after);
+    matches[0].reason = change.reason;
+  }
+  validateEditorialDecisionDocument(amended);
+  validateAppliedEditorialDecisions(amended, candidate);
+  return amended;
+}
 
 export function dateWorkflowDirectory(book, chapter, peopleDir = PEOPLE_DIR) {
   return path.join(peopleDir, 'generated', 'date-workflow', book, chapter);
@@ -129,11 +223,33 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       const key = `hints-${change.personId}`;
       if (seen.has(key)) throw new Error('Duplicate date repair target'); seen.add(key);
       const person = candidate.people.find(p => p[0] === change.personId);
-      if (!person || !Array.isArray(change.after) || !change.after.length || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
+      // A person mentioned solely in a dated retrospective or posthumous event
+      // must not retain invented life-date hints just to satisfy the ordinary
+      // extraction invariant. The separately classified reception record is
+      // still required, so an empty hint list cannot hide an ordinary person.
+      const noChronologyEvidence = change.after?.length === 0 && candidate.claims.some(claim =>
+        claim[0] === change.personId && claim[1] === 'attestation' &&
+        claim[2]?.undatedSourceAttestation === true) && !candidate.claims.some(claim =>
+        claim[0] === change.personId && hasDateBearingChronology(claim[2]));
+      const receptionOnly = change.after?.length === 0 && candidate.claims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
+      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
       person[4] = { ...person[4], a: change.after };
-    } else if (change.kind === 'replace' || change.kind === 'remove') {
-      if (!temporal.has(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim'); seen.add(change.id);
+    } else if (change.kind === 'external-primary-chronology') {
+      const key = `external-primary-chronology-${change.personId}`;
+      if (seen.has(key)) throw new Error('Duplicate external-primary chronology repair target');
+      seen.add(key);
+      const person = candidate.people.find(p => p[0] === change.personId);
+      if (!person || !Array.isArray(change.after) || !same(person[4]?.e ?? [], change.before ?? []) ||
+          change.after.some(entry => !person[4]?.a?.includes(entry?.hint))) {
+        throw new Error('Invalid or stale external-primary chronology repair');
+      }
+      person[4] = { ...person[4], e: change.after };
+    } else if (change.kind === 'replace' || change.kind === 'remove' || change.kind === 'date-context') {
+      if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');
       const index = Number(change.id.slice(6))-1;
+      if (change.kind !== 'date-context' && !temporal.has(change.id)) throw new Error('Repair must target a unique temporal claim');
+      if (change.kind === 'date-context' && (!stored.claims[index] || lifePredicates.has(stored.claims[index][1]))) throw new Error('Date-context repair requires an existing non-life claim');
+      seen.add(change.id);
       if (!same(stored.claims[index], change.before)) throw new Error('Date repair before-value mismatch');
       if (change.kind === 'remove') {
         removed.add(index);
@@ -141,6 +257,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       else {
         if (!Array.isArray(change.after) || change.after.length !== 5 || change.after[0] !== change.before[0] || change.after[1] !== change.before[1]) throw new Error('Date repair cannot change a claim subject or predicate');
         if (!lifePredicates.has(change.before[1]) && !same(withoutDates(change.before[2]),withoutDates(change.after[2]))) throw new Error('Date repair altered non-temporal event fields');
+        if (change.kind === 'date-context' && !dateAuditItems({ ...stored, claims: [change.after] }).items.some(item=>item.claimIndex===0)) throw new Error('Date-context repair must supply auditable chronology');
         candidate.claims[index] = change.after;
       }
     } else if (change.kind === 'add' || change.kind === 'add-reception-event') {
@@ -306,9 +423,14 @@ export function dateRepairDifference(before, after, packet) {
     if (match >= 0) { remaining.splice(match,1); continue; }
     changes.push({ kind: 'remove', id: item.id, before: claim, reason: 'Superseded by independently re-audited chronology in the retained repair rounds.' });
   }
-  for (const claim of before.claims.filter((c,i)=>!temporalIndices.has(i))) {
+  for (const [index, claim] of before.claims.entries()) {
+    if (temporalIndices.has(index)) continue;
     const match = remaining.findIndex(c=>same(c,claim));
-    if (match < 0) throw new Error('Date repair altered a non-temporal claim'); remaining.splice(match,1);
+    if (match >= 0) { remaining.splice(match,1); continue; }
+    const dated = remaining.findIndex(c=>sameNonDateClaim(claim,c));
+    if (dated < 0) throw new Error('Date repair altered a non-temporal claim');
+    changes.push({kind:'date-context',id:`claim-${index+1}`,before:claim,after:remaining.splice(dated,1)[0],
+      reason:'Attach independently reviewed chronology without changing the existing claim identity or non-date content.'});
   }
   // Replacements of dated non-life events must stay replacements, not additions.
   for (const claim of remaining) {

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "093",
+  "candidateFile": "staged-candidate-052f71a23f9dc4980e41.json",
+  "sourceHash": "sha256:7a05c8e96a000cd9d9044816b702361e82cf28bc0aed492dfefe6e6cb8d57d36",
+  "originalExtractionHash": "sha256:18511afcdfdc439e8fd50feb54e98a2051882d293ad31600ad986cfc5016b68c",
+  "sealedCandidateHash": "sha256:052f71a23f9dc4980e41140b0271ed816860c33af91f1b9916387e0a74915ed0",
+  "candidateExtractionHash": "sha256:441cc9f4097547edadcc3d3b3183e096360e16eb465592f1b1075137aac38d8f",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 093 date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi093",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T04:05:01Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked after fresh independent audit",
+  "summary": "Accepted the exact 51-operation sealed candidate after independent source and chronology review. It removes unsupported personal intervals inherited from bare Tang dynasty labels, age sixteen, and undated deaths; preserves one-sided chronology for pre-923, early-reign, and post-942 sequences; corrects Tongguang first year to AD 923; and corrects Tang Tianfu to AD 901–904. It preserves source wording, event ownership, evidence units, and all non-temporal extraction content. Source-specific unresolved holds remain honest holds rather than invented dates.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-44", "claim-47", "claim-48", "claim-51", "claim-800", "claim-869", "claim-178", "claim-179", "claim-180", "claim-802", "claim-872", "hints-p002", "hints-p003", "hints-p004", "hints-p076", "hints-p081"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0002–s0004: Tang offices of Lu Zhi's forebears are source-attested but have no personal Western years."],
+      "reason": "The candidate correctly replaces invented late-Tang activity ranges and their active hints with explicit source-specific undated holds."
+    },
+    {
+      "proposalItems": ["claim-54", "claim-55", "claim-59", "claim-60", "claim-61", "claim-181", "hints-p001", "hints-p005", "claim-64", "claim-65", "claim-182", "hints-p006", "claim-734", "claim-735", "hints-p071"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0006: 「年十六」 gives traditional age only.", "s0008: 「丁母憂」 records mourning after a death but gives no calendar date.", "s0135: 「李崧之母薨」 records the death without date language."],
+      "reason": "The candidate removes borrowed intervals while retaining source-backed age, mourning, and death evidence as explicit undated attestations and research holds."
+    },
+    {
+      "proposalItems": ["claim-104", "claim-105", "claim-106", "claim-107", "hints-p001"],
+      "verdict": "supported",
+      "sourceEvidence": ["The cited Tongguang first-year context explicitly identifies the first regnal year."],
+      "reason": "Tongguang first year is AD 923; replacing the whole-era AD 923–926 range with AD 923 correctly preserves the source's stated precision."
+    },
+    {
+      "proposalItems": ["claim-582", "claim-585", "claim-586", "claim-685", "claim-686", "claim-687", "claim-688", "claim-756", "claim-757", "claim-758", "claim-759", "claim-760", "claim-761", "hints-p075"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0108: 「唐莊宗平河南」 provides the pre-pacification sequence.", "s0109: 「明宗初」 is an early-reign phase.", "s0136–s0139: Gaozu's death precedes the Lesser Emperor's disposition and ensuing death sequence.", "s0143: 「梁貞明初」 and s0144: 「唐同光初」 are early-era phases."],
+      "reason": "The candidate correctly replaces flattened point dates and invented lower endpoints with conservative one-sided on-or-before/on-or-after bounds, retaining the source text and not claiming a nonexistent endpoint."
+    },
+    {
+      "proposalItems": ["claim-965", "hints-p093"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0179: 「唐天福中，隨計京師」 identifies Tang Tianfu, not Later Jin Tianfu."],
+      "reason": "Tang Tianfu spans AD 901–904. The correction removes the decades-late Later Jin Tianfu AD 936–944 conflation and synchronizes the active hint."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: the handoff pins source sha256:7a05c8e96a000cd9d9044816b702361e82cf28bc0aed492dfefe6e6cb8d57d36 and extraction sha256:18511afcdfdc439e8fd50feb54e98a2051882d293ad31600ad986cfc5016b68c.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:052f71a23f9dc4980e41140b0271ed816860c33af91f1b9916387e0a74915ed0.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate extraction hash is sha256:441cc9f4097547edadcc3d3b3183e096360e16eb465592f1b1075137aac38d8f.",
+    "proposalReplay": "PASS: the candidate has exactly 51 sealed operations and compact validation replayed it successfully.",
+    "auditCoverage": "PASS: all ten initial audit findings, their required companion attestations, and every affected active hint are repaired; no unrelated target changes.",
+    "sourceChronology": "PASS: independently checked the retained Chinese evidence for bare Tang offices, age sixteen, mourning/death statements, pre-923 sequence, early Mingzong/Zhengming/Tongguang phases, post-942 sequence, and Tang Tianfu AD 901–904.",
+    "nonDateRetention": "PASS: only date containers, required companion attestations, and active-date hints change; people, names, roles, relationships, mentions, translations, sources, predicates, evidence units, and other non-date content remain unchanged.",
+    "compactValidation": "PASS: independently rerun compact validation on the sealed candidate: 225 units, 110 people, 511 mentions, 1,585 claims, and no alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: independently rerun date-audit geometry diagnostics on the sealed candidate with no diagnostics.",
+    "canonicalMutation": "NONE: this receipt does not curate or modify canonical source or extraction data."
+  },
+  "hostRequirements": [
+    "Apply only while the pinned canonical source and extraction hashes remain current.",
+    "Replay exactly the sealed 51-operation proposal; do not alter source text, people, aliases, roles, relationships, mentions, translations, evidence units, or unrelated claims.",
+    "Keep the unresolved source-specific holds, conservative bounds, and Tang Tianfu AD 901–904 correction intact unless fresh independently reviewed evidence justifies a change.",
+    "Run scoped validation and obtain a fresh complete independent canonical date audit after host curation."
+  ]
+}

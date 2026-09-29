@@ -246,9 +246,10 @@ export function phaseCommand(phase, plan, { dryRun = false, limit, summaryOut, o
     ];
   }
   if (phase === 'extraction') {
+    const chapterLimit = Math.min(limit ?? plan.extractionChaptersPerWave, plan.extractionChaptersPerWave);
     return [
-      'scripts/sdk-people-extract.mjs', '--all', '--limit', String(plan.chaptersPerWave),
-      '--concurrency', String(plan.extractionConcurrency), '--order', 'deadline-balanced',
+      'scripts/sdk-people-extract.mjs', '--all', '--limit', String(chapterLimit),
+      '--concurrency', String(Math.min(chapterLimit, plan.extractionConcurrency)), '--order', 'deadline-balanced',
       '--max-units', String(plan.maxUnits), '--max-candidates', String(plan.maxCandidates),
       '--max-worker-kib', String(plan.maxWorkerKiB), '--max-cost', String(plan.waveCostCeilingDollars),
       '--cost-reserve', '5', '--max-run-cost', String(plan.maxRunCostDollars),
@@ -286,6 +287,7 @@ export function phaseCommand(phase, plan, { dryRun = false, limit, summaryOut, o
       '--max-new-shards', String(shards), '--concurrency', String(plan.resolutionConcurrency),
       '--max-attempts', '3', '--max-run-cost', String(plan.resolutionMaxRunCostDollars),
       '--max-run-tokens', String(plan.resolutionMaxRunTokens),
+      '--run-timeout-minutes', String(plan.runTimeoutMinutes),
       '--model', CAMPAIGN_MODEL, '--effort', 'medium',
     ];
     if (plan.resolutionDossierReady || plan.prepareDossiers) {

@@ -3,11 +3,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { buildDateAuditPacket, dateAuditDiagnostics, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport } from './lib/people-date-audit.mjs';
+import { actionableDateAuditItems, buildDateAuditPacket, dateAuditDiagnostics, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport } from './lib/people-date-audit.mjs';
 import { sha256, writeJsonAtomic } from './lib/people-content.mjs';
 import { westernBoundsErrors, boundedDateLabel } from './lib/people-date-values.mjs';
 import { personLifeSummary, formatPersonWesternYear, inferredPersonBirthYear } from './lib/people-presentation.mjs';
-import { peopleCatalogIsComplete } from './lib/people-publication.mjs';
+import { peopleCatalogIsComplete, peopleCatalogIsPublishable } from './lib/people-publication.mjs';
 
 const year = n => ({ era: n < 0 ? 'BC' : 'AD', year: Math.abs(n), precision: 'year' });
 test('catalog completion requires date approval independently of extraction', () => {
@@ -16,6 +16,25 @@ test('catalog completion requires date approval independently of extraction', ()
   assert.equal(peopleCatalogIsComplete({ ...stats, dateAuditPendingChapters: 0 }), true);
   delete stats.dateAuditPendingChapters;
   assert.throws(() => peopleCatalogIsComplete(stats), /invalid dateAuditPendingChapters/);
+});
+
+test('publication requires the complete catalog, not merely extracted records', () => {
+  const blockers = {
+    missingChapters: 1,
+    legacyChapters: 0,
+    legacyLocalPeople: 0,
+    pendingTranslationRepairs: 0,
+    unresolvedCandidateBlocks: 0,
+    dateAuditPendingChapters: 1,
+  };
+  assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: false, stats: blockers }), false);
+  const complete = {
+    ...blockers,
+    missingChapters: 0,
+    dateAuditPendingChapters: 0,
+  };
+  assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: true, stats: complete }), true);
+  assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: false, stats: complete }), false);
 });
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'people-dates-'));
@@ -134,6 +153,23 @@ test('nested dates, ages, undated life claims and every active hint enter the au
     ['p001', 'role', { roleId: 'official' }, 'explicit', ['s0001']],
   ] });
   assert.deepEqual(result.items.map(i => i.id), ['claim-1', 'claim-2', 'claim-3', 'hints-p001']);
+});
+
+test('candidate scope aggregates unique incorrect items across every audit finding', () => {
+  const report = {
+    itemChecks: [
+      { id: 'claim-1', verdict: 'incorrect' },
+      { id: 'hints-p023', verdict: 'incorrect' },
+      { id: 'hints-p065', verdict: 'incorrect' },
+      { id: 'hints-p067', verdict: 'incorrect' },
+      { id: 'hints-p004', verdict: 'research-blocked' },
+    ],
+    findings: [
+      { items: ['claim-1', 'hints-p023'] },
+      { items: ['hints-p023', 'hints-p065', 'hints-p067', 'hints-p004', 'p023'] },
+    ],
+  };
+  assert.deepEqual(actionableDateAuditItems(report), ['claim-1', 'hints-p023', 'hints-p065', 'hints-p067']);
 });
 
 test('one-sided bounds preserve direction, inclusion and the BC/AD boundary', () => {

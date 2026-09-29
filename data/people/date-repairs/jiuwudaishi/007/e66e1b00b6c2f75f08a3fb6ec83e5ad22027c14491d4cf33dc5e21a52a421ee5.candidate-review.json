@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "007",
+  "candidateFile": "staged-candidate-e66e1b00b6c2f75f08a3.json",
+  "sealedCandidateHash": "sha256:e66e1b00b6c2f75f08a3fb6ec83e5ad22027c14491d4cf33dc5e21a52a421ee5",
+  "candidateExtractionHash": "sha256:95796d250b534c3c6eb0ac3d4aebaa05aa9ff7a42ee4f3b1891e220044c4c0d8",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 007 date-repair reviewer",
+    "agentId": "review_jiuwudaishi007_date_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T21:23:25.278Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted: all 17 sealed operations resolve the seven scoped chronology findings without assigning personal activity from inherited narrative dates or later reception. Cui Jie, Youyu, and Zhu Yougui’s mother retain source-backed undated attestations; Luo Hongxin’s February 912 honor and Li Chunfeng’s 912 folk attribution are separate reception records; Wang Chucun retains only the Guangming 880–881 context; Qin Zongquan retains only an on-or-after AD 884 bound.",
+  "hostRequirements": [
+    "Apply only if the canonical source hash remains sha256:cddbf0ead60f3ed1efc9ac585eb39c5bb82a9f8738ecf9d19585105c7984257d and the canonical extraction hash remains sha256:d566d8cfd7a04b6864cce91f858140d0727ca02f3296adccfb4d078b34616b77.",
+    "Replay exactly the 17 operations bound by sealedCandidateHash; preserve the posthumous and retrospective classifications and do not restore any activity hint from the 912 narrative context.",
+    "After host curation, rerun scoped validation and obtain a fresh independent whole-chapter date audit."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:cddbf0ead60f3ed1efc9ac585eb39c5bb82a9f8738ecf9d19585105c7984257d",
+    "canonicalExtractionHash": "sha256:d566d8cfd7a04b6864cce91f858140d0727ca02f3296adccfb4d078b34616b77",
+    "canonicalInputs": "PASS: canonical source and compact extraction hashes match the review packet pins.",
+    "sealedProposalIdentity": "PASS: SHA-256 of the exact 17-operation proposal is e66e1b00b6c2f75f08a3fb6ec83e5ad22027c14491d4cf33dc5e21a52a421ee5.",
+    "candidateExtractionIdentity": "PASS: replayed candidate SHA-256 is 95796d250b534c3c6eb0ac3d4aebaa05aa9ff7a42ee4f3b1891e220044c4c0d8.",
+    "proposalReplay": "PASS: replay from the pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly 17 operations cover all seven findings: claim 97 and p006 hint; p007 hint; claims 64, 134, 135, one posthumous reception, and p009 hint; claim 89 and p034 hint; claim 90 and p035 hint; claim 103 and p044 hint; claim 104, one retrospective reception, and p045 hint.",
+    "sourceSoundness": "PASS: s0009 identifies Cui Jie while s0010’s Guangming and prior-year journey concern Cui Teng; s0010 supports Wang Chucun only in the Guangming context. s0016 calls Luo Hongxin late and records the court’s February 912 posthumous conferment, not an activity/death date. s0112 and s0114 give only undated identity/death context. s0139 says Qin Zongquan revived after Huang Chao’s fall, supporting on-or-after AD 884, not an exact point. s0141 is a later folk attribution to Li Chunfeng, not his AD 912 activity.",
+    "nonDateRetention": "PASS: the seven affected people retain their source-backed identity, relationship, office, death, title, and reception evidence; only unsupported chronology is removed or bounded.",
+    "compactValidation": "PASS: strict compact validation against a freshly rebuilt 156-unit packet (49 people, 271 mentions, 391 claims) passed.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book jiuwudaishi --chapter 007 passed against the pinned canonical inputs.",
+    "canonicalMutation": "NONE"
+  }
+}

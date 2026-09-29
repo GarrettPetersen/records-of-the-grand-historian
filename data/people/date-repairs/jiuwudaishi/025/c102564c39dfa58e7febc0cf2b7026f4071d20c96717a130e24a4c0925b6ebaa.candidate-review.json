@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-false-person-review",
+  "book": "jiuwudaishi",
+  "chapter": "025",
+  "candidateCommit": "e13e181d45d735a9ed0c2860c1f74b042e506d93",
+  "candidateFile": "staged-false-person-candidate-c102564c39dfa58e7feb.json",
+  "canonicalSourceHash": "sha256:5c621efe76c3132411fc7bafd88d507672255f6ba20a6f30f1530655006f5942",
+  "canonicalExtractionHash": "sha256:d5698f4b90d83f7e6e873feafc7e7879cc3886ef76f79439a8321594d7f142a3",
+  "candidateExtractionHash": "sha256:c102564c39dfa58e7febc0cf2b7026f4071d20c96717a130e24a4c0925b6ebaa",
+  "candidateFileSha256": "sha256:d3dc9dc7aa58cc972746581e6f984a920c213dbb68469a44e1c71ed07095d7f6",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 025 false-person title reviewer",
+    "agentId": "review_jwd013_residual_citation_holds",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-29T01:28:00Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "Accepted. The candidate correctly removes p011, the title-only false person ‘Prince of Zheng’ / 鄭王. The only two mention surfaces are title references in s0023, which says Li Guochang remained in the Prince-of-Zheng genealogical branch and does not identify an individual title-holder. The Xiantong campaign chronology in s0020 belongs to Li Guochang, not to the branch title. The candidate removes only p011, its two title-reference mentions, and its subject claims, and adds the corresponding title not-person disposition.",
+  "reviewedChanges": [
+    {
+      "person": "p011",
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0023",
+          "quote": "仍係鄭王房。",
+          "reason": "The sentence says that Li Guochang was still enrolled in the Prince of Zheng branch. 鄭王房 is a genealogical branch reference, not the identification, action, or date of an individual Prince of Zheng."
+        },
+        {
+          "unit": "s0020",
+          "quote": "咸通中，討龐勳有功，入為金吾上將軍，賜姓李氏，名國昌，",
+          "reason": "The Xiantong campaign, office, surname, and personal name belong to Li Guochang. It cannot supply activity or chronology to the title-only branch reference."
+        }
+      ],
+      "reason": "p011 is a false individual extracted from a title reference. Removing it is required to avoid a fabricated person page and borrowed date claim."
+    }
+  ],
+  "validation": {
+    "provenance": "PASS: independently rebuilt date packet matches canonical source sha256:5c621efe76c3132411fc7bafd88d507672255f6ba20a6f30f1530655006f5942 and extraction sha256:d5698f4b90d83f7e6e873feafc7e7879cc3886ef76f79439a8321594d7f142a3. The candidate JSON hash and raw candidate-file SHA-256 both exactly match the sealed dossier.",
+    "removerReplay": "PASS: the documented remover dry run for jiuwudaishi:025:p011=title independently reports removal of one person, two mentions, five subject claims, zero external claims, and classification of one candidate.",
+    "exactScope": "PASS: candidate diff removes only p011, the Chinese and English title-reference surfaces for 鄭王 / Prince of Zheng, p011's two compact claims, and replaces the covered candidate disposition with a title not-person disposition. No other person, mention, claim, or translation repair changes.",
+    "strictCompactValidation": "PASS: strict validation reports 248 units, 1181 candidates, 152 people, 885 mentions, 965 claims, 11 applied repairs, 714 dispositions, and zero alias-disposition conflicts.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 025 passes against the pinned canonical chapter.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "translationImplications": "PASS: s0023's literal and idiomatic translations correctly preserve the genealogical-branch reading, and s0020 correctly identifies Li Guochang as the campaign actor. Candidate translation-repair data is byte-identical to canonical; no translation repair is required.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate only the sealed p011 title-removal candidate while all source, canonical-extraction, candidate-extraction, and candidate-file hashes remain current.",
+    "Do not turn 鄭王房 into a named individual or attach Li Guochang's Xiantong chronology to an unnamed Prince of Zheng title-holder.",
+    "After host curation, run a fresh independent canonical audit before treating chapter chronology as approved."
+  ],
+  "publication": "staging-only; candidate remains subject to separate host curation and fresh audit"
+}

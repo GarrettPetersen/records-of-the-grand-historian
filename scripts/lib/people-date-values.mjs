@@ -27,6 +27,14 @@ export function temporalContainers(value) {
   return [...found, ...Object.entries(value).filter(([key]) => !['westernYear', 'westernInterval', 'westernBounds', 'sourceDate'].includes(key)).flatMap(([, child]) => temporalContainers(child))];
 }
 
+export function hasDateBearingChronology(value) {
+  if (!value || typeof value !== 'object') return false;
+  if (Array.isArray(value)) return value.some(hasDateBearingChronology);
+  if (value.undatedSourceAttestation === true) return false;
+  if (['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'qualitative', 'unresolved'].some(key => Object.hasOwn(value, key))) return true;
+  return Object.values(value).some(hasDateBearingChronology);
+}
+
 export function boundedDateLabel(value, formatYear) {
   const bounds = temporalContainers(value).map(item => item.westernBounds).filter(Boolean);
   if (bounds.length !== 1) return null;

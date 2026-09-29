@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "014",
+  "candidateFile": "staged-candidate-0867584d327c2a8940cc.json",
+  "candidateHash": "sha256:0867584d327c2a8940cca8745d34eae32fd23ef2a7da53e7f47219b41aaf10d8",
+  "reviewer": {
+    "name": "Codex independent Chenshu 014 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T03:50:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The two-change proposal replays byte-for-byte and removes only the unsupported AD 502–557 Liang-dynasty-wide activity interval from Zheng Shaoshu's title-reference claim and matching active-date hint. It retains the source title and names no fabricated endpoint.",
+  "validation": {
+    "proposalReplay": "PASS: applying the two pinned operations to the canonical extraction produces sha256:0867584d327c2a8940cca8745d34eae32fd23ef2a7da53e7f47219b41aaf10d8, byte-equivalent to the staged candidate.",
+    "scope": "PASS: only claim-123 and p055's active-date hints differ; all other people, claims, mentions, and provenance remain unchanged.",
+    "claimHold": "PASS: claim-123 preserves the 梁司州刺史 title as an unresolved source-specific reference without a Western personal activity interval.",
+    "pairedHint": "PASS: p055 replaces AD 502-557 with the corresponding research-required title-reference hold.",
+    "chronologyGeometry": "PASS: the candidate passes compact extraction validation and has no date-audit geometry diagnostics.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claim": "claim-123",
+      "person": "p055",
+      "unit": "s0152",
+      "quote": "鄭萬頃，滎陽人，梁司州刺史紹叔之族子也。",
+      "translation": "Zheng Wanqing of Xingyang was a kinsman of Liang's Sizhou inspector Zheng Shaoshu.",
+      "result": "The genitive construction identifies Wanqing through his kinsman Shaoshu's office. It supplies neither an appointment date nor evidence that Shaoshu was active throughout Liang (AD 502–557)."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply precisely the reviewed claim-123 and p055-hint operations; do not alter the title, identity, provenance, or unrelated extraction data.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; the retained source-specific hold requires research-blocked rather than audited status."
+  ]
+}

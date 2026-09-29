@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "002",
+  "candidateFile": "staged-candidate-3d48f7fd8d49e10d01c0.json",
+  "candidateHash": "sha256:3d48f7fd8d49e10d01c04ebb99a3feecef6fb8c15a54272766cd014b884ef509",
+  "canonicalSourceHash": "sha256:5809d5826a5372c757a364fafdb5c6f259a77f1fe69acaf70ff292ea06c59f91",
+  "canonicalExtractionHash": "sha256:bb0958ca5ac8564cf5c1732df4cdb4889c7ed20e4e9616afdcaa97f01a3dcc95",
+  "reviewer": {
+    "name": "Codex independent Chenshu 002 staged-candidate reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T03:15:00.000Z",
+  "disposition": "reject-for-revision",
+  "summary": "The proposal deterministically reconstructs the pinned candidate and each of its 17 claim conversions correctly removes the unsupported Western date while preserving the source wording as a research hold. The repair is incomplete: it contains 17 replace changes and zero hint changes. Every affected person still has the exact unsupported active-date hint that the conversion was meant to repair. Thus the candidate retains the misleading personal chronology on its person records and cannot be accepted.",
+  "validation": {
+    "proposalReplay": "PASS: replay hash is sha256:3d48f7fd8d49e10d01c04ebb99a3feecef6fb8c15a54272766cd014b884ef509 and serialized candidate output is byte-equivalent.",
+    "claimConversions": "PASS: all 17 named apparatus, cross-reference, and allusion claims become source-specific holds with their original evidence retained.",
+    "pairedHints": "FAIL: proposal has zero kind:hints changes; p103, p104, p105, p106, p108, p110, p112, p113, p114, p118, p119, p120, p121, p122, p123, p124, and p125 retain their former broad date hints.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {"claims": ["claim-877"], "unit": "s0220", "quote": "姚察為梁、陳之史官", "result": "Hold is sound; continuous AD 557–589 hint must also be removed."},
+    {"claims": ["claim-880", "claim-883"], "unit": "s0214", "quote": "蓋漢高、魏武之亞矣", "result": "Comparative allusions are undated; both former life-date hints must also be removed."},
+    {"claims": ["claim-887", "claim-895"], "unit": "s0216", "quote": "王僧辯闕伊尹之才，空結桐宮之憤，貞陽假秦兵之送", "result": "Rhetorical references are undated; paired hints must be holds."},
+    {"claims": ["claim-906", "claim-983"], "unit": "s0224", "quote": "張元濟", "result": "Editorial attribution does not support either Zhang Yuanji date range."},
+    {"claims": ["claim-913", "claim-919", "claim-924"], "unit": "s0249", "quote": "昌義之梁時為北徐州刺史", "result": "Textual apparatus does not support the retained broad date hints."},
+    {"claims": ["claim-941", "claim-946", "claim-953", "claim-956", "claim-965", "claim-974"], "unit": "s0255", "quote": "《北齊書·文宣紀》作「江州」", "result": "Cross-references and collation notes preserve text, not the retained continuous personal-date ranges."},
+    {"claims": ["claim-990"], "unit": "s0275", "quote": "謂此用《史記·淳于髡傳》穰田之文", "result": "Literary allusion does not support the retained Chunyu Kun range."}
+  ],
+  "hostRequirements": [
+    "Do not apply this candidate.",
+    "Add one exact kind:hints conversion for each of the 17 affected people, replacing its former date range with the matching research-required hold.",
+    "Replay the corrected proposal against matching canonical hashes and obtain a fresh independent review.",
+    "Do not modify canonical extraction or audit status during candidate review."
+  ]
+}

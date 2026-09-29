@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "104",
+  "candidateFile": "staged-candidate-e2f44ee0b734163af9e7.json",
+  "sourceHash": "sha256:8a70caaf1afc1fdc15096707d2e71519f5da38674d7219b276cc2ccc685eef8f",
+  "originalExtractionHash": "sha256:a72f4f26ae869892e8ac669c56201840cc7801b353e1415373a6956bf1bafecd",
+  "sealedCandidateHash": "sha256:e2f44ee0b734163af9e7666d99401a124547c477ab11f0445d61ee0d48a3dcf0",
+  "candidateExtractionHash": "sha256:8c27c2f26c2d5bbda7279f053dc4f42444e8ef47fcb26afa0535da0fd79ab7a0",
+  "reviewer": {
+    "name": "Codex independent Hanshu 104 staged-candidate reviewer",
+    "agentId": "review_hanshu104_date_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-28T21:00:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited",
+  "summary": "Accepted for host curation. The exact sealed proposal reconstructs the declared candidate bytes, replacing all 34 and only the audit-identified borrowed or retrospective Western chronology containers with explicit undated source attestations. Its 30 hint changes remove every derived hint, narrow the mixed-source p012 hint to independently supported BC 196-174, and retain the four other independently supported hints. The candidate adds no chronology, preserves each claim's subject, predicate, evidence units, source wording, people, and claim cardinality, and has no date-geometry diagnostic.",
+  "candidateValidation": {
+    "proposalApplication": "PASS: independently replayed applyDateRepairProposal from the current canonical hanshu/104 extraction and date packet; the result exactly equals the sealed candidate and hashes to sha256:8c27c2f26c2d5bbda7279f053dc4f42444e8ef47fcb26afa0535da0fd79ab7a0.",
+    "sealedIdentity": "PASS: sealedDateRepairProposalHash is sha256:e2f44ee0b734163af9e7666d99401a124547c477ab11f0445d61ee0d48a3dcf0; source hash remains sha256:8a70caaf1afc1fdc15096707d2e71519f5da38674d7219b276cc2ccc685eef8f.",
+    "operationScope": "PASS: 64 operations comprise exactly 34 audited claim-date replacements and 30 active-hint repairs. No unreviewed claim or person changed; people remain 150 and claims remain 1,103 in compact storage (1,622 packet claims).",
+    "productionExtractionValidator": "PASS: npm run people:validate -- --book hanshu --chapter 104 passed on the current canonical input; independently reconstructed candidate passes validateCompactPeopleExtraction with 302 units, 599 candidates, 150 people, 757 mentions, 1,622 claims, 26 repairs, 281 dispositions, and zero alias-disposition conflicts.",
+    "temporalGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(reconstructedCandidate)) returned zero diagnostics.",
+    "canonicalMutation": "NONE: this review does not alter the canonical extraction or the needs-revision initial audit."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-2", "claim-6", "claim-9", "claim-117", "claim-121", "claim-124", "claim-1017", "hints-p001", "hints-p002", "hints-p003", "hints-p017", "hints-p018", "hints-p019", "hints-p138"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0003", "quote": "孔子曰：「天下有道，政不在大夫。」", "reason": "A quotation of Confucius carries no date for a present act by Confucius."},
+        {"unit": "s0007", "quote": "桓、文之後，大夫世權，陪臣執命。", "reason": "The phrase is retrospective and does not make Duke Huan or Duke Wen active across a supplied interval."},
+        {"unit": "s0017", "quote": "雖其陷於刑辟，自與殺身成名，若季路、仇牧，死而不悔也。", "reason": "Ji Lu and Qiu Mu are literary exemplars, not current dated actors."},
+        {"unit": "s0018", "quote": "故曾子曰：「上失其道，民散久矣。」", "reason": "The saying does not date Zengzi's activity."},
+        {"unit": "s0273", "quote": "涉性略似郭解，外溫仁謙遜，而內隱好殺。", "reason": "Yuan She's comparison to Guo Xie is retrospective; it cannot attest Guo Xie as active in Emperor Wu's era."}
+      ],
+      "reason": "All seven replacements retain the original attestation and evidence but correctly remove their false personal Western date containers. Each paired hint was derived solely from that false chronology and is correctly removed."
+    },
+    {
+      "proposalItems": ["claim-62", "claim-70", "claim-77", "claim-95", "claim-198", "claim-203", "claim-215", "claim-219", "claim-223", "claim-251", "claim-350", "claim-357", "claim-364", "claim-371", "claim-377", "claim-383", "claim-389", "claim-393", "claim-398", "claim-403", "claim-768", "claim-1102", "hints-p012", "hints-p033", "hints-p034", "hints-p037", "hints-p038", "hints-p039", "hints-p056", "hints-p057", "hints-p058", "hints-p059", "hints-p060", "hints-p061", "hints-p062", "hints-p063", "hints-p064", "hints-p065", "hints-p101", "hints-p150"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0026", "quote": "自魏其、武安、淮南之後，天子切齒，衛、霍改節。", "reason": "自…之後 supplies sequence only and cannot supply a fixed endpoint or personal activity date for the King of Huainan, Wei Qi, or Wu'an."},
+        {"unit": "s0040", "quote": "田仲死後，有劇孟。", "reason": "The relative phrase establishes only that Ju Meng follows Tian Zhong's death; it is not a BC 180-154 activity span."},
+        {"unit": "s0046", "quote": "然孟母死，自遠方送喪蓋千乘。", "reason": "The undated death of Meng's mother does not establish BC 154."},
+        {"unit": "s0048", "quote": "而符離王孟，亦以俠稱江、淮之間。", "reason": "This undated description cannot inherit BC 154 from surrounding narration."},
+        {"unit": "s0051", "quote": "其後，代諸白、梁韓毋辟、陽翟薛況、陝寒孺，紛紛復出焉。", "reason": "其後 and the narrative transition do not establish BC 141-130 for the three named people."},
+        {"unit": "s0058", "quote": "及解年長，更折節為儉，以德報怨，厚施而薄望。", "reason": "The age transition does not establish a closed BC 140-127 interval for Guo Xie."},
+        {"unit": "s0111", "quote": "自是之後，俠者極眾，而無足數者。", "reason": "The phrase provides no personal chronology for the following names."},
+        {"unit": "s0112", "quote": "然關中長安樊中子，槐裡趙王孫，長陵高公子，西河郭翁中，太原魯翁孺，臨淮兒長卿，東陽陳君孺，雖為俠而恂恂有退讓君子之風。", "reason": "The named men remain sourced attestations, but neither this sentence nor 自是之後 proves BC 120-90 activity."},
+        {"unit": "s0113", "quote": "至若北道姚氏，西道諸杜，南道仇景，東道趙佗羽公子，南陽趙調之徒，盜跖而居民間者耳，曷足道哉！", "reason": "The same undated rhetorical sequence cannot give the named figures a BC 120-90 interval."},
+        {"unit": "s0163", "quote": "竦博學通達，以廉儉自守，而遵放縱不拘，操行雖異，然相親友，哀帝之末俱著名字，為後進冠。", "reason": "The later narrative's 哀帝之末 placement does not date the separate p101 attestation as AD 1-9."},
+        {"unit": "s0169", "quote": "大司徒馬宮大儒優士，又重遵，謂西曹：「此人大度士，奈何以小文責之？」", "reason": "The complimentary undated speech cannot supply that interval."},
+        {"unit": "s0291", "quote": "王莽居懾，誅鋤豪俠，名捕漕中叔，不能得。", "reason": "This has its own Wang Mang context but does not date Cao Zhongshu's son."},
+        {"unit": "s0295", "quote": "中叔子少游，復以俠聞於世雲。", "reason": "The son follows Cao Zhongshu in narration; the source does not establish AD 9-25 personal activity."}
+      ],
+      "reason": "All 22 sequence/narrative replacements correctly preserve source attestations while removing inherited intervals or endpoints. The 18 solely-derived hints are correctly removed. p012 is the one mixed-source hint: it is correctly narrowed from BC 196-122 to BC 196-174, independently supported by claim-61 (s0014, 淮南皆招賓客以千數)."
+    },
+    {
+      "proposalItems": ["claim-230", "claim-234", "claim-758", "claim-978", "claim-979", "hints-p040", "hints-p041", "hints-p099", "hints-p126", "hints-p127"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0052", "quote": "郭解，河內軹人也，溫善相人許負外孫也。", "reason": "Kinship between Wen and Xu Fu cannot give either relative the imported BC interval."},
+        {"unit": "s0162", "quote": "遵少孤，與張竦伯松俱為京兆史。", "reason": "Zun's orphanhood and office description do not establish BC 48-7."},
+        {"unit": "s0237", "quote": "人嘗置酒請涉，涉入里門，客有道涉所知母病避疾在裡宅者。", "reason": "The undated social episode cannot establish BC 1-AD 13 for p126."},
+        {"unit": "s0248", "quote": "後人有毀涉者曰「奸人之雄也」，喪家子即時刺殺言者。", "reason": "This undated later episode cannot establish BC 1-AD 13 for p127."}
+      ],
+      "reason": "Each of the five claim dates is borrowed from kinship, orphanhood, age, or an undated episode. The candidate retains the relationships/events as explicit undated attestations and removes the five wholly derived hints."
+    },
+    {
+      "proposalItems": ["hints-p013", "hints-p014", "hints-p015", "hints-p044"],
+      "verdict": "supported-retained-evidence",
+      "sourceEvidence": [
+        {"unit": "s0015", "quote": "外戚大臣魏其、武安", "reason": "Candidate claims 69 and 76 independently retain the source-backed BC 154-131 and BC 140-131 chronology for Wei Qi and Wu'an."},
+        {"unit": "s0043", "quote": "吳、楚反時…得劇孟", "reason": "Candidate claim 94 independently supports Ju Meng's retained BC 154 hint."},
+        {"unit": "s0090", "quote": "及徙豪茂陵也", "reason": "Candidate claim 252 independently supports Guo Xie's retained BC 127 hint."},
+        {"unit": "s0098", "quote": "御史大夫公孫弘議", "reason": "Candidate claim 253 independently supports Guo Xie's retained BC 124-121 hint."}
+      ],
+      "reason": "The repaired sequence/age claims for p013, p014, p015, and p044 do not erase their separate date-bearing claims. Their existing hints are therefore correctly retained unchanged rather than over-corrected."
+    }
+  ],
+  "hostRequirements": [
+    "Recheck the current canonical source hash, extraction hash, exact candidate-file bytes, sealed proposal hash, and this review before applying only the reviewed proposal.",
+    "Apply all 64 and only these operations, then run scoped production extraction validation and candidate/canonical chronology geometry checks.",
+    "Do not modify the source chapter or reuse the needs-revision audit as approval; commission a fresh complete independent canonical date audit after curation.",
+    "The fresh audit may record audited only if it fully verifies the curated canonical extraction and has no remaining findings or research holds."
+  ]
+}

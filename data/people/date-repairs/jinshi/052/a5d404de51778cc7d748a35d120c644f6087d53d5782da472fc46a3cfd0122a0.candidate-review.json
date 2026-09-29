@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "052",
+  "candidateFile": "staged-candidate-a5d404de51778cc7d748.json",
+  "sealedCandidateHash": "sha256:a5d404de51778cc7d748a35d120c644f6087d53d5782da472fc46a3cfd0122a0",
+  "candidateExtractionHash": "sha256:ffbcf625414b9ee4258645f754420b1742420490d53eb636ff0f9b7ee21caa61",
+  "reviewer": {
+    "name": "Codex independent Jinshi 052 institutional-attribution date-repair reviewer",
+    "agentId": "review_jinshi052",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:02:51.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent source, canonical-pin, sealed-replay, and scope review. The nine changes remove only the unsupported reign-wide personal-attestation intervals and their mirrored administrative date contexts for Hailing, Shizong, and Zhangzong. The two institutional-attribution sentences remain source-linked, explicit research holds. Directly dated Shizong evidence in AD 1161, 1162, and 1164, Zhangzong evidence in AD 1189, and Xizong evidence in AD 1148 are preserved unchanged.",
+  "validation": {
+    "canonicalSourceHash": "sha256:f9df0ea31bd40e6c4f7e84077e60112069d84f3e043a7180369ea083db5c7df7",
+    "canonicalExtractionHash": "sha256:82b8bc0ee3ffaa0320923f31afb2c5a9f61ed2d2093da9e43dcf516264f05577",
+    "canonicalInputs": "PASS: current source and extraction hashes exactly match the handoff pins.",
+    "sealedProposalIdentity": "PASS: the exact nine-operation proposal hashes to a5d404de51778cc7d748a35d120c644f6087d53d5782da472fc46a3cfd0122a0.",
+    "candidateExtractionIdentity": "PASS: the staged candidate hashes to ffbcf625414b9ee4258645f754420b1742420490d53eb636ff0f9b7ee21caa61.",
+    "proposalReplay": "PASS: replay against the pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-9, claim-10, claim-14, claim-17, claim-18, claim-19, hints-p001, hints-p002, and hints-p003 change; no source link, identity, role, predicate, or non-date event field changes.",
+    "sourceSoundness": "PASS: s0016's 海陵庶人所置 and s0017's 定于世宗之時 / 章宗所置 attribute institutional arrangements, but neither sentence supplies a dated personal event or continuous full-reign activity interval. s0027, s0187, s0116, and s0163 independently retain Shizong AD 1164, AD 1161–1162, and Zhangzong AD 1189 evidence.",
+    "directDateRetention": "PASS: p002 retains direct AD 1161, AD 1162, and AD 1164 hints; p003 retains direct AD 1189; p004's AD 1148 evidence is unchanged.",
+    "compactValidation": "PASS: 219 units, 4 people, 16 mentions, 36 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics.",
+    "scopedValidator": "PASS: people:validate --book jinshi --chapter 052.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0016",
+      "quote": "檢法、知法、國史院書寫，則海陵庶人所置者也。",
+      "result": "This identifies Hailing as the creator of named offices but does not give a date or prove his activity throughout a reign interval."
+    },
+    {
+      "unit": "s0017",
+      "quote": "則定于世宗之時，及章宗所置之太常檢討、內侍寄祿官，皆仕進之門戶也。",
+      "result": "The institutional attributions to Shizong and Zhangzong remain visible, but this sentence alone does not date each ruler's personal activity across an entire reign."
+    },
+    {
+      "unit": "s0187",
+      "quote": "大定元年，世宗以胥吏既貪墨，委之外路幹事又不知大體，徒多擾動，至二年，罷吏人而複皇統選進士之制。",
+      "result": "This directly supports Shizong's AD 1161 and AD 1162 activity and is retained unchanged."
+    },
+    {
+      "unit": "s0116",
+      "quote": "恩榜，章宗大定二十九年，敕今後凡五次禦簾進士，可一試而不黜落。",
+      "result": "This directly supports Zhangzong's AD 1189 edict and is retained unchanged."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the sealed handoff.",
+    "Replay all nine operations exactly; do not alter any direct AD 1161, 1162, 1164, 1189, or 1148 evidence.",
+    "Retain s0016 and s0017 as source-linked institutional research holds rather than inventing a personal-reign interval.",
+    "Do not alter source or master from this review receipt; rerun scoped validation and require a fresh independent canonical audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

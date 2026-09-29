@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "101",
+  "candidateCommit": "e3777044c544df397ee545e9e89f212de1cca36e",
+  "candidateFile": "staged-candidate-67de96fa581eeeae92af.json",
+  "sealedCandidateHash": "sha256:67de96fa581eeeae92af0c69d74f1f5258d6d28040cea1df5fbb6a118995bb66",
+  "candidateExtractionHash": "sha256:4947933da472904e67555c7b654c163eab34df9a40ada0d65684821c76e59375",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 101 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi101",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T05:30:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited or research-blocked after fresh independent audit",
+  "summary": "Accepted all five sealed operations. The two temple/mausoleum attestations are explicitly inside the Qianyou 1 annal and therefore correctly use AD 948. The Wuyue note proves the Hongzong-to-Hongchu succession sequence before the August 948 honour but supplies no AD 947 date; both event date contexts are preserved as source-specific unresolved contexts, and Hongzong's dependent active hint correctly retains only his separate Qianyou 1 attestation.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-579"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0105: 「乾祐元年」 establishes the annal's current year.", "s0109: 「秋七月」 begins the July sequence.", "s0112: 「禮儀使張昭上高祖廟尊號」."],
+      "reason": "The Gaozu temple honorific ceremony is in the July sequence of Qianyou 1. Replacing the inherited AD 947–948 interval with AD 948 is exact and changes no non-date evidence."
+    },
+    {
+      "proposalItems": ["claim-721"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0145: 「冬十月丙子朔，山陵使竇貞固上大行皇帝陵名曰睿陵，從之。」"],
+      "reason": "The mausoleum-naming attestation remains in the current Qianyou 1 annal. AD 948 is the supported annual context; the previous AD 947–948 interval was overbroad."
+    },
+    {
+      "proposalItems": ["claim-659", "claim-660"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0124: 「八月」 begins the surrounding August 948 sequence.", "s0129: 「乙未，…吳越國王錢宏俶加…」.", "s0131: 「先是，其兄宏倧襲父位，尋為部下所廢，以宏俶代之，故特加是命焉。」"],
+      "reason": "The retrospective note establishes Hongzong's deposition and Hongchu's replacement before the surrounding August 948 promotion, but contains no AD 947 date. Both predicates, people, Chinese source dates, and provenance remain intact; only their unsupported point years become explicit source-specific unresolved contexts."
+    },
+    {
+      "proposalItems": ["hints-p143"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0131 occurs in the current Qianyou 1 annal and separately identifies Hongzong in the retrospective sequence."],
+      "reason": "The dependent AD 947 hint is removed. The replacement correctly distinguishes the chapter's AD 948 Qianyou-1 attestation from the undated deposition sequence and does not claim an exact Western deposition year."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: source sha256:bb53e00c4e7c97522eb0b8bb68e386f99ca12778219baa807196171706797b7f and canonical extraction sha256:d564ee91388b90c4c6f0474063b73cf998099428ecd8d5a744a7843a1a33d08f match the sealed handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed proposal hash is sha256:67de96fa581eeeae92af0c69d74f1f5258d6d28040cea1df5fbb6a118995bb66.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate JSON hash is sha256:4947933da472904e67555c7b654c163eab34df9a40ada0d65684821c76e59375.",
+    "operationScope": "PASS: exact compact extraction comparison shows four changed claims at canonical indices 578, 658, 659, and 720 plus only p143's dependent active-date hint; these are exactly the five sealed operations.",
+    "candidateValidation": "PASS: handoff records successful proposal replay, compact validation, and chronology geometry for 181 source units, 184 people, 544 mentions, and 1,291 claims.",
+    "sourceSoundness": "PASS: independently checked all changed contexts against the cited Chinese and surrounding Qianyou 1 annal chronology. No unsupported AD 947 assertion remains in the two retrospective succession predicates or dependent hint.",
+    "nonDateRetention": "PASS: identities, aliases, roles, relationships, mentions, source units, translations, and all non-date claim fields are unchanged.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this review packet.",
+    "Replay exactly the five sealed operations.",
+    "Keep claim-579 and claim-721 as AD 948 attestations; do not restore AD 947–948 intervals.",
+    "Keep claim-659 and claim-660 source-specific unresolved date contexts; do not infer AD 947 or another exact Western succession year.",
+    "Keep p143's replacement active hint distinct from the undated deposition sequence and do not alter person identity or family relationship data.",
+    "Do not alter source or canonical extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation."
+  ]
+}

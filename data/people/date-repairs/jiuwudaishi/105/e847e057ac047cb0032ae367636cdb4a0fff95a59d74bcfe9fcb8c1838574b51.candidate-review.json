@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "105",
+  "candidateCommit": "f2b3de701c150c9fe2f211464811c7bb531ec211",
+  "candidateFile": "staged-candidate-e847e057ac047cb0032a.json",
+  "sourceHash": "sha256:9f536f945847805da87e1e7ef63d8d626208035593c5f8919ee0be382d592b37",
+  "originalExtractionHash": "sha256:c24d04c8466607cda8b57bf11a92395b735e2ce08ece86f2ad2f0cfe7a067a4d",
+  "sealedCandidateHash": "sha256:e847e057ac047cb0032ae367636cdb4a0fff95a59d74bcfe9fcb8c1838574b51",
+  "candidateExtractionHash": "sha256:3b79bd86968292962f9430e3f77e72ed4fd0cd84c80b63c809bd46254af214c7",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 105 claim-205 residual date-repair reviewer",
+    "agentId": "date_repair_review2_jiuwudaishi105",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T05:53:35Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "audited after fresh independent canonical audit",
+  "summary": "Accepted the single sealed claim-205 state repair. The pinned Chinese source s0068 says 「乾祐中，湘陰公鎮徐州，辟為推官。」: it supports the Qianyou-period AD 948–950 interval but no point year. The proposal retains that exact sourceDate and interval, removes only the now-unjustified unresolved state, keeps p027's ordinary AD 948–950 activity hint, and leaves claim-48's separate exact AD 948 accession chronology untouched.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-205"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0068: 「乾祐中，湘陰公鎮徐州，辟為推官。」",
+        "The chapter's Qianyou 1 and Qianyou 3 dated records independently establish the era's AD 948–950 bounds; the appointment itself does not select a year within that interval."
+      ],
+      "reason": "The retained inclusive AD 948–950 interval is the conservative, source-faithful chronology. An unresolved marker would be appropriate only for a substantive remaining research hold; it is inconsistent with this complete interval and p027's ordinary matching activity hint. No point date, life endpoint, or added event is inferred."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: source and original extraction match the handoff's pinned hashes.",
+    "sealedProposalIdentity": "PASS: independently recomputed as sha256:e847e057ac047cb0032ae367636cdb4a0fff95a59d74bcfe9fcb8c1838574b51.",
+    "candidateExtractionIdentity": "PASS: independently replayed as sha256:3b79bd86968292962f9430e3f77e72ed4fd0cd84c80b63c809bd46254af214c7.",
+    "atomicScope": "PASS: exactly one replace operation, claim-205; the only removed properties are unresolved and unresolvedReason.",
+    "proposalReplay": "PASS: replay is byte-identical to the sealed candidate and every claim other than claim-205 is unchanged.",
+    "sourceSoundness": "PASS: s0068 supports Qianyou-period AD 948–950 only; neither the retained interval nor its sourceDate has changed.",
+    "p027Hint": "PASS: p027 retains ordinary AD 948-950, with no research hold.",
+    "claim48": "PASS: claim-48 remains dateContext.westernYear AD 948 only, with no westernInterval.",
+    "chronologyGeometry": "PASS: no diagnostics on the replayed candidate.",
+    "compactValidation": "PASS: scoped person-data validation reports 27 people, 303 mentions, 304 claims, and zero alias-disposition conflicts.",
+    "canonicalMutation": "NONE: this staging receipt neither changes canonical source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this receipt.",
+    "Replay only sealed claim-205; delete only unresolved and unresolvedReason.",
+    "Retain claim-205 sourceDate 乾祐中 and its inclusive AD 948-950 westernInterval without choosing a point year.",
+    "Retain p027's ordinary AD 948-950 activity hint; do not convert it to a research hold.",
+    "Do not alter claim-48; it remains the exact nested AD 948 accession chronology only.",
+    "Run a fresh complete independent canonical date audit after host curation."
+  ]
+}

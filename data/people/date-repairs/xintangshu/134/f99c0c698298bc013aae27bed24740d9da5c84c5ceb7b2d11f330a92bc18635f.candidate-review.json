@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "xintangshu",
+  "chapter": "134",
+  "candidateFile": "staged-candidate-f99c0c698298bc013aae.json",
+  "candidateHash": "sha256:f99c0c698298bc013aae27bed24740d9da5c84c5ceb7b2d11f330a92bc18635f",
+  "sourceHash": "sha256:d0a8a48fc49c653bfa58149a4d4e7cf6868ed33eea0cbbe23211277f53701c7e",
+  "originalExtractionHash": "sha256:9fd8e8b96855df084e5cf0589f4f465da5e7442f3c640732524dc8df740bd2db",
+  "reviewer": {
+    "name": "Codex independent Xintangshu 134 residual-candidate reviewer",
+    "agentId": "date_audit_beiqishu005",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T22:30:00.000Z",
+  "disposition": "reject",
+  "summary": "Rejected. The sealed artifact replays and passes compact validation, but each of its six replace operations leaves the audited westernInterval inside dateContext untouched and adds unresolved fields only at the outer claim-value level. Consequently all six current fresh-audit defects remain in the candidate. The two added p116 and p135 unresolved attestations are conservative but do not repair the unchanged claims or their imported activity intervals.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-73",
+        "claim-442",
+        "claim-449",
+        "claim-450",
+        "claim-451",
+        "claim-452",
+        "hints-p003",
+        "hints-p116",
+        "hints-p120",
+        "hints-p127",
+        "hints-p128",
+        "hints-p135"
+      ],
+      "verdict": "reject-no-op-nested-date-context",
+      "sourceEvidence": [
+        { "unit": "s0004", "quote": "祖節，明法令，貞觀中，為尚書右丞，謹幹自將。", "sourceHash": "sha256:26e9860a2eea057430e1d0c354fb8e1a6aa84ed642d3cd519883f773b1571e08" },
+        { "unit": "s0195", "quote": "子準，為衛尉少卿，以鬥雞供奉禁中，林甫子岫，亦親近，準驕甚，淩岫出其上。", "sourceHash": "sha256:84def2d93e5c1143e1569cf8868b92f2c30867b77c7bb7df42448b3bd60b6c4f" },
+        { "unit": "s0200", "quote": "銲歷戶部郎中。", "sourceHash": "sha256:bff1652da405cbc844c2c147befeb9585ebd154a41de3a938104d330c6af8025" },
+        { "unit": "s0203", "quote": "王府司馬定安公主子韋會竊語於家，左右往白鉷，鉷遣季鄰收會長安獄，夜縊死，以屍還家。", "sourceHash": "sha256:7ab36b68a1e8b483335da14010e64fb56ee5b8bd912ab243c2949809ed88b3a1" },
+        { "unit": "s0205", "quote": "鉷封太原縣公，兼殿中監。", "sourceHash": "sha256:08623de64bdc19cfc4c892adeac43644c284d72cef6426f54e02aa75d841f9c8" },
+        { "unit": "s0230", "quote": "鉷兄錫，見諸弟貴盛，不肯仕，鉷強之，為太子仆。", "sourceHash": "sha256:97cab9bb837c4e9de559847ecc2ec3db5c962f56b4b3da8447ee60a01c152833" }
+      ],
+      "reason": "Every cited passage either has broad era wording or no date at all. It cannot justify continuous personal activity throughout the imported interval. The candidate's after-values retain the same nested dateContext.westernInterval, so the six defects identified in the fresh audit remain exactly present after replay."
+    },
+    {
+      "proposalItems": ["add:p116-attestation", "add:p135-attestation"],
+      "verdict": "insufficient-companion-change",
+      "sourceEvidence": [
+        { "unit": "s0205", "quote": "鉷封太原縣公，兼殿中監。", "sourceHash": "sha256:08623de64bdc19cfc4c892adeac43644c284d72cef6426f54e02aa75d841f9c8" },
+        { "unit": "s0230", "quote": "鉷兄錫，見諸弟貴盛，不肯仕，鉷強之，為太子仆。", "sourceHash": "sha256:97cab9bb837c4e9de559847ecc2ec3db5c962f56b4b3da8447ee60a01c152833" }
+      ],
+      "reason": "The added unresolved attestations preserve source ambiguity and may be appropriate companion records when validation requires them, but they do not remove or bound claim-449 and claim-452's retained westernInterval containers."
+    }
+  ],
+  "requiredRevision": [
+    "For every affected claim, remove westernInterval from the nested dateContext object itself and place unresolved plus its substantive reason in that same date container.",
+    "Retain the claim subject, predicate, non-date payload, certainty, and source-unit evidence exactly.",
+    "Keep p116 and p135 only if the rebuilt candidate still needs their minimal source-specific unresolved attestations after the six actual interval repairs.",
+    "Replay the revised sealed proposal and confirm the fresh packet has no remaining claim-73, claim-442, claim-449, claim-450, claim-451, or claim-452 westernInterval."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS",
+    "proposalReplay": "PASS",
+    "candidateHash": "PASS",
+    "compactValidation": "PASS: 145 people, 830 mentions, 846 claims",
+    "chronologyGeometry": "PASS",
+    "freshAuditDefectResolution": "FAIL: all six audited westernInterval containers remain after replay",
+    "canonicalMutation": "NONE"
+  },
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

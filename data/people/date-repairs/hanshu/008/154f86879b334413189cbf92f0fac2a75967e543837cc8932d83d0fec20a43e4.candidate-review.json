@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "008",
+  "candidateFile": "staged-candidate-154f86879b334413189c.json",
+  "candidateHash": "sha256:154f86879b334413189cbf92f0fac2a75967e543837cc8932d83d0fec20a43e4",
+  "reviewer": {
+    "name": "Codex independent Hanshu 008 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T09:05:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. All eleven audited claims and eleven paired hints are repaired. BC 87, BC 82, and BC 77 remain only as dated posthumous reception; Ma Tong and King Dai of Sishui have source-grounded one-sided death bounds; Crown Prince Li, final-commentary comparisons, and later kinship material are retained as source-specific holds without invented activity dates.",
+  "validation": {
+    "proposalReplay": "PASS: all twenty-five pinned operations replay byte-for-byte to sha256:154f86879b334413189cbf92f0fac2a75967e543837cc8932d83d0fec20a43e4.",
+    "coverage": "PASS: claim-106, claim-108, claim-143, claim-152, claim-167, claim-210, and claim-217 through claim-221, plus paired hints p003, p004, p017, p023, p029, p053, and p057 through p061, are each handled exactly once.",
+    "sourceChecks": "PASS: later honors and temple references retain BC 87/82/77 only in classified posthumous-reception dateContext; s0033's 始元二年以前 becomes on-or-before BC 86 and s0072's prior-death wording becomes on-or-before BC 81. 武帝末, final commentary, and later kinship facts retain their Chinese source contexts without personal Western activity dates.",
+    "scope": "PASS: only the eleven audited temporal claims, their eleven paired hints, and three required reception classifications differ semantically; no unrelated fact or valid chronology is changed.",
+    "compactValidation": "PASS: scoped people validator passed for hanshu/008.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against matching pinned source and canonical extraction hashes.",
+    "Apply all twenty-five operations exactly.",
+    "Keep reception chronology distinct from active-date hints and retain the one-sided death bounds without converting them to points.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}

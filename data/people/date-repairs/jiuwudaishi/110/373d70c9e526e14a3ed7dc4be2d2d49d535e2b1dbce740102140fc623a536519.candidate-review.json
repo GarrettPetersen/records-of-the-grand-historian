@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-source-faithful-factual-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "110",
+  "candidateFile": "staged-candidate-373d70c9e526e14a3ed7.json",
+  "sealedCandidateHash": "sha256:373d70c9e526e14a3ed7dc4be2d2d49d535e2b1dbce740102140fc623a536519",
+  "candidateExtractionHash": "sha256:7a6c57d2b31d78cd4701b9f6641da56bfe406b79a9b879f8f882f0a44cb31be9",
+  "reviewer": {"name": "Codex independent Jiuwudaishi 110 source-correction reviewer", "agentId": "date_repair_review_jiuwudaishi110", "independentOfExtractor": true, "independentOfCandidateCurator": true},
+  "reviewedAt": "2026-09-24T06:19:56.000Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "Accepted after independent source reading, exact sealed replay, hash, scope, compact-validation, and chronology-geometry checks. The four changes correct only source-contradicted Chinese name or jurisdiction values, and the required p004 alias synchronization keeps Guo Jing's 信祖 temple name consistent with claim-50. The two homophonous Xuzhou jurisdictions remain explicitly distinct as 許州 and 徐州.",
+  "validation": {
+    "canonicalSourceHash": "sha256:3394b0426be21bee8ea4d17047444e40f20ba174f00003c19316c8adbf7f567c",
+    "canonicalExtractionHash": "sha256:1db9c36bde65466e7957bf05c31d30bfda10754ccda6477bd595d31c0388671f",
+    "canonicalInputs": "PASS: current source and extraction hashes exactly match the sealed handoff and the pinned published audit at 83f497a3c358dec985d4fc6efda3a27855b81e80.",
+    "sealedProposalIdentity": "PASS: the replayed five-operation proposal hashes to 373d70c9e526e14a3ed7dc4be2d2d49d535e2b1dbce740102140fc623a536519.",
+    "candidateExtractionIdentity": "PASS: replayed candidate hashes to 7a6c57d2b31d78cd4701b9f6641da56bfe406b79a9b879f8f882f0a44cb31be9.",
+    "proposalReplay": "PASS: replay against the pinned canonical extraction reconstructs the sealed candidate exactly.",
+    "auditScope": "PASS: exactly claim-50, claim-342, claim-343, claim-344, and p004's 信祖 temple alias change; all identities, predicates, source links, dates, confidence values, and unrelated fields remain unchanged.",
+    "sourceSoundness": "PASS: s0005 says 廟號信祖; s0281 assigns He Fujin 許州節度使 and Wang Yanchao 徐州節度使; s0292 assigns Li Yun 滑州節度使.",
+    "jurisdictionSeparation": "PASS: He Fujin is Xuzhou (許州) while Wang Yanchao is Xuzhou (徐州); their Chinese semantic title fields are distinct and neither is collapsed or conflated.",
+    "compactValidation": "PASS: 351 units, 162 people, 521 mentions, 904 claims, and zero alias-disposition conflicts in the replayed candidate.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book jiuwudaishi --chapter 110 on unchanged canonical inputs.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {"unit": "s0005", "quote": "高祖諱璟，廣順初，追尊為睿和皇帝，廟號信祖，陵曰溫陵；", "result": "信祖 is Xīn zǔ / Xinzu. Both claim-50 and p004's explicit temple alias must use Xinzu, while the AD 951 posthumous-honor context remains intact."},
+    {"unit": "s0281", "quote": "戊辰，前曹州防禦使何福進受宣權許州節度使，前復州防禦使王彥超受宣權徐州節度使，前澶州節度使李洪義受宣權宋州節度使。", "result": "The parallel appointments expressly distinguish He Fujin's 許州 from Wang Yanchao's 徐州. The candidate preserves that distinction in both Chinese title fields and disambiguated English renderings."},
+    {"unit": "s0292", "quote": "壬申，前博州刺史李筠受宣權滑州節度使。", "result": "Li Yun's appointment is to 滑州, not 華州; the candidate corrects exactly that character and preserves the AD 951 appointment context."}
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the sealed handoff.",
+    "Replay exactly the four listed claim replacements and the p004 信祖 alias synchronization; do not add, remove, or broaden changes.",
+    "Preserve He Fujin's 許州 and Wang Yanchao's 徐州 as distinct Chinese semantic fields even though both render as Xuzhou in English.",
+    "Do not alter source or master from this review receipt; host-curate staging only, rerun scoped validation, and obtain a fresh independent canonical date audit."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

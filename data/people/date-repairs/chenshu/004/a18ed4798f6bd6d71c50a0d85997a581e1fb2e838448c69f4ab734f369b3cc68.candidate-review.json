@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "004",
+  "candidateFile": "staged-candidate-a18ed4798f6bd6d71c50.json",
+  "candidateHash": "sha256:a18ed4798f6bd6d71c50a0d85997a581e1fb2e838448c69f4ab734f369b3cc68",
+  "reviewer": {"name": "Codex independent Chenshu 004 staged-candidate reviewer", "agentId": "date_audit_beiqishu007", "independentOfExtractor": true, "independentOfCandidateCurator": true},
+  "reviewedAt": "2026-09-23T03:25:00.000Z",
+  "disposition": "reject-for-revision",
+  "summary": "The four claim conversions replay byte-for-byte and correctly preserve each retrospective or comparative source fact as a research hold without inventing dates. The candidate contains four replace changes and zero kind:hints changes, however. p032, p037, p038, and p048 still display their former unsupported ranges; p048 still displays AD 195–188 despite the former claim being BC 195–188. The paired repair is incomplete.",
+  "validation": {"proposalReplay": "PASS: replay hash equals the pinned candidate and serialized output is byte-equivalent.", "claimHolds": "PASS: claims 245, 252, 254, and 272 retain exact source facts without Western chronology.", "pairedHints": "FAIL: p032 AD 557–559, p037 AD 74, p038 AD 227–233, and p048 AD 195–188 remain unchanged.", "canonicalMutation": "NONE"},
+  "sourceChecks": [
+    {"claim": "claim-245", "unit": "s0089", "quote": "高祖武皇帝撥亂反正，膺圖御籙，重懸三象，還補二儀；", "result": "Retrospective proclamation, not a living-activity endpoint."},
+    {"claims": ["claim-252", "claim-254"], "unit": "s0103", "quote": "豈止罪浮於昌邑，非唯聲醜於太和。", "result": "Undated rhetorical comparisons."},
+    {"claim": "claim-272", "unit": "s0128", "quote": "蓋帝摯、漢惠之流也。", "result": "Undated historiographical comparison; it cannot retain the contradictory AD hint."}
+  ],
+  "hostRequirements": ["Do not apply this candidate.", "Add exact kind:hints conversions for p032, p037, p038, and p048 using their matching research-hold reasons.", "Replay the corrected proposal and obtain fresh independent review.", "Do not modify canonical extraction or audit status during candidate review."]
+}

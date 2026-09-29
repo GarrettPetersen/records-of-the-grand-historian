@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "houhanshu",
+  "chapter": "089",
+  "sourceHash": "sha256:da0c41360641056057981c5443b64ec71088c53394f4207b99d69bfc23d8eaf6",
+  "extractionHash": "sha256:ea6c05a80a52a25865b14785376facf9535d4340e7cb6559ea088ad5cd11ccb1",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex independent Houhanshu 089 chronology reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T23:30:00.000Z",
+  "summary": "Targeted independent source audit confirms a deterministic interval failure in Emperor Ping's duplicate attestation. The chapter identifies him as 孝平, and the checked Chinese Text Project chronology places his reign from 17 October 1 BCE to 3 February AD 6. Claim-144 instead ends at 6 BCE, creating a reversed interval. Claim-145 and the person hints already preserve the correct BCE-to-AD crossing. A date-only repair must remove the erroneous duplicate or make it identical to the supported interval, followed by a fresh complete independent audit before approval.",
+  "reviewedUnits": [
+    "s0067"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-144",
+      "verdict": "incorrect",
+      "event": "The historical attestation summarizes Emperor Ping's reign in the Western Han succession.",
+      "reason": "The source's 孝平 reference identifies Emperor Ping, but the stored interval runs from 1 BCE to 6 BCE and is chronologically reversed. The independently checked chronology places his reign across the era boundary, from 1 BCE to AD 6; the immediately following duplicate claim already uses that supported geometry.",
+      "evidence": [
+        {
+          "unit": "s0067",
+          "quote": "祚缺于孝平"
+        }
+      ]
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "items": [
+        "claim-144"
+      ],
+      "problem": "Emperor Ping's first duplicate attestation ends at 6 BCE rather than AD 6, reversing the interval and contradicting the source-backed BCE-to-AD reign chronology.",
+      "action": "In a separate date-only repair, remove claim-144 as a redundant erroneous duplicate or replace its end with AD 6 to match the supported claim-145. Preserve the correct active-date hints, do not infer finer calendar precision, and obtain a fresh complete independent audit of the repaired packet."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://ctext.org/datawiki.pl?if=gb&remap=gb&res=194391",
+      "title": "Han Ping Di | Chinese Text Project",
+      "quote": "他是西汉第十四位、亦即倒数第二位皇帝（公元前1年10月17日－公元6年2月3日在位）",
+      "sourceHash": "sha256:e73f89fbbad03a9db9d7ef1ed5871f20d082f5e24e44d37853d8fe3452bd887f",
+      "accessedAt": "2026-09-22T23:30:00.000Z",
+      "reason": "This checked Chinese chronology identifies the ruler named 孝平 in the chapter and establishes that his reign crosses from 1 BCE into AD 6, rather than ending in 6 BCE."
+    }
+  ]
+}

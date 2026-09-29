@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "005",
+  "candidateFile": "staged-candidate-c28e771e56cd181fff86.json",
+  "sealedCandidateHash": "sha256:c28e771e56cd181fff86ecc957d096aaba8dcfbccdd004e2d36b1fff5fd2fead",
+  "candidateExtractionHash": "sha256:89408c3ee6a703c7d705955ef654a3ac9b955a0f5f6c6442efef8f696fdb6d83",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 005 Confucius chronology repair reviewer",
+    "agentId": "date_audit_substantive_thirtyfive",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent full-source, sealed-replay, scope, and source-ownership review. The Kaiping 4 proposal records the construction and funding of a Wenxuan King temple, but it contains neither Confucius's personal name nor any birth or death date. Removing the imported BC 551–479 personal-attestation interval and replacing its mirrored active-date hint with a source-specific research hold is therefore necessary and minimal. The temple record itself remains in the canonical source and candidate extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:b1a0c45a5aeb72cea13748141254a61962f19a94abeb05b274ba9c61b5a71625",
+    "canonicalExtractionHash": "sha256:4776447c927d646c82025345c371e11702f740899480fc079bae996f3ab18c1b",
+    "canonicalInputs": "PASS: current source and extraction hashes exactly match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: the exact two-operation proposal hashes to c28e771e56cd181fff86ecc957d096aaba8dcfbccdd004e2d36b1fff5fd2fead.",
+    "candidateExtractionIdentity": "PASS: the staged candidate hashes to 89408c3ee6a703c7d705955ef654a3ac9b955a0f5f6c6442efef8f696fdb6d83.",
+    "proposalReplay": "PASS: replay against the pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-102 and hints-p026 change; no source link, identity, role, predicate, or non-date event field changes.",
+    "sourceSoundness": "PASS: s0074 names only 文宣王廟 and its construction/funding. It neither names 孔子 nor provides Confucius's birth, death, or a personal activity date, so it cannot support the imported BC 551–479 personal interval.",
+    "compactValidation": "PASS: 183 units, 68 people, 237 mentions, 511 claims, and zero alias-disposition conflicts in the replayed candidate.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book jiuwudaishi --chapter 005 on current canonical inputs; candidate compact validation also passed.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0074",
+      "quote": "國子監奏：「創造文宣王廟，仍請率在朝及天下現任官僚俸錢，每貫每月克一十五文，充土木之植。」",
+      "result": "This is an institutional proposal to build and fund the Wenxuan King temple. It does not state a personal life event for Confucius or give BC 551–479 chronology."
+    },
+    {
+      "unit": "s0076",
+      "quote": "是歲，以所率官僚俸錢修文宣王廟。",
+      "result": "The Kaiping 4 record confirms the temple work, not the temple honoree's birth, death, or continuous activity."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the sealed handoff.",
+    "Replay both operations exactly: remove claim-102 and replace only p026's mirrored hint with the stated source-specific research hold.",
+    "Retain the Kaiping 4 Wenxuan King temple source record; do not add or infer a Confucius lifespan from it.",
+    "Do not alter source or master from this review receipt; rerun scoped validation and require a fresh independent canonical audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

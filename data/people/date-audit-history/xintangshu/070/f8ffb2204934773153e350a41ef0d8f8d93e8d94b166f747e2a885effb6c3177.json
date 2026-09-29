@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "xintangshu",
+  "chapter": "070",
+  "sourceHash": "sha256:51964baa391cd73da57db5e7da742f02dac8d705e9bc4290576dd6ca61caa654",
+  "extractionHash": "sha256:51e3b7a2af927db3608249a449edb9a26ed6c9fc9253c4da3aded6d02d3e16b4",
+  "reviewer": {
+    "name": "Independent date audit: Xintangshu 070",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T00:00:00.000Z",
+  "status": "needs-revision",
+  "summary": "A deterministic chronology defect was confirmed in Xiang's attestation. The cited source establishes only that Xiang was Shang's younger brother and founded the Fanyang branch; it supplies no Han-era endpoint, so the reversed AD 80–20 interval cannot be repaired by reversing it or by retaining the displayed BC 80–AD 20 hint without separate evidence.",
+  "reviewedUnits": [
+    "s0034"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-184",
+      "verdict": "incorrect",
+      "event": "Xiang is described as Shang's younger brother and as founder of the Fanyang branch.",
+      "reason": "The claim's AD 80–20 western interval is geometrically reversed. More importantly, the sole cited passage has no reign, year, or other temporal wording, so it cannot support either endpoint or a replacement interval.",
+      "evidence": [
+        {
+          "unit": "s0034",
+          "quote": "弟向，范陽房始祖也。"
+        }
+      ]
+    },
+    {
+      "id": "hints-p042",
+      "verdict": "incorrect",
+      "event": "The active-date hint summarizes the chronology presented for Xiang.",
+      "reason": "The BC 80–AD 20 hint is not evidenced in the cited source unit. It must not remain as an implied correction for the invalid attestation interval unless a separately reviewed source establishes these bounds.",
+      "evidence": [
+        {
+          "unit": "s0034",
+          "quote": "弟向，范陽房始祖也。"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p042",
+      "verdict": "incorrect",
+      "reason": "Xiang's local record is linked to an unsupported life-range presentation. The familial and branch-founder description is supported, but the passage provides no independently usable personal date evidence.",
+      "evidence": [
+        {
+          "unit": "s0034",
+          "quote": "弟向，范陽房始祖也。"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-184",
+        "hints-p042",
+        "p042"
+      ],
+      "problem": "Xiang's only dated attestation has an impossible reversed interval, while its visible active-date hint presents unsupported alternate bounds.",
+      "action": "Use the fingerprinted date-repair workflow to remove the unsupported temporal fields from claim-184 and the active-date hint, unless independent source evidence is supplied for a properly bounded chronology; then independently re-audit the repaired packet."
+    }
+  ],
+  "references": []
+}

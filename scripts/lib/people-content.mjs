@@ -3,7 +3,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const configuredRepoRoot = process.env.PEOPLE_REPO_ROOT?.trim();
+if (configuredRepoRoot && !path.isAbsolute(configuredRepoRoot)) {
+  throw new Error('PEOPLE_REPO_ROOT must be an absolute path');
+}
+
+export const REPO_ROOT = configuredRepoRoot ??
+  path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const DATA_DIR = path.join(REPO_ROOT, 'data');
 export const PEOPLE_DIR = path.join(DATA_DIR, 'people');
 

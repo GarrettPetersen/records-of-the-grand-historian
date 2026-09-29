@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "017",
+  "candidateFile": "staged-candidate-fcb0472b6edc83b604e7.json",
+  "candidateHash": "sha256:fcb0472b6edc83b604e7306bae7d3d457bdf48b8ea7971523ba30c37c1754ff6",
+  "reviewer": {
+    "name": "Codex independent Chenshu 017 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:35:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The candidate exactly replays and correctly converts all 24 audit-listed temporal claims to source-specific holds, but it contains no paired hint operations. Every one of the 24 required active-date hints remains unchanged, leaving the unsupported dynasty-wide, precedent-derived, and apparatus-derived chronology visible on person records.",
+  "validation": {
+    "proposalReplay": "PASS: the 24 pinned replacements replay byte-for-byte to sha256:fcb0472b6edc83b604e7306bae7d3d457bdf48b8ea7971523ba30c37c1754ff6.",
+    "claimCoverage": "PASS: all 24 audit-listed claims are replaced exactly once, with no unlisted temporal-claim mutation.",
+    "claimHolds": "PASS: source wording, subjects, predicates, provenance, and cited facts are retained while borrowed Western chronology is removed.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "pairedHints": "FAIL: the audit requires 24 paired hint repairs, but the proposal has zero hints operations and all 24 affected hints are byte-for-byte unchanged.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": ["claim-77", "claim-78", "claim-80", "claim-81", "claim-82", "claim-83", "claim-84", "claim-85", "claim-99", "claim-102", "claim-105", "claim-106", "claim-109", "claim-110", "claim-117", "claim-130"],
+      "pairedHints": ["p006", "p007", "p009", "p010", "p011", "p012", "p013", "p014", "p028", "p031", "p034", "p035", "p038", "p039", "p046", "p061"],
+      "evidence": "s0005: 祖僧衍，齊侍中。",
+      "result": "Titles and broad dynasty or reign references do not establish whole-period personal activity; corrected claims require matching hint holds, preserving independently supported portions where present."
+    },
+    {
+      "claims": ["claim-121", "claim-122", "claim-123", "claim-124", "claim-125", "claim-126"],
+      "pairedHints": ["p050", "p051", "p052", "p053", "p054", "p055"],
+      "evidence": "s0150: 駙馬都尉置由漢武…是以魏曹植表駙馬、奉車趣為一號。",
+      "result": "The Han, Wei, and Jin figures are institutional precedents, not local activity-date evidence; corrected claims require matching hint holds."
+    },
+    {
+      "claims": ["claim-206", "claim-207"],
+      "pairedHints": ["p059", "p060"],
+      "evidence": "s0180: 按錢大昕《廿二史考異》云此別一王琳。",
+      "result": "Modern editorial witnesses are preserved as apparatus references without a generic modern active interval; corrected claims require matching hint holds."
+    }
+  ],
+  "requiredCorrections": {
+    "addHintOperationsFor": [
+      "p006", "p007", "p009", "p010", "p011", "p012", "p013", "p014", "p028", "p031", "p034", "p035", "p038", "p039", "p046", "p061",
+      "p050", "p051", "p052", "p053", "p054", "p055", "p059", "p060"
+    ],
+    "requirement": "Add one exact hints operation for each listed person. Replace only the borrowed hint portion with the paired claim's source-specific research-required hold; preserve independently supported dates in mixed hint lists and make no non-temporal changes. Restage a new pinned candidate and obtain a fresh independent review."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "112",
+  "candidateFile": "staged-candidate-e9f956978994667fb0d9.json",
+  "sealedCandidateHash": "sha256:6dc3d78da14c9d9cae95e320354ed444651a485ca177b576cf01cf74115b0fde",
+  "candidateExtractionHash": "sha256:e9f956978994667fb0d94aa1d3d997ad70ec5bd1706f333a7b90378951fbdcff",
+  "reviewer": {
+    "name": "Independent Jinshi 112 sealed candidate reviewer",
+    "agentId": "fresh_jinshi050_audit",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T19:15:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent source, canonical-pin, and sealed-replay review. The candidate makes exactly eight operations: it replaces claims 8, 59, 80, 439, and 467 and the active-date hints for p001, p002, and p047. 貞祐初 is imprecise, while 嘗薦之 and 少從軍 are undated retrospective or career wording; none supports the removed exact Western year or interval. The candidate preserves each claim's subject, predicate, sourceDate, certainty, and evidence and replaces only unsupported Western chronology with explicit research holds. Claims 32–34 remain byte-identical.",
+  "validation": {
+    "canonicalSourceHash": "sha256:5bf8cc0a72d29104d2f231f34d804c0fdbee66afd26246557717d424b8c81604",
+    "canonicalExtractionHash": "sha256:22cce11cee56bf1722ba9d08eea7152fdfbb3649cfc5c5ebfd2301f3aa051e26",
+    "canonicalInputs": "PASS: current source and canonical extraction hashes exactly match the candidate and audit pins.",
+    "auditReportHash": "sha256:b5973bbeb9d9ea0c64b84693284552e626967da5",
+    "sealedProposalIdentity": "PASS: sealed candidate handoff hash is sha256:6dc3d78da14c9d9cae95e320354ed444651a485ca177b576cf01cf74115b0fde.",
+    "candidateExtractionIdentity": "PASS: reconstructed candidate hash is sha256:e9f956978994667fb0d94aa1d3d997ad70ec5bd1706f333a7b90378951fbdcff.",
+    "proposalReplay": "PASS: replay against pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-8, claim-59, claim-80, claim-439, claim-467, hints-p001, hints-p002, and hints-p047 change.",
+    "sourceSoundness": "PASS: s0004 says 貞祐初, s0129 says 嘗薦之, and s0236 says 少從軍; these phrases do not supply the deleted point years or intervals.",
+    "retention": "PASS: each claim retains subject, predicate, sourceDate text, certainty, and evidence; claims 32, 33, and 34 are byte-identical.",
+    "compactValidation": "PASS: 240 units, 93 people, 436 mentions, 1233 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: no candidate dateAuditDiagnostics findings.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jinshi --chapter 112.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0004",
+      "quote": "貞祐初，以親衛軍送岐國公主，充護衛。",
+      "result": "初 marks an imprecise early-regnal-period event; it does not warrant the exact AD 1213 date assigned to both participants."
+    },
+    {
+      "unit": "s0129",
+      "quote": "左丞張行信嘗薦之曰：「完顏合達，今之良將也。」",
+      "result": "嘗薦之 is an undated prior recommendation and does not support an AD 1217–1231 personal activity interval."
+    },
+    {
+      "unit": "s0236",
+      "quote": "本契丹人，少從軍，以勞自千戶遷都統。",
+      "result": "The retrospective career description says only that he joined the army when young and rose through service; it supplies no AD 1223–1224 interval."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if current canonical source, extraction, audit, sealed handoff, and candidate hashes still match this receipt.",
+    "Replay exactly the five claim replacements and three hint replacements; do not alter claims 32, 33, or 34.",
+    "Retain all eight source-specific explicit research holds rather than reintroducing derived precision.",
+    "Do not alter canonical extraction from this review; after host curation, rerun scoped validation and obtain a fresh independent canonical date audit."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

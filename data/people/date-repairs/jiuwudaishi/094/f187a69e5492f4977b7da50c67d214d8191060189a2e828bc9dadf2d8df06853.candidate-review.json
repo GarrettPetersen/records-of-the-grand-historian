@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "094",
+  "candidateFile": "staged-candidate-f187a69e5492f4977b7d.json",
+  "sourceHash": "sha256:72ce5719c59b7f2891ba2bce63927f2b2a8d7fc722c37f1b8b9837db4ca1d870",
+  "originalExtractionHash": "sha256:bf6f40a27a98aabe60ef6a1d6d08987616fb318539915ec290c11eb8967c88e9",
+  "sealedCandidateHash": "sha256:f187a69e5492f4977b7da50c67d214d8191060189a2e828bc9dadf2d8df06853",
+  "candidateExtractionHash": "sha256:de3c62a5db00c1da2d61fb1e9d4b5affe510ff5e404786b32d4ef9f691086a19",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 094 date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi094",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T04:14:07Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected after independently replaying and reviewing all 77 sealed operations against audit 3e6bf3d69d and the pinned source. The candidate correctly removes borrowed Zhuangzong reign windows, identifies the separate Tianyou 10 / AD 913 Wei-Bo episode, preserves conservative Tianyou and retrospective holds, and removes unsupported family, honor, and composite endpoints. It also correctly repairs the other early/late-era phase claims. But claim-137, the companion attestation for the s0054 Early Kaiyun Yangcheng campaign, is accidentally rewritten as early Tiancheng AD 926–927. That is a six-century-era mix-up in the candidate itself: s0054 says 開運初, and the related office and participation repairs correctly use AD 944–945. The defective companion claim means the sealed candidate cannot be curated.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-7", "claim-8", "claim-10", "claim-49", "claim-97", "claim-132", "claim-151", "claim-343", "claim-521",
+        "hints-p001", "hints-p002", "hints-p008", "hints-p011", "hints-p048", "hints-p095"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0039: 莊宗定魏博 is the Tianyou 10 / AD 913 Wei-Bo episode; it is not AD 923.",
+        "s0003–s0007 and s0117/s0208–s0213 use retrospective or composite Zhuangzong wording that does not independently prove a continuous AD 923–926 personal interval."
+      ],
+      "reason": "The candidate properly removes the borrowed reign-wide components and preserves the distinct AD 913 event without inventing a continuous service interval."
+    },
+    {
+      "proposalItems": [
+        "claim-105", "claim-118", "claim-119", "claim-134", "claim-544", "claim-560", "claim-562", "claim-568", "claim-569", "claim-572",
+        "hints-p102", "hints-p106", "hints-p107", "hints-p108", "hints-p109"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "The preserved sourceDate texts distinguish 天成初, 開運初, and 清泰末; the retained phase ranges AD 926–927, AD 944–945, and AD 935–936 respectively are conservative phase treatments."
+      ],
+      "reason": "Except for claim-137 separately rejected below, these operations replace flattened point years with source-faithful phase intervals and matching active-hint changes."
+    },
+    {
+      "proposalItems": ["claim-137"],
+      "verdict": "incorrect",
+      "sourceEvidence": [
+        {
+          "unit": "s0054",
+          "quote": "開運初，契丹入寇，王師北征，以環為北面行營步軍左廂排陣使，預破契丹於陽城。"
+        }
+      ],
+      "reason": "Claim-137 retains sourceDate 開運初 but replaces its prior AD 944 point with AD 926–927 and calls it early Tiancheng. 開運 is Later Jin Kaiyun, whose first two years are AD 944–945; the candidate's own claim-118 and claim-119 correctly use that interval. Replace claim-137 with the same AD 944–945 phase interval, revise its unresolved reason to Early Kaiyun, and keep the event description and evidence unchanged."
+    },
+    {
+      "proposalItems": ["claim-548", "claim-556", "claim-650", "hints-p104", "hints-p126"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "The Wei-Bo-specific 唐天祐中 context is separately identified as Tianyou 10 / AD 913; the remaining bare Tianyou contexts have no cited numbered year."
+      ],
+      "reason": "The candidate correctly retains AD 913 only for the identified Wei-Bo event and converts the other bare Tianyou contexts to source-specific unresolved holds."
+    },
+    {
+      "proposalItems": [
+        "claim-333", "claim-337", "claim-441", "claim-445", "claim-481", "claim-482", "claim-507", "claim-554", "claim-576", "claim-577", "claim-603", "claim-629", "claim-655",
+        "hints-p045", "hints-p046", "hints-p072", "hints-p073", "hints-p084", "hints-p093", "hints-p103", "hints-p112", "hints-p114", "hints-p121", "hints-p127"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "The cited family, honor, mourning, death, and generic court-service wording is source-backed but does not supply the removed personal before/after Western endpoints."
+      ],
+      "reason": "These operations correctly preserve provenance while replacing invented endpoints and active hints with explicit source-specific holds."
+    },
+    {
+      "proposalItems": [
+        "claim-403", "claim-404", "claim-660", "claim-668", "claim-670", "claim-672", "claim-674", "claim-677", "claim-679",
+        "hints-p064", "hints-p129", "hints-p132", "hints-p133", "hints-p134", "hints-p135", "hints-p136", "hints-p137"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "The cited composite narratives and retrospective labels do not independently state the removed reign-wide interval or synthesized life endpoint."
+      ],
+      "reason": "The candidate correctly separates dated event context from later undated outcomes and retains research holds rather than inventing lifespan or full-reign activity."
+    }
+  ],
+  "hostRequirements": [
+    "Do not curate sealed candidate sha256:f187a69e5492f4977b7da50c67d214d8191060189a2e828bc9dadf2d8df06853.",
+    "Prepare a new source- and extraction-fingerprinted proposal that changes only claim-137 from the erroneous AD 926–927 Early Tiancheng interval to the source-faithful Early Kaiyun AD 944–945 interval, with an Early Kaiyun reason; retain sourceDate 開運初, event, and s0054 evidence.",
+    "Keep the other 76 reviewed operations unchanged unless a new source-specific review justifies a change.",
+    "Obtain a new independent review, then scoped validation and a fresh complete canonical date audit after any host curation."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: handoff pins source sha256:72ce5719c59b7f2891ba2bce63927f2b2a8d7fc722c37f1b8b9837db4ca1d870 and extraction sha256:bf6f40a27a98aabe60ef6a1d6d08987616fb318539915ec290c11eb8967c88e9.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:f187a69e5492f4977b7da50c67d214d8191060189a2e828bc9dadf2d8df06853.",
+    "candidateExtractionIdentity": "PASS: independently replayed 77 sealed operations and recomputed candidate hash is sha256:de3c62a5db00c1da2d61fb1e9d4b5affe510ff5e404786b32d4ef9f691086a19.",
+    "proposalReplay": "PASS: exact replay matches the handoff candidate.",
+    "compactValidation": "PASS: independent compact validation reports 323 units, 137 people, 896 mentions, 1,158 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: independent date-audit geometry diagnostics found no structural contradictions.",
+    "sourceChronology": "FAIL: claim-137 mismatches its own 開運初 sourceDate and s0054 with an AD 926–927 Early Tiancheng interval rather than AD 944–945 Early Kaiyun.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}

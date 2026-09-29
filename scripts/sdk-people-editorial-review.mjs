@@ -370,7 +370,10 @@ async function acceptDecisionPublishedAfterError(error, agent, target, loaded, o
 function resumableReview(prior) {
   return Boolean(
     prior?.agentId && !prior.resumeExhausted &&
-    ['interrupted', 'failed', 'failed/retryable'].includes(prior.status),
+    // A host can die after recording that it is about to resume but before it
+    // records the resumed run.  Keep that retained conversation sticky too;
+    // otherwise the next scheduler would silently open a replacement reviewer.
+    ['interrupted', 'recovering', 'failed', 'failed/retryable'].includes(prior.status),
   );
 }
 

@@ -1247,6 +1247,8 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     const mentionLinkCount = chapterEntries.reduce((total, entry) =>
       total + [...unzipText(entry).matchAll(/\bclass="person-link"/gu)].length, 0);
     const backlinkCount = [...glossaryContent.matchAll(/\bclass="glossary-mention-link"/gu)].length;
+    const snippetCount = [...glossaryContent.matchAll(/\bclass="glossary-mention-snippet"/gu)].length;
+    const chineseSnippetCount = [...glossaryContent.matchAll(/\bclass="glossary-mention-source"/gu)].length;
     if (peopleCount !== peopleQa.people) {
       errors.push(`People glossary entry count mismatch: ${peopleCount} != ${peopleQa.people}.`);
     }
@@ -1258,6 +1260,12 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     }
     if (backlinkCount !== peopleQa.expectedBacklinks) {
       errors.push(`People glossary backlink count mismatch: ${backlinkCount} != ${peopleQa.expectedBacklinks}.`);
+    }
+    if (snippetCount !== peopleQa.expectedBacklinks) {
+      errors.push(`People glossary source-snippet count mismatch: ${snippetCount} != ${peopleQa.expectedBacklinks}.`);
+    }
+    if (chineseSnippetCount !== peopleQa.expectedBacklinks) {
+      errors.push(`People glossary Chinese source-snippet count mismatch: ${chineseSnippetCount} != ${peopleQa.expectedBacklinks}.`);
     }
   } else {
     if (peopleEntries.length > 0) errors.push('People glossary is packaged while its QA publication gate is inactive.');

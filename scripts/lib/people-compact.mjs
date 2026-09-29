@@ -134,6 +134,7 @@ export function compactPeopleExtraction(extraction, packet) {
         r: person.identityHints.relatedLocalPeople.map((value) => shortLocalId(value, namespace)),
         a: person.identityHints.activeDateHints,
         p: person.identityHints.polityHints ?? [],
+        e: person.identityHints.externalPrimaryChronology ?? [],
         x: person.mentionException ?? null,
       },
       names,
@@ -195,6 +196,7 @@ function expandPeople(compact, namespace) {
       relatedLocalPeople: hints.r.map((value) => `${namespace}:${value}`),
       activeDateHints: hints.a,
       ...(hints.p.length > 0 ? { polityHints: hints.p } : {}),
+      ...(hints.e?.length > 0 ? { externalPrimaryChronology: hints.e } : {}),
     },
     ...(hints.x !== null ? { mentionException: hints.x } : {}),
   }));
@@ -303,33 +305,6 @@ function expandDispositions(compact, namespace) {
     }
   }
   return dispositions;
-}
-
-export function expandStalePeopleExtraction(compact, packet) {
-  const namespace = `${packet.book}:${packet.chapter}`;
-  return {
-    schemaVersion: 1,
-    book: packet.book,
-    chapter: packet.chapter,
-    input: packet.input,
-    run: compact.run,
-    people: expandPeople(compact, namespace).map((person) => ({
-      ...person,
-      mentionException: person.mentionException
-        || 'source replaced; pending people re-extraction',
-    })),
-    mentions: [],
-    claims: expandClaims(compact, namespace),
-    translationRepairs: [],
-    candidateDispositions: [],
-    coverage: {
-      ...compact.coverage,
-      unresolvedReferences: compact.coverage.unresolvedReferences.map((item) => ({
-        unit: item.unit,
-        description: item.description,
-      })),
-    },
-  };
 }
 
 export function expandPeopleExtraction(compact, packet, options = {}) {

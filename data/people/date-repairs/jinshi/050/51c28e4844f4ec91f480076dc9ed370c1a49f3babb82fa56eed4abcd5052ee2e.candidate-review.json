@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "050",
+  "candidateCommit": "5055bcb14b641aa5ad8fe6f47b639061a051e1f4",
+  "candidateFile": "staged-candidate-3110ecf9f34ff4efd7c0.json",
+  "sourceHash": "sha256:e8f079f57ca0cfa32c2d9531d70ce2c2221a376dc922205682f642576b70c69d",
+  "originalExtractionHash": "sha256:8839dac68b4739bf17fce0ebf35bda6e566bc0f3f738fdf06985b18531aea200",
+  "sealedCandidateHash": "sha256:51c28e4844f4ec91f480076dc9ed370c1a49f3babb82fa56eed4abcd5052ee2e",
+  "candidateExtractionHash": "sha256:3110ecf9f34ff4efd7c065a4e41c54a146484bf47c0aa27f898a9e46a7d48ae3",
+  "reviewer": {
+    "name": "Independent Jinshi 050 candidate reviewer",
+    "agentId": "date_audit_substantive_forty",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T23:08:00.000Z",
+  "disposition": "reject-for-revision",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The single p003 hint replacement replays exactly and all other candidate bytes are preserved, but fresh audit ce0f47ad requires discrete chapter-supported Shizong years, not a continuous AD 1162–1181 interval. The narrowed endpoint removes AD 1187 yet still asserts unsupported activity throughout the intervening years.",
+  "validation": {
+    "canonicalInputs": "PASS: current source and canonical extraction match the sealed pins.",
+    "sealedProposalIdentity": "PASS: sha256:51c28e4844f4ec91f480076dc9ed370c1a49f3babb82fa56eed4abcd5052ee2e",
+    "proposalReplay": "PASS: the sole hints-p003 operation replays byte-for-byte to the sealed candidate.",
+    "scope": "PASS: candidate diff contains only p003 hints, AD 1162–1187 to AD 1162–1181.",
+    "retention": "PASS: every non-hint extraction value and every pre-existing source-specific hold is byte-identical.",
+    "compactValidation": "PASS: compact serialization hashes to sha256:3110ecf9f34ff4efd7c065a4e41c54a146484bf47c0aa27f898a9e46a7d48ae3.",
+    "chronologyGeometry": "PASS",
+    "sourceSoundness": "FAIL: audit ce0f47ad requires discrete supported years; the candidate retains an unsupported continuous interval.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": [
+    {
+      "proposalItem": "hints-p003",
+      "verdict": "insufficient-repair",
+      "reason": "The chapter directly dates Shizong only at discrete Dading-year events; narrowing the endpoint does not make the interval source-supported.",
+      "evidence": [
+        {
+          "unit": "s0016",
+          "quote": "二十一年正月，夏國王李仁孝上表乞複置，以保安、蘭州無所產，而且稅少，惟於綏德為要地，可複設互市，命省臣議之。"
+        },
+        {
+          "unit": "s0059",
+          "quote": "世宗大定二年，以正隆之後倉廩久匱，遣太子少師完顏守道等，山東東、西路收糴軍糧，除戶口歲食外，盡令納官，給其直。"
+        }
+      ]
+    }
+  ],
+  "requiredChanges": [
+    "Replace p003's continuous AD 1162–1181 hint with the fresh audit's discrete chapter-supported years: AD 1161, 1162, 1163, 1165, 1169, 1174, 1176, 1177, and 1181.",
+    "Restage the resulting one-operation candidate with new sealed hashes and obtain a fresh independent review."
+  ]
+}

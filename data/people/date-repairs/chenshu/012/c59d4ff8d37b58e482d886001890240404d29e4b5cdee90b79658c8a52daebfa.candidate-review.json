@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "012",
+  "candidateFile": "staged-candidate-c59d4ff8d37b58e482d8.json",
+  "candidateHash": "sha256:c59d4ff8d37b58e482d886001890240404d29e4b5cdee90b79658c8a52daebfa",
+  "reviewer": {
+    "name": "Codex independent Chenshu 012 revised-candidate reviewer",
+    "agentId": "date_audit_beiqishu007",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:05:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The six-change proposal replays byte-for-byte and replaces the three unsupported inherited AD 582 chronologies with source-specific commentary holds, including the matching active-date hints. The Shen Ke accession remains correctly attributed only to Shen Ke.",
+  "validation": {
+    "proposalReplay": "PASS: applying the six operations to the pinned canonical extraction produces sha256:c59d4ff8d37b58e482d886001890240404d29e4b5cdee90b79658c8a52daebfa.",
+    "claimHolds": "PASS: claim-494, claim-498, and claim-502 become precise research holds rather than personal AD 582 events.",
+    "pairedHints": "PASS: the active-date hints for p083, p084, and p085 receive the same source-specific hold.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claims": [
+        "claim-494",
+        "claim-498",
+        "claim-502"
+      ],
+      "units": [
+        "s0197",
+        "s0201"
+      ],
+      "evidence": "s0201's commentary names 胡穎、徐度、杜稜、沈恪; the AD 582 accession in s0197 belongs to Shen Ke, not to the other three named persons.",
+      "result": "The proposed holds preserve the commentary references without assigning Hu Ying, Xu Du, or Du Leng an inherited AD 582 activity."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned input hash.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; the holds require research-blocked rather than audited."
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "139",
+  "candidateCommit": "cd08b5c4e0917ebc471829f5711a4d62e5f25fe8",
+  "candidateFile": "staged-candidate-1ad9daadd1407e63ae71.json",
+  "sealedCandidateHash": "sha256:1ad9daadd1407e63ae71092919b296a10654be68b439162ac0db09fa387bff1c",
+  "candidateExtractionHash": "sha256:e6d9785a3db466d42d28ea577f4433d6e5e647e2d9cc7b319f5f763cffa63cd3",
+  "candidateHash": "sha256:1ad9daadd1407e63ae71092919b296a10654be68b439162ac0db09fa387bff1c",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 139 date-repair reviewer",
+    "agentId": "review_jwd139_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T03:10:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent source, exact-replay, compact-validation, and chronology-geometry review. The eight atomic operations resolve exactly the four initial-audit groups: two undated bibliographic labels no longer assert their authors' activity; Han Gaozu is limited to the stated final years; Tang Zhuangzong retains the explicit AD 911 Boxiang victory alongside AD 924–925; and the internally inconsistent Zhou Taizu/Xiande label remains visible but undated, with only the separate AD 952 Guangshun context retained.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-5", "hints-p001", "p001", "claim-11", "hints-p002", "p002"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0003", "quote": "《薛史天文志序》……較《歐陽史·司天考》為詳備。"},
+        {"unit": "s0006", "quote": "參考諸書，當以《薛史》為得其實焉。"}
+      ],
+      "reason": "These are bibliographic comparisons and a source-work judgment, not dated personal events by Xue Juzheng or Ouyang Xiu. Replacing the imported AD 973/1053 attestations with explicitly undated source attestations, and removing their derivative hints, preserves the source without falsely making either author active in the chapter."
+    },
+    {
+      "proposalItems": ["hints-p004", "p004"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0008", "quote": "多引漢高祖末年日蝕於歲首。"}
+      ],
+      "reason": "末年 limits the cited Han Gaozu allusion to the final years, BC 196–195; the source does not support expanding it to his whole BC 202–195 reign."
+    },
+    {
+      "proposalItems": ["hints-p006", "p006"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0041", "quote": "至五年正月二日，果為後唐莊宗大敗於柏鄉。"},
+        {"unit": "s0012", "quote": "唐莊宗同光三年，四月癸亥朔，時有司奏。"}
+      ],
+      "reason": "The fifth year context supplies Tang Zhuangzong's personal victory at Boxiang in AD 911; the Tongguang third-year record separately supports AD 924–925. The candidate correctly retains both rather than treating the later reign-title record as his first activity."
+    },
+    {
+      "proposalItems": ["claim-66", "hints-p011", "p011"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0056", "quote": "周太祖顯德三年，正月壬戌夜，有星孛於參角。"},
+        {"unit": "s0037", "quote": "周太祖廣順二年，四月丙戌朔，日有蝕之。"}
+      ],
+      "reason": "周太祖顯德三年 combines an emperor who died in AD 954 with an era beginning in AD 954/AD 956 usage and cannot establish AD 956 activity by Zhou Taizu. The candidate preserves the contradictory Chinese wording as an undated attestation and retains only the separate Guangshun 2 AD 952 contextual hint."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:ae4fb524069706b4c6fd15d02c282667c2b239610a320b1ced6659dc0e1afa04",
+    "canonicalExtractionHash": "sha256:c463c05e32c12b1b4deb317940a8ebdd9ab8341bedc736a7a414ea9e3b33c2c7",
+    "auditReportHash": "sha256:523ad936028d2af813961305c9312ab2faf85234e8fd6c80322b7e7295b2b4e1",
+    "inputPins": "PASS: candidate source/extraction hashes and audit report hash match the complete four-finding initial audit at d56b8b87f3875f4b0517c423a815075ad829cf5d.",
+    "auditScope": "PASS: all and only the four audit findings are covered by eight atomic operations: three dated-attestation replacements and five active-date-hint changes.",
+    "sealedProposalIdentity": "PASS: isolated recomputation of the proposal seal is sha256:1ad9daadd1407e63ae71092919b296a10654be68b439162ac0db09fa387bff1c.",
+    "candidateExtractionIdentity": "PASS: isolated replay reconstructs candidate extraction sha256:e6d9785a3db466d42d28ea577f4433d6e5e647e2d9cc7b319f5f763cffa63cd3 exactly.",
+    "proposalReplay": "PASS: the pinned staging script replayed exactly 8 operations, producing 195 units, 17 people, 82 mentions, 151 compact claims, 5 repairs, and zero alias-disposition conflicts.",
+    "sourceSoundness": "PASS: no repair invents or transfers a Western date. Bibliographic and contradictory labels remain visible but undated; personal and source-dated evidence is kept distinct.",
+    "strictCompactValidation": "PASS: isolated pinned staging script completed validateCompactPeopleExtraction successfully.",
+    "chronologyGeometry": "PASS: isolated replay produced zero date-audit chronology geometry diagnostics.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only while the canonical source hash remains sha256:ae4fb524069706b4c6fd15d02c282667c2b239610a320b1ced6659dc0e1afa04 and canonical extraction hash remains sha256:c463c05e32c12b1b4deb317940a8ebdd9ab8341bedc736a7a414ea9e3b33c2c7.",
+    "Replay all eight sealed operations exactly; do not restore AD 973 or AD 1053 bibliographic-author activity, the whole BC 202–195 reign hint, or AD 956 activity for Zhou Taizu.",
+    "Keep Tang Zhuangzong's AD 911 Boxiang event alongside the AD 924–925 records, and preserve the Zhou Taizu/Xiande wording as an undated contradictory source attestation with AD 952 only as separate Guangshun context.",
+    "Run scoped validation and chronology geometry after host curation, then require a fresh complete independent canonical date audit before any audited approval or ebook-glossary gate."
+  ],
+  "publication": "staging-only"
+}

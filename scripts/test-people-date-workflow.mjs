@@ -3,9 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { writeJsonAtomic, readJson } from './lib/people-content.mjs';
+import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair } from './lib/people-date-workflow.mjs';
+import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
 function fixture(t) {
@@ -111,6 +112,35 @@ test('repairs reject wrong hashes, non-temporal claims and changed subjects',t=>
   bad=structuredClone(p);bad.changes[0].id='claim-3';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/temporal claim/);
   bad=structuredClone(p);bad.changes[0].after[0]='p002';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/subject/);
 });
+test('staged review binds a sealed proposal even when candidate bytes are unchanged', t => {
+  const proposal = { sourceHash: 'sha256:source', extractionHash: 'sha256:base', changes: [{ kind: 'hints', personId: 'p001', before: ['AD 1'], after: ['AD 1'], reason: 'A deliberately distinct sealed proposal fixture.' }] };
+  const candidate = { schemaVersion: 2, book: 'fixture', chapter: '001', people: [], claims: [] };
+  const handoff = { kind: 'date-repair-candidate-handoff', book: 'fixture', chapter: '001', proposal, candidate, sealedCandidateHash: sealedDateRepairProposalHash(proposal), candidateExtractionHash: sha256(JSON.stringify(candidate)) };
+  const review = { kind: 'independent-staged-date-repair-review', book: 'fixture', chapter: '001', candidateFile: 'staged-candidate-sealed.json', sealedCandidateHash: handoff.sealedCandidateHash, candidateExtractionHash: handoff.candidateExtractionHash };
+  assert.deepEqual(validateStagedDateRepairReview(handoff, review, 'staged-candidate-sealed.json'), { sealedCandidateHash: handoff.sealedCandidateHash, candidateExtractionHash: handoff.candidateExtractionHash });
+  const collapsed = { ...review, candidateHash: handoff.candidateExtractionHash };
+  assert.throws(() => validateStagedDateRepairReview(handoff, collapsed, 'staged-candidate-sealed.json'), /Legacy candidateHash/);
+  const wrongProposal = { ...review, sealedCandidateHash: handoff.candidateExtractionHash };
+  assert.throws(() => validateStagedDateRepairReview(handoff, wrongProposal, 'staged-candidate-sealed.json'), /exact sealed proposal/);
+});
+test('sealed editorial amendments may replace only a reviewed date container',t=>{
+  const original={id:'fixture:001:c0001',subject:'fixture:001:p001',predicate:'attestation',value:{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},certainty:'explicit',evidence:['fixture:001:s0001','fixture:001:s0002']};
+  const held={...structuredClone(original),evidence:['fixture:001:s0002'],value:{sourceDate:{text:'元年'},unresolved:true,unresolvedReason:'The fixture source supplies only a dated context, not a continuous personal chronology.',event:'Source-specific context retained without a Western personal date.'}};
+  const repair={id:'fixture:001:r0001',unit:{id:'s0001',kind:'paragraph-sentence',blockIndex:0,collection:'sentences',itemIndex:0},field:'literal',before:'Jia died in year one.',after:'Jia was present in year one.',reason:'The source says Jia was present, rather than that he died.',confidence:'high'};
+  const candidate={book:'fixture',chapter:'001',input:{chapterFingerprint:`sha256:${'a'.repeat(64)}`},run:{agentId:'extractor'},people:[{localId:'fixture:001:p001'}],claims:[held],translationRepairs:[{...repair,status:'applied'}]};
+  const document=editorialDecisionSeed({...candidate,translationRepairs:[{...repair,status:'proposed'}]});
+  document.reviewer={kind:'human',name:'Independent editor',model:null,agentId:'reviewer',runId:null,completedAt:new Date(0).toISOString()};
+  document.decisions[0]={repairId:repair.id,decision:'accept',after:null,reason:repair.reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'元年'}};
+  const reviewedAfter={...structuredClone(original),evidence:['fixture:001:s0002']};
+  document.claimRevisions=[{repairId:repair.id,before:structuredClone(original),after:reviewedAfter,reason:'Preserve the reviewed fixture attestation while removing an unrelated evidence error.',sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'元年'}}];
+  const amendment={schemaVersion:1,kind:'date-repair-editorial-amendment',book:'fixture',chapter:'001',editorialDecisionHash:sha256(JSON.stringify(document)),claimRevisions:[{repairId:repair.id,claimId:original.id,before:structuredClone(reviewedAfter),after:structuredClone(held),reason:'The reviewed source wording is retained, while the imported Western date is replaced by a source-specific unresolved hold.'}]};
+  const amended=applyDateRepairEditorialAmendment(document,amendment,candidate);
+  assert.deepEqual(amended.claimRevisions[0].after,held);
+  const stale={...amendment,editorialDecisionHash:'sha256:stale'};
+  assert.throws(()=>applyDateRepairEditorialAmendment(document,stale,candidate),/stale/);
+  const unsafe=structuredClone(amendment);unsafe.claimRevisions[0].after.value.sourceDate.text='another year';
+  assert.throws(()=>applyDateRepairEditorialAmendment(document,unsafe,candidate),/only chronology/);
+});
 function receptionRepair(f) {
   const proposal=repair({packet:f.packet,extraction:f.extraction});
   proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
@@ -126,6 +156,42 @@ test('scoped reception additions survive final-delta reconstruction and remain a
   assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
   const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
   assert.ok(packet.items.some(i=>i.value?.kind==='posthumous-reference'));
+});
+test('a reception-only person may clear fabricated active-date hints',t=>{
+  const f=fixture(t),before=f.extraction.claims[0];
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'remove',id:'claim-1',before,reason:'The cited fixture is a later reception event, not evidence of Jia living in year two.'},
+    {kind:'add-reception-event',after:['p001','event-participation',{kind:'retrospective-reference',role:'recalled-example',action:'cited as a later precedent',receptionType:'retrospective'},'explicit',['s0001']],reason:'Preserve the later citation as a retrospective reference rather than a life attestation.'},
+    {kind:'hints',personId:'p001',before:['AD 2'],after:[],reason:'Remove the fabricated active-date hint because this chapter supplies only later reception evidence.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[0][4].a,[]);
+  assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
+  const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
+  assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
+});
+test('an undated source attestation may clear active-date hints without inventing chronology',t=>{
+  const f=fixture(t),before=f.extraction.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no temporal wording.'};
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'The cited source unit identifies Yi but has no temporal language, so its inherited first-year date must be removed.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'Clear the inherited date hint because this person has only an explicitly undated source attestation.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+  assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
+});
+test('an undated source attestation cannot clear hints when another claim supplies chronology',t=>{
+  const f=fixture(t),stored=structuredClone(f.extraction);
+  stored.claims.push(['p002','birth',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}},'explicit',['s0002']]);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:stored});
+  const before=stored.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no date-bearing temporal wording.'};
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'Remove the inherited first-year date because Yi is named here without a date-bearing temporal statement.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'This must be rejected because the person retains a separate dated birth claim.'},
+  ]};
+  assert.throws(()=>applyDateRepairProposal(stored,proposal,packet),/active-hint/);
 });
 test('reception additions reject non-reception events, life claims, conflicting labels and bad evidence',t=>{
   const f=fixture(t),proposal=receptionRepair(f);
@@ -174,6 +240,60 @@ test('a reception repair stays staged until a fresh reviewer approves the added 
   assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
   assert.equal(receptionChecks,1);
   assert.ok(readJson(f.file).claims.some(c=>c[2].kind==='posthumous-reference'));
+});
+function undatedEventFixture(t) {
+  const f=fixture(t);
+  f.extraction.claims.push(['p001','event-participation',{kind:'appointment',role:'appointee'},'explicit',['s0001']]);
+  writeJsonAtomic(f.file,f.extraction);f.packet=buildDateAuditPacket('fixture','001',f.options);
+  return f;
+}
+function eventDateRepair(f) {
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  const before=f.extraction.claims[3],after=structuredClone(before);
+  after[2].dateContext={sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}};
+  proposal.changes.push({kind:'date-context',id:'claim-4',before,after,reason:'Preserve the appointment and attach its separately checked first-year source context.'});
+  return proposal;
+}
+test('missing event chronology can be added without replacing the underlying event',t=>{
+  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+  assert.ok(!f.packet.items.some(i=>i.id==='claim-4'));
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  assert.equal(combined.changes.find(c=>c.id==='claim-4').kind,'date-context');
+  assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
+  assert.ok(buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate}).items.some(i=>i.id==='claim-4'));
+});
+test('date-context cannot rewrite identities, event content, life claims or unowned targets',t=>{
+  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+  for(const mutate of [
+    c=>{c.after[0]='p002';},c=>{c.after[1]='office';},c=>{c.after[2].role='ruler';},
+    c=>{c.after[2].kind='battle';},c=>{c.id='claim-999';},c=>{c.id='claim-04';},
+    c=>{c.before[3]='uncertain';},c=>{delete c.after[2].dateContext;c.after[3]='uncertain';},
+    c=>{c.id='claim-1';c.before=f.extraction.claims[0];c.after=structuredClone(c.before);},
+  ]) {
+    const bad=structuredClone(proposal);mutate(bad.changes.at(-1));
+    assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet));
+  }
+  const changed=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  changed.claims[3][2].kind='battle';
+  assert.throws(()=>dateRepairDifference(f.extraction,changed,f.packet),/non-temporal claim/);
+});
+test('a newly dated event requires coverage in the fresh independent review',async t=>{
+  const f=undatedEventFixture(t);let approve=false,checked=0;
+  const worker=async task=>{
+    if(task.kind==='repair')return eventDateRepair(f);
+    if(task.key.startsWith('reaudit-')) {
+      if(!approve)throw new Error('awaiting fresh event-date review');
+      checked+=task.job.ownedItems.filter(id=>id==='claim-4').length;
+    }
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/awaiting fresh/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  approve=true;
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.equal(checked,1);
+  assert.equal(readJson(f.file).claims[3][2].dateContext.westernYear.year,1);
 });
 test('incomplete remote artifacts cannot be silently accepted',t=>{
   const f=fixture(t),job=dateReviewJobs(f.packet,f.options)[0],result=review({job,packet:f.packet,key:'test'});result.itemChecks.pop();

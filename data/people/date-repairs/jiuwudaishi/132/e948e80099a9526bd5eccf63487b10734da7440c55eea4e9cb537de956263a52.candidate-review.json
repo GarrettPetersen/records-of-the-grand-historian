@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "132",
+  "candidateCommit": "2f2d533df18aa85c10118d8fe11a11e3c874a85f",
+  "candidateFile": "staged-candidate-e948e80099a9526bd5ec.json",
+  "sourceHash": "sha256:e05d5342999d90ccad50c73ae916c90d961f78ad6ceb6ab0025bd33ac7761037",
+  "originalExtractionHash": "sha256:08e61ce025f5b7f1db0a1525d9ab65559fcae2802c3713c206bbd8593878e4cd",
+  "sealedCandidateHash": "sha256:e948e80099a9526bd5eccf63487b10734da7440c55eea4e9cb537de956263a52",
+  "candidateExtractionHash": "sha256:be4d883584e9bf347cc46299eaa7cadd1681ed20d4e688c77dc70063dca7a89e",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 132 staged date-repair reviewer",
+    "agentId": "review_jwd132_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T01:20:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after an independent source and structural review of all 41 sealed operations in all seven initial-audit groups. The candidate removes invented personal chronology from bare genealogies, office labels, an undated episode, literary allusions, cross-person reign envelopes, an undated succession, retrospective memorial wording, and retrospective edict examples. It preserves the attested non-date facts, replaces unsupported chronology with explicit research holds where appropriate, and does not assert any new life date.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-87", "claim-90", "hints-p002", "hints-p003"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0002: 「祖鐸，父端。」"],
+      "reason": "This is an undated genealogy only. Removing the AD 830–873 intervals and before-874 hints while retaining the relationship as an unresolved source attestation is source-faithful."
+    },
+    {
+      "proposalItems": ["claim-735", "claim-736", "claim-740", "claim-741", "hints-p081", "hints-p082"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0117: 「祖君佐，鄜延節度判官。」", "s0118: 「父懷遷，都押衙。」"],
+      "reason": "The two units identify offices and kinship but contain no regnal, calendar, or event date. Removing copied AD 860–895 and AD 870–895 contexts and hints, without changing the offices, is correct."
+    },
+    {
+      "proposalItems": ["claim-296", "claim-297", "claim-298", "claim-299", "hints-p054", "hints-p055", "hints-p056", "hints-p057"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0056: 「有部將符昭者」 in an otherwise undated anecdote.", "s0059: 「母終」 without a date for Li Maozhen's mother.", "s0060: 「細柳、大樹之威名」 as literary comparisons."],
+      "reason": "The source does not attach AD 907–923 to Fu Zhao or Li Maozhen's mother, BC 154 to Zhou Yafu, or AD 23–34 to Feng Yi. The replacement undated attestations preserve the episode and allusions without turning them into chapter-local activity."
+    },
+    {
+      "proposalItems": ["claim-624", "claim-629", "claim-630", "hints-p070", "hints-p072", "hints-p073"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0094: 「子永吉，歷數鎮行軍司馬。」", "s0104: 「時岐下有僧曰阿阇梨」.", "s0106: 「弟從照……卒。」", "s0087 and s0226 date other named deaths, not these people."],
+      "reason": "The claimed AD 924–946, AD 923–936, and AD 923–938 spans borrow endpoints from surrounding or other-person events. The candidate correctly retains source-specific undated facts and removes the intervals and hints."
+    },
+    {
+      "proposalItems": ["claim-1032", "claim-1035"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0157: 「思恭卒，弟思諫繼之。」"],
+      "reason": "The unit establishes death and succession but gives no year. Replacing the Tang-wide AD 881–907 envelope with unresolved source attestations avoids fabricating a personal chronology."
+    },
+    {
+      "proposalItems": ["claim-1220", "claim-1221", "hints-p117", "hints-p118"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0173: 「當本朝播越之後，及先皇興復之初，爰及眇躬」.", "s0167: 「彜超，仁福之次子也。」"],
+      "reason": "The retrospective memorial wording and kinship label do not date a particular event for Li Renfu or his son. Removing borrowed AD 923–933 and AD 933 chronology while preserving the facts as research holds is correct."
+    },
+    {
+      "proposalItems": ["claim-1153", "claim-1156", "claim-1157", "claim-1231", "claim-1232", "claim-1233", "claim-1234", "hints-p124", "hints-p125", "hints-p126", "hints-p127"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0183: 「且如李從嚴之守岐、隴」.", "s0184: 「高允韜之鎮鄜、延」.", "s0187: 「王都之貪上谷，李賓之吝朔方」.", "s0189: 「已見覆亡」.", "s0191: 「只陳近事」.", "s0192: 「王都、李賓足為鑒戒」."],
+      "reason": "These are the edict's retrospective examples and warnings. They support the surviving office, overthrow, and assessment facts but not AD 926–933, AD 929, or AD 923–933 personal life or death chronology; the candidate removes only the unsupported date containers and paired hints."
+    }
+  ],
+  "hostRequirements": [
+    "Curate only sealed proposal sha256:e948e80099a9526bd5eccf63487b10734da7440c55eea4e9cb537de956263a52 against the matching source and canonical extraction pins.",
+    "Replay all 41 operations exactly: 24 claim replacements and 17 paired active-hint changes. Do not restore a point date, reign-wide interval, or date context for any reviewed group without new source evidence.",
+    "After curation, run strict scoped validation and chronology geometry checks, then obtain a fresh complete independent canonical date audit before marking the chapter audited."
+  ],
+  "validation": {
+    "inputPins": "PASS: source and canonical extraction hashes match the sealed handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed seal is sha256:e948e80099a9526bd5eccf63487b10734da7440c55eea4e9cb537de956263a52.",
+    "candidateExtractionIdentity": "PASS: independently recomputed candidate hash is sha256:be4d883584e9bf347cc46299eaa7cadd1681ed20d4e688c77dc70063dca7a89e.",
+    "proposalReplay": "PASS: all 41 operations replay byte-for-byte from the pinned canonical extraction to the sealed candidate.",
+    "auditCoverage": "PASS: every temporal or hint item in each of the seven initial-audit findings has a corresponding sealed operation.",
+    "strictCompactValidation": "PASS: scoped candidate validation reports 225 units, 883 candidates, 134 people, 793 mentions, 1817 claims, 12 repairs, 475 dispositions, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: the candidate chronology scan reports zero diagnostics.",
+    "sourceChronology": "PASS: all seven groups were reread against their cited Chinese units; no new personal chronology is introduced.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  }
+}

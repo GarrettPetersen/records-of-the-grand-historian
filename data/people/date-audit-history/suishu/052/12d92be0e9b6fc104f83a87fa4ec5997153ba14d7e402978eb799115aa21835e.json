@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "suishu",
+  "chapter": "052",
+  "sourceHash": "sha256:875ff6b5868115eee15cf239ad20e33f31d939763753db808ff42476976b57fe",
+  "extractionHash": "sha256:21c52e16afaa9e841358dd9518f02dd27d600e314d7c01c0d0d85cbf437378a1",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Independent Suishu 052 date reviewer",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T00:00:00.000Z",
+  "summary": "Focused independent review of the two deterministic reversed intervals finds a shared era-sign error. The historiographer contrasts the Zhou's Fang and Shao with the Han house's Han Xin and Peng Yue; this is a retrospective comparison, not AD activity. The recorded 206–196 endpoints are chronologically ordered only when expressed as BC years. Both claims and their derived active-date hints incorrectly label them AD, creating the validator's reversed geometry.",
+  "reviewedUnits": [
+    "s0211"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-371",
+      "verdict": "incorrect",
+      "event": "Han Xin is named as an early-Han exemplar in a retrospective Sui historiographical comparison.",
+      "reason": "The cited unit identifies Han Xin as one of the Han house's earlier exemplars, rather than an actor in the Sui narrative. The existing 206–196 numerical envelope is an early-Han BC interval; its AD labels reverse chronological order and place the claim more than four centuries after the Sui source's historical referent.",
+      "evidence": [
+        {
+          "unit": "s0211",
+          "quote": "漢室韓、彭"
+        }
+      ]
+    },
+    {
+      "id": "claim-373",
+      "verdict": "incorrect",
+      "event": "Peng Yue is named as an early-Han exemplar in a retrospective Sui historiographical comparison.",
+      "reason": "The cited unit identifies Peng Yue together with Han Xin as a Han-house exemplar, rather than an actor in the Sui narrative. The existing 206–196 numerical envelope is an early-Han BC interval; its AD labels reverse chronological order and place the claim more than four centuries after the Sui source's historical referent.",
+      "evidence": [
+        {
+          "unit": "s0211",
+          "quote": "漢室韓、彭"
+        }
+      ]
+    },
+    {
+      "id": "hints-p060",
+      "verdict": "incorrect",
+      "event": "The active-date hint summarizes Han Xin's cited early-Han attestation.",
+      "reason": "The hint repeats the same AD-era error as claim-371. It must not present AD 206–196 as Han Xin's chronology; revise it only after the underlying claim is corrected to a BC interval.",
+      "evidence": [
+        {
+          "unit": "s0211",
+          "quote": "漢室韓、彭"
+        }
+      ]
+    },
+    {
+      "id": "hints-p061",
+      "verdict": "incorrect",
+      "event": "The active-date hint summarizes Peng Yue's cited early-Han attestation.",
+      "reason": "The hint repeats the same AD-era error as claim-373. It must not present AD 206–196 as Peng Yue's chronology; revise it only after the underlying claim is corrected to a BC interval.",
+      "evidence": [
+        {
+          "unit": "s0211",
+          "quote": "漢室韓、彭"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p060",
+      "verdict": "incorrect",
+      "reason": "The only reviewed date-bearing local record for Han Xin gives an early-Han retrospective identification. Its visible active-date hint repeats the underlying AD-era error and therefore needs the same BC correction; no new life endpoint is inferred from this comparison.",
+      "evidence": [
+        {
+          "unit": "s0211",
+          "quote": "漢室韓、彭"
+        }
+      ]
+    },
+    {
+      "id": "p061",
+      "verdict": "incorrect",
+      "reason": "The only reviewed date-bearing local record for Peng Yue gives an early-Han retrospective identification. Its visible active-date hint repeats the underlying AD-era error and therefore needs the same BC correction; no new life endpoint is inferred from this comparison.",
+      "evidence": [
+        {
+          "unit": "s0211",
+          "quote": "漢室韓、彭"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-371",
+        "claim-373",
+        "hints-p060",
+        "hints-p061",
+        "p060",
+        "p061"
+      ],
+      "problem": "Han Xin and Peng Yue's shared early-Han 206–196 range is stored and displayed as AD, making the interval reversed and historically anachronistic.",
+      "action": "Use the scoped date-repair workflow to change both western-interval endpoints and both active-date hints from AD to BC while preserving their existing numerical years, source wording, and uncertainty. Rebuild the packet and obtain a fresh complete independent audit; do not infer additional dates from this retrospective comparison."
+    }
+  ],
+  "references": [
+    {
+      "book": "suishu",
+      "chapter": "052",
+      "unit": "s0211",
+      "quote": "周之方、邵，漢室韓、彭，代有其人，非一時也。",
+      "sourceHash": "sha256:b58c15a2a5bb3641910c5c24c9f097c7d22222721205c01ad3ee59a92d0a3d56",
+      "reason": "The Sui historian explicitly frames Han Xin and Peng Yue as Han-house comparanda in a retrospective sequence with Zhou figures. It supports correcting the era sign of the supplied early-Han range, but it does not supply a precise birth, death, or new event date."
+    }
+  ]
+}

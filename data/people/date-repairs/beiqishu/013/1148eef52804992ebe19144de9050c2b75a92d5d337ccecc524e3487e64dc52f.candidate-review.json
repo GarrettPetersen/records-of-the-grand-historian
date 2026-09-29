@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "beiqishu",
+  "chapter": "013",
+  "candidateFile": "staged-candidate-1148eef52804992ebe19.json",
+  "candidateHash": "sha256:1148eef52804992ebe19144de9050c2b75a92d5d337ccecc524e3487e64dc52f",
+  "reviewer": {
+    "name": "Codex independent Beiqishu 013 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T08:20:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. All four audited claims and five paired hints are repaired exactly once. Gao Zhengxin's claim-97/p026 now retain only an undated, source-specific hold using actual s0114 text (少年時因獵墜馬，傷腰腳，終於長安), with no Tian Tong attribution, Western year, interval, or bound. All fifteen prior source-specific holds remain intact.",
+  "validation": {
+    "proposalReplay": "PASS: all nine pinned operations replay byte-for-byte to sha256:1148eef52804992ebe19144de9050c2b75a92d5d337ccecc524e3487e64dc52f.",
+    "coverage": "PASS: claim-62, claim-69, claim-97, claim-99 and hints p004, p010, p016, p026, p030 are each changed exactly once.",
+    "sourceChecks": "PASS: claim-97 now cites a verbatim undated s0114 fragment, rather than unsupported 天統後, and p026 is a matching research hold. Gao Mai and Lady Shan retain undated source contexts; Gao Yang is narrowed to the discrete AD 550 accession/early-Tianbao event; Gao Guiyan retains only independently supported AD 555; all source facts and valid non-target chronology are preserved.",
+    "holds": "PASS: all fifteen pre-existing source-specific research holds remain unchanged (claim-74, claim-79 through claim-82, claim-84 through claim-89, claim-115, claim-116, claim-276, and claim-279).",
+    "scope": "PASS: no candidate changes outside the four audited temporal claims and five paired hints.",
+    "compactValidation": "PASS: scoped people validator passed for beiqishu/013.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against the matching pinned source and canonical extraction hashes.",
+    "Apply all nine operations exactly.",
+    "Preserve claim-97 as an undated Gao Zhengxin hold; do not restore 天統後 or any Western bound/date.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "135",
+  "candidateFile": "staged-candidate-148c9ea909c73c7b979c.json",
+  "sealedCandidateHash": "sha256:148c9ea909c73c7b979c89fefc69150c69c29e1d0bf3235b432fbad4387ddef9",
+  "candidateExtractionHash": "sha256:dc2f2e9fae66136be05c2cbf555cbf99900084cfb19521b6b3d1d95851ce72de",
+  "disposition": "accept-for-host-curation",
+  "reviewer": {
+    "name": "Independent Jinshi 135 sealed candidate reviewer",
+    "agentId": "final_jinshi135_candidate_review",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-23T23:00:00Z",
+  "summary": "Accepted after an independent sealed-candidate, source-context, and dependency review. The candidate makes exactly three audited temporal replacements and seven dependent active-hint replacements. It converts the two imprecise Tianhui-first points and the retrospective Xiaowen interval to explicit source-specific holds, replaces four Mu-zong-wide activity hints with holds, and preserves every bounded attestation and all non-date data.",
+  "sourceChecks": [
+    {
+      "claims": ["claim-113", "claim-114"],
+      "units": ["s0078"],
+      "quote": "我國有新喪，遼主未獲，勿遽強之",
+      "result": "The candidate correctly treats 天會初 as early-reign wording rather than an exact verified AD 1123 point."
+    },
+    {
+      "claims": ["claim-336"],
+      "units": ["s0153"],
+      "quote": "後魏孝文以來已有之矣",
+      "result": "This is a retrospective statement about the antiquity of a naming practice, not an activity interval for Emperor Xiaowen."
+    },
+    {
+      "claims": ["hints-p002", "hints-p004", "hints-p005", "hints-p006"],
+      "units": ["s0005", "s0006", "s0007", "s0008"],
+      "quote": "至唐末稍衰，自後不復有聞",
+      "result": "The Mu-zong reign bounds relevant narrated material but does not prove continuous AD 1094-1103 activity for each of the four people; the candidate preserves their bounded attestations and removes only overbroad hints."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:fb8b3ee5abfdea264b125652ec41e8f81b699da2decc4df0b90deab66c9a563f",
+    "canonicalExtractionHash": "sha256:ca9973ee57e622d946df9a238b93b48ba82cb65ee3509dccd439763bd2ef58b7",
+    "auditReportHash": "sha256:5f4145efd510b03af21d13364aaf90998e917fadbde0216dcfe07b1f3d6813bd",
+    "canonicalInputs": "PASS: sealed handoff pins match the current canonical source, extraction, and authoritative audit.",
+    "sealedProposalIdentity": "PASS: sealed proposal hash matches the handoff.",
+    "candidateExtractionIdentity": "PASS: candidate extraction hash matches the handoff.",
+    "auditScope": "PASS: exactly 3 claim replacements and 7 audited dependent-hint replacements; no other candidate changes.",
+    "retention": "PASS: the three replacements preserve subject, predicate, sourceDate, certainty, evidence, and non-date claim data while replacing only unsupported Western chronology with holds.",
+    "supportedRetention": "PASS: bounded Mu-zong attestations and every unrelated supported value are retained.",
+    "handoffValidation": "PASS: sealed handoff records replay, compact-validation, and geometry PASS.",
+    "canonicalMutation": "NONE"
+  },
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "hostRequirements": [
+    "Apply only if current canonical source, extraction, authoritative audit, sealed handoff, and candidate hashes match this receipt.",
+    "Replay exactly the three claim replacements and seven hint replacements; do not alter other extraction data.",
+    "After host curation, run scoped validation and obtain a fresh independent canonical date audit."
+  ],
+  "masterMutation": "NONE",
+  "publication": "staging-only"
+}

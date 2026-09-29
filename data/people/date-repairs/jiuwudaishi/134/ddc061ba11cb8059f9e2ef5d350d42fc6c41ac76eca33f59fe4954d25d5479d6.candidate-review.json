@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "134",
+  "candidateFile": "staged-candidate-ddc061ba11cb8059f9e2.json",
+  "sealedCandidateHash": "sha256:ddc061ba11cb8059f9e2ef5d350d42fc6c41ac76eca33f59fe4954d25d5479d6",
+  "candidateExtractionHash": "sha256:5aa5c4fd8f84382a8c244c767c65b10eb8df4b904d0d960596c8d691f5ed67c7",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 134 staged-candidate source reviewer",
+    "agentId": "review_jwd134_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-27T01:24:28Z",
+  "disposition": "accept-for-host-curation",
+  "summary": "Accepted: the sealed 11-operation candidate exactly replays the five initial-audit repair groups. The source supports Yang Wei's AD 921 inclusive three-year cap, Yang Pu's post-Yang-Wei AD 921 installation, Xu Zhixun's AD 918 terminal activity, Li Bian's mother's direct AD 910 mourning/death context, and both duplicate Wang Yanjun hints ending AD 934. The candidate changes no non-date content and adds no invented chronology.",
+  "sourceChecks": [
+    {
+      "group": "Yang Wei",
+      "operations": ["claim-232", "claim-233", "hints-p042"],
+      "verdict": "supported",
+      "evidence": [
+        {"unit": "s0064", "quote": "改唐天祐十六年為武義元年"},
+        {"unit": "s0066", "quote": "渭僭號凡三年而卒"}
+      ],
+      "reason": "Tianyou 16/Wuyi 1 is AD 919; the stated three-year reign is inclusive, so AD 921 is the supported terminal year."
+    },
+    {
+      "group": "Yang Pu",
+      "operations": ["claim-237", "hints-p045"],
+      "verdict": "supported",
+      "evidence": [
+        {"unit": "s0066", "quote": "渭僭號凡三年而卒"},
+        {"unit": "s0068", "quote": "渭卒，徐溫乃推溥為主"}
+      ],
+      "reason": "Yang Pu's installation follows Yang Wei's AD 921 death in the same narrative sequence; AD 920 is unsupported."
+    },
+    {
+      "group": "Xu Zhixun",
+      "operations": ["claim-259", "hints-p044"],
+      "verdict": "supported",
+      "evidence": [
+        {"unit": "s0063", "quote": "其子知訓等於揚州居以秉政"},
+        {"unit": "s0114", "quote": "十五年，知訓授淮南行軍副使"},
+        {"unit": "s0115", "quote": "知訓為大將朱瑾所殺"}
+      ],
+      "reason": "Tianyou 15 is AD 918. The individual cannot inherit Xu Wen's later tenure through AD 927 after the source records his killing."
+    },
+    {
+      "group": "Li Bian's mother",
+      "operations": ["claim-307", "hints-p072"],
+      "verdict": "supported",
+      "evidence": [
+        {"unit": "s0110", "quote": "七年，丁母憂"}
+      ],
+      "reason": "The source directly places the maternal mourning/death context in Tianyou 7, AD 910; retaining only a before-AD-910 bound weakens the source witness."
+    },
+    {
+      "group": "Wang Yanjun",
+      "operations": ["hints-p140", "hints-p153"],
+      "verdict": "supported",
+      "evidence": [
+        {"unit": "s0243", "quote": "清泰元年，遇弒"},
+        {"unit": "s0254", "quote": "其後為子昶殺"}
+      ],
+      "reason": "Qingtai 1 is AD 934. Both duplicate person-record hints must end in AD 934 while the separately preserved claims remain unchanged."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:b63b7060ad552f947592ae25eb7d9bc42a5c0f7e1989f42ba99e0741da99f2f5",
+    "canonicalExtractionHash": "sha256:72373d943f2dc39ecf65c1e0edc6e08745295e8a5d9f9dbb4a9e8eafa1f236cc",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: 11/11 operations across all five initial-audit finding groups",
+    "sourceSoundness": "PASS",
+    "nonDateRetention": "PASS",
+    "compactValidation": "PASS",
+    "chronologyGeometry": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the pinned values.",
+    "Replay all 11 sealed operations exactly and rerun scoped strict validation and chronology geometry checks.",
+    "Require a fresh complete independent canonical date audit after curation; this review is not date approval."
+  ]
+}

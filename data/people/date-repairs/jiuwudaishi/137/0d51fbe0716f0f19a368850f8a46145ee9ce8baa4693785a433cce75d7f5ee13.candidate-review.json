@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "137",
+  "candidateCommit": "1514d35e2a7d4c9a6025c84e2a6366e5430dab33",
+  "candidateFile": "staged-candidate-0d51fbe0716f0f19a368.json",
+  "sealedCandidateHash": "sha256:0d51fbe0716f0f19a368850f8a46145ee9ce8baa4693785a433cce75d7f5ee13",
+  "candidateExtractionHash": "sha256:bb3af1ecfb55b1572ba439ed9b8c44bf38a68c9fd19b81027e969c9142f87ec0",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 137 date-repair reviewer",
+    "agentId": "review_jwd137_candidate",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-27T01:53:12Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent source, chronology, exact-replay, strict-validation, and geometry review. All eleven operations cover exactly the five initial-audit groups: six imported date-bearing claims become explicitly undated source attestations; the five paired unsupported hints are removed; Liu Shouguang retains only the independently supported AD 913 final-years hint; and Molin retains the source-qualified Mingzong-reign AD 926–933 interval. No claim or hint silently turns an undated title, recalled relationship, later envoy speech, or genealogy into personal activity.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-27",
+        "claim-37",
+        "hints-p004",
+        "hints-p005",
+        "p004",
+        "p005"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0008",
+          "quote": "時劉守光戍平州，契丹實裏王子率萬騎攻之，守光偽與之和，張幄幕於城外以享之，部族就席，伏甲起，擒實裏王子入城。"
+        },
+        {
+          "unit": "s0021",
+          "quote": "劉守光末年苛慘，軍士亡叛皆入契丹。"
+        }
+      ],
+      "reason": "The Pingzhou episode has no era or year, so it cannot carry AD 907 for either Liu Shouguang or Prince Shili. Both replacements retain the military fact as undated. Liu’s separate 末年 attestation supports the retained AD 913 endpoint: independent CText chronology identifies Liang Qianhua 3, when Li Cunxu captured Liu Shouguang, as 913; no part of that mapping transfers to Prince Shili."
+    },
+    {
+      "proposalItems": [
+        "claim-305",
+        "hints-p037",
+        "p037"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0061",
+          "quote": "阿保機號咷，聲淚俱發，曰：我與河東先世約為兄弟，河南天子吾兒也。"
+        }
+      ],
+      "reason": "Abaoji’s lament retrospectively identifies the late Hedong lord as a sworn brother. It gives no date for the brotherhood or the dead ruler’s personal activity, so the AD 907 attestation and paired hint are correctly removed while the relationship remains visible as undated."
+    },
+    {
+      "proposalItems": [
+        "hints-p041",
+        "p041"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0095",
+          "quote": "明宗時，德光遣使摩琳等三十餘人來修好。"
+        }
+      ],
+      "reason": "明宗時 gives a reign window, not an AD 927 point. Independent CText chronology records Later Tang Mingzong’s rule from 926 to 933; the candidate’s AD 926–933 hint exactly matches the source-qualified attestation and diplomatic event and introduces no false precision."
+    },
+    {
+      "proposalItems": [
+        "claim-488",
+        "hints-p066",
+        "p066"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0122",
+          "quote": "先朝是契丹所立，嗣君乃中國自冊。"
+        }
+      ],
+      "reason": "This later envoy exchange politically recalls the former dynasty’s installation; it does not demonstrate that its founder was personally active throughout AD 936–942. The candidate preserves the identification only as an undated retrospective attestation and removes the inherited living hint."
+    },
+    {
+      "proposalItems": [
+        "claim-588",
+        "hints-p089",
+        "p089"
+      ],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "unit": "s0172",
+          "quote": "永康王者，東丹王之長子。"
+        }
+      ],
+      "reason": "The sentence is an undated genealogical/title identification of Yongkang’s father. It does not provide an AD 926–937 personal activity interval for the King of Eastern Dan. The candidate retains the relationship/title fact as an explicit undated attestation and removes the derived hint."
+    }
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:64bcc004b49da4705e78abbcccebea3728c46a38a7aace3296c5ce3b9239e337",
+    "canonicalExtractionHash": "sha256:ca59bf853094576c44b8c3b44cfe26d94b1a35d88eaaa5155b41ab09e65ba2b6",
+    "inputPins": "PASS: candidate source and extraction hashes match the complete five-finding initial audit at 05858ce366604d91efd574cce469da4a1e943212.",
+    "auditScope": "PASS: five initial findings are covered exactly by eleven atomic operations: six date-bearing attestations become undated source attestations and five paired hints are removed or replaced. Candidate record cardinality is unchanged (179 units, 100 people, 589 mentions, 992 compact claims).",
+    "sealedProposalIdentity": "PASS: exact proposal replay hashes to sha256:0d51fbe0716f0f19a368850f8a46145ee9ce8baa4693785a433cce75d7f5ee13.",
+    "candidateExtractionIdentity": "PASS: exact compact candidate hashes to sha256:bb3af1ecfb55b1572ba439ed9b8c44bf38a68c9fd19b81027e969c9142f87ec0.",
+    "proposalReplay": "PASS: isolated deterministic applyDateRepairProposal replay produced the candidate exactly.",
+    "sourceSoundness": "PASS: all removed dates were unsupported imports; AD 913 and Mingzong AD 926–933 are independently supported and remain correctly owned; no retained empty hint silently dates a person.",
+    "strictCompactValidation": "PASS: validateCompactPeopleExtraction succeeded against the pinned chapter packet with zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics returned zero diagnostics.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if canonical source hash remains sha256:64bcc004b49da4705e78abbcccebea3728c46a38a7aace3296c5ce3b9239e337 and canonical extraction hash remains sha256:ca59bf853094576c44b8c3b44cfe26d94b1a35d88eaaa5155b41ab09e65ba2b6.",
+    "Replay all eleven sealed operations exactly. Do not restore imported AD 907, AD 927, AD 936–942, or AD 926–937 chronology from the undated Pingzhou, sworn-brother, retrospective Jin-founder, or Eastern-Dan-title passages.",
+    "Retain only Liu Shouguang’s independently supported AD 913 final-years hint and Molin’s source-qualified Mingzong-reign AD 926–933 hint; keep every other affected record explicitly undated.",
+    "Run scoped validation and chronology geometry after staging curation, then require a fresh complete independent canonical date audit before audited approval or any ebook-glossary gate."
+  ],
+  "publication": "staging-only"
+}

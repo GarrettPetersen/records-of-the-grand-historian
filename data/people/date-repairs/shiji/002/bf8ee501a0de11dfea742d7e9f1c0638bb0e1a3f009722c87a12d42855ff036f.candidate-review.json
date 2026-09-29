@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "shiji",
+  "chapter": "002",
+  "candidateCommit": "4403bf5754",
+  "candidateFile": "staged-candidate-bf8ee501a0de11dfea74.json",
+  "sealedCandidateHash": "sha256:bf8ee501a0de11dfea742d7e9f1c0638bb0e1a3f009722c87a12d42855ff036f",
+  "candidateExtractionHash": "sha256:839a8496f89257243738b9f374c844b3d86ec736e197bc3d00cdd26216779ada",
+  "reviewer": {
+    "name": "Codex independent Shiji 002 sealed date-repair reviewer",
+    "agentId": "review_shiji002",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T11:26:08.098Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independent Chinese-source, canonical-pin, and exact sealed-replay review. The proposal changes exactly the two audit-identified unsupported personal intervals and their paired hints into explicit source-linked research holds. 太史公曰 identifies the authorial voice and 孔子正夏時 attributes an undated calendrical act; neither source unit supplies a Western endpoint. The chapter's legendary qualitative records and all other claims remain unchanged. This receipt does not mutate or approve the canonical extraction.",
+  "validation": {
+    "canonicalSourceHash": "sha256:d1efa0545009500e2f1d4bb5b20ba09593f1dfe7dde654a09d1fb2844f9b3ea0",
+    "canonicalExtractionHash": "sha256:42428f9789665f900af3ed99fa1a0b029a16f4bfd8dd5b79c19dc5ad46274e36",
+    "sealedProposalIdentity": "PASS",
+    "candidateBytes": "PASS",
+    "proposalReplay": "PASS",
+    "coverage": "PASS: claim-275/p040, hints-p040, claim-276/p042, and hints-p042 only.",
+    "sourceOwnership": "PASS: s0260 is an authorial tag and s0261 an undated attributed act; neither establishes a personal Western activity interval.",
+    "qualitativeEvidenceRetention": "PASS: every non-target claim, including all legendary qualitative records, is byte-identical.",
+    "noOpOperations": "PASS: all four operations change their exact pinned targets.",
+    "compactValidation": "PASS: 42 people, 397 mentions, 421 claims.",
+    "chronologyGeometry": "PASS",
+    "scopedCanonicalValidation": "PASS",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0260",
+      "quote": "太史公曰",
+      "result": "The phrase identifies the commentary's authorial voice. It is retained as a source-linked attribution but does not itself date the Grand Historian's activity."
+    },
+    {
+      "unit": "s0261",
+      "quote": "孔子正夏時",
+      "result": "The text attributes a calendrical correction to Confucius but supplies no Western year or interval for that act."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes still match this receipt.",
+    "Replay exactly the two reviewed claim replacements and two paired hint replacements.",
+    "Retain the authorial tag and attributed calendrical act as source-linked research holds without deriving personal intervals.",
+    "Preserve all non-target claims, especially the chapter's legendary qualitative records; run scoped validation and require a fresh independent canonical audit after curation."
+  ]
+}

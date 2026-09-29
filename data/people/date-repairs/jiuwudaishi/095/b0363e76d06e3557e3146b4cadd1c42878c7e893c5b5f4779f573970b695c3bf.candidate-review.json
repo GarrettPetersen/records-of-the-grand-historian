@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "095",
+  "candidateFile": "staged-candidate-b0363e76d06e3557e314.json",
+  "sourceHash": "sha256:ef322c11c5a9dbb9c4dbe8af183ebb822b31292f12c3a83790da3dfe35f10c05",
+  "originalExtractionHash": "sha256:022c9c4734cc2ac313e2e3a8449a963b44866ff8ed946a0ecb5c57f1c5342ca9",
+  "priorRejectedCandidateHash": "sha256:a24b973889560448aa202ca35d1a16cbab3421a00c4ae577bb857b2349d99aec",
+  "sealedCandidateHash": "sha256:b0363e76d06e3557e3146b4cadd1c42878c7e893c5b5f4779f573970b695c3bf",
+  "candidateExtractionHash": "sha256:2db5384611814218ab5c087bc16ebe683c79fc11781827f376564d97d0a58f48",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 095 corrected date-repair reviewer",
+    "agentId": "date_repair_review2_jiuwudaishi095",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T06:00:00Z",
+  "disposition": "accept",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after a fresh independent replay of all 39 sealed operations against initial audit 3b5ba39d3916d908d35227d8429a7beb4e4134f6, the pinned Chinese source, and rejection receipt 5c7a1a7594. The 37 previously supported operations are byte-identical. The two corrected replacements now remove the false nested dateContext.westernYear AD 923 from claim-152 and claim-153 and place the conservative inclusive on-or-after AD 923 bounds, unresolved flags, and source-limited reasons inside their actual dateContext containers. Both retain the sourceDate 同光初, their distinct event or honor facts, and s0040 evidence. The candidate makes no source or canonical extraction mutation.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-152", "claim-153"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0040", "quote": "同光初，從戰於河上有功，賜忠烈功臣。"}
+      ],
+      "reason": "同光初 is an early-Tongguang phase, not an exact AD 923 point. Both corrected claims preserve the source wording and their separate military and honor facts, remove dateContext.westernYear, and retain only an inclusive on-or-after AD 923 bound with an explicit source-limited reason inside dateContext."
+    },
+    {
+      "proposalItems": ["claim-154", "claim-659", "claim-660", "claim-661", "claim-680", "claim-749", "claim-750", "claim-775", "claim-787", "claim-834", "claim-835", "claim-843", "claim-844", "claim-852", "hints-p015", "hints-p066", "hints-p076"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0040 says 同光初; s0148 says 天成初; s0157 says 唐長興初; and s0202 says 後唐天成初."
+      ],
+      "reason": "These retained phase repairs remove flattened first-year points from the actual date containers, preserve the source-era wording, use conservative inclusive lower bounds, and reconcile dependent active-date hints without manufacturing a phase endpoint."
+    },
+    {
+      "proposalItems": ["claim-501", "claim-517", "claim-524", "claim-526", "claim-528", "hints-p050", "hints-p051"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0110", "quote": "初事梁將戴思遠為步校。"},
+        {"unit": "s0111", "quote": "思遠為鄆州節度使，領部兵屯德勝渡，留順密守其城。"}
+      ],
+      "reason": "The local Dai Siyuan and Lu Shunmi account has no stated year or inherited dated campaign context. The repair removes borrowed AD 923 chronology, retains the attested offices and narrative, preserves Lu Shunmi's independently supported later hints, and records Dai Siyuan as a research hold."
+    },
+    {
+      "proposalItems": ["claim-850", "hints-p083"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        "s0207 establishes Gaozu's uprising before the subsequent Zhai Zhang narrative; s0208-s0210 recount Zhang's later Khitan service, illness, and death.",
+        {"unit": "s0210", "quote": "璋郁郁不得志，遇疾尋卒焉。"}
+      ],
+      "reason": "The repair changes the false AD 936 death point into an inclusive on-or-after AD 936 sequence bound and invents no endpoint."
+    },
+    {
+      "proposalItems": ["claim-963", "claim-964", "claim-967", "claim-970", "claim-971", "claim-974", "hints-p096", "hints-p097"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0197", "quote": "如皇甫遇憤激而沒，王清以血戰而亡，近世以來，幾人而已。"}
+      ],
+      "reason": "近世 preserves retrospective death attestations but supplies no AD 936-946 personal interval. The repair retains the attestations and replaces only fabricated calendar intervals and hints with explicit research holds."
+    },
+    {
+      "proposalItems": ["claim-977", "claim-980", "hints-p098"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0199", "quote": "唯順密遏滑臺之肇亂，救晉室之臨危，亦可謂之忠矣。"}
+      ],
+      "reason": "This is an evaluative loyalty assessment, not an AD 936-937 dated incident. The repair keeps the attestation and removes the unsupported synthetic interval and hint."
+    }
+  ],
+  "hostRequirements": [
+    "Curate exactly sealed candidate sha256:b0363e76d06e3557e3146b4cadd1c42878c7e893c5b5f4779f573970b695c3bf only after validating the pinned source and extraction fingerprints.",
+    "Do not curate rejected candidate sha256:a24b973889560448aa202ca35d1a16cbab3421a00c4ae577bb857b2349d99aec.",
+    "Run scoped validation and a fresh complete canonical date audit after host curation."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: independently rebuilt packet matches pinned source sha256:ef322c11c5a9dbb9c4dbe8af183ebb822b31292f12c3a83790da3dfe35f10c05 and extraction sha256:022c9c4734cc2ac313e2e3a8449a963b44866ff8ed946a0ecb5c57f1c5342ca9.",
+    "sealedProposalIdentity": "PASS: independently recomputed sealed proposal hash is sha256:b0363e76d06e3557e3146b4cadd1c42878c7e893c5b5f4779f573970b695c3bf.",
+    "candidateExtractionIdentity": "PASS: independently replayed all 39 sealed operations and recomputed candidate hash is sha256:2db5384611814218ab5c087bc16ebe683c79fc11781827f376564d97d0a58f48.",
+    "proposalReplay": "PASS: exact replay matches the handoff candidate.",
+    "preservedOperations": "PASS: all 37 operations other than claim-152 and claim-153 are byte-identical to rejected candidate sha256:a24b973889560448aa202ca35d1a16cbab3421a00c4ae577bb857b2349d99aec.",
+    "correctedNestedDateContexts": "PASS: claim-152 and claim-153 delete dateContext.westernYear AD 923 and hold only inclusive on-or-after AD 923 bounds plus unresolved rationale within their dateContext containers.",
+    "compactValidation": "PASS: handoff records 207 units, 98 people, 561 mentions, 1,358 claims, and zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: independently recomputed date-audit diagnostics found no structural contradictions.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}

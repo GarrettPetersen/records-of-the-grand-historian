@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "004",
+  "candidateFile": "staged-candidate-603151a539dc856e5700.json",
+  "candidateHash": "sha256:603151a539dc856e570057773aea93273c93e44caeef91a49e0ba3f113fee9fc",
+  "reviewer": {"name": "Codex independent Chenshu 004 revised-candidate reviewer", "agentId": "date_audit_beiqishu007", "independentOfExtractor": true, "independentOfCandidateCurator": true},
+  "reviewedAt": "2026-09-23T03:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The eight-change proposal deterministically reconstructs the pinned candidate byte-for-byte: four evidence-preserving claim holds and four matching active-hint holds. The retrospective Founder passage and three comparisons remain visible, but no longer assert personal life dates. p048’s former BC-claim/AD-hint contradiction is gone; its claim and hint now share a source-specific research hold.",
+  "validation": {"proposalReplay": "PASS: replay hash equals sha256:603151a539dc856e570057773aea93273c93e44caeef91a49e0ba3f113fee9fc and serialized output is byte-equivalent.", "claimHolds": "PASS: claims 245, 252, 254, and 272 retain sources without invented chronology.", "pairedHints": "PASS: p032, p037, p038, and p048 each have a matching research-required hold.", "bcAdContradiction": "PASS: no BC/AD date value remains on p048.", "canonicalMutation": "NONE"},
+  "sourceChecks": [
+    {"claim": "claim-245", "unit": "s0089", "quote": "高祖武皇帝撥亂反正，膺圖御籙，重懸三象，還補二儀；", "result": "Retrospective proclamation preserved without activity endpoint."},
+    {"claims": ["claim-252", "claim-254"], "unit": "s0103", "quote": "豈止罪浮於昌邑，非唯聲醜於太和。", "result": "Undated rhetorical comparisons preserved without dates."},
+    {"claim": "claim-272", "unit": "s0128", "quote": "蓋帝摯、漢惠之流也。", "result": "Undated comparison preserved without the prior conflicting era values."}
+  ],
+  "hostRequirements": ["Apply only against matching canonical hashes.", "Do not change canonical audit status during curation.", "Run a fresh independent canonical audit after application; research holds preclude audited status."]
+}

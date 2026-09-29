@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "117",
+  "candidateRef": "codex/jiuwudaishi117-second-date-candidate",
+  "candidateCommit": "8cb4a9cfd3da70843b211ea230b63cce84860550",
+  "auditCommit": "1da39f3d3e88df9a3070f4ad17a2046c74373e0f",
+  "candidateFile": "staged-candidate-53cf95a54325e3b2188c.json",
+  "sealedCandidateHash": "sha256:53cf95a54325e3b2188c8838b2b42833c6dff2316b9ed79dd9680cfb9306c1e2",
+  "candidateExtractionHash": "sha256:3606f64e836255590a87b44fefd62218e6b0f695c710c07f54f52308e1df9070",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 117 second staged date-repair reviewer",
+    "agentId": "fresh_audit_jiuwudaishi117",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": false
+  },
+  "reviewedAt": "2026-09-24T20:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted after independent source-context and sealed-candidate review. The 39 operations exactly cover the two remaining fresh-audit groups: twenty-two attestation/death replacements and eleven paired hint corrections for the eleven people marked 故 at 957 posthumous honors, and four death/attestation replacements plus two paired hint corrections for the mothers inferred from the sons’ 丁內艱. The Chinese wording establishes a terminus no later than the 957 event, never an AD 951–956 interval or a point death in 957. The candidate changes only people and claims; it does not mutate canonical inputs, source, master, or shared state.",
+  "scope": {
+    "canonicalSourceHash": "sha256:ea6ddf1e9f77837d89b28542c63f0ebfa3727ce8324ac6c3e4b1326772679dbf",
+    "canonicalExtractionHash": "sha256:8dc24cb81820800535be26dea6c6f59d5396525d828daea6b7fc2c30570f838e",
+    "auditReportHash": "sha256:3c641659dd12af3e0816b1e0becbee5ccf0d1af406bd1953ad1644ce0c34ba13",
+    "stagingOnly": true,
+    "masterMutation": "NONE",
+    "sharedTreeMutation": "NONE"
+  },
+  "reviewedChanges": {
+    "auditGroups": 2,
+    "operations": 39,
+    "posthumousHonorAttestationAndDeathBounds": 22,
+    "posthumousHonorHintBounds": 11,
+    "maternalBereavementAttestationAndDeathBounds": 4,
+    "maternalBereavementHintBounds": 2
+  },
+  "validation": {
+    "canonicalInputs": "PASS: source and current extraction hashes equal the sealed candidate pins",
+    "sealedReceiptBinding": "PASS",
+    "proposalReplay": "PASS: all 39 exact operations byte-match the candidate",
+    "candidateHash": "PASS",
+    "sourceSoundness": "PASS: s0068-s0075 mark the eleven honorees 故 and s0129 records the sons’ 丁內艱",
+    "scope": "PASS: only people and claims differ; 33 posthumous-honor and 6 bereavement operations",
+    "strictCompactValidation": "PASS: 1259 claims",
+    "chronologyGeometry": "PASS: zero diagnostics",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only to the matching canonical source and extraction pins.",
+    "Replay all 39 operations exactly.",
+    "Run a fresh independent canonical date audit after curation."
+  ]
+}

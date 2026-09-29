@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "beiqishu",
+  "chapter": "007",
+  "candidateFile": "f42653d11275c3eb6e4e75893832910478863f8b11f84651685afad1ada69bb4.candidate.json",
+  "sourceHash": "sha256:594ca71e125285fbcb6d97355d80e9f414be82fa0a60e61adf04e1358bfffecf",
+  "originalExtractionHash": "sha256:f42653d11275c3eb6e4e75893832910478863f8b11f84651685afad1ada69bb4",
+  "candidateExtractionHash": "sha256:3a4ba7d78d499c4d31b27af6c6f2f15d0c857a97e616ead4e9b590c2404856e3",
+  "reviewer": {
+    "name": "Codex independent Beiqishu 007 staged-candidate reviewer",
+    "agentId": "date-repair-beiqishu007-review",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T01:30:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "The exact staged proposal reconstructs to the declared candidate hash and is accepted for host-side curation. It removes the three falsely inherited Yuanxiang AD 538–539 values without dropping the s0003 marriage evidence, and it retains both dated burials as explicitly posthumous events rather than living activity. The three s0003 records remain correctly marked as research holds, so this review does not authorize an audited outcome or a date-audit status change.",
+  "candidateValidation": {
+    "proposalApplication": "PASS: applyDateRepairProposal reconstructed sha256:3a4ba7d78d499c4d31b27af6c6f2f15d0c857a97e616ead4e9b590c2404856e3 exactly from the current canonical extraction and current date packet.",
+    "productionExtractionValidator": "PASS: node scripts/validate-people-extraction.mjs /tmp/beiqishu-007-date-candidate.json reported 49 people, 212 mentions, 438 claims, and 484 candidates.",
+    "candidatePacket": "PASS: 124 Chinese units, 213 date/hint/reception items, and 49 people; the two replaced living burial representations become two explicitly classified posthumous events, hence the item count falls from 215 to 213.",
+    "temporalGeometry": "PASS: the reconstructed candidate has no dateAuditDiagnostics findings. The repository scan is intentionally not evidence for this unpersisted candidate, so the candidate packet was checked directly in memory.",
+    "canonicalMutation": "NONE: this review neither changes data/people/extractions/beiqishu/007.json nor records a new date-audit status."
+  },
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-159", "claim-163", "claim-164", "hints-p002", "hints-p004", "hints-p005"],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        {
+          "book": "beiqishu",
+          "chapter": "007",
+          "unit": "s0003",
+          "quote": "神武方招懷荒遠，乃為帝聘蠕蠕太子庵羅辰女，號「鄰和公主」。",
+          "sourceHash": "sha256:2daef292ea4cb970c730ada91bca25d9d2543f58a81a1c5a27de4774abafc914",
+          "reason": "This sentence identifies Emperor Shenwu, Anluochen, and Princess Linhe in the betrothal narrative but contains no reign title, regnal year, or relative sequence that gives their event a Western date."
+        },
+        {
+          "book": "beiqishu",
+          "chapter": "007",
+          "unit": "s0005",
+          "quote": "元象中，封長廣郡公。",
+          "sourceHash": "sha256:fe772634ef25ac8e11e5c3a04672f3be8efc27a2289f1a677684fe220767e424",
+          "reason": "The following dated sentence is Gao Zhan's enfeoffment, not a date governing the preceding marriage narrative or its other participants."
+        }
+      ],
+      "reason": "Replacing the three borrowed AD 538–539 attestations with source-specific unresolved holds is required. The candidate keeps the people, their s0003 family/marriage claims, and the attestation evidence; it only removes unsupported chronology. The corresponding hints accurately say that research is required. No precise date or one-sided bound can be supplied from these units."
+    },
+    {
+      "proposalItems": ["claim-84", "claim-158", "hints-p001", "add-reception-event:p001:s0120"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "book": "beiqishu",
+          "chapter": "007",
+          "unit": "s0119",
+          "quote": "天統四年十二月辛未，太上皇帝崩於鄴宮乾壽堂，時年三十二，諡曰武成皇帝，廟號世祖。",
+          "sourceHash": "sha256:a427d3df7c3304734f4480108554b553d750517f34160cf1ad1cc3ef1c12727d",
+          "reason": "The source explicitly records Gao Zhan's death in Tiantong 4 (AD 568)."
+        },
+        {
+          "book": "beiqishu",
+          "chapter": "007",
+          "unit": "s0120",
+          "quote": "五年二月甲申，葬於永平陵。",
+          "sourceHash": "sha256:f5b55c903acc6b05444302955e274a4dd10bf4f2168c2052842629b28b470d18",
+          "reason": "The subsequent Tiantong 5 (AD 569) burial is a posthumous event for the already dead subject; it is not evidence of AD 569 living activity."
+        }
+      ],
+      "reason": "The candidate correctly removes the AD 569 place-association and ordinary attestation, adds the same dated event as event-participation with kind posthumous-commemoration and role deceased honoree, and removes only AD 569 from Gao Zhan's active hints. The explicit AD 568 death and all other supported hints remain intact."
+    },
+    {
+      "proposalItems": ["claim-85", "claim-168", "add-reception-event:p007:s0031"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {
+          "book": "beiqishu",
+          "chapter": "007",
+          "unit": "s0028",
+          "quote": "夏四月辛丑，皇太后婁氏崩。",
+          "sourceHash": "sha256:5a0b82430516527d015ba2ee8b0c4f04ffc94e0500c13a8adce0b081b38d5cda",
+          "reason": "Empress Dowager Lou's death is expressly placed in the fourth month of Heqing 1 (AD 562)."
+        },
+        {
+          "book": "beiqishu",
+          "chapter": "007",
+          "unit": "s0031",
+          "quote": "五月甲申，祔葬武明皇后於義平陵。",
+          "sourceHash": "sha256:6f78a7aa9b8068b1dfed41820461646e286c472809103dd788384d4b424029a6",
+          "reason": "The fifth-month AD 562 interment of Empress Wuming follows the death notice and is a posthumous burial event."
+        }
+      ],
+      "reason": "The candidate preserves the named mausoleum and AD 562 conventional regnal-year date in a separately classified posthumous event, rather than presenting the event as a living place association or ordinary attestation. Lou's legitimate AD 561 and AD 562 hints remain; this change correctly avoids a false after-death activity assertion rather than erasing the source fact."
+    }
+  ],
+  "remainingHold": {
+    "items": ["candidate claim-156", "candidate claim-160", "candidate claim-161", "hints-p002", "hints-p004", "hints-p005"],
+    "reason": "The three s0003 narrative attestations are intentionally unresolved because the source gives no usable date. They must remain as explicit research holds through host curation and require a new complete independent canonical audit. Their presence requires research-blocked, not audited."
+  },
+  "hostRequirements": [
+    "Apply only the reviewed staged proposal to the current canonical extraction after rechecking its source and extraction hashes.",
+    "Run the scoped production extraction validator after applying it.",
+    "Do not change data/people/date-audits/beiqishu/007.json in this curation commit.",
+    "Create a fresh, complete, independent audit of the resulting canonical extraction; it must retain the three research holds and record research-blocked unless new source-backed chronology resolves them."
+  ]
+}

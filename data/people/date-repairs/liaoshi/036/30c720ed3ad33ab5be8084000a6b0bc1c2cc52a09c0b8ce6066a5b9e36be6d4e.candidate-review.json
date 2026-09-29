@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "liaoshi",
+  "chapter": "036",
+  "candidateFile": "staged-candidate-30c720ed3ad33ab5be80.json",
+  "sealedCandidateHash": "sha256:30c720ed3ad33ab5be8084000a6b0bc1c2cc52a09c0b8ce6066a5b9e36be6d4e",
+  "candidateExtractionHash": "sha256:62c6da4c3162563b3cd4b641930e99a930865dec59590066f34ba0c8584833c2",
+  "reviewer": {
+    "name": "Codex independent Liaoshi 036 chronology repair reviewer",
+    "agentId": "date_audit_substantive_thirtyfive",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T12:37:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent full-source, sealed-replay, scope, and chronology-ownership review. The candidate changes only 11 audit-flagged inferred date containers and their five mirrored active-date hints. Its retained source wording stays visible as an explicit research hold. Directly dated Tiansian 13, Tonghe 23, and Chongxi 17 evidence remains unchanged, including the corresponding AD 938, AD 1005, and AD 1048 claims and events.",
+  "validation": {
+    "canonicalSourceHash": "sha256:e7fca3b928435a56a19913b0a130558c94de56056c2391ba44687f398ce27e6a",
+    "canonicalExtractionHash": "sha256:e1e2899ba89065a225c7db56f075b2cb5fe50a2141358347594db4b4f36aac4d",
+    "canonicalInputs": "PASS: current source and extraction hashes exactly match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: the exact sixteen-operation proposal hashes to 30c720ed3ad33ab5be8084000a6b0bc1c2cc52a09c0b8ce6066a5b9e36be6d4e.",
+    "candidateExtractionIdentity": "PASS: the staged candidate hashes to 62c6da4c3162563b3cd4b641930e99a930865dec59590066f34ba0c8584833c2.",
+    "proposalReplay": "PASS: replay against the pinned canonical extraction reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: only claim-21, claim-22, claim-24, claim-25, claim-29, claim-34, claim-36, claim-37, claim-40, claim-41, claim-42, and the five paired hints change. No source link, identity, role, predicate, or non-date event field changes.",
+    "sourceSoundness": "PASS: the candidate correctly removes imported point years or reign-wide intervals from undated historical/geographic summaries at s0008–s0009, s0220–s0221, and s0224, retaining each source context as an explicit hold.",
+    "directDateRetention": "PASS: s0055 天顯十三年, s0149 統和二十三年, and s0158 重熙十七年 retain their direct AD 938, AD 1005, and AD 1048 claims and events unchanged.",
+    "compactValidation": "PASS: 246 units, 8 people, 19 mentions, 66 claims, and zero alias-disposition conflicts in the replayed candidate.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics in the replayed candidate.",
+    "scopedValidator": "PASS: people:validate --book liaoshi --chapter 036 on current canonical inputs; candidate compact validation also passed.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0009",
+      "quote": "太宗定晉，晉主石敬瑭來獻十六城，乃定四京，改皇都為上京。",
+      "result": "This historical summary supplies no explicit regnal or calendar date, so it cannot independently support the removed AD 938 personal claims."
+    },
+    {
+      "unit": "s0055",
+      "quote": "天顯十三年，太宗改為東京。",
+      "result": "This is the separate direct Tiansian 13 evidence for AD 938 and remains unchanged."
+    },
+    {
+      "unit": "s0149",
+      "quote": "聖宗統和二十三年，城七金山，建大定府，號中京。",
+      "result": "This is the separate direct Tonghe 23 evidence for AD 1005 and remains unchanged."
+    },
+    {
+      "unit": "s0158",
+      "quote": "又有鐵不得國者，興宗重熙十七年乞以兵助攻夏國，詔不許。",
+      "result": "This is the separate direct Chongxi 17 evidence for AD 1048 and remains unchanged."
+    },
+    {
+      "unit": "s0224",
+      "quote": "雖西北士馬雄勁，元昊、諒祚智勇過人，能使党項、阻卜掣肘大國，蓋亦襟山帶河，有以助其勢耳。",
+      "result": "This is an undated evaluative observation; it cannot supply the removed reign-wide intervals for Yuanhao or Liangzuo."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the sealed handoff.",
+    "Replay all sixteen operations exactly; retain every named source context as a research hold rather than inventing personal chronology.",
+    "Do not alter the direct Tiansian 13, Tonghe 23, or Chongxi 17 claims, events, or their AD 938, AD 1005, and AD 1048 evidence.",
+    "Do not alter source or master from this review receipt; rerun scoped validation and require a fresh independent canonical audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

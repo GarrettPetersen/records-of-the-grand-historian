@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "hanshu",
+  "chapter": "012",
+  "candidateFile": "staged-candidate-080456c9d05602b7bd0b.json",
+  "candidateHash": "sha256:080456c9d05602b7bd0b6039b720c362c6073dbbe2a1b2084b9b76e2e4c1719c",
+  "reviewer": {
+    "name": "Codex independent Hanshu 012 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T09:45:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. All twelve audited claims and eleven paired hints are repaired. Seven dated kinship, temple, and posthumously granted-title occurrences remain visible only as reception events with no life hints; the deceased-mother mourning reference, Ji Wuzi precedent, and Emperor Wu/Xuan appraisal comparisons remain source-specific unresolved contexts.",
+  "validation": {
+    "proposalReplay": "PASS: all thirty pinned operations replay byte-for-byte to sha256:080456c9d05602b7bd0b6039b720c362c6073dbbe2a1b2084b9b76e2e4c1719c.",
+    "coverage": "PASS: all twelve audit-listed claims (claim-107 through claim-109, claim-152, claim-154, claim-162, claim-164, claim-187, claim-197, claim-198, claim-250, and claim-251) and all eleven paired hints are handled exactly once.",
+    "sourceChecks": "PASS: current dated references to Emperor Yuan, Prince Gong, and posthumously titled relatives are classified as posthumous reception without living active-date hints. s0040 mourning, s0084's Ji Wuzi precedent, and s0135's 武/宣 comparative appraisal retain their exact source contexts but no invented personal chronology.",
+    "scope": "PASS: only the twelve audited temporal claims, eleven paired active hints, and seven required reception additions differ semantically; source facts, relationships, titles, and unrelated valid dates are preserved.",
+    "compactValidation": "PASS: scoped people validator passed for hanshu/012.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only against matching pinned source and canonical extraction hashes.",
+    "Apply all thirty operations exactly, including seven classified reception additions.",
+    "Do not restore reception dates as living active-date hints or life attestations.",
+    "Do not alter canonical audit status during curation; require a fresh independent canonical audit after application."
+  ]
+}

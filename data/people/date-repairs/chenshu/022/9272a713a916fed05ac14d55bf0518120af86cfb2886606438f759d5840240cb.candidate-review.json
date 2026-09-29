@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "022",
+  "candidateFile": "staged-candidate-9272a713a916fed05ac1.json",
+  "candidateHash": "sha256:9272a713a916fed05ac14d55bf0518120af86cfb2886606438f759d5840240cb",
+  "reviewer": {
+    "name": "Codex independent Chenshu 022 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T05:35:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. Claim-372 exactly replays as a proper source-specific historical-model hold, but the required paired p042 active-date-hint repair is absent. The unchanged early-Han hint would still falsely present Zhang Liang's chronology as local activity.",
+  "validation": {
+    "proposalReplay": "PASS: the pinned claim-372 replacement replays byte-for-byte to sha256:9272a713a916fed05ac14d55bf0518120af86cfb2886606438f759d5840240cb.",
+    "claimCoverage": "PASS: claim-372 is the sole audit-listed temporal claim and is replaced exactly once.",
+    "sourceHold": "PASS: the replacement retains Zhang Liang, the source wording, provenance, and s0094 while removing only borrowed Western chronology.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "pairedHint": "FAIL: p042 is the sole required paired hint target, but no hints operation is present and its early-Han active-date hint is unchanged.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "claim": "claim-372",
+      "pairedHint": "p042",
+      "unit": "s0094",
+      "quote": "駱牙識真有奉，知世祖天授之德，蓋張良之亞歟？",
+      "translation": "Luo Ya recognized true worth and served it; he knew Emperor Wen's heaven-granted virtue—was he not next to Zhang Liang?",
+      "result": "Zhang Liang is an admiring rhetorical comparison for Luo Ya, not a date-bearing event in this chapter. The allusion must remain visible without a borrowed active interval in either claim or hint."
+    }
+  ],
+  "requiredCorrections": {
+    "addHintOperationsFor": ["p042"],
+    "requirement": "Add the exact p042 hints operation replacing the early-Han active-date text with the paired source-specific research-required allusion/reception hold. Preserve all non-temporal data and restage a new pinned candidate for fresh independent review."
+  }
+}

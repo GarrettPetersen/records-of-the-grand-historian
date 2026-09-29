@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "qingshigao",
+  "chapter": "081",
+  "candidateFile": "staged-candidate-16c8a5e758efefff9fb0.json",
+  "sealedCandidateHash": "sha256:16c8a5e758efefff9fb00960c9752c136d7a7d587371db1568f1dfd7dd002298",
+  "candidateExtractionHash": "sha256:e2f6a6a04fc93371ac024a799863c9c4cb729828a54f1a52f66f95f03c25a5db",
+  "reviewer": {
+    "name": "Codex independent Qingshigao 081 staged date-repair reviewer",
+    "agentId": "review_qingshigao081",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T11:17:45.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after an independent source and sealed-replay review. The three operations address exactly the two current findings: the word 明 in s0006 remains a source-specific Ming-period genealogy reference, not a 1368–1644 lifetime interval or activity hint for the unnamed Little Prince; and 康熙十四年 in s0010 remains the date of Burne and his brothers' rebellion, not a 1675 life attestation for their father Kökege Erjen. The genealogical and father-son source contexts, as well as all identities, roles, surfaces, and other evidence, remain intact.",
+  "validation": {
+    "canonicalInputs": "PASS: fresh source and extraction hashes match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: sha256 of the exact proposal equals 16c8a5e758efefff9fb00960c9752c136d7a7d587371db1568f1dfd7dd002298.",
+    "candidateExtractionIdentity": "PASS: sha256 of the staged candidate equals e2f6a6a04fc93371ac024a799863c9c4cb729828a54f1a52f66f95f03c25a5db.",
+    "proposalReplay": "PASS: replay reconstructs the sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly claim-5 and hints-p001, plus claim-22; no other claim, hint, person, or evidence is changed.",
+    "sourceSoundness": "PASS: s0006 says that Cha Han was descended from the Yuan collateral line of the Little Prince in the Ming; s0010 explicitly dates the rebellion and execution of his son Burne and Burne's brothers in Kangxi 14.",
+    "nonDateRetention": "PASS: only the two personal chronology containers and Little Prince's paired activity hint change; the source-specific genealogy and father-son rebellion contexts remain as unresolved nonpersonal holds.",
+    "compactValidation": "PASS: 119 units, 5 people, 11 mentions, and 43 claims.",
+    "chronologyGeometry": "PASS: no temporal-geometry diagnostics.",
+    "scopedValidator": "PASS: people:validate --book qingshigao --chapter 081.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only if the canonical source and extraction hashes still match the sealed handoff.",
+    "Replay all three operations exactly; do not replace either source-specific hold with a new personal date.",
+    "Do not alter source or master from this review receipt.",
+    "Obtain a fresh independent canonical date audit after host curation."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "beiqishu",
+  "chapter": "013",
+  "candidateFile": "staged-candidate-bc3af51eba0dcf798b24.json",
+  "candidateHash": "sha256:bc3af51eba0dcf798b243c028125fb756b638356994546ab490e3acedcffbd5b",
+  "reviewer": {
+    "name": "Codex independent Beiqishu 013 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T07:50:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The four claim and five hint operations replay exactly, compact validation and geometry pass, and all fifteen pre-existing source-specific research holds remain. But claim-97 and p026 are not source-grounded: their cited units s0112–s0114 contain no 天統後 or any date, so the candidate cannot retain an AD 565 lower bound for Gao Zhengxin.",
+  "validation": {
+    "proposalReplay": "PASS: all nine pinned operations replay byte-for-byte to sha256:bc3af51eba0dcf798b243c028125fb756b638356994546ab490e3acedcffbd5b.",
+    "coverage": "PASS structurally: claim-62, claim-69, claim-97, claim-99 and hints p004, p010, p016, p026, p030 are each changed once.",
+    "holds": "PASS: all fifteen existing source-specific research holds remain unchanged (claim-74, claim-79 through claim-82, claim-84 through claim-89, claim-115, claim-116, claim-276, and claim-279). The candidate adds unresolved holds for claim-62 and claim-99.",
+    "sourceChecks": "FAIL: s0112 (子整信嗣), s0113 (歷散騎常侍、儀同三司), and s0114 (…終於長安) identify Gao Zhengxin's succession, offices, and undated death, but contain neither 天統後 nor any calendar wording. The candidate's claim-97 sourceDate 天統後 and westernBounds.onOrAfter AD 565 therefore borrow chronology absent from its cited source. The other intended removals/narrowings preserve their cited source facts.",
+    "scope": "PASS: no candidate changes outside the four audited temporal claims and five paired hints.",
+    "compactValidation": "PASS: scoped people validator passed for beiqishu/013.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "requiredCorrections": [
+    "Replace claim-97 with a source-specific unresolved hold that preserves s0112–s0114's succession, offices, and Chang'an death context but removes sourceDate 天統後 and all Western bounds/years.",
+    "Replace p026's on-or-after AD 565 hint with the same source-specific research hold; do not infer an endpoint or a lower bound from a separate Tian Tong passage.",
+    "Regenerate the pinned candidate, replay it against matching current hashes, and obtain a new independent review before host curation."
+  ]
+}

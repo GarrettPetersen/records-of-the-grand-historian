@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "houhanshu",
+  "chapter": "031",
+  "candidateCommit": "6f1ca70e21",
+  "candidateFile": "staged-candidate-e7c45ed19bcdd6b8d915.json",
+  "sourceHash": "sha256:a02588c91bbf94c9e5311e7de841bf187bd403c173756db1e27540b0a98696a6",
+  "originalExtractionHash": "sha256:db1a755d21af3dee44b5bda39db6e3509068b2b5015d84f326860c5364e44664",
+  "sealedCandidateHash": "sha256:e7c45ed19bcdd6b8d915f8e1bcabf98e298aa2adfcbdbeeb70b9e1c9620850fc",
+  "candidateExtractionHash": "sha256:ed37d768c9e6427b4dfd1122d8a2849dc7edd6f9e2e6a71805fcf58ad6c5d60b",
+  "reviewer": {
+    "name": "Codex independent Houhanshu 031 round-two date-repair reviewer",
+    "agentId": "review_houhanshu031_round2b",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T18:00:00.000Z",
+  "disposition": "reject-return-for-repair",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The sealed candidate correctly identifies the Yuanhe tomb worship in s0085 as posthumous, and it removes only claim-177. However, it leaves claims 173–176 attributed to undated s0001 even though the fresh independent audit identifies their dated local contexts elsewhere in the chapter and requires their re-anchoring. The one-operation proposal therefore does not resolve every finding it claims to repair and cannot proceed to host curation.",
+  "candidateValidation": {
+    "canonicalInputs": "PASS: source and canonical extraction hashes equal the handoff pins.",
+    "sealedProposalIdentity": "PASS: sha256:e7c45ed19bcdd6b8d915f8e1bcabf98e298aa2adfcbdbeeb70b9e1c9620850fc.",
+    "candidateByteIdentity": "PASS: sha256:ed37d768c9e6427b4dfd1122d8a2849dc7edd6f9e2e6a71805fcf58ad6c5d60b.",
+    "proposalReplay": "PASS: applyDateRepairProposal reconstructed the exact declared candidate.",
+    "scope": "FAIL: the proposal removes claim-177 only and leaves claims 173–176 with the known incorrect s0001 evidence anchors.",
+    "compactValidation": "PASS: 87 people, 412 mentions, 563 claims, 379 candidates.",
+    "temporalGeometry": "PASS: no candidate dateAuditDiagnostics findings.",
+    "scopedProductionValidation": "PASS: the current canonical extraction validates; this does not approve the incomplete staged candidate.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": [
+    {
+      "proposalItem": "claim-177",
+      "verdict": "source-sound-but-insufficient",
+      "sourceEvidence": [
+        {
+          "unit": "s0085",
+          "quote": "元和中，肅宗行東巡狩，至沛，使使者祠譚塚，鄉里以為榮。",
+          "sourceHash": "sha256:a5a93bdba1db87bdef695d64f45201efe53706349f22ad3b37d5be64498e16e1",
+          "reason": "This is a Yuanhe commemoration at Huan Tan's tomb, not a living attestation or activity date for Huan Tan."
+        }
+      ],
+      "reason": "Removing a false life-date is warranted, but it must be considered together with the unresolved evidence-anchor defects identified by the fresh audit."
+    },
+    {
+      "proposalItem": "claims-173-through-176",
+      "verdict": "unresolved-required-companion-work",
+      "sourceEvidence": [
+        {
+          "unit": "s0001",
+          "quote": "桓譚字君山，沛國相人也。",
+          "sourceHash": "sha256:d7dce9418e6be125e465a168dcd1dabc4207f9dd84bbdc785ce375bf6e850ae5",
+          "reason": "This identification sentence contains none of the Ai/Ping, Wang Mang, Gengshi, or Guangwu temporal contexts carried by claims 173–176."
+        }
+      ],
+      "reason": "The current fresh audit expressly requires re-anchoring these four claims to their actual dated local source units. A repair cannot silently leave that finding outstanding."
+    }
+  ],
+  "hostRequirements": [
+    "Do not curate or publish this rejected candidate.",
+    "Stage a new sealed proposal that removes or correctly reclassifies the Yuanhe tomb-worship life claim and re-anchors claims 173–176 to the verified dated source units.",
+    "Independently review the complete replacement candidate before any canonical mutation.",
+    "After host curation, obtain a fresh independent canonical date audit."
+  ]
+}

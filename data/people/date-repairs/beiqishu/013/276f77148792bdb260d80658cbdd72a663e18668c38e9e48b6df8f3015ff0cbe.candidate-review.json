@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "beiqishu",
+  "chapter": "013",
+  "candidateFile": "staged-candidate-276f77148792bdb260d8.json",
+  "candidateHash": "sha256:276f77148792bdb260d80658cbdd72a663e18668c38e9e48b6df8f3015ff0cbe",
+  "reviewer": {
+    "name": "Codex independent Beiqishu 013 date-repair reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T08:05:00.000Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected. The revised candidate removes Gao Zhengxin's AD 565 bound and changes p026 to a research hold, but claim-97 still retains sourceDate 天統後 although cited s0112–s0114 have no Tian Tong wording or any date. It is therefore not yet the requested source-specific undated hold.",
+  "validation": {
+    "proposalReplay": "PASS: all nine pinned operations replay byte-for-byte to sha256:276f77148792bdb260d80658cbdd72a663e18668c38e9e48b6df8f3015ff0cbe.",
+    "coverage": "PASS structurally: all four claims and five hints from the initial audit are changed once.",
+    "holds": "PASS: all fifteen pre-existing source-specific research holds remain unchanged (claim-74, claim-79 through claim-82, claim-84 through claim-89, claim-115, claim-116, claim-276, and claim-279).",
+    "sourceChecks": "FAIL: claim-97's western bound is removed, but its retained sourceDate 天統後 still asserts wording absent from s0112 (子整信嗣), s0113 (歷散騎常侍、儀同三司), and s0114 (…終於長安). The reason itself correctly says those units contain no Tian Tong wording; the claim value must agree with that source check.",
+    "scope": "PASS: no candidate changes outside the four audited temporal claims and five paired hints.",
+    "compactValidation": "PASS: scoped people validator passed for beiqishu/013.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE"
+  },
+  "requiredCorrections": [
+    "Remove sourceDate 天統後 from claim-97 as well as all Western dates/bounds.",
+    "Keep only an unresolved, source-specific Gao Zhengxin narrative hold with the actual s0112–s0114 evidence and the matching p026 research hint.",
+    "Regenerate the pinned candidate and obtain a new independent review before host curation."
+  ]
+}

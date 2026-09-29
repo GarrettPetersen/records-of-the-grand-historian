@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jinshi",
+  "chapter": "037",
+  "candidateCommit": "c4e42b61259c88804012f5b1e486f37981fdefa1",
+  "candidateFile": "staged-candidate-f76c9aeca8ba99c0308e.json",
+  "sealedCandidateHash": "sha256:bec98f57e9c612416a6fec76e5f5f358b3ce557c046fc045487dac33c777e25d",
+  "candidateExtractionHash": "sha256:f76c9aeca8ba99c0308e6517ab1e1101a1761731bb360284bb3a04beedb12b3c",
+  "reviewer": {
+    "name": "Independent Jinshi 037 staged date-repair reviewer",
+    "agentId": "date_audit_substantive_forty",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T14:02:00.000Z",
+  "disposition": "reject-restage-required",
+  "expectedCanonicalAuditStatus": "needs-revision until the sealed handoff is restaged",
+  "summary": "Rejected for host curation despite substantively narrow operations: all 26 changes correctly leave direct Tiande 2, Dading 2/7/8/9, and Shizong-era records untouched, but the candidate handoff omits its required sealedCandidateHash. Current workflow validation therefore cannot bind this receipt to the proposal and candidate bytes.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-25", "claim-26", "claim-27", "claim-28", "claim-29", "claim-30", "claim-31", "claim-32", "claim-33", "claim-34", "claim-37", "claim-42", "claim-43", "claim-44", "claim-45", "claim-78", "claim-79", "claim-136", "claim-141", "claim-152", "hints-p003", "hints-p004", "hints-p005", "hints-p009", "hints-p010", "hints-p011"],
+      "verdict": "substantively-supported-but-unsealed-handoff",
+      "sourceEvidence": [
+        "s0002: 天德二年十月九日，冊妃徒單氏為皇后。",
+        "s0153: 天德二年正月，詔有司。",
+        "s0230: 大定八年正月，冊皇太子。",
+        "s0300: 大定二年，世宗命有司議親王百官及妃主命婦見皇太子禮。",
+        "s0354: 七年，定制，皇太子赴朝。",
+        "s0356: 九年，定制，凡皇太子出。"
+      ],
+      "reason": "The source itself anchors these regnal-year records; none is altered. Each proposed hold instead applies to an undated relative procedure, generic investiture heading, or court role whose extracted Western interval merely copied the dynasty span."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: freshly rebuilt packet hashes equal sealed canonical hashes",
+    "proposalReplay": "PASS",
+    "compactValidation": "PASS: 358 units, 14 people, 263 claims",
+    "chronologyGeometry": "PASS",
+    "sealedReceiptBinding": "FAIL: handoff omits sealedCandidateHash although the separate review packet has it",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Restage the exact proposal and candidate in a handoff containing the required sealedCandidateHash, without changing any proposed operation.",
+    "Run validateStagedDateRepairReview against the restaged handoff before host curation.",
+    "Require a fresh independent canonical audit after any host curation."
+  ]
+}

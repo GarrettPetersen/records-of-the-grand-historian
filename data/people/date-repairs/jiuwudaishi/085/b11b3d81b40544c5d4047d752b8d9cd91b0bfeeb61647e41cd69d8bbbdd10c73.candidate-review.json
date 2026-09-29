@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "085",
+  "candidateFile": "staged-candidate-b11b3d81b40544c5d404.json",
+  "sourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+  "originalExtractionHash": "sha256:014e9f48f6ac46ea9c809994bed172d60d0c859c15829fce2c9d5f0138b7527e",
+  "sealedCandidateHash": "sha256:b11b3d81b40544c5d4047d752b8d9cd91b0bfeeb61647e41cd69d8bbbdd10c73",
+  "candidateExtractionHash": "sha256:1f56c504ceba755087a126084a0ff01af1a128ba2ee1d6e5fb2e60a816d9bacd",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 085 source-ownership reviewer",
+    "agentId": "date_repair_review_jiuwudaishi085",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T02:49:48Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted for host curation after independent sealed-proposal, Chinese-source-context, exact-scope, compact-validation, and chronology-geometry review. The four contextual-date claims and their four matching active-hint arrays are repaired conservatively: each retains the source attestation and a source-specific unresolved hold, while removing an unsupported Western personal-date assertion. Neither the chapter dates nor its dated documents establish a date for Chen Guan's unnamed ancestor, the former Jin lord, Wang Congke, or Yang Chengxun's unnamed father.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-39", "hints-p020"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0013", "quote": "觀以祖諱「義」，乞改官，尋授給事中。"}],
+      "reason": "The dated eleventh-month entry records Chen Guan's request because an ancestor's taboo name was 義. It records Chen Guan's appointment, not an activity, life event, or endpoint for that unnamed ancestor. Replacing the AD 946 attestation and hint with a source-specific unresolved hold is correct."
+    },
+    {
+      "proposalItems": ["claim-80", "hints-p045"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0052", "quote": "先人有田一成，有眾一旅，兵連禍結，力屈勢孤。"},
+        {"unit": "s0058", "quote": "旋屬天降鞠兇，先君即世，臣遵承遺旨，纘紹前基。"}
+      ],
+      "reason": "The December-dated memorial contains a retrospective first-person account and says 先君 had died before the speaker's succession. It supplies neither the former ruler's date nor a Western endpoint. The inherited AD 936–942 hint and AD 946 contextual attestation therefore cannot stand; the unresolved source-specific hold is conservative and source-faithful."
+    },
+    {
+      "proposalItems": ["claim-86", "hints-p050"],
+      "verdict": "supported",
+      "sourceEvidence": [{"unit": "s0075", "quote": "頃以偽主王從珂於洛京大內自焚之後，其真傳國寶不知所在，必是當時焚之。"}],
+      "reason": "This is the current emperor's dated statement about the imperial seal after Wang Congke's self-immolation. The source wording here does not date Wang Congke's act to AD 946; the chapter's December date belongs to the statement and document context. Removing the inherited AD 936 hint and retaining only an unresolved contextual attestation is correct."
+    },
+    {
+      "proposalItems": ["claim-89", "hints-p053"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0087", "quote": "戊子，殺鄭州防禦使楊承勛，責以背父之罪，令左右臠割而死。"},
+        {"unit": "s0089", "quote": "以其弟承信為平盧軍節度使，襲父爵。"}
+      ],
+      "reason": "The next-first-month date belongs to Yang Chengxun's execution, not to his unnamed father. The later note describes Chengxin inheriting the father's rank but gives no date for the father. Removing the AD 947 personal assertion and using the source-specific unresolved hold is correct."
+    }
+  ],
+  "separateGenericRelativeAssessment": {
+    "notPartOfDateAcceptance": true,
+    "items": ["p020", "p053"],
+    "assessment": "Both are anonymous generic kinship surfaces, not personally named individuals: s0013 says only 祖, and s0087/s0089 say only 父. They are strong candidates for a separate source-specific false-person review/removal under the generic-kinship rule. That review must decide whether any chapter-local relationship representation needs preservation and must be separately curated and followed by a fresh date audit; this receipt neither removes nor otherwise changes either person."
+  },
+  "hostRequirements": [
+    "Apply only if canonical source and extraction hashes remain sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d and sha256:014e9f48f6ac46ea9c809994bed172d60d0c859c15829fce2c9d5f0138b7527e.",
+    "Replay exactly the sealed eight-operation proposal: replace claims 39, 80, 86, and 89 with their unresolved contextual attestations, and make only the corresponding p020, p045, p050, and p053 active-hint changes. Do not alter people, aliases, roles, relationships, mentions, source evidence, translations, or other claims.",
+    "Treat any p020/p053 false-person decision as a separate source-audit and curation operation, not as implicit authorization from this date-repair acceptance.",
+    "After host curation, run scoped validation and obtain a fresh complete independent canonical date audit. Retain all four source-specific unresolved holds unless separately reviewed evidence supports personal chronology."
+  ],
+  "validation": {
+    "canonicalSourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+    "canonicalExtractionHash": "sha256:014e9f48f6ac46ea9c809994bed172d60d0c859c15829fce2c9d5f0138b7527e",
+    "sealedProposalIdentity": "PASS: candidate handoff declares the exact eight-operation proposal sealed to sha256:b11b3d81b40544c5d4047d752b8d9cd91b0bfeeb61647e41cd69d8bbbdd10c73.",
+    "candidateExtractionIdentity": "PASS: handoff declares candidate compact extraction sha256:1f56c504ceba755087a126084a0ff01af1a128ba2ee1d6e5fb2e60a816d9bacd.",
+    "proposalReplay": "PASS: candidate validation records a byte-exact proposal replay from the pinned canonical extraction.",
+    "auditScope": "PASS: review of the proposal found only four temporal-claim replacements and their four matching active-hint replacements; all non-temporal person data is outside scope.",
+    "sourceOwnership": "PASS: s0013, s0052/s0058, s0075, and s0087/s0089 attach the chapter dates to Chen Guan's appointment, a memorial, a seal report, and Yang Chengxun's execution respectively, not to the four affected people.",
+    "compactValidation": "PASS: candidate handoff records compact validation against the rebuilt 150-unit chapter packet (72 people, 444 mentions, 434 claims).",
+    "chronologyGeometry": "PASS: candidate handoff records no chronology-geometry defects after replay.",
+    "canonicalMutation": "NONE"
+  }
+}

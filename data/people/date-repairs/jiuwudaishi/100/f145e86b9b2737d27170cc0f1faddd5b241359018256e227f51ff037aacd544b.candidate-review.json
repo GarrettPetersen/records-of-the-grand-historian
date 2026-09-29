@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "100",
+  "candidateCommit": "07c65155627c514ec895caeb2619a2b6ef9bf0cf",
+  "candidateFile": "staged-candidate-f145e86b9b2737d27170.json",
+  "sealedCandidateHash": "sha256:f145e86b9b2737d27170cc0f1faddd5b241359018256e227f51ff037aacd544b",
+  "candidateExtractionHash": "sha256:d0ebb3b69863c81cfe2c053c92b7dbcbe67303c8f99756e801dc191bd0d6c109",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 100 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi100",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T05:04:21Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked after fresh independent audit",
+  "summary": "Accepted all 18 sealed operations. The repair removes five borrowed AD 947 life/activity hints and keeps the five deaths as source-event-only, unresolved research holds. It preserves both separately extracted Liu Duo records without identity resolution. Li Lin retains the correct Tianfu 12, twelfth-month AD 947 attestation, while his death is not given an invented personal Western date.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-146", "hints-p021"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0018: 「六月乙卯」.", "s0021: 「郇國公李從益、唐明宗淑妃王氏皆賜死於東京。」"],
+      "reason": "The source expressly records Honored Consort Wang's granted death and place, but s0021 itself supplies no personal Western date. The replacement retains that death evidence and replaces the inherited AD 947 activity label with a bounded research hold."
+    },
+    {
+      "proposalItems": ["claim-224", "claim-225", "hints-p038"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0049: 「是月，契丹所命相州節度使高唐英為屯駐指揮使王繼宏、楚暉所殺。」"],
+      "reason": "The month-relative annal notice supports Gao Tangying's killing and both named actors, not an independently asserted personal Western life date. Both death claims retain their distinct killers and source evidence; the replacement hold is source-specific."
+    },
+    {
+      "proposalItems": ["claim-608", "hints-p119"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0120: 「以兩浙節度使、守太師、兼中書令、吳越國王錢宏佐薨，廢朝三日。」"],
+      "reason": "The court-suspension notice explicitly reports Qian Hongzuo's death, but does not independently establish a personal Western date. The death, titles, person, and source provenance remain; the inherited AD 947 hint becomes an honest research hold."
+    },
+    {
+      "proposalItems": ["claim-622", "claim-653", "hints-p122", "hints-p130"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0123: 「是日，薛懷讓奏，收復邢州，殺偽命節度副使、知州事劉鐸。」", "s0128: 「鐸開門迎之，即為懷讓所害」.", "s0130: 「帝至東京，奉明歸鎮州，令鐸知邢州事，至是遇害。」"],
+      "reason": "Each source-backed Liu Duo death is retained with its own evidence and without a borrowed personal AD 947 label. The chapter has two separately extracted Liu Duo records; date repair must not resolve their identity, merge them, or remove either record."
+    },
+    {
+      "proposalItems": ["claim-788", "claim-791"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0220: 「庚子，司徒李鏻薨。」"],
+      "reason": "Li Lin's annal attestation belongs to the restored Tianfu 12, twelfth-month sequence and correctly retains AD 947 on the attestation claim. The death claim retains the explicit death event but does not convert the annal position into an invented personal Western death date."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: source sha256:9815da92a518ca0e306728d6e525c751d386d1bfaafc07f501a218ecf1aaa4f6 and canonical extraction sha256:b038300c75d9e6a8238ed622e40552cb668137de7566732d054996a03bc7f348 match the sealed handoff.",
+    "sealedProposalIdentity": "PASS: independently recomputed proposal hash is sha256:f145e86b9b2737d27170cc0f1faddd5b241359018256e227f51ff037aacd544b.",
+    "candidateExtractionIdentity": "PASS: independently replayed proposal yields sha256:d0ebb3b69863c81cfe2c053c92b7dbcbe67303c8f99756e801dc191bd0d6c109 byte-for-byte.",
+    "compactValidation": "PASS: independently validated staged extraction (173 people, 526 mentions, 1,381 claims, 894 candidates).",
+    "auditScope": "PASS: the 18 operations cover exactly the five affected death contexts, five explicit unresolved attestation holds, and five dependent active-hint targets; Li Lin's attestation date correction is paired with a deliberately undated death claim.",
+    "sourceSoundness": "PASS: independently checked each changed group against the cited Chinese. No surrounding annal chronology is copied into a personal life/activity assertion, and the explicit Li Lin attestation is assigned only to its actual Tianfu 12, twelfth-month sequence.",
+    "nonDateRetention": "PASS: all changes are limited to date-bearing claim containers, source-event explanations, explicit research holds, and dependent hints. Names, roles, aliases, mentions, family relations, claim provenance, and translations remain unchanged.",
+    "canonicalMutation": "NONE: this receipt neither changes source nor curates the canonical extraction."
+  },
+  "hostRequirements": [
+    "Apply only while the sealed source and canonical extraction hashes match this review packet.",
+    "Replay exactly the 18 sealed operations; keep all five deaths source-event-only and do not restore inherited AD 947 personal activity hints.",
+    "Keep p122 and p130 as separate Liu Duo records pending independent identity work.",
+    "Keep Li Lin's Tianfu 12 twelfth-month AD 947 attestation and do not add a personal Western death date.",
+    "Do not alter source or canonical extraction from this receipt.",
+    "Require a complete fresh independent canonical date audit after host curation."
+  ]
+}

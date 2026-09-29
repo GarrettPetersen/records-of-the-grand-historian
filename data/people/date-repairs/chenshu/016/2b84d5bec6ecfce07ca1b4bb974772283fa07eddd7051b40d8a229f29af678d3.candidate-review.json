@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "chenshu",
+  "chapter": "016",
+  "candidateFile": "staged-candidate-2b84d5bec6ecfce07ca1.json",
+  "candidateHash": "sha256:2b84d5bec6ecfce07ca1b4bb974772283fa07eddd7051b40d8a229f29af678d3",
+  "reviewer": {
+    "name": "Codex independent Chenshu 016 corrected-candidate reviewer",
+    "agentId": "review_chenshu014_date_repair",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T04:25:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted. The corrected 76-change proposal exactly replays: all 38 audited title-only, allusive, and apparatus temporal claims become source-specific holds, and all 38 corresponding active-date hints become the same source-specific research-required holds. No unrelated data changes.",
+  "validation": {
+    "proposalReplay": "PASS: applying all 76 pinned operations to the canonical extraction produces sha256:2b84d5bec6ecfce07ca1b4bb974772283fa07eddd7051b40d8a229f29af678d3, byte-equivalent to the staged candidate.",
+    "claimCoverage": "PASS: every audit-listed claim is replaced exactly once (38 of 38), with no unlisted claim mutation.",
+    "pairedHints": "PASS: every audit-listed active-date hint is replaced exactly once (38 of 38); every hold text matches its paired claim reason.",
+    "scope": "PASS: only the 38 reviewed claims and 38 paired person hint records differ; people, mentions, provenance, names, roles, relations, and all other claims remain unchanged.",
+    "sourceHolds": "PASS: each replacement retains the original subject, predicate, source-date wording, provenance, and cited units while removing only borrowed Western chronology. The title-reference, rhetorical-allusion, and apparatus samples independently source-checked in the prior rejection remain correctly classified.",
+    "chronologyGeometry": "PASS: compact extraction validation and date-audit geometry diagnostics pass.",
+    "canonicalMutation": "NONE: this review changes neither the canonical extraction nor its audit status."
+  },
+  "sourceChecks": [
+    {
+      "group": "title-only and office-reference holds",
+      "claims": ["claim-18", "claim-32", "claim-33", "claim-34", "claim-77", "claim-78", "claim-79", "claim-94", "claim-100"],
+      "pairedHints": ["p005", "p014", "p015", "p016", "p055", "p056", "p057", "p072", "p078"],
+      "evidence": "Examples: 父孝穆，梁候官令。; 祖點，梁尚書左民侍郎。; 齊武帝手詔頻褒賞。",
+      "result": "The retained references identify offices, kin, or a ruler but do not license whole-reign personal activity; all nine claim and hint holds are appropriate."
+    },
+    {
+      "group": "rhetorical allusion holds",
+      "claims": ["claim-38", "claim-39", "claim-40", "claim-41", "claim-42", "claim-43", "claim-44", "claim-45", "claim-46", "claim-47", "claim-48", "claim-49", "claim-50", "claim-51", "claim-90", "claim-91"],
+      "pairedHints": ["p020", "p021", "p022", "p023", "p024", "p025", "p026", "p027", "p028", "p029", "p030", "p031", "p032", "p033", "p068", "p069"],
+      "evidence": "Examples: 雖漢誅祿、產…; 攻壘若文鴦，焚艦如黃蓋…; 傅玄見尤於晉代，王商取陷於漢朝…",
+      "result": "The historical subjects and comparisons remain visible as source-specific references without incorrectly becoming local activity dates; all sixteen claim and hint holds are appropriate."
+    },
+    {
+      "group": "mourning, work, and editorial-apparatus holds",
+      "claims": ["claim-81", "claim-84", "claim-98", "claim-99", "claim-311", "claim-314", "claim-317", "claim-320", "claim-324", "claim-327", "claim-330", "claim-333", "claim-336"],
+      "pairedHints": ["p059", "p062", "p076", "p077", "p079", "p080", "p081", "p082", "p083", "p084", "p085", "p086", "p087"],
+      "evidence": "Examples: 按梁昭明太子薨…; 錢大昕《廿二史考異》云…; 據各本改。; 是曾鞏等所見本亦訛…",
+      "result": "The mourning citations and later witnesses retain their quoted facts and provenance without fabricating local personal chronology; all thirteen claim and hint holds are appropriate."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only to the canonical extraction matching the candidate's pinned source and extraction hashes.",
+    "Apply all 76 reviewed operations exactly; do not omit paired hint operations or alter unrelated chronology that has independent evidence.",
+    "Do not alter canonical audit status during curation.",
+    "Run a fresh independent canonical audit after application; retained research holds require research-blocked rather than audited status."
+  ]
+}

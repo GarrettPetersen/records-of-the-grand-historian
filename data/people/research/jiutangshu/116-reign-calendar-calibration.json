@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "reign-calendar-calibration",
+  "book": "jiutangshu",
+  "chapter": "116",
+  "reviewedAt": "2026-09-28",
+  "scope": "Research calibration only. This dossier neither approves a date audit nor changes a source, extraction, date claim, hint, or chronology registry.",
+  "source": {
+    "path": "data/jiutangshu/116.json",
+    "sha256": "sha256:0adef97635a0c924f67b6d949377ae80c2dec73f2b3aae9ebc16a2e1597e8dce",
+    "sampleUnits": [
+      { "unit": "s0009", "quote": "開元初，授汝州刺史，為政嚴簡，州境肅然。" },
+      { "unit": "s0017", "quote": "開元二十一年正月，制曰：\"繼好之義，雖屬邊鄙；" },
+      { "unit": "s0035", "quote": "齊物天寶初開砥柱之險，以通流運，於石中得古鐵犁鏵，有「平陸」字，因改河北縣為平陸縣，加齊物銀青光祿大夫，為鴻臚卿、河南尹。" },
+      { "unit": "s0066", "quote": "貞元十年，鄭滑節度使李融卒，軍中潰亂，以復檢校兵部尚書，兼滑州刺史、義成軍節度、鄭滑觀察營田等使、兼御史大夫。" }
+    ]
+  },
+  "projectFindings": {
+    "reignsRegistry": {
+      "path": "data/people/chronology/reigns.json",
+      "tangRows": 0,
+      "finding": "The production reign registry has no Tang entries. Its schema forbids provenance fields on individual reign rows, so it cannot by itself serve as an independently pinned historical citation."
+    },
+    "chronologyReference": {
+      "path": "data/people/chronology-reference.json",
+      "scope": "Reviewed pilot seed, not a complete corpus chronology",
+      "tangRows": 0,
+      "finding": "This is the permitted pinning mechanism: every source requires an HTTPS URL, title, checked date, and optional immutable local quotation; every reign-year entry names its source and has one exact Western year. The loader rejects missing, stale, or mismatched citations."
+    },
+    "enforcement": {
+      "path": "scripts/lib/people-chronology-reference.mjs",
+      "finding": "lookupChronology explicitly returns a blocker when no reviewed mapping exists and says not to convert from memory. chronologyCitationErrors rejects a Western date when the cited registry row does not match it."
+    }
+  },
+  "externalCalibrationSource": {
+    "id": "tang-calendar",
+    "url": "https://sx.cnkgraph.com/Calendar/唐朝",
+    "title": "Chinese historical chronology: Tang dynasty calendar table",
+    "checkedAt": "2026-09-28",
+    "quote": "开元：713年十二月—741年\n天宝：742年—756年七月\n贞元：785年—805年八月",
+    "quoteSha256": "sha256:00214eff8a98c4c697ebfc4bd55a066f49cd6b5e47d7e2fcb2037fddb78b1c8e",
+    "pageSha256": "sha256:d4258d6d03a0e50dec4720581b0971a9a201a3eb3f8c9205a6e1d908b54e7bed",
+    "interpretation": "The table supplies conventional Western-year labels for each named Tang era. It supports a linear mapping within these uninterrupted ranges, but not Gregorian month/day conversion and not personal activity dates merely because a person is mentioned nearby."
+  },
+  "candidateReferenceRows": [
+    { "id": "tang-kaiyuan-1", "period": "Kaiyuan / 開元", "regnalYear": 1, "westernYear": "AD 713" },
+    { "id": "tang-kaiyuan-21", "period": "Kaiyuan / 開元", "regnalYear": 21, "westernYear": "AD 733" },
+    { "id": "tang-kaiyuan-24", "period": "Kaiyuan / 開元", "regnalYear": 24, "westernYear": "AD 736" },
+    { "id": "tang-tianbao-1", "period": "Tianbao / 天寶", "regnalYear": 1, "westernYear": "AD 742" },
+    { "id": "tang-tianbao-13", "period": "Tianbao / 天寶", "regnalYear": 13, "westernYear": "AD 754" },
+    { "id": "tang-zhenyuan-2", "period": "Zhenyuan / 貞元", "regnalYear": 2, "westernYear": "AD 786" },
+    { "id": "tang-zhenyuan-10", "period": "Zhenyuan / 貞元", "regnalYear": 10, "westernYear": "AD 794" },
+    { "id": "tang-zhenyuan-12", "period": "Zhenyuan / 貞元", "regnalYear": 12, "westernYear": "AD 796" }
+  ],
+  "decision": {
+    "status": "positive-method-negative-application",
+    "conclusion": "A permitted, integrity-checked pinning method exists, and this calibration supplies a source suitable for a separately reviewed Tang registry addition. The current registry has no Tang mapping, so no Jiu Tangshu 116 conversion is approved or safe to apply now.",
+    "requiredNextStep": "A separate curator may propose the source and only the needed exact reign-year rows in chronology-reference.json, validate the registry, and obtain independent review before using a row on any claim. The local chapter evidence must still establish that the dated event belongs to the named person.",
+    "prohibitedInference": "Do not use the era table to turn an undated title, genealogy, reception mention, or another person’s event into this person’s activity, birth, or death date."
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "145",
+  "candidateFile": "staged-candidate-c4632573f3740325d159.json",
+  "candidateHash": "sha256:c4632573f3740325d15985986122aeba796c50af92a27c1172518261afb497be",
+  "canonicalSourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218",
+  "canonicalExtractionHash": "sha256:c3c89aebe9b69e79616b1e0177775f8c55416a1ebbd43e3b88726076698035d0",
+  "candidateExtractionHash": "sha256:98e80725737c7b17a801a4fcc85d90e7013984d054f99bb6660b5a1797f284a7",
+  "reviewer": {
+    "name": "Codex independent Jiuwudaishi 145 staged-candidate reviewer",
+    "agentId": "date_audit_substantive_thirtynine",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T13:31:44.317Z",
+  "disposition": "reject",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Rejected after fresh reconstruction, complete Chinese-source reading, and inspection of all 90 proposal operations. The candidate correctly removes many imported life ranges from historical exempla, broad dynastic labels, and retrospective musical history. It also indiscriminately erases source-dated, person-owned Later Zhou events and replaces every person hint with the same generic hold. The source explicitly dates Taizu and Shizong accessions, Bian Wei's memorial, Dou Yi's commissions and memorial, Wang Pu's musical work, and the dated court deliberation; those direct chronologies must remain source-faithful. A revised proposal may hold only the unsupported historical/reception contexts and must preserve the direct-event dates and corresponding hints.",
+  "findings": [
+    {
+      "items": [
+        "claim-100",
+        "claim-102",
+        "claim-103",
+        "claim-104",
+        "claim-105",
+        "claim-121",
+        "claim-126",
+        "claim-127",
+        "claim-133",
+        "claim-134",
+        "hints-p001",
+        "hints-p002",
+        "hints-p007",
+        "hints-p008",
+        "hints-p009"
+      ],
+      "problem": "The candidate treats explicit, person-owned Later Zhou events as if they were undated contextual references, deleting verified regnal-year conversions and all paired active hints.",
+      "action": "Retain sourceDate and supported Western chronology for the cited direct events and rebuild the relevant hints from those retained claims. Limit research holds to historical exempla, broad reign or dynasty labels that do not bound personal activity, and retrospective references.",
+      "evidence": [
+        {
+          "unit": "s0002",
+          "quote": "周廣順元年，太祖初即大位，惟新庶政，時太常卿邊蔚上疏請改舞名。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        },
+        {
+          "unit": "s0030",
+          "quote": "五年六月，命中書舍人竇儼參詳太常雅樂。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        },
+        {
+          "unit": "s0031",
+          "quote": "十一月，翰林學士竇儼上疏論禮樂刑政之源。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        },
+        {
+          "unit": "s0039",
+          "quote": "六年春正月，樞密使王樸奉詔詳定雅樂十二律旋相為宮之法，並造律準，上之。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        }
+      ]
+    },
+    {
+      "items": [
+        "claim-111",
+        "claim-151",
+        "claim-154",
+        "hints-p019",
+        "hints-p032"
+      ],
+      "problem": "The proposal deletes direct dated court action and then replaces both persons' supported date hints with a chapter-wide generic statement.",
+      "action": "Preserve the source-dated court deliberation, the named performer's dated appearance, and the relevant supported hints; do not use one generic hold in place of direct chronology.",
+      "evidence": [
+        {
+          "unit": "s0123",
+          "quote": "臣等今月十九日於太常寺集，命太樂令賈峻奏王樸新法黃鐘調七均。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        },
+        {
+          "unit": "s0128",
+          "quote": "世宗覽奏，善之。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        },
+        {
+          "unit": "s0134",
+          "quote": "其王樸所奏旋宮之法，宜依張昭等議狀行。",
+          "sourceHash": "sha256:3d9a2c7a96c672f89946d9dfb300d47c77057b7582d6183baa919b77c4266218"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: fresh packet has the pinned canonical source and extraction hashes.",
+    "proposalReplay": "PASS: all 90 operations replay byte-for-byte to sha256:98e80725737c7b17a801a4fcc85d90e7013984d054f99bb6660b5a1797f284a7.",
+    "proposalHash": "PASS: sealed proposal hash is sha256:c4632573f3740325d15985986122aeba796c50af92a27c1172518261afb497be.",
+    "compactValidation": "PASS: 135 units, 32 people, 289 claims.",
+    "chronologyGeometry": "PASS",
+    "sourceSoundness": "FAIL: direct source-dated, person-owned Later Zhou chronology is removed by the candidate.",
+    "nonDateRetention": "PASS: proposal interface preserves non-temporal extraction content.",
+    "canonicalMutation": "NONE"
+  },
+  "reviewedChanges": {
+    "total": 90,
+    "inspected": 90,
+    "verdict": "reject: broad historical holds are appropriate, but the proposal also erases direct dated personal events and their paired hints."
+  },
+  "hostRequirements": [
+    "Do not apply this candidate.",
+    "Retain the direct Later Zhou chronology shown in s0002, s0030, s0031, s0039, s0123, s0128, and s0134, with source-faithful paired hints.",
+    "Keep only source-sound research holds for non-personal historical exempla, broad contextual ranges, and retrospective references.",
+    "Replay a narrower pinned proposal and obtain a fresh independent candidate review before host curation.",
+    "Do not modify canonical extraction or canonical audit status during this review."
+  ]
+}

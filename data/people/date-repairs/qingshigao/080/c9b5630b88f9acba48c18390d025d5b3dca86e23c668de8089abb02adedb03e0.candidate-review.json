@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "qingshigao",
+  "chapter": "080",
+  "candidateFile": "staged-candidate-238d1f958579e6bee35a.json",
+  "sealedCandidateHash": "sha256:238d1f958579e6bee35adcb9036c9f106ef29602a5864c701e1d6a5474b01ff2",
+  "candidateExtractionHash": "sha256:c9b5630b88f9acba48c18390d025d5b3dca86e23c668de8089abb02adedb03e0",
+  "reviewer": {
+    "name": "Codex independent Qingshigao 080 chronology repair reviewer",
+    "agentId": "fresh_jinshi135_audit",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T01:20:00.000Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked",
+  "summary": "Accepted after independent sealed replay, source-ownership, and scope review. All sixteen operations remove only inherited, misowned, or reign-wide chronology: eight date containers become source-specific research holds and eight matching active hints become holds. Directly supported AD 1642, 1716, 1717, 1720, and 1739 claims for their actual owners remain intact.",
+  "validation": {
+    "canonicalSourceHash": "sha256:1f72cf4d774f249ad7010f7c1cd1b7d1082b1b281513b98eaa44962385dc560e",
+    "canonicalExtractionHash": "sha256:3c41e5f089038722187fd679080c965b76733eb372d280c1385f11a447e67750",
+    "canonicalInputs": "PASS: current source and extraction exactly match sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: exact sixteen-operation proposal hashes to 238d1f958579e6bee35adcb9036c9f106ef29602a5864c701e1d6a5474b01ff2.",
+    "candidateExtractionIdentity": "PASS: replayed candidate hashes to c9b5630b88f9acba48c18390d025d5b3dca86e23c668de8089abb02adedb03e0.",
+    "proposalReplay": "PASS: canonical replay reconstructs sealed candidate byte-for-byte.",
+    "auditScope": "PASS: exactly eight date-container replacements (claim-47,48,56,57,62,68,77,81) and eight matching hint replacements; no identities, evidence, predicates, roles, or non-date fields change.",
+    "sourceSoundness": "PASS: succession date belongs to Lha-bzang, 1739 appointment does not date Polhane’s son, 1750 stationing does not date Dalai/Panchen, 1717 survey does not date Ladakh Khan, and Yuan reign labels do not establish continuous activity.",
+    "directDateRetention": "PASS: direct owner evidence including 1642 tribute/conquest, 1716 Black Lama alliance, 1717 cartographer dispatch, 1720 campaign/grant, and 1739 Polhane appointment is unchanged.",
+    "compactValidation": "PASS: 290 units, 18 people, 42 mentions, 148 claims.",
+    "chronologyGeometry": "PASS: no temporal geometry diagnostics in replayed candidate.",
+    "scopedValidator": "PASS: people:validate run separately on current canonical inputs; candidate compact validation passed.",
+    "canonicalMutation": "NONE"
+  },
+  "sourceChecks": [
+    {
+      "unit": "s0017",
+      "quote": "四傳至曾孫拉藏汗，而準噶爾並之。",
+      "result": "The annexation is owned by the great-grandson Lha-bzang, not intermediate unnamed generations."
+    },
+    {
+      "unit": "s0020",
+      "quote": "至其子襲封，以罪誅，遂除西藏王爵。",
+      "result": "No inheritance or execution year is supplied."
+    },
+    {
+      "unit": "s0036",
+      "quote": "乾隆十五年，設大臣鎮守。",
+      "result": "This dates an institutional posting, not Dalai or Panchen personal activity."
+    },
+    {
+      "unit": "s0268",
+      "quote": "康熙五十六年，遣喇嘛楚兒沁藏布蘭木占巴、理籓院主事勝住等，繪畫西海、西藏輿圖。",
+      "result": "The date belongs to dispatched cartographers, not Ladakh Khan."
+    }
+  ],
+  "hostRequirements": [
+    "Apply only with matching canonical source and extraction hashes.",
+    "Replay exactly the sixteen sealed operations; do not alter source, identity, evidence, predicate, role, or non-date event content.",
+    "Retain all direct date claims for their actual source owners.",
+    "Run scoped validation and require a fresh independent canonical date audit after host curation."
+  ],
+  "publication": "staging-only",
+  "masterMutation": "NONE"
+}

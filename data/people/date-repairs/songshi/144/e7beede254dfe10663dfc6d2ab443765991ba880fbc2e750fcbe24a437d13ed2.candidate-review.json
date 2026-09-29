@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "songshi",
+  "chapter": "144",
+  "candidateCommit": "0dee51f7b3",
+  "candidateFile": "staged-candidate-e7beede254dfe10663df.json",
+  "sealedCandidateHash": "sha256:e7beede254dfe10663dfc6d2ab443765991ba880fbc2e750fcbe24a437d13ed2",
+  "candidateExtractionHash": "sha256:b1b589961b8caca183dd3e8c7b604b77528ac87d86cd637130bc766d9c585576",
+  "reviewer": {
+    "name": "Independent Songshi 144 staged date-repair reviewer",
+    "agentId": "date_audit_substantive_forty",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-23T13:02:57.110Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "research-blocked after fresh independent audit",
+  "summary": "Accepted after independent Chinese-source and sealed-replay review. The candidate preserves valid dated Zhezong-era chronology while making only three source-required repairs: it keeps Taiping Xingguo early as an undated hold, keeps the undated Gaozong–Wei welcome separate from any reign-wide activity interval, and removes the AD 1067 record misowned by the distinct Zhezong-era Grand Empress Dowager. No source or canonical extraction is changed by this receipt.",
+  "reviewedChanges": [
+    {
+      "proposalItems": [
+        "claim-53",
+        "hints-p001"
+      ],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        {
+          "unit": "s0014",
+          "quote": "太宗太平興國初，增主輦二十四人，改服高腳襆頭；"
+        }
+      ],
+      "reason": "太平興國初 is an early-reign phrase without a numbered year; the candidate correctly removes only the unsupported AD 976 point and paired hint."
+    },
+    {
+      "proposalItems": [
+        "claim-64",
+        "claim-66",
+        "hints-p007"
+      ],
+      "verdict": "supported-research-hold",
+      "sourceEvidence": [
+        {
+          "unit": "s0128",
+          "quote": "高宗將迎韋太后於郊，因製常行儀仗，用黃麾仗二千二百六十五人。"
+        }
+      ],
+      "reason": "This welcome sentence is undated. The candidate retains both named-source records but removes the full Gaozong-reign interval and only the unsupported Gaozong hint component."
+    },
+    {
+      "proposalItems": [
+        "claim-79",
+        "hints-p016"
+      ],
+      "verdict": "supported-removal",
+      "sourceEvidence": [
+        {
+          "unit": "s0162",
+          "quote": "四年，神宗嗣位，詔太皇太后儀範已定，皇太后合設儀衛：禦龍直、骨朵子直差都虞候、都頭、副都頭各一人，十將、長行各共三十人；"
+        },
+        {
+          "unit": "s0210",
+          "quote": "哲宗即位，元祐元年，詔太皇太后出入儀衛，並依章獻明肅皇后故事。"
+        }
+      ],
+      "reason": "The fourth-year Grand Empress Dowager belongs to Shenzong’s accession context, whereas p016 is specifically the Zhezong-era record whose independently dated Yuanyou-1 attestation remains."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: fresh source and canonical extraction hashes match the sealed handoff pins.",
+    "sealedProposalIdentity": "PASS: sha256:e7beede254dfe10663dfc6d2ab443765991ba880fbc2e750fcbe24a437d13ed2.",
+    "candidateExtractionIdentity": "PASS: sha256:b1b589961b8caca183dd3e8c7b604b77528ac87d86cd637130bc766d9c585576.",
+    "proposalReplay": "PASS: all scoped operations reconstruct the exact sealed candidate.",
+    "auditScope": "PASS: claims 53, 64, 66, and 79 plus their three paired hint operations; no other data changes.",
+    "sourceSoundness": "PASS: Chinese source confirms both undated contexts and the distinct Shenzong versus Zhezong Grand Empress Dowager contexts.",
+    "nonDateRetention": "PASS: source wording, owners of retained records, predicates, evidence, and non-date fields remain intact.",
+    "compactValidation": "PASS: 216 units, 19 people, 85 mentions, 169 claims.",
+    "chronologyGeometry": "PASS: no temporal diagnostics.",
+    "canonicalMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Apply only with matching canonical hashes.",
+    "Replay exactly the sealed operations; do not invent a point date or era-wide interval.",
+    "Do not alter source or canonical extraction from this receipt.",
+    "Require a fresh independent canonical audit after host curation."
+  ]
+}

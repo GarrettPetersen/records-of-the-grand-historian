@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "106",
+  "candidateCommit": "9a990a7baf6c995438bc4e706b0ae53729091da7",
+  "candidateFile": "staged-candidate-3f95f776aaf22c4bfc7e.json",
+  "sourceHash": "sha256:8adcfa7602cbe05ed24b855e6cd800061a4d7988c62a4e559220d0b1b5dc4389",
+  "originalExtractionHash": "sha256:0df675134443901a57b838c83b491480addc608adb87cd7533fddc2367ec7f3b",
+  "sealedCandidateHash": "sha256:3f95f776aaf22c4bfc7ed6b93bb270a67256b8af9cb96b7b656d1a67b94acc4d",
+  "candidateExtractionHash": "sha256:dbfad4009a69fd60dc2eb85e1d3f41ea759cbf56b1c2c84a5792c982c75ea01f",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 106 staged date-repair reviewer",
+    "agentId": "date_repair_review_jiuwudaishi106",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true
+  },
+  "reviewedAt": "2026-09-24T06:02:00Z",
+  "disposition": "accept",
+  "expectedCanonicalAuditStatus": "needs-revision",
+  "summary": "Accepted after independently recomputing both sealed identities, replaying all 35 date-only operations, and checking the frozen audit against the pinned Chinese source. The repair removes unsupported inherited family, maternal, relative-duration, warning, and early-service ranges without altering the underlying relationships or statements; corrects Tang Tianyou to AD 904–907; corrects Later Jin Tianfu to AD 936–942; and replaces invented AD 938 points with era-period intervals. No candidate chronology remains unsupported within the reviewed scope.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-66"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0004: 「歲餘，移鎮涇州。」"],
+      "reason": "The relative duration follows an earlier Tianfu appointment but has no independently fixed Western interval. Replacing the AD 937–938 interval with an unresolved, source-labelled transfer preserves the event without inventing a range."
+    },
+    {
+      "proposalItems": ["claim-139", "claim-140", "hints-p012", "hints-p013"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0019: 「祖海，父師遂。」"],
+      "reason": "The genealogy identifies Hai and Shisui but gives no Western activity dates. The source-backed relations remain intact while the inherited AD 923–949 ranges become explicit research holds."
+    },
+    {
+      "proposalItems": ["claim-146", "hints-p019"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0025: 「以母年高，去官就養。」"],
+      "reason": "The passage identifies Liu Shenjiao's elderly mother at this episode but cannot establish that she was active throughout AD 928–936. The candidate correctly retains the attestation without that inferred range."
+    },
+    {
+      "proposalItems": ["claim-167", "hints-p036"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0081: 「汝車渡村百姓劉開道下賊，慣作非為。」"],
+      "reason": "The warning names Liu Kaidao but contains no Tang Tianyou wording or date. The candidate correctly removes the fabricated AD 900–916 range and retains an undated hold."
+    },
+    {
+      "proposalItems": ["claim-364", "hints-p056"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0118: 「少從軍，善水遊。」", "s0119: 「唐莊宗與梁軍對壘於河上。」"],
+      "reason": "Ma Wan's early military service is undated; the following Zhuangzong–Liang scene does not make it an AD 918–923 enlistment. The candidate removes only that inherited interval and hint."
+    },
+    {
+      "proposalItems": ["claim-164", "claim-165", "claim-166", "hints-p033", "hints-p034", "hints-p035"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0078: 「唐天祐中」", "s0080: the same Tianyou biography context."],
+      "reason": "Tang Tianyou runs from AD 904 through AD 907. All three matching claims and hints are consistently narrowed to those inclusive era bounds."
+    },
+    {
+      "proposalItems": ["claim-198", "claim-199", "claim-200", "claim-201", "hints-p037"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0083: 「晉天福中，為密州刺史。」"],
+      "reason": "The source gives a Later Jin Tianfu-period posting. The candidate consistently changes its attestation, office, place, polity association, and hint from the unsupported AD 936–944 range to the AD 936–942 era bounds."
+    },
+    {
+      "proposalItems": ["claim-305", "claim-350", "claim-353", "hints-p046", "hints-p052", "hints-p053"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0107: 「天福中，李金全以安州叛。」"],
+      "reason": "This campaign is labelled Tianfu only. The candidate removes the unsupported extension through AD 944 and preserves distinct later facts in the affected people's hint lists."
+    },
+    {
+      "proposalItems": ["claim-482", "claim-483", "claim-505", "hints-p071"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0171: 「晉天福中，遷奉國右廂都指揮使，領禺州刺史。」"],
+      "reason": "The source supports the two offices and attestation during Tianfu, not an invented AD 938 point. Each date container is consistently replaced with the AD 936–942 interval, while separately sourced later hints remain."
+    },
+    {
+      "proposalItems": ["claim-539", "claim-551", "hints-p073"],
+      "verdict": "supported",
+      "sourceEvidence": ["s0192: 「晉天福中，授左神武統軍。」"],
+      "reason": "Huangfu Li's appointment is likewise an era-period statement. Replacing the invented AD 938 point with AD 936–942 in both the office and attestation is source-faithful; the added interval hint does not erase separately sourced dates."
+    }
+  ],
+  "hostRequirements": [
+    "Replay exactly the 35 accepted sealed operations against canonical source hash sha256:8adcfa7602cbe05ed24b855e6cd800061a4d7988c62a4e559220d0b1b5dc4389 and extraction hash sha256:0df675134443901a57b838c83b491480addc608adb87cd7533fddc2367ec7f3b.",
+    "Do not alter persons, source text, identities, mentions, family relations, or non-date claim fields during curation.",
+    "Run scoped validation and then a complete fresh independent canonical date audit after curation; acceptance of this candidate is not final date approval."
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: handoff pins the frozen source and canonical extraction hashes from audit sha256:12f482ed86c16a480266baeacf456295be81e0b4184fac4103eb7c3753ae8ffc.",
+    "sealedProposalIdentity": "PASS: independently recomputed sha256:3f95f776aaf22c4bfc7ed6b93bb270a67256b8af9cb96b7b656d1a67b94acc4d.",
+    "candidateExtractionIdentity": "PASS: independently recomputed sha256:dbfad4009a69fd60dc2eb85e1d3f41ea759cbf56b1c2c84a5792c982c75ea01f.",
+    "proposalReplay": "PASS: all 35 operations map to the ten frozen audit findings and change date-bearing fields or active hints only.",
+    "sourceChronology": "PASS: independently checked relative, genealogical, maternal, warning, early-service, Tianyou, and Tianfu evidence against the cited Chinese units.",
+    "canonicalMutation": "NONE: this receipt neither curates nor modifies canonical source or extraction data."
+  }
+}

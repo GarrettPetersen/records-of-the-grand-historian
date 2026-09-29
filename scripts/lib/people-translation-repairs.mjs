@@ -28,6 +28,7 @@ const ENGLISH_SENTENCE_INITIAL_NON_NAMES = new Set([
   'What',
 ]);
 const ENGLISH_FUNCTION_PHRASE_RE = /^(?:Am I|Even I|Though (?:He|I|It|She|That|These|They|This|Those|We))\b/u;
+const ENGLISH_PRONOUN_NAME_COLLISIONS = new Set(['he', 'she', 'i', 'you', 'we', 'they', 'it', 'his', 'her', 'their']);
 const ENGLISH_NAMED_NON_PERSON_TERMS = new Set([
   'Circular Moat',
   'Correct Month',
@@ -2585,6 +2586,9 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   for (const person of reconciled.people) {
     const exact = person.preferredNameSuggestion?.en;
     if (typeof exact !== 'string' || !exact.trim()) continue;
+    // An attested name such as He does not make every English pronoun a name.
+    // Preserve explicit mentions; require source review for new ambiguous ones.
+    if (ENGLISH_PRONOUN_NAME_COLLISIONS.has(exact.trim().toLowerCase())) continue;
     const contextUnits = new Set([
       ...reconciled.mentions
         .filter((mention) => mention.person === person.localId)
