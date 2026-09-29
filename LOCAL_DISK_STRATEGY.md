@@ -9,6 +9,26 @@ contain 4.9 GiB of `public/` and 3.5 GiB of `data/`. Keep one full checkout for 
 validation and milestone builds. Use sparse, reusable secondary checkouts for chapter
 work; build the site once per reviewed milestone.
 
+## Default worker topology
+
+Use one host checkout to prepare packets, run validators, and apply accepted results.
+Each chapter/chunk/review round has a unique artifact directory or output path; keep
+that ownership stable across restarts. Workers read only their sealed assignment and
+write only that output. They do not need local repository clones. The date workflow
+already stores jobs in chapter-scoped directories under `data/people/generated/`;
+MCP extraction already uses one persistent runtime for all bots.
+
+Disjoint chapters can share this checkout when the host owns canonical writes and Git.
+Do not let concurrent workers switch branches, pull, stage, commit, rebuild global
+output, or publish independently in it: the index and HEAD are shared. The existing
+host workflow locks and queue reservations still apply. Artifact writers remain
+isolated by their unique assigned paths, and independent review uses separate contexts.
+
+Keep a small reusable pool of sparse checkouts only for tasks needing concurrent edits
+to scripts or a different revision. Do not allocate a checkout per active chapter.
+Prefer supplying a packet to another agent over supplying an entire repository.
+Only the host can accept a fingerprint-matching result and publish canonical changes.
+
 ## Preparing workspaces
 
 Use the app's managed worktree tools and reuse an idle checkout first. Before changing
@@ -26,6 +46,20 @@ git sparse-checkout set --cone scripts functions data/BOOK \
 ```
 
 Replace BOOK with the actual book. Cone mode retains root instructions/configuration.
+For an even smaller exact-chapter selection, use the helper from the primary checkout:
+
+```sh
+node scripts/prepare-people-sparse-checkout.mjs \
+  --checkout /absolute/path/to/secondary/repo --book hanshu --chapter 104
+```
+
+It previews the required files/directories. Add `--apply` after confirming no process
+uses the secondary checkout. It selects scripts, shared schema/chronology/curation,
+the exact source chapter, and that chapter's extraction, audits, and repair history.
+Root configuration files remain available. Ignored recovery artifacts are preserved.
+Omit `--chapter` for an entire book, or omit book/chapter for scripts-only work. It
+refuses the primary checkout and any Git changes, and never creates a checkout.
+
 For script work, select `scripts functions` and add only the needed fixtures. For
 global people validation, select `data scripts functions` to retain the corpus while
 omitting duplicate site files. Expand deliberately if a tool needs additional inputs;

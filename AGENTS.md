@@ -2,6 +2,19 @@
 
 ## Local disk conservation
 
+The default chapter-worker topology is one shared host checkout plus isolated job
+artifact directories, not one worktree per chapter. Workers read sealed packets and
+write only their assigned artifact; the orchestrator performs validation and canonical
+publication. Workers sharing a checkout must not independently switch branches, pull,
+stage, commit, or build: those operations share one Git index and must be host-owned.
+Use separate reviewer conversations for independence. Create a secondary sparse
+checkout only when a task genuinely needs concurrent source-code editing or a different
+revision. Do not clone or create a worktree merely to read evidence or produce JSON.
+For a reusable clean secondary checkout, preview
+`node scripts/prepare-people-sparse-checkout.mjs --checkout ABSOLUTE_PATH --book BOOK --chapter NNN`
+and add `--apply` after checking process ownership. This exact-chapter selection omits
+unrelated chapter files as well as site assets. The helper refuses dirty checkouts.
+
 Follow `LOCAL_DISK_STRATEGY.md`. Keep one full checkout for global builds; local
 chapter workers use reusable sparse checkouts without `public/`. Before creating
 another checkout, check available disk and reuse an idle one. Below 30 GiB free,
