@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "026",
+  "candidateCommit": "0d36aa29bbc22785c9aa4563486e41e93a54c475",
+  "candidateFile": "staged-candidate-4068d7c77378099ab0df.json",
+  "sourceHash": "sha256:30557d72ceec8fd32d6322c29f7448f4695ed6c07ff065931d9b74ce2a3d9eba",
+  "originalExtractionHash": "sha256:37663663bf203f3d8a56e15df2d9fa2c1488a26d963ea5d441f676ec18e5cabc",
+  "sealedCandidateHash": "sha256:4068d7c77378099ab0df931a4159ae0da7d190de3ae4348caa3e48ad33822bd1",
+  "candidateExtractionHash": "sha256:ae203902b70d828e04c253d40d236109ce501cdfb4f027b54e9dbff4326dbad9",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 026 corrected retrospective-reference reviewer",
+    "agentId": "review_jwd013_residual_citation_holds",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-29T01:20:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. This corrected reseal preserves the already independently source-verified 54-operation reclassification and fixes its sole prior defect: proposal.auditCommit and its chapter-primary research now pin the actual Jiuwudaishi 026 canonical audit c695edde8ee1fd810453d8257f35b2669c432cff. All eighteen malformed unresolved attestations and their paired research-only hints are replaced only by eighteen explicit but undated retrospective events. No life chronology, translation, identity, role, mention, source-unit, or prior date repair changes.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-478", "claim-479", "claim-480", "claim-482", "claim-483", "claim-484"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"units": ["s0228", "s0229", "s0231", "s0236", "s0241"], "reason": "The directly hash-verified units are literary allusions or comparisons to Shen Xu, Jiang Ji, Wang Mang, Sun Quan, Liu Bei, and Zang Hong. They provide no calendar-bearing personal chronology."}
+      ],
+      "reason": "Six malformed temporal attestations and their paired hints become six undated literary-allusion records only."
+    },
+    {
+      "proposalItems": ["claim-491", "claim-492", "claim-493", "claim-494", "claim-495", "claim-496", "claim-497", "claim-498"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"units": ["s0257", "s0258", "s0262", "s0264", "s0272", "s0273", "s0274"], "reason": "The directly hash-verified units are undated genealogy, legend, retrospective career notice, anecdote, or remembered deathbed-target references. They do not date the named subjects' personal activity."}
+      ],
+      "reason": "Eight malformed temporal attestations and paired hints become eight undated retrospective-reference records only."
+    },
+    {
+      "proposalItems": ["claim-499", "claim-500", "claim-501", "claim-502"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"units": ["s0284", "s0286"], "reason": "The directly hash-verified units compare the subject with Duke Huan, Duke Wen, King Wen, and Cao Cao; they supply no calendar-bearing chronology for any comparison subject."}
+      ],
+      "reason": "Four malformed temporal attestations and paired hints become four undated historiographical-comparison records only."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: independently rebuilt canonical packet matches source sha256:30557d72ceec8fd32d6322c29f7448f4695ed6c07ff065931d9b74ce2a3d9eba and extraction sha256:37663663bf203f3d8a56e15df2d9fa2c1488a26d963ea5d441f676ec18e5cabc.",
+    "auditProvenance": "PASS: proposal.auditCommit and research.canonicalAuditCommit both equal c695edde8ee1fd810453d8257f35b2669c432cff, which resolves locally as the actual Jiuwudaishi 026 independently audited canonical commit.",
+    "researchIntegrity": "PASS: the resealed research hashes to sha256:c2e0ca85c85b45d83b09a943951fb01a07e503bee8ca4359d1c0c2bd9ce20dce, matching the proposal; all fourteen cited Chinese units exactly equal their stored quotations and SHA-256 hashes.",
+    "sealedProposalIdentity": "PASS: sealedDateRepairProposalHash(proposal) independently recomputes sha256:4068d7c77378099ab0df931a4159ae0da7d190de3ae4348caa3e48ad33822bd1.",
+    "candidateExtractionIdentity": "PASS: independent deterministic replay exactly equals the stored candidate and hashes to sha256:ae203902b70d828e04c253d40d236109ce501cdfb4f027b54e9dbff4326dbad9.",
+    "exactOperationScope": "PASS: replay removes exactly 18 unresolved attestations, adds exactly 18 undated retrospective event-participation records, and clears exactly 18 paired research-only hint sets. No other extraction field changes.",
+    "strictCompactValidation": "PASS: strict alias-disposition validation reports 305 units, 1264 candidates, 181 people, 1038 mentions, 1030 claims, 7 applied repairs, 731 dispositions, and zero alias-disposition conflicts.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 026 passes in the isolated checkout against the pinned canonical chapter.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "translationImplications": "PASS: candidate changes no translation field; the cited English translations preserve the source references and this review finds no translation repair.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate exactly this corrected sealed 54-operation proposal only while all source, extraction, audit, research, and candidate pins remain current.",
+    "Keep every replacement event undated and classified only as a retrospective allusion, reference, or comparison.",
+    "Do not infer or attach any life date from the cited literary, genealogical, anecdotal, remembered-target, or historiographical material.",
+    "Obtain a fresh complete independent canonical date audit after host curation; this receipt is not canonical approval."
+  ],
+  "publication": "staging-only; candidate remains subject to separate host curation and a fresh independent canonical date audit"
+}

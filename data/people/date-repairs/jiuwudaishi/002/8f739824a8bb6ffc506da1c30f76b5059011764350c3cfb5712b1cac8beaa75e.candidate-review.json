@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-staged-date-repair-review",
+  "book": "jiuwudaishi",
+  "chapter": "002",
+  "candidateCommit": "0d708d2cbeeb75a0128f021e694c67455638a349",
+  "candidateFile": "staged-candidate-8f739824a8bb6ffc506d.json",
+  "sourceHash": "sha256:68a2692002f17ed5b31223325942befe5c13494d284567422c86e30976e43858",
+  "originalExtractionHash": "sha256:7f287fd7195a12b9ec36bc95f7f4e18dde6b20ed8162ee1e160343cbe7a6453e",
+  "sealedCandidateHash": "sha256:8f739824a8bb6ffc506da1c30f76b5059011764350c3cfb5712b1cac8beaa75e",
+  "candidateExtractionHash": "sha256:626fae373efb9a1c337346b50063f10914cc2b8c66c04a73028f47bce08b395e",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 002 date-context reviewer",
+    "agentId": "review_jwd013_residual_citation_holds",
+    "independentOfExtractor": true,
+    "independentOfCandidateCurator": true,
+    "independentOfAuditAuthor": true
+  },
+  "reviewedAt": "2026-09-29T01:15:00Z",
+  "disposition": "accept-for-host-curation",
+  "expectedCanonicalAuditStatus": "requires-fresh-independent-audit",
+  "summary": "Accepted. The sealed candidate makes exactly two source-date-context corrections and no other extraction change. Claim-428 correctly follows the explicit Tianyou 3 first-month anchor in s0276 and therefore records s0277 as Tianyou 3 first month / AD 906. Claim-466 correctly remains within the preceding Tianyou 2 eleventh-month sequence begun at s0245 and continued at s0251, retaining AD 905 while correcting its inherited source-date label. The candidate leaves the independently supported person hints unchanged and introduces no life chronology, translation change, or scope expansion.",
+  "reviewedChanges": [
+    {
+      "proposalItems": ["claim-428"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0276", "quote": "三年正月，幽、滄稱兵，將寇于魏。", "sourceHash": "sha256:dae7a57b22ce19493c7ba596cab9fac82cf6b21d228d8f47145d4b6ceab77805", "reason": "The unit explicitly opens the third year, first month immediately before s0277."},
+        {"unit": "s0277", "quote": "魏人來乞師，且以牙軍驕悍，謀欲誅之，遣親吏臧延范密告於帝，帝陰許之。", "sourceHash": "sha256:df500b5cf61c55f87174dc2348cd3231c31109a9b2ff94f5f7c764244e3a626c", "reason": "The Wei request and imperial assent follow the explicit Tianyou 3 first-month anchor; Tianyou 2 eleventh month is stale inherited context."}
+      ],
+      "reason": "Tianyou 3 is AD 906, so the replacement is source-sequence faithful and has the correct Western year."
+    },
+    {
+      "proposalItems": ["claim-466"],
+      "verdict": "supported",
+      "sourceEvidence": [
+        {"unit": "s0245", "quote": "十月丙戌朔，天子以帝為諸道兵馬元帥。", "sourceHash": "sha256:c30f70cd02cb1573367641fc37f17c1b9f3d6c961c1dd94a4b553636c5110d66", "reason": "This begins the Tianyou 2 autumn sequence."},
+        {"unit": "s0251", "quote": "十一月丙辰，大軍北濟。", "sourceHash": "sha256:83e0b9f0598b4974e94ea92a913716b8b3a7b3947af8c389b996d759458bd8d6", "reason": "This explicitly establishes the intervening eleventh-month sequence."},
+        {"unit": "s0262", "quote": "辛巳，天子命帝為相國，總百揆。", "sourceHash": "sha256:fd184612e04e8b794692d9ada64e9ddf96edb0708ca991858d03e84b5f60bd3c", "reason": "The appointment remains in that established Tianyou 2 eleventh-month sequence; the inherited Tianyou 3 label is wrong while AD 905 remains correct."}
+      ],
+      "reason": "The replacement changes only the erroneous source-date label and preserves the source-supported AD 905 Western year."
+    }
+  ],
+  "validation": {
+    "canonicalInputs": "PASS: independently rebuilt canonical packet matches source sha256:68a2692002f17ed5b31223325942befe5c13494d284567422c86e30976e43858 and extraction sha256:7f287fd7195a12b9ec36bc95f7f4e18dde6b20ed8162ee1e160343cbe7a6453e; the independently hashed canonical audit matches handoff auditReportHash sha256:5df2ea83cd37110e9e602f675e2486ec11c5f9de065e63bd360b1c1c34367a2a.",
+    "sealedProposalIdentity": "PASS: sealedDateRepairProposalHash(proposal) independently recomputes sha256:8f739824a8bb6ffc506da1c30f76b5059011764350c3cfb5712b1cac8beaa75e.",
+    "candidateExtractionIdentity": "PASS: independent deterministic replay exactly equals the stored candidate and hashes to sha256:626fae373efb9a1c337346b50063f10914cc2b8c66c04a73028f47bce08b395e.",
+    "exactScope": "PASS: replay changes only the date containers of claim-428 and claim-466. It changes no people, aliases, roles, mentions, hints, source units, translations, or unrelated claims.",
+    "retainedHints": "PASS: p138 and p157 active-date hints remain byte-identical (AD 905 and AD 906) and are independently supported by their wider chapter evidence; neither correction creates or removes an active hint.",
+    "strictCompactValidation": "PASS: strict alias-disposition validation reports 322 units, 1055 candidates, 157 people, 856 mentions, 910 claims, 0 applied repairs, 668 dispositions, and zero alias-disposition conflicts.",
+    "scopedValidator": "PASS: npm run people:validate -- --book jiuwudaishi --chapter 002 passes in the isolated checkout against the pinned canonical chapter.",
+    "chronologyGeometry": "PASS: dateAuditDiagnostics(dateAuditItems(candidate)) returns zero diagnostics.",
+    "translationImplications": "PASS: the five sequence-anchor units' existing literal and idiomatic translations preserve the chronology and attribution adequately; the candidate changes no translation and this review identifies no translation repair.",
+    "canonicalMutation": "NONE",
+    "masterMutation": "NONE"
+  },
+  "hostRequirements": [
+    "Curate exactly this sealed two-operation proposal only while the source, extraction, audit-report, and candidate pins remain current.",
+    "Keep claim-428 at Tianyou 3 first month / AD 906 and claim-466 at Tianyou 2 eleventh month / AD 905.",
+    "Keep all active-date hints unchanged unless a separately reviewed source-specific repair requires one.",
+    "Obtain a fresh complete independent canonical date audit after host curation; this receipt is not canonical approval."
+  ],
+  "publication": "staging-only; candidate remains subject to separate host curation and a fresh independent canonical date audit"
+}
