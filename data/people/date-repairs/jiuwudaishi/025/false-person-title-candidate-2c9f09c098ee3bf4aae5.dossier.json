@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "staged-false-person-removal-candidate",
+  "book": "jiuwudaishi",
+  "chapter": "025",
+  "status": "candidate-only",
+  "canonicalSourceHash": "sha256:5c621efe76c3132411fc7bafd88d507672255f6ba20a6f30f1530655006f5942",
+  "canonicalExtractionHash": "sha256:d5698f4b90d83f7e6e873feafc7e7879cc3886ef76f79439a8321594d7f142a3",
+  "candidateExtractionHash": "sha256:c102564c39dfa58e7febc0cf2b7026f4071d20c96717a130e24a4c0925b6ebaa",
+  "candidateFile": "staged-false-person-candidate-c102564c39dfa58e7feb.json",
+  "candidateFileSha256": "sha256:d3dc9dc7aa58cc972746581e6f984a920c213dbb68469a44e1c71ed07095d7f6",
+  "operation": {
+    "tool": "scripts/remove-false-people.mjs",
+    "command": "npm run people:remove-false -- --person jiuwudaishi:025:p011=title",
+    "person": "p011",
+    "reason": "title",
+    "sourceScope": ["s0020", "s0023"],
+    "expectedEffects": {
+      "peopleRemoved": 1,
+      "mentionsRemoved": 2,
+      "subjectClaimsRemoved": 5,
+      "externalClaimsRemoved": 0,
+      "candidateDispositionsAdded": 1,
+      "resolutionReferencesInvalidated": 0
+    }
+  },
+  "evidence": [
+    {
+      "unit": "s0023",
+      "quote": "仍係鄭王房。",
+      "reason": "This says Li Guochang remained enrolled in the Prince of Zheng branch. It is a genealogical branch reference, not an identification or event of an individual Prince of Zheng."
+    },
+    {
+      "unit": "s0020",
+      "quote": "咸通中，討龐勳有功",
+      "reason": "The Xiantong campaign date belongs to Li Guochang's service and must not be borrowed for the title-only lineage reference."
+    }
+  ],
+  "translationReview": {
+    "units": ["s0023"],
+    "result": "No repair proposed: the English correctly renders a genealogical line of the Prince of Zheng and does not turn the title into an identified person."
+  },
+  "validation": {
+    "strictCompact": "PASS at c47bfff9d2308982101492fd08661f7fd206b359: 248 units, 1181 candidates, 152 people, 885 mentions, 965 claims, 714 dispositions, zero alias-disposition conflicts.",
+    "chronologyGeometry": "PASS: zero diagnostics.",
+    "unresolvedContainers": "PASS: none in candidate extraction.",
+    "canonicalMutation": "NONE"
+  },
+  "independentReviewRequired": "A separate reviewer must reproduce the documented remover against the pinned canonical hash, verify both Chinese source units, compare the candidate hash and file hash, and run fresh canonical auditing after any host curation."
+}
