@@ -55,6 +55,7 @@ import {
   fingerprintSite,
   ogSidecarPath,
 } from './scripts/og-fingerprint.mjs';
+import { collectOpeningSnippet } from './scripts/og-chapter-snippet.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -63,9 +64,6 @@ const OG_W = 1200;
 const OG_H = 630;
 const HEADER_BLUE = '#1a5490';
 const HEADER_BLUE_DEEP = '#0d3a66';
-/** Long CJK-only excerpts can trigger Resvg panics; cap per paragraph before layout. */
-const OG_SNIPPET_CHAR_CAP = 420;
-
 function envPositiveInt(name, defaultVal, max) {
   const v = parseInt(process.env[name] || '', 10);
   if (!Number.isFinite(v) || v < 1) return defaultVal;
@@ -514,58 +512,6 @@ function bookOgElement(chinese, englishName, theme) {
       },
     ),
   );
-}
-
-/**
- * One OG “paragraph” per source `paragraph` block: prefer block-level English, else join sentences.
- * @returns {{ english: boolean, text: string } | null}
- */
-function paragraphSnippetFromBlock(block) {
-  const blockTr = (block.translations || []).find((t) => t.lang === 'en') || block.translations?.[0];
-  if (blockTr) {
-    const t = String(blockTr.idiomatic || blockTr.literal || '').trim();
-    if (t) return { english: true, text: t };
-  }
-
-  const pieces = [];
-  let anyEn = false;
-  for (const s of block.sentences || []) {
-    const tr = (s.translations || []).find((x) => x.lang === 'en') || s.translations?.[0];
-    const en = tr && String(tr.idiomatic || tr.literal || '').trim();
-    const zh = String(s.zh || '').trim();
-    if (en) {
-      anyEn = true;
-      pieces.push(en);
-    } else if (zh) {
-      pieces.push(zh);
-    }
-  }
-  if (pieces.length === 0) return null;
-  const text = anyEn ? pieces.join(' ') : pieces.join('');
-  return { english: anyEn, text };
-}
-
-/**
- * Opening excerpt as one snippet per original paragraph block (not per sentence).
- */
-/**
- * Teaser for social cards: low character budget (large type), but allow several short
- * paragraphs so choppy source structure still yields multiple blocks on the card.
- */
-function collectOpeningSnippet(chapterData, maxChars = 1000, maxParagraphs = 6) {
-  const parts = [];
-  let len = 0;
-  for (const block of chapterData.content || []) {
-    if (block.type !== 'paragraph') continue;
-    const snippet = paragraphSnippetFromBlock(block);
-    if (!snippet?.text) continue;
-    const nextLen = len + snippet.text.length + (parts.length > 0 ? 1 : 0);
-    if (parts.length > 0 && nextLen > maxChars) break;
-    parts.push(snippet);
-    len = nextLen;
-    if (parts.length >= maxParagraphs) break;
-  }
-  return parts;
 }
 
 /** Horizontal padding on the chapter card text column (left + right). */
@@ -1050,11 +996,7 @@ async function main() {
     const chapterData = JSON.parse(jsonBuf.toString('utf8'));
     const zhTitle = chapterData.meta?.title?.zh || `卷${chNum}`;
     const enTitle = chapterData.meta?.title?.en || '';
-    const snippetRaw = collectOpeningSnippet(chapterData);
-    const snippet = snippetRaw.map((p) => ({
-      ...p,
-      text: p.text.length > OG_SNIPPET_CHAR_CAP ? p.text.slice(0, OG_SNIPPET_CHAR_CAP) : p.text,
-    }));
+    const snippet = collectOpeningSnippet(chapterData);
     const png = await renderPng(chapterOgElement(zhTitle, enTitle, snippet, theme), fonts, resvgFontPath, {
       fallbackElements: [
         chapterOgElement(zhTitle, enTitle, snippet, theme, { noBottomFade: true }),

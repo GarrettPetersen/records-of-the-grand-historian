@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
  * Bump when OG layout, snippet rules, fonts-as-rendered, or static site card copy changes.
  * Forces a new fingerprint so incremental builds re-raster affected cards.
  */
-export const OG_LAYOUT_VERSION = '2';
+export const OG_LAYOUT_VERSION = '3';
 
 function stableJson(value) {
   return JSON.stringify(value ?? {});
