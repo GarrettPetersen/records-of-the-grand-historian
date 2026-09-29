@@ -1,5 +1,16 @@
 # AGENTS.md
 
+## Local disk conservation
+
+Follow `LOCAL_DISK_STRATEGY.md`. Keep one full checkout for global builds; local
+chapter workers use reusable sparse checkouts without `public/`. Before creating
+another checkout, check available disk and reuse an idle one. Below 30 GiB free,
+stop new checkouts/full builds and reclaim verified completed work first. Archive
+completed managed worktrees promptly after checking service/process dependencies and
+preserving needed ignored recovery state. Do not create unmanaged `/tmp` worktrees
+per chapter or review round. Independent reviewers require separate conversations
+and sealed evidence, not full repository copies.
+
 ## Cursor Cloud specific instructions
 
 This is a static-first site with one Cloudflare Pages Function for person records (no framework, no database). All scripts are vanilla Node.js ES modules requiring Node v22+.
