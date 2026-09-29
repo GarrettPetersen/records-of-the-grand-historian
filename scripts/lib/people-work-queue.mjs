@@ -439,6 +439,7 @@ export function localCursorRecoveryTargets() {
 
 export function localUnpublishedExtractionTargets(options = {}) {
   const targets = [];
+  const baseRef = options.baseRef ?? DEFAULT_PEOPLE_QUEUE_BASE_REF;
   const root = path.join(PEOPLE_DIR, 'extractions');
   if (!fs.existsSync(root)) return targets;
   const relativeRoot = path.relative(REPO_ROOT, root);
@@ -449,7 +450,7 @@ export function localUnpublishedExtractionTargets(options = {}) {
       .filter(Boolean)
       .map((line) => line.slice(3)),
     ...git([
-      'diff', '--name-only', `${options.baseRef ?? DEFAULT_PEOPLE_QUEUE_BASE_REF}...HEAD`,
+      'diff', '--name-only', `${baseRef}...HEAD`,
       '--', relativeRoot,
     ], { allowFailure: true }).stdout.trim().split('\n').filter(Boolean),
   ]);
@@ -461,6 +462,7 @@ export function localUnpublishedExtractionTargets(options = {}) {
       const target = { book: bookEntry.name, chapter };
       const output = extractionPath(target.book, target.chapter);
       if (!changedPaths.has(path.relative(REPO_ROOT, output)) || !extractionIsCurrent(target)) continue;
+      if (extractionIsCurrent(target, { ref: baseRef })) continue;
       targets.push({
         ...target,
         chapterFingerprint: readJson(output).input.chapterFingerprint,
