@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
-import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
+import { PeopleExtractionValidationError, validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
 import { loadProperNounMatcher } from './people-candidates.mjs';
-import { isCompactPeopleExtraction } from './people-compact.mjs';
+import { expandStalePeopleExtraction, isCompactPeopleExtraction } from './people-compact.mjs';
 import { DATA_DIR, PEOPLE_DIR, REPO_ROOT, readJson } from './people-content.mjs';
 import { formatSchemaErrors, getPeopleSchemaValidator } from './people-schema.mjs';
 
@@ -87,10 +87,21 @@ export function loadValidatedPeopleCorpus() {
   for (const file of files) {
     const raw = readJson(file);
     const packet = buildPeopleExtractionPacket(raw.book, raw.chapter, { properNounMatcher: matcher });
-    const result = isCompactPeopleExtraction(raw)
-      ? validateCompactPeopleExtraction(raw, packet)
-      : validatePeopleExtraction(raw, packet);
-    const extraction = result.normalized;
+    let extraction;
+    try {
+      const result = isCompactPeopleExtraction(raw)
+        ? validateCompactPeopleExtraction(raw, packet)
+        : validatePeopleExtraction(raw, packet);
+      extraction = result.normalized;
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !isCompactPeopleExtraction(raw)) {
+        throw error;
+      }
+      console.warn(
+        `people extraction stale, loading identity-only: ${path.relative(REPO_ROOT, file)}`,
+      );
+      extraction = expandStalePeopleExtraction(raw, packet);
+    }
     const chapterId = `${extraction.book}:${extraction.chapter}`;
     if (!expectedChapterSet.has(chapterId)) {
       throw new Error(`${path.relative(REPO_ROOT, file)} does not correspond to a source chapter`);
