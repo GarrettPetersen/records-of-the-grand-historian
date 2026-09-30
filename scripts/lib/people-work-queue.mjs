@@ -87,7 +87,7 @@ export function validatePeopleWorkLedger(ledger) {
   }
   for (const [key, claim] of Object.entries(ledger.claims)) {
     if (!/^[a-z0-9_-]+\/\d{3}$/u.test(key)) throw new Error(`Invalid queue chapter key: ${key}`);
-    if (!['cursor-sdk', 'grokbot'].includes(claim.lane)) throw new Error(`Invalid queue lane for ${key}`);
+    if (!['cursor-sdk', 'grokbot', 'openrouter'].includes(claim.lane)) throw new Error(`Invalid queue lane for ${key}`);
     if (!claim.worker || !claim.status || !claim.updatedAt) throw new Error(`Incomplete queue claim for ${key}`);
     if (claim.sticky !== true && !claim.expiresAt) throw new Error(`Non-sticky queue claim lacks expiry: ${key}`);
     if (claim.grokbotPlan != null) {
@@ -112,7 +112,7 @@ export function validatePeopleWorkLedger(ledger) {
   if (ledger.dateAudits !== undefined) {
     if (!ledger.dateAudits || typeof ledger.dateAudits !== 'object' || Array.isArray(ledger.dateAudits)) throw new Error('Invalid date-audit reservation map');
     for (const [key, claim] of Object.entries(ledger.dateAudits)) {
-      if (!/^[a-z0-9_-]+\/\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);
+      if (!/^[a-z0-9_-]+\/\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual','openrouter'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);
       if(claim.executorToken!==undefined && (typeof claim.executorToken!=='string'||!claim.executorToken||!Number.isFinite(Date.parse(claim.executorExpiresAt))))throw new Error(`Invalid date executor lease ${key}`);
       for(const plan of Object.values(claim.reviewPlans??{}))if(!Number.isSafeInteger(plan.maxUnits)||plan.maxUnits<1||!Number.isSafeInteger(plan.maxBytes)||plan.maxBytes<1024||!Array.isArray(plan.jobIds)||new Set(plan.jobIds).size!==plan.jobIds.length)throw new Error(`Invalid retained date plan ${key}`);
     }
