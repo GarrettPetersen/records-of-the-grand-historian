@@ -5,6 +5,7 @@ import { Agent } from '@cursor/sdk';
 import { REPO_ROOT, writeJsonAtomic, readJson } from './people-content.mjs';
 import { sendCursorAgentWhenReady, waitForCursorRun } from './cursor-run-wait.mjs';
 import { requestCursorUsageLimitStop } from './cursor-run-control.mjs';
+import { runOpenRouterDateTools } from './openrouter-date-tools.mjs';
 
 const prompt = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-date-review.txt'),'utf8');
 
@@ -189,6 +190,33 @@ export function attachmentDateWorker({ outputDir, saveRemoteJob }) {
     await task.save({ agentId: identity.agentId });
     Object.assign(task.state, { agentId: identity.agentId });
     if (saveRemoteJob) await saveRemoteJob(task.key,task.state);
+    return artifact;
+  };
+}
+export function openRouterDateWorker({ key, model, maxWorkerBytes, timeoutMs, recoverOnly = false, saveRemoteJob,
+  request }) {
+  return async task => {
+    const input = dateWorkerInput(task);
+    const payload = JSON.stringify(input);
+    if (Buffer.byteLength(payload) > (task.maxWorkerBytes ?? maxWorkerBytes)) {
+      throw new Error('OpenRouter date packet exceeds the sealed worker byte ceiling');
+    }
+    const output = path.join(task.directory, `openrouter-${task.key}.json`);
+    const agentId = `openrouter:${model}:${task.kind}:${task.key}`;
+    const save = async patch => {
+      await task.save(patch);
+      Object.assign(task.state, patch);
+      await saveRemoteJob(task.key, { ...task.state });
+    };
+    if (fs.existsSync(output) && !task.state.validationError) {
+      return readJson(output);
+    }
+    await save({ agentId, model, status: 'running-tools' });
+    const artifact = await runOpenRouterDateTools(task, { input, key, model, timeoutMs, recoverOnly, ...(request ? { request } : {}) });
+    if (task.kind === 'review') artifact.reviewer = { name: model, agentId, independentOfExtractor: true };
+    if (task.kind === 'repair') artifact.author = { name: model, agentId };
+    writeJsonAtomic(output, artifact);
+    await save({ status: 'returned', validationError: null });
     return artifact;
   };
 }

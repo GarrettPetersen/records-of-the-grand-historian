@@ -8,7 +8,8 @@ import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-c
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
 import { dateReviewJobs, dateWorkflowDirectory, runDateWorkflow } from './lib/people-date-workflow.mjs';
-import { cursorDateWorker, attachmentDateWorker } from './lib/people-date-worker.mjs';
+import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
+import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
 import { mutateRemotePeopleWorkLedger, claimIsActive, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { createRunControl, installSignalHandlers } from './lib/cursor-run-control.mjs';
@@ -23,27 +24,28 @@ const {values:o} = parseArgs({ options:{book:{type:'string'},chapter:{type:'stri
   worker:{type:'string'},lane:{type:'string',default:'cursor-sdk'},run:{type:'boolean'},
   'dry-run':{type:'boolean'},limit:{type:'string',default:'5'},concurrency:{type:'string',default:'2'},
   model:{type:'string'},'max-units':{type:'string',default:'40'},'max-worker-kib':{type:'string',default:'64'},
-  'max-rounds':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
+  'max-rounds':{type:'string',default:'3'},'max-attempts':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
   'max-run-tokens':{type:'string',default:'4000000'},'run-timeout-minutes':{type:'string',default:'20'},
   'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},takeover:{type:'boolean'},
   'min-approved':{type:'string',default:'0'},'summary-out':{type:'string'},order:{type:'string',default:'balanced'},
   'recover-only':{type:'boolean'},'cursor-capacity-start':{type:'string'} } });
 const integer = (key,max) => { const value=Number(o[key]); if(!Number.isSafeInteger(value)||value<1||value>max)throw new Error(`Invalid --${key}`); return value; };
 if ((!o.book && !o.all) || (o.book && o.all) || (o.chapter && !o.book)) throw new Error('Use --book [--chapter NNN] or --all');
-if (!['cursor-sdk','grokbot','manual'].includes(o.lane)) throw new Error('Unknown date worker lane');
+if (!['cursor-sdk','grokbot','manual','openrouter'].includes(o.lane)) throw new Error('Unknown date worker lane');
 if (!['balanced','calibration'].includes(o.order))throw new Error('Unknown date workload order');
 if (o.chapter && !/^\d{3}$/.test(o.chapter)) throw new Error('--chapter requires three digits');
 if (!o['dry-run'] && !o.worker) throw new Error('A stable --worker ID is required');
 if (o.release && (!o.book || !o.chapter)) throw new Error('--release requires one explicit --book and --chapter');
 if (!o.release && !o['recover-only'] && !o['dry-run'] && o.lane==='cursor-sdk' && (!o.run || !o.model)) throw new Error('Paid Cursor execution requires explicit --run and --model; use --dry-run otherwise');
-if (!o.release && o.lane!=='cursor-sdk' && !o['dry-run'] && !o['attachment-dir']) throw new Error('Attachment lanes require --attachment-dir');
-if (o.lane!=='cursor-sdk' && o.run) throw new Error('Grok Bot/manual lanes must not call Cursor SDK');
+if (!o.release && ['grokbot','manual'].includes(o.lane) && !o['dry-run'] && !o['attachment-dir']) throw new Error('Attachment lanes require --attachment-dir');
+if (['grokbot','manual'].includes(o.lane) && o.run) throw new Error('Attachment lanes must not call Cursor SDK');
+if (o.lane==='openrouter' && !o.release && !o['dry-run'] && !o['recover-only'] && !o.run) throw new Error('OpenRouter execution requires --run');
 const concurrency=integer('concurrency',8), limit=integer('limit',1000);
 const minimumApproved=Number(o['min-approved']);
 if(!Number.isSafeInteger(minimumApproved)||minimumApproved<0||minimumApproved>limit)throw new Error('Invalid --min-approved');
 const options = {maxUnits:integer('max-units',1000),maxBytes:integer('max-worker-kib',512)*1024-8192,
   recoverOnly:Boolean(o['recover-only']),
-  maxWorkerBytes:integer('max-worker-kib',512)*1024,maxRounds:integer('max-rounds',20),
+  maxWorkerBytes:integer('max-worker-kib',512)*1024,maxRounds:integer('max-rounds',20),maxAttempts:integer('max-attempts',20),
   maxRunTokens:integer('max-run-tokens',10000000),timeoutMs:integer('run-timeout-minutes',120)*60000};
 const dollars=Number(o['max-run-cost']);
 if(!Number.isFinite(dollars)||dollars<=0||dollars>20) throw new Error('Invalid --max-run-cost');
@@ -84,6 +86,11 @@ if (o['dry-run']) {
   }
   options.apiKey=process.env.CURSOR_API_KEY;
   if(!o.release && o.lane==='cursor-sdk' && !options.apiKey) throw new Error('CURSOR_API_KEY is missing');
+  options.openRouterKey=process.env.OPENROUTER_API_KEY;
+  options.openRouterModel=o.model??DEFAULT_OPENROUTER_FREE_MODEL;
+  if(!o.release && o.lane==='openrouter' && !o['recover-only']) {
+    await verifyOpenRouterFreeModel({key:options.openRouterKey,model:options.openRouterModel});
+  }
   const unlock=acquireProcessRunLock(path.join(PEOPLE_DIR,'generated','date-workflow-run.lock'),{label:'People date workflow'});
   const removeSignals=installSignalHandlers(control);
   const executorToken=randomUUID(),leaseMs=Math.max(3600000,options.timeoutMs+600000);
@@ -156,7 +163,11 @@ if (o['dry-run']) {
           const editorial=editorialDecisionPath(target.book,target.chapter);
           if(fs.existsSync(editorial))validateAppliedEditorialDecisions(readJson(editorial),result.normalized);
         };
-        const worker=o.lane==='cursor-sdk'?cursorDateWorker({...options,model:o.model,saveRemoteJob},control):attachmentDateWorker({outputDir:path.resolve(o['attachment-dir']),saveRemoteJob});
+        const worker=o.lane==='cursor-sdk'
+          ? cursorDateWorker({...options,model:o.model,saveRemoteJob},control)
+          : o.lane==='openrouter'
+            ? openRouterDateWorker({key:options.openRouterKey,model:options.openRouterModel,maxWorkerBytes:options.maxWorkerBytes,timeoutMs:options.timeoutMs,recoverOnly:options.recoverOnly,saveRemoteJob})
+            : attachmentDateWorker({outputDir:path.resolve(o['attachment-dir']),saveRemoteJob});
         try {
           const result=await runDateWorkflow(target,worker,{...options,validateExtraction,saveReviewPlan});
           console.log(`${key}: ${result.status}`);
@@ -167,7 +178,12 @@ if (o['dry-run']) {
             const claim=ledger.dateAudits?.[key];if(!claim||claim.executorToken!==executorToken)throw new Error('Lost date reservation');
             claim.status=result.status==='audited'?'ready':result.status==='research-blocked'?'research-blocked':'active';
           },{message:`Date review outcome ${key}`});
-        }catch(error){console.error(`${key}: ${error.message}`);outcomes.push({book:target.book,chapter:target.chapter,status:'interrupted',error:error.message});process.exitCode=1;}
+        }catch(error){
+          if(o.lane==='openrouter' && error.status===429) control.stopRequested=true;
+          console.error(`${key}: ${error.message}`);
+          outcomes.push({book:target.book,chapter:target.chapter,status:'interrupted',error:error.message});
+          process.exitCode=1;
+        }
       }
     };
     const settled=await Promise.allSettled(Array.from({length:concurrency},processNext));
