@@ -442,12 +442,6 @@ function orphanedOwnedClaimTargets(ledger, state, workerId) {
     .filter((target) => !recoveryOnlyTarget(target, state));
 }
 
-function freshClaimWindow(targets, concurrency) {
-  // A scheduler may continue to process later work in a future invocation, but it
-  // must not reserve the whole corpus while only this many workers can start now.
-  return targets.slice(0, Math.min(targets.length, concurrency));
-}
-
 function compareBookOrder(left, right) {
   return left.book.localeCompare(right.book) || left.chapter.localeCompare(right.chapter);
 }
@@ -501,7 +495,9 @@ function currentChunkArchiveIsValid(target, packet, chunk) {
   const archive = chunkArchivePath(target, chunk);
   if (!fs.existsSync(archive)) return false;
   try {
-    validateCompactPeopleExtraction(readJson(archive), buildPeopleChunkPacket(packet, chunk));
+    validateCompactPeopleExtraction(readJson(archive), buildPeopleChunkPacket(packet, chunk), {
+      strictAliasDispositions: true,
+    });
     return true;
   } catch {
     return false;
@@ -554,7 +550,10 @@ function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
       contextUnits: opts.chunkContextUnits,
     });
     if (log) console.log(`[${stateKey(target)}] restored adaptive ${restored.length}-range chunk plan`);
-    return restored;
+    // Existing accepted chunks and retained conversations are immutable recovery
+    // boundaries. Unstarted ranges, however, must still satisfy the current sealed
+    // worker-packet ceiling before a replacement worker is created.
+    return enforceWorkerByteCeiling(target, packet, restored, opts, state);
   }
   return restoreLegacyChunkPlan(target, packet, prior, opts) ??
     planFreshChunks(target, packet, opts, state);
@@ -1703,7 +1702,9 @@ function validateDownloadedExtraction(extraction, packet, target = null, chunk =
   }
   try {
     return isCompactPeopleExtraction(normalized.extraction)
-      ? validateCompactPeopleExtraction(normalized.extraction, packet)
+      ? validateCompactPeopleExtraction(normalized.extraction, packet, {
+        strictAliasDispositions: Boolean(chunk),
+      })
       : validatePeopleExtraction(normalized.extraction, packet);
   } catch (error) {
     if (target) {
@@ -2599,12 +2600,19 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
   if (fs.existsSync(archive)) {
     try {
       const extraction = readJson(archive);
-      validateCompactPeopleExtraction(extraction, packet);
+      validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: true });
       updateChunkState(state, target, chunk, { status: 'accepted', cached: true, lastErrors: [] });
       console.log(`[${stateKey(target)}/chunk-${chunk.id}] reused validated local artifact`);
       return { chunk, extraction };
     } catch (error) {
       console.warn(`[${stateKey(target)}/chunk-${chunk.id}] stale local artifact ignored: ${validationErrors(error)[0]}`);
+      if (previousChunk?.agentId && !previousChunk.resumeExhausted) {
+        updateChunkState(state, target, chunk, {
+          status: 'interrupted',
+          resumePending: false,
+          lastErrors: validationErrors(error),
+        });
+      }
     }
   }
   const rejected = rejectedArtifactPath(target, chunk);
@@ -2612,7 +2620,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
     try {
       const recovered = validateDownloadedExtraction(readJson(rejected), packet);
       const extraction = compactPeopleExtraction(recovered.normalized, packet);
-      validateCompactPeopleExtraction(extraction, packet);
+      validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: true });
       writeTextAtomic(archive, serializeCompactPeopleExtraction(extraction));
       updateChunkState(state, target, chunk, {
         status: 'accepted',
@@ -2803,7 +2811,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
       }
     }
     const compact = compactPeopleExtraction(accepted.extraction, packet);
-    validateCompactPeopleExtraction(compact, packet);
+    validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
     writeTextAtomic(archive, serializeCompactPeopleExtraction(compact));
     updateChunkState(state, target, chunk, {
       status: 'accepted',
@@ -3961,14 +3969,6 @@ async function selfTest() {
   if (orphanedClaims.length !== 1 || orphanedClaims[0].chapter !== '001') {
     throw new Error('Scheduler restart did not isolate unstarted claims for release');
   }
-  const freshWindow = freshClaimWindow([
-    { book: 'fixture', chapter: '001' },
-    { book: 'fixture', chapter: '002' },
-    { book: 'fixture', chapter: '003' },
-  ], 2);
-  if (freshWindow.length !== 2 || freshWindow[1].chapter !== '002') {
-    throw new Error('Fresh extraction claims exceeded the live concurrency window');
-  }
   const currentStickyScope = planningScopeTargets([
     { book: 'fixture', chapter: '001' },
     { book: 'fixture', chapter: '002' },
@@ -4107,25 +4107,17 @@ async function main() {
     let targets = queue.selected;
     let claimedTargets = [];
     if (!opts.dryRun && !opts.recoverOnly && targets.length > 0) {
-      const claimWindow = freshClaimWindow(targets, opts.concurrency);
-      const deferredFreshTargets = targets.length - claimWindow.length;
-      if (deferredFreshTargets > 0) {
-        console.log(
-          `Fresh-claim window limited to ${claimWindow.length} concurrent chapter(s); ` +
-          `${deferredFreshTargets} eligible chapter(s) remain available to other lanes.`,
-        );
-      }
-      const reserved = claimRemotePeopleTargets(claimWindow, {
+      const reserved = claimRemotePeopleTargets(targets, {
         ...sharedQueueOptions,
         lane: 'cursor-sdk',
         worker: opts.workerId,
-        limit: claimWindow.length,
+        limit: targets.length,
       });
       const claimedKeys = new Set(reserved.result.claimed.map(workQueueChapterKey));
-      claimedTargets = claimWindow.filter((target) => claimedKeys.has(workQueueChapterKey(target)));
-      if (claimedTargets.length !== claimWindow.length) {
+      claimedTargets = targets.filter((target) => claimedKeys.has(workQueueChapterKey(target)));
+      if (claimedTargets.length !== targets.length) {
         console.warn(
-          `Shared queue race: reserved ${claimedTargets.length}/${claimWindow.length}; ` +
+          `Shared queue race: reserved ${claimedTargets.length}/${targets.length}; ` +
           'chapters claimed by the other lane were removed before inference.',
         );
       }
