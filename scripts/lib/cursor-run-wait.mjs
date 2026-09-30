@@ -24,6 +24,19 @@ function sleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
+// The SDK does not expose an AbortSignal for telemetry/status reads.  Do not
+// let one stalled HTTPS request defeat a run's wall-clock circuit breaker.
+function boundedRead(promise, options, label) {
+  const timeoutMs = options.readTimeoutMs ?? 30 * 1000;
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${label} timed out after ${Math.ceil(timeoutMs / 1000)}s`)), timeoutMs);
+    }),
+  ]).finally(() => clearTimeout(timer));
+}
+
 function lostStream(value) {
   return LOST_STREAM.test(value instanceof Error ? value.message : String(value ?? ''));
 }
@@ -155,7 +168,7 @@ async function enforceRunLimits(run, options, { terminal = false } = {}) {
     apiKey: options.apiKey,
     runId: run.id,
   }));
-  const billed = await readUsage(run);
+  const billed = await boundedRead(readUsage(run), options, `${options.label ?? 'Cursor run'} usage read`);
   const totalTokens = Math.max(
     billed?.usage?.totalTokens ?? 0,
     run.usage?.totalTokens ?? 0,
@@ -239,11 +252,11 @@ export async function waitForCursorRun(run, options) {
     await waitForCursorApiCooldown();
     let refreshed;
     try {
-      refreshed = await Agent.getRun(run.id, {
+      refreshed = await boundedRead(Agent.getRun(run.id, {
         runtime: 'cloud',
         agentId: options.agentId,
         apiKey: options.apiKey,
-      });
+      }), options, `${options.label ?? 'Cursor run'} status read`);
     } catch (error) {
       if (isCursorRateLimited(error)) {
         blockCursorApiFor(
