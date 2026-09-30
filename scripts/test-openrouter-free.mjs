@@ -5,6 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { assertFreeModel, openRouterFreeJson, openRouterFreeCompletion } from './lib/openrouter-free.mjs';
 import { openRouterDateWorker } from './lib/people-date-worker.mjs';
+import { runOpenRouterDateTools } from './lib/openrouter-date-tools.mjs';
 
 const catalog = { data: [{ id: 'fixture/model:free', pricing: { prompt: '0', completion: '0' },
   top_provider: { max_completion_tokens: 2048 } }] };
@@ -66,5 +67,35 @@ test('date worker checkpoints artifact and separates reviewer identity', async (
     assert.equal((await worker(task)).summary, 'Every assigned source unit was checked.');
     assert.equal(calls, 1);
     assert.equal(fs.readdirSync(directory).length, 2);
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('date tools save a nonempty check across bounded turns', async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'openrouter-date-records-'));
+  try {
+    const input = { instructions: 'Inspect chronology.', phase: 'independent-review', book: 'fixture', chapter: '001',
+      id: 'job-1', sourceHash: 'sha256:source', extractionHash: 'sha256:extraction',
+      ownedUnits: ['u1'], ownedItems: ['i1'], ownedPeople: [], units: [{ id: 'u1', zh: '甲年生' }] };
+    const task = { kind: 'review', key: 'audit-1', directory, state: {} };
+    const calls = [
+      ['read_packet', { section: 'units', start: 0, count: 1 }],
+      ['save_records', { section: 'itemChecks', records: [{ key: 'i1', value: { id: 'i1', event: 'Birth of the person', verdict: 'supported', reason: 'The owned Chinese source says the person was born.', evidence: [{ unit: 'u1', quote: '甲年生' }] } }] }],
+      ['finish_date', { summary: 'The birth date is explicitly attested in the owned source.', blocked: false, reason: '' }],
+    ];
+    let turn = 0;
+    const request = async ({ onResponse }) => {
+      const [name, args] = calls[turn++];
+      const response = { choices: [{ finish_reason: 'tool_calls', message: { role: 'assistant', content: null,
+        tool_calls: [{ id: `call-${turn}`, type: 'function', function: { name, arguments: JSON.stringify(args) } }] } }] };
+      await onResponse(response);
+      return response;
+    };
+    const result = await runOpenRouterDateTools(task, { input, key: 'fixture', model: 'fixture/model:free', timeoutMs: 1000, maxTurns: 3, request });
+    assert.equal(result.itemChecks[0].id, 'i1');
+    assert.deepEqual(result.reviewedUnits, ['u1']);
+    assert.equal(turn, 3);
+    const replay = await runOpenRouterDateTools(task, { input, key: 'fixture', model: 'fixture/model:free', timeoutMs: 1000, maxTurns: 3, recoverOnly: true, request });
+    assert.deepEqual(replay, result);
+    assert.equal(turn, 3);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 });
