@@ -1,6 +1,7 @@
 // Complete book metadata for the Twenty-Four Histories and supplemental works.
 // Books are loaded dynamically from manifest.json and sorted chronologically
 import { getBookDesign } from './book-design.js';
+import { kindleProductForBook } from './kindle-promo-shared.js?v=20260929-kindle-availability';
 
 export const BOOKS = {
   shiji: {
@@ -405,7 +406,7 @@ export function buildBookCoverCardInnerHtml({ bookId, info, chapterCount }) {
   const design = getBookDesign(bookId);
   const coverPath = `/covers/books/${bookId}.svg`;
   const coverageLine = design.coverage ? `${design.coverage} · ` : '';
-  const kindleLine = bookId === 'shiji'
+  const kindleLine = kindleProductForBook(bookId)
     ? '<div class="book-cover-card-kindle">Kindle edition available</div>'
     : '';
   return `
