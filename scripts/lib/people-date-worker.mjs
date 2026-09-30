@@ -292,7 +292,6 @@ export function attachmentDateWorker({ outputDir, saveRemoteJob }) {
     return artifact;
   };
 }
-
 export function openRouterDateWorker({ key, model, maxWorkerBytes, timeoutMs, recoverOnly = false, saveRemoteJob,
   request }) {
   return async task => {
