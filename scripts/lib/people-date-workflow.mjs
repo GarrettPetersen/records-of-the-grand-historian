@@ -217,7 +217,10 @@ export function applyDateRepairProposal(stored, proposal, packet) {
   const seen = new Set();
   const temporal = new Set(dateAuditItems(stored).items.filter(i=>i.claimIndex !== undefined).map(i=>i.id));
   const removed = new Set();
-  for (const change of proposal.changes) {
+  // Hint validity depends on the final claim set, not tool-call insertion order.
+  // Apply all claim edits before active hints and external hint provenance.
+  const rank=change=>change.kind==='external-primary-chronology'?2:change.kind==='hints'?1:0;
+  for (const change of [...proposal.changes].sort((a,b)=>rank(a)-rank(b))) {
     if (typeof change.reason !== 'string' || change.reason.trim().length < 20) throw new Error('Repair requires source-based reasoning');
     if (change.kind === 'hints') {
       const key = `hints-${change.personId}`;
@@ -227,12 +230,13 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       // must not retain invented life-date hints just to satisfy the ordinary
       // extraction invariant. The separately classified reception record is
       // still required, so an empty hint list cannot hide an ordinary person.
-      const noChronologyEvidence = change.after?.length === 0 && candidate.claims.some(claim =>
+      const remainingClaims=candidate.claims.filter((_,index)=>!removed.has(index));
+      const noChronologyEvidence = change.after?.length === 0 && remainingClaims.some(claim =>
         claim[0] === change.personId && claim[1] === 'attestation' &&
-        claim[2]?.undatedSourceAttestation === true) && !candidate.claims.some(claim =>
+        claim[2]?.undatedSourceAttestation === true) && !remainingClaims.some(claim =>
         claim[0] === change.personId && hasDateBearingChronology(claim[2]));
-      const receptionOnly = change.after?.length === 0 && candidate.claims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
-      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
+      const receptionOnly = change.after?.length === 0 && remainingClaims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
+      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error(`Invalid or stale active-hint repair for ${change.personId}: empty hints require preserved reception evidence or undated source attestation without remaining chronology`);
       person[4] = { ...person[4], a: change.after };
     } else if (change.kind === 'external-primary-chronology') {
       const key = `external-primary-chronology-${change.personId}`;

@@ -38,6 +38,7 @@ export function grokBuildDateTools(input, kind) {
   const claims = ownedEnum(input.claims.map(claim => claim.id));
   const person = ownedEnum(input.people.map(person => person.id));
   return [...common,
+    tool('remove_change', 'Withdraw a saved repair operation by its exact key; original extraction bytes are untouched. Use this to undo an invalid proposed edit, not erase source evidence.', object({ key:text, reason:text })),
     tool('revise_claim', 'Revise an affected temporal claim using named fields. Host preserves the person/predicate and supplies the exact before-value. date-context may change date fields only.', object({ kind: { enum: ['replace', 'date-context'] }, id: claims, value: { type: 'object' }, certainty, evidence: array(units), reason: text })),
     tool('remove_claim', 'Remove one misleading temporal claim. Preserve a legitimate later reception with add_temporal_claim when needed.', object({ id: claims, reason: text })),
     tool('add_temporal_claim', 'Add an omitted life/date claim or an explicitly classified later reception event for an existing person.', object({ personId: person, kind: { enum: ['attestation', 'birth', 'death', 'age', 'event-participation'] }, value: { type: 'object' }, certainty, evidence: array(units), reason: text })),
@@ -216,6 +217,10 @@ export function grokBuildDateWorker(options, { request = grokBuildSubscriptionCo
           }
           if (task.kind !== 'repair') throw new Error('Unknown review tool');
           substantive(args.reason, 'Repair reason');
+          if(name==='remove_change'){
+            if(!state.changes[args.key])throw new Error('Unknown saved repair operation');
+            delete state.changes[args.key];return {removed:args.key};
+          }
           let change, key;
           if (name === 'revise_claim' || name === 'remove_claim') {
             const row = input.claims.find(claim => claim.id === args.id)?.row;
