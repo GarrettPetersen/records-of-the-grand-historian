@@ -1,0 +1,34 @@
+name: Master build gate
+
+# Run on the proposed PR merge commit, not just the topic branch. Keep this
+# workflow unfiltered so its required check is always reported for master PRs.
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+jobs:
+  master-build:
+    name: master-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build and validate the full site
+        run: npm run build
