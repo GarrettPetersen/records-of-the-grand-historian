@@ -96,7 +96,12 @@ export function newToolState(snapshot) {
 
 export function compileToolDraft(state, snapshot) {
   const draft = structuredClone(snapshot.seed);
-  for (const section of SECTIONS) draft[section] = Object.values(state.records[section]).map(record => recordTuple(section, record));
+  for (const section of SECTIONS) {
+    const records = Object.values(state.records[section]);
+    // Tool updates may arrive out of order; tuple serialization owns ordering.
+    if (section === 'people') records.sort((a, b) => a.id.localeCompare(b.id));
+    draft[section] = records.map(record => recordTuple(section, record));
+  }
   for (const key of Object.keys(draft.coverage)) {
     if (typeof draft.coverage[key] === 'boolean') draft.coverage[key] = state.auditComplete;
   }
@@ -269,7 +274,7 @@ export function executePeopleTool(state, snapshot, name, args) {
   }
 }
 
-export async function runDeepSeekToolPilot(snapshot, { maxTurns, feedback, shouldStop, request, compare }) {
+export async function runDeepSeekToolPilot(snapshot, { maxTurns, feedback, guidance, selectTools, compactMessages, shouldStop, request, compare }) {
   const stateFile = path.join(snapshot.dir, 'agent-state.json');
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : newToolState(snapshot);
   if (state.version !== TOOL_PILOT_VERSION || state.fingerprint !== snapshot.fingerprint) throw new Error('Agent checkpoint does not match this harness and source');
@@ -330,17 +335,37 @@ Independent review, not date matching alone, judges identity and evidential supp
       writeJsonAtomic(stateFile, state);
     }
   }
+  if (guidance) {
+    const digest = sha256(guidance);
+    if (!(state.guidanceDigests ?? []).includes(digest)) {
+      state.messages.push({ role: 'user', content: guidance });
+      state.guidanceDigests = [...(state.guidanceDigests ?? []), digest];
+      writeJsonAtomic(stateFile, state);
+    }
+  }
   if (!state.accepted) {
     for (const name of ['validated.json', 'semantic-review.json', 'chronology-review.json', 'editorial-review.json', 'evaluation.json']) {
       const file = path.join(snapshot.dir, name);
       if (fs.existsSync(file)) fs.unlinkSync(file);
     }
   }
+  let firstToolTurn = true;
   while (!state.accepted && !state.blocker && !state.attention && state.nextTurn <= maxTurns && !shouldStop()) {
     const turn = state.nextTurn;
+    if (compactMessages && ((firstToolTurn && turn > 1) || Buffer.byteLength(JSON.stringify(state.messages)) > 128000)) {
+      writeJsonAtomic(path.join(snapshot.dir, 'context-archives', `before-${turn}.json`), state);
+      state.messages = compactMessages(state);
+      writeJsonAtomic(stateFile, state);
+      console.log(`${snapshot.scope}: archived transcript and compacted from retained records`);
+    }
+    firstToolTurn = false;
+    const tools = selectTools ? selectTools(PEOPLE_TOOLS, state) : PEOPLE_TOOLS;
+    if (!Array.isArray(tools) || tools.length === 0 || tools.some(item => !PEOPLE_TOOLS.includes(item))) {
+      throw new Error('Tool selection must contain existing people tools');
+    }
     console.log(`${snapshot.scope} tool turn ${turn}: submitting`);
     const response = await request(turn, {
-      model: snapshot.seed.run.model, messages: state.messages, tools: PEOPLE_TOOLS,
+      model: snapshot.seed.run.model, messages: state.messages, tools,
       thinking: { type: snapshot.thinking }, ...(snapshot.thinking === 'enabled' ? { reasoning_effort: 'low' } : {}),
       temperature: snapshot.temperature, top_p: 1, max_tokens: 8192,
     });

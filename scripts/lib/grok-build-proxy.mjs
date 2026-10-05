@@ -27,6 +27,53 @@ export function installedGrokBuildVersion(command = 'grok') {
   return version;
 }
 
+export async function grokBuildAccountStatus({ fetchImpl = fetch,
+  credential = readGrokBuildCredential(), version = installedGrokBuildVersion() } = {}) {
+  const headers = { authorization: `Bearer ${credential.token}`, 'x-xai-token-auth': 'xai-grok-cli',
+    'x-userid': credential.userId, 'x-grok-client-version': version, 'x-grok-client-mode': 'headless' };
+  const get = async suffix => {
+    const response = await fetchImpl(`https://cli-chat-proxy.grok.com/v1/${suffix}`, {
+      headers, redirect: 'error', signal: AbortSignal.timeout(15000),
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(`Grok Build billing HTTP ${response.status}`);
+    return body;
+  };
+  const billing = await get('billing?format=credits');
+  const topup = await get('auto-topup-rule');
+  const config = billing.config;
+  if (!config || !Number.isFinite(config.creditUsagePercent) ||
+      config.currentPeriod?.type !== 'USAGE_PERIOD_TYPE_WEEKLY') {
+    throw new Error('Grok Build returned no verified weekly allowance');
+  }
+  const amount = field => {
+    const value = config[field]?.val ?? 0; // Protobuf omits zero-valued fields.
+    if (!['number','string'].includes(typeof value) || !Number.isFinite(Number(value)) || Number(value)<0) {
+      throw new Error(`Grok Build returned an invalid ${field} amount`);
+    }
+    return Number(value);
+  };
+  return { usedPercent: config.creditUsagePercent, period: config.currentPeriod,
+    autoTopup: topup.rule?.enabled === true,
+    onDemandCap: amount('onDemandCap'), onDemandUsed: amount('onDemandUsed'),
+    prepaidBalance: amount('prepaidBalance') };
+}
+
+export async function grokBuildSubscriptionCompletion(options) {
+  const credential = options.credential ?? readGrokBuildCredential();
+  const version = options.version ?? installedGrokBuildVersion();
+  const status = await grokBuildAccountStatus({ credential, version, fetchImpl: options.fetchImpl ?? fetch });
+  if (status.autoTopup || status.onDemandCap > 0 || status.prepaidBalance > 0) {
+    throw new Error('Subscription-only execution requires auto top-up, on-demand cap, and purchased balance to be disabled');
+  }
+  if (status.usedPercent >= 100) {
+    const error = new Error('Grok Build weekly allowance exhausted; checkpoints retained');
+    error.status = 429;
+    throw error;
+  }
+  return grokBuildCompletion({ ...options, credential, version });
+}
+
 export async function grokBuildCompletion({ messages, tools, timeoutMs = 120000, maxTokens = 8192,
   fetchImpl = fetch, credential = readGrokBuildCredential(), version = installedGrokBuildVersion() }) {
   if (!Array.isArray(messages) || !messages.length || !Array.isArray(tools)) {

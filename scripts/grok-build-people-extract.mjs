@@ -12,21 +12,33 @@ import { validateCompactPeopleExtraction } from './validate-people-extraction.mj
 import { assertDurableCareerCoverage } from './lib/people-extraction-acceptance.mjs';
 import { claimRemotePeopleTargets, fetchPeopleQueueBase, extractionIsCurrent,
   markRemotePeopleClaims, readRemotePeopleWorkLedger, claimIsActive } from './lib/people-work-queue.mjs';
-import { runDeepSeekToolPilot, TOOL_PILOT_VERSION } from './lib/deepseek-people-tools.mjs';
-import { loadChronologyReference } from './lib/people-chronology-reference.mjs';
+import { runDeepSeekToolPilot, executePeopleTool, TOOL_PILOT_VERSION } from './lib/deepseek-people-tools.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
-import { grokBuildCompletion, GROK_BUILD_MODEL, readGrokBuildCredential,
+import { grokBuildSubscriptionCompletion, GROK_BUILD_MODEL, readGrokBuildCredential,
   installedGrokBuildVersion } from './lib/grok-build-proxy.mjs';
+import { namedPeopleRecordTools, normalizePeopleRecordCalls } from './lib/people-record-tools.mjs';
+import { grokBuildSemanticReview } from './lib/grok-build-semantic-review.mjs';
+import { semanticRepairFeedback } from './lib/deepseek-people-review.mjs';
 
 const ROOT = path.join(PEOPLE_DIR, 'generated', 'grok-build-extractions');
 const INSTRUCTIONS = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-extraction-compact.txt'), 'utf8');
 const SCHEMA = readJson(path.join(PEOPLE_DIR, 'schema', 'compact-extraction.schema.json'));
 const REFERENCED_SCHEMA = readJson(path.join(PEOPLE_DIR, 'schema', 'extraction.schema.json'));
+const EXTRACTION_TOOL_NAMES = new Set(['read_source', 'read_reference', 'read_records',
+  'write_records', 'delete_record', 'validate_draft', 'finish', 'report_blocker']);
+const SOURCE_FIRST_GUIDANCE = `This Grok Build lane is source-first extraction. An independent date-audit lane will research and approve Western chronology later. Read every owned source unit, then use write_people, write_surfaces, write_claims, write_dispositions, and write_translation_repairs in small named-field batches. Do not read records before saving any. Preserve source chronology as source evidence, but do not assert unsupported Western dates. Validate the saved draft and repair diagnostics before finish.`;
+const SOURCE_FIRST_RESUME_GUIDANCE = `Continue the saved records. The write tools now expose named schemas: write_people, write_surfaces, write_claims, write_dispositions, and write_translation_repairs. Follow their exact enums and fields. The host now sorts person IDs; do not rewrite people just to reorder them. Remove an overlapping surname surface when it is already within another person's full name (王 in 王收 cannot link simultaneously to two people). Surface exact text must actually occur in the cited unit; an inferred full name is a name claim, never a fabricated surface. Save source-supported family edges, appointments, offices, campaigns and other durable claims now; merely listing people and surfaces is incomplete. Account for every candidate with a mention or a reason-enum disposition. Independent date audit handles external research and Western chronology later.`;
 
 function positive(value, flag) {
   const number = Number(value);
   if (!Number.isSafeInteger(number) || number < 1) throw new Error(`${flag} requires a positive integer`);
   return number;
+}
+
+export function grokBuildQueueLane(claim, worker) {
+  if (claim?.worker === worker && claim.lane === 'grokbot' &&
+      claim.note?.startsWith('Local Grok Build subscription inference;')) return 'grokbot';
+  return 'grok-build';
 }
 
 export function planGrokBuildChunks(packet, { maxUnits = 20, maxCandidates = 100, maxBytes = 24 * 1024 } = {}) {
@@ -44,11 +56,14 @@ export function planGrokBuildChunks(packet, { maxUnits = 20, maxCandidates = 100
 
 export async function runGrokBuildExtraction(target, options) {
   const { worker, maxUnits, maxCandidates, maxBytes, maxTurns, maxTotalTokens, timeoutMs,
-    matcher = loadProperNounMatcher(), chronology = loadChronologyReference(),
-    completion = grokBuildCompletion } = options;
+    matcher = loadProperNounMatcher(),
+    completion = grokBuildSubscriptionCompletion } = options;
   if (!/^grok-build-[a-z0-9][a-z0-9-]{0,47}$/u.test(worker)) throw new Error('Use a stable grok-build-* worker ID');
   fetchPeopleQueueBase();
   fetchPeopleQueueBase({ baseRef: 'origin/codex/people-glossary-staging-v2' });
+  const priorClaim = readRemotePeopleWorkLedger().claims[`${target.book}/${target.chapter}`];
+  const queueLane = grokBuildQueueLane(priorClaim, worker);
+  if (queueLane !== 'grok-build') console.log('Resuming Grok Build transport under its retained grokbot queue category');
   if (fs.existsSync(extractionPath(target.book, target.chapter)) ||
       extractionIsCurrent(target, { ref: 'origin/master' }) ||
       extractionIsCurrent(target, { ref: 'origin/codex/people-glossary-staging-v2' })) {
@@ -67,8 +82,10 @@ export async function runGrokBuildExtraction(target, options) {
   if (fs.existsSync(planFile) && JSON.stringify(readJson(planFile)) !== JSON.stringify(plan)) {
     throw new Error('Retained Grok Build chunk plan differs from current source or ceilings');
   }
-  const claimed = claimRemotePeopleTargets([{ ...target, chapterFingerprint: packet.input.chapterFingerprint }], {
-    lane: 'grok-build', worker, limit: 1, sticky: true,
+  const alreadyOwned = priorClaim?.worker === worker && priorClaim?.lane === queueLane &&
+    priorClaim?.sticky === true && priorClaim?.chapterFingerprint === packet.input.chapterFingerprint;
+  const claimed = alreadyOwned ? {claimed:[target]} : claimRemotePeopleTargets([{ ...target, chapterFingerprint: packet.input.chapterFingerprint }], {
+    lane: queueLane, worker, limit: 1, sticky: true,
     note: 'Local Grok Build subscription inference; retain tool checkpoints until accepted',
     message: `Reserve Grok Build extraction ${target.book}/${target.chapter}`,
   }).result;
@@ -83,42 +100,60 @@ export async function runGrokBuildExtraction(target, options) {
     for (const chunk of chunks) {
       const owned = buildPeopleChunkPacket(packet, chunk);
       const file = path.join(directory, `chunk-${chunk.id}.json`);
-      if (fs.existsSync(file)) {
-        const extraction = readJson(file);
-        const validated = validateCompactPeopleExtraction(extraction, owned, { strictAliasDispositions: true });
-        assertDurableCareerCoverage(validated.normalized, owned);
-        parts.push({ chunk, extraction });
-        continue;
-      }
       const toolDir = path.join(directory, `tool-${chunk.id}`);
       if (usedTokens >= maxTotalTokens) throw new Error(`Grok Build invocation token ceiling reached; resume ${worker} after review`);
       const seed = buildCompactPeopleExtractionSeed(owned, 'Grok Build');
       const snapshot = { scope: `${target.book}/${target.chapter}`, chunk, packet: owned,
         worker: buildPeopleChunkWorkerPacket(packet, chunk), seed, instructions: INSTRUCTIONS,
-        dir: toolDir, thinking: 'enabled', temperature: 0, chronology,
+        dir: toolDir, thinking: 'enabled', temperature: 0, chronology: null,
         fingerprint: sha256(JSON.stringify({ protocol: TOOL_PILOT_VERSION, sourceHash, instructionHash, schemaHash,
           model: GROK_BUILD_MODEL, chunk: { id: chunk.id, start: chunk.start, end: chunk.end } })),
         messages: [{ role: 'system', content: `<schema>${JSON.stringify(SCHEMA)}</schema><referenced-schema>${JSON.stringify(REFERENCED_SCHEMA)}</referenced-schema>` }] };
       const stateFile = path.join(toolDir, 'agent-state.json');
-      const nextTurn = fs.existsSync(stateFile) ? readJson(stateFile).nextTurn : 1;
-      if (!Number.isSafeInteger(nextTurn) || nextTurn < 1) throw new Error('Invalid retained Grok Build turn counter');
-      const result = await runDeepSeekToolPilot(snapshot, {
+      const feedbackFile = path.join(toolDir, 'grok-build-repair-feedback.json');
+      let feedback = fs.existsSync(feedbackFile) ? readJson(feedbackFile).feedback : undefined;
+      let approved = false;
+      for (let round = 0; round < 3; round++) {
+        const nextTurn = fs.existsSync(stateFile) ? readJson(stateFile).nextTurn : 1;
+        if (!Number.isSafeInteger(nextTurn) || nextTurn < 1) throw new Error('Invalid retained Grok Build turn counter');
+        const result = await runDeepSeekToolPilot(snapshot, {
         maxTurns: nextTurn + maxTurns - 1,
+        feedback,
+        guidance: nextTurn > 1 ? SOURCE_FIRST_RESUME_GUIDANCE : SOURCE_FIRST_GUIDANCE,
+        selectTools: tools => tools.filter(tool => EXTRACTION_TOOL_NAMES.has(tool.function.name)),
+        compactMessages: state => [
+          { role: 'system', content: `You are a historical extraction worker using record tools. ${SOURCE_FIRST_RESUME_GUIDANCE} The source, instructions and vocabularies are supplied below; do not reread them unless a specific detail is missing. The prior transcript is archived; ALL saved records, source evidence and citations remain available. This is not a new extraction. Do not repeat already correct records. The host sorts people and assembles tuples. Use link_candidates to save actual candidate occurrences without inventing source spans. Do not invent surfaces to equalize Chinese/English counts; a pronoun is not a name.\n${INSTRUCTIONS}` },
+          { role: 'user', content: JSON.stringify({ scope: snapshot.scope, ownedUnits: snapshot.worker.units.map(row=>row[0]),
+            sealedSource: snapshot.worker, records: state.records, feedback: feedback ?? null,
+            diagnostics: executePeopleTool(state,snapshot,'validate_draft',{offset:0}),
+            nextStep: 'Use the supplied source to save missing literal mentions, candidate dispositions and durable facts. Validate and address diagnostics; never delete legitimate facts merely to satisfy the validator.' }) },
+        ],
         shouldStop: () => usedTokens >= maxTotalTokens,
         compare: () => ({}),
         request: async (turn, body) => {
           const responseFile = path.join(toolDir, `response-${turn}.json`);
           if (fs.existsSync(responseFile)) return readJson(responseFile);
-          const response = await completion({ messages: body.messages, tools: body.tools, timeoutMs,
+          const raw = await completion({ messages: body.messages, tools: namedPeopleRecordTools(body.tools, SCHEMA, snapshot.worker.candidates), timeoutMs,
             maxTokens: Math.min(body.max_tokens, 8192) });
+          writeJsonAtomic(path.join(toolDir, `raw-response-${turn}.json`), raw);
+          const response = normalizePeopleRecordCalls(raw, snapshot.worker.candidates);
           usedTokens += response.usage.total_tokens;
           writeJsonAtomic(responseFile, response);
           return response;
         },
       });
-      if (result.status !== 'validated') {
+        if (result.status !== 'validated') {
         throw new Error(`${target.book}/${target.chapter}/${chunk.id} is ${result.status}; retained work is in ${toolDir}`);
+        }
+        const review = await grokBuildSemanticReview(snapshot, { maxTurns, maxTotalTokens: maxTotalTokens-usedTokens, timeoutMs,
+          request: async body => { const response = await completion(body); usedTokens += response.usage.total_tokens; return response; } });
+        writeJsonAtomic(path.join(toolDir, 'grok-build-semantic-review.json'), review);
+        if (review.report.decision === 'approve') { approved = true; break; }
+        if (review.report.decision === 'research-blocked') throw new Error('Independent semantic review retained a research hold; inspect the saved report');
+        feedback = semanticRepairFeedback(review);
+        writeJsonAtomic(feedbackFile, { feedback, fingerprint: review.fingerprint });
       }
+      if (!approved) throw new Error('Independent semantic review still requests repairs after three rounds; drafts and findings retained');
       const extraction = readJson(path.join(toolDir, 'validated.json'));
       const validated = validateCompactPeopleExtraction(extraction, owned, { strictAliasDispositions: true });
       assertDurableCareerCoverage(validated.normalized, owned);
@@ -137,7 +172,7 @@ export async function runGrokBuildExtraction(target, options) {
     const output = extractionPath(target.book, target.chapter);
     if (fs.existsSync(output)) throw new Error('Extraction appeared while running; refusing overwrite');
     writeTextAtomic(output, serializeCompactPeopleExtraction(assembled));
-    markRemotePeopleClaims([target], 'ready', { lane: 'grok-build', worker,
+    markRemotePeopleClaims([target], 'ready', { lane: queueLane, worker,
       note: `Validated Grok Build extraction; ${validated.stats.people} people, ${validated.stats.claims} claims` });
     return { target, output, stats: validated.stats, usedTokens };
   } finally { unlock(); }
@@ -165,7 +200,7 @@ async function main() {
   fetchPeopleQueueBase({ baseRef: 'origin/codex/people-glossary-staging-v2' });
   const ledger = readRemotePeopleWorkLedger();
   const claim = ledger.claims[`${target.book}/${target.chapter}`];
-  if (claimIsActive(claim) && (claim.lane !== 'grok-build' || claim.worker !== o.worker)) {
+  if (claimIsActive(claim) && (claim.lane !== grokBuildQueueLane(claim, o.worker) || claim.worker !== o.worker)) {
     throw new Error(`${target.book}/${target.chapter} is already reserved by ${claim.lane}/${claim.worker}`);
   }
   if (fs.existsSync(extractionPath(target.book, target.chapter)) ||

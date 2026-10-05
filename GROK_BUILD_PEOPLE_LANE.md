@@ -1,4 +1,4 @@
-# Grok Build subscription lane (local people extraction)
+# Grok Build subscription lane (chapter completion)
 
 This is a separate, opt-in people-extraction lane using the Grok Build subscription
 session already logged in on this Mac. It does **not** use `XAI_API_KEY`, Cursor SDK,
@@ -17,7 +17,8 @@ remove that fixed context.
 The official Grok Build source [documents calling its CLI chat proxy with the local
 login session](https://github.com/xai-org/grok-build/blob/main/crates/codegen/xai-grok-shell/README.md#using-authjson-for-api-access).
 The runner reads `~/.grok/auth.json` in process memory and sends its credential only
-to `https://cli-chat-proxy.grok.com/v1/chat/completions` over HTTPS, with the installed
+to the fixed `https://cli-chat-proxy.grok.com` HTTPS origin (chat completions and
+read-only billing checks), with the installed
 CLI's version header. It never prints, copies, or stores the token in the repo or
 `.env`. `grok login` refreshes the session when needed. A bounded direct request on
 this host used 197 prompt tokens and 936 total tokens; a tool-call probe used 282
@@ -62,9 +63,11 @@ files during disk cleanup.
 
 The token cap is an invocation circuit breaker measured from proxy usage; it is
 not a percentage-of-weekly-capacity guarantee, and a single response can overshoot
-it. Before any live run, check Grok's current weekly allowance and the account's
-Extra Usage Credits / Auto Top Up settings; this runner cannot enforce a weekly
-percentage or prevent account-level top-up charges. The lane is intended for
+it. Every production request checks the official billing and auto-top-up endpoints.
+Execution refuses enabled auto-top-up, a nonzero on-demand cap or purchased balance,
+and stops at 100% reported weekly usage. A changed billing response fails loudly.
+This does not enforce an arbitrary percentage cap or guarantee xAI billing semantics.
+The lane is intended for
 deliberate short-chapter calibration first. If a run
 pauses or validation rejects a draft, inspect the saved diagnostics and resume with
 the same worker and source; do not release the sticky claim or change ceilings
@@ -79,7 +82,97 @@ been accepted through this lane, so its throughput and quality remain uncalibrat
 Do not count it as production capacity until a complete chapter passes the normal
 host validators and independent review.
 
-This first integration handles **people extraction only**. Independent date audits
-still use the existing Cursor/Grok Bot/manual date-workflow lanes; do not claim a
-date audit under `grok-build` until a separate date record-tool adapter and
-independent-review test are implemented.
+## End-to-end stages and completion gates
+
+The target is a chapter on **master**, not an extraction or date report alone.
+The same subscription transport now has extraction, independent semantic review,
+editorial decision, date audit/repair/re-audit, and identity decision adapters.
+These adapters are being live-calibrated; no chapter has yet passed this entire
+Grok Build path. Do not advertise production throughput from saved records.
+
+1. Resume the sticky extraction worker above. Every chunk must pass the real
+   extraction and career-coverage validators, then a fresh independent semantic
+   record-tool review of all units, people, claims, surfaces and proposals.
+   Revision findings return to the retained extractor. Changed drafts get a new
+   independent review fingerprint/context. Research holds remain explicit.
+2. Review proposed English repairs in an independent context:
+   `npm run people:grok-build:editorial -- --book BOOK --chapter NNN --run`.
+   The host constructs immutable proposal contracts and reviewer metadata; tools
+   record individual decisions and dependent-claim amendments. Then run
+   `npm run people:apply-editorial -- --book BOOK --chapter NNN` and the scoped
+   integrated people validator. Source edits invalidate old audit approvals.
+3. Run the existing durable date state machine with Grok Build record tools:
+
+   ```sh
+   npm run people:dates:run -- --book BOOK --chapter NNN --worker grok-build-date-ID \
+     --lane manual --transport grok-build --run --concurrency 1 --limit 1 \
+     --max-tool-turns 120 --max-run-tokens 4000000
+   ```
+
+   `manual` is the **queue compatibility category**, not the inference provider.
+   The explicit transport invokes only the subscription proxy, never Cursor.
+   This avoids introducing an unsupported queue enum to the parallel orchestrator.
+   Use `--fresh-audit` only to start a fresh source audit instead of seeding a repair
+   from an old placeholder report; it does not erase or restart saved workflow state.
+   `--recover-only` cannot launch inference. `--takeover` requires confirming the
+   exact prior executor has stopped. Distinct task keys/contexts separate source
+   review, repair and fresh candidate re-audit. The repair author cannot approve
+   its candidate. Failed reviews, research sources and staged rounds are retained.
+4. On the single full host checkout, after the reviewed cohort is available, run
+   the normal cross-corpus identity scheduler with explicit transport:
+
+   ```sh
+   npm run people:resolve -- --batch STABLE-BATCH --chapters BOOK/NNN \
+     --transport grok-build --run --concurrency 1 --component-shards \
+     --max-run-tokens 4000000 --skip-cloud-recovery
+   ```
+
+   Do not run this against a chapter-only sparse corpus and mistake absent chapters
+   for an empty identity backlog. Existing dossier partitioning, resumable parts,
+   source reads, prior separations, remaining-pair coverage and full aggregate
+   consistency remain mandatory. It does not use a Cursor key or recover Cursor
+   conversations. A validated uncertain `possible-same-as` keeps records separate.
+5. The host performs scoped validation, full milestone validation, date approval
+   verification, catalog/person shards/chapter links/search/sitemap and normal
+   build verification. Publish exact tracked source/extraction/editorial/date/
+   resolution files through the staging milestone and a passing master PR.
+   Respect the required `master-build` check. Never bypass it or count a failed
+   build, unresolved identity backlog, staged repair or extraction `ready` state
+   as completion. Check the merged files on `origin/master` and deployed output.
+
+## Recovery and live calibration handoff
+
+Raw responses commit before tool-state updates; an interrupted saved response is
+replayed without another inference request. Named record tools construct tuples
+on the host. `link_candidates` selects actual sealed occurrences; it cannot invent
+a full-name span. Date evidence may use `quote:null` to cite the entire exact sealed
+Chinese unit, avoiding simplified/traditional transcription drift. Reviewer reasons,
+event ownership, findings and production validation are still model/review duties.
+
+Long transcripts are archived before compaction. Saved records, source evidence,
+citations and diagnostics are supplied in the resumed context; compaction is not
+permission to discard evidence or approve a chapter. All archived/raw state stays
+ignored and must survive disk cleanup. Date telemetry is locally durable every
+turn and coalesced on the shared Git queue to reduce contention.
+
+The 2026-10-04 calibration owns `jiutangshu/058` as `grok-build-repair-1` and
+`houhanshu/109` date work as `grok-build-date-1`. Recovery currently lives in the
+small code-editing checkout:
+`/Users/garrettpetersen/.codex/worktrees/grok-build-lane-20261004/records-of-the-grand-historian`.
+Do not create a fresh checkout or duplicate these claims. The other orchestrator
+migrated the extraction's queue category to `grokbot` while retaining its worker
+and Grok Build note; the runner explicitly recognizes only that exact owned
+compatibility claim. It does not use the Grok Bot app or steal another worker.
+
+Preserve these directories before retiring that checkout:
+
+- `data/people/generated/grok-build-extractions/grok-build-repair-1/jiutangshu/058/`
+- `data/people/generated/date-workflow/houhanshu/109/`
+- any `grok-build-editorial/`, `grok-build-identity/`, date repair receipts and tracked
+  accepted chapter artifacts subsequently produced there.
+
+At the current checkpoint, extraction is incomplete and date review has substantive
+saved checks/findings but no accepted full chapter. Earlier calibration revealed
+record-ordering bugs, source-transcription errors, overlong transcripts, research
+queries incorrectly passed as literal substrings, and shared-queue contention.
+Those are explicit recovery/quality failures, not completed work.

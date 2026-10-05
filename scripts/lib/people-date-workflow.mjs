@@ -312,7 +312,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const save = () => writeJsonAtomic(stateFile, state);
   if (state.workflowVersion !== DATE_WORKFLOW_VERSION) throw new Error('Date workflow protocol changed; reconcile retained work before restarting');
   const priorReport = path.join(options.peopleDir ?? PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
-  if ((!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
+  if (!options.freshAudit && (!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
     const report = readJson(priorReport);
     validateDateAuditReport(report,packet);
     writeJsonAtomic(path.join(directory,'review-0.json'),report);

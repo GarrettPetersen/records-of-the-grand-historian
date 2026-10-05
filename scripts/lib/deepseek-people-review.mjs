@@ -20,7 +20,7 @@ export const REVIEW_SCHEMA = object({
   checks: object(Object.fromEntries(CHECKS.map(key => [key, object({ passed: { type: 'boolean' }, reasoning: { type: 'string', minLength: 20 } })]))),
   findings: { type: 'array', items: object({ records: strings, units: strings, problem: { type: 'string', minLength: 20 }, correction: { type: 'string', minLength: 20 } }) },
 });
-const INSTRUCTIONS = `Independently review historical extraction against the Chinese source, English translations, and cited research.
+export const PEOPLE_SEMANTIC_REVIEW_INSTRUCTIONS = `Independently review historical extraction against the Chinese source, English translations, and cited research.
 You are a separate reviewer, not the extractor. You receive no extractor conversation or previous reviewer conclusions.
 Read every owned unit. Check identities, homonyms, literal mention ownership, title attribution, parentage, sibling order, chronology, durable facts, and translation repairs. Citation existence and valid JSON do not establish truth.
 Use mentionCoverage to compare each unit with its actual linked occurrences in both languages. Check shortened Chinese callbacks and repeated names even when the preflight scanner missed them. A full-name link does not cover a later abbreviated occurrence in the same sentence. English and Chinese counts need not match when one translation uses a pronoun; never invent a name merely to equalize counts.
@@ -34,6 +34,7 @@ Check all supplied fact records, names, hints, and surfaces. Check for both unsu
 Use the dateEvidence projection to check each dated claim against its actual quotations, not just the presence of a source URL. Every endpoint needs support about the correct person/event. The repairDependencies projection lists facts and both translation fields affected by each repair: correcting prose while retaining the same error in a claim or the other translation is still a defect. Every material defect described in a check must also appear in an actionable finding; do not bury unresolved issues in a passing summary.
 Return one dateChecks entry for EVERY Western-dated claim, explicitly explaining evidence for both endpoints of intervals. Circa is uncertainty about an evidenced date, not permission to invent an endpoint. Return one repairChecks entry for EVERY proposed translation repair. Every failed item must have an actionable finding naming that same record. Missing item checks cannot pass validation.
 Use submit_review with a complete report, explaining all six checks and recording every material issue. Approve only if none remain; otherwise provide source-grounded actionable corrections. All unit IDs must be owned source IDs; record IDs are editing IDs. Return no full rewritten extraction.`;
+const INSTRUCTIONS = PEOPLE_SEMANTIC_REVIEW_INSTRUCTIONS;
 
 export function validateSemanticReport(report, snapshot, state) {
   const ajv = getPeopleSchemaValidator();
