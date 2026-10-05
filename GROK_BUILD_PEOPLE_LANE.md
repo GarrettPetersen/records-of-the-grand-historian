@@ -187,9 +187,46 @@ Preserve these directories before retiring that checkout:
   accepted chapter artifacts subsequently produced there.
 
 At the current checkpoint, extraction is incomplete and date review has substantive
-saved checks/findings and a staged repair proposal but no accepted full chapter.
+saved checks/findings and proposed repair operations but no accepted full chapter.
 Both date-review chunks returned substantive failure reports; the repair stage is
-not yet independently approved. Earlier calibration revealed
+not yet structurally accepted or independently approved. Earlier calibration revealed
 record-ordering bugs, source-transcription errors, overlong transcripts, research
 queries incorrectly passed as literal substrings, and shared-queue contention.
 Those are explicit recovery/quality failures, not completed work.
+
+### 2026-10-05 integration and calibration result
+
+The lane implementation was integrated into `codex/people-glossary-staging-v2`
+through PR #4273 (merge `e4435198644c96451a6be7bf95b135166042e65e`).
+The integration preserves that branch's chapter edits and newer sealed
+`date-context` contract; the adapter sends the old/new date containers, not whole
+claim rows. It also includes the exact `people-date-values.mjs` helper present in
+the full host checkout, needed by the staging workflow's existing imports.
+104 combined offline checks and an additional focused date-container adapter
+test passed in an 8.9 MiB source-only test bundle. No full repository clone or
+global build was made for that integration.
+
+The live test reached **99% reported weekly usage with zero accepted chunks and
+zero completed chapters**. This is a failed throughput calibration, not proof of
+a production completion lane. The extractor saved many proposed records but also
+repeated/rephrased facts, reread evidence, and struggled with tool schemas; record
+counts are not unique accepted facts. The date source audit returned complete
+failure reports, then its repair context looped without producing an accepted
+candidate. It was stopped with durable state intact. Do not blindly repeat large
+invocations or launch a wave after reset.
+
+The final extraction invocation paused at turn 337 with 29 diagnostics. Its first
+chunk has ten proposed people, 38 surfaces, 165 claims, four English proposals and
+three of sixteen extractor unit declarations. Those records contain duplication;
+they have not passed independent semantic review. The chapter has twenty planned
+chunks. The date workflow remains in `repair`, round zero; there is no approved
+candidate or publication receipt. Neither chapter may be counted complete.
+
+Before resuming, inspect raw responses and diagnostics, reconcile the retained
+date repair operations with staging's container-only contract, and calibrate a
+small complete packet through independent review. Source/extraction hashes and
+the production validators must still match; do not discard sticky recovery or
+reset it to manufacture a clean result. The account's current period ends
+`2026-10-06T17:40:09Z` (October 6, 10:40 a.m. Vancouver). Auto-top-up, on-demand
+capacity and purchased balance were all disabled during the checks. Existing
+guards stop at exhaustion and never switch to paid inference.
