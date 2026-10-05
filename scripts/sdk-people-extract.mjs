@@ -2597,7 +2597,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
   const packet = buildPeopleChunkPacket(fullPacket, chunk);
   const archive = chunkArchivePath(target, chunk);
   const previousChunk = state.chapters[stateKey(target)]?.chunks?.[chunk.id];
-  if (fs.existsSync(archive)) {
+  if (fs.existsSync(archive) && !(previousChunk?.globalValidationErrors?.length > 0)) {
     try {
       const extraction = readJson(archive);
       validateCompactPeopleExtraction(extraction, packet, { strictAliasDispositions: true });
@@ -2614,6 +2614,11 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
         });
       }
     }
+  }
+  if (previousChunk?.globalValidationErrors?.length > 0) {
+    console.warn(
+      `[${stateKey(target)}/chunk-${chunk.id}] rechecking archive after chapter-level validation failure`,
+    );
   }
   const rejected = rejectedArtifactPath(target, chunk);
   if (fs.existsSync(rejected)) {
@@ -2715,14 +2720,18 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
             existingRun,
           );
           const validated = validateDownloadedExtraction(recovered, packet, target, chunk);
-          accepted = {
-            extraction: validated.normalized,
-            result: existingRun,
-            stats: validated.stats,
-          };
-          console.log(
-            `[${stateKey(target)}/chunk-${chunk.id}] recovered the validated artifact before sending another turn`,
-          );
+          if (previousChunk?.globalValidationErrors?.length > 0) {
+            recoveryErrors.push(...previousChunk.globalValidationErrors);
+          } else {
+            accepted = {
+              extraction: validated.normalized,
+              result: existingRun,
+              stats: validated.stats,
+            };
+            console.log(
+              `[${stateKey(target)}/chunk-${chunk.id}] recovered the validated artifact before sending another turn`,
+            );
+          }
         } catch (error) {
           recoveryErrors.push(...validationErrors(error));
         }
@@ -2819,6 +2828,7 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
       cached: false,
       repairs: accepted.stats.repairs,
       lastErrors: [],
+      globalValidationErrors: [],
       resumePending: false,
     });
     console.log(
@@ -2876,7 +2886,32 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   };
   let compact = assembleCompactPeopleChunks(packet, parts, run);
-  let validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
+  let validated;
+  try {
+    validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
+  } catch (error) {
+    const errors = validationErrors(error);
+    const candidateIds = new Set(errors.flatMap((message) =>
+      [...String(message).matchAll(/cand_[a-z0-9]+/giu)].map((match) => match[0])));
+    const affected = candidateIds.size === 0 ? [] : parts.filter(({ extraction }) => {
+      const serialized = JSON.stringify(extraction);
+      return [...candidateIds].some((candidateId) => serialized.includes(candidateId));
+    });
+    if (affected.length === 1) {
+      const { chunk } = affected[0];
+      updateChunkState(state, target, chunk, {
+        status: 'interrupted',
+        resumePending: false,
+        globalValidationErrors: errors,
+        lastErrors: errors,
+      });
+      console.warn(
+        `[${key}/chunk-${chunk.id}] chapter-level validation rejected its local artifact; ` +
+        'retaining the exact agent for a targeted repair',
+      );
+    }
+    throw error;
+  }
   assertDurableCareerCoverage(validated.normalized, packet);
   compact = writeAcceptedExtraction(target, compact, packet);
   validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });

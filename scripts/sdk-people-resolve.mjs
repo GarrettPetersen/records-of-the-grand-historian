@@ -35,6 +35,8 @@ import {
   installSignalHandlers,
 } from './lib/cursor-run-control.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
+import { grokBuildIdentityWorker } from './lib/grok-build-identity-worker.mjs';
+import { loadEditorialReviewChapter } from './build-people-editorial-review.mjs';
 import {
   buildResolutionCandidates,
   connectedBlockComponents,
@@ -195,6 +197,7 @@ function parseArgs(argv) {
     dryRun: false,
     selfTest: false,
     apiKey: process.env.CURSOR_API_KEY,
+    transport: 'cursor-sdk', run: false,
   };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -204,6 +207,8 @@ function parseArgs(argv) {
       return value;
     };
     if (arg === '--batch') opts.batch = next();
+    else if (arg === '--transport') opts.transport = next();
+    else if (arg === '--run') opts.run = true;
     else if (arg === '--chapters') opts.chapters = parseChapterScopes(next());
     else if (arg === '--all-unresolved') opts.allUnresolved = true;
     else if (arg === '--shards') opts.shards = positiveInteger(next(), arg, MAX_SHARDS);
@@ -244,6 +249,12 @@ function parseArgs(argv) {
     } else throw new Error(`Unknown option: ${arg}`);
   }
   if (opts.selfTest) return opts;
+  if(!['cursor-sdk','grok-build'].includes(opts.transport))throw new Error('Unknown identity transport');
+  if(opts.transport==='grok-build'){
+    if(!opts.dryRun&&!opts.prepareDossiers&&!opts.recoverOnly&&!opts.run)throw new Error('Grok Build identity execution requires --run');
+    if(opts.recoverAgents.size||opts.recoverBatches.size)throw new Error('Grok Build cannot recover a Cursor conversation');
+    opts.skipCloudRecovery=true;
+  }
   if (!opts.batch || !/^[a-z0-9][a-z0-9-]+$/u.test(opts.batch)) {
     throw new Error('--batch must use lowercase letters, digits, and hyphens');
   }
@@ -1653,6 +1664,27 @@ function resolverAgentOptions(dossier, opts) {
 }
 
 async function processDossier(dossier, opts, corpus, resolutions, accepted, baseline, control) {
+  if(opts.transport==='grok-build'){
+    const evidence=new Map();
+    const validate=document=>{
+      const reconciled=enforcePriorSeparations(document,corpus,resolutions,accepted,baseline);
+      if(reconciled.repairCount)throw new Error('Decision conflicts with prior separation; correct it using source evidence');
+      return validateResolutionDocument(document,dossier,corpus,resolutions,accepted,{checkGlobalConsistency:false});
+    };
+    return control.withAgentSlot(()=>grokBuildIdentityWorker(dossier,{maxTotalTokens:opts.maxRunTokens,timeoutMs:opts.runTimeoutMs,shouldStop:()=>control.stopRequested,validate,
+      readSource:(id,start,count)=>{
+        if(!evidence.has(id)){
+          const [book,chapter]=id.split(':');const loaded=loadEditorialReviewChapter(book,chapter);
+          const claims=loaded.extraction.claims.filter(claim=>claim.subject===id);
+          const unitIds=new Set(claims.flatMap(claim=>claim.evidence).map(unit=>unit.split(':').at(-1)));
+          const units=loaded.packet.units.filter(unit=>unitIds.has(unit.id));
+          if(!units.length)throw new Error('Identity person has no sealed source evidence');
+          evidence.set(id,{claims,units});
+        }
+        const rows=evidence.get(id);return {claims:rows.claims,totalUnits:rows.units.length,units:rows.units.slice(start,start+count)};
+      },
+    }));
+  }
   let agent;
   let errors = [];
   try {
@@ -2336,7 +2368,13 @@ async function selfTest() {
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
-  if (!opts.dryRun && !opts.prepareDossiers && !opts.apiKey) throw new Error('CURSOR_API_KEY is required');
+  if(opts.transport==='grok-build'&&!opts.dryRun&&!opts.prepareDossiers){
+    const sources=execFileSync('git',['ls-files','--','data/'],{cwd:REPO_ROOT,encoding:'utf8',maxBuffer:16*1024*1024})
+      .split('\n').filter(file=>/^data\/[^/]+\/\d{3}\.json$/.test(file));
+    const missing=sources.filter(file=>!fs.existsSync(path.join(REPO_ROOT,file)));
+    if(!sources.length||missing.length)throw new Error(`Grok Build identity requires the complete host source corpus, not a sparse chapter view (${missing.length} missing sources; first: ${missing.slice(0,3).join(', ')})`);
+  }
+  if (opts.transport==='cursor-sdk' && !opts.dryRun && !opts.prepareDossiers && !opts.apiKey) throw new Error('CURSOR_API_KEY is required');
   if (!opts.prepareDossiers && fs.existsSync(opts.out)) {
     throw new Error(`Resolution output already exists: ${path.relative(REPO_ROOT, opts.out)}`);
   }
