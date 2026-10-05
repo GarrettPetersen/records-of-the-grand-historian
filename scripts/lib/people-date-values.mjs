@@ -35,6 +35,38 @@ export function hasDateBearingChronology(value) {
   return Object.values(value).some(hasDateBearingChronology);
 }
 
+// Unlike a source-date or an explicitly unresolved context, a concrete
+// Western chronology can support an English active-date hint. Keep this
+// distinction explicit: unresolved dates must remain auditable, but they do
+// not justify fabricating a year of a person's activity.
+export function hasConcreteWesternChronology(value) {
+  if (!value || typeof value !== 'object') return false;
+  if (Array.isArray(value)) return value.some(hasConcreteWesternChronology);
+  if (Object.hasOwn(value, 'westernYear') || Object.hasOwn(value, 'westernInterval') || Object.hasOwn(value, 'westernBounds')) return true;
+  return Object.entries(value)
+    .filter(([key]) => !['sourceDate', 'unresolved', 'unresolvedReason', 'undatedSourceAttestation'].includes(key))
+    .some(([, child]) => hasConcreteWesternChronology(child));
+}
+
+// A death date establishes chronology but is not evidence that someone was
+// active in that year.  Keep this shared between repair staging and production
+// validation so a date audit can remove an invented "active" hint without
+// erasing a well-supported death record.
+export function deathOnlyChronology(claims) {
+  const read = claim => Array.isArray(claim)
+    ? { predicate: claim[1], value: claim[2] }
+    : claim;
+  const temporal = claims.map(read).filter(claim => hasDateBearingChronology(claim.value));
+  const reception = value => ['posthumous', 'retrospective'].includes(value?.receptionType) ||
+    ['posthumous-commemoration', 'posthumous-reference', 'retrospective-reference'].includes(value?.kind);
+  return temporal.length > 0 && temporal.every(({ predicate, value }) =>
+    predicate === 'death' ||
+    (predicate === 'place-association' && value?.relation === 'died-at') ||
+    (predicate === 'event-participation' && value?.kind === 'death' && value?.role === 'deceased') ||
+    reception(value) ||
+    (predicate === 'attestation' && /\b(died|death|deceased)\b|[死卒薨]/iu.test(JSON.stringify(value))));
+}
+
 export function boundedDateLabel(value, formatYear) {
   const bounds = temporalContainers(value).map(item => item.westernBounds).filter(Boolean);
   if (bounds.length !== 1) return null;

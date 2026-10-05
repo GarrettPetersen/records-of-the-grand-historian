@@ -321,7 +321,10 @@ export function applyDateRepairProposal(stored, proposal, packet) {
   const seen = new Set();
   const temporal = new Set(dateAuditItems(stored).items.filter(i=>i.claimIndex !== undefined).map(i=>i.id));
   const removed = new Set();
-  for (const change of proposal.changes) {
+  // Hint validity depends on the final claim set, not tool-call insertion order.
+  // Apply all claim edits before active hints and external hint provenance.
+  const rank=change=>change.kind==='external-primary-chronology'?2:change.kind==='hints'?1:0;
+  for (const change of [...proposal.changes].sort((a,b)=>rank(a)-rank(b))) {
     if (typeof change.reason !== 'string' || change.reason.trim().length < 20) throw new Error('Repair requires source-based reasoning');
     if (change.kind === 'hints') {
       const key = `hints-${change.personId}`;
@@ -442,7 +445,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const save = () => writeJsonAtomic(stateFile, state);
   if (state.workflowVersion !== DATE_WORKFLOW_VERSION) throw new Error('Date workflow protocol changed; reconcile retained work before restarting');
   const priorReport = path.join(options.peopleDir ?? PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
-  if ((!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
+  if (!options.freshAudit && (!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
     const report = readJson(priorReport);
     validateDateAuditReport(report,packet);
     writeJsonAtomic(path.join(directory,'review-0.json'),report);

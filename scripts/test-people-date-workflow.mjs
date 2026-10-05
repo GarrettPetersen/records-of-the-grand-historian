@@ -194,6 +194,8 @@ test('a reception-only person may clear fabricated active-date hints',t=>{
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[0][4].a,[]);
   assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
+  const reordered=structuredClone(proposal);reordered.changes.reverse();
+  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
   const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
   assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
 });
@@ -207,6 +209,8 @@ test('an undated source attestation may clear active-date hints without inventin
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[1][4].a,[]);
   assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
+  const reordered=structuredClone(proposal);reordered.changes.reverse();
+  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
 });
 test('an undated source attestation may clear hints when remaining contexts are explicitly unresolved',t=>{
   const f=fixture(t),stored=structuredClone(f.extraction);
