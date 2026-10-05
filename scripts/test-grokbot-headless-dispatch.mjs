@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   capacityLimitMessage,
+  isExactWorkerSearchResult,
   parseArgs,
   mergeLiveWorkerState,
   rosterWorkersFromDocuments,
@@ -66,6 +67,22 @@ test('active-worker ceiling prevents a new dispatch burst after partial completi
   assert.deepEqual(selected.map((worker) => worker.worker), ['grokbot-25']);
 });
 
+test('recovery allowlist dispatches only established workers', () => {
+  const selected = workersToDispatch(
+    rosterWorkersFromDocuments([{ value: { rows: rosterRows() } }]),
+    { workers: {} },
+    {
+      force: false,
+      cooldownMs: 0,
+      maxActive: 12,
+      now: 10_000,
+      workers: new Set(['grokbot-26', 'grokbot-35']),
+    },
+  );
+  assert.deepEqual(selected.map((worker) => worker.worker), ['grokbot-26', 'grokbot-35']);
+  assert.throws(() => parseArgs(['once', '--workers', 'grokbot-23']), /grokbot-24 through grokbot-35/u);
+});
+
 test('recognizes the visible weekly-capacity alert before prompting more workers', () => {
   assert.equal(
     capacityLimitMessage(['Weekly usage limit reached. It resets in 1 day.']),
@@ -73,6 +90,25 @@ test('recognizes the visible weekly-capacity alert before prompting more workers
   );
   assert.equal(capacityLimitMessage(['You’re at 90% of your weekly usage limit.']), null);
   assert.equal(capacityLimitMessage([]), null);
+});
+
+test('ignores a hidden historic capacity alert', () => {
+  assert.equal(
+    capacityLimitMessage([
+      { text: 'Weekly usage limit reached. It resets in 6 days.', visible: false },
+      { text: 'Welcome back.', visible: true },
+    ]),
+    null,
+  );
+});
+
+test('search fallback accepts only a button with the exact durable worker ID', () => {
+  const worker = { id: 'agent-24', name: '24 Histories Glossary 24' };
+  assert.equal(isExactWorkerSearchResult({ agentId: 'agent-24', tagName: 'BUTTON' }, worker), true);
+  assert.equal(isExactWorkerSearchResult({ agentId: 'agent-240', tagName: 'BUTTON' }, worker), false);
+  assert.equal(isExactWorkerSearchResult({ agentId: 'agent-24', tagName: 'DIV' }, worker), false);
+  assert.equal(isExactWorkerSearchResult({ agentId: 'agent-24' }, worker), false);
+  assert.equal(isExactWorkerSearchResult(null, worker), false);
 });
 
 test('campaign prompt binds the worker and MCP workflow', () => {
