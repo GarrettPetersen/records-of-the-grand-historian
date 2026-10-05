@@ -37,6 +37,26 @@ test('empty date ownership compiles valid rejecting tool schemas, rather than em
   for(const tool of grokBuildDateTools(input,'review'))assert.doesNotThrow(()=>getPeopleSchemaValidator().compile(tool.function.parameters));
 });
 
+test('date recovery revalidates an actual finish request without inventing one',async t=>{
+  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'grok-date-recovery-'));
+  t.after(()=>fs.rmSync(directory,{recursive:true,force:true}));
+  const paths={dataDir:path.join(directory,'data'),peopleDir:path.join(directory,'people')};
+  writeJsonAtomic(path.join(paths.dataDir,'fixture/001.json'),{content:[{sentences:[{id:'s0001',zh:'甲在元年。',translation:'Jia was present in year one.'}]}]});
+  writeJsonAtomic(path.join(paths.peopleDir,'extractions/fixture/001.json'),{schemaVersion:2,book:'fixture',chapter:'001',run:{model:'extractor'},people:[['p001',['Jia','甲'],'historical','Official',{a:[]}]],claims:[['p001','attestation',{sourceDate:{text:'元年'}},'explicit',['s0001']]],surfaces:[],translationRepairs:[]});
+  const packet=buildDateAuditPacket('fixture','001',paths),job=dateReviewJobs(packet,{maxUnits:10,maxBytes:64000})[0];
+  for(const hadFinish of [true,false]){
+    const batches=[...(hadFinish?[[['finish_date',{summary:'Every assigned event will be checked against the sealed Chinese source.',blocked:false,reason:''}]]]:[]),
+      [['read_evidence',{section:'units',start:0,count:10}]],
+      [...job.ownedItems,...job.ownedPeople].map(id=>['save_check',{id,verdict:'supported',event:'Jia is present in the first-year event.',reason:'The supplied Chinese explicitly supports this event and individual.',evidence:[{unit:'s0001',quote:null}]}])];
+    let turn=0;const state={};const task={kind:'review',key:`recovery-${hadFinish}`,directory,state,job,packet,save:async patch=>Object.assign(state,patch)};
+    const options={maxWorkerBytes:64000,maxRunTokens:1000,maxToolTurns:batches.length,validateExtraction:()=>{}};
+    await assert.rejects(grokBuildDateWorker(options,{request:async()=>response(batches[turn++])})(task),/paused/);
+    const resume=grokBuildDateWorker({...options,recoverOnly:true},{request:async()=>{throw new Error('Recovery must not spend another model request');}});
+    if(hadFinish){const artifact=await resume(task);assert.equal(artifact.itemChecks.length,job.ownedItems.length);}
+    else await assert.rejects(resume(task),/cannot start a model turn/);
+  }
+});
+
 test('identity tool worker requires source reads and every assigned pair before finishing',async t=>{
   const batch=`fixture-${randomUUID()}`;
   t.after(()=>fs.rmSync(path.join(PEOPLE_DIR,'generated','grok-build-identity',batch),{recursive:true,force:true}));

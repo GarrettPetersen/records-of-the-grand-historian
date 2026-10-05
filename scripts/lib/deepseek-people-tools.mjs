@@ -51,6 +51,8 @@ The host constructs compact tuples. Do not submit compact tuples or metadata. Pr
     object({ auditComplete: { type: 'boolean' } })),
   tool('report_blocker', 'Save a specific missing-evidence or research blocker and pause without accepting the draft. Preserve completed work; use this instead of inventing facts to satisfy validation.',
     object({ units: { type: 'array', items: string, minItems: 1 }, reason: string })),
+  tool('audit_unit', 'Record completion of the source audit for one owned unit after saving all of its people, literal mentions, durable facts, relationships, source chronology and proposed English repairs. This is extractor coverage, not independent approval.',
+    object({ unit: string, reason: {type:'string',minLength:30} })),
 ];
 
 function fields(record, expected) {
@@ -93,6 +95,9 @@ export function newToolState(snapshot) {
   return { version: TOOL_PILOT_VERSION, fingerprint: snapshot.fingerprint, nextTurn: 1, messages: [],
     records: Object.fromEntries(SECTIONS.map(section => [section, {}])), readUnits: [], auditComplete: false, accepted: false };
 }
+
+export const namedPeopleSourceRows = rows => rows.map(([id,kind,zh,idiomatic,literal])=>({id,kind,zh,idiomatic,literal}));
+export const namedPeopleCandidateRows = rows => rows.map(([id,unit,language,exact,occurrence,detectors])=>({id,unit,language,exact,occurrence,detectors}));
 
 export function compileToolDraft(state, snapshot) {
   const draft = structuredClone(snapshot.seed);
@@ -180,6 +185,9 @@ export function executePeopleTool(state, snapshot, name, args) {
       const units = snapshot.worker.units.slice(args.start, args.start + args.count);
       if (!units.length) throw new Error('Source range is outside this packet');
       state.readUnits = [...new Set([...state.readUnits, ...units.map(row => row[0])])];
+      if(snapshot.namedSource)return {totalUnits:snapshot.worker.units.length,units:namedPeopleSourceRows(units),
+        candidates:namedPeopleCandidateRows(snapshot.worker.candidates.filter(row=>units.some(unit=>unit[0]===row[1]))),
+        readOnlyContext:Object.fromEntries(Object.entries(snapshot.worker.readOnlyContext).map(([name,rows])=>[name,namedPeopleSourceRows(rows)]))};
       return { totalUnits: snapshot.worker.units.length, units,
         candidates: snapshot.worker.candidates.filter(row => units.some(unit => unit[0] === row[1])),
         readOnlyContext: snapshot.worker.readOnlyContext };
@@ -258,6 +266,10 @@ export function executePeopleTool(state, snapshot, name, args) {
     case 'finish': {
       if (state.blocker) throw new Error('A research blocker remains open; await independent evidence before finishing');
       if (!args.auditComplete) throw new Error('Finish requires an affirmative completed audit');
+      if(snapshot.requireUnitAudits){
+        const missing=snapshot.worker.units.filter(row=>!state.unitAudits?.[row[0]]).map(row=>row[0]);
+        if(missing.length)throw new Error(`Source units still need individual completed audits: ${missing.join(', ')}`);
+      }
       state.auditComplete = true;
       const result = checkDraft(state, snapshot);
       state.accepted = result.ok;
@@ -271,10 +283,14 @@ export function executePeopleTool(state, snapshot, name, args) {
       state.accepted = false;
       state.auditComplete = false;
       return { paused: true, blocker: state.blocker };
+    case 'audit_unit':
+      if(!snapshot.worker.units.some(row=>row[0]===args.unit)||!state.readUnits.includes(args.unit))throw new Error('Unit audit must refer to read owned source');
+      state.unitAudits??={};state.unitAudits[args.unit]={reason:args.reason,recordedAt:new Date().toISOString()};
+      return {saved:args.unit,remaining:snapshot.worker.units.filter(row=>!state.unitAudits[row[0]]).map(row=>row[0])};
   }
 }
 
-export async function runDeepSeekToolPilot(snapshot, { maxTurns, feedback, guidance, selectTools, compactMessages, shouldStop, request, compare }) {
+export async function runDeepSeekToolPilot(snapshot, { maxTurns, feedback, guidance, selectTools, compactMessages, progress, shouldStop, request, compare }) {
   const stateFile = path.join(snapshot.dir, 'agent-state.json');
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : newToolState(snapshot);
   if (state.version !== TOOL_PILOT_VERSION || state.fingerprint !== snapshot.fingerprint) throw new Error('Agent checkpoint does not match this harness and source');
@@ -350,6 +366,7 @@ Independent review, not date matching alone, judges identity and evidential supp
     }
   }
   let firstToolTurn = true;
+  if (progress) state.noProgressTurns = 0;
   while (!state.accepted && !state.blocker && !state.attention && state.nextTurn <= maxTurns && !shouldStop()) {
     const turn = state.nextTurn;
     if (compactMessages && ((firstToolTurn && turn > 1) || Buffer.byteLength(JSON.stringify(state.messages)) > 128000)) {
@@ -373,6 +390,7 @@ Independent review, not date matching alone, judges identity and evidential supp
     if (!choice?.message) throw new Error('Missing assistant message; response retained for recovery');
     // Tool mutations and their transcript commit together. A crash replays the saved response, not the API call.
     const next = structuredClone(state);
+    const beforeProgress = progress ? JSON.stringify(progress(state)) : null;
     if (choice.finish_reason === 'length') {
       next.messages.push({ role: 'user', content: 'The previous response exceeded its token limit and was not executed. Use fewer records per tool call and return a complete tool call. All previously saved records remain intact.' });
       console.log(`${snapshot.scope} tool turn ${turn}: truncated; existing draft preserved`);
@@ -383,6 +401,7 @@ Independent review, not date matching alone, judges identity and evidential supp
       for (const call of calls) {
         let result;
         try {
+          if(!tools.some(tool=>tool.function.name===call.function.name))throw new Error('Tool is outside the current sealed assignment');
           const args = JSON.parse(call.function.arguments);
           if (call.function.name === 'research_history') {
             const schema = PEOPLE_TOOLS.find(item => item.function.name === 'research_history').function.parameters;
@@ -407,9 +426,14 @@ Independent review, not date matching alone, judges identity and evidential supp
         else next.messages.push({ role: 'user', content: 'Use tools to save your work. If missing evidence blocks completion, call report_blocker and pause. Do not invent data merely to satisfy validation.' });
       }
     }
+    if (progress) {
+      next.noProgressTurns = JSON.stringify(progress(next)) === beforeProgress ? (state.noProgressTurns ?? 0) + 1 : 0;
+      if (next.noProgressTurns === 4) next.messages.push({role:'user',content:'Four turns have saved no substantive progress. Source and records are supplied. Save missing facts now, or report an honest blocker; do not keep rereading.'});
+    }
     next.nextTurn++;
     writeJsonAtomic(stateFile, next);
     state = next;
+    if (progress && state.noProgressTurns >= 8) throw new Error('Eight extraction turns without saved progress; records retained for diagnosis');
   }
   const draft = compileToolDraft(state, snapshot);
   writeJsonAtomic(path.join(snapshot.dir, 'agent-draft.json'), draft);

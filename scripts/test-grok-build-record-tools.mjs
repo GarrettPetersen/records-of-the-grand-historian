@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { runLocalRecordToolSession } from './lib/local-record-tool-session.mjs';
 import { namedPeopleRecordTools, normalizePeopleRecordCalls } from './lib/people-record-tools.mjs';
-import { PEOPLE_TOOLS, compileToolDraft } from './lib/deepseek-people-tools.mjs';
+import { PEOPLE_TOOLS, compileToolDraft, newToolState, executePeopleTool } from './lib/deepseek-people-tools.mjs';
 import { readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { grokBuildSubscriptionCompletion } from './lib/grok-build-proxy.mjs';
 
@@ -55,4 +55,34 @@ test('subscription guard refuses paid spillover or exhausted allowance before in
     }}),/exhausted|Subscription-only/);
     assert.equal(inference,0);
   }
+});
+
+test('candidate links use host-owned exact occurrences rather than model span transcription',()=>{
+  const candidate=['cand_1234567890abcdef','s0001','zh','甲',0,[]];
+  const response={choices:[{message:{tool_calls:[{function:{name:'link_candidates',arguments:JSON.stringify({person:'p001',kind:'personal-name',candidateIds:[candidate[0]]})}}]}}]};
+  const call=normalizePeopleRecordCalls(response,[candidate]).choices[0].message.tool_calls[0];
+  assert.equal(call.function.name,'write_records');
+  assert.deepEqual(JSON.parse(call.function.arguments).records[0].locations,[{unit:'s0001',occurrences:[0]}]);
+});
+
+test('individual unit audits require owned read source and do not constitute independent approval',()=>{
+  const snapshot={fingerprint:'fixture',requireUnitAudits:true,worker:{units:[['s0001','p','甲在。','Jia was present.','Jia was present.']],candidates:[],readOnlyContext:{before:[],after:[]}}};
+  const state=newToolState(snapshot);
+  const args={unit:'s0001',reason:'The named individual and explicit presence in the sealed source were captured.'};
+  assert.throws(()=>executePeopleTool(state,snapshot,'audit_unit',args),/read owned/);
+  executePeopleTool(state,snapshot,'read_source',{start:0,count:1});
+  executePeopleTool(state,snapshot,'audit_unit',args);
+  assert.equal(state.accepted,false);assert.equal(state.auditComplete,false);
+  assert.throws(()=>executePeopleTool(state,snapshot,'audit_unit',{...args,unit:'s9999'}),/read owned/);
+});
+
+test('repeated read-only actions stop without spending an unbounded invocation',async t=>{
+  const directory=fs.mkdtempSync(path.join(os.tmpdir(),'grok-no-progress-'));t.after(()=>fs.rmSync(directory,{recursive:true,force:true}));
+  let calls=0;
+  await assert.rejects(runLocalRecordToolSession({directory,fingerprint:'same',initialState:()=>({fingerprint:'same',nextTurn:1,messages:[],records:{saved:true},finished:false}),
+    tools:[{type:'function',function:{name:'read',parameters:{type:'object',properties:{},additionalProperties:false}}}],maxTurns:20,maxTotalTokens:1000,
+    request:async()=>{calls++;return {choices:[{message:{role:'assistant',tool_calls:[{id:'read',function:{name:'read',arguments:'{}'}}]}}],usage:{total_tokens:20}};},
+    execute:async()=>({ok:true}),progress:state=>state.records,progressFeedback:()=> 'Save the missing check rather than rereading.',
+  }),/Eight turns/);
+  assert.equal(calls,8);assert.deepEqual(readJson(path.join(directory,'state.json')).records,{saved:true});
 });

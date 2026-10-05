@@ -52,6 +52,15 @@ The model gets a short instruction and a small set of record-writing tools; it r
 only the sealed source units, schema, and task instructions it needs. It cannot read
 the whole repository, run shell commands, or publish. Reasoning remains enabled.
 
+The extraction step supplies one current owned unit, its exact candidates and saved
+records beside the record-writing tools. It does not repeat the JSON-file authoring
+prompt in that tool context. `audit_unit` logs the extractor's coverage declaration
+before advancing; this is not an independent approval. Once a unit's candidates are
+accounted for, repeated mention/disposition writes are withheld for that step so
+the model can record missing facts. Whole-draft correction and independent review
+still inspect all mentions and dispositions. Eight unchanged turns stop an invocation
+with its checkpoint intact; inspect the diagnostics before resuming.
+
 Every raw response, named-field draft, chunk plan, and validated chunk is retained
 under ignored `data/people/generated/grok-build-extractions/`. The host validates
 every chunk and the assembled chapter against the current packet, checks career
@@ -155,6 +164,12 @@ permission to discard evidence or approve a chapter. All archived/raw state stay
 ignored and must survive disk cleanup. Date telemetry is locally durable every
 turn and coalesced on the shared Git queue to reduce contention.
 
+Date recovery may revalidate an actual saved, non-blocked model `finish_date`
+request after its records were corrected. It must still pass source-read coverage
+and the production report/proposal validator. It never invents a finish request,
+turns a research hold into approval, or spends inference in `--recover-only` mode.
+Repeated unchanged review/repair turns are stopped rather than silently retried.
+
 The 2026-10-04 calibration owns `jiutangshu/058` as `grok-build-repair-1` and
 `houhanshu/109` date work as `grok-build-date-1`. Recovery currently lives in the
 small code-editing checkout:
@@ -172,7 +187,9 @@ Preserve these directories before retiring that checkout:
   accepted chapter artifacts subsequently produced there.
 
 At the current checkpoint, extraction is incomplete and date review has substantive
-saved checks/findings but no accepted full chapter. Earlier calibration revealed
+saved checks/findings and a staged repair proposal but no accepted full chapter.
+Both date-review chunks returned substantive failure reports; the repair stage is
+not yet independently approved. Earlier calibration revealed
 record-ordering bugs, source-transcription errors, overlong transcripts, research
 queries incorrectly passed as literal substrings, and shared-queue contention.
 Those are explicit recovery/quality failures, not completed work.

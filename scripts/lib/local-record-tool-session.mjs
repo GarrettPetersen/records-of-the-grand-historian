@@ -6,7 +6,7 @@ import { getPeopleSchemaValidator, formatSchemaErrors } from './people-schema.mj
 // Raw responses precede transcript/tool-state commits. Interrupted turns replay
 // their saved response without another request; tool mutations commit together.
 export async function runLocalRecordToolSession({ directory, fingerprint, initialState,
-  tools, request, execute, maxTurns, maxTotalTokens, recoverOnly = false, checkpoint, prepare, compact }) {
+  tools, request, execute, maxTurns, maxTotalTokens, recoverOnly = false, checkpoint, prepare, compact, progress, progressFeedback }) {
   const file = path.join(directory, 'state.json');
   let state = fs.existsSync(file) ? readJson(file) : initialState();
   if (state.fingerprint !== fingerprint) throw new Error('Retained record-tool input changed');
@@ -40,6 +40,7 @@ export async function runLocalRecordToolSession({ directory, fingerprint, initia
     const choice = response.choices?.[0];
     if (!choice?.message) throw new Error('Record-tool response has no assistant message');
     const next = structuredClone(state);
+    const beforeProgress = progress ? JSON.stringify(progress(state)) : null;
     if (choice.finish_reason === 'length') {
       next.messages.push({ role: 'user', content: 'The last response was truncated and no tool call executed. Use shorter calls; saved records remain intact.' });
     } else {
@@ -63,10 +64,15 @@ export async function runLocalRecordToolSession({ directory, fingerprint, initia
       if (!calls.length) next.messages.push({ role: 'user', content: 'Use the record tools for the next check or correction. Finish only after complete source and check coverage.' });
     }
     next.nextTurn++;
+    if(progress){
+      next.noProgressTurns=JSON.stringify(progress(next))===beforeProgress?(next.noProgressTurns??0)+1:0;
+      if(next.noProgressTurns===4&&progressFeedback)next.messages.push({role:'user',content:progressFeedback(next)});
+    }
     writeJsonAtomic(file, next);
     state = next;
     if (checkpoint) await checkpoint({ nextTurn: state.nextTurn, tokenUsage: tokens, finished: state.finished });
     if (state.noToolTurns >= 2 || state.failedTools >= 5) throw new Error('Repeated invalid or missing tool actions; inspect retained records before resuming');
+    if(state.noProgressTurns>=8)throw new Error('Eight turns without saved review progress; inspect retained diagnostics before resuming');
   }
   if (!state.finished) throw new Error(`Record-tool job paused at turn ${state.nextTurn}; retained records are in ${directory}`);
   return state.artifact;
