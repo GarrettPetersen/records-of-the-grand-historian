@@ -2,22 +2,33 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from './people-content.mjs';
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
+import { dateWorkerInput } from './people-date-worker.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
-import { hasDateBearingChronology } from './people-date-values.mjs';
+import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
 import {
   validateAppliedEditorialDecisions,
   validateEditorialDecisionDocument,
+  editorialReviews,
 } from './people-editorial-decisions.mjs';
 
 export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const hash = value => sha256(JSON.stringify(value));
 const lifePredicates = new Set(['attestation', 'birth', 'death', 'age']);
+const claimIndexFor = (packet, id) => {
+  const item = packet.items?.find(candidate => candidate.id === id);
+  if (item) return item.claimIndex;
+  // A date-context repair can add chronology to an event that did not yet
+  // produce an audit item. Existing audit IDs above always win over this raw
+  // row fallback; replace/remove still require an owned temporal item below.
+  return Number(id.slice(6)) - 1;
+};
 const dateFields = new Set(['westernYear', 'westernInterval', 'westernBounds', 'sourceDate', 'dateContext', 'startDate', 'endDate', 'unresolved', 'unresolvedReason', 'undatedSourceAttestation']);
 const withoutDates = value => Array.isArray(value) ? value.map(withoutDates) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).filter(([key])=>!dateFields.has(key)).map(([key,v])=>[key,withoutDates(v)])) : value;
 const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1] === 'event-participation'
+  && typeof row[2]?.kind === 'string' && row[2].kind.trim().length > 0
   && Boolean(personClaimReception({ predicate: row[1], value: row[2] }))
   && personReceptionErrors({ predicate: row[1], value: row[2] }).length === 0;
 const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
@@ -94,10 +105,11 @@ export function applyDateRepairEditorialAmendment(document, amendment, candidate
     const key = `${change.repairId}:${change.claimId}`;
     if (seen.has(key)) throw new Error('Duplicate editorial amendment target');
     seen.add(key);
-    const matches = amended.claimRevisions.filter(revision =>
+    const reviewRecords = amended.schemaVersion === 4 ? amended.reviews : [amended];
+    const matches = reviewRecords.flatMap(review => (review.claimRevisions ?? []).filter(revision =>
       revision.repairId === change.repairId && revision.before?.id === change.claimId &&
       revision.after?.id === change.claimId,
-    );
+    ));
     if (matches.length !== 1 || !same(matches[0].after, change.before)) {
       throw new Error(`Editorial amendment target is missing or stale for ${key}`);
     }
@@ -108,6 +120,54 @@ export function applyDateRepairEditorialAmendment(document, amendment, candidate
   validateEditorialDecisionDocument(amended);
   validateAppliedEditorialDecisions(amended, candidate);
   return amended;
+}
+
+// Derive, but never silently publish, the narrow editorial amendment required
+// when a chronology repair changes only the date container of an already
+// reviewed replacement fact. A curator must later publish this sealed change
+// with its independently reviewed date repair.
+export function deriveDateRepairEditorialAmendment(document, candidate) {
+  if (!document || !candidate) throw new Error('Editorial amendment derivation requires a decision document and candidate');
+  validateEditorialDecisionDocument(document);
+  const reviews = editorialReviews(document);
+  if (!reviews.length) throw new Error('Date-only editorial amendment derivation requires current editorial review history');
+  const claimRevisions = [];
+  for (const revision of reviews.flatMap(review => review.claimRevisions ?? [])) {
+    const exact = candidate.claims.some(claim =>
+      claim.subject === revision.after.subject && claim.predicate === revision.after.predicate &&
+      claim.certainty === revision.after.certainty && same(claim.value, revision.after.value) &&
+      revision.after.evidence.every(item => claim.evidence.includes(item)),
+    );
+    if (exact) continue;
+    const matches = candidate.claims.filter(claim =>
+      claim.subject === revision.after.subject && claim.predicate === revision.after.predicate &&
+      claim.certainty === revision.after.certainty &&
+      same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(revision.after.value)) &&
+      revision.after.evidence.every(item => claim.evidence.includes(item)),
+    );
+    if (matches.length === 0) continue;
+    if (matches.length !== 1) throw new Error(`Date-only editorial amendment is ambiguous for ${revision.after.id}`);
+    const after = structuredClone(revision.after);
+    after.value = structuredClone(matches[0].value);
+    claimRevisions.push({
+      repairId: revision.repairId,
+      claimId: revision.after.id,
+      before: structuredClone(revision.after),
+      after,
+      reason: 'Independent chronology repair changes only the reviewed date context; the approved reading, claim identity, certainty, and source evidence remain unchanged.',
+    });
+  }
+  if (claimRevisions.length === 0) return null;
+  const amendment = {
+    schemaVersion: 1,
+    kind: 'date-repair-editorial-amendment',
+    book: document.book,
+    chapter: document.chapter,
+    editorialDecisionHash: hash(document),
+    claimRevisions,
+  };
+  applyDateRepairEditorialAmendment(document, amendment, candidate);
+  return amendment;
 }
 
 export function dateWorkflowDirectory(book, chapter, peopleDir = PEOPLE_DIR) {
@@ -173,6 +233,50 @@ export function retainedDateReviewJobs(packet,state,options={}) {
   return {key,plan:state.reviewPlans[key],jobs};
 }
 
+// Repair work owns findings rather than source-unit ranges. A finding is kept
+// whole so a researcher never receives half of a requested correction, while
+// dateWorkerInput still includes each affected person's complete chronology.
+// Findings sharing a person stay together: their changes may depend on the
+// same exact `before` value. Disjoint-person components can share a sealed
+// repair packet, however. Packing those components to the existing byte
+// ceiling avoids spending a separate model turn on every small correction.
+export function dateRepairJobs(report, packet, extraction, { maxBytes = 64 * 1024 } = {}) {
+  if (!Array.isArray(report?.findings) || !report.findings.length) throw new Error('Date repair requires review findings');
+  const itemPeople = new Map((packet?.items ?? []).map(item => [item.id, item.personId]));
+  const parent = report.findings.map((_, index) => index);
+  const find = index => parent[index] === index ? index : (parent[index] = find(parent[index]));
+  const join = (a,b) => { a=find(a);b=find(b);if(a!==b)parent[b]=a; };
+  const owner = new Map();
+  report.findings.forEach((finding,index) => {
+    const people = new Set(finding.items.map(id => id.startsWith('hints-') ? id.slice(6) : itemPeople.get(id) ?? (id.startsWith('p') ? id : null)).filter(Boolean));
+    for (const personId of people) { if(owner.has(personId)) join(index,owner.get(personId)); else owner.set(personId,index); }
+  });
+  const groups = new Map();
+  report.findings.forEach((finding,index)=>{const root=find(index);if(!groups.has(root))groups.set(root,[]);groups.get(root).push(finding);});
+  const split = findings => {
+    if (!extraction || Buffer.byteLength(JSON.stringify(dateWorkerInput({ kind:'repair', packet, extraction, report, findings }))) <= maxBytes) return [findings];
+    if (findings.length === 1) throw new Error(`Date repair evidence for finding ${hash(findings[0]).slice(7,27)} exceeds ${maxBytes} bytes; inspect this complete assigned chronology before spending`);
+    const middle=Math.floor(findings.length/2);
+    return [...split(findings.slice(0,middle)),...split(findings.slice(middle))];
+  };
+  const components = [...groups.values()].flatMap(split);
+  const packed = [];
+  let current = [];
+  for (const component of components) {
+    const candidate = [...current, ...component];
+    const fits = !extraction || Buffer.byteLength(JSON.stringify(dateWorkerInput({ kind:'repair', packet, extraction, report, findings:candidate }))) <= maxBytes;
+    if (current.length && !fits) {
+      packed.push(current);
+      current = [...component];
+    } else current = candidate;
+  }
+  if (current.length) packed.push(current);
+  return packed.map((findings, index) => ({
+    id: `${String(index + 1).padStart(3, '0')}-${hash(findings).slice(7, 27)}`,
+    findings,
+  }));
+}
+
 export function validateDateJobResult(result, job, packet) {
   if (result.jobId !== job.id || result.sourceHash !== job.sourceHash || result.extractionHash !== job.extractionHash) throw new Error('Stale date job artifact');
   for (const [field, expected] of [['reviewedUnits',job.ownedUnits],['itemChecks',job.ownedItems],['personChecks',job.ownedPeople]]) {
@@ -223,41 +327,67 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       const key = `hints-${change.personId}`;
       if (seen.has(key)) throw new Error('Duplicate date repair target'); seen.add(key);
       const person = candidate.people.find(p => p[0] === change.personId);
+      // Removes are applied after all scoped changes so original claim IDs stay
+      // stable. Hint validation, however, must reason about the effective
+      // candidate, not a claim already scheduled for removal earlier in this
+      // same proposal.
+      const activeClaims = candidate.claims.filter((_, index) => !removed.has(index));
       // A person mentioned solely in a dated retrospective or posthumous event
       // must not retain invented life-date hints just to satisfy the ordinary
       // extraction invariant. The separately classified reception record is
       // still required, so an empty hint list cannot hide an ordinary person.
-      const noChronologyEvidence = change.after?.length === 0 && candidate.claims.some(claim =>
+      const noChronologyEvidence = change.after?.length === 0 && activeClaims.some(claim =>
         claim[0] === change.personId && claim[1] === 'attestation' &&
-        claim[2]?.undatedSourceAttestation === true) && !candidate.claims.some(claim =>
-        claim[0] === change.personId && hasDateBearingChronology(claim[2]));
-      const receptionOnly = change.after?.length === 0 && candidate.claims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
-      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
+        claim[2]?.undatedSourceAttestation === true) && !activeClaims.some(claim =>
+        claim[0] === change.personId && hasConcreteWesternChronology(claim[2]));
+      // An independent repair may withdraw a spurious Western conversion while
+      // retaining the source event as explicitly unresolved. In that case an
+      // empty activity-hint list is the accurate representation: forcing a
+      // hint back in would reintroduce precisely the unsupported chronology
+      // the repair was asked to remove.
+      const unresolvedOnly = change.after?.length === 0 && activeClaims.some(claim =>
+        claim[0] === change.personId && (claim[2]?.unresolved === true || claim[2]?.dateContext?.unresolved === true)) &&
+        !activeClaims.some(claim => claim[0] === change.personId && hasConcreteWesternChronology(claim[2]));
+      const boundedUncertaintyOnly = change.after?.length === 0 && activeClaims.filter(claim =>
+        claim[0] === change.personId && hasConcreteWesternChronology(claim[2])).every(claim => {
+        const date = claim[2]?.dateContext ?? claim[2];
+        const bounds = date?.westernBounds;
+        return Boolean(bounds) && !date?.westernYear && !date?.westernInterval &&
+          Boolean(bounds.after ?? bounds.onOrAfter) && Boolean(bounds.before ?? bounds.onOrBefore);
+      }) && activeClaims.some(claim => claim[0] === change.personId && hasConcreteWesternChronology(claim[2]));
+      const receptionOnly = change.after?.length === 0 && activeClaims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
+      const deathOnly = change.after?.length === 0 && deathOnlyChronology(activeClaims.filter(claim => claim[0] === change.personId));
+      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence && !unresolvedOnly && !boundedUncertaintyOnly && !deathOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
       person[4] = { ...person[4], a: change.after };
-    } else if (change.kind === 'external-primary-chronology') {
-      const key = `external-primary-chronology-${change.personId}`;
-      if (seen.has(key)) throw new Error('Duplicate external-primary chronology repair target');
-      seen.add(key);
-      const person = candidate.people.find(p => p[0] === change.personId);
-      if (!person || !Array.isArray(change.after) || !same(person[4]?.e ?? [], change.before ?? []) ||
-          change.after.some(entry => !person[4]?.a?.includes(entry?.hint))) {
-        throw new Error('Invalid or stale external-primary chronology repair');
-      }
-      person[4] = { ...person[4], e: change.after };
-    } else if (change.kind === 'replace' || change.kind === 'remove' || change.kind === 'date-context') {
+    } else if (change.kind === 'date-context') {
       if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');
-      const index = Number(change.id.slice(6))-1;
-      if (change.kind !== 'date-context' && !temporal.has(change.id)) throw new Error('Repair must target a unique temporal claim');
-      if (change.kind === 'date-context' && (!stored.claims[index] || lifePredicates.has(stored.claims[index][1]))) throw new Error('Date-context repair requires an existing non-life claim');
+      const index = claimIndexFor(packet, change.id);
+      if (!Number.isInteger(index)) throw new Error('Repair must target a unique temporal claim');
+      const storedClaim = stored.claims[index];
+      if (!storedClaim || lifePredicates.has(storedClaim[1])) throw new Error('Date-context repair requires an existing non-life claim');
       seen.add(change.id);
-      if (!same(stored.claims[index], change.before)) throw new Error('Date repair before-value mismatch');
+      if (JSON.stringify(storedClaim[2]?.dateContext ?? null) !== JSON.stringify(change.before ?? null)) throw new Error(`Date-context before-value mismatch for ${change.id}; copy this exact sealed date context as before: ${JSON.stringify(storedClaim[2]?.dateContext ?? null)}`);
+      if (!change.after || typeof change.after !== 'object' || Array.isArray(change.after)) throw new Error('Date-context repair requires only a replacement date context');
+      if (Object.keys(change.after).some(key=>!['sourceDate','westernYear','westernInterval','westernBounds','unresolved','unresolvedReason','event'].includes(key))) throw new Error('Date-context repair may contain only chronology fields');
+      if (change.after.event !== undefined && change.after.event !== storedClaim[2]?.dateContext?.event) throw new Error('Date-context repair cannot alter an existing event description');
+      const after = structuredClone(storedClaim); after[2] = { ...after[2], dateContext: structuredClone(change.after) };
+      if (!dateAuditItems({ ...stored, claims: [after] }).items.some(item=>item.claimIndex===0)) throw new Error('Date-context repair must supply auditable chronology');
+      candidate.claims[index] = after;
+    } else if (change.kind === 'replace' || change.kind === 'remove') {
+      if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');
+      const index = claimIndexFor(packet, change.id);
+      if (!Number.isInteger(index)) throw new Error('Repair must target a unique temporal claim');
+      if (!temporal.has(change.id)) throw new Error('Repair must target a unique temporal claim');
+      seen.add(change.id);
+      if (!same(stored.claims[index], change.before)) {
+        throw new Error(`Date repair before-value mismatch for ${change.id}; copy this exact sealed row as before: ${JSON.stringify(stored.claims[index])}`);
+      }
       if (change.kind === 'remove') {
         removed.add(index);
       }
       else {
         if (!Array.isArray(change.after) || change.after.length !== 5 || change.after[0] !== change.before[0] || change.after[1] !== change.before[1]) throw new Error('Date repair cannot change a claim subject or predicate');
         if (!lifePredicates.has(change.before[1]) && !same(withoutDates(change.before[2]),withoutDates(change.after[2]))) throw new Error('Date repair altered non-temporal event fields');
-        if (change.kind === 'date-context' && !dateAuditItems({ ...stored, claims: [change.after] }).items.some(item=>item.claimIndex===0)) throw new Error('Date-context repair must supply auditable chronology');
         candidate.claims[index] = change.after;
       }
     } else if (change.kind === 'add' || change.kind === 'add-reception-event') {
@@ -342,6 +472,9 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
     const result = publishDateRepair(readJson(path.join(directory, 'publication.json')), options);
     state.phase = 'complete'; save(); return result;
   }
+  if (state.phase === 'editorial-amendment') {
+    return { status: 'editorial-amendment-required', amendmentFile: state.editorialAmendment };
+  }
   if (packet.sourceHash !== state.sourceHash || packet.extractionHash !== state.extractionHash) {
     if (state.phase === 'complete') return { status: 'stale' };
     throw new Error('Source or extraction changed during date work; retain artifacts and reconcile before resuming');
@@ -368,13 +501,25 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
       writeJsonAtomic(path.join(directory, `review-${state.round}.json`), report);
       state.review = `review-${state.round}.json`;
       if (report.status === 'audited') {
-        const rounds=fs.readdirSync(directory).filter(name=>/^repair-\d+-[a-f0-9]+\.json$/.test(name)).sort().map(name=>readJson(path.join(directory,name)));
+        const rounds=fs.readdirSync(directory).filter(name=>/^repair-\d+-.+\.json$/.test(name)).sort().map(name=>readJson(path.join(directory,name)));
         const repairAgents=new Set(Object.entries(state.jobs).filter(([key])=>key.startsWith('repair-')).map(([,job])=>job.agentId).filter(Boolean));
         for(const proposal of rounds)if(proposal.author?.agentId)repairAgents.add(proposal.author.agentId);
         if(report.reviewer.workers.some(w=>w.agentId && repairAgents.has(w.agentId)))throw new Error('A repair conversation cannot approve its own candidate');
         if (!state.candidate) { recordDateAudit(report, options); state.phase = 'complete'; save(); return report; }
         const publication = { proposal: readJson(path.join(directory, 'combined-proposal.json')), candidate: readJson(path.join(directory, state.candidate)), report,
           rounds,priorReviews:fs.readdirSync(directory).filter(name=>/^review-\d+\.json$/.test(name)).sort().map(name=>readJson(path.join(directory,name))).filter(r=>r.status!=='audited') };
+        const validation = options.validateExtraction(publication.candidate);
+        if (validation?.editorialAmendment) {
+          // Do not mutate the live editorial record or source extraction here.
+          // A curator must review and publish this sealed date-only amendment
+          // together with the already independent date-audit approval.
+          const amendmentFile = 'editorial-amendment.json';
+          writeJsonAtomic(path.join(directory, amendmentFile), validation.editorialAmendment);
+          state.editorialAmendment = amendmentFile;
+          state.phase = 'editorial-amendment';
+          save();
+          return { status: 'editorial-amendment-required', amendmentFile };
+        }
         writeJsonAtomic(path.join(directory, 'publication.json'), publication); state.phase = 'publish'; save();
         const result = publishDateRepair(publication, options); state.phase = 'complete'; save(); return result;
       }
@@ -382,21 +527,63 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
       state.phase = 'repair'; save();
     }
     if (state.round >= (options.maxRounds ?? 3)) return { status: 'needs-revision', reason: 'Repair-round ceiling reached; resume with a larger explicit ceiling after reviewing failures' };
-    const key = `repair-${state.round}-${active.extractionHash.slice(7,27)}`;
-    const artifact = path.join(directory, `${key}.json`);
-    if (!fs.existsSync(artifact)) {
-      const result = await perform({ kind: 'repair', key, packet: active, extraction: state.candidate ? readJson(path.join(directory,state.candidate)) : original,
-        report: readJson(path.join(directory,state.review)), directory },r=>{
+    const report = readJson(path.join(directory,state.review));
+    // Freeze finding ownership to the extraction independently reviewed at the
+    // start of this repair round. Candidate claim arrays may shrink during
+    // earlier repairs, which changes raw claim-N positions without changing a
+    // review finding's intended person or source evidence.
+    const repairBaseline = state.candidate ? readJson(path.join(directory,state.candidate)) : original;
+    const repairBaselinePacket = buildDateAuditPacket(book, chapter, { ...options, extraction: repairBaseline });
+    const repairPlan = state.repairPlan ?? dateRepairJobs(report, repairBaselinePacket, repairBaseline,
+      {maxBytes:options.maxWorkerBytes ?? 64*1024});
+    if (!same(state.repairPlan ?? repairPlan, repairPlan)) throw new Error('Retained date repair ownership changed; reconcile protocol before restarting');
+    state.repairPlan = repairPlan;
+    let candidate = state.repairCandidate ? readJson(path.join(directory, state.repairCandidate))
+      : (state.candidate ? readJson(path.join(directory,state.candidate)) : original);
+    for (let repairIndex = state.repairIndex ?? 0; repairIndex < repairPlan.length; repairIndex += 1) {
+      active = buildDateAuditPacket(book, chapter, { ...options, extraction: candidate });
+      const job = repairPlan[repairIndex];
+      const key = `repair-${state.round}-${job.id}-${active.extractionHash.slice(7, 19)}`;
+      const artifact = path.join(directory, `${key}.json`);
+      // A returned artifact can become invalid only when a prior repair changed
+      // the candidate it was based on (most commonly an exact active-hint
+      // `before` value). Preserve that artifact for auditability, then let the
+      // retained worker continue with the validator error instead of endlessly
+      // rereading the same stale file on every recovery invocation.
+      if (fs.existsSync(artifact)) {
+        const prior = readJson(artifact);
+        try {
+          applyDateRepairProposal(candidate, prior, active);
+        } catch (error) {
+          const rejectedBase = path.join(directory, `rejected-${key}-${hash(prior).slice(7)}`);
+          const rejected = fs.existsSync(`${rejectedBase}.json`)
+            ? `${rejectedBase}-${Date.now()}.json`
+            : `${rejectedBase}.json`;
+          fs.renameSync(artifact, rejected);
+          state.jobs[key] = { ...state.jobs[key], validationError: error.message, status: 'rejected' };
+          save();
+        }
+      }
+      if (!fs.existsSync(artifact)) {
+        const result = await perform({ kind: 'repair', key, packet: active, extraction: candidate,
+          baselinePacket: repairBaselinePacket, baselineExtraction: repairBaseline,
+          report, findings: job.findings, directory },r=>{
           if(r.blocked){if(typeof r.reason!=='string'||r.reason.trim().length<20)throw new Error('Research blocker needs a substantive reason');return;}
-          const staged=applyDateRepairProposal(state.candidate?readJson(path.join(directory,state.candidate)):original,r,active);
+          const staged=applyDateRepairProposal(candidate,r,active);
           options.validateExtraction(staged);
         });
-      if (result.blocked) { writeJsonAtomic(path.join(directory, 'research-blocker.json'), result); return { status: 'research-blocked', reason: result.reason }; }
-      writeJsonAtomic(artifact, result);
+        if (result.blocked) { writeJsonAtomic(path.join(directory, 'research-blocker.json'), result); return { status: 'research-blocked', reason: result.reason }; }
+        writeJsonAtomic(artifact, result);
+      }
+      const proposal = readJson(artifact);
+      if(proposal.author?.agentId) { state.jobs[key]={...state.jobs[key],agentId:proposal.author.agentId};save(); }
+      candidate = applyDateRepairProposal(candidate, proposal, active);
+      options.validateExtraction(candidate);
+      state.repairIndex = repairIndex + 1;
+      state.repairCandidate = `repair-candidate-${state.round}-${state.repairIndex}.json`;
+      writeJsonAtomic(path.join(directory, state.repairCandidate), candidate);
+      save();
     }
-    const proposal = readJson(artifact);
-    if(proposal.author?.agentId) { state.jobs[key]={...state.jobs[key],agentId:proposal.author.agentId};save(); }
-    let candidate = applyDateRepairProposal(state.candidate ? readJson(path.join(directory,state.candidate)) : original, proposal, active);
     if (typeof options.validateExtraction !== 'function') throw new Error('Date workflow requires a production validator');
     options.validateExtraction(candidate);
     // Collapse multiple repair rounds into a single original-to-final scoped
@@ -407,6 +594,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
     writeJsonAtomic(path.join(directory, 'combined-proposal.json'), combined);
     state.round += 1; state.candidate = `candidate-${state.round}.json`;
     writeJsonAtomic(path.join(directory, state.candidate), candidate);
+    delete state.repairPlan; delete state.repairIndex; delete state.repairCandidate;
     state.phase = 'reaudit'; save();
   }
   throw new Error('Unreachable date workflow state');
@@ -429,7 +617,8 @@ export function dateRepairDifference(before, after, packet) {
     if (match >= 0) { remaining.splice(match,1); continue; }
     const dated = remaining.findIndex(c=>sameNonDateClaim(claim,c));
     if (dated < 0) throw new Error('Date repair altered a non-temporal claim');
-    changes.push({kind:'date-context',id:`claim-${index+1}`,before:claim,after:remaining.splice(dated,1)[0],
+    const datedClaim=remaining.splice(dated,1)[0];
+    changes.push({kind:'date-context',id:`claim-${index+1}`,before:claim[2]?.dateContext ?? null,after:datedClaim[2].dateContext,
       reason:'Attach independently reviewed chronology without changing the existing claim identity or non-date content.'});
   }
   // Replacements of dated non-life events must stay replacements, not additions.
