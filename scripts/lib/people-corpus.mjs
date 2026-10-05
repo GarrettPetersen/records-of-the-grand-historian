@@ -86,11 +86,10 @@ export function loadValidatedPeopleCorpus() {
 
   for (const file of files) {
     let raw;
-    let packet;
     let result;
     try {
       raw = readJson(file);
-      packet = buildPeopleExtractionPacket(raw.book, raw.chapter, { properNounMatcher: matcher });
+      const packet = buildPeopleExtractionPacket(raw.book, raw.chapter, { properNounMatcher: matcher });
       result = isCompactPeopleExtraction(raw)
         ? validateCompactPeopleExtraction(raw, packet)
         : validatePeopleExtraction(raw, packet);

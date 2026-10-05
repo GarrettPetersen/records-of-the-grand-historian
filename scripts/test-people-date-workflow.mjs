@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, retainedDateReviewJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+import { dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
@@ -43,6 +43,26 @@ test('review partitions own every unit, date and person exactly once',t=>{
   const f=fixture(t),jobs=dateReviewJobs(f.packet,f.options);
   assert.equal(jobs.length,2);
   for(const field of ['ownedUnits','ownedItems','ownedPeople'])assert.equal(new Set(jobs.flatMap(j=>j[field])).size,jobs.flatMap(j=>j[field]).length);
+});
+test('repair findings are split without dropping or rewriting a finding',t=>{
+  const findings=[
+    {items:['claim-1'],problem:'First fixture chronology is wrong.',action:'Correct the first fixture date.'},
+    {items:['hints-p001'],problem:'First fixture hint is stale.',action:'Synchronize the first fixture hint.'},
+  ];
+  const jobs=dateRepairJobs({findings},{items:[{id:'claim-1',personId:'p001'},{id:'hints-p001',personId:'p001'}]});
+  assert.equal(jobs.length,1);
+  assert.deepEqual(jobs.flatMap(job=>job.findings),findings);
+  assert.equal(new Set(jobs.map(job=>job.id)).size,1);
+});
+test('repair planning packs disjoint people into one bounded packet',t=>{
+  const f=fixture(t);
+  const findings=[
+    {items:['claim-1'],problem:'Jia needs a source-backed chronology correction.',action:'Correct Jia only.'},
+    {items:['claim-2'],problem:'Yi needs a separate source-backed chronology correction.',action:'Correct Yi only.'},
+  ];
+  const jobs=dateRepairJobs({findings,itemChecks:[],personChecks:[],references:[]},f.packet,f.extraction,{maxBytes:1024*1024});
+  assert.equal(jobs.length,1);
+  assert.deepEqual(jobs[0].findings,findings);
 });
 test('retained review plans reuse exact ownership despite changed invocation ceilings',t=>{
   const f=fixture(t),state={phase:'audit',round:0,jobs:{}};
@@ -148,6 +168,13 @@ function receptionRepair(f) {
     reason:'Keep the later reference separate from this official\'s living activity.'});
   return proposal;
 }
+test('a reception addition requires a nonempty event kind',t=>{
+  const f=fixture(t),proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
+    {receptionType:'posthumous',role:'remembered-official'},'explicit',['s0001']],
+    reason:'Keep the later reference separate from this official\'s living activity.'});
+  assert.throws(()=>applyDateRepairProposal(f.extraction,proposal,f.packet),/explicitly classified reception/);
+});
 test('scoped reception additions survive final-delta reconstruction and remain audit items',t=>{
   const f=fixture(t),proposal=receptionRepair(f),candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   const combined=dateRepairDifference(f.extraction,candidate,f.packet);
@@ -167,6 +194,8 @@ test('a reception-only person may clear fabricated active-date hints',t=>{
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[0][4].a,[]);
   assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
+  const reordered=structuredClone(proposal);reordered.changes.reverse();
+  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
   const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
   assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
 });
@@ -180,6 +209,33 @@ test('an undated source attestation may clear active-date hints without inventin
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[1][4].a,[]);
   assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
+  const reordered=structuredClone(proposal);reordered.changes.reverse();
+  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
+});
+test('an undated source attestation may clear hints when remaining contexts are explicitly unresolved',t=>{
+  const f=fixture(t),stored=structuredClone(f.extraction);
+  stored.claims.push(['p002','event-participation',{kind:'political',role:'named',dateContext:{unresolved:true,unresolvedReason:'The source names the event but supplies no date.'}},'explicit',['s0002']]);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:stored});
+  const before=stored.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no temporal wording.'};
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'The attestation carries an inherited date even though its source wording is explicitly undated.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'An unresolved event context is not evidence for an active Western year, so clear the inherited hint.'},
+  ]};
+  const candidate=applyDateRepairProposal(stored,proposal,packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+});
+test('an unresolved replacement may clear the hint it withdraws',t=>{
+  const f=fixture(t),before=f.extraction.claims[1],after=structuredClone(before);
+  after[2]={sourceDate:{text:'The source gives only a disputed relative count.'},unresolved:true,
+    unresolvedReason:'The relative count has competing anchors and does not support one Western year.'};
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'Replace the unsupported converted year with the source\'s explicitly unresolved relative chronology.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'Clear the active hint because the repaired record no longer supports a concrete Western year.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+  assert.equal(candidate.claims[1][2].unresolved,true);
 });
 test('an undated source attestation cannot clear hints when another claim supplies chronology',t=>{
   const f=fixture(t),stored=structuredClone(f.extraction);
@@ -249,8 +305,8 @@ function undatedEventFixture(t) {
 }
 function eventDateRepair(f) {
   const proposal=repair({packet:f.packet,extraction:f.extraction});
-  const before=f.extraction.claims[3],after=structuredClone(before);
-  after[2].dateContext={sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}};
+  const before=f.extraction.claims[3][2].dateContext ?? null;
+  const after={sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}};
   proposal.changes.push({kind:'date-context',id:'claim-4',before,after,reason:'Preserve the appointment and attach its separately checked first-year source context.'});
   return proposal;
 }
@@ -266,10 +322,9 @@ test('missing event chronology can be added without replacing the underlying eve
 test('date-context cannot rewrite identities, event content, life claims or unowned targets',t=>{
   const f=undatedEventFixture(t),proposal=eventDateRepair(f);
   for(const mutate of [
-    c=>{c.after[0]='p002';},c=>{c.after[1]='office';},c=>{c.after[2].role='ruler';},
-    c=>{c.after[2].kind='battle';},c=>{c.id='claim-999';},c=>{c.id='claim-04';},
-    c=>{c.before[3]='uncertain';},c=>{delete c.after[2].dateContext;c.after[3]='uncertain';},
-    c=>{c.id='claim-1';c.before=f.extraction.claims[0];c.after=structuredClone(c.before);},
+    c=>{c.after.role='ruler';},c=>{c.after.kind='battle';},c=>{c.id='claim-999';},c=>{c.id='claim-04';},
+    c=>{c.before={sourceDate:{text:'wrong'}};},c=>{c.after=null;},
+    c=>{c.id='claim-1';c.before=f.extraction.claims[0][2].dateContext;c.after=structuredClone(c.before);},
   ]) {
     const bad=structuredClone(proposal);mutate(bad.changes.at(-1));
     assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet));
