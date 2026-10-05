@@ -26,6 +26,7 @@ Options:
   --interval-ms N     Daemon polling interval (default: ${DEFAULT_INTERVAL_MS})
   --cooldown-ms N     Minimum time between prompts to one idle worker (default: ${DEFAULT_COOLDOWN_MS})
   --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
+  --workers IDS       Comma-separated stable worker IDs to dispatch (for recovery cycles)
   --force             Dispatch even when the cached roster says a worker is running
   --launch-app        Start Grok Bot with the loopback endpoint when it is unavailable
 
@@ -46,6 +47,7 @@ export function parseArgs(argv) {
     intervalMs: DEFAULT_INTERVAL_MS,
     cooldownMs: DEFAULT_COOLDOWN_MS,
     maxActive: DEFAULT_MAX_ACTIVE,
+    workers: null,
     force: false,
     launchApp: false,
   };
@@ -60,6 +62,13 @@ export function parseArgs(argv) {
     else if (arg === '--interval-ms') options.intervalMs = positiveInteger(next(), arg);
     else if (arg === '--cooldown-ms') options.cooldownMs = positiveInteger(next(), arg);
     else if (arg === '--max-active') options.maxActive = positiveInteger(next(), arg);
+    else if (arg === '--workers') {
+      const workers = next().split(',').map((value) => value.trim()).filter(Boolean);
+      if (!workers.length || workers.some((worker) => !/^grokbot-(?:2[4-9]|3[0-5])$/u.test(worker))) {
+        throw new Error('--workers requires comma-separated stable IDs from grokbot-24 through grokbot-35');
+      }
+      options.workers = new Set(workers);
+    }
     else if (arg === '--force') options.force = true;
     else if (arg === '--launch-app') options.launchApp = true;
     else if (arg === '--help' || arg === '-h') options.command = 'help';
@@ -282,18 +291,113 @@ async function grokBotMain(cdpUrl) {
   return null;
 }
 
-async function waitForComposer(session, agentId, timeoutMs = 10000) {
+async function waitForComposer(session, worker, timeoutMs = 10000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     const ready = await session.evaluate(`(() => {
       const active = document.querySelector('[data-agent-id][aria-current="page"]');
       const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
-      return active?.getAttribute('data-agent-id') === ${JSON.stringify(agentId)} && composer != null;
+      return active?.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)} && composer != null;
     })()`);
     if (ready) return;
     await new Promise((resolve) => setTimeout(resolve, 200));
   }
-  throw new Error(`Grok Bot composer did not open for agent ${agentId}`);
+  throw new Error(`Grok Bot composer did not open for agent ${worker.id}`);
+}
+
+async function selectWorker(session, worker, timeoutMs = 10000) {
+  const direct = await session.evaluate(`(() => {
+    const button = Array.from(document.querySelectorAll('[data-agent-id]'))
+      .find((candidate) => candidate.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+    if (!(button instanceof HTMLButtonElement)) return false;
+    button.click();
+    return true;
+  })()`);
+  if (direct) return;
+
+  // The desktop sidebar virtualizes old conversations. The persisted conversation
+  // ID is authoritative, so search the virtualized viewport by that ID before
+  // opening the human-readable search palette.
+  const viewport = await session.evaluate(`(() => {
+    const node = document.querySelector('.ui-scroll-area__viewport');
+    if (!(node instanceof HTMLElement)) return null;
+    return { scrollHeight: node.scrollHeight, clientHeight: node.clientHeight };
+  })()`);
+  if (viewport && Number.isFinite(viewport.scrollHeight) && Number.isFinite(viewport.clientHeight)) {
+    const step = Math.max(100, Math.floor(viewport.clientHeight / 2));
+    for (let top = 0; top <= viewport.scrollHeight - viewport.clientHeight; top += step) {
+      const selected = await session.evaluate(`(() => {
+        const viewport = document.querySelector('.ui-scroll-area__viewport');
+        if (!(viewport instanceof HTMLElement)) return false;
+        viewport.scrollTop = ${top};
+        viewport.dispatchEvent(new Event('scroll', { bubbles: true }));
+        const button = Array.from(document.querySelectorAll('[data-agent-id]'))
+          .find((candidate) => candidate.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+        if (!(button instanceof HTMLButtonElement)) return false;
+        button.click();
+        return true;
+      })()`);
+      if (selected) return;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  const opened = await session.evaluate(`(() => {
+    const input = document.querySelector('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]');
+    if (input instanceof HTMLInputElement) return true;
+    const button = document.querySelector('button[aria-label="Search"]');
+    if (!(button instanceof HTMLButtonElement)) return false;
+    button.click();
+    return true;
+  })()`);
+  if (!opened) throw new Error(`Grok Bot cannot open Search for ${worker.worker}`);
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const focused = await session.evaluate(`(() => {
+      const input = document.querySelector('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]');
+      if (!(input instanceof HTMLInputElement)) return false;
+      input.focus();
+      return document.activeElement === input;
+    })()`);
+    if (focused) break;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  const focused = await session.evaluate(`document.activeElement instanceof HTMLInputElement
+    && document.activeElement.matches('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]')`);
+  if (!focused) throw new Error(`Grok Bot Search input did not open for ${worker.worker}`);
+  const cleared = await session.evaluate(`(() => {
+    const input = document.querySelector('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]');
+    if (!(input instanceof HTMLInputElement)) return false;
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+    if (typeof setter !== 'function') return false;
+    setter.call(input, '');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    return input.value === '';
+  })()`);
+  if (!cleared) throw new Error(`Grok Bot Search input could not clear for ${worker.worker}`);
+  await session.call('Input.insertText', { text: worker.name });
+  while (Date.now() < deadline) {
+    const candidate = await session.evaluate(`(() => {
+      const result = Array.from(document.querySelectorAll('[role="dialog"][aria-label="Search"] [data-agent-id]'))
+        .find((node) => node.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+      return result instanceof HTMLButtonElement
+        ? { agentId: result.getAttribute('data-agent-id'), tagName: result.tagName }
+        : null;
+    })()`);
+    if (isExactWorkerSearchResult(candidate, worker)) {
+      const selected = await session.evaluate(`(() => {
+        const result = Array.from(document.querySelectorAll('[role="dialog"][aria-label="Search"] [data-agent-id]'))
+          .find((node) => node.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+        if (!(result instanceof HTMLButtonElement)) return false;
+        result.click();
+        return true;
+      })()`);
+      if (selected) return;
+      throw new Error(`Grok Bot exact Search result vanished for ${worker.worker}`);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  throw new Error(`Grok Bot Search found no exact result for ${worker.worker}`);
 }
 
 async function liveRunningAgentIds(cdpUrl) {
@@ -314,9 +418,18 @@ async function liveRunningAgentIds(cdpUrl) {
 export function capacityLimitMessage(alerts) {
   if (!Array.isArray(alerts)) throw new Error('Grok Bot capacity alerts were not an array');
   const message = alerts
-    .map((alert) => String(alert ?? '').replace(/\s+/gu, ' ').trim())
+    .filter((alert) => !(alert && typeof alert === 'object' && alert.visible === false))
+    .map((alert) => String(alert && typeof alert === 'object' ? alert.text : alert ?? '').replace(/\s+/gu, ' ').trim())
     .find((alert) => /(?:weekly|usage)\s+limit\s+reached/iu.test(alert));
   return message || null;
+}
+
+export function isExactWorkerSearchResult(candidate, worker) {
+  return candidate != null
+    && typeof candidate === 'object'
+    && candidate.tagName === 'BUTTON'
+    && typeof candidate.agentId === 'string'
+    && candidate.agentId === worker?.id;
 }
 
 async function liveCapacityLimitMessage(cdpUrl) {
@@ -324,18 +437,37 @@ async function liveCapacityLimitMessage(cdpUrl) {
   if (!main) throw new Error('Grok Bot main renderer is unavailable');
   try {
     const alerts = await main.session.evaluate(`Array.from(document.querySelectorAll('[role="alert"]'))
-      .map((node) => node.innerText || node.textContent || '')`);
+      .map((node) => {
+        let current = node;
+        let visible = true;
+        while (current && current.nodeType === Node.ELEMENT_NODE) {
+          const style = getComputedStyle(current);
+          if (current.hidden || current.getAttribute('aria-hidden') === 'true'
+            || style.display === 'none' || style.visibility === 'hidden'
+            || style.visibility === 'collapse' || style.opacity === '0') {
+            visible = false;
+            break;
+          }
+          current = current.parentElement;
+        }
+        return { text: node.innerText || node.textContent || '', visible };
+      })`);
     return capacityLimitMessage(alerts);
   } finally {
     main.session.close();
   }
 }
 
-export function mergeLiveWorkerState(workers, runningAgentIds) {
-  return workers.map((worker) => ({
-    ...worker,
-    isRunning: worker.isRunning || runningAgentIds.has(worker.id),
-  }));
+export function mergeLiveWorkerState(workers, runningAgentIds, state = null) {
+  return workers.map((worker) => {
+    const persistedId = state?.workers?.[worker.worker]?.agentId;
+    const id = typeof persistedId === 'string' && persistedId.length > 0 ? persistedId : worker.id;
+    return {
+      ...worker,
+      id,
+      isRunning: worker.isRunning || runningAgentIds.has(id),
+    };
+  });
 }
 
 export async function probe(cdpUrl) {
@@ -364,14 +496,8 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
   const main = await grokBotMain(cdpUrl);
   if (!main) throw new Error('Grok Bot main renderer is unavailable');
   try {
-    const selected = await main.session.evaluate(`(() => {
-      const button = document.querySelector('[data-agent-id="${worker.id}"]');
-      if (!(button instanceof HTMLButtonElement)) return false;
-      button.click();
-      return true;
-    })()`);
-    if (!selected) throw new Error(`Grok Bot agent ${worker.id} is absent from the sidebar`);
-    await waitForComposer(main.session, worker.id);
+    await selectWorker(main.session, worker);
+    await waitForComposer(main.session, worker);
     const focused = await main.session.evaluate(`(() => {
       const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
       if (!(composer instanceof HTMLElement)) return false;
@@ -399,8 +525,10 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
       const submitted = await main.session.evaluate(`(() => {
         const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
         const active = document.querySelector('[data-agent-id][aria-current="page"]');
-        return active?.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)}
-          && (composer?.innerText ?? '').trim() === '';
+        if ((composer?.innerText ?? '').trim() !== '') return false;
+        if (active?.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)}) return true;
+        return document.querySelector('[role="dialog"][aria-label="Search"]') == null
+          && document.body.innerText.includes(${JSON.stringify(worker.name)});
       })()`);
       if (submitted) return;
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -422,7 +550,9 @@ export function workersEligibleForDispatch(workers, state, { force, cooldownMs, 
 export function workersToDispatch(workers, state, options) {
   const running = workers.filter((worker) => worker.isRunning).length;
   const availableSlots = Math.max(0, options.maxActive - running);
-  return workersEligibleForDispatch(workers, state, options).slice(0, availableSlots);
+  return workersEligibleForDispatch(workers, state, options)
+    .filter((worker) => options.workers == null || options.workers.has(worker.worker))
+    .slice(0, availableSlots);
 }
 
 async function dispatchCycle(options) {
@@ -430,12 +560,13 @@ async function dispatchCycle(options) {
   await probe(options.cdpUrl);
   const capacityMessage = await liveCapacityLimitMessage(options.cdpUrl);
   if (capacityMessage) throw new Error(`Grok Bot capacity unavailable: ${capacityMessage}`);
+  const state = readState();
+  state.workers ??= {};
   const workers = mergeLiveWorkerState(
     readRosterWorkers(),
     await liveRunningAgentIds(options.cdpUrl),
+    state,
   );
-  const state = readState();
-  state.workers ??= {};
   const dispatchable = workersToDispatch(workers, state, options);
   for (const worker of dispatchable) {
     await dispatchPrompt(options.cdpUrl, worker, workerPrompt(worker.worker));
