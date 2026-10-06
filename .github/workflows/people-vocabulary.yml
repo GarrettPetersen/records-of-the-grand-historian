@@ -1,0 +1,26 @@
+name: People vocabulary
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  merge_group:
+    types: [checks_requested]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  people-vocabulary:
+    name: People vocabulary
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Vocabulary regression tests
+        run: node --test scripts/test-people-vocabulary.mjs scripts/test-people-reception.mjs
+      - name: Check all canonical people labels
+        run: node scripts/check-people-vocabulary.mjs

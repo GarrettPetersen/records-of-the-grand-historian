@@ -75,7 +75,7 @@ for (const [personId, unit, date, year] of receptions) {
   changes.push({
     kind: 'add-reception-event',
     after: [personId, 'event-participation', {
-      kind: 'posthumous-reference',
+      kind: 'retrospective-reference',
       role: 'honoree',
       action: 'named-in-dynastic-continuity decree',
       dateContext: chronology(date, year),

@@ -617,7 +617,7 @@ function selfTest() {
   if (labelOnlyResult !== temporalPeople) {
     throw new Error('A label-only claim revision changed active-date hints');
   }
-  const reception = { ...additionalDate, value: { kind: 'posthumous-reference', dateContext: { westernYear: { era: 'AD', year: 700 } } } };
+  const reception = { ...additionalDate, value: { kind: 'retrospective-reference', dateContext: { westernYear: { era: 'AD', year: 700 } } } };
   const receptionResult = applyReviewedTemporalHintChanges(
     temporalPeople, [...temporalBefore, reception], [...temporalAfter, reception],
     { retractedClaimIds: new Set(), revisedClaims: new Map([[temporalBefore[0].id, temporalAfter[0]]]), addedClaims: [] },

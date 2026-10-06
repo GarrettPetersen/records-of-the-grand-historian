@@ -1,3 +1,4 @@
+import { personClaimReception } from './people-reception.mjs';
 const BOUND_KEYS = ['before', 'onOrBefore', 'after', 'onOrAfter'];
 
 export function westernYearOrder(year) {
@@ -57,8 +58,7 @@ export function deathOnlyChronology(claims) {
     ? { predicate: claim[1], value: claim[2] }
     : claim;
   const temporal = claims.map(read).filter(claim => hasDateBearingChronology(claim.value));
-  const reception = value => ['posthumous', 'retrospective'].includes(value?.receptionType) ||
-    ['posthumous-commemoration', 'posthumous-reference', 'retrospective-reference'].includes(value?.kind);
+  const reception = value => personClaimReception({value}) === 'retrospective';
   return temporal.length > 0 && temporal.every(({ predicate, value }) =>
     predicate === 'death' ||
     (predicate === 'place-association' && value?.relation === 'died-at') ||
