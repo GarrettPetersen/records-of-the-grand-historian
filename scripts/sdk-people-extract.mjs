@@ -50,6 +50,7 @@ import {
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   buildCompactInput,
+  compactInputErrors,
   compactPeopleExtraction,
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
@@ -93,6 +94,7 @@ import {
 } from './lib/people-resolution-invalidation.mjs';
 import {
   editorialDecisionPath,
+  editorialReviews,
   preserveAppliedEditorialClaims,
   validateAppliedEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
@@ -2551,6 +2553,27 @@ function preserveEditorialHistory(target, compact, packet) {
   if (!fs.existsSync(file) || !fs.existsSync(decisionsFile)) return compact;
 
   const previousRaw = readJson(file);
+  const decisions = readJson(decisionsFile);
+  const previousMatchesPacket = isCompactPeopleExtraction(previousRaw)
+    ? compactInputErrors(previousRaw, packet).length === 0
+    : isDeepStrictEqual(previousRaw.input, packet.input);
+  const decisionsMatchPacket = editorialReviews(decisions).every((review) =>
+    review.input?.chapterFingerprint === packet.input.chapterFingerprint,
+  );
+  if (!previousMatchesPacket || !decisionsMatchPacket) {
+    // A refreshed source cannot safely inherit decisions or applied repairs
+    // anchored to the old text. The caller will invalidate stale identity
+    // references when it writes this replacement. The old decision is a
+    // tracked canonical result (not a recovery artifact), so retire it here:
+    // Git preserves its history while the next editorial review must start
+    // from the new source-bound extraction.
+    console.warn(
+      `[${stateKey(target)}] prior extraction belongs to a different source packet; ` +
+      'retiring stale editorial decisions before replacement',
+    );
+    fs.unlinkSync(decisionsFile);
+    return compact;
+  }
   const previous = isCompactPeopleExtraction(previousRaw)
     ? validateCompactPeopleExtraction(previousRaw, packet).normalized
     : validatePeopleExtraction(previousRaw, packet).normalized;
@@ -2561,7 +2584,6 @@ function preserveEditorialHistory(target, compact, packet) {
     `remapped ${personIds.matched} match(es) and reassigned ${personIds.reassigned} collision(s)`,
   );
   preservePriorAppliedRepairs(previous, replacement);
-  const decisions = readJson(decisionsFile);
   const claims = preserveAppliedEditorialClaims(decisions, replacement);
   if (claims.removed > 0 || claims.restored > 0) {
     console.log(
@@ -2885,10 +2907,21 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     completedAt: new Date().toISOString(),
     chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   };
-  let compact = assembleCompactPeopleChunks(packet, parts, run);
+  // Rebuild the sealed packet before publication. Chunk workers are validated
+  // against ownership packets derived from `packet`, but final assembly must
+  // also defend against any in-memory mutation while those retained artifacts
+  // were being recovered. A source change remains a hard failure; it must not
+  // be papered over by assembling evidence against a different packet.
+  const finalPacket = buildPeopleExtractionPacket(target.book, target.chapter, {
+    properNounMatcher: opts.properNounMatcher,
+  });
+  if (finalPacket.input.chapterFingerprint !== packet.input.chapterFingerprint) {
+    throw new Error(`${key} source changed during chunked extraction; retained chunks require review against the new packet`);
+  }
+  let compact = assembleCompactPeopleChunks(finalPacket, parts, run);
   let validated;
   try {
-    validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
+    validated = validateCompactPeopleExtraction(compact, finalPacket, { strictAliasDispositions: true });
   } catch (error) {
     const errors = validationErrors(error);
     const candidateIds = new Set(errors.flatMap((message) =>
@@ -2912,9 +2945,9 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     }
     throw error;
   }
-  assertDurableCareerCoverage(validated.normalized, packet);
-  compact = writeAcceptedExtraction(target, compact, packet);
-  validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
+  assertDurableCareerCoverage(validated.normalized, finalPacket);
+  compact = writeAcceptedExtraction(target, compact, finalPacket);
+  validated = validateCompactPeopleExtraction(compact, finalPacket, { strictAliasDispositions: true });
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),
