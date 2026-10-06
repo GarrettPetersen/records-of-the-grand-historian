@@ -4,6 +4,7 @@ import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from '
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { dateWorkerInput } from './people-date-worker.mjs';
 import { mapDateReviewJobs } from './people-date-concurrency.mjs';
+import { reconcileRetrospectiveValue, reconcileRetrospectiveProposal } from './people-reception-reconciliation.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
 import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
@@ -33,7 +34,7 @@ const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1]
   && Boolean(personClaimReception({ predicate: row[1], value: row[2] }))
   && personReceptionErrors({ predicate: row[1], value: row[2] }).length === 0;
 const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
-  && same(withoutDates(before[2]), withoutDates(after[2]));
+  && same(withoutDates(reconcileRetrospectiveValue(before[2])), withoutDates(after[2]));
 
 // Candidate extraction bytes are not a sufficient review identity: removing a
 // sealed no-op can leave those bytes unchanged while changing the proposal a
@@ -314,6 +315,7 @@ export function assembleDateReview(packet, jobs, results) {
 }
 
 export function applyDateRepairProposal(stored, proposal, packet) {
+  proposal = reconcileRetrospectiveProposal(proposal).proposal;
   if (stored.schemaVersion !== 2) throw new Error('Date repair requires the current compact extraction format');
   if (proposal.sourceHash !== packet.sourceHash || proposal.extractionHash !== packet.extractionHash || hash(stored) !== packet.extractionHash) throw new Error('Stale date repair proposal');
   if (!Array.isArray(proposal.changes) || !proposal.changes.length) throw new Error('Repair must contain scoped changes');
@@ -390,7 +392,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       }
       else {
         if (!Array.isArray(change.after) || change.after.length !== 5 || change.after[0] !== change.before[0] || change.after[1] !== change.before[1]) throw new Error('Date repair cannot change a claim subject or predicate');
-        if (!lifePredicates.has(change.before[1]) && !same(withoutDates(change.before[2]),withoutDates(change.after[2]))) throw new Error('Date repair altered non-temporal event fields');
+        if (!lifePredicates.has(change.before[1]) && !sameNonDateClaim(change.before,change.after)) throw new Error('Date repair altered non-temporal event fields');
         candidate.claims[index] = change.after;
       }
     } else if (change.kind === 'add' || change.kind === 'add-reception-event') {
@@ -462,7 +464,16 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const perform = async (task, validate) => {
     for (let attempt=0;attempt<(options.maxAttempts ?? 3);attempt++) {
       const execute=()=>worker({...task,state:state.jobs[task.key]??{},save:patch=>{state.jobs[task.key]={...state.jobs[task.key],...patch};save();}});
-      const result=await (options.workerPool ? options.workerPool.run(execute) : execute());
+      const submitted=await (options.workerPool ? options.workerPool.run(execute) : execute());
+      let result=submitted;
+      if(task.kind==='repair') {
+        const reconciled=reconcileRetrospectiveProposal(submitted);
+        if(reconciled.changes.length) {
+          const receipt=path.join(directory,`reception-reconciliation-${task.key}-${hash(submitted).slice(7)}.json`);
+          if(!fs.existsSync(receipt))writeJsonAtomic(receipt,{submission:submitted,proposal:reconciled.proposal,changes:reconciled.changes});
+          result=reconciled.proposal;
+        }
+      }
       try { validate(result); return result; }
       catch(error) {
         writeJsonAtomic(path.join(directory,`rejected-${task.key}-${hash(result).slice(7)}.json`),result);
@@ -627,7 +638,7 @@ export function dateRepairDifference(before, after, packet) {
   // Replacements of dated non-life events must stay replacements, not additions.
   for (const claim of remaining) {
     const removed = changes.find(c=>c.kind==='remove' && c.before[0]===claim[0] && c.before[1]===claim[1]
-      && (lifePredicates.has(claim[1]) || same(withoutDates(c.before[2]),withoutDates(claim[2]))));
+      && (lifePredicates.has(claim[1]) || sameNonDateClaim(c.before,claim)));
     if (removed) { removed.kind = 'replace'; removed.after = claim; }
     else changes.push({ kind:isReceptionEvent(claim)?'add-reception-event':'add', after:claim, reason:'Added source-backed chronology or separate later reception after independent re-audit.' });
   }
