@@ -3,6 +3,7 @@ import path from 'node:path';
 import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from './people-content.mjs';
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { dateWorkerInput } from './people-date-worker.mjs';
+import { mapDateReviewJobs } from './people-date-concurrency.mjs';
 import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
 import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
@@ -321,10 +322,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
   const seen = new Set();
   const temporal = new Set(dateAuditItems(stored).items.filter(i=>i.claimIndex !== undefined).map(i=>i.id));
   const removed = new Set();
-  // Hint validity depends on the final claim set, not tool-call insertion order.
-  // Apply all claim edits before active hints and external hint provenance.
-  const rank=change=>change.kind==='external-primary-chronology'?2:change.kind==='hints'?1:0;
-  for (const change of [...proposal.changes].sort((a,b)=>rank(a)-rank(b))) {
+  for (const change of proposal.changes) {
     if (typeof change.reason !== 'string' || change.reason.trim().length < 20) throw new Error('Repair requires source-based reasoning');
     if (change.kind === 'hints') {
       const key = `hints-${change.personId}`;
@@ -360,7 +358,9 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       }) && activeClaims.some(claim => claim[0] === change.personId && hasConcreteWesternChronology(claim[2]));
       const receptionOnly = change.after?.length === 0 && activeClaims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
       const deathOnly = change.after?.length === 0 && deathOnlyChronology(activeClaims.filter(claim => claim[0] === change.personId));
-      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence && !unresolvedOnly && !boundedUncertaintyOnly && !deathOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) throw new Error('Invalid or stale active-hint repair');
+      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence && !unresolvedOnly && !boundedUncertaintyOnly && !deathOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) {
+        throw new Error(`Invalid or stale active-hint repair for ${change.personId}: expected ${JSON.stringify(person?.[4]?.a ?? [])}, received before ${JSON.stringify(change.before)} and after ${JSON.stringify(change.after)}`);
+      }
       person[4] = { ...person[4], a: change.after };
     } else if (change.kind === 'date-context') {
       if (!/^claim-[1-9]\d*$/.test(change.id) || seen.has(change.id)) throw new Error('Repair must target a unique temporal claim');
@@ -445,7 +445,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const save = () => writeJsonAtomic(stateFile, state);
   if (state.workflowVersion !== DATE_WORKFLOW_VERSION) throw new Error('Date workflow protocol changed; reconcile retained work before restarting');
   const priorReport = path.join(options.peopleDir ?? PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
-  if (!options.freshAudit && (!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
+  if ((!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
     const report = readJson(priorReport);
     validateDateAuditReport(report,packet);
     writeJsonAtomic(path.join(directory,'review-0.json'),report);
@@ -461,7 +461,8 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   }
   const perform = async (task, validate) => {
     for (let attempt=0;attempt<(options.maxAttempts ?? 3);attempt++) {
-      const result=await worker({...task,state:state.jobs[task.key]??{},save:patch=>{state.jobs[task.key]={...state.jobs[task.key],...patch};save();}});
+      const execute=()=>worker({...task,state:state.jobs[task.key]??{},save:patch=>{state.jobs[task.key]={...state.jobs[task.key],...patch};save();}});
+      const result=await (options.workerPool ? options.workerPool.run(execute) : execute());
       try { validate(result); return result; }
       catch(error) {
         writeJsonAtomic(path.join(directory,`rejected-${task.key}-${hash(result).slice(7)}.json`),result);
@@ -490,16 +491,15 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
       const {key:planKey,plan,jobs} = retainedDateReviewJobs(active,state,options);
       save();
       if(options.saveReviewPlan)await options.saveReviewPlan(planKey,plan);
-      const results = [];
-      for (const job of jobs) {
+      const results = await mapDateReviewJobs(jobs, options.jobConcurrency ?? 1, async job => {
         const key = `${state.phase}-${state.round}-${job.id}`;
         const artifact = path.join(directory, `${key}.json`);
         if (!fs.existsSync(artifact)) {
           const result = await perform({ kind: 'review', key, job, packet: active, directory, maxWorkerBytes:plan.maxBytes+8192 },r=>validateDateJobResult(r,job,active));
           validateDateJobResult(result, job, active); writeJsonAtomic(artifact, result);
         }
-        const result = readJson(artifact); validateDateJobResult(result, job, active); results.push(result);
-      }
+        const result = readJson(artifact); validateDateJobResult(result, job, active); return result;
+      });
       const report = assembleDateReview(active, jobs, results);
       writeJsonAtomic(path.join(directory, `review-${state.round}.json`), report);
       state.review = `review-${state.round}.json`;

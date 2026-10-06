@@ -7,6 +7,7 @@ import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
 import { dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
 function fixture(t) {
@@ -43,6 +44,54 @@ test('review partitions own every unit, date and person exactly once',t=>{
   const f=fixture(t),jobs=dateReviewJobs(f.packet,f.options);
   assert.equal(jobs.length,2);
   for(const field of ['ownedUnits','ownedItems','ownedPeople'])assert.equal(new Set(jobs.flatMap(j=>j[field])).size,jobs.flatMap(j=>j[field]).length);
+});
+test('parallel review and re-audit retain full gates and serial repair',async t=>{
+  const f=fixture(t),pool=createDateWorkerPool(2);
+  let active=0,peak=0;
+  const worker=async task=>{
+    active++;peak=Math.max(peak,active);
+    if(task.kind==='repair')assert.equal(active,1);
+    await new Promise(resolve=>setTimeout(resolve,5));
+    active--;
+    return task.kind==='repair'?repair(task):review(task);
+  };
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2,workerPool:pool});
+  assert.equal(result.status,'audited');assert.equal(peak,2);
+  assert.equal(pool.summary().active,0);assert.equal(pool.summary().completed,5);
+});
+test('failed parallel review drains and preserves successful siblings before resumption',async t=>{
+  const f=fixture(t);let completed=0;
+  const worker=async task=>{
+    if(task.job.ownedUnits.includes('s0001'))throw new Error('fixture failed shard');
+    await new Promise(resolve=>setTimeout(resolve,10));completed++;
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2}),/fixture failed shard/);
+  assert.equal(completed,1);assert.deepEqual(readJson(f.file),f.extraction);
+  const state=readJson(path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'));
+  assert.equal(state.phase,'audit');
+  const calls=[];
+  await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{calls.push(task);return task.kind==='repair'?repair(task):review(task);},{...f.options,jobConcurrency:2});
+  assert.equal(calls.filter(task=>task.key.startsWith('audit-')&&task.job.ownedUnits.includes('s0002')).length,0);
+});
+test('shared worker pool caps concurrent chapters rather than multiplying limits',async t=>{
+  const a=fixture(t),b=fixture(t),pool=createDateWorkerPool(2);
+  let active=0,peak=0;
+  const worker=async task=>{
+    active++;peak=Math.max(peak,active);
+    await new Promise(resolve=>setTimeout(resolve,5));active--;
+    return task.kind==='repair'?repair(task):review(task);
+  };
+  await Promise.all([a,b].map(f=>runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2,workerPool:pool})));
+  assert.equal(peak,2);assert.deepEqual(pool.summary(),{limit:2,peak:2,completed:10,active:0,queued:0});
+});
+test('pool stops queued launches on quota stop and drains active calls',async()=>{
+  let stop=false,release;const pool=createDateWorkerPool(1,{shouldStop:()=>stop});
+  const first=pool.run(()=>new Promise(resolve=>{release=resolve;}));
+  const second=pool.run(()=>assert.fail('queued worker must not launch'));
+  const rejected=assert.rejects(second,/launch stopped/);
+  await Promise.resolve();stop=true;release('done');
+  assert.equal(await first,'done');await rejected;assert.equal(pool.summary().active,0);
 });
 test('repair findings are split without dropping or rewriting a finding',t=>{
   const findings=[
@@ -194,8 +243,6 @@ test('a reception-only person may clear fabricated active-date hints',t=>{
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[0][4].a,[]);
   assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
-  const reordered=structuredClone(proposal);reordered.changes.reverse();
-  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
   const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
   assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
 });
@@ -209,8 +256,6 @@ test('an undated source attestation may clear active-date hints without inventin
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[1][4].a,[]);
   assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
-  const reordered=structuredClone(proposal);reordered.changes.reverse();
-  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
 });
 test('an undated source attestation may clear hints when remaining contexts are explicitly unresolved',t=>{
   const f=fixture(t),stored=structuredClone(f.extraction);

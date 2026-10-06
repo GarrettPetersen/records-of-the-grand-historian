@@ -63,6 +63,57 @@ evidence fails before inference: inspect that chapter and deliberately adjust th
 packet ceiling instead of silently truncating source or skipping checks.
 Measure packet size before choosing concurrency; do not restart completed work.
 
+## Bounded parallel date reviews
+
+The host runner now accepts `--job-concurrency` (default 4, maximum 8), a single
+pool shared across **all chapters and phases** in that invocation. `--concurrency`
+still controls chapter slots (default 2); two chapters with four job slots means
+at most four active worker calls, not eight. Audit and fresh re-audit chunks run
+in parallel against the existing sealed ownership plan. Repairs and canonical
+publication remain sequential within each chapter. Complete independent coverage,
+source/extraction hashes, rejected artifacts, and the self-review prohibition are
+unchanged. The workflow version and retained chunk IDs do not change.
+
+All dispatched siblings finish and checkpoint before a failed phase returns.
+Resume the same stable worker: accepted chunks are reused, including those that
+finished after a sibling failed. Account quota stops prevent queued launches and
+drain active calls. Attachment lanes export every missing review input in the
+phase rather than stopping at the first missing result; use separate reviewer
+conversations and return exact result filenames. A missing attachment still fails
+the invocation and cannot approve or publish a partial report.
+
+`--chapters-file ABSOLUTE_PATH` narrows `--all` or `--book` to a nonempty JSON
+array such as `[{"book":"jinshu","chapter":"024"}]`. Duplicate, missing and
+conflicting scopes fail before claims or inference. Choose only chapters whose
+source editorial work is finished; pause further edits to their sealed inputs.
+The existing queue, pending-repair filter and production validators still apply.
+The cohort does not grant permission to take another worker's sticky claim.
+
+For managed campaign invocations, export `PEOPLE_DATE_JOB_CONCURRENCY=4` in the
+launcher environment; an explicit `--job-concurrency` wins. No campaign spending,
+chapter-wave or identity gate caps have been increased. Start at four job slots;
+raise to eight only after measuring accepted cost, failures and wall time. Summary
+JSON includes `workerPool` with the limit, observed peak and completed worker calls
+(including failed calls, **not** completed chapters). Count approval via `approved`.
+
+Only one date host runner may own the local run lock. This refactor does not enable
+multiple providers in one invocation or competing host executors. Do not launch
+parallel lane processes or create per-chapter checkouts to get around that lock.
+
+```sh
+npm run people:dates:run -- --book jinshu --chapters-file /absolute/date-cohort.json \
+  --dry-run --limit 5 --concurrency 2 --job-concurrency 4
+# After verifying capacity, editorial closure, and existing ownership:
+npm run people:dates:run -- --book jinshu --chapters-file /absolute/date-cohort.json \
+  --worker EXISTING_STABLE_WORKER --lane cursor-sdk --model grok-4.6 --run \
+  --limit 5 --concurrency 2 --job-concurrency 4 \
+  --summary-out /absolute/date-summary.json
+```
+
+For rollout while an older invocation is running, see
+`DATE_AUDIT_PARALLEL_HANDOFF.md`. Never change its live files, delete its lock,
+take over its lease, change packet ceilings, or discard recovery artifacts.
+
 ## Resumable Worker Loop
 
 `people:dates:run` runs audit, scoped repair, fresh independent re-audit and host
