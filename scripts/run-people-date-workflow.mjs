@@ -24,7 +24,7 @@ import { editorialDecisionPath, validateAppliedEditorialDecisions } from './lib/
 const {values:o} = parseArgs({ options:{book:{type:'string'},chapter:{type:'string'},all:{type:'boolean'},
   worker:{type:'string'},lane:{type:'string',default:'cursor-sdk'},run:{type:'boolean'},
   'dry-run':{type:'boolean'},limit:{type:'string',default:'5'},concurrency:{type:'string',default:'2'},
-  'job-concurrency':{type:'string',default:process.env.PEOPLE_DATE_JOB_CONCURRENCY??'4'},'chapters-file':{type:'string'},
+  'job-concurrency':{type:'string'},'chapters-file':{type:'string'},
   model:{type:'string'},'max-units':{type:'string',default:'40'},'max-worker-kib':{type:'string',default:'64'},
   'max-rounds':{type:'string',default:'3'},'max-attempts':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
   'max-run-tokens':{type:'string',default:'4000000'},'run-timeout-minutes':{type:'string',default:'20'},
@@ -43,7 +43,10 @@ if (!o.release && ['grokbot','manual'].includes(o.lane) && !o['dry-run'] && !o['
 if (['grokbot','manual'].includes(o.lane) && o.run) throw new Error('Attachment lanes must not call Cursor SDK');
 if (o.lane==='openrouter' && !o.release && !o['dry-run'] && !o['recover-only'] && !o.run) throw new Error('OpenRouter execution requires --run');
 const concurrency=integer('concurrency',8), limit=integer('limit',1000);
-const jobConcurrency=integer('job-concurrency',8);
+// The public free tier is request-limited.  A chapter slot must therefore not
+// silently fan out into the paid-lane four-job pool unless an operator opts in.
+const jobConcurrency=Number(o['job-concurrency'] ?? (o.lane==='openrouter' ? '1' : process.env.PEOPLE_DATE_JOB_CONCURRENCY ?? '4'));
+if(!Number.isSafeInteger(jobConcurrency)||jobConcurrency<1||jobConcurrency>8)throw new Error('Invalid --job-concurrency');
 let cohort;
 if(o['chapters-file']) {
   const rows=readJson(path.resolve(o['chapters-file']));
