@@ -146,7 +146,7 @@ account usage limits stop all new launches and drain active work. Record usage
 and inspect accepted cost, tokens and failures before raising concurrency.
 
 The host accepts only fingerprinted changes to temporal claims and active hints,
-plus `add-reception-event` for a separately evidenced posthumous or retrospective
+plus `add-reception-event` for a separately evidenced retrospective
 `event-participation` claim about an existing person. Correct or remove the
 misleading life claim separately; an undated later reference need not gain a date.
 Required companion records belong in the proposal's validated `changes`, not a
@@ -209,9 +209,8 @@ avoid an all-empty-header sample but do not replace operator judgment.
   their subjects were alive. Keep posthumous reception separate from life events.
   Preserve the later event, its own date, source unit, and the subject's role as
   honoree, quoted author, or recalled example. Use `event-participation` with
-  `kind: "posthumous-commemoration"`, `"posthumous-reference"`, or
-  `"retrospective-reference"`; a narrower honor/work claim can instead carry
-  `receptionType: "posthumous"` or `"retrospective"`. The latter does not assert
+  `kind: "retrospective-reference"`; a narrower honor/work claim can instead carry
+  `receptionType: "retrospective"`. The latter does not assert
   that the subject was dead. These classifications concern the dated event,
   not when its source was written: a biography written later may still supply
   genuine birth/death/activity evidence. Never copy a reception date into living
@@ -334,3 +333,8 @@ failed pilots have now been repaired and independently re-audited. Date approval
 alone does not certify translations, exhaustive extraction, identities or
 publication readiness. Paid worker transport is covered by offline adapter tests;
 no Cursor, Grok Bot or DeepSeek inference was purchased for this implementation.
+
+Retrospective is the sole later-reception category, including commemorations and
+references after a known death. Use kind `retrospective-reference` or, on a narrower
+honor/work claim, receptionType `retrospective`. Do not require proof of death,
+introduce a posthumous subtype, or change the separate `posthumous-name` alias kind.
