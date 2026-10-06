@@ -410,6 +410,10 @@ test('shared ledger validates isolated date reservations without modifying extra
   validatePeopleWorkLedger(ledger);assert.deepEqual(ledger.claims,{});
   const reserved=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
   assert.equal(reserved.claimed.length,0);assert.equal(reserved.blocked.length,1);
+  ledger.dateAudits['fixture/001'].status='stale-source';
+  validatePeopleWorkLedger(ledger);
+  const refreshed=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
+  assert.equal(refreshed.claimed.length,1);assert.equal(refreshed.blocked.length,0);
   ledger.dateAudits['fixture/001'].lane='unknown';assert.throws(()=>validatePeopleWorkLedger(ledger),/date-audit reservation/);
 });
 test('completed workflow starts a new generation when the chapter changes',async t=>{
