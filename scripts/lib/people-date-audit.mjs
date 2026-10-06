@@ -107,6 +107,16 @@ export function validateDateAuditReport(report, packet) {
   exactMembers(report.reviewedUnits, packet.units.map(unit => unit.id), 'Reviewed units', complete);
   exactMembers(report.itemChecks.map(item => item.id), packet.items.map(item => item.id), 'Date checks', complete);
   exactMembers(report.personChecks.map(person => person.id), packet.people.map(person => person.id), 'Person checks', complete);
+  // Returning only the first missing ownership field turns an otherwise complete
+  // sealed review into one expensive continuation per hint. Surface every absent
+  // item event at once so the retained independent reviewer can repair one exact
+  // artifact without the host weakening the substantive-event requirement.
+  const missingItemEvents = report.itemChecks
+    .filter(check => typeof check.event !== 'string' || check.event.trim().length < 10)
+    .map(check => check.id);
+  if (missingItemEvents.length) {
+    throw new Error(`Event ownership must be substantive text for: ${missingItemEvents.join(', ')}`);
+  }
   const unitMap = new Map(packet.units.map(unit => [unit.id, unit]));
   for (const check of [...report.itemChecks, ...report.personChecks]) {
     if (!['supported', 'incorrect', 'research-blocked'].includes(check.verdict)) throw new Error(`Invalid verdict for ${check.id}`);
