@@ -378,6 +378,17 @@ test('date-context cannot rewrite identities, event content, life claims or unow
   changed.claims[3][2].kind='battle';
   assert.throws(()=>dateRepairDifference(f.extraction,changed,f.packet),/non-temporal claim/);
 });
+test('date-context repair retains an existing explanatory event',t=>{
+  const f=undatedEventFixture(t);
+  f.extraction.claims[3][2].dateContext={sourceDate:{text:'first-year notice'},event:'The office appointment is recorded in the first-year notice.'};
+  writeJsonAtomic(f.file,f.extraction);f.packet=buildDateAuditPacket('fixture','001',f.options);
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'date-context',id:'claim-4',before:structuredClone(f.extraction.claims[3][2].dateContext),after:{...structuredClone(f.extraction.claims[3][2].dateContext),westernYear:{era:'AD',year:1,precision:'year'}},reason:'Add the checked year while retaining the existing event wording.'});
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.equal(candidate.claims[3][2].dateContext.event,'The office appointment is recorded in the first-year notice.');
+  const bad=structuredClone(proposal);delete bad.changes.at(-1).after.event;
+  assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/cannot alter or remove an existing event description/);
+});
 test('a newly dated event requires coverage in the fresh independent review',async t=>{
   const f=undatedEventFixture(t);let approve=false,checked=0;
   const worker=async task=>{
