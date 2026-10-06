@@ -158,16 +158,17 @@ if (o['dry-run']) {
             delete ledger.dateAudits[key];return {released:true};
           }
           if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))return null;
-          if(prior && prior.status!=='ready' && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
+          if(prior && !['ready','stale-source'].includes(prior.status) && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
           if(claimIsActive(ledger.claims[key]) && !['ready','complete'].includes(ledger.claims[key].status))return null;
-          const changed=prior&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
+          const archived=prior && ['ready','stale-source'].includes(prior.status);
+          if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
+          const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
           const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
           if(changed && prior.status!=='ready' && !finishing)throw new Error(`Sticky date work ${key} changed; reconcile before release`);
-          if(prior?.status==='ready') { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
-          const claim=prior?.status==='ready'||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
+          const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
         if(!reserved)continue;
@@ -226,6 +227,15 @@ if (o['dry-run']) {
           },{message:`Date review outcome ${key}`});
         }catch(error){
           if(o.lane==='openrouter' && error.status===429) control.stopRequested=true;
+          if(/Person extraction validation failed:/.test(String(error?.message??''))) {
+            mutateRemotePeopleWorkLedger(ledger=>{
+              const claim=ledger.dateAudits?.[key];
+              if(!claim||claim.executorToken!==executorToken)throw new Error('Lost date reservation before stale-source checkpoint');
+              claim.status='stale-source';
+              claim.staleSourceReason=error.message;
+              claim.staleSourceAt=new Date().toISOString();
+            },{message:`Preserve stale-source date reservation ${key}`});
+          }
           console.error(`${key}: ${error.message}`);
           outcomes.push({book:target.book,chapter:target.chapter,status:'interrupted',error:error.message});
           process.exitCode=1;
