@@ -372,7 +372,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       if (JSON.stringify(storedClaim[2]?.dateContext ?? null) !== JSON.stringify(change.before ?? null)) throw new Error(`Date-context before-value mismatch for ${change.id}; copy this exact sealed date context as before: ${JSON.stringify(storedClaim[2]?.dateContext ?? null)}`);
       if (!change.after || typeof change.after !== 'object' || Array.isArray(change.after)) throw new Error('Date-context repair requires only a replacement date context');
       if (Object.keys(change.after).some(key=>!['sourceDate','westernYear','westernInterval','westernBounds','unresolved','unresolvedReason','event'].includes(key))) throw new Error('Date-context repair may contain only chronology fields');
-      if (change.after.event !== undefined && change.after.event !== storedClaim[2]?.dateContext?.event) throw new Error('Date-context repair cannot alter an existing event description');
+      if (storedClaim[2]?.dateContext?.event !== undefined && change.after.event !== storedClaim[2].dateContext.event) throw new Error('Date-context repair cannot alter or remove an existing event description');
       const after = structuredClone(storedClaim); after[2] = { ...after[2], dateContext: structuredClone(change.after) };
       if (!dateAuditItems({ ...stored, claims: [after] }).items.some(item=>item.claimIndex===0)) throw new Error('Date-context repair must supply auditable chronology');
       candidate.claims[index] = after;
