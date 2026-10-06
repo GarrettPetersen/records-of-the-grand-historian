@@ -547,6 +547,18 @@ function planFreshChunks(target, packet, opts, state = null) {
 
 function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
   const prior = state.chapters[stateKey(target)];
+  if (prior?.chunks && !storedExtractionMatchesPacket(target, packet)) {
+    // A prior failed launch may already have stamped the new fingerprint into
+    // state before reaching chunk publication. Consult the stored compact
+    // extraction as the authoritative source boundary, not state alone.
+    if (log) {
+      console.warn(
+        `[${stateKey(target)}] stored extraction is stale for this packet; ` +
+        'planning fresh ranges without legacy reconstruction',
+      );
+    }
+    return planFreshChunks(target, packet, opts, state);
+  }
   if (prior?.chapterFingerprint === packet.input.chapterFingerprint && prior.chunkPlan?.length) {
     const restored = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
       contextUnits: opts.chunkContextUnits,
@@ -556,6 +568,20 @@ function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
     // boundaries. Unstarted ranges, however, must still satisfy the current sealed
     // worker-packet ceiling before a replacement worker is created.
     return enforceWorkerByteCeiling(target, packet, restored, opts, state);
+  }
+  if (prior?.chapterFingerprint && prior.chapterFingerprint !== packet.input.chapterFingerprint) {
+    // Accepted chunks and retained conversations are source-bound. A reviewed
+    // source change makes them historical recovery evidence, not a candidate
+    // plan for the replacement packet; attempting legacy reconstruction would
+    // validate their compact digests against the new text and fail before the
+    // scheduler can create fresh owned ranges.
+    if (log) {
+      console.warn(
+        `[${stateKey(target)}] source changed since the prior chunk plan; ` +
+        'retaining old artifacts but planning fresh ranges',
+      );
+    }
+    return planFreshChunks(target, packet, opts, state);
   }
   return restoreLegacyChunkPlan(target, packet, prior, opts) ??
     planFreshChunks(target, packet, opts, state);
@@ -794,6 +820,21 @@ function currentExtractionIsValid(target, packet) {
     return true;
   } catch {
     return false;
+  }
+}
+
+function storedExtractionMatchesPacket(target, packet) {
+  const file = extractionPath(target.book, target.chapter);
+  if (!fs.existsSync(file)) return true;
+  try {
+    const extraction = readJson(file);
+    return isCompactPeopleExtraction(extraction)
+      ? compactInputErrors(extraction, packet).length === 0
+      : isDeepStrictEqual(extraction.input, packet.input);
+  } catch {
+    // Let the normal extraction validator report malformed current artifacts;
+    // this helper is only deciding whether source-bound recovery can continue.
+    return true;
   }
 }
 
@@ -2868,6 +2909,34 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
 
 async function processChunkedTarget(target, packet, opts, state, control, budget) {
   const key = stateKey(target);
+  let prior = state.chapters[key];
+  if (prior?.chunks && !storedExtractionMatchesPacket(target, packet)) {
+    const staleChunks = Object.entries(prior.chunks).map(([id, chunk]) => ({
+      id,
+      status: chunk.status,
+      agentId: chunk.agentId ?? null,
+    }));
+    // Do not delete source-bound archives or discarded conversations. They are
+    // retained on disk for audit and cost recovery, but must never be resumed
+    // after reviewed source text changes. Fresh chunks reuse the same packet
+    // ceilings and become the only active ownership plan.
+    console.warn(
+      `[${key}] current extraction belongs to an older source packet; ` +
+      `retaining ${staleChunks.length} stale chunk artifact record(s) outside the active plan`,
+    );
+    updateState(state, target, {
+      status: 'planned',
+      chapterFingerprint: packet.input.chapterFingerprint,
+      chunkPlan: null,
+      chunks: {},
+      staleChunkRecovery: {
+        sourceFingerprint: prior.chapterFingerprint ?? null,
+        replacedAt: new Date().toISOString(),
+        chunks: staleChunks,
+      },
+    });
+    prior = state.chapters[key];
+  }
   let chunks = chunkPlanForTarget(target, packet, opts, state);
   updateState(state, target, {
     status: 'extracting',
