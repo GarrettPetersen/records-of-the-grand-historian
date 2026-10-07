@@ -236,7 +236,11 @@ export function cursorDateWorker(options, control, {
         if (key === 'send') return (...args) => { assertLaunchAllowed(); return target.send(...args); };
         return Reflect.get(target, key, receiver);
       } });
-      const run = await send(guardedAgent,message,{label:task.key});
+      // Treat dispatch as part of the bounded worker operation.  A stalled
+      // SDK send used to inherit the helper's 45-minute retry budget even
+      // when this date worker was explicitly capped at 20 minutes, pinning
+      // the sole host executor and preventing resumable recovery.
+      const run = await send(guardedAgent,message,{label:task.key,timeoutMs:options.timeoutMs});
       await save({sent:true,runId:run.id,status:'running'});
       const result = await wait(run);
       const artifact = await download();

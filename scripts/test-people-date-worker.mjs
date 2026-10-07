@@ -155,6 +155,13 @@ test('retained conversation continues before any replacement, even with an empty
   assertUsageCheckpoint(h, task);
 });
 
+test('dispatch uses the configured worker timeout rather than the helper default', async () => {
+  const h = harness();
+  const task = reviewTask();
+  await h.worker(task);
+  assert.equal(h.calls('send')[0][3].timeoutMs, h.options.timeoutMs);
+});
+
 test('failed resume retains ownership and never creates a replacement agent', async () => {
   const failure = new Error('fetch failed during resume');
   const h = harness({ resume: () => { throw failure; } });
