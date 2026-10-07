@@ -499,6 +499,12 @@ function repairTask() {
   };
 }
 
+test('repair instructions name retrospective as the only valid reception type', () => {
+  const contract = dateWorkerInput(repairTask()).repairContract;
+  assert.match(contract, /must literally be "retrospective"/);
+  assert.match(contract, /"posthumous" is not a valid receptionType/);
+});
+
 test('repair findings include all affected person dates, hints and check evidence, but exclude unrelated people', () => {
   const task = repairTask();
   const original = structuredClone(task.packet);
