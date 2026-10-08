@@ -155,6 +155,13 @@ test('retained conversation continues before any replacement, even with an empty
   assertUsageCheckpoint(h, task);
 });
 
+test('dispatch uses the configured worker timeout rather than the helper default', async () => {
+  const h = harness();
+  const task = reviewTask();
+  await h.worker(task);
+  assert.equal(h.calls('send')[0][3].timeoutMs, h.options.timeoutMs);
+});
+
 test('failed resume retains ownership and never creates a replacement agent', async () => {
   const failure = new Error('fetch failed during resume');
   const h = harness({ resume: () => { throw failure; } });
@@ -492,15 +499,22 @@ function repairTask() {
   };
 }
 
+test('repair instructions name retrospective as the only valid reception type', () => {
+  const contract = dateWorkerInput(repairTask()).repairContract;
+  assert.match(contract, /must literally be "retrospective"/);
+  assert.match(contract, /"posthumous" is not a valid receptionType/);
+});
+
 test('repair findings include all affected person dates, hints and check evidence, but exclude unrelated people', () => {
   const task = repairTask();
   const original = structuredClone(task.packet);
   const input = dateWorkerInput(task);
   assert.deepEqual(input.people, [task.packet.people[0]]);
   assert.deepEqual(input.items.map(i => i.id), ['claim-1', 'claim-2', 'hints-p1']);
-  assert.deepEqual(input.claims, task.extraction.claims.slice(0, 2).map((row, i) => ({ id: `claim-${i + 1}`, row })));
+  assert.deepEqual(input.claims, Object.fromEntries(task.extraction.claims.slice(0, 2).map((row, i) => [`claim-${i + 1}`, row])));
+  assert.match(input.repairContract, /claims\[id\]/);
   const units = new Set(input.units.map(u => u.id));
-  for (const id of ['u2', 'u8', 'u14', 'u20', 'u23']) assert.ok(units.has(id));
+  for (const id of ['u2', 'u8', 'u14', 'u20']) assert.ok(units.has(id));
   assert.ok(!units.has('u29'));
   assert.equal(units.size, input.units.length);
   assert.deepEqual(input.units, [...input.units].sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1))));

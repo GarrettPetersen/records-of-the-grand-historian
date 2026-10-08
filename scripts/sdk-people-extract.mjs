@@ -50,6 +50,7 @@ import {
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import {
   buildCompactInput,
+  compactInputErrors,
   compactPeopleExtraction,
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
@@ -93,6 +94,7 @@ import {
 } from './lib/people-resolution-invalidation.mjs';
 import {
   editorialDecisionPath,
+  editorialReviews,
   preserveAppliedEditorialClaims,
   validateAppliedEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
@@ -545,6 +547,18 @@ function planFreshChunks(target, packet, opts, state = null) {
 
 function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
   const prior = state.chapters[stateKey(target)];
+  if (prior?.chunks && !storedExtractionMatchesPacket(target, packet)) {
+    // A prior failed launch may already have stamped the new fingerprint into
+    // state before reaching chunk publication. Consult the stored compact
+    // extraction as the authoritative source boundary, not state alone.
+    if (log) {
+      console.warn(
+        `[${stateKey(target)}] stored extraction is stale for this packet; ` +
+        'planning fresh ranges without legacy reconstruction',
+      );
+    }
+    return planFreshChunks(target, packet, opts, state);
+  }
   if (prior?.chapterFingerprint === packet.input.chapterFingerprint && prior.chunkPlan?.length) {
     const restored = normalizePeopleExtractionChunkPlan(packet, prior.chunkPlan, {
       contextUnits: opts.chunkContextUnits,
@@ -554,6 +568,20 @@ function baseChunkPlanForTarget(target, packet, opts, state, log = false) {
     // boundaries. Unstarted ranges, however, must still satisfy the current sealed
     // worker-packet ceiling before a replacement worker is created.
     return enforceWorkerByteCeiling(target, packet, restored, opts, state);
+  }
+  if (prior?.chapterFingerprint && prior.chapterFingerprint !== packet.input.chapterFingerprint) {
+    // Accepted chunks and retained conversations are source-bound. A reviewed
+    // source change makes them historical recovery evidence, not a candidate
+    // plan for the replacement packet; attempting legacy reconstruction would
+    // validate their compact digests against the new text and fail before the
+    // scheduler can create fresh owned ranges.
+    if (log) {
+      console.warn(
+        `[${stateKey(target)}] source changed since the prior chunk plan; ` +
+        'retaining old artifacts but planning fresh ranges',
+      );
+    }
+    return planFreshChunks(target, packet, opts, state);
   }
   return restoreLegacyChunkPlan(target, packet, prior, opts) ??
     planFreshChunks(target, packet, opts, state);
@@ -792,6 +820,21 @@ function currentExtractionIsValid(target, packet) {
     return true;
   } catch {
     return false;
+  }
+}
+
+function storedExtractionMatchesPacket(target, packet) {
+  const file = extractionPath(target.book, target.chapter);
+  if (!fs.existsSync(file)) return true;
+  try {
+    const extraction = readJson(file);
+    return isCompactPeopleExtraction(extraction)
+      ? compactInputErrors(extraction, packet).length === 0
+      : isDeepStrictEqual(extraction.input, packet.input);
+  } catch {
+    // Let the normal extraction validator report malformed current artifacts;
+    // this helper is only deciding whether source-bound recovery can continue.
+    return true;
   }
 }
 
@@ -2551,6 +2594,27 @@ function preserveEditorialHistory(target, compact, packet) {
   if (!fs.existsSync(file) || !fs.existsSync(decisionsFile)) return compact;
 
   const previousRaw = readJson(file);
+  const decisions = readJson(decisionsFile);
+  const previousMatchesPacket = isCompactPeopleExtraction(previousRaw)
+    ? compactInputErrors(previousRaw, packet).length === 0
+    : isDeepStrictEqual(previousRaw.input, packet.input);
+  const decisionsMatchPacket = editorialReviews(decisions).every((review) =>
+    review.input?.chapterFingerprint === packet.input.chapterFingerprint,
+  );
+  if (!previousMatchesPacket || !decisionsMatchPacket) {
+    // A refreshed source cannot safely inherit decisions or applied repairs
+    // anchored to the old text. The caller will invalidate stale identity
+    // references when it writes this replacement. The old decision is a
+    // tracked canonical result (not a recovery artifact), so retire it here:
+    // Git preserves its history while the next editorial review must start
+    // from the new source-bound extraction.
+    console.warn(
+      `[${stateKey(target)}] prior extraction belongs to a different source packet; ` +
+      'retiring stale editorial decisions before replacement',
+    );
+    fs.unlinkSync(decisionsFile);
+    return compact;
+  }
   const previous = isCompactPeopleExtraction(previousRaw)
     ? validateCompactPeopleExtraction(previousRaw, packet).normalized
     : validatePeopleExtraction(previousRaw, packet).normalized;
@@ -2561,7 +2625,6 @@ function preserveEditorialHistory(target, compact, packet) {
     `remapped ${personIds.matched} match(es) and reassigned ${personIds.reassigned} collision(s)`,
   );
   preservePriorAppliedRepairs(previous, replacement);
-  const decisions = readJson(decisionsFile);
   const claims = preserveAppliedEditorialClaims(decisions, replacement);
   if (claims.removed > 0 || claims.restored > 0) {
     console.log(
@@ -2846,6 +2909,34 @@ async function obtainChunkPart(target, fullPacket, chunk, opts, state, control, 
 
 async function processChunkedTarget(target, packet, opts, state, control, budget) {
   const key = stateKey(target);
+  let prior = state.chapters[key];
+  if (prior?.chunks && !storedExtractionMatchesPacket(target, packet)) {
+    const staleChunks = Object.entries(prior.chunks).map(([id, chunk]) => ({
+      id,
+      status: chunk.status,
+      agentId: chunk.agentId ?? null,
+    }));
+    // Do not delete source-bound archives or discarded conversations. They are
+    // retained on disk for audit and cost recovery, but must never be resumed
+    // after reviewed source text changes. Fresh chunks reuse the same packet
+    // ceilings and become the only active ownership plan.
+    console.warn(
+      `[${key}] current extraction belongs to an older source packet; ` +
+      `retaining ${staleChunks.length} stale chunk artifact record(s) outside the active plan`,
+    );
+    updateState(state, target, {
+      status: 'planned',
+      chapterFingerprint: packet.input.chapterFingerprint,
+      chunkPlan: null,
+      chunks: {},
+      staleChunkRecovery: {
+        sourceFingerprint: prior.chapterFingerprint ?? null,
+        replacedAt: new Date().toISOString(),
+        chunks: staleChunks,
+      },
+    });
+    prior = state.chapters[key];
+  }
   let chunks = chunkPlanForTarget(target, packet, opts, state);
   updateState(state, target, {
     status: 'extracting',
@@ -2885,10 +2976,21 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     completedAt: new Date().toISOString(),
     chunks: parts.map(({ chunk, extraction }) => peopleChunkRunRecord(chunk, extraction)),
   };
-  let compact = assembleCompactPeopleChunks(packet, parts, run);
+  // Rebuild the sealed packet before publication. Chunk workers are validated
+  // against ownership packets derived from `packet`, but final assembly must
+  // also defend against any in-memory mutation while those retained artifacts
+  // were being recovered. A source change remains a hard failure; it must not
+  // be papered over by assembling evidence against a different packet.
+  const finalPacket = buildPeopleExtractionPacket(target.book, target.chapter, {
+    properNounMatcher: opts.properNounMatcher,
+  });
+  if (finalPacket.input.chapterFingerprint !== packet.input.chapterFingerprint) {
+    throw new Error(`${key} source changed during chunked extraction; retained chunks require review against the new packet`);
+  }
+  let compact = assembleCompactPeopleChunks(finalPacket, parts, run);
   let validated;
   try {
-    validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
+    validated = validateCompactPeopleExtraction(compact, finalPacket, { strictAliasDispositions: true });
   } catch (error) {
     const errors = validationErrors(error);
     const candidateIds = new Set(errors.flatMap((message) =>
@@ -2912,9 +3014,9 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
     }
     throw error;
   }
-  assertDurableCareerCoverage(validated.normalized, packet);
-  compact = writeAcceptedExtraction(target, compact, packet);
-  validated = validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
+  assertDurableCareerCoverage(validated.normalized, finalPacket);
+  compact = writeAcceptedExtraction(target, compact, finalPacket);
+  validated = validateCompactPeopleExtraction(compact, finalPacket, { strictAliasDispositions: true });
   updateState(state, target, {
     status: 'accepted',
     acceptedPath: path.relative(REPO_ROOT, extractionPath(target.book, target.chapter)),

@@ -112,7 +112,7 @@ export function validatePeopleWorkLedger(ledger) {
   if (ledger.dateAudits !== undefined) {
     if (!ledger.dateAudits || typeof ledger.dateAudits !== 'object' || Array.isArray(ledger.dateAudits)) throw new Error('Invalid date-audit reservation map');
     for (const [key, claim] of Object.entries(ledger.dateAudits)) {
-      if (!/^[a-z0-9_-]+\/\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual','openrouter'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);
+      if (!/^[a-z0-9_-]+\/\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual','openrouter'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked','stale-source'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);
       if(claim.executorToken!==undefined && (typeof claim.executorToken!=='string'||!claim.executorToken||!Number.isFinite(Date.parse(claim.executorExpiresAt))))throw new Error(`Invalid date executor lease ${key}`);
       for(const plan of Object.values(claim.reviewPlans??{}))if(!Number.isSafeInteger(plan.maxUnits)||plan.maxUnits<1||!Number.isSafeInteger(plan.maxBytes)||plan.maxBytes<1024||!Array.isArray(plan.jobIds)||new Set(plan.jobIds).size!==plan.jobIds.length)throw new Error(`Invalid retained date plan ${key}`);
     }
@@ -321,7 +321,7 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
   for (const target of targets) {
     if (claimed.length >= options.limit) break;
     const key = chapterKey(target);
-    if (ledger.dateAudits?.[key] && ledger.dateAudits[key].status !== 'ready') {
+    if (ledger.dateAudits?.[key] && !['ready', 'stale-source'].includes(ledger.dateAudits[key].status)) {
       blocked.push({ ...target, claim: ledger.dateAudits[key], reason: 'Independent date work owns this chapter' });
       continue;
     }

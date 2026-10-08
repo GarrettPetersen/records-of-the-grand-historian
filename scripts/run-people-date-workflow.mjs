@@ -7,11 +7,12 @@ import { parseArgs } from 'node:util';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, dateWorkflowDirectory, runDateWorkflow } from './lib/people-date-workflow.mjs';
-import { cursorDateWorker, attachmentDateWorker } from './lib/people-date-worker.mjs';
-import { grokBuildDateWorker } from './lib/grok-build-date-worker.mjs';
+import { dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
+import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
+import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
 import { mutateRemotePeopleWorkLedger, claimIsActive, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
+import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { createRunControl, installSignalHandlers } from './lib/cursor-run-control.mjs';
 import { loadDotenv } from './load-dotenv.mjs';
 import { readPeopleCampaignPolicy } from './lib/people-campaign-policy.mjs';
@@ -22,42 +23,68 @@ import { editorialDecisionPath, validateAppliedEditorialDecisions } from './lib/
 
 const {values:o} = parseArgs({ options:{book:{type:'string'},chapter:{type:'string'},all:{type:'boolean'},
   worker:{type:'string'},lane:{type:'string',default:'cursor-sdk'},run:{type:'boolean'},
-  transport:{type:'string'},'fresh-audit':{type:'boolean'},'max-tool-turns':{type:'string',default:'60'},
   'dry-run':{type:'boolean'},limit:{type:'string',default:'5'},concurrency:{type:'string',default:'2'},
+  'job-concurrency':{type:'string'},'chapters-file':{type:'string'},
   model:{type:'string'},'max-units':{type:'string',default:'40'},'max-worker-kib':{type:'string',default:'64'},
-  'max-rounds':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
+  'max-rounds':{type:'string',default:'3'},'max-attempts':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
   'max-run-tokens':{type:'string',default:'4000000'},'run-timeout-minutes':{type:'string',default:'20'},
   'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},takeover:{type:'boolean'},
   'min-approved':{type:'string',default:'0'},'summary-out':{type:'string'},order:{type:'string',default:'balanced'},
   'recover-only':{type:'boolean'},'cursor-capacity-start':{type:'string'} } });
 const integer = (key,max) => { const value=Number(o[key]); if(!Number.isSafeInteger(value)||value<1||value>max)throw new Error(`Invalid --${key}`); return value; };
 if ((!o.book && !o.all) || (o.book && o.all) || (o.chapter && !o.book)) throw new Error('Use --book [--chapter NNN] or --all');
-if (!['cursor-sdk','grokbot','manual'].includes(o.lane)) throw new Error('Unknown date worker lane');
-if (o.transport && o.transport!=='grok-build') throw new Error('Unknown date transport');
-if (o.transport==='grok-build' && o.lane!=='manual') throw new Error('Grok Build transport uses the manual queue category for compatibility with the active orchestrator');
+if (!['cursor-sdk','grokbot','manual','openrouter'].includes(o.lane)) throw new Error('Unknown date worker lane');
 if (!['balanced','calibration'].includes(o.order))throw new Error('Unknown date workload order');
 if (o.chapter && !/^\d{3}$/.test(o.chapter)) throw new Error('--chapter requires three digits');
 if (!o['dry-run'] && !o.worker) throw new Error('A stable --worker ID is required');
 if (o.release && (!o.book || !o.chapter)) throw new Error('--release requires one explicit --book and --chapter');
 if (!o.release && !o['recover-only'] && !o['dry-run'] && o.lane==='cursor-sdk' && (!o.run || !o.model)) throw new Error('Paid Cursor execution requires explicit --run and --model; use --dry-run otherwise');
-if (!o.release && o.lane!=='cursor-sdk' && !o.transport && !o['dry-run'] && !o['attachment-dir']) throw new Error('Attachment lanes require --attachment-dir');
-if (o.transport && !o.release && !o['dry-run'] && !o['recover-only'] && !o.run) throw new Error('Grok Build execution requires --run');
-if (o.lane!=='cursor-sdk' && !o.transport && o.run) throw new Error('Grok Bot/manual attachment lanes must not invoke inference');
+if (!o.release && ['grokbot','manual'].includes(o.lane) && !o['dry-run'] && !o['attachment-dir']) throw new Error('Attachment lanes require --attachment-dir');
+if (['grokbot','manual'].includes(o.lane) && o.run) throw new Error('Attachment lanes must not call Cursor SDK');
+if (o.lane==='openrouter' && !o.release && !o['dry-run'] && !o['recover-only'] && !o.run) throw new Error('OpenRouter execution requires --run');
 const concurrency=integer('concurrency',8), limit=integer('limit',1000);
+// The public free tier is request-limited.  A chapter slot must therefore not
+// silently fan out into the paid-lane four-job pool unless an operator opts in.
+const jobConcurrency=Number(o['job-concurrency'] ?? (o.lane==='openrouter' ? '1' : process.env.PEOPLE_DATE_JOB_CONCURRENCY ?? '4'));
+if(!Number.isSafeInteger(jobConcurrency)||jobConcurrency<1||jobConcurrency>8)throw new Error('Invalid --job-concurrency');
+let cohort;
+if(o['chapters-file']) {
+  const rows=readJson(path.resolve(o['chapters-file']));
+  if(!Array.isArray(rows)||!rows.length)throw new Error('--chapters-file requires a nonempty array of {book,chapter}');
+  cohort=new Set();
+  for(const row of rows) {
+    if(!row || !/^[a-z0-9_-]+$/.test(row.book) || !/^\d{3}$/.test(row.chapter))throw new Error('Invalid date cohort chapter');
+    const key=`${row.book}/${row.chapter}`;
+    if(cohort.has(key))throw new Error(`Duplicate date cohort chapter ${key}`);
+    if((o.book&&row.book!==o.book)||(o.chapter&&row.chapter!==o.chapter))throw new Error('Date cohort conflicts with --book/--chapter');
+    if(!fs.existsSync(path.join(PEOPLE_DIR,'extractions',row.book,`${row.chapter}.json`)))throw new Error(`Missing date cohort extraction ${key}`);
+    cohort.add(key);
+  }
+}
 const minimumApproved=Number(o['min-approved']);
 if(!Number.isSafeInteger(minimumApproved)||minimumApproved<0||minimumApproved>limit)throw new Error('Invalid --min-approved');
 const options = {maxUnits:integer('max-units',1000),maxBytes:integer('max-worker-kib',512)*1024-8192,
   recoverOnly:Boolean(o['recover-only']),
-  freshAudit:Boolean(o['fresh-audit']),maxToolTurns:integer('max-tool-turns',1000),
-  maxWorkerBytes:integer('max-worker-kib',512)*1024,maxRounds:integer('max-rounds',20),
+  jobConcurrency,
+  maxWorkerBytes:integer('max-worker-kib',512)*1024,maxRounds:integer('max-rounds',20),maxAttempts:integer('max-attempts',20),
   maxRunTokens:integer('max-run-tokens',10000000),timeoutMs:integer('run-timeout-minutes',120)*60000};
 const dollars=Number(o['max-run-cost']);
 if(!Number.isFinite(dollars)||dollars<=0||dollars>20) throw new Error('Invalid --max-run-cost');
 options.maxRunCostCents=Math.round(dollars*100);
 const control=createRunControl();
+options.workerPool=createDateWorkerPool(jobConcurrency,{shouldStop:()=>control.stopRequested});
 let matcher;
 let targets=peopleExtractionFiles().map(file=>{const e=readJson(file);return {book:e.book,chapter:e.chapter,file,personCount:e.people.length,unitCount:e.input.unitCount,claimCount:e.claims.length,pendingEditorial:e.translationRepairs?.some(r=>(Array.isArray(r)?r[6]:r.status)==='proposed')};})
-  .filter(t=>(!o.book||t.book===o.book)&&(!o.chapter||t.chapter===o.chapter)&&(o.release||(!t.pendingEditorial && dateAuditStatus(t.book,t.chapter).status!=='audited')));
+  .filter(t=>{
+    if((o.book&&t.book!==o.book)||(o.chapter&&t.chapter!==o.chapter))return false;
+    if(cohort&&!cohort.has(`${t.book}/${t.chapter}`))return false;
+    if(o.release)return true;
+    if(t.pendingEditorial)return false;
+    const status=dateAuditStatus(t.book,t.chapter).status;
+    if(status==='audited')return false;
+    if(status==='research-blocked'&&!o['retry-blocked'])return false;
+    return true;
+  });
 targets.sort((a,b)=>Number(fs.existsSync(path.join(dateWorkflowDirectory(b.book,b.chapter),'state.json')))-Number(fs.existsSync(path.join(dateWorkflowDirectory(a.book,a.chapter),'state.json')))||fs.statSync(a.file).size-fs.statSync(b.file).size);
 const sticky=targets.filter(t=>fs.existsSync(path.join(dateWorkflowDirectory(t.book,t.chapter),'state.json')));
 const fresh=targets.filter(t=>!sticky.includes(t));
@@ -65,7 +92,12 @@ const named=fresh.filter(t=>t.personCount>0),empty=fresh.filter(t=>!t.personCoun
 if(o.order==='calibration') {
   const books=new Set();
   for(const quantile of [0.1,0.3,0.5,0.7,0.85]) {
-    const pool=named.filter(t=>!books.has(t.book)&&t.unitCount>=5&&t.unitCount<=60&&t.personCount<=25&&t.claimCount<=150);
+    // Every remaining chapter inside the original 60-unit / 25-person / 150-claim
+    // envelope is already research-blocked. The next unaudited chapters that
+    // still avoid dense biographies are at most 250 units, 25 people, and 200
+    // claims: Yuanshi 111, Jiu Wudaishi 139, Liaoshi 42, Songshi 120, Shiji 115,
+    // and Suishu 82. That is the inspected cohort that fills five books.
+    const pool=named.filter(t=>!books.has(t.book)&&t.unitCount>=5&&t.unitCount<=250&&t.personCount<=25&&t.claimCount<=200);
     if(!pool.length)break;
     const chosen=pool[Math.min(pool.length-1,Math.floor(pool.length*quantile))];
     ordered.push(chosen);books.add(chosen.book);named.splice(named.indexOf(chosen),1);
@@ -79,7 +111,7 @@ while(named.length || empty.length) {
 targets=[...sticky,...ordered];
 if (o['dry-run']) {
   const selected=targets.slice(0,limit).map(t=>{const p=buildDateAuditPacket(t.book,t.chapter);const jobs=dateReviewJobs(p,options);return {book:t.book,chapter:t.chapter,items:p.items.length,units:p.units.length,jobs:jobs.length,maxJobBytes:Math.max(...jobs.map(j=>Buffer.byteLength(JSON.stringify(j))))};});
-  console.log(JSON.stringify({paidCalls:0,eligibleChapters:targets.length,concurrency,selected},null,2));
+  console.log(JSON.stringify({paidCalls:0,eligibleChapters:targets.length,concurrency,jobConcurrency,selected},null,2));
 } else {
   loadDotenv(REPO_ROOT);
   if(o.lane==='cursor-sdk' && !o.release && !o['recover-only']) {
@@ -90,6 +122,11 @@ if (o['dry-run']) {
   }
   options.apiKey=process.env.CURSOR_API_KEY;
   if(!o.release && o.lane==='cursor-sdk' && !options.apiKey) throw new Error('CURSOR_API_KEY is missing');
+  options.openRouterKey=process.env.OPENROUTER_API_KEY;
+  options.openRouterModel=o.model??DEFAULT_OPENROUTER_FREE_MODEL;
+  if(!o.release && o.lane==='openrouter' && !o['recover-only']) {
+    await verifyOpenRouterFreeModel({key:options.openRouterKey,model:options.openRouterModel});
+  }
   const unlock=acquireProcessRunLock(path.join(PEOPLE_DIR,'generated','date-workflow-run.lock'),{label:'People date workflow'});
   const removeSignals=installSignalHandlers(control);
   const executorToken=randomUUID(),leaseMs=Math.max(3600000,options.timeoutMs+600000);
@@ -124,18 +161,17 @@ if (o['dry-run']) {
             delete ledger.dateAudits[key];return {released:true};
           }
           if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))return null;
-          if(prior && prior.status!=='ready' && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
+          if(prior && !['ready','stale-source'].includes(prior.status) && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
           if(claimIsActive(ledger.claims[key]) && !['ready','complete'].includes(ledger.claims[key].status))return null;
-          const changed=prior&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
+          const archived=prior && ['ready','stale-source'].includes(prior.status);
+          if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
+          const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
           const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
           if(changed && prior.status!=='ready' && !finishing)throw new Error(`Sticky date work ${key} changed; reconcile before release`);
-          if(prior?.status==='ready') { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
-          const claim=prior?.status==='ready'||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
-          if(prior?.transport && prior.transport!==o.transport)throw new Error('Sticky date transport differs; do not replace its model context');
-          if(o.transport)claim.transport=o.transport;
+          const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
         if(!reserved)continue;
@@ -162,13 +198,28 @@ if (o['dry-run']) {
         const validateExtraction=candidate=>{
           const result=validateCompactPeopleExtraction(candidate,extractionPacket);
           const editorial=editorialDecisionPath(target.book,target.chapter);
-          if(fs.existsSync(editorial))validateAppliedEditorialDecisions(readJson(editorial),result.normalized);
+          if(fs.existsSync(editorial)) {
+            const decisions=readJson(editorial);
+            try {
+              validateAppliedEditorialDecisions(decisions,result.normalized);
+            } catch (error) {
+              const editorialAmendment=deriveDateRepairEditorialAmendment(decisions,result.normalized);
+              if (!editorialAmendment) throw error;
+              return {editorialAmendment};
+            }
+          }
         };
-        const worker=o.transport==='grok-build'?grokBuildDateWorker({...options,validateExtraction,saveRemoteJob,shouldStop:()=>control.stopRequested})
-          :o.lane==='cursor-sdk'?cursorDateWorker({...options,model:o.model,saveRemoteJob},control)
-          :attachmentDateWorker({outputDir:path.resolve(o['attachment-dir']),saveRemoteJob});
+        const worker=o.lane==='cursor-sdk'
+          ? cursorDateWorker({...options,model:o.model,saveRemoteJob},control)
+          : o.lane==='openrouter'
+            ? openRouterDateWorker({key:options.openRouterKey,model:options.openRouterModel,maxWorkerBytes:options.maxWorkerBytes,timeoutMs:options.timeoutMs,recoverOnly:options.recoverOnly,saveRemoteJob})
+            : attachmentDateWorker({outputDir:path.resolve(o['attachment-dir']),saveRemoteJob});
         try {
-          const result=await runDateWorkflow(target,worker,{...options,validateExtraction,saveReviewPlan});
+          const guardedWorker=async task=>{
+            try {return await worker(task);}
+            catch(error) {if(o.lane==='openrouter'&&error.status===429)control.stopRequested=true;throw error;}
+          };
+          const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan});
           console.log(`${key}: ${result.status}`);
           outcomes.push({book:target.book,chapter:target.chapter,status:result.status});
           if(result.status==='audited')approved+=1;
@@ -177,12 +228,26 @@ if (o['dry-run']) {
             const claim=ledger.dateAudits?.[key];if(!claim||claim.executorToken!==executorToken)throw new Error('Lost date reservation');
             claim.status=result.status==='audited'?'ready':result.status==='research-blocked'?'research-blocked':'active';
           },{message:`Date review outcome ${key}`});
-        }catch(error){console.error(`${key}: ${error.message}`);outcomes.push({book:target.book,chapter:target.chapter,status:'interrupted',error:error.message});process.exitCode=1;}
+        }catch(error){
+          if(o.lane==='openrouter' && error.status===429) control.stopRequested=true;
+          if(/Person extraction validation failed:/.test(String(error?.message??''))) {
+            mutateRemotePeopleWorkLedger(ledger=>{
+              const claim=ledger.dateAudits?.[key];
+              if(!claim||claim.executorToken!==executorToken)throw new Error('Lost date reservation before stale-source checkpoint');
+              claim.status='stale-source';
+              claim.staleSourceReason=error.message;
+              claim.staleSourceAt=new Date().toISOString();
+            },{message:`Preserve stale-source date reservation ${key}`});
+          }
+          console.error(`${key}: ${error.message}`);
+          outcomes.push({book:target.book,chapter:target.chapter,status:'interrupted',error:error.message});
+          process.exitCode=1;
+        }
       }
     };
     const settled=await Promise.allSettled(Array.from({length:concurrency},processNext));
     for(const result of settled)if(result.status==='rejected'){console.error(result.reason.message);process.exitCode=1;}
-    const summary={started,approved,failed:outcomes.filter(r=>r.status!=='audited').length,eligibleChapters:targets.length,results:outcomes};
+    const summary={started,approved,failed:outcomes.filter(r=>r.status!=='audited').length,eligibleChapters:targets.length,workerPool:options.workerPool.summary(),results:outcomes};
     if(o['summary-out'])writeJsonAtomic(path.resolve(o['summary-out']),summary);
     console.log(JSON.stringify(summary));
     if(approved<minimumApproved){console.error(`Only ${approved}/${minimumApproved} required date chapters approved`);process.exitCode=1;}

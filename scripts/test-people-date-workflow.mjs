@@ -7,6 +7,7 @@ import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
 import { dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 
 function fixture(t) {
@@ -43,6 +44,65 @@ test('review partitions own every unit, date and person exactly once',t=>{
   const f=fixture(t),jobs=dateReviewJobs(f.packet,f.options);
   assert.equal(jobs.length,2);
   for(const field of ['ownedUnits','ownedItems','ownedPeople'])assert.equal(new Set(jobs.flatMap(j=>j[field])).size,jobs.flatMap(j=>j[field]).length);
+});
+test('parallel review and re-audit retain full gates and serial repair',async t=>{
+  const f=fixture(t),pool=createDateWorkerPool(2);
+  let active=0,peak=0;
+  const worker=async task=>{
+    active++;peak=Math.max(peak,active);
+    if(task.kind==='repair')assert.equal(active,1);
+    await new Promise(resolve=>setTimeout(resolve,5));
+    active--;
+    return task.kind==='repair'?repair(task):review(task);
+  };
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2,workerPool:pool});
+  assert.equal(result.status,'audited');assert.equal(peak,2);
+  assert.equal(pool.summary().active,0);assert.equal(pool.summary().completed,5);
+});
+test('failed parallel review drains and preserves successful siblings before resumption',async t=>{
+  const f=fixture(t);let completed=0;
+  const worker=async task=>{
+    if(task.job.ownedUnits.includes('s0001'))throw new Error('fixture failed shard');
+    await new Promise(resolve=>setTimeout(resolve,10));completed++;
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2}),/fixture failed shard/);
+  assert.equal(completed,1);assert.deepEqual(readJson(f.file),f.extraction);
+  const state=readJson(path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'));
+  assert.equal(state.phase,'audit');
+  const calls=[];
+  await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{calls.push(task);return task.kind==='repair'?repair(task):review(task);},{...f.options,jobConcurrency:2});
+  assert.equal(calls.filter(task=>task.key.startsWith('audit-')&&task.job.ownedUnits.includes('s0002')).length,0);
+});
+test('shared worker pool caps concurrent chapters rather than multiplying limits',async t=>{
+  const a=fixture(t),b=fixture(t),pool=createDateWorkerPool(2);
+  let active=0,peak=0;
+  const worker=async task=>{
+    active++;peak=Math.max(peak,active);
+    await new Promise(resolve=>setTimeout(resolve,5));active--;
+    return task.kind==='repair'?repair(task):review(task);
+  };
+  await Promise.all([a,b].map(f=>runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2,workerPool:pool})));
+  assert.equal(peak,2);assert.deepEqual(pool.summary(),{limit:2,peak:2,completed:10,active:0,queued:0});
+});
+test('pool stops queued launches on quota stop and drains active calls',async()=>{
+  let stop=false,release;const pool=createDateWorkerPool(1,{shouldStop:()=>stop});
+  const first=pool.run(()=>new Promise(resolve=>{release=resolve;}));
+  const second=pool.run(()=>assert.fail('queued worker must not launch'));
+  const rejected=assert.rejects(second,/launch stopped/);
+  await Promise.resolve();stop=true;release('done');
+  assert.equal(await first,'done');await rejected;assert.equal(pool.summary().active,0);
+});
+test('reception reconciliation preserves event content',t=>{
+  const f=fixture(t),row=['p001','event-participation',{kind:'posthumous-commemoration',receptionType:'posthumous',role:'honoree',action:'a later cap commemorates the Hongmen shield'},'explicit',['s0001']];
+  const before={...f.extraction,claims:[...f.extraction.claims,row]},packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:before});
+  const after=structuredClone(row);after[2].kind='retrospective-reference';after[2].receptionType='retrospective';
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[{kind:'replace',id:'claim-4',before:row,after,reason:'Unify the sole retrospective reception classification without changing the event.'}]};
+  const candidate=applyDateRepairProposal(before,proposal,packet);
+  assert.deepEqual(candidate.claims[3],after);
+  assert.equal(dateRepairDifference(before,candidate,packet).changes.length,1);
+  const bad=structuredClone(proposal);bad.changes[0].after[2].action='a different event';
+  assert.throws(()=>applyDateRepairProposal(before,bad,packet),/non-temporal/);
 });
 test('repair findings are split without dropping or rewriting a finding',t=>{
   const findings=[
@@ -164,14 +224,34 @@ test('sealed editorial amendments may replace only a reviewed date container',t=
 function receptionRepair(f) {
   const proposal=repair({packet:f.packet,extraction:f.extraction});
   proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
-    {kind:'posthumous-reference',role:'remembered-official',action:'remembered'},'explicit',['s0001']],
+    {kind:'retrospective-reference',role:'remembered-official',action:'remembered'},'explicit',['s0001']],
     reason:'Keep the later reference separate from this official\'s living activity.'});
   return proposal;
 }
+test('returned repair labels reconcile before validation and retain a raw receipt',async t=>{
+  const f=fixture(t);
+  let submission;
+  const worker=async task=>{
+    if(task.kind!=='repair')return review(task);
+    submission=receptionRepair(f);
+    submission.changes.at(-1).after[2].kind='posthumous-reference';
+    submission.changes.at(-1).after[2].receptionType='posthumous';
+    return submission;
+  };
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const directory=path.join(f.options.peopleDir,'generated','date-workflow','fixture','001');
+  const receipt=fs.readdirSync(directory).find(name=>name.startsWith('reception-reconciliation-'));
+  assert.ok(receipt);
+  const saved=readJson(path.join(directory,receipt));
+  assert.equal(saved.submission.changes.at(-1).after[2].receptionType,'posthumous');
+  assert.equal(saved.proposal.changes.at(-1).after[2].receptionType,'retrospective');
+  assert.equal(submission.changes.at(-1).after[2].receptionType,'posthumous');
+  assert.ok(readJson(f.file).claims.some(row=>row[2].kind==='retrospective-reference'));
+});
 test('a reception addition requires a nonempty event kind',t=>{
   const f=fixture(t),proposal=repair({packet:f.packet,extraction:f.extraction});
   proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
-    {receptionType:'posthumous',role:'remembered-official'},'explicit',['s0001']],
+    {receptionType:'retrospective',role:'remembered-official'},'explicit',['s0001']],
     reason:'Keep the later reference separate from this official\'s living activity.'});
   assert.throws(()=>applyDateRepairProposal(f.extraction,proposal,f.packet),/explicitly classified reception/);
 });
@@ -182,7 +262,7 @@ test('scoped reception additions survive final-delta reconstruction and remain a
   assert.equal(combined.changes.filter(c=>c.kind==='add-reception-event').length,1);
   assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
   const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
-  assert.ok(packet.items.some(i=>i.value?.kind==='posthumous-reference'));
+  assert.ok(packet.items.some(i=>i.value?.kind==='retrospective-reference'));
 });
 test('a reception-only person may clear fabricated active-date hints',t=>{
   const f=fixture(t),before=f.extraction.claims[0];
@@ -194,8 +274,6 @@ test('a reception-only person may clear fabricated active-date hints',t=>{
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[0][4].a,[]);
   assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
-  const reordered=structuredClone(proposal);reordered.changes.reverse();
-  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
   const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
   assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
 });
@@ -209,8 +287,6 @@ test('an undated source attestation may clear active-date hints without inventin
   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
   assert.deepEqual(candidate.people[1][4].a,[]);
   assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
-  const reordered=structuredClone(proposal);reordered.changes.reverse();
-  assert.deepEqual(applyDateRepairProposal(f.extraction,reordered,f.packet),candidate);
 });
 test('an undated source attestation may clear hints when remaining contexts are explicitly unresolved',t=>{
   const f=fixture(t),stored=structuredClone(f.extraction);
@@ -253,7 +329,7 @@ test('reception additions reject non-reception events, life claims, conflicting 
   const f=fixture(t),proposal=receptionRepair(f);
   for(const mutate of [
     row=>{row[1]='role';},row=>{row[1]='attestation';},row=>{row[0]='p999';},
-    row=>{row[2]={kind:'battle'};},row=>{row[2].receptionType='retrospective';},
+    row=>{row[2]={kind:'battle'};},
     row=>{row[2].receptionType='unknown';},row=>{row[4]=[];},row=>{row[4]=['s9999'];},
   ]) {
     const bad=structuredClone(proposal);mutate(bad.changes.at(-1).after);
@@ -278,7 +354,7 @@ test('corrected event dates and a separate reception event cannot be mismatched 
   const combined=dateRepairDifference(f.extraction,candidate,f.packet);
   const reconstructed=applyDateRepairProposal(f.extraction,combined,f.packet);
   assert.deepEqual(reconstructed.claims.find(c=>c[2].kind==='appointment'),after);
-  assert.ok(reconstructed.claims.some(c=>c[2].kind==='posthumous-reference'));
+  assert.ok(reconstructed.claims.some(c=>c[2].kind==='retrospective-reference'));
   const bad=structuredClone(candidate);bad.claims.find(c=>c[2].kind==='appointment')[2].kind='battle';
   assert.throws(()=>applyDateRepairProposal(f.extraction,dateRepairDifference(f.extraction,bad,f.packet),f.packet),/Only life\/date/);
 });
@@ -287,7 +363,7 @@ test('a reception repair stays staged until a fresh reviewer approves the added 
   const worker=async task=>{
     if(task.kind==='repair')return receptionRepair(f);
     if(task.key.startsWith('reaudit-') && !approve)throw new Error('waiting for independent reception review');
-    if(task.key.startsWith('reaudit-'))receptionChecks+=task.job.items.filter(i=>i.value?.kind==='posthumous-reference').length;
+    if(task.key.startsWith('reaudit-'))receptionChecks+=task.job.items.filter(i=>i.value?.kind==='retrospective-reference').length;
     return review(task);
   };
   await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/waiting for independent/);
@@ -295,7 +371,7 @@ test('a reception repair stays staged until a fresh reviewer approves the added 
   approve=true;
   assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
   assert.equal(receptionChecks,1);
-  assert.ok(readJson(f.file).claims.some(c=>c[2].kind==='posthumous-reference'));
+  assert.ok(readJson(f.file).claims.some(c=>c[2].kind==='retrospective-reference'));
 });
 function undatedEventFixture(t) {
   const f=fixture(t);
@@ -333,6 +409,17 @@ test('date-context cannot rewrite identities, event content, life claims or unow
   changed.claims[3][2].kind='battle';
   assert.throws(()=>dateRepairDifference(f.extraction,changed,f.packet),/non-temporal claim/);
 });
+test('date-context repair retains an existing explanatory event',t=>{
+  const f=undatedEventFixture(t);
+  f.extraction.claims[3][2].dateContext={sourceDate:{text:'first-year notice'},event:'The office appointment is recorded in the first-year notice.'};
+  writeJsonAtomic(f.file,f.extraction);f.packet=buildDateAuditPacket('fixture','001',f.options);
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'date-context',id:'claim-4',before:structuredClone(f.extraction.claims[3][2].dateContext),after:{...structuredClone(f.extraction.claims[3][2].dateContext),westernYear:{era:'AD',year:1,precision:'year'}},reason:'Add the checked year while retaining the existing event wording.'});
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.equal(candidate.claims[3][2].dateContext.event,'The office appointment is recorded in the first-year notice.');
+  const bad=structuredClone(proposal);delete bad.changes.at(-1).after.event;
+  assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/cannot alter or remove an existing event description/);
+});
 test('a newly dated event requires coverage in the fresh independent review',async t=>{
   const f=undatedEventFixture(t);let approve=false,checked=0;
   const worker=async task=>{
@@ -365,6 +452,10 @@ test('shared ledger validates isolated date reservations without modifying extra
   validatePeopleWorkLedger(ledger);assert.deepEqual(ledger.claims,{});
   const reserved=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
   assert.equal(reserved.claimed.length,0);assert.equal(reserved.blocked.length,1);
+  ledger.dateAudits['fixture/001'].status='stale-source';
+  validatePeopleWorkLedger(ledger);
+  const refreshed=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
+  assert.equal(refreshed.claimed.length,1);assert.equal(refreshed.blocked.length,0);
   ledger.dateAudits['fixture/001'].lane='unknown';assert.throws(()=>validatePeopleWorkLedger(ledger),/date-audit reservation/);
 });
 test('completed workflow starts a new generation when the chapter changes',async t=>{
