@@ -297,7 +297,7 @@ export function attachmentDateWorker({ outputDir, saveRemoteJob }) {
   };
 }
 export function openRouterDateWorker({ key, model, maxWorkerBytes, timeoutMs, recoverOnly = false, saveRemoteJob,
-  request }) {
+  request, maxToolTurns = 20 }) {
   return async task => {
     const input = dateWorkerInput(task);
     const payload = JSON.stringify(input);
@@ -315,7 +315,15 @@ export function openRouterDateWorker({ key, model, maxWorkerBytes, timeoutMs, re
       return readJson(output);
     }
     await save({ agentId, model, status: 'running-tools' });
-    const artifact = await runOpenRouterDateTools(task, { input, key, model, timeoutMs, recoverOnly, ...(request ? { request } : {}) });
+    const artifact = await runOpenRouterDateTools(task, {
+      input,
+      key,
+      model,
+      timeoutMs,
+      recoverOnly,
+      maxTurns: maxToolTurns,
+      ...(request ? { request } : {}),
+    });
     if (task.kind === 'review') artifact.reviewer = { name: model, agentId, independentOfExtractor: true };
     if (task.kind === 'repair') artifact.author = { name: model, agentId };
     writeJsonAtomic(output, artifact);
