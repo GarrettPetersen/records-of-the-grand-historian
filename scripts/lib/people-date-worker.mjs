@@ -315,15 +315,25 @@ export function openRouterDateWorker({ key, model, maxWorkerBytes, timeoutMs, re
       return readJson(output);
     }
     await save({ agentId, model, status: 'running-tools' });
-    const artifact = await runOpenRouterDateTools(task, {
-      input,
-      key,
-      model,
-      timeoutMs,
-      recoverOnly,
-      maxTurns: maxToolTurns,
-      ...(request ? { request } : {}),
-    });
+    let artifact;
+    try {
+      artifact = await runOpenRouterDateTools(task, {
+        input,
+        key,
+        model,
+        timeoutMs,
+        recoverOnly,
+        maxTurns: maxToolTurns,
+        ...(request ? { request } : {}),
+      });
+    } catch (error) {
+      // A bounded or artifact-only run must not leave a durable job appearing
+      // live after its runner has exited. The saved tool transcript remains
+      // the recovery source; this explicit state merely prevents an operator
+      // from mistaking a stopped run for an active inference call.
+      await save({ status: "interrupted", lastError: String(error?.message ?? error) });
+      throw error;
+    }
     if (task.kind === 'review') artifact.reviewer = { name: model, agentId, independentOfExtractor: true };
     if (task.kind === 'repair') artifact.author = { name: model, agentId };
     writeJsonAtomic(output, artifact);
