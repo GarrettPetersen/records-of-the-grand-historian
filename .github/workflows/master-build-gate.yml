@@ -18,6 +18,8 @@ jobs:
     name: master-build
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
     steps:
       - uses: actions/checkout@v4
         with:
