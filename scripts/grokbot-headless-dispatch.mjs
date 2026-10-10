@@ -505,8 +505,10 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
       return document.activeElement === composer;
     })()`);
     if (!focused) throw new Error(`Grok Bot composer could not be focused for ${worker.worker}`);
-    await main.session.call('Input.insertText', { text: prompt });
-    const marker = prompt.slice(0, 120);
+    const receipt = `Dispatch receipt: ${worker.worker}-${Date.now()}`;
+    const dispatchedPrompt = `${prompt}\n\n${receipt}`;
+    await main.session.call('Input.insertText', { text: dispatchedPrompt });
+    const marker = receipt;
     const typedDeadline = Date.now() + 5000;
     let typed = false;
     while (Date.now() < typedDeadline) {
