@@ -506,6 +506,18 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
     })()`);
     if (!focused) throw new Error(`Grok Bot composer could not be focused for ${worker.worker}`);
     await main.session.call('Input.insertText', { text: prompt });
+    const marker = prompt.slice(0, 120);
+    const typedDeadline = Date.now() + 5000;
+    let typed = false;
+    while (Date.now() < typedDeadline) {
+      typed = await main.session.evaluate(`(() => {
+        const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
+        return (composer?.innerText ?? '').includes(${JSON.stringify(marker)});
+      })()`);
+      if (typed) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    if (!typed) throw new Error(`Grok Bot did not insert the prompt for ${worker.worker}`);
     await main.session.call('Input.dispatchKeyEvent', {
       type: 'keyDown',
       key: 'Enter',
@@ -526,9 +538,8 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
         const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
         const active = document.querySelector('[data-agent-id][aria-current="page"]');
         if ((composer?.innerText ?? '').trim() !== '') return false;
-        if (active?.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)}) return true;
-        return document.querySelector('[role="dialog"][aria-label="Search"]') == null
-          && document.body.innerText.includes(${JSON.stringify(worker.name)});
+        if (active?.getAttribute('data-agent-id') !== ${JSON.stringify(worker.id)}) return false;
+        return document.body.innerText.includes(${JSON.stringify(marker)});
       })()`);
       if (submitted) return;
       await new Promise((resolve) => setTimeout(resolve, 200));
