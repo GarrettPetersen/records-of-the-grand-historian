@@ -506,6 +506,9 @@ function eligibleGrokTargets(opts, ledger) {
     ledger,
   );
   for (const target of targets) {
+    // The master ref is authoritative even when this sparse runtime has not materialized
+    // a published extraction locally. Never prune and then reclaim completed work.
+    if (extractionIsCurrent(target, { ref: opts.baseRef })) continue;
     // Existing extraction files, including stale ones, stay in the Cursor upgrade lane.
     if (extracted.has(chapterKey(target)) && !grokbotClaimOwnedByWorker(target, opts, ledger)) continue;
     const claim = ledger.claims[chapterKey(target)];
