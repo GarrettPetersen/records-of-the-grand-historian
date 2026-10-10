@@ -68,3 +68,24 @@ test('date worker checkpoints artifact and separates reviewer identity', async (
     assert.equal(fs.readdirSync(directory).length, 2);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 });
+
+
+test("date worker checkpoints an artifact-only recovery interruption", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "openrouter-date-recovery-test-"));
+  try {
+    const state = {};
+    let requested = false;
+    const worker = openRouterDateWorker({ key: "fixture", model: "fixture/model:free", maxWorkerBytes: 100000,
+      timeoutMs: 1000, recoverOnly: true, saveRemoteJob: async () => {}, request: async () => {
+        requested = true;
+        throw new Error("artifact-only recovery must not make a request");
+      } });
+    const task = { kind: "review", key: "audit-0-002", job: { book: "fixture", chapter: "001", id: "job-002",
+      sourceHash: "sha256:source", extractionHash: "sha256:extraction", ownedUnits: [], ownedItems: [], ownedPeople: [], units: [] },
+      directory, state, save: async patch => Object.assign(state, patch) };
+    await assert.rejects(worker(task), /Artifact-only recovery cannot start/);
+    assert.equal(requested, false);
+    assert.equal(state.status, "interrupted");
+    assert.match(state.lastError, /Artifact-only recovery cannot start/);
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+});

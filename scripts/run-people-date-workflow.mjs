@@ -28,6 +28,7 @@ const {values:o} = parseArgs({ options:{book:{type:'string'},chapter:{type:'stri
   model:{type:'string'},'max-units':{type:'string',default:'40'},'max-worker-kib':{type:'string',default:'64'},
   'max-rounds':{type:'string',default:'3'},'max-attempts':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
   'max-run-tokens':{type:'string',default:'4000000'},'run-timeout-minutes':{type:'string',default:'20'},
+  'max-tool-turns':{type:'string',default:'20'},
   'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},takeover:{type:'boolean'},
   'min-approved':{type:'string',default:'0'},'summary-out':{type:'string'},order:{type:'string',default:'balanced'},
   'recover-only':{type:'boolean'},'cursor-capacity-start':{type:'string'} } });
@@ -71,6 +72,7 @@ const options = {maxUnits:integer('max-units',1000),maxBytes:integer('max-worker
 const dollars=Number(o['max-run-cost']);
 if(!Number.isFinite(dollars)||dollars<=0||dollars>20) throw new Error('Invalid --max-run-cost');
 options.maxRunCostCents=Math.round(dollars*100);
+options.maxToolTurns=integer('max-tool-turns',300);
 const control=createRunControl();
 options.workerPool=createDateWorkerPool(jobConcurrency,{shouldStop:()=>control.stopRequested});
 let matcher;
@@ -212,7 +214,7 @@ if (o['dry-run']) {
         const worker=o.lane==='cursor-sdk'
           ? cursorDateWorker({...options,model:o.model,saveRemoteJob},control)
           : o.lane==='openrouter'
-            ? openRouterDateWorker({key:options.openRouterKey,model:options.openRouterModel,maxWorkerBytes:options.maxWorkerBytes,timeoutMs:options.timeoutMs,recoverOnly:options.recoverOnly,saveRemoteJob})
+            ? openRouterDateWorker({key:options.openRouterKey,model:options.openRouterModel,maxWorkerBytes:options.maxWorkerBytes,timeoutMs:options.timeoutMs,recoverOnly:options.recoverOnly,saveRemoteJob,maxToolTurns:options.maxToolTurns})
             : attachmentDateWorker({outputDir:path.resolve(o['attachment-dir']),saveRemoteJob});
         try {
           const guardedWorker=async task=>{

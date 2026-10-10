@@ -255,8 +255,8 @@ export class GrokbotMcpBridge {
     this.ledgerCache = null;
   }
 
-  currentClaim(worker) {
-    const rows = Object.entries(this.currentLedger().claims)
+  currentClaim(worker, { fresh = false } = {}) {
+    const rows = Object.entries(this.currentLedger({ fresh }).claims)
       .filter(([, claim]) =>
         claim.lane === 'grokbot' && claim.worker === worker && claim.status === 'claimed')
       .map(([key, claim]) => ({ target: requireTarget({
@@ -290,7 +290,9 @@ export class GrokbotMcpBridge {
     requireWorker(worker);
     if ((book && !chapter) || (!book && chapter)) throw new Error('book and chapter must be supplied together');
     if (book) requireTarget({ book, chapter });
-    const existing = this.currentClaim(worker);
+    // Claiming must read the live ledger. A cached pre-claim snapshot would
+    // otherwise recreate a preserved assignment as if it were fresh.
+    const existing = this.currentClaim(worker, { fresh: true });
     let prepared;
     if (existing) {
       if (book && (book !== existing.target.book || chapter !== existing.target.chapter)) {
