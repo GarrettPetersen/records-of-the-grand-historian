@@ -142,6 +142,103 @@ test('artifact-only recovery downloads retained output but never creates or send
   assert.equal(h.calls('send').length,0);
 });
 
+test('artifact-only recovery preserves a missing retained agent identity', async () => {
+  const h = harness({ resume: () => { throw new Error('Agent not found'); } });
+  h.options.recoverOnly = true;
+  const task = reviewTask(undefined, { agentId: 'retained', runId: 'saved-run', sent: true });
+  await assert.rejects(h.worker(task), /Agent not found/);
+  assert.equal(task.state.agentId, 'retained');
+  assert.equal(task.state.runId, 'saved-run');
+  assert.equal(task.state.sent, true);
+  assert.equal(task.state.agentRestarts, undefined);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assertUsageCheckpoint(h, task);
+});
+
+test('failed replacement is observed while the prior attempt checkpoints usage', async () => {
+  const h = harness({
+    resume: () => { throw new Error('Agent not found'); },
+    send: () => { throw new Error('Replacement send failed'); },
+    getUsage: async () => {
+      await new Promise(resolve => setTimeout(resolve, 10));
+      return structuredClone(billedUsage);
+    },
+  });
+  const task = reviewTask(undefined, { agentId: 'missing', sent: true });
+  await assert.rejects(h.worker(task), /Replacement send failed/);
+  assert.equal(task.state.agentRestarts, 1);
+  assert.equal(h.calls('create').length, 1);
+  assert.equal(h.calls('send').length, 1);
+});
+
+test('replacement preserves prior usage without overwriting the new run telemetry', async () => {
+  const h = harness({ listArtifacts: agent => {
+    if (agent.agentId === 'retained') throw new Error('Agent not found');
+    return agent.artifact === null ? [] : [{ path: `/opt/cursor/artifacts/date-${agent.key}.json` }];
+  } });
+  h.addAgent('retained', { runs: [{ id: 'old-run', status: 'completed' }] });
+  const task = reviewTask(undefined, { agentId: 'retained', runId: 'old-run', sent: true });
+  await h.worker(task);
+  assert.equal(task.state.priorUsages[0].agentId, 'retained');
+  assert.equal(task.state.priorUsages[0].runId, 'old-run');
+  assert.equal(task.state.usage.agentId, 'agent-1');
+  assert.equal(task.state.usage.runId, 'run-1');
+});
+
+test('quota discovered during retry telemetry preserves the retained agent', async () => {
+  let usageLookups = 0;
+  const h = harness({
+    resume: () => { throw new Error('Agent not found'); },
+    getUsage: () => { usageLookups++; throw Object.assign(new Error('Account capacity exhausted'), { code: 'usage_limit_exceeded' }); },
+  });
+  const task = reviewTask(undefined, { agentId: 'retained', runId: 'old-run', sent: true });
+  await assert.rejects(h.worker(task), /Agent not found/);
+  assert.equal(h.control.stopRequested, true);
+  assert.equal(task.state.agentId, 'retained');
+  assert.equal(task.state.runId, 'old-run');
+  assert.equal(task.state.status, 'interrupted');
+  assert.equal(task.state.lastError, 'Agent not found');
+  assert.equal(task.state.usage.status, 'unavailable');
+  assert.match(task.state.usage.error, /Account capacity exhausted/);
+  assert.equal(usageLookups, 1);
+  assert.equal(h.calls('create').length, 0);
+});
+
+test('artifact-only recovery preserves a retained repair with a research blocker', async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'people-date-blocker-test-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(directory, 'research-blocker.json'), '{}');
+  const h = harness();
+  h.options.recoverOnly = true;
+  h.addAgent('retained-repair', { key: 'repair-0-first', artifact: { changes: [] } });
+  const task = repairTask();
+  task.directory = directory;
+  Object.assign(task.state, { agentId: 'retained-repair', runId: 'old-run', sent: true, status: 'returned' });
+  await h.worker(task);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.replacementUsed, undefined);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+});
+
+test('a stopped pool preserves a retained repair with a research blocker', async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'people-date-stopped-test-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(directory, 'research-blocker.json'), '{}');
+  const h = harness();
+  h.control.stopRequested = true;
+  h.addAgent('retained-repair', { key: 'repair-0-first', artifact: { changes: [] } });
+  const task = repairTask();
+  task.directory = directory;
+  Object.assign(task.state, { agentId: 'retained-repair', runId: 'old-run', sent: true, status: 'returned' });
+  await h.worker(task);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.replacementUsed, undefined);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+});
+
 test('retained conversation continues before any replacement, even with an empty run listing', async () => {
   const h = harness();
   h.addAgent('retained');
