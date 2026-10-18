@@ -565,16 +565,30 @@ function unitLocator(unit) {
 
 export function assignExplicitCandidatePeople(reconciled, packet, requested) {
   if (requested.length === 0) return reconciled;
-  const extraction = reconciled.extraction;
+  // Work on a clone so a rejected batch cannot leave partial edits behind.
+  const extraction = structuredClone(reconciled.extraction);
   const candidateById = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
   const candidateOrder = new Map(packet.preflight.candidates.map((candidate, index) => [candidate.id, index]));
   const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
   const people = new Set(extraction.people.map((person) => person.localId));
   const unresolved = new Set(reconciled.unresolvedCandidates);
+  const accountedBefore = new Set(extraction.candidateDispositions.map((item) => item.candidate));
+  for (const mention of extraction.mentions) {
+    for (const id of mention.candidateRefs) {
+      const candidate = candidateById.get(id);
+      if (candidate && candidateInsideMention(candidate, mention)) accountedBefore.add(id);
+    }
+  }
 
-  for (const assignment of requested) {
+  // Validate the entire batch before changing any mention. In particular, two
+  // overlapping decisions for different people cannot both be applied: the
+  // later one would otherwise silently delete the first person's span.
+  const seenCandidates = new Set();
+  const assignments = requested.map((assignment) => {
     const candidate = candidateById.get(assignment.candidate);
     if (!candidate) throw new Error(`Explicit person candidate is not in the revised packet: ${assignment.candidate}`);
+    if (seenCandidates.has(candidate.id)) throw new Error(`Duplicate explicit person candidate: ${candidate.id}`);
+    seenCandidates.add(candidate.id);
     if (!unresolved.has(candidate.id)) {
       throw new Error(`Explicit person candidate is not unresolved: ${candidate.id}`);
     }
@@ -585,10 +599,50 @@ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
     if (!EXPLICIT_MENTION_KINDS.has(assignment.kind)) {
       throw new Error(`Invalid explicit person mention kind: ${assignment.kind}`);
     }
-
     const unit = unitById.get(candidate.unit);
     if (!unit) throw new Error(`Explicit person candidate refers to missing unit: ${candidate.unit}`);
     const span = exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence);
+    if (span.startCodePoint !== candidate.startCodePoint || span.endCodePoint !== candidate.endCodePoint) {
+      throw new Error(`Explicit person candidate geometry does not match the revised text: ${candidate.id}`);
+    }
+    return { assignment, candidate, person, unit, span };
+  });
+  for (let index = 0; index < assignments.length; index += 1) {
+    const left = assignments[index];
+    for (const right of assignments.slice(index + 1)) {
+      if (left.person !== right.person && left.unit.id === right.unit.id &&
+          left.candidate.language === right.candidate.language && spansOverlap(left.span, right.span)) {
+        throw new Error(`Conflicting overlapping person assignments: ${left.candidate.id}, ${right.candidate.id}`);
+      }
+      if (left.person === right.person && left.assignment.kind !== right.assignment.kind &&
+          left.unit.id === right.unit.id && left.candidate.language === right.candidate.language &&
+          spansOverlap(left.span, right.span)) {
+        throw new Error(`Conflicting overlapping mention kinds: ${left.candidate.id}, ${right.candidate.id}`);
+      }
+    }
+  }
+  for (const mention of extraction.mentions) {
+    for (const language of ['zh', 'en']) {
+      for (const span of mention.spans[language]) {
+        const overlapping = assignments.filter((item) => item.unit.id === mention.unit.id &&
+          item.candidate.language === language && spansOverlap(item.span, span));
+        if (overlapping.some((item) => item.person === mention.person && item.assignment.kind !== mention.kind &&
+            (item.span.startCodePoint !== span.startCodePoint || item.span.endCodePoint !== span.endCodePoint))) {
+          throw new Error(`Assignment conflicts with an existing mention kind: ${mention.id}`);
+        }
+        if (overlapping.some((item) => item.person === mention.person) &&
+            overlapping.some((item) => item.person !== mention.person)) {
+          throw new Error(`Conflicting assignments overlap an existing mention: ${mention.id}`);
+        }
+        if (overlapping.some((item) => item.person !== mention.person &&
+            (item.span.startCodePoint !== span.startCodePoint || item.span.endCodePoint !== span.endCodePoint))) {
+          throw new Error(`Assignment would replace part of an existing person's mention: ${mention.id}`);
+        }
+      }
+    }
+  }
+
+  for (const { assignment, candidate, person, unit, span } of assignments) {
     const overlapping = extraction.mentions.filter((mention) =>
       mention.unit.id === unit.id &&
       mention.spans[candidate.language].some((current) => spansOverlap(current, span))
@@ -606,8 +660,15 @@ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
       mention.person === person && mention.unit.id === unit.id && mention.kind === assignment.kind
     );
     if (target) {
-      if (!target.spans[candidate.language].some((current) => spansOverlap(current, span))) {
-        target.spans[candidate.language].push(span);
+      if (!target.spans[candidate.language].some((current) =>
+        current.startCodePoint <= span.startCodePoint && current.endCodePoint >= span.endCodePoint
+      )) {
+        const overlappingSpans = target.spans[candidate.language].filter((current) => spansOverlap(current, span));
+        const covering = overlappingSpans.reduce((merged, current) =>
+          coveringSpan(unit[candidate.language], merged, current), span);
+        target.spans[candidate.language] = target.spans[candidate.language]
+          .filter((current) => !overlappingSpans.includes(current));
+        target.spans[candidate.language].push(covering);
       }
       target.candidateRefs.push(candidate.id);
     } else {
@@ -633,8 +694,26 @@ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
   removeDispositionMentionConflicts(extraction);
   renumberMentions(extraction);
 
+  for (const { assignment, candidate, person } of assignments) {
+    if (!extraction.mentions.some((mention) => mention.person === person && mention.kind === assignment.kind &&
+      mention.candidateRefs.includes(candidate.id) && candidateInsideMention(candidate, mention))) {
+      throw new Error(`Explicit person assignment lost its reviewed mention: ${candidate.id}`);
+    }
+  }
+  const accountedAfter = new Set(extraction.candidateDispositions.map((item) => item.candidate));
+  for (const mention of extraction.mentions) {
+    for (const id of mention.candidateRefs) {
+      const candidate = candidateById.get(id);
+      if (candidate && candidateInsideMention(candidate, mention)) accountedAfter.add(id);
+    }
+  }
+  for (const id of accountedBefore) {
+    if (!accountedAfter.has(id)) throw new Error(`Explicit person assignments lost existing candidate coverage: ${id}`);
+  }
+
   return {
     ...reconciled,
+    extraction,
     unresolvedCandidates: reconciled.unresolvedCandidates.filter((candidate) => unresolved.has(candidate)),
   };
 }
