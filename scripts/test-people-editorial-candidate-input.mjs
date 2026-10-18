@@ -54,6 +54,15 @@ test('candidate, source, canonical extraction, and decision history cannot be ov
   assert.match(result.stderr, /must not overwrite a source or review input/);
 });
 
+test('canonical review outputs cannot overwrite chapter source or prior decisions', () => {
+  const source = run('--out', 'data/jinshu/037.json');
+  assert.notEqual(source.status, 0);
+  assert.match(source.stderr, /must not overwrite a source or review input/);
+  const history = run('--out', 'dossier.json', '--decision-seed-out', 'data/people/editorial-decisions/jinshu/037.json');
+  assert.notEqual(history.status, 0);
+  assert.match(history.stderr, /must not overwrite a source or review input/);
+});
+
 test('dossier and decision seed cannot overwrite each other', () => {
   const result = run('--extraction', 'candidate.json', '--out', 'dossier.json', '--decision-seed-out', 'dossier.json');
   assert.notEqual(result.status, 0);

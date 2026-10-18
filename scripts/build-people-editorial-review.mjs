@@ -17,7 +17,7 @@ import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import {
   isCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
-import { editorialDecisionPath, editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+import { editorialDecisionPath, editorialDecisionSeed, validateAppliedEditorialDecisions } from './lib/people-editorial-decisions.mjs';
 import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
@@ -36,7 +36,8 @@ translation repairs. The default output is gitignored under
 data/people/generated/editorial-review/. --decision-seed-out writes the
 immutable decision scaffold for a human or Codex reviewer. --extraction reads
 and validates a candidate extraction against the current chapter; it requires
-an explicit --out and does not publish the candidate.`);
+an explicit --out and does not publish the candidate. Applied decision history
+is checked, but other candidate extraction changes require independent review.`);
 }
 
 function parseArgs(argv) {
@@ -138,6 +139,10 @@ export function loadEditorialReviewChapter(book, chapter, options = {}) {
     ? validateCompactPeopleExtraction(stored, packet)
     : validatePeopleExtraction(stored, packet);
   const extraction = result.normalized;
+  if (options.extraction) {
+    const historyFile = editorialDecisionPath(book, chapterId);
+    if (fs.existsSync(historyFile)) validateAppliedEditorialDecisions(readJson(historyFile), extraction);
+  }
   return { chapterId, packet, extraction, stored };
 }
 
@@ -167,16 +172,14 @@ function main() {
   if (opts.decisionSeedOut && canonicalPath(opts.decisionSeedOut) === canonicalPath(out)) {
     throw new Error('Dossier and decision seed must use different output paths');
   }
-  if (opts.extraction) {
-    const protectedInputs = new Set([
-      opts.extraction,
-      extractionPath(opts.book, opts.chapter),
-      chapterPath(opts.book, opts.chapter),
-      editorialDecisionPath(opts.book, opts.chapter),
-    ].map(canonicalPath));
-    if ([out, opts.decisionSeedOut].filter(Boolean).some((file) => protectedInputs.has(canonicalPath(file)))) {
-      throw new Error('Candidate review outputs must not overwrite a source or review input');
-    }
+  const protectedInputs = new Set([
+    opts.extraction,
+    extractionPath(opts.book, opts.chapter),
+    chapterPath(opts.book, opts.chapter),
+    editorialDecisionPath(opts.book, opts.chapter),
+  ].filter(Boolean).map(canonicalPath));
+  if ([out, opts.decisionSeedOut].filter(Boolean).some((file) => protectedInputs.has(canonicalPath(file)))) {
+    throw new Error('Review outputs must not overwrite a source or review input');
   }
   const dossier = buildEditorialReviewDossier(opts.book, opts.chapter, {
     context: opts.context,
