@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import './test-people-progress-ui.mjs';
 import { buildPeopleGlossaryProgress, peopleProgressFromExtraction } from '../generate-progress.js';
 
 const compact = {
