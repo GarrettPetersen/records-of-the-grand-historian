@@ -28,12 +28,12 @@ const CHRONOLOGICAL_ORDER = [
 const OTHER_WORKS_ORDER = ['zizhitongjian', 'qingshigao'];
 const VALID_STATES = new Set(['current', 'date-review', 'editorial-review', 'identity-review', 'rereview', 'missing']);
 const STATE_LABELS = {
-    current: 'Glossary complete',
+    current: 'Preliminary checks passed; completion unverified',
     'date-review': 'Date audit needed',
-    'editorial-review': 'Translation review needed',
-    'identity-review': 'Identity resolution needed',
+    'editorial-review': 'Proposed repairs pending',
+    'identity-review': 'Person identity or source rereview needed',
     rereview: 'Source rereview needed',
-    missing: 'Not started'
+    missing: 'No accepted extraction'
 };
 
 function sleep(milliseconds) {
@@ -159,21 +159,21 @@ function renderOverview(summary) {
 
     const metrics = document.getElementById('corpus-metrics');
     metrics.replaceChildren(
-        metric('Complete chapters', summary.completeChapters, 'Extracted, date-audited, edited, and identity-clean.'),
+        metric('Preliminary checks passed', summary.completeChapters, 'Current extraction, date audit, no pending proposed repairs, and no flagged identity ambiguity; not a completion or publication count.'),
         metric('Date audits', summary.dateAuditedChapters, `${formatInteger(summary.dateReviewChapters)} current extractions await date approval.`),
-        metric('Identity review', summary.chaptersWithUnresolvedPeople, `${formatInteger(summary.peopleNeedingReview)} people remain ambiguous.`),
+        metric('Chapters with flagged people', summary.chaptersWithUnresolvedPeople, `${formatInteger(summary.peopleNeedingReview)} people are flagged for identity or source rereview.`),
         metric('Needs rereview', summary.rereviewChapters, 'Extracted under an earlier contract.'),
-        metric('Not started', summary.missingChapters, 'Awaiting the full glossary pass.'),
+        metric('No accepted extraction', summary.missingChapters, 'No extraction is included in this site data.'),
         metric('Individual records', summary.peopleRecords, 'Chapter-local people gathered so far.'),
-        metric('Historical facts', summary.factClaims, `${formatInteger(summary.attestations)} dated attestations recorded.`)
+        metric('Historical facts', summary.factClaims, `${formatInteger(summary.attestations)} attestations recorded.`)
     );
 
     const publicationNote = document.getElementById('publication-note');
-    publicationNote.textContent = `The glossary is complete for ${formatInteger(summary.completeChapters)} of ${formatInteger(summary.sourceChapters)} chapters. ` +
-        `${formatInteger(summary.extractedChapters)} chapters have source extractions, and ${formatInteger(summary.unresolvedCandidateBlocks)} cross-chapter identity groups still require decisions. ` +
+    publicationNote.textContent = `${formatInteger(summary.completeChapters)} of ${formatInteger(summary.sourceChapters)} chapters have passed the preliminary checks shown here. These checks do not establish whole-chapter editorial review, verified links or ebook readiness, or publication. ` +
+        `${formatInteger(summary.extractedChapters)} chapters have source extractions, and ${formatInteger(summary.unresolvedCandidateBlocks)} identity candidate groups still require decisions. ` +
         `${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
     if (summary.pendingTranslationRepairs > 0) {
-        publicationNote.textContent += ` ${formatInteger(summary.pendingTranslationRepairs)} proposed translation repairs still await editorial review.`;
+        publicationNote.textContent += ` ${formatInteger(summary.pendingTranslationRepairs)} translation repairs remain proposed.`;
     }
 }
 
@@ -192,13 +192,13 @@ function chapterTooltip(chapter, people) {
         lines.push(
             `Named records: ${formatInteger(people.peopleRecords)}`,
             `Facts: ${formatInteger(people.factClaims)}`,
-            `Dated attestations: ${formatInteger(people.attestations)}`,
+            `Attestations: ${formatInteger(people.attestations)}`,
             `Family relationships: ${formatInteger(people.familyRelationships)}`,
             `Translation fixes applied: ${formatInteger(people.appliedTranslationRepairs)}`,
             `Extraction prompt: v${people.promptVersion}`
         );
         if (people.unresolvedPeople > 0) {
-            lines.push(`People awaiting identity resolution: ${formatInteger(people.unresolvedPeople)}`);
+            lines.push(`People flagged for identity or source rereview: ${formatInteger(people.unresolvedPeople)}`);
         }
     }
     return lines.join('\n');
@@ -254,12 +254,12 @@ function createBookSection(bookId, book) {
     const statsRow = document.createElement('div');
     statsRow.className = 'book-progress-stats';
     statsRow.append(
-        statItem('current', `${formatInteger(stats.current)} complete`),
+        statItem('current', `${formatInteger(stats.current)} preliminary checks passed`),
         statItem('date-review', `${formatInteger(stats['date-review'])} date review`),
-        statItem('identity-review', `${formatInteger(stats['identity-review'])} identity review`),
-        statItem('editorial-review', `${formatInteger(stats['editorial-review'])} translation review`),
+        statItem('identity-review', `${formatInteger(stats['identity-review'])} person review`),
+        statItem('editorial-review', `${formatInteger(stats['editorial-review'])} proposed repairs pending`),
         statItem('rereview', `${formatInteger(stats.rereview)} source rereview`),
-        statItem('missing', `${formatInteger(stats.missing)} not started`)
+        statItem('missing', `${formatInteger(stats.missing)} without accepted extraction`)
     );
     const records = document.createElement('span');
     records.textContent = `${formatInteger(stats.people)} individual records · ${formatInteger(stats.facts)} facts`;
@@ -326,10 +326,13 @@ async function init() {
 
         const updated = new Date(index.generatedAt);
         requireCondition(!Number.isNaN(updated.getTime()), 'generatedAt is invalid');
-        document.getElementById('last-updated').textContent = `Last updated ${updated.toLocaleDateString(undefined, {
+        document.getElementById('last-updated').textContent = `Deployed site data generated ${updated.toLocaleString(undefined, {
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZoneName: 'short'
         })}`;
 
         loading.hidden = true;
