@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Test people date-hint normalization
+        run: npm run people:hints:self-test
+
       - name: Build and validate the full site
         run: npm run build
