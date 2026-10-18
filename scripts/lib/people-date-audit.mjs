@@ -37,7 +37,8 @@ export function dateAuditItems(extraction) {
   const items = extraction.claims.flatMap((claim, index) => {
     const [personId, predicate, value, certainty, evidence] = compact
       ? claim : [claim.subject, claim.predicate, claim.value, claim.certainty, claim.evidence];
-    if (!LIFE_PREDICATES.has(predicate) && !hasTemporalValue(value) && !personClaimReception({ value })) return [];
+    if (!LIFE_PREDICATES.has(predicate) && !hasTemporalValue(value) && !personClaimReception({ value }) &&
+        !personReceptionErrors({ predicate, value }).length) return [];
     return [{ id: `claim-${index + 1}`, claimIndex: index, personId, predicate, value, certainty,
       evidence: evidence.map(id => id.split(':').at(-1)), claimHash: sha256(JSON.stringify(claim)) }];
   });
