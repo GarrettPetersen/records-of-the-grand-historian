@@ -139,10 +139,8 @@ export function loadEditorialReviewChapter(book, chapter, options = {}) {
     ? validateCompactPeopleExtraction(stored, packet)
     : validatePeopleExtraction(stored, packet);
   const extraction = result.normalized;
-  if (options.extraction) {
-    const historyFile = editorialDecisionPath(book, chapterId);
-    if (fs.existsSync(historyFile)) validateAppliedEditorialDecisions(readJson(historyFile), extraction);
-  }
+  const historyFile = editorialDecisionPath(book, chapterId);
+  if (fs.existsSync(historyFile)) validateAppliedEditorialDecisions(readJson(historyFile), extraction);
   return { chapterId, packet, extraction, stored };
 }
 
