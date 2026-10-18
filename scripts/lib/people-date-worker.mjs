@@ -124,6 +124,8 @@ export function cursorDateWorker(options, control, {
       if (control.stopRequested) throw new Error('Date worker launch stopped; saved work is resumable');
     };
     let agent;
+    let delegatedRetry = false;
+    let usageSaved = false;
     const wait = async run => {
       control.activeRuns?.set(run.id, {
         run, agentId: agent.agentId, label: task.key,
@@ -186,7 +188,7 @@ export function cursorDateWorker(options, control, {
       // A retained repair chat gets one chance to continue after a host-side
       // invariant repair. If it still returns a persisted blocker, preserve its
       // identity and replace only that exhausted repair context.
-      if (blockerFile && fs.existsSync(blockerFile) && task.state.agentId && task.state.status === 'returned' && !task.state.replacementUsed) {
+      if (!options.recoverOnly && !control.stopRequested && blockerFile && fs.existsSync(blockerFile) && task.state.agentId && task.state.status === 'returned' && !task.state.replacementUsed) {
         const priorAgentId = task.state.agentId;
         await save({ priorAgentId, replacementUsed: true, agentId: null, runId: null, sent: false, status: 'replacement' });
         Object.assign(task.state, { priorAgentId, replacementUsed: true, agentId: null, runId: null, sent: false, status: 'replacement' });
@@ -252,18 +254,29 @@ export function cursorDateWorker(options, control, {
       const restarts = Number(task.state.agentRestarts ?? 0);
       // Cloud runs sometimes end with "Agent not found" after a few cents.
       // Drop that agent and start another one; do not discard returned jobs.
-      if (restarts < 2 && message.includes('Agent not found') && !control.stopRequested) {
-        await save({ status: 'retry', lastError: message, agentRestarts: restarts + 1, agentId: null, runId: null, sent: false });
+      if (!options.recoverOnly && restarts < 2 && message.includes('Agent not found') && !control.stopRequested) {
+        const priorUsage = await usageCheckpoint();
+        if (control.stopRequested) {
+          await save({ status: 'interrupted', lastError: message, usage: priorUsage });
+          usageSaved = true;
+          throw error;
+        }
+        await save({ status: 'retry', lastError: message, agentRestarts: restarts + 1, agentId: null, runId: null, sent: false,
+          priorUsages: [...(task.state.priorUsages ?? []), priorUsage] });
         task.state.agentId = null;
         task.state.runId = null;
         task.state.sent = false;
-        return runTask(task);
+        // Await the retry before entering this invocation's asynchronous
+        // finally block; otherwise an early rejection can go unhandled while
+        // usage checkpointing is still running.
+        delegatedRetry = true;
+        return await runTask(task);
       }
       await save({status:'interrupted',lastError:message,
         ...(error instanceof DateArtifactValidationError ? {validationError:error.message,artifactHash:error.artifactHash} : {})});
       throw error;
     } finally {
-      await save({ usage: await usageCheckpoint() });
+      if (!delegatedRetry && !usageSaved) await save({ usage: await usageCheckpoint() });
     }
   };
   return runTask;
