@@ -26,16 +26,19 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 function usage() {
   console.log(`Usage:
   node scripts/build-people-editorial-review.mjs --book BOOK --chapter NNN [--out PATH] [--context N]
+    [--extraction PATH]
     [--decision-seed-out PATH]
 
 Builds the bounded evidence dossier for an independent review of proposed
 translation repairs. The default output is gitignored under
 data/people/generated/editorial-review/. --decision-seed-out writes the
-immutable decision scaffold for a human or Codex reviewer.`);
+immutable decision scaffold for a human or Codex reviewer. --extraction reads
+and validates a candidate extraction against the current chapter; it requires
+an explicit --out and does not publish the candidate.`);
 }
 
 function parseArgs(argv) {
-  const opts = { book: null, chapter: null, out: null, decisionSeedOut: null, context: 2 };
+  const opts = { book: null, chapter: null, out: null, extraction: null, decisionSeedOut: null, context: 2 };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const next = () => {
@@ -46,6 +49,7 @@ function parseArgs(argv) {
     if (arg === '--book') opts.book = next();
     else if (arg === '--chapter') opts.chapter = normalizedChapterId(next());
     else if (arg === '--out') opts.out = path.resolve(REPO_ROOT, next());
+    else if (arg === '--extraction') opts.extraction = path.resolve(REPO_ROOT, next());
     else if (arg === '--decision-seed-out') opts.decisionSeedOut = path.resolve(REPO_ROOT, next());
     else if (arg === '--context') {
       const value = next();
@@ -119,7 +123,7 @@ export function buildEditorialReviewDossier(book, chapter, options = {}) {
 
 export function loadEditorialReviewChapter(book, chapter, options = {}) {
   const chapterId = normalizedChapterId(chapter);
-  const file = extractionPath(book, chapterId);
+  const file = options.extraction ?? extractionPath(book, chapterId);
   const stored = readJson(file);
   const packet = buildPeopleExtractionPacket(book, chapterId, {
     properNounMatcher: options.properNounMatcher ?? loadProperNounMatcher(),
@@ -134,6 +138,14 @@ export function loadEditorialReviewChapter(book, chapter, options = {}) {
 function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (!opts.book || !opts.chapter) throw new Error('--book and --chapter are required');
+  if (opts.extraction && !opts.out) throw new Error('--extraction requires an explicit --out');
+  if (opts.out && opts.decisionSeedOut === opts.out) throw new Error('Dossier and decision seed must use different output paths');
+  if (opts.extraction) {
+    const protectedInputs = new Set([opts.extraction, extractionPath(opts.book, opts.chapter)]);
+    if (protectedInputs.has(opts.out) || (opts.decisionSeedOut && protectedInputs.has(opts.decisionSeedOut))) {
+      throw new Error('Candidate review outputs must not overwrite an extraction input');
+    }
+  }
   const out = opts.out ?? path.join(
     PEOPLE_DIR,
     'generated',
@@ -141,7 +153,10 @@ function main() {
     opts.book,
     `${opts.chapter}.json`,
   );
-  const dossier = buildEditorialReviewDossier(opts.book, opts.chapter, { context: opts.context });
+  const dossier = buildEditorialReviewDossier(opts.book, opts.chapter, {
+    context: opts.context,
+    extraction: opts.extraction,
+  });
   writeJsonAtomic(out, dossier);
   if (opts.decisionSeedOut) writeJsonAtomic(opts.decisionSeedOut, dossier.decisionSeed);
   console.log(
