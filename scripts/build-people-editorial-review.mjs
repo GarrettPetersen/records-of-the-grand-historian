@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
 import path from 'node:path';
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
 import {
   PEOPLE_DIR,
   REPO_ROOT,
+  chapterPath,
   extractionPath,
   normalizedChapterId,
   readJson,
@@ -15,7 +17,7 @@ import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import {
   isCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
-import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+import { editorialDecisionPath, editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import {
   validateCompactPeopleExtraction,
   validatePeopleExtraction,
@@ -75,6 +77,10 @@ function reviewUnit(unit, focus) {
 
 export function buildEditorialReviewDossier(book, chapter, options = {}) {
   const loaded = loadEditorialReviewChapter(book, chapter, options);
+  return buildEditorialReviewDossierFromLoaded(book, loaded, options);
+}
+
+export function buildEditorialReviewDossierFromLoaded(book, loaded, options = {}) {
   const { chapterId, packet, extraction } = loaded;
   const proposals = extraction.translationRepairs.filter((repair) => repair.status === 'proposed');
   if (proposals.length === 0) throw new Error(`${book}/${chapterId} has no proposed editorial repairs`);
@@ -135,17 +141,22 @@ export function loadEditorialReviewChapter(book, chapter, options = {}) {
   return { chapterId, packet, extraction, stored };
 }
 
+function canonicalPath(file) {
+  let current = path.resolve(file);
+  const missing = [];
+  while (!fs.existsSync(current)) {
+    const parent = path.dirname(current);
+    if (parent === current) throw new Error(`Cannot resolve path: ${file}`);
+    missing.unshift(path.basename(current));
+    current = parent;
+  }
+  return path.join(fs.realpathSync(current), ...missing);
+}
+
 function main() {
   const opts = parseArgs(process.argv.slice(2));
   if (!opts.book || !opts.chapter) throw new Error('--book and --chapter are required');
   if (opts.extraction && !opts.out) throw new Error('--extraction requires an explicit --out');
-  if (opts.out && opts.decisionSeedOut === opts.out) throw new Error('Dossier and decision seed must use different output paths');
-  if (opts.extraction) {
-    const protectedInputs = new Set([opts.extraction, extractionPath(opts.book, opts.chapter)]);
-    if (protectedInputs.has(opts.out) || (opts.decisionSeedOut && protectedInputs.has(opts.decisionSeedOut))) {
-      throw new Error('Candidate review outputs must not overwrite an extraction input');
-    }
-  }
   const out = opts.out ?? path.join(
     PEOPLE_DIR,
     'generated',
@@ -153,6 +164,20 @@ function main() {
     opts.book,
     `${opts.chapter}.json`,
   );
+  if (opts.decisionSeedOut && canonicalPath(opts.decisionSeedOut) === canonicalPath(out)) {
+    throw new Error('Dossier and decision seed must use different output paths');
+  }
+  if (opts.extraction) {
+    const protectedInputs = new Set([
+      opts.extraction,
+      extractionPath(opts.book, opts.chapter),
+      chapterPath(opts.book, opts.chapter),
+      editorialDecisionPath(opts.book, opts.chapter),
+    ].map(canonicalPath));
+    if ([out, opts.decisionSeedOut].filter(Boolean).some((file) => protectedInputs.has(canonicalPath(file)))) {
+      throw new Error('Candidate review outputs must not overwrite a source or review input');
+    }
+  }
   const dossier = buildEditorialReviewDossier(opts.book, opts.chapter, {
     context: opts.context,
     extraction: opts.extraction,
