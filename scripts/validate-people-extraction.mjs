@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeExtractionDateHints } from './lib/people-date-hints.mjs';
 import { hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
 import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
 import {
@@ -906,7 +907,8 @@ function usage() {
   node scripts/validate-people-extraction.mjs --self-test
 
 The default packet is rebuilt from the current chapter, making stale input fail.
---normalize writes host-computed span offsets and hashes to --out or back to PATH.`);
+--normalize formats existing Western active-date hints and writes host-computed
+span offsets and hashes to --out or back to PATH, only after validation succeeds.`);
 }
 
 function parseArgs(argv) {
@@ -999,7 +1001,9 @@ function resolveValidationPacket(extraction, packetFile) {
 }
 
 function validateFile(file, opts) {
-  const extraction = readJson(file);
+  const submitted = readJson(file);
+  const { candidate: extraction, changes: hintChanges } = opts.normalize
+    ? normalizeExtractionDateHints(submitted) : { candidate: submitted, changes: [] };
   const packet = resolveValidationPacket(extraction, opts.packet);
   const compact = isCompactPeopleExtraction(extraction);
   const result = compact
@@ -1009,6 +1013,7 @@ function validateFile(file, opts) {
   if (opts.normalize && compact) {
     writeTextAtomic(opts.out ?? file, serializeCompactPeopleExtraction(extraction));
   }
+  if (hintChanges.length) console.log(`Normalized Western active-date hints: ${JSON.stringify(hintChanges)}`);
   console.log(
     `${path.relative(REPO_ROOT, file)}: ok (${result.stats.people} people, ` +
     `${result.stats.mentions} mentions, ${result.stats.claims} claims, ${result.stats.candidates} candidates)`,
