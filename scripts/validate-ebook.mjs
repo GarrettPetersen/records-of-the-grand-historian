@@ -22,10 +22,12 @@ import {
 
 const cliArgs = process.argv.slice(2);
 const allowPeoplePreview = cliArgs.includes('--allow-people-preview');
-const unknownOptions = cliArgs.filter((arg) => arg.startsWith('--') && arg !== '--allow-people-preview');
+const requirePeopleGlossary = cliArgs.includes('--require-people-glossary');
+const unknownOptions = cliArgs.filter((arg) => arg.startsWith('--') &&
+  arg !== '--allow-people-preview' && arg !== '--require-people-glossary');
 const positionalArgs = cliArgs.filter((arg) => !arg.startsWith('--'));
-if (unknownOptions.length > 0 || positionalArgs.length > 1) {
-  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview] dist/ebooks/<slug>/<slug>.epub');
+if (unknownOptions.length > 0 || positionalArgs.length > 1 || (allowPeoplePreview && requirePeopleGlossary)) {
+  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview | --require-people-glossary] dist/ebooks/<slug>/<slug>.epub');
   process.exit(1);
 }
 const epubPath = positionalArgs[0];
@@ -50,7 +52,7 @@ function formatChildError(error) {
 }
 
 if (!epubPath) {
-  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview] dist/ebooks/<slug>/<slug>.epub');
+  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview | --require-people-glossary] dist/ebooks/<slug>/<slug>.epub');
   process.exit(1);
 }
 
@@ -1232,8 +1234,11 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     }
   }
 
+  errors.push(...ebookPeopleReadinessErrors(peopleQa, {
+    allowPreview: allowPeoplePreview,
+    requireGlossary: requirePeopleGlossary,
+  }));
   if (peopleQa.active) {
-    errors.push(...ebookPeopleReadinessErrors(peopleQa, { allowPreview: allowPeoplePreview }));
     const expectedPeopleEntries = Number(peopleQa.shards || 0) + 1;
     if (!peopleEntries.includes('EPUB/people/index.xhtml')) {
       errors.push('Active people glossary is missing EPUB/people/index.xhtml.');
