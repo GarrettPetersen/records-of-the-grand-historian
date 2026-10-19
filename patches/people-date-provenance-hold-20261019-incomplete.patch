@@ -1,0 +1,193 @@
+--- a/scripts/run-people-date-workflow.mjs
++++ b/scripts/run-people-date-workflow.mjs
+@@ -182,10 +182,22 @@
+           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
+           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
+           if(claimIsActive(ledger.claims[key]) && !['ready','complete'].includes(ledger.claims[key].status))return null;
++          const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
++          if(prior?.status==='ready') {
++            const evidence=completedDateClaimEvidence({book:target.book,chapter:target.chapter,claim:prior});
++            if(!evidence.ready)throw new CompletedDateGenerationHold(`Ready date claim ${key} cannot be safely archived: ${evidence.reason}; preserve ownership and reconcile before dispatch`);
++          }
++          if(!prior && fs.existsSync(retainedState))throw new CompletedDateGenerationHold(`Retained date state ${key} has no matching claim; preserve it and reconcile ownership before dispatch`);
++          if(prior && prior.status!=='ready') {
++            if(typeof prior.generationId!=='string' || !prior.generationId.trim() || prior.generationId!==prior.generationId.trim())throw new CompletedDateGenerationHold(`Legacy date claim ${key} lacks a durable generation identity; preserve it and migrate ownership before dispatch`);
++            if(fs.existsSync(retainedState)) {
++              const state=readJson(retainedState);
++              if(state.generationId!==prior.generationId || state.sourceHash!==prior.sourceHash || state.extractionHash!==prior.extractionHash)throw new CompletedDateGenerationHold(`Retained date state ${key} does not match its claim generation and fingerprints; preserve it and reconcile before dispatch`);
++            }
++          }
+           const archived=prior?.status==='ready';
+           if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
+           const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
+-          const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
+           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
+           if(changed && (!finishing || prior.status==='stale-source'))throw new Error(`Sticky date work ${key} changed; reconcile before release`);
+           const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,generationId:randomUUID(),jobs:{}}:prior;
+@@ -244,14 +256,18 @@
+             catch(error) {if(o.lane==='openrouter'&&error.status===429)control.stopRequested=true;throw error;}
+           };
+           const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan,generationId:reserved.generationId});
+-          console.log(`${key}: ${result.status}`);
+-          outcomes.push({book:target.book,chapter:target.chapter,status:result.status});
+-          if(result.status==='audited')approved+=1;
+-          if(result.status!=='audited')process.exitCode=1;
+           mutateRemotePeopleWorkLedger(ledger=>{
+             const claim=ledger.dateAudits?.[key];if(!claim||claim.executorToken!==executorToken)throw new Error('Lost date reservation');
++            if(result.status==='audited') {
++              const evidence=completedDateClaimEvidence({book:target.book,chapter:target.chapter,claim});
++              if(!evidence.ready)throw new CompletedDateGenerationHold(`Completed date generation cannot be reconciled: ${evidence.reason}`);
++            }
+             claim.status=result.status==='audited'?'ready':result.status==='research-blocked'?'research-blocked':'active';
+           },{message:`Date review outcome ${key}`});
++          console.log(`${key}: ${result.status}`);
++          outcomes.push({book:target.book,chapter:target.chapter,status:result.status});
++          if(result.status==='audited')approved+=1;
++          if(result.status!=='audited')process.exitCode=1;
+         }catch(error){
+           if(o.lane==='openrouter' && error.status===429) control.stopRequested=true;
+           if(/Person extraction validation failed:/.test(String(error?.message??''))) {
+--- a/scripts/lib/people-date-workflow.mjs
++++ b/scripts/lib/people-date-workflow.mjs
+@@ -642,6 +642,10 @@
+     const current=dateAuditStatus(book,chapter,options);
+     if(current.status==='audited') {
+       if (options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
++      if (options.generationId) {
++        const evidence=completedDateClaimEvidence({book,chapter,claim:{sourceHash:state.sourceHash,extractionHash:state.extractionHash,generationId:options.generationId}},options);
++        if (!evidence.ready) throw new CompletedDateGenerationHold(`Completed date generation cannot be reconciled: ${evidence.reason}`);
++      }
+       return current;
+     }
+     fs.renameSync(directory,`${directory}.completed-${hash(state).slice(7,27)}`);
+--- a/scripts/test-people-date-workflow.mjs
++++ b/scripts/test-people-date-workflow.mjs
+@@ -5,7 +5,7 @@
+ import { test } from 'node:test';
+ import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
+ import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
+-import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
++import { CompletedDateGenerationHold, completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+ import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+ import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
+ import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+@@ -68,6 +68,24 @@
+   assert.match(completedDateClaimEvidence({...scope,claim},f.options).reason,/differs/);
+ });
+
++test('completed workflow refuses a different independently installed audited report', async t => {
++  const f=fixture(t),scope={book:'fixture',chapter:'001'},generationId='generation-one';
++  const worker=async task=>{const result=review(task);for(const item of result.itemChecks)item.verdict='supported';result.findings=[];return result;};
++  await runDateWorkflow(scope,worker,{...f.options,generationId});
++  const directory=dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir);
++  const stateFile=path.join(directory,'state.json'),reportFile=path.join(f.options.peopleDir,'date-audits/fixture/001.json');
++  const installed=readJson(reportFile);
++  installed.summary='A different independent review of the same source and extraction.';
++  writeJsonAtomic(reportFile,installed);
++  assert.equal(dateAuditStatus(scope.book,scope.chapter,f.options).status,'audited');
++  const stateBefore=fs.readFileSync(stateFile),reportBefore=fs.readFileSync(reportFile);
++  let calls=0;
++  await assert.rejects(runDateWorkflow(scope,async()=>{calls++;throw new Error('unexpected worker');},{...f.options,generationId}),/report|generation|review/i);
++  assert.equal(calls,0);
++  assert.deepEqual(fs.readFileSync(stateFile),stateBefore);
++  assert.deepEqual(fs.readFileSync(reportFile),reportBefore);
++});
++
+ test('newer external hold blocks retained workflow without changing artifacts or calling worker', async t => {
+   const f=fixture(t),scope={book:'fixture',chapter:'001'};
+   const worker=async task=>{const result=review(task);for(const item of result.itemChecks)item.verdict='supported';result.findings=[];return result;};
+@@ -103,6 +121,47 @@
+   const callback=makeCallback(fs,path,f.options.peopleDir,{worker:'owner'},os,dateExecutorIsBusy,'token',(b,c)=>dateAuditStatus(b,c,f.options),(b,c)=>buildDateAuditPacket(b,c,f.options),readJson,(input)=>completedDateClaimEvidence(input,f.options));
+   writeJsonAtomic(stateFile,{...state,phase:'audit'});const before=structuredClone(ledger);callback(ledger);assert.deepEqual(ledger,before);
+   writeJsonAtomic(stateFile,state);callback(ledger);assert.equal(claim.status,'ready');
++});
++test('audited workflow outcome cannot mark a claim ready without its own completed evidence', async t => {
++  const f=fixture(t),target={book:'fixture',chapter:'001'},generationId='generation-one',key='fixture/001';
++  const worker=async task=>{const result=review(task);for(const item of result.itemChecks)item.verdict='supported';result.findings=[];return result;};
++  await runDateWorkflow(target,worker,{...f.options,generationId});
++  const directory=dateWorkflowDirectory(target.book,target.chapter,f.options.peopleDir),stateFile=path.join(directory,'state.json');
++  const state=readJson(stateFile),source=fs.readFileSync(new URL('./run-people-date-workflow.mjs',import.meta.url),'utf8');
++  const end='},{message:`Date review outcome ${key}`});',finish=source.indexOf(end);
++  const begin='mutateRemotePeopleWorkLedger(ledger=>{',start=source.lastIndexOf(begin,finish);
++  assert.ok(start>=0&&finish>start);
++  const makeCallback=new Function('key','executorToken','result','target','completedDateClaimEvidence','CompletedDateGenerationHold',`return ledger=>{${source.slice(start+begin.length,finish)}}`);
++  const callback=makeCallback(key,'token',{status:'audited'},target,input=>completedDateClaimEvidence(input,f.options),CompletedDateGenerationHold);
++  const claim={worker:'owner',lane:'cursor-sdk',status:'active',executorToken:'token',sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,generationId};
++  const ledger={dateAudits:{[key]:claim}};
++  writeJsonAtomic(stateFile,{...state,phase:'audit'});
++  try { callback(ledger); } catch(error) { assert.match(error.message,/evidence|generation|complete|review/i); }
++  assert.equal(claim.status,'active');
++  writeJsonAtomic(stateFile,state);
++  callback(ledger);
++  assert.equal(claim.status,'ready');
++});
++test('reservation preflight retains unbound and mismatched generations before assigning an executor', t => {
++  const f=fixture(t),target={book:'fixture',chapter:'001'},key='fixture/001';
++  const source=fs.readFileSync(new URL('./run-people-date-workflow.mjs',import.meta.url),'utf8');
++  const begin='try { reserved=mutateRemotePeopleWorkLedger(ledger=>{',end='},{message:`Reserve date audit ${key}`}).result;';
++  const start=source.indexOf(begin),finish=source.indexOf(end,start);assert.ok(start>=0&&finish>start);
++  const factory=new Function('key','target','packet','o','executorToken','leaseMs','os','path','fs','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','dateExecutorIsBusy','claimIsActive','randomUUID','CompletedDateGenerationHold','completedDateClaimEvidence',`return ledger=>{${source.slice(start+begin.length,finish)}}`);
++  const callback=factory(key,target,f.packet,{worker:'owner',lane:'cursor-sdk'},'new-executor',60000,os,path,fs,
++    (book,chapter)=>dateWorkflowDirectory(book,chapter,f.options.peopleDir),readJson,()=>{},()=>false,()=>false,()=> 'new-generation',CompletedDateGenerationHold,()=>({ready:true}));
++  const prior={worker:'owner',lane:'cursor-sdk',status:'active',sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,jobs:{}};
++  const ledger={claims:{},dateAudits:{[key]:prior}},before=structuredClone(ledger);
++  assert.throws(()=>callback(ledger),/generation identity/);assert.deepEqual(ledger,before);
++  prior.generationId='generation-one';
++  const stateFile=path.join(dateWorkflowDirectory(target.book,target.chapter,f.options.peopleDir),'state.json');
++  writeJsonAtomic(stateFile,{generationId:'other-generation',sourceHash:prior.sourceHash,extractionHash:prior.extractionHash,phase:'audit'});
++  const beforeMismatch=structuredClone(ledger),stateBefore=fs.readFileSync(stateFile);
++  assert.throws(()=>callback(ledger),/does not match/);assert.deepEqual(ledger,beforeMismatch);assert.deepEqual(fs.readFileSync(stateFile),stateBefore);
++  const orphan={claims:{},dateAudits:{}};
++  assert.throws(()=>callback(orphan),/no matching claim/);assert.deepEqual(orphan,{claims:{},dateAudits:{}});
++  writeJsonAtomic(stateFile,{generationId:prior.generationId,sourceHash:prior.sourceHash,extractionHash:prior.extractionHash,phase:'audit'});
++  assert.equal(callback(ledger).executorToken,'new-executor');
+ });
+ test('completed repaired generation retains original claim binding and current audited report',async t=>{
+   const f=fixture(t),scope={book:'fixture',chapter:'001'};
+--- a/scripts/test-people-date-ownership.mjs
++++ b/scripts/test-people-date-ownership.mjs
+@@ -40,7 +40,7 @@
+ assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
+ assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
+ const body=source.slice(start+marker.length,end);
+-const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID',`return ledger=>{${body}}`);
++const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID','completedDateClaimEvidence',`return ledger=>{${body}}`);
+ const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
+ const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
+ const reconcileEnd=source.indexOf("},{message:'Reconcile completed date publications'});",reconcileStart);
+@@ -48,11 +48,11 @@
+ const reconcileBody=source.slice(reconcileStart+reconcileMarker.length,reconcileEnd);
+ const makeReconcile=new Function('o','executorToken','dateExecutorIsBusy','os','fs','path','PEOPLE_DIR','dateAuditStatus','buildDateAuditPacket','readJson','completedDateClaimEvidence',`return ledger=>{${reconcileBody}}`);
+ const key='jinshu/127', target={book:'jinshu',chapter:'127'}, h1='sha256:'+'1'.repeat(64),h2='sha256:'+'2'.repeat(64);
+-const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-source',sourceHash:h1,extractionHash:h1,jobs:{retained:{agentId:'must-preserve'}},reviewPlans:{},...overrides});
++const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-source',sourceHash:h1,extractionHash:h1,generationId:'fixture-generation',jobs:{retained:{agentId:'must-preserve'}},reviewPlans:{},...overrides});
+ const options={worker:'owner',lane:'openrouter',takeover:false,release:false,'retry-blocked':false};
+ const packet={sourceHash:h1,extractionHash:h1};
+ const workflow=path.join(root,'workflow');
+-const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation');
++const callback=(overrides={},packetOverrides={},preflight=()=>{},evidence=()=>({ready:true}))=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation',evidence);
+ const reconcile=(evidence=()=>({ready:true}))=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}),evidence);
+ const read=()=>readRemotePeopleWorkLedger();
+ const save=claim=>mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={[key]:structuredClone(claim)};delete l.dateAuditHistory;});
+@@ -93,7 +93,7 @@
+   assert.deepEqual(read().dateAudits[key],claim);
+ });
+ test('changed stale-source fingerprint remains untouched even with retained publish phase',()=>{
+-  fs.mkdirSync(workflow,{recursive:true});fs.writeFileSync(path.join(workflow,'state.json'),JSON.stringify({phase:'publish'}));
++  fs.mkdirSync(workflow,{recursive:true});fs.writeFileSync(path.join(workflow,'state.json'),JSON.stringify({phase:'publish',generationId:'fixture-generation',sourceHash:h1,extractionHash:h1}));
+   const claim=prior();save(claim);
+   assert.throws(()=>run(callback({}, {sourceHash:h2})),/Sticky date work .* changed/);
+   assert.deepEqual(read().dateAudits[key],claim);assert.equal(read().dateAuditHistory,undefined);
+@@ -103,6 +103,12 @@
+   const result=run(callback({worker:'new-owner',lane:'manual'},{sourceHash:h2}));
+   assert.equal(result.worker,'new-owner');assert.equal(result.lane,'manual');assert.equal(result.sourceHash,h2);assert.deepEqual(result.jobs,{});
+   assert.deepEqual(read().dateAuditHistory[key],[claim]);
++});
++for(const reason of ['retained generation is audit, not complete','retained generation state is missing','live report differs from completed generation review','live report is not currently audited'])test(`ready reservation preserves ${reason}`,()=>{
++  const claim=prior({status:'ready'});save(claim);
++  const before=read();
++  assert.throws(()=>run(callback({worker:'new-owner',lane:'manual'},{sourceHash:h2},()=>{},()=>({ready:false,reason}))),/generation|reconcil|retain/i);
++  assert.deepEqual(read(),before);
+ });
+ test('unexpired lease blocks same-owner resume without takeover',()=>{
+   const claim=prior({executorToken:'live-token',executorHost:os.hostname(),executorExpiresAt:new Date(Date.now()+3600000).toISOString()});save(claim);
