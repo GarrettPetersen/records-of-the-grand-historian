@@ -1,0 +1,173 @@
+diff --git a/package.json b/package.json
+index 18bf9006783..b6fd177d5c7 100644
+--- a/package.json
++++ b/package.json
+@@ -48,7 +48,7 @@
+     "people:aliases:apply:self-test": "node scripts/apply-people-alias-decisions.mjs --self-test",
+     "people:aliases:self-test": "node scripts/reconcile-people-alias-callbacks.mjs --self-test",
+     "people:validate-extraction": "node scripts/validate-people-extraction.mjs",
+-    "people:validate-extraction:self-test": "node scripts/validate-people-extraction.mjs --self-test",
++    "people:validate-extraction:self-test": "node scripts/validate-people-extraction.mjs --self-test && node scripts/test-people-unresolved-hold.mjs",
+     "people:hints:normalize": "node scripts/normalize-people-date-hints.mjs",
+     "people:hints:self-test": "node --test scripts/test-people-date-hints.mjs scripts/test-people-date-hints-validator-cli.mjs",
+     "people:extract": "node scripts/sdk-people-extract.mjs",
+diff --git a/scripts/validate-people-extraction.mjs b/scripts/validate-people-extraction.mjs
+index 0a0727ea0f3..9afd1d9ec06 100644
+--- a/scripts/validate-people-extraction.mjs
++++ b/scripts/validate-people-extraction.mjs
+@@ -813,8 +813,9 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
+     const unresolvedOnlyEvidence = sourceAttestations.length > 0 &&
+       sourceAttestations.every(claim => claim.value?.undatedSourceAttestation === true || hold(claim.value)) &&
+       temporalClaims.length > 0 && temporalClaims.every(claim => {
+-        if (claim.predicate === 'death' ||
+-            (claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
++        // Capture an explicitly unresolved death as a research hold. This is
++        // not a date approval; the independent audit checks event ownership.
++        if ((claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
+             (claim.predicate === 'event-participation' && claim.value?.kind === 'death' && claim.value?.role === 'deceased')) return false;
+         const containers = temporalContainers(claim.value);
+         return containers.length > 0 && containers.every(hold);
+@@ -1316,20 +1317,19 @@ function selfTest() {
+       if (!(error instanceof PeopleExtractionValidationError)) throw error;
+     }
+   }
+-  for (const dateContext of [
+-    { sourceDate: { text: 'first year' } },
+-    { sourceDate: { text: 'first year' }, unresolved: true,
+-      unresolvedReason: 'The source lacks a securely convertible year for this death.' },
+-  ]) {
+-    const undatedDeath = structuredClone(undatedDeathAttestation);
+-    undatedDeath.claims.at(-1).value.dateContext = dateContext;
+-    try {
+-      validatePeopleExtraction(undatedDeath, packet);
+-      throw new Error('Source-only or unresolved death unexpectedly passed the Western chronology gate');
+-    } catch (error) {
+-      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('no Western-year attestation')) throw error;
+-    }
++  const sourceOnlyDeath = structuredClone(undatedDeathAttestation);
++  sourceOnlyDeath.claims.at(-1).value.dateContext = { sourceDate: { text: 'first year' } };
++  try {
++    validatePeopleExtraction(sourceOnlyDeath, packet);
++    throw new Error('Source-only death unexpectedly passed the Western chronology gate');
++  } catch (error) {
++    if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('no Western-year attestation')) throw error;
+   }
++  const unresolvedDeath = structuredClone(undatedDeathAttestation);
++  unresolvedDeath.claims.at(-1).value.dateContext = { sourceDate: { text: 'first year' }, unresolved: true,
++    unresolvedReason: 'The source lacks a securely convertible year for this death.' };
++  validatePeopleExtraction(unresolvedDeath, packet);
++  validateCompactPeopleExtraction(compactPeopleExtraction(unresolvedDeath, packet), packet);
+ 
+   const externalPrimary = structuredClone(comprehensive);
+   externalPrimary.claims = externalPrimary.claims.filter((claim) => claim.predicate !== 'attestation');
+diff --git a/scripts/test-people-unresolved-hold.mjs b/scripts/test-people-unresolved-hold.mjs
+index 5aec68dd82d..b5a263464f7 100644
+--- a/scripts/test-people-unresolved-hold.mjs
++++ b/scripts/test-people-unresolved-hold.mjs
+@@ -1,5 +1,5 @@
+ // Offline regression tests for source-backed research holds. No canonical writes.
+-// Run from the repository root after applying validator.patch to the staging base.
++// Acceptance is capture only; independent audit must verify source entailment.
+ import assert from 'node:assert/strict';
+ import path from 'node:path';
+ import { pathToFileURL } from 'node:url';
+@@ -66,7 +66,6 @@ for (const [form, validate] of Object.entries(forms)) {
+     ['hold mixed with concrete Western interval', c => { c.claims[3].value.dateContext.westernInterval = { start: { era: 'BC', year: 683, precision: 'year' }, end: { era: 'BC', year: 682, precision: 'year' } }; }, 'has no active-date hint'],
+     ['hold mixed with concrete Western bound', c => { c.claims[3].value.dateContext.westernBounds = { before: { era: 'BC', year: 682, precision: 'year' } }; }, 'has no active-date hint'],
+     ['missing attestation', c => { c.claims.splice(2, 1); }, 'has no evidence-backed attestation'],
+-    ['source-only death', c => { c.claims[3] = { id: 'testbook:001:c0004', subject: 'testbook:001:p001', predicate: 'death', value: { sourceDate: { text: '艾麗絲來' }, unresolved: true, unresolvedReason: 'The source does not establish a securely convertible calendar year.' }, certainty: 'explicit', evidence: ['testbook:001:s0001'] }; }, 'has no Western-year attestation'],
+   ]) {
+     const candidate = structuredClone(extraction); change(candidate);
+     assert.throws(() => validate(candidate), error => error.message.includes(expected), `${form}: ${label}`);
+@@ -77,7 +76,38 @@ for (const [form, validate] of Object.entries(forms)) {
+   const hold = { sourceDate: { text: '艾麗絲父死' }, unresolved: true, unresolvedReason: 'The source does not establish a securely convertible calendar year.' };
+   falseDeath.claims[2].value = { ...hold, event: 'Later events followed the death of her father.' };
+   falseDeath.claims[3] = { id: 'testbook:001:c0004', subject: 'testbook:001:p001', predicate: 'death', value: structuredClone(hold), certainty: 'explicit', evidence: ['testbook:001:s0001'] };
+-  assert.throws(() => validate(falseDeath, fatherSource), error => error.message.includes('has no active-date hint'), `${form}: another person's death is not the subject's death`);
++  // Syntax validation cannot decide whose death the passage describes. Even
++  // deliberately bad evidence may be captured as an unresolved hold; it must
++  // not be mistaken for historical confirmation or an independent audit.
++  validate(falseDeath, fatherSource);
++  const heldDeath = structuredClone(extraction);
++  heldDeath.claims[2].value = { ...structuredClone(hold), event: 'Alice is mentioned in the source.' };
++  heldDeath.claims[3].predicate = 'death';
++  heldDeath.claims[3].value = { dateContext: structuredClone(hold) };
++  for (const promptVersion of [5, 7]) {
++    const versioned = structuredClone(heldDeath);
++    versioned.run.promptVersion = promptVersion;
++    validate(versioned);
++  }
++  for (const [label, extra] of [
++    ['year', { sourceDate: { text: 'first year' }, westernYear: { era: 'AD', year: 1, precision: 'year' } }],
++    ['interval', { sourceDate: { text: 'first year' }, westernInterval: { start: { era: 'AD', year: 1, precision: 'year' }, end: { era: 'AD', year: 2, precision: 'year' } } }],
++    ['bounds', { sourceDate: { text: 'first year' }, westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } } }],
++    ['missing date', { unresolved: true, unresolvedReason: hold.unresolvedReason }],
++    ['short reason', { sourceDate: { text: 'first year' }, unresolved: true, unresolvedReason: 'unknown' }],
++  ]) {
++    const mixed = structuredClone(heldDeath);
++    mixed.claims[3].value.endDate = extra;
++    assert.throws(() => validate(mixed), undefined, `${form}: ${label} cannot satisfy the all-holds exception`);
++  }
++  // A separately dated death alongside a held date can be valid capture, but
++  // does not authorize either the held interpretation or publication.
++  const mixedDeath = structuredClone(heldDeath);
++  mixedDeath.claims[2].value = { undatedSourceAttestation: true, event: 'Alice is named in the source.' };
++  mixedDeath.claims[3].value.endDate = { sourceDate: { text: 'first year' }, westernYear: { era: 'AD', year: 1, precision: 'year' } };
++  validate(mixedDeath);
++  const mixedItems = dateAuditItems(mixedDeath);
++  assert.ok(mixedItems.items.some(item => item.value?.dateContext?.unresolved));
+   console.log(`${form}: positive, genuinely undated, canonical hint, no-mutation, and targeted negative controls passed`);
+ }
+ const noncanonical = structuredClone(extraction);
+diff --git a/scripts/test-people-date-audit.mjs b/scripts/test-people-date-audit.mjs
+index 070716a7765..21534cfd499 100644
+--- a/scripts/test-people-date-audit.mjs
++++ b/scripts/test-people-date-audit.mjs
+@@ -8,6 +8,8 @@ import { sha256, writeJsonAtomic } from './lib/people-content.mjs';
+ import { westernBoundsErrors, boundedDateLabel } from './lib/people-date-values.mjs';
+ import { personLifeSummary, formatPersonWesternYear, inferredPersonBirthYear } from './lib/people-presentation.mjs';
+ import { peopleCatalogIsComplete, peopleCatalogIsPublishable } from './lib/people-publication.mjs';
++import { ebookCurrentDateErrors } from './lib/ebook-current-date-audits.mjs';
++import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
+ 
+ const year = n => ({ era: n < 0 ? 'BC' : 'AD', year: Math.abs(n), precision: 'year' });
+ test('catalog completion requires date approval independently of extraction', () => {
+@@ -119,6 +121,38 @@ test('research holds cannot receive date approval', t => {
+   assert.throws(() => validateDateAuditReport(f.report, packet), /Unresolved chronology/);
+ });
+ 
++test('mixed death chronology remains held until repaired and independently re-audited', t => {
++  const f = fixture(t);
++  const original = structuredClone(f.report);
++  recordDateAudit(original, f.options);
++  const held = f.extraction.claims[0][2];
++  held.endDate = { sourceDate: { text: 'possibly first year' }, unresolved: true,
++    unresolvedReason: 'The surviving heading may not describe the same death event.' };
++  writeJsonAtomic(f.extractionFile, f.extraction);
++  assert.equal(dateAuditStatus('fixture', '001', f.options).status, 'stale');
++  const packet = buildDateAuditPacket('fixture', '001', f.options);
++  const current = { ...original, sourceHash: packet.sourceHash, extractionHash: packet.extractionHash };
++  assert.throws(() => validateDateAuditReport(current, packet), /Unresolved chronology/);
++  const product = { book: 'fixture', chapters: ['001'] };
++  assert.match(ebookCurrentDateErrors(product, { getStatus: (book, chapter) => dateAuditStatus(book, chapter, f.options) }).join(' '), /stale/);
++  const context = { active: true, catalog: { people: [{ localPeople: ['fixture:001:p001'], curation: { status: 'clear' } }] },
++    siteIndex: { currentPromptVersion: 7, chapters: { 'fixture:001': { promptVersion: 7, dateAudit: dateAuditStatus('fixture', '001', f.options) } } } };
++  assert.equal(assessEbookPeopleReadiness(context, product).ready, false);
++  // This is synthetic evidence only: real repairs need source review and a
++  // fresh independent reviewer, not removal of an inconvenient hold.
++  delete held.endDate;
++  held.dateContext.westernBounds = { before: year(471) };
++  writeJsonAtomic(f.extractionFile, f.extraction);
++  const repaired = buildDateAuditPacket('fixture', '001', f.options);
++  const fresh = { ...original, extractionHash: repaired.extractionHash, reviewer: { name: 'Second independent fixture reviewer', independentOfExtractor: true } };
++  recordDateAudit(fresh, f.options);
++  const repairedStatus = dateAuditStatus('fixture', '001', f.options);
++  assert.equal(repairedStatus.status, 'audited');
++  assert.deepEqual(ebookCurrentDateErrors(product, { getStatus: (book, chapter) => dateAuditStatus(book, chapter, f.options) }), []);
++  context.siteIndex.chapters['fixture:001'].dateAudit = repairedStatus;
++  assert.equal(assessEbookPeopleReadiness(context, product).ready, true);
++});
++
+ test('reversed intervals are audit blockers, never automatically swapped', t => {
+   const f = fixture(t);
+   f.packet.items[0].value = { westernInterval: { start: year(202), end: year(195) } };
