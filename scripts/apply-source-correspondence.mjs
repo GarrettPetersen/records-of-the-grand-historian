@@ -11,6 +11,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { REPO_ROOT } from './lib/people-content.mjs';
+import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 
 const SENTENCE_ENDINGS = /([。！？；〈〉()（）])/;
 const CJK_RE = /[\p{Script=Han}]/u;
@@ -1337,33 +1339,44 @@ function applyQueue(queue, opts) {
   };
 }
 
-function main() {
-  const opts = parseArgs(process.argv.slice(2));
-  const reports = [];
+export function runSourceCorrespondence(argv, { root = REPO_ROOT } = {}) {
+  const opts = parseArgs(argv);
+  // Cooperative exclusion with combined curation. Other chapter writers do not
+  // necessarily honor this lock, so host-owned publication still requires
+  // ensuring that no other source or translation writer is running.
+  const unlock = opts.dryRun ? null : acquireProcessRunLock(
+    path.join(root, 'data/people/generated/date-workflow-run.lock'),
+    { label: 'People date workflow', failIfExists: true },
+  );
+  try {
+    const reports = [];
 
-  for (const queuePath of opts.queues) {
-    const queue = JSON.parse(fs.readFileSync(queuePath, 'utf8'));
-    const result = applyQueue(queue, opts);
-    reports.push({
-      queue: queuePath,
-      ...result,
-    });
+    for (const queuePath of opts.queues) {
+      const queue = JSON.parse(fs.readFileSync(queuePath, 'utf8'));
+      const result = applyQueue(queue, opts);
+      reports.push({
+        queue: queuePath,
+        ...result,
+      });
 
-    if (!opts.dryRun) {
-      queue.updatedAt = new Date().toISOString();
-      fs.writeFileSync(queuePath, `${JSON.stringify(queue, null, 2)}\n`, 'utf8');
+      if (!opts.dryRun) {
+        queue.updatedAt = new Date().toISOString();
+        fs.writeFileSync(queuePath, `${JSON.stringify(queue, null, 2)}\n`, 'utf8');
+      }
     }
-  }
 
-  console.log(JSON.stringify({
-    dryRun: opts.dryRun,
-    queues: reports,
-  }, null, 2));
+    console.log(JSON.stringify({
+      dryRun: opts.dryRun,
+      queues: reports,
+    }, null, 2));
+  } finally {
+    unlock?.();
+  }
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
   try {
-    main();
+    runSourceCorrespondence(process.argv.slice(2));
   } catch (error) {
     console.error(error.stack || error.message);
     process.exit(1);

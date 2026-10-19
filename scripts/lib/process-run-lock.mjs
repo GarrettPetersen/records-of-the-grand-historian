@@ -43,6 +43,9 @@ export function acquireProcessRunLock(lockFile, options = {}) {
       };
     } catch (error) {
       if (error?.code !== 'EEXIST') throw error;
+      if (options.failIfExists) {
+        throw new Error(`${label} may be already running: run lock already exists: ${lockFile}; inspect its owner before retrying.`);
+      }
       let current;
       try {
         current = JSON.parse(fs.readFileSync(lockFile, 'utf8'));

@@ -46,6 +46,20 @@ queue lease. An unfinished operation must start from an active or research-block
 date claim, not a ready claim that another extraction worker could reserve.
 The original generation's hashes and retained jobs stay intact during writes.
 
+The standard `apply-source-correspondence` command cooperates with this same
+process lock for its entire write operation and fails if it already exists,
+including when it appears stale, without taking over or removing it. The
+publisher retains its existing dead-process recovery and queue-lease checks.
+This is not general chapter-write exclusion: many other source and translation
+writers, as well as manual edits, do not honor this lock. The host must ensure
+that none of those writers are running against the chapter during publication.
+Until reclamation is repaired, this lock is cooperative best-effort protection,
+not a guarantee of crash-safe cross-writer recovery.
+The existing dead-process recovery also has a competing-reclaimer race: two
+processes can both observe a dead owner, and one may remove a newly acquired
+lock after the other reclaims it. Do not run concurrent recovery attempts.
+This lock does not authorize Chinese emendations in combined curation.
+
 A durable, content-addressed receipt precedes all canonical changes. Exact old
 date reports, queue claims, local state and workflow artifacts are preserved.
 Only after all canonical after-files validate does an explicit reviewed-generation
