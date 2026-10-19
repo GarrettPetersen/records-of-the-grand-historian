@@ -53,17 +53,13 @@ date claim, not a ready claim that another extraction worker could reserve.
 The original generation's hashes and retained jobs stay intact during writes.
 
 The standard `apply-source-correspondence` command cooperates with this same
-process lock for its entire write operation and fails if it already exists,
-including when it appears stale, without taking over or removing it. The
-publisher retains its existing dead-process recovery and queue-lease checks.
+process lock for its entire write operation. The publisher and date runner
+also fail if that lock already exists, including when it appears stale,
+without taking it over or removing it.
 This is not general chapter-write exclusion: many other source and translation
 writers, as well as manual edits, do not honor this lock. The host must ensure
 that none of those writers are running against the chapter during publication.
-Until reclamation is repaired, this lock is cooperative best-effort protection,
-not a guarantee of crash-safe cross-writer recovery.
-The existing dead-process recovery also has a competing-reclaimer race: two
-processes can both observe a dead owner, and one may remove a newly acquired
-lock after the other reclaims it. Do not run concurrent recovery attempts.
+This lock is cooperative protection, not a guarantee of cross-writer exclusion.
 This lock does not authorize Chinese emendations in combined curation.
 
 A durable, content-addressed receipt precedes all canonical changes. Exact old
@@ -72,8 +68,10 @@ Only after all canonical after-files validate does an explicit reviewed-generati
 transition mark the new date claim and local workflow complete.
 
 Resume an interrupted operation with the same receipt and hash. Only exact before
-or after file contents are accepted; unrelated third-state edits fail. A hard-crash
-lease must expire before resumption. Do not discard retained conversations or
+or after file contents are accepted; unrelated third-state edits fail. After a
+hard crash the lock remains: preserve it and follow the host's authorized lock
+recovery procedure before retrying. The lease must also expire before resumption;
+neither an absent lock nor expiry alone authorizes a takeover. Do not discard retained conversations or
 claim history, fabricate date-only recovery receipts, or force a foreign executor.
 
 An independently reviewed code-dependency change can retain an unchanged full

@@ -268,7 +268,7 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
   const root = options.root ?? REPO_ROOT;
   const p = paths(root, receipt.book, receipt.chapter);
   safeDestination(root, p.lock);
-  const unlock = acquireProcessRunLock(p.lock, { label: 'People date workflow' });
+  const unlock = acquireProcessRunLock(p.lock, { label: 'People date workflow', failIfExists: true });
   const mutateLedger = options.mutateLedger ?? mutateRemotePeopleWorkLedger;
   const token = randomUUID(), key = `${receipt.book}/${receipt.chapter}`;
   const receiptFile = path.join(p.receipts, `${expectedHash?.slice(7)}.json`);

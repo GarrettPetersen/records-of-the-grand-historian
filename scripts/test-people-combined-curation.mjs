@@ -11,7 +11,6 @@ import { buildCompactInput } from './lib/people-compact.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { editorialDecisionSeed, editorialReviews, proposalSetFingerprint } from './lib/people-editorial-decisions.mjs';
 import { sha256, contentUnits, writeJsonAtomic } from './lib/people-content.mjs';
-import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { reservePeopleTargetsInLedger } from './lib/people-work-queue.mjs';
 import { inspectCombinedBefore, prepareCombinedCuration, verifyCombinedCuration, publishCombinedCuration } from './lib/people-combined-curation.mjs';
 import { CompletedDateGenerationHold } from './lib/people-date-workflow.mjs';
@@ -721,13 +720,26 @@ for (const change of ['owner', 'generation', 'jobs', 'busy', 'foreign', 'extract
   });
 }
 
-test('the existing global process lock excludes another local date executor', t => {
-  const f = fixture(t), lock = path.join(f.root, 'data/people/generated/date-workflow-run.lock');
-  const unlock = acquireProcessRunLock(lock);
-  try { assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /already running/); }
-  finally { unlock(); }
-  assert.equal(f.calls(), 0);
-});
+for (const [description, content] of [
+  ['live', JSON.stringify({ pid: process.pid, token: 'live' })],
+  ['stale', JSON.stringify({ pid: 99999999, token: 'stale' })],
+  ['unreadable', 'not json'],
+]) {
+  test(`combined publisher preserves ${description} existing global lock`, t => {
+    const f = fixture(t), lock = path.join(f.root, 'data/people/generated/date-workflow-run.lock');
+    fs.mkdirSync(path.dirname(lock), { recursive: true });
+    fs.writeFileSync(lock, content);
+    const before = Object.fromEntries(Object.entries(f.files).map(([role, file]) => [role, fs.readFileSync(file)]));
+    const ledger = structuredClone(f.ledger);
+    const state = fs.readFileSync(path.join(f.workflow, 'state.json'));
+    assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /run lock already exists/);
+    assert.equal(fs.readFileSync(lock, 'utf8'), content);
+    for (const [role, bytes] of Object.entries(before)) assert.deepEqual(fs.readFileSync(f.files[role]), bytes);
+    assert.deepEqual(fs.readFileSync(path.join(f.workflow, 'state.json')), state);
+    assert.deepEqual(f.ledger, ledger);
+    assert.equal(f.calls(), 0);
+  });
+}
 
 test('lease theft after one canonical write prevents further writes or completion', t => {
   const f = fixture(t);
@@ -760,6 +772,22 @@ test('hard process crash retains the durable receipt and lease; recovery waits f
   assert.equal(child.status, 86, child.stderr);
   Object.assign(f.ledger, read(ledgerFile));
   assert.ok(f.ledger.dateAudits[f.key].executorToken);
+  const lock = path.join(f.root, 'data/people/generated/date-workflow-run.lock');
+  const retainedLock = fs.readFileSync(lock);
+  const durableReceipt = path.join(f.root, 'data/people/combined-curations', f.spec.book, f.spec.chapter, `${f.hash.slice(7)}.json`);
+  const retainedReceipt = fs.readFileSync(durableReceipt);
+  const retainedState = fs.readFileSync(path.join(f.workflow, 'state.json'));
+  const retainedFiles = Object.fromEntries(Object.entries(f.files).map(([role, file]) => [role, fs.readFileSync(file)]));
+  const retainedLedger = structuredClone(f.ledger);
+  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /run lock already exists/);
+  assert.deepEqual(fs.readFileSync(lock), retainedLock);
+  assert.deepEqual(fs.readFileSync(durableReceipt), retainedReceipt);
+  assert.deepEqual(fs.readFileSync(path.join(f.workflow, 'state.json')), retainedState);
+  for (const [role, bytes] of Object.entries(retainedFiles)) assert.deepEqual(fs.readFileSync(f.files[role]), bytes);
+  assert.deepEqual(f.ledger, retainedLedger);
+  assert.equal(f.calls(), 0);
+  // Test-only, isolated fixture simulation of separately authorized host recovery.
+  fs.unlinkSync(lock);
   assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /Concurrent date executor/);
   f.ledger.dateAudits[f.key].executorExpiresAt = new Date(0).toISOString();
   publishCombinedCuration(f.receipt, f.hash, f.options);
