@@ -5,7 +5,7 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { normalizeExtractionDateHints } from './lib/people-date-hints.mjs';
-import { deathOnlyChronology, hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
+import { deathOnlyChronology, hasDateBearingChronology, temporalContainers, westernBoundsErrors } from './lib/people-date-values.mjs';
 import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
 import {
   buildPeopleChunkWorkerPacket,
@@ -802,6 +802,23 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
     const receptionOnlyEvidence = personClaims.some(claim =>
       claim.predicate === 'event-participation' && personClaimReception(claim));
     const externalPrimaryChronology = hasValidatedExternalPrimaryChronology(person, packet, errors);
+    // An explicit unresolved hold with source-date text remains a hold;
+    // independent date audit must verify evidence and event ownership.
+    const hold = value => value?.unresolved === true &&
+      typeof value.unresolvedReason === 'string' && value.unresolvedReason.trim().length >= 20 &&
+      typeof value.sourceDate?.text === 'string' && value.sourceDate.text.trim().length > 0 &&
+      !value.westernYear && !value.westernInterval && !value.westernBounds;
+    const sourceAttestations = personClaims.filter(claim => claim.predicate === 'attestation');
+    const temporalClaims = personClaims.filter(claim => hasDateBearingChronology(claim.value));
+    const unresolvedOnlyEvidence = sourceAttestations.length > 0 &&
+      sourceAttestations.every(claim => claim.value?.undatedSourceAttestation === true || hold(claim.value)) &&
+      temporalClaims.length > 0 && temporalClaims.every(claim => {
+        if (claim.predicate === 'death' ||
+            (claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
+            (claim.predicate === 'event-participation' && claim.value?.kind === 'death' && claim.value?.role === 'deceased')) return false;
+        const containers = temporalContainers(claim.value);
+        return containers.length > 0 && containers.every(hold);
+      });
     if (!personClaims.some((claim) => claim.predicate === 'name')) {
       errors.push(`${person.localId} has no name claim`);
     }
@@ -815,7 +832,7 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
-      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence && !deathOnlyEvidence) {
+      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !deathOnlyEvidence) {
         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
       }
       if (!attestations.length && !lifeChronology && !personalCeremony && !externalPrimaryChronology && !receptionOnlyEvidence) {
@@ -832,10 +849,10 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [
