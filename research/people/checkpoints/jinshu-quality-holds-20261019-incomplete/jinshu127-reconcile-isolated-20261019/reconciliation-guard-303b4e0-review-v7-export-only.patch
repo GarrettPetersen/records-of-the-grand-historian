@@ -1,0 +1,1121 @@
+--- a/scripts/lib/people-translation-repairs.mjs
++++ b/scripts/lib/people-translation-repairs.mjs
+@@ -1,3 +1,4 @@
++import { createHash } from 'node:crypto';
+ import {
+   exactSpanAt,
+   setTranslationField,
+@@ -521,17 +522,6 @@
+   return span;
+ }
+ 
+-function glossaryIds(candidate) {
+-  return new Set(candidate.detectors.flatMap((detector) =>
+-    Number.isInteger(detector.glossaryId) ? [detector.glossaryId] : []
+-  ));
+-}
+-
+-function sharedGlossaryEntry(left, right) {
+-  const leftIds = glossaryIds(left);
+-  return leftIds.size > 0 && [...glossaryIds(right)].some((id) => leftIds.has(id));
+-}
+-
+ function candidateExpandedSpan(aliasSpan, unitId, language, candidates) {
+   const enclosing = candidates.filter((candidate) =>
+     candidate.unit === unitId &&
+@@ -563,6 +553,60 @@
+   };
+ }
+ 
++function reviewHash(value) {
++  return createHash('sha256').update(JSON.stringify(value)).digest('hex');
++}
++
++// Unscanned surfaces have no scanner ID or disposition slot. Present every
++// occurrence, including homonyms, as a single indivisible review packet. The
++// fingerprint binds the *entire* extraction, both packets, and reconciliation
++// settings, not merely a candidate ID or an editable sentence snippet.
++function reviewUnscannedSurfaces(extraction, revisedPacket, options, reconciled, unitById) {
++  const items = new Map();
++  for (const person of reconciled.people) {
++    const aliases = new Set([
++      person.preferredNameSuggestion?.en,
++      ...reconciled.claims.filter(c => c.subject === person.localId && c.predicate === 'name')
++        .map(c => c.value?.en),
++    ].filter(value => typeof value === 'string' && value.trim()));
++    const contextUnits = new Set([
++      ...reconciled.mentions.filter(m => m.person === person.localId).map(m => m.unit.id),
++      ...reconciled.claims.filter(c => c.subject === person.localId).flatMap(c => c.evidence.map(e => e.split(':').at(-1))),
++    ]);
++    for (const unitId of contextUnits) {
++      const unit = unitById.get(unitId);
++      if (!unit) continue;
++      for (const exact of aliases) for (const span of exactOccurrences(unit.en, exact, 'en')) {
++        const covered = reconciled.mentions.some(m => m.unit.id === unitId && m.spans.en.some(s =>
++          s.startCodePoint <= span.startCodePoint && s.endCodePoint >= span.endCodePoint));
++        const scanned = revisedPacket.preflight.candidates.some(c => c.unit === unitId && c.language === 'en' &&
++          c.startCodePoint <= span.startCodePoint && c.endCodePoint >= span.endCodePoint);
++        if (covered || scanned) continue;
++        const key = JSON.stringify([unitId, span.startCodePoint, span.endCodePoint]);
++        if (!items.has(key)) items.set(key, { unit: unitId, span, source: { zh: unit.zh, en: unit.en, literal: unit.literal }, people: [] });
++        items.get(key).people.push(person.localId);
++      }
++    }
++  }
++  if (!items.size) {
++    if (options.unscannedReview) throw new Error('Unexpected unscanned review: no unscanned surfaces');
++    return;
++  }
++  const entries = [...items.values()].map(item => ({ ...item, people: [...new Set(item.people)].sort() }));
++  const packet = {
++    version: 1,
++    inputFingerprint: reviewHash({ extraction, revisedPacket, previousPacket: options.previousPacket ?? null,
++      markRepairsApplied: options.markRepairsApplied !== false }),
++    items: entries.map(item => ({ id: reviewHash(item), ...item })),
++  };
++  packet.packetFingerprint = reviewHash(packet);
++  const error = new Error(options.unscannedReview
++    ? 'Unscanned review replay disabled: no trusted dispatch verifier is configured'
++    : `Unscanned name surface requires source review: ${packet.items.length} occurrence(s)`);
++  error.unscannedReviewPacket = packet;
++  throw error;
++}
++
+ export function assignExplicitCandidatePeople(reconciled, packet, requested) {
+   if (requested.length === 0) return reconciled;
+   // Work on a clone so a rejected batch cannot leave partial edits behind.
+@@ -1262,8 +1306,29 @@
+     mention.candidateRefs = [];
+   }
+   const previousDispositions = structuredClone(reconciled.candidateDispositions);
++  // Stable candidate IDs do not fingerprint their surrounding text. Preserve
++  // a reviewed disposition only when the source and display unit are unchanged,
++  // or the caller supplied no previous packet but the entire input fingerprint
++  // is demonstrably unchanged. Changed dispositions require fresh review.
++  const unchangedContext = (candidate) => {
++    if (!options.previousPacket) return typeof extraction.input?.chapterFingerprint === 'string' &&
++      extraction.input.chapterFingerprint === revisedPacket.input?.chapterFingerprint;
++    const before = previousUnitById.get(candidate.unit);
++    const after = unitById.get(candidate.unit);
++    return Boolean(before && after && before.zh === after.zh && before.en === after.en);
++  };
++  const blockedCandidates = new Set();
++  for (const candidate of revisedPacket.preflight.candidates) {
++    if (unchangedContext(candidate)) continue;
++    if (previousDispositions.some((disposition) => {
++      const previous = previousCandidateById.get(disposition.candidate);
++      return disposition.candidate === candidate.id || Boolean(previous &&
++        previous.unit === candidate.unit && previous.language === candidate.language &&
++        previous.exact === candidate.exact);
++    })) blockedCandidates.add(candidate.id);
++  }
+   reconciled.candidateDispositions = reconciled.candidateDispositions.filter((item) =>
+-    validCandidateIds.has(item.candidate)
++    validCandidateIds.has(item.candidate) && !blockedCandidates.has(item.candidate)
+   );
+ 
+   const unresolvedSpans = [];
+@@ -1490,25 +1555,12 @@
+   );
+ 
+   const accounted = new Set(reconciled.candidateDispositions.map((item) => item.candidate));
+-  const knownPolities = new Set(reconciled.people.flatMap((person) =>
+-    person.identityHints.polityHints ?? []
+-  ));
+-  const knownReignPeriods = new Set();
+-  for (const unit of revisedPacket.units) {
+-    for (const text of [unit.en, unit.literal]) {
+-      for (const match of text.matchAll(/\b([A-Z][\p{L}'’-]*)[ \t]+era\b/gu)) {
+-        knownReignPeriods.add(match[1]);
+-      }
+-      for (const match of text.matchAll(
+-        /\b(?:in|of)[ \t]+([A-Z][\p{L}'’-]*)[ \t]+(?:year[ \t]+\d+|\d+)\b/gu,
+-      )) {
+-        knownReignPeriods.add(match[1]);
+-      }
+-    }
+-  }
+-
+   const unresolvedCandidates = [];
+   for (const candidate of revisedPacket.preflight.candidates) {
++    if (blockedCandidates.has(candidate.id)) {
++      unresolvedCandidates.push(candidate.id);
++      continue;
++    }
+     if (accounted.has(candidate.id)) continue;
+     const remappedPriorDispositions = previousDispositions.filter((disposition) => {
+       const previous = previousCandidateById.get(disposition.candidate);
+@@ -1519,7 +1571,9 @@
+       ) return false;
+       const previousUnit = previousUnitById.get(previous.unit);
+       const revisedUnit = unitById.get(candidate.unit);
+-      if (!previousUnit || !revisedUnit) return false;
++      if (!previousUnit || !revisedUnit || !unchangedContext(candidate)) return false;
++      if (previous.exact === candidate.exact && previous.occurrence === candidate.occurrence &&
++          previous.startCodePoint === candidate.startCodePoint && previous.endCodePoint === candidate.endCodePoint) return true;
+       const remapped = remapMentionSpanThroughEdit(
+         { exact: previous.exact, occurrence: previous.occurrence },
+         previousUnit[previous.language],
+@@ -1541,41 +1595,6 @@
+       accounted.add(candidate.id);
+       continue;
+     }
+-    const priorSurfaceDispositions = previousDispositions.filter((disposition) => {
+-      const previous = previousCandidateById.get(disposition.candidate);
+-      return previous &&
+-        previous.language === candidate.language &&
+-        previous.exact === candidate.exact;
+-    });
+-    const priorDispositionKinds = new Set(priorSurfaceDispositions.map((item) =>
+-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+-    ));
+-    if (priorSurfaceDispositions.length > 0 && priorDispositionKinds.size === 1) {
+-      reconciled.candidateDispositions.push({
+-        ...structuredClone(priorSurfaceDispositions[0]),
+-        candidate: candidate.id,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    const counterpartDispositions = reconciled.candidateDispositions.filter((disposition) => {
+-      const counterpart = candidateById.get(disposition.candidate);
+-      return counterpart &&
+-        counterpart.unit === candidate.unit &&
+-        counterpart.language !== candidate.language &&
+-        sharedGlossaryEntry(counterpart, candidate);
+-    });
+-    const dispositionKinds = new Set(counterpartDispositions.map((item) =>
+-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+-    ));
+-    if (counterpartDispositions.length > 0 && dispositionKinds.size === 1) {
+-      reconciled.candidateDispositions.push({
+-        ...structuredClone(counterpartDispositions[0]),
+-        candidate: candidate.id,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+     const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+     if (containing.length === 1) {
+       containing[0].candidateRefs.push(candidate.id);
+@@ -1614,6 +1633,17 @@
+           .map((span) => ({ mention, span }))
+         : []
+     );
++    // An explicitly reviewed occurrence is not evidence that every identical
++    // occurrence in the same unit refers to the same person.
++    if (reconciled.mentions.some((mention) =>
++      mention.unit.id === candidate.unit && mention.spans[candidate.language].some((span) =>
++        span.exact === candidate.exact && !spansOverlap(candidate, span)
++      )
++    )) {
++      blockedCandidates.add(candidate.id);
++      unresolvedCandidates.push(candidate.id);
++      continue;
++    }
+     if (partialOverlaps.length === 1) {
+       const { mention, span } = partialOverlaps[0];
+       const replacement = coveringSpan(
+@@ -1657,6 +1687,24 @@
+         }
+       }
+     }
++    // Source context can establish a person's name or title without proving
++    // which occurrence in another language denotes them. Keep that surface
++    // unresolved before any generic non-person classification can claim it.
++    const localEnglish = candidate.language === 'en' ? [...unitById.get(candidate.unit).en] : [];
++    const localBefore = localEnglish.slice(0, candidate.startCodePoint).join('');
++    const localAfter = localEnglish.slice(candidate.endCodePoint).join('');
++    const explicitLocalEra = candidate.language === 'en' &&
++      (/^[ \t]+era\b/u.test(localAfter) ||
++        (/\b(?:in|of)[ \t]+$/iu.test(localBefore) && /^[ \t]+(?:year[ \t]+\d+|\d+)\b/iu.test(localAfter)));
++    if (!explicitLocalEra && partialOverlaps.length === 0 && reconciled.people.some((person) =>
++      aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
++        .some((alias) => surfaceContains(alias.exact, candidate.exact, candidate.language) ||
++          surfaceContains(candidate.exact, alias.exact, candidate.language))
++    )) {
++      blockedCandidates.add(candidate.id);
++      unresolvedCandidates.push(candidate.id);
++      continue;
++    }
+     if (addLeadingParentheticalAlias(
+       reconciled,
+       candidate,
+@@ -1673,145 +1721,10 @@
+       accounted.add(candidate.id);
+       continue;
+     }
+-    let aliasMatches = reconciled.people.flatMap((person) =>
+-      aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
+-        .filter((alias) => {
+-          if (surfaceContains(candidate.exact, alias.exact, candidate.language)) return true;
+-          const fragmentMatch = surfaceContains(alias.exact, candidate.exact, candidate.language) ||
+-            (candidate.language === 'en' && sharedWordCount(candidate.exact, alias.exact) >= 2);
+-          if (!fragmentMatch) return false;
+-          return exactOccurrences(
+-            unitById.get(candidate.unit)[candidate.language],
+-            alias.exact,
+-            candidate.language,
+-          )
+-            .some((span) => spansOverlap(span, candidate));
+-        })
+-        .map((alias) => ({ person: person.localId, alias }))
+-    );
+-    const exactAliasMatches = aliasMatches.filter((item) => item.alias.exact === candidate.exact);
+-    if (exactAliasMatches.length > 0) aliasMatches = exactAliasMatches;
+-    if (
+-      aliasMatches.length === 0 &&
+-      candidate.language === 'en' &&
+-      !ENGLISH_CONTEXTUAL_PERSON_TITLES.has(candidate.exact) &&
+-      (candidate.exact.includes(' ') || [...candidate.exact].length >= 4)
+-    ) {
+-      aliasMatches = reconciled.claims.flatMap((claim) => {
+-        if (claim.predicate !== 'name' || claim.value?.[candidate.language] !== candidate.exact) {
+-          return [];
+-        }
+-        return [{
+-          person: claim.subject,
+-          alias: {
+-            exact: candidate.exact,
+-            kind: mentionKindForNameKind(claim.value?.kind),
+-            preferred: false,
+-          },
+-        }];
+-      });
+-    }
+-    if (
+-      aliasMatches.length === 0 &&
+-      !(
+-        candidate.language === 'en' &&
+-        ENGLISH_CONTEXTUAL_PERSON_TITLES.has(candidate.exact)
+-      )
+-    ) {
+-      aliasMatches = reconciled.people.flatMap((person) => {
+-        const exact = person.preferredNameSuggestion?.[candidate.language];
+-        if (exact !== candidate.exact) return [];
+-        const nameClaim = reconciled.claims.find((claim) =>
+-          claim.subject === person.localId &&
+-          claim.predicate === 'name' &&
+-          claim.value?.[candidate.language] === exact
+-        );
+-        return [{
+-          person: person.localId,
+-          alias: {
+-            exact,
+-            kind: mentionKindForNameKind(nameClaim?.value?.kind),
+-            preferred: true,
+-          },
+-        }];
+-      });
+-    }
+-    const matchingPeople = new Set(aliasMatches.map((item) => item.person));
+-    if (matchingPeople.size === 1) {
+-      const person = [...matchingPeople][0];
+-      const unit = unitById.get(candidate.unit);
+-      const match = aliasMatches.find((item) => item.person === person);
+-      const aliasOccurrences = exactOccurrences(
+-        unit[candidate.language],
+-        match.alias.exact,
+-        candidate.language,
+-      );
+-      const aliasSpan = candidate.exact.includes(match.alias.exact)
+-        ? exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence)
+-        : aliasOccurrences.find((span) => spansOverlap(span, candidate)) ?? aliasOccurrences[0];
+-      const overlapping = reconciled.mentions.filter((mention) =>
+-        mention.person === person &&
+-        mention.unit.id === candidate.unit &&
+-        mention.spans[candidate.language].some((span) => spansOverlap(span, aliasSpan))
+-      );
+-      const conflicts = reconciled.mentions.some((mention) =>
+-        mention.person !== person &&
+-        mention.unit.id === candidate.unit &&
+-        mention.spans[candidate.language].some((span) => spansOverlap(span, aliasSpan))
+-      );
+-      if (overlapping.length === 1 && !conflicts) {
+-        const mention = overlapping[0];
+-        mention.spans[candidate.language] = mention.spans[candidate.language]
+-          .filter((span) => !spansOverlap(span, aliasSpan));
+-        mention.spans[candidate.language].push(aliasSpan);
+-        mention.kind = match.alias.kind;
+-        mention.candidateRefs.push(candidate.id);
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (addAliasMention(
+-        reconciled,
+-        unit,
+-        person,
+-        candidate.language,
+-        match.alias.kind,
+-        aliasSpan,
+-      )) {
+-        const mention = reconciled.mentions.at(-1);
+-        mention.candidateRefs.push(candidate.id);
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-    }
+-    if (candidate.language === 'en') {
+-      const unitIndex = revisedPacket.units.findIndex((unit) => unit.id === candidate.unit);
+-      const previousUnitId = revisedPacket.units[unitIndex - 1]?.id;
+-      const precedingMatches = reconciled.mentions.filter((mention) =>
+-        mention.unit.id === previousUnitId &&
+-        mention.spans.en.some((span) => span.exact === candidate.exact)
+-      );
+-      const precedingPeople = new Set(precedingMatches.map((mention) => mention.person));
+-      if (precedingPeople.size === 1) {
+-        const prior = precedingMatches[0];
+-        const span = exactSpanAt(
+-          unitById.get(candidate.unit).en,
+-          candidate.exact,
+-          candidate.occurrence,
+-        );
+-        if (addAliasMention(
+-          reconciled,
+-          unitById.get(candidate.unit),
+-          prior.person,
+-          'en',
+-          prior.kind,
+-          span,
+-        )) {
+-          reconciled.mentions.at(-1).candidateRefs.push(candidate.id);
+-          accounted.add(candidate.id);
+-          continue;
+-        }
+-      }
+-    }
++    // A same-unit name claim or a mention in another language identifies a
++    // person in the unit, not the referent of this exact surface occurrence.
++    // Existing same-language span geometry above can account for it; a new
++    // occurrence otherwise requires an explicit reviewed assignment.
+     const overlapPeople = new Set(partialOverlaps.map(({ mention }) => mention.person));
+     if (partialOverlaps.length > 1 && overlapPeople.size > 1) {
+       const titlePeople = new Set(partialOverlaps
+@@ -1899,26 +1812,18 @@
+         }
+       }
+     }
+-    if (candidate.language === 'en' && knownPolities.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'polity',
+-        note: `Known polity from chapter identity hints: ${candidate.exact}`,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
++    if (candidate.language === 'en') {
++      if (explicitLocalEra) {
++        reconciled.candidateDispositions.push({
++          candidate: candidate.id,
++          disposition: 'not-person',
++          reason: 'reign-period',
++          note: `Explicit local reign-period expression: ${candidate.exact}`,
++        });
++        accounted.add(candidate.id);
++        continue;
++      }
+     }
+-    if (candidate.language === 'en' && knownReignPeriods.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'reign-period',
+-        note: `Reign-period name established elsewhere in the chapter: ${candidate.exact}`,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+     if (candidate.language === 'en') {
+       const unitText = unitById.get(candidate.unit).en;
+       const codePoints = [...unitText];
+@@ -2602,6 +2507,7 @@
+   // unresolved fragment. Recheck after all mention growth so candidate order
+   // does not create a false failure.
+   for (const candidateId of unresolvedCandidates) {
++    if (blockedCandidates.has(candidateId)) continue;
+     const candidate = revisedPacket.preflight.candidates.find((item) => item.id === candidateId);
+     const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+     if (containing.length === 1) containing[0].candidateRefs.push(candidate.id);
+@@ -2628,6 +2534,7 @@
+     for (const candidateId of mention.candidateRefs) finalAccounted.add(candidateId);
+   }
+   const unresolvedAfterFinalMerge = revisedPacket.preflight.candidates.filter((candidate) => {
++    if (blockedCandidates.has(candidate.id)) return true;
+     if (finalAccounted.has(candidate.id)) return false;
+     const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+     if (containing.length !== 1) return true;
+@@ -2658,44 +2565,13 @@
+     !nestedStringValues(claim.value).some((value) => unsupportedPeople.has(value))
+   );
+ 
+-  // A reviewed repair can introduce a person's preferred romanization only
+-  // once, below the scanner's repeated-single-token threshold. When that
+-  // person is already evidenced in the same unit, restore the exact display
+-  // link after stale conflicting spans and unsupported people are gone.
+-  for (const person of reconciled.people) {
+-    const exact = person.preferredNameSuggestion?.en;
+-    if (typeof exact !== 'string' || !exact.trim()) continue;
+-    // An attested name such as He does not make every English pronoun a name.
+-    // Preserve explicit mentions; require source review for new ambiguous ones.
+-    if (ENGLISH_PRONOUN_NAME_COLLISIONS.has(exact.trim().toLowerCase())) continue;
+-    const contextUnits = new Set([
+-      ...reconciled.mentions
+-        .filter((mention) => mention.person === person.localId)
+-        .map((mention) => mention.unit.id),
+-      ...reconciled.claims
+-        .filter((claim) => claim.subject === person.localId)
+-        .flatMap((claim) => claim.evidence.map((evidence) => evidence.split(':').at(-1))),
+-    ]);
+-    for (const unitId of contextUnits) {
+-      const unit = unitById.get(unitId);
+-      if (!unit) continue;
+-      for (const span of exactOccurrences(unit.en, exact, 'en')) {
+-        const alreadyLinked = reconciled.mentions.some((mention) =>
+-          mention.person === person.localId &&
+-          mention.unit.id === unitId &&
+-          mention.spans.en.some((current) =>
+-            current.startCodePoint <= span.startCodePoint && current.endCodePoint >= span.endCodePoint
+-          )
+-        );
+-        if (alreadyLinked) continue;
+-        addAliasMention(reconciled, unit, person.localId, 'en', 'personal-name', span);
+-      }
+-    }
+-  }
++  // No caller can silently skip an unscanned occurrence. Export its complete
++  // fingerprinted packet, but refuse replay until host dispatch verification
++  // is actually available.
++  reviewUnscannedSurfaces(extraction, revisedPacket, options, reconciled, unitById);
+ 
+-  // Preferred-name restoration runs after the main candidate pass and can
+-  // meet a surviving bilingual mention for the same person. Normalize once
+-  // more so the added display link shares that mention instead of overlapping it.
++  // Normalize retained and explicitly reviewed spans without introducing
++  // unreviewed display links from preferred names.
+   normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
+   removeUnsupportedCrossPersonOverlaps(reconciled, candidateById);
+   normalizeMentionGeometry(reconciled, unitById, candidateById, candidateOrder);
+--- a/scripts/apply-people-translation-repairs.mjs
++++ b/scripts/apply-people-translation-repairs.mjs
+@@ -77,6 +77,14 @@
+                          Assign a new revised-packet candidate to an existing
+                          local person using an explicit mention kind. May be
+                          repeated; LOCAL_PERSON may be p071 or the full ID.
++  --unscanned-review-packet PATH
++                         Write a new source-review packet if reconciliation
++                         finds unscanned name surfaces; requires
++                         --reconcile-current and never writes chapter data.
++                         Fails without writing when no surfaces are found.
++  --unscanned-review PATH
++                         Research-only: replay is disabled until a trusted
++                         reviewer-dispatch verifier exists.
+ 
+ Proposed repairs require a complete, independently authored editorial-decision
+ file. The command validates the review before editing, applies only accepted or
+@@ -93,6 +101,8 @@
+     reconcileCurrent: false,
+     candidateDispositions: [],
+     candidatePeople: [],
++    unscannedReviewPacket: null,
++    unscannedReview: null,
+     selfTest: false,
+   };
+   for (let index = 0; index < argv.length; index += 1) {
+@@ -107,6 +117,8 @@
+     else if (arg === '--extraction') opts.extraction = path.resolve(REPO_ROOT, next());
+     else if (arg === '--decisions') opts.decisions = path.resolve(REPO_ROOT, next());
+     else if (arg === '--reconcile-current') opts.reconcileCurrent = true;
++    else if (arg === '--unscanned-review-packet') opts.unscannedReviewPacket = path.resolve(REPO_ROOT, next());
++    else if (arg === '--unscanned-review') opts.unscannedReview = path.resolve(REPO_ROOT, next());
+     else if (arg === '--candidate-disposition') {
+       const value = next();
+       const separator = value.lastIndexOf('=');
+@@ -979,10 +991,16 @@
+   if (alternateSafePeople[0].preferredNameSuggestion.en !== 'Liu Zhan') {
+     throw new Error('Reviewed alternate-name claim overwrote the preferred person suggestion');
+   }
+-  const reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
++  let reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
+     previousPacket: oldPacket,
+   });
+-  if (reconciled.unresolvedCandidates.length > 0) throw new Error('Fixture left unresolved candidates');
++  if (reconciled.unresolvedCandidates.length !== 1) throw new Error(`Expected one repeated-name review candidate: ${reconciled.unresolvedCandidates.join(', ')}`);
++  const repeatedCandidate = revisedPacket.preflight.candidates.find((candidate) => candidate.id === reconciled.unresolvedCandidates[0]);
++  if (repeatedCandidate?.exact !== 'Liu Zhan' || repeatedCandidate.occurrence !== 1) throw new Error('Unexpected repeated-name review candidate');
++  // The fixture's independent reviewer assigns the second occurrence to the
++  // person; identical surfaces alone must not make this decision automatically.
++  reconciled = assignExplicitCandidatePeople(reconciled, revisedPacket, [{ candidate: repeatedCandidate.id, person: 'p001', kind: 'personal-name' }]);
++  if (reconciled.unresolvedCandidates.length > 0) throw new Error('Explicit fixture review left unresolved candidates');
+   if (reconciled.unresolvedSpans.length > 0) throw new Error('Fixture left unresolved mention spans');
+   const repeatedSpans = reconciled.extraction.mentions
+     .filter((mention) => mention.person === 'fixture:001:p001' && mention.unit.id === 's0001')
+@@ -1185,7 +1203,7 @@
+         detectors: [{ kind: 'english-capitalized-expression' }],
+       }, {
+         id: 'fixture:002:cand_jianwu', unit: 's0006', language: 'en',
+-        exact: 'Jianwu', occurrence: 0, startCodePoint: 11, endCodePoint: 18,
++        exact: 'Jianwu', occurrence: 0, startCodePoint: 11, endCodePoint: 17,
+         detectors: [{ kind: 'english-capitalized-expression' }],
+       }, {
+         id: 'fixture:002:cand_nan', unit: 's0007', language: 'en',
+@@ -1368,7 +1386,7 @@
+         collection: 'sentences', itemIndex: 0,
+       },
+       kind: 'personal-name',
+-      spans: { zh: [{ exact: '芝', occurrence: 0 }], en: [] },
++      spans: { zh: [{ exact: '芝', occurrence: 0 }], en: [{ exact: 'Zhi', occurrence: 0 }] },
+       candidateRefs: [],
+     }, {
+       id: 'fixture:002:m0004',
+@@ -1378,7 +1396,7 @@
+         collection: 'sentences', itemIndex: 0,
+       },
+       kind: 'personal-name',
+-      spans: { zh: [{ exact: '葛祗', occurrence: 0 }], en: [] },
++      spans: { zh: [{ exact: '葛祗', occurrence: 0 }], en: [{ exact: 'Ge Zhi', occurrence: 0 }] },
+       candidateRefs: [],
+     }, {
+       id: 'fixture:002:m0005',
+@@ -1490,8 +1508,9 @@
+     previousPacket: previousFragmentPacket,
+     markRepairsApplied: false,
+   });
+-  if (fragments.unresolvedCandidates.length > 0) {
+-    throw new Error('Fragment reconciliation fixture left unresolved candidates');
++  const expectedReviewCandidates = ['fixture:002:cand_anping_title', 'fixture:002:cand_gaozu', 'fixture:002:cand_guojiu', 'fixture:002:cand_henei_en', 'fixture:002:cand_reused_title_place', 'fixture:002:cand_reused_title_prefix'];
++  if (JSON.stringify([...fragments.unresolvedCandidates].sort()) !== JSON.stringify(expectedReviewCandidates)) {
++    throw new Error(`Unexpected fragment review candidates: ${fragments.unresolvedCandidates.join(', ')}`);
+   }
+   if (fragments.extraction.mentions.some((mention) =>
+     mention.spans.en.some((span) => span.exact === 'Bao')
+@@ -1515,7 +1534,10 @@
+   const inherited = fragments.extraction.candidateDispositions.find((item) =>
+     item.candidate === 'fixture:002:cand_henei_en' && item.reason === 'place'
+   );
+-  if (!inherited) throw new Error('Bilingual glossary candidate did not inherit its disposition');
++  if (inherited) throw new Error('Bilingual glossary candidate inherited an unreviewed disposition');
++  if (!fragments.extraction.candidateDispositions.some(item => item.candidate === 'fixture:002:cand_henei_zh' && item.reason === 'place')) {
++    throw new Error('Reviewed Chinese place disposition was lost');
++  }
+   const boundedName = fragments.extraction.mentions.find((mention) =>
+     mention.person === 'fixture:002:p003' &&
+     mention.spans.en.some((span) => span.exact === 'Liu Xin')
+@@ -1524,14 +1546,9 @@
+   if (boundedName.spans.en.length !== 1 || boundedName.spans.en[0].exact !== 'Liu Xin') {
+     throw new Error('Contained alias span was not collapsed into the widest person mention');
+   }
+-  const preferredNameMention = fragments.extraction.mentions.find((mention) =>
+-    mention.person === 'fixture:002:p004' &&
+-    mention.unit.id === 's0009' &&
+-    mention.spans.en.some((span) => span.exact === 'Gaozu')
+-  );
+-  if (!preferredNameMention) {
+-    throw new Error('Unique preferred name did not acquire a mention in a newly repaired unit');
+-  }
++  if (fragments.extraction.mentions.some((mention) =>
++    mention.unit.id === 's0009' && mention.spans.en.some((span) => span.exact === 'Gaozu')
++  )) throw new Error('A name in a new unit was inferred from a chapter-wide preferred name');
+   const restoredFullName = fragments.extraction.mentions.find((mention) =>
+     mention.person === 'fixture:002:p006' &&
+     mention.unit.id === 's0012' &&
+@@ -1540,23 +1557,12 @@
+   if (!restoredFullName) {
+     throw new Error('Restored full name did not outrank its contained shorter alias');
+   }
+-  const restoredTitle = fragments.extraction.mentions.find((mention) =>
+-    mention.person === 'fixture:002:p001' &&
+-    mention.unit.id === 's0017' &&
+-    mention.kind === 'title-reference' &&
+-    mention.spans.en.some((span) => span.exact === 'Prince of Anping')
+-  );
+-  if (!restoredTitle) {
+-    throw new Error('A corrected full title did not become a linked person mention');
+-  }
+-  const reusedTitle = fragments.extraction.mentions.find((mention) =>
+-    mention.person === 'fixture:002:p001' &&
+-    mention.unit.id === 's0024' &&
+-    mention.spans.en.some((span) => span.exact === 'Prince of Anping')
+-  );
+-  if (!reusedTitle) {
+-    throw new Error('Established title was not reused for a later explicit person context');
+-  }
++  if (fragments.extraction.mentions.some((mention) =>
++    mention.unit.id === 's0017' && mention.spans.en.some((span) => span.exact === 'Prince of Anping')
++  )) throw new Error('A title was inferred from same-unit claims without occurrence-level evidence');
++  if (fragments.extraction.mentions.some((mention) =>
++    mention.unit.id === 's0024' && mention.spans.en.some((span) => span.exact === 'Prince of Anping')
++  )) throw new Error('A title was inferred from another unit without occurrence-level evidence');
+   const expectedNonPeople = new Map([
+     ['fixture:002:cand_only', 'not-a-name'],
+     ['fixture:002:cand_am_i', 'not-a-name'],
+@@ -1567,7 +1573,6 @@
+     ['fixture:002:cand_xi_people', 'collective'],
+     ['fixture:002:cand_ru_prefecture', 'place'],
+     ['fixture:002:cand_meritorious_subject', 'title'],
+-    ['fixture:002:cand_guojiu', 'office'],
+     ['fixture:002:cand_wei_hour', 'other'],
+     ['fixture:002:cand_yaolian_palace', 'organization'],
+     ['fixture:002:cand_lidui_place', 'place'],
+@@ -1711,6 +1716,8 @@
+       semanticMention('m0004', 'p004', 's0003', 'personal-name', 'en', 'Chongyuan'),
+       semanticMention('m0005', 'p004', 's0003', 'title-reference', 'zh', '皇太弟重元'),
+       semanticMention('m0006', 'p006', 's0014', 'personal-name', 'zh', '博啓圖'),
++      semanticMention('m0007', 'p005', 's0004', 'personal-name', 'en', 'Wei Shou'),
++      semanticMention('m0008', 'p006', 's0014', 'personal-name', 'en', 'Boqitu'),
+     ],
+     claims: [
+       semanticClaim('c0001', 'p001', 's0001', 'name', { kind: 'temple-name', en: 'Yizu', zh: '懿祖' }),
+@@ -1866,8 +1873,27 @@
+   console.log('apply-people-translation-repairs self-test: ok');
+ }
+ 
++function reconcileWithUnscannedReview(extraction, packet, options, opts) {
++  try {
++    return reconcileExtractionAfterRepairs(extraction, packet, {
++      ...options,
++      unscannedReview: opts.unscannedReview ? readJson(opts.unscannedReview) : undefined,
++    });
++  } catch (error) {
++    if (error.unscannedReviewPacket && opts.unscannedReviewPacket) {
++      fs.writeFileSync(opts.unscannedReviewPacket, `${JSON.stringify(error.unscannedReviewPacket, null, 2)}\n`, { flag: 'wx' });
++      error.message += `; review packet written to ${opts.unscannedReviewPacket}`;
++    }
++    throw error;
++  }
++}
++
+ export function applyPeopleTranslationRepairs(opts) {
+   if (!opts.book || !opts.chapter) throw new Error('--book and --chapter are required');
++  if (opts.unscannedReviewPacket && (!opts.reconcileCurrent || opts.unscannedReview ||
++      opts.candidatePeople?.length || opts.candidateDispositions?.length)) {
++    throw new Error('Unscanned packet export requires only --reconcile-current; review or candidate decisions are not allowed');
++  }
+ 
+   const chapterFile = chapterPath(opts.book, opts.chapter);
+   const extractionFile = opts.extraction ?? extractionPath(opts.book, opts.chapter);
+@@ -1889,10 +1915,14 @@
+   }
+ 
+   if (opts.reconcileCurrent) {
++    const rawReconciled = reconcileWithUnscannedReview(extraction, currentPacket, {
++      markRepairsApplied: false,
++    }, opts);
++    if (opts.unscannedReviewPacket) {
++      throw new Error('No unscanned name surfaces found; export-only mode made no writes');
++    }
+     const reconciled = applyExplicitCandidateDispositions(
+-      assignExplicitCandidatePeople(reconcileExtractionAfterRepairs(extraction, currentPacket, {
+-        markRepairsApplied: false,
+-      }), currentPacket, opts.candidatePeople),
++      assignExplicitCandidatePeople(rawReconciled, currentPacket, opts.candidatePeople),
+       currentPacket,
+       opts.candidateDispositions,
+     );
+@@ -2010,9 +2040,9 @@
+     properNounMatcher: matcher,
+   });
+   const reconciled = applyExplicitCandidateDispositions(
+-    assignExplicitCandidatePeople(reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
++    assignExplicitCandidatePeople(reconcileWithUnscannedReview(reviewedExtraction, revisedPacket, {
+       previousPacket: oldPacket,
+-    }), revisedPacket, opts.candidatePeople),
++    }, opts), revisedPacket, opts.candidatePeople),
+     revisedPacket,
+     opts.candidateDispositions,
+   );
+--- a/scripts/test-people-repair-name-collisions.mjs
++++ b/scripts/test-people-repair-name-collisions.mjs
+@@ -9,7 +9,7 @@
+   const person = 'fixture:001:p001';
+   const packet = { book: 'fixture', chapter: '001', input: {}, units: [unit],
+     preflight: { candidates: [] } };
+-  const extraction = { book: 'fixture', chapter: '001', input: {},
++  const extraction = { book: 'fixture', chapter: '001', input: {}, run: { agentId: 'author' },
+     people: [{ localId: person, preferredNameSuggestion: { en: name, zh: unit.zh },
+       identityHints: { polityHints: [], activeDateHints: [], relatedLocalPeople: [] } }],
+     mentions: linked ? [{ id: 'fixture:001:m0001', person,
+@@ -24,26 +24,89 @@
+ 
+ test('preserves a reviewed He name without linking a later English pronoun', () => {
+   const { extraction, packet } = fixture('He', 'He took the throne. He later marched.');
+-  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: packet });
+-  assert.deepEqual(result.unresolvedCandidates, []);
+-  assert.deepEqual(result.unresolvedSpans, []);
+-  const spans = result.extraction.mentions.flatMap(m => m.spans.en);
+-  assert.equal(spans.length, 1);
+-  assert.equal(spans[0].startCodePoint, 0);
++  let error;
++  try { reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: packet }); } catch (caught) { error = caught; }
++  assert.equal(error.unscannedReviewPacket.items[0].span.occurrence, 1);
++  assert.equal(extraction.mentions[0].spans.en.length, 1);
+ });
+ 
+ test('does not infer a pronoun-name link from a same-unit claim during current-source reconciliation', () => {
+   for (const name of ['He', 'She', 'I', 'You', 'We']) {
+     const { extraction, packet } = fixture(name, `${name} spoke.`, false);
+-    const result = reconcileExtractionAfterRepairs(extraction, packet, { markRepairsApplied: false });
+-    assert.equal(result.extraction.mentions.flatMap(m => m.spans.en).length, 0, name);
++    assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet, { markRepairsApplied: false }), /requires source review/, name);
++    assert.equal(extraction.mentions.length, 0, name);
+   }
+ });
+ 
+-test('still restores an unambiguous preferred romanization evidenced in the unit', () => {
++test('an unscanned preferred romanization requires source review rather than automatic linking', () => {
+   const { extraction, packet } = fixture('Boqitu', 'Boqitu was transferred.', false);
+-  const result = reconcileExtractionAfterRepairs(extraction, packet);
+-  assert.equal(result.extraction.mentions.flatMap(m => m.spans.en).filter(s => s.exact === 'Boqitu').length, 1);
++  assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet), /Unscanned name surface requires source review/);
++});
++
++test('unscanned repeated homonyms export exact occurrences and cannot replay without trust', () => {
++  const { extraction, packet } = fixture('Jin', 'Jin entered Jin.', false);
++  packet.units[0].zh = '進入晉';
++  let reviewPacket;
++  try { reconcileExtractionAfterRepairs(extraction, packet); }
++  catch (error) { reviewPacket = error.unscannedReviewPacket; }
++  assert.equal(reviewPacket.items.length, 2);
++  assert.deepEqual(reviewPacket.items.map(item => item.span.occurrence), [0, 1]);
++  const options = { unscannedReview: { packetFingerprint: reviewPacket.packetFingerprint, decisions: [] } };
++  assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet, options), /no trusted dispatch verifier/);
++  const changed = structuredClone(packet);
++  changed.units[0].zh += '。';
++  let changedPacket;
++  try { reconcileExtractionAfterRepairs(extraction, changed); } catch (error) { changedPacket = error.unscannedReviewPacket; }
++  assert.notEqual(changedPacket.packetFingerprint, reviewPacket.packetFingerprint);
++  const alteredExtraction = structuredClone(extraction);
++  alteredExtraction.claims[0].certainty = 'inferred';
++  let changedExtractionPacket;
++  try { reconcileExtractionAfterRepairs(alteredExtraction, packet); } catch (error) { changedExtractionPacket = error.unscannedReviewPacket; }
++  assert.notEqual(changedExtractionPacket.packetFingerprint, reviewPacket.packetFingerprint);
++  assert.deepEqual(extraction.mentions, [], 'replay must not mutate its input');
++});
++
++test('missing historical identity does not prevent export or authorize replay', () => {
++  const { extraction, packet } = fixture('Duan Hong', 'Duan Hong arrived.', false);
++  delete extraction.run.agentId;
++  extraction.run.chunks = [{ agentId: null }];
++  extraction.translationRepairs.push({ status: 'applied' });
++  assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet), /Unscanned name surface/);
++  assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet, { unscannedReview: {} }), /no trusted dispatch verifier/);
++});
++
++test('partial scanner overlap does not suppress the unscanned full name', () => {
++  const { extraction, packet } = fixture('Duan Hong', 'Duan Hong arrived.', false);
++  const unit = packet.units[0];
++  packet.preflight.candidates = [{ id: 'fixture:001:hong', unit: unit.id, language: 'en',
++    ...exactSpanAt(unit.en, 'Hong', 0), detectors: [] }];
++  let error;
++  try { reconcileExtractionAfterRepairs(extraction, packet); } catch (caught) { error = caught; }
++  assert.match(error.message, /Unscanned name surface/);
++  assert.equal(error.unscannedReviewPacket.items[0].span.exact, 'Duan Hong');
++});
++
++test('overlapping person and non-person unscanned reviews cannot contradict each other', () => {
++  const { extraction, packet } = fixture('Duan Hong', 'Duan Hong arrived.', false);
++  const other = structuredClone(extraction.people[0]);
++  other.localId = 'fixture:001:p002';
++  other.preferredNameSuggestion.en = 'Hong';
++  extraction.people.push(other);
++  const claim = structuredClone(extraction.claims[0]);
++  claim.id = 'fixture:001:c0002';
++  claim.subject = other.localId;
++  claim.value.en = 'Hong';
++  extraction.claims.push(claim);
++  let error;
++  try { reconcileExtractionAfterRepairs(extraction, packet); } catch (caught) { error = caught; }
++  const reviewPacket = error.unscannedReviewPacket;
++  assert.equal(reviewPacket.items.length, 2);
++  const review = { reviewerId: 'reviewer', packetFingerprint: reviewPacket.packetFingerprint,
++    decisions: reviewPacket.items.map(item => ({ id: item.id, sourceWitness: item.source,
++      note: 'Synthetic overlap review.', ...(item.span.exact === 'Duan Hong'
++        ? { kind: 'person', person: extraction.people[0].localId, mentionKind: 'personal-name' }
++        : { kind: 'not-person' }) })) };
++  assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet, { unscannedReview: review }), /no trusted dispatch verifier/);
+ });
+ 
+ test('rejects conflicting overlapping reviewed assignments before changing any spans', () => {
+--- /dev/null
++++ b/scripts/test-people-repair-ambiguity.mjs
+@@ -0,0 +1,193 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { exactSpanAt } from './lib/people-content.mjs';
++import { reconcileExtractionAfterRepairs } from './lib/people-translation-repairs.mjs';
++
++const locator = (id, index) => ({ id, kind: 'paragraph-sentence', blockIndex: 0, collection: 'sentences', itemIndex: index });
++const unit = (id, index, en, zh) => ({ ...locator(id, index), en, literal: en, zh });
++function candidate(id, unit, exact) {
++  return { id, unit: unit.id, language: 'en', ...exactSpanAt(unit.en, exact, 0), detectors: [] };
++}
++function fixture({ prior = false, polity = false } = {}) {
++  const u1 = unit('s0001', 0, 'The armies of Jin advanced.', '晉軍進。');
++  const u2 = unit('s0002', 1, 'De hid at Jin’s residence.', '德隱於進舍。');
++  const old = candidate('fixture:001:cand_old', u1, 'Jin');
++  const added = candidate('fixture:001:cand_new', u2, 'Jin');
++  const packet = { book: 'fixture', chapter: '001', input: {}, units: [u1, u2], preflight: { candidates: prior ? [old, added] : [added] } };
++  const previous = { ...packet, preflight: { candidates: prior ? [old] : [] } };
++  const person = 'fixture:001:p001';
++  const extraction = { book: 'fixture', chapter: '001', input: {}, run: { agentId: 'fixture-author' },
++    people: [{ localId: person, preferredNameSuggestion: { en: 'Xun Jin', zh: '遜進' }, identityHints: { polityHints: polity ? ['Jin'] : [], activeDateHints: [], relatedLocalPeople: [] } }],
++    mentions: [], claims: [{ id: 'fixture:001:c0001', subject: person, predicate: 'name', value: { kind: 'personal-name', en: 'Xun Jin', zh: '遜進' }, certainty: 'explicit', evidence: ['fixture:001:s0002'] }],
++    translationRepairs: [], candidateDispositions: prior ? [{ candidate: old.id, disposition: 'not-person', reason: 'polity', note: 'The source names the polity Jin in this unit.' }] : [],
++    coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] } };
++  return { extraction, packet, previous, old, added };
++}
++
++for (const config of [{ prior: true }, { polity: true }, { prior: true, polity: true }]) {
++  test(`ambiguous Jin remains unresolved: ${JSON.stringify(config)}`, () => {
++    const { extraction, packet, previous, old, added } = fixture(config);
++    const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++    assert.ok(result.unresolvedCandidates.includes(added.id), 'new context requires human review');
++    assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === added.id), 'must not assign a polity disposition');
++    if (config.prior) assert.ok(result.extraction.candidateDispositions.some(d => d.candidate === old.id && d.reason === 'polity'), 'retain original reviewed decision');
++  });
++}
++
++test('an unchanged surface in edited context requires review', () => {
++  const { extraction, packet, previous, old, added } = fixture({ prior: true });
++  const revisedUnit = { ...packet.units[0], en: 'Later the armies of Jin advanced.', literal: 'Later the armies of Jin advanced.' };
++  const moved = candidate('fixture:001:cand_moved', revisedUnit, 'Jin');
++  const revised = { ...packet, units: [revisedUnit, packet.units[1]], preflight: { candidates: [moved, added] } };
++  const result = reconcileExtractionAfterRepairs(extraction, revised, { previousPacket: previous });
++  assert.ok(result.unresolvedCandidates.includes(moved.id));
++  assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === moved.id));
++  assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === old.id));
++  assert.ok(result.unresolvedCandidates.includes(added.id));
++});
++
++test('an unchanged source unit permits same-unit remapping', () => {
++  const { extraction, packet, previous, old } = fixture({ prior: true });
++  const moved = candidate('fixture:001:cand_moved', packet.units[0], 'Jin');
++  const revised = { ...packet, preflight: { candidates: [moved] } };
++  const result = reconcileExtractionAfterRepairs(extraction, revised, { previousPacket: previous });
++  assert.ok(result.extraction.candidateDispositions.some(d => d.candidate === moved.id && d.reason === 'polity'));
++  assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === old.id));
++  assert.ok(!result.unresolvedCandidates.includes(moved.id));
++});
++
++test('stable candidate ID does not preserve a disposition after context changes', () => {
++  const { extraction, packet, previous, old } = fixture({ prior: true });
++  const changed = unit('s0001', 0, 'The name Jin refers to a man.', '進是一個人。');
++  const revised = { ...packet, units: [changed, packet.units[1]], preflight: { candidates: [candidate(old.id, changed, 'Jin')] } };
++  const result = reconcileExtractionAfterRepairs(extraction, revised, { previousPacket: previous });
++  assert.ok(result.unresolvedCandidates.includes(old.id));
++  assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === old.id));
++});
++
++test('an era name elsewhere does not decide whether this occurrence names a person', () => {
++  const { extraction, packet, previous } = fixture();
++  const era = unit('s0001', 0, 'During the Qinglong era.', '青龍年間。');
++  const personUnit = unit('s0002', 1, 'The house of Qinglong.', '青龍之家。');
++  const personCandidate = candidate('fixture:001:cand_period_person', personUnit, 'Qinglong');
++  packet.units = [era, personUnit];
++  packet.preflight.candidates = [personCandidate];
++  previous.units = packet.units;
++  extraction.people[0].preferredNameSuggestion = { en: 'Xun Qinglong', zh: '青龍' };
++  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++  assert.ok(result.unresolvedCandidates.includes(personCandidate.id));
++  assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === personCandidate.id));
++});
++
++test('only the occurrence in an explicit local era expression is classified', () => {
++  const { extraction, packet, previous } = fixture();
++  const current = unit('s0002', 1, 'In the Qinglong era, Qinglong departed.', '青龍年間，青龍出。');
++  const eraCandidate = candidate('fixture:001:cand_era', current, 'Qinglong');
++  const personCandidate = { id: 'fixture:001:cand_person', unit: current.id, language: 'en', ...exactSpanAt(current.en, 'Qinglong', 1), detectors: [] };
++  packet.units = [packet.units[0], current];
++  packet.preflight.candidates = [eraCandidate, personCandidate];
++  previous.units = packet.units;
++  extraction.people[0].preferredNameSuggestion = { en: 'Xun Qinglong', zh: '青龍' };
++  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++  assert.ok(result.extraction.candidateDispositions.some(d => d.candidate === eraCandidate.id && d.reason === 'reign-period'));
++  assert.ok(result.unresolvedCandidates.includes(personCandidate.id));
++  assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === personCandidate.id));
++});
++
++for (const english of ['He served in Qinglong year 3.', 'The events of Qinglong 4 followed.']) {
++  test(`local numbered-year context: ${english}`, () => {
++    const { extraction, packet, previous } = fixture();
++    const current = unit('s0002', 1, english, '青龍年間。');
++    const era = candidate('fixture:001:cand_year', current, 'Qinglong');
++    packet.units = [packet.units[0], current];
++    packet.preflight.candidates = [era];
++    previous.units = packet.units;
++    const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++    assert.ok(result.extraction.candidateDispositions.some(d => d.candidate === era.id && d.reason === 'reign-period'));
++  });
++}
++
++test('a new polity occurrence must not inherit a globally matching person', () => {
++  const { extraction, packet, previous, old } = fixture({ prior: true });
++  const territoryUnit = unit('s0002', 1, 'Soldiers marched into Jin.', '兵入晉。');
++  const personUnit = unit('s0003', 2, 'Jin served at court.', '進侍於朝。');
++  const polityCandidate = candidate('fixture:001:cand_new_polity', territoryUnit, 'Jin');
++  packet.units = [packet.units[0], territoryUnit, personUnit];
++  packet.preflight.candidates = [old, polityCandidate];
++  previous.units = packet.units;
++  extraction.people[0].preferredNameSuggestion = { en: 'Jin', zh: '進' };
++  extraction.claims[0].value = { kind: 'personal-name', en: 'Jin', zh: '進' };
++  extraction.claims[0].evidence = ['fixture:001:s0003'];
++  extraction.mentions.push({ id: 'fixture:001:m0001', person: 'fixture:001:p001', unit: locator('s0003', 2), kind: 'personal-name', spans: { zh: [exactSpanAt(personUnit.zh, '進', 0)], en: [exactSpanAt(personUnit.en, 'Jin', 0)] }, candidateRefs: [] });
++  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++  assert.ok(result.unresolvedCandidates.includes(polityCandidate.id), 'the new polity context needs independent review');
++  assert.ok(!result.extraction.mentions.some(m => m.unit.id === territoryUnit.id && m.spans.en.some(s => s.exact === 'Jin')), 'must not fabricate a person link');
++});
++
++test('same-unit person evidence does not prove a different occurrence denotes that person', () => {
++  const { extraction, packet, previous } = fixture();
++  const context = unit('s0002', 1, 'Jin entered Jin.', '進入晉。');
++  const person = candidate('fixture:001:cand_person', context, 'Jin');
++  const polity = { id: 'fixture:001:cand_polity', unit: context.id, language: 'en', ...exactSpanAt(context.en, 'Jin', 1), detectors: [] };
++  packet.units = [packet.units[0], context];
++  packet.preflight.candidates = [person, polity];
++  previous.units = packet.units;
++  extraction.people[0].preferredNameSuggestion = { en: 'Jin', zh: '進' };
++  extraction.claims[0].value = { kind: 'personal-name', en: 'Jin', zh: '進' };
++  extraction.mentions.push({ id: 'fixture:001:m0001', person: 'fixture:001:p001', unit: locator('s0002', 1), kind: 'personal-name', spans: { zh: [exactSpanAt(context.zh, '進', 0)], en: [exactSpanAt(context.en, 'Jin', 0)] }, candidateRefs: [person.id] });
++  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++  assert.ok(result.unresolvedCandidates.includes(polity.id));
++  assert.ok(!result.extraction.mentions.some(m => m.unit.id === context.id && m.spans.en.some(s => s.startCodePoint === polity.startCodePoint)));
++});
++
++test('a Chinese-only person mention cannot prove either English occurrence in the same unit', () => {
++  const { extraction, packet, previous } = fixture();
++  const context = unit('s0002', 1, 'Jin entered Jin.', '進入晉。');
++  const polity = { id: 'fixture:001:cand_polity', unit: context.id, language: 'en', ...exactSpanAt(context.en, 'Jin', 1), detectors: [] };
++  packet.units = [packet.units[0], context];
++  packet.preflight.candidates = [polity];
++  previous.units = packet.units;
++  extraction.people[0].preferredNameSuggestion = { en: 'Jin', zh: '進' };
++  extraction.claims[0].value = { kind: 'personal-name', en: 'Jin', zh: '進' };
++  extraction.mentions.push({ id: 'fixture:001:m0001', person: 'fixture:001:p001', unit: locator('s0002', 1), kind: 'personal-name', spans: { zh: [exactSpanAt(context.zh, '進', 0)], en: [] }, candidateRefs: [] });
++  assert.throws(() => reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous }), /Unscanned name surface requires source review/);
++});
++
++test('a Chinese-only person mention cannot prove a unique English polity occurrence', () => {
++  const { extraction, packet, previous } = fixture();
++  const context = unit('s0002', 1, 'He lived in Jin.', '進居晉。');
++  const polity = candidate('fixture:001:cand_polity', context, 'Jin');
++  packet.units = [packet.units[0], context];
++  packet.preflight.candidates = [polity];
++  previous.units = packet.units;
++  extraction.people[0].preferredNameSuggestion = { en: 'Jin', zh: '進' };
++  extraction.claims[0].value = { kind: 'personal-name', en: 'Jin', zh: '進' };
++  extraction.mentions.push({ id: 'fixture:001:m0001', person: 'fixture:001:p001', unit: locator('s0002', 1), kind: 'personal-name', spans: { zh: [exactSpanAt(context.zh, '進', 0)], en: [] }, candidateRefs: [] });
++  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++  assert.ok(result.unresolvedCandidates.includes(polity.id));
++  assert.ok(!result.extraction.mentions.some(m => m.unit.id === context.id && m.spans.en.length));
++});
++
++test('shared glossary entry does not transfer a Chinese disposition to English homonyms', () => {
++  const { extraction, packet, previous } = fixture();
++  const context = unit('s0002', 1, 'Jin entered Jin.', '進入晉。');
++  const first = candidate('fixture:001:cand_first', context, 'Jin');
++  const second = { id: 'fixture:001:cand_second', unit: context.id, language: 'en', ...exactSpanAt(context.en, 'Jin', 1), detectors: [] };
++  const chinese = { id: 'fixture:001:cand_zh', unit: context.id, language: 'zh', ...exactSpanAt(context.zh, '晉', 0), detectors: [{ glossaryId: 7 }] };
++  first.detectors = [{ glossaryId: 7 }];
++  second.detectors = [{ glossaryId: 7 }];
++  packet.units = [packet.units[0], context];
++  packet.preflight.candidates = [chinese, first, second];
++  previous.units = packet.units;
++  previous.preflight.candidates = [chinese, first, second];
++  extraction.people[0].preferredNameSuggestion = { en: 'Jin', zh: '進' };
++  extraction.claims[0].value = { kind: 'personal-name', en: 'Jin', zh: '進' };
++  extraction.mentions.push({ id: 'fixture:001:m0001', person: 'fixture:001:p001', unit: locator('s0002', 1), kind: 'personal-name', spans: { zh: [exactSpanAt(context.zh, '進', 0)], en: [] }, candidateRefs: [] });
++  extraction.candidateDispositions.push({ candidate: chinese.id, disposition: 'not-person', reason: 'polity', note: '晉 is the polity.' });
++  const result = reconcileExtractionAfterRepairs(extraction, packet, { previousPacket: previous });
++  assert.ok(result.extraction.candidateDispositions.some(d => d.candidate === chinese.id && d.reason === 'polity'));
++  for (const item of [first, second]) {
++    assert.ok(result.unresolvedCandidates.includes(item.id));
++    assert.ok(!result.extraction.candidateDispositions.some(d => d.candidate === item.id));
++  }
++});
+--- /dev/null
++++ b/scripts/test-people-unscanned-export-only.mjs
+@@ -0,0 +1,84 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import { createHash } from 'node:crypto';
++import { spawnSync } from 'node:child_process';
++import { fileURLToPath } from 'node:url';
++
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
++if (!process.env.JINSHU127_GUARD_TEST_FIXTURE_ROOT ||
++    fs.realpathSync(process.env.JINSHU127_GUARD_TEST_FIXTURE_ROOT) !== fs.realpathSync(root)) {
++  throw new Error('Set JINSHU127_GUARD_TEST_FIXTURE_ROOT to the isolated script-only fixture; never run this test in a shared checkout');
++}
++const source = path.join(root, 'data/people/extractions/jinshu/127.json');
++const digest = data => createHash('sha256').update(data).digest('hex');
++if (digest(fs.readFileSync(source)) !== 'cfff7a83582f27778d3088391e2c2633f63c43dbb9888850877464661fd7f6e7' ||
++    digest(fs.readFileSync(path.join(root, 'data/jinshu/127.json'))) !== '6970c4c954c237823685d6e9accee73bb3e9a49e3aec0c92664c5998ff921652') {
++  throw new Error('Isolated Jinshu 127 input fingerprints do not match the retained regression fixture');
++}
++const work = fs.mkdtempSync(path.join(root, 'export-only-test-'));
++const snapshot = dir => {
++  const result = {};
++  function visit(current) {
++    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
++      const full = path.join(current, entry.name);
++      if (entry.isDirectory()) visit(full);
++      else if (entry.isFile()) result[path.relative(dir, full)] = digest(fs.readFileSync(full));
++      else throw new Error(`Unexpected non-file in protected data tree: ${full}`);
++    }
++  }
++  visit(dir);
++  return result;
++};
++const run = args => spawnSync(process.execPath, ['scripts/apply-people-translation-repairs.mjs',
++  '--book', 'jinshu', '--chapter', '127', ...args], { cwd: root, encoding: 'utf8' });
++
++test('mixed real occurrences export only the requested new packet', () => {
++  const before = snapshot(path.join(root, 'data'));
++  const output = path.join(work, 'mixed.json');
++  const result = run(['--reconcile-current', '--unscanned-review-packet', output]);
++  assert.equal(result.status, 1, result.stderr);
++  assert.match(result.stderr, /requires source review: 13 occurrence/);
++  const items = JSON.parse(fs.readFileSync(output, 'utf8')).items;
++  assert.equal(items.length, 13);
++  assert.ok(items.some(item => item.unit === 's0192' && item.span.exact === 'Xiong' && item.people.includes('jinshu:127:p109')));
++  assert.deepEqual(snapshot(path.join(root, 'data')), before);
++});
++
++test('zero-occurrence export exits clearly without any writes', () => {
++  const variant = path.join(work, 'no-english-preferred-names.json');
++  const extraction = JSON.parse(fs.readFileSync(source, 'utf8'));
++  for (const person of extraction.people) {
++    person[1][0] = '';
++    for (const name of person[5]) name[0].en = '';
++  }
++  fs.writeFileSync(variant, JSON.stringify(extraction));
++  const variantHash = digest(fs.readFileSync(variant));
++  const before = snapshot(path.join(root, 'data'));
++  const output = path.join(work, 'zero.json');
++  const result = run(['--reconcile-current', '--extraction', variant, '--unscanned-review-packet', output]);
++  assert.equal(result.status, 1, result.stderr);
++  assert.match(result.stderr, /No unscanned name surfaces found; export-only mode made no writes/);
++  assert.equal(fs.existsSync(output), false);
++  assert.equal(digest(fs.readFileSync(variant)), variantHash);
++  assert.deepEqual(snapshot(path.join(root, 'data')), before);
++});
++
++test('export mode rejects non-reconcile, review, decision flags, and existing outputs', () => {
++  const before = snapshot(path.join(root, 'data'));
++  const existing = path.join(work, 'existing.json');
++  fs.writeFileSync(existing, 'preserve this byte-for-byte\n');
++  for (const args of [
++    ['--unscanned-review-packet', path.join(work, 'not-current.json')],
++    ['--reconcile-current', '--unscanned-review-packet', path.join(work, 'with-review.json'), '--unscanned-review', existing],
++    ['--reconcile-current', '--unscanned-review-packet', path.join(work, 'with-candidate.json'), '--candidate-person', 'candidate=p001@personal-name'],
++    ['--reconcile-current', '--unscanned-review-packet', existing],
++  ]) {
++    const result = run(args);
++    assert.equal(result.status, 1, result.stderr);
++    assert.match(result.stderr, /requires only --reconcile-current|EEXIST/);
++    assert.equal(fs.readFileSync(existing, 'utf8'), 'preserve this byte-for-byte\n');
++    assert.deepEqual(snapshot(path.join(root, 'data')), before);
++  }
++});
