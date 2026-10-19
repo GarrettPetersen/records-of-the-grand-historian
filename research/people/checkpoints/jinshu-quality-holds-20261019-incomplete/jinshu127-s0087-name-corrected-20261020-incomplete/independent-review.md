@@ -1,0 +1,23 @@
+# Independent review: held s0087 Zhang Hua candidate
+
+**Recommendation: hold this exact candidate.** The narrow person-name interpretation is source-supported, but the proposed disposition of the enclosing scanner expression is not established as compliant with the project's candidate rules. A successful validator run is not an editorial or publication approval.
+
+Candidate SHA-256 `2e8d8355a33818932f1f2908fedc14b1a538358f3e11f60a1cc71d3f2b3023d6`; preceding four-mention candidate `1d0aef11596fac9ca663d26e9835946908613249a89a57cf8986f71523a89008`; held source `ca683ed09f79724fe107185f6f1e5f5ded2378999ea887ce910432eb127dd3b3`; packet `cd6ab556fb0b323f639d2cf46013312e78a8868379cf053f1678f40c013b4701`; applied editorial history `093ceb5a45d1be3500d1449ebdfbd4d304081049fd11e7257a50d1d93b26917e`; extraction prompt examined `a417319dc067fa4bfc351bdb8a1bede16d5423a93db3868fe21f78fb2a06f763`.
+
+## Source, geometry, and dispositions
+
+The exact compact diff changes p046's English personal-name `Yellow Gate Zhang Hua` to `Zhang Hua` in s0087, and adds a `not-person/other` disposition for candidate `cand_2f722612707ea12d`, with a note that it is a redundant enclosing expression combining office words with the separately linked name. There are no other compact changes.
+
+Source `其黃門侍郎張華進曰` distinguishes office `黃門侍郎` and person `張華`. The proposed `Zhang Hua` [43,52) is the correct narrow personal-name surface, matches the separate Chinese p046 `張華` [5,7), and references the embedded scanner candidate `cand_98f8290f92dcbf22`. No other English mention overlaps it. The `Gentleman Attendant` [4,23) candidate remains a separate `not-person/office`, as does Chinese `黃門` [1,3); these office-only classifications are distinguishable from the mixed scanner phrase.
+
+The individual's name claim should distinguish `Zhang Hua` from his office. A hyperlink mention, by contrast, can cover a longer clear person-referring expression that includes office context: the extraction prompt explicitly prefers the longest clear expression. The source distinction does **not** by itself prove the original wider hyperlink is invalid; its mention kind and accounting of overlapping candidate hints need their own review.
+
+The enclosing scanner candidate `Yellow Gate Zhang Hua` [31,52), however, **includes and refers to the same named person**, notwithstanding its office words. The proposed `not-person/other` says otherwise as an unqualified classification. `prompt-people-extraction.txt` directs that an accounted person candidate fall inside a person mention, and reserves `not-person` for a clear place, office, book, collective, deity, reign period, polity or ordinary capitalized word; it also limits `duplicate-hint` to two hints describing the same non-mention candidate. No explicit rule found authorizes treating an enclosing person-bearing mixed phrase as `not-person/other` merely because a nested person name is separately linked. Its note is informative but does not itself establish policy permission. This is a semantic and policy ambiguity, not a claim that the schema rejects the field.
+
+Resolve under the existing source-review and candidate-accounting rules before promotion. For example, a reviewer may consider whether a source-supported longer *person-reference* span and appropriate kind can cover the relevant candidates without falsely classifying the office-only candidate; that is a design/review question, not an approved patch. Do not simply treat the mixed phrase as an ordinary office or suppress the embedded person.
+
+## Validation and side effects
+
+Using script-only `/tmp/jinshu127-editorial-fixture.iM9uIsV8` with the pinned packet and history, strict `validateCompactPeopleExtraction(..., {strictAliasDispositions:true})` passed: 278 units, 822 candidates, 165 people, 701 mentions, 916 claims, 36 repairs, 479 dispositions, zero alias-disposition conflicts. `validateAppliedEditorialDecisions(history, expandedCandidate)` returned `{"errors":[]}`. These checks do not semantically prove that the enclosing candidate denotes no person.
+
+Compared with the immediately preceding candidate, exactly the one English mention geometry changes [31,52) → [43,52); its expanded ID remains `jinshu:127:m0228`, and all 700 other mention geometries and expanded IDs are unchanged in this comparison. Earlier insertions caused their own ID shifts and are not erased by this result. Other unscanned questions, complete coverage, independent date audit, identity, translation review, trusted replay and publication gates remain open. No canonical files, Git state, queue or locks were changed.
