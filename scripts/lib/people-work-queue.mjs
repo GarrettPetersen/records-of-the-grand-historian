@@ -321,7 +321,7 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
   for (const target of targets) {
     if (claimed.length >= options.limit) break;
     const key = chapterKey(target);
-    if (ledger.dateAudits?.[key] && !['ready', 'stale-source'].includes(ledger.dateAudits[key].status)) {
+    if (ledger.dateAudits?.[key] && ledger.dateAudits[key].status !== 'ready') {
       blocked.push({ ...target, claim: ledger.dateAudits[key], reason: 'Independent date work owns this chapter' });
       continue;
     }

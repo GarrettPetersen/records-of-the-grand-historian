@@ -139,7 +139,7 @@ if (o['dry-run']) {
     // checkpointing its remote outcome. No model turn is needed for this step.
     mutateRemotePeopleWorkLedger(ledger=>{
       for(const [key,claim] of Object.entries(ledger.dateAudits??{})) {
-        if(claim.worker!==o.worker || claim.status==='ready' || (claim.executorHost && claim.executorHost!==os.hostname()))continue;
+        if(claim.worker!==o.worker || ['ready','stale-source'].includes(claim.status) || (claim.executorHost && claim.executorHost!==os.hostname()))continue;
         if(dateExecutorIsBusy(claim,{executorToken,takeover:o.takeover}))continue;
         const [book,chapter]=key.split('/');
         if(fs.existsSync(path.join(PEOPLE_DIR,'extractions',book,`${chapter}.json`)) && dateAuditStatus(book,chapter).status==='audited') {
@@ -163,16 +163,16 @@ if (o['dry-run']) {
             delete ledger.dateAudits[key];return {released:true};
           }
           if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))return null;
-          if(prior && !['ready','stale-source'].includes(prior.status) && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
+          if(prior && prior.status!=='ready' && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
           if(claimIsActive(ledger.claims[key]) && !['ready','complete'].includes(ledger.claims[key].status))return null;
-          const archived=prior && ['ready','stale-source'].includes(prior.status);
+          const archived=prior?.status==='ready';
           if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
           const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
           const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
-          if(changed && prior.status!=='ready' && !finishing)throw new Error(`Sticky date work ${key} changed; reconcile before release`);
+          if(changed && (!finishing || prior.status==='stale-source'))throw new Error(`Sticky date work ${key} changed; reconcile before release`);
           const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
