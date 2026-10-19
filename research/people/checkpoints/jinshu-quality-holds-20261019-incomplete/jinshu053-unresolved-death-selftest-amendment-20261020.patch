@@ -1,0 +1,36 @@
+diff --git a/scripts/validate-people-extraction.mjs b/scripts/validate-people-extraction.mjs
+--- a/scripts/validate-people-extraction.mjs
++++ b/scripts/validate-people-extraction.mjs
+@@ -1318,20 +1318,19 @@ function selfTest() {
+       if (!(error instanceof PeopleExtractionValidationError)) throw error;
+     }
+   }
+-  for (const dateContext of [
+-    { sourceDate: { text: 'first year' } },
+-    { sourceDate: { text: 'first year' }, unresolved: true,
+-      unresolvedReason: 'The source lacks a securely convertible year for this death.' },
+-  ]) {
+-    const undatedDeath = structuredClone(undatedDeathAttestation);
+-    undatedDeath.claims.at(-1).value.dateContext = dateContext;
+-    try {
+-      validatePeopleExtraction(undatedDeath, packet);
+-      throw new Error('Source-only or unresolved death unexpectedly passed the Western chronology gate');
+-    } catch (error) {
+-      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('no Western-year attestation')) throw error;
+-    }
++  const sourceOnlyDeath = structuredClone(undatedDeathAttestation);
++  sourceOnlyDeath.claims.at(-1).value.dateContext = { sourceDate: { text: 'first year' } };
++  try {
++    validatePeopleExtraction(sourceOnlyDeath, packet);
++    throw new Error('Source-only death unexpectedly passed the Western chronology gate');
++  } catch (error) {
++    if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('no Western-year attestation')) throw error;
+   }
++  const unresolvedDeath = structuredClone(undatedDeathAttestation);
++  unresolvedDeath.claims.at(-1).value.dateContext = { sourceDate: { text: 'first year' }, unresolved: true,
++    unresolvedReason: 'The source lacks a securely convertible year for this death.' };
++  validatePeopleExtraction(unresolvedDeath, packet);
++  validateCompactPeopleExtraction(compactPeopleExtraction(unresolvedDeath, packet), packet);
+ 
+   const externalPrimary = structuredClone(comprehensive);
+   externalPrimary.claims = externalPrimary.claims.filter((claim) => claim.predicate !== 'attestation');
