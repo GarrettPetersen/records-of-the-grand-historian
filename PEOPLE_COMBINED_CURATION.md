@@ -22,9 +22,12 @@ It does not extract chapters, call models, approve its own inputs, build, or pus
 - All extraction authors, including chunk authors, and all repair authors must
   be excluded from the independent reviewers. Preserve their provenance.
 
-The source mutation is limited to approved literal/idiomatic translation repairs.
-Chinese emendations, paragraph reordering and metadata changes are not supported
-by this command. Do not bypass that boundary with arbitrary JSON patches.
+Source mutations are limited to independently approved literal/idiomatic repairs,
+explicitly reviewed whole-paragraph reordering, and narrowly reviewed English
+footnote additions. See `PEOPLE_COMBINED_FOOTNOTE_REVIEW.md` for the additional
+footnote contract and exact-byte seal requirements. Chinese emendations and
+metadata changes are not supported; do not bypass these boundaries with
+arbitrary JSON patches.
 
 ## Commands
 

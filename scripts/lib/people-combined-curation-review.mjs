@@ -9,6 +9,7 @@ import { validateCompactPeopleExtraction } from '../validate-people-extraction.m
 import { loadProperNounMatcher } from './people-candidates.mjs';
 import { editorialReviews, validateAppliedEditorialDecisions } from './people-editorial-decisions.mjs';
 import { buildDateAuditPacket, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+import { replayReviewedFootnoteAdditions } from './people-combined-footnote-review.mjs';
 
 export const documentHash = value => sha256(JSON.stringify(value));
 export function requireEqual(actual, expected, label) {
@@ -221,7 +222,8 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   }
   if (!sourceRepairs) throw new Error('Combined source amendment requires new applied translation repairs');
   if (approvals.some(a => !a.used)) throw new Error('Incoming editorial approval has no matching new applied repair');
-  requireEqual(replay, source, 'unrelated source edit outside reviewed translation repairs and source reordering');
+  const footnoted = replayReviewedFootnoteAdditions(replay, { contract: materialization.sourceFootnoteContract, identity, dateReport, validation, seal, book, chapter, authorAgentIds });
+  requireEqual(footnoted, source, 'unrelated source edit outside reviewed translation repairs, source reordering and footnote additions');
   requireEqual(candidate.run, beforeExtraction.run, 'extractor provenance must not be rewritten');
 
   const dates = combinedDatePacket(book, chapter, source, candidate);
@@ -231,7 +233,7 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   }
   if (!Array.isArray(authorAgentIds) || !authorAgentIds.length || authorAgentIds.some(id => typeof id !== 'string' || !id.trim() || id !== id.trim())) throw new Error('Declare all curation author agent IDs in canonical form');
   const authors = new Set(authorAgentIds);
-  for (const id of [candidate.run.agentId, identity.reviewContext?.amendmentAuthor, materialization.sourceReordering?.authorAgentId, ...(seal.reviewer?.excludedAuthorAgentIds ?? [])]) {
+  for (const id of [candidate.run.agentId, identity.reviewContext?.amendmentAuthor, materialization.sourceReordering?.authorAgentId, materialization.sourceFootnoteContract?.authorAgentId, ...(seal.reviewer?.excludedAuthorAgentIds ?? [])]) {
     if (id && !authors.has(id)) throw new Error(`Missing declared curation author ${id}`);
   }
   const actualExtractors = new Set();

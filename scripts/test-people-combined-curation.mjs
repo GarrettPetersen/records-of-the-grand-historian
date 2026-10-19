@@ -32,7 +32,7 @@ const start = runnerSource.indexOf(reservationStart), end = runnerSource.indexOf
 assert.ok(start >= 0 && end > start, 'production reservation callback must be present');
 const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
 
-function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false } = {}) {
+export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const people = path.join(root, 'data', 'people');
