@@ -1,0 +1,18 @@
+# Independent date-resource override review — incomplete
+
+Reviewed `people-date-resources.mjs`, `staging-integration.patch`, the helper tests, and the corresponding date worker, schema loader and workflow at staging `72926180f78469e6c2c7e7e9938e14a4d873934e`.
+
+## Recommendation
+
+Do not integrate or use this patch for a production worker yet. The helper is a useful resource-consistency prototype, not a verified authority boundary or a safe production resumption mechanism.
+
+## Concrete findings
+
+1. **The schema override has process-wide scope.** The patch changes the shared `getPeopleSchemaValidator()` used by extraction validation, editorial and corpus validation as well as date work. It does not confine the substitute schema set to an individual date job or chapter. An inherited override can affect unrelated validation performed in the same process or in children that inherit its environment. A safe integration needs a deliberately scoped resource context and tests for all consumers that can use it.
+2. **A digest proves consistency, not provenance or equivalence to reviewed staging resources.** The helper verifies the operator-supplied manifest digest and every listed resource, but a manifest and digest can consistently describe arbitrary schemas and prompt text. Neither the helper nor patch establishes that the supplied digest represents the authorized reviewed revision, current required schema set, script tree, dependencies, or publication rules. The fixture tests explicitly demonstrate that a one-schema synthetic bundle and arbitrary prompt are accepted when correctly hashed. This is not a claim that trusted operators are malicious; mistaken or stale configuration alone can choose weaker resources. Bind the bundle to a reviewed, independently established resource set and specify who supplies and verifies that authority before use.
+3. **Retained jobs do not bind the resource bundle.** Date job identities and retained review plans currently incorporate source/extraction and job scope; reports likewise record source/extraction hashes, not this new manifest or prompt identity. A resumed workflow can therefore mix saved work from different resource bundles without the existing ownership check detecting that difference. A safe migration must define what to do with existing sticky jobs and conversations, preserve them, and fail or explicitly reconcile when a verified resource identity changes. Do not release claims or discard recovery artifacts.
+4. **Integration and equivalence remain untested.** The patch modifies the real shared schema loader and date worker, but the tests here exercise the helper only. They do not establish that the real staged schema bundle compiles, that ordinary extraction/date/editorial validation remains equivalent, or that workers, retained ownership, prompts, recovery and independent-review gates behave correctly across resumed jobs or process boundaries.
+
+## Checks performed
+
+Ran `node --test` on the prototype helper tests: 8 tests passed. They check unchanged default behavior, incomplete configuration, a correct synthetic snapshot, tampered manifest/schema/prompt, extra or missing schema files, and a schema-file symlink. No worker, canonical data, queue, locks, Git index or author files were modified. The helper reads and hashes verified resource bytes into one process-local snapshot; this avoids ordinary later file changes altering that snapshot. Its digest checks do not by themselves prove origin or cross-process/resumption equivalence. No full build, production worker, live schema compilation or end-to-end publication test was run.

@@ -1,0 +1,38 @@
+diff --git a/scripts/lib/people-schema.mjs b/scripts/lib/people-schema.mjs
+--- a/scripts/lib/people-schema.mjs
++++ b/scripts/lib/people-schema.mjs
+@@ -3,6 +3,7 @@ import path from 'node:path';
+ import Ajv2020 from 'ajv/dist/2020.js';
+ import addFormats from 'ajv-formats';
+ import { PEOPLE_DIR, readJson } from './people-content.mjs';
++import { pinnedDateResources } from './people-date-resources.mjs';
+ 
+ const SCHEMA_DIR = path.join(PEOPLE_DIR, 'schema');
+ let sharedValidator = null;
+@@ -16,8 +17,11 @@ export function getPeopleSchemaValidator() {
+     strictRequired: false,
+   });
+   addFormats(ajv);
+-  for (const name of fs.readdirSync(SCHEMA_DIR).filter((file) => file.endsWith('.schema.json')).sort()) {
+-    ajv.addSchema(readJson(path.join(SCHEMA_DIR, name)));
++  const schemas = pinnedDateResources?.schemas ?? fs.readdirSync(SCHEMA_DIR)
++    .filter((file) => file.endsWith('.schema.json')).sort()
++    .map(name => ({ name, document: readJson(path.join(SCHEMA_DIR, name)) }));
++  for (const { document } of schemas) {
++    ajv.addSchema(document);
+   }
+   sharedValidator = ajv;
+   return sharedValidator;
+diff --git a/scripts/lib/people-date-worker.mjs b/scripts/lib/people-date-worker.mjs
+--- a/scripts/lib/people-date-worker.mjs
++++ b/scripts/lib/people-date-worker.mjs
+@@ -6,7 +6,8 @@ import { REPO_ROOT, writeJsonAtomic, readJson } from './people-content.mjs';
+ import { sendCursorAgentWhenReady, waitForCursorRun } from './cursor-run-wait.mjs';
+ import { requestCursorUsageLimitStop } from './cursor-run-control.mjs';
+ import { runOpenRouterDateTools } from './openrouter-date-tools.mjs';
++import { pinnedDateResources } from './people-date-resources.mjs';
+ 
+-const prompt = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-date-review.txt'),'utf8');
++const prompt = pinnedDateResources?.prompt ?? fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-date-review.txt'),'utf8');
+ 
+ function repairReferences(references, people) {
