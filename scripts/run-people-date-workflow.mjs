@@ -29,7 +29,7 @@ const {values:o} = parseArgs({ options:{book:{type:'string'},chapter:{type:'stri
   'max-rounds':{type:'string',default:'3'},'max-attempts':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
   'max-run-tokens':{type:'string',default:'4000000'},'run-timeout-minutes':{type:'string',default:'20'},
   'max-tool-turns':{type:'string',default:'20'},
-  'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},takeover:{type:'boolean'},
+  'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},'research-supplement':{type:'string'},takeover:{type:'boolean'},
   'min-approved':{type:'string',default:'0'},'summary-out':{type:'string'},order:{type:'string',default:'balanced'},
   'recover-only':{type:'boolean'},'cursor-capacity-start':{type:'string'} } });
 const integer = (key,max) => { const value=Number(o[key]); if(!Number.isSafeInteger(value)||value<1||value>max)throw new Error(`Invalid --${key}`); return value; };
@@ -37,6 +37,8 @@ if ((!o.book && !o.all) || (o.book && o.all) || (o.chapter && !o.book)) throw ne
 if (!['cursor-sdk','grokbot','manual','openrouter'].includes(o.lane)) throw new Error('Unknown date worker lane');
 if (!['balanced','calibration'].includes(o.order))throw new Error('Unknown date workload order');
 if (o.chapter && !/^\d{3}$/.test(o.chapter)) throw new Error('--chapter requires three digits');
+if (o['research-supplement'] && (!o.book || !o.chapter || o.lane !== 'cursor-sdk' || !o['retry-blocked'] || o.release || o['dry-run'])) throw new Error('--research-supplement requires one explicit Cursor chapter and --retry-blocked');
+if (o['retry-blocked'] && o.lane === 'cursor-sdk' && !o['research-supplement'] && !o['recover-only'] && !o['dry-run']) throw new Error('Cursor research-blocked retry requires a fingerprint-bound --research-supplement');
 if (!o['dry-run'] && !o.worker) throw new Error('A stable --worker ID is required');
 if (o.release && (!o.book || !o.chapter)) throw new Error('--release requires one explicit --book and --chapter');
 if (!o.release && !o['recover-only'] && !o['dry-run'] && o.lane==='cursor-sdk' && (!o.run || !o.model)) throw new Error('Paid Cursor execution requires explicit --run and --model; use --dry-run otherwise');
@@ -69,6 +71,13 @@ const options = {maxUnits:integer('max-units',1000),maxBytes:integer('max-worker
   jobConcurrency,
   maxWorkerBytes:integer('max-worker-kib',512)*1024,maxRounds:integer('max-rounds',20),maxAttempts:integer('max-attempts',20),
   maxRunTokens:integer('max-run-tokens',10000000),timeoutMs:integer('run-timeout-minutes',120)*60000};
+if (o['research-supplement']) {
+  options.researchSupplement = readJson(path.resolve(o['research-supplement']));
+  if (options.researchSupplement?.book !== o.book || options.researchSupplement?.chapter !== o.chapter ||
+      options.researchSupplement?.schemaVersion !== 1 || typeof options.researchSupplement?.jobKey !== 'string') {
+    throw new Error('Research supplement must identify the selected chapter and retained job');
+  }
+}
 const dollars=Number(o['max-run-cost']);
 if(!Number.isFinite(dollars)||dollars<=0||dollars>20) throw new Error('Invalid --max-run-cost');
 options.maxRunCostCents=Math.round(dollars*100);
@@ -129,7 +138,7 @@ if (o['dry-run']) {
   if(!o.release && o.lane==='openrouter' && !o['recover-only']) {
     await verifyOpenRouterFreeModel({key:options.openRouterKey,model:options.openRouterModel});
   }
-  const unlock=acquireProcessRunLock(path.join(PEOPLE_DIR,'generated','date-workflow-run.lock'),{label:'People date workflow'});
+  const unlock=acquireProcessRunLock(path.join(PEOPLE_DIR,'generated','date-workflow-run.lock'),{label:'People date workflow',failIfExists:true});
   const removeSignals=installSignalHandlers(control);
   const executorToken=randomUUID(),leaseMs=Math.max(3600000,options.timeoutMs+600000);
   let cursor=0,started=0,approved=0;

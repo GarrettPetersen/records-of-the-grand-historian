@@ -185,5 +185,5 @@ test('recalibration does not overwrite the production checkpoint', () => {
 test('npm exposes the independent date runner and its offline tests', () => {
   const { scripts } = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
   assert.equal(scripts['people:dates:run'], 'node scripts/run-people-date-workflow.mjs');
-  assert.equal(scripts['people:dates:workflow:self-test'], 'node --test scripts/test-people-date-workflow.mjs');
+  assert.equal(scripts['people:dates:workflow:self-test'], 'node --test scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs');
 });

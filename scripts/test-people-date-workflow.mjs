@@ -9,6 +9,8 @@ import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dat
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+import { cursorDateWorker } from './lib/people-date-worker.mjs';
+import { createRunControl } from './lib/cursor-run-control.mjs';
 
 function fixture(t) {
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'date-workflow-'));
@@ -640,6 +642,316 @@ test('a repair context cannot approve its own candidate',async t=>{
   };
   await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/cannot approve its own/);
   assert.deepEqual(readJson(f.file),f.extraction);
+});
+test('repeated repair blockers are archived immutably, byte-exactly and idempotently',async t=>{
+  const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  const first={blocked:true,reason:'The first chronology finding needs primary-source research.'};
+  const second={blocked:true,reason:'The second chronology finding still needs another primary source.'};
+  let result=first,repairCalls=0;
+  const worker=async task=>{
+    if(task.kind==='review')return review(task);
+    repairCalls++;await task.save({agentId:'retained-fixture',runId:`run-${repairCalls}`,artifactHash:'fixture-remote-hash'});return result;
+  };
+  const run=()=>runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);
+  assert.equal((await run()).status,'research-blocked');
+  const legacy=path.join(directory,'research-blocker.json');
+  const firstBytes=Buffer.from(`${JSON.stringify(first,null,2)}\n`);
+  assert.deepEqual(fs.readFileSync(legacy),firstBytes);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  assert.equal((await run()).status,'research-blocked');
+  let state=readJson(path.join(directory,'state.json'));
+  assert.equal(state.blockerArchives.filter(r=>r.kind==='workflow-normalized').length,2,
+    'distinct remote run provenance is retained even for identical bytes');
+  assert.equal(new Set(state.blockerArchives.map(r=>r.path)).size,1);
+  assert.deepEqual(fs.readFileSync(legacy),firstBytes);
+  result=second;
+  assert.equal((await run()).status,'research-blocked');
+  state=readJson(path.join(directory,'state.json'));
+  const archives=state.blockerArchives.filter(r=>r.kind==='workflow-normalized');
+  assert.equal(new Set(archives.map(r=>r.path)).size,2);
+  for(const entry of state.blockerArchives){
+    const bytes=fs.readFileSync(path.join(directory,entry.path));
+    assert.equal(bytes.length,entry.bytes);
+    assert.equal(sha256(bytes.toString('utf8')).slice(7),entry.sha256);
+  }
+  assert.deepEqual(fs.readFileSync(legacy),firstBytes);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+
+test('a corrupt blocker archive fails closed before a retained repair executes',async t=>{
+  const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  const worker=async task=>task.kind==='review'?review(task):{blocked:true,reason:'The chronology needs independent source research.'};
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'research-blocked');
+  const state=readJson(path.join(directory,'state.json'));
+  const archive=path.join(directory,state.blockerArchives[0].path);
+  fs.writeFileSync(archive,'corrupted fixture archive');
+  let called=false;
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;throw new Error('must not execute');},f.options),/Conflicting immutable research blocker archive/);
+  assert.equal(called,false);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+
+test('a mismatched supplement job is rejected before repair without changing the canonical extraction',async t=>{
+  const f=fixture(t);let calls=0;
+  const worker=async task=>{if(task.kind==='repair'){calls++;return {blocked:true,reason:'The fixture chronology requires source research.'};}return review(task);};
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'research-blocked');
+  calls=0;
+  const supplement={schemaVersion:1,book:'fixture',chapter:'001',jobKey:'repair-0-wrong-job',
+    sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,originalSourceHash:f.packet.sourceHash,
+    originalExtractionHash:f.packet.extractionHash,blockerHash:`sha256:${'a'.repeat(64)}`,evidence:'Fixture source research.'};
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,researchSupplement:supplement}),/supplement.*active repair job/i);
+  assert.equal(calls,0);assert.deepEqual(readJson(f.file),f.extraction);
+});
+
+test('a retained supplement reaches only its job and does not block subsequent repairs after restart',async t=>{
+  const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  let firstKey,firstPacket;
+  const firstWorker=async task=>{
+    if(task.kind==='review')return review(task);
+    firstKey=task.key;firstPacket=task.packet;return {blocked:true,reason:'The first repair needs independent source research.'};
+  };
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},firstWorker,f.options)).status,'research-blocked');
+  const stateFile=path.join(directory,'state.json'),state=readJson(stateFile);
+  // Model a retained second disjoint component without altering its sealed
+  // first component or the live corpus; this synthetic job does not publish.
+  state.repairPlan.push({id:'002-fixture-second',findings:[{items:['claim-2'],problem:'The second person needs separate chronology.',action:'Review the second person independently.'}]});
+  writeJsonAtomic(stateFile,state);
+  const blockerBytes=Buffer.from('{"blocked":true,"reason":"Fixture research hold."}');
+  const blockerHash=sha256(blockerBytes.toString()).slice(7);
+  const supplement={schemaVersion:1,book:'fixture',chapter:'001',jobKey:firstKey,
+    sourceHash:firstPacket.sourceHash,extractionHash:firstPacket.extractionHash,originalSourceHash:f.packet.sourceHash,
+    originalExtractionHash:f.packet.extractionHash,blockerHash:`sha256:${blockerHash}`,evidence:'Fixture independent primary source.'};
+  const supplementBytes=Buffer.from(JSON.stringify(supplement));
+  const supplementHash=sha256(supplementBytes.toString()).slice(7);
+  fs.writeFileSync(path.join(directory,`raw-research-blocker-${blockerHash}.json`),blockerBytes);
+  fs.writeFileSync(path.join(directory,`research-supplement-${supplementHash}.json`),supplementBytes);
+  let secondCalls=0,firstCalls=0;
+  const worker=async task=>{
+    if(task.kind==='review')return review(task);
+    if(task.key===firstKey){
+      firstCalls++;assert.deepEqual(task.researchSupplement,supplement);
+      const result=repair(task),raw=Buffer.from(JSON.stringify(result)),artifactHash=sha256(raw.toString()).slice(7);
+      fs.writeFileSync(path.join(directory,`raw-repair-artifact-${artifactHash}.json`),raw);
+      await task.save({agentId:'fixture-repair-context',runId:'fixture-run',status:'returned',artifactHash,
+        researchSupplementHash:supplementHash,researchBlockerHash:blockerHash,
+        researchAttempts:[{agentId:'fixture-repair-context',priorRunId:'fixture-prior-run',supplementHash,blockerHash}]});
+      return result;
+    }
+    secondCalls++;assert.equal(task.researchSupplement,undefined);throw new Error('second fixture interruption');
+  };
+  const run=()=>runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,researchSupplement:supplement});
+  await assert.rejects(run(),/second fixture interruption/);
+  assert.equal(firstCalls,1);assert.equal(secondCalls,1);
+  assert.ok(fs.existsSync(path.join(directory,`${firstKey}.json`)));
+  assert.equal(readJson(stateFile).researchSupplementReceipts[firstKey].supplementHash,supplementHash);
+  await assert.rejects(run(),/second fixture interruption/);
+  assert.equal(firstCalls,1);assert.equal(secondCalls,2);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+
+async function supplementedProposalCrashFixture(t){
+  const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  let key,jobPacket,jobTask;
+  const blocked=async task=>{
+    if(task.kind==='review')return review(task);
+    key=task.key;jobPacket=task.packet;jobTask=task;
+    return {blocked:true,reason:'This retained fixture chronology requires primary source research.'};
+  };
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},blocked,f.options)).status,'research-blocked');
+  const blockerBytes=Buffer.from('{"blocked":true,"reason":"The original fixture research hold."}');
+  const blockerHash=sha256(blockerBytes.toString()).slice(7);
+  const supplement={schemaVersion:1,book:'fixture',chapter:'001',jobKey:key,sourceHash:jobPacket.sourceHash,
+    extractionHash:jobPacket.extractionHash,originalSourceHash:f.packet.sourceHash,originalExtractionHash:f.packet.extractionHash,
+    blockerHash:`sha256:${blockerHash}`,evidence:'The independent fixture source is https://example.invalid/primary.'};
+  const supplementBytes=Buffer.from(JSON.stringify(supplement)),supplementHash=sha256(supplementBytes.toString()).slice(7);
+  const proposal=repair(jobTask),raw=Buffer.from(JSON.stringify(proposal)),artifactHash=sha256(raw.toString()).slice(7);
+  fs.writeFileSync(path.join(directory,`raw-research-blocker-${blockerHash}.json`),blockerBytes);
+  fs.writeFileSync(path.join(directory,`research-supplement-${supplementHash}.json`),supplementBytes);
+  fs.writeFileSync(path.join(directory,`raw-repair-artifact-${artifactHash}.json`),raw);
+  // Represent the exact crash window: job output is durable and worker state
+  // is returned, but no workflow receipt or advanced repair candidate exists.
+  writeJsonAtomic(path.join(directory,`${key}.json`),proposal);
+  const stateFile=path.join(directory,'state.json'),state=readJson(stateFile);
+  state.jobs[key]={agentId:'fixture-repair',runId:'fixture-run',status:'returned',artifactHash,
+    researchSupplementHash:supplementHash,researchBlockerHash:blockerHash,
+    researchAttempts:[{agentId:'fixture-repair',priorRunId:'fixture-prior-run',supplementHash,blockerHash}]};
+  writeJsonAtomic(stateFile,state);
+  return {f,directory,key,supplement,supplementHash,artifactHash,stateFile};
+}
+
+test('crash after supplemented proposal requires original supplement before applying candidate',async t=>{
+  const {f,directory,key,supplement,stateFile}=await supplementedProposalCrashFixture(t);
+  let called=0;
+  const worker=async task=>{called++;if(task.kind==='review')throw new Error('fixture independent reaudit interruption');throw new Error('fixture worker must not run');};
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/supplement|receipt/i);
+  assert.equal(called,0);assert.deepEqual(readJson(f.file),f.extraction);
+  let state=readJson(stateFile);
+  assert.equal(state.repairIndex ?? 0,0);
+  assert.equal(state.researchSupplementReceipts?.[key],undefined);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,researchSupplement:supplement}),/fixture independent reaudit interruption/);
+  state=readJson(stateFile);
+  assert.ok(state.researchSupplementReceipts[key]);
+  assert.ok(fs.existsSync(path.join(directory,state.candidate)));
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+
+test('supplement receipt evidence is always checked even if caller omits supplement',async t=>{
+  for(const damage of ['missing','changed']){
+    const {f,directory,supplement,supplementHash}=await supplementedProposalCrashFixture(t);
+    const worker=async task=>{if(task.kind==='review')throw new Error('fixture independent reaudit interruption');throw new Error('unexpected repair');};
+    await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,researchSupplement:supplement}),/fixture independent reaudit interruption/);
+    const file=path.join(directory,`research-supplement-${supplementHash}.json`);
+    if(damage==='missing')fs.unlinkSync(file);else fs.writeFileSync(file,'changed fixture evidence');
+    let called=false;
+    await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;throw new Error('must not run');},f.options),/receipt evidence (?:is )?(missing|changed)/i,damage);
+    assert.equal(called,false,damage);assert.deepEqual(readJson(f.file),f.extraction);
+  }
+});
+
+test('supplemented proposal cannot advance without matching post-dispatch attempt provenance',async t=>{
+  for(const failure of ['no-attempt','before-send','dispatch-before-run-checkpoint','missing-prior-run','wrong-agent','wrong-blocker','wrong-supplement']){
+    const {f,supplement,key,stateFile}=await supplementedProposalCrashFixture(t);
+    const state=readJson(stateFile),job=state.jobs[key],attempt=job.researchAttempts[0];
+    if(failure==='no-attempt')delete job.researchAttempts;
+    if(failure==='before-send'){job.status='sending';job.runId=attempt.priorRunId;}
+    if(failure==='dispatch-before-run-checkpoint')job.runId=attempt.priorRunId;
+    if(failure==='missing-prior-run')delete attempt.priorRunId;
+    if(failure==='wrong-agent')attempt.agentId='different-agent';
+    if(failure==='wrong-blocker')attempt.blockerHash='0'.repeat(64);
+    if(failure==='wrong-supplement')attempt.supplementHash='0'.repeat(64);
+    writeJsonAtomic(stateFile,state);
+    let called=false;
+    await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;throw new Error('must not execute');},
+      {...f.options,researchSupplement:supplement}),/provenance|attempt|dispatch/i,failure);
+    assert.equal(called,false,failure);
+    assert.deepEqual(readJson(f.file),f.extraction,failure);
+    assert.equal(readJson(stateFile).researchSupplementReceipts?.[key],undefined,failure);
+  }
+});
+
+test('two sequential researched blockers continue the same workflow to a verified repair receipt',async t=>{
+  const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  const firstRaw=JSON.stringify({blocked:true,reason:'First chronology finding needs source research.'});
+  const secondRaw=JSON.stringify({blocked:true,reason:'A second distinct chronology question needs source research.'});
+  let firstTask,proposal,sendCount=0,remoteArtifact=null,runs=[];
+  const agent={agentId:'fixture-retained',async listArtifacts(){return remoteArtifact===null?[]:[{path:`/opt/cursor/artifacts/date-${firstTask.key}.json`}];},
+    async downloadArtifact(){return Buffer.from(typeof remoteArtifact==='string'?remoteArtifact:JSON.stringify(remoteArtifact));}};
+  const Agent={async create(){return agent;},async resume(id){assert.equal(id,agent.agentId);return agent;},
+    async listRuns(){return {items:runs};},async getUsage(){return {usage:{totalTokens:1}};}};
+  const cursor=cursorDateWorker({apiKey:'offline-only',model:'offline-fixture',maxWorkerBytes:65536,timeoutMs:1000,
+    maxRunCostCents:300,maxRunTokens:4000000,async saveRemoteJob(){}},createRunControl(),{
+    Agent,async send(){const run={id:`fixture-run-${++sendCount}`,status:'running'};runs=[run,...runs];return run;},
+    async wait(run){remoteArtifact=sendCount===1?firstRaw:sendCount===2?secondRaw:proposal;run.status='completed';return run;},
+  });
+  const worker=async task=>{
+    if(task.kind==='review'){
+      if(task.key.startsWith('reaudit-'))throw new Error('fixture fresh independent reaudit interruption');
+      return review(task);
+    }
+    firstTask??=task;proposal=repair(task);return cursor(task);
+  };
+  const run=options=>runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,...options});
+  assert.equal((await run({})).status,'research-blocked');
+  const originalLegacy=fs.readFileSync(path.join(directory,'research-blocker.json'));
+  const buildSupplement=(raw,evidence)=>({schemaVersion:1,book:'fixture',chapter:'001',jobKey:firstTask.key,
+    sourceHash:firstTask.packet.sourceHash,extractionHash:firstTask.packet.extractionHash,
+    originalSourceHash:f.packet.sourceHash,originalExtractionHash:f.packet.extractionHash,
+    blockerHash:sha256(raw),evidence});
+  const firstSupplement=buildSupplement(firstRaw,'First independent source: https://example.invalid/one .');
+  assert.equal((await run({researchSupplement:firstSupplement})).status,'research-blocked');
+  const secondSupplement=buildSupplement(secondRaw,'Second independent source: https://example.invalid/two .');
+  await assert.rejects(run({researchSupplement:secondSupplement}),/fixture fresh independent reaudit interruption/);
+  const state=readJson(path.join(directory,'state.json'));
+  const job=state.jobs[firstTask.key],receipt=state.researchSupplementReceipts[firstTask.key];
+  assert.equal(sendCount,3);assert.equal(job.agentId,'fixture-retained');
+  assert.deepEqual(job.researchAttempts.map(a=>a.blockerHash),[sha256(firstRaw).slice(7),sha256(secondRaw).slice(7)]);
+  assert.equal(receipt.supplementHash,sha256(JSON.stringify(secondSupplement)).slice(7));
+  for(const [raw,supplement] of [[firstRaw,firstSupplement],[secondRaw,secondSupplement]]){
+    assert.equal(fs.readFileSync(path.join(directory,`raw-research-blocker-${sha256(raw).slice(7)}.json`),'utf8'),raw);
+    assert.equal(fs.readFileSync(path.join(directory,`research-supplement-${sha256(JSON.stringify(supplement)).slice(7)}.json`),'utf8'),JSON.stringify(supplement));
+  }
+  assert.deepEqual(fs.readFileSync(path.join(directory,'research-blocker.json')),originalLegacy);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  await assert.rejects(run({}),/fixture fresh independent reaudit interruption/);
+  assert.equal(sendCount,3);
+});
+
+test('a second-blocker transition rejects missing, mismatched or nonblocked evidence before executing',async t=>{
+  for(const failure of ['missing-raw','missing-normalized','wrong-job','wrong-hash','wrong-run','wrong-agent','same-blocker-changed-supplement','nonblocked']){
+    const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+    let task;
+    const initial=async current=>{if(current.kind==='review')return review(current);task=current;return {blocked:true,reason:'The first fixture research hold needs primary evidence.'};};
+    assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},initial,f.options)).status,'research-blocked');
+    const initialRaw=JSON.stringify({blocked:true,reason:'The first fixture research hold needs primary evidence.'});
+    const later=failure==='nonblocked'?{changes:[]}:{blocked:true,reason:'A different fixture research hold also needs primary evidence.'};
+    const laterRaw=JSON.stringify(later),initialHash=sha256(initialRaw).slice(7),laterHash=sha256(laterRaw).slice(7);
+    const firstSupplement={schemaVersion:1,book:'fixture',chapter:'001',jobKey:task.key,
+      sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,originalSourceHash:f.packet.sourceHash,
+      originalExtractionHash:f.packet.extractionHash,blockerHash:`sha256:${initialHash}`,evidence:'Fixture source A.'};
+    const secondSupplement={...firstSupplement,blockerHash:`sha256:${laterHash}`,evidence:'Fixture source B.'};
+    const firstSupplementHash=sha256(JSON.stringify(firstSupplement)).slice(7);
+    const normalized=Buffer.from(`${JSON.stringify(later,null,2)}\n`),normalizedHash=sha256(normalized.toString()).slice(7);
+    const archive=path.join(directory,'blocker-archive',`${normalizedHash}.json`);
+    fs.mkdirSync(path.dirname(archive),{recursive:true});
+    fs.writeFileSync(archive,normalized);
+    fs.writeFileSync(path.join(directory,`raw-research-blocker-${initialHash}.json`),initialRaw);
+    fs.writeFileSync(path.join(directory,`raw-research-blocker-${laterHash}.json`),laterRaw);
+    fs.writeFileSync(path.join(directory,`research-supplement-${firstSupplementHash}.json`),JSON.stringify(firstSupplement));
+    const stateFile=path.join(directory,'state.json'),state=readJson(stateFile);
+    state.jobs[task.key]={agentId:'fixture-agent',runId:'fixture-next-run',status:'returned',artifactHash:laterHash,
+      researchSupplementHash:firstSupplementHash,researchBlockerHash:initialHash,
+      researchAttempts:[{blockerHash:initialHash,supplementHash:firstSupplementHash,agentId:'fixture-agent',priorRunId:'fixture-prior-run'}]};
+    state.blockerArchives.push({kind:'workflow-normalized',jobKey:task.key,path:`blocker-archive/${normalizedHash}.json`,
+      sha256:normalizedHash,bytes:normalized.length,remoteArtifactHash:laterHash,agentId:'fixture-agent',runId:'fixture-next-run'});
+    if(failure==='missing-raw')fs.unlinkSync(path.join(directory,`raw-research-blocker-${laterHash}.json`));
+    if(failure==='missing-normalized')fs.unlinkSync(archive);
+    if(failure==='wrong-job')secondSupplement.jobKey='repair-0-other-job';
+    if(failure==='wrong-hash')secondSupplement.blockerHash=`sha256:${'0'.repeat(64)}`;
+    if(failure==='wrong-run')state.jobs[task.key].runId='fixture-prior-run';
+    if(failure==='wrong-agent')state.jobs[task.key].agentId='fixture-other-agent';
+    if(failure==='same-blocker-changed-supplement')secondSupplement.blockerHash=firstSupplement.blockerHash;
+    writeJsonAtomic(stateFile,state);
+    let called=false;
+    await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;throw new Error('must not execute');},
+      {...f.options,researchSupplement:secondSupplement}),/supplement|transition|blocker|evidence/i,failure);
+    assert.equal(called,false,failure);
+    assert.deepEqual(readJson(f.file),f.extraction,failure);
+    assert.equal(readJson(stateFile).researchSupplementReceipts?.[task.key],undefined,failure);
+  }
+});
+
+test('archiving legacy blocker before interruption preserves exact bytes and resumes idempotently',async t=>{
+  const f=fixture(t),directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  const worker=async task=>task.kind==='review'?review(task):{blocked:true,reason:'The original chronology needs primary-source research.'};
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'research-blocked');
+  const legacy=path.join(directory,'research-blocker.json');
+  const raw=Buffer.from('{\n  "blocked": true,\n  "reason": "Preserved legacy raw bytes need primary source research."\n}\n');
+  fs.writeFileSync(legacy,raw);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw new Error('fixture interruption');},f.options),/fixture interruption/);
+  let state=readJson(path.join(directory,'state.json'));
+  const ref=state.blockerArchives.find(r=>r.kind==='legacy-raw-unattributed'&&r.sha256===sha256(raw.toString('utf8')).slice(7));
+  assert.ok(ref);assert.deepEqual(fs.readFileSync(path.join(directory,ref.path)),raw);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'research-blocked');
+  state=readJson(path.join(directory,'state.json'));
+  assert.equal(state.blockerArchives.filter(r=>r.kind==='legacy-raw-unattributed'&&r.sha256===ref.sha256).length,1);
+  assert.deepEqual(fs.readFileSync(legacy),raw);assert.deepEqual(readJson(f.file),f.extraction);
+});
+
+test('a prior retained repair context cannot independently re-audit its replacement work',async t=>{
+  for(const priorField of ['priorAgentId','priorUsages']){
+    const f=fixture(t);
+    const worker=async task=>{
+      if(task.kind==='repair'){
+        await task.save({agentId:'new-repair-context',...(priorField==='priorAgentId'?{priorAgentId:'old-repair-context'}:{priorUsages:[{agentId:'old-repair-context'}]})});
+        return repair(task);
+      }
+      const result=review(task);
+      if(task.key.startsWith('reaudit-'))result.reviewer.agentId='old-repair-context';
+      return result;
+    };
+    await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/cannot approve its own/);
+    assert.deepEqual(readJson(f.file),f.extraction);
+  }
 });
 test('person-check context includes that person\'s other dates and evidence',t=>{
   const f=fixture(t);
