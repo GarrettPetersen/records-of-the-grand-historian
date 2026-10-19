@@ -1,0 +1,27 @@
+// Research-only removal of the independently identified false polity disposition.
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+const dir = path.dirname(fileURLToPath(import.meta.url));
+const fixture = process.env.JINSHU127_REVIEW_FIXTURE;
+if (!fixture || !path.isAbsolute(fixture)) throw new Error('An absolute staging fixture is required');
+const { validateCompactPeopleExtraction } = await import(pathToFileURL(path.join(fixture, 'scripts/validate-people-extraction.mjs')).href);
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const base = 'jinshu127-four-field-materialized-20261020-incomplete';
+const inputs = [['extraction.json', '4f95b6bc29e14bd7a65869983e855edec7875b10391965c7029538735f257784'], ['packet.json', '9bdab3e1bc5ed44cc6f1f5ba7a7e82f2071a280566fec48e94519c34c81c8cfc']];
+const [extraction, packet] = inputs.map(([name, expected]) => { const bytes = fs.readFileSync(path.join(dir, base, name)); if (sha(bytes) !== expected) throw new Error(`Changed ${name}`); return JSON.parse(bytes); });
+const groups = extraction.candidateDispositions.filter(group => group[0] === 'not-person' && group[1] === 'polity');
+if (groups.length !== 1) throw new Error('Unexpected polity groups');
+const matches = groups[0][2].filter(entry => entry[0] === 'cand_b79e43b7adcb8ce4' && entry[1] === 'Jin');
+if (matches.length !== 1) throw new Error('Unexpected false disposition');
+groups[0][2].splice(groups[0][2].indexOf(matches[0]), 1);
+if (extraction.surfaces.filter(row => row[0] === 'p125' && row[1] === 'personal-name' && row[2] === 'en' && row[3] === 'Jin' && JSON.stringify(row[4]) === JSON.stringify([['s0213', [1]]])).length !== 1) throw new Error('Reviewed personal-name surface missing');
+const result = validateCompactPeopleExtraction(extraction, packet, {strictAliasDispositions: true});
+const bytes = Buffer.from(`${JSON.stringify(extraction, null, 2)}\n`);
+const receipt = {status: 'research-only-needs-independent-review', inputHashes: Object.fromEntries(inputs), extractionSha256: sha(bytes), correction: 'Remove the false polity disposition for s0213 Jin while retaining the already-reviewed personal-name surface.', limitations: ['No canonical publication or complete chapter approval.', 'Independent verification of this exact correction remains required.', 'The reconciliation algorithm is unsafe and requires its own fix and review.'], stats: result.stats};
+const out = path.join(dir, 'jinshu127-four-field-reconciliation-corrected-20261020-incomplete');
+fs.mkdirSync(out);
+fs.writeFileSync(path.join(out, 'extraction.json'), bytes, {flag: 'wx', mode: 0o600});
+fs.writeFileSync(path.join(out, 'receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`, {flag: 'wx', mode: 0o600});
+console.log(JSON.stringify(receipt, null, 2));
