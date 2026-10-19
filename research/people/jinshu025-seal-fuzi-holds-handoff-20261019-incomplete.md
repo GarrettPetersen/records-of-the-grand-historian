@@ -27,6 +27,37 @@ claims, 528 dispositions, and zero alias-disposition conflicts. The local
 validator dependency graph was not proven identical to staging; this is not
 a staging-code validation.
 
+## Subsequent staging-code validation and focused editorial review
+
+An independent run against staging revision
+`1ac7a4d749f50ff2ded0f2d9e8dff5c8cd45e930` rebuilt the packet from the
+retained seal-conflict research source (raw SHA-256
+`02c4c78e636051d3e81397d696443984f3963ebaad881805befcc60a92c6be78`)
+and passed strict compact validation of the candidate above: 607 units, 683
+scanner candidates, 80 people, 173 mentions, 447 claims, eight repairs, 528
+dispositions, and zero alias conflicts. The packet chapter fingerprint was
+`sha256:fe835f616bfeab4944962cb93e35e6da785d484b5b45f211d862bb20ebc418da`.
+The run used staging scripts and reference files in a 20 MiB temporary
+snapshot, removed afterwards, and the existing local dependencies (Node
+v23.7.0, ajv 8.20.0, ajv-formats 3.0.1). It did not independently reproduce
+dependency installation. Importantly, this research source differs from the
+staging canonical chapter, whose raw SHA-256 was
+`e53efc427e7a19c038d54ccf5f3253ce68bb5cb5c121b8bc9ab4e615f673ef60`;
+the result is not canonical-source validation or an approval.
+
+For s0444, a separate focused editorial review agreed that `《傅子》` is a
+work title: the existing `The Master Fu` and `Fu Xuan` introductions do not
+faithfully represent what that sentence explicitly names. The reviewer found
+the proposed `The Fu Zi says` introduction and `form` supported, and
+recommended preserving 改 as `ordered it altered to be lower`. This is a
+focused assessment, not an applied source correction or whole-chapter review.
+Removing the idiomatic `Fu Xuan` wording would invalidate its personal-name
+surface: reconcile mentions, name and authorship evidence and candidate
+dispositions, regenerate fingerprints and obtain fresh reviews. Do not label
+the title as a person's name or cite another chapter's unit as local evidence.
+The focused review compared s0444 in both the retained source and the canonical
+chapter, not every unit of those differing files.
+
 This is **not** an editorial, identity, or date approval and is not publishable.
 In particular, p051 still contains a source-attestation event with an imported
 lifespan and unresolved author attribution. See the staged independent Fu Zi
