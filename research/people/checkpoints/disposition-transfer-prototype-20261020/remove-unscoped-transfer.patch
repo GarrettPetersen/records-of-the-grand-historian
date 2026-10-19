@@ -1,0 +1,27 @@
+diff --git a/scripts/lib/people-translation-repairs.mjs b/scripts/lib/people-translation-repairs.mjs
+--- a/scripts/lib/people-translation-repairs.mjs
++++ b/scripts/lib/people-translation-repairs.mjs
+@@ -1541,23 +1541,6 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
+       accounted.add(candidate.id);
+       continue;
+     }
+-    const priorSurfaceDispositions = previousDispositions.filter((disposition) => {
+-      const previous = previousCandidateById.get(disposition.candidate);
+-      return previous &&
+-        previous.language === candidate.language &&
+-        previous.exact === candidate.exact;
+-    });
+-    const priorDispositionKinds = new Set(priorSurfaceDispositions.map((item) =>
+-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+-    ));
+-    if (priorSurfaceDispositions.length > 0 && priorDispositionKinds.size === 1) {
+-      reconciled.candidateDispositions.push({
+-        ...structuredClone(priorSurfaceDispositions[0]),
+-        candidate: candidate.id,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+     const counterpartDispositions = reconciled.candidateDispositions.filter((disposition) => {
+       const counterpart = candidateById.get(disposition.candidate);
+       return counterpart &&
