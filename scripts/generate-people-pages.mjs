@@ -287,10 +287,12 @@ function renderWesternInterval(value) {
   return start && end ? `${escapeHtml(start)} to ${escapeHtml(end)}` : null;
 }
 
-function sourceDateText(value) {
-  if (typeof value === 'string') return value;
-  if (!value || typeof value !== 'object') return '';
-  return String(value.text ?? value.zh ?? value.en ?? '').trim();
+function sourceDateParts(value) {
+  if (typeof value === 'string') return [{ text: value.trim(), lang: null }];
+  if (!value || typeof value !== 'object') return [];
+  return [['zh', 'zh-Hant'], ['en', 'en'], ['text', null]]
+    .filter(([key]) => typeof value[key] === 'string')
+    .map(([key, lang]) => ({ text: value[key].trim(), lang }));
 }
 
 export function renderDateValue(value) {
@@ -303,8 +305,14 @@ export function renderDateValue(value) {
       context.westernBounds && boundedDateLabel({ westernBounds: context.westernBounds }, formatPersonWesternYear),
       formatPersonWesternYear(context)].filter(Boolean);
     for (const date of dates) items.push(`<span class="person-fact-date">${date}</span>`);
-    const source = sourceDateText(context.sourceDate) || String(context.dateText ?? '').trim();
-    if (source && !dates.includes(source)) items.push(`<span class="person-fact-date-source" lang="zh-Hant">${escapeHtml(source)}</span>`);
+    const sourceParts = sourceDateParts(context.sourceDate).filter(({ text }) => text);
+    if (!sourceParts.length && typeof context.dateText === 'string') sourceParts.push({ text: context.dateText.trim(), lang: null });
+    const seenSources = new Set();
+    for (const { text, lang } of sourceParts) {
+      if (!text || dates.includes(text) || seenSources.has(text)) continue;
+      seenSources.add(text);
+      items.push(`<span class="person-fact-date-source"${lang ? ` lang="${lang}"` : ''}>${escapeHtml(text)}</span>`);
+    }
     if (context.unresolvedReason) items.push(`<span class="person-fact-date-reason">${escapeHtml(context.unresolvedReason)}</span>`);
   }
   return [...new Set(items)].join(' ') || null;
