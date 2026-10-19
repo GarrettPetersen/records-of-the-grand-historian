@@ -46,6 +46,13 @@ The accompanying `jinshu053-*-20261019.md` research files preserve both
 unapproved drafts and the separate focused reviews, including row-level
 objections. They are research checkpoints only: do not import them as accepted
 editorial decisions, and recheck the pinned source before any application.
+Further opening, middle and final-unit drafts, plus separate row-level
+cross-checks, are preserved alongside them at the `54eb5a3` source revision.
+Reviewers identified supported passages as well as rejected or unresolved
+wording; none of the drafts is a chapter-wide approval. In particular,
+s0205's staged `華暠` conflicts with `華廙` in another transcription and
+the account of Hua Heng's father in Jinshu 044. Treat this as a source and
+identity question requiring further witness review, not an authorized change.
 
 At the pinned revision, a read-only scan found 80 resolution files containing
 595 decisions referencing 45 local Jinshu 053 people. These are potential
