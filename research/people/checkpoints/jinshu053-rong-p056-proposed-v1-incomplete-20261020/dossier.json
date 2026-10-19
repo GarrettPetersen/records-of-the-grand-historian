@@ -1,0 +1,218 @@
+{
+  "status": "INCOMPLETE proposed-only: source and existing history untouched; no review or publication approval",
+  "inputPins": {
+    "source.json": "26f2169267b866e9203dd05f902044aa6c7839d7b780bba10ce4a1b0066c7e78",
+    "candidate.json": "35620e8c25541384a137c93eb7d2c6324f7777f5b142860ef8fb74d8bcf2c131",
+    "editorial-history.json": "9542ec6bf9385e9b1974d19c74c8227e902931abad8bc33cd58b18c27f696f10"
+  },
+  "sourceUnit": {
+    "id": "s0063",
+    "zh": "於是使尚書和郁持節，解結為副，及大將軍梁王肜、鎮東將軍淮南王允、前將軍東武公澹、趙王倫、太保何劭詣東宮，廢太子為庶人。"
+  },
+  "proposedTranslationReplacements": [
+    {
+      "unitId": "s0063",
+      "field": "literal",
+      "replacements": [
+        [
+          "Prince Liang of Liang",
+          "Rong, Prince of Liang"
+        ],
+        [
+          "Prince Huainan of Yun",
+          "Yun, Prince of Huainan"
+        ],
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0063",
+      "field": "idiomatic",
+      "replacements": [
+        [
+          "Sima Tong",
+          "Sima Rong"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0108",
+      "field": "literal",
+      "replacements": [
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0108",
+      "field": "idiomatic",
+      "replacements": [
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0111",
+      "field": "literal",
+      "replacements": [
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0179",
+      "field": "literal",
+      "replacements": [
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0179",
+      "field": "idiomatic",
+      "replacements": [
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    },
+    {
+      "unitId": "s0183",
+      "field": "literal",
+      "replacements": [
+        [
+          "Prince Zhao of Lun",
+          "Lun, Prince of Zhao"
+        ]
+      ]
+    }
+  ],
+  "postAcceptanceReconciliation": [
+    {
+      "target": "people[p051].preferred",
+      "before": [
+        "Sima Tong",
+        "司馬肜",
+        "Sima Tong"
+      ],
+      "after": [
+        "Sima Rong",
+        "司馬肜",
+        "Sima Rong"
+      ]
+    },
+    {
+      "target": "people[p051].personal-name",
+      "before": [
+        {
+          "kind": "personal-name",
+          "en": "Sima Tong",
+          "zh": "肜",
+          "pinyin": "Tong"
+        },
+        "explicit",
+        [
+          "s0063"
+        ]
+      ],
+      "after": [
+        {
+          "kind": "personal-name",
+          "en": "Sima Rong",
+          "zh": "肜",
+          "pinyin": "Rong"
+        },
+        "strongly-inferred",
+        [
+          "s0063"
+        ]
+      ]
+    },
+    {
+      "target": "surfaces[p051] English personal-name",
+      "before": [
+        "p051",
+        "personal-name",
+        "en",
+        "General-in-Chief Sima Tong",
+        [
+          [
+            "s0063",
+            [
+              0
+            ]
+          ]
+        ]
+      ],
+      "after": [
+        "p051",
+        "personal-name",
+        "en",
+        "General-in-Chief Sima Rong",
+        [
+          [
+            "s0063",
+            [
+              0
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "target": "people[p054] title claim",
+      "before": "Prince Zhao of Lun",
+      "after": "Prince of Zhao",
+      "evidence": [
+        "s0063",
+        "s0108",
+        "s0179"
+      ]
+    },
+    {
+      "target": "surfaces[p054] English title references at s0108 and s0179",
+      "before": "Prince Zhao of Lun",
+      "after": "Prince of Zhao",
+      "note": "Regenerate occurrences against the final approved source; check whether overlapping Lun personal-name spans require separate decisions."
+    },
+    {
+      "target": "s0063 p052 and p054 English title references",
+      "before": "No English title-reference surface for p054 in this unit",
+      "after": "Review exact Prince of Huainan and Prince of Zhao mentions after source application; preserve p052 existing and add p054 only if validator and independent review support the span."
+    }
+  ],
+  "reasoning": "053 s0063 explicitly supplies 梁王肜, not 司馬. Cross-chapter Jinshu 038 and the CText person record independently substantiate the surname and conventional romanization; do not present full-name inference as literal wording in 053.",
+  "references": [
+    "research/people/jinshu053-sima-rong-incomplete-20261020.md",
+    "data/people/generated/jinshu-identity-ref-64521198-20261018/jinshu053-rong-v1-independent-review-20261020.md"
+  ],
+  "holds": [
+    "The named-person and mention replacements are a plan, not current candidate content.",
+    "Fresh independent decisions against these exact proposed repair IDs are required.",
+    "Full editorial, date, identity, source-variant and publication gates remain open.",
+    "Rebuild the source packet and exact mention spans after accepted edits; validate and reconcile all invalidated review fingerprints.",
+    "No synthetic editorial decisions or approvals are created."
+  ],
+  "validation": {
+    "units": 209,
+    "candidates": 373,
+    "people": 71,
+    "mentions": 517,
+    "claims": 538,
+    "repairs": 22,
+    "dispositions": 140,
+    "aliasDispositionConflicts": 0
+  }
+}
