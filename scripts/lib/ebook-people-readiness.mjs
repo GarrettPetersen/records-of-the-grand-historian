@@ -44,7 +44,9 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
     return book === product.book && chapterIds.has(chapter);
   }));
   const peopleNeedingReview = people.filter((person) => person.curation?.status === 'needs-review');
-  const ready = people.length > 0 && missingChapters.length === 0 && legacyChapters.length === 0 &&
+  // A preview context can contain canonical facts from unreviewed chapters,
+  // even when all the product's own chapters satisfy these local checks.
+  const ready = siteContext.preview !== true && people.length > 0 && missingChapters.length === 0 && legacyChapters.length === 0 &&
     peopleNeedingReview.length === 0 && dateAuditChapters.length === 0;
   const active = people.length > 0 && (ready || allowPreview);
 
@@ -54,7 +56,9 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
     preview: active && !ready,
     reason: active
       ? null
-      : people.length === 0
+      : siteContext.preview === true && people.length > 0
+        ? 'people-catalog-preview'
+        : people.length === 0
         ? 'no-people-in-product'
         : 'product-catalog-incomplete',
     chapterIds,

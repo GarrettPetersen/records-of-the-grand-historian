@@ -35,6 +35,34 @@ assert.equal(ready.ready, true);
 assert.equal(ready.preview, false);
 assert.deepEqual(ready.people.map((item) => item.id), ['ready']);
 
+// A locally complete product cannot promote globally incomplete preview data.
+const previewContext = { ...context, preview: true };
+const previewProduct = { book: 'fixture', chapters: ['001'] };
+const gatedPreview = assessEbookPeopleReadiness(previewContext, previewProduct);
+assert.equal(gatedPreview.active, false);
+assert.equal(gatedPreview.ready, false);
+assert.equal(gatedPreview.preview, false);
+assert.equal(gatedPreview.reason, 'people-catalog-preview');
+const permittedPreview = assessEbookPeopleReadiness(previewContext, previewProduct, { allowPreview: true });
+assert.equal(permittedPreview.active, true);
+assert.equal(permittedPreview.ready, false);
+assert.equal(permittedPreview.preview, true);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: permittedPreview.active,
+  ready: permittedPreview.ready,
+  preview: permittedPreview.preview,
+  people: permittedPreview.people.length,
+  shards: 1,
+  expectedMentionLinks: 0,
+  expectedBacklinks: 0,
+  missingChapters: permittedPreview.missingChapters,
+  legacyChapters: permittedPreview.legacyChapters,
+  dateAuditChapters: permittedPreview.dateAuditChapters,
+  peopleNeedingReview: permittedPreview.peopleNeedingReview.length,
+}, { requireGlossary: true }), [
+  'People glossary is an incomplete preview and is not valid for publication.',
+]);
+
 const unaudited = structuredClone(context);
 delete unaudited.siteIndex.chapters['fixture:001'].dateAudit;
 const datesPending = assessEbookPeopleReadiness(unaudited, { book: 'fixture', chapters: ['001'] });
