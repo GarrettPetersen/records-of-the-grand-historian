@@ -71,6 +71,13 @@ research inputs at `6c7a245`. The generator reproduces the saved inventory
 byte-for-byte. Its per-row labels distinguish provisional support, further
 review and unchanged fields; they are not accepted production decisions.
 
+The separate allusions proposal and independent review dated 2026-10-19
+provide source-based follow-up for s0190, s0192 and s0197. They support the
+historical comparisons but retain wording or presentation holds; the bee
+story has multiple later tellings and a pre-compilation witness to the phrase
+does not establish which detailed narrative the author intended. The reviewed
+proposal is not yet an accepted or applied translation.
+
 At the pinned revision, a read-only scan found 80 resolution files containing
 595 decisions referencing 45 local Jinshu 053 people. These are potential
 dependencies, not a finding that all are stale or wrong. Changes to names or
