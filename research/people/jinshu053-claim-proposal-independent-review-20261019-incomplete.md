@@ -1,0 +1,26 @@
+# Jinshu 053: independent source review of 13-record claim proposal
+
+Status: **incomplete; not approval to publish, not a date audit, not an identity decision**. I independently read the v3 source and extraction and the 13-record proposal, then consulted the sources below. I did not author either proposal or v3, or change canonical files. Byte hashes:
+
+- V3 `source.json`: `a1fe01f4178470c5328f84ce651327df84042f11165cd45587bd16e5ce700d7d`.
+- V3 `extraction.json`: `13215bc5ec25605eda82e9ae22e99786480821e61b5a709faed7816e0445f22f`.
+- Proposed `extraction.json`: `04ebf839425c6220751d26340a84ab224d740df4a0505fbad0976d7d6111de07`.
+
+I compared all records and metadata between these two extraction files: the 13 changed records match the declared before/after delta, with no other differences. This byte-level check is not production validation.
+
+## Findings
+
+1. **Correct the proposal before using it.** The three sibling claims c0350–c0352 retain `kinshipTerm: {zh: "子", en: "brother"}`. Their sole cited evidence, s0170, uses 子 for the prince's sons, not a term meaning brother; brotherhood follows inferentially from the common father. The field is optional: remove the misleading term, preserve the inferred sibling relationship, and do not reintroduce unsupported maternity or relative-age qualifiers. Bin-linked sibling relations still depend on restoring and independently reviewing the missing name in s0170.
+2. The removal of birth-order, relative-age and shared-parentage values from c0333, c0348–c0352 is warranted by their existing local evidence. It does **not** establish that the removed values are historically false. In particular, [Zizhi Tongjian 83](https://ancient-china-books.github.io/zizhitongjian/OEBPS/Text/6227.html) calls Bin the crown prince's eldest son and calls Jiang Jun Bin's mother. The local extract cannot cite s0017 as proof that its anonymous newborn is Bin, and the external statement does not itself identify that newborn passage. Review external provenance separately if the production model supports it. I did not independently verify the previous note's claimed Jinshu jiaozhu passage because its server failed to return content; no conclusion about Jiang's other children follows from this review.
+3. The proposed ordinal-free descriptors for p028, p068 and p069 are conservative. The description `imperial grandson-heir` for Zang and Shang is supported by local s0176 and s0208, respectively. The local s0170 lacuna and s0017 uncertainty remain open; p028 links, c0333's evidence, c0334, c0113, m0098, related hints and date context are not validated by this proposal.
+4. s0063 identifies 梁王肜 as 大將軍, and [Jinshu 38](https://zh.wikisource.org/wiki/晉書/卷038) describes Prince of Liang Rong and his general-in-chief appointment. The proposal's `Sima Rong` and downgrade of c0186's full-name certainty to `strongly-inferred` are reasonable; s0063 itself provides 肜 rather than the full surname. This is not a cross-chapter merge approval.
+5. In s0065, 太子保林蔣俊 identifies the crown prince's baolin Jiang Jun, supporting c0106's wording. The sentence identifies Dan as directing the armed escort, then says Xie and Jiang Jun died under interrogation; it does not unambiguously assign Dan as interrogator or authority. Removing `authorityPersonId` from c0528 is conservative; it does not settle the death date or audit it. [Jinshu 53](https://zh.wikisource.org/wiki/晉書/卷053) provides the full context.
+6. [Jinshu 53](https://zh.wikisource.org/wiki/晉書/卷053) has 虨 at both places missing from local s0170 and s0171. Restoration and the corresponding candidate/mention and source-fingerprint reconciliation require the separately reviewed source-repair workflow; this note does not authorize editing sealed inputs.
+
+No production completion is implied. Recheck the final modified output independently, validate against its exact source and packet, preserve the unresolved omissions and anonymous-child issue, and obtain fresh editorial, date and identity approvals before publication.
+
+## Exact corrected v2 review
+
+The independently supplied corrected candidate is `jinshu053-reviewed-claim-repair-proposal-v2-20261019-incomplete/extraction.json`, SHA-256 `a333db403b09483991c7401ba8fb3756c8da394c38bbe2ececaa85a1bc12c5be`; its declared `claim-repair-delta.json` has SHA-256 `168755cb17461467f743f549f48d3369c9eb985968403a2e40de0c372813166b`. I compared every extraction record to the v3 input: exactly the 13 declared records differ, each matching its declared before and after. Compared with the original proposal, only c0350–c0352 changed, and in each the sole change is removal of `kinshipTerm`. No rejected age or maternity qualifier reappears.
+
+I have no remaining source-based objection to these **13 narrow changes themselves**, subject to the explicit unresolved provenance and lacuna qualifications above. This is a scoped review of those changes, not approval of unchanged claims, of the extraction as a whole, of an external parentage assertion, or of publication. In particular c0333 and the Bin-linked sibling claims still carry the pre-existing unresolved evidence problems; the rest of the chapter requires independent review and its complete downstream gates. I did not independently run the production validators in this review.
