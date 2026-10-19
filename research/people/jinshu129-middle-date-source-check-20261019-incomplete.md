@@ -81,6 +81,16 @@ correction alongside the claim. The UTF-8 SHA-256 of the entire Chinese unit, wi
 trailing newline, is
 `96062b0e0a0f6279a6503bb407a610c4b760477e0b3cc9d4c2290a52ecbb38db`.
 
+For an editorial decision on this exact candidate, a minimal proposed opening
+for **both** English fields is “More than ten days later Nu died;” with the
+rest of each field preserved. The corresponding claim should likewise remove
+the unsupported upper bound. This is a proposal for the coordinated repair,
+not an applied change, date bound, or approval of the rest of the translation.
+An independent reviewer checked the two fields and s0148–s0150. Although the
+preceding sentence describes Nu's appointment, the Chinese does not explicitly
+identify that appointment as the interval's anchor; do not turn the narrative
+sequence into a separately asserted exact starting event.
+
 All three findings require reconciliation on the actual source/extraction
 fingerprints, then a fresh, complete independent review. They do not establish
 whole-chapter completion, identity resolution, or publication readiness.
