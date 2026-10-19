@@ -14,6 +14,7 @@ import { sha256, contentUnits, writeJsonAtomic } from './lib/people-content.mjs'
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { reservePeopleTargetsInLedger } from './lib/people-work-queue.mjs';
 import { inspectCombinedBefore, prepareCombinedCuration, verifyCombinedCuration, publishCombinedCuration } from './lib/people-combined-curation.mjs';
+import { CompletedDateGenerationHold } from './lib/people-date-workflow.mjs';
 import { combinedDatePacket, documentHash, replayCombinedSourceReordering, validateCombinedReviews } from './lib/people-combined-curation-review.mjs';
 
 const reason = 'Independently checked this exact source unit and its named individual against the complete fixture.';
@@ -23,6 +24,13 @@ const unpack = content => JSON.parse(Buffer.from(content.base64, 'base64'));
 const pinFile = file => ({ file, bytes: fs.statSync(file).size, sha256: hashFile(file) });
 const chunkRun = agentId => ({ model: 'offline-fixture-chunked', promptVersion: 7, agentId: null,
   chunks: [{ chunkId: '001', startOrder: 0, endOrderExclusive: 1, model: 'offline-fixture', agentId, runId: 'chunk-run', completedAt: '2026-09-13T00:00:00Z' }] });
+
+const runnerSource = fs.readFileSync(new URL('./run-people-date-workflow.mjs', import.meta.url), 'utf8');
+const reservationStart = 'reserved=mutateRemotePeopleWorkLedger(ledger=>{';
+const reservationEnd = '},{message:`Reserve date audit ${key}`}).result;';
+const start = runnerSource.indexOf(reservationStart), end = runnerSource.indexOf(reservationEnd, start);
+assert.ok(start >= 0 && end > start, 'production reservation callback must be present');
+const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
 
 function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
@@ -512,6 +520,11 @@ for (const boundary of ['lease', 'receipt', 'history', 'source', 'extraction', '
       assert.equal(claim.sourceHash, f.state.sourceHash);
       assert.equal(claim.extractionHash, f.state.extractionHash);
       assert.deepEqual(claim.jobs, f.spec.priorClaim.jobs);
+      const unchanged = structuredClone(f.ledger);
+      for (const o of [{ worker: claim.worker }, { worker: 'other', takeover: true }, { worker: claim.worker, release: true, takeover: true }]) {
+        assert.throws(() => makeOrdinaryReservation(o, f.key, CompletedDateGenerationHold)(f.ledger), /Combined curation .* pending/);
+        assert.deepEqual(f.ledger, unchanged);
+      }
     }
     assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
     assert.equal(f.ledger.dateAuditHistory[f.key].length, 1);

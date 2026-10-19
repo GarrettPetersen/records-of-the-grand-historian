@@ -31,7 +31,7 @@ process.env.GIT_TERMINAL_PROMPT='0';
 process.env.GIT_CONFIG_NOSYSTEM='1';
 process.env.GIT_CONFIG_GLOBAL='/dev/null';
 const {mutateRemotePeopleWorkLedger,readRemotePeopleWorkLedger,dateExecutorIsBusy,claimIsActive,reservePeopleTargetsInLedger}=await import('./lib/people-work-queue.mjs');
-const {runDateWorkflow,assertCompletedGenerationSafe,dateWorkflowDirectory}=await import('./lib/people-date-workflow.mjs');
+const {runDateWorkflow,assertCompletedGenerationSafe,dateWorkflowDirectory,CompletedDateGenerationHold}=await import('./lib/people-date-workflow.mjs');
 const {writeJsonAtomic,readJson}=await import('./lib/people-content.mjs');
 const source=fs.readFileSync(fileURLToPath(new URL('./run-people-date-workflow.mjs',import.meta.url)),'utf8');
 const marker='reserved=mutateRemotePeopleWorkLedger(ledger=>{';
@@ -40,7 +40,7 @@ const end=source.indexOf('},{message:`Reserve date audit ${key}`}).result;',star
 assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
 assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
 const body=source.slice(start+marker.length,end);
-const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe',`return ledger=>{${body}}`);
+const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold',`return ledger=>{${body}}`);
 const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
 const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
 const reconcileEnd=source.indexOf("},{message:'Reconcile completed date publications'});",reconcileStart);
@@ -52,11 +52,30 @@ const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-sou
 const options={worker:'owner',lane:'openrouter',takeover:false,release:false,'retry-blocked':false};
 const packet={sourceHash:h1,extractionHash:h1};
 const workflow=path.join(root,'workflow');
-const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight);
+const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold);
 const reconcile=()=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}));
 const read=()=>readRemotePeopleWorkLedger();
 const save=claim=>mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={[key]:structuredClone(claim)};delete l.dateAuditHistory;});
 const run=cb=>mutateRemotePeopleWorkLedger(cb).result;
+
+for(const pending of [{kind:'reviewed-combined-source-identity-date-curation',receiptHash:h1},null]) {
+  for(const [label,override] of [
+    ['same owner',{}],['foreign owner',{worker:'other'}],['release',{release:true}],
+    ['foreign release',{worker:'other',release:true}],['takeover',{takeover:true}],
+    ['release with takeover',{release:true,takeover:true}],
+  ])test(`pending ${pending===null?'null':'receipt'} prevents ${label}`,()=>{
+    const claim=prior({status:'active',combinedCuration:pending});save(claim);
+    const before=read();assert.throws(()=>run(callback(override)),e=>e instanceof CompletedDateGenerationHold && /Combined curation .* pending/.test(e.message));
+    assert.deepEqual(read(),before);
+  });
+  for(const status of ['active','research-blocked','ready'])test(`pending ${pending===null?'null':'receipt'} prevents reconciliation and extraction at ${status}`,()=>{
+    const claim=prior({status,combinedCuration:pending,executorToken:'expired',executorExpiresAt:'2020-01-01T00:00:00.000Z'});save(claim);
+    run(reconcile());assert.deepEqual(read().dateAudits[key],claim);
+    const result=run(l=>reservePeopleTargetsInLedger(l,[{...target,chapterFingerprint:h1}],{worker:'extractor',lane:'cursor-sdk',limit:1}));
+    assert.equal(result.claimed.length,0);assert.equal(result.blocked.length,1);
+    assert.deepEqual(read().dateAudits[key],claim);
+  });
+}
 
 for(const claim of [null,prior({status:'ready'}),prior({status:'active'})])test(`generation hold does not change ${claim?.status??'absent'} queue reservation`,()=>{
   mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={};delete l.dateAuditHistory;if(claim)l.dateAudits[key]=structuredClone(claim);});

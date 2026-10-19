@@ -139,7 +139,7 @@ if (o['dry-run']) {
     // checkpointing its remote outcome. No model turn is needed for this step.
     mutateRemotePeopleWorkLedger(ledger=>{
       for(const [key,claim] of Object.entries(ledger.dateAudits??{})) {
-        if(claim.worker!==o.worker || ['ready','stale-source'].includes(claim.status) || (claim.executorHost && claim.executorHost!==os.hostname()))continue;
+        if(Object.hasOwn(claim,'combinedCuration') || claim.worker!==o.worker || ['ready','stale-source'].includes(claim.status) || (claim.executorHost && claim.executorHost!==os.hostname()))continue;
         if(dateExecutorIsBusy(claim,{executorToken,takeover:o.takeover}))continue;
         const [book,chapter]=key.split('/');
         if(fs.existsSync(path.join(PEOPLE_DIR,'extractions',book,`${chapter}.json`)) && dateAuditStatus(book,chapter).status==='audited') {
@@ -158,6 +158,7 @@ if (o['dry-run']) {
         try { reserved=mutateRemotePeopleWorkLedger(ledger=>{
           ledger.dateAudits ??= {};
           const prior=ledger.dateAudits[key];
+          if(prior && Object.hasOwn(prior,'combinedCuration'))throw new CompletedDateGenerationHold(`Combined curation ${key} is pending; recover its sealed receipt before resuming or releasing date work`);
           if(o.release) {
             if(!prior||prior.worker!==o.worker)throw new Error('Only the owning worker may release date work');
             if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))throw new Error('Stop the active executor before explicitly taking over its reservation');
