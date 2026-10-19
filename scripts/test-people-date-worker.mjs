@@ -690,6 +690,19 @@ test('the supplement and repair input together obey the retained packet byte cei
   assert.equal(task.state.agentId, 'retained-repair');
 });
 
+test('supplement continuation counts validation feedback in the sealed message ceiling', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  task.state.validationError = '漢'.repeat(23000);
+  task.maxWorkerBytes = 65536;
+  const h = harness();
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  await assert.rejects(h.worker(task), /message exceeds 65536 bytes/i);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+});
+
 test('an interrupted supplemented continuation downloads a changed artifact without resending', async t => {
   const { task } = blockedRepairFixture(t);
   const supplementHash = hash(JSON.stringify(task.researchSupplement));
