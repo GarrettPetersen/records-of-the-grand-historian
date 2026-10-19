@@ -23,6 +23,26 @@ can retain source references in repository data; that alone does not verify
 their presentation on the site or in ebooks. Preserve the research hold until
 the evidence and a production-supported presentation have been reviewed.
 
+An independent focused source review subsequently found additional editorial
+work that should precede new date or identity approvals. The English idiomatic
+text in s0144–s0165 includes summaries of a funeral address in place of full
+translation; s0203 inconsistently translates `出就東宮` as a move to the
+Eastern Palace and then as leaving it. The staged s0170 also omits the name
+虨 before 臧 and 尚; [Wikisource](https://zh.wikisource.org/wiki/晉書/卷053)
+and [Shidianguji](https://www.shidianguji.com/mid-page/7463962545133617190)
+both include it. These are two digital transcriptions, not established
+independently collated editions. A separate reviewer also found that s0171
+starts `字道文` locally while both transcriptions begin `虨字道文`.
+Check both omissions and witness provenance before restoring either character.
+The accepted decisions for eight earlier proposed repairs do not by themselves
+establish a chapter-wide fidelity review. The retained bilingual repair draft
+is unapproved and still needs independent philological review.
+That cross-check identifies further targets including summarized speech in
+s0132–s0139, a mistaken mourning-grade translation in s0141, and s0188's
+description of the heir as enthroned. It also flags unresolved allusions and
+terminology in the draft at s0158, s0160 and s0163. These examples are not an
+exhaustive chapter-wide defect inventory.
+
 At the pinned revision, a read-only scan found 80 resolution files containing
 595 decisions referencing 45 local Jinshu 053 people. These are potential
 dependencies, not a finding that all are stale or wrong. Changes to names or
