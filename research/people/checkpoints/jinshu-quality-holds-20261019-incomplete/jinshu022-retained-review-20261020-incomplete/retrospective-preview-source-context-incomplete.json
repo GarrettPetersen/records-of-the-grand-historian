@@ -1,0 +1,5435 @@
+{
+  "kind": "incomplete-mechanical-preview-not-historical-review",
+  "nodeVersion": "v23.7.0",
+  "inputs": {
+    "sourceFile": "data/jinshu/022.json",
+    "sourceBytesSha256": "813d92343fcc37d0cb43e961bf88ab9b4da8fceec3da3bbb7709b185a763ec38",
+    "candidateFile": "data/people/generated/date-workflow/jinshu/022/candidate-4.json",
+    "candidateBytesSha256": "6525bc9dd9c94b2fbfca5132e4005b29ca3383dcdced01cca8dfa60ec4bb2419",
+    "sourceHash": "sha256:851915ffde8d18ff168794b13c6b900354ec593d983aa6fde461ffc82f9a7ce2",
+    "extractionHash": "sha256:39c756f0deff06281d9f8ae1d8e2a9e56b38b20bc17cf8771064f802357c9826"
+  },
+  "codeFingerprints": [
+    {
+      "file": "scripts/lib/people-reception-reconciliation.mjs",
+      "sha256": "24669935d8a4b5e3315eedd9b84e58d456fafe25722950f5906405dc37c50ae8"
+    },
+    {
+      "file": "scripts/lib/people-date-audit.mjs",
+      "sha256": "f14d6a023167021bf701428a8c3a2534fdb0857a41f054ab4b3c489fdb5bbbe8"
+    },
+    {
+      "file": "scripts/validate-people-extraction.mjs",
+      "sha256": "f6dfa206856aad1388e56a42e5e55c1264c65ef413d7db88c027f25fb23a1d41"
+    },
+    {
+      "file": "scripts/lib/people-schema.mjs",
+      "sha256": "068e49d36e651d4380d020c225246b549a821a7d406988ef38607ff26f31ab71"
+    },
+    {
+      "file": "data/people/schema/compact-extraction.schema.json",
+      "sha256": "4b51e100fef9d23b994cef18fc4b9e88e99d68cc63378605784d36cb57afd86f"
+    },
+    {
+      "file": "data/people/schema/extraction.schema.json",
+      "sha256": "272b98e4b2d57e5f7bdcd85d783731b0ae8f620c7c0859f31f5d5ce7e9ec830d"
+    }
+  ],
+  "previewExtractionHash": "sha256:9791936b31b9b624e30bb09f5a24dbeca771acdabf6444fb1eb5dceac2b98af0",
+  "scopedValidation": {
+    "status": "passed",
+    "stats": {
+      "units": 613,
+      "candidates": 749,
+      "people": 124,
+      "mentions": 320,
+      "claims": 1424,
+      "repairs": 75,
+      "dispositions": 576,
+      "aliasDispositionConflicts": 0
+    }
+  },
+  "dateDiagnostics": [],
+  "rows": [
+    {
+      "id": "claim-112",
+      "before": [
+        "p019",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "officiant",
+          "action": "sacrificed to Guangwu in the Bright Hall, pairing him with High God",
+          "otherPersonId": "p020",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "明皇帝即位"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          },
+          "receptionType": "posthumous"
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0024"
+        ]
+      ],
+      "after": [
+        "p019",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "officiant",
+          "action": "sacrificed to Guangwu in the Bright Hall, pairing him with High God",
+          "otherPersonId": "p020",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "明皇帝即位"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          },
+          "receptionType": "retrospective"
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0024"
+        ]
+      ],
+      "person": {
+        "id": "p019",
+        "preferredName": [
+          "Emperor Ming",
+          "明皇帝",
+          "Ming Huangdi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0024",
+          "units": [
+            {
+              "id": "s0023",
+              "zh": "炎漢中興，明皇帝即位，表圭景而陳《清廟》，樹槐陰而疏璧流；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When fiery Han revived and Emperor Ming ascended the throne, he displayed the jade tablet’s shadow and presented “The Pure Temple”; planted locust-tree shade and opened out the jade-ring moat;",
+                  "idiomatic": "After Han’s revival, Emperor Ming took the throne: he read the sundial’s shadow and staged “The Pure Temple”; planted locust-tree shade and opened the jade-ring moat;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0024",
+              "zh": "祀光武於明堂，以配上帝；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "he sacrificed to Guangwu in the Bright Hall, pairing him with High God;",
+                  "idiomatic": "offered Guangwu in the Bright Hall as counterpart to the Supreme Lord;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0025",
+              "zh": "召桓榮於太學，袒而割牲；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "summoned Huan Rong to the Imperial Academy, baring shoulder as he cut the victim;",
+                  "idiomatic": "called Huan Rong to the academy and, shoulder bare, slew the sacrificial beast;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-121",
+      "before": [
+        "p020",
+        "honor",
+        {
+          "title": {
+            "en": "counterpart to the Supreme Lord in the Bright Hall",
+            "zh": "配上帝"
+          },
+          "action": "received",
+          "receptionType": "posthumous",
+          "dateContext": {
+            "sourceDate": {
+              "text": "明皇帝即位"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0024"
+        ]
+      ],
+      "after": [
+        "p020",
+        "honor",
+        {
+          "title": {
+            "en": "counterpart to the Supreme Lord in the Bright Hall",
+            "zh": "配上帝"
+          },
+          "action": "received",
+          "receptionType": "retrospective",
+          "dateContext": {
+            "sourceDate": {
+              "text": "明皇帝即位"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0024"
+        ]
+      ],
+      "person": {
+        "id": "p020",
+        "preferredName": [
+          "Guangwu",
+          "光武",
+          "Guangwu"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0024",
+          "units": [
+            {
+              "id": "s0023",
+              "zh": "炎漢中興，明皇帝即位，表圭景而陳《清廟》，樹槐陰而疏璧流；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When fiery Han revived and Emperor Ming ascended the throne, he displayed the jade tablet’s shadow and presented “The Pure Temple”; planted locust-tree shade and opened out the jade-ring moat;",
+                  "idiomatic": "After Han’s revival, Emperor Ming took the throne: he read the sundial’s shadow and staged “The Pure Temple”; planted locust-tree shade and opened the jade-ring moat;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0024",
+              "zh": "祀光武於明堂，以配上帝；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "he sacrificed to Guangwu in the Bright Hall, pairing him with High God;",
+                  "idiomatic": "offered Guangwu in the Bright Hall as counterpart to the Supreme Lord;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0025",
+              "zh": "召桓榮於太學，袒而割牲；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "summoned Huan Rong to the Imperial Academy, baring shoulder as he cut the victim;",
+                  "idiomatic": "called Huan Rong to the academy and, shoulder bare, slew the sacrificial beast;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-122",
+      "before": [
+        "p020",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "sacrificed to in the Bright Hall and paired with High God",
+          "otherPersonId": "p019",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "明皇帝即位"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          },
+          "receptionType": "posthumous"
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0024"
+        ]
+      ],
+      "after": [
+        "p020",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "sacrificed to in the Bright Hall and paired with High God",
+          "otherPersonId": "p019",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "明皇帝即位"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          },
+          "receptionType": "retrospective"
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0024"
+        ]
+      ],
+      "person": {
+        "id": "p020",
+        "preferredName": [
+          "Guangwu",
+          "光武",
+          "Guangwu"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0024",
+          "units": [
+            {
+              "id": "s0023",
+              "zh": "炎漢中興，明皇帝即位，表圭景而陳《清廟》，樹槐陰而疏璧流；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When fiery Han revived and Emperor Ming ascended the throne, he displayed the jade tablet’s shadow and presented “The Pure Temple”; planted locust-tree shade and opened out the jade-ring moat;",
+                  "idiomatic": "After Han’s revival, Emperor Ming took the throne: he read the sundial’s shadow and staged “The Pure Temple”; planted locust-tree shade and opened the jade-ring moat;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0024",
+              "zh": "祀光武於明堂，以配上帝；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "he sacrificed to Guangwu in the Bright Hall, pairing him with High God;",
+                  "idiomatic": "offered Guangwu in the Bright Hall as counterpart to the Supreme Lord;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0025",
+              "zh": "召桓榮於太學，袒而割牲；",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "summoned Huan Rong to the Imperial Academy, baring shoulder as he cut the victim;",
+                  "idiomatic": "called Huan Rong to the academy and, shoulder bare, slew the sacrificial beast;",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-305",
+      "before": [
+        "p047",
+        "honor",
+        {
+          "title": {
+            "en": "paired counterpart of Heaven",
+            "zh": "克配彼天"
+          },
+          "action": "honored",
+          "receptionType": "posthumous",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "after": [
+        "p047",
+        "honor",
+        {
+          "title": {
+            "en": "paired counterpart of Heaven",
+            "zh": "克配彼天"
+          },
+          "action": "honored",
+          "receptionType": "retrospective",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "person": {
+        "id": "p047",
+        "preferredName": [
+          "Emperor Xuan",
+          "宣",
+          "Xuan"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0136",
+          "units": [
+            {
+              "id": "s0135",
+              "zh": "庶幾夙夜，惟晉之祺。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Would that night and day never slack—such is Jin’s felicity.",
+                  "idiomatic": "Grant us diligence without cease—the very blessing of our Jin age.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-306",
+      "before": [
+        "p048",
+        "honor",
+        {
+          "title": {
+            "en": "paired counterpart of Heaven",
+            "zh": "克配彼天"
+          },
+          "action": "honored",
+          "receptionType": "posthumous",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "after": [
+        "p048",
+        "honor",
+        {
+          "title": {
+            "en": "paired counterpart of Heaven",
+            "zh": "克配彼天"
+          },
+          "action": "honored",
+          "receptionType": "retrospective",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "person": {
+        "id": "p048",
+        "preferredName": [
+          "Emperor Wen",
+          "文",
+          "Wen"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0136",
+          "units": [
+            {
+              "id": "s0135",
+              "zh": "庶幾夙夜，惟晉之祺。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Would that night and day never slack—such is Jin’s felicity.",
+                  "idiomatic": "Grant us diligence without cease—the very blessing of our Jin age.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-307",
+      "before": [
+        "p047",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "paired-with-Heaven",
+          "otherPersonId": "p048",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "after": [
+        "p047",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "paired-with-Heaven",
+          "otherPersonId": "p048",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "person": {
+        "id": "p047",
+        "preferredName": [
+          "Emperor Xuan",
+          "宣",
+          "Xuan"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0136",
+          "units": [
+            {
+              "id": "s0135",
+              "zh": "庶幾夙夜，惟晉之祺。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Would that night and day never slack—such is Jin’s felicity.",
+                  "idiomatic": "Grant us diligence without cease—the very blessing of our Jin age.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-308",
+      "before": [
+        "p048",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "paired-with-Heaven",
+          "otherPersonId": "p047",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "after": [
+        "p048",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "paired-with-Heaven",
+          "otherPersonId": "p047",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0136"
+        ]
+      ],
+      "person": {
+        "id": "p048",
+        "preferredName": [
+          "Emperor Wen",
+          "文",
+          "Wen"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0136",
+          "units": [
+            {
+              "id": "s0135",
+              "zh": "庶幾夙夜，惟晉之祺。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Would that night and day never slack—such is Jin’s felicity.",
+                  "idiomatic": "Grant us diligence without cease—the very blessing of our Jin age.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-332",
+      "before": [
+        "p050",
+        "honor",
+        {
+          "title": {
+            "en": "counterpart paired with High God",
+            "zh": "配上帝"
+          },
+          "action": "held",
+          "receptionType": "posthumous",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          }
+        },
+        "explicit",
+        [
+          "s0204",
+          "s0206"
+        ]
+      ],
+      "after": [
+        "p050",
+        "honor",
+        {
+          "title": {
+            "en": "counterpart paired with High God",
+            "zh": "配上帝"
+          },
+          "action": "held",
+          "receptionType": "retrospective",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          }
+        },
+        "explicit",
+        [
+          "s0204",
+          "s0206"
+        ]
+      ],
+      "person": {
+        "id": "p050",
+        "preferredName": [
+          "Martial Royal Father",
+          "烈考",
+          "Liekao"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0204",
+          "units": [
+            {
+              "id": "s0203",
+              "zh": "經始明堂，享祀匪懈。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "From the first framing of the Bright Hall—offerings never slack.",
+                  "idiomatic": "Since first they laid out the Bright Hall, sacrifice knows no neglect.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0204",
+              "zh": "於皇烈考，光配上帝。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Oh glorious fierce Father—his brilliance pairs High God.",
+                  "idiomatic": "How bright our martial royal father—his splendor mates with Heaven’s sovereign.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0205",
+              "zh": "赫赫上帝，既高既崇。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "August is High God—already lofty, already exalted.",
+                  "idiomatic": "High God towers sublime—lifted high, lifted vast.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0206",
+          "units": [
+            {
+              "id": "s0205",
+              "zh": "赫赫上帝，既高既崇。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "August is High God—already lofty, already exalted.",
+                  "idiomatic": "High God towers sublime—lifted high, lifted vast.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0206",
+              "zh": "聖考是配，明德顯融。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The sage Father matches Him—bright virtue shines abroad.",
+                  "idiomatic": "Our sage father stands as counterpart—lucent power floods every quarter.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0207",
+              "zh": "率土敬職，萬方來祭。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Within the realm all offices stand in awe—myriad regions arrive to sacrifice.",
+                  "idiomatic": "Every soil attends its duty; ten thousand quarters come bearing offerings.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-334",
+      "before": [
+        "p050",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "paired as sacrificial counterpart to High God",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          }
+        },
+        "explicit",
+        [
+          "s0204",
+          "s0206"
+        ]
+      ],
+      "after": [
+        "p050",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "paired as sacrificial counterpart to High God",
+          "place": {
+            "en": "Bright Hall",
+            "zh": "明堂"
+          }
+        },
+        "explicit",
+        [
+          "s0204",
+          "s0206"
+        ]
+      ],
+      "person": {
+        "id": "p050",
+        "preferredName": [
+          "Martial Royal Father",
+          "烈考",
+          "Liekao"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0204",
+          "units": [
+            {
+              "id": "s0203",
+              "zh": "經始明堂，享祀匪懈。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "From the first framing of the Bright Hall—offerings never slack.",
+                  "idiomatic": "Since first they laid out the Bright Hall, sacrifice knows no neglect.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0204",
+              "zh": "於皇烈考，光配上帝。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Oh glorious fierce Father—his brilliance pairs High God.",
+                  "idiomatic": "How bright our martial royal father—his splendor mates with Heaven’s sovereign.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0205",
+              "zh": "赫赫上帝，既高既崇。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "August is High God—already lofty, already exalted.",
+                  "idiomatic": "High God towers sublime—lifted high, lifted vast.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0206",
+          "units": [
+            {
+              "id": "s0205",
+              "zh": "赫赫上帝，既高既崇。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "August is High God—already lofty, already exalted.",
+                  "idiomatic": "High God towers sublime—lifted high, lifted vast.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0206",
+              "zh": "聖考是配，明德顯融。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The sage Father matches Him—bright virtue shines abroad.",
+                  "idiomatic": "Our sage father stands as counterpart—lucent power floods every quarter.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0207",
+              "zh": "率土敬職，萬方來祭。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Within the realm all offices stand in awe—myriad regions arrive to sacrifice.",
+                  "idiomatic": "Every soil attends its duty; ten thousand quarters come bearing offerings.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-338",
+      "before": [
+        "p051",
+        "event-participation",
+        {
+          "kind": "posthumous-reference",
+          "role": "honoree",
+          "action": "invoked-in-hymn"
+        },
+        "strongly-inferred",
+        [
+          "s0219"
+        ]
+      ],
+      "after": [
+        "p051",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "invoked-in-hymn"
+        },
+        "strongly-inferred",
+        [
+          "s0219"
+        ]
+      ],
+      "person": {
+        "id": "p051",
+        "preferredName": [
+          "Grand Supreme",
+          "太上",
+          "Taishang"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0219",
+          "units": [
+            {
+              "id": "s0218",
+              "zh": "祚我無疆，受天之祜。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Bless us without limit—receive Heaven’s aid.",
+                  "idiomatic": "Grant us boundless fortune—take Heaven’s protective charge.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0219",
+              "zh": "赫赫太上，巍巍聖祖。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Radiant is Grand Supreme—towering are sage ancestors.",
+                  "idiomatic": "Radiant is the Grand Supreme—sage ancestors rise immense.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0220",
+              "zh": "明明烈考，丕承繼序。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Bright is our fierce Father—greatly he inherits ordered succession.",
+                  "idiomatic": "Bright is our illustrious deceased father—he grandly carries on the succession.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-342",
+      "before": [
+        "p052",
+        "event-participation",
+        {
+          "kind": "posthumous-reference",
+          "role": "honoree",
+          "action": "invoked-in-hymn"
+        },
+        "explicit",
+        [
+          "s0220"
+        ]
+      ],
+      "after": [
+        "p052",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "invoked-in-hymn"
+        },
+        "explicit",
+        [
+          "s0220"
+        ]
+      ],
+      "person": {
+        "id": "p052",
+        "preferredName": [
+          "Illustrious Deceased Father",
+          "烈考",
+          "Liekao"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0220",
+          "units": [
+            {
+              "id": "s0219",
+              "zh": "赫赫太上，巍巍聖祖。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Radiant is Grand Supreme—towering are sage ancestors.",
+                  "idiomatic": "Radiant is the Grand Supreme—sage ancestors rise immense.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0220",
+              "zh": "明明烈考，丕承繼序。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Bright is our fierce Father—greatly he inherits ordered succession.",
+                  "idiomatic": "Bright is our illustrious deceased father—he grandly carries on the succession.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0221",
+              "zh": "祠征西將軍登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for the Shrine to General Who Conquered the West",
+                  "idiomatic": "Temple Stair Hymn: West-Conquering General",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-346",
+      "before": [
+        "p053",
+        "honor",
+        {
+          "label": {
+            "en": "shrine hymn dedicatee",
+            "zh": "祠征西將軍登歌"
+          },
+          "action": "received",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0221"
+        ]
+      ],
+      "after": [
+        "p053",
+        "honor",
+        {
+          "label": {
+            "en": "shrine hymn dedicatee",
+            "zh": "祠征西將軍登歌"
+          },
+          "action": "received",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0221"
+        ]
+      ],
+      "person": {
+        "id": "p053",
+        "preferredName": [
+          "West-Conquering General",
+          "征西將軍",
+          "Zhengxi Jiangjun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0221",
+          "units": [
+            {
+              "id": "s0220",
+              "zh": "明明烈考，丕承繼序。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Bright is our fierce Father—greatly he inherits ordered succession.",
+                  "idiomatic": "Bright is our illustrious deceased father—he grandly carries on the succession.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0221",
+              "zh": "祠征西將軍登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for the Shrine to General Who Conquered the West",
+                  "idiomatic": "Temple Stair Hymn: West-Conquering General",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0222",
+              "zh": "經始宗廟，神明戾止。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When first we founded the ancestral shrine—the gods arrived to stay.",
+                  "idiomatic": "Since raising the clan temple—numina descended to lodge.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-348",
+      "before": [
+        "p053",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "received-shrine-hymn"
+        },
+        "explicit",
+        [
+          "s0221",
+          "s0222",
+          "s0223",
+          "s0224",
+          "s0225"
+        ]
+      ],
+      "after": [
+        "p053",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "received-shrine-hymn"
+        },
+        "explicit",
+        [
+          "s0221",
+          "s0222",
+          "s0223",
+          "s0224",
+          "s0225"
+        ]
+      ],
+      "person": {
+        "id": "p053",
+        "preferredName": [
+          "West-Conquering General",
+          "征西將軍",
+          "Zhengxi Jiangjun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0221",
+          "units": [
+            {
+              "id": "s0220",
+              "zh": "明明烈考，丕承繼序。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Bright is our fierce Father—greatly he inherits ordered succession.",
+                  "idiomatic": "Bright is our illustrious deceased father—he grandly carries on the succession.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0221",
+              "zh": "祠征西將軍登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for the Shrine to General Who Conquered the West",
+                  "idiomatic": "Temple Stair Hymn: West-Conquering General",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0222",
+              "zh": "經始宗廟，神明戾止。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When first we founded the ancestral shrine—the gods arrived to stay.",
+                  "idiomatic": "Since raising the clan temple—numina descended to lodge.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0222",
+          "units": [
+            {
+              "id": "s0221",
+              "zh": "祠征西將軍登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for the Shrine to General Who Conquered the West",
+                  "idiomatic": "Temple Stair Hymn: West-Conquering General",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0222",
+              "zh": "經始宗廟，神明戾止。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When first we founded the ancestral shrine—the gods arrived to stay.",
+                  "idiomatic": "Since raising the clan temple—numina descended to lodge.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0223",
+              "zh": "申錫無疆，祗承享祀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Boundless extend Their grants—we reverently sustain the feast.",
+                  "idiomatic": "Their gifts know no horizon—we solemnly uphold communion.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0223",
+          "units": [
+            {
+              "id": "s0222",
+              "zh": "經始宗廟，神明戾止。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When first we founded the ancestral shrine—the gods arrived to stay.",
+                  "idiomatic": "Since raising the clan temple—numina descended to lodge.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0223",
+              "zh": "申錫無疆，祗承享祀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Boundless extend Their grants—we reverently sustain the feast.",
+                  "idiomatic": "Their gifts know no horizon—we solemnly uphold communion.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0224",
+              "zh": "假哉皇祖，綏予孫子。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "How vast our royal ancestor—who comforts sons and grandsons.",
+                  "idiomatic": "Sublime the royal grandfather—who shelters every descendant.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0224",
+          "units": [
+            {
+              "id": "s0223",
+              "zh": "申錫無疆，祗承享祀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Boundless extend Their grants—we reverently sustain the feast.",
+                  "idiomatic": "Their gifts know no horizon—we solemnly uphold communion.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0224",
+              "zh": "假哉皇祖，綏予孫子。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "How vast our royal ancestor—who comforts sons and grandsons.",
+                  "idiomatic": "Sublime the royal grandfather—who shelters every descendant.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0225",
+              "zh": "燕及後昆，錫茲繁祉。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "His feast reaches later generations—Their blessing heaps prosperity.",
+                  "idiomatic": "His banquet feeds generations yet unborn—blessings pile thick as grain.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0225",
+          "units": [
+            {
+              "id": "s0224",
+              "zh": "假哉皇祖，綏予孫子。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "How vast our royal ancestor—who comforts sons and grandsons.",
+                  "idiomatic": "Sublime the royal grandfather—who shelters every descendant.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0225",
+              "zh": "燕及後昆，錫茲繁祉。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "His feast reaches later generations—Their blessing heaps prosperity.",
+                  "idiomatic": "His banquet feeds generations yet unborn—blessings pile thick as grain.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0226",
+              "zh": "祠豫章府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Yuzhang Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Yuzhang Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-355",
+      "before": [
+        "p054",
+        "honor",
+        {
+          "label": {
+            "en": "shrine hymn dedicatee",
+            "zh": "祠豫章府君登歌"
+          },
+          "action": "received",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0226"
+        ]
+      ],
+      "after": [
+        "p054",
+        "honor",
+        {
+          "label": {
+            "en": "shrine hymn dedicatee",
+            "zh": "祠豫章府君登歌"
+          },
+          "action": "received",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0226"
+        ]
+      ],
+      "person": {
+        "id": "p054",
+        "preferredName": [
+          "Yuzhang Prefect Lord",
+          "豫章府君",
+          "Yuzhang Fujun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0226",
+          "units": [
+            {
+              "id": "s0225",
+              "zh": "燕及後昆，錫茲繁祉。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "His feast reaches later generations—Their blessing heaps prosperity.",
+                  "idiomatic": "His banquet feeds generations yet unborn—blessings pile thick as grain.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0226",
+              "zh": "祠豫章府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Yuzhang Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Yuzhang Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0227",
+              "zh": "嘉樂肆筵，薦祀在堂。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Glad music spreads the mats—offerings stand within the hall.",
+                  "idiomatic": "Festive tones spread woven mats—the sacrifice waits in chamber.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-357",
+      "before": [
+        "p054",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "received-shrine-hymn"
+        },
+        "explicit",
+        [
+          "s0226"
+        ]
+      ],
+      "after": [
+        "p054",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "received-shrine-hymn"
+        },
+        "explicit",
+        [
+          "s0226"
+        ]
+      ],
+      "person": {
+        "id": "p054",
+        "preferredName": [
+          "Yuzhang Prefect Lord",
+          "豫章府君",
+          "Yuzhang Fujun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0226",
+          "units": [
+            {
+              "id": "s0225",
+              "zh": "燕及後昆，錫茲繁祉。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "His feast reaches later generations—Their blessing heaps prosperity.",
+                  "idiomatic": "His banquet feeds generations yet unborn—blessings pile thick as grain.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0226",
+              "zh": "祠豫章府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Yuzhang Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Yuzhang Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0227",
+              "zh": "嘉樂肆筵，薦祀在堂。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Glad music spreads the mats—offerings stand within the hall.",
+                  "idiomatic": "Festive tones spread woven mats—the sacrifice waits in chamber.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-361",
+      "before": [
+        "p055",
+        "honor",
+        {
+          "label": {
+            "en": "shrine hymn dedicatee",
+            "zh": "祠潁川府君登歌"
+          },
+          "action": "received",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0231"
+        ]
+      ],
+      "after": [
+        "p055",
+        "honor",
+        {
+          "label": {
+            "en": "shrine hymn dedicatee",
+            "zh": "祠潁川府君登歌"
+          },
+          "action": "received",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0231"
+        ]
+      ],
+      "person": {
+        "id": "p055",
+        "preferredName": [
+          "Yingchuan Prefect Lord",
+          "潁川府君",
+          "Yingchuan Fujun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0231",
+          "units": [
+            {
+              "id": "s0230",
+              "zh": "享祀不忒，降福穰穰。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The communion knows no fault—fortune rains thickly down.",
+                  "idiomatic": "Offering stays without defect—blessings shower abundantly.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0231",
+              "zh": "祠潁川府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Yingchuan Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Yingchuan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0232",
+              "zh": "于邈先後，實司於天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, remote queen mother—she truly holds Heaven’s charge.",
+                  "idiomatic": "Far-shining queen mother—she indeed ministers for Heaven.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-363",
+      "before": [
+        "p055",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "received-shrine-hymn"
+        },
+        "explicit",
+        [
+          "s0231"
+        ]
+      ],
+      "after": [
+        "p055",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "received-shrine-hymn"
+        },
+        "explicit",
+        [
+          "s0231"
+        ]
+      ],
+      "person": {
+        "id": "p055",
+        "preferredName": [
+          "Yingchuan Prefect Lord",
+          "潁川府君",
+          "Yingchuan Fujun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0231",
+          "units": [
+            {
+              "id": "s0230",
+              "zh": "享祀不忒，降福穰穰。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The communion knows no fault—fortune rains thickly down.",
+                  "idiomatic": "Offering stays without defect—blessings shower abundantly.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0231",
+              "zh": "祠潁川府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Yingchuan Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Yingchuan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0232",
+              "zh": "于邈先後，實司於天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, remote queen mother—she truly holds Heaven’s charge.",
+                  "idiomatic": "Far-shining queen mother—she indeed ministers for Heaven.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-366",
+      "before": [
+        "p056",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "praised as ministering for Heaven"
+        },
+        "explicit",
+        [
+          "s0232"
+        ]
+      ],
+      "after": [
+        "p056",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "praised as ministering for Heaven"
+        },
+        "explicit",
+        [
+          "s0232"
+        ]
+      ],
+      "person": {
+        "id": "p056",
+        "preferredName": [
+          "Queen Mother",
+          "先後",
+          "Xianhou"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0232",
+          "units": [
+            {
+              "id": "s0231",
+              "zh": "祠潁川府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Yingchuan Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Yingchuan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0232",
+              "zh": "于邈先後，實司於天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, remote queen mother—she truly holds Heaven’s charge.",
+                  "idiomatic": "Far-shining queen mother—she indeed ministers for Heaven.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0233",
+              "zh": "顯矣皇祖，帝祉肇臻。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Manifest is royal ancestor—imperial blessing first arrives.",
+                  "idiomatic": "Bright our royal founder—Heaven’s luck first settled here.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-371",
+      "before": [
+        "p057",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "praised as the ancestor on whom imperial blessing first settled"
+        },
+        "explicit",
+        [
+          "s0233",
+          "s0234",
+          "s0235"
+        ]
+      ],
+      "after": [
+        "p057",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "praised as the ancestor on whom imperial blessing first settled"
+        },
+        "explicit",
+        [
+          "s0233",
+          "s0234",
+          "s0235"
+        ]
+      ],
+      "person": {
+        "id": "p057",
+        "preferredName": [
+          "Royal Ancestor",
+          "皇祖",
+          "Huangzu"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0233",
+          "units": [
+            {
+              "id": "s0232",
+              "zh": "于邈先後，實司於天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, remote queen mother—she truly holds Heaven’s charge.",
+                  "idiomatic": "Far-shining queen mother—she indeed ministers for Heaven.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0233",
+              "zh": "顯矣皇祖，帝祉肇臻。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Manifest is royal ancestor—imperial blessing first arrives.",
+                  "idiomatic": "Bright our royal founder—Heaven’s luck first settled here.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0234",
+              "zh": "本枝克昌，資始開元。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Root and branches flourish together—the foundation opens primal fortune.",
+                  "idiomatic": "Trunk and branches flourish together—drawing on that beginning, they open primordial fortune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0234",
+          "units": [
+            {
+              "id": "s0233",
+              "zh": "顯矣皇祖，帝祉肇臻。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Manifest is royal ancestor—imperial blessing first arrives.",
+                  "idiomatic": "Bright our royal founder—Heaven’s luck first settled here.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0234",
+              "zh": "本枝克昌，資始開元。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Root and branches flourish together—the foundation opens primal fortune.",
+                  "idiomatic": "Trunk and branches flourish together—drawing on that beginning, they open primordial fortune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0235",
+              "zh": "惠我無疆，享祚永年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Their kindness knows no bound—may fortune-seat endure ten thousand years.",
+                  "idiomatic": "Their mercy spans infinity—may the throne endure endless years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0235",
+          "units": [
+            {
+              "id": "s0234",
+              "zh": "本枝克昌，資始開元。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Root and branches flourish together—the foundation opens primal fortune.",
+                  "idiomatic": "Trunk and branches flourish together—drawing on that beginning, they open primordial fortune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0235",
+              "zh": "惠我無疆，享祚永年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Their kindness knows no bound—may fortune-seat endure ten thousand years.",
+                  "idiomatic": "Their mercy spans infinity—may the throne endure endless years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0236",
+              "zh": "祠京兆府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Capital Region Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Metropolitan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-377",
+      "before": [
+        "p058",
+        "honor",
+        {
+          "title": {
+            "en": "Temple Stair Hymn honoree",
+            "zh": "祠京兆府君登歌"
+          },
+          "action": "received",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0236"
+        ]
+      ],
+      "after": [
+        "p058",
+        "honor",
+        {
+          "title": {
+            "en": "Temple Stair Hymn honoree",
+            "zh": "祠京兆府君登歌"
+          },
+          "action": "received",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0236"
+        ]
+      ],
+      "person": {
+        "id": "p058",
+        "preferredName": [
+          "Metropolitan Prefect Lord",
+          "京兆府君",
+          "Jingzhao Fujun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0236",
+          "units": [
+            {
+              "id": "s0235",
+              "zh": "惠我無疆，享祚永年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Their kindness knows no bound—may fortune-seat endure ten thousand years.",
+                  "idiomatic": "Their mercy spans infinity—may the throne endure endless years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0236",
+              "zh": "祠京兆府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Capital Region Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Metropolitan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0237",
+              "zh": "于惟曾皇，顯顯令德。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, our august grandfather—bright stands his peerless virtue.",
+                  "idiomatic": "Lofty that royal grandfather—virtue gleams beyond compare.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-378",
+      "before": [
+        "p058",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "addressed as 曾皇 in the Jingzhao Fujun stair hymn"
+        },
+        "explicit",
+        [
+          "s0236",
+          "s0237"
+        ]
+      ],
+      "after": [
+        "p058",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "addressed as 曾皇 in the Jingzhao Fujun stair hymn"
+        },
+        "explicit",
+        [
+          "s0236",
+          "s0237"
+        ]
+      ],
+      "person": {
+        "id": "p058",
+        "preferredName": [
+          "Metropolitan Prefect Lord",
+          "京兆府君",
+          "Jingzhao Fujun"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0236",
+          "units": [
+            {
+              "id": "s0235",
+              "zh": "惠我無疆，享祚永年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Their kindness knows no bound—may fortune-seat endure ten thousand years.",
+                  "idiomatic": "Their mercy spans infinity—may the throne endure endless years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0236",
+              "zh": "祠京兆府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Capital Region Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Metropolitan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0237",
+              "zh": "于惟曾皇，顯顯令德。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, our august grandfather—bright stands his peerless virtue.",
+                  "idiomatic": "Lofty that royal grandfather—virtue gleams beyond compare.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0237",
+          "units": [
+            {
+              "id": "s0236",
+              "zh": "祠京兆府君登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Lord of Capital Region Prefecture",
+                  "idiomatic": "Temple Stair Hymn: Metropolitan Prefect Lord",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0237",
+              "zh": "于惟曾皇，顯顯令德。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, our august grandfather—bright stands his peerless virtue.",
+                  "idiomatic": "Lofty that royal grandfather—virtue gleams beyond compare.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0238",
+              "zh": "商明清亮，匪競柔克，保乂命祐，基命惟則。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Judgment lucid, purity bright—not striving yet supple mastery—guarding order, commanding blessing—founding mandate rests in norms.",
+                  "idiomatic": "Insight acute and clarity radiant—without quarrel yet mastering yielding strength—preserving peace and decreeing grace—the primal mandate roots in law.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-384",
+      "before": [
+        "p059",
+        "honor",
+        {
+          "title": {
+            "en": "Temple Stair Hymn honoree",
+            "zh": "祠宣皇帝登歌"
+          },
+          "action": "received",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0240"
+        ]
+      ],
+      "after": [
+        "p059",
+        "honor",
+        {
+          "title": {
+            "en": "Temple Stair Hymn honoree",
+            "zh": "祠宣皇帝登歌"
+          },
+          "action": "received",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0240"
+        ]
+      ],
+      "person": {
+        "id": "p059",
+        "preferredName": [
+          "Emperor Xuan",
+          "宣皇帝",
+          "Xuandi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0240",
+          "units": [
+            {
+              "id": "s0239",
+              "zh": "篤生聖祖，光濟四國。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Earnestly was born our sage ancestor—his radiance succored four states.",
+                  "idiomatic": "From him sprang the sage founder—his brilliance nursed the four quarters.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0240",
+              "zh": "祠宣皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Xuan",
+                  "idiomatic": "Temple Stair Hymn: Emperor Xuan",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0241",
+              "zh": "于鑠皇祖，聖德欽明。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "How radiant Emperor Xuan—sacred virtue revered and bright.",
+                  "idiomatic": "Blazing royal ancestor Xuan—sagely virtue reverent and bright.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-385",
+      "before": [
+        "p059",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "praised in the Emperor Xuan stair hymn"
+        },
+        "explicit",
+        [
+          "s0240",
+          "s0241"
+        ]
+      ],
+      "after": [
+        "p059",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "praised in the Emperor Xuan stair hymn"
+        },
+        "explicit",
+        [
+          "s0240",
+          "s0241"
+        ]
+      ],
+      "person": {
+        "id": "p059",
+        "preferredName": [
+          "Emperor Xuan",
+          "宣皇帝",
+          "Xuandi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0240",
+          "units": [
+            {
+              "id": "s0239",
+              "zh": "篤生聖祖，光濟四國。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Earnestly was born our sage ancestor—his radiance succored four states.",
+                  "idiomatic": "From him sprang the sage founder—his brilliance nursed the four quarters.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0240",
+              "zh": "祠宣皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Xuan",
+                  "idiomatic": "Temple Stair Hymn: Emperor Xuan",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0241",
+              "zh": "于鑠皇祖，聖德欽明。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "How radiant Emperor Xuan—sacred virtue revered and bright.",
+                  "idiomatic": "Blazing royal ancestor Xuan—sagely virtue reverent and bright.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0241",
+          "units": [
+            {
+              "id": "s0240",
+              "zh": "祠宣皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Xuan",
+                  "idiomatic": "Temple Stair Hymn: Emperor Xuan",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0241",
+              "zh": "于鑠皇祖，聖德欽明。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "How radiant Emperor Xuan—sacred virtue revered and bright.",
+                  "idiomatic": "Blazing royal ancestor Xuan—sagely virtue reverent and bright.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0242",
+              "zh": "勤施四方，夙夜敬止。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He tirelessly spread virtue through four quarters—morning and night he stopped only in reverence.",
+                  "idiomatic": "He poured transformation across the realm—rising early, retiring late in awe alone.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-395",
+      "before": [
+        "p060",
+        "honor",
+        {
+          "title": {
+            "en": "Temple Stair Hymn honoree",
+            "zh": "祠景皇帝登歌"
+          },
+          "action": "received",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0247"
+        ]
+      ],
+      "after": [
+        "p060",
+        "honor",
+        {
+          "title": {
+            "en": "Temple Stair Hymn honoree",
+            "zh": "祠景皇帝登歌"
+          },
+          "action": "received",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0247"
+        ]
+      ],
+      "person": {
+        "id": "p060",
+        "preferredName": [
+          "Emperor Jing",
+          "景皇帝",
+          "Jingdi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0247",
+          "units": [
+            {
+              "id": "s0246",
+              "zh": "畏天之命，于時保之。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He feared Heaven’s command—thereby guarding it for his age.",
+                  "idiomatic": "He trembled at celestial decree—thus keeping faith with his times.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0247",
+              "zh": "祠景皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Jing",
+                  "idiomatic": "Temple Stair Hymn: Emperor Jing",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0248",
+              "zh": "執競景皇，克明克哲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Striving stands Emperor Jing—both discerning and wise.",
+                  "idiomatic": "Intent Emperor Jing presses onward—clarifying and wise together.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-396",
+      "before": [
+        "p060",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "praised as striving, discerning, and wise"
+        },
+        "explicit",
+        [
+          "s0247",
+          "s0248"
+        ]
+      ],
+      "after": [
+        "p060",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "praised as striving, discerning, and wise"
+        },
+        "explicit",
+        [
+          "s0247",
+          "s0248"
+        ]
+      ],
+      "person": {
+        "id": "p060",
+        "preferredName": [
+          "Emperor Jing",
+          "景皇帝",
+          "Jingdi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0247",
+          "units": [
+            {
+              "id": "s0246",
+              "zh": "畏天之命，于時保之。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He feared Heaven’s command—thereby guarding it for his age.",
+                  "idiomatic": "He trembled at celestial decree—thus keeping faith with his times.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0247",
+              "zh": "祠景皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Jing",
+                  "idiomatic": "Temple Stair Hymn: Emperor Jing",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0248",
+              "zh": "執競景皇，克明克哲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Striving stands Emperor Jing—both discerning and wise.",
+                  "idiomatic": "Intent Emperor Jing presses onward—clarifying and wise together.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0248",
+          "units": [
+            {
+              "id": "s0247",
+              "zh": "祠景皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Jing",
+                  "idiomatic": "Temple Stair Hymn: Emperor Jing",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0248",
+              "zh": "執競景皇，克明克哲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Striving stands Emperor Jing—both discerning and wise.",
+                  "idiomatic": "Intent Emperor Jing presses onward—clarifying and wise together.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0249",
+              "zh": "旁作穆穆，惟祗惟畏。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "All around they modeled solemn awe—only reverence, only dread.",
+                  "idiomatic": "Every side echoed grave silence—nothing but awe, nothing but fear.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-418",
+      "before": [
+        "p063",
+        "work-association",
+        {
+          "work": {
+            "en": "Temple Stair Hymn: Emperor Wen",
+            "zh": "祠文皇帝登歌"
+          },
+          "relation": "honoree",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0254"
+        ]
+      ],
+      "after": [
+        "p063",
+        "work-association",
+        {
+          "work": {
+            "en": "Temple Stair Hymn: Emperor Wen",
+            "zh": "祠文皇帝登歌"
+          },
+          "relation": "honoree",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0254"
+        ]
+      ],
+      "person": {
+        "id": "p063",
+        "preferredName": [
+          "Emperor Wen",
+          "文皇帝",
+          "Wen huangdi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0254",
+          "units": [
+            {
+              "id": "s0253",
+              "zh": "惟天之命，于穆之已。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Such is Heaven’s charge—oh how august its silence.",
+                  "idiomatic": "Such runs Heaven’s decree—oh how solemn its stillness.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0254",
+              "zh": "祠文皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Wen",
+                  "idiomatic": "Temple Stair Hymn: Emperor Wen",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0255",
+              "zh": "于皇時晉，允文文皇，聰明睿智，聖敬神武。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Oh great Jin of this hour—truly cultured Emperor Wen—acute hearing, keen sight, sage reverence, spirit-like martial poise.",
+                  "idiomatic": "Hail Jin today—credibly cultured Emperor Wen—acute of ear and eye, holy in awe, godlike in arms.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-419",
+      "before": [
+        "p063",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "label": {
+            "zh": "祠文皇帝登歌",
+            "en": "Temple Stair Hymn: Emperor Wen"
+          }
+        },
+        "explicit",
+        [
+          "s0254"
+        ]
+      ],
+      "after": [
+        "p063",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "label": {
+            "zh": "祠文皇帝登歌",
+            "en": "Temple Stair Hymn: Emperor Wen"
+          }
+        },
+        "explicit",
+        [
+          "s0254"
+        ]
+      ],
+      "person": {
+        "id": "p063",
+        "preferredName": [
+          "Emperor Wen",
+          "文皇帝",
+          "Wen huangdi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0254",
+          "units": [
+            {
+              "id": "s0253",
+              "zh": "惟天之命，于穆之已。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Such is Heaven’s charge—oh how august its silence.",
+                  "idiomatic": "Such runs Heaven’s decree—oh how solemn its stillness.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0254",
+              "zh": "祠文皇帝登歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ascending Hymn for Emperor Wen",
+                  "idiomatic": "Temple Stair Hymn: Emperor Wen",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0255",
+              "zh": "于皇時晉，允文文皇，聰明睿智，聖敬神武。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Oh great Jin of this hour—truly cultured Emperor Wen—acute hearing, keen sight, sage reverence, spirit-like martial poise.",
+                  "idiomatic": "Hail Jin today—credibly cultured Emperor Wen—acute of ear and eye, holy in awe, godlike in arms.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-449",
+      "before": [
+        "p066",
+        "work-association",
+        {
+          "work": {
+            "en": "How Radiant",
+            "zh": "於赫篇"
+          },
+          "relation": "subject-of",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0284"
+        ]
+      ],
+      "after": [
+        "p066",
+        "work-association",
+        {
+          "work": {
+            "en": "How Radiant",
+            "zh": "於赫篇"
+          },
+          "relation": "subject-of",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0284"
+        ]
+      ],
+      "person": {
+        "id": "p066",
+        "preferredName": [
+          "Emperor Wu",
+          "武帝",
+          "Wudi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0284",
+          "units": [
+            {
+              "id": "s0283",
+              "zh": "後又改三篇之行禮詩。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Later they again altered the three procession hymns used during ritual.",
+                  "idiomatic": "Later they again altered the three ceremonial procession poems.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0284",
+              "zh": "第一日《於赫篇》，詠武帝，聲節與古《鹿鳴》同。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The first they titled “How Radiant”—praising Emperor Wu—its rhythm matched the ancient “Deer Call.”",
+                  "idiomatic": "Piece one, “How Radiant,” hymned Emperor Wu to the old meter of “Deer Call.”",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0285",
+              "zh": "第二曰《巍巍篇》，詠文帝，用延年所改《騶虞》聲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The second they titled “How Towering”—praising Emperor Wen—using the sound Zuo Yannian had refashioned for “Zouyu.”",
+                  "idiomatic": "Piece two, “How Towering,” praised Emperor Wen with Zuo Yannian’s revised “Zouyu” tune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-450",
+      "before": [
+        "p066",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "hymned",
+          "work": {
+            "en": "How Radiant",
+            "zh": "於赫篇"
+          },
+          "notes": "First of the three ceremonial procession hymns praises Emperor Wu to the ancient Deer Call meter."
+        },
+        "explicit",
+        [
+          "s0284"
+        ]
+      ],
+      "after": [
+        "p066",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "hymned",
+          "work": {
+            "en": "How Radiant",
+            "zh": "於赫篇"
+          },
+          "notes": "First of the three ceremonial procession hymns praises Emperor Wu to the ancient Deer Call meter."
+        },
+        "explicit",
+        [
+          "s0284"
+        ]
+      ],
+      "person": {
+        "id": "p066",
+        "preferredName": [
+          "Emperor Wu",
+          "武帝",
+          "Wudi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0284",
+          "units": [
+            {
+              "id": "s0283",
+              "zh": "後又改三篇之行禮詩。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Later they again altered the three procession hymns used during ritual.",
+                  "idiomatic": "Later they again altered the three ceremonial procession poems.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0284",
+              "zh": "第一日《於赫篇》，詠武帝，聲節與古《鹿鳴》同。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The first they titled “How Radiant”—praising Emperor Wu—its rhythm matched the ancient “Deer Call.”",
+                  "idiomatic": "Piece one, “How Radiant,” hymned Emperor Wu to the old meter of “Deer Call.”",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0285",
+              "zh": "第二曰《巍巍篇》，詠文帝，用延年所改《騶虞》聲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The second they titled “How Towering”—praising Emperor Wen—using the sound Zuo Yannian had refashioned for “Zouyu.”",
+                  "idiomatic": "Piece two, “How Towering,” praised Emperor Wen with Zuo Yannian’s revised “Zouyu” tune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-455",
+      "before": [
+        "p067",
+        "work-association",
+        {
+          "work": {
+            "en": "How Towering",
+            "zh": "巍巍篇"
+          },
+          "relation": "subject-of",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0285"
+        ]
+      ],
+      "after": [
+        "p067",
+        "work-association",
+        {
+          "work": {
+            "en": "How Towering",
+            "zh": "巍巍篇"
+          },
+          "relation": "subject-of",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0285"
+        ]
+      ],
+      "person": {
+        "id": "p067",
+        "preferredName": [
+          "Emperor Wen",
+          "文帝",
+          "Wendi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0285",
+          "units": [
+            {
+              "id": "s0284",
+              "zh": "第一日《於赫篇》，詠武帝，聲節與古《鹿鳴》同。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The first they titled “How Radiant”—praising Emperor Wu—its rhythm matched the ancient “Deer Call.”",
+                  "idiomatic": "Piece one, “How Radiant,” hymned Emperor Wu to the old meter of “Deer Call.”",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0285",
+              "zh": "第二曰《巍巍篇》，詠文帝，用延年所改《騶虞》聲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The second they titled “How Towering”—praising Emperor Wen—using the sound Zuo Yannian had refashioned for “Zouyu.”",
+                  "idiomatic": "Piece two, “How Towering,” praised Emperor Wen with Zuo Yannian’s revised “Zouyu” tune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0286",
+              "zh": "第三日《洋洋篇》，詠明帝，用延年所改《文王》聲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The third they titled “How Vast”—praising Emperor Ming—using the sound Zuo Yannian had refashioned for “King Wen.”",
+                  "idiomatic": "Piece three, “How Vast,” honored Emperor Ming with Zuo Yannian’s altered “King Wen” accompaniment.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-456",
+      "before": [
+        "p067",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "hymned",
+          "work": {
+            "en": "How Towering",
+            "zh": "巍巍篇"
+          },
+          "notes": "Second ceremonial procession hymn praises Emperor Wen, using Zuo Yannian’s revised Zouyu tune."
+        },
+        "explicit",
+        [
+          "s0285"
+        ]
+      ],
+      "after": [
+        "p067",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "hymned",
+          "work": {
+            "en": "How Towering",
+            "zh": "巍巍篇"
+          },
+          "notes": "Second ceremonial procession hymn praises Emperor Wen, using Zuo Yannian’s revised Zouyu tune."
+        },
+        "explicit",
+        [
+          "s0285"
+        ]
+      ],
+      "person": {
+        "id": "p067",
+        "preferredName": [
+          "Emperor Wen",
+          "文帝",
+          "Wendi"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0285",
+          "units": [
+            {
+              "id": "s0284",
+              "zh": "第一日《於赫篇》，詠武帝，聲節與古《鹿鳴》同。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The first they titled “How Radiant”—praising Emperor Wu—its rhythm matched the ancient “Deer Call.”",
+                  "idiomatic": "Piece one, “How Radiant,” hymned Emperor Wu to the old meter of “Deer Call.”",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0285",
+              "zh": "第二曰《巍巍篇》，詠文帝，用延年所改《騶虞》聲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The second they titled “How Towering”—praising Emperor Wen—using the sound Zuo Yannian had refashioned for “Zouyu.”",
+                  "idiomatic": "Piece two, “How Towering,” praised Emperor Wen with Zuo Yannian’s revised “Zouyu” tune.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0286",
+              "zh": "第三日《洋洋篇》，詠明帝，用延年所改《文王》聲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "The third they titled “How Vast”—praising Emperor Ming—using the sound Zuo Yannian had refashioned for “King Wen.”",
+                  "idiomatic": "Piece three, “How Vast,” honored Emperor Ming with Zuo Yannian’s altered “King Wen” accompaniment.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-582",
+      "before": [
+        "p083",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree"
+        },
+        "strongly-inferred",
+        [
+          "s0388"
+        ]
+      ],
+      "after": [
+        "p083",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree"
+        },
+        "strongly-inferred",
+        [
+          "s0388"
+        ]
+      ],
+      "person": {
+        "id": "p083",
+        "preferredName": [
+          "Radiant Royal Ancestor",
+          "顯祖",
+          "Xianzu"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0388",
+          "units": [
+            {
+              "id": "s0387",
+              "zh": "流景祚，顯萬世。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Flowing fortune shines—displayed through myriad ages.",
+                  "idiomatic": "Streaming mandate gleams—visible across endless succession.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0388",
+              "zh": "皇皇顯祖，翼世佐時。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Radiant royal ancestor—winging ages, aiding seasons.",
+                  "idiomatic": "Radiant illustrious ancestor—supporting eras, steadying hours.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0389",
+              "zh": "甯濟六合，受命應期。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He quieted six coordinates—received mandate matching its season.",
+                  "idiomatic": "He stilled all six realms—answered Heaven’s scheduled charge.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-591",
+      "before": [
+        "p084",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree"
+        },
+        "strongly-inferred",
+        [
+          "s0392"
+        ]
+      ],
+      "after": [
+        "p084",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree"
+        },
+        "strongly-inferred",
+        [
+          "s0392"
+        ]
+      ],
+      "person": {
+        "id": "p084",
+        "preferredName": [
+          "Emperor Jing",
+          "景皇",
+          "Jing Huang"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0392",
+          "units": [
+            {
+              "id": "s0391",
+              "zh": "廊開皇衢，用成帝基。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He opened imperial thoroughfare—thereby completing emperor’s foundation.",
+                  "idiomatic": "He cleared royal highway—thus sealed imperial groundwork.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0392",
+              "zh": "光光景皇，無競惟烈。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Bright, bright Emperor Jing—none rival his fiery merit.",
+                  "idiomatic": "Luminous Emperor Jing—no competitor matches his blazing deed.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0393",
+              "zh": "匡時拯俗，休功蓋世。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He corrected age and rescued vulgar ways—rest merit blankets ages.",
+                  "idiomatic": "He righted the hour and salvaged coarse custom—restorative glory roofs eternity.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-601",
+      "before": [
+        "p085",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree"
+        },
+        "strongly-inferred",
+        [
+          "s0396"
+        ]
+      ],
+      "after": [
+        "p085",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree"
+        },
+        "strongly-inferred",
+        [
+          "s0396"
+        ]
+      ],
+      "person": {
+        "id": "p085",
+        "preferredName": [
+          "Martial Father",
+          "烈考",
+          "Lie Kao"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0396",
+          "units": [
+            {
+              "id": "s0395",
+              "zh": "天命降監，啟祚明哲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Heaven’s mandate descended watchful—it opened fortune for wise clarity.",
+                  "idiomatic": "Heaven dropped inspecting charge—it unlocked luck for enlightened rule.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0396",
+              "zh": "穆穆烈考，克明克雋。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Solemn fierce Father—both discerning and outstanding.",
+                  "idiomatic": "Grave martial father—clarifying and brilliant alike.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0397",
+              "zh": "實天生德，誕應靈運。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Truly Heaven bore his virtue—he answered spirit-driven fortune.",
+                  "idiomatic": "Heaven truly bred his power—he matched numinous revolution.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-633",
+      "before": [
+        "p090",
+        "noble-title",
+        {
+          "title": {
+            "en": "Taizu",
+            "zh": "太祖"
+          },
+          "action": "held",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0426"
+        ]
+      ],
+      "after": [
+        "p090",
+        "noble-title",
+        {
+          "title": {
+            "en": "Taizu",
+            "zh": "太祖"
+          },
+          "action": "held",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0426"
+        ]
+      ],
+      "person": {
+        "id": "p090",
+        "preferredName": [
+          "Taizu",
+          "太祖",
+          "Taizu"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0426",
+          "units": [
+            {
+              "id": "s0425",
+              "zh": "天被顯祿，福履是綏。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Heaven mantles manifest stipend—fortunate tread rests soothed.",
+                  "idiomatic": "Heaven drapes bright salary—lucky footing stays eased.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0426",
+              "zh": "赫矣太祖，克廣明德。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Radiant Grand Progenitor—he enlarged bright virtue.",
+                  "idiomatic": "Blazing Founding Father—he widened lucid power.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0427",
+              "zh": "廊開宇宙，正世立則。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He opened cosmic halls—corrected age and planted norms.",
+                  "idiomatic": "He unrolled universe—righted era and set patterns.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-639",
+      "before": [
+        "p090",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "praised as Taizu in ancestral hymn",
+          "receptionType": "posthumous",
+          "undatedSourceAttestation": true
+        },
+        "explicit",
+        [
+          "s0426",
+          "s0427",
+          "s0428",
+          "s0429"
+        ]
+      ],
+      "after": [
+        "p090",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "praised as Taizu in ancestral hymn",
+          "receptionType": "retrospective",
+          "undatedSourceAttestation": true
+        },
+        "explicit",
+        [
+          "s0426",
+          "s0427",
+          "s0428",
+          "s0429"
+        ]
+      ],
+      "person": {
+        "id": "p090",
+        "preferredName": [
+          "Taizu",
+          "太祖",
+          "Taizu"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0426",
+          "units": [
+            {
+              "id": "s0425",
+              "zh": "天被顯祿，福履是綏。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Heaven mantles manifest stipend—fortunate tread rests soothed.",
+                  "idiomatic": "Heaven drapes bright salary—lucky footing stays eased.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0426",
+              "zh": "赫矣太祖，克廣明德。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Radiant Grand Progenitor—he enlarged bright virtue.",
+                  "idiomatic": "Blazing Founding Father—he widened lucid power.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0427",
+              "zh": "廊開宇宙，正世立則。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He opened cosmic halls—corrected age and planted norms.",
+                  "idiomatic": "He unrolled universe—righted era and set patterns.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0427",
+          "units": [
+            {
+              "id": "s0426",
+              "zh": "赫矣太祖，克廣明德。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Radiant Grand Progenitor—he enlarged bright virtue.",
+                  "idiomatic": "Blazing Founding Father—he widened lucid power.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0427",
+              "zh": "廊開宇宙，正世立則。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He opened cosmic halls—corrected age and planted norms.",
+                  "idiomatic": "He unrolled universe—righted era and set patterns.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0428",
+              "zh": "變化不經，民無瑕慝。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Transformation brooked no warp—folk bore no hidden stain.",
+                  "idiomatic": "Change admitted no skew—people hid no secret flaw.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0428",
+          "units": [
+            {
+              "id": "s0427",
+              "zh": "廊開宇宙，正世立則。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He opened cosmic halls—corrected age and planted norms.",
+                  "idiomatic": "He unrolled universe—righted era and set patterns.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0428",
+              "zh": "變化不經，民無瑕慝。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Transformation brooked no warp—folk bore no hidden stain.",
+                  "idiomatic": "Change admitted no skew—people hid no secret flaw.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0429",
+              "zh": "創業垂統，兆我晉國。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Founding enterprise he handed succession—auguring our Jin state.",
+                  "idiomatic": "He began work and passed warp—omened our Jin realm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0429",
+          "units": [
+            {
+              "id": "s0428",
+              "zh": "變化不經，民無瑕慝。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Transformation brooked no warp—folk bore no hidden stain.",
+                  "idiomatic": "Change admitted no skew—people hid no secret flaw.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0429",
+              "zh": "創業垂統，兆我晉國。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Founding enterprise he handed succession—auguring our Jin state.",
+                  "idiomatic": "He began work and passed warp—omened our Jin realm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0430",
+              "zh": "烈文伯考，時維帝景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Fierce cultured Uncle Earl—then titled Emperor Jing.",
+                  "idiomatic": "Martial cultured uncle—thereafter named Emperor Jing.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-644",
+      "before": [
+        "p091",
+        "noble-title",
+        {
+          "title": {
+            "en": "Emperor Jing",
+            "zh": "帝景"
+          },
+          "action": "held",
+          "receptionType": "posthumous"
+        },
+        "explicit",
+        [
+          "s0430"
+        ]
+      ],
+      "after": [
+        "p091",
+        "noble-title",
+        {
+          "title": {
+            "en": "Emperor Jing",
+            "zh": "帝景"
+          },
+          "action": "held",
+          "receptionType": "retrospective"
+        },
+        "explicit",
+        [
+          "s0430"
+        ]
+      ],
+      "person": {
+        "id": "p091",
+        "preferredName": [
+          "Emperor Jing",
+          "帝景",
+          "Di Jing"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0430",
+          "units": [
+            {
+              "id": "s0429",
+              "zh": "創業垂統，兆我晉國。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Founding enterprise he handed succession—auguring our Jin state.",
+                  "idiomatic": "He began work and passed warp—omened our Jin realm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0430",
+              "zh": "烈文伯考，時維帝景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Fierce cultured Uncle Earl—then titled Emperor Jing.",
+                  "idiomatic": "Martial cultured uncle—thereafter named Emperor Jing.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0431",
+              "zh": "夷險平亂，威而不猛。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He smoothed peril and quelled turmoil—awe yet never cruelty.",
+                  "idiomatic": "He leveled crisis and crushed chaos—terrible yet never harsh.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-650",
+      "before": [
+        "p091",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "named Emperor Jing as martial-cultured paternal uncle in ancestral hymn",
+          "receptionType": "posthumous",
+          "undatedSourceAttestation": true
+        },
+        "explicit",
+        [
+          "s0430",
+          "s0431",
+          "s0432",
+          "s0433"
+        ]
+      ],
+      "after": [
+        "p091",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "named Emperor Jing as martial-cultured paternal uncle in ancestral hymn",
+          "receptionType": "retrospective",
+          "undatedSourceAttestation": true
+        },
+        "explicit",
+        [
+          "s0430",
+          "s0431",
+          "s0432",
+          "s0433"
+        ]
+      ],
+      "person": {
+        "id": "p091",
+        "preferredName": [
+          "Emperor Jing",
+          "帝景",
+          "Di Jing"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0430",
+          "units": [
+            {
+              "id": "s0429",
+              "zh": "創業垂統，兆我晉國。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Founding enterprise he handed succession—auguring our Jin state.",
+                  "idiomatic": "He began work and passed warp—omened our Jin realm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0430",
+              "zh": "烈文伯考，時維帝景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Fierce cultured Uncle Earl—then titled Emperor Jing.",
+                  "idiomatic": "Martial cultured uncle—thereafter named Emperor Jing.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0431",
+              "zh": "夷險平亂，威而不猛。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He smoothed peril and quelled turmoil—awe yet never cruelty.",
+                  "idiomatic": "He leveled crisis and crushed chaos—terrible yet never harsh.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0431",
+          "units": [
+            {
+              "id": "s0430",
+              "zh": "烈文伯考，時維帝景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Fierce cultured Uncle Earl—then titled Emperor Jing.",
+                  "idiomatic": "Martial cultured uncle—thereafter named Emperor Jing.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0431",
+              "zh": "夷險平亂，威而不猛。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He smoothed peril and quelled turmoil—awe yet never cruelty.",
+                  "idiomatic": "He leveled crisis and crushed chaos—terrible yet never harsh.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0432",
+              "zh": "禦衡不迷，皇塗煥景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Steering pivot he never lost way—royal road blazed bright.",
+                  "idiomatic": "Helming balance he never wandered—imperial highway flamed clear.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0432",
+          "units": [
+            {
+              "id": "s0431",
+              "zh": "夷險平亂，威而不猛。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He smoothed peril and quelled turmoil—awe yet never cruelty.",
+                  "idiomatic": "He leveled crisis and crushed chaos—terrible yet never harsh.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0432",
+              "zh": "禦衡不迷，皇塗煥景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Steering pivot he never lost way—royal road blazed bright.",
+                  "idiomatic": "Helming balance he never wandered—imperial highway flamed clear.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0433",
+              "zh": "七德咸宣，其寧惟永。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Seven virtues all proclaimed—its calm indeed eternal.",
+                  "idiomatic": "Seven powers broadcast alike—that quiet lasts forever.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0433",
+          "units": [
+            {
+              "id": "s0432",
+              "zh": "禦衡不迷，皇塗煥景。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Steering pivot he never lost way—royal road blazed bright.",
+                  "idiomatic": "Helming balance he never wandered—imperial highway flamed clear.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0433",
+              "zh": "七德咸宣，其寧惟永。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Seven virtues all proclaimed—its calm indeed eternal.",
+                  "idiomatic": "Seven powers broadcast alike—that quiet lasts forever.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0434",
+              "zh": "猗歟盛歟！",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah how splendid!",
+                  "idiomatic": "Oh how majestic the sight!",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-660",
+      "before": [
+        "p092",
+        "event-participation",
+        {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "praised as departed sage-cultured emperor Wen",
+          "receptionType": "posthumous",
+          "undatedSourceAttestation": true
+        },
+        "explicit",
+        [
+          "s0434",
+          "s0435",
+          "s0436",
+          "s0437",
+          "s0438",
+          "s0439",
+          "s0440"
+        ]
+      ],
+      "after": [
+        "p092",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "praised as departed sage-cultured emperor Wen",
+          "receptionType": "retrospective",
+          "undatedSourceAttestation": true
+        },
+        "explicit",
+        [
+          "s0434",
+          "s0435",
+          "s0436",
+          "s0437",
+          "s0438",
+          "s0439",
+          "s0440"
+        ]
+      ],
+      "person": {
+        "id": "p092",
+        "preferredName": [
+          "Emperor Wen",
+          "先皇聖文",
+          "Xianhuang Shengwen"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0434",
+          "units": [
+            {
+              "id": "s0433",
+              "zh": "七德咸宣，其寧惟永。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Seven virtues all proclaimed—its calm indeed eternal.",
+                  "idiomatic": "Seven powers broadcast alike—that quiet lasts forever.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0434",
+              "zh": "猗歟盛歟！",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah how splendid!",
+                  "idiomatic": "Oh how majestic the sight!",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0435",
+              "zh": "先皇聖文。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Former sage cultured emperor.",
+                  "idiomatic": "Our departed sacred sovereign Wen.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0435",
+          "units": [
+            {
+              "id": "s0434",
+              "zh": "猗歟盛歟！",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah how splendid!",
+                  "idiomatic": "Oh how majestic the sight!",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0435",
+              "zh": "先皇聖文。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Former sage cultured emperor.",
+                  "idiomatic": "Our departed sacred sovereign Wen.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0436",
+              "zh": "則天作孚，大哉為君。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Patterning Heaven he forged trust—how great a lord!",
+                  "idiomatic": "He mirrored Heaven and forged faith—how vast a ruler!",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0436",
+          "units": [
+            {
+              "id": "s0435",
+              "zh": "先皇聖文。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Former sage cultured emperor.",
+                  "idiomatic": "Our departed sacred sovereign Wen.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0436",
+              "zh": "則天作孚，大哉為君。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Patterning Heaven he forged trust—how great a lord!",
+                  "idiomatic": "He mirrored Heaven and forged faith—how vast a ruler!",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0437",
+              "zh": "慎徽五典，帝載是勤。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Carefully he traced five canons—imperial burden was his diligence.",
+                  "idiomatic": "He guarded five classics—celestial load drove his zeal.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0437",
+          "units": [
+            {
+              "id": "s0436",
+              "zh": "則天作孚，大哉為君。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Patterning Heaven he forged trust—how great a lord!",
+                  "idiomatic": "He mirrored Heaven and forged faith—how vast a ruler!",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0437",
+              "zh": "慎徽五典，帝載是勤。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Carefully he traced five canons—imperial burden was his diligence.",
+                  "idiomatic": "He guarded five classics—celestial load drove his zeal.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0438",
+              "zh": "文武發揮，茂建嘉勳。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Civil and martial unfolded—lush merit piled splendid deeds.",
+                  "idiomatic": "Civil and martial powers blossomed—thick achievement stacked glory.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0438",
+          "units": [
+            {
+              "id": "s0437",
+              "zh": "慎徽五典，帝載是勤。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Carefully he traced five canons—imperial burden was his diligence.",
+                  "idiomatic": "He guarded five classics—celestial load drove his zeal.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0438",
+              "zh": "文武發揮，茂建嘉勳。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Civil and martial unfolded—lush merit piled splendid deeds.",
+                  "idiomatic": "Civil and martial powers blossomed—thick achievement stacked glory.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0439",
+              "zh": "修己濟治，民用甯殷。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Cultivating self he aided rule—people thereby rested ample.",
+                  "idiomatic": "Polishing person he steadied government—folk grew rich and calm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0439",
+          "units": [
+            {
+              "id": "s0438",
+              "zh": "文武發揮，茂建嘉勳。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Civil and martial unfolded—lush merit piled splendid deeds.",
+                  "idiomatic": "Civil and martial powers blossomed—thick achievement stacked glory.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0439",
+              "zh": "修己濟治，民用甯殷。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Cultivating self he aided rule—people thereby rested ample.",
+                  "idiomatic": "Polishing person he steadied government—folk grew rich and calm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0440",
+              "zh": "懷遠燭幽，玄教氤氳。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Cherishing distant, lighting hidden—arcane teaching drifted fragrant.",
+                  "idiomatic": "Embracing far, illuminating dark—mysterious doctrine smoked sweetly.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0440",
+          "units": [
+            {
+              "id": "s0439",
+              "zh": "修己濟治，民用甯殷。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Cultivating self he aided rule—people thereby rested ample.",
+                  "idiomatic": "Polishing person he steadied government—folk grew rich and calm.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0440",
+              "zh": "懷遠燭幽，玄教氤氳。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Cherishing distant, lighting hidden—arcane teaching drifted fragrant.",
+                  "idiomatic": "Embracing far, illuminating dark—mysterious doctrine smoked sweetly.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0441",
+              "zh": "善世不伐，服事三分。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Benefiting age without boasting—he served tripartite division.",
+                  "idiomatic": "He blessed world yet boasted not—he ministered among three kingdoms.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-928",
+      "before": [
+        "p047",
+        "event-participation",
+        {
+          "kind": "posthumous-reference",
+          "receptionType": "posthumous",
+          "role": "honoree",
+          "action": "credited-with-pacifying-and-founding-statutes",
+          "otherPersonId": "p048",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0110",
+          "s0136",
+          "s0137",
+          "s0138",
+          "s0139",
+          "s0140",
+          "s0141"
+        ]
+      ],
+      "after": [
+        "p047",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "honoree",
+          "action": "credited-with-pacifying-and-founding-statutes",
+          "otherPersonId": "p048",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0110",
+          "s0136",
+          "s0137",
+          "s0138",
+          "s0139",
+          "s0140",
+          "s0141"
+        ]
+      ],
+      "person": {
+        "id": "p047",
+        "preferredName": [
+          "Emperor Xuan",
+          "宣",
+          "Xuan"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0110",
+          "units": [
+            {
+              "id": "s0109",
+              "zh": "及武帝受命之初，百度草創。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When Emperor Wu first received Heaven’s charge, every regulation was still rough-hewn.",
+                  "idiomatic": "At the outset of Emperor Wu’s receiving the mandate, institutions existed only in embryo.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0110",
+              "zh": "泰始二年，詔郊祀明堂禮樂權用魏儀，遵周室肇稱殷禮之義，但改樂章而已，使傅玄為之詞雲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "In the second year of Taishi an edict declared that suburban rites, the Bright Hall, ritual, and music should provisionally follow Wei ceremony—honoring Zhou’s precedent of initially labeling rituals Yin—except that hymn texts alone were replaced, assigning Fu Xuan to compose the lyrics.",
+                  "idiomatic": "In the second year of Taishi an edict ordered suburban and Bright Hall liturgy to borrow Wei forms—echoing Zhou’s habit of calling early rituals Shang-style—while swapping only the hymn lyrics, commissioned from Fu Xuan.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0111",
+              "zh": "祀天地五郊夕牲歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Song for the Evening Victim at Suburban Sacrifice to Heaven and Earth and the Five Quarters",
+                  "idiomatic": "Evening Offering Hymn: Five-Direction Heaven-and-Earth Suburban Rite",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0136",
+          "units": [
+            {
+              "id": "s0135",
+              "zh": "庶幾夙夜，惟晉之祺。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Would that night and day never slack—such is Jin’s felicity.",
+                  "idiomatic": "Grant us diligence without cease—the very blessing of our Jin age.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0137",
+          "units": [
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0138",
+              "zh": "於乎緝熙，肆用靖民。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, how far-shining—freely he brings calm to the folk.",
+                  "idiomatic": "O that spreading radiance—effortlessly he steadies every household.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0138",
+          "units": [
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0138",
+              "zh": "於乎緝熙，肆用靖民。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, how far-shining—freely he brings calm to the folk.",
+                  "idiomatic": "O that spreading radiance—effortlessly he steadies every household.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0139",
+              "zh": "爰立典制，爰修禮紀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Thus statutes were framed and ritual canons trimmed.",
+                  "idiomatic": "Thus codes took shape and ceremonial chapters were polished.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0139",
+          "units": [
+            {
+              "id": "s0138",
+              "zh": "於乎緝熙，肆用靖民。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, how far-shining—freely he brings calm to the folk.",
+                  "idiomatic": "O that spreading radiance—effortlessly he steadies every household.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0139",
+              "zh": "爰立典制，爰修禮紀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Thus statutes were framed and ritual canons trimmed.",
+                  "idiomatic": "Thus codes took shape and ceremonial chapters were polished.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0140",
+              "zh": "作民之極，莫匪資始。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Setting the people’s pole-star—nothing fails to draw sustenance from the beginning.",
+                  "idiomatic": "They fixed the lodestar for the people—nothing lacks its root in primordial bounty.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0140",
+          "units": [
+            {
+              "id": "s0139",
+              "zh": "爰立典制，爰修禮紀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Thus statutes were framed and ritual canons trimmed.",
+                  "idiomatic": "Thus codes took shape and ceremonial chapters were polished.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0140",
+              "zh": "作民之極，莫匪資始。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Setting the people’s pole-star—nothing fails to draw sustenance from the beginning.",
+                  "idiomatic": "They fixed the lodestar for the people—nothing lacks its root in primordial bounty.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0141",
+              "zh": "克昌厥後，永言保之。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "May posterity flourish forever—ever shall we guard this legacy.",
+                  "idiomatic": "May heirs flourish without end—we vow eternal guardianship of their gift.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0141",
+          "units": [
+            {
+              "id": "s0140",
+              "zh": "作民之極，莫匪資始。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Setting the people’s pole-star—nothing fails to draw sustenance from the beginning.",
+                  "idiomatic": "They fixed the lodestar for the people—nothing lacks its root in primordial bounty.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0141",
+              "zh": "克昌厥後，永言保之。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "May posterity flourish forever—ever shall we guard this legacy.",
+                  "idiomatic": "May heirs flourish without end—we vow eternal guardianship of their gift.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0142",
+              "zh": "天地郊明堂夕牲歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Evening Victim Song for Suburban Rites and the Bright Hall to Heaven and Earth",
+                  "idiomatic": "Evening Offering Hymn: Round-and-Square Altars and Bright Hall",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-929",
+      "before": [
+        "p048",
+        "event-participation",
+        {
+          "kind": "posthumous-reference",
+          "receptionType": "posthumous",
+          "role": "honoree",
+          "action": "credited-with-pacifying-and-founding-statutes",
+          "otherPersonId": "p047",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0110",
+          "s0136",
+          "s0137",
+          "s0138",
+          "s0139",
+          "s0140",
+          "s0141"
+        ]
+      ],
+      "after": [
+        "p048",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "honoree",
+          "action": "credited-with-pacifying-and-founding-statutes",
+          "otherPersonId": "p047",
+          "dateContext": {
+            "sourceDate": {
+              "text": "泰始二年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0110",
+          "s0136",
+          "s0137",
+          "s0138",
+          "s0139",
+          "s0140",
+          "s0141"
+        ]
+      ],
+      "person": {
+        "id": "p048",
+        "preferredName": [
+          "Emperor Wen",
+          "文",
+          "Wen"
+        ]
+      },
+      "contexts": [
+        {
+          "evidenceUnit": "s0110",
+          "units": [
+            {
+              "id": "s0109",
+              "zh": "及武帝受命之初，百度草創。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "When Emperor Wu first received Heaven’s charge, every regulation was still rough-hewn.",
+                  "idiomatic": "At the outset of Emperor Wu’s receiving the mandate, institutions existed only in embryo.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0110",
+              "zh": "泰始二年，詔郊祀明堂禮樂權用魏儀，遵周室肇稱殷禮之義，但改樂章而已，使傅玄為之詞雲。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "In the second year of Taishi an edict declared that suburban rites, the Bright Hall, ritual, and music should provisionally follow Wei ceremony—honoring Zhou’s precedent of initially labeling rituals Yin—except that hymn texts alone were replaced, assigning Fu Xuan to compose the lyrics.",
+                  "idiomatic": "In the second year of Taishi an edict ordered suburban and Bright Hall liturgy to borrow Wei forms—echoing Zhou’s habit of calling early rituals Shang-style—while swapping only the hymn lyrics, commissioned from Fu Xuan.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0111",
+              "zh": "祀天地五郊夕牲歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Song for the Evening Victim at Suburban Sacrifice to Heaven and Earth and the Five Quarters",
+                  "idiomatic": "Evening Offering Hymn: Five-Direction Heaven-and-Earth Suburban Rite",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0136",
+          "units": [
+            {
+              "id": "s0135",
+              "zh": "庶幾夙夜，惟晉之祺。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Would that night and day never slack—such is Jin’s felicity.",
+                  "idiomatic": "Grant us diligence without cease—the very blessing of our Jin age.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0137",
+          "units": [
+            {
+              "id": "s0136",
+              "zh": "宣文惟後，克配彼天。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Xuan and Wen are the sovereigns, able to stand as counterparts to that Heaven.",
+                  "idiomatic": "Emperors Xuan and Wen, as our sovereigns, pair worthily with Heaven on high.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0138",
+              "zh": "於乎緝熙，肆用靖民。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, how far-shining—freely he brings calm to the folk.",
+                  "idiomatic": "O that spreading radiance—effortlessly he steadies every household.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0138",
+          "units": [
+            {
+              "id": "s0137",
+              "zh": "撫甯四海，保有康年。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "He soothed the four seas and guarded years of peace.",
+                  "idiomatic": "He quieted the realm within four shores and kept healthy harvest years.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0138",
+              "zh": "於乎緝熙，肆用靖民。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, how far-shining—freely he brings calm to the folk.",
+                  "idiomatic": "O that spreading radiance—effortlessly he steadies every household.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0139",
+              "zh": "爰立典制，爰修禮紀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Thus statutes were framed and ritual canons trimmed.",
+                  "idiomatic": "Thus codes took shape and ceremonial chapters were polished.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0139",
+          "units": [
+            {
+              "id": "s0138",
+              "zh": "於乎緝熙，肆用靖民。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Ah, how far-shining—freely he brings calm to the folk.",
+                  "idiomatic": "O that spreading radiance—effortlessly he steadies every household.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0139",
+              "zh": "爰立典制，爰修禮紀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Thus statutes were framed and ritual canons trimmed.",
+                  "idiomatic": "Thus codes took shape and ceremonial chapters were polished.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0140",
+              "zh": "作民之極，莫匪資始。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Setting the people’s pole-star—nothing fails to draw sustenance from the beginning.",
+                  "idiomatic": "They fixed the lodestar for the people—nothing lacks its root in primordial bounty.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0140",
+          "units": [
+            {
+              "id": "s0139",
+              "zh": "爰立典制，爰修禮紀。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Thus statutes were framed and ritual canons trimmed.",
+                  "idiomatic": "Thus codes took shape and ceremonial chapters were polished.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0140",
+              "zh": "作民之極，莫匪資始。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Setting the people’s pole-star—nothing fails to draw sustenance from the beginning.",
+                  "idiomatic": "They fixed the lodestar for the people—nothing lacks its root in primordial bounty.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0141",
+              "zh": "克昌厥後，永言保之。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "May posterity flourish forever—ever shall we guard this legacy.",
+                  "idiomatic": "May heirs flourish without end—we vow eternal guardianship of their gift.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "evidenceUnit": "s0141",
+          "units": [
+            {
+              "id": "s0140",
+              "zh": "作民之極，莫匪資始。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Setting the people’s pole-star—nothing fails to draw sustenance from the beginning.",
+                  "idiomatic": "They fixed the lodestar for the people—nothing lacks its root in primordial bounty.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0141",
+              "zh": "克昌厥後，永言保之。",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "May posterity flourish forever—ever shall we guard this legacy.",
+                  "idiomatic": "May heirs flourish without end—we vow eternal guardianship of their gift.",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            },
+            {
+              "id": "s0142",
+              "zh": "天地郊明堂夕牲歌",
+              "translations": [
+                {
+                  "lang": "en",
+                  "literal": "Evening Victim Song for Suburban Rites and the Bright Hall to Heaven and Earth",
+                  "idiomatic": "Evening Offering Hymn: Round-and-Square Altars and Bright Hall",
+                  "translator": "Garrett M. Petersen (2026)",
+                  "model": "Composer 2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "limitation": "Each proposed retrospective classification requires independent source review. No changes were applied to sealed or canonical files; schema and diagnostics cannot prove historical correctness."
+}
