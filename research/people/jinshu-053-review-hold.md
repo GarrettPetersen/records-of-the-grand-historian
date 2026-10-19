@@ -42,6 +42,10 @@ s0132–s0139, a mistaken mourning-grade translation in s0141, and s0188's
 description of the heir as enthroned. It also flags unresolved allusions and
 terminology in the draft at s0158, s0160 and s0163. These examples are not an
 exhaustive chapter-wide defect inventory.
+The accompanying `jinshu053-*-20261019.md` research files preserve both
+unapproved drafts and the separate focused reviews, including row-level
+objections. They are research checkpoints only: do not import them as accepted
+editorial decisions, and recheck the pinned source before any application.
 
 At the pinned revision, a read-only scan found 80 resolution files containing
 595 decisions referencing 45 local Jinshu 053 people. These are potential
