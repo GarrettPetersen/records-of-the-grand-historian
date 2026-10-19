@@ -1547,15 +1547,12 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         previous.language === candidate.language &&
         previous.exact === candidate.exact;
     });
-    const priorDispositionKinds = new Set(priorSurfaceDispositions.map((item) =>
-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
-    ));
-    if (priorSurfaceDispositions.length > 0 && priorDispositionKinds.size === 1) {
-      reconciled.candidateDispositions.push({
-        ...structuredClone(priorSurfaceDispositions[0]),
-        candidate: candidate.id,
-      });
-      accounted.add(candidate.id);
+    if (priorSurfaceDispositions.length > 0) {
+      // A classification belongs to its occurrence, not its spelling. The
+      // same text in another unit can name a person even when the earlier
+      // occurrence is a place or deity. Require occurrence-specific review;
+      // the final geometry pass may still account for an existing mention.
+      unresolvedCandidates.push(candidate.id);
       continue;
     }
     const counterpartDispositions = reconciled.candidateDispositions.filter((disposition) => {
