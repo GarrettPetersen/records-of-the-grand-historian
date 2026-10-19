@@ -1,0 +1,9 @@
+# Held two-field materialization: reconciliation summary
+
+Research output directory: `jinshu127-two-field-materialized-held-20261020-incomplete/`. Its receipt pins all inputs and outputs. Source SHA-256 `ca683ed09f79724fe107185f6f1e5f5ded2378999ea887ce910432eb127dd3b3`; diagnostic SHA-256 `3edcf5c76f1707fbf532a033a0672b455baffb7d3ed72874f814801d921e3c83`. The source differs from its pinned predecessor only in the approved s0214 and s0215 idiomatic fields.
+
+The unguarded 303b4e0 reconciliation returns zero unresolved and passes strict extraction and applied-history checks, but has again introduced the previously corrected error: s0213 English `Jin`, occurrence 1, candidate `jinshu:127:cand_b79e43b7adcb8ce4`, is assigned a polity disposition while the existing p125 personal-name mention loses its candidate reference. The person span remains present; this is still contradictory candidate accounting and an independently known semantic defect. Never promote this output based on the passing validators.
+
+Comparing mention multisets independent of generated mention IDs and ordering reveals five removed/added pairs: the defective s0213 candidate-reference removal above; s0214 Duan Hong's unchanged personal span with a new unit-text hash; and s0215 Murong De, Hou Chimei, and Murong Da with new unit-text hashes, the last shifted one code point. No other semantic mention differences were found by that comparison. The only candidate-disposition change is the false s0213 polity addition. The complete index-by-index before/after records remain in the pinned diagnostic artifact; widespread mention reordering and renumbering must not be mistaken for independent source-reviewed decisions.
+
+No source, extraction, date, identity or chapter-wide publication approval follows. A separately reviewed reconciliation correction or a future verified guard and fresh independent review are needed before continuing.
