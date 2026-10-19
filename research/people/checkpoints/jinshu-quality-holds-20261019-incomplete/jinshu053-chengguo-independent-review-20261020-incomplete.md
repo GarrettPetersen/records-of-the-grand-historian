@@ -1,0 +1,19 @@
+# Independent source review: Jinshu 053 s0087 (research only)
+
+Reviewed directly from Git tree `4049df22ccbe5a5c62c60ba8589607c55866e93a`, without relying on the existing English renderings as authority. Whole-file SHA-256 checks independently matched the source-finding note: 053 `85bc5ea59ed954d7a8543981b3d2c778802e08bf6505ea2c79dcaedc98af4407`, 046 `40a1034c9d4c22eb2c6f7bedf1699291978eb8074ed52621ad397e1b6f55a0ce`, and 020 `ea4c955dcfebe4b9ec6f7ff187319a9f589b9497cb12c158344b469e44d9c0a2`. These are raw JSON byte hashes, not source fingerprints. This is not an independent textual edition or a complete editorial review.
+
+## Parallels
+
+- 046 s0180–s0181 contrasts establishing regional lords as a protective screen with the possibility that kin are installed while `成國之制不建`. s0202 explicitly says Guangwu enfeoffed sons and brothers but did not establish `成國之制`. s0242–s0244 describes princes with land whose laws resembled commanderies and counties, says `無成國之制故也`, and advocates following old institutions. These contexts support the note's limited observation that installing relatives or granting territory, as such, does not establish the institutional system the author calls `成國之制`. They do not resolve the grammar of 053 or demonstrate which institutional features 053 requires.
+- 020 s0363–s0366 contrasts Han/Wei arrangements and a new mourning rite; s0364 reads `王公五等諸侯成國置卿者`, associating 成國 and the appointment of 卿 with ranked rulers/lords in that ritual provision. Its role as an institutional parallel is reasonable, but it is not the same syntactic construction as 053 and does not specify Daowen's situation.
+- Accordingly, these occurrences justify treating an institutional sense as a possibility and not adopting a proper place-name simply because of the spelling. They do not prove that `成國` is not a place-name in 053, establish the clause's punctuation, supply the subject or explain `不得王是`.
+
+## Context and chronology limits
+
+- 053 s0074 identifies the surrounding account as a letter the deposed crown prince sent his consort after reaching Xu. In s0078 he recalls Daowen being gravely ill in the twelfth month of the preceding year; s0079 says his petition for an honorary title was not granted. In s0087 the empress's intermediary reports `聞汝表陛下為道文乞王` before the unresolved `不得王是成國耳`. This is reported speech within the letter, not independent proof that any fief or kingship was granted or refused in the sense proposed by a particular parsing.
+- The wider chapter at s0045–s0057 describes a document drafted by Pan Yue and copied by the drunken crown prince, including the words `立道文為王` at s0053. That document's narrative framing matters: its wording alone is not proof that Daowen actually became king.
+- s0082 and s0084 mention the 28th and 29th, but those sentences do not themselves name a month. s0066 places a separate subsequent narrative event in the first month of the following year; s0078's `去年十二月` is relative to the letter writer's account. The reviewed passages alone do not establish an absolute year, the month of the 28th/29th, an accession/death date for Daowen, or the date of any institutional change. Do not promote those dates from an inference without separately pinned evidence and independent review.
+
+## Disposition
+
+The existing research note's cautious conclusions are supported. The literal source quotation and its final clause remain unresolved: no new confident translation or chronological claim is justified by these parallels alone. Current 053 s0087 idiomatic text, `They mocked his plea for son's kingship.`, is a loose summary; the Chinese quoted passage does not explicitly state mockery, and the English omits the disputed clause. This observation is not an approved replacement. Compare independently sourced witnesses and review the complete letter before proposing an exact wording; preserve uncertainty and current holds in the meantime.
