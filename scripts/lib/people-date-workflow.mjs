@@ -17,6 +17,32 @@ import {
 export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const hash = value => sha256(JSON.stringify(value));
+
+// A matching audited report can predate a sticky workflow. Reconcile only an
+// explicitly completed generation whose own retained review is that report.
+// Crash windows are left intact for host recovery, never promoted by inference.
+export function completedDateClaimEvidence({ book, chapter, claim }, options = {}) {
+  const peopleDir = options.peopleDir ?? PEOPLE_DIR;
+  const directory = dateWorkflowDirectory(book, chapter, peopleDir);
+  const stateFile = path.join(directory, 'state.json');
+  if (!fs.existsSync(stateFile)) return { ready: false, reason: 'retained generation state is missing' };
+  let state;
+  try { state = readJson(stateFile); } catch { return { ready: false, reason: 'retained generation state is unreadable' }; }
+  if (state.phase !== 'complete') return { ready: false, reason: `retained generation is ${state.phase ?? 'invalid'}, not complete` };
+  if (state.sourceHash !== claim.sourceHash || state.extractionHash !== claim.extractionHash) return { ready: false, reason: 'retained generation does not match claim fingerprints' };
+  if (typeof claim.generationId !== 'string' || !claim.generationId || state.generationId !== claim.generationId) return { ready: false, reason: 'claim has no matching durable generation identity' };
+  if (typeof state.review !== 'string' || !/^review-\d+\.json$/.test(state.review)) return { ready: false, reason: 'completed generation has no sealed review identity' };
+  const reviewFile = path.join(directory, state.review);
+  const reportFile = path.join(peopleDir, 'date-audits', book, `${chapter}.json`);
+  if (!fs.existsSync(reviewFile) || !fs.existsSync(reportFile)) return { ready: false, reason: 'completed generation review or live report is missing' };
+  try {
+    const review = readJson(reviewFile), report = readJson(reportFile);
+    if (!same(review, report)) return { ready: false, reason: 'live report differs from completed generation review' };
+    if (dateAuditStatus(book, chapter, options).status !== 'audited') return { ready: false, reason: 'live report is not currently audited' };
+  } catch { return { ready: false, reason: 'completed generation review or live report is invalid' }; }
+  return { ready: true };
+}
+
 const lifePredicates = new Set(['attestation', 'birth', 'death', 'age']);
 const claimIndexFor = (packet, id) => {
   const item = packet.items?.find(candidate => candidate.id === id);
@@ -479,7 +505,8 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const stateFile = path.join(directory, 'state.json');
   const packet = buildDateAuditPacket(book, chapter, options);
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : { schemaVersion: 1, workflowVersion: DATE_WORKFLOW_VERSION,
-    sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, round: 0, phase: 'audit', jobs: {} };
+    sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, ...(options.generationId ? { generationId: options.generationId } : {}), round: 0, phase: 'audit', jobs: {} };
+  if (state.phase !== 'complete' && options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
   const reportPath=path.join(options.peopleDir??PEOPLE_DIR,'date-audits',book,`${chapter}.json`);
   const reportFingerprint=()=>fs.existsSync(reportPath)?sha256(fs.readFileSync(reportPath)):null;
   let expectedReportFingerprint=reportFingerprint();
@@ -501,11 +528,15 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   if(state.restoredFromLedger){delete state.restoredFromLedger;save();}
   if (state.phase === 'complete') {
     const current=dateAuditStatus(book,chapter,options);
-    if(current.status==='audited')return current;
+    if(current.status==='audited') {
+      if (options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
+      return current;
+    }
     fs.renameSync(directory,`${directory}.completed-${hash(state).slice(7,27)}`);
-    state={schemaVersion:1,workflowVersion:DATE_WORKFLOW_VERSION,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,round:0,phase:'audit',jobs:{}};
+    state={schemaVersion:1,workflowVersion:DATE_WORKFLOW_VERSION,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,...(options.generationId?{generationId:options.generationId}:{}),round:0,phase:'audit',jobs:{}};
     save();
   }
+  if (options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
   const perform = async (task, validate) => {
     for (let attempt=0;attempt<(options.maxAttempts ?? 3);attempt++) {
       const execute=()=>worker({...task,state:state.jobs[task.key]??{},save:patch=>{state.jobs[task.key]={...state.jobs[task.key],...patch};save();}});

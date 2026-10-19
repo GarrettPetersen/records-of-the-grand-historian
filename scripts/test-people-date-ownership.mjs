@@ -40,20 +40,20 @@ const end=source.indexOf('},{message:`Reserve date audit ${key}`}).result;',star
 assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
 assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
 const body=source.slice(start+marker.length,end);
-const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold',`return ledger=>{${body}}`);
+const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID',`return ledger=>{${body}}`);
 const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
 const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
 const reconcileEnd=source.indexOf("},{message:'Reconcile completed date publications'});",reconcileStart);
 assert.ok(reconcileStart>=0 && reconcileEnd>reconcileStart,'production startup callback anchors must be present');
 const reconcileBody=source.slice(reconcileStart+reconcileMarker.length,reconcileEnd);
-const makeReconcile=new Function('o','executorToken','dateExecutorIsBusy','os','fs','path','PEOPLE_DIR','dateAuditStatus','buildDateAuditPacket','readJson',`return ledger=>{${reconcileBody}}`);
+const makeReconcile=new Function('o','executorToken','dateExecutorIsBusy','os','fs','path','PEOPLE_DIR','dateAuditStatus','buildDateAuditPacket','readJson','completedDateClaimEvidence',`return ledger=>{${reconcileBody}}`);
 const key='jinshu/127', target={book:'jinshu',chapter:'127'}, h1='sha256:'+'1'.repeat(64),h2='sha256:'+'2'.repeat(64);
 const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-source',sourceHash:h1,extractionHash:h1,jobs:{retained:{agentId:'must-preserve'}},reviewPlans:{},...overrides});
 const options={worker:'owner',lane:'openrouter',takeover:false,release:false,'retry-blocked':false};
 const packet={sourceHash:h1,extractionHash:h1};
 const workflow=path.join(root,'workflow');
-const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold);
-const reconcile=()=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}));
+const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation');
+const reconcile=(evidence=()=>({ready:true}))=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}),evidence);
 const read=()=>readRemotePeopleWorkLedger();
 const save=claim=>mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={[key]:structuredClone(claim)};delete l.dateAuditHistory;});
 const run=cb=>mutateRemotePeopleWorkLedger(cb).result;
@@ -130,6 +130,10 @@ test('startup reconciliation preserves stale-source even with an audited matchin
 test('startup reconciliation still marks completed active work ready',()=>{
   const claim=prior({status:'active'});save(claim);run(reconcile());const result=read().dateAudits[key];
   assert.equal(result.status,'ready');assert.deepEqual(result.jobs,claim.jobs);
+});
+test('startup reconciliation retains a claim without matching completed-generation evidence',()=>{
+  const claim=prior({status:'active'});save(claim);run(reconcile(()=>({ready:false,reason:'generation mismatch'})));
+  assert.deepEqual(read().dateAudits[key],claim);
 });
 test('startup reconciliation respects an active executor lease',()=>{
   const claim=prior({status:'active',executorToken:'live-token',executorHost:os.hostname(),executorExpiresAt:new Date(Date.now()+3600000).toISOString()});

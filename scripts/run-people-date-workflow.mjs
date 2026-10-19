@@ -7,7 +7,7 @@ import { parseArgs } from 'node:util';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { CompletedDateGenerationHold, assertCompletedGenerationSafe, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
+import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
 import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
 import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
 import { mutateRemotePeopleWorkLedger, claimIsActive, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
@@ -146,6 +146,8 @@ if (o['dry-run']) {
           const current=buildDateAuditPacket(book,chapter);
           const receipt=path.join(PEOPLE_DIR,'date-repairs',book,chapter,`${current.extractionHash.slice(7)}.json`);
           if(claim.sourceHash!==current.sourceHash || (claim.extractionHash!==current.extractionHash && (!fs.existsSync(receipt)||readJson(receipt).proposal.extractionHash!==claim.extractionHash)))continue;
+          const evidence=completedDateClaimEvidence({book,chapter,claim});
+          if(!evidence.ready){console.error(`Retaining date ownership ${key}: ${evidence.reason}; recover the retained generation before reconciliation`);continue;}
           claim.status='ready';claim.updatedAt=new Date().toISOString();
         }
       }
@@ -177,7 +179,7 @@ if (o['dry-run']) {
           const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
           if(changed && (!finishing || prior.status==='stale-source'))throw new Error(`Sticky date work ${key} changed; reconcile before release`);
-          const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
+          const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,generationId:randomUUID(),jobs:{}}:prior;
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
         } catch(error) {
@@ -205,7 +207,7 @@ if (o['dry-run']) {
         },{message:`Retain date ownership plan ${key}`});
         const directory=dateWorkflowDirectory(target.book,target.chapter);
         const stateFile=path.join(directory,'state.json');
-        if(!fs.existsSync(stateFile)&&(Object.keys(reserved.jobs).length||Object.keys(reserved.reviewPlans??{}).length)) writeJsonAtomic(stateFile,{schemaVersion:1,workflowVersion:1,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,round:0,phase:'audit',jobs:reserved.jobs,reviewPlans:reserved.reviewPlans??{},restoredFromLedger:true});
+        if(!fs.existsSync(stateFile)&&(Object.keys(reserved.jobs).length||Object.keys(reserved.reviewPlans??{}).length)) writeJsonAtomic(stateFile,{schemaVersion:1,workflowVersion:1,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,...(reserved.generationId?{generationId:reserved.generationId}:{}),round:0,phase:'audit',jobs:reserved.jobs,reviewPlans:reserved.reviewPlans??{},restoredFromLedger:true});
         matcher ??= loadProperNounMatcher();
         const extractionPacket=buildPeopleExtractionPacket(target.book,target.chapter,{properNounMatcher:matcher});
         const validateExtraction=candidate=>{
@@ -232,7 +234,7 @@ if (o['dry-run']) {
             try {return await worker(task);}
             catch(error) {if(o.lane==='openrouter'&&error.status===429)control.stopRequested=true;throw error;}
           };
-          const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan});
+          const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan,generationId:reserved.generationId});
           console.log(`${key}: ${result.status}`);
           outcomes.push({book:target.book,chapter:target.chapter,status:result.status});
           if(result.status==='audited')approved+=1;

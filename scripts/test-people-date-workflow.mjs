@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
@@ -40,6 +40,77 @@ function repair(task) {
     {kind:'replace',id:'claim-1',before,after,reason:'The fixture first-year event supports year one, not year two.'},
     {kind:'hints',personId:'p001',before:['AD 2'],after:['AD 1'],reason:'Synchronize the fixture hint with the corrected personal event.'}]};
 }
+
+test('date claim recovery requires its own completed generation report', async t => {
+  const f=fixture(t),scope={book:'fixture',chapter:'001'};
+  const directory=dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir);
+  const claim={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,generationId:'generation-one'};
+  assert.match(completedDateClaimEvidence({...scope,claim},f.options).reason,/missing/);
+  const worker=async task=>{const result=review(task);for(const item of result.itemChecks)item.verdict='supported';result.findings=[];return result;};
+  await runDateWorkflow(scope,worker,{...f.options,generationId:claim.generationId});
+  const stateFile=path.join(directory,'state.json'),state=readJson(stateFile);
+  assert.equal(state.phase,'complete');
+  assert.equal(completedDateClaimEvidence({...scope,claim},f.options).ready,true);
+  assert.match(completedDateClaimEvidence({...scope,claim:{...claim,generationId:'new-generation'}},f.options).reason,/generation identity/);
+  assert.match(completedDateClaimEvidence({...scope,claim:{...claim,generationId:undefined}},f.options).reason,/generation identity/);
+  assert.match(completedDateClaimEvidence({...scope,claim:{...claim,sourceHash:'other'}},f.options).reason,/fingerprints/);
+  writeJsonAtomic(stateFile,{...state,phase:'audit'});
+  assert.match(completedDateClaimEvidence({...scope,claim},f.options).reason,/not complete/);
+  writeJsonAtomic(stateFile,{...state,phase:'publish'});
+  assert.match(completedDateClaimEvidence({...scope,claim},f.options).reason,/not complete/);
+  writeJsonAtomic(stateFile,{...state,review:'../review-0.json'});
+  assert.match(completedDateClaimEvidence({...scope,claim},f.options).reason,/identity/);
+  writeJsonAtomic(stateFile,state);
+  const reviewFile=path.join(directory,state.review),saved=readJson(reviewFile);
+  writeJsonAtomic(reviewFile,{...saved,summary:'A different valid-looking historical review summary.'});
+  assert.match(completedDateClaimEvidence({...scope,claim},f.options).reason,/differs/);
+});
+
+test('newer external hold blocks retained workflow without changing artifacts or calling worker', async t => {
+  const f=fixture(t),scope={book:'fixture',chapter:'001'};
+  const worker=async task=>{const result=review(task);for(const item of result.itemChecks)item.verdict='supported';result.findings=[];return result;};
+  await runDateWorkflow(scope,worker,{...f.options,generationId:'generation-one'});
+  const directory=dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir),stateFile=path.join(directory,'state.json');
+  const oldState=readJson(stateFile);writeJsonAtomic(stateFile,{...oldState,phase:'audit'});
+  const reportFile=path.join(f.options.peopleDir,'date-audits/fixture/001.json'),oldReport=readJson(reportFile);
+  const hold={...oldReport,status:'research-blocked',reviewedUnits:[],itemChecks:[],personChecks:[],findings:[{items:['hints-p001'],problem:'Current evidence needs an independent source review.',action:'Independently assess the source and preserve this hold.'}]};
+  writeJsonAtomic(reportFile,hold);const before=fs.readFileSync(stateFile,'utf8');let calls=0;
+  await assert.rejects(runDateWorkflow(scope,async()=>{calls++;throw Error('unexpected');},f.options),/cannot be safely seeded/);
+  assert.equal(calls,0);assert.equal(fs.readFileSync(stateFile,'utf8'),before);assert.deepEqual(readJson(reportFile),hold);
+});
+test('mismatched restored generation is held before state or report mutation',async t=>{
+  const f=fixture(t),scope={book:'fixture',chapter:'001'},directory=dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir);
+  const stateFile=path.join(directory,'state.json');
+  const state={schemaVersion:1,workflowVersion:1,sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,generationId:'old',round:0,phase:'audit',jobs:{},restoredFromLedger:true};
+  writeJsonAtomic(stateFile,state);let calls=0;
+  await assert.rejects(runDateWorkflow(scope,async()=>{calls++;}, {...f.options,generationId:'new'}),/does not match the reserved generation/);
+  assert.deepEqual(readJson(stateFile),state);assert.equal(calls,0);
+});
+
+test('startup reconciliation preserves interrupted sticky claims and accepts matching completed generation', async t => {
+  const f=fixture(t),scope={book:'fixture',chapter:'001'};
+  const worker=async task=>{const result=review(task);for(const item of result.itemChecks)item.verdict='supported';result.findings=[];return result;};
+  await runDateWorkflow(scope,worker,{...f.options,generationId:'generation-one'});
+  const directory=dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir),stateFile=path.join(directory,'state.json'),state=readJson(stateFile);
+  const source=fs.readFileSync(new URL('./run-people-date-workflow.mjs',import.meta.url),'utf8');
+  const begin='mutateRemotePeopleWorkLedger(ledger=>{',end="},{message:'Reconcile completed date publications'});";
+  const start=source.indexOf(begin),finish=source.indexOf(end,start);assert.ok(start>=0&&finish>start);
+  const makeCallback=new Function('fs','path','PEOPLE_DIR','o','os','dateExecutorIsBusy','executorToken','dateAuditStatus','buildDateAuditPacket','readJson','completedDateClaimEvidence',`return ledger=>{${source.slice(start+begin.length,finish)}}`);
+  const claim={worker:'owner',status:'active',sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,generationId:'generation-one',jobs:{'audit-0':{status:'interrupted'}}};
+  const ledger={dateAudits:{'fixture/001':claim}};
+  const callback=makeCallback(fs,path,f.options.peopleDir,{worker:'owner'},os,dateExecutorIsBusy,'token',(b,c)=>dateAuditStatus(b,c,f.options),(b,c)=>buildDateAuditPacket(b,c,f.options),readJson,(input)=>completedDateClaimEvidence(input,f.options));
+  writeJsonAtomic(stateFile,{...state,phase:'audit'});const before=structuredClone(ledger);callback(ledger);assert.deepEqual(ledger,before);
+  writeJsonAtomic(stateFile,state);callback(ledger);assert.equal(claim.status,'ready');
+});
+test('completed repaired generation retains original claim binding and current audited report',async t=>{
+  const f=fixture(t),scope={book:'fixture',chapter:'001'};
+  const claim={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,generationId:'repair-generation'};
+  const result=await runDateWorkflow(scope,async task=>task.kind==='repair'?repair(task):review(task),{...f.options,generationId:claim.generationId});
+  assert.equal(result.status,'audited');
+  assert.notEqual(buildDateAuditPacket(scope.book,scope.chapter,f.options).extractionHash,claim.extractionHash);
+  assert.equal(completedDateClaimEvidence({...scope,claim},f.options).ready,true);
+  assert.match(completedDateClaimEvidence({...scope,claim:{...claim,generationId:'other-generation'}},f.options).reason,/generation identity/);
+});
 test('review partitions own every unit, date and person exactly once',t=>{
   const f=fixture(t),jobs=dateReviewJobs(f.packet,f.options);
   assert.equal(jobs.length,2);
@@ -554,9 +625,11 @@ test('shared ledger validates isolated date reservations without modifying extra
 });
 test('completed workflow starts a new generation when the chapter changes',async t=>{
   const f=fixture(t),worker=async task=>task.kind==='repair'?repair(task):review(task);
-  await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);
+  await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,generationId:'old-generation'});
   f.source.content[0].sentences[1].zh+='乙仕。';writeJsonAtomic(f.sourceFile,f.source);
-  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const packet=buildDateAuditPacket('fixture','001',f.options);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,generationId:'new-generation'})).status,'audited');
+  assert.equal(completedDateClaimEvidence({book:'fixture',chapter:'001',claim:{sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,generationId:'new-generation'}},f.options).ready,true);
   assert.ok(fs.readdirSync(path.dirname(dateWorkflowDirectory('fixture','001',f.options.peopleDir))).some(n=>n.startsWith('001.completed-')));
 });
 test('a repair context cannot approve its own candidate',async t=>{
