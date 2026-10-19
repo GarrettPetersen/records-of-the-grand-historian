@@ -112,14 +112,19 @@ Options:
   return options;
 }
 
-function rewriteLocalPersonRefs(value, localMap) {
-  if (Array.isArray(value)) return value.map((item) => rewriteLocalPersonRefs(item, localMap));
+function rewriteLocalPersonRefs(value, localMap, isReference = false) {
+  if (Array.isArray(value)) return value.map((item) => rewriteLocalPersonRefs(item, localMap, isReference));
   if (value && typeof value === 'object') {
     return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [key, rewriteLocalPersonRefs(item, localMap)]),
+      Object.entries(value).map(([key, item]) => [key, rewriteLocalPersonRefs(item, localMap, /personIds?$/iu.test(key))]),
     );
   }
-  return typeof value === 'string' && localMap.has(value) ? localMap.get(value) : value;
+  if (typeof value !== 'string') return value;
+  if (localMap.has(value)) return localMap.get(value);
+  if (isReference && /^[a-z0-9_-]+:\d{3}:p\d{3,}$/u.test(value)) {
+    throw new Error(`Cannot compile unresolved local person reference ${value}`);
+  }
+  return value;
 }
 
 function claimView(claim, localMap) {
@@ -815,6 +820,15 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       corpus.coverage.sourceChapters !== corpus.coverage.extractedChapters + corpus.coverage.missingChapterIds.length) {
     throw new Error('People corpus chapter coverage metadata is internally inconsistent');
   }
+  for (const person of corpus.localPeople.values()) {
+    for (const claim of person.claims) {
+      if (!['same-person', 'different-person'].includes(claim.predicate)) continue;
+      const target = claim.value?.personId ?? claim.value?.person;
+      if (typeof target !== 'string' || !corpus.localPeople.has(target)) {
+        throw new Error(`Cannot compile unresolved identity reference ${JSON.stringify(target)} in ${claim.id}`);
+      }
+    }
+  }
   const candidateDocument = buildPeopleResolutionCandidateDocument(corpus);
   const resolved = resolvePeopleClusters(corpus.localPeople, resolutionDocuments);
   const currentPromptVersion = readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion;
@@ -959,6 +973,19 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
 }
 
 function selfTest() {
+  const referenceMap = new Map([['fixture:001:p001', 'per_fixture_1']]);
+  const resolvedValue = rewriteLocalPersonRefs({ relatedPersonIds: ['fixture:001:p001'], text: 'fixture:002:p001' }, referenceMap);
+  if (resolvedValue.relatedPersonIds[0] !== 'per_fixture_1' || resolvedValue.text !== 'fixture:002:p001') {
+    throw new Error('Nested local person references were not resolved correctly');
+  }
+  let rejectedMissingReference = false;
+  try {
+    rewriteLocalPersonRefs({ relatedPersonIds: ['fixture:002:p001'] }, referenceMap);
+  } catch (error) {
+    if (!error.message.includes('fixture:002:p001')) throw error;
+    rejectedMissingReference = true;
+  }
+  if (!rejectedMissingReference) throw new Error('Unresolved local person reference was silently retained');
   const makePerson = (id, en, zh) => ({
     localId: id,
     book: 'fixture',
@@ -1082,6 +1109,31 @@ function selfTest() {
     }],
   }];
   const result = compilePeopleCatalog(corpus, resolution).catalog;
+  const filteredCorpus = structuredClone(corpus);
+  filteredCorpus.localPeople.delete(child.localId);
+  let rejectedFilteredTarget = false;
+  try {
+    compilePeopleCatalog(filteredCorpus, resolution);
+  } catch (error) {
+    if (error.message !== `Cannot compile unresolved local person reference ${child.localId}`) throw error;
+    rejectedFilteredTarget = true;
+  }
+  if (!rejectedFilteredTarget) throw new Error('Catalog retained a family claim with a filtered target');
+  const identityCorpus = structuredClone(corpus);
+  identityCorpus.localPeople.get(left.localId).claims.push({
+    id: 'fixture:001:c0005', subject: left.localId, predicate: 'different-person',
+    value: { person: child.localId }, certainty: 'explicit', evidence: ['fixture:001:s0001'],
+  });
+  compilePeopleCatalog(identityCorpus, resolution);
+  identityCorpus.localPeople.delete(child.localId);
+  let rejectedIdentityTarget = false;
+  try {
+    compilePeopleCatalog(identityCorpus, resolution);
+  } catch (error) {
+    if (!error.message.startsWith(`Cannot compile unresolved identity reference "${child.localId}"`)) throw error;
+    rejectedIdentityTarget = true;
+  }
+  if (!rejectedIdentityTarget) throw new Error('Catalog retained an identity claim with a filtered target');
   const fan = result.people.find((person) => person.preferredName.en === 'Fan Ye');
   const compiledChild = result.people.find((person) => person.preferredName.en === 'Fan Child');
   if (result.people.length !== 2 || fan.references.length !== 2) {

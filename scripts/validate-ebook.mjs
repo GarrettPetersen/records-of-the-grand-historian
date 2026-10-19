@@ -8,6 +8,7 @@ import path from 'node:path';
 import { scanArtifactText } from './scan-translation-artifacts.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
 import { ebookPeopleReadinessErrors } from './lib/ebook-people-readiness.mjs';
+import { ebookCurrentDateErrors, ebookManifestScopeErrors } from './lib/ebook-current-date-audits.mjs';
 import {
   KDP_MAX_HTML_FILES,
   ebookChapterHref,
@@ -81,6 +82,7 @@ const slug = path.basename(epubPath, '.epub');
 const extractDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-validate-'));
 const ebookManifest = readEbookManifest();
 const sourceProduct = manifestMetadataForSlug(ebookManifest, slug);
+if (requirePeopleGlossary) errors.push(...ebookCurrentDateErrors(sourceProduct));
 try {
   execFileSyncChecked('unzip', ['-q', epubPath, '-d', extractDir], { stdio: 'pipe' });
 } catch (error) {
@@ -1036,6 +1038,7 @@ const qaChapterById = new Map((qaReportData?.chapters || []).map((chapter) => [c
 
 if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   const metadata = readJson(path.join(productDir, 'metadata.json'));
+  if (requirePeopleGlossary) errors.push(...ebookManifestScopeErrors(sourceProduct, metadata));
   const metadataJsonText = fs.readFileSync(path.join(productDir, 'metadata.json'), 'utf8');
   const kdpMetadata = fs.existsSync(path.join(productDir, 'kdp-metadata.md'))
     ? fs.readFileSync(path.join(productDir, 'kdp-metadata.md'), 'utf8')
