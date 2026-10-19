@@ -65,6 +65,12 @@ and the required provenance, ownership, date and identity safeguards for a
 future supported path. They do not authorize a direct source edit or approve
 the proposed restorations.
 
+`jinshu053-coverage-inventory-20261019.md` and its staging generator inventory
+all 209 units in physical source order using source revision `54eb5a3` and
+research inputs at `6c7a245`. The generator reproduces the saved inventory
+byte-for-byte. Its per-row labels distinguish provisional support, further
+review and unchanged fields; they are not accepted production decisions.
+
 At the pinned revision, a read-only scan found 80 resolution files containing
 595 decisions referencing 45 local Jinshu 053 people. These are potential
 dependencies, not a finding that all are stale or wrong. Changes to names or
