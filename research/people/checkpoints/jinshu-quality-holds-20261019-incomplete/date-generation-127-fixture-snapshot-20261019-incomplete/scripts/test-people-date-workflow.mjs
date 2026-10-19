@@ -1,0 +1,593 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { test } from 'node:test';
+import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
+import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
+import { dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
+import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+
+function fixture(t) {
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'date-workflow-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const options={dataDir:path.join(root,'data'),peopleDir:path.join(root,'people'),maxUnits:1,maxBytes:64000,validateExtraction:()=>{}};
+  const source={content:[{sentences:[{id:'s0001',zh:'元年甲卒。',translation:'Jia died in year one.'},{id:'s0002',zh:'乙在。',translation:'Yi was present.'}]}]};
+  const extraction={schemaVersion:2,book:'fixture',chapter:'001',input:{unitCount:2,chapterFingerprint:'fixture',candidateScannerVersion:2,unitDigests:[]},run:{model:'original-extractor'},
+    people:[['p001',['Jia','甲'],'historical','Official',{a:['AD 2']}],['p002',['Yi','乙'],'historical','Official',{a:['AD 1']}]],
+    surfaces:[],claims:[['p001','attestation',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},'explicit',['s0001']],['p002','attestation',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}},'explicit',['s0002']],['p001','role',{roleId:'official'},'explicit',['s0001']]],translationRepairs:[],candidateDispositions:[],coverage:{}};
+  const sourceFile=path.join(options.dataDir,'fixture/001.json'),file=path.join(options.peopleDir,'extractions/fixture/001.json');
+  writeJsonAtomic(sourceFile,source);writeJsonAtomic(file,extraction);
+  return {options,source,sourceFile,extraction,file,packet:buildDateAuditPacket('fixture','001',options)};
+}
+function review(task) {
+  const check=(id,item=false)=>({id,verdict:'supported',reason:'Fixture event and date ownership were checked against the test source.',...(item?{event:'The named person participates in the fixture event.'}:{}),evidence:[{unit:'s0001',quote:'元年'}]});
+  const result={jobId:task.job.id,sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,
+    reviewedAt:new Date().toISOString(),reviewer:{name:'Independent fixture reviewer',agentId:`review-${task.key}`,independentOfExtractor:true},
+    summary:'Every owned source unit and date item was reviewed in this fixture.',reviewedUnits:task.job.ownedUnits,
+    itemChecks:task.job.ownedItems.map(id=>check(id,true)),personChecks:task.job.ownedPeople.map(id=>check(id)),findings:[],references:[]};
+  for (const item of task.job.items) if((item.value?.westernYear?.year===2)||(item.id==='hints-p001'&&item.value.includes('AD 2'))) {
+    result.itemChecks.find(c=>c.id===item.id).verdict='incorrect';
+    result.findings.push({items:[item.id],problem:'Fixture date two does not match the first-year source.',action:'Correct this fixture event to year one and synchronize its hint.'});
+  }
+  return result;
+}
+function repair(task) {
+  const before=task.extraction.claims[0],after=structuredClone(before);after[2].westernYear.year=1;
+  return {sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-1',before,after,reason:'The fixture first-year event supports year one, not year two.'},
+    {kind:'hints',personId:'p001',before:['AD 2'],after:['AD 1'],reason:'Synchronize the fixture hint with the corrected personal event.'}]};
+}
+test('review partitions own every unit, date and person exactly once',t=>{
+  const f=fixture(t),jobs=dateReviewJobs(f.packet,f.options);
+  assert.equal(jobs.length,2);
+  for(const field of ['ownedUnits','ownedItems','ownedPeople'])assert.equal(new Set(jobs.flatMap(j=>j[field])).size,jobs.flatMap(j=>j[field]).length);
+});
+test('parallel review and re-audit retain full gates and serial repair',async t=>{
+  const f=fixture(t),pool=createDateWorkerPool(2);
+  let active=0,peak=0;
+  const worker=async task=>{
+    active++;peak=Math.max(peak,active);
+    if(task.kind==='repair')assert.equal(active,1);
+    await new Promise(resolve=>setTimeout(resolve,5));
+    active--;
+    return task.kind==='repair'?repair(task):review(task);
+  };
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2,workerPool:pool});
+  assert.equal(result.status,'audited');assert.equal(peak,2);
+  assert.equal(pool.summary().active,0);assert.equal(pool.summary().completed,5);
+});
+test('failed parallel review drains and preserves successful siblings before resumption',async t=>{
+  const f=fixture(t);let completed=0;
+  const worker=async task=>{
+    if(task.job.ownedUnits.includes('s0001'))throw new Error('fixture failed shard');
+    await new Promise(resolve=>setTimeout(resolve,10));completed++;
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2}),/fixture failed shard/);
+  assert.equal(completed,1);assert.deepEqual(readJson(f.file),f.extraction);
+  const state=readJson(path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'));
+  assert.equal(state.phase,'audit');
+  const calls=[];
+  await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{calls.push(task);return task.kind==='repair'?repair(task):review(task);},{...f.options,jobConcurrency:2});
+  assert.equal(calls.filter(task=>task.key.startsWith('audit-')&&task.job.ownedUnits.includes('s0002')).length,0);
+});
+test('shared worker pool caps concurrent chapters rather than multiplying limits',async t=>{
+  const a=fixture(t),b=fixture(t),pool=createDateWorkerPool(2);
+  let active=0,peak=0;
+  const worker=async task=>{
+    active++;peak=Math.max(peak,active);
+    await new Promise(resolve=>setTimeout(resolve,5));active--;
+    return task.kind==='repair'?repair(task):review(task);
+  };
+  await Promise.all([a,b].map(f=>runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,jobConcurrency:2,workerPool:pool})));
+  assert.equal(peak,2);assert.deepEqual(pool.summary(),{limit:2,peak:2,completed:10,active:0,queued:0});
+});
+test('pool stops queued launches on quota stop and drains active calls',async()=>{
+  let stop=false,release;const pool=createDateWorkerPool(1,{shouldStop:()=>stop});
+  const first=pool.run(()=>new Promise(resolve=>{release=resolve;}));
+  const second=pool.run(()=>assert.fail('queued worker must not launch'));
+  const rejected=assert.rejects(second,/launch stopped/);
+  await Promise.resolve();stop=true;release('done');
+  assert.equal(await first,'done');await rejected;assert.equal(pool.summary().active,0);
+});
+test('reception reconciliation preserves event content',t=>{
+  const f=fixture(t),row=['p001','event-participation',{kind:'posthumous-commemoration',receptionType:'posthumous',role:'honoree',action:'a later cap commemorates the Hongmen shield'},'explicit',['s0001']];
+  const before={...f.extraction,claims:[...f.extraction.claims,row]},packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:before});
+  const after=structuredClone(row);after[2].kind='retrospective-reference';after[2].receptionType='retrospective';
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[{kind:'replace',id:'claim-4',before:row,after,reason:'Unify the sole retrospective reception classification without changing the event.'}]};
+  const candidate=applyDateRepairProposal(before,proposal,packet);
+  assert.deepEqual(candidate.claims[3],after);
+  assert.equal(dateRepairDifference(before,candidate,packet).changes.length,1);
+  const bad=structuredClone(proposal);bad.changes[0].after[2].action='a different event';
+  assert.throws(()=>applyDateRepairProposal(before,bad,packet),/non-temporal/);
+});
+test('repair findings are split without dropping or rewriting a finding',t=>{
+  const findings=[
+    {items:['claim-1'],problem:'First fixture chronology is wrong.',action:'Correct the first fixture date.'},
+    {items:['hints-p001'],problem:'First fixture hint is stale.',action:'Synchronize the first fixture hint.'},
+  ];
+  const jobs=dateRepairJobs({findings},{items:[{id:'claim-1',personId:'p001'},{id:'hints-p001',personId:'p001'}]});
+  assert.equal(jobs.length,1);
+  assert.deepEqual(jobs.flatMap(job=>job.findings),findings);
+  assert.equal(new Set(jobs.map(job=>job.id)).size,1);
+});
+test('repair planning packs disjoint people into one bounded packet',t=>{
+  const f=fixture(t);
+  const findings=[
+    {items:['claim-1'],problem:'Jia needs a source-backed chronology correction.',action:'Correct Jia only.'},
+    {items:['claim-2'],problem:'Yi needs a separate source-backed chronology correction.',action:'Correct Yi only.'},
+  ];
+  const jobs=dateRepairJobs({findings,itemChecks:[],personChecks:[],references:[]},f.packet,f.extraction,{maxBytes:1024*1024});
+  assert.equal(jobs.length,1);
+  assert.deepEqual(jobs[0].findings,findings);
+});
+test('retained review plans reuse exact ownership despite changed invocation ceilings',t=>{
+  const f=fixture(t),state={phase:'audit',round:0,jobs:{}};
+  const original=retainedDateReviewJobs(f.packet,state,{maxUnits:2,maxBytes:64000});
+  state.jobs[`audit-0-${original.jobs[0].id}`]={agentId:'retained'};
+  const resumed=retainedDateReviewJobs(f.packet,state,{maxUnits:1,maxBytes:32000});
+  assert.deepEqual(resumed.jobs,original.jobs);
+  const changed=structuredClone(f.packet);changed.items[0].value.westernYear.year=7;
+  assert.throws(()=>retainedDateReviewJobs(changed,state,f.options),/ownership changed/);
+});
+test('same worker and host cannot reuse another live executor token',()=>{
+  const claim={worker:'same-worker',executorHost:'same-host',executorToken:'first-checkout',executorExpiresAt:new Date(2000).toISOString()};
+  assert.equal(dateExecutorIsBusy(claim,{executorToken:'second-checkout',now:1000}),true);
+  assert.equal(dateExecutorIsBusy(claim,{executorToken:'first-checkout',now:1000}),false);
+  assert.equal(dateExecutorIsBusy(claim,{executorToken:'second-checkout',now:2001}),false);
+  assert.equal(dateExecutorIsBusy(claim,{executorToken:'second-checkout',now:1000,takeover:true}),false);
+});
+test('audit -> repair -> fresh re-audit -> publish completes and is idempotent',async t=>{
+  const f=fixture(t),calls=[];
+  const worker=async task=>{calls.push(task.key);return task.kind==='repair'?repair(task):review(task);};
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);
+  assert.equal(result.status,'audited');assert.equal(readJson(f.file).claims[0][2].westernYear.year,1);
+  assert.equal(dateAuditStatus('fixture','001',f.options).status,'audited');
+  assert.equal(calls.filter(k=>k.startsWith('audit-')).length,2);
+  assert.equal(calls.filter(k=>k.startsWith('reaudit-')).length,2);
+  const n=calls.length;await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);assert.equal(calls.length,n);
+});
+test('completed generation with a current needs-revision report preserves every artifact and dispatches no worker',async t=>{
+  const f=fixture(t);
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  assert.equal(result.status,'needs-revision');
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),stateFile=path.join(directory,'state.json');
+  const state=readJson(stateFile);state.phase='complete';state.restoredFromLedger=true;writeJsonAtomic(stateFile,state);
+  const names=fs.readdirSync(directory).sort(),before=new Map(names.map(n=>[n,fs.readFileSync(path.join(directory,n))]));
+  const prior=path.join(f.options.peopleDir,'date-audits','fixture','001.json'),report=fs.readFileSync(prior),extraction=fs.readFileSync(f.file);
+  let called=false;
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;throw Error('unexpected worker');},f.options),/needs-revision report/);
+  assert.equal(called,false);assert.deepEqual(fs.readdirSync(directory).sort(),names);
+  for(const [name,bytes] of before)assert.deepEqual(fs.readFileSync(path.join(directory,name)),bytes);
+  assert.deepEqual(fs.readFileSync(prior),report);assert.deepEqual(fs.readFileSync(f.file),extraction);
+});
+test('a completed generation retains a stale failed report for explicit reconciliation',async t=>{
+  const f=fixture(t);
+  await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),stateFile=path.join(directory,'state.json');
+  const state=readJson(stateFile);state.phase='complete';writeJsonAtomic(stateFile,state);
+  const changed=readJson(f.sourceFile);changed.content[0].sentences[1].translation='A changed translation.';writeJsonAtomic(f.sourceFile,changed);
+  assert.equal(dateAuditStatus('fixture','001',f.options).status,'stale');
+  let called=false;await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options),/stale needs-revision report/);
+  assert.equal(called,false);assert.equal(readJson(stateFile).phase,'complete');
+});
+test('stale failed report without local workflow state cannot start a new audit',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const stateFile=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json');fs.unlinkSync(stateFile);
+  const changed=readJson(f.sourceFile);changed.content[0].sentences[1].translation='A changed translation.';writeJsonAtomic(f.sourceFile,changed);
+  let called=false;await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options),/stale needs-revision report/);
+  assert.equal(called,false);assert.equal(fs.existsSync(stateFile),false);
+});
+test('an existing audit cannot bypass seeding of a newly failed report',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const file=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'),state=readJson(file);
+  state.phase='audit';state.round=0;state.jobs={};delete state.restoredFromLedger;writeJsonAtomic(file,state);
+  let called=false;await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options),/needs-revision report/);
+  assert.equal(called,false);assert.deepEqual(readJson(file),state);
+});
+test('a later repair cannot treat an unrelated older matching review as its current source',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json'),state=readJson(file);
+  const later=readJson(path.join(directory,'review-0.json'));later.summary='A different later review is linked to the retained repair plan.';writeJsonAtomic(path.join(directory,'review-1.json'),later);
+  state.phase='repair';state.round=1;state.review='review-1.json';writeJsonAtomic(file,state);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(readJson(file),state);
+});
+test('a restored audit past round zero cannot bypass failed report seeding',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const file=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'),state=readJson(file);
+  state.phase='audit';state.round=1;state.jobs={};state.restoredFromLedger=true;writeJsonAtomic(file,state);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(readJson(file),state);
+});
+test('a current failed report with no local state seeds the repair before any new review',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json');fs.unlinkSync(file);
+  const calls=[];const result=await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{calls.push(task.kind);return repair(task);},{...f.options,maxRounds:0});
+  assert.equal(result.status,'needs-revision');assert.equal(readJson(file).phase,'repair');assert.deepEqual(calls,[]);
+  assert.deepEqual(readJson(path.join(directory,'review-0.json')),readJson(path.join(f.options.peopleDir,'date-audits','fixture','001.json')));
+});
+test('a retained different seed is not overwritten when state is missing',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),state=path.join(directory,'state.json'),seed=path.join(directory,'review-0.json');
+  fs.unlinkSync(state);const old=readJson(seed);old.summary='Different retained review that must be preserved.';writeJsonAtomic(seed,old);const bytes=fs.readFileSync(seed);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(fs.readFileSync(seed),bytes);assert.equal(fs.existsSync(state),false);
+});
+test('interrupted publication reuses an exact retained prior review and matching receipt',async t=>{
+  const f=fixture(t),worker=async task=>task.kind==='repair'?repair(task):review(task);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json'),reportFile=path.join(f.options.peopleDir,'date-audits','fixture','001.json');
+  writeJsonAtomic(reportFile,readJson(path.join(directory,'review-0.json')));const state=readJson(file);state.phase='publish';writeJsonAtomic(file,state);
+  let called=false;const result=await runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options);
+  assert.equal(result.status,'audited');assert.equal(called,false);
+});
+test('interrupted publication cannot overwrite a separately amended failed report',async t=>{
+  const f=fixture(t),worker=async task=>task.kind==='repair'?repair(task):review(task);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json'),reportFile=path.join(f.options.peopleDir,'date-audits','fixture','001.json');
+  const prior=readJson(path.join(directory,'review-0.json'));prior.summary='An independently amended review contains an additional unresolved finding.';
+  prior.findings.push({items:['claim-1'],problem:'A later independent source review found another unresolved concern.',action:'Review the separately discovered concern before declaring chronology approved.'});
+  writeJsonAtomic(reportFile,prior);const before=fs.readFileSync(reportFile);const state=readJson(file);state.phase='publish';writeJsonAtomic(file,state);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(fs.readFileSync(reportFile),before);assert.equal(readJson(file).phase,'publish');
+});
+test('a report installed during a review is not overwritten by its outcome',async t=>{
+  const f=fixture(t),reportFile=path.join(f.options.peopleDir,'date-audits','fixture','001.json');let installed;
+  const worker=async task=>{if(!installed){installed={status:'needs-revision',note:'New independent finding'};writeJsonAtomic(reportFile,installed);}return review(task);};
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,maxRounds:0}),/Installed date report changed during workflow/);
+  assert.deepEqual(readJson(reportFile),installed);assert.deepEqual(readJson(f.file),f.extraction);
+});
+test('an interrupted source review reuses completed chunks',async t=>{
+  const f=fixture(t),calls=[];let interrupt=true;
+  const worker=async task=>{calls.push(task.key);if(interrupt&&task.kind==='review'&&task.job.ownedUnits.includes('s0002')){interrupt=false;throw new Error('interrupted');}return task.kind==='repair'?repair(task):review(task);};
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/interrupted/);
+  assert.equal(readJson(f.file).claims[0][2].westernYear.year,2);
+  const first=calls[0];await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);
+  assert.equal(calls.filter(k=>k===first).length,1);
+});
+test('failed candidate re-audit never changes the production extraction',async t=>{
+  const f=fixture(t);
+  const worker=async task=>{
+    if(task.kind==='repair')return repair(task);
+    const r=review(task);
+    if(task.key.startsWith('reaudit-')){r.personChecks[0].verdict='research-blocked';r.findings.push({items:[r.personChecks[0].id],problem:'Independent fixture evidence still needs more research.',action:'Keep the candidate staged until the primary passage is verified.'});}
+    return r;
+  };
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,maxRounds:1});
+  assert.equal(result.status,'needs-revision');assert.deepEqual(readJson(f.file),f.extraction);
+});
+test('production validation failure preserves the old source artifact',async t=>{
+  const f=fixture(t);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async task=>task.kind==='repair'?repair(task):review(task),{...f.options,maxAttempts:1,validateExtraction:()=>{throw new Error('production validation rejected');}}),/production validation rejected/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+test('missing host validation fails before invoking any worker',async t=>{
+  const f=fixture(t);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw new Error('worker must not launch');},{...f.options,validateExtraction:undefined}),/before worker execution/);
+});
+test('repair publication recovers an interrupted report write from its receipt',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>task.kind==='repair'?repair(task):review(task),f.options);
+  const publication=readJson(path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'publication.json'));
+  fs.unlinkSync(path.join(f.options.peopleDir,'date-audits/fixture/001.json'));
+  assert.equal(publishDateRepair(publication,f.options).status,'audited');
+  publication.proposal.changes[0].reason='A substituted receipt must not be accepted for recovery.';
+  assert.throws(()=>publishDateRepair(publication,f.options),/matching repair receipt/);
+});
+test('repairs reject wrong hashes, non-temporal claims and changed subjects',t=>{
+  const f=fixture(t),p=repair({packet:f.packet,extraction:f.extraction});
+  let bad=structuredClone(p);bad.sourceHash='wrong';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Stale/);
+  bad=structuredClone(p);bad.changes[0].id='claim-3';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/temporal claim/);
+  bad=structuredClone(p);bad.changes[0].after[0]='p002';assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/subject/);
+});
+test('staged review binds a sealed proposal even when candidate bytes are unchanged', t => {
+  const proposal = { sourceHash: 'sha256:source', extractionHash: 'sha256:base', changes: [{ kind: 'hints', personId: 'p001', before: ['AD 1'], after: ['AD 1'], reason: 'A deliberately distinct sealed proposal fixture.' }] };
+  const candidate = { schemaVersion: 2, book: 'fixture', chapter: '001', people: [], claims: [] };
+  const handoff = { kind: 'date-repair-candidate-handoff', book: 'fixture', chapter: '001', proposal, candidate, sealedCandidateHash: sealedDateRepairProposalHash(proposal), candidateExtractionHash: sha256(JSON.stringify(candidate)) };
+  const review = { kind: 'independent-staged-date-repair-review', book: 'fixture', chapter: '001', candidateFile: 'staged-candidate-sealed.json', sealedCandidateHash: handoff.sealedCandidateHash, candidateExtractionHash: handoff.candidateExtractionHash };
+  assert.deepEqual(validateStagedDateRepairReview(handoff, review, 'staged-candidate-sealed.json'), { sealedCandidateHash: handoff.sealedCandidateHash, candidateExtractionHash: handoff.candidateExtractionHash });
+  const collapsed = { ...review, candidateHash: handoff.candidateExtractionHash };
+  assert.throws(() => validateStagedDateRepairReview(handoff, collapsed, 'staged-candidate-sealed.json'), /Legacy candidateHash/);
+  const wrongProposal = { ...review, sealedCandidateHash: handoff.candidateExtractionHash };
+  assert.throws(() => validateStagedDateRepairReview(handoff, wrongProposal, 'staged-candidate-sealed.json'), /exact sealed proposal/);
+});
+test('sealed editorial amendments may replace only a reviewed date container',t=>{
+  const original={id:'fixture:001:c0001',subject:'fixture:001:p001',predicate:'attestation',value:{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},certainty:'explicit',evidence:['fixture:001:s0001','fixture:001:s0002']};
+  const held={...structuredClone(original),evidence:['fixture:001:s0002'],value:{sourceDate:{text:'元年'},unresolved:true,unresolvedReason:'The fixture source supplies only a dated context, not a continuous personal chronology.',event:'Source-specific context retained without a Western personal date.'}};
+  const repair={id:'fixture:001:r0001',unit:{id:'s0001',kind:'paragraph-sentence',blockIndex:0,collection:'sentences',itemIndex:0},field:'literal',before:'Jia died in year one.',after:'Jia was present in year one.',reason:'The source says Jia was present, rather than that he died.',confidence:'high'};
+  const candidate={book:'fixture',chapter:'001',input:{chapterFingerprint:`sha256:${'a'.repeat(64)}`},run:{agentId:'extractor'},people:[{localId:'fixture:001:p001'}],claims:[held],translationRepairs:[{...repair,status:'applied'}]};
+  const document=editorialDecisionSeed({...candidate,translationRepairs:[{...repair,status:'proposed'}]});
+  document.reviewer={kind:'human',name:'Independent editor',model:null,agentId:'reviewer',runId:null,completedAt:new Date(0).toISOString()};
+  document.decisions[0]={repairId:repair.id,decision:'accept',after:null,reason:repair.reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'元年'}};
+  const reviewedAfter={...structuredClone(original),evidence:['fixture:001:s0002']};
+  document.claimRevisions=[{repairId:repair.id,before:structuredClone(original),after:reviewedAfter,reason:'Preserve the reviewed fixture attestation while removing an unrelated evidence error.',sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'元年'}}];
+  const amendment={schemaVersion:1,kind:'date-repair-editorial-amendment',book:'fixture',chapter:'001',editorialDecisionHash:sha256(JSON.stringify(document)),claimRevisions:[{repairId:repair.id,claimId:original.id,before:structuredClone(reviewedAfter),after:structuredClone(held),reason:'The reviewed source wording is retained, while the imported Western date is replaced by a source-specific unresolved hold.'}]};
+  const amended=applyDateRepairEditorialAmendment(document,amendment,candidate);
+  assert.deepEqual(amended.claimRevisions[0].after,held);
+  const stale={...amendment,editorialDecisionHash:'sha256:stale'};
+  assert.throws(()=>applyDateRepairEditorialAmendment(document,stale,candidate),/stale/);
+  const unsafe=structuredClone(amendment);unsafe.claimRevisions[0].after.value.sourceDate.text='another year';
+  assert.throws(()=>applyDateRepairEditorialAmendment(document,unsafe,candidate),/only chronology/);
+});
+function receptionRepair(f) {
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
+    {kind:'retrospective-reference',role:'remembered-official',action:'remembered'},'explicit',['s0001']],
+    reason:'Keep the later reference separate from this official\'s living activity.'});
+  return proposal;
+}
+test('returned repair labels reconcile before validation and retain a raw receipt',async t=>{
+  const f=fixture(t);
+  let submission;
+  const worker=async task=>{
+    if(task.kind!=='repair')return review(task);
+    submission=receptionRepair(f);
+    submission.changes.at(-1).after[2].kind='posthumous-reference';
+    submission.changes.at(-1).after[2].receptionType='posthumous';
+    return submission;
+  };
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const directory=path.join(f.options.peopleDir,'generated','date-workflow','fixture','001');
+  const receipt=fs.readdirSync(directory).find(name=>name.startsWith('reception-reconciliation-'));
+  assert.ok(receipt);
+  const saved=readJson(path.join(directory,receipt));
+  assert.equal(saved.submission.changes.at(-1).after[2].receptionType,'posthumous');
+  assert.equal(saved.proposal.changes.at(-1).after[2].receptionType,'retrospective');
+  assert.equal(submission.changes.at(-1).after[2].receptionType,'posthumous');
+  assert.ok(readJson(f.file).claims.some(row=>row[2].kind==='retrospective-reference'));
+});
+test('a reception addition requires a nonempty event kind',t=>{
+  const f=fixture(t),proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'add-reception-event',after:['p001','event-participation',
+    {receptionType:'retrospective',role:'remembered-official'},'explicit',['s0001']],
+    reason:'Keep the later reference separate from this official\'s living activity.'});
+  assert.throws(()=>applyDateRepairProposal(f.extraction,proposal,f.packet),/explicitly classified reception/);
+});
+test('scoped reception additions survive final-delta reconstruction and remain audit items',t=>{
+  const f=fixture(t),proposal=receptionRepair(f),candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  assert.equal(combined.changes.at(-1).kind,'hints');
+  assert.equal(combined.changes.filter(c=>c.kind==='add-reception-event').length,1);
+  assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  assert.ok(packet.items.some(i=>i.value?.kind==='retrospective-reference'));
+});
+test('a reception-only person may clear fabricated active-date hints',t=>{
+  const f=fixture(t),before=f.extraction.claims[0];
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'remove',id:'claim-1',before,reason:'The cited fixture is a later reception event, not evidence of Jia living in year two.'},
+    {kind:'add-reception-event',after:['p001','event-participation',{kind:'retrospective-reference',role:'recalled-example',action:'cited as a later precedent',receptionType:'retrospective'},'explicit',['s0001']],reason:'Preserve the later citation as a retrospective reference rather than a life attestation.'},
+    {kind:'hints',personId:'p001',before:['AD 2'],after:[],reason:'Remove the fabricated active-date hint because this chapter supplies only later reception evidence.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[0][4].a,[]);
+  assert.ok(candidate.claims.some(c=>c[1]==='event-participation'&&c[2].kind==='retrospective-reference'));
+  const noReception=structuredClone(proposal);noReception.changes.splice(1,1);
+  assert.throws(()=>applyDateRepairProposal(f.extraction,noReception,f.packet),/active-hint/);
+});
+test('an undated source attestation may clear active-date hints without inventing chronology',t=>{
+  const f=fixture(t),before=f.extraction.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no temporal wording.'};
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'The cited source unit identifies Yi but has no temporal language, so its inherited first-year date must be removed.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'Clear the inherited date hint because this person has only an explicitly undated source attestation.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+  assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
+});
+test('an undated source attestation may clear hints when remaining contexts are explicitly unresolved',t=>{
+  const f=fixture(t),stored=structuredClone(f.extraction);
+  stored.claims.push(['p002','event-participation',{kind:'political',role:'named',dateContext:{unresolved:true,unresolvedReason:'The source names the event but supplies no date.'}},'explicit',['s0002']]);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:stored});
+  const before=stored.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no temporal wording.'};
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'The attestation carries an inherited date even though its source wording is explicitly undated.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'An unresolved event context is not evidence for an active Western year, so clear the inherited hint.'},
+  ]};
+  const candidate=applyDateRepairProposal(stored,proposal,packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+});
+test('an unresolved replacement may clear the hint it withdraws',t=>{
+  const f=fixture(t),before=f.extraction.claims[1],after=structuredClone(before);
+  after[2]={sourceDate:{text:'The source gives only a disputed relative count.'},unresolved:true,
+    unresolvedReason:'The relative count has competing anchors and does not support one Western year.'};
+  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'Replace the unsupported converted year with the source\'s explicitly unresolved relative chronology.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'Clear the active hint because the repaired record no longer supports a concrete Western year.'},
+  ]};
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.deepEqual(candidate.people[1][4].a,[]);
+  assert.equal(candidate.claims[1][2].unresolved,true);
+});
+test('an undated source attestation cannot clear hints when another claim supplies chronology',t=>{
+  const f=fixture(t),stored=structuredClone(f.extraction);
+  stored.claims.push(['p002','birth',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}},'explicit',['s0002']]);
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:stored});
+  const before=stored.claims[1],after=structuredClone(before);
+  after[2]={undatedSourceAttestation:true,event:'The source attests Yi but supplies no date-bearing temporal wording.'};
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,changes:[
+    {kind:'replace',id:'claim-2',before,after,reason:'Remove the inherited first-year date because Yi is named here without a date-bearing temporal statement.'},
+    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'This must be rejected because the person retains a separate dated birth claim.'},
+  ]};
+  assert.throws(()=>applyDateRepairProposal(stored,proposal,packet),/active-hint/);
+});
+test('reception additions reject non-reception events, life claims, conflicting labels and bad evidence',t=>{
+  const f=fixture(t),proposal=receptionRepair(f);
+  for(const mutate of [
+    row=>{row[1]='role';},row=>{row[1]='attestation';},row=>{row[0]='p999';},
+    row=>{row[2]={kind:'battle'};},
+    row=>{row[2].receptionType='unknown';},row=>{row[4]=[];},row=>{row[4]=['s9999'];},
+  ]) {
+    const bad=structuredClone(proposal);mutate(bad.changes.at(-1).after);
+    assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Only life\/date|source-unit/);
+  }
+  const duplicate=structuredClone(proposal);duplicate.changes.push(structuredClone(duplicate.changes.at(-1)));
+  assert.throws(()=>applyDateRepairProposal(f.extraction,duplicate,f.packet),/Duplicate/);
+  for(const field of ['hostRequiredChanges','requiredReceptionEvents','requiredHostCuration','blocked']) {
+    assert.throws(()=>applyDateRepairProposal(f.extraction,{...proposal,[field]:true},f.packet),/Incomplete repair/);
+  }
+});
+test('corrected event dates and a separate reception event cannot be mismatched during collapse',t=>{
+  const f=fixture(t);
+  const before=['p001','event-participation',{kind:'appointment',dateContext:{westernYear:{era:'AD',year:2,precision:'year'}}},'explicit',['s0001']];
+  f.extraction.claims.push(before);writeJsonAtomic(f.file,f.extraction);
+  f.packet=buildDateAuditPacket('fixture','001',f.options);
+  const proposal=receptionRepair(f),after=structuredClone(before);after[2].dateContext.westernYear.year=1;
+  proposal.changes.push({kind:'replace',id:'claim-4',before,after,reason:'Correct the appointment date without changing the event itself.'});
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  // Put the new reception before the old event to exercise matching by content.
+  candidate.claims.splice(3,2,candidate.claims[4],candidate.claims[3]);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  const reconstructed=applyDateRepairProposal(f.extraction,combined,f.packet);
+  assert.deepEqual(reconstructed.claims.find(c=>c[2].kind==='appointment'),after);
+  assert.ok(reconstructed.claims.some(c=>c[2].kind==='retrospective-reference'));
+  const bad=structuredClone(candidate);bad.claims.find(c=>c[2].kind==='appointment')[2].kind='battle';
+  assert.throws(()=>applyDateRepairProposal(f.extraction,dateRepairDifference(f.extraction,bad,f.packet),f.packet),/Only life\/date/);
+});
+test('a reception repair stays staged until a fresh reviewer approves the added event',async t=>{
+  const f=fixture(t);let approve=false;let receptionChecks=0;
+  const worker=async task=>{
+    if(task.kind==='repair')return receptionRepair(f);
+    if(task.key.startsWith('reaudit-') && !approve)throw new Error('waiting for independent reception review');
+    if(task.key.startsWith('reaudit-'))receptionChecks+=task.job.items.filter(i=>i.value?.kind==='retrospective-reference').length;
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/waiting for independent/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  approve=true;
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.equal(receptionChecks,1);
+  assert.ok(readJson(f.file).claims.some(c=>c[2].kind==='retrospective-reference'));
+});
+function undatedEventFixture(t) {
+  const f=fixture(t);
+  f.extraction.claims.push(['p001','event-participation',{kind:'appointment',role:'appointee'},'explicit',['s0001']]);
+  writeJsonAtomic(f.file,f.extraction);f.packet=buildDateAuditPacket('fixture','001',f.options);
+  return f;
+}
+function eventDateRepair(f) {
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  const before=f.extraction.claims[3][2].dateContext ?? null;
+  const after={sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}};
+  proposal.changes.push({kind:'date-context',id:'claim-4',before,after,reason:'Preserve the appointment and attach its separately checked first-year source context.'});
+  return proposal;
+}
+test('missing event chronology can be added without replacing the underlying event',t=>{
+  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+  assert.ok(!f.packet.items.some(i=>i.id==='claim-4'));
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  const combined=dateRepairDifference(f.extraction,candidate,f.packet);
+  assert.equal(combined.changes.find(c=>c.id==='claim-4').kind,'date-context');
+  assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
+  assert.ok(buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate}).items.some(i=>i.id==='claim-4'));
+});
+test('date-context cannot rewrite identities, event content, life claims or unowned targets',t=>{
+  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+  for(const mutate of [
+    c=>{c.after.role='ruler';},c=>{c.after.kind='battle';},c=>{c.id='claim-999';},c=>{c.id='claim-04';},
+    c=>{c.before={sourceDate:{text:'wrong'}};},c=>{c.after=null;},
+    c=>{c.id='claim-1';c.before=f.extraction.claims[0][2].dateContext;c.after=structuredClone(c.before);},
+  ]) {
+    const bad=structuredClone(proposal);mutate(bad.changes.at(-1));
+    assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet));
+  }
+  const changed=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  changed.claims[3][2].kind='battle';
+  assert.throws(()=>dateRepairDifference(f.extraction,changed,f.packet),/non-temporal claim/);
+});
+test('date-context repair retains an existing explanatory event',t=>{
+  const f=undatedEventFixture(t);
+  f.extraction.claims[3][2].dateContext={sourceDate:{text:'first-year notice'},event:'The office appointment is recorded in the first-year notice.'};
+  writeJsonAtomic(f.file,f.extraction);f.packet=buildDateAuditPacket('fixture','001',f.options);
+  const proposal=repair({packet:f.packet,extraction:f.extraction});
+  proposal.changes.push({kind:'date-context',id:'claim-4',before:structuredClone(f.extraction.claims[3][2].dateContext),after:{...structuredClone(f.extraction.claims[3][2].dateContext),westernYear:{era:'AD',year:1,precision:'year'}},reason:'Add the checked year while retaining the existing event wording.'});
+  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+  assert.equal(candidate.claims[3][2].dateContext.event,'The office appointment is recorded in the first-year notice.');
+  const bad=structuredClone(proposal);delete bad.changes.at(-1).after.event;
+  assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/cannot alter or remove an existing event description/);
+});
+test('a newly dated event requires coverage in the fresh independent review',async t=>{
+  const f=undatedEventFixture(t);let approve=false,checked=0;
+  const worker=async task=>{
+    if(task.kind==='repair')return eventDateRepair(f);
+    if(task.key.startsWith('reaudit-')) {
+      if(!approve)throw new Error('awaiting fresh event-date review');
+      checked+=task.job.ownedItems.filter(id=>id==='claim-4').length;
+    }
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/awaiting fresh/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  approve=true;
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.equal(checked,1);
+  assert.equal(readJson(f.file).claims[3][2].dateContext.westernYear.year,1);
+});
+test('incomplete remote artifacts cannot be silently accepted',t=>{
+  const f=fixture(t),job=dateReviewJobs(f.packet,f.options)[0],result=review({job,packet:f.packet,key:'test'});result.itemChecks.pop();
+  assert.throws(()=>validateDateJobResult(result,job,f.packet),/exactly/);
+});
+test('changed source during active work refuses reuse',async t=>{
+  const f=fixture(t);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async task=>{task.save({agentId:'retained'});throw new Error('interruption');},f.options),/interruption/);
+  f.source.content[0].sentences[0].zh='二年甲卒。';writeJsonAtomic(f.sourceFile,f.source);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw new Error('must not launch');},f.options),/changed during date work/);
+});
+test('shared ledger validates isolated date reservations without modifying extraction claims',()=>{
+  const ledger={schemaVersion:1,claims:{},dateAudits:{'fixture/001':{worker:'date-a',lane:'cursor-sdk',sourceHash:`sha256:${'a'.repeat(64)}`,extractionHash:`sha256:${'b'.repeat(64)}`,jobs:{},status:'active'}}};
+  validatePeopleWorkLedger(ledger);assert.deepEqual(ledger.claims,{});
+  const reserved=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
+  assert.equal(reserved.claimed.length,0);assert.equal(reserved.blocked.length,1);
+  ledger.dateAudits['fixture/001'].status='stale-source';
+  validatePeopleWorkLedger(ledger);
+  const refreshed=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
+  assert.equal(refreshed.claimed.length,0);assert.equal(refreshed.blocked.length,1);
+  ledger.dateAudits['fixture/001'].status='ready';
+  const ready=reservePeopleTargetsInLedger(ledger,[{book:'fixture',chapter:'001'}],{lane:'grokbot',worker:'extract-a',limit:1});
+  assert.equal(ready.claimed.length,1);assert.equal(ready.blocked.length,0);
+  ledger.dateAudits['fixture/001'].lane='unknown';assert.throws(()=>validatePeopleWorkLedger(ledger),/date-audit reservation/);
+});
+test('completed workflow starts a new generation when the chapter changes',async t=>{
+  const f=fixture(t),worker=async task=>task.kind==='repair'?repair(task):review(task);
+  await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);
+  f.source.content[0].sentences[1].zh+='乙仕。';writeJsonAtomic(f.sourceFile,f.source);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.ok(fs.readdirSync(path.dirname(dateWorkflowDirectory('fixture','001',f.options.peopleDir))).some(n=>n.startsWith('001.completed-')));
+});
+test('a repair context cannot approve its own candidate',async t=>{
+  const f=fixture(t);
+  const worker=async task=>{
+    if(task.kind==='repair'){await task.save({agentId:'same-context'});return repair(task);}
+    const result=review(task);result.reviewer.agentId='same-context';return result;
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/cannot approve its own/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+test('person-check context includes that person\'s other dates and evidence',t=>{
+  const f=fixture(t);
+  f.extraction.claims.push(['p001','age',{age:20},'explicit',['s0002']]);writeJsonAtomic(f.file,f.extraction);
+  const packet=buildDateAuditPacket('fixture','001',f.options),jobs=dateReviewJobs(packet,f.options);
+  const job=jobs.find(j=>j.ownedPeople.includes('p001'));
+  assert.ok(job.contextItems.some(i=>i.id==='claim-4'));assert.ok(job.units.some(u=>u.id==='s0002'));
+});
+test('an unstarted staged review can accept an amended proposal without losing earlier rounds',async t=>{
+  const f=fixture(t);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async task=>{
+    if(task.key.startsWith('reaudit-'))throw new Error('waiting for reviewer');
+    return task.kind==='repair'?repair(task):review(task);
+  },f.options),/waiting for reviewer/);
+  const dir=dateWorkflowDirectory('fixture','001',f.options.peopleDir),candidate=readJson(path.join(dir,'candidate-1.json'));
+  const packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  const proposal={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,author:{name:'Researcher',agentId:'repair-researcher'},changes:[{kind:'hints',personId:'p001',before:['AD 1'],after:['AD 1 (first-year fixture event)'],reason:'Clarify the hint without inventing additional fixture chronology.'}]};
+  revisePendingDateRepair({book:'fixture',chapter:'001'},proposal,f.options);
+  assert.equal(readJson(path.join(dir,'state.json')).round,2);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),f.options);
+  assert.equal(readJson(path.join(dir,'publication.json')).rounds.length,2);
+  assert.throws(()=>revisePendingDateRepair({book:'fixture',chapter:'001'},proposal,f.options),/review has started/);
+});
