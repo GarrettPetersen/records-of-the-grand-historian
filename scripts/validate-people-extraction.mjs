@@ -2,9 +2,10 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { normalizeExtractionDateHints } from './lib/people-date-hints.mjs';
-import { hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
+import { deathOnlyChronology, hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
 import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
 import {
   buildPeopleChunkWorkerPacket,
@@ -232,6 +233,30 @@ function hasSourceBackedLifeChronology(claim) {
     .flatMap((key) => nestedValuesWithKey(claim.value, key))];
   return temporalValues.some((value) => value?.sourceDate &&
     (value.westernYear || value.westernInterval || value.westernBounds));
+}
+
+// A death is not personal activity. Keep the exception conservative: a dated
+// attestation must expressly describe that death and match a structured death
+// claim's chronology and evidence, rather than merely mentioning someone
+// else's death in the description of a living person's dated activity.
+function hasOnlySourceBackedDeathChronology(claims) {
+  if (!deathOnlyChronology(claims)) return false;
+  const deaths = claims.filter(claim => claim.predicate === 'death' ||
+    (claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
+    (claim.predicate === 'event-participation' && claim.value?.kind === 'death' && claim.value?.role === 'deceased'));
+  if (!deaths.length) return false;
+  const dates = value => {
+    const date = value?.dateContext ?? value;
+    if (!date?.sourceDate || !(date.westernYear || date.westernInterval || date.westernBounds)) return null;
+    return Object.fromEntries(['sourceDate', 'westernYear', 'westernInterval', 'westernBounds']
+      .filter(key => date[key] !== undefined).map(key => [key, date[key]]));
+  };
+  return claims.filter(claim => claim.predicate === 'attestation' && hasDateBearingChronology(claim.value)).every(claim => {
+    if (!/^(?:death(?:\s+(?:mourned|implied|reported|recorded|mentioned|recalled)\b|$)|(?:he|she|they)\s+died\b|died\b)/iu.test(claim.value?.event ?? '')) return false;
+    const date = dates(claim.value);
+    return date && deaths.some(death => isDeepStrictEqual(date, dates(death.value)) &&
+      death.evidence?.some(unit => claim.evidence?.includes(unit)));
+  });
 }
 
 // A personally dated enfeoffment establishes the recipient's presence at that
@@ -773,6 +798,7 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
   }
   for (const person of normalized.people) {
     const personClaims = claimsByPerson.get(person.localId) ?? [];
+    const deathOnlyEvidence = hasOnlySourceBackedDeathChronology(personClaims);
     const receptionOnlyEvidence = personClaims.some(claim =>
       claim.predicate === 'event-participation' && personClaimReception(claim));
     const externalPrimaryChronology = hasValidatedExternalPrimaryChronology(person, packet, errors);
@@ -789,7 +815,7 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
-      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence) {
+      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence && !deathOnlyEvidence) {
         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
       }
       if (!attestations.length && !lifeChronology && !personalCeremony && !externalPrimaryChronology && !receptionOnlyEvidence) {
@@ -806,7 +832,7 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
       if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
@@ -1224,6 +1250,69 @@ function selfTest() {
   comprehensive.run.promptVersion = 7;
   Object.assign(comprehensive.coverage, Object.fromEntries(V7_COMPLETION_FLAGS.map((key) => [key, true])));
   validatePeopleExtraction(comprehensive, packet);
+
+  const deathDate = { sourceDate: { text: 'first year' }, westernYear: { era: 'AD', year: 1, precision: 'year' } };
+  const deathOnly = structuredClone(comprehensive);
+  deathOnly.people[0].identityHints.activeDateHints = [];
+  deathOnly.claims.find(claim => claim.predicate === 'attestation').value = { ...deathDate, event: 'Death mourned before the later memorial.' };
+  deathOnly.claims.push({ id: 'testbook:001:c0004', subject: 'testbook:001:p001', predicate: 'death',
+    value: { dateContext: deathDate }, certainty: 'explicit', evidence: ['testbook:001:s0001'] });
+  validatePeopleExtraction(deathOnly, packet);
+  validateCompactPeopleExtraction(compactPeopleExtraction(deathOnly, packet), packet);
+  for (const [predicate, value] of [
+    ['place-association', { relation: 'died-at', dateContext: deathDate }],
+    ['event-participation', { kind: 'death', role: 'deceased', dateContext: deathDate }],
+  ]) {
+    const alternateDeath = structuredClone(deathOnly);
+    Object.assign(alternateDeath.claims.at(-1), { predicate, value });
+    validatePeopleExtraction(alternateDeath, packet);
+  }
+  const undatedDeathAttestation = structuredClone(deathOnly);
+  undatedDeathAttestation.claims.find(claim => claim.predicate === 'attestation').value = {
+    undatedSourceAttestation: true, event: 'The source mentions the person without dating an activity.',
+  };
+  validatePeopleExtraction(undatedDeathAttestation, packet);
+  for (const negative of [
+    value => { value.claims.at(-2).value.event = 'Appointed after the death of her father.'; },
+    value => { value.claims.at(-2).value.westernYear = { era: 'AD', year: 2, precision: 'year' }; },
+    value => { value.claims.at(-2).value.sourceDate = { text: 'another event in the first year' }; },
+    value => { value.claims.at(-1).evidence = ['testbook:001:s0002']; },
+    value => { value.claims.push({ id: 'testbook:001:c0005', subject: 'testbook:001:p001',
+      predicate: 'event-participation', value: { kind: 'appointment', role: 'official', dateContext: deathDate },
+      certainty: 'explicit', evidence: ['testbook:001:s0001'] }); },
+    value => { value.claims.push({ id: 'testbook:001:c0005', subject: 'testbook:001:p001',
+      predicate: 'attestation', value: { ...deathDate, event: 'Appointed after the death of her father.' },
+      certainty: 'explicit', evidence: ['testbook:001:s0001'] }); },
+  ]) {
+    const invalidDeathOnly = structuredClone(deathOnly);
+    negative(invalidDeathOnly);
+    try {
+      validatePeopleExtraction(invalidDeathOnly, packet);
+      throw new Error('Living, mismatched, or additional activity unexpectedly passed as death-only chronology');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('active-date hint')) throw error;
+    }
+    try {
+      validateCompactPeopleExtraction(compactPeopleExtraction(invalidDeathOnly, packet), packet);
+      throw new Error('Invalid compact death-only chronology unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    }
+  }
+  for (const dateContext of [
+    { sourceDate: { text: 'first year' } },
+    { sourceDate: { text: 'first year' }, unresolved: true,
+      unresolvedReason: 'The source lacks a securely convertible year for this death.' },
+  ]) {
+    const undatedDeath = structuredClone(undatedDeathAttestation);
+    undatedDeath.claims.at(-1).value.dateContext = dateContext;
+    try {
+      validatePeopleExtraction(undatedDeath, packet);
+      throw new Error('Source-only or unresolved death unexpectedly passed the Western chronology gate');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('no Western-year attestation')) throw error;
+    }
+  }
 
   const externalPrimary = structuredClone(comprehensive);
   externalPrimary.claims = externalPrimary.claims.filter((claim) => claim.predicate !== 'attestation');
