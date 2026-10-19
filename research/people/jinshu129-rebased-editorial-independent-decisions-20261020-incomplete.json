@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshu",
+  "chapter": "129",
+  "input": {
+    "chapterFingerprint": "sha256:a3dbde52bec792d69d72d0f9a103715a744e692be7e8495566d46b05334117ce",
+    "proposalsFingerprint": "sha256:812ea089003954d898a2316cacc0d65caac42021918fb7ba0e167bb766f60969"
+  },
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex independent reviewer /root/jinshu129_target",
+    "model": null,
+    "agentId": "/root/jinshu129_target",
+    "runId": null,
+    "completedAt": "2026-10-19T08:48:19Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshu:129:r0028",
+      "unit": { "id": "s0020", "kind": "paragraph-sentence", "blockIndex": 2, "collection": "sentences", "itemIndex": 4 },
+      "field": "idiomatic",
+      "before": "Mengxun broke the dikes and flooded the walls; the city fell, and he brought back the governor Lü Chun as prisoner.",
+      "after": "Mengxun diverted water to flood the city; the city fell, and he returned with its governor Lü Chun as a prisoner.",
+      "reason": "The passage says he led water to inundate the city, not that he broke dikes.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshu:129:r0029",
+      "unit": { "id": "s0023", "kind": "paragraph-sentence", "blockIndex": 2, "collection": "sentences", "itemIndex": 7 },
+      "field": "idiomatic",
+      "before": "When Lü Hong quit Zhangye to flee east, Duan Ye's council urged an attack.",
+      "after": "When Lü Hong left Zhangye and was about to flee east, Duan Ye considered attacking him.",
+      "reason": "The deliberation is attributed to Ye, not to a council.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshu:129:r0028",
+      "decision": "accept",
+      "after": null,
+      "reason": "引水灌城 says Mengxun led water to flood the city, not that he broke dikes; 城潰 and 執太守呂純以歸 support its fall and Lü Chun's capture and removal.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0020", "excerpt": "蒙遜引水灌城，城潰，執太守呂純以歸" }
+    },
+    {
+      "repairId": "jinshu:129:r0029",
+      "decision": "accept",
+      "after": null,
+      "reason": "將東走 makes eastward flight impending, while 業議欲擊之 attributes the proposed attack to Ye's deliberation, without a council urging it.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0023", "excerpt": "呂弘去張掖，將東走，業議欲擊之" }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [
+    {
+      "repairId": "jinshu:129:r0029",
+      "before": {
+        "id": "jinshu:129:c0667",
+        "subject": "jinshu:129:p016",
+        "predicate": "event-participation",
+        "value": { "kind": "military", "role": "fleeing-commander", "action": "left Zhangye to flee east" },
+        "certainty": "explicit",
+        "evidence": ["jinshu:129:s0023"]
+      },
+      "after": {
+        "id": "jinshu:129:c0667",
+        "subject": "jinshu:129:p016",
+        "predicate": "event-participation",
+        "value": { "kind": "military", "role": "departing person", "action": "left Zhangye and was about to flee east" },
+        "certainty": "explicit",
+        "evidence": ["jinshu:129:s0023"]
+      },
+      "reason": "The corrected sentence makes flight impending rather than completed, and this evidence unit does not explicitly identify Hong as commander.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0023", "excerpt": "呂弘去張掖，將東走" }
+    }
+  ],
+  "claimAdditions": []
+}
