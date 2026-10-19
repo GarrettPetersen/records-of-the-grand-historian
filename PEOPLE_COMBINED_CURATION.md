@@ -12,10 +12,13 @@ It does not extract chapters, call models, approve its own inputs, build, or pus
   by replacing its expected hashes with whatever happens to be on disk.
 - A materialized candidate with complete independent source/identity and date
   approvals, full coverage, current references, and no proposed translation repairs.
-- The complete retained editorial history and exactly one new independently
-  approved review component. Report hashes identify that incoming component;
-  the full merged history is pinned separately. An older review cannot authorize
-  the new source amendment.
+- The complete retained editorial history followed by one or more independently
+  approved review components. For one component, each report's review context
+  pins its `editorialDecisionHash`. For multiple components, both report contexts
+  and the input seal pin the ordered `editorialDecisionHashes` array. The receipt
+  preserves the full history separately. Each new approval must match exactly one
+  new applied repair and vice versa, and repairs replay in component order. An
+  older review cannot authorize the new source amendment.
 - All extraction authors, including chunk authors, and all repair authors must
   be excluded from the independent reviewers. Preserve their provenance.
 

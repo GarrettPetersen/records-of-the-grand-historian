@@ -9,7 +9,7 @@ import { buildPeopleExtractionPacket, buildPeopleExtractionSeed } from './build-
 import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
 import { buildCompactInput } from './lib/people-compact.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
-import { editorialDecisionSeed, editorialReviews } from './lib/people-editorial-decisions.mjs';
+import { editorialDecisionSeed, editorialReviews, proposalSetFingerprint } from './lib/people-editorial-decisions.mjs';
 import { sha256, contentUnits, writeJsonAtomic } from './lib/people-content.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { reservePeopleTargetsInLedger } from './lib/people-work-queue.mjs';
@@ -32,7 +32,7 @@ const start = runnerSource.indexOf(reservationStart), end = runnerSource.indexOf
 assert.ok(start >= 0 && end > start, 'production reservation callback must be present');
 const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
 
-function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false } = {}) {
+function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const people = path.join(root, 'data', 'people');
@@ -73,7 +73,7 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
       moves: [{ kind: 'move-paragraph-block', fromBlockIndex: 1, toBlockIndex: 0, unitIds: ['s0067'], block: structuredClone(block) }],
     };
   }
-  afterSource.content[reorder ? 1 : 0].sentences[0].translations[0].literal = 'Alice Smith came.';
+  afterSource.content[reorder ? 1 : 0].sentences[0].translations[0].literal = multiple ? 'Alice Smith had come.' : 'Alice Smith came.';
   const packet = packetFor(afterSource);
   const candidate = structuredClone(extraction);
   candidate.input = buildCompactInput(packet);
@@ -86,8 +86,17 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
   newEditorial.reviewer = { kind: 'human', name: 'Independent editor', model: null, agentId: 'reviewer', runId: null, completedAt: '2026-09-14T00:00:00Z' };
   newEditorial.decisions[0] = { repairId: `${book}:${chapter}:r0001`, decision: 'accept', after: null, reason, sourceWitness: { source: 'chapter-text', citation: 's0001', excerpt: '\u827e\u9e97\u7d72\u4f86\u3002' } };
   candidate.translationRepairs = [['s0001', 'literal', 'Alice Smith come.', 'Alice Smith came.', reason, 'high', 'applied']];
-  const record = r => Object.fromEntries(Object.entries(r).filter(([k]) => !['schemaVersion', 'book', 'chapter'].includes(k)));
+  const record = r => structuredClone(Object.fromEntries(Object.entries(r).filter(([k]) => !['schemaVersion', 'book', 'chapter'].includes(k))));
   const editorial = { schemaVersion: 4, book, chapter, reviews: [record(editorialBefore), record(newEditorial)] };
+  if (multiple) {
+    const secondProposal = structuredClone(proposal);
+    secondProposal.translationRepairs = [{ ...secondProposal.translationRepairs[0], id: `${book}:${chapter}:r0002`, before: 'Alice Smith came.', after: 'Alice Smith had come.' }];
+    const secondEditorial = editorialDecisionSeed(secondProposal);
+    secondEditorial.reviewer = { ...newEditorial.reviewer, name: 'Second independent editor', agentId: 'reviewer-two' };
+    secondEditorial.decisions[0] = { ...newEditorial.decisions[0], repairId: `${book}:${chapter}:r0002` };
+    editorial.reviews.push(record(secondEditorial));
+    candidate.translationRepairs.push(['s0001', 'literal', 'Alice Smith came.', 'Alice Smith had come.', reason, 'high', 'applied']);
+  }
   const result = validateCompactPeopleExtraction(candidate, packet, { strictAliasDispositions: true });
   const expanded = result.normalized;
   const dates = combinedDatePacket(book, chapter, afterSource, candidate);
@@ -124,6 +133,10 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
   if (reorder) materialization.sourceReordering = sourceReordering;
   writeJsonAtomic(inputPaths.materialization, materialization);
   const context = { candidatePath: inputPaths.extraction, sourcePath: inputPaths.source, candidateByteHash: materialization.extractionByteHash, sourceByteHash: materialization.sourceByteHash, editorialDecisionHash: documentHash(newEditorial), amendmentAuthor: 'curator' };
+  if (multiple) {
+    delete context.editorialDecisionHash;
+    context.editorialDecisionHashes = editorialReviews(editorial).slice(1).map(documentHash);
+  }
   if (reorder) {
     context.sourceReorderingHash = documentHash(sourceReordering);
     identity.sourceReorderingReview = { id: context.sourceReorderingHash, verdict: 'supported', reason, evidence: [{ unit: 's0067', quote: '\u96e8' }] };
@@ -134,6 +147,7 @@ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-
   writeJsonAtomic(protectedFile, { unchanged: true });
   const protectedPaths = [files.source, files.extraction, files.editorial, inputPaths.source, inputPaths.extraction, inputPaths.editorial, inputPaths.materialization, protectedFile];
   const seal = { ...hashes, reviewer, protectedFiles: protectedPaths.map(file => ({ file, bytes: fs.statSync(file).size, sha256: hashFile(file) })) };
+  if (multiple) seal.editorialDecisionHashes = [...context.editorialDecisionHashes];
   if (reorder) {
     validation.sourceReorderingHash = context.sourceReorderingHash;
     seal.sourceReorderingHash = context.sourceReorderingHash;
@@ -287,7 +301,7 @@ for (const [label, mutate, pattern] of [
   ['resealed stale exact block', d => { d.materialization.sourceReordering.moves[0].block.sentences[0].zh = 'changed'; bindReordering(d); }, /exact block payload/],
   ['undeclared move author', d => { d.materialization.sourceReordering.authorAgentId = 'omitted-author'; bindReordering(d); }, /Missing declared curation author/],
   ['self-approved move author', d => { d.materialization.sourceReordering.authorAgentId = 'reviewer'; d.authorAgentIds.push('reviewer'); bindReordering(d); }, /self-approved/],
-  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /exactly one new editorial review component/],
+  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /requires new editorial review components/],
   ['missing applied English contracts', d => { d.candidate.translationRepairs = []; }, /does not match applied decision/],
   ['incomplete definite title callbacks', d => { d.identity.coverage.namedPeopleAndDefiniteCallbacksComplete = false; }, /namedPeopleAndDefiniteCallbacksComplete/],
   ['unresolved identity findings', d => { d.identity.findings = [{ problem: 'Unreviewed emperor reference' }]; }, /unresolved identity findings/],
@@ -427,6 +441,124 @@ test('the review pin binds the incoming component while the receipt pins full be
   }
   assert.deepEqual(unpack(f.receipt.before.editorial), f.docs.beforeEditorial);
   assert.deepEqual(unpack(f.receipt.inputs.editorial.content), f.docs.editorial);
+});
+
+test('separate independently reviewed components bind in order and replay sequential repairs through the durable receipt', t => {
+  const f = fixture(t, 'testbook', '001', undefined, undefined, { multiple: true });
+  const components = editorialReviews(f.docs.editorial).slice(1);
+  const hashes = components.map(documentHash);
+  assert.deepEqual(f.docs.identity.reviewContext.editorialDecisionHashes, hashes);
+  assert.deepEqual(f.docs.dateReport.reviewContext.editorialDecisionHashes, hashes);
+  assert.deepEqual(f.docs.seal.editorialDecisionHashes, hashes);
+  assert.equal(verifyCombinedCuration(f.receipt, f.hash, { root: f.root }).status, 'verified');
+  assert.deepEqual(unpack(f.receipt.inputs.editorial.content), f.docs.editorial);
+  assert.deepEqual(unpack(f.receipt.inputs.seal.content).editorialDecisionHashes, hashes);
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+  assert.equal(read(f.files.source).content[0].sentences[0].translations[0].literal, 'Alice Smith had come.');
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+});
+
+for (const [label, mutate] of [
+  ['missing identity pin', d => { delete d.identity.reviewContext.editorialDecisionHashes; }],
+  ['reordered date pins', d => { d.dateReport.reviewContext.editorialDecisionHashes.reverse(); }],
+  ['missing seal pin', d => { delete d.seal.editorialDecisionHashes; }],
+  ['reordered seal pins', d => { d.seal.editorialDecisionHashes.reverse(); }],
+  ['mixed singular and plural pins', d => { d.identity.reviewContext.editorialDecisionHash = d.identity.reviewContext.editorialDecisionHashes[0]; }],
+  ['old component dropped', d => { d.editorial.reviews.shift(); }],
+  ['old component altered', d => { d.editorial.reviews[0].reviewer.name = 'Changed'; }],
+  ['component duplicated', d => { d.editorial.reviews.push(structuredClone(d.editorial.reviews[1])); }],
+  ['component omitted', d => { d.editorial.reviews.pop(); }],
+  ['one approval rejected', d => { d.editorial.reviews[2].decisions[0].decision = 'reject'; }],
+  ['second reviewer is an author', d => { d.editorial.reviews[2].reviewer.agentId = 'curator'; }],
+  ['second reviewer unidentified', d => { d.editorial.reviews[2].reviewer.agentId = null; }],
+  ['second reviewer blank', d => { d.editorial.reviews[2].reviewer.agentId = '   '; }],
+  ['second repair omitted', d => { d.candidate.translationRepairs.pop(); }],
+  ['repair duplicated', d => { d.candidate.translationRepairs.push(structuredClone(d.candidate.translationRepairs[1])); }],
+  ['repair sequence reversed', d => { d.candidate.translationRepairs.reverse(); }],
+]) {
+  test(`multi-review rejects ${label}`, t => {
+    const f = fixture(t, 'testbook', '001', undefined, undefined, { multiple: true });
+    const docs = structuredClone(f.docs);
+    mutate(docs);
+    assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }));
+    assert.equal(f.calls(), 0);
+  });
+}
+
+test('multi-review rejects two otherwise valid approvals for the same repair even with fresh matching pins', t => {
+  const f = fixture(t, 'testbook', '001', undefined, undefined, { multiple: true });
+  const docs = structuredClone(f.docs);
+  const second = docs.editorial.reviews[2];
+  second.proposals[0].before = 'Alice Smith come.';
+  second.proposals[0].after = 'Alice Smith came.';
+  second.proposals[0].confidence = 'medium';
+  second.input.proposalsFingerprint = proposalSetFingerprint(second.proposals);
+  const hashes = editorialReviews(docs.editorial).slice(1).map(documentHash);
+  docs.identity.reviewContext.editorialDecisionHashes = hashes;
+  docs.dateReport.reviewContext.editorialDecisionHashes = hashes;
+  docs.seal.editorialDecisionHashes = hashes;
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /exactly one unused approval/);
+});
+
+test('multi-review rejects reversed review history even when all ordered pins match', t => {
+  const f = fixture(t, 'testbook', '001', undefined, undefined, { multiple: true });
+  const docs = structuredClone(f.docs);
+  [docs.editorial.reviews[1], docs.editorial.reviews[2]] = [docs.editorial.reviews[2], docs.editorial.reviews[1]];
+  const hashes = editorialReviews(docs.editorial).slice(1).map(documentHash);
+  docs.identity.reviewContext.editorialDecisionHashes = hashes;
+  docs.dateReport.reviewContext.editorialDecisionHashes = hashes;
+  docs.seal.editorialDecisionHashes = hashes;
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /repair order contradicts/);
+});
+
+for (const role of ['identity', 'dateReport', 'seal', 'nestedWorker']) {
+  for (const field of ['agentId', 'name']) {
+    test(`combined review rejects whitespace-only ${field} in ${role}`, t => {
+      const f = fixture(t);
+      const docs = structuredClone(f.docs);
+      // Break the fixture's intentional shared reviewer object so the test
+      // exercises each role independently rather than mutating all of them.
+      for (const key of ['identity', 'dateReport', 'seal']) docs[key].reviewer = structuredClone(docs[key].reviewer);
+      if (role === 'nestedWorker') {
+        docs.dateReport.reviewer.workers = [{ ...structuredClone(docs.dateReport.reviewer), name: 'Nested reviewer', agentId: 'nested-reviewer', actualAgentId: 'nested-reviewer' }];
+        docs.dateReport.reviewer.workers[0][field] = '   ';
+      } else {
+        docs[role].reviewer[field] = '   ';
+      }
+      assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /Unidentified or self-approved combined curation reviewer/);
+      assert.equal(f.calls(), 0);
+    });
+  }
+}
+
+for (const role of ['identity', 'dateReport', 'seal', 'nestedWorker']) {
+  test(`combined review rejects padded author ID in ${role}`, t => {
+    const f = fixture(t), docs = structuredClone(f.docs);
+    for (const key of ['identity', 'dateReport', 'seal']) docs[key].reviewer = structuredClone(docs[key].reviewer);
+    if (role === 'nestedWorker') {
+      docs.dateReport.reviewer.workers = [{ ...structuredClone(docs.dateReport.reviewer), agentId: ' extractor ', actualAgentId: ' extractor ' }];
+    } else {
+      docs[role].reviewer.agentId = ' extractor ';
+      docs[role].reviewer.actualAgentId = ' extractor ';
+    }
+    assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /Unidentified or self-approved combined curation reviewer/);
+  });
+}
+
+test('combined review rejects padded editorial author ID even with matching review pins', t => {
+  const f = fixture(t), docs = structuredClone(f.docs);
+  docs.editorial.reviews[1].reviewer.agentId = ' extractor ';
+  const hash = documentHash(editorialReviews(docs.editorial)[1]);
+  docs.identity.reviewContext.editorialDecisionHash = hash;
+  docs.dateReport.reviewContext.editorialDecisionHash = hash;
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /Self-approved or unidentified editorial amendment/);
+});
+
+test('combined review rejects padded declared and chunk-extraction author IDs', t => {
+  const f = fixture(t), docs = structuredClone(f.docs);
+  docs.authorAgentIds = [' extractor ', 'curator'];
+  assert.throws(() => validateCombinedReviews(docs, { dataDir: path.join(f.root, 'data') }), /canonical form/);
+  assert.throws(() => fixture(t, 'testbook', '001', chunkRun(' chunk-author '), ['extractor', 'curator', 'chunk-author']), /Noncanonical extraction author agent ID/);
 });
 
 test('one incoming editorial component must cover every new repair, not a second unpinned component', t => {
