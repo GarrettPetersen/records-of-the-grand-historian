@@ -18,6 +18,7 @@ import {
 import { peopleSiteSelfTest } from './lib/people-site.mjs';
 import { personSearchText } from './generate-people-pages.mjs';
 import './test-nested-date-rendering.mjs';
+import './test-source-date-localization.mjs';
 
 peopleSiteSelfTest();
 
