@@ -53,6 +53,17 @@ wording; none of the drafts is a chapter-wide approval. In particular,
 s0205's staged `華暠` conflicts with `華廙` in another transcription and
 the account of Hua Heng's father in Jinshu 044. Treat this as a source and
 identity question requiring further witness review, not an authorized change.
+An independent cross-check found `暠` three times inside the pinned Jinshu
+044 biography headed `華廙`, whereas a Siku-labelled transcription uses
+`廙`. The convergence of father, office and son supports a possible
+identification, but the conflicting forms do not establish that 暠 is an
+alias or that the witnesses are independent. Preserve both findings.
+
+The `jinshu053-source-amendment-workflow-*` research notes and separate review
+record why the existing combined publisher cannot accept Chinese emendations,
+and the required provenance, ownership, date and identity safeguards for a
+future supported path. They do not authorize a direct source edit or approve
+the proposed restorations.
 
 At the pinned revision, a read-only scan found 80 resolution files containing
 595 decisions referencing 45 local Jinshu 053 people. These are potential
