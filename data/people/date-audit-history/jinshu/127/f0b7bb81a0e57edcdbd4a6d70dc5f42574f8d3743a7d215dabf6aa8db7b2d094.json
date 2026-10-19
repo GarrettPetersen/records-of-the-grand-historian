@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "jinshu",
+  "chapter": "127",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:623eb92a46490b4ba9b7bddecf5401f0354bb937f55b8e43c6402bc9d38c1eee",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Codex independent recovery_review agent",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-10-19T00:36:50Z",
+  "summary": "Partial independent review of the source and chronology for local people p139 and p140 only. This is not a complete chapter audit or approval; exact Western-year support and the wider date report require further independent review.",
+  "reviewedUnits": ["s0231", "s0232", "s0233"],
+  "itemChecks": [
+    {
+      "id": "claim-334",
+      "verdict": "incorrect",
+      "event": "King Wu acts at Bi Gan's tomb; Sui later recalls that action.",
+      "reason": "The source does not state an absolute year, and the reconstructed text 武王比干 is not contiguous in the Chinese. The claim represents BC 1046 as year precision without an identified supporting conversion or uncertainty.",
+      "evidence": [{"unit": "s0232", "quote": "武王封比干之墓"}]
+    },
+    {
+      "id": "claim-335",
+      "verdict": "incorrect",
+      "event": "Bi Gan is recalled as the honoree of an action at his tomb.",
+      "reason": "The cited unit gives no exact Western year, and the tomb action is not evidence that Bi Gan was personally active then. Its sourceDate wording is not contiguous in the cited Chinese.",
+      "evidence": [{"unit": "s0232", "quote": "武王封比干之墓"}]
+    },
+    {
+      "id": "hints-p139",
+      "verdict": "research-blocked",
+      "event": "King Wu's active-date hint for the historical tomb action.",
+      "reason": "BC 1046 is not stated by this source and competing scholarly chronologies differ; assess independently whether and how external evidence supports any narrower activity hint.",
+      "evidence": [{"unit": "s0232", "quote": "武王封比干之墓"}]
+    },
+    {
+      "id": "hints-p140",
+      "verdict": "research-blocked",
+      "event": "Bi Gan's historical active-date hint, separate from later tomb commemoration.",
+      "reason": "BC 1100 is not given in this source and this reviewer has not identified a source establishing it as Bi Gan's activity year.",
+      "evidence": [{"unit": "s0232", "quote": "武王封比干之墓"}]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p139",
+      "verdict": "research-blocked",
+      "reason": "This local record has one source-dated claim; the cited unit provides no absolute year and its conversion needs independently reviewed evidence.",
+      "evidence": [{"unit": "s0232", "quote": "武王封比干之墓"}]
+    },
+    {
+      "id": "p140",
+      "verdict": "research-blocked",
+      "reason": "The cited unit concerns Bi Gan's tomb and cannot on its own establish a date of personal activity; the additional BC 1100 hint needs research.",
+      "evidence": [{"unit": "s0232", "quote": "武王封比干之墓"}]
+    }
+  ],
+  "findings": [
+    {
+      "items": ["claim-334", "hints-p139", "p139"],
+      "problem": "The cited text does not supply the precise 1046 BC year attached to King Wu's tomb action or establish the disconnected sourceDate wording.",
+      "action": "Reconcile the undated action and activity hint using a source-backed repair, preserve any genuine uncertainty, and obtain a fresh independent audit of the exact repaired extraction."
+    },
+    {
+      "items": ["claim-335", "hints-p140", "p140"],
+      "problem": "A tomb commemoration is presented as a dated personal attestation and the additional BC 1100 hint lacks evidence in this review.",
+      "action": "Separate the retrospective tomb reference from living activity, research the activity hint rather than guessing, and independently audit the resulting exact source and extraction."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://www.cambridge.org/core/journals/early-china/article/chronology-of-western-zhou/0D661C3365537C0D15AD896F72F9DF70",
+      "title": "Pengcheng Zhang, The Chronology of Western Zhou",
+      "quote": "1046, 1044, and 1027 b.c.e.",
+      "sourceHash": "sha256:f9b42b035b23645d8d67bf9295cb833ae6cdb3e0a51d436e253470bbb4bfbc1e",
+      "accessedAt": "2026-10-19",
+      "reason": "The article discusses three candidate conquest years, supporting the need to research competing chronologies rather than treat one year as certain in this undated local text."
+    }
+  ]
+}
