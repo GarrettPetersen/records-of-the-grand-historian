@@ -1,0 +1,27 @@
+# Independent source review of Jinshu 127 five-change date proposal
+
+**Disposition:** The five proposed changes are directionally source-supported and pass the tested repair and extraction validators, but remain a draft: do not publish or count this chapter approved. A separate adjacent s0232 date defect involving Lord Xinling requires review and a broader repair, and both deleted activity hints lose recorded chronology whose provenance should be researched and retained as historical evidence rather than silently treated as disproven.
+
+## Exact scope and independent checks
+
+Reviewed `jinshu127-date-possible-repair-unreviewed-67faa205.json` (byte SHA-256 `809f420140b1d4c96863cbc6331fdb50fb238f0ebb56b97b9c69cd88f96b97b8`) against staging `67faa20531f92381a2b192c72004a2ae043e1763`. Its packet source and extraction hashes match the stage source and extraction. I applied the exact proposal only in memory using the production `applyDateRepairProposal`, then ran `validateCompactPeopleExtraction` with strict alias dispositions and `validateAppliedEditorialDecisions`: all passed. The 11 existing translation-repair rows remain identical, and no canonical data changed. This checks mechanical validity, not overall historical completeness or approval.
+
+The proposal was authored by a different Codex conversation (`recovery_review`); my review is `/root/disk_audit`. The extraction records Grok Bot-chunked with null agent IDs, so independent conversation separation is attested by actual task ownership and model metadata, not mechanically established from those missing historical IDs. Do not invent them.
+
+## Five proposed changes
+
+1. Claim 334: replacing the exact 1046 BC year with an undated King Wu attestation preserves the action and avoids asserting a year not in s0232. The Shiji Music Treatise's transmitted Zheng Xuan gloss explains the tomb action as accumulating earth; “raised a mound” is consistent, though it should not be read as proving King Wu personally carried the earth or first created the tomb. The unrelated editorial repair has not yet changed the English source; coordinate fingerprints before sealing.
+2. Claim 335: removing the 1046 BC living attestation for Bi Gan avoids using an action at his existing tomb as evidence of his living activity. It must not erase the textual reference entirely.
+3. The added retrospective-reference, with Bi Gan as honoree and the cited unit retained, preserves that reference. The underlying action is King Wu's tomb action recalled by Sui; no Western date is supplied. This does not establish the dates of Bi Gan's life or of Sui's recollection.
+4. Removing p139's `BC 1046` hint avoids presenting the tomb event as an exact supported active date. Yet BC 1046 is a plausible and widely discussed chronology for other King Wu events, not disproven simply because this unit lacks it. The recorded hint and any recovered evidence should remain in preserved historical extraction/review artifacts; independently research whether a qualified, sourced bound is warranted before replacing it.
+5. Removing p140's `BC 1100` hint avoids publishing an unverified year. The existing record does not explain its provenance; a lack of proof in this review does not establish it is false. Preserve the historical bytes and research any primary or authoritative basis before deciding whether a qualified hint can be restored. Neither empty hint is a claim that the person's period is unknowable.
+
+Sources directly inspected: [Jin shu 127](https://zh.wikisource.org/zh-hans/晉書_(四庫全書本)/卷127), s0232 in staging; [annotated Shiji Music Treatise](https://www.xuoda.com/ls/shiji2/102.htm), Zheng Xuan's `積土為封`; [Zhang's study of Western Zhou chronology](https://www.cambridge.org/core/journals/early-china/article/chronology-of-western-zhou/0D661C3365537C0D15AD896F72F9DF70), which distinguishes competing conquest chronologies and does not provide a direct dated witness for this particular tomb action.
+
+## Additional hold: the neighboring example
+
+The same s0232 says `漢祖祭信陵之墳`. Staged claim 337 makes p142 Lord Xinling's `attestation` the BC 206–195 interval, with noncontiguous `sourceDate.text` `漢祖信陵` and s0232 as its sole evidence. The sentence records Gaozu's sacrifice at Xinling's grave, not Xinling's living activity in the Han ruler's reign. [Shiji 77](https://www.shidianguji.com/zh/book/LS0001/chapter/1j755ojo3fvhh_75) independently describes the lord's death and subsequently Gaozu's sacrifice and tomb guardians; it does not make Xinling alive at the later observance. The p142 active hint `BC 275-243` is not stated in s0232; this review does not establish its accuracy or inaccuracy. The prior whole-chapter audited report labelled claim 337 and p142 supported with generic reasons, while the current partial needs-revision report contains neither check. A separate draft finding is supplied; it is not a full review or an amended canonical report. Also check claim 336's source wording and range: a broad reign span is not necessarily the precise time of one sacrifice, although this review does not determine the correct conversion.
+
+Removing claim 335 shifts subsequent compact claim indices, including claim 337. Reconcile the exact final packet and all stale review, source, identity and date references before a fresh independent whole-chapter audit. Preserve all reports, worker ownership and prior artifacts. Never silently apply the proposal or edit old approval fingerprints.
+
+Signed: Codex `/root/disk_audit`, independent reviewer, 2026-10-19.
