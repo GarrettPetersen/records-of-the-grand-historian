@@ -1,0 +1,94 @@
+diff --git a/package.json b/package.json
+index 18bf9006783..86297d53e63 100644
+--- a/package.json
++++ b/package.json
+@@ -5,7 +5,7 @@
+   "main": "scrape.js",
+   "scripts": {
+     "test": "echo \"Error: no test specified\" && exit 1",
+-    "build": "node scripts/test-site-urls.mjs && node scripts/test-kindle-availability.mjs && node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/compile-people-catalog.mjs && node scripts/test-people-progress.mjs && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node generate-static-pages.js && node scripts/generate-people-pages.mjs && node scripts/verify-people-site.mjs && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
++    "build": "node scripts/assert-people-production-build.mjs && node scripts/test-people-production-build.mjs && node scripts/test-site-urls.mjs && node scripts/test-kindle-availability.mjs && node scripts/sync-publication-descriptions.mjs && node scripts/sync-data-to-public.mjs && node generate-manifest.js && node scripts/compile-people-catalog.mjs && node scripts/test-people-progress.mjs && node scripts/scan-placeholder-translations.mjs --out data/quality/placeholder-translations.json --summary --limit=0 && node generate-progress.js && node scripts/generate-book-covers.mjs && node generate-static-pages.js && node scripts/generate-people-pages.mjs && node scripts/verify-people-site.mjs && node scripts/build-book-search-corpus.mjs && node scripts/generate-sitemap.mjs && node generate-og-images.js --incremental && node scripts/verify-og-assets.mjs",
+     "test:site-urls": "node scripts/test-site-urls.mjs",
+     "test:kindle-availability": "node scripts/test-kindle-availability.mjs",
+     "test:people-progress": "node scripts/test-people-progress.mjs",
+diff --git a/scripts/assert-people-production-build.mjs b/scripts/assert-people-production-build.mjs
+new file mode 100644
+index 00000000000..e802c168d34
+--- /dev/null
++++ b/scripts/assert-people-production-build.mjs
+@@ -0,0 +1,8 @@
++#!/usr/bin/env node
++
++// A preview may be generated locally, but must never be left in the deploy
++// output by a failed production build before the later site verifier runs.
++if (process.env.PEOPLE_SITE_PREVIEW === '1') {
++  console.error('Production build refuses PEOPLE_SITE_PREVIEW=1; use the separate local preview workflow.');
++  process.exitCode = 1;
++}
+diff --git a/scripts/test-people-production-build.mjs b/scripts/test-people-production-build.mjs
+new file mode 100644
+index 00000000000..ea0b0349767
+--- /dev/null
++++ b/scripts/test-people-production-build.mjs
+@@ -0,0 +1,61 @@
++#!/usr/bin/env node
++
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import os from 'node:os';
++import path from 'node:path';
++import { spawnSync } from 'node:child_process';
++import { fileURLToPath } from 'node:url';
++import { loadPeopleSiteContext } from './lib/people-site.mjs';
++
++const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
++const build = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).scripts.build;
++assert.ok(build.startsWith('node scripts/assert-people-production-build.mjs && '), 'production preview guard must be the first build command');
++
++// Exercise the actual build command with a node shim. Only the real guard is
++// executed; every later Node command writes a marker instead of running a
++// generator. This test never modifies or builds the repository's public tree.
++const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'people-build-guard-test-'));
++try {
++  const shim = path.join(scratch, 'node');
++  const marker = path.join(scratch, 'generators-started');
++  fs.writeFileSync(shim, '#!/bin/sh\nif [ "$1" = scripts/assert-people-production-build.mjs ]; then exec "$PEOPLE_TEST_REAL_NODE" "$@"; fi\nprintf x >> "$PEOPLE_TEST_MARKER"\n', { mode: 0o700 });
++  const env = { ...process.env, PATH: `${scratch}${path.delimiter}${process.env.PATH}`, PEOPLE_TEST_REAL_NODE: process.execPath, PEOPLE_TEST_MARKER: marker };
++  const preview = spawnSync('/bin/sh', ['-c', build], { cwd: root, encoding: 'utf8', env: { ...env, PEOPLE_SITE_PREVIEW: '1' } });
++  assert.equal(preview.status, 1, preview.stderr);
++  assert.match(preview.stderr, /refuses PEOPLE_SITE_PREVIEW=1/);
++  assert.equal(fs.existsSync(marker), false, 'no subsequent build command may run in preview');
++  const normalEnv = { ...env }; delete normalEnv.PEOPLE_SITE_PREVIEW;
++  const normal = spawnSync('/bin/sh', ['-c', build], { cwd: root, encoding: 'utf8', env: normalEnv });
++  assert.equal(normal.status, 0, normal.stderr);
++  assert.ok(fs.statSync(marker).size > 0, 'normal production reaches later build steps');
++} finally {
++  fs.rmSync(scratch, { recursive: true, force: true });
++}
++
++// Test the actual local-preview context without touching generated files.
++// The old, in-memory catalog format is a supported read path; interception is
++// limited to its two exact generated paths and restored immediately.
++const catalog = { schemaVersion: 1, generatedAt: 'fixture', currentPromptVersion: 7, complete: false,
++  stats: { sourceChapters: 2, extractedChapters: 1, missingChapters: 1, dateAuditPendingChapters: 1,
++    legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0 },
++  missingChapterIds: ['fixture:002'], people: [{ id: 'fixture-person' }], familyEdges: [] };
++const index = { schemaVersion: 2, generatedAt: 'fixture', currentPromptVersion: 7, complete: false, chapters: {} };
++const files = new Map([[path.join(root, 'data/people/generated/catalog.json'), JSON.stringify(catalog)],
++  [path.join(root, 'data/people/generated/site-index.json'), JSON.stringify(index)]]);
++const exists = fs.existsSync, read = fs.readFileSync, oldPreview = process.env.PEOPLE_SITE_PREVIEW;
++try {
++  fs.existsSync = file => files.has(String(file)) || exists(file);
++  fs.readFileSync = (file, ...args) => files.has(String(file)) ? files.get(String(file)) : read(file, ...args);
++  process.env.PEOPLE_SITE_PREVIEW = '1';
++  const preview = loadPeopleSiteContext();
++  assert.equal(preview.active, true);
++  assert.equal(preview.preview, true);
++  delete process.env.PEOPLE_SITE_PREVIEW;
++  assert.equal(loadPeopleSiteContext().active, false);
++} finally {
++  fs.existsSync = exists; fs.readFileSync = read;
++  if (oldPreview === undefined) delete process.env.PEOPLE_SITE_PREVIEW;
++  else process.env.PEOPLE_SITE_PREVIEW = oldPreview;
++}
++console.log('people production build preview guard: ok');
