@@ -420,6 +420,7 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
   const repairedPacket = buildDateAuditPacket(book, chapter, { ...options, extraction: candidate });
   validateDateAuditReport(report, repairedPacket);
   if (report.status !== 'audited' || !dateAuditReferencesCurrent(report, options)) throw new Error('Repair requires current independent date approval');
+  options.verifyReportUnchanged?.();
   if (currentPacket.extractionHash !== repairedPacket.extractionHash) {
     const expected = applyDateRepairProposal(current, proposal, currentPacket);
     if (!same(expected, candidate)) throw new Error('Candidate differs from scoped repair');
@@ -433,7 +434,42 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
     const receipt = path.join(peopleDir, 'date-repairs', book, chapter, `${repairedPacket.extractionHash.slice(7)}.json`);
     if (!fs.existsSync(receipt) || !same(readJson(receipt).proposal, proposal) || !same(readJson(receipt).report,report)) throw new Error('No matching repair receipt for recovery');
   }
+  options.verifyReportUnchanged?.();
   return recordDateAudit(report, options);
+}
+
+export class CompletedDateGenerationHold extends Error {}
+export function assertCompletedGenerationSafe({book,chapter},options={}) {
+  const stateFile=path.join(dateWorkflowDirectory(book,chapter,options.peopleDir),'state.json');
+  const state=fs.existsSync(stateFile)?readJson(stateFile):null;
+  const reportFile=path.join(options.peopleDir??PEOPLE_DIR,'date-audits',book,`${chapter}.json`);
+  const report=fs.existsSync(reportFile)?readJson(reportFile):null;
+  if(!['needs-revision','research-blocked'].includes(report?.status))return;
+  const status=dateAuditStatus(book,chapter,options).status;
+  const directory=dateWorkflowDirectory(book,chapter,options.peopleDir);
+  let knownPublish=false;
+  if(state?.phase==='publish') {
+    const publicationFile=path.join(directory,'publication.json');
+    if(fs.existsSync(publicationFile)) {
+      const publication=readJson(publicationFile);
+      knownPublish=publication.priorReviews?.some(prior=>same(prior,report))===true;
+      const current=buildDateAuditPacket(book,chapter,options);
+      const candidate=buildDateAuditPacket(book,chapter,{...options,extraction:publication.candidate});
+      if(current.extractionHash===candidate.extractionHash) {
+        const receipt=path.join(options.peopleDir??PEOPLE_DIR,'date-repairs',book,chapter,`${candidate.extractionHash.slice(7)}.json`);
+        if(!fs.existsSync(receipt))knownPublish=false;
+        else {const saved=readJson(receipt);knownPublish=knownPublish && same(saved.priorReviews,publication.priorReviews) && same(saved.proposal,publication.proposal) && same(saved.report,publication.report);}
+      }
+    }
+  }
+  const staleUnreconciled=status==='stale' && !knownPublish;
+  const auditAlreadyStarted=state?.phase==='audit' && (state.round!==0 || !state.restoredFromLedger || Object.keys(state.jobs??{}).length || Object.keys(state.reviewPlans??{}).length);
+  const linkedReview=typeof state?.review==='string' && /^review-\d+\.json$/.test(state.review) ? path.join(directory,state.review) : null;
+  const unknownPrior=['repair','reaudit','editorial-amendment'].includes(state?.phase) && (!linkedReview || !fs.existsSync(linkedReview) || !same(readJson(linkedReview),report));
+  const unknownPublication=state?.phase==='publish' && !knownPublish;
+  const seed=path.join(directory,'review-0.json');
+  const seedConflict=(!state || (state.phase==='audit' && state.restoredFromLedger)) && fs.existsSync(seed) && !same(readJson(seed),report);
+  if(staleUnreconciled || state?.phase==='complete' || auditAlreadyStarted || seedConflict || unknownPrior || unknownPublication)throw new CompletedDateGenerationHold(`Date workflow has a ${status} ${report.status} report that cannot be safely seeded; preserve the full report and reconcile retained work before continuing`);
 }
 
 export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
@@ -444,13 +480,22 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const packet = buildDateAuditPacket(book, chapter, options);
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : { schemaVersion: 1, workflowVersion: DATE_WORKFLOW_VERSION,
     sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, round: 0, phase: 'audit', jobs: {} };
+  const reportPath=path.join(options.peopleDir??PEOPLE_DIR,'date-audits',book,`${chapter}.json`);
+  const reportFingerprint=()=>fs.existsSync(reportPath)?sha256(fs.readFileSync(reportPath)):null;
+  let expectedReportFingerprint=reportFingerprint();
+  const verifyReportUnchanged=()=>{if(reportFingerprint()!==expectedReportFingerprint)throw new CompletedDateGenerationHold('Installed date report changed during workflow; preserve all artifacts and reconcile before publishing');};
+  assertCompletedGenerationSafe({book,chapter},options);
+  verifyReportUnchanged();
   const save = () => writeJsonAtomic(stateFile, state);
   if (state.workflowVersion !== DATE_WORKFLOW_VERSION) throw new Error('Date workflow protocol changed; reconcile retained work before restarting');
   const priorReport = path.join(options.peopleDir ?? PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
   if ((!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
     const report = readJson(priorReport);
     validateDateAuditReport(report,packet);
-    writeJsonAtomic(path.join(directory,'review-0.json'),report);
+    const seed=path.join(directory,'review-0.json');
+    if(fs.existsSync(seed)) {
+      if(!same(readJson(seed),report))throw new CompletedDateGenerationHold('Existing date review seed differs; preserve it and reconcile before continuing');
+    } else writeJsonAtomic(seed,report);
     state.review='review-0.json';state.phase='repair';save();
   }
   if(state.restoredFromLedger){delete state.restoredFromLedger;save();}
@@ -484,7 +529,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
     throw new Error('No date validation attempts configured');
   };
   if (state.phase === 'publish') {
-    const result = publishDateRepair(readJson(path.join(directory, 'publication.json')), options);
+    const result = publishDateRepair(readJson(path.join(directory, 'publication.json')), {...options,verifyReportUnchanged});
     state.phase = 'complete'; save(); return result;
   }
   if (state.phase === 'editorial-amendment') {
@@ -519,7 +564,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
         const repairAgents=new Set(Object.entries(state.jobs).filter(([key])=>key.startsWith('repair-')).map(([,job])=>job.agentId).filter(Boolean));
         for(const proposal of rounds)if(proposal.author?.agentId)repairAgents.add(proposal.author.agentId);
         if(report.reviewer.workers.some(w=>w.agentId && repairAgents.has(w.agentId)))throw new Error('A repair conversation cannot approve its own candidate');
-        if (!state.candidate) { recordDateAudit(report, options); state.phase = 'complete'; save(); return report; }
+        if (!state.candidate) { verifyReportUnchanged();recordDateAudit(report, options); state.phase = 'complete'; save(); return report; }
         const publication = { proposal: readJson(path.join(directory, 'combined-proposal.json')), candidate: readJson(path.join(directory, state.candidate)), report,
           rounds,priorReviews:fs.readdirSync(directory).filter(name=>/^review-\d+\.json$/.test(name)).sort().map(name=>readJson(path.join(directory,name))).filter(r=>r.status!=='audited') };
         const validation = options.validateExtraction(publication.candidate);
@@ -535,9 +580,9 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
           return { status: 'editorial-amendment-required', amendmentFile };
         }
         writeJsonAtomic(path.join(directory, 'publication.json'), publication); state.phase = 'publish'; save();
-        const result = publishDateRepair(publication, options); state.phase = 'complete'; save(); return result;
+        const result = publishDateRepair(publication, {...options,verifyReportUnchanged}); state.phase = 'complete'; save(); return result;
       }
-      if (!state.candidate) recordDateAudit(report, options);
+      if (!state.candidate) {verifyReportUnchanged();recordDateAudit(report, options);expectedReportFingerprint=reportFingerprint();}
       state.phase = 'repair'; save();
     }
     if (state.round >= (options.maxRounds ?? 3)) return { status: 'needs-revision', reason: 'Repair-round ceiling reached; resume with a larger explicit ceiling after reviewing failures' };

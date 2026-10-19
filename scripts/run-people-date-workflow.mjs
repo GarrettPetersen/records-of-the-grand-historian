@@ -7,7 +7,7 @@ import { parseArgs } from 'node:util';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
+import { CompletedDateGenerationHold, assertCompletedGenerationSafe, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
 import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
 import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
 import { mutateRemotePeopleWorkLedger, claimIsActive, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
@@ -154,7 +154,8 @@ if (o['dry-run']) {
       while(!control.stopRequested && cursor<targets.length && started<limit) {
         const target=targets[cursor++],key=`${target.book}/${target.chapter}`;
         const packet=buildDateAuditPacket(target.book,target.chapter);
-        const reserved=mutateRemotePeopleWorkLedger(ledger=>{
+        let reserved;
+        try { reserved=mutateRemotePeopleWorkLedger(ledger=>{
           ledger.dateAudits ??= {};
           const prior=ledger.dateAudits[key];
           if(o.release) {
@@ -162,6 +163,8 @@ if (o['dry-run']) {
             if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))throw new Error('Stop the active executor before explicitly taking over its reservation');
             delete ledger.dateAudits[key];return {released:true};
           }
+          // Re-check inside each queue CAS attempt, before archiving or claiming.
+          assertCompletedGenerationSafe(target);
           if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))return null;
           if(prior && prior.status!=='ready' && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
@@ -176,6 +179,13 @@ if (o['dry-run']) {
           const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
+        } catch(error) {
+          if(!(error instanceof CompletedDateGenerationHold))throw error;
+          console.error(`${key}: ${error.message}`);
+          outcomes.push({book:target.book,chapter:target.chapter,status:'generation-hold',error:error.message});
+          process.exitCode=1;
+          continue;
+        }
         if(!reserved)continue;
         if(reserved.released){console.log(`Released ${key}; local recovery artifacts retained`);continue;}
         started+=1;

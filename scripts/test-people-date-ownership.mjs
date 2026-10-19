@@ -25,19 +25,22 @@ git('init','--quiet',root);
 git('remote','add','origin',remote);
 fs.mkdirSync(path.join(root,'data','people'),{recursive:true});
 fs.writeFileSync(path.join(root,'data','people','config.json'),JSON.stringify({schemaVersion:1}));
+fs.copyFileSync(fileURLToPath(new URL('../prompt-people-date-review.txt',import.meta.url)),path.join(root,'prompt-people-date-review.txt'));
 process.env.PEOPLE_REPO_ROOT=root;
 process.env.GIT_TERMINAL_PROMPT='0';
 process.env.GIT_CONFIG_NOSYSTEM='1';
 process.env.GIT_CONFIG_GLOBAL='/dev/null';
 const {mutateRemotePeopleWorkLedger,readRemotePeopleWorkLedger,dateExecutorIsBusy,claimIsActive,reservePeopleTargetsInLedger}=await import('./lib/people-work-queue.mjs');
+const {runDateWorkflow,assertCompletedGenerationSafe,dateWorkflowDirectory}=await import('./lib/people-date-workflow.mjs');
+const {writeJsonAtomic,readJson}=await import('./lib/people-content.mjs');
 const source=fs.readFileSync(fileURLToPath(new URL('./run-people-date-workflow.mjs',import.meta.url)),'utf8');
-const marker='const reserved=mutateRemotePeopleWorkLedger(ledger=>{';
+const marker='reserved=mutateRemotePeopleWorkLedger(ledger=>{';
 const start=source.indexOf(marker);
 const end=source.indexOf('},{message:`Reserve date audit ${key}`}).result;',start);
 assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
 assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
 const body=source.slice(start+marker.length,end);
-const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson',`return ledger=>{${body}}`);
+const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe',`return ledger=>{${body}}`);
 const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
 const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
 const reconcileEnd=source.indexOf("},{message:'Reconcile completed date publications'});",reconcileStart);
@@ -49,11 +52,17 @@ const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-sou
 const options={worker:'owner',lane:'openrouter',takeover:false,release:false,'retry-blocked':false};
 const packet={sourceHash:h1,extractionHash:h1};
 const workflow=path.join(root,'workflow');
-const callback=(overrides={},packetOverrides={})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')));
+const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight);
 const reconcile=()=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}));
 const read=()=>readRemotePeopleWorkLedger();
 const save=claim=>mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={[key]:structuredClone(claim)};delete l.dateAuditHistory;});
 const run=cb=>mutateRemotePeopleWorkLedger(cb).result;
+
+for(const claim of [null,prior({status:'ready'}),prior({status:'active'})])test(`generation hold does not change ${claim?.status??'absent'} queue reservation`,()=>{
+  mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={};delete l.dateAuditHistory;if(claim)l.dateAudits[key]=structuredClone(claim);});
+  const before=read();assert.throws(()=>run(callback({}, {},()=>{throw new Error('retained report hold');})),/retained report hold/);
+  assert.deepEqual(read(),before);
+});
 
 test('other worker cannot take stale-source, even after lease expiry',()=>{
   const claim=prior(); save(claim);
@@ -106,4 +115,21 @@ test('startup reconciliation still marks completed active work ready',()=>{
 test('startup reconciliation respects an active executor lease',()=>{
   const claim=prior({status:'active',executorToken:'live-token',executorHost:os.hostname(),executorExpiresAt:new Date(Date.now()+3600000).toISOString()});
   save(claim);run(reconcile());assert.deepEqual(read().dateAudits[key],claim);
+});
+
+test('real workflow generation guard prevents a production callback from changing the local Git-backed queue',async()=>{
+  const dataDir=path.join(root,'chapter-fixture'),peopleDir=path.join(root,'people-fixture');
+  const opts={dataDir,peopleDir,maxUnits:10,maxBytes:64000,maxRounds:0,validateExtraction:()=>{}};
+  writeJsonAtomic(path.join(dataDir,'jinshu/127.json'),{content:[{sentences:[{id:'s0001',zh:'元年甲卒。',translation:'Jia died in year one.'}]}]});
+  const extraction={schemaVersion:2,book:'jinshu',chapter:'127',input:{unitCount:1,chapterFingerprint:'fixture',candidateScannerVersion:2,unitDigests:[]},run:{model:'original-extractor'},people:[['p001',['Jia','甲'],'historical','Official',{a:['AD 2']}]],surfaces:[],claims:[['p001','attestation',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},'explicit',['s0001']]],translationRepairs:[],candidateDispositions:[],coverage:{}};
+  writeJsonAtomic(path.join(peopleDir,'extractions/jinshu/127.json'),extraction);
+  const worker=async task=>{
+    const check=(id,item=false)=>({id,verdict:item?'incorrect':'supported',reason:'Fixture event and date ownership were checked against the test source.',...(item?{event:'The named person participates in the fixture event.'}:{}),evidence:[{unit:'s0001',quote:'元年'}]});
+    return {jobId:task.job.id,sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,reviewedAt:new Date().toISOString(),reviewer:{name:'Independent fixture reviewer',agentId:'fixture-reviewer',independentOfExtractor:true},summary:'Every owned source unit and date item was reviewed in this fixture.',reviewedUnits:task.job.ownedUnits,itemChecks:task.job.ownedItems.map(id=>check(id,true)),personChecks:task.job.ownedPeople.map(id=>check(id)),findings:task.job.ownedItems.map(id=>({items:[id],problem:'The fixture date does not match the source event.',action:'Correct the fixture date and any related date hints.'})),references:[]};
+  };
+  assert.equal((await runDateWorkflow(target,worker,opts)).status,'needs-revision');
+  const file=path.join(dateWorkflowDirectory('jinshu','127',peopleDir),'state.json'),state=readJson(file);state.phase='complete';writeJsonAtomic(file,state);
+  const claim=prior({status:'ready'});save(claim);const before=read();
+  assert.throws(()=>run(callback({}, {},()=>assertCompletedGenerationSafe(target,opts))),/needs-revision report/);
+  assert.deepEqual(read(),before);assert.equal(readJson(file).phase,'complete');
 });

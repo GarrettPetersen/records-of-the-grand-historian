@@ -150,6 +150,97 @@ test('audit -> repair -> fresh re-audit -> publish completes and is idempotent',
   assert.equal(calls.filter(k=>k.startsWith('reaudit-')).length,2);
   const n=calls.length;await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);assert.equal(calls.length,n);
 });
+test('completed generation with a current needs-revision report preserves every artifact and dispatches no worker',async t=>{
+  const f=fixture(t);
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  assert.equal(result.status,'needs-revision');
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),stateFile=path.join(directory,'state.json');
+  const state=readJson(stateFile);state.phase='complete';state.restoredFromLedger=true;writeJsonAtomic(stateFile,state);
+  const names=fs.readdirSync(directory).sort(),before=new Map(names.map(n=>[n,fs.readFileSync(path.join(directory,n))]));
+  const prior=path.join(f.options.peopleDir,'date-audits','fixture','001.json'),report=fs.readFileSync(prior),extraction=fs.readFileSync(f.file);
+  let called=false;
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;throw Error('unexpected worker');},f.options),/needs-revision report/);
+  assert.equal(called,false);assert.deepEqual(fs.readdirSync(directory).sort(),names);
+  for(const [name,bytes] of before)assert.deepEqual(fs.readFileSync(path.join(directory,name)),bytes);
+  assert.deepEqual(fs.readFileSync(prior),report);assert.deepEqual(fs.readFileSync(f.file),extraction);
+});
+test('a completed generation retains a stale failed report for explicit reconciliation',async t=>{
+  const f=fixture(t);
+  await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),stateFile=path.join(directory,'state.json');
+  const state=readJson(stateFile);state.phase='complete';writeJsonAtomic(stateFile,state);
+  const changed=readJson(f.sourceFile);changed.content[0].sentences[1].translation='A changed translation.';writeJsonAtomic(f.sourceFile,changed);
+  assert.equal(dateAuditStatus('fixture','001',f.options).status,'stale');
+  let called=false;await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options),/stale needs-revision report/);
+  assert.equal(called,false);assert.equal(readJson(stateFile).phase,'complete');
+});
+test('stale failed report without local workflow state cannot start a new audit',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const stateFile=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json');fs.unlinkSync(stateFile);
+  const changed=readJson(f.sourceFile);changed.content[0].sentences[1].translation='A changed translation.';writeJsonAtomic(f.sourceFile,changed);
+  let called=false;await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options),/stale needs-revision report/);
+  assert.equal(called,false);assert.equal(fs.existsSync(stateFile),false);
+});
+test('an existing audit cannot bypass seeding of a newly failed report',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const file=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'),state=readJson(file);
+  state.phase='audit';state.round=0;state.jobs={};delete state.restoredFromLedger;writeJsonAtomic(file,state);
+  let called=false;await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options),/needs-revision report/);
+  assert.equal(called,false);assert.deepEqual(readJson(file),state);
+});
+test('a later repair cannot treat an unrelated older matching review as its current source',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json'),state=readJson(file);
+  const later=readJson(path.join(directory,'review-0.json'));later.summary='A different later review is linked to the retained repair plan.';writeJsonAtomic(path.join(directory,'review-1.json'),later);
+  state.phase='repair';state.round=1;state.review='review-1.json';writeJsonAtomic(file,state);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(readJson(file),state);
+});
+test('a restored audit past round zero cannot bypass failed report seeding',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const file=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'),state=readJson(file);
+  state.phase='audit';state.round=1;state.jobs={};state.restoredFromLedger=true;writeJsonAtomic(file,state);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(readJson(file),state);
+});
+test('a current failed report with no local state seeds the repair before any new review',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json');fs.unlinkSync(file);
+  const calls=[];const result=await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{calls.push(task.kind);return repair(task);},{...f.options,maxRounds:0});
+  assert.equal(result.status,'needs-revision');assert.equal(readJson(file).phase,'repair');assert.deepEqual(calls,[]);
+  assert.deepEqual(readJson(path.join(directory,'review-0.json')),readJson(path.join(f.options.peopleDir,'date-audits','fixture','001.json')));
+});
+test('a retained different seed is not overwritten when state is missing',async t=>{
+  const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),state=path.join(directory,'state.json'),seed=path.join(directory,'review-0.json');
+  fs.unlinkSync(state);const old=readJson(seed);old.summary='Different retained review that must be preserved.';writeJsonAtomic(seed,old);const bytes=fs.readFileSync(seed);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(fs.readFileSync(seed),bytes);assert.equal(fs.existsSync(state),false);
+});
+test('interrupted publication reuses an exact retained prior review and matching receipt',async t=>{
+  const f=fixture(t),worker=async task=>task.kind==='repair'?repair(task):review(task);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json'),reportFile=path.join(f.options.peopleDir,'date-audits','fixture','001.json');
+  writeJsonAtomic(reportFile,readJson(path.join(directory,'review-0.json')));const state=readJson(file);state.phase='publish';writeJsonAtomic(file,state);
+  let called=false;const result=await runDateWorkflow({book:'fixture',chapter:'001'},async()=>{called=true;},f.options);
+  assert.equal(result.status,'audited');assert.equal(called,false);
+});
+test('interrupted publication cannot overwrite a separately amended failed report',async t=>{
+  const f=fixture(t),worker=async task=>task.kind==='repair'?repair(task):review(task);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),file=path.join(directory,'state.json'),reportFile=path.join(f.options.peopleDir,'date-audits','fixture','001.json');
+  const prior=readJson(path.join(directory,'review-0.json'));prior.summary='An independently amended review contains an additional unresolved finding.';
+  prior.findings.push({items:['claim-1'],problem:'A later independent source review found another unresolved concern.',action:'Review the separately discovered concern before declaring chronology approved.'});
+  writeJsonAtomic(reportFile,prior);const before=fs.readFileSync(reportFile);const state=readJson(file);state.phase='publish';writeJsonAtomic(file,state);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.deepEqual(fs.readFileSync(reportFile),before);assert.equal(readJson(file).phase,'publish');
+});
+test('a report installed during a review is not overwritten by its outcome',async t=>{
+  const f=fixture(t),reportFile=path.join(f.options.peopleDir,'date-audits','fixture','001.json');let installed;
+  const worker=async task=>{if(!installed){installed={status:'needs-revision',note:'New independent finding'};writeJsonAtomic(reportFile,installed);}return review(task);};
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,maxRounds:0}),/Installed date report changed during workflow/);
+  assert.deepEqual(readJson(reportFile),installed);assert.deepEqual(readJson(f.file),f.extraction);
+});
 test('an interrupted source review reuses completed chunks',async t=>{
   const f=fixture(t),calls=[];let interrupt=true;
   const worker=async task=>{calls.push(task.key);if(interrupt&&task.kind==='review'&&task.job.ownedUnits.includes('s0002')){interrupt=false;throw new Error('interrupted');}return task.kind==='repair'?repair(task):review(task);};
