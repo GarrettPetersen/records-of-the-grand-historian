@@ -195,9 +195,18 @@ function runIsolatedOperation(env, operation, args) {
   });
 }
 
+function serializeAsyncOperation(callback) {
+  let tail = Promise.resolve();
+  return (...args) => {
+    const run = tail.then(() => callback(...args), () => callback(...args));
+    tail = run.catch(() => undefined);
+    return run;
+  };
+}
+
 function isolatedBridge(env) {
   return {
-    resumeOrClaim: (args) => runIsolatedOperation(env, 'resumeOrClaim', args),
+    resumeOrClaim: serializeAsyncOperation((args) => runIsolatedOperation(env, 'resumeOrClaim', args)),
     getChunk: (args) => runIsolatedOperation(env, 'getChunk', args),
     submitChunk: (args) => runIsolatedOperation(env, 'submitChunk', args),
     finalizeChapter: (args) => runIsolatedOperation(env, 'finalizeChapter', args),
