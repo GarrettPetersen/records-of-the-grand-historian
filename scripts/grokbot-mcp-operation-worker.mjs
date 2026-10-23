@@ -40,14 +40,22 @@ function sendReply(payload) {
 }
 
 process.once('message', async (message) => {
+  let reply;
+  let exitCode = 0;
   try {
     const method = operations.get(message?.operation);
     if (!method) throw new Error('Unsupported Grok Bot MCP operation');
-    const result = await bridgeFromEnvironment()[method](message.args);
-    await sendReply({ ok: true, result });
+    reply = { ok: true, result: await bridgeFromEnvironment()[method](message.args) };
   } catch (error) {
-    await sendReply({ ok: false, error: error instanceof Error ? error.message : String(error) });
+    exitCode = 1;
+    reply = { ok: false, error: error instanceof Error ? error.message : String(error) };
+  }
+  try {
+    await sendReply(reply);
+  } catch {
+    exitCode = 1;
   } finally {
     process.disconnect?.();
+    process.exit(exitCode);
   }
 });
