@@ -15,7 +15,7 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 const SERVER_VERSION = '1.0.0';
 const CLIENT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-client.mjs');
 const OPERATION_WORKER_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-operation-worker.mjs');
-const DEFAULT_OPERATION_TIMEOUT_MS = 120_000;
+const DEFAULT_OPERATION_TIMEOUT_MS = 300_000;
 
 function textResult(value) {
   return { content: [{ type: 'text', text: JSON.stringify(value) }] };

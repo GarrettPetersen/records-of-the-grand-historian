@@ -18,6 +18,7 @@ export HOST="127.0.0.1"
 export PORT="3001"
 export GROKBOT_MCP_ALLOWED_HOSTS="grokbot-mcp.24histories.com"
 export GROKBOT_MCP_BOOTSTRAP_FILE="$RUNTIME_ROOT/bootstrap.json"
+export GROKBOT_MCP_OPERATION_TIMEOUT_MS="300000"
 
 if [[ ! -d "$PEOPLE_REPO_ROOT/.git" ]]; then
   print -u2 "Missing clean Grok Bot runtime clone: $PEOPLE_REPO_ROOT"
