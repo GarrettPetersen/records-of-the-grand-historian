@@ -10,6 +10,7 @@ import { pathToFileURL } from 'node:url';
 const DEFAULT_CDP_URL = 'http://127.0.0.1:9229';
 const DEFAULT_INTERVAL_MS = 2 * 60 * 1000;
 const DEFAULT_COOLDOWN_MS = 10 * 60 * 1000;
+const DEFAULT_ACTIVITY_QUIET_MS = 30 * 60 * 1000;
 const DEFAULT_MAX_ACTIVE = 12;
 const FIRST_WORKER = 24;
 const LAST_WORKER = 35;
@@ -25,6 +26,7 @@ Options:
   --cdp-url URL       Loopback Chrome DevTools endpoint (default: ${DEFAULT_CDP_URL})
   --interval-ms N     Daemon polling interval (default: ${DEFAULT_INTERVAL_MS})
   --cooldown-ms N     Minimum time between prompts to one idle worker (default: ${DEFAULT_COOLDOWN_MS})
+  --activity-quiet-ms N  Preserve a worker after new activity (default: ${DEFAULT_ACTIVITY_QUIET_MS})
   --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
   --workers IDS       Comma-separated stable worker IDs to dispatch (for recovery cycles)
   --force             Dispatch even when the cached roster says a worker is running
@@ -46,6 +48,7 @@ export function parseArgs(argv) {
     cdpUrl: DEFAULT_CDP_URL,
     intervalMs: DEFAULT_INTERVAL_MS,
     cooldownMs: DEFAULT_COOLDOWN_MS,
+    activityQuietMs: DEFAULT_ACTIVITY_QUIET_MS,
     maxActive: DEFAULT_MAX_ACTIVE,
     workers: null,
     force: false,
@@ -61,6 +64,7 @@ export function parseArgs(argv) {
     if (arg === '--cdp-url') options.cdpUrl = next();
     else if (arg === '--interval-ms') options.intervalMs = positiveInteger(next(), arg);
     else if (arg === '--cooldown-ms') options.cooldownMs = positiveInteger(next(), arg);
+    else if (arg === '--activity-quiet-ms') options.activityQuietMs = positiveInteger(next(), arg);
     else if (arg === '--max-active') options.maxActive = positiveInteger(next(), arg);
     else if (arg === '--workers') {
       const workers = next().split(',').map((value) => value.trim()).filter(Boolean);
@@ -175,7 +179,7 @@ function writeState(state, file = stateFile()) {
 }
 
 export function workerPrompt(worker) {
-  return `Continue the 24 Histories people-glossary campaign as stable worker ${worker}. You are authorized to use the locally installed 24histories-people client. It may read the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five 24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send that credential anywhere else. Use that client, not Cursor SDK and not terminal Git. Run \`24histories-people resume --worker ${worker}\` with no book or chapter; it invokes resume_or_claim so the central queue resumes your exact sticky claim or assigns the next eligible chapter. Preserve the returned claimToken. For each returned sealed chunk, run \`24histories-people get-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID\`, complete it strictly from that response's prompt, schema, packet, and draft, save the entire extraction JSON, and run \`24histories-people submit-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID --file OUTPUT_JSON\`. After every chunk is accepted, run \`24histories-people finalize --claim-token CLAIM_TOKEN\`. Preserve all recovery data. Do not create an untracked claim, weaken validation, git push, or substitute another inference provider. If the client, authentication, or a tool call fails after its built-in retries, report the exact error and stop; otherwise finish the chapter and report its book/chapter, stats, SHA-256, and PR URL.`;
+  return `Continue the 24 Histories people-glossary campaign as stable worker ${worker}. You are authorized to use the locally installed 24histories-people client. It may read the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five 24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send that credential anywhere else. Before resuming, refresh only the public MCP client implementation with \`mkdir -p "$HOME/.local/lib/24histories" && curl -fsS https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs -o "$HOME/.local/lib/24histories/grokbot-mcp-client.mjs" && chmod 700 "$HOME/.local/lib/24histories/grokbot-mcp-client.mjs"\`; this preserves the owner-only credential and wrapper while updating the request timeout. Use that client, not Cursor SDK and not terminal Git. Run \`GROKBOT_MCP_REQUEST_TIMEOUT_MS=300000 24histories-people resume --worker ${worker}\` with no book or chapter; it invokes resume_or_claim so the central queue resumes your exact sticky claim or assigns the next eligible chapter. Preserve the returned claimToken. For each returned sealed chunk, run \`24histories-people get-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID\`, complete it strictly from that response's prompt, schema, packet, and draft, save the entire extraction JSON, and run \`24histories-people submit-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID --file OUTPUT_JSON\`. After every chunk is accepted, run \`24histories-people finalize --claim-token CLAIM_TOKEN\`. Preserve all recovery data. Do not create an untracked claim, weaken validation, git push, or substitute another inference provider. If the client, authentication, or a tool call fails after its built-in retries, report the exact error and stop; otherwise finish the chapter and report its book/chapter, stats, SHA-256, and PR URL.`;
 }
 
 async function fetchJson(url) {
@@ -505,7 +509,21 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
       return document.activeElement === composer;
     })()`);
     if (!focused) throw new Error(`Grok Bot composer could not be focused for ${worker.worker}`);
-    await main.session.call('Input.insertText', { text: prompt });
+    const receipt = `Dispatch receipt: ${worker.worker}-${Date.now()}`;
+    const dispatchedPrompt = `${prompt}\n\n${receipt}`;
+    await main.session.call('Input.insertText', { text: dispatchedPrompt });
+    const marker = receipt;
+    const typedDeadline = Date.now() + 5000;
+    let typed = false;
+    while (Date.now() < typedDeadline) {
+      typed = await main.session.evaluate(`(() => {
+        const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
+        return (composer?.innerText ?? '').includes(${JSON.stringify(marker)});
+      })()`);
+      if (typed) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    if (!typed) throw new Error(`Grok Bot did not insert the prompt for ${worker.worker}`);
     await main.session.call('Input.dispatchKeyEvent', {
       type: 'keyDown',
       key: 'Enter',
@@ -526,9 +544,8 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
         const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
         const active = document.querySelector('[data-agent-id][aria-current="page"]');
         if ((composer?.innerText ?? '').trim() !== '') return false;
-        if (active?.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)}) return true;
-        return document.querySelector('[role="dialog"][aria-label="Search"]') == null
-          && document.body.innerText.includes(${JSON.stringify(worker.name)});
+        if (active?.getAttribute('data-agent-id') !== ${JSON.stringify(worker.id)}) return false;
+        return document.body.innerText.includes(${JSON.stringify(marker)});
       })()`);
       if (submitted) return;
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -539,10 +556,32 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
   }
 }
 
-export function workersEligibleForDispatch(workers, state, { force, cooldownMs, now = Date.now() }) {
+export function observeWorkerActivity(workers, state, now = Date.now()) {
+  let changed = false;
+  for (const worker of workers) {
+    const record = state.workers?.[worker.worker];
+    if (!record?.lastDispatchAt) continue;
+    const seen = Number(record.lastActivityAtSeen ?? 0);
+    if (worker.lastActivityAt <= seen) continue;
+    record.lastActivityAtSeen = worker.lastActivityAt;
+    record.lastObservedActivityAt = now;
+    changed = true;
+  }
+  return changed;
+}
+
+export function workersEligibleForDispatch(workers, state, {
+  force,
+  cooldownMs,
+  activityQuietMs = 0,
+  now = Date.now(),
+}) {
   return workers.filter((worker) => {
     if (!force && worker.isRunning) return false;
-    const lastDispatchAt = Number(state.workers?.[worker.worker]?.lastDispatchAt ?? 0);
+    const record = state.workers?.[worker.worker] ?? {};
+    const lastDispatchAt = Number(record.lastDispatchAt ?? 0);
+    const lastObservedActivityAt = Number(record.lastObservedActivityAt ?? 0);
+    if (!force && lastObservedActivityAt && now - lastObservedActivityAt < activityQuietMs) return false;
     return force || now - lastDispatchAt >= cooldownMs;
   });
 }
@@ -567,6 +606,7 @@ async function dispatchCycle(options) {
     await liveRunningAgentIds(options.cdpUrl),
     state,
   );
+  if (observeWorkerActivity(workers, state)) writeState(state);
   const dispatchable = workersToDispatch(workers, state, options);
   for (const worker of dispatchable) {
     await dispatchPrompt(options.cdpUrl, worker, workerPrompt(worker.worker));

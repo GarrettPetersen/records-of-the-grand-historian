@@ -1,0 +1,15 @@
+diff --git a/scripts/validate-people-extraction.mjs b/scripts/validate-people-extraction.mjs
+--- a/scripts/validate-people-extraction.mjs
++++ b/scripts/validate-people-extraction.mjs
+@@ -815,7 +815,9 @@ function validatePeopleExtractionImpl(document, packet, options = {}) {
+       sourceAttestations.every(claim => claim.value?.undatedSourceAttestation === true || hold(claim.value)) &&
+       temporalClaims.length > 0 && temporalClaims.every(claim => {
+-        if (claim.predicate === 'death' ||
+-            (claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
++        // A death with only unresolved source-dated chronology is a research
++        // hold, not evidence of activity and not a reason to invent a hint.
++        // Concrete or mixed chronology still fails the all-holds test below.
++        if ((claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
+             (claim.predicate === 'event-participation' && claim.value?.kind === 'death' && claim.value?.role === 'deceased')) return false;
+         const containers = temporalContainers(claim.value);
+         return containers.length > 0 && containers.every(hold);

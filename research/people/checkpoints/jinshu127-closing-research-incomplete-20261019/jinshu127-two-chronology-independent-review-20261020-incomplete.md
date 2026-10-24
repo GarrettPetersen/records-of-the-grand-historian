@@ -1,0 +1,22 @@
+# Jinshu 127: independent focused review of two chronology repairs
+
+Research-only, incomplete. This review covers only the two changes in `jinshu127-two-chronology-repairs-20261020-incomplete/`; it is not a complete date audit, a chapter approval, or authorization to publish. Reviewer: `/root/jin127_two_review`, independent of the proposal author.
+
+## Source and reasoning
+
+- The source snapshot's s0232 says `漢祖祭信陵之墳` and has no absolute year. The same passage appears in [Jinshu 127](https://zh.wikisource.org/wiki/晉書/卷127). Replacing the old attestation's noncontiguous `漢祖信陵` and asserted BC 206–195 interval with the explicitly undated, source-specific tomb-sacrifice attestation is justified. The exact dates do not follow from this passage alone.
+- [Shiji 77](https://zh.wikisource.org/wiki/史記/卷077) distinguishes Gaozu's repeated sacrifices when passing Daliang after becoming emperor from the separate provision of five tomb-keeper families in his twelfth year; the latter is not an exact date for every sacrifice. The unchanged p141 activity hint `BC 206-195` is not established by s0232 and must remain unapproved pending independent provenance and endpoint review. Removing the dated attestation does not validate the retained hint.
+- [Zizhi Tongjian 4](https://zh.wikisource.org/wiki/資治通鑑/卷004) places Wei Anli's enfeoffment of Wuji as Lord Xinling under Zhou Nan 39, conventionally 276 BC. This is earlier than the existing activity-hint start of 275 BC. The Jinshu source gives neither endpoint; removing `BC 275-243` without substituting a guessed span is conservative. This does not itself disprove 243 BC as an endpoint or establish a full career or birth date.
+- The existing p142 retrospective-reference event is unchanged. `retrospective-reference` is a descriptive event kind recognized by `scripts/lib/people-reception.mjs`; it is not an invented `receptionType`. No new reception category or date was introduced by these two changes.
+
+## Independently checked data and validation
+
+I independently hashed the source, input extraction, editorial history and all four outputs; each equals its receipt digest. Source bytes: `984b1214a02bf06ba26c25db258a46652f0d17d11cbf56c4d96c01a3a8542d39`; input extraction: `59ed9d7f0738108fb1e587c861382a583ba8bf2e44dc63fc853e06777cd31301`; candidate extraction: `912aba0388bb765569cc2586a65097e60b5354a8ac52044bd00431adf83b4c0d`; history: `002ae46183e3d6528c0f8e6908344f2259e291385762863c24cb6cb4f10029a5`.
+
+Using current-checkout production functions, I rebuilt both date packets. Both source fingerprints are `sha256:14d01bcccbaa64c7b778a8e554138a9b5e12ff7e00b31cc8f7d4805e342ee019`; the pre-repair extraction fingerprint is `sha256:c0ff60c109dab416784e5135583a6227408596249c409192f34367c02890e35b` and the candidate is `sha256:091f6057c4d69db8ef1109ea07fc306f53dad694a5385ee574e7edf82e94249c`. Current `validateCompactPeopleExtraction` with `strictAliasDispositions: true` passes, yielding 278 units, 817 candidates, 165 people, 686 mentions, 910 claims, 13 repairs and 479 dispositions, with zero alias conflicts. `validateAppliedEditorialDecisions` returns no errors for the supplied history and normalized candidate. These are structural checks, not substantive chapter approval.
+
+An order-insensitive multiset comparison of the entire compact extraction found only the advertised p141 claim replacement and the removal of the p142 activity hint; all other root fields and row contents are unchanged. Both date packets contain 379 items; only `claim-335` and `hints-p142` differ, and every packet ID and claim index remains unchanged in this exact comparison. IDs remain packet-relative and must not be copied to a separately rebased packet without checking its fingerprints and claim hash. No source file was altered in this review.
+
+## Mandatory provenance and remaining gates
+
+This candidate is based on the earlier s0232 source snapshot and prior seven-change research candidate, **not** the later closing-edit materialized source. It must be replayed and reviewed against the final source and extraction before sealing an independent audit. All prior research decisions are scoped to their fingerprints; no canonical extraction, date approval or chapter completion follows from this review. Investigate the Gaozu hint and undertake the remaining full independent source/date audit and all editorial, identity and publication gates.

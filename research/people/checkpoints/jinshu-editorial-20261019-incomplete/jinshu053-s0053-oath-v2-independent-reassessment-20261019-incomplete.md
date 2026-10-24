@@ -1,0 +1,15 @@
+# Independent reassessment of Jinshu 053 s0053 oath v2
+
+Status: **review judgment, not an applied or schema-validated decision**. I independently reviewed `jinshu053-s0053-oath-proposal-v2-20261019-incomplete.md` against the Chinese and commentary discussed in `jinshu053-s0053-independent-oath-review-20261019-incomplete.md`. The v2 proposal adopts my suggested paired wording and accurately records both the remaining syntax uncertainty and the fabricated-document context.
+
+## Judgment
+
+The two v2 field values are **reasonable, source-supported editorial revisions**, and I would approve those exact values as the best working translation without requiring definitive proof that all other parsings are impossible. `許` permits a claim of permission within the forged document; interpreting `當` as “shall” is plausible. Their division and the anticipatory “it” remain interpretive, not a settled commentary gloss. Preserve that qualification in the decision's reason and review record. A literal translation cannot avoid all grammatical choices, and an ordinary alternative parsing alone is not a reason to leave the demonstrably deficient existing English in place indefinitely.
+
+This is not an approval of an invented fact that Heaven truly consented, an oath ceremony took place, Jiang received a position, or Daowen became king. The cited passage is attributed to a manufactured text copied under pressure, and interpretation must remain inside that quotation. Nor does this judgment resolve Jiang's identity, specify a consort title beyond the quoted English, or settle the chapter's separate chronology, source, identity and publication holds. The proposed words preserve 毛, both named references, and the oath's interpretive force. Hu explicitly calls it an oath, but does not resolve `皇天許當`; his `言將立為后也` is an interpretation of the *proposed* status, not an accomplished appointment.
+
+## Workflow limits
+
+The editorial review seed documents only `accept`, `reject`, and `revise`, not a “provisional” decision state. Do not label a schema `revise` as if it were a special, enforced hold. A legitimate exact-field review may use `revise` for each actual pending repair after a fresh, matching dossier/seed is built, with the uncertainty recorded explicitly in its reason and evidence. Preserve a separately visible philological research hold if the host's broader workflow requires one; do not let an accepted wording erase it. A decision's validity and any permission to apply it are determined by that workflow's fingerprint, reviewer-independence and validation checks, not this Markdown file.
+
+Inspection of the v3 extraction referenced by the proposal found **no `translationRepairs` entry for unit `s0053`**. Therefore the host cannot honestly treat this note as a decision on an existing proposal, and must prepare the exact literal and idiomatic repairs through the supported process before invoking an applier. No canonical files, claims, approvals or source fingerprints are changed by this reassessment.

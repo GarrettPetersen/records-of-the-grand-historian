@@ -30,10 +30,14 @@ editorial-decisions.json, validation.json. Independent review names:
 identity-review.json, date-report.json, validation.json, input-seal.json.
 Full source/identity coverage, independent approvals, exact source/extraction/
 editorial hashes, source translation-repair replay and production validation
-are mandatory. The report's editorialDecisionHash must bind the single newly
-added v3 review component, which must approve every new source repair; it cannot
-bind old-only reviews or the whole merged history. Full history bytes remain
-pinned separately. Actual run/chunk authors are excluded from all approval roles
+are mandatory. For one new v3 review component, each report's
+editorialDecisionHash binds that component. For multiple components, each report
+reviewContext and the input seal must instead contain editorialDecisionHashes:
+the ordered array of document hashes of every new v3 component. Each new applied
+repair must match exactly one new independent approval, and every such approval
+must match exactly one new repair. Old review and repair history remains unchanged
+and ordered, with full history bytes pinned separately in the receipt. Actual
+run/chunk authors are excluded from all approval roles
 even when omitted from the declared authors. Protected seal files must remain
 byte-identical. A dependency-only refresh must pin its independent addendum and
 original complete review, preserving the exact source and reports. Do not reseal

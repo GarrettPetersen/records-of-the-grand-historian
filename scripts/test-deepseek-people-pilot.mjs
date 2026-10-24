@@ -261,6 +261,24 @@ test('saved tool mutations and conversation resume together after a later reques
   }
 });
 
+test('oversized retained conversations fail before another model request', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'deepseek-tools-oversized-'));
+  try {
+    const local = { ...snapshot, dir };
+    const state = newToolState(local);
+    state.messages = [{ role: 'user', content: 'x'.repeat(513 * 1024) }];
+    fs.writeFileSync(path.join(dir, 'agent-state.json'), JSON.stringify(state));
+    let requested = false;
+    await assert.rejects(runDeepSeekToolPilot(local, {
+      maxTurns: 1, shouldStop: () => false, compare: () => ({}),
+      request: async () => { requested = true; throw new Error('must not request'); },
+    }), /above the .* safety ceiling/);
+    assert.equal(requested, false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('reviewed chronology loads only when its cited primary-text excerpts still match', () => {
   const reference = loadChronologyReference();
   assert.equal(lookupChronology(reference, '竇太后').matches[0].westernYear.year, 179);

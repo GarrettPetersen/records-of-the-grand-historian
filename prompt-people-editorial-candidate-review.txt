@@ -1,0 +1,23 @@
+# Independent Post-Repair Candidate Review
+
+You are reviewing the consequences of already independently approved translation
+repairs. The host has not changed the chapter or canonical extraction. It gives
+you a sealed dossier listing the name-like candidates that appear only after the
+approved English replacements are replayed.
+
+For every listed candidate, make exactly one source-backed decision in the
+provided `decisionSeed`:
+
+- add one `candidateDispositions` item when it is not a person; use only the
+  supplied reason vocabulary and explain the immediate Chinese/English context
+  in `note`; or
+- add one `candidatePeople` item when it is a reference to an existing local
+  person; use that person's full local ID, an allowed mention kind, and a
+  source-based `note`.
+
+Do not create a new person, omit a candidate, alter fingerprints, alter the
+chapter, alter extraction data, or decide from English capitalization alone.
+Chinese text controls the classification. A title, place, polity, era, book,
+office, collective, or deity is not a person merely because it is capitalized.
+If the supplied people do not support a safe link, reject the earlier repair in
+the editorial workflow rather than inventing an identity.

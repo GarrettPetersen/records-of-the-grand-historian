@@ -44,7 +44,9 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
     return book === product.book && chapterIds.has(chapter);
   }));
   const peopleNeedingReview = people.filter((person) => person.curation?.status === 'needs-review');
-  const ready = people.length > 0 && missingChapters.length === 0 && legacyChapters.length === 0 &&
+  // A preview context can contain canonical facts from unreviewed chapters,
+  // even when all the product's own chapters satisfy these local checks.
+  const ready = siteContext.preview !== true && people.length > 0 && missingChapters.length === 0 && legacyChapters.length === 0 &&
     peopleNeedingReview.length === 0 && dateAuditChapters.length === 0;
   const active = people.length > 0 && (ready || allowPreview);
 
@@ -54,7 +56,9 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
     preview: active && !ready,
     reason: active
       ? null
-      : people.length === 0
+      : siteContext.preview === true && people.length > 0
+        ? 'people-catalog-preview'
+        : people.length === 0
         ? 'no-people-in-product'
         : 'product-catalog-incomplete',
     chapterIds,
@@ -66,8 +70,25 @@ export function assessEbookPeopleReadiness(siteContext, product, { allowPreview 
   };
 }
 
-export function ebookPeopleReadinessErrors(peopleQa, { allowPreview = false } = {}) {
-  if (!peopleQa?.active) return [];
+export function ebookPeopleReadinessErrors(peopleQa, { allowPreview = false, requireGlossary = false } = {}) {
+  if (!peopleQa?.active) {
+    return requireGlossary ? ['A publication-ready people glossary is required but is not active.'] : [];
+  }
+  // This checks the report's structure, not independent qualification of its
+  // claims or provenance of the EPUB. Publication still needs those gates.
+  if (requireGlossary && (
+    peopleQa.active !== true || typeof peopleQa.ready !== 'boolean' ||
+    typeof peopleQa.preview !== 'boolean' ||
+    !Array.isArray(peopleQa.missingChapters) || !Array.isArray(peopleQa.legacyChapters) ||
+    !Array.isArray(peopleQa.dateAuditChapters) ||
+    !Number.isInteger(peopleQa.peopleNeedingReview) || peopleQa.peopleNeedingReview < 0 ||
+    !Number.isInteger(peopleQa.people) || peopleQa.people < 1 ||
+    !Number.isInteger(peopleQa.shards) || peopleQa.shards < 1 ||
+    !Number.isInteger(peopleQa.expectedMentionLinks) || peopleQa.expectedMentionLinks < 0 ||
+    !Number.isInteger(peopleQa.expectedBacklinks) || peopleQa.expectedBacklinks < 0
+  )) {
+    return ['Required people-glossary readiness report has missing or invalid fields.'];
+  }
   if (!Array.isArray(peopleQa.dateAuditChapters)) return ['Active people glossary is missing date-audit coverage.'];
   const errors = [];
   const hasBlockers = (peopleQa.missingChapters?.length || 0) > 0 ||
@@ -87,7 +108,7 @@ export function ebookPeopleReadinessErrors(peopleQa, { allowPreview = false } = 
     errors.push('Active people glossary is neither publication-ready nor marked as a preview.');
     return errors;
   }
-  if (allowPreview) return errors;
+  if (allowPreview && !requireGlossary) return errors;
 
   errors.push('People glossary is an incomplete preview and is not valid for publication.');
   if (hasBlockers) {

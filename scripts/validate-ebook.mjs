@@ -8,6 +8,7 @@ import path from 'node:path';
 import { scanArtifactText } from './scan-translation-artifacts.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
 import { ebookPeopleReadinessErrors } from './lib/ebook-people-readiness.mjs';
+import { ebookCurrentDateErrors, ebookManifestScopeErrors } from './lib/ebook-current-date-audits.mjs';
 import {
   KDP_MAX_HTML_FILES,
   ebookChapterHref,
@@ -22,10 +23,12 @@ import {
 
 const cliArgs = process.argv.slice(2);
 const allowPeoplePreview = cliArgs.includes('--allow-people-preview');
-const unknownOptions = cliArgs.filter((arg) => arg.startsWith('--') && arg !== '--allow-people-preview');
+const requirePeopleGlossary = cliArgs.includes('--require-people-glossary');
+const unknownOptions = cliArgs.filter((arg) => arg.startsWith('--') &&
+  arg !== '--allow-people-preview' && arg !== '--require-people-glossary');
 const positionalArgs = cliArgs.filter((arg) => !arg.startsWith('--'));
-if (unknownOptions.length > 0 || positionalArgs.length > 1) {
-  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview] dist/ebooks/<slug>/<slug>.epub');
+if (unknownOptions.length > 0 || positionalArgs.length > 1 || (allowPeoplePreview && requirePeopleGlossary)) {
+  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview | --require-people-glossary] dist/ebooks/<slug>/<slug>.epub');
   process.exit(1);
 }
 const epubPath = positionalArgs[0];
@@ -50,7 +53,7 @@ function formatChildError(error) {
 }
 
 if (!epubPath) {
-  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview] dist/ebooks/<slug>/<slug>.epub');
+  console.error('Usage: node scripts/validate-ebook.mjs [--allow-people-preview | --require-people-glossary] dist/ebooks/<slug>/<slug>.epub');
   process.exit(1);
 }
 
@@ -79,6 +82,7 @@ const slug = path.basename(epubPath, '.epub');
 const extractDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-validate-'));
 const ebookManifest = readEbookManifest();
 const sourceProduct = manifestMetadataForSlug(ebookManifest, slug);
+if (requirePeopleGlossary) errors.push(...ebookCurrentDateErrors(sourceProduct));
 try {
   execFileSyncChecked('unzip', ['-q', epubPath, '-d', extractDir], { stdio: 'pipe' });
 } catch (error) {
@@ -1034,6 +1038,7 @@ const qaChapterById = new Map((qaReportData?.chapters || []).map((chapter) => [c
 
 if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
   const metadata = readJson(path.join(productDir, 'metadata.json'));
+  if (requirePeopleGlossary) errors.push(...ebookManifestScopeErrors(sourceProduct, metadata));
   const metadataJsonText = fs.readFileSync(path.join(productDir, 'metadata.json'), 'utf8');
   const kdpMetadata = fs.existsSync(path.join(productDir, 'kdp-metadata.md'))
     ? fs.readFileSync(path.join(productDir, 'kdp-metadata.md'), 'utf8')
@@ -1232,8 +1237,11 @@ if (fs.existsSync(path.join(productDir, 'metadata.json'))) {
     }
   }
 
+  errors.push(...ebookPeopleReadinessErrors(peopleQa, {
+    allowPreview: allowPeoplePreview,
+    requireGlossary: requirePeopleGlossary,
+  }));
   if (peopleQa.active) {
-    errors.push(...ebookPeopleReadinessErrors(peopleQa, { allowPreview: allowPeoplePreview }));
     const expectedPeopleEntries = Number(peopleQa.shards || 0) + 1;
     if (!peopleEntries.includes('EPUB/people/index.xhtml')) {
       errors.push('Active people glossary is missing EPUB/people/index.xhtml.');

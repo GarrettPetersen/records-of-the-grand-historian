@@ -15,6 +15,7 @@ import {
 } from './lib/people-content.mjs';
 import { loadPeopleSiteContext } from './lib/people-site.mjs';
 import { personClaimReception } from './lib/people-reception.mjs';
+import { boundedDateLabel } from './lib/people-date-values.mjs';
 import {
   PERSON_PAGE_SHARD_COUNT,
   personIdSlugSuffix,
@@ -286,25 +287,35 @@ function renderWesternInterval(value) {
   return start && end ? `${escapeHtml(start)} to ${escapeHtml(end)}` : null;
 }
 
-function sourceDateText(value) {
-  if (typeof value === 'string') return value;
-  if (!value || typeof value !== 'object') return '';
-  return String(value.text ?? value.zh ?? value.en ?? '').trim();
+function sourceDateParts(value) {
+  if (typeof value === 'string') return [{ text: value.trim(), lang: null }];
+  if (!value || typeof value !== 'object') return [];
+  return [['zh', 'zh-Hant'], ['en', 'en'], ['text', null]]
+    .filter(([key]) => typeof value[key] === 'string')
+    .map(([key, lang]) => ({ text: value[key].trim(), lang }));
 }
 
-function renderDateValue(value) {
+export function renderDateValue(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  const context = value.dateContext && typeof value.dateContext === 'object' ? value.dateContext : value;
-  const western = formatPersonWesternYear(context.westernYear) ||
-    renderWesternInterval(context.westernInterval) ||
-    formatPersonWesternYear(context);
-  const source = sourceDateText(context.sourceDate) || String(context.dateText ?? '').trim();
-  if (!western && !source) return null;
-  const westernHtml = western ? `<span class="person-fact-date">${western}</span>` : '';
-  const sourceHtml = source && source !== western
-    ? `<span class="person-fact-date-source" lang="zh-Hant">${escapeHtml(source)}</span>`
-    : '';
-  return [westernHtml, sourceHtml].filter(Boolean).join(' ');
+  const contexts = [value];
+  if (value.dateContext && typeof value.dateContext === 'object' && !Array.isArray(value.dateContext)) contexts.push(value.dateContext);
+  const items = [];
+  for (const context of contexts) {
+    const dates = [formatPersonWesternYear(context.westernYear), renderWesternInterval(context.westernInterval),
+      context.westernBounds && boundedDateLabel({ westernBounds: context.westernBounds }, formatPersonWesternYear),
+      formatPersonWesternYear(context)].filter(Boolean);
+    for (const date of dates) items.push(`<span class="person-fact-date">${date}</span>`);
+    const sourceParts = sourceDateParts(context.sourceDate).filter(({ text }) => text);
+    if (!sourceParts.length && typeof context.dateText === 'string') sourceParts.push({ text: context.dateText.trim(), lang: null });
+    const seenSources = new Set();
+    for (const { text, lang } of sourceParts) {
+      if (!text || dates.includes(text) || seenSources.has(text)) continue;
+      seenSources.add(text);
+      items.push(`<span class="person-fact-date-source"${lang ? ` lang="${lang}"` : ''}>${escapeHtml(text)}</span>`);
+    }
+    if (context.unresolvedReason) items.push(`<span class="person-fact-date-reason">${escapeHtml(context.unresolvedReason)}</span>`);
+  }
+  return [...new Set(items)].join(' ') || null;
 }
 
 function renderScalarValue(value, key = null) {
@@ -350,7 +361,7 @@ function renderClaimDetail(field, value, peopleById) {
   return `<span class="person-fact-key">${escapeHtml(label)}</span> ${renderStructuredValue(value, peopleById, field)}`;
 }
 
-function renderClaimValue(claim, peopleById) {
+export function renderClaimValue(claim, peopleById) {
   const value = claim.value;
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     return renderStructuredValue(value, peopleById);
@@ -373,8 +384,8 @@ function renderClaimValue(claim, peopleById) {
       : date;
   const ignored = new Set([
     primaryKey,
-    'dateContext', 'sourceDate', 'westernYear', 'westernInterval', 'dateText',
-    'subjectRole', 'objectRole', 'unresolved',
+    'dateContext', 'sourceDate', 'westernYear', 'westernInterval', 'westernBounds', 'dateText',
+    'subjectRole', 'objectRole', 'unresolved', 'unresolvedReason',
   ]);
   if (primaryKey === 'en') {
     ignored.add('zh');
@@ -509,7 +520,7 @@ function uniqueFamilyRelationships(person) {
   return [...found.values()];
 }
 
-function renderFamilyAssertionDetails(details, peopleById) {
+export function renderFamilyAssertionDetails(details, peopleById) {
   const items = [];
   if (details.kinshipTerm) items.push(renderStructuredValue(details.kinshipTerm, peopleById));
   if (details.parentage && details.parentage !== 'biological') {
@@ -536,7 +547,10 @@ function renderFamilyAssertionDetails(details, peopleById) {
   if (details.intermediaryPersonIds?.length) {
     items.push(`Through ${renderStructuredValue(details.intermediaryPersonIds, peopleById)}`);
   }
-  const date = renderDateValue(details.dateContext ?? details.startDate);
+  const date = renderDateValue(details.dateContext ? details : {
+    dateContext: details.startDate,
+    unresolvedReason: details.unresolvedReason,
+  });
   if (date) items.push(date);
   if (details.endDate) items.push(`<span class="person-fact-key">Until</span> ${renderStructuredValue(details.endDate, peopleById)}`);
   if (details.note) items.push(escapeHtml(details.note));
@@ -993,7 +1007,7 @@ function renderPersonLocalNav(items) {
   </nav>`;
 }
 
-function generatePersonHtml(person, context) {
+export function generatePersonHtml(person, context) {
   const title = `${personFullDisplayName(person)} | 24 Histories`;
   const chronology = lifeSummaryForPerson(person);
   const stats = personReferenceStats(person);

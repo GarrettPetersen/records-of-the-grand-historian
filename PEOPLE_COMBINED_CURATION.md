@@ -12,16 +12,22 @@ It does not extract chapters, call models, approve its own inputs, build, or pus
   by replacing its expected hashes with whatever happens to be on disk.
 - A materialized candidate with complete independent source/identity and date
   approvals, full coverage, current references, and no proposed translation repairs.
-- The complete retained editorial history and exactly one new independently
-  approved review component. Report hashes identify that incoming component;
-  the full merged history is pinned separately. An older review cannot authorize
-  the new source amendment.
+- The complete retained editorial history followed by one or more independently
+  approved review components. For one component, each report's review context
+  pins its `editorialDecisionHash`. For multiple components, both report contexts
+  and the input seal pin the ordered `editorialDecisionHashes` array. The receipt
+  preserves the full history separately. Each new approval must match exactly one
+  new applied repair and vice versa, and repairs replay in component order. An
+  older review cannot authorize the new source amendment.
 - All extraction authors, including chunk authors, and all repair authors must
   be excluded from the independent reviewers. Preserve their provenance.
 
-The source mutation is limited to approved literal/idiomatic translation repairs.
-Chinese emendations, paragraph reordering and metadata changes are not supported
-by this command. Do not bypass that boundary with arbitrary JSON patches.
+Source mutations are limited to independently approved literal/idiomatic repairs,
+explicitly reviewed whole-paragraph reordering, and narrowly reviewed English
+footnote additions. See `PEOPLE_COMBINED_FOOTNOTE_REVIEW.md` for the additional
+footnote contract and exact-byte seal requirements. Chinese emendations and
+metadata changes are not supported; do not bypass these boundaries with
+arbitrary JSON patches.
 
 ## Commands
 
@@ -46,14 +52,26 @@ queue lease. An unfinished operation must start from an active or research-block
 date claim, not a ready claim that another extraction worker could reserve.
 The original generation's hashes and retained jobs stay intact during writes.
 
+The standard `apply-source-correspondence` command cooperates with this same
+process lock for its entire write operation. The publisher and date runner
+also fail if that lock already exists, including when it appears stale,
+without taking it over or removing it.
+This is not general chapter-write exclusion: many other source and translation
+writers, as well as manual edits, do not honor this lock. The host must ensure
+that none of those writers are running against the chapter during publication.
+This lock is cooperative protection, not a guarantee of cross-writer exclusion.
+This lock does not authorize Chinese emendations in combined curation.
+
 A durable, content-addressed receipt precedes all canonical changes. Exact old
 date reports, queue claims, local state and workflow artifacts are preserved.
 Only after all canonical after-files validate does an explicit reviewed-generation
 transition mark the new date claim and local workflow complete.
 
 Resume an interrupted operation with the same receipt and hash. Only exact before
-or after file contents are accepted; unrelated third-state edits fail. A hard-crash
-lease must expire before resumption. Do not discard retained conversations or
+or after file contents are accepted; unrelated third-state edits fail. After a
+hard crash the lock remains: preserve it and follow the host's authorized lock
+recovery procedure before retrying. The lease must also expire before resumption;
+neither an absent lock nor expiry alone authorizes a takeover. Do not discard retained conversations or
 claim history, fabricate date-only recovery receipts, or force a foreign executor.
 
 An independently reviewed code-dependency change can retain an unchanged full

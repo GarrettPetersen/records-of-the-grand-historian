@@ -104,7 +104,7 @@ Options:
   --out PATH             Generated catalog path.
   --candidates-out PATH  Generated identity-candidate dossier path.
   --site-index-out PATH  Generated chapter mention-link index path.
-  --require-resolved     Fail unless every extraction is prompt-current and every name block is resolved.
+  --require-resolved     Fail unless coverage, date audits, translation repairs, and identity resolution are complete.
   --self-test            Run compiler fixtures.`);
       process.exit(0);
     } else throw new Error(`Unknown option: ${arg}`);
@@ -112,14 +112,19 @@ Options:
   return options;
 }
 
-function rewriteLocalPersonRefs(value, localMap) {
-  if (Array.isArray(value)) return value.map((item) => rewriteLocalPersonRefs(item, localMap));
+function rewriteLocalPersonRefs(value, localMap, isReference = false) {
+  if (Array.isArray(value)) return value.map((item) => rewriteLocalPersonRefs(item, localMap, isReference));
   if (value && typeof value === 'object') {
     return Object.fromEntries(
-      Object.entries(value).map(([key, item]) => [key, rewriteLocalPersonRefs(item, localMap)]),
+      Object.entries(value).map(([key, item]) => [key, rewriteLocalPersonRefs(item, localMap, /personIds?$/iu.test(key))]),
     );
   }
-  return typeof value === 'string' && localMap.has(value) ? localMap.get(value) : value;
+  if (typeof value !== 'string') return value;
+  if (localMap.has(value)) return localMap.get(value);
+  if (isReference && /^[a-z0-9_-]+:\d{3}:p\d{3,}$/u.test(value)) {
+    throw new Error(`Cannot compile unresolved local person reference ${value}`);
+  }
+  return value;
 }
 
 function claimView(claim, localMap) {
@@ -815,6 +820,15 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       corpus.coverage.sourceChapters !== corpus.coverage.extractedChapters + corpus.coverage.missingChapterIds.length) {
     throw new Error('People corpus chapter coverage metadata is internally inconsistent');
   }
+  for (const person of corpus.localPeople.values()) {
+    for (const claim of person.claims) {
+      if (!['same-person', 'different-person'].includes(claim.predicate)) continue;
+      const target = claim.value?.personId ?? claim.value?.person;
+      if (typeof target !== 'string' || !corpus.localPeople.has(target)) {
+        throw new Error(`Cannot compile unresolved identity reference ${JSON.stringify(target)} in ${claim.id}`);
+      }
+    }
+  }
   const candidateDocument = buildPeopleResolutionCandidateDocument(corpus);
   const resolved = resolvePeopleClusters(corpus.localPeople, resolutionDocuments);
   const currentPromptVersion = readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion;
@@ -958,7 +972,40 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   };
 }
 
+function writeCompiledPeopleOutputs(result, options, writers = {
+  catalog: writePeopleCatalog,
+  candidates: writePeopleResolutionCandidates,
+  siteIndex: writePeopleSiteIndex,
+}) {
+  if (options.requireResolved && !result.catalog.complete) {
+    throw new Error(
+      `People catalog is incomplete: ${result.catalog.stats.legacyLocalPeople} legacy local people and ` +
+      `${result.catalog.stats.legacyChapters} legacy chapter(s), ` +
+      `${result.catalog.stats.missingChapters} missing chapter(s), ` +
+      `${result.catalog.stats.dateAuditPendingChapters} date-audit pending chapter(s), ` +
+      `${result.catalog.stats.pendingTranslationRepairs} pending translation repair(s), and ` +
+      `${result.catalog.stats.unresolvedCandidateBlocks} unresolved identity block(s)`,
+    );
+  }
+  writers.catalog(options.out, result.catalog);
+  writers.candidates(options.candidatesOut, result.candidates);
+  writers.siteIndex(options.siteIndexOut, result.siteIndex);
+}
+
 function selfTest() {
+  const referenceMap = new Map([['fixture:001:p001', 'per_fixture_1']]);
+  const resolvedValue = rewriteLocalPersonRefs({ relatedPersonIds: ['fixture:001:p001'], text: 'fixture:002:p001' }, referenceMap);
+  if (resolvedValue.relatedPersonIds[0] !== 'per_fixture_1' || resolvedValue.text !== 'fixture:002:p001') {
+    throw new Error('Nested local person references were not resolved correctly');
+  }
+  let rejectedMissingReference = false;
+  try {
+    rewriteLocalPersonRefs({ relatedPersonIds: ['fixture:002:p001'] }, referenceMap);
+  } catch (error) {
+    if (!error.message.includes('fixture:002:p001')) throw error;
+    rejectedMissingReference = true;
+  }
+  if (!rejectedMissingReference) throw new Error('Unresolved local person reference was silently retained');
   const makePerson = (id, en, zh) => ({
     localId: id,
     book: 'fixture',
@@ -1082,6 +1129,31 @@ function selfTest() {
     }],
   }];
   const result = compilePeopleCatalog(corpus, resolution).catalog;
+  const filteredCorpus = structuredClone(corpus);
+  filteredCorpus.localPeople.delete(child.localId);
+  let rejectedFilteredTarget = false;
+  try {
+    compilePeopleCatalog(filteredCorpus, resolution);
+  } catch (error) {
+    if (error.message !== `Cannot compile unresolved local person reference ${child.localId}`) throw error;
+    rejectedFilteredTarget = true;
+  }
+  if (!rejectedFilteredTarget) throw new Error('Catalog retained a family claim with a filtered target');
+  const identityCorpus = structuredClone(corpus);
+  identityCorpus.localPeople.get(left.localId).claims.push({
+    id: 'fixture:001:c0005', subject: left.localId, predicate: 'different-person',
+    value: { person: child.localId }, certainty: 'explicit', evidence: ['fixture:001:s0001'],
+  });
+  compilePeopleCatalog(identityCorpus, resolution);
+  identityCorpus.localPeople.delete(child.localId);
+  let rejectedIdentityTarget = false;
+  try {
+    compilePeopleCatalog(identityCorpus, resolution);
+  } catch (error) {
+    if (!error.message.startsWith(`Cannot compile unresolved identity reference "${child.localId}"`)) throw error;
+    rejectedIdentityTarget = true;
+  }
+  if (!rejectedIdentityTarget) throw new Error('Catalog retained an identity claim with a filtered target');
   const fan = result.people.find((person) => person.preferredName.en === 'Fan Ye');
   const compiledChild = result.people.find((person) => person.preferredName.en === 'Fan Child');
   if (result.people.length !== 2 || fan.references.length !== 2) {
@@ -1185,6 +1257,19 @@ function selfTest() {
     throw new Error('Curation keyed by a retired canonical ID did not follow the surviving cluster');
   }
   if (result.complete || result.stats.dateAuditPendingChapters !== 3) throw new Error('Unaudited fixture catalog was incorrectly marked complete');
+  const outputCalls = [];
+  const fixtureWriters = Object.fromEntries(['catalog', 'candidates', 'siteIndex'].map(key =>
+    [key, () => outputCalls.push(key)]));
+  const outputOptions = { requireResolved: true, out: 'catalog', candidatesOut: 'candidates', siteIndexOut: 'siteIndex' };
+  try {
+    writeCompiledPeopleOutputs({ catalog: result }, outputOptions, fixtureWriters);
+    throw new Error('Incomplete required catalog unexpectedly passed');
+  } catch (error) {
+    if (!error.message.includes('date-audit pending chapter(s)')) throw error;
+  }
+  if (outputCalls.length !== 0) throw new Error('Incomplete required catalog modified output before failing');
+  writeCompiledPeopleOutputs({ catalog: { ...result, complete: true } }, outputOptions, fixtureWriters);
+  if (outputCalls.join(',') !== 'catalog,candidates,siteIndex') throw new Error('Complete catalog output did not use every writer');
   const incompleteCorpus = structuredClone(corpus);
   incompleteCorpus.coverage = { sourceChapters: 4, extractedChapters: 3, missingChapterIds: ['fixture:004'] };
   const incomplete = compilePeopleCatalog(incompleteCorpus, resolution).catalog;
@@ -1239,18 +1324,7 @@ function main() {
     }
   }
   const result = compilePeopleCatalog(corpus, resolutions, curation.people);
-  writePeopleCatalog(options.out, result.catalog);
-  writePeopleResolutionCandidates(options.candidatesOut, result.candidates);
-  writePeopleSiteIndex(options.siteIndexOut, result.siteIndex);
-  if (options.requireResolved && !result.catalog.complete) {
-    throw new Error(
-      `People catalog is incomplete: ${result.catalog.stats.legacyLocalPeople} legacy local people and ` +
-      `${result.catalog.stats.legacyChapters} legacy chapter(s), ` +
-      `${result.catalog.stats.missingChapters} missing chapter(s), ` +
-      `${result.catalog.stats.pendingTranslationRepairs} pending translation repair(s), and ` +
-      `${result.catalog.stats.unresolvedCandidateBlocks} unresolved identity block(s)`,
-    );
-  }
+  writeCompiledPeopleOutputs(result, options);
   console.log(
     `people catalog: ${result.catalog.stats.canonicalPeople} canonical from ` +
     `${result.catalog.stats.localPeople} local people; ${result.catalog.stats.unresolvedCandidateBlocks} ` +

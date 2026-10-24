@@ -28,7 +28,8 @@ Options:
   --require-languagetool-current
                   Require current cached LanguageTool scores for the product source chapters
   --require-manual-signoff
-                  Also require the artifact-bound Kindle/KDP manual QA signoff`);
+                  Require glossary presence/readiness checks and artifact-bound Kindle/KDP manual QA signoff;
+                  independent chapter qualification and provenance checks are still required`);
 }
 
 function parseArgs(argv) {
@@ -92,6 +93,10 @@ function parseArgs(argv) {
     usage();
     process.exit(2);
   }
+  if (opts.allowPeoplePreview && opts.requireManualSignoff) {
+    console.error('--allow-people-preview cannot be combined with --require-manual-signoff.');
+    process.exit(2);
+  }
   if (!opts.all && !opts.slug) {
     usage();
     process.exit(2);
@@ -147,7 +152,8 @@ function runProduct(productLike, opts) {
     process.exit(1);
   }
 
-  const peoplePreviewArgs = opts.allowPeoplePreview ? ['--allow-people-preview'] : [];
+  const peoplePreviewArgs = opts.allowPeoplePreview ? ['--allow-people-preview'] :
+    opts.requireManualSignoff ? ['--require-people-glossary'] : [];
   run('EPUB structure validation', 'node', [
     'scripts/validate-ebook.mjs',
     ...peoplePreviewArgs,

@@ -32,5 +32,11 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Test people date-hint normalization
+        run: npm run people:hints:self-test
+
+      - name: Test unresolved people-date holds
+        run: node scripts/test-people-unresolved-hold.mjs
+
       - name: Build and validate the full site
         run: npm run build

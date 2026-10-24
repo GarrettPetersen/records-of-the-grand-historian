@@ -1,0 +1,11 @@
+import {readFileSync, writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {dateAuditDiagnostics, dateAuditItems} from '../../../../../../scripts/lib/people-date-audit.mjs';
+const file='data/people/generated/date-workflow/jinshu/022/p046-removal-candidate-incomplete.json';
+const bytes=readFileSync(file);
+const sha=createHash('sha256').update(bytes).digest('hex');
+if(sha!=='2c385031aa005500fc2721c075738b403d2bd8f1f9096cbe5e9a2aa6a4e17713') throw new Error('Unexpected candidate hash');
+const diagnostics=dateAuditDiagnostics(dateAuditItems(JSON.parse(bytes)));
+const output='data/people/generated/date-workflow/jinshu/022/p046-removal-date-diagnostics-incomplete.json';
+writeFileSync(output,JSON.stringify({candidateBytesSha256:sha,diagnostics},null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({diagnosticCount:diagnostics.length,affectedClaims:new Set(diagnostics.map(x=>x.item)).size,output}));

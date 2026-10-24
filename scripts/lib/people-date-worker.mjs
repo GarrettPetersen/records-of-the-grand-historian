@@ -107,6 +107,53 @@ class DateArtifactValidationError extends Error {
   }
 }
 
+function preserveDateBytes(directory, prefix, bytes) {
+  const digest = createHash('sha256').update(bytes).digest('hex');
+  const file = path.join(directory, `${prefix}-${digest}.json`);
+  const temporaryDirectory = fs.mkdtempSync(path.join(directory, '.date-evidence-'));
+  const temporary = path.join(temporaryDirectory, 'artifact');
+  try {
+    const descriptor = fs.openSync(temporary, 'wx', 0o600);
+    try { fs.writeFileSync(descriptor, bytes); fs.fsyncSync(descriptor); }
+    finally { fs.closeSync(descriptor); }
+    try { fs.linkSync(temporary, file); }
+    catch (error) { if (error.code !== 'EEXIST') throw error; }
+    if (!fs.readFileSync(file).equals(bytes)) throw new Error(`Conflicting immutable date evidence: ${file}`);
+  } finally {
+    if (fs.existsSync(temporary)) fs.unlinkSync(temporary);
+    fs.rmdirSync(temporaryDirectory);
+  }
+  return digest;
+}
+
+function validateResearchSupplement(task, blockerFile) {
+  const supplement = task.researchSupplement;
+  if (!supplement || typeof supplement !== 'object' || Array.isArray(supplement) || supplement.schemaVersion !== 1 ||
+      typeof supplement.evidence !== 'string' || !supplement.evidence.trim()) throw new Error('A valid research supplement is required for this blocked repair');
+  const blockerHash = typeof supplement.blockerHash === 'string' && supplement.blockerHash.startsWith('sha256:') ? supplement.blockerHash.slice(7) : '';
+  if (blockerHash !== task.state.researchBlockerHash && blockerHash !== task.state.artifactHash) throw new Error('Research supplement blockerHash does not match the retained repair');
+  for (const [field, expected] of Object.entries({ book: task.packet.book, chapter: task.packet.chapter,
+    jobKey: task.key, sourceHash: task.packet.sourceHash, extractionHash: task.packet.extractionHash,
+    originalSourceHash: task.workflowSourceHash, originalExtractionHash: task.workflowExtractionHash,
+    blockerHash: `sha256:${blockerHash}` })) {
+    if (typeof expected !== 'string' || !expected || supplement[field] !== expected) throw new Error(`Research supplement ${field} does not match the retained repair`);
+  }
+  if (!/^[a-f0-9]{64}$/.test(blockerHash ?? '')) throw new Error('Retained blocker has no valid artifact hash');
+  if (!task.state.agentId || !task.state.sent) throw new Error('Research supplement requires the retained repair conversation');
+  const legacy = blockerFile && fs.existsSync(blockerFile) ? fs.readFileSync(blockerFile) : null;
+  const archived = path.join(task.directory, `raw-research-blocker-${blockerHash}.json`);
+  const evidence = legacy && createHash('sha256').update(legacy).digest('hex') === blockerHash
+    ? legacy : fs.existsSync(archived) ? fs.readFileSync(archived) : null;
+  if (!evidence || createHash('sha256').update(evidence).digest('hex') !== blockerHash) throw new Error('Retained blocker bytes do not match its artifact hash');
+  let blocker;
+  try { blocker = JSON.parse(evidence.toString('utf8')); } catch { throw new Error('Retained blocker bytes are not JSON'); }
+  if (blocker?.blocked !== true) throw new Error('Research supplement must bind an actual blocked artifact');
+  const suppliedHash = createHash('sha256').update(JSON.stringify(supplement)).digest('hex');
+  if (task.state.researchBlockerHash === blockerHash && task.state.researchSupplementHash && task.state.researchSupplementHash !== suppliedHash) throw new Error('Research supplement changed for the retained blocker');
+  preserveDateBytes(task.directory, 'raw-research-blocker', evidence);
+  return supplement;
+}
+
 export function cursorDateWorker(options, control, {
   Agent: agentClient = Agent,
   send = sendCursorAgentWhenReady,
@@ -124,6 +171,8 @@ export function cursorDateWorker(options, control, {
       if (control.stopRequested) throw new Error('Date worker launch stopped; saved work is resumable');
     };
     let agent;
+    let delegatedRetry = false;
+    let usageSaved = false;
     const wait = async run => {
       control.activeRuns?.set(run.id, {
         run, agentId: agent.agentId, label: task.key,
@@ -153,6 +202,10 @@ export function cursorDateWorker(options, control, {
       } catch (error) {
         throw new DateArtifactValidationError(`Invalid date artifact ${output}: ${error.message}`, artifactHash, error);
       }
+      if (task.kind === 'repair' && task.directory) {
+        preserveDateBytes(task.directory, 'raw-repair-artifact', bytes);
+        if (artifact.blocked) preserveDateBytes(task.directory, 'raw-research-blocker', bytes);
+      }
       return { artifact, artifactHash };
     };
     const returned = async ({ artifact, artifactHash }) => {
@@ -177,20 +230,27 @@ export function cursorDateWorker(options, control, {
       }
     };
     try {
+      const blockerFile = task.kind === 'repair' && typeof task.directory === 'string'
+        ? path.join(task.directory, 'research-blocker.json') : null;
+      if (task.kind === 'repair' && task.state.researchSupplementHash && !task.researchSupplement) throw new Error('Retained research continuation requires its original research supplement for recovery');
+      const supplement = task.researchSupplement ? validateResearchSupplement(task, blockerFile) : null;
       const input = dateWorkerInput(task);
+      if (supplement) input.researchSupplement = supplement;
       const payload = JSON.stringify(input);
       const maxWorkerBytes=task.maxWorkerBytes??options.maxWorkerBytes;
       if (Buffer.byteLength(payload) > maxWorkerBytes) throw new Error(`Date ${task.kind} packet exceeds ${maxWorkerBytes} bytes; inspect or split the assignment before spending`);
-      const blockerFile = task.kind === 'repair' && typeof task.directory === 'string'
-        ? path.join(task.directory, 'research-blocker.json') : null;
-      // A retained repair chat gets one chance to continue after a host-side
-      // invariant repair. If it still returns a persisted blocker, preserve its
-      // identity and replace only that exhausted repair context.
-      if (blockerFile && fs.existsSync(blockerFile) && task.state.agentId && task.state.status === 'returned' && !task.state.replacementUsed) {
-        const priorAgentId = task.state.agentId;
-        await save({ priorAgentId, replacementUsed: true, agentId: null, runId: null, sent: false, status: 'replacement' });
-        Object.assign(task.state, { priorAgentId, replacementUsed: true, agentId: null, runId: null, sent: false, status: 'replacement' });
-      }
+      const oldBlockerHash = supplement ? supplement.blockerHash.slice(7) : null;
+      const verifyAttempt = () => {
+        const supplementHash = createHash('sha256').update(JSON.stringify(supplement)).digest('hex');
+        const attempts = task.state.researchAttempts;
+        if (!Array.isArray(attempts) || task.state.researchBlockerHash !== oldBlockerHash || task.state.researchSupplementHash !== supplementHash ||
+            !attempts.some(attempt => attempt.blockerHash === oldBlockerHash && attempt.supplementHash === supplementHash &&
+              attempt.agentId === task.state.agentId && typeof task.state.runId === 'string' && task.state.runId &&
+              typeof attempt.priorRunId === 'string' && attempt.priorRunId.trim() === attempt.priorRunId && attempt.priorRunId &&
+              attempt.priorRunId !== task.state.runId)) {
+          throw new Error('No post-dispatch run proves this research supplement continuation');
+        }
+      };
       if (task.state.agentId) {
         agent = await agentClient.resume(task.state.agentId,{apiKey:options.apiKey});
         const runs = await agentClient.listRuns(agent.agentId,{runtime:'cloud',apiKey:options.apiKey,limit:20});
@@ -208,7 +268,13 @@ export function cursorDateWorker(options, control, {
         }
         // A changed artifact may be a completed correction from an interrupted
         // continuation; an unchanged rejected artifact still needs that chat.
-        if (retained && (!task.state.validationError || (task.state.artifactHash && retained.artifactHash !== task.state.artifactHash))) return await returned(retained);
+        if (retained && supplement && retained.artifactHash !== oldBlockerHash &&
+            (!task.state.validationError || retained.artifactHash !== task.state.artifactHash)) {
+          verifyAttempt();
+          return await returned(retained);
+        }
+        if (retained && !supplement && retained.artifact.blocked && !options.recoverOnly && !control.stopRequested) throw new Error('A research supplement is required before continuing this blocked repair');
+        if (retained && !supplement && (!task.state.validationError || (task.state.artifactHash && retained.artifactHash !== task.state.artifactHash))) return await returned(retained);
       } else {
         assertLaunchAllowed();
         agent = await agentClient.create({apiKey:options.apiKey,name:`Dates ${task.kind} ${task.packet.book}/${task.packet.chapter}`,
@@ -221,13 +287,21 @@ export function cursorDateWorker(options, control, {
       // A bare error string otherwise leaves the reviewer reasoning from a
       // stale attachment and repeatedly publishing an incompatible artifact.
       const revisedRepairPacket = task.state.sent && task.kind === 'repair' && task.state.validationError;
-      const resolvedInvariant = blockerFile && fs.existsSync(blockerFile)
-        ? 'The host has resolved the prior active-hint invariant: an empty active-date hint is valid when every dated row is a death, death-place, deceased participation, death attestation, or separately classified later reception. Do not report this as a research hold; return the complete repair artifact.'
-        : '';
       const message = task.state.sent
-        ? `${revisedRepairPacket ? `${payload}\nThis supersedes every earlier repair packet. ` : ''}Continue your existing date work; do not restart research. ${task.state.validationError ?? ''} ${resolvedInvariant} Publish the complete current artifact at /opt/cursor/artifacts/${output}.`
+        ? `${revisedRepairPacket || supplement ? `${payload}\nThis supersedes every earlier repair packet. ` : ''}Continue your existing date work; do not restart research. ${task.state.validationError ?? ''} Publish the complete current artifact at /opt/cursor/artifacts/${output}.`
         : `${payload}\nWrite only the requested JSON artifact to /opt/cursor/artifacts/${output}. You have no repository assignment: do not clone the corpus, inspect a prior extraction, commit, push, or spend through another model API.`;
+      if (Buffer.byteLength(message) > maxWorkerBytes) throw new Error(`Date ${task.kind} message exceeds ${maxWorkerBytes} bytes; inspect or split the assignment before spending`);
       assertLaunchAllowed();
+      if (supplement) {
+        if (typeof task.state.runId !== 'string' || !task.state.runId || task.state.runId !== task.state.runId.trim()) throw new Error('Retained research blocker has no prior run identity');
+        const researchSupplementHash = preserveDateBytes(task.directory, 'research-supplement', Buffer.from(JSON.stringify(supplement)));
+        if (task.state.researchBlockerHash === oldBlockerHash && task.state.researchSupplementHash && task.state.researchSupplementHash !== researchSupplementHash) throw new Error('Research supplement changed for the retained blocker');
+        const researchAttempts = [...(task.state.researchAttempts ?? [])];
+        if (!researchAttempts.some(attempt => attempt.blockerHash === oldBlockerHash && attempt.supplementHash === researchSupplementHash)) {
+          researchAttempts.push({ blockerHash: oldBlockerHash, supplementHash: researchSupplementHash, agentId: task.state.agentId, priorRunId: task.state.runId ?? null });
+        }
+        await save({ researchSupplementHash, researchBlockerHash: oldBlockerHash, researchAttempts });
+      }
       await save({status:'sending'});
       assertLaunchAllowed();
       // The shared send helper retries asynchronously. Recheck the stop on each
@@ -245,6 +319,8 @@ export function cursorDateWorker(options, control, {
       const result = await wait(run);
       const artifact = await download();
       if (!artifact) throw new Error(`Date worker ended ${result.status} without ${output}${result.error ? `: ${result.error.message ?? JSON.stringify(result.error)}` : ''}`, { cause: result.error });
+      if (supplement && artifact.artifactHash === oldBlockerHash) throw new Error('Retained research blocker was returned unchanged after continuation');
+      if (supplement) verifyAttempt();
       return await returned(artifact);
     } catch(error) {
       requestCursorUsageLimitStop(control,error);
@@ -252,18 +328,29 @@ export function cursorDateWorker(options, control, {
       const restarts = Number(task.state.agentRestarts ?? 0);
       // Cloud runs sometimes end with "Agent not found" after a few cents.
       // Drop that agent and start another one; do not discard returned jobs.
-      if (restarts < 2 && message.includes('Agent not found') && !control.stopRequested) {
-        await save({ status: 'retry', lastError: message, agentRestarts: restarts + 1, agentId: null, runId: null, sent: false });
+      if (!task.researchSupplement && !options.recoverOnly && restarts < 2 && message.includes('Agent not found') && !control.stopRequested) {
+        const priorUsage = await usageCheckpoint();
+        if (control.stopRequested) {
+          await save({ status: 'interrupted', lastError: message, usage: priorUsage });
+          usageSaved = true;
+          throw error;
+        }
+        await save({ status: 'retry', lastError: message, agentRestarts: restarts + 1, agentId: null, runId: null, sent: false,
+          priorUsages: [...(task.state.priorUsages ?? []), priorUsage] });
         task.state.agentId = null;
         task.state.runId = null;
         task.state.sent = false;
-        return runTask(task);
+        // Await the retry before entering this invocation's asynchronous
+        // finally block; otherwise an early rejection can go unhandled while
+        // usage checkpointing is still running.
+        delegatedRetry = true;
+        return await runTask(task);
       }
       await save({status:'interrupted',lastError:message,
         ...(error instanceof DateArtifactValidationError ? {validationError:error.message,artifactHash:error.artifactHash} : {})});
       throw error;
     } finally {
-      await save({ usage: await usageCheckpoint() });
+      if (!delegatedRetry && !usageSaved) await save({ usage: await usageCheckpoint() });
     }
   };
   return runTask;

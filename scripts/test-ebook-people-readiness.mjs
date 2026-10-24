@@ -35,6 +35,34 @@ assert.equal(ready.ready, true);
 assert.equal(ready.preview, false);
 assert.deepEqual(ready.people.map((item) => item.id), ['ready']);
 
+// A locally complete product cannot promote globally incomplete preview data.
+const previewContext = { ...context, preview: true };
+const previewProduct = { book: 'fixture', chapters: ['001'] };
+const gatedPreview = assessEbookPeopleReadiness(previewContext, previewProduct);
+assert.equal(gatedPreview.active, false);
+assert.equal(gatedPreview.ready, false);
+assert.equal(gatedPreview.preview, false);
+assert.equal(gatedPreview.reason, 'people-catalog-preview');
+const permittedPreview = assessEbookPeopleReadiness(previewContext, previewProduct, { allowPreview: true });
+assert.equal(permittedPreview.active, true);
+assert.equal(permittedPreview.ready, false);
+assert.equal(permittedPreview.preview, true);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: permittedPreview.active,
+  ready: permittedPreview.ready,
+  preview: permittedPreview.preview,
+  people: permittedPreview.people.length,
+  shards: 1,
+  expectedMentionLinks: 0,
+  expectedBacklinks: 0,
+  missingChapters: permittedPreview.missingChapters,
+  legacyChapters: permittedPreview.legacyChapters,
+  dateAuditChapters: permittedPreview.dateAuditChapters,
+  peopleNeedingReview: permittedPreview.peopleNeedingReview.length,
+}, { requireGlossary: true }), [
+  'People glossary is an incomplete preview and is not valid for publication.',
+]);
+
 const unaudited = structuredClone(context);
 delete unaudited.siteIndex.chapters['fixture:001'].dateAudit;
 const datesPending = assessEbookPeopleReadiness(unaudited, { book: 'fixture', chapters: ['001'] });
@@ -76,6 +104,10 @@ const previewQa = {
   active: true,
   ready: false,
   preview: true,
+  people: 1,
+  shards: 1,
+  expectedMentionLinks: 1,
+  expectedBacklinks: 1,
   missingChapters: ['003'],
   legacyChapters: [],
   dateAuditChapters: [],
@@ -86,6 +118,25 @@ assert.deepEqual(ebookPeopleReadinessErrors(previewQa), [
   'Active people glossary retains coverage, date-audit or identity-review blockers.',
 ]);
 assert.deepEqual(ebookPeopleReadinessErrors(previewQa, { allowPreview: true }), []);
+assert.deepEqual(ebookPeopleReadinessErrors(previewQa, { allowPreview: true, requireGlossary: true }), [
+  'People glossary is an incomplete preview and is not valid for publication.',
+  'Active people glossary retains coverage, date-audit or identity-review blockers.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors({ active: false }, { requireGlossary: true }), [
+  'A publication-ready people glossary is required but is not active.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors(null, { requireGlossary: true }), [
+  'A publication-ready people glossary is required but is not active.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors({ active: true, ready: true, dateAuditChapters: [] }, { requireGlossary: true }), [
+  'Required people-glossary readiness report has missing or invalid fields.',
+]);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: true, ready: true, preview: false, missingChapters: [], legacyChapters: [],
+  dateAuditChapters: [], peopleNeedingReview: -1,
+}, { requireGlossary: true }), [
+  'Required people-glossary readiness report has missing or invalid fields.',
+]);
 assert.deepEqual(ebookPeopleReadinessErrors({
   ...previewQa,
   preview: false,
@@ -96,11 +147,49 @@ assert.deepEqual(ebookPeopleReadinessErrors({
   active: true,
   ready: true,
   preview: false,
+  people: 1,
+  shards: 1,
+  expectedMentionLinks: 1,
+  expectedBacklinks: 1,
   missingChapters: [],
   legacyChapters: [],
   dateAuditChapters: [],
   peopleNeedingReview: 0,
 }), []);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: true,
+  ready: true,
+  preview: false,
+  people: 1,
+  shards: 1,
+  expectedMentionLinks: 1,
+  expectedBacklinks: 1,
+  missingChapters: [],
+  legacyChapters: [],
+  dateAuditChapters: [],
+  peopleNeedingReview: 0,
+}, { requireGlossary: true }), []);
+assert.deepEqual(ebookPeopleReadinessErrors({
+  active: true, ready: true, preview: false, people: 0, shards: 0,
+  expectedMentionLinks: 0, expectedBacklinks: 0, missingChapters: [], legacyChapters: [],
+  dateAuditChapters: [], peopleNeedingReview: 0,
+}, { requireGlossary: true }), [
+  'Required people-glossary readiness report has missing or invalid fields.',
+]);
+const validRequiredQa = {
+  active: true, ready: true, preview: false, people: 1, shards: 1,
+  expectedMentionLinks: 1, expectedBacklinks: 1, missingChapters: [], legacyChapters: [],
+  dateAuditChapters: [], peopleNeedingReview: 0,
+};
+for (const [field, badValue] of [
+  ['people', 0], ['shards', 0], ['expectedMentionLinks', -1], ['expectedBacklinks', -1],
+  ['peopleNeedingReview', -1], ['missingChapters', null], ['legacyChapters', null],
+  ['dateAuditChapters', null], ['ready', 'true'], ['preview', null],
+]) {
+  assert.deepEqual(ebookPeopleReadinessErrors({ ...validRequiredQa, [field]: badValue }, { requireGlossary: true }), [
+    'Required people-glossary readiness report has missing or invalid fields.',
+  ], `invalid ${field} should fail required mode`);
+}
 assert.deepEqual(ebookPeopleReadinessErrors({
   active: true,
   ready: true,

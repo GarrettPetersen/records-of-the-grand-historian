@@ -6,6 +6,7 @@ import {
   isExactWorkerSearchResult,
   parseArgs,
   mergeLiveWorkerState,
+  observeWorkerActivity,
   rosterWorkersFromDocuments,
   workerPrompt,
   workersEligibleForDispatch,
@@ -53,6 +54,41 @@ test('idle selection respects running state and cooldown', () => {
   assert.equal(eligible.some((row) => row.worker === 'grokbot-25'), false);
   assert.equal(eligible.some((row) => row.worker === 'grokbot-26'), false);
   assert.equal(eligible.some((row) => row.worker === 'grokbot-27'), true);
+});
+
+test('observed activity holds an idle-looking worker quiet instead of interrupting it', () => {
+  const workers = mergeLiveWorkerState(
+    rosterWorkersFromDocuments([{ value: { rows: rosterRows() } }]),
+    new Set(),
+  );
+  const worker = workers.find((row) => row.worker === 'grokbot-25');
+  worker.lastActivityAt = 9_900;
+  const state = {
+    workers: {
+      'grokbot-25': { lastDispatchAt: 8_000, lastActivityAtSeen: 9_000 },
+    },
+  };
+  assert.equal(observeWorkerActivity(workers, state, 10_000), true);
+  assert.equal(state.workers['grokbot-25'].lastObservedActivityAt, 10_000);
+  assert.equal(observeWorkerActivity(workers, state, 10_001), false);
+  assert.equal(
+    workersEligibleForDispatch(workers, state, {
+      force: false,
+      cooldownMs: 1_000,
+      activityQuietMs: 30_000,
+      now: 20_000,
+    }).some((row) => row.worker === 'grokbot-25'),
+    false,
+  );
+  assert.equal(
+    workersEligibleForDispatch(workers, state, {
+      force: false,
+      cooldownMs: 1_000,
+      activityQuietMs: 30_000,
+      now: 40_000,
+    }).some((row) => row.worker === 'grokbot-25'),
+    true,
+  );
 });
 
 test('active-worker ceiling prevents a new dispatch burst after partial completion', () => {

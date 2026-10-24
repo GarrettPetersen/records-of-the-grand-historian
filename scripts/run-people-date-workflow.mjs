@@ -7,10 +7,10 @@ import { parseArgs } from 'node:util';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
 import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
+import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
 import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
 import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
-import { mutateRemotePeopleWorkLedger, claimIsActive, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+import { mutateRemotePeopleWorkLedger, extractionClaimBlocksDateAudit, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { createRunControl, installSignalHandlers } from './lib/cursor-run-control.mjs';
@@ -29,7 +29,7 @@ const {values:o} = parseArgs({ options:{book:{type:'string'},chapter:{type:'stri
   'max-rounds':{type:'string',default:'3'},'max-attempts':{type:'string',default:'3'},'max-run-cost':{type:'string',default:'3'},
   'max-run-tokens':{type:'string',default:'4000000'},'run-timeout-minutes':{type:'string',default:'20'},
   'max-tool-turns':{type:'string',default:'20'},
-  'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},takeover:{type:'boolean'},
+  'attachment-dir':{type:'string'},'release':{type:'boolean'},'retry-blocked':{type:'boolean'},'research-supplement':{type:'string'},takeover:{type:'boolean'},
   'min-approved':{type:'string',default:'0'},'summary-out':{type:'string'},order:{type:'string',default:'balanced'},
   'recover-only':{type:'boolean'},'cursor-capacity-start':{type:'string'} } });
 const integer = (key,max) => { const value=Number(o[key]); if(!Number.isSafeInteger(value)||value<1||value>max)throw new Error(`Invalid --${key}`); return value; };
@@ -37,6 +37,8 @@ if ((!o.book && !o.all) || (o.book && o.all) || (o.chapter && !o.book)) throw ne
 if (!['cursor-sdk','grokbot','manual','openrouter'].includes(o.lane)) throw new Error('Unknown date worker lane');
 if (!['balanced','calibration'].includes(o.order))throw new Error('Unknown date workload order');
 if (o.chapter && !/^\d{3}$/.test(o.chapter)) throw new Error('--chapter requires three digits');
+if (o['research-supplement'] && (!o.book || !o.chapter || o.lane !== 'cursor-sdk' || !o['retry-blocked'] || o.release || o['dry-run'])) throw new Error('--research-supplement requires one explicit Cursor chapter and --retry-blocked');
+if (o['retry-blocked'] && o.lane === 'cursor-sdk' && !o['research-supplement'] && !o['recover-only'] && !o['dry-run']) throw new Error('Cursor research-blocked retry requires a fingerprint-bound --research-supplement');
 if (!o['dry-run'] && !o.worker) throw new Error('A stable --worker ID is required');
 if (o.release && (!o.book || !o.chapter)) throw new Error('--release requires one explicit --book and --chapter');
 if (!o.release && !o['recover-only'] && !o['dry-run'] && o.lane==='cursor-sdk' && (!o.run || !o.model)) throw new Error('Paid Cursor execution requires explicit --run and --model; use --dry-run otherwise');
@@ -69,6 +71,13 @@ const options = {maxUnits:integer('max-units',1000),maxBytes:integer('max-worker
   jobConcurrency,
   maxWorkerBytes:integer('max-worker-kib',512)*1024,maxRounds:integer('max-rounds',20),maxAttempts:integer('max-attempts',20),
   maxRunTokens:integer('max-run-tokens',10000000),timeoutMs:integer('run-timeout-minutes',120)*60000};
+if (o['research-supplement']) {
+  options.researchSupplement = readJson(path.resolve(o['research-supplement']));
+  if (options.researchSupplement?.book !== o.book || options.researchSupplement?.chapter !== o.chapter ||
+      options.researchSupplement?.schemaVersion !== 1 || typeof options.researchSupplement?.jobKey !== 'string') {
+    throw new Error('Research supplement must identify the selected chapter and retained job');
+  }
+}
 const dollars=Number(o['max-run-cost']);
 if(!Number.isFinite(dollars)||dollars<=0||dollars>20) throw new Error('Invalid --max-run-cost');
 options.maxRunCostCents=Math.round(dollars*100);
@@ -123,13 +132,16 @@ if (o['dry-run']) {
     if(today<capacityStart)throw new Error(`Cursor SDK capacity is unavailable until ${capacityStart}; use --recover-only for artifacts without inference`);
   }
   options.apiKey=process.env.CURSOR_API_KEY;
-  if(!o.release && o.lane==='cursor-sdk' && !options.apiKey) throw new Error('CURSOR_API_KEY is missing');
+  // Artifact-only recovery must remain usable after a paid lane is unavailable
+  // or its local credential has been rotated: it only reads retained results and
+  // never asks cursorDateWorker to start or continue a model turn.
+  if(!o.release && !o['recover-only'] && o.lane==='cursor-sdk' && !options.apiKey) throw new Error('CURSOR_API_KEY is missing');
   options.openRouterKey=process.env.OPENROUTER_API_KEY;
   options.openRouterModel=o.model??DEFAULT_OPENROUTER_FREE_MODEL;
   if(!o.release && o.lane==='openrouter' && !o['recover-only']) {
     await verifyOpenRouterFreeModel({key:options.openRouterKey,model:options.openRouterModel});
   }
-  const unlock=acquireProcessRunLock(path.join(PEOPLE_DIR,'generated','date-workflow-run.lock'),{label:'People date workflow'});
+  const unlock=acquireProcessRunLock(path.join(PEOPLE_DIR,'generated','date-workflow-run.lock'),{label:'People date workflow',failIfExists:true});
   const removeSignals=installSignalHandlers(control);
   const executorToken=randomUUID(),leaseMs=Math.max(3600000,options.timeoutMs+600000);
   let cursor=0,started=0,approved=0;
@@ -139,13 +151,15 @@ if (o['dry-run']) {
     // checkpointing its remote outcome. No model turn is needed for this step.
     mutateRemotePeopleWorkLedger(ledger=>{
       for(const [key,claim] of Object.entries(ledger.dateAudits??{})) {
-        if(claim.worker!==o.worker || claim.status==='ready' || (claim.executorHost && claim.executorHost!==os.hostname()))continue;
+        if(Object.hasOwn(claim,'combinedCuration') || claim.worker!==o.worker || ['ready','stale-source'].includes(claim.status) || (claim.executorHost && claim.executorHost!==os.hostname()))continue;
         if(dateExecutorIsBusy(claim,{executorToken,takeover:o.takeover}))continue;
         const [book,chapter]=key.split('/');
         if(fs.existsSync(path.join(PEOPLE_DIR,'extractions',book,`${chapter}.json`)) && dateAuditStatus(book,chapter).status==='audited') {
           const current=buildDateAuditPacket(book,chapter);
           const receipt=path.join(PEOPLE_DIR,'date-repairs',book,chapter,`${current.extractionHash.slice(7)}.json`);
           if(claim.sourceHash!==current.sourceHash || (claim.extractionHash!==current.extractionHash && (!fs.existsSync(receipt)||readJson(receipt).proposal.extractionHash!==claim.extractionHash)))continue;
+          const evidence=completedDateClaimEvidence({book,chapter,claim});
+          if(!evidence.ready){console.error(`Retaining date ownership ${key}: ${evidence.reason}; recover the retained generation before reconciliation`);continue;}
           claim.status='ready';claim.updatedAt=new Date().toISOString();
         }
       }
@@ -154,28 +168,39 @@ if (o['dry-run']) {
       while(!control.stopRequested && cursor<targets.length && started<limit) {
         const target=targets[cursor++],key=`${target.book}/${target.chapter}`;
         const packet=buildDateAuditPacket(target.book,target.chapter);
-        const reserved=mutateRemotePeopleWorkLedger(ledger=>{
+        let reserved;
+        try { reserved=mutateRemotePeopleWorkLedger(ledger=>{
           ledger.dateAudits ??= {};
           const prior=ledger.dateAudits[key];
+          if(prior && Object.hasOwn(prior,'combinedCuration'))throw new CompletedDateGenerationHold(`Combined curation ${key} is pending; recover its sealed receipt before resuming or releasing date work`);
           if(o.release) {
             if(!prior||prior.worker!==o.worker)throw new Error('Only the owning worker may release date work');
             if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))throw new Error('Stop the active executor before explicitly taking over its reservation');
             delete ledger.dateAudits[key];return {released:true};
           }
+          // Re-check inside each queue CAS attempt, before archiving or claiming.
+          assertCompletedGenerationSafe(target);
           if(dateExecutorIsBusy(prior,{executorToken,takeover:o.takeover}))return null;
-          if(prior && !['ready','stale-source'].includes(prior.status) && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
+          if(prior && prior.status!=='ready' && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
-          if(claimIsActive(ledger.claims[key]) && !['ready','complete'].includes(ledger.claims[key].status))return null;
-          const archived=prior && ['ready','stale-source'].includes(prior.status);
+          if(extractionClaimBlocksDateAudit(ledger.claims[key]))return null;
+          const archived=prior?.status==='ready';
           if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
           const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
           const retainedState=path.join(dateWorkflowDirectory(target.book,target.chapter),'state.json');
           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
-          if(changed && prior.status!=='ready' && !finishing)throw new Error(`Sticky date work ${key} changed; reconcile before release`);
-          const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,jobs:{}}:prior;
+          if(changed && (!finishing || prior.status==='stale-source'))throw new Error(`Sticky date work ${key} changed; reconcile before release`);
+          const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,generationId:randomUUID(),jobs:{}}:prior;
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
+        } catch(error) {
+          if(!(error instanceof CompletedDateGenerationHold))throw error;
+          console.error(`${key}: ${error.message}`);
+          outcomes.push({book:target.book,chapter:target.chapter,status:'generation-hold',error:error.message});
+          process.exitCode=1;
+          continue;
+        }
         if(!reserved)continue;
         if(reserved.released){console.log(`Released ${key}; local recovery artifacts retained`);continue;}
         started+=1;
@@ -194,7 +219,7 @@ if (o['dry-run']) {
         },{message:`Retain date ownership plan ${key}`});
         const directory=dateWorkflowDirectory(target.book,target.chapter);
         const stateFile=path.join(directory,'state.json');
-        if(!fs.existsSync(stateFile)&&(Object.keys(reserved.jobs).length||Object.keys(reserved.reviewPlans??{}).length)) writeJsonAtomic(stateFile,{schemaVersion:1,workflowVersion:1,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,round:0,phase:'audit',jobs:reserved.jobs,reviewPlans:reserved.reviewPlans??{},restoredFromLedger:true});
+        if(!fs.existsSync(stateFile)&&(Object.keys(reserved.jobs).length||Object.keys(reserved.reviewPlans??{}).length)) writeJsonAtomic(stateFile,{schemaVersion:1,workflowVersion:1,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,...(reserved.generationId?{generationId:reserved.generationId}:{}),round:0,phase:'audit',jobs:reserved.jobs,reviewPlans:reserved.reviewPlans??{},restoredFromLedger:true});
         matcher ??= loadProperNounMatcher();
         const extractionPacket=buildPeopleExtractionPacket(target.book,target.chapter,{properNounMatcher:matcher});
         const validateExtraction=candidate=>{
@@ -221,7 +246,7 @@ if (o['dry-run']) {
             try {return await worker(task);}
             catch(error) {if(o.lane==='openrouter'&&error.status===429)control.stopRequested=true;throw error;}
           };
-          const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan});
+          const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan,generationId:reserved.generationId});
           console.log(`${key}: ${result.status}`);
           outcomes.push({book:target.book,chapter:target.chapter,status:result.status});
           if(result.status==='audited')approved+=1;

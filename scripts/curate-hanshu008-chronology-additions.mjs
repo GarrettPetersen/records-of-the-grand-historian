@@ -1,0 +1,27 @@
+import path from 'node:path';
+import { applyDateRepairProposal } from './lib/people-date-workflow.mjs';
+import { buildDateAuditPacket, dateAuditDiagnostics, dateAuditItems } from './lib/people-date-audit.mjs';
+import { PEOPLE_DIR, readJson, sha256, writeTextAtomic } from './lib/people-content.mjs';
+import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
+import { serializeCompactPeopleExtraction } from './lib/people-compact.mjs';
+import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
+
+const book = 'hanshu';
+const chapter = '008';
+const handoff = readJson(path.join(PEOPLE_DIR, 'date-repairs', book, chapter, 'staged-candidate-20a829b480d6ac02e60f.json'));
+const extractionPath = path.join(PEOPLE_DIR, 'extractions', book, `${chapter}.json`);
+const canonical = readJson(extractionPath);
+const packet = buildDateAuditPacket(book, chapter);
+const candidate = applyDateRepairProposal(canonical, handoff.proposal, packet);
+const candidateHash = sha256(JSON.stringify(candidate));
+if (candidateHash !== handoff.candidateExtractionHash) throw new Error(`Candidate hash mismatch: ${candidateHash}`);
+if (JSON.stringify(candidate) !== JSON.stringify(handoff.candidate)) throw new Error('Candidate does not replay byte-for-byte');
+const changes = handoff.proposal.changes;
+if (changes.length !== 16 || changes.filter(change => change.kind === 'add').length !== 9 || changes.filter(change => change.kind === 'hints').length !== 7) throw new Error('Expected nine attestation additions plus seven hints');
+const addedYears = changes.filter(change => change.kind === 'add').map(change => change.after[2]?.westernYear?.year).sort((a, b) => a - b);
+if (JSON.stringify(addedYears) !== JSON.stringify([77, 79, 80, 80, 80, 80, 80, 81, 83])) throw new Error(`Unexpected attestation years: ${JSON.stringify(addedYears)}`);
+const validation = validateCompactPeopleExtraction(candidate, buildPeopleExtractionPacket(book, chapter));
+const geometry = dateAuditDiagnostics(dateAuditItems(candidate));
+if (geometry.length) throw new Error(`Date geometry diagnostics: ${JSON.stringify(geometry)}`);
+writeTextAtomic(extractionPath, serializeCompactPeopleExtraction(candidate));
+console.log(JSON.stringify({ candidateHash, changes: changes.length, validation: validation.stats, geometry: 'PASS' }));

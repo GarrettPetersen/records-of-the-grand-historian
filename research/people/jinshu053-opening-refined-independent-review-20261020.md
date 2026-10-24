@@ -1,0 +1,25 @@
+# Jinshu 053 opening and s0204 refined candidate: independent research review
+
+**Status: incomplete research only; not chapter, editorial, date, identity, or publication approval.** This review is limited to the exact artifacts and fields identified below. Existing chapter-wide holds remain in force, including the shared-checkout schema incompatibility, unresolved source and identity issues, and independently required editorial and date reviews.
+
+## Fingerprints and preservation
+
+Candidate directory: `data/people/generated/jinshu-identity-ref-64521198-20261018/jinshu053-opening-s0204-refined-v1-incomplete-20261020`.
+
+Its actual SHA-256 values match its manifest: `source.json` `c8d769853ce0e58cf35aab43b923d7cb1f53ee055983587c6555c7206b7e12cc`; `candidate.json` `692ac0c8d26710f72309d25d3b8e40a3e4098c1f6658d9aa3b17e6c480f3b980`; `editorial-history.json` `c162a20811b6b4037d2ced0e25a074e17988ef03eab929d05c080eb499938651`; `draft-component.json` `5ea48e92f3fe50836a50e74a7d8e6bd95be6890e1a6d925401527c94f9452ecc`.
+
+The immediate predecessor `jinshu053-opening-supported-v1-incomplete-20261020` has source, candidate, history, and manifest hashes respectively `d016b082e2fc8f74437258a82572aec714daa941a788b71fddc2ac6228eb8f23`, `2e0b3b9b74cfac217ae4c5983e0f5cbe9b63c9e521d9b971905d9cad18b2c772`, `e300abbaa01d4c281437351d0b74a2b0d91994d8980b88f3572d22ac5a464dbc`, and `60276239218860d66fc220ef3e0c12ac9aad2cb6316e6336239d878be45a0c01`, matching the refined manifest. Its manifest in turn correctly pins the prior `jinshu053-quote-s0204-select-v1-incomplete-20261020` source, candidate, history, and manifest at `87d50156cafc84c2d031824839926dd1c732993e94c8bb10b159f17dd660f193`, `0656030ba8e87796923c8bd397e7e1f774941d4d19e6227d2ad43ce7353a5ce6`, `4271708b0f19d092b950d96fcb5c1a94cb485bd9273d71f2a1912f0cc0c7e449`, and `74ad9f9f9b5889859adc8e06e7b1f268a290550dfd1f986c21f9851296e1e220`.
+
+The predecessor's seven editorial-history records are structurally unchanged and precede two appended synthetic records. **The appended records contain machine-readable `accept` decisions but explicitly identify their reviewer as a synthetic draft placeholder; these are not independent approvals and must not be published or treated as such.**
+
+## Scope and source assessment
+
+Compared structurally with the s0204-select source, only eight opening English fields changed: s0014 literal; s0016 literal and idiomatic; s0018 idiomatic; s0020 idiomatic; s0022 literal and idiomatic; and s0025 idiomatic. Both s0204 English fields also changed. Chinese and all other source fields are unchanged. The eight opening edits are consistent with the narrow textual assessment in `jinshu053-s0014-s0025-independent-review.md`: in particular, the s0016 speakers follow the eunuchs in s0015, s0022 has others butchering and selling rather than assigning those acts to the crown prince, and s0025 distinguishes an advance of two months' funds from double stipends. This is not a judgment that the entire passage or chapter is complete.
+
+The refined s0204 English makes the selected upright people the prospective companions, addressing the previous wording's implication that they were already in attendance. It does not explicitly retain the ability conveyed by 能; the referents and force of 相長益 remain a source-interpretation hold. The omitted s0014 idiomatic, s0015, s0017, s0019, s0021, s0023, s0024, and s0025 literal fields remain held, as do inherited s0203, s0205, p038, source, editorial, date, identity, and publication questions. In particular, s0024 was not rewritten and its commodity and agency issues remain open.
+
+## Mentions, dispositions and validation
+
+Candidate comparison with s0204-select preserves all existing people, claims, and surfaces except the added s0025 occurrence 0 of the English title-reference `crown prince` for p001. The only new preflight dispositions cover two overlapping English detections in s0025: `Eastern Palace` (`cand_8de74e5f3e02251c`, code points 10–24) and `Eastern` (`cand_0c1520b66fcc6329`, 10–17). Treating these as a place/administrative setting rather than a person in this sentence is supported by 東宮舊制. Fingerprints, unit digests, and ten appended provisional translation-repair entries account for the remaining candidate changes.
+
+Using `buildPeopleExtractionPacket` and `validateCompactPeopleExtraction` from the pre-existing staging-pinned fixture at `/tmp/jinshu053-strict-5ce.NuGR9k1r`, with the candidate source supplied directly and `strictAliasDispositions: true`, the validator returned 209 units, 377 candidates, 71 people, 521 mentions, 541 claims, 73 repairs, 151 dispositions, and zero alias-disposition conflicts, matching the manifest. This is a structural check against that fixture, not proof of editorial or historical correctness and not validation against the incompatible current shared schema. A diagnostic print after that successful validation failed due to an incorrect packet-property assumption; a separate corrected read located and verified both exact preflight hits.

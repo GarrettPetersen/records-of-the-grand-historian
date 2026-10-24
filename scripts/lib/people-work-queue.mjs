@@ -31,6 +31,7 @@ const RECOVERABLE_STATUSES = new Set([
   'failed',
   'split',
 ]);
+const EXTRACTION_STATUSES_SAFE_FOR_DATE_AUDIT = new Set(['ready', 'submitted', 'complete']);
 
 function git(args, options = {}) {
   const hasStdinFd = Number.isInteger(options.stdinFd);
@@ -268,6 +269,13 @@ export function claimIsActive(claim, now = Date.now()) {
   return Boolean(claim && (claim.sticky === true || Date.parse(claim.expiresAt) > now));
 }
 
+// Submitted claims remain reserved through publication so that another extraction
+// lane cannot overwrite them. They no longer execute against the chapter, however,
+// and the date gate must be able to audit their current staged extraction.
+export function extractionClaimBlocksDateAudit(claim, now = Date.now()) {
+  return claimIsActive(claim, now) && !EXTRACTION_STATUSES_SAFE_FOR_DATE_AUDIT.has(claim.status);
+}
+
 export function pruneExpiredClaims(ledger, now = Date.now()) {
   const removed = [];
   for (const [key, claim] of Object.entries(ledger.claims)) {
@@ -321,7 +329,7 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
   for (const target of targets) {
     if (claimed.length >= options.limit) break;
     const key = chapterKey(target);
-    if (ledger.dateAudits?.[key] && !['ready', 'stale-source'].includes(ledger.dateAudits[key].status)) {
+    if (ledger.dateAudits?.[key] && (ledger.dateAudits[key].status !== 'ready' || Object.hasOwn(ledger.dateAudits[key], 'combinedCuration'))) {
       blocked.push({ ...target, claim: ledger.dateAudits[key], reason: 'Independent date work owns this chapter' });
       continue;
     }
@@ -423,6 +431,11 @@ export function localCursorRecoveryTargets() {
   for (const [key, chapterState] of Object.entries(state.chapters ?? {})) {
     if (chapterState.status === 'accepted') continue;
     const target = splitChapterKey(key);
+    // A translation repair can update both the chapter fingerprint and its
+    // reconciled extraction after the chunk scheduler last saved state. The
+    // old accepted chunks remain valuable archives, but a current complete
+    // extraction is publication-ready rather than resumable work.
+    if (extractionIsCurrent(target)) continue;
     if (!hasLocalCursorRecovery(target, chapterState)) continue;
     const chunks = Object.values(chapterState.chunks ?? {});
     if (!fs.existsSync(chapterPath(target.book, target.chapter))) continue;

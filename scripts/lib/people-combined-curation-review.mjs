@@ -9,6 +9,7 @@ import { validateCompactPeopleExtraction } from '../validate-people-extraction.m
 import { loadProperNounMatcher } from './people-candidates.mjs';
 import { editorialReviews, validateAppliedEditorialDecisions } from './people-editorial-decisions.mjs';
 import { buildDateAuditPacket, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+import { replayReviewedFootnoteAdditions } from './people-combined-footnote-review.mjs';
 
 export const documentHash = value => sha256(JSON.stringify(value));
 export function requireEqual(actual, expected, label) {
@@ -76,19 +77,32 @@ function reviewedSourceReordering(beforeSource, materialization, identity, dateR
 // Follow run provenance, not arbitrary nested author declarations. Chunk records
 // use the same agentId field; the production schema validates their shape.
 function extractionAuthors(run, authors) {
-  if (run?.agentId) authors.add(run.agentId);
+  if (run?.agentId) {
+    if (typeof run.agentId !== 'string' || run.agentId !== run.agentId.trim()) throw new Error('Noncanonical extraction author agent ID');
+    authors.add(run.agentId);
+  }
   for (const chunk of run?.chunks ?? []) extractionAuthors(chunk, authors);
 }
 
-function incomingEditorialReview(before, after, reports) {
+function incomingEditorialReviews(before, after, reports, seal) {
   const old = editorialReviews(before), current = editorialReviews(after);
-  for (const review of old) {
-    if (!current.some(r => isDeepStrictEqual(r, review))) throw new Error('Combined curation must retain old editorial reviews unchanged');
+  requireEqual(current.slice(0, old.length), old, 'retain old editorial reviews unchanged and ordered');
+  const additions = current.slice(old.length);
+  if (!additions.length) throw new Error('Combined source amendment requires new editorial review components');
+  const hashes = additions.map(documentHash);
+  if (new Set(hashes).size !== hashes.length || additions.some(r => old.some(previous => isDeepStrictEqual(previous, r)))) {
+    throw new Error('Duplicate incoming editorial review component');
   }
-  const additions = current.filter(r => !old.some(previous => isDeepStrictEqual(previous, r)));
-  if (additions.length !== 1) throw new Error('Combined source amendment requires exactly one new editorial review component');
-  for (const report of reports) requireEqual(report.reviewContext?.editorialDecisionHash, documentHash(additions[0]), 'reviewed incoming editorial component');
-  return additions[0];
+  if (additions.length === 1) {
+    for (const report of reports) requireEqual(report.reviewContext?.editorialDecisionHash, hashes[0], 'reviewed incoming editorial component');
+  } else {
+    for (const report of reports) {
+      requireEqual(report.reviewContext?.editorialDecisionHashes, hashes, 'reviewed ordered incoming editorial components');
+      requireEqual(report.reviewContext?.editorialDecisionHash, undefined, 'ambiguous single editorial pin');
+    }
+    requireEqual(seal.editorialDecisionHashes, hashes, 'sealed ordered incoming editorial components');
+  }
+  return additions;
 }
 
 function sealedJson(pin, seal) {
@@ -154,7 +168,7 @@ function checks(rows, expected, units, label, compare) {
 }
 
 function independent(reviewer, authors) {
-  if (!reviewer?.agentId || !reviewer.name || authors.has(reviewer.agentId)) throw new Error('Unidentified or self-approved combined curation reviewer');
+  if (typeof reviewer?.agentId !== 'string' || !reviewer.agentId.trim() || reviewer.agentId !== reviewer.agentId.trim() || typeof reviewer.name !== 'string' || !reviewer.name.trim() || authors.has(reviewer.agentId)) throw new Error('Unidentified or self-approved combined curation reviewer');
   if (reviewer.actualAgentId !== undefined) requireEqual(reviewer.actualAgentId, reviewer.agentId, 'actual reviewer identity');
   requireTrue(reviewer.independentOfExtractor, 'extractor independence');
   requireTrue(reviewer.independentOfRepairAuthor, 'repair author independence');
@@ -181,29 +195,35 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   if (expanded.translationRepairs.some(r => r.status === 'proposed')) throw new Error('Combined curation retains proposed repairs');
   validateAppliedEditorialDecisions(editorial, expanded);
   const reviews = editorialReviews(editorial);
-  const incoming = incomingEditorialReview(beforeEditorial, editorial, [identity, dateReport]);
+  const incoming = incomingEditorialReviews(beforeEditorial, editorial, [identity, dateReport], seal);
   // Replay only explicitly reviewed whole-block moves, then the independently
   // accepted English repairs using their final source locators.
   const replay = reviewedSourceReordering(beforeSource, materialization, identity, dateReport, validation, seal, { book, chapter });
-  for (const old of beforeExtraction.translationRepairs) {
-    if (!candidate.translationRepairs.some(r => isDeepStrictEqual(r, old))) throw new Error('Old translation repair history changed');
+  requireEqual(candidate.translationRepairs.slice(0, beforeExtraction.translationRepairs.length), beforeExtraction.translationRepairs, 'old translation repair history unchanged and ordered');
+  const approvals = incoming.flatMap((review, reviewIndex) => review.decisions.filter(d => d.decision !== 'reject').map(decision => ({ reviewIndex, decision, proposal: review.proposals.find(p => p.id === decision.repairId), used: false })));
+  for (const [index, review] of incoming.entries()) {
+    if (!approvals.some(a => a.reviewIndex === index)) throw new Error('Incoming editorial component has no approved repair');
   }
-  let sourceRepairs = 0;
+  let sourceRepairs = 0, lastReviewIndex = -1;
   for (const [index, row] of candidate.translationRepairs.entries()) {
-    if (beforeExtraction.translationRepairs.some(old => isDeepStrictEqual(old, row))) continue;
+    if (index < beforeExtraction.translationRepairs.length) continue;
     const repair = expanded.translationRepairs[index];
     if (repair.status !== 'applied' || !['literal', 'idiomatic'].includes(repair.field)) throw new Error('Source edit is not an applied translation repair');
-    const approved = incoming.decisions.some(d => {
-      const p = incoming.proposals.find(p => p.id === d.repairId);
-      return d.decision !== 'reject' && p?.unit.id === repair.unit.id && p.field === repair.field && p.before === repair.before &&
+    const matched = approvals.filter(({ decision: d, proposal: p }) => {
+      return p?.unit.id === repair.unit.id && p.field === repair.field && p.before === repair.before &&
         (d.decision === 'revise' ? d.after : p.after) === repair.after && d.reason === repair.reason;
     });
-    if (!approved) throw new Error('Source edit lacks approval by the pinned incoming editorial component');
+    if (matched.length !== 1 || matched[0].used) throw new Error('Source edit lacks exactly one unused approval by the pinned incoming editorial components');
+    if (matched[0].reviewIndex < lastReviewIndex) throw new Error('Source repair order contradicts incoming editorial component order');
+    lastReviewIndex = matched[0].reviewIndex;
+    matched[0].used = true;
     sourceRepairs++;
     setTranslationField(replay, repair.unit, repair.field, repair.before, repair.after);
   }
   if (!sourceRepairs) throw new Error('Combined source amendment requires new applied translation repairs');
-  requireEqual(replay, source, 'unrelated source edit outside reviewed translation repairs and source reordering');
+  if (approvals.some(a => !a.used)) throw new Error('Incoming editorial approval has no matching new applied repair');
+  const footnoted = replayReviewedFootnoteAdditions(replay, { contract: materialization.sourceFootnoteContract, identity, dateReport, validation, seal, book, chapter, authorAgentIds });
+  requireEqual(footnoted, source, 'unrelated source edit outside reviewed translation repairs, source reordering and footnote additions');
   requireEqual(candidate.run, beforeExtraction.run, 'extractor provenance must not be rewritten');
 
   const dates = combinedDatePacket(book, chapter, source, candidate);
@@ -211,9 +231,9 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   for (const [label, r] of Object.entries({ identity, dateReport, validation, materialization, seal })) {
     requireEqual([r.sourceHash, r.extractionHash], hashes, `${label} exact candidate hashes`);
   }
-  if (!Array.isArray(authorAgentIds) || !authorAgentIds.length || authorAgentIds.some(id => typeof id !== 'string' || !id.trim())) throw new Error('Declare all curation author agent IDs');
+  if (!Array.isArray(authorAgentIds) || !authorAgentIds.length || authorAgentIds.some(id => typeof id !== 'string' || !id.trim() || id !== id.trim())) throw new Error('Declare all curation author agent IDs in canonical form');
   const authors = new Set(authorAgentIds);
-  for (const id of [candidate.run.agentId, identity.reviewContext?.amendmentAuthor, materialization.sourceReordering?.authorAgentId, ...(seal.reviewer?.excludedAuthorAgentIds ?? [])]) {
+  for (const id of [candidate.run.agentId, identity.reviewContext?.amendmentAuthor, materialization.sourceReordering?.authorAgentId, materialization.sourceFootnoteContract?.authorAgentId, ...(seal.reviewer?.excludedAuthorAgentIds ?? [])]) {
     if (id && !authors.has(id)) throw new Error(`Missing declared curation author ${id}`);
   }
   const actualExtractors = new Set();
@@ -224,7 +244,7 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   requireEqual(identity.reviewer.agentId, seal.reviewer.agentId, 'identity reviewer seal');
   requireEqual(dateReport.reviewer.agentId, seal.reviewer.agentId, 'date reviewer seal');
   for (const r of reviews) {
-    if (!r.reviewer?.agentId || authors.has(r.reviewer.agentId)) throw new Error('Self-approved or unidentified editorial amendment');
+    if (typeof r.reviewer?.agentId !== 'string' || !r.reviewer.agentId.trim() || r.reviewer.agentId !== r.reviewer.agentId.trim() || authors.has(r.reviewer.agentId)) throw new Error('Self-approved or unidentified editorial amendment');
   }
   for (const id of actualExtractors) if (!authorAgentIds.includes(id)) throw new Error(`Missing declared extraction author ${id}`);
   requireEqual(identity.schemaVersion, 1, 'identity report version');

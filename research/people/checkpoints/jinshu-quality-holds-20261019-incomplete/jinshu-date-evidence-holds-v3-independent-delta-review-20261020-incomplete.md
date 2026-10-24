@@ -1,0 +1,7 @@
+# Date evidence holds v3: independent delta review (research only)
+
+Reviewed `/tmp/people-date-holds-3BAVDDuT/date-evidence-holds-v3.patch`, SHA-256 `c0c63e0905bec995b69c1f4eb249898073771d1964db76d7265f31d5757175fa`, against v2 SHA-256 `ed70112162042cadf331465cb28eb906b22d549bef991410601e40531a61dfd3`. The v3 patch matches the isolated fixture by `git apply --reverse --check`; I did not apply it to the shared checkout or index.
+
+The v2 finding about unrelated release behavior is resolved in the v3 delta: the new evidence-hold-specific check precedes the release branch, while the original full generation guard remains after it. The corresponding extracted reservation-callback tests now inject the hold checker independently and verify both that held release is fenced and that an unheld explicit release retains its earlier control flow. No additional defect was identified in this narrow delta review.
+
+Independent focused command `node --test --test-name-pattern='evidence hold|evidence-held|unheld explicit release' scripts/test-people-combined-curation.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-audit.mjs` passed 5/5 in the matching isolated fixture. These tests do not establish safe concurrent hold installation, cross-host exclusion, or crash-safe hold resolution. This note authorizes no operational deployment: preserve v3 only as an explicitly nonactivated research patch until those unresolved protections receive a separate implementation and review.

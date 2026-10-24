@@ -1,0 +1,264 @@
+diff --git a/scripts/lib/people-work-queue.mjs b/scripts/lib/people-work-queue.mjs
+index bd5091c..4e5198a 100644
+--- a/scripts/lib/people-work-queue.mjs
++++ b/scripts/lib/people-work-queue.mjs
+@@ -279,17 +279,6 @@ export function pruneExpiredClaims(ledger, now = Date.now()) {
+   return removed;
+ }
+ 
+-export function pruneMergedClaims(ledger, options = {}) {
+-  const baseRef = options.baseRef ?? DEFAULT_PEOPLE_QUEUE_BASE_REF;
+-  const removed = [];
+-  for (const key of Object.keys(ledger.claims)) {
+-    if (!extractionIsCurrent(splitChapterKey(key), { ref: baseRef })) continue;
+-    delete ledger.claims[key];
+-    removed.push(key);
+-  }
+-  return removed;
+-}
+-
+ function makeClaim(target, options, now) {
+   const sticky = options.sticky === true;
+   return {
+@@ -308,9 +297,9 @@ function makeClaim(target, options, now) {
+   };
+ }
+ 
+-function cursorMayAdopt(claim, options) {
+-  return options.lane === 'cursor-sdk' && claim.lane === 'cursor-sdk' &&
+-    ['resume-required', 'ready'].includes(claim.status);
++export function cursorClaimAvailableToWorker(claim, worker, now = Date.now()) {
++  return !claimIsActive(claim, now) || (claim.lane === 'cursor-sdk' && claim.worker === worker &&
++    !['ready', 'submitted'].includes(claim.status));
+ }
+ 
+ export function reservePeopleTargetsInLedger(ledger, targets, options) {
+@@ -327,6 +316,10 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
+     }
+     const current = ledger.claims[key];
+     if (claimIsActive(current, now)) {
++      if (['ready', 'submitted'].includes(current.status)) {
++        blocked.push({ ...target, claim: current });
++        continue;
++      }
+       if (current.lane === options.lane && current.worker === options.worker) {
+         if (target.grokbotPlan && current.grokbotPlan) {
+           if (JSON.stringify(target.grokbotPlan) !== JSON.stringify(current.grokbotPlan)) {
+@@ -337,10 +330,6 @@ export function reservePeopleTargetsInLedger(ledger, targets, options) {
+           current.updatedAt = new Date(now).toISOString();
+         }
+         claimed.push({ ...target, claim: current, reused: true });
+-      } else if (cursorMayAdopt(current, options)) {
+-        current.worker = options.worker;
+-        current.updatedAt = new Date(now).toISOString();
+-        claimed.push({ ...target, claim: current, reused: true });
+       } else {
+         blocked.push({ ...target, claim: current });
+       }
+@@ -362,7 +351,9 @@ export function claimRemotePeopleTargets(targets, options) {
+     )),
+   }));
+   return mutateRemotePeopleWorkLedger((ledger) => {
+-    pruneMergedClaims(ledger, options);
++    // A current base extraction or a free-form note does not prove that this
++    // particular assignment was accepted and incorporated. Keep claims until
++    // their owner explicitly reconciles them against verified evidence.
+     return reservePeopleTargetsInLedger(ledger, prepared, {
+       ...options,
+       limit: options.limit ?? prepared.length,
+@@ -423,11 +414,6 @@ export function localCursorRecoveryTargets() {
+   for (const [key, chapterState] of Object.entries(state.chapters ?? {})) {
+     if (chapterState.status === 'accepted') continue;
+     const target = splitChapterKey(key);
+-    // A translation repair can update both the chapter fingerprint and its
+-    // reconciled extraction after the chunk scheduler last saved state. The
+-    // old accepted chunks remain valuable archives, but a current complete
+-    // extraction is publication-ready rather than resumable work.
+-    if (extractionIsCurrent(target)) continue;
+     if (!hasLocalCursorRecovery(target, chapterState)) continue;
+     const chunks = Object.values(chapterState.chunks ?? {});
+     if (!fs.existsSync(chapterPath(target.book, target.chapter))) continue;
+@@ -485,36 +471,37 @@ export function completedForeignClaimOwnsLocalReadyOutput(item, claim, now = Dat
+     ['ready', 'submitted'].includes(claim.status);
+ }
+ 
+-export function syncLocalCursorReservations(options = {}) {
+-  const worker = options.worker ?? `${os.hostname()}-cursor-recovery`;
+-  const recovery = localCursorRecoveryTargets();
+-  const ready = localUnpublishedExtractionTargets(options);
++export function reconcileLocalCursorReservationsInLedger(ledger, { recovery, ready, worker, ...options }) {
+   const desired = new Map([
+-    ...recovery.map((target) => [chapterKey(target), { target, status: 'resume-required' }]),
+     ...ready.map((target) => [chapterKey(target), { target, status: 'ready' }]),
++    ...recovery.map((target) => [chapterKey(target), { target, status: 'resume-required' }]),
+   ]);
+-  return mutateRemotePeopleWorkLedger((ledger) => {
+-    const merged = pruneMergedClaims(ledger, options);
+-    const conflicts = [];
+     const synchronizedRecovery = [];
+     const synchronizedReady = [];
+-    const releasedStaleRecovery = [];
+     const reservedElsewhere = [];
+     for (const [key, item] of desired) {
+       const current = ledger.claims[key];
+-      if (completedForeignClaimOwnsLocalReadyOutput(item, current)) {
++      if (item.status === 'resume-required' && claimIsActive(current) && ['ready', 'submitted'].includes(current.status)) {
++        reservedElsewhere.push({ chapter: key, claim: current, reason: 'Retained recovery conflicts with a ready or submitted claim' });
++        continue;
++      }
++      if (completedForeignClaimOwnsLocalReadyOutput(item, current) ||
++          (item.status === 'ready' && claimIsActive(current) && ['ready', 'submitted'].includes(current.status))) {
++        reservedElsewhere.push({ chapter: key, claim: current, reason: 'Existing ready or submitted claim retained' });
++        continue;
++      }
++      // Never promote an existing recovery reservation based on extraction
++      // metadata alone. Only the owned, validating runner marks it ready.
++      if (item.status === 'ready' && current?.lane === 'cursor-sdk' && current.status === 'resume-required') {
+         reservedElsewhere.push({ chapter: key, claim: current });
+         continue;
+       }
+       const ownedByAnotherActiveWorker = claimIsActive(current) && (
+         current.lane !== 'cursor-sdk' ||
+-        (
+-          current.worker !== worker &&
+-          !['failed', 'resume-required', 'ready'].includes(current.status)
+-        )
++        current.worker !== worker
+       );
+       if (ownedByAnotherActiveWorker) {
+-        conflicts.push({ chapter: key, claim: current });
++        reservedElsewhere.push({ chapter: key, claim: current, reason: 'Active claim belongs to another worker' });
+         continue;
+       }
+       ledger.claims[key] = makeClaim(item.target, {
+@@ -528,28 +515,22 @@ export function syncLocalCursorReservations(options = {}) {
+       if (item.status === 'ready') synchronizedReady.push(item.target);
+       else synchronizedRecovery.push(item.target);
+     }
+-    if (conflicts.length) {
+-      throw new Error(`Local Cursor recovery conflicts with remote claims: ${conflicts.map((item) => item.chapter).join(', ')}`);
+-    }
+-    for (const [key, claim] of Object.entries(ledger.claims)) {
+-      if (
+-        claim.lane === 'cursor-sdk' &&
+-        claim.worker === worker &&
+-        claim.status === 'resume-required' &&
+-        !desired.has(key)
+-      ) {
+-        delete ledger.claims[key];
+-        releasedStaleRecovery.push(key);
+-      }
+-    }
++    // Missing local state is not evidence that the remote owner's retained
++    // conversation or artifacts were accepted or discarded.
+     return {
+       recovery: synchronizedRecovery,
+       ready: synchronizedReady,
+-      releasedStaleRecovery,
+       reservedElsewhere,
+-      merged,
+     };
+-  }, {
++}
++
++export function syncLocalCursorReservations(options = {}) {
++  const worker = options.worker ?? `${os.hostname()}-cursor-recovery`;
++  const recovery = localCursorRecoveryTargets();
++  const ready = localUnpublishedExtractionTargets(options);
++  return mutateRemotePeopleWorkLedger((ledger) => reconcileLocalCursorReservationsInLedger(ledger, {
++    ...options, recovery, ready, worker,
++  }), {
+     ...options,
+     message: 'Sync local Cursor people recovery reservations',
+   });
+diff --git a/scripts/sdk-people-extract.mjs b/scripts/sdk-people-extract.mjs
+index 3cd6839..a544099 100644
+--- a/scripts/sdk-people-extract.mjs
++++ b/scripts/sdk-people-extract.mjs
+@@ -78,6 +78,7 @@ import {
+   chapterKey as workQueueChapterKey,
+   claimIsActive,
+   claimRemotePeopleTargets,
++  cursorClaimAvailableToWorker,
+   fetchPeopleQueueBase,
+   hasLocalCursorRecovery,
+   hasLocalCursorRecoveryArtifact,
+@@ -406,12 +407,9 @@ function recoveryOnlyTarget(target, state) {
+   return hasLocalCursorRecovery(target, chapterState);
+ }
+ 
+-function availableToCursorLane(target, ledger, workerId, state) {
++function availableToCursorLane(target, ledger, workerId) {
+   const claim = ledger.claims[workQueueChapterKey(target)];
+-  if (!claimIsActive(claim)) return true;
+-  if (claim.lane !== 'cursor-sdk') return false;
+-  if (claim.worker === workerId) return true;
+-  return claim.status === 'resume-required' && recoveryOnlyTarget(target, state);
++  return cursorClaimAvailableToWorker(claim, workerId);
+ }
+ 
+ function planningScopeTargets(laneTargets, ledger, opts, state) {
+@@ -4186,10 +4184,12 @@ async function main() {
+       });
+       console.log(
+         `Shared queue synchronized: recovery=${synced.result.recovery.length}, ` +
+-        `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}, ` +
+-        `stale-recovery-released=${synced.result.releasedStaleRecovery.length}, ` +
+-        `merged-pruned=${synced.result.merged.length}`,
++        `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}; ` +
++        'merged claims are retained pending verified reconciliation',
+       );
++      for (const item of synced.result.reservedElsewhere) {
++        console.log(`  ${item.chapter}: reserved by ${item.claim.lane}/${item.claim.worker} (${item.claim.status}); ${item.reason ?? 'existing reservation retained'}`);
++      }
+     }
+     let workLedger = readRemotePeopleWorkLedger(sharedQueueOptions);
+     if (!opts.dryRun) {
+@@ -4206,7 +4206,7 @@ async function main() {
+     }
+     const allTargets = chapterTargets(opts);
+     const laneTargets = allTargets.filter((target) =>
+-      availableToCursorLane(target, workLedger, opts.workerId, state)
++      availableToCursorLane(target, workLedger, opts.workerId)
+     );
+     let rawTargets = planningScopeTargets(laneTargets, workLedger, opts, state);
+     if (rawTargets.length < laneTargets.length) {
+diff --git a/scripts/people-work-queue.mjs b/scripts/people-work-queue.mjs
+index 622a8d0..766ed38 100644
+--- a/scripts/people-work-queue.mjs
++++ b/scripts/people-work-queue.mjs
+@@ -29,7 +29,6 @@ import {
+   markRemotePeopleClaims,
+   mutateRemotePeopleWorkLedger,
+   pruneExpiredClaims,
+-  pruneMergedClaims,
+   readRemotePeopleWorkLedger,
+   releaseRemotePeopleClaims,
+   reservePeopleTargetsInLedger,
+@@ -670,10 +669,12 @@ async function syncCursor(opts) {
+   const synced = syncLocalCursorReservations({ ...queueOptions(opts), worker });
+   console.log(
+     `Cursor reservations synchronized: recovery=${synced.result.recovery.length}, ` +
+-    `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}, ` +
+-    `stale-recovery-released=${synced.result.releasedStaleRecovery.length}, ` +
+-    `merged-pruned=${synced.result.merged.length}`,
++    `local-ready=${synced.result.ready.length}, reserved-elsewhere=${synced.result.reservedElsewhere.length}; ` +
++    'merged claims are retained pending verified reconciliation',
+   );
++  for (const item of synced.result.reservedElsewhere) {
++    console.log(`  ${item.chapter}: reserved by ${item.claim.lane}/${item.claim.worker} (${item.claim.status}); ${item.reason ?? 'existing reservation retained'}`);
++  }
+ }
+ 
+ async function backfillGrokbotPlans(opts) {
+@@ -935,9 +936,8 @@ function reconcile(opts) {
+   fetchPeopleQueueBase(queueOptions(opts));
+   const result = mutateRemotePeopleWorkLedger((ledger) => ({
+     expired: pruneExpiredClaims(ledger),
+-    merged: pruneMergedClaims(ledger, queueOptions(opts)),
+   }), { ...queueOptions(opts), message: 'Reconcile people work queue' });
+-  console.log(`Reconciled: expired=${result.result.expired.length}, merged=${result.result.merged.length}`);
++  console.log(`Reconciled: expired=${result.result.expired.length}; merged claims are retained pending verified reconciliation`);
+ }
+ 
+ function release(opts) {

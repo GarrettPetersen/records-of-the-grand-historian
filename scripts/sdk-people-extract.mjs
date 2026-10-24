@@ -684,6 +684,7 @@ function prepareTargetQueue(rawTargets, opts, state, matcher) {
     const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
       properNounMatcher: matcher,
     });
+    stateChanged = resetForcedStaleSourceRecovery(target, packet, opts, state) || stateChanged;
     const measured = withRecoveryPriority({ ...target, metrics: targetMetrics(packet) }, state);
     if (!opts.force && currentExtractionIsValid(target, packet)) {
       current.push(measured);
@@ -848,6 +849,11 @@ function gitChapterAtRef(target, startingRef) {
         cwd: REPO_ROOT,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
+        // A handful of source chapters are larger than Node's 1 MiB default.
+        // This is a source-fingerprint preflight, so rejecting those chapters
+        // would leave the batch unsafely incomplete; retain an explicit,
+        // bounded ceiling rather than relying on the implicit default.
+        maxBuffer: 32 * 1024 * 1024,
       });
       return { ref, chapter: JSON.parse(raw) };
     } catch (error) {
@@ -960,6 +966,63 @@ function chunkArchivePath(target, chunk) {
   );
 }
 
+function archiveDirectoryIfPresent(source, destination) {
+  if (!fs.existsSync(source)) return false;
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  fs.renameSync(source, destination);
+  return true;
+}
+
+// A forced re-extraction after a reviewed source repair must never reuse chunk
+// artifacts whose compact input describes the old text.  Keep those artifacts
+// (and their retained conversation metadata) intact under a generation-specific
+// archive, then start a fresh plan for the new source fingerprint.
+function resetForcedStaleSourceRecovery(target, packet, opts, state) {
+  if (!opts.force) return false;
+  const key = stateKey(target);
+  const prior = state.chapters[key];
+  if (!prior?.chapterFingerprint || prior.chapterFingerprint === packet.input.chapterFingerprint) return false;
+
+  const oldFingerprint = prior.chapterFingerprint.replace(/^sha256:/u, '').slice(0, 24);
+  const generation = `${oldFingerprint}-${Date.now()}`;
+  const archiveRoot = path.join(
+    PEOPLE_DIR,
+    'generated',
+    'stale-source-extractions',
+    target.book,
+    target.chapter,
+    generation,
+  );
+  const moved = [
+    ['chunk-extractions', path.join(PEOPLE_DIR, 'generated', 'chunk-extractions', target.book, target.chapter)],
+    ['rejected-chunk-extractions', path.join(PEOPLE_DIR, 'generated', 'rejected-chunk-extractions', target.book, target.chapter)],
+    ['cloud', path.join(PEOPLE_DIR, 'generated', 'cloud', target.book, target.chapter)],
+  ].filter(([name, source]) => archiveDirectoryIfPresent(source, path.join(archiveRoot, name))).map(([name]) => name);
+
+  state.chapters[key] = {
+    attempts: prior.attempts ?? 0,
+    status: 'claimed',
+    chapterFingerprint: packet.input.chapterFingerprint,
+    staleSourceReplacements: [
+      ...(prior.staleSourceReplacements ?? []),
+      {
+        archivedAt: new Date().toISOString(),
+        fromChapterFingerprint: prior.chapterFingerprint,
+        archivePath: path.relative(REPO_ROOT, archiveRoot),
+        moved,
+        priorState: prior,
+      },
+    ],
+    updatedAt: new Date().toISOString(),
+  };
+  saveState(state);
+  console.warn(
+    `[${key}] archived stale-source recovery artifacts (${moved.join(', ') || 'state only'}) ` +
+    `before forced re-extraction`,
+  );
+  return true;
+}
+
 function rejectedArtifactPath(target, chunk = null) {
   return chunk
     ? path.join(
@@ -1020,6 +1083,20 @@ ${seed}
 </immutable-seed>`;
 }
 
+function chronologyRetryGuidance(errors) {
+  const needsChronology = errors.some((error) =>
+    /no (?:Western active-date hint|Western-year attestation) required/iu.test(String(error)));
+  if (!needsChronology) return '';
+  return `
+
+CHRONOLOGY REQUIREMENT:
+For every listed person missing a Western active-date hint or Western-year attestation,
+either add a source-grounded Western year/interval/bound and matching activeDateHint, or
+add an attestation with unresolved: true and a substantive (20+ character)
+unresolvedReason explaining why the supplied evidence cannot establish that chronology.
+Do not invent dates, copy another person's date, or use a vague placeholder.`;
+}
+
 function sealedRetryPrompt(target, chunk, errors) {
   const output = chunk ? chunkArtifactPath(target, chunk) : artifactPath(target);
   const artifact = sealedArtifactPath(output);
@@ -1030,7 +1107,7 @@ audit all owned units again, and overwrite only ${artifact} with the complete va
 Do not inspect the filesystem, browse, search, use subagents, or create another file.
 
 VALIDATION ERRORS:
-${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
+${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}${chronologyRetryGuidance(errors)}`;
 }
 
 function sealedResumePrompt(target, chunk, errors) {
@@ -1099,7 +1176,7 @@ After validation succeeds, refresh the host artifact by running:
 ${publishArtifactCommand(output)}
 
 VALIDATION ERRORS:
-${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}`;
+${errors.slice(0, 400).map((error) => `- ${error}`).join('\n')}${chronologyRetryGuidance(errors)}`;
 }
 
 function chunkBuildArgs(target, chunk, opts, packet, output) {
@@ -1201,6 +1278,8 @@ async function runAgentTurn(agent, prompt, target, opts, phase, control) {
   console.log(`[${stateKey(target)}] ${phase} prompt -> ${agent.agentId}`);
   const run = await sendCursorAgentWhenReady(agent, prompt, {
     label: `[${stateKey(target)}] ${phase}`,
+    timeoutMs: opts.runTimeoutMs,
+    readTimeoutMs: Math.min(opts.runTimeoutMs, 30_000),
   });
   control.activeRuns.set(run.id, { run, target });
   try {
@@ -3034,6 +3113,31 @@ async function processChunkedTarget(target, packet, opts, state, control, budget
   return { status: 'accepted', stats: validated.stats };
 }
 
+function retainSingleChunkValidationRepair(target, chunks, state, errors) {
+  const candidateIds = new Set(errors.flatMap((message) =>
+    [...String(message).matchAll(/cand_[a-z0-9]+/giu)].map((match) => match[0])));
+  if (candidateIds.size === 0) return false;
+  const affected = chunks.filter((chunk) => {
+    const archive = chunkArchivePath(target, chunk);
+    return fs.existsSync(archive) &&
+      [...candidateIds].some((candidateId) => fs.readFileSync(archive, 'utf8').includes(candidateId));
+  });
+  if (affected.length === 0) return false;
+  for (const chunk of affected) {
+    updateChunkState(state, target, chunk, {
+      status: 'interrupted',
+      resumePending: false,
+      globalValidationErrors: errors,
+      lastErrors: errors,
+    });
+  }
+  console.warn(
+    `[${stateKey(target)}/chunk-${affected.map((chunk) => chunk.id).join(',')}] ` +
+    'chapter-level validation rejected local artifact(s); retaining the exact agent(s) for targeted repair',
+  );
+  return true;
+}
+
 function acceptWholeExtraction(target, accepted, state) {
   let compact = compactPeopleExtraction(accepted.extraction, accepted.packet);
   const initial = validateCompactPeopleExtraction(compact, accepted.packet, { strictAliasDispositions: true });
@@ -3070,6 +3174,7 @@ async function processTarget(target, opts, state, control, budget) {
   const packet = target.packet ?? buildPeopleExtractionPacket(target.book, target.chapter, {
     properNounMatcher: opts.properNounMatcher,
   });
+  resetForcedStaleSourceRecovery(target, packet, opts, state);
   if (!opts.force && currentExtractionIsValid(target, packet)) {
     console.log(`[${key}] already accepted and current; skip`);
     updateState(state, target, { status: 'accepted', chapterFingerprint: packet.input.chapterFingerprint });
@@ -3105,6 +3210,7 @@ async function processTarget(target, opts, state, control, budget) {
     } catch (error) {
       requestCursorUsageLimitStop(control, error);
       const errors = validationErrors(error);
+      retainSingleChunkValidationRepair(target, chunkPlanForTarget(target, packet, opts, state), state, errors);
       if (isRecoveryArtifactUnavailable(error)) {
         updateState(state, target, { status: 'interrupted' });
         console.log(`[${key}] no validated artifact is available yet; retained chat preserved`);
@@ -3949,6 +4055,23 @@ async function selfTest() {
   if (networkSendAttempts !== 2 || recoveredNetworkRun.id !== 'run-network-fixture') {
     throw new Error('Cursor transient-network retry did not preserve the logical turn');
   }
+  let stalledSendAttempts = 0;
+  const recoveredStalledRun = await sendCursorAgentWhenReady({
+    async send() {
+      stalledSendAttempts += 1;
+      if (stalledSendAttempts === 1) return new Promise(() => {});
+      return { id: 'run-stalled-send-fixture' };
+    },
+  }, 'fixture prompt', {
+    label: '[fixture] extraction',
+    initialDelayMs: 0,
+    maxDelayMs: 0,
+    timeoutMs: 100,
+    readTimeoutMs: 1,
+  });
+  if (stalledSendAttempts !== 2 || recoveredStalledRun.id !== 'run-stalled-send-fixture') {
+    throw new Error('Cursor stalled send did not preserve the logical turn');
+  }
   const budget = { rawCostCents: 400, chargedCents: 0, reservedCents: 600 };
   const costOpts = { maxCostCents: 2000, agentCostReserveCents: 1000 };
   if (agentReservationCents(costOpts, budget) !== 1000) {
@@ -4243,6 +4366,36 @@ async function main() {
     const queue = prepareTargetQueue(rawTargets, opts, state, opts.properNounMatcher);
     let targets = queue.selected;
     let claimedTargets = [];
+    // Verify every sealed source packet before reserving a fresh batch.  A mismatch
+    // is a host-side preflight failure, not worker work; claiming first would leave
+    // every later target stranded when one chapter differs from the staging ref.
+    if (!opts.dryRun && !opts.recoverOnly && targets.length > 0) {
+      fetchStartingRef(opts.startingRef);
+      const sourceVerified = [];
+      const sourceMismatches = [];
+      for (const target of targets) {
+        const packet = buildPeopleExtractionPacket(target.book, target.chapter, {
+          properNounMatcher: opts.properNounMatcher,
+        });
+        try {
+          assertCloudSourceMatches(target, packet, opts, opts.properNounMatcher);
+          sourceVerified.push(target);
+        } catch (error) {
+          if (!String(error?.message ?? error).includes('the cloud worker would annotate stale text')) throw error;
+          sourceMismatches.push({ target, error });
+        }
+      }
+      if (sourceMismatches.length > 0) {
+        for (const { target, error } of sourceMismatches) {
+          console.error(`[${stateKey(target)}] skipped before claim: ${error.message}`);
+        }
+        console.error(
+          `Skipped ${sourceMismatches.length} stale-source chapter(s) before claiming the batch; ` +
+          'reconcile or publish their source changes before extraction.',
+        );
+      }
+      targets = sourceVerified;
+    }
     if (!opts.dryRun && !opts.recoverOnly && targets.length > 0) {
       const reserved = claimRemotePeopleTargets(targets, {
         ...sharedQueueOptions,
@@ -4284,8 +4437,6 @@ async function main() {
       `${opts.recoverOnly ? 'artifact recovery only; ' : ''}` +
       `shared worker=${opts.workerId}; fresh workers=sealed packet-only; no worker git pushes`,
     );
-    if (!opts.dryRun && targets.length > 0) fetchStartingRef(opts.startingRef);
-
     const control = createRunControl();
     const removeSignalHandlers = opts.dryRun ? () => {} : installSignalHandlers(control);
     const budget = {
@@ -4323,8 +4474,32 @@ async function main() {
       counts.set(outcome.status, (counts.get(outcome.status) ?? 0) + 1);
     }
     if (!opts.dryRun && claimedTargets.length > 0) {
+      // A skipped target can be a pre-existing local extraction which was not
+      // claimed by this invocation.  It needs no queue transition; treating it
+      // as ready would fail the whole batch after useful owned work completed.
+      // Accepted output, by contrast, must still have its owned claim and the
+      // queue mutation below intentionally fails loudly if that invariant is
+      // violated.
+      const currentLedger = readRemotePeopleWorkLedger(sharedQueueOptions);
+      const ownedSkipped = results.filter(({ target, outcome }) => {
+        if (outcome.status !== 'skipped') return false;
+        const claim = currentLedger.claims[workQueueChapterKey(target)];
+        return claim?.lane === 'cursor-sdk' && claim.worker === opts.workerId;
+      });
+      const unownedSkipped = results.filter(({ target, outcome }) => {
+        if (outcome.status !== 'skipped') return false;
+        const claim = currentLedger.claims[workQueueChapterKey(target)];
+        return claim?.lane !== 'cursor-sdk' || claim.worker !== opts.workerId;
+      });
+      if (unownedSkipped.length) {
+        console.log(
+          `Left ${unownedSkipped.length} unowned pre-existing skipped extraction(s) unchanged: ` +
+          unownedSkipped.map(({ target }) => stateKey(target)).join(', '),
+        );
+      }
       const ready = results
-        .filter(({ outcome }) => ['accepted', 'skipped'].includes(outcome.status))
+        .filter(({ outcome }) => outcome.status === 'accepted')
+        .concat(ownedSkipped)
         .map(({ target }) => target);
       const resumable = results
         .filter(({ outcome, target }) =>

@@ -1,0 +1,1235 @@
+--- a/scripts/lib/people-translation-repairs.mjs
++++ b/scripts/lib/people-translation-repairs.mjs
+@@ -1223,6 +1223,21 @@
+     (options.previousPacket?.units ?? []).map((unit) => [unit.id, unit]),
+   );
+   const unitById = new Map(revisedPacket.units.map((unit) => [unit.id, unit]));
++  const previousUnitDigestById = new Map((extraction.input?.unitDigests ?? []).map((digest) => [digest.id, digest]));
++  const currentUnitDigestById = new Map((revisedPacket.input?.unitDigests ?? []).map((digest) => [digest.id, digest]));
++  const unitUnchanged = (unitId) => {
++    const before = previousUnitById.get(unitId);
++    const after = unitById.get(unitId);
++    if (before && after) return ['zh', 'en', 'literal'].every(field => before[field] === after[field]);
++    const oldDigest = previousUnitDigestById.get(unitId);
++    const newDigest = currentUnitDigestById.get(unitId);
++    return Boolean(oldDigest && newDigest && ['zh', 'en', 'literal'].every(field => oldDigest[field] === newDigest[field]));
++  };
++  const priorCandidateOwners = new Map();
++  for (const mention of extraction.mentions) for (const id of mention.candidateRefs) {
++    if (!priorCandidateOwners.has(id)) priorCandidateOwners.set(id, new Set());
++    priorCandidateOwners.get(id).add(mention.person);
++  }
+   const staleSpans = [];
+   const invalidSubwordContexts = new Set();
+ 
+@@ -1262,9 +1277,14 @@
+     mention.candidateRefs = [];
+   }
+   const previousDispositions = structuredClone(reconciled.candidateDispositions);
+-  reconciled.candidateDispositions = reconciled.candidateDispositions.filter((item) =>
+-    validCandidateIds.has(item.candidate)
+-  );
++  reconciled.candidateDispositions = reconciled.candidateDispositions.filter((item) => {
++    const current = candidateById.get(item.candidate);
++    if (!current || !validCandidateIds.has(item.candidate) || !unitUnchanged(current.unit)) return false;
++    const previous = previousCandidateById.get(item.candidate);
++    return !options.previousPacket || Boolean(previous && previous.unit === current.unit && previous.language === current.language &&
++      previous.exact === current.exact && previous.occurrence === current.occurrence &&
++      previous.startCodePoint === current.startCodePoint && previous.endCodePoint === current.endCodePoint);
++  });
+ 
+   const unresolvedSpans = [];
+   const orphanedStalePeople = new Set();
+@@ -1490,1123 +1510,34 @@
+   );
+ 
+   const accounted = new Set(reconciled.candidateDispositions.map((item) => item.candidate));
+-  const knownPolities = new Set(reconciled.people.flatMap((person) =>
+-    person.identityHints.polityHints ?? []
+-  ));
+-  const knownReignPeriods = new Set();
+-  for (const unit of revisedPacket.units) {
+-    for (const text of [unit.en, unit.literal]) {
+-      for (const match of text.matchAll(/\b([A-Z][\p{L}'’-]*)[ \t]+era\b/gu)) {
+-        knownReignPeriods.add(match[1]);
+-      }
+-      for (const match of text.matchAll(
+-        /\b(?:in|of)[ \t]+([A-Z][\p{L}'’-]*)[ \t]+(?:year[ \t]+\d+|\d+)\b/gu,
+-      )) {
+-        knownReignPeriods.add(match[1]);
+-      }
+-    }
+-  }
+-
+   const unresolvedCandidates = [];
+   for (const candidate of revisedPacket.preflight.candidates) {
+     if (accounted.has(candidate.id)) continue;
+-    const remappedPriorDispositions = previousDispositions.filter((disposition) => {
+-      const previous = previousCandidateById.get(disposition.candidate);
+-      if (
+-        !previous ||
+-        previous.unit !== candidate.unit ||
+-        previous.language !== candidate.language
+-      ) return false;
+-      const previousUnit = previousUnitById.get(previous.unit);
+-      const revisedUnit = unitById.get(candidate.unit);
+-      if (!previousUnit || !revisedUnit) return false;
+-      const remapped = remapMentionSpanThroughEdit(
+-        { exact: previous.exact, occurrence: previous.occurrence },
+-        previousUnit[previous.language],
+-        revisedUnit[candidate.language],
+-        candidate.language,
+-      );
+-      return remapped?.exact === candidate.exact &&
+-        remapped.startCodePoint === candidate.startCodePoint &&
+-        remapped.endCodePoint === candidate.endCodePoint;
+-    });
+-    const remappedDispositionKinds = new Set(remappedPriorDispositions.map((item) =>
+-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+-    ));
+-    if (remappedPriorDispositions.length > 0 && remappedDispositionKinds.size === 1) {
+-      reconciled.candidateDispositions.push({
+-        ...structuredClone(remappedPriorDispositions[0]),
+-        candidate: candidate.id,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    const priorSurfaceDispositions = previousDispositions.filter((disposition) => {
+-      const previous = previousCandidateById.get(disposition.candidate);
+-      return previous &&
+-        previous.language === candidate.language &&
+-        previous.exact === candidate.exact;
+-    });
+-    const priorDispositionKinds = new Set(priorSurfaceDispositions.map((item) =>
+-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+-    ));
+-    if (priorSurfaceDispositions.length > 0 && priorDispositionKinds.size === 1) {
+-      reconciled.candidateDispositions.push({
+-        ...structuredClone(priorSurfaceDispositions[0]),
+-        candidate: candidate.id,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    const counterpartDispositions = reconciled.candidateDispositions.filter((disposition) => {
+-      const counterpart = candidateById.get(disposition.candidate);
+-      return counterpart &&
+-        counterpart.unit === candidate.unit &&
+-        counterpart.language !== candidate.language &&
+-        sharedGlossaryEntry(counterpart, candidate);
+-    });
+-    const dispositionKinds = new Set(counterpartDispositions.map((item) =>
+-      `${item.disposition}\u0000${item.reason}\u0000${item.note ?? ''}`
+-    ));
+-    if (counterpartDispositions.length > 0 && dispositionKinds.size === 1) {
+-      reconciled.candidateDispositions.push({
+-        ...structuredClone(counterpartDispositions[0]),
+-        candidate: candidate.id,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+-    if (containing.length === 1) {
+-      containing[0].candidateRefs.push(candidate.id);
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    const enclosed = reconciled.mentions.filter((mention) => candidateEnclosesMention(candidate, mention));
+-    if (enclosed.length === 1) {
+-      const mention = enclosed[0];
+-      const otherOverlap = reconciled.mentions.some((other) =>
+-        other !== mention && other.unit.id === candidate.unit && other.spans[candidate.language].some((span) =>
+-          candidate.startCodePoint < span.endCodePoint && span.startCodePoint < candidate.endCodePoint
+-        )
+-      );
+-      if (!otherOverlap) {
+-        const previous = mention.spans[candidate.language].find((span) =>
+-          candidate.startCodePoint <= span.startCodePoint && candidate.endCodePoint >= span.endCodePoint
+-        );
+-        const replacement = exactSpanAt(
+-          unitById.get(candidate.unit)[candidate.language],
+-          candidate.exact,
+-          candidate.occurrence,
+-        );
+-        mention.spans[candidate.language] = mention.spans[candidate.language]
+-          .filter((span) => span !== previous);
+-        mention.spans[candidate.language].push(replacement);
+-        mention.candidateRefs.push(candidate.id);
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-    }
+-    const partialOverlaps = reconciled.mentions.flatMap((mention) =>
+-      mention.unit.id === candidate.unit
+-        ? mention.spans[candidate.language]
+-          .filter((span) => spansOverlap(candidate, span))
+-          .map((span) => ({ mention, span }))
+-        : []
+-    );
+-    if (partialOverlaps.length === 1) {
+-      const { mention, span } = partialOverlaps[0];
+-      const replacement = coveringSpan(
+-        unitById.get(candidate.unit)[candidate.language],
+-        candidate,
+-        span,
+-      );
+-      mention.spans[candidate.language] = mention.spans[candidate.language]
+-        .filter((item) => item !== span);
+-      mention.spans[candidate.language].push(replacement);
+-      mention.candidateRefs.push(candidate.id);
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (partialOverlaps.length > 1 && candidate.language === 'en') {
+-      const titleClaims = reconciled.claims.filter((claim) =>
+-        claim.predicate === 'name' &&
+-        claim.value?.kind === 'title' &&
+-        claimEvidenceUnit(claim, candidate.unit) &&
+-        typeof claim.value?.en === 'string' &&
+-        surfaceContains(candidate.exact, claim.value.en, 'en')
+-      );
+-      const titledPeople = new Set(titleClaims.flatMap((claim) => {
+-        const hasPersonalNameInCandidate = reconciled.claims.some((nameClaim) =>
+-          nameClaim.subject === claim.subject &&
+-          nameClaim.predicate === 'name' &&
+-          nameClaim.value?.kind !== 'title' &&
+-          claimEvidenceUnit(nameClaim, candidate.unit) &&
+-          typeof nameClaim.value?.en === 'string' &&
+-          surfaceContains(candidate.exact, nameClaim.value.en, 'en')
+-        );
+-        return hasPersonalNameInCandidate ? [claim.subject] : [];
+-      }));
+-      if (titledPeople.size === 1) {
+-        const person = [...titledPeople][0];
+-        const titleSurfaces = new Set(titleClaims
+-          .filter((claim) => claim.subject === person)
+-          .map((claim) => claim.value.en.toLocaleLowerCase('en-US')));
+-        for (const { mention, span } of partialOverlaps) {
+-          if (titleSurfaces.has(span.exact.toLocaleLowerCase('en-US'))) mention.person = person;
+-        }
+-      }
+-    }
+-    if (addLeadingParentheticalAlias(
+-      reconciled,
+-      candidate,
+-      unitById.get(candidate.unit),
+-    )) {
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (addPosthumousNameCandidate(
+-      reconciled,
+-      candidate,
+-      unitById.get(candidate.unit),
+-    )) {
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    let aliasMatches = reconciled.people.flatMap((person) =>
+-      aliasesForPerson(reconciled, person.localId, candidate.language, candidate.unit)
+-        .filter((alias) => {
+-          if (surfaceContains(candidate.exact, alias.exact, candidate.language)) return true;
+-          const fragmentMatch = surfaceContains(alias.exact, candidate.exact, candidate.language) ||
+-            (candidate.language === 'en' && sharedWordCount(candidate.exact, alias.exact) >= 2);
+-          if (!fragmentMatch) return false;
+-          return exactOccurrences(
+-            unitById.get(candidate.unit)[candidate.language],
+-            alias.exact,
+-            candidate.language,
+-          )
+-            .some((span) => spansOverlap(span, candidate));
+-        })
+-        .map((alias) => ({ person: person.localId, alias }))
+-    );
+-    const exactAliasMatches = aliasMatches.filter((item) => item.alias.exact === candidate.exact);
+-    if (exactAliasMatches.length > 0) aliasMatches = exactAliasMatches;
+-    if (
+-      aliasMatches.length === 0 &&
+-      candidate.language === 'en' &&
+-      !ENGLISH_CONTEXTUAL_PERSON_TITLES.has(candidate.exact) &&
+-      (candidate.exact.includes(' ') || [...candidate.exact].length >= 4)
+-    ) {
+-      aliasMatches = reconciled.claims.flatMap((claim) => {
+-        if (claim.predicate !== 'name' || claim.value?.[candidate.language] !== candidate.exact) {
+-          return [];
+-        }
+-        return [{
+-          person: claim.subject,
+-          alias: {
+-            exact: candidate.exact,
+-            kind: mentionKindForNameKind(claim.value?.kind),
+-            preferred: false,
+-          },
+-        }];
+-      });
+-    }
+-    if (
+-      aliasMatches.length === 0 &&
+-      !(
+-        candidate.language === 'en' &&
+-        ENGLISH_CONTEXTUAL_PERSON_TITLES.has(candidate.exact)
+-      )
+-    ) {
+-      aliasMatches = reconciled.people.flatMap((person) => {
+-        const exact = person.preferredNameSuggestion?.[candidate.language];
+-        if (exact !== candidate.exact) return [];
+-        const nameClaim = reconciled.claims.find((claim) =>
+-          claim.subject === person.localId &&
+-          claim.predicate === 'name' &&
+-          claim.value?.[candidate.language] === exact
+-        );
+-        return [{
+-          person: person.localId,
+-          alias: {
+-            exact,
+-            kind: mentionKindForNameKind(nameClaim?.value?.kind),
+-            preferred: true,
+-          },
+-        }];
+-      });
+-    }
+-    const matchingPeople = new Set(aliasMatches.map((item) => item.person));
+-    if (matchingPeople.size === 1) {
+-      const person = [...matchingPeople][0];
+-      const unit = unitById.get(candidate.unit);
+-      const match = aliasMatches.find((item) => item.person === person);
+-      const aliasOccurrences = exactOccurrences(
+-        unit[candidate.language],
+-        match.alias.exact,
+-        candidate.language,
+-      );
+-      const aliasSpan = candidate.exact.includes(match.alias.exact)
+-        ? exactSpanAt(unit[candidate.language], candidate.exact, candidate.occurrence)
+-        : aliasOccurrences.find((span) => spansOverlap(span, candidate)) ?? aliasOccurrences[0];
+-      const overlapping = reconciled.mentions.filter((mention) =>
+-        mention.person === person &&
+-        mention.unit.id === candidate.unit &&
+-        mention.spans[candidate.language].some((span) => spansOverlap(span, aliasSpan))
+-      );
+-      const conflicts = reconciled.mentions.some((mention) =>
+-        mention.person !== person &&
+-        mention.unit.id === candidate.unit &&
+-        mention.spans[candidate.language].some((span) => spansOverlap(span, aliasSpan))
+-      );
+-      if (overlapping.length === 1 && !conflicts) {
+-        const mention = overlapping[0];
+-        mention.spans[candidate.language] = mention.spans[candidate.language]
+-          .filter((span) => !spansOverlap(span, aliasSpan));
+-        mention.spans[candidate.language].push(aliasSpan);
+-        mention.kind = match.alias.kind;
+-        mention.candidateRefs.push(candidate.id);
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (addAliasMention(
+-        reconciled,
+-        unit,
+-        person,
+-        candidate.language,
+-        match.alias.kind,
+-        aliasSpan,
+-      )) {
+-        const mention = reconciled.mentions.at(-1);
+-        mention.candidateRefs.push(candidate.id);
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-    }
+-    if (candidate.language === 'en') {
+-      const unitIndex = revisedPacket.units.findIndex((unit) => unit.id === candidate.unit);
+-      const previousUnitId = revisedPacket.units[unitIndex - 1]?.id;
+-      const precedingMatches = reconciled.mentions.filter((mention) =>
+-        mention.unit.id === previousUnitId &&
+-        mention.spans.en.some((span) => span.exact === candidate.exact)
+-      );
+-      const precedingPeople = new Set(precedingMatches.map((mention) => mention.person));
+-      if (precedingPeople.size === 1) {
+-        const prior = precedingMatches[0];
+-        const span = exactSpanAt(
+-          unitById.get(candidate.unit).en,
+-          candidate.exact,
+-          candidate.occurrence,
+-        );
+-        if (addAliasMention(
+-          reconciled,
+-          unitById.get(candidate.unit),
+-          prior.person,
+-          'en',
+-          prior.kind,
+-          span,
+-        )) {
+-          reconciled.mentions.at(-1).candidateRefs.push(candidate.id);
++    if (unitUnchanged(candidate.unit)) {
++      const sameOccurrence = [...previousCandidateById.values()].filter(previous =>
++        previous.unit === candidate.unit && previous.language === candidate.language &&
++        previous.exact === candidate.exact && previous.occurrence === candidate.occurrence &&
++        previous.startCodePoint === candidate.startCodePoint && previous.endCodePoint === candidate.endCodePoint);
++      if (sameOccurrence.length === 1) {
++        const previous = sameOccurrence[0];
++        const dispositions = previousDispositions.filter(item => item.candidate === previous.id);
++        const owners = priorCandidateOwners.get(previous.id) ?? new Set();
++        if (dispositions.length === 1 && owners.size === 0) {
++          reconciled.candidateDispositions.push({...dispositions[0], candidate:candidate.id});
+           accounted.add(candidate.id);
+           continue;
+         }
+-      }
+-    }
+-    const overlapPeople = new Set(partialOverlaps.map(({ mention }) => mention.person));
+-    if (partialOverlaps.length > 1 && overlapPeople.size > 1) {
+-      const titlePeople = new Set(partialOverlaps
+-        .filter(({ mention }) => mention.kind === 'title-reference')
+-        .map(({ mention }) => mention.person));
+-      const nameOverlaps = partialOverlaps.filter(({ mention }) => mention.kind !== 'title-reference');
+-      if (titlePeople.size === 1 && nameOverlaps.length === 1) {
+-        const titlePerson = [...titlePeople][0];
+-        const displacedPerson = nameOverlaps[0].mention.person;
+-        const repeated = reconciled.mentions.find((mention) =>
+-          mention !== nameOverlaps[0].mention &&
+-          mention.person === titlePerson &&
+-          mention.unit.id === candidate.unit &&
+-          mention.spans[candidate.language].some((span) =>
+-            span.exact === nameOverlaps[0].span.exact && !spansOverlap(span, candidate)
+-          )
+-        );
+-        if (displacedPerson !== titlePerson && repeated) {
+-          nameOverlaps[0].mention.person = titlePerson;
+-          repeated.person = displacedPerson;
+-          overlapPeople.clear();
+-          overlapPeople.add(titlePerson);
+-        }
+-      }
+-    }
+-    if (partialOverlaps.length > 1 && overlapPeople.size === 1) {
+-      const target = partialOverlaps[0].mention;
+-      const unit = unitById.get(candidate.unit);
+-      const candidateSpan = exactSpanAt(
+-        unit[candidate.language],
+-        candidate.exact,
+-        candidate.occurrence,
+-      );
+-      const mergedSpan = partialOverlaps.reduce(
+-        (span, current) => coveringSpan(unit[candidate.language], span, current.span),
+-        candidateSpan,
+-      );
+-      for (const { mention, span } of partialOverlaps) {
+-        mention.spans[candidate.language] = mention.spans[candidate.language]
+-          .filter((item) => item !== span);
+-        target.candidateRefs.push(...mention.candidateRefs);
+-      }
+-      target.spans[candidate.language].push(mergedSpan);
+-      target.candidateRefs.push(candidate.id);
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en') {
+-      const unit = unitById.get(candidate.unit);
+-      const points = [...unit.en];
+-      const preceding = reconciled.mentions.flatMap((mention) =>
+-        mention.unit.id === candidate.unit
+-          ? mention.spans.en
+-            .filter((span) => /^\s*\($/u.test(
+-              points.slice(span.endCodePoint, candidate.startCodePoint).join(''),
+-            ))
+-            .map((span) => ({ mention, span }))
+-          : []
+-      );
+-      const nearestEnd = Math.max(-1, ...preceding.map(({ span }) => span.endCodePoint));
+-      const nearest = preceding.filter(({ span }) => span.endCodePoint === nearestEnd);
+-      const precedingPeople = new Set(nearest.map(({ mention }) => mention.person));
+-      const closesParenthesis = /^\)/u.test(points.slice(candidate.endCodePoint).join(''));
+-      if (closesParenthesis && precedingPeople.size === 1) {
+-        const person = [...precedingPeople][0];
+-        const span = exactSpanAt(unit.en, candidate.exact, candidate.occurrence);
+-        if (addAliasMention(reconciled, unit, person, 'en', 'alternate-name', span)) {
+-          reconciled.mentions.at(-1).candidateRefs.push(candidate.id);
+-          if (!reconciled.claims.some((claim) =>
+-            claim.subject === person &&
+-            claim.predicate === 'name' &&
+-            claim.value?.en === candidate.exact
+-          )) {
+-            reconciled.claims.push({
+-              id: `${reconciled.book}:${reconciled.chapter}:c-parenthetical-alias`,
+-              subject: person,
+-              predicate: 'name',
+-              value: { kind: 'alternate-name', en: candidate.exact },
+-              certainty: 'strongly-inferred',
+-              evidence: [`${reconciled.book}:${reconciled.chapter}:${candidate.unit}`],
+-            });
+-          }
++        const containing = reconciled.mentions.filter(mention => owners.has(mention.person) && candidateInsideMention(candidate, mention));
++        if (dispositions.length === 0 && owners.size === 1 && containing.length === 1) {
++          containing[0].candidateRefs.push(candidate.id);
+           accounted.add(candidate.id);
+           continue;
+         }
+-      }
+-    }
+-    if (candidate.language === 'en' && knownPolities.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'polity',
+-        note: `Known polity from chapter identity hints: ${candidate.exact}`,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && knownReignPeriods.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'reign-period',
+-        note: `Reign-period name established elsewhere in the chapter: ${candidate.exact}`,
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en') {
+-      const unitText = unitById.get(candidate.unit).en;
+-      const codePoints = [...unitText];
+-      const before = codePoints.slice(0, candidate.startCodePoint).join('');
+-      const after = codePoints.slice(candidate.endCodePoint).join('');
+-      if (/^(?:and|but|or) (?:asked|replied|said)$/u.test(candidate.exact)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'not-a-name',
+-          note: 'Speech-introducing function phrase, not a person name.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        ['Dalü', 'Zhonglü', 'Nanlü', 'Zhong Lü', 'Nan Lü'].includes(candidate.exact) &&
+-        /\b(?:inches|music|modes?|note|pairing|palace(?:-of)?|pitch(?:es)?|pitch-?pipe|refers to|sang)\b/iu.test(unitText)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'not-a-name',
+-          note: 'Named musical pitch standard in a technical definition or measurement.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/^:\s+(?:a\s+)?place name\b/iu.test(after)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'place',
+-          note: 'Headword explicitly glossed as a place name.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/\ba title for (?:tribal )?chiefs\b/iu.test(unitText)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'office',
+-          note: 'Headword or variant explicitly glossed as a title for chiefs.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        (candidate.exact === 'Song' && /^\s+of\s+[A-Z]/u.test(after)) ||
+-        (/\(Song of\s+$/u.test(before) && /^\)/u.test(after)) ||
+-        (candidate.exact === 'Wind' && /['’]South[ \t]*$/u.test(before))
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'book-title',
+-          note: 'Component of an explicitly labeled song title, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        /^(?:[ \t]+(?:era|reign|year)\b|[ \t]*\(\d{3,4}\))/iu.test(after) ||
+-        /\b(?:beginning|opening|year) of[ \t]+$/iu.test(before) ||
+-        (/\b(?:in|of)[ \t]+$/iu.test(before) && /^[ \t]+\d+\b/u.test(after))
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'reign-period',
+-          note: 'Capitalized reign-period name identified from its date context.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/^(?:[ \t]+and[ \t]+[\p{Lu}][\p{L}'’–-]*)*[ \t]+(?:people|peoples|tribe|tribes|clan|clans|clansmen|faction|kings|kingships)\b/iu.test(after)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'Ethnic or social collective named immediately before its group noun.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === "Rus'" && /\bagainst the[ \t]*$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Rus people named as the object of a campaign, not an individual.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === "Rus'" && /\b(?:garrison|hold)[ \t]*$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'place',
+-          note: 'Rus named as the territory being garrisoned, not an individual.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === 'Zhou' && /\b(?:entering|within)[ \t]*$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'polity',
+-          note: 'Northern Zhou named as a polity or political territory, not an individual.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === 'Lü' && /\bamong the[ \t]*$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Lü clan named collectively, not Empress Lü or another individual.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === 'Lü' && /\bextirpated the[ \t]*$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Lü clansmen named collectively as the object of extirpation.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+       }
+-      if (
+-        candidate.exact === 'Lü' &&
+-        (/\b(?:clans|maternal kin|mother's people)\b/iu.test(unitText) ||
+-          /\b(?:Shen and Lü|Lü and Huo)\b/u.test(unitText))
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Lü clan or maternal kin are named collectively, not an individual Lü.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === 'Yi' && /\bMan and[ \t]*$/u.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Yi people paired with the Man peoples, not the person Yi Yin.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        candidate.exact === 'Yelü' &&
+-        (/^[ \t]+bu\b/iu.test(after) ||
+-          /\bdivided three[ \t]*$/iu.test(before) ||
+-          /\b(?:clan|names?|surname)\b/iu.test(unitText))
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Yelü clan, its divisions, or its surname is named collectively, not an individual clan member.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        candidate.exact === 'Shulü' &&
+-        ((/\bthe[ \t]*$/iu.test(before) && /^[ \t]+were\b/iu.test(after)) ||
+-          /^[ \t]+lineages\b/iu.test(after))
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'The Shulü lineage is named collectively, not an individual clan member.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === 'Three Yelü' && /^\s*:/u.test(after)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'collective',
+-          note: 'Heading for the three Yelü clan divisions, not an individual person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (candidate.exact === 'Yan' && /\bin[ \t]*$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'polity',
+-          note: 'The state of Yan in a locative construction, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        candidate.exact === 'Shu' &&
+-        /\bOnly[ \t]*$/u.test(before) &&
+-        /^[ \t]+produces\b/iu.test(after)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'polity',
+-          note: 'The region of Shu identified as the producer of a commodity, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        candidate.exact === 'Tang' &&
+-        /^[ \t]+(?:regulations|rules)\b/iu.test(after)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'polity',
+-          note: 'The Tang dynasty modifying its regulations or rules, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/^(?:\s+and\s+[\p{Lu}][\p{L}'’-]*)?\s+ruling houses?\b/u.test(after)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'polity',
+-          note: 'Ruling-clan house, not an individual person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/^[ \t]+(?:army|command|division|garrison)\b/iu.test(after)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'organization',
+-          note: 'Named military organization, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        /\bprefectures?\b[^.;!?]*$/iu.test(before) ||
+-        /^[ \t]+(?:County|Prefecture|Province)\b/u.test(after) ||
+-        /^(?:,\s*[\p{Lu}][\p{L}'’-]*)*(?:,\s*)?(?:and\s+)?other prefectures?\b/iu.test(after)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'place',
+-          note: 'Administrative place name, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/^(?:,\s*(?:and\s+)?[A-Z][\p{L}'’-]*)*\s+rivers?\b/u.test(after)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'place',
+-          note: 'Named river in a bounded geographic list, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/\bsurplus salt from(?:[ \t]+[\p{Lu}][\p{L}'’-]*,?)*[ \t]*$/u.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'place',
+-          note: 'Territorial source in a list of surplus-salt origins, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/\bprinces of\s+$/iu.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'polity',
+-          note: 'Dynastic or territorial label governing a group of princes.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (/\b(?:Pacifies|Pacifying) the\s+$/u.test(before)) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'office',
+-          note: 'Directional component of a military office title, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        /^[A-Z][a-z]+zhou$/u.test(candidate.exact)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'place',
+-          note: 'Romanized zhou place name identified from its locative context.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        /^(?:Eastern|Northern|Southern|Western)$/u.test(candidate.exact) &&
+-        /^(?:\s+and\s+(?:Eastern|Northern|Southern|Western))?\s+(?:Army|Bureau|Command|Court|Division|Office|Palace|Region)\b/iu.test(after)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'organization',
+-          note: 'Directional component of an institutional or military name, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+-      if (
+-        candidate.exact === 'Zhao' &&
+-        /^[ \t]+(?:airs|harps|music|songs|zithers)\b/iu.test(after)
+-      ) {
+-        reconciled.candidateDispositions.push({
+-          candidate: candidate.id,
+-          disposition: 'not-person',
+-          reason: 'other',
+-          note: 'Regional descriptor for a musical tradition or instrument, not a person.',
+-        });
+-        accounted.add(candidate.id);
+-        continue;
+-      }
+     }
+-    if (
+-      candidate.language === 'en' &&
+-      /^[ \t]+commandery(?:['’]s)?\b/iu.test(
+-        [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
+-      )
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'place',
+-        note: 'Component of a commandery name, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      /^[ \t]+Hall\b/u.test(
+-        [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
+-      )
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'place',
+-        note: 'Component of a hall name, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      /^(?:Cloth|Coin|Knife)(?: Worth)? (?:One|Twenty|Thirty|Forty|Fifty|Five Hundred|Five Thousand|One Hundred)$/u.test(candidate.exact)
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Currency or commodity denomination label, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && candidate.exact === 'Ghosts’') {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Possessive form of the Ghosts asterism (輿鬼), not a person or deity.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      /^Biographies\b/u.test(candidate.exact) &&
+-      /\bVolume\b[^.;!?]*,\s*$/u.test(
+-        [...unitById.get(candidate.unit).en].slice(0, candidate.startCodePoint).join('')
+-      )
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'book-title',
+-        note: 'Volume section heading, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_NAMED_PLACE_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'place',
+-        note: 'Named place, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_NAMED_ORGANIZATION_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'organization',
+-        note: 'Named institution, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_COLLECTIVE_PERSON_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'collective',
+-        note: 'Plural class of title holders, not an individual person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_INSTITUTIONAL_SUFFIX_RE.test(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'organization',
+-        note: 'Capitalized institutional name, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_NAMED_POLITY_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'polity',
+-        note: 'Named polity, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_BOOK_TITLE_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'book-title',
+-        note: 'Named work or chapter title, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_NAMED_NON_PERSON_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Named institution, place, or procedure, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_NAMED_OFFICE_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'office',
+-        note: 'Office-title component, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      [...ENGLISH_NAMED_OFFICE_TERMS].some((term) => surfaceContains(candidate.exact, term, 'en')) &&
+-      [...ENGLISH_NOBLE_TITLE_TERMS].some((term) => surfaceContains(candidate.exact, term, 'en'))
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'office',
+-        note: 'Scanner span crosses an office-title and noble-title boundary.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (candidate.language === 'en' && ENGLISH_NOBLE_TITLE_TERMS.has(candidate.exact)) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'title',
+-        note: 'Noble-rank component, not a person name by itself.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      candidate.exact === 'Jianwu' &&
+-      /\bJianwu era\b/u.test(unitById.get(candidate.unit).en)
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Jianwu is a reign era, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      candidate.exact === 'Nan' &&
+-      /\bNan Commandery\b/u.test(unitById.get(candidate.unit).en)
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'place',
+-        note: 'Nan is part of the place name Nan Commandery.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      candidateMatchesPlaceClaim(reconciled, candidate)
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'place',
+-        note: 'Place name recorded in this unit, not a person name.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      ['occupation', 'office'].some((predicate) =>
+-        candidateMatchesClaimValue(reconciled, candidate, predicate)
+-      )
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'office',
+-        note: 'Component of an office recorded in this unit, not a person name.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      candidateMatchesClaimValue(reconciled, candidate, 'credential')
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Credential or recommendation category recorded in this unit, not a person name.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      ['authorship', 'work-association'].some((predicate) =>
+-        candidateMatchesClaimValue(reconciled, candidate, predicate)
+-      )
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'book-title',
+-        note: 'Component of a cited or authored work recorded in this unit.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      candidateMatchesClaimValue(reconciled, candidate, 'organization-association')
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'organization',
+-        note: 'Component of an organization recorded in this unit, not a person name.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      candidateMatchesNamedTitleClaim(reconciled, candidate)
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'title',
+-        note: 'Component of an honorific or noble title recorded in this unit.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      (candidate.exact === 'Feng' || candidate.exact === 'Shan') &&
+-      /\bFeng and Shan (?:rites|sacrifices)\b/u.test(unitById.get(candidate.unit).en)
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Part of the Feng and Shan sacrifice name, not a person.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      /^[ \t]+hour\b/iu.test(
+-        [...unitById.get(candidate.unit).en].slice(candidate.endCodePoint).join('')
+-      )
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'other',
+-        note: 'Traditional hour label, not a person name.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+-    if (
+-      candidate.language === 'en' &&
+-      (ENGLISH_SENTENCE_INITIAL_NON_NAMES.has(candidate.exact) ||
+-        ENGLISH_FUNCTION_PHRASE_RE.test(candidate.exact)) &&
+-      candidate.detectors.every((detector) => detector.kind === 'english-capitalized-expression')
+-    ) {
+-      reconciled.candidateDispositions.push({
+-        candidate: candidate.id,
+-        disposition: 'not-person',
+-        reason: 'not-a-name',
+-        note: 'Sentence-initial English word.',
+-      });
+-      accounted.add(candidate.id);
+-      continue;
+-    }
+     unresolvedCandidates.push(candidate.id);
+   }
+ 
+-  // A later candidate can reconstruct a mention that also covers an earlier
+-  // unresolved fragment. Recheck after all mention growth so candidate order
+-  // does not create a false failure.
+-  for (const candidateId of unresolvedCandidates) {
+-    const candidate = revisedPacket.preflight.candidates.find((item) => item.id === candidateId);
+-    const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+-    if (containing.length === 1) containing[0].candidateRefs.push(candidate.id);
+-  }
+-
+   // Candidate reconciliation can widen an existing alias or add a second
+   // mention for the same person. Collapse those spans only after all mention
+   // growth has finished, and preserve the candidate accounting on the cover.
+@@ -2629,11 +1560,7 @@
+   }
+   const unresolvedAfterFinalMerge = revisedPacket.preflight.candidates.filter((candidate) => {
+     if (finalAccounted.has(candidate.id)) return false;
+-    const containing = reconciled.mentions.filter((mention) => candidateInsideMention(candidate, mention));
+-    if (containing.length !== 1) return true;
+-    containing[0].candidateRefs.push(candidate.id);
+-    finalAccounted.add(candidate.id);
+-    return false;
++    return true;
+   }).map((candidate) => candidate.id);
+ 
+   // A span can widen late in reconciliation and come to cover a scanner
+@@ -2658,41 +1585,6 @@
+     !nestedStringValues(claim.value).some((value) => unsupportedPeople.has(value))
+   );
+ 
+-  // A reviewed repair can introduce a person's preferred romanization only
+-  // once, below the scanner's repeated-single-token threshold. When that
+-  // person is already evidenced in the same unit, restore the exact display
+-  // link after stale conflicting spans and unsupported people are gone.
+-  for (const person of reconciled.people) {
+-    const exact = person.preferredNameSuggestion?.en;
+-    if (typeof exact !== 'string' || !exact.trim()) continue;
+-    // An attested name such as He does not make every English pronoun a name.
+-    // Preserve explicit mentions; require source review for new ambiguous ones.
+-    if (ENGLISH_PRONOUN_NAME_COLLISIONS.has(exact.trim().toLowerCase())) continue;
+-    const contextUnits = new Set([
+-      ...reconciled.mentions
+-        .filter((mention) => mention.person === person.localId)
+-        .map((mention) => mention.unit.id),
+-      ...reconciled.claims
+-        .filter((claim) => claim.subject === person.localId)
+-        .flatMap((claim) => claim.evidence.map((evidence) => evidence.split(':').at(-1))),
+-    ]);
+-    for (const unitId of contextUnits) {
+-      const unit = unitById.get(unitId);
+-      if (!unit) continue;
+-      for (const span of exactOccurrences(unit.en, exact, 'en')) {
+-        const alreadyLinked = reconciled.mentions.some((mention) =>
+-          mention.person === person.localId &&
+-          mention.unit.id === unitId &&
+-          mention.spans.en.some((current) =>
+-            current.startCodePoint <= span.startCodePoint && current.endCodePoint >= span.endCodePoint
+-          )
+-        );
+-        if (alreadyLinked) continue;
+-        addAliasMention(reconciled, unit, person.localId, 'en', 'personal-name', span);
+-      }
+-    }
+-  }
+-
+   // Preferred-name restoration runs after the main candidate pass and can
+   // meet a surviving bilingual mention for the same person. Normalize once
+   // more so the added display link shares that mention instead of overlapping it.

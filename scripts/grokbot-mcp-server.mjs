@@ -15,7 +15,7 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 const SERVER_VERSION = '1.0.0';
 const CLIENT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-client.mjs');
 const OPERATION_WORKER_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-operation-worker.mjs');
-const DEFAULT_OPERATION_TIMEOUT_MS = 120_000;
+const DEFAULT_OPERATION_TIMEOUT_MS = 300_000;
 
 function textResult(value) {
   return { content: [{ type: 'text', text: JSON.stringify(value) }] };
@@ -195,9 +195,18 @@ function runIsolatedOperation(env, operation, args) {
   });
 }
 
+function serializeAsyncOperation(callback) {
+  let tail = Promise.resolve();
+  return (...args) => {
+    const run = tail.then(() => callback(...args), () => callback(...args));
+    tail = run.catch(() => undefined);
+    return run;
+  };
+}
+
 function isolatedBridge(env) {
   return {
-    resumeOrClaim: (args) => runIsolatedOperation(env, 'resumeOrClaim', args),
+    resumeOrClaim: serializeAsyncOperation((args) => runIsolatedOperation(env, 'resumeOrClaim', args)),
     getChunk: (args) => runIsolatedOperation(env, 'getChunk', args),
     submitChunk: (args) => runIsolatedOperation(env, 'submitChunk', args),
     finalizeChapter: (args) => runIsolatedOperation(env, 'finalizeChapter', args),

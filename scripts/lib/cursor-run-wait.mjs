@@ -5,7 +5,7 @@ const AGENT_BUSY = /(?:\[agent_busy\]|agent already has an active run)/iu;
 const RATE_LIMIT = /(?:exceeded (?:the )?rate limit|rate limit exceeded|\b429\b)/iu;
 const RATE_LIMIT_MINUTE = /requests per minute/iu;
 const RATE_LIMIT_HOUR = /requests per hour/iu;
-const TRANSIENT_READ = /(?:service unavailable|temporarily unavailable|network request failed|fetch failed|econnreset|etimedout|socket hang up)/iu;
+const TRANSIENT_READ = /(?:service unavailable|temporarily unavailable|network request failed|fetch failed|econnreset|etimedout|timed out|socket hang up)/iu;
 
 export class CursorRunLimitExceededError extends Error {
   constructor(message, details = {}) {
@@ -93,7 +93,11 @@ export async function sendCursorAgentWhenReady(agent, prompt, options = {}) {
   while (true) {
     await waitForCursorApiCooldown();
     try {
-      return await agent.send(prompt);
+      return await boundedRead(
+        agent.send(prompt),
+        options,
+        `${options.label ?? 'Cursor agent'} send`,
+      );
     } catch (error) {
       if (Date.now() >= deadline) throw error;
       if (isCursorRateLimited(error)) {

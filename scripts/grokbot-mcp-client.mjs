@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 
 const DEFAULT_URL = 'https://grokbot-mcp.24histories.com/mcp';
+const DEFAULT_REQUEST_TIMEOUT_MS = 180_000;
 const RETRYABLE_HTTP_STATUSES = new Set([429, 502, 503, 504]);
 const MAX_HTTP_ATTEMPTS = 4;
 const COMMAND_TO_TOOL = new Map([
@@ -12,6 +13,14 @@ const COMMAND_TO_TOOL = new Map([
   ['submit-chunk', 'submit_chunk'],
   ['finalize', 'finalize_chapter'],
 ]);
+
+function requestTimeoutMs() {
+  const value = Number(process.env.GROKBOT_MCP_REQUEST_TIMEOUT_MS ?? DEFAULT_REQUEST_TIMEOUT_MS);
+  if (!Number.isSafeInteger(value) || value < 1_000 || value > 600_000) {
+    throw new Error('GROKBOT_MCP_REQUEST_TIMEOUT_MS must be an integer between 1000 and 600000');
+  }
+  return value;
+}
 
 function parseArgs(argv) {
   const [command, ...rest] = argv;
@@ -96,7 +105,7 @@ async function post(url, headers, body) {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(30_000),
+        signal: AbortSignal.timeout(requestTimeoutMs()),
       });
       text = await response.text();
     } catch (error) {

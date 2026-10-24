@@ -84,6 +84,14 @@ test('approval rejects forged quotes, duplicate IDs, failed checks and self-revi
   assert.throws(() => validateDateAuditReport(r, f.packet), /separate source reviewer/);
 });
 
+test('approval reports every missing item-event ownership field together', t => {
+  const f = fixture(t);
+  const r = structuredClone(f.report);
+  r.itemChecks.forEach(check => { delete check.event; });
+  assert.throws(() => validateDateAuditReport(r, f.packet), error =>
+    /Event ownership must be substantive text for: claim-1, hints-p001/.test(error.message));
+});
+
 test('source edits, extraction edits, removals and protocol changes invalidate approval', t => {
   const f = fixture(t); recordDateAudit(f.report, f.options);
   f.source.content[0].sentences[0].translation = 'Changed translation.';

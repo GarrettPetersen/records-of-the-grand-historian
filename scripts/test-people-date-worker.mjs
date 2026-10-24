@@ -142,6 +142,103 @@ test('artifact-only recovery downloads retained output but never creates or send
   assert.equal(h.calls('send').length,0);
 });
 
+test('artifact-only recovery preserves a missing retained agent identity', async () => {
+  const h = harness({ resume: () => { throw new Error('Agent not found'); } });
+  h.options.recoverOnly = true;
+  const task = reviewTask(undefined, { agentId: 'retained', runId: 'saved-run', sent: true });
+  await assert.rejects(h.worker(task), /Agent not found/);
+  assert.equal(task.state.agentId, 'retained');
+  assert.equal(task.state.runId, 'saved-run');
+  assert.equal(task.state.sent, true);
+  assert.equal(task.state.agentRestarts, undefined);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assertUsageCheckpoint(h, task);
+});
+
+test('failed replacement is observed while the prior attempt checkpoints usage', async () => {
+  const h = harness({
+    resume: () => { throw new Error('Agent not found'); },
+    send: () => { throw new Error('Replacement send failed'); },
+    getUsage: async () => {
+      await new Promise(resolve => setTimeout(resolve, 10));
+      return structuredClone(billedUsage);
+    },
+  });
+  const task = reviewTask(undefined, { agentId: 'missing', sent: true });
+  await assert.rejects(h.worker(task), /Replacement send failed/);
+  assert.equal(task.state.agentRestarts, 1);
+  assert.equal(h.calls('create').length, 1);
+  assert.equal(h.calls('send').length, 1);
+});
+
+test('replacement preserves prior usage without overwriting the new run telemetry', async () => {
+  const h = harness({ listArtifacts: agent => {
+    if (agent.agentId === 'retained') throw new Error('Agent not found');
+    return agent.artifact === null ? [] : [{ path: `/opt/cursor/artifacts/date-${agent.key}.json` }];
+  } });
+  h.addAgent('retained', { runs: [{ id: 'old-run', status: 'completed' }] });
+  const task = reviewTask(undefined, { agentId: 'retained', runId: 'old-run', sent: true });
+  await h.worker(task);
+  assert.equal(task.state.priorUsages[0].agentId, 'retained');
+  assert.equal(task.state.priorUsages[0].runId, 'old-run');
+  assert.equal(task.state.usage.agentId, 'agent-1');
+  assert.equal(task.state.usage.runId, 'run-1');
+});
+
+test('quota discovered during retry telemetry preserves the retained agent', async () => {
+  let usageLookups = 0;
+  const h = harness({
+    resume: () => { throw new Error('Agent not found'); },
+    getUsage: () => { usageLookups++; throw Object.assign(new Error('Account capacity exhausted'), { code: 'usage_limit_exceeded' }); },
+  });
+  const task = reviewTask(undefined, { agentId: 'retained', runId: 'old-run', sent: true });
+  await assert.rejects(h.worker(task), /Agent not found/);
+  assert.equal(h.control.stopRequested, true);
+  assert.equal(task.state.agentId, 'retained');
+  assert.equal(task.state.runId, 'old-run');
+  assert.equal(task.state.status, 'interrupted');
+  assert.equal(task.state.lastError, 'Agent not found');
+  assert.equal(task.state.usage.status, 'unavailable');
+  assert.match(task.state.usage.error, /Account capacity exhausted/);
+  assert.equal(usageLookups, 1);
+  assert.equal(h.calls('create').length, 0);
+});
+
+test('artifact-only recovery preserves a retained repair with a research blocker', async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'people-date-blocker-test-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(directory, 'research-blocker.json'), '{}');
+  const h = harness();
+  h.options.recoverOnly = true;
+  h.addAgent('retained-repair', { key: 'repair-0-first', artifact: { changes: [] } });
+  const task = repairTask();
+  task.directory = directory;
+  Object.assign(task.state, { agentId: 'retained-repair', runId: 'old-run', sent: true, status: 'returned' });
+  await h.worker(task);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.replacementUsed, undefined);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+});
+
+test('a stopped pool preserves a retained repair with a research blocker', async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'people-date-stopped-test-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(directory, 'research-blocker.json'), '{}');
+  const h = harness();
+  h.control.stopRequested = true;
+  h.addAgent('retained-repair', { key: 'repair-0-first', artifact: { changes: [] } });
+  const task = repairTask();
+  task.directory = directory;
+  Object.assign(task.state, { agentId: 'retained-repair', runId: 'old-run', sent: true, status: 'returned' });
+  await h.worker(task);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.replacementUsed, undefined);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+});
+
 test('retained conversation continues before any replacement, even with an empty run listing', async () => {
   const h = harness();
   h.addAgent('retained');
@@ -227,6 +324,22 @@ test('semantic rejection continues the same chat with the validator feedback', a
   assert.match(h.calls('send')[1][2], /Missing birth and death checks/);
   assert.match(h.calls('send')[1][2], /do not restart research/);
   assert.equal(task.state.validationError, null);
+});
+
+test('rejected repair resends the sealed current packet to its retained chat', async () => {
+  const h = harness();
+  const stale = { changes: [] };
+  h.addAgent('retained-repair', { key: 'repair-0-first', artifact: stale });
+  const task = repairTask();
+  Object.assign(task.state, {
+    agentId: 'retained-repair', sent: true, status: 'rejected',
+    validationError: 'Date repair before-value mismatch', artifactHash: hash(JSON.stringify(stale)),
+  });
+  await h.worker(task);
+  const message = h.calls('send').at(-1)[2];
+  assert.match(message, /This supersedes every earlier repair packet/);
+  assert.match(message, /"claims":\{"claim-1":\[/);
+  assert.match(message, /Date repair before-value mismatch/);
 });
 
 test('invalid JSON is an artifact validation error and is repaired in the retained chat', async () => {
@@ -499,6 +612,260 @@ function repairTask() {
   };
 }
 
+function blockedRepairFixture(t, options = {}) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'people-date-supplement-test-'));
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  const blocker = { blocked: true, reason: options.reason ?? 'The event chronology requires independent primary-source research.' };
+  const raw = JSON.stringify(blocker, null, 2) + '\n';
+  fs.writeFileSync(path.join(directory, 'research-blocker.json'), raw);
+  const task = repairTask();
+  task.directory = directory;
+  task.workflowSourceHash = 'original-source';
+  task.workflowExtractionHash = 'original-extraction';
+  Object.assign(task.state, { agentId: 'retained-repair', runId: 'old-run', sent: true, status: 'returned', artifactHash: hash(raw) });
+  task.researchSupplement = {
+    schemaVersion: 1, book: task.packet.book, chapter: task.packet.chapter, jobKey: task.key,
+    sourceHash: task.packet.sourceHash, extractionHash: task.packet.extractionHash,
+    originalSourceHash: task.workflowSourceHash, originalExtractionHash: task.workflowExtractionHash,
+    blockerHash: `sha256:${hash(raw)}`,
+    evidence: 'Source transcription: https://example.invalid/primary . The heading alone does not fix this event to a Western year.',
+  };
+  return { task, blocker, raw };
+}
+
+test('a pinned chronology supplement continues the retained repair chat with the actual evidence', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  const h = harness();
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  await h.worker(task);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('resume')[0][1], 'retained-repair');
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(h.calls('send')[0][1], 'retained-repair');
+  assert.ok(h.calls('send')[0][2].includes(task.researchSupplement.evidence));
+  assert.doesNotMatch(h.calls('send')[0][2], /host has resolved the prior active-hint invariant/);
+  assert.equal(task.state.replacementUsed, undefined);
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+});
+
+test('supplements must bind the exact retained job, both packet generations and blocker bytes before spending', async t => {
+  const bad = [
+    ['schemaVersion', 2], ['book', 'other'], ['chapter', '002'], ['jobKey', 'repair-0-other'],
+    ['sourceHash', 'different-source'], ['extractionHash', 'different-extraction'],
+    ['originalSourceHash', 'different-original-source'], ['originalExtractionHash', 'different-original-extraction'],
+    ['blockerHash', `sha256:${'0'.repeat(64)}`], ['evidence', '   '], ['evidence', null],
+  ];
+  for (const [field, value] of bad) {
+    const { task, raw } = blockedRepairFixture(t);
+    task.researchSupplement[field] = value;
+    const h = harness();
+    h.addAgent('retained-repair', { key: task.key, artifact: raw });
+    await assert.rejects(h.worker(task), /supplement|blocker|fingerprint|hash|evidence/i, field);
+    assert.equal(h.calls('create').length, 0, field);
+    assert.equal(h.calls('send').length, 0, field);
+    assert.equal(task.state.agentId, 'retained-repair', field);
+    assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw, field);
+  }
+});
+
+test('an unsupplemented research hold does not replace or continue its retained repair', async t => {
+  const { task, raw } = blockedRepairFixture(t, { reason: 'The active-hint invariant needs an explicit host determination.' });
+  delete task.researchSupplement;
+  const h = harness();
+  h.addAgent('retained-repair', { key: task.key, artifact: raw });
+  await assert.rejects(h.worker(task), /supplement|research|blocker/i);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+});
+
+test('changed blocker bytes or retained artifact hash fail closed without replacing the agent', async t => {
+  for (const failure of ['disk', 'state', 'missing-state-hash']) {
+    const { task, raw } = blockedRepairFixture(t);
+    if (failure === 'disk') fs.writeFileSync(path.join(task.directory, 'research-blocker.json'), `${raw} `);
+    if (failure === 'state') task.state.artifactHash = '0'.repeat(64);
+    if (failure === 'missing-state-hash') delete task.state.artifactHash;
+    const h = harness();
+    h.addAgent('retained-repair', { key: task.key, artifact: raw });
+    await assert.rejects(h.worker(task), /blocker|hash|fingerprint/i, failure);
+    assert.equal(h.calls('create').length, 0, failure);
+    assert.equal(h.calls('send').length, 0, failure);
+    assert.equal(task.state.agentId, 'retained-repair', failure);
+  }
+});
+
+test('the supplement and repair input together obey the retained packet byte ceiling', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  task.researchSupplement.evidence += ' 漢'.repeat(40000);
+  const h = harness();
+  h.addAgent('retained-repair', { key: task.key, artifact: raw });
+  await assert.rejects(h.worker(task), /packet exceeds|supplement.*(?:large|limit|bytes)/i);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+});
+
+test('supplement continuation counts validation feedback in the sealed message ceiling', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  task.state.validationError = '漢'.repeat(23000);
+  task.maxWorkerBytes = 65536;
+  const h = harness();
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  await assert.rejects(h.worker(task), /message exceeds 65536 bytes/i);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+});
+
+test('an interrupted supplemented continuation downloads a changed artifact without resending', async t => {
+  const { task } = blockedRepairFixture(t);
+  const supplementHash = hash(JSON.stringify(task.researchSupplement));
+  task.state.researchSupplementHash = supplementHash;
+  task.state.researchBlockerHash = task.researchSupplement.blockerHash.slice(7);
+  task.state.researchAttempts = [{ blockerHash: task.state.researchBlockerHash, supplementHash,
+    agentId: task.state.agentId, priorRunId: 'old-run' }];
+  const h = harness();
+  const corrected = { changes: [], sourceHash: task.packet.sourceHash, extractionHash: task.packet.extractionHash };
+  h.addAgent('retained-repair', { key: task.key, artifact: corrected, runs: [{ id: 'continuation', status: 'completed' }] });
+  const result = await h.worker(task);
+  assert.deepEqual(result, corrected);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+});
+
+test('changed remote artifact cannot be recovered without a proven post-dispatch attempt', async t => {
+  for (const failure of ['missing-attempt', 'stale-run', 'wrong-agent', 'wrong-blocker', 'wrong-supplement', 'missing-prior-run']) {
+    const { task } = blockedRepairFixture(t);
+    const supplementHash = hash(JSON.stringify(task.researchSupplement));
+    const blockerHash = task.researchSupplement.blockerHash.slice(7);
+    task.state.researchSupplementHash = supplementHash;
+    task.state.researchBlockerHash = blockerHash;
+    task.state.researchAttempts = [{ blockerHash, supplementHash, agentId: task.state.agentId, priorRunId: 'old-run' }];
+    if (failure === 'missing-attempt') delete task.state.researchAttempts;
+    if (failure === 'wrong-agent') task.state.researchAttempts[0].agentId = 'other-agent';
+    if (failure === 'wrong-blocker') task.state.researchAttempts[0].blockerHash = '0'.repeat(64);
+    if (failure === 'wrong-supplement') task.state.researchAttempts[0].supplementHash = '0'.repeat(64);
+    if (failure === 'missing-prior-run') delete task.state.researchAttempts[0].priorRunId;
+    const h = harness();
+    h.addAgent('retained-repair', { key: task.key, artifact: { changes: [] }, runs: [{ id: failure === 'stale-run' ? 'old-run' : 'continuation', status: 'completed' }] });
+    await assert.rejects(h.worker(task), /post-dispatch|continuation/i, failure);
+    assert.equal(h.calls('send').length, 0, failure);
+    assert.equal(h.calls('create').length, 0, failure);
+    assert.equal(task.state.agentId, 'retained-repair', failure);
+  }
+});
+
+test('a byte-identical blocker after a continuation is not accepted as a new result', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  const h = harness({ wait: async (run, options, agent) => { agent.artifact = raw; run.status = 'completed'; return run; } });
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  await assert.rejects(h.worker(task), /unchanged|identical|same.*blocker/i);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.artifactHash, hash(raw));
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+});
+
+test('a second independently supplemented blocker retains both attempts before successful repair', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  const secondRaw = JSON.stringify({ blocked: true, reason: 'A different source passage still requires independent research.' });
+  const corrected = { changes: [], sourceHash: task.packet.sourceHash, extractionHash: task.packet.extractionHash };
+  let waits = 0;
+  const h = harness({ wait: async (run, options, agent) => {
+    agent.artifact = ++waits === 1 ? secondRaw : corrected; run.status = 'completed'; return run;
+  } });
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  assert.equal((await h.worker(task)).blocked, true);
+  assert.equal(task.state.artifactHash, hash(secondRaw));
+  task.researchSupplement = { ...task.researchSupplement, blockerHash: `sha256:${hash(secondRaw)}`,
+    evidence: 'Second independent source: https://example.invalid/second . It concerns a different passage.' };
+  assert.deepEqual(await h.worker(task), corrected);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 2);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.researchAttempts.length, 2);
+  assert.deepEqual(task.state.researchAttempts.map(a => a.blockerHash), [hash(raw), hash(secondRaw)]);
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+  assert.equal(fs.readFileSync(path.join(task.directory, `raw-research-blocker-${hash(secondRaw)}.json`), 'utf8'), secondRaw);
+});
+
+test('a rejected post-supplement proposal continues the same repair with the validation error', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  const invalid = { changes: [{ bogus: true }] }, corrected = { changes: [] };
+  let waits = 0;
+  const h = harness({ wait: async (run, options, agent) => {
+    agent.artifact = ++waits === 1 ? invalid : corrected; run.status = 'completed'; return run;
+  } });
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  assert.deepEqual(await h.worker(task), invalid);
+  task.state.validationError = 'Fixture production validator rejected the proposed change';
+  task.state.status = 'rejected';
+  assert.deepEqual(await h.worker(task), corrected);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 2);
+  assert.match(h.calls('send')[1][2], /Fixture production validator rejected/);
+  assert.ok(h.calls('send')[1][2].includes(task.researchSupplement.evidence));
+  assert.equal(task.state.agentId, 'retained-repair');
+});
+
+test('pending supplemented recovery requires the original supplement and resumes without changing conversations', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  let waits = 0;
+  const h = harness({ wait: async (run, options, agent) => {
+    if (++waits === 1) { run.status = 'completed'; throw new Error('fixture interruption after dispatch'); }
+    agent.artifact = { changes: [] }; run.status = 'completed'; return run;
+  } });
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  await assert.rejects(h.worker(task), /fixture interruption after dispatch/);
+  const supplement = task.researchSupplement;
+  assert.ok(task.state.researchSupplementHash);
+  delete task.researchSupplement;
+  await assert.rejects(h.worker(task), /requires.*original research supplement/i);
+  assert.equal(h.calls('send').length, 1);
+  task.researchSupplement = supplement;
+  assert.deepEqual(await h.worker(task), { changes: [] });
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(h.calls('send').length, 2);
+  assert.equal(task.state.agentId, 'retained-repair');
+});
+
+test('a returned supplemented repair is recovered without resend after a missing workflow receipt', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  const corrected = { changes: [] };
+  const h = harness({ wait: async (run, options, agent) => { agent.artifact = corrected; run.status = 'completed'; return run; } });
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  assert.deepEqual(await h.worker(task), corrected);
+  assert.equal(task.state.status, 'returned');
+  // Simulate a host crash after the worker checkpoint but before workflow
+  // validation and the durable per-job receipt were written.
+  assert.deepEqual(await h.worker(task), corrected);
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+});
+
+test('changed supplement evidence cannot adopt an already returned remote artifact', async t => {
+  const { task, raw } = blockedRepairFixture(t);
+  const corrected = { changes: [] };
+  const h = harness({ wait: async (run, options, agent) => { agent.artifact = corrected; run.status = 'completed'; return run; } });
+  h.addAgent('retained-repair', { key: task.key, artifact: raw, runs: [{ id: 'old-run', status: 'completed' }] });
+  assert.deepEqual(await h.worker(task), corrected);
+  const pinnedHash = task.state.researchSupplementHash;
+  const returnedHash = task.state.artifactHash;
+  task.researchSupplement = { ...task.researchSupplement, evidence: 'Different evidence must not be retroactively attached to an already completed continuation.' };
+  await assert.rejects(h.worker(task), /supplement.*changed|supplement.*mismatch/i);
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(h.calls('create').length, 0);
+  assert.equal(task.state.agentId, 'retained-repair');
+  assert.equal(task.state.researchSupplementHash, pinnedHash);
+  assert.equal(task.state.artifactHash, returnedHash);
+  assert.equal(fs.readFileSync(path.join(task.directory, 'research-blocker.json'), 'utf8'), raw);
+});
+
 test('repair instructions name retrospective as the only valid reception type', () => {
   const contract = dateWorkerInput(repairTask()).repairContract;
   assert.match(contract, /must literally be "retrospective"/);
@@ -520,6 +887,44 @@ test('repair findings include all affected person dates, hints and check evidenc
   assert.deepEqual(input.units, [...input.units].sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1))));
   assert.deepEqual(input.references, task.report.references);
   assert.deepEqual(task.packet, original);
+});
+
+test('repair findings retain original ownership when prior removals renumber current claims', () => {
+  const task = repairTask();
+  const baselineClaims = [
+    ['p1', 'death', { westernYear: { era: 'AD', year: 170 } }, 'certain', ['u1']],
+    ['p2', 'death', { westernYear: { era: 'AD', year: 200 } }, 'certain', ['u2']],
+    ['p3', 'event-participation', { kind: 'retrospective-reference' }, 'certain', ['u3']],
+  ];
+  task.baselineExtraction = { claims: baselineClaims };
+  task.baselinePacket = {
+    ...task.packet,
+    people: [{ id: 'p1' }, { id: 'p2' }, { id: 'p3' }],
+    items: [
+      ...baselineClaims.map((row, claimIndex) => ({ id: `claim-${claimIndex + 1}`, personId: row[0], claimIndex, evidence: row[4] })),
+      { id: 'hints-p3', personId: 'p3', evidence: [], value: [] },
+    ],
+  };
+  // A prior removal dropped p1, so current claim-3 no longer exists and p3
+  // is now claim-2. The finding must still select p3 and u3.
+  task.extraction = { claims: baselineClaims.slice(1) };
+  task.packet = {
+    ...task.packet,
+    people: [{ id: 'p2' }, { id: 'p3' }],
+    items: [
+      { id: 'claim-1', personId: 'p2', claimIndex: 0, evidence: ['u2'] },
+      { id: 'claim-2', personId: 'p3', claimIndex: 1, evidence: ['u3'] },
+      { id: 'hints-p3', personId: 'p3', evidence: [], value: [] },
+    ],
+  };
+  task.report.findings = [{ items: ['claim-3'], problem: 'Reception lacks its context', action: 'Date the reception only' }];
+  task.report.itemChecks = [];
+  task.report.personChecks = [];
+  const input = dateWorkerInput(task);
+  assert.deepEqual(input.people, [{ id: 'p3' }]);
+  assert.deepEqual(input.items.map(item => item.id), ['claim-2', 'hints-p3']);
+  assert.deepEqual(Object.keys(input.claims), ['claim-2']);
+  assert.deepEqual(input.units.map(unit => unit.id), ['u3']);
 });
 
 test('person-only and hint-only findings also include the complete affected chronology', () => {

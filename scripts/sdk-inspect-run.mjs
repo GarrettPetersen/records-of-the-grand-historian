@@ -94,7 +94,14 @@ async function inspectOne(opts) {
       : { runtime: 'local', cwd: opts.cwd };
 
   const run = await Agent.getRun(runId, getOpts);
-  const status = run.status === 'running' ? 'error' : run.status;
+  const status = run.status;
+  if (status === 'running') {
+    console.error(`run is still live: ${runId}`);
+    console.error(`agent: ${agentId}`);
+    const url = cloudAgentUrl(agentId);
+    if (url) console.error(`open: ${url}`);
+    return;
+  }
   const result = {
     id: runId,
     status,

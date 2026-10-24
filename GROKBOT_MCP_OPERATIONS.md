@@ -204,8 +204,12 @@ mkdir -p "$GROKBOT_MCP_RUNTIME_ROOT/secrets" "$HOME/.local/state/24histories-gro
 chmod 700 "$GROKBOT_MCP_RUNTIME_ROOT" "$GROKBOT_MCP_RUNTIME_ROOT/secrets"
 ```
 
-Create the persistent runtime clone. The root files plus `data/` and `scripts/` are
-required; `public/` and full Git history are not:
+Run `npm run people:disk:check` in the host checkout first. Reuse the existing runtime
+at the path below if provisioned; do not make another runtime when adding bots or
+restarting the service. Never replace an existing directory to rerun setup: it may
+contain credentials and incomplete chunks. The following clone command is first-time
+provisioning only, not a worker-launch step. All bots share this single sparse clone.
+The root files plus `data/` and `scripts/` are required; `public/` and full history are not:
 
 ```bash
 git clone --depth 1 --filter=blob:none --sparse \

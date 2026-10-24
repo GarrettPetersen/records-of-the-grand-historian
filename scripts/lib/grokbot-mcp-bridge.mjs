@@ -116,6 +116,36 @@ function assignmentSummary(assignment, claimToken) {
   };
 }
 
+function persistedAssignmentForClaim(worker, target, claim) {
+  let assignment;
+  try {
+    assignment = readGrokbotAssignment(worker, target);
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith('Missing Grok Bot assignment:')) return null;
+    throw error;
+  }
+  if (
+    assignment.worker !== worker || assignment.book !== target.book || assignment.chapter !== target.chapter ||
+    !claim.grokbotPlan || !Array.isArray(assignment.chunks) ||
+    assignment.chunks.length !== claim.grokbotPlan.chunks.length
+  ) {
+    throw new Error(`Persisted Grok Bot assignment does not match the live claim for ${chapterKey(target)}`);
+  }
+  for (let index = 0; index < assignment.chunks.length; index += 1) {
+    const saved = assignment.chunks[index];
+    const planned = claim.grokbotPlan.chunks[index];
+    if (
+      saved.id !== planned.id ||
+      (assignment.mode === 'chunked' && (saved.start !== planned.start || saved.end !== planned.end)) ||
+      typeof saved.packet !== 'string' || typeof saved.output !== 'string' ||
+      !fs.existsSync(fileFromRepo(saved.packet)) || !fs.existsSync(fileFromRepo(saved.output))
+    ) {
+      throw new Error(`Persisted Grok Bot assignment is incomplete or stale for ${chapterKey(target)}`);
+    }
+  }
+  return assignment;
+}
+
 function fileFromRepo(relative) {
   const absolute = path.resolve(REPO_ROOT, relative);
   const prefix = `${REPO_ROOT}${path.sep}`;
@@ -241,11 +271,11 @@ export class GrokbotMcpBridge {
       : null);
   }
 
-  currentLedger({ fresh = false } = {}) {
+  currentLedger({ fresh = false, includeBase = true } = {}) {
     if (!fresh && this.ledgerCache && Date.now() - this.ledgerCache.loadedAt < LEDGER_CACHE_MS) {
       return this.ledgerCache.value;
     }
-    fetchPeopleQueueBase(queueOptions(this.options));
+    if (includeBase) fetchPeopleQueueBase(queueOptions(this.options));
     const value = readRemotePeopleWorkLedger(queueOptions(this.options));
     this.ledgerCache = { loadedAt: Date.now(), value };
     return value;
@@ -294,11 +324,16 @@ export class GrokbotMcpBridge {
     // otherwise recreate a preserved assignment as if it were fresh.
     const existing = this.currentClaim(worker, { fresh: true });
     let prepared;
+    let claim;
     if (existing) {
       if (book && (book !== existing.target.book || chapter !== existing.target.chapter)) {
         throw new Error(`${worker} must resume ${chapterKey(existing.target)} before claiming ${book}/${chapter}`);
       }
-      prepared = resumeGrokbot(defaultGrokbotOptions({ ...this.options, worker, ...existing.target }));
+      claim = existing.claim;
+      const persisted = persistedAssignmentForClaim(worker, existing.target, claim);
+      prepared = persisted
+        ? { assignment: persisted }
+        : resumeGrokbot(defaultGrokbotOptions({ ...this.options, worker, ...existing.target }));
     } else {
       const claimed = await claimGrokbot(defaultGrokbotOptions({
         ...this.options,
@@ -306,10 +341,10 @@ export class GrokbotMcpBridge {
         ...(book ? { book, chapter } : {}),
       }));
       prepared = claimed[0];
-      this.invalidateLedger();
+      claim = prepared.claim;
     }
     const target = { book: prepared.assignment.book, chapter: prepared.assignment.chapter };
-    const claim = this.currentLedger().claims[chapterKey(target)];
+    if (!claim) throw new Error(`Missing atomic Grok Bot claim for ${chapterKey(target)}`);
     const token = makeClaimToken(this.claimSecret, claimPayload(worker, target, claim));
     return assignmentSummary(prepared.assignment, token);
   }

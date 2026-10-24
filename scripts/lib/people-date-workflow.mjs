@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from './people-content.mjs';
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
 import { dateWorkerInput } from './people-date-worker.mjs';
@@ -17,6 +18,84 @@ import {
 export const DATE_WORKFLOW_VERSION = 1;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const hash = value => sha256(JSON.stringify(value));
+
+// Preserve the bytes already on disk, not a parse/stringify approximation. A
+// hard link publishes the fully written temporary file without replacing an
+// existing archive; repeated recovery is idempotent and collisions fail closed.
+function writeBlockerCreateOnly(destination, bytes, verifyCollision = true) {
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  const temporaryDirectory = fs.mkdtempSync(path.join(path.dirname(destination), '.pending-'));
+  const temporary = path.join(temporaryDirectory, 'blocker');
+  try {
+    const descriptor = fs.openSync(temporary, 'wx', 0o600);
+    try { fs.writeFileSync(descriptor, bytes); fs.fsyncSync(descriptor); }
+    finally { fs.closeSync(descriptor); }
+    try { fs.linkSync(temporary, destination); }
+    catch (error) { if (error.code !== 'EEXIST') throw error; }
+    if (verifyCollision && !fs.readFileSync(destination).equals(bytes)) throw new Error(`Conflicting immutable research blocker archive: ${destination}`);
+  } finally {
+    if (fs.existsSync(temporary)) fs.unlinkSync(temporary);
+    fs.rmdirSync(temporaryDirectory);
+  }
+}
+
+function archiveBlockerBytes(directory, bytes) {
+  const digest = createHash('sha256').update(bytes).digest('hex');
+  const relative = `blocker-archive/${digest}.json`;
+  writeBlockerCreateOnly(path.join(directory, relative), bytes);
+  return { path: relative, sha256: digest, bytes: bytes.length };
+}
+
+function retainBlockerReference(state, reference) {
+  if (state.blockerArchives !== undefined && !Array.isArray(state.blockerArchives)) throw new Error('Invalid retained blocker archive references');
+  state.blockerArchives ??= [];
+  if (!state.blockerArchives.some(entry => same(entry, reference))) state.blockerArchives.push(reference);
+}
+
+function retainedRepairAgentIds(jobs) {
+  const ids = new Set();
+  const add = id => { if (id !== undefined && id !== null) { if (typeof id !== 'string' || !id || id !== id.trim()) throw new Error('Invalid retained repair agent identity'); ids.add(id); } };
+  for (const [key, job] of Object.entries(jobs)) {
+    if (!key.startsWith('repair-')) continue;
+    add(job.agentId); add(job.priorAgentId); add(job.proposalAuthorId);
+    if (job.priorUsages !== undefined && !Array.isArray(job.priorUsages)) throw new Error('Invalid retained repair usage history');
+    for (const usage of job.priorUsages ?? []) { if (!usage || typeof usage !== 'object') throw new Error('Invalid retained repair usage entry'); add(usage.agentId); }
+  }
+  return ids;
+}
+
+function proposalAuthorId(proposal) {
+  if (proposal.author === undefined) return null;
+  const id = proposal.author?.agentId;
+  if (typeof id !== 'string' || !id || id !== id.trim()) throw new Error('Invalid repair proposal author identity');
+  return id;
+}
+
+// A matching audited report can predate a sticky workflow. Reconcile only an
+// explicitly completed generation whose own retained review is that report.
+// Crash windows are left intact for host recovery, never promoted by inference.
+export function completedDateClaimEvidence({ book, chapter, claim }, options = {}) {
+  const peopleDir = options.peopleDir ?? PEOPLE_DIR;
+  const directory = dateWorkflowDirectory(book, chapter, peopleDir);
+  const stateFile = path.join(directory, 'state.json');
+  if (!fs.existsSync(stateFile)) return { ready: false, reason: 'retained generation state is missing' };
+  let state;
+  try { state = readJson(stateFile); } catch { return { ready: false, reason: 'retained generation state is unreadable' }; }
+  if (state.phase !== 'complete') return { ready: false, reason: `retained generation is ${state.phase ?? 'invalid'}, not complete` };
+  if (state.sourceHash !== claim.sourceHash || state.extractionHash !== claim.extractionHash) return { ready: false, reason: 'retained generation does not match claim fingerprints' };
+  if (typeof claim.generationId !== 'string' || !claim.generationId || state.generationId !== claim.generationId) return { ready: false, reason: 'claim has no matching durable generation identity' };
+  if (typeof state.review !== 'string' || !/^review-\d+\.json$/.test(state.review)) return { ready: false, reason: 'completed generation has no sealed review identity' };
+  const reviewFile = path.join(directory, state.review);
+  const reportFile = path.join(peopleDir, 'date-audits', book, `${chapter}.json`);
+  if (!fs.existsSync(reviewFile) || !fs.existsSync(reportFile)) return { ready: false, reason: 'completed generation review or live report is missing' };
+  try {
+    const review = readJson(reviewFile), report = readJson(reportFile);
+    if (!same(review, report)) return { ready: false, reason: 'live report differs from completed generation review' };
+    if (dateAuditStatus(book, chapter, options).status !== 'audited') return { ready: false, reason: 'live report is not currently audited' };
+  } catch { return { ready: false, reason: 'completed generation review or live report is invalid' }; }
+  return { ready: true };
+}
+
 const lifePredicates = new Set(['attestation', 'birth', 'death', 'age']);
 const claimIndexFor = (packet, id) => {
   const item = packet.items?.find(candidate => candidate.id === id);
@@ -420,6 +499,7 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
   const repairedPacket = buildDateAuditPacket(book, chapter, { ...options, extraction: candidate });
   validateDateAuditReport(report, repairedPacket);
   if (report.status !== 'audited' || !dateAuditReferencesCurrent(report, options)) throw new Error('Repair requires current independent date approval');
+  options.verifyReportUnchanged?.();
   if (currentPacket.extractionHash !== repairedPacket.extractionHash) {
     const expected = applyDateRepairProposal(current, proposal, currentPacket);
     if (!same(expected, candidate)) throw new Error('Candidate differs from scoped repair');
@@ -433,7 +513,42 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
     const receipt = path.join(peopleDir, 'date-repairs', book, chapter, `${repairedPacket.extractionHash.slice(7)}.json`);
     if (!fs.existsSync(receipt) || !same(readJson(receipt).proposal, proposal) || !same(readJson(receipt).report,report)) throw new Error('No matching repair receipt for recovery');
   }
+  options.verifyReportUnchanged?.();
   return recordDateAudit(report, options);
+}
+
+export class CompletedDateGenerationHold extends Error {}
+export function assertCompletedGenerationSafe({book,chapter},options={}) {
+  const stateFile=path.join(dateWorkflowDirectory(book,chapter,options.peopleDir),'state.json');
+  const state=fs.existsSync(stateFile)?readJson(stateFile):null;
+  const reportFile=path.join(options.peopleDir??PEOPLE_DIR,'date-audits',book,`${chapter}.json`);
+  const report=fs.existsSync(reportFile)?readJson(reportFile):null;
+  if(!['needs-revision','research-blocked'].includes(report?.status))return;
+  const status=dateAuditStatus(book,chapter,options).status;
+  const directory=dateWorkflowDirectory(book,chapter,options.peopleDir);
+  let knownPublish=false;
+  if(state?.phase==='publish') {
+    const publicationFile=path.join(directory,'publication.json');
+    if(fs.existsSync(publicationFile)) {
+      const publication=readJson(publicationFile);
+      knownPublish=publication.priorReviews?.some(prior=>same(prior,report))===true;
+      const current=buildDateAuditPacket(book,chapter,options);
+      const candidate=buildDateAuditPacket(book,chapter,{...options,extraction:publication.candidate});
+      if(current.extractionHash===candidate.extractionHash) {
+        const receipt=path.join(options.peopleDir??PEOPLE_DIR,'date-repairs',book,chapter,`${candidate.extractionHash.slice(7)}.json`);
+        if(!fs.existsSync(receipt))knownPublish=false;
+        else {const saved=readJson(receipt);knownPublish=knownPublish && same(saved.priorReviews,publication.priorReviews) && same(saved.proposal,publication.proposal) && same(saved.report,publication.report);}
+      }
+    }
+  }
+  const staleUnreconciled=status==='stale' && !knownPublish;
+  const auditAlreadyStarted=state?.phase==='audit' && (state.round!==0 || !state.restoredFromLedger || Object.keys(state.jobs??{}).length || Object.keys(state.reviewPlans??{}).length);
+  const linkedReview=typeof state?.review==='string' && /^review-\d+\.json$/.test(state.review) ? path.join(directory,state.review) : null;
+  const unknownPrior=['repair','reaudit','editorial-amendment'].includes(state?.phase) && (!linkedReview || !fs.existsSync(linkedReview) || !same(readJson(linkedReview),report));
+  const unknownPublication=state?.phase==='publish' && !knownPublish;
+  const seed=path.join(directory,'review-0.json');
+  const seedConflict=(!state || (state.phase==='audit' && state.restoredFromLedger)) && fs.existsSync(seed) && !same(readJson(seed),report);
+  if(staleUnreconciled || state?.phase==='complete' || auditAlreadyStarted || seedConflict || unknownPrior || unknownPublication)throw new CompletedDateGenerationHold(`Date workflow has a ${status} ${report.status} report that cannot be safely seeded; preserve the full report and reconcile retained work before continuing`);
 }
 
 export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
@@ -443,24 +558,97 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const stateFile = path.join(directory, 'state.json');
   const packet = buildDateAuditPacket(book, chapter, options);
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : { schemaVersion: 1, workflowVersion: DATE_WORKFLOW_VERSION,
-    sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, round: 0, phase: 'audit', jobs: {} };
+    sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, ...(options.generationId ? { generationId: options.generationId } : {}), round: 0, phase: 'audit', jobs: {} };
+  const verifySupplementReceipt = (key, receipt) => {
+    if (!/^repair-\d+-[a-zA-Z0-9-]+$/.test(key) || !receipt || typeof receipt !== 'object' ||
+        !['supplementHash','proposalHash','rawArtifactHash','blockerHash'].every(field => /^[a-f0-9]{64}$/.test(receipt[field] ?? '')) ||
+        !['sourceHash','extractionHash'].every(field => /^sha256:[a-f0-9]{64}$/.test(receipt[field] ?? '')) ||
+        typeof receipt.agentId !== 'string' || !receipt.agentId || receipt.agentId !== receipt.agentId.trim() ||
+        typeof receipt.runId !== 'string' || !receipt.runId || receipt.runId !== receipt.runId.trim()) {
+      throw new Error('Invalid retained research supplement receipt');
+    }
+    const job = state.jobs[key];
+    if (!job || job.agentId !== receipt.agentId || job.runId !== receipt.runId ||
+        job.researchSupplementHash !== receipt.supplementHash || job.researchBlockerHash !== receipt.blockerHash ||
+        job.artifactHash !== receipt.rawArtifactHash || receipt.rawArtifactHash === receipt.blockerHash) {
+      throw new Error('Retained research supplement attempt provenance changed');
+    }
+    if (!Array.isArray(job.researchAttempts) || !job.researchAttempts.some(attempt =>
+      attempt && attempt.blockerHash === receipt.blockerHash && attempt.supplementHash === receipt.supplementHash &&
+      attempt.agentId === receipt.agentId && typeof attempt.priorRunId === 'string' && attempt.priorRunId.length > 0 &&
+      attempt.priorRunId === attempt.priorRunId.trim() && attempt.priorRunId !== receipt.runId)) {
+      throw new Error('Research supplement receipt lacks a matching prior-run dispatch attempt');
+    }
+    const readPinned = (file, expected) => {
+      if (!fs.existsSync(file)) throw new Error('Retained research supplement receipt evidence is missing');
+      const bytes = fs.readFileSync(file);
+      if (createHash('sha256').update(bytes).digest('hex') !== expected) throw new Error('Retained research supplement receipt evidence changed');
+      return bytes;
+    };
+    const archivedSupplement = JSON.parse(readPinned(path.join(directory, `research-supplement-${receipt.supplementHash}.json`), receipt.supplementHash).toString('utf8'));
+    if (archivedSupplement.jobKey !== key || archivedSupplement.book !== book || archivedSupplement.chapter !== chapter ||
+        archivedSupplement.originalSourceHash !== state.sourceHash || archivedSupplement.originalExtractionHash !== state.extractionHash ||
+        archivedSupplement.sourceHash !== receipt.sourceHash || archivedSupplement.extractionHash !== receipt.extractionHash ||
+        archivedSupplement.blockerHash !== `sha256:${receipt.blockerHash}`) throw new Error('Retained research supplement scope changed');
+    readPinned(path.join(directory, `raw-research-blocker-${receipt.blockerHash}.json`), receipt.blockerHash);
+    const proposalBytes = readPinned(path.join(directory, `${key}.json`), receipt.proposalHash);
+    const rawBytes = readPinned(path.join(directory, `raw-repair-artifact-${receipt.rawArtifactHash}.json`), receipt.rawArtifactHash);
+    if (!same(reconcileRetrospectiveProposal(JSON.parse(rawBytes.toString('utf8'))).proposal, JSON.parse(proposalBytes.toString('utf8')))) {
+      throw new Error('Retained research supplement proposal differs from its raw repair');
+    }
+  };
+  if (state.researchSupplementReceipts !== undefined && (!state.researchSupplementReceipts || typeof state.researchSupplementReceipts !== 'object' || Array.isArray(state.researchSupplementReceipts))) throw new Error('Invalid research supplement receipts');
+  for (const [key, receipt] of Object.entries(state.researchSupplementReceipts ?? {})) verifySupplementReceipt(key, receipt);
+  const supplement = options.researchSupplement;
+  let supplementHash = null;
+  let supplementConsumed = false;
+  if (supplement !== undefined) {
+    if (!supplement || typeof supplement !== 'object' || Array.isArray(supplement) ||
+        typeof supplement.jobKey !== 'string' || !/^repair-\d+-[a-zA-Z0-9-]+$/.test(supplement.jobKey) ||
+        supplement.book !== book || supplement.chapter !== chapter ||
+        supplement.originalSourceHash !== state.sourceHash || supplement.originalExtractionHash !== state.extractionHash) {
+      throw new Error('Research supplement does not identify this retained date workflow');
+    }
+    supplementHash = createHash('sha256').update(JSON.stringify(supplement)).digest('hex');
+    const receipt = state.researchSupplementReceipts?.[supplement.jobKey];
+    if (receipt) {
+      if (receipt.supplementHash !== supplementHash) throw new Error('Retained research supplement receipt mismatch');
+      supplementConsumed = true;
+    } else if (state.phase !== 'repair') {
+      throw new Error('Research supplement has no completed target repair in this workflow phase');
+    }
+  }
+  if (state.phase !== 'complete' && options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
+  const reportPath=path.join(options.peopleDir??PEOPLE_DIR,'date-audits',book,`${chapter}.json`);
+  const reportFingerprint=()=>fs.existsSync(reportPath)?sha256(fs.readFileSync(reportPath)):null;
+  let expectedReportFingerprint=reportFingerprint();
+  const verifyReportUnchanged=()=>{if(reportFingerprint()!==expectedReportFingerprint)throw new CompletedDateGenerationHold('Installed date report changed during workflow; preserve all artifacts and reconcile before publishing');};
+  assertCompletedGenerationSafe({book,chapter},options);
+  verifyReportUnchanged();
   const save = () => writeJsonAtomic(stateFile, state);
   if (state.workflowVersion !== DATE_WORKFLOW_VERSION) throw new Error('Date workflow protocol changed; reconcile retained work before restarting');
   const priorReport = path.join(options.peopleDir ?? PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
   if ((!fs.existsSync(stateFile)||state.restoredFromLedger) && state.phase==='audit' && state.round===0 && fs.existsSync(priorReport) && ['needs-revision','research-blocked'].includes(dateAuditStatus(book,chapter,options).status)) {
     const report = readJson(priorReport);
     validateDateAuditReport(report,packet);
-    writeJsonAtomic(path.join(directory,'review-0.json'),report);
+    const seed=path.join(directory,'review-0.json');
+    if(fs.existsSync(seed)) {
+      if(!same(readJson(seed),report))throw new CompletedDateGenerationHold('Existing date review seed differs; preserve it and reconcile before continuing');
+    } else writeJsonAtomic(seed,report);
     state.review='review-0.json';state.phase='repair';save();
   }
   if(state.restoredFromLedger){delete state.restoredFromLedger;save();}
   if (state.phase === 'complete') {
     const current=dateAuditStatus(book,chapter,options);
-    if(current.status==='audited')return current;
+    if(current.status==='audited') {
+      if (options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
+      return current;
+    }
     fs.renameSync(directory,`${directory}.completed-${hash(state).slice(7,27)}`);
-    state={schemaVersion:1,workflowVersion:DATE_WORKFLOW_VERSION,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,round:0,phase:'audit',jobs:{}};
+    state={schemaVersion:1,workflowVersion:DATE_WORKFLOW_VERSION,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,...(options.generationId?{generationId:options.generationId}:{}),round:0,phase:'audit',jobs:{}};
     save();
   }
+  if (options.generationId && state.generationId !== options.generationId) throw new CompletedDateGenerationHold('Retained workflow does not match the reserved generation; preserve artifacts and reconcile ownership');
   const perform = async (task, validate) => {
     for (let attempt=0;attempt<(options.maxAttempts ?? 3);attempt++) {
       const execute=()=>worker({...task,state:state.jobs[task.key]??{},save:patch=>{state.jobs[task.key]={...state.jobs[task.key],...patch};save();}});
@@ -484,7 +672,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
     throw new Error('No date validation attempts configured');
   };
   if (state.phase === 'publish') {
-    const result = publishDateRepair(readJson(path.join(directory, 'publication.json')), options);
+    const result = publishDateRepair(readJson(path.join(directory, 'publication.json')), {...options,verifyReportUnchanged});
     state.phase = 'complete'; save(); return result;
   }
   if (state.phase === 'editorial-amendment') {
@@ -516,10 +704,10 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
       state.review = `review-${state.round}.json`;
       if (report.status === 'audited') {
         const rounds=fs.readdirSync(directory).filter(name=>/^repair-\d+-.+\.json$/.test(name)).sort().map(name=>readJson(path.join(directory,name)));
-        const repairAgents=new Set(Object.entries(state.jobs).filter(([key])=>key.startsWith('repair-')).map(([,job])=>job.agentId).filter(Boolean));
-        for(const proposal of rounds)if(proposal.author?.agentId)repairAgents.add(proposal.author.agentId);
+        const repairAgents=retainedRepairAgentIds(state.jobs);
+        for(const proposal of rounds) { const authorId=proposalAuthorId(proposal); if(authorId)repairAgents.add(authorId); }
         if(report.reviewer.workers.some(w=>w.agentId && repairAgents.has(w.agentId)))throw new Error('A repair conversation cannot approve its own candidate');
-        if (!state.candidate) { recordDateAudit(report, options); state.phase = 'complete'; save(); return report; }
+        if (!state.candidate) { verifyReportUnchanged();recordDateAudit(report, options); state.phase = 'complete'; save(); return report; }
         const publication = { proposal: readJson(path.join(directory, 'combined-proposal.json')), candidate: readJson(path.join(directory, state.candidate)), report,
           rounds,priorReviews:fs.readdirSync(directory).filter(name=>/^review-\d+\.json$/.test(name)).sort().map(name=>readJson(path.join(directory,name))).filter(r=>r.status!=='audited') };
         const validation = options.validateExtraction(publication.candidate);
@@ -535,9 +723,9 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
           return { status: 'editorial-amendment-required', amendmentFile };
         }
         writeJsonAtomic(path.join(directory, 'publication.json'), publication); state.phase = 'publish'; save();
-        const result = publishDateRepair(publication, options); state.phase = 'complete'; save(); return result;
+        const result = publishDateRepair(publication, {...options,verifyReportUnchanged}); state.phase = 'complete'; save(); return result;
       }
-      if (!state.candidate) recordDateAudit(report, options);
+      if (!state.candidate) {verifyReportUnchanged();recordDateAudit(report, options);expectedReportFingerprint=reportFingerprint();}
       state.phase = 'repair'; save();
     }
     if (state.round >= (options.maxRounds ?? 3)) return { status: 'needs-revision', reason: 'Repair-round ceiling reached; resume with a larger explicit ceiling after reviewing failures' };
@@ -559,6 +747,53 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
       const job = repairPlan[repairIndex];
       const key = `repair-${state.round}-${job.id}-${active.extractionHash.slice(7, 19)}`;
       const artifact = path.join(directory, `${key}.json`);
+      const targetSupplement = supplement && !supplementConsumed && supplement.jobKey === key ? supplement : undefined;
+      const pendingSupplementHash = state.jobs[key]?.researchSupplementHash;
+      // A completed continuation can itself return a different research hold.
+      // Allow a new supplement only when that exact later blocker and the
+      // preceding attempt are independently retained and bound to this job.
+      const isVerifiedNextBlocker = () => {
+        const prior = state.jobs[key];
+        if (!targetSupplement || !prior || prior.status !== 'returned' || fs.existsSync(artifact) ||
+            !/^[a-f0-9]{64}$/.test(pendingSupplementHash ?? '') ||
+            !/^[a-f0-9]{64}$/.test(prior.researchBlockerHash ?? '') ||
+            !/^[a-f0-9]{64}$/.test(prior.artifactHash ?? '') || prior.artifactHash === prior.researchBlockerHash ||
+            targetSupplement.blockerHash !== `sha256:${prior.artifactHash}` ||
+            targetSupplement.sourceHash !== active.sourceHash || targetSupplement.extractionHash !== active.extractionHash ||
+            typeof prior.agentId !== 'string' || !prior.agentId || prior.agentId !== prior.agentId.trim() ||
+            typeof prior.runId !== 'string' || !prior.runId || prior.runId !== prior.runId.trim() ||
+            !Array.isArray(prior.researchAttempts) || !prior.researchAttempts.some(attempt =>
+              attempt?.blockerHash === prior.researchBlockerHash && attempt.supplementHash === pendingSupplementHash &&
+              attempt.agentId === prior.agentId && typeof attempt.priorRunId === 'string' && attempt.priorRunId &&
+              attempt.priorRunId === attempt.priorRunId.trim() && attempt.priorRunId !== prior.runId)) return false;
+        const readPinned = (file, expected) => {
+          if (!fs.existsSync(file)) throw new Error('Later research blocker transition is missing retained evidence');
+          const bytes = fs.readFileSync(file);
+          if (createHash('sha256').update(bytes).digest('hex') !== expected) throw new Error('Later research blocker transition has changed evidence');
+          return bytes;
+        };
+        const oldSupplement = JSON.parse(readPinned(path.join(directory, `research-supplement-${pendingSupplementHash}.json`), pendingSupplementHash).toString('utf8'));
+        if (oldSupplement.book !== book || oldSupplement.chapter !== chapter || oldSupplement.jobKey !== key ||
+            oldSupplement.originalSourceHash !== state.sourceHash || oldSupplement.originalExtractionHash !== state.extractionHash ||
+            oldSupplement.sourceHash !== active.sourceHash || oldSupplement.extractionHash !== active.extractionHash ||
+            oldSupplement.blockerHash !== `sha256:${prior.researchBlockerHash}`) throw new Error('Prior research supplement does not match this job');
+        const oldBlocker = JSON.parse(readPinned(path.join(directory, `raw-research-blocker-${prior.researchBlockerHash}.json`), prior.researchBlockerHash).toString('utf8'));
+        const newBlocker = JSON.parse(readPinned(path.join(directory, `raw-research-blocker-${prior.artifactHash}.json`), prior.artifactHash).toString('utf8'));
+        if (oldBlocker?.blocked !== true || newBlocker?.blocked !== true || typeof newBlocker.reason !== 'string' || newBlocker.reason.trim().length < 20) throw new Error('Later research transition requires substantive blocked artifacts');
+        const record = state.blockerArchives?.find(entry => entry.kind === 'workflow-normalized' && entry.jobKey === key &&
+          entry.remoteArtifactHash === prior.artifactHash && entry.agentId === prior.agentId && entry.runId === prior.runId);
+        if (!record || !/^[a-f0-9]{64}$/.test(record.sha256 ?? '') || record.path !== `blocker-archive/${record.sha256}.json`) throw new Error('Later research blocker lacks its workflow receipt');
+        const normalized = JSON.parse(readPinned(path.join(directory, record.path), record.sha256).toString('utf8'));
+        if (!same(reconcileRetrospectiveProposal(newBlocker).proposal, normalized)) throw new Error('Later research blocker differs from its workflow receipt');
+        return true;
+      };
+      if (pendingSupplementHash !== undefined && !state.researchSupplementReceipts?.[key] &&
+          (!/^[a-f0-9]{64}$/.test(pendingSupplementHash) || !targetSupplement ||
+           (supplementHash !== pendingSupplementHash && !isVerifiedNextBlocker()))) {
+        throw new Error('Retained research continuation requires its matching supplement until a verified receipt is saved');
+      }
+      if (supplement && !supplementConsumed && !targetSupplement) throw new Error(`Research supplement is not assigned to active repair job ${key}`);
+      if (supplementConsumed && supplement.jobKey === key) throw new Error('Completed research supplement target is still the active repair job');
       // A returned artifact can become invalid only when a prior repair changed
       // the candidate it was based on (most commonly an exact active-hint
       // `before` value). Preserve that artifact for auditability, then let the
@@ -569,6 +804,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
         try {
           applyDateRepairProposal(candidate, prior, active);
         } catch (error) {
+          if (targetSupplement) throw new Error(`Supplement target has an invalid retained proposal; preserve and reconcile: ${error.message}`);
           const rejectedBase = path.join(directory, `rejected-${key}-${hash(prior).slice(7)}`);
           const rejected = fs.existsSync(`${rejectedBase}.json`)
             ? `${rejectedBase}-${Date.now()}.json`
@@ -579,23 +815,76 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
         }
       }
       if (!fs.existsSync(artifact)) {
+        // Retain a pre-existing legacy blocker exactly as found before asking
+        // any worker to continue. It is chapter-global and cannot safely be
+        // attributed to this particular job without independent provenance.
+        const legacyBlocker = path.join(directory, 'research-blocker.json');
+        let legacyBytes = null;
+        if (fs.existsSync(legacyBlocker)) {
+          legacyBytes = fs.readFileSync(legacyBlocker);
+          retainBlockerReference(state, { kind: 'legacy-raw-unattributed', ...archiveBlockerBytes(directory, legacyBytes) });
+          save();
+        }
         const result = await perform({ kind: 'repair', key, packet: active, extraction: candidate,
           baselinePacket: repairBaselinePacket, baselineExtraction: repairBaseline,
-          report, findings: job.findings, directory },r=>{
+          report, findings: job.findings, directory, workflowSourceHash: state.sourceHash,
+          workflowExtractionHash: state.extractionHash, researchSupplement: targetSupplement },r=>{
           if(r.blocked){if(typeof r.reason!=='string'||r.reason.trim().length<20)throw new Error('Research blocker needs a substantive reason');return;}
           const staged=applyDateRepairProposal(candidate,r,active);
           options.validateExtraction(staged);
         });
-        if (result.blocked) { writeJsonAtomic(path.join(directory, 'research-blocker.json'), result); return { status: 'research-blocked', reason: result.reason }; }
+        if (legacyBytes && (!fs.existsSync(legacyBlocker) || !fs.readFileSync(legacyBlocker).equals(legacyBytes))) throw new Error('Retained legacy blocker changed during repair; preserve artifacts and reconcile');
+        if (result.blocked) {
+          // This serialization is the workflow's normalized result, not the
+          // SDK's raw download. The worker separately retains raw bytes.
+          const bytes = Buffer.from(`${JSON.stringify(result, null, 2)}\n`);
+          const archived = archiveBlockerBytes(directory, bytes);
+          const jobState = state.jobs[key] ?? {};
+          retainBlockerReference(state, { kind: 'workflow-normalized', jobKey: key, ...archived,
+            ...(jobState.artifactHash ? { remoteArtifactHash: jobState.artifactHash } : {}),
+            ...(jobState.agentId ? { agentId: jobState.agentId } : {}),
+            ...(jobState.runId ? { runId: jobState.runId } : {}) });
+          save();
+          // Backwards-compatible path is create-only. Never replace old bytes.
+          writeBlockerCreateOnly(legacyBlocker, bytes, false);
+          return { status: 'research-blocked', reason: result.reason };
+        }
         writeJsonAtomic(artifact, result);
       }
       const proposal = readJson(artifact);
-      if(proposal.author?.agentId) { state.jobs[key]={...state.jobs[key],agentId:proposal.author.agentId};save(); }
+      let supplementReceipt;
+      if (targetSupplement) {
+        const jobState = state.jobs[key] ?? {};
+        const rawHash = jobState.artifactHash;
+        if (jobState.researchSupplementHash !== supplementHash || jobState.status !== 'returned' ||
+            !/^[a-f0-9]{64}$/.test(rawHash ?? '') || `sha256:${rawHash}` === supplement.blockerHash) {
+          throw new Error('Supplement target lacks matching completed continuation provenance');
+        }
+        const rawFile = path.join(directory, `raw-repair-artifact-${rawHash}.json`);
+        if (!fs.existsSync(rawFile)) throw new Error('Supplement target raw repair artifact is missing');
+        const rawBytes = fs.readFileSync(rawFile);
+        if (createHash('sha256').update(rawBytes).digest('hex') !== rawHash ||
+            !same(reconcileRetrospectiveProposal(JSON.parse(rawBytes.toString('utf8'))).proposal, proposal)) {
+          throw new Error('Supplement target proposal differs from its raw repair artifact');
+        }
+        supplementReceipt = { supplementHash, rawArtifactHash: rawHash,
+          blockerHash: supplement.blockerHash.slice(7), agentId: jobState.agentId, runId: jobState.runId,
+          sourceHash: active.sourceHash, extractionHash: active.extractionHash,
+          proposalHash: createHash('sha256').update(fs.readFileSync(artifact)).digest('hex') };
+        verifySupplementReceipt(key, supplementReceipt);
+      }
+      const authorId = proposalAuthorId(proposal);
+      if(authorId) { state.jobs[key]={...state.jobs[key],proposalAuthorId:authorId};save(); }
       candidate = applyDateRepairProposal(candidate, proposal, active);
       options.validateExtraction(candidate);
       state.repairIndex = repairIndex + 1;
       state.repairCandidate = `repair-candidate-${state.round}-${state.repairIndex}.json`;
       writeJsonAtomic(path.join(directory, state.repairCandidate), candidate);
+      if (supplementReceipt) {
+        state.researchSupplementReceipts ??= {};
+        state.researchSupplementReceipts[key] = supplementReceipt;
+        supplementConsumed = true;
+      }
       save();
     }
     if (typeof options.validateExtraction !== 'function') throw new Error('Date workflow requires a production validator');
@@ -670,8 +959,9 @@ export function revisePendingDateRepair({book,chapter},proposal,options={}) {
   if(typeof options.validateExtraction!=='function')throw new Error('Pending date revision requires production validation');
   options.validateExtraction(candidate);
   const key=`repair-${state.round}-${activePacket.extractionHash.slice(7,27)}`;
+  const authorId=proposalAuthorId(proposal);
   writeJsonAtomic(path.join(directory,`${key}.json`),proposal);
-  state.jobs[key]={agentId:proposal.author?.agentId??null};
+  state.jobs[key]={proposalAuthorId:authorId};
   writeJsonAtomic(path.join(directory,'combined-proposal.json'),combined);
   state.round+=1;state.candidate=`candidate-${state.round}.json`;
   writeJsonAtomic(path.join(directory,state.candidate),candidate);writeJsonAtomic(stateFile,state);

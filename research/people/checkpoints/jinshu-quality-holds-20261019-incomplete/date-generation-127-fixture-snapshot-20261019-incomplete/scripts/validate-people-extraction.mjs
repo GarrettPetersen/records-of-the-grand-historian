@@ -1,0 +1,1655 @@
+#!/usr/bin/env node
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { isDeepStrictEqual } from 'node:util';
+import { fileURLToPath } from 'node:url';
+import { normalizeExtractionDateHints } from './lib/people-date-hints.mjs';
+import { deathOnlyChronology, hasDateBearingChronology, westernBoundsErrors } from './lib/people-date-values.mjs';
+import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
+import {
+  buildPeopleChunkWorkerPacket,
+  buildPeopleExtractionPacket,
+  buildPeopleWorkerPacket,
+} from './build-people-extraction-packet.mjs';
+import { buildPeopleChunkPacket } from './lib/people-extraction-chunks.mjs';
+import {
+  PEOPLE_DIR,
+  REPO_ROOT,
+  codePoints,
+  exactSpanAt,
+  normalizedChapterId,
+  occurrenceAt,
+  readJson,
+  sha256,
+  writeTextAtomic,
+  writeJsonAtomic,
+} from './lib/people-content.mjs';
+import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
+import {
+  compactInputErrors,
+  compactPeopleExtraction,
+  expandPeopleExtraction,
+  isCompactPeopleExtraction,
+  serializeCompactPeopleExtraction,
+} from './lib/people-compact.mjs';
+import { personNameKindFamily } from './lib/people-presentation.mjs';
+
+const EXTRACTION_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-v1.json';
+const PACKET_SCHEMA_ID = 'https://24histories.com/schema/people/extraction-packet-v1.json';
+const COMPACT_SCHEMA_ID = 'https://24histories.com/schema/people/compact-extraction-v2.json';
+const V6_COMPLETION_FLAGS = [
+  'allNamedPeopleAndMentionsCaptured',
+  'allDurableFactsCaptured',
+  'allChronologyCaptured',
+  'editorialPassCompleted',
+];
+const V7_COMPLETION_FLAGS = [
+  ...V6_COMPLETION_FLAGS,
+  'allPersonEventsCaptured',
+  'allClaimProvenanceCaptured',
+  'allFamilyRelationshipsCaptured',
+];
+const FAMILY_RELATIONS = new Set([
+  'parent-of',
+  'child-of',
+  'sibling-of',
+  'spouse-of',
+  'betrothed-to',
+  'ancestor-of',
+  'descendant-of',
+  'kin-of',
+]);
+const PARENTAGE_TYPES = new Set(['biological', 'adoptive', 'foster', 'step', 'claimed', 'uncertain']);
+const FAMILY_LINES = new Set(['paternal', 'maternal']);
+const SHARED_PARENTAGE_TYPES = new Set([
+  'full',
+  'paternal-half',
+  'maternal-half',
+  'half-unspecified',
+  'step',
+  'adoptive',
+  'uncertain',
+]);
+const RELATIVE_AGES = new Set(['elder', 'younger', 'twin', 'uncertain']);
+const UNION_CATEGORIES = new Set([
+  'marriage',
+  'primary-marriage',
+  'secondary-marriage',
+  'concubinage',
+  'betrothal',
+  'levirate',
+  'sororate',
+  'other',
+  'uncertain',
+]);
+const ATTESTATION_EQUIVALENT_LIFE_PREDICATES = new Set(['birth', 'death', 'age']);
+const RELATIONSHIP_STATES = new Set(['formed', 'active', 'ended', 'divorced', 'annulled', 'widowed', 'uncertain']);
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+export class PeopleExtractionValidationError extends Error {
+  constructor(errors) {
+    super(`Person extraction validation failed:\n${errors.map((error) => `- ${error}`).join('\n')}`);
+    this.name = 'PeopleExtractionValidationError';
+    this.errors = errors;
+  }
+}
+
+function deepEqual(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function isWordCharacter(value) {
+  return typeof value === 'string' && /^[\p{L}\p{N}_]$/u.test(value);
+}
+
+function locateMentionSpan(text, span, language) {
+  try {
+    return exactSpanAt(text, span.exact, span.occurrence);
+  } catch (exactError) {
+    if (language !== 'en' || typeof span.exact !== 'string' || !span.exact) throw exactError;
+
+    const points = codePoints(text);
+    const needleLength = codePoints(span.exact).length;
+    const foldedExact = span.exact.toLocaleLowerCase('en-US');
+    const matches = [];
+    for (let start = 0; start <= points.length - needleLength; start += 1) {
+      const actual = points.slice(start, start + needleLength).join('');
+      if (actual.toLocaleLowerCase('en-US') !== foldedExact) continue;
+      const actualPoints = codePoints(actual);
+      if (
+        (isWordCharacter(actualPoints[0]) && isWordCharacter(points[start - 1])) ||
+        (isWordCharacter(actualPoints.at(-1)) && isWordCharacter(points[start + needleLength]))
+      ) continue;
+      matches.push({ actual, start });
+    }
+    const selected = matches[span.occurrence];
+    if (!selected) throw exactError;
+    const { actual, start } = selected;
+    return exactSpanAt(text, actual, occurrenceAt(text, actual, start));
+  }
+}
+
+function uniqueIds(items, label, errors, idKey = 'id') {
+  const seen = new Set();
+  for (const item of items) {
+    const id = item[idKey];
+    if (seen.has(id)) errors.push(`duplicate ${label} ID ${id}`);
+    seen.add(id);
+  }
+  return seen;
+}
+
+function requireOrderedIds(items, prefix, digits, label, errors, idKey = 'id') {
+  for (const [index, item] of items.entries()) {
+    const expected = `${prefix}${String(index + 1).padStart(digits, '0')}`;
+    if (item[idKey] !== expected) errors.push(`${label} ${index + 1} must have ID ${expected}, found ${item[idKey]}`);
+  }
+}
+
+function requireIncreasingIds(items, prefix, digits, label, errors, idKey = 'id') {
+  let previous = 0;
+  const suffixPattern = new RegExp(`^[0-9]{${digits}}$`, 'u');
+  for (const [index, item] of items.entries()) {
+    const id = item[idKey];
+    const suffix = typeof id === 'string' && id.startsWith(prefix) ? id.slice(prefix.length) : '';
+    if (!suffixPattern.test(suffix) || Number(suffix) < 1) {
+      errors.push(`${label} ${index + 1} must have an ID matching ${prefix}${'0'.repeat(digits - 1)}1, found ${id}`);
+      continue;
+    }
+    const number = Number(suffix);
+    if (number <= previous) errors.push(`${label} IDs must be in strictly increasing order, found ${id} after ${prefix}${String(previous).padStart(digits, '0')}`);
+    previous = number;
+  }
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function normalizeClaims(claims, namespace) {
+  const merged = [];
+  const byFact = new Map();
+  for (const claim of claims) {
+    if (claim.predicate === 'role') claim.value = { roleId: claim.value.roleId };
+    const key = canonicalJson([claim.subject, claim.predicate, claim.value, claim.certainty]);
+    const existing = byFact.get(key);
+    if (existing) {
+      existing.evidence = [...new Set([...existing.evidence, ...claim.evidence])];
+      continue;
+    }
+    byFact.set(key, claim);
+    merged.push(claim);
+  }
+  for (const [index, claim] of merged.entries()) {
+    claim.id = `${namespace}:c${String(index + 1).padStart(4, '0')}`;
+  }
+  return merged;
+}
+
+function nestedValuesWithKey(value, wantedKey, found = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) nestedValuesWithKey(item, wantedKey, found);
+  } else if (value && typeof value === 'object') {
+    for (const [key, item] of Object.entries(value)) {
+      if (key === wantedKey) found.push(item);
+      nestedValuesWithKey(item, wantedKey, found);
+    }
+  }
+  return found;
+}
+
+function nestedPersonReferences(value, found = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) nestedPersonReferences(item, found);
+  } else if (value && typeof value === 'object') {
+    for (const [key, item] of Object.entries(value)) {
+      if (/personId$/iu.test(key)) found.push([key, item]);
+      if (/personIds$/iu.test(key)) {
+        if (Array.isArray(item)) {
+          for (const personId of item) found.push([key, personId]);
+        } else {
+          found.push([key, item]);
+        }
+      }
+      nestedPersonReferences(item, found);
+    }
+  }
+  return found;
+}
+
+// A dated birth, death, or age claim is itself direct source-backed evidence that
+// the person existed at that point. Do not require a duplicate activity claim
+// merely to restate that fact. Attestations remain the normal form for activity.
+function hasSourceBackedLifeChronology(claim) {
+  if (!ATTESTATION_EQUIVALENT_LIFE_PREDICATES.has(claim.predicate) || !Array.isArray(claim.evidence) || claim.evidence.length === 0) {
+    return false;
+  }
+  const temporalValues = [claim.value, ...['dateContext', 'startDate', 'endDate']
+    .flatMap((key) => nestedValuesWithKey(claim.value, key))];
+  return temporalValues.some((value) => value?.sourceDate &&
+    (value.westernYear || value.westernInterval || value.westernBounds));
+}
+
+// A death is not personal activity. Keep the exception conservative: a dated
+// attestation must expressly describe that death and match a structured death
+// claim's chronology and evidence, rather than merely mentioning someone
+// else's death in the description of a living person's dated activity.
+function hasOnlySourceBackedDeathChronology(claims) {
+  if (!deathOnlyChronology(claims)) return false;
+  const deaths = claims.filter(claim => claim.predicate === 'death' ||
+    (claim.predicate === 'place-association' && claim.value?.relation === 'died-at') ||
+    (claim.predicate === 'event-participation' && claim.value?.kind === 'death' && claim.value?.role === 'deceased'));
+  if (!deaths.length) return false;
+  const dates = value => {
+    const date = value?.dateContext ?? value;
+    if (!date?.sourceDate || !(date.westernYear || date.westernInterval || date.westernBounds)) return null;
+    return Object.fromEntries(['sourceDate', 'westernYear', 'westernInterval', 'westernBounds']
+      .filter(key => date[key] !== undefined).map(key => [key, date[key]]));
+  };
+  return claims.filter(claim => claim.predicate === 'attestation' && hasDateBearingChronology(claim.value)).every(claim => {
+    if (!/^(?:death(?:\s+(?:mourned|implied|reported|recorded|mentioned|recalled)\b|$)|(?:he|she|they)\s+died\b|died\b)/iu.test(claim.value?.event ?? '')) return false;
+    const date = dates(claim.value);
+    return date && deaths.some(death => isDeepStrictEqual(date, dates(death.value)) &&
+      death.evidence?.some(unit => claim.evidence?.includes(unit)));
+  });
+}
+
+// A personally dated enfeoffment establishes the recipient's presence at that
+// ceremony only. Reception claims remain excluded because they can be wholly
+// posthumous, and this helper never creates a life-wide interval.
+function hasSourceBackedPersonalCeremony(claim) {
+  if (claim.predicate !== 'honor' || claim.value?.action !== 'enfeoffed' ||
+      claim.value?.receptionType || !Array.isArray(claim.evidence) || claim.evidence.length === 0) return false;
+  const date = claim.value?.dateContext;
+  return Boolean(date?.sourceDate && (date.westernYear || date.westernInterval || date.westernBounds));
+}
+
+function externalPrimaryChronologyErrors(person, packet) {
+  const errors = [];
+  const entries = person.identityHints.externalPrimaryChronology ?? [];
+  for (const [index, entry] of entries.entries()) {
+    const label = `${person.localId} externalPrimaryChronology[${index}]`;
+    if (!person.identityHints.activeDateHints.includes(entry.hint)) {
+      errors.push(`${label} must attach to an exact activeDateHint`);
+    }
+    if (entry.kind !== 'bounded-life' || !/\bexternal primary\b/iu.test(entry.hint)) {
+      errors.push(`${label} must be an explicit bounded-life external primary chronology`);
+    }
+    const start = entry.bounds?.start;
+    const end = entry.bounds?.end;
+    if (!start || !end || start.era !== end.era || start.year > end.year) {
+      errors.push(`${label} must have ordered same-era start/end bounds`);
+    }
+    const sourceResearch = entry.sourceResearch;
+    const sourceRoot = path.join(PEOPLE_DIR, 'date-repairs', packet.book, packet.chapter);
+    let dossier;
+    if (!sourceResearch || typeof sourceResearch.path !== 'string' ||
+        !Array.isArray(sourceResearch.sourceIds) || sourceResearch.sourceIds.length !== 2) {
+      errors.push(`${label} must bind an exact two-item source-research dossier`);
+      continue;
+    }
+    const dossierPath = path.resolve(REPO_ROOT, sourceResearch.path);
+    if (!dossierPath.startsWith(`${sourceRoot}${path.sep}`) || path.extname(dossierPath) !== '.json') {
+      errors.push(`${label} source-research dossier must be inside its chapter date-repairs directory`);
+      continue;
+    }
+    try {
+      dossier = readJson(dossierPath);
+    } catch (error) {
+      errors.push(`${label} cannot load its source-research dossier: ${error.message}`);
+      continue;
+    }
+    if (sourceResearch.hash !== sha256(JSON.stringify(dossier))) {
+      errors.push(`${label} source-research dossier hash does not match immutable bytes`);
+      continue;
+    }
+    if (dossier?.schemaVersion !== 1 || dossier?.kind !== 'independent-date-source-research' ||
+        dossier.book !== packet.book || dossier.chapter !== packet.chapter || !Array.isArray(dossier.sources)) {
+      errors.push(`${label} source-research dossier has an invalid canonical scope or structure`);
+      continue;
+    }
+    const sourceIds = new Set(sourceResearch.sourceIds);
+    if (sourceIds.size !== sourceResearch.sourceIds.length) {
+      errors.push(`${label} source-research dossier repeats an evidence item`);
+      continue;
+    }
+    const sourceById = new Map(dossier.sources.map(source => [source?.id, source]));
+    const witnesses = entry.witnesses ?? [];
+    const kinds = witnesses.map(witness => witness.kind).sort();
+    if (!deepEqual(kinds, ['birth', 'death'])) {
+      errors.push(`${label} must supply exactly one external-primary birth witness and one death witness`);
+      continue;
+    }
+    for (const witness of witnesses) {
+      if (witness.sourceType !== 'external-primary' || typeof witness.work !== 'string' ||
+          typeof witness.citation !== 'string' || !/^https:\/\//u.test(witness.url ?? '') ||
+          typeof witness.quotation !== 'string' || !witness.westernYear) {
+        errors.push(`${label} has malformed external-primary witness evidence`);
+      }
+      const expected = witness.kind === 'birth' ? start : end;
+      if (!expected || witness.westernYear?.era !== expected.era || witness.westernYear?.year !== expected.year) {
+        errors.push(`${label} ${witness.kind} witness must match its declared life bound`);
+      }
+      const source = sourceById.get(witness.sourceId);
+      const expectedWitness = source?.chronologyWitness;
+      if (!sourceIds.has(witness.sourceId) || !source || !expectedWitness ||
+          source.sourceType !== 'external-primary' || source.id !== witness.citation ||
+          !deepEqual({
+            kind: witness.kind,
+            work: witness.work,
+            citation: witness.citation,
+            url: witness.url,
+            quotation: witness.quotation,
+            westernYear: witness.westernYear,
+          }, {
+            kind: expectedWitness.kind,
+            work: source.work,
+            citation: source.id,
+            url: source.url,
+            quotation: source.quotation,
+            westernYear: expectedWitness.westernYear,
+          })) {
+        errors.push(`${label} ${witness.kind} witness must exactly match its hash-pinned primary dossier evidence item`);
+      }
+    }
+    if (!deepEqual([...sourceIds].sort(), witnesses.map(witness => witness.sourceId).sort())) {
+      errors.push(`${label} source-research evidence items must exactly match the two witnesses`);
+    }
+  }
+  return errors;
+}
+
+function hasValidatedExternalPrimaryChronology(person, packet, errors) {
+  const validationErrors = externalPrimaryChronologyErrors(person, packet);
+  errors.push(...validationErrors);
+  return (person.identityHints.externalPrimaryChronology?.length ?? 0) > 0 && validationErrors.length === 0;
+}
+
+function validateWesternYear(value, label, errors) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push(`${label} must be an object`);
+    return;
+  }
+  if (!['BC', 'AD'].includes(value.era)) errors.push(`${label}.era must be BC or AD`);
+  if (!Number.isInteger(value.year) || value.year < 1) {
+    errors.push(`${label}.year must be a positive integer`);
+  }
+  if (!['year', 'circa'].includes(value.precision)) {
+    errors.push(`${label}.precision must be year or circa`);
+  }
+}
+
+function validateAttestationClaim(claim, errors) {
+  const value = claim.value;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    errors.push(`${claim.id} attestation value must be an object`);
+    return;
+  }
+  const allowedKeys = new Set([
+    'sourceDate',
+    'westernYear',
+    'westernInterval',
+    'westernBounds',
+    'qualitative',
+    'unresolved',
+    'unresolvedReason',
+    'undatedSourceAttestation',
+    'event',
+  ]);
+  for (const key of Object.keys(value)) {
+    if (!allowedKeys.has(key)) errors.push(`${claim.id} attestation has unknown key ${key}`);
+  }
+  if (value.sourceDate !== undefined) {
+    if (!value.sourceDate || typeof value.sourceDate !== 'object' || Array.isArray(value.sourceDate)) {
+      errors.push(`${claim.id} sourceDate must be an object`);
+    } else {
+      if (typeof value.sourceDate.text !== 'string' || !value.sourceDate.text.trim()) {
+        errors.push(`${claim.id} sourceDate.text must be nonempty`);
+      }
+      if (value.sourceDate.regnalYear !== undefined &&
+          (!Number.isInteger(value.sourceDate.regnalYear) || value.sourceDate.regnalYear < 1)) {
+        errors.push(`${claim.id} sourceDate.regnalYear must be a positive integer`);
+      }
+    }
+  }
+  if (value.westernYear !== undefined) {
+    validateWesternYear(value.westernYear, `${claim.id} westernYear`, errors);
+  }
+  if (value.westernInterval !== undefined) {
+    if (!value.westernInterval || typeof value.westernInterval !== 'object' ||
+        Array.isArray(value.westernInterval)) {
+      errors.push(`${claim.id} westernInterval must be an object`);
+    } else {
+      validateWesternYear(value.westernInterval.start, `${claim.id} westernInterval.start`, errors);
+      validateWesternYear(value.westernInterval.end, `${claim.id} westernInterval.end`, errors);
+    }
+  }
+  if (value.qualitative !== undefined &&
+      (typeof value.qualitative !== 'string' || !value.qualitative.trim())) {
+    errors.push(`${claim.id} qualitative chronology must be nonempty`);
+  }
+  if (value.unresolved !== undefined && typeof value.unresolved !== 'boolean') {
+    errors.push(`${claim.id} unresolved must be boolean`);
+  }
+  if (value.undatedSourceAttestation !== undefined && value.undatedSourceAttestation !== true) {
+    errors.push(`${claim.id} undatedSourceAttestation must be true when present`);
+  }
+  if (value.undatedSourceAttestation === true && (typeof value.event !== 'string' || value.event.trim().length < 20)) {
+    errors.push(`${claim.id} undatedSourceAttestation requires a substantive source-specific event`);
+  }
+  if (value.event !== undefined && (typeof value.event !== 'string' || !value.event.trim())) errors.push(`${claim.id} event must identify whose event is dated`);
+  if (value.westernBounds !== undefined) errors.push(...westernBoundsErrors(value.westernBounds).map(error => `${claim.id}: ${error}`));
+  if (['westernYear', 'westernInterval', 'westernBounds'].filter(key => value[key] !== undefined).length > 1) {
+    errors.push(`${claim.id} must use only one Western date representation`);
+  }
+  const hasTemporalContext = value.westernYear !== undefined ||
+    value.westernInterval !== undefined || value.westernBounds !== undefined || value.qualitative !== undefined;
+  if (value.undatedSourceAttestation === true &&
+      (hasTemporalContext || value.sourceDate !== undefined || value.unresolved !== undefined || value.unresolvedReason !== undefined)) {
+    errors.push(`${claim.id} undatedSourceAttestation cannot carry temporal or unresolved-date fields`);
+  }
+  if (!hasTemporalContext && !(value.sourceDate && value.unresolved === true) && value.undatedSourceAttestation !== true) {
+    errors.push(`${claim.id} attestation needs a Western date, qualitative chronology, unresolved sourceDate, or explicit undated source attestation`);
+  }
+  if ((value.westernYear !== undefined || value.westernInterval !== undefined || value.westernBounds !== undefined) && !value.sourceDate) {
+    errors.push(`${claim.id} Western attestation must preserve sourceDate`);
+  }
+}
+
+export function validateClaimVocabulary(claim, packet, errors) {
+  errors.push(...personReceptionErrors(claim).map(error => `${claim.id}: ${error}`));
+  if (claim.predicate === 'role') {
+    const roleId = claim.value?.roleId;
+    const known = new Set(packet.context.roles.map((role) => role.id));
+    if (!known.has(roleId)) errors.push(`${claim.id} uses unknown roleId ${JSON.stringify(roleId)}`);
+  }
+  if (claim.predicate === 'attestation') validateAttestationClaim(claim, errors);
+  if (claim.predicate === 'assessment' &&
+      (!claim.value?.provenance || typeof claim.value.provenance !== 'object' ||
+       typeof claim.value.provenance.mode !== 'string' || !claim.value.provenance.mode.trim())) {
+    errors.push(`${claim.id} assessment requires provenance.mode`);
+  }
+  if (claim.value?.provenance !== undefined &&
+      (!claim.value.provenance || typeof claim.value.provenance !== 'object' ||
+       Array.isArray(claim.value.provenance) || typeof claim.value.provenance.mode !== 'string' ||
+       !claim.value.provenance.mode.trim())) {
+    errors.push(`${claim.id} provenance must be an object with a nonempty mode`);
+  }
+  for (const negated of nestedValuesWithKey(claim.value, 'negated')) {
+    if (typeof negated !== 'boolean') errors.push(`${claim.id} negated must be boolean`);
+  }
+  if (claim.predicate === 'event-participation') {
+    if (typeof claim.value?.kind !== 'string' || !claim.value.kind.trim()) {
+      errors.push(`${claim.id} event-participation requires a nonempty kind`);
+    }
+    if (![claim.value?.role, claim.value?.action].some((item) => typeof item === 'string' && item.trim())) {
+      errors.push(`${claim.id} event-participation requires a role or action`);
+    }
+  }
+  if (claim.predicate === 'family-relationship') {
+    if (!FAMILY_RELATIONS.has(claim.value?.relation)) {
+      errors.push(`${claim.id} family-relationship uses unknown relation ${JSON.stringify(claim.value?.relation)}`);
+    }
+    if (typeof claim.value?.personId !== 'string') {
+      errors.push(`${claim.id} family-relationship requires personId`);
+    } else if (claim.value.personId === claim.subject) {
+      errors.push(`${claim.id} family-relationship cannot link a person to itself`);
+    }
+    if (claim.value?.generationDistance !== undefined &&
+        (!Number.isInteger(claim.value.generationDistance) || claim.value.generationDistance < 1)) {
+      errors.push(`${claim.id} generationDistance must be a positive integer`);
+    }
+    if (claim.value?.parentage !== undefined && !PARENTAGE_TYPES.has(claim.value.parentage)) {
+      errors.push(`${claim.id} parentage uses unknown value ${JSON.stringify(claim.value.parentage)}`);
+    }
+    if (claim.value?.line !== undefined && !FAMILY_LINES.has(claim.value.line)) {
+      errors.push(`${claim.id} line uses unknown value ${JSON.stringify(claim.value.line)}`);
+    }
+    if (claim.value?.sharedParentage !== undefined && !SHARED_PARENTAGE_TYPES.has(claim.value.sharedParentage)) {
+      errors.push(`${claim.id} sharedParentage uses unknown value ${JSON.stringify(claim.value.sharedParentage)}`);
+    }
+    if (claim.value?.subjectRelativeAge !== undefined && !RELATIVE_AGES.has(claim.value.subjectRelativeAge)) {
+      errors.push(`${claim.id} subjectRelativeAge uses unknown value ${JSON.stringify(claim.value.subjectRelativeAge)}`);
+    }
+    if (claim.value?.unionCategory !== undefined && !UNION_CATEGORIES.has(claim.value.unionCategory)) {
+      errors.push(`${claim.id} unionCategory uses unknown value ${JSON.stringify(claim.value.unionCategory)}`);
+    }
+    if (claim.value?.relationshipState !== undefined && !RELATIONSHIP_STATES.has(claim.value.relationshipState)) {
+      errors.push(`${claim.id} relationshipState uses unknown value ${JSON.stringify(claim.value.relationshipState)}`);
+    }
+    for (const field of ['subjectBirthOrder', 'objectBirthOrder']) {
+      if (claim.value?.[field] !== undefined &&
+          (!Number.isInteger(claim.value[field]) || claim.value[field] < 1)) {
+        errors.push(`${claim.id} ${field} must be a positive integer`);
+      }
+    }
+    if (claim.value?.kinshipTerm !== undefined) {
+      const term = claim.value.kinshipTerm;
+      if (!term || typeof term !== 'object' || Array.isArray(term) ||
+          ![term.zh, term.en].some((value) => typeof value === 'string' && value.trim())) {
+        errors.push(`${claim.id} kinshipTerm must be an object with a nonempty zh or en value`);
+      }
+    }
+  }
+  if (claim.predicate === 'family-summary') {
+    if (typeof claim.value?.kinshipRole !== 'string' || !claim.value.kinshipRole.trim()) {
+      errors.push(`${claim.id} family-summary requires kinshipRole`);
+    }
+    if (claim.value?.count !== undefined &&
+        (!Number.isInteger(claim.value.count) || claim.value.count < 0)) {
+      errors.push(`${claim.id} family-summary count must be a nonnegative integer`);
+    }
+    if (claim.value?.count === undefined &&
+        (typeof claim.value?.quantity !== 'string' || !claim.value.quantity.trim())) {
+      errors.push(
+        `${claim.id} family-summary for ${claim.subject} at ${claim.evidence.join(', ')} ` +
+        'requires a nonnegative integer count or nonempty string quantity ' +
+        '(use quantity: "unspecified" for an unknown count; quantity objects are invalid); ' +
+        `received ${JSON.stringify(claim.value)}`,
+      );
+    }
+  }
+  for (const polityId of nestedValuesWithKey(claim.value, 'polityId')) {
+    if (!packet.context.polities.some((polity) => polity.id === polityId)) {
+      errors.push(
+        `${claim.id} uses polityId ${JSON.stringify(polityId)} not supplied in its packet; ` +
+        'use a source-grounded polity label object instead of inventing an ID',
+      );
+    }
+  }
+  for (const reignId of nestedValuesWithKey(claim.value, 'reignId')) {
+    if (!packet.context.reigns.some((reign) => reign.id === reignId)) {
+      errors.push(`${claim.id} uses reignId ${JSON.stringify(reignId)} not supplied in its packet`);
+    }
+  }
+}
+
+function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInput = false) {
+  const errors = [];
+  const ajv = getPeopleSchemaValidator();
+  const validatePacket = ajv.getSchema(PACKET_SCHEMA_ID);
+  const validateExtraction = ajv.getSchema(EXTRACTION_SCHEMA_ID);
+  if (!validatePacket(packet)) {
+    errors.push(...formatSchemaErrors(validatePacket.errors).map((error) => `packet schema: ${error}`));
+  }
+  if (!validateExtraction(extraction)) {
+    errors.push(...formatSchemaErrors(validateExtraction.errors).map((error) => `extraction schema: ${error}`));
+  }
+  if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
+
+  const normalized = ownsInput ? extraction : {
+    ...extraction,
+    mentions: extraction.mentions.map((mention) => ({
+      ...mention,
+      spans: {
+        zh: [...mention.spans.zh],
+        en: [...mention.spans.en],
+      },
+    })),
+    claims: extraction.claims.map((claim) => ({
+      ...claim,
+      evidence: [...claim.evidence],
+    })),
+  };
+  const namespace = `${packet.book}:${packet.chapter}`;
+  if (normalized.book !== packet.book || normalized.chapter !== packet.chapter) {
+    errors.push(`extraction scope ${normalized.book}/${normalized.chapter} does not match packet ${packet.book}/${packet.chapter}`);
+  }
+  if (!deepEqual(normalized.input, packet.input)) {
+    errors.push('input fingerprints or unit digests do not exactly match the current packet');
+  }
+
+  const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
+  const personIds = uniqueIds(normalized.people, 'local person', errors, 'localId');
+  const personById = new Map(normalized.people.map((person) => [person.localId, person]));
+  uniqueIds(normalized.mentions, 'mention', errors);
+  uniqueIds(normalized.claims, 'claim', errors);
+  normalized.claims = normalizeClaims(normalized.claims, namespace);
+  uniqueIds(normalized.translationRepairs, 'translation repair', errors);
+  // Person IDs remain stable after editorial deletion, so gaps are valid. Other
+  // generated record IDs are rebuilt from array order and remain gapless.
+  requireIncreasingIds(normalized.people, `${namespace}:p`, 3, 'local person', errors, 'localId');
+  requireOrderedIds(normalized.mentions, `${namespace}:m`, 4, 'mention', errors);
+  requireOrderedIds(normalized.claims, `${namespace}:c`, 4, 'claim', errors);
+  requireOrderedIds(normalized.translationRepairs, `${namespace}:r`, 4, 'translation repair', errors);
+
+  for (const person of normalized.people) {
+    const suggestedName = person.preferredNameSuggestion;
+    if (![suggestedName.en, suggestedName.zh].some((value) => typeof value === 'string' && value.trim())) {
+      errors.push(`${person.localId} has no nonempty English or Chinese preferred-name suggestion`);
+    }
+    for (const related of person.identityHints.relatedLocalPeople) {
+      if (!personIds.has(related)) errors.push(`${person.localId} refers to unknown related local person ${related}`);
+    }
+  }
+
+  const candidateById = new Map(packet.preflight.candidates.map((candidate) => [candidate.id, candidate]));
+  const accountedCandidates = new Map();
+  const intervals = new Map();
+  const mentionsByPerson = new Map();
+  const linkedSurfaceKeys = new Set();
+
+  for (const mention of normalized.mentions) {
+    if (!personIds.has(mention.person)) errors.push(`${mention.id} refers to unknown local person ${mention.person}`);
+    mentionsByPerson.set(mention.person, (mentionsByPerson.get(mention.person) ?? 0) + 1);
+    const currentUnit = unitById.get(mention.unit.id);
+    if (!currentUnit) {
+      errors.push(`${mention.id} refers to missing unit ${mention.unit.id}`);
+      continue;
+    }
+    for (const key of ['kind', 'blockIndex', 'collection', 'itemIndex']) {
+      if (mention.unit[key] !== currentUnit[key]) {
+        errors.push(`${mention.id} unit ${key} is stale: expected ${currentUnit[key]}, found ${mention.unit[key]}`);
+      }
+    }
+
+    let spanCount = 0;
+    for (const language of ['zh', 'en']) {
+      const text = currentUnit[language];
+      for (const [spanIndex, span] of mention.spans[language].entries()) {
+        spanCount += 1;
+        try {
+          const located = locateMentionSpan(text, span, language);
+          mention.spans[language][spanIndex] = located;
+          linkedSurfaceKeys.add(`${language}\0${located.exact}`);
+          const intervalKey = `${currentUnit.id}:${language}`;
+          const existing = intervals.get(intervalKey) ?? [];
+          for (const other of existing) {
+            if (located.startCodePoint < other.endCodePoint && other.startCodePoint < located.endCodePoint) {
+              errors.push(`${mention.id} ${language} span overlaps ${other.mentionId} in unit ${currentUnit.id}`);
+            }
+          }
+          existing.push({ ...located, mentionId: mention.id });
+          intervals.set(intervalKey, existing);
+        } catch (error) {
+          errors.push(`${mention.id} ${language} span ${spanIndex}: ${error.message}`);
+        }
+      }
+    }
+    if (spanCount === 0) errors.push(`${mention.id} has no Chinese or English span`);
+
+    for (const candidateId of mention.candidateRefs) {
+      const candidate = candidateById.get(candidateId);
+      if (!candidate) {
+        errors.push(`${mention.id} refers to unknown candidate ${candidateId}`);
+        continue;
+      }
+      if (accountedCandidates.has(candidateId)) {
+        errors.push(`${candidateId} is accounted for more than once (${accountedCandidates.get(candidateId)} and ${mention.id})`);
+        continue;
+      }
+      accountedCandidates.set(candidateId, mention.id);
+      if (candidate.unit !== currentUnit.id) {
+        errors.push(`${mention.id} candidate ${candidateId} belongs to unit ${candidate.unit}, not ${currentUnit.id}`);
+      }
+      const containingSpan = mention.spans[candidate.language].some((span) =>
+        span.startCodePoint <= candidate.startCodePoint && span.endCodePoint >= candidate.endCodePoint
+      );
+      if (!containingSpan) {
+        errors.push(`${mention.id} does not contain its ${candidate.language} candidate ${candidateId} within a mention span`);
+      }
+    }
+  }
+
+  for (const person of normalized.people) {
+    if (!mentionsByPerson.has(person.localId) && !person.mentionException) {
+      errors.push(`${person.localId} has no mention and no explicit mentionException`);
+    }
+  }
+
+  const aliasDispositionConflicts = [];
+  for (const disposition of normalized.candidateDispositions) {
+    const candidateId = disposition.candidate;
+    const candidate = candidateById.get(candidateId);
+    if (!candidate) {
+      errors.push(`candidate disposition refers to unknown candidate ${candidateId}`);
+      continue;
+    }
+    if (accountedCandidates.has(candidateId)) {
+      errors.push(`${candidateId} is accounted for more than once (${accountedCandidates.get(candidateId)} and disposition)`);
+      continue;
+    }
+    accountedCandidates.set(candidateId, 'disposition');
+    if (disposition.reason === 'other' && !disposition.note) {
+      errors.push(`${candidateId} uses disposition reason "other" without a note`);
+    }
+    if (
+      disposition.reason === 'not-a-name' &&
+      linkedSurfaceKeys.has(`${candidate.language}\0${candidate.exact}`)
+    ) {
+      aliasDispositionConflicts.push({
+        candidate: candidateId,
+        language: candidate.language,
+        exact: candidate.exact,
+        unit: candidate.unit,
+      });
+    }
+  }
+  if (options.strictAliasDispositions) {
+    for (const conflict of aliasDispositionConflicts) {
+      errors.push(
+        `${conflict.candidate} disposes linked ${conflict.language} alias ` +
+        `${JSON.stringify(conflict.exact)} as not-a-name in ${conflict.unit}; link the callback or use an explicit contextual disposition`,
+      );
+    }
+  }
+  for (const candidateId of candidateById.keys()) {
+    if (!accountedCandidates.has(candidateId)) errors.push(`preflight candidate ${candidateId} is not accounted for`);
+  }
+
+  const evidencePrefix = `${namespace}:`;
+  const claimsByPerson = new Map();
+  for (const claim of normalized.claims) {
+    if (!personIds.has(claim.subject)) errors.push(`${claim.id} refers to unknown subject ${claim.subject}`);
+    if (!claimsByPerson.has(claim.subject)) claimsByPerson.set(claim.subject, []);
+    claimsByPerson.get(claim.subject).push(claim);
+    for (const evidence of claim.evidence) {
+      if (!evidence.startsWith(evidencePrefix)) {
+        errors.push(`${claim.id} evidence ${evidence} is outside assigned chapter ${namespace}`);
+        continue;
+      }
+      const unitId = evidence.slice(evidencePrefix.length);
+      if (!unitById.has(unitId)) errors.push(`${claim.id} evidence refers to missing unit ${evidence}`);
+    }
+    validateClaimVocabulary(claim, packet, errors);
+    if (claim.predicate === 'name') {
+      try {
+        personNameKindFamily(claim.value?.kind);
+      } catch (error) {
+        errors.push(`${claim.id} ${error.message}`);
+      }
+    }
+    if (normalized.run.promptVersion >= 6) {
+      for (const key of ['dateContext', 'startDate', 'endDate']) {
+        for (const value of nestedValuesWithKey(claim.value, key)) {
+          validateAttestationClaim({ id: `${claim.id} ${key}`, value }, errors);
+        }
+      }
+      if (['same-person', 'different-person'].includes(claim.predicate)) {
+        if (typeof claim.value?.personId !== 'string') {
+          errors.push(`${claim.id} ${claim.predicate} value must name the other local person in value.personId`);
+        } else if (!personIds.has(claim.value.personId)) {
+          errors.push(`${claim.id} ${claim.predicate} refers to unknown local person ${claim.value.personId}`);
+        } else if (claim.value.personId === claim.subject) {
+          errors.push(`${claim.id} ${claim.predicate} cannot refer to its own subject`);
+        }
+      }
+      for (const [key, value] of nestedPersonReferences(claim.value)) {
+        if (typeof value !== 'string' || !personIds.has(value)) {
+          errors.push(`${claim.id} ${key} refers to unknown local person ${JSON.stringify(value)}`);
+        }
+      }
+      if (normalized.run.promptVersion >= 7 && claim.predicate === 'family-relationship' &&
+          personIds.has(claim.subject) && personIds.has(claim.value?.personId)) {
+        const targetId = claim.value.personId;
+        if (!personById.get(claim.subject).identityHints.relatedLocalPeople.includes(targetId)) {
+          errors.push(`${claim.id} family target ${targetId} is missing from the subject's relatedLocalPeople hints`);
+        }
+        if (!personById.get(targetId).identityHints.relatedLocalPeople.includes(claim.subject)) {
+          errors.push(`${claim.id} family subject ${claim.subject} is missing from the target's relatedLocalPeople hints`);
+        }
+      }
+    }
+  }
+  for (const person of normalized.people) {
+    const personClaims = claimsByPerson.get(person.localId) ?? [];
+    const deathOnlyEvidence = hasOnlySourceBackedDeathChronology(personClaims);
+    const receptionOnlyEvidence = personClaims.some(claim =>
+      claim.predicate === 'event-participation' && personClaimReception(claim));
+    const externalPrimaryChronology = hasValidatedExternalPrimaryChronology(person, packet, errors);
+    if (!personClaims.some((claim) => claim.predicate === 'name')) {
+      errors.push(`${person.localId} has no name claim`);
+    }
+    if (!personClaims.some((claim) => claim.predicate === 'role')) {
+      errors.push(`${person.localId} has no role claim; use named-individual when the chapter establishes no narrower role`);
+    }
+    if (normalized.run.promptVersion >= 5) {
+      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const lifeChronology = personClaims.some(hasSourceBackedLifeChronology);
+      const personalCeremony = personClaims.some(hasSourceBackedPersonalCeremony);
+      const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+        claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+        hasDateBearingChronology(claim.value));
+      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence && !deathOnlyEvidence) {
+        errors.push(`${person.localId} has no active-date hint required by prompt v5`);
+      }
+      if (!attestations.length && !lifeChronology && !personalCeremony && !externalPrimaryChronology && !receptionOnlyEvidence) {
+        errors.push(`${person.localId} has no evidence-backed attestation required by prompt v5`);
+      }
+    }
+    if (normalized.run.promptVersion >= 7 && !['legendary', 'literary'].includes(person.historicity)) {
+      const researchHold = personClaims.some(claim => claim.predicate === 'attestation' && claim.value?.unresolved === true && typeof claim.value?.unresolvedReason === 'string' && claim.value.unresolvedReason.trim().length >= 20);
+      const attestations = personClaims.filter((claim) => claim.predicate === 'attestation');
+      const lifeChronology = personClaims.some(hasSourceBackedLifeChronology);
+      const personalCeremony = personClaims.some(hasSourceBackedPersonalCeremony);
+      const westernAttestation = attestations.some((claim) =>
+        claim.value?.westernYear || claim.value?.westernInterval || claim.value?.westernBounds);
+      const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+        claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+        hasDateBearingChronology(claim.value));
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+        errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
+      }
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
+        errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
+      }
+      const temporalValues = personClaims.flatMap((claim) => [
+        ...(claim.predicate === 'attestation' ? [claim.value] : []),
+        ...['dateContext', 'startDate', 'endDate'].flatMap((key) => nestedValuesWithKey(claim.value, key)),
+      ]);
+      if (temporalValues.some((value) => value?.unresolved === true && (typeof value.unresolvedReason !== 'string' || value.unresolvedReason.trim().length < 20))) {
+        errors.push(`${person.localId} unresolved chronology requires a substantive research-blocker reason`);
+      }
+    }
+  }
+  if (normalized.run.promptVersion >= 6) {
+    const completionFlags = normalized.run.promptVersion >= 7 ? V7_COMPLETION_FLAGS : V6_COMPLETION_FLAGS;
+    for (const key of completionFlags) {
+      if (normalized.coverage[key] !== true) {
+        errors.push(`coverage.${key} must be true for prompt v${normalized.run.promptVersion}`);
+      }
+    }
+  }
+
+  const repairChains = new Map();
+  for (const repair of normalized.translationRepairs) {
+    const currentUnit = unitById.get(repair.unit.id);
+    if (!currentUnit) {
+      errors.push(`${repair.id} refers to missing unit ${repair.unit.id}`);
+      continue;
+    }
+    for (const key of ['kind', 'blockIndex', 'collection', 'itemIndex']) {
+      if (repair.unit[key] !== currentUnit[key]) {
+        errors.push(`${repair.id} unit ${key} is stale: expected ${currentUnit[key]}, found ${repair.unit[key]}`);
+      }
+    }
+    const fieldKey = repair.field === 'idiomatic' ? 'en' : 'literal';
+    const repairKey = `${repair.unit.id}:${repair.field}`;
+    const previous = repairChains.get(repairKey)?.repair;
+    if (previous) {
+      if (previous.status !== 'applied') {
+        errors.push(`${repair.id} follows pending repair ${previous.id} for ${repairKey}`);
+      }
+      if (repair.before !== previous.after) {
+        errors.push(`${repair.id} does not continue from ${previous.id} for ${repairKey}`);
+      }
+    }
+    repairChains.set(repairKey, { repair, currentUnit, fieldKey });
+    if (repair.before === repair.after) errors.push(`${repair.id} replacement is identical to its original text`);
+  }
+  for (const { repair, currentUnit, fieldKey } of repairChains.values()) {
+    const expected = repair.status === 'applied' ? repair.after : repair.before;
+    if (currentUnit[fieldKey] !== expected) {
+      errors.push(
+        `${repair.id} ${repair.status} ${repair.field} text does not match packet unit ${repair.unit.id}`,
+      );
+    }
+  }
+
+  if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
+  return {
+    normalized,
+    audit: {
+      aliasDispositionConflicts,
+    },
+    stats: {
+      units: packet.units.length,
+      candidates: packet.preflight.candidates.length,
+      people: normalized.people.length,
+      mentions: normalized.mentions.length,
+      claims: normalized.claims.length,
+      repairs: normalized.translationRepairs.length,
+      dispositions: normalized.candidateDispositions.length,
+      aliasDispositionConflicts: aliasDispositionConflicts.length,
+    },
+  };
+}
+
+export function validatePeopleExtraction(extraction, packet, options = {}) {
+  return validatePeopleExtractionImpl(extraction, packet, options);
+}
+
+export function validateCompactPeopleExtraction(compact, packet, options = {}) {
+  const ajv = getPeopleSchemaValidator();
+  const validate = ajv.getSchema(COMPACT_SCHEMA_ID);
+  const errors = [];
+  if (!validate(compact)) {
+    errors.push(...formatSchemaErrors(validate.errors).map((item) => `compact schema: ${item}`));
+  }
+  errors.push(...compactInputErrors(compact, packet));
+  if (errors.length > 0) throw new PeopleExtractionValidationError(errors);
+  return validatePeopleExtractionImpl(expandPeopleExtraction(compact, packet), packet, options, true);
+}
+
+function usage() {
+  console.log(`Usage:
+  node scripts/validate-people-extraction.mjs PATH [--packet PATH] [--normalize] [--out PATH]
+  node scripts/validate-people-extraction.mjs --all
+  node scripts/validate-people-extraction.mjs --self-test
+
+The default packet is rebuilt from the current chapter, making stale input fail.
+--normalize formats existing Western active-date hints and writes host-computed
+span offsets and hashes to --out or back to PATH, only after validation succeeds.`);
+}
+
+function parseArgs(argv) {
+  const opts = { file: null, packet: null, normalize: false, out: null, all: false, selfTest: false };
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    const next = () => {
+      const value = argv[++index];
+      if (!value || value.startsWith('--')) throw new Error(`${arg} requires a value`);
+      return value;
+    };
+    if (arg === '--packet') opts.packet = path.resolve(REPO_ROOT, next());
+    else if (arg === '--normalize') opts.normalize = true;
+    else if (arg === '--out') opts.out = path.resolve(REPO_ROOT, next());
+    else if (arg === '--all') opts.all = true;
+    else if (arg === '--self-test') opts.selfTest = true;
+    else if (arg === '--help' || arg === '-h') {
+      usage();
+      process.exit(0);
+    } else if (!arg.startsWith('--') && !opts.file) opts.file = path.resolve(REPO_ROOT, arg);
+    else throw new Error(`Unknown option: ${arg}`);
+  }
+  return opts;
+}
+
+function extractionFiles() {
+  const root = path.join(PEOPLE_DIR, 'extractions');
+  if (!fs.existsSync(root)) return [];
+  const files = [];
+  for (const book of fs.readdirSync(root).sort()) {
+    const directory = path.join(root, book);
+    if (!fs.statSync(directory).isDirectory()) continue;
+    for (const name of fs.readdirSync(directory).filter((file) => /^\d{3}\.json$/u.test(file)).sort()) {
+      files.push(path.join(directory, name));
+    }
+  }
+  return files;
+}
+
+function isPeopleWorkerPacket(value) {
+  return [1, 2].includes(value?.version) && Array.isArray(value.units) &&
+    (value.units.length === 0 || Array.isArray(value.units[0]));
+}
+
+function resolveValidationPacket(extraction, packetFile) {
+  const rebuilt = () => buildPeopleExtractionPacket(
+    extraction.book,
+    normalizedChapterId(extraction.chapter),
+  );
+  if (!packetFile) return rebuilt();
+
+  const supplied = readJson(packetFile);
+  if (!isPeopleWorkerPacket(supplied)) return supplied;
+
+  const packet = rebuilt();
+  if (supplied.version === 1 && !deepEqual(supplied, buildPeopleWorkerPacket(packet))) {
+    throw new PeopleExtractionValidationError([
+      'compact worker packet does not exactly match the current chapter and extraction configuration',
+    ]);
+  }
+  if (supplied.version === 1) return packet;
+
+  const scope = supplied.scope;
+  const chunk = scope && {
+    id: scope.chunkId,
+    index: scope.chunkIndex,
+    count: scope.chunkCount,
+    start: scope.start,
+    end: scope.end,
+    contextStart: scope.contextStart,
+    contextEnd: scope.contextEnd,
+    maxUnits: scope.maxUnits,
+    maxCandidates: scope.maxCandidates,
+    contextUnits: scope.contextUnits,
+  };
+  let expected;
+  try {
+    expected = buildPeopleChunkWorkerPacket(packet, chunk);
+  } catch (error) {
+    throw new PeopleExtractionValidationError([
+      `invalid compact chunk scope: ${error instanceof Error ? error.message : String(error)}`,
+    ]);
+  }
+  if (!deepEqual(supplied, expected)) {
+    throw new PeopleExtractionValidationError([
+      'compact chunk packet does not exactly match the current chapter, ownership range, and context',
+    ]);
+  }
+  return buildPeopleChunkPacket(packet, chunk);
+}
+
+function validateFile(file, opts) {
+  const submitted = readJson(file);
+  const { candidate: extraction, changes: hintChanges } = opts.normalize
+    ? normalizeExtractionDateHints(submitted) : { candidate: submitted, changes: [] };
+  const packet = resolveValidationPacket(extraction, opts.packet);
+  const compact = isCompactPeopleExtraction(extraction);
+  const result = compact
+    ? validateCompactPeopleExtraction(extraction, packet)
+    : validatePeopleExtraction(extraction, packet);
+  if (opts.normalize && !compact) writeJsonAtomic(opts.out ?? file, result.normalized);
+  if (opts.normalize && compact) {
+    writeTextAtomic(opts.out ?? file, serializeCompactPeopleExtraction(extraction));
+  }
+  if (hintChanges.length) console.log(`Normalized Western active-date hints: ${JSON.stringify(hintChanges)}`);
+  console.log(
+    `${path.relative(REPO_ROOT, file)}: ok (${result.stats.people} people, ` +
+    `${result.stats.mentions} mentions, ${result.stats.claims} claims, ${result.stats.candidates} candidates)`,
+  );
+  return result;
+}
+
+function selfTest() {
+  const sparsePersonIdErrors = [];
+  requireIncreasingIds(
+    [{ localId: 'testbook:001:p001' }, { localId: 'testbook:001:p003' }],
+    'testbook:001:p',
+    3,
+    'local person',
+    sparsePersonIdErrors,
+    'localId',
+  );
+  if (sparsePersonIdErrors.length > 0) throw new Error('Sparse stable person IDs were rejected');
+  const unorderedPersonIdErrors = [];
+  requireIncreasingIds(
+    [{ localId: 'testbook:001:p003' }, { localId: 'testbook:001:p001' }],
+    'testbook:001:p',
+    3,
+    'local person',
+    unorderedPersonIdErrors,
+    'localId',
+  );
+  if (unorderedPersonIdErrors.length === 0) throw new Error('Unordered person IDs unexpectedly passed');
+
+  const input = {
+    unitCount: 1,
+    chapterFingerprint: `sha256:${'1'.repeat(64)}`,
+    chineseFingerprint: `sha256:${'2'.repeat(64)}`,
+    englishFingerprint: `sha256:${'3'.repeat(64)}`,
+    unitDigests: [{
+      id: 's0001',
+      zh: `sha256:${'4'.repeat(64)}`,
+      en: `sha256:${'5'.repeat(64)}`,
+      literal: `sha256:${'6'.repeat(64)}`,
+    }],
+  };
+  const locator = { id: 's0001', kind: 'paragraph-sentence', blockIndex: 0, collection: 'sentences', itemIndex: 0 };
+  const packet = {
+    schemaVersion: 1,
+    book: 'testbook',
+    chapter: '001',
+    source: { path: 'data/testbook/001.json', title: { zh: '', en: '' } },
+    input,
+    units: [{ ...locator, zh: '艾麗絲來。', en: 'Alice came.', literal: 'Alice came.' }],
+    preflight: {
+      scannerVersion: 2,
+      candidates: [
+        { id: 'testbook:001:cand_1111111111111111', unit: 's0001', language: 'zh', exact: '艾麗絲', occurrence: 0, startCodePoint: 0, endCodePoint: 3, detectors: [{ kind: 'fixture' }] },
+        { id: 'testbook:001:cand_2222222222222222', unit: 's0001', language: 'en', exact: 'Alice', occurrence: 0, startCodePoint: 0, endCodePoint: 5, detectors: [{ kind: 'fixture' }] },
+      ],
+    },
+    context: { westernEraStyle: 'BC_AD', roles: [{ id: 'official', label: 'Official' }], polities: [], reigns: [] },
+  };
+  const extraction = {
+    schemaVersion: 1,
+    book: 'testbook',
+    chapter: '001',
+    input,
+    run: { model: 'fixture', promptVersion: 2 },
+    people: [{
+      localId: 'testbook:001:p001',
+      preferredNameSuggestion: { en: 'Alice', zh: '艾麗絲' },
+      historicity: 'historical',
+      descriptorSuggestion: 'Official',
+      identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: [] },
+    }],
+    mentions: [{
+      id: 'testbook:001:m0001',
+      person: 'testbook:001:p001',
+      unit: locator,
+      kind: 'personal-name',
+      spans: { zh: [{ exact: '艾麗絲', occurrence: 0 }], en: [{ exact: 'Alice', occurrence: 0 }] },
+      candidateRefs: ['testbook:001:cand_1111111111111111', 'testbook:001:cand_2222222222222222'],
+    }],
+    claims: [{
+      id: 'testbook:001:c0001',
+      subject: 'testbook:001:p001',
+      predicate: 'name',
+      value: { kind: 'personal', en: 'Alice', zh: '艾麗絲' },
+      certainty: 'explicit',
+      evidence: ['testbook:001:s0001'],
+    }, {
+      id: 'testbook:001:c0002',
+      subject: 'testbook:001:p001',
+      predicate: 'role',
+      value: { roleId: 'official' },
+      certainty: 'explicit',
+      evidence: ['testbook:001:s0001'],
+    }],
+    translationRepairs: [],
+    candidateDispositions: [],
+    coverage: { allUnitsVisited: true, preflightCandidatesAccountedFor: true, unresolvedReferences: [] },
+  };
+
+  const extractionBeforeValidation = JSON.stringify(extraction);
+  const valid = validatePeopleExtraction(extraction, packet);
+  if (JSON.stringify(extraction) !== extractionBeforeValidation) {
+    throw new Error('Expanded extraction validation mutated its caller input');
+  }
+  if (valid.normalized.mentions[0].spans.zh[0].endCodePoint !== 3) throw new Error('Span normalization failed');
+
+  const sequentialRepairs = structuredClone(extraction);
+  sequentialRepairs.translationRepairs = [{
+    id: 'testbook:001:r0001',
+    unit: locator,
+    field: 'idiomatic',
+    before: 'Alice arrived.',
+    after: 'Alice came.',
+    reason: 'First reviewed correction.',
+    confidence: 'high',
+    status: 'applied',
+  }, {
+    id: 'testbook:001:r0002',
+    unit: locator,
+    field: 'idiomatic',
+    before: 'Alice came.',
+    after: 'Alice has come.',
+    reason: 'Later evidence supports a further correction.',
+    confidence: 'high',
+    status: 'proposed',
+  }];
+  validatePeopleExtraction(sequentialRepairs, packet);
+  const staleSequentialRepair = structuredClone(sequentialRepairs);
+  staleSequentialRepair.translationRepairs[1].before = 'Alice returned.';
+  try {
+    validatePeopleExtraction(staleSequentialRepair, packet);
+    throw new Error('Discontinuous sequential repair unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('does not continue')) throw error;
+  }
+
+  const caseOnlySpan = structuredClone(extraction);
+  caseOnlySpan.mentions[0].spans.en[0].exact = 'alice';
+  const normalizedCaseOnlySpan = validatePeopleExtraction(caseOnlySpan, packet);
+  if (normalizedCaseOnlySpan.normalized.mentions[0].spans.en[0].exact !== 'Alice') {
+    throw new Error('Unique capitalization-only English span was not normalized');
+  }
+  const ambiguousCasePacket = structuredClone(packet);
+  ambiguousCasePacket.units[0].en = 'Alice met ALICE.';
+  const firstCaseInsensitiveOccurrence = validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
+  if (firstCaseInsensitiveOccurrence.normalized.mentions[0].spans.en[0].exact !== 'Alice') {
+    throw new Error('Indexed capitalization-only English span did not select its first occurrence');
+  }
+  Object.assign(ambiguousCasePacket.preflight.candidates[1], {
+    exact: 'ALICE',
+    occurrence: 0,
+    startCodePoint: 10,
+    endCodePoint: 15,
+  });
+  caseOnlySpan.mentions[0].spans.en[0].occurrence = 1;
+  const secondCaseInsensitiveOccurrence = validatePeopleExtraction(caseOnlySpan, ambiguousCasePacket);
+  if (secondCaseInsensitiveOccurrence.normalized.mentions[0].spans.en[0].exact !== 'ALICE') {
+    throw new Error('Indexed capitalization-only English span did not select its second occurrence');
+  }
+  const missingCaseInsensitiveOccurrence = structuredClone(caseOnlySpan);
+  missingCaseInsensitiveOccurrence.mentions[0].spans.en[0].occurrence = 2;
+  try {
+    validatePeopleExtraction(missingCaseInsensitiveOccurrence, ambiguousCasePacket);
+    throw new Error('Missing capitalization-only English occurrence unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Could not find occurrence')) throw error;
+  }
+
+  const unknownNameKind = structuredClone(extraction);
+  unknownNameKind.claims[0].value.kind = 'renamed';
+  try {
+    validatePeopleExtraction(unknownNameKind, packet);
+    throw new Error('Extraction with an unsupported person name kind unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Unknown person name kind')) {
+      throw new Error('Unsupported name kind did not produce the expected validation error');
+    }
+  }
+
+  const temporal = structuredClone(extraction);
+  temporal.run.promptVersion = 5;
+  temporal.people[0].identityHints.activeDateHints = ['AD 1'];
+  temporal.claims.push({
+    id: 'testbook:001:c0003',
+    subject: 'testbook:001:p001',
+    predicate: 'attestation',
+    value: {
+      sourceDate: { text: 'first year' },
+      westernYear: { era: 'AD', year: 1, precision: 'year' },
+    },
+    certainty: 'explicit-event-contextual-date',
+    evidence: ['testbook:001:s0001'],
+  });
+  validatePeopleExtraction(temporal, packet);
+  const missingTemporal = structuredClone(temporal);
+  missingTemporal.claims.pop();
+  try {
+    validatePeopleExtraction(missingTemporal, packet);
+    throw new Error('Prompt-v5 extraction without an attestation unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+  }
+
+  const comprehensive = structuredClone(temporal);
+  comprehensive.run.promptVersion = 7;
+  Object.assign(comprehensive.coverage, Object.fromEntries(V7_COMPLETION_FLAGS.map((key) => [key, true])));
+  validatePeopleExtraction(comprehensive, packet);
+
+  const deathDate = { sourceDate: { text: 'first year' }, westernYear: { era: 'AD', year: 1, precision: 'year' } };
+  const deathOnly = structuredClone(comprehensive);
+  deathOnly.people[0].identityHints.activeDateHints = [];
+  deathOnly.claims.find(claim => claim.predicate === 'attestation').value = { ...deathDate, event: 'Death mourned before the later memorial.' };
+  deathOnly.claims.push({ id: 'testbook:001:c0004', subject: 'testbook:001:p001', predicate: 'death',
+    value: { dateContext: deathDate }, certainty: 'explicit', evidence: ['testbook:001:s0001'] });
+  validatePeopleExtraction(deathOnly, packet);
+  validateCompactPeopleExtraction(compactPeopleExtraction(deathOnly, packet), packet);
+  for (const [predicate, value] of [
+    ['place-association', { relation: 'died-at', dateContext: deathDate }],
+    ['event-participation', { kind: 'death', role: 'deceased', dateContext: deathDate }],
+  ]) {
+    const alternateDeath = structuredClone(deathOnly);
+    Object.assign(alternateDeath.claims.at(-1), { predicate, value });
+    validatePeopleExtraction(alternateDeath, packet);
+  }
+  const undatedDeathAttestation = structuredClone(deathOnly);
+  undatedDeathAttestation.claims.find(claim => claim.predicate === 'attestation').value = {
+    undatedSourceAttestation: true, event: 'The source mentions the person without dating an activity.',
+  };
+  validatePeopleExtraction(undatedDeathAttestation, packet);
+  for (const negative of [
+    value => { value.claims.at(-2).value.event = 'Appointed after the death of her father.'; },
+    value => { value.claims.at(-2).value.westernYear = { era: 'AD', year: 2, precision: 'year' }; },
+    value => { value.claims.at(-2).value.sourceDate = { text: 'another event in the first year' }; },
+    value => { value.claims.at(-1).evidence = ['testbook:001:s0002']; },
+    value => { value.claims.push({ id: 'testbook:001:c0005', subject: 'testbook:001:p001',
+      predicate: 'event-participation', value: { kind: 'appointment', role: 'official', dateContext: deathDate },
+      certainty: 'explicit', evidence: ['testbook:001:s0001'] }); },
+    value => { value.claims.push({ id: 'testbook:001:c0005', subject: 'testbook:001:p001',
+      predicate: 'attestation', value: { ...deathDate, event: 'Appointed after the death of her father.' },
+      certainty: 'explicit', evidence: ['testbook:001:s0001'] }); },
+  ]) {
+    const invalidDeathOnly = structuredClone(deathOnly);
+    negative(invalidDeathOnly);
+    try {
+      validatePeopleExtraction(invalidDeathOnly, packet);
+      throw new Error('Living, mismatched, or additional activity unexpectedly passed as death-only chronology');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('active-date hint')) throw error;
+    }
+    try {
+      validateCompactPeopleExtraction(compactPeopleExtraction(invalidDeathOnly, packet), packet);
+      throw new Error('Invalid compact death-only chronology unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    }
+  }
+  for (const dateContext of [
+    { sourceDate: { text: 'first year' } },
+    { sourceDate: { text: 'first year' }, unresolved: true,
+      unresolvedReason: 'The source lacks a securely convertible year for this death.' },
+  ]) {
+    const undatedDeath = structuredClone(undatedDeathAttestation);
+    undatedDeath.claims.at(-1).value.dateContext = dateContext;
+    try {
+      validatePeopleExtraction(undatedDeath, packet);
+      throw new Error('Source-only or unresolved death unexpectedly passed the Western chronology gate');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('no Western-year attestation')) throw error;
+    }
+  }
+
+  const externalPrimary = structuredClone(comprehensive);
+  externalPrimary.claims = externalPrimary.claims.filter((claim) => claim.predicate !== 'attestation');
+  externalPrimary.people[0].identityHints.activeDateHints = ['AD 1-2 (external primary birth and death witnesses; no chapter reception date treated as life activity)'];
+  const externalResearchPath = 'data/people/date-repairs/testbook/001/external-primary-self-test.json';
+  const externalResearchFile = path.join(REPO_ROOT, externalResearchPath);
+  const externalResearch = {
+    schemaVersion: 1,
+    kind: 'independent-date-source-research',
+    book: 'testbook',
+    chapter: '001',
+    sources: [
+      {
+        id: 'primary-birth', sourceType: 'external-primary', work: 'Primary annals',
+        url: 'https://example.test/birth', quotation: 'born',
+        chronologyWitness: { kind: 'birth', westernYear: { era: 'AD', year: 1, precision: 'year' } },
+      },
+      {
+        id: 'primary-death', sourceType: 'external-primary', work: 'Primary annals',
+        url: 'https://example.test/death', quotation: 'died',
+        chronologyWitness: { kind: 'death', westernYear: { era: 'AD', year: 2, precision: 'year' } },
+      },
+    ],
+  };
+  fs.mkdirSync(path.dirname(externalResearchFile), { recursive: true });
+  writeJsonAtomic(externalResearchFile, externalResearch);
+  externalPrimary.people[0].identityHints.externalPrimaryChronology = [{
+    kind: 'bounded-life',
+    hint: externalPrimary.people[0].identityHints.activeDateHints[0],
+    bounds: {
+      start: { era: 'AD', year: 1, precision: 'year' },
+      end: { era: 'AD', year: 2, precision: 'year' },
+    },
+    sourceResearch: {
+      path: externalResearchPath,
+      hash: sha256(JSON.stringify(externalResearch)),
+      sourceIds: ['primary-birth', 'primary-death'],
+    },
+    witnesses: [
+      { sourceType: 'external-primary', sourceId: 'primary-birth', kind: 'birth', work: 'Primary annals', citation: 'primary-birth', url: 'https://example.test/birth', quotation: 'born', westernYear: { era: 'AD', year: 1, precision: 'year' } },
+      { sourceType: 'external-primary', sourceId: 'primary-death', kind: 'death', work: 'Primary annals', citation: 'primary-death', url: 'https://example.test/death', quotation: 'died', westernYear: { era: 'AD', year: 2, precision: 'year' } },
+    ],
+  }];
+  try {
+    validatePeopleExtraction(externalPrimary, packet);
+    validateCompactPeopleExtraction(compactPeopleExtraction(externalPrimary, packet), packet);
+
+    const malformedExternalPrimary = structuredClone(externalPrimary);
+    malformedExternalPrimary.people[0].identityHints.externalPrimaryChronology[0].witnesses[1].sourceType = 'external-secondary';
+    try {
+      validatePeopleExtraction(malformedExternalPrimary, packet);
+      throw new Error('Malformed external-primary chronology unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('externalPrimaryChronology')) throw error;
+    }
+    const unlinkedExternalPrimary = structuredClone(externalPrimary);
+    unlinkedExternalPrimary.people[0].identityHints.externalPrimaryChronology[0].hint = 'AD 1-2 (external primary witness but not attached to an active hint)';
+    try {
+      validatePeopleExtraction(unlinkedExternalPrimary, packet);
+      throw new Error('Unlinked external-primary chronology unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('must attach to an exact activeDateHint')) throw error;
+    }
+    const dossierHashMutation = structuredClone(externalPrimary);
+    dossierHashMutation.people[0].identityHints.externalPrimaryChronology[0].sourceResearch.hash = `sha256:${'0'.repeat(64)}`;
+    try {
+      validatePeopleExtraction(dossierHashMutation, packet);
+      throw new Error('Mismatched external-primary dossier hash unexpectedly passed');
+    } catch (error) {
+      if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('dossier hash')) throw error;
+    }
+    const witnessMutations = [
+      ['sourceType', 'external-secondary'],
+      ['sourceId', 'primary-death'],
+      ['kind', 'death'],
+      ['work', 'Other primary annals'],
+      ['citation', 'primary-death'],
+      ['url', 'https://example.test/alternate-birth'],
+      ['quotation', 'was born elsewhere'],
+      ['westernYear', { era: 'AD', year: 2, precision: 'year' }],
+    ];
+    for (const [field, replacement] of witnessMutations) {
+      const substituted = structuredClone(externalPrimary);
+      substituted.people[0].identityHints.externalPrimaryChronology[0].witnesses[0][field] = replacement;
+      try {
+        validatePeopleExtraction(substituted, packet);
+        throw new Error(`External-primary ${field} substitution unexpectedly passed`);
+      } catch (error) {
+        if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('externalPrimaryChronology')) throw error;
+      }
+    }
+  } finally {
+    fs.rmSync(externalResearchFile, { force: true });
+    fs.rmdirSync(path.dirname(externalResearchFile));
+    fs.rmdirSync(path.dirname(path.dirname(externalResearchFile)));
+  }
+
+  const ceremonyOnly = structuredClone(comprehensive);
+  ceremonyOnly.claims = ceremonyOnly.claims.filter((claim) => claim.predicate !== 'attestation');
+  ceremonyOnly.people[0].identityHints.activeDateHints = ['AD 907 (enfeoffment only; no life-wide interval inferred)'];
+  ceremonyOnly.claims.push({
+    id: 'testbook:001:c0003',
+    subject: 'testbook:001:p001',
+    predicate: 'honor',
+    value: {
+      title: { en: 'Princess of Fixture', zh: '測試公主' },
+      action: 'enfeoffed',
+      dateContext: {
+        sourceDate: { text: 'first year' },
+        westernYear: { era: 'AD', year: 907, precision: 'year' },
+      },
+    },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  const ceremonyResult = validatePeopleExtraction(ceremonyOnly, packet);
+  if (!deepEqual(ceremonyResult.normalized.people[0].identityHints.activeDateHints,
+    ['AD 907 (enfeoffment only; no life-wide interval inferred)']) ||
+    ceremonyResult.normalized.claims.find((claim) => claim.predicate === 'honor').value.dateContext.westernInterval) {
+    throw new Error('Dated enfeoffment was expanded into a fabricated life interval');
+  }
+  const incompleteComprehensive = structuredClone(comprehensive);
+  incompleteComprehensive.coverage.allDurableFactsCaptured = false;
+  try {
+    validatePeopleExtraction(incompleteComprehensive, packet);
+    throw new Error('Prompt-v7 extraction with an incomplete source-pass audit unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+  }
+
+  const unresolvedComprehensive = structuredClone(comprehensive);
+  unresolvedComprehensive.people[0].identityHints.activeDateHints = ['first year (conversion unresolved)'];
+  unresolvedComprehensive.claims.find((claim) => claim.predicate === 'attestation').value = {
+    sourceDate: { text: 'first year' },
+    unresolved: true,
+  };
+  try {
+    validatePeopleExtraction(unresolvedComprehensive, packet);
+    throw new Error('Prompt-v7 historical person with unresolved chronology unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+  }
+
+  const researchHold = structuredClone(unresolvedComprehensive);
+  researchHold.claims.find((claim) => claim.predicate === 'attestation').value.unresolvedReason = 'The source does not establish which ruler owned this first reign year.';
+  validatePeopleExtraction(researchHold, packet);
+  const oneSided = structuredClone(comprehensive);
+  oneSided.claims.find((claim) => claim.predicate === 'attestation').value = {
+    sourceDate: { text: 'before the second year' },
+    westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
+  };
+  validatePeopleExtraction(oneSided, packet);
+
+  const datedDeath = structuredClone(comprehensive);
+  const datedDeathClaim = datedDeath.claims.find((claim) => claim.predicate === 'attestation');
+  datedDeathClaim.predicate = 'death';
+  datedDeathClaim.value = {
+    dateContext: {
+      sourceDate: { text: 'described as late before the second year' },
+      westernBounds: { before: { era: 'AD', year: 2, precision: 'year' } },
+    },
+  };
+  validatePeopleExtraction(datedDeath, packet);
+
+  const unsourcedDeath = structuredClone(datedDeath);
+  delete unsourcedDeath.claims.find((claim) => claim.predicate === 'death').value.dateContext.sourceDate;
+  try {
+    validatePeopleExtraction(unsourcedDeath, packet);
+    throw new Error('A life-predicate chronology without a source date unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) ||
+        !error.message.includes('Western attestation must preserve sourceDate') ||
+        !error.message.includes('has no evidence-backed attestation')) {
+      throw error;
+    }
+  }
+
+  const legendaryComprehensive = structuredClone(unresolvedComprehensive);
+  legendaryComprehensive.people[0].historicity = 'legendary';
+  legendaryComprehensive.people[0].identityHints.activeDateHints = ['legendary antiquity'];
+  legendaryComprehensive.claims.find((claim) => claim.predicate === 'attestation').value = {
+    qualitative: 'legendary antiquity',
+  };
+  validatePeopleExtraction(legendaryComprehensive, packet);
+
+  const invalidFamily = structuredClone(comprehensive);
+  invalidFamily.claims.push({
+    id: 'testbook:001:c0004',
+    subject: 'testbook:001:p001',
+    predicate: 'family-relationship',
+    value: {
+      relation: 'father-of',
+      personId: 'testbook:001:p999',
+      parentage: 'invented',
+      kinshipTerm: {},
+    },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  try {
+    validatePeopleExtraction(invalidFamily, packet);
+    throw new Error('Invalid family relationship unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    if (!error.message.includes('family-relationship uses unknown relation') || !error.message.includes('parentage') ||
+        !error.message.includes('kinshipTerm')) {
+      throw new Error('Invalid family metadata did not produce the expected validation errors');
+    }
+  }
+
+  const invalidFamilySummary = structuredClone(comprehensive);
+  invalidFamilySummary.claims.push({
+    id: 'testbook:001:c0004',
+    subject: 'testbook:001:p001',
+    predicate: 'family-summary',
+    value: {
+      kinshipRole: 'sons',
+      quantity: { unspecified: true },
+    },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  try {
+    validatePeopleExtraction(invalidFamilySummary, packet);
+    throw new Error('Invalid family summary unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    if (!error.message.includes('family-summary for testbook:001:p001 at testbook:001:s0001') ||
+        !error.message.includes('quantity: "unspecified"') ||
+        !error.message.includes('quantity objects are invalid')) {
+      throw new Error('Invalid family summary did not produce an actionable validation error');
+    }
+  }
+
+  const invalidPolity = structuredClone(comprehensive);
+  invalidPolity.claims.push({
+    id: 'testbook:001:c0004',
+    subject: 'testbook:001:p001',
+    predicate: 'polity-association',
+    value: { polityId: 'invented-polity', relation: 'served' },
+    certainty: 'explicit',
+    evidence: ['testbook:001:s0001'],
+  });
+  try {
+    validatePeopleExtraction(invalidPolity, packet);
+    throw new Error('Invented polity ID unexpectedly passed');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError)) throw error;
+    if (!error.message.includes('not supplied in its packet') ||
+        !error.message.includes('source-grounded polity label object')) {
+      throw new Error('Invented polity ID did not produce an actionable validation error');
+    }
+  }
+
+  const workerPacket = buildPeopleWorkerPacket(packet);
+  if (!isPeopleWorkerPacket(workerPacket)) throw new Error('Compact worker packet was not recognized');
+  if (!deepEqual(workerPacket, buildPeopleWorkerPacket(packet))) {
+    throw new Error('Compact worker packet comparison is not deterministic');
+  }
+
+  const duplicatedClaim = structuredClone(extraction);
+  duplicatedClaim.claims.push({
+    ...structuredClone(duplicatedClaim.claims[0]),
+    id: 'testbook:001:c0003',
+  });
+  const deduplicated = validatePeopleExtraction(duplicatedClaim, packet);
+  if (deduplicated.normalized.claims.length !== 2) throw new Error('Duplicate claims were not consolidated');
+
+  const stale = structuredClone(extraction);
+  stale.mentions[0].spans.en[0].exact = 'Alicia';
+  try {
+    validatePeopleExtraction(stale, packet);
+    throw new Error('Stale span fixture unexpectedly passed');
+  } catch (error) {
+    if (!error.message.includes('Could not find occurrence')) throw error;
+  }
+
+  const overlapping = structuredClone(extraction);
+  overlapping.mentions.push({
+    ...structuredClone(overlapping.mentions[0]),
+    id: 'testbook:001:m0002',
+    candidateRefs: [],
+  });
+  try {
+    validatePeopleExtraction(overlapping, packet);
+    throw new Error('Overlap fixture unexpectedly passed');
+  } catch (error) {
+    if (!error.message.includes('overlaps')) throw error;
+  }
+
+  const unaccounted = structuredClone(extraction);
+  unaccounted.mentions[0].candidateRefs = ['testbook:001:cand_1111111111111111'];
+  try {
+    validatePeopleExtraction(unaccounted, packet);
+    throw new Error('Unaccounted candidate fixture unexpectedly passed');
+  } catch (error) {
+    if (!error.message.includes('is not accounted for')) throw error;
+  }
+
+  const contradictoryDisposition = structuredClone(extraction);
+  contradictoryDisposition.mentions[0].candidateRefs = ['testbook:001:cand_1111111111111111'];
+  contradictoryDisposition.candidateDispositions = [{
+    candidate: 'testbook:001:cand_2222222222222222',
+    disposition: 'not-person',
+    reason: 'not-a-name',
+  }];
+  const contradiction = validatePeopleExtraction(contradictoryDisposition, packet);
+  if (contradiction.stats.aliasDispositionConflicts !== 1) {
+    throw new Error('Linked alias disposition contradiction was not counted');
+  }
+  try {
+    validatePeopleExtraction(contradictoryDisposition, packet, { strictAliasDispositions: true });
+    throw new Error('Linked alias disposition contradiction unexpectedly passed strict validation');
+  } catch (error) {
+    if (!(error instanceof PeopleExtractionValidationError) || !error.message.includes('disposes linked en alias')) {
+      throw error;
+    }
+  }
+  console.log('validate-people-extraction self-test: ok');
+}
+
+async function main() {
+  const opts = parseArgs(process.argv.slice(2));
+  if (opts.selfTest) return selfTest();
+  if (opts.all) {
+    const files = extractionFiles();
+    for (const file of files) validateFile(file, opts);
+    console.log(`Validated ${files.length} person extraction file(s).`);
+    return;
+  }
+  if (!opts.file) throw new Error('Provide an extraction file, --all, or --self-test');
+  validateFile(opts.file, opts);
+}
+
+if (isMain) {
+  main().catch((error) => {
+    console.error(error instanceof Error ? error.message : error);
+    process.exit(1);
+  });
+}

@@ -1,0 +1,508 @@
+diff --git a/PEOPLE_DATE_AUDIT.md b/PEOPLE_DATE_AUDIT.md
+index e86506f..f089227 100644
+--- a/PEOPLE_DATE_AUDIT.md
++++ b/PEOPLE_DATE_AUDIT.md
+@@ -338,3 +338,29 @@ Retrospective is the sole later-reception category, including commemorations and
+ references after a known death. Use kind `retrospective-reference` or, on a narrower
+ honor/work claim, receptionType `retrospective`. Do not require proof of death,
+ introduce a posthumous subtype, or change the separate `posthumous-name` alias kind.
++# Explicit evidence holds
++
++`data/people/date-audit-holds.json` is a mandatory tracked manifest. Its empty
++`holds` array means no explicit holds; a missing or malformed manifest is an
++error, never an empty manifest. The root-level people data file is included in
++the existing sparse-checkout patterns. Each active entry has `status: "active"`,
++`book`, three-digit `chapter`, `auditVersion`, `reportFileHash`, `sourceHash`,
++`extractionHash`, substantive `reason`, `reportedBy`, `createdAt`, and a nonempty
++`evidence` array of `{path, sha256}`. Hashes use the `sha256:` prefix. The report
++hash pins exact UTF-8 report file bytes; source and extraction hashes are the
++original audit report's packet fingerprints. Evidence paths are repository-relative
++and their hashes pin the independently reviewed evidence files. Confirm these pins
++before adding a record; a syntactically valid hash alone does not prove a finding.
++
++An entry keeps its chapter `research-blocked` even when reports, source or
++extraction later change or disappear. The original report and queue state are not
++changed. Do not remove a hold merely because a fingerprint changed or a new report
++exists. No crash-safe hold-resolution mechanism is implemented yet: removing an
++entry while the old report remains installed could silently revive that approval.
++Hold removal is prohibited until a separate reviewed resolution protocol exists.
++Automatic date workflows and report recording refuse held chapters. These checks
++are not a cross-process lock: simultaneous hold installation and publication need
++host coordination and may race between checks.
++Rebuild the catalog, site index and progress after hold changes so cached status
++and displayed metrics reflect them; ebook validation also checks current status.
++
+diff --git a/data/people/date-audit-holds.json b/data/people/date-audit-holds.json
+new file mode 100644
+index 0000000..db27c93
+--- /dev/null
++++ b/data/people/date-audit-holds.json
+@@ -0,0 +1,4 @@
++{
++  "schemaVersion": 1,
++  "holds": []
++}
+diff --git a/scripts/generate-ebook.mjs b/scripts/generate-ebook.mjs
+index de69619..65c3051 100644
+--- a/scripts/generate-ebook.mjs
++++ b/scripts/generate-ebook.mjs
+@@ -38,6 +38,7 @@ import {
+   personPublicDescription,
+ } from './lib/people-presentation.mjs';
+ import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
++import { assertEbookCurrentDateAudits } from './lib/ebook-current-date-audits.mjs';
+ 
+ const __dirname = path.dirname(fileURLToPath(import.meta.url));
+ const repoRoot = path.resolve(__dirname, '..');
+@@ -835,6 +836,9 @@ function buildEbookPeople(product) {
+   const readiness = assessEbookPeopleReadiness(PEOPLE_EBOOK, product, {
+     allowPreview: PEOPLE_EBOOK_PREVIEW,
+   });
++  // Generated indexes may predate a newly recorded evidence hold. Never label
++  // the glossary ready from cached metadata without checking current audits.
++  if (readiness.ready) assertEbookCurrentDateAudits(product);
+   if (!readiness.active) return readiness;
+   const { chapterIds } = readiness;
+   const people = readiness.people.sort((left, right) =>
+diff --git a/scripts/lib/ebook-current-date-audits.mjs b/scripts/lib/ebook-current-date-audits.mjs
+index 158e6f7..b218e5d 100644
+--- a/scripts/lib/ebook-current-date-audits.mjs
++++ b/scripts/lib/ebook-current-date-audits.mjs
+@@ -48,3 +48,8 @@ export function ebookCurrentDateErrors(product, { getStatus = dateAuditStatus }
+   }
+   return errors;
+ }
++
++export function assertEbookCurrentDateAudits(product, options = {}) {
++  const errors = ebookCurrentDateErrors(product, options);
++  if (errors.length) throw new Error(`Ebook people glossary cannot be marked ready: ${errors.join(' ')}`);
++}
+diff --git a/scripts/lib/people-combined-curation.mjs b/scripts/lib/people-combined-curation.mjs
+index 9396fb7..35d2bf4 100644
+--- a/scripts/lib/people-combined-curation.mjs
++++ b/scripts/lib/people-combined-curation.mjs
+@@ -6,7 +6,7 @@ import { isDeepStrictEqual } from 'node:util';
+ import { REPO_ROOT, writeTextAtomic } from './people-content.mjs';
+ import { acquireProcessRunLock } from './process-run-lock.mjs';
+ import { claimIsActive, dateExecutorIsBusy, mutateRemotePeopleWorkLedger, validatePeopleWorkLedger } from './people-work-queue.mjs';
+-import { validateDateAuditScope, validateDateAuditReport } from './people-date-audit.mjs';
++import { dateAuditEvidenceHold, validateDateAuditScope, validateDateAuditReport } from './people-date-audit.mjs';
+ import { combinedDatePacket, documentHash, requireEqual, validateCombinedReviews } from './people-combined-curation-review.mjs';
+ 
+ const KIND = 'reviewed-combined-source-identity-date-curation';
+@@ -266,6 +266,8 @@ function retainedClaim(claim) {
+ 
+ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
+   const root = options.root ?? REPO_ROOT;
++  const assertNoHold = () => { if (dateAuditEvidenceHold(receipt.book, receipt.chapter, { peopleDir: path.join(root, 'data', 'people') })) throw new Error(`Date audit evidence hold requires independent resolution before combined publication ${receipt.book}/${receipt.chapter}`); };
++  assertNoHold();
+   const p = paths(root, receipt.book, receipt.chapter);
+   safeDestination(root, p.lock);
+   const unlock = acquireProcessRunLock(p.lock, { label: 'People date workflow' });
+@@ -281,6 +283,7 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
+     verifyCombinedCuration(receipt, expectedHash, { root, requireBefore: !exists });
+     const finalClaim = completeClaim(receipt, expectedHash);
+     const transaction = fn => mutateLedger(ledger => {
++      assertNoHold();
+       validatePeopleWorkLedger(ledger);
+       if (claimIsActive(ledger.claims[key]) && !['ready', 'complete'].includes(ledger.claims[key].status)) throw new Error('Concurrent extraction owns this chapter');
+       const result = fn(ledger);
+@@ -328,6 +331,7 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
+     };
+     checkpoint('lease');
+     canonicalState(receipt, expectedHash, !exists);
++    assertNoHold();
+     if (!exists) durableWrite(root, receiptFile, jsonBytes(receipt));
+     // Re-read the durable content before authorizing any canonical write.
+     assertDurableReceipt();
+@@ -337,12 +341,13 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
+       const historyFile = path.join(p.dateHistory, `${documentHash(parse(receipt.before.dateReport)).slice(7)}.json`);
+       safeDestination(root, historyFile);
+       if (fs.existsSync(historyFile)) requireEqual(parse(snapshot(historyFile)), parse(receipt.before.dateReport), 'old date report history');
+-      else durableWrite(root, historyFile, bytes(receipt.before.dateReport));
++      else { assertNoHold(); durableWrite(root, historyFile, bytes(receipt.before.dateReport)); }
+     }
+     checkpoint('history');
+     for (const role of ROLES) {
+       renew();
+       canonicalState(receipt, expectedHash, false);
++      assertNoHold();
+       if (maybeSnapshot(p[role])?.sha256 !== receipt.inputs[role].content.sha256) durableWrite(root, p[role], bytes(receipt.inputs[role].content));
+       checkpoint(role);
+     }
+@@ -351,6 +356,7 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
+     renew();
+     verifyCombinedCuration(receipt, expectedHash, { root });
+     for (const role of ROLES) requireEqual(snapshot(p[role]), receipt.inputs[role].content, `published ${role}`);
++    assertNoHold();
+     durableWrite(root, p.state, jsonBytes(completeState(receipt, expectedHash)));
+     checkpoint('state');
+     renew();
+diff --git a/scripts/lib/people-date-audit.mjs b/scripts/lib/people-date-audit.mjs
+index 4b53247..abdfcf6 100644
+--- a/scripts/lib/people-date-audit.mjs
++++ b/scripts/lib/people-date-audit.mjs
+@@ -169,9 +169,44 @@ export function dateAuditReferencesCurrent(report, { dataDir = DATA_DIR } = {})
+   });
+ }
+ 
++// An explicit evidence hold is a publication gate, not a replacement audit.
++// Its fingerprints identify the defective evidence reviewed when the hold was
++// created; they intentionally do not expire when the current files change.
++export function dateAuditEvidenceHold(book, chapter, { peopleDir = PEOPLE_DIR } = {}) {
++  validateDateAuditScope(book, chapter);
++  // The single tracked manifest is included by existing sparse checkout rules.
++  // It is mandatory: absence cannot safely mean an empty set of holds.
++  const file = path.join(peopleDir, 'date-audit-holds.json');
++  const manifest = readJson(file);
++  if (!manifest || manifest.schemaVersion !== 1 || !Array.isArray(manifest.holds)) throw new Error(`Invalid date audit evidence hold manifest: ${file}`);
++  const fingerprint = value => typeof value === 'string' && /^sha256:[a-f0-9]{64}$/.test(value);
++  const seen = new Set();
++  for (const hold of manifest.holds) {
++    if (!hold || typeof hold !== 'object' || Array.isArray(hold) || hold.status !== 'active' ||
++        typeof hold.book !== 'string' || !/^[a-z0-9_-]+$/.test(hold.book) ||
++        typeof hold.chapter !== 'string' || !/^\d{3}$/.test(hold.chapter) ||
++        hold.auditVersion !== DATE_AUDIT_VERSION || !fingerprint(hold.reportFileHash) ||
++        !fingerprint(hold.sourceHash) || !fingerprint(hold.extractionHash) ||
++        typeof hold.reason !== 'string' || hold.reason.trim().length < 20 ||
++        typeof hold.reportedBy !== 'string' || !hold.reportedBy.trim() ||
++        typeof hold.createdAt !== 'string' || !Number.isFinite(Date.parse(hold.createdAt)) ||
++        !Array.isArray(hold.evidence) || !hold.evidence.length || hold.evidence.some(item =>
++          !item || typeof item.path !== 'string' || !item.path.trim() || path.isAbsolute(item.path) ||
++          item.path.split(/[\\/]/).some(part => part === '..' || part === '') || !fingerprint(item.sha256))) {
++      throw new Error(`Invalid date audit evidence hold in ${file}`);
++    }
++    const key = `${hold.book}:${hold.chapter}`;
++    if (seen.has(key)) throw new Error(`Duplicate date audit evidence hold for ${key}`);
++    seen.add(key);
++  }
++  return manifest.holds.find(hold => hold.book === book && hold.chapter === chapter) ?? null;
++}
++
+ export function dateAuditStatus(book, chapter, options = {}) {
+   validateDateAuditScope(book, chapter);
+   const peopleDir = options.peopleDir ?? PEOPLE_DIR;
++  const hold = dateAuditEvidenceHold(book, chapter, options);
++  if (hold) return { status: 'research-blocked', auditVersion: DATE_AUDIT_VERSION, evidenceHold: hold };
+   const file = path.join(peopleDir, 'date-audits', book, `${chapter}.json`);
+   if (!fs.existsSync(file)) return { status: 'un-audited', auditVersion: DATE_AUDIT_VERSION };
+   if (!fs.existsSync(path.join(options.dataDir ?? DATA_DIR, book, `${chapter}.json`)) ||
+@@ -185,6 +220,7 @@ export function dateAuditStatus(book, chapter, options = {}) {
+ }
+ 
+ export function recordDateAudit(report, options = {}) {
++  if (dateAuditEvidenceHold(report.book, report.chapter, options)) throw new Error(`Date audit evidence hold must be independently resolved before recording ${report.book}/${report.chapter}`);
+   const packet = buildDateAuditPacket(report.book, report.chapter, options);
+   validateDateAuditReport(report, packet);
+   if (!dateAuditReferencesCurrent(report, options)) throw new Error('Date audit reference changed or quotation is unsupported');
+diff --git a/scripts/lib/people-date-workflow.mjs b/scripts/lib/people-date-workflow.mjs
+index ae139e7..393173b 100644
+--- a/scripts/lib/people-date-workflow.mjs
++++ b/scripts/lib/people-date-workflow.mjs
+@@ -5,7 +5,7 @@ import { serializeCompactPeopleExtraction } from './people-compact.mjs';
+ import { dateWorkerInput } from './people-date-worker.mjs';
+ import { mapDateReviewJobs } from './people-date-concurrency.mjs';
+ import { reconcileRetrospectiveValue, reconcileRetrospectiveProposal } from './people-reception-reconciliation.mjs';
+-import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
++import { buildDateAuditPacket, dateAuditEvidenceHold, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+ import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
+ import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
+ import {
+@@ -440,6 +440,8 @@ export function applyDateRepairProposal(stored, proposal, packet) {
+ export function publishDateRepair({ proposal, candidate, report, rounds = [], priorReviews = [] }, options = {}) {
+   const peopleDir = options.peopleDir ?? PEOPLE_DIR;
+   const { book, chapter } = report;
++  const assertNoHold = () => { if (dateAuditEvidenceHold(book, chapter, options)) throw new CompletedDateGenerationHold(`Date audit evidence hold requires independent resolution before publishing ${book}/${chapter}`); };
++  assertNoHold();
+   const currentPacket = buildDateAuditPacket(book, chapter, options);
+   const file = path.join(peopleDir, 'extractions', book, `${chapter}.json`);
+   const current = readJson(file);
+@@ -454,7 +456,9 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
+     options.validateExtraction(candidate);
+     const serialized=serializeCompactPeopleExtraction(candidate);
+     if(hash(JSON.parse(serialized))!==repairedPacket.extractionHash)throw new Error('Compact serialization changed the reviewed extraction');
++    assertNoHold();
+     writeJsonAtomic(path.join(peopleDir, 'date-repairs', book, chapter, `${repairedPacket.extractionHash.slice(7)}.json`), { schemaVersion: 1, proposal, rounds, priorReviews, candidateHash: repairedPacket.extractionHash, report });
++    assertNoHold();
+     writeTextAtomic(file, serialized);
+   } else {
+     const receipt = path.join(peopleDir, 'date-repairs', book, chapter, `${repairedPacket.extractionHash.slice(7)}.json`);
+@@ -466,6 +470,7 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
+ 
+ export class CompletedDateGenerationHold extends Error {}
+ export function assertCompletedGenerationSafe({book,chapter},options={}) {
++  if(dateAuditEvidenceHold(book,chapter,options))throw new CompletedDateGenerationHold(`Date audit evidence hold requires independent resolution before reserving ${book}/${chapter}`);
+   const stateFile=path.join(dateWorkflowDirectory(book,chapter,options.peopleDir),'state.json');
+   const state=fs.existsSync(stateFile)?readJson(stateFile):null;
+   const reportFile=path.join(options.peopleDir??PEOPLE_DIR,'date-audits',book,`${chapter}.json`);
+@@ -499,6 +504,7 @@ export function assertCompletedGenerationSafe({book,chapter},options={}) {
+ }
+ 
+ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
++  if (dateAuditEvidenceHold(book, chapter, options)) throw new CompletedDateGenerationHold(`Date audit evidence hold requires independent resolution before running ${book}/${chapter}`);
+   if(typeof options.validateExtraction!=='function')throw new Error('Date workflow requires a production validator before worker execution');
+   options.validateExtraction(readJson(path.join(options.peopleDir??PEOPLE_DIR,'extractions',book,`${chapter}.json`)));
+   const directory = dateWorkflowDirectory(book, chapter, options.peopleDir);
+diff --git a/scripts/run-people-date-workflow.mjs b/scripts/run-people-date-workflow.mjs
+index ca2d1c1..2bea75e 100644
+--- a/scripts/run-people-date-workflow.mjs
++++ b/scripts/run-people-date-workflow.mjs
+@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
+ import { parseArgs } from 'node:util';
+ import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
+ import { peopleExtractionFiles } from './lib/people-corpus.mjs';
+-import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
++import { buildDateAuditPacket, dateAuditEvidenceHold, dateAuditStatus } from './lib/people-date-audit.mjs';
+ import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
+ import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
+ import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
+@@ -158,6 +158,8 @@ if (o['dry-run']) {
+         const packet=buildDateAuditPacket(target.book,target.chapter);
+         let reserved;
+         try { reserved=mutateRemotePeopleWorkLedger(ledger=>{
++          // Never mutate or release ownership of a chapter under an evidence hold.
++          if(dateAuditEvidenceHold(target.book,target.chapter))throw new CompletedDateGenerationHold(`Date audit evidence hold requires independent resolution before reserving ${key}`);
+           ledger.dateAudits ??= {};
+           const prior=ledger.dateAudits[key];
+           if(prior && Object.hasOwn(prior,'combinedCuration'))throw new CompletedDateGenerationHold(`Combined curation ${key} is pending; recover its sealed receipt before resuming or releasing date work`);
+diff --git a/scripts/test-people-combined-curation.mjs b/scripts/test-people-combined-curation.mjs
+index fb48a77..467fd67 100644
+--- a/scripts/test-people-combined-curation.mjs
++++ b/scripts/test-people-combined-curation.mjs
+@@ -30,12 +30,13 @@ const reservationStart = 'reserved=mutateRemotePeopleWorkLedger(ledger=>{';
+ const reservationEnd = '},{message:`Reserve date audit ${key}`}).result;';
+ const start = runnerSource.indexOf(reservationStart), end = runnerSource.indexOf(reservationEnd, start);
+ assert.ok(start >= 0 && end > start, 'production reservation callback must be present');
+-const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
++const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', 'assertCompletedGenerationSafe', 'target', 'dateAuditEvidenceHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
+ 
+ function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false } = {}) {
+   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
+   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+   const people = path.join(root, 'data', 'people');
++  writeJsonAtomic(path.join(people, 'date-audit-holds.json'), { schemaVersion: 1, holds: [] });
+   const files = { source: path.join(root, 'data', book, `${chapter}.json`),
+     extraction: path.join(people, 'extractions', book, `${chapter}.json`),
+     editorial: path.join(people, 'editorial-decisions', book, `${chapter}.json`),
+@@ -256,6 +257,16 @@ test('source reordering refuses duplicate source IDs, table moves, null contract
+ 
+ const reorderedFixture = t => fixture(t, 'hanshu', '003', undefined, undefined, { reorder: true });
+ 
++test('combined publisher rejects an evidence-held chapter before canonical files or queue change', t => {
++  const f = fixture(t); const before = Object.fromEntries(Object.entries(f.files).map(([key, file]) => [key, fs.readFileSync(file)]));
++  const ledger = structuredClone(f.ledger);
++  const hold = { status: 'active', book: f.docs.book, chapter: f.docs.chapter, auditVersion: 1, reportFileHash: sha256('report'), sourceHash: sha256('source'), extractionHash: sha256('extraction'), reason: 'An independently verified fixture citation does not support this date.', reportedBy: 'Fixture reviewer', createdAt: '2026-10-20T12:00:00Z', evidence: [{ path: 'research/fixture.md', sha256: sha256('evidence') }] };
++  writeJsonAtomic(path.join(f.root, 'data/people/date-audit-holds.json'), { schemaVersion: 1, holds: [hold] });
++  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /evidence hold/);
++  assert.equal(f.calls(), 0); assert.deepEqual(f.ledger, ledger);
++  for (const [key, file] of Object.entries(f.files)) assert.deepEqual(fs.readFileSync(file), before[key]);
++});
++
+ test('source reordering is sealed, independently reviewed, replayed before shifted English repairs and published only in scratch', t => {
+   const f = reorderedFixture(t);
+   const contract = f.docs.materialization.sourceReordering;
+@@ -654,7 +665,7 @@ for (const boundary of ['lease', 'receipt', 'history', 'source', 'extraction', '
+       assert.deepEqual(claim.jobs, f.spec.priorClaim.jobs);
+       const unchanged = structuredClone(f.ledger);
+       for (const o of [{ worker: claim.worker }, { worker: 'other', takeover: true }, { worker: claim.worker, release: true, takeover: true }]) {
+-        assert.throws(() => makeOrdinaryReservation(o, f.key, CompletedDateGenerationHold)(f.ledger), /Combined curation .* pending/);
++        assert.throws(() => makeOrdinaryReservation(o, f.key, CompletedDateGenerationHold, () => {}, { book: f.docs.book, chapter: f.docs.chapter }, () => null)(f.ledger), /Combined curation .* pending/);
+         assert.deepEqual(f.ledger, unchanged);
+       }
+     }
+diff --git a/scripts/test-people-date-audit.mjs b/scripts/test-people-date-audit.mjs
+index 070716a..e50c64a 100644
+--- a/scripts/test-people-date-audit.mjs
++++ b/scripts/test-people-date-audit.mjs
+@@ -8,6 +8,8 @@ import { sha256, writeJsonAtomic } from './lib/people-content.mjs';
+ import { westernBoundsErrors, boundedDateLabel } from './lib/people-date-values.mjs';
+ import { personLifeSummary, formatPersonWesternYear, inferredPersonBirthYear } from './lib/people-presentation.mjs';
+ import { peopleCatalogIsComplete, peopleCatalogIsPublishable } from './lib/people-publication.mjs';
++import { assertEbookCurrentDateAudits, ebookCurrentDateErrors } from './lib/ebook-current-date-audits.mjs';
++import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
+ 
+ const year = n => ({ era: n < 0 ? 'BC' : 'AD', year: Math.abs(n), precision: 'year' });
+ test('catalog completion requires date approval independently of extraction', () => {
+@@ -40,6 +42,7 @@ function fixture(t) {
+   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'people-dates-'));
+   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+   const options = { dataDir: path.join(root, 'data'), peopleDir: path.join(root, 'people') };
++  writeJsonAtomic(path.join(options.peopleDir, 'date-audit-holds.json'), { schemaVersion: 1, holds: [] });
+   const source = { content: [{ sentences: [{ id: 's0001', zh: '甲卒。', translation: 'Jia died.' }] }] };
+   const extraction = { schemaVersion: 2, book: 'fixture', chapter: '001', run: { model: 'extractor' },
+     people: [['p001', ['Jia', '甲'], 'historical', 'Official', { a: ['before AD 472'] }]],
+@@ -65,6 +68,66 @@ test('missing reports are unaudited; complete source checks can approve', t => {
+   assert.equal(recordDateAudit(f.report, f.options).status, 'audited');
+ });
+ 
++function holdFixture(f) {
++  return { status: 'active', book: 'fixture', chapter: '001', auditVersion: 1,
++    reportFileHash: sha256(JSON.stringify(f.report)), sourceHash: f.packet.sourceHash,
++    extractionHash: f.packet.extractionHash, reason: 'Independent review found a citation unsupported by the cited source.',
++    reportedBy: 'Fixture independent reviewer', createdAt: '2026-10-20T12:00:00Z',
++    evidence: [{ path: 'research/fixture-evidence.md', sha256: sha256('fixture evidence') }] };
++}
++function writeHolds(f, holds) { writeJsonAtomic(path.join(f.options.peopleDir, 'date-audit-holds.json'), { schemaVersion: 1, holds }); }
++
++test('active evidence hold overrides audited, unaudited, stale and newly recorded reports', t => {
++  const f = fixture(t); recordDateAudit(f.report, f.options);
++  const file = path.join(f.options.peopleDir, 'date-audits/fixture/001.json');
++  const original = fs.readFileSync(file);
++  const hold = holdFixture(f); hold.reportFileHash = sha256(original.toString('utf8')); writeHolds(f, [hold]);
++  assert.equal(dateAuditStatus('fixture', '001', f.options).status, 'research-blocked');
++  assert.deepEqual(fs.readFileSync(file), original);
++  assert.throws(() => recordDateAudit(f.report, f.options), /evidence hold must be independently resolved/);
++  assert.deepEqual(fs.readFileSync(file), original);
++  f.source.content[0].sentences[0].translation = 'Changed translation.'; writeJsonAtomic(f.sourceFile, f.source);
++  assert.equal(dateAuditStatus('fixture', '001', f.options).status, 'research-blocked');
++  fs.unlinkSync(file); fs.unlinkSync(f.extractionFile);
++  assert.equal(dateAuditStatus('fixture', '001', f.options).status, 'research-blocked');
++  assert.deepEqual(dateAuditStatus('fixture', '001', f.options).evidenceHold, hold);
++  writeHolds(f, []); assert.equal(dateAuditStatus('fixture', '001', f.options).status, 'un-audited');
++});
++
++test('missing, malformed, duplicate and unrelated invalid holds fail loudly', t => {
++  const f = fixture(t); const manifest = path.join(f.options.peopleDir, 'date-audit-holds.json');
++  fs.unlinkSync(manifest); assert.throws(() => dateAuditStatus('fixture', '001', f.options), /ENOENT/);
++  for (const bad of [null, {}, { schemaVersion: 1, holds: 'bad' }, { schemaVersion: 1, holds: [null] }]) {
++    writeJsonAtomic(manifest, bad); assert.throws(() => dateAuditStatus('fixture', '001', f.options), /Invalid date audit evidence hold/);
++  }
++  const hold = holdFixture(f);
++  for (const change of [{ reason: ' ' }, { reportFileHash: 'x' }, { sourceHash: '' }, { extractionHash: 'x' },
++    { reportedBy: ' ' }, { createdAt: 'bad' }, { status: 'resolved' }, { book: '../x' }, { chapter: '1' },
++    { evidence: [] }, { evidence: [{ path: '../unsafe', sha256: sha256('x') }] }]) {
++    writeHolds(f, [{ ...hold, ...change }]); assert.throws(() => dateAuditStatus('fixture', '001', f.options), /Invalid date audit evidence hold/);
++  }
++  writeHolds(f, [hold, hold]); assert.throws(() => dateAuditStatus('fixture', '001', f.options), /Duplicate date audit evidence hold/);
++  writeHolds(f, [{ ...hold, chapter: '002', reason: '' }]);
++  assert.throws(() => dateAuditStatus('fixture', '001', f.options), /Invalid date audit evidence hold/);
++});
++
++test('catalog and ebook date gates reject a held current audit', t => {
++  const f = fixture(t); recordDateAudit(f.report, f.options); const getStatus = (book, chapter) => dateAuditStatus(book, chapter, f.options);
++  const context = { active: true, catalog: { people: [{ id: 'ready', localPeople: ['fixture:001:p001'], curation: { status: 'machine-reviewed' } }] },
++    siteIndex: { currentPromptVersion: 7, chapters: { 'fixture:001': { promptVersion: 7, dateAudit: getStatus('fixture', '001') } } } };
++  const product = { book: 'fixture', chapters: ['001'] };
++  assert.equal(assessEbookPeopleReadiness(context, product).ready, true);
++  assert.deepEqual(ebookCurrentDateErrors(product, { getStatus }), []);
++  assert.doesNotThrow(() => assertEbookCurrentDateAudits(product, { getStatus }));
++  writeHolds(f, [holdFixture(f)]); context.siteIndex.chapters['fixture:001'].dateAudit = getStatus('fixture', '001');
++  assert.equal(assessEbookPeopleReadiness(context, product).ready, false);
++  assert.deepEqual(assessEbookPeopleReadiness(context, product).dateAuditChapters, ['001']);
++  assert.match(ebookCurrentDateErrors(product, { getStatus })[0], /research-blocked/);
++  assert.throws(() => assertEbookCurrentDateAudits(product, { getStatus }), /cannot be marked ready.*research-blocked/);
++  const stats = { missingChapters: 0, legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0, dateAuditPendingChapters: getStatus('fixture', '001').status === 'audited' ? 0 : 1 };
++  assert.equal(peopleCatalogIsComplete(stats), false);
++});
++
+ for (const field of ['reviewedUnits', 'itemChecks', 'personChecks']) {
+   test(`approval requires all ${field}`, t => {
+     const f = fixture(t); f.report[field].pop();
+diff --git a/scripts/test-people-date-ownership.mjs b/scripts/test-people-date-ownership.mjs
+index 8baf06f..11c9050 100644
+--- a/scripts/test-people-date-ownership.mjs
++++ b/scripts/test-people-date-ownership.mjs
+@@ -25,6 +25,7 @@ git('init','--quiet',root);
+ git('remote','add','origin',remote);
+ fs.mkdirSync(path.join(root,'data','people'),{recursive:true});
+ fs.writeFileSync(path.join(root,'data','people','config.json'),JSON.stringify({schemaVersion:1}));
++fs.writeFileSync(path.join(root,'data','people','date-audit-holds.json'),JSON.stringify({schemaVersion:1,holds:[]}));
+ fs.copyFileSync(fileURLToPath(new URL('../prompt-people-date-review.txt',import.meta.url)),path.join(root,'prompt-people-date-review.txt'));
+ process.env.PEOPLE_REPO_ROOT=root;
+ process.env.GIT_TERMINAL_PROMPT='0';
+@@ -32,6 +33,7 @@ process.env.GIT_CONFIG_NOSYSTEM='1';
+ process.env.GIT_CONFIG_GLOBAL='/dev/null';
+ const {mutateRemotePeopleWorkLedger,readRemotePeopleWorkLedger,dateExecutorIsBusy,claimIsActive,reservePeopleTargetsInLedger}=await import('./lib/people-work-queue.mjs');
+ const {runDateWorkflow,assertCompletedGenerationSafe,dateWorkflowDirectory,CompletedDateGenerationHold}=await import('./lib/people-date-workflow.mjs');
++const {dateAuditEvidenceHold}=await import('./lib/people-date-audit.mjs');
+ const {writeJsonAtomic,readJson}=await import('./lib/people-content.mjs');
+ const source=fs.readFileSync(fileURLToPath(new URL('./run-people-date-workflow.mjs',import.meta.url)),'utf8');
+ const marker='reserved=mutateRemotePeopleWorkLedger(ledger=>{';
+@@ -40,7 +42,7 @@ const end=source.indexOf('},{message:`Reserve date audit ${key}`}).result;',star
+ assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
+ assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
+ const body=source.slice(start+marker.length,end);
+-const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID',`return ledger=>{${body}}`);
++const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID','dateAuditEvidenceHold',`return ledger=>{${body}}`);
+ const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
+ const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
+ const reconcileEnd=source.indexOf("},{message:'Reconcile completed date publications'});",reconcileStart);
+@@ -52,7 +54,7 @@ const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-sou
+ const options={worker:'owner',lane:'openrouter',takeover:false,release:false,'retry-blocked':false};
+ const packet={sourceHash:h1,extractionHash:h1};
+ const workflow=path.join(root,'workflow');
+-const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation');
++const callback=(overrides={},packetOverrides={},preflight=()=>{},hold=()=>null)=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation',hold);
+ const reconcile=(evidence=()=>({ready:true}))=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}),evidence);
+ const read=()=>readRemotePeopleWorkLedger();
+ const save=claim=>mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={[key]:structuredClone(claim)};delete l.dateAuditHistory;});
+@@ -143,6 +145,7 @@ test('startup reconciliation respects an active executor lease',()=>{
+ test('real workflow generation guard prevents a production callback from changing the local Git-backed queue',async()=>{
+   const dataDir=path.join(root,'chapter-fixture'),peopleDir=path.join(root,'people-fixture');
+   const opts={dataDir,peopleDir,maxUnits:10,maxBytes:64000,maxRounds:0,validateExtraction:()=>{}};
++  writeJsonAtomic(path.join(peopleDir,'date-audit-holds.json'),{schemaVersion:1,holds:[]});
+   writeJsonAtomic(path.join(dataDir,'jinshu/127.json'),{content:[{sentences:[{id:'s0001',zh:'元年甲卒。',translation:'Jia died in year one.'}]}]});
+   const extraction={schemaVersion:2,book:'jinshu',chapter:'127',input:{unitCount:1,chapterFingerprint:'fixture',candidateScannerVersion:2,unitDigests:[]},run:{model:'original-extractor'},people:[['p001',['Jia','甲'],'historical','Official',{a:['AD 2']}]],surfaces:[],claims:[['p001','attestation',{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}},'explicit',['s0001']]],translationRepairs:[],candidateDispositions:[],coverage:{}};
+   writeJsonAtomic(path.join(peopleDir,'extractions/jinshu/127.json'),extraction);
+@@ -156,3 +159,20 @@ test('real workflow generation guard prevents a production callback from changin
+   assert.throws(()=>run(callback({}, {},()=>assertCompletedGenerationSafe(target,opts))),/needs-revision report/);
+   assert.deepEqual(read(),before);assert.equal(readJson(file).phase,'complete');
+ });
++
++test('evidence hold fences production reservation before any queue mutation, including release',()=>{
++  const peopleDir=path.join(root,'evidence-hold-fixture');
++  const hold={status:'active',book:'jinshu',chapter:'127',auditVersion:1,reportFileHash:h1,sourceHash:h1,extractionHash:h2,reason:'The cited fixture source does not establish the asserted date.',reportedBy:'Independent fixture reviewer',createdAt:'2026-10-20T12:00:00Z',evidence:[{path:'research/evidence.md',sha256:h1}]};
++  writeJsonAtomic(path.join(peopleDir,'date-audit-holds.json'),{schemaVersion:1,holds:[hold]});
++  for(const change of [{},{release:true},{takeover:true},{'retry-blocked':true}]) {
++    const ledger={schemaVersion:1,claims:{},dateAudits:{[key]:prior()},sentinel:'unchanged'},before=structuredClone(ledger);
++    assert.throws(()=>callback(change,{},()=>{},(book,chapter)=>dateAuditEvidenceHold(book,chapter,{peopleDir}))(ledger),/evidence hold/);
++    assert.deepEqual(ledger,before);
++  }
++});
++
++test('unheld explicit release retains its preexisting generation-guard behavior',()=>{
++  const ledger={schemaVersion:1,claims:{},dateAudits:{[key]:prior()}};
++  const result=callback({release:true},{},()=>{throw new Error('generation guard must not run on release');})(ledger);
++  assert.deepEqual(result,{released:true});assert.equal(ledger.dateAudits[key],undefined);
++});
+diff --git a/scripts/test-people-date-workflow.mjs b/scripts/test-people-date-workflow.mjs
+index f66e098..9321fb9 100644
+--- a/scripts/test-people-date-workflow.mjs
++++ b/scripts/test-people-date-workflow.mjs
+@@ -5,7 +5,7 @@ import path from 'node:path';
+ import { test } from 'node:test';
+ import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
+ import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
+-import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
++import { assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+ import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
+ import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
+ import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+@@ -14,6 +14,7 @@ function fixture(t) {
+   const root=fs.mkdtempSync(path.join(os.tmpdir(),'date-workflow-'));
+   t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+   const options={dataDir:path.join(root,'data'),peopleDir:path.join(root,'people'),maxUnits:1,maxBytes:64000,validateExtraction:()=>{}};
++  writeJsonAtomic(path.join(options.peopleDir,'date-audit-holds.json'),{schemaVersion:1,holds:[]});
+   const source={content:[{sentences:[{id:'s0001',zh:'元年甲卒。',translation:'Jia died in year one.'},{id:'s0002',zh:'乙在。',translation:'Yi was present.'}]}]};
+   const extraction={schemaVersion:2,book:'fixture',chapter:'001',input:{unitCount:2,chapterFingerprint:'fixture',candidateScannerVersion:2,unitDigests:[]},run:{model:'original-extractor'},
+     people:[['p001',['Jia','甲'],'historical','Official',{a:['AD 2']}],['p002',['Yi','乙'],'historical','Official',{a:['AD 1']}]],
+@@ -78,6 +79,19 @@ test('newer external hold blocks retained workflow without changing artifacts or
+   await assert.rejects(runDateWorkflow(scope,async()=>{calls++;throw Error('unexpected');},f.options),/cannot be safely seeded/);
+   assert.equal(calls,0);assert.equal(fs.readFileSync(stateFile,'utf8'),before);assert.deepEqual(readJson(reportFile),hold);
+ });
++test('explicit evidence hold stops workflow before worker and recovery artifacts are touched', async t => {
++  const f=fixture(t),scope={book:'fixture',chapter:'001'};
++  const hold={status:'active',book:'fixture',chapter:'001',auditVersion:1,reportFileHash:sha256('old report'),sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,
++    reason:'Independent reviewer found a citation unsupported by its source.',reportedBy:'Fixture reviewer',createdAt:'2026-10-20T12:00:00Z',evidence:[{path:'research/evidence.md',sha256:sha256('evidence')}]};
++  writeJsonAtomic(path.join(f.options.peopleDir,'date-audit-holds.json'),{schemaVersion:1,holds:[hold]});
++  const stateFile=path.join(dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir),'state.json');let calls=0;
++  await assert.rejects(runDateWorkflow(scope,async()=>{calls++;},f.options),/evidence hold requires independent resolution/);
++  assert.equal(calls,0);assert.equal(fs.existsSync(stateFile),false);
++  const sourceBefore=fs.readFileSync(f.sourceFile), extractionBefore=fs.readFileSync(f.file);
++  assert.throws(()=>publishDateRepair({report:{...scope}},f.options),/evidence hold requires independent resolution/);
++  assert.deepEqual(fs.readFileSync(f.sourceFile),sourceBefore);assert.deepEqual(fs.readFileSync(f.file),extractionBefore);
++  assert.throws(()=>assertCompletedGenerationSafe(scope,f.options),/evidence hold requires independent resolution/);
++});
+ test('mismatched restored generation is held before state or report mutation',async t=>{
+   const f=fixture(t),scope={book:'fixture',chapter:'001'},directory=dateWorkflowDirectory(scope.book,scope.chapter,f.options.peopleDir);
+   const stateFile=path.join(directory,'state.json');

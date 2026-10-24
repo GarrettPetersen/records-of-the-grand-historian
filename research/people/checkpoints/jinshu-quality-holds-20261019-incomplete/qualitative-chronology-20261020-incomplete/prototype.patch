@@ -1,0 +1,285 @@
+--- a/scripts/lib/people-date-values.mjs
++++ b/scripts/lib/people-date-values.mjs
+@@ -37,6 +37,33 @@
+   return Object.values(value).some(hasDateBearingChronology);
+ }
+ 
++// Source-relative context can be retained without inventing a Western date;
++// the separate independent audit must still verify the wording and event.
++export function isSourceRelativeQualitative(value) {
++  const sourceText = value?.sourceDate?.text;
++  // Explicit numbered years are conversion targets, not merely relative event
++  // descriptions. Do not allow a qualitative value to conceal that work.
++  const numberedYear = /(?:[元正初一二三四五六七八九十百千廿卅兩〇零\d]+年|\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|\d+(?:st|nd|rd|th)?)\s+(?:regnal\s+)?year\b|\b(?:AD|BC|BCE|CE)\s*\d)/iu;
++  return Boolean(value && typeof value.sourceDate?.text === 'string' && value.sourceDate.text.trim() &&
++    value.sourceDate.regnalYear === undefined && !numberedYear.test(sourceText) &&
++    typeof value.qualitative === 'string' && value.qualitative.trim().length >= 20 &&
++    value.unresolved === undefined && value.unresolvedReason === undefined &&
++    value.undatedSourceAttestation === undefined && value.westernYear === undefined &&
++    value.westernInterval === undefined && value.westernBounds === undefined);
++}
++
++export function hasOnlySourceRelativeQualitative(claims) {
++  const read = claim => Array.isArray(claim) ? { predicate: claim[1], value: claim[2] } : claim;
++  const normalized = claims.map(read);
++  const attestations = normalized.filter(claim => claim.predicate === 'attestation');
++  const temporal = normalized.filter(claim => hasDateBearingChronology(claim.value));
++  return attestations.length > 0 && attestations.every(claim => isSourceRelativeQualitative(claim.value)) &&
++    temporal.every(claim => {
++      const containers = temporalContainers(claim.value);
++      return containers.length > 0 && containers.every(isSourceRelativeQualitative);
++    });
++}
++
+ // Unlike a source-date or an explicitly unresolved context, a concrete
+ // Western chronology can support an English active-date hint. Keep this
+ // distinction explicit: unresolved dates must remain auditable, but they do
+--- a/scripts/lib/people-date-workflow.mjs
++++ b/scripts/lib/people-date-workflow.mjs
+@@ -7,7 +7,7 @@
+ import { reconcileRetrospectiveValue, reconcileRetrospectiveProposal } from './people-reception-reconciliation.mjs';
+ import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+ import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
+-import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
++import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology, hasOnlySourceRelativeQualitative } from './people-date-values.mjs';
+ import {
+   validateAppliedEditorialDecisions,
+   validateEditorialDecisionDocument,
+@@ -386,7 +386,8 @@
+       }) && activeClaims.some(claim => claim[0] === change.personId && hasConcreteWesternChronology(claim[2]));
+       const receptionOnly = change.after?.length === 0 && activeClaims.some(claim => claim[0] === change.personId && isReceptionEvent(claim));
+       const deathOnly = change.after?.length === 0 && deathOnlyChronology(activeClaims.filter(claim => claim[0] === change.personId));
+-      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence && !unresolvedOnly && !boundedUncertaintyOnly && !deathOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) {
++      const qualitativeOnly = change.after?.length === 0 && hasOnlySourceRelativeQualitative(activeClaims.filter(claim => claim[0] === change.personId));
++      if (!person || !Array.isArray(change.after) || (!change.after.length && !receptionOnly && !noChronologyEvidence && !unresolvedOnly && !boundedUncertaintyOnly && !deathOnly && !qualitativeOnly) || change.after.some(s=>typeof s !== 'string' || !s.trim()) || !same(person[4]?.a ?? [], change.before)) {
+         throw new Error(`Invalid or stale active-hint repair for ${change.personId}: expected ${JSON.stringify(person?.[4]?.a ?? [])}, received before ${JSON.stringify(change.before)} and after ${JSON.stringify(change.after)}`);
+       }
+       person[4] = { ...person[4], a: change.after };
+@@ -399,7 +400,7 @@
+       seen.add(change.id);
+       if (JSON.stringify(storedClaim[2]?.dateContext ?? null) !== JSON.stringify(change.before ?? null)) throw new Error(`Date-context before-value mismatch for ${change.id}; copy this exact sealed date context as before: ${JSON.stringify(storedClaim[2]?.dateContext ?? null)}`);
+       if (!change.after || typeof change.after !== 'object' || Array.isArray(change.after)) throw new Error('Date-context repair requires only a replacement date context');
+-      if (Object.keys(change.after).some(key=>!['sourceDate','westernYear','westernInterval','westernBounds','unresolved','unresolvedReason','event'].includes(key))) throw new Error('Date-context repair may contain only chronology fields');
++      if (Object.keys(change.after).some(key=>!['sourceDate','westernYear','westernInterval','westernBounds','qualitative','unresolved','unresolvedReason','event'].includes(key))) throw new Error('Date-context repair may contain only chronology fields');
+       if (storedClaim[2]?.dateContext?.event !== undefined && change.after.event !== storedClaim[2].dateContext.event) throw new Error('Date-context repair cannot alter or remove an existing event description');
+       const after = structuredClone(storedClaim); after[2] = { ...after[2], dateContext: structuredClone(change.after) };
+       if (!dateAuditItems({ ...stored, claims: [after] }).items.some(item=>item.claimIndex===0)) throw new Error('Date-context repair must supply auditable chronology');
+--- a/scripts/lib/people-date-worker.mjs
++++ b/scripts/lib/people-date-worker.mjs
+@@ -91,7 +91,7 @@
+   });
+   return { instructions: prompt, phase: 'repair-proposal', sourceHash:task.packet.sourceHash, extractionHash:task.packet.extractionHash,
+     book: task.packet.book, chapter:task.packet.chapter, sourceUrl:task.packet.sourceUrl,
+-    repairContract: 'A finding label is a coverage indicator, not necessarily a claim-row ID: target only IDs actually present in claims. For attestation, birth, death, or age rows, chronology changes MUST use kind "replace" with before copied verbatim from claims[id] and a complete after claim row; never use date-context. Claim certainty is exactly one of "explicit", "explicit-event-contextual-date", "strongly-inferred", "uncertain", "derived", or "textual-variant"; never write informal labels such as "inferred" or "contextual". For an explicitly undated source attestation, set undatedSourceAttestation:true directly on that complete after claim value—never use an invented undated field. Its event MUST be one source-specific English string of at least 20 characters (not an object), and it may carry no sourceDate, western date, unresolved field, or other temporal field. For any other row, replace or remove also copy before verbatim from claims[id]. date-context is permitted only for non-life rows: before must be exactly claims[id][2].dateContext (or null) and after must be only the replacement dateContext object. Copy any existing non-temporal dateContext fields, including event, verbatim into after; only sourceDate, westernYear, westernInterval, westernBounds, unresolved, and unresolvedReason may be added, removed, or changed. Put research explanation in reason, never in custom keys such as competingSourceDate, westernCalendar, or conversionEvidence. An add-reception-event MUST be an event-participation row with a nonempty kind such as retrospective-reference. If it supplies receptionType, its value must literally be "retrospective"; "posthumous" is not a valid receptionType. Include any role/action supported by the source. A westernInterval is exactly {start:{era:"AD"|"BC",year:positive integer,precision:"year"|"month"|"day"},end:{era:"AD"|"BC",year:positive integer,precision:"year"|"month"|"day"}}; use no westernYear or westernBounds alongside it. Every western bound is {era:"AD"|"BC",year:positive integer,precision:"year"|"month"|"day"}; never use an ad field. Non-legendary people with active-date hints require a matching AD/BC hint and a Western attestation unless the sealed source is genuinely undated. The host preserves every non-date claim field; never send a full claim row for date-context.',
++    repairContract: 'A finding label is a coverage indicator, not necessarily a claim-row ID: target only IDs actually present in claims. For attestation, birth, death, or age rows, chronology changes MUST use kind "replace" with before copied verbatim from claims[id] and a complete after claim row; never use date-context. Claim certainty is exactly one of "explicit", "explicit-event-contextual-date", "strongly-inferred", "uncertain", "derived", or "textual-variant"; never write informal labels such as "inferred" or "contextual". For an explicitly undated source attestation, set undatedSourceAttestation:true directly on that complete after claim value—never use an invented undated field. Its event MUST be one source-specific English string of at least 20 characters (not an object), and it may carry no sourceDate, western date, unresolved field, or other temporal field. For any other row, replace or remove also copy before verbatim from claims[id]. date-context is permitted only for non-life rows: before must be exactly claims[id][2].dateContext (or null) and after must be only the replacement dateContext object. Copy any existing non-temporal dateContext fields, including event, verbatim into after; only sourceDate, westernYear, westernInterval, westernBounds, qualitative, unresolved, and unresolvedReason may be added, removed, or changed. Put research explanation in reason, never in custom keys such as competingSourceDate, westernCalendar, or conversionEvidence. An add-reception-event MUST be an event-participation row with a nonempty kind such as retrospective-reference. If it supplies receptionType, its value must literally be "retrospective"; "posthumous" is not a valid receptionType. Include any role/action supported by the source. A westernInterval is exactly {start:{era:"AD"|"BC",year:positive integer,precision:"year"|"month"|"day"},end:{era:"AD"|"BC",year:positive integer,precision:"year"|"month"|"day"}}; use no westernYear or westernBounds alongside it. Every western bound is {era:"AD"|"BC",year:positive integer,precision:"year"|"month"|"day"}; never use an ad field. Historical people normally require a source-backed Western attestation and matching AD/BC hint; if the source provides only relative chronology that cannot responsibly be converted, a sourceDate and specific qualitative explanation may be recorded instead, subject to independent review. Never remove a material unresolved date to bypass the hold. Genuinely undated sources use the separate undatedSourceAttestation form. The host preserves every non-date claim field; never send a full claim row for date-context.',
+     findings, references:repairReferences(task.report.references,task.packet.people.filter(p=>referencePeople.has(p.id))).map(reference=>
+       Object.fromEntries(Object.entries(reference).filter(([key,value])=>['kind','url','title','quote','reason'].includes(key) && value !== undefined))),
+     people:task.packet.people.filter(p=>affectedPeople.has(p.id)), items:repairItems,
+--- a/scripts/validate-people-extraction.mjs
++++ b/scripts/validate-people-extraction.mjs
+@@ -5,7 +5,7 @@
+ import { isDeepStrictEqual } from 'node:util';
+ import { fileURLToPath } from 'node:url';
+ import { normalizeExtractionDateHints } from './lib/people-date-hints.mjs';
+-import { deathOnlyChronology, hasDateBearingChronology, temporalContainers, westernBoundsErrors } from './lib/people-date-values.mjs';
++import { deathOnlyChronology, hasDateBearingChronology, hasOnlySourceRelativeQualitative, isSourceRelativeQualitative, temporalContainers, westernBoundsErrors } from './lib/people-date-values.mjs';
+ import { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';
+ import {
+   buildPeopleChunkWorkerPacket,
+@@ -433,6 +433,11 @@
+       (typeof value.qualitative !== 'string' || !value.qualitative.trim())) {
+     errors.push(`${claim.id} qualitative chronology must be nonempty`);
+   }
++  if (value.sourceDate && value.qualitative !== undefined && value.unresolved !== true &&
++      value.westernYear === undefined && value.westernInterval === undefined && value.westernBounds === undefined &&
++      !isSourceRelativeQualitative(value)) {
++    errors.push(`${claim.id} qualitative-only source chronology must be source-specific and cannot hide a numbered year or unresolved conversion`);
++  }
+   if (value.unresolved !== undefined && typeof value.unresolved !== 'boolean') {
+     errors.push(`${claim.id} unresolved must be boolean`);
+   }
+@@ -819,6 +824,13 @@
+         const containers = temporalContainers(claim.value);
+         return containers.length > 0 && containers.every(hold);
+       });
++    // A source can identify an event's relative chronology without supplying a
++    // safely convertible year. This is still audited evidence, not an undated
++    // attestation and not a waiver for an unresolved source date.
++    const qualitativeOnlyEvidence = hasOnlySourceRelativeQualitative(personClaims);
++    if (qualitativeOnlyEvidence && person.identityHints.activeDateHints.some(hint => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
++      errors.push(`${person.localId} qualitative-only chronology cannot support a Western active-date hint`);
++    }
+     if (!personClaims.some((claim) => claim.predicate === 'name')) {
+       errors.push(`${person.localId} has no name claim`);
+     }
+@@ -832,7 +844,7 @@
+       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+         hasDateBearingChronology(claim.value));
+-      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !deathOnlyEvidence) {
++      if (person.identityHints.activeDateHints.length === 0 && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !qualitativeOnlyEvidence && !deathOnlyEvidence) {
+         errors.push(`${person.localId} has no active-date hint required by prompt v5`);
+       }
+       if (!attestations.length && !lifeChronology && !personalCeremony && !externalPrimaryChronology && !receptionOnlyEvidence) {
+@@ -849,10 +861,10 @@
+       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
+         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
+         hasDateBearingChronology(claim.value));
+-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
++      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !qualitativeOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
+       }
+-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
++      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !qualitativeOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
+         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
+       }
+       const temporalValues = personClaims.flatMap((claim) => [
+@@ -1476,6 +1488,32 @@
+   const researchHold = structuredClone(unresolvedComprehensive);
+   researchHold.claims.find((claim) => claim.predicate === 'attestation').value.unresolvedReason = 'The source does not establish which ruler owned this first reign year.';
+   validatePeopleExtraction(researchHold, packet);
++  const relative = structuredClone(comprehensive);
++  relative.people[0].identityHints.activeDateHints = [];
++  relative.claims.find(claim => claim.predicate === 'attestation').value = {
++    sourceDate: { text: 'King Cheng’s assembly' },
++    qualitative: 'At the assembly associated with King Cheng',
++    event: 'The person is named at King Cheng’s assembly.',
++  };
++  validatePeopleExtraction(relative, packet);
++  for (const mutate of [
++    value => { delete value.claims.find(claim => claim.predicate === 'attestation').value.sourceDate; },
++    value => { value.claims.find(claim => claim.predicate === 'attestation').value.qualitative = 'era'; },
++    value => { value.claims.find(claim => claim.predicate === 'attestation').value.unresolvedReason = 'Unresolved source conversion'; },
++    value => { value.people[0].identityHints.activeDateHints = ['BC 1020']; },
++    value => { value.claims.find(claim => claim.predicate === 'attestation').value.sourceDate.text = '元年'; },
++    value => { value.claims.find(claim => claim.predicate === 'attestation').value.sourceDate.regnalYear = 1; },
++    value => { value.claims.find(claim => claim.predicate === 'attestation').value.sourceDate.text = 'first regnal year'; },
++  ]) {
++    const invalidRelative = structuredClone(relative);
++    mutate(invalidRelative);
++    try {
++      validatePeopleExtraction(invalidRelative, packet);
++      throw new Error('Malformed qualitative chronology unexpectedly passed');
++    } catch (error) {
++      if (!(error instanceof PeopleExtractionValidationError)) throw error;
++    }
++  }
+   const oneSided = structuredClone(comprehensive);
+   oneSided.claims.find((claim) => claim.predicate === 'attestation').value = {
+     sourceDate: { text: 'before the second year' },
+--- a/scripts/test-people-date-workflow.mjs
++++ b/scripts/test-people-date-workflow.mjs
+@@ -449,6 +449,19 @@
+   const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
+   assert.deepEqual(candidate.people[1][4].a,[]);
+   assert.equal(candidate.claims[1][2].undatedSourceAttestation,true);
++});
++test('source-relative qualitative attestation may clear its old Western hint',t=>{
++  const f=fixture(t),before=f.extraction.claims[1],after=structuredClone(before);
++  after[2]={sourceDate:{text:'成王之會'},qualitative:'At the assembly associated with King Cheng',event:'The person appears at the assembly associated with King Cheng.'};
++  const proposal={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,changes:[
++    {kind:'replace',id:'claim-2',before,after,reason:'Preserve the source-relative assembly without retaining the unsupported Western date.'},
++    {kind:'hints',personId:'p002',before:['AD 1'],after:[],reason:'Clear the unsupported Western hint while retaining source-relative event chronology.'},
++  ]};
++  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
++  assert.deepEqual(candidate.people[1][4].a,[]);
++  assert.equal(candidate.claims[1][2].sourceDate.text,'成王之會');
++  const bad=structuredClone(proposal);bad.changes[0].after[2].sourceDate.text='元年';
++  assert.throws(()=>applyDateRepairProposal(f.extraction,bad,f.packet),/Invalid or stale active-hint repair/);
+ });
+ test('an undated source attestation may clear hints when remaining contexts are explicitly unresolved',t=>{
+   const f=fixture(t),stored=structuredClone(f.extraction);
+@@ -557,6 +570,15 @@
+   assert.deepEqual(applyDateRepairProposal(f.extraction,combined,f.packet),candidate);
+   assert.ok(buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate}).items.some(i=>i.id==='claim-4'));
+ });
++test('source-specific qualitative event context is preserved through repair and packet assembly',t=>{
++  const f=undatedEventFixture(t),proposal=eventDateRepair(f);
++  proposal.changes.at(-1).after={sourceDate:{text:'成王之會'},qualitative:'At the assembly associated with King Cheng'};
++  const candidate=applyDateRepairProposal(f.extraction,proposal,f.packet);
++  assert.deepEqual(candidate.claims[3][2].dateContext,proposal.changes.at(-1).after);
++  const roundtrip=dateRepairDifference(f.extraction,candidate,f.packet);
++  assert.deepEqual(applyDateRepairProposal(f.extraction,roundtrip,f.packet),candidate);
++  assert.ok(buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate}).items.some(i=>i.id==='claim-4'));
++});
+ test('date-context cannot rewrite identities, event content, life claims or unowned targets',t=>{
+   const f=undatedEventFixture(t),proposal=eventDateRepair(f);
+   for(const mutate of [
+--- a/prompt-people-date-review.txt
++++ b/prompt-people-date-review.txt
+@@ -36,6 +36,12 @@
+ endpoint or turn a bound into an exact year. Preserve relative event sequence.
+ An unresolved source date requires unresolved:true and a substantive
+ unresolvedReason, not a guessed year. Research blocks approval; report it honestly.
++Source-relative qualitative chronology is not an automatic resolution of an
++unresolved date. Independently establish that the source really supports the
++stated relationship, that the dated event belongs to this person, and that no
++available narrower Western chronology or unresolved conversion is being omitted.
++If identity, chronology, source wording or conversion remains materially in
++dispute, report research-blocked; do not clear the hold to pass validation.
+ 
+ INDEPENDENT-REVIEW:
+ Read every ownedUnits entry for omitted births, deaths, ages and date context.
+--- a/prompt-people-extraction.txt
++++ b/prompt-people-extraction.txt
+@@ -98,13 +98,18 @@
+ Record each distinct fact once: when several units support the same fact, put
+ all of their evidence IDs on one claim instead of duplicating the claim.
+ 
+-Never convert dates from memory. Every historical or uncertain person requires
++Never convert dates from memory. Historical or uncertain people normally require
+ a source-supported Western year, interval, or one-sided bound. Use a supplied reign ID
+ only when it is the correct polity and reign. If the packet lacks a mapping,
+ verify the conversion against an authoritative chronology and omit `reignId`;
+ do not invent a date to satisfy coverage. If no safe Western date can be
+ established, preserve `sourceDate`, `unresolved: true`, and a substantive
+ `unresolvedReason` in an attestation, with a `research required: ...` active hint.
++If the source genuinely offers only a meaningful relative event context, rather
++than an unresolved conversion, retain `sourceDate.text` and a source-specific
++`qualitative` description of at least 20 characters without inventing a Western
++date. This remains subject to independent review and cannot hide a material
++chronology ambiguity or evidence for a narrower date.
+ This preserves extraction work but blocks the separate date audit. Capture
+ coverage does not certify accuracy. Use `westernBounds` for before/onOrBefore/
+ after/onOrAfter year constraints instead of invented interval endpoints. An
+--- a/prompt-people-extraction-compact.txt
++++ b/prompt-people-extraction-compact.txt
+@@ -87,7 +87,7 @@
+ structured claims; they make the later cross-chapter identity dossier usable.
+ 
+ Every person must have at least one source-supported active-date hint in `a`.
+-Every historical or uncertain person needs a justified Western year, interval,
++Every historical or uncertain person normally needs a justified Western year, interval,
+ or one-sided bound such as `before AD 472`. Never invent an endpoint to satisfy
+ the validator. Use packet chronology when available. If it is missing,
+ verify the conversion against an authoritative chronology with available
+@@ -102,8 +102,13 @@
+ leave `a` empty only if it is the person's sole chronology evidence. Do not
+ invent a source date, a qualitative era, or a research hold merely to fill a
+ date field. This exceptional state is still subject to independent date audit.
+-Use a qualitative marker such as `legendary
+-antiquity` only for genuinely undatable legendary or literary figures. These
++For a genuinely source-relative event whose Western date cannot responsibly be
++assigned, retain `sourceDate.text` and a source-specific `qualitative` explanation
++of at least 20 characters, without an invented year or lifespan. This is subject
++to complete independent date review. Do not replace unresolved or competing
++date evidence with qualitative wording to evade a research hold. A generic
++marker such as `legendary antiquity` is for genuinely legendary or literary
++figures, not historical source-relative events. These
+ are attested activity dates, not birth/death dates or asserted lifespans.
+ The date of a later author's allusion, genealogy, quotation, or retrospective
+ comparison is not an activity date for the person being recalled. Never make
+--- a/PEOPLE_DATE_AUDIT.md
++++ b/PEOPLE_DATE_AUDIT.md
+@@ -222,6 +222,11 @@
+ - Preserve ruler, polity, reign, regnal year and finer calendar wording. Verify
+   the correct era, including reused names and interrupted reigns. Arithmetic
+   alone cannot identify the reign. Pin references and explain the conversion.
++- A source-specific qualitative relationship may accompany `sourceDate` when
++  no Western date can be responsibly assigned. It is not a resolution of a
++  competing or ambiguous source date: independently review the exact wording,
++  event owner, identity and relevant chronology, and preserve any research hold
++  if a materially unresolved conversion or narrower supported date remains.
+ - Distinguish conventional historical year labels from Gregorian event dates.
+   Lunar years cross Western-year boundaries. Do not invent Gregorian months or
+   days. BC/AD has no year zero.

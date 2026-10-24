@@ -12,6 +12,7 @@ import { deriveTimeWindow } from './people-time-window.mjs';
 export const TOOL_PILOT_VERSION = 1;
 const SECTIONS = ['people', 'surfaces', 'claims', 'translationRepairs', 'candidateDispositions'];
 const DEFS = ['person', 'surface', 'claim', 'repair', 'dispositionGroup'];
+const MAX_RETAINED_CONVERSATION_BYTES = 512 * 1024;
 const object = properties => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
 const string = { type: 'string' };
 const integer = { type: 'integer', minimum: 0 };
@@ -294,6 +295,10 @@ export async function runDeepSeekToolPilot(snapshot, { maxTurns, feedback, guida
   const stateFile = path.join(snapshot.dir, 'agent-state.json');
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : newToolState(snapshot);
   if (state.version !== TOOL_PILOT_VERSION || state.fingerprint !== snapshot.fingerprint) throw new Error('Agent checkpoint does not match this harness and source');
+  const retainedConversationBytes = Buffer.byteLength(JSON.stringify(state.messages));
+  if (retainedConversationBytes > MAX_RETAINED_CONVERSATION_BYTES) {
+    throw new Error(`Retained tool conversation is ${retainedConversationBytes} bytes, above the ${MAX_RETAINED_CONVERSATION_BYTES}-byte safety ceiling; preserve the checkpoint and reconcile its validation failures before another model turn`);
+  }
   if (state.researchCitationVersion !== 2) {
     for (const [id, citation] of Object.entries(state.researchCitations ?? {})) {
       if (!citation.documentId || !citation.quote || !citation.recordHash) throw new Error('Unrecognized historical citation checkpoint');

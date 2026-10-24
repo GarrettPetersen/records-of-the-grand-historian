@@ -26,13 +26,36 @@ function bridgeFromEnvironment() {
   });
 }
 
+function sendReply(payload) {
+  return new Promise((resolve, reject) => {
+    if (typeof process.send !== 'function') {
+      resolve();
+      return;
+    }
+    process.send(payload, (error) => {
+      if (error) reject(error);
+      else resolve();
+    });
+  });
+}
+
 process.once('message', async (message) => {
+  let reply;
+  let exitCode = 0;
   try {
     const method = operations.get(message?.operation);
     if (!method) throw new Error('Unsupported Grok Bot MCP operation');
-    const result = await bridgeFromEnvironment()[method](message.args);
-    process.send?.({ ok: true, result });
+    reply = { ok: true, result: await bridgeFromEnvironment()[method](message.args) };
   } catch (error) {
-    process.send?.({ ok: false, error: error instanceof Error ? error.message : String(error) });
+    exitCode = 1;
+    reply = { ok: false, error: error instanceof Error ? error.message : String(error) };
+  }
+  try {
+    await sendReply(reply);
+  } catch {
+    exitCode = 1;
+  } finally {
+    process.disconnect?.();
+    process.exit(exitCode);
   }
 });

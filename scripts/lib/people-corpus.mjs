@@ -128,7 +128,11 @@ export function loadValidatedPeopleCorpus() {
         mentions: mentionsByPerson.get(person.localId) ?? [],
       });
     }
-    chapters.push({ file, packet, extraction });
+    // Source text and candidate packets are required while validating this
+    // chapter, but corpus consumers use only its validated extraction. Keeping
+    // every packet retains the entire bilingual corpus and candidate evidence
+    // a second time throughout catalog compilation.
+    chapters.push({ file, extraction });
   }
 
   return {

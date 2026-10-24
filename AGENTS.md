@@ -2,6 +2,12 @@
 
 ## Local disk conservation
 
+Before any local batch or workspace change, run `npm run people:disk:check`.
+This read-only preflight fails below 30 GiB free or when a registered secondary
+checkout contains `public/`. Workers share the host checkout and unique artifact
+paths. Never copy the corpus, repository history, public assets, dependencies, or
+ignored recovery state into a job directory. Preserve existing work and ownership.
+
 The default chapter-worker topology is one shared host checkout plus isolated job
 artifact directories, not one worktree per chapter. Workers read sealed packets and
 write only their assigned artifact; the orchestrator performs validation and canonical
@@ -54,6 +60,12 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 ### Gotchas
 
+- **Pending parallel date-runner handoff (October 5, 2026):** Read
+  `DATE_AUDIT_PARALLEL_HANDOFF.md` before the next date invocation. The tested
+  refactor is in `patches/date-audit-parallel.patch`; adopt it only after the
+  current host invocation exits. Preserve active locks, leases, stable workers
+  and recovery artifacts. After adoption, use one shared four-job pool across
+  chapters, not separate competing executors or per-chapter repository copies.
 - **Independent people date audits:** Follow `PEOPLE_DATE_AUDIT.md` in every lane.
   All 4,099 chapters started date-un-audited; retain extraction prompt 7 and do not
   re-extract them for dates. After extraction and repairs, build a

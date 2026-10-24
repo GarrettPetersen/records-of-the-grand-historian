@@ -95,3 +95,5 @@ include shared APFS extents and do not precisely predict reclaimed space.
 The September 29 recovery reduced clean idle managed checkouts to `data scripts functions`.
 Changed checkouts were retained for their owners to review. The main checkout, persistent
 MCP runtime, and ignored recovery state were preserved.
+
+Before any local batch or workspace change, run `npm run people:disk:check`. It fails below 30 GiB free or when a registered secondary checkout contains `public/`. Workers share the host checkout and isolated artifact directories; preserve all incomplete recovery work.
