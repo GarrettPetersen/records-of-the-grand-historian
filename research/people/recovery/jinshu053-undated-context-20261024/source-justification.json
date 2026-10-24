@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "status": "authored scoped proposal; requires independent source review",
+  "book": "jinshu",
+  "chapter": "053",
+  "canonicalRef": "75400a58f52fed3c6e8621bc7a798218a4e09910",
+  "input": {
+    "sourceHash": "sha256:5bfd687ce242feb655380c5a5326984e07b4a34bd3fa6f6d611d9f5efd846262",
+    "extractionHash": "sha256:5e4b7cd15a9d5aa653e28fc1101bc3a846130274021c8b02eb5b148435a7f7b0",
+    "extractionInputFingerprint": "sha256:5ddc5b06fa83485746528cfe9e1da948819be0cfc2140d1e3dbe9dc4c2bad70f",
+    "files": [
+      {
+        "path": "data/jinshu/053.json",
+        "bytesSha256": "sha256:b79b4dbe1e9d081500c40d123b3c1f47eadceb4559747f44fdfabd89550faf40"
+      },
+      {
+        "path": "data/people/extractions/jinshu/053.json",
+        "bytesSha256": "sha256:582bfc968e337a6eddd058b59cae70ed21dc05fb51b49caafb4096638d015304"
+      }
+    ]
+  },
+  "scope": {
+    "originalBlockers": [
+      "claim-101",
+      "claim-102",
+      "claim-116"
+    ],
+    "relatedCorrections": [
+      "claim-110",
+      "hints-p004"
+    ],
+    "noOtherRowsChanged": true
+  },
+  "witnesses": [
+    {
+      "target": "claim-101",
+      "source": "chapter-text",
+      "citation": "s0003",
+      "excerpt": "幼而聰慧，武帝愛之，恆在左右。",
+      "reason": "幼而聰慧，武帝愛之，恆在左右 describes Sima Yu’s childhood and Emperor Wu’s affection without a named date. Preserve that positive biographical fact as an explicitly undated attestation, rather than marking an unasserted Western chronology unresolved."
+    },
+    {
+      "target": "claim-102",
+      "source": "chapter-text",
+      "citation": "s0007",
+      "excerpt": "太子時年五歲，牽帝裾入暗中。",
+      "reason": "太子時年五歲 gives the prince’s age in an otherwise undated episode, not a regnal or Western year. Retain both the stated age and action in the event and retain the structured age-five claim separately."
+    },
+    {
+      "target": "claim-116",
+      "source": "chapter-text",
+      "citation": "s0003",
+      "excerpt": "幼而聰慧，武帝愛之，恆在左右。",
+      "reason": "武帝愛之，恆在左右 positively attests Emperor Wu’s affection and attendance context. It neither dates the episode nor establishes personal activity throughout his reign; no missing date claim is being asserted."
+    },
+    {
+      "target": "claim-110",
+      "source": "chapter-text",
+      "citation": "s0007",
+      "excerpt": "太子時年五歲，牽帝裾入暗中。",
+      "reason": "The source states age five and the action, so both are preserved. The existing AD 266–290 interval is a reign-wide surrogate, not a date supplied for this childhood episode. Use the existing schema’s undated context marker; do not calculate a birth year or a date for the fire."
+    },
+    {
+      "target": "hints-p004",
+      "source": "chapter-text",
+      "citation": "s0003",
+      "excerpt": "武帝愛之，恆在左右",
+      "reason": "No calendar date appears in this personal affection statement; the representation is an undated fact, not a failed conversion."
+    }
+  ],
+  "decisiveContext": [
+    {
+      "id": "s0003",
+      "zh": "幼而聰慧，武帝愛之，恆在左右。",
+      "en": "Wu Di doted on the bright boy and kept him always near.",
+      "literal": "From childhood he was clever and bright; Emperor Wu loved him and kept him always at his side.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0006",
+      "zh": "宮中嘗夜失火，武帝登樓望之。",
+      "en": "A night blaze drew Wu Di to a high gallery.",
+      "literal": "Once at night the palace caught fire; Emperor Wu climbed a tower to watch.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0007",
+      "zh": "太子時年五歲，牽帝裾入暗中。",
+      "en": "Five-year-old Yu pulled his grandfather into the dark.",
+      "literal": "The crown prince was then five years old; he tugged the emperor's robe into the shadows.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0008",
+      "zh": "帝問其故，太子曰：「暮夜倉卒，宜備非常，不宜令照見人君也。」",
+      "en": "The crown prince said, \"Suddenly at night one must guard against the unexpected; one must not let firelight reveal the ruler's face.\"",
+      "literal": "The emperor asked why; the crown prince said, 'Suddenly at night one should guard against the unexpected; one must not let firelight reveal the ruler's face.'",
+      "blockIndex": 1
+    }
+  ],
+  "distinction": {
+    "undatedFact": "A source can positively attest a person, action or age without asserting a convertible calendar date. undatedSourceAttestation:true records exactly this condition; the Chinese evidence and the stated age remain.",
+    "legitimateHold": "Retain unresolved:true when a real asserted date, event anchor or proposed conversion still needs research, or competing witnesses prevent choosing chronology. Do not mark an unspecified year unresolved merely because the source gives none.",
+    "age": "Age five remains numeric age:5 with the existing sui reckoning and s0007 evidence. It does not imply five completed solar years, a birth year, or a calendar year for the episode. The no-date nested context remains auditable because age is a LIFE_PREDICATE.",
+    "reign": "No AD 266–290 activity interval is introduced or retained for these two childhood passages. The existing age-row interval is specifically reviewed for removal, not overlooked because it lacks an unresolved flag."
+  },
+  "representationAuthority": [
+    {
+      "file": "scripts/validate-people-extraction.mjs",
+      "lines": "385-461,768-770,833-855",
+      "claim": "Undated attestation marker requires a source-specific event and forbids sourceDate/qualitative/Western/unresolved fields; the same validator checks nested dateContext. A solely undated person may have no activity hints."
+    },
+    {
+      "file": "scripts/lib/people-date-values.mjs",
+      "lines": "26-37,44-50",
+      "claim": "Recursive temporalContainers finds nested unresolved state. Explicitly undated values are not date-bearing chronology and do not establish Western activity."
+    },
+    {
+      "file": "scripts/lib/people-date-audit.mjs",
+      "lines": "32-45,156",
+      "claim": "Attestation and age remain audit items even when undated; changing this representation does not bypass source review or complete coverage."
+    },
+    {
+      "file": "scripts/lib/people-date-workflow.mjs",
+      "lines": "414-506",
+      "claim": "Scoped replacement preserves subject/predicate and requires exact before rows and matching source/extraction hashes; hint removal has a no-chronology-evidence case."
+    }
+  ],
+  "limits": "No external source was needed to represent the source’s absence of a calendar date. This does not independently date the childhood episode or approve all chapter chronology. Existing approved/audit hashes are not edited; candidate changes require a newly built packet and fresh independent review before publication.",
+  "externalSourcesConsulted": [],
+  "hold": "No legitimate research hold is needed solely to represent these passages as genuinely undated. A request to assign them a Western date would require separate anchored primary evidence."
+}
