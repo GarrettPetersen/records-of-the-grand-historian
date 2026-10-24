@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "offline-date-chinese-source-view-measurement",
+  "createdAt": "2026-10-24T22:19:41.580Z",
+  "method": "Use production full host packets and production dateReviewJobs/retainedDateReviewJobs/dateWorkerInput. Clone final independent-review inputs in memory, delete only units[*].en and units[*].literal if present, assert exact equality of every other field. Do not write projected payloads, host plans, states, inputs, hashes or approvals.",
+  "status": "measurement only; projection not adopted",
+  "fullEvidence": {
+    "commit": "e7ff472067e572544a0f5dc6c42a230807675d2b",
+    "path": "research/people/date-chinese-source-view-measurement-20261024.json",
+    "sha256": "b5a1757007c2e8607eb1d68b1e452ee8e84d9b8b931a127e73e37ad55c6593b2",
+    "localPath": "data/people/generated/efficiency/date-chinese-source-view-20261024/measurement.json"
+  },
+  "cases": [
+    {
+      "label": "retained-jinshu086-reaudit2",
+      "book": "jinshu",
+      "chapter": "086",
+      "hostSourceHash": "sha256:57c82651a28b441d3057a4f35574f3f2f709864d2b1c3b45c4aa1ea8596b07d9",
+      "hostExtractionHash": "sha256:628ad95b17ea51f7c14c622446d29a037f49489ea0390941b04c07d5fd849c65",
+      "profile": {
+        "maxUnits": 250,
+        "maxBytes": 253952,
+        "jobIds": [
+          "22c43eda776e07feadac",
+          "3838678e55f838ac79f2",
+          "a0a4177a822bea5832c6",
+          "0267766eccbace673b8e"
+        ],
+        "workerByteCeiling": 262144
+      },
+      "totals": {
+        "jobs": 4,
+        "ownedUnits": 832,
+        "unitOccurrences": 868,
+        "uniqueUnits": 832,
+        "originalBytes": 633271,
+        "projectedBytes": 546606,
+        "savedBytes": 86665,
+        "savedPercent": 13.685294289490598,
+        "enFieldsRemoved": 868,
+        "literalFieldsRemoved": 0,
+        "emptyChineseWithEnglish": []
+      }
+    },
+    {
+      "label": "fresh-corrected-jinshu053-matched-profile",
+      "book": "jinshu",
+      "chapter": "053",
+      "hostSourceHash": "sha256:5bfd687ce242feb655380c5a5326984e07b4a34bd3fa6f6d611d9f5efd846262",
+      "hostExtractionHash": "sha256:5e4b7cd15a9d5aa653e28fc1101bc3a846130274021c8b02eb5b148435a7f7b0",
+      "profile": {
+        "maxUnits": 250,
+        "maxBytes": 253952,
+        "workerByteCeiling": 262144
+      },
+      "totals": {
+        "jobs": 1,
+        "ownedUnits": 209,
+        "unitOccurrences": 209,
+        "uniqueUnits": 209,
+        "originalBytes": 113929,
+        "projectedBytes": 99268,
+        "savedBytes": 14661,
+        "savedPercent": 12.868540933388338,
+        "enFieldsRemoved": 209,
+        "literalFieldsRemoved": 0,
+        "emptyChineseWithEnglish": []
+      }
+    },
+    {
+      "label": "fresh-corrected-jinshu053-cli-default-profile",
+      "book": "jinshu",
+      "chapter": "053",
+      "hostSourceHash": "sha256:5bfd687ce242feb655380c5a5326984e07b4a34bd3fa6f6d611d9f5efd846262",
+      "hostExtractionHash": "sha256:5e4b7cd15a9d5aa653e28fc1101bc3a846130274021c8b02eb5b148435a7f7b0",
+      "profile": {
+        "maxUnits": 1000,
+        "maxBytes": 516096,
+        "workerByteCeiling": 524288
+      },
+      "totals": {
+        "jobs": 1,
+        "ownedUnits": 209,
+        "unitOccurrences": 209,
+        "uniqueUnits": 209,
+        "originalBytes": 113929,
+        "projectedBytes": 99268,
+        "savedBytes": 14661,
+        "savedPercent": 12.868540933388338,
+        "enFieldsRemoved": 209,
+        "literalFieldsRemoved": 0,
+        "emptyChineseWithEnglish": []
+      }
+    }
+  ],
+  "limits": "Byte savings do not establish token savings, quality or approved-chapter throughput. Never rewrite existing sealed plans, claims, source/extraction fingerprints or approvals.",
+  "recommendation": {
+    "verdict": "Recommend a versioned Chinese-only source-unit view for genuinely fresh independent-review jobs after host review; preserve retained bilingual jobs unchanged.",
+    "seam": [
+      "Keep buildDateAuditPacket and its complete sourceHash/extractionHash calculation unchanged.",
+      "Persist an explicit source-view version in newly sealed review plans before any dispatch; absence means current legacy view. Never retrofit a retained plan, retained conversation or accepted artifact.",
+      "Bind the view version and resulting payload hash into fresh job identity/provenance. Retained job IDs, packet ownership, byte ceilings, split plans, sticky inputs, and independence/publication gates remain unchanged.",
+      "Apply the chosen projection through the shared independent-review dateWorkerInput path for every lane, only under its persisted fresh-plan version. Keep English people/claim/context-item values, instructions, source URLs, every locator and all Chinese evidence unchanged.",
+      "Keep current planning ownership and ceilings for initial rollout; do not use projected byte savings to enlarge jobs or weaken coverage. Require production validators and independent review as before.",
+      "Do not claim the existing re-audit2 conversations are Chinese-only; they have already seen English. No paid calibration or dispatch was performed."
+    ],
+    "risks": [
+      "A blank-Chinese unit with useful English-only metadata would lose that context; inspect and explicitly handle such inputs rather than silently hiding missing Chinese evidence.",
+      "Current unit metadata retains only id and blockIndex in addition to zh/en: table kind/collection/header relationships are not newly supplied by this projection. English table labels can encode inferred dates; removing them does not reconstruct missing Chinese heading context.",
+      "English source text can contain editorial notes, disambiguations or bibliographic metadata absent from zh. Those may need a separately labeled non-evidence channel if supported by a concrete case.",
+      "English chronology remains in claims and hints under review; this experiment does not make the whole prompt linguistically independent of prior extraction.",
+      "The host source fingerprint should still invalidate work when either Chinese or English source fields change; retaining that behavior is intentional."
+    ]
+  }
+}

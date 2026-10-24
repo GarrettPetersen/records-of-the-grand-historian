@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { parseArgs } from 'node:util';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
-import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
+import { buildDateAuditPacket, unresolvedDateAuditItems, dateAuditStatus } from './lib/people-date-audit.mjs';
 import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
 import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
 import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
@@ -121,7 +121,7 @@ while(named.length || empty.length) {
 }
 targets=[...sticky,...ordered];
 if (o['dry-run']) {
-  const selected=targets.slice(0,limit).map(t=>{const p=buildDateAuditPacket(t.book,t.chapter);const jobs=dateReviewJobs(p,options);return {book:t.book,chapter:t.chapter,items:p.items.length,units:p.units.length,jobs:jobs.length,maxJobBytes:Math.max(...jobs.map(j=>Buffer.byteLength(JSON.stringify(j))))};});
+  const selected=targets.slice(0,limit).map(t=>{const p=buildDateAuditPacket(t.book,t.chapter);const jobs=dateReviewJobs(p,options),unresolved=unresolvedDateAuditItems(p);return {book:t.book,chapter:t.chapter,items:p.items.length,units:p.units.length,jobs:jobs.length,maxJobBytes:Math.max(...jobs.map(j=>Buffer.byteLength(JSON.stringify(j)))),unresolvedDateItems:unresolved.length,unresolvedItemIds:unresolved.map(item=>item.id)};});
   console.log(JSON.stringify({paidCalls:0,eligibleChapters:targets.length,concurrency,jobConcurrency,selected},null,2));
 } else {
   loadDotenv(REPO_ROOT);
