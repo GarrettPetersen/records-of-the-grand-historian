@@ -536,6 +536,78 @@ export function publishDateRepair({ proposal, candidate, report, rounds = [], pr
 }
 
 export class CompletedDateGenerationHold extends Error {}
+
+// Later failed reviews describe staged candidates, while the installed report
+// deliberately remains the original negative seed until publication. Prove the
+// intervening work instead of requiring those different reviews to be equal.
+function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, directory, options) {
+  try {
+    if (!['repair', 'reaudit'].includes(state.phase) || !Number.isSafeInteger(state.round) || state.round < 1 ||
+        state.schemaVersion !== 1 || state.workflowVersion !== DATE_WORKFLOW_VERSION || state.editorialAmendment ||
+        state.candidate !== `candidate-${state.round}.json` ||
+        state.review !== `review-${state.round - (state.phase === 'reaudit' ? 1 : 0)}.json`) {
+      throw new Error('Retained phase, round, or candidate/review linkage is not a repair progression');
+    }
+    const original = readJson(path.join(options.peopleDir ?? PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
+    const originalPacket = buildDateAuditPacket(book, chapter, options);
+    if (state.sourceHash !== originalPacket.sourceHash || state.extractionHash !== originalPacket.extractionHash ||
+        !same(readJson(path.join(directory, 'review-0.json')), report)) {
+      throw new Error('Original generation pins or frozen negative seed changed');
+    }
+    validateDateAuditReport(report, originalPacket);
+    const names = fs.readdirSync(directory);
+    let baseline = original;
+    for (let round = 0; round <= state.round; round += 1) {
+      const packet = buildDateAuditPacket(book, chapter, { ...options, extraction: baseline });
+      const reviewFile = `review-${round}.json`;
+      if (round < state.round || state.phase === 'repair') {
+        const review = readJson(path.join(directory, reviewFile));
+        validateDateAuditReport(review, packet);
+        if (!dateAuditReferencesCurrent(review, options)) throw new Error('Retained negative review has stale source references');
+        if (!['needs-revision', 'research-blocked'].includes(review.status)) throw new Error('Repair ancestry requires negative reviews');
+        if (round > 0) {
+          const reviewState = structuredClone(state);
+          reviewState.phase = 'reaudit'; reviewState.round = round;
+          if (!reviewState.reviewPlans?.[`reaudit-${round}`]) throw new Error('Missing retained review ownership plan');
+          const { jobs } = retainedDateReviewJobs(packet, reviewState, options);
+          const results = jobs.map(job => readJson(path.join(directory, `reaudit-${round}-${job.id}.json`)));
+          const assembled = assembleDateReview(packet, jobs, results);
+          // Assembly time is host metadata; all worker evidence and coverage
+          // must still reproduce the frozen report exactly.
+          assembled.reviewedAt = review.reviewedAt;
+          if (!same(assembled, review)) throw new Error('Retained review differs from its completed review jobs');
+        }
+      }
+      if (round === state.round) break;
+      const prefix = `repair-candidate-${round}-`;
+      const files = names.filter(name => name.startsWith(prefix) && /^[1-9]\d*\.json$/.test(name.slice(prefix.length)))
+        .sort((a, b) => Number(a.slice(prefix.length, -5)) - Number(b.slice(prefix.length, -5)));
+      if (!files.length) throw new Error('Missing retained repair candidate progression');
+      let candidate = baseline;
+      for (const [index, file] of files.entries()) {
+        if (file !== `${prefix}${index + 1}.json`) throw new Error('Retained repair candidate progression has a gap');
+        const active = buildDateAuditPacket(book, chapter, { ...options, extraction: candidate });
+        const proposals = Object.keys(state.jobs ?? {}).filter(key => key.startsWith(`repair-${round}-`) &&
+          key.endsWith(`-${active.extractionHash.slice(7, 19)}`) && names.includes(`${key}.json`));
+        if (proposals.length !== 1) throw new Error('Repair progression lacks one unambiguous retained proposal');
+        const staged = applyDateRepairProposal(candidate, readJson(path.join(directory, `${proposals[0]}.json`)), active);
+        candidate = normalizeExtractionDateHints(staged).candidate;
+        if (!same(candidate, readJson(path.join(directory, file)))) throw new Error('Retained intermediate candidate differs from its scoped proposal');
+      }
+      const combined = dateRepairDifference(original, candidate, originalPacket);
+      const expected = applyDateRepairProposal(original, combined, originalPacket);
+      baseline = readJson(path.join(directory, `candidate-${round + 1}.json`));
+      if (!same(expected, baseline)) throw new Error('Retained round candidate differs from its repair progression');
+    }
+    const combined = readJson(path.join(directory, 'combined-proposal.json'));
+    if (!same(applyDateRepairProposal(original, combined, originalPacket), baseline)) {
+      throw new Error('Combined proposal differs from the current staged candidate');
+    }
+  } catch (error) {
+    throw new CompletedDateGenerationHold(`Date workflow cannot be safely seeded; cannot prove retained negative-review ancestry: ${error.message}`, { cause: error });
+  }
+}
+
 export function assertCompletedGenerationSafe({book,chapter},options={}) {
   const stateFile=path.join(dateWorkflowDirectory(book,chapter,options.peopleDir),'state.json');
   const state=fs.existsSync(stateFile)?readJson(stateFile):null;
@@ -562,7 +634,12 @@ export function assertCompletedGenerationSafe({book,chapter},options={}) {
   const staleUnreconciled=status==='stale' && !knownPublish;
   const auditAlreadyStarted=state?.phase==='audit' && (state.round!==0 || !state.restoredFromLedger || Object.keys(state.jobs??{}).length || Object.keys(state.reviewPlans??{}).length);
   const linkedReview=typeof state?.review==='string' && /^review-\d+\.json$/.test(state.review) ? path.join(directory,state.review) : null;
-  const unknownPrior=['repair','reaudit','editorial-amendment'].includes(state?.phase) && (!linkedReview || !fs.existsSync(linkedReview) || !same(readJson(linkedReview),report));
+  let unknownPrior=['repair','reaudit','editorial-amendment'].includes(state?.phase) && (!linkedReview || !fs.existsSync(linkedReview) || !same(readJson(linkedReview),report));
+  const hasStagedReview = ['repair', 'reaudit'].includes(state?.phase) && fs.readdirSync(directory).some(name => /^review-[1-9]\d*\.json$/.test(name));
+  if (['repair', 'reaudit'].includes(state?.phase) && (unknownPrior || hasStagedReview)) {
+    assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, directory, options);
+    unknownPrior = false;
+  }
   const unknownPublication=state?.phase==='publish' && !knownPublish;
   const seed=path.join(directory,'review-0.json');
   const seedConflict=(!state || (state.phase==='audit' && state.restoredFromLedger)) && fs.existsSync(seed) && !same(readJson(seed),report);

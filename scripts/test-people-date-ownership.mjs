@@ -30,7 +30,7 @@ process.env.PEOPLE_REPO_ROOT=root;
 process.env.GIT_TERMINAL_PROMPT='0';
 process.env.GIT_CONFIG_NOSYSTEM='1';
 process.env.GIT_CONFIG_GLOBAL='/dev/null';
-const {mutateRemotePeopleWorkLedger,readRemotePeopleWorkLedger,dateExecutorIsBusy,claimIsActive,reservePeopleTargetsInLedger}=await import('./lib/people-work-queue.mjs');
+const {mutateRemotePeopleWorkLedger,readRemotePeopleWorkLedger,dateExecutorIsBusy,claimIsActive,reservePeopleTargetsInLedger,extractionClaimBlocksDateAudit}=await import('./lib/people-work-queue.mjs');
 const {runDateWorkflow,assertCompletedGenerationSafe,dateWorkflowDirectory,CompletedDateGenerationHold}=await import('./lib/people-date-workflow.mjs');
 const {writeJsonAtomic,readJson}=await import('./lib/people-content.mjs');
 const source=fs.readFileSync(fileURLToPath(new URL('./run-people-date-workflow.mjs',import.meta.url)),'utf8');
@@ -40,7 +40,7 @@ const end=source.indexOf('},{message:`Reserve date audit ${key}`}).result;',star
 assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
 assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
 const body=source.slice(start+marker.length,end);
-const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID',`return ledger=>{${body}}`);
+const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','extractionClaimBlocksDateAudit','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID',`return ledger=>{${body}}`);
 const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
 const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
 const reconcileEnd=source.indexOf("},{message:'Reconcile completed date publications'});",reconcileStart);
@@ -52,7 +52,7 @@ const prior=(overrides={})=>({worker:'owner',lane:'openrouter',status:'stale-sou
 const options={worker:'owner',lane:'openrouter',takeover:false,release:false,'retry-blocked':false};
 const packet={sourceHash:h1,extractionHash:h1};
 const workflow=path.join(root,'workflow');
-const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation');
+const callback=(overrides={},packetOverrides={},preflight=()=>{})=>makeCallback({...options,...overrides},key,target,{...packet,...packetOverrides},'test-token',3600000,dateExecutorIsBusy,claimIsActive,extractionClaimBlocksDateAudit,fs,path,os,()=>workflow,p=>JSON.parse(fs.readFileSync(p,'utf8')),preflight,CompletedDateGenerationHold,()=> 'fixture-generation');
 const reconcile=(evidence=()=>({ready:true}))=>makeReconcile(options,'test-token',dateExecutorIsBusy,os,{existsSync:()=>true},path,root,()=>({status:'audited'}),()=>packet,()=>({proposal:{extractionHash:h1}}),evidence);
 const read=()=>readRemotePeopleWorkLedger();
 const save=claim=>mutateRemotePeopleWorkLedger(l=>{l.claims={};l.dateAudits={[key]:structuredClone(claim)};delete l.dateAuditHistory;});

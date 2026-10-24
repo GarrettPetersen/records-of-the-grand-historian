@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-24T21:56:02.874Z",
+  "problem": "Second-round recovery wrongly required the staged negative review to equal the installed original negative report.",
+  "fix": "Prove unchanged original pins and exact frozen negative seed; replay retained scoped proposals and intermediate candidates; reassemble later pinned reviewer jobs and require current secondary sources. Unknown, stale, missing, completed, publication and editorial-amendment holds remain.",
+  "author": "/root/review_date_hint_host_integration",
+  "independentReviewer": "/root/jinshu053_independent_editorial_approval",
+  "reviewVerdict": "approved after adding changed/missing secondary-source protection",
+  "validation": {
+    "workflowOwnershipTests": 142,
+    "workerSendHintTests": 91,
+    "totalOfflineTests": 233,
+    "actualJinshu086RoundTwoReadOnlyGuard": "passed",
+    "ownershipFixtureFix": "bind actual production extractionClaimBlocksDateAudit helper; assertions and queue behavior unchanged"
+  },
+  "recovery": {
+    "preservedCommit": "bf7f06137d1e8672b0ca9223bf59aa07ed50e39d",
+    "path": "research/people/recovery/jinshu086-20261024",
+    "artifacts": 32,
+    "removedFromReleaseTree": true,
+    "independentDateApproval": false
+  },
+  "limits": "Unchanged: stable worker, original packet ceilings, two chapter slots, one shared pool4, existing per-run circuit breakers.",
+  "deploymentVerification": "Prior release master12 is verified deployed; this patch still requires PR CI."
+}

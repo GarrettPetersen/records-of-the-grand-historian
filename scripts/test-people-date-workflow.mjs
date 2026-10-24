@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
-import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.mjs';
+import { buildDateAuditPacket, dateAuditStatus, dateAuditReferencesCurrent } from './lib/people-date-audit.mjs';
 import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
@@ -277,6 +277,132 @@ test('a later repair cannot treat an unrelated older matching review as its curr
   await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async()=>{throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
   assert.deepEqual(readJson(file),state);
 });
+
+async function interruptedSecondRound(t, { secondaryReference = false } = {}) {
+  const f = fixture(t), scope = { book: 'fixture', chapter: '001' };
+  const secondaryFile = path.join(f.options.dataDir, 'fixture/002.json'), secondaryQuote = '二年乙卒。';
+  if (secondaryReference) writeJsonAtomic(secondaryFile, { content: [{ sentences: [{ id: 's0001', zh: secondaryQuote, translation: 'Yi died in year two.' }] }] });
+  const worker = async task => {
+    if (task.key.startsWith('reaudit-2-')) throw new Error('fixture second-round audit interrupted');
+    if (task.kind === 'repair') {
+      task.save({ status: 'returned' });
+      if (task.key.startsWith('repair-0-')) return repair(task);
+      return { sourceHash: task.packet.sourceHash, extractionHash: task.packet.extractionHash, changes: [{
+        kind: 'hints', personId: 'p002', before: task.extraction.people[1][4].a,
+        after: ['AD 1 (fixture source year)'], reason: 'Clarify the retained fixture source year without changing the event.',
+      }] };
+    }
+    const result = review(task);
+    if (task.key.startsWith('reaudit-1-') && task.job.ownedPeople.includes('p002')) {
+      result.personChecks.find(check => check.id === 'p002').verdict = 'incorrect';
+      result.findings.push({ items: ['p002', 'hints-p002'], problem: 'The second fixture hint needs its source-year qualifier.', action: 'Clarify the existing source-year hint and obtain another independent review.' });
+      if (secondaryReference) result.references.push({ book: 'fixture', chapter: '002', unit: 's0001', quote: secondaryQuote,
+        sourceHash: sha256(secondaryQuote), reason: 'The independent second-source passage informs this staged chronology finding.' });
+    }
+    return result;
+  };
+  await assert.rejects(runDateWorkflow(scope, worker, f.options), /second-round audit interrupted/);
+  const directory = dateWorkflowDirectory(scope.book, scope.chapter, f.options.peopleDir);
+  return { ...f, scope, directory, secondaryFile, stateFile: path.join(directory, 'state.json'), reportFile: path.join(f.options.peopleDir, 'date-audits/fixture/001.json') };
+}
+
+test('a second repair round resumes from the original frozen negative seed and staged review ancestry', async t => {
+  const f = await interruptedSecondRound(t), state = readJson(f.stateFile);
+  assert.equal(state.phase, 'reaudit'); assert.equal(state.round, 2);
+  assert.equal(state.review, 'review-1.json'); assert.equal(state.candidate, 'candidate-2.json');
+  assert.deepEqual(readJson(f.reportFile), readJson(path.join(f.directory, 'review-0.json')));
+  assert.notEqual(readJson(f.reportFile).extractionHash, readJson(path.join(f.directory, state.review)).extractionHash);
+  const calls = [];
+  assert.equal((await runDateWorkflow(f.scope, async task => { calls.push(task.key); return review(task); }, f.options)).status, 'audited');
+  assert.ok(calls.length); assert.ok(calls.every(key => key.startsWith('reaudit-2-')));
+  assert.equal(readJson(f.file).people[1][4].a[0], 'AD 1 (fixture source year)');
+});
+
+test('a later negative staged review also resumes its retained repair phase', async t => {
+  const f = await interruptedSecondRound(t), state = readJson(f.stateFile);
+  // Model a crash after returning the next repair but before advancing its
+  // candidate: retain the proposal and the preceding round's combined delta.
+  state.phase = 'repair'; state.round = 1;
+  state.candidate = 'candidate-1.json'; state.review = 'review-1.json';
+  writeJsonAtomic(f.stateFile, state);
+  writeJsonAtomic(path.join(f.directory, 'combined-proposal.json'), dateRepairDifference(f.extraction, readJson(path.join(f.directory, state.candidate)), f.packet));
+  const calls = [];
+  assert.equal((await runDateWorkflow(f.scope, async task => { calls.push(task.key); return review(task); }, f.options)).status, 'audited');
+  assert.ok(calls.every(key => key.startsWith('reaudit-2-')));
+});
+
+test('a current local secondary reference in a staged negative review permits recovery', async t => {
+  const f = await interruptedSecondRound(t, { secondaryReference: true });
+  assert.equal(dateAuditReferencesCurrent(readJson(path.join(f.directory, 'review-1.json')), f.options), true);
+  assert.equal((await runDateWorkflow(f.scope, async task => review(task), f.options)).status, 'audited');
+});
+
+test('changed or missing secondary source units invalidate staged negative ancestry without changing report or job assembly', async t => {
+  for (const mutation of ['changed', 'missing']) await t.test(mutation, async t => {
+    const f = await interruptedSecondRound(t, { secondaryReference: true });
+    const secondary = readJson(f.secondaryFile);
+    if (mutation === 'changed') secondary.content[0].sentences[0].zh = '三年乙卒。';
+    else secondary.content[0].sentences = [];
+    writeJsonAtomic(f.secondaryFile, secondary);
+    const canonical = readJson(f.reportFile), staged = readJson(path.join(f.directory, 'review-1.json'));
+    assert.deepEqual(canonical.references, []); assert.equal(staged.references.length, 1);
+    assert.equal(dateAuditStatus('fixture', '001', f.options).status, 'needs-revision');
+    assert.equal(dateAuditReferencesCurrent(staged, f.options), false);
+    const files = fs.readdirSync(f.directory).sort().map(name => [path.join(f.directory, name), fs.readFileSync(path.join(f.directory, name))]);
+    files.push([f.file, fs.readFileSync(f.file)], [f.sourceFile, fs.readFileSync(f.sourceFile)],
+      [f.secondaryFile, fs.readFileSync(f.secondaryFile)], [f.reportFile, fs.readFileSync(f.reportFile)]);
+    let calls = 0;
+    await assert.rejects(runDateWorkflow(f.scope, async () => { calls += 1; throw new Error('unexpected worker'); }, f.options), /cannot be safely seeded;.*stale source references/);
+    assert.equal(calls, 0);
+    assert.deepEqual(fs.readdirSync(f.directory).sort(), files.slice(0, -4).map(([file]) => path.basename(file)));
+    for (const [file, bytes] of files) assert.deepEqual(fs.readFileSync(file), bytes);
+  });
+});
+
+test('second-round recovery holds altered, missing, stale, or unrelated ancestry before any worker or write', async t => {
+  const cases = {
+    'changed canonical report': f => amend(f.reportFile, x => { x.summary += ' A separately installed report.'; }),
+    'missing original seed': f => fs.unlinkSync(path.join(f.directory, 'review-0.json')),
+    'changed original seed': f => amend(path.join(f.directory, 'review-0.json'), x => { x.summary += ' Changed.'; }),
+    'missing prior candidate': f => fs.unlinkSync(path.join(f.directory, 'candidate-1.json')),
+    'changed prior candidate': f => amend(path.join(f.directory, 'candidate-1.json'), x => { x.people[0][4].a = ['AD 9']; }),
+    'missing current candidate': f => fs.unlinkSync(path.join(f.directory, 'candidate-2.json')),
+    'changed current candidate': f => amend(path.join(f.directory, 'candidate-2.json'), x => { x.people[0][4].a = ['AD 9']; }),
+    'missing linked review': f => fs.unlinkSync(path.join(f.directory, 'review-1.json')),
+    'stale linked review': f => amend(path.join(f.directory, 'review-1.json'), x => { x.extractionHash = f.packet.extractionHash; }),
+    'altered linked review': f => amend(path.join(f.directory, 'review-1.json'), x => { x.summary += ' Altered after assembly.'; }),
+    'older matching review pointer': f => amend(f.stateFile, x => { x.review = 'review-0.json'; }),
+    'wrong candidate pointer': f => amend(f.stateFile, x => { x.candidate = 'candidate-1.json'; }),
+    'missing review plan': f => amend(f.stateFile, x => { delete x.reviewPlans['reaudit-1']; }),
+    'changed review ownership': f => amend(f.stateFile, x => { x.reviewPlans['reaudit-1'].jobIds[0] = 'unknown'; }),
+    'missing retained review job': f => fs.unlinkSync(path.join(f.directory, fs.readdirSync(f.directory).find(n => n.startsWith('reaudit-1-')))),
+    'altered retained review job': f => amend(path.join(f.directory, fs.readdirSync(f.directory).find(n => n.startsWith('reaudit-1-'))), x => { x.summary += ' Altered.'; }),
+    'missing intermediate candidate': f => fs.unlinkSync(path.join(f.directory, 'repair-candidate-0-1.json')),
+    'altered intermediate candidate': f => amend(path.join(f.directory, 'repair-candidate-0-1.json'), x => { x.people[0][4].a = ['AD 9']; }),
+    'missing scoped proposal': f => fs.unlinkSync(path.join(f.directory, fs.readdirSync(f.directory).find(n => /^repair-1-/.test(n)))),
+    'altered combined proposal': f => amend(path.join(f.directory, 'combined-proposal.json'), x => { x.changes.find(c => c.kind === 'hints').after = ['AD 9']; }),
+    'changed original state pin': f => amend(f.stateFile, x => { x.extractionHash = 'sha256:' + '0'.repeat(64); }),
+    'changed source': f => amend(f.sourceFile, x => { x.content[0].sentences[0].translation += ' Changed.'; }),
+    'changed canonical extraction': f => amend(f.file, x => { x.people[0][4].a = ['AD 9']; }),
+    'completed generation': f => amend(f.stateFile, x => { x.phase = 'complete'; }),
+    'unknown publication': f => amend(f.stateFile, x => { x.phase = 'publish'; }),
+    'editorial amendment': f => amend(f.stateFile, x => { x.phase = 'editorial-amendment'; }),
+  };
+  function amend(file, change) { const value = readJson(file); change(value); writeJsonAtomic(file, value); }
+  function snapshot(directory) {
+    return fs.readdirSync(directory).sort().flatMap(name => {
+      const file = path.join(directory, name);
+      return fs.statSync(file).isDirectory() ? snapshot(file) : [[file, fs.readFileSync(file)]];
+    });
+  }
+  for (const [name, change] of Object.entries(cases)) await t.test(name, async t => {
+    const f = await interruptedSecondRound(t); change(f);
+    const before = snapshot(path.dirname(f.options.peopleDir)); let calls = 0;
+    await assert.rejects(runDateWorkflow(f.scope, async () => { calls += 1; throw new Error('unexpected worker'); }, f.options), /cannot be safely seeded/);
+    assert.equal(calls, 0); assert.deepEqual(snapshot(path.dirname(f.options.peopleDir)), before);
+  });
+});
+
 test('a restored audit past round zero cannot bypass failed report seeding',async t=>{
   const f=fixture(t);await runDateWorkflow({book:'fixture',chapter:'001'},async task=>review(task),{...f.options,maxRounds:0});
   const file=path.join(dateWorkflowDirectory('fixture','001',f.options.peopleDir),'state.json'),state=readJson(file);
