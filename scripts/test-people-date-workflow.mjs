@@ -984,3 +984,78 @@ test('an unstarted staged review can accept an amended proposal without losing e
   assert.equal(readJson(path.join(dir,'publication.json')).rounds.length,2);
   assert.throws(()=>revisePendingDateRepair({book:'fixture',chapter:'001'},proposal,f.options),/review has started/);
 });
+
+function formattedRepair(task) {
+  const proposal = repair(task);
+  proposal.changes.find(change => change.kind === 'hints').after = ['AD onOrAfter 1 (fixture first year)'];
+  return proposal;
+}
+test('repair hint formatting avoids a worker retry and preserves the raw proposal with an immutable receipt', async t => {
+  const f=fixture(t);let repairs=0;
+  f.options.validateExtraction = extraction => {
+    for (const person of extraction.people) for (const hint of person[4].a) {
+      assert.doesNotMatch(hint, /^(?:AD|BC) onOr/u, 'production validation sees normalized hints');
+    }
+  };
+  const worker=async task=>task.kind==='repair' ? (repairs++,formattedRepair(task)) : review(task);
+  assert.equal((await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options)).status,'audited');
+  assert.equal(repairs,1);
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),state=readJson(path.join(directory,'state.json'));
+  const records=Object.entries(state.hintFormattingReceipts);
+  assert.equal(records.length,1);
+  const [key,record]=records[0],receipt=readJson(path.join(directory,record.path));
+  assert.equal(receipt.proposalHash,sha256(JSON.stringify(readJson(path.join(directory,key+'.json')))));
+  assert.equal(readJson(path.join(directory,key+'.json')).changes.find(c=>c.kind==='hints').after[0],'AD onOrAfter 1 (fixture first year)');
+  assert.deepEqual(receipt.changes,[{personId:'p001',index:0,before:'AD onOrAfter 1 (fixture first year)',after:'on or after AD 1 (fixture first year)'}]);
+  assert.equal(readJson(f.file).people[0][4].a[0],'on or after AD 1 (fixture first year)');
+  assert.equal(receipt.originalExtractionHash,f.packet.extractionHash);
+  assert.equal(dateAuditStatus('fixture','001',f.options).status,'audited');
+  const receiptFile=path.join(directory,record.path);
+  fs.appendFileSync(receiptFile,' ');
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('worker must not run');},f.options),/hint-formatting receipt changed/);
+});
+test('formatted repair remains staged until a fresh independent audit succeeds', async t => {
+  const f=fixture(t);
+  const worker=async task=>{
+    if(task.kind==='repair')return formattedRepair(task);
+    if(task.packet.extractionHash!==f.packet.extractionHash)throw Error('Awaiting independent re-audit');
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/Awaiting independent re-audit/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),state=readJson(path.join(directory,'state.json'));
+  assert.equal(state.phase,'reaudit');
+  assert.ok(Object.keys(state.hintFormattingReceipts).length);
+  assert.notEqual(dateAuditStatus('fixture','001',f.options).status,'audited');
+});
+test('a retained formatting receipt cannot adopt a changed raw repair proposal', async t => {
+  const f=fixture(t);
+  const worker=async task=>{
+    if(task.kind==='repair')return formattedRepair(task);
+    if(task.packet.extractionHash!==f.packet.extractionHash)throw Error('Awaiting independent re-audit');
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/Awaiting independent re-audit/);
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),state=readJson(path.join(directory,'state.json'));
+  const key=Object.keys(state.hintFormattingReceipts)[0],file=path.join(directory,key+'.json'),proposal=readJson(file);
+  proposal.changes[0].reason+=' Altered.';
+  writeJsonAtomic(file,proposal);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('worker must not run');},f.options),/receipt scope or proposal changed/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});
+test('a retained formatting receipt rejects a changed intermediate candidate before any model turn', async t => {
+  const f=fixture(t);
+  const worker=async task=>{
+    if(task.kind==='repair')return formattedRepair(task);
+    if(task.packet.extractionHash!==f.packet.extractionHash)throw Error('Awaiting independent re-audit');
+    return review(task);
+  };
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options),/Awaiting independent re-audit/);
+  const directory=dateWorkflowDirectory('fixture','001',f.options.peopleDir),state=readJson(path.join(directory,'state.json'));
+  const record=Object.values(state.hintFormattingReceipts)[0],receipt=readJson(path.join(directory,record.path));
+  const candidateFile=path.join(directory,receipt.afterCandidateFile),candidate=readJson(candidateFile);
+  candidate.people[0][4].a[0]='AD 999';
+  writeJsonAtomic(candidateFile,candidate);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('worker must not run');},f.options),/normalized repair candidate changed/);
+  assert.deepEqual(readJson(f.file),f.extraction);
+});

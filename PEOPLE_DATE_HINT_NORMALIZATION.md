@@ -57,6 +57,30 @@ unchanged. Examples:
 - `20–30 AD` → `AD 20–AD 30`
 - `2 BC–1 AD` → `BC 2–AD 1`
 - `before 682 BC` → `before BC 682`
+- `AD onOrAfter 307 (after Yongjia 1)` → `on or after AD 307 (after Yongjia 1)`
+- `AD onOrAfter 318 onOrBefore 320` → `on or after AD 318 and on or before AD 320`
+
+Exact leading-era bound forms support `before`, `after`, `onOrBefore`, and
+`onOrAfter`. A paired lower/upper form explicitly shares its leading era across
+the two supplied years. Bound directions, year values, endpoint order, and an
+optional parenthetical explanation retain their meaning; no missing year or
+era is inferred from historical context. Reversed or impossible pairs, malformed
+years, conflicting eras, unsupported qualifiers, and mixed trailing text remain
+unchanged for validation or review. A hint linked to sealed external-primary
+chronology cannot be normalized without reconciling that evidence.
+
+## Date-repair handoff
+
+The host date workflow normalizes supported hint formats in its materialized
+repair candidate before production validation. It preserves the worker's raw
+proposal and records exact before/after strings, proposal and candidate hashes,
+and the staged candidate path in an immutable receipt under `hint-formatting/`.
+Recovery verifies that receipt, its proposal, and the staged output before another
+worker turn. This avoids spending a model turn solely on known formatting forms.
+
+Normalization does not edit an old sealed packet or approval, change a claim or
+date value, or approve chronology. The resulting candidate still needs production
+validation and a fresh independent date audit before canonical publication.
 
 The normalizer is idempotent. It does not convert calendars, infer missing era
 labels, reorder ranges, convert BCE/CE, or turn unresolved research into a date.

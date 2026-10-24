@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-24T19:43:52.605Z",
+  "problem": "Date repair hints such as AD onOrAfter 307 failed the Western hint gate and triggered a paid correction despite unchanged year/bound semantics.",
+  "proof": {
+    "realRejectedProposalFormatChanges": 74,
+    "productionErrorsBefore": 67,
+    "productionErrorsAfter": 0,
+    "claimsUnchanged": true,
+    "canonicalOrStagedWritesDuringProof": false
+  },
+  "fix": "Normalize only recognized existing hint forms before production validation; preserve raw proposals and immutable receipts binding the normalized intermediate candidate. Fresh independent audit remains required.",
+  "validation": {
+    "offlineTestsPassed": 164,
+    "formatterAuthor": "/root/review_date_send_recovery",
+    "hostIntegrationIndependentReviewer": "/root/review_date_hint_host_integration",
+    "reviewVerdict": "approved after adding pinned candidate hash recovery check"
+  },
+  "gateChanges": "none",
+  "remainingWork": "Two repair groups, fresh independent chronology re-audit, identity resolution, and publication verification."
+}
