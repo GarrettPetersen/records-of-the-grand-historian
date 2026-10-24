@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "recordedAt": "2026-10-24T23:04:16.794Z",
-  "status": "incomplete sticky recovery; no chapter approval",
+  "recordedAt": "2026-10-24T23:18:24.066Z",
+  "status": "needs-revision; third independent re-audit finished; no approval",
   "book": "jinshu",
   "chapter": "086",
   "originalSourceHash": "sha256:57c82651a28b441d3057a4f35574f3f2f709864d2b1c3b45c4aa1ea8596b07d9",
   "originalExtractionHash": "sha256:6e301dbd391ed60206fff277c2dc910deba679489d724461e47b4848ba59c091",
   "originalCanonicalRevision": "75400a58f52fed3c6e8621bc7a798218a4e09910",
-  "phase": "reaudit",
+  "phase": "repair",
   "round": 3,
   "candidate": "candidate-3.json",
   "independentlyDateApproved": false,
@@ -202,7 +202,7 @@
       "path": "rejected-reaudit-3-9a33c56be21543930711-44a30c4d02dd629653e9ca8457389ae0f30681ce44717449a4595d9f2b805650.json",
       "sha256": "263f8c872815a9087a1df6bab45c8146f09dbb2f331979563a919244744670e5",
       "bytes": 142269,
-      "status": "rejected evidence retained"
+      "status": "rejected evidence"
     },
     {
       "path": "rejected-repair-0-001-0004d22978496d2e0da4-6e301dbd391e-47cdc760c7f932739b5c15c27ce3ff6c162757ba92ac24b9f464fb178a8f464e.json",
@@ -311,7 +311,75 @@
       "sha256": "0bbb472de145fe974a00d0a87b4c355c12bc63c48c127036a740049788049f85",
       "bytes": 36762,
       "status": "archival only; live ledger/state remain authoritative"
+    },
+    {
+      "path": "reaudit-3-6b8cb06a31629e3423b2.json",
+      "sha256": "f364bebdba750ee18c47ada53c98da79fc3a688ba71a81868bc8365888055f7f",
+      "bytes": 154845,
+      "status": "negative independent review; not approval"
+    },
+    {
+      "path": "reaudit-3-9a33c56be21543930711.json",
+      "sha256": "ca6b5100ce5086403909c2a2cd0aba69e5f1061575ae19e852fb78f69ad33cbe",
+      "bytes": 185865,
+      "status": "negative independent review; not approval"
+    },
+    {
+      "path": "reaudit-3-9ed4b9063c887a8a7af0.json",
+      "sha256": "653f8f4d32b32331f2a31f0a33c0e9dcd10325e7e44c30673a00d1f0b91d60ef",
+      "bytes": 154227,
+      "status": "negative independent review; not approval"
+    },
+    {
+      "path": "reaudit-3-d902b2629f0467a7054d.json",
+      "sha256": "788a4d9b1a2c20d219b3484347559aea62ef11da0e659519dd472a96151fc6ed",
+      "bytes": 196891,
+      "status": "negative independent review; not approval"
+    },
+    {
+      "path": "rejected-reaudit-3-6b8cb06a31629e3423b2-0b173e45c5a558e938306fa40e78181bb7de0b32b75d0e3a13252bcccef1787b.json",
+      "sha256": "6a5d20d08d7db81b63a63c6231b00492148a3c8db032a1f39b7c5c69d404bc76",
+      "bytes": 154845,
+      "status": "rejected evidence"
+    },
+    {
+      "path": "rejected-reaudit-3-9a33c56be21543930711-273e2bdaf475d8d7c23bf3eaec61d5c710574d014e31f0dd8a0308ca09ed0eb6.json",
+      "sha256": "3d6216afe04b74493aba355b666795a26a4be7429b1c2b6f4d70cbc1b6ae34e0",
+      "bytes": 142442,
+      "status": "rejected evidence"
+    },
+    {
+      "path": "rejected-reaudit-3-9ed4b9063c887a8a7af0-fd1469f95fc1cd88d68c93d97d0cda90690f76fc72f5e9712fbcc94a8e53d174.json",
+      "sha256": "a473af85ca6ab49c7ce540aa0ae0afcc7e0627cf07494ca819fe16f3bfded79b",
+      "bytes": 148014,
+      "status": "rejected evidence"
+    },
+    {
+      "path": "rejected-reaudit-3-d902b2629f0467a7054d-e0419e4c803dd50c925fc162926a59eec6f0081b05ddd8bb1604ce23b7ffd103.json",
+      "sha256": "9954d0cedb9d444e8c87244ce8e8ccc782950052be91169d594b22cf58b39782",
+      "bytes": 187118,
+      "status": "rejected evidence"
+    },
+    {
+      "path": "review-3.json",
+      "sha256": "2380179acd75adec3af09c40859aa8a28b25db6ad0c2494b14fda363f67faabc",
+      "bytes": 690869,
+      "status": "negative independent review; not approval"
+    },
+    {
+      "path": "workflow-state-snapshot-round3-finished-20261024.json",
+      "sha256": "46ac4e1e93e1ba07aab16b7c6e9311b71a4fa761926e41d2300e1aa132231b7d",
+      "bytes": 36789,
+      "status": "archival only; never overwrite live state"
     }
   ],
-  "releasePolicy": "Remove ALL research/people/recovery/ payloads from release tree before master merge, preserving staging ancestry and local ignored work. Never install an old state snapshot over newer state or take over leases."
+  "releasePolicy": "Remove ALL research/people/recovery/ payloads from release tree before master merge, preserving staging ancestry and local ignored work. Never install an old state snapshot over newer state or take over leases.",
+  "findingsByRound": [
+    56,
+    26,
+    12,
+    26
+  ],
+  "currentUnresolvedClaims": 181,
+  "nextAction": "Target source research and truthful undated representations; no new full re-audit of unchanged unresolved candidate."
 }
