@@ -17,8 +17,12 @@
       "findings": 34
     },
     {
-      "id": "002-889786a3f5e41075d19d",
-      "findings": 21
+      "id": "002-889786a3f5e41075d19d-split1",
+      "findings": 10
+    },
+    {
+      "id": "002-889786a3f5e41075d19d-split2",
+      "findings": 11
     },
     {
       "id": "003-ef2ae8dfaa7557109277",
@@ -63,7 +67,26 @@
       "path": "repair-candidate-0-1.json",
       "sha256": "f06479e697d2f57baeecf459a6b75ad34764d0a838fd9d92fae042b8a9160c09",
       "bytes": 857495
+    },
+    {
+      "path": "unstarted-repair-split-831d317f87752ea1d93f153eb3b3f6dd15d88c55d61e3cb820d29a5764297df2.json",
+      "sha256": "831d317f87752ea1d93f153eb3b3f6dd15d88c55d61e3cb820d29a5764297df2",
+      "bytes": 25268
+    },
+    {
+      "path": "amended-repair-plan.json",
+      "sha256": "86f2ac2a18a494148a4e67b20946437c27b5d32cf42ab7c7f5cc9215dc8c202b",
+      "bytes": 43974
     }
   ],
-  "releasePolicy": "Remove this recovery directory from the release tree before merging to master. Preserve this staging commit in history so every exact artifact remains recoverable. Do not substitute these artifacts for fresh independent re-audit or canonical publication."
+  "releasePolicy": "Remove this recovery directory from the release tree before merging to master. Preserve this staging commit in history so every exact artifact remains recoverable. Do not substitute these artifacts for fresh independent re-audit or canonical publication.",
+  "repairPlanAmendment": {
+    "receipt": "unstarted-repair-split-831d317f87752ea1d93f153eb3b3f6dd15d88c55d61e3cb820d29a5764297df2.json",
+    "plan": "amended-repair-plan.json",
+    "claimWorkerUnchanged": true,
+    "allFindingsPreserved": true,
+    "workerCeilingBytes": 262144,
+    "planningCeilingBytes": 253952
+  },
+  "amendedAt": "2026-10-24T19:56:39.094Z"
 }
