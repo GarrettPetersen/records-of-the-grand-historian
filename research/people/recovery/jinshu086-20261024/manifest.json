@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
   "status": "staging-only incomplete recovery checkpoint; not a date approval",
-  "recordedAt": "2026-10-24T20:52:22.789Z",
+  "recordedAt": "2026-10-24T21:46:27.379Z",
   "book": "jinshu",
   "chapter": "086",
   "worker": "Garretts-MacBook-Pro-2.jinshu086-date-recovery",
   "sourceHash": "sha256:57c82651a28b441d3057a4f35574f3f2f709864d2b1c3b45c4aa1ea8596b07d9",
   "originalExtractionHash": "sha256:6e301dbd391ed60206fff277c2dc910deba679489d724461e47b4848ba59c091",
   "originalExtractionRef": "12f42340362f67ea3391116b30eacd8c1bbcb9cc:data/people/extractions/jinshu/086.json",
-  "candidateFile": "candidate-1.json",
-  "candidateSemanticHash": "sha256:4fc2d4fc57b647b0fadd4566c4176bbd49be25fc5e501ca8d9772f7bba73c61c",
+  "candidateFile": "candidate-2.json",
+  "candidateSemanticHash": "sha256:628ad95b17ea51f7c14c622446d29a037f49489ea0390941b04c07d5fd849c65",
   "phase": "reaudit",
-  "round": 1,
+  "round": 2,
   "originalFindingsStaged": 56,
   "independentDateApproval": false,
   "reviewPlan": {
     "maxUnits": 250,
     "maxBytes": 253952,
     "jobIds": [
-      "91403767b3c04cd7b481",
-      "fac4b2eb5d16819a75c1",
-      "3fc27dd4a3209f3ca24e",
-      "5d4fdda5f69d2072ea33"
+      "22c43eda776e07feadac",
+      "3838678e55f838ac79f2",
+      "a0a4177a822bea5832c6",
+      "0267766eccbace673b8e"
     ]
   },
   "artifacts": [
@@ -134,8 +134,60 @@
       "path": "workflow-state-snapshot-20261024.json",
       "sha256": "2f687ddd5f2b2679dac81e4bdf0e7554fb94fd9c6116cd470275ad28efdcf268",
       "bytes": 18437
+    },
+    {
+      "path": "review-1.json",
+      "sha256": "becd91105502caf4509d34b34909ac3b75c2048d365c1f3536e76464ca803216",
+      "bytes": 562266
+    },
+    {
+      "path": "candidate-2.json",
+      "sha256": "cae0df46bc4eaf56bb8d262ff0a611d27a0c59d8e214221b3a5166cf0cbbf5aa",
+      "bytes": 871725
+    },
+    {
+      "path": "repair-candidate-1-1.json",
+      "sha256": "cae0df46bc4eaf56bb8d262ff0a611d27a0c59d8e214221b3a5166cf0cbbf5aa",
+      "bytes": 871725
+    },
+    {
+      "path": "reaudit-1-3fc27dd4a3209f3ca24e.json",
+      "sha256": "ed581cc6a172152595916bc690bac991ada2f0b16d0aed23926c1e4d340cb73a",
+      "bytes": 127293
+    },
+    {
+      "path": "reaudit-1-91403767b3c04cd7b481.json",
+      "sha256": "08117bde9236e5308cf2653c743209db09733900fcbcdde82fc8865bebfecef2",
+      "bytes": 163168
+    },
+    {
+      "path": "reaudit-1-fac4b2eb5d16819a75c1.json",
+      "sha256": "20ee6d080d75d9fdb72e8e00916c2e04d387468031cf8582e582bc2ec39a0ef6",
+      "bytes": 130504
+    },
+    {
+      "path": "reaudit-1-5d4fdda5f69d2072ea33.json",
+      "sha256": "1aa21a98258bed13abb1b349c5b165743496e3c8cb4afc13c31fe7e16fcbd599",
+      "bytes": 142260
+    },
+    {
+      "path": "repair-1-001-65d6eaa1ea87a9c6d98f-4fc2d4fc57b6.json",
+      "sha256": "cb888fea810a7b6a8c10c32f4dc9a0419058f78e2ec9d97e2fa2fefcb25b6bc0",
+      "bytes": 106127
+    },
+    {
+      "path": "raw-repair-artifact-cb888fea810a7b6a8c10c32f4dc9a0419058f78e2ec9d97e2fa2fefcb25b6bc0.json",
+      "sha256": "cb888fea810a7b6a8c10c32f4dc9a0419058f78e2ec9d97e2fa2fefcb25b6bc0",
+      "bytes": 106127
+    },
+    {
+      "path": "workflow-state-snapshot-round2-20261024.json",
+      "sha256": "06dca52079a2acaa953ee00e90eec99df4de53ebbd62094fc7066ffc1e7f78a5",
+      "bytes": 29456
     }
   ],
   "ownership": "The live shared ledger remains authoritative. This state snapshot is archival; do not install it over a newer state, take over a lease, or redispatch a running reviewer.",
-  "releasePolicy": "Remove this directory from the release tree before merging to master; retain staging commit ancestry and local ignored artifacts. Fresh complete independent approval and every identity/publication gate remain required."
+  "releasePolicy": "Remove this directory from the release tree before merging to master; retain staging commit ancestry and local ignored artifacts. Fresh complete independent approval and every identity/publication gate remain required.",
+  "reviewedFindingsInSecondRound": 26,
+  "currentHold": "All re-audit2 runs reached original circuit breakers. Artifact-only recovery was stopped by the canonical-negative ancestry guard before launching jobs. Guard repair is under independent review; do not delete locks, rewrite approvals, or dispatch fresh reviewers."
 }
