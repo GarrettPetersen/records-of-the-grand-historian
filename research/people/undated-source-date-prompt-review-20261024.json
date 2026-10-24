@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-prompt-clarification-review",
+  "verdict": "approve",
+  "reviewer": {
+    "kind": "codex",
+    "name": "Codex independent source and schema reviewer",
+    "model": "GPT-6",
+    "agentId": "/root/jinshu053_independent_editorial_approval",
+    "completedAt": "2026-10-24T23:23:44.406Z"
+  },
+  "input": {
+    "canonicalRef": "75400a58f52fed3c6e8621bc7a798218a4e09910",
+    "file": "prompt-people-date-review.txt",
+    "beforeBytesSha256": "sha256:89df1b410543183ca48bf34b1f6dbb7d45c0f89ad4efcc89fb75ef35af9d4368",
+    "afterBytesSha256": "sha256:c3e91b6fb791a4b02b1b5d62ceafeb66f45ecff584054430c54b931c03d107bf",
+    "patchBytesSha256": "sha256:b1837c97440f226ec34124b10984a6b17b7be3974c4cbbae0a38292ef5e805b3",
+    "proposalFileSha256": "sha256:e5d3dfcc26e0342926ff4a2a4ac348c7b942622bb9fec0ffac95b7abcc3b7d41",
+    "wordingFileSha256": "sha256:b925c106e7672bfb08ab38dfb45887f2c5f73891ffbd53bbaa64d435c0bc65e4",
+    "boundSourceProposalSha256": "sha256:c9b056677a6628388a1fd93d0740ba24a13063458bbc85521dd1d7d5114395bc"
+  },
+  "findings": [],
+  "reasons": [
+    "The insertion preserves the original mandatory unresolved-source-date/research-hold rule verbatim, and expressly forbids using undated representation to resolve disputed dates, conversions, event owners or conflicting witnesses.",
+    "Both attestation and nested age dateContext examples use existing validator-supported fields. The marker requires a substantive source-specific event and excludes temporal/unresolved fields; the stated age and existing sui reckoning remain structured.",
+    "The wording requires preserving person, source facts, evidence and review coverage. It introduces no calendar inference, date conversion, birth-year inference, reign-wide activity assumption or automatic approval.",
+    "The explicit instruction to explain a source-supported replacement rather than merely clear flags is consistent with the independently accepted five-operation source proposal."
+  ],
+  "verification": {
+    "canonicalBeforeHashMatched": true,
+    "patchHashMatched": true,
+    "standaloneWordingExactlyMatched": true,
+    "reconstructedAfterHashMatched": true,
+    "boundSourceProposalHashMatched": true,
+    "examples": 2,
+    "fullCanonicalExtractionValidator": "passed for both literal example values inserted into the independently accepted in-memory candidate, using actual canonical applyDateRepairProposal/buildPeopleExtractionPacket/validateCompactPeopleExtraction",
+    "canonicalRoot": "/Users/garrettpetersen/.codex/worktrees/jinshu086-date-canonical",
+    "normalizedClaims": 541,
+    "noCandidateFileWritten": true,
+    "noCanonicalOrRuntimeChanges": true
+  },
+  "scope": "Approval of this exact prompt insertion only. No complete chapter date audit, canonical application, live workflow change, prior approval/hash modification, or publication performed."
+}

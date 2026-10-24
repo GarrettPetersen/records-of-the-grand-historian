@@ -17,6 +17,12 @@ function hasTemporalValue(value) {
   return value && typeof value === 'object' && Object.entries(value).some(([key, child]) => TEMPORAL_KEYS.has(key) || hasTemporalValue(child));
 }
 
+// Shared approval/scheduling predicate: bounded or explicitly undated values do
+// not count as unresolved unless their temporal container says so.
+export function unresolvedDateAuditItems(packet) {
+  return packet.items.filter(item => temporalContainers(item.value).some(value => value.unresolved === true));
+}
+
 export function dateAuditDiagnostics(packet) {
   return packet.items.flatMap(item => {
     const errors = personReceptionErrors(item);
@@ -154,7 +160,7 @@ export function validateDateAuditReport(report, packet) {
     if (!/^sha256:[a-f0-9]{64}$/.test(reference.sourceHash)) throw new Error('Reference requires a pinned source hash');
     nonempty(reference.reason, 'Reference interpretation', 20);
   }
-  if (complete && (report.findings.length || packet.items.some(item => temporalContainers(item.value).some(value => value.unresolved === true)))) throw new Error('Unresolved chronology cannot be approved');
+  if (complete && (report.findings.length || unresolvedDateAuditItems(packet).length)) throw new Error('Unresolved chronology cannot be approved');
   if (!complete && !report.findings.length) throw new Error('Unapproved audit requires actionable findings');
   return report;
 }

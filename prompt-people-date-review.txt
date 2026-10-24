@@ -37,6 +37,25 @@ endpoint or turn a bound into an exact year. Preserve relative event sequence.
 An unresolved source date requires unresolved:true and a substantive
 unresolvedReason, not a guessed year. Research blocks approval; report it honestly.
 
+Distinguish a positively attested, genuinely undated fact from an unresolved
+asserted date. In a scoped repair, use an attestation value with
+undatedSourceAttestation:true and a source-specific event of at least 20 characters;
+it must contain no sourceDate, qualitative, Western-date or unresolved fields.
+Preserve the subject, facts and source evidence. Preserve a stated age and its
+existing reckoning: an undated age claim may use the same marker and event in its
+dateContext. Age five does not supply a calendar year, birth year or reign-wide
+activity interval. Check all supplied evidence before changing active hints;
+explicitly undated evidence alone does not justify inventing a hint. Reviewers
+must still check these items. Do not merely clear unresolved flags: explain the
+source-supported replacement. This pathway does not resolve a genuinely disputed
+source date, conversion, event owner or conflicting witness; retain the appropriate
+supported uncertainty or research hold.
+
+Supported value examples (retain each claim's person and evidence; preserve the
+existing sui reckoning in the age example):
+Attestation: {"undatedSourceAttestation":true,"event":"Emperor Wu loved Sima Yu and kept him at his side; no calendar date is stated."}
+Age: {"age":5,"reckoning":"sui","dateContext":{"undatedSourceAttestation":true,"event":"The crown prince was five when he pulled the emperor by his robe into the darkness; no calendar date is stated."}}
+
 INDEPENDENT-REVIEW:
 Read every ownedUnits entry for omitted births, deaths, ages and date context.
 Check every ownedItems entry, and check each ownedPeople record for missing or
