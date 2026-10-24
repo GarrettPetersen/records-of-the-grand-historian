@@ -31,6 +31,7 @@ const RECOVERABLE_STATUSES = new Set([
   'failed',
   'split',
 ]);
+const EXTRACTION_STATUSES_SAFE_FOR_DATE_AUDIT = new Set(['ready', 'submitted', 'complete']);
 
 function git(args, options = {}) {
   const hasStdinFd = Number.isInteger(options.stdinFd);
@@ -266,6 +267,13 @@ export function listPeopleChapterTargets(options = {}) {
 
 export function claimIsActive(claim, now = Date.now()) {
   return Boolean(claim && (claim.sticky === true || Date.parse(claim.expiresAt) > now));
+}
+
+// Submitted claims remain reserved through publication so that another extraction
+// lane cannot overwrite them. They no longer execute against the chapter, however,
+// and the date gate must be able to audit their current staged extraction.
+export function extractionClaimBlocksDateAudit(claim, now = Date.now()) {
+  return claimIsActive(claim, now) && !EXTRACTION_STATUSES_SAFE_FOR_DATE_AUDIT.has(claim.status);
 }
 
 export function pruneExpiredClaims(ledger, now = Date.now()) {

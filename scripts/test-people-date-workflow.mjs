@@ -8,7 +8,7 @@ import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.m
 import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
-import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy, extractionClaimBlocksDateAudit } from './lib/people-work-queue.mjs';
 import { cursorDateWorker } from './lib/people-date-worker.mjs';
 import { createRunControl } from './lib/cursor-run-control.mjs';
 
@@ -212,6 +212,14 @@ test('same worker and host cannot reuse another live executor token',()=>{
   assert.equal(dateExecutorIsBusy(claim,{executorToken:'first-checkout',now:1000}),false);
   assert.equal(dateExecutorIsBusy(claim,{executorToken:'second-checkout',now:2001}),false);
   assert.equal(dateExecutorIsBusy(claim,{executorToken:'second-checkout',now:1000,takeover:true}),false);
+});
+test('submitted extraction claims retain publication ownership without blocking the date gate',()=>{
+  const active={sticky:true,status:'claimed'};
+  const submitted={sticky:true,status:'submitted'};
+  const ready={sticky:true,status:'ready'};
+  assert.equal(extractionClaimBlocksDateAudit(active),true);
+  assert.equal(extractionClaimBlocksDateAudit(submitted),false);
+  assert.equal(extractionClaimBlocksDateAudit(ready),false);
 });
 test('audit -> repair -> fresh re-audit -> publish completes and is idempotent',async t=>{
   const f=fixture(t),calls=[];

@@ -10,7 +10,7 @@ import { buildDateAuditPacket, dateAuditStatus } from './lib/people-date-audit.m
 import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
 import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
 import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
-import { mutateRemotePeopleWorkLedger, claimIsActive, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
+import { mutateRemotePeopleWorkLedger, extractionClaimBlocksDateAudit, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { createRunControl, installSignalHandlers } from './lib/cursor-run-control.mjs';
@@ -181,7 +181,7 @@ if (o['dry-run']) {
           if(prior && prior.status!=='ready' && (prior.worker!==o.worker || prior.lane!==o.lane))return null;
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
-          if(claimIsActive(ledger.claims[key]) && !['ready','complete'].includes(ledger.claims[key].status))return null;
+          if(extractionClaimBlocksDateAudit(ledger.claims[key]))return null;
           const archived=prior?.status==='ready';
           if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
           const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
