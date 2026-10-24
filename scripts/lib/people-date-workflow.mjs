@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { PEOPLE_DIR, readJson, sha256, writeJsonAtomic, writeTextAtomic } from './people-content.mjs';
 import { serializeCompactPeopleExtraction } from './people-compact.mjs';
+import { normalizeExtractionDateHints } from './people-date-hints.mjs';
 import { dateWorkerInput } from './people-date-worker.mjs';
 import { mapDateReviewJobs } from './people-date-concurrency.mjs';
 import { reconcileRetrospectiveValue, reconcileRetrospectiveProposal } from './people-reception-reconciliation.mjs';
@@ -37,6 +38,23 @@ function writeBlockerCreateOnly(destination, bytes, verifyCollision = true) {
     if (fs.existsSync(temporary)) fs.unlinkSync(temporary);
     fs.rmdirSync(temporaryDirectory);
   }
+}
+
+function retainHintFormattingReceipt(directory, key, proposal, packet, originalExtractionHash, before, normalized, afterCandidateFile) {
+  if (!normalized.changes.length) return null;
+  const receipt = {
+    schemaVersion: 1, kind: 'date-repair-hint-formatting', jobKey: key,
+    sourceHash: packet.sourceHash, originalExtractionHash,
+    extractionHash: packet.extractionHash, proposalHash: hash(proposal),
+    beforeCandidateHash: hash(before), afterCandidateHash: hash(normalized.candidate), afterCandidateFile,
+    changes: normalized.changes,
+    scope: 'Formatting only; chronology, claims and evidence unchanged. No date approval.',
+  };
+  const bytes = Buffer.from(`${JSON.stringify(receipt, null, 2)}\n`);
+  const digest = createHash('sha256').update(bytes).digest('hex');
+  const relative = `hint-formatting/${digest}.json`;
+  writeBlockerCreateOnly(path.join(directory, relative), bytes);
+  return { path: relative, sha256: digest, bytes: bytes.length };
 }
 
 function archiveBlockerBytes(directory, bytes) {
@@ -559,6 +577,30 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const packet = buildDateAuditPacket(book, chapter, options);
   let state = fs.existsSync(stateFile) ? readJson(stateFile) : { schemaVersion: 1, workflowVersion: DATE_WORKFLOW_VERSION,
     sourceHash: packet.sourceHash, extractionHash: packet.extractionHash, ...(options.generationId ? { generationId: options.generationId } : {}), round: 0, phase: 'audit', jobs: {} };
+  if (state.hintFormattingReceipts !== undefined && (!state.hintFormattingReceipts ||
+      typeof state.hintFormattingReceipts !== 'object' || Array.isArray(state.hintFormattingReceipts))) {
+    throw new Error('Invalid retained hint-formatting receipts');
+  }
+  for (const [key, record] of Object.entries(state.hintFormattingReceipts ?? {})) {
+    if (!/^repair-\d+-[a-zA-Z0-9-]+$/.test(key) || !record ||
+        !/^[a-f0-9]{64}$/.test(record.sha256 ?? '') ||
+        record.path !== `hint-formatting/${record.sha256}.json` ||
+        !Number.isSafeInteger(record.bytes) || record.bytes <= 0) throw new Error('Invalid retained hint-formatting receipt reference');
+    const bytes = fs.readFileSync(path.join(directory, record.path));
+    if (bytes.length !== record.bytes || createHash('sha256').update(bytes).digest('hex') !== record.sha256) {
+      throw new Error('Retained hint-formatting receipt changed');
+    }
+    const receipt = JSON.parse(bytes.toString('utf8'));
+    if (receipt.schemaVersion !== 1 || receipt.kind !== 'date-repair-hint-formatting' || receipt.jobKey !== key ||
+        receipt.sourceHash !== state.sourceHash || receipt.originalExtractionHash !== state.extractionHash ||
+        receipt.proposalHash !== hash(readJson(path.join(directory, `${key}.json`)))) {
+      throw new Error('Retained hint-formatting receipt scope or proposal changed');
+    }
+    if (!/^repair-candidate-\d+-[1-9]\d*\.json$/.test(receipt.afterCandidateFile ?? '') ||
+        receipt.afterCandidateHash !== hash(readJson(path.join(directory, receipt.afterCandidateFile)))) {
+      throw new Error('Retained normalized repair candidate changed');
+    }
+  }
   const verifySupplementReceipt = (key, receipt) => {
     if (!/^repair-\d+-[a-zA-Z0-9-]+$/.test(key) || !receipt || typeof receipt !== 'object' ||
         !['supplementHash','proposalHash','rawArtifactHash','blockerHash'].every(field => /^[a-f0-9]{64}$/.test(receipt[field] ?? '')) ||
@@ -831,7 +873,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
           workflowExtractionHash: state.extractionHash, researchSupplement: targetSupplement },r=>{
           if(r.blocked){if(typeof r.reason!=='string'||r.reason.trim().length<20)throw new Error('Research blocker needs a substantive reason');return;}
           const staged=applyDateRepairProposal(candidate,r,active);
-          options.validateExtraction(staged);
+          options.validateExtraction(normalizeExtractionDateHints(staged).candidate);
         });
         if (legacyBytes && (!fs.existsSync(legacyBlocker) || !fs.readFileSync(legacyBlocker).equals(legacyBytes))) throw new Error('Retained legacy blocker changed during repair; preserve artifacts and reconcile');
         if (result.blocked) {
@@ -875,8 +917,16 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
       }
       const authorId = proposalAuthorId(proposal);
       if(authorId) { state.jobs[key]={...state.jobs[key],proposalAuthorId:authorId};save(); }
-      candidate = applyDateRepairProposal(candidate, proposal, active);
-      options.validateExtraction(candidate);
+      const unformatted = applyDateRepairProposal(candidate, proposal, active);
+      const normalized = normalizeExtractionDateHints(unformatted);
+      options.validateExtraction(normalized.candidate);
+      const formattingReceipt = retainHintFormattingReceipt(directory, key, proposal, active,
+        state.extractionHash, unformatted, normalized, `repair-candidate-${state.round}-${repairIndex+1}.json`);
+      if (formattingReceipt) {
+        state.hintFormattingReceipts ??= {};
+        state.hintFormattingReceipts[key] = formattingReceipt;
+      }
+      candidate = normalized.candidate;
       state.repairIndex = repairIndex + 1;
       state.repairCandidate = `repair-candidate-${state.round}-${state.repairIndex}.json`;
       writeJsonAtomic(path.join(directory, state.repairCandidate), candidate);

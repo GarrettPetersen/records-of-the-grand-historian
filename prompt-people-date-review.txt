@@ -61,6 +61,10 @@ ownedPeople, with no duplicates. Even failed jobs must finish their owned checks
 or retain work for continuation; they cannot silently omit a difficult item.
 Every failed check has an actionable finding:
 {items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].
+Keep each check's reason concise and self-contained: identify its source anchor
+and why the date is supported or defective. Put shared research and conversion
+explanations once in findings or references instead of repeating paragraphs.
+Retain every owned check, its event owner, and exact per-check Chinese evidence.
 External research references use {kind:"external",url,title,quote,sourceHash,
 accessedAt,reason}; sourceHash is 'sha256:' plus SHA-256 of the short exact excerpt.
 Verify the page before citing it; keep quotations short and copyright-compliant.
@@ -74,12 +78,16 @@ Each change has a substantive source-based reason and one of these forms:
 {kind:"remove",id:"claim-N",before:EXACT_INPUT_ROW,reason}
 {kind:"add",after:[personId,"attestation"|"birth"|"death"|"age",value,certainty,[unitIds]],reason}
 {kind:"add-reception-event",after:[personId,"event-participation",value,certainty,[unitIds]],reason}
-{kind:"date-context",id:"claim-N",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}
+{kind:"date-context",id:"claim-N",before:EXACT_INPUT_DATE_CONTEXT_OR_NULL,after:REVISED_DATE_CONTEXT,reason}
 {kind:"hints",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}
 Claim rows are compact five-element arrays. Replacements keep subject/predicate.
-Use date-context to add missing chronology to an existing non-life claim. It may
-change only date fields, certainty, and evidence; the subject, predicate, and all
-non-date value fields must remain identical. It cannot remove or invent an event.
+Use date-context only for an existing non-life claim. Its before value is exactly
+claims[id][2].dateContext, or null when absent; its after value is only the revised
+date-context object, never a complete claim row. It may change only sourceDate,
+westernYear, westernInterval, westernBounds, unresolved, and unresolvedReason.
+Copy an existing event description verbatim. The host retains the claim's subject,
+predicate, certainty, evidence, and other non-date fields unchanged. Do not remove
+or invent an event, or use date-context for attestation, birth, death, or age rows.
 Do not modify names, roles, mentions, family links or translation text. Preserve
 legitimate posthumous reception as an event, but remove it from personal activity.
 Use add-reception-event with an explicit retrospective classification

@@ -1,6 +1,30 @@
 // Format existing Western chronology only; never derive a year from evidence.
 export function normalizeWesternDateHint(hint) {
   if(typeof hint!=='string')throw new Error('Active-date hints must be strings');
+  // Only an exact era/bound/year prefix is formatting-only. A trailing
+  // parenthesis is retained byte-for-byte as explanatory source context.
+  // Reject incomplete numbers, ranges, duplicate eras, and mixed trailing text
+  // as a whole rather than letting the legacy suffix pass partially edit them.
+  if (/^(?:AD|BC)\s+(?:onOrAfter|onOrBefore|before|after)\b/u.test(hint)) {
+    const labels = { onOrAfter: 'on or after', onOrBefore: 'on or before', before: 'before', after: 'after' };
+    // The sole leading era scopes both explicitly supplied bound years.
+    // Check chronology in that era; never reorder endpoints or invent scope.
+    const pair = /^(AD|BC)\s+(onOrAfter|after)\s+([1-9]\d{0,3})\s+(onOrBefore|before)\s+([1-9]\d{0,3})([ \t]+\([^()\r\n]+\))?$/u.exec(hint);
+    if (pair) {
+      if (/\b(?:AD|BC|BCE|CE)\b/iu.test(pair[6] ?? '')) return hint;
+      const lower = Number(pair[3]), upper = Number(pair[5]);
+      const reversed = pair[1] === 'AD' ? lower > upper : lower < upper;
+      const lowerOrdinal = pair[1] === 'AD' ? lower : -lower;
+      const upperOrdinal = pair[1] === 'AD' ? upper : -upper;
+      const empty = lowerOrdinal + (pair[2] === 'after' ? 1 : 0) >
+        upperOrdinal - (pair[4] === 'before' ? 1 : 0);
+      if (reversed || empty) return hint;
+      return `${labels[pair[2]]} ${pair[1]} ${pair[3]} and ${labels[pair[4]]} ${pair[1]} ${pair[5]}${pair[6] ?? ''}`;
+    }
+    const bound = /^(AD|BC)(\s+)(onOrAfter|onOrBefore|before|after)(\s+)([1-9]\d{0,3})([ \t]+\([^()\r\n]+\))?$/u.exec(hint);
+    if (!bound || /\b(?:AD|BC|BCE|CE)\b/iu.test(bound[6] ?? '')) return hint;
+    return `${labels[bound[3]]}${bound[2]}${bound[1]}${bound[4]}${bound[5]}${bound[6] ?? ''}`;
+  }
   return hint.replace(/(?<![\p{L}\p{N}+])([1-9]\d{0,3})(\s*[-–—]\s*([1-9]\d{0,3}))?\s+(BC|AD)\b/gu,
     (match,first,separator,last,era,offset)=>{
       const prefix=hint.slice(0,offset);
