@@ -10,6 +10,7 @@ import { pathToFileURL } from 'node:url';
 const DEFAULT_CDP_URL = 'http://127.0.0.1:9229';
 const DEFAULT_INTERVAL_MS = 2 * 60 * 1000;
 const DEFAULT_COOLDOWN_MS = 10 * 60 * 1000;
+const DEFAULT_ACTIVITY_QUIET_MS = 30 * 60 * 1000;
 const DEFAULT_MAX_ACTIVE = 12;
 const FIRST_WORKER = 24;
 const LAST_WORKER = 35;
@@ -25,6 +26,7 @@ Options:
   --cdp-url URL       Loopback Chrome DevTools endpoint (default: ${DEFAULT_CDP_URL})
   --interval-ms N     Daemon polling interval (default: ${DEFAULT_INTERVAL_MS})
   --cooldown-ms N     Minimum time between prompts to one idle worker (default: ${DEFAULT_COOLDOWN_MS})
+  --activity-quiet-ms N  Preserve a worker after new activity (default: ${DEFAULT_ACTIVITY_QUIET_MS})
   --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
   --workers IDS       Comma-separated stable worker IDs to dispatch (for recovery cycles)
   --force             Dispatch even when the cached roster says a worker is running
@@ -46,6 +48,7 @@ export function parseArgs(argv) {
     cdpUrl: DEFAULT_CDP_URL,
     intervalMs: DEFAULT_INTERVAL_MS,
     cooldownMs: DEFAULT_COOLDOWN_MS,
+    activityQuietMs: DEFAULT_ACTIVITY_QUIET_MS,
     maxActive: DEFAULT_MAX_ACTIVE,
     workers: null,
     force: false,
@@ -61,6 +64,7 @@ export function parseArgs(argv) {
     if (arg === '--cdp-url') options.cdpUrl = next();
     else if (arg === '--interval-ms') options.intervalMs = positiveInteger(next(), arg);
     else if (arg === '--cooldown-ms') options.cooldownMs = positiveInteger(next(), arg);
+    else if (arg === '--activity-quiet-ms') options.activityQuietMs = positiveInteger(next(), arg);
     else if (arg === '--max-active') options.maxActive = positiveInteger(next(), arg);
     else if (arg === '--workers') {
       const workers = next().split(',').map((value) => value.trim()).filter(Boolean);
@@ -552,10 +556,32 @@ export async function dispatchPrompt(cdpUrl, worker, prompt) {
   }
 }
 
-export function workersEligibleForDispatch(workers, state, { force, cooldownMs, now = Date.now() }) {
+export function observeWorkerActivity(workers, state, now = Date.now()) {
+  let changed = false;
+  for (const worker of workers) {
+    const record = state.workers?.[worker.worker];
+    if (!record?.lastDispatchAt) continue;
+    const seen = Number(record.lastActivityAtSeen ?? 0);
+    if (worker.lastActivityAt <= seen) continue;
+    record.lastActivityAtSeen = worker.lastActivityAt;
+    record.lastObservedActivityAt = now;
+    changed = true;
+  }
+  return changed;
+}
+
+export function workersEligibleForDispatch(workers, state, {
+  force,
+  cooldownMs,
+  activityQuietMs = 0,
+  now = Date.now(),
+}) {
   return workers.filter((worker) => {
     if (!force && worker.isRunning) return false;
-    const lastDispatchAt = Number(state.workers?.[worker.worker]?.lastDispatchAt ?? 0);
+    const record = state.workers?.[worker.worker] ?? {};
+    const lastDispatchAt = Number(record.lastDispatchAt ?? 0);
+    const lastObservedActivityAt = Number(record.lastObservedActivityAt ?? 0);
+    if (!force && lastObservedActivityAt && now - lastObservedActivityAt < activityQuietMs) return false;
     return force || now - lastDispatchAt >= cooldownMs;
   });
 }
@@ -580,6 +606,7 @@ async function dispatchCycle(options) {
     await liveRunningAgentIds(options.cdpUrl),
     state,
   );
+  if (observeWorkerActivity(workers, state)) writeState(state);
   const dispatchable = workersToDispatch(workers, state, options);
   for (const worker of dispatchable) {
     await dispatchPrompt(options.cdpUrl, worker, workerPrompt(worker.worker));

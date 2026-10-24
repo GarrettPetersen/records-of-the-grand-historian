@@ -20,7 +20,7 @@ Preserve later reception as its own event, not living activity: use event kind
 retrospective-reference, or receptionType: retrospective on a narrower honor/work
 claim. This does not change the posthumous-name alias kind. Record
 the reception's own date, source and subject role. Retrospective does not imply
-dead; require evidence before calling it posthumous. A later-written biography
+dead; there is no separate posthumous reception category. A later-written biography
 can still attest an earlier life event. Do not use reception dates as life dates
 or active hints, and do not discard the later reference when repairing them.
 For verified month/day events, normalize Western years/bounds to proleptic
@@ -52,7 +52,11 @@ reviewer:{name,independentOfExtractor:true}, summary (substantive),
 reviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.
 Every check has id, verdict (supported/incorrect/research-blocked), reason, and
 evidence:[{unit,quote}] containing an exact Chinese excerpt. Item checks additionally
-have event describing whose event is being dated. Include exactly ownedItems and
+have event describing whose event is being dated. This is required for **every**
+item check, including `hints-pNNN` active-date-hint rows: give a source-specific
+English sentence of at least 10 characters that identifies the named person's own
+event (or states that the hint lacks such an event). Do not omit it merely because
+the item is a hint rather than a claim. Include exactly ownedItems and
 ownedPeople, with no duplicates. Even failed jobs must finish their owned checks
 or retain work for continuation; they cannot silently omit a difficult item.
 Every failed check has an actionable finding:
@@ -98,3 +102,8 @@ or a needed conversion. Do not expand this audit into new biographies or add eve
 external life date you encounter. Preserve genuinely conflicting witnesses as
 explicitly supported uncertainty when possible; neither choose a winning date nor
 create false precision to clear a finding. An unsupported conversion remains a hold.
+
+Retrospective is the sole later-reception category, including commemorations and
+references after a known death. Use kind `retrospective-reference` or, on a narrower
+honor/work claim, receptionType `retrospective`. Do not require proof of death,
+introduce a posthumous subtype, or change the separate `posthumous-name` alias kind.

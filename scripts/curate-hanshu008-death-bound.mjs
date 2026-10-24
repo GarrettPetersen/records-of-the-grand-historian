@@ -1,0 +1,27 @@
+import path from 'node:path';
+import { applyDateRepairProposal } from './lib/people-date-workflow.mjs';
+import { buildDateAuditPacket, dateAuditDiagnostics, dateAuditItems } from './lib/people-date-audit.mjs';
+import { PEOPLE_DIR, readJson, sha256, writeTextAtomic } from './lib/people-content.mjs';
+import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
+import { serializeCompactPeopleExtraction } from './lib/people-compact.mjs';
+import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
+
+const book = 'hanshu';
+const chapter = '008';
+const handoff = readJson(path.join(PEOPLE_DIR, 'date-repairs', book, chapter, 'staged-candidate-1de136eb5b8875900a34.json'));
+const extractionPath = path.join(PEOPLE_DIR, 'extractions', book, `${chapter}.json`);
+const canonical = readJson(extractionPath);
+const packet = buildDateAuditPacket(book, chapter);
+const candidate = applyDateRepairProposal(canonical, handoff.proposal, packet);
+const candidateHash = sha256(JSON.stringify(candidate));
+if (candidateHash !== handoff.candidateExtractionHash) throw new Error(`Candidate hash mismatch: ${candidateHash}`);
+if (JSON.stringify(candidate) !== JSON.stringify(handoff.candidate)) throw new Error('Candidate does not replay byte-for-byte');
+if (handoff.proposal.changes.length !== 1 || handoff.proposal.changes[0]?.id !== 'claim-166') throw new Error('Expected only claim-166');
+const death = candidate.claims.find(claim => claim[0] === 'p029' && claim[1] === 'death');
+const deathDate = death[2]?.dateContext;
+if (deathDate?.westernBounds?.onOrBefore?.era !== 'BC' || deathDate?.westernBounds?.onOrBefore?.year !== 81 || deathDate?.westernYear) throw new Error('King Dai death must be an on-or-before BC 81 bound');
+const validation = validateCompactPeopleExtraction(candidate, buildPeopleExtractionPacket(book, chapter));
+const geometry = dateAuditDiagnostics(dateAuditItems(candidate));
+if (geometry.length) throw new Error(`Date geometry diagnostics: ${JSON.stringify(geometry)}`);
+writeTextAtomic(extractionPath, serializeCompactPeopleExtraction(candidate));
+console.log(JSON.stringify({ candidateHash, validation: validation.stats, geometry: 'PASS' }));

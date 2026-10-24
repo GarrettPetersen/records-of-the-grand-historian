@@ -549,10 +549,56 @@ function nextPreservedClaimId(extraction) {
   };
 }
 
-export function preserveAppliedEditorialClaims(document, extraction) {
+function nextPreservedMentionId(extraction) {
+  const namespace = `${extraction.book}:${extraction.chapter}:m`;
+  const used = new Set((extraction.mentions ?? []).map((mention) => mention.id));
+  let ordinal = Math.max(0, ...[...used]
+    .filter((id) => id.startsWith(namespace))
+    .map((id) => Number(id.slice(namespace.length)))
+    .filter(Number.isInteger)) + 1;
+  return () => {
+    let id;
+    do id = `${namespace}${String(ordinal++).padStart(4, '0')}`;
+    while (used.has(id));
+    used.add(id);
+    return id;
+  };
+}
+
+function remapNestedPersonId(value, from, to) {
+  if (value === from) return to;
+  if (Array.isArray(value)) return value.map((item) => remapNestedPersonId(item, from, to));
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, remapNestedPersonId(item, from, to)]));
+}
+
+function claimNameValues(claim) {
+  if (claim?.predicate !== 'name' || !claim.value || typeof claim.value !== 'object') return [];
+  return ['zh', 'en', 'pinyin'].map((field) => claim.value[field]).filter((value) => typeof value === 'string' && value.length > 0);
+}
+
+function overlappingValues(left, right) {
+  return left.some((value) => right.includes(value));
+}
+
+function sourceAnchoredReplacementPerson(extraction, priorExtraction, personId) {
+  const priorNames = (priorExtraction?.claims ?? []).filter((claim) => claim.subject === personId && claim.predicate === 'name');
+  const candidates = extraction.people.filter((person) => {
+    const currentNames = extraction.claims.filter((claim) => claim.subject === person.localId && claim.predicate === 'name');
+    return priorNames.some((prior) => currentNames.some((current) =>
+      overlappingValues(prior.evidence ?? [], current.evidence ?? []) &&
+      overlappingValues(claimNameValues(prior), claimNameValues(current))
+    ));
+  });
+  return candidates.length === 1 ? candidates[0].localId : null;
+}
+
+export function preserveAppliedEditorialClaims(document, extraction, priorExtraction = null) {
   const result = editorialDocumentErrors(document);
   if (result.errors.length > 0) throw new EditorialDecisionValidationError(result.errors);
   const nextClaimId = nextPreservedClaimId(extraction);
+  const nextMentionId = nextPreservedMentionId(extraction);
+  const restoredPeople = new Set();
   let removed = 0;
   let restored = 0;
 
@@ -565,9 +611,28 @@ export function preserveAppliedEditorialClaims(document, extraction) {
   const restore = (reviewedClaim) => {
     if (containsReviewedClaim(extraction, reviewedClaim)) return;
     if (!extraction.people.some((person) => person.localId === reviewedClaim.subject)) {
-      throw new EditorialDecisionValidationError([
-        `cannot preserve reviewed claim ${reviewedClaim.id}: subject ${reviewedClaim.subject} is missing`,
-      ]);
+      const replacementId = sourceAnchoredReplacementPerson(extraction, priorExtraction, reviewedClaim.subject);
+      if (replacementId) {
+        // Local ordinals change when a source-fresh extraction adds or drops other
+        // people.  A unique shared source witness plus an explicit shared name is
+        // strong enough to retain the reviewed local ID without guessing across a
+        // same-name block.
+        Object.assign(extraction, remapNestedPersonId(extraction, replacementId, reviewedClaim.subject));
+      }
+    }
+    if (!extraction.people.some((person) => person.localId === reviewedClaim.subject)) {
+      const priorPerson = priorExtraction?.people?.find((person) => person.localId === reviewedClaim.subject);
+      if (!priorPerson) {
+        throw new EditorialDecisionValidationError([
+          `cannot preserve reviewed claim ${reviewedClaim.id}: subject ${reviewedClaim.subject} is missing`,
+        ]);
+      }
+      // A current extractor may omit a sparse, one-surface person even though an
+      // independently reviewed applied claim explicitly preserves that person's
+      // attestation.  Retain the prior, evidence-backed record rather than silently
+      // dropping the reviewed fact or guessing a replacement identity.
+      extraction.people.push(structuredClone(priorPerson));
+      restoredPeople.add(priorPerson.localId);
     }
     const claim = { ...structuredClone(reviewedClaim), id: nextClaimId() };
     extraction.claims.push(claim);
@@ -589,6 +654,40 @@ export function preserveAppliedEditorialClaims(document, extraction) {
     }
     for (const addition of review.claimAdditions ?? []) restore(addition.claim);
   }
+
+  // A reviewed addition can be an attestation, date, or relationship rather than a
+  // name or role.  A compact person record nevertheless requires its source-backed
+  // identity skeleton.  Restore the prior name and role claims for a person that had
+  // to be brought back above, without replacing any current evidence or inventing a
+  // new identity.
+  for (const personId of restoredPeople) {
+    for (const priorClaim of priorExtraction?.claims ?? []) {
+      if (priorClaim.subject !== personId || !['name', 'role'].includes(priorClaim.predicate)) continue;
+      if (exactReviewedClaimMatches(extraction, priorClaim).length > 0) continue;
+      extraction.claims.push({ ...structuredClone(priorClaim), id: nextClaimId() });
+      if (priorClaim.predicate !== 'name') continue;
+      const person = extraction.people.find((item) => item.localId === personId);
+      for (const field of ['en', 'zh', 'pinyin']) {
+        if (typeof priorClaim.value?.[field] === 'string' && priorClaim.value[field].length > 0) {
+          person.preferredNameSuggestion[field] = priorClaim.value[field];
+        }
+      }
+    }
+    // The preserved record must remain reachable from its attested source surface.
+    // Old candidate IDs are scanner artifacts, not evidence; carrying them across a
+    // source-fresh packet could create a stale callback, so the preserved mention is
+    // deliberately a direct source-backed link instead.
+    for (const priorMention of priorExtraction?.mentions ?? []) {
+      if (priorMention.person !== personId) continue;
+      extraction.mentions ??= [];
+      extraction.mentions.push({
+        ...structuredClone(priorMention),
+        id: nextMentionId(),
+        candidateRefs: [],
+      });
+    }
+  }
+  extraction.people.sort((left, right) => left.localId.localeCompare(right.localId, 'en'));
   return { removed, restored };
 }
 

@@ -86,7 +86,7 @@ function usage() {
   node scripts/people-work-queue.mjs resume-grokbot --worker ID --book BOOK --chapter NNN
   node scripts/people-work-queue.mjs validate-grokbot --worker ID --book BOOK --chapter NNN [--chunk-id ID]
   node scripts/people-work-queue.mjs assemble-grokbot --worker ID --book BOOK --chapter NNN
-  node scripts/people-work-queue.mjs accept-grokbot --worker ID --book BOOK --chapter NNN
+  node scripts/people-work-queue.mjs accept-grokbot --worker ID --book BOOK --chapter NNN [--from-submitted-pr]
   node scripts/people-work-queue.mjs submit-grokbot --worker ID --book BOOK --chapter NNN [options]
   node scripts/people-work-queue.mjs status [options]
   node scripts/people-work-queue.mjs reconcile [options]
@@ -136,6 +136,7 @@ function parseArgs(argv) {
     maxCandidates: DEFAULT_GROKBOT_MAX_CANDIDATES,
     maxWorkerBytes: DEFAULT_GROKBOT_MAX_WORKER_BYTES,
     noPr: false,
+    fromSubmittedPr: false,
     force: false,
     chunkId: null,
     selfTest: false,
@@ -163,6 +164,7 @@ function parseArgs(argv) {
     else if (arg === '--max-worker-kib') opts.maxWorkerBytes = positiveInteger(next(), arg) * 1024;
     else if (arg === '--chunk-id') opts.chunkId = next();
     else if (arg === '--no-pr') opts.noPr = true;
+    else if (arg === '--from-submitted-pr') opts.fromSubmittedPr = true;
     else if (arg === '--force') opts.force = true;
     else if (arg === '--self-test') opts.selfTest = true;
     else if (arg === '--help' || arg === '-h') {
@@ -389,6 +391,12 @@ function prepareGrokbotAssignment(target, packet, opts) {
     book: target.book,
     chapter: target.chapter,
     branch: grokBranch(opts.worker, target),
+    workspacePolicy: {
+      mode: 'shared-host-checkout',
+      outputs: 'assigned-artifacts-only',
+      gitOwner: 'host',
+      instruction: 'Do not clone, create a worktree, copy the repository, switch branches, pull, stage, commit or build. Resume the same claim and artifact paths.',
+    },
     mode: whole ? 'whole' : 'chunked',
     prompt: 'prompt-people-extraction-compact.txt',
     schema: 'data/people/schema/compact-extraction.schema.json',
@@ -412,10 +420,11 @@ function printGrokbotAssignment(target, source, prepared) {
     `total ${(source.workerBytes / 1024).toFixed(1)} KiB`,
   );
   console.log(`Assignment: ${path.relative(REPO_ROOT, assignmentFile)}`);
-  console.log(`Create/switch to ${assignment.branch}, then read only the prompt, packet, schema, and seeded output.`);
+  console.log('Workers reuse the host checkout and assigned artifact paths; no clones, worktrees, Git mutations or builds.');
+  console.log(`Host-only publication branch: ${assignment.branch}. Workers read only the prompt, packet, schema, and seeded output.`);
   for (const chunk of assignment.chunks) console.log(`Validate ${chunk.id}: ${chunk.validate}`);
   if (assignment.assemble) console.log(`Assemble: ${assignment.assemble}`);
-  console.log(`Submit:   ${assignment.submit}`);
+  console.log(`Host-only submit: ${assignment.submit}`);
 }
 
 function chunkPlanMetrics(packet, chunks) {
@@ -642,11 +651,12 @@ function currentBranch() {
 export function assertGrokbotClaim(worker, target, opts) {
   fetchPeopleQueueBase(queueOptions(opts));
   const claim = readRemotePeopleWorkLedger(queueOptions(opts)).claims[chapterKey(target)];
+  const acceptedStatuses = opts.fromSubmittedPr ? ['claimed', 'submitted'] : ['claimed'];
   if (
     !claimIsActive(claim) ||
     claim.lane !== 'grokbot' ||
     claim.worker !== worker ||
-    claim.status !== 'claimed'
+    !acceptedStatuses.includes(claim.status)
   ) {
     throw new Error(
       `${chapterKey(target)} is not an active claimed assignment for grokbot/${worker}`,
@@ -745,15 +755,16 @@ export async function claimGrokbot(opts) {
     worker: opts.worker,
     limit: opts.limit,
     sticky: true,
-    note: 'Persistent Grok Bot assignment; resume this conversation and branch before reassignment',
+    note: 'Persistent Grok Bot assignment; resume this conversation, claim and artifact paths before reassignment; host owns Git',
   });
   if (!reserved.result.claimed.length) throw new Error('All eligible chapters were claimed by another lane');
   const prepared = [];
   for (const target of reserved.result.claimed) {
     const source = eligible.find((item) => chapterKey(item) === chapterKey(target));
+    if (!source || !target.claim) throw new Error(`Missing atomic Grok Bot reservation for ${chapterKey(target)}`);
     const result = prepareGrokbotAssignment(target, source.packet, opts);
     printGrokbotAssignment(target, source, result);
-    prepared.push({ target, source, ...result });
+    prepared.push({ target, source, claim: target.claim, ...result });
   }
   return prepared;
 }
@@ -874,8 +885,27 @@ export function acceptGrokbot(opts) {
     properNounMatcher: loadProperNounMatcher(),
   });
   const bytes = fs.readFileSync(output);
-  const validated = validateCompactPeopleExtraction(JSON.parse(bytes.toString('utf8')), packet, { strictAliasDispositions: true });
-  assertDurableCareerCoverage(validated.normalized, packet);
+  let validated;
+  try {
+    validated = validateCompactPeopleExtraction(JSON.parse(bytes.toString('utf8')), packet, { strictAliasDispositions: true });
+    assertDurableCareerCoverage(validated.normalized, packet);
+  } catch (error) {
+    if (!opts.fromSubmittedPr) throw error;
+    const rejectedDirectory = path.join(PEOPLE_DIR, 'generated', 'grokbot-rejected', target.book);
+    fs.mkdirSync(rejectedDirectory, { recursive: true });
+    const rejectedOutput = path.join(rejectedDirectory, `${target.chapter}.json`);
+    if (fs.existsSync(rejectedOutput)) {
+      throw new Error(
+        `Submitted PR output failed validation and recovery already exists at ` +
+        `${path.relative(REPO_ROOT, rejectedOutput)}: ${error.message}`,
+      );
+    }
+    fs.renameSync(output, rejectedOutput);
+    throw new Error(
+      `Submitted PR output failed validation; preserved it at ` +
+      `${path.relative(REPO_ROOT, rejectedOutput)}: ${error.message}`,
+    );
+  }
   const sha256 = createHash('sha256').update(bytes).digest('hex');
   markRemotePeopleClaims([target], 'ready', {
     ...queueOptions(opts),

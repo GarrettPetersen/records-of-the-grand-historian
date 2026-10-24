@@ -431,6 +431,11 @@ export function localCursorRecoveryTargets() {
   for (const [key, chapterState] of Object.entries(state.chapters ?? {})) {
     if (chapterState.status === 'accepted') continue;
     const target = splitChapterKey(key);
+    // A translation repair can update both the chapter fingerprint and its
+    // reconciled extraction after the chunk scheduler last saved state. The
+    // old accepted chunks remain valuable archives, but a current complete
+    // extraction is publication-ready rather than resumable work.
+    if (extractionIsCurrent(target)) continue;
     if (!hasLocalCursorRecovery(target, chapterState)) continue;
     const chunks = Object.values(chapterState.chunks ?? {});
     if (!fs.existsSync(chapterPath(target.book, target.chapter))) continue;

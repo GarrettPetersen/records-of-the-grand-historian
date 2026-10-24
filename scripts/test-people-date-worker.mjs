@@ -326,6 +326,22 @@ test('semantic rejection continues the same chat with the validator feedback', a
   assert.equal(task.state.validationError, null);
 });
 
+test('rejected repair resends the sealed current packet to its retained chat', async () => {
+  const h = harness();
+  const stale = { changes: [] };
+  h.addAgent('retained-repair', { key: 'repair-0-first', artifact: stale });
+  const task = repairTask();
+  Object.assign(task.state, {
+    agentId: 'retained-repair', sent: true, status: 'rejected',
+    validationError: 'Date repair before-value mismatch', artifactHash: hash(JSON.stringify(stale)),
+  });
+  await h.worker(task);
+  const message = h.calls('send').at(-1)[2];
+  assert.match(message, /This supersedes every earlier repair packet/);
+  assert.match(message, /"claims":\{"claim-1":\[/);
+  assert.match(message, /Date repair before-value mismatch/);
+});
+
 test('invalid JSON is an artifact validation error and is repaired in the retained chat', async () => {
   let malformed = true;
   const h = harness({ wait(run, options, agent) {
@@ -871,6 +887,44 @@ test('repair findings include all affected person dates, hints and check evidenc
   assert.deepEqual(input.units, [...input.units].sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1))));
   assert.deepEqual(input.references, task.report.references);
   assert.deepEqual(task.packet, original);
+});
+
+test('repair findings retain original ownership when prior removals renumber current claims', () => {
+  const task = repairTask();
+  const baselineClaims = [
+    ['p1', 'death', { westernYear: { era: 'AD', year: 170 } }, 'certain', ['u1']],
+    ['p2', 'death', { westernYear: { era: 'AD', year: 200 } }, 'certain', ['u2']],
+    ['p3', 'event-participation', { kind: 'retrospective-reference' }, 'certain', ['u3']],
+  ];
+  task.baselineExtraction = { claims: baselineClaims };
+  task.baselinePacket = {
+    ...task.packet,
+    people: [{ id: 'p1' }, { id: 'p2' }, { id: 'p3' }],
+    items: [
+      ...baselineClaims.map((row, claimIndex) => ({ id: `claim-${claimIndex + 1}`, personId: row[0], claimIndex, evidence: row[4] })),
+      { id: 'hints-p3', personId: 'p3', evidence: [], value: [] },
+    ],
+  };
+  // A prior removal dropped p1, so current claim-3 no longer exists and p3
+  // is now claim-2. The finding must still select p3 and u3.
+  task.extraction = { claims: baselineClaims.slice(1) };
+  task.packet = {
+    ...task.packet,
+    people: [{ id: 'p2' }, { id: 'p3' }],
+    items: [
+      { id: 'claim-1', personId: 'p2', claimIndex: 0, evidence: ['u2'] },
+      { id: 'claim-2', personId: 'p3', claimIndex: 1, evidence: ['u3'] },
+      { id: 'hints-p3', personId: 'p3', evidence: [], value: [] },
+    ],
+  };
+  task.report.findings = [{ items: ['claim-3'], problem: 'Reception lacks its context', action: 'Date the reception only' }];
+  task.report.itemChecks = [];
+  task.report.personChecks = [];
+  const input = dateWorkerInput(task);
+  assert.deepEqual(input.people, [{ id: 'p3' }]);
+  assert.deepEqual(input.items.map(item => item.id), ['claim-2', 'hints-p3']);
+  assert.deepEqual(Object.keys(input.claims), ['claim-2']);
+  assert.deepEqual(input.units.map(unit => unit.id), ['u3']);
 });
 
 test('person-only and hint-only findings also include the complete affected chronology', () => {

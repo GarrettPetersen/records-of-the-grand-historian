@@ -1455,10 +1455,14 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
         mention.person === stale.mention.person &&
         (mention.spans.zh.length > 0 || mention.spans.en.length > 0)
       );
-      const hasRemainingClaim = reconciled.claims.some((claim) =>
+      const remainingClaims = reconciled.claims.filter((claim) =>
         claim.subject === stale.mention.person
       );
-      if (!hasRemainingMention && !hasRemainingClaim) {
+      const hasOnlySameUnitClaims = remainingClaims.length > 0 && remainingClaims.every((claim) =>
+        claim.evidence.length > 0 &&
+        claim.evidence.every((evidence) => claimEvidenceUnit(claim, stale.mention.unit.id))
+      );
+      if (!hasRemainingMention && (remainingClaims.length === 0 || hasOnlySameUnitClaims)) {
         orphanedStalePeople.add(stale.mention.person);
       } else if (hasRemainingUnitContext) {
         unresolvedSpans.push(stale);
@@ -1477,6 +1481,49 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
   });
   reconciled.mentions = reconciled.mentions.filter((mention) =>
     mention.spans.zh.length > 0 || mention.spans.en.length > 0
+  );
+  // A reviewed translation repair can remove the sole displayed name of a
+  // person whose extraction was anchored only in that altered unit.  The
+  // earlier per-span loop retains the record while deciding whether a span can
+  // be remapped, but a record with no surviving mention and no independent
+  // claim witness is not a person record we may carry into the revised packet.
+  // Do this before calculating active IDs so its own now-orphaned claims do
+  // not make it appear supported.
+  const staleUnitsByPerson = new Map();
+  for (const stale of staleSpans) {
+    if (!staleUnitsByPerson.has(stale.mention.person)) staleUnitsByPerson.set(stale.mention.person, new Set());
+    staleUnitsByPerson.get(stale.mention.person).add(stale.mention.unit.id);
+  }
+  const alteredUnitIds = new Set([...previousUnitById.entries()]
+    .filter(([unitId, previous]) => {
+      const current = unitById.get(unitId);
+      return current && ['zh', 'en', 'literal'].some((field) => previous[field] !== current[field]);
+    })
+    .map(([unitId]) => unitId));
+  for (const person of reconciled.people) {
+    if (reconciled.mentions.some((mention) => mention.person === person.localId)) continue;
+    const staleUnits = new Set([
+      ...(staleUnitsByPerson.get(person.localId) ?? []),
+      ...alteredUnitIds,
+    ]);
+    if (staleUnits.size === 0) continue;
+    const ownedClaims = reconciled.claims.filter((claim) => claim.subject === person.localId);
+    const onlyRetiredUnitEvidence = ownedClaims.length === 0 || ownedClaims.every((claim) =>
+      claim.evidence.length > 0 && claim.evidence.every((evidence) => staleUnits.has(evidence.split(':').at(-1)))
+    );
+    const incomingClaims = reconciled.claims.filter((claim) =>
+      claim.subject !== person.localId && nestedStringValues(claim.value).includes(person.localId)
+    );
+    const independentlyWitnessedIncomingClaim = incomingClaims.some((claim) =>
+      claim.evidence.some((evidence) => !staleUnits.has(evidence.split(':').at(-1)))
+    );
+    if (onlyRetiredUnitEvidence && !independentlyWitnessedIncomingClaim) {
+      orphanedStalePeople.add(person.localId);
+    }
+  }
+  reconciled.claims = reconciled.claims.filter((claim) =>
+    !orphanedStalePeople.has(claim.subject) &&
+    !nestedStringValues(claim.value).some((value) => orphanedStalePeople.has(value))
   );
   const activePersonIds = new Set(reconciled.mentions.map((mention) => mention.person));
   for (const claim of reconciled.claims) {
@@ -1950,6 +1997,19 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
           disposition: 'not-person',
           reason: 'place',
           note: 'Headword explicitly glossed as a place name.',
+        });
+        accounted.add(candidate.id);
+        continue;
+      }
+      if (
+        /\bMarquis of[ \t]+$/iu.test(before) &&
+        /\bVillage$/u.test(candidate.exact)
+      ) {
+        reconciled.candidateDispositions.push({
+          candidate: candidate.id,
+          disposition: 'not-person',
+          reason: 'place',
+          note: 'Territorial component of an explicitly labeled village marquisate, not a person.',
         });
         accounted.add(candidate.id);
         continue;

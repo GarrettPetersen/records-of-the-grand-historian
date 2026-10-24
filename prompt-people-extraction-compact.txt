@@ -97,6 +97,17 @@ attestation with `unresolved: true` and a substantive `unresolvedReason`, and us
 `research required: ...` as its active hint. This preserves extraction work but
 blocks independent date approval; it is not a verified chronology. Coverage
 means all source chronology was captured, not that unresolved dates are correct.
+Do not convert a numbered regnal year by simple Gregorian arithmetic: a dynasty's
+year may begin in a non-January lunar month, and a named month can fall in a
+different Western year from the conventional table-year. Use an exact supplied
+mapping only when it covers the stated year and month; otherwise retain a
+source-attested unresolved date or a genuinely supported one-sided/range bound.
+Never turn several discrete dated acts into a continuous activity interval.
+For a later quotation, temple name, genealogy, memorial, or historical example,
+record the passage's date only as that reference's `dateContext`/reception event;
+it does not establish the recalled person's active hint, reign span, birth, or
+death. `before YEAR` excludes that year, while `onOrBefore YEAR` permits it:
+choose the latter when the source leaves an event somewhere within that year.
 When a source unit establishes a person's attestation but contains no date-bearing
 temporal wording, use `undatedSourceAttestation: true` on that attestation and
 leave `a` empty only if it is the person's sole chronology evidence. Do not
@@ -479,3 +490,8 @@ Before finishing:
    to it; do not replace a group of distinct holds with one chapter-wide string.
 6. Validate against the compact schema and write JSON only to the assigned
    output path. Then publish the artifact exactly as instructed by the runner.
+
+Retrospective is the sole later-reception category, including commemorations and
+references after a known death. Use kind `retrospective-reference` or, on a narrower
+honor/work claim, receptionType `retrospective`. Do not require proof of death,
+introduce a posthumous subtype, or change the separate `posthumous-name` alias kind.

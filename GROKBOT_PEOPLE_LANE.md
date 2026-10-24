@@ -45,25 +45,16 @@ work.
    ```bash
    npm run people:grokbot:claim -- --worker grokbot-01 --book <book> --chapter <nnn>
    ```
-3. Use a shallow sparse clone. The full Git history is roughly 10 GiB and the tracked
-   `public/` build assets are not needed by extraction workers. Substitute the assigned
-   book in the final path:
-
-   ```bash
-   git clone --depth 1 --single-branch --branch master --filter=blob:none --sparse \
-     https://github.com/GarrettPetersen/records-of-the-grand-historian.git
-   cd records-of-the-grand-historian
-   git sparse-checkout set scripts data/<book> data/people/chronology \
-     data/people/curation data/people/schema data/people/extractions
-   npm install
-   ```
-
-   Cone-mode sparse checkout includes the small root files and `data/glossary.json`
-   through their parent directories while omitting `public/`, generated people data,
-   and unrelated books. Never give a Grok worker a full-history clone.
-4. Keep one clone or Git worktree per concurrently running bot. Give every bot a stable,
-   unique worker ID such as `grokbot-01`.
-5. Work from `origin/master`. Extraction PRs target
+3. Use the MCP connector below: bots need the installed client, not a repository.
+   One persistent sparse service runtime serves all bots. Do not create clones or
+   worktrees per bot, chapter, chunk or review round. For direct-attachment recovery,
+   the trusted host prepares the assignment in its existing checkout and supplies
+   sealed packets plus unique output paths. Follow `LOCAL_DISK_STRATEGY.md` and run
+   `npm run people:disk:check` before a local batch or workspace change.
+4. Give every bot a stable, unique worker ID such as `grokbot-01`. Reviewers use
+   separate conversations, not separate repository copies. Bots must not switch
+   branches, pull, stage, commit or build in the shared host checkout.
+5. The host prepares current source evidence and owns all Git operations. Extraction PRs target
    `codex/people-glossary-staging-v2`, not `master`, so a chapter does not trigger a
    production deployment.
 
@@ -229,10 +220,12 @@ Give each Grok Bot agent this standing instruction:
 ```text
 Process exactly one 24histories people-glossary chapter at a time.
 
-1. Work in the assigned shallow sparse clone. Switch to master, pull origin/master, and
-   reconstruct the exact sticky claim published by the orchestrator:
+1. Use the host-prepared assignment and unique output paths. Do not clone, create a
+   worktree, copy the repository, switch branches, pull, stage, commit or build. The
+   host reconstructs the exact sticky claim before handing it to you:
    npm run people:grokbot:resume -- --worker YOUR_STABLE_WORKER_ID --book BOOK --chapter NNN
-2. Read the generated assignment file. Create or resume the exact branch named there.
+2. Read the generated assignment file. Resume its sealed inputs and artifact paths;
+   branches and the shared Git index belong exclusively to the host.
 3. Process the assignment's sealed chunks in order. For each chunk, read only
    prompt-people-extraction-compact.txt, that chunk's compact packet, the compact
    extraction schema, and its seeded output. The `output.json` file is an editable
@@ -245,17 +238,16 @@ Process exactly one 24histories people-glossary chapter at a time.
 5. Run each chunk's validation command until it passes. After every chunk passes, run
    the assignment's assembly command; it rejects gaps and overlaps and validates the
    complete chapter.
-6. If terminal Git can push, run the assignment's submission command. Otherwise, run
-   the assembly command and attach the assembled extraction to the trusted orchestrator.
+6. Run the assembly command and attach the assembled extraction to the trusted orchestrator.
    The orchestrator verifies the reported byte count and SHA-256, saves it at the exact
    extraction path, and runs `people:grokbot:accept`. Do not route JSON through a text or
    repository connector that can alter Unicode bytes. Never place credentials in chat or
    configure them in the worker shell.
-7. Stop after submission or attachment. Once the orchestrator has accepted the result
-   and issued a new central claim, start that next chapter in a clean worktree from the
-   latest origin/master. Do not wait for the older ready chapter to reach master.
+7. Stop after attachment. Once the orchestrator has accepted the result and issued a
+   new central claim, reuse the host checkout with that claim's unique artifact paths.
+   Never allocate another checkout. Do not wait for the older ready chapter to reach master.
 
-If interrupted, resume the same bot conversation and branch first. Rerunning the resume
+If interrupted, resume the same bot conversation, claim and artifact paths first. Rerunning the resume
 command with the same worker ID reconstructs its active assignment without mutating the
 ledger or overwriting partial output. Never release or replace an interrupted assignment
 merely to obtain a fresh chapter.

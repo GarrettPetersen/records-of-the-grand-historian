@@ -20,7 +20,6 @@ import {
   editorialDecisionPath,
   mergeEditorialDecisionReview,
   normalizeEditorialDecisionArtifact,
-  validateAppliedEditorialDecisions,
   validateEditorialDecisions,
 } from './lib/people-editorial-decisions.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
@@ -314,8 +313,19 @@ function acceptDecision(document, target, loaded, opts, state, agent, result) {
   let stored = document;
   if (fs.existsSync(file)) {
     const existing = readJson(file);
-    validateAppliedEditorialDecisions(existing, loaded.extraction);
-    stored = mergeEditorialDecisionReview(existing, document);
+    try {
+      validateEditorialDecisions(existing, loaded.extraction, loaded.packet);
+      stored = mergeEditorialDecisionReview(existing, document);
+    } catch {
+      const fingerprint = String(existing.input?.proposalsFingerprint ?? 'unknown')
+        .replace(/^sha256:/u, '').slice(0, 12);
+      const archived = file.replace(/\.json$/u, `.stale-${fingerprint}.json`);
+      writeJsonAtomic(archived, existing);
+      console.warn(
+        `[${target.book}/${target.chapter}] archived stale editorial decisions at ` +
+        `${path.relative(REPO_ROOT, archived)}`,
+      );
+    }
   }
   writeJsonAtomic(file, stored);
   updateState(state, target, {

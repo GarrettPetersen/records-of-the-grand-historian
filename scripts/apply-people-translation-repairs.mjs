@@ -5,12 +5,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
 import {
+  PEOPLE_DIR,
   REPO_ROOT,
   chapterPath,
   extractionPath,
   normalizedChapterId,
   packetPath,
   readJson,
+  sha256,
   writeTextAtomic,
   writeJsonAtomic,
 } from './lib/people-content.mjs';
@@ -55,6 +57,17 @@ const EXPLICIT_NON_PERSON_REASONS = new Set([
   'polity',
   'not-a-name',
 ]);
+const EXPLICIT_MENTION_KINDS = new Set([
+  'personal-name',
+  'courtesy-name',
+  'childhood-name',
+  'religious-name',
+  'temple-name',
+  'posthumous-name',
+  'alternate-name',
+  'title-reference',
+  'kinship-reference',
+]);
 const NON_PREFERRED_NAME_KINDS = new Set([
   'alternate',
   'alternate-name',
@@ -66,6 +79,7 @@ function usage() {
   console.log(`Usage:
   node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN [--extraction PATH] [--decisions PATH]
   node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN --reconcile-current
+  node scripts/apply-people-translation-repairs.mjs --book BOOK --chapter NNN --prepare-candidate-review [--candidate-review-out PATH]
   node scripts/apply-people-translation-repairs.mjs --self-test
 
 Options:
@@ -77,6 +91,16 @@ Options:
                          Assign a new revised-packet candidate to an existing
                          local person using an explicit mention kind. May be
                          repeated; LOCAL_PERSON may be p071 or the full ID.
+  --prepare-candidate-review
+                         Build a sealed, no-write dossier for new candidates
+                         introduced by approved repairs. An independent review
+                         must resolve every listed candidate before application.
+  --candidate-review-out PATH
+                         Where --prepare-candidate-review writes its dossier.
+  --candidate-resolution PATH
+                         Independently authored resolution of a prepared
+                         candidate-review dossier. Defaults to the canonical
+                         editorial-candidate-decisions location when present.
 
 Proposed repairs require a complete, independently authored editorial-decision
 file. The command validates the review before editing, applies only accepted or
@@ -93,6 +117,9 @@ function parseArgs(argv) {
     reconcileCurrent: false,
     candidateDispositions: [],
     candidatePeople: [],
+    prepareCandidateReview: false,
+    candidateReviewOut: null,
+    candidateResolution: null,
     selfTest: false,
   };
   for (let index = 0; index < argv.length; index += 1) {
@@ -107,6 +134,9 @@ function parseArgs(argv) {
     else if (arg === '--extraction') opts.extraction = path.resolve(REPO_ROOT, next());
     else if (arg === '--decisions') opts.decisions = path.resolve(REPO_ROOT, next());
     else if (arg === '--reconcile-current') opts.reconcileCurrent = true;
+    else if (arg === '--prepare-candidate-review') opts.prepareCandidateReview = true;
+    else if (arg === '--candidate-review-out') opts.candidateReviewOut = path.resolve(REPO_ROOT, next());
+    else if (arg === '--candidate-resolution') opts.candidateResolution = path.resolve(REPO_ROOT, next());
     else if (arg === '--candidate-disposition') {
       const value = next();
       const separator = value.lastIndexOf('=');
@@ -145,6 +175,97 @@ function parseArgs(argv) {
     } else throw new Error(`Unknown option: ${arg}`);
   }
   return opts;
+}
+
+function candidateResolutionPath(book, chapter) {
+  return path.join(PEOPLE_DIR, 'editorial-candidate-decisions', book, `${chapter}.json`);
+}
+
+function candidateReviewPath(book, chapter) {
+  return path.join(PEOPLE_DIR, 'generated', 'editorial-candidate-review', book, `${chapter}.json`);
+}
+
+function candidateReviewDossier({ book, chapter, oldPacket, revisedPacket, reviewed, unresolvedCandidates, extraction }) {
+  const candidates = new Map(revisedPacket.preflight.candidates.map((candidate) => [candidate.id, candidate]));
+  const unitById = new Map(revisedPacket.units.map((unit) => [unit.id, unit]));
+  const selected = unresolvedCandidates.map((id) => {
+    const candidate = candidates.get(id);
+    if (!candidate) throw new Error(`Candidate-review preparation lost candidate ${id}`);
+    const unit = unitById.get(candidate.unit);
+    return {
+      ...candidate,
+      context: unit ? { zh: unit.zh, idiomatic: unit.en, literal: unit.literal } : null,
+    };
+  });
+  const input = {
+    chapterFingerprint: revisedPacket.input.chapterFingerprint,
+    proposalsFingerprint: sha256(JSON.stringify(reviewed.reviewedRepairs.map((repair) => ({
+      id: repair.id, unit: repair.unit, field: repair.field, before: repair.before, after: repair.after,
+    })))),
+    originalChapterFingerprint: oldPacket.input.chapterFingerprint,
+  };
+  return {
+    schemaVersion: 1,
+    kind: 'independent-editorial-repair-candidate-review',
+    book,
+    chapter,
+    input,
+    reviewedRepairIds: reviewed.reviewedRepairs.map((repair) => repair.id),
+    candidates: selected,
+    people: extraction.people.map((person) => ({
+      localId: person.localId,
+      preferredNameSuggestion: person.preferredNameSuggestion,
+      identityHints: person.identityHints,
+    })),
+    decisionSeed: {
+      schemaVersion: 1,
+      kind: 'independent-editorial-repair-candidate-resolution',
+      book,
+      chapter,
+      input,
+      candidateDispositions: [],
+      candidatePeople: [],
+    },
+  };
+}
+
+function candidateResolutionFromDocument(document, dossier) {
+  const errors = [];
+  if (document?.schemaVersion !== 1 || document.kind !== 'independent-editorial-repair-candidate-resolution') {
+    errors.push('candidate resolution has the wrong schemaVersion or kind');
+  }
+  if (document?.book !== dossier.book || document?.chapter !== dossier.chapter) {
+    errors.push('candidate resolution scope does not match the prepared dossier');
+  }
+  if (JSON.stringify(document?.input) !== JSON.stringify(dossier.input)) {
+    errors.push('candidate resolution fingerprint does not match the prepared dossier');
+  }
+  const candidateIds = new Set(dossier.candidates.map((candidate) => candidate.id));
+  const people = new Set(dossier.people.map((person) => person.localId));
+  const handled = new Set();
+  const dispositions = document?.candidateDispositions ?? [];
+  const assignments = document?.candidatePeople ?? [];
+  for (const item of [...dispositions, ...assignments]) {
+    if (!candidateIds.has(item?.candidate)) errors.push(`resolution refers to unknown candidate ${item?.candidate}`);
+    if (handled.has(item?.candidate)) errors.push(`candidate ${item?.candidate} is resolved more than once`);
+    handled.add(item?.candidate);
+  }
+  for (const item of dispositions) {
+    if (item?.disposition !== 'not-person' || !EXPLICIT_NON_PERSON_REASONS.has(item?.reason)) {
+      errors.push(`candidate ${item?.candidate} has an invalid non-person disposition`);
+    }
+    if (typeof item?.note !== 'string' || !item.note.trim()) {
+      errors.push(`candidate ${item?.candidate} needs a source-based note`);
+    }
+  }
+  for (const item of assignments) {
+    if (!people.has(item?.person)) errors.push(`candidate ${item?.candidate} refers to unknown local person ${item?.person}`);
+    if (!EXPLICIT_MENTION_KINDS.has(item?.kind)) errors.push(`candidate ${item?.candidate} has invalid mention kind ${item?.kind}`);
+    if (typeof item?.note !== 'string' || !item.note.trim()) errors.push(`candidate ${item?.candidate} needs a source-based note`);
+  }
+  for (const id of candidateIds) if (!handled.has(id)) errors.push(`candidate ${id} has no independent resolution`);
+  if (errors.length > 0) throw new Error(`Candidate-resolution validation failed:\n${errors.map((error) => `- ${error}`).join('\n')}`);
+  return { candidateDispositions: structuredClone(dispositions), candidatePeople: structuredClone(assignments) };
 }
 
 function renumberRepairs(repairs, book, chapter) {
@@ -241,6 +362,30 @@ function claimPersonPairs(claim, people) {
   });
 }
 
+function prunePeopleLeftUnsupportedByApprovedNameRetractions(extraction, retractedNameSubjects) {
+  if (retractedNameSubjects.size === 0) return extraction;
+
+  const personIds = new Set(extraction.people.map((person) => person.localId));
+  const mentioned = new Set(extraction.mentions.map((mention) => mention.person));
+  const unsupported = new Set(extraction.people
+    .filter((person) => retractedNameSubjects.has(person.localId))
+    .filter((person) => !person.mentionException && !mentioned.has(person.localId))
+    .filter((person) => !extraction.claims.some((claim) =>
+      claim.subject === person.localId && claim.predicate === 'name'
+    ))
+    .filter((person) => !extraction.claims.some((claim) =>
+      claim.subject !== person.localId && nestedPersonIds(claim.value, personIds).includes(person.localId)
+    ))
+    .map((person) => person.localId));
+  if (unsupported.size === 0) return extraction;
+
+  return {
+    ...extraction,
+    people: extraction.people.filter((person) => !unsupported.has(person.localId)),
+    claims: extraction.claims.filter((claim) => !unsupported.has(claim.subject)),
+  };
+}
+
 function applyReviewedRelationshipHintChanges(people, originalClaims, finalClaims, reviewed) {
   const personIds = new Set(people.map((person) => person.localId));
   const affectedBefore = originalClaims.filter((claim) =>
@@ -302,6 +447,14 @@ function claimActiveDateHints(claim) {
       const year = westernPointLabel(value.westernYear);
       if (year) hints.push(year);
     }
+    if (value.westernBounds?.onOrBefore) {
+      const bound = westernPointLabel(value.westernBounds.onOrBefore);
+      if (bound) hints.push(`on or before ${bound}`);
+    }
+    if (value.westernBounds?.onOrAfter) {
+      const bound = westernPointLabel(value.westernBounds.onOrAfter);
+      if (bound) hints.push(`on or after ${bound}`);
+    }
     for (const nested of Object.values(value)) {
       if (nested && typeof nested === 'object') visit(nested);
     }
@@ -360,8 +513,9 @@ function describeUnresolvedCandidates(candidateIds, packet) {
 function applyExplicitCandidateDispositions(reconciled, packet, requested) {
   if (requested.length === 0) return reconciled;
   const packetCandidates = new Set(packet.preflight.candidates.map((candidate) => candidate.id));
+  const mentionedCandidates = new Set(reconciled.extraction.mentions.flatMap((mention) => mention.candidateRefs));
   const accounted = new Set([
-    ...reconciled.extraction.mentions.flatMap((mention) => mention.candidateRefs),
+    ...mentionedCandidates,
     ...reconciled.extraction.candidateDispositions.map((item) => item.candidate),
   ]);
   const unresolved = new Set(reconciled.unresolvedCandidates);
@@ -370,6 +524,17 @@ function applyExplicitCandidateDispositions(reconciled, packet, requested) {
       throw new Error(`Explicit candidate disposition is not in the revised packet: ${disposition.candidate}`);
     }
     if (accounted.has(disposition.candidate)) {
+      const existingIndex = reconciled.extraction.candidateDispositions.findIndex((item) =>
+        item.candidate === disposition.candidate,
+      );
+      if (existingIndex >= 0 && !mentionedCandidates.has(disposition.candidate)) {
+        // A repaired translation can reveal that a generic surface was
+        // classified too broadly before its exact local context was checked.
+        // Permit an explicit source-backed replacement, but never displace a
+        // candidate already linked to a person mention.
+        reconciled.extraction.candidateDispositions[existingIndex] = disposition;
+        continue;
+      }
       throw new Error(`Explicit candidate disposition is already accounted for: ${disposition.candidate}`);
     }
     if (!unresolved.has(disposition.candidate)) {
@@ -645,11 +810,14 @@ function selfTest() {
   if (addedReceptionResult !== temporalPeople) {
     throw new Error('Adding a later reference changed active-date hints');
   }
-  expectDecisionFailure(() => applyExplicitCandidateDispositions(
+  const correctedClassification = applyExplicitCandidateDispositions(
     explicitClassification,
     { preflight: { candidates: [{ id: candidateId }] } },
-    [{ candidate: candidateId, disposition: 'not-person', reason: 'polity' }],
-  ), 'already-accounted explicit candidate disposition');
+    [{ candidate: candidateId, disposition: 'not-person', reason: 'place', note: 'Corrected fixture context.' }],
+  );
+  if (correctedClassification.extraction.candidateDispositions[0]?.reason !== 'place') {
+    throw new Error('Explicit candidate disposition did not replace stale classification');
+  }
 
   const renamed = remapMentionSpanThroughEdit(
     { exact: 'Xuan', occurrence: 0, startCodePoint: 17, endCodePoint: 21 },
@@ -992,6 +1160,27 @@ function selfTest() {
   }
   validatePeopleExtraction(reconciled.extraction, revisedPacket);
   validateAppliedEditorialDecisions(decisions, reconciled.extraction);
+  // A source-fresh extractor can omit a person whose only surviving record is an
+  // independently reviewed claim addition.  Recovery must retain the exact prior
+  // person record and reviewed claim instead of silently losing the attestation.
+  const omittedPersonReplacement = {
+    book: extraction.book,
+    chapter: extraction.chapter,
+    people: [],
+    claims: [],
+  };
+  const preservedClaims = preserveAppliedEditorialClaims(
+    decisions,
+    omittedPersonReplacement,
+    extraction,
+  );
+  if (
+    preservedClaims.restored !== 2 ||
+    omittedPersonReplacement.people[0]?.localId !== 'fixture:001:p001' ||
+    !omittedPersonReplacement.claims.some((claim) => claim.value?.roleId === 'scholar')
+  ) {
+    throw new Error('Reviewed claim recovery did not restore an omitted prior person');
+  }
   const compact = compactPeopleExtraction(reconciled.extraction, revisedPacket);
   const compactResult = validateCompactPeopleExtraction(compact, revisedPacket);
   if (compactResult.stats.people !== 1 || compactResult.stats.repairs !== 1) {
@@ -1962,6 +2151,9 @@ export function applyPeopleTranslationRepairs(opts) {
   }
   const decisionDocument = readJson(decisionFile);
   const reviewed = validateEditorialDecisions(decisionDocument, extraction, oldPacket);
+  const retractedNameSubjects = new Set((decisionDocument.claimRetractions ?? [])
+    .filter((retraction) => retraction.claim?.predicate === 'name')
+    .map((retraction) => retraction.claim.subject));
   const retainedRepairs = renumberRepairs([
     ...extraction.translationRepairs.filter((repair) => repair.status === 'applied'),
     ...reviewed.reviewedRepairs,
@@ -2009,12 +2201,41 @@ export function applyPeopleTranslationRepairs(opts) {
     chapterFile,
     properNounMatcher: matcher,
   });
-  const reconciled = applyExplicitCandidateDispositions(
-    assignExplicitCandidatePeople(reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
-      previousPacket: oldPacket,
-    }), revisedPacket, opts.candidatePeople),
+  let reconciled = reconcileExtractionAfterRepairs(reviewedExtraction, revisedPacket, {
+    previousPacket: oldPacket,
+  });
+  const preliminaryDossier = candidateReviewDossier({
+    book: opts.book,
+    chapter: opts.chapter,
+    oldPacket,
+    revisedPacket,
+    reviewed,
+    unresolvedCandidates: reconciled.unresolvedCandidates,
+    extraction: reconciled.extraction,
+  });
+  if (opts.prepareCandidateReview) {
+    const out = opts.candidateReviewOut ?? candidateReviewPath(opts.book, opts.chapter);
+    writeJsonAtomic(out, preliminaryDossier);
+    console.log(
+      `Prepared independent candidate review for ${opts.book}/${opts.chapter}: ` +
+      `${preliminaryDossier.candidates.length} candidate(s) at ${path.relative(REPO_ROOT, out)}.`,
+    );
+    return;
+  }
+  const resolutionFile = opts.candidateResolution ?? candidateResolutionPath(opts.book, opts.chapter);
+  if (reconciled.unresolvedCandidates.length > 0 && fs.existsSync(resolutionFile)) {
+    const resolved = candidateResolutionFromDocument(readJson(resolutionFile), preliminaryDossier);
+    opts.candidateDispositions.push(...resolved.candidateDispositions);
+    opts.candidatePeople.push(...resolved.candidatePeople);
+  }
+  reconciled = applyExplicitCandidateDispositions(
+    assignExplicitCandidatePeople(reconciled, revisedPacket, opts.candidatePeople),
     revisedPacket,
     opts.candidateDispositions,
+  );
+  reconciled.extraction = prunePeopleLeftUnsupportedByApprovedNameRetractions(
+    reconciled.extraction,
+    retractedNameSubjects,
   );
   if (reconciled.unresolvedSpans.length > 0) {
     throw new Error(
