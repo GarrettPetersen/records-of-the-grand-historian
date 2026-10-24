@@ -171,6 +171,7 @@ export function cursorDateWorker(options, control, {
       if (control.stopRequested) throw new Error('Date worker launch stopped; saved work is resumable');
     };
     let agent;
+    let priorRunIds = new Set();
     let delegatedRetry = false;
     let usageSaved = false;
     const wait = async run => {
@@ -254,6 +255,7 @@ export function cursorDateWorker(options, control, {
       if (task.state.agentId) {
         agent = await agentClient.resume(task.state.agentId,{apiKey:options.apiKey});
         const runs = await agentClient.listRuns(agent.agentId,{runtime:'cloud',apiKey:options.apiKey,limit:20});
+        priorRunIds = new Set(runs.items.map(run => run.id));
         await save({sent:Boolean(task.state.sent || runs.items.length)});
         const active = runs.items.find(r=>r.status==='running');
         if (active) {
@@ -306,8 +308,31 @@ export function cursorDateWorker(options, control, {
       assertLaunchAllowed();
       // The shared send helper retries asynchronously. Recheck the stop on each
       // actual send, including retries that wake after another job hits quota.
+      let dispatchAttempted = false;
+      let dispatchError;
       const guardedAgent = new Proxy(agent, { get(target, key, receiver) {
-        if (key === 'send') return (...args) => { assertLaunchAllowed(); return target.send(...args); };
+        if (key === 'send') return async (...args) => {
+          assertLaunchAllowed();
+          // A read timeout does not abort the SDK request. Dispatch once,
+          // before any await; retries only reconcile that accepted run. A late
+          // lookup can therefore never start a turn after the helper exits.
+          if (!dispatchAttempted) {
+            dispatchAttempted = true;
+            try {
+              return await target.send(...args);
+            } catch (error) {
+              dispatchError = error;
+              requestCursorUsageLimitStop(control, error);
+            }
+          }
+          const listed = await agentClient.listRuns(agent.agentId, {
+            runtime: 'cloud', apiKey: options.apiKey, limit: 20,
+          });
+          const accepted = listed.items.filter(run => !priorRunIds.has(run.id));
+          if (accepted.length > 1) throw new Error('Multiple unexpected date runs; preserve the conversation and inspect dispatch ownership');
+          if (accepted.length === 1) return accepted[0];
+          throw dispatchError ?? Object.assign(new Error('Network request acknowledgement is still pending; preserve the date conversation'), { isRetryable: true });
+        };
         return Reflect.get(target, key, receiver);
       } });
       // Treat dispatch as part of the bounded worker operation.  A stalled

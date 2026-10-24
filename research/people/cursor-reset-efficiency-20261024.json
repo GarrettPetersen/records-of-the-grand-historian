@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-24T18:58:39.314Z",
+  "chapter": "jinshu/086",
+  "purpose": "Monthly-reset retained date-review calibration and dispatch fix",
+  "sourceHash": "sha256:57c82651a28b441d3057a4f35574f3f2f709864d2b1c3b45c4aa1ea8596b07d9",
+  "extractionHash": "sha256:6e301dbd391ed60206fff277c2dc910deba679489d724461e47b4848ba59c091",
+  "model": "grok-4.6",
+  "sharedJobSlots": 4,
+  "originalRunCeilings": {
+    "chapterSlots": 2,
+    "sharedJobSlots": 4,
+    "maxUnits": 250,
+    "maxWorkerKiB": 256,
+    "maxRunCostDollars": 3,
+    "maxRunTokens": 4000000,
+    "timeoutMinutes": 20,
+    "maxRounds": 3,
+    "maxAttempts": 3
+  },
+  "results": {
+    "independentlyDateApprovedChapters": 0,
+    "fullyCompletedChapters": 0,
+    "recoveredReviewJobs": 1,
+    "totalReviewJobs": 4,
+    "reportedTokens": 10235959,
+    "reportedRawCostDollars": 14.9611185,
+    "duplicateContinuationTokens": 684000,
+    "duplicateContinuationRawCostDollars": 0.7991865
+  },
+  "findings": [
+    "Lost send acknowledgement caused one duplicate continuation and left two accepted runs outside host monitoring.",
+    "Historical agent IDs were unavailable; original ownership and sealed ranges were retained.",
+    "Per-run ceiling cancellations preserve conversations for continuation rather than restarting research."
+  ],
+  "fix": "At most one dispatch per task invocation. Later helper retries only reconcile newly listed runs; historical runs are excluded. Native quota errors stop launches before recovery reads.",
+  "validation": {
+    "offlineTestsPassed": 86,
+    "independentReviewer": "/root/review_date_send_recovery",
+    "reviewVerdict": "approved corrected draft; no remaining actionable findings",
+    "scope": "Offline mocked SDK operations; live recovery pending."
+  },
+  "publicationStatus": "Process checkpoint only; extraction and date approvals are not implied."
+}
