@@ -132,7 +132,10 @@ if (o['dry-run']) {
     if(today<capacityStart)throw new Error(`Cursor SDK capacity is unavailable until ${capacityStart}; use --recover-only for artifacts without inference`);
   }
   options.apiKey=process.env.CURSOR_API_KEY;
-  if(!o.release && o.lane==='cursor-sdk' && !options.apiKey) throw new Error('CURSOR_API_KEY is missing');
+  // Artifact-only recovery must remain usable after a paid lane is unavailable
+  // or its local credential has been rotated: it only reads retained results and
+  // never asks cursorDateWorker to start or continue a model turn.
+  if(!o.release && !o['recover-only'] && o.lane==='cursor-sdk' && !options.apiKey) throw new Error('CURSOR_API_KEY is missing');
   options.openRouterKey=process.env.OPENROUTER_API_KEY;
   options.openRouterModel=o.model??DEFAULT_OPENROUTER_FREE_MODEL;
   if(!o.release && o.lane==='openrouter' && !o['recover-only']) {
