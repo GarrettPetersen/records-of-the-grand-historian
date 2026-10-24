@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 2,
+  "recordedAt": "2026-10-24T23:08:50.648Z",
+  "analyst": "/root/date_rework_efficiency",
+  "purpose": "Read-only rework diagnosis, not an independent approval or source-complete date audit",
+  "liveInputsChanged": false,
+  "remoteModelCalls": 0,
+  "gatesChanged": false,
+  "artifacts": [
+    {
+      "name": "review-0.json",
+      "sha256": "5c35e13a0aee47f0eb122ac87f4e95305bb0f8df46c74435a1deab86d7d21b44"
+    },
+    {
+      "name": "review-1.json",
+      "sha256": "becd91105502caf4509d34b34909ac3b75c2048d365c1f3536e76464ca803216"
+    },
+    {
+      "name": "review-2.json",
+      "sha256": "8f05ee29a3f259c9b0dd5470e47ed7d0976917fedcbcfa60199dddc933f9df3f"
+    },
+    {
+      "name": "candidate-1.json",
+      "sha256": "9d828a320b7a5bb9e4e888a4f25fa837056df972caa650ff325ef07cb3923fca"
+    },
+    {
+      "name": "candidate-2.json",
+      "sha256": "cae0df46bc4eaf56bb8d262ff0a611d27a0c59d8e214221b3a5166cf0cbbf5aa"
+    },
+    {
+      "name": "candidate-3.json",
+      "sha256": "5f8133a01c0a3c213feb41cceabb6fc1ad79d17f6422a1705b01fdc0d4f1115b"
+    }
+  ],
+  "counts": [
+    {
+      "review": 0,
+      "findings": 56
+    },
+    {
+      "review": 1,
+      "findings": 26
+    },
+    {
+      "review": 2,
+      "findings": 12
+    }
+  ],
+  "candidateMeasures": [
+    {
+      "candidate": 1,
+      "claims": 566,
+      "claimsWithUnresolvedTrue": 102,
+      "claimsWithRepeatedExternalReignTableBoilerplate": 74
+    },
+    {
+      "candidate": 2,
+      "claims": 581,
+      "claimsWithUnresolvedTrue": 146,
+      "claimsWithRepeatedExternalReignTableBoilerplate": 48
+    },
+    {
+      "candidate": 3,
+      "claims": 594,
+      "claimsWithUnresolvedTrue": 181,
+      "claimsWithRepeatedExternalReignTableBoilerplate": 44
+    }
+  ],
+  "identifierWarning": "claim-N IDs are positional and must be resolved in the candidate reviewed by that report. Compare subject/predicate/source evidence across generations, never claim-N alone.",
+  "identifierShiftExample": [
+    {
+      "candidate": 1,
+      "id": "claim-477",
+      "subject": "p209",
+      "predicate": "event-participation",
+      "evidence": [
+        "s0458"
+      ]
+    },
+    {
+      "candidate": 2,
+      "id": "claim-477",
+      "subject": "p221",
+      "predicate": "event-participation",
+      "evidence": [
+        "s0483"
+      ]
+    }
+  ],
+  "round2FindingClassification": [
+    {
+      "findingIndex": 0,
+      "class": "newly detected untouched date rows",
+      "items": [
+        "claim-12",
+        "claim-13"
+      ],
+      "evidence": "Candidate1 and candidate2 both retain Yongning1 / AD301–301 and the repeated external reign-table prose for p012/p013, evidence s0016. Source s0016 itself has no year. Candidate3 changes these to an unresolved post-301 floor. The English table cited by reviewer appears in claim event prose; this does not prove the source-unit English caused the error."
+    },
+    {
+      "findingIndex": 1,
+      "class": "newly detected related-event inconsistency",
+      "items": [
+        "claim-123",
+        "claim-124"
+      ],
+      "evidence": "Round1 finding3 repairs p104 campaign claim120 to315–316 from s0177 自去年九月, but candidate2 still leaves p105/p106 at316–316. Candidate3 synchronizes315–316. Related participants should be checked together before resealing."
+    },
+    {
+      "findingIndex": 2,
+      "class": "newly detected omitted deaths",
+      "people": [
+        "p015",
+        "p016",
+        "p019",
+        "p023",
+        "p045",
+        "p061",
+        "p065",
+        "p083"
+      ],
+      "evidence": "No death predicates for these people in candidate1 or2. Candidate3 adds claims582–589. This is not formatting rework."
+    },
+    {
+      "findingIndex": 3,
+      "class": "later audit rejects a previously proposed bound",
+      "items": [
+        "claim-139",
+        "claim-140",
+        "claim-142",
+        "claim-143",
+        "claim-145"
+      ],
+      "evidence": "Round0 finding12 expressly permits316–318 or unresolved. Candidate1/2 use316–318 bounds. Round2 now requests318 from s0234 是歲…建興六年. This establishes changed review instruction, not which historical interval is ultimately preferable. Do not auto-narrow from this analysis."
+    },
+    {
+      "findingIndex": 4,
+      "class": "prior proposed bound misses strict relative lower endpoint",
+      "items": [
+        "claim-162",
+        "claim-163",
+        "claim-164",
+        "claim-165",
+        "claim-166",
+        "claim-167",
+        "claim-168",
+        "claim-169",
+        "claim-170",
+        "claim-171",
+        "claim-172"
+      ],
+      "evidence": "Round1 finding10 requests320–322; candidate2 follows it. Round2 correctly notices that 明年 after 歲餘 after 太興三年 excludes320. Candidate3 uses after320. A source-sequence check should catch this before another full re-audit."
+    },
+    {
+      "findingIndex": 5,
+      "class": "year-set-equivalent hint representation dispute",
+      "people": [
+        "p125",
+        "p141",
+        "p142"
+      ],
+      "evidence": "Candidate2 claims use after320/onOrBefore322 at year precision and hints print321–322 with the same source qualification. The integer-year set is identical. Candidate3 changes only hint wording to after320/onOrBefore322. This is not proof of a different asserted year; preserve provenance wording and get policy clarification rather than spending repeated turns on equivalent sets."
+    },
+    {
+      "findingIndex": 6,
+      "class": "later audit rejects a previously proposed endpoint",
+      "items": [
+        "claim-144"
+      ],
+      "evidence": "Round0 finding14 expressly permits bounds318–320 or unresolved for Yin Jian. Candidate1/2 implement318–320. Round2 rejects320 because associated Bao-death source is undated. Historical endpoint acceptability requires independent source judgment; the instruction reversal itself is documented."
+    },
+    {
+      "findingIndex": 7,
+      "class": "newly detected event-cluster inconsistency",
+      "items": [
+        "claim-151"
+      ],
+      "evidence": "Candidate1/2 leave Shi arresting Liu Hong as318+ while other claims in the same night/murder cluster use320. Candidate3 changes this to320. This is not unchanged-model-output retry."
+    },
+    {
+      "findingIndex": 8,
+      "class": "newly detected omitted death predicates",
+      "people": [
+        "p137",
+        "p138",
+        "p150"
+      ],
+      "evidence": "No death predicates in candidate1/2; candidate3 adds590–592. Round0 finding23 already discusses p150 execution but requests only date repair, not an explicit death addition: action completeness matters."
+    },
+    {
+      "findingIndex": 9,
+      "class": "newly detected reception omission",
+      "people": [
+        "p126"
+      ],
+      "evidence": "Candidate1/2 have p126 death and age but no recipient-side reception on s0311 私諡曰成. Candidate3 adds claim593."
+    },
+    {
+      "findingIndex": 10,
+      "class": "repair-contract incompleteness on new reception rows",
+      "items": [
+        "claim-477",
+        "claim-478",
+        "claim-479",
+        "claim-480",
+        "claim-481",
+        "claim-482",
+        "claim-483",
+        "claim-484",
+        "claim-485",
+        "claim-486",
+        "claim-487",
+        "claim-488",
+        "claim-489",
+        "claim-490",
+        "claim-491",
+        "claim-497",
+        "claim-498",
+        "claim-514"
+      ],
+      "evidence": "Candidate2 retrospective rows carry one-sided floors without unresolved flags, contrary to the current review instruction for these particular undated sequels. Candidate3 adds nested unresolved dateContext. A general one-sided bound is not inherently an error; retain exact source uncertainty rather than mechanically marking every bound unresolved."
+    },
+    {
+      "findingIndex": 11,
+      "class": "earlier explicitly requested addition still missing",
+      "people": [
+        "p311"
+      ],
+      "evidence": "Round0 finding47 explicitly requests Quan’s destruction. Candidate1 and2 still contain no p311 death predicate; candidate3 adds claim594 on s0713. A per-finding closure ledger should have caught the omission before either later full re-audit."
+    }
+  ],
+  "minimumSafeProcessChanges": [
+    {
+      "priority": 1,
+      "change": "Require repair closure accounting for each finding, including requested additions.",
+      "details": "Resolve every requested change to exact before/after tuples and added subject/predicate/evidence. Reject or hold proposals whose actions remain only in explanatory prose. A related-event consistency checklist should include all supplied participants/hints, but must not auto-copy dates or broaden a repair outside authorized scope. Production validation and a fresh independent full review remain mandatory."
+    },
+    {
+      "priority": 2,
+      "change": "Add read-only semantic year-set comparison for structured bounds versus recognizable hint forms.",
+      "details": "At year precision, after320/onOrBefore322 and321–322 are equivalent sets. Report representation differences separately from actual chronology contradictions; preserve source labels and unresolved status. Do not automatically rewrite sealed packets, interpret arbitrary natural-language hints, or let this check confer approval."
+    },
+    {
+      "priority": 3,
+      "change": "Require a Chinese anchor for every narrowing or newly introduced endpoint.",
+      "details": "Flag 初 rewritten as元年, relative sequencing rewritten as a closed year, and externally inferred table labels without source support. Such detections are triage only because legitimate date context can be outside the cited unit. Resolve cross-unit chronology once per event cluster before fresh independent review."
+    },
+    {
+      "priority": 4,
+      "change": "Deterministically check retained unresolved chronology before approval assembly.",
+      "details": "Candidate3 has181 claims containing unresolved:true, up from102 and146. Current scripts/lib/people-date-audit.mjs:157 prohibits complete approval when any packet temporal container remains unresolved. A reviewer returning supported for such a row will be rejected regardless of other work. Keep full independent review for all units, but explicit unresolved/research-blocked items should not generate futile approval-return/retry loops. Use targeted research or preserve a research hold; do not clear unresolved flags to improve counts."
+    }
+  ],
+  "scopeLimits": [
+    "This report does not adjudicate whether s0234 scopes every preceding relief act to318.",
+    "This report does not decide whether Yin Jian can safely be bounded by320.",
+    "Source statements quoted were spot-checked in current086 Chinese; this is not complete independent chapter coverage.",
+    "Findings counts group multiple items and cannot be interpreted as numbers of factual errors or calibrated false-positive rates.",
+    "All existing seals, conversations, active leases, budgets and publication gates remain unchanged."
+  ],
+  "priorReportSha256": "f16e5a070ed5a279f9bedf3b2d3c5887d9e2aae1233e5eeec7a15a482cd5a8ed",
+  "existingMechanisms": {
+    "revision": "75400a58f52fed3c6e8621bc7a798218a4e09910",
+    "applyDateRepairProposal": "scripts/lib/people-date-workflow.mjs:414 validates source/extraction hashes, nonempty changes, known kinds, exact before values and production constraints. Line419 rejects blocked proposals and requiredHost*/side lists.",
+    "dateRepairJobs": "scripts/lib/people-date-workflow.mjs:342 groups complete findings and preserves ownership. This is not per-finding closure proof.",
+    "noDuplication": "Do not duplicate schema/type/before-value validation. Missing addition accounting is a separate semantic closure concern; avoid building an unrestricted second repair validator."
+  },
+  "recommendedFirstIntervention": {
+    "type": "Scheduling and future-review instruction clarification; no live-input/code change",
+    "action": "After live jobs drain, preserve complete negative/blocked reports. Before another fresh full-chapter re-audit, inspect unresolved-container inventory and perform targeted source research or retain research holds. Candidates with unresolved:true cannot possibly gain approval under unchanged validator; do not repeatedly spend full coverage re-audits expecting approval.",
+    "futureSealedReviewClarification": "When an owned item contains unresolved:true in a temporal container, a no-finding supported approval is structurally invalid. Return a substantive research-blocked check and actionable finding unless primary research actually resolves it; never merely mark supported because the uncertainty is honestly represented.",
+    "followupEngineering": "For future repair plans only, a compact closure receipt mapping immutable finding hashes to exact affected/added tuples can catch unimplemented additions such as p311 death. Test missing additions, compound findings, positional renumbering, unchanged dates with semantic rationale, and research holds. Do not change retained seals or assume matching an item ID proves semantic closure.",
+    "avoid": "Do not implement automatic source chronology inference, blindly replace all unresolved rows with undatedSourceAttestation, clear uncertainty flags, or skip independent complete coverage."
+  }
+}

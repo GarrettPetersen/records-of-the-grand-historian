@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "kind": "read-only-book-scoped-ebook-architecture-review",
+  "revision": "75400a58f52fed3c6e8621bc7a798218a4e09910",
+  "answer": {
+    "currentCodeAllowsVerifiedJinshuGlossaryWhileGlobalCatalogIncomplete": false,
+    "canBuildEbookWithoutGlossary": true,
+    "canBuildExplicitIncompletePreview": true,
+    "canPublishPreviewAsVerified": false,
+    "actualJinshuCompletionNotAssessed": true
+  },
+  "exactBlocker": "Global publishability is decided before product scope is applied. loadPeopleSiteContext returns inactive (catalog-not-publishable) unless every global blocker is zero. Enabling PEOPLE_EBOOK_PREVIEW only creates preview=true; assessEbookPeopleReadiness explicitly refuses ready=true for that context.",
+  "unsafeShortcut": "Do not force active=true/preview=false on the global catalog or remove the preview guard. Selected canonical records contain facts from every merged chapter/book. A ready Jinshu could then display unaudited outside-book birth/death, names, roles, descriptions and family facts. The local readiness function also relies on upstream global editorial/coverage gates that are not restated per chapter.",
+  "references": [
+    {
+      "file": "scripts/generate-ebook.mjs",
+      "line": 50,
+      "claim": "Module-global PEOPLE_EBOOK comes from loadPeopleSiteContext; product selection occurs later."
+    },
+    {
+      "file": "scripts/lib/people-site.mjs",
+      "line": 26,
+      "claim": "Loader reads and checks generation-matched global catalog/site index; lines44-47 use global publishability or explicit preview."
+    },
+    {
+      "file": "scripts/lib/people-publication.mjs",
+      "line": 1,
+      "claim": "Global blockers are pending date audits, missing/legacy chapters and people, proposed translation repairs, unresolved identity candidate blocks."
+    },
+    {
+      "file": "scripts/lib/people-publication.mjs",
+      "line": 26,
+      "claim": "Publishability requires nonempty people, catalog.complete===true, and zero global blockers."
+    },
+    {
+      "file": "scripts/lib/ebook-people-readiness.mjs",
+      "line": 11,
+      "claim": "Inactive global context returns before product-local readiness can qualify it."
+    },
+    {
+      "file": "scripts/lib/ebook-people-readiness.mjs",
+      "line": 29,
+      "claim": "Local checks cover chapter presence, older prompt version and audited/version1 date status, then select canonical people and needs-review flags."
+    },
+    {
+      "file": "scripts/lib/ebook-people-readiness.mjs",
+      "line": 48,
+      "claim": "Even locally passing products cannot be ready from preview context; preview can only activate a non-ready glossary."
+    },
+    {
+      "file": "scripts/compile-people-catalog.mjs",
+      "line": 574,
+      "claim": "Site-index chapter records contain book/chapter, promptVersion, dateAudit and mentions; pending editorial repairs are not a chapter-local readiness field."
+    },
+    {
+      "file": "scripts/compile-people-catalog.mjs",
+      "line": 622,
+      "claim": "canonicalRecord constructs names, preferred name/description, roles, claims and life buckets from every cluster member across books."
+    },
+    {
+      "file": "scripts/compile-people-catalog.mjs",
+      "line": 657,
+      "claim": "Canonical identity needs-review flags come from unresolved identity and legacy-member conditions; they are not a per-source editorial/date certificate."
+    },
+    {
+      "file": "scripts/compile-people-catalog.mjs",
+      "line": 814,
+      "claim": "Compiler derives global resolution graph and unresolved candidate state before creating canonical records."
+    },
+    {
+      "file": "scripts/compile-people-catalog.mjs",
+      "line": 927,
+      "claim": "Pending translation repair count and publication completeness are calculated over the whole corpus."
+    },
+    {
+      "file": "scripts/generate-ebook.mjs",
+      "line": 834,
+      "claim": "buildEbookPeople filters canonical people by product membership but keeps each selected canonical record whole."
+    },
+    {
+      "file": "scripts/generate-ebook.mjs",
+      "line": 2013,
+      "claim": "Glossary mentions are filtered to product scope, but family display pulls targets from global PEOPLE_EBOOK.peopleById."
+    },
+    {
+      "file": "scripts/generate-ebook.mjs",
+      "line": 2076,
+      "claim": "Glossary entry renders global person description, life summary, roles, aliases and family facts; filtering references alone does not isolate provenance."
+    },
+    {
+      "file": "scripts/generate-ebook.mjs",
+      "line": 2710,
+      "claim": "Generator reports inactive glossary or ready/preview QA separately from ebook construction; it can build an ebook without an active glossary."
+    },
+    {
+      "file": "scripts/lib/ebook-people-readiness.mjs",
+      "line": 77,
+      "claim": "Required-glossary QA rejects inactive and preview output; its explicit comment says it verifies report structure, not independent claim qualification or EPUB provenance."
+    },
+    {
+      "file": "scripts/validate-ebook.mjs",
+      "line": 85,
+      "claim": "Require-people-glossary mode additionally checks current date audits for manifest-derived scope."
+    },
+    {
+      "file": "scripts/validate-ebook.mjs",
+      "line": 1240,
+      "claim": "Validator checks required glossary readiness plus entry/index/link/backlink/snippet counts."
+    },
+    {
+      "file": "scripts/lib/ebook-current-date-audits.mjs",
+      "line": 7,
+      "claim": "Authoritative product scope and ordered chapter list must match manifest; current-date helper validates every product chapter."
+    },
+    {
+      "file": "scripts/lib/people-editorial-decisions.mjs",
+      "line": 445,
+      "claim": "Applied-editorial validator enforces reviewed repair history and rejects an extractor reviewing its own editorial proposals."
+    },
+    {
+      "file": "scripts/lib/people-corpus.mjs",
+      "line": 85,
+      "claim": "Validated corpus loading checks each extraction against a fresh chapter packet and authoritative source coverage."
+    },
+    {
+      "file": "scripts/test-ebook-people-readiness.mjs",
+      "line": 37,
+      "claim": "Existing regression deliberately forbids locally complete products from promoting globally incomplete preview data."
+    }
+  ],
+  "pureCanonicalFunctionEvidence": {
+    "method": "Import only the exact canonical standalone publication/readiness module strings through in-memory data URLs. Synthetic locally ready Jinshu fixture plus one missing unrelated chapter; no filesystem corpus reads or mutation.",
+    "globalPublishable": false,
+    "cases": {
+      "globallyGated": {
+        "active": false,
+        "ready": false,
+        "preview": false,
+        "reason": "catalog-not-publishable"
+      },
+      "previewBlocked": {
+        "active": false,
+        "ready": false,
+        "preview": false,
+        "reason": "people-catalog-preview"
+      },
+      "previewAllowed": {
+        "active": true,
+        "ready": false,
+        "preview": true,
+        "reason": null
+      },
+      "syntheticUngatedLocalPredicate": {
+        "active": true,
+        "ready": true,
+        "preview": false,
+        "reason": null
+      }
+    }
+  },
+  "smallestSafeDesign": {
+    "recommendation": "Add a separate scope-qualified ebook publication context, leaving the global site loader and global completeness contract unchanged. To make Jinshu-only gates sufficient, compile rendered facts from Jinshu scope rather than filtering whole globally aggregated person records.",
+    "steps": [
+      "Use authoritative ordered ebook manifest scope (all 130 Jinshu chapters for a complete Jinshu product); never derive required coverage from successful extraction/index entries. Keep explicit volume scope if a product is a volume.",
+      "Keep the fresh global identity graph and accepted conservative resolution decisions for canonical IDs and ambiguity checks. Any unresolved review pair touching a Jinshu local/canonical person still blocks that product, including outside-book homonyms; a validated possible-same-as preserves separate people.",
+      "Reuse canonical record construction on only scoped factual members/claims, while retaining their globally resolved canonical IDs. Scope every rendered source-derived field: preferred label/override support, aliases, descriptions, roles, life facts and age derivations, family edges/inverses, and references. Preserve claim/evidence provenance; do not trim only references from a full global canonical record.",
+      "Build family edges and derived inverse relationships from scoped source facts after projection. Resolve every rendered target from scoped supported people; if an explicitly imported outside-scope label/fact is required, add its exact source chapters as gated dependencies rather than silently importing it.",
+      "Require fresh production extraction validation and complete current prompt coverage, zero pending translation proposals, valid independent applied-editorial history, current independently approved date reports and reference evidence, and no relevant unresolved identity pairs. Do not change report hashes, accepted source/extraction pins, or independence rules.",
+      "Write a distinct versioned scope manifest/certificate and matching catalog/site-index generation through existing generated-data shard loaders/writers. Record authoritative scope, source/extraction/decision fingerprints, gate evidence and identity-generation identity. Do not set the global catalog complete flag.",
+      "Load that context per ebook product, not from the current module-global PEOPLE_EBOOK. Pass its context into chapter links and family rendering so global person lookup cannot leak back into scoped output. Cache by exact scope/fingerprints if needed.",
+      "Feed the certified non-preview context to existing readiness/rendering. Strengthen scope loading to reject missing or invalid prompt versions and count metadata. Validate current scope certificate plus existing required-glossary EPUB/link/mention/backlink checks before publication; QA sidecars alone are not gate evidence."
+    ],
+    "whyNotOnlyReadinessChange": "The existing local readiness predicate has no pending-translation-repair count, independent applied-editorial history, or per-fact provenance projection. Its safety depends on the upstream global gate. Changing a boolean would remove that protection.",
+    "smallerButConditionalAlternative": "If retaining globally aggregated facts is preferred, gate the complete dependency closure of every rendered person/name/life/family fact. That can permit unrelated books to remain incomplete, but Jinshu-only approval is insufficient when its displayed records depend on unaudited outside-book chapters. It does not fully deliver independent Jinshu release cadence."
+  },
+  "meaningfulTestsNeeded": [
+    "Complete scoped Jinshu plus unrelated missing/unaudited/unresolved other-book data publishes a required glossary; the global website remains gated and the existing preview-promotion test continues to reject raw global preview.",
+    "Authoritative complete-book scope detects a missing Jinshu chapter, a skipped chapter, duplicates/reordering, and forged product/QA scope; explicit volume products cannot claim whole-book completion.",
+    "Each Jinshu gate independently blocks: legacy/missing prompt metadata, stale source/extraction, pending translation repair, rejected repair applied, invalid editorial history or same-context editorial review, unaudited/failed/stale date report, stale secondary references, and relevant unresolved identity pair.",
+    "Unresolved same-name pair against an outside-book person still blocks Jinshu; unrelated outside-book unresolved pairs do not. Reviewed possible-same-as keeps its two people separate and never merges them.",
+    "Global shared canonical person has an outside-book-only birth date, alias, role, descriptor and family edge from an unaudited chapter; none leak into the scoped rendered entry. Its canonical ID and in-book supported facts/links remain stable.",
+    "Outside-source-only preferred-name override or inverse family fact either becomes an explicit fully gated dependency or fails scoped support checks; unresolved/missing family targets fail rather than disappear.",
+    "Mismatched scope/generation/prompt version, missing scope certificate, modified source/extraction/editorial/resolution/date evidence after compilation, or altered artifact hashes fail freshness checks.",
+    "Real EPUB required-glossary integration verifies every expected person, index target, English mention link, Chinese/English source snippet and backlink; no links target removed global entries.",
+    "PEOPLE_EBOOK_PREVIEW and allow-preview cannot satisfy required-glossary mode. A forged ready QA sidecar cannot replace a current scope certificate and current date/identity/editorial gates.",
+    "Global publication behavior and fully complete-corpus ebook behavior remain unchanged; no re-extraction, paid runner, automatic identity relaxation or approval-hash rewriting is introduced."
+  ],
+  "limits": [
+    "Architecture only. No code implementation, canonical data, generated catalog build, deployment, or model calls were performed.",
+    "No statement that Jinshu currently passes all gates; this investigates what would happen if those scoped gates passed.",
+    "The corpus-wide resolution graph must remain current for identities used by the book; this design does not waive relevant cross-book identity review."
+  ],
+  "canonicalCodeEvidence": [
+    {
+      "file": "scripts/lib/ebook-people-readiness.mjs",
+      "byteHash": "sha256:e85a4b9e4b1a0be49828454d39f990204e5f307f5957aaefb5a51f6e8321f0db"
+    },
+    {
+      "file": "scripts/lib/people-publication.mjs",
+      "byteHash": "sha256:c444415dea770b82979fe12c235547489f72bf2feca9c95d0b89a251066cfe86"
+    },
+    {
+      "file": "scripts/generate-ebook.mjs",
+      "byteHash": "sha256:de676142c12b04ddc694b5caad9ccd62aaefa371eae833ab935adfa5e545c679"
+    },
+    {
+      "file": "scripts/lib/people-site.mjs",
+      "byteHash": "sha256:0a779926bf72fc5df6b49c4bc4e410d35de815a82cdc04d2e8b5231ffcbf7465"
+    },
+    {
+      "file": "scripts/compile-people-catalog.mjs",
+      "byteHash": "sha256:5553911577ec02e84f6d7ad62932db28489090808fbd8ab31e966980325ba63d"
+    },
+    {
+      "file": "scripts/validate-ebook.mjs",
+      "byteHash": "sha256:e694b12dd7c7312e6be5908eec283481ddfac261d7ce2dbbfb25bb922da005e4"
+    },
+    {
+      "file": "scripts/lib/ebook-current-date-audits.mjs",
+      "byteHash": "sha256:21af39144d38dcde6b5e362480a81b9826b83f7f68128862eea195ce3c3e42be"
+    },
+    {
+      "file": "scripts/lib/people-editorial-decisions.mjs",
+      "byteHash": "sha256:cc76bdad14744319757beae259f8e61a41463617c00337a3c14a7a5652cb5ed2"
+    },
+    {
+      "file": "scripts/lib/people-corpus.mjs",
+      "byteHash": "sha256:5657c7becda4071c6cba95cc762d4e7777846f6f102540f05ef8339bb6bdb11d"
+    },
+    {
+      "file": "scripts/test-ebook-people-readiness.mjs",
+      "byteHash": "sha256:4c5053ca0a6f79bd4f6e3bf6500222541f50a0e589f4c3dc4ca58bfaf4cb7be9"
+    }
+  ]
+}
