@@ -1,5 +1,17 @@
 # AGENTS.md
 
+## Completion-first orchestration
+
+Follow `PEOPLE_COMPLETION_PROCESS.md` before scheduling glossary work. It supersedes
+old extraction-wave quotas and minimum extraction-batch sizes for identity work.
+First prove a live nonempty chapter (continue the existing Jinshu 053 owner/work).
+Pin source/editorial/date inputs, finish only identity pairs touching that chapter,
+and explicitly reconcile expansion instead of recursively completing the corpus.
+No new broad extraction wave until this path is proven; preserve/drain existing
+claims. Do not weaken identity, chronology or publication gates. Report zero-person
+reviews, data-qualified chapters and live published nonempty chapters separately.
+A passing build or empty extraction is not the nonempty acceptance test.
+
 ## Local disk conservation
 
 Before any local batch or workspace change, run `npm run people:disk:check`.
