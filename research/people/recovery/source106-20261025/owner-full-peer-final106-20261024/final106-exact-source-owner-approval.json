@@ -1,0 +1,79 @@
+{
+  "schema": "independent-final-exact-source-owner-approval-v1",
+  "createdAt": "2026-10-25T06:55:30.710627+00:00",
+  "reviewer": "/root/jin053_full_owner_peer",
+  "decision": "APPROVE exact final source and ownership/extraction candidate; no date approval",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "053",
+    "sourceUnits": 209,
+    "people": 73,
+    "claims": 559,
+    "mentions": 558
+  },
+  "baselineRevision": "fe23b5c8f6aefd758dbd53834819d8fee74213c4",
+  "exactApprovedInputs": [
+    {
+      "name": "sealed-final106-manifest.json",
+      "sha256": "248c8d9692bd06df4207a8766611060be3f7248982ab384602284fb7e2493c95"
+    },
+    {
+      "name": "final-source106.json",
+      "sha256": "5d4005b63b036a2c4edce99124189d56fedc90d92eb4a77280d284d012101fd8"
+    },
+    {
+      "name": "minified-final-extraction106.compact.json",
+      "sha256": "a2edb1ef6c0a73e907a8380e637bb041a20bb5975ee087e6c89a689d49446a9d"
+    },
+    {
+      "name": "final-editorial106.json",
+      "sha256": "7c00adb57131899302bc6dc4416f3ea2b3a4eaddd367a7556b513d185dd69a7b"
+    },
+    {
+      "name": "final106-complete-lineage.json",
+      "sha256": "01eeb432b88b8fdbeba0626759c7298d49152cecc5c42f87e7a48712fd6c5bfc"
+    }
+  ],
+  "reviewChain": [
+    {
+      "receipt": "owner-full-peer-source-20261024/blind-source-review.json",
+      "sha256": "2c4700c48e08f492e4386493047059bae0fa3d3fc4a898b1ce72f2583586e588"
+    },
+    {
+      "receipt": "owner-full-peer-final104-20261024/final104-independent-review.json",
+      "sha256": "c5c02ca9e016ea2e1760dd7db70aec6267dafa654595ddfe3aad69790d52cb07"
+    }
+  ],
+  "exactDeltaFindings": {
+    "source": "Against independently read104source, only s0097 literal and idiomatic strings changed. Both now read: His Majesty gives you wine to drink, yet you refuse. Is there something harmful in it? This correctly translates the imperial designation and harmful-substance question.",
+    "ownership": "Exactly one new idiomatic title-reference: s0097 His Majesty occurrence0 belongs p002 Emperor Hui. All previous final104 surfaces/owners unchanged.",
+    "extraction": "People, claims, run metadata and unrelated fields unchanged; expected input fingerprints refreshed.",
+    "translationRepairs": "130 applied rows:24old+106new. First24 exactly preserved. Relative to104projection, the only changes in existing128 rows are reason field4 for seven newly decided proposals (indices121-127). All before/after English strings unchanged there; two actual s0097 rows appended.",
+    "editorial": "Complete real document has7components, decision counts[8,14,2,97,2,5,2]. Old3 exact ordered prefix preserved; actual97/2/5/2 decisions validated by normal production editorial APIs.",
+    "oldFourSemanticFacts": "Old review component with4claimRevisions preserved identically; exact baseline validateAppliedEditorialDecisions passes current final extraction, preserving the actual corrected semantic contracts regardless of renumbered claim locators."
+  },
+  "independentVerification": {
+    "allManifestAttachmentHashesAndByteCounts": "PASS",
+    "exactBaselineStrictProductionValidator": "PASS with strictAliasDispositions true through read-only Git-pinned baselineApi",
+    "actualEditorialDocumentSchemaAndAppliedDecisions": "PASS",
+    "old71PersonIds": "all retained",
+    "runMetadata": "identical to baseline",
+    "old24RepairPrefix": "identical",
+    "old3EditorialHistoryPrefix": "identical",
+    "completeLineage": "1084groups; all553oldclaim locators and559newclaim locators covered exactly once; all518oldmention locators and558newmention locators covered exactly once",
+    "oldFullReview": "All209Chinese/literal/idiomatic units, allclaim subjects/evidence/inbound targets and all final104span owners reviewed; final106delta adds no unreviewed unchanged scope."
+  },
+  "primaryIdentityConfirmation": {
+    "witnessReceiptSha256": "c7d60ce9df0259281913a94333864e161e51573bbcc81c785a5af6140a07cf8a",
+    "gitSource": "data/jinshu/040.json at baseline",
+    "gitSourceSha256": "a7f9a6fd85718e6ddaa2383c7c06ec01d0dded689b32d51c4c411fc33da71f48",
+    "finding": "Independently read Jin040s0172 identifies Jia’s mother Guo as Lady of Yicheng; Jin053s0034 names Jia’s mother Guo Huai. p033GuoHuai and p056LadyYicheng are supported as the same individual. False p056parent-ofLadyXie edge and descriptive maternal label are correctly removed. Both local IDs remain intact pending ordinary reviewed canonical identity reconciliation; no canonical merge applied by this receipt."
+  },
+  "remainingSourceOwnershipDefects": [],
+  "limits": [
+    "Approval binds only exact hashes above; source/extraction changes require affected review.",
+    "This is independent source/ownership approval, not chronology/date approval, canonical identity publication approval, global CI, staging or deployment approval.",
+    "Prior date audit must become stale naturally; never rehash its approval."
+  ],
+  "workspaceActions": "Only isolated peer receipts written; no Git/index/branch/canonical/locks/queue/build changes."
+}
