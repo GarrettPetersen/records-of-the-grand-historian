@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -13,6 +14,7 @@ import {
   writeJsonAtomic,
   writeTextAtomic,
 } from './lib/people-content.mjs';
+import { assertPeopleSiteCertificate } from './lib/people-certified-site.mjs';
 import { loadPeopleSiteContext } from './lib/people-site.mjs';
 import { personClaimReception } from './lib/people-reception.mjs';
 import { boundedDateLabel } from './lib/people-date-values.mjs';
@@ -45,9 +47,10 @@ const CLAIM_PREVIEW_COUNT = 6;
 const REFERENCE_FILTER_THRESHOLD = 8;
 const PEOPLE_ASSET_VERSION = '20260815-people-record-v6';
 const PEOPLE_SEARCH_ASSET_VERSION = '20260909-people-search-v2';
-const PEOPLE_FAMILY_SOURCE = path.join(REPO_ROOT, 'scripts', 'assets', 'people-family.js');
-const FAMILY_CHART_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'family-chart', 'dist');
-const D3_PACKAGE = path.join(REPO_ROOT, 'node_modules', 'd3', 'dist', 'd3.min.js');
+const require = createRequire(import.meta.url);
+const PEOPLE_FAMILY_SOURCE = fileURLToPath(new URL('./assets/people-family.js', import.meta.url));
+const FAMILY_CHART_PACKAGE = path.dirname(require.resolve('family-chart'));
+const D3_PACKAGE = path.resolve(path.dirname(require.resolve('d3')), '..', 'dist', 'd3.min.js');
 const periodCache = new WeakMap();
 const referenceStatsCache = new WeakMap();
 const lifeSummaryCache = new WeakMap();
@@ -1149,11 +1152,10 @@ function writePersonPageShards(outputRoot, people, context) {
   }
   let written = 0;
   for (let index = 0; index < buckets.length; index += 1) {
-    if (!buckets[index].length) continue;
     const pages = Object.fromEntries(buckets[index].map((person) => [person.slug, generatePersonHtml(person, context)]));
     writeTextAtomic(
       path.join(pagesDir, `${String(index).padStart(4, '0')}.json`),
-      `${JSON.stringify({ v: 1, pages })}\n`,
+      `${JSON.stringify({ v: 2, certification: { inputs: context.certificate.inputs, projection: context.certificate.projection }, pages })}\n`,
     );
     written += 1;
   }
@@ -1236,6 +1238,9 @@ function writeSearchData(outputRoot, people, context) {
     preview: context.preview,
     published: context.active && !context.preview,
     people: people.length,
+    publication: context.publication,
+    certificate: context.certificate,
+    globalBlockers: context.globalStats,
     pageShards: context.pageShards ?? 0,
     redirectShards: context.redirectShards ?? 0,
     personIdRedirects: context.personIdRedirects ?? 0,
@@ -1402,8 +1407,7 @@ function generateIndexHtml(people, context, collections) {
 </html>`;
 }
 
-export function generatePeoplePages(options = parseArgs([])) {
-  const context = loadPeopleSiteContext({ allowMissing: true });
+function generatePeoplePagesInto(options, context) {
   if (!context.active) {
     cleanOwnedOutput(options.outputRoot);
     console.log(`people pages: skipped (${context.reason})`);
@@ -1453,6 +1457,61 @@ export function generatePeoplePages(options = parseArgs([])) {
     preview: context.preview,
     people: allPeople.length,
   };
+}
+
+
+export function generatePeoplePages(options = parseArgs([])) {
+  const context = loadPeopleSiteContext({ allowMissing: true });
+  if (!context.active) {
+    cleanOwnedOutput(options.outputRoot);
+    console.log(`people pages: skipped (${context.reason})`);
+    return { generated: 0, active: false, reason: context.reason,
+      publication: context.publication ?? null };
+  }
+  if (!context.certificate || !context.publication || !context.globalStats) {
+    throw new Error('Active website generation requires current certified scope evidence');
+  }
+  if (options.person || options.limit) {
+    throw new Error('Certified website artifacts require the complete qualified scope; person/limit subsets are unsupported');
+  }
+  fs.mkdirSync(path.dirname(options.outputRoot), { recursive: true });
+  const staging = fs.mkdtempSync(path.join(path.dirname(options.outputRoot), '.people-publication-'));
+  try {
+    const result = generatePeoplePagesInto({ ...options, outputRoot: staging }, context);
+    assertPeopleSiteCertificate(context.certificate);
+    // A deployment publishes the completed build artifact atomically. Local
+    // replacement also restores the previous owned files if any rename fails.
+    const targets = ['people', 'vendor/family-chart', 'people-family.js', 'data/people'];
+    const backup = fs.mkdtempSync(path.join(path.dirname(options.outputRoot), '.people-previous-'));
+    const moved = [];
+    const installed = [];
+    let backupMayBeRemoved = false;
+    try {
+      for (const relative of targets) {
+        const destination = path.join(options.outputRoot, relative);
+        const previous = path.join(backup, relative);
+        fs.mkdirSync(path.dirname(destination), { recursive: true });
+        if (fs.existsSync(destination)) {
+          fs.mkdirSync(path.dirname(previous), { recursive: true });
+          fs.renameSync(destination, previous);
+          moved.push(relative);
+        }
+        fs.renameSync(path.join(staging, relative), destination);
+        installed.push(relative);
+      }
+      backupMayBeRemoved = true;
+    } catch (error) {
+      for (const relative of installed.reverse()) fs.rmSync(path.join(options.outputRoot, relative), { recursive: true, force: true });
+      try {
+        for (const relative of moved.reverse()) fs.renameSync(path.join(backup, relative), path.join(options.outputRoot, relative));
+        backupMayBeRemoved = true;
+      } catch (recoveryError) {
+        throw new AggregateError([error, recoveryError], `People publication rollback failed; preserve recovery assets at ${backup}`);
+      }
+      throw error;
+    } finally { if (backupMayBeRemoved) fs.rmSync(backup, { recursive: true, force: true }); }
+    return { ...result, publication: context.publication ?? null };
+  } finally { fs.rmSync(staging, { recursive: true, force: true }); }
 }
 
 if (isMain) {

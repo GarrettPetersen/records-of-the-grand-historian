@@ -240,6 +240,10 @@ assert.match(searchText, /許縣/u);
 assert.match(searchText, /208/u);
 assert.doesNotMatch(searchText, /sanguozhi|explicit|appointed/u);
 
+const certification = { inputs: 'sha256:fixture-inputs', projection: 'sha256:fixture-projection' };
+const fixtureStatus = { published: true, preview: false, publication: { mode: 'certified-scope' },
+  certificate: { kind: 'certified-website-people', ...certification } };
+const certifiedShard = pages => ({ v: 2, certification, pages });
 const slug = 'fan-ye-fixture';
 const expectedShard = personPageShardName(slug);
 const context = {
@@ -248,9 +252,10 @@ const context = {
   env: {
     ASSETS: {
       async fetch(request) {
+        if (new URL(request.url).pathname === '/data/people/site-status.json') return Response.json(fixtureStatus);
         assert.equal(new URL(request.url).pathname, `/data/people/pages/${expectedShard}.json`);
         assert.equal(request.method, 'GET');
-        return Response.json({ v: 1, pages: { [slug]: '<!DOCTYPE html><h1>Fan Ye</h1>' } });
+        return Response.json(certifiedShard({ [slug]: '<!DOCTYPE html><h1>Fan Ye</h1>' }));
       },
     },
   },
@@ -274,8 +279,10 @@ const redirectEnv = {
   ASSETS: {
     async fetch(request) {
       const pathname = new URL(request.url).pathname;
+      if (pathname === '/data/people/site-status.json') return Response.json(fixtureStatus);
+      if (pathname === `/data/people/pages/${personPageShardName(canonicalSlug)}.json`) return Response.json(certifiedShard({ [canonicalSlug]: '<h1>Fan Ye</h1>' }));
       if (pathname === `/data/people/pages/${personPageShardName(retiredSlug)}.json`) {
-        return Response.json({ v: 1, pages: {} });
+        return Response.json(certifiedShard({}));
       }
       assert.equal(pathname, `/data/people/redirects/${personPageShardName(retiredSuffix)}.json`);
       return Response.json({ v: 1, redirects: { [retiredSuffix]: canonicalSlug } });
@@ -304,12 +311,16 @@ const missing = await onRequestGet({
   env: {
     ASSETS: {
       async fetch(request) {
+        if (new URL(request.url).pathname === '/data/people/site-status.json') return Response.json(fixtureStatus);
         return new URL(request.url).pathname.includes('/pages/')
-          ? Response.json({ v: 1, pages: {} })
+          ? Response.json(certifiedShard({}))
           : new Response(null, { status: 404 });
       },
     },
   },
 });
 assert.equal(missing.status, 404);
+const uncertified = await onRequestGet({ ...context,
+  env: { ASSETS: { async fetch() { return Response.json({ v: 1, pages: { [slug]: '<h1>Uncertified</h1>' } }); } } } });
+assert.equal(uncertified.status, 503);
 console.log('people edge page tests: ok');

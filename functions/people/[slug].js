@@ -48,9 +48,22 @@ async function personResponse(context) {
     console.error(JSON.stringify({ event: 'people-shard-invalid-json', slug, error: String(error) }));
     return htmlResponse('<h1>People index temporarily unavailable</h1>', 503);
   }
-  if (shard.v !== 1 || !shard.pages || typeof shard.pages !== 'object') {
+  if (shard.v !== 2 || !shard.pages || typeof shard.pages !== 'object') {
     console.error(JSON.stringify({ event: 'people-shard-invalid', slug }));
     return htmlResponse('<h1>People index temporarily unavailable</h1>', 503);
+  }
+  {
+    const response = await context.env.ASSETS.fetch(new Request(new URL('/data/people/site-status.json', context.request.url)));
+    if (!response.ok) return htmlResponse('<h1>People certification unavailable</h1>', 503);
+    let status;
+    try { status = await response.json(); }
+    catch { return htmlResponse('<h1>People certification unavailable</h1>', 503); }
+    if (!status.published || status.preview || status.publication?.mode !== 'certified-scope' || status.certificate?.kind !== 'certified-website-people' ||
+        !shard.certification?.inputs || !shard.certification?.projection ||
+        shard.certification.inputs !== status.certificate.inputs ||
+        shard.certification.projection !== status.certificate.projection) {
+      return htmlResponse('<h1>People certification unavailable</h1>', 503);
+    }
   }
   const html = shard.pages[slug];
   if (typeof html === 'string') return htmlResponse(html);
@@ -79,6 +92,19 @@ async function personResponse(context) {
   if (!SLUG_PATTERN.test(canonicalSlug) || canonicalSlug === slug) {
     console.error(JSON.stringify({ event: 'people-redirect-target-invalid', slug, canonicalSlug }));
     return htmlResponse('<h1>People index temporarily unavailable</h1>', 503);
+  }
+  {
+    const targetResponse = await context.env.ASSETS.fetch(new Request(new URL(
+      `/data/people/pages/${personPageShardName(canonicalSlug)}.json`, context.request.url)));
+    if (!targetResponse.ok) return htmlResponse('<h1>People redirect target unavailable</h1>', 503);
+    let target;
+    try { target = await targetResponse.json(); }
+    catch { return htmlResponse('<h1>People redirect target unavailable</h1>', 503); }
+    if (target.v !== 2 || typeof target.pages?.[canonicalSlug] !== 'string' ||
+        target.certification?.inputs !== shard.certification.inputs ||
+        target.certification?.projection !== shard.certification.projection) {
+      return htmlResponse('<h1>People redirect target unavailable</h1>', 503);
+    }
   }
   return permanentRedirect(context.request.url, canonicalSlug);
 }

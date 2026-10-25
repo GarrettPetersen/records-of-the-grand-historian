@@ -49,5 +49,8 @@ jobs:
       - name: Test certified ebook people provenance and publication gates
         run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
 
+      - name: Test certified website people publication
+        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs
+
       - name: Build and validate the full site
         run: npm run build
