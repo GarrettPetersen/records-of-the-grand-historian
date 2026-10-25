@@ -1,0 +1,1927 @@
+diff --git a/.github/workflows/master-build-gate.yml b/.github/workflows/master-build-gate.yml
+--- a/.github/workflows/master-build-gate.yml
++++ b/.github/workflows/master-build-gate.yml
+@@ -41,5 +41,13 @@
+       - name: Test Cursor date-worker recovery
+         run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
+ 
++      - name: Install ebook publication verification tools
++        run: |
++          sudo apt-get update
++          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
++
++      - name: Test certified ebook people provenance and publication gates
++        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
++
+       - name: Build and validate the full site
+         run: npm run build
+diff --git a/scripts/compile-people-catalog.mjs b/scripts/compile-people-catalog.mjs
+--- a/scripts/compile-people-catalog.mjs
++++ b/scripts/compile-people-catalog.mjs
+@@ -1,12 +1,13 @@
+ #!/usr/bin/env node
+ 
+ import crypto from 'node:crypto';
++import { identityInputSeal, peopleDigest } from './lib/people-identity-seal.mjs';
+ import { dateAuditStatus } from './lib/people-date-audit.mjs';
+ import path from 'node:path';
+ import { fileURLToPath } from 'node:url';
+ import { buildPeopleResolutionCandidateDocument } from './build-people-resolution-candidates.mjs';
+ import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
+-import { PEOPLE_DIR, REPO_ROOT, readJson } from './lib/people-content.mjs';
++import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
+ import {
+   writePeopleCatalog,
+   writePeopleResolutionCandidates,
+@@ -571,7 +572,7 @@
+   );
+ }
+ 
+-function buildPeopleSiteIndex(corpus, catalog) {
++function buildPeopleSiteIndex(corpus, catalog, getDateStatus = dateAuditStatus) {
+   const personById = new Map(catalog.people.map((person) => [person.id, person]));
+   const chapters = {};
+   for (const chapter of corpus.chapters) {
+@@ -582,7 +583,7 @@
+       book: extraction.book,
+       chapter: extraction.chapter,
+       promptVersion: extraction.run.promptVersion,
+-      dateAudit: dateAuditStatus(extraction.book, extraction.chapter),
++      dateAudit: getDateStatus(extraction.book, extraction.chapter),
+       mentions: extraction.mentions.map((mention) => {
+         const personId = catalog.localPersonMap[mention.person];
+         const person = personById.get(personId);
+@@ -811,7 +812,7 @@
+     }]));
+ }
+ 
+-export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}) {
++export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}, { getDateStatus = dateAuditStatus } = {}) {
+   if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
+       !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
+     throw new Error('People corpus is missing authoritative chapter coverage metadata');
+@@ -934,7 +935,7 @@
+     extractedChapters: corpus.coverage.extractedChapters,
+     missingChapters: missingChapterIds.length,
+     dateAuditPendingChapters: missingChapterIds.length + corpus.chapters.filter(({ extraction }) =>
+-      dateAuditStatus(extraction.book, extraction.chapter).status !== 'audited').length,
++      getDateStatus(extraction.book, extraction.chapter).status !== 'audited').length,
+     localPeople: corpus.localPeople.size,
+     canonicalPeople: people.length,
+     mergedLocalPeople: corpus.localPeople.size - people.length,
+@@ -967,9 +968,69 @@
+   }
+   return {
+     catalog,
++    unresolvedCanonicalPeople: [...new Set([...unresolvedLocalPeople].map(id => localMap.get(id)))].sort(),
+     candidates: candidateDocument,
+-    siteIndex: buildPeopleSiteIndex(corpus, catalog),
++    siteIndex: buildPeopleSiteIndex(corpus, catalog, getDateStatus),
+   };
++}
++
++// Reconstruct every public fact from freshly qualified source members. The
++// globally compiled mapping supplies identity and URL stability, never facts.
++export function projectPeopleProduct(corpus, globalCatalog, roleLabels, overrides = {}, getDateStatus = dateAuditStatus) {
++  const globalById = new Map(globalCatalog.people.map(person => [person.id, person]));
++  const localMap = new Map();
++  const membersByCanonical = new Map();
++  for (const [localId, member] of corpus.localPeople) {
++    const id = globalCatalog.localPersonMap[localId];
++    if (!id || !globalById.has(id) || !globalById.get(id).localPeople.includes(localId)) {
++      throw new Error(`Scoped source member ${localId} is absent from the sealed global identity mapping`);
++    }
++    localMap.set(localId, id);
++    if (!membersByCanonical.has(id)) membersByCanonical.set(id, []);
++    membersByCanonical.get(id).push(localId);
++    if (member.promptVersion !== globalCatalog.currentPromptVersion) throw new Error(`Invalid scoped prompt version for ${localId}`);
++  }
++  const people = [...membersByCanonical].map(([id, localPeople]) => {
++    const global = globalById.get(id);
++    const cluster = { canonicalPersonId: id, localPeople, retiredIds: global.retiredIds };
++    const overrideEntries = [id, ...(global.retiredIds ?? [])].filter(key => overrides[key]);
++    if (overrideEntries.length > 1) throw new Error(`Multiple scoped curation overrides for ${id}`);
++    const override = overrideEntries.length ? structuredClone(overrides[overrideEntries[0]]) : {};
++    const members = localPeople.map(localId => corpus.localPeople.get(localId));
++    if (override.preferredDescription && !members.some(member => member.descriptorSuggestion === override.preferredDescription)) {
++      throw new Error(`Preferred description for ${id} lacks scoped source support`);
++    }
++    if (override.preferredName && !members.flatMap(member => member.claims).some(claim =>
++      claim.predicate === 'name' && ['en', 'zh', 'pinyin'].every(key =>
++        !override.preferredName[key] || claim.value?.[key] === override.preferredName[key]))) {
++      throw new Error(`Preferred name for ${id} lacks scoped source support`);
++    }
++    const person = canonicalRecord(cluster, corpus, localMap, roleLabels, new Set(),
++      globalCatalog.currentPromptVersion, override);
++    person.slug = global.slug;
++    return person;
++  });
++  for (const person of people) {
++    for (const relationship of person.familyRelationships) {
++      if (!membersByCanonical.has(relationship.value.personId)) {
++        throw new Error(`Scoped family target ${relationship.value.personId} lacks scoped source support`);
++      }
++      relationship.derivedInverse = false;
++    }
++  }
++  const familyEdges = buildCanonicalFamilyEdges(people);
++  addInverseFamilyRelationships(people);
++  attachFamilyEdgeIds(people, familyEdges);
++  validateCanonicalFamilyGraph(people, familyEdges);
++  const validator = getPeopleSchemaValidator().getSchema(CANONICAL_SCHEMA_ID);
++  for (const person of people) {
++    if (!validator(person)) throw new Error(`Scoped canonical person ${person.id}: ${formatSchemaErrors(validator.errors).join('; ')}`);
++  }
++  // This context deliberately does not claim global catalog completeness.
++  const catalog = { schemaVersion: 1, generatedAt: globalCatalog.generatedAt, complete: false,
++    currentPromptVersion: globalCatalog.currentPromptVersion, people, familyEdges,
++    localPersonMap: Object.fromEntries(localMap) };
++  return { catalog, siteIndex: buildPeopleSiteIndex(corpus, catalog, getDateStatus) };
+ }
+ 
+ function writeCompiledPeopleOutputs(result, options, writers = {
+@@ -1297,6 +1358,7 @@
+ function main() {
+   const options = parseArgs(process.argv.slice(2));
+   if (options.selfTest) return selfTest();
++  const inputSeal = identityInputSeal();
+   const corpus = loadValidatedPeopleCorpus();
+   const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
+   const curation = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
+@@ -1324,7 +1386,13 @@
+     }
+   }
+   const result = compilePeopleCatalog(corpus, resolutions, curation.people);
++  if (identityInputSeal() !== inputSeal) throw new Error('Identity inputs changed during compilation; refusing publication');
+   writeCompiledPeopleOutputs(result, options);
++  writeJsonAtomic(`${options.out}.identity-seal.json`, {
++    schemaVersion: 1, kind: 'people-global-identity-seal', inputs: inputSeal,
++    catalog: peopleDigest(result.catalog), siteIndex: peopleDigest(result.siteIndex),
++    unresolvedCanonicalPeople: result.unresolvedCanonicalPeople,
++  });
+   console.log(
+     `people catalog: ${result.catalog.stats.canonicalPeople} canonical from ` +
+     `${result.catalog.stats.localPeople} local people; ${result.catalog.stats.unresolvedCandidateBlocks} ` +
+diff --git a/scripts/generate-ebook.mjs b/scripts/generate-ebook.mjs
+--- a/scripts/generate-ebook.mjs
++++ b/scripts/generate-ebook.mjs
+@@ -9,7 +9,6 @@
+ import { Resvg } from '@resvg/resvg-js';
+ import { getBookMetadata } from './book-metadata.mjs';
+ import { renderBookCover } from './generate-book-covers.mjs';
+-import { chineseText, englishText, sourceUnitAt } from './lib/people-content.mjs';
+ import {
+   inferChapterTableHeaders,
+   isSemanticTableHeader,
+@@ -17,7 +16,6 @@
+   tableCells,
+ } from './lib/table-structure.mjs';
+ import {
+-  chapterPeopleContext,
+   loadPeopleSiteContext,
+   renderUnitWithPeople,
+ } from './lib/people-site.mjs';
+@@ -28,16 +26,10 @@
+   ebookSentenceHref,
+   planEbookContentDocuments,
+ } from './lib/ebook-content-layout.mjs';
+-import {
+-  humanizePeopleValue,
+-  personAlternateNames,
+-  personDisplayName,
+-  personFullDisplayName,
+-  personLifeSummary,
+-  personPublicAliases,
+-  personPublicDescription,
+-} from './lib/people-presentation.mjs';
+-import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
++import { escapeXml, textContent, visibleTableText, formatList, getTranslationObject, getMainText } from './lib/ebook-text.mjs';
++import { buildEbookPeople, ebookPersonHref, renderEbookPeopleIndex, renderEbookGlossaryShard } from './lib/ebook-people-render.mjs';
++import { loadCertifiedEbookPeople, assertEbookPeopleCertificate } from './lib/ebook-certified-people.mjs';
++import { assertCertifiedEbookRoot, assertCertifiedEbookSources } from './lib/ebook-certified-source.mjs';
+ 
+ const __dirname = path.dirname(fileURLToPath(import.meta.url));
+ const repoRoot = path.resolve(__dirname, '..');
+@@ -62,7 +54,7 @@
+     const arg = argv[i];
+     if (!arg.startsWith('--')) continue;
+     const key = arg.slice(2);
+-    if (key === 'all' || key === 'all-products') {
++    if (key === 'all' || key === 'all-products' || key === 'require-people-glossary') {
+       args[key] = true;
+     } else {
+       args[key] = argv[i + 1];
+@@ -246,54 +238,8 @@
+   return info;
+ }
+ 
+-function escapeXml(value) {
+-  return String(value ?? '')
+-    .replace(/&/g, '&amp;')
+-    .replace(/</g, '&lt;')
+-    .replace(/>/g, '&gt;')
+-    .replace(/"/g, '&quot;')
+-    .replace(/'/g, '&#039;');
+-}
+-
+-function textContent(value) {
+-  return String(value ?? '').replace(/\s+/g, ' ').trim();
+-}
+-
+-// Table cells retain a small amount of source layout metadata in the JSON.
+-// It is useful to the web renderer but should never leak into a reading excerpt.
+-function visibleTableText(value) {
+-  return String(value ?? '').replace(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/iu, '');
+-}
+-
+-function formatList(values) {
+-  const items = values.map(textContent).filter(Boolean);
+-  if (items.length <= 1) return items.join('');
+-  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+-  return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
+-}
+-
+ function getTranslation(item) {
+   return getMainText(item);
+-}
+-
+-function getTranslationObject(item) {
+-  if (!item) return null;
+-  if (typeof item.idiomatic === 'string' || typeof item.literal === 'string' || typeof item.translation === 'string') {
+-    return null;
+-  }
+-  const translation = item.translations?.find((entry) => entry.lang === 'en') || item.translations?.[0];
+-  return translation || null;
+-}
+-
+-function getMainText(item) {
+-  if (!item) return '';
+-  const direct = item.idiomatic || item.literal || item.translation;
+-  if (typeof direct === 'string' && direct.trim()) return direct.trim();
+-  const trans = getTranslationObject(item);
+-  if (trans) {
+-    return textContent(trans.idiomatic || trans.literal || '');
+-  }
+-  return '';
+ }
+ 
+ function getFootnote(item) {
+@@ -825,84 +771,6 @@
+ function allowsChineseCharacters(item) {
+   return item?.allowChineseCharacters === true ||
+     item?.translations?.some((entry) => entry.allowChineseCharacters === true) === true;
+-}
+-
+-function ebookPersonAnchor(personId) {
+-  return `person-${personId}`;
+-}
+-
+-function buildEbookPeople(product) {
+-  const readiness = assessEbookPeopleReadiness(PEOPLE_EBOOK, product, {
+-    allowPreview: PEOPLE_EBOOK_PREVIEW,
+-  });
+-  if (!readiness.active) return readiness;
+-  const { chapterIds } = readiness;
+-  const people = readiness.people.sort((left, right) =>
+-    personDisplayName(left).localeCompare(personDisplayName(right), 'en') || left.id.localeCompare(right.id)
+-  );
+-  const peopleById = new Map(people.map((person) => [person.id, person]));
+-  const shards = [];
+-  const shardSize = 350;
+-  for (let index = 0; index < people.length; index += shardSize) {
+-    const number = shards.length + 1;
+-    shards.push({
+-      number,
+-      file: `glossary-${String(number).padStart(3, '0')}.xhtml`,
+-      people: people.slice(index, index + shardSize),
+-    });
+-  }
+-  const fileByPersonId = new Map();
+-  for (const shard of shards) {
+-    for (const person of shard.people) fileByPersonId.set(person.id, shard.file);
+-  }
+-  const chapterContexts = new Map(product.chapters.map((chapter) => {
+-    const chapterId = String(chapter).padStart(3, '0');
+-    return [chapterId, chapterPeopleContext(PEOPLE_EBOOK, product.book, chapterId)];
+-  }));
+-  const mentionSpanKeys = new Set();
+-  for (const [chapterId, context] of chapterContexts) {
+-    for (const mention of context?.record.mentions ?? []) {
+-      for (const span of mention.spans?.en ?? []) {
+-        mentionSpanKeys.add([
+-          chapterId,
+-          mention.unit.id,
+-          mention.personId,
+-          span.startCodePoint,
+-          span.endCodePoint,
+-        ].join(':'));
+-      }
+-    }
+-  }
+-  const backlinks = people.reduce((total, person) =>
+-    total + person.references.filter((reference) =>
+-      reference.book === product.book && chapterIds.has(reference.chapter)
+-    ).length, 0);
+-  return {
+-    active: true,
+-    ready: readiness.ready,
+-    preview: readiness.preview,
+-    reason: null,
+-    book: product.book,
+-    chapterIds,
+-    people,
+-    missingChapters: readiness.missingChapters,
+-    legacyChapters: readiness.legacyChapters,
+-    dateAuditChapters: readiness.dateAuditChapters,
+-    peopleNeedingReview: readiness.peopleNeedingReview,
+-    peopleById,
+-    shards,
+-    fileByPersonId,
+-    chapterContexts,
+-    expectedMentionLinks: mentionSpanKeys.size,
+-    expectedBacklinks: backlinks,
+-  };
+-}
+-
+-function ebookPersonHref(ebookPeople, personId, from = 'chapter') {
+-  const file = ebookPeople?.fileByPersonId.get(personId);
+-  if (!file) throw new Error(`No EPUB glossary target for canonical person ${personId}`);
+-  const prefix = from === 'chapter' ? '../people/' : '';
+-  return `${prefix}${file}#${ebookPersonAnchor(personId)}`;
+ }
+ 
+ function renderEbookUnit(item, main, chapterContext, ebookPeople) {
+@@ -2010,131 +1878,6 @@
+ `;
+ }
+ 
+-function ebookGlossaryReferences(person, ebookPeople) {
+-  return person.references.filter((reference) =>
+-    reference.book === ebookPeople.book && ebookPeople.chapterIds.has(reference.chapter)
+-  );
+-}
+-
+-function renderEbookGlossaryFamily(person, ebookPeople) {
+-  const rows = [];
+-  const seen = new Set();
+-  for (const relationship of person.familyRelationships) {
+-    const key = `${relationship.edgeId}:${relationship.value.relation}:${relationship.value.personId}`;
+-    if (seen.has(key)) continue;
+-    seen.add(key);
+-    const target = PEOPLE_EBOOK.peopleById.get(relationship.value.personId);
+-    if (!target) continue;
+-    const label = `${humanizePeopleValue(relationship.value.relation)} ${personFullDisplayName(target)}`;
+-    const targetFile = ebookPeople.fileByPersonId.get(target.id);
+-    rows.push(targetFile
+-      ? `<li><a href="${escapeXml(targetFile)}#${ebookPersonAnchor(target.id)}">${escapeXml(label)}</a></li>`
+-      : `<li>${escapeXml(label)}</li>`);
+-  }
+-  return rows.length ? `<h3>Family</h3><ul class="glossary-family">${rows.join('')}</ul>` : '';
+-}
+-
+-function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
+-  const groups = new Map();
+-  for (const reference of ebookGlossaryReferences(person, ebookPeople)) {
+-    if (!groups.has(reference.chapter)) groups.set(reference.chapter, []);
+-    groups.get(reference.chapter).push(reference);
+-  }
+-  if (!groups.size) return '';
+-  const rows = [...groups.entries()].sort((left, right) => left[0].localeCompare(right[0])).map(([chapter, refs]) => {
+-    const title = chapterTitles.get(chapter) || `Chapter ${Number.parseInt(chapter, 10)}`;
+-    const chapterData = chapterDataById.get(chapter);
+-    if (!chapterData) throw new Error(`Missing EPUB source chapter ${ebookPeople.book}/${chapter} for glossary reference`);
+-    const snippets = refs.map((reference) => {
+-      const unit = sourceUnitAt(chapterData, {
+-        id: reference.unitId,
+-        kind: reference.unitKind,
+-        blockIndex: reference.blockIndex,
+-        collection: reference.collection,
+-        itemIndex: reference.itemIndex,
+-      });
+-      const href = `../${ebookSentenceHref(contentLayout, chapter, 'en', reference.unitId, 'text/')}`;
+-      const zh = visibleTableText(chineseText(unit));
+-      const en = visibleTableText(englishText(unit));
+-      if (!zh && !en) throw new Error(`Empty EPUB glossary reference ${ebookPeople.book}:${chapter}:${reference.unitId}`);
+-      return `<article class="glossary-mention-snippet">` +
+-        `${zh ? `<a class="glossary-mention-source" lang="zh-Hant" href="${escapeXml(href)}">${escapeXml(zh)}</a>` : ''}` +
+-        `${en ? `<a class="glossary-mention-link" href="${escapeXml(href)}">${escapeXml(en)}</a>` : ''}` +
+-        `</article>`;
+-    }).join('');
+-    return `<li><h4>${escapeXml(title)}</h4>${snippets}</li>`;
+-  });
+-  return `<h3>Mentions</h3><ul class="glossary-mentions">${rows.join('')}</ul>`;
+-}
+-
+-function renderEbookAliasTable(person) {
+-  const aliases = personPublicAliases(person);
+-  if (!aliases.length) return '';
+-  const rows = aliases.map((name) => `<tr><th>${escapeXml(humanizePeopleValue(name.kind || 'name'))}</th>` +
+-    `<td>${escapeXml(name.en || '')}</td><td lang="zh-Hant">${escapeXml(name.zh || '')}</td>` +
+-    `<td>${escapeXml(name.pinyin || '')}</td></tr>`).join('');
+-  return `<h3>Other names</h3><div class="glossary-aliases"><table><thead><tr>` +
+-    `<th>Type</th><th>English</th><th>Chinese</th><th>Pinyin</th>` +
+-    `</tr></thead><tbody>${rows}</tbody></table></div>`;
+-}
+-
+-function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
+-  const roles = person.roles.map((role) => role.label);
+-  const lifeSummary = personLifeSummary(person);
+-  return `<section class="glossary-entry" id="${ebookPersonAnchor(person.id)}">
+-  <h2>${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}</h2>
+-  <p class="glossary-description">${escapeXml(personPublicDescription(person))}</p>
+-  ${lifeSummary ? `<p class="glossary-dates">${escapeXml(lifeSummary)}</p>` : ''}
+-  ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
+-  ${renderEbookAliasTable(person)}
+-  ${renderEbookGlossaryFamily(person, ebookPeople)}
+-  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)}
+-</section>`;
+-}
+-
+-function renderEbookPeopleIndex(ebookPeople) {
+-  const items = ebookPeople.people.map((person) => {
+-    const file = ebookPeople.fileByPersonId.get(person.id);
+-    return `<li><a class="glossary-person-link" href="${escapeXml(file)}#${ebookPersonAnchor(person.id)}">` +
+-      `${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}` +
+-      `</a><span>${escapeXml(personPublicDescription(person))}</span></li>`;
+-  }).join('\n      ');
+-  return `<?xml version="1.0" encoding="utf-8"?>
+-<!DOCTYPE html>
+-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
+-<head>
+-  <title>${peopleGlossaryTitle}</title>
+-  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
+-</head>
+-<body>
+-  <nav epub:type="glossary" class="people-glossary-index">
+-    <h1>${peopleGlossaryTitle}</h1>
+-    <ol>${items}</ol>
+-  </nav>
+-</body>
+-</html>`;
+-}
+-
+-function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
+-  const entries = shard.people.map((person) =>
+-    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)
+-  ).join('\n');
+-  return `<?xml version="1.0" encoding="utf-8"?>
+-<!DOCTYPE html>
+-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
+-<head>
+-  <title>${peopleGlossaryTitle} ${shard.number}</title>
+-  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
+-</head>
+-<body>
+-  <section epub:type="glossary" class="people-glossary">
+-    <h1>${peopleGlossaryTitle}</h1>
+-    ${entries}
+-  </section>
+-</body>
+-</html>`;
+-}
+-
+ function renderNav(product, chapters, contentLayout, ebookPeople = null) {
+   const chapterItems = chapters.map(({ chapter, data }) => {
+     const title = data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`;
+@@ -2237,6 +1980,7 @@
+     <item id="frontmatter" href="frontmatter.xhtml" media-type="application/xhtml+xml" />
+ ${aboutItem}${items}
+ ${peopleItems}
++${ebookPeople?.certificate ? '    <item id="people-certificate" href="people/certificate.json" media-type="application/json" />' : ''}
+   </manifest>
+   <spine>
+     <itemref idref="cover-page" />
+@@ -2621,7 +2365,9 @@
+   return manifest;
+ }
+ 
+-function buildProduct(product) {
++function buildProduct(product, { requirePeopleGlossary = false } = {}) {
++  if (requirePeopleGlossary && PEOPLE_EBOOK_PREVIEW) throw new Error('Required glossary cannot use PEOPLE_EBOOK_PREVIEW');
++  const peopleContext = requirePeopleGlossary ? loadCertifiedEbookPeople(product) : PEOPLE_EBOOK;
+   const generatedAt = buildTimestamp(product);
+   const bookInfo = getBookMetadata(product.book) || {};
+   const productDir = path.join(outRoot, product.slug);
+@@ -2652,6 +2398,28 @@
+     chapters: []
+   };
+ 
++  const chapters = product.chapters.map((chapter) => {
++    const file = path.join(repoRoot, 'data', product.book, `${chapter}.json`);
++    const data = readJson(file);
++    const chapterTitle = textContent(data.meta.title?.en || '');
++    const chapterQa = {
++      chapter,
++      title: chapterTitle,
++      sentenceCount: data.meta.sentenceCount || 0,
++      translatedCount: data.meta.translatedCount || 0,
++      tableRendering: emptyChapterTableStats()
++    };
++    qa.chapters.push(chapterQa);
++    if (!chapterTitle) {
++      qa.errors.push(`Missing English chapter title for ${product.book}/${chapter}`);
++    }
++    if ((data.meta.sentenceCount || 0) !== (data.meta.translatedCount || 0)) {
++      qa.errors.push(`Chapter ${chapter} is not fully translated: ${data.meta.translatedCount}/${data.meta.sentenceCount}`);
++    }
++    return { chapter, data, qa: chapterQa };
++  });
++  if (requirePeopleGlossary) assertCertifiedEbookSources(peopleContext, product, chapters);
++
+   validateProductMetadata(product, qa);
+ 
+   cleanDir(buildDir);
+@@ -2674,27 +2442,8 @@
+     writeFile(path.join(buildDir, 'EPUB', 'about.xhtml'), renderAboutThisEdition(product));
+   }
+ 
+-  const chapters = product.chapters.map((chapter) => {
+-    const file = path.join(repoRoot, 'data', product.book, `${chapter}.json`);
+-    const data = readJson(file);
+-    const chapterTitle = textContent(data.meta.title?.en || '');
+-    const chapterQa = {
+-      chapter,
+-      title: chapterTitle,
+-      sentenceCount: data.meta.sentenceCount || 0,
+-      translatedCount: data.meta.translatedCount || 0,
+-      tableRendering: emptyChapterTableStats()
+-    };
+-    qa.chapters.push(chapterQa);
+-    if (!chapterTitle) {
+-      qa.errors.push(`Missing English chapter title for ${product.book}/${chapter}`);
+-    }
+-    if ((data.meta.sentenceCount || 0) !== (data.meta.translatedCount || 0)) {
+-      qa.errors.push(`Chapter ${chapter} is not fully translated: ${data.meta.translatedCount}/${data.meta.sentenceCount}`);
+-    }
+-    return { chapter, data, qa: chapterQa };
+-  });
+-  const ebookPeopleState = buildEbookPeople(product);
++  const ebookPeopleState = buildEbookPeople(peopleContext, product, { allowPreview: PEOPLE_EBOOK_PREVIEW });
++  if (requirePeopleGlossary && !ebookPeopleState.ready) throw new Error('Required certified people glossary is not ready');
+   const ebookPeople = ebookPeopleState.active ? ebookPeopleState : null;
+   const contentLayout = planEbookContentDocuments(chapters, {
+     hasAbout: Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0,
+@@ -2761,6 +2510,7 @@
+       data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`,
+     ]));
+     const chapterDataById = new Map(chapters.map(({ chapter, data }) => [chapter, data]));
++    if (ebookPeople.certificate) writeFile(path.join(buildDir, 'EPUB', 'people', 'certificate.json'), `${JSON.stringify(ebookPeople.certificate, null, 2)}\n`);
+     writeFile(path.join(buildDir, 'EPUB', 'people', 'index.xhtml'), renderEbookPeopleIndex(ebookPeople));
+     for (const shard of ebookPeople.shards) {
+       writeFile(
+@@ -2781,6 +2531,11 @@
+     throw new Error(`${product.slug} has ${qa.errors.length} QA error(s). See ${path.relative(repoRoot, path.join(productDir, 'qa-report.json'))}`);
+   }
+ 
++  if (ebookPeople?.certificate) {
++    const currentContext = loadCertifiedEbookPeople(product);
++    assertEbookPeopleCertificate(ebookPeople.certificate, currentContext.certificate);
++    assertCertifiedEbookSources(currentContext, product, chapters);
++  }
+   normalizeFileTimes(buildDir, generatedAt);
+   zipEpub(buildDir, epubPath);
+   const preliminaryManifest = publicationManifest(product, productDir, epubPath, qa, generatedAt);
+@@ -2797,13 +2552,17 @@
+ 
+ function main() {
+   const args = parseArgs(process.argv.slice(2));
++  if (args['require-people-glossary']) {
++    assertCertifiedEbookRoot(repoRoot, 'generator executable root');
++    assertCertifiedEbookRoot(process.cwd(), 'generator working directory');
++  }
+   const products = loadProducts(args);
+   if (products.length === 0) {
+     throw new Error('No ebook products matched the requested arguments.');
+   }
+ 
+   for (const product of products) {
+-    const result = buildProduct(product);
++    const result = buildProduct(product, { requirePeopleGlossary: args['require-people-glossary'] === true });
+     console.log(`Generated ${path.relative(repoRoot, result.epubPath)}`);
+     if (result.qa.warnings.length > 0) {
+       console.log(`  Warnings: ${result.qa.warnings.length} (${path.relative(repoRoot, path.join(outRoot, product.slug, 'qa-report.json'))})`);
+diff --git a/scripts/lib/ebook-certified-people.mjs b/scripts/lib/ebook-certified-people.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/lib/ebook-certified-people.mjs
+@@ -0,0 +1,136 @@
++import fs from 'node:fs';
++import path from 'node:path';
++import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
++import { projectPeopleProduct } from '../compile-people-catalog.mjs';
++import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
++import { loadProperNounMatcher } from './people-candidates.mjs';
++import { isCompactPeopleExtraction } from './people-compact.mjs';
++import { DATA_DIR, PEOPLE_DIR, REPO_ROOT, extractionPath, readJson } from './people-content.mjs';
++import { DATE_AUDIT_VERSION, dateAuditStatus } from './people-date-audit.mjs';
++import { editorialDecisionPath, validateAppliedEditorialDecisions } from './people-editorial-decisions.mjs';
++import { readPeopleCatalog, readPeopleSiteIndex } from './people-generated-data.mjs';
++import { assertIdentitySeal, identityInputSeal, peopleDigest, stableJson } from './people-identity-seal.mjs';
++
++export function assertProductScope(product, manifest, sourceChapters) {
++  const expected = manifest?.products?.find(item => item.slug === product?.slug);
++  const valid = item => item && /^[a-z0-9_-]+$/u.test(item.book) &&
++    Array.isArray(item.chapters) && item.chapters.length > 0 &&
++    item.chapters.every(chapter => typeof chapter === 'string' && /^\d{3}$/u.test(chapter)) &&
++    new Set(item.chapters).size === item.chapters.length;
++  if (!valid(product) || !valid(expected) || product.book !== expected.book ||
++      stableJson(product.chapters) !== stableJson(expected.chapters)) {
++    throw new Error('Certified people scope must match the authoritative ordered product manifest');
++  }
++  if (product.slug === product.book && stableJson(product.chapters) !== stableJson(sourceChapters)) {
++    throw new Error('Whole-book product does not cover every authoritative source chapter in order');
++  }
++}
++
++export function assertChapterGates(extraction, currentPromptVersion, dateStatus, editorialDocument) {
++  const scope = `${extraction.book}:${extraction.chapter}`;
++  if (!Number.isInteger(currentPromptVersion) || currentPromptVersion < 1 ||
++      extraction.run?.promptVersion !== currentPromptVersion) throw new Error(`Invalid or legacy prompt version: ${scope}`);
++  if (!Array.isArray(extraction.translationRepairs)) throw new Error(`Missing editorial repair accounting: ${scope}`);
++  if (extraction.translationRepairs.some(repair => repair.status === 'proposed')) {
++    throw new Error(`Pending translation repair: ${scope}`);
++  }
++  if (extraction.translationRepairs.some(repair => repair.status === 'applied') && !editorialDocument) {
++    throw new Error(`Missing independent applied editorial history: ${scope}`);
++  }
++  if (editorialDocument) {
++    if (editorialDocument.book !== extraction.book || editorialDocument.chapter !== extraction.chapter) {
++      throw new Error(`Editorial history scope mismatch: ${scope}`);
++    }
++    validateAppliedEditorialDecisions(editorialDocument, extraction);
++  }
++  if (dateStatus?.status !== 'audited' || dateStatus.auditVersion !== DATE_AUDIT_VERSION) {
++    throw new Error(`Current independent date audit is ${dateStatus?.status ?? 'missing'}: ${scope}`);
++  }
++}
++
++export function assertScopedIdentity(corpus, globalCatalog, seal) {
++  const selected = new Set();
++  for (const localId of corpus.localPeople.keys()) {
++    const id = globalCatalog.localPersonMap[localId];
++    if (!id) throw new Error(`No sealed global canonical identity for ${localId}`);
++    selected.add(id);
++  }
++  if (seal.unresolvedCanonicalPeople.some(id => selected.has(id))) {
++    throw new Error('Unresolved global identity comparison touches this product');
++  }
++}
++
++// Required-glossary mode calls this separately for each authoritative product.
++// Global identities are reused from a hash-sealed normal catalog generation;
++// only product source members are freshly validated and projected into facts.
++export function loadCertifiedEbookPeople(product) {
++  const manifest = readJson(path.join(REPO_ROOT, 'ebooks', 'manifest.json'));
++  const sourceChapters = fs.readdirSync(path.join(DATA_DIR, product.book))
++    .filter(name => /^\d{3}\.json$/u.test(name)).sort().map(name => name.slice(0, -5));
++  assertProductScope(product, manifest, sourceChapters);
++  const catalogPath = path.join(PEOPLE_DIR, 'generated', 'catalog.json');
++  const catalog = readPeopleCatalog(catalogPath);
++  const siteIndex = readPeopleSiteIndex(path.join(PEOPLE_DIR, 'generated', 'site-index.json'));
++  const seal = readJson(`${catalogPath}.identity-seal.json`);
++  const inputs = identityInputSeal();
++  assertIdentitySeal(seal, catalog, siteIndex, inputs);
++  const config = readJson(path.join(PEOPLE_DIR, 'config.json'));
++  if (catalog.currentPromptVersion !== config.promptVersion || siteIndex.currentPromptVersion !== config.promptVersion ||
++      catalog.generatedAt !== siteIndex.generatedAt) throw new Error('Sealed identity generation does not match current configuration');
++  const matcher = loadProperNounMatcher();
++  const corpus = { chapters: [], localPeople: new Map() };
++  const gateEvidence = [];
++  for (const chapter of product.chapters) {
++    const raw = readJson(extractionPath(product.book, chapter));
++    if (raw.book !== product.book || raw.chapter !== chapter) throw new Error(`Extraction scope mismatch: ${product.book}:${chapter}`);
++    const packet = buildPeopleExtractionPacket(product.book, chapter, { properNounMatcher: matcher });
++    const options = { strictAliasDispositions: true };
++    const { normalized: extraction } = isCompactPeopleExtraction(raw)
++      ? validateCompactPeopleExtraction(raw, packet, options) : validatePeopleExtraction(raw, packet, options);
++    const editorialFile = editorialDecisionPath(product.book, chapter);
++    const editorial = fs.existsSync(editorialFile) ? readJson(editorialFile) : null;
++    const dateStatus = dateAuditStatus(product.book, chapter);
++    assertChapterGates(extraction, config.promptVersion, dateStatus, editorial);
++    const report = readJson(path.join(PEOPLE_DIR, 'date-audits', product.book, `${chapter}.json`));
++    gateEvidence.push({ chapter, inputFingerprint: packet.input.chapterFingerprint, inputUnitCount: packet.input.unitCount, extraction: peopleDigest(raw), source: peopleDigest(readJson(path.join(DATA_DIR, product.book, `${chapter}.json`))),
++      editorial: peopleDigest(editorial), dateAudit: peopleDigest(report) });
++    corpus.chapters.push({ extraction });
++    for (const person of extraction.people) {
++      if (corpus.localPeople.has(person.localId)) throw new Error(`Duplicate scoped local person ${person.localId}`);
++      corpus.localPeople.set(person.localId, { ...person, book: extraction.book, chapter: extraction.chapter,
++        promptVersion: extraction.run.promptVersion,
++        claims: extraction.claims.filter(claim => claim.subject === person.localId),
++        mentions: extraction.mentions.filter(mention => mention.person === person.localId) });
++    }
++  }
++  assertScopedIdentity(corpus, catalog, seal);
++  const roles = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
++  const overrides = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
++  const projected = projectPeopleProduct(corpus, catalog, new Map(roles.roles.map(role => [role.id, role.label])), overrides.people);
++  if (projected.catalog.people.length === 0) throw new Error('Certified product contains no people');
++  if (identityInputSeal() !== inputs) throw new Error('Identity inputs changed while qualifying product');
++  for (const evidence of gateEvidence) {
++    const chapter = evidence.chapter;
++    const editorialFile = editorialDecisionPath(product.book, chapter);
++    const currentEditorial = fs.existsSync(editorialFile) ? readJson(editorialFile) : null;
++    const report = readJson(path.join(PEOPLE_DIR, 'date-audits', product.book, `${chapter}.json`));
++    const status = dateAuditStatus(product.book, chapter);
++    if (evidence.editorial !== peopleDigest(currentEditorial) || evidence.dateAudit !== peopleDigest(report) ||
++        status.status !== 'audited' || status.auditVersion !== DATE_AUDIT_VERSION) {
++      throw new Error(`Editorial/date evidence changed while qualifying ${product.book}:${chapter}`);
++    }
++  }
++  const certificate = { schemaVersion: 1, kind: 'certified-ebook-people',
++    scope: { slug: product.slug, book: product.book, chapters: product.chapters },
++    manifest: peopleDigest(manifest), identity: peopleDigest(seal), gates: gateEvidence,
++    projection: peopleDigest(projected) };
++  return { active: true, preview: false, reason: null, ...projected, certificate,
++    peopleById: new Map(projected.catalog.people.map(person => [person.id, person])),
++    familyEdgesById: new Map(projected.catalog.familyEdges.map(edge => [edge.id, edge])) };
++}
++
++export function assertEbookPeopleCertificate(actual, expected) {
++  if (stableJson(actual) !== stableJson(expected)) {
++    throw new Error('EPUB people certificate does not match current authoritative source, gates, scope and identity generation');
++  }
++}
+diff --git a/scripts/lib/ebook-certified-source.mjs b/scripts/lib/ebook-certified-source.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/lib/ebook-certified-source.mjs
+@@ -0,0 +1,36 @@
++import fs from 'node:fs';
++import { REPO_ROOT, buildInputFingerprint, contentUnits } from './people-content.mjs';
++import { peopleDigest, stableJson } from './people-identity-seal.mjs';
++
++export function assertCertifiedEbookRoot(root, label) {
++  const actual = fs.realpathSync(root);
++  const certified = fs.realpathSync(REPO_ROOT);
++  if (actual !== certified) {
++    throw new Error(`Required ebook ${label} ${actual} differs from certified people root ${certified}`);
++  }
++}
++
++export function assertCertifiedEbookChapterSource(context, book, chapter, data) {
++  const certificate = context?.certificate;
++  if (certificate?.schemaVersion !== 1 || certificate.kind !== 'certified-ebook-people' ||
++      certificate.scope?.book !== book || !certificate.scope.chapters?.includes(chapter) ||
++      !Array.isArray(certificate.gates)) throw new Error('Missing certified ebook source scope');
++  const gates = certificate.gates.filter(gate => gate.chapter === chapter);
++  if (gates.length !== 1 || !data) throw new Error(`Missing unique certified source gate for ${book}:${chapter}`);
++  const gate = gates[0];
++  const input = buildInputFingerprint(contentUnits(data));
++  if (gate.source !== peopleDigest(data) || gate.inputFingerprint !== input.chapterFingerprint ||
++      gate.inputUnitCount !== input.unitCount) {
++    throw new Error(`Actual ebook source differs from certified chapter ${book}:${chapter}`);
++  }
++}
++
++export function assertCertifiedEbookSources(context, product, chapters) {
++  const scope = context?.certificate?.scope;
++  if (scope?.slug !== product.slug || scope?.book !== product.book ||
++      stableJson(scope?.chapters) !== stableJson(product.chapters) ||
++      stableJson(chapters.map(item => item.chapter)) !== stableJson(product.chapters)) {
++    throw new Error('Actual ebook chapters differ from certified ordered product scope');
++  }
++  for (const { chapter, data } of chapters) assertCertifiedEbookChapterSource(context, product.book, chapter, data);
++}
+diff --git a/scripts/lib/ebook-certified-verification.mjs b/scripts/lib/ebook-certified-verification.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/lib/ebook-certified-verification.mjs
+@@ -0,0 +1,60 @@
++import path from 'node:path';
++import { DATA_DIR, readJson, sourceUnitAt } from './people-content.mjs';
++import { loadCertifiedEbookPeople, assertEbookPeopleCertificate } from './ebook-certified-people.mjs';
++import { buildEbookPeople, ebookPersonHref, renderEbookPeopleIndex, renderEbookGlossaryShard } from './ebook-people-render.mjs';
++import { planEbookContentDocuments } from './ebook-content-layout.mjs';
++import { renderUnitWithPeople } from './people-site.mjs';
++import { getMainText } from './ebook-text.mjs';
++import { assertCertifiedEbookSources } from './ebook-certified-source.mjs';
++
++const personLinks = html => [...html.matchAll(/<a class="person-link"(?=\s|>)[^>]*>[\s\S]*?<\/a>/gu)].map(match => match[0]).sort();
++
++// Compare the real packaged reading artifact with fresh qualified source facts.
++// Neither a QA ready flag nor an attacker-adjusted count/hash can replace this.
++export function verifyCertifiedEbookPeople({ product, entries, readEntry, hasAbout,
++  context = loadCertifiedEbookPeople(product), chapterData = null }) {
++  const state = buildEbookPeople(context, product);
++  if (!state.ready || state.preview || !state.certificate) throw new Error('Required glossary has no certified non-preview context');
++  assertEbookPeopleCertificate(JSON.parse(readEntry('EPUB/people/certificate.json')), context.certificate);
++  const chapters = product.chapters.map(chapter => ({ chapter,
++    data: chapterData?.get(chapter) ?? readJson(path.join(DATA_DIR, product.book, `${chapter}.json`)) }));
++  assertCertifiedEbookSources(context, product, chapters);
++  const contentLayout = planEbookContentDocuments(chapters, { hasAbout,
++    peopleActive: true, peopleShards: state.shards.length });
++  const titles = new Map(chapters.map(({ chapter, data }) => [chapter, data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`]));
++  const sourceByChapter = new Map(chapters.map(({ chapter, data }) => [chapter, data]));
++  const expected = new Map([['EPUB/people/index.xhtml', renderEbookPeopleIndex(state)]]);
++  for (const shard of state.shards) expected.set(`EPUB/people/${shard.file}`,
++    renderEbookGlossaryShard(shard, state, titles, contentLayout, sourceByChapter));
++  const actualFiles = entries.filter(entry => /^EPUB\/people\/.*\.xhtml$/u.test(entry)).sort();
++  if (actualFiles.join('|') !== [...expected.keys()].sort().join('|')) throw new Error('EPUB glossary file inventory differs from current certified product');
++  for (const [file, html] of expected) {
++    if (readEntry(file) !== html) throw new Error(`EPUB glossary content differs from current certified sources: ${file}`);
++  }
++  const expectedLinksByDocument = new Map();
++  for (const { chapter, data } of chapters) {
++    const chapterContext = state.chapterContexts.get(chapter);
++    const entry = `EPUB/text/${contentLayout.documentByChapter.get(chapter).file}`;
++    if (!expectedLinksByDocument.has(entry)) expectedLinksByDocument.set(entry, []);
++    for (const [unitId, mentions] of chapterContext.mentionsByUnit) {
++      const unit = sourceUnitAt(data, mentions[0].unit);
++      const html = renderUnitWithPeople({ unitId, text: getMainText(unit), language: 'en',
++        chapterContext, chineseWordSpans: false,
++        hrefForPerson: ({ personId }) => ebookPersonHref(state, personId, 'chapter') });
++      expectedLinksByDocument.get(entry).push(...personLinks(html));
++    }
++  }
++  for (const [entry, links] of expectedLinksByDocument) {
++    if (JSON.stringify(personLinks(readEntry(entry))) !== JSON.stringify(links.sort())) {
++      throw new Error(`EPUB English person links differ from current scoped extraction: ${entry}`);
++    }
++  }
++  // Extra text documents must not carry unverified person links.
++  for (const entry of entries.filter(value => /^EPUB\/text\/.*\.xhtml$/u.test(value))) {
++    if (!expectedLinksByDocument.has(entry) && personLinks(readEntry(entry)).length) {
++      throw new Error(`Unexpected EPUB person links in ${entry}`);
++    }
++  }
++  return { people: state.people.length, shards: state.shards.length,
++    expectedMentionLinks: state.expectedMentionLinks, expectedBacklinks: state.expectedBacklinks };
++}
+diff --git a/scripts/lib/ebook-people-render.mjs b/scripts/lib/ebook-people-render.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/lib/ebook-people-render.mjs
+@@ -0,0 +1,215 @@
++import { chineseText, englishText, sourceUnitAt } from './people-content.mjs';
++import { chapterPeopleContext } from './people-site.mjs';
++import { assessEbookPeopleReadiness } from './ebook-people-readiness.mjs';
++import { ebookSentenceHref } from './ebook-content-layout.mjs';
++import { escapeXml, textContent, visibleTableText, formatList } from './ebook-text.mjs';
++import { humanizePeopleValue, personDisplayName, personFullDisplayName, personLifeSummary,
++  personPublicAliases, personPublicDescription } from './people-presentation.mjs';
++const peopleGlossaryTitle = 'People Glossary';
++
++export function ebookPersonAnchor(personId) {
++  return `person-${personId}`;
++}
++
++export function buildEbookPeople(siteContext, product, { allowPreview = false } = {}) {
++  const readiness = assessEbookPeopleReadiness(siteContext, product, {
++    allowPreview,
++  });
++  if (!readiness.active) return readiness;
++  const { chapterIds } = readiness;
++  const people = readiness.people.sort((left, right) =>
++    personDisplayName(left).localeCompare(personDisplayName(right), 'en') || left.id.localeCompare(right.id)
++  );
++  const peopleById = new Map(people.map((person) => [person.id, person]));
++  const shards = [];
++  const shardSize = 350;
++  for (let index = 0; index < people.length; index += shardSize) {
++    const number = shards.length + 1;
++    shards.push({
++      number,
++      file: `glossary-${String(number).padStart(3, '0')}.xhtml`,
++      people: people.slice(index, index + shardSize),
++    });
++  }
++  const fileByPersonId = new Map();
++  for (const shard of shards) {
++    for (const person of shard.people) fileByPersonId.set(person.id, shard.file);
++  }
++  const chapterContexts = new Map(product.chapters.map((chapter) => {
++    const chapterId = String(chapter).padStart(3, '0');
++    return [chapterId, chapterPeopleContext(siteContext, product.book, chapterId)];
++  }));
++  const mentionSpanKeys = new Set();
++  for (const [chapterId, context] of chapterContexts) {
++    for (const mention of context?.record.mentions ?? []) {
++      for (const span of mention.spans?.en ?? []) {
++        mentionSpanKeys.add([
++          chapterId,
++          mention.unit.id,
++          mention.personId,
++          span.startCodePoint,
++          span.endCodePoint,
++        ].join(':'));
++      }
++    }
++  }
++  const backlinks = people.reduce((total, person) =>
++    total + person.references.filter((reference) =>
++      reference.book === product.book && chapterIds.has(reference.chapter)
++    ).length, 0);
++  return {
++    active: true,
++    ready: readiness.ready,
++    preview: readiness.preview,
++    reason: null,
++    book: product.book,
++    chapterIds,
++    people,
++    missingChapters: readiness.missingChapters,
++    legacyChapters: readiness.legacyChapters,
++    dateAuditChapters: readiness.dateAuditChapters,
++    peopleNeedingReview: readiness.peopleNeedingReview,
++    peopleById,
++    familyPeopleById: siteContext.peopleById,
++    certificate: siteContext.certificate ?? null,
++    shards,
++    fileByPersonId,
++    chapterContexts,
++    expectedMentionLinks: mentionSpanKeys.size,
++    expectedBacklinks: backlinks,
++  };
++}
++
++export function ebookPersonHref(ebookPeople, personId, from = 'chapter') {
++  const file = ebookPeople?.fileByPersonId.get(personId);
++  if (!file) throw new Error(`No EPUB glossary target for canonical person ${personId}`);
++  const prefix = from === 'chapter' ? '../people/' : '';
++  return `${prefix}${file}#${ebookPersonAnchor(personId)}`;
++}
++
++function ebookGlossaryReferences(person, ebookPeople) {
++  return person.references.filter((reference) =>
++    reference.book === ebookPeople.book && ebookPeople.chapterIds.has(reference.chapter)
++  );
++}
++
++function renderEbookGlossaryFamily(person, ebookPeople) {
++  const rows = [];
++  const seen = new Set();
++  for (const relationship of person.familyRelationships) {
++    const key = `${relationship.edgeId}:${relationship.value.relation}:${relationship.value.personId}`;
++    if (seen.has(key)) continue;
++    seen.add(key);
++    const target = ebookPeople.familyPeopleById.get(relationship.value.personId);
++    if (!target) throw new Error(`Missing EPUB family target ${relationship.value.personId}`);
++    const label = `${humanizePeopleValue(relationship.value.relation)} ${personFullDisplayName(target)}`;
++    const targetFile = ebookPeople.fileByPersonId.get(target.id);
++    if (ebookPeople.certificate && !targetFile) throw new Error(`Certified family target ${target.id} has no glossary entry`);
++    rows.push(targetFile
++      ? `<li><a href="${escapeXml(targetFile)}#${ebookPersonAnchor(target.id)}">${escapeXml(label)}</a></li>`
++      : `<li>${escapeXml(label)}</li>`);
++  }
++  return rows.length ? `<h3>Family</h3><ul class="glossary-family">${rows.join('')}</ul>` : '';
++}
++
++function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
++  const groups = new Map();
++  for (const reference of ebookGlossaryReferences(person, ebookPeople)) {
++    if (!groups.has(reference.chapter)) groups.set(reference.chapter, []);
++    groups.get(reference.chapter).push(reference);
++  }
++  if (!groups.size) return '';
++  const rows = [...groups.entries()].sort((left, right) => left[0].localeCompare(right[0])).map(([chapter, refs]) => {
++    const title = chapterTitles.get(chapter) || `Chapter ${Number.parseInt(chapter, 10)}`;
++    const chapterData = chapterDataById.get(chapter);
++    if (!chapterData) throw new Error(`Missing EPUB source chapter ${ebookPeople.book}/${chapter} for glossary reference`);
++    const snippets = refs.map((reference) => {
++      const unit = sourceUnitAt(chapterData, {
++        id: reference.unitId,
++        kind: reference.unitKind,
++        blockIndex: reference.blockIndex,
++        collection: reference.collection,
++        itemIndex: reference.itemIndex,
++      });
++      const href = `../${ebookSentenceHref(contentLayout, chapter, 'en', reference.unitId, 'text/')}`;
++      const zh = visibleTableText(chineseText(unit));
++      const en = visibleTableText(englishText(unit));
++      if (!zh && !en) throw new Error(`Empty EPUB glossary reference ${ebookPeople.book}:${chapter}:${reference.unitId}`);
++      return `<article class="glossary-mention-snippet">` +
++        `${zh ? `<a class="glossary-mention-source" lang="zh-Hant" href="${escapeXml(href)}">${escapeXml(zh)}</a>` : ''}` +
++        `${en ? `<a class="glossary-mention-link" href="${escapeXml(href)}">${escapeXml(en)}</a>` : ''}` +
++        `</article>`;
++    }).join('');
++    return `<li><h4>${escapeXml(title)}</h4>${snippets}</li>`;
++  });
++  return `<h3>Mentions</h3><ul class="glossary-mentions">${rows.join('')}</ul>`;
++}
++
++function renderEbookAliasTable(person) {
++  const aliases = personPublicAliases(person);
++  if (!aliases.length) return '';
++  const rows = aliases.map((name) => `<tr><th>${escapeXml(humanizePeopleValue(name.kind || 'name'))}</th>` +
++    `<td>${escapeXml(name.en || '')}</td><td lang="zh-Hant">${escapeXml(name.zh || '')}</td>` +
++    `<td>${escapeXml(name.pinyin || '')}</td></tr>`).join('');
++  return `<h3>Other names</h3><div class="glossary-aliases"><table><thead><tr>` +
++    `<th>Type</th><th>English</th><th>Chinese</th><th>Pinyin</th>` +
++    `</tr></thead><tbody>${rows}</tbody></table></div>`;
++}
++
++function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
++  const roles = person.roles.map((role) => role.label);
++  const lifeSummary = personLifeSummary(person);
++  return `<section class="glossary-entry" id="${ebookPersonAnchor(person.id)}">
++  <h2>${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}</h2>
++  <p class="glossary-description">${escapeXml(personPublicDescription(person))}</p>
++  ${lifeSummary ? `<p class="glossary-dates">${escapeXml(lifeSummary)}</p>` : ''}
++  ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
++  ${renderEbookAliasTable(person)}
++  ${renderEbookGlossaryFamily(person, ebookPeople)}
++  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)}
++</section>`;
++}
++
++export function renderEbookPeopleIndex(ebookPeople) {
++  const items = ebookPeople.people.map((person) => {
++    const file = ebookPeople.fileByPersonId.get(person.id);
++    return `<li><a class="glossary-person-link" href="${escapeXml(file)}#${ebookPersonAnchor(person.id)}">` +
++      `${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}` +
++      `</a><span>${escapeXml(personPublicDescription(person))}</span></li>`;
++  }).join('\n      ');
++  return `<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE html>
++<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
++<head>
++  <title>${peopleGlossaryTitle}</title>
++  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
++</head>
++<body>
++  <nav epub:type="glossary" class="people-glossary-index">
++    <h1>${peopleGlossaryTitle}</h1>
++    <ol>${items}</ol>
++  </nav>
++</body>
++</html>`;
++}
++
++export function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
++  const entries = shard.people.map((person) =>
++    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)
++  ).join('\n');
++  return `<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE html>
++<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
++<head>
++  <title>${peopleGlossaryTitle} ${shard.number}</title>
++  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
++</head>
++<body>
++  <section epub:type="glossary" class="people-glossary">
++    <h1>${peopleGlossaryTitle}</h1>
++    ${entries}
++  </section>
++</body>
++</html>`;
++}
++
+diff --git a/scripts/lib/ebook-text.mjs b/scripts/lib/ebook-text.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/lib/ebook-text.mjs
+@@ -0,0 +1,46 @@
++export function escapeXml(value) {
++  return String(value ?? '')
++    .replace(/&/g, '&amp;')
++    .replace(/</g, '&lt;')
++    .replace(/>/g, '&gt;')
++    .replace(/"/g, '&quot;')
++    .replace(/'/g, '&#039;');
++}
++
++export function textContent(value) {
++  return String(value ?? '').replace(/\s+/g, ' ').trim();
++}
++
++// Table cells retain a small amount of source layout metadata in the JSON.
++// It is useful to the web renderer but should never leak into a reading excerpt.
++export function visibleTableText(value) {
++  return String(value ?? '').replace(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/iu, '');
++}
++
++export function formatList(values) {
++  const items = values.map(textContent).filter(Boolean);
++  if (items.length <= 1) return items.join('');
++  if (items.length === 2) return `${items[0]} and ${items[1]}`;
++  return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
++}
++
++export function getTranslationObject(item) {
++  if (!item) return null;
++  if (typeof item.idiomatic === 'string' || typeof item.literal === 'string' || typeof item.translation === 'string') {
++    return null;
++  }
++  const translation = item.translations?.find((entry) => entry.lang === 'en') || item.translations?.[0];
++  return translation || null;
++}
++
++export function getMainText(item) {
++  if (!item) return '';
++  const direct = item.idiomatic || item.literal || item.translation;
++  if (typeof direct === 'string' && direct.trim()) return direct.trim();
++  const trans = getTranslationObject(item);
++  if (trans) {
++    return textContent(trans.idiomatic || trans.literal || '');
++  }
++  return '';
++}
++
+diff --git a/scripts/lib/people-editorial-decisions.mjs b/scripts/lib/people-editorial-decisions.mjs
+--- a/scripts/lib/people-editorial-decisions.mjs
++++ b/scripts/lib/people-editorial-decisions.mjs
+@@ -446,7 +446,8 @@
+   const documentResult = editorialDocumentErrors(document);
+   const errors = [...documentResult.errors];
+   const reviews = editorialReviews(document);
+-  const pendingReview = currentReview(document, extraction);
++  const pendingReview = extraction.translationRepairs.some(repair => repair.status === 'proposed')
++    ? currentReview(document, extraction) : null;
+   const pendingFingerprint = pendingReview?.input.proposalsFingerprint ?? null;
+   const repairsByTarget = new Map();
+   for (const repair of extraction.translationRepairs) {
+@@ -521,6 +522,33 @@
+     }
+   }
+ 
++  // History must account for every applied change, as well as every historical
++  // approval remaining applied. The presence of one valid review cannot bless
++  // later repairs that were never independently authorized. IDs may be
++  // resequenced during reconciliation, so compare the exact reviewed contract.
++  const repairContract = (unit, field, before, after, reason) => JSON.stringify(canonicalize({
++    unit, field, before, after, reason,
++  }));
++  const authorizedRepairs = new Set();
++  for (const review of reviews) {
++    if (review.reviewer?.agentId && extraction.run?.agentId &&
++        review.reviewer.agentId === extraction.run.agentId) continue;
++    const proposals = new Map((review.proposals ?? []).map(proposal => [proposal.id, proposal]));
++    for (const decision of review.decisions ?? []) {
++      if (!['accept', 'revise'].includes(decision.decision)) continue;
++      const proposal = proposals.get(decision.repairId);
++      if (!proposal) continue;
++      authorizedRepairs.add(repairContract(proposal.unit, proposal.field, proposal.before,
++        decision.decision === 'revise' ? decision.after : proposal.after, decision.reason));
++    }
++  }
++  for (const repair of extraction.translationRepairs) {
++    if (repair.status !== 'applied') continue;
++    if (!authorizedRepairs.has(repairContract(repair.unit, repair.field, repair.before, repair.after, repair.reason))) {
++      errors.push(`applied ${repair.id} has no matching independent accept/revise authorization`);
++    }
++  }
++
+   if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
+   return documentResult;
+ }
+diff --git a/scripts/lib/people-identity-seal.mjs b/scripts/lib/people-identity-seal.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/lib/people-identity-seal.mjs
+@@ -0,0 +1,113 @@
++import crypto from 'node:crypto';
++import fs from 'node:fs';
++import path from 'node:path';
++import { REPO_ROOT } from './people-content.mjs';
++
++export function stableJson(value) {
++  if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
++  if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(key =>
++    `${JSON.stringify(key)}:${stableJson(value[key])}`).join(',')}}`;
++  return JSON.stringify(value);
++}
++
++export function peopleDigest(value) {
++  const hash = crypto.createHash('sha256');
++  // Keep the legacy stableJson byte representation, without materializing a
++  // catalog-sized string (V8 strings have a hard length limit independent of RAM).
++  let pending = [];
++  let pendingLength = 0;
++  const flush = () => {
++    if (pendingLength) hash.update(pending.join(''));
++    pending = [];
++    pendingLength = 0;
++  };
++  const emit = text => {
++    if (text.length >= 65_536) {
++      flush();
++      hash.update(text);
++    } else {
++      pending.push(text);
++      pendingLength += text.length;
++      if (pendingLength >= 65_536) flush();
++    }
++  };
++  const visit = (item, context = 'root') => {
++    if (Array.isArray(item)) {
++      emit('[');
++      for (let index = 0; index < item.length; index += 1) {
++        if (index) emit(',');
++        visit(item[index], 'array');
++      }
++      emit(']');
++    } else if (item && typeof item === 'object') {
++      emit('{');
++      const keys = Object.keys(item).sort();
++      for (let index = 0; index < keys.length; index += 1) {
++        if (index) emit(',');
++        const key = keys[index];
++        emit(JSON.stringify(key));
++        emit(':');
++        visit(item[key], 'object');
++      }
++      emit('}');
++    } else {
++      const text = JSON.stringify(item);
++      // Preserve stableJson's historical interpolation/join behavior even for
++      // non-JSON undefined entries. Root undefined still fails loudly.
++      if (text !== undefined) emit(text);
++      else if (context === 'object') emit('undefined');
++      else if (context === 'root') hash.update(text);
++    }
++  };
++  visit(value);
++  flush();
++  return `sha256:${hash.digest('hex')}`;
++}
++
++// A global identity generation is reusable only while every input that could
++// change identity membership or candidate ambiguity is unchanged. Hash bytes,
++// inventories and code; mtime and catalog.generatedAt are not evidence pins.
++export function identityInputSeal(root = REPO_ROOT) {
++  const files = [];
++  const visit = (relative, select) => {
++    const directory = path.join(root, relative);
++    if (!fs.existsSync(directory)) throw new Error(`Missing identity input directory ${relative}`);
++    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
++      const item = path.join(relative, entry.name);
++      if (entry.isDirectory()) visit(item, select);
++      else if (entry.isFile() && select(item)) files.push(item);
++      else if (entry.isSymbolicLink()) throw new Error(`Identity input must be a regular file: ${item}`);
++    }
++  };
++  visit('scripts', file => /\.(?:mjs|js)$/u.test(file));
++  for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
++    if (entry.isFile() && /\.(?:mjs|js)$/u.test(entry.name)) files.push(entry.name);
++  }
++  for (const entry of fs.readdirSync(path.join(root, 'data'), { withFileTypes: true })) {
++    if (!entry.isDirectory() || entry.name === 'people') continue;
++    const relative = path.join('data', entry.name);
++    for (const name of fs.readdirSync(path.join(root, relative))) {
++      if (/^\d{3}\.json$/u.test(name)) files.push(path.join(relative, name));
++    }
++  }
++  for (const directory of ['extractions', 'resolutions', 'curation', 'chronology', 'schema']) {
++    visit(path.join('data', 'people', directory), file => file.endsWith('.json'));
++  }
++  files.push('data/people/config.json', 'data/glossary.json', 'package.json');
++  return peopleDigest(files.sort().map(file => [file.split(path.sep).join('/'),
++    crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
++}
++
++export function assertIdentitySeal(seal, catalog, siteIndex, currentInputs) {
++  if (seal?.schemaVersion !== 1 || seal.kind !== 'people-global-identity-seal' ||
++      seal.inputs !== currentInputs || seal.catalog !== peopleDigest(catalog) ||
++      seal.siteIndex !== peopleDigest(siteIndex) ||
++      !Array.isArray(seal.unresolvedCanonicalPeople) ||
++      new Set(seal.unresolvedCanonicalPeople).size !== seal.unresolvedCanonicalPeople.length) {
++    throw new Error('Missing, stale or invalid global identity seal; rerun people:catalog');
++  }
++  const ids = new Set(catalog.people.map(person => person.id));
++  if (seal.unresolvedCanonicalPeople.some(id => !ids.has(id))) {
++    throw new Error('Identity seal refers to an unknown canonical person');
++  }
++}
+diff --git a/scripts/test-ebook-certified-cli.mjs b/scripts/test-ebook-certified-cli.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/test-ebook-certified-cli.mjs
+@@ -0,0 +1,142 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import { fileURLToPath, pathToFileURL } from 'node:url';
++import { spawnSync } from 'node:child_process';
++import { PEOPLE_DIR } from './lib/people-content.mjs';
++
++// A tiny actual publication, with production extraction/date validation and the
++// normal compiler. No source, identity, editorial or date gate is mocked.
++test('required CLI binds the full publication to one certified root; split-root unmentioned events reject', { timeout: 180_000 }, () => {
++  const codeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
++  const directory = fs.mkdtempSync(path.join(codeRoot, 'certified-cli-fixture-'));
++  try {
++    const a = path.join(directory, 'approved-a');
++    const b = path.join(directory, 'unapproved-b');
++    const write = (root, file, value) => {
++      const target = path.join(root, file);
++      fs.mkdirSync(path.dirname(target), { recursive: true });
++      fs.writeFileSync(target, `${JSON.stringify(value, null, 2)}\n`);
++    };
++    for (const name of ['scripts', 'data/people/extractions', 'data/people/resolutions']) {
++      fs.mkdirSync(path.join(a, name), { recursive: true });
++    }
++    // Required individual schemas/chronology are fixture dependencies; no book,
++    // corpus, public asset directory, repository or dependency tree is copied.
++    for (const name of ['schema', 'chronology']) {
++      for (const file of fs.readdirSync(path.join(PEOPLE_DIR, name)).filter(file => file.endsWith('.json'))) {
++        write(a, `data/people/${name}/${file}`, JSON.parse(fs.readFileSync(path.join(PEOPLE_DIR, name, file), 'utf8')));
++      }
++    }
++    for (const file of ['config.json', 'curation/role-vocabulary.json']) {
++      write(a, `data/people/${file}`, JSON.parse(fs.readFileSync(path.join(PEOPLE_DIR, file), 'utf8')));
++    }
++    write(a, 'package.json', { type: 'module' });
++    write(a, 'data/glossary.json', {});
++    write(a, 'data/people/curation/overrides.json', { schemaVersion: 1, people: {} });
++    const product = { slug: 'jinshu-synthetic-test', book: 'jinshu', chapters: ['001'],
++      title: 'Synthetic Integration Test', subtitle: 'Fictional test fixture', author: 'Synthetic Author',
++      translator: 'Garrett M. Petersen', publisher: 'Synthetic Testing',
++      rights: 'Synthetic test fixture only. English translation and edition are copyright (c) 2026 Garrett M. Petersen.',
++      description: 'A fictional integration testing artifact. No real publication claim.',
++      aiDisclosure: 'This synthetic English translation was generated with AI tools for local integration testing.',
++      editionNote: 'Testing edition only.', editionStatus: 'Synthetic test edition', language: 'en',
++      sourceAttribution: ['Synthetic authored fixture'],
++      kdp: { suggestedListPriceUsd: '9.99', publishingRights: 'This is not a public domain translation. Synthetic testing artifact only.',
++        aiGeneratedContent: 'Yes', categories: ['History'], keywords: ['river crossings', 'autumn gardens', 'northern mountains',
++          'southern orchards', 'western villages', 'eastern valleys', 'winter journeys'] } };
++    write(a, 'ebooks/manifest.json', { schemaVersion: 1, products: [product] });
++    const source = { meta: { book: 'jinshu', chapter: '001', sentenceCount: 1, translatedCount: 1,
++      title: { en: 'Synthetic chapter', zh: '測試' } },
++    content: [{ type: 'paragraph', sentences: [{ id: 's0001', zh: '甲至。', literal: 'Jia arrived.', idiomatic: 'Jia arrived.' }] }] };
++    write(a, 'data/jinshu/001.json', source);
++    write(a, 'data/outside/001.json', { meta: { book: 'outside', chapter: '001' },
++      content: [{ type: 'paragraph', sentences: [{ id: 's0001', zh: '雨。', idiomatic: 'It rained.' }] }] });
++    const generator = fileURLToPath(import.meta.resolve('./generate-ebook.mjs'));
++    for (const root of [a, b]) {
++      fs.mkdirSync(path.join(root, 'scripts'), { recursive: true });
++      fs.copyFileSync(generator, path.join(root, 'scripts/generate-ebook.mjs'));
++    }
++    // Executables retain their real fixture location. Only their dependency
++    // imports use the existing code installation, as in a sparse installation.
++    const loader = path.join(directory, 'fixture-loader.mjs');
++    fs.writeFileSync(loader, `export async function resolve(specifier, context, nextResolve) {
++      const entries = ${JSON.stringify([a, b].map(root => pathToFileURL(path.join(root, 'scripts/generate-ebook.mjs')).href))};
++      return nextResolve(specifier, entries.includes(context.parentURL)
++        ? { ...context, parentURL: ${JSON.stringify(pathToFileURL(generator).href)} } : context);
++    }\n`);
++    const modules = Object.fromEntries(['build-people-extraction-packet.mjs', 'validate-people-extraction.mjs',
++      'lib/people-content.mjs', 'lib/people-date-audit.mjs'].map(file => [file, import.meta.resolve(`./${file}`)]));
++    const seed = path.join(a, 'seed.mjs');
++    fs.writeFileSync(seed, `const modules = ${JSON.stringify(modules)};
++      const { buildPeopleExtractionPacket, buildPeopleExtractionSeed } = await import(modules['build-people-extraction-packet.mjs']);
++      const { validatePeopleExtraction } = await import(modules['validate-people-extraction.mjs']);
++      const { REPO_ROOT, writeJsonAtomic } = await import(modules['lib/people-content.mjs']);
++      const { buildDateAuditPacket, recordDateAudit } = await import(modules['lib/people-date-audit.mjs']);
++      const packet = buildPeopleExtractionPacket('jinshu', '001');
++      const extraction = buildPeopleExtractionSeed(packet, 'synthetic-offline-extractor');
++      extraction.run.agentId = 'synthetic-extractor';
++      for (const key of Object.keys(extraction.coverage)) if (typeof extraction.coverage[key] === 'boolean') extraction.coverage[key] = true;
++      const id = 'jinshu:001:p001';
++      extraction.people = [{ localId: id, preferredNameSuggestion: { en: 'Jia', zh: '甲', pinyin: 'Jia' },
++        historicity: 'historical', descriptorSuggestion: 'Synthetic traveller',
++        identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: ['AD 300'] } }];
++      extraction.claims = [
++        { id: 'jinshu:001:c0001', subject: id, predicate: 'name', value: { kind: 'personal', en: 'Jia', zh: '甲', pinyin: 'Jia' }, certainty: 'explicit', evidence: ['jinshu:001:s0001'] },
++        { id: 'jinshu:001:c0002', subject: id, predicate: 'role', value: { roleId: 'named-individual' }, certainty: 'explicit', evidence: ['jinshu:001:s0001'] },
++        { id: 'jinshu:001:c0003', subject: id, predicate: 'attestation', value: { sourceDate: { text: 'synthetic year' }, westernYear: { era: 'AD', year: 300, precision: 'year' } }, certainty: 'explicit', evidence: ['jinshu:001:s0001'] },
++      ];
++      const unit = Object.fromEntries(Object.entries(packet.units[0]).filter(([key]) => ['id', 'kind', 'blockIndex', 'collection', 'itemIndex'].includes(key)));
++      extraction.mentions = [{ id: 'jinshu:001:m0001', person: id, unit, kind: 'personal-name',
++        candidateRefs: packet.preflight.candidates.map(candidate => candidate.id),
++        spans: { zh: [{ exact: '甲', occurrence: 0 }], en: [{ exact: 'Jia', occurrence: 0, startCodePoint: 0, endCodePoint: 3 }] } }];
++      validatePeopleExtraction(extraction, packet, { strictAliasDispositions: true });
++      writeJsonAtomic(REPO_ROOT + '/data/people/extractions/jinshu/001.json', extraction);
++      const audit = buildDateAuditPacket('jinshu', '001');
++      const check = id => ({ id, verdict: 'supported', event: 'Synthetic Jia arrived in the source passage.',
++        reason: 'Synthetic fixture checks full source ownership; no historical assertion.', evidence: [{ unit: 's0001', quote: '甲至' }] });
++      recordDateAudit({ schemaVersion: 1, auditVersion: 1, book: 'jinshu', chapter: '001',
++        sourceHash: audit.sourceHash, extractionHash: audit.extractionHash, status: 'audited',
++        reviewer: { name: 'Independent synthetic reviewer', independentOfExtractor: true }, reviewedAt: '2026-10-24T12:00:00Z',
++        summary: 'Synthetic complete source review.', reviewedUnits: ['s0001'], itemChecks: audit.items.map(item => check(item.id)),
++        personChecks: audit.people.map(person => check(person.id)), findings: [], references: [] });
++    `);
++    const inheritedLoaders = [];
++    for (let index = 0; index < process.execArgv.length; index += 1) {
++      if (process.execArgv[index] === '--loader' || process.execArgv[index] === '--experimental-loader') {
++        inheritedLoaders.push(process.execArgv[index], process.execArgv[++index]);
++      }
++    }
++    const run = (args, cwd = a) => {
++      const result = spawnSync(process.execPath, [...inheritedLoaders, '--loader', loader, ...args],
++        { cwd, env: { ...process.env, PEOPLE_REPO_ROOT: a, TMPDIR: directory }, encoding: 'utf8', timeout: 90_000 });
++      return { status: result.status, output: result.stdout + result.stderr, error: result.error?.message };
++    };
++    for (const args of [[seed], [fileURLToPath(import.meta.resolve('./compile-people-catalog.mjs'))],
++      [path.join(a, 'scripts/generate-ebook.mjs'), '--book', 'jinshu', '--require-people-glossary']]) {
++      const result = run(args);
++      assert.equal(result.status, 0, `${args.join(' ')}\n${result.output}\n${result.error ?? ''}`);
++    }
++    const validator = fileURLToPath(import.meta.resolve('./validate-ebook.mjs'));
++    const epub = path.join(a, `dist/ebooks/${product.slug}/${product.slug}.epub`);
++    const positive = run([validator, '--require-people-glossary', epub]);
++    assert.equal(positive.status, 0, positive.output);
++    assert.match(positive.output, /EPUB validation passed/);
++    write(b, 'ebooks/manifest.json', { schemaVersion: 1, products: [product] });
++    const unapproved = structuredClone(source);
++    unapproved.content[0].sentences.push({ id: 's0002', zh: '甲祕密讓位。', literal: 'Jia secretly abdicated.', idiomatic: 'Jia secretly abdicated.' });
++    unapproved.meta.sentenceCount = 2;
++    unapproved.meta.translatedCount = 2;
++    write(b, 'data/jinshu/001.json', unapproved);
++    const splitGenerator = run([path.join(b, 'scripts/generate-ebook.mjs'), '--book', 'jinshu', '--require-people-glossary'], b);
++    assert.notEqual(splitGenerator.status, 0);
++    assert.match(splitGenerator.output, /generator executable root.*differs from certified people root/);
++    assert.equal(fs.existsSync(path.join(b, 'dist')), false, 'Mixed-root generation must fail before creating output');
++    const splitValidator = run([validator, '--require-people-glossary', epub], b);
++    assert.notEqual(splitValidator.status, 0);
++    assert.match(splitValidator.output, /validator working directory.*differs from certified people root/);
++  } finally {
++    fs.rmSync(directory, { recursive: true, force: true });
++  }
++});
+diff --git a/scripts/test-ebook-certified-people.mjs b/scripts/test-ebook-certified-people.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/test-ebook-certified-people.mjs
+@@ -0,0 +1,379 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { execFileSync } from 'node:child_process';
++import { compilePeopleCatalog, projectPeopleProduct, unresolvedCandidateState } from './compile-people-catalog.mjs';
++import { stableCanonicalPersonId, resolvePeopleClusters } from './lib/people-resolution.mjs';
++import { assertChapterGates, assertProductScope, assertScopedIdentity, assertEbookPeopleCertificate } from './lib/ebook-certified-people.mjs';
++import { assertIdentitySeal, peopleDigest } from './lib/people-identity-seal.mjs';
++import { buildEbookPeople, renderEbookPeopleIndex, renderEbookGlossaryShard, ebookPersonHref } from './lib/ebook-people-render.mjs';
++import { verifyCertifiedEbookPeople } from './lib/ebook-certified-verification.mjs';
++import { planEbookContentDocuments } from './lib/ebook-content-layout.mjs';
++import { renderUnitWithPeople } from './lib/people-site.mjs';
++import { editorialDecisionSeed, validateAppliedEditorialDecisions } from './lib/people-editorial-decisions.mjs';
++import { buildPeopleExtractionPacket, buildPeopleExtractionSeed } from './build-people-extraction-packet.mjs';
++import { validatePeopleExtraction } from './validate-people-extraction.mjs';
++import { peopleCatalogIsPublishable } from './lib/people-publication.mjs';
++import { REPO_ROOT, buildInputFingerprint, contentUnits } from './lib/people-content.mjs';
++import { assertCertifiedEbookRoot, assertCertifiedEbookSources } from './lib/ebook-certified-source.mjs';
++
++const audited = { status: 'audited', auditVersion: 1 };
++const product = { slug: 'jinshu', book: 'jinshu', chapters: ['001', '002'] };
++const manifest = { products: [product] };
++const locator = { id: 's0001', kind: 'paragraph-sentence', blockIndex: 0, collection: 'sentences', itemIndex: 0 };
++function member(book, chapter, en, zh) {
++  const scope = `${book}:${chapter}`;
++  const localId = `${scope}:p001`;
++  return { localId, book, chapter, promptVersion: 7,
++    preferredNameSuggestion: { en, zh, pinyin: en }, historicity: 'historical',
++    descriptorSuggestion: 'Official of the Jin court',
++    identityHints: { nativePlaces: [], relatedLocalPeople: [], activeDateHints: ['AD 300'], polityHints: [] },
++    claims: [
++      { id: `${scope}:c0001`, subject: localId, predicate: 'name', value: { kind: 'personal', en, zh, pinyin: en }, certainty: 'explicit', evidence: [`${scope}:s0001`] },
++      { id: `${scope}:c0002`, subject: localId, predicate: 'role', value: { roleId: 'official' }, certainty: 'explicit', evidence: [`${scope}:s0001`] },
++      { id: `${scope}:c0003`, subject: localId, predicate: 'attestation', value: { sourceDate: { text: 'first year' }, westernYear: { era: 'AD', year: 300, precision: 'year' } }, certainty: 'explicit', evidence: [`${scope}:s0001`] },
++    ],
++    mentions: [{ id: `${scope}:m0001`, person: localId, unit: locator, kind: 'personal-name', candidateRefs: [],
++      spans: { zh: [{ exact: zh, occurrence: 0 }], en: [{ exact: en, occurrence: 0, startCodePoint: 0, endCodePoint: en.length }] } }] };
++}
++function fixture() {
++  const a = member('jinshu', '001', 'Jin Father', '晉父');
++  const b = member('jinshu', '002', 'Jin Son', '晉子');
++  a.claims.push({ id: 'jinshu:001:c0004', subject: a.localId, predicate: 'family-relationship',
++    value: { relation: 'parent-of', personId: b.localId }, certainty: 'explicit', evidence: ['jinshu:001:s0001'] });
++  const outside = member('shiji', '001', 'Outside Alias', '外名');
++  const aid = stableCanonicalPersonId(a.localId);
++  const bid = stableCanonicalPersonId(b.localId);
++  const globalCatalog = { currentPromptVersion: 7, generatedAt: '2026-10-24T00:00:00.000Z', complete: false,
++    localPersonMap: { [a.localId]: aid, [b.localId]: bid, [outside.localId]: aid },
++    people: [{ id: aid, slug: 'global-stable-father', localPeople: [a.localId, outside.localId], retiredIds: [],
++      preferredName: { en: 'Outside Alias', zh: '外名' }, description: { en: 'Outside Descriptor' },
++      names: [{ en: 'Outside Alias' }], roles: [{ label: 'Outside Role' }],
++      life: { birth: [{ value: { westernYear: { era: 'BC', year: 123 } } }] },
++      familyRelationships: [{ value: { personId: 'outside-person', relation: 'spouse-of' } }] },
++    { id: bid, slug: 'global-stable-son', localPeople: [b.localId], retiredIds: [] }] };
++  const extraction = person => ({ book: person.book, chapter: person.chapter,
++    run: { promptVersion: 7, agentId: 'extractor' }, translationRepairs: [],
++    input: { chapterFingerprint: `sha256:${'a'.repeat(64)}` }, people: [person], claims: person.claims, mentions: person.mentions });
++  const corpus = { localPeople: new Map([[a.localId, a], [b.localId, b]]),
++    chapters: [a, b].map(person => ({ extraction: extraction(person) })) };
++  const projected = projectPeopleProduct(corpus, globalCatalog, new Map([['official', 'Official']]), {}, () => audited);
++  const context = { active: true, preview: false, ...projected,
++    certificate: { schemaVersion: 1, kind: 'certified-ebook-people', scope: product, projection: peopleDigest(projected) },
++    peopleById: new Map(projected.catalog.people.map(person => [person.id, person])) };
++  const data = new Map([a, b].map(person => [person.chapter, { meta: { title: { en: `Chapter ${person.chapter}` } },
++    content: [{ type: 'paragraph', sentences: [{ id: 's0001', zh: `${person.preferredNameSuggestion.zh}至。`,
++      idiomatic: `${person.preferredNameSuggestion.en} arrived.` }] }] }]));
++  context.certificate.gates = [...data].map(([chapter, source]) => {
++    const input = buildInputFingerprint(contentUnits(source));
++    return { chapter, source: peopleDigest(source), inputFingerprint: input.chapterFingerprint, inputUnitCount: input.unitCount };
++  });
++  return { a, b, aid, bid, outside, globalCatalog, corpus, context, data, extraction };
++}
++
++test('scoped projection retains global identities and URLs while excluding outside aliases, life, roles, description and family', () => {
++  const { context, aid, bid } = fixture();
++  assert.equal(context.catalog.complete, false);
++  const father = context.peopleById.get(aid);
++  assert.equal(father.slug, 'global-stable-father');
++  assert.equal(father.preferredName.en, 'Jin Father');
++  assert.equal(father.life.birth.length, 0);
++  assert.deepEqual(father.roles.map(role => role.label), ['Official']);
++  assert(!JSON.stringify(context).includes('Outside'));
++  assert.deepEqual(father.familyRelationships.map(item => item.value.personId), [bid]);
++  assert.equal(context.peopleById.get(bid).familyRelationships[0].value.relation, 'child-of');
++  assert(context.peopleById.get(bid).familyRelationships[0].derivedInverse);
++  assert(context.catalog.people.every(person => person.references.every(ref => ref.book === 'jinshu')));
++  assert(buildEbookPeople(context, product).ready);
++});
++
++test('a real globally compiled cross-book cluster stays globally blocked while its qualified book projects cleanly', () => {
++  const f = fixture();
++  const spouse = member('shiji', '002', 'Outside Spouse', '外妻');
++  f.outside.descriptorSuggestion = 'Outside Descriptor';
++  f.outside.claims.push(
++    { id: 'shiji:001:c0004', subject: f.outside.localId, predicate: 'birth',
++      value: { sourceDate: { text: 'an outside-book date' }, westernYear: { era: 'AD', year: 250, precision: 'year' } },
++      certainty: 'explicit', evidence: ['shiji:001:s0001'] },
++    { id: 'shiji:001:c0005', subject: f.outside.localId, predicate: 'family-relationship',
++      value: { relation: 'spouse-of', personId: spouse.localId }, certainty: 'explicit', evidence: ['shiji:001:s0001'] });
++  f.outside.claims.find(claim => claim.predicate === 'role').value.roleId = 'historian';
++  const members = [f.a, f.b, f.outside, spouse];
++  const globalCorpus = { localPeople: new Map(members.map(person => [person.localId, person])),
++    chapters: members.map(person => ({ extraction: f.extraction(person) })),
++    coverage: { sourceChapters: 5, extractedChapters: 4, missingChapterIds: ['hanshu:001'] } };
++  const result = compilePeopleCatalog(globalCorpus, [{ authority: 'curated', batch: 'synthetic', decisions: [
++    { decision: 'merge', localPeople: [f.a.localId, f.outside.localId] }] }], {},
++  { getDateStatus: (book) => book === 'jinshu' ? audited : { status: 'un-audited', auditVersion: 1 } });
++  assert.equal(peopleCatalogIsPublishable(result.catalog), false);
++  const id = result.catalog.localPersonMap[f.a.localId];
++  const global = result.catalog.people.find(person => person.id === id);
++  assert(global.names.some(name => name.en === 'Outside Alias'));
++  assert.equal(global.life.birth.length, 1);
++  assert(global.roles.some(role => role.roleId === 'historian'));
++  assert(global.familyRelationships.some(relation => relation.value.relation === 'spouse-of'));
++  assertScopedIdentity(f.corpus, result.catalog, { unresolvedCanonicalPeople: result.unresolvedCanonicalPeople });
++  const projected = projectPeopleProduct(f.corpus, result.catalog, new Map([['official', 'Official']]), {}, () => audited);
++  const person = projected.catalog.people.find(person => person.id === id);
++  assert.equal(person.life.birth.length, 0);
++  assert(!person.names.some(name => name.en === 'Outside Alias'));
++  assert(!person.roles.some(role => role.roleId === 'historian'));
++  assert(!person.familyRelationships.some(relation => relation.value.relation === 'spouse-of'));
++  assert.equal(peopleCatalogIsPublishable(result.catalog), false);
++});
++
++test('outside-only preferred overrides and unsupported family targets fail visibly', () => {
++  const { corpus, globalCatalog, aid, a } = fixture();
++  const roles = new Map([['official', 'Official']]);
++  assert.throws(() => projectPeopleProduct(corpus, globalCatalog, roles,
++    { [aid]: { preferredName: { en: 'Outside Alias' } } }, () => audited), /lacks scoped source support/);
++  assert.throws(() => projectPeopleProduct(corpus, globalCatalog, roles,
++    { [aid]: { preferredDescription: 'Outside Descriptor' } }, () => audited), /lacks scoped source support/);
++  a.claims.find(claim => claim.predicate === 'family-relationship').value.personId = 'shiji:999:p001';
++  assert.throws(() => projectPeopleProduct(corpus, globalCatalog, roles, {}, () => audited), /unresolved local person reference/);
++});
++
++test('complete-book and volume scope cannot be skipped, duplicated, reordered or forged', () => {
++  assert.doesNotThrow(() => assertProductScope(product, manifest, ['001', '002']));
++  for (const chapters of [['001'], ['002', '001'], ['001', '001'], ['001', '003']]) {
++    assert.throws(() => assertProductScope({ ...product, chapters }, manifest, ['001', '002']));
++  }
++  assert.throws(() => assertProductScope(product, manifest, ['001', '002', '003']), /Whole-book/);
++  const volume = { ...product, slug: 'jinshu-volume-1', chapters: ['001'] };
++  assert.doesNotThrow(() => assertProductScope(volume, { products: [volume] }, ['001', '002']));
++  assert.throws(() => assertProductScope({ ...volume, slug: 'jinshu' }, { products: [volume] }, ['001', '002']));
++});
++
++test('each local prompt, editorial and date gate fails independently', () => {
++  const { a, extraction } = fixture();
++  const value = extraction(a);
++  assert.doesNotThrow(() => assertChapterGates(value, 7, audited, null));
++  for (const version of [undefined, null, 0, 6, 8]) {
++    assert.throws(() => assertChapterGates({ ...value, run: { promptVersion: version } }, 7, audited, null), /prompt/);
++  }
++  assert.throws(() => assertChapterGates({ ...value, translationRepairs: [{ status: 'proposed' }] }, 7, audited, null), /Pending/);
++  assert.throws(() => assertChapterGates({ ...value, translationRepairs: [{ status: 'applied' }] }, 7, audited, null), /history/);
++  for (const status of ['un-audited', 'stale', 'needs-revision', 'research-blocked']) {
++    assert.throws(() => assertChapterGates(value, 7, { ...audited, status }, null), /date audit/);
++  }
++  assert.throws(() => assertChapterGates(value, 7, { ...audited, auditVersion: 2 }, null), /date audit/);
++});
++
++test('production extraction validator rejects stale source fingerprints before scoped qualification', () => {
++  const source = { meta: { book: 'fixture', chapter: '001', title: { en: 'Weather', zh: '雨' } },
++    content: [{ type: 'paragraph', sentences: [{ id: 's0001', zh: '雨。', idiomatic: 'It rained.' }] }] };
++  const packet = buildPeopleExtractionPacket('fixture', '001', { chapterData: source });
++  const extraction = buildPeopleExtractionSeed(packet, 'synthetic-offline-fixture');
++  for (const key of Object.keys(extraction.coverage)) if (typeof extraction.coverage[key] === 'boolean') extraction.coverage[key] = true;
++  assert.doesNotThrow(() => validatePeopleExtraction(extraction, packet, { strictAliasDispositions: true }));
++  source.content[0].sentences[0].idiomatic = 'It rained heavily.';
++  const fresh = buildPeopleExtractionPacket('fixture', '001', { chapterData: source });
++  assert.throws(() => validatePeopleExtraction(extraction, fresh, { strictAliasDispositions: true }), /fingerprint|hash|stale/i);
++});
++
++test('independent applied-editorial history cannot be invalid, self-reviewed or apply a rejection', () => {
++  const { a, extraction } = fixture();
++  const pending = extraction(a);
++  const repair = { id: 'jinshu:001:r0001', unit: locator, field: 'idiomatic', before: 'Jin Father arrived.',
++    after: 'Jin Father came.', reason: 'A proposed word choice.', confidence: 'medium', status: 'proposed' };
++  pending.translationRepairs = [repair];
++  const review = editorialDecisionSeed(pending);
++  review.reviewer = { kind: 'codex', name: 'Independent reviewer', model: null, agentId: 'reviewer', runId: null, completedAt: '2026-10-24T00:00:00Z' };
++  review.decisions[0] = { repairId: repair.id, decision: 'accept', after: null,
++    reason: 'Use the reviewed translation.', sourceWitness: { source: 'chapter-text', citation: 'jinshu:001:s0001', excerpt: null } };
++  const applied = { ...pending, translationRepairs: [{ ...repair, status: 'applied', reason: review.decisions[0].reason }] };
++  assert.doesNotThrow(() => assertChapterGates(applied, 7, audited, review));
++  assert.throws(() => assertChapterGates(applied, 7, audited, { ...review, reviewer: { ...review.reviewer, agentId: 'extractor' } }), /cannot review its own/);
++  assert.throws(() => assertChapterGates(applied, 7, audited, { ...review, decisions: [{ ...review.decisions[0], decision: 'reject' }] }), /rejected.*applied/);
++  assert.throws(() => assertChapterGates(applied, 7, audited, { ...review, input: {} }), /fingerprint|schema/);
++  const empty = extraction(a);
++  const emptyReview = editorialDecisionSeed(empty);
++  emptyReview.reviewer = { ...review.reviewer, agentId: 'extractor' };
++  assert.throws(() => assertChapterGates(empty, 7, audited, emptyReview), /cannot review its own/);
++});
++
++test('source-current strictly valid extraction cannot add an applied repair absent from independent history', () => {
++  const source = { meta: { book: 'fixture', chapter: '001', title: { en: 'Weather', zh: '雨' } },
++    content: [{ type: 'paragraph', sentences: [
++      { id: 's0001', zh: '雨。', idiomatic: 'Correct name.' },
++      { id: 's0002', zh: '雪。', idiomatic: 'Unreviewed replacement.' },
++    ] }] };
++  const packet = buildPeopleExtractionPacket('fixture', '001', { chapterData: source });
++  const seeded = buildPeopleExtractionSeed(packet, 'synthetic-offline-fixture');
++  for (const key of Object.keys(seeded.coverage)) if (typeof seeded.coverage[key] === 'boolean') seeded.coverage[key] = true;
++  seeded.run.agentId = 'extractor';
++  const repair = { id: 'fixture:001:r0001', unit: locator, field: 'idiomatic', before: 'Old name.',
++    after: 'Correct name.', reason: 'Correct the name.', confidence: 'high', status: 'proposed' };
++  const history = editorialDecisionSeed({ ...seeded, translationRepairs: [repair] });
++  history.reviewer = { kind: 'codex', name: 'Independent reviewer', model: null,
++    agentId: 'independent', runId: null, completedAt: '2026-10-24T00:00:00Z' };
++  history.decisions[0] = { repairId: repair.id, decision: 'accept', after: null,
++    reason: repair.reason, sourceWitness: { source: 'chapter-text', citation: 'fixture:001:s0001', excerpt: null } };
++  const extra = { ...repair, id: 'fixture:001:r0002', unit: { ...locator, id: 's0002', itemIndex: 1 },
++    before: 'Original second sentence.', after: 'Unreviewed replacement.', reason: 'Never independently reviewed.', status: 'applied' };
++  seeded.translationRepairs = [{ ...repair, status: 'applied' }, extra];
++  const { normalized } = validatePeopleExtraction(seeded, packet, { strictAliasDispositions: true });
++  assert.throws(() => validateAppliedEditorialDecisions(history, normalized), /r0002.*no matching independent/);
++  assert.throws(() => assertChapterGates(normalized, 7, audited, history), /r0002.*no matching independent/);
++  const approvedOnly = { ...normalized, translationRepairs: [normalized.translationRepairs[0]] };
++  assert.doesNotThrow(() => assertChapterGates(approvedOnly, 7, audited, history));
++  const emptyHistory = editorialDecisionSeed({ ...seeded, translationRepairs: [] });
++  emptyHistory.reviewer = history.reviewer;
++  assert.throws(() => assertChapterGates(approvedOnly, 7, audited, emptyHistory), /r0001.*no matching independent/);
++  // An unrelated valid history cannot authorize even one altered field of a
++  // repair contract, or a same-agent review, by virtue of existing on disk.
++  for (const change of [
++    { unit: { ...repair.unit, itemIndex: 9 } }, { field: 'literal' }, { before: 'Other before.' },
++    { after: 'Other after.' }, { reason: 'Unreviewed reasoning.' },
++  ]) {
++    const changed = { ...approvedOnly, translationRepairs: [{ ...approvedOnly.translationRepairs[0], ...change }] };
++    assert.throws(() => validateAppliedEditorialDecisions(history, changed), /no matching independent/);
++  }
++  assert.throws(() => validateAppliedEditorialDecisions({ ...history,
++    reviewer: { ...history.reviewer, agentId: 'extractor' } }, approvedOnly), /cannot review its own/);
++});
++
++test('outside homonym comparisons still block; unrelated outside comparisons do not', () => {
++  const { corpus, globalCatalog, aid } = fixture();
++  assert.throws(() => assertScopedIdentity(corpus, globalCatalog, { unresolvedCanonicalPeople: [aid] }), /global identity/);
++  assert.doesNotThrow(() => assertScopedIdentity(corpus, globalCatalog, { unresolvedCanonicalPeople: ['outside-unrelated'] }));
++  const a = member('jinshu', '001', 'Same Name', '同名');
++  const b = member('shiji', '001', 'Same Name', '同名');
++  const locals = new Map([[a.localId, a], [b.localId, b]]);
++  const resolved = resolvePeopleClusters(locals, [{ authority: 'curated', batch: 'fixture', decisions: [
++    { decision: 'possible-same-as', localPeople: [a.localId, b.localId] }] }]);
++  assert.equal(resolved.clusters.length, 2);
++  const mapping = new Map(resolved.clusters.flatMap(cluster => cluster.localPeople.map(id => [id, cluster.canonicalPersonId])));
++  const block = { id: 'block_fixture', localPeople: [a.localId, b.localId] };
++  assert.equal(unresolvedCandidateState({ blocks: [block] }, mapping, resolved.keepSeparate).blocks.length, 1);
++  assert.equal(unresolvedCandidateState({ blocks: [block] }, mapping, resolved.keepSeparate, resolved.possibleSameAs).blocks.length, 0);
++});
++
++test('identity generation seals and product certificates reject missing, stale and altered evidence', () => {
++  const { globalCatalog, context } = fixture();
++  const seal = { schemaVersion: 1, kind: 'people-global-identity-seal', inputs: 'current-inputs',
++    catalog: peopleDigest(globalCatalog), siteIndex: peopleDigest(context.siteIndex), unresolvedCanonicalPeople: [] };
++  assert.doesNotThrow(() => assertIdentitySeal(seal, globalCatalog, context.siteIndex, 'current-inputs'));
++  for (const bad of [null, { ...seal, inputs: 'stale' }, { ...seal, catalog: 'altered' }, { ...seal, siteIndex: 'altered' }]) {
++    assert.throws(() => assertIdentitySeal(bad, globalCatalog, context.siteIndex, 'current-inputs'), /identity seal/);
++  }
++  assert.throws(() => assertEbookPeopleCertificate({ ...context.certificate, projection: 'forged' }, context.certificate), /certificate/);
++});
++
++test('required source roots reject legitimate split-root configuration before generation or validation writes', t => {
++  const draft = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
++  const other = fs.mkdtempSync(path.join(draft, 'split-root-test-'));
++  t.after(() => fs.rmSync(other, { recursive: true, force: true }));
++  assert.doesNotThrow(() => assertCertifiedEbookRoot(REPO_ROOT, 'same-root fixture'));
++  assert.throws(() => assertCertifiedEbookRoot(other, 'generator executable root'), /differs from certified people root/);
++  assert.throws(() => assertCertifiedEbookRoot(other, 'validator working directory'), /differs from certified people root/);
++});
++
++test('actual loaded chapter objects must match full certified source and production input fingerprints', () => {
++  const f = fixture();
++  const chapters = [...f.data].map(([chapter, data]) => ({ chapter, data }));
++  assert.doesNotThrow(() => assertCertifiedEbookSources(f.context, product, chapters));
++  const preloaded = structuredClone(chapters);
++  chapters[0].data.content[0].sentences.push({ id: 's0002', zh: '甲祕密讓位。', idiomatic: 'Jia secretly abdicated.' });
++  assert.throws(() => assertCertifiedEbookSources(f.context, product, chapters), /Actual ebook source differs/);
++  // A source object read before certification must not be accepted just because
++  // it shares a root, chapter ID and all the original person anchors.
++  const changed = chapters[0].data;
++  const input = buildInputFingerprint(contentUnits(changed));
++  f.context.certificate.gates[0] = { chapter: '001', source: peopleDigest(changed),
++    inputFingerprint: input.chapterFingerprint, inputUnitCount: input.unitCount };
++  assert.throws(() => assertCertifiedEbookSources(f.context, product, preloaded), /Actual ebook source differs/);
++  const g = fixture();
++  const original = [...g.data].map(([chapter, data]) => ({ chapter, data }));
++  g.context.certificate.gates[0].inputFingerprint = `sha256:${'0'.repeat(64)}`;
++  assert.throws(() => assertCertifiedEbookSources(g.context, product, original), /Actual ebook source differs/);
++  const h = fixture();
++  h.data.get('001').meta.title.en = 'Unreviewed title';
++  assert.throws(() => assertCertifiedEbookSources(h.context, product,
++    [...h.data].map(([chapter, data]) => ({ chapter, data }))), /Actual ebook source differs/);
++});
++
++function renderedFixture() {
++  const f = fixture();
++  const state = buildEbookPeople(f.context, product);
++  const layout = planEbookContentDocuments(product.chapters, { hasAbout: false, peopleActive: true, peopleShards: state.shards.length });
++  const files = new Map([['EPUB/people/certificate.json', JSON.stringify(f.context.certificate)],
++    ['EPUB/people/index.xhtml', renderEbookPeopleIndex(state)]]);
++  const titles = new Map([...f.data].map(([chapter, data]) => [chapter, data.meta.title.en]));
++  for (const shard of state.shards) files.set(`EPUB/people/${shard.file}`, renderEbookGlossaryShard(shard, state, titles, layout, f.data));
++  for (const chapter of product.chapters) {
++    const entry = `EPUB/text/${layout.documentByChapter.get(chapter).file}`;
++    const unit = f.data.get(chapter).content[0].sentences[0];
++    const html = renderUnitWithPeople({ unitId: unit.id, text: unit.idiomatic, language: 'en', chineseWordSpans: false,
++      chapterContext: state.chapterContexts.get(chapter), hrefForPerson: ({ personId }) => ebookPersonHref(state, personId) });
++    files.set(entry, (files.get(entry) ?? '') + html);
++  }
++  return { ...f, state, files, verify: () => verifyCertifiedEbookPeople({ product, context: f.context, chapterData: f.data,
++    entries: [...files.keys()], readEntry: entry => { if (!files.has(entry)) throw new Error(`Missing ${entry}`); return files.get(entry); }, hasAbout: false }) };
++}
++
++test('actual shared ebook renderer emits only scoped facts, scoped inverse family, bilingual snippets and links', () => {
++  const f = renderedFixture();
++  const result = f.verify();
++  assert.equal(result.people, 2);
++  const glossary = f.files.get('EPUB/people/glossary-001.xhtml');
++  assert(!glossary.includes('Outside'));
++  assert(glossary.includes('晉父至。'));
++  assert(glossary.includes('Jin Father arrived.'));
++  assert(glossary.includes('Child of'));
++  assert(glossary.includes(`#person-${f.aid}`));
++});
++
++test('real artifact comparison rejects fact leakage, forged certificates, missing entries and altered English links', () => {
++  for (const mutate of [
++    f => f.files.set('EPUB/people/glossary-001.xhtml', f.files.get('EPUB/people/glossary-001.xhtml').replace('Jin Father', 'Outside Alias')),
++    f => f.files.set('EPUB/people/certificate.json', '{}'),
++    f => f.files.delete('EPUB/people/index.xhtml'),
++    f => { const file = [...f.files.keys()].find(name => name.startsWith('EPUB/text/')); f.files.set(file, f.files.get(file).replace('data-person-id=', 'data-forged-id=')); },
++    f => f.files.set('EPUB/people/extra.xhtml', '<p>Outside leak</p>'),
++  ]) {
++    const f = renderedFixture(); mutate(f); assert.throws(f.verify);
++  }
++});
++
++test('whole-source binding rejects an extra unmentioned person event even when every glossary/person anchor is unchanged', () => {
++  const f = renderedFixture();
++  f.data.get('001').content[0].sentences.push({ id: 's0002', zh: '甲祕密讓位。', idiomatic: 'Jia secretly abdicated.' });
++  const document = [...f.files.keys()].find(file => file.startsWith('EPUB/text/'));
++  f.files.set(document, f.files.get(document) + '<p>Jia secretly abdicated.</p>');
++  assert.throws(f.verify, /Actual ebook source differs from certified chapter/);
++});
++
++test('global preview cannot be promoted into certified required glossary output', () => {
++  const f = renderedFixture();
++  f.context.preview = true;
++  assert.throws(f.verify, /non-preview/);
++});
++
++test('packaged EPUB ZIP transport preserves independently checked glossary facts, snippets, certificate and mention links', t => {
++  const f = renderedFixture();
++  const draft = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
++  const directory = fs.mkdtempSync(path.join(draft, 'synthetic-epub-'));
++  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
++  const content = path.join(directory, 'content');
++  const unpacked = path.join(directory, 'unpacked');
++  for (const [entry, html] of f.files) {
++    const file = path.join(content, entry);
++    fs.mkdirSync(path.dirname(file), { recursive: true });
++    fs.writeFileSync(file, html);
++  }
++  fs.writeFileSync(path.join(content, 'mimetype'), 'application/epub+zip');
++  const archive = path.join(directory, 'fixture.epub');
++  execFileSync('zip', ['-q', '-0', archive, 'mimetype'], { cwd: content });
++  execFileSync('zip', ['-q', '-r', archive, 'EPUB'], { cwd: content });
++  execFileSync('unzip', ['-q', archive, '-d', unpacked]);
++  const entries = execFileSync('unzip', ['-Z1', archive], { encoding: 'utf8' }).trim().split('\n').filter(entry => !entry.endsWith('/'));
++  const result = verifyCertifiedEbookPeople({ product, context: f.context, chapterData: f.data,
++    entries, readEntry: entry => fs.readFileSync(path.join(unpacked, entry), 'utf8'), hasAbout: false });
++  assert.equal(result.expectedMentionLinks, 2);
++  fs.appendFileSync(path.join(unpacked, 'EPUB/people/glossary-001.xhtml'), '<p>Outside birth date</p>');
++  assert.throws(() => verifyCertifiedEbookPeople({ product, context: f.context, chapterData: f.data,
++    entries, readEntry: entry => fs.readFileSync(path.join(unpacked, entry), 'utf8'), hasAbout: false }), /differs/);
++});
+diff --git a/scripts/test-people-identity-seal.mjs b/scripts/test-people-identity-seal.mjs
+new file mode 100644
+--- /dev/null
++++ b/scripts/test-people-identity-seal.mjs
+@@ -0,0 +1,43 @@
++import assert from 'node:assert/strict';
++import crypto from 'node:crypto';
++import { constants } from 'node:buffer';
++import test from 'node:test';
++import { peopleDigest, stableJson } from './lib/people-identity-seal.mjs';
++
++const reference = value => `sha256:${crypto.createHash('sha256').update(stableJson(value)).digest('hex')}`;
++
++test('incremental identity digest exactly preserves deterministic stableJson bytes', () => {
++  const values = [null, true, false, 0, -0, 1e30, 'Chinese 史記 / escaped " \\ \n / emoji 😀 / lone \ud800',
++    [], {}, [null, undefined, , 3], { z: undefined, a: NaN, b: Infinity },
++    { people: [{ z: ['史記', { role: 'emperor', date: null }], id: 'a' }], localPersonMap: { b: 'a', a: 'a' } }];
++  for (const value of values) assert.equal(peopleDigest(value), reference(value));
++  assert.equal(peopleDigest({ b: 2, a: 1 }), peopleDigest({ a: 1, b: 2 }));
++  assert.notEqual(peopleDigest([1, 2]), peopleDigest([2, 1]));
++  assert.notEqual(peopleDigest({ a: 1 }), peopleDigest({ a: 2 }));
++  assert.throws(() => peopleDigest(undefined), TypeError);
++  assert.throws(() => peopleDigest(1n), TypeError);
++});
++
++test('identity digest handles aggregate JSON larger than the V8 maximum string', () => {
++  // Only one 1 MiB scalar is retained; references make the aggregate >512 MiB.
++  // Independent expected hashing never invokes the serializer under test.
++  const scalar = 'x'.repeat(1_048_576);
++  const count = Math.ceil(constants.MAX_STRING_LENGTH / (scalar.length + 3)) + 1;
++  const values = Array(count).fill(scalar);
++  assert.ok(count * (scalar.length + 3) + 1 > constants.MAX_STRING_LENGTH);
++  assert.throws(() => stableJson(values), RangeError);
++  const expected = crypto.createHash('sha256').update('[');
++  const encoded = JSON.stringify(scalar);
++  for (let index = 0; index < count; index += 1) {
++    if (index) expected.update(',');
++    expected.update(encoded);
++  }
++  expected.update(']');
++  assert.equal(peopleDigest(values), `sha256:${expected.digest('hex')}`);
++});
++
++test('incremental buffering preserves Unicode and key ordering across flushes', () => {
++  const record = Object.fromEntries(Array.from({ length: 12_000 }, (_, index) =>
++    [`key${12_000 - index}史`, { label: '😀史\ud800', value: index, empty: [] }]));
++  assert.equal(peopleDigest(record), reference(record));
++});
+diff --git a/scripts/validate-ebook.mjs b/scripts/validate-ebook.mjs
+--- a/scripts/validate-ebook.mjs
++++ b/scripts/validate-ebook.mjs
+@@ -8,6 +8,9 @@
+ import { scanArtifactText } from './scan-translation-artifacts.mjs';
+ import { renderBookCover } from './generate-book-covers.mjs';
+ import { ebookPeopleReadinessErrors } from './lib/ebook-people-readiness.mjs';
++import { verifyCertifiedEbookPeople } from './lib/ebook-certified-verification.mjs';
++import { loadCertifiedEbookPeople, assertEbookPeopleCertificate } from './lib/ebook-certified-people.mjs';
++import { assertCertifiedEbookRoot, assertCertifiedEbookChapterSource } from './lib/ebook-certified-source.mjs';
+ import { ebookCurrentDateErrors, ebookManifestScopeErrors } from './lib/ebook-current-date-audits.mjs';
+ import {
+   KDP_MAX_HTML_FILES,
+@@ -34,6 +37,8 @@
+ const epubPath = positionalArgs[0];
+ const CHILD_TIMEOUT_MS = 10_000;
+ const errors = [];
++if (requirePeopleGlossary) assertCertifiedEbookRoot(process.cwd(), 'validator working directory');
++let certifiedPeopleContext = null;
+ const MANIFEST_PATH = path.join(process.cwd(), 'ebooks', 'manifest.json');
+ 
+ function execFileSyncChecked(command, args, options = {}) {
+@@ -199,6 +204,17 @@
+ 
+ const entries = listEntries();
+ const entryDetails = listEntryDetails();
++if (requirePeopleGlossary) {
++  try {
++    const certifiedContext = loadCertifiedEbookPeople(sourceProduct);
++    certifiedPeopleContext = certifiedContext;
++    verifyCertifiedEbookPeople({ product: sourceProduct, context: certifiedContext, entries, readEntry: unzipText,
++      hasAbout: entries.includes('EPUB/about.xhtml') });
++    assertEbookPeopleCertificate(certifiedContext.certificate, loadCertifiedEbookPeople(sourceProduct).certificate);
++  } catch (error) {
++    errors.push(`Certified EPUB people verification failed: ${error.message}`);
++  }
++}
+ const required = [
+   'mimetype',
+   'META-INF/container.xml',
+@@ -524,9 +540,8 @@
+ 
+ function sourceChapterMetadata(book, chapter) {
+   if (!book || !chapter) return null;
+-  const file = path.join(process.cwd(), 'data', book, `${chapter}.json`);
+-  if (!fs.existsSync(file)) return null;
+-  const data = readJson(file);
++  const data = sourceChapterData(book, chapter);
++  if (!data) return null;
+   return {
+     englishTitle: data.meta?.title?.en || '',
+     chineseTitle: data.meta?.title?.zh || '',
+@@ -536,7 +551,9 @@
+ function sourceChapterData(book, chapter) {
+   if (!book || !chapter) return null;
+   const file = path.join(process.cwd(), 'data', book, `${chapter}.json`);
+-  return fs.existsSync(file) ? readJson(file) : null;
++  const data = fs.existsSync(file) ? readJson(file) : null;
++  if (requirePeopleGlossary) assertCertifiedEbookChapterSource(certifiedPeopleContext, book, chapter, data);
++  return data;
+ }
+ 
+ function sourceItemTranslation(item) {
