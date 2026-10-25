@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "kind": "artifact-only-test-fixture-fix",
+  "baseCommit": "5d652c2cded7074ad5bfe3727cff639b1f07e1f1",
+  "targetPullRequestHeadForHostCAS": "d198",
+  "patch": "production-build-test-fix.patch",
+  "patchSha256": "863417ad12a360499fee8a6d6fc84d62b10f2c002a0687bccf64de5c241ee937",
+  "files": [
+    {
+      "path": "scripts/test-people-production-build.mjs",
+      "baseSha256": "90249e8f38ea41dda50c8630cfc40b733053e46cc66822941ad63fd5d94ba5c1",
+      "draftSha256": "8172082bd94b88cfc3d019a87e817485e2aa120aaba9a791a30cc1f1a83ba7cc",
+      "bytes": 5317
+    }
+  ],
+  "evidence": {
+    "evidence/focused-tests.log": {
+      "sha256": "297e72c19a295098a061f035d098be1790860c631ee4c62d7cdbc0312645696e",
+      "bytes": 3109
+    },
+    "evidence/npm-production-self-test-existing-seal.log": {
+      "sha256": "11f0740b8f1359dbda1248012ab82d2fd557abcf0613221584be97b76dc7a448",
+      "bytes": 1135
+    },
+    "evidence/npm-production-self-test.log": {
+      "sha256": "ad6fd27fe1634d412f85d8ccac206942b0cd0925459303a3c5f7774492be8d18",
+      "bytes": 1135
+    },
+    "evidence/round-trip-and-preservation.json": {
+      "sha256": "6737559b12d1cca4cdb5301143f92420728ab33652b66d40d7e9266ee10d120d",
+      "bytes": 1374
+    }
+  },
+  "tests": {
+    "npmProductionBuildSelfTest": "passed; actual canonical package/guard/sentinel contract unchanged",
+    "npmProductionBuildSelfTestExistingPoisonSeal": "passed; exact read was intercepted",
+    "focusedTests": 26,
+    "failed": 0,
+    "fullLocalBuild": false
+  },
+  "constraints": {
+    "liveAdoption": false,
+    "productionBehaviorChange": false,
+    "v2SealChanged": false,
+    "canonicalOrGitOrQueueOrRuntimeWrites": false
+  },
+  "review": "Host must reconcile the exact one-file fix with current PR head CAS; independent source/test review requested."
+}

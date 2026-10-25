@@ -1,0 +1,48 @@
+diff --git a/scripts/test-people-production-build.mjs b/scripts/test-people-production-build.mjs
+--- a/scripts/test-people-production-build.mjs
++++ b/scripts/test-people-production-build.mjs
+@@ -47,9 +47,10 @@
+   fs.rmSync(scratch, { recursive: true, force: true });
+ }
+ 
+-// Test the actual local-preview context without touching generated files.
+-// The old, in-memory catalog format is a supported read path; interception is
+-// limited to its two exact generated paths and restored immediately.
++// Missing identity evidence cannot activate either normal or explicit-preview
++// contexts. Intercept only the fixture generated paths and force its exact seal
++// missing even if a real seal exists. Certified positive cases use the ordinary
++// compiler in test-people-qualified-site.mjs. Restore every patch immediately.
+ const catalog = { schemaVersion: 1, generatedAt: 'fixture', currentPromptVersion: 7, complete: false,
+   stats: { sourceChapters: 2, extractedChapters: 1, missingChapters: 1, dateAuditPendingChapters: 1,
+     legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0 },
+@@ -57,16 +58,25 @@
+ const index = { schemaVersion: 2, generatedAt: 'fixture', currentPromptVersion: 7, complete: false, chapters: {} };
+ const files = new Map([[path.join(root, 'data/people/generated/catalog.json'), JSON.stringify(catalog)],
+   [path.join(root, 'data/people/generated/site-index.json'), JSON.stringify(index)]]);
++const identitySealPath = path.join(root, 'data/people/generated/catalog.json.identity-seal.json');
++const missingFixtureSeal = error => error?.code === 'ENOENT' && error.path === identitySealPath;
+ const exists = fs.existsSync, read = fs.readFileSync, oldPreview = process.env.PEOPLE_SITE_PREVIEW;
+ try {
+   fs.existsSync = file => files.has(String(file)) || exists(file);
+-  fs.readFileSync = (file, ...args) => files.has(String(file)) ? files.get(String(file)) : read(file, ...args);
++  fs.readFileSync = (file, ...args) => {
++    if (String(file) === identitySealPath) {
++      const error = new Error(`Missing fixture identity seal: ${identitySealPath}`);
++      error.code = 'ENOENT';
++      error.path = identitySealPath;
++      throw error;
++    }
++    return files.has(String(file)) ? files.get(String(file)) : read(file, ...args);
++  };
+   process.env.PEOPLE_SITE_PREVIEW = '1';
+-  const preview = loadPeopleSiteContext();
+-  assert.equal(preview.active, true);
+-  assert.equal(preview.preview, true);
++  assert.throws(() => loadPeopleSiteContext(), missingFixtureSeal);
++  assert.throws(() => loadPeopleSiteContext({ allowPreview: true }), missingFixtureSeal);
+   delete process.env.PEOPLE_SITE_PREVIEW;
+-  assert.equal(loadPeopleSiteContext().active, false);
++  assert.throws(() => loadPeopleSiteContext({ allowPreview: false }), missingFixtureSeal);
+ } finally {
+   fs.existsSync = exists; fs.readFileSync = read;
+   if (oldPreview === undefined) delete process.env.PEOPLE_SITE_PREVIEW;
