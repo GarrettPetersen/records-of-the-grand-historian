@@ -1,0 +1,31 @@
+{
+  "checkedOn": "2026-10-25",
+  "canonicalReference": "4389adfd0eac38b2bad0aaba087ed6f45979363a",
+  "diskPreflight": { "passed": true, "availableGiB": 50.9306640625 },
+  "transport": {
+    "publicHealth": { "ok": true, "service": "24histories-people-grokbot", "version": "1.0.0" },
+    "authenticatedWorkerStatus": "succeeded",
+    "worker": "grokbot-24",
+    "claimedChapter": "nanshi/008",
+    "otherClaims": "Numerous ready claims with PR URLs; these are accepted completed work reserved until master and do not consume execution slots.",
+    "quota": "Unknown: neither health nor worker_status reports inference allowance.",
+    "rendererOrDispatcherStatus": "Not probed; computer use and model dispatch excluded from this check."
+  },
+  "credentials": "Ignored 0600 .env loaded only by the existing matching repository client; token never inspected, printed, copied, or placed in command arguments. Endpoint explicitly fixed to the authorized HTTPS MCP URL.",
+  "clientStatusInvocation": "GROKBOT_MCP_URL=https://grokbot-mcp.24histories.com/mcp GROKBOT_MCP_REQUEST_TIMEOUT_MS=15000 node --env-file=.env scripts/grokbot-mcp-client.mjs status --worker grokbot-24",
+  "fiveOperationSurface": ["resume_or_claim", "get_chunk", "submit_chunk", "finalize_chapter", "worker_status"],
+  "capabilities": {
+    "extraction": true,
+    "arbitrarySealedIdentityEditorialDateTasks": false,
+    "artifactOnlyDownstreamSubmission": false,
+    "reason": "get_chunk returns an existing extraction assignment; submit_chunk validates extraction data; finalize_chapter assembles and publishes extraction. No arbitrary prompt, task kind, generic artifact path, editorial decision, or date approval interface exists. The headless dispatcher hardcodes the extraction campaign prompt and its CLI exposes no task/prompt override."
+  },
+  "downstreamMcpInvocation": null,
+  "minimumExistingRoutes": {
+    "dates": "Trusted host uses people:dates:run -- --book BOOK --chapter NNN --worker EXISTING_DATE_OWNER --lane grokbot --attachment-dir ABSOLUTE_HANDOFF_DIR. This exports sealed *.input.json jobs; a separately assigned Grok Bot conversation returns exact *.result.json attachments with byte count/SHA-256 and actual conversation identity. Host validates and resumes same ownership. Repairs and re-audit require different conversations. This is outside the five-operation MCP.",
+    "identity": "Reuse root-prepared, bounded Jinshu 053 sealed identity packets with separate reviewer conversations and artifact-only returns; trusted host validates fingerprints/coverage and publishes. The existing SDK resolver provides dossier preparation but no GrokBot attachment adapter. No supported CLI command dispatches these arbitrary tasks through the headless extractor.",
+    "editorial": "Existing people:editorial-dossier can produce a dossier and --decision-seed-out scaffold for independent manual/Codex review; host applies validated decisions. No GrokBot MCP or headless arbitrary-task adapter exists."
+  },
+  "safetyAndScope": "No resume, claim, inference, submission, finalization, acceptance, queue write, lock mutation, branch/index/commit/build operation, checkout, or canonical change performed. Existing sticky claim preserved. No quota conclusion inferred. Completion-first Jinshu 053 scope preserved.",
+  "sourceCaveat": "Runbooks and server API checked from exact canonical Git ref. Local client and headless dispatcher match that ref. Local server/bridge differ from it in runtime isolation/publication/cache details; both canonical and local tool surfaces remain extraction-only."
+}
