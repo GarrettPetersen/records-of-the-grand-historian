@@ -1,0 +1,91 @@
+{
+  "canonicalRef": "81240df60b45d748f7b951c41810ef8cac9c7a3d",
+  "status": "11 exact-source helper/gate assertions passed; draft only",
+  "scope": "In-memory exact-master production validateAttestationClaim plus exact undatedOnlyEvidence gate and hasDateBearingChronology. Not whole-extraction validation, audit approval, or source-semantic validation. No modified source modules were imported.",
+  "sourceHashes": {
+    "validator": "sha256:33b59627388be1735eae3a05fb0b36b4580eb8b2c4924b063f2f7ad66e1af2c6",
+    "dateValues": "sha256:0e9b4e0092e4d7e905b326e3f6eeb21e0c255638ab18e66900a5914d797fd10f",
+    "executedAttestationFunctions": "sha256:d9ba76d43fff8cf75f1f6fb904eb5c36c9e60cb6ac325d80aa82a1722157bf7b",
+    "executedDateBearingFunction": "sha256:1ce4362c6023db6f20a45f82f8587f83629515712f66787b5ef3ce5e2f6b099e",
+    "executedUndatedGate": "sha256:1fb94d1a31ef0d114d05b5e663db88625926157d60be6b72a60336253cbdca49"
+  },
+  "examples": {
+    "attestation": {
+      "undatedSourceAttestation": true,
+      "event": "Emperor Wu loved Sima Yu and kept him at his side; no calendar date is stated."
+    },
+    "age": {
+      "age": 5,
+      "reckoning": "sui",
+      "dateContext": {
+        "undatedSourceAttestation": true,
+        "event": "The crown prince was five when he pulled the emperor by his robe into the darkness; no calendar date is stated."
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "source-specific undated attestation",
+      "expectedAccepted": true,
+      "errors": []
+    },
+    {
+      "name": "undated age dateContext preserves age five and sui",
+      "expectedAccepted": true,
+      "errors": []
+    },
+    {
+      "name": "marker with short event rejected",
+      "expectedAccepted": false,
+      "errors": [
+        "example undatedSourceAttestation requires a substantive source-specific event"
+      ]
+    },
+    {
+      "name": "marker with sourceDate rejected",
+      "expectedAccepted": false,
+      "errors": [
+        "example undatedSourceAttestation cannot carry temporal or unresolved-date fields"
+      ]
+    },
+    {
+      "name": "marker with qualitative era rejected",
+      "expectedAccepted": false,
+      "errors": [
+        "example undatedSourceAttestation cannot carry temporal or unresolved-date fields"
+      ]
+    },
+    {
+      "name": "marker with unresolved flag rejected",
+      "expectedAccepted": false,
+      "errors": [
+        "example undatedSourceAttestation cannot carry temporal or unresolved-date fields"
+      ]
+    },
+    {
+      "name": "all attestations marked undated plus undated age qualifies",
+      "expectedUndatedOnlyException": true,
+      "actual": true
+    },
+    {
+      "name": "separate dated claim prevents empty-hint undated-only exception",
+      "expectedUndatedOnlyException": false,
+      "actual": false
+    },
+    {
+      "name": "source period unresolved claim prevents undated-only exception",
+      "expectedUndatedOnlyException": false,
+      "actual": false
+    },
+    {
+      "name": "unmarked additional attestation prevents exception",
+      "expectedUndatedOnlyException": false,
+      "actual": false
+    },
+    {
+      "name": "no attestation prevents exception",
+      "expectedUndatedOnlyException": false,
+      "actual": false
+    }
+  ]
+}
