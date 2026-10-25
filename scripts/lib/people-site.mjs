@@ -1,11 +1,7 @@
 import fs from 'node:fs';
+import { loadCertifiedPeopleSite } from './people-certified-site.mjs';
 import path from 'node:path';
 import { exactSpanAt, PEOPLE_DIR } from './people-content.mjs';
-import {
-  assertPeopleCatalogPublicationState,
-  peopleCatalogIsPublishable,
-} from './people-publication.mjs';
-import { readPeopleCatalog, readPeopleSiteIndex } from './people-generated-data.mjs';
 
 const CATALOG_PATH = path.join(PEOPLE_DIR, 'generated', 'catalog.json');
 const SITE_INDEX_PATH = path.join(PEOPLE_DIR, 'generated', 'site-index.json');
@@ -30,30 +26,15 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
     return { active: false, preview: false, reason: 'generated-data-missing' };
   }
 
-  const catalog = readPeopleCatalog(CATALOG_PATH);
-  const siteIndex = readPeopleSiteIndex(SITE_INDEX_PATH);
-  assertPeopleCatalogPublicationState(catalog);
-  if (siteIndex.schemaVersion !== 2) {
-    throw new Error('Generated people site index is obsolete; rerun people:catalog');
-  }
-  if (catalog.complete !== siteIndex.complete || catalog.generatedAt !== siteIndex.generatedAt ||
-      catalog.currentPromptVersion !== siteIndex.currentPromptVersion) {
-    throw new Error('Generated people catalog and site index are out of sync; rerun people:catalog');
-  }
-
-  const publishable = peopleCatalogIsPublishable(catalog);
-  const preview = !publishable && allowPreview;
-  const active = publishable || preview;
-  const peopleById = new Map(catalog.people.map((person) => [person.id, person]));
-  const familyEdgesById = new Map((catalog.familyEdges ?? []).map((edge) => [edge.id, edge]));
+  // A stored global complete flag is never current publication authority.
+  // Both normal and diagnostic contexts qualify the current sealed source scope.
+  const context = loadCertifiedPeopleSite();
+  if (!allowPreview) return context;
   return {
-    active,
-    preview,
-    reason: active ? null : 'catalog-not-publishable',
-    catalog,
-    siteIndex,
-    peopleById,
-    familyEdgesById,
+    ...context,
+    preview: true,
+    publication: { ...context.publication, mode: 'diagnostic-preview',
+      publishedChapters: 0, publishedPeople: 0 },
   };
 }
 

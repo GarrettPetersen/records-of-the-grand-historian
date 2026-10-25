@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { loadPeopleSiteContext } from './lib/people-site.mjs';
+import { assertPeopleSiteCertificate } from './lib/people-certified-site.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load as loadHtml } from 'cheerio';
-import { PEOPLE_DIR, readJson, REPO_ROOT } from './lib/people-content.mjs';
-import {
-  assertPeopleCatalogPublicationState,
-  peopleCatalogIsPublishable,
-} from './lib/people-publication.mjs';
+import { readJson, REPO_ROOT } from './lib/people-content.mjs';
 import {
   PERSON_PAGE_SHARD_COUNT,
   personIdSlugSuffix,
@@ -17,7 +15,6 @@ import {
 import {
   personPublicAliases,
 } from './lib/people-presentation.mjs';
-import { readPeopleCatalog, readPeopleSiteIndex } from './lib/people-generated-data.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const MAX_SEARCH_BYTES_PER_PERSON = 512;
@@ -79,12 +76,11 @@ function loadSearchEntries(outputRoot, errors) {
 
 export function verifyPeopleSite(options = parseArgs([])) {
   const errors = [];
-  const catalog = readPeopleCatalog(path.join(PEOPLE_DIR, 'generated', 'catalog.json'));
-  assertPeopleCatalogPublicationState(catalog);
-  const siteIndex = readPeopleSiteIndex(path.join(PEOPLE_DIR, 'generated', 'site-index.json'));
+  const context = loadPeopleSiteContext({ allowMissing: false, allowPreview: false });
+  const { catalog, siteIndex } = context;
   const statusPath = path.join(options.outputRoot, 'data', 'people', 'site-status.json');
   if (!fs.existsSync(statusPath)) {
-    if (!peopleCatalogIsPublishable(catalog) && !options.allowPreview) {
+    if (!context.active && !options.allowPreview) {
       const staleIndex = path.join(options.outputRoot, 'people', 'index.html');
       if (fs.existsSync(staleIndex)) throw new Error('Incomplete catalog left stale published people pages');
       console.log('people site verification: publication correctly gated while catalog is incomplete');
@@ -101,8 +97,15 @@ export function verifyPeopleSite(options = parseArgs([])) {
     'People site status extracted-chapter count differs from catalog', errors);
   assert(status.missingChapters === catalog.stats.missingChapters,
     'People site status missing-chapter count differs from catalog', errors);
-  if (status.published) {
-    assert(peopleCatalogIsPublishable(catalog), 'Published people site is not publishable', errors);
+  assertPeopleSiteCertificate(status.certificate);
+  if (status.preview) {
+    assert(!status.published && status.publication?.mode === 'diagnostic-preview' &&
+      status.publication.publishedChapters === 0 && status.publication.publishedPeople === 0,
+      'Diagnostic preview claims published output', errors);
+  } else {
+    assert(status.published && status.publication?.mode === 'certified-scope', 'People artifact lacks certified publication mode', errors);
+    assert(status.publication?.publishedChapters === context.publication.publishedChapters,
+      'Published chapter count differs from certified scope', errors);
   }
   if (status.preview && !options.allowPreview) errors.push('People site is a noindex preview, not a publication build');
   if (!status.preview && !status.published) errors.push('People site is not marked published');
@@ -126,7 +129,9 @@ export function verifyPeopleSite(options = parseArgs([])) {
     const fullPath = path.join(pagesDir, file);
     assert(fs.statSync(fullPath).size < 25 * 1024 * 1024, `${file} exceeds Cloudflare's 25 MiB asset limit`, errors);
     const shard = readJson(fullPath);
-    assert(shard.v === 1 && shard.pages && typeof shard.pages === 'object', `${file} is not a v1 page shard`, errors);
+    assert(shard.v === 2 && shard.pages && typeof shard.pages === 'object', `${file} has an invalid page-shard version`, errors);
+    if (context.certificate) assert(shard.certification?.inputs === context.certificate.inputs &&
+      shard.certification?.projection === context.certificate.projection, `${file} has stale or missing certification`, errors);
     for (const [slug, html] of Object.entries(shard.pages ?? {})) {
       const person = peopleBySlug.get(slug);
       assert(Boolean(person), `${file} contains unknown person ${slug}`, errors);
@@ -279,6 +284,14 @@ export function verifyPeopleSite(options = parseArgs([])) {
     }
   }
 
+  if (!options.skipChapterLinks && context.certificate) {
+    for (const scope of context.certificate.scope) {
+      if (siteIndex.chapters[`${scope.book}:${scope.chapter}`]) continue;
+      const file = path.join(options.outputRoot, scope.book, `${scope.chapter}.html`);
+      if (fs.existsSync(file)) assert(!loadHtml(fs.readFileSync(file, 'utf8'))('a[data-person-id]').length,
+        `${scope.book}/${scope.chapter} has links outside the certified scope`, errors);
+    }
+  }
   if (errors.length) {
     const shown = errors.slice(0, 100).map((error) => `- ${error}`).join('\n');
     throw new Error(`People site verification failed (${errors.length} error(s)):\n${shown}`);

@@ -4,12 +4,12 @@
  * Uses SITE_URL (default https://24histories.com). Run after generate-static-pages.js.
  */
 import fs from 'node:fs';
+import { REPO_ROOT } from './lib/people-content.mjs';
+import { assertPeopleSiteCertificate } from './lib/people-certified-site.mjs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { canonicalUrlForHtmlFile } from './lib/site-urls.mjs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.join(__dirname, '..');
+const root = REPO_ROOT;
 const publicDir = path.join(root, 'public');
 const manifestPath = path.join(root, 'data', 'manifest.json');
 const peopleStatusPath = path.join(publicDir, 'data', 'people', 'site-status.json');
@@ -79,6 +79,16 @@ function main() {
   if (fs.existsSync(peopleStatusPath)) {
     const status = JSON.parse(fs.readFileSync(peopleStatusPath, 'utf8'));
     if (status.published) {
+      if (status.preview || status.publication?.mode !== 'certified-scope') {
+        throw new Error('Published people sitemap requires a certified non-preview scope');
+      }
+      const certified = assertPeopleSiteCertificate(status.certificate);
+      if (certified && (status.people !== certified.publication.publishedPeople ||
+          status.publication.publishedChapters !== certified.publication.publishedChapters || status.preview)) {
+        throw new Error('Published people status differs from its current certificate');
+      }
+      const expectedSlugs = new Set(certified.catalog.people.map(person => person.slug));
+      const seenSlugs = new Set();
       const peopleDir = path.join(publicDir, 'people');
       const indexPath = path.join(peopleDir, 'index.html');
       if (!fs.existsSync(indexPath)) {
@@ -92,6 +102,10 @@ function main() {
       for (const part of searchIndex.parts ?? []) {
         const data = JSON.parse(fs.readFileSync(path.join(searchDir, part.file), 'utf8'));
         for (const entry of data.entries ?? []) {
+          if (seenSlugs.has(entry[0]) || (expectedSlugs && !expectedSlugs.has(entry[0]))) {
+            throw new Error('People sitemap search contains duplicate or uncertified person');
+          }
+          seenSlugs.add(entry[0]);
           urls.push({ loc: `${origin}/people/${encodeURIComponent(entry[0])}.html`, lastmod: peopleLastmod });
           peopleFound += 1;
         }

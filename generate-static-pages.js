@@ -17,6 +17,9 @@
  */
 
 import fs from 'node:fs';
+import { REPO_ROOT } from './scripts/lib/people-content.mjs';
+import { peopleDigest } from './scripts/lib/people-identity-seal.mjs';
+import { assertPeopleSiteCertificate } from './scripts/lib/people-certified-site.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
@@ -36,7 +39,7 @@ import {
   kindleInlineCalloutHtml,
 } from './public/kindle-promo-shared.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = REPO_ROOT;
 
 /** Canonical origin for og:url, og:image, and <link rel="canonical"> */
 const CANONICAL_SITE = (process.env.SITE_URL || 'https://24histories.com').replace(/\/$/, '');
@@ -480,7 +483,11 @@ function generateStructuredData(bookId, chapterData) {
   };
 }
 
-function generateChapterHTML(bookId, chapterData, allChapters = []) {
+export function generateChapterHTML(bookId, chapterData, allChapters = []) {
+  if (PEOPLE_SITE.certificate) {
+    const gate = PEOPLE_SITE.certificate.gates.find(item => item.book === bookId && item.chapter === String(chapterData.meta.chapter).padStart(3, '0'));
+    if (gate && gate.source !== peopleDigest(chapterData)) throw new Error('Chapter source differs from certified people-link scope');
+  }
   const book = BOOKS[bookId];
   const theme = bookTheme(bookId);
   const kindleProduct = kindleProductForBook(bookId);
@@ -1575,6 +1582,7 @@ async function generateStaticPages(
     }
   }
 
+  if (PEOPLE_SITE.certificate) assertPeopleSiteCertificate(PEOPLE_SITE.certificate);
   console.log(`\n✅ Generated ${totalGenerated} static HTML pages`);
   console.log(`Output directory: ${path.join(outputDir)}`);
 }
@@ -1626,7 +1634,7 @@ Examples:
   await generateStaticPages(bookId, chapterNum, outputDir, peopleAnnotatedOnly);
 }
 
-main().catch((e) => {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch((e) => {
   console.error(e);
   process.exit(1);
 });

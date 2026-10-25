@@ -92,6 +92,36 @@ test('approval reports every missing item-event ownership field together', t => 
     /Event ownership must be substantive text for: claim-1, hints-p001/.test(error.message));
 });
 
+test('approval reports all invalid item and person reasons without changing inputs', t => {
+  const f = fixture(t);
+  f.report.itemChecks[0].reason = 'Too short';
+  delete f.report.itemChecks[1].reason;
+  f.report.personChecks[0].reason = null;
+  const before = JSON.stringify({ report: f.report, packet: f.packet });
+  assert.throws(() => validateDateAuditReport(f.report, f.packet), {
+    message: 'Reason for claim-1 must be substantive text; Reason for hints-p001 must be substantive text; Reason for p001 must be substantive text',
+  });
+  assert.equal(JSON.stringify({ report: f.report, packet: f.packet }), before);
+});
+
+test('approval keeps trimmed reason minimum and rejects nonstrings', t => {
+  const f = fixture(t);
+  for (const reason of [' '.repeat(30), `  ${'x'.repeat(19)}  `, 12345678901234567890, {}, [], null, undefined]) {
+    f.report.itemChecks[0].reason = reason;
+    assert.throws(() => validateDateAuditReport(f.report, f.packet), {
+      message: 'Reason for claim-1 must be substantive text',
+    });
+  }
+});
+
+test('approval returns the same valid report without trimming or changing inputs', t => {
+  const f = fixture(t);
+  f.report.itemChecks[0].reason = `  ${'x'.repeat(20)}  `;
+  const before = JSON.stringify({ report: f.report, packet: f.packet });
+  assert.equal(validateDateAuditReport(f.report, f.packet), f.report);
+  assert.equal(JSON.stringify({ report: f.report, packet: f.packet }), before);
+});
+
 test('source edits, extraction edits, removals and protocol changes invalidate approval', t => {
   const f = fixture(t); recordDateAudit(f.report, f.options);
   f.source.content[0].sentences[0].translation = 'Changed translation.';

@@ -60,12 +60,13 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 ### Gotchas
 
-- **Pending parallel date-runner handoff (October 5, 2026):** Read
-  `DATE_AUDIT_PARALLEL_HANDOFF.md` before the next date invocation. The tested
-  refactor is in `patches/date-audit-parallel.patch`; adopt it only after the
-  current host invocation exits. Preserve active locks, leases, stable workers
-  and recovery artifacts. After adoption, use one shared four-job pool across
-  chapters, not separate competing executors or per-chapter repository copies.
+- **Current parallel date runner:** The tested runner supports two concurrent
+  chapters using one shared four-job pool across chapters. Keep stable workers,
+  reservations, locks, leases, recovery artifacts, invocation ceilings and all
+  independent review/publication gates. Do not reapply the historical
+  `patches/date-audit-parallel.patch` to the current runner; it has already been
+  adopted. `DATE_AUDIT_PARALLEL_HANDOFF.md` and that patch remain provenance.
+  Adopt future runtime changes only after the current host invocation exits.
 - **Independent people date audits:** Follow `PEOPLE_DATE_AUDIT.md` in every lane.
   All 4,099 chapters started date-un-audited; retain extraction prompt 7 and do not
   re-extract them for dates. After extraction and repairs, build a
