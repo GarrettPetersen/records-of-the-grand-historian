@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "INDEPENDENT_EXACT_TWO_FILE_CODE_REVIEW",
+  "reviewer": "/root/jin053_full_owner_peer",
+  "reviewedAt": "2026-10-25T13:53:28.651055+00:00",
+  "result": "approved-exact-v2-code",
+  "findings": [],
+  "exactManifest": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/merged-alias-chapter-dispatch-v2-20261025/finding-manifest.json",
+    "bytes": 11564,
+    "sha256": "ab7f96779dfee1817257472422352c4a7f4baa02b38d99f4c24bf8ef6288750c"
+  },
+  "canonicalBase": "086d12200612bd8e0b6e4a204d8597ac8d299da2",
+  "exactCandidates": [
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/merged-alias-chapter-dispatch-v2-20261025/compile-people-catalog.draft.mjs",
+      "bytes": 66486,
+      "sha256": "3f2215c7019fee7abbe78c9e88962557680f9d1fdc16bf0f1f56323fb9813ab8"
+    },
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/merged-alias-chapter-dispatch-v2-20261025/sdk-people-resolve.draft.mjs",
+      "bytes": 103366,
+      "sha256": "402ba88606a721c48456fc530970738db5caf906d0decdfd28ce0784ee7be0cc"
+    }
+  ],
+  "exactPatch": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/merged-alias-chapter-dispatch-v2-20261025/canonical-chapter-work-and-dispatch.patch",
+    "bytes": 8997,
+    "sha256": "06f18793dd94f502124caadcd663f6d946c1e407a8739837ea6c09f0499d4d52"
+  },
+  "allArtifactAndCanonicalDependencyPinsVerified": true,
+  "reviewJudgments": {
+    "compilerScope": "Canonical membership index built once. Only canonical people active in each unresolved block confer chapter targets to their own full member set. Target counts deduplicate members and canonical people; comparison counts still count reviewPairs touching that chapter target. Block payload counts deliberately continue to describe matching-name block rather than full expanded host dossier. No external component receives work from a different person.",
+    "sdkScope": "Target canonical IDs derive exclusively from requested chapters (or every local person for allUnresolved). Explicit existing unresolved reviewPairs are filtered to pairs touching those targets before endpoint expansion. Expanding complete members creates no new reviewPairs. Closed A-B and unassigned external B-C are absent in alias-only request.",
+    "targetRetention": "A2, absent from original name block, is present as literal requested target with targetOfThisPass=true; A1 remains context for same canonical group. Selecting both alias chapters keeps the same connected job. Fully resolved chapter015 produces no dossier.",
+    "fullMembershipAndSharding": "Complete endpoint groups enter host blocks before connectedBlockComponents/shardComponents. Shared canonical targets therefore cannot be split across initial component shards. Existing byte/target comparison caps, adaptive partitioning and representative projections remain unchanged. Oversized worker projections may still use one representative per complete host group under existing explicit projection contract; this review does not claim all members always fit inline.",
+    "constraints": "Candidate pair pruner, normal validateResolutionDocument and global resolver conflict checks unchanged. Visible priorSeparations may be filtered for context, but actual whole global priors/corpus still feed validation. No new merge evidentiary shortcut or weakened hard constraint. Fixture normal validator acceptance covers possible-same-as A2-C; it does not claim arbitrary merges are automatically accepted.",
+    "sourceVisibility": "New visible IDs come only from complete resolved clusters drawn from same validated corpus/candidate summaries. Source callback loads book/chapter and owned evidence for each requested visible ID; missing source evidence continues to fail loudly. Source callback/tool session behavior unchanged.",
+    "budgetsIndependenceClaims": "No budget/cap/API transport/worker independence/claim ownership or publication logic changed. No paid/API calls performed in self-tests."
+  },
+  "verifiedUnchangedProductionSpans": {
+    "unresolvedCandidateState": "9b30ce91460c0acd660f99a63011c2b8fbdc862a1ad82043dbe329ee465e97ae",
+    "validateResolutionDocument": "a59b363e9ee8ab25223cff6454042e510905f686046d4395f2a9062053ee0d93",
+    "shardComponents": "d735828db8bc4e0d837c68d6031f2db964f398548f918a322d5927aa671accb3",
+    "workerProjection": "87f8e6f8a8b6dff42556db7c3e6d4a19d769e30750a8f7616ed2cd22221804ce"
+  },
+  "durableTests": {
+    "catalog": "Existing ordinary compiler selfTest fixture now has chapter014 coverage and asserts inherited one comparison, target counts, original3-person matching-block payload counts, complete merged membership and shared needs-review state.",
+    "sdk": "Existing ordinary SDK selfTest exercises alias-only target, full endpoint group, target flag, exact one pair, worker projection, unchanged normal validator, dual-alias one job and fully closed target exclusion.",
+    "independentExecutionCommand": "node --experimental-vm-modules /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/merged-alias-chapter-dispatch-v2-independent-peer-20261025/independent-run-ordinary-self-tests.mjs",
+    "independentHarness": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/merged-alias-chapter-dispatch-v2-independent-peer-20261025/independent-run-ordinary-self-tests.mjs",
+      "bytes": 3406,
+      "sha256": "a4ca47f53efb1a33d67baabd942a3676eb7a00118224400d3e8111cf99d3d41c"
+    },
+    "independentResult": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/merged-alias-chapter-dispatch-v2-independent-peer-20261025/independent-ordinary-self-test-result.json",
+      "bytes": 4878,
+      "sha256": "4b977e88749d6b781f1eaa01157b805a4154e7153e0c208e653574b95dfe78e4"
+    },
+    "catalogOrdinaryFullSelfTest": "PASS",
+    "sdkOrdinaryFullSelfTest": "PASS",
+    "baselineSdkWithNewRegression": "FAIL expected: Alias-only chapter did not produce exactly one resolver dossier",
+    "executionBoundary": "Full exact candidate modules + Git-pinned transitive dependencies evaluated through SourceTextModule; actual ordinary selfTest functions invoked. Only harness candidate-directory binding/result-output redirected into peer artifacts. Author inputs/results untouched; no production main invocation.",
+    "noNewFlagsOrAPIRefactors": true
+  },
+  "scopeLimits": [
+    "Exact compiler3f2215c7019fee7abbe78c9e88962557680f9d1fdc16bf0f1f56323fb9813ab8 +SDK402ba88606a721c48456fc530970738db5caf906d0decdfd28ce0784ee7be0cc only.",
+    "Host must serialize adoption after data checkpoint and run required normal CI before master; no host CI/publication claimed.",
+    "No global graph rebuild, remaining-count recalculation, source/date/identity verdict approval or old runtime rebinding.",
+    "No primary/canonical/author artifact changes, Git/index/build/locks/queue/claims or paid calls."
+  ],
+  "actualTokens": null,
+  "paidToolCalls": 0
+}

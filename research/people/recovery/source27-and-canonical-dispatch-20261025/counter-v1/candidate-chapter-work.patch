@@ -1,0 +1,67 @@
+--- a/scripts/compile-people-catalog.mjs
++++ b/scripts/compile-people-catalog.mjs
+@@ -770,18 +770,27 @@
+ 
+ export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPeople, localMap) {
+   const work = new Map();
++  const membersByCanonical = new Map();
++  for (const [localId, canonicalId] of localMap) {
++    if (!membersByCanonical.has(canonicalId)) membersByCanonical.set(canonicalId, []);
++    membersByCanonical.get(canonicalId).push(localId);
++  }
+   for (const block of unresolvedBlocks) {
+     const targetsByChapter = new Map();
+-    for (const localId of block.localPeople) {
+-      if (!unresolvedLocalPeople.has(localId)) continue;
+-      const [book, chapter] = localId.split(':');
+-      const chapterId = `${book}:${chapter}`;
+-      if (!targetsByChapter.has(chapterId)) {
+-        targetsByChapter.set(chapterId, { localPeople: new Set(), canonicalPeople: new Set() });
++    const activeCanonicalPeople = new Set(block.localPeople
++      .filter(id => unresolvedLocalPeople.has(id)).map(id => localMap.get(id)));
++    // Targets inherit their own canonical person's work; payload counts still describe the block.
++    for (const canonicalId of activeCanonicalPeople) {
++      for (const localId of membersByCanonical.get(canonicalId)) {
++        const [book, chapter] = localId.split(':');
++        const chapterId = `${book}:${chapter}`;
++        if (!targetsByChapter.has(chapterId)) {
++          targetsByChapter.set(chapterId, { localPeople: new Set(), canonicalPeople: new Set() });
++        }
++        const targets = targetsByChapter.get(chapterId);
++        targets.localPeople.add(localId);
++        targets.canonicalPeople.add(canonicalId);
+       }
+-      const targets = targetsByChapter.get(chapterId);
+-      targets.localPeople.add(localId);
+-      targets.canonicalPeople.add(localMap.get(localId));
+     }
+     for (const [chapterId, targets] of targetsByChapter) {
+       if (!work.has(chapterId)) {
+@@ -1293,6 +1302,11 @@
+   const alternateHomonym = makePerson('fixture:014:p001', 'Alternate Name', '別名');
+   const aliasCorpus = structuredClone(homonymCorpus);
+   aliasCorpus.localPeople.set(alternateHomonym.localId, alternateHomonym);
++  aliasCorpus.chapters.push({extraction: {
++    book: 'fixture', chapter: '014', run: {promptVersion: 7}, mentions: [], translationRepairs: [],
++  }});
++  aliasCorpus.coverage.sourceChapters += 1;
++  aliasCorpus.coverage.extractedChapters += 1;
+   const aliasResolution = [{
+     schemaVersion: 1,
+     batch: 'merged-alias-separation-fixture',
+@@ -1312,6 +1326,15 @@
+       aliasCatalog.resolutionWorkByChapter['fixture:013']?.comparisons !== 2) {
+     throw new Error('Merged alias separation was rescheduled or removed an undecided canonical pair');
+   }
++  const alternateWork = aliasCatalog.resolutionWorkByChapter['fixture:014'];
++  const sharedAliasRecord = aliasCatalog.people.find(person => person.localPeople.includes(alternateHomonym.localId));
++  if (alternateWork?.comparisons !== 1 || alternateWork.targetLocalPeople !== 1 ||
++      alternateWork.targetCanonicalPeople !== 1 || alternateWork.candidateLocalPeople !== 3 ||
++      alternateWork.maxBlockLocalPeople !== 3 ||
++      !sharedAliasRecord.localPeople.includes(resolvedHomonym.localId) ||
++      sharedAliasRecord.curation.status !== 'needs-review') {
++    throw new Error('Merged alias chapter missing its canonical unresolved comparison or shared review state');
++  }
+   const reviewedAmbiguity = {
+     schemaVersion: 1,
+     batch: 'reviewed-ambiguity-fixture',

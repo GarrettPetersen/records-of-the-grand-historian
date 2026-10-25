@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "independent-code-policy-review",
+  "reviewer": "/root/jin053_full_owner_peer",
+  "reviewedAt": "2026-10-25T11:35:24.993141+00:00",
+  "authorship": "I did not author these six candidate files.",
+  "candidateManifest": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/manifest.json",
+    "sha256": "e317fb2be9fb9ee860a82b12dd0e78d52b742ba40a81adce9d40c5b461c66e4e"
+  },
+  "candidateFiles": [
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/PEOPLE_COMPLETION_PROCESS.md",
+      "bytes": 8371,
+      "sha256": "142df53ba6ae6d75d362304ebec0d702cf574e4c530a52d8a232069cf160642c"
+    },
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/scripts/check-people-completion.mjs",
+      "bytes": 755,
+      "sha256": "9ab83243d11163f6945747398d0918af4e2bd6c98fc2cc008db5576da15c9ae3"
+    },
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/scripts/lib/people-completion-plan.mjs",
+      "bytes": 3021,
+      "sha256": "83dc0da54372c6617fdebb6a1baf6a17cfc6484b742d5be2854c4529869f99d2"
+    },
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/scripts/test-people-completion-plan.mjs",
+      "bytes": 3627,
+      "sha256": "d0a7f3a048a91f54a8fc455869ff9458c56958f0ba62f0a98dcf509879e39e4c"
+    },
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/AGENTS.md",
+      "bytes": 25111,
+      "sha256": "b9cac1f5b2b4840f20247cd27cbd9258fb2dba51aa79d8df0a5396529bdbae16"
+    },
+    {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025/package.json",
+      "bytes": 23115,
+      "sha256": "e648492e4702af89228f28e1d579c815dee191894a47ff9835dfed2f8cd8cfed"
+    }
+  ],
+  "baseline": "7b6e4f15a7894c14d7a5ecb7023c85c9b6cd9691",
+  "disposition": "ONE-LOW-SEVERITY-INPUT-VALIDATION-FINDING; policy and intended diagnostic behavior supported, exact candidate not unqualified code-approved",
+  "policyAssessment": "Completion-first/nonempty Jin053 pilot, finite touching identity scope, explicit expansion reconciliation, preserved recovery and existing source/editorial/date/identity/publication gates are consistent. The helper never labels a checkpoint complete and never grants approval; empty scope is nonzero. Synthetic tests explicitly do not satisfy live nonempty acceptance. Adoption waits for an idle boundary and preserves current owner/work.",
+  "exactScopeChecks": {
+    "AGENTS": "Only completion-first section added to exact canonical text",
+    "package": "Only two commands added; all other parsed JSON fields exact canonical",
+    "primaryThreeCodeFiles": "Byte-identical to sealed candidate",
+    "candidateAfterTests": "All six candidate hashes unchanged"
+  },
+  "testReceipt": {
+    "command": "node --test scripts/test-people-completion-plan.mjs",
+    "cwd": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-drafts/completion-first-process-7b6-20261025",
+    "exitCode": 0,
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "readonly": "Only test-owned temporary fixture directory created and removed by test; no candidate/primary writes."
+  },
+  "findings": [
+    {
+      "id": "P3-scope-and-hash-type-coercion",
+      "priority": 3,
+      "file": "scripts/lib/people-completion-plan.mjs",
+      "line": 5,
+      "problem": "RegExp.test coerces nonstring values. checkpoint accepts numeric scope book/chapter values such as {book:123,chapter:123}; two separately created such checkpoints produce ready-for-release-checks instead of throwing. A one-element array containing a valid SHA256 string likewise passes digest.test. This contradicts the policy promise that malformed checkpoints fail loudly.",
+      "reproduction": "const h=\"sha256:\"+\"1\".repeat(64); const cp=()=>({scope:{book:123,chapter:123},personCount:1,inputs:{source:h,extraction:h,editorial:h,dateAudit:h},unresolvedPairs:[]}); compareCompletionCheckpoints(cp(),cp());",
+      "actualResult": "diagnosticOnly:true, scope:{book:123,chapter:123}, state:ready-for-release-checks; exit0",
+      "expected": "Reject nonstring book/chapter and nonstring digest fields before regex validation.",
+      "impact": "Low severity: this remains diagnostic only and cannot bypass real source/date/identity/publication gates, but malformed input can be misreported as ready.",
+      "requestedCorrection": "Add explicit typeof === string checks before regex tests for scope.book, scope.chapter and each inputs digest; add negative tests using JSON-representable numeric scope and array-valued digest fields."
+    }
+  ],
+  "boundaries": [
+    "No source/people data/date/identity/publication approval.",
+    "No normal graph/SDK/CI/build invoked or interrupted.",
+    "No primary/candidate/Git/index/branch/canonical/lock/queue changes.",
+    "This is not master merge authorization; exact repaired candidate needs its own delta review if changed."
+  ]
+}
