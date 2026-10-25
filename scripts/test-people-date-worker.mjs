@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { attachmentDateWorker, cursorDateWorker, dateWorkerInput } from './lib/people-date-worker.mjs';
+import { CursorRunLimitExceededError, waitForCursorRun } from './lib/cursor-run-wait.mjs';
 import { cancelActiveRuns, createRunControl } from './lib/cursor-run-control.mjs';
 
 const billedUsage = { usage: { totalTokens: 1234 }, cost: { rawCostCents: 7.5 } };
@@ -1099,4 +1100,182 @@ test('generated attachment packets explicitly request the required identity fiel
     assert.match(input.instructions, /human attestation, not machine proof/);
     assert.equal(task.saves.length, 0);
   }
+});
+
+// A bounded run can write its complete artifact before the next telemetry poll.
+// These tests use the actual typed error produced by waitForCursorRun and mock
+// all SDK calls. Recovery itself has no dispatch capability beyond the worker's
+// existing first send; retained runs must make zero sends.
+for (const metric of ['raw-cost', 'tokens', 'wall-clock']) {
+  for (const retained of [false, true]) test(`bounded ${metric} recovers existing artifact (retained=${retained})`, async () => {
+    let stop;
+    const h = harness({ wait(run, options, agent) {
+      agent.artifact = { jobId: agent.key, complete: true };
+      // waitForCursorRun has already performed its limit cancellation here.
+      h.events.push(['limit-cancel', run.id]);
+      stop = new CursorRunLimitExceededError('bounded stop', {
+        runId: run.id, metric, observed: 324, limit: 300,
+      });
+      throw stop;
+    } });
+    const task = reviewTask(undefined, retained ? { agentId: 'retained', sent: true } : {});
+    if (retained) h.addAgent('retained', { runs: [{ id: 'prior-run', status: 'running' }] });
+    const result = await h.worker(task);
+    assert.equal(result.complete, true);
+    assert.equal(result.reviewer.agentId, task.state.agentId);
+    assert.equal(task.state.status, 'returned');
+    assert.deepEqual({ ...task.state.runLimitStop, recordedAt: null }, {
+      code: stop.code, runId: stop.runId, metric, observed: 324, limit: 300,
+      message: 'bounded stop', recordedAt: null,
+    });
+    assert.equal(h.calls('send').length, retained ? 0 : 1);
+    assert.equal(h.calls('create').length, retained ? 0 : 1);
+    assert.equal(h.calls('download').length, 1);
+    assert.equal(h.control.activeRuns.size, 0);
+    assert.equal(h.calls('wait')[0][2].maxRawCostCents, 300);
+    assert.equal(h.calls('wait')[0][2].maxTotalTokens, 4000000);
+    assert.equal(h.calls('wait')[0][2].timeoutMs, 1200000);
+    assertUsageCheckpoint(h, task);
+  });
+}
+
+for (const output of ['missing', 'malformed', 'rejected']) test(`bounded retained stop preserves ${output} output without another turn`, async () => {
+  const stop = new CursorRunLimitExceededError('original cost stop', {
+    runId: 'prior-run', metric: 'raw-cost', observed: 324, limit: 300,
+  });
+  const h = harness({ wait() { throw stop; } });
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'date-bounded-offline-'));
+  try {
+    const bytes = output === 'missing' ? null : output === 'malformed' ? '{unfinished' : JSON.stringify({ complete: false });
+    h.addAgent('retained', { artifact: bytes, runs: [{ id: 'prior-run', status: 'running' }] });
+    const task = reviewTask(undefined, { agentId: 'retained', sent: true,
+      ...(output === 'rejected' ? { validationError: 'Incomplete coverage', artifactHash: hash(Buffer.from(bytes)) } : {}),
+    });
+    task.directory = directory;
+    await assert.rejects(h.worker(task), output === 'malformed'
+      ? error => error.name === 'DateArtifactValidationError'
+      : error => error === stop);
+    assert.equal(task.state.status, 'interrupted');
+    assert.equal(task.state.runLimitStop.observed, 324);
+    assert.equal(h.calls('send').length, 0);
+    assert.equal(h.calls('create').length, 0);
+    assert.equal(task.state.agentId, 'retained');
+    assert.equal(task.state.runId, 'prior-run');
+    if (bytes) assert.equal(fs.readFileSync(path.join(directory, `raw-date-artifact-${hash(Buffer.from(bytes))}.json`), 'utf8'), bytes);
+    assertUsageCheckpoint(h, task);
+  } finally { fs.rmSync(directory, { recursive: true }); }
+});
+
+for (const type of ['transport', 'fatal', 'account', 'usage-monitor', 'cancel-failed', 'wrong-run', 'account-cause']) {
+  test(`${type} error is not a bounded artifact recovery trigger`, async () => {
+    const error = ['transport', 'fatal', 'account'].includes(type)
+      ? new Error(type === 'account' ? 'usage_limit_exceeded' : `${type} failure`)
+      : new CursorRunLimitExceededError('bounded error', {
+        runId: type === 'wrong-run' ? 'other-run' : 'prior-run',
+        metric: type === 'usage-monitor' ? 'usage-monitor' : 'tokens', observed: 4000000, limit: 4000000,
+        ...(type === 'cancel-failed' ? { cancelError: new Error('cancel failed') } : {}),
+        ...(type === 'account-cause' ? { cause: new Error('usage_limit_exceeded') } : {}),
+      });
+    const h = harness({ wait() { throw error; } });
+    h.addAgent('retained', { artifact: { complete: true }, runs: [{ id: 'prior-run', status: 'running' }] });
+    const task = reviewTask(undefined, { agentId: 'retained', sent: true });
+    await assert.rejects(h.worker(task), value => value === error);
+    assert.equal(h.calls('artifacts').length, 0);
+    assert.equal(h.calls('send').length, 0);
+    assert.equal(h.calls('create').length, 0);
+    assert.equal(h.control.stopRequested, ['account', 'account-cause'].includes(type));
+    assertUsageCheckpoint(h, task);
+  });
+}
+
+test('bounded stop does not hide artifact download transport failure', async () => {
+  const failure = new Error('download transport failed');
+  const h = harness({ wait(run, options, agent) {
+    agent.artifact = { complete: true };
+    throw new CursorRunLimitExceededError('cost stop', { runId: run.id, metric: 'raw-cost', observed: 324, limit: 300 });
+  }, download() { throw failure; } });
+  const task = reviewTask();
+  await assert.rejects(h.worker(task), error => error === failure);
+  assert.equal(task.state.runLimitStop.observed, 324);
+  assert.equal(task.state.validationError, undefined);
+  assert.equal(h.calls('send').length, 1);
+  assertUsageCheckpoint(h, task);
+});
+
+for (const lookup of ['list', 'download']) test(`bounded stop ${lookup} Agent not found never replaces or sends`, async () => {
+  const failure = new Error('Agent not found');
+  const h = harness({ wait(run, options, agent) {
+    agent.artifact = { complete: true };
+    throw new CursorRunLimitExceededError('cost stop', { runId: run.id, metric: 'raw-cost', observed: 324, limit: 300 });
+  }, ...(lookup === 'list' ? { listArtifacts() { throw failure; } } : { download() { throw failure; } }) });
+  const task = reviewTask();
+  await assert.rejects(h.worker(task), error => error === failure);
+  assert.equal(task.state.agentId, 'agent-1');
+  assert.equal(task.state.runId, 'run-1');
+  assert.equal(task.state.agentRestarts, undefined);
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(h.calls('create').length, 1);
+  assertUsageCheckpoint(h, task);
+});
+
+test('nested account causes stop globally before artifact recovery; cycles terminate', async () => {
+  const leaf = new Error('usage_limit_exceeded');
+  const intermediate = new Error('telemetry wrapper', { cause: leaf });
+  const error = new CursorRunLimitExceededError('bounded error', {
+    runId: 'prior-run', metric: 'tokens', observed: 4000000, limit: 4000000, cause: intermediate,
+  });
+  leaf.cause = intermediate;
+  const h = harness({ wait() { throw error; } });
+  h.addAgent('retained', { artifact: { complete: true }, runs: [{ id: 'prior-run', status: 'running' }] });
+  const task = reviewTask(undefined, { agentId: 'retained', sent: true });
+  await assert.rejects(h.worker(task), value => value === error);
+  assert.equal(h.control.stopRequested, true);
+  assert.equal(h.calls('artifacts').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(h.calls('create').length, 0);
+  assertUsageCheckpoint(h, task);
+});
+
+for (const failure of ['fatal', 'usage_limit_exceeded', null]) test(`real wait helper preserves terminal ${failure ?? 'success'} at cost stop`, async () => {
+  const terminalError = failure ? { message: failure } : null;
+  const h = harness({ async wait(run, options, agent) {
+    agent.artifact = { complete: true };
+    return waitForCursorRun({ ...run, wait: async () => ({ ...run,
+      status: failure ? 'error' : 'completed', error: terminalError,
+    }) }, { ...options, pollMs: 0,
+      readUsage: async () => ({ usage: { totalTokens: 100 }, cost: { rawCostCents: 324 } }),
+    });
+  } });
+  const task = reviewTask();
+  if (failure) {
+    await assert.rejects(h.worker(task), error => error instanceof CursorRunLimitExceededError &&
+      error.terminalStatus === 'error' && error.terminalError === terminalError);
+    assert.equal(h.calls('artifacts').length, 0);
+    assert.equal(h.control.stopRequested, failure === 'usage_limit_exceeded');
+  } else {
+    assert.equal((await h.worker(task)).complete, true);
+    assert.equal(h.calls('download').length, 1);
+  }
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(h.calls('create').length, 1);
+  assertUsageCheckpoint(h, task);
+});
+
+for (const lookup of ['list', 'download']) test(`post-limit ${lookup} nested account error stops the pool`, async () => {
+  const account = new Error('usage_limit_exceeded');
+  const failure = new Error('artifact read wrapper', { cause: new Error('inner wrapper', { cause: account }) });
+  account.cause = failure;
+  const h = harness({ wait(run, options, agent) {
+    agent.artifact = { complete: true };
+    throw new CursorRunLimitExceededError('cost stop', { runId: run.id, metric: 'raw-cost', observed: 324, limit: 300 });
+  }, ...(lookup === 'list' ? { listArtifacts() { throw failure; } } : { download() { throw failure; } }) });
+  const task = reviewTask();
+  await assert.rejects(h.worker(task), error => error === failure);
+  assert.equal(h.control.stopRequested, true);
+  assert.equal(h.control.stopReason, 'usage-limit');
+  assert.equal(task.state.agentId, 'agent-1');
+  assert.equal(task.state.runId, 'run-1');
+  assert.equal(h.calls('send').length, 1);
+  assert.equal(h.calls('create').length, 1);
+  assertUsageCheckpoint(h, task);
 });
