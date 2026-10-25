@@ -332,9 +332,18 @@ export function buildDossiers(opts, corpus, resolutions) {
   const targetLocalIds = new Set([...corpus.localPeople.values()]
     .filter((person) => opts.allUnresolved || opts.chapters.has(`${person.book}/${person.chapter}`))
     .map((person) => person.localId));
-  const blocks = unresolvedState.blocks.filter((block) =>
-    opts.allUnresolved || block.localPeople.some((id) => targetLocalIds.has(id))
-  );
+  const targetCanonicalIds = new Set([...targetLocalIds].map(id => canonicalByLocal.get(id)));
+  const membersByCanonical = new Map(resolved.clusters.map(cluster => [cluster.canonicalPersonId, cluster.localPeople]));
+  const blocks = unresolvedState.blocks.flatMap(block => {
+    const reviewPairs = block.reviewPairs.filter(([left, right]) =>
+      targetCanonicalIds.has(left) || targetCanonicalIds.has(right)
+    );
+    if (reviewPairs.length === 0) return [];
+    // A requested chapter alias may be absent from the matching name block.
+    const canonicalPeople = new Set(reviewPairs.flat());
+    return [{...block, reviewPairs, localPeople: [...canonicalPeople]
+      .flatMap(id => membersByCanonical.get(id)).sort()}];
+  });
   const components = connectedBlockComponents(blocks, canonicalByLocal);
   const shards = shardComponents(
     components,
@@ -1961,6 +1970,49 @@ async function selfTest() {
     throw new Error('Resolver did not keep canonical-overlap blocks in one component');
   }
   if (pairKey('b', 'a') !== pairKey('a', 'b')) throw new Error('Pair keys are unstable');
+  const aliasIds = ['fixture:011:p001', 'fixture:014:p001', 'fixture:012:p001', 'fixture:013:p001', 'fixture:015:p001'];
+  const aliasPeople = new Map(aliasIds.map((localId, index) => [localId, {
+    localId, book: 'fixture', chapter: localId.split(':')[1], promptVersion: 7,
+    preferredNameSuggestion: index === 1 ? {en: 'Alternate Name', zh: '別名'} : {en: 'Shared Name', zh: '同名'},
+    historicity: 'historical', descriptorSuggestion: 'Official', mentions: [],
+    identityHints: {nativePlaces: [], relatedLocalPeople: [], activeDateHints: [], polityHints: []},
+    claims: [{predicate: 'name', value: {kind: 'personal-name', ...(index === 1 ? {en: 'Alternate Name', zh: '別名'} : {en: 'Shared Name', zh: '同名'})}}],
+  }]));
+  const aliasResolutions = [{schemaVersion: 1, batch: 'alias-dossier-fixture', decisions: [
+    {decision: 'merge', localPeople: aliasIds.slice(0, 2), basis: ['fixture'], confidence: 'high'},
+    {decision: 'keep-separate', localPeople: [aliasIds[1], aliasIds[2]], basis: ['fixture'], confidence: 'high'},
+    ...[0, 2, 3].map(index => ({decision: 'keep-separate', localPeople: [aliasIds[4], aliasIds[index]], basis: ['fixture'], confidence: 'high'})),
+  ]}];
+  const aliasOpts = {allUnresolved: false, chapters: new Set(['fixture/014']), batch: 'alias-dispatch-fixture', shards: 1, componentShards: false};
+  const aliasBuilt = buildDossiers(aliasOpts, {localPeople: aliasPeople}, aliasResolutions);
+  if (aliasBuilt.dossiers.length !== 1) throw new Error('Alias-only chapter did not produce exactly one resolver dossier');
+  const aliasDossier = aliasBuilt.dossiers[0], aliasDocument = aliasDossier.document;
+  const aliasCanonical = id => aliasDocument.people[id].currentCanonicalPersonId;
+  const aliasPair = pairKey(aliasCanonical(aliasIds[0]), aliasCanonical(aliasIds[3]));
+  const aliasPairs = aliasDocument.blocks.flatMap(block => block.reviewPairs.map(([a, b]) => pairKey(a, b)));
+  if (aliasDocument.targetLocalPeople.join(',') !== aliasIds[1] ||
+      !aliasDocument.people[aliasIds[1]].targetOfThisPass ||
+      aliasDocument.people[aliasIds[0]].targetOfThisPass ||
+      Object.keys(aliasDocument.people).sort().join(',') !== [aliasIds[0], aliasIds[1], aliasIds[3]].sort().join(',') ||
+      aliasPairs.length !== 1 || aliasPairs[0] !== aliasPair ||
+      !aliasDocument.blocks[0].currentGroups.some(group => isDeepStrictEqual(group, aliasIds.slice(0, 2).sort()))) {
+    throw new Error('Alias dossier lost full target membership or included a closed/context-only pair');
+  }
+  const aliasProjected = projectDossierForWorker(aliasDocument);
+  if (!aliasProjected.targetLocalPeople.includes(aliasIds[1]) ||
+      aliasProjected.blocks.flatMap(block => block.reviewPairs).length !== 1) {
+    throw new Error('Alias target or assigned comparison was lost during worker projection');
+  }
+  validateResolutionDocument({schemaVersion: 1, batch: aliasDossier.batch, decisions: [{
+    decision: 'possible-same-as', localPeople: [aliasIds[1], aliasIds[3]], basis: ['fixture'], confidence: 'medium',
+  }]}, aliasDossier, {localPeople: aliasPeople}, aliasResolutions);
+  const duplicateAliasBuilt = buildDossiers({...aliasOpts, chapters: new Set(['fixture/011', 'fixture/014'])}, {localPeople: aliasPeople}, aliasResolutions);
+  if (duplicateAliasBuilt.dossiers.length !== 1 || duplicateAliasBuilt.dossiers[0].document.blocks.flatMap(block => block.reviewPairs).length !== 1) {
+    throw new Error('Two chapters of one canonical target duplicated the resolver job');
+  }
+  if (buildDossiers({...aliasOpts, chapters: new Set(['fixture/015'])}, {localPeople: aliasPeople}, aliasResolutions).dossiers.length !== 0) {
+    throw new Error('A separately resolved chapter was scheduled through other people in its name block');
+  }
   const separationCorpus = {
     localPeople: new Map([
       ['a:001:p001', { localId: 'a:001:p001', claims: [] }],

@@ -1,5 +1,0 @@
-import fs from'node:fs';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';
-export const sha=b=>createHash('sha256').update(b).digest('hex');
-export const read=p=>JSON.parse(fs.readFileSync(p));
-export const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(d=>d.isDirectory()?walk(p+'/'+d.name):[p+'/'+d.name]);
-export function exactGitSession(name){if(!/^[a-z0-9-]+$/.test(name))throw Error('Unsafe session name');const stem='/tmp/'+name+'-'+process.pid,env={...process.env,GIT_INDEX_FILE:stem+'.index'};const git=(args,input)=>{let fd;try{if(input!==undefined){fs.writeFileSync(stem+'.input',input);fd=fs.openSync(stem+'.input','r');}return execFileSync('git',args,{env,stdio:[fd??'ignore','pipe','pipe'],encoding:'utf8',maxBuffer:16e6,timeout:60000});}finally{if(fd!==undefined)fs.closeSync(fd);}};const put=(p,b)=>{if(p.startsWith('/')||p.split('/').includes('..')||/[\n,]/.test(p))throw Error('Unsafe index path');git(['update-index','--add','--cacheinfo',`100644,${git(['hash-object','-w','--stdin'],b).trim()},${p}`]);};return{git,put,env,stem};}

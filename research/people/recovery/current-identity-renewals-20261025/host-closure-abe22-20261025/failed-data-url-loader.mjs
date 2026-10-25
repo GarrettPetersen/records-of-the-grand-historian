@@ -1,6 +1,0 @@
-// Read-only derived host proof. Prior helper and approvals remain immutable.
-import fs from 'node:fs';import {createHash} from 'node:crypto';
-const file="/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/jinshu053-source106-identity-reconciliation-20261025/host-closure-6d90-20261025/current-closed-context.mjs",raw=fs.readFileSync(file);if(createHash('sha256').update(raw).digest('hex')!=="6454de7d36b216b8e5134c6d4b82904ab791bf758c6370f44e7a10a4d94669c2")throw Error('Original helper drift');
-const changes=[["CURRENT='6d90b444737811c3ea18db3b8e7265965412d16b'","CURRENT='abe22d6a2fe459385d32e5d2096543d6d0b7b7f2'"],["files.length===268","files.length===272"],["newDocuments.length===12","newDocuments.length===16"],["all268ActualPriorDocumentPins","all272ActualPriorDocumentPins"]];let source=raw.toString();for(const[from,to]of changes){if(source.split(from).length!==2)throw Error('Nonunique exact derivation '+from);source=source.replace(from,to);}
-const api=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
-export const loadCurrentClosedContext=api.loadCurrentClosedContext;export const BASE=api.BASE;export const CURRENT=api.CURRENT;
