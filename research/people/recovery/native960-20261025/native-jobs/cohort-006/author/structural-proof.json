@@ -1,0 +1,50 @@
+{
+  "sourceVerification": {
+    "protocolSha256": "7de78092e3da0da3cef2c1ca18ed2ca234fda210d4cdbd7fbaf2e9b2b6dfa91b",
+    "completePinnedBlocks": 135,
+    "exactBaselineSourceBlobs": 43,
+    "losslessPacketJoins": "prepare-author.py checks every restored mentions array, record, aliases, claims, sourcePins, sourceUnits and complete canonical endpoint membership; host prior subset reproduced exactly"
+  },
+  "scope": "Bounded sealed registry structural validation, not global CI or publication approval",
+  "registrySha256": "b6c78223d4801d1f6908bf3d892b9774d441bd61479d11673bc2f75b2c3dbc1f",
+  "hostContextSha256": "c3c994a7a1d321670e4a016966063a1961e3c1dbc945e9512439cea2ff6fc5fd",
+  "localPeople": 1537,
+  "completePriorDocuments": 79,
+  "completePriorDecisions": 507,
+  "verifiedCanonicalClusters": 1005,
+  "baselineClusters": 1471,
+  "unionClusters": 1437,
+  "documents": [
+    {
+      "file": "part-001.resolution.json",
+      "batch": "jinshu053-rest-20261025-c006-part-001-30e2e9",
+      "bytes": 5100,
+      "sha256": "2df673e3876e7f657b5d0f7a3b3c97f4117f9abe7ca1450645ae7383c8c0ec58",
+      "validation": "passed against all registry prior documents and other two new proposals"
+    },
+    {
+      "file": "part-002.resolution.json",
+      "batch": "jinshu053-rest-20261025-c006-part-002-30e2e9",
+      "bytes": 9495,
+      "sha256": "c8f9430beea3940552b56d4585234c572e83bf1f2ab57d715cf46d226bebe720",
+      "validation": "passed against all registry prior documents and other two new proposals"
+    },
+    {
+      "file": "part-003.resolution.json",
+      "batch": "jinshu053-rest-20261025-c006-part-003-30e2e9",
+      "bytes": 19448,
+      "sha256": "afc7185b8e237133f49fca29b52cf3095bebef50e49e2d7587e9d546cb734d7b",
+      "validation": "passed against all registry prior documents and other two new proposals"
+    }
+  ],
+  "runtime": "/private/var/folders/wx/4cw6l8pd3jl0q9vb_3h58q5c0000gn/T/people-process-release-fB4Moe/verification",
+  "environment": {
+    "PEOPLE_REPO_ROOT": "/Users/garrettpetersen/.codex/worktrees/jinshu086-date-canonical"
+  },
+  "runtimePins": {
+    "scripts/sdk-people-resolve.mjs": "da746f7647eba64c3ad5d4af59021a47a53139e7fc0fdd9baf44d505fa9102ab",
+    "scripts/lib/people-resolution.mjs": "100a97b979b2526d3a99cdbfd8a1b3a654fcc973c4dedaf82e63f2b6cea8848e"
+  },
+  "reproduce": "python3 author/prepare-author.py && node author/validate-author.mjs (run from cohort-006 directory)",
+  "result": "passed"
+}

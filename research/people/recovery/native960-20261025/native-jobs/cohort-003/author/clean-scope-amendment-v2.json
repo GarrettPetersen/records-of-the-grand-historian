@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "canonicalRevision": "30e2e9700c2494e6e7abcefeb53b19c24f7197c1",
+  "kind": "clean scope amendment; original sealed inputs unchanged",
+  "sealedManifest": {
+    "file": "sealed-manifest.json",
+    "sha256": "baae93fc8ba8a06f095137b531fe5c09a6ea4dfd920908b2627b22bd4af52432",
+    "bytes": 2634
+  },
+  "registry": {
+    "file": "../selected-registry.json",
+    "sha256": "b6c78223d4801d1f6908bf3d892b9774d441bd61479d11673bc2f75b2c3dbc1f",
+    "bytes": 10667546
+  },
+  "hostContext": {
+    "file": "host-context.json",
+    "sha256": "a76cb83beef3be16dcc11b7009371dfd5ee4c836ad607ad1307a061db0decf0f",
+    "bytes": 81682
+  },
+  "triggerReview": {
+    "file": "independent-review/exact-proposal-review.json",
+    "sha256": "4ffb773a6309bb0b1bf0604daae344262ada6de5f1ee1aaaad460bb619fd560b",
+    "bytes": 37418
+  },
+  "originalProposalManifest": {
+    "file": "author/manifest.json",
+    "sha256": "83f0385a9f5c11368560f01850754db1a2282cc858c69a78362c5f317ff56297",
+    "bytes": 9754
+  },
+  "scope": {
+    "originalOwnedPairs": 120,
+    "cleanProposedPairs": 119,
+    "unfinishedSourceDefectHolds": 1
+  },
+  "excludedPairs": [
+    {
+      "pair": [
+        "per_E3ZHE28YYJ6GN422D7GM",
+        "per_P8SDWFGB5DMHQT2TF1KE"
+      ],
+      "completeEndpointMemberships": [
+        {
+          "canonicalPersonId": "per_E3ZHE28YYJ6GN422D7GM",
+          "localPeople": [
+            "jinshu:053:p004"
+          ]
+        },
+        {
+          "canonicalPersonId": "per_P8SDWFGB5DMHQT2TF1KE",
+          "localPeople": [
+            "zizhitongjian:023:p053"
+          ]
+        }
+      ],
+      "status": "unapproved-source-defect-hold",
+      "closed": false,
+      "reason": "Definite mixed-person ownership: s0111 武帝 is deceased Han Wudi; s0133 陛下 is living Han Zhaodi addressed by Su Wu. Registry m0312/m0315 assign Majesty/陛下 to Wudi. Repair ownership before resolving this entity.",
+      "sourcePin": {
+        "sourcePath": "data/zizhitongjian/023.json",
+        "extractionPath": "data/people/extractions/zizhitongjian/023.json",
+        "sourceRawSha256": "b7ae45601bf305d9f1690885f0e22bdd2eeb1ddbea7e7ebeaf69b6ae2e6f6758",
+        "extractionRawSha256": "549b258a5a00ee4a68b7da0272282d1dc62a6b9c6ac46a6c6da01c2ba202f6ad",
+        "sourceSemanticHash": "sha256:596b09cc5bc3b48fa6603c51d3e41d9926cac53626ac73ba821dab5d27bcb198",
+        "extractionSemanticHash": "sha256:dbfa4c526c05556d669ab970bd50a2f385c9f4a2768930e4ca5a68fbf9677cc9"
+      },
+      "recordSha256": "9c8368c85e30f892ebc8cb13f8389ec2ddd019c1cf28fc1f0036176e3ef7cf1e",
+      "packet": {
+        "file": "part-001.json",
+        "sha256": "9ce6b1368fbe19d12f1393001e292bd06a6984a6b365de283038291886a4249a",
+        "bytes": 187455
+      },
+      "removedDecision": {
+        "decision": "keep-separate",
+        "localPeople": [
+          "jinshu:053:p004",
+          "zizhitongjian:023:p053"
+        ],
+        "basis": [
+          "The cited historical episode belongs to a different ruler from Jinshu053’s Western Jin 武帝, grandfather and patron of Sima Yu.",
+          "zizhitongjian:023:s0111「諫大夫杜延年見國家承武帝奢侈、師旅之後，數為大將軍光言：「年歲比不登，流民未盡還，宜修孝文時政，示以儉約、寬和，順天心，說民意，年歲宜應。」」",
+          "zizhitongjian:023:s0133「武曰：「武父子無功德，皆為陛下所成就，位列將，爵通侯，兄弟親近，常願肝腦塗地。」"
+        ],
+        "confidence": "high"
+      },
+      "requiredNextAction": "Repair mixed Wudi/Zhaodi mention ownership through host-owned source workflow, independently review repaired inputs, reconcile stale fingerprints, and resolve remaining pair afresh."
+    }
+  ],
+  "retainedUncertainty": {
+    "localPeople": [
+      "jinshu:053:p012",
+      "jinshu:035:p164"
+    ],
+    "outcome": "possible-same-as",
+    "extraHold": false
+  },
+  "change": "Only the p053 separation is removed from new part001-v2; original proposal files and the other two selected documents remain byte-exact.",
+  "approval": "Fresh exact-byte independent review pending; no global CI or publication approval."
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "role": "source-author",
+  "canonicalRevision": "30e2e9700c2494e6e7abcefeb53b19c24f7197c1",
+  "sealedManifestSha256": "bff10930261fdf02020e198277594814cfe364075283d20a9ca39214dd422666",
+  "registrySha256": "b6c78223d4801d1f6908bf3d892b9774d441bd61479d11673bc2f75b2c3dbc1f",
+  "documents": [
+    {
+      "file": "resolution-part-001.json",
+      "batch": "jinshu053-rest-20261025-c002-part-001-30e2e9",
+      "bytes": 49735,
+      "sha256": "a84b2e26add66058acbd989bf61f0744b7746d936053f2ba63c3899638828c85",
+      "decisions": 61
+    },
+    {
+      "file": "resolution-part-002.json",
+      "batch": "jinshu053-rest-20261025-c002-part-002-30e2e9",
+      "bytes": 36273,
+      "sha256": "d09688677e9c70c635b8736f208f4a85c79222129eed177f43edc2b2b474ed2e",
+      "decisions": 55
+    },
+    {
+      "file": "resolution-part-003.json",
+      "batch": "jinshu053-rest-20261025-c002-part-003-30e2e9",
+      "bytes": 36019,
+      "sha256": "1bea84765ef0aa932f94979ad534d4f494b57def44c22394aec31b6d52375c76",
+      "decisions": 28
+    }
+  ],
+  "outcomeCounts": {
+    "merge": 79,
+    "keep-separate": 65,
+    "possible-same-as": 0
+  },
+  "sourceCoverage": {
+    "ownedEndpointRecords": 148,
+    "priorOnlyRecords": 171,
+    "ownedCanonicalPairs": 144,
+    "allOwnedClaimsAndChineseRead": true,
+    "completePriorStructuralContext": true
+  },
+  "proofs": [
+    {
+      "file": "pair-outcomes.json",
+      "bytes": 118440,
+      "sha256": "aa4aaa9933f6dfbda9c24e3a4ced92a90e95777d4191782e9ba3745ec4c79651"
+    },
+    {
+      "file": "structural-proof.json",
+      "bytes": 1405,
+      "sha256": "a07421bf39ef48228b8ad8cc73cf22802ca09d58a0b76f27b68bc1c4a266bbb1"
+    },
+    {
+      "file": "source-defects.json",
+      "bytes": 2209,
+      "sha256": "a00b03c84c6988fff69595b066ea21ee829d3395abe73b2beb6dec8bf0b5cac1"
+    },
+    {
+      "file": "prove-and-write.mjs",
+      "bytes": 16009,
+      "sha256": "780303f081e7f7befa3101405bded5100d260820abdbf766edd0a111646d55f1"
+    },
+    {
+      "file": "root-evidence-proof.json",
+      "bytes": 850,
+      "sha256": "531c9b9f9eaf6329280cd9d90a2c93e59543443003a6c10a72617fc352ef0a4d"
+    },
+    {
+      "file": "seal-root-evidence.mjs",
+      "bytes": 2119,
+      "sha256": "5c86d02dcdbc351c3603535cbd624554b416b8ba94adfcd6b690b0b6640f2079"
+    }
+  ],
+  "approval": "Author proposal and bounded structural validation only; independent review, host aggregate validation, full global CI and publication remain separate.",
+  "usage": "Native model token/cost usage unavailable.",
+  "reproduce": "Run npm run people:disk:check, then node author/prove-and-write.mjs and node author/seal-root-evidence.mjs from this cohort directory. Both write only author artifacts."
+}
