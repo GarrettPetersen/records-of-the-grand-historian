@@ -1,0 +1,59 @@
+--- a/scripts/compile-people-catalog.mjs
++++ b/scripts/compile-people-catalog.mjs
+@@ -725,6 +725,15 @@
+   keepSeparate,
+   possibleSameAs = new Set(),
+ ) {
++  // Separation decisions may use a merged member outside this name block.
++  const separatedCanonicalPairs = new Set();
++  for (const key of keepSeparate) {
++    const localIds = key.split('\u0000');
++    if (localIds.length !== 2 || localIds.some((id) => !localMap.has(id))) {
++      throw new Error(`Separation refers to an unknown local person: ${key}`);
++    }
++    separatedCanonicalPairs.add(identityPairKey(...localIds.map((id) => localMap.get(id))));
++  }
+   const blocks = [];
+   const localPeople = new Set();
+   for (const block of candidateDocument.blocks) {
+@@ -741,9 +750,7 @@
+       for (let right = left + 1; right < groups.length; right += 1) {
+         const [leftCanonical, leftMembers] = groups[left];
+         const [rightCanonical, rightMembers] = groups[right];
+-        const separated = leftMembers.some((a) =>
+-          rightMembers.some((b) => keepSeparate.has(identityPairKey(a, b)))
+-        );
++        const separated = separatedCanonicalPairs.has(identityPairKey(leftCanonical, rightCanonical));
+         if (separated || possibleSameAs.has(identityPairKey(leftCanonical, rightCanonical))) continue;
+         reviewPairs.push([leftCanonical, rightCanonical].sort());
+         for (const localId of leftMembers) localPeople.add(localId);
+@@ -1282,6 +1289,29 @@
+       )) {
+     throw new Error('Resolution work included a chapter whose local person has no unresolved comparison');
+   }
++  // The matching name block excludes this alternate-name member of the merged person.
++  const alternateHomonym = makePerson('fixture:014:p001', 'Alternate Name', '別名');
++  const aliasCorpus = structuredClone(homonymCorpus);
++  aliasCorpus.localPeople.set(alternateHomonym.localId, alternateHomonym);
++  const aliasResolution = [{
++    schemaVersion: 1,
++    batch: 'merged-alias-separation-fixture',
++    decisions: [{
++      decision: 'merge',
++      localPeople: [resolvedHomonym.localId, alternateHomonym.localId],
++      basis: ['fixture'], confidence: 'high',
++    }, {
++      decision: 'keep-separate',
++      localPeople: [alternateHomonym.localId, ambiguousHomonymA.localId],
++      basis: ['fixture'], confidence: 'high',
++    }],
++  }];
++  const aliasCatalog = compilePeopleCatalog(aliasCorpus, aliasResolution).catalog;
++  if (aliasCatalog.resolutionWorkByChapter['fixture:011']?.comparisons !== 1 ||
++      aliasCatalog.resolutionWorkByChapter['fixture:012']?.comparisons !== 1 ||
++      aliasCatalog.resolutionWorkByChapter['fixture:013']?.comparisons !== 2) {
++    throw new Error('Merged alias separation was rescheduled or removed an undecided canonical pair');
++  }
+   const reviewedAmbiguity = {
+     schemaVersion: 1,
+     batch: 'reviewed-ambiguity-fixture',

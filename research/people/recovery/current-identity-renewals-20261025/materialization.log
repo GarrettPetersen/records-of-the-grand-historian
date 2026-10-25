@@ -1,0 +1,19 @@
+{"stage":"explicit-identity-reference-scan","checked":40}
+{"stage":"explicit-identity-reference-scan","checked":440}
+{"stage":"explicit-identity-reference-scan","checked":840}
+{"stage":"explicit-identity-reference-scan","checked":1240}
+{"stage":"explicit-identity-reference-scan","checked":1640}
+{"stage":"explicit-identity-reference-scan","checked":2040}
+{"stage":"source-materialization","chapters":100,"records":660,"units":10696}
+{"stage":"source-materialization","chapters":200,"records":1108,"units":18389}
+file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/jinshu053-source106-identity-reconciliation-20261025/materialize-registry.mjs:19
+function batch(r,files){const z=spawnSync('git',['cat-file','--batch'],{cwd:root,input:files.map(p=>r+':'+p+'\n').join(''),maxBuffer:256e6});if(z.status!==0||z.error)throw z.error??Error(z.stderr);let offset=0;return files.map(file=>{const e=z.stdout.indexOf(10,offset),h=z.stdout.subarray(offset,e).toString().split(' '),n=Number(h[2]);if(h.length!==3||!Number.isInteger(n))throw Error('Missing '+file);const b=z.stdout.subarray(e+1,e+1+n);offset=e+n+2;const pin={gitRevision:r,path:file,sha256:sha(b),bytes:b.length};inputPins.set(r+':'+file,pin);return {file,pin,document:JSON.parse(b)};});}
+                                                                                                                                                                                                                                                                                                                                                                                             ^
+
+Error: Missing data/people/extractions/jinshu/040.json
+    at file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/jinshu053-source106-identity-reconciliation-20261025/materialize-registry.mjs:19:382
+    at Array.map (<anonymous>)
+    at batch (file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/jinshu053-source106-identity-reconciliation-20261025/materialize-registry.mjs:19:224)
+    at file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/jinshu053-source106-identity-reconciliation-20261025/materialize-registry.mjs:56:14
+
+Node.js v23.7.0
