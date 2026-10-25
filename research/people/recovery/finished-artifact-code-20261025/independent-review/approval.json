@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-date-finished-artifact-code-review",
+  "reviewedAt": "2026-10-25T07:30:47.517194+00:00",
+  "reviewer": {
+    "name": "Codex independent code reviewer",
+    "agentId": "/root/date_finished_artifact_review",
+    "independentOfAuthor": true,
+    "authorAgentId": "/root/date_finished_artifact_efficiency",
+    "authorshipOrAdoptionPerformed": false
+  },
+  "baselineCommit": "bfc1da81b37cf43b3bd8fe3d49192316fc137b6a",
+  "verdict": "approved-for-idle-boundary-adoption",
+  "unresolvedFindings": [],
+  "patch": {
+    "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/date-finished-artifact-efficiency.patch",
+    "sha256": "8de337624ce52a2b0c47a9eaecf9729f2b6ce9c2f0aab2cb2de457f611ba80d6",
+    "bytes": 20135
+  },
+  "frozenAuthorManifest": {
+    "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/draft-manifest.json",
+    "sha256": "9a76dfd85c17f0ec9c4f20ff901e6d3f5bc01a8231a1756169a3acea98fe74b3",
+    "bytes": 3174
+  },
+  "baselineDependencyPins": {
+    "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/pinned-inputs.json",
+    "sha256": "d91097fb868368f4e3fe96fbcc20444c933ea492fa60ac635769281f36dad76c",
+    "bytes": 6770
+  },
+  "changedFiles": [
+    {
+      "path": "scripts/lib/people-date-worker.mjs",
+      "sha256": "d3e0c969d6ae55bf4cbfeb6adbc81c038122e5805793e5aa92a4bdec8c4aa5c3",
+      "bytes": 33537
+    },
+    {
+      "path": "scripts/lib/cursor-run-wait.mjs",
+      "sha256": "9c40ec1df71c32b18fd8b40fdc47f3a30ebaf3752ffb4553170510d6d24ce9b3",
+      "bytes": 10638
+    },
+    {
+      "path": "scripts/test-people-date-worker.mjs",
+      "sha256": "e5b140946eb4a281a0e8101e0d44610007c5c8ec8623f2485102855759466d70",
+      "bytes": 63833
+    }
+  ],
+  "independentVerification": {
+    "patchReconstruction": "Applied unified hunks in memory to exact Git baseline blobs; all three outputs equal sealed draft bytes. No checkout or index mutation.",
+    "baselineDependencies": "All 34 baseline file hashes/bytes verified against exact Git objects; unchanged verification dependencies equal those objects. Minimal config/schema contracts explicitly authorized by host.",
+    "tests": [
+      {
+        "command": "node --test verification/scripts/test-people-date-worker.mjs verification/scripts/test-people-date-workflow.mjs",
+        "workerTests": 105,
+        "workflowTests": 106,
+        "passed": 211,
+        "failed": 0,
+        "receipt": {
+          "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/independent-review/final-pinned-worker-workflow-tests.txt",
+          "sha256": "6eb5e93dcd72ec5c5049258de33fd0342305ebb1c09a45ca37abea81fa5866f6",
+          "bytes": 18886
+        }
+      },
+      {
+        "command": "node --test verification/scripts/test-people-date-ownership.mjs",
+        "passed": 36,
+        "failed": 0,
+        "receipt": {
+          "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/independent-review/pinned-ownership-tests.txt",
+          "sha256": "6cc50d96fd3a04e237ab2d3b9c02bc0fc9698c5a9d91e4c590a458967df7d72c",
+          "bytes": 2977
+        }
+      },
+      {
+        "command": "node --test independent-review/reviewer-probes.mjs",
+        "passed": 2,
+        "failed": 0,
+        "receipt": {
+          "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/independent-review/final-reviewer-probes.txt",
+          "sha256": "689caa10f49a91a30a981bb1fb7b596f3fa0b4703d32e2754a1c43804a518439",
+          "bytes": 411
+        },
+        "source": {
+          "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/independent-review/reviewer-probes.mjs",
+          "sha256": "2dd7e647d18e8538bca614ef8ef4420618b29cee4e5a67133a527470f89bb71b",
+          "bytes": 5685
+        }
+      }
+    ],
+    "receipts": [
+      {
+        "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/independent-review/patch-reconstruction.json",
+        "sha256": "32c96ef0644d10a2bfdf53ddb1dcadd607c3a43168282d0d1779cc1d66b1987d",
+        "bytes": 481
+      },
+      {
+        "path": "data/people/generated/code-drafts/date-finished-artifact-efficiency-20261025/independent-review/dependency-verification.json",
+        "sha256": "15747aeeeabc75151e69763881bd1f60692aee3f43d9994b68414ed84fca8860",
+        "bytes": 6837
+      }
+    ]
+  },
+  "resolvedFindings": [
+    {
+      "issue": "Nested account-limit causes were not globally stopped.",
+      "resolution": "Reusable cause/cancelError/terminalError traversal requests global stop across wait, outer catch, dispatch, usage checkpoints; cycle tests and artifact-lookup wrapped account tests pass."
+    },
+    {
+      "issue": "Post-stop artifact Agent-not-found errors could trigger replacement model turns.",
+      "resolution": "Restart requires no boundedRunStop; list/download regressions verify retained run identity and no additional dispatch."
+    },
+    {
+      "issue": "Waiter discarded terminal fatal/account evidence before throwing over-budget error.",
+      "resolution": "Typed terminal limit errors retain terminalStatus/terminalError; recovery excludes noncompleted/error terminals; actual waiter integration with mocked usage/terminal results passes."
+    }
+  ],
+  "semanticAssessment": [
+    "Recovery is limited to typed CursorRunLimitExceededError for matching run and raw-cost/tokens/wall-clock metrics. Production waiter cancellation path is unchanged; failed cancellation and usage-monitor errors are excluded. Successful terminal completion may also be inspected without cancellation.",
+    "Recovery only lists/downloads the existing expected artifact. It neither raises budgets nor dispatches another turn; missing, malformed, unchanged rejected or unchanged supplemented output cannot launch continuation in this invocation.",
+    "Raw artifact bytes and original stop telemetry are retained; actual usage checkpoints remain independent. Parsed returned artifacts still pass existing caller hash, exact ownership, report, chronology, repair and publication validation.",
+    "Blocked repairs remain research holds; supplements still bind original blocker bytes, sealed source/extraction hashes and retained conversation/run provenance. Reviewer identity and repair/reviewer independence gates remain intact.",
+    "No canonical runtime, corpus, claim, lease, queue, branch, index, build or recovery state was changed by this review. All SDK calls were mocked; no paid model calls occurred."
+  ],
+  "diagnosticHistory": [
+    "An initial combined run passed 97 worker and 36 ownership tests but workflow import failed because verification config was absent. This was setup failure, not acceptance.",
+    "A supplemental host-root override run passed 103 worker and 106 workflow tests but used a mixed host prompt; it is explicitly excluded from exact-pinned acceptance.",
+    "Exact-pinned workflow acceptance was rerun after minimal baseline static config/schema contracts were provided; final combined source revision passed 211 tests."
+  ],
+  "limitations": [
+    "Offline tests cannot establish remote artifact listing consistency, completeness or historical source truth. Normal downstream validation and independent date approval are still mandatory.",
+    "Approval covers this exact code patch only; it does not approve a chapter, a paid invocation, publication, or current mixed working-tree code.",
+    "The first two superseded patches are not approved."
+  ],
+  "adoptionConditions": [
+    "Host must adopt only at an idle invocation boundary, preserving active locks, leases, stable worker identities, claims, usage and recovery artifacts.",
+    "Apply/reconcile these exact three source/test files through normal staging and CI before master; do not overwrite unrelated working-tree changes.",
+    "Do not raise budgets or weaken chronology, identity, independent review, or publication gates."
+  ]
+}

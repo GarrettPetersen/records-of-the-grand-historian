@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/chronology-v1.json",
+  "title": "Person chronology data",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "polities"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "kind": { "const": "polities" },
+        "polities": { "type": "array", "items": { "$ref": "#/$defs/polity" } }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "reigns"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "kind": { "const": "reigns" },
+        "reigns": { "type": "array", "items": { "$ref": "#/$defs/reign" } }
+      }
+    }
+  ],
+  "$defs": {
+    "year": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["era", "year"],
+      "properties": {
+        "era": { "enum": ["BC", "AD"] },
+        "year": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "localized": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "zh"],
+      "properties": {
+        "en": { "type": "string", "minLength": 1 },
+        "zh": { "type": "string", "minLength": 1 },
+        "pinyin": { "type": "string" }
+      }
+    },
+    "polity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "startYear", "endYear"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name": { "$ref": "#/$defs/localized" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "startYear": { "$ref": "#/$defs/year" },
+        "endYear": { "$ref": "#/$defs/year" }
+      }
+    },
+    "reign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "polityId", "ruler", "startYear", "endYear", "yearMapping"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name": { "$ref": "#/$defs/localized" },
+        "polityId": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "ruler": { "type": "object" },
+        "startYear": { "$ref": "#/$defs/year" },
+        "endYear": { "$ref": "#/$defs/year" },
+        "yearMapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "regnalYearStart", "regnalYearEnd", "westernYearStart"],
+          "properties": {
+            "type": { "const": "linear" },
+            "regnalYearStart": { "type": "integer", "minimum": 1 },
+            "regnalYearEnd": { "type": "integer", "minimum": 1 },
+            "westernYearStart": { "type": "integer" }
+          }
+        }
+      }
+    }
+  }
+}

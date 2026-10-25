@@ -1,0 +1,131 @@
+✔ fresh review records getUsage telemetry locally and remotely at return (9.349708ms)
+✔ artifact-only recovery downloads retained output but never creates or sends a turn (3.113375ms)
+✔ artifact-only recovery preserves a missing retained agent identity (0.66425ms)
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cancelling 1 active Cursor run(s)...
+Cancelling 1 active Cursor run(s)...
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+Cursor usage limit reached; draining active work and preserving resumable state. No new agents will start.
+✔ failed replacement is observed while the prior attempt checkpoints usage (42.067958ms)
+✔ replacement preserves prior usage without overwriting the new run telemetry (2.061125ms)
+✔ quota discovered during retry telemetry preserves the retained agent (1.534583ms)
+✔ artifact-only recovery preserves a retained repair with a research blocker (19.028709ms)
+✔ a stopped pool preserves a retained repair with a research blocker (16.903708ms)
+✔ retained conversation continues before any replacement, even with an empty run listing (3.016ms)
+✔ dispatch uses the configured worker timeout rather than the helper default (2.358ms)
+✔ failed resume retains ownership and never creates a replacement agent (1.114042ms)
+✔ transport interruption recovers a published artifact on retry without another model turn (0.972208ms)
+✔ artifact download transport errors do not become validation failures (0.859584ms)
+✔ semantic rejection continues the same chat with the validator feedback (1.309708ms)
+✔ retained reasons reach one saved continuation (artifact-only=false) (0.745083ms)
+✔ retained reasons reach one saved continuation (artifact-only=true) (1.082417ms)
+✔ retained diagnostics preserve unrelated and malformed full-validation rejections (0.750084ms)
+✔ rejected repair resends the sealed current packet to its retained chat (2.241208ms)
+✔ invalid JSON is an artifact validation error and is repaired in the retained chat (2.284791ms)
+✔ a corrected artifact from an interrupted continuation supersedes rejected bytes (0.251042ms)
+▶ JSON null, primitives and arrays are rejected as artifacts rather than mistaken for missing output
+  ✔ null (3.933125ms)
+  ✔ false (0.452042ms)
+  ✔ 7 (0.311459ms)
+  ✔ "text" (0.425083ms)
+  ✔ [] (0.7155ms)
+✔ JSON null, primitives and arrays are rejected as artifacts rather than mistaken for missing output (6.776917ms)
+✔ missing artifact is resumable and not an artifact validation error (0.528042ms)
+▶ account usage errors stop subsequent launches, whether thrown or returned
+  ✔ throw (1.925541ms)
+  ✔ result (0.834291ms)
+✔ account usage errors stop subsequent launches, whether thrown or returned (3.025959ms)
+✔ usage stop still recovers an artifact produced by the exhausted run (0.66725ms)
+▶ stop during agent creation or remote checkpoint prevents sending
+  ✔ create (0.693291ms)
+  ✔ checkpoint (0.346083ms)
+✔ stop during agent creation or remote checkpoint prevents sending (1.35025ms)
+✔ an asynchronous send retry checks the shared stop again (0.35225ms)
+✔ stopRequested drains active retained runs and downloads without launching (0.50225ms)
+✔ a stop while waiting drains already launched work (0.315458ms)
+✔ active runs support signal cancellation even when retained run listings have no instance methods (0.744583ms)
+✔ active runs prefer their supported instance cancellation method (0.4795ms)
+✔ stopped retained work without an artifact never continues research (0.5445ms)
+▶ usage read failure is explicitly unavailable on both return and error, never fake zero
+  ✔ return (1.533833ms)
+  ✔ error (0.515417ms)
+✔ usage read failure is explicitly unavailable on both return and error, never fake zero (2.409083ms)
+✔ empty usage response is unavailable and a real zero response stays available (1.227125ms)
+✔ distinct concurrent review and repair jobs own independent agent IDs and usage checkpoints (1.667042ms)
+✔ a pinned chronology supplement continues the retained repair chat with the actual evidence (42.339ms)
+✔ supplements must bind the exact retained job, both packet generations and blocker bytes before spending (13.343292ms)
+✔ an unsupplemented research hold does not replace or continue its retained repair (19.156708ms)
+✔ changed blocker bytes or retained artifact hash fail closed without replacing the agent (4.798125ms)
+✔ the supplement and repair input together obey the retained packet byte ceiling (7.888833ms)
+✔ supplement continuation counts validation feedback in the sealed message ceiling (22.847ms)
+✔ an interrupted supplemented continuation downloads a changed artifact without resending (21.618458ms)
+✔ changed remote artifact cannot be recovered without a proven post-dispatch attempt (106.596958ms)
+✔ a byte-identical blocker after a continuation is not accepted as a new result (41.6495ms)
+✔ a second independently supplemented blocker retains both attempts before successful repair (80.319375ms)
+✔ a rejected post-supplement proposal continues the same repair with the validation error (70.90125ms)
+✔ pending supplemented recovery requires the original supplement and resumes without changing conversations (65.546667ms)
+✔ a returned supplemented repair is recovered without resend after a missing workflow receipt (53.928084ms)
+✔ changed supplement evidence cannot adopt an already returned remote artifact (38.682792ms)
+✔ repair instructions name retrospective as the only valid reception type (0.211542ms)
+✔ repair findings include all affected person dates, hints and check evidence, but exclude unrelated people (0.37275ms)
+✔ repair findings retain original ownership when prior removals renumber current claims (0.242875ms)
+✔ person-only and hint-only findings also include the complete affected chronology (0.167208ms)
+✔ repair packet byte ceiling fails before agent creation instead of silently truncating chronology (0.480541ms)
+✔ unknown phases fail before spending (0.171625ms)
+▶ attachment repair and review persist their attested context IDs before returning
+  ✔ repair (1.084334ms)
+  ✔ review (0.572042ms)
+✔ attachment repair and review persist their attested context IDs before returning (1.924417ms)
+✔ attachment identities expose same-context repair/review to the host independence gate (1.474166ms)
+▶ attachment results without complete explicit identities fail without saving an identity
+  ✔ repair-0 (0.832833ms)
+  ✔ repair-1 (0.509042ms)
+  ✔ repair-2 (0.460875ms)
+  ✔ repair-3 (0.462125ms)
+  ✔ review-4 (0.990542ms)
+  ✔ review-5 (1.280417ms)
+  ✔ review-6 (0.544875ms)
+  ✔ review-7 (0.556708ms)
+✔ attachment results without complete explicit identities fail without saving an identity (6.48975ms)
+✔ attachment save failure prevents returning an uncheckpointed identity (1.569625ms)
+✔ generated attachment packets explicitly request the required identity fields (3.055834ms)
+✔ bounded raw-cost recovers existing artifact (retained=false) (1.299291ms)
+✔ bounded raw-cost recovers existing artifact (retained=true) (0.407417ms)
+✔ bounded tokens recovers existing artifact (retained=false) (0.355917ms)
+✔ bounded tokens recovers existing artifact (retained=true) (0.330125ms)
+✔ bounded wall-clock recovers existing artifact (retained=false) (0.358708ms)
+✔ bounded wall-clock recovers existing artifact (retained=true) (0.320416ms)
+✔ bounded retained stop preserves missing output without another turn (1.569666ms)
+✔ bounded retained stop preserves malformed output without another turn (8.043875ms)
+✔ bounded retained stop preserves rejected output without another turn (7.841417ms)
+✔ transport error is not a bounded artifact recovery trigger (0.811417ms)
+✔ fatal error is not a bounded artifact recovery trigger (0.953625ms)
+✔ account error is not a bounded artifact recovery trigger (2.713ms)
+✔ usage-monitor error is not a bounded artifact recovery trigger (0.535541ms)
+✔ cancel-failed error is not a bounded artifact recovery trigger (0.414792ms)
+✔ wrong-run error is not a bounded artifact recovery trigger (0.256708ms)
+✔ account-cause error is not a bounded artifact recovery trigger (0.348417ms)
+✔ bounded stop does not hide artifact download transport failure (0.639625ms)
+✔ bounded stop list Agent not found never replaces or sends (0.478166ms)
+✔ bounded stop download Agent not found never replaces or sends (0.341375ms)
+✔ nested account causes stop globally before artifact recovery; cycles terminate (0.597458ms)
+✔ real wait helper preserves terminal fatal at cost stop (1.334834ms)
+✔ real wait helper preserves terminal usage_limit_exceeded at cost stop (1.33925ms)
+✔ real wait helper preserves terminal success at cost stop (0.664084ms)
+✔ post-limit list nested account error stops the pool (0.822542ms)
+✔ post-limit download nested account error stops the pool (0.527208ms)
+ℹ tests 105
+ℹ suites 0
+ℹ pass 105
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1321.763167
