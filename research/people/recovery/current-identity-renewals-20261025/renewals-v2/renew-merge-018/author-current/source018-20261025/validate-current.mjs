@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+const R='/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/jinshu053-source106-identity-reconciliation-20261025';
+const O=R+'/renewals-v2/renew-merge-018/author-current/source018-20261025';
+const {loadCurrentClosedContext}=await import(R+'/host-closure-abe22-20261025/current-closed-context.mjs');
+const ctx=await loadCurrentClosedContext();
+const work=JSON.parse(fs.readFileSync(R+'/renewals-v2/renew-merge-018/work-order.json'));
+const proposal=JSON.parse(fs.readFileSync(O+'/resolution.json'));
+const scope=ctx.scopeForWorkOrder(work);
+const validation=ctx.validateProposal(proposal,work);
+const result={status:'actual-current-closed-structural-validation-only',proof:ctx.proof,scope:{ids:scope.ids,currentClusters:scope.currentClusters.map(c=>({canonicalPersonId:c.canonicalPersonId,localPeople:c.localPeople})),actualSourceAndExtractionPins:scope.actualSourceAndExtractionPins,explicitConstraints:scope.explicitConstraints,touchingWholePriorDecisions:scope.touchingPriorDecisions},validation,independentSourceApproval:false,globalCI:false};
+fs.writeFileSync(O+'/actual-current-closed-validation.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({validation,currentClosedClusters:ctx.proof.currentClosedClusters,hostPeople:ctx.proof.hostPeople,scopePriorDecisions:scope.touchingPriorDecisions.length}));
