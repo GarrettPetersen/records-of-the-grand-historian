@@ -86,9 +86,10 @@ Put every local person connected by a `family-relationship` or another direct
 personal relationship in `r` on both people. These hints do not replace the
 structured claims; they make the later cross-chapter identity dossier usable.
 
-Every person must have at least one source-supported active-date hint in `a`.
-Every historical or uncertain person needs a justified Western year, interval,
-or one-sided bound such as `before AD 472`. Never invent an endpoint to satisfy
+Except for the genuinely undated-only evidence described below, every person
+must have at least one source-supported active-date hint in `a`, and every
+historical or uncertain person needs a justified Western year, interval, or
+one-sided bound such as `before AD 472`. Never invent an endpoint to satisfy
 the validator. Use packet chronology when available. If it is missing,
 verify the conversion against an authoritative chronology with available
 research tools and preserve the source date text without inventing a reign ID.
@@ -108,11 +109,22 @@ record the passage's date only as that reference's `dateContext`/reception event
 it does not establish the recalled person's active hint, reign span, birth, or
 death. `before YEAR` excludes that year, while `onOrBefore YEAR` permits it:
 choose the latter when the source leaves an event somewhere within that year.
-When a source unit establishes a person's attestation but contains no date-bearing
-temporal wording, use `undatedSourceAttestation: true` on that attestation and
-leave `a` empty only if it is the person's sole chronology evidence. Do not
-invent a source date, a qualitative era, or a research hold merely to fill a
-date field. This exceptional state is still subject to independent date audit.
+Distinguish a genuinely undated source fact from an unresolved asserted date.
+When all supplied evidence, including inherited context, supplies no date-bearing
+wording for an attestation, use `undatedSourceAttestation: true` with a
+source-specific `event` string of at least 20 characters and no `sourceDate`,
+qualitative, Western-date, or unresolved fields. Preserve every fact, stated age,
+reckoning, and relative event sequence; an undated age claim may use the same
+marker and substantive event in `dateContext`. Age five alone supplies no calendar
+year, birth year, or reign-wide activity interval. Do not invent a date, era, or
+research hold merely because the source supplies none. This is not an escape
+from a genuine source period, date conversion, event-ownership question, or
+conflicting witness: preserve supported bounds or an honest unresolved source
+date and research hold. All such facts remain subject to independent date audit.
+Leave `a` as `[]` for this undated-only exception only when the person has at
+least one attestation, every attestation uses this marker, and none of that
+person's claims has date-bearing chronology. An undated fact beside a dated
+claim does not qualify; retain all supported chronology.
 Use a qualitative marker such as `legendary
 antiquity` only for genuinely undatable legendary or literary figures. These
 are attested activity dates, not birth/death dates or asserted lifespans.
@@ -473,8 +485,8 @@ Before finishing:
    affiliation, education, credential, belief, skill, chronology, work,
    attribution, person-centered event, assessment, material association,
    source-critical, negative, and unusual identifying fact above was captured.
-   Every person must have a nonempty active-date hint and an evidence-backed
-   `attestation` claim.
+   Every person must have an evidence-backed `attestation` claim and a nonempty
+   active-date hint unless the undated-only exception above applies.
    Confirm every individuated relative has a person row, every family edge has
    a target `personId`, and every unnamed plural or count has a family summary.
 4. Confirm every candidate is contained in a surface or appears in exactly one

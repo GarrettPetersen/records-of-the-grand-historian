@@ -150,3 +150,11 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 ### OpenRouter free fallback lane
 
 Use `OPENROUTER_PEOPLE_LANE.md` for the local zero-priced OpenRouter extraction and independent date-audit runners. The same stable worker ID resumes sticky work; never delete ignored OpenRouter response/chunk files or date-workflow recovery state during disk cleanup. The free tier is request-limited and upstream models can return 429; stop and resume later, without silently switching to paid models or weakening validators. The extraction runner marks validated chapters `ready` but does not publish them; the host orchestrator remains responsible for exact-file staging and normal review gates. One shared checkout suffices.
+
+### Verified ebook people glossaries
+
+Follow `PEOPLE_EBOOK_CERTIFICATION.md` for required-glossary ebook generation.
+A complete book or manifest-defined volume can qualify independently of unrelated
+histories while retaining current global identity decisions. The ordinary compiler
+seal and current extraction, editorial, independent date and identity gates remain
+mandatory. Preview output does not satisfy certification.

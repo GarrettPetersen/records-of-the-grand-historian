@@ -8,6 +8,9 @@ import path from 'node:path';
 import { scanArtifactText } from './scan-translation-artifacts.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
 import { ebookPeopleReadinessErrors } from './lib/ebook-people-readiness.mjs';
+import { verifyCertifiedEbookPeople } from './lib/ebook-certified-verification.mjs';
+import { loadCertifiedEbookPeople, assertEbookPeopleCertificate } from './lib/ebook-certified-people.mjs';
+import { assertCertifiedEbookRoot, assertCertifiedEbookChapterSource } from './lib/ebook-certified-source.mjs';
 import { ebookCurrentDateErrors, ebookManifestScopeErrors } from './lib/ebook-current-date-audits.mjs';
 import {
   KDP_MAX_HTML_FILES,
@@ -34,6 +37,8 @@ if (unknownOptions.length > 0 || positionalArgs.length > 1 || (allowPeoplePrevie
 const epubPath = positionalArgs[0];
 const CHILD_TIMEOUT_MS = 10_000;
 const errors = [];
+if (requirePeopleGlossary) assertCertifiedEbookRoot(process.cwd(), 'validator working directory');
+let certifiedPeopleContext = null;
 const MANIFEST_PATH = path.join(process.cwd(), 'ebooks', 'manifest.json');
 
 function execFileSyncChecked(command, args, options = {}) {
@@ -199,6 +204,17 @@ function validateXmlEntry(entry) {
 
 const entries = listEntries();
 const entryDetails = listEntryDetails();
+if (requirePeopleGlossary) {
+  try {
+    const certifiedContext = loadCertifiedEbookPeople(sourceProduct);
+    certifiedPeopleContext = certifiedContext;
+    verifyCertifiedEbookPeople({ product: sourceProduct, context: certifiedContext, entries, readEntry: unzipText,
+      hasAbout: entries.includes('EPUB/about.xhtml') });
+    assertEbookPeopleCertificate(certifiedContext.certificate, loadCertifiedEbookPeople(sourceProduct).certificate);
+  } catch (error) {
+    errors.push(`Certified EPUB people verification failed: ${error.message}`);
+  }
+}
 const required = [
   'mimetype',
   'META-INF/container.xml',
@@ -524,9 +540,8 @@ function firstTagText(content, tagName) {
 
 function sourceChapterMetadata(book, chapter) {
   if (!book || !chapter) return null;
-  const file = path.join(process.cwd(), 'data', book, `${chapter}.json`);
-  if (!fs.existsSync(file)) return null;
-  const data = readJson(file);
+  const data = sourceChapterData(book, chapter);
+  if (!data) return null;
   return {
     englishTitle: data.meta?.title?.en || '',
     chineseTitle: data.meta?.title?.zh || '',
@@ -536,7 +551,9 @@ function sourceChapterMetadata(book, chapter) {
 function sourceChapterData(book, chapter) {
   if (!book || !chapter) return null;
   const file = path.join(process.cwd(), 'data', book, `${chapter}.json`);
-  return fs.existsSync(file) ? readJson(file) : null;
+  const data = fs.existsSync(file) ? readJson(file) : null;
+  if (requirePeopleGlossary) assertCertifiedEbookChapterSource(certifiedPeopleContext, book, chapter, data);
+  return data;
 }
 
 function sourceItemTranslation(item) {

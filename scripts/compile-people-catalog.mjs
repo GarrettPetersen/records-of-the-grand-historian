@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
 import crypto from 'node:crypto';
+import { identityInputSeal, peopleDigest } from './lib/people-identity-seal.mjs';
 import { dateAuditStatus } from './lib/people-date-audit.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPeopleResolutionCandidateDocument } from './build-people-resolution-candidates.mjs';
 import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
-import { PEOPLE_DIR, REPO_ROOT, readJson } from './lib/people-content.mjs';
+import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import {
   writePeopleCatalog,
   writePeopleResolutionCandidates,
@@ -571,7 +572,7 @@ function canonicalReferences(members) {
   );
 }
 
-function buildPeopleSiteIndex(corpus, catalog) {
+function buildPeopleSiteIndex(corpus, catalog, getDateStatus = dateAuditStatus) {
   const personById = new Map(catalog.people.map((person) => [person.id, person]));
   const chapters = {};
   for (const chapter of corpus.chapters) {
@@ -582,7 +583,7 @@ function buildPeopleSiteIndex(corpus, catalog) {
       book: extraction.book,
       chapter: extraction.chapter,
       promptVersion: extraction.run.promptVersion,
-      dateAudit: dateAuditStatus(extraction.book, extraction.chapter),
+      dateAudit: getDateStatus(extraction.book, extraction.chapter),
       mentions: extraction.mentions.map((mention) => {
         const personId = catalog.localPersonMap[mention.person];
         const person = personById.get(personId);
@@ -811,7 +812,7 @@ export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPe
     }]));
 }
 
-export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}) {
+export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}, { getDateStatus = dateAuditStatus } = {}) {
   if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
       !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
     throw new Error('People corpus is missing authoritative chapter coverage metadata');
@@ -934,7 +935,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
     extractedChapters: corpus.coverage.extractedChapters,
     missingChapters: missingChapterIds.length,
     dateAuditPendingChapters: missingChapterIds.length + corpus.chapters.filter(({ extraction }) =>
-      dateAuditStatus(extraction.book, extraction.chapter).status !== 'audited').length,
+      getDateStatus(extraction.book, extraction.chapter).status !== 'audited').length,
     localPeople: corpus.localPeople.size,
     canonicalPeople: people.length,
     mergedLocalPeople: corpus.localPeople.size - people.length,
@@ -967,9 +968,69 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   }
   return {
     catalog,
+    unresolvedCanonicalPeople: [...new Set([...unresolvedLocalPeople].map(id => localMap.get(id)))].sort(),
     candidates: candidateDocument,
-    siteIndex: buildPeopleSiteIndex(corpus, catalog),
+    siteIndex: buildPeopleSiteIndex(corpus, catalog, getDateStatus),
   };
+}
+
+// Reconstruct every public fact from freshly qualified source members. The
+// globally compiled mapping supplies identity and URL stability, never facts.
+export function projectPeopleProduct(corpus, globalCatalog, roleLabels, overrides = {}, getDateStatus = dateAuditStatus) {
+  const globalById = new Map(globalCatalog.people.map(person => [person.id, person]));
+  const localMap = new Map();
+  const membersByCanonical = new Map();
+  for (const [localId, member] of corpus.localPeople) {
+    const id = globalCatalog.localPersonMap[localId];
+    if (!id || !globalById.has(id) || !globalById.get(id).localPeople.includes(localId)) {
+      throw new Error(`Scoped source member ${localId} is absent from the sealed global identity mapping`);
+    }
+    localMap.set(localId, id);
+    if (!membersByCanonical.has(id)) membersByCanonical.set(id, []);
+    membersByCanonical.get(id).push(localId);
+    if (member.promptVersion !== globalCatalog.currentPromptVersion) throw new Error(`Invalid scoped prompt version for ${localId}`);
+  }
+  const people = [...membersByCanonical].map(([id, localPeople]) => {
+    const global = globalById.get(id);
+    const cluster = { canonicalPersonId: id, localPeople, retiredIds: global.retiredIds };
+    const overrideEntries = [id, ...(global.retiredIds ?? [])].filter(key => overrides[key]);
+    if (overrideEntries.length > 1) throw new Error(`Multiple scoped curation overrides for ${id}`);
+    const override = overrideEntries.length ? structuredClone(overrides[overrideEntries[0]]) : {};
+    const members = localPeople.map(localId => corpus.localPeople.get(localId));
+    if (override.preferredDescription && !members.some(member => member.descriptorSuggestion === override.preferredDescription)) {
+      throw new Error(`Preferred description for ${id} lacks scoped source support`);
+    }
+    if (override.preferredName && !members.flatMap(member => member.claims).some(claim =>
+      claim.predicate === 'name' && ['en', 'zh', 'pinyin'].every(key =>
+        !override.preferredName[key] || claim.value?.[key] === override.preferredName[key]))) {
+      throw new Error(`Preferred name for ${id} lacks scoped source support`);
+    }
+    const person = canonicalRecord(cluster, corpus, localMap, roleLabels, new Set(),
+      globalCatalog.currentPromptVersion, override);
+    person.slug = global.slug;
+    return person;
+  });
+  for (const person of people) {
+    for (const relationship of person.familyRelationships) {
+      if (!membersByCanonical.has(relationship.value.personId)) {
+        throw new Error(`Scoped family target ${relationship.value.personId} lacks scoped source support`);
+      }
+      relationship.derivedInverse = false;
+    }
+  }
+  const familyEdges = buildCanonicalFamilyEdges(people);
+  addInverseFamilyRelationships(people);
+  attachFamilyEdgeIds(people, familyEdges);
+  validateCanonicalFamilyGraph(people, familyEdges);
+  const validator = getPeopleSchemaValidator().getSchema(CANONICAL_SCHEMA_ID);
+  for (const person of people) {
+    if (!validator(person)) throw new Error(`Scoped canonical person ${person.id}: ${formatSchemaErrors(validator.errors).join('; ')}`);
+  }
+  // This context deliberately does not claim global catalog completeness.
+  const catalog = { schemaVersion: 1, generatedAt: globalCatalog.generatedAt, complete: false,
+    currentPromptVersion: globalCatalog.currentPromptVersion, people, familyEdges,
+    localPersonMap: Object.fromEntries(localMap) };
+  return { catalog, siteIndex: buildPeopleSiteIndex(corpus, catalog, getDateStatus) };
 }
 
 function writeCompiledPeopleOutputs(result, options, writers = {
@@ -1297,6 +1358,7 @@ function selfTest() {
 function main() {
   const options = parseArgs(process.argv.slice(2));
   if (options.selfTest) return selfTest();
+  const inputSeal = identityInputSeal();
   const corpus = loadValidatedPeopleCorpus();
   const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
   const curation = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
@@ -1324,7 +1386,13 @@ function main() {
     }
   }
   const result = compilePeopleCatalog(corpus, resolutions, curation.people);
+  if (identityInputSeal() !== inputSeal) throw new Error('Identity inputs changed during compilation; refusing publication');
   writeCompiledPeopleOutputs(result, options);
+  writeJsonAtomic(`${options.out}.identity-seal.json`, {
+    schemaVersion: 1, kind: 'people-global-identity-seal', inputs: inputSeal,
+    catalog: peopleDigest(result.catalog), siteIndex: peopleDigest(result.siteIndex),
+    unresolvedCanonicalPeople: result.unresolvedCanonicalPeople,
+  });
   console.log(
     `people catalog: ${result.catalog.stats.canonicalPeople} canonical from ` +
     `${result.catalog.stats.localPeople} local people; ${result.catalog.stats.unresolvedCandidateBlocks} ` +

@@ -9,7 +9,6 @@ import { fileURLToPath } from 'node:url';
 import { Resvg } from '@resvg/resvg-js';
 import { getBookMetadata } from './book-metadata.mjs';
 import { renderBookCover } from './generate-book-covers.mjs';
-import { chineseText, englishText, sourceUnitAt } from './lib/people-content.mjs';
 import {
   inferChapterTableHeaders,
   isSemanticTableHeader,
@@ -17,7 +16,6 @@ import {
   tableCells,
 } from './lib/table-structure.mjs';
 import {
-  chapterPeopleContext,
   loadPeopleSiteContext,
   renderUnitWithPeople,
 } from './lib/people-site.mjs';
@@ -28,16 +26,10 @@ import {
   ebookSentenceHref,
   planEbookContentDocuments,
 } from './lib/ebook-content-layout.mjs';
-import {
-  humanizePeopleValue,
-  personAlternateNames,
-  personDisplayName,
-  personFullDisplayName,
-  personLifeSummary,
-  personPublicAliases,
-  personPublicDescription,
-} from './lib/people-presentation.mjs';
-import { assessEbookPeopleReadiness } from './lib/ebook-people-readiness.mjs';
+import { escapeXml, textContent, visibleTableText, formatList, getTranslationObject, getMainText } from './lib/ebook-text.mjs';
+import { buildEbookPeople, ebookPersonHref, renderEbookPeopleIndex, renderEbookGlossaryShard } from './lib/ebook-people-render.mjs';
+import { loadCertifiedEbookPeople, assertEbookPeopleCertificate } from './lib/ebook-certified-people.mjs';
+import { assertCertifiedEbookRoot, assertCertifiedEbookSources } from './lib/ebook-certified-source.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -62,7 +54,7 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (!arg.startsWith('--')) continue;
     const key = arg.slice(2);
-    if (key === 'all' || key === 'all-products') {
+    if (key === 'all' || key === 'all-products' || key === 'require-people-glossary') {
       args[key] = true;
     } else {
       args[key] = argv[i + 1];
@@ -246,54 +238,8 @@ function validateCoverImage(buffer, qa) {
   return info;
 }
 
-function escapeXml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function textContent(value) {
-  return String(value ?? '').replace(/\s+/g, ' ').trim();
-}
-
-// Table cells retain a small amount of source layout metadata in the JSON.
-// It is useful to the web renderer but should never leak into a reading excerpt.
-function visibleTableText(value) {
-  return String(value ?? '').replace(/^((?:(?:rowspan|colspan|valign|align|style|class)\s*=\s*"[^"]*"\s*)+)\|\s*/iu, '');
-}
-
-function formatList(values) {
-  const items = values.map(textContent).filter(Boolean);
-  if (items.length <= 1) return items.join('');
-  if (items.length === 2) return `${items[0]} and ${items[1]}`;
-  return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
-}
-
 function getTranslation(item) {
   return getMainText(item);
-}
-
-function getTranslationObject(item) {
-  if (!item) return null;
-  if (typeof item.idiomatic === 'string' || typeof item.literal === 'string' || typeof item.translation === 'string') {
-    return null;
-  }
-  const translation = item.translations?.find((entry) => entry.lang === 'en') || item.translations?.[0];
-  return translation || null;
-}
-
-function getMainText(item) {
-  if (!item) return '';
-  const direct = item.idiomatic || item.literal || item.translation;
-  if (typeof direct === 'string' && direct.trim()) return direct.trim();
-  const trans = getTranslationObject(item);
-  if (trans) {
-    return textContent(trans.idiomatic || trans.literal || '');
-  }
-  return '';
 }
 
 function getFootnote(item) {
@@ -825,84 +771,6 @@ function excerptAround(text, index, width = 80) {
 function allowsChineseCharacters(item) {
   return item?.allowChineseCharacters === true ||
     item?.translations?.some((entry) => entry.allowChineseCharacters === true) === true;
-}
-
-function ebookPersonAnchor(personId) {
-  return `person-${personId}`;
-}
-
-function buildEbookPeople(product) {
-  const readiness = assessEbookPeopleReadiness(PEOPLE_EBOOK, product, {
-    allowPreview: PEOPLE_EBOOK_PREVIEW,
-  });
-  if (!readiness.active) return readiness;
-  const { chapterIds } = readiness;
-  const people = readiness.people.sort((left, right) =>
-    personDisplayName(left).localeCompare(personDisplayName(right), 'en') || left.id.localeCompare(right.id)
-  );
-  const peopleById = new Map(people.map((person) => [person.id, person]));
-  const shards = [];
-  const shardSize = 350;
-  for (let index = 0; index < people.length; index += shardSize) {
-    const number = shards.length + 1;
-    shards.push({
-      number,
-      file: `glossary-${String(number).padStart(3, '0')}.xhtml`,
-      people: people.slice(index, index + shardSize),
-    });
-  }
-  const fileByPersonId = new Map();
-  for (const shard of shards) {
-    for (const person of shard.people) fileByPersonId.set(person.id, shard.file);
-  }
-  const chapterContexts = new Map(product.chapters.map((chapter) => {
-    const chapterId = String(chapter).padStart(3, '0');
-    return [chapterId, chapterPeopleContext(PEOPLE_EBOOK, product.book, chapterId)];
-  }));
-  const mentionSpanKeys = new Set();
-  for (const [chapterId, context] of chapterContexts) {
-    for (const mention of context?.record.mentions ?? []) {
-      for (const span of mention.spans?.en ?? []) {
-        mentionSpanKeys.add([
-          chapterId,
-          mention.unit.id,
-          mention.personId,
-          span.startCodePoint,
-          span.endCodePoint,
-        ].join(':'));
-      }
-    }
-  }
-  const backlinks = people.reduce((total, person) =>
-    total + person.references.filter((reference) =>
-      reference.book === product.book && chapterIds.has(reference.chapter)
-    ).length, 0);
-  return {
-    active: true,
-    ready: readiness.ready,
-    preview: readiness.preview,
-    reason: null,
-    book: product.book,
-    chapterIds,
-    people,
-    missingChapters: readiness.missingChapters,
-    legacyChapters: readiness.legacyChapters,
-    dateAuditChapters: readiness.dateAuditChapters,
-    peopleNeedingReview: readiness.peopleNeedingReview,
-    peopleById,
-    shards,
-    fileByPersonId,
-    chapterContexts,
-    expectedMentionLinks: mentionSpanKeys.size,
-    expectedBacklinks: backlinks,
-  };
-}
-
-function ebookPersonHref(ebookPeople, personId, from = 'chapter') {
-  const file = ebookPeople?.fileByPersonId.get(personId);
-  if (!file) throw new Error(`No EPUB glossary target for canonical person ${personId}`);
-  const prefix = from === 'chapter' ? '../people/' : '';
-  return `${prefix}${file}#${ebookPersonAnchor(personId)}`;
 }
 
 function renderEbookUnit(item, main, chapterContext, ebookPeople) {
@@ -2010,131 +1878,6 @@ function renderAboutThisEdition(product) {
 `;
 }
 
-function ebookGlossaryReferences(person, ebookPeople) {
-  return person.references.filter((reference) =>
-    reference.book === ebookPeople.book && ebookPeople.chapterIds.has(reference.chapter)
-  );
-}
-
-function renderEbookGlossaryFamily(person, ebookPeople) {
-  const rows = [];
-  const seen = new Set();
-  for (const relationship of person.familyRelationships) {
-    const key = `${relationship.edgeId}:${relationship.value.relation}:${relationship.value.personId}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const target = PEOPLE_EBOOK.peopleById.get(relationship.value.personId);
-    if (!target) continue;
-    const label = `${humanizePeopleValue(relationship.value.relation)} ${personFullDisplayName(target)}`;
-    const targetFile = ebookPeople.fileByPersonId.get(target.id);
-    rows.push(targetFile
-      ? `<li><a href="${escapeXml(targetFile)}#${ebookPersonAnchor(target.id)}">${escapeXml(label)}</a></li>`
-      : `<li>${escapeXml(label)}</li>`);
-  }
-  return rows.length ? `<h3>Family</h3><ul class="glossary-family">${rows.join('')}</ul>` : '';
-}
-
-function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
-  const groups = new Map();
-  for (const reference of ebookGlossaryReferences(person, ebookPeople)) {
-    if (!groups.has(reference.chapter)) groups.set(reference.chapter, []);
-    groups.get(reference.chapter).push(reference);
-  }
-  if (!groups.size) return '';
-  const rows = [...groups.entries()].sort((left, right) => left[0].localeCompare(right[0])).map(([chapter, refs]) => {
-    const title = chapterTitles.get(chapter) || `Chapter ${Number.parseInt(chapter, 10)}`;
-    const chapterData = chapterDataById.get(chapter);
-    if (!chapterData) throw new Error(`Missing EPUB source chapter ${ebookPeople.book}/${chapter} for glossary reference`);
-    const snippets = refs.map((reference) => {
-      const unit = sourceUnitAt(chapterData, {
-        id: reference.unitId,
-        kind: reference.unitKind,
-        blockIndex: reference.blockIndex,
-        collection: reference.collection,
-        itemIndex: reference.itemIndex,
-      });
-      const href = `../${ebookSentenceHref(contentLayout, chapter, 'en', reference.unitId, 'text/')}`;
-      const zh = visibleTableText(chineseText(unit));
-      const en = visibleTableText(englishText(unit));
-      if (!zh && !en) throw new Error(`Empty EPUB glossary reference ${ebookPeople.book}:${chapter}:${reference.unitId}`);
-      return `<article class="glossary-mention-snippet">` +
-        `${zh ? `<a class="glossary-mention-source" lang="zh-Hant" href="${escapeXml(href)}">${escapeXml(zh)}</a>` : ''}` +
-        `${en ? `<a class="glossary-mention-link" href="${escapeXml(href)}">${escapeXml(en)}</a>` : ''}` +
-        `</article>`;
-    }).join('');
-    return `<li><h4>${escapeXml(title)}</h4>${snippets}</li>`;
-  });
-  return `<h3>Mentions</h3><ul class="glossary-mentions">${rows.join('')}</ul>`;
-}
-
-function renderEbookAliasTable(person) {
-  const aliases = personPublicAliases(person);
-  if (!aliases.length) return '';
-  const rows = aliases.map((name) => `<tr><th>${escapeXml(humanizePeopleValue(name.kind || 'name'))}</th>` +
-    `<td>${escapeXml(name.en || '')}</td><td lang="zh-Hant">${escapeXml(name.zh || '')}</td>` +
-    `<td>${escapeXml(name.pinyin || '')}</td></tr>`).join('');
-  return `<h3>Other names</h3><div class="glossary-aliases"><table><thead><tr>` +
-    `<th>Type</th><th>English</th><th>Chinese</th><th>Pinyin</th>` +
-    `</tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
-  const roles = person.roles.map((role) => role.label);
-  const lifeSummary = personLifeSummary(person);
-  return `<section class="glossary-entry" id="${ebookPersonAnchor(person.id)}">
-  <h2>${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}</h2>
-  <p class="glossary-description">${escapeXml(personPublicDescription(person))}</p>
-  ${lifeSummary ? `<p class="glossary-dates">${escapeXml(lifeSummary)}</p>` : ''}
-  ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
-  ${renderEbookAliasTable(person)}
-  ${renderEbookGlossaryFamily(person, ebookPeople)}
-  ${renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)}
-</section>`;
-}
-
-function renderEbookPeopleIndex(ebookPeople) {
-  const items = ebookPeople.people.map((person) => {
-    const file = ebookPeople.fileByPersonId.get(person.id);
-    return `<li><a class="glossary-person-link" href="${escapeXml(file)}#${ebookPersonAnchor(person.id)}">` +
-      `${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}` +
-      `</a><span>${escapeXml(personPublicDescription(person))}</span></li>`;
-  }).join('\n      ');
-  return `<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
-<head>
-  <title>${peopleGlossaryTitle}</title>
-  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
-</head>
-<body>
-  <nav epub:type="glossary" class="people-glossary-index">
-    <h1>${peopleGlossaryTitle}</h1>
-    <ol>${items}</ol>
-  </nav>
-</body>
-</html>`;
-}
-
-function renderEbookGlossaryShard(shard, ebookPeople, chapterTitles, contentLayout, chapterDataById) {
-  const entries = shard.people.map((person) =>
-    renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLayout, chapterDataById)
-  ).join('\n');
-  return `<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
-<head>
-  <title>${peopleGlossaryTitle} ${shard.number}</title>
-  <link rel="stylesheet" type="text/css" href="../styles/ebook.css" />
-</head>
-<body>
-  <section epub:type="glossary" class="people-glossary">
-    <h1>${peopleGlossaryTitle}</h1>
-    ${entries}
-  </section>
-</body>
-</html>`;
-}
-
 function renderNav(product, chapters, contentLayout, ebookPeople = null) {
   const chapterItems = chapters.map(({ chapter, data }) => {
     const title = data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`;
@@ -2237,6 +1980,7 @@ ${subjects}
     <item id="frontmatter" href="frontmatter.xhtml" media-type="application/xhtml+xml" />
 ${aboutItem}${items}
 ${peopleItems}
+${ebookPeople?.certificate ? '    <item id="people-certificate" href="people/certificate.json" media-type="application/json" />' : ''}
   </manifest>
   <spine>
     <itemref idref="cover-page" />
@@ -2621,7 +2365,9 @@ function writePublicationManifest(product, productDir, epubPath, qa, generatedAt
   return manifest;
 }
 
-function buildProduct(product) {
+function buildProduct(product, { requirePeopleGlossary = false } = {}) {
+  if (requirePeopleGlossary && PEOPLE_EBOOK_PREVIEW) throw new Error('Required glossary cannot use PEOPLE_EBOOK_PREVIEW');
+  const peopleContext = requirePeopleGlossary ? loadCertifiedEbookPeople(product) : PEOPLE_EBOOK;
   const generatedAt = buildTimestamp(product);
   const bookInfo = getBookMetadata(product.book) || {};
   const productDir = path.join(outRoot, product.slug);
@@ -2652,6 +2398,28 @@ function buildProduct(product) {
     chapters: []
   };
 
+  const chapters = product.chapters.map((chapter) => {
+    const file = path.join(repoRoot, 'data', product.book, `${chapter}.json`);
+    const data = readJson(file);
+    const chapterTitle = textContent(data.meta.title?.en || '');
+    const chapterQa = {
+      chapter,
+      title: chapterTitle,
+      sentenceCount: data.meta.sentenceCount || 0,
+      translatedCount: data.meta.translatedCount || 0,
+      tableRendering: emptyChapterTableStats()
+    };
+    qa.chapters.push(chapterQa);
+    if (!chapterTitle) {
+      qa.errors.push(`Missing English chapter title for ${product.book}/${chapter}`);
+    }
+    if ((data.meta.sentenceCount || 0) !== (data.meta.translatedCount || 0)) {
+      qa.errors.push(`Chapter ${chapter} is not fully translated: ${data.meta.translatedCount}/${data.meta.sentenceCount}`);
+    }
+    return { chapter, data, qa: chapterQa };
+  });
+  if (requirePeopleGlossary) assertCertifiedEbookSources(peopleContext, product, chapters);
+
   validateProductMetadata(product, qa);
 
   cleanDir(buildDir);
@@ -2674,27 +2442,8 @@ function buildProduct(product) {
     writeFile(path.join(buildDir, 'EPUB', 'about.xhtml'), renderAboutThisEdition(product));
   }
 
-  const chapters = product.chapters.map((chapter) => {
-    const file = path.join(repoRoot, 'data', product.book, `${chapter}.json`);
-    const data = readJson(file);
-    const chapterTitle = textContent(data.meta.title?.en || '');
-    const chapterQa = {
-      chapter,
-      title: chapterTitle,
-      sentenceCount: data.meta.sentenceCount || 0,
-      translatedCount: data.meta.translatedCount || 0,
-      tableRendering: emptyChapterTableStats()
-    };
-    qa.chapters.push(chapterQa);
-    if (!chapterTitle) {
-      qa.errors.push(`Missing English chapter title for ${product.book}/${chapter}`);
-    }
-    if ((data.meta.sentenceCount || 0) !== (data.meta.translatedCount || 0)) {
-      qa.errors.push(`Chapter ${chapter} is not fully translated: ${data.meta.translatedCount}/${data.meta.sentenceCount}`);
-    }
-    return { chapter, data, qa: chapterQa };
-  });
-  const ebookPeopleState = buildEbookPeople(product);
+  const ebookPeopleState = buildEbookPeople(peopleContext, product, { allowPreview: PEOPLE_EBOOK_PREVIEW });
+  if (requirePeopleGlossary && !ebookPeopleState.ready) throw new Error('Required certified people glossary is not ready');
   const ebookPeople = ebookPeopleState.active ? ebookPeopleState : null;
   const contentLayout = planEbookContentDocuments(chapters, {
     hasAbout: Array.isArray(product.aboutThisEdition) && product.aboutThisEdition.length > 0,
@@ -2761,6 +2510,7 @@ function buildProduct(product) {
       data.meta.title?.en || `Chapter ${Number.parseInt(chapter, 10)}`,
     ]));
     const chapterDataById = new Map(chapters.map(({ chapter, data }) => [chapter, data]));
+    if (ebookPeople.certificate) writeFile(path.join(buildDir, 'EPUB', 'people', 'certificate.json'), `${JSON.stringify(ebookPeople.certificate, null, 2)}\n`);
     writeFile(path.join(buildDir, 'EPUB', 'people', 'index.xhtml'), renderEbookPeopleIndex(ebookPeople));
     for (const shard of ebookPeople.shards) {
       writeFile(
@@ -2781,6 +2531,11 @@ function buildProduct(product) {
     throw new Error(`${product.slug} has ${qa.errors.length} QA error(s). See ${path.relative(repoRoot, path.join(productDir, 'qa-report.json'))}`);
   }
 
+  if (ebookPeople?.certificate) {
+    const currentContext = loadCertifiedEbookPeople(product);
+    assertEbookPeopleCertificate(ebookPeople.certificate, currentContext.certificate);
+    assertCertifiedEbookSources(currentContext, product, chapters);
+  }
   normalizeFileTimes(buildDir, generatedAt);
   zipEpub(buildDir, epubPath);
   const preliminaryManifest = publicationManifest(product, productDir, epubPath, qa, generatedAt);
@@ -2797,13 +2552,17 @@ function buildProduct(product) {
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
+  if (args['require-people-glossary']) {
+    assertCertifiedEbookRoot(repoRoot, 'generator executable root');
+    assertCertifiedEbookRoot(process.cwd(), 'generator working directory');
+  }
   const products = loadProducts(args);
   if (products.length === 0) {
     throw new Error('No ebook products matched the requested arguments.');
   }
 
   for (const product of products) {
-    const result = buildProduct(product);
+    const result = buildProduct(product, { requirePeopleGlossary: args['require-people-glossary'] === true });
     console.log(`Generated ${path.relative(repoRoot, result.epubPath)}`);
     if (result.qa.warnings.length > 0) {
       console.log(`  Warnings: ${result.qa.warnings.length} (${path.relative(repoRoot, path.join(outRoot, product.slug, 'qa-report.json'))})`);

@@ -446,7 +446,8 @@ export function validateAppliedEditorialDecisions(document, extraction) {
   const documentResult = editorialDocumentErrors(document);
   const errors = [...documentResult.errors];
   const reviews = editorialReviews(document);
-  const pendingReview = currentReview(document, extraction);
+  const pendingReview = extraction.translationRepairs.some(repair => repair.status === 'proposed')
+    ? currentReview(document, extraction) : null;
   const pendingFingerprint = pendingReview?.input.proposalsFingerprint ?? null;
   const repairsByTarget = new Map();
   for (const repair of extraction.translationRepairs) {
@@ -518,6 +519,33 @@ export function validateAppliedEditorialDecisions(document, extraction) {
       if (!containsReviewedClaim(extraction, addition.claim)) {
         errors.push(`${prefix}added ${addition.claim.id}, but its fact is missing`);
       }
+    }
+  }
+
+  // History must account for every applied change, as well as every historical
+  // approval remaining applied. The presence of one valid review cannot bless
+  // later repairs that were never independently authorized. IDs may be
+  // resequenced during reconciliation, so compare the exact reviewed contract.
+  const repairContract = (unit, field, before, after, reason) => JSON.stringify(canonicalize({
+    unit, field, before, after, reason,
+  }));
+  const authorizedRepairs = new Set();
+  for (const review of reviews) {
+    if (review.reviewer?.agentId && extraction.run?.agentId &&
+        review.reviewer.agentId === extraction.run.agentId) continue;
+    const proposals = new Map((review.proposals ?? []).map(proposal => [proposal.id, proposal]));
+    for (const decision of review.decisions ?? []) {
+      if (!['accept', 'revise'].includes(decision.decision)) continue;
+      const proposal = proposals.get(decision.repairId);
+      if (!proposal) continue;
+      authorizedRepairs.add(repairContract(proposal.unit, proposal.field, proposal.before,
+        decision.decision === 'revise' ? decision.after : proposal.after, decision.reason));
+    }
+  }
+  for (const repair of extraction.translationRepairs) {
+    if (repair.status !== 'applied') continue;
+    if (!authorizedRepairs.has(repairContract(repair.unit, repair.field, repair.before, repair.after, repair.reason))) {
+      errors.push(`applied ${repair.id} has no matching independent accept/revise authorization`);
     }
   }
 
