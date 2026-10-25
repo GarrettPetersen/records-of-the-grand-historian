@@ -1,0 +1,82 @@
+{
+  "validation": "Exact-baseline production strictAliasDispositions validation passed",
+  "counts": {
+    "people": 71,
+    "claims": 553,
+    "mentions": 514
+  },
+  "byteInputPins": {
+    "commit": "fe23b5c8f6aefd758dbd53834819d8fee74213c4",
+    "book": "jinshu",
+    "chapter": "053",
+    "sourceSha256": "sha256:50ce1c5acbafd396a312495da7d7267eac0c915e25a207adc72db21c2f72d08c",
+    "extractionSha256": "sha256:307d647957cbd4d611d555053bc54e292fdcb42e5156ec91b26316bb0dce587c",
+    "candidateSha256": "sha256:905640d97fdcf2653e4781d5c7ce2beeca7a24b73cc479a631b489181f06be12"
+  },
+  "preservedTopLevelFields": [
+    "schemaVersion",
+    "book",
+    "chapter",
+    "input",
+    "run",
+    "people",
+    "claims",
+    "translationRepairs",
+    "coverage"
+  ],
+  "existingPersonIdsUnchanged": true,
+  "allClaimContractsUnchanged": true,
+  "allDatesHintsProvenanceAnd24RepairsUnchanged": true,
+  "sourceOccurrenceTransfers": [
+    {
+      "person": "p002",
+      "surface": "the emperor",
+      "unit": "s0010",
+      "after": "p004",
+      "reason": "The emperor followed at the sty is Emperor Wu, continuing s0003/s0006–s0013; no change of emperor occurs."
+    },
+    {
+      "person": "p001",
+      "surface": "Yu",
+      "unit": "s0063",
+      "after": "p049",
+      "reason": "The only exact Yu in this unit belongs to Minister He Yu; crown prince is separately mentioned without his given name."
+    },
+    {
+      "person": "p037",
+      "surface": "Wang",
+      "unit": "s0065",
+      "after": "p038",
+      "reason": "Wang consort is the crown princess escorted with the three grandsons, not Wang Yan her father."
+    }
+  ],
+  "explicitFalsePersonalLinkRetractions": [
+    {
+      "person": "p026",
+      "surface": "Jia",
+      "unit": "s0037",
+      "reason": "Jia clan denotes the lineage collectively, not an occurrence of the individual empress."
+    },
+    {
+      "person": "p026",
+      "surface": "Jia",
+      "unit": "s0039",
+      "reason": "Jia kin denotes the collective lineage, not an occurrence of the individual empress."
+    },
+    {
+      "person": "p026",
+      "surface": "Jia",
+      "unit": "s0189",
+      "reason": "Jia kin is the collective subject of this English summary; the Chinese separately names the inner palace and outside kin."
+    },
+    {
+      "person": "p001",
+      "surface": "; far off Lu kingdom gloomy and tall; thousand-year skulls sprout teeth",
+      "unit": "s0070",
+      "reason": "This is a rhyme clause about Lu and skulls, not a personal name, title, or kinship reference to Yu."
+    }
+  ],
+  "normalDateAuditRequired": true,
+  "V2StagingPlanCompatible": false,
+  "V2Limitation": "Four false personal links need retraction; three scanner candidates become collective dispositions. The approved V2 tool only supports already-disposed non-person candidates, so this full artifact exceeds that exact tool scope and must not be staged by weakening the guard."
+}

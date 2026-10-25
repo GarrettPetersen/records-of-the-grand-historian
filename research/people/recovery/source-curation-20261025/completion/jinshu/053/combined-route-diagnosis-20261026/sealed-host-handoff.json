@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "fe23b5c8f6aefd758dbd53834819d8fee74213c4",
+  "status": "diagnostic-only; ordinary unmerged staging route; no combined-publish readiness",
+  "canonicalRawPins": {
+    "source": "50ce1c5acbafd396a312495da7d7267eac0c915e25a207adc72db21c2f72d08c",
+    "extraction": "307d647957cbd4d611d555053bc54e292fdcb42e5156ec91b26316bb0dce587c",
+    "date": "264cf77445ddf7362ae01e998712b83c2917f4c33866e031e36f11ad5bf74921",
+    "editorial": "2673907c95d69f93c066d9cf7b0d3843e7ea3324481f6e89a9c1287816d10a47"
+  },
+  "inputEvidence": {
+    "authorReport": "owner-full-author-20261026/author-report.json",
+    "blindPeer": "owner-full-peer-source-20261024/blind-source-review.json",
+    "blindPeerSha256": "2c4700c48e08f492e4386493047059bae0fa3d3fc4a898b1ce72f2583586e588"
+  },
+  "draftScope": {
+    "EnglishDefectUnits": [
+      "s0016",
+      "s0022",
+      "s0025",
+      "s0037",
+      "s0095",
+      "s0122",
+      "s0126",
+      "s0158"
+    ],
+    "fieldAccounting": "One proposal per actual changed literal/idiomatic field; paired-field defects may require more than eight repair rows. Bind the actual sealed proposals, not a guessed count.",
+    "ownerSpanCorrections": [
+      "s0010 emperor Wu",
+      "s0063 He Yu full span plus crown-prince callback",
+      "s0065 crown princess",
+      "s0070 narrow white-sand allusion",
+      "s0037/s0039/s0189 collective Jia references"
+    ],
+    "unsupportedFactCorrections": [
+      "Sibling maternal full/half specificity",
+      "p056 parent/grandparent relation, descriptor and descriptive name",
+      "Completed-divorce assertion vs request",
+      "Emperor posthumous-name kind"
+    ],
+    "allusionHold": "Resolve s0158 from sealed source evidence before adding persons/claims; do not invent coverage."
+  },
+  "normalEditorialHistoryConstruction": {
+    "helpers": [
+      "api.e.proposalContracts(expandedWithProposals)",
+      "api.e.editorialDecisionSeed(expandedWithProposals)",
+      "api.e.validateEditorialDecisionDocument(independentIncomingV3)",
+      "api.e.mergeEditorialDecisionReview(originalV4, independentIncomingV3)",
+      "api.e.validateAppliedEditorialDecisions(mergedV4, finalExpanded)"
+    ],
+    "rules": [
+      "Independent exact-proposal review, real author/extractor exclusions, no host-synthesized approvals.",
+      "New proposal fingerprint; old review components must remain an identical ordered prefix. The merge helper filters same-fingerprint components, so assert distinctness before merge.",
+      "Preserve the original 24 applied repair rows unchanged; append new rows in chain order. A later correction on the same field starts from the prior after text.",
+      "Old4 corrected claim subject/predicate/value/certainty and reviewed evidence stay present. c/m numeric IDs can resequence; do not rewrite historical reports to follow them.",
+      "Unsupported-fact corrections need full independent source review. Do not misuse translation-linked claim revisions to bless unrelated metadata corrections."
+    ],
+    "oldFourEvidence": "old-four-history-evidence.json"
+  },
+  "exactBaselineDraftValidation": {
+    "reuse": "baselineApi(root, fullCommit) exported by reviewed V2 scripts/lib/people-ownership-plan.mjs",
+    "calls": [
+      "api.p.buildPeopleExtractionPacket(book,chapter,{chapterData:finalSource})",
+      "api.v.validateCompactPeopleExtraction(fullCandidate,finalPacket,{strictAliasDispositions:true})",
+      "api.e.validateAppliedEditorialDecisions(mergedEditorial,expandedCandidate)",
+      "api.d.computeCurationDrift(vmParsedBefore,vmParsedFinal) for exhaustive reviewed changes"
+    ],
+    "warning": "Raw compact production validation uses JSON.parse preserving key order; call drift parser for duplicate-key validation but do not feed its sorted return directly to compact fingerprint checking. This helper validates drafts only, does not confer combined publication readiness or source approval. Do not call owner-only prepareOwnershipPlan on changed English source."
+  },
+  "reviewThenStagingThenAudit": [
+    "Focused independent exact English/editorial approval and full independent exact source/owner/fact approval precede staged bytes. Seal final source/candidate/editorial and complete mention/candidate/collective/fact corrections.",
+    "Host creates one UNMERGED exact reviewed staging revision including whole-decision invalidations and durable approval evidence. Keep every unrelated identity decision unchanged; remove whole affected transitive decisions, never A/B/C -> B/C.",
+    "Adopt exact revision in existing runtime only at idle invocation boundary. Retain old date report/workflow/claim; report becomes stale naturally.",
+    "Normal runner archives prior ready claim and completed workflow, obtains ONE fresh independent audit of final inputs, and recordDateAudit archives the old report. Add actual approved report to same PR.",
+    "Fresh date approval plus aggregate identity/site/full CI gates precede master/publication; staging revision is not completion. No paid/SDK/DeepSeek calls now."
+  ],
+  "dateSettings": {
+    "worker": "Garretts-MacBook-Pro-2.jinshu086-date-recovery",
+    "maxUnits": 250,
+    "maxWorkerKiB": 256,
+    "chapterConcurrency": 2,
+    "sharedJobConcurrency": 4,
+    "maxRunCostUSD": 3,
+    "maxRunTokens": 4000000,
+    "timeoutMinutes": 20
+  },
+  "dateTransitionReferences": [
+    "run-people-date-workflow.mjs:188-195 archives ready claim and reserves new generation",
+    "people-date-workflow.mjs:760-768 archives completed directory after input change",
+    "people-date-audit.mjs:203-213 preserves old report before fresh approval"
+  ],
+  "combinedBoundary": {
+    "reviewAPI": "validateCombinedReviews supports real English repairs + full source/extraction/date review; requires actual new applied repairs and fresh audited date report.",
+    "APIs": [
+      "inspectCombinedBefore",
+      "prepareCombinedCuration",
+      "verifyCombinedCuration",
+      "publishCombinedCuration"
+    ],
+    "currentBlocker": "Existing completed runtime phase and ready claim cannot pass prepare/verify: people-combined-curation.mjs:195-200 explicitly require unfinished state + active/research-blocked claim. Primary has no retained J053 state. Do not manufacture either.",
+    "roleContract": "Combined identity/date/seal require the same actual independent reviewer.agentId, with all author/extractor identities excluded. Normal assembled date report lacks that root endorsement; do not synthesize it.",
+    "identityGap": "Combined publisher writes only source/extraction/editorial/dateReport; it does not invalidate resolution decisions. Existing member-pruning helper is insufficient.",
+    "decision": "Do not extend completed-generation code. Use ordinary unmerged host staging and normal stale-input audit route."
+  },
+  "mutations": "Only this diagnostic artifact directory was written. No canonical/source/runtime/Git/index/queue/lock mutation, paid/model call, new approval or V2 change."
+}
