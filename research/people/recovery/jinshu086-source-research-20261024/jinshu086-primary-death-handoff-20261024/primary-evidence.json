@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "status": "Verified primary evidence sidecar; not date approval",
+  "book": "jinshu",
+  "chapter": "086",
+  "targetItems": [
+    "claim-409",
+    "claim-412"
+  ],
+  "witnessRevision": "75400a58f52fed3c6e8621bc7a798218a4e09910",
+  "sourceHash": "sha256:57c82651a28b441d3057a4f35574f3f2f709864d2b1c3b45c4aa1ea8596b07d9",
+  "extractionHash": "sha256:c9fd6be5dde74f2a42dad473bc1b513f713b3120e1dea4fa2b3bce05fecfb1e2",
+  "proposalHash": "sha256:3b0b57ec7c4ef65b95c2d6de2beb6a0225b55549053a30839d61561e7b58ad0b",
+  "localReferences": [
+    {
+      "book": "jinshu",
+      "chapter": "005",
+      "unit": "s0465",
+      "quote": "建興元年夏四月丙午，奉懷帝崩問，舉哀成禮。",
+      "sourceHash": "sha256:dd0ed5402502ab83ea9686013b0d7333b90040702203ad58bc03bd6a418e853b",
+      "reason": "Jianxing year-1 narrative heading under Emperor Min",
+      "sourceOrderIndex": 235,
+      "quoteMatches": true,
+      "unitHashMatches": true
+    },
+    {
+      "book": "jinshu",
+      "chapter": "005",
+      "unit": "s0255",
+      "quote": "二年春正月己巳朔，黑霧著人如墨，連夜，五日乃止。",
+      "sourceHash": "sha256:ba89c8f3ae0eca1f9e21eeeb598eda33d91dc5621214b609f17ef9328f6787ad",
+      "reason": "Following year-2 heading governing Zhang Gui death entry",
+      "sourceOrderIndex": 275,
+      "quoteMatches": true,
+      "unitHashMatches": true
+    },
+    {
+      "book": "jinshu",
+      "chapter": "005",
+      "unit": "s0264",
+      "quote": "五月壬辰，太尉、領護羌校尉、涼州刺史、西平公張軌薨。",
+      "sourceHash": "sha256:42519cf358a87bea624170f929a3fea41d5a1ab564744c91a6c1629ee7ae5afc",
+      "reason": "Explicit Zhang Gui death in fifth month, renchen under Jianxing 2",
+      "sourceOrderIndex": 284,
+      "quoteMatches": true,
+      "unitHashMatches": true
+    }
+  ],
+  "externalReferences": [
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/晉書/卷005#建興二年",
+      "title": "晉書卷五：愍帝建興二年",
+      "quote": "五月壬辰，太尉、領護羌校尉、涼州刺史、西平公張軌薨。",
+      "reason": "Independently opened primary text. The passage is under 建興二年, following the explicit 建興元年 heading; this is an explicit death event, not a later reference.",
+      "sourceHash": "sha256:42519cf358a87bea624170f929a3fea41d5a1ab564744c91a6c1629ee7ae5afc",
+      "accessedAt": "2026-10-24T19:09:15.263Z"
+    },
+    {
+      "kind": "external",
+      "url": "https://dict.revised.moe.edu.tw/appendix.jsp?ID=3&page=2&ver=0",
+      "title": "教育部中國歷代年號表：西晉建興",
+      "quote": "晉 (西元265～420) 西晉 建興 313 316",
+      "reason": "Opened and checked the Western Jin row. Jianxing 1 is conventional AD 313, so year 2 is conventional AD 314; no month/day conversion or birth-year inference is made.",
+      "sourceHash": "sha256:eb7301b235b427ef7e0c18f8c7144cbf7d61270a631b183aa003f67e99589eed",
+      "accessedAt": "2026-10-24T19:09:15.263Z"
+    }
+  ],
+  "interpretation": {
+    "conclusion": "Finding 5 overstates an inferred AD 313 as a competing primary date. The biography does not explicitly date the death to 313.",
+    "details": [
+      "Jinshu086 s0013 reads 永甯初, not 永甯元年. s0132 reads 在州十三年,寢疾. Neither specifies inclusive calendar-year counting for an office tenure.",
+      "301 + 13 - 1 = 313 assumes inclusive calendar counting and an exact 301 appointment. 301 + 13 = 314 is compatible with elapsed duration. These calculations do not create two explicit primary witnesses. The biography alone leaves the death year unstated.",
+      "Jinshu005 s0465 (source order index235) supplies 建興元年; s0255(index275) opens 二年; s0264(index284) explicitly records 張軌薨 in fifth month 壬辰. Existing checked reign table makes this conventional AD314. No Gregorian month/day conversion was performed.",
+      "The later Tongjian-family reference already present in review3 gives 己丑. Do not harmonize its sexagenary day with Jinshu005 壬辰. Both support the same conventional year according to existing research; this task does not resolve the day discrepancy.",
+      "Preserve age60, reckoning traditional-inclusive, at claim410/413. Do not infer birth. Keep p001 and p073 separate; a date repair must not merge identities."
+    ]
+  },
+  "independentReviewRequirement": "Fresh reviewer must independently verify primary witness, heading inheritance and conversion, then record its own pinned report references. Sidecar alone supplies no approval; retain sexagenary day discrepancy and all unrelated holds."
+}
