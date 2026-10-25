@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "INDEPENDENT_CODE_REVIEW_EXACT_DRAFT",
+  "reviewer": "/root/jin053_full_owner_peer",
+  "reviewedAt": "2026-10-25T13:20:27.745163+00:00",
+  "authorship": "Reviewer did not author this compiler patch or original regression.",
+  "result": "approved-minimal-code-change; durable-test-integration-required-before-host-adoption",
+  "findings": [],
+  "exactFindingManifest": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/closed-pair-candidate-probe-20261025/finding-manifest.json",
+    "bytes": 5113,
+    "sha256": "b2f95bbfe558c2649f712bef7225f0d7db1b1efb5a538f0abb08c2d32f893409"
+  },
+  "exactPatch": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/closed-pair-candidate-probe-20261025/candidate-separation.patch",
+    "bytes": 1428,
+    "sha256": "e55d95c26696987ff01f7745981af2de7245fea39369ae49b109e5c66d9ac2aa"
+  },
+  "exactDraft": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/closed-pair-candidate-probe-20261025/compile-people-catalog.draft.mjs",
+    "bytes": 63894,
+    "sha256": "31dccb630d602b998e4881b719bebb4d6303e7667c4a8770a9ef10512389bdf4"
+  },
+  "allManifestInputAndArtifactPinsVerified": true,
+  "canonicalCallerAndHarnessPins": [
+    {
+      "revision": "000d85cb53ca03bc88bf7399223587aee30e1892",
+      "file": "scripts/compile-people-catalog.mjs",
+      "bytes": 63471,
+      "sha256": "168920bde271b4d1747d24243e5a20b970ce76868614115303131c630b57a0ec"
+    },
+    {
+      "revision": "000d85cb53ca03bc88bf7399223587aee30e1892",
+      "file": "scripts/sdk-people-resolve.mjs",
+      "bytes": 99009,
+      "sha256": "da746f7647eba64c3ad5d4af59021a47a53139e7fc0fdd9baf44d505fa9102ab"
+    },
+    {
+      "revision": "000d85cb53ca03bc88bf7399223587aee30e1892",
+      "file": "scripts/lib/people-resolution.mjs",
+      "bytes": 23932,
+      "sha256": "100a97b979b2526d3a99cdbfd8a1b3a654fcc973c4dedaf82e63f2b6cea8848e"
+    },
+    {
+      "revision": "000d85cb53ca03bc88bf7399223587aee30e1892",
+      "file": "scripts/lib/people-corpus.mjs",
+      "bytes": 5946,
+      "sha256": "5657c7becda4071c6cba95cc762d4e7777846f6f102540f05ef8339bb6bdb11d"
+    },
+    {
+      "revision": "000d85cb53ca03bc88bf7399223587aee30e1892",
+      "file": "scripts/test-people-resolution.mjs",
+      "bytes": 15041,
+      "sha256": "ed3141e76364bbf2437eb94204692d191cf7c5ec0ac92c1d7b8a58987520f451"
+    },
+    {
+      "revision": "000d85cb53ca03bc88bf7399223587aee30e1892",
+      "file": "package.json",
+      "bytes": 23115,
+      "sha256": "e648492e4702af89228f28e1d579c815dee191894a47ff9835dfed2f8cd8cfed"
+    }
+  ],
+  "judgments": {
+    "bugReproduced": "Prior local keepSeparate lookup only sees local members within a shared-name block. A hard separation through an off-block merged member still separates the entire canonical pair, so scheduling that pair again is a real bug.",
+    "correctPruning": "The draft maps each final resolver keepSeparate edge through complete canonical ownership once. It then suppresses exactly those canonical pairs. It neither infers separation transitively nor alters resolver merges/conflict enforcement.",
+    "performance": "Canonical separation Set is constructed once per unresolvedCandidateState invocation, O(number of separations), outside all blocks and pair loops. Each block-pair lookup is constant expected time.",
+    "callerCompleteness": "Both exact000d compiler and SDK buildDossiers invoke resolvePeopleClusters on complete corpus.localPeople; both populate localMap/canonicalByLocal from every resolved cluster member. SDK target chapter and shard filters happen after unresolvedCandidateState. loadValidatedResolutionDocuments and resolver reject unknown local people, so no legitimate qualification-filter missing-owner path is introduced.",
+    "failFast": "Malformed separator key or absent local owner throws even for empty candidates, rather than silently suppressing or opening an unknown pair. Normal resolver guarantees nonempty valid canonical ownership values.",
+    "possibleSameAs": "Resolver already converts complete possibleSameAs groups to canonical pair keys. Draft leaves that path and lookup unchanged.",
+    "curation": "Only the final resolver keepSeparate Set is converted, so normal curated override semantics and explicit hard constraints are preserved.",
+    "primaryWorkspace": "Primary compiler and SDK already differ from000d; this review targeted exact immutable Git base plus draft. Reviewer performed no writes to primary/candidate code and no adoption."
+  },
+  "tests": [
+    {
+      "command": "node /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/closed-pair-candidate-probe-20261025/regression.mjs",
+      "status": "PASS",
+      "assertions": 8,
+      "output": {
+        "actualProductionBugReproduced": true,
+        "draftRegressionAssertions": 8,
+        "productionResolverHash": "100a97b979b2526d3a99cdbfd8a1b3a654fcc973c4dedaf82e63f2b6cea8848e",
+        "base": "000d85cb53ca03bc88bf7399223587aee30e1892",
+        "canonicalWrites": false
+      }
+    },
+    {
+      "command": "node /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/closed-pair-candidate-000d85-independent-peer-20261025/independent-edge-regression.mjs",
+      "script": {
+        "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/closed-pair-candidate-000d85-independent-peer-20261025/independent-edge-regression.mjs",
+        "bytes": 2874,
+        "sha256": "ef4f39e9f4c862a38491279cb12f7291e2402ba7b300cc0f6d2112875f6dc979"
+      },
+      "status": "PASS",
+      "assertions": 5,
+      "output": {
+        "independentAdditionalAssertions": 5,
+        "explicitDifferentThroughBothOffBlockAliases": true,
+        "curatedSeparation": true,
+        "curatedOverride": true,
+        "missingOwnerFailsBeforeEmptyBlockScan": true,
+        "malformedConstraintFails": true,
+        "base": "000d85cb53ca03bc88bf7399223587aee30e1892",
+        "noProductionWrites": true
+      },
+      "firstAttemptNote": "Initial ad-hoc fixture omitted mentions metadata required by buildResolutionCandidates; corrected fixture includes mentions and promptVersion. No production failure was inferred from that fixture error."
+    }
+  ],
+  "durableRegressionRequirement": {
+    "status": "required-before-adoption; not included in this sealed minimal draft",
+    "bestExistingHarness": "scripts/compile-people-catalog.mjs selfTest(), beside homonymCorpus/homonymResolution and reviewedAmbiguity assertions",
+    "existingCommand": "npm run people:catalog:self-test",
+    "reason": "Exercises actual compiler/unresolvedCandidateState on off-block aliases through normal resolver and protects unresolved third-party/nontransitive behavior. Private ignored regression alone is not durable repository regression coverage.",
+    "noNewFlagsOrAPIsNeeded": true,
+    "ordinaryImportSafe": "Existing isMain guard permits ordinary module imports without running compiler main. The existing --self-test flag is sufficient; no API extraction/refactor or dead code needed.",
+    "normalCI": "Host must stage a durable regression and run normal required checks before master. This receipt does not claim CI automatically runs catalog selfTest."
+  },
+  "observed16CountQualification": "The16/1081 count remains a finding-author observation for exact old7b6 graph. Reviewer did not rerun full graph loader/resolver or claim current000d remaining totals. Correctness reproduced independently using production resolver API fixtures.",
+  "scopeLimits": [
+    "Code scheduling change only; no new source, identity, date or chapter approval.",
+    "No code adoption, Git/index/branch/build/canonical/locks/queue/paid calls.",
+    "Root84checkpoint remains separate."
+  ],
+  "paidToolCalls": 0
+}
