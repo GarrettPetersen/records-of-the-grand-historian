@@ -1,0 +1,60 @@
+Prompt-only first-pass formatting draft
+
+Base: c4c0e032280dcbed529956b193e400cab045e7dc:prompt-people-date-review.txt
+Base Git blob: 2b146d14130172885435eb5fe4502fe04ed15972
+Base SHA-256: sha256:c3e91b6fb791a4b02b1b5d62ceafeb66f45ecff584054430c54b931c03d107bf (10093 bytes)
+Draft Git blob: e51a55d95727ea7d82671b775b4877edee57875c
+Draft SHA-256: sha256:65c81185158b8db257a91ea1f3afd59e3147b475b8612c646c46af806cdea350 (10378 bytes)
+Patch SHA-256: sha256:1b5447156f00933d32502a7a1daef959e67639113be0d2b012c55a4c04df3f86
+
+Two local edits in INDEPENDENT-REVIEW make existing validation requirements explicit.
+Every check reason must contain at least 20 characters after whitespace trimming,
+using substantive source-specific explanation, without padding or unnecessarily
+long reasons. Every evidence quote must be one contiguous exact substring of its
+cited source unit; disjoint passages require separate entries rather than ellipses.
+
+Validator inspection confirmed nonempty() checks trim().length, each item/person
+reason requires minimum 20, and every evidence quote must satisfy the cited unit's
+zh.includes(quote) (scripts/lib/people-date-audit.mjs:95-97,123,128).
+This draft adds no validator changes and does not alter repair-proposal rules.
+
+Checks: disk preflight passed (51.65 GiB free); existing date-audit test file passed
+18/18 via node --test scripts/test-people-date-audit.mjs. Reverse patch dry-run
+against isolated source and artifact/base hash checks also passed. No dedicated prompt behavior
+test or model trial was run; these checks cannot establish savings or compliance
+by future model outputs. No new tests were added. Existing tests used and cleaned
+their own temporary fixtures, without modifying canonical audit/source data.
+
+Only this assigned artifact directory was written. No canonical prompt, source,
+runtime, queue, locks, sealed jobs or Git index/branch were changed by this worker.
+The host owns independent review and publication. Use only for fresh jobs after
+acceptance; preserve every sealed live job unchanged.
+
+Minimal diff:
+
+--- a/prompt-people-date-review.txt
++++ b/prompt-people-date-review.txt
+@@ -70,7 +70,9 @@
+ reviewer:{name,independentOfExtractor:true}, summary (substantive),
+ reviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.
+ Every check has id, verdict (supported/incorrect/research-blocked), reason, and
+-evidence:[{unit,quote}] containing an exact Chinese excerpt. Item checks additionally
++evidence:[{unit,quote}] containing a contiguous exact Chinese substring of the cited
++source unit. Never join disjoint passages with ellipses; use separate evidence
++entries for disjoint passages. Item checks additionally
+ have event describing whose event is being dated. This is required for **every**
+ item check, including `hints-pNNN` active-date-hint rows: give a source-specific
+ English sentence of at least 10 characters that identifies the named person's own
+@@ -80,8 +82,10 @@
+ or retain work for continuation; they cannot silently omit a difficult item.
+ Every failed check has an actionable finding:
+ {items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].
+-Keep each check's reason concise and self-contained: identify its source anchor
+-and why the date is supported or defective. Put shared research and conversion
++Keep each check's reason concise and self-contained, with at least 20 characters
++after trimming whitespace of substantive, source-specific explanation, not padding:
++identify its source anchor and why the date is supported or defective. Do not
++lengthen reasons unnecessarily. Put shared research and conversion
+ explanations once in findings or references instead of repeating paragraphs.
+ Retain every owned check, its event owner, and exact per-check Chinese evidence.
+ External research references use {kind:"external",url,title,quote,sourceHash,

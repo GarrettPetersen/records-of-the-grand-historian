@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "isolated-prompt-draft",
+  "jobId": "date-firstpass-format-efficiency-20261025",
+  "createdAt": "2026-10-25T04:08:54.705390+00:00",
+  "status": "awaiting-independent-review",
+  "base": {
+    "commit": "c4c0e032280dcbed529956b193e400cab045e7dc",
+    "path": "prompt-people-date-review.txt",
+    "gitBlob": "2b146d14130172885435eb5fe4502fe04ed15972",
+    "sha256": "sha256:c3e91b6fb791a4b02b1b5d62ceafeb66f45ecff584054430c54b931c03d107bf",
+    "bytes": 10093
+  },
+  "draft": {
+    "path": "source/prompt-people-date-review.txt",
+    "gitBlob": "e51a55d95727ea7d82671b775b4877edee57875c",
+    "sha256": "sha256:65c81185158b8db257a91ea1f3afd59e3147b475b8612c646c46af806cdea350",
+    "bytes": 10378
+  },
+  "patch": {
+    "path": "patch",
+    "sha256": "sha256:1b5447156f00933d32502a7a1daef959e67639113be0d2b012c55a4c04df3f86"
+  },
+  "scope": "Fresh jobs only after host acceptance; never change sealed live jobs. Prompt only; validation unchanged.",
+  "checks": {
+    "diskPreflight": "passed; available 51.6494140625 GiB",
+    "existingDateAuditTests": {
+      "command": "node --test scripts/test-people-date-audit.mjs",
+      "passed": 18,
+      "failed": 0
+    },
+    "validatorRulesConfirmed": [
+      "scripts/lib/people-date-audit.mjs:95-97 trim().length threshold",
+      "scripts/lib/people-date-audit.mjs:123 reason minimum 20",
+      "scripts/lib/people-date-audit.mjs:128 cited Chinese unit includes exact quote"
+    ],
+    "reversePatchDryRun": "passed against isolated draft source",
+    "artifactHashes": "verified against envelope and exact committed base"
+  },
+  "publicationOwner": "host",
+  "independentReview": "required; not performed by draft author"
+}

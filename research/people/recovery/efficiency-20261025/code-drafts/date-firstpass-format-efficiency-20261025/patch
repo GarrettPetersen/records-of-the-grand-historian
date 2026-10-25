@@ -1,0 +1,26 @@
+--- a/prompt-people-date-review.txt
++++ b/prompt-people-date-review.txt
+@@ -70,7 +70,9 @@
+ reviewer:{name,independentOfExtractor:true}, summary (substantive),
+ reviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.
+ Every check has id, verdict (supported/incorrect/research-blocked), reason, and
+-evidence:[{unit,quote}] containing an exact Chinese excerpt. Item checks additionally
++evidence:[{unit,quote}] containing a contiguous exact Chinese substring of the cited
++source unit. Never join disjoint passages with ellipses; use separate evidence
++entries for disjoint passages. Item checks additionally
+ have event describing whose event is being dated. This is required for **every**
+ item check, including `hints-pNNN` active-date-hint rows: give a source-specific
+ English sentence of at least 10 characters that identifies the named person's own
+@@ -80,8 +82,10 @@
+ or retain work for continuation; they cannot silently omit a difficult item.
+ Every failed check has an actionable finding:
+ {items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].
+-Keep each check's reason concise and self-contained: identify its source anchor
+-and why the date is supported or defective. Put shared research and conversion
++Keep each check's reason concise and self-contained, with at least 20 characters
++after trimming whitespace of substantive, source-specific explanation, not padding:
++identify its source anchor and why the date is supported or defective. Do not
++lengthen reasons unnecessarily. Put shared research and conversion
+ explanations once in findings or references instead of repeating paragraphs.
+ Retain every owned check, its event owner, and exact per-check Chinese evidence.
+ External research references use {kind:"external",url,title,quote,sourceHash,
