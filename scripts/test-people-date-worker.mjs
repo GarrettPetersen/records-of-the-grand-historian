@@ -326,6 +326,67 @@ test('semantic rejection continues the same chat with the validator feedback', a
   assert.equal(task.state.validationError, null);
 });
 
+for (const recoverOnly of [false, true]) {
+  test(`retained reasons reach one saved continuation (artifact-only=${recoverOnly})`, async () => {
+    const raw = JSON.stringify({ itemChecks: [{ id: 'claim-1', reason: 'short' }, { id: 'hints-p001', reason: null }],
+      personChecks: [{ id: 'p001' }], reviewer: { name: 'Original reviewer' } }, null, 2);
+    const expected = 'Reason for claim-1 must be substantive text; Reason for hints-p001 must be substantive text; Reason for p001 must be substantive text';
+    const h = harness({ send(agent, message) {
+      assert.equal(task.state.validationError, expected);
+      assert.equal(h.checkpoints.at(-1).state.validationError, expected);
+      assert.equal(agent.artifact, raw);
+      return agent.send(message);
+    } });
+    h.options.recoverOnly = recoverOnly;
+    const retained = h.addAgent('retained', { artifact: raw });
+    const task = reviewTask(undefined, { agentId: 'retained', sent: true, status: 'rejected',
+      validationError: 'Reason for claim-1 must be substantive text', artifactHash: hash(raw), model: 'original-model' });
+    if (recoverOnly) await assert.rejects(h.worker(task), /Artifact-only recovery/);
+    else await h.worker(task);
+    assert.equal(h.calls('create').length, 0);
+    assert.equal(h.calls('resume')[0][1], 'retained');
+    assert.equal(task.state.agentId, 'retained');
+    assert.equal(task.state.model, 'original-model');
+    assert.equal(h.calls('send').length, recoverOnly ? 0 : 1);
+    assert.ok(task.saves.some(patch => patch.validationError === expected));
+    if (recoverOnly) {
+      assert.equal(task.state.validationError, expected);
+      assert.equal(retained.artifact, raw);
+      assert.equal(task.state.artifactHash, hash(raw));
+      await assert.rejects(h.worker(task), /Artifact-only recovery/);
+      assert.equal(task.state.validationError, expected);
+      assert.equal(h.calls('send').length, 0);
+    } else {
+      assert.ok(h.calls('send')[0][2].includes(expected));
+      assert.equal(h.calls('wait')[0][2].maxRawCostCents, 300);
+      assert.equal(h.calls('wait')[0][2].maxTotalTokens, 4000000);
+      assert.equal(h.calls('wait')[0][2].timeoutMs, 1200000);
+      assert.equal(h.calls('send')[0][3].timeoutMs, 1200000);
+    }
+    assert.equal(h.options.model, 'offline-model');
+    assert.equal(h.options.maxRunCostCents, 300);
+    assert.equal(h.options.maxRunTokens, 4000000);
+  });
+}
+
+test('retained diagnostics preserve unrelated and malformed full-validation rejections', async () => {
+  for (const artifact of [
+    { itemChecks: null, personChecks: [{ id: 'p001' }] },
+    { itemChecks: [null], personChecks: [] },
+    { itemChecks: [{ id: 'claim-1', reason: 'short' }], personChecks: [] },
+  ]) {
+    const h = harness(); h.options.recoverOnly = true;
+    const raw = JSON.stringify(artifact);
+    h.addAgent('retained', { artifact: raw });
+    const task = reviewTask(undefined, { agentId: 'retained', sent: true,
+      validationError: 'Quotation for claim-1 is not in its Chinese source unit', artifactHash: hash(raw) });
+    await assert.rejects(h.worker(task), /Artifact-only recovery/);
+    assert.equal(task.state.validationError, 'Quotation for claim-1 is not in its Chinese source unit');
+    assert.equal(h.calls('send').length, 0);
+    assert.equal(h.agents.get('retained').artifact, raw);
+  }
+});
+
 test('rejected repair resends the sealed current packet to its retained chat', async () => {
   const h = harness();
   const stale = { changes: [] };

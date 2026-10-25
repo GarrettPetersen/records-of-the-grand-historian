@@ -1,0 +1,161 @@
+--- a/scripts/lib/people-date-audit.mjs
++++ b/scripts/lib/people-date-audit.mjs
+@@ -98,6 +98,15 @@
+ function exactMembers(actual, expected, label, complete) {
+   if (!Array.isArray(actual) || new Set(actual).size !== actual.length || actual.some(id => !expected.includes(id))) throw new Error(`${label} contains duplicate or unknown IDs`);
+   if (complete && actual.length !== expected.length) throw new Error(`${label} does not cover the complete chapter`);
++}
++
++// Diagnostic only: malformed check collections still require full validation.
++export function dateAuditReasonErrors(report) {
++  if (!Array.isArray(report?.itemChecks) || !Array.isArray(report?.personChecks)) return [];
++  const checks = [...report.itemChecks, ...report.personChecks];
++  if (checks.some(check => !check || typeof check.id !== 'string')) return [];
++  return checks.filter(check => typeof check.reason !== 'string' || check.reason.trim().length < 20)
++    .map(check => `Reason for ${check.id} must be substantive text`);
+ }
+ 
+ export function validateDateAuditReport(report, packet) {
+@@ -124,10 +133,11 @@
+   if (missingItemEvents.length) {
+     throw new Error(`Event ownership must be substantive text for: ${missingItemEvents.join(', ')}`);
+   }
++  const invalidReasons = dateAuditReasonErrors(report);
++  if (invalidReasons.length) throw new Error(invalidReasons.join('; '));
+   const unitMap = new Map(packet.units.map(unit => [unit.id, unit]));
+   for (const check of [...report.itemChecks, ...report.personChecks]) {
+     if (!['supported', 'incorrect', 'research-blocked'].includes(check.verdict)) throw new Error(`Invalid verdict for ${check.id}`);
+-    nonempty(check.reason, `Reason for ${check.id}`, 20);
+     if (report.itemChecks.includes(check)) nonempty(check.event, `Event ownership for ${check.id}`, 10);
+     if (!Array.isArray(check.evidence) || !check.evidence.length) throw new Error(`Missing evidence for ${check.id}`);
+     for (const citation of check.evidence) {
+--- a/scripts/test-people-date-audit.mjs
++++ b/scripts/test-people-date-audit.mjs
+@@ -92,6 +92,36 @@
+     /Event ownership must be substantive text for: claim-1, hints-p001/.test(error.message));
+ });
+ 
++test('approval reports all invalid item and person reasons without changing inputs', t => {
++  const f = fixture(t);
++  f.report.itemChecks[0].reason = 'Too short';
++  delete f.report.itemChecks[1].reason;
++  f.report.personChecks[0].reason = null;
++  const before = JSON.stringify({ report: f.report, packet: f.packet });
++  assert.throws(() => validateDateAuditReport(f.report, f.packet), {
++    message: 'Reason for claim-1 must be substantive text; Reason for hints-p001 must be substantive text; Reason for p001 must be substantive text',
++  });
++  assert.equal(JSON.stringify({ report: f.report, packet: f.packet }), before);
++});
++
++test('approval keeps trimmed reason minimum and rejects nonstrings', t => {
++  const f = fixture(t);
++  for (const reason of [' '.repeat(30), `  ${'x'.repeat(19)}  `, 12345678901234567890, {}, [], null, undefined]) {
++    f.report.itemChecks[0].reason = reason;
++    assert.throws(() => validateDateAuditReport(f.report, f.packet), {
++      message: 'Reason for claim-1 must be substantive text',
++    });
++  }
++});
++
++test('approval returns the same valid report without trimming or changing inputs', t => {
++  const f = fixture(t);
++  f.report.itemChecks[0].reason = `  ${'x'.repeat(20)}  `;
++  const before = JSON.stringify({ report: f.report, packet: f.packet });
++  assert.equal(validateDateAuditReport(f.report, f.packet), f.report);
++  assert.equal(JSON.stringify({ report: f.report, packet: f.packet }), before);
++});
++
+ test('source edits, extraction edits, removals and protocol changes invalidate approval', t => {
+   const f = fixture(t); recordDateAudit(f.report, f.options);
+   f.source.content[0].sentences[0].translation = 'Changed translation.';
+--- a/scripts/lib/people-date-worker.mjs
++++ b/scripts/lib/people-date-worker.mjs
+@@ -6,6 +6,7 @@
+ import { sendCursorAgentWhenReady, waitForCursorRun } from './cursor-run-wait.mjs';
+ import { requestCursorUsageLimitStop } from './cursor-run-control.mjs';
+ import { runOpenRouterDateTools } from './openrouter-date-tools.mjs';
++import { dateAuditReasonErrors } from './people-date-audit.mjs';
+ 
+ const prompt = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-date-review.txt'),'utf8');
+ 
+@@ -277,6 +278,10 @@
+         }
+         if (retained && !supplement && retained.artifact.blocked && !options.recoverOnly && !control.stopRequested) throw new Error('A research supplement is required before continuing this blocked repair');
+         if (retained && !supplement && (!task.state.validationError || (task.state.artifactHash && retained.artifactHash !== task.state.artifactHash))) return await returned(retained);
++        if (task.kind === 'review' && retained && task.state.validationError && retained.artifactHash === task.state.artifactHash) {
++          const reasons = dateAuditReasonErrors(retained.artifact);
++          if (reasons.includes(task.state.validationError)) await save({ validationError: reasons.join('; ') });
++        }
+       } else {
+         assertLaunchAllowed();
+         agent = await agentClient.create({apiKey:options.apiKey,name:`Dates ${task.kind} ${task.packet.book}/${task.packet.chapter}`,
+--- a/scripts/test-people-date-worker.mjs
++++ b/scripts/test-people-date-worker.mjs
+@@ -326,6 +326,67 @@
+   assert.equal(task.state.validationError, null);
+ });
+ 
++for (const recoverOnly of [false, true]) {
++  test(`retained reasons reach one saved continuation (artifact-only=${recoverOnly})`, async () => {
++    const raw = JSON.stringify({ itemChecks: [{ id: 'claim-1', reason: 'short' }, { id: 'hints-p001', reason: null }],
++      personChecks: [{ id: 'p001' }], reviewer: { name: 'Original reviewer' } }, null, 2);
++    const expected = 'Reason for claim-1 must be substantive text; Reason for hints-p001 must be substantive text; Reason for p001 must be substantive text';
++    const h = harness({ send(agent, message) {
++      assert.equal(task.state.validationError, expected);
++      assert.equal(h.checkpoints.at(-1).state.validationError, expected);
++      assert.equal(agent.artifact, raw);
++      return agent.send(message);
++    } });
++    h.options.recoverOnly = recoverOnly;
++    const retained = h.addAgent('retained', { artifact: raw });
++    const task = reviewTask(undefined, { agentId: 'retained', sent: true, status: 'rejected',
++      validationError: 'Reason for claim-1 must be substantive text', artifactHash: hash(raw), model: 'original-model' });
++    if (recoverOnly) await assert.rejects(h.worker(task), /Artifact-only recovery/);
++    else await h.worker(task);
++    assert.equal(h.calls('create').length, 0);
++    assert.equal(h.calls('resume')[0][1], 'retained');
++    assert.equal(task.state.agentId, 'retained');
++    assert.equal(task.state.model, 'original-model');
++    assert.equal(h.calls('send').length, recoverOnly ? 0 : 1);
++    assert.ok(task.saves.some(patch => patch.validationError === expected));
++    if (recoverOnly) {
++      assert.equal(task.state.validationError, expected);
++      assert.equal(retained.artifact, raw);
++      assert.equal(task.state.artifactHash, hash(raw));
++      await assert.rejects(h.worker(task), /Artifact-only recovery/);
++      assert.equal(task.state.validationError, expected);
++      assert.equal(h.calls('send').length, 0);
++    } else {
++      assert.ok(h.calls('send')[0][2].includes(expected));
++      assert.equal(h.calls('wait')[0][2].maxRawCostCents, 300);
++      assert.equal(h.calls('wait')[0][2].maxTotalTokens, 4000000);
++      assert.equal(h.calls('wait')[0][2].timeoutMs, 1200000);
++      assert.equal(h.calls('send')[0][3].timeoutMs, 1200000);
++    }
++    assert.equal(h.options.model, 'offline-model');
++    assert.equal(h.options.maxRunCostCents, 300);
++    assert.equal(h.options.maxRunTokens, 4000000);
++  });
++}
++
++test('retained diagnostics preserve unrelated and malformed full-validation rejections', async () => {
++  for (const artifact of [
++    { itemChecks: null, personChecks: [{ id: 'p001' }] },
++    { itemChecks: [null], personChecks: [] },
++    { itemChecks: [{ id: 'claim-1', reason: 'short' }], personChecks: [] },
++  ]) {
++    const h = harness(); h.options.recoverOnly = true;
++    const raw = JSON.stringify(artifact);
++    h.addAgent('retained', { artifact: raw });
++    const task = reviewTask(undefined, { agentId: 'retained', sent: true,
++      validationError: 'Quotation for claim-1 is not in its Chinese source unit', artifactHash: hash(raw) });
++    await assert.rejects(h.worker(task), /Artifact-only recovery/);
++    assert.equal(task.state.validationError, 'Quotation for claim-1 is not in its Chinese source unit');
++    assert.equal(h.calls('send').length, 0);
++    assert.equal(h.agents.get('retained').artifact, raw);
++  }
++});
++
+ test('rejected repair resends the sealed current packet to its retained chat', async () => {
+   const h = harness();
+   const stale = { changes: [] };

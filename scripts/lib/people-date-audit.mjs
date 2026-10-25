@@ -100,6 +100,15 @@ function exactMembers(actual, expected, label, complete) {
   if (complete && actual.length !== expected.length) throw new Error(`${label} does not cover the complete chapter`);
 }
 
+// Diagnostic only: malformed check collections still require full validation.
+export function dateAuditReasonErrors(report) {
+  if (!Array.isArray(report?.itemChecks) || !Array.isArray(report?.personChecks)) return [];
+  const checks = [...report.itemChecks, ...report.personChecks];
+  if (checks.some(check => !check || typeof check.id !== 'string')) return [];
+  return checks.filter(check => typeof check.reason !== 'string' || check.reason.trim().length < 20)
+    .map(check => `Reason for ${check.id} must be substantive text`);
+}
+
 export function validateDateAuditReport(report, packet) {
   if (report.schemaVersion !== 1 || report.auditVersion !== DATE_AUDIT_VERSION || report.book !== packet.book || report.chapter !== packet.chapter) throw new Error('Date audit report version or scope mismatch');
   if (report.sourceHash !== packet.sourceHash || report.extractionHash !== packet.extractionHash) throw new Error('Date audit report is stale');
@@ -124,10 +133,11 @@ export function validateDateAuditReport(report, packet) {
   if (missingItemEvents.length) {
     throw new Error(`Event ownership must be substantive text for: ${missingItemEvents.join(', ')}`);
   }
+  const invalidReasons = dateAuditReasonErrors(report);
+  if (invalidReasons.length) throw new Error(invalidReasons.join('; '));
   const unitMap = new Map(packet.units.map(unit => [unit.id, unit]));
   for (const check of [...report.itemChecks, ...report.personChecks]) {
     if (!['supported', 'incorrect', 'research-blocked'].includes(check.verdict)) throw new Error(`Invalid verdict for ${check.id}`);
-    nonempty(check.reason, `Reason for ${check.id}`, 20);
     if (report.itemChecks.includes(check)) nonempty(check.event, `Event ownership for ${check.id}`, 10);
     if (!Array.isArray(check.evidence) || !check.evidence.length) throw new Error(`Missing evidence for ${check.id}`);
     for (const citation of check.evidence) {

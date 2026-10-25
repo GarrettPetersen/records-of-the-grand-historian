@@ -365,3 +365,9 @@ Resume the ordinary same-worker runner for a fresh complete independent re-audit
 and normal publication/queue completion. Local repair staging does not grant date
 approval. English source edits require the documented stale-generation reconciliation
 and new current-source evidence; never rewrite old approvals to preserve their hashes.
+
+Report-format corrections retain the independent reviewer. The validator lists all
+short item/person explanations together, and a same-artifact reason-only rejection
+receives that complete diagnostic before the next retained continuation. Hosts do
+not pad or rewrite reviewer reports. Source, evidence, independence, coverage and
+budget requirements remain unchanged.

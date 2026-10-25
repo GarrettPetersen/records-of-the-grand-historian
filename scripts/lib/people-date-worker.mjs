@@ -6,6 +6,7 @@ import { REPO_ROOT, writeJsonAtomic, readJson } from './people-content.mjs';
 import { sendCursorAgentWhenReady, waitForCursorRun } from './cursor-run-wait.mjs';
 import { requestCursorUsageLimitStop } from './cursor-run-control.mjs';
 import { runOpenRouterDateTools } from './openrouter-date-tools.mjs';
+import { dateAuditReasonErrors } from './people-date-audit.mjs';
 
 const prompt = fs.readFileSync(path.join(REPO_ROOT, 'prompt-people-date-review.txt'),'utf8');
 
@@ -277,6 +278,10 @@ export function cursorDateWorker(options, control, {
         }
         if (retained && !supplement && retained.artifact.blocked && !options.recoverOnly && !control.stopRequested) throw new Error('A research supplement is required before continuing this blocked repair');
         if (retained && !supplement && (!task.state.validationError || (task.state.artifactHash && retained.artifactHash !== task.state.artifactHash))) return await returned(retained);
+        if (task.kind === 'review' && retained && task.state.validationError && retained.artifactHash === task.state.artifactHash) {
+          const reasons = dateAuditReasonErrors(retained.artifact);
+          if (reasons.includes(task.state.validationError)) await save({ validationError: reasons.join('; ') });
+        }
       } else {
         assertLaunchAllowed();
         agent = await agentClient.create({apiKey:options.apiKey,name:`Dates ${task.kind} ${task.packet.book}/${task.packet.chapter}`,
