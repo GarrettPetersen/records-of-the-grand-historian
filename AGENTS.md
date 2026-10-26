@@ -12,6 +12,19 @@ claims. Do not weaken identity, chronology or publication gates. Report zero-per
 reviews, data-qualified chapters and live published nonempty chapters separately.
 A passing build or empty extraction is not the nonempty acceptance test.
 
+## Host resource safety
+
+Follow the crash-recovery operating profile in `PEOPLE_COMPLETION_PROCESS.md`.
+`npm run people:disk:check` now also rejects macOS swap at 4 GiB, combined Codex
+backend RSS at 4 GiB, or warning/critical memory pressure. These are conservative
+dispatch stops, not OS guarantees. Check before each dispatch/local heavy job and
+at least every 60 seconds while observing active work; a startup check alone is
+insufficient. Do not launch more work after a failed measurement or failed guard.
+Preserve live jobs, claims, locks and recovery; do not kill unrelated apps or delete
+swap/history. A fresh chat must use a compact handoff, not a fork of the oversized
+campaign conversation. Initially use no parallel native Codex subagents and only
+one cloud assignment; increase remote concurrency only after measured safe runs.
+
 ## Local disk conservation
 
 Before any local batch or workspace change, run `npm run people:disk:check`.

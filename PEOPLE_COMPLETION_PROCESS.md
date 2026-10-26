@@ -111,6 +111,65 @@ targets, not to CI/master rules. Use exact reviewed changes and the normal PR pa
 
 ## Scale only the demonstrated path
 
+### Crash-recovery operating profile (October 26, 2026)
+
+The last crash was preceded by measured Codex backend allocations of about 79 GiB
+and roughly 55 GiB swapped out; free disk subsequently fell below 1 GiB. A local
+graph pass peaked around 2.4 GiB of JavaScript heap. These observations identify a
+backend memory problem as a major contributor; they do not establish its software
+cause. Do not assume free disk, cloud inference, compaction or simply reopening the
+same long chat fixes it.
+
+Use this conservative profile until successful small runs justify changes:
+
+This host-safety profile overrides historical lane-filling and concurrency targets.
+Let already-running assignments drain; retained or ready claims are not permission
+to launch more work and must not be released merely to reduce concurrency.
+
+- Use a fresh coordination chat with only a compact work-order handoff and exact
+  evidence/receipt paths. Do not fork this campaign's accumulated history. End at
+  the first bounded batch checkpoint or 60 minutes, whichever comes first; preserve
+  a handoff before rotating. This is a session boundary, not permission to discard
+  work, abandon sticky conversations or weaken any acceptance gate.
+- Do not resume an unbounded automatic goal loop in the old chat. This crash-policy
+  repair is the final task here; glossary production resumes from the saved handoff
+  in a fresh chat. Do not create a recurring automation as a workaround.
+- Initially use no parallel native Codex subagents. Independent author/reviewer
+  conversations remain separate but run sequentially, with bounded sealed evidence
+  rather than inherited full campaign history. Start with one cloud assignment.
+  Consider two only after two completed assignments and their host acceptance checks
+  show stable resources. This does not authorize more spend or new extraction.
+- Run only one local heavy job at a time. Do not overlap full graph compilation,
+  site/ebook builds, Git packing, or large packet construction. Use a 3 GiB Node
+  old-space ceiling for newly launched heavy Node jobs; this limits JavaScript heap,
+  not native buffers or total RSS. If it fails, preserve the partial run and change
+  the batching/streaming approach rather than repeatedly raising the ceiling.
+- Run `npm run people:disk:check` before each new dispatch/heavy job, after a job,
+  and at least every 60 seconds while observing active work. On macOS it checks disk,
+  system swap, Codex backend resident memory and OS memory pressure. Keep 30 GiB
+  free; stop new work at 4 GiB swap, 4 GiB combined Codex backend RSS, or warning/
+  critical memory pressure. Unknown/failed measurements fail closed. Other platforms
+  explicitly report this macOS memory check as not applicable, not as verified safe.
+- These are admission checks, not a continuous watchdog or an application memory
+  limit. On a breach, stop new dispatches, checkpoint compact state and end the
+  coordination turn. Preserve current job IDs and verify actual remote/process
+  state before resuming. Never auto-kill the user's Codex/browser, delete swap,
+  clear history, remove locks or discard recovery. If growth continues, ask the user
+  to quit the app; a repository script cannot safely repair its allocator.
+- Bound tool output: normally return at most 1,000 tokens, at most 4,000 for a
+  necessary code review. Save large logs/results to their existing job artifacts;
+  return counts, hashes and paths. Project search/connector responses before printing
+  them. Never dump a corpus, entire API response, huge diff, or long conversation.
+- Recover known cloud agents by stable ID. Scan historical agents only for an
+  actual missing-ID recovery, not every poll or fresh assignment. Save agent/run IDs,
+  usage and output paths as soon as available. Reuse sealed graph/results on unchanged
+  inputs; refresh once per reviewed data/semantic change, not per polling turn.
+
+Do not claim this repairs a Codex backend leak or guarantees crash prevention.
+It limits exposure and stops new work well before the previously observed failure.
+Keep the existing shared date-audit pool, worker IDs, packet ceilings, validation,
+review independence and publication gates; do not introduce competing executors.
+
 After the first live receipt, use a bounded WIP cohort (initially at most three
 chapters), prioritizing Jinshu and ranking total remaining completion work. Spend
 lanes on disjoint downstream packets, not competing host executors. Size later waves
