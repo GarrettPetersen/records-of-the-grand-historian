@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { chineseVariantComparisonKey } from './people-chinese-variants.mjs';
 
 const CROCKFORD32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 const WEAK_ENGLISH_NAMES = new Set([
@@ -213,20 +214,21 @@ function identityChineseKeys(nameKeys) {
   return new Set(nameKeys
     .filter((name) => name.language === 'zh' && name.blocking)
     .filter((name) => name.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind)))
-    .map((name) => name.key));
+    .map((name) => chineseVariantComparisonKey(name.key)));
 }
 
 function candidateMemberGroups(key, bucket, members, identityChineseByPerson) {
-  const identityNameForms = bucket.names.every((name) =>
-    name.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind))
-  );
-  if (!key.startsWith('en:') || !identityNameForms) return [members];
-  const partitions = new Set(members.flatMap((member) =>
-    [...(identityChineseByPerson.get(member) ?? [])]
-  ));
+  if (!key.startsWith('en:')) return [members];
+  const chineseNamesByMember = new Map(members.map((member) => [
+    member,
+    bucket.identityMembers.has(member)
+      ? (identityChineseByPerson.get(member) ?? new Set())
+      : new Set(),
+  ]));
+  const partitions = new Set([...chineseNamesByMember.values()].flatMap((names) => [...names]));
   if (partitions.size < 2) return [members];
   const groups = [...partitions].map((partition) => members.filter((member) => {
-    const names = identityChineseByPerson.get(member) ?? new Set();
+    const names = chineseNamesByMember.get(member);
     return names.size === 0 || names.has(partition);
   }));
   return [...new Map(groups
@@ -303,10 +305,13 @@ export function buildResolutionCandidates(localPeople) {
     people[person.localId] = { ...localSummary(person), nameKeys };
     for (const key of nameKeys) {
       if (!key.blocking) continue;
-      if (!buckets.has(key.key)) buckets.set(key.key, { names: [], members: new Set() });
+      if (!buckets.has(key.key)) buckets.set(key.key, { names: [], members: new Set(), identityMembers: new Set() });
       const bucket = buckets.get(key.key);
       bucket.names.push({ value: key.value, language: key.language, kinds: key.kinds });
       bucket.members.add(person.localId);
+      if (key.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind))) {
+        bucket.identityMembers.add(person.localId);
+      }
     }
   }
 
