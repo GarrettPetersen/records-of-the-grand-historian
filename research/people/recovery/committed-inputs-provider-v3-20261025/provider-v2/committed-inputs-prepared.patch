@@ -1,0 +1,351 @@
+--- a/scripts/sdk-people-resolve.mjs
++++ b/scripts/sdk-people-resolve.mjs
+@@ -2,6 +2,7 @@
+ 
+ import { Agent, CursorAgentError } from '@cursor/sdk';
+ import { execFileSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ import { isDeepStrictEqual } from 'node:util';
+@@ -104,6 +105,11 @@
+   --starting-ref REF    Remote reference for the cloud workspace.
+   --dossier-dir DIR     Tracked repository directory containing shard dossiers.
+   --prepare-dossiers    Write shard dossiers to --dossier-dir, then exit.
++  --committed-inputs    Cursor prepared execution only; requires an immutable full
++                        --starting-ref commit. Verify source bytes at that commit,
++                        then retain per-shard checkpoints and an ignored receipt.
++                        Pending fresh host global validation and independent source
++                        acceptance; never writes a canonical aggregate. No --out.
+   --recover-only        Recover specified/prior agents and write checkpoints
+                         without launching any new resolver agents.
+   --skip-cloud-recovery Do not inspect prior Cursor agents for shard artifacts.
+@@ -189,6 +195,7 @@
+     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
+     dossierDir: null,
+     prepareDossiers: false,
++    committedInputs: false,
+     recoverOnly: false,
+     skipCloudRecovery: false,
+     recoverAgents: new Map(),
+@@ -226,6 +233,7 @@
+     else if (arg === '--starting-ref') opts.startingRef = next();
+     else if (arg === '--dossier-dir') opts.dossierDir = path.resolve(REPO_ROOT, next());
+     else if (arg === '--prepare-dossiers') opts.prepareDossiers = true;
++    else if (arg === '--committed-inputs') opts.committedInputs = true;
+     else if (arg === '--recover-only') opts.recoverOnly = true;
+     else if (arg === '--skip-cloud-recovery') opts.skipCloudRecovery = true;
+     else if (arg === '--recover-agent') {
+@@ -248,6 +256,7 @@
+       process.exit(0);
+     } else throw new Error(`Unknown option: ${arg}`);
+   }
++  assertCommittedInputOptions(opts);
+   if (opts.selfTest) return opts;
+   if(!['cursor-sdk','grok-build'].includes(opts.transport))throw new Error('Unknown identity transport');
+   if(opts.transport==='grok-build'){
+@@ -273,7 +282,7 @@
+       throw new Error('--dossier-dir must be a directory inside the repository');
+     }
+   }
+-  opts.out ??= path.join(PEOPLE_DIR, 'resolutions', `${opts.batch}.json`);
++  if (!opts.committedInputs) opts.out ??= path.join(PEOPLE_DIR, 'resolutions', `${opts.batch}.json`);
+   return opts;
+ }
+ 
+@@ -738,6 +747,7 @@
+   writeJsonAtomic(shardCheckpointPath(dossier), {
+     schemaVersion: 1,
+     dossierFingerprint: dossierFingerprint(dossier),
++    ...(dossier.committedInputProvenance ? {committedInputProvenance: dossier.committedInputProvenance} : {}),
+     document,
+   });
+ }
+@@ -868,7 +878,7 @@
+   }
+   let committed;
+   try {
+-    committed = execFileSync('git', ['show', `${localStartingRef(opts.startingRef)}:${relative}`], {
++    committed = execFileSync('git', ['show', `${opts.committedInputs ? opts.startingRef : localStartingRef(opts.startingRef)}:${relative}`], {
+       cwd: REPO_ROOT,
+       encoding: 'utf8',
+       maxBuffer: 64 * 1024 * 1024,
+@@ -921,32 +931,100 @@
+   };
+ }
+ 
+-function loadPreparedDossiers(opts) {
++function assertCommittedInputOptions(opts) {
++  if (!opts.committedInputs) return;
++  if (!opts.dossierDir || opts.prepareDossiers || opts.selfTest || opts.transport !== 'cursor-sdk') {
++    throw new Error('--committed-inputs requires Cursor prepared execution with --dossier-dir');
++  }
++  if (!/^[a-f0-9]{40}$/u.test(opts.startingRef)) {
++    throw new Error('--committed-inputs requires a full immutable 40-character commit --starting-ref');
++  }
++  if (opts.out) throw new Error('--committed-inputs forbids --out; checkpoints and a pending-host-acceptance receipt are retained instead');
++}
++
++function rawFingerprint(bytes) {
++  return `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
++}
++
++function committedSourceInventory(commit) {
++  const paths = execFileSync('git', ['ls-tree', '-r', '-z', '--name-only', commit, '--',
++    'data/people/extractions', 'data/people/resolutions'], {cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024})
++    .split('\0').filter(Boolean);
++  const inventory = new Set();
++  for (const file of paths) {
++    const extraction = /^data\/people\/extractions\/([^/]+)\/(\d{3})\.json$/u.exec(file);
++    if (extraction) {
++      inventory.add(file);
++      inventory.add(`data/${extraction[1]}/${extraction[2]}.json`);
++    } else if (file.startsWith('data/people/resolutions/') && file.endsWith('.json')) inventory.add(file);
++  }
++  return inventory;
++}
++
++function verifyCommittedSourceFiles(sourceFiles, opts) {
++  assertCommittedInputOptions(opts);
++  const commit = execFileSync('git', ['rev-parse', '--verify', `${opts.startingRef}^{commit}`], {cwd: REPO_ROOT, encoding: 'utf8'}).trim();
++  if (commit !== opts.startingRef) throw new Error('Committed inputs must name the exact commit object');
++  const seen = new Set();
++  for (const source of sourceFiles) {
++    if (typeof source?.file !== 'string' ||
++        (!/^data\/(?:[a-z0-9-]+\/\d{3}\.json|people\/(?:extractions\/[a-z0-9-]+\/\d{3}\.json|resolutions\/(?:[^/]+\/)*[^/]+\.json))$/u.test(source.file) ||
++         /[\x00-\x1f]/u.test(source.file) || path.posix.normalize(source.file) !== source.file) ||
++        seen.has(source.file) || !/^sha256:[a-f0-9]{64}$/u.test(source.fingerprint)) {
++      throw new Error(`Invalid committed resolver source path/fingerprint: ${source?.file}`);
++    }
++    absoluteRepositoryFile(source.file, 'Committed resolver source');
++    seen.add(source.file);
++  }
++  const inventory = committedSourceInventory(commit);
++  const missing = [...inventory].filter(file => !seen.has(file));
++  const unexpected = [...seen].filter(file => !inventory.has(file));
++  if (missing.length || unexpected.length) {
++    throw new Error(`Committed source inventory mismatch: missing ${missing.length} (${missing.slice(0, 3).join(', ')}); unexpected ${unexpected.length} (${unexpected.slice(0, 3).join(', ')})`);
++  }
++  const objects = [];
++  for (let offset = 0; offset < sourceFiles.length; offset += 64) {
++    const batch = sourceFiles.slice(offset, offset + 64);
++    const headers = execFileSync('git', ['cat-file', '--batch-check'], {
++      cwd: REPO_ROOT, input: batch.map(source => `${commit}:${source.file}\n`).join(''), encoding: 'utf8', maxBuffer: 64 * 1024,
++    }).trimEnd().split('\n');
++    if (headers.length !== batch.length) throw new Error('Incomplete committed source metadata');
++    for (const [index, header] of headers.entries()) {
++      const match = /^([a-f0-9]{40}) blob (\d+)$/u.exec(header);
++      if (!match || !Number.isSafeInteger(Number(match[2])) || Number(match[2]) > 32 * 1024 * 1024) {
++        throw new Error(`Missing, non-blob or oversized committed resolver source: ${batch[index].file}`);
++      }
++      objects.push({...batch[index], object: match[1], bytes: Number(match[2])});
++    }
++  }
++  for (let offset = 0; offset < objects.length;) {
++    const batch = []; let bytes = 0;
++    while (offset < objects.length && batch.length < 64 && bytes + objects[offset].bytes <= 32 * 1024 * 1024) {
++      const object = objects[offset++]; batch.push(object); bytes += object.bytes;
++    }
++    const raw = execFileSync('git', ['cat-file', '--batch'], {
++      cwd: REPO_ROOT, input: batch.map(object => `${object.object}\n`).join(''), maxBuffer: bytes + batch.length * 128 + 1024,
++    });
++    let cursor = 0;
++    for (const object of batch) {
++      const end = raw.indexOf(10, cursor);
++      if (end < cursor || raw.subarray(cursor, end).toString() !== `${object.object} blob ${object.bytes}` ||
++          end + object.bytes + 1 >= raw.length || raw[end + object.bytes + 1] !== 10) throw new Error('Malformed committed source blob response');
++      const content = raw.subarray(end + 1, end + 1 + object.bytes);
++      if (rawFingerprint(content) !== object.fingerprint) throw new Error(`Committed resolver source fingerprint mismatch: ${object.file}`);
++      cursor = end + object.bytes + 2;
++    }
++    if (cursor !== raw.length) throw new Error('Unexpected committed source blob trailing bytes');
++  }
++  return {startingRef: commit, sourceFiles: sourceFiles.length, verification: 'exact committed raw bytes; local sources not inspected'};
++}
++
++function verifyPreparedSourceFiles(sourceFiles, opts) {
++  if (opts.committedInputs) return verifyCommittedSourceFiles(sourceFiles, opts);
+   const startingRef = localStartingRef(opts.startingRef);
+-  const manifestFile = dossierManifestFile(opts);
+-  if (!fs.existsSync(manifestFile)) {
+-    throw new Error(
+-      `Missing ${repositoryPath(manifestFile)}; rerun with --prepare-dossiers and commit the result`,
+-    );
+-  }
+-  const manifestText = fs.readFileSync(manifestFile, 'utf8');
+-  verifyCommittedFile(manifestFile, manifestText, opts);
+-  const manifest = JSON.parse(manifestText);
+-  if (manifest.schemaVersion !== DOSSIER_MANIFEST_VERSION) {
+-    throw new Error(`Unsupported resolver dossier manifest version ${manifest.schemaVersion}`);
+-  }
+-  if (manifest.batch !== opts.batch) {
+-    throw new Error(`Resolver dossier manifest batch must be ${opts.batch}`);
+-  }
+-  if (JSON.stringify(manifest.selection) !== JSON.stringify(dossierSelection(opts))) {
+-    throw new Error('Resolver dossier manifest selection does not match the requested scope');
+-  }
+-  if (!Array.isArray(manifest.sourceFiles) || manifest.sourceFiles.length === 0) {
+-    throw new Error('Resolver dossier manifest has no source fingerprints');
+-  }
+   const sourcePaths = [];
+   const seenSources = new Set();
+-  for (const source of manifest.sourceFiles) {
++  for (const source of sourceFiles) {
+     if (!source?.file || seenSources.has(source.file)) {
+       throw new Error(`Resolver dossier manifest has an invalid source file ${source?.file}`);
+     }
+@@ -1001,6 +1079,58 @@
+       `Accepted formatting-only differences in ${changedSources.length} resolver source file(s)`,
+     );
+   }
++}
++
++function writeCommittedInputsReceipt(dossiers, accepted, opts) {
++  assertCommittedInputOptions(opts);
++  const acceptedBatches = new Set(accepted.map(document => document.batch));
++  const provenance = dossiers[0]?.committedInputProvenance;
++  if (!provenance || dossiers.some(dossier => !isDeepStrictEqual(dossier.committedInputProvenance, provenance))) {
++    throw new Error('Committed checkpoint receipt requires one verified immutable input provenance');
++  }
++  const receipt = {
++    schemaVersion: 1, status: 'checkpoints-pending-host-global-and-independent-source-acceptance',
++    batch: opts.batch, committedInputProvenance: provenance,
++    globallyAccepted: false, independentSourceApproved: false, publicationApproved: false,
++    shards: dossiers.map(dossier => {
++      const checkpoint = shardCheckpointPath(dossier), complete = acceptedBatches.has(dossier.batch);
++      if (complete && !fs.existsSync(checkpoint)) throw new Error(`Missing structurally accepted checkpoint ${dossier.batch}`);
++      const artifact = fs.existsSync(checkpoint) ? fs.readFileSync(checkpoint) : null;
++      return {batch: dossier.batch, status: complete ? 'structurally-accepted-pending-host-acceptance' : 'pending',
++        checkpoint: repositoryPath(checkpoint), ...(artifact ? {bytes: artifact.length, fingerprint: rawFingerprint(artifact)} : {})};
++    }),
++  };
++  const file = path.join(SHARD_CHECKPOINT_DIR, opts.batch, 'committed-inputs-receipt.json');
++  writeJsonAtomic(file, receipt);
++  console.log(JSON.stringify({status: receipt.status, batch: opts.batch, startingRef: opts.startingRef, receipt: repositoryPath(file),
++    completeShards: receipt.shards.filter(shard => shard.status !== 'pending').length, pendingShards: receipt.shards.filter(shard => shard.status === 'pending').length}));
++  return receipt;
++}
++
++function loadPreparedDossiers(opts) {
++  assertCommittedInputOptions(opts);
++  const manifestFile = dossierManifestFile(opts);
++  if (!fs.existsSync(manifestFile)) {
++    throw new Error(
++      `Missing ${repositoryPath(manifestFile)}; rerun with --prepare-dossiers and commit the result`,
++    );
++  }
++  const manifestText = fs.readFileSync(manifestFile, 'utf8');
++  verifyCommittedFile(manifestFile, manifestText, opts);
++  const manifest = JSON.parse(manifestText);
++  if (manifest.schemaVersion !== DOSSIER_MANIFEST_VERSION) {
++    throw new Error(`Unsupported resolver dossier manifest version ${manifest.schemaVersion}`);
++  }
++  if (manifest.batch !== opts.batch) {
++    throw new Error(`Resolver dossier manifest batch must be ${opts.batch}`);
++  }
++  if (JSON.stringify(manifest.selection) !== JSON.stringify(dossierSelection(opts))) {
++    throw new Error('Resolver dossier manifest selection does not match the requested scope');
++  }
++  if (!Array.isArray(manifest.sourceFiles) || manifest.sourceFiles.length === 0) {
++    throw new Error('Resolver dossier manifest has no source fingerprints');
++  }
++  const sourceVerification = verifyPreparedSourceFiles(manifest.sourceFiles, opts);
+   if (!Array.isArray(manifest.dossiers) || manifest.dossiers.length === 0) {
+     throw new Error('Resolver dossier manifest has no dossiers');
+   }
+@@ -1026,6 +1156,7 @@
+         shard: entry.shard,
+         document,
+         bytes: Buffer.byteLength(JSON.stringify(document)),
++        ...(opts.committedInputs ? {committedInputProvenance: {...sourceVerification, manifestFingerprint: rawFingerprint(Buffer.from(manifestText))}} : {}),
+       };
+       if (document.batch !== entry.batch || dossierFingerprint(dossier) !== entry.documentFingerprint) {
+         throw new Error(`Resolver dossier fingerprint mismatch: ${entry.file}`);
+@@ -1046,6 +1177,17 @@
+       }
+       return dossier;
+     });
++  if (opts.committedInputs) {
++    const inputs = new Set(manifest.sourceFiles.map(source => source.file));
++    for (const dossier of dossiers) for (const [localId, person] of Object.entries(dossier.document.people)) {
++      const scope = /^([a-z0-9-]+):(\d{3}):p\d{3,}$/u.exec(localId);
++      if (!scope || person.localId !== localId ||
++          !inputs.has(`data/${scope[1]}/${scope[2]}.json`) ||
++          !inputs.has(`data/people/extractions/${scope[1]}/${scope[2]}.json`)) {
++        throw new Error(`Committed dossier person lacks a complete source/extraction chapter: ${localId}`);
++      }
++    }
++  }
+   return { dossiers, baseline: baselineFromPreparedDossiers(dossiers) };
+ }
+ 
+@@ -2414,6 +2556,18 @@
+   if (!isDeepStrictEqual(recoveryValidationAttempts(1), [0, 1])) {
+     throw new Error('Recovered artifacts do not preserve one in-place retry at --max-attempts 1');
+   }
++  const committedArgs = ['--batch', 'committed-inputs-fixture', '--chapters', 'fixture/001',
++    '--dossier-dir', 'data/people/resolver-inputs/fixture', '--starting-ref', '1'.repeat(40), '--committed-inputs'];
++  if (!parseArgs(committedArgs).committedInputs) throw new Error('Committed prepared mode was not parsed');
++  for (const extra of [['--out', 'data/people/resolutions/forbidden.json'], ['--prepare-dossiers'],
++    ['--transport', 'grok-build'], ['--starting-ref', 'master']]) {
++    let rejected = false;
++    try { parseArgs([...committedArgs, ...extra]); } catch (error) {
++      if (!error.message.includes('--committed-inputs')) throw error;
++      rejected = true;
++    }
++    if (!rejected) throw new Error('Unsafe committed-inputs option combination was accepted');
++  }
+   console.log('sdk-people-resolve self-test: ok');
+ }
+ 
+@@ -2427,8 +2581,9 @@
+     if(!sources.length||missing.length)throw new Error(`Grok Build identity requires the complete host source corpus, not a sparse chapter view (${missing.length} missing sources; first: ${missing.slice(0,3).join(', ')})`);
+   }
+   if (opts.transport==='cursor-sdk' && !opts.dryRun && !opts.prepareDossiers && !opts.apiKey) throw new Error('CURSOR_API_KEY is required');
+-  if (!opts.prepareDossiers && fs.existsSync(opts.out)) {
+-    throw new Error(`Resolution output already exists: ${path.relative(REPO_ROOT, opts.out)}`);
++  const existingOutput = opts.out ?? path.join(PEOPLE_DIR, 'resolutions', `${opts.batch}.json`);
++  if (!opts.prepareDossiers && fs.existsSync(existingOutput)) {
++    throw new Error(`Resolution output already exists: ${path.relative(REPO_ROOT, existingOutput)}`);
+   }
+   const release = opts.dryRun || opts.prepareDossiers ? () => {} : acquireProcessRunLock(RUN_LOCK_FILE, {
+     label: 'People identity resolution scheduler',
+@@ -2447,6 +2602,7 @@
+     if (usingPreparedDossiers) {
+       ({ dossiers, baseline } = loadPreparedDossiers(opts));
+       console.log(`Loaded ${dossiers.length} source-verified dossier(s) without rebuilding the corpus graph`);
++      if (opts.committedInputs) console.log(`Inputs verified only at immutable ${opts.startingRef}; shard artifacts remain pending fresh host global and independent source acceptance`);
+     } else {
+       corpus = loadValidatedPeopleCorpus();
+       resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
+@@ -2542,6 +2698,10 @@
+       )) recovered.add(dossier);
+     }
+     pending = pending.filter((dossier) => !recovered.has(dossier));
++    if (opts.committedInputs && opts.recoverOnly && pending.length > 0) {
++      writeCommittedInputsReceipt(dossiers, accepted, opts);
++      return;
++    }
+     if (opts.recoverOnly && pending.length > 0) {
+       console.log(
+         `Recovery-only run checkpointed ${accepted.length}/${dossiers.length} validated shard(s); ` +
+@@ -2552,7 +2712,7 @@
+     if (opts.recoverOnly) {
+       console.log(
+         `Recovery-only run checkpointed all ${accepted.length} validated shard(s); ` +
+-        'writing the aggregate without launching workers.',
++        (opts.committedInputs ? 'retaining checkpoints pending host acceptance without launching workers.' : 'writing the aggregate without launching workers.'),
+       );
+     }
+     if (opts.maxNewShards !== null && pending.length > opts.maxNewShards) {
+@@ -2597,6 +2757,10 @@
+         `${failures.length} resolution shard(s) failed; no aggregate was written: ${details.join('; ')}`,
+       );
+     }
++    if (opts.committedInputs) {
++      writeCommittedInputsReceipt(dossiers, accepted, opts);
++      return;
++    }
+     if (accepted.length < dossiers.length) {
+       console.log(
+         `Checkpointed ${accepted.length}/${dossiers.length} validated shard(s); ` +

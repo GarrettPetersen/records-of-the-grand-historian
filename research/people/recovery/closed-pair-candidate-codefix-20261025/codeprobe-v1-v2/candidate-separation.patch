@@ -1,0 +1,29 @@
+--- a/scripts/compile-people-catalog.mjs
++++ b/scripts/compile-people-catalog.mjs
+@@ -725,6 +725,15 @@
+   keepSeparate,
+   possibleSameAs = new Set(),
+ ) {
++  // Separation decisions may use a merged member outside this name block.
++  const separatedCanonicalPairs = new Set();
++  for (const key of keepSeparate) {
++    const localIds = key.split('\u0000');
++    if (localIds.length !== 2 || localIds.some((id) => !localMap.has(id))) {
++      throw new Error(`Separation refers to an unknown local person: ${key}`);
++    }
++    separatedCanonicalPairs.add(identityPairKey(...localIds.map((id) => localMap.get(id))));
++  }
+   const blocks = [];
+   const localPeople = new Set();
+   for (const block of candidateDocument.blocks) {
+@@ -741,9 +750,7 @@
+       for (let right = left + 1; right < groups.length; right += 1) {
+         const [leftCanonical, leftMembers] = groups[left];
+         const [rightCanonical, rightMembers] = groups[right];
+-        const separated = leftMembers.some((a) =>
+-          rightMembers.some((b) => keepSeparate.has(identityPairKey(a, b)))
+-        );
++        const separated = separatedCanonicalPairs.has(identityPairKey(leftCanonical, rightCanonical));
+         if (separated || possibleSameAs.has(identityPairKey(leftCanonical, rightCanonical))) continue;
+         reviewPairs.push([leftCanonical, rightCanonical].sort());
+         for (const localId of leftMembers) localPeople.add(localId);

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "INDEPENDENT_EXACT_COMMITTED_INPUTS_V2_DELTA_FINDINGS",
+  "reviewer": "/root/jin053_full_owner_peer",
+  "reviewedAt": "2026-10-25T15:20:33.243917+00:00",
+  "result": "changes-requested",
+  "exactManifest": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-v2-d1-20261025/finding-manifest.json",
+    "bytes": 11369,
+    "sha256": "814c5d54de82f5f18c2c39f3d46143a97ddd73175068931371e2c7da750430a6"
+  },
+  "exactCandidate": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-v2-d1-20261025/sdk-people-resolve.draft.mjs",
+    "bytes": 113463,
+    "sha256": "0e56dd696f337b96ed7bb223725ef7c2b95a5d143582d0f2eb7a515175c51ea8"
+  },
+  "exactV1ToV2Diff": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-v2-d1-20261025/v1-to-v2.diff",
+    "bytes": 3243,
+    "sha256": "f68521015583a4b6f0a825e05abf1242a3b74daddf71f58297a30e6086b4032e"
+  },
+  "originalReviewPreserved": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-d1-independent-peer-20261025/independent-exact-committed-inputs-findings.json",
+    "bytes": 6952,
+    "sha256": "7f5c2eca6627239ca87b1682ceefe068fb66d0094f40e8a3f1970d8a047469c5"
+  },
+  "priorFindingStatus": "P2 source-manifest completeness resolved by exact immutable inventory equality and visible chapter source/extraction guard.",
+  "findings": [
+    {
+      "priority": "P2",
+      "title": "Reject committed JSON symlinks before source verification",
+      "function": "committedSourceInventory / verifyCommittedSourceFiles",
+      "candidateFile": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-v2-d1-20261025/sdk-people-resolve.draft.mjs",
+      "problem": "ls-tree --name-only discards mode. Git symlinks (120000) are blobs, so the existing cat-file blob check accepts them and hashes their link text. On checkout, worker file reads follow the symlink and return different bytes; the claimed verified input is not the source consumed by the worker. Recursive prior-resolution symlinks also differ from normal entry.isFile() inventory behavior.",
+      "independentRealGitReproduction": {
+        "fixtureCommit": "d7f9efd811b073c1ad8c9995f8a034a73dd1de12",
+        "visibleSource": "data/fixture/002.json",
+        "mode": "120000 blob",
+        "linkText": "003.json",
+        "manifestFingerprint": "sha256 of raw link text",
+        "steps": "Restore ordinary fixture commit in isolated test repo, replace visible002source with symlink to003.json, update only that manifest fingerprint, commit symlink+manifest, call actual loadPreparedDossiers at that full immutable commit. It returns1source-verified dossier; assert filesystem source bytes fingerprint differs from verified raw link fingerprint.",
+        "actualResult": "ACCEPTED (bug reproduced)",
+        "apiCalls": 0
+      },
+      "requestedCorrection": "Obtain immutable Git tree mode/type metadata for every expected source/extraction/prior path and require ordinary file mode100644/100755 and blob type before raw source verification. Reject120000 symlinks,160000 gitlinks and other non-file entries with no filesystem fallback. Retain bounded batching/inventory equality. Add real-Git source/extraction/prior symlink negatives and keep existing nonblob/omission negatives reaching their intended branches.",
+      "scope": "Input execution integrity; pending receipt still correctly prevents automatic canonical/global/source acceptance. No claim that this produced a public data defect."
+    }
+  ],
+  "deltaVerified": {
+    "exactV1ToV2DiffAndAllPins": true,
+    "allCanonicalDependencyPins": true,
+    "noDefaultLocalGuardOrPendingReceiptChanges": true,
+    "ordinaryInventoryConsistency": "Includes three-digit extraction paths and matching source, all recursive prior JSON. Complete list now required, including unrelated003 and nested prior. No raw unextracted chapter coverage falsely demanded.",
+    "negativeTestBranches": "Updated complete-inventory missing/tree fixtures reach metadata rejection; omissions/orphan tests separately prove completeness guards."
+  },
+  "independentOfflineTests": {
+    "command": "node --experimental-vm-modules /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-v2-d1-independent-peer-20261025/independent-offline-tests.mjs",
+    "harness": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-v2-d1-independent-peer-20261025/independent-offline-tests.mjs",
+      "bytes": 16419,
+      "sha256": "71a274e6bc3f554e1f9073b4ed0740874cb83eaa4d326df2cd39c524de36f8c9"
+    },
+    "result": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-v2-d1-independent-peer-20261025/independent-offline-test-result.json",
+      "bytes": 5700,
+      "sha256": "f6e1bd0a51f376a41d12b7afe5eb0df048834188c4497a97d446add2f88648af"
+    },
+    "ordinarySdkSelfTest": "PASS",
+    "expandedOriginalRealGitFixtures": "PASS",
+    "inventoryOmissionsOrphanMissingNonblob": "PASS",
+    "newIndependentSymlinkProbe": "BUG reproduced",
+    "blobBatchCountIncludingSymlinkProbe": 25,
+    "largestBlobBatchBytes": 17827023,
+    "apiCalls": 0,
+    "committedModeLocalCorpusReads": 0,
+    "canonicalOutputWritten": false,
+    "ordinaryDefaultAggregateFailurePropagates": true,
+    "authorFilesUnchangedAfterPeerExecution": true,
+    "fixtureMutationBoundary": "Only newly created isolated test Git repo modified and removed in finally; no production Git/index/locks/source operations."
+  },
+  "limits": [
+    "No adoption approval until exact mode-safe correction reviewed.",
+    "No source/date/identity verdict, normalCI/globalgraph/current-host source-equality or publication approval.",
+    "Only unique peer artifacts written, no paid/API/credential inspection/primary/canonical/build/claim/queue operations."
+  ],
+  "paidToolCalls": 0,
+  "actualTokens": null
+}

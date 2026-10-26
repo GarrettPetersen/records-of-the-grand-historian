@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "INDEPENDENT_EXACT_COMMITTED_INPUTS_CODE_REVIEW_FINDINGS",
+  "reviewer": "/root/jin053_full_owner_peer",
+  "reviewedAt": "2026-10-25T14:45:54.582366+00:00",
+  "result": "changes-requested",
+  "exactManifest": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-draft-d1-20261025/finding-manifest.json",
+    "bytes": 10453,
+    "sha256": "742307a75d9116ae7f94eb64f1f189b405305f57270b4e6648958db4e928f8fb"
+  },
+  "exactCandidate": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-draft-d1-20261025/sdk-people-resolve.draft.mjs",
+    "bytes": 111640,
+    "sha256": "66632fc928b3c7e1df61971c3d39cf545e37de0abfc3fa4fa24a3dd9d60a8ced"
+  },
+  "exactPatch": {
+    "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-draft-d1-20261025/committed-inputs-prepared.patch",
+    "bytes": 16588,
+    "sha256": "92aed619025b4160b93dc35740544ca2e9aba023df5f4c5fa35203e844fc3bc8"
+  },
+  "canonicalBase": "d1d2494017426c278606f323233ee335e33b6eeb",
+  "allCandidateArtifactAndCanonicalDependencyPinsVerified": true,
+  "findings": [
+    {
+      "priority": "P2",
+      "title": "Verify source manifest completeness before executing committed dossiers",
+      "candidateFile": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/independent-identity-recovery/committed-inputs-prepared-draft-d1-20261025/sdk-people-resolve.draft.mjs",
+      "function": "loadPreparedDossiers / verifyCommittedSourceFiles",
+      "range": "sourceFiles iteration and sourceVerification assignment",
+      "problem": "The new mode verifies every listed raw fingerprint but never establishes that the list includes source/extraction input for each visible dossier chapter or all committed corpus extraction/prior-resolution inputs. A nonempty incomplete committed manifest passes; the offline fixture itself contains fixture:002:p001 with no data/fixture/002.json or data/people/extractions/fixture/002.json in either manifest or commit. loadPreparedDossiers still returns source-verified dossiers and actual main resumes a structural checkpoint/produces pending receipt.",
+      "independentReproduction": "Peer rerun adds explicit assertions that chapter002 source is absent from disk and manifest immediately before successful loadPreparedDossiers; the existing2-person dossier and real temporary Git commit otherwise unchanged. Zero API calls.",
+      "impact": "Pending receipt correctly prevents automatic acceptance/publication, but execution can still spend a worker on a packet whose referenced evidence and complete prior inputs were not verified at the specified commit. Ordinary local final aggregate validation formerly detects incomplete preparation; committed mode deliberately returns before that gate.",
+      "requestedCorrection": "Before worker execution, derive expected committed input inventory with bounded Git tree reads: committed extraction files plus corresponding chapter source files and committed resolution documents, and require manifest coverage/equality as appropriate; also explicitly require source+extraction entries for every visible dossier chapter. Reject omissions, with no source filesystem fallback or full corpus/resolver rebuild. Add real Git fixture negative coverage for a missing visible chapter input and omitted committed prior/extraction. Preserve pending-only host acceptance boundary."
+    }
+  ],
+  "positiveChecks": {
+    "explicitOptions": "Mode is explicit Cursor prepared execution only, with full40 commit, no prepare/self-test/Grok/out. rev-parse commit dereference must equal requested object; no mutable-ref fallback.",
+    "boundedRawVerification": "Metadata<=64 objects with blob/size checks; payload batches<=64 and32MiB, computed maxBuffer, exact byte hash and framing/trailing-byte checks. No local source fallback. Individual oversize fails before payload batching.",
+    "preparedPackets": "Manifest and full/worker packets still locally readable and exact Git-equal at the pinned ref; changed packet rejected.",
+    "defaultPath": "Default local source guard remains in separate unchanged behavior, dirty/missing local source rejects. Normal prepared aggregate still attempts full local corpus and propagates its failure.",
+    "checkpointBoundary": "All final approval booleans false; explicit --out rejected; committed path returns ignored checkpoint receipt before local aggregate write or cleanup. Existing canonical output collision guard retained.",
+    "constraintsCaps": "Normal validator/pruner/dossier builder/worker projection/part limits and budgets have no altered production hunks; no new source/identity/publication shortcut claimed."
+  },
+  "independentOfflineTests": {
+    "command": "node --experimental-vm-modules /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-d1-independent-peer-20261025/independent-offline-tests.mjs",
+    "harness": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-d1-independent-peer-20261025/independent-offline-tests.mjs",
+      "bytes": 11776,
+      "sha256": "142cc1cecc36d5905deaa153cc444a87fb99c8473fabfd9fa432d283ef7dbf91"
+    },
+    "result": {
+      "file": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/code-reviews/committed-inputs-prepared-d1-independent-peer-20261025/independent-offline-test-result.json",
+      "bytes": 5481,
+      "sha256": "577b4b4faefe73eb1a36010d47a5349e773315386f24db3e18acd2b543265377"
+    },
+    "ordinarySdkSelfTest": "PASS",
+    "realTinyIsolatedGitFixture": "PASS",
+    "mainRecoveryPendingReceipt": "PASS",
+    "defaultLocalAggregateFailurePropagates": "PASS",
+    "rawMismatchMissingNonBlobDuplicateOutsidePathMalformedFingerprintReject": "PASS",
+    "mutableRefInvalidModeExplicitOutChangedPacketReject": "PASS",
+    "batchCount": 7,
+    "largestBatchBytes": 17826211,
+    "sourceCompletenessNegative": "BUG REPRODUCED: missing visible chapter002 accepted",
+    "apiCalls": 0,
+    "committedModeLocalCorpusReads": 0,
+    "canonicalOutputWritten": false,
+    "fixtureGitOnly": "Temporary isolated test Git created and removed by finally; no production Git/index/lock mutation.",
+    "authorFilesUnchangedAfterPeerRun": true
+  },
+  "limits": [
+    "No adoption approval until exact corrected candidate and regression reviewed.",
+    "No source/date/identity judgment, canonical acceptance/globalCI/publication approval.",
+    "Peer wrote only unique review artifacts; no primary/canonical/author files modified, build/queue/claims/production Git/model calls."
+  ],
+  "paidToolCalls": 0,
+  "actualTokens": null
+}

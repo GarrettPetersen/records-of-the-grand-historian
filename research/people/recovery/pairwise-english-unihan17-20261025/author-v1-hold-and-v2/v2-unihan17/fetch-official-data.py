@@ -1,0 +1,12 @@
+import pathlib,urllib.request,io,zipfile,hashlib,json,subprocess
+O=pathlib.Path(__file__).resolve().parent
+sources={'archive':'https://www.unicode.org/Public/17.0.0/ucd/Unihan.zip','license':'https://www.unicode.org/license.txt','releaseReadme':'https://www.unicode.org/Public/17.0.0/ucd/ReadMe.txt','documentation':'https://www.unicode.org/reports/tr38/tr38-39.html'}
+def get(url):
+ return subprocess.check_output(['curl','--fail','--silent','--show-error','--location','--max-time','90',url]),url
+def H(b):return hashlib.sha256(b).hexdigest()
+archive,actual=get(sources['archive']);z=zipfile.ZipFile(io.BytesIO(archive));entry=z.getinfo('Unihan_Variants.txt');raw=z.read(entry);assert b'Unihan_Variants' in raw[:3000] and b'17.0.0' in raw[:3000];(O/'Unihan_Variants-17.0.0.txt').write_bytes(raw)
+license,licenseActual=get(sources['license']);assert license.startswith(b'UNICODE LICENSE V3') and b'copyright and permission notice' in license.lower();(O/'UNICODE-LICENSE-V3.txt').write_bytes(license)
+readme,readmeActual=get(sources['releaseReadme']);assert b'Version 17.0.0' in readme and b'final data files' in readme;(O/'Unicode17-ReadMe.txt').write_bytes(readme)
+doc,docActual=get(sources['documentation']);assert b'Unicode 17.0.0' in doc and b'kSimplifiedVariant' in doc;(O/'UAX38-39-Unicode17.html').write_bytes(doc)
+manifest={'fixedRelease':'17.0.0','releaseChoice':'Intentionally fixed verified final release, NOT a claim that17 is latest. Official ReadMe confirms final Unicode17data; UAX38revision39 identifies17.0.0/2025-08-21.','officialArchive':{'url':sources['archive'],'resolvedUrl':actual,'bytes':len(archive),'sha256':H(archive),'archiveStoredOnDisk':False,'onlyExtractedEntry':'Unihan_Variants.txt','entryCrc32':f'{entry.CRC:08x}','extractedBytes':len(raw),'extractedRawSha256':H(raw)},'officialLicense':{'url':sources['license'],'resolvedUrl':licenseActual,'bytes':len(license),'sha256':H(license),'redistribution':'UnicodeLicenseV3permitscopy/modify/distribute data providedcopyright+permissionnotice accompanies copies/associateddocumentation. Fullunmodifiedlicensevendored.'},'officialReleaseReadme':{'url':sources['releaseReadme'],'resolvedUrl':readmeActual,'bytes':len(readme),'sha256':H(readme)},'officialUAX38':{'url':sources['documentation'],'resolvedUrl':docActual,'bytes':len(doc),'sha256':H(doc)},'noOtherArchiveEntriesExtracted':True,'noNpmDependencyOrOperatingSystemTransform':True}
+(O/'official-data-provenance.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(manifest))
