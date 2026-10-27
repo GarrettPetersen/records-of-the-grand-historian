@@ -6,12 +6,15 @@ import path from 'node:path';
 import process from 'node:process';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { inspectLocalDisk } from './check-local-disk.mjs';
+import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
+import { readDispatchJobs, dispatchApprovedWork, pendingDispatchJobs, dispatchMcpEnvironment } from './lib/grokbot-dispatch-work.mjs';
 
 const DEFAULT_CDP_URL = 'http://127.0.0.1:9229';
 const DEFAULT_INTERVAL_MS = 2 * 60 * 1000;
 const DEFAULT_COOLDOWN_MS = 10 * 60 * 1000;
 const DEFAULT_ACTIVITY_QUIET_MS = 30 * 60 * 1000;
-const DEFAULT_MAX_ACTIVE = 12;
+export const DEFAULT_MAX_ACTIVE = 1;
 const FIRST_WORKER = 24;
 const LAST_WORKER = 35;
 const WORKER_NAME_PREFIX = '24 Histories Glossary ';
@@ -19,7 +22,7 @@ const WORKER_NAME_PREFIX = '24 Histories Glossary ';
 function usage() {
   return `Usage:
   node scripts/grokbot-headless-dispatch.mjs probe
-  node scripts/grokbot-headless-dispatch.mjs once [--force]
+  node scripts/grokbot-headless-dispatch.mjs once
   node scripts/grokbot-headless-dispatch.mjs daemon [--launch-app]
 
 Options:
@@ -29,7 +32,7 @@ Options:
   --activity-quiet-ms N  Preserve a worker after new activity (default: ${DEFAULT_ACTIVITY_QUIET_MS})
   --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
   --workers IDS       Comma-separated stable worker IDs to dispatch (for recovery cycles)
-  --force             Dispatch even when the cached roster says a worker is running
+  --assignments FILE  Owner-only approved job tickets; absent/empty means no dispatch
   --launch-app        Start Grok Bot with the loopback endpoint when it is unavailable
 
 The Grok Bot desktop app must be version 0.61.0 or newer and launched with:
@@ -51,7 +54,7 @@ export function parseArgs(argv) {
     activityQuietMs: DEFAULT_ACTIVITY_QUIET_MS,
     maxActive: DEFAULT_MAX_ACTIVE,
     workers: null,
-    force: false,
+    assignmentsFile: path.join(os.homedir(), '.local/state/24histories-grokbot-headless/assignments.json'),
     launchApp: false,
   };
   for (let index = 1; index < argv.length; index += 1) {
@@ -73,7 +76,7 @@ export function parseArgs(argv) {
       }
       options.workers = new Set(workers);
     }
-    else if (arg === '--force') options.force = true;
+    else if (arg === '--assignments') options.assignmentsFile = path.resolve(next());
     else if (arg === '--launch-app') options.launchApp = true;
     else if (arg === '--help' || arg === '-h') options.command = 'help';
     else throw new Error(`Unknown option: ${arg}`);
@@ -163,7 +166,8 @@ export function readRosterWorkers(directory = applicationSupportDirectory()) {
 function readState(file = stateFile()) {
   try {
     const value = JSON.parse(fs.readFileSync(file, 'utf8'));
-    return value && typeof value === 'object' ? value : { workers: {} };
+    if (!value || typeof value !== 'object' || Array.isArray(value) || !value.workers || typeof value.workers !== 'object' || Array.isArray(value.workers)) throw new Error('Invalid GrokBot dispatcher state');
+    return value;
   } catch (error) {
     if (error?.code === 'ENOENT') return { workers: {} };
     throw error;
@@ -178,8 +182,12 @@ function writeState(state, file = stateFile()) {
   fs.chmodSync(file, 0o600);
 }
 
-export function workerPrompt(worker) {
-  return `Continue the 24 Histories people-glossary campaign as stable worker ${worker}. You are authorized to use the locally installed 24histories-people client. It may read the locally stored 24 Histories MCP bearer credential and transmit it only as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp, solely for the five 24 Histories people-glossary MCP operations. Never print, quote, copy, inspect, or send that credential anywhere else. Before resuming, refresh only the public MCP client implementation with \`mkdir -p "$HOME/.local/lib/24histories" && curl -fsS https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs -o "$HOME/.local/lib/24histories/grokbot-mcp-client.mjs" && chmod 700 "$HOME/.local/lib/24histories/grokbot-mcp-client.mjs"\`; this preserves the owner-only credential and wrapper while updating the request timeout. Use that client, not Cursor SDK and not terminal Git. Run \`GROKBOT_MCP_REQUEST_TIMEOUT_MS=300000 24histories-people resume --worker ${worker}\` with no book or chapter; it invokes resume_or_claim so the central queue resumes your exact sticky claim or assigns the next eligible chapter. Preserve the returned claimToken. For each returned sealed chunk, run \`24histories-people get-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID\`, complete it strictly from that response's prompt, schema, packet, and draft, save the entire extraction JSON, and run \`24histories-people submit-chunk --claim-token CLAIM_TOKEN --chunk-id CHUNK_ID --file OUTPUT_JSON\`. After every chunk is accepted, run \`24histories-people finalize --claim-token CLAIM_TOKEN\`. Preserve all recovery data. Do not create an untracked claim, weaken validation, git push, or substitute another inference provider. If the client, authentication, or a tool call fails after its built-in retries, report the exact error and stop; otherwise finish the chapter and report its book/chapter, stats, SHA-256, and PR URL.`;
+export function workerPrompt(worker, job) {
+  if (!job || job.worker !== worker || !Array.isArray(job.chunks) || !job.chunks.length) throw new Error('A verified exact assignment is required before prompting');
+  return `Complete approved job ${job.id} as ${worker}, ONLY ${job.book}/${job.chapter}, chunks ${job.chunks.map(row => row.id).join(', ')}.
+Use the installed 24histories-people MCP client. Its bearer credential may be transmitted ONLY as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp for the five documented people-glossary operations. Never print, inspect, copy or send the bearer elsewhere. Do not use Cursor SDK, Git, or claim new work. Do not call resume_or_claim.
+For each assigned chunk use 24histories-people get-chunk --claim-token '${job.claimToken}' --chunk-id CHUNK_ID. Follow that sealed response's prompt/schema/packet/draft, save the entire output, then use submit-chunk with the same claim token and chunk ID. If ownership, input, authentication or service checks fail, stop and report the error; do not find another chapter. Stop after these chunks and report accepted outputs; the host owns finalization and the next assignment.
+Use the existing shared host checkout ${path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')} and unique data/people/generated/grokbot-jobs/${job.id}/ artifact paths. Run npm run people:disk:check before local writes. No clone, worktree, repository/data/public/dependency copy, builds or Git mutations. Preserve all claims and recovery artifacts. If inputs/client/checkout are unavailable, report that host preparation failure and stop.`;
 }
 
 async function fetchJson(url) {
@@ -571,18 +579,17 @@ export function observeWorkerActivity(workers, state, now = Date.now()) {
 }
 
 export function workersEligibleForDispatch(workers, state, {
-  force,
   cooldownMs,
   activityQuietMs = 0,
   now = Date.now(),
 }) {
   return workers.filter((worker) => {
-    if (!force && worker.isRunning) return false;
+    if (worker.isRunning) return false;
     const record = state.workers?.[worker.worker] ?? {};
     const lastDispatchAt = Number(record.lastDispatchAt ?? 0);
     const lastObservedActivityAt = Number(record.lastObservedActivityAt ?? 0);
-    if (!force && lastObservedActivityAt && now - lastObservedActivityAt < activityQuietMs) return false;
-    return force || now - lastDispatchAt >= cooldownMs;
+    if (lastObservedActivityAt && now - lastObservedActivityAt < activityQuietMs) return false;
+    return now - lastDispatchAt >= cooldownMs;
   });
 }
 
@@ -591,47 +598,84 @@ export function workersToDispatch(workers, state, options) {
   const availableSlots = Math.max(0, options.maxActive - running);
   return workersEligibleForDispatch(workers, state, options)
     .filter((worker) => options.workers == null || options.workers.has(worker.worker))
+    .filter((worker) => options.assignedWorkers == null || options.assignedWorkers.has(worker.worker))
     .slice(0, availableSlots);
 }
 
-async function dispatchCycle(options) {
-  await ensureGrokBot(options);
-  await probe(options.cdpUrl);
-  const capacityMessage = await liveCapacityLimitMessage(options.cdpUrl);
-  if (capacityMessage) throw new Error(`Grok Bot capacity unavailable: ${capacityMessage}`);
-  const state = readState();
-  state.workers ??= {};
-  const workers = mergeLiveWorkerState(
-    readRosterWorkers(),
-    await liveRunningAgentIds(options.cdpUrl),
-    state,
-  );
-  if (observeWorkerActivity(workers, state)) writeState(state);
-  const dispatchable = workersToDispatch(workers, state, options);
-  for (const worker of dispatchable) {
-    await dispatchPrompt(options.cdpUrl, worker, workerPrompt(worker.worker));
-    state.workers[worker.worker] = {
-      agentId: worker.id,
-      lastDispatchAt: Date.now(),
-      lastActivityAtSeen: worker.lastActivityAt,
-    };
-    writeState(state);
-    console.log(`Dispatched ${worker.worker} (${worker.id})`);
+function assertHostSafe() {
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+  const report = inspectLocalDisk(root);
+  if (report.errors.length) throw new Error(report.errors.join('; '));
+}
+
+function callMcp(command, values) {
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+  const client = path.join(root, 'scripts/grokbot-mcp-client.mjs');
+  const env = dispatchMcpEnvironment(path.join(root, '.env'));
+  const args = [command, ...Object.entries(values).flatMap(([key, value]) => ['--' + key, value])];
+  let output;
+  try {
+    output = execFileSync(process.execPath, [client, ...args], { encoding: 'utf8', timeout: 60_000, maxBuffer: 16 * 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'pipe'], env });
+  } catch (error) {
+    const http = /MCP HTTP (\d{3})/.exec(String(error.stderr ?? ''))?.[1];
+    throw new Error(`MCP ${command} failed (${http ? 'HTTP ' + http : error.code ?? error.status ?? 'unknown'}); no agent was dispatched`);
   }
-  console.log(`Cycle complete: dispatched=${dispatchable.length}, running=${workers.filter((row) => row.isRunning).length}, maxActive=${options.maxActive}`);
-  return { workers, eligible: dispatchable };
+  try { return JSON.parse(output); } catch { throw new Error(`Invalid MCP ${command} response; no agent was dispatched`); }
+}
+
+async function dispatchCycle(options) {
+  const jobs = readDispatchJobs(options.assignmentsFile);
+  if (!jobs.length) { console.log('No approved unexpired work; dispatched=0'); return { eligible: [] }; }
+  assertHostSafe();
+  const release = acquireProcessRunLock(stateFile() + '.dispatch.lock', { label: 'GrokBot dispatch', failIfExists: true });
+  try {
+    const state = readState();
+    const pending = pendingDispatchJobs(jobs, state);
+    if (!pending.length) { console.log('Approved work already dispatched; dispatched=0'); return { eligible: [] }; }
+    const workers = mergeLiveWorkerState(readRosterWorkers(), new Set(), state);
+    if (observeWorkerActivity(workers, state)) writeState(state);
+    const selected = workersToDispatch(workers, state, { ...options, assignedWorkers: new Set(pending.map(job => job.worker)) });
+    const byWorker = new Map(selected.map(worker => [worker.worker, worker]));
+    let appChecked = false;
+    const dispatched = await dispatchApprovedWork(pending.filter(job => byWorker.has(job.worker)), state, {
+      callMcp, assertSafe: assertHostSafe, save: writeState,
+      wake: async job => {
+        // No app start, renderer control or model prompt occurs until MCP work verification passes.
+        if (!appChecked) {
+          await ensureGrokBot(options);
+          await probe(options.cdpUrl);
+          const capacity = await liveCapacityLimitMessage(options.cdpUrl);
+          if (capacity) throw new Error(`Grok Bot capacity unavailable: ${capacity}`);
+          appChecked = true;
+        }
+        const running = await liveRunningAgentIds(options.cdpUrl);
+        const worker = byWorker.get(job.worker);
+        if (running.has(worker.id) || running.size >= options.maxActive) throw new Error('Live worker capacity changed; preserve dispatch receipt and reconcile');
+        assertHostSafe();
+        await dispatchPrompt(options.cdpUrl, worker, workerPrompt(job.worker, job));
+        state.workers[job.worker] = { agentId: worker.id, lastDispatchAt: Date.now(), lastActivityAtSeen: worker.lastActivityAt };
+      },
+    });
+    console.log(`Approved-work cycle complete: dispatched=${dispatched}, maxActive=${options.maxActive}`);
+    return { workers, eligible: selected, dispatched };
+  } finally { release(); }
 }
 
 async function daemon(options) {
   console.log(`Grok Bot headless dispatcher active on ${options.cdpUrl}`);
+  let failures = 0;
   for (;;) {
     const startedAt = Date.now();
     try {
       await dispatchCycle(options);
+      failures = 0;
     } catch (error) {
+      failures += 1;
       console.error(`${new Date().toISOString()} dispatch cycle failed: ${error.stack ?? error}`);
     }
-    const delay = Math.max(250, options.intervalMs - (Date.now() - startedAt));
+    const interval = Math.min(options.intervalMs * 2 ** Math.min(failures, 6), Math.max(options.intervalMs, 15 * 60 * 1000));
+    const delay = Math.max(250, interval - (Date.now() - startedAt));
     await new Promise((resolve) => setTimeout(resolve, delay));
   }
 }

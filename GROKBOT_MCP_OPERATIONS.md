@@ -153,13 +153,55 @@ loopback-only debugging flags if the app is not running. Logs and dispatcher sta
 under `~/.local/state/24histories-grokbot-headless/`. Remove it with
 `npm run people:grokbot:headless:uninstall`.
 
-The watchdog reads the durable local Grok Bot roster, requires the exact twelve agents
-`grokbot-24` through `grokbot-35`, skips agents reported as running, and applies a
-ten-minute per-worker dispatch cooldown. Each prompt requires `resume_or_claim`, sealed
-chunk retrieval, `submit_chunk`, and `finalize_chapter`. Its state is mode `0600` under
-`~/.local/state/24histories-grokbot-headless/`; no Grok Bot or MCP credential is copied
-there. Because this path controls the already-running renderer directly, dispatch continues
-while the screen is locked as long as the logged-in macOS session and app remain alive.
+The dispatcher defaults to **one active conversation**, not twelve. It still knows
+the twelve stable worker identities, but it never wakes an idle worker to find work.
+Before touching the renderer it requires an owner-only approved work manifest at
+`~/.local/state/24histories-grokbot-headless/assignments.json` (or `--assignments FILE`).
+Missing, empty or expired work means zero MCP calls, zero app launches and zero prompts.
+
+The host creates tickets only for actual pending chunks on a centrally claimed chapter,
+after applying the completion-first policy. A `ready` or `submitted` claim is completed
+work, not a job to redispatch; it does not occupy a worker slot. The launcher itself
+never calls `resume_or_claim` or creates a fresh claim. Existing sticky ownership and
+sealed packet ceilings remain unchanged.
+
+Each ticket has `id`, `worker`, `book`, `chapter`, `issuedAt`, `expiresAt`, a scoped
+`claimToken`, and a nonempty `chunks` array. Each chunk has `id`, `packetFingerprint`
+and `draftFingerprint`. The fingerprints are `inputFingerprint(sealed.packet)` and
+`inputFingerprint(sealed.draft)` from `scripts/lib/grokbot-dispatch-work.mjs`, calculated
+from the actual MCP `get_chunk` response. The manifest envelope is
+`{"schemaVersion":1,"jobs":[...]}`. Tickets last at most one hour; expiration never
+releases a sticky claim. Write the file atomically with mode0600, outside Git. Never
+put the bearer credential in a ticket, prompt, state file or log. The scoped claim token
+is separate from the bearer; do not print the work manifest either.
+
+Before waking a worker, the dispatcher checks resources, calls authenticated MCP
+`worker_status` through the repository MCP client, confirms the exact
+`claimed` chapter, retrieves every assigned sealed chunk through `get_chunk`, and
+checks its identity and input fingerprints. The client endpoint is pinned to
+`https://grokbot-mcp.24histories.com/mcp`. The host loads only GROKBOT_MCP_AUTH_TOKEN from its owner-only repository .env
+(or the inherited environment); it never sources other dotenv assignments. The
+bearer goes only in the Authorization header to that pinned HTTPS endpoint.
+Missing client/auth/service/schema/input data
+fails before any prompt. Stale input or a finished/moved claim is not dispatched.
+Resource checks repeat between chunk reads and immediately before waking a worker.
+Only then may the existing loopback headless renderer driver deliver the exact job.
+The worker processes only those chunks and reports accepted outputs; host finalization
+uses the existing MCP validator/publisher and requires no extra inference agent.
+
+Receipts are reserved on disk before sending a prompt. Completed or uncertain sends
+are not automatically sent again, even if the cooldown expires or the ticket ID changes.
+An operator must inspect the existing conversation/job before authorizing a retry:
+set the next sequential `attempt`, `retryOf` to the prior job ID, and a `retryReason`.
+Earlier receipts remain in history. There is no `--force` bypass. A cycle lock prevents
+competing dispatchers. Connection failures back off to at least the normal polling
+interval and up to fifteen minutes; they do not wake agents to diagnose the outage.
+
+The launch agent remains disabled after the crash recovery. Do not enable it merely
+because tests pass: host resource checks and real approved work must be ready first.
+Installing it also checks host resources and now writes a one-conversation limit.
+This remains local headless control with MCP for data; it is not a new inference tool
+on the five-operation MCP surface. No Cursor SDK or screen-unlock requirement is added.
 
 Fail-fast checks:
 
