@@ -166,5 +166,6 @@ test('worker prompt requires exact approved work and never asks an agent to find
   assert.match(prompt, /submit-chunk/u);
   assert.match(prompt, /Do not use Cursor SDK/u);
   assert.match(prompt, /host owns finalization/u);
+  assert.match(prompt, /MCP-only remote computers need no repository checkout/u);
   assert.doesNotMatch(prompt, /resume --worker/u);
 });
