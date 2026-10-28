@@ -15,6 +15,19 @@ wave until a nonempty chapter is verified live. Drain/recover existing claims ra
 than abandoning them. Use one shared checkout and isolated artifact paths; this policy
 does not authorize a second executor or taking over an active chapter.
 
+
+## Repair English omissions when found
+
+A definite English omission or mistranslation requires a concrete complete replacement,
+not only a flag or an outside-scope note. Check both English fields and repeated uses.
+Supply supplemental repairs in an artifact with book, chapter, unit ID, field, exact
+before/after text and source-based reason; keep them separate from closed-schema date
+or identity reports. The host routes these into the active editorial application work,
+with a separate reviewer for worker-authored repairs. Preserve independent review and
+normal extraction, chronology, identity, CI and publication gates. Do not defer known
+fixable English to a future corpus-wide pass. An empty proposal queue alone does not
+prove every source proposition has been translated.
+
 ## Bounded chapter work order
 
 1. Finish source/editorial corrections first: paired translations, repeated names and

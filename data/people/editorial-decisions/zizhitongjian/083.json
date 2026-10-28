@@ -871,6 +871,168 @@
       "claimRetractions": [],
       "claimRevisions": [],
       "claimAdditions": []
+    },
+    {
+      "input": {
+        "chapterFingerprint": "sha256:c80466186d96182ce22925d4c68fc2fd953ee4e8e13aabe17e21343e0fb20920",
+        "proposalsFingerprint": "sha256:6b751d999f7bbc3a65ba9eda99efc7b827b151d1f70a7b5f14312b23c39eab20"
+      },
+      "reviewer": {
+        "kind": "cursor-agent",
+        "name": "Independent retained editorial reviewer",
+        "model": "grok-4.6",
+        "agentId": "bc-13b79036-67fb-4dfd-ae9c-bee557d6fffb",
+        "runId": "run-26d885c6-befc-4970-96cf-157aa6762efd",
+        "completedAt": "2026-10-28T20:38:50.026Z"
+      },
+      "proposals": [
+        {
+          "id": "zizhitongjian:083:r0032",
+          "unit": {
+            "id": "s0152",
+            "kind": "paragraph-sentence",
+            "blockIndex": 23,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "Mi was then Attendant of the Yellow Gate; when he came to the Eastern Palace the Heir Apparent sometimes dismissed him and played in the rear court.",
+          "after": "Mi was then Palace Attendant; when he came to the Eastern Palace the Heir Apparent sometimes dismissed him and played in the rear court.",
+          "reason": "Corrects the office 侍中 to Palace Attendant; preserves the existing actions and subjects.",
+          "confidence": "high"
+        },
+        {
+          "id": "zizhitongjian:083:r0033",
+          "unit": {
+            "id": "s0152",
+            "kind": "paragraph-sentence",
+            "blockIndex": 23,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "Mi was then Attendant of the Yellow Gate. When he visited the Eastern Palace the heir apparent sometimes dismissed him and amused himself in the rear court.",
+          "after": "Mi was then a Palace Attendant. When he visited the Eastern Palace the heir apparent sometimes dismissed him and amused himself in the rear court.",
+          "reason": "Corrects the office 侍中 to Palace Attendant; preserves the existing actions and subjects.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "zizhitongjian:083:r0032",
+          "decision": "accept",
+          "after": null,
+          "reason": "s0152 謐時為侍中 is Palace Attendant. “Attendant of the Yellow Gate” is the wrong office.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "zizhitongjian/083 s0152",
+            "excerpt": "謐時為侍中，至東宮，或捨之，於後庭遊戲。"
+          }
+        },
+        {
+          "repairId": "zizhitongjian:083:r0033",
+          "decision": "accept",
+          "after": null,
+          "reason": "s0152 idiomatic has the same 侍中 error; Palace Attendant is the supported rendering, and the visit / dismissal / rear-court actions are already correct.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "zizhitongjian/083 s0152",
+            "excerpt": "謐時為侍中，至東宮，或捨之，於後庭遊戲。"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [
+        {
+          "repairId": "zizhitongjian:083:r0032",
+          "before": {
+            "id": "zizhitongjian:083:c0373",
+            "subject": "zizhitongjian:083:p032",
+            "predicate": "office",
+            "value": {
+              "label": {
+                "en": "Attendant of the Yellow Gate",
+                "zh": "侍中"
+              },
+              "action": "held"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "zizhitongjian:083:s0152"
+            ]
+          },
+          "after": {
+            "id": "zizhitongjian:083:c0373",
+            "subject": "zizhitongjian:083:p032",
+            "predicate": "office",
+            "value": {
+              "label": {
+                "en": "Palace Attendant",
+                "zh": "侍中"
+              },
+              "action": "held"
+            },
+            "certainty": "explicit",
+            "evidence": [
+              "zizhitongjian:083:s0152"
+            ]
+          },
+          "reason": "s0152 侍中 is Palace Attendant, not Attendant of the Yellow Gate. Invalidated by r0032/r0033.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "zizhitongjian/083 s0152",
+            "excerpt": "謐時為侍中，至東宮，或捨之，於後庭遊戲。"
+          }
+        }
+      ],
+      "claimAdditions": []
+    },
+    {
+      "input": {
+        "chapterFingerprint": "sha256:f0a15a25559f9a55d9e61adda3e1638aa96c58b6e10095fbc5f13892bb0a9a19",
+        "proposalsFingerprint": "sha256:5810e53b029f5c9e04f43c4aeeff8bc77d69e7e55bd35db2b2ef42e9e0c443b9"
+      },
+      "reviewer": {
+        "kind": "codex",
+        "name": "Codex host independent Chinese-source review",
+        "model": null,
+        "agentId": "/root",
+        "runId": null,
+        "completedAt": "2026-10-28T20:56:13.952Z"
+      },
+      "proposals": [
+        {
+          "id": "zizhitongjian:083:r0034",
+          "unit": {
+            "id": "s0155",
+            "kind": "paragraph-sentence",
+            "blockIndex": 23,
+            "collection": "sentences",
+            "itemIndex": 4
+          },
+          "field": "idiomatic",
+          "before": "Mi slandered the heir apparent to the empress, saying: \"He hoards private wealth to win over petty men because he means to destroy the Jia clan.",
+          "after": "Mi slandered the heir apparent to the empress, saying: \"The heir apparent amasses private wealth to win over petty men because of the Jia clan.\"",
+          "reason": "s0155 太子多畜私財以結小人者，為賈氏故也 states the cause as 為賈氏故也. “Means to destroy the Jia clan” is not in this sentence.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "zizhitongjian:083:r0034",
+          "decision": "revise",
+          "after": "Mi slandered the heir apparent to the empress, saying: \"The heir apparent amasses private wealth to win over petty men because of the Jia clan.",
+          "reason": "Translate 為賈氏故也 without inserting the explicit destroy verb absent from this unit, and preserve the open quotation that continues through s0157 rather than closing it prematurely.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "zizhitongjian/083 s0155",
+            "excerpt": "謐譖太子於后曰：「太子多畜私財以結小人者，為賈氏故也。"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [],
+      "claimAdditions": []
     }
   ]
 }

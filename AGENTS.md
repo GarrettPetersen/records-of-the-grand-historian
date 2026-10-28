@@ -12,6 +12,19 @@ claims. Do not weaken identity, chronology or publication gates. Report zero-per
 reviews, data-qualified chapters and live published nonempty chapters separately.
 A passing build or empty extraction is not the nonempty acceptance test.
 
+
+## Repair English omissions when found
+
+A definite English omission or mistranslation requires a concrete complete replacement,
+not only a flag or an outside-scope note. Check both English fields and repeated uses.
+Supply supplemental repairs in an artifact with book, chapter, unit ID, field, exact
+before/after text and source-based reason; keep them separate from closed-schema date
+or identity reports. The host routes these into the active editorial application work,
+with a separate reviewer for worker-authored repairs. Preserve independent review and
+normal extraction, chronology, identity, CI and publication gates. Do not defer known
+fixable English to a future corpus-wide pass. An empty proposal queue alone does not
+prove every source proposition has been translated.
+
 ## Host resource safety
 
 Follow the crash-recovery operating profile in `PEOPLE_COMPLETION_PROCESS.md`.
