@@ -1,0 +1,2 @@
+import fs from'node:fs';import{fileURLToPath}from'node:url';import path from'node:path';import{load,overlay}from'../editorial-omission-recovery-20261028/canonical-runtime.mjs';
+const dir=path.dirname(fileURLToPath(import.meta.url));for(const f of ['scripts/lib/people-translation-repairs.mjs','scripts/self-test-people-source-name-retention.mjs'])overlay.set(f,fs.readFileSync(dir+'/implementation/'+f));await load('scripts/self-test-people-source-name-retention.mjs');

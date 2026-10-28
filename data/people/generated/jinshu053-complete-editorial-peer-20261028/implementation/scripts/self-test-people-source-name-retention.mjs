@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {hasUnchangedChineseNameEvidence as retains} from './lib/people-translation-repairs.mjs';
+const person={mentionException:'Named within the son’s overlapping kinship phrase.'};
+const claims=[{predicate:'name',value:{zh:'衛瓘'},evidence:['jinshu:053:s0205']}];
+const before=new Map([['s0205',{zh:'太保衛瓘息庭',en:'old English'}]]);
+const after=new Map([['s0205',{zh:'太保衛瓘息庭',en:'corrected English'}]]);
+assert.equal(retains(person,claims,before,after),true,'retain exact unchanged Chinese name despite changed English');
+assert.equal(retains({},claims,before,after),false,'do not create a new overlap exception');
+assert.equal(retains(person,[{...claims[0],value:{en:'Wei Guan'}}],before,after),false,'English-only names are insufficient');
+assert.equal(retains(person,claims,before,new Map([['s0205',{zh:'其子庭'}]])),false,'changed Chinese cannot preserve the old support');
+assert.equal(retains(person,[{...claims[0],value:{zh:'張華'}}],before,after),false,'name must actually occur in the Chinese witness');
+assert.equal(retains(person,[...claims,{predicate:'role',value:{roleId:'ruler'},evidence:['jinshu:053:s0206']}],before,after),false,'all claim witnesses must be present and unchanged');
+console.log('Chinese name retention: 6 offline assertions passed.');
