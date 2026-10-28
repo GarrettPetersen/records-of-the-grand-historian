@@ -110,7 +110,7 @@ Options:
                         then retain per-shard checkpoints and an ignored receipt.
                         Pending fresh host global validation and independent source
                         acceptance; never writes a canonical aggregate. No --out.
-  --recover-only        Recover specified/prior agents and write checkpoints
+  --recover-only        Download and validate prior artifacts; never start model turns
                         without launching any new resolver agents.
   --skip-cloud-recovery Do not inspect prior Cursor agents for shard artifacts.
   --recover-agent N=ID  Recover shard N from a specific Cursor agent (repeatable).
@@ -1645,7 +1645,7 @@ async function latestResolverAgents(opts, control) {
   return control.resolverAgentsPromise;
 }
 
-async function recoverPublishedShardDocuments(
+export async function recoverPublishedShardDocuments(
   dossiers,
   opts,
   corpus,
@@ -1683,6 +1683,9 @@ async function recoverPublishedShardDocuments(
       try {
         published = await downloadDocument(agent, dossier);
       } catch (error) {
+        // Artifact-only recovery must never continue a conversation, even when an
+        // earlier run did not publish its output. Leave this shard pending.
+        if (opts.recoverOnly) throw error;
         const runs = await Agent.listRuns(prior.agentId, {
           runtime: 'cloud',
           apiKey: opts.apiKey,
@@ -1757,7 +1760,7 @@ async function recoverPublishedShardDocuments(
           break;
         } catch (error) {
           errors = error?.errors ?? [error instanceof Error ? error.message : String(error)];
-          if (attempt === opts.maxAttempts) throw error;
+          if (opts.recoverOnly || attempt === opts.maxAttempts) throw error;
           console.warn(
             `[${dossier.batch}] recovered artifact failed validation: ${errors[0]}`,
           );
