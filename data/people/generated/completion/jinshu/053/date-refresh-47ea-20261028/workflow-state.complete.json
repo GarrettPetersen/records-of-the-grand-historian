@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "workflowVersion": 1,
+  "sourceHash": "sha256:6271545aaaa5fda4f55b64be5085229c7bbaefb8b7931fdc2b7a147e2d006f89",
+  "extractionHash": "sha256:c289000e9b6fdf5e0889385cd7f14558867f8a2334ea267b2e0d07f355c70d5b",
+  "generationId": "02c98213-c2bb-46e7-931c-5d6ef155da2b",
+  "round": 0,
+  "phase": "complete",
+  "jobs": {
+    "audit-0-bbe78b8b49ccfe81de7d": {
+      "agentId": "bc-bcc56e4c-5d3b-4895-aa6d-7c56557b692a",
+      "model": "grok-4.6",
+      "status": "interrupted",
+      "sent": true,
+      "runId": "run-a03b459f-bd36-4a72-98b1-456da6ce9470",
+      "runLimitStop": {
+        "code": "cursor_run_limit_exceeded",
+        "runId": "run-a03b459f-bd36-4a72-98b1-456da6ce9470",
+        "metric": "raw-cost",
+        "observed": 337.5076,
+        "limit": 300,
+        "message": "audit-0-bbe78b8b49ccfe81de7d: cancelled cloud run run-a03b459f-bd36-4a72-98b1-456da6ce9470 at $3.38 raw usage cost (limit $3.00)",
+        "recordedAt": "2026-10-28T23:13:23.542Z"
+      },
+      "lastError": "audit-0-bbe78b8b49ccfe81de7d: cancelled cloud run run-a03b459f-bd36-4a72-98b1-456da6ce9470 at $3.38 raw usage cost (limit $3.00)",
+      "usage": {
+        "agentId": "bc-bcc56e4c-5d3b-4895-aa6d-7c56557b692a",
+        "runId": "run-a03b459f-bd36-4a72-98b1-456da6ce9470",
+        "recordedAt": "2026-10-28T23:13:43.301Z",
+        "status": "available",
+        "data": {
+          "usage": {
+            "inputTokens": 172239,
+            "outputTokens": 58275,
+            "cacheWriteTokens": 0,
+            "cacheReadTokens": 2160576,
+            "totalTokens": 2391090
+          },
+          "cost": {
+            "rawCostCents": 354.8832,
+            "chargedCents": 0
+          },
+          "runs": [
+            {
+              "runId": "run-a03b459f-bd36-4a72-98b1-456da6ce9470",
+              "usage": {
+                "inputTokens": 172239,
+                "outputTokens": 58275,
+                "cacheWriteTokens": 0,
+                "cacheReadTokens": 2160576,
+                "totalTokens": 2391090
+              },
+              "cost": {
+                "rawCostCents": 354.8832,
+                "chargedCents": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "reviewPlans": {
+    "audit-0": {
+      "maxUnits": 250,
+      "maxBytes": 253952,
+      "jobIds": [
+        "bbe78b8b49ccfe81de7d"
+      ]
+    }
+  },
+  "review": "review-0.json"
+}
