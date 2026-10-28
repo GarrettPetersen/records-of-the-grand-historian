@@ -5,7 +5,8 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 export const RESERVE_BYTES = 30n * 1024n ** 3n;
-export const MAX_SWAP_BYTES = 4n * 1024n ** 3n;
+export const SWAP_WARNING_BYTES = 4n * 1024n ** 3n;
+export const MAX_SWAP_BYTES = 8n * 1024n ** 3n;
 export const MAX_CODEX_RSS_BYTES = 4n * 1024n ** 3n;
 
 export function parseMacSwapUsage(output) {
@@ -38,7 +39,7 @@ export function evaluateMemoryPolicy({ swapUsedBytes, codexResidentBytes, pressu
   }
   if (![1, 2, 4].includes(pressureLevel)) throw new Error('Unknown macOS memory pressure level');
   const errors = [];
-  if (swapUsedBytes >= MAX_SWAP_BYTES) errors.push('macOS swap is at least 4 GiB: stop new glossary dispatches and local heavy jobs; preserve work and end this coordination session.');
+  if (swapUsedBytes >= MAX_SWAP_BYTES) errors.push('macOS swap is at least 8 GiB: stop new glossary dispatches and local heavy jobs; preserve work and end this coordination session.');
   if (codexResidentBytes >= MAX_CODEX_RSS_BYTES) errors.push('Codex backends have at least 4 GiB combined resident memory: stop new work and rotate to a fresh, compact-handoff chat.');
   if (pressureLevel !== 1) errors.push('macOS reports warning or critical memory pressure: stop new glossary work.');
   return errors;
@@ -61,6 +62,8 @@ export function inspectMemory(platform = process.platform, execute = execFileSyn
   return {
     status: 'measured', platform, swapUsedBytes: swapUsedBytes.toString(),
     codexResidentBytes: codexResidentBytes.toString(), codexProcesses, pressureLevel,
+    warningSwapBytes: SWAP_WARNING_BYTES.toString(),
+    warnings: swapUsedBytes >= SWAP_WARNING_BYTES ? ['macOS swap is at least 4 GiB: inspect memory consumers, pressure and swap growth before increasing concurrency.'] : [],
     maxSwapBytes: MAX_SWAP_BYTES.toString(), maxCodexResidentBytes: MAX_CODEX_RSS_BYTES.toString(),
     errors: evaluateMemoryPolicy({ swapUsedBytes, codexResidentBytes, pressureLevel }),
   };

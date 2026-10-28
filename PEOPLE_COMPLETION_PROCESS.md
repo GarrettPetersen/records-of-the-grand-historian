@@ -147,7 +147,8 @@ to launch more work and must not be released merely to reduce concurrency.
 - Run `npm run people:disk:check` before each new dispatch/heavy job, after a job,
   and at least every 60 seconds while observing active work. On macOS it checks disk,
   system swap, Codex backend resident memory and OS memory pressure. Keep 30 GiB
-  free; stop new work at 4 GiB swap, 4 GiB combined Codex backend RSS, or warning/
+  free; warn at 4 GiB swap and inspect consumers and growth before increasing
+  concurrency. Stop new work at 8 GiB swap, 4 GiB combined Codex backend RSS, or warning/
   critical memory pressure. Unknown/failed measurements fail closed. Other platforms
   explicitly report this macOS memory check as not applicable, not as verified safe.
 - These are admission checks, not a continuous watchdog or an application memory

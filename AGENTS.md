@@ -15,8 +15,9 @@ A passing build or empty extraction is not the nonempty acceptance test.
 ## Host resource safety
 
 Follow the crash-recovery operating profile in `PEOPLE_COMPLETION_PROCESS.md`.
-`npm run people:disk:check` now also rejects macOS swap at 4 GiB, combined Codex
-backend RSS at 4 GiB, or warning/critical memory pressure. These are conservative
+`npm run people:disk:check` warns at 4 GiB macOS swap and rejects swap at 8 GiB,
+combined Codex backend RSS at 4 GiB, or warning/critical memory pressure. At the
+swap warning, inspect memory consumers and swap growth before increasing concurrency. These are conservative
 dispatch stops, not OS guarantees. Check before each dispatch/local heavy job and
 at least every 60 seconds while observing active work; a startup check alone is
 insufficient. Do not launch more work after a failed measurement or failed guard.

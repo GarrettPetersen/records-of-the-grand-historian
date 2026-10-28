@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import {
-  evaluateDiskPolicy, inspectLocalDisk, RESERVE_BYTES, MAX_SWAP_BYTES, MAX_CODEX_RSS_BYTES,
+  evaluateDiskPolicy, inspectLocalDisk, RESERVE_BYTES, SWAP_WARNING_BYTES, MAX_SWAP_BYTES, MAX_CODEX_RSS_BYTES,
   parseMacSwapUsage, parseCodexResidentUsage, evaluateMemoryPolicy, inspectMemory,
 } from './check-local-disk.mjs';
 
@@ -26,7 +26,7 @@ test('resident totals count Codex backends, preserving spaces and excluding othe
   assert.throws(() => parseCodexResidentUsage('12 -1 codex'), /measurement/);
 });
 
-test('memory guard rejects swap growth while disk may still have ample space', () => {
+test('memory guard stops at 8 GiB swap while retaining RSS and pressure limits', () => {
   const normal = { swapUsedBytes: MAX_SWAP_BYTES - 1n, codexResidentBytes: MAX_CODEX_RSS_BYTES - 1n, pressureLevel: 1 };
   assert.deepEqual(evaluateMemoryPolicy(normal), []);
   assert.match(evaluateMemoryPolicy({ ...normal, swapUsedBytes: MAX_SWAP_BYTES })[0], /swap/);
@@ -47,10 +47,23 @@ test('macOS inspection collects no process arguments and propagates measurement 
   const report = inspectMemory('darwin', execute);
   assert.equal(report.status, 'measured');
   assert.equal(report.codexResidentBytes, '1073741824');
-  assert.match(report.errors[0], /swap/);
+  assert.deepEqual(report.errors, []);
+  assert.match(report.warnings[0], /4 GiB/);
+  assert.equal(report.warningSwapBytes, SWAP_WARNING_BYTES.toString());
+  assert.equal(report.maxSwapBytes, (8n * 1024n ** 3n).toString());
   assert.deepEqual(commands[1], ['ps', ['-axo', 'pid=,rss=,comm=']]);
   assert.throws(() => inspectMemory('darwin', () => { throw new Error('measurement failed'); }), /measurement failed/);
   assert.equal(inspectMemory('linux', () => assert.fail('must not run macOS commands')).status, 'not-applicable');
+});
+
+test('swap warnings start at 4 GiB and admission stops at 8 GiB', () => {
+  for (const [usedMiB, warning, stopped] of [[4095, false, false], [4096, true, false], [8191, true, false], [8192, true, true]]) {
+    const execute = (command, args) => command === 'ps' ? '12 1024 codex\n'
+      : args[0] === 'vm.swapusage' ? `vm.swapusage: total = 8192M used = ${usedMiB}M free = ${8192 - usedMiB}M` : '1\n';
+    const report = inspectMemory('darwin', execute);
+    assert.equal(report.warnings.length > 0, warning, `warning at ${usedMiB} MiB`);
+    assert.equal(report.errors.length > 0, stopped, `stop at ${usedMiB} MiB`);
+  }
 });
 
 const primary = '/primary';
