@@ -25,6 +25,8 @@ function rosterRows() {
 test('parses only a loopback DevTools endpoint', () => {
   assert.equal(parseArgs(['once', '--cdp-url', 'http://127.0.0.1:9333']).cdpUrl, 'http://127.0.0.1:9333');
   assert.equal(parseArgs(['daemon', '--launch-app']).launchApp, true);
+  assert.equal(parseArgs(['daemon']).maxActive, 1);
+  assert.throws(() => parseArgs(['once', '--force']), /Unknown option/);
   assert.throws(() => parseArgs(['once', '--cdp-url', 'http://0.0.0.0:9333']), /loopback-only/u);
 });
 
@@ -37,6 +39,14 @@ test('loads all twelve durable worker identities and fails on gaps', () => {
     () => rosterWorkersFromDocuments([{ value: { rows: rosterRows().slice(1) } }]),
     /Missing durable Grok Bot agents: grokbot-24/u,
   );
+});
+
+test('preserves the stable conversation ID when the sidebar differs after recovery', () => {
+  const rows = rosterWorkersFromDocuments([{ value: { rows: rosterRows() } }]);
+  const merged = mergeLiveWorkerState(rows, new Set(['original-conversation']), { workers: { 'grokbot-31': { agentId: 'original-conversation' } } });
+  const worker = merged.find(row => row.worker === 'grokbot-31');
+  assert.equal(worker.id, 'original-conversation');
+  assert.equal(worker.isRunning, true);
 });
 
 test('idle selection respects running state and cooldown', () => {
@@ -147,11 +157,15 @@ test('search fallback accepts only a button with the exact durable worker ID', (
   assert.equal(isExactWorkerSearchResult(null, worker), false);
 });
 
-test('campaign prompt binds the worker and MCP workflow', () => {
-  const prompt = workerPrompt('grokbot-31');
-  assert.match(prompt, /resume_or_claim/u);
+test('worker prompt requires exact approved work and never asks an agent to find work', () => {
+  assert.throws(() => workerPrompt('grokbot-31'), /assignment/);
+  const prompt = workerPrompt('grokbot-31', { id: 'fixture', worker: 'grokbot-31', book: 'jinshu', chapter: '053', claimToken: 'fixture-scoped-token', chunks: [{ id: '001' }] });
+  assert.match(prompt, /Do not call resume_or_claim/u);
+  assert.match(prompt, /ONLY jinshu\/053, chunks 001/u);
   assert.match(prompt, /grokbot-31/u);
   assert.match(prompt, /submit-chunk/u);
-  assert.match(prompt, /24histories-people finalize/u);
-  assert.match(prompt, /not Cursor SDK/u);
+  assert.match(prompt, /Do not use Cursor SDK/u);
+  assert.match(prompt, /host owns finalization/u);
+  assert.match(prompt, /MCP-only remote computers need no repository checkout/u);
+  assert.doesNotMatch(prompt, /resume --worker/u);
 });
