@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { inputFingerprint, validateDispatchJobs, readDispatchJobs, dispatchApprovedWork, pendingDispatchJobs, dispatchMcpEnvironment } from './lib/grokbot-dispatch-work.mjs';
+import {workerPrompt} from './grokbot-headless-dispatch.mjs';
 import { workersToDispatch } from './grokbot-headless-dispatch.mjs';
 
 const NOW = Date.parse('2026-10-27T12:00:00Z');
@@ -37,6 +38,16 @@ function harness(overrides = {}) {
     }, ...overrides };
   return { events, api };
 }
+
+test('sealed review tickets verify pending host work and wake only that exact report job',async()=>{
+ const source={sealed:'review evidence'},seed={jobId:'independent-editorial'},ticket={...job(),kind:'sealed-review',reviewJob:'independent-editorial',chunks:[{id:'review',packetFingerprint:inputFingerprint(source),draftFingerprint:inputFingerprint(seed)}]};
+ const make=status=>harness({reviewerAgentForWorker:()=> 'actual-roster-agent',prepareWake:async()=>{},callMcp:async command=>command==='status'?{worker:ticket.worker,claims:[],reviews:[{id:ticket.reviewJob,book:ticket.book,chapter:ticket.chapter,status,reviewerAgentId:'actual-roster-agent'}]}:{worker:ticket.worker,book:ticket.book,chapter:ticket.chapter,chunkId:'review',mode:'sealed-review',reviewJob:ticket.reviewJob,prompt:'sealed source review',schema:{},packet:source,draft:seed}});
+ validateDispatchJobs({schemaVersion:1,jobs:[ticket]},NOW);
+ const a=make('pending-review');assert.equal(await dispatchApprovedWork([ticket],{},a.api),1);assert.ok(a.events.includes('wake'));
+ const b=make('returned-awaiting-host');assert.equal(await dispatchApprovedWork([ticket],{},b.api),0);assert.ok(!b.events.includes('wake'));
+ assert.match(workerPrompt(ticket.worker,ticket),/submit-chunk --kind review/u);
+ const unsupported=harness({callMcp:async()=>({worker:ticket.worker,claims:[]})});await assert.rejects(dispatchApprovedWork([ticket],{},unsupported.api),/does not support sealed review/u);assert.ok(!unsupported.events.includes('wake'));
+});
 
 test('no approved work performs no MCP calls, app start or model wake', async () => {
   const fail = () => assert.fail('idle launcher must not call anything');

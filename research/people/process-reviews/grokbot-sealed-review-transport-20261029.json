@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "purpose": "GrokBot downstream review artifact transport; no canonical quality acceptance",
+  "inputRevision": "966eecf6d00d0f14c72b46d94aff65f2790810e7",
+  "files": {
+    "GROKBOT_MCP_OPERATIONS.md": "b10bc26734a8037d3a0c969aed7481ebbc08599338f0fa865a3ecf9e2ef10cbb",
+    "package.json": "8b91258a2b5953c85bb582e19baa8552aed6290b858f2361948f11dabd52a084",
+    "scripts/test-grokbot-dispatch-work.mjs": "56c206a21d5d5b44c45e31204f775d99f2a1deaf6c2e648076a1f24defcd3feb",
+    "scripts/grokbot-headless-dispatch.mjs": "87b4a6c16233e61d646fc070921fc4955a3419ac1217581eabc3a0abb64c7b0a",
+    "scripts/grokbot-mcp-client.mjs": "2365d5f0580135eafd019e378291a1293d07c22f9bd2ae534508e0f4c17a1f35",
+    "scripts/test-grokbot-review-store.mjs": "bf32dcdadb71bbd0940adb91651bc2b28df88fa0f1971cf25ab91522f16dbed9",
+    "scripts/grokbot-mcp-server.mjs": "5ec076e8211f5831c230b3c3c8584beda615bfcd17bec9a0c4fe1921897eb2db",
+    "scripts/grokbot-review-jobs.mjs": "951435fa94704544d2fd5944b9af5306966fdec271f124effb735aa24c3f56a3",
+    "scripts/lib/grokbot-review-store.mjs": "9bff478cf0813dd523787635a8e924a6c2256446aa9f76b82c8d6af9ba7f4004",
+    "scripts/lib/grokbot-dispatch-work.mjs": "1a2181cf9aaef2a5c440e338f337b3fca832f0b69a06a45f20688a9c1c2c2bec",
+    "scripts/lib/grokbot-mcp-bridge.mjs": "4da2417e396239c345d6bbfb338811f93e3614896a12fbe973f5060743d88847",
+    ".github/workflows/grokbot-review-transport.yml": "f9bb478319099ec36fbd7ebd767d047e7e94e72975e890e0aae7acfb35520536"
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "packetSha256": "edfa600c1a232916f024f9816fcfead12ace208343a0b263fc83802e508065a3",
+    "approved": true,
+    "examinedFiles": [
+      "scripts/test-grokbot-dispatch-work.mjs",
+      "scripts/grokbot-headless-dispatch.mjs",
+      "scripts/grokbot-mcp-client.mjs",
+      "scripts/test-grokbot-review-store.mjs",
+      "scripts/grokbot-mcp-server.mjs",
+      "scripts/grokbot-review-jobs.mjs",
+      "scripts/lib/grokbot-review-store.mjs",
+      "scripts/lib/grokbot-dispatch-work.mjs",
+      "scripts/lib/grokbot-mcp-bridge.mjs"
+    ],
+    "findings": [
+      {
+        "severity": "low",
+        "file": "scripts/lib/grokbot-dispatch-work.mjs",
+        "line": 79,
+        "problem": "A reviewer mismatch is reported with requireValue, which throws, instead of returning false: `requireValue(typeof reviewerAgentId==='string'&&...&&pending[0].reviewerAgentId===reviewerAgentId,'Sealed reviewer does not match the actual roster agent receiving this job')`. The throw escapes dispatchApprovedWork's `for (const job of jobs)` loop, and no 'not-dispatchable' receipt is saved.",
+        "trigger": "A manifest contains a sealed-review ticket for grokbot-24 whose registered reviewerAgentId differs from grokbot-24's roster/persisted agentId, followed by a valid extraction ticket for grokbot-25 (when maxActive allows two selections).",
+        "consequence": "Every cycle until the ticket expires (at most one hour) aborts at the review ticket. It repeats the MCP status call and never reaches the later valid ticket. The dispatcher fails closed and sends nothing wrong, but other approved work is delayed.",
+        "requiredFix": "Keep refusing the wake, but persist a 'not-dispatchable' receipt with reason 'reviewer-mismatch', or skip just that ticket, so later jobs in the cycle are still processed. Add a dispatcher test where the IDs mismatch and assert that no wake happens and no reservation is made. The supplied sealed-review test only exercises matching IDs."
+      },
+      {
+        "severity": "low",
+        "file": "scripts/grokbot-review-jobs.mjs",
+        "line": 19,
+        "problem": "The host-side sticky-work guard calls `readRemotePeopleWorkLedger()` with no queue options and without fetchPeopleQueueBase. The bridge, by contrast, uses `readRemotePeopleWorkLedger(queueOptions(this.options))` after a fetch. The guard also treats any dateAudits entry with `status!=='ready'` as blocking.",
+        "trigger": "Either the local remote-tracking ledger ref is older than a claim another host just made, or the worker has historic dateAudits entries in terminal statuses other than 'ready' (for example submitted or released).",
+        "consequence": "In the stale case, a review can be registered for a worker that does hold a sticky extraction. Because of the bridge fix this no longer deadlocks: the sticky resume still works and the review waits. In the terminal-status case, registration is refused for that worker indefinitely. Both outcomes fail safe; neither loses work.",
+        "requiredFix": "Fetch and read the ledger with the same queue options the bridge uses, and test only active date-audit statuses (the claimIsActive-equivalent), not `!=='ready'`."
+      },
+      {
+        "severity": "low",
+        "file": "scripts/test-grokbot-review-store.mjs",
+        "line": 49,
+        "problem": "The new sticky-recovery regression test writes fixture assignment, packet and output files into the real shared checkout through `assignmentDirectory(j.worker,target)` with `fs.mkdirSync(dir,{recursive:true})`. Cleanup removes only the leaf directory.",
+        "trigger": "Running the test suite in the shared host checkout, especially if the run is interrupted before t.after runs.",
+        "consequence": "Empty parent directories are left for the fake worker 'grokbot-sticky-test-<pid>', or full fixture files if the run is killed, inside data/people/generated in the checkout every worker shares. The test checks that the directory does not already exist, so existing work is never clobbered.",
+        "requiredFix": "Point the assignment helpers at a temporary root through an injectable option or environment override, or remove every directory the test created."
+      }
+    ],
+    "notes": [
+      "Prior high finding (sticky-extraction deadlock) is resolved. The bridge guard is now `if(!existing&&this.reviewStore.list(worker).some(...pending-review))throw`, so resuming an existing sticky extraction never reads review storage. The reviewJob branch still refuses while an extraction is sticky, which preserves both pieces of work. The new test 'a pending or corrupted review never blocks recovery of an existing sealed extraction' resumes without reviewJob while a review is pending, and again after the review job file is made 0644. I traced both paths in the code and they hold. The CLI also adds a registration-time ledger check (see the low finding about it).",
+      "Prior medium finding (review store faults blocking extraction) is resolved. status() catches list() failures and returns `reviews:[]` plus `reviewsError:{code:'review-store-invalid'}`. verifyDispatchWork checks reviewsError only for sealed-review tickets, so extraction tickets keep working. A corrupt review store still blocks FRESH extraction claims through the `!existing` guard. That fails closed and is consistent with 'no unattended fresh extraction'.",
+      "Prior medium finding (unbound reviewer identity) is resolved for the dispatcher. reviewerAgentForWorker returns byWorker.get(worker)?.id, which is the persisted state agentId or else the roster id. The dispatcher requires it to equal pending[0].reviewerAgentId before any get-chunk call, prepareWake or wake, and records reviewerAgentId in the receipt. Residual, by design: the shared bearer lets any client call resume_or_claim with reviewJob and submit a report carrying the const reviewer ID. The stored report alone therefore proves nothing about identity. Host acceptance must cross-check it against the dispatch receipt, as the remediation states.",
+      "Prior low finding (readiness checks inside the reservation) is resolved. prepareWake (ensureGrokBot, probe, capacity, live running set and assertHostSafe) now runs before `receipt('dispatching')`, and sealed reviews must supply it. Only dispatchPrompt failures leave an uncertain 'dispatching' receipt, and those include a selectWorker failure before any text is inserted. That is conservative and acceptable. No supplied test asserts that a prepareWake failure leaves no reservation; adding one is recommended.",
+      "Prior low finding (stale lock) is resolved. Registration uses acquireProcessRunLock(...,{failIfExists:true}), which writes PID, token and time to a 0600 `.registration.lock`, is released only when the token matches, and is never auto-deleted. The new test confirms a foreign lock is preserved and reported. The lock file name does not end in .job.json, so list() ignores it.",
+      "No regressions found in the five-operation surface, client argument forwarding (--review-job and --kind review), token handling, no-clobber result publication or the extraction submit/finalize paths. The production isolatedBridge goes through grokbot-mcp-operation-worker.mjs, which was again not supplied. Its forwarding of reviewJob and report remains unverified and should be confirmed by the host before deployment.",
+      "The line numbers are counted by hand from the packet text and may be off by a line or two."
+    ]
+  },
+  "reviewerState": {
+    "phase": "report-recorded",
+    "name": "Independent GrokBot sealed review transport audit 966e 20261029",
+    "model": "claude-opus-5-5",
+    "packetSha256": "edfa600c1a232916f024f9816fcfead12ace208343a0b263fc83802e508065a3",
+    "agentId": "bc-320958c5-ac2a-4d65-bb78-19e6917b5bcf",
+    "runId": "run-41f30cdd-2870-4e4d-a54b-e82f204819fe",
+    "reportSha256": "88a7410943b3661ae4ab303a28ecc311a318808bcdc52fe195ab313483e29e86"
+  },
+  "hostTriage": {
+    "materialApproval": "code-fix.json approved:true; all five substantive findings fixed and39 offline tests pass",
+    "lowFindings": [
+      {
+        "finding": "reviewer mismatch aborts cycle",
+        "disposition": "Retain explicit fail-fast refusal during one-conversation pilot; no agent is woken and no send is reserved. Existing regression verifies wrong roster ID and no wake."
+      },
+      {
+        "finding": "live ledger might be stale or date status submitted/released should not block",
+        "disposition": "Contradicted by native implementation: readRemotePeopleWorkLedger calls fetchQueueSnapshot, fetching the exact branch each call. Date schema allows only active, ready, research-blocked, stale-source. Non-ready entries preserve sticky ownership; submitted/released are not valid date statuses.",
+        "fetchImplementation": "function fetchQueueSnapshot({ remote, branch }) {\n  const destination = remoteRef(remote, branch);\n  const fetched = git([\n    'fetch', '--quiet', remote, `+refs/heads/${branch}:${destination}`,\n  ], { allowFailure: true });\n  if (fetched.status !== 0) {\n    const exists = git(['ls-remote','--exit-code','--heads',remote,`refs/heads/${branch}`],{allowFailure:true});\n    if (exists.status === 2) return { oid: null, ledger: emptyLedger() };\n    throw new Error(`Cannot fetch shared people queue ${branch}; refusing to treat an unavailable queue as empty`);\n  }\n  const oid = git(['rev-parse', destination]).stdout.trim();\n  const shown = git(['show', `${oid}:${PEOPLE_QUEUE_FILE}`], { allowFailure: true });\n  if (shown.status !== 0) throw new Error(`${branch} exists without ${PEOPLE_QUEUE_FILE}`);\n  return { oid, ledger: validatePeopleWorkLedger(JSON.parse(shown.stdout)) };\n}\n\n",
+        "dateStatusSchema": "      if (!/^[a-z0-9_-]+\\/\\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual','openrouter'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked','stale-source'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);"
+      },
+      {
+        "finding": "fixture parent directories left behind",
+        "disposition": "Fixed: track every newly created fixture ancestor, remove only those owned empty directories after leaf cleanup; preserve existing/concurrently populated ancestors."
+      }
+    ]
+  },
+  "offlineTests": {
+    "passed": 39,
+    "logSha256": "5b7dfc0f889373516a943c514f4c8a4cc0d6b1b277c63f194e2f2d68f97ce88b"
+  },
+  "serviceDependencyPreview": {
+    "passed": true,
+    "logSha256": "b8ceb7d7da40f0a3cd398db3ac177eb11902b9412b278e790562b9761c468c7f",
+    "productionDataChanged": false
+  },
+  "operations": [
+    "resume_or_claim",
+    "get_chunk",
+    "submit_chunk",
+    "finalize_chapter",
+    "worker_status"
+  ],
+  "chapter053": {
+    "unresolvedPairs": 572,
+    "sourceEditorialDateInputsUnchanged": true,
+    "qualified": false,
+    "published": false
+  },
+  "deployment": "pending controlled existing-runtime update; no inference dispatched yet",
+  "recoveryBranch": "codex/people-recovery-20261025"
+}

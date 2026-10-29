@@ -28,6 +28,9 @@ export function validateDispatchJobs(document, now = Date.now()) {
     requireValue(/^[a-z0-9][a-z0-9-]{0,100}$/.test(job.id ?? '') && !ids.has(job.id), 'Invalid or duplicate dispatch job ID');
     requireValue(/^grokbot-(?:2[4-9]|3[0-5])$/.test(job.worker ?? '') && !workers.has(job.worker), 'Invalid or duplicate assigned worker');
     requireValue(/^[a-z0-9_-]+$/.test(job.book ?? '') && /^\d{3}$/.test(job.chapter ?? ''), 'Invalid assigned chapter');
+    requireValue(job.kind === undefined || ['extraction','sealed-review'].includes(job.kind), 'Invalid assigned work kind');
+    if(job.kind === 'sealed-review')requireValue(/^[a-z0-9][a-z0-9-]{0,63}$/.test(job.reviewJob ?? '') && job.chunks?.length === 1 && job.chunks[0].id === 'review', 'Sealed review requires its exact reviewJob and review chunk');
+    else requireValue(job.reviewJob === undefined, 'Extraction ticket cannot name a review job');
     requireValue(typeof job.claimToken === 'string' && job.claimToken.length >= 20 && /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(job.claimToken), 'Missing scoped assignment token');
     const attempt = job.attempt ?? 1;
     requireValue(Number.isSafeInteger(attempt) && attempt >= 1, 'Invalid dispatch attempt');
@@ -57,23 +60,31 @@ export function readDispatchJobs(file, now = Date.now()) {
 export function dispatchJobKey(job) {
   // The same sealed work is not new work merely because its ticket ID/expiry changed.
   const chunks = job.chunks.map(({ id, packetFingerprint, draftFingerprint }) => ({ id, packetFingerprint, draftFingerprint })).sort((a, b) => a.id.localeCompare(b.id));
-  return inputFingerprint({ worker: job.worker, book: job.book, chapter: job.chapter, chunks });
+  return inputFingerprint({ worker: job.worker, book: job.book, chapter: job.chapter, ...(job.kind === 'sealed-review' ? {kind:job.kind,reviewJob:job.reviewJob} : {}), chunks });
 }
 
-export async function verifyDispatchWork(job, callMcp, { assertSafe = () => {}, now = Date.now } = {}) {
+export async function verifyDispatchWork(job, callMcp, { assertSafe = () => {}, now = Date.now, reviewerAgentId } = {}) {
   const status = await callMcp('status', { worker: job.worker });
   requireValue(status?.worker === job.worker && Array.isArray(status.claims), 'Invalid MCP worker status');
   const target = `${job.book}/${job.chapter}`;
   const current = status.claims.filter(claim => claim.status === 'claimed');
   requireValue(current.length <= 1, 'Multiple active claims require operator reconciliation');
-  if (current.length === 0 || current[0].chapter !== target) return false;
+  if(job.kind === 'sealed-review'){
+    requireValue(!status.reviewsError,'MCP review store requires host reconciliation: '+(status.reviewsError?.message??''));
+    requireValue(Array.isArray(status.reviews),'MCP does not support sealed review jobs');
+    const pending=status.reviews.filter(r=>r.status==='pending-review');
+    requireValue(pending.length<=1,'Multiple pending reviews require host reconciliation');
+    if(current.length||pending.length!==1||pending[0].id!==job.reviewJob||pending[0].book!==job.book||pending[0].chapter!==job.chapter)return false;
+    requireValue(typeof reviewerAgentId==='string'&&reviewerAgentId.length>5&&pending[0].reviewerAgentId===reviewerAgentId,'Sealed reviewer does not match the actual roster agent receiving this job');
+  }else if (current.length === 0 || current[0].chapter !== target) return false;
   for (const chunk of job.chunks) {
     assertSafe();
     if (Date.parse(job.expiresAt) <= now()) return false;
     const sealed = await callMcp('get-chunk', { 'claim-token': job.claimToken, 'chunk-id': chunk.id });
     requireValue(sealed?.worker === job.worker && sealed.book === job.book && sealed.chapter === job.chapter && sealed.chunkId === chunk.id, 'MCP returned a different assignment');
     requireValue(typeof sealed.prompt === 'string' && sealed.prompt.length > 0 && sealed.schema && typeof sealed.schema === 'object', 'Missing sealed prompt/schema');
-    requireValue(Array.isArray(sealed.packet?.units) && sealed.packet.units.length > 0 && sealed.draft && typeof sealed.draft === 'object', 'Missing sealed packet/draft work');
+    if(job.kind === 'sealed-review')requireValue(sealed.mode==='sealed-review'&&sealed.reviewJob===job.reviewJob&&sealed.packet&&typeof sealed.packet==='object'&&!Array.isArray(sealed.packet)&&Object.keys(sealed.packet).length>0&&sealed.draft&&typeof sealed.draft==='object','Missing/different sealed review packet/draft');
+    else requireValue(Array.isArray(sealed.packet?.units) && sealed.packet.units.length > 0 && sealed.draft && typeof sealed.draft === 'object', 'Missing sealed packet/draft work');
     if (inputFingerprint(sealed.packet) !== chunk.packetFingerprint || inputFingerprint(sealed.draft) !== chunk.draftFingerprint) return false;
   }
   return true;
@@ -92,7 +103,7 @@ export function pendingDispatchJobs(jobs, state) {
   });
 }
 
-export async function dispatchApprovedWork(jobs, state, { callMcp, assertSafe, wake, save, now = Date.now }) {
+export async function dispatchApprovedWork(jobs, state, { callMcp, assertSafe, wake, save, now = Date.now, reviewerAgentForWorker, prepareWake }) {
   pendingDispatchJobs([], state);
   state.dispatchJobs ??= {};
   let dispatched = 0;
@@ -101,18 +112,21 @@ export async function dispatchApprovedWork(jobs, state, { callMcp, assertSafe, w
     const key = dispatchJobKey(job);
     const previous = state.dispatchJobs[key], attempt = job.attempt ?? 1;
     if (!pendingDispatchJobs([job], state).length) continue;
+    const reviewerAgentId=job.kind==='sealed-review'?reviewerAgentForWorker?.(job.worker):undefined;
     const receipt = status => {
       const { history = [], ...prior } = previous ?? {};
-      return { jobId: job.id, worker: job.worker, chapter: `${job.book}/${job.chapter}`, status, at: now(), attempt,
+      return { jobId: job.id, ...(job.kind==='sealed-review'?{kind:job.kind,reviewJob:job.reviewJob,reviewerAgentId}:{}), worker: job.worker, chapter: `${job.book}/${job.chapter}`, status, at: now(), attempt,
         ...(previous ? { history: [...history, prior], retryReason: job.retryReason } : {}) };
     };
     assertSafe();
-    if (!await verifyDispatchWork(job, callMcp, { assertSafe, now })) {
+    if (!await verifyDispatchWork(job, callMcp, { assertSafe, now, reviewerAgentId })) {
       state.dispatchJobs[key] = receipt('not-dispatchable');
       save(state);
       continue;
     }
-    // Recheck resources/expiry after network reads, immediately before waking the worker.
+    if(job.kind==='sealed-review')requireValue(typeof prepareWake==='function','Sealed review requires an explicit pre-send readiness check');
+    if(prepareWake)await prepareWake(job);
+    // Recheck resources/expiry after network and readiness reads, immediately before waking the worker.
     assertSafe();
     if (Date.parse(job.expiresAt) <= now()) continue;
     // Reserve BEFORE sending: an uncertain UI/network result must not be auto-retried.

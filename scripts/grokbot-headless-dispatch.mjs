@@ -184,9 +184,10 @@ function writeState(state, file = stateFile()) {
 
 export function workerPrompt(worker, job) {
   if (!job || job.worker !== worker || !Array.isArray(job.chunks) || !job.chunks.length) throw new Error('A verified exact assignment is required before prompting');
+  const submission=job.kind==='sealed-review'?'submit-chunk --kind review':'submit-chunk';
   return `Complete approved job ${job.id} as ${worker}, ONLY ${job.book}/${job.chapter}, chunks ${job.chunks.map(row => row.id).join(', ')}.
 Use the installed 24histories-people MCP client. Its bearer credential may be transmitted ONLY as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp for the five documented people-glossary operations. Never print, inspect, copy or send the bearer elsewhere. Do not use Cursor SDK, Git, or claim new work. Do not call resume_or_claim.
-For each assigned chunk use 24histories-people get-chunk --claim-token '${job.claimToken}' --chunk-id CHUNK_ID. Follow that sealed response's prompt/schema/packet/draft, save the entire output, then use submit-chunk with the same claim token and chunk ID. If ownership, input, authentication or service checks fail, stop and report the error; do not find another chapter. Stop after these chunks and report accepted outputs; the host owns finalization and the next assignment.
+For each assigned chunk use 24histories-people get-chunk --claim-token '${job.claimToken}' --chunk-id CHUNK_ID. Follow that sealed response's prompt/schema/packet/draft, save the entire output, then use ${submission} --file REPORT_FILE with the same claim token and chunk ID. ${job.kind==='sealed-review'?'This is independent source review, not extraction. Return only the sealed report envelope; host acceptance and all quality/publication gates remain required.':''} If ownership, input, authentication or service checks fail, stop and report the error; do not find another chapter. Stop after these chunks and report accepted outputs; the host owns finalization and the next assignment.
 The host has checked resources before dispatch. For operations on that Mac, use only its existing shared checkout ${path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')} and run npm run people:disk:check before local writes. MCP-only remote computers need no repository checkout: use the installed client and unique people-jobs/${job.id}/ output artifacts in your existing working directory. Never clone, create a worktree, copy repository/data/public/dependencies, build, or mutate Git. Preserve all claims and recovery artifacts. If the MCP client or sealed inputs are unavailable, report that preparation failure and stop; do not create a checkout to compensate.`;
 }
 
@@ -640,7 +641,8 @@ async function dispatchCycle(options) {
     let appChecked = false;
     const dispatched = await dispatchApprovedWork(pending.filter(job => byWorker.has(job.worker)), state, {
       callMcp, assertSafe: assertHostSafe, save: writeState,
-      wake: async job => {
+      reviewerAgentForWorker: worker => byWorker.get(worker)?.id,
+      prepareWake: async job => {
         // No app start, renderer control or model prompt occurs until MCP work verification passes.
         if (!appChecked) {
           await ensureGrokBot(options);
@@ -653,6 +655,9 @@ async function dispatchCycle(options) {
         const worker = byWorker.get(job.worker);
         if (running.has(worker.id) || running.size >= options.maxActive) throw new Error('Live worker capacity changed; preserve dispatch receipt and reconcile');
         assertHostSafe();
+      },
+      wake: async job => {
+        const worker=byWorker.get(job.worker);
         await dispatchPrompt(options.cdpUrl, worker, workerPrompt(job.worker, job));
         state.workers[job.worker] = { agentId: worker.id, lastDispatchAt: Date.now(), lastActivityAtSeen: worker.lastActivityAt };
       },

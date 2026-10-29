@@ -41,6 +41,82 @@ The MCP tool surface is deliberately limited to `resume_or_claim`, `get_chunk`,
 `submit_chunk`, `finalize_chapter`, and `worker_status`. It provides no shell, arbitrary
 file access, source edits, claim release, editorial acceptance, or date-audit approval.
 
+## Sealed downstream review artifacts
+
+The same five operation names also transport host-prepared identity, editorial and
+independent date-review packets. They do **not** accept decisions, approve dates,
+edit source files, publish a chapter, or allocate another extraction for a review job.
+The host retains the normal validators, ownership, reviewer-independence and publication
+gates. A received report is `returned-awaiting-host`, with `qualityApproved:false` and
+`published:false`, even after `finalize_chapter`.
+
+The host prepares a version1 job with a unique `id`, existing stable `worker`,
+`kind` (`identity-review`, `editorial-review` or `date-review`), book/chapter,
+40-character `sourceRevision`, the **actual roster agent ID** in `reviewerAgentId`,
+all `authorAgentIds`, complete `prompt`, sealed `packet`, report-envelope `draft`,
+closed synchronous JSON `reportSchema`, and `hostOwnership` containing the existing
+host worker, scope and SHA-256 of its ownership receipt. Registering a job does not
+acquire, replace or release a campaign claim. Hold the existing host ownership and
+check current sealed source inputs before preparing it. Keep the job at most256KiB.
+The host CLI checks the live shared ledger for sticky extraction/date work first.
+
+```sh
+# Run the resource guard and register an owner-only JSON file in the existing service
+# runtime's review directory. Use the existing runtime; never create another clone.
+npm run people:disk:check
+npm run people:grokbot:review-jobs -- register --file ABSOLUTE_JOB_JSON \
+  --root EXISTING_SERVICE_REPO/data/people/generated/grokbot/review-jobs
+```
+
+Registration is exclusive and allows one pending review per worker. Preserve an
+existing registration lock or partial artifact after a crash and inspect its recorded
+owner; do not delete it to bypass recovery. Immutable signed tokens bind the exact
+worker, job and scope. A pending review blocks fresh extraction, while an existing
+sticky extraction remains resumable and takes precedence. Returned reviews do not
+occupy an execution slot. Invalid review storage appears explicitly as `reviewsError`
+in `worker_status`; it blocks reviews/fresh allocation but not sticky extraction
+recovery. Do not ignore that error when accepting or dispatching a review.
+
+```sh
+# On the configured client, after the host has assigned this exact job:
+24histories-people resume --worker grokbot-24 --review-job EXACT_JOB_ID
+24histories-people get-chunk --claim-token SCOPED_TOKEN --chunk-id review
+24histories-people submit-chunk --claim-token SCOPED_TOKEN --chunk-id review \
+  --kind review --file COMPLETE_REPORT_JSON
+24histories-people finalize --claim-token SCOPED_TOKEN
+```
+
+The report envelope has exactly `schemaVersion:1`, `jobId`, `packetSha256`,
+`reviewer:{agentId,name}` and `result`. The result must pass the host-sealed schema.
+A different already-saved report cannot overwrite the first; preserve and reconcile
+it explicitly. This validates transport and shape only, never historical correctness.
+
+For headless dispatch use the existing owner-only approved ticket manifest, adding
+`kind:"sealed-review"` and `reviewJob:EXACT_JOB_ID`. It has one `review` chunk whose
+packet/draft fingerprints come from the actual `get_chunk` response. The dispatcher
+cross-checks the pending job's reviewer ID against the real durable-agent roster
+before waking it and records that ID in the dispatch receipt. It checks app/renderer,
+capacity and host readiness before reserving a send. Once prompt delivery starts,
+uncertain sends still require explicit retry reconciliation; never auto-resend them.
+
+**Host acceptance must cross-check the report reviewer against that actual dispatch
+receipt, the original authors, current source/extraction fingerprints and the native
+review schema. A self-reported reviewer ID is insufficient.** Export the exact saved
+envelope and run normal host editorial/date/identity acceptance separately:
+
+```sh
+npm run people:grokbot:review-jobs -- export --worker grokbot-24 \
+  --job EXACT_JOB_ID --output NEW_ENVELOPE_JSON \
+  --root EXISTING_SERVICE_REPO/data/people/generated/grokbot/review-jobs
+```
+
+Existing installed cloud clients must receive the updated public client source before
+using `--review-job` or `--kind review`. Download
+`https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs` to the already-installed
+client-code path; preserve the separate bearer-token file. Do not bootstrap or rotate
+credentials merely to update this code. The bearer still goes only in the Authorization
+header to the pinned HTTPS MCP endpoint for these five operations.
+
 ## Headless inference dispatcher
 
 The MCP service is the data plane. `scripts/grokbot-headless-dispatch.mjs` is the local

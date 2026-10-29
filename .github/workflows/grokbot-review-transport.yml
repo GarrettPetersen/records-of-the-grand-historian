@@ -1,0 +1,20 @@
+name: GrokBot review transport
+on:
+  pull_request:
+    paths:
+      - 'scripts/**grokbot**'
+      - 'scripts/lib/grokbot-*.mjs'
+      - 'scripts/lib/process-run-lock.mjs'
+      - 'package.json'
+      - '.github/workflows/grokbot-review-transport.yml'
+jobs:
+  offline-transport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run people:grokbot:mcp:self-test
+      - run: npm run people:grokbot:headless:self-test
