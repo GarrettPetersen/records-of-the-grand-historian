@@ -44,6 +44,7 @@ export function createGrokbotMcpServer(bridge) {
       instructions:
         'Process exactly one sticky people-glossary claim at a time. Start with resume_or_claim. ' +
         'For each returned chunk, call get_chunk, complete only that sealed packet, and call submit_chunk. ' +
+        'For host-assigned sealed reviews, resume_or_claim requires reviewJob; submit_chunk returns report artifacts only. ' +
         'After every chunk is accepted, call finalize_chapter. Never invent a claim token or alter source files.',
     },
   );
@@ -51,11 +52,12 @@ export function createGrokbotMcpServer(bridge) {
   server.registerTool('resume_or_claim', {
     description:
       'Resume this worker\'s sticky Grok Bot chapter, or atomically claim one new chapter if none is active. ' +
-      'Omit book and chapter for deadline-balanced allocation.',
+      'Omit book and chapter for deadline-balanced extraction allocation. For a host-prepared review, supply its exact reviewJob; this never creates extraction work.',
     inputSchema: z.object({
       worker: z.string().describe('Stable worker ID such as grokbot-01.'),
       book: z.string().optional(),
       chapter: z.string().regex(/^\d{3}$/u).optional(),
+      reviewJob: z.string().regex(/^[a-z0-9][a-z0-9-]{0,63}$/u).optional(),
     }).refine((value) => Boolean(value.book) === Boolean(value.chapter), {
       message: 'book and chapter must be supplied together',
     }),
@@ -76,25 +78,26 @@ export function createGrokbotMcpServer(bridge) {
   server.registerTool('submit_chunk', {
     description:
       'Validate and atomically save a complete extraction for one sealed chunk. ' +
-      'Invalid output is rejected without replacing the last valid saved output.',
+      'Invalid output is rejected without replacing the last valid saved output. Sealed review jobs accept report instead of extraction and never grant quality approval.',
     inputSchema: z.object({
       claimToken: z.string().min(20),
       chunkId: z.string().min(1).max(32),
-      extraction: z.record(z.string(), z.unknown()),
-    }),
+      extraction: z.record(z.string(), z.unknown()).optional(),
+      report: z.record(z.string(), z.unknown()).optional(),
+    }).refine(value => (value.extraction === undefined) !== (value.report === undefined), {message:'Supply exactly one extraction or sealed review report'}),
     annotations: { title: 'Submit validated extraction chunk', idempotentHint: true },
   }, toolHandler((args) => bridge.submitChunk(args)));
 
   server.registerTool('finalize_chapter', {
     description:
       'Assemble all accepted chunks, run complete chapter validation, publish the exact JSON to a GitHub branch, ' +
-      'open or reuse its staging pull request, and mark the shared claim submitted.',
+      'open or reuse its staging pull request, and mark the shared claim submitted. For sealed reviews, only return the stored report receipt; no publication or approval occurs.',
     inputSchema: z.object({ claimToken: z.string().min(20) }),
     annotations: { title: 'Finalize and publish chapter', idempotentHint: true },
   }, toolHandler((args) => bridge.finalizeChapter(args)));
 
   server.registerTool('worker_status', {
-    description: 'List this stable Grok Bot worker\'s active and submitted people-glossary claims.',
+    description: 'List this stable Grok Bot worker\'s extraction claims and host-prepared sealed review jobs. Returned reviews await host acceptance.',
     inputSchema: z.object({ worker: z.string() }),
     annotations: { title: 'Read worker status', readOnlyHint: true, idempotentHint: true },
   }, toolHandler((args) => bridge.status(args)));

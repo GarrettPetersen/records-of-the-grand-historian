@@ -46,6 +46,7 @@ function toolArguments(command, values) {
   if (command === 'status') return { worker: required(values, 'worker') };
   if (command === 'resume') {
     const args = { worker: required(values, 'worker') };
+    if (values['review-job']) args.reviewJob = values['review-job'];
     if (values.book || values.chapter) {
       args.book = required(values, 'book');
       args.chapter = required(values, 'chapter');
@@ -59,10 +60,11 @@ function toolArguments(command, values) {
     };
   }
   if (command === 'submit-chunk') {
+    if (values.kind !== undefined && !['review','extraction'].includes(values.kind)) throw new Error('kind must be review or extraction');
     return {
       claimToken: required(values, 'claim-token', 'GROKBOT_CLAIM_TOKEN'),
       chunkId: required(values, 'chunk-id'),
-      extraction: JSON.parse(fs.readFileSync(required(values, 'file'), 'utf8')),
+      [values.kind === 'review' ? 'report' : 'extraction']: JSON.parse(fs.readFileSync(required(values, 'file'), 'utf8')),
     };
   }
   if (command === 'finalize') {
