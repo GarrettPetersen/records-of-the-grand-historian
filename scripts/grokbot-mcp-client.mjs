@@ -137,7 +137,7 @@ async function main() {
     accept: 'application/json, text/event-stream',
     'content-type': 'application/json',
   };
-  await post(url, headers, {
+  const initialized = await post(url, headers, {
     jsonrpc: '2.0',
     id: 1,
     method: 'initialize',
@@ -147,6 +147,9 @@ async function main() {
       clientInfo: { name: '24histories-grokbot-cli', version: '1.0.0' },
     },
   });
+  if ((values['review-job'] || values.kind === 'review') && initialized?.result?.serverInfo?.version !== '1.1.0') {
+    throw new Error('Sealed review operations require the reviewed MCP server version1.1.0; refusing to send review arguments to an older extraction-only server');
+  }
   await post(url, headers, { jsonrpc: '2.0', method: 'notifications/initialized' });
   const response = await post(url, headers, {
     jsonrpc: '2.0',

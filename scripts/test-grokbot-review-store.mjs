@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {once} from 'node:events';
 import {spawn} from 'node:child_process';
+import {createServer} from 'node:http';
 import {fileURLToPath} from 'node:url';
 import {Client,StreamableHTTPClientTransport} from '@modelcontextprotocol/client';
 import {startGrokbotMcpServer} from './grokbot-mcp-server.mjs';
@@ -99,4 +100,9 @@ test('dependency-free CLI forwards reviewJob and report without touching extract
  const resumed=await cli(['resume','--worker',j.worker,'--review-job',j.id]);assert.equal(resumed.mode,'sealed-review');
  const file=path.join(dir,'report.json');fs.writeFileSync(file,JSON.stringify(report(j)),{mode:0o600});
  const result=await cli(['submit-chunk','--claim-token',resumed.claimToken,'--chunk-id','review','--kind','review','--file',file]);assert.equal(result.status,'returned-awaiting-host');assert.equal(result.qualityApproved,false);
+});
+test('review CLI refuses an older server before resume could silently allocate extraction',async t=>{
+ let calls=0;const server=createServer(async(req,res)=>{let body='';for await(const b of req)body+=b;const request=JSON.parse(body);if(request.method==='tools/call')calls++;res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({jsonrpc:'2.0',id:request.id,result:{protocolVersion:'2025-06-18',capabilities:{},serverInfo:{name:'old-extraction-only-server',version:'1.0.0'}}}));});
+ server.listen(0,'127.0.0.1');await once(server,'listening');t.after(()=>new Promise(resolve=>server.close(resolve)));
+ const script=fileURLToPath(new URL('./grokbot-mcp-client.mjs',import.meta.url)),p=spawn(process.execPath,[script,'resume','--worker','grokbot-24','--review-job','must-not-become-extraction'],{env:{...process.env,GROKBOT_MCP_AUTH_TOKEN:'fixture-only-never-real',GROKBOT_MCP_URL:'http://127.0.0.1:'+server.address().port+'/mcp'},stdio:['ignore','pipe','pipe']});let err='';p.stderr.on('data',b=>err+=b);const[code]=await once(p,'close');assert.notEqual(code,0);assert.match(err,/older extraction-only server/u);assert.equal(calls,0);
 });

@@ -29,7 +29,7 @@ export function validateDispatchJobs(document, now = Date.now()) {
     requireValue(/^grokbot-(?:2[4-9]|3[0-5])$/.test(job.worker ?? '') && !workers.has(job.worker), 'Invalid or duplicate assigned worker');
     requireValue(/^[a-z0-9_-]+$/.test(job.book ?? '') && /^\d{3}$/.test(job.chapter ?? ''), 'Invalid assigned chapter');
     requireValue(job.kind === undefined || ['extraction','sealed-review'].includes(job.kind), 'Invalid assigned work kind');
-    if(job.kind === 'sealed-review')requireValue(/^[a-z0-9][a-z0-9-]{0,63}$/.test(job.reviewJob ?? '') && job.chunks?.length === 1 && job.chunks[0].id === 'review', 'Sealed review requires its exact reviewJob and review chunk');
+    if(job.kind === 'sealed-review')requireValue(/^[a-z0-9][a-z0-9-]{0,63}$/.test(job.reviewJob ?? '') && /^[a-f0-9]{64}$/.test(job.clientSha256 ?? '') && job.chunks?.length === 1 && job.chunks[0].id === 'review', 'Sealed review requires its exact reviewJob, public client SHA-256 and review chunk');
     else requireValue(job.reviewJob === undefined, 'Extraction ticket cannot name a review job');
     requireValue(typeof job.claimToken === 'string' && job.claimToken.length >= 20 && /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(job.claimToken), 'Missing scoped assignment token');
     const attempt = job.attempt ?? 1;

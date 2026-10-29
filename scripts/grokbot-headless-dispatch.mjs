@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
+import {createHash} from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { inspectLocalDisk } from './check-local-disk.mjs';
@@ -182,11 +183,21 @@ function writeState(state, file = stateFile()) {
   fs.chmodSync(file, 0o600);
 }
 
+export async function verifyPublicReviewClient(expected,fetchClient=fetch){
+  if(!/^[a-f0-9]{64}$/u.test(expected??''))throw new Error('Invalid expected public review-client hash');
+  const response=await fetchClient('https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs',{signal:AbortSignal.timeout(10000),cache:'no-store',headers:{'cache-control':'no-cache'}});
+  if(!response.ok||!response.body)throw new Error('Public review client unavailable before dispatch');
+  const parts=[];let size=0;for await(const part of response.body){size+=part.byteLength;if(size>128*1024)throw new Error('Public review client exceeds128KiB');parts.push(Buffer.from(part));}
+  if(createHash('sha256').update(Buffer.concat(parts)).digest('hex')!==expected)throw new Error('Public review-client hash mismatch; no agent dispatched');
+}
+
 export function workerPrompt(worker, job) {
   if (!job || job.worker !== worker || !Array.isArray(job.chunks) || !job.chunks.length) throw new Error('A verified exact assignment is required before prompting');
   const submission=job.kind==='sealed-review'?'submit-chunk --kind review':'submit-chunk';
+  if(job.kind==='sealed-review'&&!/^[a-f0-9]{64}$/u.test(job.clientSha256??''))throw new Error('Verified public review-client hash required');
+  const clientUpgrade=job.kind==='sealed-review'?`Before this review, update only the already-installed public client-code file $HOME/.local/lib/24histories/grokbot-mcp-client.mjs from https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs using unauthenticated HTTPS. Download to a temporary sibling file, verify its SHA-256 equals ${job.clientSha256}, then replace only the client code. Preserve the separate credential file and existing wrapper unchanged. If verification/install fails, stop before processing work; never bootstrap or print the bearer. `:'';
   return `Complete approved job ${job.id} as ${worker}, ONLY ${job.book}/${job.chapter}, chunks ${job.chunks.map(row => row.id).join(', ')}.
-Use the installed 24histories-people MCP client. Its bearer credential may be transmitted ONLY as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp for the five documented people-glossary operations. Never print, inspect, copy or send the bearer elsewhere. Do not use Cursor SDK, Git, or claim new work. Do not call resume_or_claim.
+${clientUpgrade}Use the installed 24histories-people MCP client. Its bearer credential may be transmitted ONLY as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp for the five documented people-glossary operations. Never print, inspect, copy or send the bearer elsewhere. Do not use Cursor SDK, Git, or claim new work. Do not call resume_or_claim.
 For each assigned chunk use 24histories-people get-chunk --claim-token '${job.claimToken}' --chunk-id CHUNK_ID. Follow that sealed response's prompt/schema/packet/draft, save the entire output, then use ${submission} --file REPORT_FILE with the same claim token and chunk ID. ${job.kind==='sealed-review'?'This is independent source review, not extraction. Return only the sealed report envelope; host acceptance and all quality/publication gates remain required.':''} If ownership, input, authentication or service checks fail, stop and report the error; do not find another chapter. Stop after these chunks and report accepted outputs; the host owns finalization and the next assignment.
 The host has checked resources before dispatch. For operations on that Mac, use only its existing shared checkout ${path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')} and run npm run people:disk:check before local writes. MCP-only remote computers need no repository checkout: use the installed client and unique people-jobs/${job.id}/ output artifacts in your existing working directory. Never clone, create a worktree, copy repository/data/public/dependencies, build, or mutate Git. Preserve all claims and recovery artifacts. If the MCP client or sealed inputs are unavailable, report that preparation failure and stop; do not create a checkout to compensate.`;
 }
@@ -643,6 +654,7 @@ async function dispatchCycle(options) {
       callMcp, assertSafe: assertHostSafe, save: writeState,
       reviewerAgentForWorker: worker => byWorker.get(worker)?.id,
       prepareWake: async job => {
+        if(job.kind==='sealed-review')await verifyPublicReviewClient(job.clientSha256);
         // No app start, renderer control or model prompt occurs until MCP work verification passes.
         if (!appChecked) {
           await ensureGrokBot(options);

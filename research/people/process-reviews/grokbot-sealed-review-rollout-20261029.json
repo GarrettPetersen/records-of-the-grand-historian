@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "independentApproval": {
+    "schemaVersion": 1,
+    "packetSha256": "ae0e1fd8a6d0ecf734ddabecc46095c46f3bf9e0699c92de668ee06f0df477cd",
+    "approved": true,
+    "examinedFiles": [
+      "scripts/test-grokbot-dispatch-work.mjs",
+      "scripts/grokbot-headless-dispatch.mjs",
+      "scripts/grokbot-mcp-client.mjs",
+      "scripts/test-grokbot-review-store.mjs",
+      "scripts/grokbot-mcp-server.mjs",
+      "scripts/grokbot-review-jobs.mjs",
+      "scripts/lib/grokbot-review-store.mjs",
+      "scripts/lib/grokbot-dispatch-work.mjs",
+      "scripts/lib/grokbot-mcp-bridge.mjs"
+    ],
+    "findings": [
+      {
+        "severity": "low",
+        "file": "scripts/grokbot-headless-dispatch.mjs",
+        "line": 176,
+        "problem": "Nothing in the dispatcher checks that the public client actually has the hash the ticket names. workerPrompt only checks the format, `/^[a-f0-9]{64}$/u.test(job.clientSha256)`, and tells the agent to download https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs and compare it with ${job.clientSha256}. prepareWake checks app readiness and capacity but never fetches the public client to compare its SHA-256. The server also serves that file with `cache-control: public, max-age=300`.",
+        "trigger": "The host issues a sealed-review ticket with the new client hash shortly after deploying, while a cache within the 300-second window still serves the old client. Alternatively, the host computes clientSha256 from a working-tree file that differs from the deployed one.",
+        "consequence": "The run fails closed. The agent sees the hash mismatch and stops before doing any work, as instructed, and nothing is sent with an unverified client. But the job was already reserved as 'dispatching' and the model was woken without doing any work, so the host must write an attempt:2 retry ticket. Because dispatchJobKey does not include clientSha256, a corrected hash cannot be redispatched any other way.",
+        "requiredFix": "In prepareWake, before the 'dispatching' reservation, fetch the public client URL unauthenticated (no bearer), compute its SHA-256 and refuse to wake unless it equals job.clientSha256. Consider sending `cache-control: no-store` for the client file, or a versioned URL. Add a test showing a mismatch leaves no reservation and no wake."
+      },
+      {
+        "severity": "low",
+        "file": "scripts/grokbot-mcp-client.mjs",
+        "line": 152,
+        "problem": "The version guard requires exact equality, `initialized?.result?.serverInfo?.version !== '1.1.0'`, rather than a minimum version or a review-capability marker.",
+        "trigger": "Any later server version bump, for example to 1.1.1 or 1.2.0 for an unrelated fix, while remote machines still run this client.",
+        "consequence": "Every review resume or submit fails with 'requires the reviewed MCP server version1.1.0' until every remote client is updated again. This fails closed and loses no work, but it couples unrelated server releases to a client rollout.",
+        "requiredFix": "Accept versions at or above 1.1.0, or check an explicit capability the server advertises in serverInfo or instructions. Keep refusing servers below 1.1.0, as the new regression test checks."
+      }
+    ],
+    "notes": [
+      "The version-guard addition is correct for its stated purpose. For `--review-job` or `--kind review`, the client reads the initialize result and refuses before notifications/initialized and tools/call when the server is not 1.1.0. The new test runs against a fake 1.0.0 server and confirms no tools/call reaches it (calls===0). I also traced the reverse case of an old client talking to the new server. An old client sending submit-chunk with a review token puts the report under `extraction`, and the new bridge rejects it with 'Sealed reviews require only a report'. An old client sending resume ignores --review-job, and the new bridge refuses fresh extraction with 'Resume the host-prepared reviewJob' while a review is pending. Both fail closed, so no extraction is allocated by accident. The server's SERVER_VERSION and /health now report 1.1.0.",
+      "The client-hash addition does not add a bearer destination. The update URL is the existing public, unauthenticated client endpoint on the same pinned host. The prompt keeps the credential file and wrapper unchanged, and says to stop on a mismatch before processing work. validateDispatchJobs now requires a 64-hex clientSha256 for sealed-review tickets, and workerPrompt refuses to build a prompt without one. Extraction tickets are unaffected because neither check applies when kind is not 'sealed-review'. The new transport is not deployed (live status), so the public client today is the old one. A review ticket issued now would still be stopped earlier, because the old server's status response has no `reviews` array ('MCP does not support sealed review jobs') and the dispatcher fails before waking.",
+      "The fixture-cleanup fix in the sticky-recovery test is correct. It records every directory it creates, removes the leaf recursively, then removes the created parents and stops at the first one that is not empty. The earlier low finding about this test is resolved.",
+      "All five originally material fixes are still intact in this version: the fresh-only pending-review guard (`!existing&&...`), status reviewsError isolation, the reviewer-to-roster binding before any wake, prepareWake running before the 'dispatching' reservation, and the owner-recorded registration lock. Nothing in the quality, claim or publication paths changed, and there are still exactly five tool names.",
+      "Two low findings from the previous approval are unchanged and still open; neither is material. First, a reviewer mismatch still throws out of the dispatch loop instead of saving a 'not-dispatchable' receipt. Second, grokbot-review-jobs.mjs still reads the ledger without fetching it or passing queue options, and still treats any dateAudits entry whose status is not 'ready' as blocking.",
+      "grokbot-mcp-operation-worker.mjs (the production isolatedBridge path) was again not supplied. Its forwarding of reviewJob and report remains unverified and should be confirmed by the host before deployment.",
+      "The line numbers are counted by hand from the packet text and may be off by a line or two."
+    ]
+  },
+  "independentReviewerState": {
+    "phase": "report-recorded",
+    "name": "Independent GrokBot sealed review transport audit 966e 20261029",
+    "model": "claude-opus-5-5",
+    "packetSha256": "ae0e1fd8a6d0ecf734ddabecc46095c46f3bf9e0699c92de668ee06f0df477cd",
+    "agentId": "bc-320958c5-ac2a-4d65-bb78-19e6917b5bcf",
+    "runId": "run-fa762e48-0eb9-41af-9320-b0215b70f71e",
+    "reportSha256": "818a0be9fb34298d0c1f74995415bab6cf3b0c91e01c821524ee664d9e4b4663"
+  },
+  "hostFinalAcceptance": {
+    "materialApproval": "code-fix.json approved:true; all five substantive findings fixed and39 offline tests pass",
+    "lowFindings": [
+      {
+        "finding": "reviewer mismatch aborts cycle",
+        "disposition": "Retain explicit fail-fast refusal during one-conversation pilot; no agent is woken and no send is reserved. Existing regression verifies wrong roster ID and no wake."
+      },
+      {
+        "finding": "live ledger might be stale or date status submitted/released should not block",
+        "disposition": "Contradicted by native implementation: readRemotePeopleWorkLedger calls fetchQueueSnapshot, fetching the exact branch each call. Date schema allows only active, ready, research-blocked, stale-source. Non-ready entries preserve sticky ownership; submitted/released are not valid date statuses.",
+        "fetchImplementation": "function fetchQueueSnapshot({ remote, branch }) {\n  const destination = remoteRef(remote, branch);\n  const fetched = git([\n    'fetch', '--quiet', remote, `+refs/heads/${branch}:${destination}`,\n  ], { allowFailure: true });\n  if (fetched.status !== 0) {\n    const exists = git(['ls-remote','--exit-code','--heads',remote,`refs/heads/${branch}`],{allowFailure:true});\n    if (exists.status === 2) return { oid: null, ledger: emptyLedger() };\n    throw new Error(`Cannot fetch shared people queue ${branch}; refusing to treat an unavailable queue as empty`);\n  }\n  const oid = git(['rev-parse', destination]).stdout.trim();\n  const shown = git(['show', `${oid}:${PEOPLE_QUEUE_FILE}`], { allowFailure: true });\n  if (shown.status !== 0) throw new Error(`${branch} exists without ${PEOPLE_QUEUE_FILE}`);\n  return { oid, ledger: validatePeopleWorkLedger(JSON.parse(shown.stdout)) };\n}\n\n",
+        "dateStatusSchema": "      if (!/^[a-z0-9_-]+\\/\\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual','openrouter'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked','stale-source'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);"
+      },
+      {
+        "finding": "fixture parent directories left behind",
+        "disposition": "Fixed: track every newly created fixture ancestor, remove only those owned empty directories after leaf cleanup; preserve existing/concurrently populated ancestors."
+      }
+    ],
+    "finalApproval": "code-ready.json approved:true; all material findings resolved",
+    "finalRolloutSafeguards": {
+      "testsPassed": 41,
+      "oldServerCannotAllocateExtraction": true,
+      "publicClientHashVerifiedBeforeAppStartAndModelSend": true,
+      "clientAssetNoStore": true,
+      "reviewerMismatchAndClientMismatchLeaveNoSendReservation": true,
+      "explicitExactReviewProtocolVersion": "1.1.0; reject future unreviewed versions until client rollout is reviewed"
+    },
+    "regressionCoverageCorrection": "An earlier string-based test insertion did not land because indentation differed. The final41-test run includes explicit wrong-roster/no-reservation, wrong-client/no-reservation, and dispatch-reviewer receipt assertions."
+  },
+  "finalFiles": {
+    "scripts/grokbot-mcp-server.mjs": "ab090fc73d7ddd7ef32adc383b1aaa6fa7f7be35320c9d51e5a8d5ccadab1e16",
+    "scripts/grokbot-mcp-client.mjs": "19cd8cb609bf9a177565f5ac6557d9cf08fcdaecbc00f117fab82db53e9c45a9",
+    "scripts/grokbot-headless-dispatch.mjs": "190a4bb4146e2ca13831ee89a463fa7abdd3d9690360563ba2cf3d7674ef1f2a",
+    "scripts/lib/grokbot-dispatch-work.mjs": "44b6d93ba2b4013d7b7feb8d2f6b66be75dcff632cf927045b93442636ea7b1b",
+    "scripts/test-grokbot-review-store.mjs": "b170ca6546f84db1dc4e7a7df6037a1e80beec93f3abe13e412c56a6f909ab88",
+    "scripts/test-grokbot-dispatch-work.mjs": "4f6181d5269201478ce5139f75e9c78de05b73599ca67ce0928e327e423677a7"
+  },
+  "tests": {
+    "passed": 41,
+    "logSha256": "784159418380161deac6f4011b4d9a36afa9e02c962c65cebf80aa817ceb2088"
+  },
+  "serverVersion": "1.1.0",
+  "client": {
+    "sha256": "19cd8cb609bf9a177565f5ac6557d9cf08fcdaecbc00f117fab82db53e9c45a9",
+    "bytes": 6275
+  },
+  "qualityAndPublicationGatesUnchanged": true,
+  "grokInferenceDispatched": false
+}
