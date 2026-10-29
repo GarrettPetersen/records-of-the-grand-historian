@@ -79,7 +79,7 @@ test('observed activity holds an idle-looking worker quiet instead of interrupti
     },
   };
   assert.equal(observeWorkerActivity(workers, state, 10_000), true);
-  assert.equal(state.workers['grokbot-25'].lastObservedActivityAt, 10_000);
+  assert.equal(state.workers['grokbot-25'].lastObservedActivityAt, 9_900);
   assert.equal(observeWorkerActivity(workers, state, 10_001), false);
   assert.equal(
     workersEligibleForDispatch(workers, state, {
@@ -99,6 +99,13 @@ test('observed activity holds an idle-looking worker quiet instead of interrupti
     }).some((row) => row.worker === 'grokbot-25'),
     true,
   );
+});
+test('a delayed observation of old activity does not create a fresh quiet period',()=>{
+ const worker={worker:'grokbot-24',id:'agent-24',isRunning:false,lastActivityAt:1000},state={workers:{'grokbot-24':{lastDispatchAt:500,lastActivityAtSeen:500}}};
+ assert.equal(observeWorkerActivity([worker],state,100_000),true);
+ assert.equal(state.workers['grokbot-24'].lastObservedActivityAt,1000);
+ assert.equal(workersEligibleForDispatch([worker],state,{now:100_000,cooldownMs:1000,activityQuietMs:30_000}).length,1);
+ worker.isRunning=true;assert.equal(workersEligibleForDispatch([worker],state,{now:100_000,cooldownMs:1000,activityQuietMs:30_000}).length,0);
 });
 
 test('active-worker ceiling prevents a new dispatch burst after partial completion', () => {

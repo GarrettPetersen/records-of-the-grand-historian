@@ -584,7 +584,9 @@ export function observeWorkerActivity(workers, state, now = Date.now()) {
     const seen = Number(record.lastActivityAtSeen ?? 0);
     if (worker.lastActivityAt <= seen) continue;
     record.lastActivityAtSeen = worker.lastActivityAt;
-    record.lastObservedActivityAt = now;
+    // A delayed roster read must not turn historical activity into a new quiet hold.
+    // The live renderer is still checked for running work immediately before send.
+    record.lastObservedActivityAt = Math.min(now, worker.lastActivityAt);
     changed = true;
   }
   return changed;
