@@ -1,0 +1,12 @@
+(node:73191) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/053/grok-review-transport-966e-20261029/loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+TypeError: fetch failed
+    at node:internal/deps/undici/undici:13502:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async fetchJson (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/grokbot-headless-dispatch.mjs:206:20)
+    at async ensureGrokBot (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/grokbot-headless-dispatch.mjs:213:5)
+    at async prepareWake (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/grokbot-headless-dispatch.mjs:662:11)
+    at async dispatchApprovedWork (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/lib/grokbot-dispatch-work.mjs:128:20)
+    at async dispatchCycle (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/grokbot-headless-dispatch.mjs:655:24)
+    at async main (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/grokbot-headless-dispatch.mjs:718:5)

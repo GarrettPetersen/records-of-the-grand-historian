@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "c62ddf605e7ef3f03798e5fa36261695f14751c36312610b44d87b1ea732699c",
+  "approved": false,
+  "examinedFiles": [
+    "scripts/test-grokbot-dispatch-work.mjs",
+    "scripts/grokbot-headless-dispatch.mjs",
+    "scripts/grokbot-mcp-client.mjs",
+    "scripts/test-grokbot-review-store.mjs",
+    "scripts/grokbot-mcp-server.mjs",
+    "scripts/grokbot-review-jobs.mjs",
+    "scripts/lib/grokbot-review-store.mjs",
+    "scripts/lib/grokbot-dispatch-work.mjs",
+    "scripts/lib/grokbot-mcp-bridge.mjs"
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "file": "scripts/lib/grokbot-mcp-bridge.mjs",
+      "line": 345,
+      "problem": "resumeOrClaim rejects any non-review call when the worker has a pending review: `if(this.reviewStore.list(worker).some(job=>job.status==='pending-review'))throw ...`. This check runs before the `if (existing)` sticky-resume branch, and the reviewJob branch (line 338) rejects the opposite case: `if(existing)throw new Error('Resume existing sticky extraction before scheduling a review')`. GrokbotReviewStore.register() never checks the extraction ledger, so a review can be registered for a worker that already holds a claimed extraction.",
+      "trigger": "grokbot-24 holds a live claimed extraction (for example jinshu/086). The host runs `grokbot-review-jobs.mjs register` for grokbot-24, and the registration succeeds. Then resume_or_claim({worker:'grokbot-24'}) throws 'Resume the host-prepared reviewJob before creating extraction work', and resume_or_claim({worker:'grokbot-24',reviewJob}) throws 'Resume existing sticky extraction before scheduling a review'.",
+      "consequence": "The worker deadlocks. Its existing sticky extraction can no longer be resumed through the documented entry point (the server instructions say 'Start with resume_or_claim'), and the review cannot start either. A worker or host that lost the extraction claim token cannot recover the in-progress chapter without manually deleting review state. That breaks the requirement to preserve sticky extraction claims and is a regression in extraction. The supplied test 'sticky extraction and pending review ownership cannot be bypassed' never calls resume without reviewJob while an extraction is sticky, so it misses this.",
+      "requiredFix": "Apply the pending-review guard only when no sticky claim exists, so it blocks fresh claims and never blocks resuming an existing extraction. In the `existing` path, always allow the sticky resume. Also make register() refuse, or the host CLI check, any worker whose live ledger shows a claimed grokbot extraction. Add a test covering sticky extraction plus a pending review, then resume without reviewJob."
+    },
+    {
+      "severity": "medium",
+      "file": "scripts/lib/grokbot-mcp-bridge.mjs",
+      "line": 484,
+      "problem": "Extraction-only operations now depend on every review file for the worker being valid. status() always returns `reviews:this.reviewStore.list(worker)`, and resumeOrClaim always calls list() (line 345). list() calls read() and savedResult() on every job/result (review-store line 81-82), and those throw on any permission, symlink, schema or Ajv-strict failure.",
+      "trigger": "Any single review job or result file under data/people/generated/grokbot/review-jobs/grokbot-NN causes this. Examples: the file gains group/world bits through an operator umask, rsync or a backup restore; a result file fails re-validation; or the review-jobs root was created with mode 0755. worker_status and resume_or_claim then throw 'Review input must be an owner-only regular file' or 'Review directory must be owner-only...' for that worker.",
+      "consequence": "Extraction tickets that are otherwise valid fail verifyDispatchWork at the first `status` call ('MCP status failed; no agent was dispatched') on every daemon cycle, and extraction resume for that worker is blocked. A fault in the review transport therefore stops existing extraction work, which contradicts the requirement that existing extraction tickets continue to work.",
+      "requiredFix": "Isolate review listing from extraction paths. Do not consult the review store when resuming an existing sticky extraction. In status(), report review read failures as an explicit per-review error state (or a separate reviewsError field) rather than throwing for the whole worker, while still refusing to hand out review tokens for invalid jobs."
+    },
+    {
+      "severity": "medium",
+      "file": "scripts/lib/grokbot-dispatch-work.mjs",
+      "line": 76,
+      "problem": "The 'independent reviewer identity' is self-attested and never bound to the conversation that actually received the work. The sealed get_chunk schema hands the expected value to the worker (`reviewer:{...agentId:{const:job.reviewerAgentId}}` in the bridge's getChunk), and validateReport only compares the submitted string with that same value (review-store `report.reviewer.agentId===job.reviewerAgentId`). verifyDispatchWork checks only id/book/chapter of the pending review. It never compares the job's reviewerAgentId (already exposed in status.reviews) with the roster agent ID of the Grok Bot worker it is about to wake.",
+      "trigger": "A job is registered with reviewerAgentId 'reviewer-real-24' for worker grokbot-24. The roster agent ID for grokbot-24 is different, or that conversation is the same agent that authored the proposal under another label. The dispatcher still wakes grokbot-24, which copies the const from the schema, and store.submit() accepts and preserves a report attributed to 'reviewer-real-24'.",
+      "consequence": "The preserved artifact and export receipt carry a reviewer identity that was never verified. The independence check (authorAgentIds excludes reviewerAgentId) is then only a check on labels. A host acceptance step that trusts reviewer.agentId could accept an author-produced review as independent, which is a false-approval vector even though the transport itself returns qualityApproved:false.",
+      "requiredFix": "Bind identity at dispatch. In verifyDispatchWork or the headless wake callback, require pending[0].reviewerAgentId to equal the roster/persisted agent ID of the worker being woken, refuse otherwise, and record that agentId in the dispatch receipt. Document that host acceptance must cross-check reviewer.agentId against the dispatch receipt and never against the self-reported value alone."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/lib/grokbot-dispatch-work.mjs",
+      "line": 128,
+      "problem": "The 'dispatching' reservation is saved before wake(). In the headless wake callback, every check that runs before any prompt is sent (ensureGrokBot, probe, liveCapacityLimitMessage, the liveRunningAgentIds capacity check and assertHostSafe) can throw, and the job is then left as an 'uncertain delivery' even though nothing was sent.",
+      "trigger": "In the current live state the DevTools port 9229 is unavailable. The first `once` or daemon cycle with a valid sealed-review ticket verifies the MCP work and saves 'dispatching', then ensureGrokBot throws.",
+      "consequence": "No work is lost, but every such job permanently needs an operator-authored attempt:2 retry ticket even though delivery definitely did not happen. Under the current live conditions this blocks the first real dispatch.",
+      "requiredFix": "Run the app, renderer and capacity readiness checks before saving the 'dispatching' reservation. Alternatively, have wake signal a definite pre-send failure so the dispatcher can drop the reservation or mark it 'not-sent'. Keep reservation-before-send only for the Input.insertText/Enter phase."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/lib/grokbot-review-store.mjs",
+      "line": 68,
+      "problem": "The registration mutex is a bare mkdir of `.registration-lock` with no owner or staleness record. If the process crashes or is killed between mkdirSync and the finally rmdirSync, the lock stays forever.",
+      "trigger": "Host registration is interrupted, for example by SIGKILL or power loss, while list() or writeExclusiveAtomic is running.",
+      "consequence": "Every later registration for that worker fails with EEXIST until someone deletes the lock by hand. Any `.partial` temp file left by writeExclusiveAtomic also needs manual reconciliation.",
+      "requiredFix": "Record the owner PID and time in the lock, as the existing acquireProcessRunLock does, and report a stale lock with an explicit host-reconciliation error. Do not delete it automatically."
+    }
+  ],
+  "notes": [
+    "Production MCP requests go through isolatedBridge to grokbot-mcp-operation-worker.mjs, which was not supplied. Every supplied HTTP and CLI review test injects a bridge directly, so nothing verifies that the operation worker forwards `reviewJob` (resumeOrClaim) and `report` (submitChunk) or builds GrokbotMcpBridge with the intended review-store root. The host should confirm this before deployment.",
+    "Positive observations: the five tool names are unchanged. The review token payload is HMAC-bound to jobSha256 and scope, and extraction tokens cannot enter the review path (payload.kind check). Result publication uses link(2) no-clobber and preserves the original. Neither finalize_chapter nor submit_chunk reaches the publisher on the review path. Idle and empty manifests make no MCP or app calls. The dispatcher pins the MCP URL and loads only GROKBOT_MCP_AUTH_TOKEN from an owner-only dotenv.",
+    "Concurrent submit_chunk calls for the same review are not serialized in isolatedBridge. The losing call fails with a raw EEXIST rather than returning an idempotent receipt or the 'already preserved' error, and it leaves a .partial file. No data is lost, so this is not listed as a finding.",
+    "hostOwnership.receiptSha256 is validated only by format and is not checked against any host ledger. That fits 'transport only', but the host must verify it at acceptance."
+  ]
+}

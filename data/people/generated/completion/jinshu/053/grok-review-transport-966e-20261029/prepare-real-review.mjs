@@ -1,0 +1,16 @@
+import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {spawnSync} from 'node:child_process';
+import {dispatchMcpEnvironment,inputFingerprint,validateDispatchJobs} from '../../../../../../../scripts/lib/grokbot-dispatch-work.mjs';
+import {inspectLocalDisk} from '../../../../../../../scripts/check-local-disk.mjs';
+import {readRosterWorkers} from '../../../../../../../scripts/grokbot-headless-dispatch.mjs';
+const ROOT='/Users/garrettpetersen/records-of-the-grand-historian',J=path.dirname(fileURLToPath(import.meta.url)),job=JSON.parse(fs.readFileSync(J+'/grok-editorial-job.json')),need=(v,m)=>{if(!v)throw Error(m)};
+need(!inspectLocalDisk(ROOT).errors.length,'Resource guard');const env=dispatchMcpEnvironment(ROOT+'/.env');
+function call(command,values){need(!inspectLocalDisk(ROOT).errors.length,'Resource guard before MCP');const r=spawnSync(process.execPath,[ROOT+'/scripts/grokbot-mcp-client.mjs',command,...Object.entries(values).flatMap(([k,v])=>['--'+k,v])],{env,encoding:'utf8',timeout:60000,maxBuffer:1024*1024});if(r.status!==0)throw Error('MCP '+command+' failed: '+String(r.stderr??r.error?.message??'unknown').replaceAll(env.GROKBOT_MCP_AUTH_TOKEN,'[redacted]').slice(-500));return JSON.parse(r.stdout);}
+const worker=readRosterWorkers().find(w=>w.worker===job.worker);need(worker&&worker.id===job.reviewerAgentId,'Stable reviewer roster drift');
+const status=call('status',{worker:job.worker});need(!status.reviewsError&&status.reviews?.some(r=>r.id===job.id&&r.status==='pending-review'),'Registered exact review unavailable');
+need(!status.claims.some(c=>c.status==='claimed'),'Sticky extraction must resume first');
+const resumed=call('resume',{worker:job.worker,'review-job':job.id});need(resumed.mode==='sealed-review'&&resumed.reviewJob===job.id&&resumed.status==='pending-review','Review resume did not return exact pending job');
+const input=call('get-chunk',{'claim-token':resumed.claimToken,'chunk-id':'review'});need(input.mode==='sealed-review'&&input.reviewJob===job.id&&input.draft.reviewer.agentId===worker.id,'Wrong sealed reviewer input');
+fs.writeFileSync(J+'/grok-editorial-sealed-response.json',JSON.stringify(input)+'\n');const pin=JSON.parse(fs.readFileSync(J+'/public-client-pin.json'));
+const ticket={id:job.id+'-dispatch-1',worker:job.worker,book:job.book,chapter:job.chapter,kind:'sealed-review',reviewJob:job.id,clientSha256:pin.sha256,issuedAt:new Date().toISOString(),expiresAt:new Date(Date.now()+30*60000).toISOString(),claimToken:resumed.claimToken,chunks:[{id:'review',packetFingerprint:inputFingerprint(input.packet),draftFingerprint:inputFingerprint(input.draft)}]};
+validateDispatchJobs({schemaVersion:1,jobs:[ticket]});fs.writeFileSync(J+'/private-dispatch-ticket.json',JSON.stringify({schemaVersion:1,jobs:[ticket]})+'\n',{flag:'wx',mode:0o600});
+fs.writeFileSync(J+'/prepared-real-review.json',JSON.stringify({prepared:true,worker:job.worker,reviewerAgentId:worker.id,reviewJob:job.id,packetFingerprint:inputFingerprint(input.packet),draftFingerprint:inputFingerprint(input.draft),assignments:14,contextUnits:200,claimTokenNeverPrinted:true,inferenceDispatched:false},null,2)+'\n');console.log(JSON.stringify({prepared:true,worker:job.worker,reviewerAgentId:worker.id,reviewJob:job.id,assignments:14}));

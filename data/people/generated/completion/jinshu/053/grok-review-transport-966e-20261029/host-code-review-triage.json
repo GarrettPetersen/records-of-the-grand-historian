@@ -1,0 +1,29 @@
+{
+  "materialApproval": "code-fix.json approved:true; all five substantive findings fixed and39 offline tests pass",
+  "lowFindings": [
+    {
+      "finding": "reviewer mismatch aborts cycle",
+      "disposition": "Retain explicit fail-fast refusal during one-conversation pilot; no agent is woken and no send is reserved. Existing regression verifies wrong roster ID and no wake."
+    },
+    {
+      "finding": "live ledger might be stale or date status submitted/released should not block",
+      "disposition": "Contradicted by native implementation: readRemotePeopleWorkLedger calls fetchQueueSnapshot, fetching the exact branch each call. Date schema allows only active, ready, research-blocked, stale-source. Non-ready entries preserve sticky ownership; submitted/released are not valid date statuses.",
+      "fetchImplementation": "function fetchQueueSnapshot({ remote, branch }) {\n  const destination = remoteRef(remote, branch);\n  const fetched = git([\n    'fetch', '--quiet', remote, `+refs/heads/${branch}:${destination}`,\n  ], { allowFailure: true });\n  if (fetched.status !== 0) {\n    const exists = git(['ls-remote','--exit-code','--heads',remote,`refs/heads/${branch}`],{allowFailure:true});\n    if (exists.status === 2) return { oid: null, ledger: emptyLedger() };\n    throw new Error(`Cannot fetch shared people queue ${branch}; refusing to treat an unavailable queue as empty`);\n  }\n  const oid = git(['rev-parse', destination]).stdout.trim();\n  const shown = git(['show', `${oid}:${PEOPLE_QUEUE_FILE}`], { allowFailure: true });\n  if (shown.status !== 0) throw new Error(`${branch} exists without ${PEOPLE_QUEUE_FILE}`);\n  return { oid, ledger: validatePeopleWorkLedger(JSON.parse(shown.stdout)) };\n}\n\n",
+      "dateStatusSchema": "      if (!/^[a-z0-9_-]+\\/\\d{3}$/.test(key) || !claim.worker || !['cursor-sdk','grokbot','manual','openrouter'].includes(claim.lane) || !/^sha256:[a-f0-9]{64}$/.test(claim.sourceHash) || !/^sha256:[a-f0-9]{64}$/.test(claim.extractionHash) || !claim.jobs || typeof claim.jobs !== 'object' || Array.isArray(claim.jobs) || !['active','ready','research-blocked','stale-source'].includes(claim.status)) throw new Error(`Invalid date-audit reservation ${key}`);"
+    },
+    {
+      "finding": "fixture parent directories left behind",
+      "disposition": "Fixed: track every newly created fixture ancestor, remove only those owned empty directories after leaf cleanup; preserve existing/concurrently populated ancestors."
+    }
+  ],
+  "finalApproval": "code-ready.json approved:true; all material findings resolved",
+  "finalRolloutSafeguards": {
+    "testsPassed": 41,
+    "oldServerCannotAllocateExtraction": true,
+    "publicClientHashVerifiedBeforeAppStartAndModelSend": true,
+    "clientAssetNoStore": true,
+    "reviewerMismatchAndClientMismatchLeaveNoSendReservation": true,
+    "explicitExactReviewProtocolVersion": "1.1.0; reject future unreviewed versions until client rollout is reviewed"
+  },
+  "regressionCoverageCorrection": "An earlier string-based test insertion did not land because indentation differed. The final41-test run includes explicit wrong-roster/no-reservation, wrong-client/no-reservation, and dispatch-reviewer receipt assertions."
+}

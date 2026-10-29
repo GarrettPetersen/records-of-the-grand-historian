@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "edfa600c1a232916f024f9816fcfead12ace208343a0b263fc83802e508065a3",
+  "approved": true,
+  "examinedFiles": [
+    "scripts/test-grokbot-dispatch-work.mjs",
+    "scripts/grokbot-headless-dispatch.mjs",
+    "scripts/grokbot-mcp-client.mjs",
+    "scripts/test-grokbot-review-store.mjs",
+    "scripts/grokbot-mcp-server.mjs",
+    "scripts/grokbot-review-jobs.mjs",
+    "scripts/lib/grokbot-review-store.mjs",
+    "scripts/lib/grokbot-dispatch-work.mjs",
+    "scripts/lib/grokbot-mcp-bridge.mjs"
+  ],
+  "findings": [
+    {
+      "severity": "low",
+      "file": "scripts/lib/grokbot-dispatch-work.mjs",
+      "line": 79,
+      "problem": "A reviewer mismatch is reported with requireValue, which throws, instead of returning false: `requireValue(typeof reviewerAgentId==='string'&&...&&pending[0].reviewerAgentId===reviewerAgentId,'Sealed reviewer does not match the actual roster agent receiving this job')`. The throw escapes dispatchApprovedWork's `for (const job of jobs)` loop, and no 'not-dispatchable' receipt is saved.",
+      "trigger": "A manifest contains a sealed-review ticket for grokbot-24 whose registered reviewerAgentId differs from grokbot-24's roster/persisted agentId, followed by a valid extraction ticket for grokbot-25 (when maxActive allows two selections).",
+      "consequence": "Every cycle until the ticket expires (at most one hour) aborts at the review ticket. It repeats the MCP status call and never reaches the later valid ticket. The dispatcher fails closed and sends nothing wrong, but other approved work is delayed.",
+      "requiredFix": "Keep refusing the wake, but persist a 'not-dispatchable' receipt with reason 'reviewer-mismatch', or skip just that ticket, so later jobs in the cycle are still processed. Add a dispatcher test where the IDs mismatch and assert that no wake happens and no reservation is made. The supplied sealed-review test only exercises matching IDs."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/grokbot-review-jobs.mjs",
+      "line": 19,
+      "problem": "The host-side sticky-work guard calls `readRemotePeopleWorkLedger()` with no queue options and without fetchPeopleQueueBase. The bridge, by contrast, uses `readRemotePeopleWorkLedger(queueOptions(this.options))` after a fetch. The guard also treats any dateAudits entry with `status!=='ready'` as blocking.",
+      "trigger": "Either the local remote-tracking ledger ref is older than a claim another host just made, or the worker has historic dateAudits entries in terminal statuses other than 'ready' (for example submitted or released).",
+      "consequence": "In the stale case, a review can be registered for a worker that does hold a sticky extraction. Because of the bridge fix this no longer deadlocks: the sticky resume still works and the review waits. In the terminal-status case, registration is refused for that worker indefinitely. Both outcomes fail safe; neither loses work.",
+      "requiredFix": "Fetch and read the ledger with the same queue options the bridge uses, and test only active date-audit statuses (the claimIsActive-equivalent), not `!=='ready'`."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/test-grokbot-review-store.mjs",
+      "line": 49,
+      "problem": "The new sticky-recovery regression test writes fixture assignment, packet and output files into the real shared checkout through `assignmentDirectory(j.worker,target)` with `fs.mkdirSync(dir,{recursive:true})`. Cleanup removes only the leaf directory.",
+      "trigger": "Running the test suite in the shared host checkout, especially if the run is interrupted before t.after runs.",
+      "consequence": "Empty parent directories are left for the fake worker 'grokbot-sticky-test-<pid>', or full fixture files if the run is killed, inside data/people/generated in the checkout every worker shares. The test checks that the directory does not already exist, so existing work is never clobbered.",
+      "requiredFix": "Point the assignment helpers at a temporary root through an injectable option or environment override, or remove every directory the test created."
+    }
+  ],
+  "notes": [
+    "Prior high finding (sticky-extraction deadlock) is resolved. The bridge guard is now `if(!existing&&this.reviewStore.list(worker).some(...pending-review))throw`, so resuming an existing sticky extraction never reads review storage. The reviewJob branch still refuses while an extraction is sticky, which preserves both pieces of work. The new test 'a pending or corrupted review never blocks recovery of an existing sealed extraction' resumes without reviewJob while a review is pending, and again after the review job file is made 0644. I traced both paths in the code and they hold. The CLI also adds a registration-time ledger check (see the low finding about it).",
+    "Prior medium finding (review store faults blocking extraction) is resolved. status() catches list() failures and returns `reviews:[]` plus `reviewsError:{code:'review-store-invalid'}`. verifyDispatchWork checks reviewsError only for sealed-review tickets, so extraction tickets keep working. A corrupt review store still blocks FRESH extraction claims through the `!existing` guard. That fails closed and is consistent with 'no unattended fresh extraction'.",
+    "Prior medium finding (unbound reviewer identity) is resolved for the dispatcher. reviewerAgentForWorker returns byWorker.get(worker)?.id, which is the persisted state agentId or else the roster id. The dispatcher requires it to equal pending[0].reviewerAgentId before any get-chunk call, prepareWake or wake, and records reviewerAgentId in the receipt. Residual, by design: the shared bearer lets any client call resume_or_claim with reviewJob and submit a report carrying the const reviewer ID. The stored report alone therefore proves nothing about identity. Host acceptance must cross-check it against the dispatch receipt, as the remediation states.",
+    "Prior low finding (readiness checks inside the reservation) is resolved. prepareWake (ensureGrokBot, probe, capacity, live running set and assertHostSafe) now runs before `receipt('dispatching')`, and sealed reviews must supply it. Only dispatchPrompt failures leave an uncertain 'dispatching' receipt, and those include a selectWorker failure before any text is inserted. That is conservative and acceptable. No supplied test asserts that a prepareWake failure leaves no reservation; adding one is recommended.",
+    "Prior low finding (stale lock) is resolved. Registration uses acquireProcessRunLock(...,{failIfExists:true}), which writes PID, token and time to a 0600 `.registration.lock`, is released only when the token matches, and is never auto-deleted. The new test confirms a foreign lock is preserved and reported. The lock file name does not end in .job.json, so list() ignores it.",
+    "No regressions found in the five-operation surface, client argument forwarding (--review-job and --kind review), token handling, no-clobber result publication or the extraction submit/finalize paths. The production isolatedBridge goes through grokbot-mcp-operation-worker.mjs, which was again not supplied. Its forwarding of reviewJob and report remains unverified and should be confirmed by the host before deployment.",
+    "The line numbers are counted by hand from the packet text and may be off by a line or two."
+  ]
+}

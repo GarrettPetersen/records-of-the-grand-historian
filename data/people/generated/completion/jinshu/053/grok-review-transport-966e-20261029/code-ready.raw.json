@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "ae0e1fd8a6d0ecf734ddabecc46095c46f3bf9e0699c92de668ee06f0df477cd",
+  "approved": true,
+  "examinedFiles": [
+    "scripts/test-grokbot-dispatch-work.mjs",
+    "scripts/grokbot-headless-dispatch.mjs",
+    "scripts/grokbot-mcp-client.mjs",
+    "scripts/test-grokbot-review-store.mjs",
+    "scripts/grokbot-mcp-server.mjs",
+    "scripts/grokbot-review-jobs.mjs",
+    "scripts/lib/grokbot-review-store.mjs",
+    "scripts/lib/grokbot-dispatch-work.mjs",
+    "scripts/lib/grokbot-mcp-bridge.mjs"
+  ],
+  "findings": [
+    {
+      "severity": "low",
+      "file": "scripts/grokbot-headless-dispatch.mjs",
+      "line": 176,
+      "problem": "Nothing in the dispatcher checks that the public client actually has the hash the ticket names. workerPrompt only checks the format, `/^[a-f0-9]{64}$/u.test(job.clientSha256)`, and tells the agent to download https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs and compare it with ${job.clientSha256}. prepareWake checks app readiness and capacity but never fetches the public client to compare its SHA-256. The server also serves that file with `cache-control: public, max-age=300`.",
+      "trigger": "The host issues a sealed-review ticket with the new client hash shortly after deploying, while a cache within the 300-second window still serves the old client. Alternatively, the host computes clientSha256 from a working-tree file that differs from the deployed one.",
+      "consequence": "The run fails closed. The agent sees the hash mismatch and stops before doing any work, as instructed, and nothing is sent with an unverified client. But the job was already reserved as 'dispatching' and the model was woken without doing any work, so the host must write an attempt:2 retry ticket. Because dispatchJobKey does not include clientSha256, a corrected hash cannot be redispatched any other way.",
+      "requiredFix": "In prepareWake, before the 'dispatching' reservation, fetch the public client URL unauthenticated (no bearer), compute its SHA-256 and refuse to wake unless it equals job.clientSha256. Consider sending `cache-control: no-store` for the client file, or a versioned URL. Add a test showing a mismatch leaves no reservation and no wake."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/grokbot-mcp-client.mjs",
+      "line": 152,
+      "problem": "The version guard requires exact equality, `initialized?.result?.serverInfo?.version !== '1.1.0'`, rather than a minimum version or a review-capability marker.",
+      "trigger": "Any later server version bump, for example to 1.1.1 or 1.2.0 for an unrelated fix, while remote machines still run this client.",
+      "consequence": "Every review resume or submit fails with 'requires the reviewed MCP server version1.1.0' until every remote client is updated again. This fails closed and loses no work, but it couples unrelated server releases to a client rollout.",
+      "requiredFix": "Accept versions at or above 1.1.0, or check an explicit capability the server advertises in serverInfo or instructions. Keep refusing servers below 1.1.0, as the new regression test checks."
+    }
+  ],
+  "notes": [
+    "The version-guard addition is correct for its stated purpose. For `--review-job` or `--kind review`, the client reads the initialize result and refuses before notifications/initialized and tools/call when the server is not 1.1.0. The new test runs against a fake 1.0.0 server and confirms no tools/call reaches it (calls===0). I also traced the reverse case of an old client talking to the new server. An old client sending submit-chunk with a review token puts the report under `extraction`, and the new bridge rejects it with 'Sealed reviews require only a report'. An old client sending resume ignores --review-job, and the new bridge refuses fresh extraction with 'Resume the host-prepared reviewJob' while a review is pending. Both fail closed, so no extraction is allocated by accident. The server's SERVER_VERSION and /health now report 1.1.0.",
+    "The client-hash addition does not add a bearer destination. The update URL is the existing public, unauthenticated client endpoint on the same pinned host. The prompt keeps the credential file and wrapper unchanged, and says to stop on a mismatch before processing work. validateDispatchJobs now requires a 64-hex clientSha256 for sealed-review tickets, and workerPrompt refuses to build a prompt without one. Extraction tickets are unaffected because neither check applies when kind is not 'sealed-review'. The new transport is not deployed (live status), so the public client today is the old one. A review ticket issued now would still be stopped earlier, because the old server's status response has no `reviews` array ('MCP does not support sealed review jobs') and the dispatcher fails before waking.",
+    "The fixture-cleanup fix in the sticky-recovery test is correct. It records every directory it creates, removes the leaf recursively, then removes the created parents and stops at the first one that is not empty. The earlier low finding about this test is resolved.",
+    "All five originally material fixes are still intact in this version: the fresh-only pending-review guard (`!existing&&...`), status reviewsError isolation, the reviewer-to-roster binding before any wake, prepareWake running before the 'dispatching' reservation, and the owner-recorded registration lock. Nothing in the quality, claim or publication paths changed, and there are still exactly five tool names.",
+    "Two low findings from the previous approval are unchanged and still open; neither is material. First, a reviewer mismatch still throws out of the dispatch loop instead of saving a 'not-dispatchable' receipt. Second, grokbot-review-jobs.mjs still reads the ledger without fetching it or passing queue options, and still treats any dateAudits entry whose status is not 'ready' as blocking.",
+    "grokbot-mcp-operation-worker.mjs (the production isolatedBridge path) was again not supplied. Its forwarding of reviewJob and report remains unverified and should be confirmed by the host before deployment.",
+    "The line numbers are counted by hand from the packet text and may be off by a line or two."
+  ]
+}

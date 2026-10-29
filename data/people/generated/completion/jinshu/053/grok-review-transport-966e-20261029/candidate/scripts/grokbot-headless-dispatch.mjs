@@ -1,0 +1,729 @@
+#!/usr/bin/env node
+
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import process from 'node:process';
+import {createHash} from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+import { inspectLocalDisk } from './check-local-disk.mjs';
+import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
+import { readDispatchJobs, dispatchApprovedWork, pendingDispatchJobs, dispatchMcpEnvironment } from './lib/grokbot-dispatch-work.mjs';
+
+const DEFAULT_CDP_URL = 'http://127.0.0.1:9229';
+const DEFAULT_INTERVAL_MS = 2 * 60 * 1000;
+const DEFAULT_COOLDOWN_MS = 10 * 60 * 1000;
+const DEFAULT_ACTIVITY_QUIET_MS = 30 * 60 * 1000;
+export const DEFAULT_MAX_ACTIVE = 1;
+const FIRST_WORKER = 24;
+const LAST_WORKER = 35;
+const WORKER_NAME_PREFIX = '24 Histories Glossary ';
+
+function usage() {
+  return `Usage:
+  node scripts/grokbot-headless-dispatch.mjs probe
+  node scripts/grokbot-headless-dispatch.mjs once
+  node scripts/grokbot-headless-dispatch.mjs daemon [--launch-app]
+
+Options:
+  --cdp-url URL       Loopback Chrome DevTools endpoint (default: ${DEFAULT_CDP_URL})
+  --interval-ms N     Daemon polling interval (default: ${DEFAULT_INTERVAL_MS})
+  --cooldown-ms N     Minimum time between prompts to one idle worker (default: ${DEFAULT_COOLDOWN_MS})
+  --activity-quiet-ms N  Preserve a worker after new activity (default: ${DEFAULT_ACTIVITY_QUIET_MS})
+  --max-active N      Maximum simultaneous Grok Bot conversations (default: ${DEFAULT_MAX_ACTIVE})
+  --workers IDS       Comma-separated stable worker IDs to dispatch (for recovery cycles)
+  --assignments FILE  Owner-only approved job tickets; absent/empty means no dispatch
+  --launch-app        Start Grok Bot with the loopback endpoint when it is unavailable
+
+The Grok Bot desktop app must be version 0.61.0 or newer and launched with:
+  --remote-debugging-address=127.0.0.1 --remote-debugging-port=9229`;
+}
+
+function positiveInteger(value, flag) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) throw new Error(`${flag} requires a positive integer`);
+  return parsed;
+}
+
+export function parseArgs(argv) {
+  const options = {
+    command: argv[0] ?? 'probe',
+    cdpUrl: DEFAULT_CDP_URL,
+    intervalMs: DEFAULT_INTERVAL_MS,
+    cooldownMs: DEFAULT_COOLDOWN_MS,
+    activityQuietMs: DEFAULT_ACTIVITY_QUIET_MS,
+    maxActive: DEFAULT_MAX_ACTIVE,
+    workers: null,
+    assignmentsFile: path.join(os.homedir(), '.local/state/24histories-grokbot-headless/assignments.json'),
+    launchApp: false,
+  };
+  for (let index = 1; index < argv.length; index += 1) {
+    const arg = argv[index];
+    const next = () => {
+      index += 1;
+      if (index >= argv.length) throw new Error(`${arg} requires a value`);
+      return argv[index];
+    };
+    if (arg === '--cdp-url') options.cdpUrl = next();
+    else if (arg === '--interval-ms') options.intervalMs = positiveInteger(next(), arg);
+    else if (arg === '--cooldown-ms') options.cooldownMs = positiveInteger(next(), arg);
+    else if (arg === '--activity-quiet-ms') options.activityQuietMs = positiveInteger(next(), arg);
+    else if (arg === '--max-active') options.maxActive = positiveInteger(next(), arg);
+    else if (arg === '--workers') {
+      const workers = next().split(',').map((value) => value.trim()).filter(Boolean);
+      if (!workers.length || workers.some((worker) => !/^grokbot-(?:2[4-9]|3[0-5])$/u.test(worker))) {
+        throw new Error('--workers requires comma-separated stable IDs from grokbot-24 through grokbot-35');
+      }
+      options.workers = new Set(workers);
+    }
+    else if (arg === '--assignments') options.assignmentsFile = path.resolve(next());
+    else if (arg === '--launch-app') options.launchApp = true;
+    else if (arg === '--help' || arg === '-h') options.command = 'help';
+    else throw new Error(`Unknown option: ${arg}`);
+  }
+  if (!['probe', 'once', 'daemon', 'help'].includes(options.command)) {
+    throw new Error(`Unknown command: ${options.command}`);
+  }
+  const endpoint = new URL(options.cdpUrl);
+  if (!['127.0.0.1', 'localhost', '[::1]'].includes(endpoint.hostname)) {
+    throw new Error('The DevTools endpoint must be loopback-only');
+  }
+  return options;
+}
+
+function applicationSupportDirectory() {
+  return process.env.GROKBOT_APP_SUPPORT_DIR ?? path.join(
+    os.homedir(), 'Library', 'Application Support', 'Grok Bot',
+  );
+}
+
+function stateFile() {
+  return process.env.GROKBOT_HEADLESS_STATE_FILE ?? path.join(
+    os.homedir(), '.local', 'state', '24histories-grokbot-headless', 'state.json',
+  );
+}
+
+function workerNumber(name) {
+  const match = /^24 Histories Glossary (\d+)$/u.exec(name);
+  if (!match) return null;
+  const number = Number(match[1]);
+  return number >= FIRST_WORKER && number <= LAST_WORKER ? number : null;
+}
+
+export function rosterWorkersFromDocuments(documents) {
+  const workers = new Map();
+  for (const document of documents) {
+    const rows = document?.value?.rows;
+    if (!Array.isArray(rows)) continue;
+    for (const row of rows) {
+      const number = workerNumber(row?.name);
+      if (number == null || typeof row.id !== 'string' || row.id.length === 0) continue;
+      const current = workers.get(number);
+      if (current && current.id !== row.id) {
+        throw new Error(`Conflicting Grok Bot agent IDs for worker ${number}`);
+      }
+      workers.set(number, {
+        number,
+        worker: `grokbot-${number}`,
+        name: row.name,
+        id: row.id,
+        isRunning: row.isRunning === true,
+        lastActivityAt: Number.isFinite(row.lastActivityAt) ? row.lastActivityAt : 0,
+        lastText: typeof row.lastEntry?.text === 'string' ? row.lastEntry.text : '',
+      });
+    }
+  }
+  const missing = [];
+  for (let number = FIRST_WORKER; number <= LAST_WORKER; number += 1) {
+    if (!workers.has(number)) missing.push(`grokbot-${number}`);
+  }
+  if (missing.length) throw new Error(`Missing durable Grok Bot agents: ${missing.join(', ')}`);
+  return [...workers.values()].sort((left, right) => left.number - right.number);
+}
+
+export function readRosterWorkers(directory = applicationSupportDirectory()) {
+  const persistence = path.join(directory, 'sand-client-persistence');
+  const files = fs.readdirSync(persistence)
+    .filter((name) => name.endsWith('.blob'))
+    .map((name) => path.join(persistence, name));
+  const documents = [];
+  for (const file of files) {
+    let document;
+    try {
+      document = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch {
+      continue;
+    }
+    if (Array.isArray(document?.value?.rows) && document.value.rows.some((row) =>
+      typeof row?.name === 'string' && row.name.startsWith(WORKER_NAME_PREFIX))) {
+      documents.push(document);
+    }
+  }
+  if (!documents.length) throw new Error(`No Grok Bot roster document found under ${persistence}`);
+  return rosterWorkersFromDocuments(documents);
+}
+
+function readState(file = stateFile()) {
+  try {
+    const value = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (!value || typeof value !== 'object' || Array.isArray(value) || !value.workers || typeof value.workers !== 'object' || Array.isArray(value.workers)) throw new Error('Invalid GrokBot dispatcher state');
+    return value;
+  } catch (error) {
+    if (error?.code === 'ENOENT') return { workers: {} };
+    throw error;
+  }
+}
+
+function writeState(state, file = stateFile()) {
+  fs.mkdirSync(path.dirname(file), { recursive: true, mode: 0o700 });
+  const temporary = `${file}.${process.pid}.tmp`;
+  fs.writeFileSync(temporary, `${JSON.stringify(state, null, 2)}\n`, { mode: 0o600 });
+  fs.renameSync(temporary, file);
+  fs.chmodSync(file, 0o600);
+}
+
+export async function verifyPublicReviewClient(expected,fetchClient=fetch){
+  if(!/^[a-f0-9]{64}$/u.test(expected??''))throw new Error('Invalid expected public review-client hash');
+  const response=await fetchClient('https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs',{signal:AbortSignal.timeout(10000),cache:'no-store',headers:{'cache-control':'no-cache'}});
+  if(!response.ok||!response.body)throw new Error('Public review client unavailable before dispatch');
+  const parts=[];let size=0;for await(const part of response.body){size+=part.byteLength;if(size>128*1024)throw new Error('Public review client exceeds128KiB');parts.push(Buffer.from(part));}
+  if(createHash('sha256').update(Buffer.concat(parts)).digest('hex')!==expected)throw new Error('Public review-client hash mismatch; no agent dispatched');
+}
+
+export function workerPrompt(worker, job) {
+  if (!job || job.worker !== worker || !Array.isArray(job.chunks) || !job.chunks.length) throw new Error('A verified exact assignment is required before prompting');
+  const submission=job.kind==='sealed-review'?'submit-chunk --kind review':'submit-chunk';
+  if(job.kind==='sealed-review'&&!/^[a-f0-9]{64}$/u.test(job.clientSha256??''))throw new Error('Verified public review-client hash required');
+  const clientUpgrade=job.kind==='sealed-review'?`Before this review, update only the already-installed public client-code file $HOME/.local/lib/24histories/grokbot-mcp-client.mjs from https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs using unauthenticated HTTPS. Download to a temporary sibling file, verify its SHA-256 equals ${job.clientSha256}, then replace only the client code. Preserve the separate credential file and existing wrapper unchanged. If verification/install fails, stop before processing work; never bootstrap or print the bearer. `:'';
+  return `Complete approved job ${job.id} as ${worker}, ONLY ${job.book}/${job.chapter}, chunks ${job.chunks.map(row => row.id).join(', ')}.
+${clientUpgrade}Use the installed 24histories-people MCP client. Its bearer credential may be transmitted ONLY as an HTTPS Authorization header to https://grokbot-mcp.24histories.com/mcp for the five documented people-glossary operations. Never print, inspect, copy or send the bearer elsewhere. Do not use Cursor SDK, Git, or claim new work. Do not call resume_or_claim.
+For each assigned chunk use 24histories-people get-chunk --claim-token '${job.claimToken}' --chunk-id CHUNK_ID. Follow that sealed response's prompt/schema/packet/draft, save the entire output, then use ${submission} --file REPORT_FILE with the same claim token and chunk ID. ${job.kind==='sealed-review'?'This is independent source review, not extraction. Return only the sealed report envelope; host acceptance and all quality/publication gates remain required.':''} If ownership, input, authentication or service checks fail, stop and report the error; do not find another chapter. Stop after these chunks and report accepted outputs; the host owns finalization and the next assignment.
+The host has checked resources before dispatch. For operations on that Mac, use only its existing shared checkout ${path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')} and run npm run people:disk:check before local writes. MCP-only remote computers need no repository checkout: use the installed client and unique people-jobs/${job.id}/ output artifacts in your existing working directory. Never clone, create a worktree, copy repository/data/public/dependencies, build, or mutate Git. Preserve all claims and recovery artifacts. If the MCP client or sealed inputs are unavailable, report that preparation failure and stop; do not create a checkout to compensate.`;
+}
+
+async function fetchJson(url) {
+  const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+  if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
+  return response.json();
+}
+
+async function ensureGrokBot(options) {
+  try {
+    await fetchJson(`${options.cdpUrl.replace(/\/$/u, '')}/json/version`);
+    return;
+  } catch (error) {
+    if (!options.launchApp) throw error;
+  }
+  const endpoint = new URL(options.cdpUrl);
+  const port = endpoint.port || '9229';
+  execFileSync('/usr/bin/open', [
+    '-na',
+    '/Applications/Grok Bot.app',
+    '--args',
+    '--remote-debugging-address=127.0.0.1',
+    `--remote-debugging-port=${port}`,
+  ], { stdio: 'ignore' });
+  const deadline = Date.now() + 30000;
+  let lastError;
+  while (Date.now() < deadline) {
+    try {
+      await fetchJson(`${options.cdpUrl.replace(/\/$/u, '')}/json/version`);
+      return;
+    } catch (error) {
+      lastError = error;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  }
+  throw new Error(`Grok Bot did not expose ${options.cdpUrl} after launch: ${lastError?.message ?? 'timeout'}`);
+}
+
+class CdpSession {
+  constructor(webSocketDebuggerUrl) {
+    this.socket = new WebSocket(webSocketDebuggerUrl);
+    this.nextId = 1;
+    this.pending = new Map();
+    this.opened = new Promise((resolve, reject) => {
+      this.socket.addEventListener('open', resolve, { once: true });
+      this.socket.addEventListener('error', reject, { once: true });
+    });
+    this.socket.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      if (message.id == null) return;
+      const pending = this.pending.get(message.id);
+      if (!pending) return;
+      this.pending.delete(message.id);
+      if (message.error) pending.reject(new Error(message.error.message));
+      else pending.resolve(message.result);
+    });
+    this.socket.addEventListener('close', () => {
+      for (const pending of this.pending.values()) pending.reject(new Error('DevTools socket closed'));
+      this.pending.clear();
+    });
+  }
+
+  async call(method, params = {}) {
+    await this.opened;
+    const id = this.nextId;
+    this.nextId += 1;
+    const result = new Promise((resolve, reject) => this.pending.set(id, { resolve, reject }));
+    this.socket.send(JSON.stringify({ id, method, params }));
+    return result;
+  }
+
+  async evaluate(expression) {
+    const result = await this.call('Runtime.evaluate', {
+      expression,
+      awaitPromise: true,
+      returnByValue: true,
+      userGesture: true,
+    });
+    if (result.exceptionDetails) {
+      const detail = result.exceptionDetails.exception?.description ?? result.exceptionDetails.text;
+      throw new Error(`Grok Bot evaluation failed: ${detail}`);
+    }
+    return result.result?.value;
+  }
+
+  close() {
+    this.socket.close();
+  }
+}
+
+async function targets(cdpUrl) {
+  const rows = await fetchJson(`${cdpUrl.replace(/\/$/u, '')}/json/list`);
+  if (!Array.isArray(rows)) throw new Error('DevTools target list was not an array');
+  return rows.filter((row) => row.type === 'page' && typeof row.webSocketDebuggerUrl === 'string');
+}
+
+async function grokBotMain(cdpUrl) {
+  for (const target of await targets(cdpUrl)) {
+    if (target.url.includes('desktop-mount')) continue;
+    const session = new CdpSession(target.webSocketDebuggerUrl);
+    try {
+      const isMain = await session.evaluate(`(() =>
+        document.title === 'Grok Bot'
+        && document.querySelector('[data-agent-id]') != null
+        && document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]') != null
+      )()`);
+      if (isMain) return { target, session };
+    } catch {
+      // A non-GrokBot page may reject evaluation; keep looking.
+    }
+    session.close();
+  }
+  return null;
+}
+
+async function waitForComposer(session, worker, timeoutMs = 10000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const ready = await session.evaluate(`(() => {
+      const active = document.querySelector('[data-agent-id][aria-current="page"]');
+      const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
+      return active?.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)} && composer != null;
+    })()`);
+    if (ready) return;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  throw new Error(`Grok Bot composer did not open for agent ${worker.id}`);
+}
+
+async function selectWorker(session, worker, timeoutMs = 10000) {
+  const direct = await session.evaluate(`(() => {
+    const button = Array.from(document.querySelectorAll('[data-agent-id]'))
+      .find((candidate) => candidate.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+    if (!(button instanceof HTMLButtonElement)) return false;
+    button.click();
+    return true;
+  })()`);
+  if (direct) return;
+
+  // The desktop sidebar virtualizes old conversations. The persisted conversation
+  // ID is authoritative, so search the virtualized viewport by that ID before
+  // opening the human-readable search palette.
+  const viewport = await session.evaluate(`(() => {
+    const node = document.querySelector('.ui-scroll-area__viewport');
+    if (!(node instanceof HTMLElement)) return null;
+    return { scrollHeight: node.scrollHeight, clientHeight: node.clientHeight };
+  })()`);
+  if (viewport && Number.isFinite(viewport.scrollHeight) && Number.isFinite(viewport.clientHeight)) {
+    const step = Math.max(100, Math.floor(viewport.clientHeight / 2));
+    for (let top = 0; top <= viewport.scrollHeight - viewport.clientHeight; top += step) {
+      const selected = await session.evaluate(`(() => {
+        const viewport = document.querySelector('.ui-scroll-area__viewport');
+        if (!(viewport instanceof HTMLElement)) return false;
+        viewport.scrollTop = ${top};
+        viewport.dispatchEvent(new Event('scroll', { bubbles: true }));
+        const button = Array.from(document.querySelectorAll('[data-agent-id]'))
+          .find((candidate) => candidate.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+        if (!(button instanceof HTMLButtonElement)) return false;
+        button.click();
+        return true;
+      })()`);
+      if (selected) return;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  const opened = await session.evaluate(`(() => {
+    const input = document.querySelector('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]');
+    if (input instanceof HTMLInputElement) return true;
+    const button = document.querySelector('button[aria-label="Search"]');
+    if (!(button instanceof HTMLButtonElement)) return false;
+    button.click();
+    return true;
+  })()`);
+  if (!opened) throw new Error(`Grok Bot cannot open Search for ${worker.worker}`);
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const focused = await session.evaluate(`(() => {
+      const input = document.querySelector('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]');
+      if (!(input instanceof HTMLInputElement)) return false;
+      input.focus();
+      return document.activeElement === input;
+    })()`);
+    if (focused) break;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  const focused = await session.evaluate(`document.activeElement instanceof HTMLInputElement
+    && document.activeElement.matches('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]')`);
+  if (!focused) throw new Error(`Grok Bot Search input did not open for ${worker.worker}`);
+  const cleared = await session.evaluate(`(() => {
+    const input = document.querySelector('[role="dialog"][aria-label="Search"] input[role="combobox"][aria-label="Search"]');
+    if (!(input instanceof HTMLInputElement)) return false;
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+    if (typeof setter !== 'function') return false;
+    setter.call(input, '');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    return input.value === '';
+  })()`);
+  if (!cleared) throw new Error(`Grok Bot Search input could not clear for ${worker.worker}`);
+  await session.call('Input.insertText', { text: worker.name });
+  while (Date.now() < deadline) {
+    const candidate = await session.evaluate(`(() => {
+      const result = Array.from(document.querySelectorAll('[role="dialog"][aria-label="Search"] [data-agent-id]'))
+        .find((node) => node.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+      return result instanceof HTMLButtonElement
+        ? { agentId: result.getAttribute('data-agent-id'), tagName: result.tagName }
+        : null;
+    })()`);
+    if (isExactWorkerSearchResult(candidate, worker)) {
+      const selected = await session.evaluate(`(() => {
+        const result = Array.from(document.querySelectorAll('[role="dialog"][aria-label="Search"] [data-agent-id]'))
+          .find((node) => node.getAttribute('data-agent-id') === ${JSON.stringify(worker.id)});
+        if (!(result instanceof HTMLButtonElement)) return false;
+        result.click();
+        return true;
+      })()`);
+      if (selected) return;
+      throw new Error(`Grok Bot exact Search result vanished for ${worker.worker}`);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  throw new Error(`Grok Bot Search found no exact result for ${worker.worker}`);
+}
+
+async function liveRunningAgentIds(cdpUrl) {
+  const main = await grokBotMain(cdpUrl);
+  if (!main) throw new Error('Grok Bot main renderer is unavailable');
+  try {
+    const ids = await main.session.evaluate(`Array.from(document.querySelectorAll('[data-agent-id]'))
+      .filter((button) => button.querySelector('[data-grok-state="working"], [data-status="working"]') != null)
+      .map((button) => button.getAttribute('data-agent-id'))
+      .filter(Boolean)`);
+    if (!Array.isArray(ids)) throw new Error('Grok Bot returned an invalid live worker-state payload');
+    return new Set(ids);
+  } finally {
+    main.session.close();
+  }
+}
+
+export function capacityLimitMessage(alerts) {
+  if (!Array.isArray(alerts)) throw new Error('Grok Bot capacity alerts were not an array');
+  const message = alerts
+    .filter((alert) => !(alert && typeof alert === 'object' && alert.visible === false))
+    .map((alert) => String(alert && typeof alert === 'object' ? alert.text : alert ?? '').replace(/\s+/gu, ' ').trim())
+    .find((alert) => /(?:weekly|usage)\s+limit\s+reached/iu.test(alert));
+  return message || null;
+}
+
+export function isExactWorkerSearchResult(candidate, worker) {
+  return candidate != null
+    && typeof candidate === 'object'
+    && candidate.tagName === 'BUTTON'
+    && typeof candidate.agentId === 'string'
+    && candidate.agentId === worker?.id;
+}
+
+async function liveCapacityLimitMessage(cdpUrl) {
+  const main = await grokBotMain(cdpUrl);
+  if (!main) throw new Error('Grok Bot main renderer is unavailable');
+  try {
+    const alerts = await main.session.evaluate(`Array.from(document.querySelectorAll('[role="alert"]'))
+      .map((node) => {
+        let current = node;
+        let visible = true;
+        while (current && current.nodeType === Node.ELEMENT_NODE) {
+          const style = getComputedStyle(current);
+          if (current.hidden || current.getAttribute('aria-hidden') === 'true'
+            || style.display === 'none' || style.visibility === 'hidden'
+            || style.visibility === 'collapse' || style.opacity === '0') {
+            visible = false;
+            break;
+          }
+          current = current.parentElement;
+        }
+        return { text: node.innerText || node.textContent || '', visible };
+      })`);
+    return capacityLimitMessage(alerts);
+  } finally {
+    main.session.close();
+  }
+}
+
+export function mergeLiveWorkerState(workers, runningAgentIds, state = null) {
+  return workers.map((worker) => {
+    const persistedId = state?.workers?.[worker.worker]?.agentId;
+    const id = typeof persistedId === 'string' && persistedId.length > 0 ? persistedId : worker.id;
+    return {
+      ...worker,
+      id,
+      isRunning: worker.isRunning || runningAgentIds.has(id),
+    };
+  });
+}
+
+export async function probe(cdpUrl) {
+  const desktopStatusFile = path.join(applicationSupportDirectory(), 'desktop-status.json');
+  const desktopStatus = JSON.parse(fs.readFileSync(desktopStatusFile, 'utf8'));
+  const version = String(desktopStatus.appVersion ?? '0.0.0').split('.').map(Number);
+  if (version.some((part) => !Number.isInteger(part)) || (version[0] ?? 0) === 0 && (version[1] ?? 0) < 61) {
+    throw new Error(`Grok Bot ${desktopStatus.appVersion ?? 'unknown'} is too old; version 0.61.0+ is required`);
+  }
+  if (desktopStatus.signedIn !== true) throw new Error('Grok Bot desktop status says the user is signed out');
+  const rows = await targets(cdpUrl);
+  const main = await grokBotMain(cdpUrl);
+  if (!main) throw new Error('No Grok Bot renderer exposes the durable-agent sidebar and prompt editor');
+  const status = {
+    reachable: true,
+    targets: rows.length,
+    appVersion: desktopStatus.appVersion,
+    mainTargetId: main.target.id,
+    mainUrl: main.target.url,
+  };
+  main.session.close();
+  return status;
+}
+
+export async function dispatchPrompt(cdpUrl, worker, prompt) {
+  const main = await grokBotMain(cdpUrl);
+  if (!main) throw new Error('Grok Bot main renderer is unavailable');
+  try {
+    await selectWorker(main.session, worker);
+    await waitForComposer(main.session, worker);
+    const focused = await main.session.evaluate(`(() => {
+      const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
+      if (!(composer instanceof HTMLElement)) return false;
+      composer.focus();
+      return document.activeElement === composer;
+    })()`);
+    if (!focused) throw new Error(`Grok Bot composer could not be focused for ${worker.worker}`);
+    const receipt = `Dispatch receipt: ${worker.worker}-${Date.now()}`;
+    const dispatchedPrompt = `${prompt}\n\n${receipt}`;
+    await main.session.call('Input.insertText', { text: dispatchedPrompt });
+    const marker = receipt;
+    const typedDeadline = Date.now() + 5000;
+    let typed = false;
+    while (Date.now() < typedDeadline) {
+      typed = await main.session.evaluate(`(() => {
+        const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
+        return (composer?.innerText ?? '').includes(${JSON.stringify(marker)});
+      })()`);
+      if (typed) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    if (!typed) throw new Error(`Grok Bot did not insert the prompt for ${worker.worker}`);
+    await main.session.call('Input.dispatchKeyEvent', {
+      type: 'keyDown',
+      key: 'Enter',
+      code: 'Enter',
+      windowsVirtualKeyCode: 13,
+      nativeVirtualKeyCode: 36,
+    });
+    await main.session.call('Input.dispatchKeyEvent', {
+      type: 'keyUp',
+      key: 'Enter',
+      code: 'Enter',
+      windowsVirtualKeyCode: 13,
+      nativeVirtualKeyCode: 36,
+    });
+    const deadline = Date.now() + 10000;
+    while (Date.now() < deadline) {
+      const submitted = await main.session.evaluate(`(() => {
+        const composer = document.querySelector('[contenteditable="true"][role="textbox"][aria-label="Prompt"]');
+        const active = document.querySelector('[data-agent-id][aria-current="page"]');
+        if ((composer?.innerText ?? '').trim() !== '') return false;
+        if (active?.getAttribute('data-agent-id') !== ${JSON.stringify(worker.id)}) return false;
+        return document.body.innerText.includes(${JSON.stringify(marker)});
+      })()`);
+      if (submitted) return;
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    throw new Error(`Grok Bot did not accept the prompt for ${worker.worker}`);
+  } finally {
+    main.session.close();
+  }
+}
+
+export function observeWorkerActivity(workers, state, now = Date.now()) {
+  let changed = false;
+  for (const worker of workers) {
+    const record = state.workers?.[worker.worker];
+    if (!record?.lastDispatchAt) continue;
+    const seen = Number(record.lastActivityAtSeen ?? 0);
+    if (worker.lastActivityAt <= seen) continue;
+    record.lastActivityAtSeen = worker.lastActivityAt;
+    // A delayed roster read must not turn historical activity into a new quiet hold.
+    // The live renderer is still checked for running work immediately before send.
+    record.lastObservedActivityAt = Math.min(now, worker.lastActivityAt);
+    changed = true;
+  }
+  return changed;
+}
+
+export function workersEligibleForDispatch(workers, state, {
+  cooldownMs,
+  activityQuietMs = 0,
+  now = Date.now(),
+}) {
+  return workers.filter((worker) => {
+    if (worker.isRunning) return false;
+    const record = state.workers?.[worker.worker] ?? {};
+    const lastDispatchAt = Number(record.lastDispatchAt ?? 0);
+    const lastObservedActivityAt = Number(record.lastObservedActivityAt ?? 0);
+    if (lastObservedActivityAt && now - lastObservedActivityAt < activityQuietMs) return false;
+    return now - lastDispatchAt >= cooldownMs;
+  });
+}
+
+export function workersToDispatch(workers, state, options) {
+  const running = workers.filter((worker) => worker.isRunning).length;
+  const availableSlots = Math.max(0, options.maxActive - running);
+  return workersEligibleForDispatch(workers, state, options)
+    .filter((worker) => options.workers == null || options.workers.has(worker.worker))
+    .filter((worker) => options.assignedWorkers == null || options.assignedWorkers.has(worker.worker))
+    .slice(0, availableSlots);
+}
+
+function assertHostSafe() {
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+  const report = inspectLocalDisk(root);
+  if (report.errors.length) throw new Error(report.errors.join('; '));
+}
+
+function callMcp(command, values) {
+  const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+  const client = path.join(root, 'scripts/grokbot-mcp-client.mjs');
+  const env = dispatchMcpEnvironment(path.join(root, '.env'));
+  const args = [command, ...Object.entries(values).flatMap(([key, value]) => ['--' + key, value])];
+  let output;
+  try {
+    output = execFileSync(process.execPath, [client, ...args], { encoding: 'utf8', timeout: 60_000, maxBuffer: 16 * 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'pipe'], env });
+  } catch (error) {
+    const http = /MCP HTTP (\d{3})/.exec(String(error.stderr ?? ''))?.[1];
+    throw new Error(`MCP ${command} failed (${http ? 'HTTP ' + http : error.code ?? error.status ?? 'unknown'}); no agent was dispatched`);
+  }
+  try { return JSON.parse(output); } catch { throw new Error(`Invalid MCP ${command} response; no agent was dispatched`); }
+}
+
+async function dispatchCycle(options) {
+  const jobs = readDispatchJobs(options.assignmentsFile);
+  if (!jobs.length) { console.log('No approved unexpired work; dispatched=0'); return { eligible: [] }; }
+  assertHostSafe();
+  const release = acquireProcessRunLock(stateFile() + '.dispatch.lock', { label: 'GrokBot dispatch', failIfExists: true });
+  try {
+    const state = readState();
+    const pending = pendingDispatchJobs(jobs, state);
+    if (!pending.length) { console.log('Approved work already dispatched; dispatched=0'); return { eligible: [] }; }
+    const workers = mergeLiveWorkerState(readRosterWorkers(), new Set(), state);
+    if (observeWorkerActivity(workers, state)) writeState(state);
+    const selected = workersToDispatch(workers, state, { ...options, assignedWorkers: new Set(pending.map(job => job.worker)) });
+    const byWorker = new Map(selected.map(worker => [worker.worker, worker]));
+    let appChecked = false;
+    const dispatched = await dispatchApprovedWork(pending.filter(job => byWorker.has(job.worker)), state, {
+      callMcp, assertSafe: assertHostSafe, save: writeState,
+      reviewerAgentForWorker: worker => byWorker.get(worker)?.id,
+      prepareWake: async job => {
+        if(job.kind==='sealed-review')await verifyPublicReviewClient(job.clientSha256);
+        // No app start, renderer control or model prompt occurs until MCP work verification passes.
+        if (!appChecked) {
+          await ensureGrokBot(options);
+          await probe(options.cdpUrl);
+          const capacity = await liveCapacityLimitMessage(options.cdpUrl);
+          if (capacity) throw new Error(`Grok Bot capacity unavailable: ${capacity}`);
+          appChecked = true;
+        }
+        const running = await liveRunningAgentIds(options.cdpUrl);
+        const worker = byWorker.get(job.worker);
+        if (running.has(worker.id) || running.size >= options.maxActive) throw new Error('Live worker capacity changed; preserve dispatch receipt and reconcile');
+        assertHostSafe();
+      },
+      wake: async job => {
+        const worker=byWorker.get(job.worker);
+        await dispatchPrompt(options.cdpUrl, worker, workerPrompt(job.worker, job));
+        state.workers[job.worker] = { agentId: worker.id, lastDispatchAt: Date.now(), lastActivityAtSeen: worker.lastActivityAt };
+      },
+    });
+    console.log(`Approved-work cycle complete: dispatched=${dispatched}, maxActive=${options.maxActive}`);
+    return { workers, eligible: selected, dispatched };
+  } finally { release(); }
+}
+
+async function daemon(options) {
+  console.log(`Grok Bot headless dispatcher active on ${options.cdpUrl}`);
+  let failures = 0;
+  for (;;) {
+    const startedAt = Date.now();
+    try {
+      await dispatchCycle(options);
+      failures = 0;
+    } catch (error) {
+      failures += 1;
+      console.error(`${new Date().toISOString()} dispatch cycle failed: ${error.stack ?? error}`);
+    }
+    const interval = Math.min(options.intervalMs * 2 ** Math.min(failures, 6), Math.max(options.intervalMs, 15 * 60 * 1000));
+    const delay = Math.max(250, interval - (Date.now() - startedAt));
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+}
+
+async function main() {
+  const options = parseArgs(process.argv.slice(2));
+  if (options.command === 'help') {
+    console.log(usage());
+    return;
+  }
+  if (options.command === 'probe') {
+    const status = await probe(options.cdpUrl);
+    const workers = mergeLiveWorkerState(
+      readRosterWorkers(),
+      await liveRunningAgentIds(options.cdpUrl),
+    );
+    console.log(JSON.stringify({ ...status, workers }, null, 2));
+    return;
+  }
+  if (options.command === 'once') {
+    await dispatchCycle(options);
+    return;
+  }
+  await daemon(options);
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  main().catch((error) => {
+    console.error(error.stack ?? error);
+    process.exitCode = 1;
+  });
+}
