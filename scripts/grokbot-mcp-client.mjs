@@ -46,6 +46,7 @@ function toolArguments(command, values) {
   if (command === 'status') return { worker: required(values, 'worker') };
   if (command === 'resume') {
     const args = { worker: required(values, 'worker') };
+    if (values['review-job']) args.reviewJob = values['review-job'];
     if (values.book || values.chapter) {
       args.book = required(values, 'book');
       args.chapter = required(values, 'chapter');
@@ -59,10 +60,11 @@ function toolArguments(command, values) {
     };
   }
   if (command === 'submit-chunk') {
+    if (values.kind !== undefined && !['review','extraction'].includes(values.kind)) throw new Error('kind must be review or extraction');
     return {
       claimToken: required(values, 'claim-token', 'GROKBOT_CLAIM_TOKEN'),
       chunkId: required(values, 'chunk-id'),
-      extraction: JSON.parse(fs.readFileSync(required(values, 'file'), 'utf8')),
+      [values.kind === 'review' ? 'report' : 'extraction']: JSON.parse(fs.readFileSync(required(values, 'file'), 'utf8')),
     };
   }
   if (command === 'finalize') {
@@ -135,7 +137,7 @@ async function main() {
     accept: 'application/json, text/event-stream',
     'content-type': 'application/json',
   };
-  await post(url, headers, {
+  const initialized = await post(url, headers, {
     jsonrpc: '2.0',
     id: 1,
     method: 'initialize',
@@ -145,6 +147,9 @@ async function main() {
       clientInfo: { name: '24histories-grokbot-cli', version: '1.0.0' },
     },
   });
+  if ((values['review-job'] || values.kind === 'review') && initialized?.result?.serverInfo?.version !== '1.1.0') {
+    throw new Error('Sealed review operations require the reviewed MCP server version1.1.0; refusing to send review arguments to an older extraction-only server');
+  }
   await post(url, headers, { jsonrpc: '2.0', method: 'notifications/initialized' });
   const response = await post(url, headers, {
     jsonrpc: '2.0',

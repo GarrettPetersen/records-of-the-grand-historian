@@ -18,6 +18,7 @@ import {
   readRemotePeopleWorkLedger,
 } from './people-work-queue.mjs';
 import { REPO_ROOT, readJson } from './people-content.mjs';
+import {GrokbotReviewStore,reviewFingerprint} from './grokbot-review-store.mjs';
 
 const WORKER_PATTERN = /^grokbot-[a-z0-9][a-z0-9-]{0,47}$/u;
 const BOOK_PATTERN = /^[a-z0-9_-]+$/u;
@@ -255,11 +256,12 @@ export class GitHubPublisher {
 }
 
 export class GrokbotMcpBridge {
-  constructor({ claimSecret, githubToken, githubRepository, options = {}, publisher } = {}) {
+  constructor({ claimSecret, githubToken, githubRepository, options = {}, publisher, reviewStore } = {}) {
     if (!claimSecret || claimSecret.length < 32) {
       throw new Error('GROKBOT_MCP_CLAIM_SECRET must contain at least 32 characters');
     }
     this.claimSecret = claimSecret;
+    this.reviewStore = reviewStore ?? new GrokbotReviewStore(path.join(REPO_ROOT,'data/people/generated/grokbot/review-jobs'));
     this.options = defaultGrokbotOptions(options);
     this.ledgerCache = null;
     this.publisher = publisher ?? (githubToken && githubRepository
@@ -316,13 +318,31 @@ export class GrokbotMcpBridge {
     return { payload, target, claim };
   }
 
-  async resumeOrClaim({ worker, book, chapter }) {
+  reviewClaim(claimToken) {
+    const payload=parseClaimToken(this.claimSecret,claimToken);
+    if(payload.kind!=='sealed-review')return null;
+    if(this.currentClaim(payload.worker,{fresh:true}))throw new Error('Sticky extraction owns this worker; preserve the review and resume extraction first');
+    const job=this.reviewStore.read(payload.worker,payload.reviewJob);
+    if(payload.jobSha256!==reviewFingerprint(job)||payload.book!==job.book||payload.chapter!==job.chapter)throw new Error('Review job changed after token issuance');
+    return {payload,job};
+  }
+
+  async resumeOrClaim({ worker, book, chapter, reviewJob }) {
     requireWorker(worker);
     if ((book && !chapter) || (!book && chapter)) throw new Error('book and chapter must be supplied together');
     if (book) requireTarget({ book, chapter });
     // Claiming must read the live ledger. A cached pre-claim snapshot would
     // otherwise recreate a preserved assignment as if it were fresh.
     const existing = this.currentClaim(worker, { fresh: true });
+    if(reviewJob!==undefined){
+      if(existing)throw new Error('Resume existing sticky extraction before scheduling a review');
+      const job=this.reviewStore.read(worker,reviewJob);
+      if(book&&(book!==job.book||chapter!==job.chapter))throw new Error('Review job scope mismatch');
+      const status=this.reviewStore.list(worker).find(r=>r.id===reviewJob).status;
+      const token=makeClaimToken(this.claimSecret,{version:1,kind:'sealed-review',worker,book:job.book,chapter:job.chapter,reviewJob:job.id,jobSha256:reviewFingerprint(job)});
+      return {worker,book:job.book,chapter:job.chapter,mode:'sealed-review',kind:job.kind,reviewJob:job.id,status,claimToken:token,chunks:status==='pending-review'?[{id:'review'}]:[],qualityApproved:false,published:false};
+    }
+    if(!existing&&this.reviewStore.list(worker).some(job=>job.status==='pending-review'))throw new Error('Resume the host-prepared reviewJob before creating extraction work');
     let prepared;
     let claim;
     if (existing) {
@@ -350,6 +370,14 @@ export class GrokbotMcpBridge {
   }
 
   getChunk({ claimToken, chunkId }) {
+    const review=this.reviewClaim(claimToken);
+    if(review){
+      if(chunkId!=='review')throw new Error('Unknown sealed review chunk');
+      const {job}=review;
+      return {worker:job.worker,book:job.book,chapter:job.chapter,mode:'sealed-review',kind:job.kind,reviewJob:job.id,chunkId,prompt:job.prompt,
+        packet:job.packet,draft:job.draft,schema:{type:'object',additionalProperties:false,required:['schemaVersion','jobId','packetSha256','reviewer','result'],properties:{schemaVersion:{const:1},jobId:{const:job.id},packetSha256:{const:reviewFingerprint(job.packet)},reviewer:{type:'object',additionalProperties:false,required:['agentId','name'],properties:{agentId:{const:job.reviewerAgentId},name:{type:'string',minLength:1}}},result:job.reportSchema}},
+        instructions:'Return the complete review envelope with submit_chunk report. This stores an artifact only. Host validation and independent editorial/date/identity/publication gates remain required.'};
+    }
     const { payload, target } = this.verifiedClaim(claimToken);
     const assignment = readGrokbotAssignment(payload.worker, target);
     const chunk = assignment.chunks.find((row) => row.id === chunkId);
@@ -368,7 +396,13 @@ export class GrokbotMcpBridge {
     };
   }
 
-  submitChunk({ claimToken, chunkId, extraction }) {
+  submitChunk({ claimToken, chunkId, extraction, report }) {
+    const review=this.reviewClaim(claimToken);
+    if(review){
+      if(chunkId!=='review'||extraction!==undefined||report===undefined)throw new Error('Sealed reviews require only a report and the review chunk');
+      return this.reviewStore.submit(review.job,report);
+    }
+    if(report!==undefined||extraction===undefined)throw new Error('Extraction assignments require only an extraction');
     const { payload, target } = this.verifiedClaim(claimToken);
     const assignment = readGrokbotAssignment(payload.worker, target);
     const chunk = assignment.chunks.find((row) => row.id === chunkId);
@@ -391,6 +425,8 @@ export class GrokbotMcpBridge {
   }
 
   async finalizeChapter({ claimToken }) {
+    const review=this.reviewClaim(claimToken);
+    if(review)return this.reviewStore.receipt(review.job,this.reviewStore.savedResult(review.job));
     const verified = this.verifiedClaim(claimToken, ['claimed', 'submitted'], { fresh: true });
     if (verified.claim.status === 'submitted') {
       return {
@@ -445,7 +481,9 @@ export class GrokbotMcpBridge {
     const claims = Object.entries(this.currentLedger().claims)
       .filter(([, claim]) => claim.lane === 'grokbot' && claim.worker === worker)
       .map(([key, claim]) => ({ chapter: key, status: claim.status, prUrl: claim.prUrl ?? null }));
-    return jsonResult({ worker, claims });
+    let reviews, reviewsError;
+    try{reviews=this.reviewStore.list(worker);}catch(error){reviews=[];reviewsError={code:'review-store-invalid',message:error instanceof Error?error.message:String(error)};}
+    return jsonResult({worker,claims,reviews,...(reviewsError?{reviewsError}:{})});
   }
 }
 
