@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { inputFingerprint, validateDispatchJobs, readDispatchJobs, dispatchApprovedWork, pendingDispatchJobs, dispatchMcpEnvironment } from './lib/grokbot-dispatch-work.mjs';
-import {workerPrompt} from './grokbot-headless-dispatch.mjs';
+import {workerPrompt,verifyPublicReviewClient} from './grokbot-headless-dispatch.mjs';
+import {createHash} from 'node:crypto';
 import { workersToDispatch } from './grokbot-headless-dispatch.mjs';
 
 const NOW = Date.parse('2026-10-27T12:00:00Z');
@@ -40,13 +41,24 @@ function harness(overrides = {}) {
 }
 
 test('sealed review tickets verify pending host work and wake only that exact report job',async()=>{
- const source={sealed:'review evidence'},seed={jobId:'independent-editorial'},ticket={...job(),kind:'sealed-review',reviewJob:'independent-editorial',chunks:[{id:'review',packetFingerprint:inputFingerprint(source),draftFingerprint:inputFingerprint(seed)}]};
+ const source={sealed:'review evidence'},seed={jobId:'independent-editorial'},ticket={...job(),kind:'sealed-review',reviewJob:'independent-editorial',clientSha256:'c'.repeat(64),chunks:[{id:'review',packetFingerprint:inputFingerprint(source),draftFingerprint:inputFingerprint(seed)}]};
  const make=status=>harness({reviewerAgentForWorker:()=> 'actual-roster-agent',prepareWake:async()=>{},callMcp:async command=>command==='status'?{worker:ticket.worker,claims:[],reviews:[{id:ticket.reviewJob,book:ticket.book,chapter:ticket.chapter,status,reviewerAgentId:'actual-roster-agent'}]}:{worker:ticket.worker,book:ticket.book,chapter:ticket.chapter,chunkId:'review',mode:'sealed-review',reviewJob:ticket.reviewJob,prompt:'sealed source review',schema:{},packet:source,draft:seed}});
  validateDispatchJobs({schemaVersion:1,jobs:[ticket]},NOW);
  const a=make('pending-review');assert.equal(await dispatchApprovedWork([ticket],{},a.api),1);assert.ok(a.events.includes('wake'));
  const b=make('returned-awaiting-host');assert.equal(await dispatchApprovedWork([ticket],{},b.api),0);assert.ok(!b.events.includes('wake'));
  assert.match(workerPrompt(ticket.worker,ticket),/submit-chunk --kind review/u);
+ assert.match(workerPrompt(ticket.worker,ticket),/verify its SHA-256 equals/u);
+ assert.throws(()=>validateDispatchJobs({schemaVersion:1,jobs:[{...ticket,clientSha256:undefined}]},NOW),/public client SHA/u);
+ const mismatch=make('pending-review'),mismatchState={};mismatch.api.reviewerAgentForWorker=()=> 'wrong-agent';await assert.rejects(dispatchApprovedWork([ticket],mismatchState,mismatch.api),/actual roster agent/u);assert.ok(!mismatch.events.includes('wake'));assert.deepEqual(mismatchState.dispatchJobs,{});
+ const notReady=make('pending-review'),beforeSend={};notReady.api.prepareWake=()=>verifyPublicReviewClient('0'.repeat(64),async()=>new Response('old cached client'));await assert.rejects(dispatchApprovedWork([ticket],beforeSend,notReady.api),/hash mismatch/u);assert.deepEqual(beforeSend.dispatchJobs,{});assert.ok(!notReady.events.includes('wake'));
+ const receiptState={};await dispatchApprovedWork([ticket],receiptState,make('pending-review').api);assert.equal(Object.values(receiptState.dispatchJobs)[0].reviewerAgentId,'actual-roster-agent');
  const unsupported=harness({callMcp:async()=>({worker:ticket.worker,claims:[]})});await assert.rejects(dispatchApprovedWork([ticket],{},unsupported.api),/does not support sealed review/u);assert.ok(!unsupported.events.includes('wake'));
+});
+test('public client readiness checks exact bytes without transmitting authorization',async()=>{
+ const body='public review client fixture',hash=createHash('sha256').update(body).digest('hex');
+ await verifyPublicReviewClient(hash,async(url,options)=>{assert.equal(url,'https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs');assert.equal(options.headers.authorization,undefined);return new Response(body);});
+ await assert.rejects(verifyPublicReviewClient(hash,async()=>new Response('missing',{status:404})),/unavailable/u);
+ await assert.rejects(verifyPublicReviewClient(hash,async()=>new Response('x'.repeat(128*1024+1))),/exceeds128KiB/u);
 });
 
 test('no approved work performs no MCP calls, app start or model wake', async () => {

@@ -12,7 +12,7 @@ import * as z from 'zod/v4';
 import { positiveEnvironmentInteger } from './lib/grokbot-mcp-runtime-config.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-const SERVER_VERSION = '1.0.0';
+const SERVER_VERSION = '1.1.0';
 const CLIENT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-client.mjs');
 const OPERATION_WORKER_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'grokbot-mcp-operation-worker.mjs');
 const DEFAULT_OPERATION_TIMEOUT_MS = 300_000;
@@ -252,7 +252,7 @@ export function startGrokbotMcpServer({ env = process.env, bridge } = {}) {
     if (req.method === 'GET' && pathname === '/grokbot-mcp-client.mjs') {
       res.writeHead(200, {
         'content-type': 'text/javascript; charset=utf-8',
-        'cache-control': 'public, max-age=300',
+        'cache-control': 'no-store',
       });
       fs.createReadStream(CLIENT_FILE).pipe(res);
       return;
