@@ -26,7 +26,7 @@ assert.match(mixed,/AD 12/u);
 assert.match(mixed,/outer source/u);
 assert.match(mixed,/nested source/u);
 const person = {id:'per_0123456789ABCDEFGHJK',slug:'person-test',preferredName:{en:'Person Test'},description:{en:'Official'},
-  historicity:'historical',identificationStatus:'named',sex:null,names:[],roles:[],references:[],externalIds:{},
+  curation:{notes:[]},historicity:'historical',identificationStatus:'named',sex:null,names:[],roles:[],references:[],externalIds:{},
   familyRelationships:[],familySummaries:[],life:{birth:[],death:[],ageClaims:[],attestedActivity:[
     {predicate:'attestation',certainty:'uncertain',value:{...nested,unresolvedReason:'This is conditional'},evidence:[]}
   ]},ethnicities:[],lineages:[],occupations:[],polityAssociations:[],placeAssociations:[],organizationAssociations:[],offices:[],titlesAndHonors:[],statuses:[],education:[],credentials:[],beliefs:[],skills:[],works:[]};

@@ -238,6 +238,16 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     assert.equal(progress.summary.zeroPersonExtractions, 64);
     assert.equal(progress.summary.identityPendingCases, 1);
   } finally { process.chdir(originalCwd); }
+  const contributionDirectory = path.join(root, 'chapter-contribution');
+  const contributionRun = spawnSync(process.execPath, [fileURLToPath(import.meta.resolve('./verify-people-chapter-release.mjs')),
+    '--book', 'jinshu', '--chapter', '001', '--out', contributionDirectory], { env: process.env, encoding: 'utf8', timeout: 60_000 });
+  assert.equal(contributionRun.status, 0, contributionRun.stdout + contributionRun.stderr);
+  const contributionReceipt = JSON.parse(fs.readFileSync(path.join(contributionDirectory, 'qualification-and-contribution.json')));
+  assert.equal(contributionReceipt.dataQualified, true);
+  assert.equal(contributionReceipt.livePublished, false);
+  assert.equal(contributionReceipt.people, 1);
+  assert.equal(contributionReceipt.ebookContribution.wholeBookCertified, false);
+  assert.equal(contributionReceipt.bilingualMentionLinks, 2);
   const context = loadPeopleSiteContext();
   assert(context.active);
   assert(!context.preview);

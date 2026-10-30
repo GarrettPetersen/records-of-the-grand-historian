@@ -59,3 +59,13 @@ jobs:
 
       - name: Build and validate the full site
         run: npm run build
+
+      - name: Verify real Jinshu 053 qualification and ebook contribution
+        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
+
+      - name: Preserve nonempty chapter acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: jinshu053-qualified-contribution
+          path: data/people/generated/jinshu053-release-acceptance/
+          retention-days: 30
