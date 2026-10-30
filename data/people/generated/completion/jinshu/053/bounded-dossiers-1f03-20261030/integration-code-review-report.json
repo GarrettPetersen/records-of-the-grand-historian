@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "54175dd3f529acea727ea757118cd4d4990ff774110a683cc3a727e1d1dd817a",
+  "verdict": "changes-required",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "scripts/compile-people-catalog.mjs",
+      "reason": "The live compile path does use resolveAcceptedPeopleClusters plus assessCorpusIdentityReviews (generatedPairs 0; identityReviewByChapter; no unresolvedCanonicalPeople pair veto). The same file's selfTest still asserts resolutionWorkByChapter, unresolvedCandidateBlocks, and writeCompiledPeopleOutputs writers catalog,candidates,siteIndex. people:catalog:self-test would not prove the new catalog and currently encodes the retired pair/candidates contract. Migrate that self-test (and other CI fixtures named in knownRemainingWork) to identityReviewByChapter / identityReviewPendingChapters / seal v2 before treating compiler regression as green. Do not restore pair expansion to make the old assertions pass."
+    },
+    {
+      "severity": "medium",
+      "file": "scripts/generate-people-pages.mjs",
+      "reason": "HTML overview can emit IDENTITY_UNCERTAINTY_NOTE, but personOverview, personJsonLd description/alternateName, and search cards still present the record as an ordinary distinct Person with no uncertainty. Policy requires not presenting reviewed-ambiguous identities as confident distinct historical individuals. Carry the same note into JSON-LD and the public search snippet, or equivalent visible machine-readable uncertainty, before calling website/ebook presentation complete. Ebook HTML already has the glossary note; this gap is the person-page structured data/lede."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/lib/people-qualified-scope.mjs",
+      "reason": "Evidence/anchor chapters load with strictAliasDispositions:false. Native extraction validation still runs, and facts are not taken from those chapters, but alias-disposition failures there will not fail the chapter gate. Confirm that identity keys/witnesses cannot change under that looser flag, or require the same strict alias contract used for the target chapter."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/lib/people-resolution.mjs",
+      "reason": "resolveAcceptedPeopleClusters matches the native constraint measurement (258210 locals, exact membership/lineage, generatedPairs 0, 3000-trial semanticsMatch). resolvePeopleClusters still Cartesian-expands keep-separate/possible-same-as for historical drain and remains imported by the compiler even though compilePeopleCatalog does not call it. Keep it off the catalog/qualification/prepare path; deadline resolution already refuses fresh waves. Verify leftover callers are drain-only."
+    },
+    {
+      "severity": "low",
+      "file": "PEOPLE_ONE_HOUR_WORKFLOW.md",
+      "reason": "Still says scheduler/gate/rendering integration and a real independent chapter review are required and that no chapter was made complete. The candidate now has those hooks plus a 72-case/73-person native-accepted report. Leave the non-adoption caveats; update the prototype-state paragraph so operators do not think the pair veto is still the live chapter gate in this candidate, and do not treat that report as data-qualified or published (productionCodeAdopted/dataQualified/published remain false)."
+    }
+  ],
+  "reason": "This is not a published or data-qualified chapter and not an adoption approval. Shared qualification now independently revalidates each retained dossier proof against current primary units and person-dependency fingerprints, reconstructs facts only from scoped validated members, keeps source/date/editorial/family gates, and stamps reviewed uncertainty onto catalog/ebook HTML. Compact constraint replay measured equivalent to prior membership/lineage with generatedPairs 0; Jinshu 053 72/73 native proof is a sealed review receipt, not a live site. Mention-span witnesses accept validated abbreviations/kinship (衍長女/長女) and still reject unrelated Han (美, 字) and invented people. Changes are required before calling the candidate CI/presentation-complete: the compiler's own self-test still demands pair-era catalog fields/candidate writers, and person-page JSON-LD/search/lede omit the uncertainty the HTML note is supposed to enforce. Remaining listed work (CI fixture migration, registry builder, scheduler automation, deployment, selective proof reuse after edits) stays unfinished and must not be counted as a green release."
+}

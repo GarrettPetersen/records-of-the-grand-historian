@@ -172,3 +172,25 @@ test('primary Chinese witness names preserve the existing approved variant equiv
     'independent', ['host-author'], inputs, localNameKeys);
   assert.equal(certificate.retained.length, 1);
 });
+
+
+test('freshly validated Chinese abbreviations and kinship spans support primary witnesses', () => {
+  const f = fixture(3), person = f.records.values().next().value;
+  person.claims[0].value.zh = '王衍長女';
+  person.keys[0].key = 'zh:王衍長女'; person.keys[0].value = '王衍長女';
+  person.mentions = [{ person: person.localId, unit: { id: 's0001' }, kind: 'kinship-reference', spans: { zh: [{ exact: '長女' }], en: [] } }];
+  // Re-seal the changed fixture's current evidence rather than retagging a proof.
+  const index = buildIdentityDossierIndex(f.records, f.clusters, keyReader);
+  const plan = planChapterIdentityReview(index, f.plan.scope, inputs, limits);
+  const item = plan.cases.find(c => c.localPeople.includes(person.localId));
+  const row = f.report.reviews.find(c => c.sourceWitnesses.some(w => w.localId === person.localId));
+  row.caseId = item.id; row.membershipFingerprint = item.canonicalMembership.fingerprint;
+  row.sourceWitnesses[0].quote = '衍長女';
+  f.report.planFingerprint = plan.fingerprint;
+  f.sourceUnits.set('fixture:001:s0001', '王偉至，衍長女美。');
+  assert.doesNotThrow(() => validateRetainedDossierReview(index, plan, f.report, f.sourceUnits,
+    'independent', ['host-author'], inputs, keyReader));
+  row.sourceWitnesses[0].quote = '美';
+  assert.throws(() => validateRetainedDossierReview(index, plan, f.report, f.sourceUnits,
+    'independent', ['host-author'], inputs, keyReader), /does not support/);
+});

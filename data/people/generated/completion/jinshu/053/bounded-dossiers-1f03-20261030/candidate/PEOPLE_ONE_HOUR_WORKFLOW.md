@@ -69,11 +69,10 @@ new aggregate over unchanged individual proofs, not by rewriting an old report.
 
 | Elapsed time | Deliverable |
 | --- | --- |
-| 0–10 minutes | Validate current extraction and complete editorial/source evidence; reuse unchanged passed work. |
-| 10–25 minutes | Bounded dossier preparation and independent identity review; apply only independently proven merges. |
-| 25–35 minutes | Current chronology and scoped projection, both-language mentions, inverse excerpts and ebook contribution checks. |
-| 35–45 minutes | Clean release PR, required CI and the production build. |
-| 45–60 minutes | Merge/deploy, live person/chapter/search/sitemap checks, and the nonempty acceptance receipt. |
+| 0–10 minutes | Validate current extraction and source/editorial/date gates; reuse unchanged passed work. |
+| 10–30 minutes | Bounded dossier preparation and independent identity review; apply only independently proven merges. |
+| 30–45 minutes | Qualification, both-language mentions, inverse excerpts, website/search/sitemap and ebook contribution checks. |
+| 45–60 minutes | Clean release PR, required CI/build, merge/deploy, live content checks and the nonempty acceptance receipt. |
 
 These are time budgets to measure, not permission to approve missing evidence.
 Jinshu053 already has source/editorial and current independent date pins, so those
@@ -106,6 +105,11 @@ one-hour path works:
   their actual content. Report reviewed cases, held cases, ambiguous identities,
   data-qualified chapters and live published nonempty chapters separately.
 
-Current prototype state: bounded engine, immutable dossier store and regression
-checks exist; production scheduler/gate/rendering integration and a real independent
-chapter review are still required. No chapter has been made complete by this change.
+Current state: compact accepted-constraint replay, immutable dossiers and bounded
+planning are implemented. Candidate scheduler entry points refuse fresh pair waves;
+the shared qualification gate and website/ebook uncertainty disclosure have candidate
+integration code. Jinshu053 has a native-accepted independent report covering all
+72 cases/73 local records (63 reviewed uncertain), with exact unchanged input pins.
+Code adoption, remaining CI fixture/command integration, a passing normal build,
+PR/deployment and live nonempty receipt are still required. No chapter is published
+or data-qualified by this checkpoint. The one-hour release target remains unproven.

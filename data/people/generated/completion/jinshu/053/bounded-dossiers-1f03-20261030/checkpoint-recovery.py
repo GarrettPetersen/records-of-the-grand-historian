@@ -1,5 +1,5 @@
 import os,json,pathlib,subprocess,tempfile,re
-R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='e6e4c4c667ad73ef90a46917f542cd0d5625c76f';BRANCH='codex/people-recovery-20261025'
+R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='8b07374deb36fbc1e162c0e34cb1d27bdf74d8ca';BRANCH='codex/people-recovery-20261025'
 def git(*args,input=None,env=None):return subprocess.check_output(['git',*args],cwd=R,input=input,env=env).decode().strip()
 subprocess.run(['npm','run','people:disk:check'],cwd=R,check=True,stdout=subprocess.DEVNULL)
 assert json.loads((J/'measurement-state.json').read_text())['phase']=='finished'
@@ -8,7 +8,7 @@ files={}
 for p in J.rglob('*'):
  if not p.is_file():continue
  rel=p.relative_to(J)
- if any(part in ['registry','registry-revision-1','__pycache__'] for part in rel.parts) or any(t in p.name for t in ['private','checkpoint-index-','.lock']) or p.name=='checkpoint-recovery.log':continue
+ if any(part in ['registry','registry-revision-1','__pycache__'] for part in rel.parts) or any(t in p.name for t in ['private','checkpoint-index-','.lock']) or p.name in ['checkpoint-recovery.log','checkpoint-integration.log']:continue
  files[str(p.relative_to(R))]=p.read_bytes()
 secrets=[]
 for line in (R/'.env').read_text().splitlines():
@@ -21,7 +21,7 @@ fd,name=tempfile.mkstemp(prefix='checkpoint-index-',dir=J);os.close(fd);os.unlin
 try:
  git('read-tree',PARENT,env=env)
  for file,b in files.items():git('update-index','--add','--cacheinfo','100644,'+git('hash-object','-w','--stdin',input=b)+','+file,env=env)
- commit=git('commit-tree',git('write-tree',env=env),'-p',PARENT,input=b'Checkpoint bounded canonical dossier workflow prototype and real chapter measurements\n')
+ commit=git('commit-tree',git('write-tree',env=env),'-p',PARENT,input=b'Checkpoint compact identity integration and native accepted Jinshu053 person proofs\n')
  (J/'prepared-recovery-publication.json').write_text(json.dumps({'commit':commit,'parent':PARENT,'files':len(files),'largeLocalStoresExcluded':True},indent=2)+'\n')
  git('push','origin',commit+':refs/heads/'+BRANCH);assert git('ls-remote','origin','refs/heads/'+BRANCH).split()[0]==commit
  (J/'recovery-publication-receipt.json').write_text(json.dumps({'commit':commit,'branch':BRANCH,'files':len(files),'productionAdopted':False,'canonicalStagingUnchanged':'1f031602cf7aa15090b26ec997097d46dd2ef09f'},indent=2)+'\n')

@@ -1,0 +1,3 @@
+import fs from 'node:fs';import path from 'node:path';import{fileURLToPath}from'node:url';import{overlay,load}from'./runtime.mjs';
+const J=path.dirname(fileURLToPath(import.meta.url));for(const file of ['scripts/lib/people-resolution.mjs','scripts/lib/people-identity-dossiers.mjs','scripts/lib/people-chapter-identity.mjs','scripts/lib/people-validated-chapter.mjs','scripts/lib/people-qualified-scope.mjs','scripts/test-people-chapter-identity.mjs'])overlay.set(file,fs.readFileSync(J+'/candidate/'+file));
+await load('scripts/lib/people-qualified-scope.mjs');await load('scripts/test-people-chapter-identity.mjs');

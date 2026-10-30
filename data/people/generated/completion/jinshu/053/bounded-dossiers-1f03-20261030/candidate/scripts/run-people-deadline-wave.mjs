@@ -1,0 +1,522 @@
+#!/usr/bin/env node
+
+import { spawnSync } from 'node:child_process';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { buildPeopleGlossaryProgress } from '../generate-progress.js';
+import {
+  campaignIdentityProgress,
+  campaignProgress,
+  campaignTargets,
+  selectResolutionChapters,
+} from './plan-people-campaign.mjs';
+import {
+  readPeopleCampaignPolicy,
+  rollingCampaignDeadline,
+} from './lib/people-campaign-policy.mjs';
+import { PEOPLE_DIR, REPO_ROOT } from './lib/people-content.mjs';
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const campaignPolicy = readPeopleCampaignPolicy();
+const CAMPAIGN_MODEL = 'grok-4.6';
+const DATE_WORKER = 'deadline-dates-cursor-sdk';
+
+function localIsoDate(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function parseArgs(argv) {
+  const opts = {
+    deadline: process.env.PEOPLE_CAMPAIGN_DEADLINE ?? null,
+    asOf: localIsoDate(),
+    capacityStart: process.env.PEOPLE_CURSOR_CAPACITY_START ??
+      campaignPolicy.lanes['cursor-sdk'].capacityStart,
+    maxChaptersPerWave: campaignPolicy.maxChaptersPerWave,
+    phase: null,
+    limit: null,
+    prepareDossiers: false,
+    deferCatalog: false,
+    forceCatalog: false,
+    dryRun: false,
+    selfTest: false,
+  };
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    const next = () => {
+      const value = argv[++index];
+      if (!value || value.startsWith('--')) throw new Error(`${arg} requires a value`);
+      return value;
+    };
+    if (arg === '--deadline') opts.deadline = next();
+    else if (arg === '--as-of') opts.asOf = next();
+    else if (arg === '--cursor-capacity-start') opts.capacityStart = next();
+    else if (arg === '--max-chapters-per-wave') {
+      opts.maxChaptersPerWave = Number.parseInt(next(), 10);
+      if (!Number.isInteger(opts.maxChaptersPerWave) || opts.maxChaptersPerWave < 1) {
+        throw new Error('--max-chapters-per-wave must be a positive integer');
+      }
+    }
+    else if (arg === '--phase') opts.phase = next();
+    else if (arg === '--limit') {
+      opts.limit = Number.parseInt(next(), 10);
+      if (!Number.isInteger(opts.limit) || opts.limit < 1) throw new Error('--limit must be a positive integer');
+    }
+    else if (arg === '--prepare-dossiers') opts.prepareDossiers = true;
+    else if (arg === '--defer-catalog') opts.deferCatalog = true;
+    else if (arg === '--force-catalog') opts.forceCatalog = true;
+    else if (arg === '--summary-out') opts.summaryOut = path.resolve(next());
+    else if (arg === '--order') opts.order = next();
+    else if (arg === '--dry-run') opts.dryRun = true;
+    else if (arg === '--self-test') opts.selfTest = true;
+    else throw new Error(`Unknown option: ${arg}`);
+  }
+  if (!opts.selfTest && !['recovery', 'extraction', 'editorial', 'dates', 'resolution'].includes(opts.phase)) {
+    throw new Error('--phase must be recovery, extraction, editorial, dates, or resolution');
+  }
+  if (!opts.selfTest && opts.prepareDossiers && opts.phase !== 'resolution') {
+    throw new Error('--prepare-dossiers is only valid with --phase resolution');
+  }
+  if (!opts.selfTest && opts.deferCatalog && !['extraction', 'editorial'].includes(opts.phase)) {
+    throw new Error('--defer-catalog is only valid with --phase extraction or editorial');
+  }
+  if (!opts.selfTest && opts.forceCatalog && !['editorial', 'dates'].includes(opts.phase)) {
+    throw new Error('--force-catalog is only valid with --phase editorial or dates');
+  }
+  if (!opts.selfTest && opts.deferCatalog && opts.forceCatalog) {
+    throw new Error('--defer-catalog and --force-catalog cannot be combined');
+  }
+  if (opts.summaryOut && opts.phase !== 'dates') throw new Error('--summary-out is only valid with --phase dates');
+  if (opts.order && (opts.phase !== 'dates' || !['calibration', 'balanced'].includes(opts.order))) {
+    throw new Error('--order requires --phase dates and must be calibration or balanced');
+  }
+  opts.deadline ??= rollingCampaignDeadline(opts.asOf, campaignPolicy.planningHorizonDays);
+  return opts;
+}
+
+function currentPlan(opts) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'data', 'manifest.json'), 'utf8'));
+  const corpusProgress = buildPeopleGlossaryProgress(manifest);
+  const progress = corpusProgress.summary;
+  const completion = campaignProgress(corpusProgress);
+  const identity = campaignIdentityProgress(corpusProgress);
+  const extractionTargets = campaignTargets({
+    missingChapters: completion.extractionDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
+    wavesPerDay: 3,
+    bufferPercent: 15,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
+  });
+  const editorialTargets = campaignTargets({
+    missingChapters: completion.editorialDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
+    wavesPerDay: 3,
+    bufferPercent: 15,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
+  });
+  const resolutionTargets = campaignTargets({
+    missingChapters: identity.resolutionDebt,
+    asOf: opts.asOf,
+    deadline: opts.deadline,
+    capacityStart: opts.capacityStart ?? opts.asOf,
+    wavesPerDay: 3,
+    bufferPercent: 15,
+    maxChaptersPerWave: opts.maxChaptersPerWave,
+  });
+  const resolutionSelection = selectResolutionChapters(
+    identity.pendingResolutionChapters,
+    Math.min(opts.limit ?? resolutionTargets.chaptersPerWave, identity.pendingResolutionChapters.length),
+  );
+  const resolutionScopes = resolutionSelection.map(({ chapterId }) => chapterId.replace(':', '/'));
+  const resolutionBatchName = resolutionScopes.length > 0
+    ? `deadline-resolution-${crypto.createHash('sha256').update(resolutionScopes.join(',')).digest('hex').slice(0, 16)}`
+    : null;
+  const resolutionOutput = resolutionBatchName
+    ? path.join(PEOPLE_DIR, 'resolutions', `${resolutionBatchName}.json`)
+    : null;
+  const resolutionDossierDir = resolutionBatchName
+    ? path.join(PEOPLE_DIR, 'resolution-dossiers', resolutionBatchName)
+    : null;
+  return {
+    ...progress,
+    ...completion,
+    ...identity,
+    ...extractionTargets,
+    extractionChaptersPerWave: extractionTargets.chaptersPerWave,
+    editorialChaptersPerWave: editorialTargets.chaptersPerWave,
+    editorialConcurrency: editorialTargets.editorialConcurrency,
+    // Keep the new lane at calibration size until measured usage supports scaling.
+    dateChaptersPerWave: Math.min(opts.limit ?? 5, opts.maxChaptersPerWave, completion.dateAuditDebt),
+    dateConcurrency: 2,
+    resolutionChaptersPerWave: resolutionTargets.chaptersPerWave,
+    resolutionConcurrency: resolutionTargets.resolutionConcurrency,
+    resolutionMaxRunCostDollars: resolutionTargets.resolutionMaxRunCostDollars,
+    resolutionMaxRunTokens: resolutionTargets.resolutionMaxRunTokens,
+    resolutionSelection,
+    resolutionScopes,
+    resolutionBatchName,
+    resolutionOutput,
+    resolutionDossierDir,
+    resolutionDossierReady: Boolean(
+      resolutionDossierDir && fs.existsSync(path.join(resolutionDossierDir, 'manifest.json'))
+    ),
+    prepareDossiers: opts.prepareDossiers,
+  };
+}
+
+function rebuildPeopleCatalog() {
+  console.log('Refreshing the canonical people catalog for the next campaign wave');
+  const result = spawnSync(process.execPath, ['scripts/compile-people-catalog.mjs'], {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: 'inherit',
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) process.exit(result.status ?? 1);
+}
+
+function applyReviewedEditorialDecisions() {
+  console.log('Applying all independently reviewed translation decisions');
+  const result = spawnSync(process.execPath, ['scripts/apply-people-editorial-decisions.mjs', '--all'], {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: 'inherit',
+  });
+  if (result.error) throw result.error;
+  return result.status ?? 1;
+}
+
+export function catalogRefreshAction({
+  prepareDossiers = false,
+  deferCatalog = false,
+  forceCatalog = false,
+  catalogInputsChanged = false,
+  resolutionOutputNeedsCatalog = false,
+} = {}) {
+  if (prepareDossiers) return 'skip';
+  const needed = forceCatalog || catalogInputsChanged || resolutionOutputNeedsCatalog;
+  if (!needed) return 'skip';
+  return deferCatalog ? 'defer' : 'rebuild';
+}
+
+function catalogInputSignature() {
+  const files = [];
+  const addTree = (root) => {
+    if (!fs.existsSync(root)) return;
+    for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
+      const file = path.join(root, entry.name);
+      if (entry.isDirectory()) addTree(file);
+      else if (entry.isFile() && entry.name.endsWith('.json')) files.push(file);
+    }
+  };
+  addTree(path.join(PEOPLE_DIR, 'extractions'));
+  addTree(path.join(PEOPLE_DIR, 'resolutions'));
+  addTree(path.join(PEOPLE_DIR, 'curation'));
+  addTree(path.join(PEOPLE_DIR, 'date-audits'));
+  files.push(path.join(PEOPLE_DIR, 'config.json'), path.join(REPO_ROOT, 'data', 'manifest.json'));
+  for (const entry of fs.readdirSync(path.join(REPO_ROOT, 'data'), { withFileTypes: true })) {
+    if (!entry.isDirectory() || ['people', 'quality'].includes(entry.name)) continue;
+    const directory = path.join(REPO_ROOT, 'data', entry.name);
+    for (const name of fs.readdirSync(directory).filter((item) => /^\d{3}\.json$/u.test(item))) {
+      files.push(path.join(directory, name));
+    }
+  }
+  const hash = crypto.createHash('sha256');
+  for (const file of files.sort()) {
+    const stat = fs.statSync(file);
+    hash.update(path.relative(REPO_ROOT, file));
+    hash.update(`\0${stat.size}\0${stat.mtimeMs}\n`);
+  }
+  return hash.digest('hex');
+}
+
+export function phaseCommand(phase, plan, { dryRun = false, limit, summaryOut, order } = {}) {
+  if (phase === 'recovery') {
+    return [
+      'scripts/sdk-people-extract.mjs', '--all', '--recover-only',
+      '--concurrency', String(plan.extractionConcurrency), '--retry-failed', '--skip-dirty',
+    ];
+  }
+  if (phase === 'extraction') {
+    const chapterLimit = Math.min(limit ?? plan.extractionChaptersPerWave, plan.extractionChaptersPerWave);
+    return [
+      'scripts/sdk-people-extract.mjs', '--all', '--limit', String(chapterLimit),
+      '--concurrency', String(Math.min(chapterLimit, plan.extractionConcurrency)), '--order', 'deadline-balanced',
+      '--max-units', String(plan.maxUnits), '--max-candidates', String(plan.maxCandidates),
+      '--max-worker-kib', String(plan.maxWorkerKiB), '--max-cost', String(plan.waveCostCeilingDollars),
+      '--cost-reserve', '5', '--max-run-cost', String(plan.maxRunCostDollars),
+      '--max-run-tokens', String(plan.maxRunTokens),
+      '--run-timeout-minutes', String(plan.runTimeoutMinutes), '--max-attempts', '3',
+      '--retry-failed', '--skip-dirty', '--model', CAMPAIGN_MODEL, '--effort', 'low',
+    ];
+  }
+  if (phase === 'editorial') return [
+    'scripts/sdk-people-editorial-review.mjs', '--all', '--limit', String(Math.min(limit ?? Infinity, plan.editorialChaptersPerWave ?? plan.chaptersPerWave)),
+    '--concurrency', String(Math.min(limit ?? Infinity, plan.editorialConcurrency)), '--max-attempts', '2',
+    '--max-run-cost', String(plan.editorialMaxRunCostDollars),
+    '--max-run-tokens', String(plan.editorialMaxRunTokens),
+    '--run-timeout-minutes', String(plan.runTimeoutMinutes),
+    '--model', CAMPAIGN_MODEL, '--effort', 'medium',
+  ];
+  if (phase === 'dates') return [
+    'scripts/run-people-date-workflow.mjs', '--all',
+    '--worker', DATE_WORKER, '--lane', 'cursor-sdk',
+    '--model', CAMPAIGN_MODEL, dryRun ? '--dry-run' : '--run',
+    '--limit', String(plan.dateChaptersPerWave),
+    '--concurrency', String(plan.dateConcurrency),
+    ...(plan.capacityStart ? ['--cursor-capacity-start', plan.capacityStart] : []),
+    ...(order ? ['--order', order] : []),
+    ...(summaryOut ? ['--summary-out', summaryOut, '--min-approved', '1'] : []),
+  ];
+  if (phase === 'resolution') {
+    if (!plan.resolutionBatchName || !plan.resolutionScopes?.length) {
+      throw new Error('No current-prompt chapters are awaiting identity resolution');
+    }
+    const shards = Math.min(64, Math.max(8, Math.ceil(plan.resolutionScopes.length / 2)));
+    const command = [
+      'scripts/sdk-people-resolve.mjs', '--batch', plan.resolutionBatchName,
+      '--chapters', plan.resolutionScopes.join(','), '--shards', String(shards),
+      '--max-new-shards', String(shards), '--concurrency', String(plan.resolutionConcurrency),
+      '--max-attempts', '3', '--max-run-cost', String(plan.resolutionMaxRunCostDollars),
+      '--max-run-tokens', String(plan.resolutionMaxRunTokens),
+      '--run-timeout-minutes', String(plan.runTimeoutMinutes),
+      '--model', CAMPAIGN_MODEL, '--effort', 'medium',
+    ];
+    if (plan.resolutionDossierReady || plan.prepareDossiers) {
+      command.push('--dossier-dir', path.relative(REPO_ROOT, plan.resolutionDossierDir));
+    }
+    if (plan.prepareDossiers) command.push('--prepare-dossiers');
+    return command;
+  }
+  throw new Error(`Unsupported deadline phase ${phase}`);
+}
+
+export function dateRunAcceptedChapters(summary) {
+  if (!summary || !['started', 'approved', 'failed', 'eligibleChapters'].every((key) =>
+    Number.isSafeInteger(summary[key]) && summary[key] >= 0) || !Array.isArray(summary.results)) {
+    throw new Error('Missing or incompatible date workflow run summary');
+  }
+  const seen = new Set();
+  const accepted = [];
+  for (const result of summary.results) {
+    if (!result || !/^[a-z][a-z0-9-]*$/u.test(result.book) ||
+        !/^\d{3}$/u.test(result.chapter) || typeof result.status !== 'string') {
+      throw new Error('Invalid chapter outcome in date workflow run summary');
+    }
+    const key = `${result.book}/${result.chapter}`;
+    // An accepted audit may also report an interrupted host-side queue checkpoint.
+    const outcomeKey = `${key}:${result.status}`;
+    if (seen.has(outcomeKey)) throw new Error(`Duplicate date workflow outcome: ${key}`);
+    seen.add(outcomeKey);
+    if (result.status === 'audited') accepted.push(key);
+  }
+  if (summary.approved !== accepted.length || summary.started < accepted.length ||
+      summary.failed !== summary.results.length - accepted.length) {
+    throw new Error('Date workflow summary counts do not match chapter outcomes');
+  }
+  return accepted;
+}
+
+export function phaseHasWork(phase, plan) {
+  if (phase === 'recovery') return true;
+  if (phase === 'extraction') return plan.extractionDebt > 0;
+  if (phase === 'editorial') return plan.editorialDebt > 0;
+  if (phase === 'dates') return plan.dateAuditDebt > 0;
+  if (phase === 'resolution') return Boolean(plan.resolutionScopes?.length);
+  throw new Error(`Unsupported deadline phase ${phase}`);
+}
+
+function selfTest() {
+  const plan = campaignTargets({
+    missingChapters: 3130,
+    asOf: '2026-09-07',
+    deadline: '2026-09-30',
+    wavesPerDay: 3,
+    bufferPercent: 15,
+  });
+  const extraction = phaseCommand('extraction', plan);
+  const editorial = phaseCommand('editorial', plan);
+  const recovery = phaseCommand('recovery', plan);
+  const resolution = phaseCommand('resolution', {
+    ...plan,
+    resolutionBatchName: 'deadline-resolution-fixture',
+    resolutionScopes: ['a/001', 'a/002'],
+    resolutionConcurrency: 8,
+    resolutionMaxRunCostDollars: 3,
+    resolutionMaxRunTokens: 4_000_000,
+    resolutionDossierDir: path.join(REPO_ROOT, 'data', 'people', 'resolution-dossiers', 'fixture'),
+    resolutionDossierReady: true,
+    prepareDossiers: false,
+  });
+  if (
+    extraction[extraction.indexOf('--limit') + 1] !== '51' ||
+    extraction[extraction.indexOf('--concurrency') + 1] !== '20' ||
+    extraction[extraction.indexOf('--order') + 1] !== 'deadline-balanced' ||
+    extraction[extraction.indexOf('--max-run-cost') + 1] !== '3' ||
+    extraction[extraction.indexOf('--max-run-tokens') + 1] !== '3000000' ||
+    editorial[editorial.indexOf('--concurrency') + 1] !== '17' ||
+    !recovery.includes('--recover-only') ||
+    resolution[resolution.indexOf('--chapters') + 1] !== 'a/001,a/002' ||
+    resolution[resolution.indexOf('--concurrency') + 1] !== '8' ||
+    resolution[resolution.indexOf('--dossier-dir') + 1] !== 'data/people/resolution-dossiers/fixture' ||
+    phaseHasWork('extraction', { extractionDebt: 0 }) ||
+    phaseHasWork('editorial', { editorialDebt: 0 }) ||
+    phaseHasWork('resolution', { resolutionScopes: [] }) ||
+    !phaseHasWork('recovery', {})
+  ) {
+    throw new Error('Deadline wave command does not match the campaign targets');
+  }
+  if (catalogRefreshAction({ deferCatalog: true, catalogInputsChanged: true }) !== 'defer' ||
+      catalogRefreshAction({ forceCatalog: true }) !== 'rebuild' ||
+      catalogRefreshAction({ prepareDossiers: true, catalogInputsChanged: true }) !== 'skip' ||
+      catalogRefreshAction() !== 'skip') {
+    throw new Error('Catalog refresh policy failed its coalescing behavior');
+  }
+  const packageScripts = JSON.parse(
+    fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'),
+  ).scripts;
+  for (const name of [
+    'people:extract:deadline-recovery',
+    'people:extract:deadline-wave',
+    'people:editorial:deadline-wave',
+    'people:resolution:deadline-prepare',
+    'people:resolution:deadline-wave',
+  ]) {
+    if (packageScripts[name]?.includes('--capacity-start') ||
+        packageScripts[name]?.includes('--cursor-capacity-start') ||
+        packageScripts[name]?.includes('--deadline')) {
+      throw new Error(`${name} bypasses the centralized people campaign policy`);
+    }
+  }
+  if (campaignPolicy.lanes['cursor-sdk'].capacityStart !== '2026-09-24' ||
+      campaignPolicy.lanes.grokbot.capacityStart !== '2026-09-13' ||
+      campaignPolicy.mode !== 'quality-first') {
+    throw new Error('People campaign policy does not preserve the lane calendars and quality mode');
+  }
+  console.log('people deadline wave self-test: ok');
+}
+
+export function assertPhaseCapacity(opts, plan) {
+  if (
+    !opts.dryRun && opts.phase !== 'recovery' &&
+    !(opts.phase === 'resolution' && opts.prepareDossiers) &&
+    plan.blackoutDays > 0
+  ) {
+    const target = opts.phase === 'resolution'
+      ? `${plan.resolutionChaptersPerWave} identity chapter scopes`
+      : opts.phase === 'editorial'
+        ? `${plan.editorialChaptersPerWave} editorial chapters`
+        : opts.phase === 'dates'
+          ? `${plan.dateChaptersPerWave} date audit chapters`
+          : `${plan.extractionChaptersPerWave} extraction chapters`;
+    throw new Error(
+      `Cursor SDK capacity is unavailable until ${plan.capacityStart}; ` +
+      `the post-reset target is ${target} per wave`,
+    );
+  }
+}
+
+function main() {
+  const opts = parseArgs(process.argv.slice(2));
+  if (!opts.selfTest && opts.phase === 'resolution') {
+    throw new Error('Fresh all-pairs identity waves are retired. Preserve retained claims/artifacts; prepare one chapter with people:identity:prepare and independently review its dossiers. Historical recovery requires the exact saved worker invocation.');
+  }
+  if (opts.selfTest) return selfTest();
+  const plan = currentPlan(opts);
+  if (!phaseHasWork(opts.phase, plan)) {
+    console.log(`People deadline ${opts.phase}: no work is currently eligible`);
+    // A managed earlier stage may have deferred changes even if this lane is empty.
+    if (opts.forceCatalog && !opts.dryRun) rebuildPeopleCatalog();
+    return;
+  }
+  assertPhaseCapacity(opts, plan);
+  const command = phaseCommand(opts.phase, plan, opts);
+  console.log(
+    `People quality-first ${opts.phase}: ${plan.currentChapters}/${plan.sourceChapters} current, ` +
+    `${plan.reviewedChapters}/${plan.sourceChapters} editorially closed, ` +
+    `${plan.identityClosedChapters}/${plan.sourceChapters} identity-clean, ` +
+    `${plan.dateAuditDebt} chapters awaiting date audits, ` +
+    `${plan.extractionChaptersPerWave} extraction, ${plan.editorialChaptersPerWave} editorial, ` +
+    `${plan.dateChaptersPerWave} date audits, and ` +
+    `${plan.resolutionChaptersPerWave} identity chapter scopes/wave, ` +
+    `extraction concurrency ${plan.extractionConcurrency}, ` +
+    `editorial concurrency ${plan.editorialConcurrency}`,
+  );
+  if (!plan.targetWithinWaveCap) {
+    console.log(
+      `Soft target asks for ${plan.requiredChaptersPerWave} chapters/wave; ` +
+      `keeping the calibrated ${plan.maxChaptersPerWave}-chapter operational cap`,
+    );
+  }
+  if (opts.phase === 'resolution') {
+    console.log(
+      `Resolution selection: ${plan.resolutionScopes.length} chapter scope(s), ` +
+      `${plan.actionableResolutionChapters} actionable seed chapter(s), ` +
+      `${plan.peopleNeedingReview} people and ${plan.unresolvedCandidateBlocks} candidate blocks currently unresolved; ` +
+      `batch ${plan.resolutionBatchName}`,
+    );
+    console.log(
+      opts.prepareDossiers
+        ? `Preparing reusable dossiers in ${path.relative(REPO_ROOT, plan.resolutionDossierDir)}`
+        : plan.resolutionDossierReady
+          ? `Using prepared dossiers from ${path.relative(REPO_ROOT, plan.resolutionDossierDir)}`
+          : 'No prepared dossiers found; this wave will build the corpus graph locally',
+    );
+  }
+  if (opts.dryRun) {
+    console.log([process.execPath, ...command].join(' '));
+    return;
+  }
+  const catalogInputsBefore = catalogInputSignature();
+  const result = spawnSync(process.execPath, command, {
+    cwd: REPO_ROOT,
+    env: process.env,
+    stdio: 'inherit',
+  });
+  if (result.error) throw result.error;
+  const editorialApplicationStatus = opts.phase === 'editorial'
+    ? applyReviewedEditorialDecisions()
+    : 0;
+  const catalogInputsChanged = catalogInputsBefore !== catalogInputSignature();
+  const resolutionOutputNeedsCatalog = opts.phase === 'resolution' &&
+    plan.resolutionOutput && fs.existsSync(plan.resolutionOutput);
+  const catalogAction = catalogRefreshAction({
+    prepareDossiers: opts.prepareDossiers,
+    deferCatalog: opts.deferCatalog,
+    forceCatalog: opts.forceCatalog || (opts.phase === 'dates' && result.status === 0),
+    catalogInputsChanged,
+    resolutionOutputNeedsCatalog,
+  });
+  if (catalogAction === 'defer') {
+    console.log('Deferring the catalog rebuild to the managed date wave');
+  } else if (catalogAction === 'rebuild') {
+    rebuildPeopleCatalog();
+    if (resolutionOutputNeedsCatalog && plan.resolutionDossierReady) {
+      fs.rmSync(plan.resolutionDossierDir, { recursive: true });
+      console.log(
+        `Removed completed prepared dossiers from ${path.relative(REPO_ROOT, plan.resolutionDossierDir)}`,
+      );
+    }
+  } else if (!opts.prepareDossiers && !opts.deferCatalog) {
+    console.log('Campaign wave changed no catalog inputs; skipping the catalog rebuild');
+  }
+  if (result.status !== 0) process.exit(result.status ?? 1);
+  if (editorialApplicationStatus !== 0) process.exit(editorialApplicationStatus);
+}
+
+if (isMain) {
+  try {
+    main();
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  }
+}

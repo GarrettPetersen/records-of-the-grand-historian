@@ -12,7 +12,7 @@ const normalizeKey = key => key.startsWith('zh:') ? chineseVariantComparisonKey(
 const identityPredicates = new Set(['name', 'birth', 'death', 'sex', 'role', 'office',
   'native-place', 'family-relationship', 'relationship', 'kinship', 'lineage']);
 
-function memberContract(person, keys) {
+export function memberContract(person, keys) {
   return { localId: person.localId, promptVersion: person.promptVersion, names: keys,
     claims: person.claims.filter(claim => identityPredicates.has(claim.predicate)) };
 }
@@ -149,10 +149,18 @@ export function planChapterIdentityReview(index, scope, inputs, limits) {
 // The only authority granted here is a reviewed, retained assignment. New merges
 // still require the existing independently reviewed resolution application.
 export function validateRetainedDossierReview(index, plan, report, sourceUnits, actualReviewerAgentId, authorAgentIds, currentInputs, nameKeysForPerson) {
+  requireValue(peopleDigest(currentInputs) === peopleDigest(plan.inputs), 'Current chapter source/editorial/date inputs changed');
+  return validateDossierIdentityEvidence(index, plan, report, sourceUnits, actualReviewerAgentId, authorAgentIds, nameKeysForPerson);
+}
+
+// This checks the preserved independent report, current source persons, quotes,
+// complete coverage and accepted membership. A publication caller must ALSO
+// verify the original full primary-context/person dependencies and fresh chapter
+// gates before reusing it after unrelated envelope metadata changed.
+export function validateDossierIdentityEvidence(index, plan, report, sourceUnits, actualReviewerAgentId, authorAgentIds, nameKeysForPerson) {
   requireValue(typeof nameKeysForPerson === 'function', 'Current normal source name-key validation is required');
   const { fingerprint, ...contract } = plan;
   requireValue(peopleDigest(contract) === fingerprint, 'Dossier plan was changed after sealing');
-  requireValue(peopleDigest(currentInputs) === peopleDigest(plan.inputs), 'Current chapter source/editorial/date inputs changed');
   requireValue(Array.isArray(authorAgentIds) && authorAgentIds.length > 0, 'Author provenance is required');
   requireValue(hasOnlyKeys(report, ['schemaVersion', 'planFingerprint', 'reviewer', 'reviews']) && hasOnlyKeys(report.reviewer, ['agentId', 'name']), 'Unexpected review envelope fields');
   requireValue(report?.schemaVersion === 1 && report.planFingerprint === fingerprint, 'Stale or wrong dossier review');
@@ -194,18 +202,9 @@ export function validateRetainedDossierReview(index, plan, report, sourceUnits, 
     for (const witness of row.sourceWitnesses) {
       requireValue(hasOnlyKeys(witness, ['localId', 'book', 'chapter', 'unitId', 'quote']), 'Unexpected witness fields');
       const person = index.localPeople.get(witness.localId), sourceId = `${witness.book}:${witness.chapter}:${witness.unitId}`;
-      const quote = witness.quote, text = sourceUnits.get(sourceId);
-      if (person && !nameEvidence.has(witness.localId)) {
-        const evidence = new Map(), claims = new Map(person.claims.filter(claim => claim.predicate === 'name').map(claim => [claim.id, claim.evidence]));
-        for (const key of nameKeysForPerson(person)) if (key.language === 'zh') for (const claimId of key.sources) {
-          for (const unit of claims.get(claimId) ?? []) { if (!evidence.has(unit)) evidence.set(unit, new Set()); evidence.get(unit).add(normalizeKey(key.key).slice(3)); }
-        }
-        nameEvidence.set(witness.localId, evidence);
-      }
       requireValue(person && (caseMembers.has(witness.localId) || witness.localId === item.canonicalMembership.anchorLocalId || item.candidateDossiers.some(dossier =>
         index.localPersonMap.get(witness.localId) === index.canonicalByKnownId.get(dossier.id))), 'Witness person is outside this case');
-      requireValue(typeof text === 'string' && typeof quote === 'string' && /\p{Script=Han}/u.test(quote) && text.includes(quote) &&
-        [...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name)), 'Witness does not support this person in the current primary source');
+      assertDossierPrimaryWitness(witness, person, sourceUnits, nameKeysForPerson, nameEvidence);
       witnessedMembers.add(witness.localId); witnessedCandidates.add(index.localPersonMap.get(witness.localId));
     }
     requireValue(witnessedMembers.has(item.canonicalMembership.anchorLocalId), 'The accepted canonical dossier requires a primary identity-anchor witness');
@@ -220,4 +219,29 @@ export function validateRetainedDossierReview(index, plan, report, sourceUnits, 
   return { schemaVersion: 1, kind: 'reviewed-chapter-identity-dossiers', scope: plan.scope, inputs: plan.inputs,
     planFingerprint: fingerprint, reviewer: report.reviewer, reportFingerprint: peopleDigest(report), retained, ambiguity,
     grantsNewMerges: false, grantsNewSeparations: false, chronologyApproval: false, sourceEditorialApproval: false, publicationApproval: false };
+}
+
+export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKeysForPerson, nameEvidence = new Map()) {
+  requireValue(hasOnlyKeys(witness, ['localId', 'book', 'chapter', 'unitId', 'quote']), 'Unexpected witness fields');
+  requireValue(person && person.localId === witness.localId, `Missing current primary witness person ${witness.localId}`);
+  const sourceId = `${witness.book}:${witness.chapter}:${witness.unitId}`, quote = witness.quote, text = sourceUnits.get(sourceId);
+      if (person && !nameEvidence.has(witness.localId)) {
+        const evidence = new Map(), claims = new Map(person.claims.filter(claim => claim.predicate === 'name').map(claim => [claim.id, claim.evidence]));
+        for (const key of nameKeysForPerson(person)) if (key.language === 'zh') for (const claimId of key.sources) {
+          for (const unit of claims.get(claimId) ?? []) { if (!evidence.has(unit)) evidence.set(unit, new Set()); evidence.get(unit).add(normalizeKey(key.key).slice(3)); }
+        }
+        // A canonical name may supply an omitted surname (王衍長女), while the
+        // actual source uses 衍長女 or 長女. Fresh native extraction validation
+        // has already verified these person-linked Chinese spans and positions.
+        // Accept that precise evidence; never an arbitrary Han substring.
+        const prefix = person.localId.split(':').slice(0, 2).join(':');
+        for (const mention of person.mentions ?? []) for (const span of mention.spans.zh) {
+          const unit = `${prefix}:${mention.unit.id}`;
+          if (!evidence.has(unit)) evidence.set(unit, new Set());
+          evidence.get(unit).add(normalizeKey('zh:' + span.exact).slice(3));
+        }
+        nameEvidence.set(witness.localId, evidence);
+      }
+      requireValue(typeof text === 'string' && typeof quote === 'string' && /\p{Script=Han}/u.test(quote) && text.includes(quote) &&
+        [...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 }
