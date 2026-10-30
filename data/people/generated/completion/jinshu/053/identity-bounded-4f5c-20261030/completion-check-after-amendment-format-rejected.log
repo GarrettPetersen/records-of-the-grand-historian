@@ -1,0 +1,17 @@
+
+> records-of-the-grand-historian@1.0.0 people:completion:check
+> node scripts/check-people-completion.mjs --baseline /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/053/identity-bounded-4f5c-20261030/checkpoint-baseline-amended.json --current /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/053/identity-bounded-4f5c-20261030/checkpoint-current.json
+
+file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/lib/people-completion-plan.mjs:10
+    if (!digest.test(value.inputs?.[key] ?? '')) throw new Error(`Missing or invalid pinned ${key} byte digest`);
+                                                       ^
+
+Error: Missing or invalid pinned source byte digest
+    at checkpoint (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/lib/people-completion-plan.mjs:10:56)
+    at compareCompletionCheckpoints (file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/lib/people-completion-plan.mjs:27:13)
+    at file:///Users/garrettpetersen/records-of-the-grand-historian/scripts/check-people-completion.mjs:13:14
+    at ModuleJob.run (node:internal/modules/esm/module_job:272:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:583:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:98:5)
+
+Node.js v23.7.0
