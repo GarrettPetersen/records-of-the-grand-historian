@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "ff5dfedd95c8a431685a965a37784f452312c9169874ca4751a9b7562d0965d5",
+  "verdict": "changes-required",
+  "findings": [
+    {
+      "severity": "high",
+      "file": "scripts/lib/people-identity-dossiers.mjs",
+      "reason": "validateRetainedDossierReview lets a reviewer set unresolvedIdentity=false whenever retrieval.overflow and missingBlockingName are false, provided each bounded candidate has some Han substring from a name-evidence unit. That is a confident cross-record separation (records stay distinct; no merge/split object) without the existing independently reviewed resolution-application path. The plan itself sets proposal.unresolvedIdentity true when any candidate is retrieved, but that proposal is never enforced on the report. Overflow is the only hard block on certainty. This invents identity certainty from a capped alphabetical posting read plus a quote-in-unit check, which the policy forbids."
+    },
+    {
+      "severity": "high",
+      "file": "scripts/lib/people-identity-dossiers.mjs",
+      "reason": "False-merge / accepted-membership support is not actually gated. planChapterIdentityReview copies only chapter-local member ids onto each case; extra-chapter members of the same canonical dossier are omitted from the case, are not retrieval candidates (self id is skipped), and need no sourceWitnesses. validateRetainedDossierReview only checks that chapter-local memberVersions and localPersonMap still match. A reviewer can approve (even with unresolvedIdentity=false on a small name bucket) without citing or inspecting other locals already merged into that dossier. That weakens the false-merge hold the policy claims to keep."
+    },
+    {
+      "severity": "medium",
+      "file": "scripts/lib/people-identity-dossiers.mjs",
+      "reason": "Primary-witness checks are weaker than source-backed identity evidence: a witness passes if quote contains any Han character and is a substring of the cited unit, and the person has some name claim listing that unit. The quote need not equal the person's name, need not be the discriminating span, and need not distinguish candidates who share a unit. Combined with the certainty path above, this is not a source-identity proof."
+    },
+    {
+      "severity": "medium",
+      "file": "scripts/lib/people-identity-dossiers.mjs",
+      "reason": "Documented hard admission limits are 8 dossiers / 16 keys / 8 posting reads, but planChapterIdentityReview accepts any integer 1..32. Callers can widen retrieval without a code change. That is still not an all-pairs graph, but it is not the pinned bound the policy and measurement use. Tests also inject a toy keyReader rather than exported localNameKeys, so generic-title / preferred-non-blocking rules are not exercised by this engine."
+    },
+    {
+      "severity": "medium",
+      "file": "scripts/lib/people-identity-dossiers.mjs",
+      "reason": "ambiguityReviewed is required to be literally true on every approve row; there is no valid way to record a failed or incomplete ambiguity review except verdict=hold (which already fails the certificate). The flag is therefore not an uncertainty control. Completing a chapter with unresolvedIdentity=true is allowed, and publicationApproval stays false here, but nothing in this validator consumes or displays reviewed uncertainty, and people-qualified-scope.mjs still vetoes seal.unresolvedCanonicalPeople. That mismatch is documented as unadopted; do not treat tests or policy text as a live chapter."
+    },
+    {
+      "severity": "low",
+      "file": "PEOPLE_ONE_HOUR_WORKFLOW.md",
+      "reason": "The O(p × q × r) retrieval claim ignores that every blocking key is still visited and fingerprinted, including omitted keys beyond maxKeysPerCase, so work is O(p × K + p × q × r). Not a hidden k×k pair loop (metrics.generatedPairs is fixed at 0; scaling samples stay at 48 posting visits), but the bound is overstated. PEOPLE_COMPLETION_PROCESS.md titles the new work order as current orchestration while realMeasurement.codeAdopted/independentSourceReviewCompleted/scopeDataQualified/published are all false; the same file's non-adoption caveats are accurate and must remain the operational reading."
+    },
+    {
+      "severity": "low",
+      "file": "scripts/lib/people-identity-dossier-store.mjs",
+      "reason": "Persistence fail-closed behavior matches the tests: no manifest until finish, wx generations, per-row sha256 on read, closed getter, oversized rows leave unpublished partial jsonl. Residual: readIdentityDossierStore requires a localPeople Map but never checks it against stored memberVersions/chapters; headers.sha256 is stored but only size-checked until get(); metadata hashing uses a second 'data' listener on the same stream readline consumes (works on current Node because both listeners see the same chunks, but it is a fragile contract)."
+    }
+  ],
+  "reason": "Independent review of the sealed prototype/policy packet only. No all-pairs enumerator is present: posting reads are capped, generatedPairs stays 0, overflow is explicit, self-authored/incomplete/stale/held/extra-field reports fail, membership growth can reuse unchanged memberVersions, and the store refuses silent rebuilds. Those bounded-complexity and fail-closed pieces hold, and production scheduler/qualification/rendering are correctly still unswitched (assertScopedIdentity still applies the global unresolved-pair veto; realMeasurement flags are all false). Changes are required because the review certificate can still mint cross-record identity certainty from an untruncated small bucket plus a Han substring, and it never requires evidence for extra-chapter members of the retained canonical dossier—weakening false-merge and inventing separation without the native resolution gates. Source/date/editorial byte pins and publicationApproval=false on this certificate are intact and must stay so; do not treat helper tests or this policy text as a nonempty live chapter."
+}
