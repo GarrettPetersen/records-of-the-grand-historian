@@ -1,0 +1,52 @@
+(node:75180) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ later independently accepted name correction does not apply a rejected style change (3063.342291ms)
+✔ a rejected replacement remains forbidden without subsequent approval (0.873ms)
+✔ a different but unreviewed replacement is not enough to bypass rejection (0.312208ms)
+✔ later approval cannot authorize the rejected wording or a different reason (6.631584ms)
+✔ a later revised replacement is checked against the reviewer wording (6.702834ms)
+✖ editorial history preserves an independent Grok review in the existing batch (0.7ms)
+✖ editorial history preserves an independent Grok review in the incoming batch (0.463416ms)
+✔ editorial history still rejects an unsupported reviewer kind (4.62625ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3096.364167
+
+✖ failing tests:
+
+test at scripts/test-people-editorial-rejections.mjs:57:3
+✖ editorial history preserves an independent Grok review in the existing batch (0.7ms)
+  EditorialDecisionValidationError: Editorial decision validation failed:
+  - schema: /reviews/0/reviewer/kind must be equal to one of the allowed values
+      at validateEditorialDecisionDocument (scripts/lib/people-editorial-decisions.mjs:405:39)
+      at mergeEditorialDecisionReview (scripts/lib/people-editorial-decisions.mjs:441:3)
+      at TestContext.<anonymous> (scripts/test-people-editorial-rejections.mjs:63:21)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:678:18)
+      at Test.postRun (node:internal/test_runner/test:1091:19)
+      at Test.run (node:internal/test_runner/test:1019:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:678:7) {
+    errors: [ 'schema: /reviews/0/reviewer/kind must be equal to one of the allowed values' ]
+  }
+
+test at scripts/test-people-editorial-rejections.mjs:57:3
+✖ editorial history preserves an independent Grok review in the incoming batch (0.463416ms)
+  EditorialDecisionValidationError: Editorial decision validation failed:
+  - schema: /reviews/1/reviewer/kind must be equal to one of the allowed values
+      at validateEditorialDecisionDocument (scripts/lib/people-editorial-decisions.mjs:405:39)
+      at mergeEditorialDecisionReview (scripts/lib/people-editorial-decisions.mjs:441:3)
+      at TestContext.<anonymous> (scripts/test-people-editorial-rejections.mjs:63:21)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:678:18)
+      at Test.postRun (node:internal/test_runner/test:1091:19)
+      at Test.run (node:internal/test_runner/test:1019:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:678:7) {
+    errors: [ 'schema: /reviews/1/reviewer/kind must be equal to one of the allowed values' ]
+  }

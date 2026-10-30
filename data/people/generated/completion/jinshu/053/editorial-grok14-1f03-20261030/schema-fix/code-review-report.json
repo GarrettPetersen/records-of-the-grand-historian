@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "f5332a8244a4ba385b6fb21f762bfa8c34c7cfe85c8db2e2474b9c9200ccb7cf",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "v3 already enumerates grok-build; mergeEditorialDecisionReview validates each input then the merged schemaVersion-4 document against SCHEMA_V4_ID, whose reviewer.kind enum previously omitted that closed label, so an independently accepted v3 grok-build batch failed only at v4 history assembly. The schema edit adds solely grok-build to the v4 $defs.reviewer.kind enum, matching v3, without loosening additionalProperties, required fields, fingerprints, decision enums, or self-review agentId inequality. Native tests assign grok-build to either the existing reject batch or the incoming accept batch, call mergeEditorialDecisionReview then validateAppliedEditorialDecisions, and deep-equal the retained reviewer object and decisions; unknown kinds still fail merge on reviewer/kind. No material defect in validation authority, identity, chronology, fingerprints, schema compatibility, or reproduction of the production merge bug."
+}

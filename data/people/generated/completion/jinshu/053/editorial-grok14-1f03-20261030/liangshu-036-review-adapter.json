@@ -1,0 +1,138 @@
+{
+  "nativeReview": {
+    "schemaVersion": 3,
+    "book": "liangshu",
+    "chapter": "036",
+    "input": {
+      "chapterFingerprint": "sha256:0b8fca4489807e3c3b6d417db070e5ddd1e8f48d5619b224be758556ba337323",
+      "proposalsFingerprint": "sha256:99608f958b60e6e84d6445b094ab126f413c2975240575882069dc3dc4c4e317"
+    },
+    "reviewer": {
+      "kind": "grok-build",
+      "name": "GrokBot 24 independent source reviewer",
+      "model": null,
+      "agentId": "68870dc2-b08d-4237-8847-f42fbfd5a7c6",
+      "runId": null,
+      "completedAt": "2026-10-30T19:16:58.184Z"
+    },
+    "proposals": [
+      {
+        "id": "liangshu:036:r0004",
+        "unit": {
+          "id": "s0011",
+          "kind": "paragraph-sentence",
+          "blockIndex": 3,
+          "collection": "sentences",
+          "itemIndex": 4
+        },
+        "field": "literal",
+        "before": "Wang Rong of Langya was on friendly terms with him and recommended him to Minister of Works Prince of Jingling, where he became a scholar of the Western Pavilion.",
+        "after": "Wang Rong of Langya was on friendly terms with him and recommended him to the Minister over the Masses, the Prince of Jingling, where he became a scholar of the Western Pavilion.",
+        "reason": "司徒竟陵王 is Minister over the Masses (司徒), not 司空 Minister of Works.",
+        "confidence": "high"
+      },
+      {
+        "id": "liangshu:036:r0005",
+        "unit": {
+          "id": "s0011",
+          "kind": "paragraph-sentence",
+          "blockIndex": 3,
+          "collection": "sentences",
+          "itemIndex": 4
+        },
+        "field": "idiomatic",
+        "before": "Wang Rong of Langya, who knew him well, recommended him to Minister of Works Prince of Jingling, and he entered the Western Pavilion as a scholar.",
+        "after": "Wang Rong of Langya, who knew him well, recommended him to the Minister over the Masses, the Prince of Jingling, and he entered the Western Pavilion as a scholar.",
+        "reason": "Same unit: 司徒 is not Minister of Works.",
+        "confidence": "high"
+      },
+      {
+        "id": "liangshu:036:r0006",
+        "unit": {
+          "id": "s0080",
+          "kind": "paragraph-sentence",
+          "blockIndex": 12,
+          "collection": "sentences",
+          "itemIndex": 5
+        },
+        "field": "literal",
+        "before": "Qi Palace Secretary Wang Rong and Personnel Director Xie Tiao both held him in high regard.",
+        "after": "Qi Secretariat Gentleman Wang Rong and Xie Tiao of the Ministry of Personnel both held him in high regard.",
+        "reason": "中書郎 is Secretariat Gentleman, not Palace Secretary; 吏部 without 尚書 is not Personnel Director.",
+        "confidence": "high"
+      },
+      {
+        "id": "liangshu:036:r0007",
+        "unit": {
+          "id": "s0080",
+          "kind": "paragraph-sentence",
+          "blockIndex": 12,
+          "collection": "sentences",
+          "itemIndex": 5
+        },
+        "field": "idiomatic",
+        "before": "Wang Rong, Palace Secretary of Qi, and Xie Tiao, Director of Personnel, both admired him.",
+        "after": "Wang Rong, Secretariat Gentleman of Qi, and Xie Tiao of the Ministry of Personnel, both admired him.",
+        "reason": "Same unit: 齊中書郎王融、吏部謝朓.",
+        "confidence": "high"
+      }
+    ],
+    "decisions": [
+      {
+        "repairId": "liangshu:036:r0004",
+        "decision": "accept",
+        "after": null,
+        "reason": "司徒 is Minister over the Masses, not 司空 Minister of Works.",
+        "sourceWitness": {
+          "source": "chapter-text",
+          "citation": "liangshu/036 s0011",
+          "excerpt": "乃薦之於司徒竟陵王"
+        }
+      },
+      {
+        "repairId": "liangshu:036:r0005",
+        "decision": "accept",
+        "after": null,
+        "reason": "司徒 is Minister over the Masses, not 司空 Minister of Works.",
+        "sourceWitness": {
+          "source": "chapter-text",
+          "citation": "liangshu/036 s0011",
+          "excerpt": "乃薦之於司徒竟陵王"
+        }
+      },
+      {
+        "repairId": "liangshu:036:r0006",
+        "decision": "accept",
+        "after": null,
+        "reason": "中書郎 is Secretariat Gentleman; 吏部 without 尚書 does not support Personnel Director.",
+        "sourceWitness": {
+          "source": "chapter-text",
+          "citation": "liangshu/036 s0080",
+          "excerpt": "齊中書郎王融、吏部謝朓雅相欽重"
+        }
+      },
+      {
+        "repairId": "liangshu:036:r0007",
+        "decision": "accept",
+        "after": null,
+        "reason": "中書郎 is Secretariat Gentleman; 吏部 without 尚書 does not support Personnel Director.",
+        "sourceWitness": {
+          "source": "chapter-text",
+          "citation": "liangshu/036 s0080",
+          "excerpt": "齊中書郎王融、吏部謝朓雅相欽重"
+        }
+      }
+    ],
+    "claimRetractions": [],
+    "claimRevisions": [],
+    "claimAdditions": []
+  },
+  "rawGrokReportSha256": "aa658406452e070f83ce32c54bb00df2ecf94018c3ef2ac1e6da64812a3b05ee",
+  "reviewJob": "jinshu053-editorial-supplement-20261029",
+  "actualReviewerAgentId": "68870dc2-b08d-4237-8847-f42fbfd5a7c6",
+  "modelUnknownAndNull": true,
+  "runIdNotExposedAndNull": true,
+  "proposalDerivationOnly": true,
+  "proposalsAndApprovalsExact": true,
+  "allSourceWitnessesInHostReceipt": true
+}

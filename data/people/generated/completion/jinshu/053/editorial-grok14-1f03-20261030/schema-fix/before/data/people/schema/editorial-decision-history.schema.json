@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://24histories.com/schema/people/editorial-decision-v4.json",
+  "title": "Independent editorial decision history for a chapter extraction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "book", "chapter", "reviews"],
+  "properties": {
+    "schemaVersion": { "const": 4 },
+    "book": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "chapter": { "type": "string", "pattern": "^\\d{3}$" },
+    "reviews": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/review" }
+    }
+  },
+  "$defs": {
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input", "reviewer", "proposals", "decisions", "claimRetractions", "claimRevisions"],
+      "properties": {
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chapterFingerprint", "proposalsFingerprint"],
+          "properties": {
+            "chapterFingerprint": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/digest" },
+            "proposalsFingerprint": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/digest" }
+          }
+        },
+        "reviewer": { "$ref": "#/$defs/reviewer" },
+        "proposals": {
+          "type": "array",
+          "items": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/proposal" }
+        },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/decision" }
+        },
+        "claimRetractions": {
+          "type": "array",
+          "items": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/claimRetraction" }
+        },
+        "claimRevisions": {
+          "type": "array",
+          "items": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/claimRevision" }
+        },
+        "claimAdditions": {
+          "type": "array",
+          "items": { "$ref": "https://24histories.com/schema/people/editorial-decision-v3.json#/$defs/claimAddition" }
+        }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name", "model", "agentId", "runId", "completedAt"],
+      "properties": {
+        "kind": { "enum": ["human", "cursor-agent", "codex"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "model": { "type": ["string", "null"], "minLength": 1 },
+        "agentId": { "type": ["string", "null"], "minLength": 1 },
+        "runId": { "type": ["string", "null"], "minLength": 1 },
+        "completedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
