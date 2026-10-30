@@ -51,11 +51,12 @@ export function validateChapterIdentityBundle(view, sourceChapters, scope, bundl
   need(only(bundle, ['schemaVersion', 'kind', 'scope', 'plan', 'report', 'receipt']) &&
     bundle.schemaVersion === 1 && bundle.kind === 'chapter-identity-review' &&
     peopleDigest(bundle.scope) === peopleDigest(scope) && peopleDigest(bundle.plan.scope) === peopleDigest(scope), 'Malformed or wrong-scope chapter identity proof');
-  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople']) &&
+  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese']) &&
     bundle.receipt.planFingerprint === bundle.plan.fingerprint && bundle.receipt.reportFingerprint === peopleDigest(bundle.report), 'Identity review transport receipt does not match the preserved report');
   const chapterKey = `${scope.book}:${scope.chapter}`, own = sourceChapters.get(chapterKey);
   need(own && typeof own.extraction.run.agentId === 'string' && own.extraction.run.agentId, 'Current extractor provenance required');
   need(bundle.receipt.authorAgentIds.includes(own.extraction.run.agentId), 'Actual extraction author missing from identity review provenance');
+  need(bundle.receipt.chapterChinese === chapterChineseEvidenceFingerprint(own.packet), 'Reviewed chapter Chinese source or unit inventory changed; fresh source coverage is required');
   const localPeople = new Map(), memberVersions = new Map(), sourceUnits = new Map(), subjects = new Map();
   for (const [key, source] of sourceChapters) {
     need(key === `${source.extraction.book}:${source.extraction.chapter}`, 'Current source chapter scope mismatch');
@@ -202,4 +203,13 @@ export function identitySourceEvidenceFingerprint(person, packet) {
   return peopleDigest({ localId: person.localId, promptVersion: person.promptVersion,
     preferredNameSuggestion: person.preferredNameSuggestion, identityHints: person.identityHints ?? null,
     claims: person.claims, mentions: person.mentions ?? [], primary });
+}
+
+// Full target-chapter Chinese is part of the independent coverage proof, including
+// previously unmentioned units. A metadata/English edit may reuse unchanged person
+// proofs; inserting an unseen actor in an unmentioned Chinese unit may not.
+export function chapterChineseEvidenceFingerprint(packet) {
+  need(Array.isArray(packet?.units) && packet.units.every(unit => typeof unit.id === 'string' && typeof unit.zh === 'string') &&
+    new Set(packet.units.map(unit => unit.id)).size === packet.units.length, 'Complete current Chinese source units required');
+  return peopleDigest(packet.units.map(unit => [unit.id, unit.zh]));
 }

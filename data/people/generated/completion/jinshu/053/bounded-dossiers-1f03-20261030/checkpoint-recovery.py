@@ -1,5 +1,5 @@
 import os,json,pathlib,subprocess,tempfile,re
-R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='8b07374deb36fbc1e162c0e34cb1d27bdf74d8ca';BRANCH='codex/people-recovery-20261025'
+R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='64f8cd19e54e4605b9978d7b28c06f7ac6372e8f';BRANCH='codex/people-recovery-20261025'
 def git(*args,input=None,env=None):return subprocess.check_output(['git',*args],cwd=R,input=input,env=env).decode().strip()
 subprocess.run(['npm','run','people:disk:check'],cwd=R,check=True,stdout=subprocess.DEVNULL)
 assert json.loads((J/'measurement-state.json').read_text())['phase']=='finished'
@@ -21,7 +21,7 @@ fd,name=tempfile.mkstemp(prefix='checkpoint-index-',dir=J);os.close(fd);os.unlin
 try:
  git('read-tree',PARENT,env=env)
  for file,b in files.items():git('update-index','--add','--cacheinfo','100644,'+git('hash-object','-w','--stdin',input=b)+','+file,env=env)
- commit=git('commit-tree',git('write-tree',env=env),'-p',PARENT,input=b'Checkpoint compact identity integration and native accepted Jinshu053 person proofs\n')
+ commit=git('commit-tree',git('write-tree',env=env),'-p',PARENT,input=b'Checkpoint publication fixture migration, registry commands and complete Chinese source binding\n')
  (J/'prepared-recovery-publication.json').write_text(json.dumps({'commit':commit,'parent':PARENT,'files':len(files),'largeLocalStoresExcluded':True},indent=2)+'\n')
  git('push','origin',commit+':refs/heads/'+BRANCH);assert git('ls-remote','origin','refs/heads/'+BRANCH).split()[0]==commit
  (J/'recovery-publication-receipt.json').write_text(json.dumps({'commit':commit,'branch':BRANCH,'files':len(files),'productionAdopted':False,'canonicalStagingUnchanged':'1f031602cf7aa15090b26ec997097d46dd2ef09f'},indent=2)+'\n')

@@ -38,7 +38,7 @@
     "ebook:table-structure:self-test": "node scripts/test-table-structure.mjs",
     "people:resolution-candidates": "node scripts/build-people-resolution-candidates.mjs",
     "people:resolution:self-test": "node scripts/test-people-resolution.mjs",
-    "people:resolve": "node scripts/sdk-people-resolve.mjs",
+    "people:resolve": "node scripts/people-identity.mjs",
     "people:resolve:recovery:self-test": "node --test scripts/test-people-resolver-recovery.mjs",
     "people:editorial-dossier": "node scripts/build-people-editorial-review.mjs",
     "people:editorial-review": "node scripts/sdk-people-editorial-review.mjs",
@@ -239,8 +239,10 @@
     "sdk-repair:batch": "node scripts/sdk-repair-chapter.mjs --no-stream",
     "people:completion:check": "node scripts/check-people-completion.mjs",
     "people:completion:self-test": "node --test scripts/test-people-completion-plan.mjs",
-    "people:identity:prepare": "node scripts/prepare-people-chapter-identity.mjs",
-    "people:identity:self-test": "node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs"
+    "people:identity:prepare": "node scripts/people-identity.mjs",
+    "people:identity:self-test": "node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs",
+    "people:identity:registry": "node scripts/people-identity-registry.mjs",
+    "people:identity:record": "node scripts/record-people-chapter-identity.mjs"
   },
   "engines": {
     "node": ">=22.0.0"

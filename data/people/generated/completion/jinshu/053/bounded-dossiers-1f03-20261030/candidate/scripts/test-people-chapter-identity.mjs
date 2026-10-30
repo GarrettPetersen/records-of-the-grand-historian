@@ -4,7 +4,7 @@ import { localNameKeys } from './lib/people-resolution.mjs';
 import { peopleDigest } from './lib/people-identity-seal.mjs';
 import { buildIdentityDossierIndex, planChapterIdentityReview } from './lib/people-identity-dossiers.mjs';
 import { acceptedCatalogIdentityView, validateChapterIdentityBundle, assertReviewedIdentityCoverage,
-  applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE, identitySourceEvidenceFingerprint } from './lib/people-chapter-identity.mjs';
+  applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './lib/people-chapter-identity.mjs';
 const inputs = Object.fromEntries(['source','extraction','editorial','dateAudit'].map((k,i)=>[k,`sha256:${String(i+1).repeat(64)}`]));
 function fixture() {
   const localId='fixture:001:p001', anchorId='fixture:002:p001';
@@ -18,6 +18,7 @@ function fixture() {
     sourceWitnesses:[localId,anchorId].map(id=>({localId:id,book:'fixture',chapter:id.split(':')[1],unitId:'s0001',quote:'王偉'}))}]};
   const bundle={schemaVersion:1,kind:'chapter-identity-review',scope,plan,report,receipt:{actualReviewerAgentId:'independent-reviewer',authorAgentIds:['actual-extractor','host-author'],planFingerprint:plan.fingerprint,reportFingerprint:peopleDigest(report)}};
   const sources=new Map([own,anchor].map(person=>['fixture:'+person.chapter,{extraction:{book:'fixture',chapter:person.chapter,run:{agentId:'actual-extractor'}},localPeople:new Map([[person.localId,person]]),packet:{units:[{id:'s0001',zh:'王偉至。'}]}}]));
+  bundle.receipt.chapterChinese=chapterChineseEvidenceFingerprint(sources.get('fixture:001').packet);
   bundle.receipt.sourcePeople=[own,anchor].map(person=>({localId:person.localId,fingerprint:identitySourceEvidenceFingerprint(person,sources.get('fixture:'+person.chapter).packet)}));
   const catalog={localPersonMap:Object.fromEntries(index.localPersonMap),people:[{id:'per_test',localPeople:[localId,anchorId],retiredIds:['per_old'],curation:{notes:[]}}]};
   return {index,scope,inputs,bundle,sources,catalog,view:acceptedCatalogIdentityView(catalog),corpus:{localPeople:new Map([[localId,own]])}};
@@ -48,4 +49,9 @@ test('held cases fail while unchanged identity proofs survive a new current enve
 
 test('a surviving name quote cannot hide changed primary narrative context',()=>{
  const f=fixture();f.sources.get('fixture:002').packet.units[0].zh='非王偉至。';assert.throws(()=>validate(f),/primary context or person evidence changed/);
+});
+
+test('a new actor in an unmentioned Chinese unit cannot reuse the old chapter proof',()=>{
+ const f=fixture();f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'李忠至。'});
+ assert.throws(()=>validate(f),/chapter Chinese source or unit inventory changed/);
 });

@@ -48,7 +48,7 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
     corpus.summary.currentChapters !== countedCurrent ||
     corpus.summary.rereviewChapters !== countedRereview ||
     corpus.summary.missingChapters !== countedMissing ||
-    corpus.summary.completeChapters !== countedComplete ||
+    corpus.summary.preliminaryChapters !== countedComplete ||
     corpus.summary.dateReviewChapters !== countedDates ||
     chapterStates.some(chapter => chapter.glossaryState === 'current' && chapter.dateAudit.status !== 'audited') ||
     corpus.summary.editorialReviewChapters !== countedEditorial ||
@@ -61,6 +61,6 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
 }
 
 console.log(
-  `people progress tests passed (${countedComplete} complete, ${countedIdentity} identity review, ` +
+  `people progress tests passed (${countedComplete} preliminary, ${countedIdentity} identity review, ` +
   `${countedDates} date review, ${countedEditorial} editorial review, ${countedRereview} source rereview, ${countedMissing} missing)`,
 );

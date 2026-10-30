@@ -242,10 +242,10 @@ index 000000000000..c512f0d732fa
 +or data-qualified by this checkpoint. The one-hour release target remains unproven.
 diff --git a/data/people/identity-reviews/jinshu/053.json b/data/people/identity-reviews/jinshu/053.json
 new file mode 100644
-index 000000000000..13710dadc5f8
+index 000000000000..38fd0026ed3f
 --- /dev/null
 +++ b/data/people/identity-reviews/jinshu/053.json
-@@ -0,0 +1,9541 @@
+@@ -0,0 +1,9542 @@
 +{
 +  "schemaVersion": 1,
 +  "kind": "chapter-identity-review",
@@ -9359,6 +9359,7 @@ index 000000000000..13710dadc5f8
 +    ],
 +    "planFingerprint": "sha256:4a5d7619efeb933ee60c846a4a1f6f268b525c10c8a1acacdb083e1398085814",
 +    "reportFingerprint": "sha256:48788e57443e6088a5573699da099bccb044c5b76be42845620abcdcb601c9f6",
++    "chapterChinese": "sha256:894f67600c2b1a62a2cb8e160874dbde676a757e659992e53f0a6b3cc9378c11",
 +    "sourcePeople": [
 +      {
 +        "localId": "jinshu:053:p067",
@@ -10148,7 +10149,7 @@ index 3c029532be69..17e975e40208 100644
      }
    }
 diff --git a/generate-progress.js b/generate-progress.js
-index 402b592e5a06..edac1fe72f54 100644
+index 402b592e5a06..94147cbc190e 100644
 --- a/generate-progress.js
 +++ b/generate-progress.js
 @@ -627,75 +627,35 @@ function peopleExtractionFiles() {
@@ -10181,7 +10182,7 @@ index 402b592e5a06..edac1fe72f54 100644
 +  assertPeopleProgress(catalog.identityReviewByChapter && typeof catalog.identityReviewByChapter === 'object',
 +    'canonical catalog lacks independent person-review coverage; run npm run people:catalog');
 +  const states = { current: 0, 'date-review': 0, 'editorial-review': 0, 'identity-review': 0, rereview: 0, missing: 0 };
-+  let identityReviewedChapters = 0, identityPendingChapters = 0, identityPendingCases = 0, reviewedAmbiguousCases = 0, zeroPersonReviews = 0;
++  let identityReviewedChapters = 0, identityPendingChapters = 0, identityPendingCases = 0, reviewedAmbiguousCases = 0, zeroPersonExtractions = 0;
 +  for (const [key, chapter] of byChapter) {
 +    const review = catalog.identityReviewByChapter[key];
 +    if (chapter.state !== 'missing') assertPeopleProgress(review, `missing compiled identity coverage for ${key}`);
@@ -10189,7 +10190,7 @@ index 402b592e5a06..edac1fe72f54 100644
 +    if (chapter.state === 'current') {
 +      if (review.status === 'review-required') { identityPendingChapters += 1; identityPendingCases += review.heldCases; }
 +      else if (review.status === 'reviewed') identityReviewedChapters += 1;
-+      else if (review.status === 'no-people') zeroPersonReviews += 1;
++      else if (review.status === 'no-people') zeroPersonExtractions += 1;
 +      reviewedAmbiguousCases += review.reviewedAmbiguousCases;
      }
 -  }
@@ -10245,28 +10246,124 @@ index 402b592e5a06..edac1fe72f54 100644
 -  };
 +  return { ...summary,
 +    // Gate-ready is a staging metric; deployed nonempty receipts are recorded separately.
-+    completeChapters: states.current, dateReviewChapters: states['date-review'], editorialReviewChapters: states['editorial-review'],
++    preliminaryChapters: states.current, dateReviewChapters: states['date-review'], editorialReviewChapters: states['editorial-review'],
 +    identityReviewChapters: states['identity-review'], identityReviewedChapters, identityPendingChapters, identityPendingCases,
-+    reviewedAmbiguousCases, reviewedAmbiguousPeople: catalog.stats.reviewedAmbiguousPeople, zeroPersonReviews,
-+    completePercent: summary.sourceChapters > 0 ? states.current / summary.sourceChapters * 100 : 0 };
++    reviewedAmbiguousCases, reviewedAmbiguousPeople: catalog.stats.reviewedAmbiguousPeople, zeroPersonExtractions,
++    preliminaryPercent: summary.sourceChapters > 0 ? states.current / summary.sourceChapters * 100 : 0 };
  }
  
  function buildPeopleGlossaryProgress(manifest) {
 diff --git a/package.json b/package.json
-index e6f0ad208a25..16f55d775d9c 100644
+index e6f0ad208a25..cf22ce075094 100644
 --- a/package.json
 +++ b/package.json
-@@ -238,7 +238,9 @@
+@@ -38,7 +38,7 @@
+     "ebook:table-structure:self-test": "node scripts/test-table-structure.mjs",
+     "people:resolution-candidates": "node scripts/build-people-resolution-candidates.mjs",
+     "people:resolution:self-test": "node scripts/test-people-resolution.mjs",
+-    "people:resolve": "node scripts/sdk-people-resolve.mjs",
++    "people:resolve": "node scripts/people-identity.mjs",
+     "people:resolve:recovery:self-test": "node --test scripts/test-people-resolver-recovery.mjs",
+     "people:editorial-dossier": "node scripts/build-people-editorial-review.mjs",
+     "people:editorial-review": "node scripts/sdk-people-editorial-review.mjs",
+@@ -238,7 +238,11 @@
      "sdk-repair:list": "node scripts/sdk-repair-chapter.mjs --list-queue",
      "sdk-repair:batch": "node scripts/sdk-repair-chapter.mjs --no-stream",
      "people:completion:check": "node scripts/check-people-completion.mjs",
 -    "people:completion:self-test": "node --test scripts/test-people-completion-plan.mjs"
 +    "people:completion:self-test": "node --test scripts/test-people-completion-plan.mjs",
-+    "people:identity:prepare": "node scripts/prepare-people-chapter-identity.mjs",
-+    "people:identity:self-test": "node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs"
++    "people:identity:prepare": "node scripts/people-identity.mjs",
++    "people:identity:self-test": "node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs",
++    "people:identity:registry": "node scripts/people-identity-registry.mjs",
++    "people:identity:record": "node scripts/record-people-chapter-identity.mjs"
    },
    "engines": {
      "node": ">=22.0.0"
+diff --git a/public/progress.js b/public/progress.js
+index 0aa560950330..2b1ffbd2ea76 100644
+--- a/public/progress.js
++++ b/public/progress.js
+@@ -97,18 +97,19 @@ function validateSummary(summary) {
+         'sourceChapters',
+         'extractedChapters',
+         'currentChapters',
+-        'completeChapters',
++        'preliminaryChapters',
+         'dateReviewChapters',
+         'dateAuditedChapters',
+         'editorialReviewChapters',
+         'identityReviewChapters',
+-        'chaptersWithUnresolvedPeople',
+-        'actionableResolutionChapters',
+-        'identityCleanChapters',
++        'identityReviewedChapters',
++        'identityPendingChapters',
++        'identityPendingCases',
++        'reviewedAmbiguousCases',
++        'reviewedAmbiguousPeople',
++        'zeroPersonExtractions',
+         'rereviewChapters',
+         'missingChapters',
+-        'peopleNeedingReview',
+-        'unresolvedCandidateBlocks',
+         'peopleRecords',
+         'factClaims',
+         'familyRelationships',
+@@ -128,16 +129,16 @@ function validateSummary(summary) {
+         'extracted chapter count is inconsistent'
+     );
+     requireCondition(
+-        summary.sourceChapters === summary.completeChapters + summary.dateReviewChapters + summary.editorialReviewChapters +
++        summary.sourceChapters === summary.preliminaryChapters + summary.dateReviewChapters + summary.editorialReviewChapters +
+             summary.identityReviewChapters + summary.rereviewChapters + summary.missingChapters,
+-        'glossary completion states do not add up'
++        'preliminary review states do not add up'
+     );
+ }
+ 
+ function renderOverview(summary) {
+     validateSummary(summary);
+     const percent = summary.sourceChapters > 0
+-        ? (summary.completeChapters / summary.sourceChapters) * 100
++        ? (summary.preliminaryChapters / summary.sourceChapters) * 100
+         : 0;
+     const editorialPercent = summary.sourceChapters > 0
+         ? (summary.editorialReviewChapters / summary.sourceChapters) * 100
+@@ -159,9 +160,9 @@ function renderOverview(summary) {
+ 
+     const metrics = document.getElementById('corpus-metrics');
+     metrics.replaceChildren(
+-        metric('Preliminary checks passed', summary.completeChapters, 'Current extraction, date audit, no pending proposed repairs, and no flagged identity ambiguity; not a completion or publication count.'),
++        metric('Preliminary checks passed', summary.preliminaryChapters, 'Current extraction, date audit, no pending proposed repairs, and independently reviewed chapter identities; not a completion or publication count.'),
+         metric('Date audits', summary.dateAuditedChapters, `${formatInteger(summary.dateReviewChapters)} current extractions await date approval.`),
+-        metric('Chapters with flagged people', summary.chaptersWithUnresolvedPeople, `${formatInteger(summary.peopleNeedingReview)} people are flagged for identity or source rereview.`),
++        metric('Identity review pending', summary.identityPendingChapters, `${formatInteger(summary.identityPendingCases)} source identifications await review; reviewed cross-chapter uncertainty does not block a chapter.`),
+         metric('Needs rereview', summary.rereviewChapters, 'Extracted under an earlier contract.'),
+         metric('No accepted extraction', summary.missingChapters, 'No extraction is included in this site data.'),
+         metric('Individual records', summary.peopleRecords, 'Chapter-local people gathered so far.'),
+@@ -169,8 +170,8 @@ function renderOverview(summary) {
+     );
+ 
+     const publicationNote = document.getElementById('publication-note');
+-    publicationNote.textContent = `${formatInteger(summary.completeChapters)} of ${formatInteger(summary.sourceChapters)} chapters have passed the preliminary checks shown here. These checks do not establish whole-chapter editorial review, verified links or ebook readiness, or publication. ` +
+-        `${formatInteger(summary.extractedChapters)} chapters have source extractions, and ${formatInteger(summary.unresolvedCandidateBlocks)} identity candidate groups still require decisions. ` +
++    publicationNote.textContent = `${formatInteger(summary.preliminaryChapters)} of ${formatInteger(summary.sourceChapters)} chapters have passed the preliminary checks shown here. These checks do not establish whole-chapter editorial review, verified links or ebook readiness, or publication. ` +
++        `${formatInteger(summary.extractedChapters)} chapters have source extractions. ${formatInteger(summary.reviewedAmbiguousCases)} reviewed source identifications retain cross-chapter uncertainty. ${formatInteger(summary.zeroPersonExtractions)} current extractions report no people; they do not establish nonempty chapter completion. ` +
+         `${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
+     if (summary.pendingTranslationRepairs > 0) {
+         publicationNote.textContent += ` ${formatInteger(summary.pendingTranslationRepairs)} translation repairs remain proposed.`;
+@@ -197,8 +198,9 @@ function chapterTooltip(chapter, people) {
+             `Translation fixes applied: ${formatInteger(people.appliedTranslationRepairs)}`,
+             `Extraction prompt: v${people.promptVersion}`
+         );
+-        if (people.unresolvedPeople > 0) {
+-            lines.push(`People flagged for identity or source rereview: ${formatInteger(people.unresolvedPeople)}`);
++        if (people.identityReview) {
++            lines.push(`Independent identity reviews: ${formatInteger(people.identityReview.approvedCases)} of ${formatInteger(people.identityReview.targetCases)}`);
++            lines.push(`Reviewed identifications retaining uncertainty: ${formatInteger(people.identityReview.reviewedAmbiguousCases)}`);
+         }
+     }
+     return lines.join('\n');
 diff --git a/research/people/checkpoints/jinshu053-dossier-review-20261030/citation-followup-state.json b/research/people/checkpoints/jinshu053-dossier-review-20261030/citation-followup-state.json
 new file mode 100644
 index 000000000000..540ccc819e0b
@@ -12445,10 +12542,10 @@ index ab0dcf2e5f10..7037fb18f865 100644
        heldChapters: holds.length, holds, qualificationWorkload: qualified.workload },
 diff --git a/scripts/lib/people-chapter-identity.mjs b/scripts/lib/people-chapter-identity.mjs
 new file mode 100644
-index 000000000000..c8b6158dc7c6
+index 000000000000..a76f75900385
 --- /dev/null
 +++ b/scripts/lib/people-chapter-identity.mjs
-@@ -0,0 +1,205 @@
+@@ -0,0 +1,215 @@
 +import fs from 'node:fs';
 +import path from 'node:path';
 +import { createHash } from 'node:crypto';
@@ -12502,11 +12599,12 @@ index 000000000000..c8b6158dc7c6
 +  need(only(bundle, ['schemaVersion', 'kind', 'scope', 'plan', 'report', 'receipt']) &&
 +    bundle.schemaVersion === 1 && bundle.kind === 'chapter-identity-review' &&
 +    peopleDigest(bundle.scope) === peopleDigest(scope) && peopleDigest(bundle.plan.scope) === peopleDigest(scope), 'Malformed or wrong-scope chapter identity proof');
-+  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople']) &&
++  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese']) &&
 +    bundle.receipt.planFingerprint === bundle.plan.fingerprint && bundle.receipt.reportFingerprint === peopleDigest(bundle.report), 'Identity review transport receipt does not match the preserved report');
 +  const chapterKey = `${scope.book}:${scope.chapter}`, own = sourceChapters.get(chapterKey);
 +  need(own && typeof own.extraction.run.agentId === 'string' && own.extraction.run.agentId, 'Current extractor provenance required');
 +  need(bundle.receipt.authorAgentIds.includes(own.extraction.run.agentId), 'Actual extraction author missing from identity review provenance');
++  need(bundle.receipt.chapterChinese === chapterChineseEvidenceFingerprint(own.packet), 'Reviewed chapter Chinese source or unit inventory changed; fresh source coverage is required');
 +  const localPeople = new Map(), memberVersions = new Map(), sourceUnits = new Map(), subjects = new Map();
 +  for (const [key, source] of sourceChapters) {
 +    need(key === `${source.extraction.book}:${source.extraction.chapter}`, 'Current source chapter scope mismatch');
@@ -12654,6 +12752,23 @@ index 000000000000..c8b6158dc7c6
 +    preferredNameSuggestion: person.preferredNameSuggestion, identityHints: person.identityHints ?? null,
 +    claims: person.claims, mentions: person.mentions ?? [], primary });
 +}
++
++// Full target-chapter Chinese is part of the independent coverage proof, including
++// previously unmentioned units. A metadata/English edit may reuse unchanged person
++// proofs; inserting an unseen actor in an unmentioned Chinese unit may not.
++export function chapterChineseEvidenceFingerprint(packet) {
++  need(Array.isArray(packet?.units) && packet.units.every(unit => typeof unit.id === 'string' && typeof unit.zh === 'string') &&
++    new Set(packet.units.map(unit => unit.id)).size === packet.units.length, 'Complete current Chinese source units required');
++  return peopleDigest(packet.units.map(unit => [unit.id, unit.zh]));
++}
+diff --git a/scripts/lib/people-identity-artifacts.mjs b/scripts/lib/people-identity-artifacts.mjs
+new file mode 100644
+index 000000000000..de6b33cbf057
+--- /dev/null
++++ b/scripts/lib/people-identity-artifacts.mjs
+@@ -0,0 +1,2 @@
++import { createHash } from 'node:crypto';
++export const identityArtifactHash = bytes => createHash('sha256').update(bytes).digest('hex');
 diff --git a/scripts/lib/people-identity-dossier-store.mjs b/scripts/lib/people-identity-dossier-store.mjs
 new file mode 100644
 index 000000000000..72a0f270ccad
@@ -13011,20 +13126,209 @@ index 000000000000..a1923f70226a
 +      requireValue(typeof text === 'string' && typeof quote === 'string' && /\p{Script=Han}/u.test(quote) && text.includes(quote) &&
 +        [...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 +}
+diff --git a/scripts/lib/people-identity-registry-workflow.mjs b/scripts/lib/people-identity-registry-workflow.mjs
+new file mode 100644
+index 000000000000..4b4a9ecd835c
+--- /dev/null
++++ b/scripts/lib/people-identity-registry-workflow.mjs
+@@ -0,0 +1,28 @@
++import fs from 'node:fs';
++import path from 'node:path';
++import { identityDossierInputs } from './people-identity-seal.mjs';
++import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './people-corpus.mjs';
++import { localNameKeys, resolveAcceptedPeopleClusters } from './people-resolution.mjs';
++import { buildIdentityDossierIndex } from './people-identity-dossiers.mjs';
++import { writeIdentityDossierStore } from './people-identity-dossier-store.mjs';
++import { REPO_ROOT, PEOPLE_DIR } from './people-content.mjs';
++import { acquireProcessRunLock } from './process-run-lock.mjs';
++
++export function buildIdentityDossierRegistry({ out, revision }) {
++  if (!path.isAbsolute(out ?? '') || !/^[a-f0-9]{40}$/u.test(revision ?? '')) throw new Error('An absolute new registry directory and exact --revision are required');
++  if (fs.existsSync(out)) throw new Error('Immutable dossier generation already exists; reuse it or choose a new generation');
++  const release = acquireProcessRunLock(path.join(PEOPLE_DIR, 'generated/resolution-run.lock'), { label: 'Canonical dossier registry generation', failIfExists: true });
++  try {
++    const inputs = identityDossierInputs(REPO_ROOT), corpus = loadValidatedPeopleCorpus();
++    const documents = loadValidatedResolutionDocuments(corpus.localPeople), accepted = resolveAcceptedPeopleClusters(corpus.localPeople, documents);
++    const index = buildIdentityDossierIndex(corpus.localPeople, accepted.clusters, localNameKeys);
++    if (identityDossierInputs(REPO_ROOT) !== inputs) throw new Error('Identity inputs changed during registry construction; no generation published');
++    const manifest = writeIdentityDossierStore(out, index, { revision, identityInputs: inputs,
++      acceptedResolutionDocuments: documents.length, sourceChapters: corpus.coverage.sourceChapters,
++      extractedChapters: corpus.chapters.length, normalizedLocalPeople: corpus.localPeople.size,
++      matching: 'native-source-name-keys', generatedPairs: 0 });
++    if (identityDossierInputs(REPO_ROOT) !== inputs) throw new Error('Identity inputs changed while writing the generation; preserve it and do not use it for new work');
++    return { manifest, metrics: accepted.metrics, sourceChapters: corpus.coverage.sourceChapters,
++      extractedChapters: corpus.chapters.length, canonicalPeople: accepted.clusters.length, generatedPairs: 0 };
++  } finally { release(); }
++}
+diff --git a/scripts/lib/people-identity-review-record.mjs b/scripts/lib/people-identity-review-record.mjs
+new file mode 100644
+index 000000000000..2436021a18cb
+--- /dev/null
++++ b/scripts/lib/people-identity-review-record.mjs
+@@ -0,0 +1,98 @@
++import fs from 'node:fs';
++import path from 'node:path';
++import { identityArtifactHash } from './people-identity-artifacts.mjs';
++export { identityArtifactHash } from './people-identity-artifacts.mjs';
++import { REPO_ROOT, PEOPLE_DIR, readJson, writeJsonAtomic } from './people-content.mjs';
++import { identityDossierInputs, peopleDigest } from './people-identity-seal.mjs';
++import { readIdentityDossierStore } from './people-identity-dossier-store.mjs';
++import { chapterIdentityInputs, chapterIdentityReviewPath, chapterIdentityEvidenceScopes,
++  validateChapterIdentityBundle, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './people-chapter-identity.mjs';
++import { loadValidatedPeopleChapter } from './people-validated-chapter.mjs';
++import { loadProperNounMatcher } from './people-candidates.mjs';
++import { dateAuditStatus } from './people-date-audit.mjs';
++import { editorialDecisionPath } from './people-editorial-decisions.mjs';
++import { assertChapterGates } from './people-qualified-scope.mjs';
++import { acquireProcessRunLock } from './process-run-lock.mjs';
++const need = (condition, message) => { if (!condition) throw new Error(message); };
++
++// The job journal is host-owned captured transport metadata. A remote worker
++// writes its assigned report only; it cannot choose the actual reviewer identity.
++export function createIdentityReviewBundle(packetBytes, reportBytes, job, supplementBytes = null) {
++  const packet = JSON.parse(packetBytes), original = JSON.parse(reportBytes);
++  need(packet.schemaVersion === 1 && packet.kind === 'source-chapter-dossier-review-packet', 'Wrong source review packet');
++  need(job.schemaVersion === 1 && job.kind === 'captured-independent-identity-review' && job.phase === 'report-recorded' &&
++    peopleDigest(job.scope) === peopleDigest(packet.scope) && typeof job.agentId === 'string' && job.agentId && typeof job.runId === 'string' && job.runId,
++    'Actual captured source-review job provenance required');
++  need(job.sourcePacketSha256 === identityArtifactHash(packetBytes) && job.reportSha256 === identityArtifactHash(reportBytes), 'Captured packet/report byte hashes do not match');
++  need(original.reviewer?.agentId === job.agentId && original.planFingerprint === packet.plan.fingerprint, 'Report is not from the actual assigned independent reviewer');
++  const report = structuredClone(original);
++  if (supplementBytes) {
++    const supplement = JSON.parse(supplementBytes), capture = job.citationSupplement;
++    need(capture && capture.agentId === job.agentId && capture.runId && capture.sha256 === identityArtifactHash(supplementBytes) &&
++      capture.packetSha256 === supplement.packetSha256 && supplement.reviewerAgentId === job.agentId && supplement.schemaVersion === 1,
++      'Citation supplement lacks same-reviewer captured provenance');
++    const row = report.reviews.find(item => item.caseId === supplement.caseId);
++    need(row && ['approve','hold'].includes(supplement.verdict), 'Unknown or invalid supplemented source case');
++    if (supplement.verdict === 'hold') { row.verdict = 'hold'; row.reason = supplement.reason; }
++    else {
++      const matches = row.sourceWitnesses.map((witness,index) => witness.localId === supplement.sourceWitness?.localId ? index : -1).filter(index => index >= 0);
++      need(matches.length === 1, 'Citation supplement must replace one existing witness only');
++      row.sourceWitnesses[matches[0]] = supplement.sourceWitness;
++    }
++  } else need(!job.citationSupplement, 'Captured citation supplement must be supplied');
++  const byScope = new Map();
++  for (const unit of packet.units) {
++    const key = `${unit.book}:${unit.chapter}`;
++    if (!byScope.has(key)) byScope.set(key, []);
++    byScope.get(key).push(unit);
++  }
++  const ownUnits = byScope.get(`${packet.scope.book}:${packet.scope.chapter}`);
++  need(ownUnits, 'Complete reviewed target chapter is missing');
++  return { schemaVersion: 1, kind: 'chapter-identity-review', scope: packet.scope, plan: packet.plan, report,
++    receipt: { actualReviewerAgentId: job.agentId,
++      authorAgentIds: [...new Set([...packet.authorAgentIds, ...(job.authorAgentIds ?? [])])],
++      planFingerprint: packet.plan.fingerprint, reportFingerprint: peopleDigest(report),
++      chapterChinese: chapterChineseEvidenceFingerprint({ units: ownUnits }),
++      sourcePeople: packet.people.map(person => {
++        const units = byScope.get(`${person.book}:${person.chapter}`);
++        need(units, `Missing reviewed source context ${person.localId}`);
++        return { localId: person.localId, fingerprint: identitySourceEvidenceFingerprint(person, { units }) };
++      }) } };
++}
++
++export async function recordChapterIdentityReview({ packet, report, job, registry, supplement = null, out = null, previousSha256 = null }) {
++  const packetBytes = fs.readFileSync(packet), reportBytes = fs.readFileSync(report), captured = readJson(job);
++  const bundle = createIdentityReviewBundle(packetBytes, reportBytes, captured, supplement ? fs.readFileSync(supplement) : null);
++  const { book, chapter } = bundle.scope, canonical = chapterIdentityReviewPath(book, chapter);
++  const target = out ? path.resolve(out) : canonical, generated = path.join(PEOPLE_DIR, 'generated') + path.sep;
++  need(target === canonical || target.startsWith(generated), 'Identity record output must be the exact canonical review or an assigned generated artifact');
++  const existing = fs.existsSync(target) ? fs.readFileSync(target) : null;
++  if (existing && peopleDigest(JSON.parse(existing)) !== peopleDigest(bundle)) need(previousSha256 && identityArtifactHash(existing) === previousSha256, 'Existing identity proof differs; exact --previous-sha256 is required');
++  const release = acquireProcessRunLock(path.join(PEOPLE_DIR, 'generated/resolution-run.lock'), { label: `Record independent identity ${book}:${chapter}`, failIfExists: true });
++  let index;
++  try {
++    const identityInputs = identityDossierInputs(REPO_ROOT);
++    index = await readIdentityDossierStore(registry, new Map());
++    need(index.provenance.identityInputs === identityInputs, 'Registry is not current; rebuild its immutable generation before recording new work');
++    const matcher = loadProperNounMatcher(), sources = new Map();
++    for (const scope of chapterIdentityEvidenceScopes(bundle)) {
++      const key = `${scope.book}:${scope.chapter}`;
++      sources.set(key, loadValidatedPeopleChapter(scope.book, scope.chapter,
++        { properNounMatcher: matcher, strictAliasDispositions: scope.book === book && scope.chapter === chapter }));
++    }
++    const own = sources.get(`${book}:${chapter}`), editorialFile = editorialDecisionPath(book, chapter);
++    assertChapterGates(own.extraction, readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
++      dateAuditStatus(book, chapter), fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
++    const inputs = chapterIdentityInputs(book, chapter);
++    const certificate = validateChapterIdentityBundle({ localPersonMap: index.localPersonMap, canonicalByKnownId: index.canonicalByKnownId }, sources, bundle.scope, bundle, inputs);
++    need(identityDossierInputs(REPO_ROOT) === identityInputs && peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs), 'Source/identity inputs changed during record validation');
++    const now = fs.existsSync(target) ? fs.readFileSync(target) : null;
++    need((existing === null && now === null) || (existing !== null && now !== null && identityArtifactHash(now) === identityArtifactHash(existing)), 'Identity output changed during validation');
++    const unchanged = existing !== null && peopleDigest(JSON.parse(existing)) === peopleDigest(bundle);
++    if (!unchanged) writeJsonAtomic(target, bundle);
++    return { scope: bundle.scope, out: target, unchanged, reviewerAgentId: captured.agentId, reviewerRunId: captured.runId,
++      inputs, reviewedCases: certificate.retained.length, chapterLocalPeople: certificate.retained.reduce((sum,row) => sum + row.localPeople.length,0),
++      reviewedAmbiguousCases: certificate.ambiguity.length, nativeIdentityProofAccepted: true,
++      dataQualified: false, published: false };
++  } finally { index?.close(); release(); }
++}
+diff --git a/scripts/lib/people-identity-review-transport.mjs b/scripts/lib/people-identity-review-transport.mjs
+new file mode 100644
+index 000000000000..3a4a6fe09ffe
+--- /dev/null
++++ b/scripts/lib/people-identity-review-transport.mjs
+@@ -0,0 +1,20 @@
++import { identityArtifactHash } from './people-identity-artifacts.mjs';
++
++export function compactChapterIdentityReviewPacket(p) {
++  const sourcePacketSha256 = identityArtifactHash(Buffer.from(JSON.stringify(p, null, 2) + '\n'));
++const compact={schemaVersion:1,kind:'bounded-dossier-source-review-transport',sourcePacketSha256:sourcePacketSha256,scope:p.scope,
++ planFingerprint:p.plan.fingerprint,authorAgentIds:p.authorAgentIds,registryProvenance:p.registryProvenance,acceptedMembershipAuthority:p.acceptedMembershipAuthority,
++ reviewCases:p.plan.cases.map(c=>({caseId:c.id,canonicalPersonId:c.canonicalPersonId,localPeople:c.localPeople,canonicalMembership:c.canonicalMembership,
++  candidateDossiers:c.candidateDossiers.map(d=>d.id),retrieval:{overflow:c.retrieval.overflow,missingBlockingName:c.retrieval.missingBlockingName,
++  omittedKeys:c.retrieval.queries.filter(q=>q.omitted).map(q=>({key:q.key,totalDossiers:q.totalDossiers,visited:q.postingIdsVisited}))},proposal:c.proposal})),
++ fieldLegends:{claims:['id','predicate','value','certainty','evidence'],mentions:['id','unitId','kind','spans','notes'],candidateNames:['key','forms','kinds']},
++ people:p.people.map(person=>({localId:person.localId,preferredNameSuggestion:person.preferredNameSuggestion,historicity:person.historicity,descriptorSuggestion:person.descriptorSuggestion,
++ identityHints:person.identityHints,claims:person.claims.map(c=>[c.id,c.predicate,c.value,c.certainty,c.evidence]),
++ mentions:person.mentions.map(m=>[m.id,m.unit.id,m.kind,m.spans,m.notes??null])})),
++ units:p.units.map(u=>({book:u.book,chapter:u.chapter,id:u.id,zh:u.zh,en:u.en,literal:u.literal})),
++ candidateDossiers:p.candidateDossiers.map(d=>({id:d.id,version:d.version,acceptedSourceMembers:d.localPeople.length,names:d.names.filter(n=>n.blocking).map(n=>[n.key,n.forms,n.kinds])})),
++ candidateDisclosure:'These are bounded name-index headers, not primary-evidence proofs of equivalence or difference. Full immutable registry and posting counts/fingerprints remain sealed on host. No candidate may be merged or separated by this report. Uninspected aliases or overflow remain uncertain.',
++ requiredReport:p.requiredReport,instructions:p.instructions};
++  if (compact.people.reduce((sum, person) => sum + person.claims.length, 0) !== p.people.reduce((sum, person) => sum + person.claims.length, 0) || compact.people.reduce((sum, person) => sum + person.mentions.length, 0) !== p.people.reduce((sum, person) => sum + person.mentions.length, 0)) throw new Error('Source claims or mentions were lost during transport compaction');
++  return compact;
++}
 diff --git a/scripts/lib/people-identity-seal.mjs b/scripts/lib/people-identity-seal.mjs
-index 45e077cd20a4..35e0575cf719 100644
+index 45e077cd20a4..e2f7e3c7acb9 100644
 --- a/scripts/lib/people-identity-seal.mjs
 +++ b/scripts/lib/people-identity-seal.mjs
-@@ -93,21 +93,16 @@ export function identityInputSeal(root = REPO_ROOT) {
+@@ -67,7 +67,7 @@ export function peopleDigest(value) {
+ // A global identity generation is reusable only while every input that could
+ // change identity membership or candidate ambiguity is unchanged. Hash bytes,
+ // inventories and code; mtime and catalog.generatedAt are not evidence pins.
+-export function identityInputSeal(root = REPO_ROOT) {
++function identityInputFiles(root) {
+   const files = [];
+   const visit = (relative, select) => {
+     const directory = path.join(root, relative);
+@@ -93,21 +93,31 @@ export function identityInputSeal(root = REPO_ROOT) {
    for (const directory of ['extractions', 'resolutions', 'curation', 'chronology', 'schema']) {
      visit(path.join('data', 'people', directory), file => file.endsWith('.json'));
    }
 +  if (fs.existsSync(path.join(root, 'data/people/identity-reviews'))) visit('data/people/identity-reviews', file => file.endsWith('.json'));
    files.push('data/people/config.json', 'data/glossary.json', 'package.json');
-   return peopleDigest(files.sort().map(file => [file.split(path.sep).join('/'),
+-  return peopleDigest(files.sort().map(file => [file.split(path.sep).join('/'),
++  return files.sort();
++}
++
++function fingerprintInputFiles(root, files) {
++  return peopleDigest(files.map(file => [file.split(path.sep).join('/'),
      crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
  }
  
++export function identityInputSeal(root = REPO_ROOT) {
++  return fingerprintInputFiles(root, identityInputFiles(root));
++}
++
++// Recording a retained-identity review changes publication authority, not name
++// retrieval or accepted canonical membership. Reuse the immutable index then.
++export function identityDossierInputs(root = REPO_ROOT) {
++  return fingerprintInputFiles(root, identityInputFiles(root).filter(file =>
++    !file.split(path.sep).join('/').startsWith('data/people/identity-reviews/')));
++}
++
  export function assertIdentitySeal(seal, catalog, siteIndex, currentInputs) {
 -  if (seal?.schemaVersion !== 1 || seal.kind !== 'people-global-identity-seal' ||
 +  if (seal?.schemaVersion !== 2 || seal.kind !== 'people-accepted-identity-seal' ||
@@ -13041,6 +13345,112 @@ index 45e077cd20a4..35e0575cf719 100644
 +    throw new Error('Missing, stale or invalid accepted identity seal; rerun people:catalog');
    }
  }
+diff --git a/scripts/lib/people-identity-test-fixtures.mjs b/scripts/lib/people-identity-test-fixtures.mjs
+new file mode 100644
+index 000000000000..0c1f09b011c6
+--- /dev/null
++++ b/scripts/lib/people-identity-test-fixtures.mjs
+@@ -0,0 +1,100 @@
++// Authored offline fixtures only. These helpers exercise the actual proof
++// validator; they confer no authority on historical production data.
++import fs from 'node:fs';
++import { buildIdentityDossierIndex, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS, assertDossierPrimaryWitness } from './people-identity-dossiers.mjs';
++import { localNameKeys, resolveAcceptedPeopleClusters } from './people-resolution.mjs';
++import { peopleDigest } from './people-identity-seal.mjs';
++import { chapterIdentityInputs, chapterIdentityReviewPath, acceptedCatalogIdentityView,
++  validateChapterIdentityBundle, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './people-chapter-identity.mjs';
++import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './people-corpus.mjs';
++import { loadValidatedPeopleChapter } from './people-validated-chapter.mjs';
++import { writeJsonAtomic } from './people-content.mjs';
++
++export function fixtureIdentityBundle(index, view, sources, scope, inputs) {
++  const plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS);
++  const primary = new Map();
++  for (const [key, source] of sources) for (const unit of source.packet.units) primary.set(`${key}:${unit.id}`, unit.zh);
++  const required = new Set();
++  const reviews = plan.cases.map(item => {
++    const ids = [...new Set([...item.localPeople, item.canonicalMembership.anchorLocalId])];
++    const sourceWitnesses = ids.map(localId => {
++      required.add(localId);
++      const person = index.localPeople.get(localId), [book, chapter] = localId.split(':');
++      const evidence = new Set(person.claims.filter(claim => claim.predicate === 'name').flatMap(claim => claim.evidence));
++      for (const id of evidence) {
++        const unitId = id.split(':')[2], quote = primary.get(id);
++        if (!quote) continue;
++        const witness = { localId, book, chapter, unitId, quote };
++        try { assertDossierPrimaryWitness(witness, person, primary, localNameKeys); return witness; }
++        catch (error) { if (!error.message.startsWith('Witness does not support')) throw error; }
++      }
++      throw new Error(`Authored fixture lacks primary name evidence for ${localId}`);
++    });
++    return { caseId: item.id, verdict: 'approve', canonicalPersonId: item.canonicalPersonId,
++      membershipReviewed: true, membershipFingerprint: item.canonicalMembership.fingerprint,
++      ambiguityReviewed: true, unresolvedIdentity: true,
++      reason: 'Authored synthetic fixture independently retains this source actor and accepted anchor; cross-chapter equivalence remains uncertain.', sourceWitnesses };
++  });
++  const report = { schemaVersion: 1, planFingerprint: plan.fingerprint,
++    reviewer: { agentId: 'offline-independent-person-reviewer', name: 'Independent authored-fixture reviewer' }, reviews };
++  const own = sources.get(`${scope.book}:${scope.chapter}`);
++  const bundle = { schemaVersion: 1, kind: 'chapter-identity-review', scope, plan, report,
++    receipt: { actualReviewerAgentId: report.reviewer.agentId, authorAgentIds: [own.extraction.run.agentId, 'offline-fixture-author'],
++      planFingerprint: plan.fingerprint, reportFingerprint: peopleDigest(report), chapterChinese: chapterChineseEvidenceFingerprint(own.packet),
++      sourcePeople: [...required].map(localId => {
++        const source = sources.get(localId.split(':').slice(0, 2).join(':'));
++        return { localId, fingerprint: identitySourceEvidenceFingerprint(index.localPeople.get(localId), source.packet) };
++      }) } };
++  const certificate = validateChapterIdentityBundle(view, sources, scope, bundle, inputs);
++  return { bundle, certificate };
++}
++
++export function writeFixtureIdentityReviews(scopes) {
++  if (!process.env.PEOPLE_REPO_ROOT) throw new Error('Explicit isolated authored-fixture root required');
++  const corpus = loadValidatedPeopleCorpus(), documents = loadValidatedResolutionDocuments(corpus.localPeople);
++  const { clusters } = resolveAcceptedPeopleClusters(corpus.localPeople, documents);
++  const index = buildIdentityDossierIndex(corpus.localPeople, clusters, localNameKeys);
++  const catalog = { localPersonMap: Object.fromEntries(index.localPersonMap),
++    people: clusters.map(cluster => ({ id: cluster.canonicalPersonId, localPeople: cluster.localPeople, retiredIds: cluster.retiredIds })) };
++  const view = acceptedCatalogIdentityView(catalog), sources = new Map();
++  for (const scope of scopes) {
++    const key = `${scope.book}:${scope.chapter}`;
++    if (!sources.has(key)) sources.set(key, loadValidatedPeopleChapter(scope.book, scope.chapter));
++    const subjects = index.chapters.get(key);
++    for (const id of subjects.keys()) {
++      const dossier = index.dossiers.get(id);
++      const anchor = dossier.anchorCandidates.find(localId => !localId.startsWith(key + ':')) ?? dossier.anchorCandidates[0];
++      const [book, chapter] = anchor.split(':');
++      if (!sources.has(`${book}:${chapter}`)) sources.set(`${book}:${chapter}`, loadValidatedPeopleChapter(book, chapter));
++    }
++    const { bundle } = fixtureIdentityBundle(index, view, sources, scope, chapterIdentityInputs(scope.book, scope.chapter));
++    writeJsonAtomic(chapterIdentityReviewPath(scope.book, scope.chapter), bundle);
++  }
++}
++
++// In-memory authored sources for the existing pure projection/ebook fixtures.
++// Full production extraction/gate coverage is exercised by the isolated CLI tests.
++export function fixtureIdentityCoverage(corpus, catalog, allPeople = corpus.localPeople) {
++  const clusters = catalog.people.map(person => ({ canonicalPersonId: person.id, localPeople: person.localPeople, retiredIds: person.retiredIds }));
++  const index = buildIdentityDossierIndex(allPeople, clusters, localNameKeys), view = acceptedCatalogIdentityView(catalog), sources = new Map();
++  for (const person of allPeople.values()) {
++    const key = `${person.book}:${person.chapter}`;
++    if (!sources.has(key)) sources.set(key, { extraction: { book: person.book, chapter: person.chapter, run: { agentId: 'offline-fixture-extractor' } }, localPeople: new Map(), packet: { units: [] } });
++    sources.get(key).localPeople.set(person.localId, person);
++  }
++  for (const [key, source] of sources) {
++    const units = new Map();
++    for (const person of source.localPeople.values()) for (const claim of person.claims) if (claim.predicate === 'name' && claim.value.zh) for (const evidence of claim.evidence) {
++      if (!evidence.startsWith(key + ':')) throw new Error('Authored fixture name evidence crosses source scope');
++      const id = evidence.slice(key.length + 1); units.set(id, (units.get(id) ?? '') + claim.value.zh + '至。');
++    }
++    source.packet.units = [...units].map(([id, zh]) => ({ id, zh }));
++  }
++  const inputs = Object.fromEntries(['source', 'extraction', 'editorial', 'dateAudit'].map((key, index) => [key, `sha256:${String(index + 1).repeat(64)}`]));
++  const certificates = [];
++  for (const { extraction } of corpus.chapters) {
++    const scope = { book: extraction.book, chapter: extraction.chapter };
++    certificates.push(fixtureIdentityBundle(index, view, sources, scope, inputs).certificate);
++  }
++  return { view, certificates };
++}
 diff --git a/scripts/lib/people-publication.mjs b/scripts/lib/people-publication.mjs
 index e2b16b1c6e60..4e399954cf42 100644
 --- a/scripts/lib/people-publication.mjs
@@ -13548,6 +13958,50 @@ index aebaa70b3ac6..704f45ec2e90 100644
 +  for (const members of accepted.possibleSameAsGroups) for (let a = 0; a < members.length; a += 1) for (let b = a + 1; b < members.length; b += 1) possibleSameAs.add(pairKey(members[a], members[b]));
 +  return { clusters: accepted.clusters, keepSeparate, possibleSameAs };
  }
+diff --git a/scripts/lib/people-resource-job.mjs b/scripts/lib/people-resource-job.mjs
+new file mode 100644
+index 000000000000..166f7c53f796
+--- /dev/null
++++ b/scripts/lib/people-resource-job.mjs
+@@ -0,0 +1,25 @@
++import path from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { spawn } from 'node:child_process';
++import { inspectLocalDisk } from '../check-local-disk.mjs';
++
++// Monitor in a separate process so synchronous corpus validation cannot prevent
++// the required host measurements. Preserve active work on a resource stop.
++export async function runGuardedPeopleScript(script, args) {
++  const hostRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
++  let resourceHold = false;
++  const sample = () => {
++    const result = inspectLocalDisk(hostRoot);
++    if (result.errors.length) { resourceHold = true; console.error(JSON.stringify({ peopleResourceHold: true, errors: result.errors, preserveActiveWork: true })); }
++    return result;
++  };
++  if (sample().errors.length) throw new Error('Host resource guard rejected the new job');
++  const child = spawn(process.execPath, ['--max-old-space-size=3072', fileURLToPath(script), ...args], { cwd: hostRoot, stdio: 'inherit' });
++  const timer = setInterval(() => { try { sample(); } catch (error) { resourceHold = true; console.error(`Host measurement failed; no new work: ${error.message}`); } }, 45_000);
++  try {
++    const code = await new Promise((resolve, reject) => { child.once('error', reject); child.once('exit', (status, signal) => signal ? reject(new Error(`People job terminated by ${signal}`)) : resolve(status)); });
++    sample();
++    if (resourceHold) throw new Error('Host resource hold; preserve completed artifacts and do not dispatch more work');
++    if (code !== 0) throw new Error(`People job exited with status ${code}`);
++  } finally { clearInterval(timer); }
++}
+diff --git a/scripts/lib/people-site.mjs b/scripts/lib/people-site.mjs
+index 681db382e4fb..62e11f7c7238 100644
+--- a/scripts/lib/people-site.mjs
++++ b/scripts/lib/people-site.mjs
+@@ -34,7 +34,7 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
+     ...context,
+     preview: true,
+     publication: { ...context.publication, mode: 'diagnostic-preview',
+-      publishedChapters: 0, publishedPeople: 0 },
++      publishedChapters: 0, publishedPeople: 0, publishedNonemptyChapters: 0 },
+   };
+ }
+ 
 diff --git a/scripts/lib/people-validated-chapter.mjs b/scripts/lib/people-validated-chapter.mjs
 new file mode 100644
 index 000000000000..6d408324c998
@@ -13581,12 +14035,51 @@ index 000000000000..6d408324c998
 +    ? validateCompactPeopleExtraction(raw, packet, options) : validatePeopleExtraction(raw, packet, options);
 +  return { raw, packet, extraction, localPeople: peopleForExtraction(extraction) };
 +}
+diff --git a/scripts/people-identity-registry-worker.mjs b/scripts/people-identity-registry-worker.mjs
+new file mode 100644
+index 000000000000..8e2075a715f8
+--- /dev/null
++++ b/scripts/people-identity-registry-worker.mjs
+@@ -0,0 +1,9 @@
++#!/usr/bin/env node
++import { buildIdentityDossierRegistry } from './lib/people-identity-registry-workflow.mjs';
++const options = {}, args = process.argv.slice(2);
++for (let index = 0; index < args.length; index += 2) {
++  const name = args[index].slice(2);
++  if (!args[index].startsWith('--') || !['out','revision'].includes(name) || !args[index+1] || Object.hasOwn(options,name)) throw new Error('Usage: --out ABSOLUTE_NEW_DIRECTORY --revision FULL_GIT_SHA');
++  options[name] = args[index+1];
++}
++console.log(JSON.stringify(buildIdentityDossierRegistry(options), null, 2));
+diff --git a/scripts/people-identity-registry.mjs b/scripts/people-identity-registry.mjs
+new file mode 100644
+index 000000000000..c24d3c72172e
+--- /dev/null
++++ b/scripts/people-identity-registry.mjs
+@@ -0,0 +1,3 @@
++#!/usr/bin/env node
++import { runGuardedPeopleScript } from './lib/people-resource-job.mjs';
++await runGuardedPeopleScript(new URL('./people-identity-registry-worker.mjs', import.meta.url), process.argv.slice(2));
+diff --git a/scripts/people-identity.mjs b/scripts/people-identity.mjs
+new file mode 100644
+index 000000000000..0c76a1401713
+--- /dev/null
++++ b/scripts/people-identity.mjs
+@@ -0,0 +1,9 @@
++#!/usr/bin/env node
++import { runGuardedPeopleScript } from './lib/people-resource-job.mjs';
++const args = process.argv.slice(2);
++// Saved pair assignments retain their explicit recovery path. Fresh work always
++// prepares one indexed chapter dossier job, never a complete name-pair graph.
++const script = args.includes('--recover-only') || args.includes('--self-test')
++  ? new URL('./sdk-people-resolve.mjs', import.meta.url)
++  : new URL('./prepare-people-chapter-identity.mjs', import.meta.url);
++await runGuardedPeopleScript(script, args);
 diff --git a/scripts/prepare-people-chapter-identity.mjs b/scripts/prepare-people-chapter-identity.mjs
 new file mode 100644
-index 000000000000..a1fb49d791a1
+index 000000000000..91a91b9b2ea1
 --- /dev/null
 +++ b/scripts/prepare-people-chapter-identity.mjs
-@@ -0,0 +1,83 @@
+@@ -0,0 +1,92 @@
 +#!/usr/bin/env node
 +import fs from 'node:fs';
 +import path from 'node:path';
@@ -13599,13 +14092,16 @@ index 000000000000..a1fb49d791a1
 +import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
 +import { assertChapterGates } from './lib/people-qualified-scope.mjs';
 +import { localNameKeys } from './lib/people-resolution.mjs';
-+import { peopleDigest } from './lib/people-identity-seal.mjs';
++import { peopleDigest, identityDossierInputs } from './lib/people-identity-seal.mjs';
++import { compactChapterIdentityReviewPacket } from './lib/people-identity-review-transport.mjs';
++import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 +import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
 +import { readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
 +import { chapterIdentityInputs } from './lib/people-chapter-identity.mjs';
++const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 +const need = (ok, message) => { if (!ok) throw new Error(message); };
 +export async function buildChapterIdentityReviewPacket({ book, chapter, registry }) {
-+  need(!inspectLocalDisk(REPO_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
++  need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
 +  const inputs = chapterIdentityInputs(book, chapter), scope = { book, chapter }, matcher = loadProperNounMatcher();
 +  const own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
 +  const editorialFile = editorialDecisionPath(book, chapter);
@@ -13613,6 +14109,8 @@ index 000000000000..a1fb49d791a1
 +    dateAuditStatus(book, chapter), fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
 +  const index = await readIdentityDossierStore(registry, new Map());
 +  try {
++    const identityInputs = identityDossierInputs(REPO_ROOT);
++    need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
 +    const plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS), sources = new Map([[`${book}:${chapter}`, own]]), relevant = new Map();
 +    for (const item of plan.cases) for (const id of [...item.localPeople, item.canonicalMembership.anchorLocalId]) {
 +      const [sourceBook, sourceChapter] = id.split(':'), key = `${sourceBook}:${sourceChapter}`;
@@ -13622,7 +14120,7 @@ index 000000000000..a1fb49d791a1
 +      need(person && peopleDigest(memberContract(person, localNameKeys(person))) === index.memberVersions.get(id), `Stale dossier member ${id}; update the registry from accepted source deltas`);
 +      relevant.set(id, person);
 +    }
-+    need(peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs), 'Chapter inputs changed while preparing identity review');
++    need(peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs) && identityDossierInputs(REPO_ROOT) === identityInputs, 'Source or identity inputs changed while preparing identity review');
 +    const units = new Map();
 +    // Complete target chapter, plus actual units supporting the retained anchors.
 +    for (const unit of own.packet.units) units.set(`${book}:${chapter}:${unit.id}`, { book, chapter, ...unit });
@@ -13649,14 +14147,18 @@ index 000000000000..a1fb49d791a1
 +    const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
 +      metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
 +      generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false };
-+    need(!inspectLocalDisk(REPO_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
-+    return { plan, packet, receipt };
++    need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
++    const transport = compactChapterIdentityReviewPacket(packet);
++    const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
++    need(transportBytes.length <= 768 * 1024, 'Source-complete review transport exceeds the inspected bound; preserve evidence and split the work without truncating it');
++    receipt.sourcePacketSha256 = identityArtifactHash(bytes); receipt.transportSha256 = identityArtifactHash(transportBytes); receipt.transportBytes = transportBytes.length;
++    return { plan, packet, transport, receipt };
 +  } finally { index.close(); }
 +}
 +export async function prepareChapterIdentityReview({ out, ...options }) {
-+  const { plan, packet, receipt } = await buildChapterIdentityReviewPacket(options);
++  const { plan, packet, transport, receipt } = await buildChapterIdentityReviewPacket(options);
 +  fs.mkdirSync(out, { recursive: false });
-+  for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['preparation-receipt.json', receipt]]) {
++  for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['transport-packet.json', transport], ['preparation-receipt.json', receipt]]) {
 +    fs.writeFileSync(path.join(out, file), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
 +  }
 +  return receipt;
@@ -13670,6 +14172,31 @@ index 000000000000..a1fb49d791a1
 +  for (const key of ['registry', 'out']) { need(options[key] && path.isAbsolute(options[key]), `Absolute --${key} required`); }
 +  console.log(JSON.stringify(await prepareChapterIdentityReview(options), null, 2));
 +}
+diff --git a/scripts/record-people-chapter-identity-worker.mjs b/scripts/record-people-chapter-identity-worker.mjs
+new file mode 100644
+index 000000000000..2523f6e21d60
+--- /dev/null
++++ b/scripts/record-people-chapter-identity-worker.mjs
+@@ -0,0 +1,10 @@
++#!/usr/bin/env node
++import { recordChapterIdentityReview } from './lib/people-identity-review-record.mjs';
++const options = {}, args = process.argv.slice(2);
++for (let index = 0; index < args.length; index += 2) {
++  const name = args[index].slice(2), key = name === 'previous-sha256' ? 'previousSha256' : name;
++  if (!args[index].startsWith('--') || !['packet','report','job','registry','supplement','out','previousSha256'].includes(key) || !args[index+1] || Object.hasOwn(options,key)) throw new Error('Usage: --packet FILE --report FILE --job CAPTURED_JOB --registry DIRECTORY [--supplement FILE] [--out FILE] [--previous-sha256 HEX]');
++  options[key] = args[index+1];
++}
++for (const key of ['packet','report','job','registry']) if (!options[key]) throw new Error(`Missing --${key}`);
++console.log(JSON.stringify(await recordChapterIdentityReview(options), null, 2));
+diff --git a/scripts/record-people-chapter-identity.mjs b/scripts/record-people-chapter-identity.mjs
+new file mode 100644
+index 000000000000..0eebf6b9e437
+--- /dev/null
++++ b/scripts/record-people-chapter-identity.mjs
+@@ -0,0 +1,3 @@
++#!/usr/bin/env node
++import { runGuardedPeopleScript } from './lib/people-resource-job.mjs';
++await runGuardedPeopleScript(new URL('./record-people-chapter-identity-worker.mjs', import.meta.url), process.argv.slice(2));
 diff --git a/scripts/run-people-deadline-wave.mjs b/scripts/run-people-deadline-wave.mjs
 index 8b0947a4bb6a..0c0ff107d40d 100644
 --- a/scripts/run-people-deadline-wave.mjs
@@ -13698,19 +14225,125 @@ index 17db2c8f3b8c..d1a887112dd4 100644
    if (opts.selfTest) return selfTest();
    if(opts.transport==='grok-build'&&!opts.dryRun&&!opts.prepareDossiers){
      const sources=execFileSync('git',['ls-files','--','data/'],{cwd:REPO_ROOT,encoding:'utf8',maxBuffer:16*1024*1024})
+diff --git a/scripts/test-ebook-certified-people.mjs b/scripts/test-ebook-certified-people.mjs
+index 55182cb929a4..86e48cfd83c8 100644
+--- a/scripts/test-ebook-certified-people.mjs
++++ b/scripts/test-ebook-certified-people.mjs
+@@ -1,4 +1,7 @@
+ import test from 'node:test';
++import os from 'node:os';
++import { applyReviewedIdentityUncertainty } from './lib/people-chapter-identity.mjs';
++import { fixtureIdentityCoverage } from './lib/people-identity-test-fixtures.mjs';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -46,7 +49,7 @@ function fixture() {
+   const outside = member('shiji', '001', 'Outside Alias', '外名');
+   const aid = stableCanonicalPersonId(a.localId);
+   const bid = stableCanonicalPersonId(b.localId);
+-  const globalCatalog = { currentPromptVersion: 7, generatedAt: '2026-10-24T00:00:00.000Z', complete: false,
++  const globalCatalog = { identityReviewByChapter: {}, currentPromptVersion: 7, generatedAt: '2026-10-24T00:00:00.000Z', complete: false,
+     localPersonMap: { [a.localId]: aid, [b.localId]: bid, [outside.localId]: aid },
+     people: [{ id: aid, slug: 'global-stable-father', localPeople: [a.localId, outside.localId], retiredIds: [],
+       preferredName: { en: 'Outside Alias', zh: '外名' }, description: { en: 'Outside Descriptor' },
+@@ -60,6 +63,8 @@ function fixture() {
+   const corpus = { localPeople: new Map([[a.localId, a], [b.localId, b]]),
+     chapters: [a, b].map(person => ({ extraction: extraction(person) })) };
+   const projected = projectPeopleProduct(corpus, globalCatalog, new Map([['official', 'Official']]), {}, () => audited);
++  const identity = fixtureIdentityCoverage(corpus, globalCatalog, new Map([...corpus.localPeople, [outside.localId, outside]]));
++  applyReviewedIdentityUncertainty(projected.catalog, identity.certificates);
+   const context = { active: true, preview: false, ...projected,
+     certificate: { schemaVersion: 1, kind: 'certified-ebook-people', scope: product, projection: peopleDigest(projected) },
+     peopleById: new Map(projected.catalog.people.map(person => [person.id, person])) };
+@@ -89,7 +94,7 @@ test('scoped projection retains global identities and URLs while excluding outsi
+   assert(buildEbookPeople(context, product).ready);
+ });
+ 
+-test('a real globally compiled cross-book cluster stays globally blocked while its qualified book projects cleanly', () => {
++test('a compiled cross-book cluster can remain globally incomplete while its independently qualified book projects cleanly', () => {
+   const f = fixture();
+   const spouse = member('shiji', '002', 'Outside Spouse', '外妻');
+   f.outside.descriptorSuggestion = 'Outside Descriptor';
+@@ -114,7 +119,8 @@ test('a real globally compiled cross-book cluster stays globally blocked while i
+   assert.equal(global.life.birth.length, 1);
+   assert(global.roles.some(role => role.roleId === 'historian'));
+   assert(global.familyRelationships.some(relation => relation.value.relation === 'spouse-of'));
+-  assertScopedIdentity(f.corpus, result.catalog, { unresolvedCanonicalPeople: result.unresolvedCanonicalPeople });
++  const identity = fixtureIdentityCoverage(f.corpus, result.catalog, globalCorpus.localPeople);
++  assertScopedIdentity(f.corpus, identity.view, identity.certificates);
+   const projected = projectPeopleProduct(f.corpus, result.catalog, new Map([['official', 'Official']]), {}, () => audited);
+   const person = projected.catalog.people.find(person => person.id === id);
+   assert.equal(person.life.birth.length, 0);
+@@ -235,10 +241,12 @@ test('source-current strictly valid extraction cannot add an applied repair abse
+     reviewer: { ...history.reviewer, agentId: 'extractor' } }, approvedOnly), /cannot review its own/);
+ });
+ 
+-test('outside homonym comparisons still block; unrelated outside comparisons do not', () => {
+-  const { corpus, globalCatalog, aid } = fixture();
+-  assert.throws(() => assertScopedIdentity(corpus, globalCatalog, { unresolvedCanonicalPeople: [aid] }), /global identity/);
+-  assert.doesNotThrow(() => assertScopedIdentity(corpus, globalCatalog, { unresolvedCanonicalPeople: ['outside-unrelated'] }));
++test('reviewed chapter identities qualify with cross-chapter uncertainty; historical pairs alone grant no proof', () => {
++  const f = fixture(), { corpus, globalCatalog } = f;
++  const identity = fixtureIdentityCoverage(corpus, globalCatalog, new Map([...corpus.localPeople, [f.outside.localId, f.outside]]));
++  assert.doesNotThrow(() => assertScopedIdentity(corpus, identity.view, identity.certificates));
++  assert.throws(() => assertScopedIdentity(corpus, identity.view, []), /Missing independent person coverage/);
++  assert.throws(() => assertScopedIdentity(corpus, identity.view, { unresolvedCanonicalPeople: [] }), /validated person certificates/);
+   const a = member('jinshu', '001', 'Same Name', '同名');
+   const b = member('shiji', '001', 'Same Name', '同名');
+   const locals = new Map([[a.localId, a], [b.localId, b]]);
+@@ -253,10 +261,10 @@ test('outside homonym comparisons still block; unrelated outside comparisons do
+ 
+ test('identity generation seals and product certificates reject missing, stale and altered evidence', () => {
+   const { globalCatalog, context } = fixture();
+-  const seal = { schemaVersion: 1, kind: 'people-global-identity-seal', inputs: 'current-inputs',
+-    catalog: peopleDigest(globalCatalog), siteIndex: peopleDigest(context.siteIndex), unresolvedCanonicalPeople: [] };
++  const seal = { schemaVersion: 2, kind: 'people-accepted-identity-seal', inputs: 'current-inputs',
++    catalog: peopleDigest(globalCatalog), siteIndex: peopleDigest(context.siteIndex), identityReviews: peopleDigest(globalCatalog.identityReviewByChapter) };
+   assert.doesNotThrow(() => assertIdentitySeal(seal, globalCatalog, context.siteIndex, 'current-inputs'));
+-  for (const bad of [null, { ...seal, inputs: 'stale' }, { ...seal, catalog: 'altered' }, { ...seal, siteIndex: 'altered' }]) {
++  for (const bad of [null, { ...seal, inputs: 'stale' }, { ...seal, catalog: 'altered' }, { ...seal, siteIndex: 'altered' }, { ...seal, identityReviews: 'altered' }]) {
+     assert.throws(() => assertIdentitySeal(bad, globalCatalog, context.siteIndex, 'current-inputs'), /identity seal/);
+   }
+   assert.throws(() => assertEbookPeopleCertificate({ ...context.certificate, projection: 'forged' }, context.certificate), /certificate/);
+@@ -264,7 +272,7 @@ test('identity generation seals and product certificates reject missing, stale a
+ 
+ test('required source roots reject legitimate split-root configuration before generation or validation writes', t => {
+   const draft = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+-  const other = fs.mkdtempSync(path.join(draft, 'split-root-test-'));
++  const other = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-certified-split-root-'));
+   t.after(() => fs.rmSync(other, { recursive: true, force: true }));
+   assert.doesNotThrow(() => assertCertifiedEbookRoot(REPO_ROOT, 'same-root fixture'));
+   assert.throws(() => assertCertifiedEbookRoot(other, 'generator executable root'), /differs from certified people root/);
+@@ -323,6 +331,7 @@ test('actual shared ebook renderer emits only scoped facts, scoped inverse famil
+   assert(glossary.includes('晉父至。'));
+   assert(glossary.includes('Jin Father arrived.'));
+   assert(glossary.includes('Child of'));
++  assert(glossary.includes('not yet established whether this person is the same'));
+   assert(glossary.includes(`#person-${f.aid}`));
+ });
+ 
+@@ -355,7 +364,7 @@ test('global preview cannot be promoted into certified required glossary output'
+ test('packaged EPUB ZIP transport preserves independently checked glossary facts, snippets, certificate and mention links', t => {
+   const f = renderedFixture();
+   const draft = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+-  const directory = fs.mkdtempSync(path.join(draft, 'synthetic-epub-'));
++  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-certified-synthetic-epub-'));
+   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+   const content = path.join(directory, 'content');
+   const unpacked = path.join(directory, 'unpacked');
 diff --git a/scripts/test-people-chapter-identity.mjs b/scripts/test-people-chapter-identity.mjs
 new file mode 100644
-index 000000000000..4dabd4327837
+index 000000000000..3d1fc9d4c795
 --- /dev/null
 +++ b/scripts/test-people-chapter-identity.mjs
-@@ -0,0 +1,51 @@
+@@ -0,0 +1,57 @@
 +import test from 'node:test';
 +import assert from 'node:assert/strict';
 +import { localNameKeys } from './lib/people-resolution.mjs';
 +import { peopleDigest } from './lib/people-identity-seal.mjs';
 +import { buildIdentityDossierIndex, planChapterIdentityReview } from './lib/people-identity-dossiers.mjs';
 +import { acceptedCatalogIdentityView, validateChapterIdentityBundle, assertReviewedIdentityCoverage,
-+  applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE, identitySourceEvidenceFingerprint } from './lib/people-chapter-identity.mjs';
++  applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './lib/people-chapter-identity.mjs';
 +const inputs = Object.fromEntries(['source','extraction','editorial','dateAudit'].map((k,i)=>[k,`sha256:${String(i+1).repeat(64)}`]));
 +function fixture() {
 +  const localId='fixture:001:p001', anchorId='fixture:002:p001';
@@ -13724,6 +14357,7 @@ index 000000000000..4dabd4327837
 +    sourceWitnesses:[localId,anchorId].map(id=>({localId:id,book:'fixture',chapter:id.split(':')[1],unitId:'s0001',quote:'王偉'}))}]};
 +  const bundle={schemaVersion:1,kind:'chapter-identity-review',scope,plan,report,receipt:{actualReviewerAgentId:'independent-reviewer',authorAgentIds:['actual-extractor','host-author'],planFingerprint:plan.fingerprint,reportFingerprint:peopleDigest(report)}};
 +  const sources=new Map([own,anchor].map(person=>['fixture:'+person.chapter,{extraction:{book:'fixture',chapter:person.chapter,run:{agentId:'actual-extractor'}},localPeople:new Map([[person.localId,person]]),packet:{units:[{id:'s0001',zh:'王偉至。'}]}}]));
++  bundle.receipt.chapterChinese=chapterChineseEvidenceFingerprint(sources.get('fixture:001').packet);
 +  bundle.receipt.sourcePeople=[own,anchor].map(person=>({localId:person.localId,fingerprint:identitySourceEvidenceFingerprint(person,sources.get('fixture:'+person.chapter).packet)}));
 +  const catalog={localPersonMap:Object.fromEntries(index.localPersonMap),people:[{id:'per_test',localPeople:[localId,anchorId],retiredIds:['per_old'],curation:{notes:[]}}]};
 +  return {index,scope,inputs,bundle,sources,catalog,view:acceptedCatalogIdentityView(catalog),corpus:{localPeople:new Map([[localId,own]])}};
@@ -13754,6 +14388,11 @@ index 000000000000..4dabd4327837
 +
 +test('a surviving name quote cannot hide changed primary narrative context',()=>{
 + const f=fixture();f.sources.get('fixture:002').packet.units[0].zh='非王偉至。';assert.throws(()=>validate(f),/primary context or person evidence changed/);
++});
++
++test('a new actor in an unmentioned Chinese unit cannot reuse the old chapter proof',()=>{
++ const f=fixture();f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'李忠至。'});
++ assert.throws(()=>validate(f),/chapter Chinese source or unit inventory changed/);
 +});
 diff --git a/scripts/test-people-identity-dossier-store.mjs b/scripts/test-people-identity-dossier-store.mjs
 new file mode 100644
@@ -14013,11 +14652,53 @@ index 000000000000..552ebe6c2a03
 +  assert.throws(() => validateRetainedDossierReview(index, plan, f.report, f.sourceUnits,
 +    'independent', ['host-author'], inputs, keyReader), /does not support/);
 +});
+diff --git a/scripts/test-people-progress-ui.mjs b/scripts/test-people-progress-ui.mjs
+index 69255a91eb5d..bed1b9c359c1 100644
+--- a/scripts/test-people-progress-ui.mjs
++++ b/scripts/test-people-progress-ui.mjs
+@@ -24,10 +24,10 @@ const context = vm.createContext({ document, console, setTimeout });
+ vm.runInContext(`${script}\nthis.testApi = { renderOverview, createBookSection };`, context);
+ const summary = {
+   currentPromptVersion: 7, sourceChapters: 2, extractedChapters: 1, currentChapters: 1,
+-  completeChapters: 1, dateReviewChapters: 0, dateAuditedChapters: 1,
+-  editorialReviewChapters: 0, identityReviewChapters: 0, chaptersWithUnresolvedPeople: 0,
+-  actionableResolutionChapters: 0, identityCleanChapters: 1, rereviewChapters: 0,
+-  missingChapters: 1, peopleNeedingReview: 0, unresolvedCandidateBlocks: 0,
++  preliminaryChapters: 1, dateReviewChapters: 0, dateAuditedChapters: 1,
++  editorialReviewChapters: 0, identityReviewChapters: 0, identityReviewedChapters: 1,
++  identityPendingChapters: 0, identityPendingCases: 0, reviewedAmbiguousCases: 1,
++  reviewedAmbiguousPeople: 1, zeroPersonExtractions: 0, rereviewChapters: 0, missingChapters: 1,
+   peopleRecords: 1, factClaims: 1, familyRelationships: 0, attestations: 0,
+   appliedTranslationRepairs: 0, pendingTranslationRepairs: 0,
+ };
+@@ -38,11 +38,14 @@ assert.equal(metrics[0].children[1].textContent, '1');
+ assert.match(metrics[0].children[2].textContent, /not a completion or publication count/);
+ assert.match(elements.get('publication-note').textContent, /do not establish whole-chapter editorial review/);
+ assert.equal(elements.get('coverage-percent').textContent, '50.0%');
++assert.match(elements.get('publication-note').textContent, /1 reviewed source identifications retain cross-chapter uncertainty/);
++const incomplete = { ...summary }; delete incomplete.identityPendingCases;
++assert.throws(() => context.testApi.renderOverview(incomplete), /invalid identityPendingCases/);
+ const book = context.testApi.createBookSection('fixture', {
+   name: 'Fixture', chapters: [{ chapter: '001', title: 'Test', peopleGlossary: {
+     glossaryState: 'current', state: 'current', dateAudit: { status: 'audited' },
+     peopleRecords: 1, factClaims: 1, familyRelationships: 0, attestations: 0,
+-    appliedTranslationRepairs: 0, promptVersion: 7, unresolvedPeople: 0,
++    appliedTranslationRepairs: 0, promptVersion: 7, identityReview: { targetCases: 1, approvedCases: 1, heldCases: 0, reviewedAmbiguousCases: 1 },
+   } }],
+ });
+ assert.match(book.children[1].children[0].children[1].textContent, /preliminary checks passed/);
 diff --git a/scripts/test-people-progress.mjs b/scripts/test-people-progress.mjs
-index bb082a141946..dc4034f40f5b 100644
+index bb082a141946..9a0ebce04753 100644
 --- a/scripts/test-people-progress.mjs
 +++ b/scripts/test-people-progress.mjs
-@@ -54,9 +54,9 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
+@@ -48,19 +48,19 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
+     corpus.summary.currentChapters !== countedCurrent ||
+     corpus.summary.rereviewChapters !== countedRereview ||
+     corpus.summary.missingChapters !== countedMissing ||
+-    corpus.summary.completeChapters !== countedComplete ||
++    corpus.summary.preliminaryChapters !== countedComplete ||
+     corpus.summary.dateReviewChapters !== countedDates ||
+     chapterStates.some(chapter => chapter.glossaryState === 'current' && chapter.dateAudit.status !== 'audited') ||
      corpus.summary.editorialReviewChapters !== countedEditorial ||
      corpus.summary.identityReviewChapters !== countedIdentity ||
      chapterStates.some((chapter) => !chapter.glossaryState ||
@@ -14030,3 +14711,122 @@ index bb082a141946..dc4034f40f5b 100644
    throw new Error(`Corpus people progress is inconsistent: ${JSON.stringify(corpus.summary)}`);
  }
  
+ console.log(
+-  `people progress tests passed (${countedComplete} complete, ${countedIdentity} identity review, ` +
++  `people progress tests passed (${countedComplete} preliminary, ${countedIdentity} identity review, ` +
+   `${countedDates} date review, ${countedEditorial} editorial review, ${countedRereview} source rereview, ${countedMissing} missing)`,
+ );
+diff --git a/scripts/test-people-qualified-site.mjs b/scripts/test-people-qualified-site.mjs
+index 6018d8e38044..435b05256b30 100644
+--- a/scripts/test-people-qualified-site.mjs
++++ b/scripts/test-people-qualified-site.mjs
+@@ -93,7 +93,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+   }
+   writeAt('data/people/resolutions/synthetic.json', { schemaVersion: 1, authority: 'curated', batch: 'synthetic', decisions: [
+     { decision: 'merge', localPeople: ['jinshu:001:p001','shiji:001:p001'], basis: ['Synthetic cross-book test identity.'], confidence: 'high' }] });
++  const { writeFixtureIdentityReviews } = await import('./lib/people-identity-test-fixtures.mjs');
+   const compile = () => {
++    writeFixtureIdentityReviews([{ book: 'jinshu', chapter: '001' }, { book: 'jinshu', chapter: '002' }]);
+     const result = spawnSync(process.execPath, [fileURLToPath(import.meta.resolve('./compile-people-catalog.mjs'))], { env: process.env, encoding: 'utf8', timeout: 60_000 });
+     assert.equal(result.status, 0, result.stdout + result.stderr);
+   };
+@@ -121,11 +123,13 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+     compile();
+     const before = loadPeopleSiteContext({ allowPreview: false });
+     assert.equal(before.catalog.complete, true);
++    assert(before.catalog.people.every(person => person.curation.notes.some(note => note.includes('not yet established'))));
+     assert.equal(before.publication.qualifiedChapters, 2);
+     const completeDiagnostic = loadPeopleSiteContext({ allowPreview: true });
+     assert.equal(completeDiagnostic.catalog.complete, true);
+     assert.equal(completeDiagnostic.preview, true);
+     assert.equal(completeDiagnostic.publication.publishedChapters, 0);
++    assert.equal(completeDiagnostic.publication.publishedNonemptyChapters, 0);
+     const approvedPerson = before.catalog.people.find(person => person.localPeople.includes('jinshu:002:p001'));
+     const stalePerson = before.catalog.people.find(person => person.localPeople.includes('jinshu:001:p001'));
+     fs.unlinkSync(path.join(root, 'data/people/date-audits/jinshu/001.json'));
+@@ -136,6 +140,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+     assert.equal(diagnostic.publication.mode, 'diagnostic-preview');
+     assert.equal(diagnostic.publication.qualifiedChapters, 1);
+     assert.equal(diagnostic.publication.publishedChapters, 0);
++    assert.equal(diagnostic.publication.publishedNonemptyChapters, 0);
+     assert.equal(diagnostic.publication.publishedPeople, 0);
+     assert(diagnostic.certificate);
+     assert(!diagnostic.peopleById.has(stalePerson.id));
+@@ -176,6 +181,59 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+     process.exit(0);
+   }
+   compile();
++  // Normal registry, preparation and host-captured record APIs use the same
++  // native validators as publication, without a pair document or paid worker.
++  const { buildIdentityDossierRegistry } = await import('./lib/people-identity-registry-workflow.mjs');
++  const { buildChapterIdentityReviewPacket } = await import('./prepare-people-chapter-identity.mjs');
++  const { recordChapterIdentityReview, identityArtifactHash } = await import('./lib/people-identity-review-record.mjs');
++  const { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments, sourceChapterIds } = await import('./lib/people-corpus.mjs');
++  const { resolveAcceptedPeopleClusters, localNameKeys } = await import('./lib/people-resolution.mjs');
++  const { buildIdentityDossierIndex } = await import('./lib/people-identity-dossiers.mjs');
++  const { acceptedCatalogIdentityView } = await import('./lib/people-chapter-identity.mjs');
++  const { loadValidatedPeopleChapter } = await import('./lib/people-validated-chapter.mjs');
++  const { fixtureIdentityBundle } = await import('./lib/people-identity-test-fixtures.mjs');
++  const registry = path.join(root, 'identity-registry');
++  const registryResult = buildIdentityDossierRegistry({ out: registry, revision: '1'.repeat(40) });
++  assert.equal(registryResult.generatedPairs, 0);
++  const prepared = await buildChapterIdentityReviewPacket({ book: 'jinshu', chapter: '001', registry });
++  assert.equal(prepared.plan.metrics.generatedPairs, 0);
++  assert(prepared.plan.cases.every(item => item.candidateDossiers.length <= 8));
++  const whole = loadValidatedPeopleCorpus(), decisions = loadValidatedResolutionDocuments(whole.localPeople);
++  const groups = resolveAcceptedPeopleClusters(whole.localPeople, decisions).clusters;
++  const registryIndex = buildIdentityDossierIndex(whole.localPeople, groups, localNameKeys);
++  const fixtureView = acceptedCatalogIdentityView({ localPersonMap: Object.fromEntries(registryIndex.localPersonMap), people: groups.map(group => ({ id: group.canonicalPersonId, retiredIds: group.retiredIds })) });
++  const identitySources = new Map(['jinshu:001','jinshu:002','shiji:001'].map(key => { const [book,chapter] = key.split(':'); return [key,loadValidatedPeopleChapter(book,chapter)]; }));
++  const authored = fixtureIdentityBundle(registryIndex, fixtureView, identitySources, prepared.plan.scope, prepared.plan.inputs);
++  assert.equal(authored.bundle.plan.fingerprint, prepared.plan.fingerprint);
++  const commandDir = path.join(root, 'data/people/generated/identity-command-fixture');
++  fs.mkdirSync(commandDir, { recursive: true });
++  const packetFile = path.join(commandDir, 'packet.json'), reportFile = path.join(commandDir, 'report.json'), jobFile = path.join(commandDir, 'job.json');
++  fs.writeFileSync(packetFile, JSON.stringify(prepared.packet, null, 2) + '\n');
++  fs.writeFileSync(reportFile, JSON.stringify(authored.bundle.report));
++  const capture = { schemaVersion: 1, kind: 'captured-independent-identity-review', phase: 'report-recorded', scope: prepared.plan.scope,
++    agentId: authored.bundle.report.reviewer.agentId, runId: 'offline-authored-review-run', sourcePacketSha256: identityArtifactHash(fs.readFileSync(packetFile)), reportSha256: identityArtifactHash(fs.readFileSync(reportFile)) };
++  fs.writeFileSync(jobFile, JSON.stringify(capture));
++  const recordOptions = { packet: packetFile, report: reportFile, job: jobFile, registry, out: path.join(commandDir, 'accepted.json') };
++  assert.equal((await recordChapterIdentityReview(recordOptions)).reviewedCases, 1);
++  assert.equal((await recordChapterIdentityReview(recordOptions)).unchanged, true);
++  const acceptedBytes = fs.readFileSync(recordOptions.out);
++  fs.appendFileSync(reportFile, ' ');
++  await assert.rejects(recordChapterIdentityReview(recordOptions), /byte hashes do not match/);
++  assert.deepEqual(fs.readFileSync(recordOptions.out), acceptedBytes);
++  // Progress distinguishes reviewed source identities/uncertainty from a live receipt.
++  const progressManifest = { books: {} };
++  for (const key of sourceChapterIds()) { const [book,chapter] = key.split(':'); progressManifest.books[book] ??= { chapters: [] }; progressManifest.books[book].chapters.push({ chapter }); }
++  const { buildPeopleGlossaryProgress } = await import('../generate-progress.js');
++  const originalCwd = process.cwd();
++  try {
++    process.chdir(root);
++    const progress = buildPeopleGlossaryProgress(progressManifest);
++    assert.equal(progress.summary.preliminaryChapters, 2);
++    assert.equal(progress.summary.identityReviewedChapters, 2);
++    assert.equal(progress.summary.reviewedAmbiguousCases, 2);
++    assert.equal(progress.summary.zeroPersonExtractions, 64);
++    assert.equal(progress.summary.identityPendingCases, 1);
++  } finally { process.chdir(originalCwd); }
+   const context = loadPeopleSiteContext();
+   assert(context.active);
+   assert(!context.preview);
+@@ -230,6 +288,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+   assert.equal(served.status, 200);
+   const html = await served.text();
+   assert.match(html, /application\/ld\+json/);
++  const structured = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
++  assert(structured['@graph'].find(row => row['@type'] === 'Person').description.includes('not yet established'));
++  assert.match(html, /person-lede[^>]*>[^<]*not yet established/);
+   assert.match(html, /rel="canonical"/);
+   assert.match(html, /jinshu\/001\.html#en-s0001/);
+   assert(!html.includes('Outside'));
+@@ -248,6 +309,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+   assert(!xml.includes('outside-alias'));
+   const search = read('public/data/people/search/index.json');
+   assert.equal(search.people, 2);
++  assert(JSON.stringify(search).includes('not yet established'));
+   assert(!JSON.stringify(search).includes('Outside'));
+   const statusFile = path.join(root, 'public/data/people/site-status.json');
+   fs.renameSync(statusFile, `${statusFile}.held`);

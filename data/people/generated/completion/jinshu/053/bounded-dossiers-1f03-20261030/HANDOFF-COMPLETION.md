@@ -1,3 +1,109 @@
+# NEXT implementation checkpoint — 2026-10-30 23:08 UTC
+
+LATEST user still says IMPLEMENT the bounded dossier process through live Jinshu053.
+Previous turn was concrete progress, not completion. All work remains candidate-only;
+staging1f0316/master0be83f unchanged, recovery prior64f8cd19e54e4605b9978d7b28c06f7ac6372e8f.
+No active paid run. All local tests terminal. Preserve exact53/086 owners, locks,
+claims, audits and raw reports. Shared dirty checkout, no new checkout/native subagents,
+no reset/pull/broadstage. Guard before/after and every45-60s;3GiB Node heap,oneheavyjob.
+Last free36.27GiB/swap1.58GiB/backend0.55GiB/pressure1. Do not activate before CI and
+same independent reviewer recheck. Full glossary goal stays ACTIVE.
+
+NEW THIS TURN:
+- Added actual synthetic independent dossier reports to required native website and
+  ebook tests via candidate/scripts/lib/people-identity-test-fixtures.mjs. Source,
+  dates, editorial, family, outside-fact exclusion, preview, handlers, redirects,
+  bilingual/inverse links and EPUB ZIP integrity checks were NOT removed.
+- Native website integration previously PASSED2tests (qualified-site-fixture.log),
+  including full normal compiler/shared gate/render/search/sitemap/real handler plus
+  atomic rollback/independent holds. Later new assertions include uncertainty in lede,
+  JSONLD and search. Preview now zeros publishedNonemptyChapters as well as other
+  publication counters (new people-site.mjs candidate).
+- Native ebook-certified-people fixture PASSED17tests, including actual ZIP/unzip,
+  source-fact/projection guards and explicit reviewed uncertainty in glossary HTML.
+- Progress UI test PASSED. Backend+UI migrated to preliminaryChapters (not misleading
+  completeChapters), identityReview counts, reviewed uncertainty, zeroPersonExtractions.
+  Per-chapter tooltip uses identityReview; no old quadratic candidate counters.
+- Added FULL target Chinese/unit inventory binding to receipt.chapterChinese. Needed
+  so inserting an unseen actor into an unmentioned unit cannot reuse old person proofs.
+  Existing per-person/anchor full current claims/mentions/primary-context fingerprints
+  remain, as do new aggregates preserving original hashes after metadata-only changes.
+- REAL Jinshu053 revalidated through NEW generic createIdentityReviewBundle using
+  original immutable capture archive64f8cd19, actual72approve report + same-agent
+  citation supplement. source-review-revision-2/validated-full-chapter-binding/ has
+  captured-job.json, review-bundle.json, identity-certificate.json, acceptance-receipt.
+  PASS72cases/73records/63uncertain,209targetChineseunits, all original four bytepins
+  unchanged. Full native14chapter validation. Original raw reports/old receipts NOT
+  rewritten. Candidate canonical053.json now has this stronger receipt.
+- New generic production files: people-identity-registry[-worker].mjs,
+  lib/people-identity-registry-workflow.mjs; record-people-chapter-identity[-worker].mjs,
+  lib/people-identity-review-record.mjs; common resource parent watcher
+  lib/people-resource-job.mjs (45sec guard outside synchronous worker,3GiBheap);
+  compact source transport + artifact hash helpers; people-identity.mjs dispatcher.
+  package people:resolve/identity:prepare now bounded one-chapter preparation; explicit
+  --recover-only/--self-test routes retain old SDK recovery. Registry/record commands
+  registered. PREPARE does NOT send paid work. Generic captured-job journal binds exact
+  packet/report byte hashes and actual agent/run IDs; optional same-reviewer citation
+  supplement can replace ONLY one witness, never canonical assignments.
+- identityDossierInputs shares identity seal inventory/hashing, but excludes recorded
+  identity-review evidence; recording unchanged retained assignments must not stale
+  the matching index. Registry builder uses native compact constraints, manifest-last,
+  source signature before/after. Prepare/record require a fresh immutable registry
+  with provenance.identityInputs (old local prototype registry intentionally cannot
+  be used for fresh generic work; old real approved report can be reused for release).
+
+IMMEDIATE NEXT ACTION:
+Run watch-pinned-tests.mjs scripts/test-people-qualified-site.mjs again, output
+qualified-site-command-fixture.log. Latest expanded run PASSED preview test but FAILED
+ordinary test in TEST HARNESS before new registry constructor: fs.writeFileSync(fd,..)
+was treated as a path '/.../12'. fixture-io.mjs NOW FIXED to track allowed open fds,
+allow only owned fd writes and close. This fix has NOT been rerun yet. Do not weaken
+production locking to address this harness error. New ordinary fixture covers normal
+registry build/preparation/record, idempotency, tampered report hash rejection and real
+progress aggregation (expected2preliminary/2reviewed/2uncertain/64zero-extractions/
+1pending case). More genuine failures may surface; fix them from evidence.
+
+TEST HARNESS (no repo/worktree/data/public copies, primary source untouched):
+fixture-runtime.mjs is separate from immutable runtime.mjs; reads exact baseline Git
+plus candidate overlays. It permits writes ONLY to authored unique OS-temp fixture
+roots, redirects Node test/compile subprocesses through run-pinned-test.mjs, supports
+actual installed node_modules assets. Tests invoke NORMAL code, native validators,
+writers, renderers and verifiers. Source code uses pinned blobs, fixtures author only
+3named source chapters +64empty outside chapters. Parent watcher45sec checks host.
+Do NOT edit immutable runtime.mjs/cache producer provenance. Never materialize a full
+checkout or ignored data. Existing normal CLI test tests requiring make/shell may need
+extra harness support or run in real CI instead. Missing dynamic import hook and
+ignored d3 asset reads were HARNESS issues and are fixed.
+
+REMAINING BEFORE ADOPTION/LIVE:
+1. Finish expanded native website/command fixture; rerun ebook17 and focused25tests
+   after latest whole-Chinese guard changes (17passed before that final field change).
+   Original source-case receipt still valid under strong guard, real revalidation PASS.
+2. Migrate other required CI fixtures, notably test-ebook-certified-cli.mjs and any
+   remaining catalog/seal/pair-veto fixture. Do NOT undo new rule to satisfy old tests.
+   public progress JS cache-busting in HTML may need update because schema changed.
+3. New generic command files are NOT yet tested/rechecked beyond real bundle factory.
+   Complete normal proof REUSE readiness: high-level prepare should recognize current
+   saved proof and avoid commissioning it again. No generic automatic paid SDK source
+   runner yet; host-controlled source review is existing real pipeline. Preserve sticky
+   handles/ledger. Individual changed-person proof mixing remains unfinished: current
+   code reuses whole unchanged identity proof after envelope metadata edits, but one
+   changed person currently holds the complete report. Don't claim that limitation done.
+4. SAME independent code reviewer bc-d53b452f-3667-4606-ad22-14c47a712839 final sealed
+   recheck, latest terminalrun run-a9e7c6d5-a254-4d87-a014-a61e97793866. Existing five
+   findings fixed/investigated but postreview proof reuse/fullChinese/newcommands/UI
+   changes need review after tests pass. No live run; no need new reviewer conversation.
+5. Normal clean PR+requiredCI+actual shared real53 qualification/build/website/ebook
+   contribution checks; merge/deploy/live content and timed nonempty receipt. NO preview
+   shortcut,0people milestone, fake hashes, or source approval re-review just for style.
+   Still0published and0claimed data-qualified chapters. Do not mark full goal complete.
+
+Large LOCAL ONLY stores registry318MiB,registry-revision-1~643MiB, old171MiBf85validated
+cache preserved. New production source-case/fullChinese files can be checkpointed;
+no .env/private ticket/large store. Recovery checkpoint script parent must match latest
+remote. Full earlier implementation handoff follows for exact receipts and chronology.
+
+--- PREVIOUS HANDOFF ---
 # Implementation checkpoint — 2026-10-30 22:05 UTC
 
 LATEST USER expressly says IMPLEMENT the bounded canonical-person dossier process,

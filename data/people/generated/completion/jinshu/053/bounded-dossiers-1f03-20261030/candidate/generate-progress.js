@@ -632,7 +632,7 @@ function applyPeopleIdentityProgress(byChapter, summary) {
   assertPeopleProgress(catalog.identityReviewByChapter && typeof catalog.identityReviewByChapter === 'object',
     'canonical catalog lacks independent person-review coverage; run npm run people:catalog');
   const states = { current: 0, 'date-review': 0, 'editorial-review': 0, 'identity-review': 0, rereview: 0, missing: 0 };
-  let identityReviewedChapters = 0, identityPendingChapters = 0, identityPendingCases = 0, reviewedAmbiguousCases = 0, zeroPersonReviews = 0;
+  let identityReviewedChapters = 0, identityPendingChapters = 0, identityPendingCases = 0, reviewedAmbiguousCases = 0, zeroPersonExtractions = 0;
   for (const [key, chapter] of byChapter) {
     const review = catalog.identityReviewByChapter[key];
     if (chapter.state !== 'missing') assertPeopleProgress(review, `missing compiled identity coverage for ${key}`);
@@ -640,7 +640,7 @@ function applyPeopleIdentityProgress(byChapter, summary) {
     if (chapter.state === 'current') {
       if (review.status === 'review-required') { identityPendingChapters += 1; identityPendingCases += review.heldCases; }
       else if (review.status === 'reviewed') identityReviewedChapters += 1;
-      else if (review.status === 'no-people') zeroPersonReviews += 1;
+      else if (review.status === 'no-people') zeroPersonExtractions += 1;
       reviewedAmbiguousCases += review.reviewedAmbiguousCases;
     }
     chapter.glossaryState = chapter.state === 'current'
@@ -652,10 +652,10 @@ function applyPeopleIdentityProgress(byChapter, summary) {
   }
   return { ...summary,
     // Gate-ready is a staging metric; deployed nonempty receipts are recorded separately.
-    completeChapters: states.current, dateReviewChapters: states['date-review'], editorialReviewChapters: states['editorial-review'],
+    preliminaryChapters: states.current, dateReviewChapters: states['date-review'], editorialReviewChapters: states['editorial-review'],
     identityReviewChapters: states['identity-review'], identityReviewedChapters, identityPendingChapters, identityPendingCases,
-    reviewedAmbiguousCases, reviewedAmbiguousPeople: catalog.stats.reviewedAmbiguousPeople, zeroPersonReviews,
-    completePercent: summary.sourceChapters > 0 ? states.current / summary.sourceChapters * 100 : 0 };
+    reviewedAmbiguousCases, reviewedAmbiguousPeople: catalog.stats.reviewedAmbiguousPeople, zeroPersonExtractions,
+    preliminaryPercent: summary.sourceChapters > 0 ? states.current / summary.sourceChapters * 100 : 0 };
 }
 
 function buildPeopleGlossaryProgress(manifest) {

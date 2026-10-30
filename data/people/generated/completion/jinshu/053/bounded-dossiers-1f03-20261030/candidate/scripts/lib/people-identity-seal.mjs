@@ -67,7 +67,7 @@ export function peopleDigest(value) {
 // A global identity generation is reusable only while every input that could
 // change identity membership or candidate ambiguity is unchanged. Hash bytes,
 // inventories and code; mtime and catalog.generatedAt are not evidence pins.
-export function identityInputSeal(root = REPO_ROOT) {
+function identityInputFiles(root) {
   const files = [];
   const visit = (relative, select) => {
     const directory = path.join(root, relative);
@@ -95,8 +95,23 @@ export function identityInputSeal(root = REPO_ROOT) {
   }
   if (fs.existsSync(path.join(root, 'data/people/identity-reviews'))) visit('data/people/identity-reviews', file => file.endsWith('.json'));
   files.push('data/people/config.json', 'data/glossary.json', 'package.json');
-  return peopleDigest(files.sort().map(file => [file.split(path.sep).join('/'),
+  return files.sort();
+}
+
+function fingerprintInputFiles(root, files) {
+  return peopleDigest(files.map(file => [file.split(path.sep).join('/'),
     crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
+}
+
+export function identityInputSeal(root = REPO_ROOT) {
+  return fingerprintInputFiles(root, identityInputFiles(root));
+}
+
+// Recording a retained-identity review changes publication authority, not name
+// retrieval or accepted canonical membership. Reuse the immutable index then.
+export function identityDossierInputs(root = REPO_ROOT) {
+  return fingerprintInputFiles(root, identityInputFiles(root).filter(file =>
+    !file.split(path.sep).join('/').startsWith('data/people/identity-reviews/')));
 }
 
 export function assertIdentitySeal(seal, catalog, siteIndex, currentInputs) {

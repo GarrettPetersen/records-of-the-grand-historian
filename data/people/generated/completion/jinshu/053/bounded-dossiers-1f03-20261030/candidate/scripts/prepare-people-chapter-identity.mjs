@@ -10,13 +10,16 @@ import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
 import { assertChapterGates } from './lib/people-qualified-scope.mjs';
 import { localNameKeys } from './lib/people-resolution.mjs';
-import { peopleDigest } from './lib/people-identity-seal.mjs';
+import { peopleDigest, identityDossierInputs } from './lib/people-identity-seal.mjs';
+import { compactChapterIdentityReviewPacket } from './lib/people-identity-review-transport.mjs';
+import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
 import { readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
 import { chapterIdentityInputs } from './lib/people-chapter-identity.mjs';
+const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 export async function buildChapterIdentityReviewPacket({ book, chapter, registry }) {
-  need(!inspectLocalDisk(REPO_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
+  need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
   const inputs = chapterIdentityInputs(book, chapter), scope = { book, chapter }, matcher = loadProperNounMatcher();
   const own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
   const editorialFile = editorialDecisionPath(book, chapter);
@@ -24,6 +27,8 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     dateAuditStatus(book, chapter), fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
   const index = await readIdentityDossierStore(registry, new Map());
   try {
+    const identityInputs = identityDossierInputs(REPO_ROOT);
+    need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
     const plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS), sources = new Map([[`${book}:${chapter}`, own]]), relevant = new Map();
     for (const item of plan.cases) for (const id of [...item.localPeople, item.canonicalMembership.anchorLocalId]) {
       const [sourceBook, sourceChapter] = id.split(':'), key = `${sourceBook}:${sourceChapter}`;
@@ -33,7 +38,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
       need(person && peopleDigest(memberContract(person, localNameKeys(person))) === index.memberVersions.get(id), `Stale dossier member ${id}; update the registry from accepted source deltas`);
       relevant.set(id, person);
     }
-    need(peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs), 'Chapter inputs changed while preparing identity review');
+    need(peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs) && identityDossierInputs(REPO_ROOT) === identityInputs, 'Source or identity inputs changed while preparing identity review');
     const units = new Map();
     // Complete target chapter, plus actual units supporting the retained anchors.
     for (const unit of own.packet.units) units.set(`${book}:${chapter}:${unit.id}`, { book, chapter, ...unit });
@@ -60,14 +65,18 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
       generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false };
-    need(!inspectLocalDisk(REPO_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
-    return { plan, packet, receipt };
+    need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
+    const transport = compactChapterIdentityReviewPacket(packet);
+    const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+    need(transportBytes.length <= 768 * 1024, 'Source-complete review transport exceeds the inspected bound; preserve evidence and split the work without truncating it');
+    receipt.sourcePacketSha256 = identityArtifactHash(bytes); receipt.transportSha256 = identityArtifactHash(transportBytes); receipt.transportBytes = transportBytes.length;
+    return { plan, packet, transport, receipt };
   } finally { index.close(); }
 }
 export async function prepareChapterIdentityReview({ out, ...options }) {
-  const { plan, packet, receipt } = await buildChapterIdentityReviewPacket(options);
+  const { plan, packet, transport, receipt } = await buildChapterIdentityReviewPacket(options);
   fs.mkdirSync(out, { recursive: false });
-  for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['preparation-receipt.json', receipt]]) {
+  for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['transport-packet.json', transport], ['preparation-receipt.json', receipt]]) {
     fs.writeFileSync(path.join(out, file), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
   }
   return receipt;
