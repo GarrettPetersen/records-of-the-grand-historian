@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Glossary Progress - 二十四史</title>
+    <meta name="description" content="Chapter-by-chapter progress building the people glossary for the Twenty-Four Histories, Draft History of Qing, and Zizhi Tongjian.">
+    <link rel="canonical" href="https://24histories.com/progress">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css?v=20260814-people-progress">
+    <link rel="stylesheet" href="progress.css?v=20260814-people-progress">
+</head>
+<body>
+    <header>
+        <div class="progress-header-inner">
+            <a href="index.html" class="back-link">&larr; Back to all histories</a>
+            <h1>People Glossary</h1>
+            <h2>Chapter-by-Chapter Coverage</h2>
+        </div>
+    </header>
+
+    <main class="progress-main">
+        <div id="loading" role="status">Loading glossary progress...</div>
+
+        <div id="progress-content" hidden>
+            <section class="corpus-overview" aria-labelledby="corpus-progress-heading">
+                <div class="overview-heading-row">
+                    <div>
+                        <p class="progress-kicker">All 4,099 chapters</p>
+                        <h2 id="corpus-progress-heading">Chapters passing preliminary checks</h2>
+                    </div>
+                    <div class="coverage-figure" id="coverage-percent">0.0%</div>
+                </div>
+
+                <div class="coverage-track" id="coverage-track" role="progressbar" aria-labelledby="corpus-progress-heading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="coverage-segment current" id="coverage-current"></div>
+                    <div class="coverage-segment date-review" id="coverage-dates"></div>
+                    <div class="coverage-segment editorial-review" id="coverage-editorial"></div>
+                    <div class="coverage-segment identity-review" id="coverage-identity"></div>
+                    <div class="coverage-segment rereview" id="coverage-rereview"></div>
+                </div>
+
+                <div class="coverage-key" aria-label="Glossary chapter states">
+                    <span><i class="status-swatch current"></i>Preliminary checks passed; completion unverified</span>
+                    <span><i class="status-swatch date-review"></i>Date audit</span>
+                    <span><i class="status-swatch editorial-review"></i>Proposed repairs pending</span>
+                    <span><i class="status-swatch identity-review"></i>Person identity or source rereview</span>
+                    <span><i class="status-swatch rereview"></i>Source rereview</span>
+                    <span><i class="status-swatch missing"></i>No accepted extraction</span>
+                </div>
+
+                <div class="corpus-metrics" id="corpus-metrics"></div>
+                <p class="publication-note" id="publication-note"></p>
+            </section>
+
+            <section class="chapter-ledger" aria-labelledby="chapter-ledger-heading">
+                <div class="ledger-heading-row">
+                    <div><p class="progress-kicker">One square per chapter</p><h2 id="chapter-ledger-heading">Chapter ledger</h2></div>
+                    <p class="ledger-note">Select a square to open that chapter.</p>
+                </div>
+                <div id="books-loading-status" class="books-loading-status" aria-live="polite"></div>
+                <div id="books-container"></div>
+            </section>
+        </div>
+    </main>
+
+    <div class="last-updated" id="last-updated"></div>
+
+    <footer>
+        <p>
+            <a href="index.html">Home</a> |
+            <a href="people/index.html">People</a> |
+            <a href="about.html">About</a> |
+            <a href="blog.html">Blog</a> |
+            <a href="progress.html">Progress</a> |
+            Source texts: <a href="https://chinesenotes.com" target="_blank" rel="noopener noreferrer">Chinese Notes</a>,
+            <a href="https://ctext.org" target="_blank" rel="noopener noreferrer">CText</a>, and
+            <a href="https://zh.wikisource.org" target="_blank" rel="noopener noreferrer">Wikisource</a> |
+            <a href="privacy.html">Privacy Policy</a>
+        </p>
+        <p class="site-copyright">English translations © 2026 Garrett M. Petersen. The original Chinese texts are in the public domain.</p>
+        <p class="kindle-footer-link">Kindle editions: <a href="https://amzn.to/4vzL5yT" target="_blank" rel="noopener noreferrer sponsored">Records of the Grand Historian</a> · <a href="https://amzn.to/4fFZepo" target="_blank" rel="noopener noreferrer sponsored">Book of Han</a> · <a href="https://amzn.to/3QesTM8" target="_blank" rel="noopener noreferrer sponsored">Records of the Three Kingdoms</a> · <a href="https://amzn.to/3QesTM8" target="_blank" rel="noopener noreferrer sponsored">The Twenty-Four Histories series</a> · <span class="affiliate-disclosure">As an Amazon Associate, Garrett M. Petersen earns from qualifying purchases.</span> · <a href="privacy.html#amazon-associates">Details</a></p>
+    </footer>
+
+    <script src="progress.js?v=20261030-person-review" defer></script>
+</body>
+</html>

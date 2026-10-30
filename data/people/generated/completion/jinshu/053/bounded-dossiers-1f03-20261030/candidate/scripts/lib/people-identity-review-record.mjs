@@ -1,3 +1,4 @@
+import { loadCurrentIdentityEvidence } from './people-identity-evidence.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { identityArtifactHash } from './people-identity-artifacts.mjs';
@@ -74,13 +75,10 @@ export async function recordChapterIdentityReview({ packet, report, job, registr
     const identityInputs = identityDossierInputs(REPO_ROOT);
     index = await readIdentityDossierStore(registry, new Map());
     need(index.provenance.identityInputs === identityInputs, 'Registry is not current; rebuild its immutable generation before recording new work');
-    const matcher = loadProperNounMatcher(), sources = new Map();
-    for (const scope of chapterIdentityEvidenceScopes(bundle)) {
-      const key = `${scope.book}:${scope.chapter}`;
-      sources.set(key, loadValidatedPeopleChapter(scope.book, scope.chapter,
-        { properNounMatcher: matcher, strictAliasDispositions: scope.book === book && scope.chapter === chapter }));
-    }
-    const own = sources.get(`${book}:${chapter}`), editorialFile = editorialDecisionPath(book, chapter);
+    const matcher = loadProperNounMatcher();
+    const own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
+    const sources = loadCurrentIdentityEvidence(bundle, own, matcher);
+    const editorialFile = editorialDecisionPath(book, chapter);
     assertChapterGates(own.extraction, readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
       dateAuditStatus(book, chapter), fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
     const inputs = chapterIdentityInputs(book, chapter);

@@ -15,7 +15,8 @@ import { compactChapterIdentityReviewPacket } from './lib/people-identity-review
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
 import { readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
-import { chapterIdentityInputs } from './lib/people-chapter-identity.mjs';
+import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityReviewPath, validateChapterIdentityBundle } from './lib/people-chapter-identity.mjs';
+import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 export async function buildChapterIdentityReviewPacket({ book, chapter, registry }) {
@@ -74,6 +75,40 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
   } finally { index.close(); }
 }
 export async function prepareChapterIdentityReview({ out, ...options }) {
+  const { book, chapter, registry } = options, savedPath = chapterIdentityReviewPath(book, chapter);
+  if (fs.existsSync(savedPath)) {
+    need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected proof revalidation');
+    const savedBytes = fs.readFileSync(savedPath), saved = JSON.parse(savedBytes), inputs = chapterIdentityInputs(book, chapter);
+    const matcher = loadProperNounMatcher(), own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
+    const editorial = editorialDecisionPath(book, chapter);
+    assertChapterGates(own.extraction, readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
+      dateAuditStatus(book, chapter), fs.existsSync(editorial) ? readJson(editorial) : null);
+    const index = await readIdentityDossierStore(registry, new Map());
+    try {
+      const identityInputs = identityDossierInputs(REPO_ROOT);
+      need(index.provenance.identityInputs === identityInputs, 'Registry is not current; update it before revalidating a saved proof');
+      const sources = loadCurrentIdentityEvidence(saved, own, matcher);
+      let certificate;
+      try {
+        certificate = validateChapterIdentityBundle({ localPersonMap: index.localPersonMap, canonicalByKnownId: index.canonicalByKnownId }, sources, { book, chapter }, saved, inputs);
+      } catch (error) {
+        // A failed saved proof is a visible hold. Never silently commission a
+        // replacement conversation or repeat an unchanged historical hold.
+        if (!(error instanceof ChapterIdentityReviewError)) throw error;
+        throw new Error(`Saved identity proof requires reconciliation: ${error.message}`, { cause: error });
+      }
+      need(identityDossierInputs(REPO_ROOT) === identityInputs && peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs) &&
+        identityArtifactHash(fs.readFileSync(savedPath)) === identityArtifactHash(savedBytes), 'Saved proof or current source changed during revalidation');
+      const receipt = { status: 'identity-review-current', scope: { book, chapter }, inputs,
+        savedProof: savedPath, savedProofSha256: identityArtifactHash(savedBytes), newReviewCases: 0,
+        reviewedCases: certificate.retained.length, reviewedAmbiguousCases: certificate.ambiguity.length,
+        generatedPairs: 0, independentReviewCompleted: true, dataQualified: false, published: false };
+      fs.mkdirSync(out, { recursive: false });
+      fs.writeFileSync(path.join(out, 'preparation-receipt.json'), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
+      need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after proof reuse; dispatch no new work');
+      return receipt;
+    } finally { index.close(); }
+  }
   const { plan, packet, transport, receipt } = await buildChapterIdentityReviewPacket(options);
   fs.mkdirSync(out, { recursive: false });
   for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['transport-packet.json', transport], ['preparation-receipt.json', receipt]]) {

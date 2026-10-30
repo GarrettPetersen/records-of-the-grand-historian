@@ -1,5 +1,5 @@
 import os,json,pathlib,subprocess,tempfile,re
-R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='64f8cd19e54e4605b9978d7b28c06f7ac6372e8f';BRANCH='codex/people-recovery-20261025'
+R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='aac774611efee9561d26881f7572ea349af8ce0f';BRANCH='codex/people-recovery-20261025'
 def git(*args,input=None,env=None):return subprocess.check_output(['git',*args],cwd=R,input=input,env=env).decode().strip()
 subprocess.run(['npm','run','people:disk:check'],cwd=R,check=True,stdout=subprocess.DEVNULL)
 assert json.loads((J/'measurement-state.json').read_text())['phase']=='finished'
@@ -12,7 +12,7 @@ for p in J.rglob('*'):
  files[str(p.relative_to(R))]=p.read_bytes()
 secrets=[]
 for line in (R/'.env').read_text().splitlines():
- m=re.match(r'^(?:export\s+)?(CURSOR_API_KEY|GROKBOT_MCP_AUTH_TOKEN|GITHUB_TOKEN|GH_TOKEN)\s*=\s*(.+)$',line)
+ m=re.match(r'^(?:export\s+)?(CURSOR_API_KEY|GROKBOT_MCP_AUTH_TOKEN|GITHUB_TOKEN|GH_TOKEN|PRODUCTION_CLOUDFLARE_API_TOKEN)\s*=\s*(.+)$',line)
  if m:
   value=m[2].strip().strip('\"\'')
   if len(value)>12:secrets.append(value.encode())

@@ -1,3 +1,31 @@
+diff --git a/.github/workflows/master-build-gate.yml b/.github/workflows/master-build-gate.yml
+index 74578efb5123..f67dee926f3a 100644
+--- a/.github/workflows/master-build-gate.yml
++++ b/.github/workflows/master-build-gate.yml
+@@ -49,8 +49,23 @@ jobs:
+       - name: Test certified ebook people provenance and publication gates
+         run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
+ 
++      - name: Test bounded canonical-person dossiers and chapter proofs
++        run: |
++          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
++          npm run people:catalog:self-test
++
+       - name: Test certified website people publication
+         run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs
+ 
+       - name: Build and validate the full site
+         run: npm run build
++
++      - name: Verify real Jinshu 053 qualification and ebook contribution
++        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
++
++      - name: Preserve nonempty chapter acceptance evidence
++        uses: actions/upload-artifact@v4
++        with:
++          name: jinshu053-qualified-contribution
++          path: data/people/generated/jinshu053-release-acceptance/
++          retention-days: 30
 diff --git a/AGENTS.md b/AGENTS.md
 index a5c849ad6eca..e4a33ebccc50 100644
 --- a/AGENTS.md
@@ -10279,6 +10307,18 @@ index e6f0ad208a25..cf22ce075094 100644
    },
    "engines": {
      "node": ">=22.0.0"
+diff --git a/public/progress.html b/public/progress.html
+index e9683d58c8ce..769c7e0c39cf 100644
+--- a/public/progress.html
++++ b/public/progress.html
+@@ -82,6 +82,6 @@
+         <p class="kindle-footer-link">Kindle editions: <a href="https://amzn.to/4vzL5yT" target="_blank" rel="noopener noreferrer sponsored">Records of the Grand Historian</a> · <a href="https://amzn.to/4fFZepo" target="_blank" rel="noopener noreferrer sponsored">Book of Han</a> · <a href="https://amzn.to/3QesTM8" target="_blank" rel="noopener noreferrer sponsored">Records of the Three Kingdoms</a> · <a href="https://amzn.to/3QesTM8" target="_blank" rel="noopener noreferrer sponsored">The Twenty-Four Histories series</a> · <span class="affiliate-disclosure">As an Amazon Associate, Garrett M. Petersen earns from qualifying purchases.</span> · <a href="privacy.html#amazon-associates">Details</a></p>
+     </footer>
+ 
+-    <script src="progress.js?v=20261018-preliminary-checks" defer></script>
++    <script src="progress.js?v=20261030-person-review" defer></script>
+ </body>
+ </html>
 diff --git a/public/progress.js b/public/progress.js
 index 0aa560950330..2b1ffbd2ea76 100644
 --- a/public/progress.js
@@ -13126,6 +13166,29 @@ index 000000000000..a1923f70226a
 +      requireValue(typeof text === 'string' && typeof quote === 'string' && /\p{Script=Han}/u.test(quote) && text.includes(quote) &&
 +        [...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 +}
+diff --git a/scripts/lib/people-identity-evidence.mjs b/scripts/lib/people-identity-evidence.mjs
+new file mode 100644
+index 000000000000..f8f9ebc73423
+--- /dev/null
++++ b/scripts/lib/people-identity-evidence.mjs
+@@ -0,0 +1,17 @@
++import { chapterIdentityEvidenceScopes } from './people-chapter-identity.mjs';
++import { loadValidatedPeopleChapter } from './people-validated-chapter.mjs';
++
++// External chapters provide identity evidence only. Their alias-disposition
++// diagnostics cannot change normalized identity keys or witnesses; only the
++// target chapter must pass the full publication contract here.
++export function loadCurrentIdentityEvidence(bundle, own, properNounMatcher, cache = new Map()) {
++  const ownKey = `${own.extraction.book}:${own.extraction.chapter}`, sources = new Map([[ownKey, own]]);
++  for (const scope of chapterIdentityEvidenceScopes(bundle)) {
++    const key = `${scope.book}:${scope.chapter}`;
++    if (key === ownKey) continue;
++    if (!cache.has(key)) cache.set(key, loadValidatedPeopleChapter(scope.book, scope.chapter,
++      { properNounMatcher, strictAliasDispositions: false }));
++    sources.set(key, cache.get(key));
++  }
++  return sources;
++}
 diff --git a/scripts/lib/people-identity-registry-workflow.mjs b/scripts/lib/people-identity-registry-workflow.mjs
 new file mode 100644
 index 000000000000..4b4a9ecd835c
@@ -13162,10 +13225,11 @@ index 000000000000..4b4a9ecd835c
 +}
 diff --git a/scripts/lib/people-identity-review-record.mjs b/scripts/lib/people-identity-review-record.mjs
 new file mode 100644
-index 000000000000..2436021a18cb
+index 000000000000..62e018a1a897
 --- /dev/null
 +++ b/scripts/lib/people-identity-review-record.mjs
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,96 @@
++import { loadCurrentIdentityEvidence } from './people-identity-evidence.mjs';
 +import fs from 'node:fs';
 +import path from 'node:path';
 +import { identityArtifactHash } from './people-identity-artifacts.mjs';
@@ -13242,13 +13306,10 @@ index 000000000000..2436021a18cb
 +    const identityInputs = identityDossierInputs(REPO_ROOT);
 +    index = await readIdentityDossierStore(registry, new Map());
 +    need(index.provenance.identityInputs === identityInputs, 'Registry is not current; rebuild its immutable generation before recording new work');
-+    const matcher = loadProperNounMatcher(), sources = new Map();
-+    for (const scope of chapterIdentityEvidenceScopes(bundle)) {
-+      const key = `${scope.book}:${scope.chapter}`;
-+      sources.set(key, loadValidatedPeopleChapter(scope.book, scope.chapter,
-+        { properNounMatcher: matcher, strictAliasDispositions: scope.book === book && scope.chapter === chapter }));
-+    }
-+    const own = sources.get(`${book}:${chapter}`), editorialFile = editorialDecisionPath(book, chapter);
++    const matcher = loadProperNounMatcher();
++    const own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
++    const sources = loadCurrentIdentityEvidence(bundle, own, matcher);
++    const editorialFile = editorialDecisionPath(book, chapter);
 +    assertChapterGates(own.extraction, readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
 +      dateAuditStatus(book, chapter), fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
 +    const inputs = chapterIdentityInputs(book, chapter);
@@ -13465,10 +13526,11 @@ index e2b16b1c6e60..4e399954cf42 100644
  
  export function peopleCatalogPublicationBlockers(stats) {
 diff --git a/scripts/lib/people-qualified-scope.mjs b/scripts/lib/people-qualified-scope.mjs
-index f68d60c8dd8e..47e526299c10 100644
+index f68d60c8dd8e..8aa5c3b3f6f5 100644
 --- a/scripts/lib/people-qualified-scope.mjs
 +++ b/scripts/lib/people-qualified-scope.mjs
-@@ -1,10 +1,9 @@
+@@ -1,10 +1,10 @@
++import { loadCurrentIdentityEvidence } from './people-identity-evidence.mjs';
  import fs from 'node:fs';
  import path from 'node:path';
 -import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
@@ -13481,7 +13543,7 @@ index f68d60c8dd8e..47e526299c10 100644
  import { DATA_DIR, PEOPLE_DIR, extractionPath, readJson } from './people-content.mjs';
  import { DATE_AUDIT_VERSION, dateAuditStatus } from './people-date-audit.mjs';
  import { editorialDecisionPath, validateAppliedEditorialDecisions } from './people-editorial-decisions.mjs';
-@@ -36,17 +35,7 @@ export function assertChapterGates(extraction, currentPromptVersion, dateStatus,
+@@ -36,17 +36,7 @@ export function assertChapterGates(extraction, currentPromptVersion, dateStatus,
    }
  }
  
@@ -13500,7 +13562,7 @@ index f68d60c8dd8e..47e526299c10 100644
  
  // Shared qualification reconstructs facts only from current, strictly validated members.
  // Ebook callers assert the authoritative product contract before entering here.
-@@ -70,11 +59,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
+@@ -70,11 +60,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
    const gateEvidence = [];
    const holds = [];
    const workload = { scopeChapters: scopes.length, candidateChapters: 0, validatedChapters: 0 };
@@ -13513,7 +13575,7 @@ index f68d60c8dd8e..47e526299c10 100644
    for (const { book, chapter } of scopes) {
      if (!fs.existsSync(extractionPath(book, chapter))) {
        if (!skipUnqualified) throw new Error(`Missing scoped extraction: ${book}:${chapter}`);
-@@ -91,8 +76,8 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
+@@ -91,8 +77,8 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
          holds.push({ book, chapter, reason: 'missing-or-legacy-compiled-chapter' });
          continue;
        }
@@ -13524,7 +13586,7 @@ index f68d60c8dd8e..47e526299c10 100644
          continue;
        }
        const dateFile = path.join(PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
-@@ -108,43 +93,47 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
+@@ -108,43 +94,40 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
      }
      workload.candidateChapters += 1;
      try {
@@ -13546,14 +13608,7 @@ index f68d60c8dd8e..47e526299c10 100644
 +    let identityCertificate = null, identityBundle = null;
 +    if (current.localPeople.size) {
 +      identityBundle = readChapterIdentityBundle(book, chapter);
-+      const evidenceSources = new Map([[`${book}:${chapter}`, current]]);
-+      for (const evidenceScope of chapterIdentityEvidenceScopes(identityBundle)) {
-+        const key = `${evidenceScope.book}:${evidenceScope.chapter}`;
-+        if (evidenceSources.has(key)) continue;
-+        if (!sourceCache.has(key)) sourceCache.set(key, loadValidatedPeopleChapter(evidenceScope.book, evidenceScope.chapter,
-+          { properNounMatcher: matcher, strictAliasDispositions: false }));
-+        evidenceSources.set(key, sourceCache.get(key));
-+      }
++      const evidenceSources = loadCurrentIdentityEvidence(identityBundle, current, matcher, sourceCache);
 +      identityCertificate = validateChapterIdentityBundle(identityView, evidenceSources, { book, chapter }, identityBundle, chapterIdentityInputs(book, chapter));
 +      assertScopedIdentity(current, identityView, [identityCertificate]);
 +    }
@@ -13591,7 +13646,7 @@ index f68d60c8dd8e..47e526299c10 100644
    if (!skipUnqualified && projected.catalog.people.length === 0) throw new Error('Certified product contains no people');
    if (identityInputSeal() !== inputs) throw new Error('Identity inputs changed while qualifying product');
    for (const evidence of gateEvidence) {
-@@ -156,10 +145,11 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
+@@ -156,10 +139,11 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
      if (evidence.extraction !== peopleDigest(readJson(extractionPath(book, chapter))) ||
          evidence.source !== peopleDigest(readJson(path.join(DATA_DIR, book, `${chapter}.json`))) ||
          evidence.editorial !== peopleDigest(currentEditorial) || evidence.dateAudit !== peopleDigest(report) ||
@@ -14076,10 +14131,10 @@ index 000000000000..0c76a1401713
 +await runGuardedPeopleScript(script, args);
 diff --git a/scripts/prepare-people-chapter-identity.mjs b/scripts/prepare-people-chapter-identity.mjs
 new file mode 100644
-index 000000000000..91a91b9b2ea1
+index 000000000000..259015fe4c1b
 --- /dev/null
 +++ b/scripts/prepare-people-chapter-identity.mjs
-@@ -0,0 +1,92 @@
+@@ -0,0 +1,127 @@
 +#!/usr/bin/env node
 +import fs from 'node:fs';
 +import path from 'node:path';
@@ -14097,7 +14152,8 @@ index 000000000000..91a91b9b2ea1
 +import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 +import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
 +import { readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
-+import { chapterIdentityInputs } from './lib/people-chapter-identity.mjs';
++import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityReviewPath, validateChapterIdentityBundle } from './lib/people-chapter-identity.mjs';
++import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
 +const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 +const need = (ok, message) => { if (!ok) throw new Error(message); };
 +export async function buildChapterIdentityReviewPacket({ book, chapter, registry }) {
@@ -14156,6 +14212,40 @@ index 000000000000..91a91b9b2ea1
 +  } finally { index.close(); }
 +}
 +export async function prepareChapterIdentityReview({ out, ...options }) {
++  const { book, chapter, registry } = options, savedPath = chapterIdentityReviewPath(book, chapter);
++  if (fs.existsSync(savedPath)) {
++    need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected proof revalidation');
++    const savedBytes = fs.readFileSync(savedPath), saved = JSON.parse(savedBytes), inputs = chapterIdentityInputs(book, chapter);
++    const matcher = loadProperNounMatcher(), own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
++    const editorial = editorialDecisionPath(book, chapter);
++    assertChapterGates(own.extraction, readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
++      dateAuditStatus(book, chapter), fs.existsSync(editorial) ? readJson(editorial) : null);
++    const index = await readIdentityDossierStore(registry, new Map());
++    try {
++      const identityInputs = identityDossierInputs(REPO_ROOT);
++      need(index.provenance.identityInputs === identityInputs, 'Registry is not current; update it before revalidating a saved proof');
++      const sources = loadCurrentIdentityEvidence(saved, own, matcher);
++      let certificate;
++      try {
++        certificate = validateChapterIdentityBundle({ localPersonMap: index.localPersonMap, canonicalByKnownId: index.canonicalByKnownId }, sources, { book, chapter }, saved, inputs);
++      } catch (error) {
++        // A failed saved proof is a visible hold. Never silently commission a
++        // replacement conversation or repeat an unchanged historical hold.
++        if (!(error instanceof ChapterIdentityReviewError)) throw error;
++        throw new Error(`Saved identity proof requires reconciliation: ${error.message}`, { cause: error });
++      }
++      need(identityDossierInputs(REPO_ROOT) === identityInputs && peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs) &&
++        identityArtifactHash(fs.readFileSync(savedPath)) === identityArtifactHash(savedBytes), 'Saved proof or current source changed during revalidation');
++      const receipt = { status: 'identity-review-current', scope: { book, chapter }, inputs,
++        savedProof: savedPath, savedProofSha256: identityArtifactHash(savedBytes), newReviewCases: 0,
++        reviewedCases: certificate.retained.length, reviewedAmbiguousCases: certificate.ambiguity.length,
++        generatedPairs: 0, independentReviewCompleted: true, dataQualified: false, published: false };
++      fs.mkdirSync(out, { recursive: false });
++      fs.writeFileSync(path.join(out, 'preparation-receipt.json'), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
++      need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after proof reuse; dispatch no new work');
++      return receipt;
++    } finally { index.close(); }
++  }
 +  const { plan, packet, transport, receipt } = await buildChapterIdentityReviewPacket(options);
 +  fs.mkdirSync(out, { recursive: false });
 +  for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['transport-packet.json', transport], ['preparation-receipt.json', receipt]]) {
@@ -14225,6 +14315,43 @@ index 17db2c8f3b8c..d1a887112dd4 100644
    if (opts.selfTest) return selfTest();
    if(opts.transport==='grok-build'&&!opts.dryRun&&!opts.prepareDossiers){
      const sources=execFileSync('git',['ls-files','--','data/'],{cwd:REPO_ROOT,encoding:'utf8',maxBuffer:16*1024*1024})
+diff --git a/scripts/test-ebook-certified-cli.mjs b/scripts/test-ebook-certified-cli.mjs
+index a104b8e08ab9..119b37f1f683 100644
+--- a/scripts/test-ebook-certified-cli.mjs
++++ b/scripts/test-ebook-certified-cli.mjs
+@@ -1,4 +1,5 @@
+ import test from 'node:test';
++import os from 'node:os';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
+@@ -10,7 +11,7 @@ import { PEOPLE_DIR } from './lib/people-content.mjs';
+ // normal compiler. No source, identity, editorial or date gate is mocked.
+ test('required CLI binds the full publication to one certified root; split-root unmentioned events reject', { timeout: 180_000 }, () => {
+   const codeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+-  const directory = fs.mkdtempSync(path.join(codeRoot, 'certified-cli-fixture-'));
++  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-certified-cli-fixture-'));
+   try {
+     const a = path.join(directory, 'approved-a');
+     const b = path.join(directory, 'unapproved-b');
+@@ -67,7 +68,7 @@ test('required CLI binds the full publication to one certified root; split-root
+         ? { ...context, parentURL: ${JSON.stringify(pathToFileURL(generator).href)} } : context);
+     }\n`);
+     const modules = Object.fromEntries(['build-people-extraction-packet.mjs', 'validate-people-extraction.mjs',
+-      'lib/people-content.mjs', 'lib/people-date-audit.mjs'].map(file => [file, import.meta.resolve(`./${file}`)]));
++      'lib/people-content.mjs', 'lib/people-date-audit.mjs', 'lib/people-identity-test-fixtures.mjs'].map(file => [file, import.meta.resolve(`./${file}`)]));
+     const seed = path.join(a, 'seed.mjs');
+     fs.writeFileSync(seed, `const modules = ${JSON.stringify(modules)};
+       const { buildPeopleExtractionPacket, buildPeopleExtractionSeed } = await import(modules['build-people-extraction-packet.mjs']);
+@@ -101,6 +102,8 @@ test('required CLI binds the full publication to one certified root; split-root
+         reviewer: { name: 'Independent synthetic reviewer', independentOfExtractor: true }, reviewedAt: '2026-10-24T12:00:00Z',
+         summary: 'Synthetic complete source review.', reviewedUnits: ['s0001'], itemChecks: audit.items.map(item => check(item.id)),
+         personChecks: audit.people.map(person => check(person.id)), findings: [], references: [] });
++      const { writeFixtureIdentityReviews } = await import(modules['lib/people-identity-test-fixtures.mjs']);
++      writeFixtureIdentityReviews([{ book: 'jinshu', chapter: '001' }]);
+     `);
+     const inheritedLoaders = [];
+     for (let index = 0; index < process.execArgv.length; index += 1) {
 diff --git a/scripts/test-ebook-certified-people.mjs b/scripts/test-ebook-certified-people.mjs
 index 55182cb929a4..86e48cfd83c8 100644
 --- a/scripts/test-ebook-certified-people.mjs
@@ -14331,6 +14458,19 @@ index 55182cb929a4..86e48cfd83c8 100644
    t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
    const content = path.join(directory, 'content');
    const unpacked = path.join(directory, 'unpacked');
+diff --git a/scripts/test-nested-date-rendering.mjs b/scripts/test-nested-date-rendering.mjs
+index a672166cabea..1b2ce03c4860 100644
+--- a/scripts/test-nested-date-rendering.mjs
++++ b/scripts/test-nested-date-rendering.mjs
+@@ -26,7 +26,7 @@ assert.match(mixed,/AD 12/u);
+ assert.match(mixed,/outer source/u);
+ assert.match(mixed,/nested source/u);
+ const person = {id:'per_0123456789ABCDEFGHJK',slug:'person-test',preferredName:{en:'Person Test'},description:{en:'Official'},
+-  historicity:'historical',identificationStatus:'named',sex:null,names:[],roles:[],references:[],externalIds:{},
++  curation:{notes:[]},historicity:'historical',identificationStatus:'named',sex:null,names:[],roles:[],references:[],externalIds:{},
+   familyRelationships:[],familySummaries:[],life:{birth:[],death:[],ageClaims:[],attestedActivity:[
+     {predicate:'attestation',certainty:'uncertain',value:{...nested,unresolvedReason:'This is conditional'},evidence:[]}
+   ]},ethnicities:[],lineages:[],occupations:[],polityAssociations:[],placeAssociations:[],organizationAssociations:[],offices:[],titlesAndHonors:[],statuses:[],education:[],credentials:[],beliefs:[],skills:[],works:[]};
 diff --git a/scripts/test-people-chapter-identity.mjs b/scripts/test-people-chapter-identity.mjs
 new file mode 100644
 index 000000000000..3d1fc9d4c795
@@ -14394,6 +14534,28 @@ index 000000000000..3d1fc9d4c795
 + const f=fixture();f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'李忠至。'});
 + assert.throws(()=>validate(f),/chapter Chinese source or unit inventory changed/);
 +});
+diff --git a/scripts/test-people-date-audit.mjs b/scripts/test-people-date-audit.mjs
+index a85712e8f948..10f6e7f28365 100644
+--- a/scripts/test-people-date-audit.mjs
++++ b/scripts/test-people-date-audit.mjs
+@@ -11,7 +11,7 @@ import { peopleCatalogIsComplete, peopleCatalogIsPublishable } from './lib/peopl
+ 
+ const year = n => ({ era: n < 0 ? 'BC' : 'AD', year: Math.abs(n), precision: 'year' });
+ test('catalog completion requires date approval independently of extraction', () => {
+-  const stats = { missingChapters: 0, legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0, dateAuditPendingChapters: 1 };
++  const stats = { missingChapters: 0, legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, identityReviewPendingChapters: 0, dateAuditPendingChapters: 1 };
+   assert.equal(peopleCatalogIsComplete(stats), false);
+   assert.equal(peopleCatalogIsComplete({ ...stats, dateAuditPendingChapters: 0 }), true);
+   delete stats.dateAuditPendingChapters;
+@@ -24,7 +24,7 @@ test('publication requires the complete catalog, not merely extracted records',
+     legacyChapters: 0,
+     legacyLocalPeople: 0,
+     pendingTranslationRepairs: 0,
+-    unresolvedCandidateBlocks: 0,
++    identityReviewPendingChapters: 0,
+     dateAuditPendingChapters: 1,
+   };
+   assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: false, stats: blockers }), false);
 diff --git a/scripts/test-people-identity-dossier-store.mjs b/scripts/test-people-identity-dossier-store.mjs
 new file mode 100644
 index 000000000000..01cbb9cd4ad9
@@ -14652,6 +14814,19 @@ index 000000000000..552ebe6c2a03
 +  assert.throws(() => validateRetainedDossierReview(index, plan, f.report, f.sourceUnits,
 +    'independent', ['host-author'], inputs, keyReader), /does not support/);
 +});
+diff --git a/scripts/test-people-production-build.mjs b/scripts/test-people-production-build.mjs
+index aa6294e22606..0209aa121aed 100644
+--- a/scripts/test-people-production-build.mjs
++++ b/scripts/test-people-production-build.mjs
+@@ -53,7 +53,7 @@ try {
+ // compiler in test-people-qualified-site.mjs. Restore every patch immediately.
+ const catalog = { schemaVersion: 1, generatedAt: 'fixture', currentPromptVersion: 7, complete: false,
+   stats: { sourceChapters: 2, extractedChapters: 1, missingChapters: 1, dateAuditPendingChapters: 1,
+-    legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0 },
++    legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, identityReviewPendingChapters: 0 },
+   missingChapterIds: ['fixture:002'], people: [{ id: 'fixture-person' }], familyEdges: [] };
+ const index = { schemaVersion: 2, generatedAt: 'fixture', currentPromptVersion: 7, complete: false, chapters: {} };
+ const files = new Map([[path.join(root, 'data/people/generated/catalog.json'), JSON.stringify(catalog)],
 diff --git a/scripts/test-people-progress-ui.mjs b/scripts/test-people-progress-ui.mjs
 index 69255a91eb5d..bed1b9c359c1 100644
 --- a/scripts/test-people-progress-ui.mjs
@@ -14717,7 +14892,7 @@ index bb082a141946..9a0ebce04753 100644
    `${countedDates} date review, ${countedEditorial} editorial review, ${countedRereview} source rereview, ${countedMissing} missing)`,
  );
 diff --git a/scripts/test-people-qualified-site.mjs b/scripts/test-people-qualified-site.mjs
-index 6018d8e38044..435b05256b30 100644
+index 6018d8e38044..fb8151226e1f 100644
 --- a/scripts/test-people-qualified-site.mjs
 +++ b/scripts/test-people-qualified-site.mjs
 @@ -93,7 +93,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
@@ -14752,14 +14927,14 @@ index 6018d8e38044..435b05256b30 100644
      assert.equal(diagnostic.publication.publishedPeople, 0);
      assert(diagnostic.certificate);
      assert(!diagnostic.peopleById.has(stalePerson.id));
-@@ -176,6 +181,59 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+@@ -176,6 +181,73 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
      process.exit(0);
    }
    compile();
 +  // Normal registry, preparation and host-captured record APIs use the same
 +  // native validators as publication, without a pair document or paid worker.
 +  const { buildIdentityDossierRegistry } = await import('./lib/people-identity-registry-workflow.mjs');
-+  const { buildChapterIdentityReviewPacket } = await import('./prepare-people-chapter-identity.mjs');
++  const { buildChapterIdentityReviewPacket, prepareChapterIdentityReview } = await import('./prepare-people-chapter-identity.mjs');
 +  const { recordChapterIdentityReview, identityArtifactHash } = await import('./lib/people-identity-review-record.mjs');
 +  const { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments, sourceChapterIds } = await import('./lib/people-corpus.mjs');
 +  const { resolveAcceptedPeopleClusters, localNameKeys } = await import('./lib/people-resolution.mjs');
@@ -14772,6 +14947,10 @@ index 6018d8e38044..435b05256b30 100644
 +  assert.equal(registryResult.generatedPairs, 0);
 +  const prepared = await buildChapterIdentityReviewPacket({ book: 'jinshu', chapter: '001', registry });
 +  assert.equal(prepared.plan.metrics.generatedPairs, 0);
++  const reused = await prepareChapterIdentityReview({ book: 'jinshu', chapter: '001', registry, out: path.join(root, 'reused-identity-proof') });
++  assert.equal(reused.status, 'identity-review-current');
++  assert.equal(reused.newReviewCases, 0);
++  assert.equal(fs.existsSync(path.join(root, 'reused-identity-proof/transport-packet.json')), false);
 +  assert(prepared.plan.cases.every(item => item.candidateDossiers.length <= 8));
 +  const whole = loadValidatedPeopleCorpus(), decisions = loadValidatedResolutionDocuments(whole.localPeople);
 +  const groups = resolveAcceptedPeopleClusters(whole.localPeople, decisions).clusters;
@@ -14809,10 +14988,20 @@ index 6018d8e38044..435b05256b30 100644
 +    assert.equal(progress.summary.zeroPersonExtractions, 64);
 +    assert.equal(progress.summary.identityPendingCases, 1);
 +  } finally { process.chdir(originalCwd); }
++  const contributionDirectory = path.join(root, 'chapter-contribution');
++  const contributionRun = spawnSync(process.execPath, [fileURLToPath(import.meta.resolve('./verify-people-chapter-release.mjs')),
++    '--book', 'jinshu', '--chapter', '001', '--out', contributionDirectory], { env: process.env, encoding: 'utf8', timeout: 60_000 });
++  assert.equal(contributionRun.status, 0, contributionRun.stdout + contributionRun.stderr);
++  const contributionReceipt = JSON.parse(fs.readFileSync(path.join(contributionDirectory, 'qualification-and-contribution.json')));
++  assert.equal(contributionReceipt.dataQualified, true);
++  assert.equal(contributionReceipt.livePublished, false);
++  assert.equal(contributionReceipt.people, 1);
++  assert.equal(contributionReceipt.ebookContribution.wholeBookCertified, false);
++  assert.equal(contributionReceipt.bilingualMentionLinks, 2);
    const context = loadPeopleSiteContext();
    assert(context.active);
    assert(!context.preview);
-@@ -230,6 +288,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+@@ -230,6 +302,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
    assert.equal(served.status, 200);
    const html = await served.text();
    assert.match(html, /application\/ld\+json/);
@@ -14822,7 +15011,7 @@ index 6018d8e38044..435b05256b30 100644
    assert.match(html, /rel="canonical"/);
    assert.match(html, /jinshu\/001\.html#en-s0001/);
    assert(!html.includes('Outside'));
-@@ -248,6 +309,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+@@ -248,6 +323,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
    assert(!xml.includes('outside-alias'));
    const search = read('public/data/people/search/index.json');
    assert.equal(search.people, 2);
@@ -14830,3 +15019,95 @@ index 6018d8e38044..435b05256b30 100644
    assert(!JSON.stringify(search).includes('Outside'));
    const statusFile = path.join(root, 'public/data/people/site-status.json');
    fs.renameSync(statusFile, `${statusFile}.held`);
+diff --git a/scripts/test-people-site.mjs b/scripts/test-people-site.mjs
+index 13f45e934956..2eb9ca8d1e46 100644
+--- a/scripts/test-people-site.mjs
++++ b/scripts/test-people-site.mjs
+@@ -218,6 +218,7 @@ assert.equal(
+ );
+ 
+ const searchText = personSearchText({
++  curation: { notes: [] },
+   names: [{ kind: 'personal-name', en: 'Cao Cao', zh: '曹操', pinyin: 'Cáo Cāo' }],
+   roles: [{ roleId: 'statesman', label: 'Statesman' }],
+   life: { birth: [], death: [], ageClaims: [], attestedActivity: [] },
+diff --git a/scripts/verify-people-chapter-release.mjs b/scripts/verify-people-chapter-release.mjs
+new file mode 100644
+index 000000000000..199919907fea
+--- /dev/null
++++ b/scripts/verify-people-chapter-release.mjs
+@@ -0,0 +1,74 @@
++#!/usr/bin/env node
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import path from 'node:path';
++import { load } from 'cheerio';
++import { loadQualifiedPeopleScope } from './lib/people-qualified-scope.mjs';
++import { chapterIdentityInputs, IDENTITY_UNCERTAINTY_NOTE } from './lib/people-chapter-identity.mjs';
++import { DATA_DIR, readJson, sourceUnitAt, chineseText, englishText } from './lib/people-content.mjs';
++import { chapterPeopleContext, renderUnitWithPeople } from './lib/people-site.mjs';
++import { renderEbookGlossaryShard, ebookPersonAnchor } from './lib/ebook-people-render.mjs';
++import { planEbookContentDocuments } from './lib/ebook-content-layout.mjs';
++import { peopleDigest } from './lib/people-identity-seal.mjs';
++
++// A chapter contribution checks real qualified facts through the shared ebook
++// renderer. It grants no whole-book/product certificate and packages no ebook.
++const options = {};
++for (let i = 2; i < process.argv.length; i += 2) {
++  const key = process.argv[i].slice(2);
++  assert(['book', 'chapter', 'out'].includes(key) && process.argv[i].startsWith('--') && process.argv[i + 1] && !Object.hasOwn(options, key), 'Usage: --book BOOK --chapter NNN --out NEW_DIRECTORY');
++  options[key] = process.argv[i + 1];
++}
++const { book, chapter, out } = options;
++assert(/^[a-z0-9_-]+$/u.test(book ?? '') && /^\d{3}$/u.test(chapter ?? '') && out && !fs.existsSync(out), 'Explicit chapter and new output directory required');
++const inputs = chapterIdentityInputs(book, chapter);
++const qualified = loadQualifiedPeopleScope([{ book, chapter }]);
++const { catalog, siteIndex, gateEvidence, identityCertificates } = qualified;
++assert(catalog.people.length > 0 && gateEvidence.length === 1 && identityCertificates.length === 1, 'Real nonempty qualified chapter required');
++const context = { ...qualified, active: true, preview: false, peopleById: new Map(catalog.people.map(person => [person.id, person])) };
++const chapterContext = chapterPeopleContext(context, book, chapter);
++assert(chapterContext && chapterContext.record.mentions.length > 0, 'Qualified chapter mentions required');
++const data = readJson(path.join(DATA_DIR, book, `${chapter}.json`));
++const file = 'glossary-001.xhtml';
++const state = { book, people: catalog.people, chapterIds: new Set([chapter]),
++  familyPeopleById: context.peopleById, fileByPersonId: new Map(catalog.people.map(person => [person.id, file])),
++  certificate: { kind: 'qualified-chapter-contribution-only' } };
++const layout = planEbookContentDocuments([{ chapter, data }], { hasAbout: false, peopleActive: true, peopleShards: 1 });
++const glossary = renderEbookGlossaryShard({ number: 1, people: catalog.people }, state,
++  new Map([[chapter, data.meta.title?.en || `Chapter ${Number(chapter)}`]]), layout, new Map([[chapter, data]]));
++const $ = load(glossary, { xmlMode: true });
++assert.equal($('.glossary-entry').length, catalog.people.length, 'Every qualified person needs an ebook entry');
++for (const person of catalog.people) {
++  const entry = $(`[id="${ebookPersonAnchor(person.id)}"]`);
++  assert.equal(entry.length, 1, `Missing or duplicate ebook person ${person.id}`);
++  assert(person.references.every(reference => reference.book === book && reference.chapter === chapter), 'External facts leaked into contribution');
++  if (person.curation.notes.includes(IDENTITY_UNCERTAINTY_NOTE)) assert(entry.text().includes(IDENTITY_UNCERTAINTY_NOTE), 'Missing reviewed identity uncertainty');
++}
++let bilingualMentionLinks = 0;
++const rendered = [];
++for (const [unitId, mentions] of chapterContext.mentionsByUnit) {
++  const unit = sourceUnitAt(data, mentions[0].unit);
++  for (const language of ['zh', 'en']) {
++    const html = renderUnitWithPeople({ unitId, text: language === 'zh' ? chineseText(unit) : englishText(unit), language,
++      chineseWordSpans: false, chapterContext, hrefForPerson: ({ personId }) => `${file}#${ebookPersonAnchor(personId)}` });
++    const document = load(html);
++    for (const mention of mentions) if (mention.spans[language]?.length) {
++      assert(document(`a[href="${file}#${ebookPersonAnchor(mention.personId)}"]`).length > 0, `Missing ${language} ebook mention ${mention.mentionId}`);
++      bilingualMentionLinks++;
++    }
++    rendered.push({ unitId, language, html });
++  }
++}
++assert.equal(peopleDigest(chapterIdentityInputs(book, chapter)), peopleDigest(inputs), 'Chapter inputs changed during contribution verification');
++const receipt = { schemaVersion: 1, scope: { book, chapter }, inputs, qualifiedGateEvidence: gateEvidence,
++  identity: qualified.identity, identityInputs: qualified.inputs, people: catalog.people.length,
++  personTargets: catalog.people.map(person => ({ id: person.id, slug: person.slug, name: person.preferredName, retiredIds: person.retiredIds, uncertain: person.curation.notes.includes(IDENTITY_UNCERTAINTY_NOTE) })),
++  mentionTargets: chapterContext.record.mentions.map(mention => ({ personId: mention.personId, unitId: mention.unit.id, languages: ['zh', 'en'].filter(language => mention.spans[language]?.length) })),
++  reviewedCases: identityCertificates[0].retained.length, reviewedAmbiguousCases: identityCertificates[0].ambiguity.length,
++  bilingualMentionLinks, ebookContribution: { verified: true, glossaryFingerprint: peopleDigest(glossary), mentionFingerprint: peopleDigest(rendered), wholeBookCertified: false },
++  dataQualified: true, livePublished: false, checkedAt: new Date().toISOString() };
++fs.mkdirSync(out, { recursive: false });
++fs.writeFileSync(path.join(out, 'qualification-and-contribution.json'), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
++fs.writeFileSync(path.join(out, file), glossary, { flag: 'wx' });
++fs.writeFileSync(path.join(out, 'bilingual-mentions.json'), JSON.stringify(rendered) + '\n', { flag: 'wx' });
++console.log(JSON.stringify(receipt));

@@ -1,3 +1,4 @@
+import { loadCurrentIdentityEvidence } from './people-identity-evidence.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { projectPeopleProduct } from '../compile-people-catalog.mjs';
@@ -103,14 +104,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
     let identityCertificate = null, identityBundle = null;
     if (current.localPeople.size) {
       identityBundle = readChapterIdentityBundle(book, chapter);
-      const evidenceSources = new Map([[`${book}:${chapter}`, current]]);
-      for (const evidenceScope of chapterIdentityEvidenceScopes(identityBundle)) {
-        const key = `${evidenceScope.book}:${evidenceScope.chapter}`;
-        if (evidenceSources.has(key)) continue;
-        if (!sourceCache.has(key)) sourceCache.set(key, loadValidatedPeopleChapter(evidenceScope.book, evidenceScope.chapter,
-          { properNounMatcher: matcher, strictAliasDispositions: false }));
-        evidenceSources.set(key, sourceCache.get(key));
-      }
+      const evidenceSources = loadCurrentIdentityEvidence(identityBundle, current, matcher, sourceCache);
       identityCertificate = validateChapterIdentityBundle(identityView, evidenceSources, { book, chapter }, identityBundle, chapterIdentityInputs(book, chapter));
       assertScopedIdentity(current, identityView, [identityCertificate]);
     }
