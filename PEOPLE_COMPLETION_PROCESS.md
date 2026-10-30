@@ -1,6 +1,12 @@
 # Completion-first people glossary process
 
-This is the current orchestration policy. It supersedes extraction-volume targets,
+This is the current orchestration policy.
+
+**October 30, 2026 user-authorized process revision:** chapter completion uses
+bounded canonical-person dossier reviews, not exhaustive O(k²) same-name pair
+comparisons. This explicitly supersedes the old zero-touching-pairs completion
+condition. Adoption still requires integrated code, independent review, passing
+CI and a real nonempty live chapter receipt; this text alone grants no approval. It supersedes extraction-volume targets,
 old deadline wave recipes, and waiting for 25–50 new extractions before identity work.
 Existing source, editorial, chronology, identity and publication gates remain intact.
 A planning checkpoint grants no approval.
@@ -39,37 +45,48 @@ prove every source proposition has been translated.
 3. Pin the actual source, extraction, editorial history and date-report bytes. Record
    a small work order under `data/people/generated/completion/BOOK/NNN/`, not a checkout.
    Keep the original evidence in place; a fingerprint is not permission to rewrite it.
-4. Compile the current identity graph once and enumerate the exact outstanding
-   canonical `reviewPairs` touching this chapter's people. That is the initial finite
-   worklist. Do not recursively require every comparison of everyone encountered,
-   every chapter mentioning them or those external chapters' date approvals. External
-   sources are identity evidence, not additional chapter completion assignments.
-5. Assign bounded source-complete identity packets with independent review. Use
-   source-backed merges, separations or `possible-same-as`. Reviewed ambiguity may
-   keep records separate and close a pair; lack of evidence must not become a confident
-   merge/separation to reduce the count. Use one supported transitive cluster merge
-   for a proven same-person group, not a quadratic list of repeated pair decisions.
-   Apply the existing source-backed generic-title/homonym pruning rules before
-   commissioning packets; do not invent a new pruning shortcut for a difficult case.
-   Resume unfinished packets and retain decisions.
-6. After a reviewed batch, rebuild the graph once. Record accepted decisions, remaining
-   pair IDs, model usage and elapsed time. Compare with the initial worklist. Added pair
-   IDs, including IDs changed by merges, require host reconciliation: distinguish
-   renames from new evidence and preserve earlier worklists. Never silently grow scope.
-7. With zero touching pairs, run real scoped website qualification/projection. Public
-   facts come only from qualified chapters; global mapping supplies identities/URLs,
-   not unreviewed outside facts. Unrelated corpus debt must not block this scope.
-   Touching unresolved identities, unsupported family targets and stale evidence still
-   block it. Do not use preview flags or weaken validators to obtain a green result.
+4. Reuse the current immutable canonical-person dossier registry. Build/update it
+   once from validated source records and accepted membership decisions, never once
+   per review packet. One logical dossier represents one accepted canonical person;
+   chapter records remain its cited provenance. Historical merge, separation and
+   reviewed-ambiguity decisions remain valid constraints, not a new all-pairs queue.
+5. Prepare one case per canonical person occurring in this chapter, covering every
+   chapter-local record exactly once. Retrieve at most eight other dossiers per
+   case through the name/alias index, with at most sixteen keys and eight posting
+   reads per key. Record full posting counts/fingerprints, every omitted key and
+   every overflow. Retrieval limits are admission limits, never proof of uniqueness
+   or permission to discard a plausible match. No complete same-name pair graph,
+   connected-component completion, or recursive external-chapter completion.
+6. Independently review each case's source-backed retained identity assignment and
+   exact cited Chinese evidence. The reviewer must confirm that the record denotes
+   an actual individual, its chapter mentions belong to that record, and the accepted
+   canonical membership is supported. An unresolved cross-chapter equivalence may
+   finish as explicit reviewed uncertainty while records remain separate. It must
+   not create a confident separation, a guessed match, or a new merge. A suspected
+   false existing merge, unsupported chapter-person attribution, or conflicting
+   primary evidence remains a concrete case hold. New merges still use the existing
+   independently reviewed resolution-application gates.
+7. Once every chapter-local person has current independent case coverage and no
+   concrete case hold, run actual scoped website qualification/projection. A legacy
+   same-name candidate count is not the chapter's release gate. Publication must
+   preserve reviewed cross-chapter uncertainty visibly and reconstruct facts only
+   from qualified source members. Source/extraction/editorial/date, unsupported
+   family-target, source-fidelity, quote/artifact, CI and live-content gates remain.
+   Do not use preview flags or change stale approval hashes to obtain a green result.
 
 Freezing inputs means no speculative cleanup during downstream review, not ignoring
 factual errors. Independently review genuine corrections, preserve the old generation,
 reconcile affected work, and obtain fresh affected approvals. Do not change hashes to
 keep approvals. Keep unrelated extraction changes out of the pilot acceptance release.
 
-## Checkpoints and spending stops
+## Historical pair checkpoints and spending stops
 
-Compare two compact identity checkpoints with:
+The following retained command compares historical pair-frontier receipts. It is
+diagnostic recovery tooling; its pair count is no longer a release gate or a model
+worklist. New dossier checkpoints report person cases, approved/held cases, reviewed
+uncertainty, source input pins, reviewer receipts and publication evidence.
+
+Compare two historical compact checkpoints with:
 
 ```sh
 npm run people:completion:check -- --baseline /absolute/baseline.json --current /absolute/current.json
@@ -91,8 +108,9 @@ checkpoints fail loudly. Preserve sequential checkpoints to expose reversals.
 
 Date work permits at most three automatic repair/re-audit rounds and stops earlier
 for repeated candidates or two non-improving rounds (`PEOPLE_DATE_AUDIT.md`). For
-identity work, two accepted batches without fewer outstanding pairs require diagnosis
-before another unchanged model batch; reconcile legitimate ID changes first. Do not
+identity work, repeated unchanged case/evidence fingerprints require diagnosis
+before another model turn. Reuse unchanged independent case proofs; reconcile
+source edits and accepted membership changes explicitly. Do not
 delete state, release sticky work, raise limits or change worker IDs to bypass a hold.
 Continue another bounded chapter if useful work cannot proceed. A hold is neither a
 completion nor a campaign-wide stop.

@@ -49,6 +49,11 @@ jobs:
       - name: Test certified ebook people provenance and publication gates
         run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
 
+      - name: Test bounded canonical-person dossiers and chapter proofs
+        run: |
+          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
+          npm run people:catalog:self-test
+
       - name: Test certified website people publication
         run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs
 

@@ -627,75 +627,35 @@ function peopleExtractionFiles() {
 function applyPeopleIdentityProgress(byChapter, summary) {
   assertPeopleProgress(fs.existsSync(PEOPLE_CATALOG_PATH), `missing ${PEOPLE_CATALOG_PATH}; run npm run people:catalog`);
   const catalog = readPeopleCatalog(PEOPLE_CATALOG_PATH);
-  assertPeopleProgress(
-    catalog.stats?.sourceChapters === summary.sourceChapters &&
-    catalog.stats?.extractedChapters === summary.extractedChapters,
-    'canonical catalog is stale relative to extraction coverage; run npm run people:catalog',
-  );
-  assertPeopleProgress(
-    catalog.resolutionWorkByChapter && typeof catalog.resolutionWorkByChapter === 'object',
-    'canonical catalog lacks chapter resolution workload; run npm run people:catalog',
-  );
-  const unresolvedByChapter = new Map();
-  const seenPersonChapters = new Set();
-  const peopleNeedingReview = catalog.people.filter((person) => person.curation?.status === 'needs-review');
-  for (const person of peopleNeedingReview) {
-    for (const localId of person.localPeople) {
-      const [book, chapter] = localId.split(':');
-      const chapterId = `${book}:${chapter}`;
-      if (!byChapter.has(chapterId)) continue;
-      const key = `${person.id}\u0000${chapterId}`;
-      if (seenPersonChapters.has(key)) continue;
-      seenPersonChapters.add(key);
-      unresolvedByChapter.set(chapterId, (unresolvedByChapter.get(chapterId) ?? 0) + 1);
+  assertPeopleProgress(catalog.stats?.sourceChapters === summary.sourceChapters && catalog.stats?.extractedChapters === summary.extractedChapters,
+    'canonical catalog is stale relative to extraction coverage; run npm run people:catalog');
+  assertPeopleProgress(catalog.identityReviewByChapter && typeof catalog.identityReviewByChapter === 'object',
+    'canonical catalog lacks independent person-review coverage; run npm run people:catalog');
+  const states = { current: 0, 'date-review': 0, 'editorial-review': 0, 'identity-review': 0, rereview: 0, missing: 0 };
+  let identityReviewedChapters = 0, identityPendingChapters = 0, identityPendingCases = 0, reviewedAmbiguousCases = 0, zeroPersonExtractions = 0;
+  for (const [key, chapter] of byChapter) {
+    const review = catalog.identityReviewByChapter[key];
+    if (chapter.state !== 'missing') assertPeopleProgress(review, `missing compiled identity coverage for ${key}`);
+    chapter.identityReview = review ?? null;
+    if (chapter.state === 'current') {
+      if (review.status === 'review-required') { identityPendingChapters += 1; identityPendingCases += review.heldCases; }
+      else if (review.status === 'reviewed') identityReviewedChapters += 1;
+      else if (review.status === 'no-people') zeroPersonExtractions += 1;
+      reviewedAmbiguousCases += review.reviewedAmbiguousCases;
     }
-  }
-  const glossaryStateCounts = {
-    current: 0,
-    'date-review': 0,
-    'editorial-review': 0,
-    'identity-review': 0,
-    rereview: 0,
-    missing: 0,
-  };
-  let chaptersWithUnresolvedPeople = 0;
-  let actionableResolutionChapters = 0;
-  for (const [chapterId, chapter] of byChapter) {
-    const resolutionWork = catalog.resolutionWorkByChapter[chapterId] ?? {};
-    chapter.unresolvedPeople = unresolvedByChapter.get(chapterId) ?? 0;
-    chapter.unresolvedBlocks = resolutionWork.unresolvedBlocks ?? 0;
-    chapter.resolutionTargetPeople = resolutionWork.targetCanonicalPeople ?? 0;
-    chapter.resolutionCandidatePeople = resolutionWork.candidateLocalPeople ?? 0;
-    chapter.resolutionComparisons = resolutionWork.comparisons ?? 0;
-    chapter.resolutionMaxBlockPeople = resolutionWork.maxBlockLocalPeople ?? 0;
-    if (chapter.state === 'current' && chapter.unresolvedPeople > 0) chaptersWithUnresolvedPeople += 1;
-    if (chapter.state === 'current' && chapter.resolutionTargetPeople > 0) actionableResolutionChapters += 1;
     chapter.glossaryState = chapter.state === 'current'
-      ? chapter.dateAudit.status !== 'audited'
-        ? 'date-review'
-        : chapter.pendingTranslationRepairs > 0
-        ? 'editorial-review'
-        : chapter.unresolvedPeople > 0
-          ? 'identity-review'
-          : 'current'
+      ? chapter.dateAudit.status !== 'audited' ? 'date-review'
+        : chapter.pendingTranslationRepairs > 0 ? 'editorial-review'
+        : review.status === 'review-required' ? 'identity-review' : 'current'
       : chapter.state;
-    glossaryStateCounts[chapter.glossaryState] += 1;
+    states[chapter.glossaryState] += 1;
   }
-  return {
-    ...summary,
-    completeChapters: glossaryStateCounts.current,
-    dateReviewChapters: glossaryStateCounts['date-review'],
-    editorialReviewChapters: glossaryStateCounts['editorial-review'],
-    identityReviewChapters: glossaryStateCounts['identity-review'],
-    chaptersWithUnresolvedPeople,
-    actionableResolutionChapters,
-    identityCleanChapters: summary.currentChapters - chaptersWithUnresolvedPeople,
-    peopleNeedingReview: peopleNeedingReview.length,
-    unresolvedCandidateBlocks: catalog.stats.unresolvedCandidateBlocks,
-    completePercent: summary.sourceChapters > 0
-      ? (glossaryStateCounts.current / summary.sourceChapters) * 100
-      : 0,
-  };
+  return { ...summary,
+    // Gate-ready is a staging metric; deployed nonempty receipts are recorded separately.
+    preliminaryChapters: states.current, dateReviewChapters: states['date-review'], editorialReviewChapters: states['editorial-review'],
+    identityReviewChapters: states['identity-review'], identityReviewedChapters, identityPendingChapters, identityPendingCases,
+    reviewedAmbiguousCases, reviewedAmbiguousPeople: catalog.stats.reviewedAmbiguousPeople, zeroPersonExtractions,
+    preliminaryPercent: summary.sourceChapters > 0 ? states.current / summary.sourceChapters * 100 : 0 };
 }
 
 function buildPeopleGlossaryProgress(manifest) {

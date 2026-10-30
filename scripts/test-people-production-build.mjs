@@ -53,7 +53,7 @@ try {
 // compiler in test-people-qualified-site.mjs. Restore every patch immediately.
 const catalog = { schemaVersion: 1, generatedAt: 'fixture', currentPromptVersion: 7, complete: false,
   stats: { sourceChapters: 2, extractedChapters: 1, missingChapters: 1, dateAuditPendingChapters: 1,
-    legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0 },
+    legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, identityReviewPendingChapters: 0 },
   missingChapterIds: ['fixture:002'], people: [{ id: 'fixture-person' }], familyEdges: [] };
 const index = { schemaVersion: 2, generatedAt: 'fixture', currentPromptVersion: 7, complete: false, chapters: {} };
 const files = new Map([[path.join(root, 'data/people/generated/catalog.json'), JSON.stringify(catalog)],

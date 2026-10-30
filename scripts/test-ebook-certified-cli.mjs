@@ -1,4 +1,5 @@
 import test from 'node:test';
+import os from 'node:os';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,7 +11,7 @@ import { PEOPLE_DIR } from './lib/people-content.mjs';
 // normal compiler. No source, identity, editorial or date gate is mocked.
 test('required CLI binds the full publication to one certified root; split-root unmentioned events reject', { timeout: 180_000 }, () => {
   const codeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  const directory = fs.mkdtempSync(path.join(codeRoot, 'certified-cli-fixture-'));
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-certified-cli-fixture-'));
   try {
     const a = path.join(directory, 'approved-a');
     const b = path.join(directory, 'unapproved-b');
@@ -67,7 +68,7 @@ test('required CLI binds the full publication to one certified root; split-root 
         ? { ...context, parentURL: ${JSON.stringify(pathToFileURL(generator).href)} } : context);
     }\n`);
     const modules = Object.fromEntries(['build-people-extraction-packet.mjs', 'validate-people-extraction.mjs',
-      'lib/people-content.mjs', 'lib/people-date-audit.mjs'].map(file => [file, import.meta.resolve(`./${file}`)]));
+      'lib/people-content.mjs', 'lib/people-date-audit.mjs', 'lib/people-identity-test-fixtures.mjs'].map(file => [file, import.meta.resolve(`./${file}`)]));
     const seed = path.join(a, 'seed.mjs');
     fs.writeFileSync(seed, `const modules = ${JSON.stringify(modules)};
       const { buildPeopleExtractionPacket, buildPeopleExtractionSeed } = await import(modules['build-people-extraction-packet.mjs']);
@@ -101,6 +102,8 @@ test('required CLI binds the full publication to one certified root; split-root 
         reviewer: { name: 'Independent synthetic reviewer', independentOfExtractor: true }, reviewedAt: '2026-10-24T12:00:00Z',
         summary: 'Synthetic complete source review.', reviewedUnits: ['s0001'], itemChecks: audit.items.map(item => check(item.id)),
         personChecks: audit.people.map(person => check(person.id)), findings: [], references: [] });
+      const { writeFixtureIdentityReviews } = await import(modules['lib/people-identity-test-fixtures.mjs']);
+      writeFixtureIdentityReviews([{ book: 'jinshu', chapter: '001' }]);
     `);
     const inheritedLoaders = [];
     for (let index = 0; index < process.execArgv.length; index += 1) {

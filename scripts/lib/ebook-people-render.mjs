@@ -1,3 +1,4 @@
+import { IDENTITY_UNCERTAINTY_NOTE } from './people-chapter-identity.mjs';
 import { chineseText, englishText, sourceUnitAt } from './people-content.mjs';
 import { chapterPeopleContext } from './people-site.mjs';
 import { assessEbookPeopleReadiness } from './ebook-people-readiness.mjs';
@@ -162,6 +163,7 @@ function renderEbookGlossaryEntry(person, ebookPeople, chapterTitles, contentLay
   return `<section class="glossary-entry" id="${ebookPersonAnchor(person.id)}">
   <h2>${escapeXml(personDisplayName(person))}${person.preferredName.zh ? ` <span lang="zh-Hant">${escapeXml(person.preferredName.zh)}</span>` : ''}</h2>
   <p class="glossary-description">${escapeXml(personPublicDescription(person))}</p>
+  ${person.curation.notes.includes(IDENTITY_UNCERTAINTY_NOTE) ? `<p class="glossary-identity-note">${escapeXml(IDENTITY_UNCERTAINTY_NOTE)}</p>` : ''}
   ${lifeSummary ? `<p class="glossary-dates">${escapeXml(lifeSummary)}</p>` : ''}
   ${roles.length ? `<p><strong>Roles:</strong> ${escapeXml(formatList(roles))}</p>` : ''}
   ${renderEbookAliasTable(person)}
