@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "4be73c11b7b501a36c7273fabc0be568bba860176e99fc25690026da6074dc58",
+  "reviewerAgentId": "bc-74daf130-868f-4c87-8ae2-0833e1498f6f",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "The cheap /data-person-id/i scan is only a negative gate: it returns false solely when that ASCII name (any ASCII case) is absent from the input string, and otherwise runs the original Cheerio a[data-person-id] query. HTML tokenizes attribute names literally (no character-reference decoding in the attribute-name state; NUL becomes U+FFFD rather than being stripped), so a tree that satisfies the original presence selector must still contain those characters in the source. Comments, script/text, templates, non-anchor elements, title/suffix names, and entity-encoded markup can only create cheap positives, which still take the DOM path. Unit cases lock equality with load(html)('a[data-person-id]').length>0 across those shapes plus SVG/foreignObject, boolean attrs, and a late uppercase anchor; invalid non-strings still throw TypeError. verifyPeopleSite keeps full DOM collection for in-scope mention checks and uses hasPersonLinks only for out-of-scope chapter absence; certificate/source/coverage/publication assertions in the supplied verifier and qualified-site fixture are unchanged. CI runs both the new detection test and the qualified-site fixture, which injects an uppercase out-of-scope anchor and expects rejection. Measurement is host-page timing with sourceHtmlCopied/releaseProof false; no chapter-deployment files are in the packet."
+}

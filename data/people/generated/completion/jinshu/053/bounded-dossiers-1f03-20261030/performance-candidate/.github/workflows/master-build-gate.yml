@@ -1,0 +1,71 @@
+name: Master build gate
+
+# Run on the proposed PR merge commit, not just the topic branch. Keep this
+# workflow unfiltered so its required check is always reported for master PRs.
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+jobs:
+  master-build:
+    name: master-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Test people date-hint normalization
+        run: npm run people:hints:self-test
+
+      - name: Test unresolved people-date holds
+        run: node scripts/test-people-unresolved-hold.mjs
+
+      - name: Test Cursor date-worker recovery
+        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
+
+      - name: Install ebook publication verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
+
+      - name: Test certified ebook people provenance and publication gates
+        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
+
+      - name: Test bounded canonical-person dossiers and chapter proofs
+        run: |
+          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
+          npm run people:catalog:self-test
+
+      - name: Test certified website people publication
+        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
+
+      - name: Build and validate the full site
+        run: npm run build
+
+      - name: Verify real Jinshu 053 qualification and ebook contribution
+        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
+
+      - name: Preserve nonempty chapter acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: jinshu053-qualified-contribution
+          path: data/people/generated/jinshu053-release-acceptance/
+          retention-days: 30

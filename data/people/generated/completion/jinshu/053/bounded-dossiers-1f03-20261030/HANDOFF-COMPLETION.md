@@ -1,3 +1,5 @@
+# READ CURRENT-RELEASE-HANDOFF.md FIRST — Wei Guan missing mention repaired, date refresh approved
+
 # READ CURRENT-RELEASE-HANDOFF.md FIRST — active one-shot release, do not duplicate
 
 # LATEST — 2026-10-30 23:53 UTC
