@@ -1,3 +1,14 @@
+# READ CURRENT-RELEASE-HANDOFF.md FIRST — active one-shot release, do not duplicate
+
+# LATEST — 2026-10-30 23:53 UTC
+
+PR5361 current HEAD26f376e1dbb0a61d94e0b5f41a26abc6564ce7a7, latest REQUIRED CI41146731196 running. Earlier identical-tree CI41145276843 and41145765043 failed actual FULL BUILD at projectPeopleProduct: unqualified global Zhang Hua preferredDescription poet/writer had no exact support in qualified053 (person per_0QVB3HSQFPY8W69TZ083, p015). FIXED DATA ONLY: retire that override, native projection uses independently reviewed Junior Mentor (s0202張華為少傅); original override retained in Git+research/people/checkpoints/jinshu053-curation-projection-20261030.json. No weakened gate/new fact, no source/extraction/editorial/date edits, no new model review needed for source proofs. Streaming registry178MB metadata checksum verified all canonical-ID aliases for ALL72cases; NO other applicable curation override remains (curation-closure-preflight.json). Native family/other real gates still must pass, no data-qualified/publication claim yet. Curation fix source+receipt already normalFF pushed; source code unchanged after independent APPROVE. Merge only latestHEAD26f... with passing latestrequired CI, not bf6/olderfailedruns.
+
+Latest recovery PUSHED dc32728fe55b24474a53687e9639cdb7ffe5882f (271files, big stores excluded) preserving code approval, PR implementation, actual source proof. checkpoint script PARENT stillaac... MUST update to dc32728... before another checkpoint. Production master0be/staging1f03 unchanged. No paid run or local heavy job active. Current free36GiB/swap1.58/backend0.6GiB stable.
+
+Cloudflare preview_deployment_setting=none; queued idle preview records are intentional skipped previews, NOT a backlog to cancel. Production deployments enabled, master npmrunbuild correct. Use project-specific read API only. Old live /data/people/site-status.json returns200HTML fallback (not JSON): live-before-release.json records this; no count inferred. New real publication must return JSON certificate and exact CI gates. Livehelper has JSON-LD @graph flatten support. Ordinary whole-book certification remainsfalse. Coordination60min boundary00:13UTC.
+
+--- Prior current checkpoint ---
 # Current completion checkpoint — 2026-10-30 23:45 UTC
 
 Continue full ACTIVE user goal, bounded dossier implementation and actual live Jinshu053 first. No chapter is claimed published/data-qualified yet. Shared dirty primary checkout remains untouched by feature code: use pinned Git/temp index, never reset/switch/pull/broad stage or create worktrees. Preserve 053/086 owners, original audits/round3/circuit, all leases/claims/raw evidence and unrelated Grok14 repairs. One local heavy job,3GiB Node heap, guard before/after/every45-60s. No native subagents. All paid reviews TERMINAL; do not resend source72-case review or code packets.

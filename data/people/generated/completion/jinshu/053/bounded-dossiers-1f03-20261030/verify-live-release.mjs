@@ -13,7 +13,9 @@ assert(receipt.dataQualified && !receipt.livePublished && receipt.personTargets.
 const base = 'https://24histories.com';
 const note = 'It is not yet established whether this person is the same as similarly named people in other chapters.';
 const evidence = { revision, startedAt: new Date().toISOString(), requests: [], persons: [], redirects: [], passed: false };
-const file = J + '/live-check-' + revision.slice(0, 12) + '.json';
+const attempt = process.argv[4] ?? '';
+assert(!attempt || /^[a-z0-9-]+$/.test(attempt), 'Safe explicit live-check attempt label required');
+const file = J + '/live-check-' + revision.slice(0, 12) + (attempt ? '-' + attempt : '') + '.json';
 assert(!fs.existsSync(file), 'Preserve prior live verification; use a unique report');
 const sample = () => { const r = inspectLocalDisk(ROOT); fs.appendFileSync(J + '/live-resource-samples.jsonl', JSON.stringify({ at: new Date().toISOString(), errors: r.errors, memory: r.memory, availableGiB: r.availableGiB }) + '\n'); assert.equal(r.errors.length, 0, 'Resource hold'); };
 sample();
