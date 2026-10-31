@@ -1,5 +1,5 @@
 import os,json,pathlib,subprocess,tempfile,re,hashlib
-R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='89724274951f18af7c21fe0ca05b2a49f92810a7';BRANCH='codex/people-recovery-20261025'
+R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='ce6f2f705e1cd9aa42dd73a12c6508642fdfc620';BRANCH='codex/people-recovery-20261025'
 def git(*args,input=None,env=None):return subprocess.check_output(['git',*args],cwd=R,input=input,env=env).decode().strip()
 subprocess.run(['npm','run','people:disk:check'],cwd=R,check=True,stdout=subprocess.DEVNULL)
 assert json.loads((J/'measurement-state.json').read_text())['phase']=='finished'
@@ -34,6 +34,6 @@ try:
  commit=git('commit-tree',git('write-tree',env=env),'-p',PARENT,input=b'Checkpoint independently approved Jinshu 053 mention repair and reviewed publication gate\n')
  (J/'prepared-recovery-publication.json').write_text(json.dumps({'commit':commit,'parent':PARENT,'files':len(files),'largeLocalStoresExcluded':True},indent=2)+'\n')
  git('push','origin',commit+':refs/heads/'+BRANCH);assert git('ls-remote','origin','refs/heads/'+BRANCH).split()[0]==commit
- (J/'recovery-publication-receipt.json').write_text(json.dumps({'commit':commit,'branch':BRANCH,'files':len(files),'productionAdopted':False,'canonicalStagingUnchanged':'1f031602cf7aa15090b26ec997097d46dd2ef09f'},indent=2)+'\n')
+ (J/'recovery-publication-receipt.json').write_text(json.dumps({'commit':commit,'branch':BRANCH,'files':len(files),'productionAdopted':False,'canonicalStagingRevision':git('ls-remote','origin','refs/heads/codex/people-glossary-staging-v2').split()[0]},indent=2)+'\n')
  print(json.dumps({'recoveryCommit':commit,'files':len(files),'largeStoresLocalOnly':True,'productionAdopted':False}))
 finally:pathlib.Path(name).unlink(missing_ok=True)

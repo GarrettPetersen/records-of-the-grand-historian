@@ -1,0 +1,48 @@
+diff --git a/scripts/compile-people-catalog.mjs b/scripts/compile-people-catalog.mjs
+index 69553a603e2f..7040c6a57251 100644
+--- a/scripts/compile-people-catalog.mjs
++++ b/scripts/compile-people-catalog.mjs
+@@ -1310,6 +1310,43 @@ function selfTest() {
+       !sharedAliasRecord.localPeople.includes(resolvedHomonym.localId) || sharedAliasRecord.curation.status !== 'needs-review') {
+     throw new Error('An accepted alias merge lost its chapter identity case or existing canonical members');
+   }
++  // The matching name block excludes this alternate-name member of the merged person.
++  const alternateHomonym = makePerson('fixture:014:p001', 'Alternate Name', '別名');
++  const aliasCorpus = structuredClone(homonymCorpus);
++  aliasCorpus.localPeople.set(alternateHomonym.localId, alternateHomonym);
++  aliasCorpus.chapters.push({extraction: {
++    book: 'fixture', chapter: '014', run: {promptVersion: 7}, mentions: [], translationRepairs: [],
++  }});
++  aliasCorpus.coverage.sourceChapters += 1;
++  aliasCorpus.coverage.extractedChapters += 1;
++  const aliasResolution = [{
++    schemaVersion: 1,
++    batch: 'merged-alias-separation-fixture',
++    decisions: [{
++      decision: 'merge',
++      localPeople: [resolvedHomonym.localId, alternateHomonym.localId],
++      basis: ['fixture'], confidence: 'high',
++    }, {
++      decision: 'keep-separate',
++      localPeople: [alternateHomonym.localId, ambiguousHomonymA.localId],
++      basis: ['fixture'], confidence: 'high',
++    }],
++  }];
++  const aliasCatalog = compilePeopleCatalog(aliasCorpus, aliasResolution).catalog;
++  if (aliasCatalog.resolutionWorkByChapter['fixture:011']?.comparisons !== 1 ||
++      aliasCatalog.resolutionWorkByChapter['fixture:012']?.comparisons !== 1 ||
++      aliasCatalog.resolutionWorkByChapter['fixture:013']?.comparisons !== 2) {
++    throw new Error('Merged alias separation was rescheduled or removed an undecided canonical pair');
++  }
++  const alternateWork = aliasCatalog.resolutionWorkByChapter['fixture:014'];
++  const sharedAliasRecord = aliasCatalog.people.find(person => person.localPeople.includes(alternateHomonym.localId));
++  if (alternateWork?.comparisons !== 1 || alternateWork.targetLocalPeople !== 1 ||
++      alternateWork.targetCanonicalPeople !== 1 || alternateWork.candidateLocalPeople !== 3 ||
++      alternateWork.maxBlockLocalPeople !== 3 ||
++      !sharedAliasRecord.localPeople.includes(resolvedHomonym.localId) ||
++      sharedAliasRecord.curation.status !== 'needs-review') {
++    throw new Error('Merged alias chapter missing its canonical unresolved comparison or shared review state');
++  }
+   const reviewedAmbiguity = {
+     schemaVersion: 1,
+     batch: 'reviewed-ambiguity-fixture',

@@ -1,6 +1,6 @@
 # Jinshu 053 completion pilot
 
-Implementation is merged on master; the repaired first live release is still in CI. A live acceptance receipt remains required. One-hour throughput is not yet established.
+Implementation and the repair are merged on master; required CI passed, and production is building the repaired release. A live acceptance receipt remains required. One-hour throughput is not yet established.
 
 The chapter’s identity workload is 72 canonical-person cases covering 73 local records. Each case retrieves at most eight dossiers through the index; the pilot generates zero pair assignments. Sixty-three cases retain explicit reviewed cross-chapter uncertainty. That uncertainty does not prevent completion; a suspected incorrect merge or chapter attribution does.
 
