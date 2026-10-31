@@ -1008,6 +1008,9 @@ export function projectPeopleProduct(corpus, globalCatalog, roleLabels, override
     }
     const person = canonicalRecord(cluster, corpus, localMap, roleLabels, new Set(),
       globalCatalog.currentPromptVersion, override);
+    if (person.references.length === 0) {
+      throw new Error(`Scoped canonical person ${id} has no source mention references; repair chapter attribution before publication`);
+    }
     person.slug = global.slug;
     return person;
   });
