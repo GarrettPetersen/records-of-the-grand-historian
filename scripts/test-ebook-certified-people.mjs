@@ -141,6 +141,25 @@ test('outside-only preferred overrides and unsupported family targets fail visib
   assert.throws(() => projectPeopleProduct(corpus, globalCatalog, roles, {}, () => audited), /unresolved local person reference/);
 });
 
+test('a named father evidenced only inside his son’s compound span cannot publish without his own inverse source reference', () => {
+  const { corpus, globalCatalog, a, b, extraction } = fixture();
+  // The father still has explicit name, office, date and family claims. A son's
+  // enclosing mention must not make a zero-reference parent profile publishable.
+  a.mentions = [];
+  b.mentions[0].spans.en[0].exact = 'Jin Father’s son Jin Son';
+  b.mentions[0].spans.en[0].endCodePoint = 'Jin Father’s son Jin Son'.length;
+  corpus.chapters = [a, b].map(person => ({ extraction: extraction(person) }));
+  const roles = new Map([['official', 'Official']]);
+  assert.throws(() => projectPeopleProduct(corpus, globalCatalog, roles, {}, () => audited),
+    /has no source mention references; repair chapter attribution before publication/);
+  a.mentions = member('jinshu', '001', 'Jin Father', '晉父').mentions;
+  b.mentions = member('jinshu', '002', 'Jin Son', '晉子').mentions;
+  corpus.chapters = [a, b].map(person => ({ extraction: extraction(person) }));
+  const projected = projectPeopleProduct(corpus, globalCatalog, roles, {}, () => audited);
+  assert.equal(projected.catalog.people.length, 2);
+  assert(projected.catalog.people.every(person => person.references.length > 0));
+});
+
 test('complete-book and volume scope cannot be skipped, duplicated, reordered or forged', () => {
   assert.doesNotThrow(() => assertProductScope(product, manifest, ['001', '002']));
   for (const chapters of [['001'], ['002', '001'], ['001', '001'], ['001', '003']]) {
