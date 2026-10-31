@@ -1,5 +1,5 @@
 import os,json,pathlib,subprocess,tempfile,re,hashlib
-R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='ce6f2f705e1cd9aa42dd73a12c6508642fdfc620';BRANCH='codex/people-recovery-20261025'
+R=pathlib.Path('/Users/garrettpetersen/records-of-the-grand-historian');J=pathlib.Path(__file__).resolve().parent;PARENT='60e36d145cad56b5119fb89825f5ef150719168b';BRANCH='codex/people-recovery-20261025'
 def git(*args,input=None,env=None):return subprocess.check_output(['git',*args],cwd=R,input=input,env=env).decode().strip()
 subprocess.run(['npm','run','people:disk:check'],cwd=R,check=True,stdout=subprocess.DEVNULL)
 assert json.loads((J/'measurement-state.json').read_text())['phase']=='finished'
