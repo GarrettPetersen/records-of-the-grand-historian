@@ -11,16 +11,24 @@ old deadline wave recipes, and waiting for 25–50 new extractions before identi
 Existing source, editorial, chronology, identity and publication gates remain intact.
 A planning checkpoint grants no approval.
 
-## First prove a real delivery
+## First delivery and the next bounded cohort
 
-Continue the existing owner/work for Jinshu 053 as the first nonempty pilot. If held,
-record the precise obstacle and choose the next already-extracted Jinshu chapter with
-the smallest total downstream workload. Do not choose an empty extraction to satisfy
-this milestone, or re-extract to avoid a downstream gate. No new broad extraction
-wave until a nonempty chapter is verified live. Drain/recover existing claims rather
-than abandoning them. Use one shared checkout and isolated artifact paths; this policy
-does not authorize a second executor or taking over an active chapter.
+Jinshu 053 passed the first nonempty live acceptance on October 31, 2026 at
+revision `b26f20aae583d22a90abb2bb48bd04c05e794fa5`: 72 person pages, 73 local
+records, 72 independently reviewed cases, 63 explicitly uncertain identities,
+541 language-specific chapter links and no generated pair assignments. The
+[acceptance receipt](research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json)
+records normal CI, the exact successful production deployment and live checks.
+Its ebook contribution passed; the full Jinshu ebook remains incomplete.
 
+Continue existing Jinshu work, starting with no more than three completion WIP
+chapters and measuring completed/published throughput. Preserve and drain existing
+claims, owners and recovery. Do not reopen unchanged proofs or recursively complete
+external evidence chapters. A source edit or suspected incorrect attribution must
+still reconcile affected approvals and hold a concrete unsupported case. An empty
+extraction cannot substitute for a named-person delivery. Use the same shared
+checkout/artifact and resource-safety profile; the milestone does not authorize
+another executor, spending increase or broad extraction campaign.
 
 ## Repair English omissions when found
 

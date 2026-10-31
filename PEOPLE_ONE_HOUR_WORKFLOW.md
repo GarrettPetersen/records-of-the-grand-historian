@@ -59,7 +59,7 @@ lineage/redirects mechanically and verify each proof's actual source dependencie
 Current chapter byte pins, fresh required chronology approvals and exact primary
 witnesses are still checked. Never change approval hashes to preserve approval.
 
-The prototype already permits accepted canonical membership growth without
+The production validator permits accepted canonical membership growth without
 reopening unchanged chapter-local identity evidence. Source-identity edits, new
 chapter people, stale chapter inputs and unknown reviewer/merge fields fail closed.
 Further selective reuse after an editorial edit must be implemented as an auditable
@@ -105,11 +105,35 @@ one-hour path works:
   their actual content. Report reviewed cases, held cases, ambiguous identities,
   data-qualified chapters and live published nonempty chapters separately.
 
-Current state: compact accepted-constraint replay, immutable dossiers and bounded
-planning are implemented. Candidate scheduler entry points refuse fresh pair waves;
-the shared qualification gate and website/ebook uncertainty disclosure have candidate
-integration code. Jinshu053 has a native-accepted independent report covering all
-72 cases/73 local records (63 reviewed uncertain), with exact unchanged input pins.
-Code adoption, remaining CI fixture/command integration, a passing normal build,
-PR/deployment and live nonempty receipt are still required. No chapter is published
-or data-qualified by this checkpoint. The one-hour release target remains unproven.
+Current state: the bounded preparation/registry/record workflow, replacement resolver
+entry point, native qualified-scope gate, website/ebook uncertainty disclosure and
+required CI integration are merged. Jinshu 053 passed real live acceptance on
+October 31, 2026 at revision `b26f20aae583d22a90abb2bb48bd04c05e794fa5`:
+72 published people, 73 local records, 72 reviewed cases, 63 retained uncertainties,
+541 language-specific chapter links, and zero generated pair assignments.
+
+The complete receipt and independent review decisions are in
+[`research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json`](research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json).
+The live check made 112 requests, verified all 72 profiles and 33 retired-ID
+redirects, and checked inverse bilingual excerpts, structured/visible/search
+uncertainty, chapter links, sitemap, progress and the share image. The chapter's
+ebook contribution passed; the whole Jinshu ebook is not release-ready.
+
+The first deployment exposed Wei Guan's explicit name swallowed by his son's
+compound mention. The independently reviewed repair gives father and son exact
+non-overlapping spans, preserving all source prose, aliases, claims and dates.
+The shared website/ebook projection now rejects a person with zero source mention
+references, with a named-parent regression. The failed first live receipt remains
+preserved; passing CI alone did not finish that release.
+
+The identity refresh took 96 seconds; native CI qualification and ebook-contribution
+verification took 64 seconds. Required CI took about 22 minutes, followed by a
+production clone of four minutes, build of 25 minutes 47 seconds and deployment
+of 57 seconds. The proposed 15-minute CI/deployment allocation was not achieved.
+The last identity refresh through live acceptance took about 58 minutes, excluding
+earlier source/editorial/date work, implementation and first-release rework.
+Ordinary one-hour throughput remains unproven. Measure the next bounded Jinshu
+cohort end to end; retain at most three completion WIP chapters. Generic paid SDK
+dossier dispatch and selective per-case proof mixing after substantive source edits
+remain unimplemented. Unchanged whole proofs and current independent approvals
+can already be reused through the native gate.
