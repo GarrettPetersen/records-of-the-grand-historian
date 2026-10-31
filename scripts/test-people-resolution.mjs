@@ -296,6 +296,43 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
 }
 
 {
+  const known = [
+    candidatePerson('pairwise-a', { en: 'Wang Yan', zh: '王衍' }, 'personal-name', { en: 'Wang Yan', zh: '王衍' }),
+    candidatePerson('pairwise-b', { en: 'Wang Yan', zh: '王儼' }, 'personal-name', { en: 'Wang Yan', zh: '王儼' }),
+  ];
+  const reviewPairs = (entries) => [...new Set(buildResolutionCandidates(new Map(entries)).blocks.flatMap((block) =>
+    block.localPeople.flatMap((left, index) => block.localPeople.slice(index + 1).map((right) =>
+      [left, right].sort().join('\u0000')
+    ))
+  ))].sort();
+  assert.deepEqual(reviewPairs(known), [], 'the existing strong disjoint-Chinese pair stays partitioned');
+
+  const preferredOnly = candidatePerson('pairwise-c', { en: 'Wang Yan' }, 'personal-name', {});
+  preferredOnly[1].claims = [];
+  const chineseOnly = candidatePerson('pairwise-c', { en: 'Wang Yan' }, 'personal-name', { zh: '王玄' });
+  const missingChinese = candidatePerson('pairwise-c', { en: 'Wang Yan' }, 'personal-name', { en: 'Wang Yan' });
+  for (const unknown of [preferredOnly, chineseOnly, missingChinese]) {
+    assert.deepEqual(
+      reviewPairs([...known, unknown]),
+      ['pairwise-a\u0000pairwise-c', 'pairwise-b\u0000pairwise-c'],
+      'an unknown English or Chinese member keeps its comparisons without reactivating a strong disjoint pair',
+    );
+  }
+
+  const bridge = candidatePerson('pairwise-c', { en: 'Wang Yan', zh: '王衍' }, 'personal-name', { en: 'Wang Yan', zh: '王衍' });
+  bridge[1].claims.push({
+    id: 'pairwise-c:other-name', predicate: 'name',
+    value: { kind: 'personal-name', en: 'Wang Yan', zh: '王儼' },
+  });
+  assert.deepEqual(
+    reviewPairs([...known, bridge]),
+    ['pairwise-a\u0000pairwise-c', 'pairwise-b\u0000pairwise-c'],
+    'multiple Chinese identity aliases preserve bridge comparisons without inventing transitivity',
+  );
+}
+
+
+{
   const people = new Map([
     candidatePerson(
       'wang-yan-full',
@@ -532,6 +569,54 @@ function candidatePerson(localId, preferredNameSuggestion, nameKind, alias) {
       confidence: 'high',
     }],
   }]), /Duplicate canonical person ID/u);
+}
+
+
+{
+  const reviewPairs = (entries) => [...new Set(buildResolutionCandidates(new Map(entries)).blocks.flatMap((block) =>
+    block.localPeople.flatMap((left, index) => block.localPeople.slice(index + 1).map((right) =>
+      [left, right].sort().join('\u0000')
+    ))
+  ))].sort();
+  for (const [en, left, right] of [
+    ['Han Shou', '韓壽', '韩寿'],
+    ['Lu Ji', '陸機', '陆机'],
+    ['Han Shou', '韩壽', '韓寿'],
+    ['Han Shou', '韓夀', '韩寿'],
+    ['Tai Xin', '臺新', '台新'],
+    ['Tai Xin', '颱新', '檯新'],
+  ]) {
+    const entries = [
+      candidatePerson('variant-a', { en, zh: left }, 'personal-name', { en, zh: left }),
+      candidatePerson('variant-b', { en, zh: right }, 'personal-name', { en, zh: right }),
+    ];
+    assert.deepEqual(reviewPairs(entries), ['variant-a\u0000variant-b'],
+      `documented Unicode variants must retain the comparison: ${left}/${right}`);
+    const resolved = resolvePeopleClusters(new Map(entries), []);
+    assert.equal(resolved.clusters.length, 2, 'variant equivalence must never itself merge people');
+  }
+  const unrelated = [
+    candidatePerson('variant-a', { en: 'Wang Yan', zh: '王衍' }, 'personal-name', { en: 'Wang Yan', zh: '王衍' }),
+    candidatePerson('variant-b', { en: 'Wang Yan', zh: '王儼' }, 'personal-name', { en: 'Wang Yan', zh: '王儼' }),
+  ];
+  assert.deepEqual(reviewPairs(unrelated), [], 'distinct same-script names remain distinguishable');
+  const emperors = [
+    candidatePerson('variant-a', { en: 'Huang Di', zh: '黃帝' }, 'personal-name', { en: 'Huang Di', zh: '黃帝' }),
+    candidatePerson('variant-b', { en: 'Huang Di', zh: '炎帝' }, 'personal-name', { en: 'Huang Di', zh: '炎帝' }),
+  ];
+  assert.deepEqual(reviewPairs(emperors), [], 'specific Chinese identities remain distinct');
+  const alternate = candidatePerson('variant-c', { en: 'Han Shou', zh: '韓夀' }, 'personal-name', { en: 'Han Shou', zh: '韓夀' });
+  alternate[1].claims.push({ id: 'variant-c:birth', predicate: 'name', value: { kind: 'birth-name', en: 'Han Shou', zh: '王儼' } });
+  const aliasEntries = [
+    candidatePerson('variant-a', { en: 'Han Shou', zh: '韩寿' }, 'personal-name', { en: 'Han Shou', zh: '韩寿' }),
+    candidatePerson('variant-b', { en: 'Han Shou', zh: '王儼' }, 'birth-name', { en: 'Han Shou', zh: '王儼' }),
+    alternate,
+  ];
+  assert.deepEqual(reviewPairs(aliasEntries), ['variant-a\u0000variant-c', 'variant-b\u0000variant-c'],
+    'variant classes and multiple birth-name aliases retain bridges without merging disjoint endpoints');
+  const keys = buildResolutionCandidates(new Map(aliasEntries)).people['variant-c'].nameKeys;
+  assert.ok(keys.some((name) => name.key === 'zh:韓夀'), 'raw normalized Chinese name keys stay intact');
+  assert.ok(keys.some((name) => name.key === 'zh:王儼'), 'distinct birth-name evidence stays intact');
 }
 
 console.log('People resolution self-test passed.');

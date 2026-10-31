@@ -6,9 +6,10 @@ import path from 'node:path';
 import process from 'node:process';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { DEFAULT_MAX_ACTIVE } from './grokbot-headless-dispatch.mjs';
+import { inspectLocalDisk } from './check-local-disk.mjs';
 
 const LABEL = 'com.24histories.grokbot-headless';
-const MAX_ACTIVE_WORKERS = 12;
 
 function xml(value) {
   return value
@@ -42,6 +43,8 @@ if (process.argv[2] === 'uninstall') {
   process.exit(0);
 }
 if (process.argv.length > 2) throw new Error('Usage: install-grokbot-headless-launch-agent.mjs [uninstall]');
+const resources = inspectLocalDisk(repoRoot);
+if (resources.errors.length) throw new Error(resources.errors.join('; '));
 
 fs.mkdirSync(stateDirectory, { recursive: true, mode: 0o700 });
 fs.mkdirSync(agentsDirectory, { recursive: true });
@@ -57,7 +60,7 @@ const document = `<?xml version="1.0" encoding="UTF-8"?>
     <string>daemon</string>
     <string>--launch-app</string>
     <string>--max-active</string>
-    <string>${MAX_ACTIVE_WORKERS}</string>
+    <string>${DEFAULT_MAX_ACTIVE}</string>
   </array>
   <key>WorkingDirectory</key><string>${xml(repoRoot)}</string>
   <key>RunAtLoad</key><true/>

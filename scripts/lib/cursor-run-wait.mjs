@@ -184,7 +184,8 @@ async function enforceRunLimits(run, options, { terminal = false } = {}) {
       `${options.label}: ${terminal ? 'cloud run finished' : 'cancelled cloud run'} ${run.id} at ` +
       `${totalTokens.toLocaleString('en-US')} tokens (limit ` +
       `${maxTotalTokens.toLocaleString('en-US')})`,
-      { runId: run.id, metric: 'tokens', observed: totalTokens, limit: maxTotalTokens },
+      { runId: run.id, metric: 'tokens', observed: totalTokens, limit: maxTotalTokens,
+        ...(terminal ? { terminalStatus: run.status, terminalError: run.error ?? null } : {}) },
     );
     if (terminal) throw error;
     await cancelRunForLimit(run, options, error);
@@ -194,7 +195,8 @@ async function enforceRunLimits(run, options, { terminal = false } = {}) {
       `${options.label}: ${terminal ? 'cloud run finished' : 'cancelled cloud run'} ${run.id} at ` +
       `$${(rawCostCents / 100).toFixed(2)} ` +
       `raw usage cost (limit $${(maxRawCostCents / 100).toFixed(2)})`,
-      { runId: run.id, metric: 'raw-cost', observed: rawCostCents, limit: maxRawCostCents },
+      { runId: run.id, metric: 'raw-cost', observed: rawCostCents, limit: maxRawCostCents,
+        ...(terminal ? { terminalStatus: run.status, terminalError: run.error ?? null } : {}) },
     );
     if (terminal) throw error;
     await cancelRunForLimit(run, options, error);

@@ -1,5 +1,47 @@
 # AGENTS.md
 
+## Completion-first orchestration
+
+Follow `PEOPLE_COMPLETION_PROCESS.md` before scheduling glossary work. It supersedes
+old extraction-wave quotas and minimum extraction-batch sizes for identity work.
+First prove a live nonempty chapter (continue the existing Jinshu 053 owner/work).
+Pin source/editorial/date inputs and independently review each chapter person against
+the accepted canonical dossier. Use bounded indexed retrieval; never generate a
+complete same-name pair graph or require exhaustive negative comparisons. Preserve
+reviewed cross-chapter uncertainty explicitly; hold concrete attribution or false-merge
+contradictions. Reconcile changed evidence without recursively completing the corpus.
+No new broad extraction wave until this path is proven; preserve/drain existing
+claims. Do not weaken identity, chronology or publication gates. Report zero-person
+reviews, data-qualified chapters and live published nonempty chapters separately.
+A passing build or empty extraction is not the nonempty acceptance test.
+
+
+## Repair English omissions when found
+
+A definite English omission or mistranslation requires a concrete complete replacement,
+not only a flag or an outside-scope note. Check both English fields and repeated uses.
+Supply supplemental repairs in an artifact with book, chapter, unit ID, field, exact
+before/after text and source-based reason; keep them separate from closed-schema date
+or identity reports. The host routes these into the active editorial application work,
+with a separate reviewer for worker-authored repairs. Preserve independent review and
+normal extraction, chronology, identity, CI and publication gates. Do not defer known
+fixable English to a future corpus-wide pass. An empty proposal queue alone does not
+prove every source proposition has been translated.
+
+## Host resource safety
+
+Follow the crash-recovery operating profile in `PEOPLE_COMPLETION_PROCESS.md`.
+`npm run people:disk:check` warns at 4 GiB macOS swap and rejects swap at 8 GiB,
+combined Codex backend RSS at 4 GiB, or warning/critical memory pressure. At the
+swap warning, inspect memory consumers and swap growth before increasing concurrency. These are conservative
+dispatch stops, not OS guarantees. Check before each dispatch/local heavy job and
+at least every 60 seconds while observing active work; a startup check alone is
+insufficient. Do not launch more work after a failed measurement or failed guard.
+Preserve live jobs, claims, locks and recovery; do not kill unrelated apps or delete
+swap/history. A fresh chat must use a compact handoff, not a fork of the oversized
+campaign conversation. Initially use no parallel native Codex subagents and only
+one cloud assignment; increase remote concurrency only after measured safe runs.
+
 ## Local disk conservation
 
 Before any local batch or workspace change, run `npm run people:disk:check`.

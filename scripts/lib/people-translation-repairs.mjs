@@ -1207,6 +1207,19 @@ function shortenedNameCandidate(stale, revisedPacket) {
   return matches.length === 1 ? matches[0] : null;
 }
 
+export function hasUnchangedChineseNameEvidence(person, claims, previousUnits, currentUnits) {
+  if (!person.mentionException || claims.length === 0) return false;
+  const unchanged = (id) => {
+    const key = id.split(':').at(-1);
+    const before = previousUnits.get(key), after = currentUnits.get(key);
+    return Boolean(before && after && before.zh === after.zh);
+  };
+  return claims.every((claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged)) &&
+    claims.some((claim) => claim.predicate === 'name' &&
+      typeof claim.value?.zh === 'string' && claim.value.zh.trim().length > 0 &&
+      claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(claim.value.zh)));
+}
+
 export function reconcileExtractionAfterRepairs(extraction, revisedPacket, options = {}) {
   const reconciled = structuredClone(extraction);
   const candidateOrder = new Map(
@@ -1508,6 +1521,9 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     ]);
     if (staleUnits.size === 0) continue;
     const ownedClaims = reconciled.claims.filter((claim) => claim.subject === person.localId);
+    // A reviewed overlap exception can have no display span while its Chinese
+    // name and every claim witness remain intact after an English-only repair.
+    if (hasUnchangedChineseNameEvidence(person, ownedClaims, previousUnitById, unitById)) continue;
     const onlyRetiredUnitEvidence = ownedClaims.length === 0 || ownedClaims.every((claim) =>
       claim.evidence.length > 0 && claim.evidence.every((evidence) => staleUnits.has(evidence.split(':').at(-1)))
     );

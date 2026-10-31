@@ -97,18 +97,19 @@ function validateSummary(summary) {
         'sourceChapters',
         'extractedChapters',
         'currentChapters',
-        'completeChapters',
+        'preliminaryChapters',
         'dateReviewChapters',
         'dateAuditedChapters',
         'editorialReviewChapters',
         'identityReviewChapters',
-        'chaptersWithUnresolvedPeople',
-        'actionableResolutionChapters',
-        'identityCleanChapters',
+        'identityReviewedChapters',
+        'identityPendingChapters',
+        'identityPendingCases',
+        'reviewedAmbiguousCases',
+        'reviewedAmbiguousPeople',
+        'zeroPersonExtractions',
         'rereviewChapters',
         'missingChapters',
-        'peopleNeedingReview',
-        'unresolvedCandidateBlocks',
         'peopleRecords',
         'factClaims',
         'familyRelationships',
@@ -128,16 +129,16 @@ function validateSummary(summary) {
         'extracted chapter count is inconsistent'
     );
     requireCondition(
-        summary.sourceChapters === summary.completeChapters + summary.dateReviewChapters + summary.editorialReviewChapters +
+        summary.sourceChapters === summary.preliminaryChapters + summary.dateReviewChapters + summary.editorialReviewChapters +
             summary.identityReviewChapters + summary.rereviewChapters + summary.missingChapters,
-        'glossary completion states do not add up'
+        'preliminary review states do not add up'
     );
 }
 
 function renderOverview(summary) {
     validateSummary(summary);
     const percent = summary.sourceChapters > 0
-        ? (summary.completeChapters / summary.sourceChapters) * 100
+        ? (summary.preliminaryChapters / summary.sourceChapters) * 100
         : 0;
     const editorialPercent = summary.sourceChapters > 0
         ? (summary.editorialReviewChapters / summary.sourceChapters) * 100
@@ -159,9 +160,9 @@ function renderOverview(summary) {
 
     const metrics = document.getElementById('corpus-metrics');
     metrics.replaceChildren(
-        metric('Preliminary checks passed', summary.completeChapters, 'Current extraction, date audit, no pending proposed repairs, and no flagged identity ambiguity; not a completion or publication count.'),
+        metric('Preliminary checks passed', summary.preliminaryChapters, 'Current extraction, date audit, no pending proposed repairs, and independently reviewed chapter identities; not a completion or publication count.'),
         metric('Date audits', summary.dateAuditedChapters, `${formatInteger(summary.dateReviewChapters)} current extractions await date approval.`),
-        metric('Chapters with flagged people', summary.chaptersWithUnresolvedPeople, `${formatInteger(summary.peopleNeedingReview)} people are flagged for identity or source rereview.`),
+        metric('Identity review pending', summary.identityPendingChapters, `${formatInteger(summary.identityPendingCases)} source identifications await review; reviewed cross-chapter uncertainty does not block a chapter.`),
         metric('Needs rereview', summary.rereviewChapters, 'Extracted under an earlier contract.'),
         metric('No accepted extraction', summary.missingChapters, 'No extraction is included in this site data.'),
         metric('Individual records', summary.peopleRecords, 'Chapter-local people gathered so far.'),
@@ -169,8 +170,8 @@ function renderOverview(summary) {
     );
 
     const publicationNote = document.getElementById('publication-note');
-    publicationNote.textContent = `${formatInteger(summary.completeChapters)} of ${formatInteger(summary.sourceChapters)} chapters have passed the preliminary checks shown here. These checks do not establish whole-chapter editorial review, verified links or ebook readiness, or publication. ` +
-        `${formatInteger(summary.extractedChapters)} chapters have source extractions, and ${formatInteger(summary.unresolvedCandidateBlocks)} identity candidate groups still require decisions. ` +
+    publicationNote.textContent = `${formatInteger(summary.preliminaryChapters)} of ${formatInteger(summary.sourceChapters)} chapters have passed the preliminary checks shown here. These checks do not establish whole-chapter editorial review, verified links or ebook readiness, or publication. ` +
+        `${formatInteger(summary.extractedChapters)} chapters have source extractions. ${formatInteger(summary.reviewedAmbiguousCases)} reviewed source identifications retain cross-chapter uncertainty. ${formatInteger(summary.zeroPersonExtractions)} current extractions report no people; they do not establish nonempty chapter completion. ` +
         `${formatInteger(summary.familyRelationships)} family relationships have been recorded so far.`;
     if (summary.pendingTranslationRepairs > 0) {
         publicationNote.textContent += ` ${formatInteger(summary.pendingTranslationRepairs)} translation repairs remain proposed.`;
@@ -197,8 +198,9 @@ function chapterTooltip(chapter, people) {
             `Translation fixes applied: ${formatInteger(people.appliedTranslationRepairs)}`,
             `Extraction prompt: v${people.promptVersion}`
         );
-        if (people.unresolvedPeople > 0) {
-            lines.push(`People flagged for identity or source rereview: ${formatInteger(people.unresolvedPeople)}`);
+        if (people.identityReview) {
+            lines.push(`Independent identity reviews: ${formatInteger(people.identityReview.approvedCases)} of ${formatInteger(people.identityReview.targetCases)}`);
+            lines.push(`Reviewed identifications retaining uncertainty: ${formatInteger(people.identityReview.reviewedAmbiguousCases)}`);
         }
     }
     return lines.join('\n');

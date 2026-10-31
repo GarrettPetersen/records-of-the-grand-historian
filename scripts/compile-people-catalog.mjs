@@ -5,12 +5,11 @@ import { identityInputSeal, peopleDigest } from './lib/people-identity-seal.mjs'
 import { dateAuditStatus } from './lib/people-date-audit.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildPeopleResolutionCandidateDocument } from './build-people-resolution-candidates.mjs';
+import { assessCorpusIdentityReviews, applyReviewedIdentityUncertainty } from './lib/people-chapter-identity.mjs';
 import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import {
   writePeopleCatalog,
-  writePeopleResolutionCandidates,
   writePeopleSiteIndex,
 } from './lib/people-generated-data.mjs';
 import { formatSchemaErrors, getPeopleSchemaValidator } from './lib/people-schema.mjs';
@@ -18,7 +17,7 @@ import {
   assertPeopleCatalogPublicationState,
   peopleCatalogIsComplete,
 } from './lib/people-publication.mjs';
-import { personSlug, resolvePeopleClusters } from './lib/people-resolution.mjs';
+import { personSlug, resolveAcceptedPeopleClusters } from './lib/people-resolution.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const CANONICAL_SCHEMA_ID = 'https://24histories.com/schema/people/canonical-person-v1.json';
@@ -81,7 +80,6 @@ function canonicalJson(value) {
 function parseArgs(argv) {
   const options = {
     out: path.join(PEOPLE_DIR, 'generated', 'catalog.json'),
-    candidatesOut: path.join(PEOPLE_DIR, 'generated', 'resolution-candidates.json'),
     siteIndexOut: path.join(PEOPLE_DIR, 'generated', 'site-index.json'),
     requireResolved: false,
     selfTest: false,
@@ -94,7 +92,7 @@ function parseArgs(argv) {
       return path.resolve(REPO_ROOT, value);
     };
     if (arg === '--out') options.out = nextPath();
-    else if (arg === '--candidates-out') options.candidatesOut = nextPath();
+    else if (arg === '--candidates-out') throw new Error('Fresh pair output is retired; use people:identity:prepare for a chapter dossier review');
     else if (arg === '--site-index-out') options.siteIndexOut = nextPath();
     else if (arg === '--require-resolved') options.requireResolved = true;
     else if (arg === '--self-test') options.selfTest = true;
@@ -103,7 +101,6 @@ function parseArgs(argv) {
 
 Options:
   --out PATH             Generated catalog path.
-  --candidates-out PATH  Generated identity-candidate dossier path.
   --site-index-out PATH  Generated chapter mention-link index path.
   --require-resolved     Fail unless coverage, date audits, translation repairs, and identity resolution are complete.
   --self-test            Run compiler fixtures.`);
@@ -659,7 +656,7 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
   const promptVersions = [...new Set(members.map((member) => member.promptVersion))].sort((a, b) => a - b);
   const legacy = promptVersions.some((version) => version < currentPromptVersion);
   const notes = [];
-  if (hasUnresolvedIdentity) notes.push('Unresolved same-name identity candidate');
+  if (hasUnresolvedIdentity) notes.push('Independent chapter-person identity review required');
   if (legacy) notes.push(`Requires prompt-v${currentPromptVersion} source reread; current prompt versions: ${promptVersions.join(', ')}`);
 
   return {
@@ -725,6 +722,15 @@ export function unresolvedCandidateState(
   keepSeparate,
   possibleSameAs = new Set(),
 ) {
+  // Separation decisions may use a merged member outside this name block.
+  const separatedCanonicalPairs = new Set();
+  for (const key of keepSeparate) {
+    const localIds = key.split('\u0000');
+    if (localIds.length !== 2 || localIds.some((id) => !localMap.has(id))) {
+      throw new Error(`Separation refers to an unknown local person: ${key}`);
+    }
+    separatedCanonicalPairs.add(identityPairKey(...localIds.map((id) => localMap.get(id))));
+  }
   const blocks = [];
   const localPeople = new Set();
   for (const block of candidateDocument.blocks) {
@@ -741,9 +747,7 @@ export function unresolvedCandidateState(
       for (let right = left + 1; right < groups.length; right += 1) {
         const [leftCanonical, leftMembers] = groups[left];
         const [rightCanonical, rightMembers] = groups[right];
-        const separated = leftMembers.some((a) =>
-          rightMembers.some((b) => keepSeparate.has(identityPairKey(a, b)))
-        );
+        const separated = separatedCanonicalPairs.has(identityPairKey(leftCanonical, rightCanonical));
         if (separated || possibleSameAs.has(identityPairKey(leftCanonical, rightCanonical))) continue;
         reviewPairs.push([leftCanonical, rightCanonical].sort());
         for (const localId of leftMembers) localPeople.add(localId);
@@ -763,18 +767,27 @@ export function unresolvedCandidateState(
 
 export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPeople, localMap) {
   const work = new Map();
+  const membersByCanonical = new Map();
+  for (const [localId, canonicalId] of localMap) {
+    if (!membersByCanonical.has(canonicalId)) membersByCanonical.set(canonicalId, []);
+    membersByCanonical.get(canonicalId).push(localId);
+  }
   for (const block of unresolvedBlocks) {
     const targetsByChapter = new Map();
-    for (const localId of block.localPeople) {
-      if (!unresolvedLocalPeople.has(localId)) continue;
-      const [book, chapter] = localId.split(':');
-      const chapterId = `${book}:${chapter}`;
-      if (!targetsByChapter.has(chapterId)) {
-        targetsByChapter.set(chapterId, { localPeople: new Set(), canonicalPeople: new Set() });
+    const activeCanonicalPeople = new Set(block.localPeople
+      .filter(id => unresolvedLocalPeople.has(id)).map(id => localMap.get(id)));
+    // Targets inherit their own canonical person's work; payload counts still describe the block.
+    for (const canonicalId of activeCanonicalPeople) {
+      for (const localId of membersByCanonical.get(canonicalId)) {
+        const [book, chapter] = localId.split(':');
+        const chapterId = `${book}:${chapter}`;
+        if (!targetsByChapter.has(chapterId)) {
+          targetsByChapter.set(chapterId, { localPeople: new Set(), canonicalPeople: new Set() });
+        }
+        const targets = targetsByChapter.get(chapterId);
+        targets.localPeople.add(localId);
+        targets.canonicalPeople.add(canonicalId);
       }
-      const targets = targetsByChapter.get(chapterId);
-      targets.localPeople.add(localId);
-      targets.canonicalPeople.add(localMap.get(localId));
     }
     for (const [chapterId, targets] of targetsByChapter) {
       if (!work.has(chapterId)) {
@@ -830,26 +843,14 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       }
     }
   }
-  const candidateDocument = buildPeopleResolutionCandidateDocument(corpus);
-  const resolved = resolvePeopleClusters(corpus.localPeople, resolutionDocuments);
+  const resolved = resolveAcceptedPeopleClusters(corpus.localPeople, resolutionDocuments);
   const currentPromptVersion = readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion;
   const localMap = new Map();
   for (const cluster of resolved.clusters) {
     for (const localId of cluster.localPeople) localMap.set(localId, cluster.canonicalPersonId);
   }
-  const unresolvedState = unresolvedCandidateState(
-    candidateDocument,
-    localMap,
-    resolved.keepSeparate,
-    resolved.possibleSameAs,
-  );
-  const unresolvedBlocks = unresolvedState.blocks;
-  const unresolvedLocalPeople = unresolvedState.localPeople;
-  const resolutionWorkByChapter = buildResolutionWorkByChapter(
-    unresolvedBlocks,
-    unresolvedLocalPeople,
-    localMap,
-  );
+  const identityReviews = assessCorpusIdentityReviews(corpus, resolved.clusters);
+  const unresolvedLocalPeople = identityReviews.pendingLocalPeople;
   const roleData = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const roleLabels = new Map(roleData.roles.map((role) => [role.id, role.label]));
   const canonicalByKnownId = new Map();
@@ -942,7 +943,8 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
     legacyLocalPeople,
     legacyChapters,
     pendingTranslationRepairs,
-    unresolvedCandidateBlocks: unresolvedBlocks.length,
+    identityReviewPendingChapters: identityReviews.pendingChapters,
+    reviewedAmbiguousPeople: identityReviews.reviewedAmbiguousPeople,
     familyEdges: familyEdges.length,
     peopleWithFamily: people.filter((person) => person.familyRelationships.length > 0).length,
   };
@@ -955,10 +957,10 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       people,
       familyEdges,
       localPersonMap,
-      unresolvedCandidateBlockIds: unresolvedBlocks.map((block) => block.id),
-      resolutionWorkByChapter,
+      identityReviewByChapter: identityReviews.work,
       missingChapterIds,
   };
+  applyReviewedIdentityUncertainty(catalog, identityReviews.certificates);
   assertPeopleCatalogPublicationState(catalog);
   const validateCatalog = ajv.getSchema(CATALOG_SCHEMA_ID);
   if (!validateCatalog(catalog)) {
@@ -968,8 +970,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   }
   return {
     catalog,
-    unresolvedCanonicalPeople: [...new Set([...unresolvedLocalPeople].map(id => localMap.get(id)))].sort(),
-    candidates: candidateDocument,
+    identityReviewMetrics: { generatedPairs: 0, pendingChapters: identityReviews.pendingChapters, reviewedAmbiguousPeople: identityReviews.reviewedAmbiguousPeople },
     siteIndex: buildPeopleSiteIndex(corpus, catalog, getDateStatus),
   };
 }
@@ -1035,7 +1036,6 @@ export function projectPeopleProduct(corpus, globalCatalog, roleLabels, override
 
 function writeCompiledPeopleOutputs(result, options, writers = {
   catalog: writePeopleCatalog,
-  candidates: writePeopleResolutionCandidates,
   siteIndex: writePeopleSiteIndex,
 }) {
   if (options.requireResolved && !result.catalog.complete) {
@@ -1045,11 +1045,10 @@ function writeCompiledPeopleOutputs(result, options, writers = {
       `${result.catalog.stats.missingChapters} missing chapter(s), ` +
       `${result.catalog.stats.dateAuditPendingChapters} date-audit pending chapter(s), ` +
       `${result.catalog.stats.pendingTranslationRepairs} pending translation repair(s), and ` +
-      `${result.catalog.stats.unresolvedCandidateBlocks} unresolved identity block(s)`,
+      `${result.catalog.stats.identityReviewPendingChapters} person-review pending chapter(s)`,
     );
   }
   writers.catalog(options.out, result.catalog);
-  writers.candidates(options.candidatesOut, result.candidates);
   writers.siteIndex(options.siteIndexOut, result.siteIndex);
 }
 
@@ -1271,16 +1270,42 @@ function selfTest() {
     person.localPeople.includes(ambiguousHomonymA.localId) ||
     person.localPeople.includes(ambiguousHomonymB.localId)
   );
-  if (resolvedPage.curation.status !== 'machine-reviewed' ||
-      ambiguousPages.some((person) => person.curation.status !== 'needs-review')) {
-    throw new Error('An unresolved pair contaminated a separately resolved participant in the same candidate block');
+  if ([resolvedPage, ...ambiguousPages].some(person => person.curation.status !== 'needs-review')) {
+    throw new Error('Historical pair decisions incorrectly granted independent chapter-person coverage');
   }
-  const homonymWorkChapters = Object.keys(homonymCatalog.resolutionWorkByChapter);
-  if (homonymWorkChapters.join(',') !== 'fixture:012,fixture:013' ||
-      homonymWorkChapters.some((chapterId) =>
-        homonymCatalog.resolutionWorkByChapter[chapterId].targetCanonicalPeople !== 1
-      )) {
-    throw new Error('Resolution work included a chapter whose local person has no unresolved comparison');
+  const homonymWork = homonymCatalog.identityReviewByChapter;
+  if (['fixture:011', 'fixture:012', 'fixture:013'].some(id => homonymWork[id]?.targetCases !== 1 || homonymWork[id].heldCases !== 1) ||
+      Object.hasOwn(homonymCatalog, 'resolutionWorkByChapter')) {
+    throw new Error('Chapter identity work must count bounded person cases, never pair comparisons');
+  }
+  // The matching name block excludes this alternate-name member of the merged person.
+  const alternateHomonym = makePerson('fixture:014:p001', 'Alternate Name', '別名');
+  const aliasCorpus = structuredClone(homonymCorpus);
+  aliasCorpus.localPeople.set(alternateHomonym.localId, alternateHomonym);
+  aliasCorpus.chapters.push({extraction: {
+    book: 'fixture', chapter: '014', run: {promptVersion: 7}, mentions: [], translationRepairs: [],
+  }});
+  aliasCorpus.coverage.sourceChapters += 1;
+  aliasCorpus.coverage.extractedChapters += 1;
+  const aliasResolution = [{
+    schemaVersion: 1,
+    batch: 'merged-alias-separation-fixture',
+    decisions: [{
+      decision: 'merge',
+      localPeople: [resolvedHomonym.localId, alternateHomonym.localId],
+      basis: ['fixture'], confidence: 'high',
+    }, {
+      decision: 'keep-separate',
+      localPeople: [alternateHomonym.localId, ambiguousHomonymA.localId],
+      basis: ['fixture'], confidence: 'high',
+    }],
+  }];
+  const aliasCatalog = compilePeopleCatalog(aliasCorpus, aliasResolution).catalog;
+  const alternateWork = aliasCatalog.identityReviewByChapter['fixture:014'];
+  const sharedAliasRecord = aliasCatalog.people.find(person => person.localPeople.includes(alternateHomonym.localId));
+  if (alternateWork?.targetCases !== 1 || alternateWork.heldCases !== 1 ||
+      !sharedAliasRecord.localPeople.includes(resolvedHomonym.localId) || sharedAliasRecord.curation.status !== 'needs-review') {
+    throw new Error('An accepted alias merge lost its chapter identity case or existing canonical members');
   }
   const reviewedAmbiguity = {
     schemaVersion: 1,
@@ -1296,10 +1321,9 @@ function selfTest() {
     homonymCorpus,
     [...homonymResolution, reviewedAmbiguity],
   ).catalog;
-  if (reviewedHomonymCatalog.stats.unresolvedCandidateBlocks !== 0 ||
-      Object.keys(reviewedHomonymCatalog.resolutionWorkByChapter).length !== 0 ||
-      reviewedHomonymCatalog.people.some((person) => person.curation.status !== 'machine-reviewed')) {
-    throw new Error('A reviewed possible identity was scheduled again without new source evidence');
+  if (reviewedHomonymCatalog.stats.identityReviewPendingChapters !== homonymCorpus.chapters.length ||
+      Object.values(reviewedHomonymCatalog.identityReviewByChapter).some(row => row.status !== 'review-required')) {
+    throw new Error('A historical ambiguity pair incorrectly substituted for complete chapter-person proof coverage');
   }
   if (!/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(fan.id)) throw new Error('Stable canonical ID is invalid');
   const retiredOverrideResult = compilePeopleCatalog(corpus, resolution, {
@@ -1319,9 +1343,9 @@ function selfTest() {
   }
   if (result.complete || result.stats.dateAuditPendingChapters !== 3) throw new Error('Unaudited fixture catalog was incorrectly marked complete');
   const outputCalls = [];
-  const fixtureWriters = Object.fromEntries(['catalog', 'candidates', 'siteIndex'].map(key =>
+  const fixtureWriters = Object.fromEntries(['catalog', 'siteIndex'].map(key =>
     [key, () => outputCalls.push(key)]));
-  const outputOptions = { requireResolved: true, out: 'catalog', candidatesOut: 'candidates', siteIndexOut: 'siteIndex' };
+  const outputOptions = { requireResolved: true, out: 'catalog', siteIndexOut: 'siteIndex' };
   try {
     writeCompiledPeopleOutputs({ catalog: result }, outputOptions, fixtureWriters);
     throw new Error('Incomplete required catalog unexpectedly passed');
@@ -1330,7 +1354,7 @@ function selfTest() {
   }
   if (outputCalls.length !== 0) throw new Error('Incomplete required catalog modified output before failing');
   writeCompiledPeopleOutputs({ catalog: { ...result, complete: true } }, outputOptions, fixtureWriters);
-  if (outputCalls.join(',') !== 'catalog,candidates,siteIndex') throw new Error('Complete catalog output did not use every writer');
+  if (outputCalls.join(',') !== 'catalog,siteIndex') throw new Error('Complete catalog output did not use every writer');
   const incompleteCorpus = structuredClone(corpus);
   incompleteCorpus.coverage = { sourceChapters: 4, extractedChapters: 3, missingChapterIds: ['fixture:004'] };
   const incomplete = compilePeopleCatalog(incompleteCorpus, resolution).catalog;
@@ -1389,14 +1413,14 @@ function main() {
   if (identityInputSeal() !== inputSeal) throw new Error('Identity inputs changed during compilation; refusing publication');
   writeCompiledPeopleOutputs(result, options);
   writeJsonAtomic(`${options.out}.identity-seal.json`, {
-    schemaVersion: 1, kind: 'people-global-identity-seal', inputs: inputSeal,
+    schemaVersion: 2, kind: 'people-accepted-identity-seal', inputs: inputSeal,
     catalog: peopleDigest(result.catalog), siteIndex: peopleDigest(result.siteIndex),
-    unresolvedCanonicalPeople: result.unresolvedCanonicalPeople,
+    identityReviews: peopleDigest(result.catalog.identityReviewByChapter),
   });
   console.log(
     `people catalog: ${result.catalog.stats.canonicalPeople} canonical from ` +
-    `${result.catalog.stats.localPeople} local people; ${result.catalog.stats.unresolvedCandidateBlocks} ` +
-    `unresolved block(s); ${result.catalog.stats.familyEdges} family edge(s) -> ` +
+    `${result.catalog.stats.localPeople} local people; ${result.catalog.stats.identityReviewPendingChapters} ` +
+    `person-review pending chapter(s); ${result.catalog.stats.familyEdges} family edge(s) -> ` +
     `${path.relative(REPO_ROOT, options.out)}`,
   );
 }

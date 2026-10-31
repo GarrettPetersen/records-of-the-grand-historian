@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import { chineseVariantComparisonKey } from './people-chinese-variants.mjs';
 
 const CROCKFORD32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 const WEAK_ENGLISH_NAMES = new Set([
@@ -139,7 +140,7 @@ function weakEnglishName(value, pairedValue, kinshipName) {
     /^(?:(?:his|her|their) )?(?:(?:eldest|second|third|youngest|elder|younger|paternal|maternal|birth|step) )?(?:father|mother|son|daughter|brother|sister|uncle|aunt|grandfather|grandmother|grandson|granddaughter|nephew|niece)$/u.test(value);
 }
 
-function localNameKeys(person) {
+export function localNameKeys(person) {
   const keys = new Map();
   const preferredNonBlockingClaimKeys = new Set();
   const preferredKinshipClaimKeys = new Set();
@@ -213,20 +214,29 @@ function identityChineseKeys(nameKeys) {
   return new Set(nameKeys
     .filter((name) => name.language === 'zh' && name.blocking)
     .filter((name) => name.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind)))
-    .map((name) => name.key));
+    .map((name) => chineseVariantComparisonKey(name.key)));
+}
+
+// A reusable view of the existing source-backed English/Chinese partition rule.
+// The dossier index uses two inverted lists, never a cross-product of members.
+export function identityNameKeyState(nameKeys) {
+  return { chinese: identityChineseKeys(nameKeys), english: new Set(nameKeys
+    .filter(name => name.language === 'en' && name.blocking && name.kinds.some(kind => IDENTITY_NAME_KINDS.has(kind)))
+    .map(name => name.key)) };
 }
 
 function candidateMemberGroups(key, bucket, members, identityChineseByPerson) {
-  const identityNameForms = bucket.names.every((name) =>
-    name.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind))
-  );
-  if (!key.startsWith('en:') || !identityNameForms) return [members];
-  const partitions = new Set(members.flatMap((member) =>
-    [...(identityChineseByPerson.get(member) ?? [])]
-  ));
+  if (!key.startsWith('en:')) return [members];
+  const chineseNamesByMember = new Map(members.map((member) => [
+    member,
+    bucket.identityMembers.has(member)
+      ? (identityChineseByPerson.get(member) ?? new Set())
+      : new Set(),
+  ]));
+  const partitions = new Set([...chineseNamesByMember.values()].flatMap((names) => [...names]));
   if (partitions.size < 2) return [members];
   const groups = [...partitions].map((partition) => members.filter((member) => {
-    const names = identityChineseByPerson.get(member) ?? new Set();
+    const names = chineseNamesByMember.get(member);
     return names.size === 0 || names.has(partition);
   }));
   return [...new Map(groups
@@ -303,10 +313,13 @@ export function buildResolutionCandidates(localPeople) {
     people[person.localId] = { ...localSummary(person), nameKeys };
     for (const key of nameKeys) {
       if (!key.blocking) continue;
-      if (!buckets.has(key.key)) buckets.set(key.key, { names: [], members: new Set() });
+      if (!buckets.has(key.key)) buckets.set(key.key, { names: [], members: new Set(), identityMembers: new Set() });
       const bucket = buckets.get(key.key);
       bucket.names.push({ value: key.value, language: key.language, kinds: key.kinds });
       bucket.members.add(person.localId);
+      if (key.kinds.some((kind) => IDENTITY_NAME_KINDS.has(kind))) {
+        bucket.identityMembers.add(person.localId);
+      }
     }
   }
 
@@ -377,35 +390,6 @@ class UnionFind {
   }
 }
 
-function separationIndex(separations) {
-  const byPerson = new Map();
-  for (const key of separations) {
-    const [left, right] = key.split('\u0000');
-    if (!byPerson.has(left)) byPerson.set(left, new Set());
-    if (!byPerson.has(right)) byPerson.set(right, new Set());
-    byPerson.get(left).add(right);
-    byPerson.get(right).add(left);
-  }
-  return byPerson;
-}
-
-function wouldJoinSeparatedPeople(union, left, right, indexedSeparations) {
-  const leftRoot = union.find(left);
-  const rightRoot = union.find(right);
-  if (leftRoot === rightRoot) return false;
-  const leftMembers = union.members(leftRoot);
-  const rightMembers = union.members(rightRoot);
-  const [scanMembers, targetRoot] = leftMembers.size <= rightMembers.size
-    ? [leftMembers, rightRoot]
-    : [rightMembers, leftRoot];
-  for (const member of scanMembers) {
-    for (const separatedPerson of indexedSeparations.get(member) ?? []) {
-      if (union.find(separatedPerson) === targetRoot) return true;
-    }
-  }
-  return false;
-}
-
 export function connectedBlockComponents(blocks, canonicalByLocal) {
   const groupIds = new Set(blocks.flatMap((block) =>
     block.localPeople.map((localId) => canonicalByLocal.get(localId) ?? localId)
@@ -428,174 +412,135 @@ export function connectedBlockComponents(blocks, canonicalByLocal) {
   );
 }
 
-export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
-  const ids = [...localPeople.keys()];
-  const constraints = explicitIdentityConstraints(localPeople);
-  const modelMerges = [];
-  const modelKeepSeparate = new Set();
-  const curatedKeepSeparate = new Set();
-  const curatedMerges = [];
-  const possibleSameAsGroups = [];
-  const pins = new Map();
-  for (const document of resolutionDocuments) {
+// Constraint groups store one branch label per member. They never expand a
+// reviewed split or a merged cluster into its Cartesian product.
+class ConstraintUnion {
+  constructor(ids) {
+    this.parent = new Map(ids.map(id => [id, id]));
+    this.size = new Map(ids.map(id => [id, 1]));
+    this.labels = new Map();
+    this.labelVisits = 0;
+  }
+  find(id) {
+    if (!this.parent.has(id)) throw new Error(`Unknown local person ${id}`);
+    let root = id;
+    while (this.parent.get(root) !== root) root = this.parent.get(root);
+    while (id !== root) { const next = this.parent.get(id); this.parent.set(id, root); id = next; }
+    return root;
+  }
+  add(id, constraint, branch) {
+    const root = this.find(id);
+    if (!this.labels.has(root)) this.labels.set(root, new Map());
+    const labels = this.labels.get(root), old = labels.get(constraint);
+    if (old !== undefined && old !== branch) throw new Error(`Resolution merges people explicitly kept separate: ${constraint}`);
+    labels.set(constraint, branch);
+  }
+  conflict(left, right, kind = null) {
+    const a = this.find(left), b = this.find(right);
+    if (a === b) return false;
+    let small = this.labels.get(a) ?? new Map(), large = this.labels.get(b) ?? new Map();
+    if (small.size > large.size) [small, large] = [large, small];
+    for (const [key, value] of small) {
+      this.labelVisits += 1;
+      if ((kind === null || key.startsWith(kind + ':')) && large.has(key) && large.get(key) !== value) return true;
+    }
+    return false;
+  }
+  union(left, right) {
+    let keep = this.find(left), remove = this.find(right);
+    if (keep === remove) return;
+    if (this.conflict(keep, remove)) throw new Error(`Resolution merges people explicitly kept separate: ${left} and ${right}`);
+    if (this.size.get(keep) < this.size.get(remove)) [keep, remove] = [remove, keep];
+    this.parent.set(remove, keep); this.size.set(keep, this.size.get(keep) + this.size.get(remove)); this.size.delete(remove);
+    let target = this.labels.get(keep) ?? new Map(), source = this.labels.get(remove) ?? new Map();
+    if (target.size < source.size) [target, source] = [source, target];
+    for (const [key, value] of source) { this.labelVisits += 1; target.set(key, value); }
+    this.labels.set(keep, target); this.labels.delete(remove);
+  }
+}
+
+// Used by dossier indexing and publication. Cost follows accepted evidence and
+// constraint incidences, with union-by-size; no name buckets or pair graph.
+export function resolveAcceptedPeopleClusters(localPeople, resolutionDocuments = []) {
+  const ids = [...localPeople.keys()], explicit = explicitIdentityConstraints(localPeople);
+  const modelMerges = [], curatedMerges = [], modelSplits = [], curatedSplits = [], possibleGroups = [], pins = new Map();
+  for (const document of resolutionDocuments) for (const decision of document.decisions) {
+    const members = [...new Set(decision.localPeople)];
+    for (const id of members) if (!localPeople.has(id)) throw new Error(`${document.batch} refers to unknown local person ${id}`);
     const curated = document.authority === 'curated';
-    for (const decision of document.decisions) {
-      const decisionLocalPeople = [...new Set(decision.localPeople)];
-      for (const localId of decisionLocalPeople) {
-        if (!localPeople.has(localId)) throw new Error(`${document.batch} refers to unknown local person ${localId}`);
-      }
-      if (decision.decision === 'merge') {
-        if (curated) {
-          curatedMerges.push(decisionLocalPeople);
-        } else {
-          modelMerges.push({ batch: document.batch, localPeople: decisionLocalPeople });
-        }
-      } else if (['keep-separate', 'split'].includes(decision.decision)) {
-        const target = curated ? curatedKeepSeparate : modelKeepSeparate;
-        for (let left = 0; left < decisionLocalPeople.length; left += 1) {
-          for (let right = left + 1; right < decisionLocalPeople.length; right += 1) {
-            target.add(pairKey(decisionLocalPeople[left], decisionLocalPeople[right]));
-          }
-        }
-      } else if (decision.decision === 'possible-same-as') {
-        possibleSameAsGroups.push(decisionLocalPeople);
-      }
-      if (decision.canonicalPersonId) {
-        for (const localId of decisionLocalPeople) pins.set(localId, decision.canonicalPersonId);
-      }
-    }
+    if (decision.decision === 'merge') (curated ? curatedMerges : modelMerges).push({ batch: document.batch, members });
+    else if (['keep-separate', 'split'].includes(decision.decision)) (curated ? curatedSplits : modelSplits).push(members);
+    else if (decision.decision === 'possible-same-as') possibleGroups.push(members);
+    else throw new Error(`Unknown identity decision ${decision.decision}`);
+    if (decision.canonicalPersonId) for (const id of members) pins.set(id, decision.canonicalPersonId);
   }
-
-  const curatedIntentUnion = new UnionFind(ids);
-  for (const localPeopleGroup of curatedMerges) {
-    const [first, ...rest] = localPeopleGroup;
-    for (const other of rest) curatedIntentUnion.union(first, other);
+  const intent = new ConstraintUnion(ids);
+  for (const { members } of curatedMerges) for (const other of members.slice(1)) intent.union(members[0], other);
+  const byIntent = new Map();
+  for (const id of ids) { const root = intent.find(id); if (!byIntent.has(root)) byIntent.set(root, []); byIntent.get(root).push(id); }
+  const union = new ConstraintUnion(ids), separationGroups = [];
+  let incidences = 0;
+  const addGroup = (kind, branches) => {
+    const key = `${kind}:${separationGroups.length}`, group = { key, branches };
+    separationGroups.push(group);
+    for (const [id, branch] of branches) { union.add(id, key, branch); incidences += 1; }
+  };
+  for (const members of curatedSplits) {
+    const roots = members.map(id => intent.find(id));
+    if (new Set(roots).size !== roots.length) throw new Error('Curated merge joins people explicitly kept separate');
+    addGroup('curated', roots.flatMap(root => byIntent.get(root).map(id => [id, root])));
   }
-  const curatedMembersByRoot = new Map();
-  for (const localId of ids) {
-    const root = curatedIntentUnion.find(localId);
-    if (!curatedMembersByRoot.has(root)) curatedMembersByRoot.set(root, []);
-    curatedMembersByRoot.get(root).push(localId);
+  for (const key of explicit.different) addGroup('explicit', key.split('\u0000').map(id => [id, id]));
+  for (const key of explicit.same) {
+    const [a, b] = key.split('\u0000');
+    if (union.conflict(a, b, 'curated')) throw new Error(`Curated separation contradicts explicit same-person evidence for ${a} and ${b}`);
+    union.union(a, b);
   }
-  const expandedCuratedKeepSeparate = new Set();
-  for (const key of curatedKeepSeparate) {
-    const [left, right] = key.split('\u0000');
-    const leftRoot = curatedIntentUnion.find(left);
-    const rightRoot = curatedIntentUnion.find(right);
-    if (leftRoot === rightRoot) {
-      throw new Error(`Curated merge joins people explicitly kept separate: ${left} and ${right}`);
-    }
-    for (const leftMember of curatedMembersByRoot.get(leftRoot)) {
-      for (const rightMember of curatedMembersByRoot.get(rightRoot)) {
-        expandedCuratedKeepSeparate.add(pairKey(leftMember, rightMember));
-      }
-    }
+  for (const { batch, members } of modelMerges) for (const other of members.slice(1)) {
+    if (union.conflict(members[0], other, 'explicit')) throw new Error(`${batch} merges people explicitly identified as different`);
+    if (!union.conflict(members[0], other, 'curated')) union.union(members[0], other);
   }
-
-  const expandedCuratedSeparationIndex = separationIndex(expandedCuratedKeepSeparate);
-  const explicitDifferentIndex = separationIndex(constraints.different);
-  const modelUnion = new UnionFind(ids, { trackMembers: true });
-  for (const key of constraints.same) {
-    const [left, right] = key.split('\u0000');
-    if (wouldJoinSeparatedPeople(modelUnion, left, right, expandedCuratedSeparationIndex)) {
-      throw new Error(`Curated separation contradicts explicit same-person evidence for ${left} and ${right}`);
-    }
-    modelUnion.union(left, right);
+  const modelRoot = new Map(ids.map(id => [id, union.find(id)]));
+  const override = new ConstraintUnion([...new Set(modelRoot.values())]), touched = new Set();
+  for (const { members } of curatedMerges) {
+    const roots = [...new Set(members.map(id => modelRoot.get(id)))];
+    roots.forEach(root => touched.add(root));
+    for (const other of roots.slice(1)) override.union(roots[0], other);
   }
-  for (const modelMerge of modelMerges) {
-    const [first, ...rest] = modelMerge.localPeople;
-    for (const other of rest) {
-      if (wouldJoinSeparatedPeople(modelUnion, first, other, explicitDifferentIndex)) {
-        throw new Error(`${modelMerge.batch} merges people explicitly identified as different: ${first} and ${other}`);
-      }
-      if (wouldJoinSeparatedPeople(modelUnion, first, other, expandedCuratedSeparationIndex)) continue;
-      modelUnion.union(first, other);
-    }
-  }
-
-  const modelRoots = new Set(ids.map((localId) => modelUnion.find(localId)));
-  const curatedRootUnion = new UnionFind(modelRoots);
-  const curatedRootsTouched = new Set();
-  for (const localPeopleGroup of curatedMerges) {
-    const roots = [...new Set(localPeopleGroup.map((localId) => modelUnion.find(localId)))];
-    for (const root of roots) curatedRootsTouched.add(root);
-    const [first, ...rest] = roots;
-    for (const other of rest) curatedRootUnion.union(first, other);
-  }
-
-  const keepSeparate = new Set([...constraints.different, ...expandedCuratedKeepSeparate]);
-  for (const key of modelKeepSeparate) {
-    const [left, right] = key.split('\u0000');
-    const leftRoot = modelUnion.find(left);
-    const rightRoot = modelUnion.find(right);
-    const overriddenByCuration = curatedRootsTouched.has(leftRoot)
-      && curatedRootsTouched.has(rightRoot)
-      && curatedRootUnion.find(leftRoot) === curatedRootUnion.find(rightRoot);
-    if (!overriddenByCuration) keepSeparate.add(key);
-  }
-
-  const union = modelUnion;
-  const keepSeparateIndex = separationIndex(keepSeparate);
-  for (const localPeopleGroup of curatedMerges) {
-    const [first, ...rest] = localPeopleGroup;
-    for (const other of rest) {
-      if (wouldJoinSeparatedPeople(union, first, other, keepSeparateIndex)) {
-        throw new Error(`Curated merge joins people explicitly kept separate: ${first} and ${other}`);
-      }
-      union.union(first, other);
-    }
-  }
-
-  const clustersByRoot = new Map();
-  for (const localId of ids) {
-    const root = union.find(localId);
-    if (!clustersByRoot.has(root)) clustersByRoot.set(root, []);
-    clustersByRoot.get(root).push(localId);
-  }
-  const clusters = [];
-  for (const members of clustersByRoot.values()) {
+  for (const members of modelSplits) addGroup('model', members.map(id => {
+    const root = modelRoot.get(id);
+    return [id, touched.has(root) ? `curated:${override.find(root)}` : `local:${id}`];
+  }));
+  for (const { members } of curatedMerges) for (const other of members.slice(1)) union.union(members[0], other);
+  const byRoot = new Map();
+  for (const id of ids) { const root = union.find(id); if (!byRoot.has(root)) byRoot.set(root, []); byRoot.get(root).push(id); }
+  const clusters = [...byRoot.values()].map(members => {
     members.sort();
-    for (let left = 0; left < members.length; left += 1) {
-      for (let right = left + 1; right < members.length; right += 1) {
-        if (keepSeparate.has(pairKey(members[left], members[right]))) {
-          throw new Error(`Resolution merges people explicitly kept separate: ${members[left]} and ${members[right]}`);
-        }
-      }
-    }
-    const pinned = [...new Set(members.map((member) => pins.get(member)).filter(Boolean))];
+    const pinned = [...new Set(members.map(id => pins.get(id)).filter(Boolean))];
     if (pinned.length > 1) throw new Error(`Cluster has conflicting canonical IDs: ${pinned.join(', ')}`);
-    const candidateIds = members.map(stableCanonicalPersonId).sort();
-    clusters.push({
-      canonicalPersonId: pinned[0] ?? candidateIds[0],
-      localPeople: members,
-      retiredIds: candidateIds.filter((id) => id !== (pinned[0] ?? candidateIds[0])),
-    });
-  }
-  const canonicalOwners = new Map();
+    const candidates = members.map(stableCanonicalPersonId).sort(), canonicalPersonId = pinned[0] ?? candidates[0];
+    return { canonicalPersonId, localPeople: members, retiredIds: candidates.filter(id => id !== canonicalPersonId) };
+  });
+  const owners = new Map();
   for (const cluster of clusters) {
-    const owner = canonicalOwners.get(cluster.canonicalPersonId);
-    if (owner) {
-      throw new Error(
-        `Duplicate canonical person ID ${cluster.canonicalPersonId} for ${owner} and ${cluster.localPeople[0]}`
-      );
-    }
-    canonicalOwners.set(cluster.canonicalPersonId, cluster.localPeople[0]);
+    if (owners.has(cluster.canonicalPersonId)) throw new Error(`Duplicate canonical person ID ${cluster.canonicalPersonId}`);
+    owners.set(cluster.canonicalPersonId, cluster.localPeople[0]);
   }
-  for (const cluster of clusters) {
-    cluster.retiredIds = cluster.retiredIds.filter((id) => !canonicalOwners.has(id));
-  }
+  for (const cluster of clusters) cluster.retiredIds = cluster.retiredIds.filter(id => !owners.has(id));
   clusters.sort((a, b) => a.canonicalPersonId.localeCompare(b.canonicalPersonId));
-  const canonicalByLocal = new Map(clusters.flatMap((cluster) =>
-    cluster.localPeople.map((localId) => [localId, cluster.canonicalPersonId])
-  ));
-  const possibleSameAs = new Set();
-  for (const localPeopleGroup of possibleSameAsGroups) {
-    const canonicalPeople = [...new Set(localPeopleGroup.map((localId) => canonicalByLocal.get(localId)))];
-    for (let left = 0; left < canonicalPeople.length; left += 1) {
-      for (let right = left + 1; right < canonicalPeople.length; right += 1) {
-        possibleSameAs.add(pairKey(canonicalPeople[left], canonicalPeople[right]));
-      }
-    }
+  const canonicalByLocal = new Map(clusters.flatMap(cluster => cluster.localPeople.map(id => [id, cluster.canonicalPersonId])));
+  return { clusters, separationGroups,
+    possibleSameAsGroups: possibleGroups.map(members => [...new Set(members.map(id => canonicalByLocal.get(id)))]),
+    metrics: { localPeople: ids.length, constraintIncidences: incidences, labelVisits: union.labelVisits, generatedPairs: 0 } };
+}
+
+// Historical pair consumers remain available only to drain retained assignments.
+// New planning and publication use resolveAcceptedPeopleClusters directly.
+export function resolvePeopleClusters(localPeople, resolutionDocuments = []) {
+  const accepted = resolveAcceptedPeopleClusters(localPeople, resolutionDocuments), keepSeparate = new Set(), possibleSameAs = new Set();
+  for (const { branches } of accepted.separationGroups) for (let a = 0; a < branches.length; a += 1) for (let b = a + 1; b < branches.length; b += 1) {
+    if (branches[a][1] !== branches[b][1]) keepSeparate.add(pairKey(branches[a][0], branches[b][0]));
   }
-  return { clusters, keepSeparate, possibleSameAs };
+  for (const members of accepted.possibleSameAsGroups) for (let a = 0; a < members.length; a += 1) for (let b = a + 1; b < members.length; b += 1) possibleSameAs.add(pairKey(members[a], members[b]));
+  return { clusters: accepted.clusters, keepSeparate, possibleSameAs };
 }

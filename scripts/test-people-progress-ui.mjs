@@ -24,10 +24,10 @@ const context = vm.createContext({ document, console, setTimeout });
 vm.runInContext(`${script}\nthis.testApi = { renderOverview, createBookSection };`, context);
 const summary = {
   currentPromptVersion: 7, sourceChapters: 2, extractedChapters: 1, currentChapters: 1,
-  completeChapters: 1, dateReviewChapters: 0, dateAuditedChapters: 1,
-  editorialReviewChapters: 0, identityReviewChapters: 0, chaptersWithUnresolvedPeople: 0,
-  actionableResolutionChapters: 0, identityCleanChapters: 1, rereviewChapters: 0,
-  missingChapters: 1, peopleNeedingReview: 0, unresolvedCandidateBlocks: 0,
+  preliminaryChapters: 1, dateReviewChapters: 0, dateAuditedChapters: 1,
+  editorialReviewChapters: 0, identityReviewChapters: 0, identityReviewedChapters: 1,
+  identityPendingChapters: 0, identityPendingCases: 0, reviewedAmbiguousCases: 1,
+  reviewedAmbiguousPeople: 1, zeroPersonExtractions: 0, rereviewChapters: 0, missingChapters: 1,
   peopleRecords: 1, factClaims: 1, familyRelationships: 0, attestations: 0,
   appliedTranslationRepairs: 0, pendingTranslationRepairs: 0,
 };
@@ -38,11 +38,14 @@ assert.equal(metrics[0].children[1].textContent, '1');
 assert.match(metrics[0].children[2].textContent, /not a completion or publication count/);
 assert.match(elements.get('publication-note').textContent, /do not establish whole-chapter editorial review/);
 assert.equal(elements.get('coverage-percent').textContent, '50.0%');
+assert.match(elements.get('publication-note').textContent, /1 reviewed source identifications retain cross-chapter uncertainty/);
+const incomplete = { ...summary }; delete incomplete.identityPendingCases;
+assert.throws(() => context.testApi.renderOverview(incomplete), /invalid identityPendingCases/);
 const book = context.testApi.createBookSection('fixture', {
   name: 'Fixture', chapters: [{ chapter: '001', title: 'Test', peopleGlossary: {
     glossaryState: 'current', state: 'current', dateAudit: { status: 'audited' },
     peopleRecords: 1, factClaims: 1, familyRelationships: 0, attestations: 0,
-    appliedTranslationRepairs: 0, promptVersion: 7, unresolvedPeople: 0,
+    appliedTranslationRepairs: 0, promptVersion: 7, identityReview: { targetCases: 1, approvedCases: 1, heldCases: 0, reviewedAmbiguousCases: 1 },
   } }],
 });
 assert.match(book.children[1].children[0].children[1].textContent, /preliminary checks passed/);

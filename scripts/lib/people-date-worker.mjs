@@ -3,7 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { Agent } from '@cursor/sdk';
 import { REPO_ROOT, writeJsonAtomic, readJson } from './people-content.mjs';
-import { sendCursorAgentWhenReady, waitForCursorRun } from './cursor-run-wait.mjs';
+import { CursorRunLimitExceededError, sendCursorAgentWhenReady, waitForCursorRun } from './cursor-run-wait.mjs';
 import { requestCursorUsageLimitStop } from './cursor-run-control.mjs';
 import { runOpenRouterDateTools } from './openrouter-date-tools.mjs';
 import { dateAuditReasonErrors } from './people-date-audit.mjs';
@@ -155,6 +155,22 @@ function validateResearchSupplement(task, blockerFile) {
   return supplement;
 }
 
+// Date recovery can wrap failures in cancellation, terminal, or artifact errors.
+// Inspect their full evidence chain without losing the account-wide stop signal.
+function requestDateCursorUsageLimitStop(control, error) {
+  const pendingErrors = [error];
+  const visitedErrors = new Set();
+  let accountStop = false;
+  while (pendingErrors.length) {
+    const current = pendingErrors.pop();
+    if (!current || visitedErrors.has(current)) continue;
+    visitedErrors.add(current);
+    accountStop = requestCursorUsageLimitStop(control, current) || accountStop;
+    if (typeof current === 'object') pendingErrors.push(current.cause, current.cancelError, current.terminalError);
+  }
+  return accountStop;
+}
+
 export function cursorDateWorker(options, control, {
   Agent: agentClient = Agent,
   send = sendCursorAgentWhenReady,
@@ -175,6 +191,7 @@ export function cursorDateWorker(options, control, {
     let priorRunIds = new Set();
     let delegatedRetry = false;
     let usageSaved = false;
+    let boundedRunStop = null;
     const wait = async run => {
       control.activeRuns?.set(run.id, {
         run, agentId: agent.agentId, label: task.key,
@@ -185,7 +202,7 @@ export function cursorDateWorker(options, control, {
       try {
         const result = await waitRun(run, { agentId:agent.agentId, apiKey:options.apiKey, label:task.key,
           pollMs:15000, timeoutMs:options.timeoutMs, maxRawCostCents:options.maxRunCostCents, maxTotalTokens:options.maxRunTokens });
-        requestCursorUsageLimitStop(control, result.error);
+        requestDateCursorUsageLimitStop(control, result.error);
         return result;
       } finally {
         control.activeRuns?.delete(run.id);
@@ -197,6 +214,9 @@ export function cursorDateWorker(options, control, {
       if (!found) return null;
       const bytes = await agent.downloadArtifact(found.path);
       const artifactHash = createHash('sha256').update(bytes).digest('hex');
+      // Archive even malformed output before parsing; review and repair bytes
+      // remain available for inspection without another model turn.
+      if (task.directory) preserveDateBytes(task.directory, 'raw-date-artifact', bytes);
       let artifact;
       try {
         artifact = JSON.parse(bytes.toString('utf8'));
@@ -209,6 +229,31 @@ export function cursorDateWorker(options, control, {
         if (artifact.blocked) preserveDateBytes(task.directory, 'raw-research-blocker', bytes);
       }
       return { artifact, artifactHash };
+    };
+    const waitAndDownload = async run => {
+      let result;
+      try {
+        result = await wait(run);
+      } catch (error) {
+        // Only documented per-run cost/token/time stops permit this read-only
+        // inspection. Cancellation still happens in waitForCursorRun. Account
+        // limits, monitoring/transport failures and failed cancellation remain
+        // loud failures, never reasons to accept an artifact or send again.
+        const accountStop = requestDateCursorUsageLimitStop(control, error);
+        if (!(error instanceof CursorRunLimitExceededError) ||
+            !['raw-cost', 'tokens', 'wall-clock'].includes(error.metric) ||
+            error.runId !== run.id || error.cancelError || accountStop ||
+            (error.terminalStatus && error.terminalStatus !== 'completed') || error.terminalError) throw error;
+        boundedRunStop = error;
+        await save({ runLimitStop: {
+          code: error.code, runId: error.runId, metric: error.metric,
+          observed: error.observed, limit: error.limit, message: error.message,
+          recordedAt: new Date().toISOString(),
+        } });
+      }
+      const artifact = await download();
+      if (!artifact && boundedRunStop) throw boundedRunStop;
+      return { result, artifact };
     };
     const returned = async ({ artifact, artifactHash }) => {
       await save({ status: 'returned', validationError: null, lastError: null, artifactHash });
@@ -227,7 +272,7 @@ export function cursorDateWorker(options, control, {
         if (data == null) throw new Error('Usage lookup returned no telemetry');
         return { ...metadata, status: 'available', data };
       } catch (error) {
-        requestCursorUsageLimitStop(control, error);
+        requestDateCursorUsageLimitStop(control, error);
         return { ...metadata, status: 'unavailable', error: String(error.message ?? error) };
       }
     };
@@ -259,14 +304,13 @@ export function cursorDateWorker(options, control, {
         priorRunIds = new Set(runs.items.map(run => run.id));
         await save({sent:Boolean(task.state.sent || runs.items.length)});
         const active = runs.items.find(r=>r.status==='running');
+        let retained;
         if (active) {
           await save({runId:active.id,status:'running'});
-          await wait(active);
         } else if (runs.items.length) await save({runId:runs.items[0].id});
-        let retained;
-        try { retained = await download(); }
+        try { retained = active ? (await waitAndDownload(active)).artifact : await download(); }
         catch (error) {
-          if (!(error instanceof DateArtifactValidationError)) throw error;
+          if (!(error instanceof DateArtifactValidationError) || boundedRunStop) throw error;
           await save({validationError:error.message,artifactHash:error.artifactHash});
         }
         // A changed artifact may be a completed correction from an interrupted
@@ -282,6 +326,7 @@ export function cursorDateWorker(options, control, {
           const reasons = dateAuditReasonErrors(retained.artifact);
           if (reasons.includes(task.state.validationError)) await save({ validationError: reasons.join('; ') });
         }
+        if (boundedRunStop) throw boundedRunStop;
       } else {
         assertLaunchAllowed();
         agent = await agentClient.create({apiKey:options.apiKey,name:`Dates ${task.kind} ${task.packet.book}/${task.packet.chapter}`,
@@ -327,7 +372,7 @@ export function cursorDateWorker(options, control, {
               return await target.send(...args);
             } catch (error) {
               dispatchError = error;
-              requestCursorUsageLimitStop(control, error);
+              requestDateCursorUsageLimitStop(control, error);
             }
           }
           const listed = await agentClient.listRuns(agent.agentId, {
@@ -346,19 +391,18 @@ export function cursorDateWorker(options, control, {
       // the sole host executor and preventing resumable recovery.
       const run = await send(guardedAgent,message,{label:task.key,timeoutMs:options.timeoutMs});
       await save({sent:true,runId:run.id,status:'running'});
-      const result = await wait(run);
-      const artifact = await download();
+      const { result, artifact } = await waitAndDownload(run);
       if (!artifact) throw new Error(`Date worker ended ${result.status} without ${output}${result.error ? `: ${result.error.message ?? JSON.stringify(result.error)}` : ''}`, { cause: result.error });
       if (supplement && artifact.artifactHash === oldBlockerHash) throw new Error('Retained research blocker was returned unchanged after continuation');
       if (supplement) verifyAttempt();
       return await returned(artifact);
     } catch(error) {
-      requestCursorUsageLimitStop(control,error);
+      requestDateCursorUsageLimitStop(control,error);
       const message = String(error.message ?? error);
       const restarts = Number(task.state.agentRestarts ?? 0);
       // Cloud runs sometimes end with "Agent not found" after a few cents.
       // Drop that agent and start another one; do not discard returned jobs.
-      if (!task.researchSupplement && !options.recoverOnly && restarts < 2 && message.includes('Agent not found') && !control.stopRequested) {
+      if (!boundedRunStop && !task.researchSupplement && !options.recoverOnly && restarts < 2 && message.includes('Agent not found') && !control.stopRequested) {
         const priorUsage = await usageCheckpoint();
         if (control.stopRequested) {
           await save({ status: 'interrupted', lastError: message, usage: priorUsage });

@@ -1,0 +1,56 @@
+{
+  "kind": "approved-swap-warning-policy",
+  "generatedAt": "2026-10-28T19:55:18.522Z",
+  "base": "79535028c1c91d4ccac77875e096c1b9e3f78f73",
+  "authorization": "User explicitly approved warn at 4 GiB and stop at 8 GiB on 2026-10-28.",
+  "policy": {
+    "swapWarningGiB": 4,
+    "swapStopGiB": 8,
+    "codexRssStopGiB": 4,
+    "diskReserveGiB": 30,
+    "pressureStops": [
+      2,
+      4
+    ]
+  },
+  "tests": {
+    "passed": 11,
+    "scope": "canonical candidate resource guard, disk rules, exact swap boundaries and measurement failures"
+  },
+  "measurement": {
+    "freeGiB": 31.7060546875,
+    "swapUsedBytes": "4801555333",
+    "codexResidentBytes": "712015872",
+    "pressureLevel": 1,
+    "warnings": [
+      "macOS swap is at least 4 GiB: inspect memory consumers, pressure and swap growth before increasing concurrency."
+    ]
+  },
+  "files": [
+    {
+      "file": "scripts/check-local-disk.mjs",
+      "sha256": "d3f4e5017e20fbcabca94689c921f1f23d3158efce1ba80f3efdbd0a0915afdd"
+    },
+    {
+      "file": "scripts/test-local-disk.mjs",
+      "sha256": "5a94def9a489774aee4390a1e54ccec057a9c0f316d3b3cb25d0e849b6a04d64"
+    },
+    {
+      "file": "AGENTS.md",
+      "sha256": "1a1d34118c34f421286e79ebc929580ecca9877d8d8eae3880f50ee73e2a237c"
+    },
+    {
+      "file": "PEOPLE_COMPLETION_PROCESS.md",
+      "sha256": "23ee95b563256f193b1aabb4fbb8519e3f45f55785e74a715f7275df43db8779"
+    },
+    {
+      "file": "LOCAL_DISK_STRATEGY.md",
+      "sha256": "e139e0fee15dd9cc01359fcd271c22f58a6b61e221fcca0d0b22b800011608de"
+    }
+  ],
+  "launcherEnabled": false,
+  "concurrencyIncreased": false,
+  "glossaryDataChanged": false,
+  "globalCI": false,
+  "masterChanged": false
+}

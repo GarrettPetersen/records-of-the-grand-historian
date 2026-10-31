@@ -68,16 +68,13 @@ Use that runbook when provisioning a new machine or handing the lane to another 
 
 For unattended inference on the local Mac, use the loopback-only headless dispatcher
 documented there. It controls Grok Bot 0.61.0+'s own authenticated renderer through
-stable local agent IDs and keeps the twelve durable workers `grokbot-24` through
-`grokbot-35` occupied; the MCP bridge remains the sealed queue, validation, and
-publication data plane.
-
-An incoming orchestrator should begin with the runbook's **Existing production host:
-orchestrator handoff** checklist. The dispatcher is a persistent LaunchAgent and does
-not need to appear as an MCP tool in the orchestrator's own session. Observe it through
-`launchctl`, its logs, `people:grokbot:headless:probe`, the shared queue, and resulting
-PRs. Never run a second dispatcher beside the LaunchAgent, and never manufacture claims
-to make the lane look busy.
+stable local agent IDs `grokbot-24` through `grokbot-35`. It defaults to one active
+conversation and requires an owner-only, unexpired host-approved job ticket before
+waking anyone. It verifies the exact claimed chapter and sealed chunk fingerprints
+through MCP first. No approved work means no prompt; `ready` claims are completed,
+not work to redispatch. The MCP bridge remains the sealed queue, validation, and
+publication data plane. The old twelve-agent launch loop is disabled; resource
+checks and actual assigned work must pass before it is re-enabled.
 
 Do not assume one successful bootstrap covers the whole roster. Each durable Grok Bot
 can own a separate persistent computer. Bootstrap each stable worker once, verify

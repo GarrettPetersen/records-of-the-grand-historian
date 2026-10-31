@@ -1,4 +1,7 @@
 import test from 'node:test';
+import os from 'node:os';
+import { applyReviewedIdentityUncertainty } from './lib/people-chapter-identity.mjs';
+import { fixtureIdentityCoverage } from './lib/people-identity-test-fixtures.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -46,7 +49,7 @@ function fixture() {
   const outside = member('shiji', '001', 'Outside Alias', '外名');
   const aid = stableCanonicalPersonId(a.localId);
   const bid = stableCanonicalPersonId(b.localId);
-  const globalCatalog = { currentPromptVersion: 7, generatedAt: '2026-10-24T00:00:00.000Z', complete: false,
+  const globalCatalog = { identityReviewByChapter: {}, currentPromptVersion: 7, generatedAt: '2026-10-24T00:00:00.000Z', complete: false,
     localPersonMap: { [a.localId]: aid, [b.localId]: bid, [outside.localId]: aid },
     people: [{ id: aid, slug: 'global-stable-father', localPeople: [a.localId, outside.localId], retiredIds: [],
       preferredName: { en: 'Outside Alias', zh: '外名' }, description: { en: 'Outside Descriptor' },
@@ -60,6 +63,8 @@ function fixture() {
   const corpus = { localPeople: new Map([[a.localId, a], [b.localId, b]]),
     chapters: [a, b].map(person => ({ extraction: extraction(person) })) };
   const projected = projectPeopleProduct(corpus, globalCatalog, new Map([['official', 'Official']]), {}, () => audited);
+  const identity = fixtureIdentityCoverage(corpus, globalCatalog, new Map([...corpus.localPeople, [outside.localId, outside]]));
+  applyReviewedIdentityUncertainty(projected.catalog, identity.certificates);
   const context = { active: true, preview: false, ...projected,
     certificate: { schemaVersion: 1, kind: 'certified-ebook-people', scope: product, projection: peopleDigest(projected) },
     peopleById: new Map(projected.catalog.people.map(person => [person.id, person])) };
@@ -89,7 +94,7 @@ test('scoped projection retains global identities and URLs while excluding outsi
   assert(buildEbookPeople(context, product).ready);
 });
 
-test('a real globally compiled cross-book cluster stays globally blocked while its qualified book projects cleanly', () => {
+test('a compiled cross-book cluster can remain globally incomplete while its independently qualified book projects cleanly', () => {
   const f = fixture();
   const spouse = member('shiji', '002', 'Outside Spouse', '外妻');
   f.outside.descriptorSuggestion = 'Outside Descriptor';
@@ -114,7 +119,8 @@ test('a real globally compiled cross-book cluster stays globally blocked while i
   assert.equal(global.life.birth.length, 1);
   assert(global.roles.some(role => role.roleId === 'historian'));
   assert(global.familyRelationships.some(relation => relation.value.relation === 'spouse-of'));
-  assertScopedIdentity(f.corpus, result.catalog, { unresolvedCanonicalPeople: result.unresolvedCanonicalPeople });
+  const identity = fixtureIdentityCoverage(f.corpus, result.catalog, globalCorpus.localPeople);
+  assertScopedIdentity(f.corpus, identity.view, identity.certificates);
   const projected = projectPeopleProduct(f.corpus, result.catalog, new Map([['official', 'Official']]), {}, () => audited);
   const person = projected.catalog.people.find(person => person.id === id);
   assert.equal(person.life.birth.length, 0);
@@ -235,10 +241,12 @@ test('source-current strictly valid extraction cannot add an applied repair abse
     reviewer: { ...history.reviewer, agentId: 'extractor' } }, approvedOnly), /cannot review its own/);
 });
 
-test('outside homonym comparisons still block; unrelated outside comparisons do not', () => {
-  const { corpus, globalCatalog, aid } = fixture();
-  assert.throws(() => assertScopedIdentity(corpus, globalCatalog, { unresolvedCanonicalPeople: [aid] }), /global identity/);
-  assert.doesNotThrow(() => assertScopedIdentity(corpus, globalCatalog, { unresolvedCanonicalPeople: ['outside-unrelated'] }));
+test('reviewed chapter identities qualify with cross-chapter uncertainty; historical pairs alone grant no proof', () => {
+  const f = fixture(), { corpus, globalCatalog } = f;
+  const identity = fixtureIdentityCoverage(corpus, globalCatalog, new Map([...corpus.localPeople, [f.outside.localId, f.outside]]));
+  assert.doesNotThrow(() => assertScopedIdentity(corpus, identity.view, identity.certificates));
+  assert.throws(() => assertScopedIdentity(corpus, identity.view, []), /Missing independent person coverage/);
+  assert.throws(() => assertScopedIdentity(corpus, identity.view, { unresolvedCanonicalPeople: [] }), /validated person certificates/);
   const a = member('jinshu', '001', 'Same Name', '同名');
   const b = member('shiji', '001', 'Same Name', '同名');
   const locals = new Map([[a.localId, a], [b.localId, b]]);
@@ -253,10 +261,10 @@ test('outside homonym comparisons still block; unrelated outside comparisons do 
 
 test('identity generation seals and product certificates reject missing, stale and altered evidence', () => {
   const { globalCatalog, context } = fixture();
-  const seal = { schemaVersion: 1, kind: 'people-global-identity-seal', inputs: 'current-inputs',
-    catalog: peopleDigest(globalCatalog), siteIndex: peopleDigest(context.siteIndex), unresolvedCanonicalPeople: [] };
+  const seal = { schemaVersion: 2, kind: 'people-accepted-identity-seal', inputs: 'current-inputs',
+    catalog: peopleDigest(globalCatalog), siteIndex: peopleDigest(context.siteIndex), identityReviews: peopleDigest(globalCatalog.identityReviewByChapter) };
   assert.doesNotThrow(() => assertIdentitySeal(seal, globalCatalog, context.siteIndex, 'current-inputs'));
-  for (const bad of [null, { ...seal, inputs: 'stale' }, { ...seal, catalog: 'altered' }, { ...seal, siteIndex: 'altered' }]) {
+  for (const bad of [null, { ...seal, inputs: 'stale' }, { ...seal, catalog: 'altered' }, { ...seal, siteIndex: 'altered' }, { ...seal, identityReviews: 'altered' }]) {
     assert.throws(() => assertIdentitySeal(bad, globalCatalog, context.siteIndex, 'current-inputs'), /identity seal/);
   }
   assert.throws(() => assertEbookPeopleCertificate({ ...context.certificate, projection: 'forged' }, context.certificate), /certificate/);
@@ -264,7 +272,7 @@ test('identity generation seals and product certificates reject missing, stale a
 
 test('required source roots reject legitimate split-root configuration before generation or validation writes', t => {
   const draft = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  const other = fs.mkdtempSync(path.join(draft, 'split-root-test-'));
+  const other = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-certified-split-root-'));
   t.after(() => fs.rmSync(other, { recursive: true, force: true }));
   assert.doesNotThrow(() => assertCertifiedEbookRoot(REPO_ROOT, 'same-root fixture'));
   assert.throws(() => assertCertifiedEbookRoot(other, 'generator executable root'), /differs from certified people root/);
@@ -323,6 +331,7 @@ test('actual shared ebook renderer emits only scoped facts, scoped inverse famil
   assert(glossary.includes('晉父至。'));
   assert(glossary.includes('Jin Father arrived.'));
   assert(glossary.includes('Child of'));
+  assert(glossary.includes('not yet established whether this person is the same'));
   assert(glossary.includes(`#person-${f.aid}`));
 });
 
@@ -355,7 +364,7 @@ test('global preview cannot be promoted into certified required glossary output'
 test('packaged EPUB ZIP transport preserves independently checked glossary facts, snippets, certificate and mention links', t => {
   const f = renderedFixture();
   const draft = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  const directory = fs.mkdtempSync(path.join(draft, 'synthetic-epub-'));
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'ebook-certified-synthetic-epub-'));
   t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
   const content = path.join(directory, 'content');
   const unpacked = path.join(directory, 'unpacked');

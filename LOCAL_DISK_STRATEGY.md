@@ -11,6 +11,21 @@ work; build the site once per reviewed milestone.
 
 ## Default worker topology
 
+On macOS the same preflight also checks swap, combined resident memory of Codex
+backend executables, and OS memory pressure. It warns at 4 GiB swap: inspect memory
+consumers and swap growth before increasing concurrency. It refuses new work at 8 GiB swap,
+4 GiB Codex backend RSS, or warning/critical pressure, even if disk is plentiful.
+These conservative thresholds are not total-process memory limits. RSS misses
+swapped allocations, so checking RSS alone would not have caught the crash.
+Measurements that fail or cannot be parsed fail loudly. Non-macOS hosts explicitly
+report the memory portion as not applicable; the disk rules still apply.
+
+A preflight is a snapshot, not continuous protection. Repeat it before dispatch,
+after work and every 60 seconds while observing active jobs. Follow the finite-chat,
+sequential local-job and bounded-output profile in `PEOPLE_COMPLETION_PROCESS.md`.
+Do not delete macOS swap files or Codex history to reclaim space. Stop dispatches,
+preserve jobs and rotate the coordinator from a small handoff; a fork carries history.
+
 Use one host checkout to prepare packets, run validators, and apply accepted results.
 Each chapter/chunk/review round has a unique artifact directory or output path; keep
 that ownership stable across restarts. Workers read only their sealed assignment and

@@ -2,6 +2,7 @@
 
 import { Agent, CursorAgentError } from '@cursor/sdk';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
@@ -104,7 +105,12 @@ Options:
   --starting-ref REF    Remote reference for the cloud workspace.
   --dossier-dir DIR     Tracked repository directory containing shard dossiers.
   --prepare-dossiers    Write shard dossiers to --dossier-dir, then exit.
-  --recover-only        Recover specified/prior agents and write checkpoints
+  --committed-inputs    Cursor prepared execution only; requires an immutable full
+                        --starting-ref commit. Verify source bytes at that commit,
+                        then retain per-shard checkpoints and an ignored receipt.
+                        Pending fresh host global validation and independent source
+                        acceptance; never writes a canonical aggregate. No --out.
+  --recover-only        Download and validate prior artifacts; never start model turns
                         without launching any new resolver agents.
   --skip-cloud-recovery Do not inspect prior Cursor agents for shard artifacts.
   --recover-agent N=ID  Recover shard N from a specific Cursor agent (repeatable).
@@ -189,6 +195,7 @@ function parseArgs(argv) {
     startingRef: process.env.SDK_PEOPLE_STARTING_REF ?? DEFAULT_STARTING_REF,
     dossierDir: null,
     prepareDossiers: false,
+    committedInputs: false,
     recoverOnly: false,
     skipCloudRecovery: false,
     recoverAgents: new Map(),
@@ -226,6 +233,7 @@ function parseArgs(argv) {
     else if (arg === '--starting-ref') opts.startingRef = next();
     else if (arg === '--dossier-dir') opts.dossierDir = path.resolve(REPO_ROOT, next());
     else if (arg === '--prepare-dossiers') opts.prepareDossiers = true;
+    else if (arg === '--committed-inputs') opts.committedInputs = true;
     else if (arg === '--recover-only') opts.recoverOnly = true;
     else if (arg === '--skip-cloud-recovery') opts.skipCloudRecovery = true;
     else if (arg === '--recover-agent') {
@@ -248,6 +256,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else throw new Error(`Unknown option: ${arg}`);
   }
+  assertCommittedInputOptions(opts);
   if (opts.selfTest) return opts;
   if(!['cursor-sdk','grok-build'].includes(opts.transport))throw new Error('Unknown identity transport');
   if(opts.transport==='grok-build'){
@@ -273,7 +282,7 @@ function parseArgs(argv) {
       throw new Error('--dossier-dir must be a directory inside the repository');
     }
   }
-  opts.out ??= path.join(PEOPLE_DIR, 'resolutions', `${opts.batch}.json`);
+  if (!opts.committedInputs) opts.out ??= path.join(PEOPLE_DIR, 'resolutions', `${opts.batch}.json`);
   return opts;
 }
 
@@ -332,9 +341,18 @@ export function buildDossiers(opts, corpus, resolutions) {
   const targetLocalIds = new Set([...corpus.localPeople.values()]
     .filter((person) => opts.allUnresolved || opts.chapters.has(`${person.book}/${person.chapter}`))
     .map((person) => person.localId));
-  const blocks = unresolvedState.blocks.filter((block) =>
-    opts.allUnresolved || block.localPeople.some((id) => targetLocalIds.has(id))
-  );
+  const targetCanonicalIds = new Set([...targetLocalIds].map(id => canonicalByLocal.get(id)));
+  const membersByCanonical = new Map(resolved.clusters.map(cluster => [cluster.canonicalPersonId, cluster.localPeople]));
+  const blocks = unresolvedState.blocks.flatMap(block => {
+    const reviewPairs = block.reviewPairs.filter(([left, right]) =>
+      targetCanonicalIds.has(left) || targetCanonicalIds.has(right)
+    );
+    if (reviewPairs.length === 0) return [];
+    // A requested chapter alias may be absent from the matching name block.
+    const canonicalPeople = new Set(reviewPairs.flat());
+    return [{...block, reviewPairs, localPeople: [...canonicalPeople]
+      .flatMap(id => membersByCanonical.get(id)).sort()}];
+  });
   const components = connectedBlockComponents(blocks, canonicalByLocal);
   const shards = shardComponents(
     components,
@@ -729,6 +747,7 @@ function writeShardCheckpoint(dossier, document) {
   writeJsonAtomic(shardCheckpointPath(dossier), {
     schemaVersion: 1,
     dossierFingerprint: dossierFingerprint(dossier),
+    ...(dossier.committedInputProvenance ? {committedInputProvenance: dossier.committedInputProvenance} : {}),
     document,
   });
 }
@@ -859,7 +878,7 @@ function verifyCommittedFile(file, expected, opts) {
   }
   let committed;
   try {
-    committed = execFileSync('git', ['show', `${localStartingRef(opts.startingRef)}:${relative}`], {
+    committed = execFileSync('git', ['show', `${opts.committedInputs ? opts.startingRef : localStartingRef(opts.startingRef)}:${relative}`], {
       cwd: REPO_ROOT,
       encoding: 'utf8',
       maxBuffer: 64 * 1024 * 1024,
@@ -912,32 +931,110 @@ function baselineFromPreparedDossiers(dossiers) {
   };
 }
 
-function loadPreparedDossiers(opts) {
+function assertCommittedInputOptions(opts) {
+  if (!opts.committedInputs) return;
+  if (!opts.dossierDir || opts.prepareDossiers || opts.selfTest || opts.transport !== 'cursor-sdk') {
+    throw new Error('--committed-inputs requires Cursor prepared execution with --dossier-dir');
+  }
+  if (!/^[a-f0-9]{40}$/u.test(opts.startingRef)) {
+    throw new Error('--committed-inputs requires a full immutable 40-character commit --starting-ref');
+  }
+  if (opts.out) throw new Error('--committed-inputs forbids --out; checkpoints and a pending-host-acceptance receipt are retained instead');
+}
+
+function rawFingerprint(bytes) {
+  return `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
+}
+
+function committedSourceInventory(commit) {
+  const rows = execFileSync('git', ['ls-tree', '-r', '-z', commit, '--', 'data'],
+    {cwd: REPO_ROOT, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024}).split('\0').filter(Boolean);
+  const inventory = new Set(), entries = new Map();
+  for (const row of rows) {
+    const tab = row.indexOf('\t'), header = /^([0-7]{6}) (blob|tree|commit) ([a-f0-9]{40})$/u.exec(row.slice(0, tab));
+    if (tab < 0 || !header) throw new Error('Malformed committed source tree entry');
+    const file = row.slice(tab + 1);
+    if (entries.has(file)) throw new Error(`Duplicate committed source tree entry: ${file}`);
+    entries.set(file, {mode: header[1], type: header[2]});
+    const extraction = /^data\/people\/extractions\/([^/]+)\/(\d{3})\.json$/u.exec(file);
+    if (extraction) {
+      inventory.add(file);
+      inventory.add(`data/${extraction[1]}/${extraction[2]}.json`);
+    } else if (file.startsWith('data/people/resolutions/') && file.endsWith('.json')) inventory.add(file);
+  }
+  return {inventory, entries};
+}
+
+function verifyCommittedSourceFiles(sourceFiles, opts) {
+  assertCommittedInputOptions(opts);
+  const commit = execFileSync('git', ['rev-parse', '--verify', `${opts.startingRef}^{commit}`], {cwd: REPO_ROOT, encoding: 'utf8'}).trim();
+  if (commit !== opts.startingRef) throw new Error('Committed inputs must name the exact commit object');
+  const seen = new Set();
+  for (const source of sourceFiles) {
+    if (typeof source?.file !== 'string' ||
+        (!/^data\/(?:[a-z0-9-]+\/\d{3}\.json|people\/(?:extractions\/[a-z0-9-]+\/\d{3}\.json|resolutions\/(?:[^/]+\/)*[^/]+\.json))$/u.test(source.file) ||
+         /[\x00-\x1f]/u.test(source.file) || path.posix.normalize(source.file) !== source.file) ||
+        seen.has(source.file) || !/^sha256:[a-f0-9]{64}$/u.test(source.fingerprint)) {
+      throw new Error(`Invalid committed resolver source path/fingerprint: ${source?.file}`);
+    }
+    absoluteRepositoryFile(source.file, 'Committed resolver source');
+    seen.add(source.file);
+  }
+  const {inventory, entries} = committedSourceInventory(commit);
+  const missing = [...inventory].filter(file => !seen.has(file));
+  const unexpected = [...seen].filter(file => !inventory.has(file));
+  if (missing.length || unexpected.length) {
+    throw new Error(`Committed source inventory mismatch: missing ${missing.length} (${missing.slice(0, 3).join(', ')}); unexpected ${unexpected.length} (${unexpected.slice(0, 3).join(', ')})`);
+  }
+  for (const source of sourceFiles) {
+    const entry = entries.get(source.file);
+    if (!entry || entry.type !== 'blob' || !['100644', '100755'].includes(entry.mode)) {
+      throw new Error(`Missing, non-blob or non-regular committed resolver source: ${source.file}`);
+    }
+  }
+  const objects = [];
+  for (let offset = 0; offset < sourceFiles.length; offset += 64) {
+    const batch = sourceFiles.slice(offset, offset + 64);
+    const headers = execFileSync('git', ['cat-file', '--batch-check'], {
+      cwd: REPO_ROOT, input: batch.map(source => `${commit}:${source.file}\n`).join(''), encoding: 'utf8', maxBuffer: 64 * 1024,
+    }).trimEnd().split('\n');
+    if (headers.length !== batch.length) throw new Error('Incomplete committed source metadata');
+    for (const [index, header] of headers.entries()) {
+      const match = /^([a-f0-9]{40}) blob (\d+)$/u.exec(header);
+      if (!match || !Number.isSafeInteger(Number(match[2])) || Number(match[2]) > 32 * 1024 * 1024) {
+        throw new Error(`Missing, non-blob or oversized committed resolver source: ${batch[index].file}`);
+      }
+      objects.push({...batch[index], object: match[1], bytes: Number(match[2])});
+    }
+  }
+  for (let offset = 0; offset < objects.length;) {
+    const batch = []; let bytes = 0;
+    while (offset < objects.length && batch.length < 64 && bytes + objects[offset].bytes <= 32 * 1024 * 1024) {
+      const object = objects[offset++]; batch.push(object); bytes += object.bytes;
+    }
+    const raw = execFileSync('git', ['cat-file', '--batch'], {
+      cwd: REPO_ROOT, input: batch.map(object => `${object.object}\n`).join(''), maxBuffer: bytes + batch.length * 128 + 1024,
+    });
+    let cursor = 0;
+    for (const object of batch) {
+      const end = raw.indexOf(10, cursor);
+      if (end < cursor || raw.subarray(cursor, end).toString() !== `${object.object} blob ${object.bytes}` ||
+          end + object.bytes + 1 >= raw.length || raw[end + object.bytes + 1] !== 10) throw new Error('Malformed committed source blob response');
+      const content = raw.subarray(end + 1, end + 1 + object.bytes);
+      if (rawFingerprint(content) !== object.fingerprint) throw new Error(`Committed resolver source fingerprint mismatch: ${object.file}`);
+      cursor = end + object.bytes + 2;
+    }
+    if (cursor !== raw.length) throw new Error('Unexpected committed source blob trailing bytes');
+  }
+  return {startingRef: commit, sourceFiles: sourceFiles.length, verification: 'exact committed raw bytes; local sources not inspected'};
+}
+
+function verifyPreparedSourceFiles(sourceFiles, opts) {
+  if (opts.committedInputs) return verifyCommittedSourceFiles(sourceFiles, opts);
   const startingRef = localStartingRef(opts.startingRef);
-  const manifestFile = dossierManifestFile(opts);
-  if (!fs.existsSync(manifestFile)) {
-    throw new Error(
-      `Missing ${repositoryPath(manifestFile)}; rerun with --prepare-dossiers and commit the result`,
-    );
-  }
-  const manifestText = fs.readFileSync(manifestFile, 'utf8');
-  verifyCommittedFile(manifestFile, manifestText, opts);
-  const manifest = JSON.parse(manifestText);
-  if (manifest.schemaVersion !== DOSSIER_MANIFEST_VERSION) {
-    throw new Error(`Unsupported resolver dossier manifest version ${manifest.schemaVersion}`);
-  }
-  if (manifest.batch !== opts.batch) {
-    throw new Error(`Resolver dossier manifest batch must be ${opts.batch}`);
-  }
-  if (JSON.stringify(manifest.selection) !== JSON.stringify(dossierSelection(opts))) {
-    throw new Error('Resolver dossier manifest selection does not match the requested scope');
-  }
-  if (!Array.isArray(manifest.sourceFiles) || manifest.sourceFiles.length === 0) {
-    throw new Error('Resolver dossier manifest has no source fingerprints');
-  }
   const sourcePaths = [];
   const seenSources = new Set();
-  for (const source of manifest.sourceFiles) {
+  for (const source of sourceFiles) {
     if (!source?.file || seenSources.has(source.file)) {
       throw new Error(`Resolver dossier manifest has an invalid source file ${source?.file}`);
     }
@@ -992,6 +1089,58 @@ function loadPreparedDossiers(opts) {
       `Accepted formatting-only differences in ${changedSources.length} resolver source file(s)`,
     );
   }
+}
+
+function writeCommittedInputsReceipt(dossiers, accepted, opts) {
+  assertCommittedInputOptions(opts);
+  const acceptedBatches = new Set(accepted.map(document => document.batch));
+  const provenance = dossiers[0]?.committedInputProvenance;
+  if (!provenance || dossiers.some(dossier => !isDeepStrictEqual(dossier.committedInputProvenance, provenance))) {
+    throw new Error('Committed checkpoint receipt requires one verified immutable input provenance');
+  }
+  const receipt = {
+    schemaVersion: 1, status: 'checkpoints-pending-host-global-and-independent-source-acceptance',
+    batch: opts.batch, committedInputProvenance: provenance,
+    globallyAccepted: false, independentSourceApproved: false, publicationApproved: false,
+    shards: dossiers.map(dossier => {
+      const checkpoint = shardCheckpointPath(dossier), complete = acceptedBatches.has(dossier.batch);
+      if (complete && !fs.existsSync(checkpoint)) throw new Error(`Missing structurally accepted checkpoint ${dossier.batch}`);
+      const artifact = fs.existsSync(checkpoint) ? fs.readFileSync(checkpoint) : null;
+      return {batch: dossier.batch, status: complete ? 'structurally-accepted-pending-host-acceptance' : 'pending',
+        checkpoint: repositoryPath(checkpoint), ...(artifact ? {bytes: artifact.length, fingerprint: rawFingerprint(artifact)} : {})};
+    }),
+  };
+  const file = path.join(SHARD_CHECKPOINT_DIR, opts.batch, 'committed-inputs-receipt.json');
+  writeJsonAtomic(file, receipt);
+  console.log(JSON.stringify({status: receipt.status, batch: opts.batch, startingRef: opts.startingRef, receipt: repositoryPath(file),
+    completeShards: receipt.shards.filter(shard => shard.status !== 'pending').length, pendingShards: receipt.shards.filter(shard => shard.status === 'pending').length}));
+  return receipt;
+}
+
+function loadPreparedDossiers(opts) {
+  assertCommittedInputOptions(opts);
+  const manifestFile = dossierManifestFile(opts);
+  if (!fs.existsSync(manifestFile)) {
+    throw new Error(
+      `Missing ${repositoryPath(manifestFile)}; rerun with --prepare-dossiers and commit the result`,
+    );
+  }
+  const manifestText = fs.readFileSync(manifestFile, 'utf8');
+  verifyCommittedFile(manifestFile, manifestText, opts);
+  const manifest = JSON.parse(manifestText);
+  if (manifest.schemaVersion !== DOSSIER_MANIFEST_VERSION) {
+    throw new Error(`Unsupported resolver dossier manifest version ${manifest.schemaVersion}`);
+  }
+  if (manifest.batch !== opts.batch) {
+    throw new Error(`Resolver dossier manifest batch must be ${opts.batch}`);
+  }
+  if (JSON.stringify(manifest.selection) !== JSON.stringify(dossierSelection(opts))) {
+    throw new Error('Resolver dossier manifest selection does not match the requested scope');
+  }
+  if (!Array.isArray(manifest.sourceFiles) || manifest.sourceFiles.length === 0) {
+    throw new Error('Resolver dossier manifest has no source fingerprints');
+  }
+  const sourceVerification = verifyPreparedSourceFiles(manifest.sourceFiles, opts);
   if (!Array.isArray(manifest.dossiers) || manifest.dossiers.length === 0) {
     throw new Error('Resolver dossier manifest has no dossiers');
   }
@@ -1017,6 +1166,7 @@ function loadPreparedDossiers(opts) {
         shard: entry.shard,
         document,
         bytes: Buffer.byteLength(JSON.stringify(document)),
+        ...(opts.committedInputs ? {committedInputProvenance: {...sourceVerification, manifestFingerprint: rawFingerprint(Buffer.from(manifestText))}} : {}),
       };
       if (document.batch !== entry.batch || dossierFingerprint(dossier) !== entry.documentFingerprint) {
         throw new Error(`Resolver dossier fingerprint mismatch: ${entry.file}`);
@@ -1037,6 +1187,17 @@ function loadPreparedDossiers(opts) {
       }
       return dossier;
     });
+  if (opts.committedInputs) {
+    const inputs = new Set(manifest.sourceFiles.map(source => source.file));
+    for (const dossier of dossiers) for (const [localId, person] of Object.entries(dossier.document.people)) {
+      const scope = /^([a-z0-9-]+):(\d{3}):p\d{3,}$/u.exec(localId);
+      if (!scope || person.localId !== localId ||
+          !inputs.has(`data/${scope[1]}/${scope[2]}.json`) ||
+          !inputs.has(`data/people/extractions/${scope[1]}/${scope[2]}.json`)) {
+        throw new Error(`Committed dossier person lacks a complete source/extraction chapter: ${localId}`);
+      }
+    }
+  }
   return { dossiers, baseline: baselineFromPreparedDossiers(dossiers) };
 }
 
@@ -1484,7 +1645,7 @@ async function latestResolverAgents(opts, control) {
   return control.resolverAgentsPromise;
 }
 
-async function recoverPublishedShardDocuments(
+export async function recoverPublishedShardDocuments(
   dossiers,
   opts,
   corpus,
@@ -1522,6 +1683,9 @@ async function recoverPublishedShardDocuments(
       try {
         published = await downloadDocument(agent, dossier);
       } catch (error) {
+        // Artifact-only recovery must never continue a conversation, even when an
+        // earlier run did not publish its output. Leave this shard pending.
+        if (opts.recoverOnly) throw error;
         const runs = await Agent.listRuns(prior.agentId, {
           runtime: 'cloud',
           apiKey: opts.apiKey,
@@ -1596,7 +1760,7 @@ async function recoverPublishedShardDocuments(
           break;
         } catch (error) {
           errors = error?.errors ?? [error instanceof Error ? error.message : String(error)];
-          if (attempt === opts.maxAttempts) throw error;
+          if (opts.recoverOnly || attempt === opts.maxAttempts) throw error;
           console.warn(
             `[${dossier.batch}] recovered artifact failed validation: ${errors[0]}`,
           );
@@ -1961,6 +2125,49 @@ async function selfTest() {
     throw new Error('Resolver did not keep canonical-overlap blocks in one component');
   }
   if (pairKey('b', 'a') !== pairKey('a', 'b')) throw new Error('Pair keys are unstable');
+  const aliasIds = ['fixture:011:p001', 'fixture:014:p001', 'fixture:012:p001', 'fixture:013:p001', 'fixture:015:p001'];
+  const aliasPeople = new Map(aliasIds.map((localId, index) => [localId, {
+    localId, book: 'fixture', chapter: localId.split(':')[1], promptVersion: 7,
+    preferredNameSuggestion: index === 1 ? {en: 'Alternate Name', zh: '別名'} : {en: 'Shared Name', zh: '同名'},
+    historicity: 'historical', descriptorSuggestion: 'Official', mentions: [],
+    identityHints: {nativePlaces: [], relatedLocalPeople: [], activeDateHints: [], polityHints: []},
+    claims: [{predicate: 'name', value: {kind: 'personal-name', ...(index === 1 ? {en: 'Alternate Name', zh: '別名'} : {en: 'Shared Name', zh: '同名'})}}],
+  }]));
+  const aliasResolutions = [{schemaVersion: 1, batch: 'alias-dossier-fixture', decisions: [
+    {decision: 'merge', localPeople: aliasIds.slice(0, 2), basis: ['fixture'], confidence: 'high'},
+    {decision: 'keep-separate', localPeople: [aliasIds[1], aliasIds[2]], basis: ['fixture'], confidence: 'high'},
+    ...[0, 2, 3].map(index => ({decision: 'keep-separate', localPeople: [aliasIds[4], aliasIds[index]], basis: ['fixture'], confidence: 'high'})),
+  ]}];
+  const aliasOpts = {allUnresolved: false, chapters: new Set(['fixture/014']), batch: 'alias-dispatch-fixture', shards: 1, componentShards: false};
+  const aliasBuilt = buildDossiers(aliasOpts, {localPeople: aliasPeople}, aliasResolutions);
+  if (aliasBuilt.dossiers.length !== 1) throw new Error('Alias-only chapter did not produce exactly one resolver dossier');
+  const aliasDossier = aliasBuilt.dossiers[0], aliasDocument = aliasDossier.document;
+  const aliasCanonical = id => aliasDocument.people[id].currentCanonicalPersonId;
+  const aliasPair = pairKey(aliasCanonical(aliasIds[0]), aliasCanonical(aliasIds[3]));
+  const aliasPairs = aliasDocument.blocks.flatMap(block => block.reviewPairs.map(([a, b]) => pairKey(a, b)));
+  if (aliasDocument.targetLocalPeople.join(',') !== aliasIds[1] ||
+      !aliasDocument.people[aliasIds[1]].targetOfThisPass ||
+      aliasDocument.people[aliasIds[0]].targetOfThisPass ||
+      Object.keys(aliasDocument.people).sort().join(',') !== [aliasIds[0], aliasIds[1], aliasIds[3]].sort().join(',') ||
+      aliasPairs.length !== 1 || aliasPairs[0] !== aliasPair ||
+      !aliasDocument.blocks[0].currentGroups.some(group => isDeepStrictEqual(group, aliasIds.slice(0, 2).sort()))) {
+    throw new Error('Alias dossier lost full target membership or included a closed/context-only pair');
+  }
+  const aliasProjected = projectDossierForWorker(aliasDocument);
+  if (!aliasProjected.targetLocalPeople.includes(aliasIds[1]) ||
+      aliasProjected.blocks.flatMap(block => block.reviewPairs).length !== 1) {
+    throw new Error('Alias target or assigned comparison was lost during worker projection');
+  }
+  validateResolutionDocument({schemaVersion: 1, batch: aliasDossier.batch, decisions: [{
+    decision: 'possible-same-as', localPeople: [aliasIds[1], aliasIds[3]], basis: ['fixture'], confidence: 'medium',
+  }]}, aliasDossier, {localPeople: aliasPeople}, aliasResolutions);
+  const duplicateAliasBuilt = buildDossiers({...aliasOpts, chapters: new Set(['fixture/011', 'fixture/014'])}, {localPeople: aliasPeople}, aliasResolutions);
+  if (duplicateAliasBuilt.dossiers.length !== 1 || duplicateAliasBuilt.dossiers[0].document.blocks.flatMap(block => block.reviewPairs).length !== 1) {
+    throw new Error('Two chapters of one canonical target duplicated the resolver job');
+  }
+  if (buildDossiers({...aliasOpts, chapters: new Set(['fixture/015'])}, {localPeople: aliasPeople}, aliasResolutions).dossiers.length !== 0) {
+    throw new Error('A separately resolved chapter was scheduled through other people in its name block');
+  }
   const separationCorpus = {
     localPeople: new Map([
       ['a:001:p001', { localId: 'a:001:p001', claims: [] }],
@@ -2362,11 +2569,26 @@ async function selfTest() {
   if (!isDeepStrictEqual(recoveryValidationAttempts(1), [0, 1])) {
     throw new Error('Recovered artifacts do not preserve one in-place retry at --max-attempts 1');
   }
+  const committedArgs = ['--batch', 'committed-inputs-fixture', '--chapters', 'fixture/001',
+    '--dossier-dir', 'data/people/resolver-inputs/fixture', '--starting-ref', '1'.repeat(40), '--committed-inputs'];
+  if (!parseArgs(committedArgs).committedInputs) throw new Error('Committed prepared mode was not parsed');
+  for (const extra of [['--out', 'data/people/resolutions/forbidden.json'], ['--prepare-dossiers'],
+    ['--transport', 'grok-build'], ['--starting-ref', 'master']]) {
+    let rejected = false;
+    try { parseArgs([...committedArgs, ...extra]); } catch (error) {
+      if (!error.message.includes('--committed-inputs')) throw error;
+      rejected = true;
+    }
+    if (!rejected) throw new Error('Unsafe committed-inputs option combination was accepted');
+  }
   console.log('sdk-people-resolve self-test: ok');
 }
 
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
+  if (!opts.selfTest && !opts.recoverOnly) {
+    throw new Error('Fresh pair resolution is retired. Use people:identity:prepare for one chapter. --recover-only preserves retrieval of existing runs/checkpoints and cannot commission a new pair wave.');
+  }
   if (opts.selfTest) return selfTest();
   if(opts.transport==='grok-build'&&!opts.dryRun&&!opts.prepareDossiers){
     const sources=execFileSync('git',['ls-files','--','data/'],{cwd:REPO_ROOT,encoding:'utf8',maxBuffer:16*1024*1024})
@@ -2375,8 +2597,9 @@ async function main() {
     if(!sources.length||missing.length)throw new Error(`Grok Build identity requires the complete host source corpus, not a sparse chapter view (${missing.length} missing sources; first: ${missing.slice(0,3).join(', ')})`);
   }
   if (opts.transport==='cursor-sdk' && !opts.dryRun && !opts.prepareDossiers && !opts.apiKey) throw new Error('CURSOR_API_KEY is required');
-  if (!opts.prepareDossiers && fs.existsSync(opts.out)) {
-    throw new Error(`Resolution output already exists: ${path.relative(REPO_ROOT, opts.out)}`);
+  const existingOutput = opts.out ?? path.join(PEOPLE_DIR, 'resolutions', `${opts.batch}.json`);
+  if (!opts.prepareDossiers && fs.existsSync(existingOutput)) {
+    throw new Error(`Resolution output already exists: ${path.relative(REPO_ROOT, existingOutput)}`);
   }
   const release = opts.dryRun || opts.prepareDossiers ? () => {} : acquireProcessRunLock(RUN_LOCK_FILE, {
     label: 'People identity resolution scheduler',
@@ -2395,6 +2618,7 @@ async function main() {
     if (usingPreparedDossiers) {
       ({ dossiers, baseline } = loadPreparedDossiers(opts));
       console.log(`Loaded ${dossiers.length} source-verified dossier(s) without rebuilding the corpus graph`);
+      if (opts.committedInputs) console.log(`Inputs verified only at immutable ${opts.startingRef}; shard artifacts remain pending fresh host global and independent source acceptance`);
     } else {
       corpus = loadValidatedPeopleCorpus();
       resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
@@ -2490,6 +2714,10 @@ async function main() {
       )) recovered.add(dossier);
     }
     pending = pending.filter((dossier) => !recovered.has(dossier));
+    if (opts.committedInputs && opts.recoverOnly && pending.length > 0) {
+      writeCommittedInputsReceipt(dossiers, accepted, opts);
+      return;
+    }
     if (opts.recoverOnly && pending.length > 0) {
       console.log(
         `Recovery-only run checkpointed ${accepted.length}/${dossiers.length} validated shard(s); ` +
@@ -2500,7 +2728,7 @@ async function main() {
     if (opts.recoverOnly) {
       console.log(
         `Recovery-only run checkpointed all ${accepted.length} validated shard(s); ` +
-        'writing the aggregate without launching workers.',
+        (opts.committedInputs ? 'retaining checkpoints pending host acceptance without launching workers.' : 'writing the aggregate without launching workers.'),
       );
     }
     if (opts.maxNewShards !== null && pending.length > opts.maxNewShards) {
@@ -2544,6 +2772,10 @@ async function main() {
       throw new Error(
         `${failures.length} resolution shard(s) failed; no aggregate was written: ${details.join('; ')}`,
       );
+    }
+    if (opts.committedInputs) {
+      writeCommittedInputsReceipt(dossiers, accepted, opts);
+      return;
     }
     if (accepted.length < dossiers.length) {
       console.log(

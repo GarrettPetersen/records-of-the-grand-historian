@@ -67,7 +67,7 @@ export function peopleDigest(value) {
 // A global identity generation is reusable only while every input that could
 // change identity membership or candidate ambiguity is unchanged. Hash bytes,
 // inventories and code; mtime and catalog.generatedAt are not evidence pins.
-export function identityInputSeal(root = REPO_ROOT) {
+function identityInputFiles(root) {
   const files = [];
   const visit = (relative, select) => {
     const directory = path.join(root, relative);
@@ -93,21 +93,31 @@ export function identityInputSeal(root = REPO_ROOT) {
   for (const directory of ['extractions', 'resolutions', 'curation', 'chronology', 'schema']) {
     visit(path.join('data', 'people', directory), file => file.endsWith('.json'));
   }
+  if (fs.existsSync(path.join(root, 'data/people/identity-reviews'))) visit('data/people/identity-reviews', file => file.endsWith('.json'));
   files.push('data/people/config.json', 'data/glossary.json', 'package.json');
-  return peopleDigest(files.sort().map(file => [file.split(path.sep).join('/'),
+  return files.sort();
+}
+
+function fingerprintInputFiles(root, files) {
+  return peopleDigest(files.map(file => [file.split(path.sep).join('/'),
     crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
 }
 
+export function identityInputSeal(root = REPO_ROOT) {
+  return fingerprintInputFiles(root, identityInputFiles(root));
+}
+
+// Recording a retained-identity review changes publication authority, not name
+// retrieval or accepted canonical membership. Reuse the immutable index then.
+export function identityDossierInputs(root = REPO_ROOT) {
+  return fingerprintInputFiles(root, identityInputFiles(root).filter(file =>
+    !file.split(path.sep).join('/').startsWith('data/people/identity-reviews/')));
+}
+
 export function assertIdentitySeal(seal, catalog, siteIndex, currentInputs) {
-  if (seal?.schemaVersion !== 1 || seal.kind !== 'people-global-identity-seal' ||
+  if (seal?.schemaVersion !== 2 || seal.kind !== 'people-accepted-identity-seal' ||
       seal.inputs !== currentInputs || seal.catalog !== peopleDigest(catalog) ||
-      seal.siteIndex !== peopleDigest(siteIndex) ||
-      !Array.isArray(seal.unresolvedCanonicalPeople) ||
-      new Set(seal.unresolvedCanonicalPeople).size !== seal.unresolvedCanonicalPeople.length) {
-    throw new Error('Missing, stale or invalid global identity seal; rerun people:catalog');
-  }
-  const ids = new Set(catalog.people.map(person => person.id));
-  if (seal.unresolvedCanonicalPeople.some(id => !ids.has(id))) {
-    throw new Error('Identity seal refers to an unknown canonical person');
+      seal.siteIndex !== peopleDigest(siteIndex) || seal.identityReviews !== peopleDigest(catalog.identityReviewByChapter)) {
+    throw new Error('Missing, stale or invalid accepted identity seal; rerun people:catalog');
   }
 }
