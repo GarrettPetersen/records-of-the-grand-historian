@@ -1,0 +1,208 @@
+# AGENTS.md
+
+## Completion-first orchestration
+
+Follow `PEOPLE_COMPLETION_PROCESS.md` before scheduling glossary work. It supersedes
+old extraction-wave quotas and minimum extraction-batch sizes for identity work.
+The first live nonempty pilot is proven: Jinshu 053 at revision
+`b26f20aae583d22a90abb2bb48bd04c05e794fa5`; see the receipt in
+`research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json`.
+Continue existing Jinshu downstream work with at most three completion WIP chapters.
+Preserve prior owners and claims; do not reopen the finished pilot unless its actual
+proof dependencies change.
+Pin source/editorial/date inputs and independently review each chapter person against
+the accepted canonical dossier. Use bounded indexed retrieval; never generate a
+complete same-name pair graph or require exhaustive negative comparisons. Preserve
+reviewed cross-chapter uncertainty explicitly; hold concrete attribution or false-merge
+contradictions. Reconcile changed evidence without recursively completing the corpus.
+Prioritize existing Jinshu completion work before unrelated fresh extraction;
+preserve/drain existing claims. Do not weaken identity, chronology or publication gates. Report zero-person
+reviews, data-qualified chapters and live published nonempty chapters separately.
+A passing build or empty extraction is not the nonempty acceptance test.
+
+
+## Repair English omissions when found
+
+A definite English omission or mistranslation requires a concrete complete replacement,
+not only a flag or an outside-scope note. Check both English fields and repeated uses.
+Supply supplemental repairs in an artifact with book, chapter, unit ID, field, exact
+before/after text and source-based reason; keep them separate from closed-schema date
+or identity reports. The host routes these into the active editorial application work,
+with a separate reviewer for worker-authored repairs. Preserve independent review and
+normal extraction, chronology, identity, CI and publication gates. Do not defer known
+fixable English to a future corpus-wide pass. An empty proposal queue alone does not
+prove every source proposition has been translated.
+
+## Host resource safety
+
+Follow the crash-recovery operating profile in `PEOPLE_COMPLETION_PROCESS.md`.
+`npm run people:disk:check` warns at 4 GiB macOS swap and rejects swap at 8 GiB,
+combined Codex backend RSS at 4 GiB, or warning/critical memory pressure. At the
+swap warning, inspect memory consumers and swap growth before increasing concurrency. These are conservative
+dispatch stops, not OS guarantees. Check before each dispatch/local heavy job and
+at least every 60 seconds while observing active work; a startup check alone is
+insufficient. Do not launch more work after a failed measurement or failed guard.
+Preserve live jobs, claims, locks and recovery; do not kill unrelated apps or delete
+swap/history. A fresh chat must use a compact handoff, not a fork of the oversized
+campaign conversation. Initially use no parallel native Codex subagents and only
+one cloud assignment; increase remote concurrency only after measured safe runs.
+
+## Local disk conservation
+
+Before any local batch or workspace change, run `npm run people:disk:check`.
+This read-only preflight fails below 30 GiB free or when a registered secondary
+checkout contains `public/`. Workers share the host checkout and unique artifact
+paths. Never copy the corpus, repository history, public assets, dependencies, or
+ignored recovery state into a job directory. Preserve existing work and ownership.
+
+The default chapter-worker topology is one shared host checkout plus isolated job
+artifact directories, not one worktree per chapter. Workers read sealed packets and
+write only their assigned artifact; the orchestrator performs validation and canonical
+publication. Workers sharing a checkout must not independently switch branches, pull,
+stage, commit, or build: those operations share one Git index and must be host-owned.
+Use separate reviewer conversations for independence. Create a secondary sparse
+checkout only when a task genuinely needs concurrent source-code editing or a different
+revision. Do not clone or create a worktree merely to read evidence or produce JSON.
+For a reusable clean secondary checkout, preview
+`node scripts/prepare-people-sparse-checkout.mjs --checkout ABSOLUTE_PATH --book BOOK --chapter NNN`
+and add `--apply` after checking process ownership. This exact-chapter selection omits
+unrelated chapter files as well as site assets. The helper refuses dirty checkouts.
+
+Follow `LOCAL_DISK_STRATEGY.md`. Keep one full checkout for global builds; local
+chapter workers use reusable sparse checkouts without `public/`. Before creating
+another checkout, check available disk and reuse an idle one. Below 30 GiB free,
+stop new checkouts/full builds and reclaim verified completed work first. Archive
+completed managed worktrees promptly after checking service/process dependencies and
+preserving needed ignored recovery state. Do not create unmanaged `/tmp` worktrees
+per chapter or review round. Independent reviewers require separate conversations
+and sealed evidence, not full repository copies.
+
+## Cursor Cloud specific instructions
+
+This is a static-first site with one Cloudflare Pages Function for person records (no framework, no database). All scripts are vanilla Node.js ES modules requiring Node v22+.
+
+### Key commands
+
+- **Install deps:** `npm install` (includes `cheerio`, `satori`, `react`, `@resvg/resvg-js` for OG share images)
+- **Build/rebuild site:** `make update BOOK=<book>` — runs citations, counts, manifest (merge), progress (merge), static HTML, **`scripts/generate-sitemap.mjs`** (`public/sitemap.xml` + `public/robots.txt`), **Open Graph PNGs** (`generate-og-images.js` with **`--incremental` by default**: skips when `*.png.sha256` matches the current source fingerprint), and sync for that book only. Use `make update-all` for every book under `data/`. To **re-raster every OG card** after layout/font changes, run with **`OG_FULL=1`** (e.g. `make update-all OG_FULL=1`), or bump **`OG_LAYOUT_VERSION`** in `scripts/og-fingerprint.mjs`. **`make backfill-og-sidecars`** writes only sidecars next to existing PNGs (no raster). People records are pre-rendered into 1,024 JSON shards and served at `/people/<slug>.html` by `functions/people/[slug].js`; a second sharded person-ID index permanently redirects URLs retired by merges or slug changes. Use `npm run people:site`, `npm run people:site:verify`, and `npx wrangler pages dev public` when working on them. **`public/data/search-corpus/`**, **`public/data/people/`**, and **`public/people/`** are gitignored build output; do not commit them in chapter PRs.
+- **Cloudflare Pages:** In the project **Settings → Builds**, set **Build command** to **`npm run build`** (cannot be empty). **Build output directory:** **`public`**. Git-connected Pages does **not** read a build command from `wrangler.toml`—only the dashboard (or API) sets that. An empty build command skips the whole pipeline and deploys committed `public/` as-is (no manifest/HTML/OG regeneration). The deploy build intentionally does **not** run LanguageTool, because Cloudflare does not have the local LanguageTool server; update cleanup scores locally with `make update BOOK=<book>`, `make update-all`, or `make score-languagetool` before committing when scores matter. **`public/og/**/*.png` and `*.png.sha256` are tracked in Git** so clones and deploys include share cards; incremental builds still skip raster work when fingerprints match. The build ends with `scripts/verify-og-assets.mjs` (PNG validity + fingerprint checks). **`public/sitemap.xml`** lists chapter and hub URLs for crawlers; **`public/robots.txt`** references it via **`Sitemap:`**. After a deploy, spot-check `curl -sI https://<site>/og/site.png` returns **`Content-Type: image/png`**; HTML there usually means a missing file or rewrite rule.
+- **OG images:** First run downloads Noto Serif CJK OTF into `fonts/.cache/` (gitignored). Override with `OG_FONT_PATH` + `OG_FONT_FAMILY`. Canonical URLs use `SITE_URL` (default `https://24histories.com`) in `generate-static-pages.js` and `generate-og-images.js`. Speed on CI: **`OG_CHAPTER_CONCURRENCY`** (max 16) and **`STATIC_GEN_CONCURRENCY`** (max 32) parallelize chapter OG and HTML; when unset, both scripts pick a default from **`os.availableParallelism()`** (see `scripts/build-parallelism.mjs`) and log it—override in Pages if you want a fixed cap. **`OG_BOOK_RESVG_CHUNK`** (default 16) batches book-hub SVG→PNG in fewer child processes (`scripts/og-resvg-batch.mjs`).
+- **Validate JSON:** `make validate` (requires `jq`)
+- **Serve locally:** `cd public && python3 -m http.server 8000`
+- **View stats:** `make stats`
+- See `make help` and the README for full command reference.
+
+### Translation workflow
+
+The standard translation loop is: `make start-translation BOOK=<book>` → fill in translations → `make submit-translations` (or `make continue`). See `prompt.txt` and README for full details.
+
+- **Economical model choice:** The bulk of chapters consist of formulaic annalistic military records ("In year X, General Y attacked Z"). A less expensive model handles these well. Reserve a more capable model for famous rhetorical passages (speeches, debates, Sima Qian's commentary) where literary quality matters most.
+- **TRANSLATOR and MODEL metadata:** Always use `TRANSLATOR="Garrett M. Petersen (2026)"` and set `MODEL` to the actual model name you are running as (e.g. `MODEL="Opus 4.6"`). Do **not** use your agent identity (e.g. "Cursor Agent") as the translator — the translator is always **Garrett M. Petersen**.
+- **Article validator:** The `submit-translations.js` validator warns (non-blocking) when idiomatic translations lack English articles (`the`/`a`/`an`). These are informational only and do not block submission.
+- **FILE= parameter:** Always use `FILE=translations/current_translation_shiji.json` (or the appropriate book name) with `make submit-translations` to avoid ambiguity if multiple translation files exist.
+- **Batch size:** `start-translation` extracts 100 sentences per batch by default. For a 244-sentence chapter, expect ~3 batches. Commit every 4 batches per the workflow convention.
+- **Score-translations length mismatches:** The quality scorer flags "length mismatch" for short classical Chinese sentences with longer English translations. These are false positives inherent to translating terse classical Chinese and can be ignored.
+- **SDK translation failures:** `npm run sdk-inspect:run -- --from-log /tmp/sdk-translate-cloud.log` (or `--agent bc-… --run run-…`) prints agent URL, result summary, and last conversation turns. The orchestrator logs the same diagnostics on `status=error` automatically.
+- **SDK editorial review:** `npm run sdk-review:list` shows the queue; `npm run sdk-review:cloud -- --book <id>` runs the next unreviewed chapter via `prompt-review.txt` (semantic fidelity, dialogue attribution, `make apply-review`). Optional `--until-complete` loops within that book or globally. **Batch:** `npm run sdk-review:batch -- --book shiji [--limit N] [--dry-run]` (or `sdk-review:shiji-batch`) launches parallel cloud review agents — independent of translation batch; default concurrency **10** (`SDK_REVIEW_BATCH_CONCURRENCY`); log `/tmp/sdk-review-batch.log`.
+
+### Gotchas
+
+- **Current parallel date runner:** The tested runner supports two concurrent
+  chapters using one shared four-job pool across chapters. Keep stable workers,
+  reservations, locks, leases, recovery artifacts, invocation ceilings and all
+  independent review/publication gates. Do not reapply the historical
+  `patches/date-audit-parallel.patch` to the current runner; it has already been
+  adopted. `DATE_AUDIT_PARALLEL_HANDOFF.md` and that patch remain provenance.
+  Adopt future runtime changes only after the current host invocation exits.
+- **Independent people date audits:** Follow `PEOPLE_DATE_AUDIT.md` in every lane.
+  All 4,099 chapters started date-un-audited; retain extraction prompt 7 and do not
+  re-extract them for dates. After extraction and repairs, build a
+  `people:dates:packet`, use a separate source reviewer, and record their complete
+  report with `people:dates:record`. Capture acceptance is not date approval.
+  Catalog completion, progress and ebook-glossary gates require approval. Run
+  `people:dates:verify` before milestone builds. Preserve failed audits and research
+  holds instead of guessing dates; `westernBounds` supports one-sided chronology.
+  An unresolved reason saves extraction work but cannot pass the audit. Source or
+  extraction edits make prior approvals stale. Do not launch a paid audit wave
+  without calibrating size/cost and assigning unique resumable review ownership.
+  `people:dates:run` now executes the audit/repair/fresh-re-audit loop. Cursor
+  requires explicit `--run --model`; Grok Bot uses `--lane grokbot` attachment
+  handoffs without SDK calls. Both reserve `dateAudits` in the shared queue,
+  retain conversations and staged rounds, and publish only after independent
+  approval. Managed days include dates between editorial and identity work.
+  Oversized evidence fails before spending; inspect it instead of truncating.
+  Run `people:dates:workflow:self-test` and the date-worker offline tests before
+  changing recovery or publication behavior. Never count a failed/staged repair
+  or a scheduled calibration target as an accepted chapter.
+
+- **SDK translation orchestrator:** Per book, session *N+1* starts only after the previous chapter is on `origin/master` (merge-wait); books do not block each other (`--concurrency`). Local: `npm run sdk-translate:local -- --all-untranslated --concurrency 4 --until-complete` (direct push). Cloud: `npm run sdk-translate:cloud -- --all-untranslated --concurrency 19 --until-complete` (PR loop). **One chapter per agent (parallel, no merge-wait):** `npm run sdk-translate:cloud -- --book jinshi --chapter 068` — fan out many processes; each opens a PR but **does not** merge to `master` individually.
+- **Translation PR batching (Cloudflare builds):** Workflow `automerge-cursor.yml` only labels `cursor/*` PRs (`translation-batch`); it does **not** auto-merge to `master`. `npm run merge-translation:staging` (or workflow **Merge translation PRs to staging**) retargets each open chapter PR to `translation-staging` and **merges it via GitHub** so chapter PRs show as merged; then **one** squash PR `translation-staging` → `master` (one ~10m build). `npm run merge-translation:staging:dry-run` lists queued PRs. `--git-only` keeps the old absorb-via-local-git behavior without closing PRs on GitHub. Staging merge conflict resolution keeps **chapter** files from the PR but **drops** `public/data/search-corpus/` from git (gitignored); a post-batch corpus rebuild runs locally only (not committed).
+- **In-flight chapters:** `npm run translation-inflight` lists chapters reserved by open `cursor/*` PRs, work on `translation-staging` not yet on `master`, and local SDK claims (`data/translation-inflight.json`, gitignored). `sdk-translate --chapter` and `make start-translation` skip/blocked duplicates automatically when `GITHUB_TOKEN`/`GH_TOKEN` is set.
+- **Finish staging batch:** `npm run finish-translation-staging` closes absorbed chapter PRs, git-merges conflicted heads into `translation-staging`, and squash-merges the open `translation-staging` → `master` batch PR (requires `GITHUB_TOKEN`/`GH_TOKEN`).
+- **Shortest-chapter cloud batch:** `npm run sdk-translate:shortest-batch` (or `--dry-run`) scans `origin/master` for incomplete chapters, skips in-flight via `translation-inflight`, launches the 100 shortest with `SDK_CHAPTER_BATCH_CONCURRENCY` (default 25). Plan: `data/shortest-untranslated-batch-plan.json`; log: `/tmp/sdk-shortest-100.log`.
+- **SDK drain:** `npm run sdk-translate:drain` / `npm run sdk-translate:drain-status`.
+- **DeepSeek calibration:** `npm run people:deepseek:pilot` is an isolated,
+  resumable benchmark for already-extracted chapters, not a production lane.
+  Further paid trials are paused for economics; obtain explicit authorization
+  before spending more, including on a calibration cohort. Preserve existing
+  evidence and use the offline self-tests while paused.
+  Use `--agent --max-units 60 --max-turns 300 --review --review-rounds 5`
+  plus `--require-whole-chapter` for full-chapter calibration;
+  `--run` authorizes paid requests within the existing shared $10
+  ceiling. Completion requires the production validator plus full, focused
+  chronology, and focused editorial approvals of the current draft. Never count
+  partial chunks or a general-review approval alone as chapter completion.
+  Preserve all ignored pilot responses, draft state, citations, and interrupted
+  review reasoning. Do not publish these artifacts or bypass the shared queue.
+  See `DEEPSEEK_PEOPLE_PILOT.md` and `npm run people:deepseek:self-test`.
+- **People extraction lanes:** `npm run people:extract` and Grok Bot share the atomic
+  ledger on `codex/people-work-queue`. Sync ignored local recovery state with
+  `npm run people:queue:sync-cursor`; inspect it with `npm run people:queue:status`.
+  Grok Bot must claim through `npm run people:grokbot:claim -- --worker <stable-id>`
+  and must not call the Cursor SDK. Its extraction PRs target
+  `codex/people-glossary-staging-v2`. All Grok assignments and all resumable Cursor
+  conversations/chunks are sticky until completed or explicitly released. Grok workers
+  must use the documented shallow sparse clone because the full history is roughly
+  10 GiB and `public/` is unnecessary for extraction. When the GitHub connector does
+  not authenticate terminal Git, the trusted orchestrator publishes the exact claim,
+  the worker reconstructs it with `npm run people:grokbot:resume`, and returns the
+  assembled file as a direct attachment. The orchestrator verifies its byte count and
+  hash, saves it at the exact extraction path, then runs `npm run people:grokbot:accept`.
+  See
+  `GROKBOT_PEOPLE_LANE.md`.
+- **Local Grok Build extraction:** Follow `GROK_BUILD_PEOPLE_LANE.md`. It is a
+  separate subscription-backed `grok-build` queue lane, not Grok Bot or Cursor.
+  Use a stable worker ID, dry-run one explicit chapter, then use `--run` only
+  after checking its queue ownership and allowance. Its direct proxy transport
+  supplies bounded read/write/validate record tools without Grok Build's costly
+  coding-agent context. Preserve ignored tool checkpoints and let the host
+  validate, review, and publish. Full completion requires independent semantic and
+  editorial review, date repair/fresh re-audit, cross-corpus identity closure and
+  a passing master publication. Date inference uses `--lane manual --transport
+  grok-build`; identity uses `people:resolve --transport grok-build --run`. Never
+  infer corpus identity closure from a sparse chapter checkout. See the lane doc
+  for exact sticky calibration ownership and recovery paths; it is not yet
+  calibrated production throughput.
+- **People extraction budgets and recovery:** `npm run people:extract` defaults new workers to 60 owned units, 150 candidates, and a 48 KiB compact packet, with a $5 / five-million-token per-run circuit breaker. After calibration, the September deadline profile may use 80 units, 200 candidates, the same 48 KiB ceiling, a 20-minute remote timeout, and a three-million-token breaker for fresh chapters only. A run-limit failure affects only that chunk; it must not stop unrelated chapters. An account-level `usage_limit_exceeded` response is different: extraction and editorial schedulers stop launching globally, drain active work, and preserve partial chapters for resumption after capacity returns. When Cursor allowance is at or below 5%, first run a 5-10 chunk calibration cohort, then size the larger wave from accepted p90 usage. Do not put the circuit breaker inside the observed normal completion range or use high concurrency before measuring the remaining allowance. Complete chapters with saved chunks before opening new chapters. `data/people/generated/chunk-extractions/` and `data/people/generated/extraction-state.json` are ignored but economically valuable recovery state: never delete them during cleanup while chapters are incomplete. Resume with `--retry-failed`; validated chunks and adaptive split plans are reused automatically. Retained Cursor conversations are a standard recovery source: the runner continues every interrupted chat before replacing it with a fresh worker. If a continued chat also crosses a run limit, its ownership range is split while all nonoverlapping saved work is preserved. A retained conversation or local accepted/rejected artifact makes a claim sticky; an adaptive chunk plan by itself does not. The scheduler releases never-started claims when a run stops and reconciles orphaned `claimed` reservations on its next startup.
+- **People quality-first campaigns:** `data/people/campaign-policy.json` is the single source for lane reset calendars, the rolling planning horizon, and the calibrated wave cap. In September 2026, Grok Bot resumes September 13 and Cursor SDK resumes September 24; never treat those as a shared reset. Forecast rates over the rolling horizon, but never raise the operational cap or weaken validation to satisfy the forecast. Run recovery before fresh work, keep all twelve Grok Bot workers occupied when that lane is available, and calibrate Cursor after its own reset before scaling concurrency. The launcher prioritizes sticky recovery, uses 80-unit/200-candidate/48-KiB packets, and applies calibrated $3 / three-million-token / 20-minute per-run breakers. Invocation ceilings are circuit breakers, not spending targets. Use at least three validation attempts for multi-chunk extraction, independently review translation repairs, and accumulate at least 25 accepted chapters and normally 50 before global identity resolution. Run focused extraction validation after each wave and the full people validator once per reviewed milestone. Push exact checkpoint files to `codex/people-glossary-staging-v2` and merge substantial validated milestones to `master` without triggering a deploy per worker. Optimize duplicated context, abandoned recovery, repeated comparisons, and rebuild overhead; never trade away candidate coverage, evidence, dates, relationships, translation fidelity, or conservative identity decisions for throughput.
+- **Reviewed identity ambiguity:** A validated `possible-same-as` decision closes that canonical pair for scheduling while keeping its person records separate. Resolver dossiers expose only the remaining `reviewPairs`, including inside larger same-name blocks, so later waves do not spend capacity reconsidering the same evidence. Replacing either chapter extraction invalidates the affected decision and makes the pair eligible again.
+- **Identity candidate pruning:** Use the schema's actual `title-name`, `title-reference`, `regnal-name`, `temple-name`, and `posthumous-name` kinds as non-blocking aliases; reused sovereign titles must not create dynasty-spanning comparison components. Generic kinship labels such as `His Wife` or `其妻` are also non-blocking. When a one-word English reading has a paired Chinese form, do not block on the English reading alone: `Zhong 仲` and `Zhong 忠` remain distinguishable through their Chinese keys, while an exact Chinese mononym can still create a legitimate candidate. Partition a shared Romanized English identity name when every shared English form is supported as an identity name and both records have nonempty, disjoint sets of specific Chinese identity names; preserve the comparison whenever either side lacks that evidence. This removed 10,961 live review pairs and 948 unresolved blocks in the September 9 corpus. Measure resolver load by remaining `reviewPairs`, not raw block count, because partitioning a mixed block can create more small blocks while sharply reducing comparisons.
+- **Large identity blocks:** Collapse a well-supported same-person cluster with one transitive multi-person merge instead of emitting every pair. Keep generic surname-clan labels such as `Lady Wang` / `王氏` and exact bare kinship surfaces such as `Wife`, `Third Son`, `Younger Brother`, `妻子`, and `第三子` non-blocking while retaining specific descriptions such as `Wife of Zhang Wenxu`; do not disable the entire descriptive-kinship kind.
+- **People generated data:** `catalog.json`, `site-index.json`, and `resolution-candidates.json` are now small atomic manifests backed by generation-scoped shards. Consumers must use `readPeopleCatalog`, `readPeopleSiteIndex`, and `readPeopleResolutionCandidates` from `scripts/lib/people-generated-data.mjs`; direct `readJson` calls only see the manifest. Writers publish the manifest last and remove older generations only after the new one is readable.
+- **People editorial review budgets:** Historical accepted reviews have p90 usage near $1.90 and 2.65 million tokens. For the September campaign, use a $3 / four-million-token per-run circuit breaker and a 20-minute remote timeout; the old $1 / one-million-token defaults sit inside normal completion and should not be used for deadline waves. Resume retained reviewer conversations before opening replacements.
+- `jq` is a required system tool for `make validate` and scraping targets — it is pre-installed in the VM.
+- There is no linter, test suite, or TypeScript — the project has `"test": "echo \"Error: no test specified\" && exit 1"` in `package.json`.
+- **`make update BOOK=<book>`** is the usual incremental build after editing one book; **`make update-all`** rebuilds the whole site. Both regenerate static HTML and OG assets as appropriate and sync to `public/`. If `data/manifest.json` is missing, `make update` runs a full `make manifest` first. `data/manifest.json`, `data/progress.json`, and their `public/data/` copies are gitignored (regenerated by `make manifest` / `make progress` / `npm run build`).
+- Scraping targets (`make shiji-001`, etc.) require internet access to chinesenotes.com/ctext.org and are interactive (prompt before overwriting translated chapters).
+- `package-lock.json` is gitignored, so `npm install` resolves latest compatible versions each time.
+### OpenRouter free fallback lane
+
+Use `OPENROUTER_PEOPLE_LANE.md` for the local zero-priced OpenRouter extraction and independent date-audit runners. The same stable worker ID resumes sticky work; never delete ignored OpenRouter response/chunk files or date-workflow recovery state during disk cleanup. The free tier is request-limited and upstream models can return 429; stop and resume later, without silently switching to paid models or weakening validators. The extraction runner marks validated chapters `ready` but does not publish them; the host orchestrator remains responsible for exact-file staging and normal review gates. One shared checkout suffices.
+
+### Verified ebook people glossaries
+
+Follow `PEOPLE_EBOOK_CERTIFICATION.md` for required-glossary ebook generation.
+A complete book or manifest-defined volume can qualify independently of unrelated
+histories while retaining current global identity decisions. The ordinary compiler
+seal and current extraction, editorial, independent date and identity gates remain
+mandatory. Preview output does not satisfy certification.
