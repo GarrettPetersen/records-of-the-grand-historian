@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { hasPersonLinks } from './lib/people-html-link-detection.mjs';
 import { loadPeopleSiteContext } from './lib/people-site.mjs';
 import { assertPeopleSiteCertificate } from './lib/people-certified-site.mjs';
 import path from 'node:path';
@@ -288,7 +289,7 @@ export function verifyPeopleSite(options = parseArgs([])) {
     for (const scope of context.certificate.scope) {
       if (siteIndex.chapters[`${scope.book}:${scope.chapter}`]) continue;
       const file = path.join(options.outputRoot, scope.book, `${scope.chapter}.html`);
-      if (fs.existsSync(file)) assert(!loadHtml(fs.readFileSync(file, 'utf8'))('a[data-person-id]').length,
+      if (fs.existsSync(file)) assert(!hasPersonLinks(fs.readFileSync(file, 'utf8')),
         `${scope.book}/${scope.chapter} has links outside the certified scope`, errors);
     }
   }

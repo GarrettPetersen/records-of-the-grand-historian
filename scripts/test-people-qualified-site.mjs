@@ -298,6 +298,13 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   fs.writeFileSync(path.join(outputRoot, 'people-record.js'), '// Authored fixture runtime marker.');
   const { verifyPeopleSite } = await import('./verify-people-site.mjs');
   assert.equal(verifyPeopleSite({ outputRoot }).people, 2);
+  const outsideHtmlFile = path.join(outputRoot, 'shiji/001.html');
+  const outsideHtml = fs.readFileSync(outsideHtmlFile, 'utf8');
+  try {
+    fs.writeFileSync(outsideHtmlFile, outsideHtml + '<A DATA-PERSON-ID="unqualified">outside</A>');
+    assert.throws(() => verifyPeopleSite({ outputRoot }), /links outside the certified scope/);
+  } finally { fs.writeFileSync(outsideHtmlFile, outsideHtml); }
+
   const served = await request(person.slug);
   assert.equal(served.status, 200);
   const html = await served.text();
