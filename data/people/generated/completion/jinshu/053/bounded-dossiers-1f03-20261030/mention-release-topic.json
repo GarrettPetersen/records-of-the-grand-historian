@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "base": "077d1875a81e22dd035f7e7fb855ca050a75dad1",
+  "branch": "codex/people-site-verification-speed-20261031",
+  "commit": "2bb981125882e825d9075cde3b8126faa573fb9b",
+  "pr": 5362,
+  "files": [
+    {
+      "path": "scripts/compile-people-catalog.mjs",
+      "bytes": 65656,
+      "sha256": "5fc6a8ac40f5358085416fbdb53a928c91bde12d6053478f7c43890b7328758d"
+    },
+    {
+      "path": "scripts/test-ebook-certified-people.mjs",
+      "bytes": 29901,
+      "sha256": "caea8955613feea1edd85296f4f5d9b1f16dd4cda13887f6bd223705d0f7149a"
+    },
+    {
+      "path": "data/people/identity-reviews/jinshu/053.json",
+      "bytes": 386227,
+      "sha256": "c383de1150e62689561a051dea8710266dcd4aa550d850e799fe130bdedb333e"
+    },
+    {
+      "path": "data/people/date-audits/jinshu/053.json",
+      "bytes": 122095,
+      "sha256": "fc9301180b7db99353138366d811326fafc2b7a23646f264d574426bde93145d"
+    },
+    {
+      "path": "data/people/extractions/jinshu/053.json",
+      "bytes": 376660,
+      "sha256": "e7eb07a0bc6a3c171bd03b30196010e01c1dca20cd297e80d9c789235462008e"
+    },
+    {
+      "path": "data/people/date-audit-history/jinshu/053/036f5f81fe6f15428ee6bb895d8b0231a7f1d7e86904f1cf994b131ba47f779e.json",
+      "bytes": 122095,
+      "sha256": "278e5ee60e9d86909b322df16d6bb8c514a3246403b5abf1dd984991b2f649ed"
+    }
+  ],
+  "nativeProof": {
+    "schemaVersion": 1,
+    "scope": {
+      "book": "jinshu",
+      "chapter": "053"
+    },
+    "inputs": {
+      "source": "sha256:5eb3f5bd58f31b876a98982945fd92bcb168960e0395b8daa5fac88428e6d7c7",
+      "extraction": "sha256:e7eb07a0bc6a3c171bd03b30196010e01c1dca20cd297e80d9c789235462008e",
+      "editorial": "sha256:bedf10837ce5e93babb4c72fe197aae5ad45962b4a6873fa30d3ca10390a9390",
+      "dateAudit": "sha256:fc9301180b7db99353138366d811326fafc2b7a23646f264d574426bde93145d"
+    },
+    "sourceApprovalRunId": "run-7e3f9966-8f35-4155-be90-8a1bd0c4ade5",
+    "dateApprovalRunId": "run-3cffd213-231e-4564-897d-de1315a0bb5f",
+    "sourceCases": 72,
+    "localPeople": 73,
+    "uncertainCases": 63,
+    "canonicalMembershipUnchanged": true,
+    "registryUsedOnlyForUnchangedAcceptedMapping": true,
+    "dateStatus": {
+      "status": "audited",
+      "auditVersion": 1,
+      "reviewedAt": "2026-10-31T01:07:37.982Z",
+      "findings": 0
+    },
+    "oldDateHistoryPath": "data/people/date-audit-history/jinshu/053/036f5f81fe6f15428ee6bb895d8b0231a7f1d7e86904f1cf994b131ba47f779e.json",
+    "nativeIdentityProofAccepted": true,
+    "dataQualified": false,
+    "livePublished": false
+  },
+  "codeReview": {
+    "schemaVersion": 1,
+    "packetSha256": "f38b98f4d7bf2af70bd4f04d4a163119cf8422e105fac98b72747e8cdffac735",
+    "reviewerAgentId": "bc-ac68863d-cbf5-446f-9442-9802d2406b84",
+    "verdict": "approve",
+    "findings": [],
+    "reason": "The four-line check in projectPeopleProduct is the shared website/ebook scoped projection, so both products fail before family-graph, schema, and site-index emission when any scoped cluster\u2019s canonicalReferences([]) is empty. references are mention-derived unit rows, not claims or derived inverse family, which matches the live father (named/office/family claims, mentions=[], son compound span). Reconstruction, mapping, overrides, and existing throws are unchanged. The new test is a true prior-behavior regression: same fixture would have published a zero-excerpt father; restore path still requires every scoped person to have references. Merged scoped members still pass if any in-scope member has mentions; outside-only mentions correctly fail. Global compile remaining silent is in-scope for this gate."
+  },
+  "rootWorktreeUnchanged": true
+}
