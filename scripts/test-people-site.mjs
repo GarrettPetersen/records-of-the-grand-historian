@@ -218,6 +218,7 @@ assert.equal(
 );
 
 const searchText = personSearchText({
+  curation: { notes: [] },
   names: [{ kind: 'personal-name', en: 'Cao Cao', zh: '曹操', pinyin: 'Cáo Cāo' }],
   roles: [{ roleId: 'statesman', label: 'Statesman' }],
   life: { birth: [], death: [], ageClaims: [], attestedActivity: [] },

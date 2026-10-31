@@ -4,7 +4,7 @@ const BLOCKER_FIELDS = [
   'legacyChapters',
   'legacyLocalPeople',
   'pendingTranslationRepairs',
-  'unresolvedCandidateBlocks',
+  'identityReviewPendingChapters',
 ];
 
 export function peopleCatalogPublicationBlockers(stats) {

@@ -48,19 +48,19 @@ if (corpus.summary.sourceChapters !== chapterStates.length ||
     corpus.summary.currentChapters !== countedCurrent ||
     corpus.summary.rereviewChapters !== countedRereview ||
     corpus.summary.missingChapters !== countedMissing ||
-    corpus.summary.completeChapters !== countedComplete ||
+    corpus.summary.preliminaryChapters !== countedComplete ||
     corpus.summary.dateReviewChapters !== countedDates ||
     chapterStates.some(chapter => chapter.glossaryState === 'current' && chapter.dateAudit.status !== 'audited') ||
     corpus.summary.editorialReviewChapters !== countedEditorial ||
     corpus.summary.identityReviewChapters !== countedIdentity ||
     chapterStates.some((chapter) => !chapter.glossaryState ||
-      !Number.isInteger(chapter.unresolvedPeople) ||
-      !Number.isInteger(chapter.resolutionTargetPeople) ||
-      !Number.isInteger(chapter.resolutionComparisons))) {
+      (chapter.state !== 'missing' && (!chapter.identityReview ||
+        !Number.isInteger(chapter.identityReview.targetCases) ||
+        !Number.isInteger(chapter.identityReview.heldCases))))) {
   throw new Error(`Corpus people progress is inconsistent: ${JSON.stringify(corpus.summary)}`);
 }
 
 console.log(
-  `people progress tests passed (${countedComplete} complete, ${countedIdentity} identity review, ` +
+  `people progress tests passed (${countedComplete} preliminary, ${countedIdentity} identity review, ` +
   `${countedDates} date review, ${countedEditorial} editorial review, ${countedRereview} source rereview, ${countedMissing} missing)`,
 );

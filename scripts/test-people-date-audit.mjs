@@ -11,7 +11,7 @@ import { peopleCatalogIsComplete, peopleCatalogIsPublishable } from './lib/peopl
 
 const year = n => ({ era: n < 0 ? 'BC' : 'AD', year: Math.abs(n), precision: 'year' });
 test('catalog completion requires date approval independently of extraction', () => {
-  const stats = { missingChapters: 0, legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, unresolvedCandidateBlocks: 0, dateAuditPendingChapters: 1 };
+  const stats = { missingChapters: 0, legacyChapters: 0, legacyLocalPeople: 0, pendingTranslationRepairs: 0, identityReviewPendingChapters: 0, dateAuditPendingChapters: 1 };
   assert.equal(peopleCatalogIsComplete(stats), false);
   assert.equal(peopleCatalogIsComplete({ ...stats, dateAuditPendingChapters: 0 }), true);
   delete stats.dateAuditPendingChapters;
@@ -24,7 +24,7 @@ test('publication requires the complete catalog, not merely extracted records', 
     legacyChapters: 0,
     legacyLocalPeople: 0,
     pendingTranslationRepairs: 0,
-    unresolvedCandidateBlocks: 0,
+    identityReviewPendingChapters: 0,
     dateAuditPendingChapters: 1,
   };
   assert.equal(peopleCatalogIsPublishable({ people: [{}], complete: false, stats: blockers }), false);

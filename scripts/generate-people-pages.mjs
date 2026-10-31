@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { IDENTITY_UNCERTAINTY_NOTE } from './lib/people-chapter-identity.mjs';
 
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -824,6 +825,14 @@ function renderReferences(person) {
     <div data-person-reference-groups>${renderedGroups}</div>`;
 }
 
+function personIdentityNote(person) {
+  return person.curation.notes.includes(IDENTITY_UNCERTAINTY_NOTE) ? IDENTITY_UNCERTAINTY_NOTE : '';
+}
+
+function personSearchDescription(person) {
+  return [person.description.en, personIdentityNote(person)].filter(Boolean).join('. ');
+}
+
 function personJsonLd(person) {
   const personUrl = `${SITE_URL}/people/${person.slug}.html`;
   const roles = person.roles.map((role) => role.label).filter(Boolean);
@@ -848,7 +857,7 @@ function personJsonLd(person) {
         '@id': `${personUrl}#person`,
         name: personDisplayName(person),
         alternateName: personAlternateNames(person),
-        description: `${personPublicDescription(person)}. ${lifeSummaryForPerson(person)}. ${plural(person.references.length, 'source passage')}.`,
+        description: [personPublicDescription(person), lifeSummaryForPerson(person), plural(person.references.length, 'source passage'), personIdentityNote(person)].filter(Boolean).join('. '),
         url: personUrl,
         mainEntityOfPage: { '@id': `${personUrl}#page` },
         ...(person.sex && ['male', 'female'].includes(person.sex) ? { gender: humanizePeopleValue(person.sex) } : {}),
@@ -978,7 +987,7 @@ function personOverview(person) {
     );
     sentence = `${name} was ${withIndefiniteArticle(phrase || 'named individual')}.`;
   }
-  return `<p class="person-lede">${escapeHtml(sentence)}</p>`;
+  return `<p class="person-lede">${escapeHtml(sentence)}${personIdentityNote(person) ? ` ${escapeHtml(personIdentityNote(person))}` : ''}</p>`;
 }
 
 function renderPersonFacets(person) {
@@ -1015,7 +1024,7 @@ export function generatePersonHtml(person, context) {
   const chronology = lifeSummaryForPerson(person);
   const stats = personReferenceStats(person);
   const publicDescription = personPublicDescription(person);
-  const description = `${personFullDisplayName(person)} — ${publicDescription}. ${chronology}; ${stats.passages} cited passages across the Chinese histories.`;
+  const description = `${personFullDisplayName(person)} — ${publicDescription}. ${personIdentityNote(person)} ${chronology}; ${stats.passages} cited passages across the Chinese histories.`;
   const coherentActivity = personCoherentActivityClaims(person);
   const lifeBody = [
     person.life.birth.length ? `<h3>Birth</h3>${renderClaimList(person.life.birth, context.peopleById)}` : '',
@@ -1114,7 +1123,7 @@ function searchEntry(person) {
     personDisplayName(person),
     person.preferredName.zh ?? '',
     person.preferredName.pinyin ?? '',
-    person.description.en,
+    personSearchDescription(person),
     personSearchText(person),
     lifeSummaryForPerson(person),
     person.roles.map((role) => role.roleId),
@@ -1132,7 +1141,7 @@ function featuredSearchEntry(person) {
     personDisplayName(person),
     person.preferredName.zh ?? '',
     '',
-    person.description.en,
+    personSearchDescription(person),
     '',
     lifeSummaryForPerson(person),
     [],

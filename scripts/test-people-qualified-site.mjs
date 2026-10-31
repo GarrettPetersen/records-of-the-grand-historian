@@ -93,7 +93,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   }
   writeAt('data/people/resolutions/synthetic.json', { schemaVersion: 1, authority: 'curated', batch: 'synthetic', decisions: [
     { decision: 'merge', localPeople: ['jinshu:001:p001','shiji:001:p001'], basis: ['Synthetic cross-book test identity.'], confidence: 'high' }] });
+  const { writeFixtureIdentityReviews } = await import('./lib/people-identity-test-fixtures.mjs');
   const compile = () => {
+    writeFixtureIdentityReviews([{ book: 'jinshu', chapter: '001' }, { book: 'jinshu', chapter: '002' }]);
     const result = spawnSync(process.execPath, [fileURLToPath(import.meta.resolve('./compile-people-catalog.mjs'))], { env: process.env, encoding: 'utf8', timeout: 60_000 });
     assert.equal(result.status, 0, result.stdout + result.stderr);
   };
@@ -121,11 +123,13 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     compile();
     const before = loadPeopleSiteContext({ allowPreview: false });
     assert.equal(before.catalog.complete, true);
+    assert(before.catalog.people.every(person => person.curation.notes.some(note => note.includes('not yet established'))));
     assert.equal(before.publication.qualifiedChapters, 2);
     const completeDiagnostic = loadPeopleSiteContext({ allowPreview: true });
     assert.equal(completeDiagnostic.catalog.complete, true);
     assert.equal(completeDiagnostic.preview, true);
     assert.equal(completeDiagnostic.publication.publishedChapters, 0);
+    assert.equal(completeDiagnostic.publication.publishedNonemptyChapters, 0);
     const approvedPerson = before.catalog.people.find(person => person.localPeople.includes('jinshu:002:p001'));
     const stalePerson = before.catalog.people.find(person => person.localPeople.includes('jinshu:001:p001'));
     fs.unlinkSync(path.join(root, 'data/people/date-audits/jinshu/001.json'));
@@ -136,6 +140,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     assert.equal(diagnostic.publication.mode, 'diagnostic-preview');
     assert.equal(diagnostic.publication.qualifiedChapters, 1);
     assert.equal(diagnostic.publication.publishedChapters, 0);
+    assert.equal(diagnostic.publication.publishedNonemptyChapters, 0);
     assert.equal(diagnostic.publication.publishedPeople, 0);
     assert(diagnostic.certificate);
     assert(!diagnostic.peopleById.has(stalePerson.id));
@@ -176,6 +181,73 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     process.exit(0);
   }
   compile();
+  // Normal registry, preparation and host-captured record APIs use the same
+  // native validators as publication, without a pair document or paid worker.
+  const { buildIdentityDossierRegistry } = await import('./lib/people-identity-registry-workflow.mjs');
+  const { buildChapterIdentityReviewPacket, prepareChapterIdentityReview } = await import('./prepare-people-chapter-identity.mjs');
+  const { recordChapterIdentityReview, identityArtifactHash } = await import('./lib/people-identity-review-record.mjs');
+  const { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments, sourceChapterIds } = await import('./lib/people-corpus.mjs');
+  const { resolveAcceptedPeopleClusters, localNameKeys } = await import('./lib/people-resolution.mjs');
+  const { buildIdentityDossierIndex } = await import('./lib/people-identity-dossiers.mjs');
+  const { acceptedCatalogIdentityView } = await import('./lib/people-chapter-identity.mjs');
+  const { loadValidatedPeopleChapter } = await import('./lib/people-validated-chapter.mjs');
+  const { fixtureIdentityBundle } = await import('./lib/people-identity-test-fixtures.mjs');
+  const registry = path.join(root, 'identity-registry');
+  const registryResult = buildIdentityDossierRegistry({ out: registry, revision: '1'.repeat(40) });
+  assert.equal(registryResult.generatedPairs, 0);
+  const prepared = await buildChapterIdentityReviewPacket({ book: 'jinshu', chapter: '001', registry });
+  assert.equal(prepared.plan.metrics.generatedPairs, 0);
+  const reused = await prepareChapterIdentityReview({ book: 'jinshu', chapter: '001', registry, out: path.join(root, 'reused-identity-proof') });
+  assert.equal(reused.status, 'identity-review-current');
+  assert.equal(reused.newReviewCases, 0);
+  assert.equal(fs.existsSync(path.join(root, 'reused-identity-proof/transport-packet.json')), false);
+  assert(prepared.plan.cases.every(item => item.candidateDossiers.length <= 8));
+  const whole = loadValidatedPeopleCorpus(), decisions = loadValidatedResolutionDocuments(whole.localPeople);
+  const groups = resolveAcceptedPeopleClusters(whole.localPeople, decisions).clusters;
+  const registryIndex = buildIdentityDossierIndex(whole.localPeople, groups, localNameKeys);
+  const fixtureView = acceptedCatalogIdentityView({ localPersonMap: Object.fromEntries(registryIndex.localPersonMap), people: groups.map(group => ({ id: group.canonicalPersonId, retiredIds: group.retiredIds })) });
+  const identitySources = new Map(['jinshu:001','jinshu:002','shiji:001'].map(key => { const [book,chapter] = key.split(':'); return [key,loadValidatedPeopleChapter(book,chapter)]; }));
+  const authored = fixtureIdentityBundle(registryIndex, fixtureView, identitySources, prepared.plan.scope, prepared.plan.inputs);
+  assert.equal(authored.bundle.plan.fingerprint, prepared.plan.fingerprint);
+  const commandDir = path.join(root, 'data/people/generated/identity-command-fixture');
+  fs.mkdirSync(commandDir, { recursive: true });
+  const packetFile = path.join(commandDir, 'packet.json'), reportFile = path.join(commandDir, 'report.json'), jobFile = path.join(commandDir, 'job.json');
+  fs.writeFileSync(packetFile, JSON.stringify(prepared.packet, null, 2) + '\n');
+  fs.writeFileSync(reportFile, JSON.stringify(authored.bundle.report));
+  const capture = { schemaVersion: 1, kind: 'captured-independent-identity-review', phase: 'report-recorded', scope: prepared.plan.scope,
+    agentId: authored.bundle.report.reviewer.agentId, runId: 'offline-authored-review-run', sourcePacketSha256: identityArtifactHash(fs.readFileSync(packetFile)), reportSha256: identityArtifactHash(fs.readFileSync(reportFile)) };
+  fs.writeFileSync(jobFile, JSON.stringify(capture));
+  const recordOptions = { packet: packetFile, report: reportFile, job: jobFile, registry, out: path.join(commandDir, 'accepted.json') };
+  assert.equal((await recordChapterIdentityReview(recordOptions)).reviewedCases, 1);
+  assert.equal((await recordChapterIdentityReview(recordOptions)).unchanged, true);
+  const acceptedBytes = fs.readFileSync(recordOptions.out);
+  fs.appendFileSync(reportFile, ' ');
+  await assert.rejects(recordChapterIdentityReview(recordOptions), /byte hashes do not match/);
+  assert.deepEqual(fs.readFileSync(recordOptions.out), acceptedBytes);
+  // Progress distinguishes reviewed source identities/uncertainty from a live receipt.
+  const progressManifest = { books: {} };
+  for (const key of sourceChapterIds()) { const [book,chapter] = key.split(':'); progressManifest.books[book] ??= { chapters: [] }; progressManifest.books[book].chapters.push({ chapter }); }
+  const { buildPeopleGlossaryProgress } = await import('../generate-progress.js');
+  const originalCwd = process.cwd();
+  try {
+    process.chdir(root);
+    const progress = buildPeopleGlossaryProgress(progressManifest);
+    assert.equal(progress.summary.preliminaryChapters, 2);
+    assert.equal(progress.summary.identityReviewedChapters, 2);
+    assert.equal(progress.summary.reviewedAmbiguousCases, 2);
+    assert.equal(progress.summary.zeroPersonExtractions, 64);
+    assert.equal(progress.summary.identityPendingCases, 1);
+  } finally { process.chdir(originalCwd); }
+  const contributionDirectory = path.join(root, 'chapter-contribution');
+  const contributionRun = spawnSync(process.execPath, [fileURLToPath(import.meta.resolve('./verify-people-chapter-release.mjs')),
+    '--book', 'jinshu', '--chapter', '001', '--out', contributionDirectory], { env: process.env, encoding: 'utf8', timeout: 60_000 });
+  assert.equal(contributionRun.status, 0, contributionRun.stdout + contributionRun.stderr);
+  const contributionReceipt = JSON.parse(fs.readFileSync(path.join(contributionDirectory, 'qualification-and-contribution.json')));
+  assert.equal(contributionReceipt.dataQualified, true);
+  assert.equal(contributionReceipt.livePublished, false);
+  assert.equal(contributionReceipt.people, 1);
+  assert.equal(contributionReceipt.ebookContribution.wholeBookCertified, false);
+  assert.equal(contributionReceipt.bilingualMentionLinks, 2);
   const context = loadPeopleSiteContext();
   assert(context.active);
   assert(!context.preview);
@@ -226,10 +298,20 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   fs.writeFileSync(path.join(outputRoot, 'people-record.js'), '// Authored fixture runtime marker.');
   const { verifyPeopleSite } = await import('./verify-people-site.mjs');
   assert.equal(verifyPeopleSite({ outputRoot }).people, 2);
+  const outsideHtmlFile = path.join(outputRoot, 'shiji/001.html');
+  const outsideHtml = fs.readFileSync(outsideHtmlFile, 'utf8');
+  try {
+    fs.writeFileSync(outsideHtmlFile, outsideHtml + '<A DATA-PERSON-ID="unqualified">outside</A>');
+    assert.throws(() => verifyPeopleSite({ outputRoot }), /links outside the certified scope/);
+  } finally { fs.writeFileSync(outsideHtmlFile, outsideHtml); }
+
   const served = await request(person.slug);
   assert.equal(served.status, 200);
   const html = await served.text();
   assert.match(html, /application\/ld\+json/);
+  const structured = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/u)[1]);
+  assert(structured['@graph'].find(row => row['@type'] === 'Person').description.includes('not yet established'));
+  assert.match(html, /person-lede[^>]*>[^<]*not yet established/);
   assert.match(html, /rel="canonical"/);
   assert.match(html, /jinshu\/001\.html#en-s0001/);
   assert(!html.includes('Outside'));
@@ -248,6 +330,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   assert(!xml.includes('outside-alias'));
   const search = read('public/data/people/search/index.json');
   assert.equal(search.people, 2);
+  assert(JSON.stringify(search).includes('not yet established'));
   assert(!JSON.stringify(search).includes('Outside'));
   const statusFile = path.join(root, 'public/data/people/site-status.json');
   fs.renameSync(statusFile, `${statusFile}.held`);

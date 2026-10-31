@@ -34,7 +34,7 @@ export function loadPeopleSiteContext({ allowMissing = true, allowPreview = prev
     ...context,
     preview: true,
     publication: { ...context.publication, mode: 'diagnostic-preview',
-      publishedChapters: 0, publishedPeople: 0 },
+      publishedChapters: 0, publishedPeople: 0, publishedNonemptyChapters: 0 },
   };
 }
 

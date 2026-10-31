@@ -2586,6 +2586,9 @@ async function selfTest() {
 
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
+  if (!opts.selfTest && !opts.recoverOnly) {
+    throw new Error('Fresh pair resolution is retired. Use people:identity:prepare for one chapter. --recover-only preserves retrieval of existing runs/checkpoints and cannot commission a new pair wave.');
+  }
   if (opts.selfTest) return selfTest();
   if(opts.transport==='grok-build'&&!opts.dryRun&&!opts.prepareDossiers){
     const sources=execFileSync('git',['ls-files','--','data/'],{cwd:REPO_ROOT,encoding:'utf8',maxBuffer:16*1024*1024})

@@ -1,10 +1,10 @@
+import { loadCurrentIdentityEvidence } from './people-identity-evidence.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
 import { projectPeopleProduct } from '../compile-people-catalog.mjs';
-import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
 import { loadProperNounMatcher } from './people-candidates.mjs';
-import { isCompactPeopleExtraction } from './people-compact.mjs';
+import { loadValidatedPeopleChapter } from './people-validated-chapter.mjs';
+import { ChapterIdentityReviewError, acceptedCatalogIdentityView, chapterIdentityInputs, readChapterIdentityBundle, chapterIdentityEvidenceScopes, validateChapterIdentityBundle, assertReviewedIdentityCoverage, applyReviewedIdentityUncertainty } from './people-chapter-identity.mjs';
 import { DATA_DIR, PEOPLE_DIR, extractionPath, readJson } from './people-content.mjs';
 import { DATE_AUDIT_VERSION, dateAuditStatus } from './people-date-audit.mjs';
 import { editorialDecisionPath, validateAppliedEditorialDecisions } from './people-editorial-decisions.mjs';
@@ -36,17 +36,7 @@ export function assertChapterGates(extraction, currentPromptVersion, dateStatus,
   }
 }
 
-export function assertScopedIdentity(corpus, globalCatalog, seal) {
-  const selected = new Set();
-  for (const localId of corpus.localPeople.keys()) {
-    const id = globalCatalog.localPersonMap[localId];
-    if (!id) throw new PeopleScopeGateError(`No sealed global canonical identity for ${localId}`);
-    selected.add(id);
-  }
-  if (seal.unresolvedCanonicalPeople.some(id => selected.has(id))) {
-    throw new PeopleScopeGateError('Unresolved global identity comparison touches this product');
-  }
-}
+export const assertScopedIdentity = assertReviewedIdentityCoverage;
 
 // Shared qualification reconstructs facts only from current, strictly validated members.
 // Ebook callers assert the authoritative product contract before entering here.
@@ -70,11 +60,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
   const gateEvidence = [];
   const holds = [];
   const workload = { scopeChapters: scopes.length, candidateChapters: 0, validatedChapters: 0 };
-  const unresolvedIds = new Set(seal.unresolvedCanonicalPeople);
-  const unresolvedChapters = new Set();
-  if (skipUnqualified) for (const [localId, id] of Object.entries(catalog.localPersonMap)) {
-    if (unresolvedIds.has(id)) unresolvedChapters.add(localId.split(':').slice(0, 2).join(':'));
-  }
+  const identityView = acceptedCatalogIdentityView(catalog), identityCertificates = [], sourceCache = new Map();
   for (const { book, chapter } of scopes) {
     if (!fs.existsSync(extractionPath(book, chapter))) {
       if (!skipUnqualified) throw new Error(`Missing scoped extraction: ${book}:${chapter}`);
@@ -91,8 +77,8 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
         holds.push({ book, chapter, reason: 'missing-or-legacy-compiled-chapter' });
         continue;
       }
-      if (unresolvedChapters.has(chapterId)) {
-        holds.push({ book, chapter, reason: 'unresolved-global-identity' });
+      if (compiled.mentions.length && !fs.existsSync(path.join(PEOPLE_DIR, 'identity-reviews', book, `${chapter}.json`))) {
+        holds.push({ book, chapter, reason: 'missing-independent-person-dossier-review' });
         continue;
       }
       const dateFile = path.join(PEOPLE_DIR, 'date-audits', book, `${chapter}.json`);
@@ -108,43 +94,40 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
     }
     workload.candidateChapters += 1;
     try {
-    const raw = readJson(extractionPath(book, chapter));
-    if (raw.book !== book || raw.chapter !== chapter) throw new Error(`Extraction scope mismatch: ${book}:${chapter}`);
-    const packet = buildPeopleExtractionPacket(book, chapter, { properNounMatcher: matcher });
-    const options = { strictAliasDispositions: true };
-    const { normalized: extraction } = isCompactPeopleExtraction(raw)
-      ? validateCompactPeopleExtraction(raw, packet, options) : validatePeopleExtraction(raw, packet, options);
+    const current = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
+    const { raw, packet, extraction } = current;
     workload.validatedChapters += 1;
     const editorialFile = editorialDecisionPath(book, chapter);
     const editorial = fs.existsSync(editorialFile) ? readJson(editorialFile) : null;
     const dateStatus = dateAuditStatus(book, chapter);
     assertChapterGates(extraction, config.promptVersion, dateStatus, editorial);
-    const chapterCorpus = { localPeople: new Map(extraction.people.map(person => [person.localId, person])) };
-    assertScopedIdentity(chapterCorpus, catalog, seal);
+    let identityCertificate = null, identityBundle = null;
+    if (current.localPeople.size) {
+      identityBundle = readChapterIdentityBundle(book, chapter);
+      const evidenceSources = loadCurrentIdentityEvidence(identityBundle, current, matcher, sourceCache);
+      identityCertificate = validateChapterIdentityBundle(identityView, evidenceSources, { book, chapter }, identityBundle, chapterIdentityInputs(book, chapter));
+      assertScopedIdentity(current, identityView, [identityCertificate]);
+    }
     const report = readJson(path.join(PEOPLE_DIR, 'date-audits', book, `${chapter}.json`));
     for (const person of extraction.people) {
       if (corpus.localPeople.has(person.localId)) throw new Error(`Duplicate scoped local person ${person.localId}`);
     }
-    gateEvidence.push({ book, chapter, inputFingerprint: packet.input.chapterFingerprint, inputUnitCount: packet.input.unitCount, extraction: peopleDigest(raw), source: peopleDigest(readJson(path.join(DATA_DIR, book, `${chapter}.json`))),
-      editorial: peopleDigest(editorial), dateAudit: peopleDigest(report) });
+    gateEvidence.push({ book, chapter, personCount: current.localPeople.size, inputFingerprint: packet.input.chapterFingerprint, inputUnitCount: packet.input.unitCount, extraction: peopleDigest(raw), source: peopleDigest(readJson(path.join(DATA_DIR, book, `${chapter}.json`))),
+      editorial: peopleDigest(editorial), dateAudit: peopleDigest(report), identityReview: peopleDigest(identityBundle) });
+    if (identityCertificate) identityCertificates.push(identityCertificate);
     corpus.chapters.push({ extraction });
-    for (const person of extraction.people) {
-      if (corpus.localPeople.has(person.localId)) throw new Error(`Duplicate scoped local person ${person.localId}`);
-      corpus.localPeople.set(person.localId, { ...person, book: extraction.book, chapter: extraction.chapter,
-        promptVersion: extraction.run.promptVersion,
-        claims: extraction.claims.filter(claim => claim.subject === person.localId),
-        mentions: extraction.mentions.filter(mention => mention.person === person.localId) });
-    }
+    for (const [localId, person] of current.localPeople) corpus.localPeople.set(localId, person);
     } catch (error) {
-      if (!skipUnqualified || !(error instanceof PeopleScopeGateError ||
+      if (!skipUnqualified || !(error instanceof PeopleScopeGateError || error instanceof ChapterIdentityReviewError ||
           ['PeopleExtractionValidationError', 'EditorialDecisionValidationError'].includes(error.name))) throw error;
       holds.push({ book, chapter, reason: String(error.message) });
     }
   }
-  assertScopedIdentity(corpus, catalog, seal);
+  assertScopedIdentity(corpus, identityView, identityCertificates);
   const roles = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const overrides = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
   const projected = projectPeopleProduct(corpus, catalog, new Map(roles.roles.map(role => [role.id, role.label])), overrides.people);
+  applyReviewedIdentityUncertainty(projected.catalog, identityCertificates);
   if (!skipUnqualified && projected.catalog.people.length === 0) throw new Error('Certified product contains no people');
   if (identityInputSeal() !== inputs) throw new Error('Identity inputs changed while qualifying product');
   for (const evidence of gateEvidence) {
@@ -156,10 +139,11 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
     if (evidence.extraction !== peopleDigest(readJson(extractionPath(book, chapter))) ||
         evidence.source !== peopleDigest(readJson(path.join(DATA_DIR, book, `${chapter}.json`))) ||
         evidence.editorial !== peopleDigest(currentEditorial) || evidence.dateAudit !== peopleDigest(report) ||
-        status.status !== 'audited' || status.auditVersion !== DATE_AUDIT_VERSION) {
+        status.status !== 'audited' || status.auditVersion !== DATE_AUDIT_VERSION ||
+        evidence.identityReview !== peopleDigest(identityCertificates.some(certificate => certificate.scope.book === book && certificate.scope.chapter === chapter) ? readChapterIdentityBundle(book, chapter) : null)) {
       throw new Error(`Editorial/date evidence changed while qualifying ${book}:${chapter}`);
     }
   }
   if (expectedInputs !== null && expectedInputs !== inputs) throw new Error('Qualified scope expected input pin is stale');
-  return { ...projected, globalCatalog: catalog, holds, workload, gateEvidence, identity: peopleDigest(seal), inputs };
+  return { ...projected, globalCatalog: catalog, holds, workload, gateEvidence, identityCertificates, identity: peopleDigest(seal), inputs };
 }

@@ -426,6 +426,9 @@ export function assertPhaseCapacity(opts, plan) {
 
 function main() {
   const opts = parseArgs(process.argv.slice(2));
+  if (!opts.selfTest && opts.phase === 'resolution') {
+    throw new Error('Fresh all-pairs identity waves are retired. Preserve retained claims/artifacts; prepare one chapter with people:identity:prepare and independently review its dossiers. Historical recovery requires the exact saved worker invocation.');
+  }
   if (opts.selfTest) return selfTest();
   const plan = currentPlan(opts);
   if (!phaseHasWork(opts.phase, plan)) {
