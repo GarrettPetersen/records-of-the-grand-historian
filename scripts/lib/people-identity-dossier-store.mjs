@@ -19,7 +19,7 @@ export function createIdentityJsonlWriter(file) {
     row(value) { const b = Buffer.from(JSON.stringify(value) + '\n'); need(b.length <= maxLineBytes, 'Dossier row exceeds the sealed storage bound');
       const location = { offset: bytes, bytes: b.length, sha256: hash(b) }; digest.update(b); bytes += b.length;
       pending.push(b); pendingBytes += b.length; if (pendingBytes >= 64 * 1024) flush(); return location; },
-    close() { if (!closed) { fs.closeSync(fd); closed = true; } },
+    close() { if (!closed) { try { flush(); } finally { fs.closeSync(fd); closed = true; } } },
     finish() { flush(); fs.fsyncSync(fd); need(fs.fstatSync(fd).size === bytes, 'Incomplete dossier artifact write'); fs.closeSync(fd); closed = true;
       return { file: path.basename(file), bytes, sha256: digest.digest('hex') }; },
   };

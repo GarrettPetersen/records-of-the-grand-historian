@@ -22,9 +22,9 @@ export function writeValidatedIdentityMembers(directory, visitChapters) {
       for (const [id, person] of localPeople) {
         need(id === person.localId && !locations.has(id), `Duplicate or invalid source member ${id}`);
         const contract = memberContract(person, localNameKeys(person));
-        const compact = { localId: id, promptVersion: person.promptVersion,
-          preferredNameSuggestion: person.preferredNameSuggestion, claims: contract.claims };
-        locations.set(id, writer.row(compact));
+        // Pin the contract calculated from the complete validated person. No
+        // later reader needs to reconstruct native names from a projection.
+        locations.set(id, writer.row(contract));
         constraints.set(id, { localId: id, claims: person.claims.filter(claim =>
           claim.predicate === 'same-person' || claim.predicate === 'different-person') });
       }

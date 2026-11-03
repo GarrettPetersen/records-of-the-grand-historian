@@ -9,6 +9,7 @@ import { memberContract, buildIdentityDossierIndex, streamIdentityDossierIndex,
   planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
 import { writeIdentityDossierStore, readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
 import { writeValidatedIdentityMembers } from './lib/people-identity-member-store.mjs';
+import { buildIdentityDossierRegistry } from './lib/people-identity-registry-workflow.mjs';
 
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'identity-streaming-test-'));
@@ -16,8 +17,12 @@ function fixture(t) {
   const people = new Map();
   for (let i = 1; i <= 24; i++) {
     const id = `fixture:${i < 3 ? '001' : '002'}:p${String(i).padStart(3, '0')}`;
-    people.set(id, { localId: id, promptVersion: 7, preferredNameSuggestion: { en: 'Wang Wei', zh: '王偉' },
-      mentions: [{ ignoredByIdentity: true }], descriptorSuggestion: 'Not part of identity contract', claims: [
+    people.set(id, { localId: id, book: 'fixture', chapter: id.split(':')[1], promptVersion: 7,
+      preferredNameSuggestion: { en: 'Wang Wei', zh: '王偉' },
+      historicity: 'historical', identityHints: { active: null },
+      mentions: [{ id: `${id}:m1`, person: id, unit: { id: 's0001' }, kind: 'personal-name',
+        spans: [{ field: 'zh', start: 0, end: 2, text: '王偉' }] }],
+      descriptorSuggestion: 'Not part of identity contract', claims: [
         { id: `${id}:name`, subject: id, predicate: 'name', value: { en: 'Wang Wei', zh: '王偉', kind: 'personal-name' },
           certainty: 'explicit', evidence: ['fixture:001:s0001'] },
         { id: `${id}:office`, subject: id, predicate: 'office', value: { en: 'Governor' }, certainty: 'explicit', evidence: ['fixture:001:s0001'] },
@@ -45,8 +50,8 @@ test('bounded member spool preserves native names, identity versions and accepte
   assert.deepEqual(store.coverage, f.coverage);
   for (const [id, original] of f.people) {
     const read = store.people.get(id);
-    assert.deepEqual(localNameKeys(read), localNameKeys(original));
-    assert.deepEqual(memberContract(read, localNameKeys(read)), memberContract(original, localNameKeys(original)));
+    assert.deepEqual(read.names, localNameKeys(original));
+    assert.deepEqual(read, memberContract(original, localNameKeys(original)));
     assert.equal(read.mentions, undefined);
     assert.equal(read.claims.some(claim => claim.predicate === 'event'), false);
   }
@@ -63,7 +68,7 @@ test('streamed persistent registry is byte-identical to the in-memory index and 
   const original = buildIdentityDossierIndex(f.people, accepted.clusters, localNameKeys);
   let reads = 0;
   const lazy = { size: store.people.size, get(id) { reads++; return store.people.get(id); } };
-  const streamed = streamIdentityDossierIndex(lazy, accepted.clusters, localNameKeys);
+  const streamed = streamIdentityDossierIndex(lazy, accepted.clusters, person => person.names);
   assert.equal(reads, 0, 'creating a stream must not materialize any source evidence');
   const provenance = { revision: '1'.repeat(40), generatedPairs: 0 };
   const a = path.join(f.root, 'in-memory'), b = path.join(f.root, 'streamed');
@@ -92,8 +97,19 @@ test('member reads reject changed bytes and closed readers; validation failures 
     consume({ localPeople: f.people }); throw new Error('source validation failed');
   }), /source validation failed/);
   assert.equal(fs.existsSync(path.join(failed, 'members.jsonl')), true);
+  const retained = fs.readFileSync(path.join(failed, 'members.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+  assert.equal(retained.length, f.people.size, 'graceful validation failure must flush every accepted member');
+  assert.deepEqual(retained, [...f.people.values()].map(person => memberContract(person, localNameKeys(person))));
   assert.equal(fs.existsSync(path.join(failed, 'receipt.json')), false);
   assert.equal(fs.existsSync(path.join(failed, 'manifest.json')), false);
+});
+
+test('existing unpublished spools and missing parents fail explicitly before validating the corpus', t => {
+  const f = fixture(t), out = path.join(f.root, 'generation');
+  fs.mkdirSync(`${out}.members`);
+  const revision = '1'.repeat(40);
+  assert.throws(() => buildIdentityDossierRegistry({ out, revision }), /Unpublished dossier member generation already exists/);
+  assert.throws(() => buildIdentityDossierRegistry({ out: path.join(f.root, 'missing-parent', 'generation'), revision }), /Registry parent directory must exist/);
 });
 
 test('a lazy source hole cannot publish a registry manifest', t => {
