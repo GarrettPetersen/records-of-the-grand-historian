@@ -14,8 +14,8 @@ Registry memory fix: 151.32 s, 1.10 GiB RSS, 228270 dossiers, zero generated pai
 080 initial date audit is COMPLETE: all 16 original jobs, 355 source units,
 344 date items, 125 people, 76 findings. Native schema/coverage/reference checks pass.
 Result needs-revision; normal workflow installed the failed report and is now repair
-round 0. No model/executor active. Six repair packets fit the unchanged 56 KiB limit;
-largest 56674 bytes. Source/extraction/ownership unchanged. No repair model started.
+round 0. Current batch: repair group 1 is active; see CURRENT-STATE.json and its actual PID/run. Six repair packets fit the unchanged 56 KiB limit;
+largest 56674 bytes. Source/extraction/ownership unchanged. The first repair model has started; no canonical extraction changed.
 
 Staging 0726d158e700971f93906750b12fb5c0cc46538c contains only the negative audit,
 prior approval history and coverage receipt beyond prior staging. Master is unchanged.

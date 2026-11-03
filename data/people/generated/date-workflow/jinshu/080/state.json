@@ -726,6 +726,66 @@
       "runId": "run-ff427e8d-87a6-4ae9-b6f5-fb00a834d1af",
       "validationError": null,
       "artifactHash": "a6ca845a7e87d91448d0196e07cf5a2f48ba0f9e55dc7fab25d669bb4cf4ed6c"
+    },
+    "repair-0-001-ac55a5cc0bca257825fb-44e7f63b247f": {
+      "agentId": "bc-51292f56-99a6-4d75-abaf-528ecfbbd63e",
+      "model": "grok-4.6",
+      "status": "returned",
+      "sent": true,
+      "runId": "run-88d8b9da-68de-4d07-a2f9-2bd6e9e58d89",
+      "validationError": null,
+      "lastError": null,
+      "artifactHash": "84290a538dd7a43d0eeeef1f62058c97817dda84d4b6efc1d8761b6f75dde00b",
+      "usage": {
+        "agentId": "bc-51292f56-99a6-4d75-abaf-528ecfbbd63e",
+        "runId": "run-88d8b9da-68de-4d07-a2f9-2bd6e9e58d89",
+        "recordedAt": "2026-11-03T17:55:34.488Z",
+        "status": "available",
+        "data": {
+          "usage": {
+            "inputTokens": 135431,
+            "outputTokens": 14689,
+            "cacheWriteTokens": 0,
+            "cacheReadTokens": 749568,
+            "totalTokens": 899688
+          },
+          "cost": {
+            "rawCostCents": 146.756,
+            "chargedCents": 0
+          },
+          "runs": [
+            {
+              "runId": "run-88d8b9da-68de-4d07-a2f9-2bd6e9e58d89",
+              "usage": {
+                "inputTokens": 135431,
+                "outputTokens": 14689,
+                "cacheWriteTokens": 0,
+                "cacheReadTokens": 749568,
+                "totalTokens": 899688
+              },
+              "cost": {
+                "rawCostCents": 146.756,
+                "chargedCents": 0
+              }
+            }
+          ]
+        }
+      },
+      "originalValidationError": "Invalid or stale active-hint repair for p006: expected [\"AD 317-322\"], received before [\"AD 317-322\"] and after []",
+      "hostFeedbackSha256": "d6a186f56dfcbb63af711f1f9079065608415682118eab17308ae6f39af35afb",
+      "hostValidationFeedback": {
+        "priorRunId": "run-ef1c9842-eaa9-426c-b3f0-c76a4a457750",
+        "rawArtifactSha256": "1f847926e3d50413f010709aebd6ca9d731922529d6b7bf249d0d0a084f68a06",
+        "rejectedByLocalValidation": true,
+        "receiptSha256": "d6a186f56dfcbb63af711f1f9079065608415682118eab17308ae6f39af35afb"
+      }
+    },
+    "repair-0-002-490e168f354e5d1b4a26-0165516d06dd": {
+      "agentId": "bc-62935733-d5ec-40f5-89d6-29b99e7a6dc2",
+      "model": "grok-4.6",
+      "status": "running",
+      "sent": true,
+      "runId": "run-69db2e6a-287e-4025-a481-c779c4251c4b"
     }
   },
   "reviewPlans": {
@@ -752,5 +812,853 @@
       ]
     }
   },
-  "review": "review-0.json"
+  "review": "review-0.json",
+  "repairPlan": [
+    {
+      "id": "001-ac55a5cc0bca257825fb",
+      "findings": [
+        {
+          "items": [
+            "claim-149",
+            "claim-150",
+            "claim-160",
+            "hints-p001",
+            "hints-p006",
+            "p001",
+            "p006"
+          ],
+          "problem": "幼 and 年十三 have no reign year; AD 316/317–322 invents a start from dynasty founding or a reconstructed birth and makes childhood simultaneous with the age-thirteen visit.",
+          "action": "Keep statedAge 13 sui without a birth year. Replace the visit with an unresolved date or a one-sided onOrBefore 322 bound from Zhou Yi’s 永昌元年 death. Remove the 316–322 hint; do not date 幼 to the same closed interval."
+        },
+        {
+          "items": [
+            "claim-151",
+            "p001"
+          ],
+          "problem": "及長 is a life-stage bundled with later offices into AD 324–340 activity from Wang Dun’s death to Yu Liang’s death.",
+          "action": "Drop the Western interval on 及長, or mark it unresolved. Keep Yu Liang’s recruitment on claim-167 instead of folding it into adulthood."
+        },
+        {
+          "items": [
+            "claim-154",
+            "hints-p002",
+            "p002"
+          ],
+          "problem": "司徒導 is genealogical identification, not dated service; 317–339 / 307–339 are Eastern Jin career-spans.",
+          "action": "Remove the invented interval from the kinship line. Do not use 307 or 339 as owned active dates unless a source unit in this job actually narrates those events."
+        },
+        {
+          "items": [
+            "claim-156",
+            "hints-p003",
+            "p003"
+          ],
+          "problem": "尚書郎 is undated; AD 265–316 is Western Jin activity throughout a dynasty.",
+          "action": "Set the office attestation unresolved with a reason, and clear the dynasty-long hint."
+        },
+        {
+          "items": [
+            "claim-158",
+            "p004"
+          ],
+          "problem": "淮南太守 has no year; 307–317 borrows the crossing and invents an Eastern Jin end.",
+          "action": "Separate the undated Huainan title from the 307 advice. Do not keep 317. If a bound is kept, it cannot be a fabricated second endpoint."
+        },
+        {
+          "items": [
+            "hints-p005",
+            "p005"
+          ],
+          "problem": "The AD 307–323 hint turns the 307 crossing into reign-long living activity through Emperor Yuan’s death.",
+          "action": "Limit the active hint to the supported 307 crossing. Do not add 323 from later annals as an activity end."
+        },
+        {
+          "items": [
+            "claim-161",
+            "claim-162",
+            "claim-163",
+            "claim-164",
+            "hints-p007",
+            "hints-p008",
+            "hints-p009",
+            "hints-p010",
+            "p007",
+            "p008",
+            "p009",
+            "p010"
+          ],
+          "problem": "Wang Dun’s praise, Ruan Yu’s clerkship, and the 三少 naming are undated; AD 317–324 is activity until 太寧二年.",
+          "action": "Remove the closed 317–324 ranges. At most keep an onOrBefore 324 bound for events that require Wang Dun alive; leave 三少 unresolved rather than inheriting Dun’s death."
+        },
+        {
+          "items": [
+            "claim-165",
+            "claim-166",
+            "hints-p011",
+            "hints-p012",
+            "p011",
+            "p012"
+          ],
+          "problem": "時太尉郗鑒 and 遂以女妻之 are one matchmaking/marriage, not AD 327–339. Xi Jian became 太尉 in 咸康四年 and died in 咸康五年.",
+          "action": "Replace 327–339 with either a 338–339 uncertainty window if 太尉 is taken as contemporaneous, or unresolved:true if the title is only retrospective identification. Preserve the marriage as its own event; sync both hints."
+        },
+        {
+          "items": [
+            "claim-169",
+            "hints-p014",
+            "p014"
+          ],
+          "problem": "Yin Hao’s 揚州刺史 attestation and active hint are dated AD 351–353, a Kuaiji/campaign slice that is not his 永和二年 (346) appointment, not the s0024 letter’s earliest date, and not his tenure through 永和十年 (354).",
+          "action": "Rebuild claim-169 from Yin Hao’s own events: keep 揚州刺史殷浩 as the inspectorate attested before Wang accepted 護軍, with a start no later than 永和二年/AD 346, and date the 不協/北伐/姚襄敗 cluster to 永和八–九年 (352–353). Do not keep 351–353 as the title window. Synchronize hints-p014 to those corrected personal events."
+        },
+        {
+          "items": [
+            "claim-170",
+            "hints-p015",
+            "p015"
+          ],
+          "problem": "尚子平之志 is Wang Xizhi’s later model-citation, converted into a Guangwu life span (AD 25–57) and an active hint.",
+          "action": "Preserve the mention as retrospective-reference, or as receptionType retrospective on a narrower honor/work claim, using the letter’s own context. Remove the AD 25–57 life interval and the active hint. Do not invent a 建武 birth or activity year from this chapter."
+        },
+        {
+          "items": [
+            "claim-171",
+            "hints-p016",
+            "p016"
+          ],
+          "problem": "漢末使太傅馬日磾慰撫關東 is dated 189–194 in the claim and 192–194 in the hint. The mission is 初平三年 (192); 189 is not when he was 太傅 or envoy, and 194 is his death, not this chapter’s activity end.",
+          "action": "Date Ma Midi’s own embassy to conventional AD 192 (初平三年八月). Do not start at 189. Do not treat 194 as an activity endpoint here. Synchronize hints-p016 to the mission year."
+        },
+        {
+          "items": [
+            "claim-172",
+            "hints-p017",
+            "p017"
+          ],
+          "problem": "Huan Wen’s 不協 is dated from his 永和元年 (345) Jingzhou appointment through 353, a career window that is not the event named by 時殷浩與桓溫不協.",
+          "action": "Date Huan Wen’s own rift to the later Hao–Wen conflict that this chapter pairs with Wang’s Kuaiji letters and Yin Hao’s 北伐 (securely 352–353 for the campaign; not before Yin Hao’s 346 Yang post). Remove 345 as the start of this claim and synchronize hints-p017."
+        },
+        {
+          "items": [
+            "claim-174",
+            "claim-175",
+            "hints-p019",
+            "hints-p020",
+            "p019",
+            "p020"
+          ],
+          "problem": "s0057 恐勝廣之憂 is Wang Xizhi’s present-tense fear of a Qin-style revolt. It does not date Chen Sheng’s or Wu Guang’s rising, death, or age. BC 209 is imported from the Shiji 二世元年 July narrative, then reused as their attestation year and as active hints, turning later reception into living activity.",
+          "action": "Keep the mention. Recast claim-174 and claim-175 as retrospective-reference (or attestation with receptionType retrospective) whose date is the Hao-letter present, sharing the 353–354 letter window or remaining unresolved with a reason that Jin Shu 80 gives no Sheng-Guang year. Remove westernYear BC 209. Clear hints-p019 and hints-p020 of BC 209; do not invent a life year or delete the persons."
+        },
+        {
+          "items": [
+            "claim-195",
+            "claim-199",
+            "hints-p025",
+            "hints-p026",
+            "p025",
+            "p026"
+          ],
+          "problem": "s0074’s 今/當今 dates one Kuaiji letter naming Yin Hao and Xun Xian; the closed AD 353–354 interval drops Yonghe 8 (AD 352) when both were already in the northern deployment and treats Yonghe 10 (AD 354, Hao’s dismissal) as a safe end, turning a single present into two-year activity.",
+          "action": "Keep the rows as contemporary attestations of Hao and Xun Xian in the recall. Replace westernInterval 353–354 with unresolved:true and a reason that the letter has no reign year, or with westernBounds onOrAfter AD 352 and onOrBefore AD 354 that preserve the Yonghe 8 / 9 / early-10 competing placements. Do not invent a second exact year. Synchronize hints-p025 and hints-p026 to that repaired uncertainty; do not leave AD 353–354 as active hints."
+        },
+        {
+          "items": [
+            "claim-204",
+            "hints-p027",
+            "p027"
+          ],
+          "problem": "伍員之憂不獨在昔 is Wang Xizhi’s retrospective exemplum, yet claim-204 and the p027 hint date Wu Zixu’s own life to BC 522–484 with certainty explicit.",
+          "action": "Reclassify the Wu Zixu mention as retrospective-reference or receptionType retrospective, dated with the Kuaiji letter (same unresolved/bounded present as claims 195/199), not with Spring-and-Autumn years. Remove BC 522–484 from the attestation and from active hints. Do not add a birth or death from Zuozhuan Zhao 20 / Ai 11; those are other events and are not what s0081 attests."
+        },
+        {
+          "items": [
+            "claim-242",
+            "hints-p030",
+            "p030"
+          ],
+          "problem": "蹈東海 in s0087 is a proverbial reception of Lu Zhonglian’s Handan speech, yet the claim assigns explicit BC 284–260 life years and the hint repeats them.",
+          "action": "Keep the allusion as retrospective reception at the letter’s present. Delete BC 284–260 from the claim and from hints-p030. Do not substitute Changping/Handan years (BC 260/258) as Lu’s life dates in this chapter."
+        }
+      ]
+    },
+    {
+      "id": "002-490e168f354e5d1b4a26",
+      "findings": [
+        {
+          "items": [
+            "claim-215"
+          ],
+          "problem": "時東土饑荒 names Wang Xizhi’s granary relief without a year; AD 353–355 is a tenure-like span, not a justified uncertainty window for that famine.",
+          "action": "Keep subject/predicate (Wang Xizhi’s relief/attestation). Mark the source date 時 unresolved, or use westernBounds only where the same biography actually bounds Kuaiji office (onOrBefore the Yonghe 11/III resignation). Do not keep start-year 353 merely because Lan-ting is Yonghe 9."
+        },
+        {
+          "items": [
+            "claim-236"
+          ],
+          "problem": "Dating Xie An as 尚書僕射 correspondent in AD 353–355 contradicts this chapter’s 謝安未仕時亦居焉 and Jinshu 79; Yonghe puye belongs to Xie Shang in Jinshu 8.",
+          "action": "Do not assign AD 353–355 as Xie An’s activity. Leave names untouched. Treat the puye heading as anachronistic or contested labeling: if Xie An remains the subject, record retrospective/anachronistic title and drop the Yonghe living interval; do not silently retitle the addressee. The letter body (漕運, 此一郡) stays a Kuaiji-period administrative text for Wang Xizhi, not an active date for Xie An."
+        },
+        {
+          "items": [
+            "claim-235",
+            "claim-237",
+            "claim-238",
+            "hints-p029",
+            "p029"
+          ],
+          "problem": "Xie An’s 未仕時 residence/status is given an invented AD 345–360 window labeled explicit, while the active hint instead uses unsupported AD 353–355 and clashes with a context letter addressing him as 尚書僕射.",
+          "action": "Keep the Kuaiji residence and not-yet-in-office facts. Replace the Western interval with unresolved:true and a reason that 未仕時 is not a convertible year; do not invent 345 or 360. Clear the AD 353–355 hint. Do not use the 尚書僕射 letter as an active-life date."
+        },
+        {
+          "items": [
+            "claim-246",
+            "claim-253",
+            "claim-260",
+            "claim-267",
+            "hints-p031",
+            "hints-p032",
+            "hints-p033",
+            "hints-p034",
+            "p031",
+            "p032",
+            "p033",
+            "p034"
+          ],
+          "problem": "Yonghe 9 / AD 353 is transferred from Wang Xizhi’s Lanting preface onto 孫綽、李充、許詢、支遁, whom s0113 names only as undated eastern peers.",
+          "action": "Remove 永和九年 and AD 353 from their attestation rows and hints. Keep the undated 築室東土，與羲之同好 association, or mark any date unresolved. Do not import later participant lists to manufacture their presence year."
+        },
+        {
+          "items": [
+            "claim-297",
+            "hints-p035",
+            "p035"
+          ],
+          "problem": "p035 is given Yonghe 9 from preface sentences that neither name 羲之 nor contain the year, duplicating p028’s Lanting date; the AD 353 hint follows that row.",
+          "action": "Remove or re-evidence claim-297 so p035 is not dated from s0119–s0129. Synchronize hints to supported p035 events (context Yonghe 11 / AD 355 resignation). Do not treat p028’s gathering year as this ID’s life date."
+        },
+        {
+          "items": [
+            "claim-300",
+            "p035"
+          ],
+          "problem": "sourceDate 東晉永和前後 and the AD 353–355 window on s0130/s0131/s0149/s0152 are not in the Chinese; undated anecdotes are closed as a Yonghe activity span.",
+          "action": "Delete the fabricated sourceDate and year window. Leave those anecdotes undated or unresolved and preserve only narrative sequence after the preface, without inventing endpoints."
+        },
+        {
+          "items": [
+            "claim-299",
+            "claim-414",
+            "claim-418",
+            "hints-p057",
+            "hints-p058",
+            "p057",
+            "p058"
+          ],
+          "problem": "羲之既去官 and Xie An's 嘗謂 are one-sided after the Yonghe 11.3.9 resignation, but the extraction turned that bound into an exact AD 355 year for Xizhi's later roaming, Xu Mai's itinerary, and Xie An's middle-age remark, then copied 355 into active hints.",
+          "action": "On claim-299, claim-414, and claim-418, replace the exact westernYear 355 with an after/onOrAfter bound from the oath or mark the later anecdotes unresolved; strip AD 355 from hints-p057 and hints-p058. Preserve Xie An's 中年 as age reckoning. Do not invent an end year."
+        },
+        {
+          "items": [
+            "claim-345",
+            "hints-p036",
+            "p036"
+          ],
+          "problem": "齊彭殤 is stored as Peng Zu’s legendary-antiquity attestation and active hint rather than as a retrospective allusion in the preface.",
+          "action": "Reclassify the mention as retrospective-reference or receptionType retrospective. Remove legendary antiquity as a life/activity date and clear the matching hint. Do not assign Peng Zu a living year from this chapter."
+        },
+        {
+          "items": [
+            "claim-347",
+            "claim-349",
+            "hints-p037",
+            "hints-p038",
+            "p037",
+            "p038"
+          ],
+          "problem": "The later 金穀詩序 / 石崇 comparison is dated AD 296–300 as Pan Yue’s and Shi Chong’s living attestation; those years are not in s0130.",
+          "action": "Keep the comparison as retrospective reception of Pan Yue’s preface and of Shi Chong. Remove 296–300 and the matching hints. Do not invent a Jingu year or use the reception as a life date."
+        },
+        {
+          "items": [
+            "claim-350",
+            "hints-p039",
+            "p039"
+          ],
+          "problem": "The widow’s undated goose story is given fabricated 東晉永和前後 / AD 353–355 chronology and an active hint.",
+          "action": "Remove the invented window and hint. Mark the anecdote unresolved or leave it undated; do not borrow Wang Xizhi’s Yonghe years as her life dates."
+        },
+        {
+          "items": [
+            "claim-353",
+            "claim-358",
+            "claim-361",
+            "claim-363",
+            "hints-p040",
+            "hints-p041",
+            "hints-p042",
+            "hints-p043",
+            "p040",
+            "p041",
+            "p042",
+            "p043"
+          ],
+          "problem": "Four undated 嘗 anecdotes (Daoist geese, disciple’s table, father’s scraping, Mount Ji fans) were given a fabricated source label 東晉永和前後 and a closed AD 353–355 window taken from other Yonghe markers, then copied into active hints.",
+          "action": "Remove the invented interval and sourceDate text. Leave each encounter unresolved, or use only a one-sided bound that does not invent a second year. Clear the matching AD 353–355 hints."
+        },
+        {
+          "items": [
+            "claim-367",
+            "hints-p044",
+            "p044"
+          ],
+          "problem": "Zhong Yao is dated as if active in Cao Wei AD 200–230, but the chapter only has Wang Xizhi comparing his writing to 鐘繇.",
+          "action": "Reclassify the mention as retrospective reception (retrospective-reference or receptionType retrospective). Delete the Cao Wei life interval and the AD 200–230 hint. Do not use the reception as a life date."
+        }
+      ]
+    },
+    {
+      "id": "003-93aa5e6f7b2a1e2b6a63",
+      "findings": [
+        {
+          "items": [
+            "claim-369",
+            "hints-p045",
+            "p045"
+          ],
+          "problem": "Zhang Zhi is dated to late Han AD 168–192 from Wang Xizhi’s ranking/pond story and Yu Yi’s later Boying recollection.",
+          "action": "Keep those later references as retrospective reception of Zhang Zhi. Remove 東漢末 / 168–192 and the AD 168–192 hint. Do not convert Yu Yi’s 過江 memory into Zhang Zhi’s life years."
+        },
+        {
+          "items": [
+            "claim-372",
+            "hints-p046",
+            "p046"
+          ],
+          "problem": "Yu Yi’s undated peer comparison and letter were boxed into an Eastern Jin career window AD 327–345, hiding the earlier undated 過江 loss.",
+          "action": "Drop 327–345 and the matching hint. Keep the comparison and letter without invented years. If the 過江 recollection is kept, mark it unresolved rather than assigning a guessed crossing year."
+        },
+        {
+          "items": [
+            "claim-379",
+            "hints-p047",
+            "p047"
+          ],
+          "problem": "Xi Yin is only named in Wang Xizhi’s later comparison, yet is given AD 340–356 as living activity.",
+          "action": "Remove the invented window and hint. Treat 郗愔 as an undated mention or as retrospective reception, not as a dated career."
+        },
+        {
+          "items": [
+            "claim-381",
+            "hints-p048",
+            "p048"
+          ],
+          "problem": "Yu Liang’s receipt of an undated 章草 reply was dated AD 317–340, a dynasty-career span rather than this letter.",
+          "action": "Remove 317–340 and the hint. Leave the letter’s date unresolved. Do not turn conventional Eastern Jin bounds into a Gregorian event interval."
+        },
+        {
+          "items": [
+            "claim-383",
+            "hints-p049",
+            "p049"
+          ],
+          "problem": "Wang Shu’s attestation and active hint use 永和十一年/AD 355, which in this biography dates Wang Xizhi’s oath. The cited units have no year; the Mu-emperor annals date Shu’s Yang appointment to 永和十年 (conventional AD 354). The chapter’s mourning–累年–appointment–audit sequence is flattened.",
+          "action": "Detach 永和十一年/355 from Wang Shu. If the Yang appointment is dated, use the annals’ 永和十年 and the conventional AD 354 year-label, without pretending that label is a month-day Gregorian date. Keep rivalry, mourning, appointment, and audit as separate sequenced events. Replace the AD 355 hint accordingly. Context claim-387 needs the same year correction."
+        },
+        {
+          "items": [
+            "claim-387"
+          ],
+          "problem": "Wang Shu's Yang appointment is undated in s0156; 永和十一年/AD 355 was transferred from Xizhi's later oath and contradicts 晉書穆帝紀 永和十年二月.",
+          "action": "Retie claim-387 to 永和十年 (AD 354) from 穆帝紀 二月己丑 以前會稽內史王述爲揚州刺史, or, if confined to this chapter, drop the invented exact year and keep only a bound before the Yonghe 11.3.9 oath. Certainty cannot remain explicit-from-s0156."
+        },
+        {
+          "items": [
+            "claim-396",
+            "claim-397",
+            "hints-p050",
+            "p050"
+          ],
+          "problem": "母喪 attests the mother’s death, but both the death and a living attestation were closed at AD 353–355, and that window was reused as an activity hint. 累年 before the Yonghe 10 appointment makes a death still open through 355 untenable.",
+          "action": "Keep the death claim. Strip the 353–355 dateContext; set the death unresolved or use a one-sided bound before the Kuaiji succession / before the Yang appointment. Remove the living attestation years and the AD 353–355 hint. Do not treat the death as activity."
+        },
+        {
+          "items": [
+            "claim-398",
+            "hints-p051",
+            "p051"
+          ],
+          "problem": "Tan is only named in Xizhi's comparison and has no dated personal event, yet he was given an explicit Yonghe 11 / AD 355 attestation and active hint.",
+          "action": "Remove the transferred 永和十一年/355 date from claim-398 or recast the row as an undated mention; clear hints-p051. Do not create a Tan life year from 不及坦之."
+        },
+        {
+          "items": [
+            "claim-401",
+            "claim-405",
+            "claim-408",
+            "hints-p052",
+            "hints-p053",
+            "hints-p054",
+            "p052",
+            "p053",
+            "p054"
+          ],
+          "problem": "夙遭閔凶 and 母兄鞠育 were turned into an AD 317–345 living window for father, mother, and elder brother. That span is an Eastern-Jin dynasty bracket, not uncertainty about one event, and it treats the later tomb rite as parental activity.",
+          "action": "Delete the 317–345 interval from claim-401, claim-405, and claim-408 and from the three hints. Keep claim-402's undated early-death manner. Do not convert youth-rearing into exact years."
+        },
+        {
+          "items": [
+            "p053"
+          ],
+          "problem": "于父母墓前 shows the mother already dead by Yonghe 11.3.9, after she had reared Xizhi, but no death claim was extracted.",
+          "action": "Add a death for p053 with a one-sided bound onOrBefore the oath day (and after the father's earlier 夙 death). Do not use the tomb rite as her living activity or as a precise death year."
+        },
+        {
+          "items": [
+            "claim-410",
+            "claim-412",
+            "hints-p055",
+            "hints-p056",
+            "p055",
+            "p056"
+          ],
+          "problem": "老氏 and 周任 are retrospective citations in Xizhi's AD 355 oath, but they were given BC 571–479 and BC 1046–771 life windows and matching active hints.",
+          "action": "Remove those Western intervals and hints. Keep the names as retrospective reception on the oath (receptionType retrospective or kind retrospective-reference). Do not add encyclopedia life dates or a posthumous subtype."
+        },
+        {
+          "items": [
+            "claim-467",
+            "claim-468",
+            "claim-469",
+            "claim-495",
+            "claim-496",
+            "hints-p059",
+            "hints-p060",
+            "hints-p061",
+            "p059",
+            "p060",
+            "p061"
+          ],
+          "problem": "時劉惔為丹陽尹 is dated as a closed AD 345–349 tenure. The chapter has no year. 建康實錄 dates the appointment and this lodging anecdote to 永和三年十二月, while 資治通鑑 in 永和元年 both uses the title 丹楊尹 and sends Liu Tan to 沔中. AD 345 is therefore not a justified start for the Jiankang gathering. The 349 end is an external death terminus (劉真長死 while 褚裒 still lived; 褚裒 died 永和五年十二月), not an explicit source end.",
+          "action": "Replace the 345–349 interval on the Danyang gathering/office/place claims and the p059–p061 hints with bounds that preserve competing witnesses: onOrAfter the 永和三年十二月 appointment (conventional AD 347; note the lunar twelfth month may fall in AD 348 and was not converter-normalized day by day) against the possibly proleptic 永和元年 title, and onOrBefore 349 as a death terminus only. Do not invent a second exact year or keep 345 as the office start."
+        },
+        {
+          "items": [
+            "claim-470",
+            "claim-478",
+            "claim-500",
+            "claim-501",
+            "hints-p061",
+            "hints-p067",
+            "p061",
+            "p067"
+          ],
+          "problem": "Wang’s leisure, eastern return, and the planned tour with Xie An are given a closed AD 355–361 window. AD 355 follows the chapter vow 永和十一年, but AD 361 is not in 年五十九卒 and is a chosen death year (書斷 昇平五年卒 among competing reconstructions). Death is also used as an active hint. 頃東游還 and 比當與安石東遊山海 are letter-moment events, not six-year activity.",
+          "action": "Keep the 355 start as onOrAfter the vow. Remove the exact 361 leisure/tour endpoint; leave the death year unresolved or as competing later witnesses, not as source-explicit. Date the eastern return and Xie An plan by the first letter (after the vow, before the 358 Yuzhou letter). Drop death from p061 active hints; do not convert 五十九 into a birth year."
+        },
+        {
+          "items": [
+            "claim-471",
+            "claim-556",
+            "claim-557",
+            "claim-558"
+          ],
+          "problem": "s0202–s0203 give Wang Xizhi’s death at 59 sui, a same-sentence 贈金紫光祿大夫, and the sons’ refusal, with no reign year. AD 361 is imported (真誥 升平五年 is one later witness among others) and then reused as a life/honor year.",
+          "action": "Keep age 59 sui at death. Remove westernYear AD 361 from the death, the gift, and the sons’ refusal. Leave those events unresolved as to year, or record competing witnesses without choosing one. Keep the gift and refusal as posthumous honor/reception sequenced after death, not as living activity or active hints."
+        },
+        {
+          "items": [
+            "claim-477",
+            "claim-504",
+            "claim-505",
+            "hints-p066",
+            "p066"
+          ],
+          "problem": "萬後為豫州都督 and the second letter are given exact AD 359. 晉書·穆帝紀 and 資治通鑑 date the appointment to 升平二年八月 (AD 358) and place Wang’s cautionary letter there. The defeat is 升平三年 (AD 359). The hint ‘AD 359 Yuzhou commander and defeat’ merges those events.",
+          "action": "Date the appointment, posting, and second letter to conventional AD 358 (升平二年). Keep AD 359 only for the defeat (context claim-574). Split the p066 hint so commander and defeat are not one 359 event. 吏部郎 355–358 may remain as letter uncertainty."
+        },
+        {
+          "items": [
+            "claim-479",
+            "claim-480",
+            "claim-481",
+            "hints-p068",
+            "hints-p069",
+            "hints-p070",
+            "p068",
+            "p069",
+            "p070"
+          ],
+          "problem": "陸賈、班嗣、楊王孫 are named only as models Wang hopes to emulate. The claims assign explicit Han floruits (BC 202–180, BC 32–AD 5, BC 141–87) that are not in this chapter and are reign/dynasty slices (漢書 孝武時人也 for Yang Wangsun). Active hints repeat those slices as if they were living events.",
+          "action": "Do not delete the names. Reclassify each as retrospective reception of Wang’s letter (kind retrospective-reference, or receptionType retrospective on the honor/work claim), dated to the letter, with these men as subjects of later citation. Remove the imported Western intervals from attestations and from p068–p070 active hints. Do not add new external biographies."
+        }
+      ]
+    },
+    {
+      "id": "004-e8b3187825d26bec65b7",
+      "findings": [
+        {
+          "items": [
+            "claim-482",
+            "hints-p071",
+            "p071"
+          ],
+          "problem": "Ningzhi’s name heading and undated 仕歷 offices were given a 355–399 activity window. 355 is not his event; 399 is his death year from Sun En, not the start or span of every office.",
+          "action": "Drop the 355–399 interval on the son-heading attestation. Leave 江州刺史、左將軍、會稽內史 undated. Keep AD 399 only on the Kuaiji attack, the refused defense, and the killing. Rewrite hints to the 399 death/attack, not ‘AD 355–399 offices’."
+        },
+        {
+          "items": [
+            "claim-484",
+            "claim-521",
+            "hints-p072",
+            "p072"
+          ],
+          "problem": "玄之早卒 was given an invented AD 340–361 death window and an active hint, using the father’s putative dates rather than Xuanzhi’s own undated death.",
+          "action": "Keep the death as died-young / 早卒 with unresolved:true and a reason that the source has no year. Remove both Western endpoints and the 340–361 hint. Do not infer a birth year."
+        },
+        {
+          "items": [
+            "claim-487",
+            "claim-489",
+            "claim-524",
+            "claim-530",
+            "hints-p074",
+            "hints-p076",
+            "p074",
+            "p076"
+          ],
+          "problem": "車騎桓沖 and Huizhi’s 騎兵參軍 were dated 373–384. In 寧康元年 Chong was 中軍將軍; 車騎 begins 甯康三年 (375) in the biography or 太元元年 (376) in the annals, and he still held 車騎 at death in 太元九年 (384).",
+          "action": "Replace the 373 start. For Chong’s 車騎 office use onOrAfter 375 with the 376 annal as a competing first year, and onOrBefore 384 from the death still as 車騎. For Huizhi’s cavalry post use the same title-based bounds as uncertainty, not a full-tenure activity span. Keep Huizhi’s 363–373 Wen adviser hint; delete 373–384 from p074 and p076 hints."
+        },
+        {
+          "items": [
+            "claim-490",
+            "claim-493",
+            "claim-494",
+            "hints-p077",
+            "hints-p080",
+            "hints-p081",
+            "p077",
+            "p080",
+            "p081"
+          ],
+          "problem": "左思《招隱詩》, 井丹, and 長卿 are later quotations or literary comparisons in Wang Huizhi's anecdotes, not dated events of Zuo Si, Jing Dan, or Sima Xiangru. The closed spans AD 270–300, AD 58–88, and BC 179–117 are absent from the Chinese and treat reception as living activity.",
+          "action": "Reclassify each as retrospective-reference (or receptionType retrospective on a narrower honor/work claim) without Western life years; set unresolved:true with a reason that the chapter gives no year; delete the three active-date hints. Do not import external lifespans to clear the row."
+        },
+        {
+          "items": [
+            "claim-491",
+            "claim-533",
+            "hints-p078",
+            "p078"
+          ],
+          "problem": "逵時在剡 supports Dai Kui's residence/visit but not AD 360–395. The interval invents both endpoints and reads as activity across decades.",
+          "action": "Keep the Shan residence and the night visit as undated or unresolved source dates; remove westernInterval 360–395 from claim-491 and claim-533 and drop hints-p078. Do not fabricate a death or visit year from another biography."
+        },
+        {
+          "items": [
+            "claim-492",
+            "hints-p079",
+            "p079"
+          ],
+          "problem": "The joint reading 與弟獻之共讀《高士傳贊》 is Xianzhi's own event but has no year. AD 370–386 invents both ends. p079 is isolated from the chapter's 獻之卒 notice, which is filed under p082.",
+          "action": "Keep the reading without a Western interval; remove hints-p079. Do not borrow p082 death years as p079 activity or merge identities in this repair."
+        },
+        {
+          "items": [
+            "claim-641",
+            "claim-642",
+            "claim-676",
+            "claim-677",
+            "claim-679",
+            "claim-683",
+            "claim-706",
+            "claim-707",
+            "hints-p083",
+            "p083"
+          ],
+          "problem": "One AD 376–396 window—the conventional 太元 1–21 label of 東晉孝武帝—is applied to Huizhi's Palace Attendant tenure and resignation, the joint illness, Xianzhi's death, Huizhi's death a month later, and both attestations. Owned units s0222–s0243 contain no era name. Same-chapter 太元中 dates the Taiji Hall plaque; 俄而卒於官 follows 及安薨. A reign-length band is not event uncertainty, and office claims wrongly use 未幾，獻之卒……月餘亦卒 as their sourceDate.",
+          "action": "Strip AD 376–396 from every listed claim. Keep 後為黃門侍郎, 棄官東歸, 俱病篤, 獻之卒, and 月餘亦卒 as explicit events with unresolved Western dates (or, if converting 及安薨, one-sided bounds only—never a second invented end). Point office dateContext at 後為黃門侍郎，棄官東歸. Preserve Xianzhi died first and Huizhi a little over a month later. Rewrite hints-p083 to that relative death only, not a Taiyuan career span."
+        },
+        {
+          "items": [
+            "claim-682",
+            "claim-686",
+            "claim-690",
+            "hints-p086",
+            "p086"
+          ],
+          "problem": "The Xie An visit is undated (嘗). AD 360–396 is an invented era/career window, and 396 is after Xie An’s death in 太元十年 (AD 385). It describes activity through a period, not uncertainty about one visit.",
+          "action": "Drop both invented endpoints. Keep the visit as the brothers’ and Xie An’s own event with unresolved:true and a reason that 嘗 names no year; if a bound is added, use only a one-sided onOrBefore from the 太元十年 death (AD 385), not a new start year. Clear the 360–396 active hint for p086."
+        },
+        {
+          "items": [
+            "claim-681",
+            "claim-691",
+            "hints-p090",
+            "p090"
+          ],
+          "problem": "s0267 dates the brush episode only by 七八歲時. AD 345–361 is not in the Chinese; it converts an age (or Xizhi’s Mu-era reputation) into a closed Western interval and then repeats that interval as Xizhi’s active hint.",
+          "action": "Drop the Western interval on claim-681 and claim-691. Keep claim-675 as an age-only row. Set those attestations unresolved:true with a reason that 七八歲時 is an age, not a reign year, or remove the invented dates. Clear the AD 345–361 hint for p090. Do not infer a birth year from inclusive sui."
+        },
+        {
+          "items": [
+            "hints-p082",
+            "p082"
+          ],
+          "problem": "p082's death is fed into the Taiyuan office window AD 376-396, against the same chapter's 未幾 / 俄而 sequel after Xie An's AD 385 death.",
+          "action": "Keep the 376-396 hint only for the 太元中 / 尋除 offices. Date illness and death from 及安薨 plus 未幾遇疾 / 俄而卒於官 (385-386), in line with p096, and do not use the posthumous 396/397 honors as life dates."
+        },
+        {
+          "items": [
+            "claim-687",
+            "hints-p087",
+            "p087"
+          ],
+          "problem": "遠慚荀奉倩 is Xianzhi’s later comparison, not Xun Can’s own event. AD 240–249 treats reception as living activity, is not in the chapter, and conflicts with 荀粲傳 太和初 / death at 29.",
+          "action": "Reclassify as retrospective-reference or receptionType retrospective on the childhood remark; remove the 240–249 attestation interval and the matching active-date hint. Do not invent a birth or death year from this mention."
+        },
+        {
+          "items": [
+            "claim-688",
+            "hints-p088",
+            "p088"
+          ],
+          "problem": "近愧劉真長 is the same Xianzhi recollection, not Liu Tan’s own event. AD 330–347 is an invented Eastern Jin activity window used as attestation and as an active hint.",
+          "action": "Reclassify as retrospective reception of Xianzhi’s remark; remove 330–347 from the attestation and from p088 active-date hints. Do not convert the comparison into Liu Tan life dates."
+        },
+        {
+          "items": [
+            "claim-692",
+            "hints-p091",
+            "p091"
+          ],
+          "problem": "桓溫嘗使書扇 has no era or year. AD 345–373 is Huan Wen’s external career, not uncertainty attested in s0269.",
+          "action": "Remove the closed 345–373 interval and the matching hint. Mark the fan episode unresolved:true, or leave it as an undated attestation. Do not replace 嘗 with a career-long window."
+        },
+        {
+          "items": [
+            "claim-693",
+            "hints-p092",
+            "p092"
+          ],
+          "problem": "The princess’s event is 以選尚新安公主, which is undated. The row’s sourceDate 嘗與兄徽之、操之俱詣謝安 is another person’s visit, and AD 360–396 is invented.",
+          "action": "Replace the sourceDate with the marriage sentence or strip the date fields; set unresolved:true. Remove the AD 360–396 marriage hint. Do not reuse the Xie An visit as her chronology."
+        }
+      ]
+    },
+    {
+      "id": "005-ba481964c8e876f895b4",
+      "findings": [
+        {
+          "items": [
+            "claim-694",
+            "hints-p093",
+            "p093"
+          ],
+          "problem": "The Wu-commandery garden scene is undated 嘗經吳郡. The sourceDate is the unrelated Xie An visit, and AD 360–396 is invented.",
+          "action": "Remove the mismatched sourceDate and the 360–396 interval and hint. Mark Gu’s garden episode unresolved:true. Do not date it from Xianzhi’s career."
+        },
+        {
+          "items": [
+            "claim-795",
+            "claim-803",
+            "claim-907",
+            "hints-p095",
+            "hints-p101",
+            "p095",
+            "p101"
+          ],
+          "problem": "陛下踐阼 is Xiaowu's accession in 咸安二年秋七月己未 (conventional AD 372). The extraction uses exact AD 373, which is 寧康元年改元, and then starts Xie An's active hint at that false year.",
+          "action": "Replace the accession westernYear with AD 372 on claim-803, claim-907, and the Xie An contextual attestation claim-795. Synchronize hints-p101 and the start of hints-p095 to 372. Do not keep 373 as a second endpoint or treat 寧康 as the accession date."
+        },
+        {
+          "items": [
+            "claim-798",
+            "claim-807",
+            "claim-842",
+            "claim-843",
+            "claim-844",
+            "claim-845",
+            "claim-846",
+            "hints-p104",
+            "p096",
+            "p104"
+          ],
+          "problem": "安僖皇后立 is the empress's installation. 安帝紀 dates 立皇后王氏 to 隆安元年二月戊午 (AD 397). 太元二十一年 / AD 396 is when she was made heir-consort. Claim-798 also treats that later reception as Xianzhi's living attestation after 俄而卒於官.",
+          "action": "Redate claim-807 and the posthumous honors claim-842 through claim-846 to AD 397 as retrospective reception on 安僖皇后立. Reclassify or replace claim-798 so 396/397 is the reception date, not a life attestation, and keep it off p096 active hints. Set hints-p104 to 397. Do not discard the honors."
+        },
+        {
+          "items": [
+            "claim-805",
+            "hints-p102",
+            "p102"
+          ],
+          "problem": "郗曇 is an undated kinship identification. AD 340-361 is not in the chapter.",
+          "action": "Remove the 340-361 interval from claim-805 and hints-p102, or mark the attestation unresolved with a reason that the chapter gives no date. Do not import a full Xi Tan biography."
+        },
+        {
+          "items": [
+            "claim-806",
+            "hints-p103",
+            "p103"
+          ],
+          "problem": "與郗家離婚 is recalled at Xianzhi's last illness; the divorce year is not stated. AD 360-386 is a guessed life span.",
+          "action": "Drop 360-386. If a date is kept, date only the deathbed recollection with the 385-386 illness/death sequel, and leave the divorce itself unresolved."
+        },
+        {
+          "items": [
+            "claim-808",
+            "hints-p105",
+            "p105"
+          ],
+          "problem": "兄 in 以兄子靜之嗣 has no own dated event. AD 344-386 copies Xianzhi's conventional life onto the brother.",
+          "action": "Remove the invented endpoints and the active hint years. Do not infer a birth year from anyone's traditional inclusive age."
+        },
+        {
+          "items": [
+            "claim-809",
+            "claim-810",
+            "hints-p106",
+            "p106"
+          ],
+          "problem": "靜之嗣 and 位至義興太守 are undated. Exact 386 is false precision; 386-420 is activity through the end of Eastern Jin.",
+          "action": "Mark both claims unresolved, or use only a one-sided bound after Xianzhi's death (onOrAfter 385/386) without inventing 420. Clear the matching hints."
+        },
+        {
+          "items": [
+            "claim-812",
+            "hints-p108",
+            "p108"
+          ],
+          "problem": "桓玄雅愛其父子書 is undated later reception. AD 398-404 is Huan Xuan's political floruit, not this passage.",
+          "action": "Remove the 398-404 window and the active hint. Keep the appreciation as an undated or retrospective event; do not fabricate a career interval."
+        },
+        {
+          "items": [
+            "claim-811",
+            "hints-p107",
+            "p107"
+          ],
+          "problem": "永和二年 dates Xu Mai's Lin'an move, not Wang Xizhi's repeated visits; AD 346 as Xizhi's exact active year turns a one-sided after-the-move fact into a closed year.",
+          "action": "Remove or rewrite the Xizhi attestation/hint so he is not year-locked to 346. If a Western bound is kept, use onOrAfter AD 346 for the visits and do not invent an end year. Leave s0317-s0319 as undated personal events."
+        },
+        {
+          "items": [
+            "claim-813",
+            "claim-815",
+            "hints-p109",
+            "hints-p110",
+            "p109",
+            "p110"
+          ],
+          "problem": "未弱冠，嘗造郭璞 has no calendar year, yet the extraction assigns disagreeing closed windows AD 310-324 (claims) and AD 320-324 (hints).",
+          "action": "Strip the invented Western intervals from the Guo Pu visit. Keep claim-904's age statement. Mark the visit unresolved or leave it undated; do not import Guo Pu's external lifespan to manufacture endpoints. On hints-p109 retain only the supported AD 346 Lin'an move."
+        },
+        {
+          "items": [
+            "claim-817",
+            "claim-818",
+            "claim-838",
+            "claim-839",
+            "hints-p112",
+            "hints-p113",
+            "p112",
+            "p113",
+            "p109"
+          ],
+          "problem": "父母尚存 and 父母既終 are sequential and both precede 遍游名山, 餌術涉三年, and 永和二年; dating the deaths to AD 346 and the parents' survival as AD 320-346 contradicts that order and invents 320.",
+          "action": "Detach the parents' death from 346. Keep 父母既終 as their death event with unresolved year or a one-sided bound before the Yonghe 2 move, citing the intervening three-year herb stay. Do not invent a second endpoint or a precise death year. Rewrite the still-alive claims/hints so they end before 既終, not in 346. Do not convert 未弱冠 into parental or Xu Mai birth years."
+        },
+        {
+          "items": [
+            "claim-816",
+            "hints-p111",
+            "p111"
+          ],
+          "problem": "時南海太守鮑靚隱跡潛遁 is a narrative 'at that time', not AD 317-340.",
+          "action": "Remove the 317-340 window and the matching hint. Do not replace it with another dynasty-length career span. If a date is required, set unresolved:true with a reason that 時 has no year in this chapter."
+        },
+        {
+          "items": [
+            "claim-819",
+            "claim-820",
+            "hints-p114",
+            "hints-p115",
+            "p114",
+            "p115"
+          ],
+          "problem": "陳安世、茅季偉常所遊處 is retrospective mountain lore with no dates; BC 32-7 and BC 140-87 are imported Han reign-spans used as life/active dates.",
+          "action": "Remove the Western intervals and active hints. Preserve the mention as retrospective-reference or receptionType retrospective on the place-lore; do not add external Han biographies or new life years."
+        },
+        {
+          "items": [
+            "claim-821",
+            "hints-p116",
+            "p116"
+          ],
+          "problem": "The wife's dismissal after 父母既終 is earlier than 永和二年, while 與婦書告別 follows the 346 move; both are collapsed to AD 346.",
+          "action": "Separate the two events. Leave the dismissal undated or bounded before Yonghe 2. The farewell letter may take contextual onOrAfter AD 346 from the move/rename, not an exact year copied onto s0310. Synchronize hints-p116 to that sequence."
+        },
+        {
+          "items": [
+            "claim-822",
+            "hints-p117",
+            "p117"
+          ],
+          "problem": "Xu Mai's letter cites 左元放 and 漢末諸得道者 retrospectively; AD 189-220 invents both ends of 漢末 and is used as living activity.",
+          "action": "Reclassify as retrospective-reference (or receptionType retrospective) dated to the letter after the Lin'an settlement, not as Zuo Ci's AD 189-220 life window. Keep 漢末 unresolved; delete the active hint. Do not discard the later reference."
+        }
+      ]
+    },
+    {
+      "id": "006-e1de6a4e08a9dfe579e8",
+      "findings": [
+        {
+          "items": [
+            "claim-914",
+            "claim-921",
+            "claim-931",
+            "claim-942",
+            "claim-953",
+            "claim-965",
+            "hints-p118",
+            "hints-p119",
+            "hints-p120",
+            "hints-p121",
+            "hints-p122",
+            "hints-p123",
+            "p118",
+            "p119",
+            "p120",
+            "p121",
+            "p122",
+            "p123"
+          ],
+          "problem": "The 贊 names 伯英, 師宜, 鐘, 王逸少, 獻之, and 子雲 in later comparative judgments (lost traces, 擅美一時, 近出, unique praise, 父風, 譽過其實) and gives no birth, death, age, ruler, reign, or era. Each attestation still carries an invented sourceDate dynasty gloss and a two-ended westernInterval that copies a traditional lifespan or floruit (168–192, 168–189, 151–230, 303–361, 344–386, 487–549). Those windows describe activity across a life or dynasty, not uncertainty about one source event, and they feed matching active-date hints. The 贊's own reception is also undated in these units.",
+          "action": "Strip the parenthetical dynasty labels and both Western endpoints from claim-914, claim-921, claim-931, claim-942, claim-953, and claim-965. Keep the later 贊 mentions as retrospective reception if the claim schema can say so without inventing a reception year; do not date the 贊 from outside this passage. Clear hints-p118–p123 to empty arrays (or to hints that no longer repeat those life years). Do not replace the spans with other guessed life dates."
+        },
+        {
+          "items": [
+            "claim-971",
+            "hints-p124",
+            "p124"
+          ],
+          "problem": "王濛 is only a visual metaphor (臥王濛於紙中) inside the critique of 子雲. claim-971 still dates an Eastern-Jin lifespan 309–347, and hints-p124 repeats it as activity. That is not Wang Meng's own event and is later rhetorical reception used as a life date.",
+          "action": "Remove the 東晉 / 309–347 dating from claim-971. Do not turn the metaphor into a living-activity claim. Set hints-p124 to []. Preserve the mention only as part of the 子雲 critique, without feeding Wang Meng's life or active chronology."
+        },
+        {
+          "items": [
+            "claim-976",
+            "hints-p125",
+            "p125"
+          ],
+          "problem": "徐偃 is only the paired hunchback allusion (坐徐偃於筆下). qualitative legendary antiquity with certainty explicit is not written in s0336, and hints-p125 copies that unsupported label as if it were an active date.",
+          "action": "Remove the legendary-antiquity chronological value from claim-976 and clear hints-p125. Leave the name as an undated rhetorical mention; do not invent a year or keep a qualitative antiquity date the 贊 does not state."
+        }
+      ]
+    }
+  ],
+  "repairIndex": 1,
+  "repairCandidate": "repair-candidate-0-1.json"
 }
