@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "4a329ed2bfe4e66d6b158cddb3f86d5a032b1ab68904b7bf0e4e1ed82a124fd9",
+  "revision": "d02a90e73e3f269dc7071ee547d06dcc3505fdce",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "Admission now fails only when state.round>(maxRounds??3), matching the workflow loop (round<=maxRounds) while the repair ceiling still stops further repair after a non-approving review at round>=maxRounds. The new fixture proves pin.round 2 -> independent reaudit-3 under maxRounds 3, rejects maxRounds 2, and does not publish from the resolution proof. Only the comparison and that test changed; other previously reviewed code and the negative audit blobs are unchanged."
+}
