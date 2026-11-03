@@ -1,0 +1,22 @@
+{
+  "syntaxPassed": true,
+  "cases": [
+    {
+      "branch": "codex/people-registry-streaming-20261103",
+      "passed": true,
+      "calls": [
+        "pr view https://example.invalid/pr/1 --json headRefName --jq .headRefName"
+      ]
+    },
+    {
+      "branch": "cursor/jinshu-080",
+      "passed": true,
+      "calls": [
+        "pr view https://example.invalid/pr/1 --json headRefName --jq .headRefName",
+        "pr edit https://example.invalid/pr/1 --add-label translation-batch",
+        "pr edit https://example.invalid/pr/1 --add-label translation-batch",
+        "pr comment https://example.invalid/pr/1 --body This chapter PR is queued for **translation-staging** batch merge (not merged to `master` individually, to avoid one Cloudflare build per PR). Run workflow **Merge translation PRs to staging** or `npm run merge-translation:staging` \u2014 that retargets each chapter PR to `translation-staging` and **merges** it there (PR shows as merged). Then squash-merge `translation-staging` \u2192 `master` once."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "d67c0d4d1eb116a9b1ebf5bd67b02515f297338dc1fac6b13a9feb080fef1d35",
+  "revision": "24e69118ed2531c573cdaf7cadb738c1b258cbc4",
+  "verdict": "changes-required",
+  "findings": [
+    {
+      "file": "scripts/lib/people-identity-member-store.mjs",
+      "line": 24,
+      "severity": "high",
+      "problem": "Visit-time native name/version contracts are computed from the full validated person and then discarded. The spool writes a lossy {localId, promptVersion, preferredNameSuggestion, identity-predicate claims} record and streamIdentityDossierIndex later calls localNameKeys/memberContract on that projection. Production corpus persons also carry book, chapter, mentions, descriptorSuggestion, remaining extraction fields, and non-identity claims; dropping them can change names, member versions, posting keys, and dossier bytes versus the baseline in-memory index. The new self-test never uses production-shaped persons (no book/chapter; mentions are ignoredByIdentity-only) and cannot prove exact name/version/index identity.",
+      "requiredFix": "Pin the contract taken from the full validated person: persist memberContract including names (and every field localNameKeys actually reads, including book/chapter/mentions if the native key reader uses them). Index from those pinned names/claims instead of recomputing keys from a reduced JSON person."
+    },
+    {
+      "file": "scripts/lib/people-identity-registry-workflow.mjs",
+      "line": 16,
+      "severity": "medium",
+      "problem": "Scratch spool ${out}.members is created with mkdirSync({recursive:false}) and is intentionally left behind on validation/build failure, but out is only created later. existsSync(out) therefore does not guard retries. A failed run releases the lock, leaves an unpublished .members directory, and the next attempt at the same out throws a raw EEXIST from mkdir instead of the generation-reuse error used for out. That is a recovery regression versus baseline, where a corpus/index failure before writeIdentityDossierStore allowed retrying the same out. writer.close() also closes without flush, so the retained spool can omit up to 64KiB of pending member rows.",
+      "requiredFix": "Treat ${out}.members as an unpublished generation: if it already exists, throw the same class of explicit reuse/remove error used for out (do not depend on mkdir EEXIST). Flush pending bytes before close on the failure path so a retained spool actually contains the members already accepted. Keep the current rule that only a successful published registry deletes the spool."
+    }
+  ],
+  "reason": "Streaming the production validator and writing dossiers from a generator preserves duplicate-id/source-chapter gates, posting-sort-after-all-clusters ordering, and coverage-before-manifest publication if the member records are faithful. They are not: the indexer consumes a reduced person, not the visit-time full-person memberContract, so exact native names/versions are not guaranteed despite byte-identical fixture tests. Retry/recovery of an unpublished generation is also newly blocked by a sibling .members directory."
+}
