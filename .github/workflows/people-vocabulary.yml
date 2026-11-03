@@ -16,6 +16,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Vocabulary checks need scripts and the complete canonical people corpus.
+          sparse-checkout: |
+            scripts
+            data/people
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
