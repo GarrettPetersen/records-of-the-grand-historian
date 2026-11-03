@@ -75,13 +75,16 @@ export function loadValidatedResolutionDocuments(localPeople) {
   return documents;
 }
 
-export function loadValidatedPeopleCorpus() {
+// Validate exactly the same production inputs, releasing each chapter after its
+// synchronous consumer returns. Registry construction need not retain all facts,
+// mentions and extraction envelopes just to replay accepted identity membership.
+export function visitValidatedPeopleCorpus(consume) {
+  if (typeof consume !== 'function') throw new Error('A synchronous validated-chapter consumer is required');
   const files = peopleExtractionFiles();
   const expectedChapterIds = sourceChapterIds();
   const expectedChapterSet = new Set(expectedChapterIds);
   const matcher = files.length > 0 ? loadProperNounMatcher() : null;
-  const chapters = [];
-  const localPeople = new Map();
+  const localIds = new Set();
   const extractedChapterIds = new Set();
 
   for (const file of files) {
@@ -101,6 +104,7 @@ export function loadValidatedPeopleCorpus() {
       );
     }
     const extraction = result.normalized;
+    const localPeople = new Map();
     const chapterId = `${extraction.book}:${extraction.chapter}`;
     if (!expectedChapterSet.has(chapterId)) {
       throw new Error(`${path.relative(REPO_ROOT, file)} does not correspond to a source chapter`);
@@ -118,7 +122,8 @@ export function loadValidatedPeopleCorpus() {
       mentionsByPerson.get(mention.person).push(mention);
     }
     for (const person of extraction.people) {
-      if (localPeople.has(person.localId)) throw new Error(`Duplicate local person ID ${person.localId}`);
+      if (localIds.has(person.localId)) throw new Error(`Duplicate local person ID ${person.localId}`);
+      localIds.add(person.localId);
       localPeople.set(person.localId, {
         ...person,
         book: extraction.book,
@@ -128,20 +133,24 @@ export function loadValidatedPeopleCorpus() {
         mentions: mentionsByPerson.get(person.localId) ?? [],
       });
     }
-    // Source text and candidate packets are required while validating this
-    // chapter, but corpus consumers use only its validated extraction. Keeping
-    // every packet retains the entire bilingual corpus and candidate evidence
-    // a second time throughout catalog compilation.
-    chapters.push({ file, extraction });
+    const consumed = consume({ file, extraction, localPeople });
+    if (consumed && typeof consumed.then === 'function') throw new Error('Validated chapter consumers must be synchronous');
   }
 
   return {
-    chapters,
-    localPeople,
     coverage: {
       sourceChapters: expectedChapterIds.length,
       extractedChapters: extractedChapterIds.size,
       missingChapterIds: expectedChapterIds.filter((chapterId) => !extractedChapterIds.has(chapterId)),
     },
   };
+}
+
+export function loadValidatedPeopleCorpus() {
+  const chapters = [], localPeople = new Map();
+  const { coverage } = visitValidatedPeopleCorpus(({ file, extraction, localPeople: people }) => {
+    chapters.push({ file, extraction });
+    for (const [id, person] of people) localPeople.set(id, person);
+  });
+  return { chapters, localPeople, coverage };
 }

@@ -12,7 +12,7 @@ function regularFile(file) {
   need(stat.isFile() && !stat.isSymbolicLink(), `Expected a regular dossier artifact: ${file}`);
   return stat;
 }
-function writer(file) {
+export function createIdentityJsonlWriter(file) {
   const fd = fs.openSync(file, 'wx', 0o600), digest = createHash('sha256'); let bytes = 0, pending = [], pendingBytes = 0, closed = false;
   const flush = () => { if (pendingBytes) fs.writeSync(fd, Buffer.concat(pending, pendingBytes)); pending = []; pendingBytes = 0; };
   return {
@@ -32,7 +32,7 @@ export function writeIdentityDossierStore(directory, index, provenance) {
   fs.mkdirSync(directory, { recursive: false, mode: 0o700 });
   let headers, metadata;
   try {
-  headers = writer(path.join(directory, 'dossiers.jsonl')); metadata = writer(path.join(directory, 'index.jsonl'));
+  headers = createIdentityJsonlWriter(path.join(directory, 'dossiers.jsonl')); metadata = createIdentityJsonlWriter(path.join(directory, 'index.jsonl'));
   let dossierCount = 0;
   for (const [id, dossier] of index.dossiers) {
     need(dossier.id === id && /^sha256:[a-f0-9]{64}$/u.test(dossier.version), 'Dossier index identity/version mismatch'); const location = headers.row(dossier);

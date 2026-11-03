@@ -22,9 +22,29 @@ export function memberContract(person, keys) {
 export function buildIdentityDossierIndex(localPeople, clusters, nameKeysForPerson) {
   requireValue(localPeople instanceof Map && Array.isArray(clusters) && typeof nameKeysForPerson === 'function',
     'Validated people, accepted clusters and the normal name-key reader are required');
-  const dossiers = new Map(), localPersonMap = new Map(), postings = new Map(), englishUnknownPostings = new Map(), chapters = new Map(), memberVersions = new Map(), canonicalByKnownId = new Map();
+  const index = streamIdentityDossierIndex(localPeople, clusters, nameKeysForPerson);
+  index.dossiers = new Map(index.dossiers);
+  return index;
+}
+
+// The persistent writer consumes this once. Dossier evidence exists only for the
+// current canonical person; compact posting/membership metadata accumulates for
+// the final index. Both in-memory and persisted indexes use this same algorithm.
+export function streamIdentityDossierIndex(localPeople, clusters, nameKeysForPerson) {
+  requireValue(Number.isSafeInteger(localPeople?.size) && typeof localPeople.get === 'function' &&
+    Array.isArray(clusters) && typeof nameKeysForPerson === 'function', 'Validated source lookup and accepted clusters required');
+  const index = { schemaVersion: 1, localPeople, dossiers: null, dossierVersions: new Map(),
+    localPersonMap: new Map(), postings: new Map(), englishUnknownPostings: new Map(),
+    chapters: new Map(), memberVersions: new Map(), canonicalByKnownId: new Map() };
+  index.dossiers = iterateIdentityDossiers(index, clusters, nameKeysForPerson);
+  return index;
+}
+
+function* iterateIdentityDossiers(index, clusters, nameKeysForPerson) {
+  const { localPeople, dossierVersions, localPersonMap, postings, englishUnknownPostings,
+    chapters, memberVersions, canonicalByKnownId } = index;
   for (const cluster of clusters) {
-    requireValue(typeof cluster.canonicalPersonId === 'string' && !dossiers.has(cluster.canonicalPersonId), 'Duplicate/invalid canonical dossier');
+    requireValue(typeof cluster.canonicalPersonId === 'string' && !dossierVersions.has(cluster.canonicalPersonId), 'Duplicate/invalid canonical dossier');
     const members = [...cluster.localPeople].sort(compare), names = new Map(), contracts = [], anchors = [];
     for (const knownId of [cluster.canonicalPersonId, ...(cluster.retiredIds ?? [])]) {
       requireValue(!canonicalByKnownId.has(knownId), 'Conflicting accepted canonical lineage');
@@ -68,7 +88,7 @@ export function buildIdentityDossierIndex(localPeople, clusters, nameKeysForPers
       matching: { chineseIdentityKeys: [...keyState.chinese].sort(compare), englishIdentityKeys: [...keyState.english].sort(compare) },
       version: peopleDigest({ canonicalPersonId: cluster.canonicalPersonId, contracts }),
       evidenceContract: 'Version covers normalized source-backed identity claims and names; review certificates separately pin current chapter bytes and exact primary witnesses.' };
-    dossiers.set(dossier.id, dossier);
+    dossierVersions.set(dossier.id, dossier.version);
     for (const name of identityNames) if (name.blocking) {
       if (!postings.has(name.key)) postings.set(name.key, []);
       postings.get(name.key).push(dossier.id);
@@ -77,13 +97,13 @@ export function buildIdentityDossierIndex(localPeople, clusters, nameKeysForPers
         if (!keyState.english.has(name.key) || keyState.chinese.size === 0) englishUnknownPostings.get(name.key).push(dossier.id);
       }
     }
+    yield [dossier.id, dossier];
   }
   requireValue(localPersonMap.size === localPeople.size, 'Canonical dossiers do not cover every validated local person');
   for (const map of [postings, englishUnknownPostings]) for (const [key, ids] of map) {
     ids.sort(compare);
     map.set(key, { ids, total: ids.length, fingerprint: peopleDigest({ key, ids }) });
   }
-  return { schemaVersion: 1, dossiers, dossierVersions: new Map([...dossiers].map(([id, dossier]) => [id, dossier.version])), postings, englishUnknownPostings, localPersonMap, localPeople, chapters, memberVersions, canonicalByKnownId };
 }
 
 const keyPriority = name => name.key.startsWith('zh:') ? 0 : name.key.includes(' ') ? 1 : 2;
