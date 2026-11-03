@@ -12,14 +12,14 @@ function regularFile(file) {
   need(stat.isFile() && !stat.isSymbolicLink(), `Expected a regular dossier artifact: ${file}`);
   return stat;
 }
-function writer(file) {
+export function createIdentityJsonlWriter(file) {
   const fd = fs.openSync(file, 'wx', 0o600), digest = createHash('sha256'); let bytes = 0, pending = [], pendingBytes = 0, closed = false;
   const flush = () => { if (pendingBytes) fs.writeSync(fd, Buffer.concat(pending, pendingBytes)); pending = []; pendingBytes = 0; };
   return {
     row(value) { const b = Buffer.from(JSON.stringify(value) + '\n'); need(b.length <= maxLineBytes, 'Dossier row exceeds the sealed storage bound');
       const location = { offset: bytes, bytes: b.length, sha256: hash(b) }; digest.update(b); bytes += b.length;
       pending.push(b); pendingBytes += b.length; if (pendingBytes >= 64 * 1024) flush(); return location; },
-    close() { if (!closed) { fs.closeSync(fd); closed = true; } },
+    close() { if (!closed) { try { flush(); } finally { fs.closeSync(fd); closed = true; } } },
     finish() { flush(); fs.fsyncSync(fd); need(fs.fstatSync(fd).size === bytes, 'Incomplete dossier artifact write'); fs.closeSync(fd); closed = true;
       return { file: path.basename(file), bytes, sha256: digest.digest('hex') }; },
   };
@@ -32,7 +32,7 @@ export function writeIdentityDossierStore(directory, index, provenance) {
   fs.mkdirSync(directory, { recursive: false, mode: 0o700 });
   let headers, metadata;
   try {
-  headers = writer(path.join(directory, 'dossiers.jsonl')); metadata = writer(path.join(directory, 'index.jsonl'));
+  headers = createIdentityJsonlWriter(path.join(directory, 'dossiers.jsonl')); metadata = createIdentityJsonlWriter(path.join(directory, 'index.jsonl'));
   let dossierCount = 0;
   for (const [id, dossier] of index.dossiers) {
     need(dossier.id === id && /^sha256:[a-f0-9]{64}$/u.test(dossier.version), 'Dossier index identity/version mismatch'); const location = headers.row(dossier);

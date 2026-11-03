@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "6d7bf7313d1459422b71038c4cdaae422913cbe3beb2cab9860ddc2529f1bb5c",
+  "revision": "3582f84383dcb6f131f9fedd96809382b278789b",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "Visit-time memberContract is now persisted in full (native names plus identity claims) from the complete validated person; the registry stream reads those pinned names and does not recompute keys from a lossy projection. Same/different constraints still drive accepted clustering, duplicate-id and source-chapter gates are unchanged, posting fingerprints are finalized only after every cluster is yielded, and a missing member cannot write a manifest. Unpublished ${out}.members is rejected before validation, close() flushes accepted rows, and only a published generation deletes the spool. Limits, pair-graph policy, and validators are not weakened."
+}

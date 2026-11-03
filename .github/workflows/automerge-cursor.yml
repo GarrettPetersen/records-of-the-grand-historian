@@ -26,33 +26,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: |
-          author="$(gh pr view "$PR_URL" --json author --jq '.author.login')"
-          is_draft="$(gh pr view "$PR_URL" --json isDraft --jq '.isDraft')"
           head_ref="$(gh pr view "$PR_URL" --json headRefName --jq '.headRefName')"
-          echo "PR author: $author"
-          echo "PR is draft: $is_draft"
           echo "PR head ref: $head_ref"
 
-          label=0
-          case "$author" in
-            app/cursor|cursor|"cursor[bot]"|GarrettPetersen)
-              label=1
-              ;;
-          esac
-
-          if [ "$label" -eq 0 ] && [[ "$head_ref" == cursor/* ]]; then
-            echo "Head branch matches cursor/*"
-            label=1
-          fi
-
-          if [ "$label" -eq 0 ]; then
+          if [[ "$head_ref" != cursor/* ]]; then
             echo "Not an SDK/Cursor translation PR; skipping."
             exit 0
-          fi
-
-          if [ "$is_draft" = "true" ]; then
-            echo "Marking draft PR ready for review"
-            gh pr ready "$PR_URL"
           fi
 
           gh pr edit "$PR_URL" --add-label "translation-batch" 2>/dev/null || \

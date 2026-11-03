@@ -4,14 +4,19 @@
 
 Follow `PEOPLE_COMPLETION_PROCESS.md` before scheduling glossary work. It supersedes
 old extraction-wave quotas and minimum extraction-batch sizes for identity work.
-First prove a live nonempty chapter (continue the existing Jinshu 053 owner/work).
+The first live nonempty pilot is proven: Jinshu 053 at revision
+`b26f20aae583d22a90abb2bb48bd04c05e794fa5`; see the receipt in
+`research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json`.
+Continue existing Jinshu downstream work with at most three completion WIP chapters.
+Preserve prior owners and claims; do not reopen the finished pilot unless its actual
+proof dependencies change.
 Pin source/editorial/date inputs and independently review each chapter person against
 the accepted canonical dossier. Use bounded indexed retrieval; never generate a
 complete same-name pair graph or require exhaustive negative comparisons. Preserve
 reviewed cross-chapter uncertainty explicitly; hold concrete attribution or false-merge
 contradictions. Reconcile changed evidence without recursively completing the corpus.
-No new broad extraction wave until this path is proven; preserve/drain existing
-claims. Do not weaken identity, chronology or publication gates. Report zero-person
+Prioritize existing Jinshu completion work before unrelated fresh extraction;
+preserve/drain existing claims. Do not weaken identity, chronology or publication gates. Report zero-person
 reviews, data-qualified chapters and live published nonempty chapters separately.
 A passing build or empty extraction is not the nonempty acceptance test.
 
