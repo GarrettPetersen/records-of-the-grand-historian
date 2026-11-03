@@ -130,6 +130,24 @@ test('a worker blocker or unchanged source preflight cannot use the native amend
   assert.deepEqual(fs.readFileSync(f.file),f.original);
 });
 
+test('source-preflight retry reaches independent approval in the last legal re-audit round',async t=>{
+  const f=await unresolvedRepairFixture(t),state=readJson(path.join(f.directory,'state.json'));
+  const candidate=readJson(path.join(f.directory,state.candidate)),packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  const before=candidate.claims[0],after=structuredClone(before);
+  after[2].unresolvedReason+=' The competing fixture anchor still needs research.';
+  revisePendingDateRepair({book:'fixture',chapter:'001'},{sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,author:{agentId:'first-researcher'},changes:[{kind:'replace',id:'claim-1',before,after,reason:'Preserve the genuine source research question until its anchor is established.'}]},f.options);
+  const held=await runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('Still-unresolved source must not dispatch review');},f.options);
+  assert.equal(held.researchPreflight.round,2);
+  const claim=resolveResearchFixture({...f,result:held});
+  const resolution=resolvedDatePreflight({book:'fixture',chapter:'001'},claim,{...f.options,maxRounds:3});
+  assert.equal(resolution.round,3);
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,{...f.options,maxRounds:2}),/phase and round hold/);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  let reviews=0;
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},task=>{assert(task.key.startsWith('reaudit-3-'));reviews++;return review(task);},{...f.options,maxRounds:3});
+  assert.equal(result.status,'audited');assert(reviews>0);
+});
+
 for (const [label,alter,expected] of [
   ['preflight bytes',f=>{const file=path.join(f.directory,f.result.researchPreflight.file),p=readJson(file);p.items[0].value.unresolvedReason+=' Changed.';writeJsonAtomic(file,p);},/preflight changed/],
   ['held candidate',f=>{const file=path.join(f.directory,'candidate-1.json'),c=readJson(file);c.claims[0][2].unresolvedReason+=' Changed.';writeJsonAtomic(file,c);},/held source evidence changed/],

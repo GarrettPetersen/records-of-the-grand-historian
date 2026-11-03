@@ -1138,7 +1138,7 @@ export function resolvedDatePreflight({book,chapter},claim,options={}) {
   const pin=claim.researchPreflights?.at(-1);
   if(!pin || !/^research-preflight-\d+-[a-f0-9]{20}\.json$/.test(pin.file??''))fail('a fingerprint-bound worker research supplement or saved chapter preflight is required');
   const directory=dateWorkflowDirectory(book,chapter,options.peopleDir),state=readJson(path.join(directory,'state.json'));
-  if(state.schemaVersion!==1 || state.workflowVersion!==DATE_WORKFLOW_VERSION || state.phase!=='reaudit' || state.circuitBreaker || state.round!==pin.round+1 || state.round>=(options.maxRounds??3))fail('preserve the existing phase and round hold');
+  if(state.schemaVersion!==1 || state.workflowVersion!==DATE_WORKFLOW_VERSION || state.phase!=='reaudit' || state.circuitBreaker || state.round!==pin.round+1 || state.round>(options.maxRounds??3))fail('preserve the existing phase and round hold');
   if(state.candidate!==`candidate-${state.round}.json` || pin.candidateFile!==`candidate-${pin.round}.json`)fail('invalid native candidate path');
   const originalPacket=buildDateAuditPacket(book,chapter,options);
   if([state,claim].some(value=>value.sourceHash!==originalPacket.sourceHash || value.extractionHash!==originalPacket.extractionHash))fail('canonical source or extraction changed');
