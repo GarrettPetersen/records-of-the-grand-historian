@@ -1,0 +1,479 @@
+{
+  "kind": "independent-vocabulary-checkout-code-review",
+  "revision": "9dfe3dbc6c6483df9daa15bbf9c1bd3df8a4ef61",
+  "parent": "03218fe8d782b3d65120880b07915dc074b3a91d",
+  "author": "codex-host-existing-reception",
+  "scope": "Only vocabulary checkout changes: scripts, functions and complete data/people in default cone mode. Preserve every test, full canonical check, timeout and full-site build gate.",
+  "terminalFailureEvidence": {
+    "run": 41712941881,
+    "head": "03218fe8d782b3d65120880b07915dc074b3a91d",
+    "startedAt": "2026-11-03T20:28:54Z",
+    "completedAt": "2026-11-03T20:38:57Z",
+    "cancelledStep": "Run actions/checkout@v4",
+    "testSteps": "never started",
+    "earlierSameFailureRun": 41711914554
+  },
+  "patch": "diff --git a/.github/workflows/people-vocabulary.yml b/.github/workflows/people-vocabulary.yml\nindex 0813f07ff7f0..9870090053f4 100644\n--- a/.github/workflows/people-vocabulary.yml\n+++ b/.github/workflows/people-vocabulary.yml\n@@ -16,6 +16,12 @@ jobs:\n     timeout-minutes: 10\n     steps:\n       - uses: actions/checkout@v4\n+        with:\n+          # Include shared runtime helpers and the complete canonical people corpus.\n+          sparse-checkout: |\n+            scripts\n+            functions\n+            data/people\n       - uses: actions/setup-node@v4\n         with:\n           node-version: '22'\n",
+  "workflow": "name: People vocabulary\non:\n  pull_request:\n    branches: [master]\n  push:\n    branches: [master]\n  merge_group:\n    types: [checks_requested]\n  workflow_dispatch:\npermissions:\n  contents: read\njobs:\n  people-vocabulary:\n    name: People vocabulary\n    runs-on: ubuntu-latest\n    timeout-minutes: 10\n    steps:\n      - uses: actions/checkout@v4\n        with:\n          # Include shared runtime helpers and the complete canonical people corpus.\n          sparse-checkout: |\n            scripts\n            functions\n            data/people\n      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n      - run: npm install --no-audit --no-fund\n      - name: Vocabulary regression tests\n        run: node --test scripts/test-people-vocabulary.mjs scripts/test-people-reception.mjs scripts/test-people-date-hints.mjs\n      - name: Check all canonical people labels\n        run: node scripts/check-people-vocabulary.mjs\n",
+  "checkScript": "#!/usr/bin/env node\nimport fs from 'node:fs';\nimport path from 'node:path';\nimport {fileURLToPath} from 'node:url';\nimport {peopleExtractionFiles} from './lib/people-corpus.mjs';\nimport {getPeopleSchemaValidator} from './lib/people-schema.mjs';\nimport {PEOPLE_DIR,readJson} from './lib/people-content.mjs';\nimport {validateClaimVocabulary} from './validate-people-extraction.mjs';\n\nexport function extractionVocabularyErrors(extraction,context) {\n  const schemaIds={1:'https://24histories.com/schema/people/extraction-v1.json',2:'https://24histories.com/schema/people/compact-extraction-v2.json'};\n  const id=schemaIds[extraction.schemaVersion];\n  if(!id)return [`Unknown extraction schemaVersion ${JSON.stringify(extraction.schemaVersion)}`];\n  const validate=getPeopleSchemaValidator().getSchema(id);\n  if(!validate)throw new Error(`Missing schema ${id}`);\n  // Structural failures also fail: an invalid shape must not hide label rows.\n  const errors=[];\n  if(!validate(extraction))errors.push(...validate.errors.map(e=>`${e.instancePath||'/'} ${e.message}${e.keyword==='enum'?` (approved: ${JSON.stringify(e.params.allowedValues)})`:''}`));\n  if(errors.length)return errors;\n  const compact=extraction.schemaVersion===2;\n  const claims=compact?extraction.claims.map((row,index)=>({id:`claim-${index+1}`,subject:row[0],predicate:row[1],value:row[2],certainty:row[3],evidence:row[4]})):extraction.claims;\n  if(compact)for(const person of extraction.people)for(const [index,role] of person[6].entries())claims.push({id:`${person[0]}/role-${index+1}`,subject:person[0],predicate:'role',value:{roleId:role[0]},evidence:role[2]});\n  for(const claim of claims){\n    const found=[];validateClaimVocabulary(claim,{context},found);\n    // This gate concerns labels/controlled IDs, not a second date-audit gate.\n    errors.push(...found.filter(error=>/unknown |not supplied in its packet|receptionType|reception kind|reception event kind|retrospective-reference|Conflicting later-reception/u.test(error)));\n  }\n  return errors;\n}\n\nif(process.argv[1]&&fs.realpathSync(process.argv[1])===fileURLToPath(import.meta.url)) {\n  const context={roles:readJson(path.join(PEOPLE_DIR,'curation','role-vocabulary.json')).roles,polities:readJson(path.join(PEOPLE_DIR,'chronology','polities.json')).polities,reigns:readJson(path.join(PEOPLE_DIR,'chronology','reigns.json')).reigns};\n  const files=peopleExtractionFiles();\n  if(!files.length)throw new Error('No canonical people extractions found; refusing an empty vocabulary check');\n  let failures=0;\n  for(const file of files)for(const error of extractionVocabularyErrors(readJson(file),context)){failures++;console.error(`${path.relative(process.cwd(),file)}: ${error}`);}\n  console.log(`People vocabulary: ${files.length} canonical extractions; ${failures} errors`);\n  if(failures)process.exitCode=1;\n}\n",
+  "schemaLoader": "import fs from 'node:fs';\nimport path from 'node:path';\nimport Ajv2020 from 'ajv/dist/2020.js';\nimport addFormats from 'ajv-formats';\nimport { PEOPLE_DIR, readJson } from './people-content.mjs';\n\nconst SCHEMA_DIR = path.join(PEOPLE_DIR, 'schema');\nlet sharedValidator = null;\n\nexport function getPeopleSchemaValidator() {\n  if (sharedValidator) return sharedValidator;\n  const ajv = new Ajv2020({\n    allErrors: true,\n    allowUnionTypes: true,\n    strict: true,\n    strictRequired: false,\n  });\n  addFormats(ajv);\n  for (const name of fs.readdirSync(SCHEMA_DIR).filter((file) => file.endsWith('.schema.json')).sort()) {\n    ajv.addSchema(readJson(path.join(SCHEMA_DIR, name)));\n  }\n  sharedValidator = ajv;\n  return sharedValidator;\n}\n\nexport function formatSchemaErrors(errors) {\n  return (errors ?? []).map((error) => {\n    const location = error.instancePath || '/';\n    return `${location} ${error.message}`;\n  });\n}\n",
+  "extractionEnumeration": "export function peopleExtractionFiles() {\n  const root = path.join(PEOPLE_DIR, 'extractions');\n  if (!fs.existsSync(root)) return [];\n  const files = [];\n  for (const book of fs.readdirSync(root).sort()) {\n    const directory = path.join(root, book);\n    if (!fs.statSync(directory).isDirectory()) continue;\n    for (const name of fs.readdirSync(directory).filter((file) => /^\\d{3}\\.json$/u.test(file)).sort()) {\n      files.push(path.join(directory, name));\n    }\n  }\n  return files;\n}\n\n",
+  "repoRootDefinition": "import crypto from 'node:crypto';\nimport fs from 'node:fs';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\n\nconst configuredRepoRoot = process.env.PEOPLE_REPO_ROOT?.trim();\nif (configuredRepoRoot && !path.isAbsolute(configuredRepoRoot)) {\n  throw new Error('PEOPLE_REPO_ROOT must be an absolute path');\n}\n\nexport const REPO_ROOT = configuredRepoRoot ??\n  path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');\nexport const DATA_DIR = path.join(REPO_ROOT, 'data');\nexport const PEOPLE_DIR = path.join(DATA_DIR, 'people');\n\nexport function readJson(file) {",
+  "testsImports": {
+    "test-people-vocabulary.mjs": "import assert from 'node:assert/strict';\nimport test from 'node:test';\nimport {extractionVocabularyErrors} from './check-people-vocabulary.mjs';\n\nconst context={roles:[{id:'official'}],polities:[{id:'jin'}],reigns:[{id:'jin-test'}]};\nfunction fixture(){return {schemaVersion:2,book:'fixture',chapter:'001',input:{unitCount:0,chapterFingerprint:`sha256:${'0'.repeat(64)}`,candidateScannerVersion:2,unitDigests:[]},run:{model:'fixture',promptVersion:7},people:[],surfaces:[],claims:[],translationRepairs:[],candidateDispositions:[],coverage:{allUnitsVisited:true,preflightCandidatesAccountedFor:true,unresolvedReferences:[]}};}\nconst row=(predicate,value,certainty='explicit')=>['p001',predicate,value,certainty,['s0001']];\ntest('vocabulary gate accepts approved values and descriptive event text',()=>{\n  const e=fixture();e.claims=[row('event-participation',{kind:'a source-specific event',action:'Posthumous honors were granted.'}),row('event-participation',{kind:'retrospective-reference',receptionType:'retrospective',action:'remembered'}),row('family-relationship',{relation:'child-of',personId:'p002',parentage:'biological'}),row('polity-association',{polityId:'jin',reignId:'jin-test'})];\n  assert.deepEqual(extractionVocabularyErrors(e,context),[]);\n});\ntest('vocabulary gate rejects invented schema and semantic labels',()=>{\n  const cases=[row('invented-predicate',{}),row('sex',{},'inferred'),row('event-participation',{kind:'posthumous-reference',action:'remembered'}),row('event-participation',{kind:'retrospective-reference',receptionType:'posthumous',action:'remembered'}),row('family-relationship',{relation:'invented',personId:'p002'}),row('family-relationship',{relation:'child-of',personId:'p002',parentage:'invented'}),row('polity-association',{polityId:'invented'}),row('attestation',{reignId:'invented'})];\n  for(const claim of cases){const e=fixture();e.claims=[claim];assert.ok(extractionVocabularyErrors(e,context).length,JSON.stringify(claim));}\n});\ntest('vocabulary gate rejects unknown schemas and malformed rows',()=>{\n  assert.ok(extractionVocabularyErrors({schemaVersion:999},context).length);\n  const e=fixture();e.claims=[null];assert.ok(extractionVocabularyErrors(e,context).length);\n});\ntest('compact person role IDs and every controlled family qualifier are checked',()=>{\n  const e=fixture();e.people=[['p001',['Jia','甲',null],'historical','Official',{n:[],r:[],a:[],p:[],x:null},[[{kind:'personal-name',en:'Jia'},'explicit',['s0001']]],[['official','explicit',['s0001']]]]];\n  assert.deepEqual(extractionVocabularyErrors(e,context),[]);\n  e.people[0][6][0][0]='invented';assert.ok(extractionVocabularyErrors(e,context).some(x=>x.includes('unknown roleId')));\n  for(const field of ['parentage','line','sharedParentage','subjectRelativeAge','unionCategory','relationshipState']){",
+    "test-people-reception.mjs": "import assert from 'node:assert/strict';\nimport test from 'node:test';\nimport { readFileSync } from 'node:fs';\nimport Ajv2020 from 'ajv/dist/2020.js';\nimport { personClaimReception, personReceptionErrors } from './lib/people-reception.mjs';\nimport { dateAuditDiagnostics, dateAuditItems } from './lib/people-date-audit.mjs';\nimport { personLifeSummary, representativePersonYear } from './lib/people-presentation.mjs';\nimport { personDetailClaimSections } from './generate-people-pages.mjs';\nimport { validateClaimVocabulary } from './validate-people-extraction.mjs';\nimport { deathOnlyChronology } from './lib/people-date-values.mjs';\n\nconst year = value => ({ era: 'AD', year: value, precision: 'year' });\nconst reception = {\n  id: 'c1', predicate: 'event-participation',\n  value: { kind: 'retrospective-reference', role: 'honoree', dateContext: {\n    sourceDate: { text: 'dated later commemoration' }, westernYear: year(320),\n  } }, evidence: ['s1'],\n};\n\ntest('only explicit reception semantics classify a claim', () => {\n  assert.equal(personClaimReception(reception), 'retrospective');\n  assert.equal(personClaimReception({ value: { kind: 'retrospective-reference' } }), 'retrospective');\n  assert.equal(personClaimReception({ value: { receptionType: 'posthumous' } }), 'retrospective');\n  assert.equal(personClaimReception({ value: { action: 'posthumous-commemoration' } }), 'retrospective');",
+    "test-people-date-hints.mjs": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport os from 'node:os';\nimport path from 'node:path';\nimport {spawn} from 'node:child_process';\nimport {fileURLToPath} from 'node:url';\nimport {normalizeWesternDateHint,normalizeExtractionDateHints} from './lib/people-date-hints.mjs';\nimport {runDateHintNormalization} from './normalize-people-date-hints.mjs';\n\ntest('existing Western years and ranges retain endpoints and qualifiers',()=>{\n  for(const [before,after] of [\n    ['682 BC','BC 682'],['682–650 BC','BC 682–BC 650'],['682 - 650 BC','BC 682 - BC 650'],\n    ['c. 682 BC','c. BC 682'],['before 682 BC','before BC 682'],['20 AD','AD 20'],\n    ['2 BC–1 AD','BC 2–AD 1'],['BC 2–1 AD','BC 2–AD 1'],['AD 1–2 BC','AD 1–BC 2'],\n    ['682 BC or 650 BC','BC 682 or BC 650'],['approximately 20—30 AD','approximately AD 20—AD 30'],\n    ['earlier: 682 BC','earlier: BC 682'],['c. 682 BC','c. BC 682'],\n  ]){assert.equal(normalizeWesternDateHint(before),after,before);assert.equal(normalizeWesternDateHint(after),after);}\n});\ntest('canonical, unresolved and unsupported chronology is not guessed',()=>{\n  for(const hint of ['BC 682','AD 20–AD 30','research required: regnal year one','legendary antiquity','44 BCE','20 CE','0 BC','-44 BC','- 44 BC','10000 BC','AD 44 BC','0 – 44 BC','12.5 BC','12 . 5 BC','682/681 BC','682 / 681 BC','682⁄681 BC','682／681 BC','682∕681 BC','12．5 BC','12٫5 BC','1 234 BC','682·681 BC','682~681 BC','１／681 BC','1,234 BC','3:40 AD','1–2–3 BC','44–0 BC','died Xinghe 3 AD 541','Hongwu 1–4 AD 1368'])assert.equal(normalizeWesternDateHint(hint),hint,hint);\n  assert.throws(()=>normalizeWesternDateHint(null),/strings/);\n});\nfunction fixture(){return {schemaVersion:1,book:'fixture',chapter:'001',people:[{localId:'p001',identityHints:{activeDateHints:['682 BC','AD 20']}}],claims:[{value:{event:'682 BC',westernYear:{era:'BC',year:682}}}]};}"
+  },
+  "localValidation": {
+    "vocabularyTestsPassed": 24,
+    "canonicalExtractionsChecked": 2050,
+    "errors": 0,
+    "trackedPeopleBytes": 1136771405
+  },
+  "officialActionDocumentation": "https://github.com/actions/checkout/tree/v4#fetch-only-the-root-files-and-github-and-src-folder",
+  "officialActionFetchImplementation": "When settings.filter is absent and settings.sparseCheckout is set, actions/checkout v4 sets fetchOptions.filter to blob:none (src/git-source-provider.ts, inspected).",
+  "priorProductionCodeReview": {
+    "schemaVersion": 1,
+    "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+    "packetSha256": "6d414a61b008de59531ae64805e5a617885eb519e23995fcd8e3b9a5348feeb0",
+    "revision": "03218fe8d782b3d65120880b07915dc074b3a91d",
+    "verdict": "approve",
+    "findings": [],
+    "reason": "sameDateRepairClaim still only adds receptionType retrospective on owned temporal non-life rows, preserving subject, predicate, certainty, evidence, and other non-date fields; undated rows, life predicates, fact edits, and label withdrawal stay rejected. Collapsed deltas remain replace and replay. Re-audit and publication gates are unchanged. The repairContract now matches existing year/circa Western vocabulary (finer detail stays in sourceDate) and native first-send sizes stay under 57344."
+  },
+  "productionCodeChangedSincePriorReview": false,
+  "actualCiPassingUnproven": true,
+  "initialApprovalDisproved": {
+    "review": {
+      "schemaVersion": 1,
+      "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+      "packetSha256": "e6df8be33964bc2d2fae30f7ea35beca036b7b8d91561ce9c0cbed35df1416be",
+      "revision": "e1c3ece3a292f28c58d73efae6ae280dbae03548",
+      "verdict": "approve",
+      "findings": [],
+      "reason": "Cone-mode sparse-checkout of scripts and data/people keeps the vocabulary tests, check-people-vocabulary.mjs, extractions, schemas, role/polity/reign context, and root package files. The job still runs the same node --test set, the full canonical-label scan (empty corpus still throws), Node 22, and a 10-minute timeout. No check or publication workflow is removed or relaxed."
+    },
+    "actualCiRun": 41715613586,
+    "actualCiFailure": "test-people-reception imports generate-people-pages, which imports ../functions/lib/people-shards.js, absent from sparse checkout. Local full-checkout tests were insufficient evidence.",
+    "correctiveChange": "Include functions; do not remove the reception test or any canonical data."
+  },
+  "moduleClosure": {
+    "at": "2026-11-03T20:49:11.829Z",
+    "method": "Recursive static relative import/export and literal dynamic-import dependency inspection; runtime data reads separately covered by complete data/people",
+    "roots": [
+      "scripts/test-people-vocabulary.mjs",
+      "scripts/test-people-reception.mjs",
+      "scripts/test-people-date-hints.mjs",
+      "scripts/check-people-vocabulary.mjs"
+    ],
+    "moduleCount": 35,
+    "outside": [],
+    "sharedHelpers": [
+      "functions/lib/people-shards.js"
+    ],
+    "edges": [
+      {
+        "from": "scripts/test-people-vocabulary.mjs",
+        "to": "scripts/check-people-vocabulary.mjs"
+      },
+      {
+        "from": "scripts/check-people-vocabulary.mjs",
+        "to": "scripts/lib/people-corpus.mjs"
+      },
+      {
+        "from": "scripts/lib/people-corpus.mjs",
+        "to": "scripts/build-people-extraction-packet.mjs"
+      },
+      {
+        "from": "scripts/build-people-extraction-packet.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/build-people-extraction-packet.mjs",
+        "to": "scripts/lib/people-compact.mjs"
+      },
+      {
+        "from": "scripts/lib/people-compact.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/build-people-extraction-packet.mjs",
+        "to": "scripts/lib/people-candidates.mjs"
+      },
+      {
+        "from": "scripts/lib/people-candidates.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/build-people-extraction-packet.mjs",
+        "to": "scripts/lib/people-schema.mjs"
+      },
+      {
+        "from": "scripts/lib/people-schema.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/build-people-extraction-packet.mjs",
+        "to": "scripts/lib/people-extraction-chunks.mjs"
+      },
+      {
+        "from": "scripts/lib/people-extraction-chunks.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-extraction-chunks.mjs",
+        "to": "scripts/lib/people-compact.mjs"
+      },
+      {
+        "from": "scripts/lib/people-corpus.mjs",
+        "to": "scripts/validate-people-extraction.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-date-hints.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-date-values.mjs"
+      },
+      {
+        "from": "scripts/lib/people-date-values.mjs",
+        "to": "scripts/lib/people-reception.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-reception.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/build-people-extraction-packet.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-extraction-chunks.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-schema.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-compact.mjs"
+      },
+      {
+        "from": "scripts/validate-people-extraction.mjs",
+        "to": "scripts/lib/people-presentation.mjs"
+      },
+      {
+        "from": "scripts/lib/people-presentation.mjs",
+        "to": "scripts/lib/people-date-values.mjs"
+      },
+      {
+        "from": "scripts/lib/people-corpus.mjs",
+        "to": "scripts/lib/people-candidates.mjs"
+      },
+      {
+        "from": "scripts/lib/people-corpus.mjs",
+        "to": "scripts/lib/people-compact.mjs"
+      },
+      {
+        "from": "scripts/lib/people-corpus.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-corpus.mjs",
+        "to": "scripts/lib/people-schema.mjs"
+      },
+      {
+        "from": "scripts/check-people-vocabulary.mjs",
+        "to": "scripts/lib/people-schema.mjs"
+      },
+      {
+        "from": "scripts/check-people-vocabulary.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/check-people-vocabulary.mjs",
+        "to": "scripts/validate-people-extraction.mjs"
+      },
+      {
+        "from": "scripts/test-people-reception.mjs",
+        "to": "scripts/lib/people-reception.mjs"
+      },
+      {
+        "from": "scripts/test-people-reception.mjs",
+        "to": "scripts/lib/people-date-audit.mjs"
+      },
+      {
+        "from": "scripts/lib/people-date-audit.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-date-audit.mjs",
+        "to": "scripts/lib/people-date-values.mjs"
+      },
+      {
+        "from": "scripts/lib/people-date-audit.mjs",
+        "to": "scripts/lib/people-reception.mjs"
+      },
+      {
+        "from": "scripts/test-people-reception.mjs",
+        "to": "scripts/lib/people-presentation.mjs"
+      },
+      {
+        "from": "scripts/test-people-reception.mjs",
+        "to": "scripts/generate-people-pages.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-chapter-identity.mjs"
+      },
+      {
+        "from": "scripts/lib/people-chapter-identity.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-chapter-identity.mjs",
+        "to": "scripts/lib/people-editorial-decisions.mjs"
+      },
+      {
+        "from": "scripts/lib/people-editorial-decisions.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-editorial-decisions.mjs",
+        "to": "scripts/lib/people-schema.mjs"
+      },
+      {
+        "from": "scripts/lib/people-chapter-identity.mjs",
+        "to": "scripts/lib/people-identity-seal.mjs"
+      },
+      {
+        "from": "scripts/lib/people-identity-seal.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-chapter-identity.mjs",
+        "to": "scripts/lib/people-resolution.mjs"
+      },
+      {
+        "from": "scripts/lib/people-resolution.mjs",
+        "to": "scripts/lib/people-chinese-variants.mjs"
+      },
+      {
+        "from": "scripts/lib/people-chinese-variants.mjs",
+        "to": "scripts/lib/people-chinese-variant-data.mjs"
+      },
+      {
+        "from": "scripts/lib/people-chapter-identity.mjs",
+        "to": "scripts/lib/people-identity-dossiers.mjs"
+      },
+      {
+        "from": "scripts/lib/people-identity-dossiers.mjs",
+        "to": "scripts/lib/people-identity-seal.mjs"
+      },
+      {
+        "from": "scripts/lib/people-identity-dossiers.mjs",
+        "to": "scripts/lib/people-chinese-variants.mjs"
+      },
+      {
+        "from": "scripts/lib/people-identity-dossiers.mjs",
+        "to": "scripts/lib/people-resolution.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-certified-site.mjs"
+      },
+      {
+        "from": "scripts/lib/people-certified-site.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-certified-site.mjs",
+        "to": "scripts/lib/people-qualified-scope.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-identity-evidence.mjs"
+      },
+      {
+        "from": "scripts/lib/people-identity-evidence.mjs",
+        "to": "scripts/lib/people-chapter-identity.mjs"
+      },
+      {
+        "from": "scripts/lib/people-identity-evidence.mjs",
+        "to": "scripts/lib/people-validated-chapter.mjs"
+      },
+      {
+        "from": "scripts/lib/people-validated-chapter.mjs",
+        "to": "scripts/build-people-extraction-packet.mjs"
+      },
+      {
+        "from": "scripts/lib/people-validated-chapter.mjs",
+        "to": "scripts/validate-people-extraction.mjs"
+      },
+      {
+        "from": "scripts/lib/people-validated-chapter.mjs",
+        "to": "scripts/lib/people-compact.mjs"
+      },
+      {
+        "from": "scripts/lib/people-validated-chapter.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/compile-people-catalog.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-identity-seal.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-date-audit.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-chapter-identity.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-corpus.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-generated-data.mjs"
+      },
+      {
+        "from": "scripts/lib/people-generated-data.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-schema.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-publication.mjs"
+      },
+      {
+        "from": "scripts/compile-people-catalog.mjs",
+        "to": "scripts/lib/people-resolution.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-candidates.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-validated-chapter.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-chapter-identity.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-date-audit.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-editorial-decisions.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-publication.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-generated-data.mjs"
+      },
+      {
+        "from": "scripts/lib/people-qualified-scope.mjs",
+        "to": "scripts/lib/people-identity-seal.mjs"
+      },
+      {
+        "from": "scripts/lib/people-certified-site.mjs",
+        "to": "scripts/lib/people-identity-seal.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-site.mjs"
+      },
+      {
+        "from": "scripts/lib/people-site.mjs",
+        "to": "scripts/lib/people-certified-site.mjs"
+      },
+      {
+        "from": "scripts/lib/people-site.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-reception.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-date-values.mjs"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "functions/lib/people-shards.js"
+      },
+      {
+        "from": "scripts/generate-people-pages.mjs",
+        "to": "scripts/lib/people-presentation.mjs"
+      },
+      {
+        "from": "scripts/test-people-reception.mjs",
+        "to": "scripts/validate-people-extraction.mjs"
+      },
+      {
+        "from": "scripts/test-people-reception.mjs",
+        "to": "scripts/lib/people-date-values.mjs"
+      },
+      {
+        "from": "scripts/test-people-date-hints.mjs",
+        "to": "scripts/lib/people-date-hints.mjs"
+      },
+      {
+        "from": "scripts/test-people-date-hints.mjs",
+        "to": "scripts/normalize-people-date-hints.mjs"
+      },
+      {
+        "from": "scripts/normalize-people-date-hints.mjs",
+        "to": "scripts/lib/people-corpus.mjs"
+      },
+      {
+        "from": "scripts/normalize-people-date-hints.mjs",
+        "to": "scripts/lib/people-date-hints.mjs"
+      },
+      {
+        "from": "scripts/normalize-people-date-hints.mjs",
+        "to": "scripts/lib/people-content.mjs"
+      },
+      {
+        "from": "scripts/normalize-people-date-hints.mjs",
+        "to": "scripts/lib/people-compact.mjs"
+      }
+    ]
+  },
+  "generatorImports": "#!/usr/bin/env node\nimport { IDENTITY_UNCERTAINTY_NOTE } from './lib/people-chapter-identity.mjs';\n\nimport fs from 'node:fs';\nimport { createRequire } from 'node:module';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\nimport {\n  chapterPath,\n  chineseText,\n  englishText,\n  readJson,\n  REPO_ROOT,\n  sourceUnitAt,\n  writeJsonAtomic,\n  writeTextAtomic,\n} from './lib/people-content.mjs';\nimport { assertPeopleSiteCertificate } from './lib/people-certified-site.mjs';\nimport { loadPeopleSiteContext } from './lib/people-site.mjs';\nimport { personClaimReception } from './lib/people-reception.mjs';\nimport { boundedDateLabel } from './lib/people-date-values.mjs';\nimport {\n  PERSON_PAGE_SHARD_COUNT,\n  personIdSlugSuffix,\n  personPageShardName,\n} from '../functions/lib/people-shards.js';\nimport {\n  formatPersonWesternYear,\n  humanizePeopleValue,\n  personAlternateNames,\n  personCoherentActivityClaims,\n  personDisplayName,\n  personFullDisplayName,\n  personLifeSummary,\n  personPublicDescription,\n  personPublicAliases,\n  representativePersonYear,\n} from './lib/people-presentation.mjs';\n\nconst isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);\nconst SITE_URL = (process.env.SITE_URL || 'https://24histories.com').replace(/\\/$/u, '');\nconst SEARCH_PART_MAX_BYTES = 6 * 1024 * 1024;\nconst SEARCH_FEATURED_COUNT = 120;\nconst FEATURED_PEOPLE_COUNT = 12;\nconst FAMILY_TREE_MAX_PEOPLE = 36;\nconst KEY_SOURCE_COUNT = 5;\nconst CLAIM_PREVIEW_COUNT = 6;\nconst REFERENCE_FILTER_THRESHOLD = 8;\nconst PEOPLE_ASSET_VERSION = '20260815-people-record-v6';\nconst PEOPLE_SEARCH_ASSET_VERSION = '20260909-people-search-v2';",
+  "sharedRuntimeHelper": "export const PERSON_PAGE_SHARD_COUNT = 1024;\nconst PERSON_ID_PATTERN = /^per_([0-9A-HJKMNP-TV-Z]{20})$/u;\nconst PERSON_SLUG_SUFFIX_PATTERN = /(?:^|-)([0-9a-hjkmnp-tv-z]{8})$/u;\n\nexport function normalizePersonPageSlug(value) {\n  return String(value ?? '').replace(/\\.html$/u, '');\n}\n\nexport function personIdSlugSuffix(value) {\n  const match = PERSON_ID_PATTERN.exec(String(value ?? ''));\n  if (!match) throw new Error(`Invalid canonical person ID: ${value}`);\n  return match[1].slice(0, 8).toLocaleLowerCase('en');\n}\n\nexport function personPageSlugSuffix(value) {\n  return PERSON_SLUG_SUFFIX_PATTERN.exec(normalizePersonPageSlug(value))?.[1] ?? null;\n}\n\nexport function personPageShardName(value) {\n  const slug = normalizePersonPageSlug(value);\n  let hash = 0x811c9dc5;\n  for (let index = 0; index < slug.length; index += 1) {\n    hash ^= slug.charCodeAt(index);\n    hash = Math.imul(hash, 0x01000193) >>> 0;\n  }\n  return String(hash % PERSON_PAGE_SHARD_COUNT).padStart(4, '0');\n}\n"
+}

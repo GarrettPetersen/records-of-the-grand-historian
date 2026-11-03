@@ -1,0 +1,417 @@
+{
+  "at": "2026-11-03T20:49:11.829Z",
+  "method": "Recursive static relative import/export and literal dynamic-import dependency inspection; runtime data reads separately covered by complete data/people",
+  "roots": [
+    "scripts/test-people-vocabulary.mjs",
+    "scripts/test-people-reception.mjs",
+    "scripts/test-people-date-hints.mjs",
+    "scripts/check-people-vocabulary.mjs"
+  ],
+  "moduleCount": 35,
+  "outside": [],
+  "sharedHelpers": [
+    "functions/lib/people-shards.js"
+  ],
+  "edges": [
+    {
+      "from": "scripts/test-people-vocabulary.mjs",
+      "to": "scripts/check-people-vocabulary.mjs"
+    },
+    {
+      "from": "scripts/check-people-vocabulary.mjs",
+      "to": "scripts/lib/people-corpus.mjs"
+    },
+    {
+      "from": "scripts/lib/people-corpus.mjs",
+      "to": "scripts/build-people-extraction-packet.mjs"
+    },
+    {
+      "from": "scripts/build-people-extraction-packet.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/build-people-extraction-packet.mjs",
+      "to": "scripts/lib/people-compact.mjs"
+    },
+    {
+      "from": "scripts/lib/people-compact.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/build-people-extraction-packet.mjs",
+      "to": "scripts/lib/people-candidates.mjs"
+    },
+    {
+      "from": "scripts/lib/people-candidates.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/build-people-extraction-packet.mjs",
+      "to": "scripts/lib/people-schema.mjs"
+    },
+    {
+      "from": "scripts/lib/people-schema.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/build-people-extraction-packet.mjs",
+      "to": "scripts/lib/people-extraction-chunks.mjs"
+    },
+    {
+      "from": "scripts/lib/people-extraction-chunks.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-extraction-chunks.mjs",
+      "to": "scripts/lib/people-compact.mjs"
+    },
+    {
+      "from": "scripts/lib/people-corpus.mjs",
+      "to": "scripts/validate-people-extraction.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-date-hints.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-date-values.mjs"
+    },
+    {
+      "from": "scripts/lib/people-date-values.mjs",
+      "to": "scripts/lib/people-reception.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-reception.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/build-people-extraction-packet.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-extraction-chunks.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-schema.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-compact.mjs"
+    },
+    {
+      "from": "scripts/validate-people-extraction.mjs",
+      "to": "scripts/lib/people-presentation.mjs"
+    },
+    {
+      "from": "scripts/lib/people-presentation.mjs",
+      "to": "scripts/lib/people-date-values.mjs"
+    },
+    {
+      "from": "scripts/lib/people-corpus.mjs",
+      "to": "scripts/lib/people-candidates.mjs"
+    },
+    {
+      "from": "scripts/lib/people-corpus.mjs",
+      "to": "scripts/lib/people-compact.mjs"
+    },
+    {
+      "from": "scripts/lib/people-corpus.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-corpus.mjs",
+      "to": "scripts/lib/people-schema.mjs"
+    },
+    {
+      "from": "scripts/check-people-vocabulary.mjs",
+      "to": "scripts/lib/people-schema.mjs"
+    },
+    {
+      "from": "scripts/check-people-vocabulary.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/check-people-vocabulary.mjs",
+      "to": "scripts/validate-people-extraction.mjs"
+    },
+    {
+      "from": "scripts/test-people-reception.mjs",
+      "to": "scripts/lib/people-reception.mjs"
+    },
+    {
+      "from": "scripts/test-people-reception.mjs",
+      "to": "scripts/lib/people-date-audit.mjs"
+    },
+    {
+      "from": "scripts/lib/people-date-audit.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-date-audit.mjs",
+      "to": "scripts/lib/people-date-values.mjs"
+    },
+    {
+      "from": "scripts/lib/people-date-audit.mjs",
+      "to": "scripts/lib/people-reception.mjs"
+    },
+    {
+      "from": "scripts/test-people-reception.mjs",
+      "to": "scripts/lib/people-presentation.mjs"
+    },
+    {
+      "from": "scripts/test-people-reception.mjs",
+      "to": "scripts/generate-people-pages.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-chapter-identity.mjs"
+    },
+    {
+      "from": "scripts/lib/people-chapter-identity.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-chapter-identity.mjs",
+      "to": "scripts/lib/people-editorial-decisions.mjs"
+    },
+    {
+      "from": "scripts/lib/people-editorial-decisions.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-editorial-decisions.mjs",
+      "to": "scripts/lib/people-schema.mjs"
+    },
+    {
+      "from": "scripts/lib/people-chapter-identity.mjs",
+      "to": "scripts/lib/people-identity-seal.mjs"
+    },
+    {
+      "from": "scripts/lib/people-identity-seal.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-chapter-identity.mjs",
+      "to": "scripts/lib/people-resolution.mjs"
+    },
+    {
+      "from": "scripts/lib/people-resolution.mjs",
+      "to": "scripts/lib/people-chinese-variants.mjs"
+    },
+    {
+      "from": "scripts/lib/people-chinese-variants.mjs",
+      "to": "scripts/lib/people-chinese-variant-data.mjs"
+    },
+    {
+      "from": "scripts/lib/people-chapter-identity.mjs",
+      "to": "scripts/lib/people-identity-dossiers.mjs"
+    },
+    {
+      "from": "scripts/lib/people-identity-dossiers.mjs",
+      "to": "scripts/lib/people-identity-seal.mjs"
+    },
+    {
+      "from": "scripts/lib/people-identity-dossiers.mjs",
+      "to": "scripts/lib/people-chinese-variants.mjs"
+    },
+    {
+      "from": "scripts/lib/people-identity-dossiers.mjs",
+      "to": "scripts/lib/people-resolution.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-certified-site.mjs"
+    },
+    {
+      "from": "scripts/lib/people-certified-site.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-certified-site.mjs",
+      "to": "scripts/lib/people-qualified-scope.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-identity-evidence.mjs"
+    },
+    {
+      "from": "scripts/lib/people-identity-evidence.mjs",
+      "to": "scripts/lib/people-chapter-identity.mjs"
+    },
+    {
+      "from": "scripts/lib/people-identity-evidence.mjs",
+      "to": "scripts/lib/people-validated-chapter.mjs"
+    },
+    {
+      "from": "scripts/lib/people-validated-chapter.mjs",
+      "to": "scripts/build-people-extraction-packet.mjs"
+    },
+    {
+      "from": "scripts/lib/people-validated-chapter.mjs",
+      "to": "scripts/validate-people-extraction.mjs"
+    },
+    {
+      "from": "scripts/lib/people-validated-chapter.mjs",
+      "to": "scripts/lib/people-compact.mjs"
+    },
+    {
+      "from": "scripts/lib/people-validated-chapter.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/compile-people-catalog.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-identity-seal.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-date-audit.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-chapter-identity.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-corpus.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-generated-data.mjs"
+    },
+    {
+      "from": "scripts/lib/people-generated-data.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-schema.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-publication.mjs"
+    },
+    {
+      "from": "scripts/compile-people-catalog.mjs",
+      "to": "scripts/lib/people-resolution.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-candidates.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-validated-chapter.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-chapter-identity.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-date-audit.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-editorial-decisions.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-publication.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-generated-data.mjs"
+    },
+    {
+      "from": "scripts/lib/people-qualified-scope.mjs",
+      "to": "scripts/lib/people-identity-seal.mjs"
+    },
+    {
+      "from": "scripts/lib/people-certified-site.mjs",
+      "to": "scripts/lib/people-identity-seal.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-site.mjs"
+    },
+    {
+      "from": "scripts/lib/people-site.mjs",
+      "to": "scripts/lib/people-certified-site.mjs"
+    },
+    {
+      "from": "scripts/lib/people-site.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-reception.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-date-values.mjs"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "functions/lib/people-shards.js"
+    },
+    {
+      "from": "scripts/generate-people-pages.mjs",
+      "to": "scripts/lib/people-presentation.mjs"
+    },
+    {
+      "from": "scripts/test-people-reception.mjs",
+      "to": "scripts/validate-people-extraction.mjs"
+    },
+    {
+      "from": "scripts/test-people-reception.mjs",
+      "to": "scripts/lib/people-date-values.mjs"
+    },
+    {
+      "from": "scripts/test-people-date-hints.mjs",
+      "to": "scripts/lib/people-date-hints.mjs"
+    },
+    {
+      "from": "scripts/test-people-date-hints.mjs",
+      "to": "scripts/normalize-people-date-hints.mjs"
+    },
+    {
+      "from": "scripts/normalize-people-date-hints.mjs",
+      "to": "scripts/lib/people-corpus.mjs"
+    },
+    {
+      "from": "scripts/normalize-people-date-hints.mjs",
+      "to": "scripts/lib/people-date-hints.mjs"
+    },
+    {
+      "from": "scripts/normalize-people-date-hints.mjs",
+      "to": "scripts/lib/people-content.mjs"
+    },
+    {
+      "from": "scripts/normalize-people-date-hints.mjs",
+      "to": "scripts/lib/people-compact.mjs"
+    }
+  ]
+}

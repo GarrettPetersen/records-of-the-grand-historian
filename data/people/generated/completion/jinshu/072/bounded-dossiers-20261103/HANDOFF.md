@@ -1,3 +1,56 @@
+# Final bounded checkpoint — 2026-11-03T20:57:17.779558+00:00
+
+Exact PR5366 HEAD9dfe3dbc6c6483df9daa15bbf9c1bd3df8a4ef61 is independently
+approved. Corrected vocabulary CI41716284711 PASSED:24tests,2050canonical extractions,
+0errors; job20:50:41–20:52:54UTC (within unchanged10min limit). Current full-site
+CI41716284850 remains active in checkout. Do not merge until that required check
+passes on exact head. Do not restart active jobs because a poll expires.
+All local source/model/review jobs are terminal; no chapter claims were released.
+Source080 has3/6validated repairs, not approval. Next bounded task group4 remains
+available while release CI runs. Live4cd is fully verified; old paragraphs saying
+its deployment or vocabulary check are active are historical observations.
+Costs for this coordinator:207.933raw cents,$0charged,5SDK runs
+(four code reviews,one original-author source correction). Included allowance used;
+zero new completed/published chapters. Full metrics and provenance in current-
+completion-progress.json under080retained-date-recovery. Preserve all source gates.
+
+---
+
+# Latest release/CI checkpoint — 2026-11-03T20:55:38.068192+00:00
+
+Read this before the earlier source checkpoint below. Source080 remains 3/6accepted,
+no active source model. Candidate3/actual61changes/sha583328/native validation preserved.
+Memory guard passes (pressure1), no app restart or process cleanup was needed.
+Master4cd is now canonical/live on deployment5dc1737a and passed112checks,72pages,
+33redirects. New live receipt ../../080/retained-date-recovery-20261103/producer-contract-live-release-receipt.json;
+exact current metrics ../../080/retained-date-recovery-20261103/current-completion-progress.json.
+No newly complete or published chapter; whole Jinshu ebook still unready.
+
+PR5366 CURRENT HEAD9dfe3dbc6c6483df9daa15bbf9c1bd3df8a4ef61 (runtime same branch,
+tracked clean except node_modules). Production-code32 review remains valid unchanged.
+Additional vocabulary checkout fix is independently approved on exact9dfe:
+reviewer run run-9a042a73-e20e-4fd6-bbdd-c798b8d95ea0, agentbc-74dd257a-d700-4154-863d-950a6fc95d38.
+Keep scripts, functions, complete data/people, root cone-mode files. All existing
+quality checks and10min timeout remain. Old e1c review approved an incomplete checkout;
+actualCI41715613586 disproved it (missing functions/lib/people-shards.js). That report
+is historical, NOT merge approval. Corrected proof includes35-module import closure.
+Local24vocabulary tests/2050canonical extractions pass. Exact-head vocabulary CI
+41716284711 and full-site CI41716284850 are still active; observe them without restart.
+Merge only when exact-head required checks pass, then verify actual new deployment.
+Do not use earlier032 CI or old approval to bypass current checks.
+
+Next bounded source task remains original worker group4 (command below). Local
+staged repairs may proceed on independently reviewed production code while release
+CI runs; CI gates publication, not local staging. Preserve original claims, source,
+failed080audit, all raw artifacts and max3round circuit. Fresh independent re-audit
+still required after all six groups. Do not overwrite sealed admission evidence.
+
+Recovery branch latest completed checkpoint before this final backup:fe15f5602c2db3102672025424b4f8e0d0406b03.
+Determine newest remote recovery head/receipt rather than trusting historical embedded
+pointers. Private memory cleanup receipts and private build logs stay local.
+
+---
+
 # Completion checkpoint — 2026-11-03T20:40:41.359939+00:00
 
 Full goal remains Jinshu ebook readiness, then all histories. Only Jinshu053 is
