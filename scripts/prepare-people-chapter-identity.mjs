@@ -19,6 +19,7 @@ import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityRevie
 import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
+const MAX_REVIEW_TRANSPORT_BYTES = 768 * 1024;
 export async function buildChapterIdentityReviewPacket({ book, chapter, registry }) {
   need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
   const inputs = chapterIdentityInputs(book, chapter), scope = { book, chapter }, matcher = loadProperNounMatcher();
@@ -69,11 +70,31 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
     const transport = compactChapterIdentityReviewPacket(packet);
     const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
-    need(transportBytes.length <= 768 * 1024, 'Source-complete review transport exceeds the inspected bound; preserve evidence and split the work without truncating it');
+    need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES, 'Source-complete review transport exceeds the inspected bound; preserve evidence and split the work without truncating it');
     receipt.sourcePacketSha256 = identityArtifactHash(bytes); receipt.transportSha256 = identityArtifactHash(transportBytes); receipt.transportBytes = transportBytes.length;
     return { plan, packet, transport, receipt };
   } finally { index.close(); }
 }
+
+// Write the exact byte encodings sealed by preparation. The source packet is
+// readable JSON; the model transport is compact JSON and its bound/hash apply to
+// that actual file, not to an encoding that was never written.
+export function writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt }) {
+  const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
+  const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+  need(sourceBytes.length === receipt.packetBytes && identityArtifactHash(sourceBytes) === receipt.sourcePacketSha256,
+    'Sealed source packet bytes do not match preparation receipt');
+  need(transportBytes.length === receipt.transportBytes && identityArtifactHash(transportBytes) === receipt.transportSha256,
+    'Sealed transport bytes do not match preparation receipt');
+  need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES, 'Source-complete review transport exceeds the inspected bound');
+  fs.mkdirSync(out, { recursive: false });
+  for (const [file, bytes] of [
+    ['plan.json', Buffer.from(JSON.stringify(plan, null, 2) + '\n')],
+    ['source-review-packet.json', sourceBytes], ['transport-packet.json', transportBytes],
+    ['preparation-receipt.json', Buffer.from(JSON.stringify(receipt, null, 2) + '\n')],
+  ]) fs.writeFileSync(path.join(out, file), bytes, { flag: 'wx' });
+}
+
 export async function prepareChapterIdentityReview({ out, ...options }) {
   const { book, chapter, registry } = options, savedPath = chapterIdentityReviewPath(book, chapter);
   if (fs.existsSync(savedPath)) {
@@ -110,10 +131,7 @@ export async function prepareChapterIdentityReview({ out, ...options }) {
     } finally { index.close(); }
   }
   const { plan, packet, transport, receipt } = await buildChapterIdentityReviewPacket(options);
-  fs.mkdirSync(out, { recursive: false });
-  for (const [file, value] of [['plan.json', plan], ['source-review-packet.json', packet], ['transport-packet.json', transport], ['preparation-receipt.json', receipt]]) {
-    fs.writeFileSync(path.join(out, file), JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
-  }
+  writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt });
   return receipt;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
