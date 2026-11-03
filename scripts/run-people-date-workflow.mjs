@@ -248,12 +248,17 @@ if (o['dry-run']) {
           };
           const result=await runDateWorkflow(target,guardedWorker,{...options,validateExtraction,saveReviewPlan,generationId:reserved.generationId});
           console.log(`${key}: ${result.status}`);
-          outcomes.push({book:target.book,chapter:target.chapter,status:result.status});
+          outcomes.push({book:target.book,chapter:target.chapter,status:result.status,
+            ...(result.researchPreflight?{reason:result.reason,researchPreflight:result.researchPreflight}:{})});
           if(result.status==='audited')approved+=1;
           if(result.status!=='audited')process.exitCode=1;
           mutateRemotePeopleWorkLedger(ledger=>{
             const claim=ledger.dateAudits?.[key];if(!claim||claim.executorToken!==executorToken)throw new Error('Lost date reservation');
             claim.status=result.status==='audited'?'ready':result.status==='research-blocked'?'research-blocked':'active';
+            if(result.researchPreflight) {
+              claim.researchPreflights??=[];
+              if(!claim.researchPreflights.some(item=>item.contentHash===result.researchPreflight.contentHash))claim.researchPreflights.push(result.researchPreflight);
+            }
           },{message:`Date review outcome ${key}`});
         }catch(error){
           if(o.lane==='openrouter' && error.status===429) control.stopRequested=true;

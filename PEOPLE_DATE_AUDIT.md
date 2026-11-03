@@ -196,6 +196,15 @@ The host validates all artifacts; a bot does not commit, publish or approve itse
 Use `--retry-blocked` only after obtaining the missing research. Explicit
 `--release --book BOOK --chapter NNN --worker ID` frees an abandoned assignment
 without deleting local recovery files and does not require paid execution.
+
+Before a new independent re-audit starts, explicit unresolved items cause a
+`research-blocked` preflight instead of a model dispatch. The summary and shared
+claim history identify the pinned candidate and a packet containing affected people,
+claims and cited Chinese units. Resolve the source questions or preserve the hold;
+do not clear flags merely to pass. Amend an unreviewed candidate through the normal
+source-backed repair path, then use `--retry-blocked` for the required fresh audit.
+Already-owned re-audit work retains its existing recovery path.
+
 The direct Cursor runner also enforces the campaign capacity calendar. An explicit
 `--cursor-capacity-start` or `PEOPLE_CURSOR_CAPACITY_START` override must represent
 verified available capacity, not a way to bypass the pause. Inspect the printed

@@ -40,6 +40,11 @@ const end=source.indexOf('},{message:`Reserve date audit ${key}`}).result;',star
 assert.ok(start>=0 && end>start,'production reservation callback anchors must be present');
 assert.equal(source.indexOf(marker,start+1),-1,'reservation callback must be unambiguous');
 const body=source.slice(start+marker.length,end);
+const outcomeMarker='mutateRemotePeopleWorkLedger(ledger=>{';
+const outcomeStart=source.indexOf(outcomeMarker,source.indexOf("if(result.status!=='audited')process.exitCode=1;"));
+const outcomeEnd=source.indexOf('},{message:`Date review outcome ${key}`});',outcomeStart);
+assert.ok(outcomeStart>=0 && outcomeEnd>outcomeStart,'production outcome callback anchors must be present');
+const makeOutcome=new Function('key','executorToken','result',`return ledger=>{${source.slice(outcomeStart+outcomeMarker.length,outcomeEnd)}}`);
 const makeCallback=new Function('o','key','target','packet','executorToken','leaseMs','dateExecutorIsBusy','claimIsActive','extractionClaimBlocksDateAudit','fs','path','os','dateWorkflowDirectory','readJson','assertCompletedGenerationSafe','CompletedDateGenerationHold','randomUUID',`return ledger=>{${body}}`);
 const reconcileMarker='mutateRemotePeopleWorkLedger(ledger=>{';
 const reconcileStart=source.indexOf(reconcileMarker,source.indexOf('// Recover a completed host publication'));
@@ -91,6 +96,32 @@ test('other worker cannot take stale-source, even after lease expiry',()=>{
 test('other lane cannot take stale-source with same worker',()=>{
   const claim=prior();save(claim);assert.equal(run(callback({lane:'manual'})),null);
   assert.deepEqual(read().dateAudits[key],claim);
+});
+
+test('research preflight outcome preserves ownership and deduplicates pinned history',()=>{
+  const claim=prior({status:'active',executorToken:'preflight-owner-token',
+    executorExpiresAt:new Date(Date.now()+3600000).toISOString()});save(claim);
+  const researchPreflight={file:'research-preflight-1-fixture.json',contentHash:`sha256:${'c'.repeat(64)}`,
+    sourceHash:claim.sourceHash,extractionHash:`sha256:${'d'.repeat(64)}`,candidateFile:'candidate-1.json',round:1,unresolvedItems:1};
+  const outcome=makeOutcome(key,'preflight-owner-token',{status:'research-blocked',researchPreflight});
+  run(outcome);run(outcome);
+  const held=read().dateAudits[key];
+  assert.equal(held.status,'research-blocked');
+  assert.equal(held.worker,claim.worker);
+  assert.equal(held.executorToken,claim.executorToken);
+  assert.deepEqual(held.jobs,claim.jobs);
+  assert.deepEqual(held.researchPreflights,[researchPreflight]);
+  run(makeOutcome(key,'preflight-owner-token',{status:'audited'}));
+  assert.equal(read().dateAudits[key].status,'ready');
+  assert.deepEqual(read().dateAudits[key].researchPreflights,[researchPreflight]);
+});
+
+test('research preflight cannot update another executor reservation',()=>{
+  save(prior({status:'active',executorToken:'actual-owner-token',
+    executorExpiresAt:new Date(Date.now()+3600000).toISOString()}));
+  const before=read();
+  assert.throws(()=>run(makeOutcome(key,'intruder-token',{status:'research-blocked',researchPreflight:{file:'untrusted'}})),/Lost date reservation/);
+  assert.deepEqual(read(),before);
 });
 test('changed stale-source fingerprint remains untouched even with retained publish phase',()=>{
   fs.mkdirSync(workflow,{recursive:true});fs.writeFileSync(path.join(workflow,'state.json'),JSON.stringify({phase:'publish'}));
