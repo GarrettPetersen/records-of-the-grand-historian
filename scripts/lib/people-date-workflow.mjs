@@ -7,7 +7,7 @@ import { normalizeExtractionDateHints } from './people-date-hints.mjs';
 import { dateWorkerInput } from './people-date-worker.mjs';
 import { mapDateReviewJobs } from './people-date-concurrency.mjs';
 import { reconcileRetrospectiveValue, reconcileRetrospectiveProposal } from './people-reception-reconciliation.mjs';
-import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent, unresolvedDateAuditItems } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
 import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
 import {
@@ -819,6 +819,28 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const original = readJson(path.join(options.peopleDir ?? PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
   for (; state.round <= (options.maxRounds ?? 3);) {
     let active = state.candidate ? buildDateAuditPacket(book, chapter, { ...options, extraction: readJson(path.join(directory, state.candidate)) }) : packet;
+    // A fresh re-audit cannot approve an explicitly unresolved candidate. Keep
+    // retained review ownership intact, and route new work to focused research
+    // before buying another complete source review.
+    const reviewPrefix = `reaudit-${state.round}-`;
+    const unresolved = state.phase === 'reaudit' ? unresolvedDateAuditItems(active) : [];
+    const reviewStarted = unresolved.length > 0 && (Object.keys(state.jobs).some(key => key.startsWith(reviewPrefix)) ||
+      fs.readdirSync(directory).some(name => name.startsWith(reviewPrefix)));
+    if (unresolved.length && !reviewStarted) {
+      const people = new Set(unresolved.map(item => item.personId));
+      const units = new Set(unresolved.flatMap(item => item.evidence));
+      const preflight = {schemaVersion:1,kind:'date-reaudit-research-preflight',book,chapter,
+        sourceHash:active.sourceHash,extractionHash:active.extractionHash,round:state.round,candidateFile:state.candidate,
+        items:unresolved,people:active.people.filter(person=>people.has(person.id)),
+        units:active.units.filter(unit=>units.has(unit.id))};
+      const preflightFile = `research-preflight-${state.round}-${hash(preflight).slice(7,27)}.json`;
+      const file = path.join(directory,preflightFile);
+      if (fs.existsSync(file) && !same(readJson(file),preflight)) throw new Error('Retained research preflight changed');
+      if (!fs.existsSync(file)) writeJsonAtomic(file,preflight);
+      return {status:'research-blocked',reason:`${unresolved.length} unresolved date items require focused source research before a fresh re-audit.`,
+        researchPreflight:{file:preflightFile,contentHash:hash(preflight),sourceHash:active.sourceHash,
+          extractionHash:active.extractionHash,candidateFile:state.candidate,round:state.round,unresolvedItems:unresolved.length}};
+    }
     if (state.phase === 'audit' || state.phase === 'reaudit') {
       const {key:planKey,plan,jobs} = retainedDateReviewJobs(active,state,options);
       save();
