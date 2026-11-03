@@ -1,81 +1,68 @@
-# Current bounded completion handoff — November 3, 2026
+# Completion handoff — November 3, 2026
 
-Full goal remains Jinshu ebook readiness, then all histories. Only Jinshu053 is
-complete/published. No new chapter completed in this batch. This is a source-audit
-checkpoint; next coordinator starts from next-repair-work-order.json below.
-Read CURRENT-STATE.json for exact revisions and current native source state.
+Full goal remains Jinshu ebook readiness, then all histories. Only Jinshu 053 is
+complete/published. ZERO new chapters this batch. Read CURRENT-STATE.json and follow
+AGENTS.md/PEOPLE_COMPLETION_PROCESS.md; no broad extraction or pair-graph scheduler.
 
-Engineering release complete: PR5364 master9fb028cbfa31abbf88e24f642dd8516d4713c258,
-requiredCI41666026318 success, independent code approval,39identity tests. Cloudflare
-85d5ea66-628e-4394-8eab-3124f7eb883c is successful/canonical. Live verification passed
-112HTTPchecks/72person pages/33redirects at16:38:36Z, including bilingual links,
-uncertainty/search/sitemap/progress/PNG and exact CI certificate inputs. Source data
-unchanged in that release. See live-transport-release-receipt.json and
-release-progress-transport.json. No new deploy/review for053 needed.
-Registry memory repair PR5363:151.32s/1.10GiBRSS,228270dossiers/258210records,
-ZERO generated pair assignments. Bounded indexed dossiers remain the required path.
+PR 5364 is live: master 9fb028cbfa31abbf88e24f642dd8516d4713c258,
+required CI 41666026318 success, independent approval, 39 identity tests. Cloudflare
+85d5ea66-628e-4394-8eab-3124f7eb883c succeeded/canonical. Live checker passed 112 HTTP
+checks, 72 person pages and 33 redirects, including bilingual links, uncertainty,
+search/sitemap/progress/PNG and exact CI inputs. See live-transport-release-receipt.json.
+Registry memory fix: 151.32 s, 1.10 GiB RSS, 228270 dossiers, zero generated pairs.
 
-080 COMPLETE initial date audit:16/16 original ranges,355source units,344date
-items,125people,76finding groups. Native schema/coverage/reference checks pass.
-Result needs-revision; no research hold or false approval substituted. All source,
-extraction, claims, original ownership and paid artifacts retained. Normal native
-workflow installed the full failed report and transitioned to repair round0.
-No model/executor remains active. No repair model has started.
+080 initial date audit is COMPLETE: all 16 original jobs, 355 source units,
+344 date items, 125 people, 76 findings. Native schema/coverage/reference checks pass.
+Result needs-revision; normal workflow installed the failed report and is now repair
+round 0. No model/executor active. Six repair packets fit the unchanged 56 KiB limit;
+largest 56674 bytes. Source/extraction/ownership unchanged. No repair model started.
 
-Staging0726d158e700971f93906750b12fb5c0cc46538c publishes only that negative080audit,
-its prior audited report archived under date-audit-history, and coverage receipt.
-Exact source/extraction bytes matched staging before publication; all previous tree
-entries preserved via host temp-index commit. Master9fb is unchanged. Staging date
-receipt counts now7Jinshu/257corpus; stale5/142.072 still has challenged GuoYuan
-approval/OpenRouter ownership. Fully complete/published remains1/1. Deployed native
-receipt counts remain8/258 with072 AND080 held; do not confuse staging with live.
-See staging-progress-after-080-audit.json for full qualified/partial counts.
+Staging 0726d158e700971f93906750b12fb5c0cc46538c contains only the negative audit,
+prior approval history and coverage receipt beyond prior staging. Master is unchanged.
+Staging current date receipts: Jinshu 7 / corpus 257, stale 5 / 142. The counted 072
+approval still has retained Guo Yuan findings and sticky OpenRouter ownership; keep
+it held. Deployed native receipts remain 8 / 258, with 072 and 080 held. Fully complete
+and live published remain 1 / 1. See staging-progress-after-080-audit.json.
 
-Next work: ../080/retained-date-recovery-20261103/next-repair-work-order.json.
-Six native repair packets were measured at unchanged56KiB; largest56674bytes.
-Resume SAME worker jinshu-release-dates-cursor-sdk using host helper:
-node ../080/retained-date-recovery-20261103/resume-one-review.mjs --attempt repair-round-0-group-1 --jobs 1
-(run from this directory, or use its absolute path). Helper now supports native
-repair/reaudit phases, enforces serial repairs, refuses circuit-breaker/round>=3,
-uses unchanged3$/4Mtoken/20min limits and sends exactly one SIGINT after one newly
-captured run to stop queued launches and drain active work. Syntax and serial-repair
-rejection-before-dispatch checked. Original successful audit journals are unchanged.
-Check real PID/remote state before resuming any retained attempt. Do not launch a
-duplicate executor or send a second signal for routine rotation. Repair groups use
-current candidate chronology; then fresh independent re-audit, never repair-author
-self-approval. Preserve max3round/repeated-candidate/nonimprovement circuit breakers.
-Genuinely undated facts can use supported undatedSourceAttestation; unresolved
-research remains held. No guessed endpoints or source/approval hash rewriting.
+NEXT: ../080/retained-date-recovery-20261103/next-repair-work-order.json.
+Same worker jinshu-release-dates-cursor-sdk. After guard and actual process/ledger
+inspection, run its absolute command: resume-one-review.mjs --attempt
+repair-round-0-group-1 --jobs 1. Helper supports native repair/reaudit phases, enforces
+serial repair, refuses circuit breakers/round >=3, and sends ONE SIGINT after one
+new run to stop queued work while active work drains. Never send a second signal for
+routine rotation. Limits remain $3 / 4M tokens / 20 minutes. Finish all six normal
+repair groups, then fresh independent re-audit; no repair-author self-approval.
+Undated source facts may use supported undatedSourceAttestation; unresolved research
+stays held. Preserve complete coverage and every editorial/date/identity/site/ebook/
+CI/live gate. No stale approval hash rewriting. Host alone publishes exact files.
 
-Canonical code runtime /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime
-is sparse/detached9fb/no public/dependencies linked. Native worker uses
-PEOPLE_REPO_ROOT=/Users/garrettpetersen/records-of-the-grand-historian to preserve
-080 state/source/extraction and the newly installed failed audit. Keep dirty primary
-and086 checkouts/index untouched. Host alone Git/build/publication. No new checkout,
-native subagents or broad extraction. One local heavy job,3GiBheap; guard before,
-after and every45–60s. Native host helper samples every45s. No guard weakening.
+Runtime /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime is sparse,
+detached at 9fb, no public, dependencies linked. Native commands use PEOPLE_REPO_ROOT
+pointing to /Users/garrettpetersen/records-of-the-grand-historian, preserving ignored
+080 state and failed report. Keep dirty primary/086 checkouts and index untouched.
+No new checkout/native subagent. One local heavy job, 3 GiB heap, resource guard
+before/after and every 45–60 seconds. Native helper samples every 45 seconds.
 
-Source-audit usage today:11 new Cursor SDK Grok4.6 runs,5 original cached reused,
-raw1672.7084cents, charged0,9666511tokens. Included allowance was consumed; charged0
-is not free capacity. One305.7104c run crossed unchanged300c ceiling; native read-only
-recovery retained its valid artifact with no additional model turn and overshoot
-unchanged. Other transient stream/usage reads recovered original handles. Do not
-claim account quota exhaustion from those transient errors. See audit-cost-receipt.
-One-hour throughput remains unproven; current bottleneck is genuine chronology
-repair debt rather than pair enumeration. Generic paid identity scheduling still
-needs production integration; normal bounded prepare/record/publication gates exist.
-Do not use old deadline resolution waves or complete same-name pair graphs.
-Fresh identity preparations require current immutable registry after code/source
-changes; preserve/revalidate unchanged source-case proofs rather than retagging seals.
+Recovery branch codex/people-recovery-20261025 checkpoint
+70860b5afbd7090f3450f2e9daecd5ec14ba76d3 preserves all 16 normalized reports,
+new raw bytes, full failed report/history, live proof, admission preview and work order.
+Previous tree retained. Original five October raw files were never locally archived;
+normalized reports/remote hashes retained. Never fabricate original raw bytes.
+Offline regressions: 225 workflow/worker/campaign + 36 ownership = 261 pass.
+Serial-repair rejection checked before dispatch. Canonical runtime remains clean
+apart from its dependency symlink. One-hour throughput remains unproven.
 
-Latest selective recovery checkpoint path is in CURRENT-STATE.json; final complete
-negative-audit receipt follows this handoff. Previous recovery tree entries stay.
-Original five October normalized reports exist; old raw hashes were not locally
-archived by that runner. Never fabricate raw bytes or relabel normalized hashes.
+Today’s audit: 11 new Cursor SDK Grok 4.6 runs, five cached reused, $16.727084 raw,
+$0 charged, 9666511 tokens. Included allowance was consumed. One $3.057104 run crossed
+the unchanged $3 ceiling; native zero-inference recovery preserved its valid output
+and actual usage. No account-quota exhaustion was reported. Next bottleneck is six
+chronology repair groups, not pair enumeration. Generic paid identity scheduling
+still needs integration; normal bounded prepare/record/publication gates exist.
+Fresh preparations need a genuinely current registry after source/code changes;
+reuse valid case proofs normally, never retag old seals.
 
-Memory-warning cleanup is standard in global/project AGENTS and process doc.
-Inspect pressure, swap growth and physical footprint including compressed/graphics.
-SIGTERM only verified idle superseded previews with current PID/cwd/port/client/
-ownership checks and restart receipt. Preserve current5176 with clients, MCP3001,
-uncertain4190, other apps, live jobs, locks/history/recovery. No blanket app restart.
-Last pressure normal, swapabout2.47GiB, disk31.3GiB. Run guard before next dispatch.
+Memory-warning cleanup is standard in global/project AGENTS. Inspect pressure,
+swap growth and physical footprint including compressed/graphics allocations.
+SIGTERM only verified idle superseded previews with PID/cwd/port/client/ownership
+checks and restart receipt. Preserve current 5176, MCP 3001, uncertain 4190, active
+jobs, other apps, history and recovery. No blanket restart or weaker guard.
