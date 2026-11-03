@@ -177,6 +177,82 @@ test('reception reconciliation preserves event content',t=>{
   const bad=structuredClone(proposal);bad.changes[0].after[2].action='a different event';
   assert.throws(()=>applyDateRepairProposal(before,bad,packet),/non-temporal/);
 });
+for (const predicate of ['honor', 'event-participation']) {
+  test(`existing dated ${predicate} can gain retrospective classification and replay its final delta`, t => {
+    const f = fixture(t);
+    const row = ['p001', predicate, {kind:'ritual', action:'posthumous-honor', role:'honoree',
+      dateContext:{sourceDate:{text:'元年'}, westernYear:{era:'AD',year:2,precision:'year'}}}, 'explicit', ['s0001']];
+    const before = {...f.extraction, claims:[...f.extraction.claims, row]};
+    const packet = buildDateAuditPacket('fixture','001',{...f.options, extraction:before});
+    const after = structuredClone(row);
+    after[2].receptionType = 'retrospective';
+    after[2].dateContext.westernYear.year = 1;
+    const proposal = {sourceHash:packet.sourceHash, extractionHash:packet.extractionHash,
+      changes:[{kind:'replace',id:'claim-4',before:row,after,
+        reason:'The source records an honor after death, so its date belongs to later reception.'}]};
+    const candidate = applyDateRepairProposal(before,proposal,packet);
+    assert.deepEqual(candidate.claims[3],after);
+    const collapsed = dateRepairDifference(before,candidate,packet);
+    assert.equal(collapsed.changes[0].kind,'replace');
+    assert.deepEqual(applyDateRepairProposal(before,collapsed,packet),candidate);
+    assert.deepEqual(before.claims[3],row);
+    for (const mutate of [
+      c => {c.after[2].action = 'a different event';},
+      c => {c.after[2].role = 'a different participant';},
+      c => {c.after[3] = 'derived';},
+      c => {c.after[4] = ['s0002'];},
+      c => {c.after[2].receptionType = 'unrecognized-reception';},
+    ]) {
+      const invalid = structuredClone(proposal); mutate(invalid.changes[0]);
+      assert.throws(()=>applyDateRepairProposal(before,invalid,packet),/non-temporal/);
+    }
+    const withdrawal = {sourceHash:packet.sourceHash,extractionHash:sha256(JSON.stringify(candidate)),
+      changes:[{...proposal.changes[0],before:after,after:row}]};
+    const candidatePacket = buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+    assert.throws(()=>applyDateRepairProposal(candidate,withdrawal,candidatePacket),/non-temporal/);
+  });
+}
+
+test('reception classification cannot replace an undated non-temporal claim', t => {
+  const f = fixture(t), before = f.extraction.claims[2], after = structuredClone(before);
+  after[2].receptionType = 'retrospective';
+  const proposal = {sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,
+    changes:[{kind:'replace',id:'claim-3',before,after,reason:'An undated role must not enter a temporal replacement through classification.'}]};
+  assert.throws(()=>applyDateRepairProposal(f.extraction,proposal,f.packet),/unique temporal claim/);
+});
+
+test('a rejected independent re-audit cannot publish a reception-classified candidate', async t => {
+  const f = fixture(t), row = ['p001','honor',{action:'posthumous-honor',
+    dateContext:{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}}},'explicit',['s0001']];
+  f.extraction.claims.push(row); writeJsonAtomic(f.file,f.extraction);
+  const original = fs.readFileSync(f.file), initial = buildDateAuditPacket('fixture','001',f.options);
+  let freshAuditCheckedClassification = false;
+  const worker = async task => {
+    if (task.kind === 'repair') {
+      const proposal = repair(task), after = structuredClone(row);
+      after[2].dateContext.westernYear.year = 1; after[2].receptionType = 'retrospective';
+      proposal.changes.unshift({kind:'replace',id:'claim-4',before:row,after,
+        reason:'Propose later-reception classification for independent source verification.'});
+      return proposal;
+    }
+    const report = review(task);
+    if (task.packet.extractionHash !== initial.extractionHash) {
+      const item = task.job.items.find(i=>i.predicate === 'honor');
+      if (item) {
+        freshAuditCheckedClassification = true;
+        report.itemChecks.find(c=>c.id === item.id).verdict = 'incorrect';
+        report.findings.push({items:[item.id],problem:'The independent fixture source reviewer rejects this reception classification.',
+          action:'Keep the original extraction unpublished until this classification is resolved.'});
+      }
+    }
+    return report;
+  };
+  const result = await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,maxRounds:1});
+  assert.equal(result.status,'needs-revision');
+  assert.equal(freshAuditCheckedClassification,true);
+  assert.deepEqual(fs.readFileSync(f.file),original);
+});
+
 test('repair findings are split without dropping or rewriting a finding',t=>{
   const findings=[
     {items:['claim-1'],problem:'First fixture chronology is wrong.',action:'Correct the first fixture date.'},

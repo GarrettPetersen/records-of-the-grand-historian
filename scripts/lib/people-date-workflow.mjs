@@ -133,6 +133,20 @@ const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1]
 const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
   && same(withoutDates(reconcileRetrospectiveValue(before[2])), withoutDates(after[2]));
 
+// Existing dated honors/events need the same reception classification that a
+// newly added reception event already carries. This narrowly permits adding the
+// sole accepted label; it does not permit rewriting the underlying fact. The
+// resulting candidate still requires a fresh independent source/date audit.
+const sameDateRepairClaim = (before, after) => {
+  if (sameNonDateClaim(before, after)) return true;
+  if (before[0] !== after[0] || before[1] !== after[1] || lifePredicates.has(before[1]) ||
+      before[3] !== after[3] || !same(before[4], after[4]) ||
+      before[2]?.receptionType !== undefined || after[2]?.receptionType !== 'retrospective') return false;
+  const unclassified = structuredClone(after);
+  delete unclassified[2].receptionType;
+  return sameNonDateClaim(before, unclassified);
+};
+
 // Candidate extraction bytes are not a sufficient review identity: removing a
 // sealed no-op can leave those bytes unchanged while changing the proposal a
 // reviewer must approve. New staged handoffs therefore bind reviews to both.
@@ -489,7 +503,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       }
       else {
         if (!Array.isArray(change.after) || change.after.length !== 5 || change.after[0] !== change.before[0] || change.after[1] !== change.before[1]) throw new Error('Date repair cannot change a claim subject or predicate');
-        if (!lifePredicates.has(change.before[1]) && !sameNonDateClaim(change.before,change.after)) throw new Error('Date repair altered non-temporal event fields');
+        if (!lifePredicates.has(change.before[1]) && !sameDateRepairClaim(change.before,change.after)) throw new Error('Date repair altered non-temporal event fields');
         candidate.claims[index] = change.after;
       }
     } else if (change.kind === 'add' || change.kind === 'add-reception-event') {
@@ -1054,7 +1068,7 @@ export function dateRepairDifference(before, after, packet) {
   // Replacements of dated non-life events must stay replacements, not additions.
   for (const claim of remaining) {
     const removed = changes.find(c=>c.kind==='remove' && c.before[0]===claim[0] && c.before[1]===claim[1]
-      && (lifePredicates.has(claim[1]) || sameNonDateClaim(c.before,claim)));
+      && (lifePredicates.has(claim[1]) || sameDateRepairClaim(c.before,claim)));
     if (removed) { removed.kind = 'replace'; removed.after = claim; }
     else changes.push({ kind:isReceptionEvent(claim)?'add-reception-event':'add', after:claim, reason:'Added source-backed chronology or separate later reception after independent re-audit.' });
   }

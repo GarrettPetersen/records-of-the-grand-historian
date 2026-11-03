@@ -16,6 +16,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Include shared runtime helpers and the complete canonical people corpus.
+          sparse-checkout: |
+            scripts
+            functions
+            data/people
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
