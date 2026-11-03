@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus, dateAuditReferencesCurrent } from './lib/people-date-audit.mjs';
-import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, resolvedDatePreflight, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy, extractionClaimBlocksDateAudit } from './lib/people-work-queue.mjs';
@@ -87,8 +87,7 @@ test('unresolved repair preflight preserves the candidate and stops before a fre
   await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('No new review allowed');},f.options),/Retained research preflight changed/);
 });
 
-test('source-resolved candidates still need fresh independent approval after the preflight hold', async t => {
-  const f = await unresolvedRepairFixture(t);
+function resolveResearchFixture(f) {
   const state = readJson(path.join(f.directory,'state.json'));
   const candidate = readJson(path.join(f.directory,state.candidate));
   const packet = buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
@@ -100,6 +99,15 @@ test('source-resolved candidates still need fresh independent approval after the
       {kind:'hints',personId:'p001',before:[],after:['AD 1'],reason:'Restore the supported activity hint after resolving the source anchor.'},
     ]};
   revisePendingDateRepair({book:'fixture',chapter:'001'},proposal,f.options);
+  return {sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,researchPreflights:[f.result.researchPreflight]};
+}
+
+test('source-resolved candidates still need fresh independent approval after the preflight hold', async t => {
+  const f = await unresolvedRepairFixture(t), claim = resolveResearchFixture(f);
+  const resolution = resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options);
+  assert.equal(resolution.authorAgentId,'independent-source-researcher');
+  assert.equal(resolution.preflightContentHash,f.result.researchPreflight.contentHash);
+  assert.equal(resolution.round,2);
   assert.deepEqual(fs.readFileSync(f.file),f.original);
   let freshReviews = 0;
   const result = await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{
@@ -111,6 +119,32 @@ test('source-resolved candidates still need fresh independent approval after the
   assert.equal(result.status,'audited');
   assert(freshReviews > 0);
   assert.equal(readJson(f.file).claims[0][2].westernYear.year,1);
+});
+
+test('a worker blocker or unchanged source preflight cannot use the native amendment retry', async t => {
+  const f = await unresolvedRepairFixture(t);
+  const claim={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash};
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options),/worker research supplement or saved chapter preflight/);
+  claim.researchPreflights=[f.result.researchPreflight];
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options),/phase and round hold/);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+});
+
+for (const [label,alter,expected] of [
+  ['preflight bytes',f=>{const file=path.join(f.directory,f.result.researchPreflight.file),p=readJson(file);p.items[0].value.unresolvedReason+=' Changed.';writeJsonAtomic(file,p);},/preflight changed/],
+  ['held candidate',f=>{const file=path.join(f.directory,'candidate-1.json'),c=readJson(file);c.claims[0][2].unresolvedReason+=' Changed.';writeJsonAtomic(file,c);},/held source evidence changed/],
+  ['amendment provenance',f=>{const file=path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`),p=readJson(file);p.author.agentId='unrecorded-author';writeJsonAtomic(file,p);},/amendment provenance/],
+  ['candidate facts',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].westernYear.year=777;writeJsonAtomic(file,c);},/differs from the native source amendment/],
+  ['unresolved candidate',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].unresolved=true;writeJsonAtomic(file,c);},/research has not resolved/],
+  ['combined replay',f=>{const file=path.join(f.directory,'combined-proposal.json'),p=readJson(file);p.changes.find(c=>c.kind==='replace').after[2].westernYear.year=777;writeJsonAtomic(file,p);},/does not reproduce/],
+  ['canonical source',f=>{const s=readJson(f.sourceFile);s.content[0].sentences[0].zh+='改';writeJsonAtomic(f.sourceFile,s);},/canonical source or extraction changed/],
+  ['round circuit',f=>{const file=path.join(f.directory,'state.json'),s=readJson(file);s.circuitBreaker={reason:'retained hold'};writeJsonAtomic(file,s);},/phase and round hold/],
+]) test(`source-preflight retry rejects changed ${label} without approving the chapter`,async t=>{
+  const f=await unresolvedRepairFixture(t),claim=resolveResearchFixture(f);
+  alter(f);
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options),expected);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  assert.notEqual(dateAuditStatus('fixture','001',f.options).status,'audited');
 });
 
 test('unresolved preflight preserves an already-owned re-audit recovery path', async t => {

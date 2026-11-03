@@ -7,7 +7,7 @@ import { parseArgs } from 'node:util';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import { peopleExtractionFiles } from './lib/people-corpus.mjs';
 import { buildDateAuditPacket, unresolvedDateAuditItems, dateAuditStatus } from './lib/people-date-audit.mjs';
-import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, runDateWorkflow } from './lib/people-date-workflow.mjs';
+import { CompletedDateGenerationHold, assertCompletedGenerationSafe, completedDateClaimEvidence, dateReviewJobs, dateWorkflowDirectory, deriveDateRepairEditorialAmendment, resolvedDatePreflight, runDateWorkflow } from './lib/people-date-workflow.mjs';
 import { cursorDateWorker, attachmentDateWorker, openRouterDateWorker } from './lib/people-date-worker.mjs';
 import { DEFAULT_OPENROUTER_FREE_MODEL, verifyOpenRouterFreeModel } from './lib/openrouter-free.mjs';
 import { mutateRemotePeopleWorkLedger, extractionClaimBlocksDateAudit, dateExecutorIsBusy } from './lib/people-work-queue.mjs';
@@ -38,7 +38,7 @@ if (!['cursor-sdk','grokbot','manual','openrouter'].includes(o.lane)) throw new 
 if (!['balanced','calibration'].includes(o.order))throw new Error('Unknown date workload order');
 if (o.chapter && !/^\d{3}$/.test(o.chapter)) throw new Error('--chapter requires three digits');
 if (o['research-supplement'] && (!o.book || !o.chapter || o.lane !== 'cursor-sdk' || !o['retry-blocked'] || o.release || o['dry-run'])) throw new Error('--research-supplement requires one explicit Cursor chapter and --retry-blocked');
-if (o['retry-blocked'] && o.lane === 'cursor-sdk' && !o['research-supplement'] && !o['recover-only'] && !o['dry-run']) throw new Error('Cursor research-blocked retry requires a fingerprint-bound --research-supplement');
+if (o['retry-blocked'] && o.lane === 'cursor-sdk' && !o['research-supplement'] && !o['recover-only'] && !o['dry-run'] && (!o.book || !o.chapter)) throw new Error('Research retry requires one explicit chapter with a native source amendment, or a fingerprint-bound --research-supplement');
 if (!o['dry-run'] && !o.worker) throw new Error('A stable --worker ID is required');
 if (o.release && (!o.book || !o.chapter)) throw new Error('--release requires one explicit --book and --chapter');
 if (!o.release && !o['recover-only'] && !o['dry-run'] && o.lane==='cursor-sdk' && (!o.run || !o.model)) throw new Error('Paid Cursor execution requires explicit --run and --model; use --dry-run otherwise');
@@ -185,6 +185,8 @@ if (o['dry-run']) {
           if(prior?.status!=='ready' && prior?.executorHost && prior.executorHost!==os.hostname() && !o.takeover)throw new Error('Date work belongs to another host; stop that executor before using --takeover');
           if(prior?.status==='research-blocked'&&!o['retry-blocked'])return null;
           if(extractionClaimBlocksDateAudit(ledger.claims[key]))return null;
+          const preflightResolution=prior?.status==='research-blocked' && o.lane==='cursor-sdk' && !o['research-supplement'] && !o['recover-only']
+            ? resolvedDatePreflight(target,prior,options) : null;
           const archived=prior?.status==='ready';
           if(archived) { ledger.dateAuditHistory??={}; (ledger.dateAuditHistory[key]??=[]).push(prior); }
           const changed=prior&&!archived&&(prior.sourceHash!==packet.sourceHash||prior.extractionHash!==packet.extractionHash);
@@ -192,6 +194,10 @@ if (o['dry-run']) {
           const finishing=changed && fs.existsSync(retainedState) && readJson(retainedState).phase==='publish';
           if(changed && (!finishing || prior.status==='stale-source'))throw new Error(`Sticky date work ${key} changed; reconcile before release`);
           const claim=archived||!prior?{worker:o.worker,lane:o.lane,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,generationId:randomUUID(),jobs:{}}:prior;
+          if(preflightResolution) {
+            claim.preflightResolutions??=[];
+            if(!claim.preflightResolutions.some(row=>row.preflightContentHash===preflightResolution.preflightContentHash && row.candidateExtractionHash===preflightResolution.candidateExtractionHash))claim.preflightResolutions.push(preflightResolution);
+          }
           claim.status='active';claim.executorHost=os.hostname();claim.executorToken=executorToken;claim.executorExpiresAt=new Date(Date.now()+leaseMs).toISOString();claim.updatedAt=new Date().toISOString();ledger.dateAudits[key]=claim;return claim;
         },{message:`Reserve date audit ${key}`}).result;
         } catch(error) {

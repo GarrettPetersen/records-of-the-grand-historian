@@ -197,6 +197,14 @@ Use `--retry-blocked` only after obtaining the missing research. Explicit
 `--release --book BOOK --chapter NNN --worker ID` frees an abandoned assignment
 without deleting local recovery files and does not require paid execution.
 
+For a chapter preflight hold, `--retry-blocked` on one explicit chapter may resume
+without a worker `--research-supplement` after `revisePendingDateRepair` stages a
+source amendment. Reservation verifies the saved preflight and held candidate,
+original source/extraction pins, recorded author, amended facts and exact combined
+proposal replay, and rejects remaining unresolved items or a round/circuit hold.
+The resolution is retained in claim history; fresh independent approval is still
+required. A blocked worker artifact still requires its fingerprint-bound supplement.
+
 Before a new independent re-audit starts, explicit unresolved items cause a
 `research-blocked` preflight instead of a model dispatch. The summary and shared
 claim history identify the pinned candidate and a packet containing affected people,

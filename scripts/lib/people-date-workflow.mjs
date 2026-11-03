@@ -1130,3 +1130,38 @@ export function revisePendingDateRepair({book,chapter},proposal,options={}) {
   writeJsonAtomic(path.join(directory,state.candidate),candidate);writeJsonAtomic(stateFile,state);
   return buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
 }
+
+// A chapter preflight has no blocked model artifact to supplement. Resume only
+// after proving the exact native amendment; the worker-blocker path stays intact.
+export function resolvedDatePreflight({book,chapter},claim,options={}) {
+  const fail=message=>{throw new Error(`Preflight research retry: ${message}`);};
+  const pin=claim.researchPreflights?.at(-1);
+  if(!pin || !/^research-preflight-\d+-[a-f0-9]{20}\.json$/.test(pin.file??''))fail('a fingerprint-bound worker research supplement or saved chapter preflight is required');
+  const directory=dateWorkflowDirectory(book,chapter,options.peopleDir),state=readJson(path.join(directory,'state.json'));
+  if(state.schemaVersion!==1 || state.workflowVersion!==DATE_WORKFLOW_VERSION || state.phase!=='reaudit' || state.circuitBreaker || state.round!==pin.round+1 || state.round>=(options.maxRounds??3))fail('preserve the existing phase and round hold');
+  if(state.candidate!==`candidate-${state.round}.json` || pin.candidateFile!==`candidate-${pin.round}.json`)fail('invalid native candidate path');
+  const originalPacket=buildDateAuditPacket(book,chapter,options);
+  if([state,claim].some(value=>value.sourceHash!==originalPacket.sourceHash || value.extractionHash!==originalPacket.extractionHash))fail('canonical source or extraction changed');
+  const preflight=readJson(path.join(directory,pin.file));
+  if(preflight.schemaVersion!==1 || preflight.kind!=='date-reaudit-research-preflight' || preflight.book!==book || preflight.chapter!==chapter ||
+    hash(preflight)!==pin.contentHash || preflight.sourceHash!==originalPacket.sourceHash || preflight.extractionHash!==pin.extractionHash ||
+    preflight.round!==pin.round || preflight.candidateFile!==pin.candidateFile)fail('saved research preflight changed');
+  const held=readJson(path.join(directory,pin.candidateFile)),heldPacket=buildDateAuditPacket(book,chapter,{...options,extraction:held});
+  if(heldPacket.extractionHash!==pin.extractionHash || !unresolvedDateAuditItems(heldPacket).length)fail('held source evidence changed');
+  const key=`repair-${pin.round}-${pin.extractionHash.slice(7,27)}`,proposal=readJson(path.join(directory,`${key}.json`));
+  const author=proposalAuthorId(proposal);
+  if(!author || state.jobs[key]?.proposalAuthorId!==author || proposal.sourceHash!==heldPacket.sourceHash || proposal.extractionHash!==heldPacket.extractionHash)fail('native source amendment provenance is missing');
+  const amended=applyDateRepairProposal(held,proposal,heldPacket),candidate=readJson(path.join(directory,state.candidate));
+  const active=buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
+  if(active.extractionHash===heldPacket.extractionHash || unresolvedDateAuditItems(active).length)fail('source research has not resolved the held candidate');
+  // Native replay may move changed rows. Compare all facts as a multiset, then
+  // require the saved original-to-final proposal to reproduce its fingerprint.
+  const facts=value=>hash({...value,claims:value.claims.map(row=>JSON.stringify(row)).sort()});
+  if(facts(amended)!==facts(candidate))fail('candidate differs from the native source amendment');
+  const original=readJson(path.join(options.peopleDir??PEOPLE_DIR,'extractions',book,`${chapter}.json`));
+  const replay=applyDateRepairProposal(original,readJson(path.join(directory,'combined-proposal.json')),originalPacket);
+  if(hash(replay)!==active.extractionHash)fail('combined source repair does not reproduce the candidate');
+  return {preflightContentHash:pin.contentHash,sourceHash:originalPacket.sourceHash,originalExtractionHash:originalPacket.extractionHash,
+    beforeExtractionHash:heldPacket.extractionHash,candidateExtractionHash:active.extractionHash,
+    amendmentFile:`${key}.json`,amendmentContentHash:hash(proposal),authorAgentId:author,round:state.round};
+}
