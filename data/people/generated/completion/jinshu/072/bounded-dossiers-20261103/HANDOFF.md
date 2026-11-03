@@ -24,7 +24,7 @@ approval still has retained Guo Yuan findings and sticky OpenRouter ownership; k
 it held. Deployed native receipts remain 8 / 258, with 072 and 080 held. Fully complete
 and live published remain 1 / 1. See staging-progress-after-080-audit.json.
 
-NEXT: ../080/retained-date-recovery-20261103/next-repair-work-order.json.
+NEXT: ../../080/retained-date-recovery-20261103/next-repair-work-order.json.
 Same worker jinshu-release-dates-cursor-sdk. After guard and actual process/ledger
 inspection, run its absolute command: resume-one-review.mjs --attempt
 repair-round-0-group-1 --jobs 1. Helper supports native repair/reaudit phases, enforces
@@ -44,7 +44,7 @@ No new checkout/native subagent. One local heavy job, 3 GiB heap, resource guard
 before/after and every 45–60 seconds. Native helper samples every 45 seconds.
 
 Recovery branch codex/people-recovery-20261025 checkpoint
-70860b5afbd7090f3450f2e9daecd5ec14ba76d3 preserves all 16 normalized reports,
+d64747ee84432147c03e2627cf5967fb94387ef0 preserves all 16 normalized reports,
 new raw bytes, full failed report/history, live proof, admission preview and work order.
 Previous tree retained. Original five October raw files were never locally archived;
 normalized reports/remote hashes retained. Never fabricate original raw bytes.
