@@ -1,0 +1,1141 @@
+{
+  "sourceHash": "sha256:78efc236952724ac19b16e86ab77616208432d87d2d71eb2c25e79a7b6a2dc4b",
+  "extractionHash": "sha256:0165516d06ddbdad1fa407506458623a4f9e87ef8053cf844cc930e538c7303d",
+  "changes": [
+    {
+      "kind": "replace",
+      "id": "claim-211",
+      "before": [
+        "p028",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "時東土饑荒"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0083",
+          "s0084",
+          "s0085"
+        ]
+      ],
+      "after": [
+        "p028",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "時東土饑荒"
+          },
+          "unresolved": true,
+          "unresolvedReason": "時東土饑荒 dates Wang Xizhi’s granary relief only as ‘at that time’; s0083 names no reign year, so a closed AD 353–355 tenure window is not a justified uncertainty range for that famine."
+        },
+        "explicit",
+        [
+          "s0083",
+          "s0084",
+          "s0085"
+        ]
+      ],
+      "reason": "s0083 時東土饑荒，羲之輒開倉振貸 names the eastern famine and granary loans without a year. Yonghe 9 (蘭亭) does not supply a start year, and a Kuaiji-office span is not an event window. Keep the relief attestation; leave 時 unresolved rather than inventing endpoints."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-232",
+      "before": [
+        "p029",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "又遺尚書僕射謝安書"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0085"
+        ]
+      ],
+      "after": [
+        "p029",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Named as addressee of Wang Xizhi’s letter headed 尚書僕射謝安"
+        },
+        "explicit",
+        [
+          "s0085"
+        ]
+      ],
+      "reason": "s0085 又遺尚書僕射謝安書曰 names Xie An as addressee but gives him no year. AD 353–355 is Wang Xizhi’s Kuaiji administrative window (漕運), not Xie An’s activity. The same chapter’s 謝安未仕時亦居焉 shows he was still out of office in those years, so the Yonghe living interval is dropped and the heading is not treated as a convertible date."
+    },
+    {
+      "kind": "add-reception-event",
+      "after": [
+        "p029",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "addressee",
+          "action": "letter-heading-uses-anachronistic-title-尚書僕射"
+        },
+        "explicit",
+        [
+          "s0085"
+        ]
+      ],
+      "reason": "The heading 尚書僕射謝安 is kept with Xie An as subject and not silently retitled. s0112 謝安未仕時亦居焉, and Jinshu 79’s 安始有仕進志，時年已四十餘矣, show he was not puye in the Yonghe Kuaiji years. The title is recorded as retrospective/anachronistic labeling, not as living office."
+    },
+    {
+      "kind": "date-context",
+      "id": "claim-231",
+      "before": {
+        "sourceDate": {
+          "text": "未仕時"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 345,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 360,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "未仕時"
+        },
+        "unresolved": true,
+        "unresolvedReason": "未仕時 marks Xie An’s Kuaiji residence before he took office and is not a reign year; AD 345 and AD 360 are not in the chapter."
+      },
+      "reason": "s0112 謝安未仕時亦居焉 keeps the Kuaiji residence, but 未仕時 is a relative status phrase, not a convertible year. The invented AD 345–360 window is removed; no second endpoint is supplied."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-233",
+      "before": [
+        "p029",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "謝安未仕時亦居焉"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 345,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 360,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0112"
+        ]
+      ],
+      "after": [
+        "p029",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "謝安未仕時亦居焉"
+          },
+          "unresolved": true,
+          "unresolvedReason": "未仕時 is a relative not-yet-in-office marker, not a reign year that converts to AD 345–360."
+        },
+        "explicit",
+        [
+          "s0112"
+        ]
+      ],
+      "reason": "The attestation 謝安未仕時亦居焉 is explicit, but the Western interval 345–360 is not in s0112. Replace that closed window with unresolved:true; do not invent bounding years from later office or from the anachronistic 尚書僕射 heading."
+    },
+    {
+      "kind": "date-context",
+      "id": "claim-234",
+      "before": {
+        "sourceDate": {
+          "text": "未仕時"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 345,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 360,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "未仕時"
+        },
+        "unresolved": true,
+        "unresolvedReason": "未仕時 states that Xie An was not yet in office and does not convert to a year; AD 345 and AD 360 are not in the chapter."
+      },
+      "reason": "Keep the not-yet-in-office status from 未仕時. The explicit Chinese fact stays; only the fabricated AD 345–360 conversion is dropped in favor of unresolved:true."
+    },
+    {
+      "kind": "hints",
+      "personId": "p029",
+      "before": [
+        "AD 353-355"
+      ],
+      "after": [],
+      "reason": "Xie An’s owned dated rows are now an undated letter heading plus unresolved 未仕時 residence/status. AD 353–355 was the unsupported puye/Yonghe living span and must not remain an active hint."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-241",
+      "before": [
+        "p031",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和九年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 353,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0113",
+          "s0115"
+        ]
+      ],
+      "after": [
+        "p031",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Built a house in the eastern lands and shared literary tastes with Wang Xizhi"
+        },
+        "explicit",
+        [
+          "s0113"
+        ]
+      ],
+      "reason": "s0113 孫綽、李充、許詢、支遁等皆以文義冠世，並築室東土，與羲之同好 names Sun Chuo only as an undated eastern peer. 永和九年 and AD 353 belong to s0115’s Lanting preface for Wang Xizhi and are not in this sentence."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-248",
+      "before": [
+        "p032",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和九年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 353,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0113",
+          "s0115"
+        ]
+      ],
+      "after": [
+        "p032",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Built a house in the eastern lands and shared literary tastes with Wang Xizhi"
+        },
+        "explicit",
+        [
+          "s0113"
+        ]
+      ],
+      "reason": "s0113 names Li Chong in the same undated 築室東土，與羲之同好 list. Do not import 永和九年 / AD 353 from the following Lanting sentence."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-255",
+      "before": [
+        "p033",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和九年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 353,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0113",
+          "s0115"
+        ]
+      ],
+      "after": [
+        "p033",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Built a house in the eastern lands and shared literary tastes with Wang Xizhi"
+        },
+        "explicit",
+        [
+          "s0113"
+        ]
+      ],
+      "reason": "s0113 names Xu Xun only among undated eastern peers. The Lanting year in s0115 does not date his association."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-262",
+      "before": [
+        "p034",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和九年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 353,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0113",
+          "s0115"
+        ]
+      ],
+      "after": [
+        "p034",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Built a house in the eastern lands and shared literary tastes with Wang Xizhi"
+        },
+        "explicit",
+        [
+          "s0113"
+        ]
+      ],
+      "reason": "s0113 names Zhi Dun only among undated eastern peers. Remove the transferred 永和九年 / AD 353 life date."
+    },
+    {
+      "kind": "hints",
+      "personId": "p031",
+      "before": [
+        "AD 353"
+      ],
+      "after": [],
+      "reason": "Sun Chuo’s remaining attestation is the undated 築室東土 association. AD 353 was imported from Wang Xizhi’s Lanting year and is not a supported active date."
+    },
+    {
+      "kind": "hints",
+      "personId": "p032",
+      "before": [
+        "AD 353"
+      ],
+      "after": [],
+      "reason": "Li Chong’s sealed source row is undated. Clear the imported AD 353 hint."
+    },
+    {
+      "kind": "hints",
+      "personId": "p033",
+      "before": [
+        "AD 353"
+      ],
+      "after": [],
+      "reason": "Xu Xun’s sealed source row is undated. Clear the imported AD 353 hint."
+    },
+    {
+      "kind": "hints",
+      "personId": "p034",
+      "before": [
+        "AD 353"
+      ],
+      "after": [],
+      "reason": "Zhi Dun’s sealed source row is undated. Clear the imported AD 353 hint."
+    },
+    {
+      "kind": "remove",
+      "id": "claim-292",
+      "before": [
+        "p035",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和九年",
+            "regnalYear": 9
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 353,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0119",
+          "s0120",
+          "s0121",
+          "s0122",
+          "s0123",
+          "s0124",
+          "s0125",
+          "s0126",
+          "s0127",
+          "s0128",
+          "s0129"
+        ]
+      ],
+      "reason": "s0119–s0129 are Lanting preface sentences that neither name 羲之 nor contain 永和九年. That year belongs to p028’s gathering (s0114–s0115). Leaving p035 dated from this block would duplicate p028’s life date on a second ID, so the row is removed rather than re-evidenced."
+    },
+    {
+      "kind": "hints",
+      "personId": "p035",
+      "before": [
+        "AD 353",
+        "AD 355"
+      ],
+      "after": [
+        "AD 355"
+      ],
+      "reason": "AD 353 on p035 came only from the unsupported preface-body row. Supported p035 chronology in this chapter is the Yonghe 11 / AD 355 resignation and tomb oath (s0163); later 既去官 roaming is a one-sided bound, not a second exact year."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-295",
+      "before": [
+        "p035",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "東晉永和前後"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0130",
+          "s0131",
+          "s0149",
+          "s0152"
+        ]
+      ],
+      "after": [
+        "p035",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Undated anecdotes placed after the Lanting preface, with no Yonghe year in the Chinese"
+        },
+        "explicit",
+        [
+          "s0130",
+          "s0131",
+          "s0149",
+          "s0152"
+        ]
+      ],
+      "reason": "s0130, s0131, s0149, and s0152 contain no 東晉永和前後 and no year. They follow the preface in narrative order only. Delete the fabricated sourceDate and the closed AD 353–355 span; do not invent endpoints for these anecdotes."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-294",
+      "before": [
+        "p035",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "羲之既去官"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 355,
+            "precision": "year"
+          }
+        },
+        "explicit",
+        [
+          "s0173",
+          "s0174",
+          "s0175",
+          "s0178"
+        ]
+      ],
+      "after": [
+        "p035",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "羲之既去官"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0173",
+          "s0174",
+          "s0175",
+          "s0178"
+        ]
+      ],
+      "reason": "s0173 羲之既去官，與東土人士盡山水之遊 is one-sided after the s0163 oath 維永和十一年三月癸卯朔，九日辛亥 (conventional AD 355). 既去官 does not name that year as the roaming’s exact date, and no end year is given. Use onOrAfter 355, not an exact westernYear."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-409",
+      "before": [
+        "p057",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "羲之既去官"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 355,
+            "precision": "year"
+          }
+        },
+        "explicit",
+        [
+          "s0174"
+        ]
+      ],
+      "after": [
+        "p057",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "羲之既去官"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0174"
+        ]
+      ],
+      "reason": "s0174 又與道士許邁共修服食 follows 羲之既去官, so Xu Mai’s itinerary with Xizhi is after the Yonghe 11.3.9 oath, not dated to AD 355 as an exact year. The same chapter elsewhere dates Xu Mai’s 臨安西山 retreat to 永和二年; an exclusive 355 life year would overwrite that. Keep only the one-sided bound."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-413",
+      "before": [
+        "p058",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "羲之既去官"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 355,
+            "precision": "year"
+          }
+        },
+        "explicit",
+        [
+          "s0175"
+        ]
+      ],
+      "after": [
+        "p058",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "羲之既去官"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0175"
+        ]
+      ],
+      "reason": "s0175 謝安嘗謂羲之曰：「中年以來…」 is sequenced after 既去官, so the conversation is onOrAfter the oath year, not an exact AD 355 event. 中年 is Xie An’s age reckoning and is not converted into a calendar year or an end date."
+    },
+    {
+      "kind": "hints",
+      "personId": "p057",
+      "before": [
+        "AD 355"
+      ],
+      "after": [],
+      "reason": "Xu Mai’s remaining Western chronology is a one-sided onOrAfter bound from Wang Xizhi’s resignation, not a supported exact active year. Strip AD 355."
+    },
+    {
+      "kind": "hints",
+      "personId": "p058",
+      "before": [
+        "AD 355"
+      ],
+      "after": [],
+      "reason": "Xie An’s 嘗謂 is only after 既去官; 中年 is age reckoning. AD 355 is not a supported exact active hint."
+    },
+    {
+      "kind": "remove",
+      "id": "claim-340",
+      "before": [
+        "p036",
+        "attestation",
+        {
+          "qualitative": "legendary antiquity"
+        },
+        "explicit",
+        [
+          "s0127"
+        ]
+      ],
+      "reason": "s0127 齊彭殤為妄作 is Wang Xizhi’s preface allusion, not a living attestation of Peng Zu. Remove the legendary-antiquity life/activity date; the mention is reclassified as retrospective reception."
+    },
+    {
+      "kind": "add-reception-event",
+      "after": [
+        "p036",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "alluded-exemplar",
+          "action": "Lanting-preface-rejects-equating-Peng-Zu-with-a-child-dead-young"
+        },
+        "explicit",
+        [
+          "s0127"
+        ]
+      ],
+      "reason": "齊彭殤 is a retrospective allusion inside the Lanting preface. Record Peng Zu as the alluded exemplar and do not assign him a living year from this chapter."
+    },
+    {
+      "kind": "hints",
+      "personId": "p036",
+      "before": [
+        "legendary antiquity"
+      ],
+      "after": [],
+      "reason": "Peng Zu is only received by allusion. Legendary antiquity is not a supported active-life hint in this chapter."
+    },
+    {
+      "kind": "remove",
+      "id": "claim-342",
+      "before": [
+        "p037",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "金穀詩序"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 296,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 300,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0130"
+        ]
+      ],
+      "reason": "s0130 或以潘岳《金穀詩序》方其文 compares Pan Yue’s preface to Wang Xizhi’s text. AD 296–300 is not in that sentence and must not be stored as Pan Yue’s living attestation."
+    },
+    {
+      "kind": "add-reception-event",
+      "after": [
+        "p037",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "compared-author",
+          "action": "金穀詩序-compared-to-Wang-Xizhi-preface"
+        },
+        "explicit",
+        [
+          "s0130"
+        ]
+      ],
+      "reason": "Keep the comparison as retrospective reception of Pan Yue’s 金穀詩序. Do not invent a Jingu year or use the reception as a life date."
+    },
+    {
+      "kind": "hints",
+      "personId": "p037",
+      "before": [
+        "AD 296-300"
+      ],
+      "after": [],
+      "reason": "Pan Yue has no supported living year in this chapter after the 296–300 interval is removed."
+    },
+    {
+      "kind": "remove",
+      "id": "claim-344",
+      "before": [
+        "p038",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "金穀詩序"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 296,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 300,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0130"
+        ]
+      ],
+      "reason": "s0130 羲之比于石崇 is a later comparison, not a dated living attestation of Shi Chong. AD 296–300 is not in the Chinese."
+    },
+    {
+      "kind": "add-reception-event",
+      "after": [
+        "p038",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "compared-host",
+          "action": "Wang-Xizhi-likened-to-Shi-Chong"
+        },
+        "explicit",
+        [
+          "s0130"
+        ]
+      ],
+      "reason": "Keep the Shi Chong comparison as retrospective reception. Do not invent a Jingu year or treat the reception as his life date."
+    },
+    {
+      "kind": "hints",
+      "personId": "p038",
+      "before": [
+        "AD 296-300"
+      ],
+      "after": [],
+      "reason": "Shi Chong has no supported living year in this chapter after the 296–300 interval is removed."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-345",
+      "before": [
+        "p039",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "東晉永和前後"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0131",
+          "s0132"
+        ]
+      ],
+      "after": [
+        "p039",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Undated Kuaiji anecdote: the widow cooked her goose before Wang Xizhi arrived"
+        },
+        "explicit",
+        [
+          "s0131",
+          "s0132"
+        ]
+      ],
+      "reason": "s0131–s0132 會稽有孤居姥養一鵝…烹以待之 name the widow with 性愛鵝 and no year. 東晉永和前後 and AD 353–355 are not in the Chinese and must not borrow Wang Xizhi’s Yonghe years as her life dates."
+    },
+    {
+      "kind": "hints",
+      "personId": "p039",
+      "before": [
+        "AD 353-355"
+      ],
+      "after": [],
+      "reason": "The widow’s goose story is now an undated source attestation. Clear the fabricated AD 353–355 active hint."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-348",
+      "before": [
+        "p040",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "東晉永和前後"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0133",
+          "s0134",
+          "s0135"
+        ]
+      ],
+      "after": [
+        "p040",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Undated Shanyin encounter: the Daoist traded geese for a copy of the Daodejing"
+        },
+        "explicit",
+        [
+          "s0133",
+          "s0134",
+          "s0135"
+        ]
+      ],
+      "reason": "s0133 又山陰有一道士，養好鵝 is a 又 anecdote with no reign year. Delete the invented 東晉永和前後 label and the closed AD 353–355 window."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-353",
+      "before": [
+        "p041",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "東晉永和前後"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0137",
+          "s0138"
+        ]
+      ],
+      "after": [
+        "p041",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Undated visit in which Wang Xizhi wrote on the disciple’s lacquer table"
+        },
+        "explicit",
+        [
+          "s0137",
+          "s0138"
+        ]
+      ],
+      "reason": "s0137 嘗詣門生家 is an undated 嘗 anecdote. The fabricated Yonghe window is not a one-sided bound supported by this sentence."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-356",
+      "before": [
+        "p042",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "東晉永和前後"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0138"
+        ]
+      ],
+      "after": [
+        "p042",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Undated sequel: the disciple’s father scraped away Wang Xizhi’s writing"
+        },
+        "explicit",
+        [
+          "s0138"
+        ]
+      ],
+      "reason": "s0138 後為其父誤刮去之 sequences the father’s scraping after the table-writing, still without a year. Remove the invented sourceDate and AD 353–355 interval."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-358",
+      "before": [
+        "p043",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "東晉永和前後"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 353,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 355,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0139",
+          "s0140",
+          "s0141",
+          "s0142",
+          "s0143",
+          "s0144"
+        ]
+      ],
+      "after": [
+        "p043",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Undated Mount Ji encounter: the old woman sold fans inscribed by Wang Xizhi"
+        },
+        "explicit",
+        [
+          "s0139",
+          "s0140",
+          "s0141",
+          "s0142",
+          "s0143",
+          "s0144"
+        ]
+      ],
+      "reason": "s0139 又嘗在蕺山見一老姥 is another undated 嘗 encounter. Do not close it as Yonghe activity by borrowing other markers."
+    },
+    {
+      "kind": "hints",
+      "personId": "p040",
+      "before": [
+        "AD 353-355"
+      ],
+      "after": [],
+      "reason": "The Shanyin Daoist encounter is undated in the sealed source. Clear the copied AD 353–355 hint."
+    },
+    {
+      "kind": "hints",
+      "personId": "p041",
+      "before": [
+        "AD 353-355"
+      ],
+      "after": [],
+      "reason": "The disciple’s table anecdote is undated. Clear the copied AD 353–355 hint."
+    },
+    {
+      "kind": "hints",
+      "personId": "p042",
+      "before": [
+        "AD 353-355"
+      ],
+      "after": [],
+      "reason": "The father’s scraping is undated. Clear the copied AD 353–355 hint."
+    },
+    {
+      "kind": "hints",
+      "personId": "p043",
+      "before": [
+        "AD 353-355"
+      ],
+      "after": [],
+      "reason": "The Mount Ji fan-seller encounter is undated. Clear the copied AD 353–355 hint."
+    },
+    {
+      "kind": "remove",
+      "id": "claim-362",
+      "before": [
+        "p044",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "曹魏"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 200,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 230,
+              "precision": "year"
+            }
+          }
+        },
+        "explicit",
+        [
+          "s0146"
+        ]
+      ],
+      "reason": "s0146 我書比鐘繇，當抗行 is Wang Xizhi comparing his writing to Zhong Yao. The chapter does not date Zhong Yao’s life to Cao Wei AD 200–230. Remove that living interval."
+    },
+    {
+      "kind": "add-reception-event",
+      "after": [
+        "p044",
+        "event-participation",
+        {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "compared-calligrapher",
+          "action": "Wang-Xizhi-compared-his-own-writing-to-Zhong-Yao"
+        },
+        "explicit",
+        [
+          "s0146"
+        ]
+      ],
+      "reason": "Reclassify the 鐘繇 mention as retrospective reception of Zhong Yao’s calligraphy. Do not use the comparison as Zhong Yao’s life date."
+    },
+    {
+      "kind": "hints",
+      "personId": "p044",
+      "before": [
+        "AD 200-230"
+      ],
+      "after": [],
+      "reason": "Zhong Yao is only received by comparison in this chapter. Clear the Cao Wei AD 200–230 active hint."
+    }
+  ]
+}

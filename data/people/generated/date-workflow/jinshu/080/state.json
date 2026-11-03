@@ -783,9 +783,55 @@
     "repair-0-002-490e168f354e5d1b4a26-0165516d06dd": {
       "agentId": "bc-62935733-d5ec-40f5-89d6-29b99e7a6dc2",
       "model": "grok-4.6",
-      "status": "running",
+      "status": "rejected",
       "sent": true,
-      "runId": "run-69db2e6a-287e-4025-a481-c779c4251c4b"
+      "runId": "run-69db2e6a-287e-4025-a481-c779c4251c4b",
+      "validationError": "Host validated diagnostics: p057 and p058 retain onOrAfter AD355 bounds; set their active hints to [\"on or after AD 355\"], not []. This preserves the bound without asserting an exact year. All other group2 changes pass production validation with these hints. Return the complete proposal.",
+      "lastError": null,
+      "artifactHash": "e87638d8a3d2d388496f86b650aec84621d31ab70ab45c6e1859c10a4d7565f5",
+      "usage": {
+        "agentId": "bc-62935733-d5ec-40f5-89d6-29b99e7a6dc2",
+        "runId": "run-69db2e6a-287e-4025-a481-c779c4251c4b",
+        "recordedAt": "2026-11-03T18:05:41.129Z",
+        "status": "available",
+        "data": {
+          "usage": {
+            "inputTokens": 57929,
+            "outputTokens": 28647,
+            "cacheWriteTokens": 0,
+            "cacheReadTokens": 167808,
+            "totalTokens": 254384
+          },
+          "cost": {
+            "rawCostCents": 74.3288,
+            "chargedCents": 0
+          },
+          "runs": [
+            {
+              "runId": "run-69db2e6a-287e-4025-a481-c779c4251c4b",
+              "usage": {
+                "inputTokens": 57929,
+                "outputTokens": 28647,
+                "cacheWriteTokens": 0,
+                "cacheReadTokens": 167808,
+                "totalTokens": 254384
+              },
+              "cost": {
+                "rawCostCents": 74.3288,
+                "chargedCents": 0
+              }
+            }
+          ]
+        }
+      },
+      "originalValidationError": "Invalid or stale active-hint repair for p057: expected [\"AD 355\"], received before [\"AD 355\"] and after []",
+      "hostFeedbackSha256": "95c8e1432be0439028a54165c5af2ac9840f3f1dc8adbeef02c9eef73fc9eab0",
+      "hostValidationFeedback": {
+        "priorRunId": "run-69db2e6a-287e-4025-a481-c779c4251c4b",
+        "rawArtifactSha256": "e87638d8a3d2d388496f86b650aec84621d31ab70ab45c6e1859c10a4d7565f5",
+        "rejectedByLocalValidation": true,
+        "receiptSha256": "95c8e1432be0439028a54165c5af2ac9840f3f1dc8adbeef02c9eef73fc9eab0"
+      }
     }
   },
   "reviewPlans": {
