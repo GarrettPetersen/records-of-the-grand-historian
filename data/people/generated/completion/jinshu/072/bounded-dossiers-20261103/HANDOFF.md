@@ -1,60 +1,62 @@
 # Current completion handoff — 2026-11-03
 
-Read CURRENT-STATE.json for exact revisions, jobs and source paths. Full goal remains
-Jinshu ebook readiness, then all histories. This is NOT glossary completion.
+Full goal: Jinshu ebook readiness, then all histories. Only Jinshu053 is currently
+complete/published. Engineering releases and partial date reports add ZERO chapters.
+Read CURRENT-STATE.json for exact current deployment and date-review handles.
 
-Memory repair PR5363 is merged/live at b68fb90c2306287ef1e63aaf5852f1d7a3b329df.
-RequiredCI41653571541 passed. Production bf07f2bb-5fc5-4b54-a7a1-b6eb25a681af
-succeeded and was canonical. New live verification passed112HTTPchecks/72person
-pages/33redirects, actual certificate/CI inputs matched, all72cases and63honest
-uncertainties retained. See live-code-release-receipt.json. ZERO new chapters were
-completed or published; existing053 is the one completed nonempty chapter.
+Memory/streaming PR5363 is merged and live-verified at b68fb90c2306:112HTTPchecks,
+72person pages,33redirects, all72identity cases/63reviewed uncertainties preserved.
+Registry build:151.32s,1.10GiBpeakRSS,228270canonical dossiers/258210records, ZERO
+new pair assignments. Native independent review and36tests passed.
 
-One reusable sparse runtime: /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime.
-Public absent; dependencies linked; old dirty primary/086 preserved. Host only Git
-and builds. Workers only sealed packets/isolated outputs; no clones/worktrees/Git.
-No parallel native agents. Guard before dispatch and every45–60sec; no relaxed limits.
+Transport-byte PR5364 is merged at master9fb028cbfa31abbf88e24f642dd8516d4713c258.
+RequiredCI41666026318 passed on exactce705head; independent reviewer approved;
+39tests and actual749718-byte/96case transport proof pass. Production deployment
+85d5ea66-628e-4394-8eab-3124f7eb883c is the existing active handle; do not redeploy
+on observation timeout. Use observe-production.mjs. Once successful AND canonical,
+run the saved053 verify-live-release.mjs against this directory's
+ci-transport-qualified-contribution/qualification-and-contribution.json and9fb SHA.
+New staging34bb369fecf2f93fd0427902733a513ee1482512 retains both histories and the
+exact new master tree. Original dirty primary/086 checkouts are untouched.
 
-Transport handoff bug now fixed in candidate ce70553424f8e33bfe1eec9fc594ca7cf7fba806,
-PR5364. Native prepare previously sealed compact749718-byte transport but wrote
-pretty1348961-byte file with wrong hash. New writer validates both source and
-transport hashes/bytes before mkdir, emits exact UTF8 buffers, keeps768KiB limit,
-wx outputs and receipt last. All39tests pass, actual96-case/106-record packet now
-matches original seal with all fields retained. Original bad artifact preserved.
-Separate retained reviewer bc-74dd257a-d700-4154-863d-950a6fc95d38 APPROVED in
-run-2bac2131-9a4b-4ad2-8300-f33678433f8b. Observe CI41666026318 at exact ce705
-head; no new CI run just because observation expires. Merge only required-green
-head; normal deployment and live verification afterward. Model review capture,
-real byte proof and logs are in this directory. No need another broad source audit.
-Current runtime is on that candidate branch. After adoption, an actually current
-immutable registry is needed for fresh preparations because global code pins
-changed. Do not relabel old registry hashes. Existing source proofs may be reused
-through normal native validation. Previous generation built151.32s/1.10GiBRSS,
-228270dossiers/258210records, zero generated pairs; no heap increase.
+Canonical sparse runtime: /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime
+is detached at9fb. No public; dependencies linked. Source workers use
+PEOPLE_REPO_ROOT=/Users/garrettpetersen/records-of-the-grand-historian to preserve
+original sealed inputs and sticky ignored recovery. Host only Git/builds. No new
+checkout/native subagents/broad extraction. Guard before dispatch and every45–60s.
 
-080 retained recovery: canonical code with PEOPLE_REPO_ROOT pointing to primary
-recovers the original date state safely. Primary lacks072/080 date-report files;
-source/extraction/editorial bytes match published master. This explains the earlier
-CLI-filter confusion: do NOT modify filtering based on that incomplete diagnosis.
-Five cached080results reused at zero inference. One new native-validated range
-returned with7groups of unsupported/misattributed date findings; cost123.2144raw
-cents,charged0. It is NOT a chapter approval. All findings/raw bytes retained for
-normal repair/fresh independent audit after complete coverage.
+080 now has9/16 native-validated original audit ranges. Original owner is
+jinshu-release-dates-cursor-sdk; original plan40units/56KiB remains unchanged.
+Two single-job calibrations passed under resource/cost limits, then one shared
+pool of2 ran two ranges. One returned normally; the other finished at305.7104raw
+cents against unchanged300c ceiling. Artifact-only recovery retrieved its saved
+valid report, adding4finding groups without another model turn. Raw usage/negative
+findings/bytes retained in measured-pair-1/accepted-and-recovered-receipt.json under
+../080/retained-date-recovery-20261103. No account quota failure was reported.
+The native --recover-only invocation is finishing ledger bookkeeping: CLI61398,
+hostsession41875. Verify actual terminal before any next invocation. No active
+model remains. Then resume the7 original missing jobs via the same host script,
+unique --attempt and --jobs2, unchanged3$/4Mtoken/20min ceilings. Do not replace
+conversations, rewrite source pins, or mark partial findings as chapter approval.
+After complete audit coverage, use normal repairs/fresh independent re-audit and
+existing max3round/repeated-candidate/nonimprovement circuit breakers.
 
-080 now has6/16 returned audit jobs. A SECOND calibration range is LIVE:
-bc-48d895ba-ce30-410f-92a5-57d2ce03a47f /
-run-1d3eee81-671a-43bb-a172-4378fa24110e, owned CLIpid52974, hostsession6520.
-Read ../080/retained-date-recovery-20261103/second-range-calibration/one-review-state.json.
-One supported SIGINT stopped queued dispatches and leaves the active model running.
-Do not send a second SIGINT or SIGTERM; preserve and observe the actual handle.
-Original plan40units/56KiB and stableworker jinshu-release-dates-cursor-sdk remain.
-Only one cloud review was active at a time; no extra model workers are queued.
+072 remains held on independent GuoYuan findings with sticky OpenRouter work.
+080 is held on concrete unsupported/misattributed dates. Neither may use its older
+generic audited receipt as release proof. Primary lacks072/080 date-audit files;
+canonical code correctly recovers original work when PEOPLE_REPO_ROOT points there.
+Earlier CLI-filter diagnosis was wrong; do not modify filtering based on it.
 
-072 remains held on separately reviewed GuoYuan chronology findings. No identity
-reviewer was sent its bad packet. 080 is also held by fresh concrete findings;
-neither can use an older generic audited receipt to obtain release. Preserve all
-claims, original reports, dates/family/source/editorial/identity/CI/live gates.
-Do not redo unchanged global audit or completed053model reviews. No broad extraction.
-Native approval receipt counters remain8Jinshu/258corpus, but now twoJinshu receipts
-are independently challenged. Stale5/142. Full source-data counts remain unchanged;
-release-progress-code-repair.json records exact proven unchanged-data basis.
+Fresh identity preparations require a genuinely current immutable registry after
+code/source changes; never relabel old seals. Preserve unchanged source-case proofs
+through normal validation. Bounded indexed retrieval only; no same-name pair graph.
+All source/editorial/date/identity/website/ebook/CI/live gates remain mandatory.
+Counts are unchanged from release-progress-code-repair.json: nominal current date
+receipts8Jinshu/258corpus, stale5/142, with072 AND080 explicitly challenged. Whole
+Jinshu ebook remains unready. No whole-corpus reaudit needed for code-only releases.
+
+Memory-warning cleanup is standard policy in AGENTS.md/PEOPLE_COMPLETION_PROCESS.md:
+inspect pressure, swap growth and physical footprint incl.graphics/compressed;
+terminate only verified idle superseded previews viaSIGTERM with restart receipt.
+Current5176 preview has clients and must stay. MCP3001 and uncertain4190 stay.
+Pressure normal, swap2.48GiB, no extra verified stale server at last check.
