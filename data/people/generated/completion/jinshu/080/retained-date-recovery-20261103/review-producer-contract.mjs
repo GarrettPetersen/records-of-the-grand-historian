@@ -1,0 +1,45 @@
+import fs from 'node:fs';
+import { createHash } from 'node:crypto';
+import { Agent } from '@cursor/sdk';
+import { loadDotenv } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/load-dotenv.mjs';
+import { inspectLocalDisk } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+import { mutateRemotePeopleWorkLedger } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-work-queue.mjs';
+import { sendCursorAgentWhenReady, waitForCursorRun } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/cursor-run-wait.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',dir=root+'/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103';
+const recheck=process.argv[2]==='--admission-recheck';
+const receptionFinal=process.argv[2]==='--existing-reception-final';
+const reception=process.argv[2]==='--existing-reception'||receptionFinal;
+if(process.argv.length!==((recheck||reception)?3:2))throw new Error('Use no arguments, --admission-recheck or --existing-reception');
+const prefix=dir+(receptionFinal?'/existing-reception-final-review':reception?'/existing-reception-independent-review':recheck?'/producer-contract-admission-recheck':'/producer-contract-independent-review'),stateFile=prefix+'-state.json';
+const need=(condition,message)=>{if(!condition)throw new Error(message);};
+need(!fs.existsSync(stateFile),'Retained review exists; recover its actual agent/run');
+const packet=fs.readFileSync(prefix+'-packet.json'),revision=JSON.parse(packet).revision;
+need(revision===(receptionFinal?'03218fe8d782b3d65120880b07915dc074b3a91d':reception?'ee87af6ec2d2754bec2fa3ec0659efb226ef477c':'33bf1df1e0c2a9b6d5db914de79ec6e20c374eb1'),'Unexpected candidate revision');
+const prior=JSON.parse(fs.readFileSync(receptionFinal?dir+'/existing-reception-independent-review-state.json':reception?dir+'/producer-contract-admission-recheck-state.json':recheck?dir+'/producer-contract-independent-review-state.json':root+'/data/people/generated/completion/jinshu/072/bounded-dossiers-20261103/transport-code-review-state.json'));
+need(prior.phase==='report-recorded'&&prior.verdict===(recheck?'changes-required':'approve')&&prior.agentId,'Retained independent reviewer provenance required');
+need((fs.statSync(root+'/.env').mode&0o077)===0,'Private credentials required');loadDotenv(root);
+const apiKey=process.env.CURSOR_API_KEY;need(apiKey,'Cursor credential missing');
+const state={schemaVersion:1,kind:reception?'independent-existing-reception-code-review':'independent-producer-contract-code-review',worker:reception?'host-existing-reception-20261103':'host-qualified-hints-20261103',phase:'claimed',pid:process.pid,agentId:prior.agentId,revision,packetSha256:createHash('sha256').update(packet).digest('hex'),startedAt:new Date().toISOString(),limits:{rawCostCents:300,totalTokens:4000000,timeoutMinutes:20}};
+const key=(reception?'date-repair-existing-reception-':'date-repair-qualified-hints-')+revision.slice(0,8)+(recheck?'-admission-recheck':''),save=()=>fs.writeFileSync(stateFile,JSON.stringify(state,null,2)+'\n');
+const claim=()=>mutateRemotePeopleWorkLedger(ledger=>{ledger.codeReviews??={};const old=ledger.codeReviews[key];need(!old||(old.worker===state.worker&&old.packetSha256===state.packetSha256&&old.agentId===state.agentId),'Sealed code review owned elsewhere');ledger.codeReviews[key]={...state,sticky:true,updatedAt:new Date().toISOString()};},{message:'Checkpoint producer contract code review '+state.phase});
+let held=false,agent;
+const sample=()=>{const guard=inspectLocalDisk(root);fs.appendFileSync(prefix+'-resources.jsonl',JSON.stringify({at:new Date().toISOString(),guard})+'\n');if(guard.errors.length)held=true;return guard;};
+need(!sample().errors.length,'Host dispatch guard');save();claim();
+const timer=setInterval(()=>{try{sample();}catch(error){held=true;state.measurementError=error.message;save();}},45000);
+try{
+  agent=await Agent.resume(state.agentId,{apiKey});const runs=await Agent.listRuns(state.agentId,{apiKey,runtime:'cloud',limit:20});
+  need(!runs.items.some(r=>r.status==='running'),'Retained reviewer has an active run; preserve it');
+  const purpose=reception?'Independently review the exact existing-reception repair patch by codex-host-existing-reception. Check the narrow classification allowance, rejected changes to facts/certainty/evidence, temporal ownership, final-delta reconstruction/replay, and the fresh independent audit/publication gate. Identify regressions or ways the patch could misrepresent source evidence.':'Independently review this exact instruction-only candidate by codex-host-qualified-hints. Check that the added clause accurately expresses existing chronology rules, does not add a restriction or weaken validators, and fits the retained sealed packet ceilings.';
+  const prompt=purpose+' You are '+state.agentId+', independent of the author. Read actual code and evidence; passing tests alone does not prove correctness. You are not a chapter/date approver. Use only this sealed packet: no clone/worktree, repository/data copy, Git, build, SDK/other-model API, canonical edits, or additional tools. One shared host checkout and isolated artifacts; host alone publishes. Host resource guard runs before dispatch and every45s; claim is on shared codeReviews '+key+'. Return ONLY one JSON assistant message {schemaVersion:1,reviewerAgentId:"'+state.agentId+'",packetSha256:"'+state.packetSha256+'",revision:"'+revision+'",verdict:"approve"|"changes-required",findings:[{file,line,severity,problem,requiredFix}],reason:string}. Report concrete defects, no optional style findings.\nSEALED PACKET:\n'+packet;
+  fs.writeFileSync(prefix+'-prompt.txt',prompt,{flag:'wx'});need(!held&&!sample().errors.length,'Host guard before send');
+  state.phase='sending';save();const run=await sendCursorAgentWhenReady(agent,prompt,{label:'Producer contract review',timeoutMs:60000});
+  state.runId=run.id;state.phase='running';save();claim();console.log(JSON.stringify({agentId:state.agentId,runId:run.id,phase:state.phase}));
+  const result=await waitForCursorRun(run,{agentId:state.agentId,apiKey,label:'Producer contract review',pollMs:15000,timeoutMs:1200000,maxRawCostCents:300,maxTotalTokens:4000000});
+  state.phase=result.status;save();need(result.status==='finished'&&typeof result.result==='string','Preserve reviewer handle for recovery');
+  fs.writeFileSync(prefix+'.raw.txt',result.result,{flag:'wx'});const report=JSON.parse(result.result);
+  need(report.schemaVersion===1&&report.reviewerAgentId===state.agentId&&report.packetSha256===state.packetSha256&&report.revision===revision&&['approve','changes-required'].includes(report.verdict)&&Array.isArray(report.findings),'Review provenance/shape mismatch');
+  fs.writeFileSync(prefix+'-report.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});
+  fs.writeFileSync(prefix+'-usage.json',JSON.stringify(await agent.getUsage({runId:run.id}),null,2)+'\n',{flag:'wx'});
+  state.phase='report-recorded';state.verdict=report.verdict;state.finishedAt=new Date().toISOString();save();claim();console.log(JSON.stringify({verdict:report.verdict,findings:report.findings.length}));
+}catch(error){state.error={name:error.name,message:String(error.message).replaceAll(apiKey,'[redacted]').slice(0,900)};save();claim();console.error(JSON.stringify(state.error));process.exitCode=1;}
+finally{clearInterval(timer);sample();if(agent)await agent.close();}

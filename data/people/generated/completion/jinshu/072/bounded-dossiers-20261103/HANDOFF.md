@@ -1,74 +1,75 @@
-# Bounded completion handoff — November 3, 2026, repair checkpoint
+# Completion checkpoint — 2026-11-03T20:40:41.359939+00:00
 
-Full goal: Jinshu ebook readiness, then all histories. Only Jinshu053 is complete
-and live. ZERO new complete/published chapters this batch. Follow current AGENTS.md
-and PEOPLE_COMPLETION_PROCESS.md; no all-pairs identity graph or broad extraction.
+Full goal remains Jinshu ebook readiness, then all histories. Only Jinshu053 is
+complete/live. ZERO newly complete/published chapters in this bounded batch.
+Read current AGENTS.md/PEOPLE_COMPLETION_PROCESS.md. No complete same-name pair
+ graph, broad extraction, new checkout, or native subagents. Preserve dirty primary
+and086; host alone Git/build/publication. One local heavy job,3GiB Node heap;
+source repairs serial1cloud. Guard before/after work and every45–60s.
 
-Live code remains master9fb028cbfa31abbf88e24f642dd8516d4713c258 (PR5364,
-CI41666026318). Canonical Cloudflare85d5ea66-628e-4394-8eab-3124f7eb883c passed
-112live checks/72person pages/33redirects. Source53 proofs remain current. No new
-release, rebuild or source53 model review needed. Streaming registry:151.32s,
-1.10GiB RSS,228270dossiers, zero generated pairs. Current registry needs genuine
-refresh after actual source/code changes; never relabel old seals.
+Memory warning cleared by an actual passing guard: pressure1,swap2.328GiB.
+No processes were killed or apps restarted. Standard bounded preview cleanup is
+saved globally and in project instructions. Stop new work if guard fails again;
+keep private cleanup receipts private. Current source invocation is TERMINAL:
+CLI48114/session10981 exited after ONE SIGINT queued-drain, active run completed.
+Do not send additional signals or start a replacement author.
 
-080 full initial audit:16 original jobs,355source units,344date items,125people,
-76findings, native needs-revision report. Staging0726d158e700971f93906750b12fb5c0cc46538c
-contains that failed audit, prior approval history and coverage. Canonical extraction
-is still original; candidate repairs are ignored staged work, NOT approval.
+Jinshu080 state: repair round0,index3,candidate repair-candidate-0-3.json,
+sha256:583328da961aefd928f3e2151f13dec44dbb3fa15babdb05901f567bf67d5052.
+Three of six repair groups passed native production validation. Latest actual
+proposal61changes, same author bc-aa6d55f5-0d9e-43bb-8b4a-c8c56fed5b7a,
+run run-5b3c5db8-b573-4656-8bb6-2d7043ad61da, raw SHA256
+540783adeb28728b293c5c04a74eb9dd193f9e1f53a2b205f4c6b1e9b5048c03.
+Native validationError null, original125people retained. Canonical extraction and
+source unchanged; full negative initial date audit on staging remains needs-revision.
+Receipt ../../080/retained-date-recovery-20261103/repair-round-0-group-3-correction/accepted-candidate-receipt.json.
+Three groups remain, then FULL fresh independent source/date re-audit. Repair author
+cannot approve. Keep existing max3round/repeated-candidate/nonimprovement stops.
 
-CURRENT: two of six repair groups pass native production validation.
-Native state data/people/generated/date-workflow/jinshu/080/state.json is repair,
-round0, repairIndex2, repairCandidate=repair-candidate-0-2.json. No executor/model
-active. All125people and original surfaces/source preserved. Group1 actual accepted
-proposal has50changes; group2 has45. Receipts under ../../080/retained-date-recovery-20261103/
-repair-round-0-group-1-correction/accepted-candidate-receipt.json and group2-correction.
-Do not rerun accepted groups or reset state/claims/circuit breakers.
+Root causes fixed: narrowly allow retrospective classification on existing dated
+non-life claims, preserving other facts/certainty/evidence; preserve it in final-delta
+replay. Worker instructions now match production Western precision year/circa;
+finer native-calendar detail remains in sourceDate. No schema/validator/date-review
+or publication gate was weakened. Independent reviewer approved exact03218 below;
+268unique offline tests pass,105worker tests rerun after guidance edit. Actual native
+first-send/continuation admission passed for remaining groups at candidate2; next
+candidate must use fresh actual guard, not overwrite sealed old admission evidence.
+Original rejected producer raw and host diagnostic copies remain separate.
+Two code reviews plus actual source correction:177.8702raw cents,$0charged;
+included Cursor allowance consumed, no completed-chapter throughput claimed.
 
-Both initial proposals incorrectly cleared hints despite retained one-sided Western
-bounds. Group1 also encoded five retrospective references as life attestations.
-Host ran read-only diagnostics, fixed copies passed production validation, then SAME
-producer conversations returned actual corrected proposals through normal validators.
-No raw artifact or approval hash was changed, and no validator was weakened.
-Four SDK runs this batch:452.2108raw cents/$0charged; included allowance consumed.
-Original rejected versions, feedback and actual corrected artifacts remain preserved.
+Runtime W=/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime,
+branch codex/people-existing-reception-repair-20261103,head
+03218fe8d782b3d65120880b07915dc074b3a91d. Tracked clean except node_modules symlink.
+Use PEOPLE_REPO_ROOT=/Users/garrettpetersen/records-of-the-grand-historian to preserve
+original source/state. No branch switching during a native invocation.
+PR5366 READY at03218, independent approval run-d1a65355-2255-4af0-8282-63fc91f52260,
+reviewer bc-74dd257a-d700-4154-863d-950a6fc95d38. Required CI41712941882 is
+in progress, full-site build at latest observation. No bypass/restart; merge normally
+only after exact-head required checks pass. Local staged repair may use reviewed
+code while CI runs. Source group3 did so; it is not a chapter publication.
 
-NEXT: before fresh group3, independently review producer-hint-contract-review-packet.json
-under that same080completion directory. Proposed patch adds280bytes of qualified-hint
-example/all-retained-claims/hints-last guidance. It is NOT adopted; source runtime
-remains clean at9fb apart from dependency symlink. Candidate syntax passed; remaining
-four initial messages measured <=57344bytes under the proposed clause (largest57066),
-but recheck actual current candidate before adoption. Normal code review/tests/CI
-and idle-boundary adoption remain required. Base offline date tests:261pass; identity
-code tests:39pass. The clause changes instructions only, never acceptance/schema/budgets.
-Then guard and resume original owner using unique artifact attempt:
-node /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103/resume-one-review.mjs --attempt repair-round-0-group-3 --jobs 1
-Four serial groups remain, then FULL fresh independent audit. A repair author must
-not approve their candidate. Keep max3round/repeated-candidate/nonimprovement stops.
-Genuinely undated facts stay undated; unresolved research remains held.
+PR5365 merged master4cd33f50caf1be0adb464ebb1029c70e64daf78b; CI41693848878
+SUCCESS. Merged tree exactly equals reviewed33bf tree. Existing production deployment
+5dc1737a-d292-4e50-b144-09458d840f34 is in build; observe it, never restart because
+observation expires. CURRENT-STATE.json now points to this master/deployment;
+publicationVerified=false until canonical success and live checks. Prior live9fb
+receipt remains preserved. CI qualification artifact downloaded under
+../../080/retained-date-recovery-20261103/producer-contract-release-ci/.
+Use verify-live-release.mjs with that exact qualification receipt and4cd after
+canonical success; preserve unique live report. No new source053 review/rebuild needed.
 
-Original worker:jinshu-release-dates-cursor-sdk. Canonical sparse runtime:
-/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime. Execute native code
-there with PEOPLE_REPO_ROOT=/Users/garrettpetersen/records-of-the-grand-historian,
-preserving original state, source, extraction and failed report. Host alone Git,
-builds and canonical publication; do not touch dirty primary/086 index/branches.
-No new checkout/native agents. One local heavy job,3GiBheap; guard before/after and
-every45–60s. Host helper samples45s, drains after one new run viaONE SIGINT. Do not
-send a second signal or restart from observation timeouts. Preserve real handles.
+NEXT source command, after guard and native final admission:
+node /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103/resume-one-review.mjs --attempt repair-round-0-group-4 --jobs 1
+This resumes worker jinshu-release-dates-cursor-sdk, same shared dateAudits ownership.
+Do not rerun accepted groups1–3, reset state/claims, or overwrite proof hashes.
+No unproven year is allowed merely to satisfy a structural gate.
 
-072 remains held on GuoYuan findings/sticky OpenRouter work.130 triage found a Qubei
-person-check citing only HelianBobo heading; its native audited status was NOT changed,
-but independently recheck before reuse. See alternative-chapter-130-date-evidence-triage.
-Do not treat generic saved checks as new verified source work. Staging native date
-receipts7Jinshu/257corpus, stale5/142; published/complete remains1/1. Full counts in
-staging-progress-after-080-audit.json. Whole Jinshu ebook and one-hour throughput
-remain unproven. Generic paid bounded identity scheduler still needs integration;
-normal prepare/record/site qualification gates exist. Never invoke legacy pair waves.
-
-Latest selective recovery receipts in this directory identify exact remote commits
-on codex/people-recovery-20261025; previous tree entries preserved. Check CURRENT-STATE
-and actual native state/remote handles. All current workflow JSON and raw rejected/
-corrected bytes are backed up; no swap/history/recovery deletion.
-Memory-warning policy is standard globally and in this project: inspect pressure,
-swap growth and physical footprint incl.graphics/compressed; stop only verified
-idle superseded previews viaSIGTERM with restart receipt. Keep current5176, MCP3001,
-uncertain4190 and unrelated apps/jobs. Guard unchanged; last pressure normal.
+Staging remains0726d158e700971f93906750b12fb5c0cc46538c. Exact separate Jinshu/corpus
+counts and caveats in staging-progress-after-080-audit.json:61/2050extracted;
+45/1393editoriallyclosed;7/257native current date receipts,5/142stale;1/1identity-
+certified,dataqualified,complete and live. Raw date receipts are not release-ready:
+072GuoYuan remains challenged,130Qubei source-proof QA concern remains held;
+080needsrevision. Corpus sourcevalidated lower bound1508, not all2050. Preserve072
+OpenRouter recovery (no paid fallback) and086 round3/circuit/claims. Whole Jinshu
+ebook and one-hour chapter throughput remain unproven. No broad wave.

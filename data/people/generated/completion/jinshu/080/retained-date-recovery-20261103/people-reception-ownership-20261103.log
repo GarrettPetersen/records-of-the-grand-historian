@@ -1,0 +1,48 @@
+Retaining date ownership jinshu/127: generation mismatch; recover the retained generation before reconciliation
+✔ pending receipt prevents same owner (1662.105ms)
+✔ pending receipt prevents foreign owner (1744.412625ms)
+✔ pending receipt prevents release (1797.4435ms)
+✔ pending receipt prevents foreign release (1701.221042ms)
+✔ pending receipt prevents takeover (1767.739959ms)
+✔ pending receipt prevents release with takeover (1703.161916ms)
+✔ pending receipt prevents reconciliation and extraction at active (2940.032833ms)
+✔ pending receipt prevents reconciliation and extraction at research-blocked (2999.511625ms)
+✔ pending receipt prevents reconciliation and extraction at ready (3052.945167ms)
+✔ pending null prevents same owner (1693.153042ms)
+✔ pending null prevents foreign owner (1695.862917ms)
+✔ pending null prevents release (1705.01025ms)
+✔ pending null prevents foreign release (1680.067375ms)
+✔ pending null prevents takeover (1702.532958ms)
+✔ pending null prevents release with takeover (1707.176334ms)
+✔ pending null prevents reconciliation and extraction at active (3124.536625ms)
+✔ pending null prevents reconciliation and extraction at research-blocked (3147.624042ms)
+✔ pending null prevents reconciliation and extraction at ready (2957.165916ms)
+✔ generation hold does not change absent queue reservation (1704.406584ms)
+✔ generation hold does not change ready queue reservation (1706.789875ms)
+✔ generation hold does not change active queue reservation (1698.180375ms)
+✔ other worker cannot take stale-source, even after lease expiry (1865.595791ms)
+✔ other lane cannot take stale-source with same worker (1874.173959ms)
+✔ changed stale-source fingerprint remains untouched even with retained publish phase (1846.972917ms)
+✔ ready claim is archived and may be reassigned with fresh fingerprint and no old jobs (1874.679916ms)
+✔ unexpired lease blocks same-owner resume without takeover (1841.136041ms)
+✔ same-owner unchanged stale-source resumes without dropping retained jobs (1542.956542ms)
+✔ extraction claim blocked while date work is stale-source (2183.065792ms)
+✔ extraction claim blocked while date work is active (2172.941042ms)
+✔ extraction claim blocked while date work is research-blocked (2179.656958ms)
+✔ ready date audit does not block extraction claim (2197.64725ms)
+✔ startup reconciliation preserves stale-source even with an audited matching report (1935.907208ms)
+✔ startup reconciliation still marks completed active work ready (2012.139208ms)
+✔ startup reconciliation retains a claim without matching completed-generation evidence (1847.243375ms)
+✔ startup reconciliation respects an active executor lease (1849.798167ms)
+✔ real workflow generation guard prevents a production callback from changing the local Git-backed queue (1750.158666ms)
+✔ stale date reconciliation archives every workflow artifact without deleting it (2.962041ms)
+✔ matching workflow inputs are never archived (1.3125ms)
+✔ stale reports are retained in immutable history before removal from the live path (2.048333ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 73675.752667

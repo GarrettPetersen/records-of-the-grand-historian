@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "323ff68b2b0144d64957836cd98eaffeeec0a3fba65af43a787a06983d06f185",
+  "revision": "ee87af6ec2d2754bec2fa3ec0659efb226ef477c",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "sameDateRepairClaim only adds receptionType retrospective on existing temporal non-life rows: subject, predicate, certainty, evidence, and other non-date value fields stay equal after dropping that label; life rows and undated non-temporal targets remain blocked. dateRepairDifference still collapses those edits to replace (not add-reception-event), and apply replays the collapsed delta. Withdrawal of the label, fact/certainty/evidence edits, and a failed independent re-audit still refuse staging/publish. Host audit and publication gates are unchanged."
+}

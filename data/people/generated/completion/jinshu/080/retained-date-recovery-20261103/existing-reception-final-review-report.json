@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "6d414a61b008de59531ae64805e5a617885eb519e23995fcd8e3b9a5348feeb0",
+  "revision": "03218fe8d782b3d65120880b07915dc074b3a91d",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "sameDateRepairClaim still only adds receptionType retrospective on owned temporal non-life rows, preserving subject, predicate, certainty, evidence, and other non-date fields; undated rows, life predicates, fact edits, and label withdrawal stay rejected. Collapsed deltas remain replace and replay. Re-audit and publication gates are unchanged. The repairContract now matches existing year/circa Western vocabulary (finer detail stays in sourceDate) and native first-send sizes stay under 57344."
+}

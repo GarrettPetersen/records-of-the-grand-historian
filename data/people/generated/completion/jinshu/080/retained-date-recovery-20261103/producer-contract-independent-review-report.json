@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "dddc6e208d57d07a340075f40aeacb049849b1fa88df96d30b1ff3c1f2c385c1",
+  "revision": "33bf1df1e0c2a9b6d5db914de79ec6e20c374eb1",
+  "verdict": "changes-required",
+  "findings": [
+    {
+      "file": "scripts/lib/people-date-worker.mjs",
+      "line": 92,
+      "severity": "high",
+      "problem": "The added repairContract sentences are 279 ASCII bytes with no JSON escapes. Retained packet 004-e8b3187825d26bec65b7 is already 57066 message bytes against a 57344 ceiling (278 bytes of headroom). First-send message is payload plus a fixed suffix, so 57066+279=57345 exceeds maxWorkerBytes and would refuse that sealed repair. Packets 003/005/006 still fit; 001/002 were not in the admission list. Host diagnostics already treat qualified on-or-after hints and last-position hint edits as existing gates, so the wording is not the blocker—admission is.",
+      "requiredFix": "Shorten the clause by at least 2 bytes (more if 001/002 are tighter than 004) so every retained first-send message stays ≤57344 after JSON.stringify. Keep one-sided hint mapping, full retained-person chronology, and hint-last ordering, but do not adopt this 279-byte insertion until measured messageBytes for all retained repair ids are under the ceiling."
+    }
+  ],
+  "reason": "Instruction-only text matches existing hint/order gates and does not change validators, but it cannot be adopted: packet 004’s sealed message would exceed 57344 bytes."
+}

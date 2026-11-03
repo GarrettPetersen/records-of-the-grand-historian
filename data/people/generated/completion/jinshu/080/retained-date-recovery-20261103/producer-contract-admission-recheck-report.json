@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "f1538950e08e73a9fdf09e86cf3cf57071daf36c5c92a30dc7388f1c9c089ef3",
+  "revision": "33bf1df1e0c2a9b6d5db914de79ec6e20c374eb1",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "Native first-send already includes the 280-byte clause. All six retained messages stay under 57344 (tightest unaccepted is 004 at 57066; 001 is 57214 and already accepted). The clause restates existing gates: one-sided westernBounds.onOrAfter maps to “on or after AD …”, not empty or exact year; scan the person’s retained claims before clearing hints; hint edits last. Validators are unchanged."
+}
