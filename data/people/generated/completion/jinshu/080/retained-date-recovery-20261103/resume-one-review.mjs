@@ -16,7 +16,9 @@ const stateFile = root + '/data/people/generated/date-workflow/jinshu/080/state.
 const ownState = job + '/one-review-state.json';
 if (fs.existsSync(ownState)) throw new Error('Retained invocation exists; inspect its exact process and remote handles before resuming');
 const before = JSON.parse(fs.readFileSync(stateFile));
-if (before.phase !== 'audit' || before.round !== 0 || !before.reviewPlans?.['audit-0']) throw new Error('Unexpected retained audit phase; preserve it');
+if (!['audit', 'repair', 'reaudit'].includes(before.phase) || !Number.isSafeInteger(before.round) || before.round < 0 || before.round >= 3 ||
+    (before.phase === 'audit' && before.round !== 0) || !before.reviewPlans?.['audit-0'] || before.circuitBreaker) throw new Error('Unexpected or held retained date phase; preserve it');
+if (before.phase === 'repair' && jobLimit !== 1) throw new Error('Retained repairs are serial; use --jobs 1');
 const oldRuns = new Set(Object.values(before.jobs).map(value => value.runId).filter(Boolean));
 if (jobLimit === 2) {
   const calibrations = [base + '/one-review-state.json', base + '/second-range-calibration/one-review-state.json'].map(file => JSON.parse(fs.readFileSync(file)));
@@ -30,7 +32,7 @@ if (jobLimit === 2) {
   }
 }
 const state = { schemaVersion: 1, worker: 'jinshu-release-dates-cursor-sdk', scope: { book: 'jinshu', chapter: '080' },
-  phase: 'starting', startedAt: new Date().toISOString(), priorRunIds: [...oldRuns],
+  phase: 'starting', workflowPhaseAtStart: before.phase, workflowRoundAtStart: before.round, startedAt: new Date().toISOString(), priorRunIds: [...oldRuns],
   sourceHash: before.sourceHash, extractionHash: before.extractionHash, limits: { concurrency: jobLimit, rawCostCents: 300, totalTokens: 4000000, timeoutMinutes: 20 },
   drainPolicy: `One SIGINT to the owned CLI after ${jobLimit} newly captured review jobs. Its installed handler stops queued work and drains active runs; no SIGTERM, second SIGINT, or active cancellation.` };
 const save = () => fs.writeFileSync(ownState, JSON.stringify(state, null, 2) + '\n');
