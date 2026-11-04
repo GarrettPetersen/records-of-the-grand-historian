@@ -1,0 +1,5 @@
+Date recovery rejected a valid source-research round because no review was dispatched before its unresolved preflight. Prove the saved preflight and native source amendment in the retained ancestry, then require the actual later negative reviews and a fresh independent approval.
+
+The retry and ancestry paths share the same amendment proof. Missing or altered proofs, started review ownership, missing real reviews and stale source evidence still block. Round limits, circuit breakers and publication gates are unchanged.
+
+Validation: 134 workflow, 44 ownership and 122 worker/campaign/stale checks pass; read-only admission against retained Jinshu 080 passes with all 110 saved JSON files unchanged. Independent review approved exact head `8766795062d4bfe5b0107a06059f181437274827` with no findings (reviewer `bc-74dd257a-d700-4154-863d-950a6fc95d38`, run `run-46146551-8842-461c-a940-f11da8563859`, packet SHA-256 `02f03b2e04bd65a31ef2063a6dea22bb3d7a5673fab1fb5add2af8b3026f9857`). This change approves no chapter.

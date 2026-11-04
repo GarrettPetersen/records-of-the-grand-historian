@@ -39,6 +39,14 @@ else:raise RuntimeError('Retained source CLI is still present; inspect current o
 files += [p for p in (audit/'full-reaudit-2').glob('*.json') if p.name!='f0c40-original-first-turn.json']
 files += list((audit/'preflight-resume-release-ci').glob('*'))
 files.append(base/'nov03-six-repairs-source-amendment-and-resume-recovery.json')
+files += list((audit/'final-reaudit2-range-20261104').glob('*.json'))
+files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-862bdec59a91.json'))
+files += [audit/name for name in ['preflight-ancestry-proposal.patch','preflight-ancestry-workflow.log','preflight-ancestry-workers.log','preflight-ancestry-combined-initial.log','preflight-ancestry-pr-body.md','preflight-ancestry-independent-review.raw.txt']]
+files += list((audit/'preflight-ancestry-release-ci').glob('*'))
+# Full provider conversation dumps, credentials and private memory cleanup receipts
+# remain excluded. Keep the compact replaced handoff as historical evidence.
+archive=audit/'handoff-before-memory-standard-checkpoint-20261104.md'
+if archive.exists():files.append(archive)
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
