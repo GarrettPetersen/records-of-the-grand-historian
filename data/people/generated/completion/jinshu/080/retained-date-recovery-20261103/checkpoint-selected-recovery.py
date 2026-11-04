@@ -32,6 +32,13 @@ for name in ['review-0.json','combined-proposal.json']:
  p=wf/name
  if p.exists():files.append(p)
 files += list(audit.glob('*.mjs')); files += list(audit.glob('*.py')); files += list(audit.glob('preflight-resume-*.raw.txt')); files += [audit/name for name in ['preflight-resume-workflow-ownership.log','preflight-resume-workflow-ownership-final.log','preflight-resume-e2e-ownership.log','preflight-resume-worker-campaign-stale.log','preflight-resume-corrected-workflow.log']]; files += list((audit/'reaudit-preflight-release-ci').glob('*')); files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-32f51184c37b.json')); files.append(base/'nov03-fifth-repair-and-live-preflight-recovery.json')
+cohort=json.loads((audit/'full-reaudit-2/state.json').read_text());assert cohort['phase']=='terminal','Preserve active re-audit before checkpoint'
+try:os.kill(cohort['pid'],0)
+except ProcessLookupError:pass
+else:raise RuntimeError('Retained source CLI is still present; inspect current ownership')
+files += [p for p in (audit/'full-reaudit-2').glob('*.json') if p.name!='f0c40-original-first-turn.json']
+files += list((audit/'preflight-resume-release-ci').glob('*'))
+files.append(base/'nov03-six-repairs-source-amendment-and-resume-recovery.json')
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
@@ -42,7 +49,7 @@ with tempfile.TemporaryDirectory(prefix='people-recovery-index-') as temp:
  env=dict(os.environ,GIT_INDEX_FILE=str(pathlib.Path(temp)/'index'));git('read-tree',parent,env=env)
  git('update-index','--add','--index-info',input=''.join('100644 '+blob+'\t'+p.as_posix()+'\n' for p,data,digest,blob in blobs).encode(),env=env)
  tree=git('write-tree',env=env);changes=git('diff-tree','--no-commit-id','--name-only','-r',git('rev-parse',parent+'^{tree}'),tree).splitlines();assert set(changes)<=set(p.as_posix() for p in files)
- commit=git('commit-tree',tree,'-p',parent,input=('Checkpoint six Jinshu080 repairs and native source amendment; chapter unapproved\n').encode());pendingTarget=base/(receiptName+'.pending.json');assert not pendingTarget.exists();pendingTarget.write_text(json.dumps({'parent':parent,'commit':commit,'branch':branch,'files':len(files),'chapterApproved':False},indent=2)+'\n');print(json.dumps({'pendingCommit':commit}),flush=True);git('push','--porcelain','origin',commit+':'+branch)
+ commit=git('commit-tree',tree,'-p',parent,input=('Checkpoint retained Jinshu080 reviews and validated pending repairs; chapter unapproved\n').encode());pendingTarget=base/(receiptName+'.pending.json');assert not pendingTarget.exists();pendingTarget.write_text(json.dumps({'parent':parent,'commit':commit,'branch':branch,'files':len(files),'chapterApproved':False},indent=2)+'\n');print(json.dumps({'pendingCommit':commit}),flush=True);git('push','--porcelain','origin',commit+':'+branch)
 assert git('ls-remote','origin',branch).split()[0]==commit
 verified=git('cat-file','--batch-check=%(objectname)',input=('\n'.join(commit+':'+p.as_posix() for p,data,digest,blob in blobs)+'\n').encode()).splitlines();assert verified==[blob for p,data,digest,blob in blobs]
 receipt={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'branch':branch,'parent':parent,'commit':commit,'files':[{'path':p.as_posix(),'bytes':len(data),'sha256':digest} for p,data,digest,blob in blobs],'originalOctoberRawReportsNotPresentLocally':oldRawAbsent,'returnedOriginalAuditRanges':returned,'workflowPhase':state['phase'],'repairGroupsAccepted':sum(1 for key,job in state['jobs'].items() if key.startswith('repair-0-00') and job.get('status')=='returned'),'chapterApproved':False,'newPublishedChapters':0,'scope':'Selected recovery artifacts only; all previous recovery tree entries preserved. Dirty primary index and canonical source unchanged.'}

@@ -1,0 +1,389 @@
+{
+  "jobId": "6b20ec8a358bb98617e8",
+  "sourceHash": "sha256:78efc236952724ac19b16e86ab77616208432d87d2d71eb2c25e79a7b6a2dc4b",
+  "extractionHash": "sha256:af2ead9e282388392087d7c7f57b97362656fa7d88d355844a63fee1e208af28",
+  "reviewedAt": "2026-11-04T00:22:41Z",
+  "reviewer": {
+    "name": "independent-date-reviewer",
+    "independentOfExtractor": true
+  },
+  "summary": "Owned units s0244–s0266 contain no omitted birth, death, or age statements for the owned people: Zhenzhi’s and Caozhi’s office lists are undated, Xianzhi’s 年數歲 is already extracted, and Xun Can and Liu Tan appear only as names in Xianzhi’s shame comparison. The Xie An visit is an undated 嘗 event whose sole justified Western endpoint is on or before AD 385, the Gregorian year of Xie An’s 太元十年八月丁酉 death under Jin Xiaowu; that one-sided bound and the empty retrospective hints are supported. The Huan Xuan Grand Commandant cluster is not: chapter 80 only says 桓玄為太尉, the annals place that self-appointment in 元興元年三月 (AD 402) and his next elevations in 元興二年 (AD 403), and an exact westernYear 402 turns an office-tenure window into a false point date.",
+  "reviewedUnits": [
+    "s0244",
+    "s0245",
+    "s0246",
+    "s0247",
+    "s0248",
+    "s0249",
+    "s0250",
+    "s0251",
+    "s0252",
+    "s0253",
+    "s0254",
+    "s0255",
+    "s0256",
+    "s0257",
+    "s0258",
+    "s0259",
+    "s0260",
+    "s0261",
+    "s0262",
+    "s0263",
+    "s0264",
+    "s0265",
+    "s0266"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-632",
+      "verdict": "incorrect",
+      "event": "Huan Xuan held Grand Commandant and assembled the court to question Wang Zhenzhi.",
+      "reason": "The dated event belongs to Huan Xuan (p085), whose office is the time-marker for the court scene. Unit s0245 says only 桓玄為太尉; it is an office label, not a reign year, and 為太尉 means he was serving as Grand Commandant when the court assembled, not that the exchange is known to occupy a single Gregorian year. Jinshu 安帝紀, Emperor An, Eastern Jin, era 元興: in 元興元年三月壬申 he made himself 丞相 and shortly 自稱太尉; in 元興二年二月乙卯 he claimed 大將軍 and in 秋八月 相國/楚王. Those months convert to AD 402 and AD 403 (Yuanxing 1/III and Yuanxing 2/II and VIII all sit mid-year, so Julian-versus-proleptic-Gregorian does not move the year). Holding the office can run from 402 into 403, so westernYear 402 invents a point date and a missing second endpoint. Use onOrAfter 402 and onOrBefore 403; do not keep an exact year.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        }
+      ]
+    },
+    {
+      "id": "claim-661",
+      "verdict": "supported",
+      "event": "Wang Xianzhi, then only several years old, watched retainers play chupu and judged the southern side weak.",
+      "reason": "The age statement belongs to Wang Xianzhi (p082). s0254 gives 年數歲 with no calendar year and no inclusive-age figure that could be turned into a birth year. The claim correctly keeps the traditional age wording and does not add a Western birth date.",
+      "evidence": [
+        {
+          "unit": "s0254",
+          "quote": "年數歲，嘗觀門生樗蒱，曰：「南風不競。」"
+        }
+      ]
+    },
+    {
+      "id": "claim-669",
+      "verdict": "supported",
+      "event": "Wang Xianzhi went with Huizhi and Caozhi to visit Xie An.",
+      "reason": "The dated event is Wang Xianzhi’s own visit (p082), not a later quotation. s0258 marks it only with 嘗 and names 謝安 as the living host, so the source year is unknown. The sole justified Western endpoint is onOrBefore AD 385: Jinshu 孝武帝紀, Eastern Jin, Emperor Xiaowu, era 太元十年八月丁酉, 太保謝安薨. The North-South calendar table gives 太元十年八月朔 as 公曆 09-21 丙子, so 丁酉 is 公曆 12 October 385; Academia Sinica’s pre-1582 Julian default cannot move that mid-year death into another Western year. A visit to the living Xie An may still fall in 385, hence onOrBefore 385 rather than before 385. No start year is supplied, and none was invented. Certainty uncertain matches 嘗.",
+      "evidence": [
+        {
+          "unit": "s0258",
+          "quote": "嘗與兄徽之、操之俱詣謝安"
+        }
+      ]
+    },
+    {
+      "id": "claim-671",
+      "verdict": "incorrect",
+      "event": "Wang Zhenzhi stood among the assembled court and answered Huan Xuan while Xuan was Grand Commandant.",
+      "reason": "The dated event belongs to Wang Zhenzhi (p084), who is questioned and replies in s0245–s0247. The only source date is 桓玄為太尉. That office begins in 元興元年三月 (AD 402) and is superseded by 大將軍 and then 相國/楚王 in 元興二年 (AD 403). Zhenzhi’s reply is not independently dated to the appointment month, and 亡叔 only shows Xianzhi was already dead; it does not pin the year. westernYear 402 is false precision for Zhenzhi’s appearance. Replace it with onOrAfter 402 and onOrBefore 403.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        },
+        {
+          "unit": "s0247",
+          "quote": "楨之曰：「亡叔一時之標，公是千載之英。」"
+        }
+      ]
+    },
+    {
+      "id": "claim-672",
+      "verdict": "incorrect",
+      "event": "Huan Xuan, as Grand Commandant, assembled the court and asked Zhenzhi to compare him with Zhenzhi’s late uncle.",
+      "reason": "Same Huan Xuan (p085) court event as claim-632. s0245 dates it only by the 太尉 office. Annals justify a window from the 元興元年三月 self-appointment (AD 402) through 元興二年 (AD 403), not a single westernYear. The attestation row repeats that unsupported point date.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        }
+      ]
+    },
+    {
+      "id": "claim-673",
+      "verdict": "supported",
+      "event": "Wang Caozhi visited Xie An together with his brothers Huizhi and Xianzhi.",
+      "reason": "The dated event is Wang Caozhi’s own visit (p086), named as 操之 in s0258. The Chinese gives 嘗 and no year. The onOrBefore AD 385 bound is Caozhi’s terminus only because Xie An, the host, died in 太元十年八月丁酉, whose proleptic Gregorian year is 385. The visit may still occur in 385, so onOrBefore is the right operator. No second endpoint is present or needed. s0250’s undated 侍中、尚書、豫章太守 list does not date this visit.",
+      "evidence": [
+        {
+          "unit": "s0258",
+          "quote": "嘗與兄徽之、操之俱詣謝安"
+        }
+      ]
+    },
+    {
+      "id": "claim-675",
+      "verdict": "supported",
+      "event": "Xie An received the three Wang brothers and judged the youngest superior.",
+      "reason": "The dated event is Xie An’s own hosting and remark (p089) in s0258–s0259, not a descendant’s later commemoration. The visit is undated (嘗). His death in 太元十年八月丁酉 under Jin Xiaowu supplies only an onOrBefore AD 385 year bound; that death month stays in Gregorian 385, so the year label equals the death-day year. He can still host in 385, therefore onOrBefore rather than before. The later 及安薨 reception in the wider chapter is outside these units and is not used as living activity here.",
+      "evidence": [
+        {
+          "unit": "s0258",
+          "quote": "嘗與兄徽之、操之俱詣謝安"
+        },
+        {
+          "unit": "s0259",
+          "quote": "既出，客問安王氏兄弟優劣，安曰：「小者佳。」"
+        }
+      ]
+    },
+    {
+      "id": "claim-697",
+      "verdict": "incorrect",
+      "event": "Huan Xuan, as Grand Commandant, asked Wang Zhenzhi how he compared with Zhenzhi’s late uncle.",
+      "reason": "Event owner is Huan Xuan (p085) as questioner. s0245 ties the question to 桓玄為太尉, which is tenure, not a proven AD 402 day. The same 402/403 window required for claim-632 applies; an exact westernYear overstates what the office label and the 安帝紀 appointments can support.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        }
+      ]
+    },
+    {
+      "id": "claim-979",
+      "verdict": "supported",
+      "event": "Xun Can, called Xun Fengqian, was named by Wang Xianzhi as the distant exemplar in an undated shame comparison, which is not Xun Can’s own activity.",
+      "reason": "s0256 is Xianzhi’s speech, 遠慚荀奉倩. The row correctly treats Xun Can (p087) as a retrospective-reference / receptionType retrospective, records no Western year, and states the comparison is not Xun Can’s activity. The surrounding 年數歲 scene is also undated as a calendar year; leaving this reception unresolved by year, rather than borrowing a life date, follows the source.",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "獻之怒曰：「遠慚荀奉倩，近愧劉真長。」"
+        }
+      ]
+    },
+    {
+      "id": "claim-980",
+      "verdict": "supported",
+      "event": "Liu Tan, called Liu Zhenchang, was named by Wang Xianzhi as the near exemplar in an undated shame comparison, which is not Liu Tan’s own activity.",
+      "reason": "s0256 names 劉真長 only inside Xianzhi’s undated outburst. The claim correctly classifies Liu Tan (p088) as retrospective reception, not living activity, and does not turn the childhood scene into a life date for Tan.",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "獻之怒曰：「遠慚荀奉倩，近愧劉真長。」"
+        }
+      ]
+    },
+    {
+      "id": "hints-p084",
+      "verdict": "incorrect",
+      "event": "Wang Zhenzhi answered Huan Xuan at the Grand Commandant court assembly.",
+      "reason": "The hint restates Zhenzhi’s own court reply as an exact AD 402. That point year is the same unsupported conversion as claim-671: the source event is 桓玄為太尉, whose attested tenure opens in 元興元年 and is overtaken in 元興二年. Active hints must track the corrected window, not a single year.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        },
+        {
+          "unit": "s0247",
+          "quote": "楨之曰：「亡叔一時之標，公是千載之英。」"
+        }
+      ]
+    },
+    {
+      "id": "hints-p085",
+      "verdict": "incorrect",
+      "event": "Huan Xuan held Grand Commandant and questioned Zhenzhi before the assembled court.",
+      "reason": "The hint assigns Huan Xuan’s own Grand Commandant activity to AD 402 exactly. Chapter 80 does not give that year, and the annals keep him under 太尉 only until the 元興二年 elevations. The active hint should read as on or after 402 and on or before 403.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        }
+      ]
+    },
+    {
+      "id": "hints-p086",
+      "verdict": "supported",
+      "event": "Wang Caozhi visited Xie An with his brothers Huizhi and Xianzhi.",
+      "reason": "The hint names Caozhi’s own visit, matching s0258, and uses the same justified on-or-before AD 385 bound as claim-673. It does not turn s0250’s undated offices into activity spanning a dynasty.",
+      "evidence": [
+        {
+          "unit": "s0258",
+          "quote": "嘗與兄徽之、操之俱詣謝安"
+        }
+      ]
+    },
+    {
+      "id": "hints-p087",
+      "verdict": "supported",
+      "event": "The empty hint records no dated activity; Xun Can is only named in Xianzhi’s undated shame comparison.",
+      "reason": "Owned evidence gives Xun Can no personal event and no calendar date. Keeping active-date-hints empty correctly prevents the retrospective 遠慚荀奉倩 naming from feeding a life-date hint.",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "獻之怒曰：「遠慚荀奉倩，近愧劉真長。」"
+        }
+      ]
+    },
+    {
+      "id": "hints-p088",
+      "verdict": "supported",
+      "event": "The empty hint records no dated activity; Liu Tan is only named in Xianzhi’s undated shame comparison.",
+      "reason": "Owned evidence gives Liu Tan no personal event and no calendar date. An empty hint correctly keeps 近愧劉真長 as reception rather than activity.",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "獻之怒曰：「遠慚荀奉倩，近愧劉真長。」"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p084",
+      "verdict": "incorrect",
+      "reason": "Wang Zhenzhi’s only dated personal event in the owned slice is the court reply under 桓玄為太尉 (s0245–s0247). s0244’s 歷位侍中、大司馬長史 has no year and was rightly left undated; there is no birth, death, or age to add. The person record and hint nevertheless treat AD 402 as an exact year. Because Huan Xuan’s 太尉 tenure, once checked against 安帝紀 元興元年–二年, is a 402–403 window, Zhenzhi’s chronology is over-precise rather than missing. 亡叔 is Xianzhi’s already-dead status at that audience, not a life date for Zhenzhi.",
+      "evidence": [
+        {
+          "unit": "s0244",
+          "quote": "楨之字公幹，歷位侍中、大司馬長史。"
+        },
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        },
+        {
+          "unit": "s0247",
+          "quote": "楨之曰：「亡叔一時之標，公是千載之英。」"
+        }
+      ]
+    },
+    {
+      "id": "p085",
+      "verdict": "incorrect",
+      "reason": "Huan Xuan’s owned chronology is the same court scene. He is the office-holder and questioner; the event is his. The source date is only 桓玄為太尉. External annals support onOrAfter 402 (元興元年三月 self-appointment) and onOrBefore 403 (元興二年 大將軍 then 相國/楚王), not an exact AD 402 life or activity year. No birth or death for Xuan appears in the owned units. The person hint repeats the false point date.",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "桓玄為太尉，朝臣畢集，問楨之：「我何如君亡叔？」"
+        }
+      ]
+    },
+    {
+      "id": "p086",
+      "verdict": "supported",
+      "reason": "Wang Caozhi is introduced in s0249–s0250 with undated offices (曆侍中、尚書、豫章太守) and no birth, death, or age. His only dated personal event is the Xie An visit in s0258, correctly bounded onOrBefore AD 385 from Xie An’s 太元十年 death and not stretched into a dynasty-long activity window. That bound does not collide with Zhenzhi’s later Taiwei-period scene, which is a different generation and is not Caozhi’s event.",
+      "evidence": [
+        {
+          "unit": "s0250",
+          "quote": "操之字子重，曆侍中、尚書、豫章太守。"
+        },
+        {
+          "unit": "s0258",
+          "quote": "嘗與兄徽之、操之俱詣謝安"
+        }
+      ]
+    },
+    {
+      "id": "p087",
+      "verdict": "supported",
+      "reason": "Xun Can has no birth, death, age, or living activity in the owned units. He is only named in Xianzhi’s 遠慚荀奉倩 line. The supplied claim keeps that as retrospective reception with an undated attestation, and the person hint is empty, so later naming is not treated as Xun Can’s life date or active span. No competing life date is present to preserve.",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "獻之怒曰：「遠慚荀奉倩，近愧劉真長。」"
+        }
+      ]
+    },
+    {
+      "id": "p088",
+      "verdict": "supported",
+      "reason": "Liu Tan likewise has no life event in the owned slice, only 近愧劉真長 inside Xianzhi’s undated comparison. Retrospective classification plus an empty active hint keeps reception separate from living chronology and does not invent a year.",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "獻之怒曰：「遠慚荀奉倩，近愧劉真長。」"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-632",
+        "claim-671",
+        "claim-672",
+        "claim-697",
+        "hints-p084",
+        "hints-p085",
+        "p084",
+        "p085"
+      ],
+      "problem": "Chapter 80 dates the court assembly only by 桓玄為太尉. Jinshu 安帝紀 places that self-appointment in 元興元年三月 (AD 402) and Huan Xuan’s next elevations (大將軍, then 相國/楚王) in 元興二年 (AD 403). The anecdote is not a reign-year label and is not fixed to the appointment month, so westernYear AD 402 and the matching exact-year hints are false precision.",
+      "action": "On claim-632, claim-671, claim-672, and claim-697, replace westernYear {era: AD, year: 402, precision: year} with westernBounds {onOrAfter: {era: AD, year: 402, precision: year}, onOrBefore: {era: AD, year: 403, precision: year}}, keep sourceDate 桓玄為太尉, and state the 元興元年–二年 tenure in the conversion evidence. Rewrite hints-p084 and hints-p085 to the same window, for example 'on or after AD 402, on or before AD 403, when Huan Xuan was Grand Commandant'."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/zh-hans/%E6%99%89%E6%9B%B8/%E5%8D%B7010",
+      "title": "晋书/卷010 安帝纪 元兴元年",
+      "quote": "玄俄又自称太尉、扬州牧，总百揆",
+      "sourceHash": "sha256:641c9ca0d96aec78c1b9a0b832cc3e58a89a7c8deefb3ef71eb1c195c1fa0f66",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Primary annals for Emperor An, Eastern Jin, era 元興元年三月: Huan Xuan shortly after 壬申 自稱太尉, giving the earliest justified Western year AD 402 for 桓玄為太尉."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/zh-hans/%E6%99%89%E6%9B%B8/%E5%8D%B7010",
+      "title": "晋书/卷010 安帝纪 元兴二年",
+      "quote": "乙卯，桓玄自称大将军。",
+      "sourceHash": "sha256:653a9690a2b10367c6db259211e071015dc21b5823e272ca9dfa96f6a59ccb33",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Same annals, 元興二年二月: Xuan claimed 大將軍, so the 太尉 office-label no longer names a single AD 402 point."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/zh-hans/%E6%99%89%E6%9B%B8/%E5%8D%B7010",
+      "title": "晋书/卷010 安帝纪 元兴二年八月",
+      "quote": "秋八月，玄又自号相国、楚王。",
+      "sourceHash": "sha256:3a5baf27eea55a390914a4124f4647834479b5e87b3fe5833afef19796b8a015",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Same annals, 元興二年秋八月: 相國/楚王 supersedes 太尉 and keeps the latest possible year of the office-label in AD 403."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/zh-hans/%E6%99%89%E6%9B%B8/%E5%8D%B7009",
+      "title": "晋书/卷009 孝武帝纪 太元十年",
+      "quote": "丁酉，使持节、侍中、中书监、大都督十五州诸军事、卫将军、太保谢安薨。",
+      "sourceHash": "sha256:bd1d0d7f7c157b62301e78378b23f6b37ab335af9c35b73f31301df81af3cebc",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Primary passage for the Xie An visit terminus: Jin Xiaowu, Eastern Jin, 太元十年八月丁酉, Xie An died, so a living 詣謝安 is on or before AD 385."
+    },
+    {
+      "kind": "external",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars_chinese.html",
+      "title": "南北朝朔閏異同表",
+      "quote": "下表列出東晉末年及南北朝時代南朝和北朝每月初一的公曆日期",
+      "sourceHash": "sha256:3951dbc9f6070b92121724eb30b0183c062401bb3021dbaabdc72c0bdd9aadba",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Calendar witness that the table’s Western month-days are 公曆 (proleptic Gregorian), the convention used to check that 太元十年八月 and 元興元年三月 / 元興二年二月·八月 stay inside AD 385, 402, and 403."
+    },
+    {
+      "kind": "external",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars_chinese.html",
+      "title": "南北朝朔閏異同表 太元十年",
+      "quote": "385 | 晋孝武帝太元十年",
+      "sourceHash": "sha256:cc5208678a44cc5bf889fb141a3e621a5a25ff28dba8d28cd02ddb5e88931cc2",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Maps 晉孝武帝太元十年 to Gregorian 385; the same row gives 八月朔 as 09-21 丙子, so 丁酉 remains 12 October 385 and the year bound needs no Julian adjustment."
+    },
+    {
+      "kind": "external",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars_chinese.html",
+      "title": "南北朝朔閏異同表 元興元年",
+      "quote": "402 | 晋安帝元興元年/大亨元年",
+      "sourceHash": "sha256:9f5c0f18d87f76bf45906002e7f807ec1c8a4cfa9d918ecbda35ea09d12b474d",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Maps 晉安帝元興元年 to Gregorian 402; 三月朔 is 04-18 己巳, so 三月壬申 stays in AD 402."
+    },
+    {
+      "kind": "external",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars_chinese.html",
+      "title": "南北朝朔閏異同表 元興二年",
+      "quote": "403 | 晋安帝元興二年",
+      "sourceHash": "sha256:b4731686317788aa46a44da710c57f00550b8a9bc9af87a7127e23ed1af45d73",
+      "accessedAt": "2026-11-04T00:22:41Z",
+      "reason": "Maps 晉安帝元興二年 to Gregorian 403, the latest year justified for a 太尉-period assembly before the 大將軍 and 相國 elevations."
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T23:20:27.161347+00:00",
+  "generatedAt": "2026-11-04T00:30:26.058315+00:00",
   "basis": "Source-data counts reused from identified prior audit; deployed32f is code-only relative to verified89ed. Candidate2 is local staged work, unapproved. PR5368 contains the previously validated negative080audit unchanged from staging and is not merged.",
   "deployedMaster": {
     "revision": "32f51184c37b5a3df8d05f4d4a28eb6144229cab",
@@ -92,7 +92,7 @@
         {
           "book": "jinshu",
           "chapter": "080",
-          "reason": "Complete negative initial audit has 76 findings; 3/6 repair groups accepted, fresh independent re-audit not yet performed."
+          "reason": "All six original repair groups accepted; host source-only amendment26 staged; current candidate2 remains unapproved while full independent re-audit2 drains. Returned findings have an isolated 29-change host repair proposal, not yet production-validated or adopted."
         },
         {
           "book": "jinshu",
@@ -111,7 +111,7 @@
       {
         "book": "jinshu",
         "chapter": "080",
-        "reason": "Complete negative initial audit has 76 findings; 3/6 repair groups accepted, fresh independent re-audit not yet performed."
+        "reason": "All six original repair groups accepted; host source-only amendment26 staged; current candidate2 remains unapproved while full independent re-audit2 drains. Returned findings have an isolated 29-change host repair proposal, not yet production-validated or adopted."
       },
       {
         "book": "jinshu",
@@ -321,10 +321,16 @@
   "newPublishedChapters": 0,
   "wholeJinshuEbookReady": false,
   "oneHourChapterThroughputProven": false,
-  "pendingMaster": "89edbf689cf19beff845af891450277e5de5c7e9",
-  "pendingProductionDeployment": "e8b66b08-c157-4691-a6a3-68aa2f03dc88",
+  "pendingMaster": "862bdec59a911a25c07a08e2ebdeb2da4bd65ac5",
+  "pendingProductionDeployment": "39454903-eec9-4b65-9a7a-e6ded8afa3db",
   "sourceDataUnchangedByMergedCode": true,
-  "pendingDeployment": null,
+  "pendingDeployment": {
+    "revision": "862bdec59a911a25c07a08e2ebdeb2da4bd65ac5",
+    "id": "39454903-eec9-4b65-9a7a-e6ded8afa3db",
+    "status": "one bounded retry accepted after terminal clone-only build timeout",
+    "failedDeploymentId": "2f581f88-dc80-4837-952b-08b0cb33bbda",
+    "liveVerified": false
+  },
   "source080Progress": {
     "phase": "reaudit",
     "round": 2,
@@ -335,15 +341,38 @@
     "all26ChangedClaimsRemainAuditable": true,
     "currentCandidateHash": "sha256:af2ead9e282388392087d7c7f57b97362656fa7d88d355844a63fee1e208af28",
     "independentApprovalCompleted": false,
-    "chapterApproved": false
+    "chapterApproved": false,
+    "activeIndependentReview": {
+      "pid": 61498,
+      "expectedJobs": 16,
+      "concurrency": 2,
+      "capturedJobs": 3,
+      "statuses": {
+        "interrupted": 1,
+        "running": 2
+      },
+      "approvalCompleted": false
+    }
   },
   "source080Rework": {
-    "group": 5,
-    "attempts": 2,
-    "rawCostCents": 167.9396,
-    "chargedCents": 0,
-    "totalTokens": 859475,
-    "sameAuthorRecovered": true,
-    "newCompletedChapters": 0
+    "at": "2026-11-04T00:24:24.271278+00:00",
+    "candidate": "candidate-2.json",
+    "phase": "reaudit",
+    "round": 2,
+    "candidateApproved": false,
+    "originalRepairsAccepted": 6,
+    "sourceOnlyAmendments": 26,
+    "capturedReviewRuns": 13,
+    "plannedReviewRanges": 16,
+    "drainRequestedAt": "2026-11-04T00:21:25.543Z",
+    "repairProposal": "pending-reaudit2-repairs-v5-proposal.json",
+    "proposedChanges": 40,
+    "proposalAdopted": false,
+    "productionValidation": "passed",
+    "independentReauditStillRequired": true,
+    "nativeCachedReports": 13,
+    "cohortTerminal": true,
+    "remainingRanges": 3,
+    "checksumOnlyRecoveryAdopted": true
   }
 }
