@@ -558,8 +558,7 @@ function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, 
   try {
     if (!['repair', 'reaudit'].includes(state.phase) || !Number.isSafeInteger(state.round) || state.round < 1 ||
         state.schemaVersion !== 1 || state.workflowVersion !== DATE_WORKFLOW_VERSION || state.editorialAmendment ||
-        state.candidate !== `candidate-${state.round}.json` ||
-        state.review !== `review-${state.round - (state.phase === 'reaudit' ? 1 : 0)}.json`) {
+        state.candidate !== `candidate-${state.round}.json` || !/^review-\d+\.json$/.test(state.review ?? '')) {
       throw new Error('Retained phase, round, or candidate/review linkage is not a repair progression');
     }
     const original = readJson(path.join(options.peopleDir ?? PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
@@ -571,14 +570,27 @@ function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, 
     validateDateAuditReport(report, originalPacket);
     const names = fs.readdirSync(directory);
     let baseline = original;
+    let lastReview;
     for (let round = 0; round <= state.round; round += 1) {
       const packet = buildDateAuditPacket(book, chapter, { ...options, extraction: baseline });
       const reviewFile = `review-${round}.json`;
       if (round < state.round || state.phase === 'repair') {
+        if (round > 0 && round < state.round && !names.includes(reviewFile)) {
+          // Native source research can advance an unreviewed preflight round.
+          // Prove that exact transition, including the absence of started review
+          // ownership, rather than inventing a negative review for the gap.
+          const preflight = dateResearchPreflight(packet, round, `candidate-${round}.json`);
+          const pin = { file: `research-preflight-${round}-${hash(preflight).slice(7,27)}.json`,
+            contentHash: hash(preflight), extractionHash: packet.extractionHash,
+            candidateFile: `candidate-${round}.json`, round };
+          baseline = proveDatePreflightAmendment({ book, chapter }, { state, directory, pin, originalPacket }, options).candidate;
+          continue;
+        }
         const review = readJson(path.join(directory, reviewFile));
         validateDateAuditReport(review, packet);
         if (!dateAuditReferencesCurrent(review, options)) throw new Error('Retained negative review has stale source references');
         if (!['needs-revision', 'research-blocked'].includes(review.status)) throw new Error('Repair ancestry requires negative reviews');
+        lastReview = reviewFile;
         if (round > 0) {
           const reviewState = structuredClone(state);
           reviewState.phase = 'reaudit'; reviewState.round = round;
@@ -613,6 +625,7 @@ function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, 
       baseline = readJson(path.join(directory, `candidate-${round + 1}.json`));
       if (!same(expected, baseline)) throw new Error('Retained round candidate differs from its repair progression');
     }
+    if (state.review !== lastReview) throw new Error('Retained review pointer differs from its last completed review');
     const combined = readJson(path.join(directory, 'combined-proposal.json'));
     if (!same(applyDateRepairProposal(original, combined, originalPacket), baseline)) {
       throw new Error('Combined proposal differs from the current staged candidate');
@@ -827,12 +840,7 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
     const reviewStarted = unresolved.length > 0 && (Object.keys(state.jobs).some(key => key.startsWith(reviewPrefix)) ||
       fs.readdirSync(directory).some(name => name.startsWith(reviewPrefix)));
     if (unresolved.length && !reviewStarted) {
-      const people = new Set(unresolved.map(item => item.personId));
-      const units = new Set(unresolved.flatMap(item => item.evidence));
-      const preflight = {schemaVersion:1,kind:'date-reaudit-research-preflight',book,chapter,
-        sourceHash:active.sourceHash,extractionHash:active.extractionHash,round:state.round,candidateFile:state.candidate,
-        items:unresolved,people:active.people.filter(person=>people.has(person.id)),
-        units:active.units.filter(unit=>units.has(unit.id))};
+      const preflight = dateResearchPreflight(active, state.round, state.candidate);
       const preflightFile = `research-preflight-${state.round}-${hash(preflight).slice(7,27)}.json`;
       const file = path.join(directory,preflightFile);
       if (fs.existsSync(file) && !same(readJson(file),preflight)) throw new Error('Retained research preflight changed');
@@ -1131,6 +1139,46 @@ export function revisePendingDateRepair({book,chapter},proposal,options={}) {
   return buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
 }
 
+function dateResearchPreflight(packet, round, candidateFile) {
+  const items = unresolvedDateAuditItems(packet);
+  const people = new Set(items.map(item => item.personId));
+  const units = new Set(items.flatMap(item => item.evidence));
+  return {schemaVersion:1,kind:'date-reaudit-research-preflight',book:packet.book,chapter:packet.chapter,
+    sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,round,candidateFile,
+    items,people:packet.people.filter(person=>people.has(person.id)),units:packet.units.filter(unit=>units.has(unit.id))};
+}
+
+// Shared by retry admission and later ancestry recovery. This proves a saved
+// native transition; it never treats the absence of a review as approval.
+function proveDatePreflightAmendment({book,chapter},{state,directory,pin,originalPacket},options) {
+  const fail=message=>{throw new Error(`Preflight research retry: ${message}`);};
+  if(!pin || !/^research-preflight-\d+-[a-f0-9]{20}\.json$/.test(pin.file??''))fail('a fingerprint-bound worker research supplement or saved chapter preflight is required');
+  if(!Number.isSafeInteger(pin.round) || pin.round<1 || pin.candidateFile!==`candidate-${pin.round}.json`)fail('invalid native candidate path');
+  const preflight=readJson(path.join(directory,pin.file));
+  if(preflight.schemaVersion!==1 || preflight.kind!=='date-reaudit-research-preflight' || preflight.book!==book || preflight.chapter!==chapter ||
+    hash(preflight)!==pin.contentHash || preflight.sourceHash!==originalPacket.sourceHash || preflight.extractionHash!==pin.extractionHash ||
+    preflight.round!==pin.round || preflight.candidateFile!==pin.candidateFile)fail('saved research preflight changed');
+  const held=readJson(path.join(directory,pin.candidateFile)),heldPacket=buildDateAuditPacket(book,chapter,{...options,extraction:held});
+  if(heldPacket.extractionHash!==pin.extractionHash || !unresolvedDateAuditItems(heldPacket).length)fail('held source evidence changed');
+  if(!same(preflight,dateResearchPreflight(heldPacket,pin.round,pin.candidateFile)))fail('saved research preflight differs from held source evidence');
+  const prefix=`reaudit-${pin.round}-`;
+  if(state.reviewPlans?.[`reaudit-${pin.round}`] || Object.keys(state.jobs??{}).some(key=>key.startsWith(prefix)) ||
+    fs.readdirSync(directory).some(name=>name===`review-${pin.round}.json` || name.startsWith(prefix) || name.startsWith(`repair-candidate-${pin.round}-`)))fail('independent review or ordinary repair already started for the held round');
+  const key=`repair-${pin.round}-${pin.extractionHash.slice(7,27)}`,proposal=readJson(path.join(directory,`${key}.json`));
+  const author=proposalAuthorId(proposal);
+  if(!author || state.jobs[key]?.proposalAuthorId!==author || proposal.sourceHash!==heldPacket.sourceHash || proposal.extractionHash!==heldPacket.extractionHash)fail('native source amendment provenance is missing');
+  const amended=applyDateRepairProposal(held,proposal,heldPacket),candidate=readJson(path.join(directory,`candidate-${pin.round+1}.json`));
+  const active=buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
+  if(active.extractionHash===heldPacket.extractionHash)fail('source research has not changed the held candidate');
+  // Native replay may move changed rows. Compare all facts as a multiset, then
+  // require the saved original-to-final proposal to reproduce its fingerprint.
+  const facts=value=>hash({...value,claims:value.claims.map(row=>JSON.stringify(row)).sort()});
+  if(facts(amended)!==facts(candidate))fail('candidate differs from the native source amendment');
+  return {candidate,active,resolution:{preflightContentHash:pin.contentHash,sourceHash:originalPacket.sourceHash,originalExtractionHash:originalPacket.extractionHash,
+    beforeExtractionHash:heldPacket.extractionHash,candidateExtractionHash:active.extractionHash,
+    amendmentFile:`${key}.json`,amendmentContentHash:hash(proposal),authorAgentId:author,round:pin.round+1}};
+}
+
 // A chapter preflight has no blocked model artifact to supplement. Resume only
 // after proving the exact native amendment; the worker-blocker path stays intact.
 export function resolvedDatePreflight({book,chapter},claim,options={}) {
@@ -1139,29 +1187,13 @@ export function resolvedDatePreflight({book,chapter},claim,options={}) {
   if(!pin || !/^research-preflight-\d+-[a-f0-9]{20}\.json$/.test(pin.file??''))fail('a fingerprint-bound worker research supplement or saved chapter preflight is required');
   const directory=dateWorkflowDirectory(book,chapter,options.peopleDir),state=readJson(path.join(directory,'state.json'));
   if(state.schemaVersion!==1 || state.workflowVersion!==DATE_WORKFLOW_VERSION || state.phase!=='reaudit' || state.circuitBreaker || state.round!==pin.round+1 || state.round>(options.maxRounds??3))fail('preserve the existing phase and round hold');
-  if(state.candidate!==`candidate-${state.round}.json` || pin.candidateFile!==`candidate-${pin.round}.json`)fail('invalid native candidate path');
+  if(state.candidate!==`candidate-${state.round}.json`)fail('invalid native candidate path');
   const originalPacket=buildDateAuditPacket(book,chapter,options);
   if([state,claim].some(value=>value.sourceHash!==originalPacket.sourceHash || value.extractionHash!==originalPacket.extractionHash))fail('canonical source or extraction changed');
-  const preflight=readJson(path.join(directory,pin.file));
-  if(preflight.schemaVersion!==1 || preflight.kind!=='date-reaudit-research-preflight' || preflight.book!==book || preflight.chapter!==chapter ||
-    hash(preflight)!==pin.contentHash || preflight.sourceHash!==originalPacket.sourceHash || preflight.extractionHash!==pin.extractionHash ||
-    preflight.round!==pin.round || preflight.candidateFile!==pin.candidateFile)fail('saved research preflight changed');
-  const held=readJson(path.join(directory,pin.candidateFile)),heldPacket=buildDateAuditPacket(book,chapter,{...options,extraction:held});
-  if(heldPacket.extractionHash!==pin.extractionHash || !unresolvedDateAuditItems(heldPacket).length)fail('held source evidence changed');
-  const key=`repair-${pin.round}-${pin.extractionHash.slice(7,27)}`,proposal=readJson(path.join(directory,`${key}.json`));
-  const author=proposalAuthorId(proposal);
-  if(!author || state.jobs[key]?.proposalAuthorId!==author || proposal.sourceHash!==heldPacket.sourceHash || proposal.extractionHash!==heldPacket.extractionHash)fail('native source amendment provenance is missing');
-  const amended=applyDateRepairProposal(held,proposal,heldPacket),candidate=readJson(path.join(directory,state.candidate));
-  const active=buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
-  if(active.extractionHash===heldPacket.extractionHash || unresolvedDateAuditItems(active).length)fail('source research has not resolved the held candidate');
-  // Native replay may move changed rows. Compare all facts as a multiset, then
-  // require the saved original-to-final proposal to reproduce its fingerprint.
-  const facts=value=>hash({...value,claims:value.claims.map(row=>JSON.stringify(row)).sort()});
-  if(facts(amended)!==facts(candidate))fail('candidate differs from the native source amendment');
+  const {candidate,active,resolution}=proveDatePreflightAmendment({book,chapter},{state,directory,pin,originalPacket},options);
+  if(unresolvedDateAuditItems(active).length)fail('source research has not resolved the held candidate');
   const original=readJson(path.join(options.peopleDir??PEOPLE_DIR,'extractions',book,`${chapter}.json`));
   const replay=applyDateRepairProposal(original,readJson(path.join(directory,'combined-proposal.json')),originalPacket);
   if(hash(replay)!==active.extractionHash)fail('combined source repair does not reproduce the candidate');
-  return {preflightContentHash:pin.contentHash,sourceHash:originalPacket.sourceHash,originalExtractionHash:originalPacket.extractionHash,
-    beforeExtractionHash:heldPacket.extractionHash,candidateExtractionHash:active.extractionHash,
-    amendmentFile:`${key}.json`,amendmentContentHash:hash(proposal),authorAgentId:author,round:state.round};
+  return resolution;
 }

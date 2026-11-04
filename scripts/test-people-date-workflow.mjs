@@ -48,6 +48,7 @@ async function unresolvedRepairFixture(t) {
   const worker = async task => {
     calls.push({kind:task.kind,key:task.key});
     if (task.kind !== 'repair') return review(task);
+    task.save({status:'returned'});
     const before = task.extraction.claims[0], after = structuredClone(before);
     after[2] = {sourceDate:{text:'元年'},unresolved:true,
       unresolvedReason:'The fixture has competing source anchors requiring focused research.'};
@@ -153,7 +154,7 @@ for (const [label,alter,expected] of [
   ['held candidate',f=>{const file=path.join(f.directory,'candidate-1.json'),c=readJson(file);c.claims[0][2].unresolvedReason+=' Changed.';writeJsonAtomic(file,c);},/held source evidence changed/],
   ['amendment provenance',f=>{const file=path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`),p=readJson(file);p.author.agentId='unrecorded-author';writeJsonAtomic(file,p);},/amendment provenance/],
   ['candidate facts',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].westernYear.year=777;writeJsonAtomic(file,c);},/differs from the native source amendment/],
-  ['unresolved candidate',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].unresolved=true;writeJsonAtomic(file,c);},/research has not resolved/],
+  ['unresolved candidate',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].unresolved=true;writeJsonAtomic(file,c);},/differs from the native source amendment/],
   ['combined replay',f=>{const file=path.join(f.directory,'combined-proposal.json'),p=readJson(file);p.changes.find(c=>c.kind==='replace').after[2].westernYear.year=777;writeJsonAtomic(file,p);},/does not reproduce/],
   ['canonical source',f=>{const s=readJson(f.sourceFile);s.content[0].sentences[0].zh+='改';writeJsonAtomic(f.sourceFile,s);},/canonical source or extraction changed/],
   ['round circuit',f=>{const file=path.join(f.directory,'state.json'),s=readJson(file);s.circuitBreaker={reason:'retained hold'};writeJsonAtomic(file,s);},/phase and round hold/],
@@ -164,6 +165,68 @@ for (const [label,alter,expected] of [
   assert.deepEqual(fs.readFileSync(f.file),f.original);
   assert.notEqual(dateAuditStatus('fixture','001',f.options).status,'audited');
 });
+
+async function interruptedRepairAfterPreflight(t) {
+  const f=await unresolvedRepairFixture(t);
+  resolveResearchFixture(f);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async task=>{
+    if(task.kind==='repair')throw Error('fixture repair after preflight interrupted');
+    const result=review(task);
+    if(task.job.ownedPeople.includes('p002')) {
+      result.personChecks.find(check=>check.id==='p002').verdict='incorrect';
+      result.findings.push({items:['p002','hints-p002'],problem:'The second fixture hint needs its source-year qualifier.',action:'Clarify the existing source-year hint and obtain another independent review.'});
+    }
+    return result;
+  },{...f.options,maxAttempts:1}),/repair after preflight interrupted/);
+  return f;
+}
+
+test('a negative review after a native preflight amendment resumes repair and requires last-round approval',async t=>{
+  const f=await interruptedRepairAfterPreflight(t),scope={book:'fixture',chapter:'001'};
+  assert(!fs.existsSync(path.join(f.directory,'review-1.json')));
+  assert.equal(readJson(path.join(f.directory,'state.json')).phase,'repair');
+  const calls=[];
+  const worker=async task=>{
+    calls.push(task.key);
+    if(task.kind!=='repair')return review(task);
+    return {sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,author:{agentId:'second-repair-author'},changes:[{
+      kind:'hints',personId:'p002',before:['AD 1'],after:['AD 1 (fixture source year)'],reason:'Clarify the existing source-year hint without changing its year.'}]};
+  };
+  // Stop at a real invocation boundary after applying the repair and before its
+  // final audit; both the repair phase and the next reaudit must prove the gap.
+  await assert.rejects(runDateWorkflow(scope,task=>{
+    if(task.kind==='review')throw Error('fixture last-round audit interrupted');
+    return worker(task);
+  },{...f.options,maxAttempts:1}),/last-round audit interrupted/);
+  assert.equal(readJson(path.join(f.directory,'state.json')).round,3);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  assert.equal((await runDateWorkflow(scope,worker,f.options)).status,'audited');
+  assert(calls.some(key=>key.startsWith('repair-2-')));
+  assert(calls.some(key=>key.startsWith('reaudit-3-')));
+  assert(!fs.existsSync(path.join(f.directory,'review-1.json')));
+});
+
+for(const [name,change] of [
+  ['missing preflight',f=>fs.unlinkSync(path.join(f.directory,f.result.researchPreflight.file))],
+  ['changed preflight',f=>amend(path.join(f.directory,f.result.researchPreflight.file),p=>{p.items=[];})],
+  ['changed held candidate',f=>amend(path.join(f.directory,'candidate-1.json'),p=>{p.claims[0][2].unresolvedReason+=' Changed.';})],
+  ['missing native amendment',f=>fs.unlinkSync(path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`))],
+  ['changed amendment author',f=>amend(path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`),p=>{p.author.agentId='forged-author';})],
+  ['started review job',f=>amend(path.join(f.directory,'state.json'),s=>{s.jobs['reaudit-1-owned']={agentId:'retained-reviewer'};})],
+  ['started review plan',f=>amend(path.join(f.directory,'state.json'),s=>{s.reviewPlans['reaudit-1']={};})],
+  ['started review artifact',f=>writeJsonAtomic(path.join(f.directory,'reaudit-1-owned.json'),{})],
+  ['missing actual negative review',f=>fs.unlinkSync(path.join(f.directory,'review-2.json'))],
+  ['changed latest review pointer',f=>amend(path.join(f.directory,'state.json'),s=>{s.review='review-0.json';})],
+])test(`preflight ancestry rejects ${name} before any worker or write`,async t=>{
+  const f=await interruptedRepairAfterPreflight(t);change(f);
+  const files=fs.readdirSync(f.directory).sort().map(name=>[name,fs.readFileSync(path.join(f.directory,name))]);
+  let calls=0;
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{calls++;throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.equal(calls,0);
+  assert.deepEqual(fs.readdirSync(f.directory).sort().map(name=>[name,fs.readFileSync(path.join(f.directory,name))]),files);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+});
+function amend(file,change){const value=readJson(file);change(value);writeJsonAtomic(file,value);}
 
 test('unresolved preflight preserves an already-owned re-audit recovery path', async t => {
   const f = await unresolvedRepairFixture(t), stateFile = path.join(f.directory,'state.json');
