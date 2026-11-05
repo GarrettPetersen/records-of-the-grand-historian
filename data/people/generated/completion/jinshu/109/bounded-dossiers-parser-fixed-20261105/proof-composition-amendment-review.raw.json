@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "096ee9f7b3b7a81fa30b34e7cbe26adcd4a085bec3e0b124e3358b40053897e3",
+  "reviewer": {
+    "agentId": "e3c481e8-4dd5-4fdd-bd60-37306c8d72fe",
+    "name": "Independent reviewer"
+  },
+  "verdict": "request-changes",
+  "findings": [
+    {
+      "file": "scripts/lib/people-identity-proof-composition.mjs",
+      "line": 85,
+      "priority": "P2",
+      "problem": "The aggregate journal is optional for part captures. captureIdentityProofComponent accepts job.kind === 'captured-independent-identity-review-part' with aggregateJob === null, and in that case aggregate-level authorAgentIds are silently left out of the excluded-author union. The recovery worker passes aggregateJob only if the history entry happens to include it (reconcile-people-identity-reviews-worker.mjs:45).",
+      "trigger": "A people:identity:reconcile history entry whose job is a '-part' capture but has no aggregateJob field, while the real aggregate journal lists authorAgentIds containing that part's reviewer.",
+      "impact": "Recovery can still accept a self-reviewed part as an independent component. The record path always passes the aggregate and would reject the same report, so the original P2 independence gap stays open on the mechanical recovery path.",
+      "fix": "Require aggregateJob whenever job.kind is 'captured-independent-identity-review-part', in both captureIdentityProofComponent and the reconcile worker. Optionally also check aggregateJob.scope/schemaVersion. Add a regression where a part entry without aggregateJob is rejected."
+    }
+  ],
+  "summary": "Packet hash verified. The editorial-input fix is correct: recovery now uses the shared pinned.inputs, which treats a missing editorial file as 'null'. requireAuditReport:false is passed only by the reconcile worker, and prepare/record/pinned defaults still require the date report. Normal assertChapterGates date and editorial checks are unchanged in both recording modes. Author exclusion now unions packet, job and aggregate authors, and the aggregate must contain the exact agent/run/report/transport tuple. Recording passes the aggregate for parts, and original reportText, report/transport hashes, runId and plan fingerprints are preserved byte-for-byte. The --retained-composition routing only skips the old saved-proof branch when it is explicitly requested. Without a source revision the retained recording still fails closed, outputs stay generated or canonical with --previous-sha256, and all gates remain. One residual P2 remains: part captures without an aggregate journal still bypass aggregate-level author exclusion on the recovery path."
+}

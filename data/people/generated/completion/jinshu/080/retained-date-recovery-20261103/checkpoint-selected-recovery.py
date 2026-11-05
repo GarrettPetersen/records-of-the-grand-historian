@@ -110,6 +110,7 @@ if prepared109.exists():
  
  for extension in ['json','md','mjs','py','txt','log','patch']:files += list(prepared109.glob('*.'+extension))
  files += list((prepared109/'candidate-native-dossier-delta').glob('*.json'))
+ for generation in ['native-proof-composition-candidate','native-proof-composition-final']:files += list((prepared109/generation).glob('*.json'))
  # Independently reviewed amendments are canonical working inputs, still
  # incomplete and unapproved for dates/identity/publication. Preserve exact
  # bytes without touching the shared checkout's Git index or staged deletions.
@@ -119,6 +120,7 @@ if prepared109.exists():
 files += list((audit/'dossier-reuse-release-ci').glob('*'));files += list(audit.glob('dossier-reuse-*.jsonl'));files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-5a79118e3c66.json'))
 files.append(audit/'handoff-before-semantic-reuse-diagnostic-20261105.md')
 files.append(audit/'handoff-before-native-dossier-delta-20261105.md')
+files.append(audit/'handoff-before-proof-composition-wip-20261105.md')
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()

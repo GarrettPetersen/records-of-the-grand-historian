@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "a03773cc5cda6d5952c6e7c4e7bfeac535e757cbc364ccf07c85e847a59bfab1",
+  "reviewer": {
+    "agentId": "e3c481e8-4dd5-4fdd-bd60-37306c8d72fe",
+    "name": "Independent reviewer"
+  },
+  "verdict": "request-changes",
+  "findings": [
+    {
+      "file": "scripts/reconcile-people-identity-reviews-worker.mjs",
+      "line": 40,
+      "priority": "P2",
+      "problem": "Pinned input derivation treats the optional editorial-decisions file as mandatory and only defaults dateAudit to 'null'. For kind==='editorial' with the file absent from the snapshot, it still calls pinned.snapshot.read(file). The normal chapterIdentityInputs (people-chapter-identity.mjs:37) and pinned.inputs treat a missing editorial history as Buffer('null').",
+      "trigger": "Run people:identity:reconcile for any chapter that has no data/people/editorial-decisions/<book>/<chapter>.json at the pinned revision. That is a normal state: assertChapterGates permits a null editorial document when no repairs were applied.",
+      "impact": "Mechanical recovery throws before reconciling, so every chapter without applied editorial repairs cannot recover reusable proofs and falls back to a full fresh model review. Even if the read returned something, the hand-built digest is a second copy of the input contract that can diverge from the one prepare/record use, which would cause 'Current plan does not pin the exact source snapshot' failures.",
+      "fix": "Replace the hand-rolled map with pinned.inputs(book, chapter), the same function record and prepare use, and compare that to plan.inputs. Add a regression for a chapter with no editorial file."
+    },
+    {
+      "file": "scripts/lib/people-identity-proof-composition.mjs",
+      "line": 93,
+      "priority": "P2",
+      "problem": "captureIdentityProofComponent records receipt.authorAgentIds from packet.authorAgentIds only and drops job.authorAgentIds. The baseline createIdentityReviewBundle (people-identity-review-record.mjs:79) deliberately unions [...packet.authorAgentIds, ...(job.authorAgentIds ?? [])] into the excluded-author set. reconcileIdentityProofComposition (line 146) then adds only current extraction authors.",
+      "trigger": "A captured job whose journal lists an additional author in job.authorAgentIds (for example a repair or supplement author not in the extraction run provenance) and the same agent as the component's actualReviewerAgentId or a part reviewer. The baseline path rejects this as self-review. Capture/reconcile/compose accept it.",
+      "impact": "The composition path weakens the independence gate compared with the normal recording path. A self-reviewed proof can qualify as an independent identity certificate through recovery even though the same report would be rejected when recorded normally.",
+      "fix": "In captureIdentityProofComponent, set authorAgentIds to the deduplicated union of packet.authorAgentIds and job.authorAgentIds, and for parts include the aggregate journal's authorAgentIds. Keep the !includes(actualReviewerAgentId) check in assertComponent. Add a regression where job.authorAgentIds contains the reviewer."
+    }
+  ],
+  "summary": "I read the full packet (hash verified) and traced capture, reconcile, prepare with only the remaining cases, recording new parts alongside retained components, and the composed validation and qualification. The core design holds up. Original reportText and plan fingerprints are kept verbatim and hash-checked. The one-case projection only feeds the existing validateDossierIdentityEvidence and is never persisted; certificates cite the original producer, run, report hash and plan. Partial coverage, still-current holds (prepare refuses them and validation rejects them), changed semantic person evidence or full target Chinese, current-extractor self-review, and forged selections all fail closed. Certain proofs are invalidated when candidate search changes, while uncertain ones only carry their reviewed uncertainty into the current candidate bucket. Normal date and editorial gates still run in both recording modes. The zero-remaining case returns a composition without dispatching a model job, and the registry update and reconcile commands now run under the 45-second resource monitor with the resolution lock. Two actionable defects remain. Mechanical reconcile crashes on chapters with no editorial file. Composition capture also drops journal-level author IDs, so the self-review exclusion is weaker than in the normal recording path. Passing tests do not cover either case."
+}
