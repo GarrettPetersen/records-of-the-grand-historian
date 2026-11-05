@@ -136,6 +136,7 @@ for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('1
  if folder.is_dir():files += list(folder.glob('*.json'))
 files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/109.stale-939c2e595e93dbf2804b').glob('*.json'))
 files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-029c0b784aed.json'))
+files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-c991cf12d80f.json'))
 files.append(audit/'composed-identity-production-observations.jsonl')
 files.append(pathlib.Path('data/people/generated/date-workflow/jinshu/109/state.json'))
 files.append(pathlib.Path('data/people/generated/date-workflow/jinshu/109.stale-6dc9cbab2bd96a8c378b/state.json'))
@@ -157,12 +158,27 @@ for folder in audit.glob('free072-*'):
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
 freeFix=audit/'free-date-record-ownership-fix-20261105'
 for extension in ['json','mjs']:files += list(freeFix.glob('*.'+extension))
-for extension in ['json','mjs','md','log','yml']:
+for extension in ['json','mjs','md','log','yml','txt']:
  files += list((audit/'free-date-record-ownership-pr-20261105').glob('*.'+extension))
 for folder in (audit/'free-date-record-ownership-pr-20261105').glob('independent-free-code-review-*'):
  if folder.is_dir():
   for extension in ['json','log']:files += list(folder.glob('*.'+extension))
 files += list((audit/'free-date-record-ownership-pr-20261105'/'ci-qualified-contribution').glob('*'))
+files += list((audit/'free-date-record-ownership-pr-20261105'/'merged-qualified-contribution').glob('*'))
+files += list((audit/'free-date-record-ownership-pr-20261105').glob('merged-deployment-*.jsonl'))
+files += list((audit/'adopt109-v4-host-date-repairs-20261105').glob('*.json'))
+files += list((audit/'adopt109-v4-host-date-repairs-20261105').glob('*.jsonl'))
+for folder in dateResearch.glob('reviewed-research-English-source-prepared*'):
+ if folder.is_dir():
+  files += list(folder.glob('*.json'))
+  files += list((folder/'date-input'/'jinshu').glob('109.json'))
+for folder in dateResearch.glob('focused-date-research-current-source-*'):
+ if folder.is_dir():
+  for extension in ['json','mjs','txt','jsonl']:files += list(folder.glob('*.'+extension))
+  files += list((folder/'full-claim-anchors-1').glob('*.json'))
+for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.research-English-source-*'):
+ if folder.is_dir():files += list(folder.glob('*.json'))
+files.append(audit/'handoff-before-research-English-source-20261105.md')
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
 files += list(wf072.glob('*.json'))

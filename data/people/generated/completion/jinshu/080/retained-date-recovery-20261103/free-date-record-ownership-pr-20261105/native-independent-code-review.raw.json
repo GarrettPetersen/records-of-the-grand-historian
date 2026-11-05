@@ -1,0 +1,50 @@
+{
+  "kind": "independent-code-review",
+  "packetSha256": "0927e59f8dafcc87cd1c36572c7ffecc72f87a3b34e57b4011d05a7ffcaee27a",
+  "candidateRevision": "5db1e658d2e27b10c89578c4641b52255ec35d2d",
+  "baseRevision": "029c0b784aede1067fda4c808c7cbedc2d11c20c",
+  "reviewer": {
+    "name": "Grok Bot",
+    "agentId": "df68114d-b106-4220-acab-2fc026619f22",
+    "independentOfAuthor": true
+  },
+  "verdict": "approve",
+  "checks": [
+    {
+      "id": "owned-id-membership",
+      "verdict": "approve",
+      "reason": "The complete save_records implementation checks strict key/value.id equality and exact Set membership in ownedItems or ownedPeople before assigning any record. Prefixed item IDs and unowned person IDs are rejected in the supplied regressions; assemble retains exact-coverage validation."
+    },
+    {
+      "id": "whole-batch-atomicity",
+      "verdict": "approve",
+      "reason": "All record shape, key, duplicate, ID-equality and ownership checks complete in a validation-only loop before the separate assignment loop. A malformed later record therefore cannot persist an earlier valid record or overwrite an existing correction. Supplied before/after evidence reproduces and fixes partial writes. Atomicity is per save_records call, not across separate tool calls."
+    },
+    {
+      "id": "duplicate-key-rejection",
+      "verdict": "approve",
+      "reason": "A fresh Set per save_records call rejects the second occurrence of any key before the assignment loop, including matching keys with different values. The duplicate regression asserts both an error and an unchanged persisted draft."
+    },
+    {
+      "id": "later-call-corrections",
+      "verdict": "approve",
+      "reason": "The duplicate-key Set is local to each call, not shared with retained records. A valid subsequent call can upsert the same owned ID and clear finished; the two-turn regression verifies the persisted corrected reason and saved key."
+    },
+    {
+      "id": "repair-scope-preservation",
+      "verdict": "approve",
+      "reason": "Repair calls remain restricted to changes, while review calls retain their existing four-section allowlist. Ownership and key/value.id equality checks apply only to itemChecks and personChecks. Stable repair keys may still differ from change IDs, as the supplied change-1/claim-1 regression verifies; downstream repair scope validation is not modified by this diff."
+    },
+    {
+      "id": "recovery-and-publication-gates",
+      "verdict": "approve",
+      "reason": "The diff leaves packet/model fingerprints, cached-response replay, recoverOnly refusal of new model turns, validation-feedback reopening, source/extraction hashes and assembly coverage guards unchanged. It changes no publication or historical validators. Supplied recovery tests remain included; code approval conveys no historical, source, date, identity, chapter or publication approval."
+    },
+    {
+      "id": "required-ci-coverage",
+      "verdict": "approve",
+      "reason": "The master-build workflow adds scripts/test-openrouter-free.mjs to the existing required date-worker test command, covering all 11 declared tests including six new offline regressions. Existing recovery, ownership, preflight, publication, dossier, site-build and chapter-release gates remain intact, with no added filtering or failure suppression. Green CI at this exact head is user-supplied evidence; tests and CI were not rerun during this review."
+    }
+  ],
+  "findings": []
+}
