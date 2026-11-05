@@ -117,6 +117,14 @@ if prepared109.exists():
  if (prepared109/'reviewed-amendments-application.json').exists():
   for chapter in ['108','109']:
    files += [pathlib.Path(p) for p in [f'data/jinshu/{chapter}.json',f'data/people/extractions/jinshu/{chapter}.json',f'data/people/editorial-decisions/jinshu/{chapter}.json']]
+for extension in ['json','mjs','txt','jsonl']:files += list((prepared109/'current-source-date-parts').glob('*.'+extension))
+files += list((prepared109/'combined-code-release-ci').glob('*.json'))
+for folderName in ['paired-office-prepared','paired-office-prepared-preserve-facts','date-known-findings-draft']:files += list((prepared109/folderName).glob('*.json'))
+files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-029c0b784aed.json'))
+files.append(audit/'composed-identity-production-observations.jsonl')
+files.append(pathlib.Path('data/people/generated/date-workflow/jinshu/109/state.json'))
+files.append(pathlib.Path('data/people/generated/date-workflow/jinshu/109.stale-6dc9cbab2bd96a8c378b/state.json'))
+files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/109').glob('audit-0-*.json'))
 files += list((audit/'dossier-reuse-release-ci').glob('*'));files += list(audit.glob('dossier-reuse-*.jsonl'));files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-5a79118e3c66.json'))
 files.append(audit/'handoff-before-semantic-reuse-diagnostic-20261105.md')
 files.append(audit/'handoff-before-native-dossier-delta-20261105.md')
