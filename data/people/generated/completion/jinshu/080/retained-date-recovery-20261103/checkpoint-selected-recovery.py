@@ -178,6 +178,13 @@ for folder in dateResearch.glob('focused-date-research-current-source-*'):
   files += list((folder/'full-claim-anchors-1').glob('*.json'))
 for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.research-English-source-*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
+# Complete-source fidelity evidence and direct native review attachments.
+# Private memory cleanup receipts and provider conversation stores stay excluded.
+for folder in dateResearch.glob('complete-English-coverage-c4f6b535-20261105*'):
+ if folder.is_dir():
+  for extension in ['json','mjs','txt','jsonl']:
+   files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
+files.append(audit/'handoff-before-complete-source-English-coverage-20261105.md')
 files.append(audit/'handoff-before-research-English-source-20261105.md')
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')

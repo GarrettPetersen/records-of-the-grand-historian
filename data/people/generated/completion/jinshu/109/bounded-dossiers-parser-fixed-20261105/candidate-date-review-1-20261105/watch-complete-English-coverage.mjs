@@ -1,0 +1,5 @@
+import fs from 'node:fs';
+import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+import {acquireProcessRunLock} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/process-run-lock.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',dir=new URL('.',import.meta.url).pathname,out=dir+'complete-English-coverage-c4f6b535-20261105/',unlock=acquireProcessRunLock(root+'/data/people/generated/date-workflow-run.lock',{label:'One calibrated complete-source English109 executor',failIfExists:true});
+try{while(true){const m=JSON.parse(fs.readFileSync(out+'manifest.json'));if(!['running','ready-next','coverage-returned','cross-reviewing'].includes(m.phase)){console.log(JSON.stringify({watchEnded:true,phase:m.phase}));break;}const guard=inspectLocalDisk(root);fs.appendFileSync(out+'resources.jsonl',JSON.stringify({at:new Date().toISOString(),guard})+'\n');if(guard.errors.length)console.error(JSON.stringify({resourceHold:guard.errors,preserveActiveJobs:true}));await new Promise(r=>setTimeout(r,45000));}}finally{unlock();}
