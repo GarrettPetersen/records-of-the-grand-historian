@@ -1,0 +1,24 @@
+import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+import {buildPeopleExtractionPacket} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/build-people-extraction-packet.mjs';
+import {loadProperNounMatcher} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-candidates.mjs';
+import {validateCompactPeopleExtraction} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/validate-people-extraction.mjs';
+import {validateAppliedEditorialDecisions} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-editorial-decisions.mjs';
+import {validateDateAuditReport,dateAuditReferencesCurrent} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-audit.mjs';
+import {contentUnits,sha256} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-content.mjs';
+import {dateAuditItems} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-audit.mjs';
+import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',a=root+'/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103',revision='8f2c7a77f87a4ee912269d72a8f1ef02e57478a4';
+if(inspectLocalDisk(root).errors.length)throw Error('Resource guard rejected frontier check');
+const show=p=>JSON.parse(execFileSync('git',['show',revision+':'+p],{cwd:root,maxBuffer:8*1024*1024})),matcher=loadProperNounMatcher(),records=[];
+for(const chapter of ['053','072','093','109','117','119','123','130']){
+ const report=show('data/people/date-audits/jinshu/'+chapter+'.json'),source=show('data/jinshu/'+chapter+'.json'),extraction=show('data/people/extractions/jinshu/'+chapter+'.json');
+ const units=contentUnits(source).map(({id,zh,en,literal,blockIndex})=>({id,zh,en,literal,blockIndex}));const sourceHash=sha256(JSON.stringify(units)),extractionHash=sha256(JSON.stringify(extraction));
+ const row={chapter,revision,sourceHash,extractionHash,nativeDateStatus:report.status,datePinsCurrent:report.sourceHash===sourceHash&&report.extractionHash===extractionHash,knownHold:chapter==='072'?'Retained independent Guo Yuan negative findings':chapter==='130'?'Qubei source QA cites unrelated heading':null,alreadyPublished:chapter==='053',productionValidation:false,editorialValidation:false,dateReportValidation:false,people:report.personChecks.length,sourceUnits:units.length};
+ if(row.datePinsCurrent&&!row.knownHold&&!row.alreadyPublished){
+  try{const packet=buildPeopleExtractionPacket('jinshu',chapter,{chapterData:source,chapterFile:root+'/data/jinshu/'+chapter+'.json',properNounMatcher:matcher});const validated=validateCompactPeopleExtraction(extraction,packet);row.productionValidation=true;row.stats=validated.stats;const editorial=show('data/people/editorial-decisions/jinshu/'+chapter+'.json');validateAppliedEditorialDecisions(editorial,validated.normalized);row.editorialValidation=true;row.pendingTranslationRepairs=validated.normalized.translationRepairs.filter(r=>r.status==='proposed').length;
+   const dateItems=dateAuditItems(extraction);validateDateAuditReport(report,{book:'jinshu',chapter,sourceHash,extractionHash,...dateItems,units,extractor:extraction.run});row.dateReportValidation=true;row.requiresCanonicalReferenceFreshnessCheck=report.references.some(r=>r.kind==='chapter');
+  }catch(e){row.failure={name:e.name,message:e.message.slice(0,1200)};}
+ }
+ records.push(row);
+}
+const result={at:new Date().toISOString(),kind:'pinned-master-Jinshu-retained-date-frontier-preflight',revision,records,eligibleForNextCompletionPreflight:records.filter(r=>r.productionValidation&&r.editorialValidation&&r.dateReportValidation&&!r.pendingTranslationRepairs&&!r.knownHold).sort((a,b)=>a.people-b.people).map(r=>r.chapter),claimChecked:false,identityPrepared:false,chapterApproved:false,notes:'Read-only exact-master checks. No source/extraction/restoration or new model work. Eligibility still requires shared ownership, chapter-reference freshness, retained authorship holds, indexed identity and normal publication gates.'};fs.writeFileSync(a+'/current-jinshu-date-frontier-preflight.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});if(inspectLocalDisk(root).errors.length)throw Error('Guard failed after preflight');console.log(JSON.stringify({revision,records:records.map(({chapter,datePinsCurrent,knownHold,people,productionValidation,editorialValidation,dateReportValidation,pendingTranslationRepairs,failure})=>({chapter,datePinsCurrent,knownHold,people,productionValidation,editorialValidation,dateReportValidation,pendingTranslationRepairs,failure})),nextPreflight:result.eligibleForNextCompletionPreflight}));

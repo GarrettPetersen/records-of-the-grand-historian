@@ -66,6 +66,9 @@ for folderName in ['second-final-reaudit3-calibration-20261105','second-final-re
  else:raise RuntimeError('Second final-round CLI PID still present; inspect ownership')
  files += list(folder.glob('*.json'));files.append(folder/'one-review.log')
 files += [audit/name for name in ['finished-budget-red.log','finished-budget-regression.log','finished-budget-proposal.patch','finished-budget-independent-review.raw.txt','focused-source-editorial-review.raw.txt','finished-budget-pr-body.md']]
+files += list((audit/'finished-budget-release-ci').glob('*'))
+files += [audit/name for name in ['reviewed-editorial-prepare.log','reviewed-editorial-apply.log','reviewed-editorial-pr-body.md']]
+files.append(audit/'current-jinshu-date-frontier-preflight.log')
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
