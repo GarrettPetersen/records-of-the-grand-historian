@@ -1,0 +1,385 @@
+diff --git a/PEOPLE_COMPLETION_PROCESS.md b/PEOPLE_COMPLETION_PROCESS.md
+index d130eccc5512..fe87a34e94f7 100644
+--- a/PEOPLE_COMPLETION_PROCESS.md
++++ b/PEOPLE_COMPLETION_PROCESS.md
+@@ -243,10 +243,25 @@ adoption, data qualification and live publication separately.
+ Keep the complete source packet and the full plan. Oversized transports split by
+ case ownership within the existing byte ceiling. Each part includes the complete
+ target chapter and every cited claim and mention unit for its people and anchors.
+-Preserve each actual report, producer and sealed part hash. All owned cases must
+-assemble exactly once, with one actual independent reviewer retained across parts;
+-then run the normal full-plan identity validator and publication gates. No part by
+-itself certifies a chapter. Single cases that exceed the bound stay held.
++Preserve each actual report, producer and sealed part hash. Assign new unreviewed
++parts to independent conversations rather than accumulating every part in one
++context; keep the one-active-cloud-assignment resource profile. Recover an existing
++part's producer and saved result before replacing work. All owned cases must assemble
++exactly once, and every actual part producer must be independent of every extractor.
++The aggregate names a real contributing reviewer and retains the producer of each
++case. Then run the normal full-plan identity validator and publication gates. No
++part itself certifies a chapter. Single cases that exceed the bound stay held.
++
++Fresh preparation defaults to 256 KiB parts. Its receipt pins `transportPolicy`
++(`schemaVersion: 1`, `maxBytes`) within the 768 KiB absolute ceiling. Run the read-only
++`validatePreparedIdentityReviewArtifacts` preflight before model dispatch, and copy
++that exact policy into the captured part journal. Recording reproduces the pinned
++layout rather than applying a later default. A retained journal without this policy
++requires explicit host reconciliation against its original preparation/invocation
++and byte-identical parts; preserve the original journal and provider reports. Never
++guess a policy, silently fall back, or retag a report to fit a new layout. Completed
++identity proofs keep their normal unchanged-source revalidation path. A smaller part
++limit alone does not prove lower compaction, cost or one-hour throughput.
+ 
+ Chunked extractions identify their actual contributing agents through `run.chunks`.
+ Exclude every actual chunk author from independent review; never invent an aggregate
+diff --git a/scripts/lib/people-identity-review-record.mjs b/scripts/lib/people-identity-review-record.mjs
+index 54251430662d..48987a9e51d8 100644
+--- a/scripts/lib/people-identity-review-record.mjs
++++ b/scripts/lib/people-identity-review-record.mjs
+@@ -15,7 +15,7 @@ import { editorialDecisionPath } from './people-editorial-decisions.mjs';
+ import { assertChapterGates } from './people-qualified-scope.mjs';
+ import { acquireProcessRunLock } from './process-run-lock.mjs';
+ import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime, pinnedIdentityHostGeneratedDirectory } from './people-pinned-identity-source.mjs';
+-import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts, MAX_IDENTITY_REVIEW_TRANSPORT_BYTES } from './people-identity-review-transport.mjs';
++import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts, identityReviewTransportMaxBytes } from './people-identity-review-transport.mjs';
+ const need = (condition, message) => { if (!condition) throw new Error(message); };
+ 
+ // The job journal is host-owned captured transport metadata. A remote worker
+@@ -30,19 +30,19 @@ export function createIdentityReviewBundle(packetBytes, reportBytes, job, supple
+   need(original.reviewer?.agentId === job.agentId && original.planFingerprint === packet.plan.fingerprint, 'Report is not from the actual assigned independent reviewer');
+   let partReceipts = null;
+   if (job.kind === 'captured-independent-identity-review-parts') {
+-    const expected = splitChapterIdentityReviewTransport(compactChapterIdentityReviewPacket(packet), MAX_IDENTITY_REVIEW_TRANSPORT_BYTES);
++    const expected = splitChapterIdentityReviewTransport(compactChapterIdentityReviewPacket(packet), identityReviewTransportMaxBytes(job.transportPolicy));
+     need(Array.isArray(job.parts) && job.parts.length === expected.length && partArtifacts.length === expected.length, 'All captured independent review parts are required');
+     const transports = [], reports = [];
+     for (const [i, capture] of job.parts.entries()) {
+       const artifact = partArtifacts[i], transport = JSON.parse(artifact.transportBytes), report = JSON.parse(artifact.reportBytes);
+       need(capture.schemaVersion === 1 && capture.kind === 'captured-independent-identity-review-part' && capture.phase === 'report-recorded' &&
+-        capture.agentId === job.agentId && typeof capture.runId === 'string' && capture.runId && capture.sourcePacketSha256 === job.sourcePacketSha256 &&
++        typeof capture.agentId === 'string' && capture.agentId && report.reviewer?.agentId === capture.agentId && typeof capture.runId === 'string' && capture.runId && capture.sourcePacketSha256 === job.sourcePacketSha256 &&
+         capture.transportSha256 === identityArtifactHash(artifact.transportBytes) && capture.reportSha256 === identityArtifactHash(artifact.reportBytes) &&
+         identityArtifactHash(artifact.transportBytes) === identityArtifactHash(Buffer.from(JSON.stringify(expected[i]) + '\n')),
+         'Actual captured identity part bytes/provenance do not match');
+       transports.push(transport); reports.push(report);
+     }
+-    need(job.runId === job.parts.at(-1).runId, 'Aggregate identity journal must retain the actual final part run');
++    need(job.parts.some(part => part.agentId === job.agentId && part.runId === job.runId), 'Aggregate identity journal must retain an actual contributor and their matching run');
+     const assembled = assembleChapterIdentityReviewParts(packet.plan, transports, reports, job.parts.map(p => p.agentId), packet.authorAgentIds);
+     need(peopleDigest(assembled) === peopleDigest(original), 'Recorded aggregate report differs from actual independent part reports');
+     partReceipts = job.parts.map((p, i) => ({ agentId: p.agentId, runId: p.runId, packetSha256: p.sourcePacketSha256, transportSha256: p.transportSha256,
+diff --git a/scripts/lib/people-identity-review-transport.mjs b/scripts/lib/people-identity-review-transport.mjs
+index 793c657a3dd9..066b57bda5d2 100644
+--- a/scripts/lib/people-identity-review-transport.mjs
++++ b/scripts/lib/people-identity-review-transport.mjs
+@@ -1,6 +1,22 @@
+ import { identityArtifactHash } from './people-identity-artifacts.mjs';
+ import { peopleDigest } from './people-identity-seal.mjs';
++// Preparation pins its chosen bound; recording must reproduce that exact layout.
+ export const MAX_IDENTITY_REVIEW_TRANSPORT_BYTES = 768 * 1024;
++export const DEFAULT_IDENTITY_REVIEW_PART_BYTES = 256 * 1024;
++
++export function identityReviewTransportPolicy(maxBytes = DEFAULT_IDENTITY_REVIEW_PART_BYTES) {
++  const policy = { schemaVersion: 1, maxBytes };
++  identityReviewTransportMaxBytes(policy);
++  return policy;
++}
++
++export function identityReviewTransportMaxBytes(policy) {
++  if (!policy || Object.keys(policy).sort().join(',') !== 'maxBytes,schemaVersion' || policy.schemaVersion !== 1 ||
++      !Number.isSafeInteger(policy.maxBytes) || policy.maxBytes < 1024 || policy.maxBytes > MAX_IDENTITY_REVIEW_TRANSPORT_BYTES) {
++    throw new Error('Explicit sealed identity transport policy required; reconcile retained preparation before dispatch or recording');
++  }
++  return policy.maxBytes;
++}
+ 
+ export function compactChapterIdentityReviewPacket(p) {
+   const sourcePacketSha256 = identityArtifactHash(Buffer.from(JSON.stringify(p, null, 2) + '\n'));
+@@ -72,7 +88,8 @@ export function assembleChapterIdentityReviewParts(plan, transports, reports, ac
+     for (const row of r.reviews) { if (seen.has(row.caseId)) throw new Error('Duplicate identity review case'); seen.add(row.caseId); reviews.set(row.caseId, row); }
+   }
+   if (seen.size !== plan.cases.length || plan.cases.some(c => !seen.has(c.id))) throw new Error('Incomplete full chapter identity coverage');
+-  if (new Set(actualReviewerAgentIds).size !== 1) throw new Error('A chapter report must retain one actual independent reviewer; use one retained reviewer across its parts');
++  // Parts can use independent conversations without accumulating earlier parts in
++  // one context. Each real producer remains bound to its exact owned case rows.
+   return { schemaVersion: 1, planFingerprint: plan.fingerprint, reviewer: reports[0].reviewer, reviews: plan.cases.map(c => reviews.get(c.id)) };
+ }
+ 
+@@ -82,15 +99,18 @@ export function assembleChapterIdentityReviewParts(plan, transports, reports, ac
+ export function assertCapturedIdentityReviewParts(report, receipt) {
+   if (receipt.reviewParts === undefined) return;
+   if (!Array.isArray(receipt.reviewParts) || !receipt.reviewParts.length) throw new Error('Captured identity review parts are missing');
+-  const rows = new Map(report.reviews.map(row => [row.caseId, row])), seen = new Set();
++  if (report.reviewer?.agentId !== receipt.actualReviewerAgentId || !Array.isArray(receipt.authorAgentIds)) throw new Error('Invalid aggregate identity reviewer provenance');
++  const rows = new Map(report.reviews.map(row => [row.caseId, row])), seen = new Set(), producers = new Set();
+   const expectedKeys = ['agentId','runId','packetSha256','transportSha256','reportSha256','caseIds','reviewsFingerprint'].sort().join(',');
+   let packet;
+   for (const part of receipt.reviewParts) {
+-    if (Object.keys(part).sort().join(',') !== expectedKeys || part.agentId !== receipt.actualReviewerAgentId || typeof part.runId !== 'string' || !part.runId.trim() ||
++    if (Object.keys(part).sort().join(',') !== expectedKeys || typeof part.agentId !== 'string' || !part.agentId.trim() || receipt.authorAgentIds.includes(part.agentId) || typeof part.runId !== 'string' || !part.runId.trim() ||
+         ![part.packetSha256,part.transportSha256,part.reportSha256].every(v => /^[a-f0-9]{64}$/u.test(v)) || !Array.isArray(part.caseIds) || !part.caseIds.length || new Set(part.caseIds).size !== part.caseIds.length) throw new Error('Invalid actual identity part provenance');
+     if (packet && packet !== part.packetSha256) throw new Error('Identity parts do not share their full source packet'); packet = part.packetSha256;
++    producers.add(part.agentId);
+     const reviewed = part.caseIds.map(id => { if (!rows.has(id) || seen.has(id)) throw new Error('Captured identity parts lost or duplicated case coverage'); seen.add(id); return rows.get(id); });
+     if (peopleDigest(reviewed) !== part.reviewsFingerprint) throw new Error('Captured identity part reviews changed');
+   }
++  if (!producers.has(receipt.actualReviewerAgentId)) throw new Error('Aggregate reviewer did not contribute an actual identity part');
+   if (seen.size !== report.reviews.length) throw new Error('Captured identity parts do not cover the complete report');
+ }
+diff --git a/scripts/prepare-people-chapter-identity.mjs b/scripts/prepare-people-chapter-identity.mjs
+index c6e7bbdda77d..4c8569e96295 100644
+--- a/scripts/prepare-people-chapter-identity.mjs
++++ b/scripts/prepare-people-chapter-identity.mjs
+@@ -11,7 +11,7 @@ import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
+ import { assertChapterGates } from './lib/people-qualified-scope.mjs';
+ import { localNameKeys } from './lib/people-resolution.mjs';
+ import { peopleDigest, identityDossierInputs } from './lib/people-identity-seal.mjs';
+-import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, MAX_IDENTITY_REVIEW_TRANSPORT_BYTES } from './lib/people-identity-review-transport.mjs';
++import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, identityReviewTransportPolicy, identityReviewTransportMaxBytes } from './lib/people-identity-review-transport.mjs';
+ import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
+ import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
+ import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
+@@ -21,7 +21,6 @@ import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs'
+ import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
+ const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+ const need = (ok, message) => { if (!ok) throw new Error(message); };
+-const MAX_REVIEW_TRANSPORT_BYTES = MAX_IDENTITY_REVIEW_TRANSPORT_BYTES;
+ export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
+   const units = new Map(), ownPrefix = `${own.extraction.book}:${own.extraction.chapter}`;
+   for (const unit of own.packet.units) units.set(`${ownPrefix}:${unit.id}`, { book: own.extraction.book, chapter: own.extraction.chapter, ...unit });
+@@ -80,13 +79,15 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
+       instructions: 'Review every case and every target local person. Quote the primary Chinese for each target and the retained canonical anchor. Confirm actual individual, supported chapter attribution, and accepted membership; hold contradictions. Keep unresolvedIdentity true when proposed, including small candidate buckets and overflow. Omitted names are unreviewed uncertainty, never separation evidence. No positive merges, no all-pairs comparisons, no recursive external chapter completion. Return the closed required report only. Supply definite English repairs separately with complete exact before/after, source reason, both fields and repetitions; do not silently ignore them.' };
+     const bytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
+     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
++      transportPolicy: identityReviewTransportPolicy(),
+       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
+       generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false,
+       ...(registryReuse ? { sourceRevision, registryReuse } : {}) };
+     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
+     const transport = compactChapterIdentityReviewPacket(packet);
+     const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+-    const reviewParts = transportBytes.length > MAX_REVIEW_TRANSPORT_BYTES ? splitChapterIdentityReviewTransport(transport, MAX_REVIEW_TRANSPORT_BYTES) : [];
++    const maxBytes = identityReviewTransportMaxBytes(receipt.transportPolicy);
++    const reviewParts = transportBytes.length > maxBytes ? splitChapterIdentityReviewTransport(transport, maxBytes) : [];
+     if (reviewParts.length) receipt.reviewParts = reviewParts.map((part, index) => { const bytes = Buffer.from(JSON.stringify(part) + '\n'); return { file: `transport-part-${String(index + 1).padStart(3, '0')}.json`, bytes: bytes.length, sha256: identityArtifactHash(bytes), caseIds: part.reviewCases.map(c => c.caseId) }; });
+     receipt.sourcePacketSha256 = identityArtifactHash(bytes); receipt.transportSha256 = identityArtifactHash(transportBytes); receipt.transportBytes = transportBytes.length;
+     return { plan, packet, transport, receipt, reviewParts };
+@@ -96,19 +97,26 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
+ // Write the exact byte encodings sealed by preparation. The source packet is
+ // readable JSON; the model transport is compact JSON and its bound/hash apply to
+ // that actual file, not to an encoding that was never written.
+-export function writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt, reviewParts = [] }) {
++export function validatePreparedIdentityReviewArtifacts({ packet, transport, receipt, reviewParts = [] }) {
++  const maxBytes = identityReviewTransportMaxBytes(receipt.transportPolicy);
+   const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
+   const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+   need(sourceBytes.length === receipt.packetBytes && identityArtifactHash(sourceBytes) === receipt.sourcePacketSha256,
+     'Sealed source packet bytes do not match preparation receipt');
+   need(transportBytes.length === receipt.transportBytes && identityArtifactHash(transportBytes) === receipt.transportSha256,
+     'Sealed transport bytes do not match preparation receipt');
+-  need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES || reviewParts.length > 0, 'Source-complete review transport exceeds the inspected bound');
++  need(transportBytes.length <= maxBytes || reviewParts.length > 0, 'Source-complete review transport exceeds the inspected bound');
+   if (reviewParts.length) {
+-    const expected = splitChapterIdentityReviewTransport(transport, MAX_REVIEW_TRANSPORT_BYTES);
++    const expected = splitChapterIdentityReviewTransport(transport, maxBytes);
+     need(peopleDigest(expected) === peopleDigest(reviewParts) && receipt.reviewParts?.length === reviewParts.length, 'Review partition evidence differs from the sealed source transport');
+     for (const [i, part] of reviewParts.entries()) { const bytes = Buffer.from(JSON.stringify(part) + '\n'), sealed = receipt.reviewParts[i]; need(sealed.file === `transport-part-${String(i + 1).padStart(3, '0')}.json` && sealed.bytes === bytes.length && sealed.sha256 === identityArtifactHash(bytes) && peopleDigest(sealed.caseIds) === peopleDigest(part.reviewCases.map(c => c.caseId)), 'Review part bytes differ from preparation receipt'); }
+   }
++  return { sourceBytes, transportBytes };
++}
++
++export function writePreparedIdentityReviewArtifacts(out, prepared) {
++  const { plan, receipt, reviewParts = [] } = prepared;
++  const { sourceBytes, transportBytes } = validatePreparedIdentityReviewArtifacts(prepared);
+   fs.mkdirSync(out, { recursive: false });
+   for (const [file, bytes] of [
+     ['plan.json', Buffer.from(JSON.stringify(plan, null, 2) + '\n')],
+diff --git a/scripts/test-people-chapter-identity.mjs b/scripts/test-people-chapter-identity.mjs
+index 9327f8c10509..27bcc1532b11 100644
+--- a/scripts/test-people-chapter-identity.mjs
++++ b/scripts/test-people-chapter-identity.mjs
+@@ -6,22 +6,30 @@ import { buildIdentityDossierIndex, planChapterIdentityReview } from './lib/peop
+ import { acceptedCatalogIdentityView, validateChapterIdentityBundle, assertReviewedIdentityCoverage,
+   applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './lib/people-chapter-identity.mjs';
+ const inputs = Object.fromEntries(['source','extraction','editorial','dateAudit'].map((k,i)=>[k,`sha256:${String(i+1).repeat(64)}`]));
+-function fixture() {
+-  const localId='fixture:001:p001', anchorId='fixture:002:p001';
+-  const make=id=>({localId:id,book:'fixture',chapter:id.split(':')[1],promptVersion:7,preferredNameSuggestion:{en:'Wang Wei',zh:'王偉'},
+-    claims:[{id:id+':c0001',subject:id,predicate:'name',value:{kind:'personal-name',en:'Wang Wei',zh:'王偉'},certainty:'explicit',evidence:[id.split(':').slice(0,2).join(':')+':s0001']}]});
+-  const own=make(localId),anchor=make(anchorId),people=new Map([[localId,own],[anchorId,anchor]]),clusters=[{canonicalPersonId:'per_test',localPeople:[localId,anchorId],retiredIds:['per_old']}];
+-  const index=buildIdentityDossierIndex(people,clusters,localNameKeys),scope={book:'fixture',chapter:'001'},plan=planChapterIdentityReview(index,scope,inputs,{maxDossiersPerCase:8,maxKeysPerCase:16,maxPostingReadsPerKey:8}),item=plan.cases[0];
+-  const report={schemaVersion:1,planFingerprint:plan.fingerprint,reviewer:{agentId:'independent-reviewer',name:'Independent reviewer'},reviews:[{
++function fixture(count=1) {
++  const names=[{en:'Wang Wei',zh:'王偉'},{en:'Li Zhong',zh:'李忠'}].slice(0,count),people=new Map(),clusters=[],sources=new Map();
++  const chapterText=names.map(name=>name.zh+'至。').join('');
++  for(const [i,name] of names.entries()){
++    const localId=`fixture:001:p00${i+1}`,anchorId=`fixture:00${i+2}:p001`;
++    const make=id=>({localId:id,book:'fixture',chapter:id.split(':')[1],promptVersion:7,preferredNameSuggestion:name,
++      claims:[{id:id+':c0001',subject:id,predicate:'name',value:{kind:'personal-name',...name},certainty:'explicit',evidence:[id.split(':').slice(0,2).join(':')+':s0001']}]});
++    for(const person of [make(localId),make(anchorId)]){
++      people.set(person.localId,person);const key='fixture:'+person.chapter;
++      if(!sources.has(key))sources.set(key,{extraction:{book:'fixture',chapter:person.chapter,run:{agentId:'actual-extractor'}},localPeople:new Map(),packet:{units:[{id:'s0001',zh:person.chapter==='001'?chapterText:name.zh+'至。'}]}});
++      sources.get(key).localPeople.set(person.localId,person);
++    }
++    clusters.push({canonicalPersonId:i===0?'per_test':'per_second',localPeople:[localId,anchorId],retiredIds:i===0?['per_old']:[]});
++  }
++  const index=buildIdentityDossierIndex(people,clusters,localNameKeys),scope={book:'fixture',chapter:'001'},plan=planChapterIdentityReview(index,scope,inputs,{maxDossiersPerCase:8,maxKeysPerCase:16,maxPostingReadsPerKey:8});
++  const report={schemaVersion:1,planFingerprint:plan.fingerprint,reviewer:{agentId:'independent-reviewer',name:'Independent reviewer'},reviews:plan.cases.map(item=>({
+     caseId:item.id,verdict:'approve',canonicalPersonId:item.canonicalPersonId,membershipReviewed:true,membershipFingerprint:item.canonicalMembership.fingerprint,
+     ambiguityReviewed:true,unresolvedIdentity:true,reason:'Source identifies the named individual; independent cross-chapter equivalence remains uncertain.',
+-    sourceWitnesses:[localId,anchorId].map(id=>({localId:id,book:'fixture',chapter:id.split(':')[1],unitId:'s0001',quote:'王偉'}))}]};
++    sourceWitnesses:clusters.find(c=>c.canonicalPersonId===item.canonicalPersonId).localPeople.map(id=>({localId:id,book:'fixture',chapter:id.split(':')[1],unitId:'s0001',quote:people.get(id).preferredNameSuggestion.zh}))}))};
+   const bundle={schemaVersion:1,kind:'chapter-identity-review',scope,plan,report,receipt:{actualReviewerAgentId:'independent-reviewer',authorAgentIds:['actual-extractor','host-author'],planFingerprint:plan.fingerprint,reportFingerprint:peopleDigest(report)}};
+-  const sources=new Map([own,anchor].map(person=>['fixture:'+person.chapter,{extraction:{book:'fixture',chapter:person.chapter,run:{agentId:'actual-extractor'}},localPeople:new Map([[person.localId,person]]),packet:{units:[{id:'s0001',zh:'王偉至。'}]}}]));
+   bundle.receipt.chapterChinese=chapterChineseEvidenceFingerprint(sources.get('fixture:001').packet);
+-  bundle.receipt.sourcePeople=[own,anchor].map(person=>({localId:person.localId,fingerprint:identitySourceEvidenceFingerprint(person,sources.get('fixture:'+person.chapter).packet)}));
+-  const catalog={localPersonMap:Object.fromEntries(index.localPersonMap),people:[{id:'per_test',localPeople:[localId,anchorId],retiredIds:['per_old'],curation:{notes:[]}}]};
+-  return {index,scope,inputs,bundle,sources,catalog,view:acceptedCatalogIdentityView(catalog),corpus:{localPeople:new Map([[localId,own]])}};
++  bundle.receipt.sourcePeople=[...people.values()].map(person=>({localId:person.localId,fingerprint:identitySourceEvidenceFingerprint(person,sources.get('fixture:'+person.chapter).packet)}));
++  const catalog={localPersonMap:Object.fromEntries(index.localPersonMap),people:clusters.map(c=>({id:c.canonicalPersonId,localPeople:c.localPeople,retiredIds:c.retiredIds,curation:{notes:[]}}))};
++  return {index,scope,inputs,bundle,sources,catalog,view:acceptedCatalogIdentityView(catalog),corpus:{localPeople:new Map(sources.get('fixture:001').localPeople)}};
+ }
+ const validate=f=>validateChapterIdentityBundle(f.view,f.sources,f.scope,f.bundle,f.inputs);
+ test('independent person proof qualifies retained assignments and preserves uncertainty visibly',()=>{
+@@ -68,3 +76,11 @@ test('captured part receipts bind every reviewed case and retain actual producer
+  f.bundle.report.reviews[0].reason+=' Changed after capture.';f.bundle.receipt.reportFingerprint=peopleDigest(f.bundle.report);assert.throws(()=>validate(f),/part reviews changed/);
+  const g=fixture();g.bundle.receipt.reviewParts=[];assert.throws(()=>validate(g),/parts are missing/);
+ });
++
++test('full source revalidation accepts different independent part producers and rejects an extractor in any part',()=>{
++ const f=fixture(2),rows=f.bundle.report.reviews;
++ f.bundle.receipt.reviewParts=rows.map((row,i)=>({agentId:i===0?'independent-reviewer':'second-independent-reviewer',runId:`actual-run-${i}`,packetSha256:'a'.repeat(64),transportSha256:'b'.repeat(64),reportSha256:'c'.repeat(64),caseIds:[row.caseId],reviewsFingerprint:peopleDigest([row])}));
++ assert.equal(validate(f).retained.length,2);
++ f.bundle.receipt.reviewParts[1].agentId='actual-extractor';assert.throws(()=>validate(f),/identity part provenance/);
++ f.bundle.receipt.reviewParts[1].agentId='second-independent-reviewer';f.bundle.receipt.reviewParts[0].agentId='unrelated-reviewer';assert.throws(()=>validate(f),/did not contribute/);
++});
+diff --git a/scripts/test-people-identity-preparation.mjs b/scripts/test-people-identity-preparation.mjs
+index 2f2a27b64355..d3fcc16785f8 100644
+--- a/scripts/test-people-identity-preparation.mjs
++++ b/scripts/test-people-identity-preparation.mjs
+@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import os from 'node:os';
+ import path from 'node:path';
+-import { writePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
++import { writePreparedIdentityReviewArtifacts, validatePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
+ import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
++import { identityReviewTransportPolicy } from './lib/people-identity-review-transport.mjs';
+ 
+ function fixture(t) {
+   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'identity-preparation-test-'));
+@@ -14,7 +15,7 @@ function fixture(t) {
+   const transport = { kind: 'bounded-dossier-source-review-transport', rows: [['s0001', '王偉𠀀至。', 'Wang Wei arrived.']] };
+   const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
+   const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+-  const receipt = { packetBytes: sourceBytes.length, sourcePacketSha256: identityArtifactHash(sourceBytes),
++  const receipt = { transportPolicy: identityReviewTransportPolicy(), packetBytes: sourceBytes.length, sourcePacketSha256: identityArtifactHash(sourceBytes),
+     transportBytes: transportBytes.length, transportSha256: identityArtifactHash(transportBytes) };
+   return { root, out: path.join(root, 'prepared'), value: { plan, packet, transport, receipt }, sourceBytes, transportBytes };
+ }
+@@ -31,6 +32,14 @@ test('prepared transport and primary source files match their sealed UTF-8 bytes
+   assert.notEqual(bytes.length, Buffer.byteLength(JSON.stringify(f.value.transport, null, 2) + '\n'));
+ });
+ 
++test('dispatch preflight rejects absent or invalid pinned transport policy before writing', t => {
++  for (const policy of [undefined, { schemaVersion: 1, maxBytes: 769 * 1024 }, { schemaVersion: 1, maxBytes: 256 * 1024, extra: true }]) {
++    const f = fixture(t); f.value.receipt.transportPolicy = policy;
++    assert.throws(() => validatePreparedIdentityReviewArtifacts(f.value), /Explicit sealed identity transport policy/);
++    assert.equal(fs.existsSync(f.out), false);
++  }
++});
++
+ test('changed source or transport seals fail before creating an output directory', t => {
+   for (const field of ['packetBytes', 'sourcePacketSha256', 'transportBytes', 'transportSha256']) {
+     const f = fixture(t);
+diff --git a/scripts/test-people-identity-review-parts.mjs b/scripts/test-people-identity-review-parts.mjs
+index 5cfa9e32e653..4a55ef80e859 100644
+--- a/scripts/test-people-identity-review-parts.mjs
++++ b/scripts/test-people-identity-review-parts.mjs
+@@ -1,7 +1,11 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import { splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts } from './lib/people-identity-review-transport.mjs';
++import { splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts, compactChapterIdentityReviewPacket,
++  identityReviewTransportPolicy, DEFAULT_IDENTITY_REVIEW_PART_BYTES, MAX_IDENTITY_REVIEW_TRANSPORT_BYTES } from './lib/people-identity-review-transport.mjs';
+ import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
++import { createIdentityReviewBundle } from './lib/people-identity-review-record.mjs';
++import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
++import { validatePreparedIdentityReviewArtifacts } from './prepare-people-chapter-identity.mjs';
+ function fixture() {
+  const own='fixture:001:p001',anchor='fixture:002:p001',other='fixture:001:p002',otherAnchor='fixture:003:p001';
+  const person=(localId,unit)=>({localId,claims:[['c1','name',{zh:'王偉'},'explicit',[unit]]],mentions:[['m1','s0001','personal-name',{},null]]});
+@@ -24,3 +28,51 @@ test('assembly requires all exact parts and actual independent producer, in line
+ test('aggregate extraction authors remain actual complete chunk contributors',()=>{
+  assert.deepEqual(extractionAuthorAgentIds({run:{agentId:null,chunks:[{agentId:'a'},{agentId:'b'},{agentId:'a'}]}}),['a','b']);assert.deepEqual(extractionAuthorAgentIds({run:{agentId:'top'}}),['top']);assert.throws(()=>extractionAuthorAgentIds({run:{agentId:null}}),/provenance/);assert.throws(()=>extractionAuthorAgentIds({run:{agentId:'top',chunks:[{agentId:null}]}}),/every chunk/);
+ });
++
++test('the actual default accepts the exact UTF-8 boundary and holds an oversized individual case',()=>{
++ assert.equal(DEFAULT_IDENTITY_REVIEW_PART_BYTES,256*1024);
++ const t=fixture();t.reviewCases=t.reviewCases.slice(0,1);
++ const initial=splitChapterIdentityReviewTransport(t,MAX_IDENTITY_REVIEW_TRANSPORT_BYTES)[0];
++ const unit=t.units.find(u=>u.chapter==='002');unit.en+='x'.repeat(DEFAULT_IDENTITY_REVIEW_PART_BYTES-Buffer.byteLength(JSON.stringify(initial)+'\n'));
++ const parts=splitChapterIdentityReviewTransport(t,DEFAULT_IDENTITY_REVIEW_PART_BYTES);
++ assert.equal(parts.length,1);assert.equal(Buffer.byteLength(JSON.stringify(parts[0])+'\n'),DEFAULT_IDENTITY_REVIEW_PART_BYTES);
++ unit.en+='x';assert.throws(()=>splitChapterIdentityReviewTransport(t,DEFAULT_IDENTITY_REVIEW_PART_BYTES),/case.*exceeds/);
++});
++
++test('separate independent conversations assemble exact case ownership without a shared growing context',()=>{
++ const parts=splitChapterIdentityReviewTransport(fixture(),4000),r=reports(parts),plan={fingerprint:'plan',cases:[{id:'a'},{id:'b'}]};r[1].reviewer.agentId='second-reviewer';
++ const combined=assembleChapterIdentityReviewParts(plan,parts,r,['reviewer','second-reviewer'],['extractor']);
++ assert.equal(combined.reviewer.agentId,'reviewer');assert.deepEqual(combined.reviews.map(row=>row.caseId),['a','b']);
++ r[1].reviewer.agentId='extractor';assert.throws(()=>assembleChapterIdentityReviewParts(plan,parts,r,['reviewer','extractor'],['extractor']),/nonindependent/);
++});
++
++function largeCapturedFixture(maxBytes) {
++ const scope={book:'fixture',chapter:'001'},cases=[],people=[],units=[{...scope,id:'s0001',zh:'王偉至。',en:'Wang Wei arrived.',literal:'Wang Wei arrived.'}];
++ for(let i=0;i<9;i++){
++  const localId=`fixture:001:p${i+1}`,chapter=String(i+2).padStart(3,'0'),anchor=`fixture:${chapter}:p1`;
++  cases.push({id:`case-${i}`,canonicalPersonId:`person-${i}`,localPeople:[localId],canonicalMembership:{anchorLocalId:anchor},candidateDossiers:[],retrieval:{queries:[]},proposal:{}});
++  for(const id of [localId,anchor]){const ch=id.split(':')[1];people.push({localId:id,book:'fixture',chapter:ch,claims:[{id:id+':c1',predicate:'name',value:{kind:'personal-name',zh:'王偉',en:'Wang Wei'},certainty:'explicit',evidence:[`fixture:${ch}:s0001`]}],mentions:[]});}
++  units.push({book:'fixture',chapter,id:'s0001',zh:'王偉至。',en:'x'.repeat(150*1024),literal:'Wang Wei arrived.'});
++ }
++ const packet={schemaVersion:1,kind:'source-chapter-dossier-review-packet',scope,plan:{scope,fingerprint:'plan',cases},people,units,candidateDossiers:[],authorAgentIds:['extractor']};
++ const packetBytes=Buffer.from(JSON.stringify(packet,null,2)+'\n'),sourceHash=identityArtifactHash(packetBytes),transports=splitChapterIdentityReviewTransport(compactChapterIdentityReviewPacket(packet),maxBytes);
++ const partReports=transports.map((t,i)=>({schemaVersion:1,planFingerprint:'plan',reviewer:{agentId:`reviewer-${i}`,name:'Independent reviewer'},reviews:t.reviewCases.map(c=>({caseId:c.caseId,verdict:'approve'}))}));
++ const producers=partReports.map(r=>r.reviewer.agentId),report=assembleChapterIdentityReviewParts(packet.plan,transports,partReports,producers,packet.authorAgentIds),reportBytes=Buffer.from(JSON.stringify(report));
++ const artifacts=transports.map((t,i)=>({transportBytes:Buffer.from(JSON.stringify(t)+'\n'),reportBytes:Buffer.from(JSON.stringify(partReports[i]))}));
++ const parts=artifacts.map((a,i)=>({schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',agentId:producers[i],runId:`actual-run-${i}`,sourcePacketSha256:sourceHash,transportSha256:identityArtifactHash(a.transportBytes),reportSha256:identityArtifactHash(a.reportBytes)}));
++ const job={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope,agentId:producers[0],runId:parts[0].runId,sourcePacketSha256:sourceHash,reportSha256:identityArtifactHash(reportBytes),transportPolicy:identityReviewTransportPolicy(maxBytes),parts};
++ return {packetBytes,reportBytes,job,artifacts,transports,packet};
++}
++test('native capture reproduces nine default parts, preserves all producers, and retains an explicitly pinned larger layout',()=>{
++ for(const [bound,count] of [[DEFAULT_IDENTITY_REVIEW_PART_BYTES,9],[MAX_IDENTITY_REVIEW_TRANSPORT_BYTES,2]]){
++  const f=largeCapturedFixture(bound),record=()=>createIdentityReviewBundle(f.packetBytes,f.reportBytes,f.job,null,f.artifacts);
++  assert.equal(f.transports.length,count);const bundle=record();assert.equal(bundle.report.reviews.length,9);assert.deepEqual(bundle.receipt.reviewParts.map(p=>p.agentId),f.job.parts.map(p=>p.agentId));
++  const transport=compactChapterIdentityReviewPacket(f.packet),transportBytes=Buffer.from(JSON.stringify(transport)+'\n');
++  const prepared={packet:f.packet,transport,reviewParts:f.transports,receipt:{transportPolicy:f.job.transportPolicy,packetBytes:f.packetBytes.length,sourcePacketSha256:identityArtifactHash(f.packetBytes),transportBytes:transportBytes.length,transportSha256:identityArtifactHash(transportBytes),reviewParts:f.transports.map((p,i)=>({file:`transport-part-${String(i+1).padStart(3,'0')}.json`,bytes:f.artifacts[i].transportBytes.length,sha256:identityArtifactHash(f.artifacts[i].transportBytes),caseIds:p.reviewCases.map(c=>c.caseId)}))}};
++  assert.deepEqual(validatePreparedIdentityReviewArtifacts(prepared).sourceBytes,f.packetBytes);
++  const policy=f.job.transportPolicy;delete f.job.transportPolicy;assert.throws(record,/Explicit sealed identity transport policy/);f.job.transportPolicy=policy;
++  f.job.runId='invented-run';assert.throws(record,/actual contributor/);
++ }
++ const f=largeCapturedFixture(MAX_IDENTITY_REVIEW_TRANSPORT_BYTES);f.job.transportPolicy=identityReviewTransportPolicy();
++ assert.throws(()=>createIdentityReviewBundle(f.packetBytes,f.reportBytes,f.job,null,f.artifacts),/All captured independent review parts/);
++});
+diff --git a/scripts/test-people-qualified-site.mjs b/scripts/test-people-qualified-site.mjs
+index a7d095deab6b..0e910bd46d43 100644
+--- a/scripts/test-people-qualified-site.mjs
++++ b/scripts/test-people-qualified-site.mjs
+@@ -222,7 +222,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+   assert.equal((await recordChapterIdentityReview(recordOptions)).unchanged, true);
+   // Captured parts are recorded through the real native gate, preserving every
+   // producer/run and rejecting a fabricated aggregate or changed part artifact.
+-  const { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport } = await import('./lib/people-identity-review-transport.mjs');
++  const { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, identityReviewTransportPolicy } = await import('./lib/people-identity-review-transport.mjs');
+   const captureParts = (packet, label) => {
+     const packetPath = path.join(commandDir, label + '-packet.json'), journalPath = path.join(commandDir, label + '-job.json');
+     fs.writeFileSync(packetPath, JSON.stringify(packet, null, 2) + '\n');
+@@ -231,7 +231,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+     const transportFile = path.join(commandDir, label + '-part.json'); fs.writeFileSync(transportFile, JSON.stringify(parts[0]) + '\n');
+     const part = { schemaVersion: 1, kind: 'captured-independent-identity-review-part', phase: 'report-recorded', agentId: capture.agentId,
+       runId: label + '-actual-part-run', sourcePacketSha256: sourceHash, transportSha256: identityArtifactHash(fs.readFileSync(transportFile)), reportSha256: capture.reportSha256, transportFile, reportFile };
+-    const journal = { ...capture, kind: 'captured-independent-identity-review-parts', runId: part.runId, sourcePacketSha256: sourceHash, parts: [part] };
++    const journal = { ...capture, kind: 'captured-independent-identity-review-parts', transportPolicy: identityReviewTransportPolicy(768 * 1024), runId: part.runId, sourcePacketSha256: sourceHash, parts: [part] };
+     fs.writeFileSync(journalPath, JSON.stringify(journal));return { packet: packetPath, report: reportFile, job: journalPath, registry, out: path.join(commandDir, label + '-accepted.json') };
+   };
+   const partOptions = captureParts(prepared.packet, 'parts');

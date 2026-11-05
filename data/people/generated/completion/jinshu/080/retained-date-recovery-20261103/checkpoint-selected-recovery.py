@@ -87,6 +87,8 @@ files += list((audit/'pinned-registry-release-ci').glob('*'))
 verifiedLive=pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-3a078d6924f8.json')
 if verifiedLive.exists():files.append(verifiedLive)
 files += list(audit.glob('identity-review-context-bound-*.log'));files += list(audit.glob('identity-review-context-bound-*.patch'))
+files += list(pathlib.Path('data/people/generated/completion/jinshu/093/bounded-independent-parts-eb9a-20261105').glob('*.json'))
+files += list(audit.glob('identity-review-context-bound-*-prompt.txt'));files += list(audit.glob('identity-review-context-bound-*resources.jsonl'))
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()

@@ -1,136 +1,162 @@
-# Completion handoff — 2026-11-05T03:33UTC
+# Completion handoff — 2026-11-05T04:35UTC
 P=/Users/garrettpetersen/records-of-the-grand-historian
 W=/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime
 A=P/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103
 B=P/data/people/generated/completion/jinshu/072/bounded-dossiers-20261103
 C=P/data/people/generated/completion/jinshu/093/pinned-dossiers-reviewed-candidate-20261105
+D=P/data/people/generated/completion/jinshu/093/bounded-independent-parts-eb9a-20261105
 J53=P/data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030
 
 Read full objective /Users/garrettpetersen/.codex/attachments/b66467b3-5e6d-47d8-83b8-239914d7d144/pasted-text-1.txt.
-All-history glossary INCOMPLETE, Jinshu ebook first. Only Jinshu053 complete/live.
-This goal turn PROGRESS: recovered terminal093 source attempt, diagnosed usage outage
-and compaction overhead, preserved sticky queue ownership, tested a smaller lossless
-transport proposal (58 checks). No new completed/published chapter. Previous memory
-turn also yielded measured safety evidence. Do not mark goal complete or blocked.
+All-history glossary remains INCOMPLETE,Jinshu ebook first. Only053complete/live.
+Previous and current goal turns PROGRESS: actual independent code hold, concrete repairs,
+63localchecks, genuine independent approval, nine source-complete093parts sealed/preflighted.
+Zero new source-case approval or chapter completion/publication. No blocked audit yet.
 
-## Merged production code; first deployment failed, single startup retry active
-PR5372 normal --merge at02:52:04UTC, master3a078d6924f8a76457a5f0d225184d277891e098.
-Reviewed Wheadb6c3d870bc7d2a27fe513338e3d2ec489fe5785c; merged/reviewed trees exactly
-b3d11ce5c5d7e9d60518bd3ac89260b5c0622826. RequiredCI41955734729/41955734758/
-41955734724 PASS. Independentbc-74dd257a-d700-4154-863d-950a6fc95d38/
-run-bd43688a-b7ee-4b22-b4b4-edb1dbaa6465 approved final head, zero findings,
-44.1982c raw/0charged,203685tokens. All 3 code reviews together88.7998c raw/0charged.
-A/pinned-registry-recording-final-independent-review-* and merge-and-adoption.json.
-Code adopted at idle boundary; original 58 checks passed. W tracked clean, only
-node_modules symlink, NO public/. Do not repeat unchanged code reviews/builds.
-PR5371 source correction absorbed/marked merged; 080English correction nowmaster.
+## Immediate next: current PR5373 exact CI, then093 source review
+https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5373 DRAFT.
+Wbranch codex/identity-review-context-bound-20261105,trackedclean HEAD
+**eb9a9018818056367c39a567b69ff8561598d74c**,tree2da4609a0a7c14b5fe4fc25077b0f8a9df909480.
+Code is NOT production-adopted yet. Last adopted headb6c3d870bc7d2a27fe513338e3d2ec489fe5785c.
+Required exact-head master-build **41966818582** active full-build step; vocabulary
+41966818604 PASS. Observe same actual run, never restart solely on observation timeout.
+Prior75459adc17335074a463a85755e3ac3128a0206b CI41962727382 PASS,but independent
+review HELD that one-line proposal. Do not use old green CI/approval for the new head.
+CLI gh pr edit failed due old projectCards GraphQL; REST gh api PATCH succeeded.
+Title/body now match final 8-file change. Preserve branch and all source work.
 
-Exact production deployment3cf9457b-c0c0-480a-9e19-3f28713ee282 for3a.
-First attempt FAILED03:28:45UTC after31m32s before dependency setup/build-command logs.
-Previous8f2 same build config began setup within1s afterclone; no source-level failure
-was printed. A/pinned-registry-production-deployment-failure.json + startup-comparison.json.
-One bounded exact-revision retrybb7ec8aa-e5c7-4ae8-8a0e-ea5b09c757b0 created03:32UTC.
-B/observe-production.mjs now targets retry viaCURRENT-STATE. Verify actual remote handle,
-no further automatic retry, no config/cache/limit/gate change. Both old and new handles
-retained in A/pinned-registry-single-startup-retry.json. Queue/recovery previews are
-verified is_skipped:true, not active builds. Master remains exactly3a.
-On actual canonical success run:
-node J53/verify-live-release.mjs A/pinned-registry-release-ci/qualification-and-contribution.json 3a078d6924f8a76457a5f0d225184d277891e098
-This verifies every qualified person/backlink/search/sitemap/uncertainty/OG/progress.
-Latest fully live verified master8f2c7a77f87a4ee912269d72a8f1ef02e57478a4,
-canonical68604dba-e32e-4d6d-9d8c-5e4807c259b1:112requests,72pages,33redirects,
-541bilingualmentionlinks. A/finished-budget-full-live-release-receipt.json.
-Do not count source080English correction as live until3a full verification passes.
+### Concrete fixes and real independent recheck
+Original one-line smaller cap stranded earlier captures, still accumulated all parts
+in one conversation, and lacked boundary coverage. Corrected: default fresh parts
+256KiB,absolute768KiB; preparation and captured journal pin explicit transportPolicy
+{schemaVersion:1,maxBytes}. Readonly validatePreparedIdentityReviewArtifacts rejects
+missing/invalid policy/changed bytes before dispatch. Writer reuses this same check.
+Native recording reproduces exact saved policy/layout, not a later default; no silent
+fallback. Host explicitly reconciles older journals against original invocation and
+byte-identical parts; never retag provider reports. Distinct independent conversations
+can own different parts. Every part producer is checked against its own report and
+all extractors; full coverage, primary evidence and uncertainty rules remain unchanged.
+Aggregate names a real contributor and matching real run; all per-case producer rows
+retained. Published proofs keep normal unchanged-source revalidation. No new merges,
+all-pairs graph or relaxed date/editorial/identity/publication gate.
 
-## Jinshu093 source review STOPPED; recover same reviewer, do not replace
-Actual reviewerbc-9366e53c-31d6-4fe5-a9d1-155aa50b5786,
-run-766f25e1-b6d2-4c36-8e3c-70524aaa8adc. Provider CANCELLED, controllerPID9801 gone,
-tool89732 terminal1. Three consecutive usage-monitor failures triggered required
-fail-closed cancellation. Completed code reviewer's usage endpoint fails too;
-last readonly recheck03:29:47 still internal_error. This is not quota/reset evidence.
-No finished result, no report, no approved case, no editorial repair returned.
-Private saved conversation C/independent-review/cancelled-run-conversation.private.json;
-DO NOT dump or push it. Trace has no final JSON; it shows compaction followed by
-transcript reconstruction, two delegated parser tasks and repeated evidence reads.
-Cloud SDK tools/disallowedTools are LOCAL ONLY; text no-tools instructions were not
-enforced. Do not assert they were. No host-spawned new native agents or replacement.
+**63 local checks PASS**:61identity +2native-site,with real pinned recording fixtures,
+exact256KiB boundary/+1byte hold,nine-part prepare/capture roundtrip,explicit older
+768KiB/two-part layout,missing policy/invented run rejection,full current-source
+mixed-producer proof and rejection of extractor/noncontributor. A/identity-review-
+context-bound-repair-{identity,native-site}.log +repair-local-validation.json.
+Construction compatibility rechecked:all21registryconstruction modules unchanged.
+A/identity-review-context-bound-repair-construction-compatibility.json. No registry
+rewrite or full-corpus copy. Wpublic absent,only node_modules symlink untracked.
 
-Controller C/run-independent-review.mjs is preserved; DO NOT rerun --run or blindly
---resume: current run is truly cancelled. Original source review budget shared across
-whole chapter is $3raw/4Mtokens/20min, model start03:07:24.770, deadline03:27:24.770.
-Do not reset timer or expand spending. Final actual usage is unknown because endpoint
-fails. Last measured03:10:52 was58.7679c raw/0charged,555906tokens (lower bound only).
-C/independent-review-monitoring-hold.json + artifact-recovery.json + JSONL observations.
-Shared queue commit5bd6592d0735a53174204a383b7577c2fa64619a preserves worker
-jinshu-completion-093-identity, sticky source/plan, activeRun:false and monitoring hold.
-Original date owner jinshu-release-dates-cursor-sdk preserved; no date executor.
-All 8 retained date jobs had no model/run/artifact; native current date approval is
-valid. Do not restart old empty date jobs or steal that claim.
+Independent reviewer is real **GrokBot conversation7670f5a7-6a60-4557-9411-f243728bc990**,
+UI title 'Jinshu identity context recheck 5373'. Actual app roster observed ID.
+Initial754hold preserved A/identity-review-context-bound-grokbot-report.json,
+sha1b161241bb1a72ff59f7909fed253ce7fb13d5b444a88887a6ff1b571cbfdcaa,
+actual reply03:54:12,file03:54:13UTC. 3warnings/noerrors,NOTdiscarded.
+Same retained reviewer APPROVED eb9 with0findings at04:24:55,file04:24:56UTC.
+**A/identity-review-context-bound-grokbot-recheck-report.json**,
+SHA2564612148b6cfa4c16a83e69d9633db9d31dc80e6d87bade27b6ab315a58baabb3.
+Packet207163bytes,SHA2bd48e0e1d3d8279536f1ff3765fbf00822d42ce4c3d858f5e03cf6194b285b3.
+Both actual downloaded JSONs byte-checked against real producer/packet/revision;
+shared queue codeReviews identity-context-bound-eb9a90188180 commit
+**a0362476154b5301550cb2d400c595dc07fbab28** records approval. No SDKrunID invented;
+provenance is actual GrokBot conversation+observed response/file timestamps.
+Both guard watchers42531/68792 terminal; no model/CLI/native test active now.
 
-Immutable prepared C evidence source8f2:171cases/171records,0pairs,max8 dossiers,
-754headers,74overflowcases,12sourcechapters,383units,185materializedpeople.
-Plan sha256:306a5e7e9206c4ac8b3d759feb737e000696ff7cc76c9ec78d521068ee9ecfc1.
-Sourcepacket899b3c67350ec95c003de5a88b4b339ea038f6691935f4ec3244dc83d89325ff.
-Original parts85/86cases,665870/539506bytes; firstpart was sent onlyonce.
-C/post-merge-current-evidence-preflight.json proves all185source fingerprints and
-4target pins unchanged on3a, no changedpeople. Registry remains original immutable
-P/data/people/generated/identity-dossiers/3582f843-streamed-20261103;
-full original seal57229f712d3aa0c93bc3c7b9a5cfb04f811539f46a4143371c2fba003e0da875
-proved;6489datafiles/21constructionmodules current. Never retag/rebuild/copy it.
+GrokBot was signed out. Routine existing-account login restored via native app/Chrome,
+no password/credential changes or purchases. Version0.78.5,weekly UI0%used before
+these 2~67sec reviews; recheck capacity before source dispatch. Preserve all other
+bots/sticky claims. Headless CDP9229 socket absent; probe now signedin but fetchfails.
+Do NOT restart active jobs/app; use native CUA for manual attachment review. This
+session CUA handle grokApp exists; fresh chat must reread CUA docs. Actual new code
+bot has no canonical data/extraction work. One active model only, no native subagents.
 
-## Concrete proposed process correction, NOT adopted
-A/identity-review-context-bound-proposal.patch changes MAX transport768KiB to256KiB
-only, with comment; all source/claims/mentions/anchors/headers and native gates remain.
-C/transport-size-calibration.json: real093 becomes9parts10/11/21/21/22/21/22/21/22
-cases, max254432bytes,53ms planning, zero pairs. All171cases remain. More repeated
-chapter bytes; actual throughput still unproven. It does not fix provider outage.
-58 checks PASSED with actual proposed constant:56identity +2native-site/recording.
-Logs A/identity-review-context-bound-{identity,native-site}.log and local-validation.json.
-Temporary Wfile restored byte-exact to adopted code; Wtrackedclean. No model dispatch,
-production adoption, PR or source proof from proposal. Independent recheck is required
-before adoption; recover retained code reviewer when monitoring works within its
-remaining original budget. New sealed independent-review-packet/work-order.json under
-A/identity-review-context-bound-* are PREPARED, not dispatched; remaining raw code
-review budget211.2002c of original300c. Exact patch/module/calibration included.
-Do not repeat same large packet unchanged.
+##093 prepared D: now nine parts, still ZERO source approvals
+Native preflight was actually called on the complete prepared object before writingD.
+D/repartition-receipt.json,preparation-receipt.json pinpolicy256KiB. Cases
+10/11/21/21/22/21/22/21/22,max254432bytes.171cases/171records,0pairs,<=8dossiers,
+754headers,74overflowcases,383primaryunits,185people,12evidencechapters. Every part
+has complete target chapter and all owned/anchor claims+mention units,all6actual
+extractors excluded. No source,claim,mention,candidateheader or case omitted.
+**Source packet and plan are byte-identical to C**:
+source899b3c67350ec95c003de5a88b4b339ea038f6691935f4ec3244dc83d89325ff;
+plan sha256:306a5e7e9206c4ac8b3d759feb737e000696ff7cc76c9ec78d521068ee9ecfc1.
+Original evidence source8f2; C/post-merge-current-evidence-preflight.json proves all185
+identity source fingerprints/4targetpins current onmaster3a,changedPeople=[].
+Known080English correction is already on3a; old8f2anchor English may show its earlier
+literal. Preserve current repair receipts and do not spend to repeat an already-applied
+fix; any fresh genuine English omission still needs concrete independent repair.
 
-After real all-part source approval, native recorder must validate full report against
-sealed plan/registry, then normal qualification/site/ebook/CI/deploy/live. Existing CI
-hardcodes053contribution;093must get its own actual release verification/artifact in
-its release batch. A green053artifact cannot qualify093. No positive merges/pairgraph,
-unproven matches stay separate uncertain, concrete wrong actors/false merges hold.
+Reuse original immutable registry P/data/people/generated/identity-dossiers/
+3582f843-streamed-20261103. Original fullseal57229f712d3aa0c93bc3c7b9a5cfb04f811539f46a4143371c2fba003e0da875
+and6489datafiles/21constructionfiles proved in originalC. D is explicit lossless
+repartition of that sealed input,not a fresh index/data approval. Native final recorder
+must still re-prove original registry and normal source/editorial/date/fullcertificate.
 
-## Other preserved holds and safety
-080WF reauditround3 LAST legalround, candidate6fee1c8ec326ebf18b27c95a2995ada8ffc2199a199f7f42329d287659cdf7e3.
-47rootrepairs retained, finalaudited2/16ranges only1clean/1negative,14unstarted.
-Claim171/hints-p017/p017 borrowed352–353 from different letter; nativeexpandedc0648.
-Nondate event wording independentlyapproved ONLY in A/reviewed-editorial-staged-date-candidate.json;
-rejected interval remains. SourceEnglishfix nowmaster makes old date source pinsstale;
-no4thround/reset/retag/autoapproval. Need independently reviewed chronology approach.
-072free429/GuoYuan,130Qubei wrongheading,086round3circuit,123staledates preserved.
+Old Cursor source agentbc-9366e53c-31d6-4fe5-a9d1-155aa50b5786/
+run-766f25e1-b6d2-4c36-8e3c-70524aaa8adc authoritatively CANCELLED after3usage-read
+failures; no finished report. C/independent-review/*.json and private conversation kept.
+Do NOT --run/restart/reset deadline in old C/run-independent-review.mjs. Original
+first-send03:07:24.770,deadline03:27:24.770. Last billed58.7679craw/0charged/555906tokens
+is only a lower bound; final usage unknown. Direct underlying usage HTTP500 verified
+for both source and completed code agents,runfiltered ANDaggregate; SDKnotparsebug.
+A/identity-review-usage-http-diagnosis-20261105.json. No paid fallback/capacity expansion.
+GrokBot is a separately already-authorized available lane,not a replacement SDK model.
 
-Last fully live counts8f2: Jinshu130:61ready,45nativeeditorial/44unheld,7nativedates/
-5unheld+5staleapprovals,1identity/complete/live. Corpus4099:2050extracted2040current+
-10rereview,>=1508strictready(532notfreshchecked),1393nativeeditorial/1392unheld,
-257nativedates/255unheld+142staleapprovals,1identity/complete/live.30zero-person
-extractions are not absence approvals.3a master Englishfix clears080editorialhold
-(45/1393unheld), but pending deployment;080datehold remains. No wholeJinshu ebook.
+Stable shared identity owner remains **jinshu-completion-093-identity**,sticky stopped
+with actual cancelled handle,queue5bd6592d0735a53174204a383b7577c2fa64619a. Recover/read
+current exact owner and preserve original journal before any explicit lane/method
+reconciliation. Do not steal date owner jinshu-release-dates-cursor-sdk: no executor,
+8oldemptyjobs had no model/run/artifact; real existing target date approval is valid.
+After CI/adoption boundary, assign new unreviewed parts to separate real independent
+conversations,one active. Capture actual producer/completion/message IDs and literal
+report bytes; never synthesize SDKrunIDs. Copy exact prepared transportPolicy into
+captured job. Preserve all reports and stop concrete actor/false-merge contradictions;
+unproven equivalence remains separately uncertain. All9parts required before native
+recording/qualification. Current CI verifies053only:093needs its own real qualification
+and ebook-contribution verifier/artifact in chapter release PR. No green053artifact
+can qualify093. New parts/source reviews are NOT yet commissioned.
 
-Run people:disk:check before/afterdispatch/localheavy and every<=60s active observation.
-Latest free31.67GiB,pressure1,swap4954MiBstable,backend<0.8GiB. One localheavyjob/3GiB
-heap,onecloudslot,no nativeagents/newcheckouts/copies/paidfallback/capacitypurchase.
-Memorycleanupstandard savedglobal/project/skill; inspectphysical inclcompressed/GPU,
-verifyidle/supersededownership+clients+newerpreview/completedowner,privaterestartreceipt,
-SIGTERMonly;verifyport/currentpreview/guard. Current5176/MCP3001preserved,GPU215MB.
-P hugeDIRTY: neverreset/switch/pull/broadstage. Host owns all sharedGit and builds.
-Privatecredentials/conversations/memoryreceipts excludedfrombackup. Compactcurrent
-handoff; priorfull handoff A/handoff-before-093-provider-stop-20261105.md archived.
+## Deployment failure is real; no third blind retry
+Master3a078d6924f8a76457a5f0d225184d277891e098 (normalPR5372merge/requiredCI/independent
+code review passed) remains NOTlive. First3cf9457b-c0c0-480a-9e19-3f28713ee282 timedout.
+Single retry **bb7ec8aa-e5c7-4ae8-8a0e-ea5b09c757b0** buildSUCCEEDED04:11:52UTC,
+deployFAILED04:12:45 afterassetoutputvalidation,also overallbuildtimelimit. No retryloop,
+cache/config/limit/gate change. A/pinned-registry-single-retry-terminal-log-tail.json.
+**GET history/logs defaults to1000rows; use ?size=100000** (verified4374rows,487886bytes)
+for terminal diagnosis. In-progress partial/default logs were incomplete and cannot
+prove npmneverran. Actual tail:OGverifyPASS,buildFinished,WorkerCompiled,_routes,
+Validatingassetoutput,then time-limit termination. Need actual phase timing/throughput
+investigation,not another unchanged retry. B/observe-production.mjs targets failedretry.
+Latest fully live8f2c7a77f87a4ee912269d72a8f1ef02e57478a4,canonical68604dba-e32e-4d6d-9d8c-5e4807c259b1,
+112requests/72pages/33redirects/541links. A/finished-budget-full-live-release-receipt.json.
+Only when future exactcanonicaldeploy succeeds run normal J53/verify-live-release.mjs
+with matching CIqualificationartifact and merged revision. Preserve all failed handles.
 
-Recovery checkpoint2eac13eee1777b874d54b6e278f3da4640a7eaf7 verified611files/32.4MB.
-Final failure/retry metadata checkpoint uses B/nov05-startup-retry-and-review-holds-recovery.json.
-No local native/model/test process active at this checkpoint; only external retry active.
+## Remaining holds/counts/safety
+080dateWF LASTround3,candidate6fee1c8ec326ebf18b27c95a2995ada8ffc2199a199f7f42329d287659cdf7e3,
+2/16finalranges audited(1clean,1negative),14unstarted.47rootrepairs saved. Claim171/
+hints-p017/p017(nativec0648) borrowed352–353fromdifferentletter. Nondateevent correction
+independentlyapproved onlyin A/reviewed-editorial-staged-date-candidate.json,stillrejected
+interval. Englishfix nowmaster makesoldsourcepinstale. No4thround/reset/retag. Neednew
+independent chronology approach.072GuoYuan/free429,130Qubeiwrongheading,086round3circuit,
+123staledates preserved. Old full details archived A/handoff-before-grokbot-repair-20261105.md.
+Last deployed8f2 counts(reused prior validation+knownholds):Jinshu130,61ready,44editorial,
+5dateapproved(7native minus2holds),5stale,1identity/complete/live. Corpus4099,>=1508strictready
+(532notfreshchecked),2050extracted2040current+10rereview,1392editorial,255dates(257minus2),
+142stale,1identity/complete/live.30zero-personextractionsNOTabsenceapprovals. Merged3a
+Englishfix raiseseditorial45/1393butNOTdeployed. No wholeJinshuebook/onehourproof.
 
-Latest verified remote recovery9588ca68095edb84f8a8e54e12628af932b118b6:618files/32.46MB.
-A/current-completion-progress.json now compactly labels deployed8f2 and merged3a,
-explicit holds and inherited count basis; old nested metrics archived unchanged.
-Final metrics receipt B/nov05-final-progress-and-retry-recovery.json.
+Guard before/afterdispatch/localheavy and<=60s observingwork. Lastfree31.57GiB,
+pressure1,swap4586MiBdown,backend<1GiB. Preserve otherchatbackend46048,active5176preview,
+MCP3001,all app/model/build/review jobs. Standardmemoryprocedureglobally/project/skill
+saved:physicalinclcompressed/GPU,verifiedidle/supersededownership+no clients+newerpreview
+orcompletedowner,privaterestartreceipt,SIGTERMonly,verifyports/currentpreview/guard.
+Noappwide restart/history/swapdelete/forcedloops/guardweakening. One localheavyjob,
+3GiBNodeheap,no nativeagents/newcheckouts/corpuscopies. P hugeDIRTY:neverreset/switch/pull/
+broadstage. Wexisting sparsecodecheckout only; no publicmaterialization. HostaloneGit/build.
+Current backup603f2e874944cc5730c87f10f80a72813dfa19be. Next receipt
+B/nov05-grokbot-independent-repair-and-source-parts-recovery.json records new verified
+checkpoint. Script A/checkpoint-selected-recovery.py uses tempindex,exactblobverify,
+ffpushpreservingoldtree. Privatecredentials/fullproviderconversations/memoryreceipts excluded.
