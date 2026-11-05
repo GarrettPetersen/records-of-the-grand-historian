@@ -72,6 +72,21 @@ files.append(audit/'current-jinshu-date-frontier-preflight.log')
 files += list(audit.glob('pinned-registry-*.log'));files += list(audit.glob('pinned-registry-*.patch'));files += list(audit.glob('pinned-registry-*.raw.txt'));files.append(audit/'pinned-registry-pr-body.md')
 for folder in [pathlib.Path('data/people/generated/completion/jinshu/093/pinned-dossiers-20261105'),pathlib.Path('data/people/generated/completion/jinshu/093/pinned-dossiers-reviewed-candidate-20261105')]: files += list(folder.glob('*.json'))
 files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-8f2c7a77f87a.json'))
+# Preserve the terminal real093 attempt and merged production evidence; never
+# snapshot a live controller or include its full private provider conversation.
+review=pathlib.Path('data/people/generated/completion/jinshu/093/pinned-dossiers-reviewed-candidate-20261105')
+reviewState=json.loads((review/'independent-review/state.json').read_text())
+assert reviewState['phase'] in ['stopped-preserve-handles','all-reports-recorded','research-blocked','budget-stopped']
+try:os.kill(reviewState['pid'],0)
+except ProcessLookupError:pass
+else:raise RuntimeError('093 controller PID present; verify ownership before checkpoint')
+files += [review/'run-independent-review.mjs'];files += list(review.glob('*.log'))
+files += [q for q in (review/'independent-review').glob('*.json') if not q.name.endswith('.private.json')]
+files += list((review/'independent-review').glob('*.jsonl'));files += list((review/'independent-review').glob('*-report.json'));files += list((review/'independent-review').glob('*-provider.raw.json'))
+files += list((audit/'pinned-registry-release-ci').glob('*'))
+verifiedLive=pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-3a078d6924f8.json')
+if verifiedLive.exists():files.append(verifiedLive)
+files += list(audit.glob('identity-review-context-bound-*.log'));files += list(audit.glob('identity-review-context-bound-*.patch'))
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()

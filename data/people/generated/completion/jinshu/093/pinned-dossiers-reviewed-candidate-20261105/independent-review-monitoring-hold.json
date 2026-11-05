@@ -1,0 +1,49 @@
+{
+  "at": "2026-11-05T03:20:38.015815+00:00",
+  "kind": "retained-identity-review-monitoring-hold",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "093"
+  },
+  "sourceRevision": "8f2c7a77f87a4ee912269d72a8f1ef02e57478a4",
+  "sourcePacketSha256": "899b3c67350ec95c003de5a88b4b339ea038f6691935f4ec3244dc83d89325ff",
+  "planFingerprint": "sha256:306a5e7e9206c4ac8b3d759feb737e000696ff7cc76c9ec78d521068ee9ecfc1",
+  "worker": "jinshu-completion-093-identity",
+  "agentId": "bc-9366e53c-31d6-4fe5-a9d1-155aa50b5786",
+  "runId": "run-766f25e1-b6d2-4c36-8e3c-70524aaa8adc",
+  "providerStatus": "cancelled",
+  "stopMetric": "usage-monitor",
+  "monitorFailures": 3,
+  "completedReviewReports": 0,
+  "approvedCases": 0,
+  "chapterApproved": false,
+  "newCompletedChapters": 0,
+  "newPublishedChapters": 0,
+  "lastMeasuredUsage": {
+    "at": "2026-11-05T03:10:52.623Z",
+    "agentId": "bc-9366e53c-31d6-4fe5-a9d1-155aa50b5786",
+    "runId": "run-766f25e1-b6d2-4c36-8e3c-70524aaa8adc",
+    "status": "running",
+    "usage": {
+      "inputTokens": 503465,
+      "outputTokens": 38041,
+      "cacheWriteTokens": 0,
+      "cacheReadTokens": 14400,
+      "totalTokens": 555906
+    },
+    "cost": {
+      "rawCostCents": 58.7679,
+      "chargedCents": 0
+    }
+  },
+  "finalCostKnown": false,
+  "usageFailureAlsoAffectsCompletedReviewer": true,
+  "retainedPrivateConversation": "data/people/generated/completion/jinshu/093/pinned-dossiers-reviewed-candidate-20261105/independent-review/cancelled-run-conversation.private.json",
+  "processFindings": [
+    "Retained trace shows compaction followed by transcript reconstruction and two delegated parsing tasks, despite text instructions against tools/delegation.",
+    "Installed SDK restricts tools only for local agents; cloud tools/disallowedTools are explicitly unsupported. Do not assert cloud tool prohibition was technically enforced.",
+    "Smaller lossless transports were measured offline; no revised production partition or source report has been adopted."
+  ],
+  "transportCalibration": "data/people/generated/completion/jinshu/093/pinned-dossiers-reviewed-candidate-20261105/transport-size-calibration.json",
+  "next": "Recover actual final usage and retained reviewer artifacts. Do not repeat the same large packet or start a replacement. Preserve the original budget and source ownership; independently check any revised transport before a further model turn."
+}
