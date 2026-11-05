@@ -33,8 +33,9 @@ evidence, not approvals.
 `people:identity:reconcile` takes `--current-plan FILE --history FILE --registry
 DIRECTORY --source-revision FULL_SHA --out NEW_DIRECTORY` (all paths absolute).
 The history is an array of `{ packet, report, transport, job, transportPolicy }`
-for exact retained captures; include `aggregateJob` for a captured part with an
-aggregate journal. Author exclusions include packet, part and aggregate authors.
+for exact retained captures. Every part entry must include `aggregateJob`.
+Legacy direct parts need a verified, explicitly derived partial journal; never
+guess omitted authors. Author exclusions include packet, part and aggregate authors.
 The host verifies original packet/report/transport
 bytes and producer/run identities, compares normalized person evidence and full
 primary Chinese, and revalidates each unchanged assignment through the native
