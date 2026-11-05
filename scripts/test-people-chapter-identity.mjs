@@ -55,3 +55,16 @@ test('a new actor in an unmentioned Chinese unit cannot reuse the old chapter pr
  const f=fixture();f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'李忠至。'});
  assert.throws(()=>validate(f),/chapter Chinese source or unit inventory changed/);
 });
+
+test('chunked extraction identities require every actual author and preserve reviewer independence',()=>{
+ const f=fixture(),own=f.sources.get('fixture:001');own.extraction.run={agentId:null,chunks:[{agentId:'chunk-author-a'},{agentId:'chunk-author-b'}]};f.bundle.receipt.authorAgentIds=['chunk-author-a','chunk-author-b','host-author'];assert.doesNotThrow(()=>validate(f));
+ f.bundle.receipt.authorAgentIds=['chunk-author-a'];assert.throws(()=>validate(f),/Actual extraction author missing/);
+ const g=fixture();g.sources.get('fixture:001').extraction.run={agentId:null,chunks:[{agentId:'independent-reviewer'}]};g.bundle.receipt.authorAgentIds=['independent-reviewer'];assert.throws(()=>validate(g),/independent reviewer/);
+ const h=fixture();h.sources.get('fixture:001').extraction.run={agentId:null,chunks:[{agentId:null}]};assert.throws(()=>validate(h),/every chunk/);
+});
+
+test('captured part receipts bind every reviewed case and retain actual producer metadata',()=>{
+ const f=fixture(),rows=f.bundle.report.reviews;f.bundle.receipt.reviewParts=[{agentId:'independent-reviewer',runId:'actual-part-run',packetSha256:'a'.repeat(64),transportSha256:'b'.repeat(64),reportSha256:'c'.repeat(64),caseIds:rows.map(r=>r.caseId),reviewsFingerprint:peopleDigest(rows)}];assert.doesNotThrow(()=>validate(f));
+ f.bundle.report.reviews[0].reason+=' Changed after capture.';f.bundle.receipt.reportFingerprint=peopleDigest(f.bundle.report);assert.throws(()=>validate(f),/part reviews changed/);
+ const g=fixture();g.bundle.receipt.reviewParts=[];assert.throws(()=>validate(g),/parts are missing/);
+});

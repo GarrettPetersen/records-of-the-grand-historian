@@ -220,6 +220,50 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   const recordOptions = { packet: packetFile, report: reportFile, job: jobFile, registry, out: path.join(commandDir, 'accepted.json') };
   assert.equal((await recordChapterIdentityReview(recordOptions)).reviewedCases, 1);
   assert.equal((await recordChapterIdentityReview(recordOptions)).unchanged, true);
+  // Captured parts are recorded through the real native gate, preserving every
+  // producer/run and rejecting a fabricated aggregate or changed part artifact.
+  const { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport } = await import('./lib/people-identity-review-transport.mjs');
+  const captureParts = (packet, label) => {
+    const packetPath = path.join(commandDir, label + '-packet.json'), journalPath = path.join(commandDir, label + '-job.json');
+    fs.writeFileSync(packetPath, JSON.stringify(packet, null, 2) + '\n');
+    const sourceHash = identityArtifactHash(fs.readFileSync(packetPath)), parts = splitChapterIdentityReviewTransport(compactChapterIdentityReviewPacket(packet), 768 * 1024);
+    assert.equal(parts.length, 1);
+    const transportFile = path.join(commandDir, label + '-part.json'); fs.writeFileSync(transportFile, JSON.stringify(parts[0]) + '\n');
+    const part = { schemaVersion: 1, kind: 'captured-independent-identity-review-part', phase: 'report-recorded', agentId: capture.agentId,
+      runId: label + '-actual-part-run', sourcePacketSha256: sourceHash, transportSha256: identityArtifactHash(fs.readFileSync(transportFile)), reportSha256: capture.reportSha256, transportFile, reportFile };
+    const journal = { ...capture, kind: 'captured-independent-identity-review-parts', runId: part.runId, sourcePacketSha256: sourceHash, parts: [part] };
+    fs.writeFileSync(journalPath, JSON.stringify(journal));return { packet: packetPath, report: reportFile, job: journalPath, registry, out: path.join(commandDir, label + '-accepted.json') };
+  };
+  const partOptions = captureParts(prepared.packet, 'parts');
+  assert.equal((await recordChapterIdentityReview(partOptions)).reviewedCases, 1);
+  const partBundle = JSON.parse(fs.readFileSync(partOptions.out)); assert.equal(partBundle.receipt.reviewParts[0].runId, 'parts-actual-part-run');
+  const partJournal = JSON.parse(fs.readFileSync(partOptions.job)), partFile = partJournal.parts[0].transportFile, partBytes = fs.readFileSync(partFile);
+  fs.appendFileSync(partFile, ' '); await assert.rejects(recordChapterIdentityReview(partOptions), /part bytes\/provenance/); fs.writeFileSync(partFile, partBytes);
+  const providerBytes = fs.readFileSync(reportFile), changedReport = JSON.parse(providerBytes); changedReport.reviews[0].reason += ' Host-authored unreviewed change.';
+  fs.writeFileSync(reportFile, JSON.stringify(changedReport));const alteredJournal = { ...partJournal, reportSha256: identityArtifactHash(fs.readFileSync(reportFile)) };fs.writeFileSync(partOptions.job, JSON.stringify(alteredJournal));
+  await assert.rejects(recordChapterIdentityReview(partOptions), /part bytes\/provenance|differs from actual/);fs.writeFileSync(reportFile, providerBytes);fs.writeFileSync(partOptions.job, JSON.stringify(partJournal));
+
+  // A tiny authored Git corpus plus the actual construction-code blobs exercises
+  // pinned preparation/recording. No repository or data-tree checkout is copied.
+  const { gitIdentitySnapshot, provePinnedDossierReuse } = await import('./lib/people-pinned-identity-source.mjs');
+  const { writeIdentityDossierStore } = await import('./lib/people-identity-dossier-store.mjs');
+  const git = (...args) => { const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
+  const originalPackage = fs.readFileSync(path.join(root, 'package.json'));
+  fs.writeFileSync(path.join(root, 'package.json'), fs.readFileSync(path.join(code, 'package.json')));
+  git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid');
+  for (const dir of ['jinshu','shiji','people/schema','people/chronology','people/curation','people/extractions','people/date-audits','people/editorial-decisions']) git('add','data/' + dir);
+  git('add','package.json','data/glossary.json','data/people/config.json');
+  const productionSnapshot = gitIdentitySnapshot(code, spawnSync('git',['-C',code,'rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim());
+  for (const file of productionSnapshot.codeDependencies()) {
+    const r = spawnSync('git',['-C',root,'hash-object','-w','--stdin'],{input:fs.readFileSync(path.join(code,file)),encoding:'utf8'});assert.equal(r.status,0,r.stderr);git('update-index','--add','--cacheinfo','100644,'+r.stdout.trim()+','+file);
+  }
+  git('commit','-qm','Authored pinned identity fixture'); const pinnedRevision = git('rev-parse','HEAD'), pinnedSnapshot = gitIdentitySnapshot(root,pinnedRevision);
+  const pinnedProvenance = { revision: pinnedRevision, identityInputs: pinnedSnapshot.legacySeal() }, pinnedRegistry = path.join(root,'pinned-native-registry');
+  writeIdentityDossierStore(pinnedRegistry,registryIndex,pinnedProvenance);
+  const pinnedPacket = { ...prepared.packet, registryProvenance:pinnedProvenance, registryReuse:provePinnedDossierReuse(pinnedProvenance,pinnedSnapshot) };
+  const pinnedOptions = { ...captureParts(pinnedPacket,'pinned-parts'), registry:pinnedRegistry };
+  const pinnedRecorded = await recordChapterIdentityReview(pinnedOptions);assert.equal(pinnedRecorded.nativeIdentityProofAccepted,true);assert.equal(pinnedRecorded.sourceRevision,pinnedRevision);assert.equal(pinnedRecorded.reviewedCases,1);
+  fs.writeFileSync(path.join(root,'package.json'),originalPackage);
   const acceptedBytes = fs.readFileSync(recordOptions.out);
   fs.appendFileSync(reportFile, ' ');
   await assert.rejects(recordChapterIdentityReview(recordOptions), /byte hashes do not match/);
