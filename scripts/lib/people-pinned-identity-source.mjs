@@ -11,6 +11,10 @@ import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../va
 import { isCompactPeopleExtraction } from './people-compact.mjs';
 import { peopleForExtraction } from './people-validated-chapter.mjs';
 import { dateAuditItems, validateDateAuditReport, DATE_AUDIT_VERSION } from './people-date-audit.mjs';
+import { loadProperNounMatcher } from './people-candidates.mjs';
+import { localNameKeys } from './people-resolution.mjs';
+import { memberContract } from './people-identity-dossiers.mjs';
+import { chapterChineseEvidenceFingerprint, identitySourceEvidenceFingerprint } from './people-chapter-identity.mjs';
 
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 const registryEntries = ['people-identity-registry-workflow', 'people-corpus', 'people-resolution', 'people-identity-dossiers', 'people-identity-member-store', 'people-identity-dossier-store'].map(n => `scripts/lib/${n}.mjs`);
@@ -78,18 +82,59 @@ export function gitIdentitySnapshot(root, revision) {
   return { root, revision, files, regular, read, json, legacySeal, codeDependencies };
 }
 
+// A source/editorial repair can change file bytes without changing a single
+// indexed person. Prove that explicitly; never change the original generation,
+// accepted membership, or the independent approvals attached to either source.
+export function proveUnchangedIdentityChapter(before, after) {
+  need(chapterChineseEvidenceFingerprint(before.packet) === chapterChineseEvidenceFingerprint(after.packet), 'Dossier primary Chinese changed; update affected dossiers');
+  const oldIds = [...before.localPeople.keys()].sort(), newIds = [...after.localPeople.keys()].sort();
+  need(peopleDigest(oldIds) === peopleDigest(newIds), 'Dossier person inventory changed; update affected dossiers');
+  const members = [];
+  for (const id of oldIds) {
+    const oldPerson = before.localPeople.get(id), person = after.localPeople.get(id);
+    const contract = peopleDigest(memberContract(person, localNameKeys(person)));
+    need(contract === peopleDigest(memberContract(oldPerson, localNameKeys(oldPerson))), `Dossier member changed: ${id}; update affected dossiers`);
+    const sourceEvidence = identitySourceEvidenceFingerprint(person, after.packet);
+    need(sourceEvidence === identitySourceEvidenceFingerprint(oldPerson, before.packet), `Dossier source evidence changed: ${id}; update affected dossiers`);
+    members.push([id, contract, sourceEvidence]);
+  }
+  return { people: members.length, members: peopleDigest(members), chinese: chapterChineseEvidenceFingerprint(after.packet) };
+}
+
 export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
   const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
   need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
   const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
-  need(peopleDigest(beforeData) === peopleDigest(afterData) && beforeData.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier data changed; update affected dossiers before preparing new work');
+  need(peopleDigest(beforeData) === peopleDigest(afterData), 'Dossier data inventory changed; update affected dossiers before preparing new work');
+  const changedData = beforeData.filter(f => retained.regular(f).oid !== current.regular(f).oid);
+  const changedChapters = new Map();
+  for (const file of changedData) {
+    const match = /^data\/(?:people\/extractions\/)?([a-z0-9_-]+)\/(\d{3})\.json$/u.exec(file);
+    need(match, `Dossier data changed: ${file}; update affected dossiers before preparing new work`);
+    changedChapters.set(`${match[1]}:${match[2]}`, { book: match[1], chapter: match[2] });
+  }
   const beforeCode = retained.codeDependencies(), afterCode = current.codeDependencies();
   need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
   need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
   assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
+  const unchangedChapters = [];
+  if (changedChapters.size) {
+    const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);
+    const properNounMatcher = loadProperNounMatcher();
+    for (const [key, scope] of [...changedChapters].sort(([a], [b]) => a.localeCompare(b, 'en'))) {
+      // Both sides use the production validator and the unchanged construction
+      // runtime/configuration. Unextracted/invalid chapters cannot be reused.
+      const options = { properNounMatcher, strictAliasDispositions: false };
+      let proof;
+      try { proof = proveUnchangedIdentityChapter(before.load(scope.book, scope.chapter, options), after.load(scope.book, scope.chapter, options)); }
+      catch (error) { throw new Error(`Unchanged dossier proof failed for ${key}: ${error.message}`, { cause: error }); }
+      unchangedChapters.push({ scope: key, ...proof });
+    }
+  }
   return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
     retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
     dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
+    ...(changedData.length ? { changedData, unchangedChapters } : {}),
     registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
 }
 

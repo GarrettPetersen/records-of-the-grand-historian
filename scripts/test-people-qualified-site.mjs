@@ -245,7 +245,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
 
   // A tiny authored Git corpus plus the actual construction-code blobs exercises
   // pinned preparation/recording. No repository or data-tree checkout is copied.
-  const { gitIdentitySnapshot, provePinnedDossierReuse } = await import('./lib/people-pinned-identity-source.mjs');
+  const { gitIdentitySnapshot, provePinnedDossierReuse, pinnedIdentityChapterContext } = await import('./lib/people-pinned-identity-source.mjs');
   const { writeIdentityDossierStore } = await import('./lib/people-identity-dossier-store.mjs');
   const git = (...args) => { const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
   const originalPackage = fs.readFileSync(path.join(root, 'package.json'));
@@ -263,6 +263,22 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   const pinnedPacket = { ...prepared.packet, registryProvenance:pinnedProvenance, registryReuse:provePinnedDossierReuse(pinnedProvenance,pinnedSnapshot) };
   const pinnedOptions = { ...captureParts(pinnedPacket,'pinned-parts'), registry:pinnedRegistry };
   const pinnedRecorded = await recordChapterIdentityReview(pinnedOptions);assert.equal(pinnedRecorded.nativeIdentityProofAccepted,true);assert.equal(pinnedRecorded.sourceRevision,pinnedRevision);assert.equal(pinnedRecorded.reviewedCases,1);
+  // Real production normalization permits an English-only edit to reuse index
+  // bytes, while the separate chronology approval correctly becomes stale.
+  {
+  const changedSource='data/jinshu/001.json',changedExtraction='data/people/extractions/jinshu/001.json';
+  const originalSource=fs.readFileSync(path.join(root,changedSource)),originalExtraction=fs.readFileSync(path.join(root,changedExtraction));
+  const originalRegistry=fs.readFileSync(path.join(pinnedRegistry,'manifest.json')),originalAudit=fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/001.json'));
+  const editedSource=read(changedSource);editedSource.content[0].sentences[0].idiomatic='Jia arrived safely.';writeAt(changedSource,editedSource);
+  const editedExtraction=read(changedExtraction);editedExtraction.input=buildPeopleExtractionSeed(buildPeopleExtractionPacket('jinshu','001'),'fixture').input;writeAt(changedExtraction,editedExtraction);
+  git('add',changedSource,changedExtraction);git('commit','-qm','English repair with unchanged identity evidence');
+  const repairedRevision=git('rev-parse','HEAD'),repairedProof=provePinnedDossierReuse(pinnedProvenance,gitIdentitySnapshot(root,repairedRevision));
+  assert.deepEqual(repairedProof.changedData,[changedSource,changedExtraction]);assert.equal(repairedProof.unchangedChapters[0].people,1);assert.equal(repairedProof.chapterApproval,false);
+  assert.throws(()=>pinnedIdentityChapterContext(root,repairedRevision).dates('jinshu','001'),/stale/);
+  assert.deepEqual(fs.readFileSync(path.join(pinnedRegistry,'manifest.json')),originalRegistry);assert.deepEqual(fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/001.json')),originalAudit);
+  fs.writeFileSync(path.join(root,changedSource),originalSource);fs.writeFileSync(path.join(root,changedExtraction),originalExtraction);
+  git('add',changedSource,changedExtraction);git('commit','-qm','Restore fixture source');
+  }
   fs.writeFileSync(path.join(root,'package.json'),originalPackage);
   const acceptedBytes = fs.readFileSync(recordOptions.out);
   fs.appendFileSync(reportFile, ' ');
