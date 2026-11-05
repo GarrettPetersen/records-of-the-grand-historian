@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-05T01:00:56.594Z",
+  "updatedAt": "2026-11-05T01:05:29.386Z",
   "claims": {
     "nanshi/001": {
       "lane": "openrouter",
@@ -67331,7 +67331,7 @@
           }
         }
       },
-      "status": "active",
+      "status": "research-blocked",
       "updatedAt": "2026-11-05T00:38:36.209Z",
       "reviewPlans": {
         "audit-0": {
@@ -67438,7 +67438,48 @@
           "round": 2
         }
       ],
-      "executorHost": "Garretts-MacBook-Pro-2.local"
+      "executorHost": "Garretts-MacBook-Pro-2.local",
+      "sourceResearchHold": {
+        "kind": "validated-negative-final-round-partition",
+        "candidateHash": "sha256:6fee1c8ec326ebf18b27c95a2995ada8ffc2199a199f7f42329d287659cdf7e3",
+        "jobId": "1d4cf3caaba38b6237ad",
+        "reportSha256": "11badf97fe889624cad5fb12105d40d55123ae73ac67a681e3a458f469f2d5a1",
+        "findings": [
+          {
+            "items": [
+              "claim-171",
+              "hints-p017",
+              "p017"
+            ],
+            "problem": "claim-171 and the p017 AD 352-353 hint date Huan Wen’s being at odds from Yin Hao’s northern-campaign years. s0035 only says 時殷浩與桓溫不協 when Wang Xizhi wrote; Jin Shu’s Yin Hao biography places 與溫頗相疑貳 after Huan Wen destroyed Shu, and Yin Hao’s dismissal is 永和十年. The closed 352-353 interval is not Huan Wen’s own event and must not feed his activity dates.",
+            "action": "Replace claim-171’s westernInterval 352-353 with a bound that dates only the attested moment of discord, such as onOrBefore AD 353, or onOrAfter 348 and onOrBefore 354 if the post-Shu start is kept as a competing reading. Do not invent an exact year. Clear p017’s AD 352-353 active hint so it no longer copies Yin Hao’s campaign window."
+          }
+        ],
+        "round": 3,
+        "sourceEditorialProposal": "supplemental-editorial-repairs-after-final-review2.json",
+        "chapterApproved": false
+      },
+      "sourceResearchAssignments": {
+        "letters-editorial-45621b8c715d": {
+          "schemaVersion": 1,
+          "kind": "independent-source-editorial-research",
+          "worker": "jinshu-release-dates-cursor-sdk",
+          "phase": "planned",
+          "pid": 27135,
+          "packetSha256": "45621b8c715dc03302b3e7a9caa72df1df5389e635e6e31603b9924f36fec781",
+          "agentId": null,
+          "runId": null,
+          "startedAt": "2026-11-05T01:05:27.439Z",
+          "limits": {
+            "rawCostCents": 300,
+            "totalTokens": 500000,
+            "timeoutMinutes": 5
+          },
+          "dateApproval": false,
+          "chapterApproved": false,
+          "updatedAt": "2026-11-05T01:05:29.386Z"
+        }
+      }
     },
     "jinshu/128": {
       "worker": "openrouter-local-dates",
