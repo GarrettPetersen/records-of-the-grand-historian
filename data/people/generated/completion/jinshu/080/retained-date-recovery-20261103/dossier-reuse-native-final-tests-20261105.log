@@ -1,0 +1,60 @@
+✔ original Git seal equals byte hashes of the original filesystem inventory (6166.909875ms)
+✔ unrelated code and package script changes reuse immutable dossiers without rewriting seals (6889.547333ms)
+✔ changed source, extraction, inventories, schema, curation and construction code remain blocked (29280.111542ms)
+✔ byte-only English edits reuse unchanged dossiers, not chapter approvals (5.261833ms)
+✔ unmentioned Chinese, person coverage, names, date hints, prose claims and mentions cannot hide behind unchanged index keys (3.767166ms)
+✔ package dependency changes and unverifiable original provenance are rejected (5252.191542ms)
+✔ dirty runtime dependencies, added schemas and symlinks cannot pass the pinned runtime check (6005.66575ms)
+✔ a dirty runtime glossary is rejected before dossier reuse normalization (6426.704333ms)
+✔ computed index imports and nonregular committed data fail loudly (3846.501584ms)
+✔ pinned chapter pins and independent dates use committed evidence and reject stale or negative reports (2362.758875ms)
+✖ ordinary compiler, certified subset, real pages/handler and all publication holds (52939.651666ms)
+✔ English-only source repairs reuse dossier inputs without reusing stale date approval (35152.782792ms)
+✔ formerly complete catalogs cannot promote explicit previews after current approval disappears (1974.142083ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156966.14075
+
+✖ failing tests:
+
+test at scripts/test-people-qualified-site.mjs:51:3
+✖ ordinary compiler, certified subset, real pages/handler and all publication holds (52939.651666ms)
+  AssertionError [ERR_ASSERTION]: node:internal/modules/esm/resolve:275
+      throw new ERR_MODULE_NOT_FOUND(
+            ^
+  
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/public/book-design.js' imported from /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/generate-static-pages.js
+      at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+      at moduleResolve (node:internal/modules/esm/resolve:860:10)
+      at defaultResolve (node:internal/modules/esm/resolve:984:11)
+      at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:719:12)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:643:25)
+      at ModuleLoader.resolve (node:internal/modules/esm/loader:626:38)
+      at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:279:38)
+      at ModuleJob._link (node:internal/modules/esm/module_job:136:49) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/public/book-design.js'
+  }
+  
+  Node.js v23.7.0
+  
+  
+  1 !== 0
+  
+      at runFixture (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:48:14)
+      at TestContext.<anonymous> (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:51:121)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.start (node:internal/test_runner/test:878:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:297:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual'
+  }

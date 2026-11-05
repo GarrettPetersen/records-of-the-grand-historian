@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "head": "03a2c99e2683fb1b6e21d83e395b4611106eb244",
+  "verdict": "approve",
+  "findings": [],
+  "notes": [
+    "With `node -e <script> <size>`, process.argv[1] is the size argument, so the byte count is passed correctly. The size comes from Buffer.length, not the string length, so multi-byte UTF-8 is counted correctly.",
+    "The read loop uses fs.readSync with an exact count, rejects truncated input with count===0, and never waits for EOF. The 16 MiB bound is enforced in both the caller and the child.",
+    "The child only builds a vm.SourceTextModule and reads dependencySpecifiers. There is no link() or evaluate() call, and the regression test proves that a top-level throw never runs. The returned shape is validated as an array of strings.",
+    "A timeout of 10_000 makes execFileSync throw, so the parent fails visibly instead of hanging. The computed-loading regex guard and the relative-specifier traversal are unchanged, so dependency discovery behaves the same as in the previously approved e5fc867 logic.",
+    "The new helper file is imported by people-pinned-identity-source.mjs, not by any registryEntries module, so it is not part of the sealed construction-code closure. No registry, dossier, or approval bytes are affected, which is consistent with the prior approval."
+  ]
+}

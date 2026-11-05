@@ -3,7 +3,7 @@ import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-c
 const root='/Users/garrettpetersen/records-of-the-grand-historian';
 const dir=new URL('.',import.meta.url).pathname;
 const stateFile=process.argv[2]??'review-state.json';
-if(!['review-state.json','focused-name-repair-review-state.json','repeated-jiiye-repair-state.json'].includes(stateFile))throw Error('Unknown review state');
+if(!['review-state.json','focused-name-repair-review-state.json','repeated-jiiye-repair-state.json','date-finding-calibration-state.json'].includes(stateFile))throw Error('Unknown review state');
 while(true){
  const state=JSON.parse(fs.readFileSync(dir+stateFile));
  const active=stateFile==='review-state.json'?state.parts.filter(p=>p.phase==='running'):(state.phase==='running'?[{index:'focused-repair',agentId:state.agentId}]:[]);

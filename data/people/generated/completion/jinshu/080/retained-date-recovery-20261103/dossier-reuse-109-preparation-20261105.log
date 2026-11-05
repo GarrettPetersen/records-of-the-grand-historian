@@ -1,0 +1,24 @@
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /usr/local/Cellar/node/23.7.0/bin/node --experimental-vm-modules --input-type=module -e import vm from 'node:vm';import fs from 'node:fs';const m=new vm.SourceTextModule(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(m.dependencySpecifiers));
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:882:11)
+    at execFileSync (node:child_process:918:15)
+    at Object.codeDependencies (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:73:34)
+    at provePinnedDossierReuse (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:116:71)
+    at buildChapterIdentityReviewPacket (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:52:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async prepareChapterIdentityReview (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:168:20)
+    at async file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:181:30 {
+  status: null,
+  signal: 'SIGTERM',
+  output: [ null, Buffer(0) [Uint8Array] [], Buffer(0) [Uint8Array] [] ],
+  pid: 21912,
+  stdout: Buffer(0) [Uint8Array] [],
+  stderr: Buffer(0) [Uint8Array] []
+}
+
+Node.js v23.7.0

@@ -91,9 +91,23 @@ files += list(pathlib.Path('data/people/generated/completion/jinshu/093/bounded-
 current093=pathlib.Path('data/people/generated/completion/jinshu/093/bounded-independent-parts-eb9a-20261105')
 for extension in ['mjs','txt','jsonl','log','md']:files += list(current093.glob('*.'+extension))
 files += [pathlib.Path(p) for p in ['data/jinshu/093.json','data/people/extractions/jinshu/093.json','data/people/editorial-decisions/jinshu/093.json']]
-files += list(audit.glob('site-certification-single-pass-*'))
+files += [p for p in audit.glob('site-certification-single-pass-*') if p.is_file()]
 files.append(audit/'host-completion-process-before-part-adoption-20261105.md')
 files += list(audit.glob('identity-review-context-bound-*-prompt.txt'));files += list(audit.glob('identity-review-context-bound-*resources.jsonl'))
+# Preserve the verified deployed release and current-source093 negative audit.
+files += list((audit/'site-certification-single-pass-release-ci').glob('*.json'))
+files += list(audit.glob('dossier-reuse-*.log'));files += list(audit.glob('dossier-reuse-*.patch'));files += list(audit.glob('dossier-reuse-*.txt'))
+files.append(audit/'single-pass-production-observations.jsonl')
+files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-a366058eaf47.json'))
+for extension in ['json','mjs','txt','jsonl']:
+ files += list((current093/'current-source-date-parts').glob('*.'+extension))
+wf093=pathlib.Path('data/people/generated/date-workflow/jinshu/093')
+files += [wf093/'state.json',wf093/'audit-0-3dc0994b6fe992d77786.json']
+files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/093.source-reconciled-913a94949591').glob('*.json'))
+prepared109=pathlib.Path('data/people/generated/completion/jinshu/109/bounded-dossiers-parser-fixed-20261105')
+if prepared109.exists():
+ assert (prepared109/'preparation-receipt.json').exists(),'Preserve active109 preparation before snapshot'
+ files += list(prepared109.glob('*.json'));files += list(prepared109.glob('*.md'))
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
@@ -104,7 +118,7 @@ with tempfile.TemporaryDirectory(prefix='people-recovery-index-') as temp:
  env=dict(os.environ,GIT_INDEX_FILE=str(pathlib.Path(temp)/'index'));git('read-tree',parent,env=env)
  git('update-index','--add','--index-info',input=''.join('100644 '+blob+'\t'+p.as_posix()+'\n' for p,data,digest,blob in blobs).encode(),env=env)
  tree=git('write-tree',env=env);changes=git('diff-tree','--no-commit-id','--name-only','-r',git('rev-parse',parent+'^{tree}'),tree).splitlines();assert set(changes)<=set(p.as_posix() for p in files)
- commit=git('commit-tree',tree,'-p',parent,input=('Checkpoint reviewed Jinshu093 source corrections and retained identity proofs; chapter incomplete\n').encode());pendingTarget=base/(receiptName+'.pending.json');assert not pendingTarget.exists();pendingTarget.write_text(json.dumps({'parent':parent,'commit':commit,'branch':branch,'files':len(files),'chapterApproved':False},indent=2)+'\n');print(json.dumps({'pendingCommit':commit}),flush=True);git('push','--porcelain','origin',commit+':'+branch)
+ commit=git('commit-tree',tree,'-p',parent,input=('Checkpoint verified release and reviewed source, date and dossier reuse work; next chapters incomplete\n').encode());pendingTarget=base/(receiptName+'.pending.json');assert not pendingTarget.exists();pendingTarget.write_text(json.dumps({'parent':parent,'commit':commit,'branch':branch,'files':len(files),'chapterApproved':False},indent=2)+'\n');print(json.dumps({'pendingCommit':commit}),flush=True);git('push','--porcelain','origin',commit+':'+branch)
 assert git('ls-remote','origin',branch).split()[0]==commit
 verified=git('cat-file','--batch-check=%(objectname)',input=('\n'.join(commit+':'+p.as_posix() for p,data,digest,blob in blobs)+'\n').encode()).splitlines();assert verified==[blob for p,data,digest,blob in blobs]
 receipt={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'branch':branch,'parent':parent,'commit':commit,'files':[{'path':p.as_posix(),'bytes':len(data),'sha256':digest} for p,data,digest,blob in blobs],'originalOctoberRawReportsNotPresentLocally':oldRawAbsent,'returnedOriginalAuditRanges':returned,'workflowPhase':state['phase'],'repairGroupsAccepted':sum(1 for key,job in state['jobs'].items() if key.startswith('repair-0-00') and job.get('status')=='returned'),'chapterApproved':False,'newPublishedChapters':0,'scope':'Reviewed incomplete093 canonical source changes and exact recovery artifacts; all previous recovery tree entries preserved. Snapshot leaves the dirty primary index and source unchanged.'}

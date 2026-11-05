@@ -1,0 +1,331 @@
+diff --git a/scripts/lib/people-pinned-identity-source.mjs b/scripts/lib/people-pinned-identity-source.mjs
+index 396311c50077..a59def9f06cc 100644
+--- a/scripts/lib/people-pinned-identity-source.mjs
++++ b/scripts/lib/people-pinned-identity-source.mjs
+@@ -11,6 +11,11 @@ import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../va
+ import { isCompactPeopleExtraction } from './people-compact.mjs';
+ import { peopleForExtraction } from './people-validated-chapter.mjs';
+ import { dateAuditItems, validateDateAuditReport, DATE_AUDIT_VERSION } from './people-date-audit.mjs';
++import { loadProperNounMatcher } from './people-candidates.mjs';
++import { localNameKeys } from './people-resolution.mjs';
++import { memberContract } from './people-identity-dossiers.mjs';
++import { chapterChineseEvidenceFingerprint, identitySourceEvidenceFingerprint } from './people-chapter-identity.mjs';
++import { pinnedModuleDependencies } from './people-pinned-module-parser.mjs';
+ 
+ const need = (ok, message) => { if (!ok) throw new Error(message); };
+ const registryEntries = ['people-identity-registry-workflow', 'people-corpus', 'people-resolution', 'people-identity-dossiers', 'people-identity-member-store', 'people-identity-dossier-store'].map(n => `scripts/lib/${n}.mjs`);
+@@ -59,14 +64,13 @@ export function gitIdentitySnapshot(root, revision) {
+     const seen = new Set(), pending = [...registryEntries];
+     while (pending.length) {
+       const file = pending.pop(); if (seen.has(file)) continue; regular(file); seen.add(file);
+-      const text = read(file).toString();
++      const source = read(file), text = source.toString();
+       // Parse static imports with Node's own JavaScript parser without linking
+       // or executing the module. Quoted import names and multiline declarations
+       // must not silently hide a dependency. Computed loading stays unsupported.
+       const gap = String.raw`(?:\s|/\*[\s\S]*?\*/|//[^\n]*(?:\n|$))*`;
+       need(!new RegExp(String.raw`\b(?:import|require|eval)${gap}\(`, 'u').test(text) && !new RegExp(String.raw`\bnew${gap}Function${gap}\(`, 'u').test(text), `Computed index dependency in ${file}`);
+-      const parser = "import vm from 'node:vm';import fs from 'node:fs';const m=new vm.SourceTextModule(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(m.dependencySpecifiers));";
+-      const imports = JSON.parse(execFileSync(process.execPath, ['--experimental-vm-modules', '--input-type=module', '-e', parser], { input: text, maxBuffer: 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] }));
++      const imports = pinnedModuleDependencies(source);
+       for (const specifier of imports) {
+         if (!specifier.startsWith('.')) continue;
+         const dependency = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
+@@ -78,18 +82,63 @@ export function gitIdentitySnapshot(root, revision) {
+   return { root, revision, files, regular, read, json, legacySeal, codeDependencies };
+ }
+ 
++// A source/editorial repair can change file bytes without changing a single
++// indexed person. Prove that explicitly; never change the original generation,
++// accepted membership, or the independent approvals attached to either source.
++export function proveUnchangedIdentityChapter(before, after) {
++  need(chapterChineseEvidenceFingerprint(before.packet) === chapterChineseEvidenceFingerprint(after.packet), 'Dossier primary Chinese changed; update affected dossiers');
++  const oldIds = [...before.localPeople.keys()].sort(), newIds = [...after.localPeople.keys()].sort();
++  need(peopleDigest(oldIds) === peopleDigest(newIds), 'Dossier person inventory changed; update affected dossiers');
++  const members = [];
++  for (const id of oldIds) {
++    const oldPerson = before.localPeople.get(id), person = after.localPeople.get(id);
++    const contract = peopleDigest(memberContract(person, localNameKeys(person)));
++    need(contract === peopleDigest(memberContract(oldPerson, localNameKeys(oldPerson))), `Dossier member changed: ${id}; update affected dossiers`);
++    const sourceEvidence = identitySourceEvidenceFingerprint(person, after.packet);
++    need(sourceEvidence === identitySourceEvidenceFingerprint(oldPerson, before.packet), `Dossier source evidence changed: ${id}; update affected dossiers`);
++    members.push([id, contract, sourceEvidence]);
++  }
++  return { people: members.length, members: peopleDigest(members), chinese: chapterChineseEvidenceFingerprint(after.packet) };
++}
++
+ export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
+   const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
+   need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
+   const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
+-  need(peopleDigest(beforeData) === peopleDigest(afterData) && beforeData.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier data changed; update affected dossiers before preparing new work');
++  need(peopleDigest(beforeData) === peopleDigest(afterData), 'Dossier data inventory changed; update affected dossiers before preparing new work');
++  const changedData = beforeData.filter(f => retained.regular(f).oid !== current.regular(f).oid);
++  const changedChapters = new Map();
++  for (const file of changedData) {
++    const match = /^data\/(?:people\/extractions\/)?([a-z0-9_-]+)\/(\d{3})\.json$/u.exec(file);
++    need(match, `Dossier data changed: ${file}; update affected dossiers before preparing new work`);
++    changedChapters.set(`${match[1]}:${match[2]}`, { book: match[1], chapter: match[2] });
++  }
+   const beforeCode = retained.codeDependencies(), afterCode = current.codeDependencies();
+   need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
+   need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
+   assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
++  const unchangedChapters = [];
++  if (changedChapters.size) {
++    const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);
++    // assertPinnedIdentityRuntime above already checks the glossary bytes and
++    // the transitive matcher/scanner code against this exact pinned snapshot.
++    const properNounMatcher = loadProperNounMatcher();
++    for (const [key, scope] of [...changedChapters].sort(([a], [b]) => a.localeCompare(b, 'en'))) {
++      // Match native registry construction's production validation contract.
++      // Strict alias-disposition checks remain mandatory for the TARGET in
++      // preparation/recording; index reuse grants no chapter approval and must
++      // not recursively require publication readiness of evidence chapters.
++      const options = { properNounMatcher, strictAliasDispositions: false };
++      let proof;
++      try { proof = proveUnchangedIdentityChapter(before.load(scope.book, scope.chapter, options), after.load(scope.book, scope.chapter, options)); }
++      catch (error) { throw new Error(`Unchanged dossier proof failed for ${key}: ${error.message}`, { cause: error }); }
++      unchangedChapters.push({ scope: key, ...proof });
++    }
++  }
+   return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
+     retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
+     dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
++    ...(changedData.length ? { changedData, unchangedChapters, normalizationGlossaryBlob: current.regular('data/glossary.json').oid } : {}),
+     registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
+ }
+ 
+diff --git a/scripts/lib/people-pinned-module-parser.mjs b/scripts/lib/people-pinned-module-parser.mjs
+new file mode 100644
+index 000000000000..99bbb282eae9
+--- /dev/null
++++ b/scripts/lib/people-pinned-module-parser.mjs
+@@ -0,0 +1,29 @@
++import { execFileSync } from 'node:child_process';
++
++// Parse without linking or evaluating repository code. Read exactly the sealed
++// byte count: waiting for stdin EOF can stall on a macOS synchronous child pipe.
++export const PINNED_MODULE_PARSER = `
++import vm from 'node:vm';
++import fs from 'node:fs';
++const size = Number(process.argv[1]);
++if (!Number.isSafeInteger(size) || size < 0 || size > 16 * 1024 * 1024) throw Error('Invalid pinned module size');
++const bytes = Buffer.alloc(size);
++let offset = 0;
++while (offset < size) {
++  const count = fs.readSync(0, bytes, offset, size - offset, null);
++  if (count === 0) throw Error('Truncated pinned module input');
++  offset += count;
++}
++const module = new vm.SourceTextModule(bytes.toString('utf8'));
++process.stdout.write(JSON.stringify(module.dependencySpecifiers));
++`;
++
++export function pinnedModuleDependencies(bytes) {
++  if (!Buffer.isBuffer(bytes) || bytes.length > 16 * 1024 * 1024) throw Error('Bounded pinned module bytes required');
++  const output = execFileSync(process.execPath,
++    ['--experimental-vm-modules', '--input-type=module', '-e', PINNED_MODULE_PARSER, String(bytes.length)],
++    { input: bytes, timeout: 10_000, maxBuffer: 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] });
++  const imports = JSON.parse(output);
++  if (!Array.isArray(imports) || imports.some(specifier => typeof specifier !== 'string')) throw Error('Invalid pinned module dependencies');
++  return imports;
++}
+diff --git a/scripts/test-people-pinned-identity-source.mjs b/scripts/test-people-pinned-identity-source.mjs
+index 8f8d33105a55..82de1b01b920 100644
+--- a/scripts/test-people-pinned-identity-source.mjs
++++ b/scripts/test-people-pinned-identity-source.mjs
+@@ -5,7 +5,7 @@ import os from 'node:os';
+ import path from 'node:path';
+ import { execFileSync } from 'node:child_process';
+ import { createHash } from 'node:crypto';
+-import { gitIdentitySnapshot, provePinnedDossierReuse, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
++import { gitIdentitySnapshot, provePinnedDossierReuse, proveUnchangedIdentityChapter, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
+ import { peopleDigest } from './lib/people-identity-seal.mjs';
+ import { contentUnits, sha256 } from './lib/people-content.mjs';
+ import { dateAuditItems } from './lib/people-date-audit.mjs';
+@@ -43,9 +43,34 @@ test('unrelated code and package script changes reuse immutable dossiers without
+ });
+ test('changed source, extraction, inventories, schema, curation and construction code remain blocked',t=>{
+  for(const file of ['data/fixture/001.json','data/people/extractions/fixture/001.json','data/fixture/002.json','data/people/schema/new.schema.json','data/people/curation/new.json','scripts/lib/leaf.mjs','scripts/lib/quoted.mjs']){
+-  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/Dossier data changed|construction code changed/);
++  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/Dossier data (?:inventory )?changed|construction code changed|Unchanged dossier proof failed/);
+  }
+ });
++
++function identityChapter() {
++ const id='fixture:001:p001';
++ const person={localId:id,promptVersion:7,preferredNameSuggestion:{en:'Jia',zh:'甲'},identityHints:{active:['AD 1']},mentions:[],claims:[
++  {id:'fixture:001:c001',subject:id,predicate:'name',value:{en:'Jia',zh:'甲',kind:'personal-name'},certainty:'explicit',evidence:['fixture:001:s0001']},
++  {id:'fixture:001:c002',subject:id,predicate:'attestation',value:{event:'Arrived.'},certainty:'explicit',evidence:['fixture:001:s0001']},
++ ]};
++ return {packet:{units:[{id:'s0001',zh:'甲至。',en:'Jia arrived.'},{id:'s0002',zh:'雨。',en:'It rained.'}]},localPeople:new Map([[id,person]])};
++}
++test('byte-only English edits reuse unchanged dossiers, not chapter approvals',()=>{
++ const before=identityChapter(),after=structuredClone(before);after.packet.units[0].en='Jia came.';
++ assert.deepEqual(proveUnchangedIdentityChapter(before,after),proveUnchangedIdentityChapter(before,before));
++});
++test('unmentioned Chinese, person coverage, names, date hints, prose claims and mentions cannot hide behind unchanged index keys',()=>{
++ const changes=[
++  chapter=>{chapter.packet.units[1].zh='乙至。';},
++  chapter=>{chapter.localPeople.clear();},
++  chapter=>{chapter.localPeople.values().next().value.preferredNameSuggestion.en='Yi';},
++  chapter=>{chapter.localPeople.values().next().value.identityHints.active=['AD 2'];},
++  chapter=>{chapter.localPeople.values().next().value.claims[1].value.event='Departed.';},
++  chapter=>{chapter.localPeople.values().next().value.mentions.push({unit:{id:'s0002'}});},
++  chapter=>{chapter.localPeople.values().next().value.claims.push({id:'fixture:001:c003',subject:'fixture:001:p001',predicate:'same-person',value:'fixture:002:p001',evidence:['fixture:001:s0001']});},
++ ];
++ for(const change of changes){const before=identityChapter(),after=structuredClone(before);change(after);assert.throws(()=>proveUnchangedIdentityChapter(before,after),/Dossier (?:primary Chinese|person inventory|member|source evidence) changed/);}
++});
+ test('package dependency changes and unverifiable original provenance are rejected',t=>{
+  const f=fixture(t);assert.throws(()=>provePinnedDossierReuse({...f.provenance,identityInputs:'sha256:bad'},f.snapshot,{runtimeRoot:f.root,codeRoot:f.root}),/original Git source seal/);
+  f.json('package.json',{name:'fixture',type:'module',scripts:{test:'old'},dependencies:{ajv:'9'}});const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/package contract changed/);
+@@ -54,6 +79,10 @@ test('dirty runtime dependencies, added schemas and symlinks cannot pass the pin
+  const f=fixture(t);f.write('scripts/lib/leaf.mjs','changed');assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/Runtime index dependency differs/);f.write('scripts/lib/leaf.mjs','export const leaf=true;\n');f.json('data/people/schema/extra.schema.json',{});assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/inventory differs/);fs.unlinkSync(path.join(f.root,'data/people/schema/extra.schema.json'));
+  const file=path.join(f.root,'data/glossary.json'),saved=path.join(f.root,'saved-glossary');fs.renameSync(file,saved);fs.symlinkSync(saved,file);assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/regular file/);
+ });
++test('a dirty runtime glossary is rejected before dossier reuse normalization',t=>{
++ const f=fixture(t);f.json('data/glossary.json',{changed:{text:'甲',isProperNoun:true}});
++ assert.throws(()=>provePinnedDossierReuse(f.provenance,f.snapshot,{runtimeRoot:f.root,codeRoot:f.root}),/Runtime index configuration differs: data\/glossary.json/);
++});
+ test('computed index imports and nonregular committed data fail loudly',t=>{
+  const f=fixture(t);f.write('scripts/lib/leaf.mjs','export const x=import(variable);\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>current.codeDependencies(),/Computed index dependency/);
+  const g=fixture(t);fs.unlinkSync(path.join(g.root,'data/glossary.json'));fs.symlinkSync('people/config.json',path.join(g.root,'data/glossary.json'));const next=gitIdentitySnapshot(g.root,g.commit());assert.throws(()=>next.legacySeal(),/nonregular/);
+diff --git a/scripts/test-people-pinned-module-parser.mjs b/scripts/test-people-pinned-module-parser.mjs
+new file mode 100644
+index 000000000000..1daa0aa20ef9
+--- /dev/null
++++ b/scripts/test-people-pinned-module-parser.mjs
+@@ -0,0 +1,41 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { spawn } from 'node:child_process';
++import { PINNED_MODULE_PARSER, pinnedModuleDependencies } from './lib/people-pinned-module-parser.mjs';
++
++async function parseWithOpenInput(t, bytes, declaredSize = bytes.length, end = false) {
++  const child = spawn(process.execPath, ['--experimental-vm-modules', '--input-type=module', '-e', PINNED_MODULE_PARSER, String(declaredSize)],
++    { stdio: ['pipe', 'pipe', 'pipe'] });
++  let out = '', err = '';
++  child.stdout.on('data', data => { out += data; });
++  child.stderr.on('data', data => { err += data; });
++  const done = new Promise((resolve, reject) => {
++    child.on('error', reject);
++    child.stdin.on('error', reject);
++    child.on('close', code => resolve({ code, out, err }));
++  });
++  t.after(() => { if (child.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); });
++  child.stdin.write(bytes);
++  if (end) child.stdin.end();
++  return done;
++}
++
++test('parsing completes while stdin remains open, preserves UTF-8, and never evaluates source', { timeout: 5_000 }, async t => {
++  const bytes = Buffer.from(`import './甲.mjs';export {x} from './乙.mjs';/*${'史'.repeat(32_000)}*/throw Error('repository code must not execute');`);
++  const result = await parseWithOpenInput(t, bytes);
++  assert.equal(result.code, 0, result.err);
++  assert.deepEqual(JSON.parse(result.out), ['./甲.mjs', './乙.mjs']);
++});
++
++test('truncated input fails visibly instead of waiting or parsing partial source', { timeout: 5_000 }, async t => {
++  const bytes = Buffer.from("import './a.mjs';");
++  const result = await parseWithOpenInput(t, bytes, bytes.length + 1, true);
++  assert.notEqual(result.code, 0);
++  assert.match(result.err, /Truncated pinned module input/);
++});
++
++test('empty modules parse and invalid source or size fails', () => {
++  assert.deepEqual(pinnedModuleDependencies(Buffer.alloc(0)), []);
++  assert.throws(() => pinnedModuleDependencies(Buffer.from('export ???')), /Command failed/);
++  assert.throws(() => pinnedModuleDependencies('not bytes'), /Bounded pinned module bytes/);
++});
+diff --git a/scripts/test-people-qualified-site.mjs b/scripts/test-people-qualified-site.mjs
+index 7df3fc85b535..bad711f6319e 100644
+--- a/scripts/test-people-qualified-site.mjs
++++ b/scripts/test-people-qualified-site.mjs
+@@ -8,9 +8,25 @@ import { spawnSync } from 'node:child_process';
+ 
+ // Each fixture authors only three source chapters. Individual schemas and chronology
+ // are dependencies, never a corpus/worktree/public/node_modules copy.
++async function pinIdentityFixture(root, code) {
++  const { gitIdentitySnapshot } = await import('./lib/people-pinned-identity-source.mjs');
++  const git = (...args) => { const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
++  const originalPackage = fs.readFileSync(path.join(root, 'package.json'));
++  fs.writeFileSync(path.join(root, 'package.json'), fs.readFileSync(path.join(code, 'package.json')));
++  git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid');
++  for (const dir of ['jinshu','shiji','people/schema','people/chronology','people/curation','people/extractions','people/date-audits','people/editorial-decisions']) git('add','data/' + dir);
++  git('add','package.json','data/glossary.json','data/people/config.json');
++  const productionSnapshot = gitIdentitySnapshot(code, spawnSync('git',['-C',code,'rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim());
++  for (const file of productionSnapshot.codeDependencies()) {
++    const r = spawnSync('git',['-C',root,'hash-object','-w','--stdin'],{input:fs.readFileSync(path.join(code,file)),encoding:'utf8'});assert.equal(r.status,0,r.stderr);git('update-index','--add','--cacheinfo','100644,'+r.stdout.trim()+','+file);
++  }
++  git('commit','-qm','Authored pinned identity fixture'); const pinnedRevision = git('rev-parse','HEAD'), pinnedSnapshot = gitIdentitySnapshot(root,pinnedRevision);
++  return { git, originalPackage, pinnedRevision, pinnedSnapshot };
++}
++
+ const file = fileURLToPath(import.meta.url);
+ const code = path.resolve(path.dirname(file), '..');
+-if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
++if (!['--fixture-child', '--preview-fixture-child', '--reuse-fixture-child'].includes(process.argv[2])) {
+   const runFixture = mode => {
+     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'people-qualified-site-'));
+     try {
+@@ -33,6 +49,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+     } finally { fs.rmSync(root, { recursive: true, force: true }); }
+   };
+   test('ordinary compiler, certified subset, real pages/handler and all publication holds', { timeout: 180_000 }, () => runFixture('--fixture-child'));
++  test('English-only source repairs reuse dossier inputs without reusing stale date approval', { timeout: 180_000 }, () => runFixture('--reuse-fixture-child'));
+   test('formerly complete catalogs cannot promote explicit previews after current approval disappears', { timeout: 180_000 }, () => runFixture('--preview-fixture-child'));
+ } else {
+   const { REPO_ROOT: root, writeJsonAtomic: write } = await import('./lib/people-content.mjs');
+@@ -91,6 +108,29 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+       reviewer: { name: 'Independent synthetic date reviewer', independentOfExtractor: true }, reviewedAt: '2026-10-24T12:00:00Z',
+       summary: 'Complete authored synthetic chapter date review.', reviewedUnits: ['s0001'], itemChecks: audit.items.map(item => check(item.id)), personChecks: audit.people.map(person => check(person.id)), findings: [], references: [] });
+   }
++  if(process.argv[2]==='--reuse-fixture-child') {
++    const { gitIdentitySnapshot, provePinnedDossierReuse, pinnedIdentityChapterContext } = await import('./lib/people-pinned-identity-source.mjs');
++    const { git, pinnedRevision, pinnedSnapshot } = await pinIdentityFixture(root, code);
++    const pinnedProvenance = { revision:pinnedRevision,identityInputs:pinnedSnapshot.legacySeal() };
++  // Real production normalization permits an English-only edit to reuse index
++  // bytes, while the separate chronology approval correctly becomes stale.
++  {
++  const changedSource='data/jinshu/001.json',changedExtraction='data/people/extractions/jinshu/001.json';
++  const originalSource=fs.readFileSync(path.join(root,changedSource)),originalExtraction=fs.readFileSync(path.join(root,changedExtraction));
++  const originalAudit=fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/001.json'));
++  const editedSource=read(changedSource);editedSource.content[0].sentences[0].literal='Jia came.';writeAt(changedSource,editedSource);
++  const editedExtraction=read(changedExtraction);editedExtraction.input=buildPeopleExtractionSeed(buildPeopleExtractionPacket('jinshu','001'),'fixture').input;writeAt(changedExtraction,editedExtraction);
++  git('add',changedSource,changedExtraction);git('commit','-qm','English repair with unchanged identity evidence');
++  const repairedRevision=git('rev-parse','HEAD'),repairedProof=provePinnedDossierReuse(pinnedProvenance,gitIdentitySnapshot(root,repairedRevision));
++  assert.deepEqual(repairedProof.changedData,[changedSource,changedExtraction]);assert.equal(repairedProof.unchangedChapters[0].people,1);assert.equal(repairedProof.chapterApproval,false);
++  assert.throws(()=>pinnedIdentityChapterContext(root,repairedRevision).dates('jinshu','001'),/stale/);
++assert.deepEqual(fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/001.json')),originalAudit);
++  fs.writeFileSync(path.join(root,changedSource),originalSource);fs.writeFileSync(path.join(root,changedExtraction),originalExtraction);
++  git('add',changedSource,changedExtraction);git('commit','-qm','Restore fixture source');
++  }
++    console.log('English-only repair reuses validated index inputs; native date approval remains stale and untouched.');
++    process.exit(0);
++  }
+   writeAt('data/people/resolutions/synthetic.json', { schemaVersion: 1, authority: 'curated', batch: 'synthetic', decisions: [
+     { decision: 'merge', localPeople: ['jinshu:001:p001','shiji:001:p001'], basis: ['Synthetic cross-book test identity.'], confidence: 'high' }] });
+   const { writeFixtureIdentityReviews } = await import('./lib/people-identity-test-fixtures.mjs');
+@@ -245,19 +285,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+ 
+   // A tiny authored Git corpus plus the actual construction-code blobs exercises
+   // pinned preparation/recording. No repository or data-tree checkout is copied.
+-  const { gitIdentitySnapshot, provePinnedDossierReuse } = await import('./lib/people-pinned-identity-source.mjs');
++  const { gitIdentitySnapshot, provePinnedDossierReuse, pinnedIdentityChapterContext } = await import('./lib/people-pinned-identity-source.mjs');
+   const { writeIdentityDossierStore } = await import('./lib/people-identity-dossier-store.mjs');
+-  const git = (...args) => { const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
+-  const originalPackage = fs.readFileSync(path.join(root, 'package.json'));
+-  fs.writeFileSync(path.join(root, 'package.json'), fs.readFileSync(path.join(code, 'package.json')));
+-  git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid');
+-  for (const dir of ['jinshu','shiji','people/schema','people/chronology','people/curation','people/extractions','people/date-audits','people/editorial-decisions']) git('add','data/' + dir);
+-  git('add','package.json','data/glossary.json','data/people/config.json');
+-  const productionSnapshot = gitIdentitySnapshot(code, spawnSync('git',['-C',code,'rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim());
+-  for (const file of productionSnapshot.codeDependencies()) {
+-    const r = spawnSync('git',['-C',root,'hash-object','-w','--stdin'],{input:fs.readFileSync(path.join(code,file)),encoding:'utf8'});assert.equal(r.status,0,r.stderr);git('update-index','--add','--cacheinfo','100644,'+r.stdout.trim()+','+file);
+-  }
+-  git('commit','-qm','Authored pinned identity fixture'); const pinnedRevision = git('rev-parse','HEAD'), pinnedSnapshot = gitIdentitySnapshot(root,pinnedRevision);
++  const { git, originalPackage, pinnedRevision, pinnedSnapshot } = await pinIdentityFixture(root, code);
+   const pinnedProvenance = { revision: pinnedRevision, identityInputs: pinnedSnapshot.legacySeal() }, pinnedRegistry = path.join(root,'pinned-native-registry');
+   writeIdentityDossierStore(pinnedRegistry,registryIndex,pinnedProvenance);
+   const pinnedPacket = { ...prepared.packet, registryProvenance:pinnedProvenance, registryReuse:provePinnedDossierReuse(pinnedProvenance,pinnedSnapshot) };

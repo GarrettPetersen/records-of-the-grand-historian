@@ -1,0 +1,36 @@
+✔ original Git seal equals byte hashes of the original filesystem inventory (5538.88225ms)
+✔ unrelated code and package script changes reuse immutable dossiers without rewriting seals (6162.826333ms)
+✔ changed source, extraction, inventories, schema, curation and construction code remain blocked (25875.125375ms)
+✔ byte-only English edits reuse unchanged dossiers, not chapter approvals (5.04575ms)
+✔ unmentioned Chinese, person coverage, names, date hints, prose claims and mentions cannot hide behind unchanged index keys (3.3765ms)
+✔ package dependency changes and unverifiable original provenance are rejected (4705.802834ms)
+✔ dirty runtime dependencies, added schemas and symlinks cannot pass the pinned runtime check (5307.486375ms)
+✔ computed index imports and nonregular committed data fail loudly (3703.667458ms)
+✔ pinned chapter pins and independent dates use committed evidence and reject stale or negative reports (2349.184542ms)
+file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:343
+  const changedSource = structuredClone(sources.get('jinshu:001'));
+        ^
+
+SyntaxError: Identifier 'changedSource' has already been declared
+    at compileSourceTextModule (node:internal/modules/esm/utils:338:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:106:18)
+    at #translate (node:internal/modules/esm/loader:473:12)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:520:27)
+    at async ModuleJob._link (node:internal/modules/esm/module_job:115:19)
+
+Node.js v23.7.0
+✖ scripts/test-people-qualified-site.mjs (104.669625ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 54050.599417
+
+✖ failing tests:
+
+test at scripts/test-people-qualified-site.mjs:1:1
+✖ scripts/test-people-qualified-site.mjs (104.669625ms)
+  'test failed'

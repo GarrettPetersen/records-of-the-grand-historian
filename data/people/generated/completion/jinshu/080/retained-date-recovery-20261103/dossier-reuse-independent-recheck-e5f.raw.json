@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "head": "e5fc8670355ab53f9ee615b290c1c1c9fd9d6b4b",
+  "verdict": "approve",
+  "findings": [],
+  "resolvedFindings": [
+    {
+      "file": "scripts/lib/people-pinned-identity-source.mjs",
+      "line": 131,
+      "original": "Unchanged-chapter proof uses strictAliasDispositions:false.",
+      "rationale": "The native corpus constructor calls validateCompactPeopleExtraction/validatePeopleExtraction with no options, and the validator only emits alias-disposition conflicts when options.strictAliasDispositions is truthy. So false is exactly the index-construction contract. The target chapter is still validated strictly by pinned.load's default (true) in people-identity-review-record.mjs line 107, and the reuse proof returns chapterApproval:false. My first finding wrongly treated the index-reuse proof as the publication gate."
+    },
+    {
+      "file": "scripts/lib/people-pinned-identity-source.mjs",
+      "line": 125,
+      "original": "loadProperNounMatcher reads the runtime working tree, not the pinned revision.",
+      "rationale": "assertPinnedIdentityRuntime runs before this point. It requires data/glossary.json (a runtimeData entry) to be a regular non-symlink file whose blob hash equals current.regular(...).oid, and it requires all transitive construction code at codeRoot to match pinned blobs. Glossary changes between retained and current are also blocked, because data/glossary.json does not match the changed-chapter regex. That binds the runtime matcher to both commits. The dirty-glossary regression (test line 82) and the normalizationGlossaryBlob receipt cover it. Only a theoretical check-to-use race is left, which is outside this packet's threat model."
+    }
+  ]
+}

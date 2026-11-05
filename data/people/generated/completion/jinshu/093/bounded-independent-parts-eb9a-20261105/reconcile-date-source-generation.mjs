@@ -1,0 +1,38 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash,randomUUID} from 'node:crypto';
+import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+import {acquireProcessRunLock} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/process-run-lock.mjs';
+import {readRemotePeopleWorkLedger,mutateRemotePeopleWorkLedger,dateExecutorIsBusy} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-work-queue.mjs';
+import {buildDateAuditPacket,validateDateAuditReport} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-audit.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',dir=new URL('.',import.meta.url).pathname;
+const read=p=>JSON.parse(fs.readFileSync(p)),hash=b=>createHash('sha256').update(b).digest('hex'),need=(v,m)=>{if(!v)throw Error(m);};
+need(!inspectLocalDisk(root).errors.length,'Resource guard rejected date reconciliation');
+need(!fs.existsSync(dir+'date-source-generation-reconciliation.json'),'Preserve existing reconciliation');
+const unlock=acquireProcessRunLock(root+'/data/people/generated/date-workflow-run.lock',{label:'Reviewed093 source generation reconciliation',failIfExists:true});
+try{
+ const workflow=root+'/data/people/generated/date-workflow/jinshu/093',stateBytes=fs.readFileSync(workflow+'/state.json'),oldState=JSON.parse(stateBytes);
+ const old=buildDateAuditPacket('jinshu','093',{dataDir:dir+'retained-date-source-view',extraction:read(dir+'accepted-before-extraction.json')});
+ const oldReport=read(dir+'accepted-before-date-audit.json');validateDateAuditReport(oldReport,old);
+ const current=buildDateAuditPacket('jinshu','093',{dataDir:root+'/data',peopleDir:root+'/data/people'}),sealed=read(dir+'current-source-date-audit-packet.json');
+ need(current.sourceHash===sealed.sourceHash&&current.extractionHash===sealed.extractionHash,'Current sealed date source changed');
+ need(oldReport.status==='audited'&&!oldReport.findings.length&&oldState.phase==='audit'&&oldState.round===0&&!oldState.circuitBreaker&&!oldState.candidate&&!oldState.review,'Only independently approved old source with unstarted managed work may reconcile here');
+ const unstarted=Object.values(oldState.jobs);need(unstarted.length===8&&unstarted.every(j=>j.status==='interrupted'&&j.lastError==='Artifact-only recovery cannot start or continue a model turn'&&!j.agentId&&!j.runId),'Old managed date work has actual/staged work; stop');
+ need(oldState.sourceHash===old.sourceHash&&oldState.extractionHash===old.extractionHash&&old.sourceHash!==current.sourceHash&&old.extractionHash!==current.extractionHash,'Genuine independently reviewed input change required');
+ const prior=readRemotePeopleWorkLedger().dateAudits['jinshu/093'];
+ need(prior.worker==='jinshu-release-dates-cursor-sdk'&&prior.status==='stale-source'&&!prior.executorToken&&!dateExecutorIsBusy(prior)&&prior.sourceHash===old.sourceHash&&prior.extractionHash===old.extractionHash,'Original date owner is not idle or pins changed');
+ const savedClaim=JSON.stringify(prior),token='source-generation-'+randomUUID(),generationId=randomUUID(),archive=workflow+'.source-reconciled-'+old.extractionHash.slice(7,19);
+ need(!fs.existsSync(archive),'Preserve existing source archive');
+ const manifest=[];function visit(folder){for(const entry of fs.readdirSync(folder,{withFileTypes:true})){const p=path.join(folder,entry.name);if(entry.isDirectory())visit(p);else {need(entry.isFile(),'Unexpected retained artifact type');manifest.push({path:path.relative(workflow,p),sha256:hash(fs.readFileSync(p))});}}}visit(workflow);
+ fs.writeFileSync(dir+'date-source-generation-before-claim.json',JSON.stringify(prior,null,2)+'\n',{flag:'wx'});
+ fs.writeFileSync(dir+'date-source-generation-intent.json',JSON.stringify({at:new Date().toISOString(),worker:prior.worker,token,generationId,oldSourceHash:old.sourceHash,oldExtractionHash:old.extractionHash,newSourceHash:current.sourceHash,newExtractionHash:current.extractionHash,archive,manifest,oldReportNativeValidation:true,oldReportUnchanged:true,newDateApproval:false},null,2)+'\n',{flag:'wx'});
+ mutateRemotePeopleWorkLedger(l=>{const c=l.dateAudits['jinshu/093'];need(JSON.stringify(c)===savedClaim,'Date owner changed before reconciliation');c.executorToken=token;c.executorExpiresAt=new Date(Date.now()+120000).toISOString();c.sourceGenerationReconciliation={phase:'archiving-unstarted-old-source',intent:dir+'date-source-generation-intent.json'};},{message:'Reserve same-owner093 date generation reconciliation after reviewed source correction'});
+ need(hash(fs.readFileSync(workflow+'/state.json'))===hash(stateBytes),'Retained date state changed');
+ fs.renameSync(workflow,archive);for(const row of manifest)need(hash(fs.readFileSync(path.join(archive,row.path)))===row.sha256,'Archived recovery bytes changed');
+ fs.mkdirSync(workflow);const prepared=read(dir+'current-source-date-parts/preparation-receipt.json');
+ const next={schemaVersion:1,workflowVersion:1,generationId,sourceHash:current.sourceHash,extractionHash:current.extractionHash,round:0,phase:'audit',jobs:{},reviewPlans:{'audit-0':{maxUnits:40,maxBytes:48*1024,jobIds:prepared.jobs.map(j=>j.jobId)}},sourceGenerationReconciliation:dir+'date-source-generation-intent.json',priorGenerationDirectory:archive};
+ fs.writeFileSync(workflow+'/state.json',JSON.stringify(next,null,2)+'\n',{flag:'wx'});
+ const q=mutateRemotePeopleWorkLedger(l=>{const c=l.dateAudits['jinshu/093'];need(c.worker===prior.worker&&c.executorToken===token,'Date reconciliation ownership changed');l.dateAuditHistory??={};(l.dateAuditHistory['jinshu/093']??=[]).push({...prior,archiveDirectory:archive,sourceGenerationReconciliation:dir+'date-source-generation-intent.json',oldReportNativeValidation:true});l.dateAudits['jinshu/093']={worker:prior.worker,lane:'grokbot',sourceHash:current.sourceHash,extractionHash:current.extractionHash,generationId,status:'active',jobs:{},reviewPlans:next.reviewPlans,sticky:true,sourceGenerationReconciliation:dir+'date-source-generation-intent.json',priorGenerationDirectory:archive,sourceCorrectionReceipt:dir+'reviewed-source-correction-application.json',limits:{activeConversations:1,stageTimeoutMinutes:20,maxWorkerBytes:64*1024,maxRounds:3,purchasedCapacity:false},updatedAt:new Date().toISOString()};},{message:'Continue093 date owner on corrected source through boundedGrok attachments; preserve old approvals/recovery'});
+ const receipt={at:new Date().toISOString(),worker:prior.worker,lane:'grokbot',generationId,queueCommit:q.commit,archive,archivedFiles:manifest.length,allArchivedBytesVerified:true,oldReportNativeValidation:true,oldApprovalRetagged:false,sourceCorrectionIndependentlyReviewed:true,stateFile:workflow+'/state.json',sourceHash:current.sourceHash,extractionHash:current.extractionHash,preparedParts:prepared.jobs.length,modelsDispatched:0,dateApproval:false,chapterApproved:false};
+ fs.writeFileSync(dir+'date-source-generation-reconciliation.json',JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(receipt));
+}finally{unlock();}

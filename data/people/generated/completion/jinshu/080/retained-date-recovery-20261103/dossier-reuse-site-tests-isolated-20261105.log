@@ -1,0 +1,86 @@
+✖ ordinary compiler, certified subset, real pages/handler and all publication holds (58230.024292ms)
+✖ English-only source repairs reuse dossier inputs without reusing stale date approval (34834.782583ms)
+✔ formerly complete catalogs cannot promote explicit previews after current approval disappears (1910.402291ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 95145.033958
+
+✖ failing tests:
+
+test at scripts/test-people-qualified-site.mjs:51:3
+✖ ordinary compiler, certified subset, real pages/handler and all publication holds (58230.024292ms)
+  AssertionError [ERR_ASSERTION]: node:internal/modules/esm/resolve:275
+      throw new ERR_MODULE_NOT_FOUND(
+            ^
+  
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/public/book-design.js' imported from /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/generate-static-pages.js
+      at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+      at moduleResolve (node:internal/modules/esm/resolve:860:10)
+      at defaultResolve (node:internal/modules/esm/resolve:984:11)
+      at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:719:12)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:643:25)
+      at ModuleLoader.resolve (node:internal/modules/esm/loader:626:38)
+      at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:279:38)
+      at ModuleJob._link (node:internal/modules/esm/module_job:136:49) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/public/book-design.js'
+  }
+  
+  Node.js v23.7.0
+  
+  
+  1 !== 0
+  
+      at runFixture (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:48:14)
+      at TestContext.<anonymous> (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:51:121)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.start (node:internal/test_runner/test:878:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:297:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual'
+  }
+
+test at scripts/test-people-qualified-site.mjs:52:3
+✖ English-only source repairs reuse dossier inputs without reusing stale date approval (34834.782583ms)
+  AssertionError [ERR_ASSERTION]: file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:130
+        catch (error) { throw new Error(`Unchanged dossier proof failed for ${key}: ${error.message}`, { cause: error }); }
+                              ^
+  
+  Error: Unchanged dossier proof failed for jinshu:001: Dossier source evidence changed: jinshu:001:p001; update affected dossiers
+      at provePinnedDossierReuse (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:130:29)
+      at file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:124:64 {
+    [cause]: Error: Dossier source evidence changed: jinshu:001:p001; update affected dossiers
+        at need (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:19:48)
+        at proveUnchangedIdentityChapter (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:98:5)
+        at provePinnedDossierReuse (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-pinned-identity-source.mjs:129:21)
+        at file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:124:64
+  }
+  
+  Node.js v23.7.0
+  
+  
+  1 !== 0
+  
+      at runFixture (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:48:14)
+      at TestContext.<anonymous> (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-qualified-site.mjs:52:124)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:678:18)
+      at Test.postRun (node:internal/test_runner/test:1091:19)
+      at Test.run (node:internal/test_runner/test:1019:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:297:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual'
+  }

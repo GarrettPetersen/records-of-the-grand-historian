@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-05T07:42:23.742Z",
+  "pid": 21912,
+  "parent": 20319,
+  "command": "20319 /usr/local/Cellar/node/23.7.0/bin/node --experimental-vm-modules --input-type=module -e import vm from 'node:vm';import fs from 'node:fs';const m=new vm.SourceTextModule(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(m.dependencySpecifiers));",
+  "cwd": "/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime",
+  "sample": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103/dossier-reuse-109-parser.sample.txt",
+  "stack": "node::fs::ReadFileUtf8 / uv_fs_read, synchronous stdin read waiting for EOF",
+  "action": "SIGTERM verified read-only parser child; parent must fail visibly and close dossier reader normally",
+  "restartAfterFix": "node --max-old-space-size=3072 scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter 109 --registry /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/identity-dossiers/3582f843-streamed-20261103 --source-revision a366058eaf47f2bb88684a9d8acf6432f489fd1a --out /Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/109/bounded-dossiers-parser-fixed-20261105",
+  "chapterApproved": false,
+  "canonicalFilesWritten": false
+}

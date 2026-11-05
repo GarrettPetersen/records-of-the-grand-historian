@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "head": "bc0a8f7e06a8bf24cdfe025715ee319e1f87ec71",
+  "verdict": "hold",
+  "findings": [
+    {
+      "file": "scripts/lib/people-pinned-identity-source.mjs",
+      "line": 127,
+      "problem": "The unchanged-chapter proof loads both revisions with strictAliasDispositions:false, but production recording (people-identity-review-record.mjs line 107, pinned.load with default strictAliasDispositions=true) and loadValidatedPeopleChapter both validate strictly. The proof therefore accepts an extraction edit that fails production validation (e.g. a broken/removed alias disposition) as 'unchanged', contradicting the comment that both sides use the production validator and that invalid chapters cannot be reused.",
+      "requiredFix": "Load both sides with the production default (strictAliasDispositions:true, i.e. omit the override), and add a test where an extraction edit violates strict alias dispositions and the reuse proof throws."
+    },
+    {
+      "file": "scripts/lib/people-pinned-identity-source.mjs",
+      "line": 123,
+      "problem": "loadProperNounMatcher() is read from the host working tree/runtime, not from the pinned retained or current revision, so the normalization used to build both packets is not bound to the commits being compared; a working-tree glossary/matcher edit can change packet normalization for both sides without appearing in the proof.",
+      "requiredFix": "Build the matcher from the pinned snapshot's data (e.g. data/glossary.json at current.revision, already asserted unchanged vs retained) or assert the runtime matcher source bytes equal the pinned blob, and record its digest in the proof."
+    }
+  ]
+}
