@@ -184,6 +184,7 @@ for folder in dateResearch.glob('complete-English-coverage-c4f6b535-20261105*'):
  if folder.is_dir():
   for extension in ['json','mjs','txt','jsonl']:
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
+files.append(audit/'handoff-before-original-cross-reviews-20261105.md')
 files.append(audit/'handoff-before-complete-source-English-coverage-20261105.md')
 files.append(audit/'handoff-before-research-English-source-20261105.md')
 files.append(audit/'free-date-record-ownership-proposal.patch')
