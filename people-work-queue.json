@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-05T05:10:59.018Z",
+  "updatedAt": "2026-11-05T05:13:14.275Z",
   "claims": {
     "nanshi/001": {
       "lane": "openrouter",
@@ -82316,7 +82316,7 @@
         "schemaVersion": 1,
         "maxBytes": 262144
       },
-      "phase": "reviewing",
+      "phase": "source-reconciliation-hold",
       "startedAt": "2026-11-05T04:47:16.484Z",
       "sourceModelStageStartedAt": "2026-11-05T04:56:38.382Z",
       "deadlineAt": "2026-11-05T05:16:38.383Z",
@@ -82453,7 +82453,7 @@
         },
         {
           "index": 2,
-          "phase": "running",
+          "phase": "report-recorded",
           "caseIds": [
             "sha256:7fd7cd056a67ead4450a60fe8c7d488b0ca5f4c4c0dbc69ffc106de439c6972f",
             "sha256:db01ce1ef54fd4ce56e19a15e2ec8df19fdd8eef1ef2633ca8c501865d95b88b",
@@ -82480,7 +82480,7 @@
           "transportFile": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/093/bounded-independent-parts-eb9a-20261105/transport-part-003.json",
           "transportSha256": "f4fee74794ec264a9a3dab3a77b904f549d814afb7af9fc0dc667abccf5c0119",
           "agentId": "5fd22a9a-26c0-4a99-a556-ed6a66b4d224",
-          "providerRunId": null,
+          "providerRunId": "t0s3",
           "producerObservation": {
             "id": "5fd22a9a-26c0-4a99-a556-ed6a66b4d224",
             "name": "Jinshu 093 dossier review 03",
@@ -82497,7 +82497,72 @@
             "conversationId": "5fd22a9a-26c0-4a99-a556-ed6a66b4d224",
             "title": "Jinshu 093 dossier review 03",
             "workingIndicatorObserved": true
-          }
+          },
+          "schemaVersion": 1,
+          "kind": "captured-independent-identity-review-part",
+          "scope": {
+            "book": "jinshu",
+            "chapter": "093"
+          },
+          "runId": "t0s3",
+          "providerKind": "grokbot",
+          "providerConversationId": "5fd22a9a-26c0-4a99-a556-ed6a66b4d224",
+          "providerMessageId": "t0s3",
+          "providerCompletedAt": "2026-11-05T05:11:58.089Z",
+          "providerObservation": {
+            "id": "5fd22a9a-26c0-4a99-a556-ed6a66b4d224",
+            "name": "Jinshu 093 dossier review 03",
+            "lastMessageId": "t0s3",
+            "newestEntryId": "t0s3",
+            "lastActivityAt": 1793855518089
+          },
+          "capturedAt": "2026-11-05T05:12:52.039Z",
+          "sourcePacketSha256": "899b3c67350ec95c003de5a88b4b339ea038f6691935f4ec3244dc83d89325ff",
+          "reportFile": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/093/bounded-independent-parts-eb9a-20261105/part-003-report.json",
+          "reportSha256": "2ed09ae9c42539ed6d419fa7cd87229692ab8348aa25fd73678279a1ff5bb437",
+          "providerMessageFile": "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/093/bounded-independent-parts-eb9a-20261105/part-003-provider.raw.json",
+          "providerMessageSha256": "6428a02aa3821a96181a4754d6de0ffda031f28e118f27d4f5f3bca05968ba5a",
+          "approvedCases": 20,
+          "holds": [
+            {
+              "caseId": "sha256:d2522b728a9b0f8ddd4c9a20bca15d7704728bca4ccd354cc490e2679e29aa2d",
+              "verdict": "hold",
+              "canonicalPersonId": "per_5DQDR5CJ85HJ7XCHFRAB",
+              "membershipReviewed": true,
+              "membershipFingerprint": "sha256:32c310df16eec31a5e4edf6923a1f058d6cda6b68b106e9a7bd5b469cf2c8ace",
+              "ambiguityReviewed": true,
+              "unresolvedIdentity": true,
+              "reason": "王叔仁 is the courtesy name of Wang Yun (s0230 王蘊，字叔仁), who asked to be sent out to a command. The local record's personal-name claim \"Wang Shu\" (c0047) and the s0021 English \"Wang Shu\" are wrong: Wang Shu (述) is a different man (s0223). Held until the name is corrected; the referent itself is attested.",
+              "sourceWitnesses": [
+                {
+                  "localId": "jinshu:093:p016",
+                  "book": "jinshu",
+                  "chapter": "093",
+                  "unitId": "s0021",
+                  "quote": "王叔仁"
+                }
+              ]
+            }
+          ],
+          "editorialRepairs": [
+            {
+              "book": "jinshu",
+              "chapter": "093",
+              "unitId": "s0021",
+              "field": "idiomatic",
+              "before": "Chu Pou shrank from wielding power at court, and Wang Shu begged to be sent to the frontier; both kept their skins and their honor, and deserve mention.",
+              "after": "Chu Pou shrank from wielding power at court, and Wang Yun begged to be sent to the frontier; both kept their skins and their honor, and deserve mention.",
+              "sourceBasedReason": "王叔仁 is the courtesy name of Wang Yun (s0230 王蘊，字叔仁). \"Wang Shu\" wrongly names him and could be confused with Wang Shu 述 (s0223).",
+              "sourceQuote": "王叔仁之固求出鎮",
+              "pairedFieldChecked": "As for Chu Yeye’s fearing and avoiding court power, and Wang Shuren’s firmly seeking to go out and hold a command, by this they were able to preserve the body and keep far from harm—there is something to praise in that.",
+              "repeatedUsesChecked": [
+                "s0021",
+                "s0223",
+                "s0230"
+              ]
+            }
+          ],
+          "chapterApproved": false
         },
         {
           "index": 3,
@@ -82689,8 +82754,8 @@
           "providerRunId": null
         }
       ],
-      "approvedCases": 21,
-      "heldCases": 0,
+      "approvedCases": 41,
+      "heldCases": 1,
       "chapterApproved": false,
       "dataQualified": false,
       "published": false,
@@ -82752,12 +82817,12 @@
         }
       },
       "sticky": true,
-      "activeRun": true,
+      "activeRun": false,
       "methodReconciliation": "Original source run authoritatively cancelled on usage HTTP500; no report existed. Its full journal/partial conversation preserved. Reuse exact source/plan and indexed dossiers, independently approved lossless repartition. Continue same chapter owner via already-authorized available GrokBot lane; no SDK restart, report retag or paid fallback.",
-      "updatedAt": "2026-11-05T05:10:59.017Z",
-      "queueCommit": "a0d6feab0bc44eb90edc115928e6d9748b5b5392",
+      "updatedAt": "2026-11-05T05:13:14.273Z",
+      "queueCommit": "faa20ef2b5a0ed48ba260813e9b0e14213d7eb89",
       "weeklyUsageAtStartPercent": 1,
-      "observedAt": "2026-11-05T05:09:04.390Z"
+      "observedAt": "2026-11-05T05:12:52.039Z"
     }
   }
 }
