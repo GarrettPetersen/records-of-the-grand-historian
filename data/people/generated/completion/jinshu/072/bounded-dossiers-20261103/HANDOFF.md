@@ -129,3 +129,8 @@ handoff; priorfull handoff A/handoff-before-093-provider-stop-20261105.md archiv
 Recovery checkpoint2eac13eee1777b874d54b6e278f3da4640a7eaf7 verified611files/32.4MB.
 Final failure/retry metadata checkpoint uses B/nov05-startup-retry-and-review-holds-recovery.json.
 No local native/model/test process active at this checkpoint; only external retry active.
+
+Latest verified remote recovery9588ca68095edb84f8a8e54e12628af932b118b6:618files/32.46MB.
+A/current-completion-progress.json now compactly labels deployed8f2 and merged3a,
+explicit holds and inherited count basis; old nested metrics archived unchanged.
+Final metrics receipt B/nov05-final-progress-and-retry-recovery.json.
