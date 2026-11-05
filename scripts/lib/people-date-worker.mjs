@@ -243,7 +243,7 @@ export function cursorDateWorker(options, control, {
         if (!(error instanceof CursorRunLimitExceededError) ||
             !['raw-cost', 'tokens', 'wall-clock'].includes(error.metric) ||
             error.runId !== run.id || error.cancelError || accountStop ||
-            (error.terminalStatus && error.terminalStatus !== 'completed') || error.terminalError) throw error;
+            (error.terminalStatus && error.terminalStatus !== 'finished') || error.terminalError) throw error;
         boundedRunStop = error;
         await save({ runLimitStop: {
           code: error.code, runId: error.runId, metric: error.metric,
