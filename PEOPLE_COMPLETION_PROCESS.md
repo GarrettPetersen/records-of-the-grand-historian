@@ -58,6 +58,14 @@ prove every source proposition has been translated.
    per review packet. One logical dossier represents one accepted canonical person;
    chapter records remain its cited provenance. Historical merge, separation and
    reviewed-ambiguity decisions remain valid constraints, not a new all-pairs queue.
+   When unrelated working-tree edits prevent a reliable filesystem view, use
+   `people:identity:prepare -- --book BOOK --chapter NNN --registry ABSOLUTE_DIR
+   --out NEW_ABSOLUTE_DIR --source-revision FULL_ACCEPTED_GIT_SHA`. This reads sealed
+   source/editorial/date evidence from Git without a checkout copy. Registry reuse
+   requires the original generation's full Git seal to match, identical complete
+   dossier-data inventories and contents, unchanged transitive construction code,
+   package dependencies and runtime configuration. Any relevant change holds for a
+   registry update; this path does not retag an old seal or approve a chapter.
 5. Prepare one case per canonical person occurring in this chapter, covering every
    chapter-local record exactly once. Retrieve at most eight other dossiers per
    case through the name/alias index, with at most sixteen keys and eight posting
@@ -229,3 +237,17 @@ Jinshu 053 or repeat passed checks on unchanged inputs merely to adopt this poli
 Reuse gate fixes already on master instead of rebuilding them from an older host
 checkout. Documenting policy is not proof the running orchestrator adopted it: report
 adoption, data qualification and live publication separately.
+
+### Oversized identity evidence and aggregate extraction authors
+
+Keep the complete source packet and the full plan. Oversized transports split by
+case ownership within the existing byte ceiling. Each part includes the complete
+target chapter and every cited claim and mention unit for its people and anchors.
+Preserve each actual report, producer and sealed part hash. All owned cases must
+assemble exactly once, with one actual independent reviewer retained across parts;
+then run the normal full-plan identity validator and publication gates. No part by
+itself certifies a chapter. Single cases that exceed the bound stay held.
+
+Chunked extractions identify their actual contributing agents through `run.chunks`.
+Exclude every actual chunk author from independent review; never invent an aggregate
+agent ID or accept missing chunk provenance.

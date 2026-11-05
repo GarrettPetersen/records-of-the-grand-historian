@@ -55,3 +55,10 @@ test('a new actor in an unmentioned Chinese unit cannot reuse the old chapter pr
  const f=fixture();f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'李忠至。'});
  assert.throws(()=>validate(f),/chapter Chinese source or unit inventory changed/);
 });
+
+test('chunked extraction identities require every actual author and preserve reviewer independence',()=>{
+ const f=fixture(),own=f.sources.get('fixture:001');own.extraction.run={agentId:null,chunks:[{agentId:'chunk-author-a'},{agentId:'chunk-author-b'}]};f.bundle.receipt.authorAgentIds=['chunk-author-a','chunk-author-b','host-author'];assert.doesNotThrow(()=>validate(f));
+ f.bundle.receipt.authorAgentIds=['chunk-author-a'];assert.throws(()=>validate(f),/Actual extraction author missing/);
+ const g=fixture();g.sources.get('fixture:001').extraction.run={agentId:null,chunks:[{agentId:'independent-reviewer'}]};g.bundle.receipt.authorAgentIds=['independent-reviewer'];assert.throws(()=>validate(g),/independent reviewer/);
+ const h=fixture();h.sources.get('fixture:001').extraction.run={agentId:null,chunks:[{agentId:null}]};assert.throws(()=>validate(h),/every chunk/);
+});

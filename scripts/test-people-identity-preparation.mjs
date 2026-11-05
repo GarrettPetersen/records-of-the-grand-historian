@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { writePreparedIdentityReviewArtifacts } from './prepare-people-chapter-identity.mjs';
+import { writePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 
 function fixture(t) {
@@ -51,4 +51,13 @@ test('oversized transport stays rejected and existing immutable output is never 
   const before = fs.readFileSync(path.join(f.out, 'transport-packet.json'));
   assert.throws(() => writePreparedIdentityReviewArtifacts(f.out, f.value), /EEXIST/);
   assert.deepEqual(fs.readFileSync(path.join(f.out, 'transport-packet.json')), before);
+});
+
+
+test('primary packet includes complete target chapter and all anchor claim and mention units',()=>{
+ const own={extraction:{book:'fixture',chapter:'001'},packet:{units:[{id:'s0001',zh:'王至。'},{id:'s0002',zh:'後事。'}]}};
+ const anchor={packet:{units:[{id:'s0001',zh:'王生。'},{id:'s0002',zh:'王仕。'}]}};
+ const sources=new Map([['fixture:001',own],['fixture:002',anchor]]),person={localId:'fixture:002:p001',claims:[{evidence:['fixture:002:s0001']}],mentions:[{unit:{id:'s0002'}}]};
+ const units=collectChapterIdentityPrimaryUnits(own,sources,new Map([[person.localId,person]]));assert.deepEqual([...units.keys()],['fixture:001:s0001','fixture:001:s0002','fixture:002:s0001','fixture:002:s0002']);
+ person.mentions[0].unit.id='s0003';assert.throws(()=>collectChapterIdentityPrimaryUnits(own,sources,new Map([[person.localId,person]])),/Missing current primary unit/);
 });
