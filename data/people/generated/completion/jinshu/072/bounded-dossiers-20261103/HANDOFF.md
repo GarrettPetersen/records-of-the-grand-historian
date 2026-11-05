@@ -1,4 +1,4 @@
-# Completion handoff — 2026-11-05T03:28UTC
+# Completion handoff — 2026-11-05T03:33UTC
 P=/Users/garrettpetersen/records-of-the-grand-historian
 W=/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime
 A=P/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103
@@ -13,7 +13,7 @@ and compaction overhead, preserved sticky queue ownership, tested a smaller loss
 transport proposal (58 checks). No new completed/published chapter. Previous memory
 turn also yielded measured safety evidence. Do not mark goal complete or blocked.
 
-## Merged production code; exact deployment is still building
+## Merged production code; first deployment failed, single startup retry active
 PR5372 normal --merge at02:52:04UTC, master3a078d6924f8a76457a5f0d225184d277891e098.
 Reviewed Wheadb6c3d870bc7d2a27fe513338e3d2ec489fe5785c; merged/reviewed trees exactly
 b3d11ce5c5d7e9d60518bd3ac89260b5c0622826. RequiredCI41955734729/41955734758/
@@ -26,8 +26,14 @@ node_modules symlink, NO public/. Do not repeat unchanged code reviews/builds.
 PR5371 source correction absorbed/marked merged; 080English correction nowmaster.
 
 Exact production deployment3cf9457b-c0c0-480a-9e19-3f28713ee282 for3a.
-Latest stagebuild active from02:57:13UTC. B/observe-production.mjs targets this handle,
-checks provenance and guard. Preserve handle; no retries/config/cache/limit changes.
+First attempt FAILED03:28:45UTC after31m32s before dependency setup/build-command logs.
+Previous8f2 same build config began setup within1s afterclone; no source-level failure
+was printed. A/pinned-registry-production-deployment-failure.json + startup-comparison.json.
+One bounded exact-revision retrybb7ec8aa-e5c7-4ae8-8a0e-ea5b09c757b0 created03:32UTC.
+B/observe-production.mjs now targets retry viaCURRENT-STATE. Verify actual remote handle,
+no further automatic retry, no config/cache/limit/gate change. Both old and new handles
+retained in A/pinned-registry-single-startup-retry.json. Queue/recovery previews are
+verified is_skipped:true, not active builds. Master remains exactly3a.
 On actual canonical success run:
 node J53/verify-live-release.mjs A/pinned-registry-release-ci/qualification-and-contribution.json 3a078d6924f8a76457a5f0d225184d277891e098
 This verifies every qualified person/backlink/search/sitemap/uncertainty/OG/progress.
@@ -41,7 +47,7 @@ Actual reviewerbc-9366e53c-31d6-4fe5-a9d1-155aa50b5786,
 run-766f25e1-b6d2-4c36-8e3c-70524aaa8adc. Provider CANCELLED, controllerPID9801 gone,
 tool89732 terminal1. Three consecutive usage-monitor failures triggered required
 fail-closed cancellation. Completed code reviewer's usage endpoint fails too;
-last readonly recheck03:24:17 still internal_error. This is not quota/reset evidence.
+last readonly recheck03:29:47 still internal_error. This is not quota/reset evidence.
 No finished result, no report, no approved case, no editorial repair returned.
 Private saved conversation C/independent-review/cancelled-run-conversation.private.json;
 DO NOT dump or push it. Trace has no final JSON; it shows compaction followed by
@@ -83,7 +89,10 @@ Logs A/identity-review-context-bound-{identity,native-site}.log and local-valida
 Temporary Wfile restored byte-exact to adopted code; Wtrackedclean. No model dispatch,
 production adoption, PR or source proof from proposal. Independent recheck is required
 before adoption; recover retained code reviewer when monitoring works within its
-remaining original budget. Do not repeat same large packet unchanged.
+remaining original budget. New sealed independent-review-packet/work-order.json under
+A/identity-review-context-bound-* are PREPARED, not dispatched; remaining raw code
+review budget211.2002c of original300c. Exact patch/module/calibration included.
+Do not repeat same large packet unchanged.
 
 After real all-part source approval, native recorder must validate full report against
 sealed plan/registry, then normal qualification/site/ebook/CI/deploy/live. Existing CI
@@ -116,3 +125,7 @@ SIGTERMonly;verifyport/currentpreview/guard. Current5176/MCP3001preserved,GPU215
 P hugeDIRTY: neverreset/switch/pull/broadstage. Host owns all sharedGit and builds.
 Privatecredentials/conversations/memoryreceipts excludedfrombackup. Compactcurrent
 handoff; priorfull handoff A/handoff-before-093-provider-stop-20261105.md archived.
+
+Recovery checkpoint2eac13eee1777b874d54b6e278f3da4640a7eaf7 verified611files/32.4MB.
+Final failure/retry metadata checkpoint uses B/nov05-startup-retry-and-review-holds-recovery.json.
+No local native/model/test process active at this checkpoint; only external retry active.

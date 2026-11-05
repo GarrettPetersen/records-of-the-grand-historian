@@ -1,0 +1,100 @@
+{
+  "at": "2026-11-05T03:30:02.244Z",
+  "deploymentId": "3cf9457b-c0c0-480a-9e19-3f28713ee282",
+  "deployment": {
+    "id": "3cf9457b-c0c0-480a-9e19-3f28713ee282",
+    "latestStage": {
+      "name": "build",
+      "started_on": "2026-11-05T02:57:13.391488Z",
+      "ended_on": "2026-11-05T03:28:45.678546Z",
+      "status": "failure"
+    },
+    "stages": [
+      {
+        "name": "queued",
+        "started_on": "2026-11-05T02:52:07.023211Z",
+        "ended_on": "2026-11-05T02:52:07.029173Z",
+        "status": "success"
+      },
+      {
+        "name": "initialize",
+        "started_on": "2026-11-05T02:52:07.029173Z",
+        "ended_on": "2026-11-05T02:52:10.397393Z",
+        "status": "success"
+      },
+      {
+        "name": "clone_repo",
+        "started_on": "2026-11-05T02:52:10.397393Z",
+        "ended_on": "2026-11-05T02:57:13.391488Z",
+        "status": "success"
+      },
+      {
+        "name": "build",
+        "started_on": "2026-11-05T02:57:13.391488Z",
+        "ended_on": "2026-11-05T03:28:45.678546Z",
+        "status": "failure"
+      },
+      {
+        "name": "deploy",
+        "started_on": null,
+        "ended_on": null,
+        "status": "idle"
+      }
+    ],
+    "commit": "3a078d6924f8a76457a5f0d225184d277891e098",
+    "buildConfig": {
+      "build_command": "NODE_OPTIONS=--max-old-space-size=6144 npm run build",
+      "destination_dir": "public",
+      "build_caching": true,
+      "root_dir": "",
+      "web_analytics_tag": null,
+      "web_analytics_token": null
+    }
+  },
+  "logs": {
+    "total": 10,
+    "includes_container_logs": true,
+    "data": [
+      {
+        "ts": "2026-11-05T02:52:10.446759Z",
+        "line": "Cloning repository..."
+      },
+      {
+        "ts": "2026-11-05T02:55:43.266278Z",
+        "line": "From https://github.com/GarrettPetersen/records-of-the-grand-historian"
+      },
+      {
+        "ts": "2026-11-05T02:55:43.267047Z",
+        "line": " * branch              3a078d6924f8a76457a5f0d225184d277891e098 -> FETCH_HEAD"
+      },
+      {
+        "ts": "2026-11-05T02:55:43.267217Z",
+        "line": ""
+      },
+      {
+        "ts": "2026-11-05T02:57:12.782309Z",
+        "line": "HEAD is now at 3a078d69 Merge pull request #5372 from GarrettPetersen/codex/identity-pinned-registry-reuse-20261105"
+      },
+      {
+        "ts": "2026-11-05T02:57:12.783153Z",
+        "line": ""
+      },
+      {
+        "ts": "2026-11-05T02:57:12.885298Z",
+        "line": ""
+      },
+      {
+        "ts": "2026-11-05T02:57:12.886061Z",
+        "line": "Using v2 root directory strategy"
+      },
+      {
+        "ts": "2026-11-05T02:57:12.915565Z",
+        "line": "Success: Finished cloning repository files"
+      },
+      {
+        "ts": "2026-11-05T03:28:45.678546Z",
+        "line": "Failed: build exceeded the time limit and was terminated. Refer to https://developers.cloudflare.com/pages/platform/limits/#builds for build limits"
+      }
+    ]
+  }
+}
