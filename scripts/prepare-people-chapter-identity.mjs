@@ -19,6 +19,7 @@ import { readIdentityDossierRegistry as readIdentityDossierStore } from './lib/p
 import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityReviewPath, validateChapterIdentityBundle } from './lib/people-chapter-identity.mjs';
 import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
+import { reconcileIdentityProofComposition, identityCompositionSourcePlans } from './lib/people-identity-proof-composition.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
@@ -38,7 +39,7 @@ export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
   return units;
 }
 
-export async function buildChapterIdentityReviewPacket({ book, chapter, registry, sourceRevision }) {
+export async function buildChapterIdentityReviewPacket({ book, chapter, registry, sourceRevision, retainedComposition = null }) {
   need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
   const pinned = sourceRevision ? pinnedIdentityChapterContext(REPO_ROOT, sourceRevision) : null;
   const readInputs = pinned ? pinned.inputs : chapterIdentityInputs, loadChapter = pinned ? pinned.load : loadValidatedPeopleChapter;
@@ -64,8 +65,27 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     if (pinned) assertPinnedIdentityRuntime(pinned.snapshot);
     need(peopleDigest(readInputs(book, chapter)) === peopleDigest(inputs) && (pinned || identityDossierInputs(REPO_ROOT) === identityInputs), 'Source or identity inputs changed while preparing identity review');
     const units = collectChapterIdentityPrimaryUnits(own, sources, relevant);
+    let retainedIdentityProof = null, remainingCaseIds = null, reusedCases = 0;
+    if (retainedComposition) {
+      need(path.isAbsolute(retainedComposition), 'Absolute retained composition required');
+      const previous = readJson(retainedComposition), sourcePlans = identityCompositionSourcePlans(previous,plan);
+      for (const component of previous.components) for (const dependency of component.receipt.sourcePeople) {
+        const [b,c] = dependency.localId.split(':'), key = `${b}:${c}`;
+        if (!sources.has(key)) sources.set(key,loadChapter(b,c,{properNounMatcher:matcher,strictAliasDispositions:false}));
+      }
+      const result = reconcileIdentityProofComposition({localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId},sources,plan,sourcePlans,previous.components);
+      need(!result.held.length, 'Current retained attribution or false-merge hold requires source/membership reconciliation; do not commission an unchanged replacement review');
+      retainedIdentityProof = {schemaVersion:1,kind:'chapter-identity-review-composition',scope,plan,sourcePlans,components:previous.components,selections:result.selections};
+      remainingCaseIds = result.remainingCaseIds; reusedCases = result.eligible.size;
+      if (!remainingCaseIds.length) {
+        const certificate = validateChapterIdentityBundle({localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId},sources,scope,retainedIdentityProof,inputs);
+        return {composition:retainedIdentityProof,receipt:{status:'identity-review-current',scope,inputs,planFingerprint:plan.fingerprint,newReviewCases:0,
+          reviewedCases:certificate.retained.length,reviewedAmbiguousCases:certificate.ambiguity.length,generatedPairs:0,independentReviewCompleted:true,dataQualified:false,published:false}};
+      }
+    }
     const candidateIds = [...new Set(plan.cases.flatMap(item => item.candidateDossiers.map(row => row.id)))];
     const packet = { schemaVersion: 1, kind: 'source-chapter-dossier-review-packet', scope, plan,
+      ...(retainedIdentityProof ? {retainedIdentityProof,reviewCaseIds:remainingCaseIds,transportPolicy:identityReviewTransportPolicy()} : {}),
       authorAgentIds: extractionAuthorAgentIds(own.extraction), registryProvenance: index.provenance,
       ...(registryReuse ? { registryReuse } : {}),
       acceptedMembershipAuthority: 'Existing native validated and source-reviewed canonical membership is the baseline. Review this chapter and current anchor; hold concrete contradictions. This report cannot merge, split or separate records.',
@@ -82,6 +102,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
       transportPolicy: identityReviewTransportPolicy(),
       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
       generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false,
+      ...(retainedIdentityProof ? {reusedCases,newReviewCases:remainingCaseIds.length,retainedCompositionFingerprint:peopleDigest(retainedIdentityProof)} : {}),
       ...(registryReuse ? { sourceRevision, registryReuse } : {}) };
     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
     const transport = compactChapterIdentityReviewPacket(packet);
@@ -128,11 +149,11 @@ export function writePreparedIdentityReviewArtifacts(out, prepared) {
 
 export async function prepareChapterIdentityReview({ out, ...options }) {
   const { book, chapter, registry } = options, savedPath = chapterIdentityReviewPath(book, chapter);
-  if (options.sourceRevision) {
+  if (options.sourceRevision && !options.retainedComposition) {
     const source = pinnedIdentityChapterContext(REPO_ROOT, options.sourceRevision);
     need(!source.snapshot.files.has(`data/people/identity-reviews/${book}/${chapter}.json`) && !fs.existsSync(savedPath), 'Retained identity proof exists; reconcile it before preparing new pinned work');
   }
-  if (fs.existsSync(savedPath)) {
+  if (fs.existsSync(savedPath) && !options.retainedComposition) {
     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected proof revalidation');
     const savedBytes = fs.readFileSync(savedPath), saved = JSON.parse(savedBytes), inputs = chapterIdentityInputs(book, chapter);
     const matcher = loadProperNounMatcher(), own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
@@ -167,14 +188,21 @@ export async function prepareChapterIdentityReview({ out, ...options }) {
   }
   const prepared = await buildChapterIdentityReviewPacket(options);
   const { receipt } = prepared;
+  if (prepared.composition) {
+    fs.mkdirSync(out,{recursive:false});
+    fs.writeFileSync(path.join(out,'composition.json'),JSON.stringify(prepared.composition,null,2)+'\n',{flag:'wx'});
+    fs.writeFileSync(path.join(out,'preparation-receipt.json'),JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});
+    need(!inspectLocalDisk(HOST_ROOT).errors.length,'Host guard failed after composition reuse');
+    return receipt;
+  }
   writePreparedIdentityReviewArtifacts(out, prepared);
   return receipt;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2), options = {};
   for (let i = 0; i < args.length; i += 2) {
-    const key = args[i].slice(2); need(['book', 'chapter', 'registry', 'out', 'source-revision'].includes(key) && args[i].startsWith('--') && args[i+1], 'Usage: --book BOOK --chapter NNN --registry IMMUTABLE_DIRECTORY --out NEW_ARTIFACT_DIRECTORY [--source-revision FULL_GIT_SHA]');
-    const option = key === 'source-revision' ? 'sourceRevision' : key;
+    const key = args[i].slice(2); need(['book', 'chapter', 'registry', 'out', 'source-revision','retained-composition'].includes(key) && args[i].startsWith('--') && args[i+1], 'Usage: --book BOOK --chapter NNN --registry IMMUTABLE_DIRECTORY --out NEW_ARTIFACT_DIRECTORY [--source-revision FULL_GIT_SHA] [--retained-composition FILE]');
+    const option = key === 'source-revision' ? 'sourceRevision' : key === 'retained-composition' ? 'retainedComposition' : key;
     need(!Object.hasOwn(options, option), `Duplicate option ${key}`); options[option] = args[i+1];
   }
   for (const key of ['registry', 'out']) { need(options[key] && path.isAbsolute(options[key]), `Absolute --${key} required`); }

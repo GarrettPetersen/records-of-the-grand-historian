@@ -8,6 +8,8 @@ import { extractionAuthorAgentIds } from './people-extraction-authorship.mjs';
 import { assertCapturedIdentityReviewParts } from './people-identity-review-transport.mjs';
 import { localNameKeys } from './people-resolution.mjs';
 import { validateDossierIdentityEvidence, memberContract } from './people-identity-dossiers.mjs';
+import { validateIdentityProofComposition } from './people-identity-proof-composition.mjs';
+import { identityChapterChineseFingerprint } from './people-identity-semantic-source.mjs';
 
 export class ChapterIdentityReviewError extends Error {}
 const validatedCertificates = new WeakSet();
@@ -50,6 +52,12 @@ export function acceptedCatalogIdentityView(catalog) {
 // sourceChapters contains ONLY current native-validated chapter/anchor material.
 // External chapters supply identity evidence; this grants none of their facts.
 export function validateChapterIdentityBundle(view, sourceChapters, scope, bundle, inputs) {
+  if (bundle?.kind === 'chapter-identity-review-composition') {
+    try {
+      const certificate = validateIdentityProofComposition(view, sourceChapters, scope, bundle, inputs);
+      validatedCertificates.add(certificate); return certificate;
+    } catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
+  }
   need(only(bundle, ['schemaVersion', 'kind', 'scope', 'plan', 'report', 'receipt']) &&
     bundle.schemaVersion === 1 && bundle.kind === 'chapter-identity-review' &&
     peopleDigest(bundle.scope) === peopleDigest(scope) && peopleDigest(bundle.plan.scope) === peopleDigest(scope), 'Malformed or wrong-scope chapter identity proof');
@@ -122,6 +130,17 @@ export function chapterIdentityEvidenceScopes(bundle) {
   for (const item of bundle.plan.cases) for (const id of [...item.localPeople, item.canonicalMembership.anchorLocalId]) {
     const [book, chapter] = id.split(':'); chapterIdentityReviewPath(book, chapter);
     scopes.set(`${book}:${chapter}`, { book, chapter });
+  }
+  if (bundle.kind === 'chapter-identity-review-composition') {
+    need(Array.isArray(bundle.components), 'Missing immutable identity source components');
+    for (const component of bundle.components) {
+      need(Array.isArray(component.receipt?.sourcePeople), 'Missing captured composition dependencies');
+      for (const person of component.receipt.sourcePeople) {
+        const [book,chapter] = person.localId.split(':'); chapterIdentityReviewPath(book,chapter);
+        scopes.set(`${book}:${chapter}`,{ book,chapter });
+      }
+    }
+    return [...scopes.values()];
   }
   // Witnesses to optional retrieved candidates must also be verified against
   // actual source, rather than trusting the model's quoted attachment.
@@ -214,7 +233,6 @@ export function identitySourceEvidenceFingerprint(person, packet) {
 // previously unmentioned units. A metadata/English edit may reuse unchanged person
 // proofs; inserting an unseen actor in an unmentioned Chinese unit may not.
 export function chapterChineseEvidenceFingerprint(packet) {
-  need(Array.isArray(packet?.units) && packet.units.every(unit => typeof unit.id === 'string' && typeof unit.zh === 'string') &&
-    new Set(packet.units.map(unit => unit.id)).size === packet.units.length, 'Complete current Chinese source units required');
-  return peopleDigest(packet.units.map(unit => [unit.id, unit.zh]));
+  try { return identityChapterChineseFingerprint(packet); }
+  catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
 }

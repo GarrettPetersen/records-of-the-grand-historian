@@ -164,8 +164,9 @@ export function pinnedIdentityChapterContext(root, revision) {
   const snapshot = gitIdentitySnapshot(root, revision);
   const scope = (book, chapter) => need(/^[a-z0-9_-]+$/u.test(book) && /^\d{3}$/u.test(chapter), 'Invalid pinned chapter scope');
   const optional = file => snapshot.files.has(file) ? snapshot.json(file) : null;
-  const inputs = (book, chapter) => { scope(book, chapter); const source = `data/${book}/${chapter}.json`, extraction = `data/people/extractions/${book}/${chapter}.json`, editorial = `data/people/editorial-decisions/${book}/${chapter}.json`, date = `data/people/date-audits/${book}/${chapter}.json`;
-    return { source: sha256(snapshot.read(source)), extraction: sha256(snapshot.read(extraction)), editorial: sha256(snapshot.files.has(editorial) ? snapshot.read(editorial) : Buffer.from('null')), dateAudit: sha256(snapshot.read(date)) }; };
+  const inputs = (book, chapter, { requireAuditReport = true } = {}) => { scope(book, chapter); const source = `data/${book}/${chapter}.json`, extraction = `data/people/extractions/${book}/${chapter}.json`, editorial = `data/people/editorial-decisions/${book}/${chapter}.json`, date = `data/people/date-audits/${book}/${chapter}.json`;
+    need(!requireAuditReport || snapshot.files.has(date), `Missing required independent date report: ${book}:${chapter}`);
+    return { source: sha256(snapshot.read(source)), extraction: sha256(snapshot.read(extraction)), editorial: sha256(snapshot.files.has(editorial) ? snapshot.read(editorial) : Buffer.from('null')), dateAudit: sha256(snapshot.files.has(date) ? snapshot.read(date) : Buffer.from('null')) }; };
   const load = (book, chapter, { properNounMatcher, strictAliasDispositions = true }) => {
     scope(book, chapter); const raw = snapshot.json(`data/people/extractions/${book}/${chapter}.json`), source = snapshot.json(`data/${book}/${chapter}.json`);
     need(raw.book === book && raw.chapter === chapter, 'Pinned extraction scope mismatch');
