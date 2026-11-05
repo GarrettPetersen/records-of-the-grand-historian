@@ -1,0 +1,73 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+import {mutateRemotePeopleWorkLedger} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-work-queue.mjs';
+import {acquireProcessRunLock} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/process-run-lock.mjs';
+import {buildPeopleExtractionPacket} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/build-people-extraction-packet.mjs';
+import {loadProperNounMatcher} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-candidates.mjs';
+import {validateCompactPeopleExtraction} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/validate-people-extraction.mjs';
+import {validateAppliedEditorialDecisions} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-editorial-decisions.mjs';
+import {buildDateAuditPacket,dateAuditReferencesCurrent} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-audit.mjs';
+import {applyDateRepairProposal} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-workflow.mjs';
+import {writeTextAtomic} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-content.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',dir=new URL('.',import.meta.url).pathname,out=dir+'reviewed-English-source-prepared-v3/';
+const read=p=>JSON.parse(fs.readFileSync(p)),need=(v,m)=>{if(!v)throw Error(m)},hash=b=>createHash('sha256').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+const controlFile=dir+'source-transition-controller.json',control=read(controlFile),transition=read(out+'date-transition.json'),manifest=read(out+'manifest.json'),review=read(dir+'source-transition-independent-review.raw.json'),packetBytes=fs.readFileSync(dir+'source-transition-review.input.json'),packet=JSON.parse(packetBytes);
+const receiptFile=dir+'reviewed-English-source-application.json',intentFile=dir+'reviewed-English-source-application-intent.json',wf=transition.priorWorkflowDirectory,archive=transition.archiveWorkflowDirectory;
+need(!fs.existsSync(receiptFile)&&!fs.existsSync(intentFile)&&!fs.existsSync(archive),'Existing application must be recovered, never overwritten');
+need(!inspectLocalDisk(root).errors.length,'Resource guard hold');
+need(control.phase==='review-returned'&&review.verdict==='approve'&&review.reviewer.agentId===control.agentId&&review.reviewer.independentOfAuthors===true&&review.packetSha256===hash(packetBytes)&&review.applierSha256===hash(fs.readFileSync(new URL(import.meta.url)))&&review.transitionSha256===hash(fs.readFileSync(out+'date-transition.json')),'Exact independent transition/code approval required');
+need(control.reviewSha256===hash(fs.readFileSync(dir+'source-transition-independent-review.raw.json'))&&!packet.excludedReviewers.includes(control.agentId),'Independent source transition reviewer changed');
+const checkIds=['english-approval-provenance','candidate-accounting','date-replay-preservation','source-and-round-ownership','publication-gates','atomic-recovery'];
+need(review.checks.length===checkIds.length&&checkIds.every(id=>review.checks.some(c=>c.id===id&&c.verdict==='approve'&&c.reason?.trim().length>=20)),'Complete independent transition checks required');
+for(const [file,digest]of Object.entries(packet.sealedFileSha256))need(hash(fs.readFileSync(file))===digest,'Sealed source-transition input changed: '+file);
+for(const f of Object.values(manifest.files))need(hash(fs.readFileSync(root+'/'+f.path))===f.beforeSha256&&hash(fs.readFileSync(f.afterFile))===f.afterSha256,'Current/prepared source files changed');
+const oldState=read(wf+'/state.json');
+need(oldState.generationId===transition.fromGenerationId&&oldState.phase==='repair'&&oldState.round===1&&oldState.reviewRoundCeiling===3&&!oldState.circuitBreaker&&!fs.existsSync(root+'/data/people/date-audits/jinshu/109.json'),'Preserve original native round, any circuit hold and absent/staged-deleted date report');
+const unlock=acquireProcessRunLock(root+'/data/people/generated/resolution-run.lock',{label:'Reviewed English source application with date carry',failIfExists:true});
+try{
+ const reservation=mutateRemotePeopleWorkLedger(l=>{
+  const c=l.dateAudits['jinshu/109'],i=l.identityReviews?.['jinshu/109'];
+  need(c.worker===control.worker&&c.generationId===transition.fromGenerationId&&c.executorToken===control.executorToken&&c.sourceHash===transition.priorCanonicalSourceHash&&c.extractionHash===transition.priorCanonicalExtractionHash,'Date owner changed');
+  need(!l.claims['jinshu/109']&&!Object.values(c.jobs).some(j=>['claimed','running'].includes(j.status)),'An extraction/model job is active');
+  need(i?.worker===packet.identityOwner.worker&&i.updatedAt===packet.identityOwner.updatedAt&&!i.activeRun,'Identity source owner changed');
+  c.sourceEditorialApplication={phase:'applying',intentFile,receiptFile,dateApproval:false};
+  i.sourceApplication={phase:'applying',intentFile,receiptFile,chapterApproved:false};
+ },{message:'Reserve independently reviewed forty-field109 English application and capped negative-date carry'});
+ fs.writeFileSync(intentFile,json({at:new Date().toISOString(),queueCommit:reservation.commit,transition,manifest,executorToken:control.executorToken,canonicalFilesExpected:3,oldNativeStateSha256:hash(fs.readFileSync(wf+'/state.json')),receiptFile,dateApproval:false,chapterApproved:false}),{flag:'wx'});
+ for(const f of Object.values(manifest.files))need(hash(fs.readFileSync(root+'/'+f.path))===f.beforeSha256,'Source changed after reservation');
+ need(hash(fs.readFileSync(wf+'/review-1.json'))===transition.retainedNegativeReportSha256,'Native negative review changed');
+ fs.renameSync(wf,archive);fs.mkdirSync(wf);
+ for(const f of Object.values(manifest.files))writeTextAtomic(root+'/'+f.path,fs.readFileSync(f.afterFile,'utf8'));
+ const candidate=read(out+'date-replay-candidate.json'),proposal=read(out+'date-replay-proposal.json'),native=read(out+'date-workflow-state.json');
+ fs.copyFileSync(out+'date-replay-candidate.json',wf+'/candidate-1.json');
+ fs.copyFileSync(out+'date-replay-proposal.json',wf+'/combined-proposal.json');
+ fs.copyFileSync(out+'date-replay-proposal.json',wf+'/repair-0-host-english-source-replay.json');
+ fs.copyFileSync(archive+'/review-1.json',wf+'/review-1.json'); // exact negative report, never re-tagged
+ fs.writeFileSync(wf+'/negative-review-lineage.json',json(transition),{flag:'wx'});
+ writeTextAtomic(wf+'/state.json',json(native));
+ const source=read(root+'/data/jinshu/109.json'),canonical=read(root+'/data/people/extractions/jinshu/109.json'),editorial=read(root+'/data/people/editorial-decisions/jinshu/109.json');
+ const chapterPacket=buildPeopleExtractionPacket('jinshu','109',{chapterData:source,chapterFile:root+'/data/jinshu/109.json',properNounMatcher:loadProperNounMatcher()});
+ const validated=validateCompactPeopleExtraction(canonical,chapterPacket,{strictAliasDispositions:true});validateAppliedEditorialDecisions(editorial,validated.normalized);
+ const staged=validateCompactPeopleExtraction(candidate,chapterPacket,{strictAliasDispositions:true});validateAppliedEditorialDecisions(editorial,staged.normalized);
+ const options={dataDir:root+'/data',peopleDir:root+'/data/people'},current=buildDateAuditPacket('jinshu','109',options),replayed=buildDateAuditPacket('jinshu','109',{...options,extraction:candidate}),oldPacket=read(dir+'packet.json');
+ need(current.sourceHash===transition.sourceHash&&current.extractionHash===transition.canonicalExtractionHash&&replayed.extractionHash===transition.candidateExtractionHash,'Installed source/date pins differ');
+ need(JSON.stringify(applyDateRepairProposal(canonical,proposal,current))===JSON.stringify(candidate),'Scoped date replay differs');
+ need(JSON.stringify(oldPacket.items)===JSON.stringify(replayed.items)&&JSON.stringify(oldPacket.people)===JSON.stringify(replayed.people)&&JSON.stringify(oldPacket.units.map(u=>[u.id,u.zh]))===JSON.stringify(replayed.units.map(u=>[u.id,u.zh])),'Date/Chinese preservation proof failed');
+ need(hash(fs.readFileSync(wf+'/review-1.json'))===transition.retainedNegativeReportSha256&&dateAuditReferencesCurrent(read(wf+'/review-1.json'),options)&&!fs.existsSync(root+'/data/people/date-audits/jinshu/109.json'),'Negative witnesses or absent date report changed');
+ const receipt={at:new Date().toISOString(),kind:'applied-reviewed-English-with-capped-negative-date-findings-carry',canonicalWrites:3,EnglishFieldsApplied:40,sourceCallbacksResolved:12,sourceHash:current.sourceHash,canonicalExtractionHash:current.extractionHash,candidateExtractionHash:replayed.extractionHash,fromGenerationId:transition.fromGenerationId,toGenerationId:transition.toGenerationId,archiveWorkflowDirectory:archive,originalNegativeReportPreserved:true,negativeReportSha256:transition.retainedNegativeReportSha256,scopedDateEditsReplayed:18,dateItemsUnchanged:591,ChineseUnitsUnchanged:302,peopleUnchanged:181,round:1,maxRepairRounds:3,normalValidation:true,editorialValidation:true,stats:validated.stats,transitionReviewAgentId:control.agentId,transitionReviewRunId:control.reviewRunId,dateApproval:false,identityApproval:false,chapterApproved:false,published:false};
+ fs.writeFileSync(receiptFile,json(receipt),{flag:'wx'});
+ const finished=new Date().toISOString();
+ const q=mutateRemotePeopleWorkLedger(l=>{
+  const c=l.dateAudits['jinshu/109'],i=l.identityReviews['jinshu/109'];need(c.executorToken===control.executorToken&&c.generationId===transition.fromGenerationId&&i.sourceApplication?.intentFile===intentFile,'Source lease changed during application');
+  l.dateAuditHistory??={};(l.dateAuditHistory['jinshu/109']??=[]).push(structuredClone(c));
+  Object.assign(c,{generationId:transition.toGenerationId,sourceHash:current.sourceHash,extractionHash:current.extractionHash,status:'active',sticky:true,jobs:structuredClone(native.jobs),reviewPlans:{},candidateStage:{phase:'repair',round:1,maxRepairRounds:3,candidateExtractionHash:replayed.extractionHash,priorSourceReportsRetained:13,currentSourceReviewReports:0,negativeFindings:55,sourceApplicationReceipt:receiptFile},sourceEditorialApplication:{phase:'applied',at:finished,receipt:receiptFile,requiresFreshDateApproval:true},executorExpiresAt:new Date(Date.now()+35*60000).toISOString()});
+  i.phase='source-reconciliation-hold';i.activeRun=false;i.updatedAt=finished;i.queueUpdatedAt=finished;i.sourceApplication={phase:'applied',receipt:receiptFile,oldPacketDispatchForbidden:true,dateApproval:false,chapterApproved:false};
+ },{message:'Record validated109 English source and same-round date replay; preserve all prior negative reports'});
+ Object.assign(control,{phase:'repair-ready',generationId:transition.toGenerationId,sourceHash:current.sourceHash,canonicalExtractionHash:current.extractionHash,candidateExtractionHash:replayed.extractionHash,sourceApplicationReceipt:receiptFile,queueCommit:q.commit,round:1,maxRepairRounds:3});writeTextAtomic(controlFile,json(control));
+ const oldController=read(dir+'controller.json');
+ for(const p of oldController.parts)if(p.reportFile?.startsWith(wf+'/')){p.originalReportFile=p.reportFile;p.reportFile=archive+p.reportFile.slice(wf.length);}
+ oldController.phase='superseded-by-reviewed-English-source';oldController.currentController=controlFile;oldController.archivedNativeDirectory=archive;writeTextAtomic(dir+'controller.json',json(oldController));
+ need(!inspectLocalDisk(root).errors.length,'Resource hold after source application; preserve completed source and all recovery');
+ console.log(JSON.stringify({...receipt,queueCommit:q.commit}));
+}finally{unlock();}
