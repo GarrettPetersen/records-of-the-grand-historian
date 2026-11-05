@@ -47,6 +47,17 @@ files += list((audit/'preflight-ancestry-release-ci').glob('*'))
 # remain excluded. Keep the compact replaced handoff as historical evidence.
 archive=audit/'handoff-before-memory-standard-checkpoint-20261104.md'
 if archive.exists():files.append(archive)
+for folderName in ['final-reaudit3-calibration-20261104','final-reaudit3-artifact-recovery-20261105']:
+ folder=audit/folderName
+ invocation=json.loads((folder/'one-review-state.json').read_text());assert invocation['phase']=='terminal','Preserve active final-round source work'
+ try:os.kill(invocation['pid'],0)
+ except ProcessLookupError:pass
+ else:raise RuntimeError('Final-round CLI PID still present; verify ownership before snapshot')
+ files += list(folder.glob('*.json'));files.append(folder/'one-review.log')
+files += [audit/'final-reaudit3-calibration-controller.log',audit/'final-reaudit3-artifact-recovery-controller.log']
+files += list(audit.glob('handoff-before-*.md'))
+live=pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-4064b02dc4d2.json')
+if live.exists():files.append(live)
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
