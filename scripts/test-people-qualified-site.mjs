@@ -222,7 +222,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   assert.equal((await recordChapterIdentityReview(recordOptions)).unchanged, true);
   // Captured parts are recorded through the real native gate, preserving every
   // producer/run and rejecting a fabricated aggregate or changed part artifact.
-  const { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport } = await import('./lib/people-identity-review-transport.mjs');
+  const { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, identityReviewTransportPolicy } = await import('./lib/people-identity-review-transport.mjs');
   const captureParts = (packet, label) => {
     const packetPath = path.join(commandDir, label + '-packet.json'), journalPath = path.join(commandDir, label + '-job.json');
     fs.writeFileSync(packetPath, JSON.stringify(packet, null, 2) + '\n');
@@ -231,7 +231,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     const transportFile = path.join(commandDir, label + '-part.json'); fs.writeFileSync(transportFile, JSON.stringify(parts[0]) + '\n');
     const part = { schemaVersion: 1, kind: 'captured-independent-identity-review-part', phase: 'report-recorded', agentId: capture.agentId,
       runId: label + '-actual-part-run', sourcePacketSha256: sourceHash, transportSha256: identityArtifactHash(fs.readFileSync(transportFile)), reportSha256: capture.reportSha256, transportFile, reportFile };
-    const journal = { ...capture, kind: 'captured-independent-identity-review-parts', runId: part.runId, sourcePacketSha256: sourceHash, parts: [part] };
+    const journal = { ...capture, kind: 'captured-independent-identity-review-parts', transportPolicy: identityReviewTransportPolicy(768 * 1024), runId: part.runId, sourcePacketSha256: sourceHash, parts: [part] };
     fs.writeFileSync(journalPath, JSON.stringify(journal));return { packet: packetPath, report: reportFile, job: journalPath, registry, out: path.join(commandDir, label + '-accepted.json') };
   };
   const partOptions = captureParts(prepared.packet, 'parts');
@@ -342,6 +342,14 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   fs.writeFileSync(path.join(outputRoot, 'people-record.js'), '// Authored fixture runtime marker.');
   const { verifyPeopleSite } = await import('./verify-people-site.mjs');
   assert.equal(verifyPeopleSite({ outputRoot }).people, 2);
+  const certificateStatusFile = path.join(outputRoot, 'data/people/site-status.json');
+  const savedStatus = fs.readFileSync(certificateStatusFile);
+  try {
+    const tampered = JSON.parse(savedStatus);
+    tampered.certificate.projection = 'sha256:' + '0'.repeat(64);
+    fs.writeFileSync(certificateStatusFile, JSON.stringify(tampered));
+    assert.throws(() => verifyPeopleSite({ outputRoot }), /Website people certificate is missing or stale/);
+  } finally { fs.writeFileSync(certificateStatusFile, savedStatus); }
   const outsideHtmlFile = path.join(outputRoot, 'shiji/001.html');
   const outsideHtml = fs.readFileSync(outsideHtmlFile, 'utf8');
   try {

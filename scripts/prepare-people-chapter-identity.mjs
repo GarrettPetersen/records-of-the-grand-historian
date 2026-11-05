@@ -11,7 +11,7 @@ import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
 import { assertChapterGates } from './lib/people-qualified-scope.mjs';
 import { localNameKeys } from './lib/people-resolution.mjs';
 import { peopleDigest, identityDossierInputs } from './lib/people-identity-seal.mjs';
-import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, MAX_IDENTITY_REVIEW_TRANSPORT_BYTES } from './lib/people-identity-review-transport.mjs';
+import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, identityReviewTransportPolicy, identityReviewTransportMaxBytes } from './lib/people-identity-review-transport.mjs';
 import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
@@ -21,7 +21,6 @@ import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs'
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
-const MAX_REVIEW_TRANSPORT_BYTES = MAX_IDENTITY_REVIEW_TRANSPORT_BYTES;
 export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
   const units = new Map(), ownPrefix = `${own.extraction.book}:${own.extraction.chapter}`;
   for (const unit of own.packet.units) units.set(`${ownPrefix}:${unit.id}`, { book: own.extraction.book, chapter: own.extraction.chapter, ...unit });
@@ -80,13 +79,15 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
       instructions: 'Review every case and every target local person. Quote the primary Chinese for each target and the retained canonical anchor. Confirm actual individual, supported chapter attribution, and accepted membership; hold contradictions. Keep unresolvedIdentity true when proposed, including small candidate buckets and overflow. Omitted names are unreviewed uncertainty, never separation evidence. No positive merges, no all-pairs comparisons, no recursive external chapter completion. Return the closed required report only. Supply definite English repairs separately with complete exact before/after, source reason, both fields and repetitions; do not silently ignore them.' };
     const bytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
+      transportPolicy: identityReviewTransportPolicy(),
       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
       generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false,
       ...(registryReuse ? { sourceRevision, registryReuse } : {}) };
     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
     const transport = compactChapterIdentityReviewPacket(packet);
     const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
-    const reviewParts = transportBytes.length > MAX_REVIEW_TRANSPORT_BYTES ? splitChapterIdentityReviewTransport(transport, MAX_REVIEW_TRANSPORT_BYTES) : [];
+    const maxBytes = identityReviewTransportMaxBytes(receipt.transportPolicy);
+    const reviewParts = transportBytes.length > maxBytes ? splitChapterIdentityReviewTransport(transport, maxBytes) : [];
     if (reviewParts.length) receipt.reviewParts = reviewParts.map((part, index) => { const bytes = Buffer.from(JSON.stringify(part) + '\n'); return { file: `transport-part-${String(index + 1).padStart(3, '0')}.json`, bytes: bytes.length, sha256: identityArtifactHash(bytes), caseIds: part.reviewCases.map(c => c.caseId) }; });
     receipt.sourcePacketSha256 = identityArtifactHash(bytes); receipt.transportSha256 = identityArtifactHash(transportBytes); receipt.transportBytes = transportBytes.length;
     return { plan, packet, transport, receipt, reviewParts };
@@ -96,19 +97,26 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
 // Write the exact byte encodings sealed by preparation. The source packet is
 // readable JSON; the model transport is compact JSON and its bound/hash apply to
 // that actual file, not to an encoding that was never written.
-export function writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt, reviewParts = [] }) {
+export function validatePreparedIdentityReviewArtifacts({ packet, transport, receipt, reviewParts = [] }) {
+  const maxBytes = identityReviewTransportMaxBytes(receipt.transportPolicy);
   const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
   const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
   need(sourceBytes.length === receipt.packetBytes && identityArtifactHash(sourceBytes) === receipt.sourcePacketSha256,
     'Sealed source packet bytes do not match preparation receipt');
   need(transportBytes.length === receipt.transportBytes && identityArtifactHash(transportBytes) === receipt.transportSha256,
     'Sealed transport bytes do not match preparation receipt');
-  need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES || reviewParts.length > 0, 'Source-complete review transport exceeds the inspected bound');
+  need(transportBytes.length <= maxBytes || reviewParts.length > 0, 'Source-complete review transport exceeds the inspected bound');
   if (reviewParts.length) {
-    const expected = splitChapterIdentityReviewTransport(transport, MAX_REVIEW_TRANSPORT_BYTES);
+    const expected = splitChapterIdentityReviewTransport(transport, maxBytes);
     need(peopleDigest(expected) === peopleDigest(reviewParts) && receipt.reviewParts?.length === reviewParts.length, 'Review partition evidence differs from the sealed source transport');
     for (const [i, part] of reviewParts.entries()) { const bytes = Buffer.from(JSON.stringify(part) + '\n'), sealed = receipt.reviewParts[i]; need(sealed.file === `transport-part-${String(i + 1).padStart(3, '0')}.json` && sealed.bytes === bytes.length && sealed.sha256 === identityArtifactHash(bytes) && peopleDigest(sealed.caseIds) === peopleDigest(part.reviewCases.map(c => c.caseId)), 'Review part bytes differ from preparation receipt'); }
   }
+  return { sourceBytes, transportBytes };
+}
+
+export function writePreparedIdentityReviewArtifacts(out, prepared) {
+  const { plan, receipt, reviewParts = [] } = prepared;
+  const { sourceBytes, transportBytes } = validatePreparedIdentityReviewArtifacts(prepared);
   fs.mkdirSync(out, { recursive: false });
   for (const [file, bytes] of [
     ['plan.json', Buffer.from(JSON.stringify(plan, null, 2) + '\n')],
