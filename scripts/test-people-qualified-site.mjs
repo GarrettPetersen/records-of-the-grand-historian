@@ -342,6 +342,14 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
   fs.writeFileSync(path.join(outputRoot, 'people-record.js'), '// Authored fixture runtime marker.');
   const { verifyPeopleSite } = await import('./verify-people-site.mjs');
   assert.equal(verifyPeopleSite({ outputRoot }).people, 2);
+  const certificateStatusFile = path.join(outputRoot, 'data/people/site-status.json');
+  const savedStatus = fs.readFileSync(certificateStatusFile);
+  try {
+    const tampered = JSON.parse(savedStatus);
+    tampered.certificate.projection = 'sha256:' + '0'.repeat(64);
+    fs.writeFileSync(certificateStatusFile, JSON.stringify(tampered));
+    assert.throws(() => verifyPeopleSite({ outputRoot }), /Website people certificate is missing or stale/);
+  } finally { fs.writeFileSync(certificateStatusFile, savedStatus); }
   const outsideHtmlFile = path.join(outputRoot, 'shiji/001.html');
   const outsideHtml = fs.readFileSync(outsideHtmlFile, 'utf8');
   try {
