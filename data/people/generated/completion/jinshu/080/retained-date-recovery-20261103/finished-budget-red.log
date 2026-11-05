@@ -1,0 +1,32 @@
+✖ real wait helper preserves terminal success at cost stop (8.044708ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 497.380417
+
+✖ failing tests:
+
+test at scripts/test-people-date-worker.mjs:1239:64
+✖ real wait helper preserves terminal success at cost stop (8.044708ms)
+  Error [CursorRunLimitExceededError]: audit-0-first: cloud run finished run-1 at $3.24 raw usage cost (limit $3.00)
+      at enforceRunLimits (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/cursor-run-wait.mjs:194:19)
+      at async waitForCursorRun (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/cursor-run-wait.mjs:224:7)
+      at async wait (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-worker.mjs:203:24)
+      at async waitAndDownload (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-worker.mjs:236:18)
+      at async Object.runTask [as worker] (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-worker.mjs:394:36)
+      at async TestContext.<anonymous> (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-date-worker.mjs:1256:19)
+      at async Test.run (node:internal/test_runner/test:981:9)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:297:3) {
+    code: 'cursor_run_limit_exceeded',
+    isRetryable: false,
+    runId: 'run-1',
+    metric: 'raw-cost',
+    observed: 324,
+    limit: 300,
+    terminalStatus: 'finished',
+    terminalError: null
+  }

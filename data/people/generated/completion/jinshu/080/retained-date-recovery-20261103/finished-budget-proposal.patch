@@ -1,0 +1,57 @@
+diff --git a/scripts/lib/people-date-worker.mjs b/scripts/lib/people-date-worker.mjs
+index 7bcb8e4d2b3e..d4a91de2b95f 100644
+--- a/scripts/lib/people-date-worker.mjs
++++ b/scripts/lib/people-date-worker.mjs
+@@ -243,7 +243,7 @@ export function cursorDateWorker(options, control, {
+         if (!(error instanceof CursorRunLimitExceededError) ||
+             !['raw-cost', 'tokens', 'wall-clock'].includes(error.metric) ||
+             error.runId !== run.id || error.cancelError || accountStop ||
+-            (error.terminalStatus && error.terminalStatus !== 'completed') || error.terminalError) throw error;
++            (error.terminalStatus && error.terminalStatus !== 'finished') || error.terminalError) throw error;
+         boundedRunStop = error;
+         await save({ runLimitStop: {
+           code: error.code, runId: error.runId, metric: error.metric,
+diff --git a/scripts/test-people-date-worker.mjs b/scripts/test-people-date-worker.mjs
+index dd24385655f8..864c3cddf723 100644
+--- a/scripts/test-people-date-worker.mjs
++++ b/scripts/test-people-date-worker.mjs
+@@ -1241,7 +1241,7 @@ for (const failure of ['fatal', 'usage_limit_exceeded', null]) test(`real wait h
+   const h = harness({ async wait(run, options, agent) {
+     agent.artifact = { complete: true };
+     return waitForCursorRun({ ...run, wait: async () => ({ ...run,
+-      status: failure ? 'error' : 'completed', error: terminalError,
++      status: failure ? 'error' : 'finished', error: terminalError,
+     }) }, { ...options, pollMs: 0,
+       readUsage: async () => ({ usage: { totalTokens: 100 }, cost: { rawCostCents: 324 } }),
+     });
+@@ -1255,12 +1255,30 @@ for (const failure of ['fatal', 'usage_limit_exceeded', null]) test(`real wait h
+   } else {
+     assert.equal((await h.worker(task)).complete, true);
+     assert.equal(h.calls('download').length, 1);
++    assert.equal(task.state.runLimitStop.metric, 'raw-cost');
++    assert.equal(task.state.runLimitStop.observed, 324);
++    assert.equal(task.state.runLimitStop.limit, 300);
+   }
+   assert.equal(h.calls('send').length, 1);
+   assert.equal(h.calls('create').length, 1);
+   assertUsageCheckpoint(h, task);
+ });
+ 
++for (const status of ['error', 'cancelled', 'running', 'completed']) test(`terminal ${status} cannot supply a successful bounded-stop artifact`, async () => {
++  const stop = new CursorRunLimitExceededError('terminal cost stop', {
++    runId: 'prior-run', metric: 'raw-cost', observed: 324, limit: 300,
++    terminalStatus: status, terminalError: null,
++  });
++  const h = harness({ wait() { throw stop; } });
++  h.addAgent('retained', { artifact: { complete: true }, runs: [{ id: 'prior-run', status: 'running' }] });
++  const task = reviewTask(undefined, { agentId: 'retained', sent: true });
++  await assert.rejects(h.worker(task), error => error === stop);
++  assert.equal(h.calls('artifacts').length, 0);
++  assert.equal(h.calls('send').length, 0);
++  assert.equal(h.calls('create').length, 0);
++  assertUsageCheckpoint(h, task);
++});
++
+ for (const lookup of ['list', 'download']) test(`post-limit ${lookup} nested account error stops the pool`, async () => {
+   const account = new Error('usage_limit_exceeded');
+   const failure = new Error('artifact read wrapper', { cause: new Error('inner wrapper', { cause: account }) });

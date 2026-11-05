@@ -58,6 +58,14 @@ files += [audit/'final-reaudit3-calibration-controller.log',audit/'final-reaudit
 files += list(audit.glob('handoff-before-*.md'))
 live=pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-4064b02dc4d2.json')
 if live.exists():files.append(live)
+for folderName in ['second-final-reaudit3-calibration-20261105','second-final-reaudit3-artifact-recovery-20261105']:
+ folder=audit/folderName
+ invocation=json.loads((folder/'one-review-state.json').read_text());assert invocation['phase']=='terminal','Preserve active second final-round source work'
+ try:os.kill(invocation['pid'],0)
+ except ProcessLookupError:pass
+ else:raise RuntimeError('Second final-round CLI PID still present; inspect ownership')
+ files += list(folder.glob('*.json'));files.append(folder/'one-review.log')
+files += [audit/name for name in ['finished-budget-red.log','finished-budget-regression.log','finished-budget-proposal.patch','finished-budget-independent-review.raw.txt','focused-source-editorial-review.raw.txt','finished-budget-pr-body.md']]
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()

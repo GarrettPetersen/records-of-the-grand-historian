@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "supplemental-source-editorial-repair-proposal",
+  "at": "2026-11-05T00:56:16.445265+00:00",
+  "authorAgentId": "/root",
+  "book": "jinshu",
+  "chapter": "080",
+  "candidateHash": "sha256:6fee1c8ec326ebf18b27c95a2995ada8ffc2199a199f7f42329d287659cdf7e3",
+  "repairs": [
+    {
+      "book": "jinshu",
+      "chapter": "080",
+      "unitId": "s0036",
+      "field": "translations[lang=en].literal",
+      "before": "When Hao was about to conduct a northern expedition, Xizhi thought it would certainly fail, and with a letter stopped him; the words were very urgent and thorough.",
+      "after": "When Hao was about to conduct a northern expedition, Xizhi thought it would certainly fail, and tried to stop him with a letter; the words were very urgent and thorough.",
+      "sourceBasedReason": "以書止之 states an attempt to dissuade through a letter. The next sentence says 浩遂行, so the English claim that the letter stopped him incorrectly asserts success. The idiomatic field already says urging him to desist and is accurate.",
+      "pairedFieldChecked": "When Yin Hao prepared a northern campaign, Wang Xizhi was convinced it would end in disaster and sent him a letter urging him to desist, in the frankest terms.",
+      "repeatedUsesChecked": {
+        "chapter": "080",
+        "matchingLiteralOutcomePhraseOccurrences": 1
+      }
+    },
+    {
+      "book": "jinshu",
+      "chapter": "080",
+      "unitId": "s0035",
+      "field": "stagedPeople.claims[claim-171].value.event",
+      "before": "Huan Wen was at odds with Yin Hao when Wang Xizhi wrote against the northern campaign",
+      "after": "Huan Wen was at odds with Yin Hao when Wang Xizhi wrote to urge concord between court and frontier.",
+      "sourceBasedReason": "s0035 records the concord admonition prompted by discord. s0036 separately introduces the northern-campaign warning with 及浩將北伐. The current glossary event conflates the two letters. This non-date event-text correction needs the editorial/source route, not a date-only repair."
+    }
+  ],
+  "sourceEvidence": [
+    {
+      "unitId": "s0035",
+      "zh": "時殷浩與桓溫不協，羲之以國家之安在於內外和，因以與浩書以戒之，浩不從。",
+      "sha256": "1417d6b05b77b5a4d46a9628154715a03b67e6f1b0eca8060c8daf62f99c5035"
+    },
+    {
+      "unitId": "s0036",
+      "zh": "及浩將北伐，羲之以為必敗，以書止之，言甚切至。",
+      "sha256": "7d1c2c3335bc4248f53759b7b029bda367f54dfd933c5cf0097ed297da64e9bb"
+    },
+    {
+      "unitId": "s0037",
+      "zh": "浩遂行果為姚襄所敗。",
+      "sha256": "0d85ed6c2a620fa195411144dd78f8435b31ed330efe0878bf5141dba1aebcfc"
+    },
+    {
+      "unitId": "s0038",
+      "zh": "復圖再舉，又遺浩書曰：",
+      "sha256": "613a007e314c0e790900c9a6fd27aa523f5382d85771ab33303f1b8feb159c32"
+    }
+  ],
+  "independentReviewRequired": true,
+  "applied": false,
+  "canonicalWrites": 0,
+  "chapterApproved": false,
+  "routing": "Host source/editorial application work; obtain a separate reviewer before applying. Coordinate retained date-workflow reconciliation and new fingerprint validation explicitly; preserve all round3 negatives/circuits and do not reset the loop."
+}

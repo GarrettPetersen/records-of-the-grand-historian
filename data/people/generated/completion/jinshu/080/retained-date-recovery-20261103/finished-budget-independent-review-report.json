@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "bc-74dd257a-d700-4154-863d-950a6fc95d38",
+  "packetSha256": "609c41f54ba42e32df60078ea7be9becbb94d566b2ea6aa0dfef519b739e932a",
+  "revision": "2fb4d93012f083a4f91d3eb3f235f4c4665c727a",
+  "verdict": "approve",
+  "findings": [],
+  "reason": "waitForCursorRun still stamps the SDK terminal status onto typed raw-cost/tokens stops; the worker now recovers only when that status is finished with no terminalError, cancelError, account stop, or metric/run mismatch. Mid-run budget stops without a terminal status still download once with no extra send or replacement agent. error, cancelled, running, completed, fatal, usage_limit_exceeded, transport, usage-monitor, and failed-cancel paths stay rejected, and returning an artifact still does not skip source or publication validation."
+}
