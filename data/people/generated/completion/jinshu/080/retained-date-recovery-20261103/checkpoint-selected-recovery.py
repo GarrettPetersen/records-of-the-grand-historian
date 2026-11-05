@@ -108,7 +108,8 @@ prepared109=pathlib.Path('data/people/generated/completion/jinshu/109/bounded-do
 if prepared109.exists():
  assert (prepared109/'preparation-receipt.json').exists(),'Preserve active109 preparation before snapshot'
  
- for extension in ['json','md','mjs','py','txt','log']:files += list(prepared109.glob('*.'+extension))
+ for extension in ['json','md','mjs','py','txt','log','patch']:files += list(prepared109.glob('*.'+extension))
+ files += list((prepared109/'candidate-native-dossier-delta').glob('*.json'))
  # Independently reviewed amendments are canonical working inputs, still
  # incomplete and unapproved for dates/identity/publication. Preserve exact
  # bytes without touching the shared checkout's Git index or staged deletions.
@@ -117,6 +118,7 @@ if prepared109.exists():
    files += [pathlib.Path(p) for p in [f'data/jinshu/{chapter}.json',f'data/people/extractions/jinshu/{chapter}.json',f'data/people/editorial-decisions/jinshu/{chapter}.json']]
 files += list((audit/'dossier-reuse-release-ci').glob('*'));files += list(audit.glob('dossier-reuse-*.jsonl'));files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-5a79118e3c66.json'))
 files.append(audit/'handoff-before-semantic-reuse-diagnostic-20261105.md')
+files.append(audit/'handoff-before-native-dossier-delta-20261105.md')
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
@@ -130,5 +132,5 @@ with tempfile.TemporaryDirectory(prefix='people-recovery-index-') as temp:
  commit=git('commit-tree',tree,'-p',parent,input=('Checkpoint verified release and reviewed source, date and dossier reuse work; next chapters incomplete\n').encode());pendingTarget=base/(receiptName+'.pending.json');assert not pendingTarget.exists();pendingTarget.write_text(json.dumps({'parent':parent,'commit':commit,'branch':branch,'files':len(files),'chapterApproved':False},indent=2)+'\n');print(json.dumps({'pendingCommit':commit}),flush=True);git('push','--porcelain','origin',commit+':'+branch)
 assert git('ls-remote','origin',branch).split()[0]==commit
 verified=git('cat-file','--batch-check=%(objectname)',input=('\n'.join(commit+':'+p.as_posix() for p,data,digest,blob in blobs)+'\n').encode()).splitlines();assert verified==[blob for p,data,digest,blob in blobs]
-receipt={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'branch':branch,'parent':parent,'commit':commit,'files':[{'path':p.as_posix(),'bytes':len(data),'sha256':digest} for p,data,digest,blob in blobs],'originalOctoberRawReportsNotPresentLocally':oldRawAbsent,'returnedOriginalAuditRanges':returned,'workflowPhase':state['phase'],'repairGroupsAccepted':sum(1 for key,job in state['jobs'].items() if key.startswith('repair-0-00') and job.get('status')=='returned'),'chapterApproved':False,'newPublishedChapters':0,'scope':'Reviewed incomplete093 canonical source changes and exact recovery artifacts; all previous recovery tree entries preserved. Snapshot leaves the dirty primary index and source unchanged.'}
+receipt={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'branch':branch,'parent':parent,'commit':commit,'files':[{'path':p.as_posix(),'bytes':len(data),'sha256':digest} for p,data,digest,blob in blobs],'originalOctoberRawReportsNotPresentLocally':oldRawAbsent,'returnedOriginalAuditRanges':returned,'workflowPhase':state['phase'],'repairGroupsAccepted':sum(1 for key,job in state['jobs'].items() if key.startswith('repair-0-00') and job.get('status')=='returned'),'chapterApproved':False,'newPublishedChapters':0,'scope':'Exact selected incomplete canonical source work and recovery artifacts; all previous recovery tree entries preserved. Snapshot leaves the dirty primary index, source and staged deletions unchanged.'}
 receiptName=os.environ['PEOPLE_CHECKPOINT_RECEIPT'];assert '/' not in receiptName and receiptName.endswith('.json');target=base/receiptName;assert not target.exists();target.write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps({'checkpoint':commit,'files':len(files),'bytes':sum(len(d) for p,d,h,b in blobs),'changedPaths':len(changes),'auditRanges':returned,'chapterApproved':False}))

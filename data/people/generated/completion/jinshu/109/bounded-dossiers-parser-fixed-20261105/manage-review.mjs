@@ -23,7 +23,7 @@ need(hash(fs.readFileSync(dir + 'source-review-packet.json')) === state.sourcePa
 need(state.parts.length === receipt.reviewParts.length, 'Review frontier changed');
 need(!inspectLocalDisk(host).errors.length, 'Resource guard rejected review coordination');
 const action = process.argv[2], number = Number(process.argv[3]), agentId = process.argv[4];
-need(['claim', 'bind', 'start', 'capture', 'capture-derived', 'readable', 'repair-reserve', 'repair-start', 'repair-record'].includes(action), 'Choose owned identity action or repair-reserve/repair-start/repair-record 0 AGENT');
+need(['claim', 'bind', 'start', 'capture', 'capture-derived', 'readable', 'repair-reserve', 'repair-start', 'repair-record', 'code-reserve', 'code-start', 'code-record', 'code-amend-reserve', 'code-amend-start', 'code-amend-record'].includes(action), 'Choose owned identity, repair or code review action');
 
 function checkpoint() {
   const expectedUpdatedAt = state.queueUpdatedAt ?? null, stamp = new Date().toISOString();
@@ -38,14 +38,44 @@ function checkpoint() {
     const dates = ledger.dateAudits?.['jinshu/109'];
     need(!dates || !dateExecutorIsBusy(dates), 'Date owner is active; preserve its invocation');
     ledger.identityReviews['jinshu/109'] = { ...state, sticky: true, updatedAt: stamp, queueUpdatedAt: stamp,
-      activeRun: state.parts.some(part => part.phase === 'running') || state.repairReview?.phase === 'running' };
+      activeRun: state.parts.some(part => part.phase === 'running') || state.repairReview?.phase === 'running' || state.codeReview?.phase === 'running' || state.codeReviewAmendment?.phase === 'running' };
   }, { message: 'Checkpoint bounded Jinshu109 independent identity ' + action });
   state.queueUpdatedAt = stamp; state.queueCommit = result.commit;
   save(dir + 'review-state.json', state);
   return result.commit;
 }
 
-if (['repair-reserve', 'repair-start', 'repair-record'].includes(action)) {
+if (action.startsWith('code-')) {
+  const amendment = action.startsWith('code-amend-'), field = amendment ? 'codeReviewAmendment' : 'codeReview';
+  const operation = action.split('-').at(-1), prefix = amendment ? 'dossier-delta-amendment-review' : 'dossier-delta-independent-review';
+  need(state.worker && state.queueUpdatedAt && agentId, 'Actual independent code reviewer and retained owner required');
+  if (operation === 'reserve') {
+    need(!state[field] && state.sourceApplication?.phase === 'applied' && !packet.authorAgentIds.includes(agentId) &&
+      !state.parts.some(p => p.agentId === agentId) && state.repairReview?.agentId !== agentId, 'Separate code reviewer required');
+    if (amendment) need(state.codeReview?.phase === 'report-recorded' && state.codeReview.verdict === 'approve' && state.codeReview.agentId === agentId,
+      'Amendment must retain the actual independent parent reviewer');
+    need(state.parts.filter(p => ['reserved','running'].includes(p.phase)).length +
+      (['reserved','running'].includes(state.repairReview?.phase) ? 1 : 0) < 2, 'Shared remote pool is full');
+    const file = dir + prefix + '-packet.json';
+    state[field] = { phase: 'reserved', agentId, packetFile: file, packetSha256: hash(fs.readFileSync(file)), reservedAt: new Date().toISOString(),
+      deadlineAt: new Date(Date.now() + 20 * 60_000).toISOString(), canonicalWritesAuthorized: false };
+  } else if (operation === 'start') {
+    need(state[field]?.phase === 'reserved' && state[field].agentId === agentId, 'Code review reservation changed');
+    state[field].phase = 'running'; state[field].startedObservedAt = new Date().toISOString();
+  } else {
+    const review = read(dir + prefix + '.raw.json'), observed = observeProvider(p => p.id === agentId);
+    need(state[field]?.phase === 'running' && state[field].agentId === agentId && review.reviewer?.agentId === agentId &&
+      review.packetSha256 === state[field].packetSha256 && ['approve','request-changes'].includes(review.verdict) &&
+      Array.isArray(review.findings) && (review.verdict !== 'approve' || review.findings.length === 0) && observed.lastMessageId,
+      'Actual complete independent code report and producer required');
+    state[field] = { ...state[field], phase: 'report-recorded', reportFile: dir + prefix + '.raw.json',
+      reportSha256: hash(fs.readFileSync(dir + prefix + '.raw.json')), providerMessageId: observed.lastMessageId,
+      verdict: review.verdict, findings: review.findings.length, capturedAt: new Date().toISOString() };
+  }
+  state.activeModelJobs = state.parts.filter(p => p.phase === 'running').length +
+    (state.repairReview?.phase === 'running' ? 1 : 0) + (state.codeReview?.phase === 'running' ? 1 : 0) + (state.codeReviewAmendment?.phase === 'running' ? 1 : 0);
+  console.log(JSON.stringify({ phase: state[field].phase, agentId, packetSha256: state[field].packetSha256, queueCommit: checkpoint() }));
+} else if (['repair-reserve', 'repair-start', 'repair-record'].includes(action)) {
   need(state.worker && state.queueUpdatedAt && agentId, 'Actual independent editorial producer and retained ownership required');
   if (action === 'repair-reserve') {
     need(state.phase === 'source-reconciliation-hold' && !state.repairReview && !packet.authorAgentIds.includes(agentId) &&

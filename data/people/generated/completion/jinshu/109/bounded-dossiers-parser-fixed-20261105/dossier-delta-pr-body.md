@@ -1,0 +1,7 @@
+Reviewed Jinshu 108/109 corrections changed five local identity records across four canonical dossiers. Add `people:identity:update` to validate the exact source delta and publish an immutable generation containing only affected dossiers, member versions, and name postings. Preparation and recording read these generations through the same registry interface.
+
+The updater retains accepted membership, rejects changed person inventories or explicit identity constraints, verifies parent and payload hashes, and enforces the ancestry bound before writing. Source-proof composition and current chapter approvals remain separate requirements; this change publishes no new chapter.
+
+Validation: all 73 identity regression tests pass, including nine delta tests comparing against a full native rebuild, changed English partitions, tampering, stale versions, inherited lookups, parent immutability, and generation-limit admission. Against the current corpus, five changed members required four dossier replacements and six materialized members; the delta is 17,648 bytes. Jinshu 109 retains 141 cases covering 181 records, at most eight candidates per case, and zero generated pairs. Nineteen saved positive cases retain unchanged source and full current case contracts.
+
+Independent code reviewer `106f1d74-b801-4b8c-bbae-3d42963d38f7` approved both the initial packet (`t0s3`) and the exact final amendments (`t1s2`) with zero findings. The host verified final file hashes against both preserved review packets.
