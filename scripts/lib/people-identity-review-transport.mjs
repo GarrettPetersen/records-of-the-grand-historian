@@ -1,6 +1,8 @@
 import { identityArtifactHash } from './people-identity-artifacts.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
-export const MAX_IDENTITY_REVIEW_TRANSPORT_BYTES = 768 * 1024;
+// Keep source review below the compaction-heavy size observed in Jinshu 093.
+// Split case ownership; each part still retains the complete chapter evidence.
+export const MAX_IDENTITY_REVIEW_TRANSPORT_BYTES = 256 * 1024;
 
 export function compactChapterIdentityReviewPacket(p) {
   const sourcePacketSha256 = identityArtifactHash(Buffer.from(JSON.stringify(p, null, 2) + '\n'));
