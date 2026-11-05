@@ -5,6 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { assertFreeModel, openRouterFreeJson, openRouterFreeCompletion } from './lib/openrouter-free.mjs';
 import { openRouterDateWorker } from './lib/people-date-worker.mjs';
+import { runOpenRouterDateTools } from './lib/openrouter-date-tools.mjs';
 
 const catalog = { data: [{ id: 'fixture/model:free', pricing: { prompt: '0', completion: '0' },
   top_provider: { max_completion_tokens: 2048 } }] };
@@ -88,4 +89,73 @@ test("date worker checkpoints an artifact-only recovery interruption", async () 
     assert.equal(state.status, "interrupted");
     assert.match(state.lastError, /Artifact-only recovery cannot start/);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+});
+
+// Exercise the persisted draft through real tool responses, including replay-safe
+// corrections in later calls. No inference or network requests are made.
+async function savedDateBatch(calls, { kind = 'review', section = 'itemChecks' } = {}) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'openrouter-date-batch-test-'));
+  const task = { kind, key: 'audit-fixture', directory, state: {} };
+  const input = { instructions: 'Offline record-contract regression.', phase: kind,
+    book: 'fixture', chapter: '001', ownedUnits: [], ownedItems: ['claim-1'], ownedPeople: ['p001'] };
+  let requests = 0;
+  try {
+    await assert.rejects(runOpenRouterDateTools(task, { input, key: 'unused', model: 'fixture/model:free',
+      timeoutMs: 1, maxTurns: calls.length, request: async () => {
+        const args = calls[requests++];
+        assert.ok(args, 'Unexpected extra request');
+        return { choices: [{ finish_reason: 'tool_calls', message: { role: 'assistant', content: null,
+          tool_calls: [{ id: `call-${requests}`, type: 'function', function: {
+            name: 'save_records', arguments: JSON.stringify(args) } }] } }] };
+      } }), /paused after/);
+    assert.equal(requests, calls.length);
+    const state = JSON.parse(fs.readFileSync(path.join(directory, `openrouter-tools-${task.key}`, 'state.json')));
+    return { records: state.records[section], result: JSON.parse(state.messages.at(-1).content) };
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+}
+const dateCheck = (id, reason = 'The sealed Chinese source supports this exact owned event.') => ({ key: id,
+  value: { id, verdict: 'supported', reason, event: 'The person participates in the source event.',
+    evidence: [{ unit: 's0001', quote: '例' }] } });
+
+test('date tools reject a prefixed item ID before saving it', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'itemChecks', records: [dateCheck('check-claim-1')] }]);
+  assert.deepEqual(records, {});
+  assert.match(result.error, /not owned/);
+});
+
+test('date tools reject an unowned person ID before saving it', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'personChecks', records: [dateCheck('p999')] }], { section: 'personChecks' });
+  assert.deepEqual(records, {});
+  assert.match(result.error, /not owned/);
+});
+
+test('date tools reject a malformed batch without partially changing the draft', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'itemChecks', records: [dateCheck('claim-1'),
+    { key: 'invalid:key', value: { id: 'invalid:key' } }] }]);
+  assert.deepEqual(records, {});
+  assert.match(result.error, /Invalid date record/);
+});
+
+test('date tools reject duplicate keys in one batch without changing the draft', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'itemChecks', records: [dateCheck('claim-1'),
+    dateCheck('claim-1', 'A second value must not overwrite the first within a malformed batch.')] }]);
+  assert.deepEqual(records, {});
+  assert.match(result.error, /Duplicate/);
+});
+
+test('date tools allow correcting the same owned record in a later call', async () => {
+  const corrected = 'The corrected check cites the independently inspected source evidence.';
+  const { records, result } = await savedDateBatch([
+    { section: 'itemChecks', records: [dateCheck('claim-1')] },
+    { section: 'itemChecks', records: [dateCheck('claim-1', corrected)] }]);
+  assert.equal(records['claim-1'].reason, corrected);
+  assert.deepEqual(result.saved, ['claim-1']);
+});
+
+test('date tools preserve stable repair keys independently of review ownership IDs', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'changes', records: [{ key: 'change-1',
+    value: { kind: 'remove', id: 'claim-1', reason: 'The source disproves the inferred activity date.' } }] }],
+    { kind: 'repair', section: 'changes' });
+  assert.deepEqual(Object.keys(records), ['change-1']);
+  assert.deepEqual(result.saved, ['change-1']);
 });
