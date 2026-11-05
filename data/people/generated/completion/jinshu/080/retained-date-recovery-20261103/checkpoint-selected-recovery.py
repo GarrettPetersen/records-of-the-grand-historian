@@ -107,7 +107,9 @@ files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/093.sourc
 prepared109=pathlib.Path('data/people/generated/completion/jinshu/109/bounded-dossiers-parser-fixed-20261105')
 if prepared109.exists():
  assert (prepared109/'preparation-receipt.json').exists(),'Preserve active109 preparation before snapshot'
- files += list(prepared109.glob('*.json'));files += list(prepared109.glob('*.md'))
+ 
+ for extension in ['json','md','mjs','txt']:files += list(prepared109.glob('*.'+extension))
+files += list((audit/'dossier-reuse-release-ci').glob('*'));files += list(audit.glob('dossier-reuse-*.jsonl'));files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-5a79118e3c66.json'))
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
