@@ -101,7 +101,7 @@ export function proveUnchangedIdentityChapter(before, after) {
   return { people: members.length, members: peopleDigest(members), chinese: chapterChineseEvidenceFingerprint(after.packet) };
 }
 
-export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
+export function inspectPinnedDossierChanges(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
   const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
   need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
   const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
@@ -117,6 +117,11 @@ export function provePinnedDossierReuse(registryProvenance, current, { runtimeRo
   need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
   need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
   assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
+  return { retained, current, changedData, changedChapters, afterData, afterCode };
+}
+
+export function provePinnedDossierReuse(registryProvenance, current, options = {}) {
+  const { retained, changedData, changedChapters, afterData, afterCode } = inspectPinnedDossierChanges(registryProvenance, current, options);
   const unchangedChapters = [];
   if (changedChapters.size) {
     const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);
@@ -159,8 +164,9 @@ export function pinnedIdentityChapterContext(root, revision) {
   const snapshot = gitIdentitySnapshot(root, revision);
   const scope = (book, chapter) => need(/^[a-z0-9_-]+$/u.test(book) && /^\d{3}$/u.test(chapter), 'Invalid pinned chapter scope');
   const optional = file => snapshot.files.has(file) ? snapshot.json(file) : null;
-  const inputs = (book, chapter) => { scope(book, chapter); const source = `data/${book}/${chapter}.json`, extraction = `data/people/extractions/${book}/${chapter}.json`, editorial = `data/people/editorial-decisions/${book}/${chapter}.json`, date = `data/people/date-audits/${book}/${chapter}.json`;
-    return { source: sha256(snapshot.read(source)), extraction: sha256(snapshot.read(extraction)), editorial: sha256(snapshot.files.has(editorial) ? snapshot.read(editorial) : Buffer.from('null')), dateAudit: sha256(snapshot.read(date)) }; };
+  const inputs = (book, chapter, { requireAuditReport = true } = {}) => { scope(book, chapter); const source = `data/${book}/${chapter}.json`, extraction = `data/people/extractions/${book}/${chapter}.json`, editorial = `data/people/editorial-decisions/${book}/${chapter}.json`, date = `data/people/date-audits/${book}/${chapter}.json`;
+    need(!requireAuditReport || snapshot.files.has(date), `Missing required independent date report: ${book}:${chapter}`);
+    return { source: sha256(snapshot.read(source)), extraction: sha256(snapshot.read(extraction)), editorial: sha256(snapshot.files.has(editorial) ? snapshot.read(editorial) : Buffer.from('null')), dateAudit: sha256(snapshot.files.has(date) ? snapshot.read(date) : Buffer.from('null')) }; };
   const load = (book, chapter, { properNounMatcher, strictAliasDispositions = true }) => {
     scope(book, chapter); const raw = snapshot.json(`data/people/extractions/${book}/${chapter}.json`), source = snapshot.json(`data/${book}/${chapter}.json`);
     need(raw.book === book && raw.chapter === chapter, 'Pinned extraction scope mismatch');

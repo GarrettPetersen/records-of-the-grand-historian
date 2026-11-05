@@ -19,10 +19,17 @@ export function identityReviewTransportMaxBytes(policy) {
 }
 
 export function compactChapterIdentityReviewPacket(p) {
+  let cases = p.plan.cases;
+  if (p.reviewCaseIds !== undefined) {
+    const known = new Set(cases.map(c => c.id));
+    if (!Array.isArray(p.reviewCaseIds) || !p.reviewCaseIds.length || new Set(p.reviewCaseIds).size !== p.reviewCaseIds.length ||
+      p.reviewCaseIds.some(id => !known.has(id))) throw new Error('Explicit remaining identity cases must be a unique nonempty plan subset');
+    const selected = new Set(p.reviewCaseIds); cases = cases.filter(c => selected.has(c.id));
+  }
   const sourcePacketSha256 = identityArtifactHash(Buffer.from(JSON.stringify(p, null, 2) + '\n'));
 const compact={schemaVersion:1,kind:'bounded-dossier-source-review-transport',sourcePacketSha256:sourcePacketSha256,scope:p.scope,
  planFingerprint:p.plan.fingerprint,authorAgentIds:p.authorAgentIds,registryProvenance:p.registryProvenance,acceptedMembershipAuthority:p.acceptedMembershipAuthority,
- reviewCases:p.plan.cases.map(c=>({caseId:c.id,canonicalPersonId:c.canonicalPersonId,localPeople:c.localPeople,canonicalMembership:c.canonicalMembership,
+ reviewCases:cases.map(c=>({caseId:c.id,canonicalPersonId:c.canonicalPersonId,localPeople:c.localPeople,canonicalMembership:c.canonicalMembership,
   candidateDossiers:c.candidateDossiers.map(d=>d.id),retrieval:{overflow:c.retrieval.overflow,missingBlockingName:c.retrieval.missingBlockingName,
   omittedKeys:c.retrieval.queries.filter(q=>q.omitted).map(q=>({key:q.key,totalDossiers:q.totalDossiers,visited:q.postingIdsVisited}))},proposal:c.proposal})),
  fieldLegends:{claims:['id','predicate','value','certainty','evidence'],mentions:['id','unitId','kind','spans','notes'],candidateNames:['key','forms','kinds']},
@@ -75,8 +82,12 @@ export function splitChapterIdentityReviewTransport(transport, maxBytes) {
   return parts;
 }
 
-export function assembleChapterIdentityReviewParts(plan, transports, reports, actualReviewerAgentIds, authorAgentIds) {
+export function assembleChapterIdentityReviewParts(plan, transports, reports, actualReviewerAgentIds, authorAgentIds, reviewCaseIds = plan.cases.map(c => c.id)) {
   if (!transports.length || transports.length !== reports.length || reports.length !== actualReviewerAgentIds.length) throw new Error('Missing independent identity review parts');
+  const known = new Set(plan.cases.map(c => c.id));
+  if (!Array.isArray(reviewCaseIds) || !reviewCaseIds.length || new Set(reviewCaseIds).size !== reviewCaseIds.length ||
+    reviewCaseIds.some(id => !known.has(id))) throw new Error('Invalid explicit identity assembly coverage');
+  const selected = new Set(reviewCaseIds), ownedCases = plan.cases.filter(c => selected.has(c.id));
   const reviews = new Map(), seen = new Set();
   // A combined report names a real reviewer who independently contributed. Every
   // other actual producer remains in the immutable part receipts, validated here.
@@ -87,10 +98,10 @@ export function assembleChapterIdentityReviewParts(plan, transports, reports, ac
     if (!actual || new Set(actual).size !== actual.length || JSON.stringify([...actual].sort()) !== JSON.stringify([...expected].sort())) throw new Error('Identity review part does not cover its exact owned cases');
     for (const row of r.reviews) { if (seen.has(row.caseId)) throw new Error('Duplicate identity review case'); seen.add(row.caseId); reviews.set(row.caseId, row); }
   }
-  if (seen.size !== plan.cases.length || plan.cases.some(c => !seen.has(c.id))) throw new Error('Incomplete full chapter identity coverage');
+  if (seen.size !== ownedCases.length || ownedCases.some(c => !seen.has(c.id))) throw new Error('Incomplete full chapter identity coverage');
   // Parts can use independent conversations without accumulating earlier parts in
   // one context. Each real producer remains bound to its exact owned case rows.
-  return { schemaVersion: 1, planFingerprint: plan.fingerprint, reviewer: reports[0].reviewer, reviews: plan.cases.map(c => reviews.get(c.id)) };
+  return { schemaVersion: 1, planFingerprint: plan.fingerprint, reviewer: reports[0].reviewer, reviews: ownedCases.map(c => reviews.get(c.id)) };
 }
 
 // Publication retains the real per-part producer/run and exact reviewed rows.

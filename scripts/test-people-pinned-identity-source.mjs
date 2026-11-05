@@ -92,3 +92,9 @@ test('pinned chapter pins and independent dates use committed evidence and rejec
  f.json('data/people/date-audits/fixture/001.json',{...f.report,sourceHash:'sha256:bad'});const current=pinnedIdentityChapterContext(f.root,f.commit());assert.throws(()=>current.dates('fixture','001'),/stale/);
  assert.throws(()=>gitIdentitySnapshot(f.root,'HEAD'),/Exact Git commit/);assert.throws(()=>context.inputs('../fixture','001'),/Invalid pinned chapter/);
 });
+test('pinned recovery shares the optional editorial contract without weakening the required chronology default',t=>{
+ const f=fixture(t),original=pinnedIdentityChapterContext(f.root,f.base);assert.equal(original.inputs('fixture','001').editorial,sha256(Buffer.from('null')));
+ fs.unlinkSync(path.join(f.root,'data/people/date-audits/fixture/001.json'));const current=pinnedIdentityChapterContext(f.root,f.commit());
+ assert.throws(()=>current.inputs('fixture','001'),/Missing required independent date report/);
+ const recovery=current.inputs('fixture','001',{requireAuditReport:false});assert.equal(recovery.editorial,sha256(Buffer.from('null')));assert.equal(recovery.dateAudit,sha256(Buffer.from('null')));
+});
