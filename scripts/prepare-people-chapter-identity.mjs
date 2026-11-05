@@ -15,7 +15,7 @@ import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport
 import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
-import { readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
+import { readIdentityDossierRegistry as readIdentityDossierStore } from './lib/people-identity-dossier-delta.mjs';
 import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityReviewPath, validateChapterIdentityBundle } from './lib/people-chapter-identity.mjs';
 import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';

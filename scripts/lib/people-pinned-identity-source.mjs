@@ -101,7 +101,7 @@ export function proveUnchangedIdentityChapter(before, after) {
   return { people: members.length, members: peopleDigest(members), chinese: chapterChineseEvidenceFingerprint(after.packet) };
 }
 
-export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
+export function inspectPinnedDossierChanges(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
   const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
   need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
   const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
@@ -117,6 +117,11 @@ export function provePinnedDossierReuse(registryProvenance, current, { runtimeRo
   need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
   need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
   assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
+  return { retained, current, changedData, changedChapters, afterData, afterCode };
+}
+
+export function provePinnedDossierReuse(registryProvenance, current, options = {}) {
+  const { retained, changedData, changedChapters, afterData, afterCode } = inspectPinnedDossierChanges(registryProvenance, current, options);
   const unchangedChapters = [];
   if (changedChapters.size) {
     const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);

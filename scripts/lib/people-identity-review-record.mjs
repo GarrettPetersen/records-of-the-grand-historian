@@ -5,7 +5,7 @@ import { identityArtifactHash } from './people-identity-artifacts.mjs';
 export { identityArtifactHash } from './people-identity-artifacts.mjs';
 import { REPO_ROOT, PEOPLE_DIR, readJson, writeJsonAtomic } from './people-content.mjs';
 import { identityDossierInputs, peopleDigest } from './people-identity-seal.mjs';
-import { readIdentityDossierStore } from './people-identity-dossier-store.mjs';
+import { readIdentityDossierRegistry as readIdentityDossierStore } from './people-identity-dossier-delta.mjs';
 import { chapterIdentityInputs, chapterIdentityReviewPath, chapterIdentityEvidenceScopes,
   validateChapterIdentityBundle, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './people-chapter-identity.mjs';
 import { loadValidatedPeopleChapter } from './people-validated-chapter.mjs';
