@@ -1,0 +1,19 @@
+file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-editorial-decisions.mjs:833
+  if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
+                               ^
+
+EditorialDecisionValidationError: Editorial decision validation failed:
+- schema: /proposals/0/reason must NOT have more than 500 characters
+- schema: /decisions/0/reason must NOT have more than 500 characters
+    at validateEditorialDecisions (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-editorial-decisions.mjs:833:32)
+    at file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/109/bounded-dossiers-parser-fixed-20261105/prepare-reviewed-amendments.mjs:56:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:272:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:583:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:98:5) {
+  errors: [
+    'schema: /proposals/0/reason must NOT have more than 500 characters',
+    'schema: /decisions/0/reason must NOT have more than 500 characters'
+  ]
+}
+
+Node.js v23.7.0

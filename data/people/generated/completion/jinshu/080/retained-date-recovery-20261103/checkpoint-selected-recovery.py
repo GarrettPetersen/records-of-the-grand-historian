@@ -108,8 +108,15 @@ prepared109=pathlib.Path('data/people/generated/completion/jinshu/109/bounded-do
 if prepared109.exists():
  assert (prepared109/'preparation-receipt.json').exists(),'Preserve active109 preparation before snapshot'
  
- for extension in ['json','md','mjs','txt']:files += list(prepared109.glob('*.'+extension))
+ for extension in ['json','md','mjs','py','txt','log']:files += list(prepared109.glob('*.'+extension))
+ # Independently reviewed amendments are canonical working inputs, still
+ # incomplete and unapproved for dates/identity/publication. Preserve exact
+ # bytes without touching the shared checkout's Git index or staged deletions.
+ if (prepared109/'reviewed-amendments-application.json').exists():
+  for chapter in ['108','109']:
+   files += [pathlib.Path(p) for p in [f'data/jinshu/{chapter}.json',f'data/people/extractions/jinshu/{chapter}.json',f'data/people/editorial-decisions/jinshu/{chapter}.json']]
 files += list((audit/'dossier-reuse-release-ci').glob('*'));files += list(audit.glob('dossier-reuse-*.jsonl'));files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-5a79118e3c66.json'))
+files.append(audit/'handoff-before-semantic-reuse-diagnostic-20261105.md')
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
