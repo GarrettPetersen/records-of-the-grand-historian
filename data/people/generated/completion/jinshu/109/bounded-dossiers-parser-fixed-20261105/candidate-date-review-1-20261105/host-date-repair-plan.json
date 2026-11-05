@@ -1,0 +1,794 @@
+{
+  "sourceHash": "sha256:183a6b155f064e8b3ea790b3e14c7463a8298f0e94d1648894b5e87ce5bcb46e",
+  "baselineExtractionHash": "sha256:88ae3b24a9562ec1e403e44e5241ac779046e9eb21dbd126cfc6ce818715923b",
+  "round": 1,
+  "maxRepairRounds": 3,
+  "groups": [
+    {
+      "id": "001-b9b93a21fb318e2186f6",
+      "findings": [
+        {
+          "items": [
+            "claim-66",
+            "p001"
+          ],
+          "problem": "s0007 率眾征討，累有功 describes repeated campaigns after the 建武初 appointments, yet the claim carries westernYear AD 317.",
+          "action": "Replace the dateContext with westernBounds onOrAfter AD 317, keeping sourceDate 建武初, and leave hints-p001 unchanged since other 317 events support it."
+        },
+        {
+          "items": [
+            "hints-p004",
+            "p004"
+          ],
+          "problem": "Yidougui's own dated claims (claim-74, claim-100, claim-139) are all AD 333–334 windows; no discrete 333 or 334 event supports [\"AD 333\",\"AD 334\"].",
+          "action": "Set hints-p004 to [\"AD 333-334\"], consistent with the p003/p007/p011–p018 repair."
+        },
+        {
+          "items": [
+            "hints-p010",
+            "p010"
+          ],
+          "problem": "Duan Liao's owned backing claim is a 333–334 window (claim-101), yet hints-p010 lists discrete AD 333 alongside AD 334.",
+          "action": "Set hints-p010 to [\"AD 333-334\", \"AD 334\"], keeping the supported Tuhe/attestation 334 point and aligning the Ren-backing window with the p004 repair pattern."
+        },
+        {
+          "items": [
+            "claim-217",
+            "hints-p035",
+            "p035"
+          ],
+          "problem": "Huang's ice strike on Ren is narrated under Jinshu 咸康初 but dated by ZZTJ to 咸康二年 (AD 336); claim-217 and hints still use exact AD 335 for that campaign block.",
+          "action": "Replace claim-217's westernYear 335 with westernInterval AD 335–336 (or split the 咸康初 raid from the Ren campaign), and set hints-p035 to include AD 336 alongside 337 (and 334 from earlier parts if retained elsewhere)."
+        },
+        {
+          "items": [
+            "claim-262",
+            "claim-309",
+            "claim-317",
+            "claim-318",
+            "claim-319",
+            "claim-320",
+            "claim-321",
+            "claim-322",
+            "hints-p074",
+            "p074"
+          ],
+          "problem": "s0072 title grant is labeled sourceDate 咸康三年 (kingship formula from s0056) with westernInterval 337-338, and hints-p074 is AD 337 only. ZZTJ dates the advancement to Xiankang 4/4/癸丑 = AD 338.",
+          "action": "Replace each claim's dateContext/value with sourceDate text reflecting the post-kingship grant (or omit the false 咸康三年 label) and westernYear AD 338 at year precision; set hints-p074 to ['AD 338']."
+        },
+        {
+          "items": [
+            "claim-221",
+            "hints-p036",
+            "p036"
+          ],
+          "problem": "Ren's ice-campaign targeting is exact AD 335, but ZZTJ places the campaign in AD 336 while Jinshu only says 咸康初.",
+          "action": "Replace claim-221 with westernInterval AD 335–336 or westernYear AD 336, and set hints-p036 to [\"AD 336\"] or [\"AD 335-336\"]."
+        },
+        {
+          "items": [
+            "claim-351"
+          ],
+          "problem": "Murong Ren's execution is given a point westernYear AD 335 from the qualitative 咸康初. The ice-crossing context (s0036) indicates a winter campaign that could fall in early AD 336, and no month or year appears in the owned units.",
+          "action": "Replace the point year with a supported window (for example a westernInterval of AD 335-336 tied to the winter crossing) or verify the year against a primary chronicle (Zizhi tongjian, Jin juan) with calendar conversion. Do not keep a bare 335."
+        },
+        {
+          "items": [
+            "claim-222",
+            "hints-p037",
+            "p037"
+          ],
+          "problem": "The Hutuo ice crossing is dated AD 25, but Hou Hanshu places it in Gengshi 2 (AD 24); the chapter use is retrospective speech.",
+          "action": "Set westernYear to AD 24 for the historical crossing (or reclassify as retrospective-reference dated to Huang's speech), and set hints-p037 to [\"AD 24\"] only if a life-event hint is kept."
+        },
+        {
+          "items": [
+            "hints-p038",
+            "p038"
+          ],
+          "problem": "Duan Liao's 337-338 activity (fleeing to Miyun, false surrender to Shi Hu) in context claim-224 is missing from the hint.",
+          "action": "Change the hints to ['AD 335-337', 'AD 337-338']."
+        },
+        {
+          "items": [
+            "hints-p041",
+            "p041"
+          ],
+          "problem": "Duan Lan's defeat north of Lingzhi in context claim-228 (AD 337-338) is missing from the hint.",
+          "action": "Change the hints to ['AD 335-337', 'AD 337-338']."
+        },
+        {
+          "items": [
+            "hints-p047",
+            "p047"
+          ],
+          "problem": "Murong Jun's appointment as crown prince in AD 337 (context claims 235 and 349) is missing from the hint.",
+          "action": "Change the hints to ['AD 335-337', 'AD 337']."
+        },
+        {
+          "items": [
+            "claim-254",
+            "hints-p066",
+            "p066"
+          ],
+          "problem": "s0059 cites Cao Cao (魏武) only as a regency precedent at Huang's AD 337 enthronement; the claim dates Cao Cao's own regency 196-220 and feeds an active hint from an imported span.",
+          "action": "Remove claim-254 and replace it with a retrospective-reference event for p066 dated to the 咸康三年 (AD 337) citation with subject role 'cited precedent' from s0059; set hints-p066 to [] unless separately source-supported."
+        },
+        {
+          "items": [
+            "claim-255",
+            "hints-p067",
+            "p067"
+          ],
+          "problem": "s0059 cites Sima Zhao (晉文) only as a regency precedent at Huang's AD 337 enthronement; the claim dates his own regency 255-265 and feeds an active hint from an imported span.",
+          "action": "Remove claim-255 and replace it with a retrospective-reference event for p067 dated to the 咸康三年 (AD 337) citation with subject role 'cited precedent' from s0059; set hints-p067 to [] unless separately source-supported."
+        }
+      ]
+    },
+    {
+      "id": "002-5f7ada4f46dd68477b41",
+      "findings": [
+        {
+          "items": [
+            "claim-431",
+            "claim-460",
+            "claim-465",
+            "claim-472",
+            "claim-477",
+            "claim-478",
+            "claim-481",
+            "claim-482",
+            "claim-485",
+            "claim-487",
+            "claim-491",
+            "hints-p075",
+            "hints-p076",
+            "hints-p077",
+            "hints-p078",
+            "hints-p079",
+            "hints-p080",
+            "hints-p081",
+            "hints-p082",
+            "p075",
+            "p076",
+            "p077",
+            "p078",
+            "p079",
+            "p080",
+            "p081",
+            "p082"
+          ],
+          "problem": "Events in s0073-s0076 are dated with sourceDate 又聞庾亮薨 and westernYear AD 340, but that clause starts at s0077. ZZTJ places Murong Ping’s Liaoxi victory, Duan Liao’s execution, the Fancheng fighting and Liu Xiang’s dispatch in Xiankang 5 (AD 339). Yu Liang dies in Xiankang 6/1 (AD 340).",
+          "action": "Retarget those claims to AD 339 (point year or a tight 339 window justified from ZZTJ), drop 又聞庾亮薨 from their sourceDate, shrink claim-431’s evidence to the owned units, and set the listed hints to AD 339 (p075 may also keep separate 340-341 context hints only for later owned/context events)."
+        },
+        {
+          "items": [
+            "claim-437",
+            "p075"
+          ],
+          "problem": "claim-437 treats s0076 皝雖稱燕王 as Huang assuming King of Yan in AD 340. The line states he already used the title without court mandate when sending Liu Xiang; the assumption is s0056 咸康三年.",
+          "action": "Remove or convert claim-437 to a retrospective-reference / undatedSourceAttestation about lacking court recognition at the AD 339 embassy; do not keep a 340 assumption. Life assumption stays on the 337 kingship claim owned elsewhere."
+        },
+        {
+          "items": [
+            "claim-432",
+            "claim-449",
+            "claim-638",
+            "hints-p111",
+            "p111"
+          ],
+          "problem": "其年 in s0080 is placed after the Yu Liang/recognition narrative (≥340) but ZZTJ 咸康五年 (AD 339) dates the Goguryeo campaign and peace plea before Yu Liang's death; point year 340 hides conflicting witnesses.",
+          "action": "Replace with unresolved:true and an unresolvedReason preserving Jinshu (≥340 by narrative order) vs ZZTJ (339); do not pick a winner; resync hints."
+        },
+        {
+          "items": [
+            "claim-433",
+            "claim-450",
+            "claim-639",
+            "claim-645",
+            "hints-p112",
+            "p112"
+          ],
+          "problem": "明年 in s0081 counts from the disputed 其年; ZZTJ does not record the heir's homage in 340/341 under that label.",
+          "action": "Mark unresolved with the dependency reason or a window covering both readings (340-341 vs 341-342); resync hints."
+        },
+        {
+          "items": [
+            "claim-438",
+            "claim-633",
+            "hints-p110",
+            "p110"
+          ],
+          "problem": "又聞庾亮薨 gives only a terminus post quem (Yu Liang died 咸康六年正月庚子朔, AD 340); ZZTJ 咸康七年 places the Yu Bing/He Chong memorial in 341.",
+          "action": "Use westernBounds onOrAfter AD 340 (or interval 340-341 noting ZZTJ 341); resync p110 hint."
+        }
+      ]
+    },
+    {
+      "id": "003-05b9ed7aa3ab14bab1ed",
+      "findings": [
+        {
+          "items": [
+            "claim-524",
+            "hints-p086",
+            "p086",
+            "claim-529",
+            "hints-p087",
+            "p087",
+            "claim-534",
+            "hints-p088",
+            "p088",
+            "claim-539",
+            "claim-540",
+            "hints-p089",
+            "p089",
+            "claim-544",
+            "hints-p090",
+            "p090",
+            "claim-550",
+            "hints-p091",
+            "p091",
+            "claim-553",
+            "hints-p092",
+            "p092",
+            "claim-557",
+            "hints-p093",
+            "p093",
+            "claim-561",
+            "hints-p094",
+            "p094",
+            "claim-565",
+            "hints-p095",
+            "p095",
+            "claim-569",
+            "hints-p096",
+            "p096",
+            "claim-591",
+            "hints-p101",
+            "p101",
+            "claim-596",
+            "hints-p102",
+            "p102",
+            "claim-600",
+            "hints-p103",
+            "p103",
+            "claim-605",
+            "hints-p104",
+            "p104",
+            "claim-610",
+            "hints-p105",
+            "p105",
+            "claim-614",
+            "hints-p106",
+            "p106"
+          ],
+          "problem": "Units s0221–s0228 and s0245–s0249 (with echoes in s0253–s0254) only cite Zhou–Han figures as exempla inside Murong Huang's memorial after 又聞庾亮薨 (AD 340). The owned claims date those figures' own imported career/death spans and feed matching active hints, turning retrospective references into personal activity.",
+          "action": "For each affected person, remove or replace the life-dated attestation (and Tian Fen death claim-540) with a retrospective-reference event dated to the AD 340 citation (subject role: cited exemplum) from the naming unit; set each corresponding hints-pNNN to [] unless a separate non-exemplum source event exists."
+        },
+        {
+          "items": [
+            "hints-p083",
+            "p083"
+          ],
+          "problem": "Yu Liang's supported events are the Su Jun-era role (AD 327–328) and death (AD 340), but hints-p083 lists a single AD 327–340 career window.",
+          "action": "Set hints-p083 to [\"AD 327-328\", \"AD 340\"], keeping claim-496/497/498 unchanged."
+        },
+        {
+          "items": [
+            "claim-573",
+            "hints-p097",
+            "p097"
+          ],
+          "problem": "s0231 addresses living Emperor Cheng as 陛下 in the AD 340 memorial; claim-573 and hints-p097 still assign an imported reign-wide AD 325–342 span.",
+          "action": "Remove or retarget claim-573 so it does not use a reign-long westernInterval; keep claim-574's AD 340 point; set hints-p097 to [\"AD 340\"]."
+        },
+        {
+          "items": [
+            "claim-649",
+            "claim-660",
+            "hints-p113",
+            "hints-p114",
+            "p113",
+            "p114"
+          ],
+          "problem": "s0082-s0083 is an 初 flashback starting after Duan Liao's defeat (ZZTJ 咸康四年, 338); only Han's return is 340 (ZZTJ 咸康六年二月).",
+          "action": "Split: date the flight/hosting onOrAfter 338 and before the 340 return; date the return 340; resync p113/p114 hints."
+        },
+        {
+          "items": [
+            "claim-618",
+            "claim-623",
+            "hints-p107",
+            "hints-p108",
+            "p107",
+            "p108"
+          ],
+          "problem": "Dou Wu and He Jin appear only as examples in Huang's letter; the 168/189 dates are their own deaths imported from outside, not attested here.",
+          "action": "Remove claim-618/623 as life attestations and add retrospective-reference events dated to the letter (onOrAfter 340), with subject role 'cited exemplar'; clear hints."
+        },
+        {
+          "items": [
+            "claim-628",
+            "hints-p109",
+            "p109"
+          ],
+          "problem": "先帝 in s0261 is unnamed; 323-325 is Emperor Ming's reign, not a dated grant.",
+          "action": "Research which emperor granted Huang a 列將 command and when; until then mark unresolved."
+        }
+      ]
+    },
+    {
+      "id": "004-f4746e9d178804622e29",
+      "findings": [
+        {
+          "items": [
+            "claim-720",
+            "claim-721",
+            "claim-722",
+            "claim-723",
+            "claim-724",
+            "claim-746",
+            "claim-748",
+            "claim-754",
+            "claim-755",
+            "claim-756",
+            "claim-757",
+            "claim-758",
+            "claim-759",
+            "claim-809",
+            "claim-813",
+            "claim-814",
+            "claim-815",
+            "claim-816",
+            "hints-p119",
+            "hints-p120",
+            "p116",
+            "p117",
+            "p118",
+            "p119",
+            "p120"
+          ],
+          "problem": "The 於是 block (s0089-s0091) follows the ≥340 raid and precedes 咸康七年; ZZTJ dates Longcheng (正月) and Guo Xi's (郭烯) investiture to 341. The 335 start is unsupported.",
+          "action": "Change windows to AD 340-341 (or 341 with ZZTJ witness); resync p116-p120 hints."
+        },
+        {
+          "items": [
+            "claim-747",
+            "claim-749",
+            "claim-760",
+            "claim-761",
+            "claim-762",
+            "claim-763",
+            "claim-764",
+            "claim-765",
+            "claim-766",
+            "claim-767",
+            "claim-768",
+            "claim-769",
+            "claim-770",
+            "claim-771",
+            "claim-810",
+            "claim-817",
+            "claim-819",
+            "claim-821",
+            "claim-822",
+            "claim-824",
+            "claim-826",
+            "claim-827",
+            "hints-p121",
+            "hints-p122",
+            "hints-p123",
+            "hints-p124",
+            "hints-p125",
+            "hints-p127",
+            "hints-p128",
+            "p121",
+            "p122",
+            "p123",
+            "p124",
+            "p125",
+            "p127",
+            "p128"
+          ],
+          "problem": "Jinshu s0092–s0096 places the Longcheng move and Goguryeo/Wandu war under 咸康七年 (AD 341), but ZZTJ 卷097 dates 遷都龍城 to 咸康八年冬十月 and the November Wandu campaign to AD 342. Point years and 341-based hints hide the conflict.",
+          "action": "Replace westernYear 341 with unresolved:true (or westernInterval 341–342) preserving Jinshu 咸康七年 vs ZZTJ 咸康八年; resync hints; do not pick a winner."
+        },
+        {
+          "items": [
+            "claim-772",
+            "claim-773",
+            "claim-795",
+            "claim-811",
+            "claim-823",
+            "hints-p124",
+            "p124"
+          ],
+          "problem": "明年 after Jinshu’s 咸康七年 block is converted to AD 342, but ZZTJ dates Gao Zhao’s submission and the return of Li’s corpse to 建元元年春二月 (AD 343).",
+          "action": "Mark unresolved or use a 342–343 window stating both witnesses; keep the submission event; resync p124 hints."
+        }
+      ]
+    },
+    {
+      "id": "005-616a2c1de9133f339a7b",
+      "findings": [
+        {
+          "items": [
+            "claim-750",
+            "claim-751",
+            "claim-752",
+            "claim-753",
+            "claim-774",
+            "claim-775",
+            "claim-776",
+            "claim-777",
+            "claim-778",
+            "claim-779",
+            "claim-780",
+            "claim-781",
+            "claim-782",
+            "claim-783",
+            "claim-784",
+            "claim-785",
+            "claim-812",
+            "claim-818",
+            "claim-820",
+            "claim-828",
+            "claim-829",
+            "claim-830",
+            "claim-831",
+            "hints-p121",
+            "hints-p122",
+            "hints-p129",
+            "hints-p130",
+            "hints-p131",
+            "p121",
+            "p122",
+            "p129",
+            "p130",
+            "p131"
+          ],
+          "problem": "Post-明年 narrative is bulk-dated AD 342 via 咸康七年後明年及隨後紀事, but ZZTJ places Moqian Hun in 建元元年 (343), Yuwen destruction/Changli/Weide/Sheyiyu’s death in 建元二年 (344), and park-oxen shares in 永和元年 (345).",
+          "action": "Drop the false 342 point year; date each episode with unresolved or witness-specific years/windows from Jinshu sequence vs ZZTJ; resync hints."
+        },
+        {
+          "items": [
+            "claim-825",
+            "hints-p126",
+            "p126"
+          ],
+          "problem": "claim-825 and hints-p126 assign Li a living reign AD 300–331 (美川王) that the chapter never states; s0096 only records Huang opening 釗父利墓 and carrying the corpse.",
+          "action": "Remove the imported reign attestation and active hint; keep only a posthumous exhumation/return event under the contested raid year; optionally add retrospective handling without life dates."
+        },
+        {
+          "items": [
+            "claim-832",
+            "claim-788",
+            "claim-789",
+            "claim-790",
+            "claim-791",
+            "claim-792",
+            "claim-793",
+            "claim-794",
+            "claim-843",
+            "claim-844",
+            "claim-845",
+            "hints-p132",
+            "hints-p143",
+            "hints-p144",
+            "hints-p145",
+            "p132",
+            "p143",
+            "p144",
+            "p145"
+          ],
+          "problem": "Owned speech-block dates use synthetic 咸康七年後明年及隨後紀事 → AD 342, but Jinshu never years the park-oxen shares (s0110–s0111) or Feng Yu’s remonstrance (s0112–s0296), while ZZTJ 卷097 places that levy and remonstrance under 永和元年 (AD 345). Wang Xian/Liu Ming are 前者 relative to the speech.",
+          "action": "Drop the false 342 point year; date Feng Yu/Song Gai to unresolved or ZZTJ 345 with Jinshu undated preserved; date Wang Xian/Liu Ming punishments as unresolved onOrBefore the speech year; resync hints."
+        },
+        {
+          "items": [
+            "claim-836",
+            "hints-p136",
+            "p136"
+          ],
+          "problem": "先王 in s0273 is undated retrospective praise of Murong Hui, yet claim-836/hints-p136 impose AD 307–333 as if it were a dated career activity window.",
+          "action": "Replace with undatedSourceAttestation (or retrospective-reference) keeping the Hui achievements; remove the 307–333 active hint."
+        },
+        {
+          "items": [
+            "claim-837",
+            "hints-p137",
+            "p137"
+          ],
+          "problem": "s0274 only compares Huang to 西伯; BC 1100–1050 invents a traditional lifespan nowhere in the chapter.",
+          "action": "Use undatedSourceAttestation or qualitative antiquity for the rhetorical 西伯; delete the invented interval/hint."
+        },
+        {
+          "items": [
+            "claim-838",
+            "hints-p138",
+            "p138"
+          ],
+          "problem": "石季龍 is a present-tense rival inside the remonstrance; AD 334–349 imports Shi Hu’s full reign rather than the speech’s undated/ZZTJ 345 setting.",
+          "action": "Tie the mention to the remonstrance’s corrected date context (or undated attestation); remove the reign-long hint."
+        },
+        {
+          "items": [
+            "claim-841",
+            "claim-842",
+            "hints-p141",
+            "hints-p142",
+            "p141",
+            "p142"
+          ],
+          "problem": "s0282 only cites 西門 and 史起 irrigation methods; BC 400 point year and BC 350–300 floruit are invented outside the chapter.",
+          "action": "Use undatedSourceAttestation (method citation) or qualitative Warring States; clear the false floruit hints."
+        }
+      ]
+    },
+    {
+      "id": "006-e75bb7e63501615c8fc2",
+      "findings": [
+        {
+          "items": [
+            "claim-865",
+            "claim-866",
+            "claim-867",
+            "claim-868",
+            "claim-871",
+            "hints-p146",
+            "hints-p147",
+            "hints-p148",
+            "hints-p149",
+            "hints-p150",
+            "p146",
+            "p147",
+            "p148",
+            "p149",
+            "p150"
+          ],
+          "problem": "Undated remonstrance/edict (s0303, s0113–s0128) and undated Nansu (s0137) are given westernInterval or hints AD 334-348 from 在位十五年…永和四年. That is a reign-long activity span, not event uncertainty. ZZTJ 卷097 places Feng Yu’s remonstrance, Huang’s reply, and 拔南蘇 in 永和元年 (AD 345).",
+          "action": "Replace each affected attestation/dateContext with either undatedSourceAttestation (Jinshu-only) or a point/tight window anchored to ZZTJ AD 345 while preserving Jinshu’s lack of a local year as unresolved if both witnesses must stay; resync hints to AD 345 (or clear them). Do not keep AD 334-348."
+        },
+        {
+          "items": [
+            "claim-869",
+            "claim-872",
+            "claim-873",
+            "claim-875",
+            "claim-943",
+            "claim-945",
+            "claim-946",
+            "claim-947",
+            "hints-p148",
+            "hints-p150",
+            "hints-p151",
+            "hints-p152",
+            "p148",
+            "p150",
+            "p151",
+            "p152"
+          ],
+          "problem": "s0138 三年 is converted as Huang’s third year from a 334 accession (=AD 336). That conflicts with (1) narrative order after 咸康七年/明年 and before 永和四年, which favors reading 三年 as 永和三年 (AD 347); (2) ZZTJ 卷097, which narrates the Fuyu raid under 永和二年 (AD 346) and states Huang only 自稱十二年 in 永和元年. Point year 336 hides the conflict.",
+          "action": "Mark each 三年-based value/dateContext unresolved:true with an unresolvedReason that preserves Jinshu 三年 (336 vs 347 readings) and ZZTJ AD 346; do not pick a winner. Resync hints; drop AD 336."
+        },
+        {
+          "items": [
+            "claim-877",
+            "claim-879",
+            "hints-p154",
+            "hints-p155",
+            "p154",
+            "p155"
+          ],
+          "problem": "The AD 307 start for Hui's appointment of Han is unsupported; Hui died in Xianhe 8 (AD 333) after a 49-year reign.",
+          "action": "Replace the interval with westernBounds onOrBefore AD 333 (or an undated attestation), and recompute the hints."
+        },
+        {
+          "items": [
+            "claim-878",
+            "claim-881",
+            "claim-882",
+            "claim-883",
+            "hints-p154",
+            "hints-p157",
+            "hints-p158",
+            "hints-p159",
+            "p157",
+            "p158",
+            "p159"
+          ],
+          "problem": "The exile and Duan-war events are dated to Huang's 334-348 reign via ellipsis-joined sourceDates. ZZTJ 96 places Shi Hu's campaign, Duan Lan's defeat and Liao's flight in AD 338, and Han died in 344.",
+          "action": "For the Shi Hu and Duan Lan defeat events use AD 338 (citing ZZTJ 96). For Han's exile service with Duan Liao use bounds onOrAfter 333, onOrBefore 338. Sync the hints."
+        },
+        {
+          "items": [
+            "claim-912"
+          ],
+          "problem": "The accession year is derived by subtracting the reign count, which conflicts with Hui's death in AD 333.",
+          "action": "Replace with onOrAfter 333 bounds, or research Huang's explicit succession date; do not keep the exact 334."
+        },
+        {
+          "items": [
+            "claim-917",
+            "claim-918"
+          ],
+          "problem": "Jun's imperial claim and the posthumous title are a point event in Yonghe 8 (AD 352, Jinshu 110), not a 348-352 window. The title is retrospective reception.",
+          "action": "Set westernYear AD 352 on both. Mark claim-917 receptionType retrospective."
+        },
+        {
+          "items": [
+            "claim-968",
+            "claim-969"
+          ],
+          "problem": "Duan Liao's flight is misdated to Jianyuan 2 (AD 344); it happened in AD 338.",
+          "action": "Set westernYear AD 338 with ZZTJ 96 as conversion and witness evidence, and remove 建元二年 as its sourceDate."
+        },
+        {
+          "items": [
+            "claim-1000",
+            "hints-p163",
+            "p163"
+          ],
+          "problem": "The sourceDate is a bare name and the window is reign-wide activity from 337 to 348.",
+          "action": "Replace with Han's welcome bounded onOrAfter 338, onOrBefore 344, or remove; drop the 337-348 hint."
+        }
+      ]
+    },
+    {
+      "id": "007-fe98ccea18ab47783d51",
+      "findings": [
+        {
+          "items": [
+            "claim-1016",
+            "hints-p164",
+            "p164"
+          ],
+          "problem": "Han's retrospective invocation of the late king in AD 344 is recorded as Hui's living activity from 307 to 333.",
+          "action": "Remove the life attestation, add a retrospective-reference event for p164 dated AD 344 (Han's dying speech), and clear the hint."
+        },
+        {
+          "items": [
+            "p154",
+            "p161",
+            "p155",
+            "p164",
+            "p157",
+            "p160",
+            "p148",
+            "p163"
+          ],
+          "problem": "There are duplicate person records for the same individuals (Murong Han, Murong Hui, Duan Liao, Murong Huang), which splits their chronologies.",
+          "action": "The host should merge or link the duplicate identities in the identity workflow. That is outside this date repair."
+        },
+        {
+          "items": [
+            "claim-967",
+            "claim-970",
+            "claim-1005",
+            "claim-1025",
+            "hints-p160",
+            "p160",
+            "p165"
+          ],
+          "problem": "The Duan Liao-Murong Huang war and remonstrance are dated 338-339. ZZTJ files the remonstrance under 337 (遼數與皝相攻), and it precedes the fall of Lingzhi in 338.",
+          "action": "Replace the window with westernBounds onOrBefore AD 338 (onOrAfter 333, Huang's accession, if a lower bound is desired). Remove 339."
+        },
+        {
+          "items": [
+            "claim-1022",
+            "claim-1073",
+            "hints-p167",
+            "hints-p165",
+            "p167"
+          ],
+          "problem": "He Yan's appointment of Yang Yu is dated 304-311, but He Yan was killed in 304.",
+          "action": "Use westernBounds onOrBefore AD 304."
+        },
+        {
+          "items": [
+            "claim-1024",
+            "claim-1101",
+            "claim-1108",
+            "hints-p165",
+            "hints-p172",
+            "hints-p173",
+            "p165",
+            "p172",
+            "p173"
+          ],
+          "problem": "Yang Yu joining Duan Jilujuan is dated 318-325. ZZTJ 314 records the flight, and Jilujuan died in the first month of 318.",
+          "action": "Use westernYear 314 (ZZTJ placement), or bounds onOrAfter 314 and onOrBefore 318."
+        },
+        {
+          "items": [
+            "claim-1028",
+            "claim-1060",
+            "claim-1061",
+            "hints-p165",
+            "p165"
+          ],
+          "problem": "Yang Yu's death and age window starts in 337, before his attested activity in 338-341.",
+          "action": "Use westernBounds onOrAfter AD 341 and onOrBefore AD 348 (Huang died in the ninth month of Yonghe 4). Keep age 62 sui with no birth year."
+        },
+        {
+          "items": [
+            "claim-1057",
+            "hints-p165"
+          ],
+          "problem": "The Longcheng planning is dated only to 342. ZZTJ records Yang Yu building Longcheng in the first month of 341.",
+          "action": "Use westernInterval 341-342 for the planning event."
+        },
+        {
+          "items": [
+            "claim-972",
+            "claim-1050",
+            "claim-1130",
+            "hints-p179",
+            "p179"
+          ],
+          "problem": "The point year 338 is used for events in the twelfth month of Xiankang 4, which may fall in January 339 proleptic Gregorian.",
+          "action": "Verify the month with a calendar conversion (Gregorian setting). Otherwise use a 338-339 window and keep the Chinese date label."
+        },
+        {
+          "items": [
+            "p165"
+          ],
+          "problem": "Omitted dated events: s0213 appointments (twelfth month of Xiankang 4), s0214 campaigns against Goguryeo (342) and Yuwen Gui (344), and s0209 Yan commandery warden (ZZTJ: 北平相, a conflicting witness).",
+          "action": "Add the claims with their own evidence. Keep the s0209 office variant as a conflicting witness."
+        },
+        {
+          "items": [
+            "claim-880",
+            "hints-p156",
+            "p156"
+          ],
+          "problem": "Han's mother is given Hui's event and window.",
+          "action": "Replace with undatedSourceAttestation: Murong Han was born to her as Hui's eldest son by a secondary consort, with no date stated. Clear her hints."
+        },
+        {
+          "items": [
+            "claim-1077",
+            "hints-p168",
+            "p168"
+          ],
+          "problem": "Wang Jun's 領州 is dated from 300. ZZTJ places his assumption of Youzhou in 304, after he killed He Yan.",
+          "action": "Use westernYear 304 for 領州, or bounds onOrAfter 304 and onOrBefore 314 for Yang Yu's transfer."
+        },
+        {
+          "items": [
+            "claim-1069",
+            "claim-1135",
+            "claim-1141",
+            "claim-1143",
+            "hints-p166",
+            "hints-p180",
+            "hints-p181",
+            "p166",
+            "p180",
+            "p181"
+          ],
+          "problem": "Undated facts (幼, 初, 少孤) carry invented windows. Claim-1141 and claim-1143 cite Dan's phrase instead of 少孤.",
+          "action": "Convert these to undatedSourceAttestation or an undated death with the correct evidence. Remove the hints."
+        },
+        {
+          "items": [
+            "claim-1112",
+            "claim-1117",
+            "claim-1120",
+            "claim-1123",
+            "hints-p174",
+            "hints-p175",
+            "hints-p176",
+            "hints-p177",
+            "p174",
+            "p175",
+            "p176",
+            "p177"
+          ],
+          "problem": "Allusions in speeches c.314 are dated as the ancients' own lifespans or activity.",
+          "action": "Replace them with retrospective-reference events dated to the c.314 speech. Remove the active hints."
+        }
+      ]
+    }
+  ]
+}

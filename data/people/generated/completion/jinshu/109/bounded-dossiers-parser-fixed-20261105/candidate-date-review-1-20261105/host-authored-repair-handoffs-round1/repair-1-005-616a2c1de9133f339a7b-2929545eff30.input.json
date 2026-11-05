@@ -1,0 +1,2912 @@
+{
+  "instructions": "You are performing one bounded phase of the independent chronology workflow.\nThe host owns publication. Never certify your own repairs. Do not re-extract\nnames/mentions, rewrite translations, clone the corpus, or call another paid API.\n\nUse the supplied sealed evidence and your assigned output path. Do not create a\nrepository clone or worktree for this job. When using a shared host checkout, write\nonly the assigned review/repair artifact; the host owns validation, source changes,\nGit operations and publication. Separate reviewer conversations provide independence.\n\nHistorical rules: date the named person's OWN event, not a descendant's action,\nlater quotation, republication, or commemoration. Read the Chinese; the English\nand previous model assertions are not independent evidence. Verify conversions\nagainst a primary passage and a reliable calendar reference, including the ruler,\npolity, reign and repeated era names. Preserve competing readings. Never infer\ntwins from 同生 in a maternal list. Preserve age reckoning; do not automatically\nconvert traditional inclusive age into a precise birth year. Conventional regnal\nyear labels need not equal the Gregorian year of every month/day within them.\nThere is no year zero. Use BC/AD. Keep birth/death separate from activity.\nPreserve later reception as its own event, not living activity: use event kind\nretrospective-reference, or receptionType: retrospective on a narrower honor/work\nclaim. This does not change the posthumous-name alias kind. Record\nthe reception's own date, source and subject role. Retrospective does not imply\ndead; there is no separate posthumous reception category. A later-written biography\ncan still attest an earlier life event. Do not use reception dates as life dates\nor active hints, and do not discard the later reference when repairing them.\nFor verified month/day events, normalize Western years/bounds to proleptic\nGregorian and state that convention in the conversion evidence. Check the\nconverter's calendar setting: Academia Sinica defaults to Julian before 1582,\nwhich can change the Western year near New Year. Retain the Chinese date and\nidentify Julian witnesses explicitly. Do not apply a fixed offset across\ncenturies or pretend a reign-year-only label specifies a Gregorian event date.\n\nUse westernBounds with before/onOrBefore/after/onOrAfter positive BC/AD year\nobjects for genuine one-sided knowledge. An event after an accession in AD 479\ncan still occur in AD 479: onOrAfter 479, not after 479. Never invent a second\nendpoint or turn a bound into an exact year. Preserve relative event sequence.\nAn unresolved source date requires unresolved:true and a substantive\nunresolvedReason, not a guessed year. Research blocks approval; report it honestly.\n\nDistinguish a positively attested, genuinely undated fact from an unresolved\nasserted date. In a scoped repair, use an attestation value with\nundatedSourceAttestation:true and a source-specific event of at least 20 characters;\nit must contain no sourceDate, qualitative, Western-date or unresolved fields.\nPreserve the subject, facts and source evidence. Preserve a stated age and its\nexisting reckoning: an undated age claim may use the same marker and event in its\ndateContext. Age five does not supply a calendar year, birth year or reign-wide\nactivity interval. Check all supplied evidence before changing active hints;\nexplicitly undated evidence alone does not justify inventing a hint. Reviewers\nmust still check these items. Do not merely clear unresolved flags: explain the\nsource-supported replacement. This pathway does not resolve a genuinely disputed\nsource date, conversion, event owner or conflicting witness; retain the appropriate\nsupported uncertainty or research hold.\n\nSupported value examples (retain each claim's person and evidence; preserve the\nexisting sui reckoning in the age example):\nAttestation: {\"undatedSourceAttestation\":true,\"event\":\"Emperor Wu loved Sima Yu and kept him at his side; no calendar date is stated.\"}\nAge: {\"age\":5,\"reckoning\":\"sui\",\"dateContext\":{\"undatedSourceAttestation\":true,\"event\":\"The crown prince was five when he pulled the emperor by his robe into the darkness; no calendar date is stated.\"}}\n\nINDEPENDENT-REVIEW:\nRead every ownedUnits entry for omitted births, deaths, ages and date context.\nCheck every ownedItems entry, and check each ownedPeople record for missing or\nincoherent chronology in the supplied evidence. Context-only units are read-only;\nother jobs own their completeness checks. Identify the owner of every dated\nevent and justify each endpoint in your reason. A date window must describe\nuncertainty about an event, not activity throughout a dynasty. Check active hints\nagainst supported personal events. Later posthumous events must not feed life dates.\nDo not approve unsupported chronology merely because it looks plausible.\n\nReturn JSON with jobId (input id), sourceHash, extractionHash, reviewedAt (ISO),\nreviewer:{name,independentOfExtractor:true}, summary (substantive),\nreviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.\nEvery check has id, verdict (supported/incorrect/research-blocked), reason, and\nevidence:[{unit,quote}] containing a contiguous exact Chinese substring of the cited\nsource unit. Never join disjoint passages with ellipses; use separate evidence\nentries for disjoint passages. Item checks additionally\nhave event describing whose event is being dated. This is required for **every**\nitem check, including `hints-pNNN` active-date-hint rows: give a source-specific\nEnglish sentence of at least 10 characters that identifies the named person's own\nevent (or states that the hint lacks such an event). Do not omit it merely because\nthe item is a hint rather than a claim. Include exactly ownedItems and\nownedPeople, with no duplicates. Even failed jobs must finish their owned checks\nor retain work for continuation; they cannot silently omit a difficult item.\nEvery failed check has an actionable finding:\n{items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].\nKeep each check's reason concise and self-contained, with at least 20 characters\nafter trimming whitespace of substantive, source-specific explanation, not padding:\nidentify its source anchor and why the date is supported or defective. Do not\nlengthen reasons unnecessarily. Put shared research and conversion\nexplanations once in findings or references instead of repeating paragraphs.\nRetain every owned check, its event owner, and exact per-check Chinese evidence.\nExternal research references use {kind:\"external\",url,title,quote,sourceHash,\naccessedAt,reason}; sourceHash is 'sha256:' plus SHA-256 of the short exact excerpt.\nVerify the page before citing it; keep quotations short and copyright-compliant.\nDo not invent a reference or claim an external source was read when it was not.\n\nREPAIR-PROPOSAL:\nResolve the supplied findings by reading their Chinese evidence and doing any\nnecessary targeted research. Return {sourceHash,extractionHash,changes:[...]}.\nEach change has a substantive source-based reason and one of these forms:\n{kind:\"replace\",id:\"claim-N\",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}\n{kind:\"remove\",id:\"claim-N\",before:EXACT_INPUT_ROW,reason}\n{kind:\"add\",after:[personId,\"attestation\"|\"birth\"|\"death\"|\"age\",value,certainty,[unitIds]],reason}\n{kind:\"add-reception-event\",after:[personId,\"event-participation\",value,certainty,[unitIds]],reason}\n{kind:\"date-context\",id:\"claim-N\",before:EXACT_INPUT_DATE_CONTEXT_OR_NULL,after:REVISED_DATE_CONTEXT,reason}\n{kind:\"hints\",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}\nClaim rows are compact five-element arrays. Replacements keep subject/predicate.\nUse date-context only for an existing non-life claim. Its before value is exactly\nclaims[id][2].dateContext, or null when absent; its after value is only the revised\ndate-context object, never a complete claim row. It may change only sourceDate,\nwesternYear, westernInterval, westernBounds, unresolved, and unresolvedReason.\nCopy an existing event description verbatim. The host retains the claim's subject,\npredicate, certainty, evidence, and other non-date fields unchanged. Do not remove\nor invent an event, or use date-context for attestation, birth, death, or age rows.\nDo not modify names, roles, mentions, family links or translation text. Preserve\nlegitimate posthumous reception as an event, but remove it from personal activity.\nUse add-reception-event with an explicit retrospective classification\nas described above. Remove or correct the misleading life claim separately.\nDo not invent a date for an undated reference or rewrite unrelated event fields.\nAll necessary operations must be in changes; do not leave required companion\nrecords in hostRequiredChanges or similar side lists. If the supported operations\ncannot represent the complete repair, return blocked:true and explain the gap.\nSynchronize hints with corrected chronology. Use only existing person IDs and\nknown source-unit IDs. Avoid unnecessary edits. The next reviewer receives the\nresulting claims independently and must establish their support from the source.\nIf research cannot resolve a finding, return {blocked:true,reason:...}; do not\ndelete a person or fabricate a date to get a passing result.\nFor person checks, compare all supplied items and contextItems for that person,\nincluding dates elsewhere in the chapter. Context items are read-only evidence;\ndo not emit itemChecks for IDs outside ownedItems. Report contradictions or\nmissing narrative context instead of certifying a person from an isolated event.\nKeep supplementary research targeted to an existing date defect, a local omission,\nor a needed conversion. Do not expand this audit into new biographies or add every\nexternal life date you encounter. Preserve genuinely conflicting witnesses as\nexplicitly supported uncertainty when possible; neither choose a winning date nor\ncreate false precision to clear a finding. An unsupported conversion remains a hold.\n\nRetrospective is the sole later-reception category, including commemorations and\nreferences after a known death. Use kind `retrospective-reference` or, on a narrower\nhonor/work claim, receptionType `retrospective`. Do not require proof of death,\nintroduce a posthumous subtype, or change the separate `posthumous-name` alias kind.\n",
+  "phase": "repair-proposal",
+  "sourceHash": "sha256:183a6b155f064e8b3ea790b3e14c7463a8298f0e94d1648894b5e87ce5bcb46e",
+  "extractionHash": "sha256:2929545eff3047716650d035cac3854a38faae0adc0fb8eff9405e056f9d5e27",
+  "book": "jinshu",
+  "chapter": "109",
+  "sourceUrl": "https://chinesenotes.com/jinshu/jinshu109.html",
+  "repairContract": "A finding label is a coverage indicator, not necessarily a claim-row ID: target only IDs actually present in claims. For attestation, birth, death, or age rows, chronology changes MUST use kind \"replace\" with before copied verbatim from claims[id] and a complete after claim row; never use date-context. Claim certainty is exactly one of \"explicit\", \"explicit-event-contextual-date\", \"strongly-inferred\", \"uncertain\", \"derived\", or \"textual-variant\"; never write informal labels such as \"inferred\" or \"contextual\". For an explicitly undated source attestation, set undatedSourceAttestation:true directly on that complete after claim value—never use an invented undated field. Its event MUST be one source-specific English string of at least 20 characters (not an object), and it may carry no sourceDate, western date, unresolved field, or other temporal field. For any other row, replace or remove also copy before verbatim from claims[id]. date-context is permitted only for non-life rows: before must be exactly claims[id][2].dateContext (or null) and after must be only the replacement dateContext object. Copy any existing non-temporal dateContext fields, including event, verbatim into after; only sourceDate, westernYear, westernInterval, westernBounds, unresolved, and unresolvedReason may be added, removed, or changed. Put research explanation in reason, never in custom keys such as competingSourceDate, westernCalendar, or conversionEvidence. An add-reception-event MUST be an event-participation row with a nonempty kind such as retrospective-reference. If it supplies receptionType, its value must literally be \"retrospective\"; \"posthumous\" is not a valid receptionType. Include any role/action supported by the source. A westernInterval is exactly {start:{era:\"AD\"|\"BC\",year:positive integer,precision:\"year\"|\"circa\"},end:{era:\"AD\"|\"BC\",year:positive integer,precision:\"year\"|\"circa\"}}; use no westernYear or westernBounds alongside it. Every western bound is {era:\"AD\"|\"BC\",year:positive integer,precision:\"year\"|\"circa\"}; never use an ad field. Western years, interval endpoints and bounds use only year or circa precision; preserve finer dates in sourceDate. Non-legendary people with active-date hints require a matching AD/BC hint and a Western attestation unless the sealed source is genuinely undated. Retained chronology can require a qualified hint: westernBounds.onOrAfter AD 355 maps to on or after AD 355, not an empty hint or exact AD 355. Check every retained claim for that person before clearing hints. Put all hint changes last, after claim edits and reception additions. The host preserves every non-date claim field; never send a full claim row for date-context.",
+  "findings": [
+    {
+      "items": [
+        "claim-750",
+        "claim-751",
+        "claim-752",
+        "claim-753",
+        "claim-774",
+        "claim-775",
+        "claim-776",
+        "claim-777",
+        "claim-778",
+        "claim-779",
+        "claim-780",
+        "claim-781",
+        "claim-782",
+        "claim-783",
+        "claim-784",
+        "claim-785",
+        "claim-812",
+        "claim-818",
+        "claim-820",
+        "claim-828",
+        "claim-829",
+        "claim-830",
+        "claim-831",
+        "hints-p121",
+        "hints-p122",
+        "hints-p129",
+        "hints-p130",
+        "hints-p131",
+        "p121",
+        "p122",
+        "p129",
+        "p130",
+        "p131"
+      ],
+      "problem": "Post-明年 narrative is bulk-dated AD 342 via 咸康七年後明年及隨後紀事, but ZZTJ places Moqian Hun in 建元元年 (343), Yuwen destruction/Changli/Weide/Sheyiyu’s death in 建元二年 (344), and park-oxen shares in 永和元年 (345).",
+      "action": "Drop the false 342 point year; date each episode with unresolved or witness-specific years/windows from Jinshu sequence vs ZZTJ; resync hints."
+    },
+    {
+      "items": [
+        "claim-825",
+        "hints-p126",
+        "p126"
+      ],
+      "problem": "claim-825 and hints-p126 assign Li a living reign AD 300–331 (美川王) that the chapter never states; s0096 only records Huang opening 釗父利墓 and carrying the corpse.",
+      "action": "Remove the imported reign attestation and active hint; keep only a posthumous exhumation/return event under the contested raid year; optionally add retrospective handling without life dates."
+    },
+    {
+      "items": [
+        "claim-832",
+        "claim-788",
+        "claim-789",
+        "claim-790",
+        "claim-791",
+        "claim-792",
+        "claim-793",
+        "claim-794",
+        "claim-843",
+        "claim-844",
+        "claim-845",
+        "hints-p132",
+        "hints-p143",
+        "hints-p144",
+        "hints-p145",
+        "p132",
+        "p143",
+        "p144",
+        "p145"
+      ],
+      "problem": "Owned speech-block dates use synthetic 咸康七年後明年及隨後紀事 → AD 342, but Jinshu never years the park-oxen shares (s0110–s0111) or Feng Yu’s remonstrance (s0112–s0296), while ZZTJ 卷097 places that levy and remonstrance under 永和元年 (AD 345). Wang Xian/Liu Ming are 前者 relative to the speech.",
+      "action": "Drop the false 342 point year; date Feng Yu/Song Gai to unresolved or ZZTJ 345 with Jinshu undated preserved; date Wang Xian/Liu Ming punishments as unresolved onOrBefore the speech year; resync hints."
+    },
+    {
+      "items": [
+        "claim-836",
+        "hints-p136",
+        "p136"
+      ],
+      "problem": "先王 in s0273 is undated retrospective praise of Murong Hui, yet claim-836/hints-p136 impose AD 307–333 as if it were a dated career activity window.",
+      "action": "Replace with undatedSourceAttestation (or retrospective-reference) keeping the Hui achievements; remove the 307–333 active hint."
+    },
+    {
+      "items": [
+        "claim-837",
+        "hints-p137",
+        "p137"
+      ],
+      "problem": "s0274 only compares Huang to 西伯; BC 1100–1050 invents a traditional lifespan nowhere in the chapter.",
+      "action": "Use undatedSourceAttestation or qualitative antiquity for the rhetorical 西伯; delete the invented interval/hint."
+    },
+    {
+      "items": [
+        "claim-838",
+        "hints-p138",
+        "p138"
+      ],
+      "problem": "石季龍 is a present-tense rival inside the remonstrance; AD 334–349 imports Shi Hu’s full reign rather than the speech’s undated/ZZTJ 345 setting.",
+      "action": "Tie the mention to the remonstrance’s corrected date context (or undated attestation); remove the reign-long hint."
+    },
+    {
+      "items": [
+        "claim-841",
+        "claim-842",
+        "hints-p141",
+        "hints-p142",
+        "p141",
+        "p142"
+      ],
+      "problem": "s0282 only cites 西門 and 史起 irrigation methods; BC 400 point year and BC 350–300 floruit are invented outside the chapter.",
+      "action": "Use undatedSourceAttestation (method citation) or qualitative Warring States; clear the false floruit hints."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108",
+      "title": "晉書 卷108 載記第八 慕容廆 (Wikisource)",
+      "quote": "八年，廆卒，乃止。時年六十五",
+      "reason": "Follows 咸和五年 in Hui's annals: Xianhe 8 = AD 333 for Hui's death."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108",
+      "title": "晉書 卷108 載記第八 慕容廆 (Wikisource)",
+      "quote": "建興中，湣帝遣使拜廆鎮軍將軍、昌黎、遼東二國公",
+      "reason": "Hui already held a Liaodong dukedom under Jianxing (AD 313–317), so s0006 cannot be pinned to 317 or after 太興."
+    },
+    {
+      "kind": "chapter",
+      "quote": "宇文歸遣其國相莫淺渾伐皝，諸將請戰，皝不許。",
+      "reason": "Opens the undated post-明年 Moqian Hun episode."
+    },
+    {
+      "kind": "chapter",
+      "quote": "皝開地千餘里，徙其部人五萬餘落于昌黎，改涉奕於城為威德城。",
+      "reason": "Annexation, Changli resettlement, and Weide rename after that victory."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "十一月，皝自將勁兵四萬出南道，以慕容翰、慕容霸為前鋒",
+      "reason": "ZZTJ 咸康八年十一月 (342) witness for the Goguryeo campaign van."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "宇文逸豆歸遣其相莫淺渾將兵擊燕；諸將爭欲擊之，燕王皝不許。",
+      "reason": "ZZTJ 建元元年 (343) witness for the Moqian Hun raid."
+    },
+    {
+      "kind": "chapter",
+      "quote": "皝記室參軍封裕諫曰：",
+      "reason": "Jinshu opens Feng Yu’s remonstrance with no year-word in this unit."
+    },
+    {
+      "kind": "chapter",
+      "quote": "繼武闡廣之功，有高西伯。",
+      "reason": "Rhetorical 西伯 comparison only."
+    },
+    {
+      "kind": "chapter",
+      "quote": "石季龍誰與居乎！",
+      "reason": "Present-tense Shi Hu taunt inside the speech."
+    },
+    {
+      "kind": "chapter",
+      "quote": "且水旱之厄，堯、湯所不免，王者宜浚治溝澮，循鄭白、西門、史起溉灌之法",
+      "reason": "Yao/Tang qualitative exempla and Ximen/Shi Qi method citation; also shows 鄭白 as canal names."
+    },
+    {
+      "kind": "chapter",
+      "quote": "前者參軍王憲、大夫劉明並竭忠獻款，以貢至言",
+      "reason": "Former remonstrances of Wang Xian and Liu Ming."
+    },
+    {
+      "kind": "chapter",
+      "quote": "右長史宋該等阿媚苟容，輕劾諫士",
+      "reason": "Song Gai named as flattering impeacher."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "燕王皝以牛假貧民，使佃苑中，稅其什之八，自有牛者稅其七。記室參軍封裕上書諫",
+      "reason": "ZZTJ 永和元年 (AD 345) witness for the park-oxen levy and Feng Yu’s remonstrance."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "參軍王憲、大夫劉明並以言事忤旨，主者處以大辟，殿下雖恕其死，猶免官禁錮。",
+      "reason": "ZZTJ quote inside the same 345 remonstrance recalling Wang Xian/Liu Ming’s prior punishment."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "右長史宋該等阿媚苟容，輕劾諫士，己無骨鯁，嫉人有之，掩蔽耳目，不忠之甚者也。",
+      "reason": "ZZTJ 345 witness naming Song Gai inside Feng Yu’s remonstrance."
+    },
+    {
+      "kind": "chapter",
+      "quote": "王憲、劉明，忠臣也，願宥忤鱗之愆，收其藥石之效。",
+      "reason": "Names Wang Xian and Liu Ming as loyal remonstrators inside Feng’s memorial."
+    },
+    {
+      "kind": "chapter",
+      "quote": "王憲、劉明雖其罪應禁黜，亦猶孤之無大量也。",
+      "reason": "Huang restores Wang Xian and Liu Ming while admitting his own lack of forbearance."
+    },
+    {
+      "kind": "chapter",
+      "quote": "建元二年，從皝討宇文歸",
+      "reason": "Jianyuan 2 of Jin Kangdi (AD 344) explicitly dates Han's campaign against Yuwen Gui and the following wound."
+    },
+    {
+      "kind": "chapter",
+      "quote": "及遼奔走，翰又北投宇文歸",
+      "reason": "Duan Liao's flight precedes Han's move to Yuwen Gui; it is AD 338, not the later 建元二年 campaign."
+    },
+    {
+      "kind": "chapter",
+      "quote": "石季龍克令支，裕以郡降，拜北平太守，徵為尚書左丞。",
+      "reason": "Owned unit s0210, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+    },
+    {
+      "kind": "chapter",
+      "quote": "東破高句麗，北滅宇文歸，皆豫其謀，皝甚器重之。",
+      "reason": "Owned unit s0214, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+    }
+  ],
+  "people": [
+    {
+      "id": "p116",
+      "names": [
+        "Murong Huang",
+        "慕容皝",
+        "Murong Huang"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and General",
+      "hints": [
+        "AD 341",
+        "AD 341-342",
+        "AD 342",
+        "AD 342-343"
+      ]
+    },
+    {
+      "id": "p121",
+      "names": [
+        "Murong Han",
+        "慕容翰",
+        "Murong Han"
+      ],
+      "historicity": "historical",
+      "descriptor": "General",
+      "hints": [
+        "AD 341-342",
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p122",
+      "names": [
+        "Murong Chui",
+        "慕容垂",
+        "Murong Chui"
+      ],
+      "historicity": "historical",
+      "descriptor": "Royal Family Member and Military Officer",
+      "hints": [
+        "AD 341-342",
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p126",
+      "names": [
+        "Li",
+        "利",
+        "Li"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 300-331"
+      ]
+    },
+    {
+      "id": "p129",
+      "names": [
+        "Yuwen Gui",
+        "宇文歸",
+        "Yuwen Gui"
+      ],
+      "historicity": "historical",
+      "descriptor": "Tribal Leader and Ruler",
+      "hints": [
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p130",
+      "names": [
+        "Moqian Hun",
+        "莫淺渾",
+        "Moqian Hun"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official and General",
+      "hints": [
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p131",
+      "names": [
+        "Sheyiyu",
+        "涉奕於",
+        "Sheyiyu"
+      ],
+      "historicity": "historical",
+      "descriptor": "General",
+      "hints": [
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p132",
+      "names": [
+        "Feng Yu",
+        "封裕",
+        "Feng Yu"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official and Commentator",
+      "hints": [
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p136",
+      "names": [
+        "Murong Hui",
+        "慕容廆",
+        "Murong Hui"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 307-333"
+      ]
+    },
+    {
+      "id": "p137",
+      "names": [
+        "Earl of the West",
+        "西伯",
+        "Xibo"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "BC 1100-1050"
+      ]
+    },
+    {
+      "id": "p138",
+      "names": [
+        "Shi Hu",
+        "石季龍",
+        "Shi Jilong"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 334-349"
+      ]
+    },
+    {
+      "id": "p141",
+      "names": [
+        "Ximen",
+        "西門",
+        "Ximen"
+      ],
+      "historicity": "historical",
+      "descriptor": "Administrator",
+      "hints": [
+        "circa BC 400"
+      ]
+    },
+    {
+      "id": "p142",
+      "names": [
+        "Shi Qi",
+        "史起",
+        "Shi Qi"
+      ],
+      "historicity": "historical",
+      "descriptor": "Administrator",
+      "hints": [
+        "BC 350-300"
+      ]
+    },
+    {
+      "id": "p143",
+      "names": [
+        "Wang Xian",
+        "王憲",
+        "Wang Xian"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": [
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p144",
+      "names": [
+        "Liu Ming",
+        "劉明",
+        "Liu Ming"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": [
+        "AD 342"
+      ]
+    },
+    {
+      "id": "p145",
+      "names": [
+        "Song Gai",
+        "宋該",
+        "Song Gai"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": [
+        "AD 342"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "claim-695",
+      "personId": "p116",
+      "claimIndex": 694,
+      "evidence": [
+        "s0090"
+      ]
+    },
+    {
+      "id": "claim-696",
+      "personId": "p116",
+      "claimIndex": 695,
+      "evidence": [
+        "s0090"
+      ]
+    },
+    {
+      "id": "claim-697",
+      "personId": "p116",
+      "claimIndex": 696,
+      "evidence": [
+        "s0090"
+      ]
+    },
+    {
+      "id": "claim-698",
+      "personId": "p116",
+      "claimIndex": 697,
+      "evidence": [
+        "s0090"
+      ]
+    },
+    {
+      "id": "claim-699",
+      "personId": "p116",
+      "claimIndex": 698,
+      "evidence": [
+        "s0090"
+      ]
+    },
+    {
+      "id": "claim-721",
+      "personId": "p116",
+      "claimIndex": 720,
+      "evidence": [
+        "s0089"
+      ]
+    },
+    {
+      "id": "claim-722",
+      "personId": "p116",
+      "claimIndex": 721,
+      "evidence": [
+        "s0092"
+      ]
+    },
+    {
+      "id": "claim-723",
+      "personId": "p116",
+      "claimIndex": 722,
+      "evidence": [
+        "s0089"
+      ]
+    },
+    {
+      "id": "claim-724",
+      "personId": "p116",
+      "claimIndex": 723,
+      "evidence": [
+        "s0095",
+        "s0096"
+      ]
+    },
+    {
+      "id": "claim-725",
+      "personId": "p116",
+      "claimIndex": 724,
+      "evidence": [
+        "s0108"
+      ]
+    },
+    {
+      "id": "claim-726",
+      "personId": "p116",
+      "claimIndex": 725,
+      "evidence": [
+        "s0108"
+      ]
+    },
+    {
+      "id": "claim-727",
+      "personId": "p131",
+      "claimIndex": 726,
+      "evidence": [
+        "s0108"
+      ]
+    },
+    {
+      "id": "claim-728",
+      "personId": "p129",
+      "claimIndex": 727,
+      "evidence": [
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-734",
+      "personId": "p116",
+      "claimIndex": 733,
+      "evidence": [
+        "s0091"
+      ]
+    },
+    {
+      "id": "claim-735",
+      "personId": "p116",
+      "claimIndex": 734,
+      "evidence": [
+        "s0092"
+      ]
+    },
+    {
+      "id": "claim-736",
+      "personId": "p116",
+      "claimIndex": 735,
+      "evidence": [
+        "s0093"
+      ]
+    },
+    {
+      "id": "claim-737",
+      "personId": "p121",
+      "claimIndex": 736,
+      "evidence": [
+        "s0095"
+      ]
+    },
+    {
+      "id": "claim-738",
+      "personId": "p122",
+      "claimIndex": 737,
+      "evidence": [
+        "s0093"
+      ]
+    },
+    {
+      "id": "claim-743",
+      "personId": "p116",
+      "claimIndex": 742,
+      "evidence": [
+        "s0096"
+      ]
+    },
+    {
+      "id": "claim-746",
+      "personId": "p126",
+      "claimIndex": 745,
+      "evidence": [
+        "s0096",
+        "s0097"
+      ]
+    },
+    {
+      "id": "claim-748",
+      "personId": "p116",
+      "claimIndex": 747,
+      "evidence": [
+        "s0097"
+      ]
+    },
+    {
+      "id": "claim-749",
+      "personId": "p130",
+      "claimIndex": 748,
+      "evidence": [
+        "s0098",
+        "s0101"
+      ]
+    },
+    {
+      "id": "claim-750",
+      "personId": "p116",
+      "claimIndex": 749,
+      "evidence": [
+        "s0098"
+      ]
+    },
+    {
+      "id": "claim-751",
+      "personId": "p130",
+      "claimIndex": 750,
+      "evidence": [
+        "s0099"
+      ]
+    },
+    {
+      "id": "claim-752",
+      "personId": "p121",
+      "claimIndex": 751,
+      "evidence": [
+        "s0101"
+      ]
+    },
+    {
+      "id": "claim-753",
+      "personId": "p130",
+      "claimIndex": 752,
+      "evidence": [
+        "s0101"
+      ]
+    },
+    {
+      "id": "claim-754",
+      "personId": "p116",
+      "claimIndex": 753,
+      "evidence": [
+        "s0102"
+      ]
+    },
+    {
+      "id": "claim-755",
+      "personId": "p116",
+      "claimIndex": 754,
+      "evidence": [
+        "s0103",
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-756",
+      "personId": "p131",
+      "claimIndex": 755,
+      "evidence": [
+        "s0104",
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-757",
+      "personId": "p129",
+      "claimIndex": 756,
+      "evidence": [
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-758",
+      "personId": "p116",
+      "claimIndex": 757,
+      "evidence": [
+        "s0108"
+      ]
+    },
+    {
+      "id": "claim-759",
+      "personId": "p116",
+      "claimIndex": 758,
+      "evidence": [
+        "s0109"
+      ]
+    },
+    {
+      "id": "claim-760",
+      "personId": "p116",
+      "claimIndex": 759,
+      "evidence": [
+        "s0110",
+        "s0111"
+      ]
+    },
+    {
+      "id": "claim-763",
+      "personId": "p143",
+      "claimIndex": 762,
+      "evidence": [
+        "s0291",
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-764",
+      "personId": "p144",
+      "claimIndex": 763,
+      "evidence": [
+        "s0291",
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-765",
+      "personId": "p116",
+      "claimIndex": 764,
+      "evidence": [
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-766",
+      "personId": "p143",
+      "claimIndex": 765,
+      "evidence": [
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-767",
+      "personId": "p144",
+      "claimIndex": 766,
+      "evidence": [
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-768",
+      "personId": "p143",
+      "claimIndex": 767,
+      "evidence": [
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-769",
+      "personId": "p144",
+      "claimIndex": 768,
+      "evidence": [
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-784",
+      "personId": "p116",
+      "claimIndex": 783,
+      "evidence": [
+        "s0089",
+        "s0090",
+        "s0091"
+      ]
+    },
+    {
+      "id": "claim-785",
+      "personId": "p116",
+      "claimIndex": 784,
+      "evidence": [
+        "s0092",
+        "s0093",
+        "s0094",
+        "s0095",
+        "s0096"
+      ]
+    },
+    {
+      "id": "claim-786",
+      "personId": "p116",
+      "claimIndex": 785,
+      "evidence": [
+        "s0097"
+      ]
+    },
+    {
+      "id": "claim-787",
+      "personId": "p116",
+      "claimIndex": 786,
+      "evidence": [
+        "s0098",
+        "s0102",
+        "s0103",
+        "s0108",
+        "s0112"
+      ]
+    },
+    {
+      "id": "claim-792",
+      "personId": "p121",
+      "claimIndex": 791,
+      "evidence": [
+        "s0093",
+        "s0095"
+      ]
+    },
+    {
+      "id": "claim-793",
+      "personId": "p121",
+      "claimIndex": 792,
+      "evidence": [
+        "s0101",
+        "s0103",
+        "s0104",
+        "s0105"
+      ]
+    },
+    {
+      "id": "claim-794",
+      "personId": "p122",
+      "claimIndex": 793,
+      "evidence": [
+        "s0093"
+      ]
+    },
+    {
+      "id": "claim-795",
+      "personId": "p122",
+      "claimIndex": 794,
+      "evidence": [
+        "s0103"
+      ]
+    },
+    {
+      "id": "claim-800",
+      "personId": "p126",
+      "claimIndex": 799,
+      "evidence": [
+        "s0096"
+      ]
+    },
+    {
+      "id": "claim-803",
+      "personId": "p129",
+      "claimIndex": 802,
+      "evidence": [
+        "s0098",
+        "s0103",
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-804",
+      "personId": "p130",
+      "claimIndex": 803,
+      "evidence": [
+        "s0098",
+        "s0101"
+      ]
+    },
+    {
+      "id": "claim-805",
+      "personId": "p131",
+      "claimIndex": 804,
+      "evidence": [
+        "s0104",
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-806",
+      "personId": "p131",
+      "claimIndex": 805,
+      "evidence": [
+        "s0107"
+      ]
+    },
+    {
+      "id": "claim-807",
+      "personId": "p132",
+      "claimIndex": 806,
+      "evidence": [
+        "s0112"
+      ]
+    },
+    {
+      "id": "claim-811",
+      "personId": "p136",
+      "claimIndex": 810,
+      "evidence": [
+        "s0273"
+      ]
+    },
+    {
+      "id": "claim-812",
+      "personId": "p137",
+      "claimIndex": 811,
+      "evidence": [
+        "s0274"
+      ]
+    },
+    {
+      "id": "claim-813",
+      "personId": "p138",
+      "claimIndex": 812,
+      "evidence": [
+        "s0279"
+      ]
+    },
+    {
+      "id": "claim-816",
+      "personId": "p141",
+      "claimIndex": 815,
+      "evidence": [
+        "s0282"
+      ]
+    },
+    {
+      "id": "claim-817",
+      "personId": "p142",
+      "claimIndex": 816,
+      "evidence": [
+        "s0282"
+      ]
+    },
+    {
+      "id": "claim-818",
+      "personId": "p143",
+      "claimIndex": 817,
+      "evidence": [
+        "s0291",
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-819",
+      "personId": "p144",
+      "claimIndex": 818,
+      "evidence": [
+        "s0291",
+        "s0292"
+      ]
+    },
+    {
+      "id": "claim-820",
+      "personId": "p145",
+      "claimIndex": 819,
+      "evidence": [
+        "s0296"
+      ]
+    },
+    {
+      "id": "hints-p116",
+      "personId": "p116",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 341",
+        "AD 341-342",
+        "AD 342",
+        "AD 342-343"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p121",
+      "personId": "p121",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 341-342",
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p122",
+      "personId": "p122",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 341-342",
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p126",
+      "personId": "p126",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 300-331"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p129",
+      "personId": "p129",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p130",
+      "personId": "p130",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p131",
+      "personId": "p131",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p132",
+      "personId": "p132",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p136",
+      "personId": "p136",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 307-333"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p137",
+      "personId": "p137",
+      "predicate": "active-date-hints",
+      "value": [
+        "BC 1100-1050"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p138",
+      "personId": "p138",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 334-349"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p141",
+      "personId": "p141",
+      "predicate": "active-date-hints",
+      "value": [
+        "circa BC 400"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p142",
+      "personId": "p142",
+      "predicate": "active-date-hints",
+      "value": [
+        "BC 350-300"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p143",
+      "personId": "p143",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p144",
+      "personId": "p144",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p145",
+      "personId": "p145",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 342"
+      ],
+      "evidence": []
+    }
+  ],
+  "claims": {
+    "claim-695": [
+      "p116",
+      "office",
+      {
+        "label": {
+          "en": "Palace Attendant",
+          "zh": "侍中"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0090"
+      ]
+    ],
+    "claim-696": [
+      "p116",
+      "office",
+      {
+        "label": {
+          "en": "Grand Commander of all military affairs north of the Yellow River",
+          "zh": "大都督河北諸軍事"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0090"
+      ]
+    ],
+    "claim-697": [
+      "p116",
+      "office",
+      {
+        "label": {
+          "en": "Grand General",
+          "zh": "大將軍"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0090"
+      ]
+    ],
+    "claim-698": [
+      "p116",
+      "noble-title",
+      {
+        "title": {
+          "en": "King of Yan",
+          "zh": "燕王"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0090"
+      ]
+    ],
+    "claim-699": [
+      "p116",
+      "office",
+      {
+        "label": {
+          "en": "other offices left unchanged",
+          "zh": "其餘官皆如故"
+        },
+        "action": "retained",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0090"
+      ]
+    ],
+    "claim-721": [
+      "p116",
+      "place-association",
+      {
+        "place": {
+          "en": "Longcheng",
+          "zh": "龍城"
+        },
+        "relation": "founded",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0089"
+      ]
+    ],
+    "claim-722": [
+      "p116",
+      "place-association",
+      {
+        "place": {
+          "en": "Longcheng",
+          "zh": "龍城"
+        },
+        "relation": "capital-moved-to",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0092"
+      ]
+    ],
+    "claim-723": [
+      "p116",
+      "place-association",
+      {
+        "place": {
+          "en": "Liucheng",
+          "zh": "柳城"
+        },
+        "relation": "renamed-from",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0089"
+      ]
+    ],
+    "claim-724": [
+      "p116",
+      "place-association",
+      {
+        "place": {
+          "en": "Wandu",
+          "zh": "丸都"
+        },
+        "relation": "captured",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0095",
+        "s0096"
+      ]
+    ],
+    "claim-725": [
+      "p116",
+      "place-association",
+      {
+        "place": {
+          "en": "Changli",
+          "zh": "昌黎"
+        },
+        "relation": "resettled-people-at",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0108"
+      ]
+    ],
+    "claim-726": [
+      "p116",
+      "place-association",
+      {
+        "place": {
+          "en": "Weide",
+          "zh": "威德城"
+        },
+        "relation": "renamed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0108"
+      ]
+    ],
+    "claim-727": [
+      "p131",
+      "place-association",
+      {
+        "place": {
+          "en": "Sheyiyu city",
+          "zh": "涉奕於城"
+        },
+        "relation": "associated-fort",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0108"
+      ]
+    ],
+    "claim-728": [
+      "p129",
+      "place-association",
+      {
+        "place": {
+          "en": "northern desert",
+          "zh": "漠北"
+        },
+        "relation": "fled-to",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0107"
+      ]
+    ],
+    "claim-734": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "grantor",
+        "action": "enfeoffed-over-one-hundred-meritorious-officers",
+        "dateContext": {
+          "sourceDate": {
+            "text": "於是…咸康七年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0091"
+      ]
+    ],
+    "claim-735": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "ruler",
+        "action": "moved-capital",
+        "place": {
+          "en": "Longcheng",
+          "zh": "龍城"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0092"
+      ]
+    ],
+    "claim-736": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned-against-Yuwen-and-Goguryeo",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0093"
+      ]
+    ],
+    "claim-737": [
+      "p121",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "vanguard",
+        "action": "defeated",
+        "otherPersonId": "p124",
+        "place": {
+          "en": "Mudi",
+          "zh": "木底"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0095"
+      ]
+    ],
+    "claim-738": [
+      "p122",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "vanguard",
+        "action": "advanced",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0093"
+      ]
+    ],
+    "claim-743": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "opened-tomb-and-razed-Wandu",
+        "otherPersonId": "p126",
+        "place": {
+          "en": "Wandu",
+          "zh": "丸都"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0096"
+      ]
+    ],
+    "claim-746": [
+      "p126",
+      "material-association",
+      {
+        "item": {
+          "en": "corpse",
+          "zh": "屍"
+        },
+        "relation": "exhumed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          },
+          "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+        }
+      },
+      "explicit",
+      [
+        "s0096",
+        "s0097"
+      ]
+    ],
+    "claim-748": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "diplomatic",
+        "role": "recipient",
+        "action": "returned-fathers-corpse",
+        "otherPersonId": "p126",
+        "dateContext": {
+          "sourceDate": {
+            "text": "明年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 343,
+              "precision": "year"
+            }
+          },
+          "event": "Jinshu109 dates the submission and corpse return to 明年 after its Xiankang7block(342by that sequence); ZZTJ97 records the same episode in Jianyuan1/secondmonth343. Both witnesses are retained as a342–343window."
+        }
+      },
+      "explicit",
+      [
+        "s0097"
+      ]
+    ],
+    "claim-749": [
+      "p130",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "invader",
+        "action": "campaigned-against",
+        "otherPersonId": "p116",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0098",
+        "s0101"
+      ]
+    ],
+    "claim-750": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "refused-immediate-battle",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0098"
+      ]
+    ],
+    "claim-751": [
+      "p130",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "neglected-defenses-in-drink-and-hunting",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0099"
+      ]
+    ],
+    "claim-752": [
+      "p121",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "defeated-and-captured-host",
+        "otherPersonId": "p130",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0101"
+      ]
+    ],
+    "claim-753": [
+      "p130",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "fugitive",
+        "action": "escaped-alone",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0101"
+      ]
+    ],
+    "claim-754": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "administration",
+        "role": "ruler",
+        "action": "toured-and-encouraged-farming",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0102"
+      ]
+    ],
+    "claim-755": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned-against",
+        "otherPersonId": "p129",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0103",
+        "s0107"
+      ]
+    ],
+    "claim-756": [
+      "p131",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "resisted-and-was-beheaded",
+        "otherPersonId": "p121",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0104",
+        "s0107"
+      ]
+    ],
+    "claim-757": [
+      "p129",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "fugitive",
+        "action": "fled-to-northern-desert",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0107"
+      ]
+    ],
+    "claim-758": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "administration",
+        "role": "ruler",
+        "action": "annexed-land-and-resettled-fifty-thousand-settlements",
+        "place": {
+          "en": "Changli",
+          "zh": "昌黎"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0108"
+      ]
+    ],
+    "claim-759": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "ritual",
+        "role": "host",
+        "action": "victory-feast-and-graded-rewards",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0109"
+      ]
+    ],
+    "claim-760": [
+      "p116",
+      "event-participation",
+      {
+        "kind": "administration",
+        "role": "ruler",
+        "action": "set-park-farming-shares",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0110",
+        "s0111"
+      ]
+    ],
+    "claim-763": [
+      "p143",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "remonstrator",
+        "action": "offered-loyal-counsel-and-was-punished",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0291",
+        "s0292"
+      ]
+    ],
+    "claim-764": [
+      "p144",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "remonstrator",
+        "action": "offered-loyal-counsel-and-was-punished",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0291",
+        "s0292"
+      ]
+    ],
+    "claim-765": [
+      "p116",
+      "legal-action",
+      {
+        "label": {
+          "en": "pardon from capital punishment",
+          "zh": "恕其大辟"
+        },
+        "action": "pardoned",
+        "otherPersonId": "p143",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0292"
+      ]
+    ],
+    "claim-766": [
+      "p143",
+      "legal-action",
+      {
+        "label": {
+          "en": "demotion, bar, and exclusion from court",
+          "zh": "削黜禁錮，不齒於朝"
+        },
+        "action": "punished",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0292"
+      ]
+    ],
+    "claim-767": [
+      "p144",
+      "legal-action",
+      {
+        "label": {
+          "en": "demotion, bar, and exclusion from court",
+          "zh": "削黜禁錮，不齒於朝"
+        },
+        "action": "punished",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0292"
+      ]
+    ],
+    "claim-768": [
+      "p143",
+      "status",
+      {
+        "status": "barred-from-court",
+        "action": "entered",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0292"
+      ]
+    ],
+    "claim-769": [
+      "p144",
+      "status",
+      {
+        "status": "barred-from-court",
+        "action": "entered",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "quotation",
+          "speakerPersonId": "p132"
+        }
+      },
+      "explicit",
+      [
+        "s0292"
+      ]
+    ],
+    "claim-784": [
+      "p116",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "於是…咸康七年"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 341,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0089",
+        "s0090",
+        "s0091"
+      ]
+    ],
+    "claim-785": [
+      "p116",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+      },
+      "explicit",
+      [
+        "s0092",
+        "s0093",
+        "s0094",
+        "s0095",
+        "s0096"
+      ]
+    ],
+    "claim-786": [
+      "p116",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "明年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 343,
+            "precision": "year"
+          }
+        },
+        "event": "Jinshu109 dates the submission and corpse return to 明年 after its Xiankang7block(342by that sequence); ZZTJ97 records the same episode in Jianyuan1/secondmonth343. Both witnesses are retained as a342–343window."
+      },
+      "explicit",
+      [
+        "s0097"
+      ]
+    ],
+    "claim-787": [
+      "p116",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0098",
+        "s0102",
+        "s0103",
+        "s0108",
+        "s0112"
+      ]
+    ],
+    "claim-792": [
+      "p121",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0093",
+        "s0095"
+      ]
+    ],
+    "claim-793": [
+      "p121",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0101",
+        "s0103",
+        "s0104",
+        "s0105"
+      ]
+    ],
+    "claim-794": [
+      "p122",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        },
+        "event": "Chronology differs between primary witnesses: Jinshu109 narrates the Longcheng move/Wandu war under Xiankang7(341), while ZZTJ97 places the move in Xiankang8/tenthmonth and the campaign in eleventhmonth342. The interval preserves both readings without preferring either."
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0093"
+      ]
+    ],
+    "claim-795": [
+      "p122",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0103"
+      ]
+    ],
+    "claim-800": [
+      "p126",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "釗父利墓（美川王在位）"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 300,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 331,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0096"
+      ]
+    ],
+    "claim-803": [
+      "p129",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0098",
+        "s0103",
+        "s0107"
+      ]
+    ],
+    "claim-804": [
+      "p130",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0098",
+        "s0101"
+      ]
+    ],
+    "claim-805": [
+      "p131",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0104",
+        "s0107"
+      ]
+    ],
+    "claim-806": [
+      "p131",
+      "death",
+      {
+        "manner": "beheaded",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康七年後明年及隨後紀事"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0107"
+      ]
+    ],
+    "claim-807": [
+      "p132",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0112"
+      ]
+    ],
+    "claim-811": [
+      "p136",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "先王"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 307,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0273"
+      ]
+    ],
+    "claim-812": [
+      "p137",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "西伯"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 1100,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 1050,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0274"
+      ]
+    ],
+    "claim-813": [
+      "p138",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "石季龍"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 349,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0279"
+      ]
+    ],
+    "claim-816": [
+      "p141",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "西門溉灌之法"
+        },
+        "westernYear": {
+          "era": "BC",
+          "year": 400,
+          "precision": "year"
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0282"
+      ]
+    ],
+    "claim-817": [
+      "p142",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "史起溉灌之法"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "BC",
+            "year": 350,
+            "precision": "year"
+          },
+          "end": {
+            "era": "BC",
+            "year": 300,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0282"
+      ]
+    ],
+    "claim-818": [
+      "p143",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0291",
+        "s0292"
+      ]
+    ],
+    "claim-819": [
+      "p144",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0291",
+        "s0292"
+      ]
+    ],
+    "claim-820": [
+      "p145",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康七年後明年及隨後紀事"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 342,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0296"
+      ]
+    ]
+  },
+  "units": [
+    {
+      "id": "s0089",
+      "zh": "使陽裕、唐柱等築龍城，構宮廟，改柳城為龍城縣。",
+      "en": "He had Yang Yu and Tang Zhu build Longcheng, raised palaces and shrines, and renamed Liucheng county Longcheng.",
+      "literal": "Had Yang Yu, Tang Zhu, and others build Longcheng, construct palace and temples, changed Liucheng to Longcheng county.",
+      "blockIndex": 23
+    },
+    {
+      "id": "s0090",
+      "zh": "於是成帝使兼大鴻臚郭希持節拜皝侍中、大都督河北諸軍事、大將軍、燕王，其餘官皆如故。",
+      "en": "Emperor Cheng then sent Guo Xi to invest him as palace attendant, grand commander north of the river, grand general, and king of Yan, leaving other posts unchanged.",
+      "literal": "Thereupon Emperor Cheng sent concurrent Grand Herald Guo Xi bearing credentials to appoint Huang Palace Attendant, Grand Commander of all military affairs north of the Yellow River, Grand General, King of Yan; the rest of offices all as before.",
+      "blockIndex": 23
+    },
+    {
+      "id": "s0091",
+      "zh": "封諸功臣百餘人，",
+      "en": "He enfeoffed more than a hundred deserving officers.",
+      "literal": "Enfeoffed the various meritorious ministers over a hundred persons.",
+      "blockIndex": 23
+    },
+    {
+      "id": "s0092",
+      "zh": "咸康七年，皝遷都龍城。",
+      "en": "In the seventh year of Xiankang, he moved his capital to Longcheng.",
+      "literal": "In the seventh year of Xiankang, Huang moved the capital to Longcheng.",
+      "blockIndex": 24
+    },
+    {
+      "id": "s0093",
+      "zh": "率勁卒四萬，入自南陝，以伐宇文、高句麗，又使翰及子垂為前鋒，遣長史王寓等勒眾萬五千，從北置而進。",
+      "en": "He took forty thousand veterans through the southern defile against Yuwen and Goguryeo, with Murong Han and Murong Chui as van while Wang Yu led fifteen thousand from Beizhi.",
+      "literal": "Led picked soldiers forty thousand, entered from the southern defile to campaign against Yuwen and Goguryeo; again had Han and son Chui as vanguard, sent chief clerk Wang Yu and others leading host fifteen thousand to advance from Beizhi.",
+      "blockIndex": 24
+    },
+    {
+      "id": "s0094",
+      "zh": "高句麗王釗謂皝軍之從北路也，乃遣其弟武統精銳五萬距北置，躬率弱卒以防南陝。",
+      "en": "King Gao Zhao assumed the main thrust would come from the north, sent fifty thousand under his brother Wu to Beizhi, and held the southern defile with weaker troops.",
+      "literal": "Goguryeo King Zhao thought Huang’s army came by the northern route; thereupon sent his younger brother Wu leading picked fifty thousand to block Beizhi; personally led weak soldiers to guard the southern defile.",
+      "blockIndex": 24
+    },
+    {
+      "id": "s0095",
+      "zh": "翰與釗戰於木底，大敗之，乘勝遂入丸都，釗單馬而遁。",
+      "en": "Murong Han routed him at Mudi, pressed into Wandu, and Zhao fled alone on horseback.",
+      "literal": "Han fought Zhao at Mudi, greatly defeated them, rode victory then entered Wandu; Zhao single horse fled.",
+      "blockIndex": 24
+    },
+    {
+      "id": "s0096",
+      "zh": "皝掘釗父利墓，載其屍並其母妻珍寶，掠男女五萬餘口，焚其宮室，毀丸都而歸。",
+      "en": "Huang opened Gao Zhao’s father Li’s tomb, carried off the corpse together with Zhao’s mother, wife, and treasures, plundered more than fifty thousand men and women, fired the palaces, razed Wandu, and returned.",
+      "literal": "Huang dug Zhao’s father Li’s tomb, loaded his corpse together with his mother, wife, and treasures, plundered over fifty thousand male and female, burned his palace chambers, destroyed Wandu and returned.",
+      "blockIndex": 24
+    },
+    {
+      "id": "s0097",
+      "zh": "明年，釗遣使稱臣于皝，貢其方物，乃歸其父屍。",
+      "en": "The next year Gao Zhao sent envoys declaring himself a subject of Huang, offered local products, and Huang then returned his father’s corpse.",
+      "literal": "The next year, Zhao sent envoys declaring subject to Huang, offered their local products, then returned his father’s corpse.",
+      "blockIndex": 24
+    },
+    {
+      "id": "s0098",
+      "zh": "宇文歸遣其國相莫淺渾伐皝，諸將請戰，皝不許。",
+      "en": "Yuwen Gui sent Moqian Hun; Huang’s generals begged to fight but he refused.",
+      "literal": "Yuwen Gui sent his state chancellor Moqian Hun to campaign against Huang; the generals requested battle; Huang did not permit.",
+      "blockIndex": 25
+    },
+    {
+      "id": "s0099",
+      "zh": "渾以皝為憚之，荒酒縱獵，不復設備。",
+      "en": "Moqian Hun assumed Huang was afraid and gave himself to drink and hunting without precautions.",
+      "literal": "Hun because Huang feared them, indulged wine and wantonly hunted, again did not set defenses.",
+      "blockIndex": 25
+    },
+    {
+      "id": "s0101",
+      "zh": "遣翰率騎擊之，渾大敗，僅以身免，盡俘其眾。",
+      "en": "He sent Murong Han with cavalry to strike them; Moqian Hun was badly defeated and escaped alone, while his entire host was taken captive.",
+      "literal": "Sent Han leading cavalry to strike them; Hun was greatly defeated, barely himself escaped, wholly captured their host.",
+      "blockIndex": 25
+    },
+    {
+      "id": "s0102",
+      "zh": "皝躬巡郡縣，勸課農桑，起龍城宮闕。",
+      "en": "Murong Huang toured his domains, pushed farming and sericulture, and raised palaces at Longcheng.",
+      "literal": "Huang personally toured prefectures and counties, urged and supervised farming and sericulture, raised Longcheng palace and towers.",
+      "blockIndex": 26
+    },
+    {
+      "id": "s0103",
+      "zh": "尋又率騎二萬親伐宇文歸，以翰及垂為前鋒。",
+      "en": "He soon took twenty thousand horse against Yuwen Gui, with Murong Han and Murong Chui as van.",
+      "literal": "Soon again led cavalry twenty thousand personally to campaign against Yuwen Gui, with Han and Chui as vanguard.",
+      "blockIndex": 27
+    },
+    {
+      "id": "s0104",
+      "zh": "歸使其騎將涉奕於盡眾距翰，皝馳遣謂翰曰：「奕於雄悍，宜小避之，待虜勢驕，然後取也。」",
+      "en": "Yuwen Gui sent Sheyiyu to hold Murong Han; Huang sent word: “Sheyiyu is fierce—spar lightly until he grows reckless, then strike.”",
+      "literal": "Gui made his cavalry general Sheyiyu exhaust the host to resist Han; Huang gallop-sent word telling Han: “Sheyiyu is fierce and bold; ought slightly to avoid him, wait until the bandits’ situation grows arrogant, then take them.”",
+      "blockIndex": 27
+    },
+    {
+      "id": "s0105",
+      "zh": "翰曰：「歸之精銳，盡在於此，今若克之，則歸可不勞兵而滅。",
+      "en": "Murong Han replied, “Yuwen Gui’s best troops are here; crush them and his realm falls without a long campaign.",
+      "literal": "Han said: “Gui’s picked troops are all here; now if we defeat them, then Gui can be destroyed without tiring the army.",
+      "blockIndex": 27
+    },
+    {
+      "id": "s0107",
+      "zh": "於是前戰，斬奕於，盡俘其眾，歸遠遁漠北。",
+      "en": "He attacked, slew Sheyiyu, took his army, and drove Yuwen Gui deep into the steppe.",
+      "literal": "Thereupon advanced battle, beheaded Sheyiyu, wholly captured their host; Gui fled far to the northern desert.",
+      "blockIndex": 27
+    },
+    {
+      "id": "s0108",
+      "zh": "皝開地千餘里，徙其部人五萬餘落于昌黎，改涉奕於城為威德城。",
+      "en": "He annexed a thousand li of pasture, resettled fifty thousand Yuwen dependents at Changli, and renamed Sheyiyu’s fort Weide.",
+      "literal": "Huang opened territory over a thousand li, moved their division people over fifty thousand settlements to Changli, changed Sheyiyu city to Weide city.",
+      "blockIndex": 27
+    },
+    {
+      "id": "s0109",
+      "zh": "行飲至之禮，論功行賞各有差。",
+      "en": "He held a victory feast and handed out graded rewards.",
+      "literal": "Performed the “drink-on-arrival” rite, discussed merit and performed rewards each had gradations.",
+      "blockIndex": 27
+    },
+    {
+      "id": "s0110",
+      "zh": "以牧牛給貧家，田于苑中，公收其八，二分入私。",
+      "en": "Poor households received draft oxen to till the royal park on an eighty-twenty revenue split with the state.",
+      "literal": "Used herding oxen given to poor families, fields in the royal park, the public took eight-tenths, two-tenths went private.",
+      "blockIndex": 28
+    },
+    {
+      "id": "s0111",
+      "zh": "有牛而無地者，亦田苑中，公收其七，三分入私。",
+      "en": "Householders who owned cattle but no land tilled the park on a seventy-thirty split.",
+      "literal": "Those with oxen but without land, also fielded in the park, the public took seven-tenths, three-tenths went private.",
+      "blockIndex": 28
+    },
+    {
+      "id": "s0112",
+      "zh": "皝記室參軍封裕諫曰：臣聞聖王之宰國也，薄賦而藏于百姓，分之以三等之田，十一而稅之；",
+      "en": "Murong Huang's secretary Feng Yu remonstrated: I have heard that a sage king keeps taxes light and stores wealth among the people, divides land into three grades, and levies one part in ten;",
+      "literal": "Murong Huang's secretary-advisor Feng Yu remonstrated, saying: Your servant has heard that when a sage king governs a state, he keeps taxes light and stores wealth among the people, divides land into three grades, and levies one part in ten;",
+      "blockIndex": 28
+    },
+    {
+      "id": "s0273",
+      "zh": "先王以神武聖略，保全一方，威以殄奸，德以懷遠，故九州之人，塞表殊類，繈負萬里，若赤子之歸慈父，流人之多舊土十倍有餘，人殷地狹，故無田者十有四焉。",
+      "en": "Murong Hui, by divine martial strategy, preserved this region, destroyed traitors by might and won the distant by virtue; people of the nine provinces and foreign tribes came carrying infants for ten thousand li like children to a loving father. Refugees outnumbered the old population more than tenfold; land was scarce and four in ten had no fields.",
+      "literal": "The former king, by divine martial sage strategy, preserved one region; by might he destroyed traitors and by virtue he won the distant; therefore people of the nine provinces and foreign tribes beyond the frontier came carrying infants for ten thousand li, like infants returning to a loving father; the displaced exceeded the old population more than tenfold, the people were many and the land narrow, so those without fields were four in ten.",
+      "blockIndex": 29
+    },
+    {
+      "id": "s0274",
+      "zh": "殿下以英聖之資，克廣先業，南摧強趙，東滅句麗，開境三千，戶增十萬，繼武闡廣之功，有高西伯。",
+      "en": "Your Highness, with heroic endowment, has extended the former enterprise: south you crushed strong Zhao, east you destroyed Goguryeo, opened three thousand li and added a hundred thousand households, rivaling the great Earl of the West.",
+      "literal": "Your Highness, with heroic and sage endowment, has been able to extend the former enterprise: south you crushed strong Zhao, east you destroyed Goguryeo, opened three thousand li of border and increased households by a hundred thousand, continuing the merit of martial expansion, rivaling the great Earl of the West.",
+      "blockIndex": 29
+    },
+    {
+      "id": "s0279",
+      "zh": "邇者深副樂土之望，中國之人皆將壺餐奉迎，石季龍誰與居乎！",
+      "en": "Recently you have deeply fulfilled the hope of a happy land; the people of China will all bring food to welcome you. Who then will remain with Shi Hu?",
+      "literal": "Recently you have deeply fulfilled the hope of a happy land; the people of China will all bring food to welcome you; Shi Jilong—who will dwell with him!",
+      "blockIndex": 29
+    },
+    {
+      "id": "s0282",
+      "zh": "且水旱之厄，堯、湯所不免，王者宜浚治溝澮，循鄭白、西門、史起溉灌之法，旱則決溝為雨，水則入於溝瀆，上無《雲漢》之憂，下無昏墊之患。",
+      "en": "Flood and drought, which Yao and Tang did not escape, require dredged canals and irrigation after the Zheng and Bai canals and the methods of Ximen and Shi Qi; drought is eased by opening channels to supply water like rain, and floodwaters are directed into drainage channels, so that above there is no anxiety like that expressed in Yunhan and below there is no misery from inundation.",
+      "literal": "Moreover flood and drought are misfortunes Yao and Tang did not escape; a king ought to dredge and maintain canals and ditches, following the Zheng and Bai canals and the irrigation methods of Ximen and Shi Qi; in drought open ditches as rain, in flood send water into channels; above no worry like the \"Yunhan,\" below no trouble of mire and flood.",
+      "blockIndex": 29
+    },
+    {
+      "id": "s0291",
+      "zh": "前者參軍王憲、大夫劉明並竭忠獻款，以貢至言，雖頗有逆鱗，意在無責。",
+      "en": "Staff officer Wang Xian and Grand Master Liu Ming spoke with full loyalty; though they ruffled scales, they meant no offense.",
+      "literal": "Formerly the staff officer Wang Xian and Grand Master Liu Ming both exhausted loyalty and offered sincerity, presenting utmost words; though they somewhat ruffled scales, the intent was not to blame.",
+      "blockIndex": 29
+    },
+    {
+      "id": "s0292",
+      "zh": "主者奏以妖言犯上，至之于法，殿下慈弘苞納，恕其大辟，猶削黜禁錮，不齒於朝。",
+      "en": "Officials charged them with demonic speech; Your Highness pardoned their capital crime yet still barred them from court.",
+      "literal": "The responsible officials memorialized that they spoke demonic words offending superiors and brought them to law; Your Highness, merciful and broad in acceptance, pardoned their capital offense yet still demoted, barred, and excluded them from court.",
+      "blockIndex": 29
+    },
+    {
+      "id": "s0296",
+      "zh": "右長史宋該等阿媚苟容，輕劾諫士，己無骨鯁，嫉人有之，掩蔽耳目，不忠之甚。",
+      "en": "Right chief clerk Song Gai and others flatter, impeach remonstrators lightly, have no backbone yet envy it in others, and cover eyes and ears, most disloyal.",
+      "literal": "Right Chief Clerk Song Gai and others flatter and accommodate, lightly impeach remonstrators, themselves without backbone yet jealous when others have it, covering eyes and ears, most disloyal.",
+      "blockIndex": 29
+    }
+  ]
+}
