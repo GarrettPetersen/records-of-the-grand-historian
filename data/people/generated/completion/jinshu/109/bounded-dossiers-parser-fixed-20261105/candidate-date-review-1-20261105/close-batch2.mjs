@@ -1,0 +1,40 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {mutateRemotePeopleWorkLedger} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-work-queue.mjs';
+import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+import {buildDateAuditPacket} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-audit.mjs';
+import {validateDateJobResult} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-date-workflow.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian', dir=new URL('.',import.meta.url).pathname;
+const read=p=>JSON.parse(fs.readFileSync(p)), need=(v,m)=>{if(!v)throw Error(m)}, hash=b=>createHash('sha256').update(b).digest('hex');
+const state=read(dir+'controller.json'), native=read(root+'/data/people/generated/date-workflow/jinshu/109/state.json'), packet=read(dir+'packet.json'), jobs=read(dir+'native-jobs.json');
+need(!inspectLocalDisk(root).errors.length,'Resource guard hold');
+need(state.batchNumber===2 && state.phase==='reviewing' && Date.now()>=Date.parse(state.deadlineAt),'Exact expired batch2 required');
+need(!state.parts.some(p=>['claimed','running'].includes(p.phase)),'Preserve active model handles');
+const current=buildDateAuditPacket('jinshu','109',{dataDir:root+'/data',peopleDir:root+'/data/people'});
+need(current.sourceHash===state.sourceHash && current.extractionHash===state.canonicalExtractionHash,'Canonical pins changed');
+need(native.generationId===state.generationId && native.round===1 && native.reviewRoundCeiling===3 && native.phase==='reaudit','Native ownership/cap changed');
+const done=state.parts.filter(p=>p.phase==='report-recorded');
+need(done.length===7 && done.every((p,i)=>p.index===i),'Exact seven-part checkpoint required');
+const reports=done.map(p=>{
+ const bytes=fs.readFileSync(p.reportFile), report=JSON.parse(bytes), job=native.jobs['reaudit-1-'+p.jobId];
+ need(hash(bytes)===p.reportSha256 && job?.status==='returned' && job.resultSha256===p.reportSha256 && job.agentId===p.agentId,'Native retained report differs');
+ validateDateJobResult(report,jobs[p.index],packet);
+ return report;
+});
+const pending=read(dir+'pending-paired-English-repairs-batch2.json');
+const summary={at:new Date().toISOString(),kind:'bounded-independent-candidate-date-review-batch',batch:2,scope:state.scope,sourceRevision:state.sourceRevision,sourceHash:state.sourceHash,canonicalExtractionHash:state.canonicalExtractionHash,candidateExtractionHash:state.extractionHash,round:1,maxRepairRounds:3,independentApproachApproved:true,approvedScopedChanges:18,completeReports:done.length,totalReports:state.parts.length,reviewedUnits:reports.reduce((n,r)=>n+r.reviewedUnits.length,0),reviewedItems:reports.reduce((n,r)=>n+r.itemChecks.length,0),reviewedPeople:reports.reduce((n,r)=>n+r.personChecks.length,0),findings:reports.reduce((n,r)=>n+r.findings.length,0),supportedItems:reports.reduce((n,r)=>n+r.itemChecks.filter(i=>i.verdict==='supported').length,0),pendingEnglishFields:pending.repairs.length,pairedUnchangedFieldsChecked:pending.pairedFieldChecks.length,sourceInputsFrozen:true,canonicalWrites:0,dateApproval:false,chapterApproved:false,activeOwnedModelJobs:0,remainingParts:state.parts.filter(p=>p.phase==='prepared').map(p=>p.index+1),dispatchWindowExpired:true,pendingEnglishFile:dir+'pending-paired-English-repairs-batch2.json',normalizedCaptureReceipts:done.filter(p=>p.captureNormalization).map(p=>p.captureNormalization.receiptFile)};
+need(!fs.existsSync(dir+'batch2-summary.json'),'Preserve existing checkpoint');
+const q=mutateRemotePeopleWorkLedger(ledger=>{
+ const c=ledger.dateAudits['jinshu/109'];
+ need(c?.worker===state.worker && c.lane==='grokbot' && c.generationId===state.generationId && c.executorToken===state.executorToken && c.sourceHash===state.sourceHash && c.extractionHash===state.canonicalExtractionHash,'Shared date owner changed');
+ for(const p of done){const j=c.jobs['reaudit-1-'+p.jobId];need(j?.status==='returned' && j.resultSha256===p.reportSha256,'Shared returned report differs');if(p.captureNormalization)j.captureNormalization=p.captureNormalization;}
+ need(!Object.values(c.jobs).some(j=>['claimed','running'].includes(j.status)),'Shared job still active');
+ c.candidateStage={...c.candidateStage,phase:'reaudit',round:1,maxRepairRounds:3,completeReports:7,totalReports:13,batch:2,batchPhase:'bounded-batch-complete',batchSummary:dir+'batch2-summary.json',pendingEnglishFile:summary.pendingEnglishFile};
+ c.lastBoundedBatch={...summary};
+ delete c.executorToken;delete c.executorExpiresAt;
+},{message:'Checkpoint seven independent109 native re-audit reports; preserve incomplete round1 and release idle executor'});
+summary.queueCommit=q.commit;
+fs.writeFileSync(dir+'batch2-summary.json',JSON.stringify(summary,null,2)+'\n',{flag:'wx'});
+state.phase='bounded-batch-complete';state.activeOwnedModelJobs=0;state.batchSummary=dir+'batch2-summary.json';state.queueCommit=q.commit;state.closedAt=summary.at;delete state.executorToken;
+fs.writeFileSync(dir+'controller.json.tmp',JSON.stringify(state,null,2)+'\n');fs.renameSync(dir+'controller.json.tmp',dir+'controller.json');
+console.log(JSON.stringify(summary));
