@@ -1,0 +1,988 @@
+{
+ "jobId": "e787a9727b2167ddff79",
+ "sourceHash": "sha256:0aea020cdfd5593619a808b02c83e4dc722117f2f6b1a0fa75d85bea53733736",
+ "extractionHash": "sha256:65c76c9f93157f64c140d105b7f9e37da69f0ca1847e415fe77f3b100150dc36",
+ "reviewedAt": "2026-11-05T15:10:14.305544+00:00",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "cc5be1ff-7e76-4a45-b245-e00da289f539",
+  "independentOfExtractor": true
+ },
+ "summary": "Not approved. Jinshu 109 dates in this part rest on relative markers (其年, 明年, 於是, 初) without explicit reign years except 咸康七年. Checked against ZZTJ 卷096-097: the Goguryeo peace plea is 339 in ZZTJ (conflict with Jinshu's ≥340 order), Han's return and the raid are 340, Longcheng and the investiture are 341. Defects: point years from disputed 其年/明年, an 初 flashback merged with 340 events, unsupported 335 window starts on the Longcheng/investiture block, a 340 point year where Yu Liang's death is only a lower bound, Dou Wu/He Jin dated from a retrospective citation, and an unidentified 先帝. Six items and four hints are supported. No births, deaths or ages occur in owned units.",
+ "reviewedUnits": [
+  "s0256",
+  "s0257",
+  "s0258",
+  "s0259",
+  "s0260",
+  "s0261",
+  "s0079",
+  "s0080",
+  "s0081",
+  "s0082",
+  "s0083",
+  "s0084",
+  "s0085",
+  "s0086",
+  "s0087",
+  "s0088",
+  "s0089",
+  "s0090",
+  "s0091"
+ ],
+ "itemChecks": [
+  {
+   "id": "claim-432",
+   "verdict": "incorrect",
+   "event": "Murong Huang's invasion of Goguryeo after which King Zhao sued for peace.",
+   "reason": "其年 is relative to the court's recognition story that follows Yu Liang's death (Jan 340), but ZZTJ 咸康五年 (AD 339) places this same Goguryeo campaign before that death; a bare point year 340 hides a conflicting witness.",
+   "evidence": [
+    {
+     "unit": "s0080",
+     "quote": "其年皝伐高句麗"
+    }
+   ]
+  },
+  {
+   "id": "claim-433",
+   "verdict": "incorrect",
+   "event": "Murong Huang received the homage of King Zhao's heir.",
+   "reason": "明年 counts from the disputed 其年; if 其年 is uncertain (339 per ZZTJ vs ≥340 per Jinshu order) the point year 341 inherits that defect.",
+   "evidence": [
+    {
+     "unit": "s0081",
+     "quote": "明年，釗遣其世子朝於皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-434",
+   "verdict": "supported",
+   "event": "Murong Huang planned against the Shi and sent Wang Che to Murong Han.",
+   "reason": "The undated narrative sits after Yu Liang's death (340) and before the 咸康七年 entry; ZZTJ dates Wang Che's mission and the raid to 咸康六年 (340), inside the 340-341 uncertainty window.",
+   "evidence": [
+    {
+     "unit": "s0087",
+     "quote": "皝將圖石氏"
+    },
+    {
+     "unit": "s0084",
+     "quote": "皝遣商人王車陰使察翰"
+    }
+   ]
+  },
+  {
+   "id": "claim-438",
+   "verdict": "incorrect",
+   "event": "Court recognition of Murong Huang's title King of Yan.",
+   "reason": "Recognition follows Yu Liang's death (onOrAfter 340) and ZZTJ dates the memorial and investiture to 341; a point year 340 is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0079",
+     "quote": "奏聽皝稱燕王"
+    }
+   ]
+  },
+  {
+   "id": "claim-449",
+   "verdict": "incorrect",
+   "event": "Murong Huang commanded the invasion of Goguryeo against King Zhao.",
+   "reason": "Same 其年 anchor as claim-432: Jinshu's sequence implies on/after 340 while ZZTJ dates the campaign to 339; point year 340 is unsupported precision.",
+   "evidence": [
+    {
+     "unit": "s0080",
+     "quote": "其年皝伐高句麗，王釗乞盟而還"
+    }
+   ]
+  },
+  {
+   "id": "claim-450",
+   "verdict": "incorrect",
+   "event": "Murong Huang hosted the homage of Zhao's heir.",
+   "reason": "Derived from 明年 after the disputed 其年; 341 cannot be fixed as a point year until the base year is resolved.",
+   "evidence": [
+    {
+     "unit": "s0081",
+     "quote": "明年，釗遣其世子朝於皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-452",
+   "verdict": "supported",
+   "event": "Murong Huang raided You and Ji through Yiweng Pass.",
+   "reason": "Jinshu leaves the raid undated between the 340 anchor and 咸康七年; ZZTJ 咸康六年冬十月 (340) falls in the 340-341 window, which honestly represents uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0088",
+     "quote": "率騎二萬出蠮螉塞，長驅至於薊城"
+    }
+   ]
+  },
+  {
+   "id": "claim-466",
+   "verdict": "supported",
+   "event": "Shi Jilong was the target of Huang's planned raid.",
+   "reason": "Shi Jilong is attested in Huang's planning speech, undated but placed between 340 and 341 by narrative order; ZZTJ 340 is inside the window.",
+   "evidence": [
+    {
+     "unit": "s0087",
+     "quote": "石季龍自以安樂諸城守防嚴重"
+    }
+   ]
+  },
+  {
+   "id": "claim-618",
+   "verdict": "incorrect",
+   "event": "Dou Wu is only cited as a historical example in Murong Huang's letter.",
+   "reason": "s0258-s0259 is Huang's later quotation of a Han figure, not Dou Wu's own dated event; AD 168 is imported external knowledge and should be a retrospective reference dated to the letter (on/after 340).",
+   "evidence": [
+    {
+     "unit": "s0258",
+     "quote": "竇武、何進好善虛己"
+    },
+    {
+     "unit": "s0259",
+     "quote": "雖為閹豎所危"
+    }
+   ]
+  },
+  {
+   "id": "claim-623",
+   "verdict": "incorrect",
+   "event": "He Jin is only cited as a historical example in Murong Huang's letter.",
+   "reason": "He Jin appears in Huang's retrospective example; the passage dates none of He Jin's own acts, so AD 189 is not supported by this unit and the item should be retrospective reception.",
+   "evidence": [
+    {
+     "unit": "s0258",
+     "quote": "竇武、何進好善虛己"
+    },
+    {
+     "unit": "s0259",
+     "quote": "天下嗟痛"
+    }
+   ]
+  },
+  {
+   "id": "claim-628",
+   "verdict": "research-blocked",
+   "event": "The former emperor's grant of a general's command to Murong Huang.",
+   "reason": "先帝 is unnamed; the 323-325 window is Emperor Ming's reign span, not a dated grant, and the identity of the emperor and the appointment year are not established by s0261.",
+   "evidence": [
+    {
+     "unit": "s0261",
+     "quote": "過蒙先帝列將之授"
+    }
+   ]
+  },
+  {
+   "id": "claim-633",
+   "verdict": "incorrect",
+   "event": "He Chong joined Yu Bing in recommending recognition of Huang as King of Yan.",
+   "reason": "又聞庾亮薨 gives only a lower bound (Yu Liang died 咸康六年正月, AD 340); ZZTJ places the Yu Bing/He Chong memorial under 咸康七年 (341), so point 340 is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0079",
+     "quote": "遂與何充等奏聽皝稱燕王"
+    }
+   ]
+  },
+  {
+   "id": "claim-638",
+   "verdict": "incorrect",
+   "event": "King Zhao of Goguryeo sued for peace with Murong Huang.",
+   "reason": "King Zhao's plea follows the same 其年 anchor; ZZTJ 咸康五年 places it in 339, so 340 as a point year conflicts with a primary witness.",
+   "evidence": [
+    {
+     "unit": "s0080",
+     "quote": "王釗乞盟而還"
+    }
+   ]
+  },
+  {
+   "id": "claim-639",
+   "verdict": "incorrect",
+   "event": "King Zhao sent his heir to pay homage to Huang.",
+   "reason": "Zhao's own act is dated only by 明年 relative to the disputed 其年; point 341 is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0081",
+     "quote": "釗遣其世子朝於皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-645",
+   "verdict": "incorrect",
+   "event": "Zhao's heir went to pay homage at Murong Huang's court.",
+   "reason": "The heir's homage depends on the same 明年 relative anchor; 341 inherits the 其年 conflict.",
+   "evidence": [
+    {
+     "unit": "s0081",
+     "quote": "釗遣其世子朝於皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-649",
+   "verdict": "incorrect",
+   "event": "Murong Han's flight to Yuwen Gui, feigned madness and return.",
+   "reason": "The passage opens with 初, a flashback to after Duan Liao's defeat (ZZTJ 338), so the flight and feigned madness predate 340; one 340-341 window conflates them with the return, which ZZTJ dates 咸康六年二月 (340).",
+   "evidence": [
+    {
+     "unit": "s0082",
+     "quote": "初，段遼之敗也，建威翰奔于宇文歸"
+    },
+    {
+     "unit": "s0086",
+     "quote": "翰乃竊歸駿馬，攜其二子而還"
+    }
+   ]
+  },
+  {
+   "id": "claim-660",
+   "verdict": "incorrect",
+   "event": "Yuwen Gui sheltered and trusted the feigning Murong Han.",
+   "reason": "Gui's trust is part of the 初 flashback beginning after Duan Liao's fall (338); a 340-341 window misdates his own hosting, which ran before Han's 340 escape.",
+   "evidence": [
+    {
+     "unit": "s0082",
+     "quote": "建威翰奔于宇文歸"
+    },
+    {
+     "unit": "s0083",
+     "quote": "歸信而不禁"
+    }
+   ]
+  },
+  {
+   "id": "claim-664",
+   "verdict": "supported",
+   "event": "The merchant Wang Che spied on Murong Han and carried the bow and arrows.",
+   "reason": "Wang Che's mission precedes Han's return; ZZTJ places it in 咸康六年 (340), inside the 340-341 window derived from Jinshu's order.",
+   "evidence": [
+    {
+     "unit": "s0084",
+     "quote": "皝遣商人王車陰使察翰"
+    },
+    {
+     "unit": "s0086",
+     "quote": "乃遣車遺翰弓矢"
+    }
+   ]
+  },
+  {
+   "id": "claim-720",
+   "verdict": "incorrect",
+   "event": "Murong Huang appointed Palace Attendant by Emperor Cheng's envoy.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "拜皝侍中"
+    }
+   ]
+  },
+  {
+   "id": "claim-721",
+   "verdict": "incorrect",
+   "event": "Murong Huang appointed Grand Commander north of the Yellow River.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "大都督河北諸軍事"
+    }
+   ]
+  },
+  {
+   "id": "claim-722",
+   "verdict": "incorrect",
+   "event": "Murong Huang appointed Grand General.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "大將軍、燕王"
+    }
+   ]
+  },
+  {
+   "id": "claim-723",
+   "verdict": "incorrect",
+   "event": "Murong Huang invested as King of Yan.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "大將軍、燕王"
+    }
+   ]
+  },
+  {
+   "id": "claim-724",
+   "verdict": "incorrect",
+   "event": "Murong Huang retained his other offices at the investiture.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "其餘官皆如故"
+    }
+   ]
+  },
+  {
+   "id": "claim-746",
+   "verdict": "incorrect",
+   "event": "Murong Huang founded Longcheng.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "築龍城"
+    }
+   ]
+  },
+  {
+   "id": "claim-748",
+   "verdict": "incorrect",
+   "event": "Murong Huang renamed Liucheng as Longcheng county.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "改柳城為龍城縣"
+    }
+   ]
+  },
+  {
+   "id": "claim-754",
+   "verdict": "incorrect",
+   "event": "Yang Yu built Longcheng for Murong Huang.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "使陽裕、唐柱等築龍城"
+    }
+   ]
+  },
+  {
+   "id": "claim-755",
+   "verdict": "incorrect",
+   "event": "Tang Zhu built Longcheng for Murong Huang.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "使陽裕、唐柱等築龍城"
+    }
+   ]
+  },
+  {
+   "id": "claim-756",
+   "verdict": "incorrect",
+   "event": "Murong Huang raised palaces and shrines at Longcheng.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "構宮廟"
+    }
+   ]
+  },
+  {
+   "id": "claim-757",
+   "verdict": "incorrect",
+   "event": "Guo Xi, acting Grand Herald, invested Murong Huang.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "兼大鴻臚郭希持節拜皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-758",
+   "verdict": "incorrect",
+   "event": "Emperor Cheng sent the investiture to Murong Huang.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "於是成帝使兼大鴻臚郭希持節拜皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-759",
+   "verdict": "incorrect",
+   "event": "Murong Huang enfeoffed over a hundred meritorious officers.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0091",
+     "quote": "封諸功臣百餘人"
+    }
+   ]
+  },
+  {
+   "id": "claim-809",
+   "verdict": "incorrect",
+   "event": "Murong Huang's Longcheng building, investiture and enfeoffments.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "構宮廟"
+    }
+   ]
+  },
+  {
+   "id": "claim-813",
+   "verdict": "incorrect",
+   "event": "Yang Yu's construction of Longcheng.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "陽裕"
+    }
+   ]
+  },
+  {
+   "id": "claim-814",
+   "verdict": "incorrect",
+   "event": "Tang Zhu's construction of Longcheng.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "唐柱"
+    }
+   ]
+  },
+  {
+   "id": "claim-815",
+   "verdict": "incorrect",
+   "event": "Emperor Cheng's investiture of Murong Huang.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "成帝使兼大鴻臚郭希"
+    }
+   ]
+  },
+  {
+   "id": "claim-816",
+   "verdict": "incorrect",
+   "event": "Guo Xi's investiture mission to Murong Huang.",
+   "reason": "於是 places this between the 340 anchor and 咸康七年; ZZTJ dates Longcheng's building (正月) and Guo Xi's investiture to 咸康七年 (341). The 335 start has no source basis.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "郭希持節"
+    }
+   ]
+  },
+  {
+   "id": "hints-p107",
+   "verdict": "incorrect",
+   "event": "Dou Wu has no own dated event here, only a mention in Huang's letter.",
+   "reason": "AD 168 comes from a retrospective citation; hints should not be fed by later reception.",
+   "evidence": [
+    {
+     "unit": "s0258",
+     "quote": "竇武"
+    }
+   ]
+  },
+  {
+   "id": "hints-p108",
+   "verdict": "incorrect",
+   "event": "He Jin has no own dated event here, only a mention in Huang's letter.",
+   "reason": "AD 189 comes from a retrospective citation; no own event is dated in s0258.",
+   "evidence": [
+    {
+     "unit": "s0258",
+     "quote": "何進"
+    }
+   ]
+  },
+  {
+   "id": "hints-p109",
+   "verdict": "research-blocked",
+   "event": "The unnamed former emperor's grant of command to Huang.",
+   "reason": "Hint 323-325 is a reign span for an unconfirmed identification of 先帝.",
+   "evidence": [
+    {
+     "unit": "s0261",
+     "quote": "先帝"
+    }
+   ]
+  },
+  {
+   "id": "hints-p110",
+   "verdict": "incorrect",
+   "event": "He Chong's joint memorial recommending recognition.",
+   "reason": "Only onOrAfter 340 is supported locally; ZZTJ gives 341, so a 340 hint is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0079",
+     "quote": "何充"
+    }
+   ]
+  },
+  {
+   "id": "hints-p111",
+   "verdict": "incorrect",
+   "event": "King Zhao's peace plea and dispatch of his heir.",
+   "reason": "Hint 340-341 rests on the disputed 其年/明年 chain; ZZTJ dates the peace plea 339.",
+   "evidence": [
+    {
+     "unit": "s0080",
+     "quote": "王釗乞盟"
+    }
+   ]
+  },
+  {
+   "id": "hints-p112",
+   "verdict": "incorrect",
+   "event": "The heir's homage at Huang's court.",
+   "reason": "Hint 341 rests on 明年 relative to the disputed 其年.",
+   "evidence": [
+    {
+     "unit": "s0081",
+     "quote": "世子朝於皝"
+    }
+   ]
+  },
+  {
+   "id": "hints-p113",
+   "verdict": "incorrect",
+   "event": "Murong Han's flight, feigned madness and return.",
+   "reason": "Hint 340-341 omits the pre-340 flight under 初; only the return is 340.",
+   "evidence": [
+    {
+     "unit": "s0082",
+     "quote": "建威翰奔于宇文歸"
+    }
+   ]
+  },
+  {
+   "id": "hints-p114",
+   "verdict": "incorrect",
+   "event": "Yuwen Gui's hosting of Murong Han.",
+   "reason": "Hint 340 misses that Gui's hosting began after Duan Liao's fall (338).",
+   "evidence": [
+    {
+     "unit": "s0083",
+     "quote": "歸信而不禁"
+    }
+   ]
+  },
+  {
+   "id": "hints-p115",
+   "verdict": "supported",
+   "event": "Wang Che's spying mission to Murong Han.",
+   "reason": "Hint 340-341 matches the supported claim-664 window; ZZTJ gives 340.",
+   "evidence": [
+    {
+     "unit": "s0084",
+     "quote": "商人王車"
+    }
+   ]
+  },
+  {
+   "id": "hints-p116",
+   "verdict": "supported",
+   "event": "Murong Huang's investiture, Longcheng works and 341-342 campaigns.",
+   "reason": "Hint 341-342 matches 咸康七年 (s0092) and the following 明年 events in context items, though owned claims need their 335 start repaired.",
+   "evidence": [
+    {
+     "unit": "s0092",
+     "quote": "咸康七年，皝遷都龍城"
+    }
+   ]
+  },
+  {
+   "id": "hints-p117",
+   "verdict": "supported",
+   "event": "Yang Yu's construction of Longcheng.",
+   "reason": "Hint 341 agrees with ZZTJ 咸康七年正月 and Jinshu's 340-341 placement; the claim windows need repair, not the hint.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "使陽裕"
+    }
+   ]
+  },
+  {
+   "id": "hints-p118",
+   "verdict": "supported",
+   "event": "Tang Zhu's construction of Longcheng.",
+   "reason": "Hint 341 agrees with ZZTJ 咸康七年正月 for the Longcheng building.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "唐柱"
+    }
+   ]
+  },
+  {
+   "id": "hints-p119",
+   "verdict": "incorrect",
+   "event": "Emperor Cheng's investiture of Huang.",
+   "reason": "Hint 335-342 is reign-wide activity; the only owned event is the 340-341 investiture (ZZTJ 341).",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "成帝"
+    }
+   ]
+  },
+  {
+   "id": "hints-p120",
+   "verdict": "incorrect",
+   "event": "Guo Xi's investiture mission.",
+   "reason": "Hint 335-341 has no basis for 335; the mission is 340-341 (ZZTJ 341).",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "郭希持節"
+    }
+   ]
+  }
+ ],
+ "personChecks": [
+  {
+   "id": "p107",
+   "verdict": "incorrect",
+   "reason": "Only a retrospective mention; claim-618 and hint wrongly date Dou Wu's own life.",
+   "evidence": [
+    {
+     "unit": "s0258",
+     "quote": "竇武"
+    }
+   ]
+  },
+  {
+   "id": "p108",
+   "verdict": "incorrect",
+   "reason": "Only a retrospective mention; claim-623 and hint wrongly date He Jin.",
+   "evidence": [
+    {
+     "unit": "s0258",
+     "quote": "何進"
+    }
+   ]
+  },
+  {
+   "id": "p109",
+   "verdict": "research-blocked",
+   "reason": "Identity and grant date of 先帝 unresolved.",
+   "evidence": [
+    {
+     "unit": "s0261",
+     "quote": "先帝列將之授"
+    }
+   ]
+  },
+  {
+   "id": "p110",
+   "verdict": "incorrect",
+   "reason": "Memorial date is onOrAfter 340, ZZTJ 341; point 340 wrong.",
+   "evidence": [
+    {
+     "unit": "s0079",
+     "quote": "何充"
+    }
+   ]
+  },
+  {
+   "id": "p111",
+   "verdict": "incorrect",
+   "reason": "Peace plea and heir dispatch dated on a disputed 其年/明年 chain.",
+   "evidence": [
+    {
+     "unit": "s0080",
+     "quote": "王釗乞盟"
+    }
+   ]
+  },
+  {
+   "id": "p112",
+   "verdict": "incorrect",
+   "reason": "Homage year depends on disputed 其年.",
+   "evidence": [
+    {
+     "unit": "s0081",
+     "quote": "世子"
+    }
+   ]
+  },
+  {
+   "id": "p113",
+   "verdict": "incorrect",
+   "reason": "Flight/madness (after 338) merged with 340 return.",
+   "evidence": [
+    {
+     "unit": "s0082",
+     "quote": "陽狂恣酒"
+    }
+   ]
+  },
+  {
+   "id": "p114",
+   "verdict": "incorrect",
+   "reason": "Hosting of Han predates 340.",
+   "evidence": [
+    {
+     "unit": "s0083",
+     "quote": "歸信而不禁"
+    }
+   ]
+  },
+  {
+   "id": "p115",
+   "verdict": "supported",
+   "reason": "Wang Che's mission consistently dated 340-341, ZZTJ 340.",
+   "evidence": [
+    {
+     "unit": "s0085",
+     "quote": "車還以白"
+    }
+   ]
+  },
+  {
+   "id": "p116",
+   "verdict": "incorrect",
+   "reason": "Owned investiture/Longcheng claims carry an unsupported 335 start against context 341 dates.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "拜皝侍中"
+    }
+   ]
+  },
+  {
+   "id": "p117",
+   "verdict": "incorrect",
+   "reason": "claim-754/813 window 335-341 unsupported; should be 340-341.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "陽裕"
+    }
+   ]
+  },
+  {
+   "id": "p118",
+   "verdict": "incorrect",
+   "reason": "claim-755/814 window 335-341 unsupported.",
+   "evidence": [
+    {
+     "unit": "s0089",
+     "quote": "唐柱"
+    }
+   ]
+  },
+  {
+   "id": "p119",
+   "verdict": "incorrect",
+   "reason": "Investiture window and hint overextended to 335.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "成帝"
+    }
+   ]
+  },
+  {
+   "id": "p120",
+   "verdict": "incorrect",
+   "reason": "Mission window and hint start at unsupported 335.",
+   "evidence": [
+    {
+     "unit": "s0090",
+     "quote": "郭希"
+    }
+   ]
+  }
+ ],
+ "findings": [
+  {
+   "items": [
+    "claim-432",
+    "claim-449",
+    "claim-638",
+    "hints-p111",
+    "p111"
+   ],
+   "problem": "其年 in s0080 is placed after the Yu Liang/recognition narrative (≥340) but ZZTJ 咸康五年 (AD 339) dates the Goguryeo campaign and peace plea before Yu Liang's death; point year 340 hides conflicting witnesses.",
+   "action": "Replace with unresolved:true and an unresolvedReason preserving Jinshu (≥340 by narrative order) vs ZZTJ (339); do not pick a winner; resync hints."
+  },
+  {
+   "items": [
+    "claim-433",
+    "claim-450",
+    "claim-639",
+    "claim-645",
+    "hints-p112",
+    "p112"
+   ],
+   "problem": "明年 in s0081 counts from the disputed 其年; ZZTJ does not record the heir's homage in 340/341 under that label.",
+   "action": "Mark unresolved with the dependency reason or a window covering both readings (340-341 vs 341-342); resync hints."
+  },
+  {
+   "items": [
+    "claim-649",
+    "claim-660",
+    "hints-p113",
+    "hints-p114",
+    "p113",
+    "p114"
+   ],
+   "problem": "s0082-s0083 is an 初 flashback starting after Duan Liao's defeat (ZZTJ 咸康四年, 338); only Han's return is 340 (ZZTJ 咸康六年二月).",
+   "action": "Split: date the flight/hosting onOrAfter 338 and before the 340 return; date the return 340; resync p113/p114 hints."
+  },
+  {
+   "items": [
+    "claim-618",
+    "claim-623",
+    "hints-p107",
+    "hints-p108",
+    "p107",
+    "p108"
+   ],
+   "problem": "Dou Wu and He Jin appear only as examples in Huang's letter; the 168/189 dates are their own deaths imported from outside, not attested here.",
+   "action": "Remove claim-618/623 as life attestations and add retrospective-reference events dated to the letter (onOrAfter 340), with subject role 'cited exemplar'; clear hints."
+  },
+  {
+   "items": [
+    "claim-628",
+    "hints-p109",
+    "p109"
+   ],
+   "problem": "先帝 in s0261 is unnamed; 323-325 is Emperor Ming's reign, not a dated grant.",
+   "action": "Research which emperor granted Huang a 列將 command and when; until then mark unresolved."
+  },
+  {
+   "items": [
+    "claim-438",
+    "claim-633",
+    "hints-p110",
+    "p110"
+   ],
+   "problem": "又聞庾亮薨 gives only a terminus post quem (Yu Liang died 咸康六年正月庚子朔, AD 340); ZZTJ 咸康七年 places the Yu Bing/He Chong memorial in 341.",
+   "action": "Use westernBounds onOrAfter AD 340 (or interval 340-341 noting ZZTJ 341); resync p110 hint."
+  },
+  {
+   "items": [
+    "claim-720",
+    "claim-721",
+    "claim-722",
+    "claim-723",
+    "claim-724",
+    "claim-746",
+    "claim-748",
+    "claim-754",
+    "claim-755",
+    "claim-756",
+    "claim-757",
+    "claim-758",
+    "claim-759",
+    "claim-809",
+    "claim-813",
+    "claim-814",
+    "claim-815",
+    "claim-816",
+    "hints-p119",
+    "hints-p120",
+    "p116",
+    "p117",
+    "p118",
+    "p119",
+    "p120"
+   ],
+   "problem": "The 於是 block (s0089-s0091) follows the ≥340 raid and precedes 咸康七年; ZZTJ dates Longcheng (正月) and Guo Xi's (郭烯) investiture to 341. The 335 start is unsupported.",
+   "action": "Change windows to AD 340-341 (or 341 with ZZTJ witness); resync p116-p120 hints."
+  }
+ ],
+ "references": [
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "資治通鑑 卷096",
+   "quote": "皝擊高句麗，兵及新城，高句麗王釗乞盟，乃還",
+   "sourceHash": "sha256:5a0ea3e7d1a6ae5c7c285c04272f94f0b1f10a4ce18212f1e04aa2492402fb50",
+   "accessedAt": "2026-11-05T15:10:14.305544+00:00",
+   "reason": "ZZTJ 咸康五年 (339) witness for the Goguryeo peace plea."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "資治通鑑 卷096",
+   "quote": "春，正月，庚子朔，都亭文康侯庾亮薨",
+   "sourceHash": "sha256:b8625504b513b64dedbfc42264d3630392f1b79248d3414ec2a845849f09bded",
+   "accessedAt": "2026-11-05T15:10:14.305544+00:00",
+   "reason": "Yu Liang's death, 咸康六年 (340) first month: lower bound."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "資治通鑑 卷096",
+   "quote": "二月，翰竊逸豆歸名馬，攜其二子過取弓矢，逃歸",
+   "sourceHash": "sha256:f46b98f22a822e64726759e1dc456a49340c56b61b3a278921eee870f88dfa95",
+   "accessedAt": "2026-11-05T15:10:14.305544+00:00",
+   "reason": "Han's return 咸康六年二月 (340)."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "資治通鑑 卷096",
+   "quote": "冬，十月，皝帥諸軍入自蠮螉塞襲趙",
+   "sourceHash": "sha256:4270cd9af4abcac284719ef51b9be9bedd80916e37dc62403f70ece1d0cc0ef7",
+   "accessedAt": "2026-11-05T15:10:14.305544+00:00",
+   "reason": "Raid 咸康六年十月 (340)."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "資治通鑑 卷096",
+   "quote": "燕王皝使唐國內史陽裕等築城於柳城之北、龍山之西",
+   "sourceHash": "sha256:dfa5aca693802a24059076f85329f7ab9279670791a7f198780770d3fc42191d",
+   "accessedAt": "2026-11-05T15:10:14.305544+00:00",
+   "reason": "Longcheng construction 咸康七年正月 (341)."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "資治通鑑 卷096",
+   "quote": "詔遣兼大鴻臚郭烯持節詣棘城冊命燕王",
+   "sourceHash": "sha256:28382cc21561494733148ff6a3901aa5a978fec491c4dcad2ea4a33a37670a85",
+   "accessedAt": "2026-11-05T15:10:14.305544+00:00",
+   "reason": "Investiture 咸康七年 (341); envoy written 郭烯."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0092",
+   "quote": "咸康七年，皝遷都龍城",
+   "sourceHash": "sha256:d64d84c8ae64552cea339ca43be9d1557423146b2f73813a4b626e4d5f0bd43f",
+   "reason": "Upper anchor following the 於是 block."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0056",
+   "quote": "以咸康三年僭即王位",
+   "sourceHash": "sha256:0ac76b7c36766499d9e3b56cfd82903ef8c97190324d4bd6039d2cac76cde7be",
+   "reason": "337 self-proclamation; the 335 window start has no anchor in owned units."
+  }
+ ]
+}

@@ -1,0 +1,1528 @@
+{
+ "jobId": "4022de3fd7eec419a815",
+ "sourceHash": "sha256:0aea020cdfd5593619a808b02c83e4dc722117f2f6b1a0fa75d85bea53733736",
+ "extractionHash": "sha256:65c76c9f93157f64c140d105b7f9e37da69f0ca1847e415fe77f3b100150dc36",
+ "reviewedAt": "2026-11-05T15:27:03.376703+00:00",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "1b172af9-67b4-4761-839f-d83112a78157",
+  "independentOfExtractor": true
+ },
+ "summary": "Independent review of the Yang Yu biography units s0182-s0219, checked against the Zizhi Tongjian. Supported: the 314 fall of Ji, the 338 fall of Lingzhi, and the 342 move to Helong. Found defective: He Yan (≤304), Wang Jun 領州 (304), Duan Jilujuan (314, died 318), the remonstrance (≤338), Yang Yu's death (341-348), and the Longcheng works (341-342). Undated facts carry invented windows, and allusions are dated by the ancients' lifespans. Events in the twelfth month of Xiankang 4 need a Gregorian check. Items: 17 supported, 39 flagged. This is not a full-chapter approval.",
+ "reviewedUnits": [
+  "s0182",
+  "s0183",
+  "s0184",
+  "s0185",
+  "s0186",
+  "s0187",
+  "s0188",
+  "s0189",
+  "s0190",
+  "s0191",
+  "s0192",
+  "s0193",
+  "s0194",
+  "s0195",
+  "s0196",
+  "s0197",
+  "s0198",
+  "s0199",
+  "s0200",
+  "s0201",
+  "s0202",
+  "s0203",
+  "s0204",
+  "s0205",
+  "s0206",
+  "s0207",
+  "s0208",
+  "s0209",
+  "s0210",
+  "s0211",
+  "s0212",
+  "s0213",
+  "s0214",
+  "s0215",
+  "s0216",
+  "s0217",
+  "s0218",
+  "s0219"
+ ],
+ "itemChecks": [
+  {
+   "id": "claim-967",
+   "verdict": "incorrect",
+   "event": "Duan Liao's own warfare with Murong Huang that occasioned Yang Yu's remonstrance.",
+   "reason": "段遼與皝相攻 is a repeated-hostility frame, not a 338-339 event; ZZTJ files the remonstrance under Xiankang 3 (337) with 遼數與皝相攻, and Yang Yu left for Yan commandery before Lingzhi fell in 338. AD 339 is impossible and 338 is only an upper bound.",
+   "evidence": [
+    {
+     "unit": "s0204",
+     "quote": "段遼與皝相攻"
+    },
+    {
+     "unit": "s0208",
+     "quote": "遼不從"
+    }
+   ]
+  },
+  {
+   "id": "claim-970",
+   "verdict": "incorrect",
+   "event": "Duan Liao warring against Murong Huang before Lingzhi fell.",
+   "reason": "Same frame as claim-967: hostilities ran from Huang's accession to early 338, so the window should be bounded onOrBefore 338 with no end in 339.",
+   "evidence": [
+    {
+     "unit": "s0204",
+     "quote": "段遼與皝相攻"
+    }
+   ]
+  },
+  {
+   "id": "claim-972",
+   "verdict": "research-blocked",
+   "event": "Duan Liao asking Shi Hu to send troops to receive him (請迎).",
+   "reason": "ZZTJ dates the request to the twelfth month of Xiankang 4. That lunar month may fall in December 338 or January 339 proleptic Gregorian. westernYear 338 needs a verified day-level conversion or a 338-339 window.",
+   "evidence": [
+    {
+     "unit": "s0211",
+     "quote": "段遼之請迎于季龍也"
+    }
+   ]
+  },
+  {
+   "id": "claim-1001",
+   "verdict": "supported",
+   "event": "Murong Huang moving his capital to Helong (Longcheng).",
+   "reason": "及遷都和龍 is Huang's capital move. ZZTJ dates it to the tenth month of Xiankang 8 (AD 342), which stays inside AD 342 on any calendar.",
+   "evidence": [
+    {
+     "unit": "s0215",
+     "quote": "及遷都和龍"
+    }
+   ]
+  },
+  {
+   "id": "claim-1005",
+   "verdict": "incorrect",
+   "event": "Murong Huang's warfare with Duan Liao that Yang Yu warned against.",
+   "reason": "Mirror of claim-970. The 338-339 window postdates the remonstrance context (ZZTJ: 337, 初…遼數與皝相攻). The fighting ended with Duan Liao's fall in 338.",
+   "evidence": [
+    {
+     "unit": "s0204",
+     "quote": "段遼與皝相攻"
+    }
+   ]
+  },
+  {
+   "id": "claim-1010",
+   "verdict": "supported",
+   "event": "Murong Huang's capital being moved to Helong.",
+   "reason": "The tenth month of Xiankang 8 falls in AD 342, so this place association is correctly dated to 342.",
+   "evidence": [
+    {
+     "unit": "s0215",
+     "quote": "及遷都和龍"
+    }
+   ]
+  },
+  {
+   "id": "claim-1022",
+   "verdict": "incorrect",
+   "event": "Yang Yu's appointment as chief clerk by Youzhou governor He Yan.",
+   "reason": "ZZTJ 304 says Sima Ying made He Yan governor of Youzhou to kill Wang Jun, and Wang Jun killed He Yan that year. Yang Yu's appointment must therefore be onOrBefore 304. The 311 end is impossible.",
+   "evidence": [
+    {
+     "unit": "s0184",
+     "quote": "刺史和演辟為主簿"
+    }
+   ]
+  },
+  {
+   "id": "claim-1023",
+   "verdict": "supported",
+   "event": "Yang Yu being recommended to Shi Le after Shi Le took Ji.",
+   "reason": "Shi Le entered Ji in the third month of Jianxing 2 (AD 314). In ZZTJ 314, Yang Yu then fled to Duan Jilujuan.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "石勒既克薊城"
+    },
+    {
+     "unit": "s0188",
+     "quote": "北平陽裕，幹事之才"
+    },
+    {
+     "unit": "s0191",
+     "quote": "裕乃微服潛遁"
+    }
+   ]
+  },
+  {
+   "id": "claim-1024",
+   "verdict": "incorrect",
+   "event": "Yang Yu accepting service under Duan Jilujuan (段眷).",
+   "reason": "ZZTJ puts Yang Yu's flight to Duan Jilujuan in 314, and Jilujuan died in the first month of Taixing 1 (318). The window 318-325 almost entirely postdates the patron's death. Use 314 (onOrBefore early 318).",
+   "evidence": [
+    {
+     "unit": "s0192",
+     "quote": "時鮮卑單于段眷為晉驃騎大將軍、遼西公"
+    },
+    {
+     "unit": "s0201",
+     "quote": "裕乃應之"
+    },
+    {
+     "unit": "s0202",
+     "quote": "拜郎中令、中軍將軍"
+    }
+   ]
+  },
+  {
+   "id": "claim-1025",
+   "verdict": "incorrect",
+   "event": "Yang Yu remonstrating with Duan Liao over the war with Huang.",
+   "reason": "Yang Yu's own remonstrance came before he became Yan warden and before Lingzhi fell in 338 (ZZTJ files it under 337). The window 338-339 is wrong.",
+   "evidence": [
+    {
+     "unit": "s0204",
+     "quote": "裕諫曰"
+    },
+    {
+     "unit": "s0208",
+     "quote": "遼不從"
+    }
+   ]
+  },
+  {
+   "id": "claim-1026",
+   "verdict": "supported",
+   "event": "Yang Yu surrendering his commandery when Shi Hu took Lingzhi.",
+   "reason": "In ZZTJ, Shi Hu entered Lingzhi in Xiankang 4 (338) and Yang Yu surrendered then. The point year 338 is supported.",
+   "evidence": [
+    {
+     "unit": "s0210",
+     "quote": "石季龍克令支，裕以郡降"
+    }
+   ]
+  },
+  {
+   "id": "claim-1027",
+   "verdict": "supported",
+   "event": "Yang Yu attested at Huang's capital move to Helong.",
+   "reason": "The move is dated to the tenth month of 342, so the attestation year 342 is supported. Construction began in 341 (see claim-1057).",
+   "evidence": [
+    {
+     "unit": "s0215",
+     "quote": "及遷都和龍"
+    }
+   ]
+  },
+  {
+   "id": "claim-1028",
+   "verdict": "incorrect",
+   "event": "Yang Yu's death, mourned by Murong Huang.",
+   "reason": "The 337 start precedes Yang Yu's 338 surrender, and ZZTJ shows him alive in 341 (Longcheng works; promoted to Left Sima). Huang mourned him, so the death is onOrBefore 348, when Huang died in the ninth month of Yonghe 4. Use bounds of onOrAfter 341 and onOrBefore 348.",
+   "evidence": [
+    {
+     "unit": "s0219",
+     "quote": "及死，皝甚悼之，時年六十二"
+    }
+   ]
+  },
+  {
+   "id": "claim-1047",
+   "verdict": "supported",
+   "event": "Yang Yu surrendering his commandery to Shi Hu at Lingzhi.",
+   "reason": "Shi Hu's capture of Lingzhi is dated AD 338 (Xiankang 4), and the surrender immediately followed.",
+   "evidence": [
+    {
+     "unit": "s0210",
+     "quote": "裕以郡降"
+    }
+   ]
+  },
+  {
+   "id": "claim-1050",
+   "verdict": "research-blocked",
+   "event": "Yang Yu serving concurrently as Sima to Ma Qiu, General Who Campaigns in the East.",
+   "reason": "ZZTJ dates the appointment to the twelfth month of Xiankang 4. This needs a verified conversion because it may fall in January 339 Gregorian. The bare westernYear 338 overstates precision.",
+   "evidence": [
+    {
+     "unit": "s0211",
+     "quote": "裕以左丞領征東麻秋司馬"
+    }
+   ]
+  },
+  {
+   "id": "claim-1057",
+   "verdict": "incorrect",
+   "event": "Yang Yu planning the walls and palaces of Huang's new capital.",
+   "reason": "ZZTJ dates Yang Yu's building of Longcheng to the first month of 341, while the move itself was in 342. His planning event spans 341-342, not the 342 point year alone.",
+   "evidence": [
+    {
+     "unit": "s0215",
+     "quote": "皝所制城池宮闔，皆裕之規模"
+    }
+   ]
+  },
+  {
+   "id": "claim-1060",
+   "verdict": "incorrect",
+   "event": "Yang Yu's age of 62 (sui) at his death.",
+   "reason": "The age 62 sui is explicit and correct, but its date context inherits the bad 337-348 window. The context should be the death bounds of onOrAfter 341 and onOrBefore 348. Do not derive a birth year.",
+   "evidence": [
+    {
+     "unit": "s0219",
+     "quote": "時年六十二"
+    }
+   ]
+  },
+  {
+   "id": "claim-1061",
+   "verdict": "incorrect",
+   "event": "Yang Yu's own death.",
+   "reason": "The death window starts at 337, before his 338 surrender and his 341 attested activity. The correct bounds are onOrAfter 341 and onOrBefore 348, set by Huang mourning him.",
+   "evidence": [
+    {
+     "unit": "s0219",
+     "quote": "及死，皝甚悼之"
+    }
+   ]
+  },
+  {
+   "id": "claim-1069",
+   "verdict": "incorrect",
+   "event": "Uncle Dan marveling at the young Yang Yu.",
+   "reason": "No calendar date is stated (幼). The window 290-310 is an invented estimate and should be an undatedSourceAttestation.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "惟叔父耽幼而奇之"
+    }
+   ]
+  },
+  {
+   "id": "claim-1073",
+   "verdict": "incorrect",
+   "event": "He Yan, as governor, appointing Yang Yu.",
+   "reason": "He Yan's governorship of Youzhou ended with his death in 304 (ZZTJ), so the window must end in 304, not 311.",
+   "evidence": [
+    {
+     "unit": "s0184",
+     "quote": "刺史和演辟為主簿"
+    }
+   ]
+  },
+  {
+   "id": "claim-1077",
+   "verdict": "incorrect",
+   "event": "Wang Jun taking charge of Youzhou (領州) and transferring Yang Yu.",
+   "reason": "ZZTJ 304 says Wang Jun killed He Yan and 自領幽州營兵. Wang Jun's taking of the province is 304, and the transfer falls between 304 and 314, not 300.",
+   "evidence": [
+    {
+     "unit": "s0185",
+     "quote": "王浚領州"
+    }
+   ]
+  },
+  {
+   "id": "claim-1078",
+   "verdict": "supported",
+   "event": "Wang Jun's defeat and capture by Shi Le, discussed at Ji.",
+   "reason": "Shi Le took Ji and seized Wang Jun in the third month of Jianxing 2 (314).",
+   "evidence": [
+    {
+     "unit": "s0189",
+     "quote": "王公何以不任"
+    },
+    {
+     "unit": "s0190",
+     "quote": "所以為明公擒也"
+    }
+   ]
+  },
+  {
+   "id": "claim-1083",
+   "verdict": "supported",
+   "event": "Shi Le's conquest of Ji and his talent inquiry there.",
+   "reason": "ZZTJ 314: 壬申，勒晨至薊. The point year 314 is supported.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "石勒既克薊城"
+    },
+    {
+     "unit": "s0191",
+     "quote": "勒方任之"
+    }
+   ]
+  },
+  {
+   "id": "claim-1084",
+   "verdict": "supported",
+   "event": "Shi Le taking Jicheng.",
+   "reason": "Shi Le's capture of Ji is dated to the third month of 314.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "石勒既克薊城"
+    }
+   ]
+  },
+  {
+   "id": "claim-1090",
+   "verdict": "supported",
+   "event": "Zao Song answering Shi Le's question after Ji fell.",
+   "reason": "Zao Song's own reply took place right after the capture of Ji in 314.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "問棗嵩曰"
+    },
+    {
+     "unit": "s0187",
+     "quote": "嵩曰"
+    },
+    {
+     "unit": "s0190",
+     "quote": "嵩曰：「王公由不能任"
+    }
+   ]
+  },
+  {
+   "id": "claim-1096",
+   "verdict": "supported",
+   "event": "Liu Han being recommended by Zao Song in 314.",
+   "reason": "Liu Han is named in the 314 recommendation, and ZZTJ 314 records Liu Han going over to Duan Pidi.",
+   "evidence": [
+    {
+     "unit": "s0187",
+     "quote": "燕國劉翰，德素長者"
+    }
+   ]
+  },
+  {
+   "id": "claim-1101",
+   "verdict": "incorrect",
+   "event": "Duan Jilujuan (段眷) inviting Yang Yu while holding Jin titles.",
+   "reason": "Duan Jilujuan died in the first month of 318 (ZZTJ). The invitation was in 314. The window 318-325 is wrong.",
+   "evidence": [
+    {
+     "unit": "s0192",
+     "quote": "鮮卑單于段眷為晉驃騎大將軍、遼西公"
+    },
+    {
+     "unit": "s0201",
+     "quote": "裕乃應之"
+    }
+   ]
+  },
+  {
+   "id": "claim-1108",
+   "verdict": "incorrect",
+   "event": "Cheng Pan advising Yang Yu to accept Duan Juan's summons.",
+   "reason": "Cheng Pan's conversation came before Yang Yu joined Duan Jilujuan in 314. It is not datable to 318-325.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "裕謂友人成泮曰"
+    },
+    {
+     "unit": "s0195",
+     "quote": "泮曰"
+    }
+   ]
+  },
+  {
+   "id": "claim-1112",
+   "verdict": "incorrect",
+   "event": "Confucius cited in Yang Yu's c.314 speech (retrospective reference).",
+   "reason": "仲尼 appears only as an allusion in Yang Yu's speech. A Spring and Autumn lifespan (551-479 BC) is not an event dated by this source. This should be a retrospective-reference dated to the speech (314), with no life dates from this chapter.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "仲尼喜佛肸之召"
+    }
+   ]
+  },
+  {
+   "id": "claim-1117",
+   "verdict": "incorrect",
+   "event": "Bi Xi's summons of Confucius, alluded to by Yang Yu.",
+   "reason": "The Analects episode is quoted retrospectively. 490-480 BC is not supported by any cited evidence, so this should be a retrospective reference at 314 or an unresolved external date.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "佛肸之召"
+    }
+   ]
+  },
+  {
+   "id": "claim-1120",
+   "verdict": "incorrect",
+   "event": "Yi Yin's saying quoted by Yang Yu.",
+   "reason": "伊尹 is a quotation in Yang Yu's speech. The circa 1600-1500 BC window is not derived from this source, and the item should be a retrospective reference.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "伊尹亦稱何事非君"
+    }
+   ]
+  },
+  {
+   "id": "claim-1123",
+   "verdict": "incorrect",
+   "event": "Ma Shaoyou's saying quoted by Cheng Pan.",
+   "reason": "少遊有雲 is Cheng Pan quoting Ma Yuan's cousin. The AD 25-56 Jianwu reign window is an unsupported activity span for a retrospective quotation.",
+   "evidence": [
+    {
+     "unit": "s0199",
+     "quote": "少遊有雲"
+    }
+   ]
+  },
+  {
+   "id": "claim-1126",
+   "verdict": "supported",
+   "event": "Shi Hu capturing Lingzhi.",
+   "reason": "Shi Hu's capture of Lingzhi, Duan Liao's seat, is dated AD 338 (Xiankang 4) in ZZTJ.",
+   "evidence": [
+    {
+     "unit": "s0210",
+     "quote": "石季龍克令支"
+    }
+   ]
+  },
+  {
+   "id": "claim-1127",
+   "verdict": "supported",
+   "event": "Shi Hu taking Lingzhi.",
+   "reason": "Shi Hu's own conquest of Lingzhi is dated to 338.",
+   "evidence": [
+    {
+     "unit": "s0210",
+     "quote": "石季龍克令支"
+    }
+   ]
+  },
+  {
+   "id": "claim-1130",
+   "verdict": "research-blocked",
+   "event": "Ma Qiu leading the escort and being defeated, with Yang Yu as his Sima.",
+   "reason": "ZZTJ dates Ma Qiu's mission and defeat to the twelfth month of Xiankang 4, which possibly falls in January 339 Gregorian. This needs a conversion check before using the point year 338.",
+   "evidence": [
+    {
+     "unit": "s0211",
+     "quote": "征東麻秋司馬"
+    },
+    {
+     "unit": "s0212",
+     "quote": "秋敗"
+    }
+   ]
+  },
+  {
+   "id": "claim-1135",
+   "verdict": "incorrect",
+   "event": "Lu Chen repeatedly praising Yang Yu.",
+   "reason": "初…每稱之 is an undated flashback. The window 311-351 is Lu Chen's broad career span, not a dated event, so this should be an undatedSourceAttestation.",
+   "evidence": [
+    {
+     "unit": "s0218",
+     "quote": "初，范陽盧諶每稱之曰"
+    }
+   ]
+  },
+  {
+   "id": "claim-1141",
+   "verdict": "incorrect",
+   "event": "Death of Yang Yu's father, implied by 少孤.",
+   "reason": "The cited quote concerns Uncle Dan, not the father. 少孤 gives no calendar year, so 290-310 is invented and the item should be undated.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "少孤"
+    }
+   ]
+  },
+  {
+   "id": "claim-1143",
+   "verdict": "incorrect",
+   "event": "Death of Yang Yu's father while Yang Yu was a child.",
+   "reason": "The death is inferred from 少孤, but no year is stated. The sourceDate text is wrong, and the 290-310 window is unsupported. This must be an undated or unresolved claim.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "少孤，兄弟皆早亡"
+    }
+   ]
+  },
+  {
+   "id": "hints-p160",
+   "verdict": "incorrect",
+   "event": "Duan Liao's own hostilities, request for escort, and flight.",
+   "reason": "AD 338-339 rests on the mis-dated remonstrance window. Duan Liao's personal events are war onOrBefore 338, Lingzhi lost in 338, and the escort request in the twelfth month of Xiankang 4. The 344 flight is context-supported.",
+   "evidence": [
+    {
+     "unit": "s0208",
+     "quote": "遼不從"
+    }
+   ]
+  },
+  {
+   "id": "hints-p165",
+   "verdict": "incorrect",
+   "event": "Yang Yu's dated career events.",
+   "reason": "Corrections needed: 304-311→≤304; 318-325→314; 337-348 death→341-348; add 341 Longcheng works. The 314, 338, and 342 hints are supported.",
+   "evidence": [
+    {
+     "unit": "s0182",
+     "quote": "陽裕，字士倫"
+    }
+   ]
+  },
+  {
+   "id": "hints-p166",
+   "verdict": "incorrect",
+   "event": "Uncle Dan's admiration of Yang Yu (undated).",
+   "reason": "The source dates nothing for Dan, so the AD 290-310 hint is invented. Remove it, because undated evidence does not justify a hint.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "叔父耽"
+    }
+   ]
+  },
+  {
+   "id": "hints-p167",
+   "verdict": "incorrect",
+   "event": "He Yan appointing Yang Yu as governor.",
+   "reason": "He Yan died in 304, so the hint should be 304 or ≤304, not 304-311.",
+   "evidence": [
+    {
+     "unit": "s0184",
+     "quote": "刺史和演"
+    }
+   ]
+  },
+  {
+   "id": "hints-p168",
+   "verdict": "incorrect",
+   "event": "Wang Jun taking Youzhou and later being captured.",
+   "reason": "The hint should start in 304 (領州), not 300. The 314 capture is supported.",
+   "evidence": [
+    {
+     "unit": "s0185",
+     "quote": "王浚領州"
+    }
+   ]
+  },
+  {
+   "id": "hints-p169",
+   "verdict": "supported",
+   "event": "Shi Le taking Ji.",
+   "reason": "The AD 314 hint matches the capture of Ji.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "石勒既克薊城"
+    }
+   ]
+  },
+  {
+   "id": "hints-p170",
+   "verdict": "supported",
+   "event": "Zao Song answering Shi Le at Ji.",
+   "reason": "The AD 314 hint matches Zao Song's reply after the fall of Ji.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "問棗嵩曰"
+    }
+   ]
+  },
+  {
+   "id": "hints-p171",
+   "verdict": "supported",
+   "event": "Liu Han being recommended at Ji.",
+   "reason": "The AD 314 hint matches the recommendation.",
+   "evidence": [
+    {
+     "unit": "s0187",
+     "quote": "燕國劉翰"
+    }
+   ]
+  },
+  {
+   "id": "hints-p172",
+   "verdict": "incorrect",
+   "event": "Duan Jilujuan inviting Yang Yu.",
+   "reason": "The invitation was in 314, and Jilujuan died in early 318, so the 318-325 hint is impossible.",
+   "evidence": [
+    {
+     "unit": "s0194",
+     "quote": "眷今召我"
+    }
+   ]
+  },
+  {
+   "id": "hints-p173",
+   "verdict": "incorrect",
+   "event": "Cheng Pan's advice to Yang Yu.",
+   "reason": "The advice was given around 314, before Yang Yu joined Duan. The 318-325 hint is wrong.",
+   "evidence": [
+    {
+     "unit": "s0195",
+     "quote": "泮曰"
+    }
+   ]
+  },
+  {
+   "id": "hints-p174",
+   "verdict": "incorrect",
+   "event": "Confucius is only alluded to; this hint lacks an event of his in this chapter.",
+   "reason": "A retrospective allusion must not produce an active-life hint. Remove BC 551-479.",
+   "evidence": [
+    {
+     "unit": "s0200",
+     "quote": "卿追蹤伊、孔"
+    }
+   ]
+  },
+  {
+   "id": "hints-p175",
+   "verdict": "incorrect",
+   "event": "Bi Xi is only alluded to; the hint lacks a source-dated event.",
+   "reason": "BC 490-480 is unsupported by the chapter, and the allusion is retrospective.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "佛肸之召"
+    }
+   ]
+  },
+  {
+   "id": "hints-p176",
+   "verdict": "incorrect",
+   "event": "Yi Yin is only quoted; the hint lacks a source-dated event.",
+   "reason": "A retrospective quotation must not produce the active hint BC 1600-1500.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "伊尹亦稱"
+    }
+   ]
+  },
+  {
+   "id": "hints-p177",
+   "verdict": "incorrect",
+   "event": "Ma Shaoyou is only quoted; the hint lacks a source-dated event.",
+   "reason": "AD 25-56 is unsupported here, and the quotation is retrospective.",
+   "evidence": [
+    {
+     "unit": "s0199",
+     "quote": "少遊有雲"
+    }
+   ]
+  },
+  {
+   "id": "hints-p178",
+   "verdict": "supported",
+   "event": "Shi Hu taking Lingzhi.",
+   "reason": "The AD 338 hint matches Xiankang 4.",
+   "evidence": [
+    {
+     "unit": "s0210",
+     "quote": "石季龍克令支"
+    }
+   ]
+  },
+  {
+   "id": "hints-p179",
+   "verdict": "research-blocked",
+   "event": "Ma Qiu's escort mission and defeat.",
+   "reason": "This occurred in the twelfth month of Xiankang 4. The Gregorian year (338 or 339) needs conversion.",
+   "evidence": [
+    {
+     "unit": "s0212",
+     "quote": "秋敗"
+    }
+   ]
+  },
+  {
+   "id": "hints-p180",
+   "verdict": "incorrect",
+   "event": "Lu Chen's undated praise of Yang Yu.",
+   "reason": "Undated 初 evidence does not justify the hint AD 311-351. Remove it.",
+   "evidence": [
+    {
+     "unit": "s0218",
+     "quote": "范陽盧諶"
+    }
+   ]
+  },
+  {
+   "id": "hints-p181",
+   "verdict": "incorrect",
+   "event": "The father's death is implied but undated.",
+   "reason": "Undated 少孤 does not justify the hint AD 290-310. Remove it.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "少孤"
+    }
+   ]
+  }
+ ],
+ "personChecks": [
+  {
+   "id": "p160",
+   "verdict": "incorrect",
+   "reason": "Duan Liao's 338-339 remonstrance window is wrong (≤338). The escort request needs a twelfth-month conversion. The 344 context is fine.",
+   "evidence": [
+    {
+     "unit": "s0211",
+     "quote": "段遼之請迎于季龍也"
+    }
+   ]
+  },
+  {
+   "id": "p165",
+   "verdict": "incorrect",
+   "reason": "Yang Yu's chronology has wrong windows (He Yan ≤304; Duan 314; death 341-348). Omitted events: s0209 Yan warden (ZZTJ says 北平相 instead, a conflicting witness), s0213 appointments (twelfth month of Xiankang 4), and s0214 campaigns against Goguryeo (342) and Yuwen Gui (344).",
+   "evidence": [
+    {
+     "unit": "s0213",
+     "quote": "拜郎中令，遷大將軍左司馬"
+    },
+    {
+     "unit": "s0214",
+     "quote": "東破高句麗，北滅宇文歸"
+    }
+   ]
+  },
+  {
+   "id": "p166",
+   "verdict": "incorrect",
+   "reason": "Dan's only event is undated, so the 290-310 claim and hint are invented.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "惟叔父耽幼而奇之"
+    }
+   ]
+  },
+  {
+   "id": "p167",
+   "verdict": "incorrect",
+   "reason": "He Yan's appointment of Yang Yu must be ≤304, the year He Yan was killed.",
+   "evidence": [
+    {
+     "unit": "s0184",
+     "quote": "刺史和演"
+    }
+   ]
+  },
+  {
+   "id": "p168",
+   "verdict": "incorrect",
+   "reason": "Wang Jun's 領州 is 304, not 300. His 314 capture is supported.",
+   "evidence": [
+    {
+     "unit": "s0185",
+     "quote": "王浚領州"
+    }
+   ]
+  },
+  {
+   "id": "p169",
+   "verdict": "supported",
+   "reason": "Shi Le's taking of Ji in 314 is coherent across all of his items.",
+   "evidence": [
+    {
+     "unit": "s0186",
+     "quote": "石勒既克薊城"
+    }
+   ]
+  },
+  {
+   "id": "p170",
+   "verdict": "supported",
+   "reason": "Zao Song's reply in 314 is coherent.",
+   "evidence": [
+    {
+     "unit": "s0190",
+     "quote": "嵩曰"
+    }
+   ]
+  },
+  {
+   "id": "p171",
+   "verdict": "supported",
+   "reason": "Liu Han's 314 recommendation is coherent.",
+   "evidence": [
+    {
+     "unit": "s0187",
+     "quote": "燕國劉翰"
+    }
+   ]
+  },
+  {
+   "id": "p172",
+   "verdict": "incorrect",
+   "reason": "Duan Jilujuan's invitation was in 314. He died in early 318, so 318-325 is impossible.",
+   "evidence": [
+    {
+     "unit": "s0192",
+     "quote": "鮮卑單于段眷"
+    }
+   ]
+  },
+  {
+   "id": "p173",
+   "verdict": "incorrect",
+   "reason": "Cheng Pan's speech is c.314, not 318-325.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "友人成泮"
+    }
+   ]
+  },
+  {
+   "id": "p174",
+   "verdict": "incorrect",
+   "reason": "Confucius is a retrospective allusion. The lifespan dates and hint are improper.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "仲尼"
+    }
+   ]
+  },
+  {
+   "id": "p175",
+   "verdict": "incorrect",
+   "reason": "Bi Xi is a retrospective allusion, and its date is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "佛肸"
+    }
+   ]
+  },
+  {
+   "id": "p176",
+   "verdict": "incorrect",
+   "reason": "Yi Yin is a retrospective quotation, and its date is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0193",
+     "quote": "伊尹"
+    }
+   ]
+  },
+  {
+   "id": "p177",
+   "verdict": "incorrect",
+   "reason": "Ma Shaoyou is a retrospective quotation, and its date is unsupported.",
+   "evidence": [
+    {
+     "unit": "s0199",
+     "quote": "少遊"
+    }
+   ]
+  },
+  {
+   "id": "p178",
+   "verdict": "supported",
+   "reason": "Shi Hu's capture of Lingzhi in 338 is coherent. The escort request is dated by Duan Liao's claim.",
+   "evidence": [
+    {
+     "unit": "s0210",
+     "quote": "石季龍克令支"
+    }
+   ]
+  },
+  {
+   "id": "p179",
+   "verdict": "research-blocked",
+   "reason": "Ma Qiu's mission needs a Gregorian conversion for the twelfth month of Xiankang 4.",
+   "evidence": [
+    {
+     "unit": "s0212",
+     "quote": "秋敗"
+    }
+   ]
+  },
+  {
+   "id": "p180",
+   "verdict": "incorrect",
+   "reason": "Lu Chen's praise is undated (初), so the 311-351 window is invented.",
+   "evidence": [
+    {
+     "unit": "s0218",
+     "quote": "每稱之"
+    }
+   ]
+  },
+  {
+   "id": "p181",
+   "verdict": "incorrect",
+   "reason": "The father's death is undated (少孤), and the evidence cites the wrong phrase.",
+   "evidence": [
+    {
+     "unit": "s0183",
+     "quote": "少孤"
+    }
+   ]
+  }
+ ],
+ "findings": [
+  {
+   "items": [
+    "claim-967",
+    "claim-970",
+    "claim-1005",
+    "claim-1025",
+    "hints-p160",
+    "p160",
+    "p165"
+   ],
+   "problem": "The Duan Liao-Murong Huang war and remonstrance are dated 338-339. ZZTJ files the remonstrance under 337 (遼數與皝相攻), and it precedes the fall of Lingzhi in 338.",
+   "action": "Replace the window with westernBounds onOrBefore AD 338 (onOrAfter 333, Huang's accession, if a lower bound is desired). Remove 339."
+  },
+  {
+   "items": [
+    "claim-1022",
+    "claim-1073",
+    "hints-p167",
+    "hints-p165",
+    "p167"
+   ],
+   "problem": "He Yan's appointment of Yang Yu is dated 304-311, but He Yan was killed in 304.",
+   "action": "Use westernBounds onOrBefore AD 304."
+  },
+  {
+   "items": [
+    "claim-1077",
+    "hints-p168",
+    "p168"
+   ],
+   "problem": "Wang Jun's 領州 is dated from 300. ZZTJ places his assumption of Youzhou in 304, after he killed He Yan.",
+   "action": "Use westernYear 304 for 領州, or bounds onOrAfter 304 and onOrBefore 314 for Yang Yu's transfer."
+  },
+  {
+   "items": [
+    "claim-1024",
+    "claim-1101",
+    "claim-1108",
+    "hints-p165",
+    "hints-p172",
+    "hints-p173",
+    "p165",
+    "p172",
+    "p173"
+   ],
+   "problem": "Yang Yu joining Duan Jilujuan is dated 318-325. ZZTJ 314 records the flight, and Jilujuan died in the first month of 318.",
+   "action": "Use westernYear 314 (ZZTJ placement), or bounds onOrAfter 314 and onOrBefore 318."
+  },
+  {
+   "items": [
+    "claim-1028",
+    "claim-1060",
+    "claim-1061",
+    "hints-p165",
+    "p165"
+   ],
+   "problem": "Yang Yu's death and age window starts in 337, before his attested activity in 338-341.",
+   "action": "Use westernBounds onOrAfter AD 341 and onOrBefore AD 348 (Huang died in the ninth month of Yonghe 4). Keep age 62 sui with no birth year."
+  },
+  {
+   "items": [
+    "claim-1057",
+    "hints-p165"
+   ],
+   "problem": "The Longcheng planning is dated only to 342. ZZTJ records Yang Yu building Longcheng in the first month of 341.",
+   "action": "Use westernInterval 341-342 for the planning event."
+  },
+  {
+   "items": [
+    "claim-972",
+    "claim-1050",
+    "claim-1130",
+    "hints-p179",
+    "p179"
+   ],
+   "problem": "The point year 338 is used for events in the twelfth month of Xiankang 4, which may fall in January 339 proleptic Gregorian.",
+   "action": "Verify the month with a calendar conversion (Gregorian setting). Otherwise use a 338-339 window and keep the Chinese date label."
+  },
+  {
+   "items": [
+    "claim-1069",
+    "claim-1135",
+    "claim-1141",
+    "claim-1143",
+    "hints-p166",
+    "hints-p180",
+    "hints-p181",
+    "p166",
+    "p180",
+    "p181"
+   ],
+   "problem": "Undated facts (幼, 初, 少孤) carry invented windows. Claim-1141 and claim-1143 cite Dan's phrase instead of 少孤.",
+   "action": "Convert these to undatedSourceAttestation or an undated death with the correct evidence. Remove the hints."
+  },
+  {
+   "items": [
+    "claim-1112",
+    "claim-1117",
+    "claim-1120",
+    "claim-1123",
+    "hints-p174",
+    "hints-p175",
+    "hints-p176",
+    "hints-p177",
+    "p174",
+    "p175",
+    "p176",
+    "p177"
+   ],
+   "problem": "Allusions in speeches c.314 are dated as the ancients' own lifespans or activity.",
+   "action": "Replace them with retrospective-reference events dated to the c.314 speech. Remove the active hints."
+  },
+  {
+   "items": [
+    "p165"
+   ],
+   "problem": "Omitted dated events: s0213 appointments (twelfth month of Xiankang 4), s0214 campaigns against Goguryeo (342) and Yuwen Gui (344), and s0209 Yan commandery warden (ZZTJ: 北平相, a conflicting witness).",
+   "action": "Add the claims with their own evidence. Keep the s0209 office variant as a conflicting witness."
+  }
+ ],
+ "references": [
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷085",
+   "title": "Zizhi Tongjian 85 (304)",
+   "quote": "浚與審登密嚴兵，約并州刺史東贏公騰共圍演，殺之，自領幽州營兵。",
+   "sourceHash": "sha256:fa838a12e9a1a20d5415f8c1efb3e6b08b75e029a95cbac885cd1733d70645a7",
+   "accessedAt": "2026-11-05",
+   "reason": "Wang Jun killed He Yan in 304 and took Youzhou, which caps He Yan's appointment of Yang Yu at 304."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷089",
+   "title": "Zizhi Tongjian 89 (314)",
+   "quote": "王浚從事中郎陽裕，耽之兄子也，逃奔令支，依段疾陸眷。",
+   "sourceHash": "sha256:4113e967fb7909e212dcfed24c14bcbf45394c5b1de605a5f11c82171f150af5",
+   "accessedAt": "2026-11-05",
+   "reason": "Places Yang Yu's flight to Duan Jilujuan in 314, just after Shi Le took Ji."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷089",
+   "title": "Zizhi Tongjian 89 (314)",
+   "quote": "壬申，勒晨至薊",
+   "sourceHash": "sha256:2226d5f567cace7672c44d97d0e9b35f660643f86147919d9a634870e7e552de",
+   "accessedAt": "2026-11-05",
+   "reason": "Shi Le's entry into Ji is dated in Jianxing 2 (314)."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷090",
+   "title": "Zizhi Tongjian 90 (318)",
+   "quote": "春，正月，遼西公疾陸眷卒",
+   "sourceHash": "sha256:03569d66b0078401d705f9bbda080a8295948c8433ace4f065509b7611650c3e",
+   "accessedAt": "2026-11-05",
+   "reason": "Duan Jilujuan died in the first month of 318, so the 318-325 invitation window is impossible."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷095",
+   "title": "Zizhi Tongjian 95 (337)",
+   "quote": "遼數與皝相攻",
+   "sourceHash": "sha256:cd4c6a49fa4a3ef2d9e95c0902ee068b79e7f2894d043a95e39ba28ecec87b5b",
+   "accessedAt": "2026-11-05",
+   "reason": "The remonstrance is filed under Xiankang 3 (337), before the fall of Lingzhi in 338."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "Zizhi Tongjian 96 (338)",
+   "quote": "十二月，段遼自密雲山遣使求迎於趙",
+   "sourceHash": "sha256:80401eac98991c2fb5cd96952f6b9c182becd21b69823eab62b58be396e310ec",
+   "accessedAt": "2026-11-05",
+   "reason": "Duan Liao's request for escort is in the twelfth month of Xiankang 4, which needs a Gregorian check."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+   "title": "Zizhi Tongjian 96 (341)",
+   "quote": "春，正月，燕王皝使唐國內史陽裕等築城於柳城之北",
+   "sourceHash": "sha256:6d0b0ae54916213842478652321d38d14f72622f7a711efa229415c987db8204",
+   "accessedAt": "2026-11-05",
+   "reason": "Yang Yu was building Longcheng in 341, which shows he was alive then and dates the planning."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+   "title": "Zizhi Tongjian 97 (342)",
+   "quote": "冬，十月，燕王皝遷都龍城",
+   "sourceHash": "sha256:9e0649eeb9aedc2d1a280ee27671c8753652d3ff190febc1dd6b526b6d51c6cf",
+   "accessedAt": "2026-11-05",
+   "reason": "The capital move is in the tenth month of 342."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/資治通鑑/卷098",
+   "title": "Zizhi Tongjian 98 (348)",
+   "quote": "九月，丙申，薨。",
+   "sourceHash": "sha256:e66ba74f2559b4800c541ba6ebe6d3d95453e28637cc08aac59e848ee52be2b2",
+   "accessedAt": "2026-11-05",
+   "reason": "Murong Huang died in 348, the upper bound for Yang Yu's mourned death."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0182",
+   "quote": "陽裕，字士倫，右北平無終人也。",
+   "sourceHash": "sha256:2557d6af8aa5eee5eabbed0271dbeaad2ec25a7b44e6b433b68295b4906b616a",
+   "reason": "Owned unit s0182, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0183",
+   "quote": "少孤，兄弟皆早亡，單煢獨立，雖宗族無能識者，惟叔父耽幼而奇之，曰：「此兒非惟吾門之標秀，乃佐時之良器也。」",
+   "sourceHash": "sha256:72cfe7f5179e5fb8ddb9a78786ff7c011fe0afa50b0e1b780ae0f810356b7db1",
+   "reason": "Owned unit s0183, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0184",
+   "quote": "刺史和演辟為主簿。",
+   "sourceHash": "sha256:948cd553d998e0ad13cc470f0731cd24aa4b04c4bf70ca1fbcd9a2723cf8dc2a",
+   "reason": "Owned unit s0184, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0185",
+   "quote": "王浚領州，轉治中從事，忌而不能任。",
+   "sourceHash": "sha256:e24c013e51fea0f4fd7f8495c909d63400b85763373a0993070653f680cdadf9",
+   "reason": "Owned unit s0185, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0186",
+   "quote": "石勒既克薊城，問棗嵩曰：「幽州人士，誰最可者？」",
+   "sourceHash": "sha256:bb1d6ce56668f5c6b32d4eadf37e887ee318e0965a71ad11822a5f13bd8d8eeb",
+   "reason": "Owned unit s0186, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0187",
+   "quote": "嵩曰：「燕國劉翰，德素長者。",
+   "sourceHash": "sha256:7f916904ae71287d39fe88d0ad53b56d8b5b3a6ef112c918996f620642f147cd",
+   "reason": "Owned unit s0187, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0188",
+   "quote": "北平陽裕，幹事之才。」",
+   "sourceHash": "sha256:434e8bf4093572387f307e62706afbae4cf04b4b1df624579ebe447da2840852",
+   "reason": "Owned unit s0188, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0189",
+   "quote": "勒曰：「若如君言，王公何以不任？」",
+   "sourceHash": "sha256:a2e95410bdd07ccdadd8539bf0f1cbbb8eee3ec091f96a7f43fd2df2d6ac4a0f",
+   "reason": "Owned unit s0189, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0190",
+   "quote": "嵩曰：「王公由不能任，所以為明公擒也。」",
+   "sourceHash": "sha256:8ca85c6289d432a34ebf981781bbe63b40b75b29be00eecec695531065570838",
+   "reason": "Owned unit s0190, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0191",
+   "quote": "勒方任之，裕乃微服潛遁。",
+   "sourceHash": "sha256:df6fae447da09f682e8f369d163c4073477864c1b0029c5119d73e9a59f0b4d3",
+   "reason": "Owned unit s0191, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0192",
+   "quote": "時鮮卑單于段眷為晉驃騎大將軍、遼西公，雅好人物，虛心延裕。",
+   "sourceHash": "sha256:bc107103a46a04785e6293d1e0d5bf98c820bcaa65d7c86e357b97eda5d8af7d",
+   "reason": "Owned unit s0192, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0193",
+   "quote": "裕謂友人成泮曰：「仲尼喜佛肸之召，以匏瓜自喻，伊尹亦稱何事非君，何使非民，聖賢尚如此，況吾曹乎！",
+   "sourceHash": "sha256:6cc722bd2de5ea9bc144c0cb056d121f8ca3d3bab8e7bd87aa4c86240b55c812",
+   "reason": "Owned unit s0193, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0194",
+   "quote": "眷今召我，豈徒然哉！」",
+   "sourceHash": "sha256:0b76f170e16b0f7e40bd8322cf0b04d9cc35c787e3477157eece2deb250606f0",
+   "reason": "Owned unit s0194, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0195",
+   "quote": "泮曰：「今華夏分崩，九州幅裂，軌跡所及，易水而已。",
+   "sourceHash": "sha256:bea9bcc010d847c21b8321e80e0e4a7003ff0d4e069aa2b5a674636be34c635e",
+   "reason": "Owned unit s0195, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0196",
+   "quote": "欲偃蹇考槃，以待大通者，俟河之清也。",
+   "sourceHash": "sha256:8f06755cb06726e2c44868418e7c2bb69752647956b7590a7efe5793e7c4eece",
+   "reason": "Owned unit s0196, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0197",
+   "quote": "人壽幾何？",
+   "sourceHash": "sha256:25ddabc904ccb53c18182792c8c980f921037de91f50783c77cf5e0c3f6cfca0",
+   "reason": "Owned unit s0197, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0198",
+   "quote": "古人以為白駒之歎。",
+   "sourceHash": "sha256:e89c988561f0be5b158ab02823261c1ed0cacb72d6f47e5a365809d13ab58def",
+   "reason": "Owned unit s0198, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0199",
+   "quote": "少遊有雲，郡掾足以廕後，況國相乎！",
+   "sourceHash": "sha256:e3367434536d063c54104c2313038a824c18b445e23dbf39af2470ae0d657795",
+   "reason": "Owned unit s0199, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0200",
+   "quote": "卿追蹤伊、孔，抑亦知機其神也。」",
+   "sourceHash": "sha256:9e0fab630006831231bf08cc72606744d0f9356d3a77a9da8609bd8596671848",
+   "reason": "Owned unit s0200, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0201",
+   "quote": "裕乃應之。",
+   "sourceHash": "sha256:8ae7148320a1afe3556b7288308813c495a9041fc679c43da8442a0e5a2eda5e",
+   "reason": "Owned unit s0201, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0202",
+   "quote": "拜郎中令、中軍將軍，處上卿位。",
+   "sourceHash": "sha256:b575534c2e3962c073ec34a5ca9dd897e62c62e48263a5dfa944ca1214947413",
+   "reason": "Owned unit s0202, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0203",
+   "quote": "曆事段氏五主，甚見尊重。",
+   "sourceHash": "sha256:dfbcf87f86efa327e01d16685a338c6eececdc2a588b68548e4202519ca6a93e",
+   "reason": "Owned unit s0203, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0204",
+   "quote": "段遼與皝相攻，裕諫曰：「臣聞親仁善鄰，國之寶也。",
+   "sourceHash": "sha256:a1bc4bc61734ef02ac9b2bbe748a4bbdaa51250d8667c6a7d2b4f37893b0b484",
+   "reason": "Owned unit s0204, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0205",
+   "quote": "慕容與國世為婚姻，且皝令德之主，不宜連兵構怨，凋殘百姓。",
+   "sourceHash": "sha256:037a14d84a9a78a60af6d2ff85f99205072e134f65d40ea66f2e3d249f6c411c",
+   "reason": "Owned unit s0205, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0206",
+   "quote": "臣恐禍害之興，將由於此。",
+   "sourceHash": "sha256:cbfe2693d4eefdc4ecde066b87a3cc27b3adeb33f107c7d4e9dc6c2305cca78d",
+   "reason": "Owned unit s0206, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0207",
+   "quote": "願兩追前失，通款如初，使國家有太山之安，蒼生蒙息肩之惠。」",
+   "sourceHash": "sha256:510d12c1efa56a1323c6fa20b5aa3f1bc66164def93769ea4eb22c708c567808",
+   "reason": "Owned unit s0207, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0208",
+   "quote": "遼不從。",
+   "sourceHash": "sha256:6796714cbe8d8844d13fc31b539205d7fc4dd5ee412d790a274a7f1391b44281",
+   "reason": "Owned unit s0208, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0209",
+   "quote": "出為燕郡太守。",
+   "sourceHash": "sha256:28c9fad0bd4fbda042fc9f85e0bb1947f8b4d163e6c6b7b3eabb0204df61639e",
+   "reason": "Owned unit s0209, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0210",
+   "quote": "石季龍克令支，裕以郡降，拜北平太守，徵為尚書左丞。",
+   "sourceHash": "sha256:6c75756e9efdb1aead6dd5988a9b793f13a69bc62addeb0f58dd07276b0318eb",
+   "reason": "Owned unit s0210, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0211",
+   "quote": "段遼之請迎于季龍也，裕以左丞領征東麻秋司馬。",
+   "sourceHash": "sha256:28c90257d79702e2209e103621ca5b62e5d82a9b6d93b3d83b68ccc7dc722098",
+   "reason": "Owned unit s0211, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0212",
+   "quote": "秋敗，裕為軍人所執，將詣皝。",
+   "sourceHash": "sha256:c640ae5b422f1ca1ec87e15e291f66e5fb2ba7bab7316fe9b2b23f491c763fe6",
+   "reason": "Owned unit s0212, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0213",
+   "quote": "皝素聞裕名，即命釋其囚，拜郎中令，遷大將軍左司馬。",
+   "sourceHash": "sha256:99c6c4a00d90ebdd1778c8e26a5f5ab1a2088f409852040ef99465926150ae6b",
+   "reason": "Owned unit s0213, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0214",
+   "quote": "東破高句麗，北滅宇文歸，皆豫其謀，皝甚器重之。",
+   "sourceHash": "sha256:314e0c0ab09c576b28461b8ca1cbc38296af6e1a1f2d2c12fbb7574719961792",
+   "reason": "Owned unit s0214, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0215",
+   "quote": "及遷都和龍，裕雅有巧思，皝所制城池宮闔，皆裕之規模。",
+   "sourceHash": "sha256:43c1d3d01b4904c007fe5da654735d6579b750f695491c9ae4509e7c0417e4e8",
+   "reason": "Owned unit s0215, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0216",
+   "quote": "裕雖仕皝日近，寵秩在舊人之右，性謙恭清儉，剛簡慈篤，雖曆居朝端，若布衣之士。",
+   "sourceHash": "sha256:0bc2341b2cea4a3ecd79fd6577a44373b5edcc4171d41aa0c0a44a46c6f71a1e",
+   "reason": "Owned unit s0216, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0217",
+   "quote": "士大夫流亡羈絕者，莫不經營收葬，存恤孤遺，士無賢不肖皆傾身待之，是以所在推仰。",
+   "sourceHash": "sha256:abffbe845ac3e52173bcecf72e01a3cc2f813ff972c5f46c0c3f9b564f89e0ab",
+   "reason": "Owned unit s0217, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0218",
+   "quote": "初，范陽盧諶每稱之曰：「吾及晉之清平，曆觀朝士多矣，忠清簡毅，篤信義烈，如陽士倫者，實亦未幾。」",
+   "sourceHash": "sha256:38a3ce10af25eb9c6378ba4ce533e34dcb0957b029bb52a4f14b9547cb1ac154",
+   "reason": "Owned unit s0218, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0219",
+   "quote": "及死，皝甚悼之，時年六十二。",
+   "sourceHash": "sha256:fd8c7e021f7252204796b48333703a2b2243f61386faf1312b0ec97bc9a3bdf2",
+   "reason": "Owned unit s0219, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+  }
+ ]
+}

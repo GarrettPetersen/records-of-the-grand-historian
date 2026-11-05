@@ -1,0 +1,2807 @@
+{
+  "instructions": "You are performing one bounded phase of the independent chronology workflow.\nThe host owns publication. Never certify your own repairs. Do not re-extract\nnames/mentions, rewrite translations, clone the corpus, or call another paid API.\n\nUse the supplied sealed evidence and your assigned output path. Do not create a\nrepository clone or worktree for this job. When using a shared host checkout, write\nonly the assigned review/repair artifact; the host owns validation, source changes,\nGit operations and publication. Separate reviewer conversations provide independence.\n\nHistorical rules: date the named person's OWN event, not a descendant's action,\nlater quotation, republication, or commemoration. Read the Chinese; the English\nand previous model assertions are not independent evidence. Verify conversions\nagainst a primary passage and a reliable calendar reference, including the ruler,\npolity, reign and repeated era names. Preserve competing readings. Never infer\ntwins from 同生 in a maternal list. Preserve age reckoning; do not automatically\nconvert traditional inclusive age into a precise birth year. Conventional regnal\nyear labels need not equal the Gregorian year of every month/day within them.\nThere is no year zero. Use BC/AD. Keep birth/death separate from activity.\nPreserve later reception as its own event, not living activity: use event kind\nretrospective-reference, or receptionType: retrospective on a narrower honor/work\nclaim. This does not change the posthumous-name alias kind. Record\nthe reception's own date, source and subject role. Retrospective does not imply\ndead; there is no separate posthumous reception category. A later-written biography\ncan still attest an earlier life event. Do not use reception dates as life dates\nor active hints, and do not discard the later reference when repairing them.\nFor verified month/day events, normalize Western years/bounds to proleptic\nGregorian and state that convention in the conversion evidence. Check the\nconverter's calendar setting: Academia Sinica defaults to Julian before 1582,\nwhich can change the Western year near New Year. Retain the Chinese date and\nidentify Julian witnesses explicitly. Do not apply a fixed offset across\ncenturies or pretend a reign-year-only label specifies a Gregorian event date.\n\nUse westernBounds with before/onOrBefore/after/onOrAfter positive BC/AD year\nobjects for genuine one-sided knowledge. An event after an accession in AD 479\ncan still occur in AD 479: onOrAfter 479, not after 479. Never invent a second\nendpoint or turn a bound into an exact year. Preserve relative event sequence.\nAn unresolved source date requires unresolved:true and a substantive\nunresolvedReason, not a guessed year. Research blocks approval; report it honestly.\n\nDistinguish a positively attested, genuinely undated fact from an unresolved\nasserted date. In a scoped repair, use an attestation value with\nundatedSourceAttestation:true and a source-specific event of at least 20 characters;\nit must contain no sourceDate, qualitative, Western-date or unresolved fields.\nPreserve the subject, facts and source evidence. Preserve a stated age and its\nexisting reckoning: an undated age claim may use the same marker and event in its\ndateContext. Age five does not supply a calendar year, birth year or reign-wide\nactivity interval. Check all supplied evidence before changing active hints;\nexplicitly undated evidence alone does not justify inventing a hint. Reviewers\nmust still check these items. Do not merely clear unresolved flags: explain the\nsource-supported replacement. This pathway does not resolve a genuinely disputed\nsource date, conversion, event owner or conflicting witness; retain the appropriate\nsupported uncertainty or research hold.\n\nSupported value examples (retain each claim's person and evidence; preserve the\nexisting sui reckoning in the age example):\nAttestation: {\"undatedSourceAttestation\":true,\"event\":\"Emperor Wu loved Sima Yu and kept him at his side; no calendar date is stated.\"}\nAge: {\"age\":5,\"reckoning\":\"sui\",\"dateContext\":{\"undatedSourceAttestation\":true,\"event\":\"The crown prince was five when he pulled the emperor by his robe into the darkness; no calendar date is stated.\"}}\n\nINDEPENDENT-REVIEW:\nRead every ownedUnits entry for omitted births, deaths, ages and date context.\nCheck every ownedItems entry, and check each ownedPeople record for missing or\nincoherent chronology in the supplied evidence. Context-only units are read-only;\nother jobs own their completeness checks. Identify the owner of every dated\nevent and justify each endpoint in your reason. A date window must describe\nuncertainty about an event, not activity throughout a dynasty. Check active hints\nagainst supported personal events. Later posthumous events must not feed life dates.\nDo not approve unsupported chronology merely because it looks plausible.\n\nReturn JSON with jobId (input id), sourceHash, extractionHash, reviewedAt (ISO),\nreviewer:{name,independentOfExtractor:true}, summary (substantive),\nreviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.\nEvery check has id, verdict (supported/incorrect/research-blocked), reason, and\nevidence:[{unit,quote}] containing a contiguous exact Chinese substring of the cited\nsource unit. Never join disjoint passages with ellipses; use separate evidence\nentries for disjoint passages. Item checks additionally\nhave event describing whose event is being dated. This is required for **every**\nitem check, including `hints-pNNN` active-date-hint rows: give a source-specific\nEnglish sentence of at least 10 characters that identifies the named person's own\nevent (or states that the hint lacks such an event). Do not omit it merely because\nthe item is a hint rather than a claim. Include exactly ownedItems and\nownedPeople, with no duplicates. Even failed jobs must finish their owned checks\nor retain work for continuation; they cannot silently omit a difficult item.\nEvery failed check has an actionable finding:\n{items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].\nKeep each check's reason concise and self-contained, with at least 20 characters\nafter trimming whitespace of substantive, source-specific explanation, not padding:\nidentify its source anchor and why the date is supported or defective. Do not\nlengthen reasons unnecessarily. Put shared research and conversion\nexplanations once in findings or references instead of repeating paragraphs.\nRetain every owned check, its event owner, and exact per-check Chinese evidence.\nExternal research references use {kind:\"external\",url,title,quote,sourceHash,\naccessedAt,reason}; sourceHash is 'sha256:' plus SHA-256 of the short exact excerpt.\nVerify the page before citing it; keep quotations short and copyright-compliant.\nDo not invent a reference or claim an external source was read when it was not.\n\nREPAIR-PROPOSAL:\nResolve the supplied findings by reading their Chinese evidence and doing any\nnecessary targeted research. Return {sourceHash,extractionHash,changes:[...]}.\nEach change has a substantive source-based reason and one of these forms:\n{kind:\"replace\",id:\"claim-N\",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}\n{kind:\"remove\",id:\"claim-N\",before:EXACT_INPUT_ROW,reason}\n{kind:\"add\",after:[personId,\"attestation\"|\"birth\"|\"death\"|\"age\",value,certainty,[unitIds]],reason}\n{kind:\"add-reception-event\",after:[personId,\"event-participation\",value,certainty,[unitIds]],reason}\n{kind:\"date-context\",id:\"claim-N\",before:EXACT_INPUT_DATE_CONTEXT_OR_NULL,after:REVISED_DATE_CONTEXT,reason}\n{kind:\"hints\",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}\nClaim rows are compact five-element arrays. Replacements keep subject/predicate.\nUse date-context only for an existing non-life claim. Its before value is exactly\nclaims[id][2].dateContext, or null when absent; its after value is only the revised\ndate-context object, never a complete claim row. It may change only sourceDate,\nwesternYear, westernInterval, westernBounds, unresolved, and unresolvedReason.\nCopy an existing event description verbatim. The host retains the claim's subject,\npredicate, certainty, evidence, and other non-date fields unchanged. Do not remove\nor invent an event, or use date-context for attestation, birth, death, or age rows.\nDo not modify names, roles, mentions, family links or translation text. Preserve\nlegitimate posthumous reception as an event, but remove it from personal activity.\nUse add-reception-event with an explicit retrospective classification\nas described above. Remove or correct the misleading life claim separately.\nDo not invent a date for an undated reference or rewrite unrelated event fields.\nAll necessary operations must be in changes; do not leave required companion\nrecords in hostRequiredChanges or similar side lists. If the supported operations\ncannot represent the complete repair, return blocked:true and explain the gap.\nSynchronize hints with corrected chronology. Use only existing person IDs and\nknown source-unit IDs. Avoid unnecessary edits. The next reviewer receives the\nresulting claims independently and must establish their support from the source.\nIf research cannot resolve a finding, return {blocked:true,reason:...}; do not\ndelete a person or fabricate a date to get a passing result.\nFor person checks, compare all supplied items and contextItems for that person,\nincluding dates elsewhere in the chapter. Context items are read-only evidence;\ndo not emit itemChecks for IDs outside ownedItems. Report contradictions or\nmissing narrative context instead of certifying a person from an isolated event.\nKeep supplementary research targeted to an existing date defect, a local omission,\nor a needed conversion. Do not expand this audit into new biographies or add every\nexternal life date you encounter. Preserve genuinely conflicting witnesses as\nexplicitly supported uncertainty when possible; neither choose a winning date nor\ncreate false precision to clear a finding. An unsupported conversion remains a hold.\n\nRetrospective is the sole later-reception category, including commemorations and\nreferences after a known death. Use kind `retrospective-reference` or, on a narrower\nhonor/work claim, receptionType `retrospective`. Do not require proof of death,\nintroduce a posthumous subtype, or change the separate `posthumous-name` alias kind.\n\nThe returned attachment must include author:{name,agentId}. Use your actual stable conversation/context ID as agentId. This identity is a human attestation, not machine proof; a repair context cannot independently review its own changes.",
+  "phase": "repair-proposal",
+  "sourceHash": "sha256:0aea020cdfd5593619a808b02c83e4dc722117f2f6b1a0fa75d85bea53733736",
+  "extractionHash": "sha256:65c76c9f93157f64c140d105b7f9e37da69f0ca1847e415fe77f3b100150dc36",
+  "book": "jinshu",
+  "chapter": "109",
+  "sourceUrl": "https://chinesenotes.com/jinshu/jinshu109.html",
+  "repairContract": "A finding label is a coverage indicator, not necessarily a claim-row ID: target only IDs actually present in claims. For attestation, birth, death, or age rows, chronology changes MUST use kind \"replace\" with before copied verbatim from claims[id] and a complete after claim row; never use date-context. Claim certainty is exactly one of \"explicit\", \"explicit-event-contextual-date\", \"strongly-inferred\", \"uncertain\", \"derived\", or \"textual-variant\"; never write informal labels such as \"inferred\" or \"contextual\". For an explicitly undated source attestation, set undatedSourceAttestation:true directly on that complete after claim value—never use an invented undated field. Its event MUST be one source-specific English string of at least 20 characters (not an object), and it may carry no sourceDate, western date, unresolved field, or other temporal field. For any other row, replace or remove also copy before verbatim from claims[id]. date-context is permitted only for non-life rows: before must be exactly claims[id][2].dateContext (or null) and after must be only the replacement dateContext object. Copy any existing non-temporal dateContext fields, including event, verbatim into after; only sourceDate, westernYear, westernInterval, westernBounds, unresolved, and unresolvedReason may be added, removed, or changed. Put research explanation in reason, never in custom keys such as competingSourceDate, westernCalendar, or conversionEvidence. An add-reception-event MUST be an event-participation row with a nonempty kind such as retrospective-reference. If it supplies receptionType, its value must literally be \"retrospective\"; \"posthumous\" is not a valid receptionType. Include any role/action supported by the source. A westernInterval is exactly {start:{era:\"AD\"|\"BC\",year:positive integer,precision:\"year\"|\"circa\"},end:{era:\"AD\"|\"BC\",year:positive integer,precision:\"year\"|\"circa\"}}; use no westernYear or westernBounds alongside it. Every western bound is {era:\"AD\"|\"BC\",year:positive integer,precision:\"year\"|\"circa\"}; never use an ad field. Western years, interval endpoints and bounds use only year or circa precision; preserve finer dates in sourceDate. Non-legendary people with active-date hints require a matching AD/BC hint and a Western attestation unless the sealed source is genuinely undated. Retained chronology can require a qualified hint: westernBounds.onOrAfter AD 355 maps to on or after AD 355, not an empty hint or exact AD 355. Check every retained claim for that person before clearing hints. Put all hint changes last, after claim edits and reception additions. The host preserves every non-date claim field; never send a full claim row for date-context.",
+  "findings": [
+    {
+      "items": [
+        "claim-66",
+        "p001"
+      ],
+      "problem": "s0007 率眾征討，累有功 describes repeated campaigns after the 建武初 appointments, yet the claim carries westernYear AD 317.",
+      "action": "Replace the dateContext with westernBounds onOrAfter AD 317, keeping sourceDate 建武初, and leave hints-p001 unchanged since other 317 events support it."
+    },
+    {
+      "items": [
+        "hints-p004",
+        "p004"
+      ],
+      "problem": "Yidougui's own dated claims (claim-74, claim-100, claim-139) are all AD 333–334 windows; no discrete 333 or 334 event supports [\"AD 333\",\"AD 334\"].",
+      "action": "Set hints-p004 to [\"AD 333-334\"], consistent with the p003/p007/p011–p018 repair."
+    },
+    {
+      "items": [
+        "hints-p010",
+        "p010"
+      ],
+      "problem": "Duan Liao's owned backing claim is a 333–334 window (claim-101), yet hints-p010 lists discrete AD 333 alongside AD 334.",
+      "action": "Set hints-p010 to [\"AD 333-334\", \"AD 334\"], keeping the supported Tuhe/attestation 334 point and aligning the Ren-backing window with the p004 repair pattern."
+    },
+    {
+      "items": [
+        "claim-217",
+        "hints-p035",
+        "p035"
+      ],
+      "problem": "Huang's ice strike on Ren is narrated under Jinshu 咸康初 but dated by ZZTJ to 咸康二年 (AD 336); claim-217 and hints still use exact AD 335 for that campaign block.",
+      "action": "Replace claim-217's westernYear 335 with westernInterval AD 335–336 (or split the 咸康初 raid from the Ren campaign), and set hints-p035 to include AD 336 alongside 337 (and 334 from earlier parts if retained elsewhere)."
+    },
+    {
+      "items": [
+        "claim-262",
+        "claim-309",
+        "claim-317",
+        "claim-318",
+        "claim-319",
+        "claim-320",
+        "claim-321",
+        "claim-322",
+        "hints-p074",
+        "p074"
+      ],
+      "problem": "s0072 title grant is labeled sourceDate 咸康三年 (kingship formula from s0056) with westernInterval 337-338, and hints-p074 is AD 337 only. ZZTJ dates the advancement to Xiankang 4/4/癸丑 = AD 338.",
+      "action": "Replace each claim's dateContext/value with sourceDate text reflecting the post-kingship grant (or omit the false 咸康三年 label) and westernYear AD 338 at year precision; set hints-p074 to ['AD 338']."
+    },
+    {
+      "items": [
+        "claim-221",
+        "hints-p036",
+        "p036"
+      ],
+      "problem": "Ren's ice-campaign targeting is exact AD 335, but ZZTJ places the campaign in AD 336 while Jinshu only says 咸康初.",
+      "action": "Replace claim-221 with westernInterval AD 335–336 or westernYear AD 336, and set hints-p036 to [\"AD 336\"] or [\"AD 335-336\"]."
+    },
+    {
+      "items": [
+        "claim-351"
+      ],
+      "problem": "Murong Ren's execution is given a point westernYear AD 335 from the qualitative 咸康初. The ice-crossing context (s0036) indicates a winter campaign that could fall in early AD 336, and no month or year appears in the owned units.",
+      "action": "Replace the point year with a supported window (for example a westernInterval of AD 335-336 tied to the winter crossing) or verify the year against a primary chronicle (Zizhi tongjian, Jin juan) with calendar conversion. Do not keep a bare 335."
+    },
+    {
+      "items": [
+        "claim-222",
+        "hints-p037",
+        "p037"
+      ],
+      "problem": "The Hutuo ice crossing is dated AD 25, but Hou Hanshu places it in Gengshi 2 (AD 24); the chapter use is retrospective speech.",
+      "action": "Set westernYear to AD 24 for the historical crossing (or reclassify as retrospective-reference dated to Huang's speech), and set hints-p037 to [\"AD 24\"] only if a life-event hint is kept."
+    },
+    {
+      "items": [
+        "hints-p038",
+        "p038"
+      ],
+      "problem": "Duan Liao's 337-338 activity (fleeing to Miyun, false surrender to Shi Hu) in context claim-224 is missing from the hint.",
+      "action": "Change the hints to ['AD 335-337', 'AD 337-338']."
+    },
+    {
+      "items": [
+        "hints-p041",
+        "p041"
+      ],
+      "problem": "Duan Lan's defeat north of Lingzhi in context claim-228 (AD 337-338) is missing from the hint.",
+      "action": "Change the hints to ['AD 335-337', 'AD 337-338']."
+    },
+    {
+      "items": [
+        "hints-p047",
+        "p047"
+      ],
+      "problem": "Murong Jun's appointment as crown prince in AD 337 (context claims 235 and 349) is missing from the hint.",
+      "action": "Change the hints to ['AD 335-337', 'AD 337']."
+    },
+    {
+      "items": [
+        "claim-254",
+        "hints-p066",
+        "p066"
+      ],
+      "problem": "s0059 cites Cao Cao (魏武) only as a regency precedent at Huang's AD 337 enthronement; the claim dates Cao Cao's own regency 196-220 and feeds an active hint from an imported span.",
+      "action": "Remove claim-254 and replace it with a retrospective-reference event for p066 dated to the 咸康三年 (AD 337) citation with subject role 'cited precedent' from s0059; set hints-p066 to [] unless separately source-supported."
+    },
+    {
+      "items": [
+        "claim-255",
+        "hints-p067",
+        "p067"
+      ],
+      "problem": "s0059 cites Sima Zhao (晉文) only as a regency precedent at Huang's AD 337 enthronement; the claim dates his own regency 255-265 and feeds an active hint from an imported span.",
+      "action": "Remove claim-255 and replace it with a retrospective-reference event for p067 dated to the 咸康三年 (AD 337) citation with subject role 'cited precedent' from s0059; set hints-p067 to [] unless separately source-supported."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://www.guxuo.com/ls/zztj/0718.htm",
+      "title": "资治通鉴·晋成帝咸康元年",
+      "quote": "十二月，徐孟等至棘城，慕容皝始受朝命。",
+      "reason": "ZZTJ places the envoys' arrival and Huang's acceptance in Xiankang 1/12 (AD 335), after Jinshu's 是歲 (Xianhe 9) dispatch narrative."
+    },
+    {
+      "kind": "external",
+      "url": "https://www.guxuo.com/ls/zztj/0719.htm",
+      "title": "资治通鉴·晋成帝咸康二年",
+      "quote": "慕容皝将讨慕容仁，司马高诩曰：“仁叛弃君亲，民神怒；前此海未尝冻，自仁反以来，连年冻者三矣。",
+      "reason": "ZZTJ dates Huang's ice campaign against Ren to spring of Xiankang 2 (AD 336), against Jinshu's undivided 咸康初 label."
+    },
+    {
+      "kind": "chapter",
+      "quote": "擁段遼及其部眾以歸",
+      "reason": "Owned Chinese for the Miyun aftermath; also the omitted 部眾 in the idiomatic English."
+    },
+    {
+      "kind": "chapter",
+      "quote": "段遼謀叛，皝誅之。",
+      "reason": "Duan Liao’s execution; no year in-unit."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/zh-hans/%E8%B3%87%E6%B2%BB%E9%80%9A%E9%91%91/%E5%8D%B7096",
+      "title": "资治通鉴/卷096 咸康四年四月",
+      "quote": "夏，四月，癸丑，以慕容皝为征北大将军、幽州牧，领平州刺史。",
+      "reason": "Point date for the Jin title advancement corresponding to s0072: Xiankang 4/4 = AD 338."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+      "title": "資治通鑑 卷096",
+      "quote": "二月，翰竊逸豆歸名馬，攜其二子過取弓矢，逃歸",
+      "reason": "Han's return 咸康六年二月 (340)."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "宇文逸豆歸遣其相莫淺渾將兵擊燕；諸將爭欲擊之，燕王皝不許。",
+      "reason": "ZZTJ 建元元年 (343) witness for the Moqian Hun raid."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷097",
+      "title": "資治通鑑 卷097",
+      "quote": "遂斬涉夜干。宇文士卒見涉夜干死，不戰而潰；燕兵乘勝逐之，遂克其都城。逸豆歸走死漠北",
+      "reason": "ZZTJ 建元二年 (344) witness for Sheyiyu’s death and Gui’s desert end."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikisource.org/wiki/資治通鑑/卷096",
+      "title": "Zizhi Tongjian 96 (338)",
+      "quote": "十二月，段遼自密雲山遣使求迎於趙",
+      "reason": "Duan Liao's request for escort is in the twelfth month of Xiankang 4, which needs a Gregorian check."
+    },
+    {
+      "kind": "chapter",
+      "quote": "段遼與皝相攻，裕諫曰：「臣聞親仁善鄰，國之寶也。",
+      "reason": "Owned unit s0204, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+    },
+    {
+      "kind": "chapter",
+      "quote": "段遼之請迎于季龍也，裕以左丞領征東麻秋司馬。",
+      "reason": "Owned unit s0211, read in full for Yang Yu chapter chronology, omissions, and event ownership."
+    }
+  ],
+  "people": [
+    {
+      "id": "p001",
+      "names": [
+        "Murong Huang",
+        "慕容皝",
+        "Murong Huang"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and General",
+      "hints": [
+        "AD 317",
+        "AD 325-326",
+        "AD 333",
+        "AD 334"
+      ]
+    },
+    {
+      "id": "p004",
+      "names": [
+        "Yidougui",
+        "逸豆歸",
+        "Yidougui"
+      ],
+      "historicity": "historical",
+      "descriptor": "Tribal Leader",
+      "hints": [
+        "AD 333",
+        "AD 334"
+      ]
+    },
+    {
+      "id": "p010",
+      "names": [
+        "Duan Liao",
+        "段遼",
+        "Duan Liao"
+      ],
+      "historicity": "historical",
+      "descriptor": "Tribal Leader and Ruler",
+      "hints": [
+        "AD 333",
+        "AD 334"
+      ]
+    },
+    {
+      "id": "p035",
+      "names": [
+        "Murong Huang",
+        "皝",
+        "Murong Huang"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 335",
+        "AD 337"
+      ]
+    },
+    {
+      "id": "p036",
+      "names": [
+        "Murong Ren",
+        "仁",
+        "Ren"
+      ],
+      "historicity": "historical",
+      "descriptor": "Rebel",
+      "hints": [
+        "AD 335"
+      ]
+    },
+    {
+      "id": "p037",
+      "names": [
+        "Emperor Guangwu of Han",
+        "漢光武",
+        "Han Guangwu"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 25"
+      ]
+    },
+    {
+      "id": "p038",
+      "names": [
+        "Duan Liao",
+        "段遼",
+        "Duan Liao"
+      ],
+      "historicity": "historical",
+      "descriptor": "Clan Leader and Warlord",
+      "hints": [
+        "AD 335-337"
+      ]
+    },
+    {
+      "id": "p041",
+      "names": [
+        "Duan Lan",
+        "段蘭",
+        "Duan Lan"
+      ],
+      "historicity": "historical",
+      "descriptor": "General",
+      "hints": [
+        "AD 335-337"
+      ]
+    },
+    {
+      "id": "p047",
+      "names": [
+        "Murong Jun",
+        "俊",
+        "Murong Jun"
+      ],
+      "historicity": "historical",
+      "descriptor": "Royal Family Member",
+      "hints": [
+        "AD 335-337"
+      ]
+    },
+    {
+      "id": "p066",
+      "names": [
+        "Cao Cao",
+        "魏武",
+        "Cao Cao"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 196-220"
+      ]
+    },
+    {
+      "id": "p067",
+      "names": [
+        "Sima Zhao",
+        "晉文",
+        "Sima Zhao"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 255-265"
+      ]
+    },
+    {
+      "id": "p074",
+      "names": [
+        "Emperor Cheng",
+        "帝",
+        "Chengdi"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "AD 337"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "claim-63",
+      "personId": "p001",
+      "claimIndex": 62,
+      "evidence": [
+        "s0007"
+      ]
+    },
+    {
+      "id": "claim-64",
+      "personId": "p001",
+      "claimIndex": 63,
+      "evidence": [
+        "s0007"
+      ]
+    },
+    {
+      "id": "claim-65",
+      "personId": "p001",
+      "claimIndex": 64,
+      "evidence": [
+        "s0007"
+      ]
+    },
+    {
+      "id": "claim-66",
+      "personId": "p001",
+      "claimIndex": 65,
+      "evidence": [
+        "s0007"
+      ]
+    },
+    {
+      "id": "claim-67",
+      "personId": "p001",
+      "claimIndex": 66,
+      "evidence": [
+        "s0008"
+      ]
+    },
+    {
+      "id": "claim-68",
+      "personId": "p001",
+      "claimIndex": 67,
+      "evidence": [
+        "s0008"
+      ]
+    },
+    {
+      "id": "claim-70",
+      "personId": "p001",
+      "claimIndex": 69,
+      "evidence": [
+        "s0009"
+      ]
+    },
+    {
+      "id": "claim-71",
+      "personId": "p001",
+      "claimIndex": 70,
+      "evidence": [
+        "s0009"
+      ]
+    },
+    {
+      "id": "claim-74",
+      "personId": "p004",
+      "claimIndex": 73,
+      "evidence": [
+        "s0010"
+      ]
+    },
+    {
+      "id": "claim-75",
+      "personId": "p001",
+      "claimIndex": 74,
+      "evidence": [
+        "s0010"
+      ]
+    },
+    {
+      "id": "claim-83",
+      "personId": "p001",
+      "claimIndex": 82,
+      "evidence": [
+        "s0014"
+      ]
+    },
+    {
+      "id": "claim-100",
+      "personId": "p004",
+      "claimIndex": 99,
+      "evidence": [
+        "s0020"
+      ]
+    },
+    {
+      "id": "claim-101",
+      "personId": "p010",
+      "claimIndex": 100,
+      "evidence": [
+        "s0020"
+      ]
+    },
+    {
+      "id": "claim-110",
+      "personId": "p001",
+      "claimIndex": 109,
+      "evidence": [
+        "s0025"
+      ]
+    },
+    {
+      "id": "claim-111",
+      "personId": "p001",
+      "claimIndex": 110,
+      "evidence": [
+        "s0026"
+      ]
+    },
+    {
+      "id": "claim-118",
+      "personId": "p001",
+      "claimIndex": 117,
+      "evidence": [
+        "s0029"
+      ]
+    },
+    {
+      "id": "claim-119",
+      "personId": "p001",
+      "claimIndex": 118,
+      "evidence": [
+        "s0029"
+      ]
+    },
+    {
+      "id": "claim-120",
+      "personId": "p001",
+      "claimIndex": 119,
+      "evidence": [
+        "s0029"
+      ]
+    },
+    {
+      "id": "claim-121",
+      "personId": "p001",
+      "claimIndex": 120,
+      "evidence": [
+        "s0029"
+      ]
+    },
+    {
+      "id": "claim-122",
+      "personId": "p001",
+      "claimIndex": 121,
+      "evidence": [
+        "s0029"
+      ]
+    },
+    {
+      "id": "claim-124",
+      "personId": "p001",
+      "claimIndex": 123,
+      "evidence": [
+        "s0030"
+      ]
+    },
+    {
+      "id": "claim-128",
+      "personId": "p001",
+      "claimIndex": 127,
+      "evidence": [
+        "s0032"
+      ]
+    },
+    {
+      "id": "claim-130",
+      "personId": "p001",
+      "claimIndex": 129,
+      "evidence": [
+        "s0006",
+        "s0007"
+      ]
+    },
+    {
+      "id": "claim-131",
+      "personId": "p001",
+      "claimIndex": 130,
+      "evidence": [
+        "s0008"
+      ]
+    },
+    {
+      "id": "claim-132",
+      "personId": "p001",
+      "claimIndex": 131,
+      "evidence": [
+        "s0009"
+      ]
+    },
+    {
+      "id": "claim-133",
+      "personId": "p001",
+      "claimIndex": 132,
+      "evidence": [
+        "s0010",
+        "s0011"
+      ]
+    },
+    {
+      "id": "claim-134",
+      "personId": "p001",
+      "claimIndex": 133,
+      "evidence": [
+        "s0021"
+      ]
+    },
+    {
+      "id": "claim-135",
+      "personId": "p001",
+      "claimIndex": 134,
+      "evidence": [
+        "s0029",
+        "s0030"
+      ]
+    },
+    {
+      "id": "claim-139",
+      "personId": "p004",
+      "claimIndex": 138,
+      "evidence": [
+        "s0010",
+        "s0020"
+      ]
+    },
+    {
+      "id": "claim-147",
+      "personId": "p010",
+      "claimIndex": 146,
+      "evidence": [
+        "s0013"
+      ]
+    },
+    {
+      "id": "claim-148",
+      "personId": "p010",
+      "claimIndex": 147,
+      "evidence": [
+        "s0023"
+      ]
+    },
+    {
+      "id": "claim-217",
+      "personId": "p035",
+      "claimIndex": 216,
+      "evidence": [
+        "s0033",
+        "s0035",
+        "s0036",
+        "s0039",
+        "s0040",
+        "s0041"
+      ]
+    },
+    {
+      "id": "claim-218",
+      "personId": "p035",
+      "claimIndex": 217,
+      "evidence": [
+        "s0044",
+        "s0046",
+        "s0052",
+        "s0055"
+      ]
+    },
+    {
+      "id": "claim-219",
+      "personId": "p035",
+      "claimIndex": 218,
+      "evidence": [
+        "s0056"
+      ]
+    },
+    {
+      "id": "claim-220",
+      "personId": "p035",
+      "claimIndex": 219,
+      "evidence": [
+        "s0060",
+        "s0062",
+        "s0064",
+        "s0066",
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-221",
+      "personId": "p036",
+      "claimIndex": 220,
+      "evidence": [
+        "s0035",
+        "s0036",
+        "s0040"
+      ]
+    },
+    {
+      "id": "claim-222",
+      "personId": "p037",
+      "claimIndex": 221,
+      "evidence": [
+        "s0037"
+      ]
+    },
+    {
+      "id": "claim-223",
+      "personId": "p038",
+      "claimIndex": 222,
+      "evidence": [
+        "s0042",
+        "s0048",
+        "s0050",
+        "s0054"
+      ]
+    },
+    {
+      "id": "claim-224",
+      "personId": "p038",
+      "claimIndex": 223,
+      "evidence": [
+        "s0060",
+        "s0062",
+        "s0063",
+        "s0070",
+        "s0071"
+      ]
+    },
+    {
+      "id": "claim-227",
+      "personId": "p041",
+      "claimIndex": 226,
+      "evidence": [
+        "s0043",
+        "s0044"
+      ]
+    },
+    {
+      "id": "claim-228",
+      "personId": "p041",
+      "claimIndex": 227,
+      "evidence": [
+        "s0062"
+      ]
+    },
+    {
+      "id": "claim-234",
+      "personId": "p047",
+      "claimIndex": 233,
+      "evidence": [
+        "s0050"
+      ]
+    },
+    {
+      "id": "claim-235",
+      "personId": "p047",
+      "claimIndex": 234,
+      "evidence": [
+        "s0059"
+      ]
+    },
+    {
+      "id": "claim-254",
+      "personId": "p066",
+      "claimIndex": 253,
+      "evidence": [
+        "s0059"
+      ]
+    },
+    {
+      "id": "claim-255",
+      "personId": "p067",
+      "claimIndex": 254,
+      "evidence": [
+        "s0059"
+      ]
+    },
+    {
+      "id": "claim-262",
+      "personId": "p074",
+      "claimIndex": 261,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-308",
+      "personId": "p035",
+      "claimIndex": 307,
+      "evidence": [
+        "s0056"
+      ]
+    },
+    {
+      "id": "claim-309",
+      "personId": "p035",
+      "claimIndex": 308,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-316",
+      "personId": "p035",
+      "claimIndex": 315,
+      "evidence": [
+        "s0056"
+      ]
+    },
+    {
+      "id": "claim-317",
+      "personId": "p035",
+      "claimIndex": 316,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-318",
+      "personId": "p035",
+      "claimIndex": 317,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-319",
+      "personId": "p035",
+      "claimIndex": 318,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-320",
+      "personId": "p035",
+      "claimIndex": 319,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-321",
+      "personId": "p035",
+      "claimIndex": 320,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-322",
+      "personId": "p035",
+      "claimIndex": 321,
+      "evidence": [
+        "s0072"
+      ]
+    },
+    {
+      "id": "claim-349",
+      "personId": "p047",
+      "claimIndex": 348,
+      "evidence": [
+        "s0059"
+      ]
+    },
+    {
+      "id": "claim-351",
+      "personId": "p036",
+      "claimIndex": 350,
+      "evidence": [
+        "s0040"
+      ]
+    },
+    {
+      "id": "claim-359",
+      "personId": "p035",
+      "claimIndex": 358,
+      "evidence": [
+        "s0056"
+      ]
+    },
+    {
+      "id": "claim-405",
+      "personId": "p035",
+      "claimIndex": 404,
+      "evidence": [
+        "s0056"
+      ]
+    },
+    {
+      "id": "hints-p001",
+      "personId": "p001",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 317",
+        "AD 325-326",
+        "AD 333",
+        "AD 334"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p004",
+      "personId": "p004",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 333",
+        "AD 334"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p010",
+      "personId": "p010",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 333",
+        "AD 334"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p035",
+      "personId": "p035",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 335",
+        "AD 337"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p036",
+      "personId": "p036",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 335"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p037",
+      "personId": "p037",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 25"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p038",
+      "personId": "p038",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 335-337"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p041",
+      "personId": "p041",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 335-337"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p047",
+      "personId": "p047",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 335-337"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p066",
+      "personId": "p066",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 196-220"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p067",
+      "personId": "p067",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 255-265"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p074",
+      "personId": "p074",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 337"
+      ],
+      "evidence": []
+    }
+  ],
+  "claims": {
+    "claim-63": [
+      "p001",
+      "office",
+      {
+        "label": {
+          "en": "General Who Champions the Army",
+          "zh": "冠軍將軍"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "建武初"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 317,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0007"
+      ]
+    ],
+    "claim-64": [
+      "p001",
+      "noble-title",
+      {
+        "title": {
+          "en": "Left Worthy Prince",
+          "zh": "左賢王"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "建武初"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 317,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0007"
+      ]
+    ],
+    "claim-65": [
+      "p001",
+      "enfeoffment",
+      {
+        "title": {
+          "en": "Marquis of Wangping",
+          "zh": "望平侯"
+        },
+        "action": "enfeoffed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "建武初"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 317,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0007"
+      ]
+    ],
+    "claim-66": [
+      "p001",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned with repeated merit",
+        "dateContext": {
+          "sourceDate": {
+            "text": "建武初"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 317,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0007"
+      ]
+    ],
+    "claim-67": [
+      "p001",
+      "office",
+      {
+        "label": {
+          "en": "General Who Pacifies the North",
+          "zh": "平北將軍"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "太甯末"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 325,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 326,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0008"
+      ]
+    ],
+    "claim-68": [
+      "p001",
+      "enfeoffment",
+      {
+        "title": {
+          "en": "Duke of Chaoxian",
+          "zh": "朝鮮公"
+        },
+        "action": "advanced",
+        "dateContext": {
+          "sourceDate": {
+            "text": "太甯末"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 325,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 326,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0008"
+      ]
+    ],
+    "claim-70": [
+      "p001",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "successor",
+        "action": "succeeded Murong Hui",
+        "otherPersonId": "p002",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0009"
+      ]
+    ],
+    "claim-71": [
+      "p001",
+      "office",
+      {
+        "label": {
+          "en": "Acting Governor of Ping Province",
+          "zh": "行平州刺史"
+        },
+        "action": "acted-as",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0009"
+      ]
+    ],
+    "claim-74": [
+      "p004",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "expeller",
+        "action": "expelled Qidegui",
+        "otherPersonId": "p003",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒後至咸和九年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 334,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0010"
+      ]
+    ],
+    "claim-75": [
+      "p001",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "led cavalry against Yidougui; built Yuyin and Anjin",
+        "otherPersonId": "p004",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒後至咸和九年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 334,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0010"
+      ]
+    ],
+    "claim-83": [
+      "p001",
+      "legal-action",
+      {
+        "status": "execution",
+        "action": "killed",
+        "otherPersonId": "p007",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒後至咸和九年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 334,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0014"
+      ]
+    ],
+    "claim-100": [
+      "p004",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "ally",
+        "action": "backed Ren",
+        "otherPersonId": "p006",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒後至咸和九年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 334,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0020"
+      ]
+    ],
+    "claim-101": [
+      "p010",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "ally",
+        "action": "backed Ren",
+        "otherPersonId": "p006",
+        "dateContext": {
+          "sourceDate": {
+            "text": "廆卒後至咸和九年"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 334,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0020"
+      ]
+    ],
+    "claim-110": [
+      "p001",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "principal",
+        "action": "sent Ningyuan Murong Han and Feng Yi to relieve Liucheng",
+        "otherPersonId": "p027",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸和九年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0025"
+      ]
+    ],
+    "claim-111": [
+      "p001",
+      "attribution",
+      {
+        "kind": "speech",
+        "role": "speaker",
+        "otherPersonId": "p027",
+        "quoted": true,
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸和九年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0026"
+      ]
+    ],
+    "claim-118": [
+      "p001",
+      "office",
+      {
+        "label": {
+          "en": "General Who Guards the Army",
+          "zh": "鎮軍大將軍"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0029"
+      ]
+    ],
+    "claim-119": [
+      "p001",
+      "office",
+      {
+        "label": {
+          "en": "Governor of Ping Province",
+          "zh": "平州刺史"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0029"
+      ]
+    ],
+    "claim-120": [
+      "p001",
+      "noble-title",
+      {
+        "title": {
+          "en": "Great Shanyu",
+          "zh": "大單于"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0029"
+      ]
+    ],
+    "claim-121": [
+      "p001",
+      "enfeoffment",
+      {
+        "title": {
+          "en": "Duke of Liaodong",
+          "zh": "遼東公"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0029"
+      ]
+    ],
+    "claim-122": [
+      "p001",
+      "polity-association",
+      {
+        "polityId": "eastern-jin",
+        "relation": "invested-by",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0029"
+      ]
+    ],
+    "claim-124": [
+      "p001",
+      "event-participation",
+      {
+        "kind": "military",
+        "role": "commander",
+        "action": "took Xiangping",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0030"
+      ]
+    ],
+    "claim-128": [
+      "p001",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "principal",
+        "action": "executed Ren’s magistrates; moved clans to Jicheng; established three counties",
+        "dateContext": {
+          "sourceDate": {
+            "text": "是歲"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0032"
+      ]
+    ],
+    "claim-130": [
+      "p001",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "建武初"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 317,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0006",
+        "s0007"
+      ]
+    ],
+    "claim-131": [
+      "p001",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "太甯末"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 325,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 326,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0008"
+      ]
+    ],
+    "claim-132": [
+      "p001",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "廆卒"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 333,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0009"
+      ]
+    ],
+    "claim-133": [
+      "p001",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "廆卒後至咸和九年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0010",
+        "s0011"
+      ]
+    ],
+    "claim-134": [
+      "p001",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸和九年"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 334,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0021"
+      ]
+    ],
+    "claim-135": [
+      "p001",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "是歲"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 334,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0029",
+        "s0030"
+      ]
+    ],
+    "claim-139": [
+      "p004",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "廆卒後至咸和九年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0010",
+        "s0020"
+      ]
+    ],
+    "claim-147": [
+      "p010",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "廆卒後至咸和九年"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 334,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0013"
+      ]
+    ],
+    "claim-148": [
+      "p010",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸和九年"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 334,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0023"
+      ]
+    ],
+    "claim-217": [
+      "p035",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康初"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 335,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0033",
+        "s0035",
+        "s0036",
+        "s0039",
+        "s0040",
+        "s0041"
+      ]
+    ],
+    "claim-218": [
+      "p035",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康初"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 335,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0044",
+        "s0046",
+        "s0052",
+        "s0055"
+      ]
+    ],
+    "claim-219": [
+      "p035",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康三年",
+          "regnalYear": 3
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 337,
+          "precision": "year"
+        }
+      },
+      "explicit",
+      [
+        "s0056"
+      ]
+    ],
+    "claim-220": [
+      "p035",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康三年",
+          "regnalYear": 3
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0060",
+        "s0062",
+        "s0064",
+        "s0066",
+        "s0072"
+      ]
+    ],
+    "claim-221": [
+      "p036",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康初"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 335,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0035",
+        "s0036",
+        "s0040"
+      ]
+    ],
+    "claim-222": [
+      "p037",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "漢光武因滹沱之冰以濟大業"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 25,
+          "precision": "year"
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0037"
+      ]
+    ],
+    "claim-223": [
+      "p038",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康初"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 335,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0042",
+        "s0048",
+        "s0050",
+        "s0054"
+      ]
+    ],
+    "claim-224": [
+      "p038",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康三年",
+          "regnalYear": 3
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0060",
+        "s0062",
+        "s0063",
+        "s0070",
+        "s0071"
+      ]
+    ],
+    "claim-227": [
+      "p041",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康初"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 335,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0043",
+        "s0044"
+      ]
+    ],
+    "claim-228": [
+      "p041",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康三年",
+          "regnalYear": 3
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0062"
+      ]
+    ],
+    "claim-234": [
+      "p047",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康初"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 335,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0050"
+      ]
+    ],
+    "claim-235": [
+      "p047",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康三年",
+          "regnalYear": 3
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 337,
+          "precision": "year"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0059"
+      ]
+    ],
+    "claim-254": [
+      "p066",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "魏武、晉文輔政故事"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 196,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 220,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0059"
+      ]
+    ],
+    "claim-255": [
+      "p067",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "魏武、晉文輔政故事"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 255,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 265,
+            "precision": "year"
+          }
+        }
+      },
+      "strongly-inferred",
+      [
+        "s0059"
+      ]
+    ],
+    "claim-262": [
+      "p074",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸康三年",
+          "regnalYear": 3
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-308": [
+      "p035",
+      "polity-association",
+      {
+        "polity": {
+          "en": "Yan",
+          "zh": "燕"
+        },
+        "relation": "ruled",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0056"
+      ]
+    ],
+    "claim-309": [
+      "p035",
+      "polity-association",
+      {
+        "polityId": "eastern-jin",
+        "relation": "received-office-from",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-316": [
+      "p035",
+      "noble-title",
+      {
+        "title": {
+          "en": "King of Yan",
+          "zh": "燕王"
+        },
+        "action": "assumed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        },
+        "provenance": {
+          "mode": "historian-judgment"
+        }
+      },
+      "explicit",
+      [
+        "s0056"
+      ]
+    ],
+    "claim-317": [
+      "p035",
+      "office",
+      {
+        "label": {
+          "en": "General Who Campaigns North",
+          "zh": "征北大將軍"
+        },
+        "action": "granted",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-318": [
+      "p035",
+      "office",
+      {
+        "label": {
+          "en": "Shepherd of You Province",
+          "zh": "幽州牧"
+        },
+        "action": "granted",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-319": [
+      "p035",
+      "office",
+      {
+        "label": {
+          "en": "Governor of Ping Province",
+          "zh": "平州刺史"
+        },
+        "action": "held-concurrently",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-320": [
+      "p035",
+      "office",
+      {
+        "label": {
+          "en": "Cavalier Attendant-in-Ordinary",
+          "zh": "散騎常侍"
+        },
+        "action": "added",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-321": [
+      "p035",
+      "enfeoffment",
+      {
+        "label": {
+          "en": "increase of fief by ten thousand households",
+          "zh": "增邑萬戶"
+        },
+        "action": "increased",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-322": [
+      "p035",
+      "noble-title",
+      {
+        "title": {
+          "en": "credentials, commander-in-chief, shanyu, and duke as before",
+          "zh": "持節、都督、單于、公如故"
+        },
+        "action": "held",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 337,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0072"
+      ]
+    ],
+    "claim-349": [
+      "p047",
+      "noble-title",
+      {
+        "title": {
+          "en": "Crown Prince",
+          "zh": "太子"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0059"
+      ]
+    ],
+    "claim-351": [
+      "p036",
+      "death",
+      {
+        "manner": "executed",
+        "authorityPersonId": "p035",
+        "place": {
+          "en": "near Pingguo",
+          "zh": "平郭"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康初"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 335,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0040"
+      ]
+    ],
+    "claim-359": [
+      "p035",
+      "status",
+      {
+        "status": "amnesty-proclaimed",
+        "action": "issued",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0056"
+      ]
+    ],
+    "claim-405": [
+      "p035",
+      "event-participation",
+      {
+        "kind": "political",
+        "role": "usurper",
+        "action": "assumed-kingship",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸康三年",
+            "regnalYear": 3
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 337,
+            "precision": "year"
+          }
+        }
+      },
+      "explicit",
+      [
+        "s0056"
+      ]
+    ]
+  },
+  "units": [
+    {
+      "id": "s0006",
+      "zh": "廆為遼東公，立為世子。",
+      "en": "When Murong Hui was named duke of Liaodong, Huang was made his heir.",
+      "literal": "When Hui became Duke of Liaodong, he was established as heir apparent.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0007",
+      "zh": "建武初，拜為冠軍將軍、左賢王，封望平侯，率眾征討，累有功。",
+      "en": "Early in the Jianwu era he was named general who champions the army and left worthy prince, created marquis of Wangping, and led troops on several successful expeditions.",
+      "literal": "At the beginning of Jianwu, appointed General Who Champions the Army, Left Worthy Prince, enfeoffed Marquis of Wangping; led host in campaigns; repeatedly had merit.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0008",
+      "zh": "太甯末，拜平北將軍，進封朝鮮公。",
+      "en": "Late in the Taining era he became general who pacifies the north and was promoted to duke of Chaoxian.",
+      "literal": "At the end of Taining, appointed General Who Pacifies the North; advanced enfeoffment to Duke of Chaoxian.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0009",
+      "zh": "廆卒，嗣位，以平北將軍行平州刺史，督攝部內。",
+      "en": "When Hui died he succeeded him, serving as general who pacifies the north and acting governor of Pingzhou with authority over the whole command.",
+      "literal": "When Hui died, he succeeded the position; as general who pacifies the north acted as governor of Ping Province, supervising and holding the interior of the command.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0010",
+      "zh": "尋而宇文乞得龜為其別部逸豆歸所逐，奔死於外，皝率騎討之，逸豆歸懼而請和，遂築榆陰、安晉二城而還。",
+      "en": "Soon afterward Yuwen Qidegui was driven out by Yidougui of his separate division and died in exile; Huang led cavalry against Yidougui, who took fright and sued for peace; Huang then built the two cities of Yuyin and Anjin and withdrew.",
+      "literal": "Soon Yuwen Qidegui was by his separate division Yidougui expelled, fled and died outside; Huang led cavalry to campaign against him; Yidougui feared and requested peace; thereupon built the two cities of Yuyin and Anjin and returned.",
+      "blockIndex": 1
+    },
+    {
+      "id": "s0011",
+      "zh": "初，皝庶兄建威翰驍武有雄才，素為皝所忌，母弟征虜仁、廣武昭並有寵於廆，皝亦不平之。",
+      "en": "Earlier, Huang's elder half-brother Murong Han, general who establishes might, was brave in arms and of heroic talent, and Huang had long resented him. Huang's younger full brothers Murong Ren, general who campaigns against the caitiffs, and Murong Zhao, general who extends martial power, were both favored by Hui, which also displeased Huang.",
+      "literal": "At first, Huang's elder brother by a concubine, Han, the general who establishes might, was brave in warfare and had heroic talent; Huang had long been jealous of him. His younger brothers by the same mother, Ren, the general who campaigns against the caitiffs, and Zhao, the general who extends martial power, both enjoyed Hui's favor; Huang was also displeased with them.",
+      "blockIndex": 2
+    },
+    {
+      "id": "s0013",
+      "zh": "至此，翰出奔段遼，仁勸昭舉兵廢皝。",
+      "en": "Murong Han fled to Duan Liao, while Murong Ren urged Murong Zhao to revolt and depose Huang.",
+      "literal": "Reaching this point, Han fled out to Duan Liao; Ren urged Zhao to raise troops and depose Huang.",
+      "blockIndex": 2
+    },
+    {
+      "id": "s0014",
+      "zh": "皝殺昭，遣使按檢仁之虛實，遇仁於險瀆。",
+      "en": "Huang executed Zhao and sent envoys to probe whether Ren’s situation was genuine; they encountered Ren at Xiandu.",
+      "literal": "Huang killed Zhao, sent envoys to investigate the truth of Ren’s situation, met Ren at Xiandu.",
+      "blockIndex": 2
+    },
+    {
+      "id": "s0020",
+      "zh": "宇文歸、段遼及鮮卑諸部並為之援，",
+      "en": "Yuwen Gui, Duan Liao, and other Xianbei chiefs backed him.",
+      "literal": "Yuwen Gui, Duan Liao, and the various Xianbei divisions all became his aid.",
+      "blockIndex": 2
+    },
+    {
+      "id": "s0021",
+      "zh": "咸和九年，皝遣其司馬封弈攻鮮卑木堤于白狼，揚威淑虞攻烏丸悉羅侯于平岡，皆斬之。",
+      "en": "In the ninth year of Xianhe, Huang sent Marshal Feng Yi to strike the Xianbei leader Muti at Bailang and Shuyu to strike the Wuhuan Siluohou at Pinggang; both enemy heads were taken.",
+      "literal": "In the ninth year of Xianhe, Huang sent his marshal Feng Yi to attack the Xianbei Muti at Bailang, and Yangwei Shuyu to attack the Wuhuan Siluohou at Pinggang; both were beheaded.",
+      "blockIndex": 3
+    },
+    {
+      "id": "s0023",
+      "zh": "段遼遂寇徒河，皝將張萌逆擊，敗之。",
+      "en": "Duan Liao then invaded Tuhe, but Huang’s general Zhang Meng intercepted and routed him.",
+      "literal": "Duan Liao thereupon raided Tuhe; Huang’s general Zhang Meng met and struck them, defeated them.",
+      "blockIndex": 3
+    },
+    {
+      "id": "s0025",
+      "zh": "旬余，蘭、翰復圍柳城，皝遣甯遠慕容汗及封弈等救之。",
+      "en": "Ten-odd days later Duan Lan and Murong Han, the kinsman who had joined Duan Liao, again besieged Liucheng; Huang sent the Ningyuan general, a different Murong Han, together with Feng Yi and others to relieve the city.",
+      "literal": "After ten-odd days, Lan and Han again besieged Liucheng; Huang sent General Who Pacifies the Distance Murong Han and Feng Yi and others to rescue it.",
+      "blockIndex": 3
+    },
+    {
+      "id": "s0026",
+      "zh": "皝戒汗曰：「賊眾氣銳，難與爭鋒，宜顧萬全，慎勿輕進，必須兵集陣整，然後擊之。」",
+      "en": "Huang warned Murong Han (the general of pacifying distance): “The foe is numerous and keen—do not trade blows rashly; wait until your force is formed, then attack.”",
+      "literal": "Huang warned Han, saying: “The bandits’ host is many and their spirit sharp; hard to contend edge; ought to look to complete safety, carefully do not lightly advance; must wait until troops are gathered and lines set, then strike them.”",
+      "blockIndex": 3
+    },
+    {
+      "id": "s0029",
+      "zh": "是歲，成帝遣謁者徐孟、閭丘幸等持節拜皝鎮軍大將軍、平州刺史、大單于、遼東公，持節、都督、承制封拜，一如廆故事。",
+      "en": "That year Emperor Cheng invested him as general who guards the army, governor of Pingzhou, great shanyu, and duke of Liaodong, with full authority to enfeoff subordinates as Hui had held.",
+      "literal": "That year, Emperor Cheng sent attendants Xu Meng, Lüqiu Xing, and others bearing credentials to appoint Huang General Who Guards the Army, governor of Ping Province, Great Shanyu, Duke of Liaodong; bearer of credentials, overall commander, investiture by mandate on the model of Hui’s precedent.",
+      "blockIndex": 4
+    },
+    {
+      "id": "s0030",
+      "zh": "皝自征遼東，克襄平。",
+      "en": "Huang led the army in person and captured Xiangping.",
+      "literal": "Huang personally campaigned Liaodong, took Xiangping.",
+      "blockIndex": 5
+    },
+    {
+      "id": "s0031",
+      "zh": "仁所署居就令劉程以城降，新昌人張衡執縣宰以降。",
+      "en": "Liu Cheng, whom Ren had installed at Juqiu, yielded the town, while Zhang Heng of Xinchang seized the magistrate and capitulated.",
+      "literal": "Magistrate Liu Cheng of Juqiu, whom Ren had appointed, surrendered the city; a man of Xinchang, Zhang Heng, seized the county chief and surrendered.",
+      "blockIndex": 5
+    },
+    {
+      "id": "s0032",
+      "zh": "於是斬仁所置守宰，分徙遼東大姓於棘城，置和陽、武次、西樂三縣而歸。",
+      "en": "He executed Ren’s officials, relocated the leading Liaodong families to Jicheng, set up three new counties, and marched home.",
+      "literal": "Thereupon executed Ren’s placed guardians and magistrates, divided and moved great clans of Liaodong to Jicheng, established the three counties of Heyang, Wuci, and Xile, and returned.",
+      "blockIndex": 5
+    },
+    {
+      "id": "s0033",
+      "zh": "咸康初，遣封弈襲宇文別部涉奕於，大獲而還。",
+      "en": "Early in Xiankang he sent Feng Yi against Sheyiyu of a separate Yuwen division and returned with rich spoils.",
+      "literal": "At the beginning of Xiankang, sent Feng Yi to raid Yuwen’s separate division Sheyiyu; great capture and return.",
+      "blockIndex": 6
+    },
+    {
+      "id": "s0035",
+      "zh": "皝將乘海討仁，群下咸諫，以海道危陰，宜從陸路。",
+      "en": "When Huang planned a seaborne strike on Ren, his advisers objected that the route was too perilous and urged a march by land.",
+      "literal": "Huang was about to cross the sea to strike Ren; subordinates all remonstrated, because sea routes were dangerous and precipitous, ought to follow land route.",
+      "blockIndex": 6
+    },
+    {
+      "id": "s0036",
+      "zh": "皝曰：「舊海水無淩，自仁反已來，凍合者三矣。",
+      "en": "Huang replied, “This gulf seldom froze in the past, yet since Ren’s revolt it has frozen solid three winters running.",
+      "literal": "Huang said: “Formerly the sea water had no ice; since Ren’s rebellion, the freeze has joined three times.",
+      "blockIndex": 6
+    },
+    {
+      "id": "s0037",
+      "zh": "昔漢光武因滹沱之冰以濟大業，天其或者欲吾乘此而無之乎！",
+      "en": "Han Guangwu once crossed the Hutuo on the ice to win his empire—Heaven may mean me to use this freeze against Ren!",
+      "literal": "Formerly Han Guangwu relied on the Hutuo’s ice to accomplish the great enterprise; Heaven perhaps or desires me to ride this to destroy him!",
+      "blockIndex": 6
+    },
+    {
+      "id": "s0039",
+      "zh": "乃率三軍從昌黎踐淩而進。",
+      "en": "He then marched the host across the frozen bay from Changli.",
+      "literal": "Thereupon led the three armies from Changli treading the ice to advance.",
+      "blockIndex": 6
+    },
+    {
+      "id": "s0040",
+      "zh": "仁不虞皝之至也，軍去平郭七里，候騎乃告，仁狼狽出戰，為皝所擒，殺仁而還。",
+      "en": "Ren never expected him: Huang’s vanguard was seven li from Pingguo before Ren learned of it; Ren scrambled into battle, was taken, and executed.",
+      "literal": "Ren did not expect Huang’s arrival; the army was seven li from Pingguo when patrol riders reported; Ren in confusion came out to fight, was captured by Huang; killed Ren and returned.",
+      "blockIndex": 6
+    },
+    {
+      "id": "s0041",
+      "zh": "立藉田於朝陽門東，置官司以主之。",
+      "en": "He set aside a ritual field east of the Chaoyang Gate and staffed it with officials.",
+      "literal": "Established “helping-field” east of the Chaoyang Gate, set offices to supervise it.",
+      "blockIndex": 7
+    },
+    {
+      "id": "s0042",
+      "zh": "段遼遣將李詠夜襲武興，遇雨，引還，都尉張萌追擊，擒詠。",
+      "en": "Duan Liao’s night raid on Wuxing failed in the rain; Zhang Meng ran down Li Yong and captured him.",
+      "literal": "Duan Liao sent general Li Yong to night-raid Wuxing; met rain, led back; commandant Zhang Meng pursued, captured Yong.",
+      "blockIndex": 8
+    },
+    {
+      "id": "s0043",
+      "zh": "段蘭擁眾數萬屯於曲水亭，將攻柳城，宇文歸入寇安晉，為蘭聲援。",
+      "en": "Duan Lan massed tens of thousands at Qushui to strike Liucheng while Yuwen Gui hit Anjin in coordination.",
+      "literal": "Duan Lan led a host of several tens of thousands encamped at Qushui Pavilion, about to attack Liucheng; Yuwen Gui entered to raid Anjin as sounding support for Lan.",
+      "blockIndex": 8
+    },
+    {
+      "id": "s0044",
+      "zh": "皝以步騎五萬擊之，師次柳城，蘭、歸皆遁。",
+      "en": "Huang met them with fifty thousand foot and horse; Lan and Gui both fled when the army halted at Liucheng.",
+      "literal": "Huang with infantry and cavalry fifty thousand struck them; army halted at Liucheng; Lan and Gui both fled.",
+      "blockIndex": 8
+    },
+    {
+      "id": "s0046",
+      "zh": "謂諸將曰：「二虜恥無功而歸，必復重至，宜於柳城左右設伏以待之。」",
+      "en": "He told his commanders, “They will return in force to save face—we should lay ambushes around Liucheng.”",
+      "literal": "Said to the generals: “The two barbarians, shamed at returning without merit, surely will come again heavily; ought at Liucheng’s left and right to set ambush to await them.”",
+      "blockIndex": 8
+    },
+    {
+      "id": "s0048",
+      "zh": "俄而遼騎果至，弈夾擊，大敗之，斬其將榮保。",
+      "en": "When Duan Liao’s riders appeared, Feng Yi caught them in a pincer, slew Rong Bao, and routed the column.",
+      "literal": "Soon Liao’s cavalry indeed arrived; Yi attacked from both sides, greatly defeated them, beheaded their general Rong Bao.",
+      "blockIndex": 8
+    },
+    {
+      "id": "s0050",
+      "zh": "使其世子俊伐段遼諸城，封弈攻宇文別部，皆大捷而歸。",
+      "en": "His heir Murong Jun stormed Duan Liao’s towns while Feng Yi struck the Yuwen—both returned in triumph.",
+      "literal": "Made his heir apparent Jun campaign against Duan Liao’s cities; Feng Yi attacked Yuwen’s separate division; both great victory and return.",
+      "blockIndex": 8
+    },
+    {
+      "id": "s0052",
+      "zh": "後徙昌黎郡，築好城于乙連東，使將軍蘭勃戍之，以逼乙連。",
+      "en": "He shifted his seat to Changli, built Haocheng east of Yilian, and stationed Lan Bo there to choke the enemy.",
+      "literal": "Later moved Changli commandery, built Haocheng east of Yilian, had general Lan Bo garrison it, to press Yilian.",
+      "blockIndex": 10
+    },
+    {
+      "id": "s0054",
+      "zh": "乙連饑甚，段遼輸之粟，蘭勃要擊獲之。",
+      "en": "When Yilian starved, Duan Liao sent grain; Lan Bo seized the convoy.",
+      "literal": "Yilian was extremely hungry; Duan Liao sent them grain; Lan Bo intercepted and captured it.",
+      "blockIndex": 10
+    },
+    {
+      "id": "s0055",
+      "zh": "遼遣將屈雲攻興國，與皝將慕容遵大戰于五官水上，雲敗，斬之，盡俘其眾。",
+      "en": "Qu Yun attacked Xingguo but Murong Zun destroyed him at Wuguan River and took his entire force.",
+      "literal": "Liao sent general Qu Yun to attack Xingguo, with Huang’s general Murong Zun fought a great battle at Wuguan River; Yun was defeated, beheaded; all captured their host.",
+      "blockIndex": 10
+    },
+    {
+      "id": "s0056",
+      "zh": "封弈等以皝任重位輕，宜稱燕王，皝於是以咸康三年僭即王位，赦其境內。",
+      "en": "Feng Yi and others, holding that Huang’s burden was heavy while his rank was light, urged him to style himself King of Yan; Huang thereupon in the third year of Xiankang illegitimately assumed the kingship and pardoned those within his borders.",
+      "literal": "Feng Yi and others because Huang’s burden was weighty yet rank was light, ought to style King of Yan; Huang thereupon in the third year of Xiankang illegitimately assumed kingship, pardoned those within his borders.",
+      "blockIndex": 11
+    },
+    {
+      "id": "s0059",
+      "zh": "以其妻段氏為王后，世子俊為太子，皆如魏武、晉文輔政故事。",
+      "en": "He made Lady Duan queen and Murong Jun crown prince, citing Cao Cao and Sima Zhao as precedents.",
+      "literal": "Made his wife Lady Duan queen, heir apparent Jun crown prince, all like Wei Wu and Jin Wen’s precedent of assisting government.",
+      "blockIndex": 11
+    },
+    {
+      "id": "s0060",
+      "zh": "皝以段遼屢為邊患，遣將軍宋回稱籓于石季龍，請師討遼。",
+      "en": "Troubled by Duan Liao, he sent Song Hui to submit to Shi Hu and beg for an allied expedition.",
+      "literal": "Because Duan Liao repeatedly was a border trouble, sent general Song Hui to declare vassalage to Shi Jilong, requesting troops to strike Liao.",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0062",
+      "zh": "皝率諸軍攻遼令支以北諸城，遼遣其將段蘭來距，大戰，敗之，斬級數千，掠五千餘戶而歸。",
+      "en": "Huang stormed Duan Liao’s strongholds north of Lingzhi, crushed Duan Lan, took thousands of heads, and carried off more than five thousand households.",
+      "literal": "Huang led the various armies to attack Liao’s cities north of Lingzhi; Liao sent his general Duan Lan to resist; great battle, defeated them, beheaded several thousand grades, plundered over five thousand households and returned.",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0063",
+      "zh": "季龍至徐無，遼奔密雲山。",
+      "en": "Shi Hu reached Xuwu while Duan Liao fled into Miyun Mountain.",
+      "literal": "Jilong reached Xuwu; Liao fled to Miyun Mountain.",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0064",
+      "zh": "季龍進入令支，怒皝之不會師也，進軍擊之，至於棘城，戎卒數十萬，四面進攻，郡縣諸部叛應季龍者三十六城。",
+      "en": "Shi Hu entered Lingzhi, furious that Huang had not coordinated, drove on to Jicheng with hundreds of thousands of men; thirty-six towns went over to him.",
+      "literal": "Jilong entered Lingzhi, angry that Huang had not joined forces, advanced army to strike him, reaching Jicheng; Rong soldiers several hundred thousand, four sides advanced attack; prefectures and counties various divisions rebelled responding to Jilong thirty-six cities.",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0066",
+      "zh": "皝曰：「孤方取天下，何乃降人乎！」",
+      "en": "Huang snapped, “I mean to seize the realm—why would I surrender?”",
+      "literal": "Huang said: “I am about to take All under Heaven—how then become another’s surrendered man!”",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0070",
+      "zh": "段遼遣使詐降于季龍，請兵應接。",
+      "en": "Duan Liao feigned submission to Shi Hu and asked for an escort.",
+      "literal": "Duan Liao sent envoys feigning surrender to Jilong, requesting troops to meet and escort.",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0071",
+      "zh": "季龍遣其將麻秋率眾迎遼，恪伏精騎七千於密雲山，大敗之，獲其司馬陽裕、將軍鮮于亮，擁段遼及其部眾以歸。",
+      "en": "Shi Hu sent Ma Qiu to fetch him; Murong Ke ambushed seven thousand elite riders at Miyun, captured Yang Yu and Xianyu Liang, and brought Duan Liao in.",
+      "literal": "Jilong sent his general Ma Qiu leading host to welcome Liao; Ke ambushed seven thousand picked cavalry at Miyun Mountain, greatly defeated them, captured their marshal Yang Yu, general Xianyu Liang, and led Duan Liao and his division host back.",
+      "blockIndex": 12
+    },
+    {
+      "id": "s0072",
+      "zh": "帝又遣使進皝為征北大將軍、幽州牧，領平州刺史，加散騎常侍，增邑萬戶，持節、都督、單于、公如故。",
+      "en": "The emperor again sent envoys to advance Huang as General Who Campaigns North, shepherd of You Province, concurrently governor of Ping Province, adding Cavalier Attendant-in-Ordinary and an increase of ten thousand households, with credentials, overall command, shanyu, and duke as before.",
+      "literal": "The emperor again sent envoys to advance Huang as General Who Campaigns North, shepherd of You Province, concurrently governor of Ping Province, added Cavalier Attendant-in-Ordinary, increased fief ten thousand households; credentials, overall command, shanyu, duke as before.",
+      "blockIndex": 13
+    }
+  ]
+}

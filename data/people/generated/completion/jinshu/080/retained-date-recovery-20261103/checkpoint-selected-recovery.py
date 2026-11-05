@@ -121,6 +121,9 @@ for extension in ['json','mjs','txt','jsonl']:files += list((prepared109/'curren
 files += list((prepared109/'combined-code-release-ci').glob('*.json'))
 for folderName in ['paired-office-prepared','paired-office-prepared-preserve-facts','date-known-findings-draft']:files += list((prepared109/folderName).glob('*.json'))
 for extension in ['json','mjs','txt','jsonl']:files += list((prepared109/'candidate-date-review-1-20261105').glob('*.'+extension))
+files += list((prepared109/'candidate-date-review-1-20261105'/'native-repair-handoffs-round1').glob('*.json'))
+for folder in (prepared109/'candidate-date-review-1-20261105').glob('reviewed-English-source-prepared*'):
+ if folder.is_dir():files += list(folder.glob('*.json'))
 files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/109').glob('*.json'))
 files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/109.stale-939c2e595e93dbf2804b').glob('*.json'))
 files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-029c0b784aed.json'))
