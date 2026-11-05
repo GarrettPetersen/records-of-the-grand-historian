@@ -1,0 +1,41 @@
+import fs from 'node:fs';
+import { createHash } from 'node:crypto';
+import { Agent } from '@cursor/sdk';
+import { loadDotenv } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/load-dotenv.mjs';
+import { inspectLocalDisk } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+import { mutateRemotePeopleWorkLedger } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-work-queue.mjs';
+import { sendCursorAgentWhenReady, waitForCursorRun } from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/cursor-run-wait.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',dir=root+'/data/people/generated/completion/jinshu/080/retained-date-recovery-20261103';
+const prefix=dir+'/pinned-registry-combined-head-independent-review',stateFile=prefix+'-state.json';
+const need=(condition,message)=>{if(!condition)throw new Error(message);};
+need(!fs.existsSync(stateFile),'Retained review exists; recover its actual agent/run');
+const packet=fs.readFileSync(prefix+'-packet.json'),revision=JSON.parse(packet).revision;
+need(revision==='f9798a368bc4891e1628fb1ffb4b5528d1626ada','Unexpected candidate revision');
+const prior=JSON.parse(fs.readFileSync(dir+'/preflight-ancestry-independent-review-state.json'));
+need(prior.phase==='report-recorded'&&prior.verdict==='approve'&&prior.agentId==='bc-74dd257a-d700-4154-863d-950a6fc95d38','Retained independent reviewer provenance required');
+need((fs.statSync(root+'/.env').mode&0o077)===0,'Private credentials required');loadDotenv(root);
+const apiKey=process.env.CURSOR_API_KEY;need(apiKey,'Cursor credential missing');
+const state={schemaVersion:1,kind:'independent-pinned-registry-code-review',worker:'host-identity-combined-head-20261105',phase:'claimed',pid:process.pid,agentId:prior.agentId,revision,packetSha256:createHash('sha256').update(packet).digest('hex'),startedAt:new Date().toISOString(),limits:{rawCostCents:268,totalTokens:3870000,timeoutMinutes:10}};
+const key="identity-combined-head-"+revision.slice(0,12),save=()=>fs.writeFileSync(stateFile,JSON.stringify(state,null,2)+'\n');
+const claim=()=>mutateRemotePeopleWorkLedger(ledger=>{ledger.codeReviews??={};const old=ledger.codeReviews[key];need(!old||(old.worker===state.worker&&old.packetSha256===state.packetSha256&&old.agentId===state.agentId),'Sealed code review owned elsewhere');ledger.codeReviews[key]={...state,sticky:true,updatedAt:new Date().toISOString()};},{message:'Checkpoint producer contract code review '+state.phase});
+let held=false,agent;
+const sample=()=>{const guard=inspectLocalDisk(root);fs.appendFileSync(prefix+'-resources.jsonl',JSON.stringify({at:new Date().toISOString(),guard})+'\n');if(guard.errors.length)held=true;return guard;};
+need(!sample().errors.length,'Host dispatch guard');save();claim();
+const timer=setInterval(()=>{try{sample();}catch(error){held=true;state.measurementError=error.message;save();}},45000);
+try{
+  agent=await Agent.resume(state.agentId,{apiKey});const runs=await Agent.listRuns(state.agentId,{apiKey,runtime:'cloud',limit:20});
+  need(!runs.items.some(r=>r.status==='running'),'Retained reviewer has an active run; preserve it');
+  const purpose='Independently recheck the exact combined release head from the sealed unchanged-code blob proof and the already independently reviewed source correction. Verify only the three exact source/extraction/editorial files changed after your full code review; source wording matches Chinese and later outcome, extraction reconciliation and applied-editorial validation passed, and retained date/identity/publication holds remain. This is a new real review of the combined head, not permission to retag the old report. No chapter approval.';
+  const prompt=purpose+' You are '+state.agentId+', independent of the author. Read actual code and evidence; passing tests alone does not prove correctness. You are not a chapter/date approver. Use only this sealed packet: no clone/worktree, repository/data copy, Git, build, SDK/other-model API, canonical edits, or additional tools. One shared host checkout and isolated artifacts; host alone publishes. Host resource guard runs before dispatch and every45s; claim is on shared codeReviews '+key+'. Return ONLY one JSON assistant message {schemaVersion:1,reviewerAgentId:"'+state.agentId+'",packetSha256:"'+state.packetSha256+'",revision:"'+revision+'",verdict:"approve"|"changes-required",findings:[{file,line,severity,problem,requiredFix}],reason:string}. Report concrete defects, no optional style findings.\nSEALED PACKET:\n'+packet;
+  fs.writeFileSync(prefix+'-prompt.txt',prompt,{flag:'wx'});need(!held&&!sample().errors.length,'Host guard before send');
+  state.phase='sending';save();const run=await sendCursorAgentWhenReady(agent,prompt,{label:'Combined-head review',timeoutMs:60000});
+  state.runId=run.id;state.phase='running';save();claim();console.log(JSON.stringify({agentId:state.agentId,runId:run.id,phase:state.phase}));
+  const result=await waitForCursorRun(run,{agentId:state.agentId,apiKey,label:'Combined-head review',pollMs:15000,timeoutMs:600000,maxRawCostCents:268,maxTotalTokens:3870000});
+  state.phase=result.status;save();need(result.status==='finished'&&typeof result.result==='string','Preserve reviewer handle for recovery');
+  fs.writeFileSync(prefix+'.raw.txt',result.result,{flag:'wx'});const report=JSON.parse(result.result);
+  need(report.schemaVersion===1&&report.reviewerAgentId===state.agentId&&report.packetSha256===state.packetSha256&&report.revision===revision&&['approve','changes-required'].includes(report.verdict)&&Array.isArray(report.findings),'Review provenance/shape mismatch');
+  fs.writeFileSync(prefix+'-report.json',JSON.stringify(report,null,2)+'\n',{flag:'wx'});
+  fs.writeFileSync(prefix+'-usage.json',JSON.stringify(await agent.getUsage({runId:run.id}),null,2)+'\n',{flag:'wx'});
+  state.phase='report-recorded';state.verdict=report.verdict;state.finishedAt=new Date().toISOString();save();claim();console.log(JSON.stringify({verdict:report.verdict,findings:report.findings.length}));
+}catch(error){state.error={name:error.name,message:String(error.message).replaceAll(apiKey,'[redacted]').slice(0,900)};save();claim();console.error(JSON.stringify(state.error));process.exitCode=1;}
+finally{clearInterval(timer);sample();if(agent)await agent.close();}

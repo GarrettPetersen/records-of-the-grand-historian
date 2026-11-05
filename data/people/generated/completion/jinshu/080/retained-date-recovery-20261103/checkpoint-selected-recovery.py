@@ -69,6 +69,9 @@ files += [audit/name for name in ['finished-budget-red.log','finished-budget-reg
 files += list((audit/'finished-budget-release-ci').glob('*'))
 files += [audit/name for name in ['reviewed-editorial-prepare.log','reviewed-editorial-apply.log','reviewed-editorial-pr-body.md']]
 files.append(audit/'current-jinshu-date-frontier-preflight.log')
+files += list(audit.glob('pinned-registry-*.log'));files += list(audit.glob('pinned-registry-*.patch'));files += list(audit.glob('pinned-registry-*.raw.txt'));files.append(audit/'pinned-registry-pr-body.md')
+for folder in [pathlib.Path('data/people/generated/completion/jinshu/093/pinned-dossiers-20261105'),pathlib.Path('data/people/generated/completion/jinshu/093/pinned-dossiers-reviewed-candidate-20261105')]: files += list(folder.glob('*.json'))
+files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-8f2c7a77f87a.json'))
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()

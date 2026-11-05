@@ -1,0 +1,24 @@
+file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-identity-review-transport.mjs:40
+    if ([...evidence].some(id => !available.has(id))) throw new Error('Missing primary evidence in review part');
+                                                            ^
+
+Error: Missing primary evidence in review part
+    at project (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-identity-review-transport.mjs:40:61)
+    at split (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-identity-review-transport.mjs:48:41)
+    at splitChapterIdentityReviewTransport (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-identity-review-transport.mjs:49:3)
+    at buildChapterIdentityReviewPacket (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:81:78)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async prepareChapterIdentityReview (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:152:20)
+    at async file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:165:30
+
+Node.js v23.7.0
+file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-resource-job.mjs:23
+    if (code !== 0) throw new Error(`People job exited with status ${code}`);
+                          ^
+
+Error: People job exited with status 1
+    at runGuardedPeopleScript (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-resource-job.mjs:23:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/people-identity.mjs:9:1
+
+Node.js v23.7.0

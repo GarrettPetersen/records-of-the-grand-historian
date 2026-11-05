@@ -1,0 +1,22 @@
+file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:22
+const need = (ok, message) => { if (!ok) throw new Error(message); };
+                                               ^
+
+Error: Source-complete review transport exceeds the inspected bound; preserve evidence and split the work without truncating it
+    at need (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:22:48)
+    at buildChapterIdentityReviewPacket (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:80:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async prepareChapterIdentityReview (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:144:48)
+    at async file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/prepare-people-chapter-identity.mjs:156:30
+
+Node.js v23.7.0
+file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-resource-job.mjs:23
+    if (code !== 0) throw new Error(`People job exited with status ${code}`);
+                          ^
+
+Error: People job exited with status 1
+    at runGuardedPeopleScript (file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-resource-job.mjs:23:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/people-identity.mjs:9:1
+
+Node.js v23.7.0

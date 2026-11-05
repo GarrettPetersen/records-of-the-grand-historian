@@ -1,0 +1,609 @@
+diff --git a/PEOPLE_COMPLETION_PROCESS.md b/PEOPLE_COMPLETION_PROCESS.md
+index 9ec055d70c94..1cc1e766bbee 100644
+--- a/PEOPLE_COMPLETION_PROCESS.md
++++ b/PEOPLE_COMPLETION_PROCESS.md
+@@ -58,6 +58,14 @@ prove every source proposition has been translated.
+    per review packet. One logical dossier represents one accepted canonical person;
+    chapter records remain its cited provenance. Historical merge, separation and
+    reviewed-ambiguity decisions remain valid constraints, not a new all-pairs queue.
++   When unrelated working-tree edits prevent a reliable filesystem view, use
++   `people:identity:prepare -- --book BOOK --chapter NNN --registry ABSOLUTE_DIR
++   --out NEW_ABSOLUTE_DIR --source-revision FULL_ACCEPTED_GIT_SHA`. This reads sealed
++   source/editorial/date evidence from Git without a checkout copy. Registry reuse
++   requires the original generation's full Git seal to match, identical complete
++   dossier-data inventories and contents, unchanged transitive construction code,
++   package dependencies and runtime configuration. Any relevant change holds for a
++   registry update; this path does not retag an old seal or approve a chapter.
+ 5. Prepare one case per canonical person occurring in this chapter, covering every
+    chapter-local record exactly once. Retrieve at most eight other dossiers per
+    case through the name/alias index, with at most sixteen keys and eight posting
+@@ -229,3 +237,17 @@ Jinshu 053 or repeat passed checks on unchanged inputs merely to adopt this poli
+ Reuse gate fixes already on master instead of rebuilding them from an older host
+ checkout. Documenting policy is not proof the running orchestrator adopted it: report
+ adoption, data qualification and live publication separately.
++
++### Oversized identity evidence and aggregate extraction authors
++
++Keep the complete source packet and the full plan. Oversized transports split by
++case ownership within the existing byte ceiling. Each part includes the complete
++target chapter and every cited claim and mention unit for its people and anchors.
++Preserve each actual report, producer and sealed part hash. All owned cases must
++assemble exactly once, with one actual independent reviewer retained across parts;
++then run the normal full-plan identity validator and publication gates. No part by
++itself certifies a chapter. Single cases that exceed the bound stay held.
++
++Chunked extractions identify their actual contributing agents through `run.chunks`.
++Exclude every actual chunk author from independent review; never invent an aggregate
++agent ID or accept missing chunk provenance.
+diff --git a/package.json b/package.json
+index eba57e7e4318..105f291d33a2 100644
+--- a/package.json
++++ b/package.json
+@@ -240,7 +240,7 @@
+     "people:completion:check": "node scripts/check-people-completion.mjs",
+     "people:completion:self-test": "node --test scripts/test-people-completion-plan.mjs",
+     "people:identity:prepare": "node scripts/people-identity.mjs",
+-    "people:identity:self-test": "node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-identity-registry-streaming.mjs scripts/test-people-identity-preparation.mjs",
++    "people:identity:self-test": "node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-identity-registry-streaming.mjs scripts/test-people-identity-preparation.mjs scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-review-parts.mjs scripts/test-people-identity-seal.mjs",
+     "people:identity:registry": "node scripts/people-identity-registry.mjs",
+     "people:identity:record": "node scripts/record-people-chapter-identity.mjs"
+   },
+diff --git a/scripts/lib/people-chapter-identity.mjs b/scripts/lib/people-chapter-identity.mjs
+index a76f75900385..93cb68f9c7a8 100644
+--- a/scripts/lib/people-chapter-identity.mjs
++++ b/scripts/lib/people-chapter-identity.mjs
+@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
+ import { PEOPLE_DIR, DATA_DIR, extractionPath, readJson, contentUnits } from './people-content.mjs';
+ import { editorialDecisionPath } from './people-editorial-decisions.mjs';
+ import { peopleDigest } from './people-identity-seal.mjs';
++import { extractionAuthorAgentIds } from './people-extraction-authorship.mjs';
+ import { localNameKeys } from './people-resolution.mjs';
+ import { validateDossierIdentityEvidence, memberContract } from './people-identity-dossiers.mjs';
+ 
+@@ -54,8 +55,10 @@ export function validateChapterIdentityBundle(view, sourceChapters, scope, bundl
+   need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese']) &&
+     bundle.receipt.planFingerprint === bundle.plan.fingerprint && bundle.receipt.reportFingerprint === peopleDigest(bundle.report), 'Identity review transport receipt does not match the preserved report');
+   const chapterKey = `${scope.book}:${scope.chapter}`, own = sourceChapters.get(chapterKey);
+-  need(own && typeof own.extraction.run.agentId === 'string' && own.extraction.run.agentId, 'Current extractor provenance required');
+-  need(bundle.receipt.authorAgentIds.includes(own.extraction.run.agentId), 'Actual extraction author missing from identity review provenance');
++  need(own, 'Current extractor provenance required');
++  let actualAuthors;
++  try { actualAuthors = extractionAuthorAgentIds(own.extraction); } catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
++  need(actualAuthors.every(id => bundle.receipt.authorAgentIds.includes(id)), 'Actual extraction author missing from identity review provenance');
+   need(bundle.receipt.chapterChinese === chapterChineseEvidenceFingerprint(own.packet), 'Reviewed chapter Chinese source or unit inventory changed; fresh source coverage is required');
+   const localPeople = new Map(), memberVersions = new Map(), sourceUnits = new Map(), subjects = new Map();
+   for (const [key, source] of sourceChapters) {
+diff --git a/scripts/lib/people-extraction-authorship.mjs b/scripts/lib/people-extraction-authorship.mjs
+new file mode 100644
+index 000000000000..fa38824b8d61
+--- /dev/null
++++ b/scripts/lib/people-extraction-authorship.mjs
+@@ -0,0 +1,15 @@
++// Aggregate extractions have actual chunk authors, not an invented aggregate
++// agent. All contributing agents must be excluded from independent review.
++export function extractionAuthorAgentIds(extraction) {
++  const run = extraction?.run, ids = [];
++  if (typeof run?.agentId === 'string' && run.agentId.trim()) ids.push(run.agentId);
++  if (run?.chunks !== undefined) {
++    if (!Array.isArray(run.chunks) || !run.chunks.length) throw new Error('Current extractor chunk provenance required');
++    for (const chunk of run.chunks) {
++      if (typeof chunk?.agentId !== 'string' || !chunk.agentId.trim()) throw new Error('Actual extractor identity required for every chunk');
++      ids.push(chunk.agentId);
++    }
++  }
++  if (!ids.length) throw new Error('Current extractor provenance required');
++  return [...new Set(ids)];
++}
+diff --git a/scripts/lib/people-identity-review-transport.mjs b/scripts/lib/people-identity-review-transport.mjs
+index 3a4a6fe09ffe..51a3bb2b155f 100644
+--- a/scripts/lib/people-identity-review-transport.mjs
++++ b/scripts/lib/people-identity-review-transport.mjs
+@@ -18,3 +18,58 @@ const compact={schemaVersion:1,kind:'bounded-dossier-source-review-transport',so
+   if (compact.people.reduce((sum, person) => sum + person.claims.length, 0) !== p.people.reduce((sum, person) => sum + person.claims.length, 0) || compact.people.reduce((sum, person) => sum + person.mentions.length, 0) !== p.people.reduce((sum, person) => sum + person.mentions.length, 0)) throw new Error('Source claims or mentions were lost during transport compaction');
+   return compact;
+ }
++
++// Split case ownership only. Each part retains the complete target chapter and
++// every claim/mention source unit of its people and canonical anchors. The full
++// immutable source packet remains the common authority; no part can certify it.
++export function splitChapterIdentityReviewTransport(transport, maxBytes) {
++  if (!Number.isSafeInteger(maxBytes) || maxBytes < 1024 || !transport.reviewCases?.length) throw new Error('Invalid bounded identity review partition request');
++  const byPerson = new Map(transport.people.map(p => [p.localId, p])), byUnit = new Map(transport.units.map(u => [`${u.book}:${u.chapter}:${u.id}`, u])), byDossier = new Map(transport.candidateDossiers.map(d => [d.id, d]));
++  const targetUnits = transport.units.filter(u => u.book === transport.scope.book && u.chapter === transport.scope.chapter);
++  const project = cases => {
++    const ids = new Set(cases.flatMap(c => [...c.localPeople, c.canonicalMembership.anchorLocalId]));
++    const people = [...ids].map(id => byPerson.get(id));
++    if (people.some(p => !p)) throw new Error('Missing review part person or anchor');
++    const evidence = new Set();
++    for (const p of people) {
++      const prefix = p.localId.split(':').slice(0, 2).join(':');
++      for (const claim of p.claims) for (const id of claim[4]) evidence.add(id.includes(':') ? id : `${prefix}:${id}`);
++      for (const mention of p.mentions) evidence.add(mention[1].includes(':') ? mention[1] : `${prefix}:${mention[1]}`);
++    }
++    const candidateIds = new Set(cases.flatMap(c => c.candidateDossiers));
++    const unitIds = new Set(targetUnits.map(u => `${u.book}:${u.chapter}:${u.id}`));
++    for (const id of evidence) unitIds.add(id);
++    const units = [...unitIds].map(id => byUnit.get(id)).filter(Boolean);
++    const available = new Set(units.map(u => `${u.book}:${u.chapter}:${u.id}`));
++    const missing = [...evidence].filter(id => !available.has(id));
++    if (missing.length) throw new Error('Missing primary evidence in review part: ' + missing.slice(0, 8).join(', '));
++    const candidateDossiers = [...candidateIds].map(id => byDossier.get(id));
++    if (candidateDossiers.some(d => !d)) throw new Error('Missing bounded candidate dossier');
++    return { ...transport, kind: 'bounded-dossier-source-review-part', reviewCases: cases, people, units, candidateDossiers,
++      partitionAuthority: 'This part owns only its listed cases. All parts must pass exact coverage and independent source validation against the common full plan before any chapter certificate.' };
++  };
++  const size = p => Buffer.byteLength(JSON.stringify(p) + '\n');
++  const parts = [];
++  const split = cases => { const part = project(cases); if (size(part) <= maxBytes) { parts.push(part); return; } if (cases.length === 1) throw new Error(`Identity case ${cases[0].caseId} exceeds the inspected transport bound; preserve its complete evidence`); const middle = Math.floor(cases.length / 2); split(cases.slice(0, middle)); split(cases.slice(middle)); };
++  split(transport.reviewCases);
++  const expected = transport.reviewCases.map(c => c.caseId), actual = parts.flatMap(p => p.reviewCases.map(c => c.caseId));
++  if (expected.length !== new Set(expected).size || JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error('Review partition lost or duplicated case ownership');
++  return parts;
++}
++
++export function assembleChapterIdentityReviewParts(plan, transports, reports, actualReviewerAgentIds, authorAgentIds) {
++  if (!transports.length || transports.length !== reports.length || reports.length !== actualReviewerAgentIds.length) throw new Error('Missing independent identity review parts');
++  const reviews = new Map(), seen = new Set();
++  // A combined report names a real reviewer who independently contributed. Every
++  // other actual producer remains in the immutable part receipts, validated here.
++  for (let i = 0; i < reports.length; i++) {
++    const t = transports[i], r = reports[i], agent = actualReviewerAgentIds[i];
++    if (t.kind !== 'bounded-dossier-source-review-part' || t.sourcePacketSha256 !== transports[0].sourcePacketSha256 || Object.keys(r).sort().join(',') !== 'planFingerprint,reviewer,reviews,schemaVersion' || Object.keys(r.reviewer ?? {}).sort().join(',') !== 'agentId,name' || !agent || authorAgentIds.includes(agent) || r.schemaVersion !== 1 || r.reviewer?.agentId !== agent || !r.reviewer.name?.trim() || r.planFingerprint !== plan.fingerprint || t.planFingerprint !== plan.fingerprint) throw new Error('Stale or nonindependent identity review part');
++    const expected = t.reviewCases.map(c => c.caseId), actual = r.reviews?.map(c => c.caseId);
++    if (!actual || new Set(actual).size !== actual.length || JSON.stringify([...actual].sort()) !== JSON.stringify([...expected].sort())) throw new Error('Identity review part does not cover its exact owned cases');
++    for (const row of r.reviews) { if (seen.has(row.caseId)) throw new Error('Duplicate identity review case'); seen.add(row.caseId); reviews.set(row.caseId, row); }
++  }
++  if (seen.size !== plan.cases.length || plan.cases.some(c => !seen.has(c.id))) throw new Error('Incomplete full chapter identity coverage');
++  if (new Set(actualReviewerAgentIds).size !== 1) throw new Error('A chapter report must retain one actual independent reviewer; use one retained reviewer across its parts');
++  return { schemaVersion: 1, planFingerprint: plan.fingerprint, reviewer: reports[0].reviewer, reviews: plan.cases.map(c => reviews.get(c.id)) };
++}
+diff --git a/scripts/lib/people-pinned-identity-source.mjs b/scripts/lib/people-pinned-identity-source.mjs
+new file mode 100644
+index 000000000000..a6339f04329e
+--- /dev/null
++++ b/scripts/lib/people-pinned-identity-source.mjs
+@@ -0,0 +1,133 @@
++import fs from 'node:fs';
++import path from 'node:path';
++import { execFileSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
++import { peopleDigest } from './people-identity-seal.mjs';
++import { REPO_ROOT, contentUnits, sha256 } from './people-content.mjs';
++import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
++import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
++import { isCompactPeopleExtraction } from './people-compact.mjs';
++import { peopleForExtraction } from './people-validated-chapter.mjs';
++import { dateAuditItems, validateDateAuditReport, DATE_AUDIT_VERSION } from './people-date-audit.mjs';
++
++const need = (ok, message) => { if (!ok) throw new Error(message); };
++const registryEntries = ['people-identity-registry-workflow', 'people-corpus', 'people-resolution', 'people-identity-dossiers', 'people-identity-member-store', 'people-identity-dossier-store'].map(n => `scripts/lib/${n}.mjs`);
++const hash = bytes => createHash('sha256').update(bytes).digest('hex');
++const blobHash = bytes => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
++const packageContract = pkg => Object.fromEntries(Object.entries(pkg).filter(([key]) => key !== 'scripts'));
++const dataInput = file => /^data\/(?!people\/)[^/]+\/\d{3}\.json$/u.test(file) ||
++  /^data\/people\/(?:extractions|resolutions|curation|chronology|schema)\/.*\.json$/u.test(file) || ['data/people/config.json', 'data/glossary.json'].includes(file);
++const legacyInput = file => dataInput(file) || /^scripts\/.*\.(?:mjs|js)$/u.test(file) || /^[^/]+\.(?:mjs|js)$/u.test(file) || file === 'package.json';
++
++export function gitIdentitySnapshot(root, revision) {
++  need(/^[a-f0-9]{40}$/u.test(revision ?? ''), 'Exact Git commit required for pinned identity evidence');
++  const git = (...args) => execFileSync('git', ['-C', root, ...args], { maxBuffer: 16 * 1024 * 1024 });
++  need(git('rev-parse', `${revision}^{commit}`).toString().trim() === revision, 'Pinned identity revision is not a commit');
++  const files = new Map();
++  for (const entry of git('ls-tree', '-r', '-l', '-z', revision).toString().split('\0').filter(Boolean)) {
++    const match = /^(\d+) (\w+) ([a-f0-9]{40})\s+(\d+|-)\t([\s\S]+)$/u.exec(entry);
++    need(match, 'Invalid Git tree inventory');
++    files.set(match[5], { mode: match[1], type: match[2], oid: match[3], bytes: Number(match[4]) });
++  }
++  const regular = file => { const row = files.get(file); need(row?.type === 'blob' && ['100644','100755'].includes(row.mode), `Missing/nonregular pinned identity input ${file}`); return row; };
++  const read = file => { need(!file.split('/').includes('..') && !path.isAbsolute(file), 'Invalid pinned identity path'); return git('cat-file', 'blob', regular(file).oid); };
++  const json = file => JSON.parse(read(file));
++  // Match the original filesystem-based registry seal, including every original
++  // script. Bound batch bytes; no corpus-sized string or checkout is created.
++  const legacySeal = () => {
++    const selected = [...files.keys()].filter(legacyInput).sort(), rows = [];
++    for (let start = 0; start < selected.length;) {
++      const batch = []; let bytes = 0;
++      while (start < selected.length && (batch.length === 0 || bytes + regular(selected[start]).bytes < 16 * 1024 * 1024)) {
++        const file = selected[start++], row = regular(file); need(row.bytes < 64 * 1024 * 1024, `Oversized pinned input ${file}`); batch.push(file); bytes += row.bytes;
++      }
++      const output = execFileSync('git', ['-C', root, 'cat-file', '--batch'], { input: batch.map(f => regular(f).oid).join('\n') + '\n', maxBuffer: bytes + batch.length * 128 + 1024 });
++      let offset = 0;
++      for (const file of batch) {
++        const row = regular(file), end = output.indexOf(10, offset); need(end >= offset, 'Missing Git object header');
++        need(output.subarray(offset, end).toString() === `${row.oid} blob ${row.bytes}`, 'Pinned Git object mismatch'); offset = end + 1;
++        rows.push([file, hash(output.subarray(offset, offset + row.bytes))]); offset += row.bytes;
++        need(output[offset++] === 10, 'Truncated pinned Git object');
++      }
++      need(offset === output.length, 'Unexpected pinned Git object bytes');
++    }
++    return peopleDigest(rows);
++  };
++  const codeDependencies = () => {
++    const seen = new Set(), pending = [...registryEntries];
++    while (pending.length) {
++      const file = pending.pop(); if (seen.has(file)) continue; regular(file); seen.add(file);
++      const text = read(file).toString();
++      // Parse static imports with Node's own JavaScript parser without linking
++      // or executing the module. Quoted import names and multiline declarations
++      // must not silently hide a dependency. Computed loading stays unsupported.
++      const gap = String.raw`(?:\s|/\*[\s\S]*?\*/|//[^\n]*(?:\n|$))*`;
++      need(!new RegExp(String.raw`\b(?:import|require|eval)${gap}\(`, 'u').test(text) && !new RegExp(String.raw`\bnew${gap}Function${gap}\(`, 'u').test(text), `Computed index dependency in ${file}`);
++      const parser = "import vm from 'node:vm';import fs from 'node:fs';const m=new vm.SourceTextModule(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(m.dependencySpecifiers));";
++      const imports = JSON.parse(execFileSync(process.execPath, ['--experimental-vm-modules', '--input-type=module', '-e', parser], { input: text, maxBuffer: 1024 * 1024, stdio: ['pipe', 'pipe', 'pipe'] }));
++      for (const specifier of imports) {
++        if (!specifier.startsWith('.')) continue;
++        const dependency = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
++        need(!dependency.startsWith('../') && /\.(?:mjs|js)$/u.test(dependency), `Unsupported index dependency ${specifier}`); pending.push(dependency);
++      }
++    }
++    return [...seen].sort();
++  };
++  return { root, revision, files, regular, read, json, legacySeal, codeDependencies };
++}
++
++export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT } = {}) {
++  const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
++  need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
++  const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
++  need(peopleDigest(beforeData) === peopleDigest(afterData) && beforeData.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier data changed; update affected dossiers before preparing new work');
++  const beforeCode = retained.codeDependencies(), afterCode = current.codeDependencies();
++  need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
++  need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
++  assertPinnedIdentityRuntime(current, runtimeRoot);
++  return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
++    retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
++    dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
++    registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
++}
++
++export function assertPinnedIdentityRuntime(current, runtimeRoot = REPO_ROOT) {
++  const code = current.codeDependencies(), data = [...current.files.keys()].filter(dataInput).sort();
++  const runtimeBytes = file => { const full = path.join(runtimeRoot, file), stat = fs.lstatSync(full); need(stat.isFile() && !stat.isSymbolicLink(), `Runtime input must be a regular file: ${file}`); return fs.readFileSync(full); };
++  for (const file of code) need(blobHash(runtimeBytes(file)) === current.regular(file).oid, `Runtime index dependency differs from pinned revision: ${file}`);
++  const runtimeData = data.filter(f => !/^data\/(?!people\/)[^/]+\/\d{3}\.json$/u.test(f) && !/^data\/people\/(?:extractions|resolutions)\//u.test(f));
++  for (const directory of ['data/people/curation', 'data/people/schema', 'data/people/chronology']) {
++    const actual = [], visit = relative => { const full = path.join(runtimeRoot, relative); if (!fs.existsSync(full)) return; const stat = fs.lstatSync(full); need(!stat.isSymbolicLink(), `Runtime inventory must not use symlinks: ${relative}`); if (stat.isDirectory()) for (const name of fs.readdirSync(full)) visit(`${relative}/${name}`); else if (relative.endsWith('.json')) actual.push(relative); };
++    visit(directory); need(peopleDigest(actual.sort()) === peopleDigest(runtimeData.filter(f => f.startsWith(directory + '/'))), `Runtime index configuration inventory differs: ${directory}`);
++  }
++  for (const file of runtimeData) need(blobHash(runtimeBytes(file)) === current.regular(file).oid, `Runtime index configuration differs: ${file}`);
++  need(peopleDigest(packageContract(JSON.parse(runtimeBytes('package.json')))) === peopleDigest(packageContract(current.json('package.json'))), 'Runtime package contract differs');
++}
++
++export function pinnedIdentityChapterContext(root, revision) {
++  const snapshot = gitIdentitySnapshot(root, revision);
++  const scope = (book, chapter) => need(/^[a-z0-9_-]+$/u.test(book) && /^\d{3}$/u.test(chapter), 'Invalid pinned chapter scope');
++  const optional = file => snapshot.files.has(file) ? snapshot.json(file) : null;
++  const inputs = (book, chapter) => { scope(book, chapter); const source = `data/${book}/${chapter}.json`, extraction = `data/people/extractions/${book}/${chapter}.json`, editorial = `data/people/editorial-decisions/${book}/${chapter}.json`, date = `data/people/date-audits/${book}/${chapter}.json`;
++    return { source: sha256(snapshot.read(source)), extraction: sha256(snapshot.read(extraction)), editorial: sha256(snapshot.files.has(editorial) ? snapshot.read(editorial) : Buffer.from('null')), dateAudit: sha256(snapshot.read(date)) }; };
++  const load = (book, chapter, { properNounMatcher, strictAliasDispositions = true }) => {
++    scope(book, chapter); const raw = snapshot.json(`data/people/extractions/${book}/${chapter}.json`), source = snapshot.json(`data/${book}/${chapter}.json`);
++    need(raw.book === book && raw.chapter === chapter, 'Pinned extraction scope mismatch');
++    const packet = buildPeopleExtractionPacket(book, chapter, { chapterData: source, chapterFile: path.join(root, `data/${book}/${chapter}.json`), properNounMatcher });
++    const { normalized: extraction } = isCompactPeopleExtraction(raw) ? validateCompactPeopleExtraction(raw, packet, { strictAliasDispositions }) : validatePeopleExtraction(raw, packet, { strictAliasDispositions });
++    return { raw, packet, extraction, localPeople: peopleForExtraction(extraction) };
++  };
++  const editorial = (book, chapter) => optional(`data/people/editorial-decisions/${book}/${chapter}.json`);
++  const dates = (book, chapter) => {
++    scope(book, chapter); const source = snapshot.json(`data/${book}/${chapter}.json`), raw = snapshot.json(`data/people/extractions/${book}/${chapter}.json`), report = snapshot.json(`data/people/date-audits/${book}/${chapter}.json`);
++    const units = contentUnits(source).map(({ id, zh, en, literal, blockIndex }) => ({ id, zh, en, literal, blockIndex }));
++    const packet = { schemaVersion: 1, auditVersion: DATE_AUDIT_VERSION, book, chapter, units, sourceHash: sha256(JSON.stringify(units)), extractionHash: sha256(JSON.stringify(raw)), extractor: raw.run, ...dateAuditItems(raw) };
++    validateDateAuditReport(report, packet);
++    for (const reference of report.references) {
++      if (reference.kind === 'external') need(reference.sourceHash === sha256(reference.quote), 'Pinned external date reference changed');
++      else { const unit = contentUnits(snapshot.json(`data/${reference.book}/${reference.chapter}.json`)).find(u => u.id === reference.unit); need(unit && sha256(unit.zh) === reference.sourceHash && unit.zh.includes(reference.quote), 'Pinned chapter date reference changed'); }
++    }
++    return { status: report.status, auditVersion: DATE_AUDIT_VERSION, reviewedAt: report.reviewedAt, findings: report.findings.length };
++  };
++  return { snapshot, inputs, load, editorial, dates, config: snapshot.json('data/people/config.json') };
++}
+diff --git a/scripts/prepare-people-chapter-identity.mjs b/scripts/prepare-people-chapter-identity.mjs
+index f35ddc034f2c..400864201acb 100644
+--- a/scripts/prepare-people-chapter-identity.mjs
++++ b/scripts/prepare-people-chapter-identity.mjs
+@@ -11,49 +11,64 @@ import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
+ import { assertChapterGates } from './lib/people-qualified-scope.mjs';
+ import { localNameKeys } from './lib/people-resolution.mjs';
+ import { peopleDigest, identityDossierInputs } from './lib/people-identity-seal.mjs';
+-import { compactChapterIdentityReviewPacket } from './lib/people-identity-review-transport.mjs';
++import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport } from './lib/people-identity-review-transport.mjs';
++import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
+ import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
+ import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
+ import { readIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
+ import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityReviewPath, validateChapterIdentityBundle } from './lib/people-chapter-identity.mjs';
+ import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
++import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
+ const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+ const need = (ok, message) => { if (!ok) throw new Error(message); };
+ const MAX_REVIEW_TRANSPORT_BYTES = 768 * 1024;
+-export async function buildChapterIdentityReviewPacket({ book, chapter, registry }) {
++export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
++  const units = new Map(), ownPrefix = `${own.extraction.book}:${own.extraction.chapter}`;
++  for (const unit of own.packet.units) units.set(`${ownPrefix}:${unit.id}`, { book: own.extraction.book, chapter: own.extraction.chapter, ...unit });
++  for (const person of relevant.values()) {
++    const prefix = person.localId.split(':').slice(0, 2).join(':');
++    const evidence = new Set([...person.claims.flatMap(c => c.evidence), ...person.mentions.map(m => m.unit.id.includes(':') ? m.unit.id : `${prefix}:${m.unit.id}`)]);
++    for (const id of evidence) {
++      const [book, chapter, unitId] = id.split(':'), source = sources.get(`${book}:${chapter}`);
++      need(source, `Missing primary chapter for ${id}`);
++      if (!source.unitMap) source.unitMap = new Map(source.packet.units.map(unit => [unit.id, unit]));
++      const unit = source.unitMap.get(unitId); need(unit, `Missing current primary unit ${id}`);
++      units.set(id, { book, chapter, ...unit });
++    }
++  }
++  return units;
++}
++
++export async function buildChapterIdentityReviewPacket({ book, chapter, registry, sourceRevision }) {
+   need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
+-  const inputs = chapterIdentityInputs(book, chapter), scope = { book, chapter }, matcher = loadProperNounMatcher();
+-  const own = loadValidatedPeopleChapter(book, chapter, { properNounMatcher: matcher });
++  const pinned = sourceRevision ? pinnedIdentityChapterContext(REPO_ROOT, sourceRevision) : null;
++  const readInputs = pinned ? pinned.inputs : chapterIdentityInputs, loadChapter = pinned ? pinned.load : loadValidatedPeopleChapter;
++  const inputs = readInputs(book, chapter), scope = { book, chapter }, matcher = loadProperNounMatcher();
++  const own = loadChapter(book, chapter, { properNounMatcher: matcher });
+   const editorialFile = editorialDecisionPath(book, chapter);
+-  assertChapterGates(own.extraction, readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion,
+-    dateAuditStatus(book, chapter), fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
++  assertChapterGates(own.extraction, (pinned ? pinned.config : readJson(path.join(PEOPLE_DIR, 'config.json'))).promptVersion,
++    pinned ? pinned.dates(book, chapter) : dateAuditStatus(book, chapter), pinned ? pinned.editorial(book, chapter) : fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
+   const index = await readIdentityDossierStore(registry, new Map());
+   try {
+-    const identityInputs = identityDossierInputs(REPO_ROOT);
+-    need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
++    const registryReuse = pinned ? provePinnedDossierReuse(index.provenance, pinned.snapshot) : null;
++    const identityInputs = pinned ? null : identityDossierInputs(REPO_ROOT);
++    if (!pinned) need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
+     const plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS), sources = new Map([[`${book}:${chapter}`, own]]), relevant = new Map();
+     for (const item of plan.cases) for (const id of [...item.localPeople, item.canonicalMembership.anchorLocalId]) {
+       const [sourceBook, sourceChapter] = id.split(':'), key = `${sourceBook}:${sourceChapter}`;
+-      if (!sources.has(key)) sources.set(key, loadValidatedPeopleChapter(sourceBook, sourceChapter,
++      if (!sources.has(key)) sources.set(key, loadChapter(sourceBook, sourceChapter,
+         { properNounMatcher: matcher, strictAliasDispositions: false }));
+       const person = sources.get(key).localPeople.get(id);
+       need(person && peopleDigest(memberContract(person, localNameKeys(person))) === index.memberVersions.get(id), `Stale dossier member ${id}; update the registry from accepted source deltas`);
+       relevant.set(id, person);
+     }
+-    need(peopleDigest(chapterIdentityInputs(book, chapter)) === peopleDigest(inputs) && identityDossierInputs(REPO_ROOT) === identityInputs, 'Source or identity inputs changed while preparing identity review');
+-    const units = new Map();
+-    // Complete target chapter, plus actual units supporting the retained anchors.
+-    for (const unit of own.packet.units) units.set(`${book}:${chapter}:${unit.id}`, { book, chapter, ...unit });
+-    for (const person of relevant.values()) for (const claim of person.claims) for (const evidenceId of claim.evidence) {
+-      const [sourceBook, sourceChapter, unitId] = evidenceId.split(':'), source = sources.get(`${sourceBook}:${sourceChapter}`);
+-      need(source, `Missing primary chapter for ${evidenceId}`);
+-      if (!source.unitMap) source.unitMap = new Map(source.packet.units.map(unit => [unit.id, unit]));
+-      const unit = source.unitMap.get(unitId);
+-      need(unit, `Missing current primary unit ${evidenceId}`); units.set(evidenceId, { book: sourceBook, chapter: sourceChapter, ...unit });
+-    }
++    if (pinned) assertPinnedIdentityRuntime(pinned.snapshot);
++    need(peopleDigest(readInputs(book, chapter)) === peopleDigest(inputs) && (pinned || identityDossierInputs(REPO_ROOT) === identityInputs), 'Source or identity inputs changed while preparing identity review');
++    const units = collectChapterIdentityPrimaryUnits(own, sources, relevant);
+     const candidateIds = [...new Set(plan.cases.flatMap(item => item.candidateDossiers.map(row => row.id)))];
+     const packet = { schemaVersion: 1, kind: 'source-chapter-dossier-review-packet', scope, plan,
+-      authorAgentIds: [own.extraction.run.agentId], registryProvenance: index.provenance,
++      authorAgentIds: extractionAuthorAgentIds(own.extraction), registryProvenance: index.provenance,
++      ...(registryReuse ? { registryReuse } : {}),
+       acceptedMembershipAuthority: 'Existing native validated and source-reviewed canonical membership is the baseline. Review this chapter and current anchor; hold concrete contradictions. This report cannot merge, split or separate records.',
+       people: [...relevant.values()], units: [...units.values()],
+       candidateDossiers: candidateIds.map(id => { const dossier = index.dossiers.get(id); return { id, version: dossier.version, names: dossier.names, matching: dossier.matching, localPeople: dossier.localPeople }; }),
+@@ -66,37 +81,49 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
+     const bytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
+     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
+       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
+-      generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false };
++      generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false,
++      ...(registryReuse ? { sourceRevision, registryReuse } : {}) };
+     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
+     const transport = compactChapterIdentityReviewPacket(packet);
+     const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+-    need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES, 'Source-complete review transport exceeds the inspected bound; preserve evidence and split the work without truncating it');
++    const reviewParts = transportBytes.length > MAX_REVIEW_TRANSPORT_BYTES ? splitChapterIdentityReviewTransport(transport, MAX_REVIEW_TRANSPORT_BYTES) : [];
++    if (reviewParts.length) receipt.reviewParts = reviewParts.map((part, index) => { const bytes = Buffer.from(JSON.stringify(part) + '\n'); return { file: `transport-part-${String(index + 1).padStart(3, '0')}.json`, bytes: bytes.length, sha256: identityArtifactHash(bytes), caseIds: part.reviewCases.map(c => c.caseId) }; });
+     receipt.sourcePacketSha256 = identityArtifactHash(bytes); receipt.transportSha256 = identityArtifactHash(transportBytes); receipt.transportBytes = transportBytes.length;
+-    return { plan, packet, transport, receipt };
++    return { plan, packet, transport, receipt, reviewParts };
+   } finally { index.close(); }
+ }
+ 
+ // Write the exact byte encodings sealed by preparation. The source packet is
+ // readable JSON; the model transport is compact JSON and its bound/hash apply to
+ // that actual file, not to an encoding that was never written.
+-export function writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt }) {
++export function writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt, reviewParts = [] }) {
+   const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
+   const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
+   need(sourceBytes.length === receipt.packetBytes && identityArtifactHash(sourceBytes) === receipt.sourcePacketSha256,
+     'Sealed source packet bytes do not match preparation receipt');
+   need(transportBytes.length === receipt.transportBytes && identityArtifactHash(transportBytes) === receipt.transportSha256,
+     'Sealed transport bytes do not match preparation receipt');
+-  need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES, 'Source-complete review transport exceeds the inspected bound');
++  need(transportBytes.length <= MAX_REVIEW_TRANSPORT_BYTES || reviewParts.length > 0, 'Source-complete review transport exceeds the inspected bound');
++  if (reviewParts.length) {
++    const expected = splitChapterIdentityReviewTransport(transport, MAX_REVIEW_TRANSPORT_BYTES);
++    need(peopleDigest(expected) === peopleDigest(reviewParts) && receipt.reviewParts?.length === reviewParts.length, 'Review partition evidence differs from the sealed source transport');
++    for (const [i, part] of reviewParts.entries()) { const bytes = Buffer.from(JSON.stringify(part) + '\n'), sealed = receipt.reviewParts[i]; need(sealed.file === `transport-part-${String(i + 1).padStart(3, '0')}.json` && sealed.bytes === bytes.length && sealed.sha256 === identityArtifactHash(bytes) && peopleDigest(sealed.caseIds) === peopleDigest(part.reviewCases.map(c => c.caseId)), 'Review part bytes differ from preparation receipt'); }
++  }
+   fs.mkdirSync(out, { recursive: false });
+   for (const [file, bytes] of [
+     ['plan.json', Buffer.from(JSON.stringify(plan, null, 2) + '\n')],
+     ['source-review-packet.json', sourceBytes], ['transport-packet.json', transportBytes],
+     ['preparation-receipt.json', Buffer.from(JSON.stringify(receipt, null, 2) + '\n')],
+   ]) fs.writeFileSync(path.join(out, file), bytes, { flag: 'wx' });
++  for (const [i, part] of reviewParts.entries()) fs.writeFileSync(path.join(out, receipt.reviewParts[i].file), JSON.stringify(part) + '\n', { flag: 'wx' });
+ }
+ 
+ export async function prepareChapterIdentityReview({ out, ...options }) {
+   const { book, chapter, registry } = options, savedPath = chapterIdentityReviewPath(book, chapter);
++  if (options.sourceRevision) {
++    const source = pinnedIdentityChapterContext(REPO_ROOT, options.sourceRevision);
++    need(!source.snapshot.files.has(`data/people/identity-reviews/${book}/${chapter}.json`) && !fs.existsSync(savedPath), 'Retained identity proof exists; reconcile it before preparing new pinned work');
++  }
+   if (fs.existsSync(savedPath)) {
+     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected proof revalidation');
+     const savedBytes = fs.readFileSync(savedPath), saved = JSON.parse(savedBytes), inputs = chapterIdentityInputs(book, chapter);
+@@ -130,15 +157,17 @@ export async function prepareChapterIdentityReview({ out, ...options }) {
+       return receipt;
+     } finally { index.close(); }
+   }
+-  const { plan, packet, transport, receipt } = await buildChapterIdentityReviewPacket(options);
+-  writePreparedIdentityReviewArtifacts(out, { plan, packet, transport, receipt });
++  const prepared = await buildChapterIdentityReviewPacket(options);
++  const { receipt } = prepared;
++  writePreparedIdentityReviewArtifacts(out, prepared);
+   return receipt;
+ }
+ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+   const args = process.argv.slice(2), options = {};
+   for (let i = 0; i < args.length; i += 2) {
+-    const key = args[i].slice(2); need(['book', 'chapter', 'registry', 'out'].includes(key) && args[i].startsWith('--') && args[i+1], 'Usage: --book BOOK --chapter NNN --registry IMMUTABLE_DIRECTORY --out NEW_ARTIFACT_DIRECTORY');
+-    need(!Object.hasOwn(options, key), `Duplicate option ${key}`); options[key] = args[i+1];
++    const key = args[i].slice(2); need(['book', 'chapter', 'registry', 'out', 'source-revision'].includes(key) && args[i].startsWith('--') && args[i+1], 'Usage: --book BOOK --chapter NNN --registry IMMUTABLE_DIRECTORY --out NEW_ARTIFACT_DIRECTORY [--source-revision FULL_GIT_SHA]');
++    const option = key === 'source-revision' ? 'sourceRevision' : key;
++    need(!Object.hasOwn(options, option), `Duplicate option ${key}`); options[option] = args[i+1];
+   }
+   for (const key of ['registry', 'out']) { need(options[key] && path.isAbsolute(options[key]), `Absolute --${key} required`); }
+   console.log(JSON.stringify(await prepareChapterIdentityReview(options), null, 2));
+diff --git a/scripts/test-people-chapter-identity.mjs b/scripts/test-people-chapter-identity.mjs
+index 3d1fc9d4c795..1bd4ba0914ab 100644
+--- a/scripts/test-people-chapter-identity.mjs
++++ b/scripts/test-people-chapter-identity.mjs
+@@ -55,3 +55,10 @@ test('a new actor in an unmentioned Chinese unit cannot reuse the old chapter pr
+  const f=fixture();f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'李忠至。'});
+  assert.throws(()=>validate(f),/chapter Chinese source or unit inventory changed/);
+ });
++
++test('chunked extraction identities require every actual author and preserve reviewer independence',()=>{
++ const f=fixture(),own=f.sources.get('fixture:001');own.extraction.run={agentId:null,chunks:[{agentId:'chunk-author-a'},{agentId:'chunk-author-b'}]};f.bundle.receipt.authorAgentIds=['chunk-author-a','chunk-author-b','host-author'];assert.doesNotThrow(()=>validate(f));
++ f.bundle.receipt.authorAgentIds=['chunk-author-a'];assert.throws(()=>validate(f),/Actual extraction author missing/);
++ const g=fixture();g.sources.get('fixture:001').extraction.run={agentId:null,chunks:[{agentId:'independent-reviewer'}]};g.bundle.receipt.authorAgentIds=['independent-reviewer'];assert.throws(()=>validate(g),/independent reviewer/);
++ const h=fixture();h.sources.get('fixture:001').extraction.run={agentId:null,chunks:[{agentId:null}]};assert.throws(()=>validate(h),/every chunk/);
++});
+diff --git a/scripts/test-people-identity-preparation.mjs b/scripts/test-people-identity-preparation.mjs
+index c8bd27402dc2..2f2a27b64355 100644
+--- a/scripts/test-people-identity-preparation.mjs
++++ b/scripts/test-people-identity-preparation.mjs
+@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import os from 'node:os';
+ import path from 'node:path';
+-import { writePreparedIdentityReviewArtifacts } from './prepare-people-chapter-identity.mjs';
++import { writePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
+ import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
+ 
+ function fixture(t) {
+@@ -52,3 +52,12 @@ test('oversized transport stays rejected and existing immutable output is never
+   assert.throws(() => writePreparedIdentityReviewArtifacts(f.out, f.value), /EEXIST/);
+   assert.deepEqual(fs.readFileSync(path.join(f.out, 'transport-packet.json')), before);
+ });
++
++
++test('primary packet includes complete target chapter and all anchor claim and mention units',()=>{
++ const own={extraction:{book:'fixture',chapter:'001'},packet:{units:[{id:'s0001',zh:'王至。'},{id:'s0002',zh:'後事。'}]}};
++ const anchor={packet:{units:[{id:'s0001',zh:'王生。'},{id:'s0002',zh:'王仕。'}]}};
++ const sources=new Map([['fixture:001',own],['fixture:002',anchor]]),person={localId:'fixture:002:p001',claims:[{evidence:['fixture:002:s0001']}],mentions:[{unit:{id:'s0002'}}]};
++ const units=collectChapterIdentityPrimaryUnits(own,sources,new Map([[person.localId,person]]));assert.deepEqual([...units.keys()],['fixture:001:s0001','fixture:001:s0002','fixture:002:s0001','fixture:002:s0002']);
++ person.mentions[0].unit.id='s0003';assert.throws(()=>collectChapterIdentityPrimaryUnits(own,sources,new Map([[person.localId,person]])),/Missing current primary unit/);
++});
+diff --git a/scripts/test-people-identity-review-parts.mjs b/scripts/test-people-identity-review-parts.mjs
+new file mode 100644
+index 000000000000..5cfa9e32e653
+--- /dev/null
++++ b/scripts/test-people-identity-review-parts.mjs
+@@ -0,0 +1,26 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts } from './lib/people-identity-review-transport.mjs';
++import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
++function fixture() {
++ const own='fixture:001:p001',anchor='fixture:002:p001',other='fixture:001:p002',otherAnchor='fixture:003:p001';
++ const person=(localId,unit)=>({localId,claims:[['c1','name',{zh:'王偉'},'explicit',[unit]]],mentions:[['m1','s0001','personal-name',{},null]]});
++ return {schemaVersion:1,kind:'bounded-dossier-source-review-transport',scope:{book:'fixture',chapter:'001'},sourcePacketSha256:'source',planFingerprint:'plan',instructions:'Review independently.',reviewCases:[{caseId:'a',localPeople:[own],canonicalMembership:{anchorLocalId:anchor},candidateDossiers:['d1']},{caseId:'b',localPeople:[other],canonicalMembership:{anchorLocalId:otherAnchor},candidateDossiers:['d2']}],people:[person(own,'fixture:001:s0001'),person(anchor,'fixture:002:s0001'),person(other,'fixture:001:s0001'),person(otherAnchor,'fixture:003:s0001')],units:[{book:'fixture',chapter:'001',id:'s0001',zh:'王偉至。',en:'x'.repeat(300)},{book:'fixture',chapter:'001',id:'s0002',zh:'未久。'},{book:'fixture',chapter:'002',id:'s0001',zh:'王偉至。',en:'x'.repeat(2000)},{book:'fixture',chapter:'003',id:'s0001',zh:'王偉至。',en:'x'.repeat(2000)}],candidateDossiers:[{id:'d1',names:['王偉']},{id:'d2',names:['王偉']}]};
++}
++test('bounded parts retain complete target chapter and all owned person/anchor evidence',()=>{
++ const t=fixture(),parts=splitChapterIdentityReviewTransport(t,4000);assert.equal(parts.length,2);assert.deepEqual(parts.flatMap(p=>p.reviewCases.map(c=>c.caseId)),['a','b']);
++ for(const p of parts){assert(Buffer.byteLength(JSON.stringify(p)+'\n')<=4000);assert.equal(p.sourcePacketSha256,t.sourcePacketSha256);assert(p.units.some(u=>u.chapter==='001'&&u.id==='s0002'));for(const person of p.people)assert.deepEqual(person,t.people.find(x=>x.localId===person.localId));}
++ assert.deepEqual(parts[0].units.filter(u=>u.chapter!=='001').map(u=>u.chapter),['002']);assert.deepEqual(parts[1].candidateDossiers,[t.candidateDossiers[1]]);
++});
++test('unreviewable single cases, missing witnesses and duplicate case ownership fail closed',()=>{
++ const t=fixture();assert.throws(()=>splitChapterIdentityReviewTransport(t,1024),/case.*exceeds/);const m=fixture();m.units=m.units.filter(u=>u.chapter!=='002');assert.throws(()=>splitChapterIdentityReviewTransport(m,4000),/Missing primary evidence/);const d=fixture();d.reviewCases[1].caseId='a';assert.throws(()=>splitChapterIdentityReviewTransport(d,4000),/lost or duplicated/);
++});
++const reports=parts=>parts.map(p=>({schemaVersion:1,planFingerprint:'plan',reviewer:{agentId:'reviewer',name:'Independent Reviewer'},reviews:p.reviewCases.map(c=>({caseId:c.caseId,verdict:'approve'}))}));
++test('assembly requires all exact parts and actual independent producer, in linear case order',()=>{
++ const parts=splitChapterIdentityReviewTransport(fixture(),4000),plan={fingerprint:'plan',cases:[{id:'a'},{id:'b'}]},r=reports(parts);const result=assembleChapterIdentityReviewParts(plan,parts,r,['reviewer','reviewer'],['extractor']);assert.deepEqual(result.reviews.map(x=>x.caseId),['a','b']);
++ assert.throws(()=>assembleChapterIdentityReviewParts(plan,parts,r,['extractor','reviewer'],['extractor']),/nonindependent/);assert.throws(()=>assembleChapterIdentityReviewParts(plan,parts.slice(0,1),r.slice(0,1),['reviewer'],['extractor']),/Incomplete full/);const dup=structuredClone(r);dup[1].reviews[0].caseId='a';assert.throws(()=>assembleChapterIdentityReviewParts(plan,parts,dup,['reviewer','reviewer'],['extractor']),/exact owned/);const extra=structuredClone(r);extra[0].unexpected=true;assert.throws(()=>assembleChapterIdentityReviewParts(plan,parts,extra,['reviewer','reviewer'],['extractor']),/Stale/);
++ const held=structuredClone(r);held[0].reviews[0].verdict='hold';assert.equal(assembleChapterIdentityReviewParts(plan,parts,held,['reviewer','reviewer'],['extractor']).reviews[0].verdict,'hold');
++});
++test('aggregate extraction authors remain actual complete chunk contributors',()=>{
++ assert.deepEqual(extractionAuthorAgentIds({run:{agentId:null,chunks:[{agentId:'a'},{agentId:'b'},{agentId:'a'}]}}),['a','b']);assert.deepEqual(extractionAuthorAgentIds({run:{agentId:'top'}}),['top']);assert.throws(()=>extractionAuthorAgentIds({run:{agentId:null}}),/provenance/);assert.throws(()=>extractionAuthorAgentIds({run:{agentId:'top',chunks:[{agentId:null}]}}),/every chunk/);
++});
+diff --git a/scripts/test-people-pinned-identity-source.mjs b/scripts/test-people-pinned-identity-source.mjs
+new file mode 100644
+index 000000000000..117cf26c28c8
+--- /dev/null
++++ b/scripts/test-people-pinned-identity-source.mjs
+@@ -0,0 +1,65 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs';
++import os from 'node:os';
++import path from 'node:path';
++import { execFileSync } from 'node:child_process';
++import { createHash } from 'node:crypto';
++import { gitIdentitySnapshot, provePinnedDossierReuse, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
++import { peopleDigest } from './lib/people-identity-seal.mjs';
++import { contentUnits, sha256 } from './lib/people-content.mjs';
++import { dateAuditItems } from './lib/people-date-audit.mjs';
++
++function fixture(t) {
++ const root=fs.mkdtempSync(path.join(os.tmpdir(),'identity-pinned-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
++ const git=(...args)=>execFileSync('git',['-C',root,...args],{encoding:'utf8'}).trim();
++ git('init','-q');git('config','user.email','fixture@example.invalid');git('config','user.name','Fixture');
++ const write=(file,text)=>{fs.mkdirSync(path.dirname(path.join(root,file)),{recursive:true});fs.writeFileSync(path.join(root,file),text);};
++ const json=(file,value)=>write(file,JSON.stringify(value)+'\n');
++ const code=['people-identity-registry-workflow','people-corpus','people-resolution','people-identity-dossiers','people-identity-member-store','people-identity-dossier-store'];
++ for(const name of code)write(`scripts/lib/${name}.mjs`,'export const fixture=true;\n');
++ write('scripts/lib/people-corpus.mjs',"import {\n fixture\n} from './nested.mjs';\nexport { value } from './reexport.mjs';\nimport { 'quoted' as value } from './quoted.mjs';\n");
++ write('scripts/lib/nested.mjs',"import './leaf.mjs';\nexport const fixture=true;\n");write('scripts/lib/leaf.mjs','export const leaf=true;\n');write('scripts/lib/reexport.mjs','export const value=true;\n');write('scripts/lib/quoted.mjs','export const quoted=true;\n');
++ json('package.json',{name:'fixture',type:'module',scripts:{test:'old'},dependencies:{ajv:'8'}});json('data/people/config.json',{promptVersion:7});json('data/glossary.json',{});json('data/people/schema/fixture.schema.json',{});
++ const source={content:[{sentences:[{id:'s0001',zh:'甲至。',en:'Jia arrived.',literal:'Jia arrived.'}]}]};
++ const extraction={schemaVersion:2,book:'fixture',chapter:'001',run:{model:'extractor'},people:[['p001',['Jia','甲'],'historical','Official',{a:[]}]],claims:[]};
++ json('data/fixture/001.json',source);json('data/people/extractions/fixture/001.json',extraction);
++ const units=contentUnits(source).map(({id,zh,en,literal,blockIndex})=>({id,zh,en,literal,blockIndex})),items=dateAuditItems(extraction);
++ const report={schemaVersion:1,auditVersion:1,book:'fixture',chapter:'001',status:'audited',sourceHash:sha256(JSON.stringify(units)),extractionHash:sha256(JSON.stringify(extraction)),reviewedAt:'2026-01-01T00:00:00Z',reviewer:{name:'Independent fixture reviewer',independentOfExtractor:true},summary:'Complete fixture source review without chronological assertions.',reviewedUnits:['s0001'],itemChecks:[{id:'hints-p001',verdict:'supported',event:'Jia arrived in an undated source statement.',reason:'Empty activity hints preserve the genuinely undated source statement.',evidence:[{unit:'s0001',quote:'甲至'}]}],personChecks:[{id:'p001',verdict:'supported',reason:'The source merely records Jia arriving without a date.',evidence:[{unit:'s0001',quote:'甲至'}]}],findings:[],references:[]};
++ assert.equal(items.items.length,1);json('data/people/date-audits/fixture/001.json',report);
++ const commit=()=>{git('add','.');git('commit','-qm','fixture');return git('rev-parse','HEAD');};
++ const base=commit(),snapshot=gitIdentitySnapshot(root,base),provenance={revision:base,identityInputs:snapshot.legacySeal()};
++ return {root,git,write,json,commit,base,snapshot,provenance,source,extraction,report};
++}
++
++test('original Git seal equals byte hashes of the original filesystem inventory',t=>{
++ const f=fixture(t),files=f.git('ls-files').split('\n').filter(p=>!p.startsWith('data/people/date-audits/')).sort();
++ const expected=peopleDigest(files.map(p=>[p,createHash('sha256').update(fs.readFileSync(path.join(f.root,p))).digest('hex')]));
++ assert.equal(f.snapshot.legacySeal(),expected);assert(f.snapshot.codeDependencies().includes('scripts/lib/leaf.mjs'));assert(f.snapshot.codeDependencies().includes('scripts/lib/reexport.mjs'));assert(f.snapshot.codeDependencies().includes('scripts/lib/quoted.mjs'));
++});
++test('unrelated code and package script changes reuse immutable dossiers without rewriting seals',t=>{
++ const f=fixture(t);f.write('scripts/test-unrelated.mjs','console.log("new test");\n');f.json('package.json',{name:'fixture',type:'module',scripts:{test:'new'},dependencies:{ajv:'8'}});const current=gitIdentitySnapshot(f.root,f.commit());
++ const proof=provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root});assert.equal(proof.registryBytesChanged,false);assert.equal(proof.retainedOriginalSeal,f.provenance.identityInputs);assert.equal(proof.sourceRevision,current.revision);assert.equal(proof.chapterApproval,false);
++});
++test('changed source, extraction, inventories, schema, curation and construction code remain blocked',t=>{
++ for(const file of ['data/fixture/001.json','data/people/extractions/fixture/001.json','data/fixture/002.json','data/people/schema/new.schema.json','data/people/curation/new.json','scripts/lib/leaf.mjs','scripts/lib/quoted.mjs']){
++  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root}),/Dossier data changed|construction code changed/);
++ }
++});
++test('package dependency changes and unverifiable original provenance are rejected',t=>{
++ const f=fixture(t);assert.throws(()=>provePinnedDossierReuse({...f.provenance,identityInputs:'sha256:bad'},f.snapshot,{runtimeRoot:f.root}),/original Git source seal/);
++ f.json('package.json',{name:'fixture',type:'module',scripts:{test:'old'},dependencies:{ajv:'9'}});const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root}),/package contract changed/);
++});
++test('dirty runtime dependencies, added schemas and symlinks cannot pass the pinned runtime check',t=>{
++ const f=fixture(t);f.write('scripts/lib/leaf.mjs','changed');assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root),/Runtime index dependency differs/);f.write('scripts/lib/leaf.mjs','export const leaf=true;\n');f.json('data/people/schema/extra.schema.json',{});assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root),/inventory differs/);fs.unlinkSync(path.join(f.root,'data/people/schema/extra.schema.json'));
++ const file=path.join(f.root,'data/glossary.json'),saved=path.join(f.root,'saved-glossary');fs.renameSync(file,saved);fs.symlinkSync(saved,file);assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root),/regular file/);
++});
++test('computed index imports and nonregular committed data fail loudly',t=>{
++ const f=fixture(t);f.write('scripts/lib/leaf.mjs','export const x=import(variable);\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>current.codeDependencies(),/Computed index dependency/);
++ const g=fixture(t);fs.unlinkSync(path.join(g.root,'data/glossary.json'));fs.symlinkSync('people/config.json',path.join(g.root,'data/glossary.json'));const next=gitIdentitySnapshot(g.root,g.commit());assert.throws(()=>next.legacySeal(),/nonregular/);
++});
++test('pinned chapter pins and independent dates use committed evidence and reject stale or negative reports',t=>{
++ const f=fixture(t),context=pinnedIdentityChapterContext(f.root,f.base),before=context.inputs('fixture','001');f.json('data/fixture/001.json',{});assert.deepEqual(context.inputs('fixture','001'),before);assert.equal(context.dates('fixture','001').status,'audited');
++ f.json('data/people/date-audits/fixture/001.json',{...f.report,sourceHash:'sha256:bad'});const current=pinnedIdentityChapterContext(f.root,f.commit());assert.throws(()=>current.dates('fixture','001'),/stale/);
++ assert.throws(()=>gitIdentitySnapshot(f.root,'HEAD'),/Exact Git commit/);assert.throws(()=>context.inputs('../fixture','001'),/Invalid pinned chapter/);
++});
