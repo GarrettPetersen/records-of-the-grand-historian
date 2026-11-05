@@ -8,9 +8,25 @@ import { spawnSync } from 'node:child_process';
 
 // Each fixture authors only three source chapters. Individual schemas and chronology
 // are dependencies, never a corpus/worktree/public/node_modules copy.
+async function pinIdentityFixture(root, code) {
+  const { gitIdentitySnapshot } = await import('./lib/people-pinned-identity-source.mjs');
+  const git = (...args) => { const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
+  const originalPackage = fs.readFileSync(path.join(root, 'package.json'));
+  fs.writeFileSync(path.join(root, 'package.json'), fs.readFileSync(path.join(code, 'package.json')));
+  git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid');
+  for (const dir of ['jinshu','shiji','people/schema','people/chronology','people/curation','people/extractions','people/date-audits','people/editorial-decisions']) git('add','data/' + dir);
+  git('add','package.json','data/glossary.json','data/people/config.json');
+  const productionSnapshot = gitIdentitySnapshot(code, spawnSync('git',['-C',code,'rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim());
+  for (const file of productionSnapshot.codeDependencies()) {
+    const r = spawnSync('git',['-C',root,'hash-object','-w','--stdin'],{input:fs.readFileSync(path.join(code,file)),encoding:'utf8'});assert.equal(r.status,0,r.stderr);git('update-index','--add','--cacheinfo','100644,'+r.stdout.trim()+','+file);
+  }
+  git('commit','-qm','Authored pinned identity fixture'); const pinnedRevision = git('rev-parse','HEAD'), pinnedSnapshot = gitIdentitySnapshot(root,pinnedRevision);
+  return { git, originalPackage, pinnedRevision, pinnedSnapshot };
+}
+
 const file = fileURLToPath(import.meta.url);
 const code = path.resolve(path.dirname(file), '..');
-if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
+if (!['--fixture-child', '--preview-fixture-child', '--reuse-fixture-child'].includes(process.argv[2])) {
   const runFixture = mode => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'people-qualified-site-'));
     try {
@@ -33,6 +49,7 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     } finally { fs.rmSync(root, { recursive: true, force: true }); }
   };
   test('ordinary compiler, certified subset, real pages/handler and all publication holds', { timeout: 180_000 }, () => runFixture('--fixture-child'));
+  test('English-only source repairs reuse dossier inputs without reusing stale date approval', { timeout: 180_000 }, () => runFixture('--reuse-fixture-child'));
   test('formerly complete catalogs cannot promote explicit previews after current approval disappears', { timeout: 180_000 }, () => runFixture('--preview-fixture-child'));
 } else {
   const { REPO_ROOT: root, writeJsonAtomic: write } = await import('./lib/people-content.mjs');
@@ -90,6 +107,29 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
     recordDateAudit({ schemaVersion: 1, auditVersion: 1, book, chapter, sourceHash: audit.sourceHash, extractionHash: audit.extractionHash, status: 'audited',
       reviewer: { name: 'Independent synthetic date reviewer', independentOfExtractor: true }, reviewedAt: '2026-10-24T12:00:00Z',
       summary: 'Complete authored synthetic chapter date review.', reviewedUnits: ['s0001'], itemChecks: audit.items.map(item => check(item.id)), personChecks: audit.people.map(person => check(person.id)), findings: [], references: [] });
+  }
+  if(process.argv[2]==='--reuse-fixture-child') {
+    const { gitIdentitySnapshot, provePinnedDossierReuse, pinnedIdentityChapterContext } = await import('./lib/people-pinned-identity-source.mjs');
+    const { git, pinnedRevision, pinnedSnapshot } = await pinIdentityFixture(root, code);
+    const pinnedProvenance = { revision:pinnedRevision,identityInputs:pinnedSnapshot.legacySeal() };
+  // Real production normalization permits an English-only edit to reuse index
+  // bytes, while the separate chronology approval correctly becomes stale.
+  {
+  const changedSource='data/jinshu/001.json',changedExtraction='data/people/extractions/jinshu/001.json';
+  const originalSource=fs.readFileSync(path.join(root,changedSource)),originalExtraction=fs.readFileSync(path.join(root,changedExtraction));
+  const originalAudit=fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/001.json'));
+  const editedSource=read(changedSource);editedSource.content[0].sentences[0].literal='Jia came.';writeAt(changedSource,editedSource);
+  const editedExtraction=read(changedExtraction);editedExtraction.input=buildPeopleExtractionSeed(buildPeopleExtractionPacket('jinshu','001'),'fixture').input;writeAt(changedExtraction,editedExtraction);
+  git('add',changedSource,changedExtraction);git('commit','-qm','English repair with unchanged identity evidence');
+  const repairedRevision=git('rev-parse','HEAD'),repairedProof=provePinnedDossierReuse(pinnedProvenance,gitIdentitySnapshot(root,repairedRevision));
+  assert.deepEqual(repairedProof.changedData,[changedSource,changedExtraction]);assert.equal(repairedProof.unchangedChapters[0].people,1);assert.equal(repairedProof.chapterApproval,false);
+  assert.throws(()=>pinnedIdentityChapterContext(root,repairedRevision).dates('jinshu','001'),/stale/);
+assert.deepEqual(fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/001.json')),originalAudit);
+  fs.writeFileSync(path.join(root,changedSource),originalSource);fs.writeFileSync(path.join(root,changedExtraction),originalExtraction);
+  git('add',changedSource,changedExtraction);git('commit','-qm','Restore fixture source');
+  }
+    console.log('English-only repair reuses validated index inputs; native date approval remains stale and untouched.');
+    process.exit(0);
   }
   writeAt('data/people/resolutions/synthetic.json', { schemaVersion: 1, authority: 'curated', batch: 'synthetic', decisions: [
     { decision: 'merge', localPeople: ['jinshu:001:p001','shiji:001:p001'], basis: ['Synthetic cross-book test identity.'], confidence: 'high' }] });
@@ -245,19 +285,9 @@ if (!['--fixture-child', '--preview-fixture-child'].includes(process.argv[2])) {
 
   // A tiny authored Git corpus plus the actual construction-code blobs exercises
   // pinned preparation/recording. No repository or data-tree checkout is copied.
-  const { gitIdentitySnapshot, provePinnedDossierReuse } = await import('./lib/people-pinned-identity-source.mjs');
+  const { gitIdentitySnapshot, provePinnedDossierReuse, pinnedIdentityChapterContext } = await import('./lib/people-pinned-identity-source.mjs');
   const { writeIdentityDossierStore } = await import('./lib/people-identity-dossier-store.mjs');
-  const git = (...args) => { const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
-  const originalPackage = fs.readFileSync(path.join(root, 'package.json'));
-  fs.writeFileSync(path.join(root, 'package.json'), fs.readFileSync(path.join(code, 'package.json')));
-  git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid');
-  for (const dir of ['jinshu','shiji','people/schema','people/chronology','people/curation','people/extractions','people/date-audits','people/editorial-decisions']) git('add','data/' + dir);
-  git('add','package.json','data/glossary.json','data/people/config.json');
-  const productionSnapshot = gitIdentitySnapshot(code, spawnSync('git',['-C',code,'rev-parse','HEAD'],{encoding:'utf8'}).stdout.trim());
-  for (const file of productionSnapshot.codeDependencies()) {
-    const r = spawnSync('git',['-C',root,'hash-object','-w','--stdin'],{input:fs.readFileSync(path.join(code,file)),encoding:'utf8'});assert.equal(r.status,0,r.stderr);git('update-index','--add','--cacheinfo','100644,'+r.stdout.trim()+','+file);
-  }
-  git('commit','-qm','Authored pinned identity fixture'); const pinnedRevision = git('rev-parse','HEAD'), pinnedSnapshot = gitIdentitySnapshot(root,pinnedRevision);
+  const { git, originalPackage, pinnedRevision, pinnedSnapshot } = await pinIdentityFixture(root, code);
   const pinnedProvenance = { revision: pinnedRevision, identityInputs: pinnedSnapshot.legacySeal() }, pinnedRegistry = path.join(root,'pinned-native-registry');
   writeIdentityDossierStore(pinnedRegistry,registryIndex,pinnedProvenance);
   const pinnedPacket = { ...prepared.packet, registryProvenance:pinnedProvenance, registryReuse:provePinnedDossierReuse(pinnedProvenance,pinnedSnapshot) };

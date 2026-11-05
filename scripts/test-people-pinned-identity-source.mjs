@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { gitIdentitySnapshot, provePinnedDossierReuse, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
+import { gitIdentitySnapshot, provePinnedDossierReuse, proveUnchangedIdentityChapter, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
 import { peopleDigest } from './lib/people-identity-seal.mjs';
 import { contentUnits, sha256 } from './lib/people-content.mjs';
 import { dateAuditItems } from './lib/people-date-audit.mjs';
@@ -43,8 +43,33 @@ test('unrelated code and package script changes reuse immutable dossiers without
 });
 test('changed source, extraction, inventories, schema, curation and construction code remain blocked',t=>{
  for(const file of ['data/fixture/001.json','data/people/extractions/fixture/001.json','data/fixture/002.json','data/people/schema/new.schema.json','data/people/curation/new.json','scripts/lib/leaf.mjs','scripts/lib/quoted.mjs']){
-  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/Dossier data changed|construction code changed/);
+  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/Dossier data (?:inventory )?changed|construction code changed|Unchanged dossier proof failed/);
  }
+});
+
+function identityChapter() {
+ const id='fixture:001:p001';
+ const person={localId:id,promptVersion:7,preferredNameSuggestion:{en:'Jia',zh:'甲'},identityHints:{active:['AD 1']},mentions:[],claims:[
+  {id:'fixture:001:c001',subject:id,predicate:'name',value:{en:'Jia',zh:'甲',kind:'personal-name'},certainty:'explicit',evidence:['fixture:001:s0001']},
+  {id:'fixture:001:c002',subject:id,predicate:'attestation',value:{event:'Arrived.'},certainty:'explicit',evidence:['fixture:001:s0001']},
+ ]};
+ return {packet:{units:[{id:'s0001',zh:'甲至。',en:'Jia arrived.'},{id:'s0002',zh:'雨。',en:'It rained.'}]},localPeople:new Map([[id,person]])};
+}
+test('byte-only English edits reuse unchanged dossiers, not chapter approvals',()=>{
+ const before=identityChapter(),after=structuredClone(before);after.packet.units[0].en='Jia came.';
+ assert.deepEqual(proveUnchangedIdentityChapter(before,after),proveUnchangedIdentityChapter(before,before));
+});
+test('unmentioned Chinese, person coverage, names, date hints, prose claims and mentions cannot hide behind unchanged index keys',()=>{
+ const changes=[
+  chapter=>{chapter.packet.units[1].zh='乙至。';},
+  chapter=>{chapter.localPeople.clear();},
+  chapter=>{chapter.localPeople.values().next().value.preferredNameSuggestion.en='Yi';},
+  chapter=>{chapter.localPeople.values().next().value.identityHints.active=['AD 2'];},
+  chapter=>{chapter.localPeople.values().next().value.claims[1].value.event='Departed.';},
+  chapter=>{chapter.localPeople.values().next().value.mentions.push({unit:{id:'s0002'}});},
+  chapter=>{chapter.localPeople.values().next().value.claims.push({id:'fixture:001:c003',subject:'fixture:001:p001',predicate:'same-person',value:'fixture:002:p001',evidence:['fixture:001:s0001']});},
+ ];
+ for(const change of changes){const before=identityChapter(),after=structuredClone(before);change(after);assert.throws(()=>proveUnchangedIdentityChapter(before,after),/Dossier (?:primary Chinese|person inventory|member|source evidence) changed/);}
 });
 test('package dependency changes and unverifiable original provenance are rejected',t=>{
  const f=fixture(t);assert.throws(()=>provePinnedDossierReuse({...f.provenance,identityInputs:'sha256:bad'},f.snapshot,{runtimeRoot:f.root,codeRoot:f.root}),/original Git source seal/);
@@ -53,6 +78,10 @@ test('package dependency changes and unverifiable original provenance are reject
 test('dirty runtime dependencies, added schemas and symlinks cannot pass the pinned runtime check',t=>{
  const f=fixture(t);f.write('scripts/lib/leaf.mjs','changed');assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/Runtime index dependency differs/);f.write('scripts/lib/leaf.mjs','export const leaf=true;\n');f.json('data/people/schema/extra.schema.json',{});assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/inventory differs/);fs.unlinkSync(path.join(f.root,'data/people/schema/extra.schema.json'));
  const file=path.join(f.root,'data/glossary.json'),saved=path.join(f.root,'saved-glossary');fs.renameSync(file,saved);fs.symlinkSync(saved,file);assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/regular file/);
+});
+test('a dirty runtime glossary is rejected before dossier reuse normalization',t=>{
+ const f=fixture(t);f.json('data/glossary.json',{changed:{text:'甲',isProperNoun:true}});
+ assert.throws(()=>provePinnedDossierReuse(f.provenance,f.snapshot,{runtimeRoot:f.root,codeRoot:f.root}),/Runtime index configuration differs: data\/glossary.json/);
 });
 test('computed index imports and nonregular committed data fail loudly',t=>{
  const f=fixture(t);f.write('scripts/lib/leaf.mjs','export const x=import(variable);\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>current.codeDependencies(),/Computed index dependency/);
