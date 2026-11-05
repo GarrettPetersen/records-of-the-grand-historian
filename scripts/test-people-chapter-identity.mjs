@@ -6,22 +6,30 @@ import { buildIdentityDossierIndex, planChapterIdentityReview } from './lib/peop
 import { acceptedCatalogIdentityView, validateChapterIdentityBundle, assertReviewedIdentityCoverage,
   applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE, identitySourceEvidenceFingerprint, chapterChineseEvidenceFingerprint } from './lib/people-chapter-identity.mjs';
 const inputs = Object.fromEntries(['source','extraction','editorial','dateAudit'].map((k,i)=>[k,`sha256:${String(i+1).repeat(64)}`]));
-function fixture() {
-  const localId='fixture:001:p001', anchorId='fixture:002:p001';
-  const make=id=>({localId:id,book:'fixture',chapter:id.split(':')[1],promptVersion:7,preferredNameSuggestion:{en:'Wang Wei',zh:'王偉'},
-    claims:[{id:id+':c0001',subject:id,predicate:'name',value:{kind:'personal-name',en:'Wang Wei',zh:'王偉'},certainty:'explicit',evidence:[id.split(':').slice(0,2).join(':')+':s0001']}]});
-  const own=make(localId),anchor=make(anchorId),people=new Map([[localId,own],[anchorId,anchor]]),clusters=[{canonicalPersonId:'per_test',localPeople:[localId,anchorId],retiredIds:['per_old']}];
-  const index=buildIdentityDossierIndex(people,clusters,localNameKeys),scope={book:'fixture',chapter:'001'},plan=planChapterIdentityReview(index,scope,inputs,{maxDossiersPerCase:8,maxKeysPerCase:16,maxPostingReadsPerKey:8}),item=plan.cases[0];
-  const report={schemaVersion:1,planFingerprint:plan.fingerprint,reviewer:{agentId:'independent-reviewer',name:'Independent reviewer'},reviews:[{
+function fixture(count=1) {
+  const names=[{en:'Wang Wei',zh:'王偉'},{en:'Li Zhong',zh:'李忠'}].slice(0,count),people=new Map(),clusters=[],sources=new Map();
+  const chapterText=names.map(name=>name.zh+'至。').join('');
+  for(const [i,name] of names.entries()){
+    const localId=`fixture:001:p00${i+1}`,anchorId=`fixture:00${i+2}:p001`;
+    const make=id=>({localId:id,book:'fixture',chapter:id.split(':')[1],promptVersion:7,preferredNameSuggestion:name,
+      claims:[{id:id+':c0001',subject:id,predicate:'name',value:{kind:'personal-name',...name},certainty:'explicit',evidence:[id.split(':').slice(0,2).join(':')+':s0001']}]});
+    for(const person of [make(localId),make(anchorId)]){
+      people.set(person.localId,person);const key='fixture:'+person.chapter;
+      if(!sources.has(key))sources.set(key,{extraction:{book:'fixture',chapter:person.chapter,run:{agentId:'actual-extractor'}},localPeople:new Map(),packet:{units:[{id:'s0001',zh:person.chapter==='001'?chapterText:name.zh+'至。'}]}});
+      sources.get(key).localPeople.set(person.localId,person);
+    }
+    clusters.push({canonicalPersonId:i===0?'per_test':'per_second',localPeople:[localId,anchorId],retiredIds:i===0?['per_old']:[]});
+  }
+  const index=buildIdentityDossierIndex(people,clusters,localNameKeys),scope={book:'fixture',chapter:'001'},plan=planChapterIdentityReview(index,scope,inputs,{maxDossiersPerCase:8,maxKeysPerCase:16,maxPostingReadsPerKey:8});
+  const report={schemaVersion:1,planFingerprint:plan.fingerprint,reviewer:{agentId:'independent-reviewer',name:'Independent reviewer'},reviews:plan.cases.map(item=>({
     caseId:item.id,verdict:'approve',canonicalPersonId:item.canonicalPersonId,membershipReviewed:true,membershipFingerprint:item.canonicalMembership.fingerprint,
     ambiguityReviewed:true,unresolvedIdentity:true,reason:'Source identifies the named individual; independent cross-chapter equivalence remains uncertain.',
-    sourceWitnesses:[localId,anchorId].map(id=>({localId:id,book:'fixture',chapter:id.split(':')[1],unitId:'s0001',quote:'王偉'}))}]};
+    sourceWitnesses:clusters.find(c=>c.canonicalPersonId===item.canonicalPersonId).localPeople.map(id=>({localId:id,book:'fixture',chapter:id.split(':')[1],unitId:'s0001',quote:people.get(id).preferredNameSuggestion.zh}))}))};
   const bundle={schemaVersion:1,kind:'chapter-identity-review',scope,plan,report,receipt:{actualReviewerAgentId:'independent-reviewer',authorAgentIds:['actual-extractor','host-author'],planFingerprint:plan.fingerprint,reportFingerprint:peopleDigest(report)}};
-  const sources=new Map([own,anchor].map(person=>['fixture:'+person.chapter,{extraction:{book:'fixture',chapter:person.chapter,run:{agentId:'actual-extractor'}},localPeople:new Map([[person.localId,person]]),packet:{units:[{id:'s0001',zh:'王偉至。'}]}}]));
   bundle.receipt.chapterChinese=chapterChineseEvidenceFingerprint(sources.get('fixture:001').packet);
-  bundle.receipt.sourcePeople=[own,anchor].map(person=>({localId:person.localId,fingerprint:identitySourceEvidenceFingerprint(person,sources.get('fixture:'+person.chapter).packet)}));
-  const catalog={localPersonMap:Object.fromEntries(index.localPersonMap),people:[{id:'per_test',localPeople:[localId,anchorId],retiredIds:['per_old'],curation:{notes:[]}}]};
-  return {index,scope,inputs,bundle,sources,catalog,view:acceptedCatalogIdentityView(catalog),corpus:{localPeople:new Map([[localId,own]])}};
+  bundle.receipt.sourcePeople=[...people.values()].map(person=>({localId:person.localId,fingerprint:identitySourceEvidenceFingerprint(person,sources.get('fixture:'+person.chapter).packet)}));
+  const catalog={localPersonMap:Object.fromEntries(index.localPersonMap),people:clusters.map(c=>({id:c.canonicalPersonId,localPeople:c.localPeople,retiredIds:c.retiredIds,curation:{notes:[]}}))};
+  return {index,scope,inputs,bundle,sources,catalog,view:acceptedCatalogIdentityView(catalog),corpus:{localPeople:new Map(sources.get('fixture:001').localPeople)}};
 }
 const validate=f=>validateChapterIdentityBundle(f.view,f.sources,f.scope,f.bundle,f.inputs);
 test('independent person proof qualifies retained assignments and preserves uncertainty visibly',()=>{
@@ -67,4 +75,12 @@ test('captured part receipts bind every reviewed case and retain actual producer
  const f=fixture(),rows=f.bundle.report.reviews;f.bundle.receipt.reviewParts=[{agentId:'independent-reviewer',runId:'actual-part-run',packetSha256:'a'.repeat(64),transportSha256:'b'.repeat(64),reportSha256:'c'.repeat(64),caseIds:rows.map(r=>r.caseId),reviewsFingerprint:peopleDigest(rows)}];assert.doesNotThrow(()=>validate(f));
  f.bundle.report.reviews[0].reason+=' Changed after capture.';f.bundle.receipt.reportFingerprint=peopleDigest(f.bundle.report);assert.throws(()=>validate(f),/part reviews changed/);
  const g=fixture();g.bundle.receipt.reviewParts=[];assert.throws(()=>validate(g),/parts are missing/);
+});
+
+test('full source revalidation accepts different independent part producers and rejects an extractor in any part',()=>{
+ const f=fixture(2),rows=f.bundle.report.reviews;
+ f.bundle.receipt.reviewParts=rows.map((row,i)=>({agentId:i===0?'independent-reviewer':'second-independent-reviewer',runId:`actual-run-${i}`,packetSha256:'a'.repeat(64),transportSha256:'b'.repeat(64),reportSha256:'c'.repeat(64),caseIds:[row.caseId],reviewsFingerprint:peopleDigest([row])}));
+ assert.equal(validate(f).retained.length,2);
+ f.bundle.receipt.reviewParts[1].agentId='actual-extractor';assert.throws(()=>validate(f),/identity part provenance/);
+ f.bundle.receipt.reviewParts[1].agentId='second-independent-reviewer';f.bundle.receipt.reviewParts[0].agentId='unrelated-reviewer';assert.throws(()=>validate(f),/did not contribute/);
 });

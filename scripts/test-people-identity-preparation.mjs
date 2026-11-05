@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { writePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
+import { writePreparedIdentityReviewArtifacts, validatePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
+import { identityReviewTransportPolicy } from './lib/people-identity-review-transport.mjs';
 
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'identity-preparation-test-'));
@@ -14,7 +15,7 @@ function fixture(t) {
   const transport = { kind: 'bounded-dossier-source-review-transport', rows: [['s0001', '王偉𠀀至。', 'Wang Wei arrived.']] };
   const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
   const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
-  const receipt = { packetBytes: sourceBytes.length, sourcePacketSha256: identityArtifactHash(sourceBytes),
+  const receipt = { transportPolicy: identityReviewTransportPolicy(), packetBytes: sourceBytes.length, sourcePacketSha256: identityArtifactHash(sourceBytes),
     transportBytes: transportBytes.length, transportSha256: identityArtifactHash(transportBytes) };
   return { root, out: path.join(root, 'prepared'), value: { plan, packet, transport, receipt }, sourceBytes, transportBytes };
 }
@@ -29,6 +30,14 @@ test('prepared transport and primary source files match their sealed UTF-8 bytes
   assert.equal(bytes.length, receipt.transportBytes);
   assert.equal(identityArtifactHash(bytes), receipt.transportSha256);
   assert.notEqual(bytes.length, Buffer.byteLength(JSON.stringify(f.value.transport, null, 2) + '\n'));
+});
+
+test('dispatch preflight rejects absent or invalid pinned transport policy before writing', t => {
+  for (const policy of [undefined, { schemaVersion: 1, maxBytes: 769 * 1024 }, { schemaVersion: 1, maxBytes: 256 * 1024, extra: true }]) {
+    const f = fixture(t); f.value.receipt.transportPolicy = policy;
+    assert.throws(() => validatePreparedIdentityReviewArtifacts(f.value), /Explicit sealed identity transport policy/);
+    assert.equal(fs.existsSync(f.out), false);
+  }
 });
 
 test('changed source or transport seals fail before creating an output directory', t => {

@@ -15,7 +15,7 @@ import { editorialDecisionPath } from './people-editorial-decisions.mjs';
 import { assertChapterGates } from './people-qualified-scope.mjs';
 import { acquireProcessRunLock } from './process-run-lock.mjs';
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime, pinnedIdentityHostGeneratedDirectory } from './people-pinned-identity-source.mjs';
-import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts, MAX_IDENTITY_REVIEW_TRANSPORT_BYTES } from './people-identity-review-transport.mjs';
+import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts, identityReviewTransportMaxBytes } from './people-identity-review-transport.mjs';
 const need = (condition, message) => { if (!condition) throw new Error(message); };
 
 // The job journal is host-owned captured transport metadata. A remote worker
@@ -30,19 +30,19 @@ export function createIdentityReviewBundle(packetBytes, reportBytes, job, supple
   need(original.reviewer?.agentId === job.agentId && original.planFingerprint === packet.plan.fingerprint, 'Report is not from the actual assigned independent reviewer');
   let partReceipts = null;
   if (job.kind === 'captured-independent-identity-review-parts') {
-    const expected = splitChapterIdentityReviewTransport(compactChapterIdentityReviewPacket(packet), MAX_IDENTITY_REVIEW_TRANSPORT_BYTES);
+    const expected = splitChapterIdentityReviewTransport(compactChapterIdentityReviewPacket(packet), identityReviewTransportMaxBytes(job.transportPolicy));
     need(Array.isArray(job.parts) && job.parts.length === expected.length && partArtifacts.length === expected.length, 'All captured independent review parts are required');
     const transports = [], reports = [];
     for (const [i, capture] of job.parts.entries()) {
       const artifact = partArtifacts[i], transport = JSON.parse(artifact.transportBytes), report = JSON.parse(artifact.reportBytes);
       need(capture.schemaVersion === 1 && capture.kind === 'captured-independent-identity-review-part' && capture.phase === 'report-recorded' &&
-        capture.agentId === job.agentId && typeof capture.runId === 'string' && capture.runId && capture.sourcePacketSha256 === job.sourcePacketSha256 &&
+        typeof capture.agentId === 'string' && capture.agentId && report.reviewer?.agentId === capture.agentId && typeof capture.runId === 'string' && capture.runId && capture.sourcePacketSha256 === job.sourcePacketSha256 &&
         capture.transportSha256 === identityArtifactHash(artifact.transportBytes) && capture.reportSha256 === identityArtifactHash(artifact.reportBytes) &&
         identityArtifactHash(artifact.transportBytes) === identityArtifactHash(Buffer.from(JSON.stringify(expected[i]) + '\n')),
         'Actual captured identity part bytes/provenance do not match');
       transports.push(transport); reports.push(report);
     }
-    need(job.runId === job.parts.at(-1).runId, 'Aggregate identity journal must retain the actual final part run');
+    need(job.parts.some(part => part.agentId === job.agentId && part.runId === job.runId), 'Aggregate identity journal must retain an actual contributor and their matching run');
     const assembled = assembleChapterIdentityReviewParts(packet.plan, transports, reports, job.parts.map(p => p.agentId), packet.authorAgentIds);
     need(peopleDigest(assembled) === peopleDigest(original), 'Recorded aggregate report differs from actual independent part reports');
     partReceipts = job.parts.map((p, i) => ({ agentId: p.agentId, runId: p.runId, packetSha256: p.sourcePacketSha256, transportSha256: p.transportSha256,

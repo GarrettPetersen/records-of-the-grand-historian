@@ -243,10 +243,25 @@ adoption, data qualification and live publication separately.
 Keep the complete source packet and the full plan. Oversized transports split by
 case ownership within the existing byte ceiling. Each part includes the complete
 target chapter and every cited claim and mention unit for its people and anchors.
-Preserve each actual report, producer and sealed part hash. All owned cases must
-assemble exactly once, with one actual independent reviewer retained across parts;
-then run the normal full-plan identity validator and publication gates. No part by
-itself certifies a chapter. Single cases that exceed the bound stay held.
+Preserve each actual report, producer and sealed part hash. Assign new unreviewed
+parts to independent conversations rather than accumulating every part in one
+context; keep the one-active-cloud-assignment resource profile. Recover an existing
+part's producer and saved result before replacing work. All owned cases must assemble
+exactly once, and every actual part producer must be independent of every extractor.
+The aggregate names a real contributing reviewer and retains the producer of each
+case. Then run the normal full-plan identity validator and publication gates. No
+part itself certifies a chapter. Single cases that exceed the bound stay held.
+
+Fresh preparation defaults to 256 KiB parts. Its receipt pins `transportPolicy`
+(`schemaVersion: 1`, `maxBytes`) within the 768 KiB absolute ceiling. Run the read-only
+`validatePreparedIdentityReviewArtifacts` preflight before model dispatch, and copy
+that exact policy into the captured part journal. Recording reproduces the pinned
+layout rather than applying a later default. A retained journal without this policy
+requires explicit host reconciliation against its original preparation/invocation
+and byte-identical parts; preserve the original journal and provider reports. Never
+guess a policy, silently fall back, or retag a report to fit a new layout. Completed
+identity proofs keep their normal unchanged-source revalidation path. A smaller part
+limit alone does not prove lower compaction, cost or one-hour throughput.
 
 Chunked extractions identify their actual contributing agents through `run.chunks`.
 Exclude every actual chunk author from independent review; never invent an aggregate
