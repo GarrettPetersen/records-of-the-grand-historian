@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {observeProvider} from './provider-observation.mjs';
+const dir=new URL('.',import.meta.url).pathname,number=Number(process.argv[2]);
+if(!Number.isInteger(number)||number<3||number>9)throw Error('Prepared part number required');
+const stem=`part-${String(number).padStart(3,'0')}`,state=JSON.parse(fs.readFileSync(dir+'review-state.json')),part=state.parts[number-1];
+if(state.phase!=='reviewing'||part.phase!=='prepared'||state.parts.some(p=>['running','dispatch-reserved'].includes(p.phase))||Date.now()>=Date.parse(state.deadlineAt))throw Error('Ownership, stage or concurrency blocks dispatch');
+const producer=observeProvider(row=>row.name===`Jinshu 093 dossier review ${String(number).padStart(2,'0')}`);
+if(producer.lastMessageId!=='tbs0')throw Error('Expected fresh independent conversation');
+const packet=JSON.parse(fs.readFileSync(dir+'source-review-packet.json'));if(packet.authorAgentIds.includes(producer.id))throw Error('Extractor cannot independently review');
+const prompt=fs.readFileSync(dir+'part-001-prompt.txt','utf8').replaceAll('the10',`the${part.caseIds.length}`).replaceAll('all10',`all${part.caseIds.length}`).replaceAll('transport-part-001',`transport-${stem}`).replaceAll('d4481262-b52b-4f6d-873d-7953bb6343ad',producer.id);
+fs.writeFileSync(dir+stem+'-prompt.txt',prompt,{flag:'wx'});
+Object.assign(part,{phase:'dispatch-reserved',agentId:producer.id,producerObservation:producer,promptFile:dir+stem+'-prompt.txt',promptSha256:createHash('sha256').update(prompt).digest('hex'),dispatchReservedAt:new Date().toISOString()});
+fs.writeFileSync(dir+'review-state.tmp',JSON.stringify(state,null,2)+'\n');fs.renameSync(dir+'review-state.tmp',dir+'review-state.json');
+console.log(JSON.stringify({number,producer,cases:part.caseIds.length,deadlineAt:state.deadlineAt}));
