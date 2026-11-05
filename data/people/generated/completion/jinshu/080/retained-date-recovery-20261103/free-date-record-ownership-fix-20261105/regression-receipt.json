@@ -1,0 +1,161 @@
+{
+  "at": "2026-11-05T17:47:19.358Z",
+  "kind": "offline-openrouter-date-record-ownership-regressions",
+  "productionRuntimeUnchanged": true,
+  "modelCalls": 0,
+  "proposedPassed": 6,
+  "originalFailuresReproduced": 4,
+  "results": [
+    {
+      "variant": "before",
+      "case": "reject-prefixed-item-id",
+      "passed": false,
+      "keys": [
+        "check-claim-1"
+      ],
+      "toolResult": {
+        "saved": [
+          "check-claim-1"
+        ],
+        "total": 1
+      }
+    },
+    {
+      "variant": "before",
+      "case": "reject-unowned-person-id",
+      "passed": false,
+      "keys": [
+        "p999"
+      ],
+      "toolResult": {
+        "saved": [
+          "p999"
+        ],
+        "total": 1
+      }
+    },
+    {
+      "variant": "before",
+      "case": "reject-mixed-batch-without-partial-write",
+      "passed": false,
+      "keys": [
+        "claim-1"
+      ],
+      "toolResult": {
+        "ok": false,
+        "error": "Invalid date record"
+      }
+    },
+    {
+      "variant": "before",
+      "case": "reject-duplicate-key-atomically",
+      "passed": false,
+      "keys": [
+        "claim-1"
+      ],
+      "toolResult": {
+        "saved": [
+          "claim-1",
+          "claim-1"
+        ],
+        "total": 1
+      }
+    },
+    {
+      "variant": "before",
+      "case": "allow-correction-in-later-call",
+      "passed": true,
+      "keys": [
+        "claim-1"
+      ],
+      "toolResult": {
+        "saved": [
+          "claim-1"
+        ],
+        "total": 1
+      }
+    },
+    {
+      "variant": "before",
+      "case": "preserve-repair-record-keys",
+      "passed": true,
+      "keys": [
+        "change-1"
+      ],
+      "toolResult": {
+        "saved": [
+          "change-1"
+        ],
+        "total": 1
+      }
+    },
+    {
+      "variant": "proposed",
+      "case": "reject-prefixed-item-id",
+      "passed": true,
+      "keys": [],
+      "toolResult": {
+        "ok": false,
+        "error": "Date check ID check-claim-1 is not owned by this job; use the exact owned ID as both key and value.id"
+      }
+    },
+    {
+      "variant": "proposed",
+      "case": "reject-unowned-person-id",
+      "passed": true,
+      "keys": [],
+      "toolResult": {
+        "ok": false,
+        "error": "Date check ID p999 is not owned by this job; use the exact owned ID as both key and value.id"
+      }
+    },
+    {
+      "variant": "proposed",
+      "case": "reject-mixed-batch-without-partial-write",
+      "passed": true,
+      "keys": [],
+      "toolResult": {
+        "ok": false,
+        "error": "Invalid date record"
+      }
+    },
+    {
+      "variant": "proposed",
+      "case": "reject-duplicate-key-atomically",
+      "passed": true,
+      "keys": [],
+      "toolResult": {
+        "ok": false,
+        "error": "Duplicate date record key within one batch"
+      }
+    },
+    {
+      "variant": "proposed",
+      "case": "allow-correction-in-later-call",
+      "passed": true,
+      "keys": [
+        "claim-1"
+      ],
+      "toolResult": {
+        "saved": [
+          "claim-1"
+        ],
+        "total": 1
+      }
+    },
+    {
+      "variant": "proposed",
+      "case": "preserve-repair-record-keys",
+      "passed": true,
+      "keys": [
+        "change-1"
+      ],
+      "toolResult": {
+        "saved": [
+          "change-1"
+        ],
+        "total": 1
+      }
+    }
+  ]
+}

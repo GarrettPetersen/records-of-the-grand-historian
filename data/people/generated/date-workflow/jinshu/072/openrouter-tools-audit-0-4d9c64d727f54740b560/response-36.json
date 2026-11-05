@@ -1,0 +1,65 @@
+{
+  "id": "gen-1793900245-jTCr2Ay35OdI9HbCpvfL",
+  "object": "chat.completion",
+  "created": 1793900245,
+  "model": "dots-studio/dots-3-note-preview:free",
+  "provider": "AtlasCloud",
+  "system_fingerprint": null,
+  "service_tier": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "tool_calls",
+      "native_finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "\n\n\n",
+        "refusal": null,
+        "reasoning": "All item checks and person checks are saved. Now I need to assemble the final artifact. Let me verify the saved records first.\n",
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_c2b2e9ec1d92415898b3081f",
+            "function": {
+              "name": "read_saved",
+              "arguments": "{\"section\": \"itemChecks\", \"start\": 0, \"count\": 5}"
+            }
+          }
+        ],
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "All item checks and person checks are saved. Now I need to assemble the final artifact. Let me verify the saved records first.\n",
+            "format": "unknown",
+            "index": 0
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17352,
+    "completion_tokens": 76,
+    "total_tokens": 17428,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 15360,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 33,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

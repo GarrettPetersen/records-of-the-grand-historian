@@ -1,0 +1,65 @@
+{
+  "id": "gen-1793900812-LP7vWefzII3g51jF5qhP",
+  "object": "chat.completion",
+  "created": 1793900812,
+  "model": "dots-studio/dots-3-note-preview:free",
+  "provider": "AtlasCloud",
+  "system_fingerprint": null,
+  "service_tier": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "tool_calls",
+      "native_finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "\n\n\n",
+        "refusal": null,
+        "reasoning": "Good, the three problematic checks have been saved with corrected keys and improved reasoning. Now I need to check the remaining saved records to ensure all keys have the correct check- prefix. Let me read the full saved itemChecks and personChecks to verify.\n",
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_184f4976b49b454bbaa1036b",
+            "function": {
+              "name": "read_saved",
+              "arguments": "{\"section\": \"itemChecks\", \"start\": 0, \"count\": 27}"
+            }
+          }
+        ],
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "Good, the three problematic checks have been saved with corrected keys and improved reasoning. Now I need to check the remaining saved records to ensure all keys have the correct check- prefix. Let me read the full saved itemChecks and personChecks to verify.\n",
+            "format": "unknown",
+            "index": 0
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 21516,
+    "completion_tokens": 101,
+    "total_tokens": 21617,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 66,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

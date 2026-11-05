@@ -1,0 +1,32 @@
+--- a/scripts/lib/openrouter-date-tools.mjs
++++ b/scripts/lib/openrouter-date-tools.mjs
+@@ -12,7 +12,7 @@
+ export const OPENROUTER_DATE_TOOLS = [
+   tool('read_packet', 'Read one bounded slice of the sealed date evidence. Read all owned units and assigned checks before finishing.',
+     object({ section: string, start: { type: 'integer', minimum: 0 }, count: { type: 'integer', minimum: 1, maximum: 10 } })),
+-  tool('save_records', 'Upsert up to five review checks, findings, references, or repair changes. Each entry has a stable key and a nonempty object value that belongs in the final artifact. Never save empty arrays or placeholder records; if a section has no records, skip it. Use another call for corrections; saved records survive interruptions.',
++  tool('save_records', 'Upsert up to five review checks, findings, references, or repair changes. Each entry has a stable key and a nonempty object value that belongs in the final artifact. For itemChecks and personChecks, both key and value.id must be the exact owned ID; never add a check- prefix. Never save empty arrays or placeholder records; if a section has no records, skip it. Use another call for corrections; saved records survive interruptions.',
+     object({ section: { type: 'string', enum: [...REVIEW_SECTIONS, ...REPAIR_SECTIONS] }, records: { type: 'array', minItems: 1, maxItems: 5,
+       items: object({ key: string, value: { type: 'object' } }) } })),
+   tool('read_saved', 'Inspect saved records before correcting or finishing.',
+@@ -114,11 +114,18 @@
+           } else if (call.function.name === 'save_records') {
+             const allowed = task.kind === 'review' ? REVIEW_SECTIONS : REPAIR_SECTIONS;
+             if (!allowed.includes(args.section) || !Array.isArray(args.records) || !args.records.length || args.records.length > 5) throw new Error('Invalid date record batch');
++            const isCheck = ['itemChecks', 'personChecks'].includes(args.section);
++            const owned = new Set(args.section === 'itemChecks' ? input.ownedItems : args.section === 'personChecks' ? input.ownedPeople : []);
++            const keys = new Set();
++            // Validate the complete call before mutating the retained draft.
+             for (const row of args.records) {
+               if (!/^[a-zA-Z0-9_-]{1,80}$/.test(row.key) || !row.value || typeof row.value !== 'object' || Array.isArray(row.value) || !Object.keys(row.value).length) throw new Error('Invalid date record');
+-              if (['itemChecks', 'personChecks'].includes(args.section) && row.value.id !== row.key) throw new Error('Date check key must match its ID');
+-              next.records[args.section][row.key] = row.value;
++              if (keys.has(row.key)) throw new Error('Duplicate date record key within one batch');
++              keys.add(row.key);
++              if (isCheck && row.value.id !== row.key) throw new Error('Date check key must match its ID');
++              if (isCheck && !owned.has(row.key)) throw new Error(`Date check ID ${row.key} is not owned by this job; use the exact owned ID as both key and value.id`);
+             }
++            for (const row of args.records) next.records[args.section][row.key] = row.value;
+             next.finished = false;
+             result = { saved: args.records.map(row => row.key), total: Object.keys(next.records[args.section]).length };
+           } else if (call.function.name === 'finish_date') {

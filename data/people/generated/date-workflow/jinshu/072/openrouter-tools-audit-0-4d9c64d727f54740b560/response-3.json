@@ -1,0 +1,65 @@
+{
+  "id": "gen-1791503984-KqJiegDY3njR4pv8Gfan",
+  "object": "chat.completion",
+  "created": 1791503984,
+  "model": "dots-studio/dots-3-note-preview:free",
+  "provider": "AtlasCloud",
+  "system_fingerprint": null,
+  "service_tier": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "tool_calls",
+      "native_finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "\n\n\n",
+        "refusal": null,
+        "reasoning": "I'll continue reading units.",
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_a97ce6c22acb43fbb1170e47",
+            "function": {
+              "name": "read_packet",
+              "arguments": "{\"section\": \"units\", \"start\": 20, \"count\": 10}"
+            }
+          }
+        ],
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "I'll continue reading units.",
+            "format": "unknown",
+            "index": 0
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 4300,
+    "completion_tokens": 57,
+    "total_tokens": 4357,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 7,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

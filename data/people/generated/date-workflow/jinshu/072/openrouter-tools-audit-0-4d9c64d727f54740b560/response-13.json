@@ -1,0 +1,65 @@
+{
+  "id": "gen-1791504138-fL8Vcr1GXgUcFucLyApZ",
+  "object": "chat.completion",
+  "created": 1791504138,
+  "model": "dots-studio/dots-3-note-preview:free",
+  "provider": "AtlasCloud",
+  "system_fingerprint": null,
+  "service_tier": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "tool_calls",
+      "native_finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "\n\n\n",
+        "refusal": null,
+        "reasoning": "Now I have all the data. Let me also check if there's a contextItems section I need to read. The instructions say \"Only these evidence sections need reading: units, items, people, contextItems.\" Let me check contextItems.\n\nActually, I've read units, items, people. Let me check if there are contextItems.\n",
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_804e06f918de47adbde62778",
+            "function": {
+              "name": "read_packet",
+              "arguments": "{\"section\": \"contextItems\", \"start\": 0, \"count\": 10}"
+            }
+          }
+        ],
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "Now I have all the data. Let me also check if there's a contextItems section I need to read. The instructions say \"Only these evidence sections need reading: units, items, people, contextItems.\" Let me check contextItems.\n\nActually, I've read units, items, people. Let me check if there are contextItems.\n",
+            "format": "unknown",
+            "index": 0
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10335,
+    "completion_tokens": 120,
+    "total_tokens": 10455,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 9728,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 78,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

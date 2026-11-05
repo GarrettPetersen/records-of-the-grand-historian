@@ -142,6 +142,27 @@ files.append(audit/'handoff-before-semantic-reuse-diagnostic-20261105.md')
 files.append(audit/'handoff-before-native-dossier-delta-20261105.md')
 files.append(audit/'handoff-before-proof-composition-wip-20261105.md')
 files.append(audit/'handoff-before-strict-author-journal-approved-20261105.md')
+# Retained free-lane recovery and focused source proposals remain incomplete.
+# Individual provider responses are replayable; full conversation snapshots stay private.
+dateResearch=prepared109/'candidate-date-review-1-20261105'
+for pattern in ['focused-date-research-20261105*','p112-label-source-closure-20261105']:
+ for folder in dateResearch.glob(pattern):
+  if folder.is_dir():files += list(folder.glob('*.json'))
+for folder in audit.glob('free072-*'):
+ if folder.is_dir():
+  for extension in ['json','jsonl','txt','mjs']:
+   files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
+freeFix=audit/'free-date-record-ownership-fix-20261105'
+for extension in ['json','mjs']:files += list(freeFix.glob('*.'+extension))
+for extension in ['json','mjs','md','log']:
+ files += list((audit/'free-date-record-ownership-pr-20261105').glob('*.'+extension))
+files.append(audit/'free-date-record-ownership-proposal.patch')
+wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
+files += list(wf072.glob('*.json'))
+tools072=wf072/'openrouter-tools-audit-0-4d9c64d727f54740b560'
+files += list(tools072.glob('response-*.json'))
+files=[p for p in files if not p.name.endswith('.private.json')]
+files.append(base/'nov05-focused-research-and-free-calibration-metrics.json')
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()

@@ -1,0 +1,161 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import test from 'node:test';
+import { assertFreeModel, openRouterFreeJson, openRouterFreeCompletion } from './lib/openrouter-free.mjs';
+import { openRouterDateWorker } from './lib/people-date-worker.mjs';
+import { runOpenRouterDateTools } from './lib/openrouter-date-tools.mjs';
+
+const catalog = { data: [{ id: 'fixture/model:free', pricing: { prompt: '0', completion: '0' },
+  top_provider: { max_completion_tokens: 2048 } }] };
+const reply = (body, status = 200) => ({ ok: status === 200, status, headers: { get: () => null }, json: async () => body });
+
+test('rejects paid, missing, and unverified models before inference', () => {
+  assert.equal(assertFreeModel('fixture/model:free', catalog).id, 'fixture/model:free');
+  assert.throws(() => assertFreeModel('fixture/model', catalog), /free/);
+  assert.throws(() => assertFreeModel('missing:free', catalog), /unavailable/);
+  assert.throws(() => assertFreeModel('paid:free', { data: [{ id: 'paid:free', pricing: { prompt: '0.01', completion: '0' } }] }), /zero-priced/);
+});
+
+test('free completion validates route, JSON, and cost', async () => {
+  const fetchImpl = async (url, options) => url.endsWith('/models') ? reply(catalog) :
+    reply({ model: 'fixture/model:free', choices: [{ message: { content: '{"ok":true}' } }], usage: { cost: 0 } });
+  const result = await openRouterFreeJson({ key: 'fixture', model: 'fixture/model:free', messages: [{ role: 'user', content: 'test' }], maxTokens: 16, fetchImpl });
+  assert.deepEqual(result.artifact, { ok: true });
+  await assert.rejects(openRouterFreeJson({ key: 'fixture', model: 'fixture/model:free', messages: [{ role: 'user', content: 'test' }], maxTokens: 3000, fetchImpl }), /limit/);
+  const bad = async url => url.endsWith('/models') ? reply(catalog) : reply({ model: 'paid/model', choices: [{ message: { content: '{}' } }] });
+  await assert.rejects(openRouterFreeJson({ key: 'fixture', model: 'fixture/model:free', messages: [{ role: 'user', content: 'test' }], maxTokens: 16, fetchImpl: bad }), /unexpected model/);
+});
+
+test('tool completion keeps reasoning and tool calls enabled', async () => {
+  let sent;
+  const fetchImpl = async (url, options) => {
+    if (url.endsWith('/models')) return reply(catalog);
+    sent = JSON.parse(options.body);
+    return reply({ model: 'fixture/model:free', choices: [{ finish_reason: 'tool_calls', message: { tool_calls: [] } }], usage: { cost: 0 } });
+  };
+  await openRouterFreeCompletion({ key: 'fixture', model: 'fixture/model:free', messages: [{ role: 'user', content: 'test' }],
+    tools: [{ type: 'function', function: { name: 'ping', parameters: { type: 'object', properties: {} } } }], maxTokens: 16, fetchImpl });
+  assert.equal(sent.reasoning.enabled, true);
+  assert.equal(sent.tools[0].function.name, 'ping');
+  assert.equal(sent.response_format, undefined);
+});
+
+test('date worker checkpoints artifact and separates reviewer identity', async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'openrouter-date-test-'));
+  try {
+    const state = {};
+    let calls = 0;
+    const worker = openRouterDateWorker({ key: 'fixture', model: 'fixture/model:free', maxWorkerBytes: 100000,
+      timeoutMs: 1000, saveRemoteJob: async () => {}, request: async ({ onResponse }) => {
+        calls++;
+        const response = { model: 'fixture/model:free', choices: [{ finish_reason: 'tool_calls', message: {
+          role: 'assistant', content: null, tool_calls: [{ id: 'call-1', type: 'function', function: {
+            name: 'finish_date', arguments: JSON.stringify({ summary: 'Every assigned source unit was checked.', blocked: false, reason: '' }),
+          } }],
+        } }] };
+        await onResponse(response);
+        return response;
+      } });
+    const task = { kind: 'review', key: 'audit-0-001', job: { book: 'fixture', chapter: '001', id: 'job-001',
+      sourceHash: 'sha256:source', extractionHash: 'sha256:extraction', ownedUnits: [], ownedItems: [], ownedPeople: [], units: [] },
+      directory, state, save: async patch => Object.assign(state, patch) };
+    const artifact = await worker(task);
+    assert.equal(artifact.reviewer.independentOfExtractor, true);
+    assert.equal(artifact.reviewer.agentId, 'openrouter:fixture/model:free:review:audit-0-001');
+    assert.equal((await worker(task)).summary, 'Every assigned source unit was checked.');
+    assert.equal(calls, 1);
+    assert.equal(fs.readdirSync(directory).length, 2);
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+});
+
+
+test("date worker checkpoints an artifact-only recovery interruption", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "openrouter-date-recovery-test-"));
+  try {
+    const state = {};
+    let requested = false;
+    const worker = openRouterDateWorker({ key: "fixture", model: "fixture/model:free", maxWorkerBytes: 100000,
+      timeoutMs: 1000, recoverOnly: true, saveRemoteJob: async () => {}, request: async () => {
+        requested = true;
+        throw new Error("artifact-only recovery must not make a request");
+      } });
+    const task = { kind: "review", key: "audit-0-002", job: { book: "fixture", chapter: "001", id: "job-002",
+      sourceHash: "sha256:source", extractionHash: "sha256:extraction", ownedUnits: [], ownedItems: [], ownedPeople: [], units: [] },
+      directory, state, save: async patch => Object.assign(state, patch) };
+    await assert.rejects(worker(task), /Artifact-only recovery cannot start/);
+    assert.equal(requested, false);
+    assert.equal(state.status, "interrupted");
+    assert.match(state.lastError, /Artifact-only recovery cannot start/);
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+});
+
+// Exercise the persisted draft through real tool responses, including replay-safe
+// corrections in later calls. No inference or network requests are made.
+async function savedDateBatch(calls, { kind = 'review', section = 'itemChecks' } = {}) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'openrouter-date-batch-test-'));
+  const task = { kind, key: 'audit-fixture', directory, state: {} };
+  const input = { instructions: 'Offline record-contract regression.', phase: kind,
+    book: 'fixture', chapter: '001', ownedUnits: [], ownedItems: ['claim-1'], ownedPeople: ['p001'] };
+  let requests = 0;
+  try {
+    await assert.rejects(runOpenRouterDateTools(task, { input, key: 'unused', model: 'fixture/model:free',
+      timeoutMs: 1, maxTurns: calls.length, request: async () => {
+        const args = calls[requests++];
+        assert.ok(args, 'Unexpected extra request');
+        return { choices: [{ finish_reason: 'tool_calls', message: { role: 'assistant', content: null,
+          tool_calls: [{ id: `call-${requests}`, type: 'function', function: {
+            name: 'save_records', arguments: JSON.stringify(args) } }] } }] };
+      } }), /paused after/);
+    assert.equal(requests, calls.length);
+    const state = JSON.parse(fs.readFileSync(path.join(directory, `openrouter-tools-${task.key}`, 'state.json')));
+    return { records: state.records[section], result: JSON.parse(state.messages.at(-1).content) };
+  } finally { fs.rmSync(directory, { recursive: true, force: true }); }
+}
+const dateCheck = (id, reason = 'The sealed Chinese source supports this exact owned event.') => ({ key: id,
+  value: { id, verdict: 'supported', reason, event: 'The person participates in the source event.',
+    evidence: [{ unit: 's0001', quote: '例' }] } });
+
+test('date tools reject a prefixed item ID before saving it', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'itemChecks', records: [dateCheck('check-claim-1')] }]);
+  assert.deepEqual(records, {});
+  assert.match(result.error, /not owned/);
+});
+
+test('date tools reject an unowned person ID before saving it', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'personChecks', records: [dateCheck('p999')] }], { section: 'personChecks' });
+  assert.deepEqual(records, {});
+  assert.match(result.error, /not owned/);
+});
+
+test('date tools reject a malformed batch without partially changing the draft', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'itemChecks', records: [dateCheck('claim-1'),
+    { key: 'invalid:key', value: { id: 'invalid:key' } }] }]);
+  assert.deepEqual(records, {});
+  assert.match(result.error, /Invalid date record/);
+});
+
+test('date tools reject duplicate keys in one batch without changing the draft', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'itemChecks', records: [dateCheck('claim-1'),
+    dateCheck('claim-1', 'A second value must not overwrite the first within a malformed batch.')] }]);
+  assert.deepEqual(records, {});
+  assert.match(result.error, /Duplicate/);
+});
+
+test('date tools allow correcting the same owned record in a later call', async () => {
+  const corrected = 'The corrected check cites the independently inspected source evidence.';
+  const { records, result } = await savedDateBatch([
+    { section: 'itemChecks', records: [dateCheck('claim-1')] },
+    { section: 'itemChecks', records: [dateCheck('claim-1', corrected)] }]);
+  assert.equal(records['claim-1'].reason, corrected);
+  assert.deepEqual(result.saved, ['claim-1']);
+});
+
+test('date tools preserve stable repair keys independently of review ownership IDs', async () => {
+  const { records, result } = await savedDateBatch([{ section: 'changes', records: [{ key: 'change-1',
+    value: { kind: 'remove', id: 'claim-1', reason: 'The source disproves the inferred activity date.' } }] }],
+    { kind: 'repair', section: 'changes' });
+  assert.deepEqual(Object.keys(records), ['change-1']);
+  assert.deepEqual(result.saved, ['change-1']);
+});

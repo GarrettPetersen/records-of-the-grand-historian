@@ -1,0 +1,65 @@
+{
+  "id": "gen-1791503995-6L9zJu1y8pSowtLYpado",
+  "object": "chat.completion",
+  "created": 1791503995,
+  "model": "dots-studio/dots-3-note-preview:free",
+  "provider": "AtlasCloud",
+  "system_fingerprint": null,
+  "service_tier": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "tool_calls",
+      "native_finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "\n\n\n",
+        "refusal": null,
+        "reasoning": "The units list shows gaps: s0052-s0056 missing. Let me read more. Total is 51 rows, and I've seen s0002-s0051, s0057. Let me read from 47 again with count 10 — it returned s0049, s0050, s0051, s0057. So s0052-s0056 don't exist? But owned units include s0052...s0057. Wait, owned units list: s0002 through s0047, then s0048...s0057? Let me check: owned units are s0002..s0047 (that's 46 units) plus... let me count: s0002,s0003,...,s0047 = 46 units. The list given: [\"s0002\",...,\"s0047\"] — yes 46 units. So s0052-s0057 are NOT owned. Good. So I've read all owned units: s0002-s0051 (50 units) and s0057 is not owned. Wait, but I read s0057 in the last call. It's not owned, so ignore.\n\nActually owned units end at s0047. I've read s0002-s0051 which includes s0048-s0051 not owned. That's fine, extra reading is okay. But I should focus on owned. Let me now read items and people.\n\nLet me read the items section.",
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_733656ddf15344558c0295ba",
+            "function": {
+              "name": "read_packet",
+              "arguments": "{\"section\": \"items\", \"start\": 0, \"count\": 10}"
+            }
+          }
+        ],
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "The units list shows gaps: s0052-s0056 missing. Let me read more. Total is 51 rows, and I've seen s0002-s0051, s0057. Let me read from 47 again with count 10 — it returned s0049, s0050, s0051, s0057. So s0052-s0056 don't exist? But owned units include s0052...s0057. Wait, owned units list: s0002 through s0047, then s0048...s0057? Let me check: owned units are s0002..s0047 (that's 46 units) plus... let me count: s0002,s0003,...,s0047 = 46 units. The list given: [\"s0002\",...,\"s0047\"] — yes 46 units. So s0052-s0057 are NOT owned. Good. So I've read all owned units: s0002-s0051 (50 units) and s0057 is not owned. Wait, but I read s0057 in the last call. It's not owned, so ignore.\n\nActually owned units end at s0047. I've read s0002-s0051 which includes s0048-s0051 not owned. That's fine, extra reading is okay. But I should focus on owned. Let me now read items and people.\n\nLet me read the items section.",
+            "format": "unknown",
+            "index": 0
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 6505,
+    "completion_tokens": 427,
+    "total_tokens": 6932,
+    "cost": 0,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 6144,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 230,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}
