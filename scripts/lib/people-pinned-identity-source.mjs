@@ -120,10 +120,14 @@ export function provePinnedDossierReuse(registryProvenance, current, { runtimeRo
   const unchangedChapters = [];
   if (changedChapters.size) {
     const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);
+    // assertPinnedIdentityRuntime above already checks the glossary bytes and
+    // the transitive matcher/scanner code against this exact pinned snapshot.
     const properNounMatcher = loadProperNounMatcher();
     for (const [key, scope] of [...changedChapters].sort(([a], [b]) => a.localeCompare(b, 'en'))) {
-      // Both sides use the production validator and the unchanged construction
-      // runtime/configuration. Unextracted/invalid chapters cannot be reused.
+      // Match native registry construction's production validation contract.
+      // Strict alias-disposition checks remain mandatory for the TARGET in
+      // preparation/recording; index reuse grants no chapter approval and must
+      // not recursively require publication readiness of evidence chapters.
       const options = { properNounMatcher, strictAliasDispositions: false };
       let proof;
       try { proof = proveUnchangedIdentityChapter(before.load(scope.book, scope.chapter, options), after.load(scope.book, scope.chapter, options)); }
@@ -134,7 +138,7 @@ export function provePinnedDossierReuse(registryProvenance, current, { runtimeRo
   return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
     retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
     dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
-    ...(changedData.length ? { changedData, unchangedChapters } : {}),
+    ...(changedData.length ? { changedData, unchangedChapters, normalizationGlossaryBlob: current.regular('data/glossary.json').oid } : {}),
     registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
 }
 

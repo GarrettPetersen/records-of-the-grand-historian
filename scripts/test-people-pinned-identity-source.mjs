@@ -79,6 +79,10 @@ test('dirty runtime dependencies, added schemas and symlinks cannot pass the pin
  const f=fixture(t);f.write('scripts/lib/leaf.mjs','changed');assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/Runtime index dependency differs/);f.write('scripts/lib/leaf.mjs','export const leaf=true;\n');f.json('data/people/schema/extra.schema.json',{});assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/inventory differs/);fs.unlinkSync(path.join(f.root,'data/people/schema/extra.schema.json'));
  const file=path.join(f.root,'data/glossary.json'),saved=path.join(f.root,'saved-glossary');fs.renameSync(file,saved);fs.symlinkSync(saved,file);assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/regular file/);
 });
+test('a dirty runtime glossary is rejected before dossier reuse normalization',t=>{
+ const f=fixture(t);f.json('data/glossary.json',{changed:{text:'甲',isProperNoun:true}});
+ assert.throws(()=>provePinnedDossierReuse(f.provenance,f.snapshot,{runtimeRoot:f.root,codeRoot:f.root}),/Runtime index configuration differs: data\/glossary.json/);
+});
 test('computed index imports and nonregular committed data fail loudly',t=>{
  const f=fixture(t);f.write('scripts/lib/leaf.mjs','export const x=import(variable);\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>current.codeDependencies(),/Computed index dependency/);
  const g=fixture(t);fs.unlinkSync(path.join(g.root,'data/glossary.json'));fs.symlinkSync('people/config.json',path.join(g.root,'data/glossary.json'));const next=gitIdentitySnapshot(g.root,g.commit());assert.throws(()=>next.legacySeal(),/nonregular/);
