@@ -1,0 +1,5 @@
+Retained chapter identity reviews currently lose usable work after source corrections, and registry refreshes rebuild unrelated dossiers. This change revalidates each retained case against its current source and canonical assignment, preserves original reports and producer provenance, and transports only the remaining cases. Part captures require explicit, verified author journals; incomplete evidence stays incomplete and all normal date, identity and publication gates remain in place.
+
+Immutable registry deltas update only affected dossiers and indexed postings without generating same-name pair assignments. The current Jinshu 109 recovery retains 19 cases covering 28 records, leaving 122 cases outstanding; it does not approve or publish that chapter.
+
+Validation: 87 identity regression tests passed. Independent review approved both the delta implementation and the final proof-composition implementation, including the explicitly derived partial author journal. The last commit only clarifies that journal requirement in documentation. Normal CI must pass on this PR's final head before merge.

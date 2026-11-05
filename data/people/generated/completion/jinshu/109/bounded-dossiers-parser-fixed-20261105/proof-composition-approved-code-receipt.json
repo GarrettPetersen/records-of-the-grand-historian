@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-05T12:28:07.720939+00:00",
+  "codeRevision": "c1d7500a4635af591fae1c6f7614c4e6c67dcf75",
+  "kind": "independently-reviewed-native-composition-candidate",
+  "runtimeFilesHashVerified": 18,
+  "packageDiffVerified": true,
+  "reviewer": "e3c481e8-4dd5-4fdd-bd60-37306c8d72fe",
+  "runId": "t2s2",
+  "reportSha256": "783f9ef2466846f1757c5a761174a08d567e6465592b46a1418529e25fd29957",
+  "provenanceReview": {
+    "journalSha256": "92433bf25c46e9902ee285c6806fb4c4a6fe881ded5e5fd948537ea61b46f30c",
+    "verdict": "approve",
+    "reason": "The native author contract for this packet is packet.authorAgentIds. The recovery script (lines 16-19) recomputes it from the Git-pinned extraction at registryReuse.sourceRevision, ties it to plan.inputs.extraction, and checks that extractionAuthorAgentIds matches it exactly. The six IDs match the six chunk agentIds in the original extraction run (chunks 001-006). The run-level agentId and runId are null, so no other extraction producer exists. The historical controller is the only source that could add authors, and it never writes authorAgentIds into a capture (lines 126-134). It has no aggregate or override path. The script still unions any declared capture authors and rejects unknown capture keys (line 33), so no declared author is dropped or treated as empty. Each identityReport is checked byte-for-byte against the provider envelope's identityReport span (line 42). For the capture-derived part, the controller also checked that span against the host context envelope (controller lines 114-120), so host editorial context could not change the identity bytes. The script checks that none of the three reviewers is an input author (line 50). It also checks that no existing parent journal is overwritten (line 26), that the 8 unstarted parts have no producer (line 31), and that the original assembler required full coverage (line 52). The journal is marked derivedNow, historicalAggregateClaimed:false and coverageComplete:false, so it doesn't pose as a historical aggregate. The focused-English repair reviewer (state.repairReview.agentId) is the only other actor. It is outside this contract because its repairs are not in source packet d95ceca0 (sourceApplication is still awaiting native preparation). Once applied, they change the plan inputs and must go through new validation; they cannot inherit these components. Limitation: I checked the attached script, controller, hashes and journal structure, but could not re-hash the user's local files myself."
+  },
+  "testsPassed": 87,
+  "failed": 0,
+  "nativeRecoveredCases": 19,
+  "nativeRecoveredRecords": 28,
+  "remainingCases": 122,
+  "generatedPairs": 0,
+  "canonicalWrites": 0,
+  "chapterApproved": false,
+  "published": false,
+  "releaseCandidateRevision": "03ecda055cfff2abb05d5fcfd6590315efa8ba8d",
+  "documentationOnlyAfterReview": {
+    "path": "PEOPLE_DOSSIER_UPDATES.md",
+    "before": "for exact retained captures; include `aggregateJob` for a captured part with an\naggregate journal. Author exclusions include packet, part and aggregate authors.",
+    "after": "for exact retained captures. Every part entry must include `aggregateJob`.\nLegacy direct parts need a verified, explicitly derived partial journal; never\nguess omitted authors. Author exclusions include packet, part and aggregate authors.",
+    "runtimeCodeUnchanged": true
+  }
+}

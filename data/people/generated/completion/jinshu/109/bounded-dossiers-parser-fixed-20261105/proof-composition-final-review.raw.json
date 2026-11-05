@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "b09ad905e2e06290ed8b27d485b4e02d951120d583ca0b2c7f5577d9bad2a35c",
+  "reviewer": {
+    "agentId": "e3c481e8-4dd5-4fdd-bd60-37306c8d72fe",
+    "name": "Independent reviewer"
+  },
+  "verdict": "approve",
+  "findings": [],
+  "provenanceReview": {
+    "journalSha256": "92433bf25c46e9902ee285c6806fb4c4a6fe881ded5e5fd948537ea61b46f30c",
+    "verdict": "approve",
+    "reason": "The native author contract for this packet is packet.authorAgentIds. The recovery script (lines 16-19) recomputes it from the Git-pinned extraction at registryReuse.sourceRevision, ties it to plan.inputs.extraction, and checks that extractionAuthorAgentIds matches it exactly. The six IDs match the six chunk agentIds in the original extraction run (chunks 001-006). The run-level agentId and runId are null, so no other extraction producer exists. The historical controller is the only source that could add authors, and it never writes authorAgentIds into a capture (lines 126-134). It has no aggregate or override path. The script still unions any declared capture authors and rejects unknown capture keys (line 33), so no declared author is dropped or treated as empty. Each identityReport is checked byte-for-byte against the provider envelope's identityReport span (line 42). For the capture-derived part, the controller also checked that span against the host context envelope (controller lines 114-120), so host editorial context could not change the identity bytes. The script checks that none of the three reviewers is an input author (line 50). It also checks that no existing parent journal is overwritten (line 26), that the 8 unstarted parts have no producer (line 31), and that the original assembler required full coverage (line 52). The journal is marked derivedNow, historicalAggregateClaimed:false and coverageComplete:false, so it doesn't pose as a historical aggregate. The focused-English repair reviewer (state.repairReview.agentId) is the only other actor. It is outside this contract because its repairs are not in source packet d95ceca0 (sourceApplication is still awaiting native preparation). Once applied, they change the plan inputs and must go through new validation; they cannot inherit these components. Limitation: I checked the attached script, controller, hashes and journal structure, but could not re-hash the user's local files myself."
+  },
+  "summary": "Code approve, no findings. Part captures now require the aggregate journal (line 85), and the transport kind must match the capture kind (line 86). The parent is checked for schema, scope, kind, phase, source packet and the exact producer, run, report and transport tuple, and its author IDs must be explicit string arrays. Excluded authors are the union of packet, job and parent authors. Regression tests cover a missing journal, aggregate-only authors and a parent without this part. The derived jinshu/109 journal completely covers the native extraction-author contract and invents no historical parent. Remaining residual risk: the code cannot tell a derived journal from a native one, so integrity still depends on the source packet's own author list, which it always includes. That is acceptable."
+}

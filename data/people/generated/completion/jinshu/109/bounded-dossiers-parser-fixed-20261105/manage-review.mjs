@@ -23,7 +23,8 @@ need(hash(fs.readFileSync(dir + 'source-review-packet.json')) === state.sourcePa
 need(state.parts.length === receipt.reviewParts.length, 'Review frontier changed');
 need(!inspectLocalDisk(host).errors.length, 'Resource guard rejected review coordination');
 const action = process.argv[2], number = Number(process.argv[3]), agentId = process.argv[4];
-need(['claim', 'bind', 'start', 'capture', 'capture-derived', 'readable', 'repair-reserve', 'repair-start', 'repair-record', 'code-reserve', 'code-start', 'code-record', 'code-amend-reserve', 'code-amend-start', 'code-amend-record', 'proof-code-reserve','proof-code-start','proof-code-record','proof-code-amend-reserve','proof-code-amend-start','proof-code-amend-record'].includes(action), 'Choose owned identity, repair or code review action');
+const reviewFields = ['repairReview','codeReview','codeReviewAmendment','proofCodeReview','proofCodeReviewAmendment','proofCodeReviewFinal'];
+need(['claim', 'bind', 'start', 'capture', 'capture-derived', 'readable', 'repair-reserve', 'repair-start', 'repair-record', 'code-reserve', 'code-start', 'code-record', 'code-amend-reserve', 'code-amend-start', 'code-amend-record', 'proof-code-reserve','proof-code-start','proof-code-record','proof-code-amend-reserve','proof-code-amend-start','proof-code-amend-record','proof-code-final-reserve','proof-code-final-start','proof-code-final-record'].includes(action), 'Choose owned identity, repair or code review action');
 
 function checkpoint() {
   const expectedUpdatedAt = state.queueUpdatedAt ?? null, stamp = new Date().toISOString();
@@ -38,7 +39,7 @@ function checkpoint() {
     const dates = ledger.dateAudits?.['jinshu/109'];
     need(!dates || !dateExecutorIsBusy(dates), 'Date owner is active; preserve its invocation');
     ledger.identityReviews['jinshu/109'] = { ...state, sticky: true, updatedAt: stamp, queueUpdatedAt: stamp,
-      activeRun: state.parts.some(part => part.phase === 'running') || ['repairReview','codeReview','codeReviewAmendment','proofCodeReview','proofCodeReviewAmendment'].some(key => state[key]?.phase === 'running') };
+      activeRun: state.parts.some(part => part.phase === 'running') || reviewFields.some(key => state[key]?.phase === 'running') };
   }, { message: 'Checkpoint bounded Jinshu109 independent identity ' + action });
   state.queueUpdatedAt = stamp; state.queueCommit = result.commit;
   save(dir + 'review-state.json', state);
@@ -46,18 +47,18 @@ function checkpoint() {
 }
 
 if (action.startsWith('code-') || action.startsWith('proof-code-')) {
-  const proof = action.startsWith('proof-code-'), amendment = action.startsWith('code-amend-') || action.startsWith('proof-code-amend-');
-  const field = proof ? (amendment ? 'proofCodeReviewAmendment' : 'proofCodeReview') : amendment ? 'codeReviewAmendment' : 'codeReview';
-  const operation = action.split('-').at(-1), prefix = proof ? (amendment ? 'proof-composition-amendment-review' : 'proof-composition-independent-review') : amendment ? 'dossier-delta-amendment-review' : 'dossier-delta-independent-review';
+  const proof = action.startsWith('proof-code-'), final = action.startsWith('proof-code-final-'), amendment = action.startsWith('code-amend-') || action.startsWith('proof-code-amend-') || final;
+  const field = proof ? (final ? 'proofCodeReviewFinal' : amendment ? 'proofCodeReviewAmendment' : 'proofCodeReview') : amendment ? 'codeReviewAmendment' : 'codeReview';
+  const operation = action.split('-').at(-1), prefix = proof ? (final ? 'proof-composition-final-review' : amendment ? 'proof-composition-amendment-review' : 'proof-composition-independent-review') : amendment ? 'dossier-delta-amendment-review' : 'dossier-delta-independent-review';
   need(state.worker && state.queueUpdatedAt && agentId, 'Actual independent code reviewer and retained owner required');
   if (operation === 'reserve') {
     need(!state[field] && state.sourceApplication?.phase === 'applied' && !packet.authorAgentIds.includes(agentId) &&
       !state.parts.some(p => p.agentId === agentId) && state.repairReview?.agentId !== agentId, 'Separate code reviewer required');
-    const parent = state[proof ? 'proofCodeReview' : 'codeReview'];
+    const parent = state[proof ? (final ? 'proofCodeReviewAmendment' : 'proofCodeReview') : 'codeReview'];
     if (amendment) need(parent?.phase === 'report-recorded' && ['approve','request-changes'].includes(parent.verdict) && parent.agentId === agentId,
       'Amendment must retain the actual independent parent reviewer');
     need(state.parts.filter(p => ['reserved','running'].includes(p.phase)).length +
-      ['repairReview','codeReview','codeReviewAmendment','proofCodeReview','proofCodeReviewAmendment'].filter(key => ['reserved','running'].includes(state[key]?.phase)).length < 2, 'Shared remote pool is full');
+      reviewFields.filter(key => ['reserved','running'].includes(state[key]?.phase)).length < 2, 'Shared remote pool is full');
     const file = dir + prefix + '-packet.json';
     state[field] = { phase: 'reserved', agentId, packetFile: file, packetSha256: hash(fs.readFileSync(file)), reservedAt: new Date().toISOString(),
       deadlineAt: new Date(Date.now() + 20 * 60_000).toISOString(), canonicalWritesAuthorized: false };
@@ -75,7 +76,7 @@ if (action.startsWith('code-') || action.startsWith('proof-code-')) {
       verdict: review.verdict, findings: review.findings.length, capturedAt: new Date().toISOString() };
   }
   state.activeModelJobs = state.parts.filter(p => p.phase === 'running').length +
-    ['repairReview','codeReview','codeReviewAmendment','proofCodeReview','proofCodeReviewAmendment'].filter(key => state[key]?.phase === 'running').length;
+    reviewFields.filter(key => state[key]?.phase === 'running').length;
   console.log(JSON.stringify({ phase: state[field].phase, agentId, packetSha256: state[field].packetSha256, queueCommit: checkpoint() }));
 } else if (['repair-reserve', 'repair-start', 'repair-record'].includes(action)) {
   need(state.worker && state.queueUpdatedAt && agentId, 'Actual independent editorial producer and retained ownership required');
