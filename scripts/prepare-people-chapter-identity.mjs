@@ -11,7 +11,7 @@ import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
 import { assertChapterGates } from './lib/people-qualified-scope.mjs';
 import { localNameKeys } from './lib/people-resolution.mjs';
 import { peopleDigest, identityDossierInputs } from './lib/people-identity-seal.mjs';
-import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport } from './lib/people-identity-review-transport.mjs';
+import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, MAX_IDENTITY_REVIEW_TRANSPORT_BYTES } from './lib/people-identity-review-transport.mjs';
 import { extractionAuthorAgentIds } from './lib/people-extraction-authorship.mjs';
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
 import { memberContract, planChapterIdentityReview, IDENTITY_REVIEW_LIMITS } from './lib/people-identity-dossiers.mjs';
@@ -21,7 +21,7 @@ import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs'
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
-const MAX_REVIEW_TRANSPORT_BYTES = 768 * 1024;
+const MAX_REVIEW_TRANSPORT_BYTES = MAX_IDENTITY_REVIEW_TRANSPORT_BYTES;
 export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
   const units = new Map(), ownPrefix = `${own.extraction.book}:${own.extraction.chapter}`;
   for (const unit of own.packet.units) units.set(`${ownPrefix}:${unit.id}`, { book: own.extraction.book, chapter: own.extraction.chapter, ...unit });

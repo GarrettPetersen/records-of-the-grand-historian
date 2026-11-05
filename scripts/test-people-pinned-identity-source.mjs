@@ -39,20 +39,20 @@ test('original Git seal equals byte hashes of the original filesystem inventory'
 });
 test('unrelated code and package script changes reuse immutable dossiers without rewriting seals',t=>{
  const f=fixture(t);f.write('scripts/test-unrelated.mjs','console.log("new test");\n');f.json('package.json',{name:'fixture',type:'module',scripts:{test:'new'},dependencies:{ajv:'8'}});const current=gitIdentitySnapshot(f.root,f.commit());
- const proof=provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root});assert.equal(proof.registryBytesChanged,false);assert.equal(proof.retainedOriginalSeal,f.provenance.identityInputs);assert.equal(proof.sourceRevision,current.revision);assert.equal(proof.chapterApproval,false);
+ const proof=provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root});assert.equal(proof.registryBytesChanged,false);assert.equal(proof.retainedOriginalSeal,f.provenance.identityInputs);assert.equal(proof.sourceRevision,current.revision);assert.equal(proof.chapterApproval,false);
 });
 test('changed source, extraction, inventories, schema, curation and construction code remain blocked',t=>{
  for(const file of ['data/fixture/001.json','data/people/extractions/fixture/001.json','data/fixture/002.json','data/people/schema/new.schema.json','data/people/curation/new.json','scripts/lib/leaf.mjs','scripts/lib/quoted.mjs']){
-  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root}),/Dossier data changed|construction code changed/);
+  const f=fixture(t);f.write(file,file.endsWith('.mjs')?'export const changed=true;\n':'{}\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/Dossier data changed|construction code changed/);
  }
 });
 test('package dependency changes and unverifiable original provenance are rejected',t=>{
- const f=fixture(t);assert.throws(()=>provePinnedDossierReuse({...f.provenance,identityInputs:'sha256:bad'},f.snapshot,{runtimeRoot:f.root}),/original Git source seal/);
- f.json('package.json',{name:'fixture',type:'module',scripts:{test:'old'},dependencies:{ajv:'9'}});const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root}),/package contract changed/);
+ const f=fixture(t);assert.throws(()=>provePinnedDossierReuse({...f.provenance,identityInputs:'sha256:bad'},f.snapshot,{runtimeRoot:f.root,codeRoot:f.root}),/original Git source seal/);
+ f.json('package.json',{name:'fixture',type:'module',scripts:{test:'old'},dependencies:{ajv:'9'}});const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>provePinnedDossierReuse(f.provenance,current,{runtimeRoot:f.root,codeRoot:f.root}),/package contract changed/);
 });
 test('dirty runtime dependencies, added schemas and symlinks cannot pass the pinned runtime check',t=>{
- const f=fixture(t);f.write('scripts/lib/leaf.mjs','changed');assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root),/Runtime index dependency differs/);f.write('scripts/lib/leaf.mjs','export const leaf=true;\n');f.json('data/people/schema/extra.schema.json',{});assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root),/inventory differs/);fs.unlinkSync(path.join(f.root,'data/people/schema/extra.schema.json'));
- const file=path.join(f.root,'data/glossary.json'),saved=path.join(f.root,'saved-glossary');fs.renameSync(file,saved);fs.symlinkSync(saved,file);assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root),/regular file/);
+ const f=fixture(t);f.write('scripts/lib/leaf.mjs','changed');assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/Runtime index dependency differs/);f.write('scripts/lib/leaf.mjs','export const leaf=true;\n');f.json('data/people/schema/extra.schema.json',{});assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/inventory differs/);fs.unlinkSync(path.join(f.root,'data/people/schema/extra.schema.json'));
+ const file=path.join(f.root,'data/glossary.json'),saved=path.join(f.root,'saved-glossary');fs.renameSync(file,saved);fs.symlinkSync(saved,file);assert.throws(()=>assertPinnedIdentityRuntime(f.snapshot,f.root,f.root),/regular file/);
 });
 test('computed index imports and nonregular committed data fail loudly',t=>{
  const f=fixture(t);f.write('scripts/lib/leaf.mjs','export const x=import(variable);\n');const current=gitIdentitySnapshot(f.root,f.commit());assert.throws(()=>current.codeDependencies(),/Computed index dependency/);

@@ -5,6 +5,7 @@ import { PEOPLE_DIR, DATA_DIR, extractionPath, readJson, contentUnits } from './
 import { editorialDecisionPath } from './people-editorial-decisions.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
 import { extractionAuthorAgentIds } from './people-extraction-authorship.mjs';
+import { assertCapturedIdentityReviewParts } from './people-identity-review-transport.mjs';
 import { localNameKeys } from './people-resolution.mjs';
 import { validateDossierIdentityEvidence, memberContract } from './people-identity-dossiers.mjs';
 
@@ -52,8 +53,9 @@ export function validateChapterIdentityBundle(view, sourceChapters, scope, bundl
   need(only(bundle, ['schemaVersion', 'kind', 'scope', 'plan', 'report', 'receipt']) &&
     bundle.schemaVersion === 1 && bundle.kind === 'chapter-identity-review' &&
     peopleDigest(bundle.scope) === peopleDigest(scope) && peopleDigest(bundle.plan.scope) === peopleDigest(scope), 'Malformed or wrong-scope chapter identity proof');
-  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese']) &&
+  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese', ...(bundle.receipt?.reviewParts !== undefined ? ['reviewParts'] : [])]) &&
     bundle.receipt.planFingerprint === bundle.plan.fingerprint && bundle.receipt.reportFingerprint === peopleDigest(bundle.report), 'Identity review transport receipt does not match the preserved report');
+  try { assertCapturedIdentityReviewParts(bundle.report, bundle.receipt); } catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
   const chapterKey = `${scope.book}:${scope.chapter}`, own = sourceChapters.get(chapterKey);
   need(own, 'Current extractor provenance required');
   let actualAuthors;

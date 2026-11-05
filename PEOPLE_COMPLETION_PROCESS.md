@@ -251,3 +251,12 @@ itself certifies a chapter. Single cases that exceed the bound stay held.
 Chunked extractions identify their actual contributing agents through `run.chunks`.
 Exclude every actual chunk author from independent review; never invent an aggregate
 agent ID or accept missing chunk provenance.
+
+The normal identity recorder also accepts captured part journals. It re-derives
+bounded transports from the exact full source packet, verifies each actual
+producer/run and raw report hash, and rejects any aggregate that differs from
+those reports. Published proof receipts retain per-part case fingerprints and
+producer metadata. Pinned recording re-proves the registry input equivalence and
+uses the primary checkout's shared identity lock/recovery directory; it still runs
+the normal complete certificate validator. Runtime code is checked at its actual
+module location, separately from configured data/configuration roots.

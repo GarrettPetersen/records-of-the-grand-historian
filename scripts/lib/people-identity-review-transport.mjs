@@ -1,4 +1,6 @@
 import { identityArtifactHash } from './people-identity-artifacts.mjs';
+import { peopleDigest } from './people-identity-seal.mjs';
+export const MAX_IDENTITY_REVIEW_TRANSPORT_BYTES = 768 * 1024;
 
 export function compactChapterIdentityReviewPacket(p) {
   const sourcePacketSha256 = identityArtifactHash(Buffer.from(JSON.stringify(p, null, 2) + '\n'));
@@ -72,4 +74,23 @@ export function assembleChapterIdentityReviewParts(plan, transports, reports, ac
   if (seen.size !== plan.cases.length || plan.cases.some(c => !seen.has(c.id))) throw new Error('Incomplete full chapter identity coverage');
   if (new Set(actualReviewerAgentIds).size !== 1) throw new Error('A chapter report must retain one actual independent reviewer; use one retained reviewer across its parts');
   return { schemaVersion: 1, planFingerprint: plan.fingerprint, reviewer: reports[0].reviewer, reviews: plan.cases.map(c => reviews.get(c.id)) };
+}
+
+// Publication retains the real per-part producer/run and exact reviewed rows.
+// This is additional provenance; the full-plan identity validator still decides
+// whether the chapter evidence and every retained assignment can be certified.
+export function assertCapturedIdentityReviewParts(report, receipt) {
+  if (receipt.reviewParts === undefined) return;
+  if (!Array.isArray(receipt.reviewParts) || !receipt.reviewParts.length) throw new Error('Captured identity review parts are missing');
+  const rows = new Map(report.reviews.map(row => [row.caseId, row])), seen = new Set();
+  const expectedKeys = ['agentId','runId','packetSha256','transportSha256','reportSha256','caseIds','reviewsFingerprint'].sort().join(',');
+  let packet;
+  for (const part of receipt.reviewParts) {
+    if (Object.keys(part).sort().join(',') !== expectedKeys || part.agentId !== receipt.actualReviewerAgentId || typeof part.runId !== 'string' || !part.runId.trim() ||
+        ![part.packetSha256,part.transportSha256,part.reportSha256].every(v => /^[a-f0-9]{64}$/u.test(v)) || !Array.isArray(part.caseIds) || !part.caseIds.length || new Set(part.caseIds).size !== part.caseIds.length) throw new Error('Invalid actual identity part provenance');
+    if (packet && packet !== part.packetSha256) throw new Error('Identity parts do not share their full source packet'); packet = part.packetSha256;
+    const reviewed = part.caseIds.map(id => { if (!rows.has(id) || seen.has(id)) throw new Error('Captured identity parts lost or duplicated case coverage'); seen.add(id); return rows.get(id); });
+    if (peopleDigest(reviewed) !== part.reviewsFingerprint) throw new Error('Captured identity part reviews changed');
+  }
+  if (seen.size !== report.reviews.length) throw new Error('Captured identity parts do not cover the complete report');
 }

@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+const RUNTIME_CODE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 import { peopleDigest } from './people-identity-seal.mjs';
 import { REPO_ROOT, contentUnits, sha256 } from './people-content.mjs';
 import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
@@ -76,7 +78,7 @@ export function gitIdentitySnapshot(root, revision) {
   return { root, revision, files, regular, read, json, legacySeal, codeDependencies };
 }
 
-export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT } = {}) {
+export function provePinnedDossierReuse(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
   const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
   need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
   const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
@@ -84,24 +86,24 @@ export function provePinnedDossierReuse(registryProvenance, current, { runtimeRo
   const beforeCode = retained.codeDependencies(), afterCode = current.codeDependencies();
   need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
   need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
-  assertPinnedIdentityRuntime(current, runtimeRoot);
+  assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
   return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
     retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
     dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
     registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
 }
 
-export function assertPinnedIdentityRuntime(current, runtimeRoot = REPO_ROOT) {
+export function assertPinnedIdentityRuntime(current, runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT) {
   const code = current.codeDependencies(), data = [...current.files.keys()].filter(dataInput).sort();
-  const runtimeBytes = file => { const full = path.join(runtimeRoot, file), stat = fs.lstatSync(full); need(stat.isFile() && !stat.isSymbolicLink(), `Runtime input must be a regular file: ${file}`); return fs.readFileSync(full); };
-  for (const file of code) need(blobHash(runtimeBytes(file)) === current.regular(file).oid, `Runtime index dependency differs from pinned revision: ${file}`);
+  const runtimeBytes = (file, root = runtimeRoot) => { const full = path.join(root, file), stat = fs.lstatSync(full); need(stat.isFile() && !stat.isSymbolicLink(), `Runtime input must be a regular file: ${file}`); return fs.readFileSync(full); };
+  for (const file of code) need(blobHash(runtimeBytes(file, codeRoot)) === current.regular(file).oid, `Runtime index dependency differs from pinned revision: ${file}`);
   const runtimeData = data.filter(f => !/^data\/(?!people\/)[^/]+\/\d{3}\.json$/u.test(f) && !/^data\/people\/(?:extractions|resolutions)\//u.test(f));
   for (const directory of ['data/people/curation', 'data/people/schema', 'data/people/chronology']) {
     const actual = [], visit = relative => { const full = path.join(runtimeRoot, relative); if (!fs.existsSync(full)) return; const stat = fs.lstatSync(full); need(!stat.isSymbolicLink(), `Runtime inventory must not use symlinks: ${relative}`); if (stat.isDirectory()) for (const name of fs.readdirSync(full)) visit(`${relative}/${name}`); else if (relative.endsWith('.json')) actual.push(relative); };
     visit(directory); need(peopleDigest(actual.sort()) === peopleDigest(runtimeData.filter(f => f.startsWith(directory + '/'))), `Runtime index configuration inventory differs: ${directory}`);
   }
   for (const file of runtimeData) need(blobHash(runtimeBytes(file)) === current.regular(file).oid, `Runtime index configuration differs: ${file}`);
-  need(peopleDigest(packageContract(JSON.parse(runtimeBytes('package.json')))) === peopleDigest(packageContract(current.json('package.json'))), 'Runtime package contract differs');
+  for (const root of new Set([runtimeRoot, codeRoot])) need(peopleDigest(packageContract(JSON.parse(runtimeBytes('package.json', root)))) === peopleDigest(packageContract(current.json('package.json'))), 'Runtime package contract differs');
 }
 
 export function pinnedIdentityChapterContext(root, revision) {
@@ -130,4 +132,11 @@ export function pinnedIdentityChapterContext(root, revision) {
     return { status: report.status, auditVersion: DATE_AUDIT_VERSION, reviewedAt: report.reviewedAt, findings: report.findings.length };
   };
   return { snapshot, inputs, load, editorial, dates, config: snapshot.json('data/people/config.json') };
+}
+
+// Code-only sparse runtimes share the primary checkout's recovery/lock domain.
+export function pinnedIdentityHostGeneratedDirectory(root = REPO_ROOT) {
+  const common = fs.realpathSync(execFileSync('git', ['-C', root, 'rev-parse', '--path-format=absolute', '--git-common-dir'], { encoding: 'utf8' }).trim());
+  need(path.basename(common) === '.git', 'Explicit primary Git checkout required for pinned identity recording');
+  return path.join(path.dirname(common), 'data/people/generated');
 }
