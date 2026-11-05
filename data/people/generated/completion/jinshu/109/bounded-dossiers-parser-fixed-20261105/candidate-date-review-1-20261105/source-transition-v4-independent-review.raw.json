@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "packetSha256": "21449e48a6e9a838969c34ce4341178f3a42e1fc588085c36cdb1aac58f0041a",
+  "applierSha256": "a0bf30cde90fa4e07a0e0861428dacad5eb4b0b198af7b13747109fc634204d5",
+  "transitionSha256": "df04677cf08d5ae1e238cbe28fb45212a28e30e97fb80877057457ce15384a19",
+  "reviewer": {
+    "name": "Grok Bot",
+    "agentId": "cd3267d3-3b95-450b-bd84-630b4be68776",
+    "independentOfAuthors": true
+  },
+  "verdict": "approve",
+  "checks": [
+    {
+      "id": "english-approval-provenance",
+      "verdict": "approve",
+      "reason": "All 40 English field replacements are backed by four sealed independent part reviews (parts 1–4) whose sha256 digests match english-full-source-part00N-provider.raw.json; preparer code requires completeReports===4, repairs.length===40, each row’s independentReviewer.agentId !== authorAgentId, and rawRow.after === row.after before accepting. Reviewer agents are listed in excludedReviewers for this transition review, and people/claims plus complete Chinese units are asserted unchanged."
+    },
+    {
+      "id": "candidate-accounting",
+      "verdict": "approve",
+      "reason": "Exactly twelve source-callback decisions are present and unique: five link actions reuse existing same-unit Chinese anchors to local jinshu:109 persons with personal-name or title-reference kinds, and seven disposition actions mark place/book-title/organization non-persons with zhEvidence witnessed in the unit Chinese. Preparer accounting requires every unresolved prospective candidate to have one decision and forbids cross-chapter callbacks."
+    },
+    {
+      "id": "date-replay-preservation",
+      "verdict": "approve",
+      "reason": "The replayed proposal is an exact copy of the old 18-edit scoped proposal after only sourceHash/extractionHash header replacements (verified byte-equal after header swap); sealed date-replay-proposal.json matches. Applier copies archive review-1.json unchanged (sha256 dbd6a595…), retains all 55 negative findings with approvalRetagged false, proves date items/Chinese units unchanged after restoring the p112 label for comparison, and keeps person date claims/hints identical aside from that display-label delta."
+    },
+    {
+      "id": "source-and-round-ownership",
+      "verdict": "approve",
+      "reason": "Native state stays phase repair at round 1 with reviewRoundCeiling/maxRepairRounds 3 across originalSafety, transition, and newNativeState; applier requires the same date worker, executorToken, prior generation/source/extraction pins, and identity owner worker/updatedAt before mutating the ledger, then advances only toGenerationId while recording requiresFreshDateApproval and forbidding old packet dispatch."
+    },
+    {
+      "id": "publication-gates",
+      "verdict": "approve",
+      "reason": "Transition, label preparation, receipt, and ledger updates keep dateApproval, identityApproval, chapterApproved, and published false; applier stamps requiresFreshDateApproval:true and oldPacketDispatchForbidden:true, so this code/label approval cannot satisfy future independent date, identity, or publication gates."
+    },
+    {
+      "id": "atomic-recovery",
+      "verdict": "approve",
+      "reason": "Applier refuses to proceed if receipt, intent, or archive already exist; takes a fail-if-exists process lock; writes intent/receipt/negative-lineage with wx; renames the live workflow directory to the archive before recreating it; uses writeTextAtomic for canonical files and state; and re-checks resource guards plus source digests after reservation so a partial run remains recoverable rather than overwritten."
+    }
+  ],
+  "findings": [],
+  "preferredLabelCorrection": {
+    "personId": "p112",
+    "before": "Heir of King Gao Zhen",
+    "after": "Heir of King Gao Zhao",
+    "verdict": "approve",
+    "reason": "Units s0080–s0081 English and literal both name Gao Zhao / Zhao, Chinese 釗 matches father p111 (King Gao Zhao / 釗 / Zhao), and p112’s family claim is heir of that father; only the preferred English display label still said Zhen. The correction changes that display label alone to Heir of King Gao Zhao while keeping 世子, null pinyin, descriptive-kinship name claims, relationships, and dates—no heir personal name is inferred or introduced."
+  }
+}

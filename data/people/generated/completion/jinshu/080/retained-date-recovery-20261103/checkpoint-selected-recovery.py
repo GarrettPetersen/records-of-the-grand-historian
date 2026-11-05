@@ -124,6 +124,7 @@ for extension in ['json','mjs','txt','jsonl']:files += list((prepared109/'candid
 files += list((prepared109/'candidate-date-review-1-20261105'/'native-repair-handoffs-round1').glob('*.json'))
 for folder in (prepared109/'candidate-date-review-1-20261105').glob('reviewed-English-source-prepared*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
+files += list((prepared109/'candidate-date-review-1-20261105'/'reviewed-English-label-source-prepared-v4').glob('*.json'))
 files += list((prepared109/'candidate-date-review-1-20261105'/'prospective-current-source-repair').glob('*.json'))
 for folder in (prepared109/'candidate-date-review-1-20261105').glob('host-date-repair-group*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
@@ -131,6 +132,8 @@ for folder in (prepared109/'candidate-date-review-1-20261105').glob('host-author
  if folder.is_dir():files += list(folder.glob('*.json'))
 files.append(prepared109/'candidate-date-review-1-20261105'/'reviewed-English-source-prepared-v3'/'date-input'/'jinshu'/'109.json')
 files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/109').glob('*.json'))
+for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.english-label-source-*'):
+ if folder.is_dir():files += list(folder.glob('*.json'))
 files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/109.stale-939c2e595e93dbf2804b').glob('*.json'))
 files.append(pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-029c0b784aed.json'))
 files.append(audit/'composed-identity-production-observations.jsonl')
@@ -145,7 +148,7 @@ files.append(audit/'handoff-before-strict-author-journal-approved-20261105.md')
 # Retained free-lane recovery and focused source proposals remain incomplete.
 # Individual provider responses are replayable; full conversation snapshots stay private.
 dateResearch=prepared109/'candidate-date-review-1-20261105'
-for pattern in ['focused-date-research-20261105*','p112-label-source-closure-20261105']:
+for pattern in ['focused-date-research-20261105*','focused-date-research-v4-20261105','p112-label-source-closure-20261105']:
  for folder in dateResearch.glob(pattern):
   if folder.is_dir():files += list(folder.glob('*.json'))
 for folder in audit.glob('free072-*'):
@@ -154,8 +157,12 @@ for folder in audit.glob('free072-*'):
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
 freeFix=audit/'free-date-record-ownership-fix-20261105'
 for extension in ['json','mjs']:files += list(freeFix.glob('*.'+extension))
-for extension in ['json','mjs','md','log']:
+for extension in ['json','mjs','md','log','yml']:
  files += list((audit/'free-date-record-ownership-pr-20261105').glob('*.'+extension))
+for folder in (audit/'free-date-record-ownership-pr-20261105').glob('independent-free-code-review-*'):
+ if folder.is_dir():
+  for extension in ['json','log']:files += list(folder.glob('*.'+extension))
+files += list((audit/'free-date-record-ownership-pr-20261105'/'ci-qualified-contribution').glob('*'))
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
 files += list(wf072.glob('*.json'))

@@ -1,0 +1,28 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {inspectLocalDisk} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/check-local-disk.mjs';
+const root='/Users/garrettpetersen/records-of-the-grand-historian',dir=new URL('.',import.meta.url).pathname,out=dir+'reviewed-English-label-source-prepared-v4/';
+const read=p=>JSON.parse(fs.readFileSync(p)),need=(v,m)=>{if(!v)throw Error(m)},hash=b=>createHash('sha256').update(b).digest('hex'),write=(p,v)=>fs.writeFileSync(p,JSON.stringify(v,null,2)+'\n',{flag:'wx'});
+need(!inspectLocalDisk(root).errors.length,'Resource guard hold');need(!fs.existsSync(out+'coordinated-preparation-receipt.json')&&!fs.existsSync(dir+'source-transition-v4-controller.json'),'Preserve an already finalized preparation');
+const file=dir+'source-transition-v4-review.input.json',bytes=fs.readFileSync(file),before=JSON.parse(bytes),packet=structuredClone(before),oldControl=read(dir+'source-transition-controller.json');
+need(bytes.length===64077&&oldControl.phase==='prepared-unclaimed'&&!oldControl.agentId&&!oldControl.executorToken,'Expected the exact unclaimed oversized preparation');
+write(out+'seal-attempt1-oversize.json',{at:new Date().toISOString(),packetBytes:bytes.length,conservativePromptBudget:2200,hardCeiling:65536,dispatched:false,canonicalWrites:0,reason:'First seal stopped before controller creation because complete input plus prompt budget exceeded the transport ceiling.'});
+packet.instructions='Review all application/preparation code, source callback cases and exact lossless proposal replay. Verify p112 against both English fields and Chinese. Paths resolve from the packet directory. Preserve negative proofs, same owner and round1/max3. Code/label approval grants no date, identity, chapter or publication approval.';
+const restored=structuredClone(packet);restored.instructions=before.instructions;need(JSON.stringify(restored)===JSON.stringify(before),'Evidence changed while deduplicating instructions');
+const nextBytes=Buffer.from(JSON.stringify(packet)+'\n'),packetSha256=hash(nextBytes),managerFile=dir+'manage-source-transition-v4-review.mjs',manager=fs.readFileSync(managerFile,'utf8'),template=manager.match(/const prompt=`([\s\S]*?)`;\n\s*need/);
+need(template,'Missing actual review prompt');
+const placeholder='00000000-0000-0000-0000-000000000000';
+const prompt=Function('m','id','packet','return `'+template[1]+'`;')({packetSha256},placeholder,packet); // trusted, sealed host template; length only
+need(nextBytes.length<=64512&&nextBytes.length+Buffer.byteLength(prompt)<=65536,'Complete coordinated evidence and actual prompt exceed transport ceiling');
+for(const[f,h]of Object.entries(packet.sealedFileSha256))need(hash(fs.readFileSync(path.resolve(dir,f)))===h,'Coordinated sealed input changed: '+f);
+for(const f of ['apply-reviewed-English-label-source-with-date-carry-v4.mjs','manage-source-transition-v4-review.mjs','watch-source-transition-v4.mjs'])execFileSync(process.execPath,['--check',dir+f]);
+fs.renameSync(file,dir+'source-transition-v4-review.oversize.input.json');fs.writeFileSync(file,nextBytes,{flag:'wx'});
+const transition=read(out+'date-transition.json'),control={...oldControl,at:new Date().toISOString(),kind:'coordinated-English-label-source-and-date-repair-controller',packetSha256,preparationDirectory:out,plannedGenerationId:transition.toGenerationId,preferredLabelApprovalRequired:true};
+write(dir+'source-transition-v4-controller.json',control);
+const receipt={at:new Date().toISOString(),kind:'sealed-coordinated-source-label-transition',packetFile:file,packetSha256,packetBytes:nextBytes.length,actualPromptBytes:Buffer.byteLength(prompt),combinedBytes:nextBytes.length+Buffer.byteLength(prompt),hardCeiling:65536,sealedFiles:Object.keys(packet.sealedFileSha256).length,plannedGenerationId:transition.toGenerationId,canonicalExtractionHash:transition.canonicalExtractionHash,candidateExtractionHash:transition.candidateExtractionHash,round:1,maxRepairRounds:3,losslessProposalReconstruction:true,losslessRelativeFilePaths:true,allSubstantiveEvidencePreserved:true,onlyRedundantPromptInstructionsDeduplicated:true,originalV3InputsUnchanged:true,sourceApplied:false,independentTransitionAndLabelApproval:false,canonicalWrites:0};
+write(out+'coordinated-preparation-receipt.json',receipt);
+need(!Object.keys(packet.sealedFileSha256).some(f=>path.resolve(dir,f)===dir+'source-transition-controller.json'),'Do not mutate a sealed old controller');
+write(dir+'source-transition-v3-controller.before-v4.json',oldControl);fs.writeFileSync(dir+'source-transition-controller.json',JSON.stringify({...oldControl,phase:'superseded-preparation',supersededBy:dir+'source-transition-v4-controller.json',supersededAt:new Date().toISOString(),reason:'Known preferred-label correction coordinated before any fresh date audit; old V3 input remains sealed and must not dispatch.'},null,2)+'\n');
+console.log(JSON.stringify(receipt));
