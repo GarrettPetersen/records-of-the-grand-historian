@@ -1,0 +1,1180 @@
+{
+ "jobId": "93d4339d0590364864ef",
+ "sourceHash": "sha256:ba3c1435796b6eece661b3fe56dee89c5fae4803da673d043f29aabeb6e18a0b",
+ "extractionHash": "sha256:9e3ac72efffe45c7886be87ec0569afe4acffc7ffd0d806c62ded1b9d2702879",
+ "reviewedAt": "2026-11-06T22:35:38+00:00",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "671637ac-ccf5-4b18-8862-9f632ddefcec",
+  "independentOfExtractor": true
+ },
+ "summary": "Read all 18 owned units (s0002–s0019) in Chinese, plus each owned person's supplied items and context items. No birth or age is stated in these units. The only deaths are Hui (s0009 廆卒, AD 333 via Jinshu 108 咸和八年), Qidegui (s0010 奔死於外) and Zhao (s0014 皝殺昭), and all three are captured. The conversions are correct at year level: 建武初 is 317, 太甯末 is 325–326 and 咸和九年 is 334, with no Julian/Gregorian issue. The post-Hui sequence correctly uses a 333–334 event window rather than a chosen year. The two defects from the earlier current-source review are fixed in this candidate: claim-66 now has westernBounds onOrAfter 317, and hints-p004 is [\"AD 333-334\"]. All 70 items and 17 people are supported, and there are no findings. Compared with the prior candidate, the 28 supplied units (Chinese and English), all 70 items, the 14 context items and the people records are byte-identical in content; only the job ID, sourceHash, extractionHash and the order of the s0024 unitPeople list differ, so the new sourceHash reflects text outside this packet. Every check was still redone against the Chinese. English check: only the en field was supplied, and no definite English defect was found in the owned units; the literal translation field was not supplied and is unchecked. This is not chapter or publication approval.",
+ "reviewedUnits": [
+  "s0002",
+  "s0003",
+  "s0004",
+  "s0005",
+  "s0006",
+  "s0007",
+  "s0008",
+  "s0009",
+  "s0010",
+  "s0011",
+  "s0012",
+  "s0013",
+  "s0014",
+  "s0015",
+  "s0016",
+  "s0017",
+  "s0018",
+  "s0019"
+ ],
+ "itemChecks": [
+  {
+   "id": "claim-63",
+   "verdict": "supported",
+   "event": "Murong Huang's own appointment as General Who Champions the Army at the start of Jianwu.",
+   "reason": "建武初 opens s0007; Jianwu (Emperor Yuan) began AD 317 and was renamed Taixing in 318, so 初 is AD 317 at year precision.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "建武初，拜為冠軍將軍、左賢王，封望平侯"
+    }
+   ]
+  },
+  {
+   "id": "claim-64",
+   "verdict": "supported",
+   "event": "Murong Huang's own appointment as Left Worthy Prince at the start of Jianwu.",
+   "reason": "Same 建武初 clause in s0007; AD 317.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "左賢王"
+    }
+   ]
+  },
+  {
+   "id": "claim-65",
+   "verdict": "supported",
+   "event": "Murong Huang's own enfeoffment as Marquis of Wangping at the start of Jianwu.",
+   "reason": "Same 建武初 clause in s0007; AD 317.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "封望平侯"
+    }
+   ]
+  },
+  {
+   "id": "claim-66",
+   "verdict": "supported",
+   "event": "Murong Huang's own repeated campaigns with accumulated merit after the Jianwu appointments.",
+   "reason": "率眾征討，累有功 describes repeated campaigns that follow the 建武初 appointments. They are not one AD 317 event. The candidate's westernBounds onOrAfter AD 317 (with sourceDate 建武初 kept) is the honest one-sided bound and adds no invented end year.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "率眾征討，累有功"
+    }
+   ]
+  },
+  {
+   "id": "claim-67",
+   "verdict": "supported",
+   "event": "Murong Huang's own appointment as General Who Pacifies the North late in Taining.",
+   "reason": "太甯末 in s0008; Taining ran AD 323 to early 326 (Xianhe began 326), so a 325–326 window is honest.",
+   "evidence": [
+    {
+     "unit": "s0008",
+     "quote": "太甯末，拜平北將軍，進封朝鮮公"
+    }
+   ]
+  },
+  {
+   "id": "claim-68",
+   "verdict": "supported",
+   "event": "Murong Huang's own promotion to Duke of Chaoxian late in Taining.",
+   "reason": "Same 太甯末 clause; 325–326 window.",
+   "evidence": [
+    {
+     "unit": "s0008",
+     "quote": "進封朝鮮公"
+    }
+   ]
+  },
+  {
+   "id": "claim-69",
+   "verdict": "supported",
+   "event": "Murong Hui's own death.",
+   "reason": "s0009 says only 廆卒. Jinshu 108 puts it in 咸和八年 (時年六十五), which is AD 333 (see references).",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "廆卒"
+    }
+   ]
+  },
+  {
+   "id": "claim-70",
+   "verdict": "supported",
+   "event": "Murong Huang's own succession to Hui.",
+   "reason": "嗣位 follows 廆卒 directly; AD 333.",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "廆卒，嗣位"
+    }
+   ]
+  },
+  {
+   "id": "claim-71",
+   "verdict": "supported",
+   "event": "Murong Huang's own acting governorship of Pingzhou upon succession.",
+   "reason": "Same s0009 clause; AD 333.",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "以平北將軍行平州刺史"
+    }
+   ]
+  },
+  {
+   "id": "claim-72",
+   "verdict": "supported",
+   "event": "Yuwen Qidegui's own death in exile after expulsion.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "奔死於外"
+    }
+   ]
+  },
+  {
+   "id": "claim-73",
+   "verdict": "supported",
+   "event": "Yuwen Qidegui's own expulsion by Yidougui.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "宇文乞得龜為其別部逸豆歸所逐"
+    }
+   ]
+  },
+  {
+   "id": "claim-74",
+   "verdict": "supported",
+   "event": "Yidougui's own expulsion of Qidegui.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "為其別部逸豆歸所逐"
+    }
+   ]
+  },
+  {
+   "id": "claim-75",
+   "verdict": "supported",
+   "event": "Murong Huang's own cavalry campaign against Yidougui and building of Yuyin and Anjin.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "皝率騎討之"
+    }
+   ]
+  },
+  {
+   "id": "claim-78",
+   "verdict": "supported",
+   "event": "p005's own fear for his safety when Hui died.",
+   "reason": "及廆卒 ties this fear to Hui's death in AD 333; 並 covers Han, Ren and Zhao from s0011.",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "及廆卒，並懼不自容"
+    },
+    {
+     "unit": "s0011",
+     "quote": "庶兄建威翰"
+    }
+   ]
+  },
+  {
+   "id": "claim-79",
+   "verdict": "supported",
+   "event": "p006's own fear for his safety when Hui died.",
+   "reason": "及廆卒 ties this fear to Hui's death in AD 333; 並 covers Han, Ren and Zhao from s0011.",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "並懼不自容"
+    },
+    {
+     "unit": "s0011",
+     "quote": "庶兄建威翰"
+    }
+   ]
+  },
+  {
+   "id": "claim-80",
+   "verdict": "supported",
+   "event": "p007's own fear for his safety when Hui died.",
+   "reason": "及廆卒 ties this fear to Hui's death in AD 333; 並 covers Han, Ren and Zhao from s0011.",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "及廆卒"
+    },
+    {
+     "unit": "s0011",
+     "quote": "庶兄建威翰"
+    }
+   ]
+  },
+  {
+   "id": "claim-81",
+   "verdict": "supported",
+   "event": "Murong Han's own flight to Duan Liao.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0013",
+     "quote": "翰出奔段遼"
+    }
+   ]
+  },
+  {
+   "id": "claim-82",
+   "verdict": "supported",
+   "event": "Murong Ren's own urging of Zhao to depose Huang.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0013",
+     "quote": "仁勸昭舉兵廢皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-83",
+   "verdict": "supported",
+   "event": "Murong Huang's own killing of Murong Zhao.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0014",
+     "quote": "皝殺昭"
+    }
+   ]
+  },
+  {
+   "id": "claim-84",
+   "verdict": "supported",
+   "event": "Murong Zhao's own death at Huang's hands.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0014",
+     "quote": "皝殺昭"
+    }
+   ]
+  },
+  {
+   "id": "claim-85",
+   "verdict": "supported",
+   "event": "Murong Ren's own killing of the envoy and return to Pingguo.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0015",
+     "quote": "殺皝使，東歸平郭"
+    }
+   ]
+  },
+  {
+   "id": "claim-86",
+   "verdict": "supported",
+   "event": "Murong You's own defeat and capture by Ren.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0017",
+     "quote": "幼等大敗，皆沒於仁"
+    }
+   ]
+  },
+  {
+   "id": "claim-87",
+   "verdict": "supported",
+   "event": "Tong Shou's own defeat and capture by Ren.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty. s0017 gives the capture (皆沒於仁).",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "司馬佟壽等討之"
+    },
+    {
+     "unit": "s0017",
+     "quote": "皆沒於仁"
+    }
+   ]
+  },
+  {
+   "id": "claim-88",
+   "verdict": "supported",
+   "event": "Wang Bing's own rebellion in Liaodong.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "襄平令王冰"
+    }
+   ]
+  },
+  {
+   "id": "claim-89",
+   "verdict": "supported",
+   "event": "Sun Ji's own rebellion in Liaodong.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "將軍孫機以遼東叛於皝"
+    }
+   ]
+  },
+  {
+   "id": "claim-90",
+   "verdict": "supported",
+   "event": "Feng Chou's own abandonment of his city.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "東夷校尉封抽"
+    }
+   ]
+  },
+  {
+   "id": "claim-92",
+   "verdict": "supported",
+   "event": "Yi Yi's own abandonment of his post.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "護軍乙逸"
+    }
+   ]
+  },
+  {
+   "id": "claim-94",
+   "verdict": "supported",
+   "event": "Han Jiao's own abandonment of his city.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "遼東相韓矯"
+    }
+   ]
+  },
+  {
+   "id": "claim-96",
+   "verdict": "supported",
+   "event": "Gao Xu's own abandonment of his city.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "玄菟太守高詡等棄城奔還"
+    }
+   ]
+  },
+  {
+   "id": "claim-98",
+   "verdict": "supported",
+   "event": "Murong Ren's own self-proclamation as General of Chariots and Cavalry.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0019",
+     "quote": "自稱車騎將軍"
+    }
+   ]
+  },
+  {
+   "id": "claim-99",
+   "verdict": "supported",
+   "event": "Murong Ren's own self-styling as Duke of Liaodong.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0019",
+     "quote": "遼東公"
+    }
+   ]
+  },
+  {
+   "id": "claim-130",
+   "verdict": "supported",
+   "event": "Murong Huang attested receiving the Jianwu-era appointments.",
+   "reason": "Dated by 建武初 in s0007 (AD 317). s0006 is listed as undated co-evidence only.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "建武初，拜為冠軍將軍、左賢王，封望平侯"
+    }
+   ]
+  },
+  {
+   "id": "claim-131",
+   "verdict": "supported",
+   "event": "Murong Huang attested receiving the late-Taining appointments.",
+   "reason": "太甯末 in s0008; 325–326.",
+   "evidence": [
+    {
+     "unit": "s0008",
+     "quote": "太甯末，拜平北將軍，進封朝鮮公"
+    }
+   ]
+  },
+  {
+   "id": "claim-132",
+   "verdict": "supported",
+   "event": "Murong Huang attested at his succession.",
+   "reason": "廆卒 in s0009; AD 333.",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "廆卒，嗣位"
+    }
+   ]
+  },
+  {
+   "id": "claim-133",
+   "verdict": "supported",
+   "event": "Murong Huang attested campaigning against Yidougui.",
+   "reason": "Dated through s0010, Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty. s0011 is an 初 flashback and supplies no date.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "皝率騎討之"
+    }
+   ]
+  },
+  {
+   "id": "claim-136",
+   "verdict": "supported",
+   "event": "Murong Hui attested as Duke of Liaodong when he named Huang heir.",
+   "reason": "s0006 has no date expression; 建武初 begins s0007. The undated attestation is correct.",
+   "evidence": [
+    {
+     "unit": "s0006",
+     "quote": "廆為遼東公，立為世子"
+    }
+   ]
+  },
+  {
+   "id": "claim-137",
+   "verdict": "supported",
+   "event": "Murong Hui attested through his death.",
+   "reason": "廆卒 in s0009 and s0012; AD 333.",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "廆卒"
+    },
+    {
+     "unit": "s0012",
+     "quote": "及廆卒"
+    }
+   ]
+  },
+  {
+   "id": "claim-138",
+   "verdict": "supported",
+   "event": "p003 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "宇文乞得龜"
+    }
+   ]
+  },
+  {
+   "id": "claim-139",
+   "verdict": "supported",
+   "event": "p004 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "逸豆歸懼而請和"
+    }
+   ]
+  },
+  {
+   "id": "claim-140",
+   "verdict": "supported",
+   "event": "p005 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0013",
+     "quote": "翰出奔段遼"
+    }
+   ]
+  },
+  {
+   "id": "claim-142",
+   "verdict": "supported",
+   "event": "p006 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0019",
+     "quote": "仁於是盡有遼左之地"
+    }
+   ]
+  },
+  {
+   "id": "claim-144",
+   "verdict": "supported",
+   "event": "p007 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0014",
+     "quote": "皝殺昭"
+    }
+   ]
+  },
+  {
+   "id": "claim-145",
+   "verdict": "supported",
+   "event": "The mother of Murong Han is attested only through his description as a concubine's son.",
+   "reason": "庶兄 implies only a concubine mother; no date. Undated attestation is correct.",
+   "evidence": [
+    {
+     "unit": "s0011",
+     "quote": "皝庶兄建威翰"
+    }
+   ]
+  },
+  {
+   "id": "claim-146",
+   "verdict": "supported",
+   "event": "Huang's mother is attested only through Ren and Zhao being his full younger brothers.",
+   "reason": "母弟 means the same mother as Huang; no date. Undated attestation is correct.",
+   "evidence": [
+    {
+     "unit": "s0011",
+     "quote": "母弟征虜仁、廣武昭"
+    }
+   ]
+  },
+  {
+   "id": "claim-147",
+   "verdict": "supported",
+   "event": "p010 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0013",
+     "quote": "翰出奔段遼"
+    }
+   ]
+  },
+  {
+   "id": "claim-149",
+   "verdict": "supported",
+   "event": "p011 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "建武幼"
+    }
+   ]
+  },
+  {
+   "id": "claim-150",
+   "verdict": "supported",
+   "event": "p012 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "司馬佟壽"
+    }
+   ]
+  },
+  {
+   "id": "claim-151",
+   "verdict": "supported",
+   "event": "p013 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "襄平令王冰"
+    }
+   ]
+  },
+  {
+   "id": "claim-152",
+   "verdict": "supported",
+   "event": "p014 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "將軍孫機"
+    }
+   ]
+  },
+  {
+   "id": "claim-153",
+   "verdict": "supported",
+   "event": "p015 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "東夷校尉封抽"
+    }
+   ]
+  },
+  {
+   "id": "claim-154",
+   "verdict": "supported",
+   "event": "p016 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "護軍乙逸"
+    }
+   ]
+  },
+  {
+   "id": "claim-155",
+   "verdict": "supported",
+   "event": "p017 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "遼東相韓矯"
+    }
+   ]
+  },
+  {
+   "id": "claim-156",
+   "verdict": "supported",
+   "event": "p018 attested in the post-Hui-death narrative.",
+   "reason": "Bounded after Hui's death (s0009, AD 333) and before the 咸和九年 entry (s0021, AD 334); 333–334 is event uncertainty.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "玄菟太守高詡"
+    }
+   ]
+  },
+  {
+   "id": "hints-p001",
+   "verdict": "supported",
+   "event": "Active hint check: Huang's own events: 建武初 AD 317, 太甯末 325–326, succession 333, Xianhe 9 334.",
+   "reason": "Hints [\"AD 317\", \"AD 325-326\", \"AD 333\", \"AD 334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "建武初，拜為冠軍將軍、左賢王，封望平侯"
+    },
+    {
+     "unit": "s0008",
+     "quote": "太甯末，拜平北將軍，進封朝鮮公"
+    },
+    {
+     "unit": "s0009",
+     "quote": "廆卒，嗣位"
+    },
+    {
+     "unit": "s0021",
+     "quote": "咸和九年"
+    }
+   ]
+  },
+  {
+   "id": "hints-p002",
+   "verdict": "supported",
+   "event": "Active hint check: Hui's own death AD 333; his dukedom fact is undated.",
+   "reason": "Hints [\"AD 333\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "廆卒"
+    }
+   ]
+  },
+  {
+   "id": "hints-p003",
+   "verdict": "supported",
+   "event": "Active hint check: Qidegui's expulsion and death, 333–334 window.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "奔死於外"
+    }
+   ]
+  },
+  {
+   "id": "hints-p004",
+   "verdict": "supported",
+   "event": "Active hint check: Yidougui's own expulsion of Qidegui, peace plea and backing of Ren are all 333–334 window events, so the single AD 333-334 hint matches them.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "逸豆歸懼而請和"
+    }
+   ]
+  },
+  {
+   "id": "hints-p005",
+   "verdict": "supported",
+   "event": "Active hint check: Han's own fear at Hui's death (333) and the Liucheng raid (334).",
+   "reason": "Hints [\"AD 333\", \"AD 334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "及廆卒"
+    },
+    {
+     "unit": "s0013",
+     "quote": "翰出奔段遼"
+    }
+   ]
+  },
+  {
+   "id": "hints-p006",
+   "verdict": "supported",
+   "event": "Active hint check: Ren's own fear at Hui's death (333) and the 是歲 surrender of his appointees (334, context claim-143).",
+   "reason": "Hints [\"AD 333\", \"AD 334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "並懼不自容"
+    },
+    {
+     "unit": "s0019",
+     "quote": "自稱車騎將軍"
+    }
+   ]
+  },
+  {
+   "id": "hints-p007",
+   "verdict": "supported",
+   "event": "Active hint check: Zhao's own fear (333) and death (333–334 window).",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0014",
+     "quote": "皝殺昭"
+    }
+   ]
+  },
+  {
+   "id": "hints-p008",
+   "verdict": "supported",
+   "event": "Active hint check: No dated event of Han's mother; empty hints are correct.",
+   "reason": "Hints [] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0011",
+     "quote": "庶兄"
+    }
+   ]
+  },
+  {
+   "id": "hints-p009",
+   "verdict": "supported",
+   "event": "Active hint check: No dated event of Huang's mother; empty hints are correct.",
+   "reason": "Hints [] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0011",
+     "quote": "母弟"
+    }
+   ]
+  },
+  {
+   "id": "hints-p011",
+   "verdict": "supported",
+   "event": "Active hint check: p011's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "建武幼"
+    }
+   ]
+  },
+  {
+   "id": "hints-p012",
+   "verdict": "supported",
+   "event": "Active hint check: p012's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "佟壽"
+    }
+   ]
+  },
+  {
+   "id": "hints-p013",
+   "verdict": "supported",
+   "event": "Active hint check: p013's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "王冰"
+    }
+   ]
+  },
+  {
+   "id": "hints-p014",
+   "verdict": "supported",
+   "event": "Active hint check: p014's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "孫機"
+    }
+   ]
+  },
+  {
+   "id": "hints-p015",
+   "verdict": "supported",
+   "event": "Active hint check: p015's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "封抽"
+    }
+   ]
+  },
+  {
+   "id": "hints-p016",
+   "verdict": "supported",
+   "event": "Active hint check: p016's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "乙逸"
+    }
+   ]
+  },
+  {
+   "id": "hints-p017",
+   "verdict": "supported",
+   "event": "Active hint check: p017's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "韓矯"
+    }
+   ]
+  },
+  {
+   "id": "hints-p018",
+   "verdict": "supported",
+   "event": "Active hint check: p018's only own event is in the 333–334 post-Hui sequence.",
+   "reason": "Hints [\"AD 333-334\"] match the person's own supported events; no reception date feeds them.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "高詡"
+    }
+   ]
+  }
+ ],
+ "personChecks": [
+  {
+   "id": "p001",
+   "verdict": "supported",
+   "reason": "Huang: no birth or age is stated (s0003 gives only 第三子). His own chronology is coherent: 建武初 appointments in 317, campaigns on or after 317, 太甯末 325–326, succession 333, and 333–334 window events. Hints remain supported.",
+   "evidence": [
+    {
+     "unit": "s0007",
+     "quote": "建武初，拜為冠軍將軍、左賢王，封望平侯"
+    },
+    {
+     "unit": "s0008",
+     "quote": "太甯末，拜平北將軍，進封朝鮮公"
+    },
+    {
+     "unit": "s0009",
+     "quote": "廆卒，嗣位"
+    },
+    {
+     "unit": "s0021",
+     "quote": "咸和九年"
+    }
+   ]
+  },
+  {
+   "id": "p002",
+   "verdict": "supported",
+   "reason": "Hui: death 333 is supported by Jinshu 108; the s0006 dukedom is correctly undated. Jinshu 108 also records 遼東國公 under 建興中, so no 317 dating is safe.",
+   "evidence": [
+    {
+     "unit": "s0009",
+     "quote": "廆卒"
+    }
+   ]
+  },
+  {
+   "id": "p003",
+   "verdict": "supported",
+   "reason": "Qidegui's expulsion and death, 333–334 window.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "奔死於外"
+    }
+   ]
+  },
+  {
+   "id": "p004",
+   "verdict": "supported",
+   "reason": "Yidougui: no birth, death or age is stated. His own events (claim-74, claim-139, and context claim-100) all fall in the 333–334 post-Hui window, and hints [\"AD 333-334\"] now match them.",
+   "evidence": [
+    {
+     "unit": "s0010",
+     "quote": "逸豆歸懼而請和"
+    }
+   ]
+  },
+  {
+   "id": "p005",
+   "verdict": "supported",
+   "reason": "Han's own fear at Hui's death (333) and the Liucheng raid (334).",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "及廆卒"
+    },
+    {
+     "unit": "s0013",
+     "quote": "翰出奔段遼"
+    }
+   ]
+  },
+  {
+   "id": "p006",
+   "verdict": "supported",
+   "reason": "Ren's own fear at Hui's death (333) and the 是歲 surrender of his appointees (334, context claim-143).",
+   "evidence": [
+    {
+     "unit": "s0012",
+     "quote": "並懼不自容"
+    },
+    {
+     "unit": "s0019",
+     "quote": "自稱車騎將軍"
+    }
+   ]
+  },
+  {
+   "id": "p007",
+   "verdict": "supported",
+   "reason": "Zhao's own fear (333) and death (333–334 window).",
+   "evidence": [
+    {
+     "unit": "s0014",
+     "quote": "皝殺昭"
+    }
+   ]
+  },
+  {
+   "id": "p008",
+   "verdict": "supported",
+   "reason": "No dated event of Han's mother; empty hints are correct.",
+   "evidence": [
+    {
+     "unit": "s0011",
+     "quote": "庶兄"
+    }
+   ]
+  },
+  {
+   "id": "p009",
+   "verdict": "supported",
+   "reason": "No dated event of Huang's mother; empty hints are correct.",
+   "evidence": [
+    {
+     "unit": "s0011",
+     "quote": "母弟"
+    }
+   ]
+  },
+  {
+   "id": "p011",
+   "verdict": "supported",
+   "reason": "p011's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "建武幼"
+    }
+   ]
+  },
+  {
+   "id": "p012",
+   "verdict": "supported",
+   "reason": "p012's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0016",
+     "quote": "佟壽"
+    }
+   ]
+  },
+  {
+   "id": "p013",
+   "verdict": "supported",
+   "reason": "p013's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "王冰"
+    }
+   ]
+  },
+  {
+   "id": "p014",
+   "verdict": "supported",
+   "reason": "p014's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "孫機"
+    }
+   ]
+  },
+  {
+   "id": "p015",
+   "verdict": "supported",
+   "reason": "p015's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "封抽"
+    }
+   ]
+  },
+  {
+   "id": "p016",
+   "verdict": "supported",
+   "reason": "p016's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "乙逸"
+    }
+   ]
+  },
+  {
+   "id": "p017",
+   "verdict": "supported",
+   "reason": "p017's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "韓矯"
+    }
+   ]
+  },
+  {
+   "id": "p018",
+   "verdict": "supported",
+   "reason": "p018's only own event is in the 333–334 post-Hui sequence.",
+   "evidence": [
+    {
+     "unit": "s0018",
+     "quote": "高詡"
+    }
+   ]
+  }
+ ],
+ "findings": [],
+ "references": [
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108",
+   "title": "晉書 卷108 載記第八 慕容廆 (Wikisource)",
+   "quote": "八年，廆卒，乃止。時年六十五",
+   "sourceHash": "sha256:ecabaab37afff893fea5c91a83b2172bc73e910face3f692e7e59fb30d658c72",
+   "accessedAt": "2026-11-06T22:35:38+00:00",
+   "reason": "Follows 咸和五年 in Hui's annals: Xianhe 8 = AD 333 for Hui's death."
+  },
+  {
+   "kind": "external",
+   "url": "https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8/%E5%8D%B7108",
+   "title": "晉書 卷108 載記第八 慕容廆 (Wikisource)",
+   "quote": "建興中，湣帝遣使拜廆鎮軍將軍、昌黎、遼東二國公",
+   "sourceHash": "sha256:3175721c0ddc37cceaf6971150df5f62b57214da09a6f329607717b721c99cc4",
+   "accessedAt": "2026-11-06T22:35:38+00:00",
+   "reason": "Hui already held a Liaodong dukedom under Jianxing (AD 313–317), so s0006 cannot be pinned to 317 or after 太興."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0007",
+   "quote": "建武初",
+   "sourceHash": "sha256:293a3df14207c730ee5b7cd51404b8448d0242993fec13dffcc47535bad3d5f9",
+   "reason": "Anchors the Jianwu-start appointments to AD 317, the first year of Jianwu before its 318 renaming."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0008",
+   "quote": "太甯末",
+   "sourceHash": "sha256:d89c37d482955b1c978c55fe969daa730d800e24b5ef28a1a88894cb962273fa",
+   "reason": "Late Taining anchors a 325–326 window, since Xianhe began in AD 326."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0009",
+   "quote": "廆卒",
+   "sourceHash": "sha256:9741868c8182d0dfdcd37774c6906ff800ffb6460a7c6d2981bae00f58ab0360",
+   "reason": "Hui's death, which opens the post-Hui event window (AD 333 per Jinshu 108)."
+  },
+  {
+   "kind": "chapter",
+   "book": "jinshu",
+   "chapter": "109",
+   "unit": "s0021",
+   "quote": "咸和九年",
+   "sourceHash": "sha256:47e9750f16d7c1c56b5ab9f178bfce201207597384fe56159d24dcd7892d89ce",
+   "reason": "Xianhe 9 = AD 334 closes the window for preceding undated post-Hui events."
+  }
+ ]
+}
