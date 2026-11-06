@@ -232,6 +232,12 @@ for folder in dateResearch.glob('native-final-date-stage-*'):
  assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for native chronology watcher to release its own lock'
 for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.geographic-mention-*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
+pairedController=dateResearch/'paired-English-s0028-s0062-controller.json'
+if pairedController.exists():
+ pairedState=json.loads(pairedController.read_text())
+ assert pairedState['phase'] in ['checkpoint-held','applied-checkpoint'] and pairedState.get('executorReleased') is True,'Drain paired English review before snapshot'
+ assert not pairedState['activeCaseId'] and all(p['status']=='returned' for p in pairedState['parts']),'Preserve active English reviewer handles'
+ assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for paired English watcher to release its own lock'
 files += list(audit.glob('handoff-before-*.md'))
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
