@@ -56,6 +56,7 @@ for folderName in ['final-reaudit3-calibration-20261104','final-reaudit3-artifac
  files += list(folder.glob('*.json'));files.append(folder/'one-review.log')
 files += [audit/'final-reaudit3-calibration-controller.log',audit/'final-reaudit3-artifact-recovery-controller.log']
 files += list(audit.glob('handoff-before-*.md'))
+files.append(audit/'checkpoint-selected-recovery.py')
 live=pathlib.Path('data/people/generated/completion/jinshu/053/bounded-dossiers-1f03-20261030/live-check-4064b02dc4d2.json')
 if live.exists():files.append(live)
 for folderName in ['second-final-reaudit3-calibration-20261105','second-final-reaudit3-artifact-recovery-20261105']:
@@ -184,9 +185,7 @@ for folder in dateResearch.glob('complete-English-coverage-c4f6b535-20261105*'):
  if folder.is_dir():
   for extension in ['json','mjs','txt','jsonl']:
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
-files.append(audit/'handoff-before-original-cross-reviews-20261105.md')
-files.append(audit/'handoff-before-complete-source-English-coverage-20261105.md')
-files.append(audit/'handoff-before-research-English-source-20261105.md')
+files += list(audit.glob('handoff-before-*.md'))
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
 files += list(wf072.glob('*.json'))
