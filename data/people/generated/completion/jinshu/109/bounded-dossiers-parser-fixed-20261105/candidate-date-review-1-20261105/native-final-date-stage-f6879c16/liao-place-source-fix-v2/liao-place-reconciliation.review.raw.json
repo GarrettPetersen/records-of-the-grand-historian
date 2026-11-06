@@ -1,0 +1,52 @@
+{
+ "kind": "independent-source-epoch-transition-review",
+ "packetSha256": "97be9b9a6761c8dfc55cd5b4029df01502d48347dc0ebbb82cf9dd7de0ad5d82",
+ "sourceHash": "sha256:28badf0a7033d58ae2eea1afa52bd02951460779ae9b2413e0732da952c74cd8",
+ "extractionHash": "sha256:e6517350b0d7a993311a41c946ccc98eee3bd46fc48657d0496df9308c0ca619",
+ "manifestSha256": "fafa74b151d92f9783ba8806a64b8dc80c53a5fa9c0d7f1d2188297a62556df8",
+ "applierSha256": "8fe0323648acefcfbb4722b201fd5c6bf10fd912f6c8776425ee0de22de7a37a",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+  "independentOfAuthor": true
+ },
+ "verdict": "approve",
+ "checks": [
+  {
+   "id": "reviewed-runtime-commit-and-complete-import-seals",
+   "verdict": "approve",
+   "reason": "This resolves my unsealed-runtime-imports finding. checkRuntime() hardcodes reviewedRuntimeHead c991cf12d80fda1d1375d729f6f3553cc212bbcb (the same boundary I accepted earlier) and requires git rev-parse HEAD to equal it and git status --porcelain --untracked-files=no to be empty in the runtime worktree. It parses the applier's own static imports (non-node:) and requires exactly 12, re-running the regex gives 12 and there are no dynamic imports, then hashes each resolved file. All 12 manifest.runtimeBoundary hashes match seals I reviewed before: the 10 runtime modules match code-transition-02, and source-review-validation.mjs f5ad0e95… and provider-observation.mjs 605ae0cf… match the source-epoch packets. The boundary is computed at load for every action, embedded at prepare, deep-compared to the manifest in every later action, and recomputed right after the wx application intent, before any source pins, the rename or writes. Non-blocking notes: the ES modules are evaluated just before their bytes are hashed, and node_modules and untracked-but-ignored files are outside the tracked-clean check."
+  },
+  {
+   "id": "exact-geographic-occurrence-and-retained-personal-aliases",
+   "verdict": "approve",
+   "reason": "s0019 zh 仁於是盡有遼左之地 uses 遼左 for the region east of the Liao River, not Duan Liao. The English 'Liao' at code points 46–50 (which I re-sliced) is the geographic one. The patch requires exactly one p157 personal-name/en/'Liao' surface row and exactly one ['s0019',[0]] occurrence. It removes that occurrence and asserts the remaining occurrences equal [['s0024',[0]],['s0055',[0]],['s0156',[1]]]. The manifest before and after surfaces show exactly this one-entry delta. s0024 遼弟蘭, s0055 遼遣將 and s0156 為遼所敬愛 are genuine short forms of Duan Liao and stay. The new candidate jinshu:109:cand_58144e3674e2cd76 gets a place disposition, but only if no disposition for it already exists. The unitPeople guard proves that no other p157 mention, including a Chinese 遼, stays in s0019. The p157 person record is unchanged and no records are merged. The source finding's remark that p157 is 'a second 段遼 record' is left unresolved, as it should be. The patch logic is byte-identical to v1, and the manifest sourceUnit, retainUnits, person, beforeSurface, afterSurface and candidate are unchanged."
+  },
+  {
+   "id": "strict-validation-and-unchanged603-date-items",
+   "verdict": "approve",
+   "reason": "Both the canonical file and candidate-3 are patched the same way. Each goes through validateCompactPeopleExtraction with strictAliasDispositions plus validateAppliedEditorialDecisions, and must have 865 mentions (one false mention removed). buildDateAuditPacket items and people deep-equal the before state for both. unitPeople may differ only by p157 being removed from s0019. dateRepairDifference(c,s) followed by applyDateRepairProposal must reproduce the candidate exactly, and apply re-runs the same validation, replay and hash checks on the installed files. The 603 date items, the claims and the hints therefore can't change in a way these validators would miss. The Chinese and English prose and the editorial file are pinned by hash before and after. The validators producing these guarantees are now part of the sealed, reviewed c991cf12 runtime boundary, and the old and new extraction hashes and file pins are unchanged from v1."
+  },
+  {
+   "id": "native-round3-cap-and-complete-history-preservation",
+   "verdict": "approve",
+   "reason": "Prepare requires state round 3, reviewRoundCeiling 3, no circuit breaker, no active part and exactly one returned part. Apply hash-checks all 29 workflowFiles (including review-1.json dbd6a595…, the reaudit-3 report b3b7b628… and state 72f39529…) after the reservation. It then archives the whole directory by rename to a new, non-existent .geographic-mention-<uuid> path, copies back with COPYFILE_EXCL, and re-hashes every archived file afterwards. The new state keeps round 3 and ceiling 3 with no circuit breaker, records roundBefore and roundAfter as 3 and nativeRepairRoundConsumed false, and asserts date-audits/jinshu/109.json is absent. There is no explicit recover action: a crash after the rename leaves the intent and the ledger in the applying phase, and reruns are refused. This fails closed and the original bytes in the archive stay intact, but recovery would be manual. v2 uses a fresh liao-place-source-fix-v2 output folder and a new toGenerationId (efe86033…), so v1's preparation does not collide with it."
+  },
+  {
+   "id": "retire-only-stale-phase3-plan-and-partial-proof",
+   "verdict": "approve",
+   "reason": "Only reaudit-3-* files are left out of the new active directory. In the new state, only jobs with reaudit-3- keys and reviewPlans['reaudit-3'] are removed (the old plan with 13 job ids, 40 units and 49152 bytes stays in the archive and the manifest). In the ledger, only claim.reviewPlans['reaudit-3'] is removed, after the full claim is pushed to dateAuditHistory. The partial approval from 671637ac/t2s3 is preserved, not retagged: approvalRetagged is false, oldPartialReports is 1 and the old controller is left as it was. The candidates, repairs, preflights, review-1 and the lineage files are copied back byte for byte. Only candidate-3, the combined proposal, state and the author journal are rewritten with the new generation, and the new stage gets only a revision.json."
+  },
+  {
+   "id": "current-source-pins-and-shared-ownership",
+   "verdict": "approve",
+   "reason": "owner() requires the exact worker, the grokbot lane, the generation, the source and extraction hashes and the executorToken in every ledger mutation, with no claimed or running jobs. The identity run must be idle, with updatedAt pinned at 2026-11-06T20:33:17.568Z. The pins for the canonical file (9a830b99…), source (b7788e71…), editorial (7b42f5d3…), state (72f39529…) and staged outputs are checked before the reservation. After the wx intent, the runtime boundary, source, editorial, canonical and state pins and all 29 workflow files are re-checked before the archive rename and writes. All of this is unchanged from v1 except the runtime re-check that was added, and the earlier code gap is closed. Recovery fails closed: an existing intent or receipt refuses reruns."
+  },
+  {
+   "id": "fresh-independent-audit-required-before-publication",
+   "verdict": "approve",
+   "reason": "After apply, the ledger claim is set to active with candidateStage.requiresFreshCompleteIndependentAudit true, round 3 and maxRepairRounds 3. The executor token, host and expiry are cleared, so a new owner has to claim it. The identity review is put on source-reconciliation-hold with oldPacketDispatchForbidden, and the controller records oldPacketDispatchForbidden and executorReleased. With the reaudit-3 plan and jobs removed, any new audit has to be built from the new fingerprint inputs. dateApproval and chapterApproved stay false and no date-audit file is created. This review gives no date, identity, chapter or publication approval."
+  }
+ ],
+ "findings": []
+}

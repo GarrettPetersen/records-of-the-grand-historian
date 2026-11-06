@@ -216,6 +216,22 @@ for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('1
  if folder.is_dir():files += list(folder.glob('*.json'))
 for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.reviewed-English-*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
+for folder in dateResearch.glob('native-final-date-stage-*'):
+ if not folder.is_dir():continue
+ controller=folder/'audit-controller.json'
+ if controller.exists():
+  nativeAudit=json.loads(controller.read_text())
+  assert nativeAudit['phase'] in ['checkpoint-held','source-reconciled'],'Drain the current native chronology audit before snapshot'
+  assert not nativeAudit['activePart'] and nativeAudit.get('executorReleased') is True,'Preserve active chronology reviewer handles'
+  assert all(part['status'] not in ['claimed','running'] for part in nativeAudit['parts']),'Preserve active chronology reviewers'
+ for sourceController in folder.glob('liao-place-source-fix*/review-controller.json'):
+  sourceReview=json.loads(sourceController.read_text())
+  assert sourceReview['phase'] in ['applied','checkpoint-held'] or (sourceReview['phase']=='returned' and sourceReview.get('verdict')=='needs-revision'),'Preserve live source-attribution review'
+ for extension in ['json','mjs','txt','jsonl']:
+  files += [p for p in folder.rglob('*.'+extension) if not p.name.endswith('.private.json')]
+ assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for native chronology watcher to release its own lock'
+for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.geographic-mention-*'):
+ if folder.is_dir():files += list(folder.glob('*.json'))
 files += list(audit.glob('handoff-before-*.md'))
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')

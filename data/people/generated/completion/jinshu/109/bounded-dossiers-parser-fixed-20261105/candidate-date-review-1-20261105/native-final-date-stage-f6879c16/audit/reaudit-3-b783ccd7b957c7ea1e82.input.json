@@ -1,0 +1,2295 @@
+{
+  "instructions": "You are performing one bounded phase of the independent chronology workflow.\nThe host owns publication. Never certify your own repairs. Do not re-extract\nnames/mentions, rewrite translations, clone the corpus, or call another paid API.\n\nUse the supplied sealed evidence and your assigned output path. Do not create a\nrepository clone or worktree for this job. When using a shared host checkout, write\nonly the assigned review/repair artifact; the host owns validation, source changes,\nGit operations and publication. Separate reviewer conversations provide independence.\n\nHistorical rules: date the named person's OWN event, not a descendant's action,\nlater quotation, republication, or commemoration. Read the Chinese; the English\nand previous model assertions are not independent evidence. Verify conversions\nagainst a primary passage and a reliable calendar reference, including the ruler,\npolity, reign and repeated era names. Preserve competing readings. Never infer\ntwins from 同生 in a maternal list. Preserve age reckoning; do not automatically\nconvert traditional inclusive age into a precise birth year. Conventional regnal\nyear labels need not equal the Gregorian year of every month/day within them.\nThere is no year zero. Use BC/AD. Keep birth/death separate from activity.\nPreserve later reception as its own event, not living activity: use event kind\nretrospective-reference, or receptionType: retrospective on a narrower honor/work\nclaim. This does not change the posthumous-name alias kind. Record\nthe reception's own date, source and subject role. Retrospective does not imply\ndead; there is no separate posthumous reception category. A later-written biography\ncan still attest an earlier life event. Do not use reception dates as life dates\nor active hints, and do not discard the later reference when repairing them.\nFor verified month/day events, normalize Western years/bounds to proleptic\nGregorian and state that convention in the conversion evidence. Check the\nconverter's calendar setting: Academia Sinica defaults to Julian before 1582,\nwhich can change the Western year near New Year. Retain the Chinese date and\nidentify Julian witnesses explicitly. Do not apply a fixed offset across\ncenturies or pretend a reign-year-only label specifies a Gregorian event date.\n\nUse westernBounds with before/onOrBefore/after/onOrAfter positive BC/AD year\nobjects for genuine one-sided knowledge. An event after an accession in AD 479\ncan still occur in AD 479: onOrAfter 479, not after 479. Never invent a second\nendpoint or turn a bound into an exact year. Preserve relative event sequence.\nAn unresolved source date requires unresolved:true and a substantive\nunresolvedReason, not a guessed year. Research blocks approval; report it honestly.\n\nDistinguish a positively attested, genuinely undated fact from an unresolved\nasserted date. In a scoped repair, use an attestation value with\nundatedSourceAttestation:true and a source-specific event of at least 20 characters;\nit must contain no sourceDate, qualitative, Western-date or unresolved fields.\nPreserve the subject, facts and source evidence. Preserve a stated age and its\nexisting reckoning: an undated age claim may use the same marker and event in its\ndateContext. Age five does not supply a calendar year, birth year or reign-wide\nactivity interval. Check all supplied evidence before changing active hints;\nexplicitly undated evidence alone does not justify inventing a hint. Reviewers\nmust still check these items. Do not merely clear unresolved flags: explain the\nsource-supported replacement. This pathway does not resolve a genuinely disputed\nsource date, conversion, event owner or conflicting witness; retain the appropriate\nsupported uncertainty or research hold.\n\nSupported value examples (retain each claim's person and evidence; preserve the\nexisting sui reckoning in the age example):\nAttestation: {\"undatedSourceAttestation\":true,\"event\":\"Emperor Wu loved Sima Yu and kept him at his side; no calendar date is stated.\"}\nAge: {\"age\":5,\"reckoning\":\"sui\",\"dateContext\":{\"undatedSourceAttestation\":true,\"event\":\"The crown prince was five when he pulled the emperor by his robe into the darkness; no calendar date is stated.\"}}\n\nINDEPENDENT-REVIEW:\nRead every ownedUnits entry for omitted births, deaths, ages and date context.\nCheck every ownedItems entry, and check each ownedPeople record for missing or\nincoherent chronology in the supplied evidence. Context-only units are read-only;\nother jobs own their completeness checks. Identify the owner of every dated\nevent and justify each endpoint in your reason. A date window must describe\nuncertainty about an event, not activity throughout a dynasty. Check active hints\nagainst supported personal events. Later posthumous events must not feed life dates.\nDo not approve unsupported chronology merely because it looks plausible.\n\nReturn JSON with jobId (input id), sourceHash, extractionHash, reviewedAt (ISO),\nreviewer:{name,independentOfExtractor:true}, summary (substantive),\nreviewedUnits (exact ownedUnits), itemChecks, personChecks, findings, references.\nEvery check has id, verdict (supported/incorrect/research-blocked), reason, and\nevidence:[{unit,quote}] containing a contiguous exact Chinese substring of the cited\nsource unit. Never join disjoint passages with ellipses; use separate evidence\nentries for disjoint passages. Item checks additionally\nhave event describing whose event is being dated. This is required for **every**\nitem check, including `hints-pNNN` active-date-hint rows: give a source-specific\nEnglish sentence of at least 10 characters that identifies the named person's own\nevent (or states that the hint lacks such an event). Do not omit it merely because\nthe item is a hint rather than a claim. Include exactly ownedItems and\nownedPeople, with no duplicates. Even failed jobs must finish their owned checks\nor retain work for continuation; they cannot silently omit a difficult item.\nEvery failed check has an actionable finding:\n{items:[affected item/person IDs],problem,action}. Supported jobs have findings: [].\nKeep each check's reason concise and self-contained, with at least 20 characters\nafter trimming whitespace of substantive, source-specific explanation, not padding:\nidentify its source anchor and why the date is supported or defective. Do not\nlengthen reasons unnecessarily. Put shared research and conversion\nexplanations once in findings or references instead of repeating paragraphs.\nRetain every owned check, its event owner, and exact per-check Chinese evidence.\nExternal research references use {kind:\"external\",url,title,quote,sourceHash,\naccessedAt,reason}; sourceHash is 'sha256:' plus SHA-256 of the short exact excerpt.\nVerify the page before citing it; keep quotations short and copyright-compliant.\nDo not invent a reference or claim an external source was read when it was not.\n\nREPAIR-PROPOSAL:\nResolve the supplied findings by reading their Chinese evidence and doing any\nnecessary targeted research. Return {sourceHash,extractionHash,changes:[...]}.\nEach change has a substantive source-based reason and one of these forms:\n{kind:\"replace\",id:\"claim-N\",before:EXACT_INPUT_ROW,after:REVISED_ROW,reason}\n{kind:\"remove\",id:\"claim-N\",before:EXACT_INPUT_ROW,reason}\n{kind:\"add\",after:[personId,\"attestation\"|\"birth\"|\"death\"|\"age\",value,certainty,[unitIds]],reason}\n{kind:\"add-reception-event\",after:[personId,\"event-participation\",value,certainty,[unitIds]],reason}\n{kind:\"date-context\",id:\"claim-N\",before:EXACT_INPUT_DATE_CONTEXT_OR_NULL,after:REVISED_DATE_CONTEXT,reason}\n{kind:\"hints\",personId,before:EXACT_OLD_HINT_ARRAY,after:NEW_HINT_ARRAY,reason}\nClaim rows are compact five-element arrays. Replacements keep subject/predicate.\nUse date-context only for an existing non-life claim. Its before value is exactly\nclaims[id][2].dateContext, or null when absent; its after value is only the revised\ndate-context object, never a complete claim row. It may change only sourceDate,\nwesternYear, westernInterval, westernBounds, unresolved, and unresolvedReason.\nCopy an existing event description verbatim. The host retains the claim's subject,\npredicate, certainty, evidence, and other non-date fields unchanged. Do not remove\nor invent an event, or use date-context for attestation, birth, death, or age rows.\nDo not modify names, roles, mentions, family links or translation text. Preserve\nlegitimate posthumous reception as an event, but remove it from personal activity.\nUse add-reception-event with an explicit retrospective classification\nas described above. Remove or correct the misleading life claim separately.\nDo not invent a date for an undated reference or rewrite unrelated event fields.\nAll necessary operations must be in changes; do not leave required companion\nrecords in hostRequiredChanges or similar side lists. If the supported operations\ncannot represent the complete repair, return blocked:true and explain the gap.\nSynchronize hints with corrected chronology. Use only existing person IDs and\nknown source-unit IDs. Avoid unnecessary edits. The next reviewer receives the\nresulting claims independently and must establish their support from the source.\nIf research cannot resolve a finding, return {blocked:true,reason:...}; do not\ndelete a person or fabricate a date to get a passing result.\nFor person checks, compare all supplied items and contextItems for that person,\nincluding dates elsewhere in the chapter. Context items are read-only evidence;\ndo not emit itemChecks for IDs outside ownedItems. Report contradictions or\nmissing narrative context instead of certifying a person from an isolated event.\nKeep supplementary research targeted to an existing date defect, a local omission,\nor a needed conversion. Do not expand this audit into new biographies or add every\nexternal life date you encounter. Preserve genuinely conflicting witnesses as\nexplicitly supported uncertainty when possible; neither choose a winning date nor\ncreate false precision to clear a finding. An unsupported conversion remains a hold.\n\nRetrospective is the sole later-reception category, including commemorations and\nreferences after a known death. Use kind `retrospective-reference` or, on a narrower\nhonor/work claim, receptionType `retrospective`. Do not require proof of death,\nintroduce a posthumous subtype, or change the separate `posthumous-name` alias kind.\n\nThe returned attachment must include reviewer:{name,agentId,independentOfExtractor:true}. Use your actual stable conversation/context ID as agentId. This identity is a human attestation, not machine proof; a repair context cannot independently review its own changes.",
+  "phase": "independent-review",
+  "schemaVersion": 1,
+  "workflowVersion": 1,
+  "book": "jinshu",
+  "chapter": "109",
+  "sourceHash": "sha256:28badf0a7033d58ae2eea1afa52bd02951460779ae9b2413e0732da952c74cd8",
+  "extractionHash": "sha256:e6517350b0d7a993311a41c946ccc98eee3bd46fc48657d0496df9308c0ca619",
+  "sourceUrl": "https://chinesenotes.com/jinshu/jinshu109.html",
+  "ownedUnits": [
+    "s0182",
+    "s0183",
+    "s0184",
+    "s0185",
+    "s0186",
+    "s0187",
+    "s0188",
+    "s0189",
+    "s0190",
+    "s0191",
+    "s0192",
+    "s0193",
+    "s0194",
+    "s0195",
+    "s0196",
+    "s0197",
+    "s0198",
+    "s0199",
+    "s0200",
+    "s0201",
+    "s0202",
+    "s0203",
+    "s0204",
+    "s0205",
+    "s0206",
+    "s0207",
+    "s0208",
+    "s0209",
+    "s0210",
+    "s0211",
+    "s0212",
+    "s0213",
+    "s0214",
+    "s0215",
+    "s0216",
+    "s0217",
+    "s0218",
+    "s0219"
+  ],
+  "ownedItems": [
+    "claim-937",
+    "claim-940",
+    "claim-942",
+    "claim-971",
+    "claim-975",
+    "claim-980",
+    "claim-991",
+    "claim-992",
+    "claim-993",
+    "claim-994",
+    "claim-995",
+    "claim-996",
+    "claim-997",
+    "claim-1016",
+    "claim-1019",
+    "claim-1022",
+    "claim-1023",
+    "claim-1024",
+    "claim-1026",
+    "claim-1029",
+    "claim-1030",
+    "claim-1038",
+    "claim-1042",
+    "claim-1046",
+    "claim-1047",
+    "claim-1052",
+    "claim-1053",
+    "claim-1059",
+    "claim-1065",
+    "claim-1070",
+    "claim-1077",
+    "claim-1091",
+    "claim-1092",
+    "claim-1095",
+    "claim-1100",
+    "claim-1106",
+    "claim-1108",
+    "claim-1141",
+    "claim-1142",
+    "claim-1143",
+    "claim-1144",
+    "claim-1145",
+    "claim-1146",
+    "claim-1147",
+    "claim-1148",
+    "claim-1149",
+    "hints-p160",
+    "hints-p165",
+    "hints-p166",
+    "hints-p167",
+    "hints-p168",
+    "hints-p169",
+    "hints-p170",
+    "hints-p171",
+    "hints-p172",
+    "hints-p173",
+    "hints-p174",
+    "hints-p175",
+    "hints-p176",
+    "hints-p177",
+    "hints-p178",
+    "hints-p179",
+    "hints-p180",
+    "hints-p181"
+  ],
+  "ownedPeople": [
+    "p160",
+    "p165",
+    "p166",
+    "p167",
+    "p168",
+    "p169",
+    "p170",
+    "p171",
+    "p172",
+    "p173",
+    "p174",
+    "p175",
+    "p176",
+    "p177",
+    "p178",
+    "p179",
+    "p180",
+    "p181"
+  ],
+  "people": [
+    {
+      "id": "p160",
+      "names": [
+        "Duan Liao",
+        "段遼",
+        "Duan Liao"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and Clan Leader",
+      "hints": [
+        "AD 338",
+        "AD 338-339",
+        "on or after AD 333 and on or before AD 338"
+      ]
+    },
+    {
+      "id": "p161",
+      "names": [
+        "Murong Han",
+        "慕容翰",
+        "Murong Han"
+      ],
+      "historicity": "historical",
+      "descriptor": "General",
+      "hints": [
+        "AD 344"
+      ]
+    },
+    {
+      "id": "p162",
+      "names": [
+        "Yuwen Gui",
+        "宇文歸",
+        "Yuwen Gui"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and Clan Leader",
+      "hints": [
+        "AD 344"
+      ]
+    },
+    {
+      "id": "p163",
+      "names": [
+        "Murong Huang",
+        "慕容皝",
+        "Murong Huang"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler",
+      "hints": [
+        "on or after AD 338 and on or before AD 348",
+        "AD 341-342",
+        "AD 344"
+      ]
+    },
+    {
+      "id": "p165",
+      "names": [
+        "Yang Yu",
+        "陽裕",
+        "Yang Yu"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official and Administrator",
+      "hints": [
+        "on or before AD 304",
+        "AD 314",
+        "AD 314-318",
+        "on or after AD 333 and on or before AD 338",
+        "AD 338-339",
+        "AD 341",
+        "AD 341-342",
+        "AD 344",
+        "on or after AD 344 and on or before AD 348"
+      ]
+    },
+    {
+      "id": "p166",
+      "names": [
+        "Yang Dan",
+        "耽",
+        "Dan"
+      ],
+      "historicity": "historical",
+      "descriptor": "Family Member",
+      "hints": []
+    },
+    {
+      "id": "p167",
+      "names": [
+        "He Yan",
+        "和演",
+        "He Yan"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": [
+        "on or before AD 304"
+      ]
+    },
+    {
+      "id": "p168",
+      "names": [
+        "Wang Jun",
+        "王浚",
+        "Wang Jun"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official and Warlord",
+      "hints": [
+        "on or after AD 304 and on or before AD 314"
+      ]
+    },
+    {
+      "id": "p169",
+      "names": [
+        "Shi Le",
+        "石勒",
+        "Shi Le"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and Warlord",
+      "hints": [
+        "AD 314"
+      ]
+    },
+    {
+      "id": "p170",
+      "names": [
+        "Zao Song",
+        "棗嵩",
+        "Zao Song"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": [
+        "AD 314"
+      ]
+    },
+    {
+      "id": "p171",
+      "names": [
+        "Liu Han",
+        "劉翰",
+        "Liu Han"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": [
+        "AD 314"
+      ]
+    },
+    {
+      "id": "p172",
+      "names": [
+        "Duan Juan",
+        "段眷",
+        "Duan Juan"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and Tribal Leader",
+      "hints": [
+        "AD 314-318"
+      ]
+    },
+    {
+      "id": "p173",
+      "names": [
+        "Cheng Pan",
+        "成泮",
+        "Cheng Pan"
+      ],
+      "historicity": "historical",
+      "descriptor": "Named Individual",
+      "hints": [
+        "AD 314-318"
+      ]
+    },
+    {
+      "id": "p174",
+      "names": [
+        "Confucius",
+        "仲尼",
+        "Zhongni"
+      ],
+      "historicity": "historical",
+      "descriptor": "Philosopher and Teacher",
+      "hints": []
+    },
+    {
+      "id": "p175",
+      "names": [
+        "Bi Xi",
+        "佛肸",
+        "Bi Xi"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": []
+    },
+    {
+      "id": "p176",
+      "names": [
+        "Yi Yin",
+        "伊尹",
+        "Yi Yin"
+      ],
+      "historicity": "historical",
+      "descriptor": "Statesman",
+      "hints": []
+    },
+    {
+      "id": "p177",
+      "names": [
+        "Shao You",
+        "少遊",
+        "Shao You"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official",
+      "hints": []
+    },
+    {
+      "id": "p178",
+      "names": [
+        "Shi Hu",
+        "石季龍",
+        "Shi Jilong"
+      ],
+      "historicity": "historical",
+      "descriptor": "Ruler and Warlord",
+      "hints": [
+        "AD 338"
+      ]
+    },
+    {
+      "id": "p179",
+      "names": [
+        "Ma Qiu",
+        "麻秋",
+        "Ma Qiu"
+      ],
+      "historicity": "historical",
+      "descriptor": "General",
+      "hints": [
+        "AD 338-339"
+      ]
+    },
+    {
+      "id": "p180",
+      "names": [
+        "Lu Chen",
+        "盧諶",
+        "Lu Chen"
+      ],
+      "historicity": "historical",
+      "descriptor": "Official and Scholar",
+      "hints": []
+    },
+    {
+      "id": "p181",
+      "names": [
+        "Father of Yang Yu",
+        null,
+        null
+      ],
+      "historicity": "historical",
+      "descriptor": "Family Member",
+      "hints": []
+    }
+  ],
+  "items": [
+    {
+      "id": "claim-937",
+      "claimIndex": 936,
+      "personId": "p160",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "段遼與皝相攻；遼不從"
+        },
+        "westernBounds": {
+          "onOrAfter": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          },
+          "onOrBefore": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0204",
+        "s0208"
+      ],
+      "claimHash": "sha256:665c64ff806983b285364b1161855eb61c63d1e91f546fe61721ec1714b4535b"
+    },
+    {
+      "id": "claim-940",
+      "claimIndex": 939,
+      "personId": "p160",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "antagonist",
+        "action": "warred-against",
+        "otherPersonId": "p163",
+        "dateContext": {
+          "sourceDate": {
+            "text": "段遼與皝相攻；遼不從"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0204"
+      ],
+      "claimHash": "sha256:b9fce904813b9b8629f591e4459c66bfb0355880e7f7f779f9a224e24be0c12f"
+    },
+    {
+      "id": "claim-942",
+      "claimIndex": 941,
+      "personId": "p160",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "petitioner",
+        "action": "requested-escort",
+        "otherPersonId": "p178",
+        "dateContext": {
+          "sourceDate": {
+            "text": "段遼之請迎于季龍也，裕以左丞領征東麻秋司馬"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 339,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0211"
+      ],
+      "claimHash": "sha256:431537157a654dd4e0657782373c1ff250d93ddb0c3dad07bc4f8721a0d490bf"
+    },
+    {
+      "id": "claim-971",
+      "claimIndex": 970,
+      "personId": "p163",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "及遷都和龍"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0215"
+      ],
+      "claimHash": "sha256:c2349173b754821e5785143f4111e75a450a9934cfce7ccce0342772f35e9e14"
+    },
+    {
+      "id": "claim-975",
+      "claimIndex": 974,
+      "personId": "p163",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "antagonist",
+        "action": "warred-against",
+        "otherPersonId": "p160",
+        "dateContext": {
+          "sourceDate": {
+            "text": "段遼與皝相攻；遼不從"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 333,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0204"
+      ],
+      "claimHash": "sha256:2080866eb18261a6a13348c3c7c183f2832eaaaf6a42de7268668684f0ca1d92"
+    },
+    {
+      "id": "claim-980",
+      "claimIndex": 979,
+      "personId": "p163",
+      "predicate": "place-association",
+      "value": {
+        "place": {
+          "en": "Helong",
+          "zh": "和龍"
+        },
+        "relation": "capital-moved-to",
+        "dateContext": {
+          "sourceDate": {
+            "text": "遷都和龍"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0215"
+      ],
+      "claimHash": "sha256:ad899f867981468751f4c879652818d4be956fbe8bec8ac2efaa23db1cf0e1ab"
+    },
+    {
+      "id": "claim-991",
+      "claimIndex": 990,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "刺史和演辟為主簿"
+        },
+        "westernBounds": {
+          "onOrBefore": {
+            "era": "AD",
+            "year": 304,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0184"
+      ],
+      "claimHash": "sha256:947c482815ca61e2dcc553268e5c2ca771c0b5b7397d64ca79c486de324ad331"
+    },
+    {
+      "id": "claim-992",
+      "claimIndex": 991,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石勒既克薊城"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 314,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0186",
+        "s0188",
+        "s0191"
+      ],
+      "claimHash": "sha256:bdd23897b0c5667f82e458c9f281385205081d53b44517ce3e8b479aaa9b0525"
+    },
+    {
+      "id": "claim-993",
+      "claimIndex": 992,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "鮮卑單于段眷…虛心延裕；裕乃應之"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 314,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 318,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0192",
+        "s0201",
+        "s0202"
+      ],
+      "claimHash": "sha256:c5b3b89f63cf2675d531cef801194da623c555a420c60a5e504d9069cf500153"
+    },
+    {
+      "id": "claim-994",
+      "claimIndex": 993,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "段遼與皝相攻；遼不從"
+        },
+        "westernBounds": {
+          "onOrAfter": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          },
+          "onOrBefore": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0204",
+        "s0208"
+      ],
+      "claimHash": "sha256:e2db2b82f9d676a53a76489a67a2d2a4779d7e7b77706ec5f8d41d7853f2592a"
+    },
+    {
+      "id": "claim-995",
+      "claimIndex": 994,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石季龍克令支；段遼之請迎于季龍也"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 339,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0210",
+        "s0211",
+        "s0212"
+      ],
+      "claimHash": "sha256:b38d9a3c566ac607c03ab3a8a7ba42645570a58efb7af142ad3155b7e3d619cd"
+    },
+    {
+      "id": "claim-996",
+      "claimIndex": 995,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "及遷都和龍"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0215"
+      ],
+      "claimHash": "sha256:9fdd0c90a4812d9e1e8399f528879ef0b9b4e33be59d87eb83d2a2a48e02f44a"
+    },
+    {
+      "id": "claim-997",
+      "claimIndex": 996,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "及死，皝甚悼之，時年六十二"
+        },
+        "westernBounds": {
+          "onOrAfter": {
+            "era": "AD",
+            "year": 344,
+            "precision": "year"
+          },
+          "onOrBefore": {
+            "era": "AD",
+            "year": 348,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0219"
+      ],
+      "claimHash": "sha256:8e314369f34650bbe18e11bf0bca5337bd3d542e3d7eb7192eb7c585aa9e6803"
+    },
+    {
+      "id": "claim-1016",
+      "claimIndex": 1015,
+      "personId": "p165",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "surrendering-governor",
+        "action": "surrendered-commandery",
+        "otherPersonId": "p178",
+        "place": {
+          "en": "Lingzhi",
+          "zh": "令支"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "石季龍克令支"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0210"
+      ],
+      "claimHash": "sha256:e3640edfb415072859b10d7e2573ee65f4e4b4d7c82f9d38176aa8e289a0cf9f"
+    },
+    {
+      "id": "claim-1019",
+      "claimIndex": 1018,
+      "personId": "p165",
+      "predicate": "office",
+      "value": {
+        "label": {
+          "en": "Sima under Ma Qiu",
+          "zh": "征東麻秋司馬"
+        },
+        "action": "held-concurrently",
+        "otherPersonId": "p179",
+        "dateContext": {
+          "sourceDate": {
+            "text": "段遼之請迎于季龍也，裕以左丞領征東麻秋司馬"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 339,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0211"
+      ],
+      "claimHash": "sha256:f6ef4459f9035ceae3cafdf061e77ff738befcfecadbd03979594487e65cdf77"
+    },
+    {
+      "id": "claim-1022",
+      "claimIndex": 1021,
+      "personId": "p165",
+      "predicate": "office",
+      "value": {
+        "label": {
+          "en": "Palace Director",
+          "zh": "郎中令"
+        },
+        "action": "appointed",
+        "authorityPersonId": "p163",
+        "dateContext": {
+          "sourceDate": {
+            "text": "拜郎中令"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 338,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 339,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit",
+      "evidence": [
+        "s0213"
+      ],
+      "claimHash": "sha256:a7cf0553140c8e30d6641d9eb3dfb729a6d3ca6cad3998e29c44fd457123be14"
+    },
+    {
+      "id": "claim-1023",
+      "claimIndex": 1022,
+      "personId": "p165",
+      "predicate": "office",
+      "value": {
+        "label": {
+          "en": "Grand General's Left Major",
+          "zh": "大將軍左司馬"
+        },
+        "action": "promoted",
+        "authorityPersonId": "p163",
+        "dateContext": {
+          "sourceDate": {
+            "text": "遷大將軍左司馬"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit",
+      "evidence": [
+        "s0213"
+      ],
+      "claimHash": "sha256:496e1e874ab547c5f2f7edff552d8abe8b6b4cd568ae1c1c7603630e56395630"
+    },
+    {
+      "id": "claim-1024",
+      "claimIndex": 1023,
+      "personId": "p165",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "strategist",
+        "action": "planned-campaigns",
+        "otherPersonId": "p163",
+        "dateContext": {
+          "sourceDate": {
+            "text": "東破高句麗，北滅宇文歸，皆豫其謀"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 344,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit",
+      "evidence": [
+        "s0214"
+      ],
+      "claimHash": "sha256:ffa2e83fa60015ba902b782bb99f879c3dc451b8cf6b0b91076621260eabda81"
+    },
+    {
+      "id": "claim-1026",
+      "claimIndex": 1025,
+      "personId": "p165",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "scholarly",
+        "role": "planner",
+        "action": "designed-walls-and-palaces",
+        "place": {
+          "en": "Helong",
+          "zh": "和龍"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "及遷都和龍"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 341,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 342,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0215"
+      ],
+      "claimHash": "sha256:7042ab25e8f1ceb85ac234ab7ecde0caffe38e2953c5253f67c1ed742ccab3df"
+    },
+    {
+      "id": "claim-1029",
+      "claimIndex": 1028,
+      "personId": "p165",
+      "predicate": "age",
+      "value": {
+        "age": 62,
+        "reckoning": "sui",
+        "dateContext": {
+          "sourceDate": {
+            "text": "及死，皝甚悼之，時年六十二"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 344,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 348,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit",
+      "evidence": [
+        "s0219"
+      ],
+      "claimHash": "sha256:35f29d1962b1df8afea94f757608d133105d27acb921896c2b119aef1a463085"
+    },
+    {
+      "id": "claim-1030",
+      "claimIndex": 1029,
+      "personId": "p165",
+      "predicate": "death",
+      "value": {
+        "dateContext": {
+          "sourceDate": {
+            "text": "及死，皝甚悼之，時年六十二"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 344,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 348,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0219"
+      ],
+      "claimHash": "sha256:fd25c8f0b456d34de7cc18d8dd3dd14770d0e0b39247b9b6e2a81014cdb1cf6b"
+    },
+    {
+      "id": "claim-1038",
+      "claimIndex": 1037,
+      "personId": "p166",
+      "predicate": "attestation",
+      "value": {
+        "undatedSourceAttestation": true,
+        "event": "Yang Dan recognized and praised his nephew Yang Yu’s promise while Yu was young; the chapter gives no calendar year."
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0183"
+      ],
+      "claimHash": "sha256:1dd4d747910bd0ab12f54821347ff55fcbf9f6a314c14317ae328343a62b0ef0"
+    },
+    {
+      "id": "claim-1042",
+      "claimIndex": 1041,
+      "personId": "p167",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "刺史和演辟為主簿"
+        },
+        "westernBounds": {
+          "onOrBefore": {
+            "era": "AD",
+            "year": 304,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0184"
+      ],
+      "claimHash": "sha256:48b0f65565855bc4a514853ccabc282448a1b7a94af863fef0d00f5f75159e63"
+    },
+    {
+      "id": "claim-1046",
+      "claimIndex": 1045,
+      "personId": "p168",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "王浚領州，轉治中從事"
+        },
+        "westernBounds": {
+          "onOrAfter": {
+            "era": "AD",
+            "year": 304,
+            "precision": "year"
+          },
+          "onOrBefore": {
+            "era": "AD",
+            "year": 314,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0185"
+      ],
+      "claimHash": "sha256:bdff10eaf530a570a65030ad05b86a30682f4b52470b5bce57ed7463f884bff3"
+    },
+    {
+      "id": "claim-1047",
+      "claimIndex": 1046,
+      "personId": "p168",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石勒既克薊城"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 314,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0189",
+        "s0190"
+      ],
+      "claimHash": "sha256:357d69bdb133be130645552165dc8e32dc4e4462e0f310280bc9915a08fb5213"
+    },
+    {
+      "id": "claim-1052",
+      "claimIndex": 1051,
+      "personId": "p169",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石勒既克薊城"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 314,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0186",
+        "s0191"
+      ],
+      "claimHash": "sha256:6a2d8aadd36b9a8f963f63ae18a98ddbb4322d7b14a023544a7cc23c2f9a6910"
+    },
+    {
+      "id": "claim-1053",
+      "claimIndex": 1052,
+      "personId": "p169",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "conqueror",
+        "action": "took-city",
+        "place": {
+          "en": "Jicheng",
+          "zh": "薊城"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "石勒既克薊城"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 314,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0186"
+      ],
+      "claimHash": "sha256:e64d6c7108f011b7935d03195dd050cc1edab7fa4e3cc0f8a4f41906e782ef55"
+    },
+    {
+      "id": "claim-1059",
+      "claimIndex": 1058,
+      "personId": "p170",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石勒既克薊城"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 314,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0186",
+        "s0187",
+        "s0190"
+      ],
+      "claimHash": "sha256:33b930d5f58a06a339c775381caf2b2d8de37700eeb096be48ec73590d61ae31"
+    },
+    {
+      "id": "claim-1065",
+      "claimIndex": 1064,
+      "personId": "p171",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石勒既克薊城"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 314,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0187"
+      ],
+      "claimHash": "sha256:228205f0fc5765ae350ef799f1dc8a190addc8eefbf72587fb15cc3d184f1695"
+    },
+    {
+      "id": "claim-1070",
+      "claimIndex": 1069,
+      "personId": "p172",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "鮮卑單于段眷…虛心延裕；裕乃應之"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 314,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 318,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0192",
+        "s0201"
+      ],
+      "claimHash": "sha256:15acfa9811d279559a58530160de2a6f4764ed653c0fbf25e80da74296719075"
+    },
+    {
+      "id": "claim-1077",
+      "claimIndex": 1076,
+      "personId": "p173",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "鮮卑單于段眷…虛心延裕；裕乃應之"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 314,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 318,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0193",
+        "s0195"
+      ],
+      "claimHash": "sha256:0ffb72c1e78415b397a2e861d7a0d95667a0aa9cd5ccdc7daa0721d884cf138b"
+    },
+    {
+      "id": "claim-1091",
+      "claimIndex": 1090,
+      "personId": "p178",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "石季龍克令支"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 338,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0210",
+        "s0211"
+      ],
+      "claimHash": "sha256:223362fe2a28853e59709d72243f528c84eea0c21b35cc4284b9ada57e24886a"
+    },
+    {
+      "id": "claim-1092",
+      "claimIndex": 1091,
+      "personId": "p178",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "conqueror",
+        "action": "took",
+        "place": {
+          "en": "Lingzhi",
+          "zh": "令支"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "石季龍克令支"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0210"
+      ],
+      "claimHash": "sha256:abf8e1c91ae58f9d0be67650a05c010d69a784d0f45d9ff300b7870db6914db3"
+    },
+    {
+      "id": "claim-1095",
+      "claimIndex": 1094,
+      "personId": "p179",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "段遼之請迎于季龍也，裕以左丞領征東麻秋司馬"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 339,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0211",
+        "s0212"
+      ],
+      "claimHash": "sha256:012ae4eb42c58010c09422e24912e7518f61ce883aa39030befc4e4b0e5cf831"
+    },
+    {
+      "id": "claim-1100",
+      "claimIndex": 1099,
+      "personId": "p180",
+      "predicate": "attestation",
+      "value": {
+        "undatedSourceAttestation": true,
+        "event": "Lu Chen is recalled as praising Yang Yu’s loyalty, integrity and constancy; 初 introduces the recollection without a calendar date."
+      },
+      "certainty": "explicit",
+      "evidence": [
+        "s0218"
+      ],
+      "claimHash": "sha256:dd9800f1e785c5bb2680af4ccbfebc3b5088a92aa26512e0abc5805bad0b2fa5"
+    },
+    {
+      "id": "claim-1106",
+      "claimIndex": 1105,
+      "personId": "p181",
+      "predicate": "attestation",
+      "value": {
+        "undatedSourceAttestation": true,
+        "event": "Yang Yu lost his father while young, as 少孤 establishes; no year of the father’s activity or death is stated."
+      },
+      "certainty": "strongly-inferred",
+      "evidence": [
+        "s0183"
+      ],
+      "claimHash": "sha256:8c53ae1d9072ac1f7f112f44ec0357ce5431c9c5a6834e9d4b8be1e1bb8833fa"
+    },
+    {
+      "id": "claim-1108",
+      "claimIndex": 1107,
+      "personId": "p181",
+      "predicate": "death",
+      "value": {
+        "statement": "died while Yang Yu was young, implied by 少孤"
+      },
+      "certainty": "strongly-inferred",
+      "evidence": [
+        "s0183"
+      ],
+      "claimHash": "sha256:c1234e26ddade925be14d860342d09c390d947b0ac566f719bcf02818d06b9f2"
+    },
+    {
+      "id": "claim-1141",
+      "claimIndex": 1140,
+      "personId": "p174",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "retrospective-reference",
+        "receptionType": "retrospective",
+        "role": "cited precedent",
+        "action": "Confucius is cited as welcoming Bi Xi’s summons and comparing himself to a bottle gourd as a precedent for accepting an invitation to serve.",
+        "dateContext": {
+          "sourceDate": {
+            "text": "裕謂友人成泮曰：「仲尼喜佛肸之召，以匏瓜自喻，伊尹亦稱何事非君，何使非民，聖賢尚如此，況吾曹乎！"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 314,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 318,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0193"
+      ],
+      "claimHash": "sha256:2b3204330b39d27ff3519a2cac1cd5e1df8a3f4bf466d4a03d0bd610c29b2cd8"
+    },
+    {
+      "id": "claim-1142",
+      "claimIndex": 1141,
+      "personId": "p175",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "retrospective-reference",
+        "receptionType": "retrospective",
+        "role": "cited precedent",
+        "action": "Bi Xi’s summons to Confucius is cited as a precedent in Yang Yu’s discussion of accepting Duan Juan’s invitation.",
+        "dateContext": {
+          "sourceDate": {
+            "text": "裕謂友人成泮曰：「仲尼喜佛肸之召，以匏瓜自喻，伊尹亦稱何事非君，何使非民，聖賢尚如此，況吾曹乎！"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 314,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 318,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0193"
+      ],
+      "claimHash": "sha256:0b9357a5dd0a7579977ea836f8f39bda56317615e52d3d385a247416f490a526"
+    },
+    {
+      "id": "claim-1143",
+      "claimIndex": 1142,
+      "personId": "p176",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "retrospective-reference",
+        "receptionType": "retrospective",
+        "role": "cited precedent",
+        "action": "Yi Yin’s statement that one may serve any ruler and any people is cited as a precedent for accepting an invitation to office.",
+        "dateContext": {
+          "sourceDate": {
+            "text": "裕謂友人成泮曰：「仲尼喜佛肸之召，以匏瓜自喻，伊尹亦稱何事非君，何使非民，聖賢尚如此，況吾曹乎！"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 314,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 318,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0193"
+      ],
+      "claimHash": "sha256:02998cf0d0c724e00fe7a9fa711d13853ef1eeaf3d515eaf0c0e6c17137337d6"
+    },
+    {
+      "id": "claim-1144",
+      "claimIndex": 1143,
+      "personId": "p177",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "retrospective-reference",
+        "receptionType": "retrospective",
+        "role": "cited precedent",
+        "action": "Shao You’s saying that a commandery clerkship could protect later generations is cited to support accepting a higher office.",
+        "dateContext": {
+          "sourceDate": {
+            "text": "少遊有雲，郡掾足以廕後，況國相乎！"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 314,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 318,
+              "precision": "year"
+            }
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0199"
+      ],
+      "claimHash": "sha256:8c4757a49f961cc8ec05ca5898a231103f27bbebe617af33e636773ccf6f7f7c"
+    },
+    {
+      "id": "claim-1145",
+      "claimIndex": 1144,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "出為燕郡太守"
+        },
+        "westernBounds": {
+          "onOrAfter": {
+            "era": "AD",
+            "year": 333,
+            "precision": "year"
+          },
+          "onOrBefore": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        },
+        "event": "Jinshu calls Yang Yu warden of Yan commandery; ZZTJ96’s pre-surrender account calls him Beiping xiang. Retain these as conflicting office witnesses without silently replacing either."
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0209"
+      ],
+      "claimHash": "sha256:787cd5d701c7a6243f470ebec653e507a1a20e5c51ed9ea27a5163ef7fdf9786"
+    },
+    {
+      "id": "claim-1146",
+      "claimIndex": 1145,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "拜郎中令"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 339,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0213"
+      ],
+      "claimHash": "sha256:a90ef846cb68e89e8e92ae832f9edc15f90089abf133d08a04309b5c6fa74bbc"
+    },
+    {
+      "id": "claim-1147",
+      "claimIndex": 1146,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "遷大將軍左司馬"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 341,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0213"
+      ],
+      "claimHash": "sha256:9d023e521c592831a67328f542b8a917f393f3721f08667dc3ebb37b715eca6d"
+    },
+    {
+      "id": "claim-1148",
+      "claimIndex": 1147,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "東破高句麗，北滅宇文歸，皆豫其謀"
+        },
+        "event": "Yang Yu participated in planning the Goguryeo campaign; Jinshu and ZZTJ’s campaign chronology is preserved as341–342.",
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 341,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 342,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0214"
+      ],
+      "claimHash": "sha256:cacfb62283488abf9ce1f642de92ce799aeb6056f96a23ce0af8e6be6715779f"
+    },
+    {
+      "id": "claim-1149",
+      "claimIndex": 1148,
+      "personId": "p165",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "東破高句麗，北滅宇文歸，皆豫其謀"
+        },
+        "event": "Yang Yu participated in planning the campaign that destroyed Yuwen Gui, dated344by ZZTJ97.",
+        "westernYear": {
+          "era": "AD",
+          "year": 344,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0214"
+      ],
+      "claimHash": "sha256:cd45bd323634017182415aa0dce798c328cc91658464b3047142f6f89f2da78f"
+    },
+    {
+      "id": "hints-p160",
+      "personId": "p160",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 338",
+        "AD 338-339",
+        "on or after AD 333 and on or before AD 338"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p165",
+      "personId": "p165",
+      "predicate": "active-date-hints",
+      "value": [
+        "on or before AD 304",
+        "AD 314",
+        "AD 314-318",
+        "on or after AD 333 and on or before AD 338",
+        "AD 338-339",
+        "AD 341",
+        "AD 341-342",
+        "AD 344",
+        "on or after AD 344 and on or before AD 348"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p166",
+      "personId": "p166",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    },
+    {
+      "id": "hints-p167",
+      "personId": "p167",
+      "predicate": "active-date-hints",
+      "value": [
+        "on or before AD 304"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p168",
+      "personId": "p168",
+      "predicate": "active-date-hints",
+      "value": [
+        "on or after AD 304 and on or before AD 314"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p169",
+      "personId": "p169",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 314"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p170",
+      "personId": "p170",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 314"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p171",
+      "personId": "p171",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 314"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p172",
+      "personId": "p172",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 314-318"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p173",
+      "personId": "p173",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 314-318"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p174",
+      "personId": "p174",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    },
+    {
+      "id": "hints-p175",
+      "personId": "p175",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    },
+    {
+      "id": "hints-p176",
+      "personId": "p176",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    },
+    {
+      "id": "hints-p177",
+      "personId": "p177",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    },
+    {
+      "id": "hints-p178",
+      "personId": "p178",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 338"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p179",
+      "personId": "p179",
+      "predicate": "active-date-hints",
+      "value": [
+        "AD 338-339"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "hints-p180",
+      "personId": "p180",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    },
+    {
+      "id": "hints-p181",
+      "personId": "p181",
+      "predicate": "active-date-hints",
+      "value": [],
+      "evidence": []
+    }
+  ],
+  "contextItems": [
+    {
+      "id": "claim-938",
+      "claimIndex": 937,
+      "personId": "p160",
+      "predicate": "attestation",
+      "value": {
+        "sourceDate": {
+          "text": "及遼奔走，翰又北投宇文歸。"
+        },
+        "westernYear": {
+          "era": "AD",
+          "year": 338,
+          "precision": "year"
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0164"
+      ],
+      "claimHash": "sha256:053825643ac281b1f617f9ac1361eac7c17c6d12fbe12e9b929cbba09aab976a"
+    },
+    {
+      "id": "claim-939",
+      "claimIndex": 938,
+      "personId": "p160",
+      "predicate": "event-participation",
+      "value": {
+        "kind": "military",
+        "role": "defeated-party",
+        "action": "fled",
+        "dateContext": {
+          "sourceDate": {
+            "text": "及遼奔走"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 338,
+            "precision": "year"
+          }
+        }
+      },
+      "certainty": "explicit-event-contextual-date",
+      "evidence": [
+        "s0164"
+      ],
+      "claimHash": "sha256:ad990eec975a1da6d2e9b5bd40c03d3b84838ee5d1c08ba30843515d40b12a3b"
+    }
+  ],
+  "unitPeople": {
+    "s0179": [],
+    "s0180": [],
+    "s0181": [
+      "p165"
+    ],
+    "s0182": [
+      "p165"
+    ],
+    "s0183": [
+      "p166",
+      "p165"
+    ],
+    "s0184": [
+      "p167"
+    ],
+    "s0185": [
+      "p168",
+      "p165"
+    ],
+    "s0186": [
+      "p169",
+      "p170"
+    ],
+    "s0187": [
+      "p170",
+      "p171"
+    ],
+    "s0188": [
+      "p165"
+    ],
+    "s0189": [
+      "p169",
+      "p168"
+    ],
+    "s0190": [
+      "p170",
+      "p168",
+      "p169"
+    ],
+    "s0191": [
+      "p165",
+      "p169"
+    ],
+    "s0192": [
+      "p165",
+      "p172"
+    ],
+    "s0193": [
+      "p165",
+      "p173",
+      "p174",
+      "p175",
+      "p176"
+    ],
+    "s0194": [
+      "p172"
+    ],
+    "s0195": [
+      "p173"
+    ],
+    "s0196": [],
+    "s0197": [],
+    "s0198": [],
+    "s0199": [
+      "p177"
+    ],
+    "s0200": [
+      "p174",
+      "p176"
+    ],
+    "s0201": [
+      "p165",
+      "p172"
+    ],
+    "s0202": [],
+    "s0203": [],
+    "s0204": [
+      "p160",
+      "p163",
+      "p165"
+    ],
+    "s0205": [
+      "p163"
+    ],
+    "s0206": [],
+    "s0207": [],
+    "s0208": [
+      "p160"
+    ],
+    "s0209": [],
+    "s0210": [
+      "p165",
+      "p178"
+    ],
+    "s0211": [
+      "p160",
+      "p165",
+      "p178",
+      "p179"
+    ],
+    "s0212": [
+      "p163",
+      "p165",
+      "p179"
+    ],
+    "s0213": [
+      "p163",
+      "p165"
+    ],
+    "s0214": [
+      "p162",
+      "p163"
+    ],
+    "s0215": [
+      "p163",
+      "p165"
+    ],
+    "s0216": [
+      "p163",
+      "p165"
+    ],
+    "s0217": [],
+    "s0218": [
+      "p180",
+      "p165"
+    ],
+    "s0219": [
+      "p163"
+    ],
+    "s0164": [
+      "p160",
+      "p161",
+      "p162"
+    ],
+    "s0173": [
+      "p162",
+      "p163"
+    ]
+  },
+  "units": [
+    {
+      "id": "s0164",
+      "zh": "及遼奔走，翰又北投宇文歸。",
+      "en": "When Duan Liao fled in defeat, Han again went north to Yuwen Gui.",
+      "blockIndex": 39
+    },
+    {
+      "id": "s0173",
+      "zh": "建元二年，從皝討宇文歸，臨陣為流矢所中，臥病積時。",
+      "en": "In the second year of Jianyuan, he joined the war on Yuwen Gui, took a stray shaft, and lay long ill.",
+      "blockIndex": 40
+    },
+    {
+      "id": "s0179",
+      "zh": "不圖此心不遂，沒有餘恨，命也奈何！」",
+      "en": "That hope dies with me—such is fate.”",
+      "blockIndex": 40
+    },
+    {
+      "id": "s0180",
+      "zh": "仰藥而死。",
+      "en": "He drank the poison and died.",
+      "blockIndex": 40
+    },
+    {
+      "id": "s0181",
+      "zh": "陽裕",
+      "en": "Yang Yu.",
+      "blockIndex": 41
+    },
+    {
+      "id": "s0182",
+      "zh": "陽裕，字士倫，右北平無終人也。",
+      "en": "Yang Yu, courtesy name Shilun, came from Wuzhong in right Beiping.",
+      "blockIndex": 42
+    },
+    {
+      "id": "s0183",
+      "zh": "少孤，兄弟皆早亡，單煢獨立，雖宗族無能識者，惟叔父耽幼而奇之，曰：「此兒非惟吾門之標秀，乃佐時之良器也。」",
+      "en": "Orphaned young, with brothers dead early, he stood alone; few in the clan knew him, but his uncle Dan marveled at him even in youth and said, \"This child is not only our clan's outstanding ornament but an instrument to serve the age.\"",
+      "blockIndex": 42
+    },
+    {
+      "id": "s0184",
+      "zh": "刺史和演辟為主簿。",
+      "en": "Governor He Yan made him chief clerk.",
+      "blockIndex": 42
+    },
+    {
+      "id": "s0185",
+      "zh": "王浚領州，轉治中從事，忌而不能任。",
+      "en": "When Wang Jun held the province, Yu was transferred to administration aide; Jun was jealous and would not employ him.",
+      "blockIndex": 42
+    },
+    {
+      "id": "s0186",
+      "zh": "石勒既克薊城，問棗嵩曰：「幽州人士，誰最可者？」",
+      "en": "After Shi Le took Jicheng he asked Zao Song, \"Among the gentlemen of Youzhou, who is most worthy?\"",
+      "blockIndex": 43
+    },
+    {
+      "id": "s0187",
+      "zh": "嵩曰：「燕國劉翰，德素長者。",
+      "en": "Zao Song said, \"Liu Han of Yan, whose virtue is that of a plain elder.",
+      "blockIndex": 43
+    },
+    {
+      "id": "s0188",
+      "zh": "北平陽裕，幹事之才。」",
+      "en": "Yang Yu of Beiping for administrative talent.”",
+      "blockIndex": 43
+    },
+    {
+      "id": "s0189",
+      "zh": "勒曰：「若如君言，王公何以不任？」",
+      "en": "Shi Le asked, \"If what you say is so, why did Duke Wang not employ them?\"",
+      "blockIndex": 43
+    },
+    {
+      "id": "s0190",
+      "zh": "嵩曰：「王公由不能任，所以為明公擒也。」",
+      "en": "Song answered, “Because he could not use them, you captured him.”",
+      "blockIndex": 43
+    },
+    {
+      "id": "s0191",
+      "zh": "勒方任之，裕乃微服潛遁。",
+      "en": "Shi Le meant to employ Yang Yu, who fled in disguise.",
+      "blockIndex": 43
+    },
+    {
+      "id": "s0192",
+      "zh": "時鮮卑單于段眷為晉驃騎大將軍、遼西公，雅好人物，虛心延裕。",
+      "en": "At that time the Xianbei shanyu Duan Juan, who held the Jin titles of General of Agile Cavalry and Duke of Liaoxi, had a refined fondness for men of talent and humbly invited Yang Yu.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0193",
+      "zh": "裕謂友人成泮曰：「仲尼喜佛肸之召，以匏瓜自喻，伊尹亦稱何事非君，何使非民，聖賢尚如此，況吾曹乎！",
+      "en": "Yang Yu told his friend Cheng Pan, \"Confucius rejoiced at Bi Xi's summons and likened himself to a gourd; Yi Yin too said, 'What affair is not that of the lord? What people are not his subjects?' Even sages were thus, how much more we!",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0194",
+      "zh": "眷今召我，豈徒然哉！」",
+      "en": "Duan Juan’s summons is no empty gesture!”",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0195",
+      "zh": "泮曰：「今華夏分崩，九州幅裂，軌跡所及，易水而已。",
+      "en": "Cheng Pan replied, “Now Huaxia is split and crumbling, the nine provinces torn apart; where proper tracks reach is only as far as the Yi River.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0196",
+      "zh": "欲偃蹇考槃，以待大通者，俟河之清也。",
+      "en": "To wish to live in proud reclusion and wait for a great opening is to wait for the Yellow River to run clear.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0197",
+      "zh": "人壽幾何？",
+      "en": "How long is a life?",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0198",
+      "zh": "古人以為白駒之歎。",
+      "en": "The ancients sighed at time’s white colt.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0199",
+      "zh": "少遊有雲，郡掾足以廕後，況國相乎！",
+      "en": "Shaoyou said that a post as commandery clerk was enough to shelter one's descendants; how much more the post of chancellor of a state!",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0200",
+      "zh": "卿追蹤伊、孔，抑亦知機其神也。」",
+      "en": "You follow Confucius and Yi Yin—you know when Heaven calls.”",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0201",
+      "zh": "裕乃應之。",
+      "en": "Yang Yu accepted Duan Juan’s offer.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0202",
+      "zh": "拜郎中令、中軍將軍，處上卿位。",
+      "en": "He was named palace director and central army general, ranking among the highest ministers.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0203",
+      "zh": "曆事段氏五主，甚見尊重。",
+      "en": "He served five successive Duan lords and won deep respect.",
+      "blockIndex": 44
+    },
+    {
+      "id": "s0204",
+      "zh": "段遼與皝相攻，裕諫曰：「臣聞親仁善鄰，國之寶也。",
+      "en": "When Duan Liao and Murong Huang clashed, Yang Yu urged, “A state’s greatest treasure is to cherish kindness and befriend one’s neighbors.",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0205",
+      "zh": "慕容與國世為婚姻，且皝令德之主，不宜連兵構怨，凋殘百姓。",
+      "en": "The Murong house and yours have intermarried for generations; Murong Huang is a man of virtue—you must not exhaust the people in vendetta.",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0206",
+      "zh": "臣恐禍害之興，將由於此。",
+      "en": "I fear calamity will come of this feud.",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0207",
+      "zh": "願兩追前失，通款如初，使國家有太山之安，蒼生蒙息肩之惠。」",
+      "en": "Let both sides remedy their former faults and renew good faith as at the beginning, so the state may have the security of Mount Tai and the common people receive the blessing of laying down their burdens.”",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0208",
+      "zh": "遼不從。",
+      "en": "Duan Liao refused.",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0209",
+      "zh": "出為燕郡太守。",
+      "en": "He left court to become grand warden of Yan commandery.",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0210",
+      "zh": "石季龍克令支，裕以郡降，拜北平太守，徵為尚書左丞。",
+      "en": "When Shi Hu seized Lingzhi, Yang Yu surrendered his commandery, was named grand warden of Beiping, then recalled as left assistant in the secretariat.",
+      "blockIndex": 45
+    },
+    {
+      "id": "s0211",
+      "zh": "段遼之請迎于季龍也，裕以左丞領征東麻秋司馬。",
+      "en": "When Duan Liao asked Shi Hu to send troops to receive him, Yang Yu, while serving as Left Assistant, concurrently served as marshal to Ma Qiu, General Who Campaigns in the East.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0212",
+      "zh": "秋敗，裕為軍人所執，將詣皝。",
+      "en": "Ma Qiu’s defeat left Yang Yu a prisoner on his way to Murong Huang.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0213",
+      "zh": "皝素聞裕名，即命釋其囚，拜郎中令，遷大將軍左司馬。",
+      "en": "Murong Huang, who had long heard of Yu’s name, at once ordered his bonds released, appointed him Palace Director, then promoted him to Grand General’s Left Major.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0214",
+      "zh": "東破高句麗，北滅宇文歸，皆豫其謀，皝甚器重之。",
+      "en": "He helped plan the eastern victory over Goguryeo and the northern destruction of Yuwen Gui, and Huang came to rely on him heavily.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0215",
+      "zh": "及遷都和龍，裕雅有巧思，皝所制城池宮闔，皆裕之規模。",
+      "en": "When the capital shifted to Helong, Yang Yu’s engineering shaped every wall and tower Murong Huang built.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0216",
+      "zh": "裕雖仕皝日近，寵秩在舊人之右，性謙恭清儉，剛簡慈篤，雖曆居朝端，若布衣之士。",
+      "en": "Although Yang Yu served Huang and grew daily closer, with favor and rank above the old retainers, his nature was humble, respectful, pure and frugal, firm, simple, kind and earnest; though he repeatedly held posts at the apex of the court, he was like a scholar in plain cloth.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0217",
+      "zh": "士大夫流亡羈絕者，莫不經營收葬，存恤孤遺，士無賢不肖皆傾身待之，是以所在推仰。",
+      "en": "He buried exiles, aided their orphans, and honored every gentleman he met, winning universal esteem.",
+      "blockIndex": 46
+    },
+    {
+      "id": "s0218",
+      "zh": "初，范陽盧諶每稱之曰：「吾及晉之清平，曆觀朝士多矣，忠清簡毅，篤信義烈，如陽士倫者，實亦未幾。」",
+      "en": "Earlier, Lu Chen of Fanyang always praised him, saying, “I have lived through Jin’s clear peace and have broadly observed many court gentlemen; loyal, pure, concise and resolute, steadfast in faith and fierce in righteousness—men like Yang Shilun are in truth few.”",
+      "blockIndex": 47
+    },
+    {
+      "id": "s0219",
+      "zh": "及死，皝甚悼之，時年六十二。",
+      "en": "When he died at sixty-two, Murong Huang mourned him deeply.",
+      "blockIndex": 47
+    }
+  ],
+  "id": "b783ccd7b957c7ea1e82"
+}
