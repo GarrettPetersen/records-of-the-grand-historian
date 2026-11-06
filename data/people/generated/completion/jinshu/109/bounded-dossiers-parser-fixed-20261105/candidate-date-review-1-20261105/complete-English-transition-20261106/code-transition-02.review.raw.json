@@ -1,0 +1,37 @@
+{
+ "schemaVersion": 1,
+ "kind": "independent-code-and-source-transition-review",
+ "book": "jinshu",
+ "chapter": "109",
+ "packetSha256": "b3799c1444ecd071ddae992d670b1a9ceb518c00ca55dca4540dc325b9ad5603",
+ "sourceHash": "sha256:c4f6b5352e90cd844f2a74dedde356aaf1e21dd347a0f928d07f81f8a6f40b4c",
+ "canonicalExtractionHash": "sha256:e4ea69cbbcaedf6228d780ccecae970156eeae756d89418dc706ad56f6f27981",
+ "stagedExtractionHash": "sha256:e967eee846c1a6277e2cc0469554decf55305394310145bad75888c6220a7186",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+  "independentOfAuthors": true
+ },
+ "verdict": "approve",
+ "checks": [
+  {
+   "id": "immutable-seals-and-reused-runtime-boundary",
+   "verdict": "approve",
+   "reason": "My prior finding is fixed. sealedFileSha256 now pins all four missing direct imports (check-local-disk, build-people-extraction-packet, lib/people-content and lib/people-candidates) and their transitive local closure: 38 .mjs entries, or 37 unique modules because provider-observation.mjs is listed under both a relative and an absolute path with the same hash, which matches importClosure.localModules=37 with no nonliteral dynamic imports. The 36 entries from the prior packet are present with unchanged hashes except the applier. The embedded applier (75bc078a…) and complete-English-transition-proof.mjs (eb2028a9…) match their seals, and manifestSha256 is unchanged (eb702de6…). The applier still checks every seal (line 20). It now also enforces runtime HEAD equal to runtimeHead c991cf12 and clean tracked files (git status --porcelain --untracked-files=no, line 22) before any reservation or canonical write."
+  },
+  {
+   "id": "conservative-proof-composition",
+   "verdict": "approve",
+   "reason": "composeTransitionChecks accepts the prior report only if it is exactly needs-revision with one finding and 20 unique checks matching priorInput.requiredChecks, all approved except the single rejected immutable-seals check. It requires the fresh report to approve exactly the two fresh checks with no findings, and requires unchanged source, canonical, staged and manifest fingerprints. It requires the application body from the unique marker 'for(const[k,f]of Object.entries(manifest.files))' to be byte-identical to the prior embedded applier; I confirmed this, and its hash equals retainedApplicationBodySha256 b1ffb5ec…. Every prior seal other than the applier must also be unchanged. validateFinalTransitionProof binds both jobs by input and raw SHA, packetSha256, kind, reviewer agentId, independentOfAuthors and excludedReviewerIds, and needs priorReview to match the immutable prior job (my result a47109e9… and the checks and findings embedded verbatim). It returns the union of required checks, so the 9 automatic-mention gates (line 34) still bind. Neither report is rewritten, and every approval flag stays false."
+  }
+ ],
+ "findings": [],
+ "cautions": [
+  "Bare package imports (@cursor/sdk, ajv, ajv-formats) are declared as external boundaries. The tracked-clean git check does not cover node_modules, so package bytes are pinned only by the lockfile and installed tree, not by this applier.",
+  "Seals and runtime HEAD are verified after ES module imports have already been evaluated. This leaves a narrow window between module load and hashing. It is low risk on a single-owner host with the process lock, and the workflow does not attempt to detect it.",
+  "The prior-report gate checks that exactly one finding exists, but not its content. It is still bound to the exact immutable prior result hash a47109e9…, so it cannot be substituted.",
+  "The offline guard tests (9 passed) were supplied evidence. I did not re-run them. The synthetic positive case is not a model approval.",
+  "The 19 reused approvals, including the 9 source mention joins (皝 is Murong Huang, p163, not 翰 or 汗; Yang Yu is p165; Lu Chen is p180), were not repeated, as scoped. No merge, new person, date or fact is inferred.",
+  "No date, identity, chapter or publication approval is granted."
+ ]
+}

@@ -26,7 +26,14 @@ export function collectEnglishRepairDecisions(){
     for(const p of r.additionalCorrections)add({...p,recordKind:'source-English'},part.agentId,{kind:'source-coverage-proposal',part:part.index,rawFile:part.rawFile});
     for(const p of r.recordCorrections)add(p,part.agentId,{kind:'source-record-proposal',part:part.index,rawFile:part.rawFile});
   }
-  for(const job of c.jobs.filter(j=>j.phase==='returned')){
+  for(const job of c.jobs){
+    for(const revision of job.wordingRevisions??[]){
+      const entry=entries.get(revision.targetKey);
+      need(entry?.status==='independently-approved'&&entry.after===revision.previousAfter&&entry.approval.rawSha256===revision.previousApprovalSha256&&entry.before!==revision.after&&typeof revision.after==='string'&&revision.after.trim().length>0&&revision.sourceReason?.trim().length>=20&&revision.authorAgentId==='codex-thread:01a18e17-07b3-7f13-8e34-cb207908be33','Exact approved wording lineage required for a host-authored production revision');
+      entry.wordingHistory=[...(entry.wordingHistory??[]),{after:entry.after,authorAgentId:entry.authorAgentId,approval:entry.approval,revisionReason:revision.sourceReason}];
+      Object.assign(entry,{after:revision.after,sourceReason:revision.sourceReason,authorAgentId:revision.authorAgentId,status:'pending-review',approval:null});
+    }
+    if(job.phase!=='returned')continue;
     need(hash(fs.readFileSync(job.inputFile))===job.inputSha256&&hash(fs.readFileSync(job.rawFile))===job.resultSha256,'Exact retained independent report required');
     const input=decodeEnglishRepairPacket(read(job.inputFile)),r=read(job.rawFile);need(r.reviewer.agentId===job.agentId&&r.reviewer.independentOfAuthors===true&&!input.excludedReviewerIds.includes(job.agentId),'Independent repair actor required');
     for(const p of input.proposals){

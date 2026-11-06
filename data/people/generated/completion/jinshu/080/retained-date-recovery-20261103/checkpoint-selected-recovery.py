@@ -185,6 +185,20 @@ for folder in dateResearch.glob('complete-English-coverage-c4f6b535-20261105*'):
  if folder.is_dir():
   for extension in ['json','mjs','txt','jsonl']:
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
+for pattern in ['complete-English-source-prepared-*','complete-English-transition-*','current-source-date-work-order-*']:
+ for folder in dateResearch.glob(pattern):
+  if not folder.is_dir():continue
+  for extension in ['json','mjs','txt','jsonl']:
+   files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
+  files += list((folder/'date-input'/'jinshu').glob('109.json'))
+transition=dateResearch/'complete-English-transition-20261106'/'controller.json'
+if transition.exists():
+ transitionState=json.loads(transition.read_text())
+ assert transitionState['phase'] in ['checkpoint-held','applied-checkpoint'],'Preserve live source transition owner'
+ assert not any(j['phase'] in ['claimed','running'] for j in transitionState['jobs']),'Preserve actual independent transition reviewers'
+ assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for source watcher to release its own global lock'
+for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.complete-English-source-*'):
+ if folder.is_dir():files += list(folder.glob('*.json'))
 files += list(audit.glob('handoff-before-*.md'))
 files.append(audit/'free-date-record-ownership-proposal.patch')
 wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
@@ -193,6 +207,17 @@ tools072=wf072/'openrouter-tools-audit-0-4d9c64d727f54740b560'
 files += list(tools072.glob('response-*.json'))
 files=[p for p in files if not p.name.endswith('.private.json')]
 files.append(base/'nov05-focused-research-and-free-calibration-metrics.json')
+retiredCanonicalPaths=['data/people/date-audits/jinshu/109.json'];retiredCanonicalArchives=[]
+for stalePath in retiredCanonicalPaths:
+ assert not pathlib.Path(stalePath).exists(),'Preserve the existing absent canonical date approval'
+ if subprocess.run(['git','cat-file','-e',parent+':'+stalePath],capture_output=True).returncode:continue
+ retiredBytes=subprocess.check_output(['git','show',parent+':'+stalePath]);digest=hashlib.sha256(retiredBytes).hexdigest();json.loads(retiredBytes)
+ archived=audit/('historical-recovery-tree-109-date-audit-'+digest+'.json')
+ if archived.exists():assert archived.read_bytes()==retiredBytes,'Historical report archive changed'
+ else:archived.write_bytes(retiredBytes)
+ proof=audit/('historical-recovery-tree-109-date-audit-'+digest+'.receipt.json')
+ if not proof.exists():proof.write_text(json.dumps({'kind':'retired-source-date-audit-history-only','originalRecoveryParent':parent,'retiredCanonicalPath':stalePath,'archivedFile':archived.as_posix(),'originalBytes':len(retiredBytes),'sha256':digest,'currentSourceApproval':False,'approvalRetagged':False},indent=2)+'\n')
+ files += [archived,proof];retiredCanonicalArchives.append({'path':stalePath,'archive':archived.as_posix(),'sha256':digest})
 files=list(dict.fromkeys(files));blobs=[]
 for p in files:
  data=p.read_bytes()
@@ -202,9 +227,12 @@ written=git('hash-object','-w','--stdin-paths',input=('\n'.join(p.as_posix() for
 with tempfile.TemporaryDirectory(prefix='people-recovery-index-') as temp:
  env=dict(os.environ,GIT_INDEX_FILE=str(pathlib.Path(temp)/'index'));git('read-tree',parent,env=env)
  git('update-index','--add','--index-info',input=''.join('100644 '+blob+'\t'+p.as_posix()+'\n' for p,data,digest,blob in blobs).encode(),env=env)
- tree=git('write-tree',env=env);changes=git('diff-tree','--no-commit-id','--name-only','-r',git('rev-parse',parent+'^{tree}'),tree).splitlines();assert set(changes)<=set(p.as_posix() for p in files)
+ git('update-index','--force-remove','--',*retiredCanonicalPaths,env=env)
+ tree=git('write-tree',env=env);changes=git('diff-tree','--no-commit-id','--name-only','-r',git('rev-parse',parent+'^{tree}'),tree).splitlines();assert set(changes)<=set(p.as_posix() for p in files)|set(retiredCanonicalPaths)
  commit=git('commit-tree',tree,'-p',parent,input=('Checkpoint verified release and reviewed source, date and dossier reuse work; next chapters incomplete\n').encode());pendingTarget=base/(receiptName+'.pending.json');assert not pendingTarget.exists();pendingTarget.write_text(json.dumps({'parent':parent,'commit':commit,'branch':branch,'files':len(files),'chapterApproved':False},indent=2)+'\n');print(json.dumps({'pendingCommit':commit}),flush=True);git('push','--porcelain','origin',commit+':'+branch)
 assert git('ls-remote','origin',branch).split()[0]==commit
+for retiredPath in retiredCanonicalPaths:assert subprocess.run(['git','cat-file','-e',commit+':'+retiredPath],capture_output=True).returncode,'Retired approval must remain absent in recovery snapshot'
 verified=git('cat-file','--batch-check=%(objectname)',input=('\n'.join(commit+':'+p.as_posix() for p,data,digest,blob in blobs)+'\n').encode()).splitlines();assert verified==[blob for p,data,digest,blob in blobs]
 receipt={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'branch':branch,'parent':parent,'commit':commit,'files':[{'path':p.as_posix(),'bytes':len(data),'sha256':digest} for p,data,digest,blob in blobs],'originalOctoberRawReportsNotPresentLocally':oldRawAbsent,'returnedOriginalAuditRanges':returned,'workflowPhase':state['phase'],'repairGroupsAccepted':sum(1 for key,job in state['jobs'].items() if key.startswith('repair-0-00') and job.get('status')=='returned'),'chapterApproved':False,'newPublishedChapters':0,'scope':'Exact selected incomplete canonical source work and recovery artifacts; all previous recovery tree entries preserved. Snapshot leaves the dirty primary index, source and staged deletions unchanged.'}
+receipt['retiredCanonicalPathsAbsent']=retiredCanonicalPaths;receipt['historicalReportArchives']=retiredCanonicalArchives;receipt['scope']='Exact selected incomplete source/recovery checkpoint. Retired canonical109 approval is absent, with its original bytes archived as historical evidence. All other prior recovery entries and the dirty primary index/source/staged deletions are preserved.'
 receiptName=os.environ['PEOPLE_CHECKPOINT_RECEIPT'];assert '/' not in receiptName and receiptName.endswith('.json');target=base/receiptName;assert not target.exists();target.write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps({'checkpoint':commit,'files':len(files),'bytes':sum(len(d) for p,d,h,b in blobs),'changedPaths':len(changes),'auditRanges':returned,'chapterApproved':False}))

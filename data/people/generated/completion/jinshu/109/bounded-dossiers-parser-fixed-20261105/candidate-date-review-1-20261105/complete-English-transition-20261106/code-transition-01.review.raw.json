@@ -1,0 +1,133 @@
+{
+ "schemaVersion": 1,
+ "kind": "independent-code-and-source-transition-review",
+ "book": "jinshu",
+ "chapter": "109",
+ "packetSha256": "0f43868206b514d1fa61b549e58d33ba1114e7727ea66a67503de45ac4c21a89",
+ "sourceHash": "sha256:c4f6b5352e90cd844f2a74dedde356aaf1e21dd347a0f928d07f81f8a6f40b4c",
+ "canonicalExtractionHash": "sha256:e4ea69cbbcaedf6228d780ccecae970156eeae756d89418dc706ad56f6f27981",
+ "stagedExtractionHash": "sha256:e967eee846c1a6277e2cc0469554decf55305394310145bad75888c6220a7186",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+  "independentOfAuthors": true
+ },
+ "verdict": "needs-revision",
+ "checks": [
+  {
+   "id": "approved-current-wording-proof-lineage",
+   "verdict": "approve",
+   "reason": "prepare-complete-English-source.mjs calls frozenRepairProofs, which pins the receipt, the registry SHA f4512775... and the jobs hash, and requires all 135 entries approved by an agent other than the author with no Han script. This is the same sealed helper code I approved in my prior helper review (hashes unchanged). The manifest's reviewRegistrySha256 and reviewCohortReceiptSha256 are recomputed from the sealed files, and every added repair's editorial decision cites the exact per-entry independent approval (agentId, runId, completedAt)."
+  },
+  {
+   "id": "source-only-133-English-fields",
+   "verdict": "approve",
+   "reason": "Preparation requires exactly 133 source-English entries, each with sourceQuote equal to unit.zh, before equal to the current en or literal field, and editorial seed exactly one decision validated per repair. applyTranslationRepairs is then reversed with setTranslationField, and the result must equal the original source. The applier repeats that inverse check after the write, and both require Chinese (unit id, zh) pairs unchanged across all 302 units."
+  },
+  {
+   "id": "exact-two-record-scalars-and-staged-index-shift",
+   "verdict": "approve",
+   "reason": "recordMappings finds each of claim-59 (relation studied to esteemed) and claim-1042 (label minister of the Duan to served the Duan house) as a unique full-row match in canonical and in staged. That gives index 58/58 and 1041/1010, matching the manifest and the test that pins the 1042 to 1011 shift. patchRecordWordings and assertRecordDelta restore those rows and require all other claims and people identical, and the applier asserts this both before and after installation."
+  },
+  {
+   "id": "all-23-explicit-source-callbacks",
+   "verdict": "approve",
+   "reason": "applyApprovedEnglishSourceCallbacks requires the returned approve job's input and raw hashes, the plan input hash, a source-callback-reconciliation-review with 23 approve checks and no findings, and exact equality between the plan cases and the unresolved set. It anchors each person to an existing local id and preferredNameSuggestion, needs a Chinese witness mention in the anchor unit and exact exactSpanAt geometry, and allows non-person only for place, collective or polity with a note. It asserts exactly +17 mentions and +6 dispositions, with people and claims unchanged."
+  },
+  {
+   "id": "all-603-date-items-and-366-change-replay",
+   "verdict": "approve",
+   "reason": "Preparation rebuilds the date packets, restores prior items only for the two record-wording claim ids, and requires items and people identical to the old canonical and staged packets (dateItemsWithReviewedScalarDelta is []). It requires 366 dateRepairDifference changes that replay exactly onto staged. The applier recomputes the old staged fingerprint before writing and, after installation, requires 366 changes, an exact replay and the manifest candidate hash. The 603 count is reported, not separately asserted."
+  },
+  {
+   "id": "strict-extraction-and-editorial-validation",
+   "verdict": "approve",
+   "reason": "Both canonical and staged outputs are checked with validateCompactPeopleExtraction(strictAliasDispositions:true) and validateAppliedEditorialDecisions against the prospective packet before serialization. The applier re-runs both against the prospective packet before any write and against the freshly built chapter packet after installation. Stats show 0 alias-disposition conflicts and the same units, people and repairs across variants."
+  },
+  {
+   "id": "preserve-native-round2-cap3-negative-report-and-deletion",
+   "verdict": "approve",
+   "reason": "The applier requires the prior native hash d4a430f9..., the generation from 01d01ae9, round 2, ceiling 3, no circuit breaker and no existing archive. It archives by rename, copies files back and keeps round and ceiling. It records the old negative authority as historical-negative-report-only with approvalRetagged false, re-asserts the review-1.json hash and that date-audits/jinshu/109.json is absent after writing, and sets ledger candidateStage round 2, max 3."
+  },
+  {
+   "id": "exclusive-ownership-intent-and-interruption-recovery",
+   "verdict": "approve",
+   "reason": "The applier refuses any existing receipt, intent or archive. It holds resolution-run.lock (failIfExists), reserves both ledger owners through assertSourceOwners plus an identity updatedAt pin, writes the intent with wx, and rechecks source and native bytes after reservation. Archiving uses rename, canonical writes use writeTextAtomic, the receipt is written with wx, and the final ledger commit requires the same token and intentFile. Any interruption leaves an intent or archive that blocks a repeat. The lock is released in finally."
+  },
+  {
+   "id": "immutable-seals-and-reused-runtime-boundary",
+   "verdict": "reject",
+   "reason": "Rejected. The sealed boundary is incomplete: four runtime modules imported directly by the sealed preparer and applier are not in sealedFileSha256, so the applier's seal loop cannot detect a change to them. One of them, people-content.mjs, is the canonical write primitive. The embedded code hashes, manifest SHA and applier SHA themselves all match."
+  },
+  {
+   "id": "prewrite-and-postwrite-validation",
+   "verdict": "approve",
+   "reason": "Before writing, the applier checks the review, the seals, before and after file bytes, record deltas, strict validation of both variants and the unique geometry and prepared id of each of the 9 automatic mentions. After writing it rebuilds the chapter packet and re-validates, recomputes source, canonical and staged hashes against the manifest, replays the 366 date changes, re-checks the record and source inverse deltas, and confirms the negative report, the absent date audit and round 2/3."
+  },
+  {
+   "id": "no-date-identity-chapter-or-publication-approval",
+   "verdict": "approve",
+   "reason": "Manifest, intent, receipt and ledger all set dateApproval, identityApproval, chapterApproved and published to false. The ledger sets requiresFreshDateApproval, research-blocked status, currentSourceReviewReports 0 and oldPacketDispatchForbidden. Identity moves to source-reconciliation-hold. No date-audit file is written, and historical reports are never retagged as current approval."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0841",
+   "verdict": "approve",
+   "reason": "s0216 zh 皝 at code points 3–4 (only occurrence, unit hash matches) refers to Murong Huang 慕容皝 (local p163). It is not Han 翰. Name claims c0595/c0596 record 皝 as Huang's personal/given name, and the sentence 裕雖仕皝日近 says Yang Yu served Huang."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0842",
+   "verdict": "approve",
+   "reason": "s0216 en 'Yang Yu' at 9–16 (occurrence 0, unit hash matches) is the subject of 裕雖仕皝. It maps to existing p165 陽裕, backed by name claim c0601. This is an existing person; no new person is inferred."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0843",
+   "verdict": "approve",
+   "reason": "s0216 en 'Huang' at 24–29 (only occurrence) renders 皝 in 仕皝 and maps to p163 Murong Huang through given-name claim c0596. It does not mean Han 汗/翰 or any other person."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0844",
+   "verdict": "approve",
+   "reason": "s0218 zh 盧諶 at 4–6, in 范陽盧諶每稱之 ('Lu Chen of Fanyang always praised him'), maps to existing p180 Lu Chen, whose personal-name claim c0658 cites s0218 as evidence. This is an exact single occurrence."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0845",
+   "verdict": "approve",
+   "reason": "s0218 en 'Lu Chen' at 9–16 (occurrence 0, unit hash matches) is the paired English of 盧諶 and maps to p180. No merge or new person is involved."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0846",
+   "verdict": "approve",
+   "reason": "s0218 zh 陽士倫 at 37–40 is surname 陽 plus courtesy name 士倫, so the courtesy-name kind is right. It maps to p165 Yang Yu through courtesy claim c0604 (Shilun, evidence s0182 and s0218) and surname claim c0602, and the 之 Lu Chen praises refers to Yang Yu."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0847",
+   "verdict": "approve",
+   "reason": "s0218 en 'Yang Shilun' at 235–246 (only occurrence, unit hash matches) is the paired English of 陽士倫 and maps to p165 Yang Yu through courtesy-name claim c0604."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0848",
+   "verdict": "approve",
+   "reason": "s0219 zh 皝 at 3–4 in 及死，皝甚悼之 ('when he died, Huang deeply mourned him') maps to p163 Murong Huang. It is the single occurrence, it is 皝 and not 翰, and the dead man is Yang Yu, the continuing subject."
+  },
+  {
+   "id": "automatic-source-mention:jinshu:109:m0849",
+   "verdict": "approve",
+   "reason": "s0219 en 'Murong Huang' at 27–39 (only occurrence, unit hash matches) is the paired English of 皝 and maps to p163, backed by personal-name claim c0595."
+  }
+ ],
+ "findings": [
+  {
+   "file": "apply-complete-English-source.mjs",
+   "line": 20,
+   "problem": "The packet's sealedFileSha256 (checked by the applier's seal loop at line 20) does not list four runtime modules that the sealed code imports directly: /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-content.mjs (writeTextAtomic, setTranslationField and exactSpanAt; imported at apply line 9, prepare line 10 and callbacks line 3), scripts/build-people-extraction-packet.mjs (apply line 7, prepare line 8), scripts/lib/people-candidates.mjs (loadProperNounMatcher; apply line 8, prepare line 9) and scripts/check-local-disk.mjs (apply line 4, prepare line 5). people-content.mjs performs every canonical write and the inverse source-delta check, and build-people-extraction-packet.mjs produces the Chinese-unchanged and prospective-packet comparisons. A change to any of them would not be detected. runtimeEvidence.trackedCleanVerified at head c991cf12 is reported but not enforced by the applier.",
+   "action": "Add SHA256 seals for these four modules (and any transitive local imports of the sealed runtime libraries) to sealedFileSha256. Then regenerate the packet and manifest pins and request a fresh independent review. No source, date or callback content needs to change."
+  }
+ ],
+ "cautions": [
+  "validate-English-record-wording.mjs is sealed but not embedded in this packet. I reused my prior helper-review approval of the identical hash c31cb436....",
+  "complete-English-source-reconciliation-tests.mjs reads repair-decisions-working.json rather than the sealed production registry. The test result is still consistent with the production mapping (index 1041/1010).",
+  "The 603 date-item count is only reported in the manifest and receipt, not asserted. Exact item equality and the 366-change replay still bind it.",
+  "The 9 automatic mentions and the 23 callbacks agree with the supplied source units and local name claims. Huang 皝 (p163) is kept distinct from Han 翰/汗. No Wang Jun 浚 or Murong Jun 俊 joins are present. No merge, new person, date or fact is inferred.",
+  "No source, date, identity, chapter or publication approval is granted."
+ ]
+}

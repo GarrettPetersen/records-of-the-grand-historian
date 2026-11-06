@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {root,evidence,workflow,read,same,recordMappings,patchRecordWordings,assertRecordDelta} from './complete-English-source-common.mjs';
+const registry=read(evidence+'repair-decisions-working.json'),m=read(evidence+'manifest.json'),canonical=read(root+'/data/people/extractions/jinshu/109.json'),native=read(workflow+'/state.json'),staged=read(workflow+'/'+native.candidate);
+const changes=recordMappings(registry,m,canonical,staged),shifted=changes.find(c=>c.recordId==='claim-1042');
+assert.equal(shifted.canonical.index,1041);assert.equal(shifted.staged.index,1010);
+const next=patchRecordWordings(staged,changes,'staged');assert.equal(next.claims[1010][2].label.en,'served the Duan house');assert.deepEqual(next.claims[1041],staged.claims[1041]);assert.deepEqual(staged.claims[1010],shifted.staged.row);
+const duplicate=structuredClone(staged);duplicate.claims.push(structuredClone(shifted.staged.row));assert.throws(()=>recordMappings(registry,m,canonical,duplicate),/Unique complete claim row/);
+const missing=structuredClone(staged);missing.claims[1010][2].label.en='different wording';assert.throws(()=>recordMappings(registry,m,canonical,missing),/Unique complete claim row/);
+const wrongField=structuredClone(registry);wrongField.entries.find(e=>e.recordId==='claim-1042').fieldPath=[2,'label','zh'];assert.throws(()=>recordMappings(wrongField,m,canonical,staged),/Only the reviewed descriptive claim scalars/);
+const wrongIndex=structuredClone(changes);wrongIndex.find(c=>c.recordId==='claim-1042').staged.index=1041;assert.throws(()=>patchRecordWordings(staged,wrongIndex,'staged'),/Exact staged original claim/);
+const undeclared=structuredClone(next);undeclared.claims[0][0]='changed-person';assert.throws(()=>assertRecordDelta(staged,undeclared,changes,'staged'),/Undeclared claim/);
+assert.deepEqual(next.people,staged.people);assertRecordDelta(canonical,patchRecordWordings(canonical,changes,'canonical'),changes,'canonical');
+console.log(JSON.stringify({tests:7,passed:true,actualClaimIndexShift:'1042 -> 1011',canonicalWrites:0}));
