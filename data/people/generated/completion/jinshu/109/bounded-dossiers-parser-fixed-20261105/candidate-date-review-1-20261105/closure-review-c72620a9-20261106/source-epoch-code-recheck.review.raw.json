@@ -1,0 +1,32 @@
+{
+ "kind": "independent-source-epoch-transition-review",
+ "packetSha256": "7394bdd1d5843e454d2bd90ce737cddae0f8d155132f3a0610d4057a068d5241",
+ "sourceHash": "sha256:d0a2ab5a1ce1200705b4b2d96d140fbe1745c2e18812f47c11e09c0bfbd76e39",
+ "extractionHash": "sha256:c715ff1e3cd0fe148deddca495c6029110f68a8cd9adbeaf1e8647efda9ede66",
+ "manifestSha256": "e54fdac2428910941cc1261d74c8c815d14f65c30258c8c93d0110a68f3ec684",
+ "applierSha256": "f37bb113f2b7963136e28aa0dfcfb3e733d1f02c395a1af3fe50765a3c622941",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+  "independentOfAuthor": true
+ },
+ "verdict": "approve",
+ "checks": [
+  {
+   "id": "sealed-configuration-and-runtime-binding",
+   "verdict": "approve",
+   "reason": "This resolves my unbound-application-config finding. The new EPOCH_CONFIG_PATH guard requires path.resolve(configFile)===dir+'closure-review-c72620a9.json' for both prepare and apply. The apply gate then requires reviewInput.configFile to equal that path, shaFile(configFile) to equal reviewInput.configSha256 (14fe14b2…, also sealed as D|closure-review-c72620a9.json, and the seal loop re-hashes it), and app.runtimeHead to equal reviewInput.runtimeBoundary.head. composeSourceEpochReview additionally pins that head to the original reviewed c991cf12, requires input.configuration to deep-equal the live config, and requires the config to deep-equal the original sealed config (6d5858bc…) except that application.reviewCase changes to source-epoch-code-recheck. The supplied configuration has runtimeHead c991cf12 and five sealedCurrentFiles whose hashes equal the P| seals and the manifest before-hashes. The current() git check therefore compares against the reviewed commit before any mutation. Minor: the reviewInput.kind assertion was dropped from the gate, but the input is still bound by its exact job SHA and FRESH_EPOCH_CHECKS."
+  },
+  {
+   "id": "post-reservation-canonical-pins",
+   "verdict": "approve",
+   "reason": "This resolves my source-bytes-not-rechecked-after-reservation finding. The EPOCH_CANONICAL_PIN region re-hashes all three manifest.files[].path against beforeSha256 ('Source changed after reservation'). It sits immediately after the ledger reservation and the wx intent write, before current(), the workflow hash check, the archive rename and the writeTextAtomic loop, all under resolution-run.lock. current() also re-checks the now-visible sealedCurrentFiles (the source, extraction and editorial before-hashes plus state.json and candidate-2.json). A failure leaves the intent and the reserved ledger state, so the run fails closed without repeating."
+  },
+  {
+   "id": "conservative-eight-check-proof-reuse",
+   "verdict": "approve",
+   "reason": "composeSourceEpochReview accepts only my exact prior report: needs-revision, exactly the two finding ids unbound-application-config and source-bytes-not-rechecked-after-reservation, and all 10 checks present with only the two boundary checks held. The raw prior input, report and original config bytes are hashed against priorReview and originalConfigSha256 and deep-equal the parsed objects. My prior result SHA b5cb72a7… matches, and the embedded checks and findings are verbatim. The gate requires source, extraction, canonical and manifest pins unchanged and every prior seal unchanged except the bundle and config. I confirmed this: only those two changed, and the five new D| seals are additions. I also ran normalizeEpochPatch(current, original) and it returns the original bundle byte-for-byte, so the change is limited to four marked regions, all of which I reviewed. The gate also requires a fresh approve of all three checks with no findings. The prior job must stay returned/needs-revision with exact hashes and runId, and neither report is rewritten."
+  }
+ ],
+ "findings": []
+}

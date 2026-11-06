@@ -1,0 +1,82 @@
+{
+ "kind": "independent-source-epoch-transition-review",
+ "packetSha256": "1efa565d0b499a91b4f58a75ebac83ae5223239491e73590325f308f5a636569",
+ "sourceHash": "sha256:d0a2ab5a1ce1200705b4b2d96d140fbe1745c2e18812f47c11e09c0bfbd76e39",
+ "extractionHash": "sha256:c715ff1e3cd0fe148deddca495c6029110f68a8cd9adbeaf1e8647efda9ede66",
+ "manifestSha256": "e54fdac2428910941cc1261d74c8c815d14f65c30258c8c93d0110a68f3ec684",
+ "applierSha256": "2ed3767af2a23c7fc94874f4d605c70b009f622ad0bb4f5ed44afdd8f411b857",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+  "independentOfAuthor": true
+ },
+ "verdict": "needs-revision",
+ "checks": [
+  {
+   "id": "exact-independent-English-proofs",
+   "verdict": "approve",
+   "reason": "englishProofs() reads each declared case from control, requires returned/approve and an exact input and raw SHA, and runs validateEditorialReview: exact kind, book, chapter, packet, source and both extraction pins, reviewer agentId, independentOfAuthors and not excluded, complete unique check coverage, and an approved after equal to the proposal after. It also requires no additionalCorrections and no extractionProposals. Line 72 additionally requires unit.zh to equal sourceChinese, the unit field to equal before, a matching approve check, and the author to differ from the proof agent. The three supplied reports (0f487fa0 t4s2 and t5s2, bbde5351 t6s2) approve all five targets with afters byte-identical to sourceFields[].after, the proof bindings match manifest.proofs, and the inputs and raws are sealed under D|closure-review-c72620a9-20261106/. s0034-en is authored by the excluded host thread but approved by an independent agent."
+  },
+  {
+   "id": "complete-source-and-repeated-use-context",
+   "verdict": "approve",
+   "reason": "Each proof carries full contextUnitIds, and its reasons address repeated uses. s0138: parallel 率騎 at s0034, s0047, s0101 and s0103, and 部眾 at s0071. s0034: s0033's Feng Yi raid makes 又敗之 a second defeat of Sheyiyu, with the victor left unnamed. s0250: 被髮 at s0082 (Han's feigned madness) is kept distinct. s0083: Gui of s0082 believes and Han roams (s0084). Here Han is Murong Han 翰 (p113), not 汗. 俊 in s0138 is the heir apparent Murong Jun, not Wang Jun 浚, and it is a literal-field change only. The five production reasons are faithful bounded projections of the full rationales. The s0083 summary drops the unverified tongjian96 quote, consistent with the reviewer's caution."
+  },
+  {
+   "id": "exact-reviewed-field-source-delta",
+   "verdict": "approve",
+   "reason": "Repairs carry before and after exactly as approved, mapping en to idiomatic and literal to literal. After applyTranslationRepairs, every unit of the rebuilt packet must deep-equal the old unit with only the declared (unit, field) values replaced. The unit count must match. Exactly five unique targets must equal app.expectedTargets. zh is untouched because sourceChinese equals unit.zh and the unit equality includes zh. The applier re-checks current, before and after file SHAs against the manifest and reinstalls only those three files."
+  },
+  {
+   "id": "mention-geometry-and-candidate-accounting",
+   "verdict": "approve",
+   "reason": "reconcileExtractionAfterRepairs must leave no unresolved spans or candidates. witnessSet re-verifies every en and zh span with exactSpanAt against its own packet, and compares person, kind, unit, exact, occurrence and candidateRefs, dropping code points only for en spans in moved units. Each moved mention must match uniquely. The six reanchors (canonical and staged) are consistent: Sheyiyu stays 0–7, Yuwen Gui stays 0–9, and Han (p113) moves from 48–51 to 56–59. I recomputed 'Han' at index 56 in the new s0083 text and at 48 in the old. People and claims are copied from the raw extraction, and stats are unchanged (866 mentions, 799 candidates, 0 alias conflicts)."
+  },
+  {
+   "id": "editorial-history-and-strict-production-validation",
+   "verdict": "approve",
+   "reason": "Each repair gets a one-decision editorialDecisionSeed scoped to itself, with the proof's real agentId, runId and completedAt, decision accept, and a chapter-text witness (full unit zh). It is validated with validateEditorialDecisions and merged onto the existing editorial history, so prior decisions are kept and repairs grow from 239 to 244. Production reasons are 20–500 characters, while the full sourceReason and reason are preserved in manifest.sourceFields. Both variants pass validateCompactPeopleExtraction(strictAliasDispositions) and validateAppliedEditorialDecisions at prepare, before apply and on the live installed files."
+  },
+  {
+   "id": "unchanged-603-date-items-and-366-change-replay",
+   "verdict": "approve",
+   "reason": "Preparation rebuilds date packets from the new source for both variants, and requires items and people deep-equal to the pre-change packets (603 items). dateRepairDifference must produce exactly 366 changes that applyDateRepairProposal replays to the staged candidate. The applier repeats the replay before writing (against out/date-input) and after installation (against live files), and requires people and claims unchanged between current and prepared for both variants. The change reasons state that fresh independent date approval is still required."
+  },
+  {
+   "id": "source-epoch-history-round-cap-and-positive-report-absence",
+   "verdict": "approve",
+   "reason": "current() requires native generation c72620a9, phase reaudit, round 2, ceiling 3, no circuit breaker, no reaudit-2 jobs or plan, no candidate-3, and an absent date-audits/jinshu/109.json. Apply re-checks the state.json and review-1.json SHAs (dbd6a595…) against the manifest. The new state keeps round and cap, appends sourceEpochTransitions with approvalRetagged false, and records review-1 as historical-negative-report-only. After writing it re-asserts the review-1 hash, the absent audit, 2/3 and no breaker."
+  },
+  {
+   "id": "shared-ownership-and-fail-closed-current-pins",
+   "verdict": "needs-revision",
+   "reason": "Ledger ownership is otherwise sound: exact worker, lane, status, generation, source and extraction, executorToken, no claim, idle jobs at apply, identity owner and updatedAt pinned, and completion re-asserts the intentFile. But the operative config file (argv[2]) is never bound to the reviewed packet. It supplies the generation, source and extraction pins, sealedCurrentFiles, worker, controllerFile, preparedFolder, reviewCase and runtimeHead, and its contents are not supplied. Source bytes are not explicitly re-hashed after reservation. See the findings."
+  },
+  {
+   "id": "reviewed-code-and-clean-runtime-boundaries",
+   "verdict": "needs-revision",
+   "reason": "The applier (2ed3767a…) and source-review-validation.mjs (f5ad0e95…) match their embedded code. Every sealed D| and P| key is re-hashed, and pathBases must equal {D:dir, P:root/}. But the runtime git check (line 27) compares HEAD to app.runtimeHead from the unbound config, not to reviewInput.runtimeBoundary.head (c991cf12). Nothing ties the executed config to the sealed D|closure-review-c72620a9.json, so a different config could make a different runtime commit pass this check."
+  },
+  {
+   "id": "durable-intent-and-post-application-verification",
+   "verdict": "approve",
+   "reason": "Apply refuses an existing intent, receipt or archive, holds resolution-run.lock with failIfExists, reserves the ledger, then writes the intent with wx before any mutation. It re-runs current() and verifies the exact workflow file set and hashes, archives by rename, and copies back with COPYFILE_EXCL plus hash checks. It writes the three files with writeTextAtomic, then verifies installed SHAs, live strict validation, live date replay and the negative-history pins. Only then does it write the wx receipt and commit the ledger with all approval flags false. Any interruption leaves an intent or archive that blocks a repeat."
+  }
+ ],
+ "findings": [
+  {
+   "id": "unbound-application-config",
+   "file": "source-epoch-bundle.mjs",
+   "lines": "20–23, 27–28, 105–107",
+   "evidence": "const config=read(configFile) with configFile taken from process.argv. The only check is path.isAbsolute. config.application.runtimeHead feeds the git HEAD check at line 27, and config.sealedCurrentFiles, generationId, sourceHash, canonicalExtractionHash, candidateExtractionHash, worker, controllerFile, preparedFolder and reviewCase drive every other pin. The sealed list includes D|closure-review-c72620a9.json (6d5858bc…), but the applier never requires configFile to be that path or to have that hash. It also never compares app.runtimeHead with reviewInput.runtimeBoundary.head (c991cf12d80fda1d1375d729f6f3553cc212bbcb). The config contents are not in the packet, so the reviewer cannot verify those values.",
+   "action": "In apply (and prepare), require shaFile(configFile) to equal a sealed entry, for example need(path.resolve(configFile)===dir+'closure-review-c72620a9.json'), whose hash is then checked by the seal loop, or add an explicit configSha256 to the review input. Also require app.runtimeHead===reviewInput.runtimeBoundary.head. Include the full config in the next review packet."
+  },
+  {
+   "id": "source-bytes-not-rechecked-after-reservation",
+   "file": "source-epoch-bundle.mjs",
+   "lines": "110, 120–124",
+   "evidence": "manifest.files[].beforeSha256 is checked only before the lock and ledger reservation (line 110). After reservation, current() re-hashes only config.sealedCurrentFiles, whose contents are unseen and unbound, and the workflow directory. Before the writeTextAtomic loop at line 124 there is no explicit re-check that the three canonical files still equal beforeSha256. The previous applier did have this check: 'Source changed after reservation'.",
+   "action": "After the intent write, add for(const f of Object.values(manifest.files))need(shaFile(f.path)===f.beforeSha256,'Source changed after reservation'), or prove in the packet that config.sealedCurrentFiles contains exactly those three paths with those hashes."
+  }
+ ]
+}

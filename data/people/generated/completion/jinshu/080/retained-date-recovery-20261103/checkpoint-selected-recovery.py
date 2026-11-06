@@ -193,12 +193,19 @@ for folder in dateResearch.glob('complete-English-coverage-c4f6b535-20261105*'):
  if folder.is_dir():
   for extension in ['json','mjs','txt','jsonl']:
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
-for pattern in ['complete-English-source-prepared-*','complete-English-transition-*','current-source-date-work-order-*']:
+for pattern in ['complete-English-source-prepared-*','complete-English-transition-*','current-source-date-work-order-*','closure-review-*','closure-source-prepared*']:
  for folder in dateResearch.glob(pattern):
   if not folder.is_dir():continue
   for extension in ['json','mjs','txt','jsonl']:
    files += [p for p in folder.glob('*.'+extension) if not p.name.endswith('.private.json')]
   files += list((folder/'date-input'/'jinshu').glob('109.json'))
+closureController=dateResearch/'closure-review-c72620a9-controller.json'
+if closureController.exists():
+ closureState=json.loads(closureController.read_text())
+ assert closureState['phase'] in ['checkpoint-held','applied-checkpoint'],'Preserve the live source-correction closure owner'
+ assert not closureState['activeCaseId'] and closureState.get('executorReleased') is True,'Release only the verified idle source closure executor'
+ assert all(part['status'] not in ['claimed','running'] for part in closureState['parts']),'Preserve actual source closure reviewers'
+ assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for source closure watcher to release its lock'
 transition=dateResearch/'complete-English-transition-20261106'/'controller.json'
 if transition.exists():
  transitionState=json.loads(transition.read_text())
@@ -206,6 +213,8 @@ if transition.exists():
  assert not any(j['phase'] in ['claimed','running'] for j in transitionState['jobs']),'Preserve actual independent transition reviewers'
  assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for source watcher to release its own global lock'
 for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.complete-English-source-*'):
+ if folder.is_dir():files += list(folder.glob('*.json'))
+for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.reviewed-English-*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
 files += list(audit.glob('handoff-before-*.md'))
 files.append(audit/'free-date-record-ownership-proposal.patch')
