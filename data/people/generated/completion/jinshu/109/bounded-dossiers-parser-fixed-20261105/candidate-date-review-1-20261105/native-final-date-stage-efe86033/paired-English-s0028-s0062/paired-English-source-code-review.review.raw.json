@@ -1,0 +1,80 @@
+{
+ "kind": "independent-source-epoch-transition-review",
+ "packetSha256": "118e4e2c6a1374b6e1e5252986d5cb03b2771993e87587a282d576e6c03d47d5",
+ "sourceHash": "sha256:28badf0a7033d58ae2eea1afa52bd02951460779ae9b2413e0732da952c74cd8",
+ "extractionHash": "sha256:dc9cd435c238f5e7e5c350b10a2c4b88c0124a4b962bc96f9842735675f0ac35",
+ "manifestSha256": "55bd7855f7142bf6b90c02f536a0c4097c034ed7998d8a46efdf484450891fc2",
+ "applierSha256": "609df7dd510d08c11273adecbe5279ba07a5ad4b5a22f1a51395ecc359b31645",
+ "reviewer": {
+  "name": "Grok Bot",
+  "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+  "independentOfAuthor": true
+ },
+ "verdict": "needs-revision",
+ "checks": [
+  {
+   "id": "exact-independent-English-proofs",
+   "verdict": "approve",
+   "reason": "There is one English proof, from reviewer 0f487fa0/t7s2. I re-hashed both parts: the input is 666d7dbc… and the report 7f5eda10…, matching the sealed hashes and manifest.proofs. The report approves all 3 checks with no additional corrections and no extraction proposals. Each check's 'after' text equals the proposal byte for byte, and validateEditorialReview (f5ad0e95…, the version I reviewed before) enforces exactly that. The reviewer is not among the excluded authors (codex host, 73b605fb), and I'm independent of all three excluded ids. On the substance: 躬勒將士 is now 'personally led his officers and men'. 圍守二旬 is now the length of the siege rather than a wait before the sortie. 斬首千五百級 and 斬級數千 now count heads instead of 'grades'. 復攻柳城 restores Liucheng. All three are correct renderings of the Chinese."
+  },
+  {
+   "id": "complete-source-and-repeated-use-context",
+   "verdict": "approve",
+   "reason": "The full Chinese for s0028 (蘭復攻柳城…蘭乃遁歸) and s0062 (皝率諸軍攻遼令支以北諸城…掠五千餘戶而歸) is supplied, with both current English fields and the neighbouring units s0027, s0029, s0061 and s0063. Prepare requires u.zh===sourceChinese and u[field]===before for each unit. The repeated-use list correctly keeps the real 'grade' senses in s0109 (各有差) and s0112 (三等之田). The reasons quoted in full in sourceFields match the proof input, and the bounded productionReasons (248–271 characters) are those same texts verbatim. In s0027, 汗 is Murong Han 汗, not Han 翰; it is context only and nothing changes there."
+  },
+  {
+   "id": "exact-reviewed-field-source-delta",
+   "verdict": "approve",
+   "reason": "expectedTargets is exactly s0028-en, s0028-literal and s0062-literal, with no duplicates and the sorted set enforced. Each repair needs a 20–500 character production reason, the exact before text, an approved check whose after equals the proposal, and an author different from the reviewer. After applyTranslationRepairs, every unit is compared with structuredClone(u) with only the declared fields replaced, so any other field or locator change fails. The unit count is unchanged. Source b7788e71… becomes 9419ce49…, and the extraction (3a078518… to e3a33911…) and editorial (7b42f5d3… to da524512…) before and after files are all sealed."
+  },
+  {
+   "id": "mention-geometry-and-candidate-accounting",
+   "verdict": "approve",
+   "reason": "witnessSet re-anchors every en and zh span with exactSpanAt on both the old and new packets. Start and end code points are dropped only for en spans in the moved unit s0028, and the person, kind, unit, exact text, occurrence and candidateRefs must still be equal. Each moved mention must match exactly one mention afterwards. I re-computed the new English: 'Duan Lan' sits at 0–8, 'Shi Cong' at 107–115 and 'Lan' (occurrence 1) at 217–220, and nothing else matches. That agrees with all 6 mentionReanchors across both variants. unresolvedSpans must be empty, and unresolvedCandidates must be exactly jinshu:109:cand_c645c205f91a98c9 'Liucheng' at s0028 en 18–26 with zh starting 蘭復攻柳城. It gets a not-person/place disposition only if it has none, and 柳城 is indeed the besieged city."
+  },
+  {
+   "id": "editorial-history-and-strict-production-validation",
+   "verdict": "approve",
+   "reason": "Each repair gets its own scoped editorialDecisionSeed with exactly one decision. That decision is attributed to the actual independent reviewer and run, cites the Chinese of its unit, goes through validateEditorialDecisions, and is merged into the existing editorial history with no rewrite. The extraction stays at 865 mentions with 0 alias-disposition conflicts. Both variants go through validateCompactPeopleExtraction with strictAliasDispositions plus validateAppliedEditorialDecisions at prepare, at apply (on the prepared files) and on the live installed files. The people and claims are carried over unchanged and asserted deep-equal at apply."
+  },
+  {
+   "id": "unchanged-603-date-items-and-366-change-replay",
+   "verdict": "approve",
+   "reason": "For both variants, buildDateAuditPacket on the new source must give items and people deep-equal to the old packets (603 items). The people, hints and claims are copied from the raw extraction. dateRepairDifference must produce exactly 366 changes, and applyDateRepairProposal(canonical) must reproduce the staged candidate exactly. This is re-checked at apply from the sealed prepared files, and again on the installed live files after writing. The change reasons say fresh date approval is still required."
+  },
+  {
+   "id": "source-epoch-history-round-cap-and-positive-report-absence",
+   "verdict": "approve",
+   "reason": "current() requires round 3, reviewRoundCeiling 3, no circuit breaker, candidate-3, exactly two reaudit-3 jobs, a reaudit-3 plan, and date-audits/jinshu/109.json absent. Apply re-hashes all 30 workflow files (both reaudit-3 partial reports 5f120cf7… and 1241c3d3…, and the negative review-1 dbd6a595…) after the reservation. It requires the exact file set, archives by rename to a new path, copies back everything except reaudit-3-* with COPYFILE_EXCL and exact re-hashing, and re-hashes the whole archive at the end. Only the reaudit-3 jobs and plan are removed from state and the ledger. approvalRetagged is false everywhere, the negative report is kept as historical authority only, and round 3/3 is asserted after install."
+  },
+  {
+   "id": "shared-ownership-and-fail-closed-current-pins",
+   "verdict": "approve",
+   "reason": "owners() requires the exact worker and the grokbot lane, an active or research-blocked status, and matching generation, source and canonical hashes, with no chapter claim and no claimed or running jobs. Prepare needs an absent executorToken, while apply needs the controller's token. The identity owner must be idle and its updatedAt (21:23:20.177Z) must match the preparation time. The reservation happens under resolution-run.lock with failIfExists. After the wx intent, the three canonical files are re-pinned. current() then re-checks git HEAD, the clean tree, all seven sealedCurrentFiles and native state, followed by the exact workflow file set and hashes, all before the rename and the writes."
+  },
+  {
+   "id": "reviewed-code-and-clean-runtime-boundaries",
+   "verdict": "needs-revision",
+   "reason": "The decoded applier is 30,847 bytes with SHA 609df7dd…, matching codeEncoding, the D| seal and applierSha256; I read all 149 lines. The manifest re-serializes to 55bd7855…. The 13 static imports equal runtimeBoundary.importedModules and the sealed set. 11 of the hashes match seals I reviewed earlier, and the two additions (process-run-lock 289dbdac… and people-translation-repairs cc66964f…) sit under the clean c991cf12 git check. The config path guard and configSha256 binding are present. However, nothing binds the configuration I reviewed to the bytes that will run (see the finding on the config)."
+  },
+  {
+   "id": "durable-intent-and-post-application-verification",
+   "verdict": "needs-revision",
+   "reason": "The intent is written with wx after the ledger reservation, and an existing intent or receipt stops any rerun. Installed bytes are compared with the after hashes, and validation, the date packet and replay are re-run on the live files. The negative report, the absence of a positive report, the round cap and the full archive are re-verified, and the receipt and the ledger completion follow. However, some preconditions are only checked after the irreversible source writes and the ledger completion: the old audit controller (phase checkpoint-held, no active part, two returned parts), the prior revision.json, and the new stage directory. If one fails there, the installed epoch is left half-recorded (see the finding on late preconditions)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "reviewed-config-not-bound-to-sealed-config-bytes",
+   "severity": "blocking",
+   "evidence": "The packet includes config with configSha256 ec64fa29… (also sealed as D|paired-English-s0028-s0062-config.json). The packet's config object does not re-serialize to that hash in any standard JSON form (indent 0, 1, 2 or 4, with or without a trailing newline; for example indent 2 plus newline gives 8d437ab8…). Apply (lines 107 and 110) checks only reviewInput.configSha256===shaFile(configFile) and the seal. It never checks that the reviewInput.config object deep-equals the parsed runtime config. So the expectedTargets, productionReasons, sealedCurrentFiles, priorAuditController, priorNativeStage and runtimeHead I reviewed are not proven to be the ones that execute.",
+   "action": "In apply, before the reservation, add need(same(reviewInput.config,config),'Reviewed configuration differs from executed configuration'). Alternatively, ship the exact config bytes so their SHA reproduces ec64fa29…. Then send a fresh packet."
+  },
+  {
+   "id": "late-preconditions-after-canonical-writes",
+   "severity": "blocking",
+   "evidence": "Line 145 reads app.priorAuditController and requires phase==='checkpoint-held', no activePart and exactly two returned parts. Line 142 reads app.priorNativeStage+'revision.json' and mkdirSync(newStage). Both run after renameSync(wf,archive), the three writeTextAtomic canonical writes, the state rewrite and the receipt, and line 145 runs after the ledger completion on line 144. The audit-controller's hash is pinned in sealedCurrentFiles, but its phase and parts are never validated before the writes. If any of these fail, the source is installed and the ledger says applied, but the old audit controller and the main controller are not updated, and the existing receipt blocks a rerun.",
+   "action": "Validate the old audit controller's phase, activePart and returned-part count, the readability of the prior revision.json, and the absence of the new stage directory, all before the lock and reservation. Re-check them after the reservation alongside current(). Keep only the writes at the end. Then send a fresh packet."
+  }
+ ]
+}
