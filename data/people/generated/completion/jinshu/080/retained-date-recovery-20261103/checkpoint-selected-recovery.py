@@ -175,8 +175,16 @@ for folder in dateResearch.glob('reviewed-research-English-source-prepared*'):
   files += list((folder/'date-input'/'jinshu').glob('109.json'))
 for folder in dateResearch.glob('focused-date-research-current-source-*'):
  if folder.is_dir():
-  for extension in ['json','mjs','txt','jsonl']:files += list(folder.glob('*.'+extension))
+  for extension in ['json','mjs','txt','jsonl','log']:files += list(folder.glob('*.'+extension))
   files += list((folder/'full-claim-anchors-1').glob('*.json'))
+currentFocusedConfig=dateResearch/'focused-date-research-c72620a9.json'
+if currentFocusedConfig.exists():
+ focusedConfig=json.loads(currentFocusedConfig.read_text())
+ focusedState=json.loads((dateResearch/focusedConfig['controllerFile']).read_text())
+ assert focusedState['phase']=='checkpoint-held' and not focusedState['activeCaseId'],'Drain current source-review executor before snapshot'
+ assert all(part['status'] not in ['claimed','running'] for part in focusedState['parts']),'Preserve actual current-source reviewers'
+ assert focusedState.get('executorReleased') is True,'Release only the verified idle source executor before checkpoint'
+ assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for current source watcher to release its own lock'
 for folder in pathlib.Path('data/people/generated/date-workflow/jinshu').glob('109.research-English-source-*'):
  if folder.is_dir():files += list(folder.glob('*.json'))
 # Complete-source fidelity evidence and direct native review attachments.
