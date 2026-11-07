@@ -1,0 +1,67 @@
+{
+  "kind": "independent-source-epoch-transition-review",
+  "packetSha256": "418649ab839530c37a8eaf6fca65a470fed310a4f2b800ad372d7c48ad99b155",
+  "sourceHash": "sha256:ba3c1435796b6eece661b3fe56dee89c5fae4803da673d043f29aabeb6e18a0b",
+  "extractionHash": "sha256:9e3ac72efffe45c7886be87ec0569afe4acffc7ffd0d806c62ded1b9d2702879",
+  "manifestSha256": "900fc8f9453ffc37f08fea7b322d3a834db9dc57cd0b8765f7c8219d97d30453",
+  "applierSha256": "01f56bab632db16c655d82a18851a8da80a83872acd6fa02844622f23e2181a6",
+  "reviewer": {
+    "name": "Grok Bot",
+    "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+    "independentOfAuthor": true
+  },
+  "verdict": "approve",
+  "checks": [
+    {
+      "id": "exact-independent-field-proof-composition",
+      "verdict": "approve",
+      "reason": "The packet sha256 is 418649ab…. The bundle decodes to 238,972 bytes with sha256 1093b0c7…, as declared. The applier (01f56bab), compose (2905e842) and validation (f5ad0e95) code is byte-identical to v1. Five proof specs bind their input and report shas: frozen-English-a and frozen-English-b (0f487fa0), and the amendments (693c9e45), note-rendering (6a4e9310) and explicit-variant (ffd55cfe, input 4232c385) proofs (dddb08ed). The explicit-variant report is my own approve review from t13u. The composition yields 29 source fields and 3 record wordings, 32 in total. Disclosure: the last three proofs are also mine, so this check is not independent of them."
+    },
+    {
+      "id": "additional-finding-coverage-without-retagging",
+      "verdict": "approve",
+      "reason": "The additionalFindingResolutions are unchanged from v1. s0214/literal is resolved by exact independent recheck. s0216/literal and s0216/en are resolved by existing-field-proof coverage. For both s0216 entries, findingSha256 and selectedAfterSha256 recompute exactly, as sha256 of the JSON-stringified correction and the selected after. No original report is retagged or replaced, and every field except s0168-en-explicit-variant has identical before and after strings to v1."
+    },
+    {
+      "id": "exact-reviewed-source-and-record-string-delta",
+      "verdict": "approve",
+      "reason": "The only change from v1 is s0168/en. Its after is byte-equal to the text approved in frozen-English-explicit-variant. The new supersession runs from frozen-English-a to frozen-English-explicit-variant. Its beforeAfterSha256 (29cd668c) and selectedAfterSha256 (f8100560) recompute exactly. Its reason is at least 60 characters and says the earlier report stays unchanged. The s0168/literal supersession to note-rendering is unchanged. The three record leaves are unchanged: p031 Juqiu becomes Jujiu in the claim action and the alias, and the p113 alias becomes Han, General Who Establishes Might (建威翰)."
+    },
+    {
+      "id": "chinese-identity-and-reviewed-English-geometry",
+      "verdict": "approve",
+      "reason": "The s0084 Chinese 皝遣商人王車陰使察翰，翰見車無言 is preserved. Its two English Han candidates, cand_9ec9e40bccdc8321 and cand_bced8e929cd29ad6, are assigned to the existing p113 (Chinese 翰, Murong Han), not to Murong Han 汗, in both the canonical and staged variants. The 22 mentionReanchors are identical to v1. The Chinese and unmodified English witnesses are flagged unchanged. No person or unit pairing is added, and no people are merged."
+    },
+    {
+      "id": "candidate-coverage-editorial-history-and-philology",
+      "verdict": "approve",
+      "reason": "The finding from the first application review is resolved. The s0168 idiomatic text now marks the Tongjian variant behind “loath to kill you”. It keeps the extant Jinshu reading “I regret not killing you” and the Jinshu Jiaozhu’s judgment that it is probably corrupt, and it points to the literal note. The Chinese 恨不殺汝 is not emended. Candidates rise from 805 to 806 and dispositions from 355 to 356. The new cand_04b1dfb1f89dd475 covers code points 203 to 217 of the new English exactly (Jinshu Jiaozhu) and is marked not-person with reason book-title. Liaodong (s0030, 自征遼東) stays not-person with reason place."
+    },
+    {
+      "id": "unchanged-chronology-and-366-change-replay",
+      "verdict": "approve",
+      "reason": "The applier code is unchanged, so it still requires 603 date items, the expected people hints and the exact 366-change replay. The manifest reports dateItems 603, dateReplayChanges 366, and chronologyAndHintsUnchanged true. The manifest also has dateApproval false and chapterApproved false. This review approves no dates and clears no chronology uncertainty."
+    },
+    {
+      "id": "complete-negative-history-and-final-round-hold",
+      "verdict": "approve",
+      "reason": "The negative report file and its sha, nativeStateSha256 and workflowFileSha256 all match v1. The manifest records round 3 of 3 and canonicalWrites 0. The unchanged applier keeps the reaudit-3 job requirement, the absence of date-audits/jinshu/109.json, and the final state: phase repair with sourceApproachReviewRequired and a retained negative review. No whole-chapter approval is implied."
+    },
+    {
+      "id": "shared-ownership-resource-and-post-reservation-pins",
+      "verdict": "approve",
+      "reason": "The ownership, ledger, disk-check and process-run-lock (failIfExists) logic is byte-identical to the 01f56bab applier I reviewed in v1. The identityOwner is still jinshu-completion-109-identity. The config changes only the prepared folder (v3 to v5), the review case (-v2), the fifth proof spec, the s0168/en production reason, the extra candidate decision and the extra supersession. None of these touches the ownership or reservation pins."
+    },
+    {
+      "id": "reviewed-code-config-and-clean-runtime-bindings",
+      "verdict": "approve",
+      "reason": "configText hashes to e4cdb4b8…, which matches configSha256 and its seal, and it deep-equals config. Every included code file matches its seal. The sealed test file (3d313bb7) is byte-identical to v1, and its six tests pass when rerun. Caution: the prompt-contract seal moved from b2afd31c to efd68a41 and its new bytes are not included. The applier does not import it, so this has no runtime effect."
+    },
+    {
+      "id": "durable-intent-archive-and-post-application-verification",
+      "verdict": "approve",
+      "reason": "The applier is unchanged, so the order is the same as in v1. It writes the intent, re-pins, creates the new stage, verifies the workflow and renames the archive. It then copies back with COPYFILE_EXCL, excluding reaudit-3 files, writes atomically, and runs post-install validation, the revision and receipt, and ledger completion. The v5 prepared files are all sealed. The candidate and reconciliation hashes changed from v3 only as the s0168 edit and the new disposition explain."
+    }
+  ],
+  "findings": []
+}

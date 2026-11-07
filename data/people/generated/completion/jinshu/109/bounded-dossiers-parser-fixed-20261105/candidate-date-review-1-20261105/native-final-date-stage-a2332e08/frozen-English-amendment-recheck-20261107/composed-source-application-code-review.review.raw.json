@@ -1,0 +1,74 @@
+{
+  "kind": "independent-source-epoch-transition-review",
+  "packetSha256": "4fdb974d6e06752352638188e11525f1c1033e8bf53b94b8591b3392bb19b065",
+  "sourceHash": "sha256:ba3c1435796b6eece661b3fe56dee89c5fae4803da673d043f29aabeb6e18a0b",
+  "extractionHash": "sha256:9e3ac72efffe45c7886be87ec0569afe4acffc7ffd0d806c62ded1b9d2702879",
+  "manifestSha256": "3499a9dcad4b2a9369953d9a873145299f56562266fe7a5d4a5a73d099cc599e",
+  "applierSha256": "01f56bab632db16c655d82a18851a8da80a83872acd6fa02844622f23e2181a6",
+  "reviewer": {
+    "name": "Grok Bot",
+    "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+    "independentOfAuthor": true
+  },
+  "verdict": "needs-revision",
+  "checks": [
+    {
+      "id": "exact-independent-field-proof-composition",
+      "verdict": "approve",
+      "reason": "The decoded bundle is 238,182 bytes with sha256 49e282d7…, and the applier matches 01f56bab…. The four proof specs bind frozen-English-a and frozen-English-b (reviewer 0f487fa0) and the amendments and note-rendering proofs (reviewer dddb08ed), each by its input and report sha. composeEnglishFieldProofs re-runs validateEditorialReview (the f5ad0e95 validator, unchanged) on each report. It takes only approved checks. An amend has to be matched by a different reviewer's exact approval, and a reject throws. It yields 29 source fields and 3 record leaves, which matches expectedTargets and expectedRecordTargets. The single s0168 literal supersession digests match, and the 6 node tests pass."
+    },
+    {
+      "id": "additional-finding-coverage-without-retagging",
+      "verdict": "approve",
+      "reason": "There are three resolutions. The B s0214 finding is closed by my exact approved s0214-literal-additional. My two s0216 findings are bound by sha to the earlier B replacements: the findingSha256 and selectedAfterSha256 recompute exactly. Both B texts render 日近 as 'had served Huang only a short time' and keep the contrast 'his favor and rank surpassed those of the old retainers', so they fully fix the defect. The original reports stay needs-revision and unchanged; wholeBatchReviewerApproval is false, and there is no unused coverage."
+    },
+    {
+      "id": "exact-reviewed-source-and-record-string-delta",
+      "verdict": "approve",
+      "reason": "prepare checks each unit's zh and before against the live packet, builds one accepted editorial decision per repair under the original field reviewer's binding, and then asserts that every unit and field equals the expected one with only the declared fields changed. applyRecordWordings changes only the two declared alias leaves and one claim.action leaf (Juqiu to Jujiu for p031, and the 建威翰 title alias for p113 Murong Han 翰, not 汗), matching each person, unit, Chinese anchor and before value. apply re-derives the people and claims exactly."
+    },
+    {
+      "id": "chinese-identity-and-reviewed-English-geometry",
+      "verdict": "approve",
+      "reason": "verifyMentionReconciliation checks every mention against exactSpanAt in both packets. It requires the zh projection (person, kind, unit, spans and zh candidates) to be identical, and unedited English witnesses to be exact, and it forbids any new person|unit pairing. The 22 reanchors cover only edited units. In s0084, the two Han links (occurrences 0 and 1, candidates cand_9ec9… and cand_bced…) go to the existing p113, anchored by 察翰 and 翰見車. Wang Che p115 and Huang p075 are unchanged."
+    },
+    {
+      "id": "candidate-coverage-editorial-history-and-philology",
+      "verdict": "needs-revision",
+      "reason": "The candidate handling is correct. The unresolved candidates must exactly equal the declared set, and Liaodong cand_d8498a26970d9532 in s0030 (自征遼東) gets not-person/place without replacing an existing disposition. The English-only s0168 literal note keeps all the approved witnesses. However, the composed s0168 idiomatic replacement ('I have lived in your country for a long time, and I am loath to kill you.') renders the Tongjian variant 恨恨不欲殺汝 as if it were the extant 恨不殺汝, with no mark. Its own sourceReason forbids exactly that, and it contradicts the paired literal. See the finding."
+    },
+    {
+      "id": "unchanged-chronology-and-366-change-replay",
+      "verdict": "approve",
+      "reason": "Each variant rebuilds the date packet from the prepared source. The items must equal those built from the record-adjusted extraction, and the people hints must equal the prior ones, so only the reviewed action leaf can change a date item. dateRepairDifference has to yield exactly 366 changes that replay canonical to staged. apply and post-install re-check the source and extraction hashes and the replay. The manifest records 603 items and 366 changes, with dateApproval false and canonicalWrites 0."
+    },
+    {
+      "id": "complete-negative-history-and-final-round-hold",
+      "verdict": "approve",
+      "reason": "current() requires reaudit, round 3, ceiling 3, no circuit breaker, 13 returned reaudit-3 jobs and an absent date-audits/jinshu/109.json. The negative report is sha-pinned to its current source and extraction. Every workflow file, including all 13 reaudit-3 parts, is archived by rename, and the copy-back verifies each byte. The new state is phase repair, round 3/3, with sourceApproachReviewRequired and the retained negative review. The ledger is research-blocked and sticky with requiresFreshDateApproval. There is no round 4 and no positive approval."
+    },
+    {
+      "id": "shared-ownership-resource-and-post-reservation-pins",
+      "verdict": "approve",
+      "reason": "owners() requires the exact worker, the grokbot lane, the generation and the hashes, executorToken idle versus active as appropriate, no claims, no live jobs, and an idle identity owner. The identity updatedAt is pinned against the preparation. The run lock uses failIfExists. After the ledger reservation it re-checks the canonical before-shas, current() and the inspectPriorAuditAndNextStage equality, then the workflow names and digests, all before the first rename. The disk resource guard runs before and after."
+    },
+    {
+      "id": "reviewed-code-config-and-clean-runtime-bindings",
+      "verdict": "approve",
+      "reason": "The config path is pinned. configText sha is fd6e6cef…, which equals configSha256 and the config seal, and JSON.parse(configText) equals config deep-equal. apply decodes the transport bundle, verifies its bytes and sha, and requires that the reviewed config equals the executed config and its bytes. The runtime HEAD is c991cf12 with a clean tracked tree. The 13 runtime imports are the same sealed set, with the two new named imports from already-sealed modules. All D and P seals, including the prepared-v3 files and the four proof files, are re-verified on current paths."
+    },
+    {
+      "id": "durable-intent-archive-and-post-application-verification",
+      "verdict": "approve",
+      "reason": "The order is: wx intent recorded with the queue commit, a re-pin, mkdir of the new stage, verification of the workflow, an archive rename, an exact COPYFILE_EXCL copy-back, then the writeTextAtomic canonical writes. After install it checks the after-shas, normal and editorial validation, the live date and replay, the negative report's sha in both places, the repair hold and an exact archive. It writes the revision and the wx receipt, then the ledger completion under the intent check. A failure part-way leaves the intent and next stage in place, so a retry fails closed."
+    }
+  ],
+  "findings": [
+    {
+      "id": "s0168-idiomatic-silently-adopts-variant-reading",
+      "severity": "blocking",
+      "evidence": "In fieldProofComposition.fields, s0168-idiomatic (from frozen-English-a, reviewer 0f487fa0) changes 'I have lived among you too long—I should have killed you.' to 'I have lived in your country for a long time, and I am loath to kill you.' The source unit is the extant 吾處汝國久，恨不殺汝. 恨不+verb means 'regret not', and 'loath to kill you' is the Tongjian variant 恨恨不欲殺汝 (or the Yulan 誓不殺汝 sense), not a reading of the extant text. The field's own sourceReason (also productionReasons s0168/en) says not to treat 恨不 as simply reluctant and not to silently emend. The applied s0168-literal-English-note, by contrast, keeps 'I regret not killing you' and flags the variant explicitly. Applying both would install contradictory, unmarked renderings of one sentence.",
+      "action": "Replace the s0168 idiomatic after with a rendering of the extant text that is consistent with the literal. Either keep 'I should have killed you' or give an explicit English note on the Jinshu Jiaozhu/Tongjian/Yulan variant. Get the exact replacement independently approved and add it as a declared supersession, then re-prepare. The manifest, source hash and seals will change, so a fresh application review is needed. Do not rewrite the frozen-English-a report."
+    }
+  ]
+}

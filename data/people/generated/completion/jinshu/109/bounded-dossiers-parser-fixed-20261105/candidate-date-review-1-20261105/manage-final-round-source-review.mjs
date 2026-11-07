@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {sourceCodeReviewPrompt,validateSourceCodeReview} from './source-code-review-final-round-contract.mjs';
+import {sourceCodeReviewPrompt,validateSourceCodeReview} from './source-code-review-composed-contract.mjs';
 import {editorialReviewPrompt,validateEditorialReview} from './source-English-review-contract.mjs';
 import os from 'node:os';
 import path from 'node:path';
