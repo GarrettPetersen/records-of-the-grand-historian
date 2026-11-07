@@ -1,0 +1,67 @@
+{
+  "kind": "independent-source-epoch-transition-review",
+  "packetSha256": "24eb815c4ed378406f85d5cf81cb04eafe411c79d70cf14e1f93d1402f8c778b",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:623eb92a46490b4ba9b7bddecf5401f0354bb937f55b8e43c6402bc9d38c1eee",
+  "manifestSha256": "2ba720ad6cb34bbb25cfd45fa43388ce344aadfe4251a8a013233a5859bede81",
+  "applierSha256": "29957cf49b1d0b79ae1594b1b590f41791b0d3af3ce9a2cfdf994414041053af",
+  "reviewer": {
+    "name": "Grok Bot",
+    "agentId": "0f487fa0-1e09-449e-a50d-2cf33e7a3df7",
+    "independentOfAuthor": true
+  },
+  "verdict": "approve",
+  "checks": [
+    {
+      "id": "normal-independent-eight-field-English-review",
+      "verdict": "approve",
+      "reason": "proof English-batch8-v2.review.raw.json (d933b929…) is byte-identical to the review agent 0f487fa0 returned in run t10s2. It accepts all 8 repairs r0012-r0019 with no supplemental repairs. Its controller is released with allEnglishAccepted and a matching reviewSha256. The reviewer is not one of the excluded source authors (codex-thread:01a18e17… and dddb08ed…)."
+    },
+    {
+      "id": "exact-source-only-English-delta-and-history",
+      "verdict": "approve",
+      "reason": "All 8 manifest repairs equal the seed proposals exactly in unit, field, before and after, and carry the reviewed reasons. Repair history moves from 11 to 19 entries. The v6 after-files have the same hashes as v5 (source 81c8f5cd…, extraction aadc0f43…, editorial 75a4428e…), so the only manifest changes are the timestamp, folder paths, generation id and the new unlinkedChineseWitnesses field."
+    },
+    {
+      "id": "exact-Chinese-and-unchanged-English-witnesses",
+      "verdict": "approve",
+      "reason": "Prepare still rebuilds every unit with only the reviewed fields replaced and asserts exact zh spans and unedited en spans, with no new person/unit membership. The manifest records allChineseWitnessesUnchanged and unchangedEnglishWitnessesExact as true. The helper keeps a person only when every cited unit's zh is present and byte-identical before and after."
+    },
+    {
+      "id": "explicit-current-candidate-person-and-disposition-coverage",
+      "verdict": "approve",
+      "reason": "Unresolved candidates must exactly equal the two config links: p001 'Murong De' in s0010, backed by an existing en mention, and p009 'Ah Meng' in s0011, backed by zh 阿蒙 as an alternate name. Dispositions are empty. F1 is fixed: config.unlinkedChineseWitnesses flags 德 in s0010 (occurrence 0) for p001 as flagged-not-linked, linkedNow false, requiring separate identity review. Prepare asserts the flag and that no zh mention is inserted, apply checks that the manifest copy equals the config, and the flag reaches application.json and ledger candidateStage."
+    },
+    {
+      "id": "all-people-claims-hints-and379dateitems-preserved",
+      "verdict": "approve",
+      "reason": "Raw people and claims are asserted unchanged, before and after date packets have equal items and people, and strict validation passes. The manifest records 165 people, 910 claims, 379 dateItems and 687 mentions, with identical stagedStats. In the kinship fix, an existing mentionException is still required, every claim's evidence must be unchanged, and at least one cited zh unit must contain a name or a kinshipTerm.zh tied to a personId. 德兄 is not contiguous in s0272, and p163 is kept through 兄 to p154. The fix adds no identity or date approval."
+    },
+    {
+      "id": "fifteen-unchanged-date-changes-staged-not-applied",
+      "verdict": "approve",
+      "reason": "The retained proposal (2cf1449d…, byte-equal to the legacy five-reference proposal) has 15 changes, all supported by index in the independent source review. Only the pins are rederived, and the staged proposal (a9ded99a…) and staged extraction (7291a8c9…) live only in the prepared folder. The manifest records changeCount 15, currentSourceDateApproval false, canonicalDateChangesApplied false and dateApproval false, and apply installs only source, extraction and editorial."
+    },
+    {
+      "id": "legacy-complete-round2-history-preserved-with-no-reset",
+      "verdict": "approve",
+      "reason": "All 15 legacy workflow files keep their pinned hashes, including state.json 88cd5e1c…, and the legacy phase must be complete at round 2. Apply rechecks every workflow file after its writes. The ledger archives the prior row to dateAuditHistory and records priorNativeRound 2 under a sticky research-blocked hold, so nothing resets and no next round starts automatically."
+    },
+    {
+      "id": "shared-idle-owner-and-durable-post-reservation-pins",
+      "verdict": "approve",
+      "reason": "The owner must match the exact worker, generation and hashes, be research-blocked, hold no claims or active identity run, and carry the correct executor token. Apply takes a lock, reserves the ledger, and writes intent.json with flag wx before any canonical write. It then reruns current(), owner(), all sealed pins and the workflow hashes. The owner-manager is unchanged: 76091a1a… equals the copy in the previously reviewed packet."
+    },
+    {
+      "id": "exact-clean-runtime-code-config-manifest-and-proof-seals",
+      "verdict": "approve",
+      "reason": "The bundle (062e86f4…, 218115 bytes) and every code, proof and config file match their seals, as do the applier 29957cf4… and the manifest 2ba720ad…. F2 is fixed: newFunctionSha256 is removed, functionSerialization is Function.prototype.toString, and functionSha256 e08bfed1… equals the toString of the transformed helper that current() checks. F3 is fixed: all 4 real fixtures are hash-checked against config seals before JSON.parse. Production head 50ef6d3d records the helper at 5467d383…, equal to the compiled transform, and supplies all 11 self-test assertions (6 name, 5 kinship)."
+    },
+    {
+      "id": "post-install-validation-and-fail-closed-source-reconciliation-hold",
+      "verdict": "approve",
+      "reason": "After writing, apply re-hashes the installed files against the prepared after-files and rebuilds the live date packet. It reruns strict and applied-editorial validation, the semantic pins and the legacy workflow check. It requires the negative report 03acf8dc… unchanged and dateAuditStatus stale, never retagged. The ledger becomes sticky research-blocked with candidateStage source-reconciliation-hold, actual source authors excluded, the Chinese-link flag, and a required independent fresh whole-chapter review. The remaining intent file blocks any rerun, so a failure stays closed."
+    }
+  ],
+  "findings": []
+}

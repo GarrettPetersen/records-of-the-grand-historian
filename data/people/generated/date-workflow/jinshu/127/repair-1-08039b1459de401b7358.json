@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "kind": "date-repair-proposal",
+  "book": "jinshu",
+  "chapter": "127",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:08039b1459de401b73585011bcc8efcc0c2705f4c1b17027c5343f184fdac250",
+  "author": {
+    "name": "Codex date-repair staging",
+    "agentId": "repair_dates_jinshu127_round3"
+  },
+  "summary": "Corrects the remaining local Cao Ni chronology without merging the two local person records. The Guanggu attestation and its active-date hint now end with the independently attested AD 323 capture and killing, rather than an unsupported AD 322 terminal year. A fresh reviewer must assess the rebuilt candidate independently.",
+  "changes": [
+    {
+      "kind": "replace",
+      "id": "claim-222",
+      "before": [
+        "p075",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "曹嶷之所營"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 322,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0130"
+        ]
+      ],
+      "after": [
+        "p075",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永嘉五年至太寧元年（311–323；終於後趙趙王五年）",
+            "calendarConvention": "The AD bounds are year-precision historical activity bounds. The terminal year is the independently checked Later Zhao capture and killing, not an assertion that the Jinshu retrospective itself dates the construction."
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0130"
+        ]
+      ],
+      "reason": "Jinshu 127 names Cao Ni as the builder of Guanggu but does not supply a terminal year. Its later unit s0159 identifies the same Chinese name as captured by Later Zhao. The independently checked CText biographical chronology places Shi Hu's siege, Cao Ni's surrender, and his killing at Xiangguo in AD 323. Retaining AD 311 as the established beginning while correcting the end to AD 323 removes the contradictory AD 322 cutoff without treating the retrospective sentence as its own date source."
+    },
+    {
+      "kind": "hints",
+      "personId": "p075",
+      "before": [
+        "AD 311-322"
+      ],
+      "after": [
+        "AD 311-323 (terminal capture and killing by Later Zhao independently checked at AD 323)"
+      ],
+      "reason": "The former hint preserved the unsupported AD 322 endpoint despite the same chapter's Cao Ni capture notice and the independently checked AD 323 capture-and-death chronology. This synchronized summary keeps the two local records separate while no longer displaying an internally conflicting terminal year."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://ctext.org/datawiki.pl?if=gb&res=285273",
+      "title": "CText biographical record: Cao Ni (曹嶷)",
+      "quote": "晉明帝太寧元年（323年），石勒派遣石虎率領四萬步騎東進，圍攻廣固，于是投降石虎，曹嶷在襄國（今河北省邢台市）被殺。",
+      "sourceHash": "sha256:020b44b0283593ccec9bcc2ed788de125f35202013548871973a83fda24522bc",
+      "accessedAt": "2026-09-22",
+      "reason": "Independent chronological witness for Cao Ni's AD 323 surrender to Shi Hu and killing at Xiangguo; it corrects the stale AD 322 endpoint while the chapter itself supplies the identity linkage through its capture notice."
+    }
+  ]
+}

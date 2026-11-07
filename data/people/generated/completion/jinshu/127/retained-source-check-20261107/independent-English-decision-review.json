@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 3,
+  "book": "jinshu",
+  "chapter": "127",
+  "input": {
+    "chapterFingerprint": "sha256:f6bdf140cecc56db219d787e7c3e014dfe566450086cdbb02371f92215020494",
+    "proposalsFingerprint": "sha256:637438929d783fb74480ec2b86dc5db363d40d208778c21b8044aa2ee37da05b"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Grok Bot",
+    "model": "Grok Bot (provider model not exposed)",
+    "agentId": "dddb08ed-6a6f-4878-872a-436e19e2882a",
+    "runId": null,
+    "completedAt": "2026-11-07T01:25:32.577Z"
+  },
+  "proposals": [
+    {
+      "id": "jinshu:127:r0012",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "idiomatic",
+      "before": "Chui said to him: “Your capacity and insight have advanced; you are no longer the young Meng east of Wu.”",
+      "after": "Chui said to him: “Your capacity and insight have advanced; you are no longer Ah Meng of Wu.”",
+      "reason": "吳下阿蒙 is a nickname/allusive expression for Ah Meng of Wu. The current east of Wu is not in the source; young also obscures 阿蒙 as the name. Preserve the complete quotation.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshu:127:r0013",
+      "unit": {
+        "id": "s0011",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "field": "literal",
+      "before": "Chui said to him: “Your capacity and insight have advanced; you are no longer the young Meng east of Wu.”",
+      "after": "Chui said to him: “Your capacity and insight have advanced; you are no longer Ah Meng of Wu.”",
+      "reason": "Correct the same geographical/name mistranslation in the paired literal field; 吳下 is Wu, not east of Wu, and 阿蒙 is Ah Meng.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshu:127:r0014",
+      "unit": {
+        "id": "s0272",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "idiomatic",
+      "before": "Murong Chao, whom he had summoned from Chang'an, now arrived.",
+      "after": "Murong Chao, his elder brother's son, whom he had summoned from Chang'an, now arrived.",
+      "reason": "The source explicitly says 德...其兄子超: Chao is De’s elder brother’s son. Restore that omitted relationship and preserve his arrival after the earlier summons.",
+      "confidence": "high"
+    },
+    {
+      "id": "jinshu:127:r0015",
+      "unit": {
+        "id": "s0272",
+        "kind": "paragraph-sentence",
+        "blockIndex": 21,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "field": "literal",
+      "before": "Earlier, De had welcomed his brother's son Chao from Chang'an; at this point he arrived.",
+      "after": "Earlier, De had summoned his elder brother's son Chao from Chang'an; at this point he arrived.",
+      "reason": "Restore the explicit elder-brother relationship in 兄子 and the earlier summons versus current arrival. Independently check 迎 in its full narrative context; no new date or identity is inferred.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jinshu:127:r0012",
+      "decision": "accept",
+      "after": null,
+      "reason": "吳下 means in Wu, the region of Wu, not east of Wu. 阿蒙 is the familiar name Ah Meng, which young Meng hides. This is Lu Su’s proverbial jibe at Lü Meng, quoted by Chui. Ah Meng of Wu is faithful, keeps the whole quotation and identifies no one new.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "Jinshu127 s0011",
+        "excerpt": "非復吳下阿蒙也"
+      }
+    },
+    {
+      "repairId": "jinshu:127:r0013",
+      "decision": "accept",
+      "after": null,
+      "reason": "The literal field had the same east-of-Wu and young-Meng mistranslation, word for word. Ah Meng of Wu renders 吳下阿蒙 exactly, so both fields now read the same way.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "Jinshu127 s0011",
+        "excerpt": "汝器識長進，非復吳下阿蒙也"
+      }
+    },
+    {
+      "repairId": "jinshu:127:r0014",
+      "decision": "accept",
+      "after": null,
+      "reason": "其兄子超 explicitly makes Chao the son of De’s elder brother (兄), and the idiomatic field had dropped this. Had summoned keeps the earlier act marked by 初 separate from 及是而至, the arrival now. It adds no date, name or identity for the father.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "Jinshu127 s0272",
+        "excerpt": "初，德迎其兄子超于長安，及是而至"
+      }
+    },
+    {
+      "repairId": "jinshu:127:r0015",
+      "decision": "accept",
+      "after": null,
+      "reason": "兄 means elder brother, so his brother’s son was too vague. 迎 here is De’s earlier act of sending for or fetching Chao from Chang’an, which Later Qin held. Welcomed wrongly suggests a reception at the arrival, which came later (及是而至). Summoned is acceptable and keeps the two stages apart.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "Jinshu127 s0272",
+        "excerpt": "德迎其兄子超于長安"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": [],
+  "claimAdditions": []
+}

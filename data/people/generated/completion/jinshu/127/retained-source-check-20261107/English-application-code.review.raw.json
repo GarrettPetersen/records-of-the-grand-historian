@@ -1,0 +1,92 @@
+{
+  "kind": "independent-source-epoch-transition-review",
+  "packetSha256": "3d9e758100077caaa3a7911c131b5b044f9fece4b61010e40064fefdbf052688",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:623eb92a46490b4ba9b7bddecf5401f0354bb937f55b8e43c6402bc9d38c1eee",
+  "manifestSha256": "93e6f4d3b3f37e08fcda6a6bac08dbd13f137cab9daf4f193f0edb64c5ca961a",
+  "applierSha256": "bd0ff16dccef9d601bd3f8e02219bd688ea68be3b1193675fe55a006dc0be452",
+  "reviewer": {
+    "name": "Grok Bot",
+    "agentId": "0f487fa0-1e09-449e-a50d-2cf33e7a3df7",
+    "independentOfAuthor": true
+  },
+  "verdict": "needs-revision",
+  "checks": [
+    {
+      "id": "normal-independent-eight-field-English-review",
+      "verdict": "approve",
+      "reason": "proof/English-batch8-v2.review.raw.json (sha d933b929…) is byte-identical to the review agent 0f487fa0 returned in run t10s2: 8 accept decisions for r0012-r0019, supplementalRepairs empty. The controller shows executorReleased, allEnglishAccepted, supplementalRepairs 0, and the matching reviewSha256. The reviewer is not in actualSourceAuthorIds (host codex-thread:01a18e17… and dddb08ed…)."
+    },
+    {
+      "id": "exact-source-only-English-delta-and-history",
+      "verdict": "approve",
+      "reason": "All 8 manifest repairs equal the seed proposals in id, unit, field, before and after, carry the reviewed reason, and are status proposed. Stats move repairs 11 to 19. The applier rebuilds every unit as old-with-only-the-reviewed-fields-replaced and appends exactly the 8 reviewed repairs to the editorial file, so it records no other English or source delta."
+    },
+    {
+      "id": "exact-Chinese-and-unchanged-English-witnesses",
+      "verdict": "approve",
+      "reason": "Prepare asserts every zh span and every en span in units without an edit is exact, and forbids new person/unit memberships. The manifest records allChineseWitnessesUnchanged and unchangedEnglishWitnessesExact as true. Unit-shape equality also blocks any change to zh. The kinship-retention guard fails when any cited unit's zh changes or goes missing, as unit tests 2 and 4 cover."
+    },
+    {
+      "id": "explicit-current-candidate-person-and-disposition-coverage",
+      "verdict": "needs-revision",
+      "reason": "Unresolved candidates must equal config.candidatePeople plus candidateDispositions exactly: p001 'Murong De' in s0010 with an existing en witness, and p009 'Ah Meng' in s0011 with zh witness 阿蒙 and kind alternate-name. Dispositions are empty, and both links are explicit and infer no identity. However, the unlinked Chinese 德 in s0010 (德兄垂) is mentioned only inside free-text reason prose. No separate durable flag records it, so finding F1 applies."
+    },
+    {
+      "id": "all-people-claims-hints-and379dateitems-preserved",
+      "verdict": "approve",
+      "reason": "The applier asserts raw people and claims are unchanged, that before and after date packets have equal items and people, and that strict validation passes. The manifest records 165 people, 910 claims, 687 mentions, 379 dateItems and allClaimsAndPeopleUnchanged true, with identical stagedStats. The p163 root bug is fixed: 德兄 is not contiguous in s0272, and the new branch retains p163 through c0869 (kinship 兄 to p154) on unchanged s0272."
+    },
+    {
+      "id": "fifteen-unchanged-date-changes-staged-not-applied",
+      "verdict": "approve",
+      "reason": "The retained proposal (sha 2cf1449d…, equal to the legacy five-reference proposal) has 15 changes, and dddb08ed's review supports all 15 by index. Prepare rewrites only the hash pins, asserts the changes are equal, and writes the staged proposal and staged extraction to the prepared folder only. The manifest records changeCount 15, currentSourceDateApproval false and canonicalDateChangesApplied false. Apply installs only source, extraction and editorial."
+    },
+    {
+      "id": "legacy-complete-round2-history-preserved-with-no-reset",
+      "verdict": "approve",
+      "reason": "The manifest pins all 15 legacy workflow files, including state.json 88cd5e1c…, which equals the sealed current pin. The legacy phase must be complete at round 2, and apply rechecks every workflow file hash after the canonical writes. The ledger pushes the old row into dateAuditHistory and records priorNativeRound 2 under the sticky research-blocked hold instead of resetting rounds."
+    },
+    {
+      "id": "shared-idle-owner-and-durable-post-reservation-pins",
+      "verdict": "approve",
+      "reason": "owner() requires the exact worker, generation and hashes, research-blocked status, no claims, no active identity run and the correct executorToken. Apply takes a lock, reserves sourceEnglishApplication in the ledger, writes intent.json with flag wx before any canonical write, and then reruns current(), owner(), the sealed-file pins and the workflow hashes before writing. An existing intent or application file refuses a rerun."
+    },
+    {
+      "id": "exact-clean-runtime-code-config-manifest-and-proof-seals",
+      "verdict": "needs-revision",
+      "reason": "The bundle (3ee896bc…), all code, config and proof files, the applier bd0ff16d… and the manifest 93e6f4d3… match their seals. HEAD c991cf12 must be clean, and the loader pins base cc66964f… and compiled 5467d383…. The enforced functionSha256 e08bfed1… equals the guard's toString(). However, the receipt's newFunctionSha256 does not reproduce (F2), and the real-fixture test reads an unsealed extraction-packet.json (F3)."
+    },
+    {
+      "id": "post-install-validation-and-fail-closed-source-reconciliation-hold",
+      "verdict": "approve",
+      "reason": "After writing, apply re-hashes the installed files against the prepared after-files and rebuilds the live date packet. It reruns strict validation and applied-editorial validation and rechecks the semantic pins and legacy workflow. It requires the negative report sha 03acf8dc… unchanged and dateAuditStatus stale, never retagged. The ledger becomes research-blocked and sticky with candidateStage source-reconciliation-hold, actualSourceAuthors kept, and requiresIndependentFreshWholeChapterReview set. A failure leaves the intent file in place, so it fails closed."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "check": "explicit-current-candidate-person-and-disposition-coverage",
+      "severity": "blocking",
+      "location": "English-application-config.json candidatePeople[0]; manifest; apply-reviewed-English.mjs ledger candidateStage",
+      "problem": "The Chinese 德 in s0010 (德兄垂甚壯之) has no zh mention linked to p001. Only the reason string of candidate cand_3a3e62b164d62b2d acknowledges this ('without a new Chinese mention'). No separate machine-readable flag is configured, asserted, written to the manifest, or carried into the source-reconciliation-hold ledger row, so the gap can be lost once the candidate is reconciled.",
+      "requiredFix": "Add config.unlinkedChineseWitnesses = [{\"unit\":\"s0010\",\"zh\":\"德\",\"occurrence\":0,\"contextQuote\":\"德兄垂甚壯之\",\"expectedExistingPerson\":\"jinshu:127:p001\",\"status\":\"flagged-not-linked\",\"linkedNow\":false,\"requiresSeparateIdentityReview\":true}]. In prepare, assert that s0010 zh still contains 德兄垂, that no zh mention is added there, and copy the array into the manifest. In apply, copy it into candidateStage.unlinkedChineseWitnesses. Then reseal the config, manifest and applier and resubmit for review."
+    },
+    {
+      "id": "F2",
+      "check": "exact-clean-runtime-code-config-manifest-and-proof-seals",
+      "severity": "blocking",
+      "location": "code/reconciliation-runtime-transform.json newFunctionSha256 and runtimeBoundary.singleModuleGuardedOverride.newFunctionSha256",
+      "problem": "newFunctionSha256 a7f6f0f2d120faf73edbda2bbdbb58aed4009d06e8026eaf8df59935a6199bf7 matches none of these: the sealed changedFunction text (ed340efd…), the text without its trailing newline (ca98ddfe…), the text without 'export ' (42820310…), or the toString form (e08bfed1…, which equals functionSha256). A seal in the reviewed receipt does not match the text it pins.",
+      "requiredFix": "Set newFunctionSha256 to ed340efdf25a85953c6a7bff6fc3e88de43f11f24b648962d6deff8a05944aa6 (sha256 of the exact changedFunction string), or remove the field so that functionSha256 e08bfed15a352190a6e8e4b151842371f1c9b564337dbaa2a1e0a3cbbf5e3c10 is the only function seal. State its serialization (Function.prototype.toString). Then reseal the transform, bundle and manifest."
+    },
+    {
+      "id": "F3",
+      "check": "exact-clean-runtime-code-config-manifest-and-proof-seals",
+      "severity": "blocking",
+      "location": "code test file, real-fixture test reading R+'extraction-packet.json'",
+      "problem": "The real-fixture regression that proves 165 people, 910 claims and p163 retained loads extraction-packet.json from the retained-source-check folder. That file is not among the sealed code, config or proof files, and it has no pin in config.sealedCurrentFiles, so the fixture result is not bound to sealed evidence.",
+      "requiredFix": "Add its pin, \"<R>extraction-packet.json\": \"<sha256>\", to config.sealedCurrentFiles. Have the test assert that sha before use, or include the file in proofFiles with its seal. Then rerun the 6 tests and reseal."
+    }
+  ]
+}

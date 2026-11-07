@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "kind": "date-repair-proposal",
+  "book": "jinshu",
+  "chapter": "127",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:15e35a1356f1c327a2334770cfa59ee439f9964bcf848045af749a442cf77f25",
+  "author": {
+    "name": "Codex date-repair staging",
+    "agentId": "repair_dates_jinshu127"
+  },
+  "summary": "Repairs the three mechanically reversed historical-attestation intervals with the separate, source-pinned chronology of the events actually recalled by Jinshu 127. It does not treat the rhetorical retrospective itself as the date source and requires a fresh independent whole-chapter audit before publication.",
+  "changes": [
+    {
+      "kind": "replace",
+      "id": "claim-255",
+      "before": [
+        "p085",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "十六國典故"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 350,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 322,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0148"
+        ]
+      ],
+      "after": [
+        "p085",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和十二年（前燕元璽五年）正月",
+            "polity": "Former Yan",
+            "calendarConvention": "Conventional Chinese regnal-year labels; Western year is year precision only."
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 356,
+            "precision": "year"
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0148"
+        ]
+      ],
+      "reason": "Jinshu 127 recalls Wei's association with Duan Kan but gives no dates. Zizhi Tongjian 100 records that Qi wangyou Pi Lu Wei was wounded and already dead after Murong Ke defeated Duan Kan at the Zi River in the first lunar month of AD 356; replacing the impossible 350-to-322 interval with that event year preserves the allusion without claiming an unsupported active span."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-256",
+      "before": [
+        "p086",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "十六國典故"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 350,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 322,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0148",
+          "s0160"
+        ]
+      ],
+      "after": [
+        "p086",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永和六年至永和十二年（前燕元璽五年）",
+            "polity": "Former Yan",
+            "calendarConvention": "Conventional Chinese regnal-year labels; bounded historical activity, not continuous proof of personal activity."
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 350,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 356,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0148",
+          "s0160"
+        ]
+      ],
+      "reason": "The recall in Jinshu 127 says Duan Kan caused disorder and was destroyed by the preceding court, but has no dates. Zizhi Tongjian 98 places his southern move and self-proclamation as Qi king in AD 350; Zizhi Tongjian 100 records the siege, surrender of Guanggu, and pacification of Qi in AD 356. The resulting 350-to-356 interval describes the documented independent regime rather than the invalid shared interval; it deliberately does not assert his later execution year as the date of the recalled destruction."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-262",
+      "before": [
+        "p092",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "十六國典故"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 350,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 322,
+              "precision": "year"
+            }
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0159"
+        ]
+      ],
+      "after": [
+        "p092",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "太寧元年（後趙趙王五年）",
+            "polity": "Later Zhao",
+            "calendarConvention": "Conventional Chinese regnal-year label; Western year is year precision only."
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 323,
+            "precision": "year"
+          }
+        },
+        "strongly-inferred",
+        [
+          "s0159"
+        ]
+      ],
+      "reason": "Jinshu 127 identifies Cao Yi's capture by Later Zhao but supplies no date. The CText biographical record, citing Jin chronology, places Shi Hu's siege of Guanggu, Cao Yi's surrender, and his killing at Xiangguo in AD 323. AD 323 is therefore the supported year for this captured-by-Later-Zhao attestation, instead of the mechanically impossible 350-to-322 interval."
+    },
+    {
+      "kind": "hints",
+      "personId": "p085",
+      "before": [
+        "AD 350-356"
+      ],
+      "after": [
+        "AD 356 (wounded and died in the Battle of the Zi River; Zizhi Tongjian 100)"
+      ],
+      "reason": "The prior hint copied the time span of Duan Kan's independent regime onto Pi Lu Wei. The cited historical account instead supports Pi Lu Wei's final event in AD 356 and does not establish his activity throughout AD 350-356."
+    },
+    {
+      "kind": "hints",
+      "personId": "p092",
+      "before": [
+        "AD 311-322"
+      ],
+      "after": [
+        "AD 323 (captured and killed by Later Zhao; CText biographical record)"
+      ],
+      "reason": "The source-backed capture and death occurred in AD 323, while the old ending at AD 322 has no support in the recalled sentence and leaves the documented final event outside the displayed chronology."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://ancient-china-books.github.io/zizhitongjian/OEBPS/Text/6244.html",
+      "title": "Zizhi Tongjian, juan 100 (AD 356)",
+      "quote": "龕面縛出降，幷執朱禿送薊。……恪撫安新民，悉定齊地。",
+      "sourceHash": "sha256:8eefa8cf2dd8855dd76ed7003152d9a78d0d32038778f15312810d34f87296bf",
+      "accessedAt": "2026-09-22",
+      "reason": "Primary chronicle witness for Duan Kan's AD 356 surrender and the pacification of Qi."
+    },
+    {
+      "kind": "external",
+      "url": "https://ctext.org/datawiki.pl?if=gb&res=285273",
+      "title": "CText biographical record: Cao Yi",
+      "quote": "晉明帝太寧元年（323年），石勒派遣石虎率領四萬步騎東進，圍攻廣固，于是投降石虎，曹嶷在襄國被殺。",
+      "sourceHash": "sha256:75786c2237979375a07145ea06d69b2526f736d9dd9fb4fbf6e19b5c05adf037",
+      "accessedAt": "2026-09-22",
+      "reason": "Chronological witness for Cao Yi's AD 323 capture and killing."
+    },
+    {
+      "kind": "external",
+      "url": "https://zh.wikipedia.org/wiki/%E8%BE%9F%E9%97%BE%E8%94%9A",
+      "title": "Pi Lu Wei, source transcription from Zizhi Tongjian 100",
+      "quote": "丙申，恪大破龕於淄水……齊王友辟闾蔚被创，恪闻其贤，遣人求之，蔚已死。",
+      "sourceHash": "sha256:e538d40f37072c1fee199c0f897f0e6bdffc7c4442733d4c0aa7cb05f6baecb0",
+      "accessedAt": "2026-09-22",
+      "reason": "Locates the Zizhi Tongjian 100 passage for Pi Lu Wei's death during the AD 356 Zi River battle; the primary chronicle remains the historical authority."
+    }
+  ]
+}

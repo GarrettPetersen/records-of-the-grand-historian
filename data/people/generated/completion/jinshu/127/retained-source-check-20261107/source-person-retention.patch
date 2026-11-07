@@ -1,0 +1,31 @@
+--- a/scripts/lib/people-translation-repairs.mjs
++++ b/scripts/lib/people-translation-repairs.mjs
+@@ -1215,9 +1215,14 @@
+     return Boolean(before && after && before.zh === after.zh);
+   };
+   return claims.every((claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged)) &&
+-    claims.some((claim) => claim.predicate === 'name' &&
+-      typeof claim.value?.zh === 'string' && claim.value.zh.trim().length > 0 &&
+-      claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(claim.value.zh)));
++    claims.some((claim) => {
++      const name = claim.predicate === 'name' ? claim.value?.zh : null;
++      const kinship = claim.predicate === 'family-relationship' &&
++        typeof claim.value?.personId === 'string' ? claim.value?.kinshipTerm?.zh : null;
++      const witness = name ?? kinship;
++      return typeof witness === 'string' && witness.trim().length > 0 &&
++        claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(witness));
++    });
+ }
+ 
+ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, options = {}) {
+@@ -1521,8 +1526,8 @@
+     ]);
+     if (staleUnits.size === 0) continue;
+     const ownedClaims = reconciled.claims.filter((claim) => claim.subject === person.localId);
+-    // A reviewed overlap exception can have no display span while its Chinese
+-    // name and every claim witness remain intact after an English-only repair.
++    // A declared no-span exception can retain a Chinese name or a source-backed
++    // kinship intermediary while every cited Chinese unit remains unchanged.
+     if (hasUnchangedChineseNameEvidence(person, ownedClaims, previousUnitById, unitById)) continue;
+     const onlyRetiredUnitEvidence = ownedClaims.length === 0 || ownedClaims.every((claim) =>
+       claim.evidence.length > 0 && claim.evidence.every((evidence) => staleUnits.has(evidence.split(':').at(-1)))

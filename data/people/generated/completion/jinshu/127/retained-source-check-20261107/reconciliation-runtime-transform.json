@@ -1,0 +1,21 @@
+{
+  "kind": "sealed-reviewed-runtime-source-transform",
+  "baseFile": "/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-translation-repairs.mjs",
+  "baseCommit": "c991cf12d80fda1d1375d729f6f3553cc212bbcb",
+  "baseSha256": "cc66964ffb40403932d3d00d52be2887839a4c3fcda6e7258118037d7eabe53f",
+  "compiledSha256": "5467d383bb9dfc1f84c374b001165d3dd8591993982f2f67884d4b89ed9417e3",
+  "edits": [
+    {
+      "before": "export function hasUnchangedChineseNameEvidence(person, claims, previousUnits, currentUnits) {\n  if (!person.mentionException || claims.length === 0) return false;\n  const unchanged = (id) => {\n    const key = id.split(':').at(-1);\n    const before = previousUnits.get(key), after = currentUnits.get(key);\n    return Boolean(before && after && before.zh === after.zh);\n  };\n  return claims.every((claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged)) &&\n    claims.some((claim) => claim.predicate === 'name' &&\n      typeof claim.value?.zh === 'string' && claim.value.zh.trim().length > 0 &&\n      claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(claim.value.zh)));\n}\n",
+      "after": "export function hasUnchangedChineseNameEvidence(person, claims, previousUnits, currentUnits) {\n  if (!person.mentionException || claims.length === 0) return false;\n  const unchanged = (id) => {\n    const key = id.split(':').at(-1);\n    const before = previousUnits.get(key), after = currentUnits.get(key);\n    return Boolean(before && after && before.zh === after.zh);\n  };\n  return claims.every((claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged)) &&\n    claims.some((claim) => {\n      const name = claim.predicate === 'name' ? claim.value?.zh : null;\n      const kinship = claim.predicate === 'family-relationship' &&\n        typeof claim.value?.personId === 'string' ? claim.value?.kinshipTerm?.zh : null;\n      const witness = name ?? kinship;\n      return typeof witness === 'string' && witness.trim().length > 0 &&\n        claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(witness));\n    });\n}\n"
+    },
+    {
+      "before": "// A reviewed overlap exception can have no display span while its Chinese\n    // name and every claim witness remain intact after an English-only repair.",
+      "after": "// A declared no-span exception can retain a Chinese name or a source-backed\n    // kinship intermediary while every cited Chinese unit remains unchanged."
+    }
+  ],
+  "changedFunction": "export function hasUnchangedChineseNameEvidence(person, claims, previousUnits, currentUnits) {\n  if (!person.mentionException || claims.length === 0) return false;\n  const unchanged = (id) => {\n    const key = id.split(':').at(-1);\n    const before = previousUnits.get(key), after = currentUnits.get(key);\n    return Boolean(before && after && before.zh === after.zh);\n  };\n  return claims.every((claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged)) &&\n    claims.some((claim) => {\n      const name = claim.predicate === 'name' ? claim.value?.zh : null;\n      const kinship = claim.predicate === 'family-relationship' &&\n        typeof claim.value?.personId === 'string' ? claim.value?.kinshipTerm?.zh : null;\n      const witness = name ?? kinship;\n      return typeof witness === 'string' && witness.trim().length > 0 &&\n        claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(witness));\n    });\n}\n",
+  "scope": "Only the source-backed no-span person retention guard and its call/comment. No runtime file is edited. Adoption only for a new host invocation, with all code independently reviewed before canonical writes.",
+  "functionSha256": "e08bfed15a352190a6e8e4b151842371f1c9b564337dbaa2a1e0a3cbbf5e3c10",
+  "functionSerialization": "Function.prototype.toString"
+}

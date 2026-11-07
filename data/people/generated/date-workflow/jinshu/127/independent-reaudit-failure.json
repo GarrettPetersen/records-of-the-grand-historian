@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "jinshu",
+  "chapter": "127",
+  "sourceHash": "sha256:48f235482a285d91bc99fb19f9e1ad0e602ed183d0dea305e756d084362fda2b",
+  "extractionHash": "sha256:08039b1459de401b73585011bcc8efcc0c2705f4c1b17027c5343f184fdac250",
+  "reviewer": {
+    "name": "Independent Jinshu 127 whole-chapter re-audit: chronology failure check",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-09-22T22:13:55.130Z",
+  "status": "needs-revision",
+  "summary": "Fresh independent review of the staged candidate began with all 278 source units and its 379 temporal/hint checks in scope. It cannot approve the candidate: a current Cao 嶷 record still assigns an AD 311–322 terminal range even though the same chapter recalls his capture by Later Zhao and the independently checked chronology places that capture and death in AD 323. The candidate must be repaired and then restarted as a whole-chapter independent audit; this negative report deliberately makes no approval claim.",
+  "reviewedUnits": [
+    "s0130",
+    "s0159"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-222",
+      "verdict": "incorrect",
+      "event": "Cao Ni’s construction of Guanggu, recalled retrospectively in the chapter.",
+      "reason": "The candidate assigns this Cao 嶷 attestation AD 311–322, but the source supplies no endpoint and the same chapter separately recalls the same named person’s capture by Later Zhao. Independent chronology identifies that final event as AD 323, so an active interval ending at 322 is unsupported and conflicts with the current candidate’s own repaired AD 323 record.",
+      "evidence": [
+        {
+          "unit": "s0130",
+          "quote": "廣固者，曹嶷之所營，山川阻峻，足為帝王之都。"
+        },
+        {
+          "unit": "s0159",
+          "quote": "近則曹嶷跋扈，見擒于後趙；"
+        }
+      ]
+    },
+    {
+      "id": "hints-p075",
+      "verdict": "incorrect",
+      "event": "The active-date summary for the Cao 嶷 record that recalls the construction of Guanggu.",
+      "reason": "The displayed AD 311–322 hint inherits an unsupported terminal year. It omits the source chapter’s later capture notice for the same Chinese identity and is inconsistent with the independently checked AD 323 capture-and-death chronology; it must not survive as a person chronology summary.",
+      "evidence": [
+        {
+          "unit": "s0130",
+          "quote": "廣固者，曹嶷之所營，山川阻峻，足為帝王之都。"
+        },
+        {
+          "unit": "s0159",
+          "quote": "近則曹嶷跋扈，見擒于後趙；"
+        }
+      ]
+    },
+    {
+      "id": "claim-262",
+      "verdict": "supported",
+      "event": "Cao Ni’s capture by Later Zhao, reported as a retrospective example.",
+      "reason": "The chapter explicitly identifies Cao 嶷 as captured by Later Zhao. The candidate’s AD 323 point is consistent with the independently checked contemporary chronology, but it cannot cure the separate stale AD 311–322 record for the same Chinese identity.",
+      "evidence": [
+        {
+          "unit": "s0159",
+          "quote": "近則曹嶷跋扈，見擒于後趙；"
+        }
+      ]
+    },
+    {
+      "id": "hints-p092",
+      "verdict": "supported",
+      "event": "The active-date summary for the Cao 嶷 capture-by-Later-Zhao record.",
+      "reason": "The AD 323 summary correctly keeps the final capture and death distinct from an invented continuous activity span. It is supported by the chapter’s capture wording and the independently checked AD 323 chronology.",
+      "evidence": [
+        {
+          "unit": "s0159",
+          "quote": "近則曹嶷跋扈，見擒于後趙；"
+        }
+      ]
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p075",
+      "verdict": "incorrect",
+      "reason": "This candidate record is explicitly identified as 曹嶷, the same Chinese personal name used by the chapter’s later capture notice. Its AD 311–322 active hint lacks source support for a terminal year and contradicts the independently checked AD 323 final event; preserve the uncertainty or repair the end date before a fresh complete audit.",
+      "evidence": [
+        {
+          "unit": "s0130",
+          "quote": "廣固者，曹嶷之所營，山川阻峻，足為帝王之都。"
+        },
+        {
+          "unit": "s0159",
+          "quote": "近則曹嶷跋扈，見擒于後趙；"
+        }
+      ]
+    },
+    {
+      "id": "p092",
+      "verdict": "supported",
+      "reason": "This candidate record’s 曹嶷 capture is a retrospective reference, not evidence that an unrelated same-name person was alive in the chapter’s narrative present. Its AD 323 chronology is independently supported and should remain separate from the stale duplicate local record until identity resolution.",
+      "evidence": [
+        {
+          "unit": "s0159",
+          "quote": "近則曹嶷跋扈，見擒于後趙；"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-222",
+        "hints-p075",
+        "p075"
+      ],
+      "problem": "The staged candidate retains a Cao 嶷 active interval and hint ending in AD 322, although its other current Cao 嶷 record and independently checked chronology place capture and death in AD 323. The retrospective Guanggu reference does not support the earlier endpoint.",
+      "action": "In a separate date-repair context, replace or remove the unsupported AD 311–322 endpoint and synchronize the associated hint without silently merging local people. Then rebuild the candidate packet and run a new complete independent review of all 278 units, 379 date/hint checks, and 165 people."
+    }
+  ],
+  "references": [
+    {
+      "kind": "external",
+      "url": "https://ctext.org/datawiki.pl?if=gb&res=285273",
+      "title": "CText biographical record: Cao Ni (曹嶷)",
+      "quote": "晉明帝太寧元年（323年），石勒派遣石虎率領四萬步騎東進，圍攻廣固，于是投降石虎，曹嶷在襄國（今河北省邢台市）被殺。",
+      "sourceHash": "sha256:020b44b0283593ccec9bcc2ed788de125f35202013548871973a83fda24522bc",
+      "accessedAt": "2026-09-22",
+      "reason": "Independent chronological witness that dates Cao 嶷’s surrender to Shi Hu and death at Xiangguo to AD 323; it exposes the stale AD 322 endpoint in the candidate."
+    }
+  ]
+}

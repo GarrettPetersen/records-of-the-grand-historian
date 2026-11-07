@@ -244,6 +244,19 @@ wf072=pathlib.Path('data/people/generated/date-workflow/jinshu/072')
 files += list(wf072.glob('*.json'))
 tools072=wf072/'openrouter-tools-audit-0-4d9c64d727f54740b560'
 files += list(tools072.glob('response-*.json'))
+# Retained127 source-quality evidence and exact independently reviewed partial work.
+retained127=pathlib.Path('data/people/generated/completion/jinshu/127/retained-source-check-20261107')
+if retained127.exists():
+ for controller127 in [retained127/'controller.json',*sorted(retained127.glob('*-controller.json'))]:
+  if not controller127.exists():continue
+  state127=json.loads(controller127.read_text())
+  assert state127['phase'] in ['checkpoint-held','applied-checkpoint'] and state127.get('executorReleased') is True,'Preserve live127 review/application owner'
+ assert not pathlib.Path('data/people/generated/date-workflow-run.lock').exists(),'Wait for127 watcher to release its own lock'
+ for extension127 in ['json','mjs','txt','jsonl','md','patch','py']:
+  files += [q for q in retained127.rglob('*.'+extension127) if not q.name.endswith('.private.json')]
+ files += [pathlib.Path(q) for q in ['data/jinshu/127.json','data/people/extractions/jinshu/127.json','data/people/editorial-decisions/jinshu/127.json','data/people/date-audits/jinshu/127.json']]
+ files += list(pathlib.Path('data/people/generated/date-workflow/jinshu/127').glob('*.json'))
+ files += list(pathlib.Path('data/people/date-audit-history/jinshu/127').glob('*.json'))
 files=[p for p in files if not p.name.endswith('.private.json')]
 files.append(base/'nov05-focused-research-and-free-calibration-metrics.json')
 retiredCanonicalPaths=['data/people/date-audits/jinshu/109.json'];retiredCanonicalArchives=[]
