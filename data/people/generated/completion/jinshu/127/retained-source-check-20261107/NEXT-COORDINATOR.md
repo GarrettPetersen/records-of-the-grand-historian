@@ -1,0 +1,36 @@
+# Compact coordinator handoff — Jinshu 127 completion
+
+Continue the existing full goal: read `/Users/garrettpetersen/.codex/attachments/b66467b3-5e6d-47d8-83b8-239914d7d144/pasted-text-1.txt`. All 4,099 chapters remain in scope, prioritizing all 130 Jinshu through ebook readiness. Only Jinshu053 has a verified live nonempty release. Do not repeat it or count this code release as another chapter.
+
+Use a fresh coordination chat with this compact handoff, not a fork of the campaign history. `PEOPLE_COMPLETION_PROCESS.md` requires this at lines105–106 and246–250. Read the current AGENTS.md, glossary skill and completion process before scheduling. Stop at a bounded checkpoint or60minutes. No native parallel agents; initially one cloud assignment, one heavy local job with <=3GiB Node heap. Before dispatch/workspace/heavy work and every60seconds during active work run `npm run people:disk:check`. Memory recovered: pressure1, swap~1.70GiB, disk~30.68GiB. Remeasure, never reuse that assurance. On warning actively diagnose/clean verified idle superseded previews; preserve current5176 and MCP3001 unless independently authorized. Do not delete recovery, history, swap or locks.
+
+## Checkout / coordination
+
+P=/Users/garrettpetersen/records-of-the-grand-historian (one shared dirty host checkout; no broad status/diff/stage/pull/reset or branch switch). Primary HEAD3abd4ae7e81e0c4b03884282a51beec9f0dd56a2. Primary index SHA256793be8e2b83d79da0d364c448f8bd85e4ac5f53c924d11b45af06a53c24f88a6. Preserve staged deletion/absence of data/people/date-audits/jinshu/109.json.
+W=/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime, clean c991cf12d80fda1d1375d729f6f3553cc212bbcb. Use W libraries with explicit P data paths; never PEOPLE_REPO_ROOT=P (dirty schema mismatch). Do not update W until runtime/service ownership is established. No new checkout/corpus copy.
+R=P/data/people/generated/completion/jinshu/127/retained-source-check-20261107.
+B=P/data/people/generated/completion/jinshu/072/bounded-dossiers-20261103.
+
+Read current shared ledger before writes. Last actual127 owner: jinshu-completion-127-source-quality, grokbot, research-blocked, no executor/jobs/extractionclaim/identityowner. Generation a6dc476b-5e0c-4284-b7dc-e61524ceb7c9. Source sha256:8d87af938f44b8508f0966ec791e459235767bbc848e185e1ad63281dee67a7e; extraction sha256:21531ff5b0023ce1def8e97d11717dc625b89e2c585784c4120af6f43e7b15c2. Retain owner and machine-readable candidateStage holds.
+
+## Completed this bounded batch
+
+PR5378 reviewed person-retention fix merged56aee9165ec8ba93e8c30a6166da95df00acdcc8; pre/postmerge CI passed. Production canonical deployment b207c978-5bbc-4ab2-8b5b-54536d00701d has exact revision and deploy success. R/merged-fix-deployment-observation-20261107.json and merged-fix-live-smoke-20261107.json prove deployment and five live smoke responses including one person/chapter backlink, search index, progress JSON and OG PNG. This is code-only, zero newly complete/published chapters; not a full-corpus verification.
+
+## Next deliverable: three source-backed corrections
+
+O=R/record-and-mention-candidate-20261107. Read preparation-receipt.json, content-review-evidence.json, production-interface-gap.json, candidate-extraction.json. Current-extraction-packet.json is complete, pins and SHA seals retained. No canonical writes or independent approval yet.
+1. /people/8/5/2/0/en: young Meng east of Wu -> Ah Meng of Wu (p009 alias吳下阿蒙, s0011).
+2. /claims/88/2/assessment: praised De as no longer the young Meng of Wu -> praised De as no longer Ah Meng of Wu (p005 assessment, s0011).
+3. Add existing p001 MurongDe personal-name Chinese德, s0010 occurrence0. Source s0003 defines 慕容德/德; s0010 says德兄垂甚壯之. Existing English sameunit p001 assignment and6nameclaims included. No new person/merge. There is no exact德 scanner candidate in s0010; do not fabricate an ID.
+Candidate d820c328a19b339d42a0d52159fb9036483509ee4c8c5599d744500fb2f20e76 (semantic extraction hash prefixedsha256). It passes strict normal extraction and existing applied-editorial-history validation:165people/910claims,687->688mentions; all379dateitems and165datepeople unchanged. Reverting exactly two English leaves and removing exactly the added mention reconstructs the complete current raw extraction, proving no hidden delta. Two reviewed source English fields already fixed earlier; do not reapply the8field source batch.
+
+The existing reviewed production appliers do not represent this record/span correction batch. Alias applier only handles scanner reviewItems; translation applier --extraction is its targetfile, not a canonical importer, and no proposed source repairs remain. Do not fake a source edit, reuse an old approval or create another127bespoke canonical applier. Fix one shared production application path once, with preservation regressions and independent code review, then reuse it for independently reviewed content. Current data candidate is ready for content review; application-code contract is not ready. Native validators, queue ownership/current-generation transition and legacy workflow/history must remain enforced.
+
+## Review and chronology requirements
+
+No new complete date audit yet. Full278unit/both-English source coverage is UNVERIFIED; prior17unit focused review and8field approval are not whole-source coverage. Reuse actual complete provenance if available; otherwise bounded full-source parts, aggregate exact coverage, collect/apply corrections before another whole audit. R/CURRENT-WORK.json cumulative127Accounting retains known reviews, source generations and unknown historical usage. Unknown is not zero. Diagnose repeated late defects before another complete audit; do not reset cumulative spend or native rounds after source changes.
+
+Legacy127 native workflow is phasecomplete/round2 with15files unchanged; archiveStaleDateWorkflow rejects completedstate intentionally. Preserve history/counter; at most one automatic round remains. Independently reviewed15datechanges are staged in English-applied-prepared-v6, not canonical. Reconcile through reviewed publication/source recovery, never reset phase/round or retag old hashes. Old canonical negative is now stale historical evidence. Actual source authors host codex-thread:01a18e17-07b3-7f13-8e34-cb207908be33 anddddb08ed-6a6f-4878-872a-436e19e2882a cannot perform fresh independent date audit. Retained independent reviewer0f487fa0-1e09-449e-a50d-2cf33e7a3df7 is eligible for these host-authored three content proposals; recover actual conversation and terminal run before continuation. Old sealed spec/admission windows are expired; never edit sealed inputs. Generic manager manage-independent-attachment.mjs exists, but its native-editorial prompt is hardcoded8fields and unsuitable unchanged for this batch. Do not assume an old code-only review approves new content.
+
+109 remains parked at native repair3/3/sourceApproachReviewRequired; no automaticround4. Its full handoff remains B/HANDOFF.md and CURRENT-STATE.json. Preserve existing source-reconciliation holds. No broad extraction, global pair graph or recursive external chapter completion; max8indexed dossiers/person after source/date gates. Finish through normal site/backlinks/search/ebook/CI/deployment gates. Whole Jinshu ebook not ready.

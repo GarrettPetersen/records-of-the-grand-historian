@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-07T20:14:36.830672+00:00",
+  "kind": "reviewed-production-interface-gap",
+  "chapter": "jinshu/127",
+  "candidateSha256": "20aee320728ba65aa45e0c072ee0d3ab39ab343165305d9539d466768a167484",
+  "exactlyTwoRecordLeavesAndOneMentionAdded": true,
+  "canonicalFilesUnchanged": true,
+  "proof": "Revert the two declared exact English leaves and remove only p001/zh/德/s0010 occurrence0; resulting full raw compact object equals current canonical extraction.",
+  "existingInterfaces": [
+    {
+      "path": "scripts/apply-people-alias-decisions.mjs",
+      "limitation": "Only accepts current reviewItems/candidates. Current packet has no exact Chinese德 candidate in s0010, so it rejects a fabricated candidate ID. It cannot repair the two English record leaves."
+    },
+    {
+      "path": "scripts/apply-people-translation-repairs.mjs",
+      "limitation": "Source-field repair workflow and scanner candidate assignments. With no proposed source repair it validates and returns. --extraction names the file it reads/writes, not a reviewed canonical replacement importer. Do not add a fake source repair to enter this workflow."
+    },
+    {
+      "path": "scripts/lib/people-editorial-decisions.mjs",
+      "limitation": "Claim revisions are tied to source translation repair proposals; no general alias leaf correction/explicit source span contract. Existing applied editorial history validates the proposed candidate unchanged."
+    }
+  ],
+  "requiredSharedFix": "Extend one shared reviewed production content-application path with sealed exact record corrections and explicit source-span additions, plus normal strict extraction/editorial validation, owned source generation transition and preserved native date workflow/history. Do not create another chapter-specific applier. Independently review new code once and the three content cases separately or in a source-complete bounded content review.",
+  "fullSourceEnglishCoverage": "unverified; focused17units and8field evidence is not whole278unit coverage",
+  "freshFullDateAudit": "not authorized by this packet; establish full coverage and review changed approach/cumulative accounting first",
+  "providerUsageThisTurn": {
+    "newModelInvocations": 0,
+    "newPaidCharges": 0,
+    "historicalUsage": "unknown, not zero"
+  },
+  "chapterApproved": false
+}

@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-07T02:27:09.573135+00:00",
+  "status": "blocked-memory-pressure",
+  "blockedAudit": {
+    "sameConditionObservedConsecutiveGoalTurnsAtLeast": 4,
+    "condition": "macOS warning pressure causes required resource guard rejection",
+    "safeCleanup": "No verified idle superseded preview. Current5176 has connected clients; ownership confirmation remains unanswered. MCP3001 preserved. No unrelated app interruption authorized.",
+    "remainingSafeWork": "Existing remote CI remains live; no new local heavy work or reviewer dispatch is authorized under failed guard. CI completion does not clear host memory admission hold."
+  },
+  "guard": {
+    "exitCode": 1,
+    "stdout": "\n> records-of-the-grand-historian@1.0.0 people:disk:check\n> node scripts/check-local-disk.mjs\n\n{\n  \"primary\": \"/Users/garrettpetersen/records-of-the-grand-historian\",\n  \"availableBytes\": \"33103212544\",\n  \"availableGiB\": 30.8291015625,\n  \"reserveGiB\": 30,\n  \"worktrees\": [\n    {\n      \"path\": \"/Users/garrettpetersen/records-of-the-grand-historian\",\n      \"hasPublic\": true\n    },\n    {\n      \"path\": \"/Users/garrettpetersen/.codex/worktrees/jinshu086-date-canonical\",\n      \"hasPublic\": false\n    },\n    {\n      \"path\": \"/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime\",\n      \"hasPublic\": false\n    }\n  ],\n  \"memory\": {\n    \"status\": \"measured\",\n    \"platform\": \"darwin\",\n    \"swapUsedBytes\": \"1858999418\",\n    \"codexResidentBytes\": \"477741056\",\n    \"codexProcesses\": [\n      {\n        \"pid\": \"18719\",\n        \"residentBytes\": \"58769408\"\n      },\n      {\n        \"pid\": \"24601\",\n        \"residentBytes\": \"72286208\"\n      },\n      {\n        \"pid\": \"30535\",\n        \"residentBytes\": \"60801024\"\n      },\n      {\n        \"pid\": \"52127\",\n        \"residentBytes\": \"245907456\"\n      },\n      {\n        \"pid\": \"55194\",\n        \"residentBytes\": \"39976960\"\n      }\n    ],\n    \"pressureLevel\": 2,\n    \"warningSwapBytes\": \"4294967296\",\n    \"warnings\": [],\n    \"maxSwapBytes\": \"8589934592\",\n    \"maxCodexResidentBytes\": \"4294967296\",\n    \"errors\": [\n      \"macOS reports warning or critical memory pressure: stop new glossary work.\"\n    ]\n  },\n  \"errors\": [\n    \"macOS reports warning or critical memory pressure: stop new glossary work.\"\n  ],\n  \"scope\": \"Registered worktrees only; external clones and service runtimes must also be checked by the host.\"\n}\n"
+  },
+  "liveJob": {
+    "run": 42328400607,
+    "revision": "56aee9165ec8ba93e8c30a6166da95df00acdcc8",
+    "status": "in_progress",
+    "conclusion": "",
+    "jobs": [
+      {
+        "id": 128268983781,
+        "status": "in_progress",
+        "conclusion": "",
+        "activeSteps": [
+          "Build and validate the full site"
+        ]
+      }
+    ]
+  },
+  "pendingPreviewQuestion": "Is task at127.0.0.1:5176 finished? Preserve unless explicitly confirmed finished/authorized. Unanswered is not approval.",
+  "previewRestartReceipt": "/Users/garrettpetersen/.codex/memory-warning-receipts/preview-5176-confirmation-20261107.json",
+  "resume": "After resource change, rerun npm run people:disk:check and require pass; poll sameCI42328400607 (never restart merely because observation expired); verify deployment for56aee916; resume127three corrections and existing source/date holds. Preserve109round3ceiling and all claims.",
+  "fullGoalScopeUnchanged": true,
+  "newCompletedChapters": 0,
+  "newPublishedChapters": 0,
+  "remoteRecoveryHeadUnchanged": "126e936b3b9728917766fd6f1ce7985cecf7b67e"
+}
