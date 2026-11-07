@@ -10,4 +10,13 @@ assert.equal(retains(person,[{...claims[0],value:{en:'Wei Guan'}}],before,after)
 assert.equal(retains(person,claims,before,new Map([['s0205',{zh:'其子庭'}]])),false,'changed Chinese cannot preserve the old support');
 assert.equal(retains(person,[{...claims[0],value:{zh:'張華'}}],before,after),false,'name must actually occur in the Chinese witness');
 assert.equal(retains(person,[...claims,{predicate:'role',value:{roleId:'ruler'},evidence:['jinshu:053:s0206']}],before,after),false,'all claim witnesses must be present and unchanged');
-console.log('Chinese name retention: 6 offline assertions passed.');
+const intermediary={mentionException:'Unnamed father inferred from the cited kinship phrase.'};
+const familyClaim={predicate:'family-relationship',value:{personId:'jinshu:127:p154',kinshipTerm:{zh:'兄'}},evidence:['jinshu:127:s0272']};
+const kinshipBefore=new Map([['s0272',{zh:'初，德迎其兄子超于長安，及是而至。',en:'old English'}]]);
+const kinshipAfter=new Map([['s0272',{zh:'初，德迎其兄子超于長安，及是而至。',en:'corrected English'}]]);
+assert.equal(retains(intermediary,[familyClaim],kinshipBefore,kinshipAfter),true,'English-only corrections retain an existing Chinese-backed unnamed intermediary');
+assert.equal(retains({},[familyClaim],kinshipBefore,kinshipAfter),false,'a kinship claim does not invent a no-span exception');
+assert.equal(retains(intermediary,[{...familyClaim,value:{personId:'jinshu:127:p154',kinshipTerm:{en:'elder brother'}}}],kinshipBefore,kinshipAfter),false,'an English kinship term alone is insufficient');
+assert.equal(retains(intermediary,[familyClaim],kinshipBefore,new Map([['s0272',{zh:'超至長安。'}]])),false,'changed Chinese cannot preserve kinship support');
+assert.equal(retains(intermediary,[familyClaim,{predicate:'attestation',value:{},evidence:['jinshu:127:missing']}],kinshipBefore,kinshipAfter),false,'every owned kinship claim witness must remain present and unchanged');
+console.log('Chinese name and kinship retention: 11 offline assertions passed.');
