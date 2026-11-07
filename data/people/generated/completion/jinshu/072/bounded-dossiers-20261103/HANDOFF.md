@@ -48,13 +48,17 @@ Date owner jinshu-release-dates-cursor-sdk, lane grokbot, research-blocked/no ex
 
 
 
+## Final active-record repetition check — current127 hold
+
+The eight SOURCE English fields are applied, but two active glossary record strings still retain the old mistranslation. R/record-wording-repairs-required.json supplies complete exact replacements: /people/8/5/2/0/en “young Meng east of Wu” → “Ah Meng of Wu”; /claims/88/2/assessment “praised De as no longer the young Meng of Wu” → “praised De as no longer Ah Meng of Wu”. Both cite s0011; preserve Chinese, identity, certainty and all other fields. These are proposed, NOT applied or independently approved. R/record-wording-hold-receipt.json records their machine-readable shared source hold under candidateStage.requiredRecordWordings. Review and apply them, plus the Chinese德 link, BEFORE sealing any fresh date audit. This is current chapter work, never a deferred corpus-wide cleanup. Do not rerun the completed eight-field app.
+
 ## Next work and checkpoint
 
 1. ObservePR5378’sactualrun/auto-merge/deploy. Preserve itscurrenthead/checks andthecleanruntime; do notrebuild/release053again.
 2. Fix127’sknownChinese德linkwithindependentreview, preserveanonymousfatherandallfacts. Thenreconcilelegacycompleted2throughreviewedpublicationrecovery, maintaininground2/3history—archiveStaleDateWorkflow intentionallyrejectscomplete; do notbypass/reset. Rebase15unchangedhelddatechangesafterthesource-linkfix; obtainfreshFULLcurrent-source independentaudit beforequalification.
 3. Continuebounded canonicaldossiers (atmost8indexedretrievals/person,zeropairgraph) onlywheneligible. Applynormal website/backlinks/search/ebook/CI/deployment/livegates. OtherretainedJinshuholds/ownersstaypreserved; no newwave.
 
-A/checkpoint-selected-recovery.py nowincludesRrecursive,canonical127source/extraction/editorial/dateaudit/history andalllegacyWF127, usingprivateGitindex. ExactnewcheckpointisinB/nov07-jinshu127-reviewed-source-and-kinship-fix-recovery.json afterbackup; previousdb5333caf1cc13d047dc1e2f39f1391a34c839efreceiptbyte-exactatR/previous-recovery-receipt-db5333ca.json. Priorhandoff/state atA/handoff-before-127-reviewed-source-checkpoint-20261107.md andA/state-before-127-reviewed-source-checkpoint-20261107.json.0newcomplete/0newpublished,only053verifiedlive. Historicaldeployedc991Nov5metricsscopeandcontested072/109/127dateapprovalsarelabelledinCURRENT-STATE; donotcountthemascleared.
+A/checkpoint-selected-recovery.py nowincludesRrecursive,canonical127source/extraction/editorial/dateaudit/history andalllegacyWF127, usingprivateGitindex. Exact latest checkpoint is in B/nov07-jinshu127-record-wording-hold-recovery.json after backup; prior646b9608523c9cebcac4e0365d08390d358b20ee receipt is byte-exact in R/previous-recovery-receipt-646b9608.json; previousdb5333caf1cc13d047dc1e2f39f1391a34c839efreceiptbyte-exactatR/previous-recovery-receipt-db5333ca.json. Priorhandoff/state atA/handoff-before-127-reviewed-source-checkpoint-20261107.md andA/state-before-127-reviewed-source-checkpoint-20261107.json.0newcomplete/0newpublished,only053verifiedlive. Historicaldeployedc991Nov5metricsscopeandcontested072/109/127dateapprovalsarelabelledinCURRENT-STATE; donotcountthemascleared.
 
 ## Resource boundary
 
