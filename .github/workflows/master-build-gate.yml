@@ -35,6 +35,11 @@ jobs:
       - name: Test people date-hint normalization
         run: npm run people:hints:self-test
 
+      - name: Verify reviewed record corrections
+        run: |
+          node scripts/apply-people-alias-decisions.mjs --self-test
+          node --test scripts/test-people-record-corrections.mjs
+
       - name: Test unresolved people-date holds
         run: node scripts/test-people-unresolved-hold.mjs
 
