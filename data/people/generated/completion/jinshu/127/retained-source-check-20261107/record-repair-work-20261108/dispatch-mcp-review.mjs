@@ -1,3 +1,4 @@
+import {checkReviewWorkerOwnership} from './check-review-worker-ownership.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -17,8 +18,8 @@ const currentSend=()=>JSON.parse(fs.readFileSync(stateFile)).dispatchJobs?.[disp
 assert.ok(!currentSend(),'Prior send must be reconciled');
 const prior=observeProvider(r=>r.id===ready.reviewer);assert.equal(prior.lastMessageId,ready.priorRunId);assert.equal(prior.newestEntryId,prior.lastMessageId);
 const guard=inspectLocalDisk(root);assert.deepEqual(guard.errors,[]);assert.deepEqual(guard.memory.warnings,[]);
-function update(label,fn){return mutateRemotePeopleWorkLedger(l=>{const r=l.dateAudits['jinshu/127'];assert.equal(r.worker,ready.owner);assert.equal(r.generationId,'a6dc476b-5e0c-4284-b7dc-e61524ceb7c9');assert.ok(!l.claims['jinshu/127']&&!l.identityReviews?.['jinshu/127']?.activeRun);assert.equal(r.jobs[key].inputSha256,ready.inputSha);fn(r,r.jobs[key]);},{message:label});}
-update('Reserve the independently assigned Jinshu 127 MCP review',(r,j)=>{assert.ok(!r.executorToken);assert.equal(j.status,'prepared');assert.ok(!Object.values(r.jobs).some(k=>['claimed','running','running-tools'].includes(k.status)));r.executorToken=token;r.executorHost=os.hostname();r.executorExpiresAt=new Date(Date.now()+35*60000).toISOString();j.status='claimed';});
+function update(label,fn){return mutateRemotePeopleWorkLedger(l=>{const r=l.dateAudits['jinshu/127'];assert.equal(r.worker,ready.owner);assert.equal(r.generationId,'a6dc476b-5e0c-4284-b7dc-e61524ceb7c9');assert.ok(!l.claims['jinshu/127']&&!l.identityReviews?.['jinshu/127']?.activeRun);assert.equal(r.jobs[key].inputSha256,ready.inputSha);fn(r,r.jobs[key],l);},{message:label});}
+update('Reserve the independently assigned Jinshu 127 MCP review',(r,j,l)=>{checkReviewWorkerOwnership(l,ready.worker);assert.ok(!r.executorToken);assert.equal(j.status,'prepared');assert.ok(!Object.values(r.jobs).some(k=>['claimed','running','running-tools'].includes(k.status)));r.executorToken=token;r.executorHost=os.hostname();r.executorExpiresAt=new Date(Date.now()+35*60000).toISOString();j.status='claimed';});
 const result=spawnSync(process.execPath,['--max-old-space-size=3072','/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/grokbot-headless-dispatch.mjs','once','--launch-app','--max-active','1','--workers',ready.worker,'--assignments',name],{env,encoding:'utf8',timeout:130000,stdio:['ignore','pipe','pipe']});
 const send=currentSend();const now=observeProvider(r=>r.id===ready.reviewer);
 const definitelyUnsent=!send&&now.lastMessageId===prior.lastMessageId&&now.newestEntryId===prior.newestEntryId;

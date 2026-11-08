@@ -1,3 +1,4 @@
+import {checkReviewWorkerOwnership} from './check-review-worker-ownership.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
@@ -14,12 +15,18 @@ import {mutateRemotePeopleWorkLedger,readRemotePeopleWorkLedger} from '/Users/ga
 const refreshing=process.argv[2]==='--refresh-ticket';
 assert.ok(process.argv.length===2 || (refreshing && process.argv.length===3));
 const dir=path.dirname(fileURLToPath(import.meta.url)), root=process.cwd();
+const registeredReceipt = path.join(dir, 'mcp-ready.json');
+if (refreshing) {
+  assert.ok(fs.existsSync(registeredReceipt), 'Missing original registration receipt. Reconcile the retained review.');
+} else {
+  assert.ok(!fs.existsSync(registeredReceipt), 'The review is already registered. Use --refresh-ticket for its expired ticket.');
+}
 const W='/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime',service='/Users/garrettpetersen/.local/share/24histories-grokbot-mcp/repo';
 const sha=b=>createHash('sha256').update(b).digest('hex'), file=path.join(dir,'record-review.input.json'), bytes=fs.readFileSync(file),input=JSON.parse(bytes), inputSha=sha(bytes);
 const jobId='jinshu127-records-'+inputSha.slice(0,16),worker='grokbot-25', reviewer='04811f86-4236-4507-a9a1-08340fa2ec8a',key='jinshu/127';
 const save=(file,obj)=>fs.writeFileSync(path.join(dir,file),JSON.stringify(obj,null,2)+'\n',{flag:'wx',mode:0o600});
 function guard(){const g=inspectLocalDisk(root);assert.deepEqual(g.errors,[]);assert.deepEqual(g.memory.warnings,[]);}
-function owner(l){const r=l.dateAudits[key];assert.equal(r.worker,input.owner);assert.equal(r.generationId,input.generationId);assert.equal(r.sourceHash,input.sourceHash);assert.equal(r.extractionHash,input.extractionHash);assert.equal(r.status,'research-blocked');assert.ok(!r.executorToken && !l.claims[key] && !l.identityReviews?.[key]?.activeRun);assert.ok(!Object.values(r.jobs).some(j=>['claimed','running','running-tools'].includes(j.status)));return r;}
+function owner(l){checkReviewWorkerOwnership(l,worker);const r=l.dateAudits[key];assert.equal(r.worker,input.owner);assert.equal(r.generationId,input.generationId);assert.equal(r.sourceHash,input.sourceHash);assert.equal(r.extractionHash,input.extractionHash);assert.equal(r.status,'research-blocked');assert.ok(!r.executorToken && !l.claims[key] && !l.identityReviews?.[key]?.activeRun);assert.ok(!Object.values(r.jobs).some(j=>['claimed','running','running-tools'].includes(j.status)));return r;}
 const env=dispatchMcpEnvironment(path.join(root,'.env'));
 function call(command,values){
  guard();
@@ -45,10 +52,15 @@ const job={schemaVersion:1,id:jobId,worker,kind:'editorial-review',book:input.bo
   hostOwnership:{worker:input.owner,scope:'Independent review of the three exact Jinshu 127 record and mention corrections under the existing source-quality owner. Return artifacts only.',receiptSha256:inputSha}};
 const priorJob=owner(readRemotePeopleWorkLedger()).jobs[jobId];
 if(!priorJob){
+ assert.ok(!refreshing,'Missing original shared job. Ticket refresh cannot recreate ownership.');
  mutateRemotePeopleWorkLedger(l=>{const r=owner(l);assert.ok(!r.jobs[jobId]);r.jobs[jobId]={kind:'independent-record-correction-review',status:'prepared',agentId:reviewer,transportWorker:worker,inputSha256:inputSha,inputFile:file,reviewJob:jobId,priorRunId:actual.lastMessageId,transport:'sealed-mcp'};},{message:'Bind one Jinshu 127 editorial review to its current source owner'});
 }else{assert.equal(priorJob.status,'prepared');assert.equal(priorJob.inputSha256,inputSha);assert.equal(priorJob.agentId,reviewer);}
 const store=new GrokbotReviewStore(service+'/data/people/generated/grokbot/review-jobs');
-if(!fs.existsSync(store.jobFile(worker,jobId)))store.register(job);assert.deepEqual(store.read(worker,jobId),job);
+if (!fs.existsSync(store.jobFile(worker, jobId))) {
+  assert.ok(!refreshing, 'Missing original sealed MCP job. Ticket refresh cannot register replacement work.');
+  store.register(job);
+}
+assert.deepEqual(store.read(worker, jobId), job);
 const resumed=call('resume',{worker,'review-job':jobId,book:input.book,chapter:input.chapter});assert.equal(resumed.mode,'sealed-review');assert.equal(resumed.reviewJob,jobId);
 const sealed=call('get-chunk',{'claim-token':resumed.claimToken,'chunk-id':'review'});assert.deepEqual(sealed.packet,packet);assert.deepEqual(sealed.draft,job.draft);
 const clientSha256=sha(fs.readFileSync(W+'/scripts/grokbot-mcp-client.mjs'));assert.equal(sha(execFileSync('curl',['-fsS','https://grokbot-mcp.24histories.com/grokbot-mcp-client.mjs'])),clientSha256);

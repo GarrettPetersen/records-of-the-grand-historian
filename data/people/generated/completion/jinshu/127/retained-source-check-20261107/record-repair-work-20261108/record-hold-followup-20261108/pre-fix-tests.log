@@ -1,0 +1,94 @@
+✔ preserves every unrelated record, including unnamed people and evidence (352.819292ms)
+✔ recovers an interruption after reserved and publishes once (474.502125ms)
+✔ recovers an interruption after installed and publishes once (365.639709ms)
+✔ missing review, self-review, active owner and workflow drift each block publication (458.185ms)
+✖ a later batch resolves only the remaining record wording (177.205625ms)
+✖ an explicit mention preserves an existing partial wording hold (194.853291ms)
+✖ the new generation retains previous source authors and the correction author (225.539875ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 4
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2644.081125
+
+✖ failing tests:
+
+test at data/people/generated/completion/jinshu/127/retained-source-check-20261107/record-repair-work-20261108/record-hold-followup-20261108/scripts/test-people-record-corrections.mjs:117:1
+✖ a later batch resolves only the remaining record wording (177.205625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   '/people/0/5/0/0/en'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/127/retained-source-check-20261107/record-repair-work-20261108/record-hold-followup-20261108/scripts/test-people-record-corrections.mjs:124:10)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:678:18)
+      at Test.postRun (node:internal/test_runner/test:1091:19)
+      at Test.run (node:internal/test_runner/test:1019:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:678:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '/people/0/5/0/0/en' ],
+    expected: [],
+    operator: 'deepStrictEqual'
+  }
+
+test at data/people/generated/completion/jinshu/127/retained-source-check-20261107/record-repair-work-20261108/record-hold-followup-20261108/scripts/test-people-record-corrections.mjs:129:1
+✖ an explicit mention preserves an existing partial wording hold (194.853291ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      independentReviewRequired: true,
+      outstandingTargets: [
+  +     '/people/0/5/0/0/en',
+        '/claims/0/2/assessment'
+      ],
+      targets: [
+        '/people/0/5/0/0/en',
+        '/claims/0/2/assessment'
+  
+      at TestContext.<anonymous> (file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/127/retained-source-check-20261107/record-repair-work-20261108/record-hold-followup-20261108/scripts/test-people-record-corrections.mjs:135:10)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:678:18)
+      at Test.postRun (node:internal/test_runner/test:1091:19)
+      at Test.run (node:internal/test_runner/test:1019:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:678:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { targets: [ '/people/0/5/0/0/en', '/claims/0/2/assessment' ], outstandingTargets: [ '/people/0/5/0/0/en', '/claims/0/2/assessment' ], independentReviewRequired: true },
+    expected: { targets: [ '/people/0/5/0/0/en', '/claims/0/2/assessment' ], outstandingTargets: [ '/claims/0/2/assessment' ], independentReviewRequired: true },
+    operator: 'deepStrictEqual'
+  }
+
+test at data/people/generated/completion/jinshu/127/retained-source-check-20261107/record-repair-work-20261108/record-hold-followup-20261108/scripts/test-people-record-corrections.mjs:138:1
+✖ the new generation retains previous source authors and the correction author (225.539875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'previous-curator',
+  -   'curator'
+    ]
+  
+      at TestContext.<anonymous> (file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/127/retained-source-check-20261107/record-repair-work-20261108/record-hold-followup-20261108/scripts/test-people-record-corrections.mjs:143:10)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:980:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:678:18)
+      at Test.postRun (node:internal/test_runner/test:1091:19)
+      at Test.run (node:internal/test_runner/test:1019:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:678:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'previous-curator' ],
+    expected: [ 'previous-curator', 'curator' ],
+    operator: 'deepStrictEqual'
+  }
