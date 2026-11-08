@@ -82,13 +82,15 @@ function reconcileRecordHolds(stage, input, inputHash) {
   const wording = next.requiredRecordWordings;
   if (wording?.targets) {
     const reviewed = new Set(input.changes.filter(c => c.type !== 'add-mention').map(c => c.pointer));
-    wording.outstandingTargets = wording.targets.filter(p => !reviewed.has(p));
+    const outstanding = wording.outstandingTargets ?? wording.targets;
+    wording.outstandingTargets = outstanding.filter(pointer => !reviewed.has(pointer));
     if (wording.outstandingTargets.length === 0) {
       wording.independentReviewRequired = false;
       wording.status = 'reviewed-and-applied';
     }
   }
   if (next.stagedCandidate) next.stagedCandidate.requiresCurrentGenerationReconciliation = true;
+  next.actualSourceAuthors = [...new Set([...(next.actualSourceAuthors ?? []), input.authorId])];
   next.requiresIndependentFreshWholeChapterReview = true;
   next.reviewedRecordCorrections = { inputHash, resolvedChanges: input.changes, supersededGeneration: input.generationId };
   return next;
