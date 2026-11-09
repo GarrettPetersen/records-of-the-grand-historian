@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {buildPeopleExtractionPacket} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/build-people-extraction-packet.mjs';
 import {validateCompactPeopleExtraction} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/validate-people-extraction.mjs';
+import {getPeopleSchemaValidator} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-schema.mjs';
 import {editorialDecisionSeed,proposalSetFingerprint,validateEditorialDecisionDocument,validateEditorialDecisions,validateAppliedEditorialDecisions,mergeEditorialDecisionReview} from '/Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/lib/people-editorial-decisions.mjs';
 const dir=path.dirname(fileURLToPath(import.meta.url));
 const read=file=>JSON.parse(fs.readFileSync(file));
@@ -31,8 +32,10 @@ const decisionById=new Map(),reports=[],seenSupplementals=new Set(),supplemental
 const lists={claimRevisions:[],claimAdditions:[],claimRetractions:[]};
 for(const part of order.parts){
  const input=read(dir+'/'+part.file);assert.equal(hash(dir+'/'+part.file),part.sha256);
- const file=dir+'/'+input.partId+'.editorial-review.json';
- if(!fs.existsSync(file))continue;
+ const original=dir+'/'+input.partId+'.editorial-review.json';
+ if(!fs.existsSync(original))continue;
+ const second=dir+'/'+input.partId+'.editorial-review.v2.json';
+ const file=fs.existsSync(second)?second:original;
  const report=read(file);assert.deepEqual([report.book,report.chapter,report.partId,report.inputSha256,report.agentId],['jinshu','119',input.partId,part.sha256,job.agentId]);
  assert.ok(Number.isFinite(Date.parse(report.completedAt)));
  const proposals=seed.proposals.filter(p=>part.proposalIds.includes(p.id));
@@ -46,13 +49,16 @@ for(const part of order.parts){
  const partDocument={...seed,reviewer,proposals,input:{...seed.input,proposalsFingerprint:proposalSetFingerprint(proposals)},decisions:report.decisions};
  for(const k in lists){partDocument[k]=report[k];lists[k].push(...report[k]);}
  validateEditorialDecisionDocument(partDocument);
+ const schema=getPeopleSchemaValidator().getSchema('https://24histories.com/schema/people/extraction-v1.json#/$defs/claim');
+ assert.ok(schema);
+ for(const claim of [...report.claimRevisions.map(r=>r.after),...report.claimAdditions.map(r=>r.claim)])assert.ok(schema(claim),claim.id+' '+JSON.stringify(schema.errors));
  for(const s of report.supplementalRepairs){
   const u=input.units.find(u=>u.id===(s.unitId??s.unit));assert.ok(u);const field=s.field==='idiomatic'?'en':s.field;
   assert.equal(u[field],s.before);assert.ok(s.after?.trim()&&s.after!==s.before&&u.zh.includes(s.sourceWitness.excerpt));assert.ok(s.reason.trim().length);
   const key=u.id+'/'+field;assert.ok(!seenSupplementals.has(key),key);seenSupplementals.add(key);supplementalRepairs.push(s);
  }
  findings.push(...report.attributionFindings);
- reports.push({partId:input.partId,sha256:hash(file),decisions:report.decisions.length,completedAt:report.completedAt});
+ reports.push({partId:input.partId,file:path.basename(file),sha256:hash(file),originalSha256:hash(original),decisions:report.decisions.length,completedAt:report.completedAt});
 }
 const full=decisionById.size===seed.proposals.length;
 const result={queueCommit:head,agentId:job.agentId,reports,decisions:decisionById.size,full,approvals:{accept:0,revise:0,reject:0},supplementalRepairs:supplementalRepairs.length,attributionFindings:findings.length};
