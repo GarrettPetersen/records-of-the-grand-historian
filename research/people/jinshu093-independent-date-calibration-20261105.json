@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "reviewerAgentId": "9f719f1b-cbdd-493d-865f-01a925790ae0",
+  "packetSha256": "3998280eec33bb08ba904116e197dd6675c1ade73a03f43e1ec0f9d6e82065c8",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "093"
+  },
+  "overall": "confirmed-with-corrections",
+  "checks": [
+    {
+      "id": "claim-3",
+      "objection": "partly-valid",
+      "reason": "s0011 praises 樊靡卿之父子 among 后族之所美者 and states no calendar date; the claim's parenthetical 東漢光武之世 and AD25–51 window are not in the Chinese and must go. The objection rightly rejects that invented reign window. It overreaches when it treats ordinary preface narrative of a past personal conduct as later reception solely because the historian writes later: a later biography may still attest an earlier life event, so undatedSourceAttestation of the conduct is enough.",
+      "evidence": [
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0011",
+          "quote": "樊靡卿之父子，竇廣國之弟兄，陰興之守約戒奢，史丹之掩惡揚善，斯並后族之所美者也。"
+        }
+      ],
+      "minimumRepresentation": "Replace the dated attestation with undatedSourceAttestation:true and a source-specific event that Fan Miqing and his father are listed among exemplary affines (后族之所美者); drop （東漢光武之世） and the AD25–51 westernInterval; do not add a retrospective reception event merely because the praise sits in the chapter preface.",
+      "extraRestrictionsRejected": [
+        "Equate ordinary past-tense preface praise of a historical person's conduct with later reception / retrospective-reference solely because the historian writes later",
+        "Require verbatim sourceDate.text as a separate correctness rule beyond what the schema already requires for nonempty sourceDate when present",
+        "Require atomized single-clause prose for the attested father-son praise"
+      ]
+    },
+    {
+      "id": "claim-55",
+      "objection": "valid",
+      "reason": "s0014 only alludes 悼后遇雲林之災 with no year. The proposed AD300 matches 湣懷's 湖城 disaster in the same sentence, not a dated Empress Dao event. Supplied jinshu 031 narrates her degradation and 絕膳而崩 at age thirty-four after fifteen years as empress, still without stating AD300. The absolute year is unsupported on this evidence; do not approve it.",
+      "evidence": [
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0014",
+          "quote": "遂使悼后遇雲林之災，湣懷濫湖城之酷。"
+        },
+        {
+          "book": "jinshu",
+          "chapter": "031",
+          "unitId": "s0260",
+          "quote": "初，太后尚有侍御十餘人，賈后奪之，絕膳而崩，時年三十四，在位十五年。"
+        }
+      ],
+      "minimumRepresentation": "Keep the preface allusion without westernYear AD300 (undatedSourceAttestation of the 雲林之災 mention, or unresolved with a substantive unresolvedReason). Do not invent AD300. Establishing any replacement absolute year is a genuine research gap beyond this packet.",
+      "extraRestrictionsRejected": []
+    },
+    {
+      "id": "claim-56",
+      "objection": "valid",
+      "reason": "The death claim's AD300 and place 雲林 are not established by s0014's literary allusion. primary031 shows Empress Dao was starved after Jia-led degradation (絕膳而崩), not killed at a place named 雲林, and still gives no AD300. Objecting to the unsupported year and literal Yunlin place is correct; the fact of death itself is attested in 031 and should not be discarded with the bad date/place fields.",
+      "evidence": [
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0014",
+          "quote": "遂使悼后遇雲林之災"
+        },
+        {
+          "book": "jinshu",
+          "chapter": "031",
+          "unitId": "s0260",
+          "quote": "絕膳而崩，時年三十四，在位十五年。"
+        },
+        {
+          "book": "jinshu",
+          "chapter": "031",
+          "unitId": "s0236",
+          "quote": "駿既死，詔使後軍將軍荀悝送后于永寧宮。"
+        }
+      ],
+      "minimumRepresentation": "Retain a death claim anchored to jinshu 031 starvation after degradation; remove place 雲林/Yunlin as a literal death place and remove AD300. Use unresolved dateContext (or research Hui-di / houfei annals for a regnal death year) without guessing. Manner should reflect 絕膳, not an unverified Yunlin disaster/killing locale.",
+      "extraRestrictionsRejected": []
+    },
+    {
+      "id": "claim-183",
+      "objection": "partly-valid",
+      "reason": "s0030–s0033 attest that before the heir was fixed, 文帝素意重攸 with 代宗之議, then after counsel the 儲位遂定. No Chinese year supports AD255–265, so that westernInterval is outside-sourced and must not be approved from this chapter alone. 素 marks a standing attitude, not endpoints of a dated window. The objection errs when it treats combining those supported actions in descriptive prose as itself an error.",
+      "evidence": [
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0030",
+          "quote": "初，帝未立為太子，而聲論不及弟攸，文帝素意重攸，恆有代宗之議。"
+        },
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0033",
+          "quote": "其後文帝與武帝論當世之務及人間可否，武帝答無不允，由是儲位遂定。"
+        }
+      ],
+      "minimumRepresentation": "Replace AD255–265 with undatedSourceAttestation (event: Emperor Wen long favoured Sima You and considered replacing the heir before the succession was settled) or unresolved without inventing endpoints. Keep the prose-linked sequence; do not split it merely for atomization. Any AD255–265 window needs cited primary context plus calendar conversion not supplied here.",
+      "extraRestrictionsRejected": [
+        "Treat combining supported actions in descriptive prose as itself an error",
+        "Require atomized separate dated claims for 素意重攸, the observation/coaching, and 儲位遂定"
+      ]
+    },
+    {
+      "id": "hints-p016",
+      "objection": "partly-valid",
+      "reason": "s0021's 王叔仁之固求出鎮 is an undated preface notice, so an active hint built only on that line is unsupported. The same chapter's biography names 王蘊字叔仁 and records 太元九年卒, so saying the chapter gives no dated personal event for this figure overreaches if p016 is that person (also listed as p145). AD360 as the hint start is still not shown in the supplied Chinese; do not guess it. Clear or recompute after identity and conversion, rather than keep AD360–384 on empty evidence.",
+      "evidence": [
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0021",
+          "quote": "王叔仁之固求出鎮"
+        },
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0230",
+          "quote": "王蘊，字叔仁，孝武定皇后父，司徒左長史濛之子也。"
+        },
+        {
+          "book": "jinshu",
+          "chapter": "093",
+          "unitId": "s0257",
+          "quote": "太元九年卒，年五十五"
+        }
+      ],
+      "minimumRepresentation": "Remove hints-p016 as attached to empty/preface-only evidence, or unify p016 with p145 (王蘊字叔仁) and recompute active hints only from biography-supported personal events after verifying 太元九年 conversion; do not retain AD360 without source support and do not invent years.",
+      "extraRestrictionsRejected": [
+        "Deny any dated personal event in this chapter for 王叔仁 while 王蘊字叔仁 and 太元九年卒 appear in the same chapter"
+      ]
+    }
+  ],
+  "methodFindings": [
+    "Preface past narrative is not automatically later reception; use undatedSourceAttestation for undated personal conduct attested by later writing.",
+    "Descriptive multi-action prose is allowed; unsupported Western windows are not.",
+    "p016 王叔仁 and p145 王蘊字叔仁 appear to be the same historical person split across records; hint repair should address identity before inventing or clearing career windows.",
+    "Empress Dao death year remains a genuine research gap on supplied evidence after rejecting AD300; 雲林 is allusion, not a verified death place."
+  ],
+  "dateApproval": false,
+  "chapterApproved": false
+}
