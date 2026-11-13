@@ -737,6 +737,84 @@ function addAliasMention(extraction, unit, person, language, kind, span) {
   return true;
 }
 
+// Claim values may give an expanded name absent from the source. Materialize only
+// literal Chinese witnesses, and require an unambiguous location before linking.
+export function reconcileReviewedNameMentionSpans(mentions, claims, reviewed, packet) {
+  const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
+  const revisedClaims = reviewed.revisedClaims;
+  const retainedNames = [
+    ...claims.filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
+      .map((claim) => revisedClaims.get(claim.id) ?? claim),
+    ...reviewed.addedClaims,
+  ].filter((claim) => claim.predicate === 'name');
+  const supports = (person, unit, language, exact) => retainedNames.some((claim) =>
+    claim.subject === person && claim.value?.[language] === exact && claimEvidenceUnit(claim, unit)
+  );
+  const retractedNames = claims.filter((claim) =>
+    claim.predicate === 'name' && reviewed.retractedClaimIds.has(claim.id)
+  );
+  const nameRevisions = claims.filter((claim) => claim.predicate === 'name' && revisedClaims.has(claim.id));
+  const draft = { book: packet.book, chapter: packet.chapter, mentions: structuredClone(mentions) };
+  for (const mention of draft.mentions) {
+    for (const before of retractedNames) {
+      if (before.subject !== mention.person || !claimEvidenceUnit(before, mention.unit.id)) continue;
+      for (const language of ['zh', 'en']) {
+        const exact = before.value?.[language];
+        if (exact && !supports(mention.person, mention.unit.id, language, exact)) {
+          mention.spans[language] = mention.spans[language].filter((span) => span.exact !== exact);
+        }
+      }
+    }
+    for (const before of nameRevisions) {
+      const after = revisedClaims.get(before.id);
+      if (before.predicate !== 'name' || after?.predicate !== 'name' ||
+          before.subject !== mention.person || after.subject !== mention.person ||
+          !claimEvidenceUnit(before, mention.unit.id) || !claimEvidenceUnit(after, mention.unit.id)) continue;
+      const oldExact = before.value?.zh, exact = after.value?.zh;
+      if (!oldExact || !exact || oldExact === exact || !oldExact.includes(exact) ||
+          supports(mention.person, mention.unit.id, 'zh', oldExact)) continue;
+      mention.spans.zh = mention.spans.zh.map((span) => {
+        if (span.exact !== oldExact) return span;
+        const unit = unitById.get(mention.unit.id);
+        if (!unit) throw new Error(`Reviewed name span lost source unit ${mention.unit.id}`);
+        const original = exactSpanAt(unit.zh, oldExact, span.occurrence);
+        if (span.startCodePoint !== original.startCodePoint || span.endCodePoint !== original.endCodePoint) {
+          throw new Error(`Reviewed name span has stale geometry: ${before.id}`);
+        }
+        const narrowed = exactOccurrences(unit.zh, exact).filter((candidate) =>
+          candidate.startCodePoint >= original.startCodePoint && candidate.endCodePoint <= original.endCodePoint
+        );
+        if (narrowed.length !== 1) throw new Error(`Ambiguous reviewed name narrowing: ${before.id}`);
+        return narrowed[0];
+      });
+    }
+  }
+  draft.mentions = draft.mentions.filter((mention) => mention.spans.zh.length || mention.spans.en.length);
+  for (const claim of reviewed.addedClaims) {
+    if (claim.predicate !== 'name' || !claim.value?.zh) continue;
+    for (const evidence of new Set(claim.evidence)) {
+      const unit = unitById.get(evidence.split(':').at(-1));
+      if (!unit) throw new Error(`Reviewed name addition lost source unit ${evidence}`);
+      const occurrences = exactOccurrences(unit.zh, claim.value.zh);
+      const covered = (span) => draft.mentions.some((mention) =>
+        mention.person === claim.subject && mention.unit.id === unit.id &&
+        mention.spans.zh.some((current) =>
+          current.startCodePoint <= span.startCodePoint && current.endCodePoint >= span.endCodePoint
+        )
+      );
+      if (occurrences.every(covered)) continue;
+      if (occurrences.length !== 1) throw new Error(`Ambiguous reviewed Chinese name witness: ${claim.id}`);
+      const kind = claim.value.kind === 'descriptive-kinship' ? 'kinship-reference' :
+        claim.value.kind === 'alternate' ? 'alternate-name' : mentionKindForNameKind(claim.value.kind);
+      if (!addAliasMention(draft, unit, claim.subject, 'zh', kind, occurrences[0])) {
+        throw new Error(`Reviewed Chinese name witness conflicts with an existing person: ${claim.id}`);
+      }
+    }
+  }
+  renumberMentions(draft);
+  return draft.mentions;
+}
+
 function addInferredNameClaim(extraction, person, unitId, kind, exact) {
   if (extraction.claims.some((claim) =>
     claim.subject === person &&

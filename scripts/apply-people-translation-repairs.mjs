@@ -31,6 +31,7 @@ import {
   removeDispositionMentionConflicts,
   removeUnsupportedCrossPersonOverlaps,
   remapMentionSpanThroughEdit,
+  reconcileReviewedNameMentionSpans,
 } from './lib/people-translation-repairs.mjs';
 import {
   editorialDecisionPath,
@@ -282,38 +283,6 @@ function applyReviewedClaimChanges(claims, reviewed) {
     .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim),
     ...structuredClone(reviewed.addedClaims ?? []),
   ];
-}
-
-function removeRetractedNameMentionSpans(mentions, claims, reviewed) {
-  const retractedNames = claims.filter((claim) =>
-    reviewed.retractedClaimIds.has(claim.id) && claim.predicate === 'name'
-  );
-  if (retractedNames.length === 0) return structuredClone(mentions);
-  const retainedNames = claims
-    .filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
-    .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim)
-    .filter((claim) => claim.predicate === 'name');
-
-  return structuredClone(mentions).flatMap((mention) => {
-    for (const claim of retractedNames) {
-      if (
-        claim.subject !== mention.person ||
-        !claim.evidence.some((evidence) => evidence.split(':').at(-1) === mention.unit.id)
-      ) continue;
-      for (const language of ['zh', 'en']) {
-        const exact = claim.value?.[language];
-        if (typeof exact !== 'string' || !exact) continue;
-        const stillSupported = retainedNames.some((retained) =>
-          retained.subject === mention.person &&
-          retained.value?.[language] === exact &&
-          retained.evidence.some((evidence) => evidence.split(':').at(-1) === mention.unit.id)
-        );
-        if (stillSupported) continue;
-        mention.spans[language] = mention.spans[language].filter((span) => span.exact !== exact);
-      }
-    }
-    return mention.spans.zh.length > 0 || mention.spans.en.length > 0 ? [mention] : [];
-  });
 }
 
 function applyReviewedPersonNameChanges(people, claims, reviewed) {
@@ -670,7 +639,7 @@ function selfTest() {
     throw new Error('Explicit person assignment did not replace a conflicting remapped span');
   }
 
-  const retractedMentionResult = removeRetractedNameMentionSpans([{
+  const retractedMentionResult = reconcileReviewedNameMentionSpans([{
     id: 'fixture:001:m0001',
     person: 'fixture:001:p001',
     unit: { id: 's0001' },
@@ -685,7 +654,8 @@ function selfTest() {
     predicate: 'name',
     value: { kind: 'personal', en: 'Wrong Name' },
     evidence: ['fixture:001:s0001'],
-  }], { retractedClaimIds: new Set(['fixture:001:c0001']) });
+  }], { retractedClaimIds: new Set(['fixture:001:c0001']), revisedClaims: new Map(), addedClaims: [] },
+  { book: 'fixture', chapter: '001', units: [] });
   if (retractedMentionResult.length !== 0) {
     throw new Error('A mention created solely by a retracted name claim survived reconciliation');
   }
@@ -702,7 +672,7 @@ function selfTest() {
     value: { kind: 'title', en: 'Honored Consort', zh: '貴嬪' },
     evidence: ['fixture:001:s0001'],
   }];
-  const retainedSharedSurface = removeRetractedNameMentionSpans([{
+  const retainedSharedSurface = reconcileReviewedNameMentionSpans([{
     id: 'fixture:001:m0001',
     person: 'fixture:001:p001',
     unit: { id: 's0001' },
@@ -714,7 +684,8 @@ function selfTest() {
   }], sharedSurfaceClaims, {
     retractedClaimIds: new Set(['fixture:001:c0001']),
     revisedClaims: new Map(),
-  });
+    addedClaims: [],
+  }, { book: 'fixture', chapter: '001', units: [] });
   if (
     retainedSharedSurface[0]?.spans.zh.length !== 1 ||
     retainedSharedSurface[0]?.spans.en.length !== 0
@@ -2174,7 +2145,7 @@ export function applyPeopleTranslationRepairs(opts) {
   const reviewedExtraction = {
     ...structuredClone(extraction),
     people: reviewedPeople,
-    mentions: removeRetractedNameMentionSpans(extraction.mentions, extraction.claims, reviewed),
+    mentions: reconcileReviewedNameMentionSpans(extraction.mentions, extraction.claims, reviewed, oldPacket),
     claims: reviewedClaims,
     translationRepairs: retainedRepairs,
   };
