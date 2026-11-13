@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-code-review",
+  "book": "jinshu",
+  "chapter": "119",
+  "base": "60849db832e126bbacbf4da483644aa25a00fa09",
+  "author": "codex-thread:01a1d349-bfa3-7d02-b876-d6694585a2df",
+  "reviewer": "/root/reviewed_name_spans",
+  "scope": "Shared reviewed name-claim span reconciliation: preserve retraction semantics, narrow Chinese spans within accepted original geometry, add unambiguous Chinese source witnesses for accepted name additions. No content adjudication or canonical writes. PR5379 inspected; this patches the existing native translation applier, reuses existing span and mention helpers.",
+  "files": {
+    "people-translation-repairs.mjs": "c714bc7c174653d03aee0ed533351a0f4efa4bdd109f00a40ab0455c1a1464c2",
+    "apply-people-translation-repairs.mjs": "b0ae2384756c8cfe6965919a550d75b8109ba0fc18a0a2499325645d170e15f8",
+    "test-people-reviewed-name-spans.mjs": "79466fcc592c608f6c4b8de8ee18cab352d158c14f0fdaf0045fb5ed857c7f17",
+    "master-build-gate.yml": "c3e92c415b24537852ecd443d69ee884e5891af95792d8f19b4f11f6ef1ef91c",
+    "test-loader.mjs": "04e51ab59afaef7e567ddc46e8f349ab5232e6a7ae581524cadf97704c9efb02",
+    "reviewed-name-spans.patch": "ac624a44bea28f5ef6cd5998ad579b9a79ee2bda2761a86cea693c7cf35fd1c8"
+  },
+  "output": "independent-code-review.json",
+  "expectedTests": [
+    "new regression script",
+    "native translation-applier --self-test"
+  ],
+  "safety": "Only shared primary checkout plus assigned artifact output. No new checkout, branch switch, pull, stage, commit, build or canonical writes. Run people:disk:check before local work and every60 seconds. Preserve claims, locks, recovery, index and services."
+}

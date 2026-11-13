@@ -1,0 +1,5 @@
+Reviewed name-claim changes could leave Chinese links inconsistent with the accepted claims: a wife’s span still included children, and two added aliases had no Chinese links. The shared translation-repair path now narrows a revised name within its original span and links unambiguous Chinese witnesses for accepted name additions. Ambiguous or conflicting locations fail before writes; expanded names absent from the source preserve their literal abbreviations.
+
+Independent code review approved this exact patch. The native Jinshu119 fixture applied all 283 reviewed English fields and passed 371 postconditions, including the three exact span corrections, all 202 person IDs, 2,084 claims, 30 family claims, unnamed-mother exceptions, and every other mention’s geometry. The existing 123-candidate resolution passed unchanged. Canonical chapter data was not changed.
+
+Validation: new preservation/failure regressions, native translation-applier self-test, eight reviewer adversarial cases, native compact extraction and merged editorial-history validation. CI runs the new regressions and applier self-test. The applied-history replay branch is outside this change’s scope.

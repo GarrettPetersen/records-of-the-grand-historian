@@ -1,0 +1,268 @@
+--- a/scripts/lib/people-translation-repairs.mjs
++++ b/scripts/lib/people-translation-repairs.mjs
+@@ -737,6 +737,84 @@
+   return true;
+ }
+ 
++// Claim values may give an expanded name absent from the source. Materialize only
++// literal Chinese witnesses, and require an unambiguous location before linking.
++export function reconcileReviewedNameMentionSpans(mentions, claims, reviewed, packet) {
++  const unitById = new Map(packet.units.map((unit) => [unit.id, unit]));
++  const revisedClaims = reviewed.revisedClaims;
++  const retainedNames = [
++    ...claims.filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
++      .map((claim) => revisedClaims.get(claim.id) ?? claim),
++    ...reviewed.addedClaims,
++  ].filter((claim) => claim.predicate === 'name');
++  const supports = (person, unit, language, exact) => retainedNames.some((claim) =>
++    claim.subject === person && claim.value?.[language] === exact && claimEvidenceUnit(claim, unit)
++  );
++  const retractedNames = claims.filter((claim) =>
++    claim.predicate === 'name' && reviewed.retractedClaimIds.has(claim.id)
++  );
++  const nameRevisions = claims.filter((claim) => claim.predicate === 'name' && revisedClaims.has(claim.id));
++  const draft = { book: packet.book, chapter: packet.chapter, mentions: structuredClone(mentions) };
++  for (const mention of draft.mentions) {
++    for (const before of retractedNames) {
++      if (before.subject !== mention.person || !claimEvidenceUnit(before, mention.unit.id)) continue;
++      for (const language of ['zh', 'en']) {
++        const exact = before.value?.[language];
++        if (exact && !supports(mention.person, mention.unit.id, language, exact)) {
++          mention.spans[language] = mention.spans[language].filter((span) => span.exact !== exact);
++        }
++      }
++    }
++    for (const before of nameRevisions) {
++      const after = revisedClaims.get(before.id);
++      if (before.predicate !== 'name' || after?.predicate !== 'name' ||
++          before.subject !== mention.person || after.subject !== mention.person ||
++          !claimEvidenceUnit(before, mention.unit.id) || !claimEvidenceUnit(after, mention.unit.id)) continue;
++      const oldExact = before.value?.zh, exact = after.value?.zh;
++      if (!oldExact || !exact || oldExact === exact || !oldExact.includes(exact) ||
++          supports(mention.person, mention.unit.id, 'zh', oldExact)) continue;
++      mention.spans.zh = mention.spans.zh.map((span) => {
++        if (span.exact !== oldExact) return span;
++        const unit = unitById.get(mention.unit.id);
++        if (!unit) throw new Error(`Reviewed name span lost source unit ${mention.unit.id}`);
++        const original = exactSpanAt(unit.zh, oldExact, span.occurrence);
++        if (span.startCodePoint !== original.startCodePoint || span.endCodePoint !== original.endCodePoint) {
++          throw new Error(`Reviewed name span has stale geometry: ${before.id}`);
++        }
++        const narrowed = exactOccurrences(unit.zh, exact).filter((candidate) =>
++          candidate.startCodePoint >= original.startCodePoint && candidate.endCodePoint <= original.endCodePoint
++        );
++        if (narrowed.length !== 1) throw new Error(`Ambiguous reviewed name narrowing: ${before.id}`);
++        return narrowed[0];
++      });
++    }
++  }
++  draft.mentions = draft.mentions.filter((mention) => mention.spans.zh.length || mention.spans.en.length);
++  for (const claim of reviewed.addedClaims) {
++    if (claim.predicate !== 'name' || !claim.value?.zh) continue;
++    for (const evidence of new Set(claim.evidence)) {
++      const unit = unitById.get(evidence.split(':').at(-1));
++      if (!unit) throw new Error(`Reviewed name addition lost source unit ${evidence}`);
++      const occurrences = exactOccurrences(unit.zh, claim.value.zh);
++      const covered = (span) => draft.mentions.some((mention) =>
++        mention.person === claim.subject && mention.unit.id === unit.id &&
++        mention.spans.zh.some((current) =>
++          current.startCodePoint <= span.startCodePoint && current.endCodePoint >= span.endCodePoint
++        )
++      );
++      if (occurrences.every(covered)) continue;
++      if (occurrences.length !== 1) throw new Error(`Ambiguous reviewed Chinese name witness: ${claim.id}`);
++      const kind = claim.value.kind === 'descriptive-kinship' ? 'kinship-reference' :
++        claim.value.kind === 'alternate' ? 'alternate-name' : mentionKindForNameKind(claim.value.kind);
++      if (!addAliasMention(draft, unit, claim.subject, 'zh', kind, occurrences[0])) {
++        throw new Error(`Reviewed Chinese name witness conflicts with an existing person: ${claim.id}`);
++      }
++    }
++  }
++  renumberMentions(draft);
++  return draft.mentions;
++}
++
+ function addInferredNameClaim(extraction, person, unitId, kind, exact) {
+   if (extraction.claims.some((claim) =>
+     claim.subject === person &&
+--- a/scripts/apply-people-translation-repairs.mjs
++++ b/scripts/apply-people-translation-repairs.mjs
+@@ -31,6 +31,7 @@
+   removeDispositionMentionConflicts,
+   removeUnsupportedCrossPersonOverlaps,
+   remapMentionSpanThroughEdit,
++  reconcileReviewedNameMentionSpans,
+ } from './lib/people-translation-repairs.mjs';
+ import {
+   editorialDecisionPath,
+@@ -284,38 +285,6 @@
+   ];
+ }
+ 
+-function removeRetractedNameMentionSpans(mentions, claims, reviewed) {
+-  const retractedNames = claims.filter((claim) =>
+-    reviewed.retractedClaimIds.has(claim.id) && claim.predicate === 'name'
+-  );
+-  if (retractedNames.length === 0) return structuredClone(mentions);
+-  const retainedNames = claims
+-    .filter((claim) => !reviewed.retractedClaimIds.has(claim.id))
+-    .map((claim) => reviewed.revisedClaims.get(claim.id) ?? claim)
+-    .filter((claim) => claim.predicate === 'name');
+-
+-  return structuredClone(mentions).flatMap((mention) => {
+-    for (const claim of retractedNames) {
+-      if (
+-        claim.subject !== mention.person ||
+-        !claim.evidence.some((evidence) => evidence.split(':').at(-1) === mention.unit.id)
+-      ) continue;
+-      for (const language of ['zh', 'en']) {
+-        const exact = claim.value?.[language];
+-        if (typeof exact !== 'string' || !exact) continue;
+-        const stillSupported = retainedNames.some((retained) =>
+-          retained.subject === mention.person &&
+-          retained.value?.[language] === exact &&
+-          retained.evidence.some((evidence) => evidence.split(':').at(-1) === mention.unit.id)
+-        );
+-        if (stillSupported) continue;
+-        mention.spans[language] = mention.spans[language].filter((span) => span.exact !== exact);
+-      }
+-    }
+-    return mention.spans.zh.length > 0 || mention.spans.en.length > 0 ? [mention] : [];
+-  });
+-}
+-
+ function applyReviewedPersonNameChanges(people, claims, reviewed) {
+   const originalClaims = new Map(claims.map((claim) => [claim.id, claim]));
+   const nameRevisions = [...reviewed.revisedClaims.entries()]
+@@ -670,7 +639,7 @@
+     throw new Error('Explicit person assignment did not replace a conflicting remapped span');
+   }
+ 
+-  const retractedMentionResult = removeRetractedNameMentionSpans([{
++  const retractedMentionResult = reconcileReviewedNameMentionSpans([{
+     id: 'fixture:001:m0001',
+     person: 'fixture:001:p001',
+     unit: { id: 's0001' },
+@@ -685,7 +654,8 @@
+     predicate: 'name',
+     value: { kind: 'personal', en: 'Wrong Name' },
+     evidence: ['fixture:001:s0001'],
+-  }], { retractedClaimIds: new Set(['fixture:001:c0001']) });
++  }], { retractedClaimIds: new Set(['fixture:001:c0001']), revisedClaims: new Map(), addedClaims: [] },
++  { book: 'fixture', chapter: '001', units: [] });
+   if (retractedMentionResult.length !== 0) {
+     throw new Error('A mention created solely by a retracted name claim survived reconciliation');
+   }
+@@ -702,7 +672,7 @@
+     value: { kind: 'title', en: 'Honored Consort', zh: '貴嬪' },
+     evidence: ['fixture:001:s0001'],
+   }];
+-  const retainedSharedSurface = removeRetractedNameMentionSpans([{
++  const retainedSharedSurface = reconcileReviewedNameMentionSpans([{
+     id: 'fixture:001:m0001',
+     person: 'fixture:001:p001',
+     unit: { id: 's0001' },
+@@ -714,7 +684,8 @@
+   }], sharedSurfaceClaims, {
+     retractedClaimIds: new Set(['fixture:001:c0001']),
+     revisedClaims: new Map(),
+-  });
++    addedClaims: [],
++  }, { book: 'fixture', chapter: '001', units: [] });
+   if (
+     retainedSharedSurface[0]?.spans.zh.length !== 1 ||
+     retainedSharedSurface[0]?.spans.en.length !== 0
+@@ -2174,7 +2145,7 @@
+   const reviewedExtraction = {
+     ...structuredClone(extraction),
+     people: reviewedPeople,
+-    mentions: removeRetractedNameMentionSpans(extraction.mentions, extraction.claims, reviewed),
++    mentions: reconcileReviewedNameMentionSpans(extraction.mentions, extraction.claims, reviewed, oldPacket),
+     claims: reviewedClaims,
+     translationRepairs: retainedRepairs,
+   };
+--- /dev/null
++++ b/scripts/test-people-reviewed-name-spans.mjs
+@@ -0,0 +1,68 @@
++import assert from 'node:assert/strict';
++import { exactSpanAt } from './lib/people-content.mjs';
++import { reconcileReviewedNameMentionSpans } from './lib/people-translation-repairs.mjs';
++
++const book = 'fixture', chapter = '001', id = value => `${book}:${chapter}:${value}`;
++const unit = (unitId, zh, en) => ({ id: unitId, kind: 'sentence', blockIndex: 0,
++  collection: 'sentences', itemIndex: Number(unitId.slice(1)), zh, en, literal: en });
++const units = [unit('s0001', '妻率眾。泓將妻子詣壘門而降。', 'Hong led his wife and children to surrender.'),
++  unit('s0002', '景茂因仲襄之緒，躡苻亡之會。', 'Jingmao inherited the legacy of Yao Yizhong and Yao Xiang.'),
++  unit('s0003', '挫雷惡之鋒。', 'He broke Lei Edi’s advance.')];
++const packet = { book, chapter, units, preflight: { candidates: [] }, input: {} };
++const claim = (claimId, person, zh, evidence, kind = 'personal') => ({ id: id(claimId),
++  subject: id(person), predicate: 'name', value: { kind, zh }, certainty: 'explicit', evidence: [id(evidence)] });
++const mention = (person, source, zh, occurrence, en) => ({ id: id('m' + person), person: id(person),
++  unit: Object.fromEntries(['id','kind','blockIndex','collection','itemIndex'].map(key => [key, source[key]])),
++  kind: 'personal-name', candidateRefs: [], spans: {
++    zh: zh ? [exactSpanAt(source.zh, zh, occurrence)] : [],
++    en: en ? [exactSpanAt(source.en, en, 0)] : [],
++  } });
++const wife = claim('c0001','p001','妻子','s0001','descriptive-kinship');
++const expanded = claim('c0002','p004','雷惡','s0003');
++const retracted = claim('c0003','p002','仲襄','s0002');
++const claims = [wife, expanded, retracted,
++  { id: id('c0004'), subject: id('p001'), predicate: 'family-relationship',
++    value: { relationship: 'spouse', personId: id('p005') }, evidence: [id('s0001')] }];
++const reviewed = { retractedClaimIds: new Set([retracted.id]), revisedClaims: new Map([
++  [wife.id, { ...wife, value: { ...wife.value, zh: '妻' } }],
++  [expanded.id, { ...expanded, value: { ...expanded.value, zh: '雷惡地' } }],
++]), addedClaims: [claim('c0005','p002','仲','s0002','alternate'), claim('c0006','p003','襄','s0002','given')] };
++const mentions = [mention('p001',units[0],'妻子',0,'wife'),
++  mention('p002',units[1],'仲襄',0,'Yao Yizhong'), mention('p003',units[1],null,0,'Yao Xiang'),
++  mention('p004',units[2],'雷惡',0,'Lei Edi')];
++const people = [{ localId: id('p001'), identityHints: { mother: id('p006') } },
++  ...['p002','p003','p004','p005'].map(p => ({ localId: id(p) })),
++  ...['p006','p007'].map(p => ({ localId: id(p), mentionException: { reason: 'unnamed-mother' },
++    identityHints: { activeDateHints: [] } }))];
++const snapshot = structuredClone({ mentions, claims, units, people });
++const result = reconcileReviewedNameMentionSpans(mentions, claims, reviewed, packet);
++const spans = (person, language) => result.filter(m => m.person === id(person)).flatMap(m => m.spans[language]);
++assert.deepEqual(spans('p001','zh'), [exactSpanAt(units[0].zh,'妻',1)], 'narrow within the original span, not the first wife in the unit');
++assert.deepEqual(spans('p001','en'), mentions[0].spans.en);
++assert.deepEqual(spans('p002','zh'), [exactSpanAt(units[1].zh,'仲',0)]);
++assert.deepEqual(spans('p003','zh'), [exactSpanAt(units[1].zh,'襄',0)]);
++assert.deepEqual(spans('p002','en'), mentions[1].spans.en);
++assert.deepEqual(spans('p003','en'), mentions[2].spans.en);
++assert.deepEqual(spans('p004','zh'), mentions[3].spans.zh, 'expanded canonical name preserves the literal source abbreviation');
++assert.deepEqual({ mentions, claims, units, people }, snapshot, 'inputs, family claims, unnamed mothers and identity assignments remain unchanged');
++assert.equal(new Set(result.map(m => m.id)).size, result.length);
++assert.deepEqual(reconcileReviewedNameMentionSpans(result, claims, reviewed, packet), result, 'replay creates no duplicate spans');
++
++const shared = { ...retracted, id: id('c0007') };
++const retained = reconcileReviewedNameMentionSpans(mentions,[...claims,shared],{...reviewed,addedClaims:[]},packet);
++assert.ok(retained.some(m => m.spans.zh.some(s => s.exact === '仲襄')), 'another accepted same-person claim retains its surface');
++const absent = { ...reviewed, addedClaims: [claim('c0008','p002','姚弋仲','s0002')] };
++assert.doesNotThrow(() => reconcileReviewedNameMentionSpans(mentions,claims,absent,packet), 'canonical full name need not be literal Chinese');
++const repeatedPacket = { ...packet, units: [unit('s0002','仲問仲。','Zhong asked Zhong.')] };
++const repeated = { retractedClaimIds: new Set(), revisedClaims: new Map(), addedClaims: [reviewed.addedClaims[0]] };
++assert.throws(() => reconcileReviewedNameMentionSpans([],[],repeated,repeatedPacket), /Ambiguous reviewed Chinese name/);
++assert.throws(() => reconcileReviewedNameMentionSpans([mention('p009',units[1],'仲',0,null)],[],repeated,packet), /conflicts/);
++const stale = structuredClone(mentions); stale[0].spans.zh[0].startCodePoint = 0;
++assert.throws(() => reconcileReviewedNameMentionSpans(stale,claims,reviewed,packet), /stale geometry/);
++assert.throws(() => reconcileReviewedNameMentionSpans(mentions,claims,reviewed,{...packet,units:[]}), /lost source unit/);
++const ambiguousUnit = unit('s0001','妻妻','wife');
++const ambiguousBefore = claim('c0009','p001','妻妻','s0001','descriptive-kinship');
++assert.throws(() => reconcileReviewedNameMentionSpans([mention('p001',ambiguousUnit,'妻妻',0,'wife')],[ambiguousBefore],
++  { retractedClaimIds:new Set(), revisedClaims:new Map([[ambiguousBefore.id,{...ambiguousBefore,value:{...ambiguousBefore.value,zh:'妻'}}]]),addedClaims:[] },
++  {...packet,units:[ambiguousUnit]}), /Ambiguous reviewed name narrowing/);
++console.log('people reviewed name spans: preservation, narrowing, separate aliases, replay and fail-fast checks passed');
+--- a/.github/workflows/master-build-gate.yml
++++ b/.github/workflows/master-build-gate.yml
+@@ -57,6 +57,11 @@
+       - name: Test certified website people publication
+         run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
+ 
++      - name: Test reviewed name spans and translation repairs
++        run: |
++          node scripts/test-people-reviewed-name-spans.mjs
++          node scripts/apply-people-translation-repairs.mjs --self-test
++
+       - name: Build and validate the full site
+         run: npm run build
+ 

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-code-review",
+  "reviewer": "/root/reviewed_name_spans",
+  "reviewedAt": "2026-11-13T05:13:22.055Z",
+  "status": "approved-code-only",
+  "workOrder": {
+    "path": "data/people/generated/completion/jinshu/119/source-coverage-20261109/span-corrections-20261112/code-review-work-order.json",
+    "sha256": "7258fd9e1547c7e1f294c414855fd9a481208191bd8252ee5ae8cc53d48aee4b"
+  },
+  "base": "60849db832e126bbacbf4da483644aa25a00fa09",
+  "reviewedFiles": {
+    "people-translation-repairs.mjs": {
+      "sha256": "c714bc7c174653d03aee0ed533351a0f4efa4bdd109f00a40ab0455c1a1464c2",
+      "bytes": 115492,
+      "verified": true
+    },
+    "apply-people-translation-repairs.mjs": {
+      "sha256": "b0ae2384756c8cfe6965919a550d75b8109ba0fc18a0a2499325645d170e15f8",
+      "bytes": 96886,
+      "verified": true
+    },
+    "test-people-reviewed-name-spans.mjs": {
+      "sha256": "79466fcc592c608f6c4b8de8ee18cab352d158c14f0fdaf0045fb5ed857c7f17",
+      "bytes": 5828,
+      "verified": true
+    },
+    "master-build-gate.yml": {
+      "sha256": "c3e92c415b24537852ecd443d69ee884e5891af95792d8f19b4f11f6ef1ef91c",
+      "bytes": 3116,
+      "verified": true
+    },
+    "test-loader.mjs": {
+      "sha256": "04e51ab59afaef7e567ddc46e8f349ab5232e6a7ae581524cadf97704c9efb02",
+      "bytes": 1497,
+      "verified": true
+    },
+    "reviewed-name-spans.patch": {
+      "sha256": "ac624a44bea28f5ef6cd5998ad579b9a79ee2bda2761a86cea693c7cf35fd1c8",
+      "bytes": 15464,
+      "verified": true
+    }
+  },
+  "exactBaselinePatchVerified": {
+    "files": [
+      "scripts/lib/people-translation-repairs.mjs",
+      "scripts/apply-people-translation-repairs.mjs",
+      "scripts/test-people-reviewed-name-spans.mjs",
+      ".github/workflows/master-build-gate.yml"
+    ],
+    "method": "Reconstructed all four sealed artifact files in memory from exact released baseline and sealed unified patch; byte equality confirmed."
+  },
+  "findings": [],
+  "assessment": [
+    "No blocking code defect found in the sealed patch. The existing production translation applier invokes the shared mention helper before the existing reconciliation and strict extraction validators; no bespoke application framework or validator relaxation was introduced.",
+    "Retractions remain scoped to the affected person and evidence unit and preserve surfaces supported by retained, revised or added same-person claims. Chinese narrowing requires a unique literal witness within the validated original span geometry; expanded canonical Chinese names preserve their printed abbreviation.",
+    "Reviewed Chinese additions use literal evidence-unit witnesses and existing addAliasMention overlap protection. Repeated uncovered witnesses and same-person or cross-person partial overlaps fail rather than choosing an occurrence or overwriting attribution. Existing same-person coverage and replay produce no duplicate span.",
+    "The helper clones mention inputs and only mutates the clone. Source units, English fields, claims/evidence, family claims, person identities and unnamed-person records receive no new write path. Intended English-span preservation and input immutability are covered by the sealed regression and existing native self-test.",
+    "PR 5379 metadata and scope were inspected: its record-correction contract targets the existing alias application command. This patch extends the separate existing translation application path without duplicating that framework or changing PR 5379 code."
+  ],
+  "tests": [
+    {
+      "command": "node --loader ./data/people/generated/completion/jinshu/119/source-coverage-20261109/span-corrections-20261112/test-loader.mjs /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/test-people-reviewed-name-spans.mjs",
+      "exitCode": 0,
+      "result": "people reviewed name spans: preservation, narrowing, separate aliases, replay and fail-fast checks passed"
+    },
+    {
+      "command": "node --loader ./data/people/generated/completion/jinshu/119/source-coverage-20261109/span-corrections-20261112/test-loader.mjs /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/apply-people-translation-repairs.mjs --self-test",
+      "exitCode": 0,
+      "result": "apply-people-translation-repairs self-test: ok"
+    },
+    {
+      "command": "Additional inline, in-memory assertions through the same sealed loader",
+      "exitCode": 0,
+      "cases": 8,
+      "result": "Passed Unicode code-point narrowing, fully covered repeated witnesses, partially uncovered repeated-witness rejection, same-person partial-overlap rejection, cross-person partial-overlap rejection, sequential-added-name conflict rejection, retraction person/unit scope, and a retracted surface retained by an accepted replacement addition."
+    }
+  ],
+  "limitations": [
+    "Code-only review. No chapter content approval, native chapter preview, canonical application, date/identity approval, publication or throughput claim is made.",
+    "The new helper is invoked in the proposed-repair path. The existing no-proposals/applied-history replay branch does not invoke it. This report does not establish that already-installed chapter claims can be reconciled by rerunning that branch.",
+    "Candidate references and candidate dispositions remain subject to the existing native reconciliation and strict validator; this review grants no candidate-accounting exception."
+  ],
+  "safety": {
+    "resourceGuard": "Passed before work, periodically during review, and immediately before report creation; no warnings or errors. Final measured availableGiB 30.978515625, swapUsedBytes 3293514301, combinedCodexResidentBytes 1021919232, pressureLevel 1.",
+    "mutations": "Only this assigned review report was written. No canonical data, ledger, prior job, branch, index, claim, recovery artifact or service was changed. No checkout/worktree/copy, build, staging, commit or pull was performed."
+  }
+}
