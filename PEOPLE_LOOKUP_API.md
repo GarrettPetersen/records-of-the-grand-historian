@@ -5,6 +5,13 @@ host sends a chapter packet to a Cursor cloud agent; the agent retrieves relevan
 canonical dossiers here rather than downloading the corpus or all person records.
 `PEOPLE_SINGLE_OWNER_WORKFLOW.md` describes the chapter-owner/reviewer topology.
 
+Live endpoint (verified November 13, 2026):
+`https://24histories-people-lookup.garrett-m-petersen.workers.dev`.
+Pinned prefix: `snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac`.
+Host smoke testing verified unauthenticated 401, manifest seal, Chinese-variant
+search parity, dossier retrieval and member evidence. Eight offline tests pass.
+This is service verification, not a completed chapter or a cloud-lane rollout.
+
 ## Data and API contract
 
 The initial immutable generation comes from the existing November 3 native dossier

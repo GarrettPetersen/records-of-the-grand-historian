@@ -4,6 +4,11 @@ Scope: orchestration design and bounded canonical-person retrieval. No chapter
 claim has been taken over, no inference wave launched, no running job's source or
 inputs changed. Adopt at the existing owner's next idle invocation boundary.
 
+Published handoff branch: `codex/people-chapter-owner-lookup`, based on canonical
+runtime revision `c991cf12d80fda1d1375d729f6f3553cc212bbcb`. Its Git commit was made
+with a separate temporary index, preserving the active checkout's branch and index.
+The read-only endpoint is deployed and host-verified; see `PEOPLE_LOOKUP_API.md`.
+
 1. Read `PEOPLE_SINGLE_OWNER_WORKFLOW.md` and `PEOPLE_LOOKUP_API.md`. Keep the current
    nonempty Jinshu completion target and shared queue/recovery ownership.
 2. Run the lookup unit tests, then the live verifier against the exported generation.
