@@ -2,6 +2,13 @@
 
 This is the current orchestration policy.
 
+**November 13 chapter-owner design:** adopt `PEOPLE_SINGLE_OWNER_WORKFLOW.md` at
+the next idle boundary: one persistent capable chapter agent, bounded public-history
+lookup (`PEOPLE_LOOKUP_API.md`), one independent final reviewer, then dependency-scoped
+patches where native proof composition supports them. Preserve running ownership
+and every native approval/publication gate. The lookup service is retrieval only;
+its installation does not enable general approval reuse across source edits.
+
 **October 30, 2026 user-authorized process revision:** chapter completion uses
 bounded canonical-person dossier reviews, not exhaustive O(k²) same-name pair
 comparisons. This explicitly supersedes the old zero-touching-pairs completion

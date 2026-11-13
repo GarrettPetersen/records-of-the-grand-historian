@@ -1,0 +1,29 @@
+name = "24histories-people-lookup"
+main = "worker.mjs"
+compatibility_date = "2026-11-13"
+workers_dev = true
+preview_urls = false
+
+[limits]
+cpu_ms = 10
+
+[observability]
+enabled = false
+
+[[r2_buckets]]
+binding = "PEOPLE_DATA"
+bucket_name = "24histories-people-lookup"
+
+[[durable_objects.bindings]]
+name = "PEOPLE_BUDGET"
+class_name = "PeopleBudget"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PeopleBudget"]
+
+[[unsafe.bindings]]
+name = "PEOPLE_RATE"
+type = "ratelimit"
+namespace_id = "2413130001"
+simple = { limit = 60, period = 60 }

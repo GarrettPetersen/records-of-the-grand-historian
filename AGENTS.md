@@ -2,6 +2,11 @@
 
 ## Completion-first orchestration
 
+At an idle chapter boundary, follow `PEOPLE_SINGLE_OWNER_WORKFLOW.md`: one persistent
+capable reasoning chapter owner, bounded lookup via `PEOPLE_LOOKUP_API.md`, and one
+independent final reviewer. Preserve active claims and native gates. Retrieval is
+not approval; reuse changed-source proofs only through validated native composition.
+
 Follow `PEOPLE_COMPLETION_PROCESS.md` before scheduling glossary work. It supersedes
 old extraction-wave quotas and minimum extraction-batch sizes for identity work.
 The first live nonempty pilot is proven: Jinshu 053 at revision
