@@ -1,3 +1,9 @@
+## Deployment and next review
+
+GitHub reports success for the master build, People vocabulary and Cloudflare Pages on commit 60849db832e126bbacbf4da483644aa25a00fa09. Live checks verified the link from Jinshu 053 to emperor-wu-of-jin-06fcm2ke, the return link to that chapter and the same slug in the live person-search shard.
+
+For the independent chapter 119 content review, ../supplemental-adjudication-20261112/input.json contains 16 distinct unit/field targets. Each original field matched the exact English in reviewed-draft-source.json. The input and draft matched the SHA-256 values in preparation-receipt.json. The packet was prepared but unassigned at this check. Resume under the existing owner and select an independent reviewer using the exclusions in input.json. Preserve the separate source-backed chronology and family-attribution work. Production chapter data has not changed.
+
 ## November 12 merge verified
 
 PR 5380 was squash-merged to master at 60849db832e126bbacbf4da483644aa25a00fa09. All three GitHub checks succeeded. Both merged files match the independent v2 review seals. The earlier CI wait below is resolved. Continue with the sealed chapter 119 content adjudication, preserving chapter ownership and verifying the current source and extraction before application. This merge applied zero chapter data corrections.
