@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "kind": "released-native-application-gap-evidence",
+  "at": "2026-11-13T05:00:15.721207+00:00",
+  "book": "jinshu",
+  "chapter": "119",
+  "owner": "jinshu-release-dates-cursor-sdk",
+  "runtimeRelease": "60849db832e126bbacbf4da483644aa25a00fa09",
+  "nativeApplierExit": 0,
+  "nativeExtractionValidatorPassed": true,
+  "nativeMergedEditorialHistoryPassed": true,
+  "canonicalPinsUnchanged": {
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/jinshu/119.json": "6dfc672b2d80926464480722baa3a9f1ab09b2ac611551238aba3066e6c5423c",
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/extractions/jinshu/119.json": "4a1114d93e54faa26103ba6b5ec6b76010cc9681e237a515a499b6c0c7e270d3",
+    "/Users/garrettpetersen/records-of-the-grand-historian/.git/index": "793be8e2b83d79da0d364c448f8bd85e4ac5f53c924d11b45af06a53c24f88a6"
+  },
+  "inputPins": {
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/structured-adjudication-20261112/coherent-native-review.json": "ff288189c2c1dca7326957ca1bc9cad99dac6fa486703059094c8890546e369b",
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/structured-adjudication-20261112/coherent-candidate.compact.json": "457410fbb70a25416f9510d3431e34d1579251364bdde7e909233cd047c8efda",
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/candidate-reconciliation-20261112/native-candidate-resolution.json": "b06960ee28b6204c8100c8b850fde195efe208762f1124d8c701e9e46c67745c"
+  },
+  "outputPins": {
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/candidate-reconciliation-20261112/failed-preview-source.json": "57c670cc39d83def76e70048d262bc0cfa49ab7b240c751a927430b3f6533182",
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/candidate-reconciliation-20261112/failed-preview.compact.json": "ace8c050bfe094a5e6933b4e9add20c36d8e44a36f595d9ebf7fcc43086f6e12",
+    "/Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/candidate-reconciliation-20261112/application-verification.v3.json": "27b58cf735a12b0ebedd45d069a08d945a9900ed20cb1e7f6ec7a8b43e80d38f"
+  },
+  "stats": {
+    "units": 276,
+    "candidates": 1027,
+    "people": 202,
+    "mentions": 1122,
+    "claims": 2084,
+    "repairs": 314,
+    "dispositions": 440,
+    "aliasDispositionConflicts": 0
+  },
+  "checks": 367,
+  "passed": 364,
+  "failed": 3,
+  "defects": [
+    {
+      "unit": "s0245",
+      "person": "p182",
+      "observed": {
+        "exact": "妻子",
+        "startCodePoint": 2,
+        "endCodePoint": 4
+      },
+      "required": {
+        "exact": "妻",
+        "startCodePoint": 2,
+        "endCodePoint": 3
+      },
+      "acceptedClaim": "c0717",
+      "sourceUnchanged": "泓將妻子詣壘門而降。",
+      "scope": "Narrow individual wife only. Preserve children in source/evidence/both English fields."
+    },
+    {
+      "unit": "s0254",
+      "person": "p186",
+      "observed": "No Chinese mention; English Yao Yizhong retained.",
+      "required": {
+        "exact": "仲",
+        "startCodePoint": 3,
+        "endCodePoint": 4
+      },
+      "acceptedClaim": "c2093"
+    },
+    {
+      "unit": "s0254",
+      "person": "p188",
+      "observed": "No Chinese mention; English Yao Xiang retained.",
+      "required": {
+        "exact": "襄",
+        "startCodePoint": 4,
+        "endCodePoint": 5
+      },
+      "acceptedClaim": "c2094"
+    }
+  ],
+  "verifiedContent": {
+    "englishFinalFields": 283,
+    "people": 202,
+    "claims": 2084,
+    "familyClaims": 30,
+    "claimRevisions": 44,
+    "claimRetractions": 11,
+    "claimAdditions": 5,
+    "allExpectedClaimSemanticsExactMultiset": true,
+    "allEightCurrentStructuredActionsPreserved": true,
+    "motherAndP190ActiveDateHintsEmpty": true,
+    "motherExceptionsPreserved": true
+  },
+  "verificationCorrections": [
+    {
+      "original": "verify-application.mjs/application-verification.json",
+      "issues": "Host checker assumed stable claim IDs across compact reserialization, used nonexistent enLiteral instead of literal, counted full Yao Hedu plus three callbacks as three rather than four, compared span metadata to geometry only. Preserved unchanged as diagnostic, not genuine content failures."
+    },
+    {
+      "original": "verify-application.v2.mjs/application-verification.v2.json",
+      "issue": "Host checker passed only new coherent history to applied-history validator, omitting sealed older authorizations for31 already applied repairs. Preserved unchanged. v3 merges original history pinned b10099e7 with coherent review; native applied-history validator then passes."
+    }
+  ],
+  "verificationMethod": "v3 verifies full expected claim multiset ignoring generated IDs, records old-to-new claim correspondence, exact all283 English fields, and actual source/mention geometry. No applier, input, report or validator was changed.",
+  "relatedUnreleasedPr": {
+    "number": 5379,
+    "state": "OPEN",
+    "head": "e53ee7eeb7c93cd2d26817c06f8ecfbe7433d705",
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5379",
+    "observedAt": "2026-11-13T05:00:15.721207+00:00",
+    "checks": "master-build and People vocabulary successful; still unreleased",
+    "limitation": "It does not change removeRetractedNameMentionSpans or implement revision narrowing. Inspect shared record correction path before choosing integration; do not create another bespoke applier."
+  },
+  "canonicalApplied": false,
+  "newlyDataQualified": 0,
+  "newlyPublished": 0,
+  "productionCodeChanges": 0,
+  "hold": "Three observed native geometry gaps require shared production-path correction, preservation regressions and independent code review before canonical use. No fresh full audit until this known gap converges."
+}

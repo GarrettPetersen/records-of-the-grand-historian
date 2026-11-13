@@ -1,0 +1,21 @@
+{"nativeValidatorPassed":true,"people":202,"claims":2084,"checks":367,"failures":[{"id":"s0245-wife-individual-span","passed":false,"error":"Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n    {\n+     endCodePoint: 4,\n+     exact: '妻子',\n-     endCodePoint: 3,\n-     exact: '妻',\n      startCodePoint: 2\n    }\n  ]\n"},{"id":"s0254-Zhong-Chinese-link","passed":false,"error":"p186 s0254 zh missing 仲"},{"id":"s0254-Xiang-Chinese-link","passed":false,"error":"p188 s0254 zh missing 襄"}]}
+node:internal/modules/run_main:104
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Final accepted postconditions failed; preserved application-verification.v3.json
+
+3 !== 0
+
+    at file:///Users/garrettpetersen/records-of-the-grand-historian/data/people/generated/completion/jinshu/119/source-coverage-20261109/candidate-reconciliation-20261112/verify-application.v3.mjs:57:150
+    at ModuleJob.run (node:internal/modules/esm/module_job:272:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:583:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:98:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 0,
+  operator: 'strictEqual'
+}
+
+Node.js v23.7.0
