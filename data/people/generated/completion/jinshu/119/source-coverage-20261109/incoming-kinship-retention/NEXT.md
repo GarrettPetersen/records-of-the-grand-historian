@@ -1,3 +1,7 @@
+## November 12 merge verified
+
+PR 5380 was squash-merged to master at 60849db832e126bbacbf4da483644aa25a00fa09. All three GitHub checks succeeded. Both merged files match the independent v2 review seals. The earlier CI wait below is resolved. Continue with the sealed chapter 119 content adjudication, preserving chapter ownership and verifying the current source and extraction before application. This merge applied zero chapter data corrections.
+
 # Continue Jinshu 119 after incoming kinship code review
 
 Use the existing primary checkout and isolated artifact paths. Read AGENTS.md, PEOPLE_COMPLETION_PROCESS.md, ../RESUME.md and work-order.json. Resource guards remain mandatory before dispatch/changes and every60seconds. Preserve private controllers, dirty primary index, source/extraction pins and jinshu-release-dates-cursor-sdk ownership. Jinshu127 remains parked for Grok sign-in.
