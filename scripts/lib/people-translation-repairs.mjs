@@ -1207,22 +1207,31 @@ function shortenedNameCandidate(stale, revisedPacket) {
   return matches.length === 1 ? matches[0] : null;
 }
 
-export function hasUnchangedChineseNameEvidence(person, claims, previousUnits, currentUnits) {
-  if (!person.mentionException || claims.length === 0) return false;
+export function hasUnchangedChineseNameEvidence(person, claims, previousUnits, currentUnits, incomingClaims = []) {
+  if (!person.mentionException) return false;
   const unchanged = (id) => {
     const key = id.split(':').at(-1);
     const before = previousUnits.get(key), after = currentUnits.get(key);
     return Boolean(before && after && before.zh === after.zh);
   };
-  return claims.every((claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged)) &&
-    claims.some((claim) => {
-      const name = claim.predicate === 'name' ? claim.value?.zh : null;
-      const kinship = claim.predicate === 'family-relationship' &&
-        typeof claim.value?.personId === 'string' ? claim.value?.kinshipTerm?.zh : null;
-      const witness = name ?? kinship;
-      return typeof witness === 'string' && witness.trim().length > 0 &&
-        claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(witness));
-    });
+  const unchangedEvidence = (claim) => claim.evidence.length > 0 && claim.evidence.every(unchanged);
+  const witnessed = (claim) => {
+    const name = claim.predicate === 'name' ? claim.value?.zh : null;
+    const kinship = claim.predicate === 'family-relationship' &&
+      typeof claim.value?.personId === 'string' ? claim.value?.kinshipTerm?.zh : null;
+    const witness = name ?? kinship;
+    return typeof witness === 'string' && witness.trim().length > 0 &&
+      claim.evidence.some((id) => currentUnits.get(id.split(':').at(-1))?.zh.includes(witness));
+  };
+  // A maternal uncle can attest an unnamed mother through a relationship
+  // directed at her, even when her own inferred "mother" glyph is absent.
+  const incomingFamilyWitness = incomingClaims.some((claim) =>
+    typeof person.localId === 'string' &&
+    typeof claim.subject === 'string' && claim.subject !== person.localId &&
+    claim.predicate === 'family-relationship' && claim.value?.personId === person.localId &&
+    unchangedEvidence(claim) && witnessed(claim)
+  );
+  return claims.every(unchangedEvidence) && (claims.some(witnessed) || incomingFamilyWitness);
 }
 
 export function reconcileExtractionAfterRepairs(extraction, revisedPacket, options = {}) {
@@ -1526,14 +1535,14 @@ export function reconcileExtractionAfterRepairs(extraction, revisedPacket, optio
     ]);
     if (staleUnits.size === 0) continue;
     const ownedClaims = reconciled.claims.filter((claim) => claim.subject === person.localId);
-    // A declared no-span exception can retain a Chinese name or a source-backed
-    // kinship intermediary while every cited Chinese unit remains unchanged.
-    if (hasUnchangedChineseNameEvidence(person, ownedClaims, previousUnitById, unitById)) continue;
-    const onlyRetiredUnitEvidence = ownedClaims.length === 0 || ownedClaims.every((claim) =>
-      claim.evidence.length > 0 && claim.evidence.every((evidence) => staleUnits.has(evidence.split(':').at(-1)))
-    );
     const incomingClaims = reconciled.claims.filter((claim) =>
       claim.subject !== person.localId && nestedStringValues(claim.value).includes(person.localId)
+    );
+    // Preserve an existing no-span exception with an unchanged Chinese witness,
+    // including source-backed family relationships directed at this person.
+    if (hasUnchangedChineseNameEvidence(person, ownedClaims, previousUnitById, unitById, incomingClaims)) continue;
+    const onlyRetiredUnitEvidence = ownedClaims.length === 0 || ownedClaims.every((claim) =>
+      claim.evidence.length > 0 && claim.evidence.every((evidence) => staleUnits.has(evidence.split(':').at(-1)))
     );
     const independentlyWitnessedIncomingClaim = incomingClaims.some((claim) =>
       claim.evidence.some((evidence) => !staleUnits.has(evidence.split(':').at(-1)))
