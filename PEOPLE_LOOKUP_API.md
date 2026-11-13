@@ -52,7 +52,7 @@ and `agent.send(...,{cloud:{envVars}})` on resume.
 ```js
 import {peopleLookupCloudOptions} from './scripts/lib/people-lookup-client.mjs';
 // Merge with the work order's existing cloud metadata; do not replace it.
-const cloud = {...existingCloudOptions, ...peopleLookupCloudOptions()};
+const cloud = {...existingCloudOptions, ...peopleLookupCloudOptions(), repos: [], autoCreatePR: false};
 // Agent.create({apiKey, model: selectedReasoningModel, cloud, ...});
 // For a retained cloud agent: agent.send(prompt, {cloud: peopleLookupCloudOptions()});
 ```
