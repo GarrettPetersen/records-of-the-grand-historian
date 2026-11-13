@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-12T23:56:29.615271+00:00",
+  "base": "56aee9165ec8ba93e8c30a6166da95df00acdcc8",
+  "sourceLoading": "Every JavaScript module under runtime loaded from exact released Git bytes except the two sealed patched modules. Existing runtime dependency installation.",
+  "results": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "scripts/test-people-repair-name-collisions.mjs",
+        "scripts/test-people-editorial-rejections.mjs",
+        "scripts/test-people-reconciliation-disposition-guard.mjs"
+      ],
+      "exitCode": 0,
+      "log": "broader-tests-1.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/apply-people-translation-repairs.mjs",
+        "--self-test"
+      ],
+      "exitCode": 0,
+      "log": "broader-tests-2.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/self-test-people-source-name-retention.mjs"
+      ],
+      "exitCode": 0,
+      "log": "broader-tests-3.log"
+    }
+  ]
+}

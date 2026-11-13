@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-code-review",
+  "book": "jinshu",
+  "chapter": "119",
+  "reviewer": "/root/incoming_kinship_code_review",
+  "author": "codex-thread:01a1d223-7797-7df0-89d2-d8161a4ecb9b",
+  "completedAt": "2026-11-12T23:55:40.525Z",
+  "base": "56aee9165ec8ba93e8c30a6166da95df00acdcc8",
+  "inputWorkOrder": "code-review-work-order-v2.json",
+  "inputWorkOrderSha256": "9a8c932eedd010bee7b95adf8cc634df71eadffa489ed38a7378063066f2b551",
+  "priorWorkOrderSha256": "1f909cac45adcbe93073c9fd88464578a8f3f174e1e8be1875fcc718ee96bcd4",
+  "inputFiles": {
+    "work-order.json": "909a8f1c63c07a949713acdc0d79d5724dcd05008b8e5f0b360603b392e2744c",
+    "people-translation-repairs.mjs": "903568f8eb7bf55feeaba4762665101ddd41a42a9cb91603143a7bd150a1eead",
+    "self-test-people-source-name-retention.mjs": "820ab0d30471891a551d3d0040de02751c3404cef90500c04763153185c20d3c",
+    "corrected-candidate-dossier.json": "80a423461be40741f7483ac84f6fa9e2c771db8e84420e3e0731df902c77d8a9",
+    "incoming-kinship-retention-v2.patch": "023381f24c8d13a594cf6780a4919d16f29a5905b9d18ebbaada710ee4c74c52"
+  },
+  "status": "approved",
+  "scope": "Code-only preservation and regression review. No source-content, attribution, chronology, identity, chapter-completion or publication approval.",
+  "summary": "The change narrowly extends existing no-span preservation to exact-target incoming family claims with an unchanged Chinese kinship witness, without weakening owned-claim evidence requirements. No open code findings remain. The corrected patch reproduces both sealed modules from the released baseline.",
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "P2",
+      "status": "corrected",
+      "file": "incoming-kinship-retention.patch",
+      "startLine": 1,
+      "endLine": 9,
+      "title": "Original patch used invalid symlink/deletion framing",
+      "detail": "The original sealed patch described a released mode-100644 module as a mode-120000 deletion against b/dev/stdin followed by full-file creation. It was not a usable minimal patch against the released baseline.",
+      "resolution": "Superseded by sealed incoming-kinship-retention-v2.patch. Independent in-memory hunk application verified every source/context line and reconstructed exactly the two sealed module hashes; original malformed patch remains evidence."
+    }
+  ],
+  "preservationChecks": {
+    "preexistingMentionExceptionRequired": true,
+    "noPersonOrMentionExceptionCreation": true,
+    "incomingGuard": "person.localId and claim.subject must be strings; subject differs from target; predicate is family-relationship; value.personId equals that exact localId; every nonempty incoming evidence list resolves in both packets with unchanged Chinese; the nonempty Chinese kinship term occurs in its cited current Chinese witness.",
+    "ownedGuard": "Every owned claim still requires nonempty evidence with all Chinese witnesses present and unchanged; incoming support cannot excuse missing or changed owned witnesses.",
+    "originalOwnNameAndKinshipPathsPreserved": true,
+    "nativeValidatorsChanged": false,
+    "chronologyErrorsRemainBlocking": true
+  },
+  "testsRun": [
+    {
+      "name": "Sealed input verification",
+      "result": "passed",
+      "detail": "All five original order file hashes, all five v2 order file hashes, six nested work-order evidence seals, and both released Git blob IDs matched. The v2 order links the original order SHA256."
+    },
+    {
+      "name": "Released-baseline module diff",
+      "result": "passed",
+      "detail": "Independently compared git-show bytes at released master against both sealed modules; only the incoming-kinship helper/callsite and related self-test additions changed."
+    },
+    {
+      "name": "Loader-based retention regression",
+      "result": "passed",
+      "command": "node --no-warnings --loader ./data/people/generated/completion/jinshu/119/source-coverage-20261109/incoming-kinship-retention/test-loader.mjs /Users/garrettpetersen/.codex/worktrees/people-canonical-runtime/scripts/self-test-people-source-name-retention.mjs",
+      "assertions": 32,
+      "detail": "Existing own-name/own-kinship cases and new exact-target, wrong-target, non-family, self-directed, English-only, absent-term, missing/empty evidence, changed-source and absent-exception cases passed; integrated unsupported-person removal left no dangling family links."
+    },
+    {
+      "name": "Actual Jinshu 119 native preview, in memory",
+      "result": "passed",
+      "detail": "Used the existing canonical-runtime native helpers with import paths and helper exports exposed only in memory; overlaid the sealed corrected library through test-loader. Original extraction passed initial native validation; native reviewed repairs and candidate handling were reused. Separately loaded exact released git-show library bytes for baseline comparison. No files were written.",
+      "originalPeople": 202,
+      "releasedPreviewPeople": 201,
+      "correctedPreviewPeople": 202,
+      "correctedIdsEqualOriginal": true,
+      "correctedDossierDeepEqualsSealed": true,
+      "candidates": 121,
+      "reviewedFamilyClaimsPreserved": 30,
+      "restoredFamilyClaimIds": [
+        "jinshu:119:c1488",
+        "jinshu:119:c1489"
+      ],
+      "restoredPerson": "jinshu:119:p118",
+      "unresolvedCandidatesAfterNativeResolution": 0,
+      "unresolvedSpansAfterNativeResolution": 0
+    },
+    {
+      "name": "Native chronology gate",
+      "result": "expected-rejection",
+      "detail": "After native resolution of all 121 candidates, validatePeopleExtraction rejected exactly four existing p190 chronology requirements: active-date hint, evidence-backed attestation, Western active-date hint and Western-year attestation. No suppression or invented dates occurred."
+    },
+    {
+      "name": "Input immutability during native preview",
+      "result": "passed",
+      "detail": "Before/after SHA256 comparison showed unchanged canonical chapter, canonical extraction, primary Git index, sealed candidate.compact.json and validated-review.json."
+    },
+    {
+      "name": "V2 patch reconstruction",
+      "result": "passed",
+      "detail": "Read-only in-memory application of two hunks per file against exact released git-show bytes checked hunk positions, context, removal/addition counts, file scope and resulting bytes. Both outputs exactly matched sealed module hashes. An initial checker rejected standard diff --git headers before processing any hunk; the corrected checker handled those headers and passed."
+    },
+    {
+      "name": "Resource guard",
+      "result": "passed-after-external-cleanup",
+      "detail": "Immediate pre-review and pre-write guards passed. A mid-review disk measurement failed at 29.8984375 GiB, with normal memory pressure and no swap warning. A following no-write native preview was inadvertently launched without conditioning on guard success; it was allowed to finish. New tests/writes were then held. Host reported completed-artifact cleanup, and subsequent independent guards passed, including 30.189453125 GiB before final patch reconstruction."
+    }
+  ],
+  "limitations": [
+    "Approval covers code preservation behavior only. It does not endorse mother attribution, kinship content, translation text or p190 chronology; those remain subject to independent content review and normal gates.",
+    "Native integration used the existing canonical-runtime dependency scripts, whose runtime revision differs from released master; the changed library was overlaid from the sealed artifact and the baseline comparison used exact released Git bytes. Full released-site build and broader applier self-tests were not run by this reviewer.",
+    "Patch applicability was independently verified by exact read-only hunk reconstruction in memory, without changing a checkout or index.",
+    "No queue changes, branch changes, staging, commits, builds, secondary checkouts, copies, canonical writes or subagents were performed. This JSON is the sole file written by this reviewer."
+  ],
+  "chapterApproved": false,
+  "canonicalFieldsApplied": 0
+}
