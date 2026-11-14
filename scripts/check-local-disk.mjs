@@ -52,11 +52,12 @@ export function inspectMemory(platform = process.platform, execute = execFileSyn
     errors: [],
   };
   const read = (command, args) => execute(command, args, { encoding: 'utf8', timeout: 5000, maxBuffer: 2 * 1024 * 1024 });
-  const swapUsedBytes = parseMacSwapUsage(read('sysctl', ['vm.swapusage']));
+  // launchd services have a minimal PATH. These macOS tools have stable system paths.
+  const swapUsedBytes = parseMacSwapUsage(read('/usr/sbin/sysctl', ['vm.swapusage']));
   // Executable names only: never collect process arguments, environment or credentials.
-  const codexProcesses = parseCodexResidentUsage(read('ps', ['-axo', 'pid=,rss=,comm=']));
+  const codexProcesses = parseCodexResidentUsage(read('/bin/ps', ['-axo', 'pid=,rss=,comm=']));
   const codexResidentBytes = codexProcesses.reduce((total, row) => total + BigInt(row.residentBytes), 0n);
-  const rawPressure = read('sysctl', ['-n', 'kern.memorystatus_vm_pressure_level']).trim();
+  const rawPressure = read('/usr/sbin/sysctl', ['-n', 'kern.memorystatus_vm_pressure_level']).trim();
   if (!/^[124]$/.test(rawPressure)) throw new Error('Unrecognized macOS memory pressure measurement');
   const pressureLevel = Number(rawPressure);
   return {
