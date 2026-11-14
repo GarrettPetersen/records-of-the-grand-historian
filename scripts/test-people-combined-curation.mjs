@@ -80,7 +80,7 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
   candidate.people[0][4].a = ['AD 2'];
   candidate.claims[0][2].westernYear.year = 2;
   const proposal = structuredClone(beforeExpanded);
-  proposal.translationRepairs = [{ id: `${book}:${chapter}:r0001`, unit: beforeExpanded.mentions[0].unit, field: 'literal', before: 'Alice Smith come.', after: 'Alice Smith came.', reason, confidence: 'high', status: 'proposed' }];
+  proposal.translationRepairs = [{ id: `${book}:${chapter}:r0001`, unit: validateCompactPeopleExtraction(candidate, packet, { strictAliasDispositions: true }).normalized.mentions[0].unit, field: 'literal', before: 'Alice Smith come.', after: 'Alice Smith came.', reason, confidence: 'high', status: 'proposed' }];
   const newEditorial = editorialDecisionSeed(proposal);
   newEditorial.reviewer = { kind: 'human', name: 'Independent editor', model: null, agentId: 'reviewer', runId: null, completedAt: '2026-09-14T00:00:00Z' };
   newEditorial.decisions[0] = { repairId: `${book}:${chapter}:r0001`, decision: 'accept', after: null, reason, sourceWitness: { source: 'chapter-text', citation: 's0001', excerpt: '\u827e\u9e97\u7d72\u4f86\u3002' } };
@@ -382,7 +382,7 @@ for (const [label, mutate, pattern] of [
   ['resealed stale exact block', d => { d.materialization.sourceReordering.moves[0].block.sentences[0].zh = 'changed'; bindReordering(d); }, /exact block payload/],
   ['undeclared move author', d => { d.materialization.sourceReordering.authorAgentId = 'omitted-author'; bindReordering(d); }, /Missing declared curation author/],
   ['self-approved move author', d => { d.materialization.sourceReordering.authorAgentId = 'reviewer'; d.authorAgentIds.push('reviewer'); bindReordering(d); }, /self-approved/],
-  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /no incoming editorial components/],
+  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /has no matching independent/],
   ['missing applied English contracts', d => { d.candidate.translationRepairs = []; }, /does not match applied decision/],
   ['incomplete definite title callbacks', d => { d.identity.coverage.namedPeopleAndDefiniteCallbacksComplete = false; }, /namedPeopleAndDefiniteCallbacksComplete/],
   ['unresolved identity findings', d => { d.identity.findings = [{ problem: 'Unreviewed emperor reference' }]; }, /unresolved identity findings/],
@@ -570,6 +570,8 @@ test('multi-review rejects two otherwise valid approvals for the same repair eve
   const f = fixture(t, 'testbook', '001', undefined, undefined, { multiple: true });
   const docs = structuredClone(f.docs);
   const second = docs.editorial.reviews[2];
+  const actualSecondApproval = structuredClone(second);
+  docs.editorial.reviews.push(actualSecondApproval);
   second.proposals[0].before = 'Alice Smith come.';
   second.proposals[0].after = 'Alice Smith came.';
   second.proposals[0].confidence = 'medium';
