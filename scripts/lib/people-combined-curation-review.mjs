@@ -88,7 +88,16 @@ function incomingEditorialReviews(before, after, reports, seal) {
   const old = editorialReviews(before), current = editorialReviews(after);
   requireEqual(current.slice(0, old.length), old, 'retain old editorial reviews unchanged and ordered');
   const additions = current.slice(old.length);
-  if (!additions.length) throw new Error('Combined source amendment requires new editorial review components');
+  if (!additions.length) {
+    requireEqual(after, before, 'unchanged editorial history with no incoming editorial components');
+    for (const report of reports) {
+      requireEqual(report.reviewContext?.editorialDecisionHashes, [], 'no incoming editorial components');
+      requireEqual(report.reviewContext?.editorialDecisionHash, undefined, 'no phantom incoming editorial component');
+    }
+    requireEqual(seal.editorialDecisionHashes, [], 'sealed absence of incoming editorial components');
+    requireEqual(seal.editorialDecisionHash, undefined, 'no phantom sealed editorial component');
+    return [];
+  }
   const hashes = additions.map(documentHash);
   if (new Set(hashes).size !== hashes.length || additions.some(r => old.some(previous => isDeepStrictEqual(previous, r)))) {
     throw new Error('Duplicate incoming editorial review component');
@@ -204,7 +213,7 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   for (const [index, review] of incoming.entries()) {
     if (!approvals.some(a => a.reviewIndex === index)) throw new Error('Incoming editorial component has no approved repair');
   }
-  let sourceRepairs = 0, lastReviewIndex = -1;
+  let lastReviewIndex = -1;
   for (const [index, row] of candidate.translationRepairs.entries()) {
     if (index < beforeExtraction.translationRepairs.length) continue;
     const repair = expanded.translationRepairs[index];
@@ -217,10 +226,8 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
     if (matched[0].reviewIndex < lastReviewIndex) throw new Error('Source repair order contradicts incoming editorial component order');
     lastReviewIndex = matched[0].reviewIndex;
     matched[0].used = true;
-    sourceRepairs++;
     setTranslationField(replay, repair.unit, repair.field, repair.before, repair.after);
   }
-  if (!sourceRepairs) throw new Error('Combined source amendment requires new applied translation repairs');
   if (approvals.some(a => !a.used)) throw new Error('Incoming editorial approval has no matching new applied repair');
   const footnoted = replayReviewedFootnoteAdditions(replay, { contract: materialization.sourceFootnoteContract, identity, dateReport, validation, seal, book, chapter, authorAgentIds });
   requireEqual(footnoted, source, 'unrelated source edit outside reviewed translation repairs, source reordering and footnote additions');
@@ -307,6 +314,7 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   requireEqual(validation.identityReviewHash, documentHash(identity), 'identity report seal');
   requireEqual(validation.dateReportHash, documentHash(dateReport), 'date report seal');
   if (!['approved-exact-editorial-amended-candidate', 'approved-exact-combined-candidate'].includes(validation.status)) throw new Error('Combined validation does not approve the exact candidate');
+  if (!incoming.length) requireEqual(validation.status, 'approved-exact-combined-candidate', 'unchanged editorial candidate status');
   requireEqual(validation.reviewerId, identity.reviewer.agentId, 'validation reviewer');
   if (validation.validationKind !== undefined) validateRetainedCoverage(validation, seal, identity, dateReport);
   else requireTrue(validation.completeIdentityEvidenceCoverage, 'completeIdentityEvidenceCoverage');

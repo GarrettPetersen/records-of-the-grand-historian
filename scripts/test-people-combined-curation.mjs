@@ -80,7 +80,7 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
   candidate.people[0][4].a = ['AD 2'];
   candidate.claims[0][2].westernYear.year = 2;
   const proposal = structuredClone(beforeExpanded);
-  proposal.translationRepairs = [{ id: `${book}:${chapter}:r0001`, unit: beforeExpanded.mentions[0].unit, field: 'literal', before: 'Alice Smith come.', after: 'Alice Smith came.', reason, confidence: 'high', status: 'proposed' }];
+  proposal.translationRepairs = [{ id: `${book}:${chapter}:r0001`, unit: validateCompactPeopleExtraction(candidate, packet, { strictAliasDispositions: true }).normalized.mentions[0].unit, field: 'literal', before: 'Alice Smith come.', after: 'Alice Smith came.', reason, confidence: 'high', status: 'proposed' }];
   const newEditorial = editorialDecisionSeed(proposal);
   newEditorial.reviewer = { kind: 'human', name: 'Independent editor', model: null, agentId: 'reviewer', runId: null, completedAt: '2026-09-14T00:00:00Z' };
   newEditorial.decisions[0] = { repairId: `${book}:${chapter}:r0001`, decision: 'accept', after: null, reason, sourceWitness: { source: 'chapter-text', citation: 's0001', excerpt: '\u827e\u9e97\u7d72\u4f86\u3002' } };
@@ -167,6 +167,88 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
   return { root, spec, ...prepared, options, files, workflow, inputPaths, ledger, protectedFile, state,
     calls: () => calls, key: `${book}/${chapter}`, docs: { book, chapter, source: afterSource, candidate, editorial, identity, dateReport, validation, materialization, seal, beforeSource: source, beforeExtraction: extraction, beforeEditorial: editorialBefore, authorAgentIds: spec.authorAgentIds } };
 }
+
+function unchangedEnglishDocs(t) {
+  const f = fixture(t), d = structuredClone(f.docs);
+  d.beforeSource = structuredClone(d.source);
+  d.beforeExtraction.input = structuredClone(d.candidate.input);
+  d.beforeExtraction.translationRepairs = structuredClone(d.candidate.translationRepairs);
+  d.beforeEditorial = structuredClone(d.editorial);
+  for (const report of [d.identity, d.dateReport]) {
+    delete report.reviewContext.editorialDecisionHash;
+    report.reviewContext.editorialDecisionHashes = [];
+  }
+  d.seal.editorialDecisionHashes = [];
+  d.validation.status = 'approved-exact-combined-candidate';
+  d.validation.identityReviewHash = documentHash(d.identity);
+  d.validation.dateReportHash = documentHash(d.dateReport);
+  return { f, d };
+}
+
+test('correct English needs no invented repair for independently reviewed person/date corrections', t => {
+  const { f, d } = unchangedEnglishDocs(t);
+  assert.notDeepEqual(d.beforeExtraction.people, d.candidate.people);
+  assert.deepEqual(d.beforeSource, d.source);
+  assert.deepEqual(d.beforeEditorial, d.editorial);
+  assert.equal(validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }).stats.people, 1);
+});
+
+test('unchanged-English path rejects fabricated editorial pins and altered history', t => {
+  const { f, d } = unchangedEnglishDocs(t);
+  d.identity.reviewContext.editorialDecisionHash = 'sha256:' + '0'.repeat(64);
+  assert.throws(() => validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }), /phantom incoming editorial/);
+  delete d.identity.reviewContext.editorialDecisionHash;
+  d.editorial.chapter = '002';
+  assert.throws(() => validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }), /editorial scope/);
+});
+
+test('unchanged English publishes reviewed identity/date changes without rewriting source or editorial history', t => {
+  const { f, d } = unchangedEnglishDocs(t);
+  const beforeDates = combinedDatePacket(d.book, d.chapter, d.beforeSource, d.beforeExtraction);
+  writeJsonAtomic(f.files.source, d.beforeSource);
+  writeJsonAtomic(f.files.extraction, d.beforeExtraction);
+  writeJsonAtomic(f.files.editorial, d.beforeEditorial);
+  const oldReport = read(f.files.dateReport);
+  Object.assign(oldReport, { sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash });
+  writeJsonAtomic(f.files.dateReport, oldReport);
+  Object.assign(f.state, { sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash });
+  writeJsonAtomic(path.join(f.workflow, 'state.json'), f.state);
+  Object.assign(f.spec.priorClaim, { sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash });
+  f.spec.claimHash = documentHash(f.spec.priorClaim);
+  f.ledger.dateAudits[f.key] = structuredClone(f.spec.priorClaim);
+  d.seal.protectedFiles = d.seal.protectedFiles.map(pin => pinFile(pin.file));
+  for (const [role, doc] of Object.entries({ identity: d.identity, dateReport: d.dateReport, validation: d.validation, seal: d.seal })) writeJsonAtomic(f.inputPaths[role], doc);
+  f.spec.before = inspectCombinedBefore({ root: f.root, book: d.book, chapter: d.chapter });
+  const prepared = prepareCombinedCuration(f.spec);
+  const sourceHash = hashFile(f.files.source), editorialHash = hashFile(f.files.editorial);
+  assert.equal(publishCombinedCuration(prepared.receipt, prepared.hash, f.options).status, 'complete');
+  assert.equal(hashFile(f.files.source), sourceHash);
+  assert.equal(hashFile(f.files.editorial), editorialHash);
+  assert.deepEqual(read(f.files.extraction), d.candidate);
+  assert.equal(f.ledger.dateAudits[f.key].status, 'ready');
+});
+
+test('unchanged-English path cannot approve an unrecorded English edit or self-review', t => {
+  const { f, d } = unchangedEnglishDocs(t);
+  d.source.content[0].sentences[0].translations[0].literal += ' Unreviewed new claim.';
+  assert.throws(() => validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }));
+  d.source = structuredClone(d.beforeSource);
+  d.authorAgentIds.push(d.identity.reviewer.agentId);
+  assert.throws(() => validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }), /self-approved/);
+});
+
+test('GrokBot editorial review has an explicit provenance kind, with unknown kinds still rejected', t => {
+  const f = fixture(t), d = structuredClone(f.docs);
+  d.editorial.reviews.at(-1).reviewer.kind = 'grokbot';
+  const bind = () => {
+    for (const report of [d.identity, d.dateReport]) report.reviewContext.editorialDecisionHash = documentHash(editorialReviews(d.editorial).at(-1));
+    d.validation.identityReviewHash = documentHash(d.identity);
+    d.validation.dateReportHash = documentHash(d.dateReport);
+  };
+  bind();assert.equal(validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }).stats.people, 1);
+  d.editorial.reviews.at(-1).reviewer.kind = 'invented-review-engine';bind();
+  assert.throws(() => validateCombinedReviews(d, { dataDir: path.join(f.root, 'data') }));
+});
 
 function reorderContract(source, moves) {
   const reordered = structuredClone(source);
@@ -300,7 +382,7 @@ for (const [label, mutate, pattern] of [
   ['resealed stale exact block', d => { d.materialization.sourceReordering.moves[0].block.sentences[0].zh = 'changed'; bindReordering(d); }, /exact block payload/],
   ['undeclared move author', d => { d.materialization.sourceReordering.authorAgentId = 'omitted-author'; bindReordering(d); }, /Missing declared curation author/],
   ['self-approved move author', d => { d.materialization.sourceReordering.authorAgentId = 'reviewer'; d.authorAgentIds.push('reviewer'); bindReordering(d); }, /self-approved/],
-  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /requires new editorial review components/],
+  ['missing incoming editorial component', d => { d.editorial = d.beforeEditorial; }, /has no matching independent/],
   ['missing applied English contracts', d => { d.candidate.translationRepairs = []; }, /does not match applied decision/],
   ['incomplete definite title callbacks', d => { d.identity.coverage.namedPeopleAndDefiniteCallbacksComplete = false; }, /namedPeopleAndDefiniteCallbacksComplete/],
   ['unresolved identity findings', d => { d.identity.findings = [{ problem: 'Unreviewed emperor reference' }]; }, /unresolved identity findings/],
@@ -488,6 +570,8 @@ test('multi-review rejects two otherwise valid approvals for the same repair eve
   const f = fixture(t, 'testbook', '001', undefined, undefined, { multiple: true });
   const docs = structuredClone(f.docs);
   const second = docs.editorial.reviews[2];
+  const actualSecondApproval = structuredClone(second);
+  docs.editorial.reviews.push(actualSecondApproval);
   second.proposals[0].before = 'Alice Smith come.';
   second.proposals[0].after = 'Alice Smith came.';
   second.proposals[0].confidence = 'medium';

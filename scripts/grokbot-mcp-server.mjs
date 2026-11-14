@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { McpServer, createMcpHandler } from '@modelcontextprotocol/server';
 import { toNodeHandler } from '@modelcontextprotocol/node';
 import * as z from 'zod/v4';
+import {chapterMcpHandler,chapterBootstrap} from './lib/people-chapter-mcp.mjs';
 import { positiveEnvironmentInteger } from './lib/grokbot-mcp-runtime-config.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -244,6 +245,26 @@ export function startGrokbotMcpServer({ env = process.env, bridge } = {}) {
   const nodeHandler = toNodeHandler(handler);
   const httpServer = createHttpServer((req, res) => {
     const pathname = new URL(req.url ?? '/', 'http://localhost').pathname;
+    if(req.method==='GET'&&pathname==='/chapter-client.mjs'){
+      res.writeHead(200,{'content-type':'text/javascript; charset=utf-8','cache-control':'no-cache'});
+      fs.createReadStream(path.join(path.dirname(CLIENT_FILE),'people-chapter-client.mjs')).pipe(res);return;
+    }
+    const chapterRoute=pathname.match(/^\/(chapter-mcp|chapter-bootstrap)\/([a-z0-9_-]+-\d{3}-[a-f0-9]{12})\/(owner|reviewer)$/);
+    if(chapterRoute){
+      if(!env.PEOPLE_CHAPTER_ROOT){res.writeHead(503);res.end('Chapter host root is not configured');return;}
+      if(allowedHosts.size&&!allowedHosts.has(normalizeHost(req.headers.host))){res.writeHead(403);res.end('Host not allowed');return;}
+      if(req.headers.origin&&!allowedOrigins.has(String(req.headers.origin).toLowerCase())){res.writeHead(403);res.end('Origin not allowed');return;}
+      try{
+        if(chapterRoute[1]==='chapter-bootstrap'){
+          if(req.method!=='POST'){res.writeHead(405);res.end();return;}
+          const value=chapterBootstrap(env.PEOPLE_CHAPTER_ROOT,chapterRoute[2],chapterRoute[3],String(req.headers['x-bootstrap-key']??''));
+          res.writeHead(200,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(value));return;
+        }
+        const scoped=chapterMcpHandler(env.PEOPLE_CHAPTER_ROOT,chapterRoute[2],chapterRoute[3],bearerToken(req));
+        void scoped(req,res);
+      }catch{res.writeHead(401,{'content-type':'text/plain'});res.end('Unauthorized or unavailable chapter assignment');}
+      return;
+    }
     if (req.method === 'GET' && pathname === '/health') {
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(JSON.stringify({ ok: true, service: '24histories-people-grokbot', version: SERVER_VERSION }));
