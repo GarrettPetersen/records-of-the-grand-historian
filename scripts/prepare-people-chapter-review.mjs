@@ -27,10 +27,12 @@ const {loadProperNounMatcher}=await import(pathToFileURL(path.join(job.nativeRoo
 const {editorialDecisionSeed,editorialReviews}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-editorial-decisions.mjs')));
 const extractionPacket=buildPeopleExtractionPacket(job.book,job.chapter,{chapterData:source,properNounMatcher:loadProperNounMatcher()});
 const expanded=validateCompactPeopleExtraction(extraction,extractionPacket,{strictAliasDispositions:true}).normalized;
-const canonicalExtraction=JSON.parse(fs.readFileSync(path.join(root,`data/people/extractions/${job.book}/${job.chapter}.json`)));
+const canonicalExtractionFile=path.join(root,`data/people/extractions/${job.book}/${job.chapter}.json`);
+if(job.canonicalExtractionAbsent&&fs.existsSync(canonicalExtractionFile))throw Error('Original canonical extraction absence changed; reconcile ownership');
+const priorRepairCount=job.canonicalExtractionAbsent?0:JSON.parse(fs.readFileSync(canonicalExtractionFile)).translationRepairs.length;
 const canonicalEditorial=path.join(root,`data/people/editorial-decisions/${job.book}/${job.chapter}.json`);
-const beforeEditorial=JSON.parse(fs.readFileSync(canonicalEditorial));
-const newRepairs=expanded.translationRepairs.slice(canonicalExtraction.translationRepairs.length);
+const beforeEditorial=fs.existsSync(canonicalEditorial)?JSON.parse(fs.readFileSync(canonicalEditorial)):null;
+const newRepairs=expanded.translationRepairs.slice(priorRepairCount);
 if(newRepairs.length){
  const seed=editorialDecisionSeed({...expanded,translationRepairs:newRepairs.map(r=>({...r,status:'proposed'}))});
  const record=Object.fromEntries(Object.entries(seed).filter(([key])=>!['schemaVersion','book','chapter'].includes(key)));

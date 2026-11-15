@@ -19,16 +19,19 @@ export function pinChapterNativeRuntime(root,job,nativeRoot){
  for(const [index,pin] of job.nativeSeals.entries())job.artifacts.push({id:'native-'+index,file:path.relative(root,path.join(job.nativeRoot,pin.file)),bytes:fs.statSync(path.join(job.nativeRoot,pin.file)).size,sha256:pin.sha256,use:'pinned-production-contract'});
  return job;
 }
-export function prepareChapterOwner(root,{book,chapter,lane,worker,ledger,extra=[]}){
+export function prepareChapterOwner(root,{book,chapter,lane,worker,ledger,extra=[],freshSeed=null}){
  need(/^[a-z0-9_-]+$/.test(book)&&/^\d{3}$/.test(chapter),'Invalid chapter scope');
  need(['cursor-sdk','grokbot'].includes(lane)&&worker,'Explicit supported lane and stable worker required');
  const key=book+'/'+chapter,priorDate=ledger.dateAudits?.[key];
  need(!priorDate?.executorToken||Date.parse(priorDate.executorExpiresAt)<=Date.now(),'A live date executor owns this chapter');
  need(!ledger.chapterOwners?.[key]||ledger.chapterOwners[key].status==='published','Chapter already has an owner; resume it');
  const id=`${book}-${chapter}-${randomBytes(6).toString('hex')}`,dir=ownerDirectory(root,id);
- fs.mkdirSync(dir,{recursive:true,mode:0o700});
  const source=path.join(root,`data/${book}/${chapter}.json`),extraction=path.join(root,`data/people/extractions/${book}/${chapter}.json`);
- const candidates=new Set([source,extraction]),hostOnlyReferences=[];
+ const fresh=freshSeed!==null;
+ need(fresh?!fs.existsSync(extraction):fs.existsSync(extraction),'Use an explicit fresh draft only when the canonical extraction is absent; otherwise resume existing work');
+ if(fresh)need(freshSeed.schemaVersion===2&&freshSeed.book===book&&freshSeed.chapter===chapter&&freshSeed.people?.length===0&&freshSeed.claims?.length===0&&freshSeed.translationRepairs?.length===0,'Fresh seed must be an empty, unapproved private draft for this exact chapter');
+ fs.mkdirSync(dir,{recursive:true,mode:0o700});
+ const candidates=new Set(fresh?[source]:[source,extraction]),hostOnlyReferences=[];
  for(const kind of ['editorial-decisions','date-audits','chapter-identity','identity-certificates']){
   const file=path.join(root,`data/people/${kind}/${book}/${chapter}.json`);if(fs.existsSync(file))candidates.add(file);
  }
@@ -53,7 +56,7 @@ export function prepareChapterOwner(root,{book,chapter,lane,worker,ledger,extra=
  }
  for(const file of extra){const resolved=fs.realpathSync(file);need(resolved.startsWith(root+path.sep),'Extra recovery must be inside the shared checkout');regular(resolved);candidates.add(resolved);}
  // Documentation/code contracts are bounded explicit inputs, never an entire checkout.
- for(const name of ['PEOPLE_SINGLE_OWNER_WORKFLOW.md','PEOPLE_DATE_AUDIT.md','scripts/publish-people-combined-curation.mjs','scripts/lib/people-combined-curation-review.mjs','scripts/lib/people-compact.mjs','data/people/schemas/people-extraction-compact.schema.json']){
+ for(const name of ['PEOPLE_CHAPTER_OWNER_PROCESS.md','PEOPLE_SINGLE_OWNER_WORKFLOW.md','PEOPLE_DATE_AUDIT.md','scripts/publish-people-combined-curation.mjs','scripts/lib/people-combined-curation-review.mjs','scripts/lib/people-compact.mjs','data/people/schemas/people-extraction-compact.schema.json']){
   const file=path.join(root,name);if(fs.existsSync(file))candidates.add(file);
  }
  const artifacts=[...candidates].sort().flatMap((file,index)=>{
@@ -62,14 +65,22 @@ export function prepareChapterOwner(root,{book,chapter,lane,worker,ledger,extra=
   return[{id:'a'+String(index).padStart(4,'0'),file:path.relative(root,file),bytes:size,sha256:digest(fs.readFileSync(file)),
    use:file===source||file===extraction?'current-input':'recovery-evidence-not-approval'}];
  });
- const recovery={extraction:read(path.join(generated,'extraction-state.json')).chapters?.[key]??null,
+ const extractionState=path.join(generated,'extraction-state.json');
+ const recovery={extraction:fs.existsSync(extractionState)?read(extractionState).chapters?.[key]??null:null,
   dateClaim:priorDate??null,extractionClaim:ledger.claims[key]??null,identityClaim:ledger.identityReviews?.[key]??null};
+ // An absent accepted extraction does not mean an untouched chapter. Retained
+ // chunks, reviews and conversations remain inputs to the same owner workflow.
+ const recoveryArtifacts=artifacts.filter(a=>a.file.startsWith('data/people/')&&a.file!==path.relative(root,extraction));
+ const hasRecovery=recoveryArtifacts.length>0||Object.values(recovery).some(value=>value!==null);
  writeJsonAtomic(path.join(dir,'recovery-state.json'),recovery);
  const snapshot=path.join(dir,'recovery-state.json');artifacts.push({id:'recovery-state',file:path.relative(root,snapshot),bytes:fs.statSync(snapshot).size,sha256:digest(fs.readFileSync(snapshot)),use:'recovery-evidence-not-approval'});
- const sourceValue=read(source),extractionValue=read(extraction);
+ const sourceValue=read(source),extractionValue=fresh?freshSeed:read(extraction);
+ const authorIds=value=>[value?.agentId,value?.run?.agentId,...(value?.run?.chunks??[]).map(c=>c.agentId)].filter(Boolean);
+ const partialAuthors=recoveryArtifacts.filter(a=>/generated\/(chunk-extractions|rejected-chunk-extractions|openrouter-extractions)\//.test(a.file)&&a.file.endsWith('.json')).flatMap(a=>authorIds(read(path.join(root,a.file))));
  const job={schemaVersion:1,id,book,chapter,lane,worker,status:'prepared',revision:0,createdAt:new Date().toISOString(),
-  sourceSha256:digest(fs.readFileSync(source)),extractionSha256:digest(fs.readFileSync(extraction)),artifacts,hostOnlyReferences,
-  unitIds:contentUnits(sourceValue).map(u=>u.id),coveredUnits:[],authors:[...new Set([extractionValue.run?.agentId,...(extractionValue.run?.chunks??[]).map(c=>c.agentId)].filter(Boolean))],originalAuthorWorkerIds:ledger.claims[key]?.lane==='grokbot'?[ledger.claims[key].worker]:[],findings:[],repairs:[],
+  sourceSha256:digest(fs.readFileSync(source)),extractionSha256:fresh?null:digest(fs.readFileSync(extraction)),artifacts,hostOnlyReferences,
+  ...(fresh?{canonicalExtractionAbsent:true,initialState:hasRecovery?'recovery-private-draft':'unstarted-private-draft',firstInstallApprovalGranted:false}:{}),
+  unitIds:contentUnits(sourceValue).map(u=>u.id),coveredUnits:[],authors:[...new Set([...authorIds(extractionValue),...authorIds(recovery.extraction),...partialAuthors])],originalAuthorWorkerIds:ledger.claims[key]?.lane==='grokbot'?[ledger.claims[key].worker]:[],findings:[],repairs:[],
   priorDateClaim:priorDate??null,priorDateClaimHash:priorDate?digest(JSON.stringify(priorDate)):null,
   lookupGeneration:'snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac'};
  writeJsonAtomic(path.join(dir,'source.json'),sourceValue);writeJsonAtomic(path.join(dir,'extraction.json'),extractionValue);
