@@ -27,7 +27,8 @@ export function remoteAdmissionInventory(directory){
    for(const role of ['owner','reviewer']){
     const actor=job[role+'AgentId'],run=job[role+'RunId'],dispatch=job.dispatch?.[role];
     if(actor?.startsWith('bc-')&&run)addRun(actor,run);
-    if(dispatch?.state==='dispatching'||dispatch?.state==='sent'&&dispatch.lane==='cursor-sdk'&&!run)
+    const activeGrokPhase=role==='owner'?['prepared','working'].includes(job.status):job.status==='reviewing';
+    if(dispatch?.state==='dispatching'||dispatch?.state==='sent'&&(dispatch.lane==='cursor-sdk'&&!run||dispatch.lane==='grokbot'&&activeGrokPhase))
      uncertain.add(actor?.startsWith('bc-')?'cursor:'+actor:actor?.startsWith('grokbot:')?'grok:'+actor.slice(8):'uncertain:'+job.id+':'+role);
    }
   }
@@ -50,4 +51,10 @@ export async function measureRemoteAdmission(inventory,liveGrok,getRun){
   cursorRuns.set(item.runId,run);if(run.status==='running')occupied.add('cursor:'+item.agentId);
  }
  return{activeCount:occupied.size,cursorRuns,occupied:[...occupied]};
+}
+
+export function remoteContinuationSlot(admission,actor,maxActive){
+ need(typeof actor==='string'&&(actor.startsWith('bc-')||actor.startsWith('grokbot:')),'Retained actual actor required');
+ const key=actor.startsWith('bc-')?'cursor:'+actor:'grok:'+actor.slice(8),reserved=admission.occupied.includes(key);
+ return{reserved,admitted:admission.activeCount<maxActive||reserved&&admission.activeCount===maxActive};
 }

@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
-import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission} from './lib/people-remote-admission.mjs';
+import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission,remoteContinuationSlot} from './lib/people-remote-admission.mjs';
 const policy={completionThroughput:{targetPublishedChaptersPerDay:50,initialRemoteAssignments:4,maxRemoteAssignments:12}};
 test('explicit remote policy replaces the serial cap and rejects invalid limits',()=>{
  assert.equal(remoteAdmissionLimit(policy),4);assert.equal(remoteAdmissionLimit(policy,'8'),8);assert.equal(remoteAdmissionLimit(policy,'12'),12);
@@ -23,4 +23,14 @@ test('deduplicates overlapping inventory and fails closed on failed or unknown s
 });
 test('completed remote conversations do not occupy active capacity',async()=>{
  const r=await measureRemoteAdmission({runs:[{agentId:'bc-a',runId:'run-a'}],uncertain:[]},new Set(),async()=>({status:'finished'}));assert.equal(r.activeCount,0);
+});
+test('sent Grok startup retains its slot until a real chapter return without leaking slots from old roles',async t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'grok-admission-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));
+ const id='jinshu-056-abcdef012345',d=path.join(dir,id);fs.mkdirSync(d);const file=path.join(d,'job.json');
+ const job={id,status:'working',ownerAgentId:'grokbot:g1',dispatch:{owner:{lane:'grokbot',state:'sent'}}};
+ fs.writeFileSync(file,JSON.stringify(job));let r=await measureRemoteAdmission(remoteAdmissionInventory(dir),new Set(),async()=>{throw Error('Unexpected SDK call');});assert.equal(r.activeCount,1);
+ assert.deepEqual(remoteContinuationSlot(r,'grokbot:g1',1),{reserved:true,admitted:true});
+ assert.equal(remoteContinuationSlot(r,'bc-other',1).admitted,false);
+ job.status='review-returned';fs.writeFileSync(file,JSON.stringify(job));r=await measureRemoteAdmission(remoteAdmissionInventory(dir),new Set(),async()=>null);assert.equal(r.activeCount,0);
+ job.status='reviewing';fs.writeFileSync(file,JSON.stringify(job));assert.equal(remoteAdmissionInventory(dir).uncertain.length,0);
 });

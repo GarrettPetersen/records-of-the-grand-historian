@@ -11,7 +11,7 @@ import {acquireProcessRunLock} from './lib/process-run-lock.mjs';
 import {liveRunningAgentIds,readRosterWorkers} from './grokbot-headless-dispatch.mjs';
 import {assertPeopleMasterSync} from './check-people-master-sync.mjs';
 import {readPeopleCampaignPolicy} from './lib/people-campaign-policy.mjs';
-import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission} from './lib/people-remote-admission.mjs';
+import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission,remoteContinuationSlot} from './lib/people-remote-admission.mjs';
 loadDotenv(REPO_ROOT);
 const {values:o}=parseArgs({options:{job:{type:'string',multiple:true},model:{type:'string'},'max-active':{type:'string'},run:{type:'boolean'},once:{type:'boolean'}}});
 if(!o.job?.length||!o.model||!o.run)throw Error('Use --job ID (repeat) --model MODEL --run [--once]; only explicit retained chapters are scheduled');
@@ -73,7 +73,12 @@ try{do{
    if(run.status==='error'&&/usage_limit|capacity|quota/i.test(run.error?.message??'')){state.cursorCapacityHold=run.error;save();log({lane:'cursor-sdk',capacityHold:true});continue;}
   }else running=liveGrok.has(j[role+'AgentId'].replace(/^grokbot:/,''));
   if(running)continue;
-  if(activeCount>=maxActive)continue;
+  const continuation=remoteContinuationSlot({...admission,activeCount},j[role+'AgentId'],maxActive);
+  if(!continuation.admitted)continue;
+  if(lane==='grokbot'){
+   const sentAt=Date.parse(j.dispatch[role].at);if(!Number.isFinite(sentAt))throw Error('Grok dispatch timestamp is missing; reconcile before continuation');
+   if(Date.now()-sentAt<120000)continue; // Do not resend while a fresh dispatch starts.
+  }
   const fingerprint=digest(fs.readFileSync(path.join(dir,'source.json')))+digest(fs.readFileSync(path.join(dir,'extraction.json')))+(role==='reviewer'?digest(fs.readFileSync(path.join(dir,'identity-review.json')))+digest(fs.readFileSync(path.join(dir,'date-report.json'))):'');
   const continuationKey=id+':'+role,prior=state.continuations[continuationKey]??{count:0,unchanged:0};
   if(prior.count>=3||prior.unchanged>=2){j.status='held';j.circuitBreaker={reason:'Bounded non-improving continuation limit',role,...prior};writeJsonAtomic(file,j);log({job:id,action:'host-replan-required',reason:j.circuitBreaker});continue;}
@@ -85,7 +90,7 @@ try{do{
   if(role==='owner'&&j.preReviewFeedback)fs.appendFileSync(feedback,'\nDeterministic pre-review coherence feedback: '+j.preReviewFeedback+'\n');
   const args=['scripts/run-people-chapter-owner.mjs',role==='reviewer'?'--review':'--start','--continue','--feedback',feedback,'--job',id,'--lane',lane,'--model',o.model,'--run'];if(lane==='grokbot')args.push('--worker',j.dispatch[role].worker??j.worker);
   log({job:id,action:'continue-retained-owner',result:invoke(args)});
-  activeCount++;
+  if(!continuation.reserved)activeCount++;
   state.continuations[continuationKey]={count:prior.count+1,unchanged:prior.fingerprint===fingerprint?prior.unchanged+1:0,fingerprint};save();
  }catch(error){
   state.issues??={};state.issues[id]={at:new Date().toISOString(),message:error.message};
