@@ -43,3 +43,16 @@ test('obsolete empty templates are retired as evidence rather than promoted to r
  const result=prepareChapterEditorialHistory({...options,extraction:next,current:r.document});
  assert.equal(result.retiredTemplates.length,1);assert.equal(result.retainedReviewCount,0);assert.equal(result.document.reviewer.agentId,null);
 });
+test('an unchanged rejected set fails closed instead of making a duplicate review generation',()=>{
+ const {options,reviewed}=fixture();options.extraction.translationRepairs=options.extraction.translationRepairs.slice(0,1);
+ reviewed.decisions[0].decision='reject';
+ assert.throws(()=>prepareChapterEditorialHistory(options),/Previously rejected corrections remain unchanged/);
+ assert.equal(options.current.decisions[0].decision,'reject');
+});
+test('pending templates cannot pass the native applied-repair approval gate',()=>{
+ const {options}=fixture(),r=prepareChapterEditorialHistory(options);
+ assert.throws(()=>native.validateAppliedEditorialDecisions(r.document,options.extraction),/no matching independent/);
+ const pending=r.document.reviews[1];pending.reviewer={...options.current.reviewer};
+ pending.decisions=pending.proposals.map(p=>({repairId:p.id,decision:'accept',after:null,reason:p.reason,sourceWitness:{source:'chapter-text',citation:'test:001:'+p.unit.id,excerpt:'乙'}}));
+ assert.doesNotThrow(()=>native.validateAppliedEditorialDecisions(r.document,options.extraction));
+});

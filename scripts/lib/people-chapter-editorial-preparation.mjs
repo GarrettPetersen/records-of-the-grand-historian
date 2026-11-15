@@ -34,6 +34,8 @@ export function prepareChapterEditorialHistory({extraction,canonical,current,rev
  }));
  const pending=extraction.translationRepairs.filter(r=>!covered(r));
  const seed=pending.length?editorialDecisionSeed({...extraction,translationRepairs:pending.map(r=>({...r,status:'proposed'}))}):null;
+ need(!seed||!reviewed.some(r=>r.input.proposalsFingerprint===seed.input.proposalsFingerprint),
+  'Previously rejected corrections remain unchanged; preserve the report and return them to the owner instead of reseeding duplicate reviews');
  // A changed untouched template is recovery evidence, never an old approval.
  const retainedTemplate=seed&&templates.find(r=>same(r.proposals,seed.proposals)&&same(r.input,seed.input));
  if(seed)reviewed.push(retainedTemplate??seed);
