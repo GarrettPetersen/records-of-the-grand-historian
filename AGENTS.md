@@ -16,6 +16,10 @@ including canonical certification. Native report formats and publication order m
 not become separate full model reviews. Retained unfinished jobs keep their recovery
 history and native gates; include all current partial work and proofs instead of
 resetting the chapter. One untouched-chapter pilot is explicitly user-authorized.
+Apply `PEOPLE_CHAPTER_COMPLETION_RULES.md`: source-supported unknowns and reviewed
+uncertain identities are valid outcomes; concrete source contradictions still block.
+Keep report/packet construction on the host, preserve accepted repair records, and
+review only new repairs and affected dependencies through native validation.
 
 At an idle chapter boundary, follow `PEOPLE_SINGLE_OWNER_WORKFLOW.md`: one persistent
 capable reasoning chapter owner, bounded lookup via `PEOPLE_LOOKUP_API.md`, and one

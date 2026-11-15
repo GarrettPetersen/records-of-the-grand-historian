@@ -56,7 +56,7 @@ export function prepareChapterOwner(root,{book,chapter,lane,worker,ledger,extra=
  }
  for(const file of extra){const resolved=fs.realpathSync(file);need(resolved.startsWith(root+path.sep),'Extra recovery must be inside the shared checkout');regular(resolved);candidates.add(resolved);}
  // Documentation/code contracts are bounded explicit inputs, never an entire checkout.
- for(const name of ['PEOPLE_CHAPTER_OWNER_PROCESS.md','PEOPLE_SINGLE_OWNER_WORKFLOW.md','PEOPLE_DATE_AUDIT.md','scripts/publish-people-combined-curation.mjs','scripts/lib/people-combined-curation-review.mjs','scripts/lib/people-compact.mjs','data/people/schemas/people-extraction-compact.schema.json']){
+ for(const name of ['PEOPLE_CHAPTER_COMPLETION_RULES.md','PEOPLE_CHAPTER_OWNER_PROCESS.md','PEOPLE_SINGLE_OWNER_WORKFLOW.md','PEOPLE_DATE_AUDIT.md','scripts/publish-people-combined-curation.mjs','scripts/lib/people-combined-curation-review.mjs','scripts/lib/people-compact.mjs','data/people/schemas/people-extraction-compact.schema.json']){
   const file=path.join(root,name);if(fs.existsSync(file))candidates.add(file);
  }
  const artifacts=[...candidates].sort().flatMap((file,index)=>{

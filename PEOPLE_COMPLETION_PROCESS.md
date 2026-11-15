@@ -2,6 +2,12 @@
 
 This is the current orchestration policy.
 
+Follow `PEOPLE_CHAPTER_COMPLETION_RULES.md` to close source-supported records without
+open-ended optional research. Reviewed uncertainty is a valid native outcome;
+contradictions, unsupported asserted facts and known fixable English defects remain
+blocking. Host-built packets and incremental editorial history prevent report formats
+from forcing redundant model passes. Existing holds require explicit reconciliation.
+
 **November 15 simplification and synchronization:** all chapters follow
 `PEOPLE_CHAPTER_OWNER_PROCESS.md` at any level of completeness: one complete owner submission and one complete
 independent final review, including canonical identity evidence. Extra native report
