@@ -126,13 +126,32 @@ export function prepareCombinedCuration(spec) {
   return { receipt, hash };
 }
 
+// Absence is an exact-before condition, never a synthesized unfinished state.
+// Only a reservation that has not started any date work may use this path.
+function retainedWorkflowState(receipt) {
+  const row = receipt.workflow.find(r => r.name === 'state.json');
+  if (row) return parse(row.content);
+  const claim = receipt.priorClaim;
+  const initialFields = ['worker', 'lane', 'status', 'sourceHash', 'extractionHash', 'jobs', 'updatedAt', 'generationId', 'reviewPlans'];
+  if (receipt.workflow.length || receipt.beforePins.stateByteHash !== null || receipt.before.dateReport ||
+      claim.status !== 'active' || Object.keys(claim.jobs).length ||
+      (claim.reviewPlans !== undefined && (!claim.reviewPlans || typeof claim.reviewPlans !== 'object' ||
+        Array.isArray(claim.reviewPlans) || Object.keys(claim.reviewPlans).length)) ||
+      Object.keys(claim).some(key => !initialFields.includes(key))) {
+    throw new Error('Missing workflow state requires an untouched initial date reservation');
+  }
+  return null;
+}
+
 function completeState(receipt, hash) {
-  const old = parse(receipt.workflow.find(r => r.name === 'state.json').content);
+  const old = retainedWorkflowState(receipt);
+  const prior = old ?? receipt.priorClaim;
   const identity = parse(receipt.inputs.identity.content);
-  return { schemaVersion: old.schemaVersion, workflowVersion: old.workflowVersion,
+  return { schemaVersion: old?.schemaVersion ?? 1, workflowVersion: old?.workflowVersion ?? 1,
+    ...(!old && prior.generationId ? { generationId: prior.generationId } : {}),
     sourceHash: identity.sourceHash, extractionHash: identity.extractionHash,
     round: 0, phase: 'complete', jobs: {}, reviewReceipt: { kind: KIND, hash },
-    reviewedGenerationTransition: { before: { sourceHash: old.sourceHash, extractionHash: old.extractionHash },
+    reviewedGenerationTransition: { before: { sourceHash: prior.sourceHash, extractionHash: prior.extractionHash },
       after: { sourceHash: identity.sourceHash, extractionHash: identity.extractionHash }, historyReceipt: hash } };
 }
 function completeClaim(receipt, hash) {
@@ -151,10 +170,10 @@ function canonicalState(receipt, hash, requireBefore) {
     const after = receipt.inputs[role].content.sha256;
     if (current !== before && (requireBefore || current !== after)) throw new Error(`Canonical ${role} is neither exact before nor reviewed after`);
   }
-  const oldState = receipt.workflow.find(r => r.name === 'state.json').content;
+  const oldState = receipt.workflow.find(r => r.name === 'state.json')?.content ?? null;
   const currentState = maybeSnapshot(p.state)?.sha256 ?? null;
   const finalState = encode(jsonBytes(completeState(receipt, hash)));
-  if (currentState !== oldState.sha256 && (requireBefore || currentState !== finalState.sha256)) throw new Error('Local workflow state drift');
+  if (currentState !== (oldState?.sha256 ?? null) && (requireBefore || currentState !== finalState.sha256)) throw new Error('Local workflow state drift');
   if (currentState === finalState.sha256) {
     for (const role of ROLES) requireEqual(maybeSnapshot(p[role])?.sha256, receipt.inputs[role].content.sha256, 'complete state requires all canonical after documents');
   }
@@ -185,24 +204,26 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   const oldPacket = combinedDatePacket(receipt.book, receipt.chapter, beforeSource, beforeExtraction);
   requireEqual(documentHash(receipt.priorClaim), receipt.claimHash, 'original queue claim');
   const oldState = receipt.workflow.find(r => r.name === 'state.json');
-  if (!oldState || new Set(receipt.workflow.map(r => r.name)).size !== receipt.workflow.length) throw new Error('Missing or duplicate retained workflow state');
+  if (new Set(receipt.workflow.map(r => r.name)).size !== receipt.workflow.length) throw new Error('Duplicate retained workflow state');
   for (const row of receipt.workflow) {
     if (!row.name || row.name.split('/').some(part => part === '..' || part === '.' || !part) || path.isAbsolute(row.name)) throw new Error('Invalid retained artifact path');
     bytes(row.content);
   }
-  const state = parse(oldState.content);
-  requireEqual([state.schemaVersion, state.workflowVersion], [1, 1], 'retained workflow protocol');
-  if (!state.jobs || !['audit', 'repair', 'reaudit', 'publish'].includes(state.phase)) throw new Error('Combined curation needs an unfinished retained generation');
+  const state = retainedWorkflowState(receipt);
+  if (state) {
+    requireEqual([state.schemaVersion, state.workflowVersion], [1, 1], 'retained workflow protocol');
+    if (!state.jobs || !['audit', 'repair', 'reaudit', 'publish'].includes(state.phase)) throw new Error('Combined curation needs an unfinished retained generation');
+  }
   // Extraction reservation treats ready date claims as unowned, regardless of
   // executor tokens. Do not admit that inconsistent state into this workflow.
   if (!['active', 'research-blocked'].includes(receipt.priorClaim.status)) throw new Error('Unfinished combined curation requires an active or research-blocked date claim, not ready');
-  for (const doc of [state, receipt.priorClaim]) requireEqual([doc.sourceHash, doc.extractionHash], [oldPacket.sourceHash, oldPacket.extractionHash], 'old generation source/extraction pins');
+  for (const doc of [state, receipt.priorClaim].filter(Boolean)) requireEqual([doc.sourceHash, doc.extractionHash], [oldPacket.sourceHash, oldPacket.extractionHash], 'old generation source/extraction pins');
   if (receipt.priorClaim.combinedCuration || receipt.priorClaim.reviewReceipt) throw new Error('Cannot supersede an already transitioned claim with this receipt');
   validatePeopleWorkLedger({ schemaVersion: 1, claims: {}, dateAudits: { [`${receipt.book}/${receipt.chapter}`]: receipt.priorClaim } });
   if (receipt.before.dateReport) validateDateAuditReport(parse(receipt.before.dateReport), oldPacket);
   requireEqual(receipt.beforePins, { sourceHash: oldPacket.sourceHash, extractionHash: oldPacket.extractionHash,
     ...Object.fromEntries(ROLES.map(role => [`${role}ByteHash`, receipt.before[role]?.sha256 ?? null])),
-    stateByteHash: oldState.content.sha256, workflowHash: workflowHash(receipt.workflow) }, 'before content pins');
+    stateByteHash: oldState?.content.sha256 ?? null, workflowHash: workflowHash(receipt.workflow) }, 'before content pins');
 
   const docs = Object.fromEntries(Object.entries(receipt.inputs).map(([role, entry]) => [role, parse(entry.content)]));
   const seal = docs.seal;
@@ -211,7 +232,7 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   if (new Set(receipt.protectedInputs.map(e => e.file)).size !== receipt.protectedInputs.length) throw new Error('Duplicate protected input');
   for (const [i, entry] of receipt.protectedInputs.entries()) {
     requireEqual([entry.content.sha256, bytes(entry.content).length], [seal.protectedFiles[i].sha256, seal.protectedFiles[i].bytes], 'sealed protected bytes');
-    if (entry.file === p.state) requireEqual(entry.content, oldState.content, 'sealed original local state');
+    if (entry.file === p.state) requireEqual(entry.content, oldState?.content ?? null, 'sealed original local state');
   }
   for (const role of ['source', 'extraction', 'editorial', 'materialization']) {
     const input = receipt.inputs[role];
@@ -232,7 +253,7 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   requireEqual(docs.materialization.sourceByteHash, receipt.inputs.source.content.sha256, 'materialized source bytes');
   requireEqual(docs.materialization.extractionByteHash, receipt.inputs.extraction.content.sha256, 'materialized extraction bytes');
   const authors = new Set(receipt.authorAgentIds);
-  for (const jobs of [state.jobs, receipt.priorClaim.jobs]) {
+  for (const jobs of [state?.jobs ?? {}, receipt.priorClaim.jobs]) {
     for (const [key, job] of Object.entries(jobs)) if (key.startsWith('repair-') && job.agentId) authors.add(job.agentId);
   }
   const result = validateCombinedReviews({ book: receipt.book, chapter: receipt.chapter,

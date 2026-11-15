@@ -31,7 +31,7 @@ const start = runnerSource.indexOf(reservationStart), end = runnerSource.indexOf
 assert.ok(start >= 0 && end > start, 'production reservation callback must be present');
 const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
 
-export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false } = {}) {
+export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false, initial = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const people = path.join(root, 'data', 'people');
@@ -119,11 +119,13 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
   const beforeDates = combinedDatePacket(book, chapter, source, extraction);
   const oldReport = { ...dateReport, sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, status: 'research-blocked',
     itemChecks: dateReport.itemChecks.map(c => ({ ...c, verdict: 'research-blocked' })), findings: dateReport.itemChecks.map(c => ({ items: [c.id], problem: reason, action: reason })) };
-  for (const [role, doc] of Object.entries({ source, extraction, editorial: editorialBefore, dateReport: oldReport })) writeJsonAtomic(files[role], doc);
+  for (const [role, doc] of Object.entries({ source, extraction, editorial: editorialBefore, dateReport: oldReport })) if (!initial || role !== 'dateReport') writeJsonAtomic(files[role], doc);
   const state = { schemaVersion: 1, workflowVersion: 1, sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, phase: 'repair', round: 0, jobs: { 'repair-0-retained': { agentId: 'curator', conversation: 'do-not-delete' } }, review: 'review-0.json' };
-  writeJsonAtomic(path.join(workflow, 'state.json'), state);
-  writeJsonAtomic(path.join(workflow, 'review-0.json'), oldReport);
-  writeJsonAtomic(path.join(workflow, 'jobs', 'failed.json'), { rejected: true, evidence: 'retain all bytes' });
+  if (!initial) {
+    writeJsonAtomic(path.join(workflow, 'state.json'), state);
+    writeJsonAtomic(path.join(workflow, 'review-0.json'), oldReport);
+    writeJsonAtomic(path.join(workflow, 'jobs', 'failed.json'), { rejected: true, evidence: 'retain all bytes' });
+  }
   const materializedDir = path.join(root, 'staged', 'materialized'), reviewDir = path.join(root, 'staged', 'independent-review');
   const inputPaths = { source: path.join(materializedDir, 'data', book, `${chapter}.json`), extraction: path.join(materializedDir, 'candidate.json'), editorial: path.join(materializedDir, 'editorial-decisions.json'), materialization: path.join(materializedDir, 'validation.json'),
     identity: path.join(reviewDir, 'identity-review.json'), dateReport: path.join(reviewDir, 'date-report.json'), validation: path.join(reviewDir, 'validation.json'), seal: path.join(reviewDir, 'input-seal.json') };
@@ -152,7 +154,7 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
     seal.sourceReorderingHash = context.sourceReorderingHash;
   }
   for (const [role, doc] of Object.entries({ identity, dateReport, validation, seal })) writeJsonAtomic(inputPaths[role], doc);
-  const priorClaim = { lane: 'manual', worker: 'sticky-worker', status: 'research-blocked', sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, jobs: structuredClone(state.jobs) };
+  const priorClaim = { lane: 'manual', worker: 'sticky-worker', status: initial ? 'active' : 'research-blocked', sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, jobs: initial ? {} : structuredClone(state.jobs) };
   const spec = { root, book, chapter, materializedDir, reviewDir, before: inspectCombinedBefore({ root, book, chapter }), priorClaim, claimHash: documentHash(priorClaim), authorAgentIds };
   const ledger = { schemaVersion: 1, claims: {}, dateAudits: { [`${book}/${chapter}`]: structuredClone(priorClaim) }, sentinel: { unrelated: 'unchanged' } };
   let calls = 0;
@@ -1052,3 +1054,95 @@ if (process.env.PEOPLE_COMBINED_PREPARE_SPEC) {
     assert.deepEqual(receipt.priorClaim, spec.priorClaim);
   });
 }
+
+const initialFixture = t => fixture(t, 'testbook', '001', undefined, undefined, { initial: true });
+
+test('absent initial workflow remains absent until reviewed publication and preserves stale generations', t => {
+  const f = initialFixture(t);
+  const stale = `${f.workflow}.stale-old/state.json`;
+  const held = { phase: 'repair', circuitBreaker: { reason: 'preserve old hold' }, jobs: { old: { agentId: 'original' } } };
+  writeJsonAtomic(stale, held);
+  const staleHash = hashFile(stale);
+  assert.equal(fs.existsSync(f.workflow), false);
+  assert.equal(f.receipt.beforePins.stateByteHash, null);
+  assert.deepEqual(f.receipt.workflow, []);
+  assert.equal(verifyCombinedCuration(f.receipt, f.hash, { root: f.root }).status, 'verified');
+  assert.equal(fs.existsSync(f.workflow), false);
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+  const state = read(path.join(f.workflow, 'state.json'));
+  assert.equal(state.phase, 'complete');
+  assert.equal(state.reviewReceipt.hash, f.hash);
+  assert.deepEqual(state.reviewedGenerationTransition.before, { sourceHash: f.spec.priorClaim.sourceHash, extractionHash: f.spec.priorClaim.extractionHash });
+  assert.deepEqual(f.ledger.dateAuditHistory[f.key], [f.spec.priorClaim]);
+  assert.equal(hashFile(stale), staleHash);
+  const after = hashFile(path.join(f.workflow, 'state.json'));
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+  assert.equal(hashFile(path.join(f.workflow, 'state.json')), after);
+  assert.equal(hashFile(stale), staleHash);
+});
+
+for (const boundary of ['lease', 'receipt', 'history', 'source', 'extraction', 'editorial', 'dateReport', 'state', 'queue']) {
+  test(`absent initial workflow crash recovery after ${boundary}`, t => {
+    const f = initialFixture(t);
+    assert.throws(() => publishCombinedCuration(f.receipt, f.hash, { ...f.options, checkpoint: stage => { if (stage === boundary) throw Error('interrupt'); } }), /interrupt/);
+    if (!['state', 'queue'].includes(boundary)) assert.equal(fs.existsSync(path.join(f.workflow, 'state.json')), false);
+    assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+    assert.equal(read(path.join(f.workflow, 'state.json')).phase, 'complete');
+    assert.deepEqual(f.ledger.dateAuditHistory[f.key], [f.spec.priorClaim]);
+  });
+}
+
+for (const [label, mutate] of [
+  ['retained remote job', f => { f.spec.priorClaim.jobs.old = { agentId: 'reviewer' }; }],
+  ['retained review plan', f => { f.spec.priorClaim.reviewPlans = { audit: { maxUnits: 1, maxBytes: 1024, jobIds: ['old'] } }; }],
+  ['research hold', f => { f.spec.priorClaim.status = 'research-blocked'; }],
+  ['remote breaker', f => { f.spec.priorClaim.circuitBreaker = { held: true }; }],
+  ['unknown recovery metadata', f => { f.spec.priorClaim.recovery = 'not disposable'; }],
+  ['retained local artifact', f => { writeJsonAtomic(path.join(f.workflow, 'old-review.json'), { held: true }); }],
+  ['installed date report', f => { writeJsonAtomic(f.files.dateReport, f.docs.dateReport); }],
+]) {
+  test(`missing initial state rejects ${label} even with fresh mechanical pins`, t => {
+    const f = initialFixture(t);
+    mutate(f);
+    f.spec.claimHash = documentHash(f.spec.priorClaim);
+    f.spec.before = inspectCombinedBefore({ root: f.root, book: f.spec.book, chapter: f.spec.chapter });
+    assert.throws(() => prepareCombinedCuration(f.spec), /untouched initial date reservation/);
+    assert.equal(f.calls(), 0);
+  });
+}
+
+test('missing initial state rejects canonical state appearing after seal and deleted retained state', t => {
+  const f = initialFixture(t);
+  writeJsonAtomic(path.join(f.workflow, 'state.json'), f.state);
+  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /state drift/);
+  assert.equal(f.calls(), 0);
+  const retained = fixture(t);
+  fs.unlinkSync(path.join(retained.workflow, 'state.json'));
+  assert.throws(() => prepareCombinedCuration(retained.spec), /exact-before/);
+  retained.spec.before = inspectCombinedBefore({ root: retained.root, book: retained.spec.book, chapter: retained.spec.chapter });
+  assert.throws(() => prepareCombinedCuration(retained.spec), /untouched initial date reservation/);
+});
+
+test('existing workflow breaker and jobs remain immutable receipt history', t => {
+  const f = fixture(t);
+  f.state.circuitBreaker = { reason: 'reviewed resolution required', round: 3 };
+  writeJsonAtomic(path.join(f.workflow, 'state.json'), f.state);
+  f.spec.before = inspectCombinedBefore({ root: f.root, book: f.spec.book, chapter: f.spec.chapter });
+  const prepared = prepareCombinedCuration(f.spec);
+  assert.equal(publishCombinedCuration(prepared.receipt, prepared.hash, f.options).status, 'complete');
+  const receiptFile = path.join(f.root, 'data/people/combined-curations/testbook/001', `${prepared.hash.slice(7)}.json`);
+  const archived = unpack(read(receiptFile).workflow.find(row => row.name === 'state.json').content);
+  assert.deepEqual(archived, f.state);
+  assert.deepEqual(read(path.join(f.workflow, 'jobs/failed.json')), { rejected: true, evidence: 'retain all bytes' });
+});
+
+test('absent workflow still rejects source drift and changed shared ownership', t => {
+  const f = initialFixture(t);
+  f.ledger.dateAudits[f.key].worker = 'foreign-worker';
+  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /exact-before shared queue claim/);
+  assert.equal(fs.existsSync(f.workflow), false);
+  const other = initialFixture(t);
+  fs.appendFileSync(other.files.source, ' ');
+  assert.throws(() => publishCombinedCuration(other.receipt, other.hash, other.options), /Canonical source/);
+  assert.equal(other.calls(), 0);
+});
