@@ -44,6 +44,9 @@ jobs:
       - name: Test chapter-owner isolation and combined publication
         run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-combined-curation.mjs
 
+      - name: Test shared-host master synchronization
+        run: npm run people:master:self-test
+
       - name: Install ebook publication verification tools
         run: |
           sudo apt-get update

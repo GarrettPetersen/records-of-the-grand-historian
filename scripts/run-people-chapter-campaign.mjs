@@ -9,6 +9,7 @@ import {REPO_ROOT,writeJsonAtomic} from './lib/people-content.mjs';
 import {ownerDirectory,digest} from './lib/people-chapter-owner.mjs';
 import {acquireProcessRunLock} from './lib/process-run-lock.mjs';
 import {liveRunningAgentIds,readRosterWorkers} from './grokbot-headless-dispatch.mjs';
+import {assertPeopleMasterSync} from './check-people-master-sync.mjs';
 loadDotenv(REPO_ROOT);
 const {values:o}=parseArgs({options:{job:{type:'string',multiple:true},model:{type:'string'},run:{type:'boolean'},once:{type:'boolean'}}});
 if(!o.job?.length||!o.model||!o.run)throw Error('Use --job ID (repeat) --model MODEL --run [--once]; only explicit retained chapters are scheduled');
@@ -23,6 +24,7 @@ const guard=()=>{const r=spawnSync(process.execPath,['scripts/check-local-disk.m
 const invoke=(args,env={})=>{guard();const r=spawnSync(process.execPath,args,{cwd:REPO_ROOT,encoding:'utf8',timeout:60000,maxBuffer:1024*1024,env:{...process.env,...env}});if(r.status!==0)throw Error((r.stderr||r.stdout||r.error?.message||'Command failed').slice(-3000));return r.stdout;};
 const bounded=async promise=>{let timer;try{return await Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Cursor status read timed out')),15000);})]);}finally{clearTimeout(timer);}};
 try{do{
+ assertPeopleMasterSync(REPO_ROOT);
  guard();const liveGrok=await liveRunningAgentIds('http://127.0.0.1:9229');const rows=readRosterWorkers();
  const cursorRuns=new Map();let activeCount=liveGrok.size;
  for(const id of o.job){const j=JSON.parse(fs.readFileSync(path.join(ownerDirectory(REPO_ROOT,id),'job.json')));for(const role of ['owner','reviewer'])if(j[role+'RunId']&&j[role+'AgentId']?.startsWith('bc-')){const run=await bounded(Agent.getRun(j[role+'RunId'],{runtime:'cloud',agentId:j[role+'AgentId'],apiKey:process.env.CURSOR_API_KEY}));cursorRuns.set(j[role+'RunId'],run);if(run.status==='running')activeCount++;}}

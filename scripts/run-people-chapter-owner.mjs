@@ -10,11 +10,12 @@ import {REPO_ROOT,writeJsonAtomic} from './lib/people-content.mjs';
 import {readRemotePeopleWorkLedger,mutateRemotePeopleWorkLedger,dateExecutorIsBusy} from './lib/people-work-queue.mjs';
 import {prepareChapterOwner,ownerDirectory,digest,pinChapterNativeRuntime} from './lib/people-chapter-owner.mjs';
 import {readRosterWorkers,dispatchPrompt,probe,liveRunningAgentIds} from './grokbot-headless-dispatch.mjs';
+import {assertPeopleMasterSync} from './check-people-master-sync.mjs';
 
 loadDotenv(REPO_ROOT);
 const {values:o}=parseArgs({options:{prepare:{type:'boolean'},start:{type:'boolean'},status:{type:'boolean'},review:{type:'boolean'},run:{type:'boolean'},continue:{type:'boolean'},feedback:{type:'string'},book:{type:'string'},chapter:{type:'string'},lane:{type:'string'},worker:{type:'string'},job:{type:'string'},model:{type:'string'},extra:{type:'string',multiple:true},'native-root':{type:'string'}}});
 const modes=['prepare','start','status','review'].filter(k=>o[k]);if(modes.length!==1)throw Error('Choose --prepare, --start, --review or --status');
-const guard=()=>{const r=spawnSync(process.execPath,['scripts/check-local-disk.mjs'],{cwd:REPO_ROOT,encoding:'utf8',env:{...process.env,PEOPLE_REPO_ROOT:REPO_ROOT}});if(r.status!==0)throw Error('Resource guard failed: '+r.stdout+r.stderr);};
+const guard=()=>{const r=spawnSync(process.execPath,['scripts/check-local-disk.mjs'],{cwd:REPO_ROOT,encoding:'utf8',env:{...process.env,PEOPLE_REPO_ROOT:REPO_ROOT}});if(r.status!==0)throw Error('Resource guard failed: '+r.stdout+r.stderr);assertPeopleMasterSync(REPO_ROOT);};
 if(o.prepare){
  guard();const ledger=readRemotePeopleWorkLedger();
  if(!o['native-root'])throw Error('--native-root must pin the existing current production runtime');

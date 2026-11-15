@@ -2,24 +2,48 @@
 
 ## Completion-first orchestration
 
+Keep the shared host synchronized with master using `PEOPLE_MASTER_SYNC.md`.
+Run `node scripts/check-people-master-sync.mjs` at coordinator startup, after a
+master merge, before a new chapter and before publication. Stop new dispatch on
+failure; preserve active sealed work and reconcile at a host-owned idle boundary.
+Alternate-index publication is not a checkout sync. Never plan from an obsolete
+catalog or silently missing released files. Preserve all unpublished work in named
+recovery checkpoints before synchronization; do not copy the repository.
+
+For a fresh chapter follow `PEOPLE_FRESH_CHAPTER_WORKFLOW.md`: one persistent owner
+does all substantive steps; one independent final reviewer covers the entire result,
+including canonical certification. Native report formats and publication order must
+not become separate full model reviews. Retained unfinished jobs keep their recovery
+history and native gates; do not reset them to adopt the fresh-chapter path.
+
+At an idle chapter boundary, follow `PEOPLE_SINGLE_OWNER_WORKFLOW.md`: one persistent
+capable reasoning chapter owner, bounded lookup via `PEOPLE_LOOKUP_API.md`, and one
+independent final reviewer. Preserve active claims and native gates. Retrieval is
+not approval; reuse changed-source proofs only through validated native composition.
+
 Follow `PEOPLE_COMPLETION_PROCESS.md` before scheduling glossary work. It supersedes
 old extraction-wave quotas and minimum extraction-batch sizes for identity work.
-The first live nonempty pilot is proven: Jinshu 053 at revision
-`b26f20aae583d22a90abb2bb48bd04c05e794fa5`; see the receipt in
-`research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json`.
-Continue existing Jinshu downstream work with at most three completion WIP chapters.
-Preserve prior owners and claims; do not reopen the finished pilot unless its actual
-proof dependencies change.
+Jinshu 053's nonempty live milestone is already proven; target the next published
+chapter, not a repeat pilot. Follow the November 6 operational changes in that document:
+establish full-source English coverage rather than an empty proposal queue, batch
+repairs before downstream audits, use reviewed reusable production appliers, retain
+cumulative chapter accounting across source generations, and diagnose repeated late
+defects before funding another full audit. These host scheduling rules do not weaken
+native validators or automatically change a running invocation or its goal text.
 Pin source/editorial/date inputs and independently review each chapter person against
 the accepted canonical dossier. Use bounded indexed retrieval; never generate a
 complete same-name pair graph or require exhaustive negative comparisons. Preserve
 reviewed cross-chapter uncertainty explicitly; hold concrete attribution or false-merge
 contradictions. Reconcile changed evidence without recursively completing the corpus.
-Prioritize existing Jinshu completion work before unrelated fresh extraction;
-preserve/drain existing claims. Do not weaken identity, chronology or publication gates. Report zero-person
+No new broad extraction wave until this path is proven; preserve/drain existing
+claims. Do not weaken identity, chronology or publication gates. Report zero-person
 reviews, data-qualified chapters and live published nonempty chapters separately.
 A passing build or empty extraction is not the nonempty acceptance test.
 
+The original nonempty live acceptance receipt remains at
+`research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json`
+(revision `b26f20aae583d22a90abb2bb48bd04c05e794fa5`). Preserve it as the
+historical milestone; do not repeat it merely because a local catalog is stale.
 
 ## Repair English omissions when found
 
@@ -47,13 +71,47 @@ swap/history. A fresh chat must use a compact handoff, not a fork of the oversiz
 campaign conversation. Initially use no parallel native Codex subagents and only
 one cloud assignment; increase remote concurrency only after measured safe runs.
 
+On a memory warning, follow the preview-cleanup procedure in
+`PEOPLE_COMPLETION_PROCESS.md`: inspect physical footprint as well as RSS and
+gracefully stop verified idle, superseded preview servers under the user's standing
+authorization. Confirm ownership, no clients and no active task, preserve current
+previews/MCP/jobs, save restart commands, and rerun the guard before new heavy work.
+No repeated approval is needed for that verified cleanup; uncertain or active
+services still require confirmation.
+
+A memory warning starts active remediation, not a polling-only hold. Diagnose the
+largest relevant physical footprints and perform authorized safe cleanup. If the
+next useful action needs confirmation, present its specific target, measured
+footprint, interruption and restart plan, and ask once. Preserve the pending answer
+instead of repeatedly reporting the same failed guard. Recheck after cleanup or an
+external resource change; clear the resource hold only after an actual guard pass.
+
 ## Local disk conservation
 
 Before any local batch or workspace change, run `npm run people:disk:check`.
 This read-only preflight fails below 30 GiB free or when a registered secondary
-checkout contains `public/`. Workers share the host checkout and unique artifact
-paths. Never copy the corpus, repository history, public assets, dependencies, or
-ignored recovery state into a job directory. Preserve existing work and ownership.
+checkout contains `public/`. It does not delete anything or authorize a new checkout.
+All local lanes and subagents must use the same host checkout plus unique artifact
+paths. Pass this requirement explicitly in every worker handoff, including external
+agents that do not automatically read AGENTS.md. Separate reviewer conversations do
+not require separate worktrees. Never copy the repo, `data/`, `public/`, `.git/`,
+`node_modules/`, or ignored recovery state into a job directory.
+For a genuine concurrent-code/different-revision exception, reuse an idle sparse
+checkout first. If creation is unavoidable, the host must check disk/ownership,
+create it with `--no-checkout`, configure sparsity, and only then materialize the
+needed files. Do not use a tool that creates a full checkout and shrink it later.
+Workers must not auto-create checkouts when an input or command fails; report the
+missing sealed input to the host. Preserve existing work and claim ownership.
+
+Before requesting another model turn for a date-hint formatting error, follow
+`PEOPLE_DATE_HINT_NORMALIZATION.md`. `people:hints:normalize` previews exact
+existing-year changes (`682 BC` → `BC 682`, including ranges); `--apply` requires
+a receipt and host ownership of idle inputs. The extraction validator's existing
+`--normalize` path also formats hints automatically before validation and writes
+only after validation passes. Library validators and CI remain read-only.
+Never infer missing dates, rewrite sealed review inputs, or preserve approvals
+by changing their hashes. Normalization changes extraction fingerprints; perform
+it before sealing independent date packets and reconcile stale work normally.
 
 The default chapter-worker topology is one shared host checkout plus isolated job
 artifact directories, not one worktree per chapter. Workers read sealed packets and
@@ -69,7 +127,8 @@ and add `--apply` after checking process ownership. This exact-chapter selection
 unrelated chapter files as well as site assets. The helper refuses dirty checkouts.
 
 Follow `LOCAL_DISK_STRATEGY.md`. Keep one full checkout for global builds; local
-chapter workers use reusable sparse checkouts without `public/`. Before creating
+chapter workers share it via sealed inputs and isolated outputs. Exceptional code-edit
+checkouts must be sparse and omit `public/`. Before creating
 another checkout, check available disk and reuse an idle one. Below 30 GiB free,
 stop new checkouts/full builds and reclaim verified completed work first. Archive
 completed managed worktrees promptly after checking service/process dependencies and
@@ -107,13 +166,20 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 
 ### Gotchas
 
-- **Current parallel date runner:** The tested runner supports two concurrent
-  chapters using one shared four-job pool across chapters. Keep stable workers,
-  reservations, locks, leases, recovery artifacts, invocation ceilings and all
-  independent review/publication gates. Do not reapply the historical
-  `patches/date-audit-parallel.patch` to the current runner; it has already been
-  adopted. `DATE_AUDIT_PARALLEL_HANDOFF.md` and that patch remain provenance.
-  Adopt future runtime changes only after the current host invocation exits.
+- **Date review loop breaker:** Follow the circuit-breaker section in
+  `PEOPLE_DATE_AUDIT.md`. At most three repair/re-audit rounds; stop sooner for
+  repeated candidate fingerprints or two non-improving review rounds. A saved
+  `state.json.circuitBreaker` is an unapproved chapter hold, not disposable state.
+  Do not raise limits, delete recovery state or change worker IDs to bypass it.
+  Investigate the source/representation and independently review the new approach;
+  continue other chapters. Adopt code changes only at an idle invocation boundary.
+
+- **Pending parallel date-runner handoff (October 5, 2026):** Read
+  `DATE_AUDIT_PARALLEL_HANDOFF.md` before the next date invocation. The tested
+  refactor is in `patches/date-audit-parallel.patch`; adopt it only after the
+  current host invocation exits. Preserve active locks, leases, stable workers
+  and recovery artifacts. After adoption, use one shared four-job pool across
+  chapters, not separate competing executors or per-chapter repository copies.
 - **Independent people date audits:** Follow `PEOPLE_DATE_AUDIT.md` in every lane.
   All 4,099 chapters started date-un-audited; retain extraction prompt 7 and do not
   re-extract them for dates. After extraction and repairs, build a
@@ -170,19 +236,6 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
   hash, saves it at the exact extraction path, then runs `npm run people:grokbot:accept`.
   See
   `GROKBOT_PEOPLE_LANE.md`.
-- **Local Grok Build extraction:** Follow `GROK_BUILD_PEOPLE_LANE.md`. It is a
-  separate subscription-backed `grok-build` queue lane, not Grok Bot or Cursor.
-  Use a stable worker ID, dry-run one explicit chapter, then use `--run` only
-  after checking its queue ownership and allowance. Its direct proxy transport
-  supplies bounded read/write/validate record tools without Grok Build's costly
-  coding-agent context. Preserve ignored tool checkpoints and let the host
-  validate, review, and publish. Full completion requires independent semantic and
-  editorial review, date repair/fresh re-audit, cross-corpus identity closure and
-  a passing master publication. Date inference uses `--lane manual --transport
-  grok-build`; identity uses `people:resolve --transport grok-build --run`. Never
-  infer corpus identity closure from a sparse chapter checkout. See the lane doc
-  for exact sticky calibration ownership and recovery paths; it is not yet
-  calibrated production throughput.
 - **People extraction budgets and recovery:** `npm run people:extract` defaults new workers to 60 owned units, 150 candidates, and a 48 KiB compact packet, with a $5 / five-million-token per-run circuit breaker. After calibration, the September deadline profile may use 80 units, 200 candidates, the same 48 KiB ceiling, a 20-minute remote timeout, and a three-million-token breaker for fresh chapters only. A run-limit failure affects only that chunk; it must not stop unrelated chapters. An account-level `usage_limit_exceeded` response is different: extraction and editorial schedulers stop launching globally, drain active work, and preserve partial chapters for resumption after capacity returns. When Cursor allowance is at or below 5%, first run a 5-10 chunk calibration cohort, then size the larger wave from accepted p90 usage. Do not put the circuit breaker inside the observed normal completion range or use high concurrency before measuring the remaining allowance. Complete chapters with saved chunks before opening new chapters. `data/people/generated/chunk-extractions/` and `data/people/generated/extraction-state.json` are ignored but economically valuable recovery state: never delete them during cleanup while chapters are incomplete. Resume with `--retry-failed`; validated chunks and adaptive split plans are reused automatically. Retained Cursor conversations are a standard recovery source: the runner continues every interrupted chat before replacing it with a fresh worker. If a continued chat also crosses a run limit, its ownership range is split while all nonoverlapping saved work is preserved. A retained conversation or local accepted/rejected artifact makes a claim sticky; an adaptive chunk plan by itself does not. The scheduler releases never-started claims when a run stops and reconciles orphaned `claimed` reservations on its next startup.
 - **People quality-first campaigns:** `data/people/campaign-policy.json` is the single source for lane reset calendars, the rolling planning horizon, and the calibrated wave cap. In September 2026, Grok Bot resumes September 13 and Cursor SDK resumes September 24; never treat those as a shared reset. Forecast rates over the rolling horizon, but never raise the operational cap or weaken validation to satisfy the forecast. Run recovery before fresh work, keep all twelve Grok Bot workers occupied when that lane is available, and calibrate Cursor after its own reset before scaling concurrency. The launcher prioritizes sticky recovery, uses 80-unit/200-candidate/48-KiB packets, and applies calibrated $3 / three-million-token / 20-minute per-run breakers. Invocation ceilings are circuit breakers, not spending targets. Use at least three validation attempts for multi-chunk extraction, independently review translation repairs, and accumulate at least 25 accepted chapters and normally 50 before global identity resolution. Run focused extraction validation after each wave and the full people validator once per reviewed milestone. Push exact checkpoint files to `codex/people-glossary-staging-v2` and merge substantial validated milestones to `master` without triggering a deploy per worker. Optimize duplicated context, abandoned recovery, repeated comparisons, and rebuild overhead; never trade away candidate coverage, evidence, dates, relationships, translation fidelity, or conservative identity decisions for throughput.
 - **Reviewed identity ambiguity:** A validated `possible-same-as` decision closes that canonical pair for scheduling while keeping its person records separate. Resolver dossiers expose only the remaining `reviewPairs`, including inside larger same-name blocks, so later waves do not spend capacity reconsidering the same evidence. Replacing either chapter extraction invalidates the affected decision and makes the pair eligible again.
@@ -195,14 +248,7 @@ The standard translation loop is: `make start-translation BOOK=<book>` → fill 
 - **`make update BOOK=<book>`** is the usual incremental build after editing one book; **`make update-all`** rebuilds the whole site. Both regenerate static HTML and OG assets as appropriate and sync to `public/`. If `data/manifest.json` is missing, `make update` runs a full `make manifest` first. `data/manifest.json`, `data/progress.json`, and their `public/data/` copies are gitignored (regenerated by `make manifest` / `make progress` / `npm run build`).
 - Scraping targets (`make shiji-001`, etc.) require internet access to chinesenotes.com/ctext.org and are interactive (prompt before overwriting translated chapters).
 - `package-lock.json` is gitignored, so `npm install` resolves latest compatible versions each time.
+
 ### OpenRouter free fallback lane
 
 Use `OPENROUTER_PEOPLE_LANE.md` for the local zero-priced OpenRouter extraction and independent date-audit runners. The same stable worker ID resumes sticky work; never delete ignored OpenRouter response/chunk files or date-workflow recovery state during disk cleanup. The free tier is request-limited and upstream models can return 429; stop and resume later, without silently switching to paid models or weakening validators. The extraction runner marks validated chapters `ready` but does not publish them; the host orchestrator remains responsible for exact-file staging and normal review gates. One shared checkout suffices.
-
-### Verified ebook people glossaries
-
-Follow `PEOPLE_EBOOK_CERTIFICATION.md` for required-glossary ebook generation.
-A complete book or manifest-defined volume can qualify independently of unrelated
-histories while retaining current global identity decisions. The ordinary compiler
-seal and current extraction, editorial, independent date and identity gates remain
-mandatory. Preview output does not satisfy certification.

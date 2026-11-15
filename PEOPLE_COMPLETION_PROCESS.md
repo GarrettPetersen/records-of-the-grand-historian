@@ -2,6 +2,21 @@
 
 This is the current orchestration policy.
 
+**November 15 simplification and synchronization:** fresh chapters follow
+`PEOPLE_FRESH_CHAPTER_WORKFLOW.md`: one complete owner submission and one complete
+independent final review, including canonical identity evidence. Extra native report
+formats are host serialization, not extra review layers. Recover existing partial
+jobs without extending their recovery machinery to every new chapter. Follow
+`PEOPLE_MASTER_SYNC.md` at startup and release/dispatch boundaries; a dirty checkout
+or alternate-index release never excuses an obsolete shared baseline.
+
+**November 13 chapter-owner design:** adopt `PEOPLE_SINGLE_OWNER_WORKFLOW.md` at
+the next idle boundary: one persistent capable chapter agent, bounded public-history
+lookup (`PEOPLE_LOOKUP_API.md`), one independent final reviewer, then dependency-scoped
+patches where native proof composition supports them. Preserve running ownership
+and every native approval/publication gate. The lookup service is retrieval only;
+its installation does not enable general approval reuse across source edits.
+
 **October 30, 2026 user-authorized process revision:** chapter completion uses
 bounded canonical-person dossier reviews, not exhaustive O(k²) same-name pair
 comparisons. This explicitly supersedes the old zero-touching-pairs completion
@@ -11,24 +26,102 @@ old deadline wave recipes, and waiting for 25–50 new extractions before identi
 Existing source, editorial, chronology, identity and publication gates remain intact.
 A planning checkpoint grants no approval.
 
-## First delivery and the next bounded cohort
+## Deliver the next chapter, not the first one again
 
-Jinshu 053 passed the first nonempty live acceptance on October 31, 2026 at
-revision `b26f20aae583d22a90abb2bb48bd04c05e794fa5`: 72 person pages, 73 local
-records, 72 independently reviewed cases, 63 explicitly uncertain identities,
-541 language-specific chapter links and no generated pair assignments. The
-[acceptance receipt](research/people/checkpoints/jinshu053-live-acceptance-20261031/acceptance.json)
-records normal CI, the exact successful production deployment and live checks.
-Its ebook contribution passed; the full Jinshu ebook remains incomplete.
+Jinshu 053 already has a saved nonempty live acceptance receipt and 72 published
+person pages. Verify freshness when needed; do not repeat that completed pilot or
+its release merely because an older goal says to prove the first chapter. The next
+milestone is a second, then third published nonempty chapter, followed by measured
+repeatable throughput. No new broad extraction wave while downstream completion is
+stalled. Retain the existing owner of the selected completion chapter. A replacement
+target must have a recorded reason and lower total remaining work, not just an old
+positive audit flag. Never choose an empty extraction to satisfy this milestone.
+Drain/recover existing claims. Use one shared checkout and isolated artifact paths;
+this policy does not authorize a second executor or taking over an active chapter.
 
-Continue existing Jinshu work, starting with no more than three completion WIP
-chapters and measuring completed/published throughput. Preserve and drain existing
-claims, owners and recovery. Do not reopen unchanged proofs or recursively complete
-external evidence chapters. A source edit or suspected incorrect attribution must
-still reconcile affected approvals and hold a concrete unsupported case. An empty
-extraction cannot substitute for a named-person delivery. Use the same shared
-checkout/artifact and resource-safety profile; the milestone does not authorize
-another executor, spending increase or broad extraction campaign.
+## Operational changes after the November 6 process audit
+
+These are scheduling and evidence requirements, not a new approval format, a reason
+to repeat unchanged reviews, or permission to change an active invocation's inputs.
+Adopt them at its next idle boundary. The replacement campaign objective is in
+`PEOPLE_GLOSSARY_ORCHESTRATOR_GOAL.md`; it does not itself change the app's saved goal.
+
+### Close the English/source pass before commissioning downstream work
+
+Distinguish **proposal queue empty** from **full source/editorial coverage verified**.
+Before a new complete date audit or identity wave, record who reviewed the complete
+chapter, its pinned source/English inputs, the covered unit IDs and both English
+fields where present, and the accepted/rejected/applied repair evidence. Check source
+propositions, kinship, event ownership, names/titles, omissions, repeated uses and the
+parallel English field. Existing review evidence may satisfy this; do not commission
+a duplicate full review merely to generate another receipt. Reuse unchanged unit
+proofs only through the normal verified provenance path; do not manually retag hashes.
+If full coverage cannot be established, call editorial status **unverified**, not
+closed. Split large source passes into bounded source-complete parts and aggregate
+their exact coverage, with no dropped units or invented approvals.
+
+Collect corrections across that source pass, independently review worker-authored
+replacements, and apply one coherent chapter batch before freezing downstream input.
+Do not alternate a new complete date audit with one-at-a-time English corrections.
+When an active review discovers English defects, preserve its actual result and let
+started work drain safely. Keep supplemental repairs outside closed date/identity
+schemas. Resolve/apply the chapter repair batch before commissioning another full
+review. Genuine later errors must still be fixed; freezing is not permission to hide
+them. Inspect why the prior source pass missed them instead of repeating the same
+unchanged prompt. Review only affected work where the native validators support it;
+otherwise retain the required full independent audit.
+
+### Separate routine content review from application-code development
+
+Use the existing reviewed production appliers and sealed before/after data contracts.
+Routine unchanged code does not need a fresh model code review for each chapter;
+repair content still needs independent review and all native acceptance checks.
+Do not create a bespoke applier/framework for each packet. If the supported path
+cannot represent a legitimate change, record the exact gap, fix the shared production
+path once with preservation regressions and independent code review, then reuse it.
+Do not extend an interface or duplicate implementation just to work around a hold.
+Preserve unnamed people, Chinese evidence, existing claims and identity assignments
+on English-only edits; tests must cover those invariants as well as intended changes.
+New/mutated code still needs review. Never suppress a real validator failure to save
+time or treat a helper's successful execution as independent content approval.
+
+### Count the whole chapter cost, not just each invocation
+
+Extend the existing chapter work order, not a new competing ledger, with cumulative
+review/repair invocations, full-audit passes, source generations, known raw model
+usage/cost, elapsed time, late editorial defects and reusable accepted results. Mark
+missing provider usage unknown, not zero; distinguish raw model value from billed
+charges. Preserve that accounting across worker/chat changes and source reconciliation.
+Use the existing three-round date breaker. Source edits and manual/focused paths do
+not automatically authorize more spending. After either two completed full audits
+without chapter approval or two successive downstream passes discovering missed
+editorial defects, stop new *full* audits and diagnose the source/method/application
+gap. Preserve independently reviewed focused research and active jobs; a new complete
+audit requires a recorded changed approach, independently reviewed corrective evidence
+and a bounded next-run budget under the existing authorization. Do not invent a dollar
+limit unrelated to measured work or silently raise the existing cost/round limits.
+This accounting policy is host-enforced until integrated into the native scheduler;
+do not claim the current per-run breaker enforces cumulative chapter spending.
+
+### Keep a short, explicit completion frontier
+
+Keep one primary completion target and at most two other active completion chapters.
+For each, show owner, current pins, full-source coverage state, date/identity status,
+exact next deliverable and concrete holds. Historical recovery directories are not
+automatically active WIP. Park a genuine research hold explicitly; do not repeatedly
+poll or rewrite it, and do not discard it. Select the next eligible target from this
+frontier after inspecting its evidence, rather than repeatedly assuming legacy positive
+date reports mean the chapter is ready. Qualified or merely fingerprint-current reports
+known to be contested must be reported separately from uncontested approvals.
+
+Every bounded handoff reports **newly published chapters**, **data-qualified chapters**,
+**applied reviewed corrections**, **known holds**, and **code-only work** separately.
+A successful code release is not chapter throughput. A real new finding is useful
+work, but it does not establish convergence. Keep fresh-chat/60-minute boundaries:
+another turn in the same oversized conversation is not a fresh chat. Do not weaken
+resource guards when rotation or disk reserve blocks dispatch. Check disk now, not
+only before the previous batch; about 31 GiB free leaves little working margin.
+
 
 ## Repair English omissions when found
 
@@ -58,14 +151,6 @@ prove every source proposition has been translated.
    per review packet. One logical dossier represents one accepted canonical person;
    chapter records remain its cited provenance. Historical merge, separation and
    reviewed-ambiguity decisions remain valid constraints, not a new all-pairs queue.
-   When unrelated working-tree edits prevent a reliable filesystem view, use
-   `people:identity:prepare -- --book BOOK --chapter NNN --registry ABSOLUTE_DIR
-   --out NEW_ABSOLUTE_DIR --source-revision FULL_ACCEPTED_GIT_SHA`. This reads sealed
-   source/editorial/date evidence from Git without a checkout copy. Registry reuse
-   requires the original generation's full Git seal to match, identical complete
-   dossier-data inventories and contents, unchanged transitive construction code,
-   package dependencies and runtime configuration. Any relevant change holds for a
-   registry update; this path does not retag an old seal or approve a chapter.
 5. Prepare one case per canonical person occurring in this chapter, covering every
    chapter-local record exactly once. Retrieve at most eight other dossiers per
    case through the name/alias index, with at most sixteen keys and eight posting
@@ -199,11 +284,14 @@ to launch more work and must not be released merely to reduce concurrency.
   critical memory pressure. Unknown/failed measurements fail closed. Other platforms
   explicitly report this macOS memory check as not applicable, not as verified safe.
 - These are admission checks, not a continuous watchdog or an application memory
-  limit. On a breach, stop new dispatches, checkpoint compact state and end the
-  coordination turn. Preserve current job IDs and verify actual remote/process
-  state before resuming. Never auto-kill the user's Codex/browser, delete swap,
-  clear history, remove locks or discard recovery. If growth continues, ask the user
-  to quit the app; a repository script cannot safely repair its allocator.
+  limit. On a breach, stop new dispatches and checkpoint compact state. Preserve
+  current job IDs and verify actual remote/process state before resuming. Perform
+  the active remediation procedure below; if the guard still fails after safe
+  cleanup, record the remaining concrete action and any required user decision
+  before ending the coordination turn. Never auto-kill the user's Codex/browser, delete
+  swap, clear history, remove locks or discard recovery. If growth continues, ask
+  about an app restart after preserving active work; a repository script cannot
+  safely repair its allocator.
 - Bound tool output: normally return at most 1,000 tokens, at most 4,000 for a
   necessary code review. Save large logs/results to their existing job artifacts;
   return counts, hashes and paths. Project search/connector responses before printing
@@ -217,6 +305,51 @@ Do not claim this repairs a Codex backend leak or guarantees crash prevention.
 It limits exposure and stops new work well before the previously observed failure.
 Keep the existing shared date-audit pool, worker IDs, packet ceilings, validation,
 review independence and publication gates; do not introduce competing executors.
+
+#### Standard memory-warning preview cleanup (October 31, 2026)
+
+The user has authorized this bounded cleanup without repeated approval:
+
+A warning starts active memory remediation. Stopping production is the admission
+response; it does not finish the remediation task. Diagnose the largest relevant
+physical footprints, verify ownership and perform the safe cleanup already
+authorized. If the remaining useful action would interrupt active or uncertain
+work, present the exact target, measured footprint, expected interruption and
+restart plan, then ask once for the missing authorization or ownership information.
+Keep that decision pending without assuming approval. Do not spend successive
+turns merely repeating the same failed guard. If no safe action is available,
+record the concrete external change needed and preserve the resource hold.
+
+After cleanup or an external resource change, remeasure pressure, swap and the
+resource guard. An actual passing measurement clears the resource admission hold;
+record the new evidence and reconcile stale local hold summaries without changing
+chapter approvals or automatically resuming a paused/blocked goal. Do not attribute
+recovery to an action that was not performed or whose effect was not measured.
+
+1. Pause new heavy work. Inspect OS memory pressure, swap growth and process
+   physical footprint, including compressed/graphics allocations. Backend RSS
+   alone can miss a large application GPU helper footprint.
+2. Identify idle, superseded local development/preview servers. Immediately before
+   signaling, verify the PID, executable/command, project working directory and
+   listening port; check for connected clients and active task ownership. No
+   connected clients alone is insufficient. Confirm a newer retained preview
+   serves that project, or that the owning task has completed.
+3. Save the exact restart command and checks in a private local cleanup receipt.
+   Send SIGTERM only to verified idle servers. Keep the current/newest preview,
+   active model/build/review jobs, MCP services and unknown services running. Ask
+   before interrupting anything active or uncertain; do not escalate to force-kill.
+4. Verify released ports and the retained preview, then rerun
+   `npm run people:disk:check`. Resume heavy work only after an actual passing
+   measurement, with the existing before/after/60-second checks. Preserve all
+   claims, locks, recovery and history; keep every existing safety threshold.
+
+On October 31, a measured application GPU helper footprint was about 6.3 GB even
+though backend RSS was below 1 GiB. One targeted graceful helper restart reduced
+that footprint; it is diagnostic evidence, not a blanket automatic restart policy.
+Memory pressure returned to normal before the separately authorized idle preview
+cleanup. Ports 4173, 5174 and 5175 were then stopped; the active preview on 5176
+was retained. Recheck current processes every time rather than reusing these PIDs
+or assuming these port numbers are always disposable.
 
 After the first live receipt, use a bounded WIP cohort (initially at most three
 chapters), prioritizing Jinshu and ranking total remaining completion work. Spend
