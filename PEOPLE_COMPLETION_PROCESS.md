@@ -2,6 +2,11 @@
 
 This is the current orchestration policy.
 
+The November15 throughput objective is50completed, live-published chapters/day.
+Follow `PEOPLE_THROUGHPUT_TARGET.md` for measured4→8→12remote admission, bounded
+bundled person evidence, completion-first scheduling and batched releases. This is
+a target requiring real measured releases, not a promise or permission to weaken gates.
+
 Follow `PEOPLE_CHAPTER_COMPLETION_RULES.md` to close source-supported records without
 open-ended optional research. Reviewed uncertainty is a valid native outcome;
 contradictions, unsupported asserted facts and known fixable English defects remain

@@ -3,6 +3,8 @@
 The November 15 user direction favors more Cursor cloud parallelism and useful
 GrokBot work from included capacity. The initial one-assignment recovery limit is
 superseded by staged remote admission, not by unlimited local concurrency.
+Follow `PEOPLE_THROUGHPUT_TARGET.md`: the objective is 50 published chapters/day;
+the shared policy defines an initial 4 assignments and measured steps to 8 and 12.
 
 Start with a shared target of four remote assignments across both lanes, for
 example two Cursor cloud agents and two GrokBot conversations. This is a target,
@@ -11,9 +13,9 @@ first. Prefer GrokBot when equally suitable; use capable reasoning Cursor owners
 and reviewers for additional throughput and difficult work. Do not silently switch
 the provider of a retained conversation or buy new paid API capacity.
 
-Adopt the cap in the sole coordinator's scheduler at an idle boundary. The current
-campaign runner still contains a one-assignment cap until that code change is
-explicitly adopted. Other launchers must not independently claim four more slots.
+Adopt the reviewed scheduler change at an idle boundary. The campaign runner now
+reads the shared throughput policy and supports `--max-active`; do not run unreviewed
+changes or competing launchers. Other launchers must not independently claim four more slots.
 Count actual running assignments, uncertain dispatches and existing sticky work
 across both lanes; neither a returned chat nor a stale roster flag proves idleness.
 Preserve atomic claims, stable actors and independent review provenance.
@@ -39,7 +41,7 @@ checkout merely to run a chapter/reviewer. Cloud workers do not mutate host Git.
 
 After a four-assignment cohort shows stable host resources, bounded MCP response
 times, lookup quota headroom and useful validated output, the coordinator may raise
-the shared target to eight. Record the measurements first. Stop scaling if the
+the shared target to eight, then twelve. Record the measurements first. Stop scaling if the
 publication queue grows without releases or repeated review defects dominate.
 Measure released nonempty chapters and cost per accepted chapter, not busy agents.
 

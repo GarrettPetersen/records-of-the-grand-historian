@@ -10,10 +10,13 @@ import {ownerDirectory,digest} from './lib/people-chapter-owner.mjs';
 import {acquireProcessRunLock} from './lib/process-run-lock.mjs';
 import {liveRunningAgentIds,readRosterWorkers} from './grokbot-headless-dispatch.mjs';
 import {assertPeopleMasterSync} from './check-people-master-sync.mjs';
+import {readPeopleCampaignPolicy} from './lib/people-campaign-policy.mjs';
+import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission} from './lib/people-remote-admission.mjs';
 loadDotenv(REPO_ROOT);
-const {values:o}=parseArgs({options:{job:{type:'string',multiple:true},model:{type:'string'},run:{type:'boolean'},once:{type:'boolean'}}});
+const {values:o}=parseArgs({options:{job:{type:'string',multiple:true},model:{type:'string'},'max-active':{type:'string'},run:{type:'boolean'},once:{type:'boolean'}}});
 if(!o.job?.length||!o.model||!o.run)throw Error('Use --job ID (repeat) --model MODEL --run [--once]; only explicit retained chapters are scheduled');
 const campaignDir=path.join(REPO_ROOT,'data/people/generated/chapter-owners'),stateFile=path.join(campaignDir,'campaign.json');
+const policy=readPeopleCampaignPolicy(),maxActive=remoteAdmissionLimit(policy,o['max-active']),completedRuns=new Map();
 const stopAt=Date.now()+55*60*1000;
 const release=acquireProcessRunLock(path.join(campaignDir,'campaign.lock'),{label:'Chapter-owner campaign',failIfExists:true});
 const state=fs.existsSync(stateFile)?JSON.parse(fs.readFileSync(stateFile)):{schemaVersion:1,jobs:o.job,continuations:{},gateResults:{},startedAt:new Date().toISOString(),grokPlanningHorizonDays:3};
@@ -26,13 +29,18 @@ const bounded=async promise=>{let timer;try{return await Promise.race([promise,n
 try{do{
  assertPeopleMasterSync(REPO_ROOT);
  guard();const liveGrok=await liveRunningAgentIds('http://127.0.0.1:9229');const rows=readRosterWorkers();
- const cursorRuns=new Map();let activeCount=liveGrok.size;
- for(const id of o.job){const j=JSON.parse(fs.readFileSync(path.join(ownerDirectory(REPO_ROOT,id),'job.json')));for(const role of ['owner','reviewer'])if(j[role+'RunId']&&j[role+'AgentId']?.startsWith('bc-')){const run=await bounded(Agent.getRun(j[role+'RunId'],{runtime:'cloud',agentId:j[role+'AgentId'],apiKey:process.env.CURSOR_API_KEY}));cursorRuns.set(j[role+'RunId'],run);if(run.status==='running')activeCount++;}}
+ const admission=await measureRemoteAdmission(remoteAdmissionInventory(campaignDir),liveGrok,async({agentId,runId})=>{
+  if(completedRuns.has(runId))return completedRuns.get(runId);
+  const run=await bounded(Agent.getRun(runId,{runtime:'cloud',agentId,apiKey:process.env.CURSOR_API_KEY}));
+  if(run.status!=='running')completedRuns.set(runId,run);return run;
+ });
+ const cursorRuns=admission.cursorRuns;let activeCount=admission.activeCount;
+ state.remoteAdmission={at:new Date().toISOString(),maxActive,activeCount,occupied:admission.occupied,targetPublishedChaptersPerDay:policy.completionThroughput.targetPublishedChaptersPerDay};save();
  for(const id of o.job){try{
   const dir=ownerDirectory(REPO_ROOT,id),file=path.join(dir,'job.json');let j=JSON.parse(fs.readFileSync(file));
   state.lastObservation={at:new Date().toISOString(),job:id,status:j.status,revision:j.revision,coverage:j.coveredUnits.length};save();
   if(j.status==='ready-for-review'&&(!j.dispatch?.reviewer||j.dispatch.reviewer.state==='returned')){
-   if(activeCount>=1){log({job:id,waiting:'Shared one-assignment cap'});continue;}
+   if(activeCount>=maxActive){log({job:id,waiting:'Shared remote assignment cap',activeCount,maxActive});continue;}
    const lane=j.dispatch?.reviewer?.lane??(j.lane==='cursor-sdk'?'grokbot':'cursor-sdk');
    const args=['scripts/run-people-chapter-owner.mjs','--review','--job',id,'--lane',lane,'--model',o.model,'--run'];
    if(j.reviewAgentId){const feedback=path.join(dir,'review-generation-feedback.txt');fs.writeFileSync(feedback,'The owner has applied the independent findings to the same chapter. Read the new sealed reviewPacketArtifacts and inspect the exact patches/dependency closure. Retain unchanged proofs. Return complete current native reports and remaining findings, with actual provenance; do not repeat onboarding or blanket-review unchanged work.');args.push('--continue','--feedback',feedback);}
@@ -65,7 +73,7 @@ try{do{
    if(run.status==='error'&&/usage_limit|capacity|quota/i.test(run.error?.message??'')){state.cursorCapacityHold=run.error;save();log({lane:'cursor-sdk',capacityHold:true});continue;}
   }else running=liveGrok.has(j[role+'AgentId'].replace(/^grokbot:/,''));
   if(running)continue;
-  if(activeCount>=1)continue;
+  if(activeCount>=maxActive)continue;
   const fingerprint=digest(fs.readFileSync(path.join(dir,'source.json')))+digest(fs.readFileSync(path.join(dir,'extraction.json')))+(role==='reviewer'?digest(fs.readFileSync(path.join(dir,'identity-review.json')))+digest(fs.readFileSync(path.join(dir,'date-report.json'))):'');
   const continuationKey=id+':'+role,prior=state.continuations[continuationKey]??{count:0,unchanged:0};
   if(prior.count>=3||prior.unchanged>=2){j.status='held';j.circuitBreaker={reason:'Bounded non-improving continuation limit',role,...prior};writeJsonAtomic(file,j);log({job:id,action:'host-replan-required',reason:j.circuitBreaker});continue;}

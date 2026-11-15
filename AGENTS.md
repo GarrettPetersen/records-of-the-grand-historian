@@ -2,6 +2,11 @@
 
 ## Completion-first orchestration
 
+The user target is50completed and live-published chapters perday, documented in
+`PEOPLE_THROUGHPUT_TARGET.md`. Size remote concurrency from measured productive
+agent time and real completion/release throughput; extractions and queued work do
+not count. Preserve quality gates, included lane allowances and resource guards.
+
 Keep the shared host synchronized with master using `PEOPLE_MASTER_SYNC.md`.
 Run `node scripts/check-people-master-sync.mjs` at coordinator startup, after a
 master merge, before a new chapter and before publication. Stop new dispatch on
