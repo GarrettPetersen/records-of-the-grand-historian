@@ -69,8 +69,10 @@ at least every 60 seconds while observing active work; a startup check alone is
 insufficient. Do not launch more work after a failed measurement or failed guard.
 Preserve live jobs, claims, locks and recovery; do not kill unrelated apps or delete
 swap/history. A fresh chat must use a compact handoff, not a fork of the oversized
-campaign conversation. Initially use no parallel native Codex subagents and only
-one cloud assignment; increase remote concurrency only after measured safe runs.
+campaign conversation. Use no parallel native Codex subagents initially. Follow
+`PEOPLE_REMOTE_CONCURRENCY.md` for the user-authorized staged remote concurrency
+increase; the original one-cloud-assignment limit was a recovery calibration,
+not a permanent restriction on Cursor cloud or GrokBot completion work.
 
 On a memory warning, follow the preview-cleanup procedure in
 `PEOPLE_COMPLETION_PROCESS.md`: inspect physical footprint as well as RSS and

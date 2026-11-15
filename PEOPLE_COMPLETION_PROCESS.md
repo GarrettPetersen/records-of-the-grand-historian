@@ -267,11 +267,12 @@ to launch more work and must not be released merely to reduce concurrency.
 - Do not resume an unbounded automatic goal loop in the old chat. This crash-policy
   repair is the final task here; glossary production resumes from the saved handoff
   in a fresh chat. Do not create a recurring automation as a workaround.
-- Initially use no parallel native Codex subagents. Independent author/reviewer
-  conversations remain separate but run sequentially, with bounded sealed evidence
-  rather than inherited full campaign history. Start with one cloud assignment.
-  Consider two only after two completed assignments and their host acceptance checks
-  show stable resources. This does not authorize more spend or new extraction.
+- Initially use no parallel native Codex subagents. Follow
+  `PEOPLE_REMOTE_CONCURRENCY.md` for the November 15 user-authorized staged remote
+  increase. Separate chapter owners/reviewers can run concurrently across chapters;
+  the same candidate must have one writer and a frozen independent review boundary.
+  Keep bounded sealed evidence rather than inherited campaign history. This does
+  not authorize a new broad extraction wave or bypass resource/publication gates.
 - Run only one local heavy job at a time. Do not overlap full graph compilation,
   site/ebook builds, Git packing, or large packet construction. Use a 3 GiB Node
   old-space ceiling for newly launched heavy Node jobs; this limits JavaScript heap,
