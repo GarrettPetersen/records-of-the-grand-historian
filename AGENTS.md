@@ -10,11 +10,12 @@ Alternate-index publication is not a checkout sync. Never plan from an obsolete
 catalog or silently missing released files. Preserve all unpublished work in named
 recovery checkpoints before synchronization; do not copy the repository.
 
-For a fresh chapter follow `PEOPLE_FRESH_CHAPTER_WORKFLOW.md`: one persistent owner
+For every chapter follow `PEOPLE_CHAPTER_OWNER_PROCESS.md`: one persistent owner
 does all substantive steps; one independent final reviewer covers the entire result,
 including canonical certification. Native report formats and publication order must
 not become separate full model reviews. Retained unfinished jobs keep their recovery
-history and native gates; do not reset them to adopt the fresh-chapter path.
+history and native gates; include all current partial work and proofs instead of
+resetting the chapter. One untouched-chapter pilot is explicitly user-authorized.
 
 At an idle chapter boundary, follow `PEOPLE_SINGLE_OWNER_WORKFLOW.md`: one persistent
 capable reasoning chapter owner, bounded lookup via `PEOPLE_LOOKUP_API.md`, and one

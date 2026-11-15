@@ -2,11 +2,12 @@
 
 This is the current orchestration policy.
 
-**November 15 simplification and synchronization:** fresh chapters follow
-`PEOPLE_FRESH_CHAPTER_WORKFLOW.md`: one complete owner submission and one complete
+**November 15 simplification and synchronization:** all chapters follow
+`PEOPLE_CHAPTER_OWNER_PROCESS.md` at any level of completeness: one complete owner submission and one complete
 independent final review, including canonical identity evidence. Extra native report
-formats are host serialization, not extra review layers. Recover existing partial
-jobs without extending their recovery machinery to every new chapter. Follow
+formats are host serialization, not extra review layers. Supply all existing partial
+work and valid independent proofs to the same owner; complete only missing/affected
+work without resetting the chapter or its holds. Follow
 `PEOPLE_MASTER_SYNC.md` at startup and release/dispatch boundaries; a dirty checkout
 or alternate-index release never excuses an obsolete shared baseline.
 

@@ -1,12 +1,27 @@
-# Fresh chapter: one owner, one complete submission
+# Any chapter: one owner, one complete submission
 
-This is the default for a chapter that has not started. The multi-stage recovery
-machinery is for retained unfinished work; it is not the fresh-chapter template.
+This is the default at every level of completeness: untouched, partially extracted,
+translated/repaired, independently audited, partly identity-reviewed, or awaiting
+publication. Completion state is an input to one workflow, not a choice of pipelines.
 Adopt at an idle boundary without interrupting existing jobs or erasing their holds.
 
+The host inventories existing source, drafts, chunks, repairs, reviewer reports,
+identity decisions, publication receipts and retained conversations with their hashes
+and provenance. Mark each component current, partial, stale, held or missing. A stale
+approval is reusable evidence rather than a current approval. Resume the existing
+owner where possible; if an explicit ownership transfer is needed, give one successor
+a compact handoff and every relevant artifact without copying the repository.
+
+The owner closes only missing work and the actual dependency closure of changes.
+Do not re-extract a completed chapter, repeat unchanged source review, discard a
+partial chunk, or commission a fresh audit merely because the chapter entered this
+workflow. Normalize mechanical legacy-format differences on the host, retaining the
+original evidence. Resolve genuine contradictions rather than relabeling them.
+
 The host supplies one work order containing the full Chinese chapter, both English
-fields, approved labels, existing canonical people lookup, exact source revision and
-small recording tools. One capable reasoning agent owns the same conversation until
+fields, the completion-state inventory and partial work, approved labels, existing
+canonical people lookup, exact source revision and small recording tools. One capable
+reasoning agent owns the same conversation until
 the complete chapter is ready: source/translation corrections, every person and
 mention, names, relationships, supported chronology, canonical memberships and explicit
 uncertainty. No separate extraction, editorial, date-repair or identity-author agents.
@@ -16,8 +31,11 @@ assembles one coherent candidate and gives deterministic schema, coverage, date 
 reference errors back to that owner. IDs, paths, hashes, native report wrappers and
 checklist inventories are mechanical host work, not another model assignment.
 
-One separate independent reviewer checks the entire finished candidate and canonical
-dossier evidence in one conversation. That review must include canonical-person
+One separate independent reviewer closes review of the entire finished candidate and
+canonical dossier evidence in one conversation. Retain valid unchanged independent
+proofs through native composition; independently inspect missing/changed components
+and their dependencies. Never turn saved partial work into approval automatically.
+That review must include canonical-person
 certification evidence as well as source, chronology and coverage, rather than stop
 at combined curation and commission another identity review. Use the native formats;
 host adapters may encode captured decisions but cannot invent approval, reasons,
@@ -36,6 +54,7 @@ chapter, canonical records, backlinks/search and ebook eligibility through norma
 CI/deployment gates. These mechanical stages are not extra editorial model reviews.
 Completion means a verified released chapter, not a draft or a successful tool call.
 
-Initially prove this with the current retained cohort; then measure published
+The user-authorized single untouched-chapter pilot tests the complete path, while
+existing partly finished chapters continue under this same process. Measure published
 chapters per day, total owner/reviewer usage and repair rounds before scaling.
 Never hide a new model review behind a differently named certification step.
