@@ -29,7 +29,9 @@ export function prepareChapterEditorialHistory({extraction,canonical,current,rev
  }
  const covered=repair=>reviewed.some(r=>r.decisions.some(d=>{
   const p=r.proposals.find(p=>p.id===d.repairId);
-  return ['accept','revise'].includes(d.decision)&&p&&same({...p,after:d.decision==='revise'?d.after:p.after,reason:d.reason},proposal(repair));
+  if(!['accept','revise'].includes(d.decision)||!p)return false;
+  const actual=proposal(repair),expected={...p,after:d.decision==='revise'?d.after:p.after};
+  return [p.reason,d.reason].includes(actual.reason)&&same({...expected,reason:actual.reason},actual);
  }));
  const pending=extraction.translationRepairs.filter(r=>!covered(r));
  const seed=pending.length?editorialDecisionSeed({...extraction,translationRepairs:pending.map(r=>({...r,status:'proposed'}))}):null;

@@ -49,13 +49,20 @@ for(const r of fields.values()){
 if(missing.length)throw Error('Owner coherence: repair confidence is missing for journal indices '+missing.join(',')+'. In this same owner context, chapter_patch target editorial-proposals pointer /repairConfidence add:true with an explicit index-to-high/medium/low map, then finish the native gate again. Do not reread unchanged source.');
 const manual=candidate.translationRepairs.slice(prefix.length);
 if(manual.some(row=>!job.repairs.some(r=>isDeepStrictEqual([r.unitId,r.field,r.before,r.after],row.slice(0,4)))&&!rows.some(r=>isDeepStrictEqual(r.slice(0,4),row.slice(0,4)))))throw Error('Owner coherence: a manually added repair has no matching source-tool record or verified final field delta');
-const expected=[...prefix,...rows];
+let expected=[...prefix,...rows],reviewedReasonBindings=[];
+if(job.reviewAgentId){
+ const {bindChapterRepairReasonMetadata}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-chapter-native-inputs.mjs')));
+ const editorialNative=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-editorial-decisions.mjs')));
+ const priorEditorial=path.join(root,`data/people/editorial-decisions/${job.book}/${job.chapter}.json`);
+ const bound=bindChapterRepairReasonMetadata({...candidate,translationRepairs:expected},read(path.join(dir,'editorial.json')),{priorRepairCount:prefix.length,canonicalReviewCount:editorialNative.editorialReviews(fs.existsSync(priorEditorial)?read(priorEditorial):null).length,actualReviewerAgentId:job.reviewAgentId,authorAgentIds:job.authors,native:editorialNative});
+ expected=bound.candidate.translationRepairs;reviewedReasonBindings=bound.changes;
+}
 if(!isDeepStrictEqual(candidate.translationRepairs,expected)){
  const snapshot=path.join(dir,'owner-history');fs.mkdirSync(snapshot,{recursive:true});
  const bytes=fs.readFileSync(path.join(dir,'extraction.json')),archive=path.join(snapshot,'extraction-before-repair-assembly-'+digest(bytes).slice(7,23)+'.json');
  if(!fs.existsSync(archive))fs.writeFileSync(archive,bytes,{flag:'wx',mode:0o600});
  candidate.translationRepairs=expected;writeJsonAtomic(path.join(dir,'extraction.json'),candidate);
- job.revision++;job.repairAssembly={at:new Date().toISOString(),sourceOperations:rows.length,priorRepairCount:prefix.length,retainedManualDraft:archive};
+ job.revision++;job.repairAssembly={at:new Date().toISOString(),sourceOperations:rows.length,priorRepairCount:prefix.length,retainedManualDraft:archive,reviewedReasonBindings};
  fs.appendFileSync(path.join(dir,'operations.jsonl'),JSON.stringify({at:new Date().toISOString(),role:'host',operation:'compile-recorded-repairs',resultRevision:job.revision,sourceOperations:rows.length})+'\n',{mode:0o600});
  writeJsonAtomic(file,job);
 }
