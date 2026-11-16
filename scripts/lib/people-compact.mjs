@@ -389,3 +389,22 @@ export function serializeCompactPeopleExtraction(compact) {
   lines.push('}', '');
   return lines.join('\n');
 }
+
+// Remove only repeated encodings of the exact same individual/kind/language/
+// surface/unit/occurrence. No actor, name, relationship or unique occurrence is
+// selected or removed. The caller still runs strict native validation.
+export function deduplicateCompactMentionOccurrences(raw){
+ if(!isCompactPeopleExtraction(raw))throw Error('Compact draft required for occurrence normalization');
+ const candidate=structuredClone(raw),seen=new Set(),removed=[];
+ candidate.surfaces=candidate.surfaces.flatMap((row,rowIndex)=>{
+  if(!Array.isArray(row)||row.length!==5||!Array.isArray(row[4]))throw Error('Malformed compact surface');
+  const locations=row[4].flatMap(([unit,occurrences])=>{
+   if(!Array.isArray(occurrences))throw Error('Malformed compact occurrences');
+   const keep=occurrences.filter(occurrence=>{
+    const key=JSON.stringify([...row.slice(0,4),unit,occurrence]);
+    if(seen.has(key)){removed.push({rowIndex,person:row[0],kind:row[1],language:row[2],surface:row[3],unit,occurrence});return false;}
+    seen.add(key);return true;
+   });return keep.length?[[unit,keep]]:[];
+  });return locations.length?[[...row.slice(0,4),locations]]:[];
+ });return{candidate,removed,approvalGranted:false};
+}
