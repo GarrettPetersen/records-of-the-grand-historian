@@ -199,6 +199,18 @@ export function combinedDatePacket(book, chapter, source, extraction) {
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 }
 
+// Isolate historical repairs while deriving the narrow, independently audited
+// chronology amendment. Incoming English repairs are validated against their
+// own retained independent records by the normal combined gate below.
+export function combinedEditorialBaseline(beforeEditorial, expanded, priorRepairCount) {
+  if (!Number.isSafeInteger(priorRepairCount) || priorRepairCount < 0 ||
+      priorRepairCount > expanded.translationRepairs.length) throw new Error('Invalid historical repair boundary');
+  if (beforeEditorial === null) return { editorial: null, amendment: null };
+  const historical = { ...expanded, translationRepairs: expanded.translationRepairs.slice(0, priorRepairCount) };
+  const amendment = deriveDateRepairEditorialAmendment(beforeEditorial, historical);
+  return { editorial: amendment ? applyDateRepairEditorialAmendment(beforeEditorial, amendment, historical) : beforeEditorial, amendment };
+}
+
 export function validateCombinedReviews({ book, chapter, source, candidate, editorial, identity, dateReport, validation, materialization, seal, beforeSource, beforeExtraction, beforeEditorial, authorAgentIds }, { dataDir }) {
   requireEqual(candidate.schemaVersion, 2, 'compact candidate version');
   requireEqual([candidate.book, candidate.chapter], [book, chapter], 'candidate scope');
@@ -207,17 +219,12 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   const result = validateCompactPeopleExtraction(candidate, packet, { strictAliasDispositions: true });
   const expanded = result.normalized;
   if (expanded.translationRepairs.some(r => r.status === 'proposed')) throw new Error('Combined curation retains proposed repairs');
-  let editorialBaseline = beforeEditorial;
+  const { editorial: editorialBaseline, amendment: expectedAmendment } = combinedEditorialBaseline(beforeEditorial, expanded, beforeExtraction?.translationRepairs.length ?? 0);
   const amendment = materialization.editorialAmendment;
+  requireEqual(amendment, expectedAmendment ?? undefined, 'exact derived chronology history amendment');
   const amendmentHash = amendment === undefined ? undefined : documentHash(amendment);
   for (const context of [identity.reviewContext, dateReport.reviewContext, validation, seal]) {
     requireEqual(context?.editorialAmendmentHash, amendmentHash, 'editorial chronology amendment binding');
-  }
-  if (amendment !== undefined) {
-    requireEqual(source, beforeSource, 'chronology history amendment requires unchanged English');
-    requireEqual(amendment, deriveDateRepairEditorialAmendment(beforeEditorial, expanded), 'exact derived chronology history amendment');
-    editorialBaseline = applyDateRepairEditorialAmendment(beforeEditorial, amendment, expanded);
-    requireEqual(editorial, editorialBaseline, 'only derived chronology history changes');
   }
   validateAppliedEditorialDecisions(editorial, expanded);
   const reviews = editorialReviews(editorial);

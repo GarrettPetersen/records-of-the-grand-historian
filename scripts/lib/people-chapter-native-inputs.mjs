@@ -67,17 +67,23 @@ export async function prepareChapterNativeInputs({root,dir,job,hostAuthor}) {
   const {buildPeopleExtractionPacket}=await native('build-people-extraction-packet.mjs');
   const {validateCompactPeopleExtraction}=await native('validate-people-extraction.mjs');
   const {loadProperNounMatcher}=await native('lib/people-candidates.mjs');
-  const {deriveDateRepairEditorialAmendment,applyDateRepairEditorialAmendment}=await native('lib/people-date-workflow.mjs');
+  const {combinedEditorialBaseline}=await native('lib/people-combined-curation-review.mjs');
   const expanded=validateCompactPeopleExtraction(raw.extraction,buildPeopleExtractionPacket(job.book,job.chapter,{chapterData:raw.source,properNounMatcher:loadProperNounMatcher()}),{strictAliasDispositions:true}).normalized;
   const originalEditorial=beforePins.editorial===null?null:JSON.parse(fs.readFileSync(canonical.editorial));
-  const amendment=originalEditorial===null?null:deriveDateRepairEditorialAmendment(originalEditorial,expanded);
   const singleReview=originalEditorial===null&&raw.editorial.schemaVersion===4&&raw.editorial.reviews?.length===1;
-  const editorial=amendment?applyDateRepairEditorialAmendment(originalEditorial,amendment,expanded):singleReview?{schemaVersion:3,book:job.book,chapter:job.chapter,...raw.editorial.reviews[0]}:raw.editorial;
-  if(amendment)need(isDeepStrictEqual(raw.editorial,originalEditorial),'Chronology amendment requires exact captured old editorial history');
   const editorialNative=await native('lib/people-editorial-decisions.mjs');
   const priorRepairCount=beforePins.extraction===null?0:JSON.parse(fs.readFileSync(canonical.extraction)).translationRepairs.length;
-  const reasonBinding=bindChapterRepairReasonMetadata(raw.extraction,editorial,{priorRepairCount,canonicalReviewCount:editorialNative.editorialReviews(originalEditorial).length,actualReviewerAgentId:job.reviewAgentId,authorAgentIds:job.authors,native:editorialNative});
+  const reasonBinding=bindChapterRepairReasonMetadata(raw.extraction,raw.editorial,{priorRepairCount,canonicalReviewCount:editorialNative.editorialReviews(originalEditorial).length,actualReviewerAgentId:job.reviewAgentId,authorAgentIds:job.authors,native:editorialNative});
   const boundCandidateBytes=reasonBinding.changes.length?json(reasonBinding.candidate):rawBytes.extraction;
+  const boundExpanded=reasonBinding.changes.length?validateCompactPeopleExtraction(reasonBinding.candidate,buildPeopleExtractionPacket(job.book,job.chapter,{chapterData:raw.source,properNounMatcher:loadProperNounMatcher()}),{strictAliasDispositions:true}).normalized:expanded;
+  const baseline=combinedEditorialBaseline(originalEditorial,boundExpanded,priorRepairCount),amendment=baseline.amendment;
+  const oldReviews=editorialNative.editorialReviews(originalEditorial),currentReviews=editorialNative.editorialReviews(raw.editorial);
+  need(isDeepStrictEqual(currentReviews.slice(0,oldReviews.length),oldReviews),'Captured canonical editorial history changed');
+  let editorial=singleReview?{schemaVersion:3,book:job.book,chapter:job.chapter,...raw.editorial.reviews[0]}:raw.editorial;
+  if(amendment){
+    const reviews=[...editorialNative.editorialReviews(baseline.editorial),...currentReviews.slice(oldReviews.length)];
+    editorial=reviews.length===1?reviews[0]:{schemaVersion:4,book:job.book,chapter:job.chapter,reviews:reviews.map(({schemaVersion,book,chapter,...record})=>record)};
+  }
   const binding={kind:'host-native-input-metadata-binding',hostAuthor,rawPins,beforePins,editorialAmendment:amendment,singleReviewWrapperNormalized:singleReview,reviewedRepairReasonBinding:reasonBinding.changes,semanticApprovalCreated:false};
   const suffix=documentHash(binding).slice(7,23),out=path.join(dir,'native-bound-'+suffix),materializedDir=path.join(out,'materialized'),reviewDir=path.join(out,'review');
   const targets={source:path.join(materializedDir,'data',job.book,job.chapter+'.json'),extraction:path.join(materializedDir,'candidate.json'),editorial:path.join(materializedDir,'editorial-decisions.json'),materialization:path.join(materializedDir,'validation.json'),identity:path.join(reviewDir,'identity-review.json'),dateReport:path.join(reviewDir,'date-report.json'),validation:path.join(reviewDir,'validation.json'),seal:path.join(reviewDir,'input-seal.json')};
