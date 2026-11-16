@@ -185,12 +185,30 @@ const withoutEditorialAmendmentDates = value => Array.isArray(value)
       .map(([key, item]) => [key, withoutEditorialAmendmentDates(item)]))
     : value;
 
+// An imported conversion can be withdrawn in favor of the exact source's
+// undated attestation. This cannot replace an office, polity or other fact.
+function undatedEditorialAttestation(before, after) {
+  return before?.predicate === 'attestation' && after?.predicate === 'attestation' &&
+    before.value && after.value && before.value.event === undefined &&
+    (before.value.dateContext === undefined || (before.value.dateContext && typeof before.value.dateContext === 'object' &&
+      !Array.isArray(before.value.dateContext) && Object.keys(before.value.dateContext).every(key =>
+        ['sourceDate', 'westernYear', 'westernInterval', 'westernBounds', 'unresolved', 'unresolvedReason'].includes(key)))) &&
+    ['westernYear', 'westernInterval', 'westernBounds', 'dateContext'].some(key => before.value[key] !== undefined) &&
+    Object.keys(before.value).every(key => ['sourceDate', 'westernYear', 'westernInterval', 'westernBounds', 'dateContext'].includes(key)) &&
+    after.value.undatedSourceAttestation === true &&
+    typeof after.value.event === 'string' && after.value.event.trim().length >= 20 &&
+    Object.keys(after.value).every(key => ['undatedSourceAttestation', 'event'].includes(key)) &&
+    (before.certainty === after.certainty || (before.certainty === 'strongly-inferred' && after.certainty === 'explicit'));
+}
+
 function assertDateOnlyEditorialClaimAmendment(before, after) {
   if (!before || !after || before.id !== after.id || before.subject !== after.subject ||
-      before.predicate !== after.predicate || before.certainty !== after.certainty ||
+      before.predicate !== after.predicate ||
+      (before.certainty !== after.certainty && !undatedEditorialAttestation(before, after)) ||
       !same(before.evidence, after.evidence)) {
     throw new Error('Editorial amendment must preserve the reviewed claim identity, certainty, and evidence');
   }
+  if (undatedEditorialAttestation(before, after)) return;
   if (!same(withoutEditorialAmendmentDates(before.value), withoutEditorialAmendmentDates(after.value))) {
     throw new Error('Editorial amendment may change only chronology fields in the reviewed replacement fact');
   }
@@ -252,16 +270,20 @@ export function deriveDateRepairEditorialAmendment(document, candidate) {
       revision.after.evidence.every(item => claim.evidence.includes(item)),
     );
     if (exact) continue;
-    const matches = candidate.claims.filter(claim =>
-      claim.subject === revision.after.subject && claim.predicate === revision.after.predicate &&
-      claim.certainty === revision.after.certainty &&
-      same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(revision.after.value)) &&
-      revision.after.evidence.every(item => claim.evidence.includes(item)),
-    );
+    const matches = candidate.claims.filter(claim => {
+      if (claim.subject !== revision.after.subject || claim.predicate !== revision.after.predicate ||
+          !revision.after.evidence.every(item => claim.evidence.includes(item))) return false;
+      const after = { ...revision.after, value: claim.value, certainty: claim.certainty };
+      return (same(claim.evidence, revision.after.evidence) && undatedEditorialAttestation(revision.after, after)) ||
+        (claim.certainty === revision.after.certainty &&
+          same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(revision.after.value)) &&
+          (revision.after.value?.event === undefined || revision.after.value.event === claim.value?.event));
+    });
     if (matches.length === 0) continue;
-    if (matches.length !== 1) throw new Error(`Date-only editorial amendment is ambiguous for ${revision.after.id}`);
+    if (matches.some(claim => !same([claim.value, claim.certainty], [matches[0].value, matches[0].certainty]))) throw new Error(`Date-only editorial amendment is ambiguous for ${revision.after.id}`);
     const after = structuredClone(revision.after);
     after.value = structuredClone(matches[0].value);
+    after.certainty = matches[0].certainty;
     claimRevisions.push({
       repairId: revision.repairId,
       claimId: revision.after.id,

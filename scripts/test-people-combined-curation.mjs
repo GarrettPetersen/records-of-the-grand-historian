@@ -1,3 +1,6 @@
+import {fileURLToPath} from 'node:url';
+import {prepareChapterNativeInputs} from './lib/people-chapter-native-inputs.mjs';
+import {deriveDateRepairEditorialAmendment,applyDateRepairEditorialAmendment} from './lib/people-date-workflow.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -31,7 +34,7 @@ const start = runnerSource.indexOf(reservationStart), end = runnerSource.indexOf
 assert.ok(start >= 0 && end > start, 'production reservation callback must be present');
 const makeOrdinaryReservation = new Function('o', 'key', 'CompletedDateGenerationHold', `return ledger=>{${runnerSource.slice(start + reservationStart.length, end)}}`);
 
-export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false } = {}) {
+export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'offline-fixture', promptVersion: 7, agentId: 'extractor' }, authorAgentIds = ['extractor', 'curator'], { reorder = false, multiple = false, initial = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'combined-curation-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const people = path.join(root, 'data', 'people');
@@ -119,11 +122,13 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
   const beforeDates = combinedDatePacket(book, chapter, source, extraction);
   const oldReport = { ...dateReport, sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, status: 'research-blocked',
     itemChecks: dateReport.itemChecks.map(c => ({ ...c, verdict: 'research-blocked' })), findings: dateReport.itemChecks.map(c => ({ items: [c.id], problem: reason, action: reason })) };
-  for (const [role, doc] of Object.entries({ source, extraction, editorial: editorialBefore, dateReport: oldReport })) writeJsonAtomic(files[role], doc);
+  for (const [role, doc] of Object.entries({ source, extraction, editorial: editorialBefore, dateReport: oldReport })) if (!initial || role !== 'dateReport') writeJsonAtomic(files[role], doc);
   const state = { schemaVersion: 1, workflowVersion: 1, sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, phase: 'repair', round: 0, jobs: { 'repair-0-retained': { agentId: 'curator', conversation: 'do-not-delete' } }, review: 'review-0.json' };
-  writeJsonAtomic(path.join(workflow, 'state.json'), state);
-  writeJsonAtomic(path.join(workflow, 'review-0.json'), oldReport);
-  writeJsonAtomic(path.join(workflow, 'jobs', 'failed.json'), { rejected: true, evidence: 'retain all bytes' });
+  if (!initial) {
+    writeJsonAtomic(path.join(workflow, 'state.json'), state);
+    writeJsonAtomic(path.join(workflow, 'review-0.json'), oldReport);
+    writeJsonAtomic(path.join(workflow, 'jobs', 'failed.json'), { rejected: true, evidence: 'retain all bytes' });
+  }
   const materializedDir = path.join(root, 'staged', 'materialized'), reviewDir = path.join(root, 'staged', 'independent-review');
   const inputPaths = { source: path.join(materializedDir, 'data', book, `${chapter}.json`), extraction: path.join(materializedDir, 'candidate.json'), editorial: path.join(materializedDir, 'editorial-decisions.json'), materialization: path.join(materializedDir, 'validation.json'),
     identity: path.join(reviewDir, 'identity-review.json'), dateReport: path.join(reviewDir, 'date-report.json'), validation: path.join(reviewDir, 'validation.json'), seal: path.join(reviewDir, 'input-seal.json') };
@@ -152,7 +157,7 @@ export function fixture(t, book = 'testbook', chapter = '001', run = { model: 'o
     seal.sourceReorderingHash = context.sourceReorderingHash;
   }
   for (const [role, doc] of Object.entries({ identity, dateReport, validation, seal })) writeJsonAtomic(inputPaths[role], doc);
-  const priorClaim = { lane: 'manual', worker: 'sticky-worker', status: 'research-blocked', sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, jobs: structuredClone(state.jobs) };
+  const priorClaim = { lane: 'manual', worker: 'sticky-worker', status: initial ? 'active' : 'research-blocked', sourceHash: beforeDates.sourceHash, extractionHash: beforeDates.extractionHash, jobs: initial ? {} : structuredClone(state.jobs) };
   const spec = { root, book, chapter, materializedDir, reviewDir, before: inspectCombinedBefore({ root, book, chapter }), priorClaim, claimHash: documentHash(priorClaim), authorAgentIds };
   const ledger = { schemaVersion: 1, claims: {}, dateAudits: { [`${book}/${chapter}`]: structuredClone(priorClaim) }, sentinel: { unrelated: 'unchanged' } };
   let calls = 0;
@@ -1051,4 +1056,270 @@ if (process.env.PEOPLE_COMBINED_PREPARE_SPEC) {
     assert.deepEqual(receipt.beforePins, spec.before);
     assert.deepEqual(receipt.priorClaim, spec.priorClaim);
   });
+}
+
+const initialFixture = t => fixture(t, 'testbook', '001', undefined, undefined, { initial: true });
+
+test('absent initial workflow remains absent until reviewed publication and preserves stale generations', t => {
+  const f = initialFixture(t);
+  const stale = `${f.workflow}.stale-old/state.json`;
+  const held = { phase: 'repair', circuitBreaker: { reason: 'preserve old hold' }, jobs: { old: { agentId: 'original' } } };
+  writeJsonAtomic(stale, held);
+  const staleHash = hashFile(stale);
+  assert.equal(fs.existsSync(f.workflow), false);
+  assert.equal(f.receipt.beforePins.stateByteHash, null);
+  assert.deepEqual(f.receipt.workflow, []);
+  assert.equal(verifyCombinedCuration(f.receipt, f.hash, { root: f.root }).status, 'verified');
+  assert.equal(fs.existsSync(f.workflow), false);
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+  const state = read(path.join(f.workflow, 'state.json'));
+  assert.equal(state.phase, 'complete');
+  assert.equal(state.reviewReceipt.hash, f.hash);
+  assert.deepEqual(state.reviewedGenerationTransition.before, { sourceHash: f.spec.priorClaim.sourceHash, extractionHash: f.spec.priorClaim.extractionHash });
+  assert.deepEqual(f.ledger.dateAuditHistory[f.key], [f.spec.priorClaim]);
+  assert.equal(hashFile(stale), staleHash);
+  const after = hashFile(path.join(f.workflow, 'state.json'));
+  assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+  assert.equal(hashFile(path.join(f.workflow, 'state.json')), after);
+  assert.equal(hashFile(stale), staleHash);
+});
+
+for (const boundary of ['lease', 'receipt', 'history', 'source', 'extraction', 'editorial', 'dateReport', 'state', 'queue']) {
+  test(`absent initial workflow crash recovery after ${boundary}`, t => {
+    const f = initialFixture(t);
+    assert.throws(() => publishCombinedCuration(f.receipt, f.hash, { ...f.options, checkpoint: stage => { if (stage === boundary) throw Error('interrupt'); } }), /interrupt/);
+    if (!['state', 'queue'].includes(boundary)) assert.equal(fs.existsSync(path.join(f.workflow, 'state.json')), false);
+    assert.equal(publishCombinedCuration(f.receipt, f.hash, f.options).status, 'complete');
+    assert.equal(read(path.join(f.workflow, 'state.json')).phase, 'complete');
+    assert.deepEqual(f.ledger.dateAuditHistory[f.key], [f.spec.priorClaim]);
+  });
+}
+
+for (const [label, mutate] of [
+  ['retained remote job', f => { f.spec.priorClaim.jobs.old = { agentId: 'reviewer' }; }],
+  ['retained review plan', f => { f.spec.priorClaim.reviewPlans = { audit: { maxUnits: 1, maxBytes: 1024, jobIds: ['old'] } }; }],
+  ['research hold', f => { f.spec.priorClaim.status = 'research-blocked'; }],
+  ['remote breaker', f => { f.spec.priorClaim.circuitBreaker = { held: true }; }],
+  ['unknown recovery metadata', f => { f.spec.priorClaim.recovery = 'not disposable'; }],
+  ['retained local artifact', f => { writeJsonAtomic(path.join(f.workflow, 'old-review.json'), { held: true }); }],
+  ['installed date report', f => { writeJsonAtomic(f.files.dateReport, f.docs.dateReport); }],
+]) {
+  test(`missing initial state rejects ${label} even with fresh mechanical pins`, t => {
+    const f = initialFixture(t);
+    mutate(f);
+    f.spec.claimHash = documentHash(f.spec.priorClaim);
+    f.spec.before = inspectCombinedBefore({ root: f.root, book: f.spec.book, chapter: f.spec.chapter });
+    assert.throws(() => prepareCombinedCuration(f.spec), /untouched initial date reservation/);
+    assert.equal(f.calls(), 0);
+  });
+}
+
+test('missing initial state rejects canonical state appearing after seal and deleted retained state', t => {
+  const f = initialFixture(t);
+  writeJsonAtomic(path.join(f.workflow, 'state.json'), f.state);
+  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /state drift/);
+  assert.equal(f.calls(), 0);
+  const retained = fixture(t);
+  fs.unlinkSync(path.join(retained.workflow, 'state.json'));
+  assert.throws(() => prepareCombinedCuration(retained.spec), /exact-before/);
+  retained.spec.before = inspectCombinedBefore({ root: retained.root, book: retained.spec.book, chapter: retained.spec.chapter });
+  assert.throws(() => prepareCombinedCuration(retained.spec), /untouched initial date reservation/);
+});
+
+test('existing workflow breaker and jobs remain immutable receipt history', t => {
+  const f = fixture(t);
+  f.state.circuitBreaker = { reason: 'reviewed resolution required', round: 3 };
+  writeJsonAtomic(path.join(f.workflow, 'state.json'), f.state);
+  f.spec.before = inspectCombinedBefore({ root: f.root, book: f.spec.book, chapter: f.spec.chapter });
+  const prepared = prepareCombinedCuration(f.spec);
+  assert.equal(publishCombinedCuration(prepared.receipt, prepared.hash, f.options).status, 'complete');
+  const receiptFile = path.join(f.root, 'data/people/combined-curations/testbook/001', `${prepared.hash.slice(7)}.json`);
+  const archived = unpack(read(receiptFile).workflow.find(row => row.name === 'state.json').content);
+  assert.deepEqual(archived, f.state);
+  assert.deepEqual(read(path.join(f.workflow, 'jobs/failed.json')), { rejected: true, evidence: 'retain all bytes' });
+});
+
+test('absent workflow still rejects source drift and changed shared ownership', t => {
+  const f = initialFixture(t);
+  f.ledger.dateAudits[f.key].worker = 'foreign-worker';
+  assert.throws(() => publishCombinedCuration(f.receipt, f.hash, f.options), /exact-before shared queue claim/);
+  assert.equal(fs.existsSync(f.workflow), false);
+  const other = initialFixture(t);
+  fs.appendFileSync(other.files.source, ' ');
+  assert.throws(() => publishCombinedCuration(other.receipt, other.hash, other.options), /Canonical source/);
+  assert.equal(other.calls(), 0);
+});
+
+{
+const native=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const save=(file,value)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,JSON.stringify(value,null,2)+"\n");};
+function bindingFixture(t){
+ const f=fixture(t),dir=path.join(f.root,'chapter-job');fs.mkdirSync(dir);
+ const names={source:'source',extraction:'extraction',editorial:'editorial',materialization:'materialization',identity:'identity-review',dateReport:'date-report',validation:'review-validation',seal:'input-seal'};
+ const files={};for(const[role,name]of Object.entries(names)){files[role]=path.join(dir,name+'.json');fs.copyFileSync(f.inputPaths[role],files[role]);}
+ const identity=read(files.identity),dateReport=read(files.dateReport),validation=read(files.validation),seal=read(files.seal);
+ for(const r of[identity,dateReport]){delete r.reviewContext.sourcePath;delete r.reviewContext.candidatePath;}
+ validation.identityReviewHash=documentHash(identity);validation.dateReportHash=documentHash(dateReport);
+ for(const[role,doc]of Object.entries({identity,dateReport,validation}))save(files[role],doc);
+ const hashBytes=async file=>{const{createHash}=await import('node:crypto');const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:'sha256:'+createHash('sha256').update(b).digest('hex')};};
+ return{f,dir,files,seal,hashBytes};
+}
+
+test('metadata binding preserves raw checks and nonstandard source bytes, then passes the native gate',async t=>{
+ const{f,dir,files,seal,hashBytes}=bindingFixture(t);
+ // A byte-preserving adapter must handle ordinary noncanonical JSON whitespace.
+ fs.appendFileSync(files.source,' ');
+ const sourcePin=await hashBytes(files.source),materialization=read(files.materialization);
+ materialization.sourceByteHash=sourcePin.sha256;save(files.materialization,materialization);
+ for(const role of['identity','dateReport']){const r=read(files[role]);r.reviewContext.sourceByteHash=sourcePin.sha256;save(files[role],r);}
+ const validation=read(files.validation);validation.identityReviewHash=documentHash(read(files.identity));validation.dateReportHash=documentHash(read(files.dateReport));save(files.validation,validation);
+ seal.protectedFiles=await Promise.all(['source','extraction','editorial'].map(role=>hashBytes(files[role])));save(files.seal,seal);
+ const raw=Object.fromEntries(Object.entries(files).map(([role,file])=>[role,fs.readFileSync(file)]));
+ const job={book:f.spec.book,chapter:f.spec.chapter,nativeRoot:native,reviewAgentId:'reviewer',beforeNative:f.spec.before};
+ const bound=await prepareChapterNativeInputs({root:f.root,dir,job,hostAuthor:'codex:fixture-host'});
+ for(const[role,file]of Object.entries(files))assert.deepEqual(fs.readFileSync(file),raw[role]);
+ assert.deepEqual(fs.readFileSync(path.join(bound.materializedDir,'data/testbook/001.json')),raw.source);
+ const prepared=prepareCombinedCuration({...f.spec,...bound});
+ assert.equal(prepared.receipt.inputs.identity.file,path.join(bound.reviewDir,'identity-review.json'));
+ const normalized=read(prepared.receipt.inputs.identity.file),original=read(files.identity);
+ for(const key of ['unitChecks','personChecks','nameClaimChecks','familyRelationshipChecks','mentionChecks','candidateChecks','collectiveOccurrenceChecks','coverage','reviewer','approved','status','summary','findings'])assert.deepEqual(normalized[key],original[key]);
+ assert.equal(read(bound.bindingReceipt).hostAuthor,'codex:fixture-host');
+});
+
+for(const[label,mutate]of[
+ ['changed report hash',({files})=>{const r=read(files.identity);r.summary+=' changed';save(files.identity,r);}],
+ ['foreign reviewer',({files})=>{const r=read(files.identity);r.reviewer.agentId='foreign';save(files.identity,r);}],
+ ['absent source protection',({seal})=>{seal.protectedFiles=[];}],
+])test('metadata binding rejects '+label,async t=>{
+ const x=bindingFixture(t);x.seal.protectedFiles=await Promise.all(['source','extraction','editorial'].map(role=>x.hashBytes(x.files[role])));mutate(x);save(x.files.seal,x.seal);
+ await assert.rejects(()=>prepareChapterNativeInputs({root:x.f.root,dir:x.dir,job:{book:x.f.spec.book,chapter:x.f.spec.chapter,nativeRoot:native,reviewAgentId:'reviewer',beforeNative:x.f.spec.before},hostAuthor:'codex:fixture-host'}));
+});
+
+function undatedFixture(t){
+ const f=fixture(t),d=structuredClone(f.docs);
+ d.beforeSource=structuredClone(d.source);d.beforeExtraction=structuredClone(d.candidate);
+ d.beforeExtraction.claims[0][2]={sourceDate:{text:'Fixture year'},westernYear:{era:'AD',year:1,precision:'year'}};d.beforeExtraction.claims[0][3]='strongly-inferred';
+ const packet=buildPeopleExtractionPacket(d.book,d.chapter,{chapterData:d.source,properNounMatcher:loadProperNounMatcher()});
+ const old=validateCompactPeopleExtraction(d.beforeExtraction,packet,{strictAliasDispositions:true}).normalized.claims.find(c=>c.predicate==='attestation');
+ const before=structuredClone(old);before.value.westernYear.year=5;
+ d.beforeEditorial=structuredClone(d.editorial);d.beforeEditorial.reviews.at(-1).claimRevisions=[{repairId:`${d.book}:${d.chapter}:r0001`,before,after:old,reason:'The independently corrected dated attestation replaces the rejected old date.',sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'艾麗絲'}}];
+ d.candidate.claims[0][2]={undatedSourceAttestation:true,event:'The source names Alice arriving without supplying a Western year.'};d.candidate.claims[0][3]='explicit';d.candidate.people[0][4].a=[];
+ const checked=validateCompactPeopleExtraction(d.candidate,packet,{strictAliasDispositions:true}),amendment=deriveDateRepairEditorialAmendment(d.beforeEditorial,checked.normalized);
+ d.editorial=applyDateRepairEditorialAmendment(d.beforeEditorial,amendment,checked.normalized);
+ const dates=combinedDatePacket(d.book,d.chapter,d.source,d.candidate);
+ for(const r of[d.identity,d.dateReport,d.validation,d.materialization,d.seal])Object.assign(r,{sourceHash:dates.sourceHash,extractionHash:dates.extractionHash});
+ for(const r of[d.identity,d.dateReport]){delete r.reviewContext.editorialDecisionHash;r.reviewContext.editorialDecisionHashes=[];}
+ d.seal.editorialDecisionHashes=[];
+ d.materialization.editorialAmendment=amendment;
+ for(const r of[d.identity.reviewContext,d.dateReport.reviewContext,d.validation,d.seal])r.editorialAmendmentHash=documentHash(amendment);
+ d.dateReport.itemChecks=dates.items.map(i=>({id:i.id,verdict:'supported',reason:'The complete independent fixture review confirms this exact undated source event.',event:'The source supplies no Western date for this event.',evidence:[{unit:'s0001',quote:'艾麗絲'}]}));
+ d.identity.coverage.temporalItems=dates.items.length;d.validation.status='approved-exact-combined-candidate';d.validation.productionExtractionStats=checked.stats;d.validation.identityReviewHash=documentHash(d.identity);d.validation.dateReportHash=documentHash(d.dateReport);
+ return{f,d,amendment,checked};
+}
+
+test('undated chronology amendment composes with full exact independent reviews and preserves old history',t=>{
+ const{f,d,amendment}=undatedFixture(t),old=structuredClone(d.beforeEditorial);
+ assert.equal(amendment.claimRevisions.length,1);
+ assert.equal(validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}).stats.people,1);
+ assert.deepEqual(d.beforeEditorial,old);
+});
+
+for(const[label,mutate]of[
+ ['changed person',a=>{a.claimRevisions[0].after.subject='testbook:001:p999';}],
+ ['changed predicate',a=>{a.claimRevisions[0].after.predicate='office';}],
+ ['lost evidence',a=>{a.claimRevisions[0].after.evidence=[];}],
+ ['invented non-date fact',a=>{a.claimRevisions[0].after.value.office='general';}],
+ ['false certainty',a=>{a.claimRevisions[0].after.certainty='uncertain';}],
+])test('undated chronology amendment rejects '+label,t=>{
+ const{d,amendment,checked}=undatedFixture(t),bad=structuredClone(amendment);mutate(bad);
+ assert.throws(()=>applyDateRepairEditorialAmendment(d.beforeEditorial,bad,checked.normalized));
+});
+
+test('undated chronology amendment cannot replace an unapproved or incompletely reviewed candidate',t=>{
+ const{f,d}=undatedFixture(t);d.dateReport.status='needs-revision';
+ assert.throws(()=>validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}));
+ d.dateReport.status='audited';delete d.identity.reviewContext.editorialAmendmentHash;
+ assert.throws(()=>validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}),/amendment binding/);
+});
+
+}
+
+{
+const save=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+"\n");
+const pin=pinFile;
+function firstInstallFixture(t){
+ const f=fixture(t);
+ for(const role of['extraction','editorial','dateReport'])fs.unlinkSync(f.files[role]);
+ fs.rmSync(f.workflow,{recursive:true});
+ const history=read(f.inputPaths.editorial),editorial={schemaVersion:3,book:f.spec.book,chapter:f.spec.chapter,...history.reviews[1]};save(f.inputPaths.editorial,editorial);
+ const seal=read(f.inputPaths.seal);seal.protectedFiles=[f.files.source,...['source','extraction','editorial','materialization'].map(role=>f.inputPaths[role]),f.protectedFile].map(pin);save(f.inputPaths.seal,seal);
+ f.spec.before=inspectCombinedBefore({root:f.root,book:f.spec.book,chapter:f.spec.chapter});
+ f.spec.priorClaim=null;f.spec.claimHash=documentHash(null);
+ f.spec.initialOwner={jobId:'testbook-001-000000000000',worker:'sole-owner',lane:'manual',status:'active',updatedAt:'2026-11-15T00:00:00Z'};f.spec.initialOwnerHash=documentHash(f.spec.initialOwner);
+ f.ledger.dateAudits={};f.ledger.chapterOwners={[f.key]:structuredClone(f.spec.initialOwner)};
+ const prepared=prepareCombinedCuration(f.spec);return{...f,...prepared};
+}
+
+test('first install publishes from real null baselines only after complete independent approval',t=>{
+ const f=firstInstallFixture(t);
+ assert.equal(f.receipt.before.extraction,null);assert.equal(f.receipt.before.editorial,null);assert.equal(f.receipt.before.dateReport,null);
+ assert.equal(f.receipt.beforePins.extractionHash,null);assert.equal(f.receipt.priorClaim,null);assert.deepEqual(f.receipt.workflow,[]);
+ assert.equal(fs.existsSync(f.files.extraction),false);assert.equal(fs.existsSync(f.files.editorial),false);
+ const stages=[];
+ assert.equal(publishCombinedCuration(f.receipt,f.hash,{...f.options,checkpoint:stage=>{
+   stages.push(stage);if(['lease','receipt','history','source'].includes(stage))assert.equal(fs.existsSync(f.files.extraction),false);
+   if(stage!=='queue')assert.equal(f.ledger.dateAudits[f.key].status,'active');
+ }}).status,'complete');
+ assert.equal(read(f.files.extraction).people.length,1);assert.equal(read(f.files.dateReport).status,'audited');
+ assert.equal(f.ledger.dateAudits[f.key].status,'ready');assert.equal(f.ledger.dateAuditHistory?.[f.key],undefined);
+ assert.deepEqual(f.ledger.chapterOwners[f.key],f.spec.initialOwner);
+ assert.equal(read(path.join(f.workflow,'state.json')).reviewedGenerationTransition.before.extractionHash,null);
+ const final=Object.fromEntries(Object.entries(f.files).map(([role,file])=>[role,pin(file)]));
+ assert.equal(publishCombinedCuration(f.receipt,f.hash,f.options).status,'complete');
+ for(const[role,file]of Object.entries(f.files))assert.deepEqual(pin(file),final[role]);
+});
+
+for(const boundary of['lease','receipt','history','source','extraction','editorial','dateReport','state','queue'])test('first install recovers exact partial publication after '+boundary,t=>{
+ const f=firstInstallFixture(t);
+ assert.throws(()=>publishCombinedCuration(f.receipt,f.hash,{...f.options,checkpoint:stage=>{if(stage===boundary)throw Error('interrupt');}}),/interrupt/);
+ if(!['extraction','editorial','dateReport','state','queue'].includes(boundary))assert.equal(fs.existsSync(f.files.extraction),false);
+ assert.equal(publishCombinedCuration(f.receipt,f.hash,f.options).status,'complete');
+ assert.equal(f.ledger.dateAudits[f.key].status,'ready');assert.equal(read(f.files.extraction).people.length,1);
+});
+
+for(const[label,mutate]of[
+ ['foreign owner',f=>{f.ledger.chapterOwners[f.key].worker='different-owner';}],
+ ['unclaimed ownership',f=>{delete f.ledger.chapterOwners[f.key];}],
+ ['competing extraction',f=>{f.ledger.claims[f.key]={worker:'other',lane:'cursor-sdk',status:'ready',claimedAt:'2026-11-15T00:00:00Z',updatedAt:'2026-11-15T00:00:00Z'};}],
+ ['competing identity',f=>{f.ledger.identityReviews={[f.key]:{held:true}};}],
+ ['unexpected date reservation',f=>{f.ledger.dateAudits[f.key]={worker:'sole-owner',lane:'manual',status:'active',sourceHash:f.receipt.inputs.identity?read(f.inputPaths.identity).sourceHash:null,extractionHash:read(f.inputPaths.identity).extractionHash,jobs:{}};}],
+])test('first install rejects '+label+' before canonical writes',t=>{
+ const f=firstInstallFixture(t);mutate(f);assert.throws(()=>publishCombinedCuration(f.receipt,f.hash,f.options));assert.equal(fs.existsSync(f.files.extraction),false);
+});
+
+for(const[label,mutate]of[
+ ['negative review',f=>{const r=read(f.inputPaths.identity);r.approved=false;save(f.inputPaths.identity,r);}],
+ ['incomplete identity coverage',f=>{const r=read(f.inputPaths.identity);r.personChecks=[];save(f.inputPaths.identity,r);}],
+ ['unreviewed English',f=>{const r=read(f.inputPaths.source);r.content[0].sentences[0].translations[0].literal+=' Unreviewed.';save(f.inputPaths.source,r);}],
+ ['different original source',f=>{fs.appendFileSync(f.files.source,' ');}],
+ ['competing canonical install',f=>{save(f.files.extraction,{accepted:'foreign'});}],
+ ['retained workflow breaker',f=>{fs.mkdirSync(f.workflow,{recursive:true});save(path.join(f.workflow,'state.json'),{schemaVersion:1,workflowVersion:1,round:3,phase:'repair',jobs:{},circuitBreaker:{held:true}});}],
+])test('first install rejects '+label+' without creating accepted empty history',t=>{
+ const f=firstInstallFixture(t);mutate(f);assert.throws(()=>prepareCombinedCuration(f.spec));assert.equal(f.calls(),0);
+});
+
+test('first install cannot use re-pinned retained workflow state as absence',t=>{
+ const f=firstInstallFixture(t);fs.mkdirSync(f.workflow,{recursive:true});save(path.join(f.workflow,'state.json'),{schemaVersion:1,workflowVersion:1,sourceHash:f.spec.before.sourceHash,extractionHash:null,round:3,phase:'repair',jobs:{},circuitBreaker:{held:true}});
+ f.spec.before=inspectCombinedBefore({root:f.root,book:f.spec.book,chapter:f.spec.chapter});
+ assert.throws(()=>prepareCombinedCuration(f.spec),/retained workflow/);
+});
+
+test('first install admission cannot erase an existing extraction editorial history',t=>{
+ const f=fixture(t);fs.unlinkSync(f.files.editorial);
+ const seal=read(f.inputPaths.seal);seal.protectedFiles=seal.protectedFiles.filter(p=>p.file!==f.files.editorial);save(f.inputPaths.seal,seal);
+ f.spec.before=inspectCombinedBefore({root:f.root,book:f.spec.book,chapter:f.spec.chapter});
+ assert.throws(()=>prepareCombinedCuration(f.spec),/existing extraction requires its retained editorial history/);
+ assert.equal(f.calls(),0);
+});
+
 }
