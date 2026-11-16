@@ -6,6 +6,7 @@ import {parseArgs} from 'node:util';
 import {spawnSync} from 'node:child_process';
 import {ownerDirectory,digest} from './lib/people-chapter-owner.mjs';
 import {writeJsonAtomic} from './lib/people-content.mjs';
+import {prepareChapterEditorialHistory} from './lib/people-chapter-editorial-preparation.mjs';
 const {values:o}=parseArgs({options:{job:{type:'string'},root:{type:'string'}}});
 const root=fs.realpathSync(o.root??process.cwd()),dir=ownerDirectory(root,o.job),file=path.join(dir,'job.json');
 let original=fs.readFileSync(file),job=JSON.parse(original);
@@ -24,38 +25,34 @@ const source=JSON.parse(sourceBytes),extraction=JSON.parse(extractionBytes),pack
 const {buildPeopleExtractionPacket}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/build-people-extraction-packet.mjs')));
 const {validateCompactPeopleExtraction}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/validate-people-extraction.mjs')));
 const {loadProperNounMatcher}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-candidates.mjs')));
-const {editorialDecisionSeed,editorialReviews}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-editorial-decisions.mjs')));
+const editorialNative=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-editorial-decisions.mjs')));
 const extractionPacket=buildPeopleExtractionPacket(job.book,job.chapter,{chapterData:source,properNounMatcher:loadProperNounMatcher()});
 const expanded=validateCompactPeopleExtraction(extraction,extractionPacket,{strictAliasDispositions:true}).normalized;
-const canonicalExtraction=JSON.parse(fs.readFileSync(path.join(root,`data/people/extractions/${job.book}/${job.chapter}.json`)));
+const canonicalExtractionFile=path.join(root,`data/people/extractions/${job.book}/${job.chapter}.json`);
+if(job.canonicalExtractionAbsent&&fs.existsSync(canonicalExtractionFile))throw Error('Original canonical extraction absence changed; reconcile ownership');
+const priorRepairCount=job.canonicalExtractionAbsent?0:JSON.parse(fs.readFileSync(canonicalExtractionFile)).translationRepairs.length;
 const canonicalEditorial=path.join(root,`data/people/editorial-decisions/${job.book}/${job.chapter}.json`);
-const beforeEditorial=JSON.parse(fs.readFileSync(canonicalEditorial));
-const newRepairs=expanded.translationRepairs.slice(canonicalExtraction.translationRepairs.length);
-if(newRepairs.length){
- const seed=editorialDecisionSeed({...expanded,translationRepairs:newRepairs.map(r=>({...r,status:'proposed'}))});
- const record=Object.fromEntries(Object.entries(seed).filter(([key])=>!['schemaVersion','book','chapter'].includes(key)));
- const existing=JSON.parse(fs.readFileSync(path.join(dir,'editorial.json'))),oldReviews=editorialReviews(beforeEditorial),current=editorialReviews(existing);
- if(current.length!==oldReviews.length&&JSON.stringify(current.at(-1).proposals)!==JSON.stringify(record.proposals))throw Error('Owner coherence: changed pending editorial proposals require explicit same-reviewer reconciliation; preserve prior review');
- if(current.length===oldReviews.length)fs.writeFileSync(path.join(dir,'editorial.json'),JSON.stringify({schemaVersion:4,book:job.book,chapter:job.chapter,reviews:[...oldReviews,record]},null,2)+'\n');
-}else{
- const editorialFile=path.join(dir,'editorial.json'),existing=JSON.parse(fs.readFileSync(editorialFile));
- if(JSON.stringify(existing)!==JSON.stringify(beforeEditorial)){
-  const history=path.join(dir,'review-history');fs.mkdirSync(history,{recursive:true});
-  const archived=path.join(history,'editorial-before-zero-repair-'+digest(fs.readFileSync(editorialFile)).slice(7,23)+'.json');
-  if(!fs.existsSync(archived))fs.copyFileSync(editorialFile,archived,fs.constants.COPYFILE_EXCL);
-  writeJsonAtomic(editorialFile,beforeEditorial);
- }
+const beforeEditorial=fs.existsSync(canonicalEditorial)?JSON.parse(fs.readFileSync(canonicalEditorial)):null;
+const newRepairs=expanded.translationRepairs.slice(priorRepairCount);
+const editorialFile=path.join(dir,'editorial.json'),editorialBytes=fs.readFileSync(editorialFile);
+const preparedEditorial=prepareChapterEditorialHistory({extraction:{...expanded,translationRepairs:newRepairs},canonical:beforeEditorial,current:JSON.parse(editorialBytes),reviewerAgentId:job.reviewAgentId,native:editorialNative});
+if(JSON.stringify(JSON.parse(editorialBytes))!==JSON.stringify(preparedEditorial.document)){
+ const history=path.join(dir,'review-history');fs.mkdirSync(history,{recursive:true});
+ const archived=path.join(history,'editorial-before-preparation-'+digest(editorialBytes).slice(7,23)+'.json');
+ if(!fs.existsSync(archived))fs.writeFileSync(archived,editorialBytes,{flag:'wx',mode:0o600});
+ writeJsonAtomic(editorialFile,preparedEditorial.document);
 }
 const suffix=digest(sourceBytes).slice(7,19)+'-'+digest(extractionBytes).slice(7,19);
 const materialization={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,sourceByteHash:digest(sourceBytes),extractionByteHash:digest(extractionBytes)};
 const existingMaterialization=JSON.parse(fs.readFileSync(path.join(dir,'materialization.json')));
-if(Object.keys(existingMaterialization).some(k=>!Object.hasOwn(materialization,k)))throw Error('Owner coherence: unsupported source-structure contract requires explicit host review');
+if(Object.keys(existingMaterialization).some(k=>!Object.hasOwn(materialization,k)&&k!=='sourceFootnoteContract'))throw Error('Owner coherence: unsupported source-structure contract requires explicit host review');
+if(existingMaterialization.sourceFootnoteContract)materialization.sourceFootnoteContract=existingMaterialization.sourceFootnoteContract;
 fs.writeFileSync(path.join(dir,'materialization.json'),JSON.stringify(materialization,null,2)+'\n');
 const draftFiles=['source','extraction','editorial','editorial-proposals','materialization'].map(name=>{const f=path.join(dir,name+'.json'),b=fs.readFileSync(f);return{name,file:f,bytes:b.length,sha256:digest(b),documentHash:documentHash(JSON.parse(b))};});
 const context={kind:'independent-chapter-review-context',schemaVersion:1,book:job.book,chapter:job.chapter,
  actualAuthors:job.authors,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,draftFiles,
  counts:{sourceUnits:job.unitIds.length,people:extraction.people.length,temporalItems:packet.items.length,personChecks:packet.people.length},
- editorial:{newRepairProposals:newRepairs.length,oldHistoryPreserved:true,hashesAreInitialDraftSnapshots:true,getFinalHashes:'Read draft:editorial with JSON pointer /reviews/INDEX for documentHash after decisions; read each full draft for final raw sha256/bytes. No hashes here grant approval.'},
+ editorial:{newRepairProposals:preparedEditorial.pendingRepairIds.length,pendingRepairIds:preparedEditorial.pendingRepairIds,retainedReviewCount:preparedEditorial.retainedReviewCount,oldHistoryPreserved:true,hashesAreInitialDraftSnapshots:true,getFinalHashes:'Read draft:editorial using /reviews/INDEX for history v4, or the root for a single v3 review. Read full drafts for final hashes. Host computes mechanical bindings; no hashes here grant approval.'},
  approvalGranted:false,instruction:'Review all required native source/editorial/date/identity evidence. These computed hashes and counts grant no semantic approval. Retained editorial history must remain intact. Never approve a repair you authored; return repair-required or research-hold findings explicitly.'};
 const entries=[];
 for(const [name,value] of [['date-review-packet',packet],['review-context',context]]){

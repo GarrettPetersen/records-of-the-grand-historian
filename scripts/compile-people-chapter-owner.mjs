@@ -6,6 +6,7 @@ import {parseArgs} from 'node:util';
 import {pathToFileURL} from 'node:url';
 import {ownerDirectory,digest,chapterOperation} from './lib/people-chapter-owner.mjs';
 import {writeJsonAtomic} from './lib/people-content.mjs';
+import {prepareEnglishFootnoteAdditions} from './lib/people-footnote-preparation.mjs';
 const {values:o}=parseArgs({options:{job:{type:'string'},root:{type:'string'}}});
 const root=fs.realpathSync(o.root??process.cwd()),dir=ownerDirectory(root,o.job),file=path.join(dir,'job.json');
 let job=JSON.parse(fs.readFileSync(file));
@@ -13,9 +14,16 @@ if(!['working','ready-for-review'].includes(job.status))throw Error('Owner coher
 const read=p=>JSON.parse(fs.readFileSync(p));
 const {contentUnits,setTranslationField}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-content.mjs')));
 const sourceFile=path.join(root,`data/${job.book}/${job.chapter}.json`),beforeFile=path.join(root,`data/people/extractions/${job.book}/${job.chapter}.json`);
-if(digest(fs.readFileSync(sourceFile))!==job.sourceSha256||digest(fs.readFileSync(beforeFile))!==job.extractionSha256)throw Error('Owner coherence: original canonical inputs changed');
-const before=read(beforeFile),candidate=read(path.join(dir,'extraction.json')),source=read(path.join(dir,'source.json')),replay=read(sourceFile);
-const prefix=before.translationRepairs;
+if(digest(fs.readFileSync(sourceFile))!==job.sourceSha256)throw Error('Owner coherence: original canonical source changed');
+let prefix;
+if(job.canonicalExtractionAbsent){
+ if(job.extractionSha256!==null||fs.existsSync(beforeFile))throw Error('Owner coherence: original canonical extraction absence changed');
+ prefix=[];
+}else{
+ if(digest(fs.readFileSync(beforeFile))!==job.extractionSha256)throw Error('Owner coherence: original canonical extraction changed');
+ prefix=read(beforeFile).translationRepairs;
+}
+const candidate=read(path.join(dir,'extraction.json')),source=read(path.join(dir,'source.json')),replay=read(sourceFile);
 if(!isDeepStrictEqual(candidate.translationRepairs.slice(0,prefix.length),prefix))throw Error('Owner coherence: prior repair history changed; preserve and reconcile it');
 const proposals=read(path.join(dir,'editorial-proposals.json')),rows=[],missing=[],fields=new Map();
 for(const [index,r] of job.repairs.entries()){
@@ -24,7 +32,14 @@ for(const [index,r] of job.repairs.entries()){
  const key=r.unitId+'/'+r.field,prior=fields.get(key);
  fields.set(key,{...r,before:prior?.before??r.before,lastIndex:index});
 }
-if(!isDeepStrictEqual(replay,source))throw Error('Owner coherence: source changes are not completely explained by exact-before repair records');
+const materialization=read(path.join(dir,'materialization.json'));
+let completeReplay=replay;
+if(materialization.sourceFootnoteContract){
+ const prepared=prepareEnglishFootnoteAdditions(replay,materialization.sourceFootnoteContract);
+ if(!isDeepStrictEqual(prepared.contract,materialization.sourceFootnoteContract)||!job.authors.includes(prepared.contract.authorAgentId))throw Error('Owner coherence: footnote contract or declared author changed');
+ completeReplay=prepared.source;
+}
+if(!isDeepStrictEqual(completeReplay,source))throw Error('Owner coherence: source changes are not completely explained by exact-before repair records and explicit footnote additions');
 for(const r of fields.values()){
  if(r.before===r.after)continue;
  const confidence=r.confidence??proposals.repairConfidence?.[String(r.lastIndex)];

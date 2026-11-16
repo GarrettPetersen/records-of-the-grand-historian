@@ -39,6 +39,55 @@ test('partial work indexed and byte sealed, retained conversations preserved',t=
  fs.appendFileSync(path.join(root,artifact.file),' ');
  assert.throws(()=>chapterOperation(root,job.id,'owner','read',{artifact:artifact.id}),/Sealed input changed/);
 });
+test('explicit fresh preparation keeps the seed private and preserves canonical absence',t=>{
+ const {root}=fixture(t),canonical=path.join(root,'data/people/extractions/test/001.json');
+ const seed={schemaVersion:2,book:'test',chapter:'001',people:[],claims:[],translationRepairs:[],run:{agentId:null},coverage:{allUnitsVisited:false}};
+ const options={book:'test',chapter:'001',lane:'cursor-sdk',worker:'fresh-owner',ledger:{schemaVersion:1,claims:{}},freshSeed:seed};
+ assert.throws(()=>prepareChapterOwner(root,options),/canonical extraction is absent/);
+ fs.unlinkSync(canonical);
+ assert.throws(()=>prepareChapterOwner(root,{...options,freshSeed:null}),/explicit fresh draft/);
+ const job=prepareChapterOwner(root,options),dir=ownerDirectory(root,job.id);
+ assert.equal(fs.existsSync(canonical),false);
+ assert.equal(job.extractionSha256,null);assert.equal(job.canonicalExtractionAbsent,true);
+ assert.equal(job.firstInstallApprovalGranted,false);
+ assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir,'extraction.json'))),seed);
+ assert.equal(JSON.parse(fs.readFileSync(path.join(dir,'editorial.json'))).reviews[0].id,'retained-review');
+});
+test('fresh compiler preserves absent canonical extraction and rejects a new competing install',t=>{
+ const {root,job,dir}=fixture(t),native=nativeFixture(root);
+ const canonical=path.join(root,'data/people/extractions/test/001.json');fs.unlinkSync(canonical);
+ Object.assign(job,{status:'working',canonicalExtractionAbsent:true,extractionSha256:null,nativeRoot:native,nativeSeals:[]});
+ fs.writeFileSync(path.join(dir,'job.json'),JSON.stringify(job));
+ const invoke=()=>spawnSync(process.execPath,['scripts/compile-people-chapter-owner.mjs','--root',root,'--job',job.id],{cwd:process.cwd(),encoding:'utf8',env:{...process.env,PEOPLE_REPO_ROOT:root}});
+ let r=invoke();assert.equal(r.status,0,r.stderr);assert.equal(fs.existsSync(canonical),false);
+ fs.writeFileSync(canonical,'{}');r=invoke();assert.notEqual(r.status,0);assert.match(r.stderr,/extraction absence changed/);
+});
+test('missing accepted extraction preserves partial chunks, holds and reviewer evidence without granting approval',t=>{
+ const {root}=fixture(t);
+ fs.unlinkSync(path.join(root,'data/people/extractions/test/001.json'));
+ const chunk='data/people/generated/chunk-extractions/test/001/chunk-001.json';
+ fs.mkdirSync(path.dirname(path.join(root,chunk)),{recursive:true});
+ const bytes=JSON.stringify({people:[{id:'saved-person'}],run:{agentId:'retained-chunk-author'}});
+ fs.writeFileSync(path.join(root,chunk),bytes);
+ const ledger={schemaVersion:1,claims:{'test/001':{worker:'original-worker',status:'ready'}},dateAudits:{'test/001':{status:'research-blocked',circuitBreaker:{rounds:3}}},identityReviews:{'test/001':{status:'held',reason:'Unresolved attribution'}}};
+ const before=JSON.stringify(ledger);
+ const seed={schemaVersion:2,book:'test',chapter:'001',people:[],claims:[],translationRepairs:[],coverage:{allUnitsVisited:false}};
+ const job=prepareChapterOwner(root,{book:'test',chapter:'001',lane:'cursor-sdk',worker:'successor',ledger,freshSeed:seed});
+ assert.equal(job.initialState,'recovery-private-draft');
+ assert(job.authors.includes('retained-chunk-author'));
+ assert(job.authors.includes('retained-agent'));
+ const artifact=job.artifacts.find(a=>a.file===chunk);assert(artifact);
+ assert.deepEqual(JSON.parse(chapterOperation(root,job.id,'owner','read',{artifact:artifact.id}).text),JSON.parse(bytes));
+ assert.equal(fs.readFileSync(path.join(root,chunk),'utf8'),bytes);
+ assert.equal(JSON.stringify(ledger),before);
+ const recovery=JSON.parse(fs.readFileSync(path.join(ownerDirectory(root,job.id),'recovery-state.json')));
+ assert.equal(recovery.dateClaim.circuitBreaker.rounds,3);
+ assert.equal(recovery.identityClaim.reason,'Unresolved attribution');
+ assert.equal(recovery.extraction.agentId,'retained-agent');
+ assert.equal(job.firstInstallApprovalGranted,false);
+ assert.deepEqual(job.coveredUnits,[]);
+ assert.equal(fs.existsSync(path.join(root,'data/people/extractions/test/001.json')),false);
+});
 test('roles, exact-before, revision, source repair and coverage guards',t=>{
  const {root,job,dir}=fixture(t);
  assert.throws(()=>authenticateChapterRole(root,job.id,'owner','bad'),/Invalid scoped/);
@@ -125,4 +174,26 @@ test('HTTP MCP accepts only job-scoped credential and exposes chapter tools',asy
  headers.authorization='Bearer '+fs.readFileSync(path.join(dir,'owner-token'),'utf8');
  const response=await fetch(url,{method:'POST',headers,body:JSON.stringify({jsonrpc:'2.0',id:2,method:'tools/call',params:{name:'chapter_manifest',arguments:{}}})});
  assert.equal(response.status,200);const text=await response.text();const data=text.split('\n').filter(s=>s.startsWith('data:')).at(-1);const value=JSON.parse(data?data.slice(5):text);assert.equal(JSON.parse(value.result.content[0].text).id,job.id);
+});
+
+test('bounded exact-before replacement is atomic, revision guarded and role scoped',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.people=[{id:'one'},{id:'two'},{id:'three'}];fs.writeFileSync(file,JSON.stringify(d));
+ const args={revision:0,target:'extraction',pointer:'/people',expectedLength:3,replacements:[{index:0,before:{id:'one'},after:{id:'first'}},{index:2,before:{id:'wrong'},after:{id:'last'}}]};
+ const before=fs.readFileSync(file);assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/exact-before/);assert.deepEqual(fs.readFileSync(file),before);assert.equal(JSON.parse(fs.readFileSync(path.join(dir,'job.json'))).revision,0);
+ args.replacements[1].before={id:'three'};const r=chapterOperation(root,job.id,'owner','replace',args);assert.equal(r.revision,1);assert.equal(r.approvalGranted,false);
+ assert.deepEqual(JSON.parse(fs.readFileSync(file)).people,[{id:'first'},{id:'two'},{id:'last'}]);assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/Stale/);
+ assert.throws(()=>chapterOperation(root,job.id,'owner','replace',{...args,revision:1,target:'identity-review'}),/Role cannot/);
+ assert.throws(()=>chapterOperation(root,job.id,'owner','replace',{...args,revision:1,expectedLength:2}),/length changed/);
+});
+test('bounded replacement refuses duplicate indices, appends, unsafe pointers and oversized batches',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.people=['one','two'];fs.writeFileSync(file,JSON.stringify(d));
+ const args={revision:0,target:'extraction',pointer:'/people',expectedLength:2,replacements:[{index:0,before:'one',after:'changed'}]},before=fs.readFileSync(file);
+ for(const override of [{replacements:[...args.replacements,...args.replacements]},{replacements:[{index:2,before:null,after:'appended'}]},{pointer:'/__proto__/bad'},{replacements:Array(33).fill(args.replacements[0])},{replacements:[{...args.replacements[0],extra:'ignored'}]}]){assert.throws(()=>chapterOperation(root,job.id,'owner','replace',{...args,...override}));assert.deepEqual(fs.readFileSync(file),before);}
+});
+test('independent reviewer can replace authored checks without owner access to review artifacts',t=>{
+ const {root,job,dir}=fixture(t);job.status='reviewing';job.reviewAgentId='independent';fs.writeFileSync(path.join(dir,'job.json'),JSON.stringify(job));
+ const file=path.join(dir,'review-validation.json');fs.writeFileSync(file,JSON.stringify({checks:[{verdict:'hold'}]}));
+ const args={revision:0,target:'review-validation',pointer:'/checks',expectedLength:1,replacements:[{index:0,before:{verdict:'hold'},after:{verdict:'supported',reason:'Actual independent fixture judgment'}}]};
+ assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/frozen/);
+ assert.equal(chapterOperation(root,job.id,'reviewer','replace',args).revision,1);assert.equal(JSON.parse(fs.readFileSync(file)).checks[0].verdict,'supported');
 });

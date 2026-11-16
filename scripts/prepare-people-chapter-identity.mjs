@@ -20,6 +20,7 @@ import { ChapterIdentityReviewError, chapterIdentityInputs, chapterIdentityRevie
 import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs';
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
 import { reconcileIdentityProofComposition, identityCompositionSourcePlans } from './lib/people-identity-proof-composition.mjs';
+import { loadPrivateIdentityCandidate, projectPrivateIdentityIndex } from './lib/people-private-identity-inputs.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
@@ -39,21 +40,34 @@ export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
   return units;
 }
 
-export async function buildChapterIdentityReviewPacket({ book, chapter, registry, sourceRevision, retainedComposition = null }) {
+export async function buildChapterIdentityReviewPacket({ book, chapter, registry, sourceRevision, retainedComposition = null, privateCandidate = null, transportMaxBytes }) {
   need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host resource guard rejected dossier preparation');
   const pinned = sourceRevision ? pinnedIdentityChapterContext(REPO_ROOT, sourceRevision) : null;
-  const readInputs = pinned ? pinned.inputs : chapterIdentityInputs, loadChapter = pinned ? pinned.load : loadValidatedPeopleChapter;
-  const inputs = readInputs(book, chapter), scope = { book, chapter }, matcher = loadProperNounMatcher();
+  const matcher = loadProperNounMatcher();
+  need(!privateCandidate || pinned, 'Private candidate preparation requires an exact accepted source revision');
+  const candidate = privateCandidate ? loadPrivateIdentityCandidate({book,chapter,files:privateCandidate,properNounMatcher:matcher}) : null;
+  const acceptedLoad = pinned ? pinned.load : loadValidatedPeopleChapter;
+  const readInputs = candidate ? () => candidate.assertUnchanged() : pinned ? pinned.inputs : chapterIdentityInputs;
+  const loadChapter = candidate ? (b,c,options) => b===book&&c===chapter ? candidate.own : acceptedLoad(b,c,options) : acceptedLoad;
+  const inputs = readInputs(book, chapter), scope = { book, chapter };
   const own = loadChapter(book, chapter, { properNounMatcher: matcher });
   const editorialFile = editorialDecisionPath(book, chapter);
-  assertChapterGates(own.extraction, (pinned ? pinned.config : readJson(path.join(PEOPLE_DIR, 'config.json'))).promptVersion,
+  if (!candidate) assertChapterGates(own.extraction, (pinned ? pinned.config : readJson(path.join(PEOPLE_DIR, 'config.json'))).promptVersion,
     pinned ? pinned.dates(book, chapter) : dateAuditStatus(book, chapter), pinned ? pinned.editorial(book, chapter) : fs.existsSync(editorialFile) ? readJson(editorialFile) : null);
   const index = await readIdentityDossierStore(registry, new Map());
   try {
-    const registryReuse = pinned ? provePinnedDossierReuse(index.provenance, pinned.snapshot) : null;
+    const projectedSources = new Map([[book+':'+chapter,own]]);
+    const privateProjection = candidate ? projectPrivateIdentityIndex(index,own,scope,id=>{
+      const[b,c]=id.split(':'),key=b+':'+c;
+      if(!projectedSources.has(key))projectedSources.set(key,acceptedLoad(b,c,{properNounMatcher:matcher,strictAliasDispositions:false}));
+      return projectedSources.get(key).localPeople.get(id);
+    }) : null;
+    const registryReuse = pinned && !candidate ? provePinnedDossierReuse(index.provenance, pinned.snapshot) : null;
     const identityInputs = pinned ? null : identityDossierInputs(REPO_ROOT);
-    if (!pinned) need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
-    const plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS), sources = new Map([[`${book}:${chapter}`, own]]), relevant = new Map();
+    if (!pinned && !candidate) need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
+    let plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS);
+    if(candidate){const {fingerprint,...body}=plan;for(const item of body.cases)item.proposal={...item.proposal,unresolvedIdentity:true,reason:'Private source-backed membership is provisional; retain cross-chapter uncertainty until actual accepted membership is verified.'};plan={...body,fingerprint:peopleDigest(body)};}
+    const sources = new Map([[book+':'+chapter, own]]), relevant = new Map();
     for (const item of plan.cases) for (const id of [...item.localPeople, item.canonicalMembership.anchorLocalId]) {
       const [sourceBook, sourceChapter] = id.split(':'), key = `${sourceBook}:${sourceChapter}`;
       if (!sources.has(key)) sources.set(key, loadChapter(sourceBook, sourceChapter,
@@ -63,7 +77,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
       relevant.set(id, person);
     }
     if (pinned) assertPinnedIdentityRuntime(pinned.snapshot);
-    need(peopleDigest(readInputs(book, chapter)) === peopleDigest(inputs) && (pinned || identityDossierInputs(REPO_ROOT) === identityInputs), 'Source or identity inputs changed while preparing identity review');
+    need(peopleDigest(readInputs(book, chapter)) === peopleDigest(inputs) && (candidate || pinned || identityDossierInputs(REPO_ROOT) === identityInputs), 'Source or identity inputs changed while preparing identity review');
     const units = collectChapterIdentityPrimaryUnits(own, sources, relevant);
     let retainedIdentityProof = null, remainingCaseIds = null, reusedCases = 0;
     if (retainedComposition) {
@@ -78,6 +92,8 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
       retainedIdentityProof = {schemaVersion:1,kind:'chapter-identity-review-composition',scope,plan,sourcePlans,components:previous.components,selections:result.selections};
       remainingCaseIds = result.remainingCaseIds; reusedCases = result.eligible.size;
       if (!remainingCaseIds.length) {
+        if(candidate)return{composition:retainedIdentityProof,receipt:{status:'private-evidence-current',scope,inputs,planFingerprint:plan.fingerprint,newReviewCases:0,
+          privateEvidenceReviewedCases:result.eligible.size,generatedPairs:0,acceptedMembershipStillRequired:true,independentReviewCompleted:false,dataQualified:false,published:false}};
         const certificate = validateChapterIdentityBundle({localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId},sources,scope,retainedIdentityProof,inputs);
         return {composition:retainedIdentityProof,receipt:{status:'identity-review-current',scope,inputs,planFingerprint:plan.fingerprint,newReviewCases:0,
           reviewedCases:certificate.retained.length,reviewedAmbiguousCases:certificate.ambiguity.length,generatedPairs:0,independentReviewCompleted:true,dataQualified:false,published:false}};
@@ -87,8 +103,9 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     const packet = { schemaVersion: 1, kind: 'source-chapter-dossier-review-packet', scope, plan,
       ...(retainedIdentityProof ? {retainedIdentityProof,reviewCaseIds:remainingCaseIds,transportPolicy:identityReviewTransportPolicy()} : {}),
       authorAgentIds: extractionAuthorAgentIds(own.extraction), registryProvenance: index.provenance,
+      ...(candidate ? {privateCandidate:candidate.metadata,privateProjection} : {}),
       ...(registryReuse ? { registryReuse } : {}),
-      acceptedMembershipAuthority: 'Existing native validated and source-reviewed canonical membership is the baseline. Review this chapter and current anchor; hold concrete contradictions. This report cannot merge, split or separate records.',
+      acceptedMembershipAuthority: candidate ? 'PRIVATE preview only: projected membership is not yet an accepted canonical record. Review exact source people and proposed anchors conservatively. Publication requires normal source/date/editorial approval and actual installed membership; native proof composition must prove every unchanged case against that accepted view. Preserve unresolvedIdentity:true; never infer merges or separations from missing candidates.' : 'Existing native validated and source-reviewed canonical membership is the baseline. Review this chapter and current anchor; hold concrete contradictions. This report cannot merge, split or separate records.',
       people: [...relevant.values()], units: [...units.values()],
       candidateDossiers: candidateIds.map(id => { const dossier = index.dossiers.get(id); return { id, version: dossier.version, names: dossier.names, matching: dossier.matching, localPeople: dossier.localPeople }; }),
       requiredReport: { schemaVersion: 1, planFingerprint: plan.fingerprint, reviewer: { agentId: 'ACTUAL_REVIEWER_AGENT_ID', name: 'REVIEWER_NAME' },
@@ -99,9 +116,10 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
       instructions: 'Review every case and every target local person. Quote the primary Chinese for each target and the retained canonical anchor. Confirm actual individual, supported chapter attribution, and accepted membership; hold contradictions. Keep unresolvedIdentity true when proposed, including small candidate buckets and overflow. Omitted names are unreviewed uncertainty, never separation evidence. No positive merges, no all-pairs comparisons, no recursive external chapter completion. Return the closed required report only. Supply definite English repairs separately with complete exact before/after, source reason, both fields and repetitions; do not silently ignore them.' };
     const bytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
-      transportPolicy: identityReviewTransportPolicy(),
+      transportPolicy: identityReviewTransportPolicy(transportMaxBytes),
       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
       generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false,
+      ...(candidate ? {privateCandidate:candidate.metadata,privateProjection,acceptedMembershipStillRequired:true} : {}),
       ...(retainedIdentityProof ? {reusedCases,newReviewCases:remainingCaseIds.length,retainedCompositionFingerprint:peopleDigest(retainedIdentityProof)} : {}),
       ...(registryReuse ? { sourceRevision, registryReuse } : {}) };
     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
