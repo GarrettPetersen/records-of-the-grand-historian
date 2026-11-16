@@ -17,7 +17,7 @@ import { sha256, contentUnits, writeJsonAtomic } from './lib/people-content.mjs'
 import { reservePeopleTargetsInLedger } from './lib/people-work-queue.mjs';
 import { inspectCombinedBefore, prepareCombinedCuration, verifyCombinedCuration, publishCombinedCuration } from './lib/people-combined-curation.mjs';
 import { CompletedDateGenerationHold } from './lib/people-date-workflow.mjs';
-import { combinedDatePacket, documentHash, replayCombinedSourceReordering, validateCombinedReviews } from './lib/people-combined-curation-review.mjs';
+import { combinedDatePacket, documentHash, replayCombinedSourceReordering, validateCombinedReviews, combinedEditorialBaseline } from './lib/people-combined-curation-review.mjs';
 
 const reason = 'Independently checked this exact source unit and its named individual against the complete fixture.';
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -1240,6 +1240,79 @@ test('undated chronology amendment cannot replace an unapproved or incompletely 
  assert.throws(()=>validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}));
  d.dateReport.status='audited';delete d.identity.reviewContext.editorialAmendmentHash;
  assert.throws(()=>validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}),/amendment binding/);
+});
+
+function mixedChronologyFixture(t){
+ const {f,d}=undatedFixture(t),unit=d.source.content[0].sentences[0];
+ unit.translations[0].literal='Alice Smith arrived.';
+ const packet=buildPeopleExtractionPacket(d.book,d.chapter,{chapterData:d.source,properNounMatcher:loadProperNounMatcher()});
+ d.candidate.input=buildCompactInput(packet);
+ d.candidate.translationRepairs.push(['s0001','literal','Alice Smith came.','Alice Smith arrived.',reason,'high','applied']);
+ const checked=validateCompactPeopleExtraction(d.candidate,packet,{strictAliasDispositions:true});
+ const incoming=editorialDecisionSeed({...checked.normalized,translationRepairs:checked.normalized.translationRepairs.slice(-1).map(r=>({...r,status:'proposed'}))});
+ incoming.reviewer={kind:'human',name:'Independent editor',model:null,agentId:'reviewer',runId:null,completedAt:'2026-09-14T00:00:00Z'};
+ incoming.decisions[0]={repairId:incoming.proposals[0].id,decision:'accept',after:null,reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'艾麗絲來。'}};
+ const baseline=combinedEditorialBaseline(d.beforeEditorial,checked.normalized,d.beforeExtraction.translationRepairs.length);
+ const record=({schemaVersion,book,chapter,...r})=>r;
+ d.editorial={schemaVersion:4,book:d.book,chapter:d.chapter,reviews:[...editorialReviews(baseline.editorial),incoming].map(record)};
+ const dates=combinedDatePacket(d.book,d.chapter,d.source,d.candidate);
+ for(const r of[d.identity,d.dateReport,d.validation,d.materialization,d.seal])Object.assign(r,{sourceHash:dates.sourceHash,extractionHash:dates.extractionHash});
+ const hashes=[documentHash(incoming)];
+ for(const r of[d.identity,d.dateReport]){delete r.reviewContext.editorialDecisionHash;r.reviewContext.editorialDecisionHash=hashes[0];delete r.reviewContext.editorialDecisionHashes;}
+ delete d.seal.editorialDecisionHashes;d.seal.editorialDecisionHash=hashes[0];
+ d.materialization.editorialAmendment=baseline.amendment;
+ for(const r of[d.identity.reviewContext,d.dateReport.reviewContext,d.validation,d.seal])r.editorialAmendmentHash=documentHash(baseline.amendment);
+ d.identity.unitChecks[0].literalHash=sha256(unit.translations[0].literal);
+ d.validation.status='approved-exact-editorial-amended-candidate';d.validation.productionExtractionStats=checked.stats;
+ d.validation.identityReviewHash=documentHash(d.identity);d.validation.dateReportHash=documentHash(d.dateReport);
+ return{f,d,incoming};
+}
+test('metadata binding composes chronology history and incoming English without changing raw captured proofs',async t=>{
+ const {f,d}=mixedChronologyFixture(t),dir=path.join(f.root,'data/people/generated/chapter-owners/test-001-0123456789ab');fs.mkdirSync(dir,{recursive:true});
+ const save=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
+ save(f.files.source,d.beforeSource);save(f.files.extraction,d.beforeExtraction);save(f.files.editorial,d.beforeEditorial);
+ const record=({schemaVersion,book,chapter,...r})=>r;
+ d.editorial={schemaVersion:4,book:d.book,chapter:d.chapter,reviews:[...editorialReviews(d.beforeEditorial),editorialReviews(d.editorial).at(-1)].map(record)};
+ const names={source:'source',candidate:'extraction',editorial:'editorial',materialization:'materialization',identity:'identity-review',dateReport:'date-report',validation:'review-validation',seal:'input-seal'};
+ for(const key of ['source','candidate','editorial'])save(path.join(dir,names[key]+'.json'),d[key]);
+ const rawPath=key=>path.join(dir,names[key]+'.json');
+ const materialization={sourceHash:d.materialization.sourceHash,extractionHash:d.materialization.extractionHash,sourceByteHash:hashFile(rawPath('source')),extractionByteHash:hashFile(rawPath('candidate'))};
+ save(rawPath('materialization'),materialization);
+ for(const r of [d.identity,d.dateReport]){delete r.reviewContext.editorialAmendmentHash;Object.assign(r.reviewContext,{sourcePath:rawPath('source'),candidatePath:rawPath('candidate'),sourceByteHash:materialization.sourceByteHash,candidateByteHash:materialization.extractionByteHash});}
+ delete d.validation.editorialAmendmentHash;delete d.seal.editorialAmendmentHash;
+ d.validation.identityReviewHash=documentHash(d.identity);d.validation.dateReportHash=documentHash(d.dateReport);
+ d.seal.protectedFiles=['source','candidate','editorial'].map(key=>pinFile(rawPath(key)));
+ for(const key of ['identity','dateReport','validation','seal'])save(rawPath(key),d[key]);
+ const raw=Object.fromEntries(Object.keys(names).map(key=>[key,fs.readFileSync(rawPath(key))]));
+ const job={book:d.book,chapter:d.chapter,nativeRoot:path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),reviewAgentId:'reviewer',authors:d.authorAgentIds,beforeNative:inspectCombinedBefore({root:f.root,book:d.book,chapter:d.chapter})};
+ const bound=await prepareChapterNativeInputs({root:f.root,dir,job,hostAuthor:'codex:mixed-fixture'});
+ for(const key of Object.keys(names))assert.deepEqual(fs.readFileSync(rawPath(key)),raw[key]);
+ const boundDocs={...d,source:read(path.join(bound.materializedDir,'data',d.book,d.chapter+'.json')),candidate:read(path.join(bound.materializedDir,'candidate.json')),editorial:read(path.join(bound.materializedDir,'editorial-decisions.json')),materialization:read(path.join(bound.materializedDir,'validation.json')),identity:read(path.join(bound.reviewDir,'identity-review.json')),dateReport:read(path.join(bound.reviewDir,'date-report.json')),validation:read(path.join(bound.reviewDir,'validation.json')),seal:read(path.join(bound.reviewDir,'input-seal.json'))};
+ assert.equal(validateCombinedReviews(boundDocs,{dataDir:path.join(f.root,'data')}).stats.people,1);
+ assert.deepEqual(editorialReviews(boundDocs.editorial).at(-1),editorialReviews(d.editorial).at(-1));
+});
+test('new candidate non-date claims cannot be inserted onto historical editorial records',t=>{
+ const{d}=mixedChronologyFixture(t),packet=buildPeopleExtractionPacket(d.book,d.chapter,{chapterData:d.source,properNounMatcher:loadProperNounMatcher()}),expanded=validateCompactPeopleExtraction(d.candidate,packet,{strictAliasDispositions:true}).normalized;
+ const before=structuredClone(d.beforeEditorial),expected=combinedEditorialBaseline(before,expanded,d.beforeExtraction.translationRepairs.length);
+ expanded.claims.push({id:'testbook:001:c9999',subject:'testbook:001:p001',predicate:'event-participation',value:{action:'invented-unrelated-non-date-action'},certainty:'explicit',evidence:['testbook:001:s0001']});
+ assert.deepEqual(combinedEditorialBaseline(before,expanded,d.beforeExtraction.translationRepairs.length),expected);
+ assert.deepEqual(d.beforeEditorial,before);
+ const dateClaim=expanded.claims.find(c=>c.predicate==='attestation');dateClaim.value.event='Invented change to a reviewed non-date event';
+ assert.throws(()=>validateCombinedReviews({...d,candidate:{...d.candidate,claims:[['p001','attestation',{undatedSourceAttestation:true,event:dateClaim.value.event},'explicit',['s0001']]]}},{dataDir:process.cwd()}));
+});
+test('chronology history amendment composes with independently reviewed new English and retains raw old records',t=>{
+ const{f,d,incoming}=mixedChronologyFixture(t),old=structuredClone(d.beforeEditorial),current=structuredClone(incoming);
+ assert.equal(validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}).stats.people,1);
+ assert.deepEqual(d.beforeEditorial,old);assert.deepEqual(editorialReviews(d.editorial).at(-1),current);
+});
+for(const[label,mutate]of[
+ ['unauthorized English',d=>{d.source.content[0].sentences[0].translations[0].literal+=' Unreviewed.';}],
+ ['changed canonical non-date reasoning',d=>{d.editorial.reviews[0].reviewedAt='2026-09-15T00:00:00Z';}],
+ ['uncaptured incoming component',d=>{d.identity.reviewContext.editorialDecisionHash='sha256:'+'0'.repeat(64);}],
+ ['missing chronology review binding',d=>{delete d.dateReport.reviewContext.editorialAmendmentHash;}],
+ ['self-approved new English',d=>{d.editorial.reviews.at(-1).reviewer.agentId='extractor';}],
+])test('mixed chronology and English rejects '+label,t=>{
+ const{f,d}=mixedChronologyFixture(t);mutate(d);assert.throws(()=>validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}));
 });
 
 }
