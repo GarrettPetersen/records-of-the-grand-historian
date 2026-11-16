@@ -132,3 +132,30 @@ test('changed bounded candidates preserve already reviewed uncertainty but canno
     assert.equal(result.remainingCaseIds.length,uncertain?0:1);
   }
 });
+
+function singletonFixture(){
+ const f=fixture(),clusters=[...f.people.keys()].map((id,i)=>({canonicalPersonId:'per_singleton_'+i,localPeople:[id],retiredIds:[]}));
+ const index=buildIdentityDossierIndex(f.people,clusters,localNameKeys),plan=planChapterIdentityReview(index,f.scope,inputs,IDENTITY_REVIEW_LIMITS),captured=plan.cases.map((item,i)=>f.makeCapture(plan,item,'singleton-reviewer-'+i));
+ const next=()=>{const index=buildIdentityDossierIndex(f.people,clusters,localNameKeys);return{index,plan:planChapterIdentityReview(index,f.scope,inputs,IDENTITY_REVIEW_LIMITS),view:{localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId}};};
+ return{...f,clusters,plan,captured,next};
+}
+test('singleton generated claim-label churn reuses exact semantic proofs without retagging original reports',()=>{
+ const f=singletonFixture(),original=f.captured.map(c=>c.component.reportText);for(const p of f.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';
+ const n=f.next(),result=reconcileIdentityProofComposition(n.view,f.sources,n.plan,[f.plan],f.captured.map(c=>c.component));assert.equal(result.eligible.size,2);assert.equal(result.remainingCaseIds.length,0);
+ const bundle={schemaVersion:1,kind:'chapter-identity-review-composition',scope:f.scope,plan:n.plan,sourcePlans:[f.plan],components:f.captured.map(c=>c.component),selections:result.selections};
+ assert.equal(validateChapterIdentityBundle(n.view,f.sources,f.scope,bundle,inputs).retained.length,2);
+ for(const[i,c]of bundle.components.entries()){assert.equal(c.reportText,original[i]);assert.equal(JSON.parse(c.reportText).planFingerprint,f.plan.fingerprint);}
+});
+test('singleton reuse still invalidates changed facts or occurrences and preserves a current concrete hold',()=>{
+ const f=singletonFixture();f.sources.get('fixture:001').localPeople.values().next().value.claims[0].value.en='Changed identity';const n=f.next();assert.equal(reconcileIdentityProofComposition(n.view,f.sources,n.plan,[f.plan],f.captured.map(c=>c.component)).remainingCaseIds.length,1);
+ const g=singletonFixture(),held=g.makeCapture(g.plan,g.plan.cases[0],'actual-hold-reviewer','hold');for(const p of g.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';const m=g.next(),r=reconcileIdentityProofComposition(m.view,g.sources,m.plan,[g.plan],[held.component]);assert.equal(r.held.length,1);assert.equal(r.eligible.size,0);
+});
+test('bookkeeping reuse cannot cross a protected membership or anchor change, or a nonsingleton dossier',()=>{
+ const f=fixture();for(const p of f.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';const index=buildIdentityDossierIndex(f.people,f.clusters,localNameKeys),plan=planChapterIdentityReview(index,f.scope,inputs,IDENTITY_REVIEW_LIMITS);
+ assert.equal(reconcileIdentityProofComposition({localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId},f.sources,plan,[f.plan],f.captured.map(c=>c.component)).eligible.size,0);
+ const g=singletonFixture(),n=g.next();n.plan.cases[0].canonicalMembership.protectedLocalPeople.push('fixture:002:p001');const {fingerprint,...body}=n.plan;n.plan={...body,fingerprint:peopleDigest(body)};assert.equal(reconcileIdentityProofComposition(n.view,g.sources,n.plan,[g.plan],g.captured.map(c=>c.component)).remainingCaseIds.length,1);
+});
+test('singleton bookkeeping projection still checks full Chinese coverage and every exact occurrence',()=>{
+ const f=singletonFixture();for(const p of f.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'另有新名。'});const n=f.next();assert.equal(reconcileIdentityProofComposition(n.view,f.sources,n.plan,[f.plan],f.captured.map(c=>c.component)).eligible.size,0);
+ const g=singletonFixture();for(const p of g.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';g.sources.get('fixture:001').localPeople.values().next().value.mentions[0].spans.zh[0].occurrence++;const m=g.next();assert.equal(reconcileIdentityProofComposition(m.view,g.sources,m.plan,[g.plan],g.captured.map(c=>c.component)).remainingCaseIds.length,1);
+});

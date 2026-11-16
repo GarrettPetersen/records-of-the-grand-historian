@@ -52,13 +52,13 @@ const draftFiles=['source','extraction','editorial','editorial-proposals','mater
 const context={kind:'independent-chapter-review-context',schemaVersion:1,book:job.book,chapter:job.chapter,
  actualAuthors:job.authors,sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,draftFiles,
  counts:{sourceUnits:job.unitIds.length,people:extraction.people.length,temporalItems:packet.items.length,personChecks:packet.people.length},
- editorial:{newRepairProposals:preparedEditorial.pendingRepairIds.length,pendingRepairIds:preparedEditorial.pendingRepairIds,retainedReviewCount:preparedEditorial.retainedReviewCount,oldHistoryPreserved:true,hashesAreInitialDraftSnapshots:true,getFinalHashes:'Read draft:editorial using /reviews/INDEX for history v4, or the root for a single v3 review. Read full drafts for final hashes. Host computes mechanical bindings; no hashes here grant approval.'},
+ editorial:{canonicalBeforeReviewCount:editorialNative.editorialReviews(beforeEditorial).length,nativeIncomingReviewIndices:editorialNative.editorialReviews(preparedEditorial.document).map((_,i)=>i).slice(editorialNative.editorialReviews(beforeEditorial).length),newRepairProposals:preparedEditorial.pendingRepairIds.length,pendingRepairIds:preparedEditorial.pendingRepairIds,retainedReviewCount:preparedEditorial.retainedReviewCount,oldHistoryPreserved:true,hashesAreInitialDraftSnapshots:true,getFinalHashes:'After final decisions, chapter_read draft:editorial returns editorialComponentHashes as native schema3 document hashes, even with a component pointer. Select nativeIncomingReviewIndices in order; never use the bare /reviews/INDEX documentHash as the native wrapper hash. Read final full drafts for report hashes. All hashes are computed metadata, not approval.'},
  approvalGranted:false,instruction:'Review all required native source/editorial/date/identity evidence. These computed hashes and counts grant no semantic approval. Retained editorial history must remain intact. Never approve a repair you authored; return repair-required or research-hold findings explicitly.'};
 const entries=[];
 for(const [name,value] of [['date-review-packet',packet],['review-context',context]]){
- const target=path.join(dir,name+'-'+suffix+'.json'),bytes=Buffer.from(JSON.stringify(value,null,2)+'\n');
+ const bytes=Buffer.from(JSON.stringify(value,null,2)+'\n'),id=name+'-'+suffix+(name==='review-context'?'-'+digest(bytes).slice(7,19):''),target=path.join(dir,id+'.json');
  if(fs.existsSync(target)){if(digest(fs.readFileSync(target))!==digest(bytes))throw Error('Immutable review packet differs; preserve and reconcile');}else fs.writeFileSync(target,bytes,{flag:'wx',mode:0o600});
- const id=name+'-'+suffix;entries.push({id,file:path.relative(root,target),bytes:bytes.length,sha256:digest(bytes),use:'current-independent-review-input-not-approval'});
+ entries.push({id,file:path.relative(root,target),bytes:bytes.length,sha256:digest(bytes),use:'current-independent-review-input-not-approval'});
 }
 if(!fs.readFileSync(file).equals(original))throw Error('Job changed while sealing review; reconcile without losing outputs');
 job.artifacts=[...job.artifacts.filter(a=>!entries.some(e=>e.id===a.id)),...entries];job.reviewPacketArtifacts=entries.map(e=>({id:e.id,kind:e.id.startsWith('date-')?'native-date-packet':'native-hashes-and-counts'}));

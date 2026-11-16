@@ -15,6 +15,18 @@ const rowKeys = ['caseId','verdict','canonicalPersonId','membershipReviewed','me
 const dependencyIds = (item, row) => [...new Set([...item.localPeople, item.canonicalMembership.anchorLocalId, ...row.sourceWitnesses.map(w => w.localId)])];
 const assignment = item => Object.fromEntries(['id','canonicalPersonId','dossierVersion','canonicalMembership','localPeople','memberVersions'].map(k => [k,item[k]]));
 
+// A singleton's generated claim labels may change while every actual source
+// fact/occurrence stays identical. Its whole protected membership is the one
+// already-captured semantic dependency. Never infer this for a larger dossier.
+function sameProtectedSingleton(before,current){
+ const id=before.localPeople[0];
+ return before.id===current.id&&before.canonicalPersonId===current.canonicalPersonId&&
+  same(before.localPeople,[id])&&same(current.localPeople,[id])&&
+  same(before.canonicalMembership.protectedLocalPeople,[id])&&same(current.canonicalMembership.protectedLocalPeople,[id])&&
+  before.canonicalMembership.anchorLocalId===id&&current.canonicalMembership.anchorLocalId===id&&
+  same(Object.keys(before.memberVersions),[id])&&same(Object.keys(current.memberVersions),[id]);
+}
+
 function assertPlan(plan) {
   const { fingerprint: digest, ...body } = plan;
   need(plan.schemaVersion === 1 && plan.kind === 'chapter-identity-dossier-review' && digest === peopleDigest(body) &&
@@ -155,11 +167,14 @@ export function reconcileIdentityProofComposition(view, sourceChapters, plan, so
     const original = assertComponent(component,parent), actualAuthors = [...new Set([...component.receipt.authorAgentIds,...authors])];
     need(!actualAuthors.includes(component.receipt.actualReviewerAgentId), 'Current or original extractor cannot independently review their own person');
     for (const row of original.report.reviews) {
-      const before = original.cases.get(row.caseId), current = currentCases.get(row.caseId); let reason = null;
+      const before = original.cases.get(row.caseId), current = currentCases.get(row.caseId); let reason = null, singletonRebind = false;
       if (!current) reason = 'Current chapter case or canonical membership changed';
-      else if (!same(assignment(before),assignment(current))) reason = 'Current assigned dossier, member or anchor contract changed';
+      else if (!same(assignment(before),assignment(current))) {
+        if(row.unresolvedIdentity===true&&sameProtectedSingleton(before,current))singletonRebind=true;
+        else reason = 'Current assigned dossier, member or anchor contract changed';
+      }
       else if (!row.unresolvedIdentity && !same(before,current)) reason = 'Previously certain candidate search changed; fresh ambiguity review required';
-      else if (component.receipt.chapterChinese !== identityChapterChineseFingerprint(evidence.own.packet)) reason = 'Full target Chinese or unit coverage changed';
+      if (!reason && component.receipt.chapterChinese !== identityChapterChineseFingerprint(evidence.own.packet)) reason = 'Full target Chinese or unit coverage changed';
       if (!reason) for (const id of dependencyIds(before,row)) {
         const person = evidence.index.localPeople.get(id), source = person && sourceChapters.get(person.book + ':' + person.chapter);
         need(source, 'Missing current native-validated review dependency ' + id);
@@ -169,7 +184,12 @@ export function reconcileIdentityProofComposition(view, sourceChapters, plan, so
       if (reason) { invalidated.push({ componentId: component.id,caseId: row.caseId,reason }); continue; }
       if (row.verdict === 'hold') { held.push({ componentId: component.id,caseId: row.caseId,reason: row.reason }); continue; }
       need(!eligible.has(row.caseId), 'Duplicate eligible independent case proofs require explicit reconciliation');
-      const proof = validateOneCase(evidence,parent,before,original.report,row,actualAuthors);
+      // Only after ALL original semantic dependencies and full Chinese match,
+      // validate against the current native singleton contract. This projection
+      // is never saved as a new model report; original bytes/hash/plan stay exact.
+      const proof = singletonRebind
+        ?validateOneCase(evidence,plan,current,original.report,{...row,membershipFingerprint:current.canonicalMembership.fingerprint},actualAuthors)
+        :validateOneCase(evidence,parent,before,original.report,row,actualAuthors);
       eligible.set(row.caseId, { componentId: component.id, caseId: row.caseId, proof,
         sourceReview: { agentId: component.receipt.actualReviewerAgentId, runId: component.receipt.runId,
           reportSha256: component.receipt.reportSha256, sourcePlanFingerprint: parent.fingerprint }, candidateSearchChanged: !same(before,current) });

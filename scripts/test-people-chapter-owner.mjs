@@ -7,6 +7,8 @@ import {once} from 'node:events';
 import {spawnSync} from 'node:child_process';
 import {prepareChapterOwner,chapterOperation,authenticateChapterRole,ownerDirectory,pinChapterNativeRuntime} from './lib/people-chapter-owner.mjs';
 import {startGrokbotMcpServer} from './grokbot-mcp-server.mjs';
+import {editorialReviews} from './lib/people-editorial-decisions.mjs';
+import {documentHash} from './lib/people-combined-curation-review.mjs';
 
 function fixture(t){
  const root=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'chapter-owner-test-')));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
@@ -209,4 +211,16 @@ test('bounded removal rejects unsafe indices, repeated rows, stale lengths, role
  const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.claims=['keep','remove'];fs.writeFileSync(file,JSON.stringify(d));
  const args={revision:0,target:'extraction',pointer:'/claims',expectedLength:2,removals:[{index:1,before:'remove'}]},before=fs.readFileSync(file);
  for(const override of [{expectedLength:3},{removals:[...args.removals,...args.removals]},{removals:[{index:2,before:null}]},{target:'identity-review'},{pointer:'/__proto__/bad'},{removals:Array(33).fill(args.removals[0])},{removals:[{...args.removals[0],extra:true}]}]){assert.throws(()=>chapterOperation(root,job.id,'owner','remove',{...args,...override}));assert.deepEqual(fs.readFileSync(file),before);}
+});
+test('editorial reads expose exact native schema3 component hashes without changing raw records or bare-pointer hashes',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'editorial.json'),document={schemaVersion:4,book:'test',chapter:'001',reviews:[{reviewer:{agentId:'actual-reviewer'},decisions:[]},{reviewer:{agentId:null},decisions:[{decision:'reject',reason:''}]}]};
+ fs.writeFileSync(file,JSON.stringify(document));const before=fs.readFileSync(file),result=chapterOperation(root,job.id,'reviewer','read',{artifact:'draft:editorial',pointer:'/reviews/1'});
+ assert.deepEqual(result.editorialComponentHashes,editorialReviews(document).map((r,index)=>({index,documentHash:documentHash(r)})));
+ assert.equal(result.documentHash,documentHash(document.reviews[1]));assert.notEqual(result.documentHash,result.editorialComponentHashes[1].documentHash);assert.deepEqual(fs.readFileSync(file),before);
+});
+test('single-review and empty editorial hash views preserve native document shape and grant no approval',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'editorial.json'),document={schemaVersion:3,book:'test',chapter:'001',reviewer:{agentId:null},decisions:[]};fs.writeFileSync(file,JSON.stringify(document));
+ const result=chapterOperation(root,job.id,'owner','read',{artifact:'draft:editorial'});assert.deepEqual(result.editorialComponentHashes,[{index:0,documentHash:documentHash(document)}]);assert.equal(JSON.parse(result.text).reviewer.agentId,null);
+ fs.writeFileSync(file,'{}');assert.deepEqual(chapterOperation(root,job.id,'owner','read',{artifact:'draft:editorial'}).editorialComponentHashes,[]);
+ assert.equal(chapterOperation(root,job.id,'owner','read',{artifact:'draft:source'}).editorialComponentHashes,undefined);
 });
