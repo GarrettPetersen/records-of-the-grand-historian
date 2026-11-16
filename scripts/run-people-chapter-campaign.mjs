@@ -11,7 +11,7 @@ import {acquireProcessRunLock} from './lib/process-run-lock.mjs';
 import {liveRunningAgentIds,readRosterWorkers} from './grokbot-headless-dispatch.mjs';
 import {assertPeopleMasterSync} from './check-people-master-sync.mjs';
 import {readPeopleCampaignPolicy} from './lib/people-campaign-policy.mjs';
-import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission,remoteContinuationSlot} from './lib/people-remote-admission.mjs';
+import {chapterRoleAgentId,remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission,remoteContinuationSlot} from './lib/people-remote-admission.mjs';
 loadDotenv(REPO_ROOT);
 const {values:o}=parseArgs({options:{job:{type:'string',multiple:true},model:{type:'string'},'max-active':{type:'string'},run:{type:'boolean'},once:{type:'boolean'}}});
 if(!o.job?.length||!o.model||!o.run)throw Error('Use --job ID (repeat) --model MODEL --run [--once]; only explicit retained chapters are scheduled');
@@ -71,9 +71,9 @@ try{do{
   if(lane==='cursor-sdk'){
    const run=cursorRuns.get(j[role+'RunId']);running=run.status==='running';
    if(run.status==='error'&&/usage_limit|capacity|quota/i.test(run.error?.message??'')){state.cursorCapacityHold=run.error;save();log({lane:'cursor-sdk',capacityHold:true});continue;}
-  }else running=liveGrok.has(j[role+'AgentId'].replace(/^grokbot:/,''));
+  }else running=liveGrok.has(chapterRoleAgentId(j,role).replace(/^grokbot:/,''));
   if(running)continue;
-  const continuation=remoteContinuationSlot({...admission,activeCount},j[role+'AgentId'],maxActive);
+  const continuation=remoteContinuationSlot({...admission,activeCount},chapterRoleAgentId(j,role),maxActive);
   if(!continuation.admitted)continue;
   if(lane==='grokbot'){
    const sentAt=Date.parse(j.dispatch[role].at);if(!Number.isFinite(sentAt))throw Error('Grok dispatch timestamp is missing; reconcile before continuation');
