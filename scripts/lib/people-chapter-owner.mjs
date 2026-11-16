@@ -113,12 +113,16 @@ export function chapterOperation(root,id,role,operation,args={}){
  if(operation==='manifest')return{...job,repairs:undefined,repairOperations:job.repairs.length,repairDetails:'chapter_read artifact repair-log (paged)',artifacts:job.artifacts.slice(args.artifactOffset??0,(args.artifactOffset??0)+40),nextArtifactOffset:(args.artifactOffset??0)+40<job.artifacts.length?(args.artifactOffset??0)+40:null,priorDateClaim:undefined,authors:job.authors,artifactCount:job.artifacts.length,
   instructions:'Read current source and extraction, then RESUME/HANDOFF and partial reviews. Reuse all valid work. Recovery evidence is not approval. Use bounded artifact reads and small patch/repair/coverage/finding calls. For a new array record call chapter_patch with add:true, pointer:/claims/N (N=current array length, or /claims/-), after:ONE_RECORD and no before. Do not replace whole arrays to append. Terminal clients can call list_tools for exact argument schemas. Do not clone, create a worktree, build or edit Git. Host owns canonical publication. A finish call requests host validation; it does not grant approval.'};
  if(operation==='read'){
-  let value,fileInfo;
+  let value,fileInfo,editorialComponentHashes;
   if(args.artifact==='repair-log'){
    value=job.repairs;const bytes=Buffer.from(JSON.stringify(value));fileInfo={file:null,bytes:bytes.length,sha256:digest(bytes),computedView:true};
   }else if(args.artifact?.startsWith('draft:')){
    const target=args.artifact.slice(6);need(['source','extraction','materialization','editorial','editorial-proposals','identity-review','date-report','review-validation','input-seal','native-validation'].includes(target),'Unknown draft');
    const file=path.join(dir,target+'.json'),bytes=fs.readFileSync(file);value=JSON.parse(bytes);fileInfo={file,bytes:bytes.length,sha256:digest(bytes)};
+   if(target==='editorial'){
+    const components=value.schemaVersion===3?[value]:value.schemaVersion===4&&Array.isArray(value.reviews)?value.reviews.map(review=>({schemaVersion:3,book:value.book,chapter:value.chapter,...review})):[];
+    editorialComponentHashes=components.map((component,index)=>({index,documentHash:digest(JSON.stringify(component))}));
+   }
   }else{
    const item=job.artifacts.find(a=>a.id===args.artifact);need(item,'Unknown sealed artifact');
    const target=path.join(root,item.file);need(fs.realpathSync(target)===target,'Sealed artifact path changed');
@@ -129,7 +133,7 @@ export function chapterOperation(root,id,role,operation,args={}){
   if(args.pointer!==undefined)value=pointer(value,args.pointer).value;
   const text=typeof value==='string'?value:JSON.stringify(value,null,2),offset=args.offset??0;
   need(Number.isSafeInteger(offset)&&offset>=0&&offset<=text.length,'Invalid artifact offset');
-  return{...fileInfo,documentHash:digest(JSON.stringify(value)),text:text.slice(offset,offset+16000),offset,nextOffset:offset+16000<text.length?offset+16000:null,totalCharacters:text.length};
+  return{...fileInfo,...(editorialComponentHashes===undefined?{}:{editorialComponentHashes}),documentHash:digest(JSON.stringify(value)),text:text.slice(offset,offset+16000),offset,nextOffset:offset+16000<text.length?offset+16000:null,totalCharacters:text.length};
  }
  if(operation==='validate'){
   const guard=spawnSync(process.execPath,['scripts/check-local-disk.mjs'],{cwd:root,encoding:'utf8',env:{...process.env,PEOPLE_REPO_ROOT:root}});
