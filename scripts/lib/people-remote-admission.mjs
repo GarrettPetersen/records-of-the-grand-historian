@@ -4,6 +4,11 @@ const need=(ok,message)=>{if(!ok)throw Error('Remote admission: '+message);};
 const chapterId=/^[a-z0-9_-]+-\d{3}-[a-f0-9]{12}$/;
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 
+export function chapterRoleAgentId(job,role){
+ need(role==='owner'||role==='reviewer','Unknown chapter role');
+ return job[role==='reviewer'?'reviewAgentId':'ownerAgentId'];
+}
+
 export function remoteAdmissionLimit(policy,value){
  const p=policy.completionThroughput;
  need(p&&Number.isSafeInteger(p.targetPublishedChaptersPerDay)&&p.targetPublishedChaptersPerDay>0&&
@@ -25,7 +30,7 @@ export function remoteAdmissionInventory(directory){
   if(chapterId.test(entry.name)&&fs.existsSync(jobFile)){
    const job=read(jobFile);need(job.id===entry.name,'Chapter job scope does not match directory');jobs.push(job);
    for(const role of ['owner','reviewer']){
-    const actor=job[role+'AgentId'],run=job[role+'RunId'],dispatch=job.dispatch?.[role];
+    const actor=chapterRoleAgentId(job,role),run=job[role+'RunId'],dispatch=job.dispatch?.[role];
     if(actor?.startsWith('bc-')&&run)addRun(actor,run);
     const activeGrokPhase=role==='owner'?['prepared','working'].includes(job.status):job.status==='reviewing';
     if(dispatch?.state==='dispatching'||dispatch?.state==='sent'&&(dispatch.lane==='cursor-sdk'&&!run||dispatch.lane==='grokbot'&&activeGrokPhase))

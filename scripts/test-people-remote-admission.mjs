@@ -1,6 +1,11 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
-import {remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission,remoteContinuationSlot} from './lib/people-remote-admission.mjs';
+import {chapterRoleAgentId,remoteAdmissionLimit,remoteAdmissionInventory,measureRemoteAdmission,remoteContinuationSlot} from './lib/people-remote-admission.mjs';
 const policy={completionThroughput:{targetPublishedChaptersPerDay:50,initialRemoteAssignments:4,maxRemoteAssignments:12}};
+test('uses the same actual journal actor fields for inventory and retained campaign roles',()=>{
+ const job={ownerAgentId:'grokbot:source-owner',reviewAgentId:'bc-independent-reviewer'};
+ assert.equal(chapterRoleAgentId(job,'owner'),'grokbot:source-owner');assert.equal(chapterRoleAgentId(job,'reviewer'),'bc-independent-reviewer');
+ assert.equal(chapterRoleAgentId({},'reviewer'),undefined);assert.throws(()=>chapterRoleAgentId(job,'review'),/Unknown chapter role/);
+});
 test('explicit remote policy replaces the serial cap and rejects invalid limits',()=>{
  assert.equal(remoteAdmissionLimit(policy),4);assert.equal(remoteAdmissionLimit(policy,'8'),8);assert.equal(remoteAdmissionLimit(policy,'12'),12);
  for(const n of ['0','13','oops','2.5'])assert.throws(()=>remoteAdmissionLimit(policy,n));assert.throws(()=>remoteAdmissionLimit({}));
@@ -23,6 +28,24 @@ test('deduplicates overlapping inventory and fails closed on failed or unknown s
 });
 test('completed remote conversations do not occupy active capacity',async()=>{
  const r=await measureRemoteAdmission({runs:[{agentId:'bc-a',runId:'run-a'}],uncertain:[]},new Set(),async()=>({status:'finished'}));assert.equal(r.activeCount,0);
+});
+test('counts an actual Cursor reviewer through the chapter journal reviewAgentId and reviewerRunId fields',async t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'cursor-review-admission-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));
+ const id='jinshu-127-0123456789ab',d=path.join(dir,id);fs.mkdirSync(d);
+ fs.writeFileSync(path.join(d,'job.json'),JSON.stringify({id,status:'reviewing',ownerAgentId:'grokbot:original-owner',reviewAgentId:'bc-actual-reviewer',reviewerRunId:'run-actual-reviewer',dispatch:{reviewer:{state:'sent',lane:'cursor-sdk'}}}));
+ const inventory=remoteAdmissionInventory(dir);
+ assert.deepEqual(inventory.runs,[{agentId:'bc-actual-reviewer',runId:'run-actual-reviewer'}]);
+ const r=await measureRemoteAdmission(inventory,new Set(),async row=>{assert.equal(row.agentId,'bc-actual-reviewer');assert.equal(row.runId,'run-actual-reviewer');return{status:'running'};});
+ assert.deepEqual(r.occupied,['cursor:bc-actual-reviewer']);assert.equal(r.activeCount,1);
+ await assert.rejects(measureRemoteAdmission(inventory,new Set(),async()=>{throw Error('Reviewer status unavailable');}),/Reviewer status unavailable/);
+});
+test('deduplicates a sent Grok reviewer startup against the same actual live actor',async t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'grok-review-admission-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));
+ const id='jinshu-056-0123456789ab',d=path.join(dir,id);fs.mkdirSync(d);
+ fs.writeFileSync(path.join(d,'job.json'),JSON.stringify({id,status:'reviewing',reviewAgentId:'grokbot:actual-reviewer',dispatch:{reviewer:{state:'sent',lane:'grokbot'}}}));
+ const inventory=remoteAdmissionInventory(dir);assert.deepEqual(inventory.uncertain,['grok:actual-reviewer']);
+ const r=await measureRemoteAdmission(inventory,new Set(['actual-reviewer']),async()=>{throw Error('Unexpected SDK status');});
+ assert.deepEqual(r.occupied,['grok:actual-reviewer']);assert.equal(r.activeCount,1);
 });
 test('sent Grok startup retains its slot until a real chapter return without leaking slots from old roles',async t=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'grok-admission-'));t.after(()=>fs.rmSync(dir,{recursive:true,force:true}));

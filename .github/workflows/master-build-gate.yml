@@ -53,7 +53,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
 
       - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
+        run: node --test scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
 
       - name: Test bounded canonical-person dossiers and chapter proofs
         run: |
@@ -79,4 +79,14 @@ jobs:
         with:
           name: jinshu053-qualified-contribution
           path: data/people/generated/jinshu053-release-acceptance/
+          retention-days: 30
+
+      - name: Verify real Jinshu 119 qualification and ebook contribution
+        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
+
+      - name: Preserve Jinshu 119 nonempty acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: jinshu119-qualified-contribution
+          path: data/people/generated/jinshu119-release-acceptance/
           retention-days: 30
