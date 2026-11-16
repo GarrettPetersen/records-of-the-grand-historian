@@ -1175,7 +1175,7 @@ test('metadata binding preserves raw checks and nonstandard source bytes, then p
  const validation=read(files.validation);validation.identityReviewHash=documentHash(read(files.identity));validation.dateReportHash=documentHash(read(files.dateReport));save(files.validation,validation);
  seal.protectedFiles=await Promise.all(['source','extraction','editorial'].map(role=>hashBytes(files[role])));save(files.seal,seal);
  const raw=Object.fromEntries(Object.entries(files).map(([role,file])=>[role,fs.readFileSync(file)]));
- const job={book:f.spec.book,chapter:f.spec.chapter,nativeRoot:native,reviewAgentId:'reviewer',beforeNative:f.spec.before};
+ const job={book:f.spec.book,chapter:f.spec.chapter,nativeRoot:native,reviewAgentId:'reviewer',authors:f.spec.authorAgentIds,beforeNative:f.spec.before};
  const bound=await prepareChapterNativeInputs({root:f.root,dir,job,hostAuthor:'codex:fixture-host'});
  for(const[role,file]of Object.entries(files))assert.deepEqual(fs.readFileSync(file),raw[role]);
  assert.deepEqual(fs.readFileSync(path.join(bound.materializedDir,'data/testbook/001.json')),raw.source);
@@ -1192,7 +1192,7 @@ for(const[label,mutate]of[
  ['absent source protection',({seal})=>{seal.protectedFiles=[];}],
 ])test('metadata binding rejects '+label,async t=>{
  const x=bindingFixture(t);x.seal.protectedFiles=await Promise.all(['source','extraction','editorial'].map(role=>x.hashBytes(x.files[role])));mutate(x);save(x.files.seal,x.seal);
- await assert.rejects(()=>prepareChapterNativeInputs({root:x.f.root,dir:x.dir,job:{book:x.f.spec.book,chapter:x.f.spec.chapter,nativeRoot:native,reviewAgentId:'reviewer',beforeNative:x.f.spec.before},hostAuthor:'codex:fixture-host'}));
+ await assert.rejects(()=>prepareChapterNativeInputs({root:x.f.root,dir:x.dir,job:{book:x.f.spec.book,chapter:x.f.spec.chapter,nativeRoot:native,reviewAgentId:'reviewer',authors:x.f.spec.authorAgentIds,beforeNative:x.f.spec.before},hostAuthor:'codex:fixture-host'}));
 });
 
 function undatedFixture(t){

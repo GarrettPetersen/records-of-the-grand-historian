@@ -11,6 +11,34 @@ const need=(ok,message)=>{if(!ok)throw Error(message);};
 const pin=file=>{const b=fs.readFileSync(file);return{file,sha256:hash(b),bytes:b.length};};
 const immutableWrite=(file,bytes)=>{fs.mkdirSync(path.dirname(file),{recursive:true});if(fs.existsSync(file))need(fs.readFileSync(file).equals(bytes),'Prepared native input changed: '+file);else fs.writeFileSync(file,bytes,{flag:'wx',mode:0o600});};
 
+// Bind only reasoning already supplied by the captured independent reviewer.
+// Source text, facts, replacement wording, authors and old repair history stay exact.
+export function bindChapterRepairReasonMetadata(candidate,editorial,{priorRepairCount,canonicalReviewCount,actualReviewerAgentId,authorAgentIds,native}){
+ need(candidate.schemaVersion===2&&Number.isSafeInteger(priorRepairCount)&&priorRepairCount>=0&&priorRepairCount<=candidate.translationRepairs.length,'Explicit compact repair boundary required');
+ need(Number.isSafeInteger(canonicalReviewCount)&&canonicalReviewCount>=0&&actualReviewerAgentId&&Array.isArray(authorAgentIds)&&!authorAgentIds.includes(actualReviewerAgentId),'Actual independent repair reviewer required');
+ const reviews=native.editorialReviews(editorial),copy=structuredClone(candidate),changes=[];
+ need(canonicalReviewCount<=reviews.length,'Canonical review boundary exceeds history');
+ for(let index=priorRepairCount;index<copy.translationRepairs.length;index++){
+  const row=copy.translationRepairs[index],id=`${candidate.book}:${candidate.chapter}:r${String(index+1).padStart(4,'0')}`,matches=[];
+  for(const [reviewIndex,review]of reviews.entries()){
+   if(reviewIndex<canonicalReviewCount)continue;
+   for(const decision of review.decisions??[]){
+    if(decision.repairId!==id||!['accept','revise'].includes(decision.decision))continue;
+    const proposal=review.proposals.find(p=>p.id===id);if(!proposal)continue;
+    const after=decision.decision==='revise'?decision.after:proposal.after;
+    if(!isDeepStrictEqual([proposal.unit.id,proposal.field,proposal.before,after,proposal.confidence],[row[0],row[1],row[2],row[3],row[5]]))continue;
+    need(review.reviewer?.agentId===actualReviewerAgentId&&!authorAgentIds.includes(review.reviewer.agentId),'Uncaptured or author-supplied repair approval');
+    native.validateEditorialDecisionDocument(review);
+    need([proposal.reason,decision.reason].includes(row[4]),'Repair reasoning differs from both the authored proposal and actual independent decision');
+    matches.push({reviewIndex,decision});
+   }
+  }
+  need(matches.length<=1,'Duplicate accepted incoming repair approvals');
+  if(matches.length&&row[4]!==matches[0].decision.reason){changes.push({repairId:id,reviewIndex:matches[0].reviewIndex,beforeReason:row[4],afterReason:matches[0].decision.reason,actualReviewerAgentId});row[4]=matches[0].decision.reason;}
+ }
+ return{candidate:copy,changes,semanticApprovalCreated:false};
+}
+
 // Bind already-captured approvals to the native publisher's physical paths.
 // Original reports stay immutable. Every added field is host metadata; no check,
 // verdict, reason, reviewer declaration or approval boolean is manufactured.
@@ -46,10 +74,22 @@ export async function prepareChapterNativeInputs({root,dir,job,hostAuthor}) {
   const singleReview=originalEditorial===null&&raw.editorial.schemaVersion===4&&raw.editorial.reviews?.length===1;
   const editorial=amendment?applyDateRepairEditorialAmendment(originalEditorial,amendment,expanded):singleReview?{schemaVersion:3,book:job.book,chapter:job.chapter,...raw.editorial.reviews[0]}:raw.editorial;
   if(amendment)need(isDeepStrictEqual(raw.editorial,originalEditorial),'Chronology amendment requires exact captured old editorial history');
-  const binding={kind:'host-native-input-metadata-binding',hostAuthor,rawPins,beforePins,editorialAmendment:amendment,singleReviewWrapperNormalized:singleReview,semanticApprovalCreated:false};
+  const editorialNative=await native('lib/people-editorial-decisions.mjs');
+  const priorRepairCount=beforePins.extraction===null?0:JSON.parse(fs.readFileSync(canonical.extraction)).translationRepairs.length;
+  const reasonBinding=bindChapterRepairReasonMetadata(raw.extraction,editorial,{priorRepairCount,canonicalReviewCount:editorialNative.editorialReviews(originalEditorial).length,actualReviewerAgentId:job.reviewAgentId,authorAgentIds:job.authors,native:editorialNative});
+  const boundCandidateBytes=reasonBinding.changes.length?json(reasonBinding.candidate):rawBytes.extraction;
+  const binding={kind:'host-native-input-metadata-binding',hostAuthor,rawPins,beforePins,editorialAmendment:amendment,singleReviewWrapperNormalized:singleReview,reviewedRepairReasonBinding:reasonBinding.changes,semanticApprovalCreated:false};
   const suffix=documentHash(binding).slice(7,23),out=path.join(dir,'native-bound-'+suffix),materializedDir=path.join(out,'materialized'),reviewDir=path.join(out,'review');
   const targets={source:path.join(materializedDir,'data',job.book,job.chapter+'.json'),extraction:path.join(materializedDir,'candidate.json'),editorial:path.join(materializedDir,'editorial-decisions.json'),materialization:path.join(materializedDir,'validation.json'),identity:path.join(reviewDir,'identity-review.json'),dateReport:path.join(reviewDir,'date-report.json'),validation:path.join(reviewDir,'validation.json'),seal:path.join(reviewDir,'input-seal.json')};
-  const docs=structuredClone(raw);docs.editorial=editorial;
+  const docs=structuredClone(raw);docs.editorial=editorial;docs.extraction=reasonBinding.candidate;
+  if(reasonBinding.changes.length){
+    const extractionHash=documentHash(docs.extraction),candidateByteHash=hash(boundCandidateBytes);
+    for(const role of ['identity','dateReport','validation','seal','materialization']){
+      need(docs[role].extractionHash===raw.identity.extractionHash,'Unexpected captured extraction hash before reason binding');docs[role].extractionHash=extractionHash;
+      for(const context of [docs[role],docs[role].reviewContext].filter(Boolean))if(context.candidateByteHash!==undefined){need(context.candidateByteHash===rawPins.extraction.sha256,'Conflicting candidate metadata before reason binding');context.candidateByteHash=candidateByteHash;}
+    }
+    docs.materialization.extractionByteHash=candidateByteHash;
+  }
   const metadata={hostAuthor,receipt:path.join(out,'host-binding.json'),originalReportHashes:Object.fromEntries(['identity','dateReport','validation','seal'].map(role=>[role,rawPins[role].sha256]))};
   for(const role of ['identity','dateReport']){
     const context=docs[role].reviewContext;
@@ -64,7 +104,7 @@ export async function prepareChapterNativeInputs({root,dir,job,hostAuthor}) {
   docs.validation.hostInputBinding=metadata;docs.seal.hostInputBinding=metadata;
   if(docs.seal.identityReviewHash!==undefined)docs.seal.identityReviewHash=documentHash(docs.identity);
   if(docs.seal.dateReportHash!==undefined)docs.seal.dateReportHash=documentHash(docs.dateReport);
-  const outputBytes=Object.fromEntries(Object.entries(docs).map(([role,value])=>[role,['source','extraction'].includes(role)||(role==='editorial'&&!amendment&&!singleReview)?rawBytes[role]:json(value)]));
+  const outputBytes=Object.fromEntries(Object.entries(docs).map(([role,value])=>[role,role==='extraction'?boundCandidateBytes:role==='source'||(role==='editorial'&&!amendment&&!singleReview)?rawBytes[role]:json(value)]));
   const rolePins=['source','extraction','editorial','materialization'].map(role=>({file:targets[role],sha256:hash(outputBytes[role]),bytes:outputBytes[role].length}));
   const protectedPins=new Map();
   for(const p of [...originalProtected,...Object.values(beforePins).filter(Boolean),...rolePins,...Object.values(rawPins)]){const old=protectedPins.get(p.file);need(!old||isDeepStrictEqual(old,p),'Conflicting host protection pins');protectedPins.set(p.file,p);}
