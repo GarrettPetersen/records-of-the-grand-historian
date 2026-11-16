@@ -18,6 +18,7 @@ import {
   peopleCatalogIsComplete,
 } from './lib/people-publication.mjs';
 import { personSlug, resolveAcceptedPeopleClusters } from './lib/people-resolution.mjs';
+import { reviewedInferredSourceReferences } from './lib/people-inferred-source-references.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const CANONICAL_SCHEMA_ID = 'https://24histories.com/schema/people/canonical-person-v1.json';
@@ -977,7 +978,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
 
 // Reconstruct every public fact from freshly qualified source members. The
 // globally compiled mapping supplies identity and URL stability, never facts.
-export function projectPeopleProduct(corpus, globalCatalog, roleLabels, overrides = {}, getDateStatus = dateAuditStatus) {
+export function projectPeopleProduct(corpus, globalCatalog, roleLabels, overrides = {}, getDateStatus = dateAuditStatus, identityCertificates = []) {
   const globalById = new Map(globalCatalog.people.map(person => [person.id, person]));
   const localMap = new Map();
   const membersByCanonical = new Map();
@@ -1008,6 +1009,9 @@ export function projectPeopleProduct(corpus, globalCatalog, roleLabels, override
     }
     const person = canonicalRecord(cluster, corpus, localMap, roleLabels, new Set(),
       globalCatalog.currentPromptVersion, override);
+    if (person.references.length === 0) {
+      person.references = reviewedInferredSourceReferences(members, corpus, id, identityCertificates);
+    }
     if (person.references.length === 0) {
       throw new Error(`Scoped canonical person ${id} has no source mention references; repair chapter attribution before publication`);
     }

@@ -115,7 +115,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
     gateEvidence.push({ book, chapter, personCount: current.localPeople.size, inputFingerprint: packet.input.chapterFingerprint, inputUnitCount: packet.input.unitCount, extraction: peopleDigest(raw), source: peopleDigest(readJson(path.join(DATA_DIR, book, `${chapter}.json`))),
       editorial: peopleDigest(editorial), dateAudit: peopleDigest(report), identityReview: peopleDigest(identityBundle) });
     if (identityCertificate) identityCertificates.push(identityCertificate);
-    corpus.chapters.push({ extraction });
+    corpus.chapters.push({ extraction, packet });
     for (const [localId, person] of current.localPeople) corpus.localPeople.set(localId, person);
     } catch (error) {
       if (!skipUnqualified || !(error instanceof PeopleScopeGateError || error instanceof ChapterIdentityReviewError ||
@@ -126,7 +126,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
   assertScopedIdentity(corpus, identityView, identityCertificates);
   const roles = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
   const overrides = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
-  const projected = projectPeopleProduct(corpus, catalog, new Map(roles.roles.map(role => [role.id, role.label])), overrides.people);
+  const projected = projectPeopleProduct(corpus, catalog, new Map(roles.roles.map(role => [role.id, role.label])), overrides.people, dateAuditStatus, identityCertificates);
   applyReviewedIdentityUncertainty(projected.catalog, identityCertificates);
   if (!skipUnqualified && projected.catalog.people.length === 0) throw new Error('Certified product contains no people');
   if (identityInputSeal() !== inputs) throw new Error('Identity inputs changed while qualifying product');
