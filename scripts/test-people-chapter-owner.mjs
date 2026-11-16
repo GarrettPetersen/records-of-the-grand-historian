@@ -175,3 +175,25 @@ test('HTTP MCP accepts only job-scoped credential and exposes chapter tools',asy
  const response=await fetch(url,{method:'POST',headers,body:JSON.stringify({jsonrpc:'2.0',id:2,method:'tools/call',params:{name:'chapter_manifest',arguments:{}}})});
  assert.equal(response.status,200);const text=await response.text();const data=text.split('\n').filter(s=>s.startsWith('data:')).at(-1);const value=JSON.parse(data?data.slice(5):text);assert.equal(JSON.parse(value.result.content[0].text).id,job.id);
 });
+
+test('bounded exact-before replacement is atomic, revision guarded and role scoped',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.people=[{id:'one'},{id:'two'},{id:'three'}];fs.writeFileSync(file,JSON.stringify(d));
+ const args={revision:0,target:'extraction',pointer:'/people',expectedLength:3,replacements:[{index:0,before:{id:'one'},after:{id:'first'}},{index:2,before:{id:'wrong'},after:{id:'last'}}]};
+ const before=fs.readFileSync(file);assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/exact-before/);assert.deepEqual(fs.readFileSync(file),before);assert.equal(JSON.parse(fs.readFileSync(path.join(dir,'job.json'))).revision,0);
+ args.replacements[1].before={id:'three'};const r=chapterOperation(root,job.id,'owner','replace',args);assert.equal(r.revision,1);assert.equal(r.approvalGranted,false);
+ assert.deepEqual(JSON.parse(fs.readFileSync(file)).people,[{id:'first'},{id:'two'},{id:'last'}]);assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/Stale/);
+ assert.throws(()=>chapterOperation(root,job.id,'owner','replace',{...args,revision:1,target:'identity-review'}),/Role cannot/);
+ assert.throws(()=>chapterOperation(root,job.id,'owner','replace',{...args,revision:1,expectedLength:2}),/length changed/);
+});
+test('bounded replacement refuses duplicate indices, appends, unsafe pointers and oversized batches',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.people=['one','two'];fs.writeFileSync(file,JSON.stringify(d));
+ const args={revision:0,target:'extraction',pointer:'/people',expectedLength:2,replacements:[{index:0,before:'one',after:'changed'}]},before=fs.readFileSync(file);
+ for(const override of [{replacements:[...args.replacements,...args.replacements]},{replacements:[{index:2,before:null,after:'appended'}]},{pointer:'/__proto__/bad'},{replacements:Array(33).fill(args.replacements[0])},{replacements:[{...args.replacements[0],extra:'ignored'}]}]){assert.throws(()=>chapterOperation(root,job.id,'owner','replace',{...args,...override}));assert.deepEqual(fs.readFileSync(file),before);}
+});
+test('independent reviewer can replace authored checks without owner access to review artifacts',t=>{
+ const {root,job,dir}=fixture(t);job.status='reviewing';job.reviewAgentId='independent';fs.writeFileSync(path.join(dir,'job.json'),JSON.stringify(job));
+ const file=path.join(dir,'review-validation.json');fs.writeFileSync(file,JSON.stringify({checks:[{verdict:'hold'}]}));
+ const args={revision:0,target:'review-validation',pointer:'/checks',expectedLength:1,replacements:[{index:0,before:{verdict:'hold'},after:{verdict:'supported',reason:'Actual independent fixture judgment'}}]};
+ assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/frozen/);
+ assert.equal(chapterOperation(root,job.id,'reviewer','replace',args).revision,1);assert.equal(JSON.parse(fs.readFileSync(file)).checks[0].verdict,'supported');
+});

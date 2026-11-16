@@ -45,7 +45,8 @@ if(JSON.stringify(JSON.parse(editorialBytes))!==JSON.stringify(preparedEditorial
 const suffix=digest(sourceBytes).slice(7,19)+'-'+digest(extractionBytes).slice(7,19);
 const materialization={sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,sourceByteHash:digest(sourceBytes),extractionByteHash:digest(extractionBytes)};
 const existingMaterialization=JSON.parse(fs.readFileSync(path.join(dir,'materialization.json')));
-if(Object.keys(existingMaterialization).some(k=>!Object.hasOwn(materialization,k)))throw Error('Owner coherence: unsupported source-structure contract requires explicit host review');
+if(Object.keys(existingMaterialization).some(k=>!Object.hasOwn(materialization,k)&&k!=='sourceFootnoteContract'))throw Error('Owner coherence: unsupported source-structure contract requires explicit host review');
+if(existingMaterialization.sourceFootnoteContract)materialization.sourceFootnoteContract=existingMaterialization.sourceFootnoteContract;
 fs.writeFileSync(path.join(dir,'materialization.json'),JSON.stringify(materialization,null,2)+'\n');
 const draftFiles=['source','extraction','editorial','editorial-proposals','materialization'].map(name=>{const f=path.join(dir,name+'.json'),b=fs.readFileSync(f);return{name,file:f,bytes:b.length,sha256:digest(b),documentHash:documentHash(JSON.parse(b))};});
 const context={kind:'independent-chapter-review-context',schemaVersion:1,book:job.book,chapter:job.chapter,

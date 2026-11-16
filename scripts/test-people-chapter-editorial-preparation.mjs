@@ -24,6 +24,14 @@ test('first review uses the native single-review wrapper and remains unapproved'
  const {options}=fixture(),r=prepareChapterEditorialHistory({...options,current:{},reviewerAgentId:null});
  assert.equal(r.document.schemaVersion,3);assert.equal(r.document.reviewer.agentId,null);assert.equal(r.pendingRepairIds.length,2);
 });
+test('retains exact native-valid canonical history without an agent ID, without promoting incoming anonymous review',()=>{
+ const {options,reviewed}=fixture();reviewed.reviewer.agentId=null;reviewed.reviewer.runId=null;
+ assert.doesNotThrow(()=>native.validateEditorialDecisionDocument(reviewed));
+ const before=structuredClone(reviewed),result=prepareChapterEditorialHistory({...options,canonical:reviewed});
+ assert.deepEqual(native.editorialReviews(result.document)[0],before);
+ assert.deepEqual(result.pendingRepairIds,['test:001:r0002']);assert.equal(result.approvalGranted,false);
+ assert.throws(()=>prepareChapterEditorialHistory({...options,canonical:null}),/Partially written review/);
+});
 test('rejects uncaptured approval, changed canonical history and half-written templates',()=>{
  const {options,reviewed}=fixture();assert.throws(()=>prepareChapterEditorialHistory({...options,reviewerAgentId:'someone-else'}),/Uncaptured reviewer/);
  assert.throws(()=>prepareChapterEditorialHistory({...options,canonical:reviewed,current:{}}),/Canonical editorial history changed/);

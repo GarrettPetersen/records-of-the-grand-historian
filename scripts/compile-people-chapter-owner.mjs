@@ -6,6 +6,7 @@ import {parseArgs} from 'node:util';
 import {pathToFileURL} from 'node:url';
 import {ownerDirectory,digest,chapterOperation} from './lib/people-chapter-owner.mjs';
 import {writeJsonAtomic} from './lib/people-content.mjs';
+import {prepareEnglishFootnoteAdditions} from './lib/people-footnote-preparation.mjs';
 const {values:o}=parseArgs({options:{job:{type:'string'},root:{type:'string'}}});
 const root=fs.realpathSync(o.root??process.cwd()),dir=ownerDirectory(root,o.job),file=path.join(dir,'job.json');
 let job=JSON.parse(fs.readFileSync(file));
@@ -31,7 +32,14 @@ for(const [index,r] of job.repairs.entries()){
  const key=r.unitId+'/'+r.field,prior=fields.get(key);
  fields.set(key,{...r,before:prior?.before??r.before,lastIndex:index});
 }
-if(!isDeepStrictEqual(replay,source))throw Error('Owner coherence: source changes are not completely explained by exact-before repair records');
+const materialization=read(path.join(dir,'materialization.json'));
+let completeReplay=replay;
+if(materialization.sourceFootnoteContract){
+ const prepared=prepareEnglishFootnoteAdditions(replay,materialization.sourceFootnoteContract);
+ if(!isDeepStrictEqual(prepared.contract,materialization.sourceFootnoteContract)||!job.authors.includes(prepared.contract.authorAgentId))throw Error('Owner coherence: footnote contract or declared author changed');
+ completeReplay=prepared.source;
+}
+if(!isDeepStrictEqual(completeReplay,source))throw Error('Owner coherence: source changes are not completely explained by exact-before repair records and explicit footnote additions');
 for(const r of fields.values()){
  if(r.before===r.after)continue;
  const confidence=r.confidence??proposals.repairConfidence?.[String(r.lastIndex)];

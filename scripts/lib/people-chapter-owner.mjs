@@ -167,7 +167,22 @@ console.log(JSON.stringify(report));`;
  need(!(role==='owner'&&['ready-for-review','reviewing'].includes(job.status)),'Finished owner candidate is frozen pending host reconciliation');
  need(!(role==='reviewer'&&job.status!=='reviewing'),'Reviewer writes require an active independent review phase');
  need(['prepared','working','ready-for-review','reviewing'].includes(job.status),'Job is held or finished');
- if(operation==='append'){
+ if(operation==='replace'){
+  need(roleTargets[role]?.includes(args.target),'Role cannot write that artifact');
+  need(Array.isArray(args.replacements)&&args.replacements.length>0&&args.replacements.length<=32,'Replace between one and 32 exact-before records');
+  const target=path.join(dir,args.target+'.json'),document=read(target),array=pointer(document,args.pointer).value;
+  need(Array.isArray(array)&&array.length===args.expectedLength,'Replacement array length changed; reconcile current draft');
+  const seen=new Set();
+  for(const r of args.replacements){
+   need(r&&isDeepStrictEqual(Object.keys(r).sort(),['after','before','index']),'Use exact replacement fields');
+   need(Number.isSafeInteger(r.index)&&r.index>=0&&r.index<array.length&&!seen.has(r.index),'Invalid or duplicate replacement index');seen.add(r.index);
+   need(isDeepStrictEqual(array[r.index],r.before),'Replacement exact-before mismatch');
+   need(Buffer.byteLength(JSON.stringify(r.after))<=48000,'Replacement too large');
+  }
+  for(const r of args.replacements)array[r.index]=r.after;
+  need(Buffer.byteLength(JSON.stringify(document))<=16*1024*1024,'Chapter draft exceeded 16 MiB');writeJsonAtomic(target,document);
+ }else if(operation==='append'){
+
   need(roleTargets[role]?.includes(args.target),'Role cannot write that artifact');
   need(Array.isArray(args.records)&&args.records.length>0&&args.records.length<=32,'Append between one and 32 reviewed records');
   const target=path.join(dir,args.target+'.json'),document=read(target),array=pointer(document,args.pointer).value;

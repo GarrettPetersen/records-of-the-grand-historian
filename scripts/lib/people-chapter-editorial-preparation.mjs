@@ -18,11 +18,10 @@ export function prepareChapterEditorialHistory({extraction,canonical,current,rev
  need(existing.length>=before.length&&before.every((r,i)=>same(r,existing[i])),'Canonical editorial history changed');
  const reviewed=[],templates=[];
  for(const [i,r] of existing.entries()){
-  if(r.reviewer?.agentId){
+  if(i<before.length||r.reviewer?.agentId){
    if(i>=before.length)need(reviewerAgentId&&r.reviewer.agentId===reviewerAgentId,'Uncaptured reviewer cannot supply chapter approval');
    validateEditorialDecisionDocument(r);reviewed.push(r);
   }else{
-   need(i>=before.length,'Canonical history contains an unfinished reviewer');
    need(r.decisions?.every(d=>d.decision==='reject'&&d.reason===''&&d.sourceWitness===null)&&
     !r.claimRetractions?.length&&!r.claimRevisions?.length&&!r.claimAdditions?.length,'Partially written review requires same-reviewer reconciliation');
    templates.push(r);

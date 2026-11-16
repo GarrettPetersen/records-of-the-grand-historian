@@ -97,7 +97,7 @@ function validateDelta(index, delta) {
   return replacements;
 }
 
-function applyDelta(index, delta) {
+export function applyIdentityDossierDelta(index, delta) {
   const replacements = validateDelta(index, delta), previous = index.dossiers;
   const close = index.close; let closed = false;
   index.dossiers = { size: previous.size, get(id) {
@@ -157,6 +157,6 @@ export async function readIdentityDossierRegistry(directory, localPeople, ancest
   try {
     need(hash(regularBytes(parentFile)) === manifest.base.manifestSha256 && index.dossiers.size === manifest.dossierCount,
       'Dossier delta parent changed during read');
-    applyDelta(index, JSON.parse(payload)); index.provenance = manifest.provenance; index.generationDepth += 1; return index;
+    applyIdentityDossierDelta(index, JSON.parse(payload)); index.provenance = manifest.provenance; index.generationDepth += 1; return index;
   } catch (error) { index.close(); throw error; }
 }
