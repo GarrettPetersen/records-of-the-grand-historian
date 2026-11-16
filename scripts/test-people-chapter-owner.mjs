@@ -197,3 +197,16 @@ test('independent reviewer can replace authored checks without owner access to r
  assert.throws(()=>chapterOperation(root,job.id,'owner','replace',args),/frozen/);
  assert.equal(chapterOperation(root,job.id,'reviewer','replace',args).revision,1);assert.equal(JSON.parse(fs.readFileSync(file)).checks[0].verdict,'supported');
 });
+
+test('bounded removal validates all exact-before rows before deleting, preserving all other order and revision',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.claims=['keep-first','remove-one','keep-middle','remove-two','keep-last'];fs.writeFileSync(file,JSON.stringify(d));
+ const args={revision:0,target:'extraction',pointer:'/claims',expectedLength:5,removals:[{index:1,before:'remove-one'},{index:3,before:'wrong'}]},before=fs.readFileSync(file);
+ assert.throws(()=>chapterOperation(root,job.id,'owner','remove',args),/Exact-before/);assert.deepEqual(fs.readFileSync(file),before);assert.equal(JSON.parse(fs.readFileSync(path.join(dir,'job.json'))).revision,0);
+ args.removals[1].before='remove-two';const result=chapterOperation(root,job.id,'owner','remove',args);assert.equal(result.revision,1);assert.equal(result.approvalGranted,false);
+ assert.deepEqual(JSON.parse(fs.readFileSync(file)).claims,['keep-first','keep-middle','keep-last']);assert.throws(()=>chapterOperation(root,job.id,'owner','remove',args),/Stale/);
+});
+test('bounded removal rejects unsafe indices, repeated rows, stale lengths, role escalation and oversized batches',t=>{
+ const {root,job,dir}=fixture(t),file=path.join(dir,'extraction.json'),d=JSON.parse(fs.readFileSync(file));d.claims=['keep','remove'];fs.writeFileSync(file,JSON.stringify(d));
+ const args={revision:0,target:'extraction',pointer:'/claims',expectedLength:2,removals:[{index:1,before:'remove'}]},before=fs.readFileSync(file);
+ for(const override of [{expectedLength:3},{removals:[...args.removals,...args.removals]},{removals:[{index:2,before:null}]},{target:'identity-review'},{pointer:'/__proto__/bad'},{removals:Array(33).fill(args.removals[0])},{removals:[{...args.removals[0],extra:true}]}]){assert.throws(()=>chapterOperation(root,job.id,'owner','remove',{...args,...override}));assert.deepEqual(fs.readFileSync(file),before);}
+});

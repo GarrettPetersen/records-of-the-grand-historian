@@ -1,3 +1,4 @@
+import {applyExactArrayRemovals} from './people-chapter-array-edits.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createHash,randomBytes,timingSafeEqual} from 'node:crypto';
@@ -167,7 +168,13 @@ console.log(JSON.stringify(report));`;
  need(!(role==='owner'&&['ready-for-review','reviewing'].includes(job.status)),'Finished owner candidate is frozen pending host reconciliation');
  need(!(role==='reviewer'&&job.status!=='reviewing'),'Reviewer writes require an active independent review phase');
  need(['prepared','working','ready-for-review','reviewing'].includes(job.status),'Job is held or finished');
- if(operation==='replace'){
+ if(operation==='remove'){
+  need(roleTargets[role]?.includes(args.target),'Role cannot write that artifact');
+  const target=path.join(dir,args.target+'.json'),document=read(target),array=pointer(document,args.pointer).value;
+  applyExactArrayRemovals(array,args.expectedLength,args.removals);
+  writeJsonAtomic(target,document);
+ }else if(operation==='replace'){
+
   need(roleTargets[role]?.includes(args.target),'Role cannot write that artifact');
   need(Array.isArray(args.replacements)&&args.replacements.length>0&&args.replacements.length<=32,'Replace between one and 32 exact-before records');
   const target=path.join(dir,args.target+'.json'),document=read(target),array=pointer(document,args.pointer).value;
