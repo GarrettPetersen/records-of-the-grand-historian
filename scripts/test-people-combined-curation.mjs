@@ -1396,3 +1396,76 @@ test('first install admission cannot erase an existing extraction editorial hist
 });
 
 }
+
+
+// Count reconciliation is an explicit derived artifact, never a changed capture.
+{
+const nativeRoot=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const save=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
+function countBindingFixture(t,mutate=()=>{}){
+ const f=fixture(t),dir=path.join(f.root,'count-binding-job');fs.mkdirSync(dir);
+ const names={source:'source',extraction:'extraction',editorial:'editorial',materialization:'materialization',identity:'identity-review',dateReport:'date-report',validation:'review-validation',seal:'input-seal'},files={};
+ for(const[role,name]of Object.entries(names)){files[role]=path.join(dir,name+'.json');fs.copyFileSync(f.inputPaths[role],files[role]);}
+ const identity=read(files.identity),dateReport=read(files.dateReport),validation=read(files.validation),seal=read(files.seal);
+ for(const r of[identity,dateReport]){delete r.reviewContext.sourcePath;delete r.reviewContext.candidatePath;}
+ identity.coverage.candidateDispositions++;
+ mutate({identity,dateReport,validation,seal});
+ validation.identityReviewHash=documentHash(identity);validation.dateReportHash=documentHash(dateReport);
+ seal.protectedFiles=['source','extraction','editorial'].map(role=>pinFile(files[role]));
+ for(const[role,value]of Object.entries({identity,dateReport,validation,seal}))save(files[role],value);
+ const job={id:'testbook-001-abcdef012345',book:f.spec.book,chapter:f.spec.chapter,nativeRoot,reviewAgentId:'reviewer',reviewerRunId:'captured-run',authors:f.spec.authorAgentIds,beforeNative:f.spec.before,
+   circuitBreaker:{reason:'original held chapter',reviewRounds:3},reviewRounds:3,repairRounds:2,nativeSeals:[],
+   recordingRecoveryHistory:[{stage:'native-wrapper-binding',status:'recorded',receipt:{file:'original-wrapper'}},{stage:'explicit-witness-capture',status:'recorded',receipt:{file:'original-witness'}}],witnessCapture:{receipt:'original-capture'}};
+ const rawPins=Object.fromEntries(Object.entries(files).map(([role,file])=>[role,pinFile(file)]));
+ const request={schemaVersion:1,kind:'host-candidate-disposition-count-binding',job:job.id,actualReviewer:job.reviewAgentId,actualRun:job.reviewerRunId,breakerHash:documentHash(job.circuitBreaker),reviewRounds:3,repairRounds:2,
+  rawPins,change:{pointer:'/coverage/candidateDispositions',before:identity.coverage.candidateDispositions,after:identity.coverage.candidateDispositions-1}};
+ const requestFile=path.join(dir,'count-request.json');save(requestFile,request);job.coverageCountBinding=pinFile(requestFile);
+ const prepare=()=>prepareChapterNativeInputs({root:f.root,dir,job,hostAuthor:'codex:count-fixture'});
+ return{f,dir,files,job,request,requestFile,prepare,saveRequest:()=>{save(requestFile,request);job.coverageCountBinding=pinFile(requestFile);}};
+}
+test('explicit count binding preserves captured bytes and passes the unchanged full native gate',async t=>{
+ const x=countBindingFixture(t),before=Object.fromEntries(Object.entries(x.files).map(([k,f])=>[k,fs.readFileSync(f)])),oldJob=structuredClone(x.job);
+ const bound=await x.prepare(),prepared=prepareCombinedCuration({...x.f.spec,...bound}),after=read(prepared.receipt.inputs.identity.file),original=read(x.files.identity);
+ assert.equal(after.coverage.candidateDispositions,original.coverage.candidateDispositions-1);
+ const expected=structuredClone(original);expected.coverage.candidateDispositions--;expected.reviewContext.sourcePath=after.reviewContext.sourcePath;expected.reviewContext.candidatePath=after.reviewContext.candidatePath;expected.hostInputBinding=after.hostInputBinding;
+ assert.deepEqual(after,expected);
+ for(const[k,f]of Object.entries(x.files))assert.deepEqual(fs.readFileSync(f),before[k]);assert.deepEqual(x.job,oldJob);
+ const receipt=read(bound.coverageCountBinding.file);assert.deepEqual(receipt.change,x.request.change);assert.equal(receipt.semanticApprovalCreated,false);assert.equal(receipt.actualRun,'captured-run');
+ assert.equal(receipt.nativeValidation.method,'validateCombinedReviews');assert.deepEqual(receipt.nativeValidation.stats,x.f.docs.validation.productionExtractionStats);
+ assert(read(path.join(bound.reviewDir,'input-seal.json')).protectedFiles.some(p=>p.sha256===bound.coverageCountBinding.sha256));
+ assert.deepEqual(await x.prepare(),bound);
+});
+test('no explicit request leaves stale count rejected by ordinary native validation',async t=>{
+ const x=countBindingFixture(t);delete x.job.coverageCountBinding;const bound=await x.prepare();assert.equal(bound.coverageCountBinding,undefined);
+ assert.throws(()=>prepareCombinedCuration({...x.f.spec,...bound}),/candidateDispositions count/);
+});
+for(const[label,mutate]of[
+ ['missing candidate row',d=>d.identity.candidateChecks.pop()],
+ ['duplicate candidate row',d=>d.identity.candidateChecks.push(structuredClone(d.identity.candidateChecks[0]))],
+ ['extra candidate row',d=>d.identity.candidateChecks.push({...d.identity.candidateChecks[0],id:'unregistered-candidate'})],
+ ['wrong personal owner',d=>d.identity.candidateChecks[0].personalOwners=['wrong-person']],
+ ['changed mention judgment',d=>d.identity.mentionChecks[0].verdict='unsupported'],
+ ['invalid source witness',d=>d.identity.personChecks[0].evidence[0].quote='not in source'],
+ ['other stale count',d=>d.identity.coverage.people++],
+ ['false full-source coverage',d=>d.identity.coverage.allSourceUnitsRead=false],
+ ['date semantic mutation',d=>d.dateReport.itemChecks[0].verdict='unsupported'],
+])test('count reconciliation retains production rejection for '+label,async t=>{const x=countBindingFixture(t,mutate);await assert.rejects(x.prepare());});
+for(const[label,mutate]of[
+ ['wrong requested count',x=>x.request.change.after++],
+ ['wrong before count',x=>x.request.change.before++],
+ ['generic metadata pointer',x=>x.request.change.pointer='/coverage/people'],
+ ['extra requested edit',x=>x.request.additionalEdit={approved:true}],
+ ['wrong reviewer',x=>x.request.actualReviewer='author'],
+ ['wrong run',x=>x.request.actualRun='other-run'],
+ ['breaker reset',x=>x.job.circuitBreaker.reason='reset'],
+ ['counter reset',x=>x.job.reviewRounds=0],
+ ['frozen source drift',x=>fs.appendFileSync(x.files.source,' ')],
+ ['frozen extraction drift',x=>fs.appendFileSync(x.files.extraction,' ')],
+ ['semantic report mutation',x=>{const r=read(x.files.identity);r.personChecks[0].reason+=' altered conclusion';save(x.files.identity,r);const v=read(x.files.validation);v.identityReviewHash=documentHash(r);save(x.files.validation,v);}],
+ ['incomplete recording',x=>x.job.recordingRecoveryHistory[1].status='sent'],
+ ['absent capture',x=>delete x.job.witnessCapture],
+])test('count-binding request rejects '+label,async t=>{const x=countBindingFixture(t);mutate(x);x.saveRequest();await assert.rejects(x.prepare());});
+test('count-binding rejects tampered request bytes even with valid JSON',async t=>{const x=countBindingFixture(t);fs.appendFileSync(x.requestFile,' ');await assert.rejects(x.prepare(),/request changed/);});
+test('immutable derivation receipt cannot be retagged after tampering',async t=>{const x=countBindingFixture(t),b=await x.prepare();const r=read(b.coverageCountBinding.file);r.change.after=999;save(b.coverageCountBinding.file,r);await assert.rejects(x.prepare(),/Prepared native input changed/);});
+test('derived identity semantic changes fail replay against the preserved capture',async t=>{const x=countBindingFixture(t),b=await x.prepare();const f=path.join(b.reviewDir,'identity-review.json'),r=read(f);r.personChecks[0].reason+=' tampered';save(f,r);await assert.rejects(x.prepare(),/Prepared native input changed/);});
+}
