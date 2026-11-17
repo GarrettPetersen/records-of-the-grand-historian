@@ -95,7 +95,14 @@ export function cleanNpmDownloads(home, execute = run, beforeRemove = () => {}) 
   const opened = execute('/usr/sbin/lsof', ['-nP', '+D', cache, '-F', 'pn']);
   if (opened.status !== 0 && opened.status !== 1) throw new Error('Cannot verify npm cache open files');
   if (opened.status === 1 && opened.stderr?.trim()) throw new Error('npm cache open-file inspection incomplete');
-  if (opened.stdout.trim()) return { status: 'busy', path: cache, allocatedBytes, reason: 'Open cache files; preserved' };
+  const pids = [];
+  for (const line of opened.stdout.split('\n').filter(Boolean)) {
+    if (/^p\d+$/.test(line)) pids.push(Number(line.slice(1)));
+    else if (!line.startsWith('n') || !pids.length) throw new Error('Unrecognized npm cache open-file measurement');
+  }
+  // lsof may report its own directory traversal. Ignore only its exact child PID,
+  // not arbitrary other lsof processes, and preserve every other open-file owner.
+  if (pids.some(pid => pid !== opened.pid)) return { status: 'busy', path: cache, allocatedBytes, reason: 'Open cache files; preserved' };
   const processes = execute('/bin/ps', ['-axo', 'command=']);
   if (processes.status !== 0) throw new Error('Cannot verify package install activity');
   if (hasPackageInstall(processes.stdout)) return { status: 'busy', path: cache, allocatedBytes, reason: 'Package install/cache activity; preserved' };

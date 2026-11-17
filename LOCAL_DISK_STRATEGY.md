@@ -15,6 +15,9 @@ checks open files and package-install/cache processes, and records the exact pat
 and allocated bytes before removal. Busy or unverifiable caches are preserved.
 Installed dependencies, npm configuration and logs are not download cache.
 Unknown or warning memory pressure prevents automatic cleanup.
+Any package-manager invocation is conservatively treated as busy, including dev
+commands with flags. Use the direct Node command above for a manual run, rather
+than wrapping cleanup in `npm run` and making its own parent look busy.
 
 It then measures real free space again and issues one local macOS notification.
 Busy, absent-cache and memory-pressure deferrals are inspected again on later

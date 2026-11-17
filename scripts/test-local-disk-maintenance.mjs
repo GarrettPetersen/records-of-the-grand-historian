@@ -91,6 +91,15 @@ test('open files and package installs preserve cache; failed lsof fails closed',
   assert.throws(()=>cleanNpmDownloads(home,()=>({status:1,stdout:'',stderr:'permission denied'})),/incomplete/);
   assert.ok(fs.existsSync(cache));
 });
+test('only the exact lsof inspection PID is excluded; malformed open-file output refuses deletion',t=>{
+  const {home,cache}=fixture(t);
+  const self=command=>command.endsWith('lsof')?{status:0,pid:42,stdout:'p42\nn/cache\n'}:idle(command);
+  assert.equal(cleanNpmDownloads(home,self).status,'removed-download-cache');
+  fs.mkdirSync(cache);
+  const other=()=>({status:0,pid:42,stdout:'p42\nn/cache\np43\nn/cache/file\n'});
+  assert.equal(cleanNpmDownloads(home,other).status,'busy');
+  assert.throws(()=>cleanNpmDownloads(home,()=>({status:0,stdout:'unknown\n'})),/Unrecognized/);
+});
 test('symlinks and special files cannot expand deletion scope',t=>{
   const {home,cache}=fixture(t);fs.symlinkSync(home,path.join(cache,'redirect'));
   assert.throws(()=>cleanNpmDownloads(home,idle),/special file/);

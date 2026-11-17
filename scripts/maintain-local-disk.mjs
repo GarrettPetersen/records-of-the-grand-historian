@@ -43,13 +43,14 @@ if (command === 'status') {
   // Kernel-owned BSD lock: automatically released after crash/reboot. Never
   // unlink it (-k), which would let another process lock a different inode.
   const child = spawnSync('/usr/bin/lockf', ['-k', '-t', '0', path.join(directory, 'maintenance.lock'),
-    process.execPath, fileURLToPath(import.meta.url), '_locked-run'], { stdio: 'inherit' });
+    process.execPath, fileURLToPath(import.meta.url), '_locked-run'], { stdio: 'inherit',
+    env: { ...process.env, HISTORIES_DISK_MAINTENANCE_LOCK: path.join(directory, 'maintenance.lock') } });
   if (child.error) throw child.error;
   if (child.status === null) throw new Error(`Disk maintenance terminated: ${child.signal}`);
   process.exitCode = child.status;
 } else {
-    const parent = execFileSync('/bin/ps', ['-p', String(process.ppid), '-o', 'comm='], { encoding: 'utf8', timeout: 5000 }).trim();
-    if (path.basename(parent) !== 'lockf') throw new Error('Internal maintenance worker requires the lockf parent; use run');
+    if (process.env.HISTORIES_DISK_MAINTENANCE_LOCK !== path.join(directory, 'maintenance.lock')) throw new Error('Internal maintenance worker requires lockf handoff; use run');
+    delete process.env.HISTORIES_DISK_MAINTENANCE_LOCK;
     const now = new Date().toISOString();
     const save = state => {
       const temp = `${statePath}.tmp`;
