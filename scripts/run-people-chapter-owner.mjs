@@ -5,6 +5,7 @@ import {randomBytes} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {parseArgs} from 'node:util';
 import {Agent} from '@cursor/sdk';
+import {authorizeRecordingRecovery} from './lib/people-recording-recovery.mjs';
 import {loadDotenv} from './load-dotenv.mjs';
 import {REPO_ROOT,writeJsonAtomic} from './lib/people-content.mjs';
 import {readRemotePeopleWorkLedger,mutateRemotePeopleWorkLedger,dateExecutorIsBusy} from './lib/people-work-queue.mjs';
@@ -13,7 +14,7 @@ import {readRosterWorkers,dispatchPrompt,probe,liveRunningAgentIds} from './grok
 import {assertPeopleMasterSync} from './check-people-master-sync.mjs';
 
 loadDotenv(REPO_ROOT);
-const {values:o}=parseArgs({options:{prepare:{type:'boolean'},fresh:{type:'boolean'},start:{type:'boolean'},status:{type:'boolean'},review:{type:'boolean'},run:{type:'boolean'},continue:{type:'boolean'},feedback:{type:'string'},book:{type:'string'},chapter:{type:'string'},lane:{type:'string'},worker:{type:'string'},job:{type:'string'},model:{type:'string'},extra:{type:'string',multiple:true},'native-root':{type:'string'}}});
+const {values:o}=parseArgs({options:{prepare:{type:'boolean'},fresh:{type:'boolean'},start:{type:'boolean'},status:{type:'boolean'},review:{type:'boolean'},run:{type:'boolean'},continue:{type:'boolean'},feedback:{type:'string'},book:{type:'string'},chapter:{type:'string'},lane:{type:'string'},worker:{type:'string'},job:{type:'string'},model:{type:'string'},extra:{type:'string',multiple:true},'native-root':{type:'string'},'recording-recovery':{type:'string'}}});
 const modes=['prepare','start','status','review'].filter(k=>o[k]);if(modes.length!==1)throw Error('Choose --prepare, --start, --review or --status');
 const guard=()=>{const r=spawnSync(process.execPath,['scripts/check-local-disk.mjs'],{cwd:REPO_ROOT,encoding:'utf8',env:{...process.env,PEOPLE_REPO_ROOT:REPO_ROOT}});if(r.status!==0)throw Error('Resource guard failed: '+r.stdout+r.stderr);assertPeopleMasterSync(REPO_ROOT);};
 if(o.prepare){
@@ -55,10 +56,14 @@ if(o.prepare){
  const dir=ownerDirectory(REPO_ROOT,o.job),file=path.join(dir,'job.json'),job=JSON.parse(fs.readFileSync(file));
  if(o.status){console.log(JSON.stringify({id:job.id,status:job.status,lane:job.lane,ownerAgentId:job.ownerAgentId,ownerRunId:job.ownerRunId,reviewAgentId:job.reviewAgentId,revision:job.revision,covered:job.coveredUnits.length,total:job.unitIds.length,findings:job.findings,dispatch:job.dispatch},null,2));process.exit(0);}
  guard();if(!o.run)throw Error('--run is required to start/continue inference');
- if(job.status==='held'||job.circuitBreaker)throw Error('Chapter is held; diagnose and independently review a new approach before resuming');
+ let recordingRecovery=null;
+ if(o['recording-recovery']){
+  recordingRecovery=await authorizeRecordingRecovery({job,dir,root:REPO_ROOT,receiptFile:o['recording-recovery'],feedbackFile:o.feedback,review:o.review,continuation:o.continue,getRun:(agentId,runId)=>Agent.getRun(runId,{runtime:'cloud',agentId,apiKey:process.env.CURSOR_API_KEY})});
+ }else if(job.status==='held'||job.circuitBreaker)throw Error('Chapter is held; diagnose and independently review a new approach before resuming');
  const role=o.review?'reviewer':'owner',lane=o.lane??job.lane,agentKey=role==='owner'?'ownerAgentId':'reviewAgentId';
+ if(recordingRecovery&&lane!=='cursor-sdk')throw Error('Recording recovery requires the retained Cursor reviewer');
  if(job.dispatch?.[role]?.lane&&job.dispatch[role].lane!==lane)throw Error('Retained role must resume in its original lane; no implicit provider switch');
- if(role==='reviewer'&&job.status!=='ready-for-review'&&!(o.continue&&job.status==='reviewing'))throw Error('Owner must finish a validated candidate first');
+ if(role==='reviewer'&&!recordingRecovery&&job.status!=='ready-for-review'&&!(o.continue&&job.status==='reviewing'))throw Error('Owner must finish a validated candidate first');
  if(role==='reviewer'&&job.ownerAgentId?.startsWith('bc-')&&job.ownerRunId){
   const ownerRun=await Agent.getRun(job.ownerRunId,{runtime:'cloud',agentId:job.ownerAgentId,apiKey:process.env.CURSOR_API_KEY});
   if(ownerRun.status==='running')throw Error('Owner inference must drain before independent review');
@@ -70,7 +75,7 @@ if(o.prepare){
   Object.assign(job,JSON.parse(fs.readFileSync(file)));
   job.reviewFindingStart=job.findings.length;
  }
- if(job.dispatch?.[role]?.state==='dispatching')throw Error('Prior dispatch is uncertain: inspect before another send');
+ if(job.dispatch?.[role]?.state==='dispatching'&&!recordingRecovery?.resumingDispatch)throw Error('Prior dispatch is uncertain: inspect before another send');
  if(job.dispatch?.[role]?.state==='sent'&&!o.continue)throw Error('Assignment already sent: observe the retained agent; do not duplicate');
  if(o.continue&&!o.feedback)throw Error('A continuation requires compact concrete --feedback FILE');
  const token=fs.readFileSync(path.join(dir,role+'-token'),'utf8'),url=`https://grokbot-mcp.24histories.com/chapter-mcp/${job.id}/${role}`;
@@ -80,6 +85,7 @@ if(o.prepare){
  const prompt=o.continue?'Continue this same sealed chapter and existing draft; do not re-onboard or repeat unchanged work. Host feedback:\n'+fs.readFileSync(o.feedback,'utf8'):intro+roleGuidance;
  if(prompt.length>16000)throw Error('Prompt/feedback must be compact');
  job.dispatch??={};
+ if(recordingRecovery){job.recordingRecovery=recordingRecovery;const history=[...(job.recordingRecoveryHistory??[])];if(history.at(-1)?.stage===recordingRecovery.stage)history[history.length-1]=structuredClone(recordingRecovery);else history.push(structuredClone(recordingRecovery));job.recordingRecoveryHistory=history;}
  if(lane==='cursor-sdk'){
   if(o.continue){const previous=await Agent.getRun(job[role+'RunId'],{runtime:'cloud',agentId:job[agentKey],apiKey:process.env.CURSOR_API_KEY});if(previous.status==='running')throw Error('Retained agent is still running');}
   if(!o.model)throw Error('--model must select an available capable reasoning model');
@@ -87,10 +93,10 @@ if(o.prepare){
   const agent=job[agentKey]?await Agent.resume(job[agentKey],{apiKey:process.env.CURSOR_API_KEY}):await Agent.create({apiKey:process.env.CURSOR_API_KEY,name:`Chapter ${role} ${job.book}/${job.chapter}`,model:{id:o.model,params:[{id:'effort',value:'high'},{id:'fast',value:'false'}]},cloud:{repos:[],autoCreatePR:false,metadata:{purpose:'people-chapter-'+role,book:job.book,chapter:job.chapter,job:job.id}},mcpServers:[{chapter:connection}]});
   if(role==='reviewer'&&agent.agentId===job.ownerAgentId)throw Error('Reviewer is the owner');
   job[agentKey]=agent.agentId;if(role==='owner')job.authors=[...new Set([...job.authors,agent.agentId])];else job.status='reviewing';
-  job.dispatch[role]={state:'dispatching',at:new Date().toISOString(),lane};writeJsonAtomic(file,job);
-  const run=await agent.send(prompt,{mcpServers:{chapter:connection}});
+  job.dispatch[role]={state:'dispatching',at:recordingRecovery?.startedAt??new Date().toISOString(),lane};writeJsonAtomic(file,job);
+  const run=await agent.send(prompt,{...(recordingRecovery?{idempotencyKey:'native-recording-'+recordingRecovery.receipt.sha256.slice(7)}:{}),mcpServers:{chapter:connection},...(recordingRecovery?{cloud:{envVars:{CHAPTER_REVIEW_URL:url,CHAPTER_REVIEW_TOKEN:token}}}:{})});
   // Tool activity can update the journal while send awaits: merge only dispatch fields.
-  const latest=JSON.parse(fs.readFileSync(file));latest[role+'RunId']=run.id;latest.dispatch[role]={state:'sent',at:new Date().toISOString(),lane,runId:run.id};writeJsonAtomic(file,latest);agent.close();
+  const latest=JSON.parse(fs.readFileSync(file));latest[role+'RunId']=run.id;if(recordingRecovery){latest.recordingRecovery={...latest.recordingRecovery,status:'sent',runId:run.id};latest.recordingRecoveryHistory[latest.recordingRecoveryHistory.length-1]=structuredClone(latest.recordingRecovery);}latest.dispatch[role]={state:'sent',at:recordingRecovery?.startedAt??new Date().toISOString(),lane,runId:run.id};writeJsonAtomic(file,latest);agent.close();
   console.log(JSON.stringify({job:job.id,role,lane,agentId:agent.agentId,runId:run.id}));
  }else if(lane==='grokbot'){
   const worker=o.worker??job.worker,rows=readRosterWorkers(),selected=rows.find(r=>r.worker===worker);
