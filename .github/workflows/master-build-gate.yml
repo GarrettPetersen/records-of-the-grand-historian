@@ -90,3 +90,18 @@ jobs:
           name: jinshu119-qualified-contribution
           path: data/people/generated/jinshu119-release-acceptance/
           retention-days: 30
+
+      - name: Verify Jinshu 117 and 130 qualification and ebook contributions
+        run: |
+          for chapter in 117 130; do
+            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
+          done
+
+      - name: Preserve Jinshu 117 and 130 nonempty acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: jinshu117-130-qualified-contributions
+          path: |
+            data/people/generated/jinshu117-release-acceptance/
+            data/people/generated/jinshu130-release-acceptance/
+          retention-days: 30
