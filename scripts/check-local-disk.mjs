@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { LOW_DISK_BYTES } from './lib/local-disk-maintenance.mjs';
 
 export const RESERVE_BYTES = 30n * 1024n ** 3n;
 export const SWAP_WARNING_BYTES = 4n * 1024n ** 3n;
@@ -99,6 +100,13 @@ export function inspectLocalDisk(repoRoot) {
     primary, availableBytes: availableBytes.toString(),
     availableGiB: Number(availableBytes / (1024n ** 2n)) / 1024,
     reserveGiB: 30, worktrees,
+    diskMaintenance: {
+      warningGiB: 35,
+      required: availableBytes < LOW_DISK_BYTES,
+      command: 'node scripts/maintain-local-disk.mjs run',
+      procedure: 'LOCAL_DISK_STRATEGY.md#automatic-low-disk-procedure',
+      guardRemainsReadOnly: true,
+    },
     memory,
     errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }), ...memory.errors],
     scope: 'Registered worktrees only; external clones and service runtimes must also be checked by the host.',
