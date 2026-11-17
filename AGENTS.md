@@ -100,6 +100,15 @@ external resource change; clear the resource hold only after an actual guard pas
 
 ## Local disk conservation
 
+Follow `LOCAL_DISK_STRATEGY.md#automatic-low-disk-procedure` when the read-only
+guard reports `diskMaintenance.required` (below35GiB), before the30GiB stop.
+The host's five-minute maintenance timer attempts only verified unused npm download
+cache cleanup and records one incident/notification until40GiB recovery. It never
+deletes chapter evidence, registries, history, worktrees, runtimes or app updates.
+Inspect its receipt and actively follow the documented host procedure if safe cache
+cleanup is insufficient. Preserve one pending human decision; no repeated asks or
+cleanup loops. Resume heavy work only after the full guard actually passes.
+
 Before any local batch or workspace change, run `npm run people:disk:check`.
 This read-only preflight fails below 30 GiB free or when a registered secondary
 checkout contains `public/`. It does not delete anything or authorize a new checkout.

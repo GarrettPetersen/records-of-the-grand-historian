@@ -41,7 +41,7 @@ test('macOS inspection collects no process arguments and propagates measurement 
   const execute = (command, args, options) => {
     commands.push([command, args]);
     assert.equal(options.timeout, 5000);
-    if (command === 'ps') return '12 1048576 /Applications/CodexCLI.app/Contents/MacOS/codex\n';
+    if (command === '/bin/ps') return '12 1048576 /Applications/CodexCLI.app/Contents/MacOS/codex\n';
     return args[0] === 'vm.swapusage' ? 'vm.swapusage: total = 8192M used = 4096M free = 4096M' : '1\n';
   };
   const report = inspectMemory('darwin', execute);
@@ -51,14 +51,14 @@ test('macOS inspection collects no process arguments and propagates measurement 
   assert.match(report.warnings[0], /4 GiB/);
   assert.equal(report.warningSwapBytes, SWAP_WARNING_BYTES.toString());
   assert.equal(report.maxSwapBytes, (8n * 1024n ** 3n).toString());
-  assert.deepEqual(commands[1], ['ps', ['-axo', 'pid=,rss=,comm=']]);
+  assert.deepEqual(commands[1], ['/bin/ps', ['-axo', 'pid=,rss=,comm=']]);
   assert.throws(() => inspectMemory('darwin', () => { throw new Error('measurement failed'); }), /measurement failed/);
   assert.equal(inspectMemory('linux', () => assert.fail('must not run macOS commands')).status, 'not-applicable');
 });
 
 test('swap warnings start at 4 GiB and admission stops at 8 GiB', () => {
   for (const [usedMiB, warning, stopped] of [[4095, false, false], [4096, true, false], [8191, true, false], [8192, true, true]]) {
-    const execute = (command, args) => command === 'ps' ? '12 1024 codex\n'
+    const execute = (command, args) => command === '/bin/ps' ? '12 1024 codex\n'
       : args[0] === 'vm.swapusage' ? `vm.swapusage: total = 8192M used = ${usedMiB}M free = ${8192 - usedMiB}M` : '1\n';
     const report = inspectMemory('darwin', execute);
     assert.equal(report.warnings.length > 0, warning, `warning at ${usedMiB} MiB`);

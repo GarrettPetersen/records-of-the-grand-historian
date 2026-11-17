@@ -1,5 +1,76 @@
 # Local disk strategy
 
+## Automatic low-disk procedure
+
+The macOS host runs `node scripts/maintain-local-disk.mjs run` every five minutes
+through LaunchAgent `com.24histories.disk-maintenance`. Install it once with
+`node scripts/maintain-local-disk.mjs install`; remove the timer with `uninstall`.
+`status` prints the current incident and exact receipt location. No model/API calls,
+new worktrees, server shutdowns, builds or registry replays run in this service.
+
+Below **35 GiB** free, the service opens one low-space incident and attempts only
+this automatic cleanup: the current user's **`~/.npm/_cacache` download cache**.
+It first rejects redirected/symlink/special-file paths, bounds its inspection,
+checks open files and package-install/cache processes, and records the exact path
+and allocated bytes before removal. Busy or unverifiable caches are preserved.
+Installed dependencies, npm configuration and logs are not download cache.
+Unknown or warning memory pressure prevents automatic cleanup.
+Any package-manager invocation is conservatively treated as busy, including dev
+commands with flags. Use the direct Node command above for a manual run, rather
+than wrapping cleanup in `npm run` and making its own parent look busy.
+
+It then measures real free space again and issues one local macOS notification.
+Busy, absent-cache and memory-pressure deferrals are inspected again on later
+ticks; they are not falsely described as exhausted cleanup. A completed deletion
+or failed/interrupted attempt is not repeated in that incident. If space remains
+low or inspection fails, the incident requires host action. Delivered alerts and
+permission requests are not repeated; failed notification delivery is retried.
+The incident is rearmed only after **40 GiB** free is observed. The existing
+**30 GiB admission reserve remains unchanged**; clearing a notification or freeing
+a small cache never approves dispatch/publication. Run `npm run people:disk:check`
+after any cleanup/external change and resume only on a full actual pass. Inspect
+the receipt's latest measurement even when a prior incident remains latched.
+
+Receipts are in `~/.local/state/24histories-disk-maintenance/`: atomic `state.json`
+and one `incident-*.json` per episode. They record measured before/after space,
+the attempted cleanup, and pending action. No credentials or process arguments
+are logged. A kernel `lockf` lock prevents overlapping timers/manual runs and is
+released automatically on process exit/reboot. Its empty lock file stays in place;
+file existence does not mean a lock is held. Never delete it during a running job.
+
+When the automatic cleanup cannot provide useful headroom, the host follows this
+ordered procedure immediately, rather than merely polling the failed guard:
+
+1. Stop new heavy jobs/dispatch; preserve active work and current ownership. Check
+   disk trend, swap, memory pressure and physical footprints. Inspect recent growth
+   using bounded inventories; do not assume the largest directory caused it.
+2. Inspect completed managed checkouts and reproducible outputs, checking process
+   dependencies, recovery/claim ownership and required sealed references. Archive
+   or remove only verified completed/reproducible work with a recovery receipt.
+   Do not delete a private registry merely because a chapter PR merged: native
+   retained proofs may still reference it. Do not regenerate site output to clean it.
+3. Preserve all source/unpublished changes, incomplete chunks, sealed packets,
+   paid responses, native review history, active registries, locks, Git recovery
+   refs, app/conversation history, swap, installed runtimes and pending updater
+   installations. Never automatically delete them, empty Trash, run Git GC, prune
+   worktrees or terminate apps. An updater/download directory is not proven safe
+   solely by its name or age.
+4. If no safe useful target exists, retain one concrete pending request: required
+   extra headroom or a specific target with measured size, owner, interruption and
+   recovery/restart plan. Ask once when ownership/authorization is missing. Keep
+   this decision in the coordinator handoff and supervisor checkpoint; later
+   agents must not repeat the request or bypass the hold.
+5. After the cleanup or external change, rerun the full guard and record actual
+   reclaimed bytes. Clear resource holds only on observed success. Resume one
+   bounded job, remeasure, and keep serialized host writes and five-minute monitoring.
+
+The preflight stays read-only and reports `diskMaintenance.required` below35GiB,
+with the command/procedure above. If the host moves machines or the checkout moves,
+install the timer again using that machine's Node executable and checkout path.
+This timer mitigates safe reproducible cache growth; it cannot guarantee headroom
+when other active projects write large files. A pending human space decision is
+not permission to delete their work.
+
 MCP GrokBot workers share one local runtime clone. The bridge serves sealed packets
 and publishes through GitHub. Remote bots use the installed client and do not need a
 repository clone for MCP work. Avoid local per-bot clones.
@@ -89,8 +160,10 @@ the selection. Retain the selection when reusing the checkout for another task.
 Do not create unmanaged `/tmp` worktrees for each chapter or review round. Independent
 review requires a separate conversation and sealed evidence, not an entire copy of
 the repo. Reuse a released workspace, or use a sparse workspace for concurrent work.
-Managed creation may initially materialize a full checkout; check disk before creation
-and make it sparse immediately. At low space, reuse rather than create.
+For a genuine different-revision exception, reuse an idle sparse checkout first.
+If creation is unavoidable, use `--no-checkout`, configure sparsity, and only then
+materialize the exact files. Never create a full checkout and shrink it afterward.
+At low space, reuse rather than create.
 
 ## Completion and disk reserve
 
