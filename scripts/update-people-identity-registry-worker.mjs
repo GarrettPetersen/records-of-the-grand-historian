@@ -10,11 +10,10 @@ import { localNameKeys } from './lib/people-resolution.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
 import { acquireProcessRunLock } from './lib/process-run-lock.mjs';
 import { pinnedIdentityChapterContext, inspectPinnedDossierChanges, pinnedIdentityHostGeneratedDirectory } from './lib/people-pinned-identity-source.mjs';
-import { readIdentityDossierRegistry, buildIdentityDossierDelta, writeIdentityDossierDelta } from './lib/people-identity-dossier-delta.mjs';
+import { assertUnchangedIdentityConstraints, readIdentityDossierRegistry, buildIdentityDossierDelta, writeIdentityDossierDelta } from './lib/people-identity-dossier-delta.mjs';
 
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 const hostRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const constraints = person => person.claims.filter(c => ['same-person', 'different-person'].includes(c.predicate));
 
 // This changes indexed evidence, never accepted canonical membership or chapter
 // approvals. Only normal source/extraction deltas at an exact Git revision are
@@ -44,7 +43,7 @@ export async function updateIdentityDossierRegistry({ registry, out, sourceRevis
       for (const [id, person] of next.localPeople) {
         const original = old.localPeople.get(id), oldContract = peopleDigest(memberContract(original, localNameKeys(original)));
         need(index.memberVersions.get(id) === oldContract, `Retained dossier member does not match pinned source: ${id}`);
-        need(peopleDigest(constraints(person)) === peopleDigest(constraints(original)), `Identity constraints changed: ${id}; replay accepted canonical membership`);
+        assertUnchangedIdentityConstraints(original, person);
         if (peopleDigest(memberContract(person, localNameKeys(person))) !== oldContract) { changed.push(id); memberChanges.push(id); }
       }
       current.set(key, next); chapters.push({ scope: key, people: next.localPeople.size, changedMembers: memberChanges });

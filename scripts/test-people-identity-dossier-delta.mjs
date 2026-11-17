@@ -8,7 +8,7 @@ import { buildIdentityDossierIndex, planChapterIdentityReview, IDENTITY_REVIEW_L
 import { localNameKeys } from './lib/people-resolution.mjs';
 import { peopleDigest } from './lib/people-identity-seal.mjs';
 import { writeIdentityDossierStore } from './lib/people-identity-dossier-store.mjs';
-import { buildIdentityDossierDelta, writeIdentityDossierDelta, readIdentityDossierRegistry } from './lib/people-identity-dossier-delta.mjs';
+import { assertUnchangedIdentityConstraints, buildIdentityDossierDelta, writeIdentityDossierDelta, readIdentityDossierRegistry } from './lib/people-identity-dossier-delta.mjs';
 
 const provenance = revision => ({ revision: revision.repeat(40), identityInputs: peopleDigest(revision) });
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -17,6 +17,36 @@ function person(chapter, en, zh) {
   return { localId, promptVersion: 7, preferredNameSuggestion: { en, zh }, claims: [{ id: `fixture:${chapter}:c001`, subject: localId,
     predicate: 'name', value: { kind: 'personal', en, ...(zh ? { zh } : {}) }, certainty: 'explicit', evidence: [`fixture:${chapter}:s0001`] }] };
 }
+function constrainedPerson() {
+  const value = person('001', 'Wang Wei', '王偉');
+  value.claims.push({ id: 'fixture:001:c0773', subject: value.localId, predicate: 'different-person',
+    value: { personId: 'fixture:001:p002' }, certainty: 'explicit', evidence: ['fixture:001:s0052'] });
+  return value;
+}
+test('native source recompilation may renumber an unchanged identity constraint', () => {
+  const before = constrainedPerson(), after = structuredClone(before);
+  after.claims[1].id = 'fixture:001:c0772';
+  assert.doesNotThrow(() => assertUnchangedIdentityConstraints(before, after));
+  assert.deepEqual(before, constrainedPerson(), 'The retained source evidence must stay unchanged');
+});
+test('constraint comparison still rejects every semantic change, occurrence loss, and new constraint', () => {
+  const before = constrainedPerson();
+  const mutations = [
+    p => { p.claims[1].subject = 'fixture:001:p003'; },
+    p => { p.claims[1].predicate = 'same-person'; },
+    p => { p.claims[1].value.personId = 'fixture:001:p003'; },
+    p => { p.claims[1].certainty = 'strongly-inferred'; },
+    p => { p.claims[1].evidence = ['fixture:001:s0053']; },
+    p => { p.claims[1].notes = ['Additional source qualification']; },
+    p => { p.claims.pop(); },
+    p => { p.claims.push({ ...p.claims[1], id: 'fixture:001:c0774' }); },
+  ];
+  for (const mutate of mutations) {
+    const after = structuredClone(before); mutate(after);
+    assert.throws(() => assertUnchangedIdentityConstraints(before, after), /replay accepted canonical membership/u);
+  }
+  assert.throws(() => assertUnchangedIdentityConstraints(before, { ...before, localId: 'fixture:002:p001' }), /Matching validated/u);
+});
 async function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'dossier-delta-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
