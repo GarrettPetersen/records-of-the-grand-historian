@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { spawn, spawnSync } from 'node:child_process';
 import { maintainDisk, cleanNpmDownloads, hasPackageInstall } from './lib/local-disk-maintenance.mjs';
 
 const report = (gib, pressureLevel = 1) => ({ availableBytes: String(BigInt(gib) * 1024n ** 3n), availableGiB: gib, memory: { pressureLevel }, errors: gib < 30 ? ['disk reserve'] : [] });
@@ -49,6 +50,24 @@ test('interrupted cleanup requires inspection and alerts once without retrying d
   assert.equal(state.status,'interrupted-needs-inspection');
   maintainDisk({...deps,state});assert.equal(alerts,1);
 });
+test('busy and warning-pressure deferrals retry safely after conditions clear',()=>{
+  let state, attempts=0, alerts=0;
+  const deps={now:'test',measure:()=>report(32),save:x=>{state=structuredClone(x);},notify:()=>alerts++,clean:()=>{attempts++;return{status:attempts===1?'busy':'removed-download-cache'};}};
+  maintainDisk(deps);assert.equal(state.status,'cleanup-deferred');
+  maintainDisk({...deps,state});assert.equal(attempts,2);assert.equal(alerts,1);
+  maintainDisk({...deps,state});assert.equal(attempts,2);
+  maintainDisk({...deps,state:undefined,measure:()=>report(32,2)});
+  assert.equal(state.status,'cleanup-deferred');
+  maintainDisk({...deps,state});assert.equal(attempts,3);
+});
+test('notification failure retains incident and retries alert without repeating deletion',()=>{
+  let state, cleanups=0, alerts=0;
+  const deps={now:'test',measure:()=>report(32),save:x=>{state=structuredClone(x);},clean:()=>{cleanups++;return{status:'removed-download-cache'};},notify:()=>{if(++alerts===1)throw Error('alert unavailable');}};
+  assert.throws(()=>maintainDisk(deps),/alert unavailable/);
+  assert.equal(state.episode.notificationDeliveredAt,undefined);
+  maintainDisk({...deps,state});assert.equal(alerts,2);assert.equal(cleanups,1);
+  assert.equal(state.episode.notificationError,undefined);
+});
 function fixture(t) {
   const home=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'disk-cleanup-test-')));
   t.after(()=>fs.rmSync(home,{recursive:true,force:true}));
@@ -79,7 +98,21 @@ test('symlinks and special files cannot expand deletion scope',t=>{
   assert.throws(()=>cleanNpmDownloads(home,idle),/redirected/);
   assert.ok(fs.existsSync(path.join(cache+'-saved','download')));
 });
-test('install detection excludes dev servers and detects installers',()=>{
-  assert.equal(hasPackageInstall('npm run dev\nnode scripts/maintain-local-disk.mjs run'),false);
-  for(const text of ['npm install','node /bin/npm-cli.js ci','pnpm add x','yarn install','npx package'])assert.equal(hasPackageInstall(text),true);
+test('package activity detection fails closed with flags and even npm dev invocations',()=>{
+  assert.equal(hasPackageInstall('node app/server.mjs\nnode scripts/maintain-local-disk.mjs run'),false);
+  for(const text of ['npm install','node /bin/npm-cli.js ci','pnpm add x','yarn install','npx package','npm --omit=dev install','npm --prefix x ci','pnpm --filter pkg add','yarn --cwd d install','npm run dev'])assert.equal(hasPackageInstall(text),true);
+});
+test('kernel lock rejects a concurrent job and releases after worker termination without deleting lock file', { skip: process.platform !== 'darwin' }, async t=>{
+  const {home}=fixture(t),lock=path.join(home,'maintenance.lock');
+  const child=spawn('/usr/bin/lockf',['-k','-t','0',lock,process.execPath,'-e','console.log(process.pid);setInterval(()=>{},1000)']);
+  let worker;
+  t.after(()=>{if(worker){try{process.kill(worker,'SIGTERM');}catch(e){if(e.code!=='ESRCH')throw e;}}});
+  const exited=new Promise(resolve=>child.once('exit',resolve));
+  worker=Number(await new Promise((resolve,reject)=>{child.stdout.once('data',x=>resolve(x.toString().trim()));child.once('error',reject);}));
+  assert.ok(worker>0);
+  const blocked=spawnSync('/usr/bin/lockf',['-k','-t','0',lock,'/usr/bin/true']);
+  assert.equal(blocked.status,75);
+  process.kill(worker,'SIGTERM');await exited;worker=null;
+  assert.ok(fs.existsSync(lock));
+  assert.equal(spawnSync('/usr/bin/lockf',['-k','-t','0',lock,'/usr/bin/true']).status,0);
 });

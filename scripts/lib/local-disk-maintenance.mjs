@@ -5,26 +5,33 @@ import { spawnSync } from 'node:child_process';
 export const LOW_DISK_BYTES = 35n * 1024n ** 3n;
 export const RECOVERED_DISK_BYTES = 40n * 1024n ** 3n;
 
-// A low-space episode is latched until 40 GiB returns. Do not repeatedly clean,
-// notify, or erase a pending human decision on every preflight/timer invocation.
+// Completed/failed deletion is one-shot. Temporary busy/absent/pressure deferrals
+// may be inspected again, without repeating a successfully delivered notification.
 export function maintainDisk({ state, measure, save, clean, notify, now }) {
   const before = measure();
   const available = BigInt(before.availableBytes);
+  const deliver = next => {
+    if (!next.episode.notificationDeliveredAt) {
+      try { notify(next); }
+      catch (error) { next.episode.notificationError = error.message; save(next); throw error; }
+      next.episode.notificationDeliveredAt = now;
+      delete next.episode.notificationError;
+      save(next);
+    }
+    return next;
+  };
   if (available >= RECOVERED_DISK_BYTES) {
     const next = { schemaVersion: 1, status: 'healthy', measuredAt: now, measurement: before };
     save(next);
     return next;
   }
-  if (state?.episode) {
+  if (state?.episode && (state.status !== 'cleanup-deferred' || available >= LOW_DISK_BYTES)) {
     const next = { ...state, measuredAt: now, measurement: before };
     if (state.status === 'cleanup-started') {
       next.status = 'interrupted-needs-inspection';
-      next.episode.notificationAttemptedAt = now;
-      save(next);
-      notify(next);
     }
     save(next);
-    return next;
+    return deliver(next);
   }
   if (available >= LOW_DISK_BYTES) {
     const next = { schemaVersion: 1, status: 'healthy', measuredAt: now, measurement: before };
@@ -32,7 +39,8 @@ export function maintainDisk({ state, measure, save, clean, notify, now }) {
     return next;
   }
   const next = { schemaVersion: 1, status: 'cleanup-started', measuredAt: now,
-    measurement: before, episode: { startedAt: now, before, cleanupAttempted: true } };
+    measurement: before, episode: state?.episode ?? { startedAt: now, before } };
+  next.episode.inspections = (next.episode.inspections ?? 0) + 1;
   save(next); // Preserve the attempt even if cleanup crashes; never blindly repeat it.
   try {
     next.episode.cleanup = before.memory?.pressureLevel === 1
@@ -40,19 +48,17 @@ export function maintainDisk({ state, measure, save, clean, notify, now }) {
       : { status: 'skipped', reason: 'Memory pressure is not verified normal; host remediation required.' };
     next.measurement = measure();
     next.episode.observedFreeBytesChange = (BigInt(next.measurement.availableBytes) - available).toString();
-    next.status = BigInt(next.measurement.availableBytes) >= LOW_DISK_BYTES ? 'recovered-warning' : 'needs-space';
+    next.status = ['busy', 'absent', 'skipped'].includes(next.episode.cleanup.status)
+      ? 'cleanup-deferred' : BigInt(next.measurement.availableBytes) >= LOW_DISK_BYTES ? 'recovered-warning' : 'needs-space';
   } catch (error) {
     next.status = 'cleanup-error';
     next.episode.error = error.message;
-    next.episode.notificationAttemptedAt = now;
     save(next);
-    notify(next);
+    deliver(next);
     throw error;
   }
-  next.episode.notificationAttemptedAt = now;
   save(next);
-  notify(next); // A notification failure is visible, not an invented successful alert.
-  return next;
+  return deliver(next);
 }
 
 function run(command, args) {
@@ -62,13 +68,14 @@ function run(command, args) {
 }
 
 export function hasPackageInstall(output) {
-  return output.split('\n').some(line => /\b(?:npm(?:-cli)?|pnpm|yarn|bun)(?:\.js|\.cjs)?\s+(?:install|i|ci|add|update|upgrade|exec|dlx|cache)\b|\bnpx\b/.test(line));
+  return output.split('\n').some(line => /(?:^|[\s/])(?:npm(?:-cli)?|pnpm|yarn|bun|npx)(?:\.js|\.cjs)?(?:\s|$)/.test(line));
 }
 
 export function cleanNpmDownloads(home, execute = run, beforeRemove = () => {}) {
   const parent = path.join(home, '.npm');
   const cache = path.join(parent, '_cacache');
-  if (!fs.existsSync(cache)) return { status: 'absent', path: cache, allocatedBytes: 0 };
+  try { fs.lstatSync(cache); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; return { status: 'absent', path: cache, allocatedBytes: 0 }; }
   for (const entry of [home, parent, cache]) {
     if (fs.lstatSync(entry).isSymbolicLink() || fs.realpathSync(entry) !== entry) throw new Error('Refusing redirected npm cache path');
   }

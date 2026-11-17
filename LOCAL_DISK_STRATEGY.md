@@ -17,8 +17,11 @@ Installed dependencies, npm configuration and logs are not download cache.
 Unknown or warning memory pressure prevents automatic cleanup.
 
 It then measures real free space again and issues one local macOS notification.
-If space remains low or inspection fails, the incident requires host action; it
-does not repeatedly delete, alert, or ask permission on each timer invocation.
+Busy, absent-cache and memory-pressure deferrals are inspected again on later
+ticks; they are not falsely described as exhausted cleanup. A completed deletion
+or failed/interrupted attempt is not repeated in that incident. If space remains
+low or inspection fails, the incident requires host action. Delivered alerts and
+permission requests are not repeated; failed notification delivery is retried.
 The incident is rearmed only after **40 GiB** free is observed. The existing
 **30 GiB admission reserve remains unchanged**; clearing a notification or freeing
 a small cache never approves dispatch/publication. Run `npm run people:disk:check`
@@ -28,8 +31,9 @@ the receipt's latest measurement even when a prior incident remains latched.
 Receipts are in `~/.local/state/24histories-disk-maintenance/`: atomic `state.json`
 and one `incident-*.json` per episode. They record measured before/after space,
 the attempted cleanup, and pending action. No credentials or process arguments
-are logged. A process lock prevents overlapping timers/manual runs; a leftover
-lock requires checking its PID/ownership rather than blindly clearing it.
+are logged. A kernel `lockf` lock prevents overlapping timers/manual runs and is
+released automatically on process exit/reboot. Its empty lock file stays in place;
+file existence does not mean a lock is held. Never delete it during a running job.
 
 When the automatic cleanup cannot provide useful headroom, the host follows this
 ordered procedure immediately, rather than merely polling the failed guard:
