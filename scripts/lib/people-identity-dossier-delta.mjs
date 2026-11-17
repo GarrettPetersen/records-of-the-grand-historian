@@ -13,6 +13,18 @@ const digest = value => /^sha256:[a-f0-9]{64}$/u.test(value ?? '');
 const maxDeltaBytes = 16 * 1024 * 1024;
 const mapKinds = ['postings', 'englishUnknownPostings', 'memberVersions'];
 
+export function assertUnchangedIdentityConstraints(before, after) {
+  need(before?.localId && before.localId === after?.localId &&
+    Array.isArray(before.claims) && Array.isArray(after.claims), 'Matching validated source people required');
+  // The compiler can renumber claims after an unrelated claim is removed.
+  // Only that generated locator is incidental; retain every semantic field,
+  // constraint occurrence and its order when deciding whether replay is needed.
+  const constraints = person => person.claims
+    .filter(claim => ['same-person', 'different-person'].includes(claim.predicate))
+    .map(({ id, ...claim }) => claim);
+  need(same(constraints(before), constraints(after)), `Identity constraints changed: ${after.localId}; replay accepted canonical membership`);
+}
+
 function regularBytes(file) {
   const stat = fs.lstatSync(file);
   need(stat.isFile() && !stat.isSymbolicLink(), `Expected regular dossier generation file: ${file}`);
