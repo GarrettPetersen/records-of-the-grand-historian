@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { gitIdentitySnapshot, provePinnedDossierReuse, proveUnchangedIdentityChapter, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
+import { gitIdentitySnapshot, proveDisplayCurationDelta, provePinnedDossierReuse, proveUnchangedIdentityChapter, assertPinnedIdentityRuntime, pinnedIdentityChapterContext } from './lib/people-pinned-identity-source.mjs';
 import { peopleDigest } from './lib/people-identity-seal.mjs';
 import { contentUnits, sha256 } from './lib/people-content.mjs';
 import { dateAuditItems } from './lib/people-date-audit.mjs';
@@ -97,4 +97,36 @@ test('pinned recovery shares the optional editorial contract without weakening t
  fs.unlinkSync(path.join(f.root,'data/people/date-audits/fixture/001.json'));const current=pinnedIdentityChapterContext(f.root,f.commit());
  assert.throws(()=>current.inputs('fixture','001'),/Missing required independent date report/);
  const recovery=current.inputs('fixture','001',{requireAuditReport:false});assert.equal(recovery.editorial,sha256(Buffer.from('null')));assert.equal(recovery.dateAudit,sha256(Buffer.from('null')));
+});
+
+const displayId = 'per_00000000000000000001';
+const displayDocument = () => ({schemaVersion: 1, people: {[displayId]: {
+  preferredName: {kind: 'personal', en: 'Jia', zh: '甲', pinyin: 'Jia'},
+  preferredDescription: 'Official', preferredSlug: 'jia-stable', reason: 'Reviewed public display.'}}});
+test('display-only curation proves no membership or dossier-fact authority', () => {
+  const before=displayDocument(),after=structuredClone(before);
+  after.people[displayId].preferredName.en='Jia alternate';delete after.people[displayId].preferredName.pinyin;
+  after.people[displayId].preferredDescription='Ruler';after.people[displayId].reason='New reviewed display.';
+  const proof=proveDisplayCurationDelta(before,after);
+  assert.deepEqual(proof.changedPeople,[displayId]);assert.equal(proof.contentApproval,false);
+  assert.equal(proof.membershipChanges,0);assert.equal(proof.dossierFactsChanged,false);
+});
+test('curation inventory, hidden identity keys and malformed display fields fail closed', () => {
+  for(const change of [
+    d=>{d.people.per_00000000000000000002=structuredClone(d.people[displayId]);},
+    d=>{delete d.people[displayId];}, d=>{d.people[displayId].members=['fixture:001:p001'];},
+    d=>{d.people[displayId].preferredName.sameAs='other';}, d=>{d.people[displayId].preferredName.en=12;},
+    d=>{d.people[displayId].preferredName=null;}, d=>{d.people[displayId].preferredSlug='../other';},
+    d=>{d.people[displayId].preferredDescription='';}, d=>{d.schemaVersion=2;},d=>{d.hidden='unreviewed';}
+  ]){const before=displayDocument(),after=structuredClone(before);change(after);assert.throws(()=>proveDisplayCurationDelta(before,after));}
+});
+test('pinned reuse exposes exact display delta while retaining original registry bytes and seal', t => {
+  const f=fixture(t);f.json('data/people/curation/overrides.json',displayDocument());
+  const base=f.commit(),snapshot=gitIdentitySnapshot(f.root,base),provenance={revision:base,identityInputs:snapshot.legacySeal()};
+  const after=displayDocument();after.people[displayId].preferredDescription='Ruler';
+  f.json('data/people/curation/overrides.json',after);const current=gitIdentitySnapshot(f.root,f.commit());
+  const proof=provePinnedDossierReuse(provenance,current,{runtimeRoot:f.root,codeRoot:f.root});
+  assert.equal(proof.displayCurationChanges.length,1);assert.deepEqual(proof.displayCurationChanges[0].changedPeople,[displayId]);
+  assert.equal(proof.retainedOriginalSeal,provenance.identityInputs);assert.equal(proof.registryBytesChanged,false);
+  assert.equal(proof.chapterApproval,false);assert.deepEqual(proof.unchangedChapters,[]);
 });

@@ -101,14 +101,52 @@ export function proveUnchangedIdentityChapter(before, after) {
   return { people: members.length, members: peopleDigest(members), chinese: chapterChineseEvidenceFingerprint(after.packet) };
 }
 
+// These fields are consumed by public product projection, never by accepted
+// membership or native dossier construction. This proves only a display delta;
+// source-backed public names/descriptions still pass normal product qualification.
+export function proveDisplayCurationDelta(before, after) {
+  const object = value => value && typeof value === 'object' && !Array.isArray(value);
+  const keys = value => Object.keys(value).sort();
+  for (const document of [before, after]) {
+    need(object(document) && peopleDigest(keys(document)) === peopleDigest(['people', 'schemaVersion']) &&
+      document.schemaVersion === 1 && object(document.people), 'Invalid display curation document');
+    for (const [id, entry] of Object.entries(document.people)) {
+      need(/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(id) && object(entry) &&
+        keys(entry).every(key => ['preferredName', 'preferredDescription', 'preferredSlug', 'reason'].includes(key)) &&
+        typeof entry.reason === 'string' && entry.reason.trim(), 'Non-display or invalid curation entry');
+      need(entry.preferredName !== undefined || entry.preferredDescription !== undefined || entry.preferredSlug !== undefined,
+        'Empty display curation entry');
+      if (entry.preferredName !== undefined) {
+        const name = entry.preferredName;
+        need(object(name) && keys(name).every(key => ['kind', 'en', 'zh', 'pinyin'].includes(key)) &&
+          typeof name.kind === 'string' && name.kind.trim() &&
+          ['en', 'zh', 'pinyin'].every(key => name[key] === undefined || name[key] === null || typeof name[key] === 'string') &&
+          ['en', 'zh', 'pinyin'].some(key => typeof name[key] === 'string' && name[key].trim()), 'Invalid display preferred name');
+      }
+      if (entry.preferredDescription !== undefined) need(typeof entry.preferredDescription === 'string' &&
+        entry.preferredDescription.trim() && entry.preferredDescription.length <= 200, 'Invalid display description');
+      if (entry.preferredSlug !== undefined) need(typeof entry.preferredSlug === 'string' &&
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(entry.preferredSlug), 'Invalid display slug');
+    }
+  }
+  need(peopleDigest(keys(before.people)) === peopleDigest(keys(after.people)), 'Display curation person inventory changed');
+  return {file: 'data/people/curation/overrides.json', before: peopleDigest(before), after: peopleDigest(after),
+    changedPeople: keys(before.people).filter(id => peopleDigest(before.people[id]) !== peopleDigest(after.people[id])),
+    membershipChanges: 0, dossierFactsChanged: false, contentApproval: false};
+}
+
 export function inspectPinnedDossierChanges(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
   const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
   need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
   const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
   need(peopleDigest(beforeData) === peopleDigest(afterData), 'Dossier data inventory changed; update affected dossiers before preparing new work');
   const changedData = beforeData.filter(f => retained.regular(f).oid !== current.regular(f).oid);
-  const changedChapters = new Map();
+  const changedChapters = new Map(), displayCurationChanges = [];
   for (const file of changedData) {
+    if (file === 'data/people/curation/overrides.json') {
+      displayCurationChanges.push(proveDisplayCurationDelta(retained.json(file), current.json(file)));
+      continue;
+    }
     const match = /^data\/(?:people\/extractions\/)?([a-z0-9_-]+)\/(\d{3})\.json$/u.exec(file);
     need(match, `Dossier data changed: ${file}; update affected dossiers before preparing new work`);
     changedChapters.set(`${match[1]}:${match[2]}`, { book: match[1], chapter: match[2] });
@@ -117,11 +155,11 @@ export function inspectPinnedDossierChanges(registryProvenance, current, { runti
   need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
   need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
   assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
-  return { retained, current, changedData, changedChapters, afterData, afterCode };
+  return { retained, current, changedData, changedChapters, displayCurationChanges, afterData, afterCode };
 }
 
 export function provePinnedDossierReuse(registryProvenance, current, options = {}) {
-  const { retained, changedData, changedChapters, afterData, afterCode } = inspectPinnedDossierChanges(registryProvenance, current, options);
+  const { retained, changedData, changedChapters, displayCurationChanges, afterData, afterCode } = inspectPinnedDossierChanges(registryProvenance, current, options);
   const unchangedChapters = [];
   if (changedChapters.size) {
     const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);
@@ -143,6 +181,7 @@ export function provePinnedDossierReuse(registryProvenance, current, options = {
   return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
     retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
     dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
+    ...(displayCurationChanges.length ? { displayCurationChanges } : {}),
     ...(changedData.length ? { changedData, unchangedChapters, normalizationGlossaryBlob: current.regular('data/glossary.json').oid } : {}),
     registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
 }

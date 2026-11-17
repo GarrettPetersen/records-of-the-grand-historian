@@ -21,6 +21,7 @@ import { loadCurrentIdentityEvidence } from './lib/people-identity-evidence.mjs'
 import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIdentityRuntime } from './lib/people-pinned-identity-source.mjs';
 import { reconcileIdentityProofComposition, identityCompositionSourcePlans } from './lib/people-identity-proof-composition.mjs';
 import { loadPrivateIdentityCandidate, projectPrivateIdentityIndex } from './lib/people-private-identity-inputs.mjs';
+import { acceptedIdentityUncertaintyInstruction } from './lib/people-identity-uncertainty.mjs';
 const HOST_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 export function collectChapterIdentityPrimaryUnits(own, sources, relevant) {
@@ -67,6 +68,8 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     if (!pinned && !candidate) need(index.provenance.identityInputs === identityInputs, 'Registry is not current; build a new immutable generation before preparing fresh work');
     let plan = planChapterIdentityReview(index, scope, inputs, IDENTITY_REVIEW_LIMITS);
     if(candidate){const {fingerprint,...body}=plan;for(const item of body.cases)item.proposal={...item.proposal,unresolvedIdentity:true,reason:'Private source-backed membership is provisional; retain cross-chapter uncertainty until actual accepted membership is verified.'};plan={...body,fingerprint:peopleDigest(body)};}
+    if (retainedComposition) need(path.isAbsolute(retainedComposition), 'Absolute retained composition required');
+    const previous = retainedComposition ? readJson(retainedComposition) : null;
     const sources = new Map([[book+':'+chapter, own]]), relevant = new Map();
     for (const item of plan.cases) for (const id of [...item.localPeople, item.canonicalMembership.anchorLocalId]) {
       const [sourceBook, sourceChapter] = id.split(':'), key = `${sourceBook}:${sourceChapter}`;
@@ -82,7 +85,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     let retainedIdentityProof = null, remainingCaseIds = null, reusedCases = 0;
     if (retainedComposition) {
       need(path.isAbsolute(retainedComposition), 'Absolute retained composition required');
-      const previous = readJson(retainedComposition), sourcePlans = identityCompositionSourcePlans(previous,plan);
+      const sourcePlans = identityCompositionSourcePlans(previous,plan);
       for (const component of previous.components) for (const dependency of component.receipt.sourcePeople) {
         const [b,c] = dependency.localId.split(':'), key = `${b}:${c}`;
         if (!sources.has(key)) sources.set(key,loadChapter(b,c,{properNounMatcher:matcher,strictAliasDispositions:false}));
@@ -114,6 +117,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
           reason: 'Specific source-based reason. Hold a concrete wrong actor or false existing merge. Preserve uncertainty about cross-chapter equivalence.',
           sourceWitnesses: [{ localId: 'TARGET_OR_ANCHOR_ID', book: 'BOOK', chapter: 'NNN', unitId: 'UNIT_ID', quote: 'EXACT_CHINESE_NAME_IN_CURRENT_SOURCE' }] }] },
       instructions: 'Review every case and every target local person. Quote the primary Chinese for each target and the retained canonical anchor. Confirm actual individual, supported chapter attribution, and accepted membership; hold contradictions. Keep unresolvedIdentity true when proposed, including small candidate buckets and overflow. Omitted names are unreviewed uncertainty, never separation evidence. No positive merges, no all-pairs comparisons, no recursive external chapter completion. Return the closed required report only. Supply definite English repairs separately with complete exact before/after, source reason, both fields and repetitions; do not silently ignore them.' };
+    if (previous) packet.instructions += acceptedIdentityUncertaintyInstruction(plan, previous);
     const bytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
       transportPolicy: identityReviewTransportPolicy(transportMaxBytes),
