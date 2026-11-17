@@ -49,3 +49,32 @@ test('duplicate exact primary witnesses collapse to one cited passage',()=>{
   const f=fixture();f.certificate.retained[0].sourceWitnesses.push(structuredClone(f.certificate.retained[0].sourceWitnesses[0]));
   const refs=f.run();assert.equal(refs.length,1);assert.equal(refs[0].claimRefs.length,3);
 });
+
+function collectiveFixture() {
+  const f=fixture(),id=f.person.localId,unit='fixture:001:s0001';
+  f.person.preferredNameSuggestion={en:'Yuan Shu'};
+  f.person.mentionException='Named only as one of 二袁 in the warning.';
+  f.person.claims=[
+    {id:'personal',subject:id,predicate:'name',value:{kind:'personal',en:'Yuan Shu'},certainty:'strongly-inferred',evidence:[unit]},
+    {id:'collective',subject:id,predicate:'name',value:{kind:'alternate',en:'the two Yuans',zh:'二袁'},certainty:'explicit',evidence:[unit]}];
+  f.source.zh='不可追二袁之蹤。';f.source.en='Do not follow the path of the two Yuans.';
+  f.certificate.retained[0].sourceWitnesses[0].quote='二袁';
+  return f;
+}
+test('Jinshu 117 Yuan Shu collective reference preserves the person without inventing an individual mention',()=>{
+  const f=collectiveFixture(),before=structuredClone(f.person),refs=f.run();
+  assert.equal(refs.length,1);assert.equal(refs[0].sourceQuote,'二袁');assert.deepEqual(refs[0].claimRefs,['collective','personal']);
+  assert.deepEqual(refs[0].kinds,['reviewed-allusion']);assert.deepEqual(refs[0].mentionRefs,[]);
+  assert(refs[0].inference.includes('independently reviewed'));assert.deepEqual(f.person,before);
+});
+test('Jinshu 117 explicit unnamed brother label retains its reviewed source citation',()=>{
+  const f=collectiveFixture();f.person.claims=[{...f.person.claims[1],value:{kind:'descriptive-kinship',zh:'兄',en:"Yang Duo's elder brother"}}];
+  f.source.zh='楊多使兄子良國至。';f.certificate.retained[0].sourceWitnesses[0].quote='兄';
+  const refs=f.run();assert.equal(refs.length,1);assert.deepEqual(refs[0].kinds,['inferred-kinship']);assert.deepEqual(refs[0].mentionRefs,[]);
+});
+test('collective citations require current exact Chinese evidence, explicit attribution and an independent scoped proof',()=>{
+  for(const mutate of [f=>f.person.claims[1].evidence=['fixture:001:s0002'],f=>f.person.claims[1].certainty='strongly-inferred',f=>f.person.claims[1].value.kind='personal',f=>delete f.person.claims[1].value.zh,f=>f.certificate.retained[0].sourceWitnesses[0].quote='二',f=>f.certificate.retained[0].localPeople=[]]){
+    const f=collectiveFixture();mutate(f);assert.deepEqual(f.run(),[]);
+  }
+  const f=collectiveFixture();f.source.zh='追前人之蹤。';assert.throws(()=>f.run(),/current primary source/);
+});
