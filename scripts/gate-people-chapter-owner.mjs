@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
+import {Agent} from '@cursor/sdk';
+import {loadDotenv} from './load-dotenv.mjs';
+import {assertRecordingRecoveryGate,recordingDocumentHash} from './lib/people-recording-recovery.mjs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {parseArgs} from 'node:util';
@@ -11,6 +14,8 @@ import {readRemotePeopleWorkLedger} from './lib/people-work-queue.mjs';
 const {values:o}=parseArgs({options:{job:{type:'string'},root:{type:'string'},publish:{type:'boolean'},'host-author':{type:'string'}}});
 const root=fs.realpathSync(o.root??process.cwd()),dir=ownerDirectory(root,o.job),file=path.join(dir,'job.json'),job=JSON.parse(fs.readFileSync(file));
 assertPeopleMasterSync(root);
+loadDotenv(root);
+await assertRecordingRecoveryGate(job,dir,(agentId,runId)=>Agent.getRun(runId,{runtime:'cloud',agentId,apiKey:process.env.CURSOR_API_KEY}));
 if(!['review-returned','gate-passed'].includes(job.status))throw Error('Independent review must return before the native gate');
 if(!job.ownerAgentId||!job.reviewAgentId||job.ownerAgentId===job.reviewAgentId)throw Error('Missing actual independent agent identities');
 for(const name of ['identity-review','date-report','input-seal'])if(JSON.parse(fs.readFileSync(path.join(dir,name+'.json'))).reviewer?.agentId!==job.reviewAgentId)throw Error('Report does not identify the actual captured independent reviewer');
@@ -43,4 +48,4 @@ const {receipt,hash}=prepareCombinedCuration({root,book:job.book,chapter:job.cha
 const receiptFile=path.join(dir,'native-receipt-'+hash.slice(7,23)+'.json');
 if(!fs.existsSync(receiptFile))fs.writeFileSync(receiptFile,JSON.stringify(receipt,null,2)+'\n',{flag:'wx',mode:0o600});
 if(o.publish){const result=publishCombinedCuration(receipt,hash,{root});job.status='native-published';job.nativePublication={at:new Date().toISOString(),receipt:receiptFile,hash};writeJsonAtomic(file,job);console.log(JSON.stringify({nativePublished:true,receipt:receiptFile,hash,result,publicChapterComplete:false}));}
-else{job.status='gate-passed';job.nativeGate={at:new Date().toISOString(),receipt:receiptFile,hash};writeJsonAtomic(file,job);console.log(JSON.stringify({gatePassed:true,receipt:receiptFile,hash,publicChapterComplete:false}));}
+else{if(job.circuitBreaker){job.circuitBreakerResolution={kind:'native-approved-recording-recovery',originalBreakerHash:recordingDocumentHash(job.circuitBreaker),nativeGateHash:hash,actualReviewer:job.reviewAgentId,actualRun:job.reviewerRunId,recordingReceipts:job.recordingRecoveryHistory.map(h=>h.receipt),at:new Date().toISOString()};}job.status='gate-passed';job.nativeGate={at:new Date().toISOString(),receipt:receiptFile,hash};writeJsonAtomic(file,job);console.log(JSON.stringify({gatePassed:true,receipt:receiptFile,hash,publicChapterComplete:false}));}
