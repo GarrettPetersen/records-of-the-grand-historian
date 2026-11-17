@@ -62,7 +62,7 @@ export async function updateIdentityDossierRegistry({ registry, out, sourceRevis
     const identityInputs = after.snapshot.legacySeal();
     const provenance = { ...index.provenance, revision: sourceRevision, identityInputs,
       update: { kind: 'native-validated-pinned-source-delta', parentRevision: index.provenance.revision,
-        changedData: inspected.changedData, changedMembers: changed, updatedDossiers: delta.dossiers.length,
+        changedData: inspected.changedData, displayCurationChanges: inspected.displayCurationChanges, changedMembers: changed, updatedDossiers: delta.dossiers.length,
         materializedPeople: people.size, generatedPairs: 0 } };
     const manifest = writeIdentityDossierDelta(out, registry, index, delta, provenance);
     guard();

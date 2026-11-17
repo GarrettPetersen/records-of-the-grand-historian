@@ -18,6 +18,7 @@ import { pinnedIdentityChapterContext, provePinnedDossierReuse, assertPinnedIden
 import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport, assembleChapterIdentityReviewParts, identityReviewTransportMaxBytes } from './people-identity-review-transport.mjs';
 import { planChapterIdentityReview } from './people-identity-dossiers.mjs';
 import { captureIdentityProofComponent, reconcileIdentityProofComposition, identityCompositionSourcePlans } from './people-identity-proof-composition.mjs';
+import { assertIdentityUncertaintyPreserved } from './people-identity-uncertainty.mjs';
 const need = (condition, message) => { if (!condition) throw new Error(message); };
 
 // The job journal is host-owned captured transport metadata. A remote worker
@@ -140,6 +141,7 @@ export async function recordChapterIdentityReview({ packet, report, job, registr
     if (deriveSelections) bundle.selections = reconcileIdentityProofComposition({localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId},
       sources,bundle.plan,bundle.sourcePlans,bundle.components).selections;
     const certificate = validateChapterIdentityBundle({ localPersonMap: index.localPersonMap, canonicalByKnownId: index.canonicalByKnownId }, sources, bundle.scope, bundle, inputs);
+    if (existing) assertIdentityUncertaintyPreserved(JSON.parse(existing), bundle);
     if (existing && peopleDigest(JSON.parse(existing)) !== peopleDigest(bundle)) need(previousSha256 && identityArtifactHash(existing) === previousSha256,
       'Existing identity proof differs; exact --previous-sha256 is required');
     if (pinned) assertPinnedIdentityRuntime(pinned.snapshot);

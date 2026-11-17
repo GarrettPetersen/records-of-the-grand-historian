@@ -8,6 +8,7 @@ import { compactChapterIdentityReviewPacket, splitChapterIdentityReviewTransport
 import { createIdentityReviewBundle } from './lib/people-identity-review-record.mjs';
 import { captureIdentityProofComponent, reconcileIdentityProofComposition } from './lib/people-identity-proof-composition.mjs';
 import { validateChapterIdentityBundle, assertReviewedIdentityCoverage, applyReviewedIdentityUncertainty, IDENTITY_UNCERTAINTY_NOTE } from './lib/people-chapter-identity.mjs';
+import { selectedIdentityUncertainty, acceptedIdentityUncertaintyInstruction, assertIdentityUncertaintyPreserved } from './lib/people-identity-uncertainty.mjs';
 
 const inputs = Object.fromEntries(['source','extraction','editorial','dateAudit'].map(k => [k,peopleDigest(k)]));
 const bytes = object => Buffer.from(JSON.stringify(object,null,2)+'\n');
@@ -47,6 +48,30 @@ function fixture(uncertain=true) {
   return {people,sources,clusters,index,view,scope,plan,captured,makeCapture,bundle};
 }
 const validate=(f,b=f.bundle())=>validateChapterIdentityBundle(f.view,f.sources,f.scope,b,inputs);
+
+test('accepted uncertainty cannot become certainty from empty bounded candidates or fresh native approval',()=>{
+  const old=fixture(true), fresh=fixture(false), before=old.bundle(), after=fresh.bundle();
+  // Native certification alone permits certainty for an empty candidate search.
+  assert.equal(validate(fresh,after).ambiguity.length,0);
+  assert(after.plan.cases.every(item=>item.candidateDossiers.length===0));
+  const original=JSON.stringify(after);
+  assert.throws(()=>assertIdentityUncertaintyPreserved(before,after),/positive source-backed reconciliation/u);
+  assert.equal(JSON.stringify(after),original,'preflight must not edit reviewer decisions');
+  const instruction=acceptedIdentityUncertaintyInstruction(after.plan,before);
+  assert(instruction.includes(after.plan.cases[0].id));assert(instruction.includes('regardless of the generated proposal'));
+  const packet=JSON.parse(fresh.captured[0].packetBytes);packet.instructions+=instruction;
+  assert.equal(compactChapterIdentityReviewPacket(packet).instructions,packet.instructions);
+});
+test('uncertainty preflight compares all selected assignments and preserves retained decisions',()=>{
+  const f=fixture(),before=f.bundle(),after=f.bundle(),original=JSON.stringify(before);
+  assert.equal(assertIdentityUncertaintyPreserved(before,after).length,2);
+  assert.equal([...selectedIdentityUncertainty(after).values()].filter(row=>row.unresolvedIdentity).length,2);
+  assert.equal(JSON.stringify(before),original);
+  const certain=fixture(false);assert.equal(assertIdentityUncertaintyPreserved(certain.bundle(),after).length,2);
+  const bad=structuredClone(after);bad.components[0].reportText+=' ';
+  assert.throws(()=>assertIdentityUncertaintyPreserved(before,bad),/Changed selected uncertainty component/u);
+  assert.throws(()=>assertIdentityUncertaintyPreserved(before,{...after,scope:{book:'other',chapter:'001'}}),/scope changed/u);
+});
 
 test('actual independent components certify complete coverage without rewriting original report bytes or fingerprints',()=>{
   const f=fixture(),original=f.captured.map(c=>c.reportBytes.toString()),bundle=f.bundle(),certificate=validate(f,bundle);
