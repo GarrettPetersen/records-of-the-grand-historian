@@ -7,8 +7,8 @@ export function reviewedInferredSourceReferences(members, corpus, canonicalId, c
   const references = new Map();
   for (const person of members) {
     const names = person.claims.filter(claim => claim.predicate === 'name');
-    if (person.mentions.length || !person.mentionException?.trim() || !names.length ||
-        !names.every(claim => claim.certainty === 'strongly-inferred' && claim.value.kind === 'descriptive-kinship')) continue;
+    if (person.mentions.length || !person.mentionException?.trim() || !names.length) continue;
+    const inferredKinship = names.every(claim => claim.certainty === 'strongly-inferred' && claim.value.kind === 'descriptive-kinship');
     const certificate = certificates.find(item => item.scope.book === person.book && item.scope.chapter === person.chapter);
     if (!certificate) continue;
     const proof = certificate.retained.find(item => item.canonicalPersonId === canonicalId && item.localPeople.includes(person.localId));
@@ -21,10 +21,19 @@ export function reviewedInferredSourceReferences(members, corpus, canonicalId, c
     const witnesses = proof.sourceWitnesses.filter(witness => witness.localId === person.localId &&
       witness.book === person.book && witness.chapter === person.chapter);
     for (const witness of witnesses) {
+      const sourceId = prefix + witness.unitId;
+      // Collective aliases (二袁) and explicit kinship labels (兄) may identify
+      // an independently reviewed person without an individual inline mention.
+      // Require that exact explicit Chinese label in this very witness/unit;
+      // a personal-name claim or an arbitrary exception grants no citation.
+      const citedNames = names.filter(claim => claim.certainty === 'explicit' &&
+        ['alternate', 'descriptive-kinship'].includes(claim.value.kind) &&
+        claim.value.zh?.trim() && witness.quote.includes(claim.value.zh) && claim.evidence.includes(sourceId));
+      if (!inferredKinship && !citedNames.length) continue;
       // Reuse the same narrow source-bound kinship graph checks as canonical
       // certification. Arbitrary claimed evidence or mentionException is insufficient.
       assertDossierPrimaryWitness(witness, person, sourceText, localNameKeys, new Map(), corpus.localPeople);
-      const sourceId = prefix + witness.unitId, unit = units.get(sourceId);
+      const unit = units.get(sourceId);
       const claimRefs = person.claims.filter(claim => ['name', 'family-relationship'].includes(claim.predicate) &&
         claim.evidence.includes(sourceId)).map(claim => claim.id).sort();
       const key = sourceId;
@@ -35,9 +44,10 @@ export function reviewedInferredSourceReferences(members, corpus, canonicalId, c
       }
       references.set(key, {book:person.book,chapter:person.chapter,unitId:unit.id,
         blockIndex:unit.blockIndex,collection:unit.collection,itemIndex:unit.itemIndex,unitKind:unit.kind,
-        kinds:['inferred-kinship'],languages:['zh','en'].filter(language => unit[language]?.trim()),
+        kinds:[inferredKinship || citedNames.every(claim => claim.value.kind === 'descriptive-kinship') ? 'inferred-kinship' : 'reviewed-allusion'],languages:['zh','en'].filter(language => unit[language]?.trim()),
         mentionRefs:[],claimRefs,sourceQuote:witness.quote,reviewedCaseId:proof.caseId,
-        inference:'This unnamed relative is inferred from the kinship described in this passage.'});
+        inference:inferredKinship ? 'This unnamed relative is inferred from the kinship described in this passage.' :
+          'This person is identified through an independently reviewed collective or kinship reference in this passage.'});
     }
   }
   return [...references.values()].sort((a,b) => a.book.localeCompare(b.book) ||
