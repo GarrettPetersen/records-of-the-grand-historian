@@ -1,7 +1,7 @@
 import { loadCurrentIdentityEvidence } from './people-identity-evidence.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import { projectPeopleProduct } from '../compile-people-catalog.mjs';
+import { projectQualifiedPeopleProduct } from './people-product-inputs.mjs';
 import { loadProperNounMatcher } from './people-candidates.mjs';
 import { loadValidatedPeopleChapter } from './people-validated-chapter.mjs';
 import { ChapterIdentityReviewError, acceptedCatalogIdentityView, chapterIdentityInputs, readChapterIdentityBundle, chapterIdentityEvidenceScopes, validateChapterIdentityBundle, assertReviewedIdentityCoverage, applyReviewedIdentityUncertainty } from './people-chapter-identity.mjs';
@@ -124,9 +124,7 @@ export function loadQualifiedPeopleScope(scopes, { skipUnqualified = false,
     }
   }
   assertScopedIdentity(corpus, identityView, identityCertificates);
-  const roles = readJson(path.join(PEOPLE_DIR, 'curation', 'role-vocabulary.json'));
-  const overrides = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
-  const projected = projectPeopleProduct(corpus, catalog, new Map(roles.roles.map(role => [role.id, role.label])), overrides.people, dateAuditStatus, identityCertificates);
+  const projected = projectQualifiedPeopleProduct(corpus, catalog, identityCertificates);
   applyReviewedIdentityUncertainty(projected.catalog, identityCertificates);
   if (!skipUnqualified && projected.catalog.people.length === 0) throw new Error('Certified product contains no people');
   if (identityInputSeal() !== inputs) throw new Error('Identity inputs changed while qualifying product');
