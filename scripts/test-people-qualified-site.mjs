@@ -221,6 +221,10 @@ assert.deepEqual(fs.readFileSync(path.join(root,'data/people/date-audits/jinshu/
     process.exit(0);
   }
   compile();
+  const dataValidation = spawnSync(process.execPath, [fileURLToPath(import.meta.resolve('./validate-people-data.mjs'))], {
+    env: process.env, encoding: 'utf8', timeout: 60_000,
+  });
+  assert.equal(dataValidation.status, 0, dataValidation.stdout + dataValidation.stderr);
   // Normal registry, preparation and host-captured record APIs use the same
   // native validators as publication, without a pair document or paid worker.
   const { buildIdentityDossierRegistry } = await import('./lib/people-identity-registry-workflow.mjs');
