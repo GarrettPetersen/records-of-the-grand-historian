@@ -67,7 +67,7 @@ export async function prepareChapterNativeInputs({root,dir,job,hostAuthor}) {
   const {buildPeopleExtractionPacket}=await native('build-people-extraction-packet.mjs');
   const {validateCompactPeopleExtraction}=await native('validate-people-extraction.mjs');
   const {loadProperNounMatcher}=await native('lib/people-candidates.mjs');
-  const {combinedEditorialBaseline}=await native('lib/people-combined-curation-review.mjs');
+  const {combinedEditorialBaseline,acceptedHistoricalClaims}=await native('lib/people-combined-curation-review.mjs');
   const expanded=validateCompactPeopleExtraction(raw.extraction,buildPeopleExtractionPacket(job.book,job.chapter,{chapterData:raw.source,properNounMatcher:loadProperNounMatcher()}),{strictAliasDispositions:true}).normalized;
   // An explicit host request may reconcile this one derived aggregate only.
   // The gate has already authenticated the immutable independent capture. The
@@ -101,7 +101,8 @@ export async function prepareChapterNativeInputs({root,dir,job,hostAuthor}) {
   need(!countBinding||reasonBinding.changes.length===0,'Count binding cannot change the frozen extraction');
   const boundCandidateBytes=reasonBinding.changes.length?json(reasonBinding.candidate):rawBytes.extraction;
   const boundExpanded=reasonBinding.changes.length?validateCompactPeopleExtraction(reasonBinding.candidate,buildPeopleExtractionPacket(job.book,job.chapter,{chapterData:raw.source,properNounMatcher:loadProperNounMatcher()}),{strictAliasDispositions:true}).normalized:expanded;
-  const baseline=combinedEditorialBaseline(originalEditorial,boundExpanded,priorRepairCount),amendment=baseline.amendment;
+  const acceptedClaims=originalEditorial===null?null:acceptedHistoricalClaims(job.book,job.chapter,JSON.parse(fs.readFileSync(canonical.source)),beforePins.extraction===null?null:JSON.parse(fs.readFileSync(canonical.extraction)));
+  const baseline=combinedEditorialBaseline(originalEditorial,boundExpanded,priorRepairCount,acceptedClaims),amendment=baseline.amendment;
   const oldReviews=editorialNative.editorialReviews(originalEditorial),currentReviews=editorialNative.editorialReviews(raw.editorial);
   need(isDeepStrictEqual(currentReviews.slice(0,oldReviews.length),oldReviews),'Captured canonical editorial history changed');
   let editorial=singleReview?{schemaVersion:3,book:job.book,chapter:job.chapter,...raw.editorial.reviews[0]}:raw.editorial;

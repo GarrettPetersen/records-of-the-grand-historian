@@ -42,7 +42,7 @@ jobs:
         run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
 
       - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs
+        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
 
       - name: Test shared-host master synchronization
         run: npm run people:master:self-test

@@ -30,6 +30,7 @@ function nativeFixture(root){
  fs.writeFileSync(path.join(native,'scripts/validate-people-extraction.mjs'),'export const validateCompactPeopleExtraction=()=>({stats:{people:0}});');
  fs.writeFileSync(path.join(native,'scripts/lib/people-candidates.mjs'),'export const loadProperNounMatcher=()=>({});');
  fs.writeFileSync(path.join(native,'scripts/lib/people-content.mjs'),'export {contentUnits,setTranslationField} from '+JSON.stringify(new URL('./lib/people-content.mjs',import.meta.url).href)+';');
+ fs.writeFileSync(path.join(native,'scripts/lib/people-editorial-decisions.mjs'),'export {editorialReviews,validateEditorialDecisionDocument} from '+JSON.stringify(new URL('./lib/people-editorial-decisions.mjs',import.meta.url).href)+';');
  return native;
 }
 test('partial work indexed and byte sealed, retained conversations preserved',t=>{

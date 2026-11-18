@@ -10,7 +10,7 @@ import { loadProperNounMatcher } from './people-candidates.mjs';
 import { editorialReviews, validateAppliedEditorialDecisions } from './people-editorial-decisions.mjs';
 import { buildDateAuditPacket, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
 import { replayReviewedFootnoteAdditions } from './people-combined-footnote-review.mjs';
-import { deriveDateRepairEditorialAmendment, applyDateRepairEditorialAmendment } from './people-date-workflow.mjs';
+import { deriveDateRepairEditorialAmendment, applyDateRepairEditorialAmendment, historicalDateProjection } from './people-date-workflow.mjs';
 
 export const documentHash = value => sha256(JSON.stringify(value));
 export function requireEqual(actual, expected, label) {
@@ -199,14 +199,24 @@ export function combinedDatePacket(book, chapter, source, extraction) {
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }
 }
 
+// The accepted canonical facts that the canonical editorial history was validated against.
+export function acceptedHistoricalClaims(book, chapter, beforeSource, beforeExtraction) {
+  if (beforeExtraction === null) return null;
+  const packet = buildPeopleExtractionPacket(book, chapter, { chapterData: beforeSource, properNounMatcher: loadProperNounMatcher() });
+  return validateCompactPeopleExtraction(beforeExtraction, packet, { strictAliasDispositions: true }).normalized.claims;
+}
+
 // Isolate historical repairs while deriving the narrow, independently audited
 // chronology amendment. Incoming English repairs are validated against their
 // own retained independent records by the normal combined gate below.
-export function combinedEditorialBaseline(beforeEditorial, expanded, priorRepairCount) {
+export function combinedEditorialBaseline(beforeEditorial, expanded, priorRepairCount, acceptedClaims) {
   if (!Number.isSafeInteger(priorRepairCount) || priorRepairCount < 0 ||
       priorRepairCount > expanded.translationRepairs.length) throw new Error('Invalid historical repair boundary');
   if (beforeEditorial === null) return { editorial: null, amendment: null };
-  const historical = { ...expanded, translationRepairs: expanded.translationRepairs.slice(0, priorRepairCount) };
+  if (!Array.isArray(acceptedClaims)) throw new Error('Historical editorial baseline requires the accepted before-extraction claims');
+  // Accepted history is checked against its accepted facts advanced only by
+  // chronology-only changes; every other current change faces final validation.
+  const historical = { ...expanded, claims: historicalDateProjection(acceptedClaims, expanded.claims), translationRepairs: expanded.translationRepairs.slice(0, priorRepairCount) };
   const amendment = deriveDateRepairEditorialAmendment(beforeEditorial, historical);
   return { editorial: amendment ? applyDateRepairEditorialAmendment(beforeEditorial, amendment, historical) : beforeEditorial, amendment };
 }
@@ -219,7 +229,8 @@ export function validateCombinedReviews({ book, chapter, source, candidate, edit
   const result = validateCompactPeopleExtraction(candidate, packet, { strictAliasDispositions: true });
   const expanded = result.normalized;
   if (expanded.translationRepairs.some(r => r.status === 'proposed')) throw new Error('Combined curation retains proposed repairs');
-  const { editorial: editorialBaseline, amendment: expectedAmendment } = combinedEditorialBaseline(beforeEditorial, expanded, beforeExtraction?.translationRepairs.length ?? 0);
+  const { editorial: editorialBaseline, amendment: expectedAmendment } = combinedEditorialBaseline(beforeEditorial, expanded, beforeExtraction?.translationRepairs.length ?? 0,
+    beforeEditorial === null ? null : acceptedHistoricalClaims(book, chapter, beforeSource, beforeExtraction));
   const amendment = materialization.editorialAmendment;
   requireEqual(amendment, expectedAmendment ?? undefined, 'exact derived chronology history amendment');
   const amendmentHash = amendment === undefined ? undefined : documentHash(amendment);

@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 import {ownerDirectory,digest,chapterOperation} from './lib/people-chapter-owner.mjs';
 import {writeJsonAtomic} from './lib/people-content.mjs';
 import {prepareEnglishFootnoteAdditions} from './lib/people-footnote-preparation.mjs';
+import {acceptedRepairContracts,assembleOwnerRepairChain,assertAcceptedRepairsPreserved} from './lib/people-owner-repair-chain.mjs';
 const {values:o}=parseArgs({options:{job:{type:'string'},root:{type:'string'}}});
 const root=fs.realpathSync(o.root??process.cwd()),dir=ownerDirectory(root,o.job),file=path.join(dir,'job.json');
 let job=JSON.parse(fs.readFileSync(file));
@@ -25,12 +26,10 @@ if(job.canonicalExtractionAbsent){
 }
 const candidate=read(path.join(dir,'extraction.json')),source=read(path.join(dir,'source.json')),replay=read(sourceFile);
 if(!isDeepStrictEqual(candidate.translationRepairs.slice(0,prefix.length),prefix))throw Error('Owner coherence: prior repair history changed; preserve and reconcile it');
-const proposals=read(path.join(dir,'editorial-proposals.json')),rows=[],missing=[],fields=new Map();
-for(const [index,r] of job.repairs.entries()){
+const proposals=read(path.join(dir,'editorial-proposals.json'));
+for(const r of job.repairs){
  const unit=contentUnits(replay).find(u=>u.id===r.unitId);if(!unit)throw Error('Owner coherence: unknown source repair unit');
  setTranslationField(replay,unit,r.field,r.before,r.after);
- const key=r.unitId+'/'+r.field,prior=fields.get(key);
- fields.set(key,{...r,before:prior?.before??r.before,lastIndex:index});
 }
 const materialization=read(path.join(dir,'materialization.json'));
 let completeReplay=replay;
@@ -40,32 +39,34 @@ if(materialization.sourceFootnoteContract){
  completeReplay=prepared.source;
 }
 if(!isDeepStrictEqual(completeReplay,source))throw Error('Owner coherence: source changes are not completely explained by exact-before repair records and explicit footnote additions');
-for(const r of fields.values()){
- if(r.before===r.after)continue;
- const confidence=r.confidence??proposals.repairConfidence?.[String(r.lastIndex)];
- if(!['high','medium','low'].includes(confidence))missing.push(r.lastIndex);
- rows.push([r.unitId,r.field,r.before,r.after,r.reason,confidence,'applied']);
+// Keep the owner's valid repair chain row for row (stable IDs); append only
+// journal changes not yet recorded. Accepted incoming rows must survive exactly.
+const draftEditorial=path.join(dir,'editorial.json'),priorEditorial=path.join(root,`data/people/editorial-decisions/${job.book}/${job.chapter}.json`);
+let editorialNative=null,draft=null,canonicalReviewCount=0;
+if(job.reviewAgentId||fs.existsSync(draftEditorial)){
+ editorialNative=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-editorial-decisions.mjs')));
+ draft=read(draftEditorial);
+ canonicalReviewCount=editorialNative.editorialReviews(fs.existsSync(priorEditorial)?read(priorEditorial):null).length;
 }
-if(missing.length)throw Error('Owner coherence: repair confidence is missing for journal indices '+missing.join(',')+'. In this same owner context, chapter_patch target editorial-proposals pointer /repairConfidence add:true with an explicit index-to-high/medium/low map, then finish the native gate again. Do not reread unchanged source.');
-const manual=candidate.translationRepairs.slice(prefix.length);
-if(manual.some(row=>!job.repairs.some(r=>isDeepStrictEqual([r.unitId,r.field,r.before,r.after],row.slice(0,4)))&&!rows.some(r=>isDeepStrictEqual(r.slice(0,4),row.slice(0,4)))))throw Error('Owner coherence: a manually added repair has no matching source-tool record or verified final field delta');
-let expected=[...prefix,...rows],reviewedReasonBindings=[];
+const contracts=editorialNative?acceptedRepairContracts(editorialNative.editorialReviews(draft).slice(canonicalReviewCount),{book:job.book,chapter:job.chapter,authors:job.authors,validateReview:review=>editorialNative.validateEditorialDecisionDocument(review)}):[];
+const chain=assembleOwnerRepairChain({journal:job.repairs,manualRows:candidate.translationRepairs.slice(prefix.length),repairConfidence:proposals.repairConfidence??{},contracts});
+if(chain.missing.length)throw Error('Owner coherence: repair confidence is missing for journal indices '+chain.missing.join(',')+'. In this same owner context, chapter_patch target editorial-proposals pointer /repairConfidence add:true with an explicit index-to-high/medium/low map, then finish the native gate again. Do not reread unchanged source.');
+let expected=[...prefix,...chain.rows],reviewedReasonBindings=[];
 if(job.reviewAgentId){
  const {bindChapterRepairReasonMetadata}=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-chapter-native-inputs.mjs')));
- const editorialNative=await import(pathToFileURL(path.join(job.nativeRoot,'scripts/lib/people-editorial-decisions.mjs')));
- const priorEditorial=path.join(root,`data/people/editorial-decisions/${job.book}/${job.chapter}.json`);
- const bound=bindChapterRepairReasonMetadata({...candidate,translationRepairs:expected},read(path.join(dir,'editorial.json')),{priorRepairCount:prefix.length,canonicalReviewCount:editorialNative.editorialReviews(fs.existsSync(priorEditorial)?read(priorEditorial):null).length,actualReviewerAgentId:job.reviewAgentId,authorAgentIds:job.authors,native:editorialNative});
+ const bound=bindChapterRepairReasonMetadata({...candidate,translationRepairs:expected},draft,{priorRepairCount:prefix.length,canonicalReviewCount,actualReviewerAgentId:job.reviewAgentId,authorAgentIds:job.authors,native:editorialNative});
  expected=bound.candidate.translationRepairs;reviewedReasonBindings=bound.changes;
 }
+const acceptedIncomingRepairs=assertAcceptedRepairsPreserved(expected,contracts);
 if(!isDeepStrictEqual(candidate.translationRepairs,expected)){
  const snapshot=path.join(dir,'owner-history');fs.mkdirSync(snapshot,{recursive:true});
  const bytes=fs.readFileSync(path.join(dir,'extraction.json')),archive=path.join(snapshot,'extraction-before-repair-assembly-'+digest(bytes).slice(7,23)+'.json');
  if(!fs.existsSync(archive))fs.writeFileSync(archive,bytes,{flag:'wx',mode:0o600});
  candidate.translationRepairs=expected;writeJsonAtomic(path.join(dir,'extraction.json'),candidate);
- job.revision++;job.repairAssembly={at:new Date().toISOString(),sourceOperations:rows.length,priorRepairCount:prefix.length,retainedManualDraft:archive,reviewedReasonBindings};
- fs.appendFileSync(path.join(dir,'operations.jsonl'),JSON.stringify({at:new Date().toISOString(),role:'host',operation:'compile-recorded-repairs',resultRevision:job.revision,sourceOperations:rows.length})+'\n',{mode:0o600});
+ job.revision++;job.repairAssembly={at:new Date().toISOString(),sourceOperations:chain.appended.length,retainedChainRows:chain.rows.length-chain.appended.length,acceptedIncomingRepairs,priorRepairCount:prefix.length,retainedManualDraft:archive,reviewedReasonBindings};
+ fs.appendFileSync(path.join(dir,'operations.jsonl'),JSON.stringify({at:new Date().toISOString(),role:'host',operation:'compile-recorded-repairs',resultRevision:job.revision,sourceOperations:chain.appended.length})+'\n',{mode:0o600});
  writeJsonAtomic(file,job);
 }
 const report=chapterOperation(root,job.id,'owner','validate');
 if(!report.passed)throw Error('Owner coherence: assembled candidate fails native validation; inspect draft:native-validation');
-console.log(JSON.stringify({coherent:true,job:job.id,sourceRepairOperations:rows.length,approvalGranted:false}));
+console.log(JSON.stringify({coherent:true,job:job.id,sourceRepairOperations:chain.appended.length,retainedChainRows:chain.rows.length-chain.appended.length,acceptedIncomingRepairs,approvalGranted:false}));

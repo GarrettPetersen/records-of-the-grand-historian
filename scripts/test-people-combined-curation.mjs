@@ -12,12 +12,12 @@ import { buildPeopleExtractionPacket, buildPeopleExtractionSeed } from './build-
 import { validateCompactPeopleExtraction } from './validate-people-extraction.mjs';
 import { buildCompactInput } from './lib/people-compact.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
-import { editorialDecisionSeed, editorialReviews, proposalSetFingerprint } from './lib/people-editorial-decisions.mjs';
+import { editorialDecisionSeed, editorialReviews, proposalSetFingerprint, validateAppliedEditorialDecisions } from './lib/people-editorial-decisions.mjs';
 import { sha256, contentUnits, writeJsonAtomic } from './lib/people-content.mjs';
 import { reservePeopleTargetsInLedger } from './lib/people-work-queue.mjs';
 import { inspectCombinedBefore, prepareCombinedCuration, verifyCombinedCuration, publishCombinedCuration } from './lib/people-combined-curation.mjs';
 import { CompletedDateGenerationHold } from './lib/people-date-workflow.mjs';
-import { combinedDatePacket, documentHash, replayCombinedSourceReordering, validateCombinedReviews, combinedEditorialBaseline } from './lib/people-combined-curation-review.mjs';
+import { combinedDatePacket, documentHash, replayCombinedSourceReordering, validateCombinedReviews, combinedEditorialBaseline, acceptedHistoricalClaims } from './lib/people-combined-curation-review.mjs';
 
 const reason = 'Independently checked this exact source unit and its named individual against the complete fixture.';
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -1252,7 +1252,7 @@ function mixedChronologyFixture(t){
  const incoming=editorialDecisionSeed({...checked.normalized,translationRepairs:checked.normalized.translationRepairs.slice(-1).map(r=>({...r,status:'proposed'}))});
  incoming.reviewer={kind:'human',name:'Independent editor',model:null,agentId:'reviewer',runId:null,completedAt:'2026-09-14T00:00:00Z'};
  incoming.decisions[0]={repairId:incoming.proposals[0].id,decision:'accept',after:null,reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'艾麗絲來。'}};
- const baseline=combinedEditorialBaseline(d.beforeEditorial,checked.normalized,d.beforeExtraction.translationRepairs.length);
+ const baseline=combinedEditorialBaseline(d.beforeEditorial,checked.normalized,d.beforeExtraction.translationRepairs.length,acceptedHistoricalClaims(d.book,d.chapter,d.beforeSource,d.beforeExtraction));
  const record=({schemaVersion,book,chapter,...r})=>r;
  d.editorial={schemaVersion:4,book:d.book,chapter:d.chapter,reviews:[...editorialReviews(baseline.editorial),incoming].map(record)};
  const dates=combinedDatePacket(d.book,d.chapter,d.source,d.candidate);
@@ -1293,9 +1293,9 @@ test('metadata binding composes chronology history and incoming English without 
 });
 test('new candidate non-date claims cannot be inserted onto historical editorial records',t=>{
  const{d}=mixedChronologyFixture(t),packet=buildPeopleExtractionPacket(d.book,d.chapter,{chapterData:d.source,properNounMatcher:loadProperNounMatcher()}),expanded=validateCompactPeopleExtraction(d.candidate,packet,{strictAliasDispositions:true}).normalized;
- const before=structuredClone(d.beforeEditorial),expected=combinedEditorialBaseline(before,expanded,d.beforeExtraction.translationRepairs.length);
+ const before=structuredClone(d.beforeEditorial),accepted=acceptedHistoricalClaims(d.book,d.chapter,d.beforeSource,d.beforeExtraction),expected=combinedEditorialBaseline(before,expanded,d.beforeExtraction.translationRepairs.length,accepted);
  expanded.claims.push({id:'testbook:001:c9999',subject:'testbook:001:p001',predicate:'event-participation',value:{action:'invented-unrelated-non-date-action'},certainty:'explicit',evidence:['testbook:001:s0001']});
- assert.deepEqual(combinedEditorialBaseline(before,expanded,d.beforeExtraction.translationRepairs.length),expected);
+ assert.deepEqual(combinedEditorialBaseline(before,expanded,d.beforeExtraction.translationRepairs.length,accepted),expected);
  assert.deepEqual(d.beforeEditorial,before);
  const dateClaim=expanded.claims.find(c=>c.predicate==='attestation');dateClaim.value.event='Invented change to a reviewed non-date event';
  assert.throws(()=>validateCombinedReviews({...d,candidate:{...d.candidate,claims:[['p001','attestation',{undatedSourceAttestation:true,event:dateClaim.value.event},'explicit',['s0001']]]}},{dataDir:process.cwd()}));
@@ -1313,6 +1313,70 @@ for(const[label,mutate]of[
  ['self-approved new English',d=>{d.editorial.reviews.at(-1).reviewer.agentId='extractor';}],
 ])test('mixed chronology and English rejects '+label,t=>{
  const{f,d}=mixedChronologyFixture(t);mutate(d);assert.throws(()=>validateCombinedReviews(d,{dataDir:path.join(f.root,'data')}));
+});
+
+// R2 name-history regressions on the real native validators and AJV schema.
+const claimCore=c=>Object.fromEntries(['id','subject','predicate','value','certainty','evidence'].map(k=>[k,structuredClone(c[k])]));
+const nameMissing=name=>e=>new RegExp(`revised ${name.id}, but its replacement fact is missing`).test([e?.message,...(e?.errors??[])].join('\n'));
+function nameHistory(t){
+ const{f,d,checked}=undatedFixture(t);
+ const name=checked.normalized.claims.find(c=>c.predicate==='name'&&c.value?.kind==='personal-name');
+ assert.ok(name&&name.value.en==='Alice Smith','fixture personal-name claim');
+ const reading=en=>({...claimCore(name),value:{...structuredClone(name.value),en}});
+ const witness={source:'chapter-text',citation:'s0001',excerpt:'艾麗絲'};
+ const unreviewed={repairId:`${d.book}:${d.chapter}:r0001`,before:reading('Alice Smythe'),after:reading('Alice Smyth'),reason,sourceWitness:witness};
+ const history=structuredClone(d.beforeEditorial);history.reviews.at(-1).claimRevisions.push(structuredClone(unreviewed));
+ const amended=structuredClone(d.editorial);amended.reviews.at(-1).claimRevisions.push(structuredClone(unreviewed));
+ return{f,d,checked,name,reading,witness,history,amended};
+}
+
+test('name history: raw supersession arrays never excuse a missing reviewed name at the real library boundaries',t=>{
+ const{d,checked,name,reading,history,amended}=nameHistory(t),n=d.beforeExtraction.translationRepairs.length,missing=nameMissing(name);
+ const raw={laterClaimRevisions:[{before:reading('Alice Smyth'),after:reading('Alice Smith')}]};
+ const accepted=acceptedHistoricalClaims(d.book,d.chapter,d.beforeSource,d.beforeExtraction);
+ assert.ok(accepted.some(c=>c.predicate==='attestation'&&c.value.westernYear),'accepted claims are the original dated facts, not current facts');
+ assert.equal(combinedEditorialBaseline(d.beforeEditorial,checked.normalized,n,accepted).amendment.claimRevisions.length,1,'control: the date-only amendment still derives');
+ assert.throws(()=>validateAppliedEditorialDecisions(amended,checked.normalized,raw),missing);
+ assert.throws(()=>deriveDateRepairEditorialAmendment(history,checked.normalized,raw),missing);
+ assert.throws(()=>combinedEditorialBaseline(history,checked.normalized,n,accepted),missing);
+ assert.throws(()=>combinedEditorialBaseline(history,checked.normalized,n,checked.normalized.claims),missing);
+ for(const fourth of[undefined,null,raw])assert.throws(()=>combinedEditorialBaseline(history,checked.normalized,n,fourth),/accepted before-extraction claims/);
+});
+
+test('name history: a host-inserted claim row fails the captured incoming-component pins; only a reviewer re-pin admits it',t=>{
+ const{f,d}=mixedChronologyFixture(t),dataDir=path.join(f.root,'data');
+ const packet=buildPeopleExtractionPacket(d.book,d.chapter,{chapterData:d.source,properNounMatcher:loadProperNounMatcher()});
+ const name=validateCompactPeopleExtraction(d.candidate,packet,{strictAliasDispositions:true}).normalized.claims.find(c=>c.predicate==='name'&&c.value?.kind==='personal-name');
+ assert.ok(name,'fixture personal-name claim');
+ const incoming=d.editorial.reviews.at(-1);
+ incoming.claimRevisions.push({repairId:incoming.proposals[0].id,before:{...claimCore(name),value:{...structuredClone(name.value),en:'Alice Smyth'}},after:claimCore(name),reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'艾麗絲'}});
+ assert.throws(()=>validateCombinedReviews(d,{dataDir}),/reviewed incoming editorial component/);
+ const hash=documentHash(editorialReviews(d.editorial).at(-1));
+ for(const r of[d.identity,d.dateReport])r.reviewContext.editorialDecisionHash=hash;
+ d.seal.editorialDecisionHash=hash;d.validation.identityReviewHash=documentHash(d.identity);d.validation.dateReportHash=documentHash(d.dateReport);
+ assert.equal(validateCombinedReviews(d,{dataDir}).stats.people,1);
+});
+
+test('name history: only one later reviewed in-document name row supersedes, under the real validator and schema',t=>{
+ const{d,checked,name,reading,witness,amended}=nameHistory(t),missing=nameMissing(name);
+ const record=({schemaVersion,book,chapter,...r})=>r,id=`${d.book}:${d.chapter}:r0002`,unit=checked.normalized.translationRepairs[0].unit;
+ const build=({before='The official Alice Smyth came.',after='The official Alice Smith came.',row=true,reviewer='reviewer-two',first=false}={})=>{
+  const repair={id,unit,field:'idiomatic',before,after,reason,confidence:'high'};
+  const later=editorialDecisionSeed({...checked.normalized,translationRepairs:[{...repair,status:'proposed'}]});
+  later.reviewer={kind:'human',name:'Later independent editor',model:null,agentId:reviewer,runId:null,completedAt:'2026-09-15T00:00:00Z'};
+  later.decisions[0]={repairId:id,decision:'accept',after:null,reason,sourceWitness:{source:'chapter-text',citation:'s0001',excerpt:'艾麗絲來。'}};
+  later.claimRevisions=row?[{repairId:id,before:reading('Alice Smyth'),after:reading('Alice Smith'),reason,sourceWitness:witness}]:[];
+  const history=editorialReviews(amended);
+  return{document:{schemaVersion:4,book:d.book,chapter:d.chapter,reviews:(first?[later,...history]:[...history,later]).map(record)},
+   extraction:{...checked.normalized,translationRepairs:[...checked.normalized.translationRepairs,{...repair,status:'applied'}]}};
+ };
+ const ok=build();
+ validateAppliedEditorialDecisions(ok.document,ok.extraction);
+ for(const[label,variant]of[['no reviewed row',{row:false}],['English repair is not the exact name substitution',{after:'The official Alice Smith arrived.'}],
+   ['row precedes the historical revision',{first:true}],['self-review by the extractor',{reviewer:'extractor'}]]){
+  const x=build(variant);assert.throws(()=>validateAppliedEditorialDecisions(x.document,x.extraction),missing,label);
+ }
+ assert.throws(()=>validateAppliedEditorialDecisions(build({row:false}).document,ok.extraction,{laterClaimRevisions:[ok.document.reviews.at(-1).claimRevisions[0]]}),missing,'raw array');
 });
 
 }
