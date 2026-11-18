@@ -1,0 +1,67 @@
+name: Remote people registry
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: people-registry-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - name: Reuse the existing exact-commit artifact
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=people-registry-$GITHUB_SHA&per_page=100" \
+            --jq '.artifacts | map(select(.expired == false)) | if length > 1 then error("Duplicate immutable registry artifacts; inspect storage") elif length == 1 then .[0].id else "" end')
+          if [ -n "$id" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Reusing exact-commit registry artifact $id; no rebuild or second stored copy." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.existing.outputs.exists != 'true'
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        if: steps.existing.outputs.exists != 'true'
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+        if: steps.existing.outputs.exists != 'true'
+      - name: Build one source-pinned shared registry remotely
+        if: steps.existing.outputs.exists != 'true'
+        run: |
+          mkdir -p data/people/generated/identity-dossiers
+          node scripts/people-identity-registry-worker.mjs \
+            --out "$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$GITHUB_SHA" \
+            --revision "$GITHUB_SHA"
+      - name: Preserve a compressed immutable generation and byte hashes
+        if: steps.existing.outputs.exists != 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/people-registry-export"
+          cp "data/people/generated/identity-dossiers/$GITHUB_SHA/manifest.json" "$RUNNER_TEMP/people-registry-export/manifest.json"
+          tar -czf "$RUNNER_TEMP/people-registry-export/registry.tar.gz" -C data/people/generated/identity-dossiers "$GITHUB_SHA"
+          cd "$RUNNER_TEMP/people-registry-export"
+          sha256sum registry.tar.gz manifest.json > SHA256SUMS
+          test "$(stat -c %s registry.tar.gz)" -le 167772160 || { echo 'Compressed registry exceeds 160 MiB storage budget'; exit 1; }
+      - uses: actions/upload-artifact@v4
+        if: steps.existing.outputs.exists != 'true'
+        with:
+          name: people-registry-${{ github.sha }}
+          path: ${{ runner.temp }}/people-registry-export/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0

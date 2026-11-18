@@ -17,12 +17,15 @@
  */
 
 import fs from 'node:fs';
+import { assertRemotePeopleGeneration } from './scripts/lib/people-generation-policy.mjs';
 import { REPO_ROOT } from './scripts/lib/people-content.mjs';
 import { peopleDigest } from './scripts/lib/people-identity-seal.mjs';
 import { assertPeopleSiteCertificate } from './scripts/lib/people-certified-site.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defaultStaticGenConcurrency, hardwareConcurrency } from './scripts/build-parallelism.mjs';
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))
+  assertRemotePeopleGeneration('Website HTML generation');
 import { getBookMetadata, mergeBookInfo } from './scripts/book-metadata.mjs';
 import {
   chapterPeopleContext,
@@ -1634,7 +1637,9 @@ Examples:
   await generateStaticPages(bookId, chapterNum, outputDir, peopleAnnotatedOnly);
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch((e) => {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
+}

@@ -2,6 +2,7 @@
 
 import crypto from 'node:crypto';
 import { identityInputSeal, peopleDigest } from './lib/people-identity-seal.mjs';
+import { assertRemotePeopleGeneration } from './lib/people-generation-policy.mjs';
 import { dateAuditStatus } from './lib/people-date-audit.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -1389,6 +1390,7 @@ function selfTest() {
 function main() {
   const options = parseArgs(process.argv.slice(2));
   if (options.selfTest) return selfTest();
+  assertRemotePeopleGeneration('Corpus catalog and site-index generation');
   const inputSeal = identityInputSeal();
   const corpus = loadValidatedPeopleCorpus();
   const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);

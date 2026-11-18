@@ -224,6 +224,7 @@ ebook-readiness:
 # With BOOK=<id>, copy only that book's chapter JSON (plus glossary and manifest).
 .PHONY: sync
 sync:
+	@$(NODE) scripts/assert-people-remote-build.mjs
 	@echo "Syncing data to public/data..."
 	@mkdir -p public/data
 ifdef BOOK
@@ -248,6 +249,7 @@ endif
 # Open Graph share images only (writes public/og/)
 .PHONY: generate-og-images
 generate-og-images:
+	@$(NODE) scripts/assert-people-remote-build.mjs
 	@$(NODE) generate-og-images.js $(OG_IMAGE_ARGS)
 
 .PHONY: generate-book-covers
@@ -268,12 +270,14 @@ generate-sitemap:
 # chapter, so a single-book rebuild must refresh this cross-book subset too.
 .PHONY: generate-people-annotated-pages
 generate-people-annotated-pages:
+	@$(NODE) scripts/assert-people-remote-build.mjs
 	@echo "Refreshing all people-annotated chapter pages..."
 	@$(NODE) generate-static-pages.js --people-annotated
 
 # Generate static HTML pages for SEO
 .PHONY: generate-pages
 generate-pages:
+	@$(NODE) scripts/assert-people-remote-build.mjs
 	@echo "Generating static HTML pages..."
 	@$(NODE) scripts/sync-publication-descriptions.mjs
 	@$(NODE) scripts/generate-book-covers.mjs
@@ -294,6 +298,7 @@ generate-pages:
 # Requires BOOK=<book-id> (directory name under data/, e.g. shiji). Use make update-all for every book.
 .PHONY: update
 update:
+	@$(NODE) scripts/assert-people-remote-build.mjs
 	@if [ -z "$(BOOK)" ]; then \
 		echo "Error: BOOK is required."; \
 		echo "Usage: make update BOOK=shiji"; \
@@ -363,6 +368,7 @@ update:
 # Full-site update: same seven steps as update, for every book (previous default behavior)
 .PHONY: update-all
 update-all:
+	@$(NODE) scripts/assert-people-remote-build.mjs
 	@echo "=== Running full update workflow (8 steps, all books) ==="
 	@echo "🎯 Remember: Translate like Ken Liu - prioritize semantic fidelity and modern readability"
 	@echo "   • Focus on semantic fidelity and modern readability"

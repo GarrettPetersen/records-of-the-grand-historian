@@ -100,6 +100,29 @@ external resource change; clear the resource hold only after an actual guard pas
 
 ## Local disk conservation
 
+### November 18: enforce storage reuse
+
+Follow `LOCAL_DISK_STRATEGY.md#preventing-duplicate-storage`. Global catalog/site-index
+and full registry generation run only on GitHub-hosted CI or Cloudflare Pages;
+local chapter workers use sealed chapter inputs and bounded lookup. This supersedes
+local full-build examples below. Never create a full registry inside a chapter/job.
+The resource guard rejects new local full registries outside the frozen retention
+inventory in `data/people/storage-policy.json`. Do not expand that inventory to
+permit a new copy. Existing pinned evidence stays readable with its original bytes.
+It also rejects regenerated local global catalogs/site indexes, including partial
+output from historical runtimes. Do not use an older runtime/library entry point
+to bypass the remote-generation rule.
+
+Use `scripts/create-people-recovery-checkpoint.mjs` with explicit owned source paths
+for new host checkpoints: no generated data, `public/`, ignored state, credentials,
+directory copies or corpus snapshots. Keep ignored recovery in place. At 1 GiB of
+loose Git storage, the helper requires verified lossless compaction before another
+checkpoint. No GC or expiry of objects, refs, reflogs or historical approvals.
+
+Website builds produce web assets. KDP ebook exports are separate book-release
+artifacts and must never be deployed as website assets. CI may test ebook glossary
+readiness privately without generating a public ebook download.
+
 Follow `LOCAL_DISK_STRATEGY.md#automatic-low-disk-procedure` when the read-only
 guard reports `diskMaintenance.required` (below35GiB), before the30GiB stop.
 The host's five-minute maintenance timer attempts only verified unused npm download

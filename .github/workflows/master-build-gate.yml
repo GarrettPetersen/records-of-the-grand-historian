@@ -3,6 +3,7 @@ name: Master build gate
 # Run on the proposed PR merge commit, not just the topic branch. Keep this
 # workflow unfiltered so its required check is always reported for master PRs.
 on:
+  workflow_dispatch:
   pull_request:
     branches: [master]
   push:
@@ -34,6 +35,11 @@ jobs:
 
       - name: Test people date-hint normalization
         run: npm run people:hints:self-test
+
+      - name: Prevent duplicate storage and local corpus builds
+        run: |
+          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
+          python3 scripts/test-people-recovery-archive.py
 
       - name: Test unresolved people-date holds
         run: node scripts/test-people-unresolved-hold.mjs
