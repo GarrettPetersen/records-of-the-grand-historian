@@ -1413,10 +1413,10 @@ function selfTest() {
   console.log('compile-people-catalog self-test: ok');
 }
 
-function main() {
-  const options = parseArgs(process.argv.slice(2));
-  if (options.selfTest) return selfTest();
-  assertRemotePeopleGeneration('Corpus catalog and site-index generation');
+// Return only the compiled products. The source reader, validation indexes and
+// resolution inputs must become collectible before hashing inputs and writing
+// output alongside the much larger catalog and site index.
+function compileCurrentPeopleCatalog() {
   const inputSeal = identityInputSeal();
   const corpus = loadValidatedPeopleCorpusOnDemand();
   console.log(JSON.stringify({ phase: 'validated-corpus-index', chapters: corpus.chapters.length, localPeople: corpus.localPeople.size, ...process.memoryUsage() }));
@@ -1447,8 +1447,18 @@ function main() {
   }
   const result = compilePeopleCatalog(corpus, resolutions, curation.people);
   console.log(JSON.stringify({ phase: 'compiled-catalog', chapterLoads: corpus.metrics.chapterLoads, ...process.memoryUsage() }));
+  return { result, inputSeal };
+}
+
+function main() {
+  const options = parseArgs(process.argv.slice(2));
+  if (options.selfTest) return selfTest();
+  assertRemotePeopleGeneration('Corpus catalog and site-index generation');
+  const { result, inputSeal } = compileCurrentPeopleCatalog();
   if (identityInputSeal() !== inputSeal) throw new Error('Identity inputs changed during compilation; refusing publication');
+  console.log(JSON.stringify({ phase: 'rechecked-catalog-inputs', ...process.memoryUsage() }));
   writeCompiledPeopleOutputs(result, options);
+  console.log(JSON.stringify({ phase: 'wrote-catalog-outputs', ...process.memoryUsage() }));
   writeJsonAtomic(`${options.out}.identity-seal.json`, {
     schemaVersion: 2, kind: 'people-accepted-identity-seal', inputs: inputSeal,
     catalog: peopleDigest(result.catalog), siteIndex: peopleDigest(result.siteIndex),
