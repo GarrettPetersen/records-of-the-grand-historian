@@ -1,3 +1,4 @@
+import './test-people-inferred-paternal-witness.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';

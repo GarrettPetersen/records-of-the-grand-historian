@@ -1,3 +1,4 @@
+import {inferredPaternalWitness} from './people-inferred-paternal-witness.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
 import { chineseVariantComparisonKey } from './people-chinese-variants.mjs';
 import { identityNameKeyState } from './people-resolution.mjs';
@@ -339,6 +340,7 @@ export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKe
       requireValue(typeof text === 'string' && typeof quote === 'string' && /\p{Script=Han}/u.test(quote) && text.includes(quote) &&
         ([...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name))||
           inferredElderBrotherFatherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
+          inferredPaternalWitness(person,sourceId,quote,text,sourcePeople,(relative,quote)=>sourceNameOccurs(relative,sourceId,quote,nameKeysForPerson,nameEvidence))||
           inferredMotherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
           acceptedAliasWitness(person,sourceId,quote,sourcePeople,acceptedCanonical,nameKeysForPerson,nameEvidence)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 }
