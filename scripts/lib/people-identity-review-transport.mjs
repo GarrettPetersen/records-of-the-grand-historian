@@ -39,6 +39,7 @@ const compact={schemaVersion:1,kind:'bounded-dossier-source-review-transport',so
  units:p.units.map(u=>({book:u.book,chapter:u.chapter,id:u.id,zh:u.zh,en:u.en,literal:u.literal})),
  candidateDossiers:p.candidateDossiers.map(d=>({id:d.id,version:d.version,acceptedSourceMembers:d.localPeople.length,names:d.names.filter(n=>n.blocking).map(n=>[n.key,n.forms,n.kinds])})),
  candidateDisclosure:'These are bounded name-index headers, not primary-evidence proofs of equivalence or difference. Full immutable registry and posting counts/fingerprints remain sealed on host. No candidate may be merged or separated by this report. Uninspected aliases or overflow remain uncertain.',
+ ...(p.retainedHolds?.length ? {retainedHolds:p.retainedHolds.filter(hold=>cases.some(item=>item.id===hold.caseId))} : {}),
  requiredReport:p.requiredReport,instructions:p.instructions};
   if (compact.people.reduce((sum, person) => sum + person.claims.length, 0) !== p.people.reduce((sum, person) => sum + person.claims.length, 0) || compact.people.reduce((sum, person) => sum + person.mentions.length, 0) !== p.people.reduce((sum, person) => sum + person.mentions.length, 0)) throw new Error('Source claims or mentions were lost during transport compaction');
   return compact;

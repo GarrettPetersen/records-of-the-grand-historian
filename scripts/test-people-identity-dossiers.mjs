@@ -1,3 +1,4 @@
+import './test-people-inferred-intermediary-witness.mjs';
 import './test-people-inferred-paternal-witness.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';

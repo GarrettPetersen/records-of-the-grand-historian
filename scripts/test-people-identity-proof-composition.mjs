@@ -184,3 +184,45 @@ test('singleton bookkeeping projection still checks full Chinese coverage and ev
  const f=singletonFixture();for(const p of f.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';f.sources.get('fixture:001').packet.units.push({id:'s0002',zh:'另有新名。'});const n=f.next();assert.equal(reconcileIdentityProofComposition(n.view,f.sources,n.plan,[f.plan],f.captured.map(c=>c.component)).eligible.size,0);
  const g=singletonFixture();for(const p of g.sources.get('fixture:001').localPeople.values())p.claims[0].id+='-renumbered';g.sources.get('fixture:001').localPeople.values().next().value.mentions[0].spans.zh[0].occurrence++;const m=g.next();assert.equal(reconcileIdentityProofComposition(m.view,g.sources,m.plan,[g.plan],g.captured.map(c=>c.component)).remainingCaseIds.length,1);
 });
+
+function holdResolutionCapture(f, held, {reviewer=held.component.receipt.actualReviewerAgentId, runId='fresh-resolution-run', plan=f.plan, caseIndex=0, refs=[held.component.id], witness=null}={}) {
+ const captured=f.makeCapture(plan,plan.cases[caseIndex],reviewer);
+ const report=JSON.parse(captured.reportBytes); report.reviews[0].resolvesHolds=refs;
+ if(witness!==null)report.reviews[0].sourceWitnesses[0].quote=witness;
+ const reportBytes=bytes(report),job={...captured.job,runId,reportSha256:identityArtifactHash(reportBytes)};
+ return captureIdentityProofComponent(captured.packetBytes,reportBytes,captured.transportBytes,job,identityReviewTransportPolicy()).component;
+}
+test('same reviewer can explicitly resolve the exact retained hold through a fresh current native capture',()=>{
+ const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold'),fresh=holdResolutionCapture(f,held);
+ const original=held.component.reportText,components=[held.component,fresh,f.captured[1].component];
+ const result=reconcileIdentityProofComposition(f.view,f.sources,f.plan,[],components);
+ assert.equal(result.held.length,0);assert.equal(result.remainingCaseIds.length,0);
+ assert.equal(validate(f,f.bundle(components)).retained.length,2);
+ assert.equal(held.component.reportText,original);assert.equal(JSON.parse(original).reviews[0].verdict,'hold');
+ assert.throws(()=>validate(f,f.bundle([held.component,f.captured[1].component])),/held/);
+});
+test('a hold cannot be cleared by a different reviewer, the same run, or an unrelated hold reference',()=>{
+ for(const opts of [{reviewer:'different-reviewer'},{runId:'hold-reviewer-actual-run'},{refs:[peopleDigest('unknown hold')]},{caseIndex:1}]) {
+  const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold');
+  const fresh=holdResolutionCapture(f,held,opts);
+  assert.throws(()=>reconcileIdentityProofComposition(f.view,f.sources,f.plan,[],[held.component,fresh]),/Hold resolution/);
+ }
+});
+test('explicit resolution still passes native witness validation and closed component metadata',()=>{
+ const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold');
+ assert.throws(()=>holdResolutionCapture(f,held,{refs:[]}),/component IDs/);
+ assert.throws(()=>holdResolutionCapture(f,held,{refs:[held.component.id,held.component.id]}),/component IDs/);
+ const fresh=holdResolutionCapture(f,held,{witness:'unrelated witness'});
+ assert.throws(()=>reconcileIdentityProofComposition(f.view,f.sources,f.plan,[],[held.component,fresh]),/quote|Witness/);
+});
+test('hold resolution must be captured against the current plan even if old uncertain proof would be reusable',()=>{
+ const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold'),fresh=holdResolutionCapture(f,held);
+ const {fingerprint,...body}=f.plan;body.inputs={...body.inputs,editorial:peopleDigest('new editorial bytes')};const next={...body,fingerprint:peopleDigest(body)};
+ assert.throws(()=>reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],[held.component,fresh]),/current-plan/);
+});
+test('compact transport discloses exact applicable hold references without dropping original composition',()=>{
+ const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold');
+ const p=JSON.parse(held.packetBytes);p.retainedHolds=[{componentId:held.component.id,caseId:f.plan.cases[0].id,reason:'Concrete source attribution hold',reviewerAgentId:'hold-reviewer'}];
+ const t=compactChapterIdentityReviewPacket(p);assert.deepEqual(t.retainedHolds,p.retainedHolds);
+ p.reviewCaseIds=[f.plan.cases[1].id];assert.deepEqual(compactChapterIdentityReviewPacket(p).retainedHolds,[]);
+});
