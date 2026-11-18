@@ -58,8 +58,9 @@ function assertComponent(component, sourcePlan) {
     same(report.reviews.map(row => row.caseId).sort(), [...r.reviewedCaseIds].sort()), 'Original report lost its actual producer, plan or owned cases');
   const cases = new Map(sourcePlan.cases.map(c => [c.id,c])), required = new Set();
   for (const row of report.reviews) {
-    need(only(row, rowKeys) && cases.has(row.caseId) && ['approve','hold'].includes(row.verdict) && Array.isArray(row.sourceWitnesses),
+    need(only(row, row.resolvesHolds === undefined ? rowKeys : [...rowKeys,'resolvesHolds']) && cases.has(row.caseId) && ['approve','hold'].includes(row.verdict) && Array.isArray(row.sourceWitnesses),
       'Invalid original identity case row');
+    if (row.resolvesHolds !== undefined) need(row.verdict === 'approve' && Array.isArray(row.resolvesHolds) && row.resolvesHolds.length > 0 && new Set(row.resolvesHolds).size === row.resolvesHolds.length && row.resolvesHolds.every(fingerprint), 'Explicit retained hold component IDs required');
     for (const id of dependencyIds(cases.get(row.caseId), row)) required.add(id);
   }
   need(Array.isArray(r.sourcePeople) && r.sourcePeople.length === required.size && new Set(r.sourcePeople.map(p => p.localId)).size === required.size &&
@@ -145,6 +146,8 @@ function currentEvidence(view, sourceChapters, scope) {
 // It passes an unchanged original case row through the existing native case
 // gate. Original plan/report byte hashes remain in the immutable component.
 function validateOneCase(evidence, plan, item, report, row, actualAuthors) {
+  const {resolvesHolds, ...nativeRow} = row;
+  row = nativeRow;
   const body = { ...plan, cases: [item] }; delete body.fingerprint;
   const projection = { ...body, fingerprint: peopleDigest(body) };
   const scoped = { ...evidence.index, chapters: new Map([[evidence.ownKey, new Map([[item.canonicalPersonId,item.localPeople]])]]) };
@@ -191,17 +194,29 @@ export function reconcileIdentityProofComposition(view, sourceChapters, plan, so
         ?validateOneCase(evidence,plan,current,original.report,{...row,membershipFingerprint:current.canonicalMembership.fingerprint},actualAuthors)
         :validateOneCase(evidence,parent,before,original.report,row,actualAuthors);
       eligible.set(row.caseId, { componentId: component.id, caseId: row.caseId, proof,
+        resolvesHolds: row.resolvesHolds ?? [], resolutionPlan: parent.fingerprint,
         sourceReview: { agentId: component.receipt.actualReviewerAgentId, runId: component.receipt.runId,
           reportSha256: component.receipt.reportSha256, sourcePlanFingerprint: parent.fingerprint }, candidateSearchChanged: !same(before,current) });
     }
   }
-  // A still-current concrete hold cannot disappear behind another old approval.
-  for (const row of held) eligible.delete(row.caseId);
+  // Ordinary approvals cannot clear a hold. Require an explicit reference in
+  // a fresh captured CURRENT-plan approval by the original independent reviewer.
+  for (const [caseId, proof] of eligible) for (const componentId of proof.resolvesHolds) {
+    const hold = held.find(row => row.componentId === componentId && row.caseId === caseId);
+    need(hold, 'Hold resolution must reference an applicable retained hold for this case');
+    const original = components.find(component => component.id === componentId);
+    need(proof.resolutionPlan === plan.fingerprint &&
+      proof.sourceReview.agentId === original.receipt.actualReviewerAgentId &&
+      proof.sourceReview.runId !== original.receipt.runId,
+      'Hold resolution requires a fresh current-plan capture from the original independent reviewer');
+  }
+  const unresolvedHolds = held.filter(row => !eligible.get(row.caseId)?.resolvesHolds.includes(row.componentId));
+  for (const row of unresolvedHolds) eligible.delete(row.caseId);
   const selections = new Map();
   for (const item of plan.cases) if (eligible.has(item.id)) {
     const row = eligible.get(item.id); if (!selections.has(row.componentId)) selections.set(row.componentId,[]); selections.get(row.componentId).push(item.id);
   }
-  return { eligible, selections: [...selections].map(([componentId,caseIds]) => ({ componentId,caseIds })), invalidated, held,
+  return { eligible, selections: [...selections].map(([componentId,caseIds]) => ({ componentId,caseIds })), invalidated, held: unresolvedHolds,
     remainingCaseIds: plan.cases.filter(c => !eligible.has(c.id)).map(c => c.id), evidence };
 }
 

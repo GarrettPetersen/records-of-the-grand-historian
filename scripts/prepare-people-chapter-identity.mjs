@@ -82,7 +82,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     if (pinned) assertPinnedIdentityRuntime(pinned.snapshot);
     need(peopleDigest(readInputs(book, chapter)) === peopleDigest(inputs) && (candidate || pinned || identityDossierInputs(REPO_ROOT) === identityInputs), 'Source or identity inputs changed while preparing identity review');
     const units = collectChapterIdentityPrimaryUnits(own, sources, relevant);
-    let retainedIdentityProof = null, remainingCaseIds = null, reusedCases = 0;
+    let retainedIdentityProof = null, remainingCaseIds = null, reusedCases = 0, retainedHolds = [];
     if (retainedComposition) {
       need(path.isAbsolute(retainedComposition), 'Absolute retained composition required');
       const sourcePlans = identityCompositionSourcePlans(previous,plan);
@@ -91,7 +91,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
         if (!sources.has(key)) sources.set(key,loadChapter(b,c,{properNounMatcher:matcher,strictAliasDispositions:false}));
       }
       const result = reconcileIdentityProofComposition({localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId},sources,plan,sourcePlans,previous.components);
-      need(!result.held.length, 'Current retained attribution or false-merge hold requires source/membership reconciliation; do not commission an unchanged replacement review');
+      retainedHolds = result.held.map(hold => ({...hold, reviewerAgentId: previous.components.find(component => component.id === hold.componentId).receipt.actualReviewerAgentId}));
       retainedIdentityProof = {schemaVersion:1,kind:'chapter-identity-review-composition',scope,plan,sourcePlans,components:previous.components,selections:result.selections};
       remainingCaseIds = result.remainingCaseIds; reusedCases = result.eligible.size;
       if (!remainingCaseIds.length) {
@@ -104,7 +104,7 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
     }
     const candidateIds = [...new Set(plan.cases.flatMap(item => item.candidateDossiers.map(row => row.id)))];
     const packet = { schemaVersion: 1, kind: 'source-chapter-dossier-review-packet', scope, plan,
-      ...(retainedIdentityProof ? {retainedIdentityProof,reviewCaseIds:remainingCaseIds,transportPolicy:identityReviewTransportPolicy()} : {}),
+      ...(retainedIdentityProof ? {retainedIdentityProof,retainedHolds,reviewCaseIds:remainingCaseIds,transportPolicy:identityReviewTransportPolicy()} : {}),
       authorAgentIds: extractionAuthorAgentIds(own.extraction), registryProvenance: index.provenance,
       ...(candidate ? {privateCandidate:candidate.metadata,privateProjection} : {}),
       ...(registryReuse ? { registryReuse } : {}),
@@ -118,13 +118,14 @@ export async function buildChapterIdentityReviewPacket({ book, chapter, registry
           sourceWitnesses: [{ localId: 'TARGET_OR_ANCHOR_ID', book: 'BOOK', chapter: 'NNN', unitId: 'UNIT_ID', quote: 'EXACT_CHINESE_NAME_IN_CURRENT_SOURCE' }] }] },
       instructions: 'Review every case and every target local person. Quote the primary Chinese for each target and the retained canonical anchor. Confirm actual individual, supported chapter attribution, and accepted membership; hold contradictions. Keep unresolvedIdentity true when proposed, including small candidate buckets and overflow. Omitted names are unreviewed uncertainty, never separation evidence. No positive merges, no all-pairs comparisons, no recursive external chapter completion. Return the closed required report only. Supply definite English repairs separately with complete exact before/after, source reason, both fields and repetitions; do not silently ignore them.' };
     if (previous) packet.instructions += acceptedIdentityUncertaintyInstruction(plan, previous);
+    if (retainedHolds.length) packet.instructions += ' Current retained concrete holds remain unapproved. Only their original independent reviewer may explicitly resolve them after source/membership reconciliation. For an approved held case, add resolvesHolds: [EXACT_RETAINED_COMPONENT_ID] to the current case row and explain the source-based resolution in reason. A new actual captured run, full current native witnesses and unchanged publication gates are required. Preserve unresolved holds and original reports.';
     const bytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
     const receipt = { scope, inputs, planFingerprint: plan.fingerprint, packetFingerprint: peopleDigest(packet), packetBytes: bytes.length,
       transportPolicy: identityReviewTransportPolicy(transportMaxBytes),
       metrics: plan.metrics, evidenceChapters: sources.size, primaryUnits: units.size, sourcePeople: relevant.size,
       generatedPairs: 0, independentReviewCompleted: false, dataQualified: false, published: false,
       ...(candidate ? {privateCandidate:candidate.metadata,privateProjection,acceptedMembershipStillRequired:true} : {}),
-      ...(retainedIdentityProof ? {reusedCases,newReviewCases:remainingCaseIds.length,retainedCompositionFingerprint:peopleDigest(retainedIdentityProof)} : {}),
+      ...(retainedIdentityProof ? {reusedCases,newReviewCases:remainingCaseIds.length,retainedHoldCases:retainedHolds.length,retainedCompositionFingerprint:peopleDigest(retainedIdentityProof)} : {}),
       ...(registryReuse ? { sourceRevision, registryReuse } : {}) };
     need(!inspectLocalDisk(HOST_ROOT).errors.length, 'Host guard failed after dossier preparation; preserve artifacts, dispatch no new work');
     const transport = compactChapterIdentityReviewPacket(packet);

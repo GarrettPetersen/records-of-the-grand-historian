@@ -1,3 +1,4 @@
+import {inferredIntermediaryWitness} from './people-inferred-intermediary-witness.mjs';
 import {inferredPaternalWitness} from './people-inferred-paternal-witness.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
 import { chineseVariantComparisonKey } from './people-chinese-variants.mjs';
@@ -273,6 +274,13 @@ function sourceNameOccurs(person,sourceId,text,nameKeysForPerson,nameEvidence){
   return [...(nameEvidence.get(person.localId).get(sourceId)??[])].some(name=>name&&normalizeKey('zh:'+text).slice(3).includes(name));
 }
 
+// Current native Chinese name evidence for a relative in exactly this unit.
+function sourceUnitNames(person,sourceId,nameKeysForPerson,nameEvidence){
+  if(!person)return [];
+  if(!nameEvidence.has(person.localId))nameEvidence.set(person.localId,primaryWitnessNameEvidence(person,nameKeysForPerson));
+  return [...(nameEvidence.get(person.localId).get(sourceId)??[])].filter(Boolean);
+}
+
 function inferredMotherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence){
   const names=person.claims.filter(c=>c.predicate==='name');
   if(typeof person.mentionException!=='string'||!person.mentionException.trim()||(person.mentions??[]).length||
@@ -342,5 +350,6 @@ export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKe
           inferredElderBrotherFatherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
           inferredPaternalWitness(person,sourceId,quote,text,sourcePeople,(relative,quote)=>sourceNameOccurs(relative,sourceId,quote,nameKeysForPerson,nameEvidence))||
           inferredMotherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
+          inferredIntermediaryWitness(person,sourceId,quote,text,sourcePeople,relative=>sourceUnitNames(relative,sourceId,nameKeysForPerson,nameEvidence),value=>normalizeKey('zh:'+value).slice(3))||
           acceptedAliasWitness(person,sourceId,quote,sourcePeople,acceptedCanonical,nameKeysForPerson,nameEvidence)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 }
