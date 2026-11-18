@@ -218,11 +218,43 @@ test('explicit resolution still passes native witness validation and closed comp
 test('hold resolution must be captured against the current plan even if old uncertain proof would be reusable',()=>{
  const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold'),fresh=holdResolutionCapture(f,held);
  const {fingerprint,...body}=f.plan;body.inputs={...body.inputs,editorial:peopleDigest('new editorial bytes')};const next={...body,fingerprint:peopleDigest(body)};
- assert.throws(()=>reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],[held.component,fresh]),/current-plan/);
+ const result=reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],[held.component,fresh]);
+ assert.deepEqual(result.remainingCaseIds,next.cases.map(c=>c.id));assert.equal(result.held.length,1);
+ assert(result.invalidated.some(r=>r.componentId===fresh.id&&/current-plan/.test(r.reason)));
+ assert.throws(()=>validateChapterIdentityBundle(f.view,f.sources,f.scope,{schemaVersion:1,kind:'chapter-identity-review-composition',scope:f.scope,plan:next,sourcePlans:[f.plan],components:[held.component,fresh],selections:result.selections},next.inputs),/Incomplete|held/);
 });
 test('compact transport discloses exact applicable hold references without dropping original composition',()=>{
  const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold');
  const p=JSON.parse(held.packetBytes);p.retainedHolds=[{componentId:held.component.id,caseId:f.plan.cases[0].id,reason:'Concrete source attribution hold',reviewerAgentId:'hold-reviewer'}];
  const t=compactChapterIdentityReviewPacket(p);assert.deepEqual(t.retainedHolds,p.retainedHolds);
  p.reviewCaseIds=[f.plan.cases[1].id];assert.deepEqual(compactChapterIdentityReviewPacket(p).retainedHolds,[]);
+});
+
+function multiCaseResolutionCapture(f,held) {
+ const original=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer');
+ const packet=JSON.parse(original.packetBytes);packet.reviewCaseIds=f.plan.cases.map(c=>c.id);
+ const report=JSON.parse(original.reportBytes);report.reviews[0].resolvesHolds=[held.component.id];
+ report.reviews.push(JSON.parse(f.captured[1].reportBytes).reviews[0]);
+ const packetBytes=bytes(packet),reportBytes=bytes(report),transportBytes=Buffer.from(JSON.stringify(compactChapterIdentityReviewPacket(packet))+'\n');
+ const job={...original.job,runId:'old-multi-case-resolution-run',sourcePacketSha256:identityArtifactHash(packetBytes),reportSha256:identityArtifactHash(reportBytes),transportSha256:identityArtifactHash(transportBytes)};
+ return captureIdentityProofComponent(packetBytes,reportBytes,transportBytes,job,identityReviewTransportPolicy()).component;
+}
+function nextEditorialPlan(plan) { const {fingerprint,...body}=plan;body.inputs={...body.inputs,editorial:peopleDigest('actually changed editorial generation')};return{...body,fingerprint:peopleDigest(body)}; }
+test('a stale hold-binding row preserves sibling proofs and original captures but cannot qualify the chapter',()=>{
+ const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold'),old=multiCaseResolutionCapture(f,held),next=nextEditorialPlan(f.plan),original=JSON.stringify([held.component,old]);
+ const r=reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],[held.component,old]);
+ assert.deepEqual(r.remainingCaseIds,[next.cases[0].id]);assert.equal(r.eligible.size,1);assert.equal(r.held.length,1);assert.equal(r.eligible.get(next.cases[1].id).componentId,old.id);
+ assert.equal(r.invalidated.filter(x=>x.componentId===old.id).length,1);assert.equal(JSON.stringify([held.component,old]),original);
+ const bundle={schemaVersion:1,kind:'chapter-identity-review-composition',scope:f.scope,plan:next,sourcePlans:[f.plan],components:[held.component,old],selections:r.selections};
+ assert.throws(()=>validateChapterIdentityBundle(f.view,f.sources,f.scope,bundle,next.inputs),/Incomplete|held/);
+});
+test('only a fresh current-plan same-reviewer binding closes the stale hold while sibling proofs stay reused',()=>{
+ const f=fixture(),held=f.makeCapture(f.plan,f.plan.cases[0],'hold-reviewer','hold'),old=multiCaseResolutionCapture(f,held),next=nextEditorialPlan(f.plan);
+ const fresh=holdResolutionCapture(f,held,{plan:next,runId:'actual-new-current-binding'}),components=[held.component,old,fresh];
+ const r=reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],components);assert.equal(r.remainingCaseIds.length,0);assert.equal(r.held.length,0);assert.equal(r.eligible.get(next.cases[1].id).componentId,old.id);
+ const bundle={schemaVersion:1,kind:'chapter-identity-review-composition',scope:f.scope,plan:next,sourcePlans:[f.plan],components,selections:r.selections};assert.equal(validateChapterIdentityBundle(f.view,f.sources,f.scope,bundle,next.inputs).retained.length,2);
+ for(const opts of [{reviewer:'unrelated-reviewer'},{runId:held.component.receipt.runId},{refs:[peopleDigest('wrong hold')]}]) {
+  const bad=holdResolutionCapture(f,held,{plan:next,...opts});assert.throws(()=>reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],[held.component,old,bad]),/Hold resolution/);
+ }
+ const missing=f.makeCapture(next,next.cases[0],'hold-reviewer').component;const incomplete=reconcileIdentityProofComposition(f.view,f.sources,next,[f.plan],[held.component,old,missing]);assert.deepEqual(incomplete.remainingCaseIds,[next.cases[0].id]);assert.equal(incomplete.held.length,1);
 });
