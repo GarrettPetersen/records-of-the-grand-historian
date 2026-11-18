@@ -217,6 +217,27 @@ function assertDateOnlyEditorialClaimAmendment(before, after) {
   }
 }
 
+// Accepted historical facts advanced only by chronology-only changes now in the
+// candidate. Reviewed history is checked against this projection when the date
+// amendment is derived; every other current change faces final validation.
+export function historicalDateProjection(acceptedClaims, currentClaims) {
+  if (!Array.isArray(acceptedClaims) || !Array.isArray(currentClaims)) throw new Error('Historical date projection requires accepted and current claims');
+  const core = claim => [claim.subject, claim.predicate, claim.value, claim.certainty, claim.evidence];
+  const used = new Set();
+  return acceptedClaims.map(before => {
+    if (currentClaims.some(claim => same(core(claim), core(before)))) return structuredClone(before);
+    const matches = currentClaims.filter(claim => claim.subject === before.subject && claim.predicate === before.predicate &&
+      same(claim.evidence, before.evidence) && (undatedEditorialAttestation(before, { ...before, value: claim.value, certainty: claim.certainty }) ||
+        (claim.certainty === before.certainty && !same(claim.value, before.value) &&
+          same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(before.value)) &&
+          (before.value?.event === undefined || before.value.event === claim.value?.event))));
+    if (!matches.length) return structuredClone(before);
+    if (matches.length !== 1 || used.has(matches[0])) throw new Error(`Historical date projection is ambiguous for ${before.id}`);
+    used.add(matches[0]);
+    return { ...structuredClone(before), value: structuredClone(matches[0].value), certainty: matches[0].certainty };
+  });
+}
+
 export function applyDateRepairEditorialAmendment(document, amendment, candidate) {
   if (!document || !amendment || !candidate) throw new Error('Editorial amendment requires decision, amendment, and expanded candidate');
   validateEditorialDecisionDocument(document);
