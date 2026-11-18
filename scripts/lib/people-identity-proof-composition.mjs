@@ -184,6 +184,11 @@ export function reconcileIdentityProofComposition(view, sourceChapters, plan, so
         if (!currentFingerprints.has(id)) currentFingerprints.set(id, semanticIdentitySourceFingerprint(person,source.packet));
         if (currentFingerprints.get(id) !== original.dependencies.get(id)) { reason = 'Primary context, claims or name occurrences changed: ' + id; break; }
       }
+      // A prior plan's hold resolution is historical approval, not a current
+      // resolution. Preserve it and request a fresh binding for this case while
+      // continuing to validate unrelated rows in the same captured component.
+      if (!reason && row.resolvesHolds?.length && parent.fingerprint !== plan.fingerprint)
+        reason = 'Hold resolution requires a fresh current-plan capture from the original independent reviewer';
       if (reason) { invalidated.push({ componentId: component.id,caseId: row.caseId,reason }); continue; }
       if (row.verdict === 'hold') { held.push({ componentId: component.id,caseId: row.caseId,reason: row.reason }); continue; }
       need(!eligible.has(row.caseId), 'Duplicate eligible independent case proofs require explicit reconciliation');
