@@ -9,6 +9,67 @@ const MAP_ENTRIES_PER_SHARD = 10_000;
 const CANDIDATE_BLOCKS_PER_SHARD = 1_000;
 const CHAPTERS_PER_SHARD = 32;
 
+// The compiled corpus stays live while shards are written. Do not allocate a
+// second shard-sized JSON string and UTF-8 buffer on top of that corpus.
+function writeShardAtomic(file, value) {
+  const temporary = path.join(path.dirname(file), `.${path.basename(file)}.${process.pid}.${crypto.randomBytes(6).toString('hex')}.tmp`);
+  let fd = fs.openSync(temporary, 'wx');
+  let pending = [], length = 0;
+  const ancestors = new Set();
+  const flush = () => {
+    if (length) fs.writeFileSync(fd, pending.join(''));
+    pending = []; length = 0;
+  };
+  const emit = text => {
+    if (text.length >= 65_536) { flush(); fs.writeFileSync(fd, text); }
+    else {
+      pending.push(text); length += text.length;
+      if (length >= 65_536 || pending.length >= 4096) flush();
+    }
+  };
+  const prepare = (item, key) => {
+    if (item !== null && (typeof item === 'object' || typeof item === 'bigint') && typeof item.toJSON === 'function') item = item.toJSON(key);
+    if (item instanceof Number || item instanceof String || item instanceof Boolean || item instanceof BigInt) item = item.valueOf();
+    return item;
+  };
+  const omitted = item => item === undefined || typeof item === 'function' || typeof item === 'symbol';
+  const visit = (item, depth) => {
+    if (item === null || typeof item !== 'object') { emit(JSON.stringify(item)); return; }
+    if (ancestors.has(item)) throw new TypeError('Converting circular shard structure to JSON');
+    ancestors.add(item);
+    const array = Array.isArray(item), indent = '  '.repeat(depth), childIndent = indent + '  ';
+    emit(array ? '[' : '{');
+    let count = 0;
+    if (array) {
+      const size = item.length;
+      for (let index = 0; index < size; index++) {
+        const child = prepare(item[index], String(index));
+        emit((count++ ? ',\n' : '\n') + childIndent);
+        visit(omitted(child) ? null : child, depth + 1);
+      }
+    } else {
+      for (const key of Object.keys(item)) {
+        const child = prepare(item[key], key);
+        if (omitted(child)) continue;
+        emit((count++ ? ',\n' : '\n') + childIndent + JSON.stringify(key) + ': ');
+        visit(child, depth + 1);
+      }
+    }
+    if (count) emit('\n' + indent);
+    emit(array ? ']' : '}');
+    ancestors.delete(item);
+  };
+  try {
+    visit(prepare(value, ''), 0); emit('\n'); flush();
+    fs.closeSync(fd); fd = null;
+    fs.renameSync(temporary, file);
+  } catch (error) {
+    if (fd !== null) fs.closeSync(fd);
+    fs.rmSync(temporary, { force: true });
+    throw error;
+  }
+}
+
 function chunks(values, size) {
   const result = [];
   for (let index = 0; index < values.length; index += size) {
@@ -34,7 +95,7 @@ function shardGeneration(file, generatedAt) {
 function writeArrayShards(file, directory, prefix, values, size) {
   return chunks(values, size).map((items, index) => {
     const shardFile = path.join(directory, `${prefix}-${String(index + 1).padStart(4, '0')}.json`);
-    writeJsonAtomic(shardFile, { schemaVersion: 1, items });
+    writeShardAtomic(shardFile, { schemaVersion: 1, items });
     return { file: relativeShardPath(file, shardFile), count: items.length };
   });
 }
@@ -42,7 +103,7 @@ function writeArrayShards(file, directory, prefix, values, size) {
 function writeMapShards(file, directory, prefix, value, size) {
   return chunks(Object.entries(value), size).map((entries, index) => {
     const shardFile = path.join(directory, `${prefix}-${String(index + 1).padStart(4, '0')}.json`);
-    writeJsonAtomic(shardFile, { schemaVersion: 1, entries });
+    writeShardAtomic(shardFile, { schemaVersion: 1, entries });
     return { file: relativeShardPath(file, shardFile), count: entries.length };
   });
 }
@@ -166,7 +227,7 @@ export function writePeopleSiteIndex(file, siteIndex) {
           generation.directory,
           `chapters-${book}-${String(index + 1).padStart(4, '0')}.json`,
         );
-        writeJsonAtomic(shardFile, { schemaVersion: 1, entries });
+        writeShardAtomic(shardFile, { schemaVersion: 1, entries });
         return { file: relativeShardPath(file, shardFile), count: entries.length };
       }));
   writeJsonAtomic(file, {

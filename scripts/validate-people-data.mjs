@@ -12,6 +12,8 @@ import {
   writeJsonAtomic,
 } from './lib/people-content.mjs';
 import { loadProperNounMatcher } from './lib/people-candidates.mjs';
+import { peopleDigest } from './lib/people-identity-seal.mjs';
+import { loadValidatedPeopleChapter } from './lib/people-validated-chapter.mjs';
 import { isCompactPeopleExtraction } from './lib/people-compact.mjs';
 import {
   loadValidatedResolutionDocuments,
@@ -194,8 +196,8 @@ async function main() {
       else if (repair.status === 'applied') appliedRepairs += 1;
     }
     extractionByScope.set(`${extraction.book}/${extraction.chapter}`, {
-      extraction: result.normalized,
-      packet,
+      extractionFingerprint: peopleDigest(result.normalized),
+      packetFingerprint: peopleDigest(packet),
     });
   }
 
@@ -221,7 +223,13 @@ async function main() {
     }
     const expected = path.resolve(extractionPath(document.book, document.chapter));
     const scope = `${document.book}/${document.chapter}`;
-    const loaded = extractionByScope.get(scope);
+    const pin = extractionByScope.get(scope);
+    const loaded = pin ? loadValidatedPeopleChapter(document.book, document.chapter, {
+      properNounMatcher: matcher, strictAliasDispositions: scoped,
+    }) : null;
+    if (loaded && (peopleDigest(loaded.extraction) !== pin.extractionFingerprint || peopleDigest(loaded.packet) !== pin.packetFingerprint)) {
+      throw new Error(`People inputs changed during editorial validation: ${scope}`);
+    }
     if (!fs.existsSync(expected) || !loaded) {
       errors.push(`${path.relative(REPO_ROOT, file)} has no corresponding extraction`);
     }
