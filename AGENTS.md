@@ -109,6 +109,9 @@ local full-build examples below. Never create a full registry inside a chapter/j
 The resource guard rejects new local full registries outside the frozen retention
 inventory in `data/people/storage-policy.json`. Do not expand that inventory to
 permit a new copy. Existing pinned evidence stays readable with its original bytes.
+It also rejects regenerated local global catalogs/site indexes, including partial
+output from historical runtimes. Do not use an older runtime/library entry point
+to bypass the remote-generation rule.
 
 Use `scripts/create-people-recovery-checkpoint.mjs` with explicit owned source paths
 for new host checkpoints: no generated data, `public/`, ignored state, credentials,

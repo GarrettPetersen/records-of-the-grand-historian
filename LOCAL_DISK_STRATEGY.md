@@ -37,6 +37,10 @@ override. Small isolated library fixtures and self-tests remain available.
   manifests/file sizes and refuses **any new local full registry**. Do not add a
   retention entry to make a new copy pass. This is preservation of old evidence,
   not permission to keep producing historical whole-corpus copies.
+  The guard also rejects local `catalog.json`, `catalog-shards/`, `site-index.json`
+  or `site-index-shards/`, including partial generations made by old/direct library
+  writers. Hosted builders are allowed to produce ephemeral global outputs; they
+  do not inherit the local historical-cache inventory restriction.
 - KDP exports are separate, on-demand book-release artifacts. Do not put EPUB,
   MOBI, print interiors or KDP bundles in the website deployment. Private CI checks
   may verify the ebook contribution from exactly the same accepted chapter inputs.

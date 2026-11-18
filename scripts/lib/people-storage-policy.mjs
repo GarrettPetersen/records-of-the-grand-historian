@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { peopleGenerationIsRemote } from './people-generation-policy.mjs';
 
 export function inventoryLocalPeopleRegistries(root) {
   const result = []; let visited = 0;
@@ -42,22 +43,27 @@ export function inventoryLocalPeopleRegistries(root) {
   return result.sort((a, b) => a.directory.localeCompare(b.directory));
 }
 
-export function evaluatePeopleRegistryStorage(actual, policy) {
+export function evaluatePeopleRegistryStorage(actual, policy, { allowNewFullRegistries = false } = {}) {
   if (policy.schemaVersion !== 1 || !Array.isArray(policy.retainedFullRegistries)) throw Error('Invalid storage policy');
   const retained = new Map(policy.retainedFullRegistries.map(row => [row.directory, row]));
   if (retained.size !== policy.retainedFullRegistries.length) throw Error('Duplicate storage retention entry');
   const errors = [];
   for (const row of actual) {
     const prior = retained.get(row.directory);
-    if (!prior) errors.push('Unbudgeted local full registry; stop new copies and use remote generation: ' + row.directory);
+    if (!prior) { if (!allowNewFullRegistries) errors.push('Unbudgeted local full registry; stop new copies and use remote generation: ' + row.directory); }
     else if (prior.manifestSha256 !== row.manifestSha256 || JSON.stringify(prior.files) !== JSON.stringify(row.files))
       errors.push('Retained immutable registry changed: ' + row.directory);
   }
   return { fullRegistries: actual.length, fullRegistryBytes: actual.reduce((n, row) => n + row.files.reduce((s, f) => s + f.bytes, 0), 0), errors };
 }
 
-export function inspectPeopleRegistryStorage(root) {
+export function inspectPeopleRegistryStorage(root, { env = process.env } = {}) {
   const file = path.join(root, 'data/people/storage-policy.json');
   if (!fs.existsSync(file)) throw Error('Missing explicit people storage policy');
-  return evaluatePeopleRegistryStorage(inventoryLocalPeopleRegistries(root), JSON.parse(fs.readFileSync(file)));
+  const remote = peopleGenerationIsRemote(env);
+  const result = evaluatePeopleRegistryStorage(inventoryLocalPeopleRegistries(root), JSON.parse(fs.readFileSync(file)), { allowNewFullRegistries: remote });
+  const forbiddenAggregatePaths = remote ? [] : ['catalog.json', 'catalog-shards', 'site-index.json', 'site-index-shards']
+    .filter(name => fs.existsSync(path.join(root, 'data/people/generated', name)));
+  for (const name of forbiddenAggregatePaths) result.errors.push('Local global-derived output is forbidden; preserve source and use remote generation: data/people/generated/' + name);
+  return { ...result, forbiddenAggregatePaths };
 }

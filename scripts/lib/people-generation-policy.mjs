@@ -1,12 +1,15 @@
 import path from 'node:path';
 import fs from 'node:fs';
 
-export function assertRemotePeopleGeneration(operation, env = process.env) {
+export function peopleGenerationIsRemote(env = process.env) {
   // A generic CI=1, macOS/Linux detection or an override flag must not turn a
   // local coordinator into another corpus build worker.
   const github = env.GITHUB_ACTIONS === 'true' && env.RUNNER_ENVIRONMENT === 'github-hosted';
   const pages = env.CF_PAGES === '1' && Boolean(env.CF_PAGES_BUILD_ID || env.CF_PAGES_COMMIT_SHA);
-  if (!github && !pages) throw Error(`${operation} requires GitHub-hosted CI or Cloudflare Pages. ` +
+  return github || pages;
+}
+export function assertRemotePeopleGeneration(operation, env = process.env) {
+  if (!peopleGenerationIsRemote(env)) throw Error(`${operation} requires GitHub-hosted CI or Cloudflare Pages. ` +
     'Local chapter workers use sealed inputs and bounded lookup; submit reviewed source and inspect remote qualification receipts.');
 }
 
