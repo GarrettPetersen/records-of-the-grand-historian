@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { addCompactSurface } from './lib/people-compact-surface.mjs';
+import { runRecordCorrections } from './lib/people-record-corrections.mjs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
@@ -33,6 +35,7 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 function usage() {
   console.log(`Usage:
   node scripts/apply-people-alias-decisions.mjs --decisions PATH [--apply]
+  node scripts/apply-people-alias-decisions.mjs --record-packet PATH [--apply] [--root PATH]
   node scripts/apply-people-alias-decisions.mjs --self-test
 
 Without --apply, validates the complete decision file and reports the prospective
@@ -44,6 +47,8 @@ function options(argv) {
     args: argv,
     options: {
       decisions: { type: 'string' },
+      'record-packet': { type: 'string' },
+      root: { type: 'string' },
       apply: { type: 'boolean', default: false },
       'self-test': { type: 'boolean', default: false },
       help: { type: 'boolean', short: 'h', default: false },
@@ -56,6 +61,11 @@ function options(argv) {
     process.exit(0);
   }
   if (values['self-test']) return { selfTest: true };
+  if (values['record-packet']) {
+    if (values.decisions) throw new Error('Select one decision format');
+    return { recordPacket: path.resolve(values['record-packet']), root: values.root, apply: values.apply };
+  }
+  if (values.root) throw new Error('--root requires --record-packet');
   if (!values.decisions) throw new Error('--decisions is required');
   return {
     selfTest: false,
@@ -88,27 +98,6 @@ function addDisposition(compact, candidate, decision) {
     compact.candidateDispositions.push(group);
   }
   group[2].push([candidate, decision.note]);
-}
-
-function addSurface(compact, candidate, decision, book, chapter) {
-  const person = shortId(decision.personId, book, chapter);
-  let surface = compact.surfaces.find((row) => (
-    row[0] === person && row[1] === decision.kind && row[2] === candidate.language && row[3] === candidate.exact
-  ));
-  if (!surface) {
-    surface = [person, decision.kind, candidate.language, candidate.exact, []];
-    compact.surfaces.push(surface);
-  }
-  let unit = surface[4].find(([unitId]) => unitId === candidate.unit);
-  if (!unit) {
-    unit = [candidate.unit, []];
-    surface[4].push(unit);
-  }
-  if (unit[1].includes(candidate.occurrence)) {
-    throw new Error(`${candidate.id} is already present in the selected surface`);
-  }
-  unit[1].push(candidate.occurrence);
-  unit[1].sort((left, right) => left - right);
 }
 
 function validateEnvelope(document) {
@@ -202,7 +191,7 @@ function prepareChapter(review, submitted, matcher) {
     if (!candidate) throw new Error(`${candidateId} is absent from the current scanner packet`);
     const shortCandidate = shortId(candidateId, review.book, review.chapter);
     removeCandidate(compact, shortCandidate);
-    if (decision.action === 'link') addSurface(compact, candidate, decision, review.book, review.chapter);
+    if (decision.action === 'link') addCompactSurface(compact, shortId(decision.personId, review.book, review.chapter), decision.kind, candidate);
     else addDisposition(compact, shortCandidate, decision);
   }
   validateCompactPeopleExtraction(compact, packet, { strictAliasDispositions: true });
@@ -245,9 +234,7 @@ function selfTest() {
   removeCandidate(compact, 'cand_a');
   if (compact.candidateDispositions.length !== 0) throw new Error('Candidate disposition was not removed');
   const candidate = { id: 'book:001:cand_a', language: 'en', exact: 'Alice', unit: 's0001', occurrence: 1 };
-  addSurface(compact, candidate, {
-    personId: 'book:001:p001', kind: 'personal-name',
-  }, 'book', '001');
+  addCompactSurface(compact, 'p001', 'personal-name', candidate);
   if (compact.surfaces[0][4][0][1][0] !== 1) throw new Error('Linked surface was not added');
   addDisposition(compact, 'cand_b', { reason: 'place', note: 'This occurrence names a province.' });
   if (compact.candidateDispositions[0][1] !== 'place') throw new Error('Contextual disposition was not added');
@@ -301,6 +288,7 @@ function selfTest() {
 function main() {
   const opts = options(process.argv.slice(2));
   if (opts.selfTest) return selfTest();
+  if (opts.recordPacket) return console.log(runRecordCorrections(opts));
   if (!fs.existsSync(REVIEW_FILE) || !fs.existsSync(DEBT_FILE)) {
     throw new Error('Alias review reports are missing; run npm run people:validate and npm run people:aliases:reconcile -- --all');
   }
