@@ -7,6 +7,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { assertRemotePeopleGeneration } from './lib/people-generation-policy.mjs';
+assertRemotePeopleGeneration('Corpus copy to website output');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');

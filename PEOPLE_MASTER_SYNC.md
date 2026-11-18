@@ -17,6 +17,12 @@ Do not make another checkout or copy the corpus. Inventory overlaps and retain
 unpublished work in recoverable Git objects; record the refs and changed paths in
 the handoff. Do not push private recovery snapshots as a public source-code PR.
 
+Use `scripts/create-people-recovery-checkpoint.mjs` and explicit owned source paths
+for this preservation. Never recursively stage/copy ignored generated state or site
+output. Its 64 MiB source limit and loose-object storage stop are intentional; use
+verified lossless compaction instead of bypassing them. See
+`LOCAL_DISK_STRATEGY.md#source-only-host-checkpoints`.
+
 Bring the host to the released baseline. Active chapters' canonical before-inputs
 must stay byte-identical until their owner can reconcile at an idle boundary. Record
 only these deliberate exceptions in `data/people/generated/master-sync-receipt.json`:
@@ -27,7 +33,7 @@ receipt. The receipt is not a content approval. Reconcile rather than retag revi
 After sync, verify source/code and released extraction/date/identity file inventories,
 rerun both guards, and report the exact master commit plus remaining owned overlays.
 Ignored generated catalogs are not synchronized by Git: verify their generation
-against current inputs or rebuild before using their counts. Use supported pinned
+against current inputs or inspect a new exact remote build before using their counts. Use supported pinned
 Git readers for immutable evidence; do not treat missing local files as missing work.
 
 Unmerged recovery work needs an owner and a reconciliation list. Compare it against

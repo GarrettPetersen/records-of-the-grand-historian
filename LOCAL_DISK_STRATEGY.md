@@ -1,5 +1,109 @@
 # Local disk strategy
 
+## Preventing duplicate storage
+
+The November 18 storage policy supersedes local full-build instructions. One shared
+source checkout is sufficient; global derived output is generated on ephemeral remote
+runners. `compile-people-catalog.mjs` and the full registry runner fail before loading
+the corpus unless running in GitHub-hosted CI or Cloudflare Pages. There is no local
+override. Small isolated library fixtures and self-tests remain available.
+
+- Normal reviewed source PRs run the existing **Master build gate** remotely. Its
+  `npm run build` produces the catalog, website/search shards, HTML, sitemap and OG
+  assets; qualification receipts retain the normal independent review/chronology/
+  identity and product gates. Cloudflare Pages separately builds the deployed site.
+  Inspect exact commit/run receipts and actual live URLs; do not rebuild everything
+  locally merely to prepare or count a chapter release.
+- For a manual build of an existing remote branch, run
+  `gh workflow run master-build-gate.yml --ref BRANCH`. Record the resulting exact
+  head SHA and run ID; a dispatch is not qualification. No local clone or full artifact
+  download is required to inspect a small qualification receipt.
+- Full canonical registry construction is remote via
+  `gh workflow run people-registry-build.yml --ref BRANCH`. It produces one immutable
+  shared generation, manifest and SHA-256 hashes, with a **128 MiB compressed artifact
+  cap** and **seven-day retention**. Keep durable review evidence separately. Download
+  only bounded packets/receipts for chapter work; do not unpack the corpus on this host.
+  Existing pinned lookup generations remain unchanged; publishing a new lookup
+  generation is a separate verified operation, never implied by this build.
+  Repeated dispatch of the same commit reuses its existing artifact. Do not request
+  full construction for an unrelated code/config edit: prove native pinned reuse.
+- Full registry paths belong under one `identity-dossiers/GENERATION`, never inside
+  a chapter job. Identical input fingerprints must reuse the existing immutable
+  generation and its original provenance, not regenerate under another name. Use the
+  existing bounded native delta path for membership-preserving dossier corrections.
+  Genuine membership changes still require normal validated remote construction.
+- `data/people/storage-policy.json` freezes the existing full registries that are
+  still referenced by retained proofs. The read-only resource guard compares their
+  manifests/file sizes and refuses **any new local full registry**. Do not add a
+  retention entry to make a new copy pass. This is preservation of old evidence,
+  not permission to keep producing historical whole-corpus copies.
+- KDP exports are separate, on-demand book-release artifacts. Do not put EPUB,
+  MOBI, print interiors or KDP bundles in the website deployment. Private CI checks
+  may verify the ebook contribution from exactly the same accepted chapter inputs.
+
+### Source-only host checkpoints
+
+Save a JSON array of explicit owned source file paths, then use:
+
+```sh
+node scripts/create-people-recovery-checkpoint.mjs \
+  --files /absolute/path/to/owned-source-paths.json \
+  --prefix refs/recovery/NAME
+```
+
+The helper preserves HEAD, staged tree and owned working changes through Git objects
+and named refs, without touching the primary HEAD/index. It rejects ignored/private
+files, generated data, `public/`, dependency/cache directories, redirected paths and
+directory copies. A checkpoint is limited to 64 MiB of explicitly selected source.
+Unfinished model responses/proofs remain in their existing artifact paths, never
+copied into Git to take a checkpoint. Repeating the same source uses Git's existing
+content-addressed objects. No private recovery refs go into a public PR.
+
+At **1 GiB loose Git storage**, the helper stops before writing more objects. The
+host may use `node scripts/compact-people-git-storage.mjs` to preview, then `--apply
+--receipt NEW_ABSOLUTE_PATH` while the coordinator and all host Git writers are idle.
+It packs at most 3 GiB per operation with one bounded-memory Git process; includes
+unreachable/recovery-only objects; verifies the full new pack and exact selected
+object set; and removes only redundant loose copies. Refs, reflogs, old packs,
+HEAD, index, source and historical objects are retained. This is **not GC** and
+must not be replaced with `git gc`, prune or expiry. An interrupted/failed pack
+leaves loose originals; inspect the receipt before another attempt. Cleanup is
+serialized with builds/registry jobs and has its own worst-case temporary budget.
+
+### Legacy recovery archives
+
+Old `.git/worktree-recovery-*` directories may contain moved unfinished work as well
+as reproducible output. Never delete them wholesale. The lossless archival helper
+`scripts/archive-people-worktree-recovery.py` accepts only that legacy location and
+a private `.git/recovery-archives/*.tar.gz` destination. It checks for open files,
+hashes every original file, preserves filenames/modes/symlinks/extended attributes, verifies every archive
+entry against original bytes, rechecks ownership and unchanged originals, and writes
+a durable receipt before removing the uncompressed directory. It refuses an existing
+or interrupted archive and reserves worst-case temporary space. It does not select
+live chapter directories, registries, app history or another project's files.
+
+Retain the archive and its receipt as recovery evidence. Verify the archive SHA-256
+before restoring to the original location; use the same archival helper with
+`--restore --source ORIGINAL_PATH --archive ARCHIVE_PATH`. It restores original
+bytes, extended attributes, modes, symlinks and nanosecond mtimes into a new empty
+destination, then verifies them; reconcile normally afterward. Plain tar extraction
+alone does not restore the receipt's extended-attribute contract. Old evidence must be restored
+before a consumer needs its original path. Never fabricate a seal or retag approval
+because an old path was archived. Do not publish private recovery archives.
+
+Run `npm run people:storage:self-test` and the disk guard tests before changing these
+rules. CI runs the storage regressions. Actual free-space measurements, rather than
+directory totals, determine whether cleanup cleared the 30 GiB admission reserve.
+
+Identical retained registry payloads can be shared without changing any evidence
+path, manifest, hash, offset or content. Preview with
+`node scripts/deduplicate-people-registry-payloads.mjs`; after confirming no active
+readers/writers, apply with `--apply --receipt NEW_ABSOLUTE_PATH`. The tool checks
+every candidate's actual SHA-256 against its immutable manifest, rechecks ownership,
+then atomically shares only identical read-only `dossiers.jsonl`/`index.jsonl` files.
+Never hard-link mutable source, responses, manifests or receipts. Different registry
+contents remain separate; there is no semantic merge or changed approval.
+
 ## Automatic low-disk procedure
 
 The macOS host runs `node scripts/maintain-local-disk.mjs run` every five minutes
@@ -76,9 +180,9 @@ and publishes through GitHub. Remote bots use the installed client and do not ne
 repository clone for MCP work. Avoid local per-bot clones.
 
 Git worktrees share history but duplicate checked-out files. A full task checkout can
-contain 4.9 GiB of `public/` and 3.5 GiB of `data/`. Keep one full checkout for global
-validation and milestone builds. Use sparse, reusable secondary checkouts for chapter
-work; build the site once per reviewed milestone.
+contain 4.9 GiB of `public/` and 3.5 GiB of `data/`. Keep one shared source checkout;
+global validation and website builds run remotely. Reuse a sparse secondary checkout
+only for a genuine concurrent-code/different-revision exception.
 
 ## Default worker topology
 

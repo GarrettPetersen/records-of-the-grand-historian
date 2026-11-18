@@ -115,6 +115,19 @@ limit unrelated to measured work or silently raise the existing cost/round limit
 This accounting policy is host-enforced until integrated into the native scheduler;
 do not claim the current per-run breaker enforces cumulative chapter spending.
 
+### Remote generation and storage reuse (November 18)
+
+Follow `LOCAL_DISK_STRATEGY.md#preventing-duplicate-storage`. Local corpus catalog,
+site-index and full registry builds are disabled. Submit exact reviewed source/code
+through normal remote PR CI; use its compact native qualification receipts and
+the exact Cloudflare deployment/live checks. A failure of an old local generated
+catalog does not require another chapter source review. Preserve accepted source
+and canonical proofs, and fix the output writer remotely without increasing local
+heap or allocating another registry. KDP exports remain separate private artifacts.
+Use the source-only checkpoint helper, bounded native deltas and pinned lookups.
+The frozen local registry inventory protects retained proofs and blocks new copies;
+do not expand it to bypass the rule. No broad recovery directory snapshots.
+
 ### Keep a short, explicit completion frontier
 
 Keep one primary completion target and at most two other active completion chapters.

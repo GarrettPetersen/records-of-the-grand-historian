@@ -4,6 +4,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { LOW_DISK_BYTES } from './lib/local-disk-maintenance.mjs';
+import { inspectPeopleRegistryStorage } from './lib/people-storage-policy.mjs';
 
 export const RESERVE_BYTES = 30n * 1024n ** 3n;
 export const SWAP_WARNING_BYTES = 4n * 1024n ** 3n;
@@ -96,6 +97,10 @@ export function inspectLocalDisk(repoRoot) {
       return { path: checkout, hasPublic: fs.existsSync(path.join(checkout, 'public')) };
     });
   const memory = inspectMemory();
+  // Tiny external test repositories do not carry this project's policy. A real
+  // people checkout must carry it, and never silently accepts unbudgeted copies.
+  const registryStorage = fs.existsSync(path.join(primary, 'data/people/config.json'))
+    ? inspectPeopleRegistryStorage(primary) : { fullRegistries: 0, fullRegistryBytes: 0, errors: [] };
   return {
     primary, availableBytes: availableBytes.toString(),
     availableGiB: Number(availableBytes / (1024n ** 2n)) / 1024,
@@ -108,7 +113,8 @@ export function inspectLocalDisk(repoRoot) {
       guardRemainsReadOnly: true,
     },
     memory,
-    errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }), ...memory.errors],
+    registryStorage,
+    errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }), ...memory.errors, ...registryStorage.errors],
     scope: 'Registered worktrees only; external clones and service runtimes must also be checked by the host.',
   };
 }
