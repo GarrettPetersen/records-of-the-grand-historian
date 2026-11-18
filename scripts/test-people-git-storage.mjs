@@ -78,7 +78,11 @@ test('an incomplete preserved pack never authorizes deletion of another object',
   for(const row of inventory.files) assert.equal(fs.existsSync(row.file), true);
 });
 test('redirected object directories and excessive batch sizes fail closed', t => {
-  const f = fixture(t), directory = path.join(f.root, '.git/objects/aa');
+  const f = fixture(t), objects = path.join(f.root, '.git/objects');
+  const prefix = Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'))
+    .find(name => !fs.existsSync(path.join(objects, name)));
+  assert.notEqual(prefix, undefined, 'fixture needs an unused loose-object directory');
+  const directory = path.join(objects, prefix);
   fs.mkdirSync(path.join(f.root, 'outside')); fs.symlinkSync(path.join(f.root, 'outside'), directory);
   assert.throws(() => inspectPeopleGitStorage(f.root), /Redirected/);
   assert.throws(() => compactPeopleGitStorage({ ...f, maxInputBytes: 4 * 1024 ** 3 }), /at most/);
