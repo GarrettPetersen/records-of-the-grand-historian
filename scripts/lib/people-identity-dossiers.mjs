@@ -1,3 +1,4 @@
+import {inferredSpouseWitness} from './people-inferred-spouse-witness.mjs';
 import {inferredIntermediaryWitness} from './people-inferred-intermediary-witness.mjs';
 import {inferredPaternalWitness} from './people-inferred-paternal-witness.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
@@ -351,5 +352,6 @@ export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKe
           inferredPaternalWitness(person,sourceId,quote,text,sourcePeople,(relative,quote)=>sourceNameOccurs(relative,sourceId,quote,nameKeysForPerson,nameEvidence))||
           inferredMotherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
           inferredIntermediaryWitness(person,sourceId,quote,text,sourcePeople,relative=>sourceUnitNames(relative,sourceId,nameKeysForPerson,nameEvidence),value=>normalizeKey('zh:'+value).slice(3))||
+          inferredSpouseWitness(person,sourceId,quote,text,sourcePeople,relative=>sourceUnitNames(relative,sourceId,nameKeysForPerson,nameEvidence),value=>normalizeKey('zh:'+value).slice(3))||
           acceptedAliasWitness(person,sourceId,quote,sourcePeople,acceptedCanonical,nameKeysForPerson,nameEvidence)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 }

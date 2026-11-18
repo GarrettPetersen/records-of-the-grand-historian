@@ -175,11 +175,10 @@ test('unrelated unnamed relatives with a mentionException do not bind on a co-oc
   }), false);
 });
 
-test('actual current Jinshu032 graphs pass the native OR integration while Tushan stays held and Shun still binds directly',()=>{
+test('actual current Jinshu032 graphs pass native family integration; Shun binds directly',()=>{
  const people=new Map(packet.people.map(p=>[p.localId,p])),units=new Map(packet.units.map(u=>[P(u.id),u.zh]));
  for(const graph of packet.graphs){
   const run=()=>assertDossierPrimaryWitness(graph.witness,people.get(graph.personId),units,localNameKeys,new Map(),people);
-  if(graph.personId===P('p157'))assert.throws(run,/Witness does not support/);
-  else assert.doesNotThrow(run,graph.personId);
+  assert.doesNotThrow(run,graph.personId); // A separate spouse helper binds the entailed Tushan mate.
  }
 });
