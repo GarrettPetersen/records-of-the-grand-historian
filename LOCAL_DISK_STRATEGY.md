@@ -20,7 +20,7 @@ override. Small isolated library fixtures and self-tests remain available.
   download is required to inspect a small qualification receipt.
 - Full canonical registry construction is remote via
   `gh workflow run people-registry-build.yml --ref BRANCH`. It produces one immutable
-  shared generation, manifest and SHA-256 hashes, with a **128 MiB compressed artifact
+  shared generation, manifest and SHA-256 hashes, with a **160 MiB compressed artifact
   cap** and **seven-day retention**. Keep durable review evidence separately. Download
   only bounded packets/receipts for chapter work; do not unpack the corpus on this host.
   Existing pinned lookup generations remain unchanged; publishing a new lookup

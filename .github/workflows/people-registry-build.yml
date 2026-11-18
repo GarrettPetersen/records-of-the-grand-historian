@@ -56,7 +56,7 @@ jobs:
           tar -czf "$RUNNER_TEMP/people-registry-export/registry.tar.gz" -C data/people/generated/identity-dossiers "$GITHUB_SHA"
           cd "$RUNNER_TEMP/people-registry-export"
           sha256sum registry.tar.gz manifest.json > SHA256SUMS
-          test "$(stat -c %s registry.tar.gz)" -le 134217728 || { echo 'Compressed registry exceeds 128 MiB storage budget'; exit 1; }
+          test "$(stat -c %s registry.tar.gz)" -le 167772160 || { echo 'Compressed registry exceeds 160 MiB storage budget'; exit 1; }
       - uses: actions/upload-artifact@v4
         if: steps.existing.outputs.exists != 'true'
         with:
