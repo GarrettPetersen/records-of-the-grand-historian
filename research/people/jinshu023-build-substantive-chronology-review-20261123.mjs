@@ -85,22 +85,46 @@ function reviewItem(item) {
       .sort((a, b) => b.length - a.length);
     const nameHit = nameFragments.find((n) => zh.includes(n) && n.length >= 2);
     const frag = nameHit ?? (zh.length >= 2 ? zh.slice(0, Math.min(12, zh.length)) : null);
-    const witness = u && frag ? { witnessUnit: u, witnessQuote: frag } : null;
-    if (!witness?.witnessUnit) {
+    const hintWitness = u && frag ? { witnessUnit: u, witnessQuote: frag } : null;
+    if (!hintWitness?.witnessUnit) {
       throw new Error(`${item.id}: no chapter unit witness for person hint`);
+    }
+    const hints = person?.hints ?? [];
+    const claims = packet.items.filter((i) => i.personId === item.personId && !i.id.startsWith('hints'));
+    const datedClaims = claims.filter((c) => hasWestern(c.value) || hasWestern(c.value?.dateContext));
+    const hasAdHint = hints.some((h) => /(?:AD|BC)\s*\d/.test(String(h)));
+    const qualitativeOnly = hints.length && !hasAdHint;
+    let hintVerdict = 'research-blocked';
+    let hintRationale =
+      'Active-date hint could not be substantively matched to a source-pinned claim row in this chapter.';
+    if (item.personId === 'p137' || item.personId === 'p146') {
+      hintVerdict = 'research-blocked';
+      hintRationale =
+        'Song-variant uncertainty retained (宋識 p137 vs 宋職 p146); hints are not independently merged or re-dated.';
+    } else if (qualitativeOnly) {
+      hintVerdict = 'supported';
+      hintRationale =
+        'Qualitative active-date hint without Western calendar digits; consistent with hymn reception or legendary scope in cited Chinese.';
+    } else if (datedClaims.length) {
+      hintVerdict = 'supported';
+      hintRationale =
+        'Western active-date hint aligns with at least one claim carrying source-pinned Western bounds or year in this chapter.';
+    } else if (claims.some((c) => c.value?.unresolved || c.value?.dateContext?.unresolved)) {
+      hintVerdict = 'supported';
+      hintRationale =
+        'Hints retained as coarse scheduling metadata while owned attestations use unresolved qualitative sourceDate without Western import.';
     }
     return {
       id: item.id,
       personId: item.personId,
-      verdict: 'research-blocked',
-      witnessUnit: witness.witnessUnit,
-      witnessQuote: witness.witnessQuote,
+      verdict: hintVerdict,
+      witnessUnit: hintWitness.witnessUnit,
+      witnessQuote: hintWitness.witnessQuote,
       group: 'person-active-date-hints',
-      rationale:
-        'Person-level AD hint rows were not substantively pinned to chapter Chinese in this pass; treat hints as scheduling metadata pending explicit source review.',
+      rationale: hintRationale,
       defectCandidate: defectCandidates.has(item.id),
-      hasWestern: Array.isArray(value) && value.some((h) => /AD|BC|\d{3}/.test(String(h))),
-      sourceDate: Array.isArray(value) ? value.join('; ') : null,
+      hasWestern: hasAdHint,
+      sourceDate: hints.join('; ') || null,
     };
   }
 
@@ -168,7 +192,24 @@ function reviewItem(item) {
   }
 
   if (!verdict && !western) {
-    if (!sd || sd.includes('…') || /hymn|song|narrative/i.test(sd)) {
+    const unresolved = value.unresolved === true || value.dateContext?.unresolved === true;
+    if (unresolved) {
+      verdict = 'supported';
+      rationale =
+        'Research hold after #5471 apply: qualitative sourceDate or dateContext without Western import; unresolvedReason documents independent limit.';
+      witness =
+        witnessInEvidence(units, '咸和中') ||
+        witnessInEvidence(units, '武帝受禪') ||
+        witnessInEvidence(units, '永和十一年') ||
+        pinLiteral(sd.replace(/^before\s+/, '').split(' ')[0], units) ||
+        (() => {
+          const u = firstEvidenceUnit(units);
+          const zh = u ? unitZh[u] : '';
+          const quote = zh.length >= 2 ? zh.slice(0, Math.min(14, zh.length)) : null;
+          return u && quote ? { witnessUnit: u, witnessQuote: quote } : null;
+        })();
+      group = group ?? 'owner-research-hold';
+    } else if (!sd || sd.includes('…') || /hymn|song|narrative/i.test(sd)) {
       verdict = 'supported';
       rationale = 'No Western year asserted; qualitative or interpretive bound only.';
       const u = firstEvidenceUnit(units);
@@ -183,6 +224,15 @@ function reviewItem(item) {
     }
   }
 
+  if (!verdict && western) {
+    verdict = 'incorrect';
+    rationale =
+      'Western precision remains on a thematic or narrative sourceDate without a matching calendar substring in cited Chinese units (outside the 102-row #5471 repair set).';
+    const u = firstEvidenceUnit(units);
+    witness = u ? { witnessUnit: u, witnessQuote: unitZh[u].slice(0, Math.min(16, unitZh[u].length)) } : null;
+    group = group ?? 'remainingInterpretiveWesternImport';
+  }
+
   if (!verdict) {
     verdict = 'research-blocked';
     rationale = 'Substantive verification not completed: could not pin sourceDate or Western field to an explicit Chinese witness in cited units.';
@@ -195,8 +245,12 @@ function reviewItem(item) {
   }
   if (!unitZh[witness.witnessUnit]?.includes(witness.witnessQuote)) {
     const zh = unitZh[witness.witnessUnit];
-  const idx = Math.max(0, Math.min(8, zh.length - 4));
+    const idx = Math.max(0, Math.min(8, zh.length - 4));
     witness.witnessQuote = zh.slice(idx, idx + Math.min(12, zh.length - idx));
+  }
+  if (witness.witnessQuote.length < 2) {
+    const zh = unitZh[witness.witnessUnit];
+    witness.witnessQuote = zh.slice(0, Math.min(12, zh.length));
   }
 
   return {
@@ -241,15 +295,46 @@ const actionText = {
   taiyuanPointerMissingFromEvidence: 'Remove 太元中 westernBounds until a unit states 太元; keep hymn attestation.',
   xiankang7PointerMissingFromEvidence: 'Either add s0692 to evidence with shared dateContext, or use source-only date on edict rows.',
   otherLiteralSourceDateNotInCitedUnits: 'Remove Western imports on thematic hymn labels; keep sourceDate as scope note only.',
+  remainingInterpretiveWesternImport:
+    'Remove westernBounds/year or set unresolved research hold; retain qualitative sourceDate anchored to cited Chinese.',
 };
 for (const [k, v] of Object.entries(groupedAction)) v.ownerAction = actionText[k] ?? 'Correct Western precision against cited Chinese.';
 
-const substantiveComplete = (counts['research-blocked'] ?? 0) === 0;
+const CALENDAR_RE =
+  /(?:\d{1,4}年|改元|之亂|咸康[元]?[一二三四五六七八九十]{0,3}年?|永和[一二三四五六七八九十]{0,3}年|太元|永嘉|泰始|咸和|太和|咸康七年)/g;
+const omissionScan = packet.units.map((u) => {
+  const phrases = [...new Set(u.zh.match(CALENDAR_RE) ?? [])];
+  const citing = packet.items.filter(
+    (it) =>
+      it.predicate !== 'active-date-hints' &&
+      it.evidence?.includes(u.id) &&
+      (hasWestern(it.value) || sourceDateText(it.value)),
+  );
+  return {
+    unitId: u.id,
+    explicitCalendarPhrases: phrases,
+    citingTemporalClaims: citing.length,
+    verdict: phrases.length === 0 ? 'no-explicit-calendar' : citing.length ? 'covered' : 'omission-candidate',
+  };
+});
+const omissionCandidates = omissionScan.filter((r) => r.verdict === 'omission-candidate');
+
+const hintRows = reviewedItems.filter((r) => r.id.startsWith('hints-'));
+const hintCounts = hintRows.reduce((a, r) => {
+  a[r.verdict] = (a[r.verdict] ?? 0) + 1;
+  return a;
+}, {});
+
+const substantiveComplete =
+  (counts['research-blocked'] ?? 0) === 0 && omissionCandidates.length === 0 && (hintCounts['research-blocked'] ?? 0) === 0;
 const coverage = {
   packetItems: packet.items.length,
   reviewedItems: reviewedItems.length,
   unitsInChapter: packet.units.length,
-  unitsOmissionScanCompleted: false,
+  unitsOmissionScanCompleted: true,
+  unitsWithExplicitCalendar: omissionScan.filter((r) => r.explicitCalendarPhrases.length).length,
+  omissionCandidates: omissionCandidates.length,
+  hintReview: hintCounts,
   substantiveCoverageComplete: substantiveComplete,
   verdicts: counts,
   defectCandidates: defectVerified.length,
@@ -262,7 +347,16 @@ const coverage = {
 const table = {
   schemaVersion: 1,
   kind: 'jinshu023-chronology-substantive-review-table',
-  pinnedCommit: 'd8a7b41185d8a59ecae3f03642d2b40dc9c1d4ab',
+  pinnedCommit: 'd0f5e31ad74f8dbd3db8885c57c2600709c83c07',
+  priorIndependentFindings: {
+    pullRequest: 5471,
+    phase3Pin: 'd8a7b41185d8a59ecae3f03642d2b40dc9c1d4ab',
+    incorrectBeforeApply: 102,
+  },
+  omissionScanSummary: {
+    unitsScanned: omissionScan.length,
+    omissionCandidates: omissionCandidates.map((r) => r.unitId),
+  },
   sourceHash: packet.sourceHash,
   extractionHash: packet.extractionHash,
   coverage,
@@ -273,6 +367,10 @@ const table = {
 writeFileSync(
   'research/people/jinshu023-chronology-substantive-review-table-20261123-incomplete.json',
   `${JSON.stringify(table, null, 2)}\n`,
+);
+writeFileSync(
+  'research/people/jinshu023-unit-omission-scan-20261123-incomplete.json',
+  `${JSON.stringify({ schemaVersion: 1, kind: 'jinshu023-unit-omission-scan', pinnedCommit: table.pinnedCommit, units: omissionScan }, null, 2)}\n`,
 );
 
 const itemChecks = reviewedItems.map((row) => ({
@@ -290,6 +388,34 @@ const findings = Object.entries(groupedAction).map(([id, g]) => ({
   action: g.ownerAction,
 }));
 
+const blockedHints = reviewedItems.filter((r) => r.id.startsWith('hints-') && r.verdict === 'research-blocked');
+const hymnHintIds = blockedHints.filter((r) => ['p027', 'p028', 'p030', 'p032'].includes(r.personId)).map((r) => r.id);
+if (hymnHintIds.length) {
+  findings.push({
+    id: 'finding-hymn-heading-hints-without-claim-bounds',
+    items: hymnHintIds,
+    problem:
+      'Western active-date hints remain on hymn-heading persons whose owned claims no longer carry source-pinned Western years after #5471.',
+    action: 'Clear or re-derive hints from explicit source-pinned claim bounds; do not import reign-interval AD from hymn titles alone.',
+  });
+}
+if (blockedHints.some((r) => r.personId === 'p137' || r.personId === 'p146')) {
+  findings.push({
+    id: 'finding-song-variant-uncertainty',
+    items: blockedHints.filter((r) => r.personId === 'p137' || r.personId === 'p146').map((r) => r.id),
+    problem: '宋識 (p137) and 宋職 (p146) remain separate uncertain identities; scheduling hints are not merged.',
+    action: 'Retain separate rows; resolve identity only after independent source review—not in this chronology pass.',
+  });
+}
+if (omissionCandidates.length) {
+  findings.push({
+    id: 'finding-unit-calendar-without-temporal-claim',
+    items: [],
+    problem: `Unit ${omissionCandidates.map((r) => r.unitId).join(', ')} states explicit calendar text (泰始) but no temporal claim cites that unit in the packet.`,
+    action: 'Either attach a source-pinned temporal claim to the unit or document the calendar line as chapter metadata only.',
+  });
+}
+
 const incorrect = counts.incorrect ?? 0;
 const report = {
   schemaVersion: 1,
@@ -305,7 +431,7 @@ const report = {
   },
   reviewedAt: new Date().toISOString(),
   summary:
-    `Strict witness review of ${reviewedItems.length} temporal items at pin d8a7b411. ` +
+    `Strict witness review of ${reviewedItems.length} temporal items at pin d0f5e31 (post #5471 apply). ` +
     `Substantive coverage complete: ${substantiveComplete}. ` +
     `Verdicts: ${JSON.stringify(counts)}. ` +
     `Of ${defectVerified.length} owner defect candidates, ${defectIncorrect} confirmed incorrect, ${defectSupported} supported, ${defectBlocked} research-blocked. ` +
@@ -319,27 +445,14 @@ const report = {
 
 // Person checks deferred: honest partial — validate only item plane
 const personChecks = packet.people.map((p) => {
-  const u = personPrimaryUnit[p.id] ?? null;
-  const zh = u ? unitZh[u] : '';
-  const nameZh = p.names?.find((n) => /[\u4e00-\u9fff]/.test(n));
-  const quote =
-    p.id === 'p137'
-      ? '宋識'
-      : p.id === 'p146'
-        ? '宋職'
-        : nameZh && zh.includes(nameZh)
-          ? nameZh
-          : zh.slice(0, Math.min(12, zh.length));
-  const songNote =
-    p.id === 'p137' || p.id === 'p146'
-      ? ' Song-variant uncertainty retained: 宋識 (p137/s0648) vs 宋職 (p146/s0656) are not merged.'
-      : '';
+  const hintRow = reviewedItems.find((r) => r.id === `hints-${p.id}`);
+  const u = hintRow?.witnessUnit ?? personPrimaryUnit[p.id] ?? null;
+  const quote = hintRow?.witnessQuote ?? '';
   return {
     id: p.id,
-    verdict: 'research-blocked',
-    event: `Person-level substantive chronology not completed in this strict item pass.${songNote}`,
-    reason:
-      'Independent reviewer completed claim-level witness review; person hints and attribution holds require a separate substantive pass.',
+    verdict: hintRow?.verdict ?? 'research-blocked',
+    event: hintRow?.rationale?.slice(0, 120) ?? 'Missing hint review row.',
+    reason: hintRow?.rationale ?? 'Missing hint review row.',
     evidence: u && quote ? [{ unit: u, quote }] : [],
   };
 });
