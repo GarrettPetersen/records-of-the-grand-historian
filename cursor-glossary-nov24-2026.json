@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T23:04:26.669Z",
+  "lastCheckedAt": "2026-11-23T23:05:22.111Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -545,7 +545,24 @@
           "completedAt": "2026-11-23T17:26:04Z",
           "appliesToCurrentCandidate": false
         }
-      ]
+      ],
+      "additionalRegistryBlocker": {
+        "reason": "Two IDs still referenced by accepted cross-chapter resolutions",
+        "missing": [
+          {
+            "id": "p225",
+            "files": [
+              "jinshu053-bounded-source-reviewed-20261030.json"
+            ]
+          },
+          {
+            "id": "p113",
+            "files": [
+              "jinshu053-current-renew-merge-019-v2-jin059-abe22-20261025.json"
+            ]
+          }
+        ]
+      }
     },
     "jinshu/031": {
       "originalPR": 5406,
@@ -3075,6 +3092,54 @@
       "hostedRun": 45284160964,
       "category": "global referential integrity",
       "detail": "Current chronology and scoped validation passed; exact global registry rejects two removed existing member IDs. Preserve cross-chapter IDs and assess their dependencies before native identity certification."
+    },
+    "canonicalReferencePreflight": {
+      "at": "2026-11-23T23:05:22.111Z",
+      "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+      "scanned": 17,
+      "passing": 15,
+      "failed": [
+        {
+          "chapter": "jinshu/094",
+          "revision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
+          "referenced": 8,
+          "missing": [
+            {
+              "id": "p087",
+              "files": [
+                "jinshu053-current-renew-merge-012-medium-d-20261025.json",
+                "jinshu053-wu-source-reviewed-20261029.json"
+              ]
+            },
+            {
+              "id": "p081",
+              "files": [
+                "jinshu053-current-renew-merge-014-large-f-20261025.json"
+              ]
+            }
+          ]
+        },
+        {
+          "chapter": "jinshu/067",
+          "revision": "f96a8b20294d52d2489b17b70f1358e2daeba3cf",
+          "referenced": 5,
+          "missing": [
+            {
+              "id": "p225",
+              "files": [
+                "jinshu053-bounded-source-reviewed-20261030.json"
+              ]
+            },
+            {
+              "id": "p113",
+              "files": [
+                "jinshu053-current-renew-merge-019-v2-jin059-abe22-20261025.json"
+              ]
+            }
+          ]
+        }
+      ],
+      "rule": "Before another author/reviewer cycle and before hosted registry, verify every accepted cross-chapter resolution member ID for the exact chapter candidate still exists and still denotes the same person. Reserve canonical dossier edits independently from chapter writes and reconcile affected proofs against the current registry. Let disjoint chapter edits run in parallel regardless of book."
     }
   }
 }
