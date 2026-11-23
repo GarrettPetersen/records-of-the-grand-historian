@@ -4,16 +4,28 @@ on:
 permissions:
   contents: read
 jobs:
-  validate-jinshu-047:
+  scoped-validation:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - chapter: '065'
+            revision: 09ad5383251b59697ade682efba6f8e71f8d1446
+          - chapter: '078'
+            revision: 67e19fbddd4677db3744330d4919212887b94ea6
+          - chapter: '085'
+            revision: 103736d18c27e8985ec6fc1ef1b4dc361384754e
+          - chapter: '116'
+            revision: 59aec9792ff2faaa2b4b53ceb1af007efd63a2c7
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: dc6a726b7f763f7f4f54f3b95318074a0af7569b
+          ref: ${{ matrix.revision }}
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm install --no-audit --no-fund
-      - run: npm run people:validate -- --book jinshu --chapter 047
+      - run: npm run people:validate -- --book jinshu --chapter ${{ matrix.chapter }}
