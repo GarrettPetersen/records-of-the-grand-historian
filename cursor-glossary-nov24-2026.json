@@ -8,9 +8,9 @@
   "dispatchState": "open-with-live-cycle-verification",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-23T17:34:17.450Z",
+    "verifiedAt": "2026-11-23T17:36:23.349Z",
     "cursorModelsUsedPercent": 25,
-    "otherModelsUsedPercent": 52,
+    "otherModelsUsedPercent": 54,
     "onDemandLimitUsd": 1,
     "onDemandLimitReached": true,
     "lastObservedOnDemandMeterUsd": 2.91,
@@ -39,7 +39,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Observe 031, 067 and 116 review runs and the 094 owner. Resume 123 after its owner is free.",
+  "nextAction": "Repair the exact Jinshu 067 attestation source pins, then return to the same reviewer. Observe 031, 094 and 116.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T17:35:02.811Z",
+  "lastCheckedAt": "2026-11-23T17:36:23.349Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -410,7 +410,7 @@
       "reviewPR": 5445,
       "revision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
       "verifiedScopedFiles": 6,
-      "status": "draft-chronology-report-evidence-repair-required",
+      "status": "draft-attestation-source-pin-repair-required",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -927,15 +927,25 @@
     },
     "jinshu/067": {
       "chapterPR": 5445,
-      "findingsPR": 5454,
-      "reviewRevision": "dfe855c8a778e55a96bf282ec993f5f2c17b1496",
+      "findingsPR": 5456,
+      "reviewRevision": "f00691b4c44ca99bb1f0582eb225530f342df190",
       "revision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
       "candidateRevision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
       "agentId": "bc-eda5fdb7-cf38-47cb-98f8-37c378bbd7cb",
       "previousRunId": "run-dbad299a-7eee-4cc4-8392-4d483961d569",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:30:25.748Z",
-      "runId": "run-ab514578-91a8-45fd-b7d5-89031bd262e5"
+      "runId": "run-ab514578-91a8-45fd-b7d5-89031bd262e5",
+      "chronology": "needs-revision",
+      "coverage": {
+        "checkedItems": 269,
+        "totalItems": 452,
+        "checkedUnits": 171,
+        "totalUnits": 578,
+        "checkedPeople": 4
+      },
+      "incorrectAttestations": 61,
+      "unreviewedEmptyHints": 170
     }
   },
   "targetedOwnerRuns": {
