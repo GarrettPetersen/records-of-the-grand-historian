@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "book": "jinshu",
+  "chapter": "028",
+  "candidateCommit": "b309c074f654f3b1dbbbffd21940ef56b3311dc5",
+  "packetSourceHash": "sha256:a9a83cef47b36523d8a2ac931e72b73f4621b743065bcd4895eb2e12ebaf9961",
+  "packetExtractionHash": "sha256:bb9dab0bb3818853347557360bd4f754ad968829ab58b91075f272cf1b89cbe4",
+  "status": "systemic-hold",
+  "finding": "340/403 attestation items carry onOrAfter westernBounds whose event text cites a standard Ming reign-year table (external conversion; inferred). Native packet includes no reign table; bounds are unsupported for independent audit until retracted or re-derived with pinned external evidence.",
+  "counts": {
+    "attestations": 403,
+    "withWesternBounds": 340,
+    "withoutWesternBounds": 63,
+    "groups": {
+      "ming-table-inferred": 340
+    }
+  },
+  "groupedCorrection": {
+    "action": "batch-retract-or-replace",
+    "targetPredicate": "attestation",
+    "targetField": "value.westernBounds",
+    "affectedItems": 340,
+    "replacementPolicy": "Retain sourceDate.text and narrative event; set westernBounds null or research-blocked until independent reviewer supplies pinned reign-table excerpt per polity",
+    "doNotRepeat": "Item-by-item Ming-table re-audit before batch retraction is applied"
+  },
+  "sampleItemIds": [
+    "claim-6",
+    "claim-8",
+    "claim-12",
+    "claim-16",
+    "claim-19"
+  ],
+  "sampleEventText": "In the Jiaping era of Cao Fang, the deposed Prince of Qi of Wei, a horse rumor arose in Dongjun. Year from a standard Ming reign-year table (external conversion; inferred). The packet has no Ming reign table, so no reignId is used."
+}
