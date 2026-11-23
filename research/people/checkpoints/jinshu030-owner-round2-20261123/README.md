@@ -32,3 +32,9 @@ Diagnosis: **188** attestation rows carried Western `sourceDate` / `westernInter
 ## Validation
 
 `npm run people:validate -- --book jinshu --chapter 030` → PASS (208 people, 44 proposed / 0 applied).
+
+## Artifacts
+
+- `missing-editorial-witness-bindings.json` — 44 accepts lacking `sourceWitness.excerpt`
+- `outside-knowledge-chronology-diagnosis.json` — grouped chronology diagnosis/residual
+- `western-attestation-curation-log.json` — per-claim before/after for the 188 attestations
