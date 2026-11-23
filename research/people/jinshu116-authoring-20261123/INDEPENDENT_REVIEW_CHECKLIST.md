@@ -1,18 +1,18 @@
-# Jinshu 116 — owner chronology corrections vs #5446
+# Jinshu 116 — owner residuals vs #5449
 
-Owner: `bc-e9c3ed78` · Reviewer: `bc-96175e3c` @ `f1c3429e8d` (#5446) · Base `b23b174813`
+Owner: `bc-e9c3ed78` · Reviewer: `bc-96175e3c` @ `22b6186e89` (#5449) · Base `5520975d6a`
 
 ## Done
-- [x] Preserved 70 native editorial accepts and source English
-- [x] R1 wording leftovers confirmed cleared by reviewer
-- [x] claim-255: evidence repinned to include s0297 (Shengping 1 year sentence)
-- [x] Year-title residuals without chapter anchors converted to native undated attestations (Yang An; Fu Jian invasion/fall 383–385 packaging; Quan Yi defection)
-- [x] Zhongyuan `漢中元末` retained as unresolved research holds (p008/p009) with research-required hints
-- [x] Sun Ce claim-253 / empty hints-p054 left unchanged
-- [x] #5446 independent date report left intact (not copied onto staging)
-- [x] Chapter-scoped `people:validate` passed; dates verify remains stale for same independent reviewer
+- [x] Preserved 70 editorial accepts and source English
+- [x] claim-446 → evidence s0166 + undated; claim-502 → s0175 exhumation undated
+- [x] claim-540 → evidence s0243 + undated; claim-568 → s0233 太常 office undated
+- [x] Fu Jian residual Western packaging undated (claim-315/291/563); hints-p059 → AD 357 only
+- [x] hints-p039 cleared AD 386–393 (kept AD 352/353)
+- [x] Preserved Sun Ce + Zhongyuan unresolved holds
+- [x] Fresh date packet pinned; #5449 report left intact
+- [x] Scoped validation passed
 
 ## Still required (same independent reviewer)
 - [ ] Fresh date re-audit on new extraction fingerprint
-- [ ] Identity certification
+- [ ] Identity certification after audited chronology
 - [ ] Host publication
