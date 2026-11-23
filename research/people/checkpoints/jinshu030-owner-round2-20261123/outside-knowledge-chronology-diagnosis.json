@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu030-owner-outside-knowledge-western-attestation-repair",
+  "book": "jinshu",
+  "chapter": "030",
+  "stagingPr": 5479,
+  "reviewerEvidenceCommit": "59b25738210e49cee8aeeb0b782a659ef065ece1",
+  "diagnosis": {
+    "inheritedOutsideKnowledgeAttestations": 188,
+    "chineseContainedArabicOrGongyuanYears": 0,
+    "sourceDateTextsWereWesternRangesNotInChinese": 188,
+    "systematicFalsePrecision": true
+  },
+  "repairGroups": [
+    {
+      "id": "native-era-year-source-quoted",
+      "count": 3,
+      "rule": "When evidence Chinese contains exactly one era-year (e.g. 永元六年), keep sourceDate.text as that Chinese string with qualitative explanation; remove westernInterval / outside-knowledge conversion.",
+      "people": [
+        {
+          "id": "p054",
+          "sourceDate": "永元六年",
+          "evidence": [
+            "s0080"
+          ]
+        },
+        {
+          "id": "p057",
+          "sourceDate": "建安元年",
+          "evidence": [
+            "s0094"
+          ]
+        },
+        {
+          "id": "p162",
+          "sourceDate": "元康四年",
+          "evidence": [
+            "s0379"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "undated-source-attestation",
+      "count": 185,
+      "rule": "When Chinese lacks a unique bindable era-year, or a unit contains multiple era-years, convert to undatedSourceAttestation with cleaned event (≥20 chars). Do not invent Western endpoints."
+    },
+    {
+      "id": "clear-western-active-date-hints",
+      "count": 188,
+      "rule": "Clear AD/BC active-date hints on affected people; preserve polity including p044 Eastern Han. Native hints retained only for the three source-quoted era-year people."
+    },
+    {
+      "id": "strip-office-dateContext-western",
+      "count": 2,
+      "rule": "Remove residual westernYear / outside-knowledge dateContext on non-attestation claims after attestation repair."
+    }
+  ],
+  "preserved": {
+    "p044EasternHan": true,
+    "localPeopleCount": 208,
+    "proposedEditorialRepairsUnapplied": 44,
+    "resolutionRefsMissing": 0
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 030",
+    "passed": true,
+    "stats": "208 people, 509 mentions, 1341 claims, 44 proposed / 0 applied repairs"
+  },
+  "undatedAttestationsNow": 193,
+  "nativeQuotedAttestationsNow": 3,
+  "dateApproval": "NONE",
+  "editorialApply": "BLOCKED-missing-reviewer-sourceWitness",
+  "queueEdited": false,
+  "merged": false
+}
