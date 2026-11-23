@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu094-owner-round5-source-only-contract-blocker",
+  "book": "jinshu",
+  "chapter": "094",
+  "stagingPr": 5430,
+  "stagingPin": "6a105053b45aedce8955a8660d982fbbfdee774b",
+  "reviewPr": 5466,
+  "reviewHead": "3d55719c57fa8cd5dd22c56543b0d5de1aad4e9e",
+  "continuesReviewer": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+  "chineseWitness": {
+    "unit": "s0306",
+    "zh": "永康初，惠帝博求清節俊異之士，太守仇馥薦旭清貞潔素，學識通博，詔下州郡以禮發遣。",
+    "exactPhrase": "永康初",
+    "note": "Explicit source era phrase (early-era), not an event with unknown source dating."
+  },
+  "heldItems": [
+    "claim-133",
+    "claim-134"
+  ],
+  "persons": [
+    "p103",
+    "p104"
+  ],
+  "contract": {
+    "testFileOnMaster": "scripts/test-people-source-only-chronology.mjs",
+    "helperOnMaster": "sourceQuotedQualitativeAttestation + sourceDateOnlyEvidence in scripts/validate-people-extraction.mjs",
+    "requirements": [
+      "certainty === explicit",
+      "sourceDate.text nonempty and quoted in cited unit zh",
+      "qualitative length >= 20",
+      "event length >= 20",
+      "no westernYear/Interval/Bounds",
+      "no unresolved / undatedSourceAttestation",
+      "person temporal claims are exclusively this form (or undated attestations)"
+    ],
+    "presentOnStagingBranch": false
+  },
+  "before": {
+    "claims": {
+      "claim-133": [
+        "p103",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永康初"
+          },
+          "unresolved": true,
+          "unresolvedReason": "s0306 reads 永康初 (early Yongkang), not 永康元年; a forced year-1 / AD 300 conversion is not source-supported.",
+          "event": "Emperor Hui sought recluses in early Yongkang"
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0306"
+        ]
+      ],
+      "claim-134": [
+        "p104",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永康初"
+          },
+          "unresolved": true,
+          "unresolvedReason": "s0306 reads 永康初 (early Yongkang), not 永康元年; a forced year-1 / AD 300 conversion is not source-supported.",
+          "event": "Qiu Fu recommended Ren Xu in early Yongkang"
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0306"
+        ]
+      ]
+    },
+    "hints": {
+      "p103": [],
+      "p104": []
+    },
+    "packet": {
+      "sourceHash": "sha256:91df3146ad1ad42aed31ebb9655096205d2f570dca6ad4a5d59da45910bd8415",
+      "extractionHash": "sha256:bcb8653386e924b49f22e6dfdcae958d687de88f99cefd3e3e1c30f71bc811d7",
+      "items": 534
+    },
+    "unresolvedItemIds": [
+      "claim-133",
+      "claim-134"
+    ],
+    "chronologyGeometry": []
+  },
+  "attemptedChapterOnlyAfter": {
+    "claims": {
+      "claim-133": [
+        "p103",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永康初"
+          },
+          "qualitative": "Early Yongkang era activity, exactly as stated by the source phrase 永康初, with no Western year conversion asserted.",
+          "event": "Emperor Hui sought recluses in early Yongkang"
+        },
+        "explicit",
+        [
+          "s0306"
+        ]
+      ],
+      "claim-134": [
+        "p104",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "永康初"
+          },
+          "qualitative": "Early Yongkang era activity, exactly as stated by the source phrase 永康初, with no Western year conversion asserted.",
+          "event": "Qiu Fu recommended Ren Xu in early Yongkang"
+        },
+        "explicit",
+        [
+          "s0306"
+        ]
+      ]
+    },
+    "hints": {
+      "p103": [
+        "During the early Yongkang era (永康初)"
+      ],
+      "p104": [
+        "During the early Yongkang era (永康初)"
+      ]
+    },
+    "certaintyChangedTo": "explicit",
+    "unresolvedRemoved": true
+  },
+  "experimentalValidation": {
+    "stagingBranchValidator": {
+      "ok": false,
+      "errors": [
+        "jinshu:094:p103 has no Western active-date hint required for a non-legendary prompt-v7 person",
+        "jinshu:094:p103 has no Western-year attestation required for a non-legendary prompt-v7 person",
+        "jinshu:094:p104 has no Western active-date hint required for a non-legendary prompt-v7 person",
+        "jinshu:094:p104 has no Western-year attestation required for a non-legendary prompt-v7 person"
+      ]
+    },
+    "masterValidatorProbe": {
+      "ok": true,
+      "note": "Temporary checkout of origin/master validate-people-extraction.mjs accepted the attempted shape; branch file restored immediately after probe. No master merge.",
+      "unresolvedAfter": 0,
+      "chronologyGeometry": []
+    }
+  },
+  "realBlocker": "The native source-only attestation contract exists on master (test-people-source-only-chronology.mjs + sourceQuotedQualitativeAttestation), and the two 永康初 claims meet its data requirements. This staging branch validator lacks sourceDateOnlyEvidence, so a chapter-only extraction patch that removes unresolved fails prompt-v7 Western gates. Expressing the scope requires bringing that validator helper (and test) onto the chapter path before rewriting claim-133/134; chapter-only extraction change alone is invalid here.",
+  "extractionMutation": "NONE — claims left as research-hold unresolved sourceDate until the contract is available on this branch",
+  "preserved": {
+    "deathsUntouched": [
+      "claim-400",
+      "claim-401"
+    ],
+    "englishDecisionsUntouched": true,
+    "otherItemsUntouched": true
+  },
+  "dateApproval": "NONE",
+  "publication": "staging-documentation-only",
+  "masterMutation": "NONE"
+}
