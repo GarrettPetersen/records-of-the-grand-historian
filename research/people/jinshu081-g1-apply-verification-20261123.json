@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-g1-g2-apply-verification",
+  "reviewerAgentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
+  "verifiedAt": "2026-11-23T23:40:00.000Z",
+  "stagingHead": "ca293f391617cdaf6b7fcd4a54fb3019f7aee493",
+  "diagnosisCommit": "e61ea4f09f930a815a2c533ce03a7a3c5deff319",
+  "ownerReceipt": "research/people/jinshu081-owner-g1-chronology-apply-receipt-20261123.json",
+  "verdict": "pattern-match-with-one-schema-deviation",
+  "countsVerifiedOnStagingExtraction": {
+    "attestationUndatedSourceAttestation": 358,
+    "attestationStillWestern": 39,
+    "p077p079s0091Undated": true
+  },
+  "alignmentWithDiagnosis": {
+    "G1": "358 no-calendar Western attestations converted to undatedSourceAttestation — matches inventory.",
+    "G2": "claim-230, claim-232, claim-234 on s0091 included in the 358; no Western left on those rows.",
+    "G3": "39 claim IDs listed unchanged; spot-check claim-4, claim-44, claim-52 retain westernInterval.",
+    "G4": "397 outside-knowledge active-date hints unchanged — expected hold, not repaired.",
+    "G5": "46 death claims event-only — expected open queue."
+  },
+  "schemaDeviation": {
+    "diagnosisRule": "Keep sourceDate.text as Chinese anchor on undated attestations.",
+    "ownerApply": "sourceDate object removed where undatedSourceAttestation is true (schema constraint per owner receipt).",
+    "reviewerNote": "Acceptable if native validate passes; Chinese anchors remain in cited evidence units and mention geometry."
+  },
+  "englishBlockingChronology": true,
+  "extractionHashAfterG1": "sha256:54182e6d3276c99b026ed56486a9d873ebe541989db16f614f0cd4543ab87c5f",
+  "priorDatePacketStale": "research/people/jinshu081-date-packet-20261123.json pins pre-G1 extractionHash f7d6f79…"
+}
