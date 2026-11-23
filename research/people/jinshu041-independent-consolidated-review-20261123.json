@@ -50,6 +50,19 @@
   },
   "overallVerdict": "incomplete-holds",
   "interpretation": "Independent consolidation retains existing owner artifacts and confirms extraction/editorial gates; does not approve chronology, identity certification, or publication.",
+  "freshDateAudit": {
+    "path": "research/people/jinshu041-independent-review-20261123/date-audit-report.json",
+    "packetPath": "research/people/jinshu041-independent-review-20261123/date-packet.json",
+    "residualsPath": "research/people/jinshu041-independent-review-20261123/date-audit-residuals.json",
+    "status": "needs-revision",
+    "items": 496,
+    "people": 127,
+    "units": 375,
+    "incorrectItems": 99,
+    "findingGroups": 9,
+    "supersedesStaleProductionAudit": true,
+    "notRecordedToProduction": true
+  },
   "decisions": [
     {
       "gate": "source-english-editorial",
@@ -64,19 +77,12 @@
     },
     {
       "gate": "chronology",
-      "verdict": "hold",
-      "kind": "procedural-research-block",
-      "group": "whole-chapter-temporal-pending-verification",
+      "verdict": "needs-revision",
+      "kind": "fresh-native-audit-on-current-packet",
+      "artifact": "research/people/jinshu041-independent-review-20261123/date-audit-report.json",
       "itemCount": 496,
-      "reason": "Prior native date audit is a single finding that research-blocks every claim, active-date hint, and person interval without item-level approval. A blanket research-block is not chronology approval. Current source/extraction SHA-256 values differ from the audit's pinned hashes; any future audit transition must re-fingerprint before approval."
-    },
-    {
-      "gate": "chronology",
-      "verdict": "hold",
-      "kind": "source-supported-negative",
-      "group": "genuine-source-contradictions",
-      "itemCount": 0,
-      "reason": "This independent pass found no concrete source contradictions among reviewed witnesses (editorial citations, sampled Li Xi s0067 vs s0083 sequence, extraction validator pass). Unresolved regnal conversion, event ownership, and Western interval endpoints remain ordinary research holds, not contradiction blocks."
+      "incorrectItems": 99,
+      "reason": "First current independent audit with complete item/person coverage on fresh chapter-scoped packet (375 units read). Status needs-revision: 55 false-precision vague-regnal, 44 evidence attribution mismatches, plus grouped research holds. Supersedes stale production blanket hold; not written to data/people/date-audits."
     },
     {
       "gate": "identity",
