@@ -5,15 +5,15 @@
   "chapter": "116",
   "authorWorker": "cursor-github-nov24-2",
   "authorAgentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
-  "note": "Author cannot approve chronology. Existing date-audits/jinshu/116.json is preserved as prior evidence but verify reports status=stale after source/extraction edits.",
+  "note": "Author cannot approve chronology. Existing date-audits/jinshu/116.json is preserved as prior evidence but verify reports status=stale after coverage follow-up source/extraction edits.",
   "priorDateAudit": {
     "path": "data/people/date-audits/jinshu/116.json",
     "status": "research-blocked",
     "verifyStatus": "stale",
     "priorSourceHash": "sha256:6798100d53187fb3a9c6dcc564ef67ff44f4f64cebdb3bd4c31798a5952c3d59",
     "priorExtractionHash": "sha256:190495b069ebbacf1336f758d0e63598631b76653a8baa7b9c344a4d5196791c",
-    "currentSourceSha256": "sha256:e1cb735fe26c0bc10b52a3d396ec27e3869f516087de77c6e017e9740f0a7af7",
-    "currentExtractionSha256": "sha256:d98d2a8360cc9a5cbda313b22da7367dc8460575d306d54d294ec6675598b0c9",
+    "currentSourceSha256": "sha256:496e6159bbad0e62ea78b4028f70a855009e14c44ec7582b9447bfeadfca3a37",
+    "currentExtractionSha256": "sha256:6863c326811df8b0ff0aa3ddf40bfdf6f13e743bf77e15af428e1c1758e67877",
     "preservedResearchBlockedItems": [
       "claim-227",
       "claim-283",
@@ -431,9 +431,51 @@
     }
   ],
   "requiredIndependentActions": [
-    "Archive current stale date audit into date-audit-history when replacing.",
-    "Build a fresh people:dates:packet against current source+extraction.",
-    "Independent reviewer (not cursor-github-nov24-2 / bc-e9c3ed78) must produce a new native date-audits report.",
-    "Do not fabricate Western endpoints for simile-only or dynasty-window-only cases."
-  ]
+    "Fresh people:dates:packet after coverage follow-up fingerprint change",
+    "Independent native date-audits",
+    "Assess chronology-holds-proposal without inventing years",
+    "Preserve research-blocked items unless independently resolved"
+  ],
+  "coverageFollowUp": {
+    "agentId": "bc-64091dcd-7d73-5466-abfd-7804d6b27966",
+    "artifact": "chronology-holds-proposal.json",
+    "summary": {
+      "itemCount": 8,
+      "treatments": {
+        "convert-to-undated-native": 2,
+        "propose-western-year-after-repin": 1,
+        "convert-to-bounds-or-keep-hold": 2,
+        "drop-obsolete-hold-on-re-audit": 1,
+        "convert-to-retrospective-undated": 1,
+        "partial-keep-hold-with-selective-undating": 1
+      },
+      "westernPointYearsProposed": [
+        "AD 357 only after repinning claim-283 evidence/ownership to s0297 / Xiang death"
+      ],
+      "doNotProposeAsPointYearsFromThisChapterAlone": [
+        353,
+        373,
+        383,
+        385
+      ]
+    },
+    "treatments": {
+      "convert-to-undated-native": 2,
+      "propose-western-year-after-repin": 1,
+      "convert-to-bounds-or-keep-hold": 2,
+      "drop-obsolete-hold-on-re-audit": 1,
+      "convert-to-retrospective-undated": 1,
+      "partial-keep-hold-with-selective-undating": 1
+    },
+    "westernPointYearsProposed": [
+      "AD 357 only after repinning claim-283 evidence/ownership to s0297 / Xiang death"
+    ],
+    "doNotProposeAsPointYearsFromThisChapterAlone": [
+      353,
+      373,
+      383,
+      385
+    ],
+    "note": "Coverage agent C proposal packaged for independent date reviewer; no invented endpoints or self-approval."
+  }
 }
