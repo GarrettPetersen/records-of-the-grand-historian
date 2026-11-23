@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Attach exact hosted certificate to draft 5447 and merge approved head into staging.",
+  "nextAction": "Accumulate certified chapters on staging and prepare a master-based batch at the threshold or campaign close. 083/094 preparations running; 115 metadata-only rebind returned.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T23:29:41.430Z",
+  "lastCheckedAt": "2026-11-23T23:30:45.750Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -848,10 +848,10 @@
     }
   },
   "releaseAudit": {
-    "stagingHasCampaignApprovals": false,
-    "reason": "Campaign staging PRs are drafts. Existing staging lacks five current master identity certificates for Jinshu 117, 119, 120, 129 and 130. A staging release must preserve them.",
+    "stagingHasCampaignApprovals": true,
+    "reason": "031 is approved on staging. Build a master-based release batch to preserve five current published Jinshu chapters absent or stale in the staging baseline.",
     "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-    "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
+    "staging": "42ed000746cdadf6ec57d79d9710c1c7f14292c8",
     "stagingAheadBy": 1596,
     "stagingBehindBy": 43,
     "verifiedAt": "2026-11-23T17:15:38.145Z",
@@ -868,7 +868,12 @@
       "data/people/editorial-decisions/jinshu/<chapter>.json",
       "data/people/extractions/jinshu/<chapter>.json"
     ],
-    "releasePreparation": "Once chapters are approved and merged to staging, assemble the production batch from current master with only the approved chapter deltas and required dependencies. Verify retained releases with the full master gate. Keep shared staging and its history."
+    "releasePreparation": "Once chapters are approved and merged to staging, assemble the production batch from current master with only the approved chapter deltas and required dependencies. Verify retained releases with the full master gate. Keep shared staging and its history.",
+    "campaignApprovedOnStaging": [
+      "jinshu/031"
+    ],
+    "campaignMergedMaster": [],
+    "campaignVerifiedLive": []
   },
   "reviewRuns": {
     "jinshu/047": {
@@ -2049,10 +2054,15 @@
         "identityBlob": "aa0da3b408e41de2f5d9d3449d63c88cedbbdc11",
         "dateBlob": "8f0e8b1f8b811c66a1c60c285be823f167ed064a",
         "staging": {
-          "status": "merge_pending",
+          "status": "merged",
           "stagingBefore": "41613a7f88427a475c37ffc02885097239a0b43e",
           "head": "cf61a8f46c0df04660bcdfe1db60f64df3b02186",
-          "policy": "Only the certified draft head may merge into shared staging."
+          "policy": "Only the certified draft head may merge into shared staging.",
+          "mergeCommit": "42ed000746cdadf6ec57d79d9710c1c7f14292c8",
+          "mergedAt": "2026-11-23T23:29:52Z",
+          "verifiedStagedIdentityBlob": "aa0da3b408e41de2f5d9d3449d63c88cedbbdc11",
+          "verifiedStagedDateBlob": "8f0e8b1f8b811c66a1c60c285be823f167ed064a",
+          "requiresMasterRelease": true
         }
       }
     },
@@ -2179,7 +2189,7 @@
       "githubRun": 45287545951,
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45287545951",
       "identityPreparation": {
-        "status": "dispatching",
+        "status": "in_progress",
         "workflowCommit": "cbbbf7b09deb77becc853b1b868ff895f0ac6ba6",
         "workflowBlob": "517202cc93e78f2b12d2b44bcf82e7161086ade3",
         "chapters": [
@@ -2196,8 +2206,10 @@
             "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45289188834"
           },
           "094": {
-            "status": "dispatch_pending",
-            "requestedAt": "2026-11-23T23:29:41.429Z"
+            "status": "in_progress",
+            "requestedAt": "2026-11-23T23:29:41.429Z",
+            "runId": 45289301214,
+            "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45289301214"
           }
         }
       },
