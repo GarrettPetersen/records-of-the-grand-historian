@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-date-spotcheck-not-an-audit",
+  "warning": "Not a native date-audit approval. Does not replace people:dates:record for jinshu/023.",
+  "book": "jinshu",
+  "chapter": "023",
+  "candidateRevision": "2ac477356f2c45918ec874f019b21baa2bef9bd9",
+  "reviewer": {
+    "kind": "cursor-agent",
+    "agentId": "bc-873c06e1-3547-4e7e-8ca5-8a1d171840d6",
+    "completedAt": "2026-11-23T18:00:00.000Z"
+  },
+  "inputs": {
+    "sourceHash": "sha256:3eef51572d178debde082791b9a81cd436d3234c91ef53a5f2abd2b697a52acd",
+    "extractionHash": "sha256:65683b5a91258386d62fd48104f9358d8d47dcf4e1bdc29b773207c5ae410eea",
+    "datePacketChecks": 437,
+    "westernYearClaimOccurrences": 17
+  },
+  "preconditionStatus": {
+    "peopleValidate": "PASS",
+    "priorDateAuditOnFile": false,
+    "authorChronologyFile": "research/people/jinshu023-chronology-findings-20261123-incomplete.json (author hints only)"
+  },
+  "spotChecks": [
+    {
+      "unit": "s0017",
+      "sourceDate": "永和十一年",
+      "person": "jinshu:023:p008",
+      "storedWestern": "AD 355",
+      "verdict": "source-anchored",
+      "witness": "永和十一年，謝尚鎮壽陽，於是采拾樂人，以備太樂，並制石磬，雅樂始頗具。",
+      "note": "Eastern Jin Yonghe 11; conversion consistent. Full auditor must confirm via native packet item."
+    },
+    {
+      "unit": "s0131",
+      "sourceDate": "太和改元",
+      "person": "jinshu:023:p039",
+      "storedWestern": "AD 227",
+      "verdict": "source-anchored",
+      "witness": "Treatise hymn context for Wei Emperor Ming’s Taihe inaugural year.",
+      "note": "Hymn attestation, not imported biography; western year follows stated reign change."
+    },
+    {
+      "unit": "s0692",
+      "sourceDate": "成帝咸康七年",
+      "persons": ["jinshu:023:p163", "jinshu:023:p164", "jinshu:023:p165", "jinshu:023:p166"],
+      "storedWestern": "AD 341",
+      "verdict": "source-anchored",
+      "witness": "成帝咸康七年，尚書蔡謨奏：「八年正會儀注，惟作鼓吹鐘鼓，其餘伎樂盡不作。」",
+      "note": "Translation repair accepts Xiankang 7; western mapping left for independent date audit."
+    }
+  ],
+  "sourceOnlyOrUndatedRepresentations": [
+    {
+      "group": "hymn-heroes-without-names",
+      "units": ["s0032", "s0060", "s0144", "s0145", "s0215", "s0293", "s0411", "s0464", "s0484", "s0489", "s0531", "s0566", "s0595", "s0688", "s0715"],
+      "recommendation": "Keep author unresolved-reference list; do not infer rulers or fathers from English gloss."
+    },
+    {
+      "group": "legendary-antiquity-mentions",
+      "recommendation": "Retain qualitative attestation (e.g. Bo Yi, Tang-Yu court) without life-span imports unless unit states a reign or year."
+    }
+  ],
+  "corrections": [],
+  "blockers": [
+    "Full independent date audit (437 packet items) still required before chronology certification.",
+    "No recommendation to remove existing westernYear fields without item-by-item auditor review."
+  ]
+}
