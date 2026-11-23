@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-chapter-identity-review-evidence",
+  "status": "held-without-canonical-certification",
+  "warning": "PEOPLE_LOOKUP_TOKEN unavailable in Cursor Cloud; no canonical membership certification against pinned registry generation.",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "083"
+  },
+  "inputs": {
+    "source": "sha256:e319248128286fa0a30defb276a8a11d20d93baf9499066ea3e806a13a4fd5c4",
+    "extraction": "sha256:8e43433f2c4a39ddcbcdbae2062556c50f96818182063505a4ac38a78a8b28f2",
+    "ownerCommit": "d22185e8c112ae1f497d0dd3c95e8dfb6c47cfc1",
+    "requiredRegistry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer 2.5 (Jinshu 083 independent reviewer)",
+    "model": "composer-2.5-fast",
+    "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+    "runId": null,
+    "completedAt": "2026-11-23T20:55:49.561Z",
+    "independentOfOwner": true,
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-11-23T20:55:49.561Z",
+  "cases": [
+    {
+      "localIds": [
+        "jinshu:083:p036",
+        "jinshu:083:p037"
+      ],
+      "verdict": "hold-same-person-locally",
+      "reason": "Both records surface 袁瑰 / Yuan Gui from heading and body units; merge is likely but requires bounded lookup dossiers before canonical certification."
+    },
+    {
+      "localIds": [
+        "jinshu:083:p037",
+        "jinshu:083:p070"
+      ],
+      "verdict": "hold-same-person-locally",
+      "reason": "Mononym 瑰 in Yuan You section is contextually Yuan Gui; keep separate local people until lookup confirms posting graph."
+    },
+    {
+      "localIds": [
+        "jinshu:083:p168"
+      ],
+      "verdict": "hold-not-person",
+      "reason": "p168 is courtesy 山甫 split from biography subject; appraisal s0376 names 山甫 explicitly and must not remain a false Yuan Mei person after r0035.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "jinshu/083 s0376",
+        "excerpt": "山甫獻誠讜而振頹風"
+      }
+    },
+    {
+      "localIds": [
+        "jinshu:083:p001"
+      ],
+      "verdict": "hold-lookup-required",
+      "reason": "Primary subject 顧和; historical, but canonical membership uncertified without lookup token."
+    }
+  ],
+  "residualClaimDefects": [
+    "jinshu:083:c0118 and c0120 retain Mei English until claim revisions are applied.",
+    "Kinship labels c0134/c0136/c0143 still read Grandfather/Father/Mother of Yuan Mei.",
+    "jinshu:083:c0585 on p168 still names Yuan Mei."
+  ],
+  "lookup": {
+    "attempted": false,
+    "reason": "Missing PEOPLE_LOOKUP_TOKEN / client-token on cloud VM"
+  }
+}
