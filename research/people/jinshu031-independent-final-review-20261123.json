@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-chapter-final-review",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "031"
+  },
+  "reviewInput": {
+    "pullRequest": 5447,
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu031",
+    "revision": "004540543a5a78803538358024ec36156746533b",
+    "verifiedExactHead": true,
+    "priorAuthorPullRequest": 5406
+  },
+  "reviewer": {
+    "name": "Independent Jinshu 031 final reviewer",
+    "model": "gpt-5.6-sol-medium",
+    "agentId": "bc-c338e2c8-9d0c-4d07-a751-be3d40824e00",
+    "independentOfExtractorAndRepairAuthor": true
+  },
+  "editorial": {
+    "priorAcceptedDecisionsPreserved": 52,
+    "newProposalsReviewed": 6,
+    "decisions": {
+      "accepted": [
+        "jinshu:031:r0055",
+        "jinshu:031:r0056",
+        "jinshu:031:r0057",
+        "jinshu:031:r0058"
+      ],
+      "revised": [
+        "jinshu:031:r0053",
+        "jinshu:031:r0054"
+      ],
+      "rejected": []
+    },
+    "revisionReason": "Use lower-case descriptive wording for the collective 十亂 allusion so the translation does not assert a personal-name occurrence.",
+    "nativeResult": "Six independently reviewed repairs applied; the extraction now retains 58 applied repairs and 58 editorial decisions with no proposed repairs."
+  },
+  "chronology": {
+    "packet": {
+      "sourceHash": "sha256:5931817a64f67187859f248b5745941f3ac96af346c8cb948971b681314a26f2",
+      "extractionHash": "sha256:54c0b1b99881ed5e787916be056b982e5bc2cc364ebae9e816077b7ecfafb95b",
+      "reviewedUnits": 680,
+      "itemChecks": 804,
+      "personChecks": 269
+    },
+    "authorFlaggedWesternConversions": {
+      "total": 383,
+      "groups": [
+        {
+          "kind": "western-only-attestation-labels",
+          "count": 203,
+          "result": "202 cited source occurrences are genuinely undated and require undatedSourceAttestation; claim-846 keeps AD 276 but must restore 咸寧二年 as sourceDate."
+        },
+        {
+          "kind": "relative-or-bounded-attestations",
+          "count": 29,
+          "result": "Shared death, birth, posthumous-honor and sequence bounds are retained where the source supports them; claim-211, claim-212, claim-213 and claim-840 have retrospective event ownership instead of living attestation."
+        },
+        {
+          "kind": "dated-non-attestation-events",
+          "count": 151,
+          "result": "140 use supported shared era/calendar evidence; ten 永嘉初, 永康初 or 永興初 items overstate 初 as a first-year point; claim-902 contradicts its AD 275 value by labelling the event 泰始十年."
+        }
+      ]
+    },
+    "nativeUndatedAccounting": {
+      "alreadyCorrectUndatedSourceAttestations": 42,
+      "westernDatesToConvertToUndated": 202,
+      "literaryAllusionsToConvertFromResearchBlockToUndated": 2,
+      "genuinelyUndatedAfterFocusedRepair": 246
+    },
+    "findings": [
+      "Remove 202 imported lifetime, reign or office spans from chapter occurrences that do not date their people.",
+      "Restore the Chinese regnal wording on claim-846 while retaining its supported conventional AD 276 label.",
+      "Replace first-year point dates for source wording ending in 初 with supported non-point representation.",
+      "Represent Boyu and Laozi as undated literary allusions rather than unresolved research blockers.",
+      "Correct claim-902 to the relative year after the Taishi 10 death, consistent with its AD 275 value.",
+      "Reclassify three later edict references and one duplicate burial attestation so they do not assert living activity.",
+      "Regenerate only the affected active-date hints and person checks after these repairs."
+    ],
+    "nativeReport": "data/people/date-audits/jinshu/031.json",
+    "status": "needs-revision"
+  },
+  "identity": {
+    "lookupRegistry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "registryRevision": "3582f84383dcb6f131f9fedd96809382b278789b",
+    "limits": {
+      "queryKeysPerPerson": 2,
+      "resultsPerKey": 8,
+      "generatedPairs": 0
+    },
+    "checkpointCounts": {
+      "reviewed": 22,
+      "retainedMembershipFound": 11,
+      "membershipNotRetrieved": 11,
+      "truncatedSearches": 14
+    },
+    "retainedMemberships": [
+      "jinshu:031:p002",
+      "jinshu:031:p003",
+      "jinshu:031:p004",
+      "jinshu:031:p007",
+      "jinshu:031:p008",
+      "jinshu:031:p010",
+      "jinshu:031:p011",
+      "jinshu:031:p015",
+      "jinshu:031:p016",
+      "jinshu:031:p019",
+      "jinshu:031:p020"
+    ],
+    "notRetrieved": [
+      "jinshu:031:p001",
+      "jinshu:031:p005",
+      "jinshu:031:p006",
+      "jinshu:031:p009",
+      "jinshu:031:p012",
+      "jinshu:031:p013",
+      "jinshu:031:p014",
+      "jinshu:031:p017",
+      "jinshu:031:p018",
+      "jinshu:031:p021",
+      "jinshu:031:p022"
+    ],
+    "result": "No native identity approval recorded. The chronology prerequisite failed, and bounded search produced explicit zero-result or truncated candidate sets that cannot prove membership or separation. Preserve this checkpoint and prepare the native dossier plan after focused chronology repair."
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 031",
+    "result": "PASS",
+    "detail": "269 local people, 1341 mentions, 2180 claims, 0 proposed repairs, 58 applied repairs, 58 editorial decisions, 2 claim retractions and 6 claim revisions.",
+    "dateRecorder": "PASS: needs-revision report accepted with complete unit, item and person coverage.",
+    "approval": false,
+    "approvalBlockers": [
+      "focused-owner-chronology-repairs",
+      "fresh-independent-date-approval",
+      "native-complete-identity-dossier-review-after-date-approval"
+    ]
+  }
+}
