@@ -13,13 +13,13 @@
   "validation": {
     "command": "npm run people:validate -- --book jinshu --chapter 023",
     "result": "PASS",
-    "detail": "167 people, 576 mentions, 1050 claims, 19 proposed repairs"
+    "detail": "167 people, 576 mentions, 1050 claims, 20 proposed repairs"
   },
   "coverage": {
     "units": 716,
     "priorProposedRepairsRetained": 19,
-    "newRepairsAddedThisPass": 0,
-    "note": "Author re-checked Chinese against both English fields. All 19 existing proposed repairs still match current source befores. No additional definite mistranslations found beyond that set; long musical catalogue compressions retained as non-blocking literary condensation with titles still represented.",
+    "newRepairsAddedThisPass": 1,
+    "note": "Author re-checked Chinese against both English fields. Retained 19 existing proposed repairs (befores still match). Added 1 literal repair for s0692 咸康/Xiankang (literal had the same Xianhe error already flagged for idiomatic).",
     "unresolvedReferencesRetained": [
       {
         "unit": "s0032",
@@ -97,6 +97,13 @@
         "unit": "s0670",
         "description": "The subject of 制此歌 (who composed the Round Fan song) is not explicit; recorded as uncertain for the maid."
       }
+    ],
+    "newProposedRepairs": [
+      {
+        "unit": "s0692",
+        "field": "literal",
+        "reason": "咸康 is Xiankang, not Xianhe; the sealed literal also drops 尚書 and misrenders the reign name. Align with the Chinese (and the already proposed idiomatic repair)."
+      }
     ]
   },
   "chronology": {
@@ -112,7 +119,7 @@
   },
   "editorial": {
     "priorReviews": 0,
-    "proposedRepairsAwaitingReview": 19,
+    "proposedRepairsAwaitingReview": 20,
     "selfApproval": false
   },
   "nativeCertification": {
