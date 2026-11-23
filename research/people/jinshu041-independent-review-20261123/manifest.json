@@ -4,41 +4,49 @@
   "book": "jinshu",
   "chapter": "041",
   "stagingDraftPr": 5476,
-  "stagingDraftSha": "0d933e064f776c8493a00b0c305363d1946557a5",
-  "priorConsolidatedReviewSha": "d5bb6f7025e5c6b0a8a3387a9091be0183b3f43b",
+  "stagingDraftSha": "1d77d017cd0b359decfac8bd79ad2950a22a23e7",
+  "priorEvidenceCommits": [
+    "00e7e11b1705a1e81e9f3748e8f53295ed284a15",
+    "d5bb6f7025e5c6b0a8a3387a9091be0183b3f43b"
+  ],
   "reviewerAgentId": "bc-64f55949-b3a6-4213-b7a2-6e6256473515",
-  "generatedAt": "2026-11-23T23:16:00.000Z",
+  "generatedAt": "2026-11-23T23:40:00.000Z",
   "artifacts": {
-    "date-packet.json": {
-      "path": "research/people/jinshu041-independent-review-20261123/date-packet.json",
-      "sha256": "sha256:4603006a5a00251ac5f12b9cf2ec07ef444cd0b1b0c92aa36aab1c95d95d9447",
-      "sourceHash": "sha256:6a3c9baa458a6a4b6d41068407b18acaf95f2cde19dff10078aac44f0ac89545",
-      "extractionHash": "sha256:c635b037f8577259df67beff67d1963eb4bbfa3dcadffe04dad61f5bd9214457",
+    "date-packet-post-delta.json": {
+      "extractionSha256": "sha256:908879f66eb990b8230b584402608fe8ff0ec40ede6741775c747dc2d9b71348",
       "items": 496,
       "people": 127,
       "units": 375
     },
+    "date-audit-report-post-delta.json": {
+      "status": "research-blocked",
+      "incorrectRemaining": 0,
+      "validateDateAuditReport": "PASS"
+    },
+    "date-incorrect-delta-receipt.json": {
+      "path": "research/people/jinshu041-authoring-20261123/date-incorrect-delta-receipt.json"
+    },
+    "date-incorrect-delta-verification.json": {
+      "allDeltaVerified": true,
+      "repairedCount": 99
+    },
     "date-audit-report.json": {
-      "path": "research/people/jinshu041-independent-review-20261123/date-audit-report.json",
-      "sha256": "sha256:27f855ad0579be1b7ce7c14d4737098461acc79dc9ec40fd81f6dee64abc83fb",
-      "status": "needs-revision",
-      "validateDateAuditReport": "PASS against co-located packet"
-    },
-    "date-audit-residuals.json": {
-      "path": "research/people/jinshu041-independent-review-20261123/date-audit-residuals.json"
-    },
-    "build-date-audit.mjs": {
-      "path": "research/people/jinshu041-independent-review-20261123/build-date-audit.mjs",
-      "note": "Regenerates report; independent reviewer harness only"
+      "note": "Prior pass (00e7e11b); 397 itemChecks preserved exactly in post-delta merge"
     }
   },
+  "editorial": {
+    "decisionCount": 23,
+    "sha256": "sha256:d10fd82f8cfefe5168d60f44df6b911eaa7044fdcb5ab9ce3f21ccb321a7852e",
+    "witnessed": true
+  },
   "canonicalDependencies": [
-    "Production data/people/date-audits/jinshu/041.json remains the stale blanket hold until host runs recordDateAudit on this report against live packet hashes",
-    "Chapter identity-reviews packet still absent; identity gate unchanged",
-    "23 editorial decisions retained; no source or extraction edits in this evidence push"
+    "Post-delta extraction at 1d77d017 is staging candidate only until host adopts via normal workflow",
+    "production data/people/date-audits/jinshu/041.json still stale until explicit recordDateAudit",
+    "identity-reviews packet still absent"
   ],
   "explicitNonActions": [
-    "No recordDateAudit / no production date-audit path write",
-    "No claim queue, merge, or full registry build"
+    "No recordDateAudit",
+    "No data/people/extractions write on reviewer branch",
+    "No queue merges or canonical publication"
   ]
 }
