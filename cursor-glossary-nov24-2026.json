@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Once exact registries are available, run hosted native retained proof replay for 031 and native current packet for 094. Verify all original reports and leave any remaining case binding to its original reviewer.",
+  "nextAction": "Correct existing Jinshu 094 canonical ID dependencies before a new build; preserve running 031 and other cloud work.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T23:02:27.727Z",
+  "lastCheckedAt": "2026-11-23T23:04:22.336Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -369,7 +369,7 @@
       "reviewPR": 5430,
       "revision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
       "verifiedScopedFiles": 5,
-      "status": "current-native-date-proof-canonical-registry-next",
+      "status": "current-chronology-canonical-registry-blocked-by-retired-referenced-ids",
       "scopedValidation": {
         "githubRun": 45230672687,
         "candidateRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
@@ -445,7 +445,7 @@
         "revision": "45d2797a408e7a891881d8497cd06a26507dcd72",
         "candidate": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31"
       },
-      "identityBlocker": "Canonical identity requires matching native registry and case review.",
+      "identityBlocker": "Restore or supersede two source-supported local IDs with independent proof before rebuilding. Do not drop accepted canonical membership.",
       "provenanceRecovery": {
         "status": "verified-awaiting-owner-metadata-only-patch",
         "worker": "grokbot-28",
@@ -464,7 +464,26 @@
         "sameDateAuditItems": true,
         "sourceUnchanged": true,
         "verified12ChunkAuthors": "grokbot-28"
-      }
+      },
+      "missingAcceptedIds": [
+        {
+          "id": "p087",
+          "name": "Sima Yan 司馬炎",
+          "currentSameName": "p046",
+          "acceptedDocuments": [
+            "jinshu053-current-renew-merge-012-medium-d-20261025.json",
+            "jinshu053-wu-source-reviewed-20261029.json"
+          ]
+        },
+        {
+          "id": "p081",
+          "name": "Zhang Hua 張華",
+          "currentSameName": "p062",
+          "acceptedDocuments": [
+            "jinshu053-current-renew-merge-014-large-f-20261025.json"
+          ]
+        }
+      ]
     },
     "jinshu/123": {
       "originalPR": 5419,
@@ -1209,18 +1228,17 @@
       "returnedRevision": "d04279d2736afc07d9069dd44b5656de92b68af1"
     },
     "jinshu/094": {
-      "status": "finished",
-      "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
-      "previousRunId": "run-e1caf57c-a21d-4028-a269-321f07ee5267",
+      "status": "dispatch_pending",
       "chapterPR": 5430,
-      "revision": "042eb3e75139ba9d5676b2af903f0ed9e333a798",
-      "reservedAt": "2026-11-23T22:21:45.483Z",
-      "idempotencyKey": "nov24-cursor-jinshu-094-pin-042eb3e75-2",
-      "runId": "run-a0135e72-5823-4104-aee5-48db37fbacf5",
-      "sentAt": "2026-11-23T22:21:50.979Z",
-      "finishedObservedAt": "2026-11-23T22:24:14.780Z",
-      "resultRevision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
-      "verifiedAgentIdOnly": true
+      "revision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
+      "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+      "previousRunId": "run-148980ba-e76e-49a9-b18e-266d09bdb79f",
+      "idempotencyKey": "cursor-nov24-jinshu094-referenced-ids-2daaba8f",
+      "reservedAt": "2026-11-23T23:04:22.336Z",
+      "lastSendAttempt": {
+        "status": "not-started",
+        "at": "2026-11-23T23:04:22.336Z"
+      }
     },
     "jinshu/067": {
       "candidateRevision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
@@ -1737,7 +1755,7 @@
       "githubRun": 45284160964,
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45284160964",
       "identityPreparation": {
-        "status": "waiting-for-exact-registry-artifact",
+        "status": "held-registry-source-referential-integrity",
         "workflowRevision": "9bb87db1873a20522cfbb56c178bf6fb698abb8a",
         "workflow": ".github/workflows/master-build-gate.yml",
         "workflowRef": "codex/cursor-glossary-nov24-2026",
@@ -1745,6 +1763,13 @@
         "sourceRevision": "5c6443441bb9d3330367833e01eae38ebb7421e9",
         "chapter": "094",
         "preparedAt": "2026-11-23T23:02:27.727Z"
+      },
+      "blocker": "Accepted resolution refers to missing local person jinshu:094:p087",
+      "stagingRepair": {
+        "otherMissingAcceptedId": "p081",
+        "allPriorLocalIdsMissing": 34,
+        "productionResolutionIdsExamined": 8,
+        "existingIdsWithChangedPreferredNames": 0
       }
     },
     "finalChapter031": {
@@ -2260,6 +2285,20 @@
         "finishedObservedAt": "2026-11-23T22:21:45.483Z",
         "resultRevision": "042eb3e75139ba9d5676b2af903f0ed9e333a798",
         "provenanceDefect": "12 unverified run IDs added despite scoped instruction"
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+        "previousRunId": "run-e1caf57c-a21d-4028-a269-321f07ee5267",
+        "chapterPR": 5430,
+        "revision": "042eb3e75139ba9d5676b2af903f0ed9e333a798",
+        "reservedAt": "2026-11-23T22:21:45.483Z",
+        "idempotencyKey": "nov24-cursor-jinshu-094-pin-042eb3e75-2",
+        "runId": "run-a0135e72-5823-4104-aee5-48db37fbacf5",
+        "sentAt": "2026-11-23T22:21:50.979Z",
+        "finishedObservedAt": "2026-11-23T22:24:14.780Z",
+        "resultRevision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
+        "verifiedAgentIdOnly": true
       }
     ],
     "jinshu/123": [
@@ -3027,6 +3066,13 @@
       "Record current native canonical certificate and validator acceptance for Jinshu 031",
       "Make that candidate mergeable, stage it, run required master CI and verify Live Cloudflare release under the campaign batch rule",
       "Measure exact useful completion rate, replay safeguards and provider/quota behavior before a bulk concurrency change"
-    ]
+    ],
+    "additionalObservedBottleneck": {
+      "chapter": "jinshu/094",
+      "at": "2026-11-23T23:04:22.336Z",
+      "hostedRun": 45284160964,
+      "category": "global referential integrity",
+      "detail": "Current chronology and scoped validation passed; exact global registry rejects two removed existing member IDs. Preserve cross-chapter IDs and assess their dependencies before native identity certification."
+    }
   }
 }
