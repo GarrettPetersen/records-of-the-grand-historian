@@ -5,13 +5,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['031', '083', '094', '115', '031-record']
+        options: ['031', '083', '094', '115', '031-record', '031-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record'
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -242,3 +242,62 @@ jobs:
           path: ${{ runner.temp }}/recorded/
           if-no-files-found: error
           retention-days: 7
+  transfer-031:
+    if: inputs.chapter == '031-stage'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: jinshu-031-recorded-canonical-identity
+          run-id: 45288153281
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/recorded
+      - name: Attach the exact verified proof and date seal to the owner draft
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/recorded"
+          sha256sum -c SHA256SUMS
+          jq -e '.nativeIdentityProofAccepted and .reviewedCases == 257 and .chapterLocalPeople == 267 and .sourceRevision == "f65754d727561484a4a9a75453cdcd67ecec5c4d"' recording-receipt.json
+          grep -F 'Scoped person data validation passed for jinshu/031' scoped-validation.txt
+          node <<'JS'
+          const {execFileSync}=require('node:child_process');
+          const {createHash}=require('node:crypto');
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const root='repos/'+process.env.GITHUB_REPOSITORY;
+          const branch='codex/cursor-glossary-nov24-2026-jinshu031';
+          const owner='7a7c5869773c0ad213a4b8ba3c498ffaf2cbe537';
+          const seal='f65754d727561484a4a9a75453cdcd67ecec5c4d';
+          const api=(method,url,body)=>JSON.parse(execFileSync('gh',['api','-X',method,root+url,...(body?['--input','-']:[])],{input:body?JSON.stringify(body):undefined,encoding:'utf8',maxBuffer:10e6}));
+          const ownerRef='/git/refs/heads/'+branch;
+          assert.equal(api('GET',ownerRef).object.sha,owner,'Exact owner PR changed');
+          const entry=(revision,path)=>api('GET','/contents/'+path+'?ref='+revision);
+          for(const path of ['data/jinshu/031.json','data/people/extractions/jinshu/031.json','data/people/editorial-decisions/jinshu/031.json']){
+            assert.equal(entry(owner,path).sha,entry(seal,path).sha,'Source evidence differs from hosted seal: '+path);
+          }
+          const dates='data/people/date-audits/jinshu/031.json';
+          const oldDate=entry(owner,dates);
+          const dateBytes=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json',root+'/contents/'+dates+'?ref='+owner],{maxBuffer:10e6});
+          const archiveKey=createHash('sha256').update(JSON.stringify(JSON.parse(dateBytes))).digest('hex');
+          const proof=api('POST','/git/blobs',{encoding:'base64',content:fs.readFileSync('jinshu-031-identity-proof.json').toString('base64')});
+          const files=[
+            {path:dates,sha:entry(seal,dates).sha},
+            {path:'data/people/date-audit-history/jinshu/031/'+archiveKey+'.json',sha:oldDate.sha},
+            {path:'data/people/identity-reviews/jinshu/031.json',sha:proof.sha},
+          ];
+          const original=api('GET','/git/commits/'+owner);
+          const tree=api('POST','/git/trees',{base_tree:original.tree.sha,tree:files.map(file=>({...file,mode:'100644',type:'blob'}))});
+          const message='Attach native independently approved Jinshu 031 identity and chronology';
+          const stage=api('POST','/git/commits',{message,tree:tree.sha,parents:[owner]});
+          for(const {path,sha} of files)assert.equal(entry(stage.sha,path).sha,sha);
+          const ref=api('PATCH',ownerRef,{sha:stage.sha,force:false});
+          assert.equal(ref.object.sha,stage.sha);
+          console.log(JSON.stringify({chapter:'jinshu/031',pullRequest:5447,ownerBefore:owner,approvedHead:stage.sha,certificateBlob:proof.sha,files}));
+          JS
