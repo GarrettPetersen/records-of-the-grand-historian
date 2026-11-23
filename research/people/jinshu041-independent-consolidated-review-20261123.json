@@ -4,7 +4,7 @@
   "book": "jinshu",
   "chapter": "041",
   "stagingDraftPr": 5476,
-  "stagingDraftSha": "1d77d017cd0b359decfac8bd79ad2950a22a23e7",
+  "stagingDraftSha": "76896c492bffcc7a5fdd843d30da2be55bffe568",
   "sourceOwnerPr": 5418,
   "sourceOwnerAgentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
   "reviewer": {
@@ -13,7 +13,7 @@
     "agentId": "bc-64f55949-b3a6-4213-b7a2-6e6256473515",
     "independentOfOwner": true
   },
-  "reviewedAt": "2026-11-23T23:05:00.000Z",
+  "reviewedAt": "2026-11-23T23:58:00.000Z",
   "chapterTitle": {
     "zh": "卷四十一 列傳第十一 魏舒 李憙 劉寔 高光",
     "en": "Volume 41 Biographies 11: Wei Shu; Li Xi; Liu Shi; Gao Guang"
@@ -25,7 +25,9 @@
     },
     "extraction": {
       "path": "data/people/extractions/jinshu/041.json",
-      "sha256": "sha256:c4b7005f2c3c437ea1a56d25c28ddd4a7e5319bae3fbe12fea0b3ee891a78752"
+      "sha256": "sha256:c4b7005f2c3c437ea1a56d25c28ddd4a7e5319bae3fbe12fea0b3ee891a78752",
+      "stagingCandidateSha256": "sha256:604a6660ce80b5300f13b02928f07f6f5e7872ea0b45b1c4d46839097dd8be3a",
+      "note": "stagingCandidate at PR #5476 commit 76896c492; production pin unchanged on reviewer branch"
     },
     "editorial": {
       "path": "data/people/editorial-decisions/jinshu/041.json",
@@ -66,6 +68,18 @@
     "supersedesStaleProductionAudit": true,
     "notRecordedToProduction": true
   },
+  "narrowChronoProof": {
+    "stagingDraftSha": "76896c492bffcc7a5fdd843d30da2be55bffe568",
+    "artifact": "research/people/jinshu041-independent-review-20261123/narrow-chrono-independent-proof-20261123.json",
+    "receipt": "research/people/jinshu041-authoring-20261123/narrow-chrono-delta-receipt.json",
+    "inventory": "research/people/jinshu041-authoring-20261123/chrono-groups-inventory.json",
+    "narrowAppliedVerified": 228,
+    "explicitSourceCalendarSupported": 8,
+    "activeDateHints": { "total": 127, "needChange": 108, "retainUnchanged": 19 },
+    "qualitativeLegendary": { "total": 42, "needChange": 23, "retainUnchanged": 19 },
+    "chapterCanClose": false,
+    "exactDependenciesPath": "research/people/jinshu041-independent-review-20261123/manifest.json"
+  },
   "decisions": [
     {
       "gate": "source-english-editorial",
@@ -81,12 +95,13 @@
     {
       "gate": "chronology",
       "verdict": "research-blocked",
-      "kind": "post-delta-merge-on-staging-1d77d017",
-      "artifact": "research/people/jinshu041-independent-review-20261123/date-audit-report-post-delta.json",
+      "kind": "narrow-chrono-proof-on-staging-76896c492",
+      "artifact": "research/people/jinshu041-independent-review-20261123/narrow-chrono-independent-proof-20261123.json",
       "itemCount": 496,
       "incorrectItemsAfterDelta": 0,
-      "deltaVerified": 99,
-      "reason": "All 99 prior incorrect items independently verified against date-incorrect-delta-receipt.json and Chinese witnesses; 397 unchanged itemChecks copied exactly from 00e7e11b evidence. Full native report status research-blocked (zero incorrect, no Western approvals). Not audited; not recordDateAudit."
+      "narrowAppliedVerified": 228,
+      "explicitWesternSupported": 8,
+      "reason": "228 narrow-delta claims independently matched to Chinese witnesses on staging extraction 604a6660…; eight explicit regnal-year tokens (太熙元年, 九年) carry supported source-calendar Western mappings with person-specific reasons. Remaining 295 unresolved / 24 undated bundles are valid native holds, not blanket approval. 108/127 active hints still assert derived Gregorian without per-hint sealing. Chapter cannot close until manifest exactDependencies clear. No recordDateAudit; no full rerun."
     },
     {
       "gate": "identity",
