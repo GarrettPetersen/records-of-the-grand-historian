@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-author-residual-review-package",
+  "book": "jinshu",
+  "chapter": "031",
+  "worker": "cursor-github-nov24-3",
+  "authorAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
+  "authoredAt": "2026-11-23T15:47:31.367Z",
+  "transport": "github-cloud-pr",
+  "baseRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "sourceHash": "sha256:20809876bebf046c3cbd4e907a78e283ba038ba2699b70ac241d35632257242e",
+  "extractionHashBeforeNewRepairs": "sha256:b6bde5b034cf5765dd48f6043158feb7a6ebf10e8f70a2103a2c12aca910df85",
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 031",
+    "result": "PASS",
+    "detail": "269 people, 1340 mentions, 2180 claims, 6 proposed repair(s), 52 applied repair(s), 52 editorial decision(s)"
+  },
+  "coverage": {
+    "unitsRead": 680,
+    "bothEnglishFieldsPresent": true,
+    "priorAppliedRepairsVerified": 52,
+    "newProposedRepairs": [
+      {
+        "unit": "s0032",
+        "field": "literal",
+        "reason": "十亂 are King Wu of Zhou’s ten capable ministers (亂 “to bring order”), not “Disorderly Ones.” Align the literal with the Chinese and with the idiomatic sense already present."
+      },
+      {
+        "unit": "s0032",
+        "field": "idiomatic",
+        "reason": "Replace “ten turbulent” with the standard reading of 十亂 as the Ten Capable Ministers, matching the source allusion."
+      },
+      {
+        "unit": "s0040",
+        "field": "literal",
+        "reason": "粟邑 is Suyi, not Suiyi."
+      },
+      {
+        "unit": "s0040",
+        "field": "idiomatic",
+        "reason": "粟邑 is Suyi, not Suiyi."
+      },
+      {
+        "unit": "s0515",
+        "field": "idiomatic",
+        "reason": "Idiomatic omitted 字仁林 and reduced 侍中、御史中丞; restore courtesy name and both offices from the Chinese (and the sealed literal)."
+      },
+      {
+        "unit": "s0667",
+        "field": "idiomatic",
+        "reason": "Idiomatic omitted 字仲容 and shortened 清明亭侯; restore courtesy name and the pavilion-marquis title from the Chinese."
+      }
+    ],
+    "note": "Full Chinese units were checked against literal and idiomatic English. Existing 52 applied repairs remain byte-exact in source. New proposed repairs are author-only and await independent editorial review; they are not applied to source."
+  },
+  "chronology": {
+    "datePacketChecks": 804,
+    "status": "author-findings-pending-independent-audit",
+    "findingsSummary": [
+      "Many attestation/death/accession claims carry westernYear/Interval labeled “outside-knowledge conversion” while the Chinese evidence supplies only regnal dates (e.g. 正始八年, 青龍二年, 咸寧四年).",
+      "Idiomatic English often already prints Western years (e.g. s0052 “She died in 247”); literal usually keeps the regnal form.",
+      "Pinned local reigns.json in this checkout does not yet contain Wei Zhengshi/Qinglong or Jin Taishi/Xianning mappings, so chapter-local calendar witnesses are insufficient to certify those conversions here.",
+      "Author must not invent seals or approve dates. Independent date audit (and any date-repair proposal staging) remains required."
+    ],
+    "recommendedIndependentActions": [
+      "Run people:dates packet/audit against current source+extraction fingerprints with an independent reviewer conversation.",
+      "For claims whose only Western year is outside-knowledge conversion without a verified calendar witness, prefer unresolved+unresolvedReason retaining sourceDate, or attach a sealed chronology witness—do not silently keep invented precision.",
+      "Do not clear research holds to force completion."
+    ]
+  },
+  "identity": {
+    "status": "blocked-on-private-lookup-credential",
+    "lookupService": "https://24histories-people-lookup.garrett-m-petersen.workers.dev",
+    "registry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "health": "ok",
+    "blocker": "PEOPLE_LOOKUP_TOKEN is not available in this cloud checkout (no ~/.local/share/24histories-people-lookup/client-token and no env injection). Bounded dossier search cannot be performed without fabricating identity evidence.",
+    "recommendedIndependentActions": [
+      "Inject PEOPLE_LOOKUP_URL + PEOPLE_LOOKUP_TOKEN into an author or reviewer cloud session.",
+      "Prepare chapter identity dossier plan via people:identity:prepare with the immutable registry.",
+      "Independent reviewer must certify memberships; author cannot approve own proposals."
+    ]
+  },
+  "editorial": {
+    "priorIndependentReviewsRetained": 2,
+    "priorReviewsCover": "52 previously applied repairs only",
+    "newProposedRepairsAwaitingReview": 6,
+    "selfApproval": false,
+    "note": "Author must not write native editorial approval for these new repairs. Independent schema3/schema4 review required before apply-repairs."
+  },
+  "nativeCertification": {
+    "complete": false,
+    "blockers": [
+      "independent-editorial-review-of-new-proposed-repairs",
+      "independent-date-audit",
+      "bounded-lookup-identity-proposals-and-independent-identity-certification"
+    ]
+  },
+  "filesChanged": [
+    "data/people/extractions/jinshu/031.json",
+    "research/people/jinshu031-author-residual-review-20261123-incomplete.json",
+    "research/people/jinshu031-chronology-findings-20261123-incomplete.json"
+  ]
+}
