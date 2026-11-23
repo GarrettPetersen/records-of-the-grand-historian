@@ -1,0 +1,524 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-anonymous-link-dependency-cleanup-not-identity-approval",
+  "status": "needs-identity-recheck",
+  "warning": "Not an identity seal, chronology approval, or publication. Removes fabricated anonymous locals only.",
+  "book": "jinshu",
+  "chapter": "083",
+  "chapterDraftPr": 5474,
+  "candidateBase": "62941898c31e1e5802f67940af14408961db4871",
+  "independentWitnessTriage": {
+    "pr": 5480,
+    "commit": "963ee5293a57602bfd6fb45db19b2ff78d542032",
+    "nativeHoldPath": "research/people/jinshu083-independent-review-20261123/identity-sealed-1fb7ef67/identity-review-native-hold.json",
+    "blockedLocals": [
+      "p030",
+      "p071",
+      "p073",
+      "p074",
+      "p097",
+      "p130"
+    ],
+    "readyCaseCount": 164,
+    "totalCases": 170
+  },
+  "referenceVerification": {
+    "surfacesForBlockedLocals": 0,
+    "preparationReceiptPublished": false,
+    "preparationReceiptDataQualified": false,
+    "masterTrackedRefsToJinshu083Prefix": {
+      "note": "origin/master people tree grep for jinshu:083 hits editorial-decisions + date-audit-baseline only; no generated catalog/reference publication for chapter 083.",
+      "published": false
+    },
+    "conclusion": "No published canonical chapter-083 reference edges depend on the six fabricated locals; safe to drop without catalog breakage."
+  },
+  "chineseReadings": {
+    "p030": {
+      "units": [
+        "s0062"
+      ],
+      "zh": [
+        "尚，皇太后舅，故寢其奏。"
+      ],
+      "reading": "Names 尚 and denotes 皇太后; maternal-uncle link is stated. No named mother."
+    },
+    "p071": {
+      "units": [
+        "s0158"
+      ],
+      "zh": [
+        "猷孫宏，見《文苑傳》。"
+      ],
+      "reading": "Names 猷 and 宏 with 孫; intervening child unstated."
+    },
+    "p073": {
+      "units": [
+        "s0159",
+        "s0161"
+      ],
+      "zh": [
+        "從祖準",
+        "準字孝尼，以儒學知名，注《喪服經》。"
+      ],
+      "reading": "Names 準 as 從祖; does not name You’s grandfather/father generation."
+    },
+    "p074": {
+      "units": [
+        "s0156",
+        "s0159"
+      ],
+      "zh": [
+        "瑰為丹陽，猷為武康，兄弟列宰名邑，論者美之。",
+        "從祖準"
+      ],
+      "reading": "Names brothers 瑰/猷 and collateral great-uncle 準; father unstated."
+    },
+    "p097": {
+      "units": [
+        "s0209"
+      ],
+      "zh": [
+        "逌少孤，與從弟灌共居，甚相友悌，由是獲當時之譽。"
+      ],
+      "reading": "Names 逌 and 從弟灌; Guan’s father unstated."
+    },
+    "p130": {
+      "units": [
+        "s0286",
+        "s0287"
+      ],
+      "zh": [
+        "曾祖浚，吳會稽太守。",
+        "父育，郡主簿。"
+      ],
+      "reading": "Names 曾祖浚 and 父育; intervening grandfather unstated."
+    }
+  },
+  "decisions": {
+    "removedFabricatedStandalonePersons": [
+      "p030",
+      "p071",
+      "p073",
+      "p074",
+      "p097",
+      "p130"
+    ],
+    "reason": "Zero direct surfaces; each was an unnamed intermediary only logically entailed. Chapter names the real witnesses already captured as separate locals.",
+    "preservedNamedWitnesses": [
+      "p027",
+      "p029",
+      "p069",
+      "p072",
+      "p075",
+      "p093",
+      "p096",
+      "p098",
+      "p128",
+      "p129",
+      "p131"
+    ],
+    "preservedStatedKinship": [
+      {
+        "subject": "p027",
+        "relation": "kin-of",
+        "object": "p029",
+        "term": "舅",
+        "unit": "s0062"
+      },
+      {
+        "subject": "p069",
+        "relation": "ancestor-of",
+        "object": "p072",
+        "term": "孫",
+        "unit": "s0158",
+        "note": "rewritten from fabricated parent-of p071"
+      },
+      {
+        "subject": "p075",
+        "relation": "kin-of",
+        "object": "p069",
+        "term": "從祖",
+        "unit": "s0159"
+      },
+      {
+        "subject": "p093",
+        "relation": "kin-of",
+        "object": "p098",
+        "term": "從弟",
+        "unit": "s0209",
+        "intermediariesKept": [
+          "p096"
+        ]
+      },
+      {
+        "subject": "p129",
+        "relation": "ancestor-of",
+        "object": "p128",
+        "term": "曾祖",
+        "unit": "s0286"
+      },
+      {
+        "subject": "p131",
+        "relation": "parent-of",
+        "object": "p128",
+        "term": "父",
+        "unit": "s0287"
+      }
+    ],
+    "removedDependentEvidenceOnly": true,
+    "unaffectedIdsPreserved": true,
+    "editorialPreserved": true,
+    "chronologyFindingsPreserved": "No date-audit file on branch tip; affected named-person attestations unchanged (0 drift on unaffected attestations). Removed only westernBounds/undated attestations owned by the six fabricated locals."
+  },
+  "fingerprints": {
+    "priorExtractionHash": "sha256:a3e13c66c2ca168fa1853d8bdef1356cd05c8ffa1acad4e1895f0c878b332c60",
+    "repairedExtractionHash": "sha256:65905855a709651fd7bef2f5a5845198f00cf5d9d6f5a34b9db70647562b2306"
+  },
+  "operations": [
+    {
+      "op": "remove-person",
+      "id": "p030",
+      "name": [
+        "Mother of the Empress Dowager",
+        null,
+        null
+      ]
+    },
+    {
+      "op": "remove-person",
+      "id": "p071",
+      "name": [
+        "Child of Yuan You",
+        null,
+        null
+      ]
+    },
+    {
+      "op": "remove-person",
+      "id": "p073",
+      "name": [
+        "Paternal grandfather of Yuan You",
+        null,
+        null
+      ]
+    },
+    {
+      "op": "remove-person",
+      "id": "p074",
+      "name": [
+        "Father of Yuan You",
+        null,
+        null
+      ]
+    },
+    {
+      "op": "remove-person",
+      "id": "p097",
+      "name": [
+        "Father of Jiang Guan",
+        null,
+        null
+      ]
+    },
+    {
+      "op": "remove-person",
+      "id": "p130",
+      "name": [
+        "Grandfather of Che Yin",
+        null,
+        null
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p027",
+      "removed": [
+        "p030"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p029",
+      "removed": [
+        "p030"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p069",
+      "removed": [
+        "p071",
+        "p073",
+        "p074"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p070",
+      "removed": [
+        "p073",
+        "p074"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p072",
+      "removed": [
+        "p071"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p075",
+      "removed": [
+        "p073",
+        "p074"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p093",
+      "removed": [
+        "p097"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p096",
+      "removed": [
+        "p097"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p098",
+      "removed": [
+        "p097"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p128",
+      "removed": [
+        "p130"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p129",
+      "removed": [
+        "p130"
+      ]
+    },
+    {
+      "op": "strip-related",
+      "id": "p131",
+      "removed": [
+        "p130"
+      ]
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p030",
+      "predicate": "sex"
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p027",
+      "predicate": "family-relationship",
+      "personId": "p030",
+      "relation": "sibling-of"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p030",
+      "predicate": "family-relationship"
+    },
+    {
+      "op": "strip-intermediaries",
+      "subject": "p027",
+      "predicate": "family-relationship",
+      "target": "p029",
+      "removed": [
+        "p030"
+      ]
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p030",
+      "predicate": "attestation"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p071",
+      "predicate": "sex"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p073",
+      "predicate": "sex"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p074",
+      "predicate": "sex"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p097",
+      "predicate": "sex"
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p069",
+      "predicate": "family-relationship",
+      "personId": "p071",
+      "relation": "parent-of"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p071",
+      "predicate": "family-relationship"
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p069",
+      "predicate": "family-relationship",
+      "personId": "p074",
+      "relation": "child-of"
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p070",
+      "predicate": "family-relationship",
+      "personId": "p074",
+      "relation": "child-of"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p074",
+      "predicate": "family-relationship"
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p075",
+      "predicate": "family-relationship",
+      "personId": "p073",
+      "relation": "sibling-of"
+    },
+    {
+      "op": "strip-intermediaries",
+      "subject": "p075",
+      "predicate": "family-relationship",
+      "target": "p069",
+      "removed": [
+        "p073",
+        "p074"
+      ]
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p096",
+      "predicate": "family-relationship",
+      "personId": "p097",
+      "relation": "sibling-of"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p097",
+      "predicate": "family-relationship"
+    },
+    {
+      "op": "strip-intermediaries",
+      "subject": "p093",
+      "predicate": "family-relationship",
+      "target": "p098",
+      "removed": [
+        "p097"
+      ]
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p071",
+      "predicate": "attestation"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p073",
+      "predicate": "attestation"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p074",
+      "predicate": "attestation"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p097",
+      "predicate": "attestation"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p071",
+      "predicate": "historicity"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p073",
+      "predicate": "historicity"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p074",
+      "predicate": "historicity"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p097",
+      "predicate": "historicity"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p130",
+      "predicate": "sex"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p130",
+      "predicate": "attestation"
+    },
+    {
+      "op": "remove-claim-target",
+      "subject": "p129",
+      "predicate": "family-relationship",
+      "personId": "p130",
+      "relation": "parent-of"
+    },
+    {
+      "op": "remove-claim-subject",
+      "subject": "p130",
+      "predicate": "family-relationship"
+    },
+    {
+      "op": "add-stated-kinship",
+      "subject": "p069",
+      "target": "p072",
+      "relation": "ancestor-of",
+      "source": "猷孫宏",
+      "unit": "s0158"
+    }
+  ],
+  "validation": {
+    "peopleValidateExtraction": "data/people/extractions/jinshu/083.json: ok (167 people, 932 mentions, 1754 claims, 814 candidates)",
+    "peopleValidateScoped": "Scoped person data validation passed for jinshu/083: 1 extraction(s), 167 local people, 932 mentions, 1754 claims, 0 proposed repair(s), 37 applied repair(s), 37 editorial decision(s), 0 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 3 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "nonActions": [
+    "No fabricated replacement links",
+    "No global corpus build",
+    "No validator weakening",
+    "No self-approval / identity seal",
+    "No queue edits",
+    "No merge"
+  ],
+  "nextStep": "Independent identity recheck against repaired extraction; do not treat this receipt as membership certification."
+}
