@@ -8,9 +8,9 @@
   "dispatchState": "open-with-live-cycle-verification",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-23T17:36:23.349Z",
+    "verifiedAt": "2026-11-23T17:40:05.413Z",
     "cursorModelsUsedPercent": 25,
-    "otherModelsUsedPercent": 54,
+    "otherModelsUsedPercent": 55,
     "onDemandLimitUsd": 1,
     "onDemandLimitReached": true,
     "lastObservedOnDemandMeterUsd": 2.91,
@@ -39,7 +39,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Observe 031 and 116 reviews, 067 and 094 owner runs and hosted validation. Prioritize 123 owner continuation after 094; Jinshu 023 ready for independent review when slots allow.",
+  "nextAction": "Hold 116 after the third routine round. Move 094 to its retained reviewer and 123 back to the original owner.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T17:38:39.023Z",
+  "lastCheckedAt": "2026-11-23T17:40:05.413Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -274,7 +274,7 @@
       "originalPR": 5409,
       "reviewPR": 5429,
       "revision": "b50547fea51c8fef5ca4b1ad9264dfbc28780bb8",
-      "status": "draft-awaiting-final-focused-hold-recheck",
+      "status": "held-chronology-circuit-breaker",
       "verifiedScopedFiles": 7,
       "previousRevisions": [
         {
@@ -362,9 +362,9 @@
     "jinshu/094": {
       "originalPR": 5424,
       "reviewPR": 5430,
-      "revision": "166a7da3935090884d7a89aaec47af256aed1985",
+      "revision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
       "verifiedScopedFiles": 5,
-      "status": "held-grouped-chronology-correction-required",
+      "status": "draft-awaiting-changed-chronology-review",
       "scopedValidation": {
         "githubRun": 45224891962,
         "candidateRevision": "166a7da3935090884d7a89aaec47af256aed1985",
@@ -740,9 +740,11 @@
       "candidateRevision": "166a7da3935090884d7a89aaec47af256aed1985",
       "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
       "previousRunId": "run-2438f72c-0603-4e7e-a0b4-9128d1726a76",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:26:40.291Z",
-      "runId": "run-a8b24f03-8855-4052-a2b5-ab281cefa1b5"
+      "runId": "run-a8b24f03-8855-4052-a2b5-ab281cefa1b5",
+      "returnedRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
+      "summary": "49 applied editorial repairs, zero proposed, grouped chronology corrections, scoped validation reported passing."
     },
     "jinshu/067": {
       "candidateRevision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
@@ -941,9 +943,25 @@
       "previousReviewRevision": "b1f045f199946436d261a494e793e4c9c92a7016",
       "agentId": "bc-96175e3c-9233-480b-8bdd-ac02689d9be2",
       "previousRunId": "run-ae3564bf-7896-4f20-b99e-353a43e6d86d",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:34:17.450Z",
-      "runId": "run-30830ffb-da67-4297-b568-89866109bdc0"
+      "runId": "run-30830ffb-da67-4297-b568-89866109bdc0",
+      "findingsPR": 5458,
+      "reviewRevision": "729d9f643cf45995ce13d16d7042a4821abedfd6",
+      "chronology": "research-blocked",
+      "coverage": {
+        "items": 36,
+        "totalItems": 680,
+        "people": 10,
+        "totalPeople": 150,
+        "units": 19,
+        "totalUnits": 299
+      },
+      "disposition": "circuit-breaker-hold",
+      "remaining": [
+        "Shaodang claim-12/hints-p007 unsupported before AD 56",
+        "Full native chronology coverage unavailable"
+      ]
     },
     "jinshu/067": {
       "chapterPR": 5445,
