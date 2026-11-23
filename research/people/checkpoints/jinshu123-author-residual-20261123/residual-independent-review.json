@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-author-residual-independent-review",
+  "book": "jinshu",
+  "chapter": "123",
+  "worker": "cursor-github-nov24-1",
+  "authorAgentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+  "authoredAt": "2026-11-23T15:56:47.240Z",
+  "baseCommit": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "approvalGranted": false,
+  "pins": {
+    "sourceSha256": "sha256:51c0a72d96ce2681540cffc0c46baad349fd6f89664b96b2781db93b7e99b063",
+    "extractionSha256": "sha256:d8a16b2abc8f230141d8525f8db8afb463ff53ad7bd973d072ee2438e5518a43",
+    "chapterFingerprint": "sha256:527c3d01c614f99b6c129a75927cf3a7eb94fca92c010bc7cf77cd3aa29b0bf7",
+    "priorDateAuditStatus": "stale"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 123",
+    "passed": true,
+    "stats": {
+      "units": 298,
+      "candidates": 892,
+      "people": 148,
+      "mentions": 941,
+      "claims": 916,
+      "repairs": 45,
+      "dispositions": 377,
+      "aliasDispositionConflicts": 0
+    },
+    "proposedRepairs": 45
+  },
+  "appliedNow": {
+    "extractionFixes": [
+      "removed false p059 death claim from s0148 送死",
+      "rewrote p059 s0148 attestation event away from death",
+      "corrected p082 event outcome for s0204–s0206"
+    ],
+    "note": "Source English unchanged; proposed repairs validate against before-text. Duplicate local person merges deferred to identity residual (no fabricated merges)."
+  },
+  "residualIndependentReview": {
+    "editorial": {
+      "status": "pending",
+      "reason": "Author cannot approve own translation repairs.",
+      "proposedRepairCount": 45,
+      "topThemes": [
+        "s0205 reversed Liu Laozhi battle outcome",
+        "s0148 送死 misread as Huan Chong death",
+        "s0102 吾父子 father/son attribution",
+        "s0295 Kuruguan Wei + office grouping",
+        "retained prior proposed repairs for Muyu Gen / Shi Hu subject / offices"
+      ]
+    },
+    "chronology": {
+      "status": "pending-fresh-independent-date-audit",
+      "reason": "Existing date audit is stale. Author did not invent or clear Western years; flagged unsupported death-year and campaign-year assertions for independent re-audit. Regnal witnesses 太元八年/十一年/二十一年 retained.",
+      "priorReport": "data/people/date-audits/jinshu/123.json",
+      "datePacketPath": "research/people/checkpoints/jinshu123-author-residual-20261123/date-packet.json",
+      "notes": [
+        {
+          "unitIds": [
+            "s0007",
+            "s0011",
+            "s0018",
+            "s0023",
+            "s0025",
+            "s0030",
+            "s0039",
+            "s0047",
+            "s0062",
+            "s0064",
+            "s0068",
+            "s0073",
+            "s0076",
+            "s0118",
+            "s0148",
+            "s0155",
+            "s0157",
+            "s0162",
+            "s0183",
+            "s0202",
+            "s0204",
+            "s0215",
+            "s0229",
+            "s0248",
+            "s0266",
+            "s0280",
+            "s0287",
+            "s0293"
+          ],
+          "detail": "The existing date audit is stale. The extraction contains many asserted Western years and intervals, while the chapter usually gives events, relative sequence, or regnal years. Preserve the Chinese date witnesses and require a fresh independent audit; this review does not approve any Western conversion."
+        },
+        {
+          "personId": "p059",
+          "unitIds": [
+            "s0148"
+          ],
+          "detail": "The asserted AD 384 'death of Huan Chong' is doubly unsupported: 去夏 is only a relative 'last summer', and 送死 does not say Huan Chong died. Remove the death event and re-audit any year separately."
+        },
+        {
+          "unitIds": [
+            "s0248",
+            "s0249",
+            "s0250",
+            "s0252",
+            "s0253",
+            "s0254",
+            "s0258",
+            "s0260",
+            "s0261",
+            "s0262",
+            "s0264"
+          ],
+          "detail": "The extraction assigns AD 394 to the Changzi campaign from the witness 於是議征長子, which contains no year or era. AD 394 may be externally recoverable, but it is unsupported by this chapter text alone and must not pass while the date audit is stale."
+        },
+        {
+          "unitIds": [
+            "s0266",
+            "s0270",
+            "s0272",
+            "s0274",
+            "s0276"
+          ],
+          "detail": "The extraction assigns AD 395 to the Canhe campaign from the place/event name 參合, not from an expressed date. That Western year needs independent evidence."
+        },
+        {
+          "unitIds": [
+            "s0118",
+            "s0293",
+            "s0287"
+          ],
+          "detail": "These units do provide regnal witnesses 太元八年, 太元十一年, and 太元二十一年. The extraction converts them to AD 383, AD 386, and AD 396; retain the regnal dates, but treat the Western mappings as pending fresh date review rather than approved."
+        }
+      ]
+    },
+    "identity": {
+      "status": "pending-bounded-lookup-and-independent-canonical-review",
+      "reason": "PEOPLE_LOOKUP_TOKEN unavailable; author did not merge duplicate chunk-local records or invent membership seals.",
+      "duplicateLocalClusters": {
+        "kind": "duplicate-person-records",
+        "detail": "The extraction splits clearly continuous same-chapter people into duplicate IDs: Murong Chui p001/p029/p057/p092/p129; Fu Jian p013/p028/p058/p114; Fu Pi p038/p060/p093; Murong Bao p016/p055/p075/p096/p141; Murong De p018/p054/p079/p101/p131; Murong Wei p008/p043/p080/p123; Murong Nong p045/p067/p094/p138; Murong Kai p046/p077/p111/p137; Murong Shao p047/p112/p143; Murong Long p076/p122/p146; Han Xin p025/p031/p063; Fu Hui p039/p062; Fu Feilong p041/p061; Shi Yue p036/p068; Zhai Bin p040/p071; Kuruguan Wei p051/p097; Murong Zhou p048/p113; Feng Heng p072/p100; Zhai Liao p085/p119; Xu Yan p088/p095; Murong Huang p002/p104; Murong Lin p102/p142; Murong Guo p128/p139; and Zhang Chong p099/p133.",
+        "proposedFix": "Merge each listed same-person group and repoint all surfaces, claims, relationships, and chronology to the retained chapter-local person ID. Do not include p120 in the Murong Ke merge until its unsupported identification is resolved."
+      },
+      "otherIssues": [
+        {
+          "kind": "unsupported-identity-link",
+          "personId": "p120",
+          "unitIds": [
+            "s0221"
+          ],
+          "detail": "p120 is named 'Murong Ke' and p111 (Murong Kai) is asserted to be his son, but s0221 supplies only the title 太原王; this chapter never names that referent as Murong Ke. The source-form title does not support silently manufacturing the personal name.",
+          "proposedFix": "Retain the source-form referent 'Prince of Taiyuan' as unresolved, or link it only after independent evidence establishes the identity; remove the p111→p120 parent claim unless that identification is separately supported."
+        },
+        {
+          "kind": "false-death-claim",
+          "personId": "p059",
+          "unitIds": [
+            "s0148"
+          ],
+          "detail": "The extraction says Huan Chong 'died last summer' and labels the attestation event his death. 送死 here says he came courting death in a failed attack; it does not report his death.",
+          "proposedFix": "Delete the death claim and describe the event as Huan Chong's failed attack followed by the attack on Yuncheng."
+        },
+        {
+          "kind": "wrong-event-outcome",
+          "personId": "p082",
+          "unitIds": [
+            "s0204",
+            "s0205",
+            "s0206"
+          ],
+          "detail": "Liu Laozhi's event claim says he defeated Chui and then was routed only at Wuqiao. It omits and conflicts with s0205, where Laozhi pursued Chui but lost every successive engagement.",
+          "proposedFix": "Record that Laozhi defeated Chui at Ye in s0204, then lost the successive pursuit battles in s0205 and was defeated again at Wuqiao in s0206."
+        },
+        {
+          "kind": "wrong-office-label",
+          "personId": "p088",
+          "unitIds": [
+            "s0210"
+          ],
+          "detail": "The claim renders 建節將軍 as 'General Who Establishes Integrity'; the current literal translation instead incorrectly says 'Commandery'. 節 is the command standard/tally in this title.",
+          "proposedFix": "Normalize the English office label to 'General Who Establishes the Standard' (or the project's established equivalent for 建節將軍) while retaining the exact Chinese."
+        },
+        {
+          "kind": "wrong-surface",
+          "personId": "p070",
+          "unitIds": [
+            "s0171"
+          ],
+          "detail": "The canonical record correctly identifies Liuxia Hui, but its captured English surface is 'Liu Hui', inherited from the defective translation.",
+          "proposedFix": "After the translation repair, replace the English mention surface with 'Liuxia Hui'; retain 柳惠 as the exact Chinese abbreviated form."
+        },
+        {
+          "kind": "wrong-surface",
+          "personId": "p097",
+          "unitIds": [
+            "s0295"
+          ],
+          "detail": "The canonical record correctly has Kuruguan Wei, but its English mention surface is 'Guan Wei', inherited from parsing the compound surname 庫辱官 as a place.",
+          "proposedFix": "Replace the English mention surface with 'Kuruguan Wei' after the translation repair."
+        },
+        {
+          "kind": "wrong-event-label",
+          "personId": "p119",
+          "unitIds": [
+            "s0223",
+            "s0224"
+          ],
+          "detail": "The event claim says Zhai Liao 'sued for peace'; 請降 says he requested surrender, followed by bare-chested submission.",
+          "proposedFix": "Change the event action to 'sent an envoy to request surrender and then submitted bare-chested'."
+        },
+        {
+          "kind": "missing-family-mention",
+          "personId": "p126",
+          "unitIds": [
+            "s0244"
+          ],
+          "detail": "Zhai Zhao is said to take his wife and children (攜妻子) when he flees, but his extraction has no family-summary claim for them.",
+          "proposedFix": "Add an explicit family-summary for an unnamed wife and children, without inventing names, counts, or identities."
+        }
+      ],
+      "lookupBlocked": true
+    }
+  },
+  "sourceReviewCoverage": {
+    "unitsReviewed": 298,
+    "noDefectUnitsCount": 271,
+    "summary": "Reviewed all 298 units and both English fields, plus all 14 existing proposed repairs. Found 32 additional or refined field-level repairs across 23 units; together with the existing proposals, 27 units have definite translation defects and 271 have no definite translation defect found. The most consequential findings are the reversed battle outcome in s0205, the false Huan Chong death in s0148, 'my father and I' for 吾父子 in s0102, the still-misgrouped s0295 existing proposal, and the extraction's extensive duplicate splitting of continuous people. Nine clear extraction issues and five chronology cautions are recorded; no Western year is approved."
+  }
+}
