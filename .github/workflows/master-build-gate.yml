@@ -5,13 +5,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['031', '083', '094', '115', '031-record', '031-stage']
+        options: ['031', '083', '094', '115', '031-record', '031-stage', '083-witness-check']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage'
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -313,4 +313,72 @@ jobs:
           const ref=api('PATCH',ownerRef,{sha:stage.sha,force:false});
           assert.equal(ref.object.sha,stage.sha);
           console.log(JSON.stringify({chapter:'jinshu/031',pullRequest:5447,ownerBefore:owner,approvedHead:stage.sha,certificateBlob:proof.sha,files}));
+          JS
+  witness-check-083:
+    if: inputs.chapter == '083-witness-check'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 1fb7ef675b0c2089fefaec9a8185c33f8d072bb3
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with:
+          name: jinshu-083-native-identity-evidence
+          run-id: 45289188834
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/native-identity
+      - name: Check native witness routes for the six held people
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {assertDossierPrimaryWitness} from './scripts/lib/people-identity-dossiers.mjs';
+          import {localNameKeys} from './scripts/lib/people-resolution.mjs';
+          import {identityArtifactHash as hash} from './scripts/lib/people-identity-artifacts.mjs';
+          const base=path.join(process.env.RUNNER_TEMP,'native-identity');
+          const bytes=fs.readFileSync(path.join(base,'source-review-packet.json'));
+          const packet=JSON.parse(bytes), receipt=JSON.parse(fs.readFileSync(path.join(base,'preparation-receipt.json')));
+          assert.equal(receipt.sourcePacketSha256,hash(bytes));
+          assert.equal(receipt.sourceRevision,'1fb7ef675b0c2089fefaec9a8185c33f8d072bb3');
+          assert.deepEqual(packet.scope,{book:'jinshu',chapter:'083'});
+          const source=JSON.parse(execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/research/people/jinshu083-independent-review-20261123/identity-sealed-1fb7ef67/identity-review-native-hold.json?ref=963ee5293a57602bfd6fb45db19b2ff78d542032'],{encoding:'utf8'}));
+          const people=new Map(packet.people.map(person=>[person.localId,person]));
+          const units=new Map(packet.units.map(unit=>[[unit.book,unit.chapter,unit.id].join(':'),unit.zh]));
+          const plan=new Map(packet.plan.cases.map(item=>[item.id,item]));
+          const canonical=new Map(packet.plan.cases.flatMap(item=>item.localPeople.map(id=>[id,item.canonicalPersonId])));
+          const nameEvidence=new Map();
+          const audit=[];
+          for(const held of source.blockedCases){
+            const item=plan.get(held.caseId);
+            assert(item);
+            for(const problem of held.failures){
+              const person=people.get(problem.localId);
+              assert(person);
+              const tested=new Set(person.claims.flatMap(claim=>claim.evidence));
+              for(const {unitId} of problem.ownedUnits)tested.add('jinshu:083:'+unitId);
+              const matches=[];
+              for(const sourceID of tested){
+                const [book,chapter,unitId]=sourceID.split(':');
+                const quote=units.get(sourceID);
+                if(!quote)continue;
+                const witness={localId:person.localId,book,chapter,unitId,quote};
+                try{assertDossierPrimaryWitness(witness,person,units,localNameKeys,nameEvidence,people,canonical);matches.push(witness);}
+                catch(error){if(!error.message.startsWith('Witness does not support this person'))throw error;}
+              }
+              audit.push({caseId:item.id,localId:person.localId,sourceUnitsTested:[...tested],nativeCompatibleCandidateQuotes:matches});
+            }
+          }
+          assert.equal(audit.length,6);
+          console.log(JSON.stringify({sourceRevision:receipt.sourceRevision,authority:'Mechanical witness candidates only. Independent identity disposition required.',cases:audit},null,2));
           JS
