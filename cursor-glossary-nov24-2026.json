@@ -39,7 +39,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Prioritize Jinshu 031 in the freed slot when GitHub prepares its native identity packet. The shared original Jinshu 110 owner is currently resolving Jinshu 023. Observe 023/094/123 and preserve 110 review evidence.",
+  "nextAction": "Preserve 094 review. Resume original Jinshu 031 owner after its active 023 corrections finish to recover historical authorship using the verified ledger and PR. Revalidate the seal with the retained reviewer, then reuse or rebuild the registry only if the native seal requires it.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T18:01:04.391Z",
+  "lastCheckedAt": "2026-11-23T18:04:49.437Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -368,7 +368,7 @@
       "reviewPR": 5430,
       "revision": "6a105053b45aedce8955a8660d982fbbfdee774b",
       "verifiedScopedFiles": 5,
-      "status": "draft-awaiting-three-chronology-correction-recheck",
+      "status": "held-early-yongkang-source-chronology",
       "scopedValidation": {
         "githubRun": 45230672687,
         "candidateRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
@@ -468,7 +468,7 @@
       "reviewPR": 5447,
       "revision": "10430638f26b6f78c517d3e3c9bf56de1f21209f",
       "verifiedScopedFiles": 3,
-      "status": "draft-chronology-approved-identity-preparation",
+      "status": "draft-historical-author-provenance-recovery-required",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -971,9 +971,18 @@
       "candidateRevision": "6a105053b45aedce8955a8660d982fbbfdee774b",
       "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
       "previousRunId": "run-976716ac-f4b9-4a7b-b109-bfdeecd6ed26",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:58:25.152Z",
-      "runId": "run-073d220c-fd6f-40a4-90de-6c8be28620a1"
+      "runId": "run-073d220c-fd6f-40a4-90de-6c8be28620a1",
+      "resultPR": 5466,
+      "reviewRevision": "3d55719c57fa8cd5dd22c56543b0d5de1aad4e9e",
+      "chronology": "research-blocked",
+      "remaining": "Two Yongkang early-era claims unresolved; death attribution fixes independently verified.",
+      "coverage": {
+        "items": 534,
+        "supported": 532,
+        "held": 2
+      }
     },
     "jinshu/123": {
       "revision": "c7696e3be9e79839e70bfd643a4205a008d3e07e",
@@ -1045,7 +1054,7 @@
       "githubRun": 45231719127,
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45231719127",
       "identityPreparation": {
-        "status": "in_progress",
+        "status": "completed",
         "workflowRevision": "966dd39e9b3551ffb48ed40e9f5ffacf6189f44b",
         "workflow": ".github/workflows/master-build-gate.yml",
         "workflowRef": "codex/cursor-glossary-nov24-2026",
@@ -1055,7 +1064,10 @@
         "registryArtifact": 14847169943,
         "githubRun": 45233151605,
         "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45233151605",
-        "executionRevision": "b8b0bc15af2ca5eb324adbcc2da3fb3f67d390e2"
+        "executionRevision": "b8b0bc15af2ca5eb324adbcc2da3fb3f67d390e2",
+        "conclusion": "failure",
+        "blocker": "Actual extractor identity required for every chunk",
+        "failedStep": "Verify exact execution inputs and prepare the native packet"
       },
       "conclusion": "success",
       "artifact": {
@@ -1063,6 +1075,63 @@
         "name": "people-registry-8ecdd9cb9fcb719bf9a1c6ec0fcf254875615515",
         "digest": "sha256:2f4958209be468a494aa92ef3a62325ff9b8cea4c0fc9bb152cc0826705ad26b",
         "sizeInBytes": 140773020
+      },
+      "provenanceRecovery": {
+        "status": "historical-producer-verified-awaiting-owner",
+        "ledgerRevision": "a51f61f414a14e33a0760ac847406782fe7d09b6",
+        "originalPR": 4697,
+        "originalExtractionRevision": "976c3c1cff4401279f765ed3dfd6320c829b599b",
+        "originalExtractionSha256": "be8a4707a0ab98c9fc5b36dc3df3f759ae2520ef5d89a398a2b943281487818a",
+        "historicalStableProducer": "grokbot-24",
+        "verifiedChunkPlan": [
+          {
+            "id": "001",
+            "start": 0,
+            "end": 76
+          },
+          {
+            "id": "002",
+            "start": 76,
+            "end": 152
+          },
+          {
+            "id": "003",
+            "start": 152,
+            "end": 228
+          },
+          {
+            "id": "004",
+            "start": 228,
+            "end": 307
+          },
+          {
+            "id": "005",
+            "start": 307,
+            "end": 377
+          },
+          {
+            "id": "006",
+            "start": 377,
+            "end": 449
+          },
+          {
+            "id": "007",
+            "start": 449,
+            "end": 529
+          },
+          {
+            "id": "008",
+            "start": 529,
+            "end": 607
+          },
+          {
+            "id": "009",
+            "start": 607,
+            "end": 680
+          }
+        ],
+        "priorScopedOwner": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
+        "action": "Recover only verified author identity metadata, preserve exact source and temporal items, validate chapter, and return the fresh extraction seal to the original independent reviewer. Record the actual Cursor correction authors separately. Never rewrite audit hashes on behalf of the reviewer."
       }
     }
   },
