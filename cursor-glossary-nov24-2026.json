@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "When guard passes, send still-unsent existing 094 reviewer reservation first and resume same 083 reviewer on latest two changes. Observe live 031 and 115.",
+  "nextAction": "Observe active 031. After a passing cloud guard and fresh Cursor allowance, dispatch the three unsent 094/083 reviewer and 115 owner reservations in order, preserving their exact actor and idempotency key.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T22:25:06.483Z",
+  "lastCheckedAt": "2026-11-23T22:26:41.010Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -694,7 +694,7 @@
       "reviewPR": 5470,
       "revision": "6cc3b19eade8f36eeb36ca1026344d678bc20d00",
       "verifiedScopedFiles": 5,
-      "status": "editorial-and-local-people-approved-496-date-items-outstanding",
+      "status": "native-chronology-reviewed-four-claim-repairs-needed",
       "verifiedPreimages": {
         "authorBase": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "stagingBase": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -714,8 +714,8 @@
       },
       "reviewEvidenceRevision": "3734bd2654fb8bf3b73b5ce73a150c6651755c2b",
       "reviewEvidence": {
-        "revision": "d2b1617653dcd67f49dbbeea32376d73e29c3712",
-        "ref": "refs/heads/cursor/jinshu-115-independent-review-eaaf"
+        "pr": 5483,
+        "revision": "d78592a9b663cf5ee1200f0c73b7ea2560dcaef1"
       }
     },
     "jinshu/083": {
@@ -1358,7 +1358,7 @@
       }
     },
     "jinshu/115": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-84536a48-e6d3-4027-a8ff-2478884deaaf",
       "previousRunId": "run-3721c4e9-73ab-4cc4-b2c9-f3ee0bce518d",
       "chapterPR": 5470,
@@ -1366,27 +1366,35 @@
       "reservedAt": "2026-11-23T22:21:45.483Z",
       "idempotencyKey": "nov24-cursor-jinshu-115-pin-6cc3b19ea-2",
       "runId": "run-82154be7-0e7e-4dbe-92d5-626030581cc9",
-      "sentAt": "2026-11-23T22:22:02.248Z"
+      "sentAt": "2026-11-23T22:22:02.248Z",
+      "finishedObservedAt": "2026-11-23T22:26:41.010Z",
+      "resultPR": 5483,
+      "reviewRevision": "d78592a9b663cf5ee1200f0c73b7ea2560dcaef1",
+      "chronology": "needs-revision",
+      "reviewedItems": 496,
+      "units": 342,
+      "incorrectItems": [
+        "claim-513",
+        "claim-514",
+        "claim-515",
+        "claim-625"
+      ]
     },
     "jinshu/083": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
-      "previousRunId": "run-a92a659b-447a-4880-9492-6d019a6dc4c8",
+      "previousRunId": "run-0d2368a1-3056-47f7-8231-225dcafcabd9",
       "chapterPR": 5474,
-      "revision": "1d31857750bb6c3f6110885228614fa103793462",
+      "revision": "2ccc2b14cfd8ca498bc3a8b8a1f38d5b05c8db21",
       "previousReviewPR": 5480,
-      "previousReviewRevision": "fede91fee456bc69e3bde17211a5f659ba6afa72",
-      "idempotencyKey": "cursor-nov24-jinshu083-focused-1d31857750",
-      "reservedAt": "2026-11-23T22:17:33.117Z",
-      "runId": "run-0d2368a1-3056-47f7-8231-225dcafcabd9",
-      "sentAt": "2026-11-23T22:17:37.898Z",
-      "finishedObservedAt": "2026-11-23T22:21:45.483Z",
-      "resultPR": 5480,
-      "reviewRevision": "b5a53f9ba9d8da51d92f1608ea332584346e340d",
-      "editorial": "approved",
-      "localContinuity": "approved",
-      "chronology": "needs-revision",
-      "remainingHint": "hints-p026"
+      "previousReviewRevision": "b5a53f9ba9d8da51d92f1608ea332584346e340d",
+      "idempotencyKey": "cursor-nov24-jinshu083-source-hint-recheck-2ccc2b14",
+      "reservedAt": "2026-11-23T22:26:41.010Z",
+      "lastSendAttempt": {
+        "status": "not-started",
+        "at": "2026-11-23T22:26:41.010Z"
+      },
+      "prompt": "Exact #5474 and #5480. Recheck only revised hints-p026 and claim-212 at s0053, accepting the Chinese qualitative contextual wording only if supported by the native rules and report. Preserve reviewed editorial/local evidence and record exact independent current chronology if supported. State actual canonical dependency."
     }
   },
   "identityRegistryBuild": {
@@ -1645,21 +1653,20 @@
       "summary": "Native validation passed. Source-limited undated claims preserve Sun Ce comparison and Jinshu Zhongyuan wording; parallel source and distinction retained for independent verification."
     },
     "jinshu/115": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
-      "previousRunId": "run-1af6a472-8ea2-4d49-9ce3-221d2d25cced",
+      "previousRunId": "run-a0135e72-5823-4104-aee5-48db37fbacf5",
       "chapterPR": 5470,
-      "revision": "f9c7de782aa0e77ef9374efeaa8499c58c3a6a93",
-      "reservedAt": "2026-11-23T20:53:25.263Z",
-      "idempotencyKey": "cursor-nov24-jinshu-115-f9c7de782",
-      "runId": "run-dc99687d-70ea-47ef-8027-259580534082",
-      "sentAt": "2026-11-23T20:53:35.332Z",
-      "mode": "cursor-cloud-github-only",
-      "finishedObservedAt": "2026-11-23T21:00:45.520Z",
-      "resultRevision": "6cc3b19eade8f36eeb36ca1026344d678bc20d00",
-      "repairsApplied": 26,
-      "retainedRejectedRepairs": 1,
-      "ownerScopedValidation": "pass"
+      "revision": "6cc3b19eade8f36eeb36ca1026344d678bc20d00",
+      "findingsPR": 5483,
+      "findingsRevision": "d78592a9b663cf5ee1200f0c73b7ea2560dcaef1",
+      "idempotencyKey": "cursor-nov24-jinshu115-native-four-claims-d78592a9",
+      "reservedAt": "2026-11-23T22:26:41.010Z",
+      "lastSendAttempt": {
+        "status": "not-started",
+        "at": "2026-11-23T22:26:41.010Z"
+      },
+      "prompt": "Exact #5470 and #5483. Repair the four findings only: claim-513/514/515 preserve exact wording and sense of 大界營 in s0217 with a supported place/camp description, and claim-625 cites s0280 for the age while preserving s0279 as death evidence. Keep the 26 approved English repairs, new people and local continuity. Validate and push the exact owned draft to GitHub for the original same-reviewer recheck."
     },
     "jinshu/083": {
       "status": "finished",
@@ -1841,6 +1848,25 @@
         "editorialDecisions": 37,
         "sourceFilesChanged": false,
         "scopedValidation": "pass"
+      }
+    ],
+    "jinshu/115": [
+      {
+        "status": "finished",
+        "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+        "previousRunId": "run-1af6a472-8ea2-4d49-9ce3-221d2d25cced",
+        "chapterPR": 5470,
+        "revision": "f9c7de782aa0e77ef9374efeaa8499c58c3a6a93",
+        "reservedAt": "2026-11-23T20:53:25.263Z",
+        "idempotencyKey": "cursor-nov24-jinshu-115-f9c7de782",
+        "runId": "run-dc99687d-70ea-47ef-8027-259580534082",
+        "sentAt": "2026-11-23T20:53:35.332Z",
+        "mode": "cursor-cloud-github-only",
+        "finishedObservedAt": "2026-11-23T21:00:45.520Z",
+        "resultRevision": "6cc3b19eade8f36eeb36ca1026344d678bc20d00",
+        "repairsApplied": 26,
+        "retainedRejectedRepairs": 1,
+        "ownerScopedValidation": "pass"
       }
     ]
   },
@@ -2342,6 +2368,28 @@
         "chronology": "un-audited",
         "dateItems": 496
       }
+    ],
+    "jinshu/083": [
+      {
+        "status": "finished",
+        "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+        "previousRunId": "run-a92a659b-447a-4880-9492-6d019a6dc4c8",
+        "chapterPR": 5474,
+        "revision": "1d31857750bb6c3f6110885228614fa103793462",
+        "previousReviewPR": 5480,
+        "previousReviewRevision": "fede91fee456bc69e3bde17211a5f659ba6afa72",
+        "idempotencyKey": "cursor-nov24-jinshu083-focused-1d31857750",
+        "reservedAt": "2026-11-23T22:17:33.117Z",
+        "runId": "run-0d2368a1-3056-47f7-8231-225dcafcabd9",
+        "sentAt": "2026-11-23T22:17:37.898Z",
+        "finishedObservedAt": "2026-11-23T22:21:45.483Z",
+        "resultPR": 5480,
+        "reviewRevision": "b5a53f9ba9d8da51d92f1608ea332584346e340d",
+        "editorial": "approved",
+        "localContinuity": "approved",
+        "chronology": "needs-revision",
+        "remainingHint": "hints-p026"
+      }
     ]
   },
   "stagingValidatorSync": {
@@ -2430,7 +2478,19 @@
           "physicalGiB": 1.7
         }
       ],
-      "remediation": "Existing processes belong to subject-and-sovereign; do not interrupt. No verified idle glossary preview. Preserve active Cursor work."
+      "remediation": "Existing processes belong to subject-and-sovereign; do not interrupt. No verified idle glossary preview. Preserve active Cursor work.",
+      "latest": {
+        "at": "2026-11-23T22:26:41.010Z",
+        "pressure": 2,
+        "errors": [
+          "macOS reports warning or critical memory pressure: stop new glossary work."
+        ],
+        "swapUsedBytes": "4841275392"
+      },
+      "verifiedOtherProjectFootprintsGiB": [
+        2.9,
+        3
+      ]
     },
     "cloudMemoryOperatorBlocker": {
       "at": "2026-11-23T21:03:32.221Z",
