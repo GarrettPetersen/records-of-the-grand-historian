@@ -1,46 +1,20 @@
-name: Jinshu 031 native identity packet
+name: Campaign source-only chronology regression
 on:
   workflow_dispatch:
 permissions:
   contents: read
-  actions: read
 jobs:
-  prepare:
+  source-only-chronology:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      SOURCE_REVISION: 8ecdd9cb9fcb719bf9a1c6ec0fcf254875615515
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 8ecdd9cb9fcb719bf9a1c6ec0fcf254875615515
+          ref: 9d46bb8550b53d05958b0c1e3123d3680d9770b3
           persist-credentials: false
           fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
-      - uses: actions/download-artifact@v4
-        with:
-          name: people-registry-8ecdd9cb9fcb719bf9a1c6ec0fcf254875615515
-          run-id: 45231719127
-          github-token: ${{ github.token }}
-          path: ${{ runner.temp }}/registry-archive
-      - name: Verify exact execution inputs and prepare the native packet
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
-          cd "$RUNNER_TEMP/registry-archive"
-          sha256sum -c SHA256SUMS
-          mkdir "$RUNNER_TEMP/identity-registry"
-          tar --extract --gzip --file registry.tar.gz --directory "$RUNNER_TEMP/identity-registry"
-          cmp manifest.json "$RUNNER_TEMP/identity-registry/$SOURCE_REVISION/manifest.json"
-          cd "$GITHUB_WORKSPACE"
-          node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter 031 --source-revision "$SOURCE_REVISION" --registry "$RUNNER_TEMP/identity-registry/$SOURCE_REVISION" --out "$RUNNER_TEMP/jinshu031-identity"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: jinshu031-native-identity-packet
-          path: ${{ runner.temp }}/jinshu031-identity/
-          if-no-files-found: error
-          retention-days: 7
+      - run: node --test scripts/test-people-source-only-chronology.mjs
