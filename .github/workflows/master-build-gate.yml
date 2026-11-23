@@ -1,19 +1,32 @@
-name: Jinshu 031 native identity packet
+name: Native Jinshu identity packet and retained proof
 on:
   workflow_dispatch:
+    inputs:
+      chapter:
+        required: true
+        type: choice
+        options: ['031', '094']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
-      SOURCE_REVISION: 9378307ca88e29cc83616d5598ef92911410899b
+      CHAPTER: ${{ inputs.chapter }}
     steps:
+      - id: pin
+        run: |
+          case "$CHAPTER" in
+            031) revision=f65754d727561484a4a9a75453cdcd67ecec5c4d; registry_run=45284855296 ;;
+            094) revision=5c6443441bb9d3330367833e01eae38ebb7421e9; registry_run=45284160964 ;;
+            *) exit 1 ;;
+          esac
+          printf 'revision=%s\nregistry_run=%s\n' "$revision" "$registry_run" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
-          ref: 9378307ca88e29cc83616d5598ef92911410899b
+          ref: ${{ steps.pin.outputs.revision }}
           persist-credentials: false
           fetch-depth: 1
       - uses: actions/setup-node@v4
@@ -22,11 +35,76 @@ jobs:
       - run: npm install --no-audit --no-fund
       - uses: actions/download-artifact@v4
         with:
-          name: people-registry-9378307ca88e29cc83616d5598ef92911410899b
-          run-id: 45263354340
+          name: people-registry-${{ steps.pin.outputs.revision }}
+          run-id: ${{ steps.pin.outputs.registry_run }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/registry-archive
-      - name: Verify exact execution inputs and prepare the native packet
+      - uses: actions/download-artifact@v4
+        if: inputs.chapter == '031'
+        with:
+          name: jinshu031-native-identity-packet
+          run-id: 45264629519
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/original-identity
+      - name: Verify original reports and derive native retained components
+        if: inputs.chapter == '031'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import assert from 'node:assert/strict';
+          import {captureIdentityProofComponent} from './scripts/lib/people-identity-proof-composition.mjs';
+          import {identityArtifactHash as hash} from './scripts/lib/people-identity-artifacts.mjs';
+          const tmp=process.env.RUNNER_TEMP;
+          const oldPacket=fs.readFileSync(path.join(tmp,'original-identity/source-review-packet.json'));
+          const receipt=JSON.parse(fs.readFileSync(path.join(tmp,'original-identity/preparation-receipt.json')));
+          const packet=JSON.parse(oldPacket), scope={book:'jinshu',chapter:'031'};
+          assert.deepEqual(packet.scope,scope);
+          assert.equal(hash(oldPacket),'fdb98159c15fc9cd2874b10d74977fbd1d9d1e146239059fff0364280acf4ab3');
+          const evidence='6a570bcfef20299d6d2c27617280ec3c533391fb';
+          const original='4588bb7810f9f33ad5719d180aeb99ba15bedce1';
+          const actor='bc-c338e2c8-9d0c-4d07-a751-be3d40824e00', originalRun='run-1da4161b-9b5d-49a7-a8b6-c7827519b61a';
+          const base='research/people/jinshu031-independent-canonical-identity-parts-20261123/';
+          const read=(file,revision)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+file+'?ref='+revision],{maxBuffer:10*1024*1024});
+          const reportBytes=read('research/people/jinshu031-independent-canonical-identity-report-20261123.json',original);
+          const report=JSON.parse(reportBytes),manifest=JSON.parse(read(base+'manifest.json',evidence));
+          assert.equal(manifest.originalAggregateReport.commit,original);
+          assert.equal(manifest.originalAggregateReport.sha256,'sha256:'+hash(reportBytes));
+          assert.equal(report.reviewer.agentId,actor);
+          assert.equal(manifest.partitionAuthor.agentId,actor);
+          assert.equal(report.planFingerprint,packet.plan.fingerprint);
+          assert(!packet.authorAgentIds.includes(actor));
+          assert.equal(manifest.parts.length,32);
+          assert.equal(receipt.reviewParts.length,32);
+          const aggregate={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope,authorAgentIds:packet.authorAgentIds,sourcePacketSha256:hash(oldPacket),transportPolicy:receipt.transportPolicy,parts:[]};
+          const captured=[], reconstructed=[];
+          for(const [i,entry] of manifest.parts.entries()){
+            assert.match(entry.file,/^part-\d{3}\.result\.json$/u);
+            assert.equal(entry.originalTransportFile,receipt.reviewParts[i].file);
+            const bytes=read(base+entry.file,evidence),piece=JSON.parse(bytes);
+            assert.equal('sha256:'+hash(bytes),entry.sha256);
+            const transport=fs.readFileSync(path.join(tmp,'original-identity',receipt.reviewParts[i].file));
+            assert.equal(hash(transport),receipt.reviewParts[i].sha256);
+            assert.equal('sha256:'+hash(transport),entry.originalTransportSha256);
+            assert.deepEqual(piece.reviews.map(row=>row.caseId),entry.caseIds);
+            reconstructed.push(...piece.reviews);
+            // The reviewer supplied a lossless partition. Only the outer native wrapper is encoded here.
+            const native=Buffer.from(JSON.stringify({schemaVersion:1,planFingerprint:report.planFingerprint,reviewer:report.reviewer,reviews:piece.reviews})+'\n');
+            const job={schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope,sourcePacketSha256:hash(oldPacket),agentId:actor,runId:originalRun,reportSha256:hash(native),transportSha256:hash(transport)};
+            aggregate.parts.push(job);captured.push({native,transport,job});
+          }
+          assert.deepEqual(reconstructed,report.reviews);
+          const components=captured.map(({native,transport,job})=>captureIdentityProofComponent(oldPacket,native,transport,job,receipt.transportPolicy,aggregate).component);
+          fs.writeFileSync(path.join(tmp,'retained-031.json'),JSON.stringify({schemaVersion:1,kind:'chapter-identity-review-composition',scope,plan:packet.plan,sourcePlans:[],components,selections:[]})+'\n');
+          console.log(JSON.stringify({original,partitionCommit:evidence,originalProviderRun:originalRun,rows:reconstructed.length,components:components.length}));
+          JS
+      - name: Validate exact registry and prepare native identity evidence
+        env:
+          SOURCE_REVISION: ${{ steps.pin.outputs.revision }}
         shell: bash
         run: |
           set -euo pipefail
@@ -34,13 +112,18 @@ jobs:
           cd "$RUNNER_TEMP/registry-archive"
           sha256sum -c SHA256SUMS
           mkdir "$RUNNER_TEMP/identity-registry"
-          tar --extract --gzip --file registry.tar.gz --directory "$RUNNER_TEMP/identity-registry"
-          cmp manifest.json "$RUNNER_TEMP/identity-registry/$SOURCE_REVISION/manifest.json"
+          tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
+          registry="$RUNNER_TEMP/identity-registry/$SOURCE_REVISION"
+          cmp manifest.json "$registry/manifest.json"
           cd "$GITHUB_WORKSPACE"
-          node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter 031 --source-revision "$SOURCE_REVISION" --registry "$RUNNER_TEMP/identity-registry/$SOURCE_REVISION" --out "$RUNNER_TEMP/jinshu031-identity"
+          extra=()
+          if [[ "$CHAPTER" == 031 ]]; then
+            extra+=(--retained-composition "$RUNNER_TEMP/retained-031.json")
+          fi
+          node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter "$CHAPTER" --source-revision "$SOURCE_REVISION" --registry "$registry" --out "$RUNNER_TEMP/native-identity" "${extra[@]}"
       - uses: actions/upload-artifact@v4
         with:
-          name: jinshu031-native-identity-packet
-          path: ${{ runner.temp }}/jinshu031-identity/
+          name: jinshu-${{ inputs.chapter }}-native-identity-evidence
+          path: ${{ runner.temp }}/native-identity/
           if-no-files-found: error
           retention-days: 7
