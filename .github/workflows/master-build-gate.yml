@@ -1,20 +1,46 @@
-name: Campaign source-only chronology regression
+name: Jinshu 031 native identity packet
 on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 jobs:
-  source-only-chronology:
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      SOURCE_REVISION: 9378307ca88e29cc83616d5598ef92911410899b
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: aad5dc09c7cdddbb1e3e6b7931f139a25a8a2248
+          ref: 9378307ca88e29cc83616d5598ef92911410899b
           persist-credentials: false
           fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
-      - run: node --test scripts/test-people-source-only-chronology.mjs
+      - uses: actions/download-artifact@v4
+        with:
+          name: people-registry-9378307ca88e29cc83616d5598ef92911410899b
+          run-id: 45263354340
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry-archive
+      - name: Verify exact execution inputs and prepare the native packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
+          cd "$RUNNER_TEMP/registry-archive"
+          sha256sum -c SHA256SUMS
+          mkdir "$RUNNER_TEMP/identity-registry"
+          tar --extract --gzip --file registry.tar.gz --directory "$RUNNER_TEMP/identity-registry"
+          cmp manifest.json "$RUNNER_TEMP/identity-registry/$SOURCE_REVISION/manifest.json"
+          cd "$GITHUB_WORKSPACE"
+          node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter 031 --source-revision "$SOURCE_REVISION" --registry "$RUNNER_TEMP/identity-registry/$SOURCE_REVISION" --out "$RUNNER_TEMP/jinshu031-identity"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu031-native-identity-packet
+          path: ${{ runner.temp }}/jinshu031-identity/
+          if-no-files-found: error
+          retention-days: 7
