@@ -5,12 +5,14 @@
   "resetDate": "2026-11-24",
   "resetTime": null,
   "dispatchDeadline": null,
-  "dispatchState": "awaiting-verified-reset-time",
+  "dispatchState": "open-with-live-cycle-verification",
   "usage": {
     "source": "Cursor spending dashboard",
-    "cursorModelsUsedPercent": 22,
-    "otherModelsUsedPercent": 50,
-    "onDemandLimitUsd": 1
+    "verifiedAt": "2026-11-23T16:10:54.297Z",
+    "cursorModelsUsedPercent": 23,
+    "otherModelsUsedPercent": 51,
+    "onDemandLimitUsd": 1,
+    "onDemandLimitReached": true
   },
   "workers": {
     "running": [
@@ -212,5 +214,39 @@
   "releaseAudit": {
     "stagingHasCampaignApprovals": false,
     "reason": "Campaign staging PRs are drafts. Existing staging lacks five current master identity certificates for Jinshu 117, 119, 120, 129 and 130. A staging release must preserve them."
-  }
+  },
+  "reviewRuns": {
+    "jinshu/047": {
+      "chapter": "047",
+      "key": "jinshu/047",
+      "pr": 5423,
+      "revision": "dc6a726b7f763f7f4f54f3b95318074a0af7569b",
+      "reviewBranch": "codex/cursor-glossary-nov24-2026-jinshu047",
+      "status": "creating",
+      "reservedAt": "2026-11-23T16:10:54.295Z",
+      "lookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac"
+    },
+    "jinshu/078": {
+      "chapter": "078",
+      "key": "jinshu/078",
+      "pr": 5425,
+      "revision": "67e19fbddd4677db3744330d4919212887b94ea6",
+      "reviewBranch": "codex/cursor-glossary-nov24-2026-jinshu078",
+      "status": "creating",
+      "reservedAt": "2026-11-23T16:10:54.297Z",
+      "lookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac"
+    },
+    "jinshu/085": {
+      "chapter": "085",
+      "key": "jinshu/085",
+      "pr": 5428,
+      "revision": "103736d18c27e8985ec6fc1ef1b4dc361384754e",
+      "reviewBranch": "codex/cursor-glossary-nov24-2026-jinshu085",
+      "status": "creating",
+      "reservedAt": "2026-11-23T16:10:54.297Z",
+      "lookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac"
+    }
+  },
+  "absolute24HourCutoff": "2026-11-24T16:00:22.165Z",
+  "dispatchRule": "Before each new batch confirm original billing period still active in the Cursor dashboard, included capacity remains and hard overage cap remains unchanged. Use 24-hour absolute cap and close on observed rollover. Exact reset hour remains unverified."
 }
