@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T22:22:02.248Z",
+  "lastCheckedAt": "2026-11-23T22:24:14.780Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -367,9 +367,9 @@
     "jinshu/094": {
       "originalPR": 5424,
       "reviewPR": 5430,
-      "revision": "042eb3e75139ba9d5676b2af903f0ed9e333a798",
+      "revision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
       "verifiedScopedFiles": 5,
-      "status": "verified-actor-but-unverified-run-ids-need-removal",
+      "status": "provenance-restored-awaiting-current-native-date-evidence",
       "scopedValidation": {
         "githubRun": 45230672687,
         "candidateRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
@@ -445,7 +445,7 @@
         "revision": "4581f0bb52af0a48d60a5b9687f0b0e88b696cd0",
         "candidate": "06acf99f4a4b5f5dd51c658eb036b995975d2fdc"
       },
-      "identityBlocker": "Missing historical extractor identity in all 12 chunk metadata records. Original ledger and exact submitted bytes prove grokbot-28.",
+      "identityBlocker": "Independent exact chronology requires a current extraction fingerprint before canonical identity.",
       "provenanceRecovery": {
         "status": "verified-awaiting-owner-metadata-only-patch",
         "worker": "grokbot-28",
@@ -455,6 +455,15 @@
         "originalExtractionSha256": "d1f99a1c23d336c39660d7392a9fccc0449b474636cd5961c22b3a6ff99f0aa3",
         "verifiedMatchingRanges": 12,
         "action": "Once current 115 work releases the original owner, patch historical chunk agentId only and ask the same independent reviewer to confirm the exact current date fingerprint. Preserve prior report and date evidence."
+      },
+      "metadataParity": {
+        "old": "06acf99f4a4b5f5dd51c658eb036b995975d2fdc",
+        "head": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
+        "oldExtractionHash": "sha256:b511160c8a1c6292b6d83df1a12f8e34860acfaff1cbd2f1656c1f95e10fa680",
+        "newExtractionHash": "sha256:df5737a0bfa07ca9ed9647511c5d122c6b310f95b38aceca1901da6d2f4f1862",
+        "sameDateAuditItems": true,
+        "sourceUnchanged": true,
+        "verified12ChunkAuthors": "grokbot-28"
       }
     },
     "jinshu/123": {
@@ -1084,7 +1093,7 @@
       "returnedRevision": "d04279d2736afc07d9069dd44b5656de92b68af1"
     },
     "jinshu/094": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
       "previousRunId": "run-e1caf57c-a21d-4028-a269-321f07ee5267",
       "chapterPR": 5430,
@@ -1092,7 +1101,10 @@
       "reservedAt": "2026-11-23T22:21:45.483Z",
       "idempotencyKey": "nov24-cursor-jinshu-094-pin-042eb3e75-2",
       "runId": "run-a0135e72-5823-4104-aee5-48db37fbacf5",
-      "sentAt": "2026-11-23T22:21:50.979Z"
+      "sentAt": "2026-11-23T22:21:50.979Z",
+      "finishedObservedAt": "2026-11-23T22:24:14.780Z",
+      "resultRevision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
+      "verifiedAgentIdOnly": true
     },
     "jinshu/067": {
       "candidateRevision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
@@ -1243,26 +1255,15 @@
       "findings": "70 authentic editorial accepts; checked aliases and merges. Residual claim wording, stale chronology and canonical identity remain."
     },
     "jinshu/094": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
-      "previousRunId": "run-073d220c-fd6f-40a4-90de-6c8be28620a1",
+      "previousRunId": "run-b1030876-2893-4590-9cb0-cfc1c06be642",
       "chapterPR": 5430,
-      "revision": "06acf99f4a4b5f5dd51c658eb036b995975d2fdc",
-      "reservedAt": "2026-11-23T20:53:25.263Z",
-      "idempotencyKey": "cursor-nov24-jinshu-094-06acf99f4",
-      "runId": "run-b1030876-2893-4590-9cb0-cfc1c06be642",
-      "sentAt": "2026-11-23T20:53:30.145Z",
-      "mode": "cursor-cloud-github-only",
-      "finishedObservedAt": "2026-11-23T20:58:45.456Z",
-      "resultPR": 5481,
-      "reviewRevision": "4581f0bb52af0a48d60a5b9687f0b0e88b696cd0",
-      "chronology": "audited",
-      "coverage": {
-        "items": 534,
-        "people": 250,
-        "units": 869,
-        "findings": 0
-      }
+      "revision": "2daaba8f060fcbcad4c9daa65b5ecc43a184da31",
+      "previousReviewPR": 5481,
+      "previousReviewRevision": "4581f0bb52af0a48d60a5b9687f0b0e88b696cd0",
+      "reservedAt": "2026-11-23T22:24:14.780Z",
+      "idempotencyKey": "cursor-nov24-jinshu094-metadata-reseal-2daaba8f0"
     },
     "jinshu/123": {
       "chapterPR": 5439,
@@ -2126,6 +2127,28 @@
           "items": 534,
           "supported": 532,
           "held": 2
+        }
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+        "previousRunId": "run-073d220c-fd6f-40a4-90de-6c8be28620a1",
+        "chapterPR": 5430,
+        "revision": "06acf99f4a4b5f5dd51c658eb036b995975d2fdc",
+        "reservedAt": "2026-11-23T20:53:25.263Z",
+        "idempotencyKey": "cursor-nov24-jinshu-094-06acf99f4",
+        "runId": "run-b1030876-2893-4590-9cb0-cfc1c06be642",
+        "sentAt": "2026-11-23T20:53:30.145Z",
+        "mode": "cursor-cloud-github-only",
+        "finishedObservedAt": "2026-11-23T20:58:45.456Z",
+        "resultPR": 5481,
+        "reviewRevision": "4581f0bb52af0a48d60a5b9687f0b0e88b696cd0",
+        "chronology": "audited",
+        "coverage": {
+          "items": 534,
+          "people": 250,
+          "units": 869,
+          "findings": 0
         }
       }
     ],
