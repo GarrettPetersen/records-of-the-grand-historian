@@ -21,15 +21,30 @@
       "cursor-github-nov24-3",
       "cursor-github-nov24-4"
     ],
-    "runLedgerCommit": "5346a2481c418c9bf43977550a78057b367808cc"
+    "runLedgerCommit": "5346a2481c418c9bf43977550a78057b367808cc",
+    "lastVerifiedAt": "2026-11-23T16:04:26.849Z"
   },
   "candidatePullRequest": 5417,
   "blockers": [
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Verify the reset hour and assign independent combined review of Jinshu 047 PR 5423, checking current staging validators and using bounded lookup. Keep active owner work and hold production until approvals.",
+  "nextAction": "Read hosted scoped validation run 45212212060 for PR 5423. Before dispatch, verify the Cursor reset hour and pin the original campaign deadline. Next capacity slot goes to a combined independent reviewer for the staging candidate.",
   "pullRequests": [
+    {
+      "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
+      "isDraft": false,
+      "number": 5424,
+      "state": "OPEN",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5424"
+    },
+    {
+      "headRefOid": "3e9d961317d0c4ca9979f1188074f8732a572432",
+      "isDraft": false,
+      "number": 5422,
+      "state": "OPEN",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5422"
+    },
     {
       "headRefOid": "ab93b4db76540c5f7efe0875de842d206f35b187",
       "isDraft": false,
@@ -83,7 +98,7 @@
       "headRefOid": "9c78025c3c5cd42ee7a881645462c243ee2a9880",
       "isDraft": false,
       "number": 5414,
-      "state": "OPEN",
+      "state": "CLOSED",
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5414"
     },
     {
@@ -150,7 +165,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T16:02:57.741Z",
+  "lastCheckedAt": "2026-11-23T16:04:26.849Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -162,7 +177,13 @@
       "reviewPR": 5423,
       "revision": "dc6a726b7f763f7f4f54f3b95318074a0af7569b",
       "status": "draft-awaiting-independent-review",
-      "verifiedScopedFiles": 3
+      "verifiedScopedFiles": 3,
+      "scopedValidation": {
+        "githubRun": 45212212060,
+        "workflowRevision": "e570d364f9a3eaabb554d838e405fd9b7e7e9b07",
+        "status": "queued",
+        "candidateRevision": "dc6a726b7f763f7f4f54f3b95318074a0af7569b"
+      }
     }
   }
 }
