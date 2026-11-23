@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-identity-preparation-scope",
+  "book": "jinshu",
+  "chapter": "067",
+  "pinCommit": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
+  "dateAuditGate": {
+    "status": "audited",
+    "path": "data/people/date-audits/jinshu/067.json",
+    "findings": 0
+  },
+  "editorialGate": {
+    "appliedRepairs": 3,
+    "byteHash": "sha256:18c185a549bc1cb0eb4486276233f33c88cce1798a4c5e4efe95117869607d13"
+  },
+  "prepareAttempted": true,
+  "prepareOutcome": "blocked-missing-input",
+  "missingInputs": [
+    {
+      "id": "immutable-canonical-identity-registry",
+      "requiredBy": "npm run people:identity:prepare -- --book jinshu --chapter 067 --registry <IMMUTABLE_DIRECTORY> --out <NEW_ARTIFACT_DIRECTORY>",
+      "detail": "No local immutable dossier store (manifest.json + generation shards) is available in this Cursor VM. prepare-people-chapter-identity.mjs fails at readIdentityDossierStore: ENOENT .../manifest.json."
+    },
+    {
+      "id": "accepted-membership-replay-for-changed-locals",
+      "requiredBy": "index.memberVersions.get(localId) === peopleDigest(memberContract(person)) for every jinshu:067 local in the review plan",
+      "detail": "Cohesion reduced locals 254→174 and changed field seals (e.g. jinshu:067:p178 after Xi Yin AD 384 correction per owner identity-member-delta). Prior hosted lookup generation cb756c508e0265ca… is retrieval-only; Cursor cannot run people:identity:registry full generation here."
+    }
+  ],
+  "acceptedMembershipDeltaOwnerNote": "research/people/jinshu067-authoring-20261123/identity-member-delta-after-xi-yin-384.json",
+  "lookupRetrievalOnly": {
+    "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "use": "Bounded search retrieval only until host publishes registry generation accepting updated jinshu:067 member inventory."
+  },
+  "continuityPreserved": {
+    "liuXiaSeparate": ["p041", "p166"],
+    "caiMoMerge": "p167",
+    "wenJiaoMerge": "p029"
+  },
+  "nativeIdentityApproval": false
+}
