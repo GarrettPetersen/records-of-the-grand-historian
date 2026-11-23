@@ -1,15 +1,16 @@
-# Jinshu 067 — owner Xi Yin AD 384 correction vs #5451
+# Jinshu 067 — owner attestation repairs vs #5456
 
-Owner: `bc-e9c3ed78` · Reviewer round-2 @ `e74600bac689` (#5451) · Base `0b2c2b5169`
+Owner: `bc-e9c3ed78` · Independent evidence #5456 @ `f00691b4c44ca99bb1f0582eb225530f342df190` · Base `73a655fb8523f92a12f58a5d1cd7cb0e815b3012`
 
 ## Done
-- [x] Preserved 3 editorial decisions byte-identically
-- [x] claim-519 / claim-699: 太元九年 Western year AD 393 → **AD 384** (s0373); hints-p178 aligned
-- [x] Preserved Liu Xia p041/p166 separate; Wen Jiao undated death; continuity merges
-- [x] Fresh date packet rebuilt; identity member delta records only `jinshu:067:p178`
-- [x] No global registry rebuild; scoped validation passed
+- [x] Preserved 1,391 mentions and 3 editorial accepts (byte-identical editorial hash)
+- [x] Preserved Xi Yin AD 384 (`claim-519` / `claim-699` / hints-p178) and continuity merges; Liu Xia p041/p166 split retained
+- [x] Repaired all 61 #5456 attestation source-reference mismatches (8 repin / 43 correct / 10 uncertain)
+- [x] Fresh native packet + grouped before/after receipts for same reviewer
+- [x] Scoped `people:validate` + extraction validator passed; `dates:verify` remains **un-audited**
 
 ## Still required (same independent reviewer)
-- [ ] Native date audit confirming AD 384 pin + undated residual groups
-- [ ] Identity certification (hosted baseline + p178 delta; Liu Xia hold)
+- [ ] Re-check the 10 uncertain attestation rows (false substring / office-title / verb misreads)
+- [ ] Substantive checks for 170 empty `active-date-hint` rows left unreviewed in #5456
+- [ ] Native date audit + identity certification (hosted baseline + p178 delta)
 - [ ] Host publication
