@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-independent-consolidated-review",
+  "reportType": "independent-review-round2-not-full-native-seal",
+  "book": "jinshu",
+  "chapter": "067",
+  "status": "needs-owner-repair",
+  "approved": false,
+  "candidate": {
+    "pr": 5445,
+    "prUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5445",
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu067",
+    "commit": "0b2c2b5169e13489edc3cbfdc4f63779d8e8af71",
+    "priorCandidateCommit": "9ca4be6e093bd80fe9ecff230e60cd011363a22b",
+    "comparedReviewPr": 5448,
+    "comparedReviewCommit": "e81040486e78a14b66988ca8308774eea5a48642"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer independent Jinshu 067 reviewer",
+    "model": "Composer",
+    "agentId": "bc-eda5fdb7-cf38-47cb-98f8-37c378bbd7cb",
+    "runUrl": "https://cursor.com/agents/bc-eda5fdb7-cf38-47cb-98f8-37c378bbd7cb",
+    "independentOfExtractor": true,
+    "independentOfRepairAuthor": true,
+    "reviewedAt": "2026-11-23T17:35:00.000Z",
+    "reviewRound": 2
+  },
+  "provenanceRef": "research/people/jinshu067-independent-review-round2-20261123/provenance.json",
+  "scopedChecksRef": "research/people/jinshu067-independent-review-round2-20261123/scoped-checks.json",
+  "lanes": {
+    "englishSourceRepair": {
+      "status": "accepted-applied-repairs-unchanged",
+      "editorialByteHash": "sha256:18c185a549bc1cb0eb4486276233f33c88cce1798a4c5e4efe95117869607d13",
+      "byteMatchRound1ReviewPr5448": true,
+      "acceptedRepairs": ["jinshu:067:r0001", "jinshu:067:r0002", "jinshu:067:r0003"]
+    },
+    "extractionEvidence": {
+      "status": "structurally-valid-cohesion-applied",
+      "peopleBefore": 254,
+      "peopleAfter": 174,
+      "remainingDuplicatePreferredZh": [["劉遐", ["p041", "p166"]]],
+      "continuityFindings": [
+        {
+          "id": "cai-mo-merge",
+          "severity": "pass",
+          "detail": "Owner merge p047→p167 corroborated: same 蔡謨 across detainee list (s0079) and Xi Jian memorial (s0328–s0331)."
+        },
+        {
+          "id": "wen-jiao-merge",
+          "severity": "pass",
+          "detail": "Owner merge to p029 corroborated: single biography narrative including death at s0193."
+        },
+        {
+          "id": "exact-surface-classical",
+          "severity": "pass-with-note",
+          "detail": "Merges for rhetorical historical names (e.g. 齊桓公, 晉文公, 劉秀) are same classical referent within chapter usage, not distinct Eastern Jin persons."
+        },
+        {
+          "id": "liu-xia-unresolved",
+          "severity": "hold",
+          "detail": "劉遐 p041 (s0075 military) vs p166 (s0323 長史 on another memorial) kept separate; insufficient contextual proof of sameness."
+        }
+      ]
+    },
+    "chronology": {
+      "status": "cannot-approve",
+      "nativeGate": "data/people/date-audits/jinshu/067.json missing",
+      "packetItems": 452,
+      "notesRef": "research/people/jinshu067-independent-review-round2-20261123/chronology-review-notes.json",
+      "findings": [
+        {
+          "id": "xi-yin-western-year-mismatch",
+          "severity": "block",
+          "personId": "p178",
+          "detail": "s0373 太元九年 attached to death, but extraction uses AD 393 (Taiyuan 18), not AD 384 (Taiyuan 9)."
+        },
+        {
+          "id": "wen-jiao-undated-death",
+          "severity": "pass",
+          "detail": "s0193 death age 42 retained without invented Western year."
+        },
+        {
+          "id": "no-native-date-report",
+          "severity": "block",
+          "detail": "Fresh packet reviewed; independent people:dates:record not present on pin."
+        }
+      ]
+    },
+    "canonicalIdentities": {
+      "status": "cannot-approve",
+      "lookupRef": "research/people/jinshu067-independent-review-round2-20261123/identity-lookup-evidence.json",
+      "findings": [
+        {
+          "id": "cai-mo-hosted-p167",
+          "severity": "partial",
+          "detail": "Hosted dossier lists jinshu:067:p167 after merge; full chapter certification still blocked."
+        },
+        {
+          "id": "merged-locals-not-on-baseline",
+          "severity": "block",
+          "detail": "Merged principals (e.g. p029, p178) not visible on hosted baseline at probed generation."
+        },
+        {
+          "id": "liu-xia-pair-held",
+          "severity": "pass",
+          "detail": "Unresolved 劉遐 pair retained per bounded lookup and source context."
+        }
+      ]
+    }
+  },
+  "ownerCorrectionsRef": "research/people/jinshu067-independent-review-round2-20261123/owner-corrections.json",
+  "nativeApprovals": {
+    "editorial": "accepted-unchanged-from-round1",
+    "dateAudit": "missing",
+    "identityReview": "not-complete",
+    "combinedCuration": "not-started"
+  },
+  "explicitNonClaims": [
+    "Not combined-curation seal",
+    "Not date-audit approval",
+    "Not identity/dossier certification",
+    "Not publication readiness",
+    "No chapter-wide approval"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "pinCommit": "0b2c2b5169e13489edc3cbfdc4f63779d8e8af71",
+  "runAt": "2026-11-23T17:35:00.000Z",
+  "checks": [
+    {
+      "name": "validate-people-extraction",
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jinshu/067.json",
+      "exitCode": 0,
+      "result": "ok",
+      "counts": { "people": 174, "mentions": 1391, "claims": 1185, "candidates": 1281 }
+    },
+    {
+      "name": "people-validate-scoped",
+      "command": "npm run people:validate -- --book jinshu --chapter 067",
+      "exitCode": 0,
+      "result": "ok",
+      "summary": "174 local people, 3 applied editorial repairs, 0 proposed repairs"
+    },
+    {
+      "name": "editorial-byte-hash",
+      "command": "sha256sum data/people/editorial-decisions/jinshu/067.json",
+      "result": "sha256:18c185a549bc1cb0eb4486276233f33c88cce1798a4c5e4efe95117869607d13",
+      "matchRound1Review": true
+    },
+    {
+      "name": "date-packet-build",
+      "command": "node scripts/people-date-audit.mjs packet --book jinshu --chapter 067",
+      "exitCode": 0,
+      "items": 452
+    },
+    {
+      "name": "date-audit-record",
+      "path": "data/people/date-audits/jinshu/067.json",
+      "exists": false
+    }
+  ]
+}

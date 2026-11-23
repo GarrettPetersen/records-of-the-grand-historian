@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-corrections-from-independent-review",
+  "book": "jinshu",
+  "chapter": "067",
+  "pinCommit": "0b2c2b5169e13489edc3cbfdc4f63779d8e8af71",
+  "reviewRound": 2,
+  "corrections": [
+    {
+      "priority": 1,
+      "lane": "chronology",
+      "id": "xi-yin-taiyuan-9-western-year",
+      "personId": "p178",
+      "evidence": ["s0373"],
+      "before": "westernYear AD 393 on death and age claims; active-date hint AD 393",
+      "after": "westernYear AD 384 for 太元九年; clear or realign active-date hints to match source numeral 九",
+      "reason": "Standard Eastern Jin 太元元年 = 376 CE ⇒ 太元九年 = 384 CE. AD 393 corresponds to 太元十八年, contradicting source 九年."
+    },
+    {
+      "priority": 2,
+      "lane": "chronology",
+      "id": "rebuild-date-packet-after-xi-yin-fix",
+      "action": "Regenerate people:dates:packet and run independent native date audit record after correcting p178 Western year."
+    },
+    {
+      "priority": 3,
+      "lane": "identity",
+      "id": "liu-xia-hold",
+      "personIds": ["p041", "p166"],
+      "action": "Retain separate locals; do not merge on exact 劉遐 alone. Add reviewed possible-same-as only with cross-unit source proof."
+    },
+    {
+      "priority": 4,
+      "lane": "canonicalIdentities",
+      "id": "hosted-baseline-refresh",
+      "action": "After owner commit lands on staging, refresh hosted registry so merged jinshu:067 locals (e.g. p029, p178) are visible before identity certification."
+    }
+  ],
+  "affirmationsNoChangeRequired": [
+    "Editorial decisions byte-identical to round-1 review (#5448)",
+    "Wen Jiao death at s0193 correctly undated (age 42 without reign title)",
+    "Exact-surface biography merges for Cai Mo and Wen Jiao corroborated in chapter context"
+  ]
+}
