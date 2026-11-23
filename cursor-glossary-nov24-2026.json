@@ -1,0 +1,32 @@
+{
+  "id": "cursor-glossary-nov24-2026",
+  "schemaVersion": 1,
+  "startedAt": "2026-11-23T16:00:22.165Z",
+  "resetDate": "2026-11-24",
+  "resetTime": null,
+  "dispatchDeadline": null,
+  "dispatchState": "awaiting-verified-reset-time",
+  "usage": {
+    "source": "Cursor spending dashboard",
+    "cursorModelsUsedPercent": 22,
+    "otherModelsUsedPercent": 50,
+    "onDemandLimitUsd": 1
+  },
+  "workers": {
+    "running": [
+      "cursor-github-nov24-2"
+    ],
+    "finished": [
+      "cursor-github-nov24-1",
+      "cursor-github-nov24-3",
+      "cursor-github-nov24-4"
+    ],
+    "runLedgerCommit": "5346a2481c418c9bf43977550a78057b367808cc"
+  },
+  "candidatePullRequest": 5417,
+  "blockers": [
+    "Cursor displays reset date only; verify exact reset time before new dispatch",
+    "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
+  ],
+  "nextAction": "Independently review Jinshu 085 PR 5417 with pinned read-only lookup once dispatch deadline is verified. Preserve active owner work."
+}
