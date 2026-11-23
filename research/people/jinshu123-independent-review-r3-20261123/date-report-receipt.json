@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "kind": "date-audit-record-receipt",
+  "book": "jinshu",
+  "chapter": "123",
+  "recordedStatus": "needs-revision",
+  "reviewedAt": "2026-11-23T17:51:36.400Z",
+  "sourceHash": "sha256:45a310e8b04b4146e5a7856022432cf8ab4c6b8d1f68a299202008c0caaee2a6",
+  "extractionHash": "sha256:1589c0fed66a57ac89b6d6f3bca7536e77ab0346e3b31d7d2a355b9c03365caf",
+  "matchesOwnerResidualPacket": true,
+  "itemVerdicts": {
+    "supported": 288,
+    "incorrect": 40
+  },
+  "personVerdicts": {
+    "supported": 83,
+    "incorrect": 20
+  },
+  "findings": [
+    {
+      "itemCount": 4,
+      "problem": "Western point years are asserted with sourceDate 太元… but none of the cited evidence units contain that era witness; claim-565/566/567 also label Chui’s death on s0280 campaign text.",
+      "action": "Remove the point Western year or move evidence to the era unit (s0118/s0293/s0287). Fix mislabeled death events on s0280.",
+      "items": [
+        "claim-400",
+        "claim-565",
+        "claim-566",
+        "claim-567"
+      ]
+    },
+    {
+      "itemCount": 18,
+      "problem": "westernBounds.onOrAfter retain sourceDate 乙太元… while cited evidence units lack the 太元 graph (narrative inheritance only).",
+      "action": "Either include the era-bearing unit in evidence, or replace with undatedSourceAttestation/unresolved without a fake local era sourceDate.",
+      "items": [
+        "claim-245",
+        "claim-288",
+        "claim-363",
+        "claim-367",
+        "claim-370",
+        "claim-375",
+        "claim-376",
+        "claim-379",
+        "claim-382",
+        "claim-385",
+        "claim-477",
+        "claim-480",
+        "claim-483",
+        "claim-491",
+        "claim-494",
+        "claim-498",
+        "claim-505",
+        "claim-506"
+      ]
+    },
+    {
+      "itemCount": 18,
+      "problem": "Active-date hints list AD years for people who lack a direct 太元-witnessed claim in the current packet.",
+      "action": "Clear or rebuild those hints from locally witnessed claims only; do not copy inherited bounds.",
+      "items": [
+        "hints-p039",
+        "hints-p076",
+        "hints-p083",
+        "hints-p084",
+        "hints-p085",
+        "hints-p086",
+        "hints-p087",
+        "hints-p088",
+        "hints-p089",
+        "hints-p090",
+        "hints-p121",
+        "hints-p124",
+        "hints-p125",
+        "hints-p126",
+        "hints-p127",
+        "hints-p128",
+        "hints-p147",
+        "hints-p148"
+      ]
+    },
+    {
+      "itemCount": 20,
+      "problem": "Persons whose chronology still includes inherited Western point years, inherited 太元 westernBounds without local era evidence, and/or AD hints without a direct 太元-witnessed claim.",
+      "action": "Repair the listed persons’ chronology and hints against locally witnessed Chinese era units only; then re-submit for independent date audit.",
+      "items": [
+        "p016",
+        "p039",
+        "p040",
+        "p076",
+        "p083",
+        "p084",
+        "p085",
+        "p086",
+        "p087",
+        "p088",
+        "p089",
+        "p090",
+        "p121",
+        "p124",
+        "p125",
+        "p126",
+        "p127",
+        "p128",
+        "p147",
+        "p148"
+      ]
+    }
+  ],
+  "supportedGroups": {
+    "undatedSourceAttestation": 99,
+    "directTaiyuanWesternMappings": 32,
+    "taiyuanConversionsChecked": {
+      "太元八年": "AD 383",
+      "太元十一年": "AD 386",
+      "太元二十一年": "AD 396",
+      "reckoning": "Jin Xiaowu 太元元年 = AD 376"
+    }
+  },
+  "incorrectGroups": {
+    "inheritedPointYears": [
+      "claim-400",
+      "claim-565",
+      "claim-566",
+      "claim-567"
+    ],
+    "inheritedWesternBounds": [
+      "claim-245",
+      "claim-288",
+      "claim-363",
+      "claim-367",
+      "claim-370",
+      "claim-375",
+      "claim-376",
+      "claim-379",
+      "claim-382",
+      "claim-385",
+      "claim-477",
+      "claim-480",
+      "claim-483",
+      "claim-491",
+      "claim-494",
+      "claim-498",
+      "claim-505",
+      "claim-506"
+    ],
+    "adHintsWithoutDirectEra": [
+      "hints-p039",
+      "hints-p076",
+      "hints-p083",
+      "hints-p084",
+      "hints-p085",
+      "hints-p086",
+      "hints-p087",
+      "hints-p088",
+      "hints-p089",
+      "hints-p090",
+      "hints-p121",
+      "hints-p124",
+      "hints-p125",
+      "hints-p126",
+      "hints-p127",
+      "hints-p128",
+      "hints-p147",
+      "hints-p148"
+    ]
+  },
+  "priorReportArchivedInHistory": true,
+  "chapterApproval": false
+}
