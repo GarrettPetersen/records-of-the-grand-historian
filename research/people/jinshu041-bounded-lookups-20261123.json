@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-person-lookup-receipt",
+  "book": "jinshu",
+  "chapter": "041",
+  "recordedAt": "2026-11-23T23:05:00.000Z",
+  "registry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+  "reviewerAgentId": "bc-64f55949-b3a6-4213-b7a2-6e6256473515",
+  "requests": [
+    {
+      "id": "L1",
+      "endpoint": "/v1/search",
+      "query": { "q": "魏舒", "limit": 8 },
+      "status": 200,
+      "summary": "total 12 canonical candidates, truncated — not unique identification"
+    },
+    {
+      "id": "L2",
+      "endpoint": "/v1/search",
+      "query": { "key": "jinshu:041:p012", "limit": 8 },
+      "status": 200,
+      "summary": "total 0 — chapter-local key not in registry"
+    },
+    {
+      "id": "L3",
+      "endpoint": "/v1/search",
+      "query": { "key": "jinshu:041:p056", "limit": 8 },
+      "status": 200,
+      "summary": "total 0 — chapter-local key not in registry"
+    },
+    {
+      "id": "L4",
+      "endpoint": "/v1/search",
+      "query": { "key": "jinshu:041:p017", "limit": 8 },
+      "status": 200,
+      "summary": "total 0 — chapter-local key not in registry"
+    },
+    {
+      "id": "L5",
+      "endpoint": "/v1/search",
+      "query": { "q": "劉寔", "limit": 8 },
+      "status": 200,
+      "summary": "total 14 canonical candidates, truncated — not unique identification"
+    }
+  ],
+  "note": "Five authenticated bounded requests consumed for this review. Full response bodies were captured in cloud artifact jinshu041-bounded-lookups.json for this run; this receipt records conclusions only."
+}
