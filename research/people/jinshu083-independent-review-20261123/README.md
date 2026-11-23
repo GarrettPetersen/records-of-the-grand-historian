@@ -18,3 +18,12 @@ npm run people:dates:verify -- --book jinshu --chapter 083
 ```
 
 Artifacts: `independent-editorial-decisions-v4.json`, `independent-date-audit.json`, `independent-identity-review.json`, `consolidated-review.json`.
+
+## Follow-up (2026-11-23T22:18:59.565Z)
+
+Owner `1d31857750bb6c3f6110885228614fa103793462`. Rechecked claim-212/c0814, Mei/Gui claims, local same-person links.
+
+- Chronology: **needs-revision** (hint cleanup only)
+- Identity: chapter-local links OK; **no canonical certification**
+
+See `consolidated-review-followup.json`.
