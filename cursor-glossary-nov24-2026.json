@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T17:13:21.673Z",
+  "lastCheckedAt": "2026-11-23T17:15:39.365Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -297,8 +297,10 @@
         "githubRun": 45224891962,
         "candidateRevision": "5520975d6aaf496e3494352c6498fa12947d3f80",
         "workflowRevision": "e1abdabae721a53408a0b630721ac6e7fef1990f",
-        "status": "in_progress",
-        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45224891962"
+        "status": "completed",
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45224891962/job/137868623942",
+        "githubJob": 137868623942,
+        "conclusion": "success"
       }
     },
     "jinshu/094": {
@@ -312,7 +314,9 @@
         "candidateRevision": "166a7da3935090884d7a89aaec47af256aed1985",
         "workflowRevision": "e1abdabae721a53408a0b630721ac6e7fef1990f",
         "status": "in_progress",
-        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45224891962"
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45224891962/job/137868624369",
+        "githubJob": 137868624369,
+        "conclusion": null
       },
       "scopedValidationHistory": [
         {
@@ -338,19 +342,62 @@
       "reviewPR": 5445,
       "revision": "9ca4be6e093bd80fe9ecff230e60cd011363a22b",
       "verifiedScopedFiles": 6,
-      "status": "draft-owner-continuity-correction-required"
+      "status": "draft-owner-continuity-correction-required",
+      "productionInputParity": {
+        "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+        "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
+        "verifiedPaths": [
+          "identity-reviews",
+          "combined-curations",
+          "date-audits",
+          "editorial-decisions",
+          "extractions"
+        ],
+        "status": "same-preimages"
+      }
     },
     "jinshu/031": {
       "originalPR": 5406,
       "reviewPR": 5447,
       "revision": "004540543a5a78803538358024ec36156746533b",
       "verifiedScopedFiles": 3,
-      "status": "draft-awaiting-independent-review"
+      "status": "draft-awaiting-independent-review",
+      "productionInputParity": {
+        "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+        "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
+        "verifiedPaths": [
+          "identity-reviews",
+          "combined-curations",
+          "date-audits",
+          "editorial-decisions",
+          "extractions"
+        ],
+        "status": "same-preimages"
+      }
     }
   },
   "releaseAudit": {
     "stagingHasCampaignApprovals": false,
-    "reason": "Campaign staging PRs are drafts. Existing staging lacks five current master identity certificates for Jinshu 117, 119, 120, 129 and 130. A staging release must preserve them."
+    "reason": "Campaign staging PRs are drafts. Existing staging lacks five current master identity certificates for Jinshu 117, 119, 120, 129 and 130. A staging release must preserve them.",
+    "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+    "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
+    "stagingAheadBy": 1596,
+    "stagingBehindBy": 43,
+    "verifiedAt": "2026-11-23T17:15:38.145Z",
+    "publishedJinshuChaptersToPreserve": [
+      "117",
+      "119",
+      "120",
+      "129",
+      "130"
+    ],
+    "missingPathPattern": "data/people/identity-reviews/jinshu/<chapter>.json",
+    "differentDependentPathPatterns": [
+      "data/people/date-audits/jinshu/<chapter>.json",
+      "data/people/editorial-decisions/jinshu/<chapter>.json",
+      "data/people/extractions/jinshu/<chapter>.json"
+    ],
+    "releasePreparation": "Once chapters are approved and merged to staging, assemble the production batch from current master with only the approved chapter deltas and required dependencies. Verify retained releases with the full master gate. Keep shared staging and its history."
   },
   "reviewRuns": {
     "jinshu/047": {
