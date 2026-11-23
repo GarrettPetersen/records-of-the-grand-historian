@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Observe active 031. After a passing cloud guard and fresh Cursor allowance, dispatch the three unsent 094/083 reviewer and 115 owner reservations in order, preserving their exact actor and idempotency key.",
+  "nextAction": "Dispatch the four explicitly unsent exact scopes after a passing cloud guard and current allowance. Prioritize 031 independent delta proof, then 094 and 083, then 115 owner. No eligible release.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T22:26:41.010Z",
+  "lastCheckedAt": "2026-11-23T22:30:15.663Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -531,9 +531,9 @@
     "jinshu/031": {
       "originalPR": 5406,
       "reviewPR": 5447,
-      "revision": "c8e085f9411b4c4d647dd72318906bc04023bfb9",
+      "revision": "7a7c5869773c0ad213a4b8ba3c498ffaf2cbe537",
       "verifiedScopedFiles": 3,
-      "status": "canonical-review-complete-two-source-witness-corrections-pending",
+      "status": "two-held-witnesses-fixed-awaiting-independent-delta-review",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -628,6 +628,25 @@
           "p190",
           "p152"
         ]
+      },
+      "witnessDelta": {
+        "before": "c8e085f9411b4c4d647dd72318906bc04023bfb9",
+        "after": "7a7c5869773c0ad213a4b8ba3c498ffaf2cbe537",
+        "oneEnglishUnit": "s0326",
+        "chineseUnchanged": true,
+        "editorialBytesUnchanged": true,
+        "priorDateItems": 804,
+        "currentDateItems": 799,
+        "all799RemainingDateWitnessesIdentical": true,
+        "removedDateItems": [
+          "claim-749",
+          "claim-760",
+          "claim-890",
+          "hints-p152",
+          "hints-p190"
+        ],
+        "approvedPriorIdentityCases": 257,
+        "proofToPreserve": 5482
       }
     },
     "jinshu/023": {
@@ -1141,7 +1160,7 @@
       "dateApproval": "stale"
     },
     "jinshu/031": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
       "previousRunId": "run-eeec9cee-4d5a-4988-be2a-7946664134ee",
       "chapterPR": 5447,
@@ -1151,7 +1170,17 @@
       "reservedAt": "2026-11-23T22:19:17.688Z",
       "idempotencyKey": "cursor-nov24-jinshu031-two-identity-witnesses-c8e085f94",
       "runId": "run-12f2909a-f6d6-485e-a442-93283add45d3",
-      "sentAt": "2026-11-23T22:19:25.191Z"
+      "sentAt": "2026-11-23T22:19:25.191Z",
+      "finishedObservedAt": "2026-11-23T22:30:15.663Z",
+      "resultRevision": "7a7c5869773c0ad213a4b8ba3c498ffaf2cbe537",
+      "scopedValidation": "pass",
+      "removedPeople": [
+        "p152",
+        "p190"
+      ],
+      "changedEnglishUnits": [
+        "s0326"
+      ]
     },
     "jinshu/023": {
       "chapterPR": 5457,
@@ -1297,30 +1326,20 @@
       "resultPR": 5475
     },
     "jinshu/031": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-c338e2c8-9d0c-4d07-a751-be3d40824e00",
+      "previousRunId": "run-1da4161b-9b5d-49a7-a8b6-c7827519b61a",
       "chapterPR": 5447,
-      "revision": "c8e085f9411b4c4d647dd72318906bc04023bfb9",
-      "previousRunId": "run-9215921a-dd30-412d-a5e1-956d333ed73d",
-      "idempotencyKey": "cursor-nov24-jinshu031-native-identity-9378307ca",
-      "reservedAt": "2026-11-23T22:12:41.641Z",
-      "runId": "run-1da4161b-9b5d-49a7-a8b6-c7827519b61a",
-      "sentAt": "2026-11-23T22:12:48.774Z",
-      "preflight": {
-        "mode": "cursor-cloud-github-only",
-        "pressure": 1,
-        "swapUsedBytes": "4764005826"
+      "revision": "7a7c5869773c0ad213a4b8ba3c498ffaf2cbe537",
+      "previousReviewPR": 5482,
+      "previousReviewRevision": "4588bb7810f9f33ad5719d180aeb99ba15bedce1",
+      "idempotencyKey": "cursor-nov24-jinshu031-scoped-witnesses-7a7c58697",
+      "reservedAt": "2026-11-23T22:30:15.663Z",
+      "lastSendAttempt": {
+        "status": "not-started",
+        "at": "2026-11-23T22:30:15.663Z"
       },
-      "finishedObservedAt": "2026-11-23T22:19:17.688Z",
-      "resultPR": 5482,
-      "reviewRevision": "4588bb7810f9f33ad5719d180aeb99ba15bedce1",
-      "reviewedCases": 259,
-      "approvedCases": 257,
-      "heldPeople": [
-        "p190",
-        "p152"
-      ],
-      "canonicalCertificationComplete": false
+      "prompt": "Exact #5447 and independent #5482. Check the single s0326 idiomatic change and exclusion of p152/p190, with surviving Chinese and 799 chronology witnesses unchanged. Verify the delta and bind independent exact current native editorial/date evidence where warranted. Preserve the 257 original case judgments under native proof composition. Preserve original report, transport and actual run provenance; if the existing aggregate report needs captured per-part responses, return lossless partitions explicitly authored as such against the original sealed transport and disclose their relationship to the original report. No new full review. State only scoped canon follow-up and any real hold."
     },
     "jinshu/023": {
       "status": "finished",
@@ -2251,6 +2270,32 @@
           "items": 804,
           "findings": 0
         }
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-c338e2c8-9d0c-4d07-a751-be3d40824e00",
+        "chapterPR": 5447,
+        "revision": "c8e085f9411b4c4d647dd72318906bc04023bfb9",
+        "previousRunId": "run-9215921a-dd30-412d-a5e1-956d333ed73d",
+        "idempotencyKey": "cursor-nov24-jinshu031-native-identity-9378307ca",
+        "reservedAt": "2026-11-23T22:12:41.641Z",
+        "runId": "run-1da4161b-9b5d-49a7-a8b6-c7827519b61a",
+        "sentAt": "2026-11-23T22:12:48.774Z",
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "4764005826"
+        },
+        "finishedObservedAt": "2026-11-23T22:19:17.688Z",
+        "resultPR": 5482,
+        "reviewRevision": "4588bb7810f9f33ad5719d180aeb99ba15bedce1",
+        "reviewedCases": 259,
+        "approvedCases": 257,
+        "heldPeople": [
+          "p190",
+          "p152"
+        ],
+        "canonicalCertificationComplete": false
       }
     ],
     "jinshu/123": [
@@ -2480,7 +2525,7 @@
       ],
       "remediation": "Existing processes belong to subject-and-sovereign; do not interrupt. No verified idle glossary preview. Preserve active Cursor work.",
       "latest": {
-        "at": "2026-11-23T22:26:41.010Z",
+        "at": "2026-11-23T22:30:15.663Z",
         "pressure": 2,
         "errors": [
           "macOS reports warning or critical memory pressure: stop new glossary work."
@@ -2490,7 +2535,14 @@
       "verifiedOtherProjectFootprintsGiB": [
         2.9,
         3
-      ]
+      ],
+      "unsent": [
+        "jinshu/031",
+        "jinshu/094",
+        "jinshu/083",
+        "jinshu/115"
+      ],
+      "resolution": "Resume once actual cloud preflight passes or permitted alternate host coordination is ready. Preserve both active subject-and-sovereign processes."
     },
     "cloudMemoryOperatorBlocker": {
       "at": "2026-11-23T21:03:32.221Z",
