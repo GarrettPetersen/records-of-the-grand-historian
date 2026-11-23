@@ -4,7 +4,7 @@
   "book": "jinshu",
   "chapter": "041",
   "stagingDraftPr": 5476,
-  "stagingDraftSha": "0d933e064f776c8493a00b0c305363d1946557a5",
+  "stagingDraftSha": "1d77d017cd0b359decfac8bd79ad2950a22a23e7",
   "sourceOwnerPr": 5418,
   "sourceOwnerAgentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
   "reviewer": {
@@ -51,15 +51,18 @@
   "overallVerdict": "incomplete-holds",
   "interpretation": "Independent consolidation retains existing owner artifacts and confirms extraction/editorial gates; does not approve chronology, identity certification, or publication.",
   "freshDateAudit": {
-    "path": "research/people/jinshu041-independent-review-20261123/date-audit-report.json",
-    "packetPath": "research/people/jinshu041-independent-review-20261123/date-packet.json",
-    "residualsPath": "research/people/jinshu041-independent-review-20261123/date-audit-residuals.json",
-    "status": "needs-revision",
+    "path": "research/people/jinshu041-independent-review-20261123/date-audit-report-post-delta.json",
+    "packetPath": "research/people/jinshu041-independent-review-20261123/date-packet-post-delta.json",
+    "priorPath": "research/people/jinshu041-independent-review-20261123/date-audit-report.json",
+    "deltaReceipt": "research/people/jinshu041-authoring-20261123/date-incorrect-delta-receipt.json",
+    "deltaVerification": "research/people/jinshu041-independent-review-20261123/date-incorrect-delta-verification.json",
+    "status": "research-blocked",
     "items": 496,
     "people": 127,
     "units": 375,
-    "incorrectItems": 99,
-    "findingGroups": 9,
+    "incorrectItemsAfterDelta": 0,
+    "deltaRepairedVerified": 99,
+    "unchangedItemChecksExact": 397,
     "supersedesStaleProductionAudit": true,
     "notRecordedToProduction": true
   },
@@ -77,12 +80,13 @@
     },
     {
       "gate": "chronology",
-      "verdict": "needs-revision",
-      "kind": "fresh-native-audit-on-current-packet",
-      "artifact": "research/people/jinshu041-independent-review-20261123/date-audit-report.json",
+      "verdict": "research-blocked",
+      "kind": "post-delta-merge-on-staging-1d77d017",
+      "artifact": "research/people/jinshu041-independent-review-20261123/date-audit-report-post-delta.json",
       "itemCount": 496,
-      "incorrectItems": 99,
-      "reason": "First current independent audit with complete item/person coverage on fresh chapter-scoped packet (375 units read). Status needs-revision: 55 false-precision vague-regnal, 44 evidence attribution mismatches, plus grouped research holds. Supersedes stale production blanket hold; not written to data/people/date-audits."
+      "incorrectItemsAfterDelta": 0,
+      "deltaVerified": 99,
+      "reason": "All 99 prior incorrect items independently verified against date-incorrect-delta-receipt.json and Chinese witnesses; 397 unchanged itemChecks copied exactly from 00e7e11b evidence. Full native report status research-blocked (zero incorrect, no Western approvals). Not audited; not recordDateAudit."
     },
     {
       "gate": "identity",
