@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-author-residual-independent-review",
+  "book": "jinshu",
+  "chapter": "030",
+  "worker": "cursor-github-nov24-1",
+  "authorAgentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+  "authoredAt": "2026-11-23T16:00:37.835Z",
+  "baseCommit": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "approvalGranted": false,
+  "pins": {
+    "sourceSha256": "sha256:3298f6dd67c597a5a61a6c662199b7b10f54640db3f5eeef158f003e2a8e2a09",
+    "extractionSha256": "sha256:625cf1e818f5703a6143c443c03c115695e74d656f6cc32b078bb071b7a47d3f",
+    "chapterFingerprint": "sha256:f258bc0a26ea3965f257f5618a305a3ccb4d0e65771dbba399706ac1421aa7af"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 030",
+    "passed": true,
+    "stats": {
+      "units": 575,
+      "candidates": 723,
+      "people": 208,
+      "mentions": 509,
+      "claims": 1341,
+      "repairs": 44,
+      "dispositions": 451,
+      "aliasDispositionConflicts": 0
+    },
+    "proposedRepairs": 44
+  },
+  "appliedNow": {
+    "extractionFixes": [
+      "p044 Chen Chong polity [\"Western Jin\",\"Eastern Jin\"] -> [\"Eastern Han\"]"
+    ],
+    "note": "Source English unchanged; proposed repairs validate against before-text."
+  },
+  "residualIndependentReview": {
+    "editorial": {
+      "status": "pending",
+      "reason": "Author cannot approve own translation repairs.",
+      "proposedRepairCount": 44,
+      "topThemes": [
+        "The s0096 proposed repair still leaves authorship of the Spring and Autumn Adjudications grammatically attached to Zhang Tang; the replacement explicitly attributes it to Dong Zhongshu.",
+        "Eight existing idiomatic proposals leave the same name, number, or attribution defect in the literal field.",
+        "s0246 inserts an unsupported Western year, while s0211 miscasts Sima Shi’s regency as co-rule and s0525 reverses the corporal-punishment argument.",
+        "Chen Chong’s extraction record assigns him to Western and Eastern Jin despite the chapter and its own description placing him in Eastern Han."
+      ]
+    },
+    "chronology": {
+      "status": "pending-independent-date-audit",
+      "reason": "Un-audited chapter; unsupported Western year in idiomatic text proposed for removal without inventing a replacement conversion.",
+      "notes": [
+        {
+          "unit": "s0246",
+          "note": "The source gives the native date 泰始三年 only. The current idiomatic field's “267 CE” is an unsourced conversion in this chapter text and is removed by sr-013; no replacement Western year is proposed."
+        }
+      ],
+      "datePacketPath": "research/people/checkpoints/jinshu030-author-residual-20261123/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-bounded-lookup-and-independent-canonical-review",
+      "reason": "PEOPLE_LOOKUP_TOKEN unavailable; no fabricated membership seals.",
+      "extractionIssues": [
+        {
+          "personId": "p044",
+          "person": "Chen Chong",
+          "units": [
+            "s0068",
+            "s0077",
+            "s0080",
+            "s0089",
+            "s0090",
+            "s0091"
+          ],
+          "issue": "The person record's polity list is [\"Western Jin\", \"Eastern Jin\"], although Chen Chong is introduced under Emperor Zhang of Han, serves in Yongyuan 6, and the record itself describes him as an Eastern Han official.",
+          "proposedResolution": "Replace the polity list with [\"Eastern Han\"].",
+          "reason": "The current polity assignment contradicts the chapter context and the record’s own description."
+        }
+      ],
+      "lookupBlocked": true
+    }
+  },
+  "sourceReviewCoverage": {
+    "unitsReviewedCount": 540,
+    "noDefectUnitsCount": 540,
+    "summary": {
+      "existingRepairsAcceptedWithoutReplacement": 22,
+      "existingRepairsReplaced": 1,
+      "newTranslationRepairRows": 21,
+      "translationRepairRowsReturned": 22,
+      "uniqueUnitsWithKnownOrNewTranslationDefects": 35,
+      "recordLevelExtractionIssues": 1,
+      "chronologyNotes": 1,
+      "topFindings": [
+        "The s0096 proposed repair still leaves authorship of the Spring and Autumn Adjudications grammatically attached to Zhang Tang; the replacement explicitly attributes it to Dong Zhongshu.",
+        "Eight existing idiomatic proposals leave the same name, number, or attribution defect in the literal field.",
+        "s0246 inserts an unsupported Western year, while s0211 miscasts Sima Shi’s regency as co-rule and s0525 reverses the corporal-punishment argument.",
+        "Chen Chong’s extraction record assigns him to Western and Eastern Jin despite the chapter and its own description placing him in Eastern Han."
+      ]
+    }
+  }
+}
