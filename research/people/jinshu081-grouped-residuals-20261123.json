@@ -1,47 +1,60 @@
 {
   "schemaVersion": 1,
-  "kind": "independent-chapter-grouped-residuals",
-  "stagingHead": "ca293f391617cdaf6b7fcd4a54fb3019f7aee493",
-  "reviewerBranch": "cursor/jinshu081-independent-review-b72f",
-  "reviewerCommit": "533a81307d",
+  "stagingHead": "aa3722c4350992e0e50f0b412ede6c773aab0755",
   "chronologyFinalized": false,
-  "chronologyBlockedOnEnglish": "Owner English defect patches accepted but not yet applied to data/jinshu/081.json; do not run current native item audit or record date-audits/jinshu/081.json until host application.",
+  "chronologyStatus": "needs-revision",
+  "nativeReport": "research/people/jinshu081-date-audit-report-20261123.json",
+  "sealProof": "research/people/jinshu081-date-audit-seal-proof-20261123.json",
   "preserved": {
-    "editorialIdiomRepairs": ["s0021", "s0033", "s0069", "s0085", "s0091"],
-    "g1g2StructuralApply": "358 undated attestations per diagnosis — verified on staging extraction"
+    "editorialIdiomRepairs": [
+      "s0021",
+      "s0033",
+      "s0069",
+      "s0085",
+      "s0091"
+    ],
+    "englishDefectUnits": [
+      "s0009",
+      "s0303",
+      "s0304",
+      "s0306",
+      "s0308"
+    ]
   },
-  "residuals": [
-    {
-      "group": "English",
-      "action": "Host apply accepted jinshu081-english-defect patches; then reconcile mentions if English surfaces shift.",
-      "blocking": ["native date item audit", "extractionHash-stable packet"]
-    },
+  "remainingSourceIssues": [
     {
       "group": "G3",
-      "concreteDefect": true,
-      "count": 39,
-      "summary": "Attestations still carry Western intervals while conversion from cited era/reign text is unwitnessed (e.g. claim-44 永嘉四年 vs AD 310–311 endpoints).",
-      "action": "Post-English, rebuild packet; independent per-item conversion or unresolved."
+      "count": 16,
+      "claims": [
+        "claim-22",
+        "claim-52",
+        "claim-76",
+        "claim-78",
+        "claim-92",
+        "claim-238",
+        "claim-311",
+        "claim-441",
+        "claim-443",
+        "claim-525",
+        "claim-1027",
+        "claim-1101",
+        "claim-1103",
+        "claim-1105",
+        "claim-1107",
+        "claim-1232"
+      ]
     },
     {
       "group": "G4",
-      "concreteDefect": true,
-      "count": 397,
-      "summary": "All active-date hints remain outside-knowledge without date-audit approval; duplicate narrative risk reduced after G1 but hints still unwitnessed.",
-      "action": "Witness or hold each hints-* after G3 clearance."
+      "count": 397
     },
     {
       "group": "G5",
-      "concreteDefect": true,
-      "count": 46,
-      "summary": "Death claims lack Western bounds or explicit unresolved dating; separate from G1 mass pattern.",
-      "action": "Source review of death narrative units."
+      "count": 44
     },
     {
       "group": "Identity",
-      "concreteDefect": true,
-      "summary": "Canonical completion packet still absent; prior lookup limits unchanged.",
-      "action": "Bounded case review after English + chronology artifacts current."
+      "note": "completion packet still absent"
     }
   ]
 }
