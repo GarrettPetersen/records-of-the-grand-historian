@@ -8,9 +8,9 @@
   "dispatchState": "open-with-live-cycle-verification",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-23T17:47:09.659Z",
+    "verifiedAt": "2026-11-23T17:50:10.445Z",
     "cursorModelsUsedPercent": 25,
-    "otherModelsUsedPercent": 56,
+    "otherModelsUsedPercent": 57,
     "onDemandLimitUsd": 1,
     "onDemandLimitReached": true,
     "lastObservedOnDemandMeterUsd": 2.91,
@@ -39,7 +39,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Observe 031, 094 and 123 independent reviews, 067 owner repair and hosted CI. Start 023 independent review when a slot opens.",
+  "nextAction": "Build the Jinshu 031 identity registry remotely, recheck 067, repair three 094 findings, and start the 023 review.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T17:49:01.004Z",
+  "lastCheckedAt": "2026-11-23T17:50:10.445Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -368,7 +368,7 @@
       "reviewPR": 5430,
       "revision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
       "verifiedScopedFiles": 5,
-      "status": "draft-awaiting-changed-chronology-review",
+      "status": "draft-focused-chronology-repairs-required",
       "scopedValidation": {
         "githubRun": 45230672687,
         "candidateRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
@@ -423,9 +423,9 @@
     "jinshu/067": {
       "originalPR": 5420,
       "reviewPR": 5445,
-      "revision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
+      "revision": "f96a8b20294d52d2489b17b70f1358e2daeba3cf",
       "verifiedScopedFiles": 6,
-      "status": "draft-attestation-source-pin-repair-required",
+      "status": "draft-awaiting-attestation-recheck",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -468,7 +468,7 @@
       "reviewPR": 5447,
       "revision": "10430638f26b6f78c517d3e3c9bf56de1f21209f",
       "verifiedScopedFiles": 3,
-      "status": "draft-awaiting-accession-recheck",
+      "status": "draft-chronology-approved-identity-preparation",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -518,11 +518,11 @@
         "githubRun": 45230672687,
         "candidateRevision": "2ac477356f2c45918ec874f019b21baa2bef9bd9",
         "workflowRevision": "e867fa88e9e8bbf0c192aeed2d4d57212bddd5f6",
-        "status": "in_progress",
+        "status": "completed",
         "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45230672687/job/137889036113",
         "githubJob": 137889036113,
-        "conclusion": null,
-        "completedAt": null,
+        "conclusion": "success",
+        "completedAt": "2026-11-23T17:47:56Z",
         "appliesToCurrentCandidate": true
       }
     }
@@ -787,9 +787,11 @@
       "reviewRevision": "f00691b4c44ca99bb1f0582eb225530f342df190",
       "agentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
       "previousRunId": "run-52497472-6cc1-4e6c-b4b0-93667a72c4ed",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:36:28.381Z",
-      "runId": "run-f4be0e62-58e1-46c7-9da8-0f4298cbb4e8"
+      "runId": "run-f4be0e62-58e1-46c7-9da8-0f4298cbb4e8",
+      "returnedRevision": "f96a8b20294d52d2489b17b70f1358e2daeba3cf",
+      "summary": "61 attestation repairs: 8 repinned, 43 corrected, 10 uncertain. Scoped validation reported passing."
     },
     "jinshu/123": {
       "chapterPR": 5439,
@@ -901,14 +903,21 @@
     "jinshu/094": {
       "chapterPR": 5430,
       "findingsPR": 5450,
-      "reviewRevision": "40d6cce44f1b65834b794793a00466bd6ea56454",
+      "reviewRevision": "c03ffe96a1f94cb3de08c9b60b8a937b18e4ef6e",
       "revision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
       "candidateRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
       "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
       "previousRunId": "run-ea6cc3dc-1a4a-4247-a67b-3b75ae9abed5",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:40:09.375Z",
-      "runId": "run-976716ac-f4b9-4a7b-b109-bfdeecd6ed26"
+      "runId": "run-976716ac-f4b9-4a7b-b109-bfdeecd6ed26",
+      "resultPR": 5460,
+      "chronology": "needs-revision",
+      "remaining": [
+        "claim-133/134 永康初",
+        "Fan Can death s0148",
+        "Ren Xu death s0318"
+      ]
     },
     "jinshu/123": {
       "revision": "c7696e3be9e79839e70bfd643a4205a008d3e07e",
@@ -928,9 +937,17 @@
       "previousReviewRevision": "7898a1188d16bc912b594bb94221dcebd2cf305c",
       "agentId": "bc-c338e2c8-9d0c-4d07-a751-be3d40824e00",
       "previousRunId": "run-8321dccd-6430-4985-9435-524d009fa6c3",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:45:19.724Z",
-      "runId": "run-0b26d2d8-ad49-485c-b7e7-e9b61a5cf766"
+      "runId": "run-0b26d2d8-ad49-485c-b7e7-e9b61a5cf766",
+      "resultPR": 5461,
+      "reviewRevision": "a396df6cbaa1e0c52f14e3b93a853c2b16c9a125",
+      "chronology": "audited",
+      "coverage": {
+        "items": 804,
+        "units": 680,
+        "people": 269
+      }
     }
   },
   "identityRegistryBuild": {
@@ -949,7 +966,7 @@
     },
     "membershipNotes": "Exact master baseline artifact remains available. Evidence-only updates retain membership. Changed person inventories or explicit same/different constraints require native accepted membership replay or a source-pinned hosted registry before canonical certification. Lookup alone cannot certify.",
     "chapter031": {
-      "status": "dispatching",
+      "status": "in_progress",
       "ref": "codex/cursor-glossary-nov24-2026-identity-031",
       "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
       "parentCandidate": "10430638f26b6f78c517d3e3c9bf56de1f21209f",
@@ -960,7 +977,9 @@
         "data/people/extractions/jinshu/031.json",
         "data/people/editorial-decisions/jinshu/031.json",
         "data/people/date-audits/jinshu/031.json"
-      ]
+      ],
+      "githubRun": 45231719127,
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45231719127"
     }
   },
   "dateReviewRuns": {
