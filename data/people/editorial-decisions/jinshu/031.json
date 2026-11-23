@@ -1664,6 +1664,183 @@
       "claimRetractions": [],
       "claimRevisions": [],
       "claimAdditions": []
+    },
+    {
+      "input": {
+        "chapterFingerprint": "sha256:c3eacc03f6fcb9777506f524e3d36637b84d40b4a9716b250554e6c1dd4fe561",
+        "proposalsFingerprint": "sha256:bca31c505b6fc6f3c92e4e4afd824f0b97a3b77ac9a01908ab5342bc1e7bf519"
+      },
+      "reviewer": {
+        "kind": "cursor-agent",
+        "name": "Independent Jinshu 031 final reviewer",
+        "model": "gpt-5.6-sol-medium",
+        "agentId": "bc-c338e2c8-9d0c-4d07-a751-be3d40824e00",
+        "runId": null,
+        "completedAt": "2026-11-23T17:10:18.504Z"
+      },
+      "proposals": [
+        {
+          "id": "jinshu:031:r0053",
+          "unit": {
+            "id": "s0032",
+            "kind": "paragraph-sentence",
+            "blockIndex": 0,
+            "collection": "sentences",
+            "itemIndex": 31
+          },
+          "field": "literal",
+          "before": "one goodness of Empress Mu—merit equal to the Ten Disorderly Ones.",
+          "after": "one goodness of Empress Mu—merit equal to the Ten Capable Ministers.",
+          "reason": "十亂 are King Wu of Zhou’s ten capable ministers (亂 “to bring order”), not “Disorderly Ones.” Align the literal with the Chinese and with the idiomatic sense already present.",
+          "confidence": "high"
+        },
+        {
+          "id": "jinshu:031:r0054",
+          "unit": {
+            "id": "s0032",
+            "kind": "paragraph-sentence",
+            "blockIndex": 0,
+            "collection": "sentences",
+            "itemIndex": 31
+          },
+          "field": "idiomatic",
+          "before": "a single virtue in Empress Mu rivaled the merit of the “ten turbulent” worthies who saved a dynasty.",
+          "after": "a single virtue in Empress Mu rivaled the merit of the Ten Capable Ministers who ordered the realm.",
+          "reason": "Replace “ten turbulent” with the standard reading of 十亂 as the Ten Capable Ministers, matching the source allusion.",
+          "confidence": "high"
+        },
+        {
+          "id": "jinshu:031:r0055",
+          "unit": {
+            "id": "s0040",
+            "kind": "paragraph-sentence",
+            "blockIndex": 2,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "literal",
+          "before": "Her father Wang was magistrate of Suiyi in Wei;",
+          "after": "Her father Wang was magistrate of Suyi in Wei;",
+          "reason": "粟邑 is Suyi, not Suiyi.",
+          "confidence": "high"
+        },
+        {
+          "id": "jinshu:031:r0056",
+          "unit": {
+            "id": "s0040",
+            "kind": "paragraph-sentence",
+            "blockIndex": 2,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "Her father Wang had served as magistrate of Suiyi under Wei;",
+          "after": "Her father Wang had served as magistrate of Suyi under Wei;",
+          "reason": "粟邑 is Suyi, not Suiyi.",
+          "confidence": "high"
+        },
+        {
+          "id": "jinshu:031:r0057",
+          "unit": {
+            "id": "s0515",
+            "kind": "paragraph-sentence",
+            "blockIndex": 61,
+            "collection": "sentences",
+            "itemIndex": 1
+          },
+          "field": "idiomatic",
+          "before": "Zhuge Mei served as attendant and censor chief.",
+          "after": "Quan’s younger brother Zhuge Mei, courtesy Renlin, was Palace Attendant and Palace Assistant Imperial Clerk.",
+          "reason": "Idiomatic omitted 字仁林 and reduced 侍中、御史中丞; restore courtesy name and both offices from the Chinese (and the sealed literal).",
+          "confidence": "high"
+        },
+        {
+          "id": "jinshu:031:r0058",
+          "unit": {
+            "id": "s0667",
+            "kind": "paragraph-sentence",
+            "blockIndex": 81,
+            "collection": "sentences",
+            "itemIndex": 2
+          },
+          "field": "idiomatic",
+          "before": "Her father Xiahou Zhuang—Huainan governor—Marquis of Qingming.",
+          "after": "Her father Xiahou Zhuang, courtesy Zhongrong, was governor of Huainan and Marquis of Qingming Pavilion.",
+          "reason": "Idiomatic omitted 字仲容 and shortened 清明亭侯; restore courtesy name and the pavilion-marquis title from the Chinese.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "jinshu:031:r0053",
+          "decision": "revise",
+          "after": "one goodness of Empress Mu—merit equal to the ten capable ministers.",
+          "reason": "The Zhou allusion 十亂 denotes the ten ministers who brought order; “Disorderly Ones” reverses 亂 in context. Use lower-case descriptive wording because this is a collective allusion, not a personal-name occurrence.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "jinshu/031 s0032",
+            "excerpt": "穆后一善，勣侔於十亂。"
+          }
+        },
+        {
+          "repairId": "jinshu:031:r0054",
+          "decision": "revise",
+          "after": "a single virtue in Empress Mu rivaled the merit of the ten capable ministers who ordered the realm.",
+          "reason": "The idiomatic “ten turbulent” misstates the same 十亂 allusion. Use lower-case descriptive wording because this collective allusion is not a personal-name occurrence.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "jinshu/031 s0032",
+            "excerpt": "穆后一善，勣侔於十亂。"
+          }
+        },
+        {
+          "repairId": "jinshu:031:r0055",
+          "decision": "accept",
+          "after": null,
+          "reason": "粟邑 is the place-name Suyi. The literal field’s “Suiyi” transposes the vowels and conflicts with the supported office label already retained in the extraction.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "jinshu/031 s0040",
+            "excerpt": "父汪，魏粟邑令；"
+          }
+        },
+        {
+          "repairId": "jinshu:031:r0056",
+          "decision": "accept",
+          "after": null,
+          "reason": "粟邑 is the place-name Suyi. The idiomatic field repeats the same “Suiyi” transcription error, so both English fields require the matching correction.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "jinshu/031 s0040",
+            "excerpt": "父汪，魏粟邑令；"
+          }
+        },
+        {
+          "repairId": "jinshu:031:r0057",
+          "decision": "accept",
+          "after": null,
+          "reason": "銓弟玫 identifies Mei as Quan’s younger brother; 字仁林 supplies Renlin; and 侍中、御史中丞 supplies both offices. The replacement restores each omitted element and agrees with the literal field and related claims.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "jinshu/031 s0515",
+            "excerpt": "銓弟玫，字仁林，侍中、御史中丞。"
+          }
+        },
+        {
+          "repairId": "jinshu:031:r0058",
+          "decision": "accept",
+          "after": null,
+          "reason": "字仲容 explicitly supplies the courtesy name, while 清明亭侯 is Marquis of Qingming Pavilion rather than the shortened Marquis of Qingming. The proposal restores both omissions without changing identity.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "jinshu/031 s0667",
+            "excerpt": "父莊，字仲容，淮南太守、清明亭侯。"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [],
+      "claimAdditions": []
     }
   ]
 }
