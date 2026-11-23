@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu030-post-apply-chronology-scope",
+  "reviewedAt": "2026-11-23T23:48:00.000Z",
+  "reviewerAgentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+  "stagingPin": {
+    "draftPull": 5479,
+    "draftCommit": "aed1eba6d5d38944fc98a551b846d89da187be5f"
+  },
+  "datePacket": {
+    "path": "research/people/checkpoints/jinshu030-post-apply-20261123/date-packet.json",
+    "sha256": "sha256:c0c2553c1582c9a7ce992be0a088a20103599216268b3690186a8f707e82bbca",
+    "sourceHash": "sha256:c6bd62d2eea304d143ea91b9d41d85c73f4209eb17bacaea8ee0253c6a78ff02",
+    "extractionHash": "sha256:b0421ccc0fca0ea3b6926cb8b8b4ab76a07d8c9fe3b856fbade1d7636328ea44",
+    "dateHintChecks": 506,
+    "people": 208,
+    "sourceUnits": 575
+  },
+  "ownerCurationReviewed": [
+    "research/people/checkpoints/jinshu030-owner-round2-20261123/outside-knowledge-chronology-diagnosis.json",
+    "research/people/checkpoints/jinshu030-owner-round2-20261123/western-attestation-curation-log.json"
+  ],
+  "westernAttestationCorrection": {
+    "verdict": "accept-owner-repair-direction",
+    "outsideKnowledgeRemaining": 0,
+    "westernIntervalRemaining": 0,
+    "undatedSourceAttestation": 193,
+    "activeWesternHintsCleared": 188,
+    "nativeQuotedHanJinEraYears": [
+      {
+        "personId": "p054",
+        "sourceDateText": "永元六年",
+        "evidenceUnits": [
+          "s0080"
+        ],
+        "auditNote": "Eastern Han reign year quoted in source; Western conversion deferred to independent date audit."
+      },
+      {
+        "personId": "p057",
+        "sourceDateText": "建安元年",
+        "evidenceUnits": [
+          "s0094"
+        ],
+        "auditNote": "Late Han reign year quoted in source; Western conversion deferred."
+      },
+      {
+        "personId": "p162",
+        "sourceDateText": "元康四年",
+        "evidenceUnits": [
+          "s0379"
+        ],
+        "auditNote": "Western Jin reign year quoted in source; Western conversion deferred."
+      }
+    ]
+  },
+  "dateAuditReadiness": {
+    "chapterStatus": "un-audited",
+    "readyForFullUnitPersonCoverageApproval": false,
+    "reason": "Scoped Han-era cohort still needs independent date audit with sealed packet; native era-year conversions and 185 legacy active-date-hint debts remain for the audit lane, not reviewer certification here."
+  },
+  "groupedResidualsForDateAudit": [
+    {
+      "groupId": "native-era-year-conversion",
+      "count": 3,
+      "people": [
+        "p054",
+        "p057",
+        "p162"
+      ],
+      "action": "Independently convert or formally hold each source-quoted reign year without reintroducing outside-knowledge intervals."
+    },
+    {
+      "groupId": "supported-undated-attestation",
+      "count": 193,
+      "action": "Treat as valid undatedSourceAttestation outcomes where Chinese lacks a unique bindable era-year; do not invent Western endpoints."
+    },
+    {
+      "groupId": "unresolved-recalled-exemplar",
+      "count": 3,
+      "people": [
+        "p052",
+        "p073",
+        "p075"
+      ],
+      "action": "Retain unresolved holds for pre-Han or literary figures cited only as analogies."
+    },
+    {
+      "groupId": "unresolved-han-legal-commentators",
+      "count": 5,
+      "action": "Retain Han commentator undated holds (e.g. p096, p097, p132, p133, p135) without dating from commentary title alone."
+    },
+    {
+      "groupId": "taishi-s0246-english-only",
+      "count": 1,
+      "units": [
+        "s0246"
+      ],
+      "action": "Accept applied English removal of (267 CE); Western year for 泰始三年 still requires separate audited claim work if introduced."
+    },
+    {
+      "groupId": "legacy-active-date-hint-debt",
+      "count": 185,
+      "action": "Validator-reported persons without active-date hints after Western hint clearing; date audit should reconcile hints vs undated attestations without restoring false precision."
+    }
+  ],
+  "preservedPriorChronologyHolds": {
+    "fromConsolidatedReview": "59b25738210e49cee8aeeb0b782a659ef065ece1",
+    "holdsStillActive": true,
+    "dateApprovalGranted": false
+  }
+}
