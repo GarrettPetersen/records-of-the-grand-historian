@@ -83,6 +83,13 @@ campaign conversation. Use no parallel native Codex subagents initially. Follow
 increase; the original one-cloud-assignment limit was a recovery calibration,
 not a permanent restriction on Cursor cloud or GrokBot completion work.
 
+For Cursor Cloud runs coordinated through GitHub only, use
+`npm run people:disk:check -- --cursor-cloud-github-only` before dispatch and
+during observation. This waives the 30 GiB local disk floor for that path.
+Claims, PRs, validation and artifacts stay remote. Use the default guard for
+local preparation, downloads, builds, worktrees, or dispatch through the Mac's
+MCP services. Memory, inventory and measurement failures still stop dispatch.
+
 On a memory warning, follow the preview-cleanup procedure in
 `PEOPLE_COMPLETION_PROCESS.md`: inspect physical footprint as well as RSS and
 gracefully stop verified idle, superseded preview servers under the user's standing

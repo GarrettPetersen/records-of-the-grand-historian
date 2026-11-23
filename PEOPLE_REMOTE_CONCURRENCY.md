@@ -34,6 +34,14 @@ November 15 calibration completed owner, independent-review and owner-repair run
 with normal pressure and stable/decreasing swap. This supports a measured increase,
 not a guarantee that every larger configuration is safe.
 
+For Cursor Cloud campaigns that coordinate entirely through GitHub, run
+`npm run people:disk:check -- --cursor-cloud-github-only` on that same cadence.
+This mode allows the light GitHub and Cursor API coordination calls below the
+30 GiB local disk floor. Keep all claims, artifact handling, code writes, validation
+and builds remote. Use the default guard for dispatches that rely on Mac-side
+packets, artifact downloads, local MCP services or other local job execution.
+Record the mode and measured resources in the campaign journal before resuming.
+
 Keep one host canonical publication/compilation/heavy build at a time. All workers
 use sealed inputs, scoped tools and isolated artifacts in the same shared checkout.
 Never copy the repository, corpus, public assets or dependencies, or create a
