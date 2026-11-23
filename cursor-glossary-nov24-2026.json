@@ -8,7 +8,7 @@
   "dispatchState": "open-with-live-cycle-verification",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-23T17:21:35.655Z",
+    "verifiedAt": "2026-11-23T17:23:17.677Z",
     "cursorModelsUsedPercent": 24,
     "otherModelsUsedPercent": 52,
     "onDemandLimitUsd": 1,
@@ -39,7 +39,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Observe 031, 067, 116 and 123 independent reviews. Jinshu 094 next for original-owner correction when a slot opens.",
+  "nextAction": "Resume the original 067 and 031 owners when eligibility verifies. Observe 116 and 123 independent reviews and hosted validation.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T17:21:39.465Z",
+  "lastCheckedAt": "2026-11-23T17:23:17.677Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -294,15 +294,24 @@
         }
       ],
       "scopedValidation": {
-        "githubRun": 45224891962,
-        "candidateRevision": "5520975d6aaf496e3494352c6498fa12947d3f80",
-        "workflowRevision": "e1abdabae721a53408a0b630721ac6e7fef1990f",
-        "status": "completed",
-        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45224891962/job/137868623942",
-        "githubJob": 137868623942,
-        "conclusion": "success",
-        "completedAt": "2026-11-23T17:15:31Z"
-      }
+        "githubRun": 45226850736,
+        "candidateRevision": "23084ed3554e8673628fe5903c2253140b53f611",
+        "workflowRevision": "29f9e70114fdf0de5790cf377421f48c952be5bd",
+        "status": "in_progress",
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45226850736"
+      },
+      "scopedValidationHistory": [
+        {
+          "githubRun": 45224891962,
+          "candidateRevision": "5520975d6aaf496e3494352c6498fa12947d3f80",
+          "workflowRevision": "e1abdabae721a53408a0b630721ac6e7fef1990f",
+          "status": "completed",
+          "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45224891962/job/137868623942",
+          "githubJob": 137868623942,
+          "conclusion": "success",
+          "completedAt": "2026-11-23T17:15:31Z"
+        }
+      ]
     },
     "jinshu/094": {
       "originalPR": 5424,
@@ -337,14 +346,21 @@
       "reviewPR": 5439,
       "revision": "0ebd20b28e489ca9e1a52ff9097091826d8ffb73",
       "verifiedScopedFiles": 5,
-      "status": "draft-awaiting-changed-evidence-review"
+      "status": "draft-awaiting-changed-evidence-review",
+      "scopedValidation": {
+        "githubRun": 45226850736,
+        "candidateRevision": "0ebd20b28e489ca9e1a52ff9097091826d8ffb73",
+        "workflowRevision": "29f9e70114fdf0de5790cf377421f48c952be5bd",
+        "status": "in_progress",
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45226850736"
+      }
     },
     "jinshu/067": {
       "originalPR": 5420,
       "reviewPR": 5445,
       "revision": "0b2c2b5169e13489edc3cbfdc4f63779d8e8af71",
       "verifiedScopedFiles": 6,
-      "status": "draft-awaiting-changed-evidence-chronology-review",
+      "status": "draft-owner-chronology-correction-required",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -356,6 +372,13 @@
           "extractions"
         ],
         "status": "same-preimages"
+      },
+      "scopedValidation": {
+        "githubRun": 45226850736,
+        "candidateRevision": "0b2c2b5169e13489edc3cbfdc4f63779d8e8af71",
+        "workflowRevision": "29f9e70114fdf0de5790cf377421f48c952be5bd",
+        "status": "in_progress",
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45226850736"
       }
     },
     "jinshu/031": {
@@ -363,7 +386,7 @@
       "reviewPR": 5447,
       "revision": "004540543a5a78803538358024ec36156746533b",
       "verifiedScopedFiles": 3,
-      "status": "draft-awaiting-independent-review",
+      "status": "draft-owner-chronology-correction-required",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -533,7 +556,7 @@
       "chapter": "031",
       "pr": 5447,
       "revision": "004540543a5a78803538358024ec36156746533b",
-      "status": "sent",
+      "status": "finished",
       "reservedAt": "2026-11-23T17:05:12.696Z",
       "model": "gpt-5.6-sol",
       "ownerAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
@@ -545,7 +568,11 @@
       },
       "provisionalAgentId": "bc-a4892daf-d07a-4ad4-9a66-3c640bc0cb65",
       "agentId": "bc-c338e2c8-9d0c-4d07-a751-be3d40824e00",
-      "runId": "run-888dcb57-4703-49c3-b835-dc4b6bf65839"
+      "runId": "run-888dcb57-4703-49c3-b835-dc4b6bf65839",
+      "findingsPR": 5452,
+      "reviewRevision": "9494712572016c660238f58cb133325366f6a624",
+      "reviewBranch": "cursor/jinshu031-independent-review-4e00",
+      "findings": "58 editorial decisions and scoped validation on reviewer revision. Native 804-check chronology needs revision; 202 should be undated, ten over-precise era dates, one contradictory dirge date and four retrospective misattributions."
     }
   },
   "absolute24HourCutoff": "2026-11-24T16:00:22.165Z",
@@ -804,9 +831,13 @@
       "previousReviewPR": 5448,
       "previousReviewerRunId": "run-068c8c6f-75b5-46f6-9041-b5683cc752bf",
       "agentId": "bc-eda5fdb7-cf38-47cb-98f8-37c378bbd7cb",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T17:17:45.169Z",
-      "runId": "run-051f769c-f62f-4dba-9f90-68864d0fb272"
+      "runId": "run-051f769c-f62f-4dba-9f90-68864d0fb272",
+      "findingsPR": 5451,
+      "reviewRevision": "e74600bac689e530c63f52fbead7dc24665fee22",
+      "reviewBranch": "cursor/jinshu-067-independent-review-round2-d7cb",
+      "findings": "Contextual continuity accepted. Xi Yin AD 393 conflicts with 太元九年; correct claims 519/699 and corresponding hints. Native chronology and identity pending."
     }
   },
   "targetedOwnerRuns": {
