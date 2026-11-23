@@ -17,7 +17,7 @@ Targeted re-check of owner repairs only:
 
 | File | Purpose |
 |------|---------|
-| `repair-verification.json` | Targeted claim pins and verdicts |
+| `targeted-claim-recheck.json` | Targeted claim pins and verdicts |
 | `date-audit-report.json` | Full native chronology report (`audited` if all 496 pass) |
 | `canonical-identity-dependency.json` | Canonical merge holds (separate from chronology) |
 | `generate-date-audit-report.mjs` | Reproduces report from live `buildDateAuditPacket` |

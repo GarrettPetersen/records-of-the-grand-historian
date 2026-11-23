@@ -258,7 +258,7 @@ const report = {
 validateDateAuditReport(report, packet);
 
 writeFileSync(path.join(__dirname, 'date-audit-report.json'), `${JSON.stringify(report, null, 2)}\n`);
-writeFileSync(path.join(__dirname, 'repair-verification.json'), `${JSON.stringify({
+writeFileSync(path.join(__dirname, 'targeted-claim-recheck.json'), `${JSON.stringify({
   schemaVersion: 1,
   draftCommit: DRAFT_COMMIT,
   priorEvidenceCommit: PRIOR_EVIDENCE,
