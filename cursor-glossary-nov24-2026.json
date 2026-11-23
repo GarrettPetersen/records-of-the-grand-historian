@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T23:34:43.357Z",
+  "lastCheckedAt": "2026-11-23T23:35:47.968Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1692,32 +1692,27 @@
       "nativeReportLocation": "research/people/checkpoints/jinshu115-independent-round5-rebind-20261123/date-audit-report.json"
     },
     "jinshu/083": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
-      "previousRunId": "run-932e5a26-81d1-40ce-bbe3-fa7cbaaddeff",
+      "previousRunId": "run-2b367f7d-2fa4-4c0e-ab0c-d708b4f64cc7",
       "chapterPR": 5474,
       "revision": "62941898c31e1e5802f67940af14408961db4871",
       "previousReviewPR": 5480,
-      "previousReviewRevision": "9683967196dfdea75ccb51e2339334c76c64ac60",
-      "idempotencyKey": "cursor-nov24-delta-review-083-62941898c3",
-      "reservedAt": "2026-11-23T23:09:54.588Z",
-      "prompt": "Continue as the same independent Jinshu 083 reviewer. Exact owner #5474 revision 62941898c31e1e5802f67940af14408961db4871 and your #5480 evidence 9683967196dfdea75ccb51e2339334c76c64ac60. Review only claim-808/p130 and its dependent evidence: owner reclassified unnamed lineage in s0286–s0287 as undated genealogy. Check source and native schema, preserve the approved s0053 wording and 37 editorial decisions, and only reuse prior independent evidence via exact dependency verification. If supported, push the native current chronology report, exact scope, and any remaining canonical prerequisite to your existing evidence branch. If native closure fails, record the precise hold. Use the configured bounded people lookup only if needed. Do not merge or edit the queue.",
+      "previousReviewRevision": "f27d4116dc65ef8246c5da3b9c735b3e5cb44e9a",
+      "sourceRevision": "1fb7ef675b0c2089fefaec9a8185c33f8d072bb3",
+      "artifactId": 14872303771,
+      "prompt": "Continue as the existing independent reviewer for Jinshu 083, exact approved-chronology candidate #5474 at 62941898c31e1e5802f67940af14408961db4871 and your prior #5480 at f27d4116dc65ef8246c5da3b9c735b3e5cb44e9a. Native exact identity packet sealed to source 1fb7ef675b0c2089fefaec9a8185c33f8d072bb3 is GitHub Actions run 45289188834, artifact 14872303771, jinshu-083-native-identity-evidence. Download inside Cursor Cloud with gh run download 45289188834 -R GarrettPetersen/records-of-the-grand-historian -n jinshu-083-native-identity-evidence -D /tmp/jinshu083-identity. Verify the preparation receipt and all sealed transport hashes. Cover every current case exactly as partitioned, quote actual Chinese for target and accepted canonical anchor, preserve unresolved identity and current accepted distinctions. Return closed-schema reports per sealed part, with a hash manifest mapping reports to exact case IDs, plan, transport and artifact. Push to existing review PR #5480. Do not infer new merges, repeat approved editorial/chronology, use corpus-wide rebuilds, edit the queue, or merge. If blocked report the exact case or access problem.",
+      "idempotencyKey": "cursor-nov24-083-native-identity-14872303771",
+      "reservedAt": "2026-11-23T23:35:47.967Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-23T23:10:16.523Z"
+        "at": "2026-11-23T23:35:47.967Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
-        "swapUsedBytes": "3390371266"
-      },
-      "runId": "run-2b367f7d-2fa4-4c0e-ab0c-d708b4f64cc7",
-      "sentAt": "2026-11-23T23:10:25.613Z",
-      "reviewRevision": "f27d4116dc65ef8246c5da3b9c735b3e5cb44e9a",
-      "resultPR": 5480,
-      "chronology": "audited",
-      "reviewedDateItems": 532,
-      "finishedObservedAt": "2026-11-23T23:17:19.096Z"
+        "swapUsedBytes": "3365205442"
+      }
     },
     "jinshu/041": {
       "status": "sent",
@@ -2257,16 +2252,23 @@
         "requestedAt": "2026-11-23T23:27:00.087Z",
         "steps": {
           "083": {
-            "status": "in_progress",
+            "status": "completed",
             "requestedAt": "2026-11-23T23:28:58.104Z",
             "runId": 45289188834,
-            "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45289188834"
+            "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45289188834",
+            "conclusion": "success",
+            "artifactId": 14872303771,
+            "cases": 170,
+            "localPeople": 173
           },
           "094": {
-            "status": "in_progress",
-            "requestedAt": "2026-11-23T23:29:41.429Z",
-            "runId": 45289301214,
-            "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45289301214"
+            "status": "dispatch_pending",
+            "previousRunId": 45289301214,
+            "blocker": "A complete case exceeds the default 256 KiB partition.",
+            "chosenTransportMaxBytes": 393216,
+            "workflowRevision": "0b306c724dd554565744591b54ba5dcef4a32c9c",
+            "workflowBlob": "1d66fc732653b310919c5877be04c11418b59bcb",
+            "requestedAt": "2026-11-23T23:35:47.967Z"
           }
         }
       },
@@ -3398,6 +3400,34 @@
         "reviewRevision": "9683967196dfdea75ccb51e2339334c76c64ac60",
         "chronology": "needs-revision",
         "remaining": "claim-808 Che lineage unresolved"
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+        "previousRunId": "run-932e5a26-81d1-40ce-bbe3-fa7cbaaddeff",
+        "chapterPR": 5474,
+        "revision": "62941898c31e1e5802f67940af14408961db4871",
+        "previousReviewPR": 5480,
+        "previousReviewRevision": "9683967196dfdea75ccb51e2339334c76c64ac60",
+        "idempotencyKey": "cursor-nov24-delta-review-083-62941898c3",
+        "reservedAt": "2026-11-23T23:09:54.588Z",
+        "prompt": "Continue as the same independent Jinshu 083 reviewer. Exact owner #5474 revision 62941898c31e1e5802f67940af14408961db4871 and your #5480 evidence 9683967196dfdea75ccb51e2339334c76c64ac60. Review only claim-808/p130 and its dependent evidence: owner reclassified unnamed lineage in s0286–s0287 as undated genealogy. Check source and native schema, preserve the approved s0053 wording and 37 editorial decisions, and only reuse prior independent evidence via exact dependency verification. If supported, push the native current chronology report, exact scope, and any remaining canonical prerequisite to your existing evidence branch. If native closure fails, record the precise hold. Use the configured bounded people lookup only if needed. Do not merge or edit the queue.",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-23T23:10:16.523Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3390371266"
+        },
+        "runId": "run-2b367f7d-2fa4-4c0e-ab0c-d708b4f64cc7",
+        "sentAt": "2026-11-23T23:10:25.613Z",
+        "reviewRevision": "f27d4116dc65ef8246c5da3b9c735b3e5cb44e9a",
+        "resultPR": 5480,
+        "chronology": "audited",
+        "reviewedDateItems": 532,
+        "finishedObservedAt": "2026-11-23T23:17:19.096Z"
       }
     ],
     "jinshu/041": [
