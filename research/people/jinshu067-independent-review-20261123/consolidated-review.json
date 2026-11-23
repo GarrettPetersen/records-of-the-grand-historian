@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-independent-consolidated-review",
+  "reportType": "independent-review-not-full-native-seal",
+  "book": "jinshu",
+  "chapter": "067",
+  "status": "needs-owner-repair",
+  "approved": false,
+  "candidate": {
+    "pr": 5445,
+    "prUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5445",
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu067",
+    "commit": "9ca4be6e093bd80fe9ecff230e60cd011363a22b",
+    "baseBranch": "codex/people-glossary-staging-v2",
+    "authorPr": 5420
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer independent Jinshu 067 reviewer",
+    "model": "Composer",
+    "agentId": "bc-eda5fdb7-cf38-47cb-98f8-37c378bbd7cb",
+    "runUrl": "https://cursor.com/agents/bc-eda5fdb7-cf38-47cb-98f8-37c378bbd7cb",
+    "independentOfExtractor": true,
+    "independentOfRepairAuthor": true,
+    "excludedAuthorAgentIds": [
+      "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd"
+    ],
+    "reviewedAt": "2026-11-23T17:12:00.000Z"
+  },
+  "provenance": {
+    "chapterFingerprint": "sha256:07183c1fa24714ab7eabf582c5247a5a256c481a5f0d826a92f453741622dca6",
+    "datePacketSourceHash": "sha256:f466143c2644337f00077c67da91f482efe453190b71ef5ae613a8cb8d6ad6f0",
+    "datePacketExtractionHash": "sha256:301719d7d02e45c6f72e1da409ca09302c2c49d2e8fed7d95167b70a2e6a0afa",
+    "editorialByteHash": "sha256:18c185a549bc1cb0eb4486276233f33c88cce1798a4c5e4efe95117869607d13",
+    "lookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "lookupManifestVerified": true,
+    "dossierCount": 228270
+  },
+  "scopedChecks": {
+    "extractionValidation": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jinshu/067.json",
+      "result": "ok",
+      "counts": {
+        "people": 254,
+        "mentions": 1391,
+        "claims": 1568,
+        "candidates": 1281
+      }
+    },
+    "chapterFingerprintMatch": true,
+    "dateAuditStatus": "un-audited",
+    "datePacket": {
+      "built": true,
+      "items": 531,
+      "people": 254,
+      "units": 578
+    },
+    "editorialAppliedAuthorization": {
+      "schema4OnReviewerBranch": "passes validateAppliedEditorialDecisions and people:validate scoped"
+    }
+  },
+  "lanes": {
+    "englishSourceRepair": {
+      "status": "accepted-applied-repairs",
+      "nativeRecord": "data/people/editorial-decisions/jinshu/067.json (schemaVersion 4 on reviewer branch)",
+      "acceptedRepairs": [
+        "jinshu:067:r0001",
+        "jinshu:067:r0002",
+        "jinshu:067:r0003"
+      ],
+      "findings": [
+        {
+          "id": "en-s0095-situ",
+          "severity": "pass",
+          "unit": "s0095",
+          "detail": "司徒 is Minister of Education in this memorial context; 司空 would be Minister of Works. Idiomatic repair is source-faithful."
+        },
+        {
+          "id": "en-s0328-cai-mo",
+          "severity": "pass",
+          "unit": "s0328",
+          "detail": "太常臣謨 is identified as 蔡謨 at s0331; Xun Mo was an English mistranslation. Both idiomatic and literal fields corrected consistently."
+        },
+        {
+          "id": "author-not-self-approved",
+          "severity": "pass",
+          "detail": "Independent reviewer bc-eda5fdb7 distinct from author bc-e9c3ed78; native editorial history recorded on reviewer branch only."
+        }
+      ],
+      "ownerCorrections": []
+    },
+    "extractionEvidence": {
+      "status": "structurally-valid-with-blocking-intra-chapter-splits",
+      "findings": [
+        {
+          "id": "extraction-validator-ok",
+          "severity": "pass",
+          "detail": "Production extraction validator accepts candidate at commit 9ca4be6."
+        },
+        {
+          "id": "cai-mo-dual-local",
+          "severity": "block",
+          "detail": "Cai Mo 蔡謨 appears at s0079 (p047) and 太常臣謨/蔡謨 at s0328–s0331 (p167) without same-as linkage—same historical official split across locals.",
+          "examples": [
+            {
+              "name": {
+                "en": "Cai Mo",
+                "zh": "蔡謨"
+              },
+              "localIds": [
+                "p047",
+                "p167"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chunk-false-splits-major",
+          "severity": "block",
+          "detail": "Grok chunked extraction left many duplicate preferred-name groups (e.g. Wen Jiao×8, Yu Liang×8, Wang Dao×6). Event ownership and identity certification cannot proceed until repaired or source-justified uncertainty is explicitly retained.",
+          "examples": [
+            {
+              "name": {
+                "zh": "溫嶠"
+              },
+              "localIds": [
+                "p001",
+                "p029",
+                "p042",
+                "p060",
+                "p086",
+                "p135",
+                "p153",
+                "p248"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "chronology": {
+      "status": "cannot-approve",
+      "nativeGate": "data/people/date-audits/jinshu/067.json missing; status un-audited",
+      "findings": [
+        {
+          "id": "no-date-audit-report",
+          "severity": "block",
+          "detail": "No native date-audit report exists. Packet built (531 checks) but complete independent report not recorded here."
+        },
+        {
+          "id": "cai-mo-outside-knowledge-intervals",
+          "severity": "hold-for-auditor",
+          "detail": "p047/p167 attestation intervals use outside-knowledge AD conversion without chapter reign witnesses; auditor must hold, witness, or narrow bounds."
+        },
+        {
+          "id": "duplicate-subject-date-ownership",
+          "severity": "block",
+          "detail": "Cai Mo chronology split across p047 and p167; broader chunk splits repeat the pattern for major actors."
+        }
+      ],
+      "ownerAction": "After extraction identity continuity repairs, rebuild people:dates:packet and run full independent date audit loop."
+    },
+    "canonicalIdentities": {
+      "status": "cannot-approve",
+      "nativeGate": "chapter identity dossier review / people:identity:prepare+record not completed",
+      "lookup": {
+        "attempted": true,
+        "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+        "manifestOk": true,
+        "caution": "Truncated zh:蔡謨 posting (20 total). Registry member per_6BFCXV2GJ0AS8V9W26JY covers jinshu:067:p167 only."
+      },
+      "findings": [
+        {
+          "id": "cai-mo-same-source",
+          "severity": "block",
+          "detail": "Source requires one Cai Mo across s0079 and s0328/s0331; dual locals block certification until reconciled (merge or explicit reviewed uncertainty with linkage)."
+        },
+        {
+          "id": "no-guessed-merges",
+          "severity": "process",
+          "detail": "No canonical merge or identity certificate authored on this branch."
+        }
+      ],
+      "ownerAction": "Reconcile p047/p167 and other duplicate preferred-name groups, then run bounded identity preparation against pinned lookup generation."
+    }
+  },
+  "nativeApprovals": {
+    "editorial": "accepted-on-reviewer-branch-for-r0001-r0003",
+    "dateAudit": "missing-cannot-record-complete-report-here",
+    "identityReview": "blocked-on-intra-chapter-splits-including-cai-mo",
+    "combinedCuration": "not-started"
+  },
+  "remainingBlockersForOwner": [
+    {
+      "priority": 1,
+      "lane": "extractionEvidence",
+      "blocker": "Reconcile Cai Mo p047/p167 and other intra-chapter duplicate locals for major biography subjects before date/identity native gates."
+    },
+    {
+      "priority": 2,
+      "lane": "chronology",
+      "blocker": "Complete independent native date audit after continuity repairs; do not approve outside-knowledge Western intervals without witnesses."
+    },
+    {
+      "priority": 3,
+      "lane": "canonicalIdentities",
+      "blocker": "Prepare and record chapter identity review after registry-aligned local continuity."
+    },
+    {
+      "priority": 4,
+      "lane": "host-apply",
+      "blocker": "Land reviewer-branch editorial-decisions and research bundle onto staging candidate; editorial accept is not date/identity/publication approval."
+    }
+  ],
+  "explicitNonClaims": [
+    "Not combined-curation seal",
+    "Not date-audit approval",
+    "Not identity/dossier certification",
+    "Not publication or ebook-glossary readiness",
+    "No chapter-wide approval despite three accepted English repairs"
+  ]
+}
