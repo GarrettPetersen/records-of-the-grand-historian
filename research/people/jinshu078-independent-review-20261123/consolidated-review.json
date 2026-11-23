@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-independent-consolidated-review",
+  "reportType": "independent-review-not-full-native-seal",
+  "book": "jinshu",
+  "chapter": "078",
+  "status": "needs-owner-repair",
+  "approved": false,
+  "candidate": {
+    "pr": 5425,
+    "prUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5425",
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu078",
+    "commit": "67e19fbddd4677db3744330d4919212887b94ea6",
+    "baseBranch": "codex/people-glossary-staging-v2"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer independent Jinshu 078 reviewer",
+    "model": "Composer",
+    "agentId": "bc-7f508e5e-7b4f-4508-9646-49aac6917f05",
+    "runUrl": "https://cursor.com/agents/bc-7f508e5e-7b4f-4508-9646-49aac6917f05",
+    "independentOfExtractor": true,
+    "independentOfRepairAuthor": true,
+    "excludedAuthorAgentIds": [
+      "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
+      "bc-2416caa8-666b-41e5-8551-7e1364efaeac",
+      "bc-03dc6607-8c3c-48b0-b1cd-7f0da3d0b222",
+      "bc-6e2386b2-c3ca-4055-b321-4c1789b7fcf8"
+    ],
+    "reviewedAt": "2026-11-23T16:18:08.683Z"
+  },
+  "provenance": {
+    "chapterFingerprint": "sha256:0b874e58cf91961934433d51108c2b73989c8419f63816cf6c998cd3c604c06f",
+    "datePacketSourceHash": "sha256:8d7f4d213c6a7635ce7fbc28cbaea85ac79d4c640a2d1799c767f91f48350dfd",
+    "datePacketExtractionHash": "sha256:350842f19b4e2ed7c3c15ad190c726ddff1670060476d4a902c8c1b9ebcc6c24",
+    "lookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "lookupManifestVerified": true,
+    "dossierCount": 228270
+  },
+  "scopedChecks": {
+    "extractionValidation": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jinshu/078.json",
+      "result": "ok",
+      "counts": {
+        "people": 173,
+        "mentions": 866,
+        "claims": 1844,
+        "candidates": 827
+      }
+    },
+    "chapterFingerprintMatch": true,
+    "dateAuditStatus": "un-audited",
+    "datePacket": {
+      "built": true,
+      "items": 573,
+      "people": 173,
+      "units": 415
+    },
+    "priorEditorialAppliedAuthorization": {
+      "beforeThisReview": "failed on r0027/r0028 only",
+      "afterSchema4MergeOnReviewerBranch": "passes validateAppliedEditorialDecisions"
+    }
+  },
+  "lanes": {
+    "englishSourceRepair": {
+      "status": "accepted-for-pending-repairs",
+      "nativeRecord": "data/people/editorial-decisions/jinshu/078.json (schemaVersion 4 merge on reviewer branch)",
+      "acceptedRepairs": [
+        "jinshu:078:r0027",
+        "jinshu:078:r0028"
+      ],
+      "findings": [
+        {
+          "id": "en-s0003-brackets",
+          "severity": "pass",
+          "unit": "s0003",
+          "detail": "Chinese is editorial contents markup 〈（子汪 安國 弟祗 從子坦嚴 從弟群 群子沉）〉. Both English fields correctly omit the corner brackets after r0027/r0028; no residual 〈〉 remain in English fields."
+        },
+        {
+          "id": "en-title-zhang-mao",
+          "severity": "non-blocking-note",
+          "unit": "s0004",
+          "detail": "Author note about Zhang Mao is supported: s0004 Chinese lists 丁潭 張茂 陶回, so Zhang Mao belongs in the chapter body even if a juan-title string elsewhere omits him."
+        }
+      ],
+      "reusedPriorProofs": {
+        "editorialDecisionsR0001ToR0026": "retained verbatim in schema4 review 1; applied-repair authorization still matches"
+      }
+    },
+    "extractionEvidence": {
+      "status": "structurally-valid-with-blocking-intra-chapter-splits",
+      "findings": [
+        {
+          "id": "extraction-validator-ok",
+          "severity": "pass",
+          "detail": "Production extraction validator accepts the candidate against the current chapter packet."
+        },
+        {
+          "id": "intra-chapter-false-splits",
+          "severity": "block",
+          "detail": "Chunked extraction left multiple local people with the same preferred identity name and no same-as / possible-same-as claims. Biography subjects and recurrent actors are split across chunk boundaries.",
+          "examples": [
+            {
+              "name": {
+                "en": "Kong Yu",
+                "zh": "孔愉"
+              },
+              "localIds": [
+                "p001",
+                "p118",
+                "p145"
+              ],
+              "note": "p001 owns the biography body; p118 is the Hengtang/Sujun cameo; p145 is late encomium/reference units."
+            },
+            {
+              "name": {
+                "en": "Ding Tan",
+                "zh": "丁潭"
+              },
+              "localIds": [
+                "p009",
+                "p131",
+                "p143"
+              ]
+            },
+            {
+              "name": {
+                "en": "Zhang Mao",
+                "zh": "張茂"
+              },
+              "localIds": [
+                "p010",
+                "p147"
+              ]
+            },
+            {
+              "name": {
+                "en": "Tao Hui",
+                "zh": "陶回"
+              },
+              "localIds": [
+                "p011",
+                "p063",
+                "p154"
+              ]
+            },
+            {
+              "name": {
+                "en": "Kong Tan",
+                "zh": "孔坦 / 坦"
+              },
+              "localIds": [
+                "p005",
+                "p047",
+                "p061",
+                "p087",
+                "p123",
+                "p159"
+              ]
+            },
+            {
+              "name": {
+                "en": "Wang Dao",
+                "zh": "王導"
+              },
+              "localIds": [
+                "p025",
+                "p060",
+                "p064",
+                "p119",
+                "p144"
+              ]
+            }
+          ],
+          "ownerAction": "Consolidate false splits for the same chapter person (or record explicit reviewed uncertainty only where the source truly does not identify them), then regenerate fingerprints before date/identity native gates."
+        },
+        {
+          "id": "unresolved-references-retained",
+          "severity": "non-blocking-if-honest",
+          "detail": "21 coverage.unresolvedReferences remain (unnamed Prince of Donghai, undated careers, packet reign-map gaps such as 咸和初 / 隆和元年 / 太和中, encomium names). Unknowns are valid; they are not a substitute for repairing false splits."
+        }
+      ]
+    },
+    "chronology": {
+      "status": "cannot-approve",
+      "nativeGate": "data/people/date-audits/jinshu/078.json missing; status un-audited",
+      "findings": [
+        {
+          "id": "no-date-audit-report",
+          "severity": "block",
+          "detail": "No native date-audit report exists for jinshu/078. A sealed packet was built in this environment (573 item checks, 173 people, 415 units) but a complete independent item/unit/person report was not recorded here."
+        },
+        {
+          "id": "duplicate-subject-date-ownership",
+          "severity": "block",
+          "detail": "Because biography subjects are split across local IDs, temporal claims for one life are partitioned (e.g. Kong Yu death/age on p001; later allusions on p118/p145; Ding Tan career on p131 vs retirement on p143). Date approval cannot certify event ownership until local identity continuity is repaired."
+        },
+        {
+          "id": "reign-map-gaps",
+          "severity": "hold-for-auditor",
+          "detail": "Author chronology notes are directionally right: several units rely on Eastern Jin reign labels without packet year maps (咸和初, 隆和元年, 太和中, inherited 五年). Auditor must use standard reign witnesses rather than invent precision; unresolvedReferences already flag several of these."
+        },
+        {
+          "id": "no-self-sealed-date-report",
+          "severity": "process",
+          "detail": "This reviewer did not write data/people/date-audits/jinshu/078.json. Doing so without complete reviewedUnits/itemChecks/personChecks would be an unpublished/self-serving seal."
+        }
+      ],
+      "ownerAction": "After extraction identity repairs, regenerate people:dates:packet and run a full independent date audit/repair loop; do not treat this consolidated review as date approval."
+    },
+    "canonicalIdentities": {
+      "status": "cannot-approve",
+      "nativeGate": "chapter identity dossier review / people:identity:prepare+record not completed",
+      "lookup": {
+        "attempted": true,
+        "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+        "manifestOk": true,
+        "rateLimitEncountered": true,
+        "caution": "Search totals/IDs are candidates only; truncated or multi-hit postings are not unique identity proofs."
+      },
+      "findings": [
+        {
+          "id": "lookup-manifest-pin",
+          "severity": "pass",
+          "detail": "GET /v1/manifest returned generation cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac with 228270 dossiers."
+        },
+        {
+          "id": "registry-already-mirrors-local-splits",
+          "severity": "block",
+          "detail": "Pinned lookup dossiers already attach separate local members for the same surface name, so certifying identities against the current extraction would entrench chunk splits.",
+          "evidence": [
+            {
+              "zh": "張茂",
+              "searchTotal": 16,
+              "truncated": true,
+              "memberDossiers": [
+                {
+                  "personId": "per_5C3C79NEP4B5QWPX0JKD",
+                  "localPeople": [
+                    "jinshu:078:p010"
+                  ]
+                },
+                {
+                  "personId": "per_83G0QG6C4CWPCVDTJEQM",
+                  "localPeople": [
+                    "jinshu:078:p147"
+                  ]
+                }
+              ]
+            },
+            {
+              "zh": "陶回",
+              "searchTotal": 4,
+              "truncated": false,
+              "memberDossiers": [
+                {
+                  "personId": "per_GQBDXAP7P688532THAP9",
+                  "localPeople": [
+                    "jinshu:078:p011"
+                  ]
+                },
+                {
+                  "personId": "per_P78Z03WV9F52V3RJSW3K",
+                  "localPeople": [
+                    "jinshu:078:p063"
+                  ]
+                },
+                {
+                  "personId": "per_SFKRC862GFXE5H59YSS2",
+                  "localPeople": [
+                    "jinshu:078:p154"
+                  ]
+                }
+              ]
+            },
+            {
+              "zh": "孔愉",
+              "searchKeyNormalized": "zh:孔愈",
+              "searchTotal": 10,
+              "truncated": true,
+              "primaryMemberDossier": {
+                "personId": "per_10G4748J1VMH9T36F1F7",
+                "localPeople": [
+                  "jinshu:078:p001"
+                ]
+              }
+            },
+            {
+              "zh": "丁潭",
+              "searchTotal": 5,
+              "truncated": false,
+              "chapterHit": {
+                "personId": "per_JE514ZQ1GPES9QQ6HFR1",
+                "claimRefsInclude": "jinshu:078"
+              }
+            }
+          ]
+        },
+        {
+          "id": "no-guessed-merges",
+          "severity": "process",
+          "detail": "No canonical merge, same-as approval, or identity certificate was authored. Host must prepare a chapter identity packet after local continuity repairs; reviewer will assess dossiers then."
+        }
+      ],
+      "ownerAction": "Repair intra-chapter person continuity first; then run bounded identity preparation against the pinned lookup generation and return dossiers to an independent reviewer."
+    }
+  },
+  "nativeApprovals": {
+    "editorial": "accepted-on-reviewer-branch-for-r0027-r0028; prior r0001-r0026 retained",
+    "dateAudit": "missing-cannot-record-complete-report-here",
+    "identityReview": "blocked-on-intra-chapter-splits-and-missing-dossier-packet",
+    "combinedCuration": "not-started"
+  },
+  "remainingBlockersForOwner": [
+    {
+      "priority": 1,
+      "lane": "extractionEvidence",
+      "blocker": "Consolidate intra-chapter duplicate local people for the same historical referent (Kong Yu, Ding Tan, Zhang Mao, Tao Hui, Kong Tan, Wang Dao, and the other duplicate preferred-name groups), or explicitly retain only source-justified uncertainty with linkage records."
+    },
+    {
+      "priority": 2,
+      "lane": "chronology",
+      "blocker": "No native date-audit report; after extraction repair, rebuild the date packet and complete independent unit/item/person checks. Reign-label gaps must use witnesses or remain unresolved—do not invent years."
+    },
+    {
+      "priority": 3,
+      "lane": "canonicalIdentities",
+      "blocker": "Cannot certify canonical memberships while local splits remain and no chapter identity review packet/report exists. Lookup evidence shows the pinned registry already mirrors several splits."
+    },
+    {
+      "priority": 4,
+      "lane": "host-apply",
+      "blocker": "Merge/apply the reviewer-branch schema4 editorial decisions (r0027/r0028 accept) onto the candidate if not landed by this follow-up PR; do not treat editorial accept as date/identity approval."
+    }
+  ],
+  "explicitNonClaims": [
+    "Not a combined-curation seal",
+    "Not a date-audit approval",
+    "Not an identity/dossier certification",
+    "Not publication or ebook-glossary readiness",
+    "No self-approval of author extraction beyond the independently checked s0003 bracket repairs"
+  ]
+}
