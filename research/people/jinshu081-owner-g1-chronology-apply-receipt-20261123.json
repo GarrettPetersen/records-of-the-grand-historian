@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-grouped-chronology-apply-receipt",
+  "book": "jinshu",
+  "chapter": "081",
+  "pullRequest": 5478,
+  "stagingHeadBefore": "2967dfbc46e04e7768e32e1185b5873e295b91fc",
+  "diagnosisCommit": "e61ea4f09f930a815a2c533ce03a7a3c5deff319",
+  "diagnosisPath": "research/people/jinshu081-date-pattern-diagnosis-20261123.json",
+  "ownerAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
+  "appliedAt": "2026-11-23T23:31:42.857Z",
+  "warning": "Owner structural chronology apply only. Not a native date-audit approval. Not editorial self-approval. English defect patches are supplied separately and not applied to chapter bytes in this commit.",
+  "hashes": {
+    "sourceHash": "sha256:ce91ab08d88c4e26e1eccc7d10f374cc5c542752561de93f097743de43774984",
+    "extractionHashBefore": "sha256:f7d6f79ad0d7cb41aff6d2aea51c85049b4147264bd42e5ab71cf840310c0d40",
+    "extractionHashAfter": "sha256:54182e6d3276c99b026ed56486a9d873ebe541989db16f614f0cd4543ab87c5f"
+  },
+  "groups": {
+    "G1": {
+      "action": "applied",
+      "count": 358,
+      "rule": "Removed westernInterval; set undatedSourceAttestation:true; retained exact event wording and claim person/predicate/certainty/evidence keys. sourceDate dropped because undatedSourceAttestation cannot carry temporal fields under the production schema; Chinese anchors remain in cited evidence units."
+    },
+    "G2": {
+      "action": "applied-as-G1-subset",
+      "claimIds": [
+        "claim-230",
+        "claim-232",
+        "claim-234"
+      ],
+      "note": "Rhetorical allusion attestations on s0091 (p077–p079); same undated replacement. Western life ranges must not be re-derived from the comparative sentence alone."
+    },
+    "G3": {
+      "action": "deferred-unchanged",
+      "count": 39,
+      "claimIds": [
+        "claim-4",
+        "claim-22",
+        "claim-44",
+        "claim-52",
+        "claim-76",
+        "claim-78",
+        "claim-92",
+        "claim-192",
+        "claim-238",
+        "claim-248",
+        "claim-311",
+        "claim-397",
+        "claim-399",
+        "claim-401",
+        "claim-441",
+        "claim-443",
+        "claim-489",
+        "claim-521",
+        "claim-525",
+        "claim-705",
+        "claim-981",
+        "claim-989",
+        "claim-991",
+        "claim-997",
+        "claim-1027",
+        "claim-1101",
+        "claim-1103",
+        "claim-1105",
+        "claim-1107",
+        "claim-1232",
+        "claim-1280",
+        "claim-1282",
+        "claim-1284",
+        "claim-1286",
+        "claim-1288",
+        "claim-1290",
+        "claim-1292",
+        "claim-1294",
+        "claim-1296"
+      ],
+      "note": "Calendar-substring rows retained with current Western intervals for independent conversion witnessing."
+    },
+    "G4": {
+      "action": "retained-unchanged",
+      "peopleWithOutsideKnowledgeHints": 397,
+      "note": "Active-date hints kept as explicitly marked outside-knowledge; not treated as witnessed Western attestations."
+    },
+    "G5": {
+      "action": "left-open",
+      "deathClaims": 46,
+      "deathWithWesternOnClaim": 0,
+      "note": "Death rows remain event-only without Western; separate source review required."
+    }
+  },
+  "inventory": {
+    "before": {
+      "attestationWithWestern": 397,
+      "g1Targets": 358,
+      "g3Deferred": 39,
+      "undatedFlag": 0,
+      "deathClaims": 46,
+      "hintsPeople": 397
+    },
+    "after": {
+      "attestationWithWestern": 39,
+      "undatedSourceAttestation": 358,
+      "deathClaims": 46,
+      "hintsPeople": 397,
+      "appliedTranslationRepairs": 5,
+      "people": 397,
+      "surfaces": 989,
+      "claims": 2415,
+      "compactClaimRows": 1342,
+      "validatorClaims": 2415,
+      "validatorMentions": 2172
+    }
+  },
+  "preserved": {
+    "personIdsReferencedByAcceptedResolutions": [
+      "p071",
+      "p079",
+      "p004",
+      "p175"
+    ],
+    "mentionAndClaimKeys": "stable (replace-in-place; no claim index shifts)",
+    "fiveApprovedEnglishChanges": [
+      "s0021",
+      "s0033",
+      "s0069",
+      "s0085",
+      "s0091"
+    ]
+  },
+  "englishDefectPatches": {
+    "status": "supplied-separately-not-applied",
+    "path": "research/people/jinshu081-english-defect-patches-20261123.json",
+    "fieldPatchCount": 10,
+    "units": [
+      "s0009",
+      "s0303",
+      "s0304",
+      "s0306",
+      "s0308"
+    ],
+    "rationale": "Exact both-field patches for independent editorial application via native repair tooling; applying here would change chapter fingerprints and candidate IDs and is withheld from this chronology commit to avoid self-approval and disposition churn."
+  },
+  "remainingIndependentReviewScope": [
+    "Fresh native date-audit packet at new extractionHash with complete itemChecks (840 rows: 358 undated attestations + 39 G3 + 397 hints + 46 deaths)",
+    "G3: 39 calendar-adjacent attestations — conversion proof or unresolved with source reason",
+    "G4: 397 outside-knowledge active-date hints — witness, hold, or regenerate from supported claims",
+    "G5: 46 death claims — source-backed Western bounds or unresolved",
+    "Apply or reject the two definite English defect patches (10 field edits) via independent editorial decisions; do not treat this receipt as acceptance",
+    "Identity certification / completion packet still outstanding",
+    "No self-approval, queue changes, or merge from this owner apply"
+  ],
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 081",
+    "expected": "PASS",
+    "result": "PASS",
+    "detail": "397 local people, 2172 mentions, 2415 claims, 0 proposed repairs, 5 applied repairs, 5 editorial decisions"
+  }
+}
