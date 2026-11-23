@@ -1,14 +1,14 @@
-# Jinshu 116 — independent review still required
+# Jinshu 116 — owner reconciliation vs #5436
 
-Author: `cursor-github-nov24-2` / `bc-e9c3ed78`. No self-approval.
+Owner: `bc-e9c3ed78` · Reviewer: `bc-96175e3c` @ `2e6a4f369a72bdd5cf005155fb48bd4a6aee73d6` · Base `59aec9792ff2faaa2b4b53ceb1af007efd63a2c7`
 
-## Author candidate (coverage follow-up)
-- Applied 69 new repairs from EN coverage agents A/B/C (70 applied total)
-- Corrected preferred EN aliases: Guo Yi, Jingmao (courtesy via text), Gucheng Shen, Lan Du, Suolu Yao, Mizijie Pochu, Dou Yang
-- Chronology residual packaged from agent C; prior audit stale — no invented dates
+## Done (no self-approval)
+- F1 alias/pinyin/claim-label sync
+- F2 merges of listed false splits; 舜 unresolvedIdentity hold
+- F3 Sun Ce simile research hold; date packet prepared (not approved)
+- 70 English repairs preserved
+- Native editorial-decisions **not** written (F4 for same independent reviewer)
 
-## Still needed
-- [ ] Native editorial-decisions approval
-- [ ] Fresh independent date audit
-- [ ] Bounded people-lookup + identity certification
-- [ ] Host publication gates
+## Same reviewer recheck
+- Alias sync, merges, Sun Ce hold, then native editorial accepts on this fingerprint
+- Fresh date audit + identity certification
