@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Complete the exact Jinshu 031 native recorder path and observe Jinshu 094 registry. Preserve upstream work while evaluating review outcomes. Current audit has no complete campaign releases.",
+  "nextAction": "Once exact registries are available, run hosted native retained proof replay for 031 and native current packet for 094. Verify all original reports and leave any remaining case binding to its original reviewer.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T22:59:52.758Z",
+  "lastCheckedAt": "2026-11-23T23:02:27.727Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1719,7 +1719,7 @@
       }
     },
     "currentChapter094": {
-      "status": "in_progress",
+      "status": "completed",
       "ref": "codex/cursor-glossary-nov24-2026-identity-094-current",
       "revision": "5c6443441bb9d3330367833e01eae38ebb7421e9",
       "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
@@ -1733,12 +1733,22 @@
       ],
       "requestedAt": "2026-11-23T22:55:05.637Z",
       "workflow": "people-registry-build.yml",
-      "conclusion": null,
+      "conclusion": "failure",
       "githubRun": 45284160964,
-      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45284160964"
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45284160964",
+      "identityPreparation": {
+        "status": "waiting-for-exact-registry-artifact",
+        "workflowRevision": "9bb87db1873a20522cfbb56c178bf6fb698abb8a",
+        "workflow": ".github/workflows/master-build-gate.yml",
+        "workflowRef": "codex/cursor-glossary-nov24-2026",
+        "registryRun": 45284160964,
+        "sourceRevision": "5c6443441bb9d3330367833e01eae38ebb7421e9",
+        "chapter": "094",
+        "preparedAt": "2026-11-23T23:02:27.727Z"
+      }
     },
     "finalChapter031": {
-      "status": "dispatch_pending",
+      "status": "in_progress",
       "ref": "codex/cursor-glossary-nov24-2026-identity-031-witness-delta",
       "revision": "f65754d727561484a4a9a75453cdcd67ecec5c4d",
       "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
@@ -1752,7 +1762,20 @@
       ],
       "requestedAt": "2026-11-23T22:59:52.758Z",
       "originalTransportArtifact": 14862627745,
-      "originalReviewPR": 5482
+      "originalReviewPR": 5482,
+      "conclusion": null,
+      "githubRun": 45284855296,
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45284855296",
+      "identityPreparation": {
+        "status": "waiting-for-exact-registry-artifact",
+        "workflowRevision": "9bb87db1873a20522cfbb56c178bf6fb698abb8a",
+        "workflow": ".github/workflows/master-build-gate.yml",
+        "workflowRef": "codex/cursor-glossary-nov24-2026",
+        "registryRun": 45284855296,
+        "sourceRevision": "f65754d727561484a4a9a75453cdcd67ecec5c4d",
+        "chapter": "031",
+        "preparedAt": "2026-11-23T23:02:27.727Z"
+      }
     }
   },
   "dateReviewRuns": {
