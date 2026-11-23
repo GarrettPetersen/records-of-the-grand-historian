@@ -39,7 +39,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Observe Jinshu 023 review evidence, 031 authorship, 094 source-only repair, and 123 chronology.",
+  "nextAction": "Observe the hosted validator test, then sync the reviewed code to staging before the 094 repair. Prioritize 031 authorship when its owner returns. Preserve 123 with its research hold.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -175,7 +175,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-23T18:09:39.850Z",
+  "lastCheckedAt": "2026-11-23T18:13:05.946Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -366,9 +366,9 @@
     "jinshu/094": {
       "originalPR": 5424,
       "reviewPR": 5430,
-      "revision": "6a105053b45aedce8955a8660d982fbbfdee774b",
+      "revision": "3a8fa8146ef299a2295aa9ccf625164a0629e104",
       "verifiedScopedFiles": 5,
-      "status": "held-early-yongkang-source-chronology",
+      "status": "held-staging-validator-sync",
       "scopedValidation": {
         "githubRun": 45230672687,
         "candidateRevision": "050a320209768c02a3a60ecc8ba8aef1ac96ffb2",
@@ -415,7 +415,7 @@
       "reviewPR": 5439,
       "revision": "b5962b67fc6277f56d24341fb7bf7627d9449ede",
       "verifiedScopedFiles": 5,
-      "status": "draft-awaiting-native-chronology-review",
+      "status": "held-23-unresolved-chronology-items",
       "scopedValidation": {
         "githubRun": 45226850736,
         "candidateRevision": "0ebd20b28e489ca9e1a52ff9097091826d8ffb73",
@@ -836,9 +836,11 @@
       "reviewRevision": "3d55719c57fa8cd5dd22c56543b0d5de1aad4e9e",
       "agentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
       "previousRunId": "run-8e501961-9dd4-4ff0-a6c5-96444cdb4d9e",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T18:08:07.823Z",
-      "runId": "run-1ecaf2da-f79f-4765-ac71-7b92cbe28fcf"
+      "runId": "run-1ecaf2da-f79f-4765-ac71-7b92cbe28fcf",
+      "returnedRevision": "3a8fa8146ef299a2295aa9ccf625164a0629e104",
+      "summary": "Staging lacks source-only chronology validator; master probe passed. Draft update preserved only evidence."
     },
     "jinshu/067": {
       "candidateRevision": "73a655fb8523f92a12f58a5d1cd7cb0e815b3012",
@@ -998,10 +1000,14 @@
       "candidateRevision": "b5962b67fc6277f56d24341fb7bf7627d9449ede",
       "agentId": "bc-985e5c79-a8bc-4040-8f8d-4f1fba0f38b2",
       "previousRunId": "run-abd9ab8b-df71-4412-b917-a377b0c6cd5b",
-      "status": "sent",
+      "status": "finished",
       "at": "2026-11-23T18:06:06.137Z",
       "c": "123",
-      "runId": "run-e51ec3f9-8d6e-4f82-86e5-96045440a397"
+      "runId": "run-e51ec3f9-8d6e-4f82-86e5-96045440a397",
+      "resultPR": 5468,
+      "reviewRevision": "fa431c67fd5cd0a3e863a30abb05d5b7c83d13ad",
+      "chronology": "research-blocked",
+      "remaining": "23 explicit unresolved rows; last targeted fixes verified."
     },
     "jinshu/031": {
       "revision": "10430638f26b6f78c517d3e3c9bf56de1f21209f",
@@ -1621,5 +1627,14 @@
         "blocker": "Generator defaults to supported and falls back to generic Chinese quotes. Four asserted groups are hypotheses until real item and witness verification."
       }
     ]
+  },
+  "stagingValidatorSync": {
+    "status": "dispatching",
+    "pr": 5469,
+    "revision": "9d46bb8550b53d05958b0c1e3123d3680d9770b3",
+    "masterPR": 5386,
+    "workflowRevision": "c1d5511b2940179aad6e5ab34ad78acc34014e39",
+    "base": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
+    "requestedAt": "2026-11-23T18:13:05.946Z"
   }
 }
