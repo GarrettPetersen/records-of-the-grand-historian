@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-date-pattern-diagnosis",
+  "status": "unsupported-mass-positive-western-attestation",
+  "warning": "Grouped correction inventory. Not a native date-audit approval. Apply structural repair before item-by-item witnessing of 840 packet rows.",
+  "book": "jinshu",
+  "chapter": "081",
+  "reviewerAgentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
+  "diagnosedAt": "2026-11-23T23:25:00.000Z",
+  "stagingHead": "2967dfbc46e04e7768e32e1185b5873e295b91fc",
+  "packet": {
+    "path": "research/people/jinshu081-date-packet-20261123.json",
+    "sourceHash": "sha256:ce91ab08d88c4e26e1eccc7d10f374cc5c542752561de93f097743de43774984",
+    "extractionHash": "sha256:f7d6f79ad0d7cb41aff6d2aea51c85049b4147264bd42e5ab71cf840310c0d40",
+    "items": 840
+  },
+  "ownerReceiptCrosswalk": "research/people/jinshu081-owner-editorial-apply-receipt-20261123.json",
+  "patternSummary": {
+    "peopleWithOutsideKnowledgeActiveHints": 397,
+    "attestationItemsWithWesternInterval": 397,
+    "attestationItemsLackingCalendarInCitedZh": 358,
+    "attestationItemsWithSomeCalendarSubstringInCitedZh": 39,
+    "attestationItemsWithUndatedSourceAttestationFlag": 0,
+    "deathClaimItems": 46,
+    "deathItemsWithWesternOnClaim": 0,
+    "systematicEventLabel": "Western intervals on attestations carry an outside-knowledge disclaimer in event text but still assert precise year endpoints while sourceDate.text is usually an office, kinship label, or personal name—not a calendar phrase from the cited unit."
+  },
+  "correctionGroups": [
+    {
+      "groupId": "G1-mass-undated-attestation",
+      "scope": "358 attestation packet items (claim-* )",
+      "verdict": "unsupported-as-source-witnessed-western",
+      "representativeZh": "征虜將軍羊鑒…（s0001，無年號）",
+      "representativeExample": {
+        "packetId": "claim-2",
+        "personId": "p001",
+        "evidence": ["s0001"],
+        "sourceDateText": "征虜將軍",
+        "currentWestern": "AD 318–322 on career attestation"
+      },
+      "replacementRule": "On each affected attestation: remove westernInterval (and westernYear if present); set undatedSourceAttestation: true; keep sourceDate.text as the Chinese anchor actually present in evidence; retain event wording that marks career/reign as biography-context only; do not treat active-date-hint ranges as if independently witnessed on the same claim.",
+      "rationale": "Cited units name offices or persons without reign-year material. Positive Western endpoints are extractor outside-knowledge estimates, not quotations or conversions supported by the cited Chinese."
+    },
+    {
+      "groupId": "G2-historical-allusion-attestation",
+      "scope": "Subset of G1 where evidence is rhetorical comparison only (e.g. p077–p079 on s0091)",
+      "verdict": "unsupported-episode-anchoring",
+      "representativeZh": "且項羽、袁紹非不強也，高祖縞冠，人應如響；",
+      "representativeExample": {
+        "packetIds": ["claim-230", "claim-232", "claim-234"],
+        "personIds": ["p077", "p078", "p079"],
+        "evidence": ["s0091"]
+      },
+      "replacementRule": "Same as G1 for the chapter cite; additionally mark that Western life ranges for these persons must come from accepted biography chapters or explicit undated allusion—never from the comparative sentence alone.",
+      "rationale": "Speech compares historical strength; it does not date Xiang Yu, Yuan Shao, or Gaozu within Jin annals."
+    },
+    {
+      "groupId": "G3-calendar-adjacent-review-queue",
+      "scope": "39 attestation items where cited Chinese contains a reign or era substring",
+      "verdict": "deferred-pending-structural-repair-and-conversion-proof",
+      "representativeZh": "永嘉四年…毛孟…（s0017）；惠帝末…（s0016）",
+      "representativeExamples": [
+        { "packetId": "claim-44", "personId": "p022", "sourceDateText": "永嘉四年", "evidence": ["s0017"] },
+        { "packetId": "claim-52", "personId": "p026", "sourceDateText": "惠帝末", "evidence": ["s0016"] }
+      ],
+      "replacementRule": "Do not auto-approve current Western intervals. After G1 repair, independently witness each row: map the cited era/reign phrase to Western bounds with documented conversion, or hold unresolved with specific reason.",
+      "rationale": "Calendar material appears in evidence, but present Western endpoints still use generic outside-knowledge conversion text and often mismatch the cited phrase (e.g. office string in sourceDate)."
+    },
+    {
+      "groupId": "G4-active-date-hints",
+      "scope": "397 hints-* packet items",
+      "verdict": "unsupported-until-independent-conversion-audit",
+      "representativeZh": "Person record activeDateHints: “AD 310–AD 315 (outside-knowledge conversion)”",
+      "replacementRule": "Retain hints only as explicitly marked outside-knowledge until a date audit witnesses or unresolved each range. Hints must not duplicate approved Western attestations after G1 repair.",
+      "rationale": "Every local person carries an outside-knowledge hint; none are sealed by date-audits/jinshu/081.json."
+    },
+    {
+      "groupId": "G5-death-events",
+      "scope": "46 death claim-* items",
+      "verdict": "separate-source-review-required",
+      "representativeZh": "遜怒囚群帥…夜中卒（s0035）",
+      "replacementRule": "Witness death dating from cited narrative units; add Western bounds or unresolved only with source reason. Current schema stores event:\"died\" without Western on claim—review remains open.",
+      "rationale": "Death rows are not part of the mass Western attestation defect but still require chapter audit."
+    }
+  ],
+  "definiteSourceOmissions": [
+    "data/people/date-audits/jinshu/081.json",
+    "data/people/generated/completion/jinshu/081/ canonical completion packet"
+  ],
+  "canonicalDependencies": [
+    "Independent structural attestation repair (G1–G2) before full 840-row item witnessing",
+    "Native date-audit report with complete itemChecks after repair fingerprints change",
+    "Pinned conversion tables or per-item conversion proof for G3 queue"
+  ],
+  "preservedUncertainty": [
+    "All death claims without Western remain open, not rejected",
+    "G3 rows are not bulk-rejected—only deferred",
+    "Editorial repairs and reviewer accept decisions remain valid; chronology defect is extraction-level, not English repair"
+  ],
+  "nextReviewerAction": "Host applies grouped attestation repair or schedules bounded repair wave; then rerun packet at new extraction hash before independent item witnessing."
+}

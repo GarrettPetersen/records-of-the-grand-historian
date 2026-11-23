@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "jinshu",
+  "chapter": "081",
+  "sourceHash": "sha256:ce91ab08d88c4e26e1eccc7d10f374cc5c542752561de93f097743de43774984",
+  "extractionHash": "sha256:f7d6f79ad0d7cb41aff6d2aea51c85049b4147264bd42e5ab71cf840310c0d40",
+  "status": "needs-revision",
+  "warning": "Incomplete scoped audit. Full 840-item witnessing deferred pending grouped attestation repair in research/people/jinshu081-date-pattern-diagnosis-20261123.json. Not recorded to data/people/date-audits/.",
+  "reviewer": {
+    "name": "Cursor Cloud independent Jinshu 081 residual reviewer (continuation)",
+    "agentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
+    "independentOfExtractor": true
+  },
+  "reviewedAt": "2026-11-23T23:28:00.000Z",
+  "stagingHead": "2967dfbc46e04e7768e32e1185b5873e295b91fc",
+  "packetPath": "research/people/jinshu081-date-packet-20261123.json",
+  "patternDiagnosis": "research/people/jinshu081-date-pattern-diagnosis-20261123.json",
+  "summary": "Fresh native packet built at staging head (840 items). Diagnosed systematic unsupported positive Western attestation on 358 of 397 attestation rows where cited Chinese lacks calendar material; 397 duplicated outside-knowledge active-date hints; 39 rows queue for post-repair conversion witnessing. Five applied editorial repairs verified separately; they do not fix chronology. Item witnessing for the mass pattern is blocked until host applies G1–G2 correction rules. Death claims (46) remain separate open work without Western on claim objects.",
+  "reviewedUnits": [
+    "s0001",
+    "s0007",
+    "s0016",
+    "s0017",
+    "s0021",
+    "s0033",
+    "s0036",
+    "s0069",
+    "s0085",
+    "s0091"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-2",
+      "verdict": "incorrect",
+      "event": "Yang Jian's appointment as General Who Conquers Caitiffs in the opening biographical list",
+      "evidence": [
+        { "unit": "s0001", "quote": "羊鑒" }
+      ],
+      "reason": "Chapter heading lists Yang Jian among biographies without a reign year; attestation anchors 征虜將軍 from elsewhere while cite is the heading—AD 318–322 is outside-knowledge only. Group G1."
+    },
+    {
+      "id": "claim-56",
+      "verdict": "incorrect",
+      "event": "Wang Zai serving as Administrator of Hanjia during the Warm Water battle",
+      "evidence": [
+        { "unit": "s0033", "quote": "漢嘉太守" }
+      ],
+      "reason": "Repair unit s0033 cites battle narrative without reign year; Western career interval on attestation is unsupported. Group G1."
+    },
+    {
+      "id": "claim-80",
+      "verdict": "incorrect",
+      "event": "Ren Hui acting as Cheng Han general in the same engagement",
+      "evidence": [
+        { "unit": "s0033", "quote": "任回" }
+      ],
+      "reason": "Personal name mention is not a calendar source; Western interval cannot be witnessed from this cite. Group G1."
+    },
+    {
+      "id": "claim-104",
+      "verdict": "incorrect",
+      "event": "Hao Jia dispatched as supervising secretary on the mobile headquarters",
+      "evidence": [
+        { "unit": "s0069", "quote": "治書御史" }
+      ],
+      "reason": "Editorial repair restored dispatch wording; cited unit still has no era year for Western endpoints. Group G1."
+    },
+    {
+      "id": "claim-216",
+      "verdict": "incorrect",
+      "event": "Liu Yin's biographical opening describing birth locale and character",
+      "evidence": [
+        { "unit": "s0085", "quote": "劉胤" }
+      ],
+      "reason": "Biography sentence introduces the person; AD 310–330 attestation interval is outside-knowledge only. Group G1."
+    },
+    {
+      "id": "claim-230",
+      "verdict": "incorrect",
+      "event": "Xiang Yu cited as a rhetorical comparator in Liu Yin's speech",
+      "evidence": [
+        { "unit": "s0091", "quote": "項羽" }
+      ],
+      "reason": "Comparative allusion does not date Western Chu career; BC 209–202 on this cite is unsupported. Group G2."
+    },
+    {
+      "id": "claim-234",
+      "verdict": "incorrect",
+      "event": "Gaozu hemp-cap example in the same argument",
+      "evidence": [
+        { "unit": "s0091", "quote": "高祖" }
+      ],
+      "reason": "Illustrative reference to Han founding is not a Jinshu life-date attestation for Liu Bang on s0091. Group G2."
+    },
+    {
+      "id": "claim-44",
+      "verdict": "research-blocked",
+      "event": "Mao Meng's 永嘉四年 petition context",
+      "evidence": [
+        { "unit": "s0017", "quote": "永嘉四年" }
+      ],
+      "reason": "Calendar phrase present but current AD 310–311 endpoints conflict with 永嘉四年 conversion; deferred to G3 after structural repair."
+    },
+    {
+      "id": "hints-p001",
+      "verdict": "incorrect",
+      "event": "Active-date hint range for p001",
+      "evidence": [
+        { "unit": "s0001", "quote": "羊鑒" }
+      ],
+      "reason": "Outside-knowledge hint duplicates unapproved Western attestation on claim-2. Group G4."
+    }
+  ],
+  "personChecks": [],
+  "findings": [
+    {
+      "id": "finding-G1",
+      "items": [
+        "claim-2",
+        "claim-56",
+        "claim-80",
+        "claim-104",
+        "claim-216"
+      ],
+      "problem": "Mass attestation pattern stores precise Western intervals while cited Chinese units lack calendar material; sourceDate.text anchors offices or names instead of reign phrases.",
+      "action": "Apply research/people/jinshu081-date-pattern-diagnosis-20261123.json group G1 replacement rule chapter-wide before item-by-item audit."
+    },
+    {
+      "id": "finding-G2",
+      "items": [
+        "claim-230",
+        "claim-234"
+      ],
+      "problem": "Historical figures in comparative rhetoric receive life-range attestations anchored to the speech unit.",
+      "action": "Apply G2 replacement rule; retain separate canonical biography dating outside this chapter cite."
+    },
+    {
+      "id": "finding-G3",
+      "items": [
+        "claim-44"
+      ],
+      "problem": "Calendar-bearing cites still use generic outside-knowledge Western endpoints without conversion proof.",
+      "action": "Queue G3 rows for independent conversion review after G1 repair changes fingerprints."
+    },
+    {
+      "id": "finding-G4",
+      "items": [
+        "hints-p001"
+      ],
+      "problem": "Every person carries outside-knowledge active-date hints unaudited and duplicative of attestation Western claims.",
+      "action": "Witness or hold each hints-* row after attestation repair; do not approve catalog while all 397 hints remain unaudited."
+    }
+  ],
+  "references": [
+    {
+      "kind": "chapter",
+      "book": "jinshu",
+      "chapter": "081",
+      "unit": "s0069",
+      "quote": "於是遣治書御史郝嘏為行台，催攝令進討。",
+      "sourceHash": "sha256:ce91ab08d88c4e26e1eccc7d10f374cc5c542752561de93f097743de43774984",
+      "reason": "Editorial dispatch wording confirmed; still no embedded reign year for Western attestation on claim-104."
+    }
+  ],
+  "deferredItemCount": 831,
+  "canonicalDependencies": [
+    "data/people/date-audits/jinshu/081.json (not written — research artifact only)",
+    "Grouped attestation repair at staging head before full packet witnessing",
+    "data/people/generated/completion/jinshu/081/ (still absent)"
+  ]
+}
