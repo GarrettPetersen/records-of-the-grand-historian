@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "kind": "consolidated-independent-chapter-review",
+  "book": "jinshu",
+  "chapter": "085",
+  "candidate": {
+    "pr": 5428,
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu085",
+    "commit": "103736d18c27e8985ec6fc1ef1b4dc361384754e",
+    "baseBranch": "codex/people-glossary-staging-v2",
+    "baseCommitAtReview": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
+    "authorWorker": "cursor-github-nov24-2",
+    "authorAgentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
+    "sourceSha256": "sha256:6b616104f7e5f2f626ca52a9d3c45900830f3b99a40f96cdfff35dea051fc203",
+    "extractionSha256": "sha256:efeb720eb2f124200ebb27421540a4d2d62fda878af72e9b5c2ab4630378326e",
+    "datePacketSourceHash": "sha256:76706a52e0cf3d0959a4ccd988ed381bb53e6fb33c453f72d9145be60892c2da",
+    "datePacketExtractionHash": "sha256:211ecf37d1cb3d2def068fe32ddc14742d7a3e41357c8af843839910756db3d1",
+    "chapterFingerprint": "sha256:4c82a897155a6840aa5a6d261ecba7d36df8367b05793c27dc8ff415ce42405f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer",
+    "model": "Composer",
+    "agentId": "bc-65fb5d6a-4638-432a-aaa2-0356929fe257",
+    "independentOfAuthor": true,
+    "reviewedAt": "2026-11-23T16:18:49.721Z"
+  },
+  "lookup": {
+    "manifestGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "registryPrefix": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "dossierCount": 228270,
+    "credentialUsed": true,
+    "boundedSearchesArtifact": "lookup-bounded.json",
+    "note": "Retrieval is candidate evidence only, not identity approval. Truncated searches are not uniqueness proofs."
+  },
+  "scopedValidation": {
+    "peopleValidate": "Scoped person data validation passed for jinshu/085: 1 extraction(s), 142 local people, 965 mentions, 859 claims, 0 proposed repair(s), 13 applied repair(s) before this review's editorial accept file.",
+    "diskCheckGiB": 227.54
+  },
+  "lanes": {
+    "englishSourceRepair": {
+      "verdict": "accept-applied-repairs",
+      "nativeArtifact": "data/people/editorial-decisions/jinshu/085.json",
+      "decisions": 13,
+      "summary": "All 13 applied English repairs are source-supported and independently accepted: 羊僧壽→Yang Sengshou; drop invented 金紫 from 左光祿大夫; 邁→Liu Mai across the brother biography; 從兄子韶 kinship clarified for Tan Shao.",
+      "noAdditionalEnglishBlockersFoundInReviewedUnits": true
+    },
+    "extractionEvidence": {
+      "verdict": "retain-with-identity-debt",
+      "people": 142,
+      "mentions": 965,
+      "claims": 859,
+      "withinChapterSameNameExtraLocals": 49,
+      "sameNameClusters": 26,
+      "notes": [
+        "Extraction validates after the English repairs.",
+        "Extractor run.agentId is null on the candidate; native identity receipt requires current extractor provenance.",
+        "Multiple local IDs share exact Chinese preferred names (劉毅×7, 桓玄×7, 劉裕×7, 何無忌×6, 檀憑之×2, etc.). Treat as unresolved within-chapter identity debt for the owner, not silent merges by the reviewer."
+      ]
+    },
+    "chronology": {
+      "verdict": "needs-revision",
+      "nativeArtifact": "data/people/date-audits/jinshu/085.json",
+      "status": "needs-revision",
+      "priorDateAudit": null,
+      "keyFindings": [
+        "claim-206: 江州刺史 dated 義熙中 on s0143; unit only supports 隆安中 for 司徒長史; 義熙中 belongs on s0150 death/deprivation.",
+        "claim-378: s0282 rearing event carries sourceDate from s0283 office sentence plus invented before-AD-404 bound.",
+        "127 claims invent Western endpoints from parenthetical narrative/kinship framing.",
+        "14 allusion active-date hints remain research-required placeholders and are research-blocked."
+      ],
+      "blockerForApproval": "Fresh repair of listed incorrect/research-blocked items, then a new independent re-audit against updated fingerprints. No chronology approval in this review."
+    },
+    "canonicalIdentities": {
+      "verdict": "not-sealed",
+      "nativeIdentityReviewRecorded": false,
+      "blockers": [
+        "No accepted native date-audit approval yet (current status needs-revision).",
+        "extraction.run.agentId is null; chapter identity receipt requires actual extractor provenance.",
+        "No local accepted catalog rebuild/publication path in this cloud review (full corpus generation forbidden).",
+        "Major-name searches for 劉毅/桓玄/劉裕/何無忌/殷仲堪 are truncated; host must resolve with sealed bounded packets before positive unique certification.",
+        "Within-chapter duplicate locals (49 extras across 26 exact-name clusters) remain unresolved."
+      ],
+      "boundedLookupObservations": [
+        "羊僧壽 → unique per_F5YK87RBC8SVQPMNHQ5R with localPeople jinshu:085:p033 and English Yang Sengshou; supports the Sengshou repair, not a merge decision.",
+        "劉邁 → unique per_D05BN1AMW85XEB0GEJEK with courtesy 伯群 / Liu Mai; supports the He Mai→Liu Mai repair, not a merge decision.",
+        "檀憑之 total 3 non-truncated candidates; 魏詠之 total 5; 卞範之 total 3; 諸葛長民 truncated at 11. Empty/truncated search is not uniqueness proof."
+      ]
+    }
+  },
+  "ownerReturn": {
+    "sameOwner": "cursor-github-nov24-2 / bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
+    "requiredOwnerActions": [
+      "Keep the 13 independently accepted English repairs as-is unless a later source contradiction appears.",
+      "Repair chronology defects named in data/people/date-audits/jinshu/085.json (especially claim-206, claim-378, parenthetical invented endpoints, research-required hints).",
+      "Reconcile within-chapter duplicate locals or retain explicit unresolvedIdentity; do not guess merges from truncated lookup totals.",
+      "Restore/record real extractor provenance before requesting native identity certification.",
+      "After chronology repair, request a fresh independent date re-audit and only then host identity certification / publication gates."
+    ],
+    "notDoneByThisReviewer": [
+      "No author-branch edits to source/extraction.",
+      "No claims ledger changes.",
+      "No catalog/site generation or deployment.",
+      "No fabricated identity seal or chronology approval."
+    ]
+  },
+  "nativeSeals": {
+    "editorialCompletedAt": "2026-11-23T16:18:23.986Z",
+    "dateReviewedAt": "2026-11-23T16:18:49.721Z",
+    "dateStatus": "needs-revision",
+    "editorialDecisions": 13
+  }
+}
