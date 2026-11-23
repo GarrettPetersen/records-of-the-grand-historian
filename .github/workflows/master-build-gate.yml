@@ -126,7 +126,16 @@ jobs:
           if [[ "$CHAPTER" == 031 ]]; then
             extra+=(--retained-composition "$RUNNER_TEMP/retained-031.json")
           fi
+          if [[ "$CHAPTER" == 094 ]]; then
+            SOURCE_REVISION="$SOURCE_REVISION" IDENTITY_REGISTRY="$registry" node --input-type=module <<'JS'
+          import path from 'node:path';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const receipt=await prepareChapterIdentityReview({book:'jinshu',chapter:'094',sourceRevision:process.env.SOURCE_REVISION,registry:process.env.IDENTITY_REGISTRY,out:path.join(process.env.RUNNER_TEMP,'native-identity'),transportMaxBytes:384*1024});
+          console.log(JSON.stringify(receipt,null,2));
+          JS
+          else
           node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter "$CHAPTER" --source-revision "$SOURCE_REVISION" --registry "$registry" --out "$RUNNER_TEMP/native-identity" "${extra[@]}"
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: jinshu-${{ inputs.chapter }}-native-identity-evidence
