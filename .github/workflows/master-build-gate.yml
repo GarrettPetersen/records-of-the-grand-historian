@@ -22,10 +22,10 @@ jobs:
           case "$CHAPTER" in
             031) revision=f65754d727561484a4a9a75453cdcd67ecec5c4d; registry_run=45284855296 ;;
             083|094) revision=1fb7ef675b0c2089fefaec9a8185c33f8d072bb3; registry_run=45287545951 ;;
-            115) revision=131ae6dd0d756654bbd5d839226e08b7c5cc3c39; registry_run=45286659491 ;;
+            115) revision=1fb25e99e2fc07ba0ee8fbd89369d44c482c4326; registry_revision=131ae6dd0d756654bbd5d839226e08b7c5cc3c39; registry_run=45286659491 ;;
             *) exit 1 ;;
           esac
-          printf 'revision=%s\nregistry_run=%s\n' "$revision" "$registry_run" >> "$GITHUB_OUTPUT"
+          printf 'revision=%s\nregistry_run=%s\nregistry_revision=%s\n' "$revision" "$registry_run" "${registry_revision:-$revision}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           ref: ${{ steps.pin.outputs.revision }}
@@ -37,7 +37,7 @@ jobs:
       - run: npm install --no-audit --no-fund
       - uses: actions/download-artifact@v4
         with:
-          name: people-registry-${{ steps.pin.outputs.revision }}
+          name: people-registry-${{ steps.pin.outputs.registry_revision }}
           run-id: ${{ steps.pin.outputs.registry_run }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/registry-archive
@@ -107,15 +107,19 @@ jobs:
       - name: Validate exact registry and prepare native identity evidence
         env:
           SOURCE_REVISION: ${{ steps.pin.outputs.revision }}
+          REGISTRY_REVISION: ${{ steps.pin.outputs.registry_revision }}
         shell: bash
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
+          if [[ "$REGISTRY_REVISION" != "$SOURCE_REVISION" ]]; then
+            git fetch --depth=1 --no-tags origin "$REGISTRY_REVISION"
+          fi
           cd "$RUNNER_TEMP/registry-archive"
           sha256sum -c SHA256SUMS
           mkdir "$RUNNER_TEMP/identity-registry"
           tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
-          registry="$RUNNER_TEMP/identity-registry/$SOURCE_REVISION"
+          registry="$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION"
           cmp manifest.json "$registry/manifest.json"
           cd "$GITHUB_WORKSPACE"
           extra=()
