@@ -5,7 +5,7 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['031', '094']
+        options: ['031', '083', '094', '115']
 permissions:
   contents: read
   actions: read
@@ -20,7 +20,8 @@ jobs:
         run: |
           case "$CHAPTER" in
             031) revision=f65754d727561484a4a9a75453cdcd67ecec5c4d; registry_run=45284855296 ;;
-            094) revision=5c6443441bb9d3330367833e01eae38ebb7421e9; registry_run=45284160964 ;;
+            083|094) revision=1fb7ef675b0c2089fefaec9a8185c33f8d072bb3; registry_run=45287545951 ;;
+            115) revision=131ae6dd0d756654bbd5d839226e08b7c5cc3c39; registry_run=45286659491 ;;
             *) exit 1 ;;
           esac
           printf 'revision=%s\nregistry_run=%s\n' "$revision" "$registry_run" >> "$GITHUB_OUTPUT"
