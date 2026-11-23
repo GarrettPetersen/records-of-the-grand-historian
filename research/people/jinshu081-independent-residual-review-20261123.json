@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-independent-residual-review",
+  "status": "incomplete-not-certified",
+  "warning": "Independent reviewer package only. No claim edits, editorial application, date approval, identity certification, or publication.",
+  "book": "jinshu",
+  "chapter": "081",
+  "reviewerAgentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
+  "reviewedAt": "2026-11-23T22:58:00.000Z",
+  "staging": {
+    "pullRequest": 5478,
+    "headSha": "425749ace8c3b743648c8e2301a8a5997f08480f",
+    "headBranch": "codex/cursor-glossary-nov24-2026-jinshu081",
+    "sourceOwnerPullRequest": 5407,
+    "ownerAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a"
+  },
+  "inputs": {
+    "source": {
+      "path": "data/jinshu/081.json",
+      "sha256": "sha256:a596adf5561a4045cdb43f7025e371f9311abfcf188d38b32def3c22eb291846"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jinshu/081.json",
+      "sha256": "sha256:57ec8066d630caba38a3b3b97ef236c5e9ff48ea84b329928f0d487c1cf47220",
+      "chapterFingerprint": "sha256:c910cd9ab9e8ecd846ab94f8cf71fb66468afec9232c1d4f35205281bd14a33c"
+    },
+    "authorPackage": {
+      "path": "research/people/jinshu081-author-residual-review-20261123-incomplete.json",
+      "sourceHashClaimed": "sha256:dc33b523367908de8dd5fc97b451fec42814c4bcade75ac419dee6153d912b21"
+    },
+    "editorialHistory": null,
+    "dateAudit": null,
+    "canonicalCompletionPacket": {
+      "expectedPath": "data/people/generated/completion/jinshu/081/",
+      "present": false
+    }
+  },
+  "gates": {
+    "extractionSchema": {
+      "command": "npm run people:validate -- --book jinshu --chapter 081",
+      "result": "PASS",
+      "detail": "397 people, 2163 mentions, 2415 claims, 5 proposed repairs, 0 applied repairs"
+    },
+    "sourceEnglishEditorial": {
+      "result": "accept-all-proposed",
+      "repairsReviewed": 5,
+      "repairsAccepted": 5,
+      "repairsRejected": 0
+    },
+    "chronology": {
+      "result": "hold-independent-date-audit",
+      "dateAuditsFile": "data/people/date-audits/jinshu/081.json",
+      "present": false,
+      "authorChronologyFindings": "research/people/jinshu081-chronology-findings-20261123-incomplete.json",
+      "outsideKnowledgeTemporalInExtraction": 366,
+      "authorLifeClaimsListed": 0,
+      "repairUnitsDateImpact": "none — the five idiomatic repairs do not add, move or remove dated claims",
+      "note": "Author chronology artifact is explicitly not a native audit. All outside-knowledge Western intervals remain unaudited for this chapter."
+    },
+    "identity": {
+      "result": "hold-bounded-lookup-insufficient",
+      "canonicalPacketPresent": false,
+      "lookupRegistryPinned": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Registry manifest matches author package. No per-chapter canonical completion packet; dossier member evidence for jinshu:081:p* not returned in bounded sample. Identity certification not claimed."
+    }
+  },
+  "boundedLookupRequests": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Verify pinned registry generation",
+      "outcome": "generation cb756c508e0265ca…; dossierCount 228270; sourceEditorialApproval false"
+    },
+    {
+      "route": "/v1/search?key=zh:劉胤",
+      "purpose": "Cross-check Liu Yin (p070) against canonical dossiers",
+      "outcome": "2 candidates (per_J5M150Q5AP65DDMCB0VW, per_RYENYA4EX364A1KX7MJ5); both are Han Liu Xu 劉胥, not Jin Liu Yin 劉胤"
+    },
+    {
+      "route": "/v1/search?key=zh:毛孟",
+      "purpose": "Mao Meng (p022) for s0021 repair context",
+      "outcome": "1 candidate per_J3WT4W6H1Q0X0JN4KG9G; not proof of chapter membership"
+    },
+    {
+      "route": "/v1/search?key=zh:郝嘏",
+      "purpose": "Hao Jia (p052) for s0069 repair",
+      "outcome": "1 candidate per_GTZPA9F1AM2W423V1AH7"
+    },
+    {
+      "route": "/v1/people/per_RYENYA4EX364A1KX7MJ5?member=jinshu:081:p070",
+      "purpose": "Exact member evidence for Jin Liu Yin",
+      "outcome": "HTTP 404 Member does not belong to this dossier"
+    }
+  ],
+  "additionalIdentityNeeds": [
+    "Materialize or supply the exact canonical completion packet at data/people/generated/completion/jinshu/081/ (absent in staging SHA).",
+    "Independent bounded case review for all 397 chapter-local people; lookup search for 劉胤 does not surface Jin Liu Yin (p070).",
+    "Resolve candidate-disposition mistranslation links (e.g. 廙→Wang Yi p087, Sima Daozi, Empress Wang) through chapter-local source review, separate from the five accepted repairs."
+  ],
+  "decisions": [
+    {
+      "unit": "s0021",
+      "field": "idiomatic",
+      "decision": "accept",
+      "sourceZh": "與孟俱行，道遇寇賊，逾年乃至。",
+      "rationale": "Current idiomatic drops companion 孟 and the road encounter 道遇寇賊; proposed text restores both propositions. Extraction already links 孟 to p022 Mao Meng via s0018/s0021."
+    },
+    {
+      "unit": "s0033",
+      "field": "idiomatic",
+      "decision": "accept",
+      "sourceZh": "李雄遣李驤、任回攻釗，釗自南秦與漢嘉太守王載共距之，戰於溫水，釗敗績，載遂以二郡附雄。",
+      "rationale": "Current idiomatic collapses agents into “Xiong’s generals” and omits Zhao’s joint defense with Wang Zai. Proposed repair matches the literal and named persons p013, p040, p009, p028, p023."
+    },
+    {
+      "unit": "s0069",
+      "field": "idiomatic",
+      "decision": "accept",
+      "sourceZh": "於是遣治書御史郝嘏為行台，催攝令進討。",
+      "rationale": "“Court fired Hao Jia” materially misreads 遣 as dismissal. Proposed wording matches 治書御史…為行台…催攝令進討 (dispatch as mobile headquarters to press the offensive). Literal already correct; extraction p052 consistent."
+    },
+    {
+      "unit": "s0085",
+      "field": "idiomatic",
+      "decision": "accept",
+      "sourceZh": "劉胤，字承胤，東萊掖人，漢齊悼惠王肥之後也，美姿容，善自任遇，交結時豪，名著海岱間，士咸慕之。",
+      "rationale": "Current idiomatic omits courtesy 字承胤, origin 掖, Qi royal descent, befriending contemporaries, and scholars’ admiration. Proposed repair tracks the sealed literal; minor locution differences only (e.g. Chengyin, Dao-Hui of Qi)."
+    },
+    {
+      "unit": "s0091",
+      "field": "idiomatic",
+      "decision": "accept",
+      "sourceZh": "且項羽、袁紹非不強也，高祖縞冠，人應如響；",
+      "rationale": "Current idiomatic erases 項羽、袁紹 and mislabels 高祖縞冠 as “Liu Bang’s plain cap.” Proposed repair restores the named contrast and Gaozu hemp cap; trailing semicolon preserves continuation into s0092. Extraction p077–p079 aligned."
+    }
+  ],
+  "nativeCertification": {
+    "complete": false,
+    "blockers": [
+      "apply-five-accepted-editorial-repairs-via-host-materializer",
+      "independent-full-chapter-date-audit",
+      "canonical-completion-packet-and-per-person-case-review",
+      "no-date-audits-jinshu-081-json"
+    ]
+  }
+}
