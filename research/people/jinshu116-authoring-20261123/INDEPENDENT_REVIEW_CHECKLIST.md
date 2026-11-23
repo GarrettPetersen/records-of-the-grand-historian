@@ -1,14 +1,14 @@
-# Jinshu 116 — owner reconciliation vs #5436
+# Jinshu 116 — owner R1 residue cleanup vs #5441
 
-Owner: `bc-e9c3ed78` · Reviewer: `bc-96175e3c` @ `2e6a4f369a72bdd5cf005155fb48bd4a6aee73d6` · Base `59aec9792ff2faaa2b4b53ceb1af007efd63a2c7`
+Owner: `bc-e9c3ed78` · Reviewer: `bc-96175e3c` @ `8603f7345cf145509750be11862a15531fc80f0e` · Base `d04279d2736afc07d9069dd44b5656de92b68af1`
 
-## Done (no self-approval)
-- F1 alias/pinyin/claim-label sync
-- F2 merges of listed false splits; 舜 unresolvedIdentity hold
-- F3 Sun Ce simile research hold; date packet prepared (not approved)
-- 70 English repairs preserved
-- Native editorial-decisions **not** written (F4 for same independent reviewer)
+## Done
+- [x] Preserved 70 native editorial accepts from reviewer (copied unchanged)
+- [x] R1 only: Lan Niu→Lan Du claim statement; Gu Chengshan→Gucheng Shen claim statement; Suo Luyao→Suolu Yao on p137 descriptor
+- [x] Did not reopen translationRepairs journal or source English
+- [x] Refreshed date packet evidence; left chronology approval to same independent reviewer
 
-## Same reviewer recheck
-- Alias sync, merges, Sun Ce hold, then native editorial accepts on this fingerprint
-- Fresh date audit + identity certification
+## Still required
+- [ ] Independent date audit
+- [ ] Native identity certification
+- [ ] Host publication
