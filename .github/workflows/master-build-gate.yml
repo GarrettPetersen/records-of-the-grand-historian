@@ -5,12 +5,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['031', '083', '094', '115']
+        options: ['031', '083', '094', '115', '031-record']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
+    if: inputs.chapter != '031-record'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -126,5 +127,118 @@ jobs:
         with:
           name: jinshu-${{ inputs.chapter }}-native-identity-evidence
           path: ${{ runner.temp }}/native-identity/
+          if-no-files-found: error
+          retention-days: 7
+  record-031:
+    if: inputs.chapter == '031-record'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: f65754d727561484a4a9a75453cdcd67ecec5c4d
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with:
+          name: people-registry-f65754d727561484a4a9a75453cdcd67ecec5c4d
+          run-id: 45284855296
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry-archive
+      - uses: actions/download-artifact@v4
+        with:
+          name: jinshu-031-native-identity-evidence
+          run-id: 45286126920
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/native-identity
+      - name: Verify actual report capture and run the canonical recorder
+        shell: bash
+        run: |
+          set -euo pipefail
+          revision=f65754d727561484a4a9a75453cdcd67ecec5c4d
+          test "$(git rev-parse HEAD)" = "$revision"
+          mkdir "$RUNNER_TEMP/identity-registry" "$RUNNER_TEMP/recorded"
+          (
+            cd "$RUNNER_TEMP/registry-archive"
+            sha256sum -c SHA256SUMS
+            tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
+            cmp manifest.json "$RUNNER_TEMP/identity-registry/$revision/manifest.json"
+          )
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash as sha} from './scripts/lib/people-identity-artifacts.mjs';
+          import {assembleChapterIdentityReviewParts} from './scripts/lib/people-identity-review-transport.mjs';
+          const base=path.join(process.env.RUNNER_TEMP,'native-identity');
+          const packetBytes=fs.readFileSync(path.join(base,'source-review-packet.json'));
+          const packet=JSON.parse(packetBytes);
+          const receipt=JSON.parse(fs.readFileSync(path.join(base,'preparation-receipt.json')));
+          const commit='43891318ba7bce476cac75524bc059cb9a94d6ab';
+          const agentId='bc-c338e2c8-9d0c-4d07-a751-be3d40824e00';
+          const runId='run-5ea57248-9aae-4296-92b9-f6454beb90d0';
+          const get=file=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/research/people/jinshu031-native-identity-remaining-review-20261123/'+file+'?ref='+commit],{maxBuffer:1000000});
+          const manifest=JSON.parse(get('manifest.json'));
+          const scope={book:'jinshu',chapter:'031'};
+          assert.deepEqual(packet.scope,scope);
+          assert.deepEqual(manifest.scope,scope);
+          assert.equal(manifest.reviewer.agentId,agentId);
+          assert.equal(manifest.actionsEvidence.artifactId,14871024327);
+          assert.equal(manifest.actionsEvidence.runId,45286126920);
+          assert.equal(manifest.actionsEvidence.artifactDigest,'sha256:54ab3b6e712a6726579dd603238d262604d4d6225fcd6410d98915d3eac1a4ee');
+          assert.equal(receipt.sourceRevision,'f65754d727561484a4a9a75453cdcd67ecec5c4d');
+          assert.equal(manifest.sealedPacket.sourceRevision,receipt.sourceRevision);
+          assert.equal(manifest.sealedPacket.sourcePacketSha256,'sha256:'+sha(packetBytes));
+          assert.equal(manifest.sealedPacket.planFingerprint,packet.plan.fingerprint);
+          assert.equal(manifest.sealedPacket.retainedCompositionFingerprint,receipt.retainedCompositionFingerprint);
+          assert.equal(sha(packetBytes),receipt.sourcePacketSha256);
+          assert.equal(receipt.reusedCases,208);
+          assert.equal(receipt.newReviewCases,49);
+          assert.equal(manifest.parts.length,receipt.reviewParts.length);
+          const reports=[], transports=[];
+          const parts=receipt.reviewParts.map((sealed,index)=>{
+            const entry=manifest.parts[index], file='part-'+String(index+1).padStart(3,'0')+'.report.json';
+            assert.equal(entry.file,file);
+            assert.equal(entry.sealedTransportFile,sealed.file);
+            assert.equal(entry.sealedTransportSha256,'sha256:'+sealed.sha256);
+            assert.deepEqual(entry.caseIds,sealed.caseIds);
+            const transportFile=path.join(base,sealed.file);
+            const transportBytes=fs.readFileSync(transportFile), reportBytes=get(file);
+            assert.equal(sha(transportBytes),sealed.sha256);
+            assert.equal('sha256:'+sha(reportBytes),entry.sha256);
+            const report=JSON.parse(reportBytes);
+            assert.equal(report.reviewer.agentId,agentId);
+            reports.push(report); transports.push(JSON.parse(transportBytes));
+            const reportFile=path.join(base,file);
+            fs.writeFileSync(reportFile,reportBytes,{flag:'wx'});
+            return {schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope,agentId,runId,sourcePacketSha256:sha(packetBytes),transportSha256:sha(transportBytes),reportSha256:sha(reportBytes),transportFile,reportFile};
+          });
+          const assembled=assembleChapterIdentityReviewParts(packet.plan,transports,reports,parts.map(part=>part.agentId),packet.authorAgentIds,packet.reviewCaseIds);
+          assert.equal(assembled.reviews.length,49);
+          const reportBytes=Buffer.from(JSON.stringify(assembled,null,2)+'\n');
+          const job={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope,agentId,runId,authorAgentIds:packet.authorAgentIds,sourcePacketSha256:sha(packetBytes),reportSha256:sha(reportBytes),transportPolicy:receipt.transportPolicy,parts};
+          fs.writeFileSync(path.join(base,'recording-report.json'),reportBytes,{flag:'wx'});
+          fs.writeFileSync(path.join(base,'recording-job.json'),JSON.stringify(job)+'\n',{flag:'wx'});
+          JS
+          node scripts/record-people-chapter-identity-worker.mjs \
+            --packet "$RUNNER_TEMP/native-identity/source-review-packet.json" \
+            --report "$RUNNER_TEMP/native-identity/recording-report.json" \
+            --job "$RUNNER_TEMP/native-identity/recording-job.json" \
+            --registry "$RUNNER_TEMP/identity-registry/$revision" | tee "$RUNNER_TEMP/recorded/recording-receipt.json"
+          jq -e '.nativeIdentityProofAccepted and .reviewedCases == 257 and .chapterLocalPeople == 267' "$RUNNER_TEMP/recorded/recording-receipt.json"
+          npm run people:validate -- --book jinshu --chapter 031 | tee "$RUNNER_TEMP/recorded/scoped-validation.txt"
+          cp data/people/identity-reviews/jinshu/031.json "$RUNNER_TEMP/recorded/jinshu-031-identity-proof.json"
+          (cd "$RUNNER_TEMP/recorded" && sha256sum jinshu-031-identity-proof.json recording-receipt.json scoped-validation.txt > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu-031-recorded-canonical-identity
+          path: ${{ runner.temp }}/recorded/
           if-no-files-found: error
           retention-days: 7
