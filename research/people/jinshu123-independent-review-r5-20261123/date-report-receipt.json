@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "date-audit-record-receipt",
+  "book": "jinshu",
+  "chapter": "123",
+  "recordedStatus": "research-blocked",
+  "reviewedAt": "2026-11-23T20:50:36.178Z",
+  "sourceHash": "sha256:45a310e8b04b4146e5a7856022432cf8ab4c6b8d1f68a299202008c0caaee2a6",
+  "extractionHash": "sha256:addfb4874a9eb7ab5109a1b4efb159a4e2c8ad6998328974099845ec05df54d9",
+  "matchesOwnerResidualPacket": true,
+  "itemVerdicts": {
+    "supported": 319,
+    "research-blocked": 3
+  },
+  "personVerdicts": {
+    "supported": 100,
+    "research-blocked": 3
+  },
+  "findings": [
+    {
+      "itemCount": 2,
+      "problem": "Unnamed elder-brother inferences remain unresolvedDateAuditItems. An undated inferred relation is not a dated event; Western years must not be copied from the sons. These two rows still block native audited status.",
+      "action": "Focused clearance only: convert to undatedSourceAttestation (or drop temporal unresolved packaging) without inventing dates or naming the brother; do not full-redo the chapter.",
+      "items": [
+        "claim-220",
+        "claim-326"
+      ]
+    },
+    {
+      "itemCount": 1,
+      "problem": "p120 source-form 太原王 remains unresolvedDateAuditItems. A source-attested title need not be promoted to a speculative known person; identity uncertainty is real but currently packaged as chronology unresolved.",
+      "action": "Focused clearance only: keep source-form title without promoting to Murong Ke; use undated title attestation (or non-unresolved packaging) so identity seal review can proceed after audited chronology; do not full-redo.",
+      "items": [
+        "claim-474"
+      ]
+    },
+    {
+      "itemCount": 3,
+      "problem": "Persons p049, p091, and p120 retain the three unresolvedDateAuditItems (claim-220, claim-326, claim-474); native audited status remains blocked.",
+      "action": "Focused clearance of those three rows only; no chapter-wide redo. Then same-reviewer re-audit for audited.",
+      "items": [
+        "p049",
+        "p091",
+        "p120"
+      ]
+    }
+  ],
+  "verifiedConversions": {
+    "clearedFromUnresolved": [
+      "claim-22",
+      "claim-26",
+      "claim-42",
+      "claim-58",
+      "claim-103",
+      "claim-142",
+      "claim-28",
+      "claim-116",
+      "claim-129",
+      "claim-293",
+      "claim-305",
+      "claim-307",
+      "claim-309",
+      "claim-318",
+      "claim-419",
+      "claim-426",
+      "claim-435",
+      "claim-437",
+      "claim-440",
+      "claim-470"
+    ],
+    "droppedFromDatePacketAsNonTemporal": [
+      "claim-22",
+      "claim-26",
+      "claim-42",
+      "claim-58",
+      "claim-103",
+      "claim-142"
+    ],
+    "convertedToUndatedSourceAttestation": [
+      "claim-28",
+      "claim-116",
+      "claim-129",
+      "claim-293",
+      "claim-305",
+      "claim-307",
+      "claim-309",
+      "claim-318",
+      "claim-419",
+      "claim-426",
+      "claim-435",
+      "claim-437",
+      "claim-440",
+      "claim-470"
+    ]
+  },
+  "remainingUnresolved": [
+    {
+      "id": "claim-220",
+      "person": "p049",
+      "predicate": "attestation",
+      "reason": "Unnamed elder brother inferred from 兄子; his own activity dates are not given and must not be copied from his sons.",
+      "sourceDate": "兄子楷、紹"
+    },
+    {
+      "id": "claim-326",
+      "person": "p091",
+      "predicate": "attestation",
+      "reason": "Unnamed elder brother inferred from 兄子; do not copy his son's dates.",
+      "sourceDate": "斌兄子真"
+    },
+    {
+      "id": "claim-474",
+      "person": "p120",
+      "predicate": "attestation",
+      "reason": "s0221 supplies only the title 太原王; identifying this figure as Murong Ke (or any other named person) is not supported by this chapter alone and remains unresolved for independent identity review.",
+      "sourceDate": "太原王"
+    }
+  ],
+  "preservedTaiyuanMappings": 33,
+  "whyNotAudited": "Native unresolvedDateAuditItems still nonempty: claim-220, claim-326, claim-474.",
+  "concreteRemainingBlocker": "Focused clearance of claim-220, claim-326, claim-474 only (inferred kin ≠ dated event; 太原王 not promoted). No full redo.",
+  "chapterApproval": false
+}
