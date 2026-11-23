@@ -384,6 +384,19 @@ function validateWesternYear(value, label, errors) {
   }
 }
 
+// Preserve an exact source regnal expression without asserting an optional
+// Western conversion. Every dated item for this narrow person must be this
+// explicit source-quoted form; asserted Western/life dates retain normal gates.
+function sourceQuotedQualitativeAttestation(claim, packet) {
+ const value=claim.value;
+ return claim.predicate==='attestation'&&claim.certainty==='explicit'&&
+  typeof value?.sourceDate?.text==='string'&&value.sourceDate.text.trim().length>0&&
+  typeof value.qualitative==='string'&&value.qualitative.trim().length>=20&&
+  typeof value.event==='string'&&value.event.trim().length>=20&&
+  !value.westernYear&&!value.westernInterval&&!value.westernBounds&&!value.unresolved&&!value.undatedSourceAttestation&&
+  claim.evidence.length>0&&claim.evidence.some(id=>packet.units.some(u=>id===packet.book+':'+packet.chapter+':'+u.id&&u.zh.includes(value.sourceDate.text)));
+}
+
 function validateAttestationClaim(claim, errors) {
   const value = claim.value;
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -810,6 +823,9 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       !value.westernYear && !value.westernInterval && !value.westernBounds;
     const sourceAttestations = personClaims.filter(claim => claim.predicate === 'attestation');
     const temporalClaims = personClaims.filter(claim => hasDateBearingChronology(claim.value));
+    const sourceDateOnlyEvidence=sourceAttestations.some(claim=>sourceQuotedQualitativeAttestation(claim,packet))&&
+      sourceAttestations.every(claim=>claim.value?.undatedSourceAttestation===true||sourceQuotedQualitativeAttestation(claim,packet))&&
+      temporalClaims.every(claim=>sourceQuotedQualitativeAttestation(claim,packet));
     const unresolvedOnlyEvidence = sourceAttestations.length > 0 &&
       sourceAttestations.every(claim => claim.value?.undatedSourceAttestation === true || hold(claim.value)) &&
       temporalClaims.length > 0 && temporalClaims.every(claim => {
@@ -849,10 +865,10 @@ function validatePeopleExtractionImpl(extraction, packet, options = {}, ownsInpu
       const undatedOnlyEvidence = attestations.length > 0 && attestations.every((claim) =>
         claim.value?.undatedSourceAttestation === true) && !personClaims.some((claim) =>
         hasDateBearingChronology(claim.value));
-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !sourceDateOnlyEvidence && !deathOnlyEvidence && !person.identityHints.activeDateHints.some((hint) => /\b(?:AD|BC)\s+\d{1,4}\b/u.test(hint))) {
         errors.push(`${person.localId} has no Western active-date hint required for a non-legendary prompt-v7 person`);
       }
-      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
+      if (!researchHold && !receptionOnlyEvidence && !undatedOnlyEvidence && !unresolvedOnlyEvidence && !sourceDateOnlyEvidence && !westernAttestation && !lifeChronology && !personalCeremony && !externalPrimaryChronology) {
         errors.push(`${person.localId} has no Western-year attestation required for a non-legendary prompt-v7 person`);
       }
       const temporalValues = personClaims.flatMap((claim) => [
