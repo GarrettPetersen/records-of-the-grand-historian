@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "book": "jinshu",
+  "chapter": "028",
+  "reviewerAgentId": "bc-0dff1b5a-cee1-497c-a682-50af5e1e208b",
+  "candidateCommit": "e0dd64172202d644fccc431811dcb0f52ff09b5b",
+  "registry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+  "boundedRequestCount": 5,
+  "note": "Lookup results are candidate evidence only, not identity decisions.",
+  "requests": [
+    {
+      "route": "/v1/manifest",
+      "result": {
+        "status": "ok",
+        "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+        "dossierCount": 228270
+      }
+    },
+    {
+      "route": "/v1/search?key=zh:康帝&limit=3",
+      "result": {
+        "key": "zh:康帝",
+        "total": 5,
+        "truncated": true,
+        "candidateIds": [
+          "per_0B7XC1NRYFQ61134MT7P",
+          "per_A7Q4N56V0EW6HDTKP0XP",
+          "per_B6PBHC87TCKG8JPZWYQ2"
+        ],
+        "finding": "Multiple canonical postings for the title 康帝; chapter-local persons p105/p318/p372 cannot be certified without native dossier review."
+      }
+    },
+    {
+      "route": "/v1/search?q=Sima%20Yue&limit=5",
+      "result": {
+        "key": "en:sima yue",
+        "total": 56,
+        "truncated": true,
+        "finding": "High ambiguity for English Sima Yue; s0693 repair correctly uses Emperor Kang + Wu fief context instead of erroneous Sima Dan."
+      }
+    },
+    {
+      "route": "/v1/people/per_4C5P0YD3MKP8B9YNB87D",
+      "result": {
+        "dossierId": "per_4C5P0YD3MKP8B9YNB87D",
+        "zh": "高堂隆",
+        "enForms": ["Gao Tanglong"],
+        "finding": "Supports Gaotang Long repair at s0728; registry romanization differs slightly from applied compound surname."
+      }
+    },
+    {
+      "route": "/v1/people/per_0B7XC1NRYFQ61134MT7P",
+      "result": {
+        "dossierId": "per_0B7XC1NRYFQ61134MT7P",
+        "jinshu028ClaimRefs": ["jinshu:028:c0906", "jinshu:028:c0907", "jinshu:028:c0908"],
+        "finding": "Dossier includes jinshu:028 Kang-di name claims; does not resolve multi-person 康帝 split in this chapter."
+      }
+    }
+  ],
+  "additionalIdentityNeeds": [
+    "Native chapter identity packet via prepare-people-chapter-identity after editorial + date gates",
+    "Reviewer dossier pass for duplicate 康帝 locals and high-volume same-name officials",
+    "Member-level /v1/people lookups for Sun Xiu (p299), Zhang Lin, and crown-prince 遹/愍懷 lines after budget reset"
+  ]
+}
