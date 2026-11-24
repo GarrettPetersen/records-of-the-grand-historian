@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "worker": "cursor-nov24-retained-blocked-owner-3",
+  "idempotencyKey": "fe6c05e3310ccd12e4ea8a19613b06b17abf2989ea7910cee78b8b03c5cb0957",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "notes": "Owner handoff only; no canonical edits, deploy, or merge.",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "029"
+  },
+  "observedBlocker": "Actual extractor identity required for every chunk",
+  "handoffBranch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-029-e9e1b1",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/029.json",
+      "gitBlob": "735854f876cf51745c720031b25b9f723fdfb299",
+      "contentSha256": "sha256:f8eae6b1babbb1fe4714dd797e69b60b54e6d24b59464cde49f74a534391c7f6"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/029.json",
+      "gitBlob": "fc9b34905bb64f80d7512533ebeaede7469d564e",
+      "contentSha256": "sha256:a82990bc34f0b4e9ef1dd3e5bbbccb93f63bb6aa554b92696c3a09ee66c80c6f"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/029.json",
+      "gitBlob": "88772bdb2ad75d355f8af2669935ff6c7f97dc0e",
+      "contentSha256": "sha256:170cf2e47594a440d6ae6cbbb10824981bab9ba16c625d2a3172429afae3cfed"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/029.json",
+      "gitBlob": "0ef5d7f38c7ff43405fad25f039cdb803e95b7d3",
+      "contentSha256": "sha256:f595d6e2d13a5f527de34dd765e000a6d767b1cb00f5b9e51606534f6e631ee0"
+    }
+  },
+  "testedRecoveryFindings": {
+    "runLevelAgentId": null,
+    "chunkProvenanceGaps": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005",
+      "006"
+    ],
+    "chunkProvenancePresent": [],
+    "extractionContentHash": "sha256:037ba720905ddda10ed97a28c54b13192d0f5da86ae43ceffa198b9a735c123b",
+    "queueEvidence": {
+      "grokbotClaimCommit": "b6ba3438ce3ad6f5bf25ce58959ffb0c877f0a7b",
+      "grokbotWorker": "grokbot-31",
+      "grokbotLane": "grokbot",
+      "chapterFingerprintAtClaim": "sha256:3433fadf3dd80805b9f579b8a979c1604f9ff1594b8fbc8c58391a6afc0821cb",
+      "chapterFingerprintCurrent": "sha256:9afaa61101aac97e5a320a06ab1750c89c95283b4612ba7d36678d8c15179acd",
+      "fingerprintMatchAtClaim": false,
+      "model": "Grok Bot-chunked",
+      "claimsUnchangedSincePromotion": true,
+      "promotionCommit": "fcc1c784e500a89600e5eff234518bae08bab1e4",
+      "note": "Claims/people byte-identical to promotion commit fcc1c784; only chunk agentId metadata missing."
+    },
+    "claimsUnchangedSincePromotion": true
+  },
+  "concreteProposedPatches": [
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/jiuwudaishi/029.json",
+      "field": "run.chunks[*].agentId",
+      "proposedValue": "grokbot-31",
+      "proposedRunIdPattern": "jiuwudaishi-029-chunk-{chunkId}",
+      "preserveCompletedAt": true,
+      "reason": "Queue claim b6ba343 assigns jiuwudaishi/029 to grokbot-31; completedAt timestamps present on chunks."
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "extractionContentSha256": "sha256:a82990bc34f0b4e9ef1dd3e5bbbccb93f63bb6aa554b92696c3a09ee66c80c6f",
+    "queueBranch": "origin/codex/people-work-queue"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Pinned independent date audit unchanged.",
+    "editorial": "Pinned editorial decisions unchanged.",
+    "identity": "Native identity gates still require authorAgentIds including run-level extractor after provenance patch."
+  },
+  "holds": []
+}
