@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
+        options: ['030', '031', '031-release-dependencies', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '078-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
+    if: inputs.chapter != '031-release-dependencies' && inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '078-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -983,5 +983,82 @@ jobs:
         with:
           name: jinshu-${{ steps.pins.outputs.chapter }}-native-identity-evidence
           path: ${{ runner.temp }}/native-identity/
+          if-no-files-found: error
+          retention-days: 7
+
+  release-dependencies-031:
+    if: inputs.chapter == '031-release-dependencies'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - id: pins
+        name: Pin the failed release candidate and the existing Jinshu 053 certificate
+        run: |
+          node <<'JS'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const {execFileSync} = require('node:child_process');
+          const root = 'repos/' + process.env.GITHUB_REPOSITORY;
+          const read = (path,raw=false) => JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8'}));
+          const journal = read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
+          const {isolatedFallback: failed,master} = journal.releaseAudit;
+          assert.equal(failed.conclusion,'failure');
+          assert(failed.chapters.includes('jinshu/031'));
+          const old = read('/contents/data/people/identity-reviews/jinshu/053.json?ref='+master);
+          const retained = read('/contents/data/people/identity-reviews/jinshu/053.json?ref='+failed.revision);
+          assert.equal(old.sha,retained.sha);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'candidate='+failed.revision+'\nmaster='+master+'\ncertificate='+old.sha+'\n');
+          JS
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pins.outputs.candidate }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - name: Identify exact published-proof dependencies affected by Jinshu 031
+        env:
+          CANDIDATE: ${{ steps.pins.outputs.candidate }}
+          MASTER: ${{ steps.pins.outputs.master }}
+          CERTIFICATE: ${{ steps.pins.outputs.certificate }}
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {readChapterIdentityBundle,identitySourceEvidenceFingerprint} from './scripts/lib/people-chapter-identity.mjs';
+          import {loadValidatedPeopleChapter} from './scripts/lib/people-validated-chapter.mjs';
+          const active = readChapterIdentityBundle('jinshu','053');
+          const candidate = loadValidatedPeopleChapter('jinshu','031');
+          const scoped = active.receipt.sourcePeople.filter(item=>item.localId.startsWith('jinshu:031:'));
+          const affected = scoped.flatMap(old=>{
+            const person = candidate.localPeople.get(old.localId);
+            const actual = person ? identitySourceEvidenceFingerprint(person,candidate.packet) : null;
+            if(actual===old.fingerprint) return [];
+            const cases = active.report.reviews.filter(row=>{
+              const plan=active.plan.cases.find(item=>item.id===row.caseId);
+              return row.sourceWitnesses.some(w=>w.localId===old.localId) || plan.canonicalMembership.anchorLocalId===old.localId || plan.localPeople.includes(old.localId);
+            }).map(row=>({caseId:row.caseId,witnesses:row.sourceWitnesses,reason:row.reason}));
+            assert(cases.length>0,'Published source dependency must belong to an actual case');
+            return [{localId:old.localId,originalFingerprint:old.fingerprint,currentFingerprint:actual,cases,
+              currentPerson:person??null,primaryUnits:person?candidate.packet.units.filter(unit=>person.claims.some(claim=>claim.evidence.includes('jinshu:031:'+unit.id))).map(({id,zh})=>({id,zh})):[]}];
+          });
+          assert(affected.some(x=>x.localId==='jinshu:031:p221'));
+          const out={authority:'Diagnostic only. Affected cases require fresh independent review against current evidence.',
+            originalMaster:process.env.MASTER,candidate:process.env.CANDIDATE,certificateBlob:process.env.CERTIFICATE,
+            protectedChapter:'jinshu/053',scopedDependencyCount:scoped.length,affected};
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/jinshu031-dependency-scope.json',JSON.stringify(out,null,2)+'\n',{flag:'wx'});
+          console.log(JSON.stringify({originalMaster:out.originalMaster,candidate:out.candidate,scoped:scoped.length,
+            affected:affected.map(({localId,cases})=>({localId,caseIds:cases.map(x=>x.caseId)}))}));
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu031-published-053-dependency-scope
+          path: ${{ runner.temp }}/jinshu031-dependency-scope.json
           if-no-files-found: error
           retention-days: 7
