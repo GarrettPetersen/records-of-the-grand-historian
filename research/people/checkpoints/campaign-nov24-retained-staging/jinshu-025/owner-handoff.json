@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "025"
+  },
+  "ownerAgentId": "bc-b07f6f8e-5dd0-4f5f-8466-6c7bd3b4577e",
+  "worker": "cursor-nov24-retained-staging-w10-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5d5f80d1677de63cfc4e3fe06b058e285ffe48c047443eda1c58f86d49fbeba",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-025-4577e",
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "inputBlobWitness": {
+    "source": "57cc6bc01e4b56102f2877bdaab75a689c790c47",
+    "extraction": "624b3942ea7bdaeee49d5a8c4d5dcd99d97efabf",
+    "editorial": "90114b709392e942ad45266738abfaf070d79ca1"
+  },
+  "sealedInputs": {
+    "source": "sha256:e53efc427e7a19c038d54ccf5f3253ce68bb5cb5c121b8bc9ab4e615f673ef60",
+    "extraction": "sha256:354cf17d688dc9763edef0ae648d200d8b51370b01faed96b76c094b1f58a665",
+    "editorial": "sha256:88e82fcdb8ec0dc191ba5cb79a1653f660711898514b1275d3a812bab555d1dc"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "extractionBytesWitness": 142216,
+    "contentSha256": "sha256:354cf17d688dc9763edef0ae648d200d8b51370b01faed96b76c094b1f58a665",
+    "localPeople": 80,
+    "note": "Full extraction retained unchanged; no re-extraction or chunk regeneration."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "pinnedBlob": "90114b709392e942ad45266738abfaf070d79ca1",
+    "appliedRepairsWitnessedInSource": true,
+    "note": "Accepted editorial artifact pinned at witness blob; native validator confirms applied repairs match independent decisions."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 607,
+    "translatedCount": 607,
+    "bothFieldsComplete": true,
+    "unitCount": 607,
+    "titleZh": "\u5377\u4e8c\u5341\u4e94 \u5fd7\u7b2c\u5341\u4e94 \u8f3f\u670d",
+    "titleEn": "Volume 25 Treatises 15: Travel and Dress",
+    "missingUnits": []
+  },
+  "auditState": {
+    "dispatchLabel": "no-native-date-report",
+    "dateAuditPath": null,
+    "chronologyStatus": "un-audited"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-025/date-packet.json",
+    "contentSha256": "sha256:96ef648894bc05ae98983c6a8d09bfa653310fcbc595c5730bd84bbd40c6d500",
+    "itemCount": 207,
+    "peopleCount": 80,
+    "unitCount": 607,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 025 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-025/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 025",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/025: 1 extraction(s), 80 local people, 171 mentions, 444 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 025",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "note": "No data/people/date-audits/jinshu/{ch}.json; owner does not self-approve."
+    }
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book jinshu --chapter 025",
+    "npm run people:dates:packet -- --book jinshu --chapter 025 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-025/date-packet.json",
+    "npm run people:dates:verify -- --book jinshu --chapter 025",
+    "npm run people:dates:record -- --book jinshu --chapter 025"
+  ],
+  "substantiveFindings": "Treatise chapter (travel and dress); extraction prompt v7 retained; four accepted editorial repairs (Ying Shao names, Fu Jian, Jin Hui Di armory fire) verified in source idiomatic fields. No definite English omission or chronology contradiction found in owner spot-check of cited units and packet item structure. Independent native date report absent; candidate packet sealed at listed hash.",
+  "remainingIndependentEvidence": {
+    "dateAudit": "Complete independent native date audit against sealed packet sha256:96ef648894bc05ae98983c6a8d09bfa653310fcbc595c5730bd84bbd40c6d500; record via people:dates:record after zero-finding or repaired review.",
+    "identity": "Bounded canonical identity dossier review for chapter-local people after date gate; owner handoff is not identity approval.",
+    "editorial": "Pinned editorial decisions unchanged; independent reviewer confirms applied repairs remain source-faithful.",
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [],
+  "authorEvidence": {
+    "method": "Witnessed pinned git blobs; read Chinese/English source fields; reused sealed extraction and editorial artifacts; built native date packet; scoped people:validate and people:dates:verify; no registry generation, deploy, merge, or extraction rewrite.",
+    "completedAt": "2026-11-24T17:07:49.004Z"
+  },
+  "reproduce": {
+    "witnessBlobs": {
+      "source": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/jinshu/025.json",
+      "extraction": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/extractions/jinshu/025.json",
+      "editorial": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/editorial-decisions/jinshu/025.json"
+    }
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; sealed inputs not modified."
+}
