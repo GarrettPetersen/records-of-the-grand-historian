@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "current-master-transport-identity-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "050"
+  },
+  "ownerAgentId": "bc-8068a1ee-9041-4d7f-9ca7-302616febf7d",
+  "campaignWorker": "cursor-nov24-current-master-4",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:80adead107fc924f39e67a5ea3434ed78a09eb4fa14681c42d5862bdb93ef3bf",
+    "sourcePacketSha256": "sha256:f050e2f7203639f9d1eea87956b1c8e8509191787ccba455105a09c6d1fa5105",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:781c757f7913c5c5628a3776ab12b3542391369bc54ca879f7432fd7f760dbaa",
+        "caseCount": 9
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:5a9177e29122e220c41d7a939ee11dbd3d7883a6216924da3f093cd713dc000f",
+        "caseCount": 10
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:f7a4d2f85feec1218fda9e4a3bebd60f87bf48a19ecd48118ead3c8682ac413c",
+        "caseCount": 20
+      }
+    ],
+    "preparationReceiptSha256": "sha256:e6b75a77c0701902ae19907beaa3f93f51b4c6399b05eab89d234f1fdde90d14"
+  },
+  "sealedInputs": {
+    "source": "sha256:fb24630c2347f5d6db27ce4f16064fc64941de6bf5cb59ee96c353e11ae6587a",
+    "extraction": "sha256:38b9b83b67f335fed2f96f03cf8ec5255a8bbf11bc2fd34ba9c9e084af66788c",
+    "editorial": "sha256:bb99ebbc0969ded7165cb23344f4f8a2817ac7f810a5e3973e7fdef7c0615d75",
+    "dateAudit": "sha256:c61ee57cd6ff4825883090538defc3eaaa7c8f3195ddfa7e7d744fac09a349d0"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "3 applied editorial decisions; no pending proposals",
+  "reviewCases": 39,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 39 cases reviewed against sealed shiji/050 inputs (chapter 50 太史公自序). 21 overflow cases preserve bounded-retrieval uncertainty; 4 cases retain preparation-proposed resolved identity (unresolvedIdentity false). No false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:a9403393c20066dd88a4056cbd6f910716a125f04ca150f1b20bbfec4fbd9ad8",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/shiji-050/transport-part-003.json",
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 050"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
