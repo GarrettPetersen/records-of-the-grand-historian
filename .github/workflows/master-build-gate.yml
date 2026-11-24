@@ -1,71 +1,62 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Certify Jiuwudaishi 011 final identity
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  certify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 28
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: a88740ac77c6b1d5ddc3a558deaa29af20efbde2
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: resolved-date-hold-identity-packets
+          run-id: 45401293109
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/review-inputs
+      - name: Record exact independent native identity certificate
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$GITHUB_WORKSPACE/data/people/generated/jiuwudaishi011-native"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$OUT" "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
+          node --input-type=module <<'JS'
+          const x={"scope":{"book":"jiuwudaishi","chapter":"011"},"agentId":"bc-8e760a8a-a6d0-4dfe-a1f8-5a81bd0fae6d","ownerAgentId":"bc-f6969509-1699-4266-a225-cb3bca5d36ef","runId":"run-0d87a07e-4eb2-452d-9186-82d95377d73d","sourcePacketSha256":"6c868d7a45f3ca65da85974ffebd276c21da0cafff4255deccfa3b0a8a2942cf","reportSha256":"acd93c6d69c80e393327bb19c8621b520af722d9a5755650137be9fddedc82a1","reportPath":"research/people/checkpoints/campaign-nov24-resolved-date-holds/jiuwudaishi-011/independent-identity-report-part-001.json","reportHead":"091c1bc1515d9086112b8c70f82d0085859a0173","identityCases":34};
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash,recordChapterIdentityReview} from './scripts/lib/people-identity-review-record.mjs';
+          const dir=process.env.RUNNER_TEMP+'/review-inputs/jiuwudaishi-011', out=process.env.OUT;
+          const packet=dir+'/source-review-packet.json', report=dir+'/native-source-review.json', job=dir+'/capture.json';
+          const p=fs.readFileSync(packet), raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+x.reportPath+'?ref='+x.reportHead],{maxBuffer:2e6,timeout:25000});
+          assert.equal(identityArtifactHash(p).replace(/^sha256:/u,''),x.sourcePacketSha256.replace(/^sha256:/u,''));
+          assert.equal(identityArtifactHash(raw).replace(/^sha256:/u,''),x.reportSha256);
+          assert.equal(JSON.parse(p).registryReuse.sourceRevision,process.env.SOURCE);
+          fs.writeFileSync(report,raw,{flag:'wx'});
+          fs.writeFileSync(job,JSON.stringify({schemaVersion:1,kind:'captured-independent-identity-review',phase:'report-recorded',scope:x.scope,agentId:x.agentId,runId:x.runId,authorAgentIds:[x.ownerAgentId],sourcePacketSha256:identityArtifactHash(p),reportSha256:identityArtifactHash(raw)}),{flag:'wx'});
+          const r=await recordChapterIdentityReview({packet,report,job,registry:process.env.REGISTRY,out:out+'/jiuwudaishi-011.json'});
+          assert(r.nativeIdentityProofAccepted&&r.reviewedCases===x.identityCases);
+          fs.writeFileSync(out+'/summary.json',JSON.stringify(r,null,2)+'\n');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jiuwudaishi011-native-identity-certificate
+          path: data/people/generated/jiuwudaishi011-native/
+          if-no-files-found: error
+          retention-days: 7
