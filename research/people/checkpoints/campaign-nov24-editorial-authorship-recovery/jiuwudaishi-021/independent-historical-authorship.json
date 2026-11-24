@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "jiuwudaishi/021",
+  "reviewerAgentId": "bc-8f57ea80-2d46-4f49-b193-aa2d4991b64b",
+  "ownerAgentId": "bc-7e39e06d-e9bf-40a6-878e-3b988562acfa",
+  "ownerRevision": "f4e86059bf2ed56aee1cf839f5bdd9659ff65fa2",
+  "verdict": "approve",
+  "proof": {
+    "ownerPullRequest": 5655,
+    "ownerBranch": "cursor/nov24-retained-jiuwudaishi-021-62acfa",
+    "ownerRecovery": {
+      "path": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-021/owner-recovery.json",
+      "sha256": "02dff1dc657c5b25efe46c920ee3f8f91c2b372ace8cb7e06a2f243c216401ac"
+    },
+    "pinnedInputBlobs": {
+      "data/jiuwudaishi/021.json": "5ede2f34ded4b3233a04893259f168eb14304ba4",
+      "data/people/extractions/jiuwudaishi/021.json": "3af51c76305b86d3e97297036cfa725ecce66c63",
+      "data/people/date-audits/jiuwudaishi/021.json": "63ba17ef7b9345ab60ba38409a04eaf8aef69507",
+      "data/people/editorial-decisions/jiuwudaishi/021.json": "b5d0d77e0ae2e8dc501b350ca27960ad52470b9d"
+    },
+    "historicalProducerEvidence": {
+      "workQueueClaimCommit": "311e4f620376d6cc848ae675298b4f683837a53c",
+      "workQueueClaimAuthor": "24histories queue broker <queue@24histories.com>",
+      "claimRecord": {
+        "lane": "grokbot",
+        "worker": "grokbot-25",
+        "status": "claimed",
+        "claimedAt": "2026-09-08T17:12:08.783Z"
+      },
+      "introductionCommit": "fcc1c784e500a89600e5eff234518bae08bab1e4",
+      "introductionGitBlob": "3af51c76305b86d3e97297036cfa725ecce66c63",
+      "introductionSha256": "798d1d10487123d3f057bed94f322fb4ed86170ad60032298572bab3ac44a96d",
+      "promotedBatchPullRequest": 3914
+    },
+    "candidatePatch": {
+      "parentGitBlob": "3af51c76305b86d3e97297036cfa725ecce66c63",
+      "proposedGitBlob": "7d9ecdef6770a9740ba4c23a194031d58b992213",
+      "proposedSha256": "7f6cb5a0dd294d9f0633b857fde9ce7cf6e93f1ae83b2650a617754bce460d8e",
+      "authorshipOnlyContentEqual": true,
+      "chunkCount": 7,
+      "restoredChunkAgentId": "grokbot-25"
+    }
+  },
+  "validation": {
+    "scopedExtraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/jiuwudaishi/021.json",
+      "exitCode": 0,
+      "summary": "ok (107 people, 721 mentions, 933 claims, 859 candidates)"
+    },
+    "scopedChapterData": {
+      "command": "node scripts/validate-people-data.mjs --book jiuwudaishi --chapter 021",
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed; pinned editorial/decision bytes unchanged"
+    },
+    "scopedDateVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 021",
+      "exitCode": 1,
+      "status": "stale",
+      "nativePacket": {
+        "sourceHash": "sha256:afd965492078b8c6caa64485ef5a58e9f2879ecd17f5131327e547266438e060",
+        "extractionHash": "sha256:be81d541d28014e690cccaddcef4c02cbb46fd82258035ea0fcced1192c50349"
+      },
+      "sealedDateAudit": {
+        "sourceHash": "sha256:afd965492078b8c6caa64485ef5a58e9f2879ecd17f5131327e547266438e060",
+        "extractionHash": "sha256:782f3416a2a63fffa5e208fbbaaf81d7035ab425baab201b49054e7297cb5534"
+      }
+    },
+    "authorshipDiff": {
+      "method": "JSON equality after deleting run.chunk agentId/runId only",
+      "priorBlob": "3af51c76305b86d3e97297036cfa725ecce66c63",
+      "proposedBlob": "7d9ecdef6770a9740ba4c23a194031d58b992213",
+      "contentEqual": true
+    }
+  },
+  "remainingIssues": [
+    {
+      "kind": "date-audit-stale",
+      "severity": "gate",
+      "detail": "Independent date audit remains bound to prior extractionHash; sourceHash is unchanged.",
+      "minimumReuse": "Archive stale date workflow/report and re-record the existing audited scope against the current native packet using scripts/reconcile-stale-people-date-workflow.mjs or an equivalent independent date reviewer pass without re-extraction."
+    },
+    {
+      "kind": "provider-run-ids-unknown",
+      "severity": "informational",
+      "detail": "Chunk runId and top-level run.agentId remain null; provider run IDs and chunk completion timestamps were not recovered and are intentionally left unknown."
+    }
+  ]
+}
