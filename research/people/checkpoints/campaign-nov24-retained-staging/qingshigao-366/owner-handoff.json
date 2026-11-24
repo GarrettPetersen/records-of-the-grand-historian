@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "366"
+  },
+  "ownerAgentId": "bc-17e1969d-e1ec-437d-8f24-1b6049e2e12a",
+  "workerId": "cursor-nov24-retained-staging-w13-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "67fea3249bfe1b396445e20996115f40b99ff254f553c321099a7a69539f4690",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-366-2e12a",
+  "phase": "dispatch_pending",
+  "inputBlobWitness": {
+    "source": "c77e27522cecbac939217d3ffd61d07037d8147a",
+    "extraction": "9cf177b91384660d47c9c15a98c1312e374eeb79",
+    "editorial": "dd0682e1fa50d5c45314d81c73b886b6e25185c9"
+  },
+  "sealedInputs": {
+    "source": "sha256:e5a498607c06b7781523aff80749bef997624b6098c794f98418cc4cbee46d83",
+    "extraction": "sha256:d9927ee1b025abdff682e165337728159f0a80014cfe3163ef4289d6c4cb1829",
+    "editorial": "sha256:03751190d201d3db489ce2aed9d63b747fe41eef4e27e61882c12f2d33934f27"
+  },
+  "extractionBytes": 91185,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "d9927ee1b025abdff682e165337728159f0a80014cfe3163ef4289d6c4cb1829",
+    "people": 41,
+    "claims": 297,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 366 Biographies 153: Sun Yuting, Jiang Youxian, Li Hongbin",
+    "chineseUnits": 197,
+    "translatedCount": 197,
+    "sentenceCount": 197,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 91185
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-366/sealed-native-date-packet.json",
+    "contentSha256": "sha256:63046d5abd112fe28b3a9569f78e5b6d989c392962e607c6b28f02ffbeb3ba9f",
+    "packetSourceHash": "sha256:7c3700d2a575c5f1fee3d86e7840f4d24e947c08d8f3e788a5631bae176e02da",
+    "packetExtractionHash": "sha256:1f4c552ca0ead27919a054a1c8555e843445181021b0a127e8110a94ddb81566",
+    "summary": "qingshigao/366: 165 date/hint checks, 41 people, 197 source units",
+    "itemChecks": 0,
+    "personChecks": 0
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReuse": "Pinned prompt v7 extraction at witness git blob; no re-extraction, claim edits, or hash replacement.",
+    "editorialReuse": "Pinned editorial decisions (5) retained with accepted repairs already applied in sealed inputs where recorded.",
+    "dateAuditReuse": "No data/people/date-audits artifact; owner prepared candidate packet only and did not self-approve."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 366",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/366: 1 extraction(s), 41 local people, 219 mentions, 438 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 366",
+      "findings": 0,
+      "chapters": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 366",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "missingGate": "independent-native-date-audit"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "candidateValidationCommands": {
+    "prepareDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 366 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-366/sealed-native-date-packet.json",
+    "recordDateAudit": "npm run people:dates:record -- --report <independent-review.json>",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 366",
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 366"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "substantiveFindings": "Owner pass on sealed source, prompt-v7 extraction, and accepted editorial at staging 20b8d0e3: git blob witnesses match work-order pins; paired literal and idiomatic English on all 197 Chinese units; people:validate passes; people:dates:scan reports 0 structural interval defects; qingshigao/366: 165 date/hint checks, 41 people, 197 source units; sealed packet hash sha256:63046d5abd112fe28b3a9569f78e5b6d989c392962e607c6b28f02ffbeb3ba9f. No owner-authored definite English repair or concrete chronology contradiction requiring edit before independent review. Still missing: committed native date audit (status un-audited).",
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-366/sealed-native-date-packet.json",
+      "packetContentSha256": "sha256:63046d5abd112fe28b3a9569f78e5b6d989c392962e607c6b28f02ffbeb3ba9f",
+      "instruction": "Independent reviewer audits sealed packet item/person checks with primary unit quotes; record via people:dates:record in separate context."
+    },
+    "independentIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "instruction": "Bounded dossier identity review remains after chronology approval when resolver schedules this chapter."
+    },
+    "independentReviewCompleted": false
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 366",
+    "prepareDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 366 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-366/sealed-native-date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 366"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; not publication or merge approval."
+}
