@@ -1,0 +1,23 @@
+
+> records-of-the-grand-historian@1.0.0 people:validate
+> node scripts/validate-people-data.mjs --book jinshu --chapter 028
+
+Scoped person data validation passed for jinshu/028: 1 extraction(s), 403 local people, 1217 mentions, 2016 claims, 0 proposed repair(s), 79 applied repair(s), 79 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 62 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.
+
+> records-of-the-grand-historian@1.0.0 people:dates:verify
+> node scripts/people-date-audit.mjs verify --book jinshu --chapter 028
+
+{
+  "total": 1,
+  "counts": {
+    "un-audited": 1
+  },
+  "chapters": [
+    {
+      "book": "jinshu",
+      "chapter": "028",
+      "status": "un-audited",
+      "auditVersion": 1
+    }
+  ]
+}
