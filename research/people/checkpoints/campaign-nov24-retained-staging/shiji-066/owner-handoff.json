@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "066"
+  },
+  "ownerAgentId": "bc-6717c892-c42b-4f22-a800-2bc5fe9d9042",
+  "workerId": "cursor-nov24-retained-staging-w13-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7c9132bf7aa57d48c7e5f0ba17534a1bfcafa196a677534122252886613e9031",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-066-d9042",
+  "extractionBytes": 101670,
+  "inputBlobWitness": {
+    "source": "892821c7dcec73b1c31016df8c548696d9f1aa3c",
+    "extraction": "e837ecfe4f3b3d041aa4b82253635bd4dccbee4b",
+    "editorial": "52831791f0a0162029c383c52eada12e9837300e"
+  },
+  "sealedInputs": {
+    "source": "sha256:b86e4b51037c3038af7323f9574d81aaa41ecc79d16a6e1dc3d15d5ec7b90c23",
+    "extraction": "sha256:abebeab7658ac7bb6d555803519761e7c23c654953fc2e7e558d86006b36b470",
+    "editorial": "sha256:9cc695f835264b60d98e6e4f70bafe065bcc6b1ab9c2aa079224f02b2462900c"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-066/date-packet.json",
+    "sha256": "sha256:8176a0f17a7a1d5de4559e0f040a8b96b2c2e08472d3db2072ca28c0b3d3d0ba",
+    "sourceHash": "sha256:9088818a2f04af181adcb0f344d850605753412b4b43cfa668a86067dae1e976",
+    "extractionHash": "sha256:95435eaaeaf1f4fc636b495cd7001646094c96e8a64d2a3cb45ce7a5c1edeae8",
+    "itemCheckCount": 131,
+    "personCheckCount": 51,
+    "sourceUnitCount": 220
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Biography of Wu Zixu",
+    "chineseUnits": 220,
+    "translatedCount": 220,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "sourceExtractionSha256": "abebeab7658ac7bb6d555803519761e7c23c654953fc2e7e558d86006b36b470",
+    "rawExtractionFileSha256": "abebeab7658ac7bb6d555803519761e7c23c654953fc2e7e558d86006b36b470",
+    "editorialDecisionCount": 22,
+    "appliedEnglishRepairsInSource": 22,
+    "coverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "noExtractionRerun": true,
+    "noEditorialReopen": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 066",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/066: 1 extraction(s), 51 local people, 610 mentions, 404 claims, 0 proposed repair(s), 22 applied repair(s), 22 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 066",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "datesScan": {
+      "command": "node scripts/people-date-audit.mjs scan --book shiji --chapter 066",
+      "findings": 0,
+      "reversedIntervals": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book shiji --chapter 066",
+    "npm run people:dates:verify -- --book shiji --chapter 066",
+    "npm run people:dates:packet -- --book shiji --chapter 066 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-066/date-packet.json",
+    "node scripts/people-date-audit.mjs scan --book shiji --chapter 066"
+  ],
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "no-native-date-report",
+      "reason": "Missing data/people/date-audits/shiji/066.json; owner sealed fresh date packet only and did not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-066/date-packet.json",
+      "packetSha256": "sha256:8176a0f17a7a1d5de4559e0f040a8b96b2c2e08472d3db2072ca28c0b3d3d0ba",
+      "packetSourceHash": "sha256:9088818a2f04af181adcb0f344d850605753412b4b43cfa668a86067dae1e976",
+      "packetExtractionHash": "sha256:95435eaaeaf1f4fc636b495cd7001646094c96e8a64d2a3cb45ce7a5c1edeae8",
+      "recordCommand": "npm run people:dates:record -- --report <independent-shiji-066-date-review.json>",
+      "authorNotesPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-066/chronology-author-notes.json"
+    },
+    "identity": {
+      "chapterLocalContradiction": false,
+      "corpusBoundedIdentityReview": "pending per campaign policy; owner found no sealed-input attribution contradiction."
+    }
+  },
+  "substantiveFindings": "Pinned git blob witness verified on staging 20b8d0e3 for source, extraction, and editorial inputs. Full chapter English paired on 220/220 Chinese units; accepted editorial repairs reflected in source JSON. people:validate passed; people:dates:scan reports 0 structural interval findings; deterministic date packet written (131 items, 51 people). No definite English omission, extraction contradiction, or owner-proposed chronology repair in this pass. High density of Chu/Wu regnal references and relative dating; 22 applied editorial English repairs must not change attestations without reviewer check.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "blobWitnessVerified": true,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
