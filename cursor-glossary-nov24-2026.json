@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Check terminal baseline and optimized outcomes. The baseline generated the full site and retained native Jinshu 053 identity and ebook proof. Optimized cohort should reduce full-build time and qualify each candidate. Cursor remains held pending key renewal.",
+  "nextAction": "Verify the exact corrected hosted full-site and new-candidate ebook receipts, preserving successful baseline and failed-run provenance. Cursor stays held pending replacement credentials.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T03:35:43.554Z",
+  "lastCheckedAt": "2026-11-24T03:39:49.720Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1588,7 +1588,7 @@
       "failure": "Jinshu 053 existing certificate relies on Jinshu 031 p221; primary evidence fingerprint changed."
     },
     "safeCandidate": {
-      "status": "in_progress",
+      "status": "completed",
       "ref": "codex/cursor-glossary-nov24-2026-release-safe",
       "revision": "27bdef9780609853f79a030dcd8a5750a3ffb97a",
       "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
@@ -1645,7 +1645,7 @@
       "siteBuildDurationSeconds": 2094,
       "siteBuildFinishedAt": "2026-11-24T03:31:24Z",
       "protectedJinshu053": "success",
-      "conclusion": null
+      "conclusion": "success"
     },
     "productionCheck": {
       "status": "terminal-build-timeout",
@@ -1747,7 +1747,7 @@
     "buildPerformanceCandidate": {
       "status": "success",
       "ref": "codex/cursor-glossary-nov24-2026-build-performance",
-      "revision": "6fe2ba7f3ab5e6ed587c7737b7950c2b66de09dc",
+      "revision": "ef995d54824017254b05d032912999047ec6127d",
       "parent": "27bdef9780609853f79a030dcd8a5750a3ffb97a",
       "paths": [
         "scripts/compile-people-catalog.mjs"
@@ -1772,13 +1772,15 @@
         "exactWorkflowRevision": "b1a15d39fe07bbfd48aa871383a6bbf9602e74ce",
         "earlierComparativeRun": 45310422151,
         "earlierChapterLoads": 31853
-      }
+      },
+      "measuredRevision": "6fe2ba7f3ab5e6ed587c7737b7950c2b66de09dc",
+      "correctedCompilerBlob": "7e66309e0870a2b4e0eda06d232b74025becbb1f"
     },
     "exactCohortVerification": {
-      "status": "in_progress",
-      "ref": "codex/cursor-glossary-nov24-2026-cohort-verification",
-      "revision": "2c1212f202d86aa786a11cc63bec3bc9d487789a",
-      "performanceRevision": "6fe2ba7f3ab5e6ed587c7737b7950c2b66de09dc",
+      "status": "dispatch-intent",
+      "ref": "codex/cursor-glossary-nov24-2026-cohort-verification-v2",
+      "revision": "5900e5d7295df0610e0ac68ebed5dad4523cdeba",
+      "performanceRevision": "ef995d54824017254b05d032912999047ec6127d",
       "chapters": [
         "jinshu/030",
         "jinshu/083",
@@ -1788,13 +1790,40 @@
       ],
       "expectedReceipt": "campaign-five-chapter-qualification",
       "note": "Campaign validation workflow only. Production protects the unchanged master CI rule.",
-      "requestedAt": "2026-11-24T03:27:28.242Z",
+      "requestedAt": "2026-11-24T03:39:49.719Z",
       "onlyHosted": true,
       "benchmarkRunId": 45317562008,
       "rationale": "Run precise nondeploying cohort check on a separate GitHub runner. The existing baseline build continues independently; no additional production release is open.",
-      "runId": 45319648316,
-      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45319648316"
-    }
+      "runId": null,
+      "url": null,
+      "previousFailedRun": 45319648316,
+      "reason": "Restore only exact baseline separator bytes. Keep existing 88-test ebook gate and full cohort verification."
+    },
+    "exactCohortVerificationHistory": [
+      {
+        "status": "completed",
+        "ref": "codex/cursor-glossary-nov24-2026-cohort-verification",
+        "revision": "2c1212f202d86aa786a11cc63bec3bc9d487789a",
+        "performanceRevision": "6fe2ba7f3ab5e6ed587c7737b7950c2b66de09dc",
+        "chapters": [
+          "jinshu/030",
+          "jinshu/083",
+          "jinshu/085",
+          "jinshu/115",
+          "jinshu/123"
+        ],
+        "expectedReceipt": "campaign-five-chapter-qualification",
+        "note": "Campaign validation workflow only. Production protects the unchanged master CI rule.",
+        "requestedAt": "2026-11-24T03:27:28.242Z",
+        "onlyHosted": true,
+        "benchmarkRunId": 45317562008,
+        "rationale": "Run precise nondeploying cohort check on a separate GitHub runner. The existing baseline build continues independently; no additional production release is open.",
+        "runId": 45319648316,
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45319648316",
+        "conclusion": "failure",
+        "failure": "Optimized file transport changed two escaped NUL identity separators, rejected by existing ebook identity fixture."
+      }
+    ]
   },
   "reviewRuns": {
     "jinshu/047": {
