@@ -36,11 +36,15 @@ Witness policy: `lib/chronology-witness.mjs` — packet name, zh surface, or pri
 | Finding groups | 37 | **46** (new groups appended) |
 | Deduped held item IDs | 109 | **378** |
 
+## Owner incorrect-30 (`1720e384ae`)
+
+`independent-incorrect-30-verification-20261124.json`: **30/30** judgments supported, **0** rejected; **14** hold groups closed; **hold-004** partial (**claim-24**). Editorial 97 unchanged on owner receipt. Not audited.
+
 ## Recording gate
 
 - **Remaining packet items:** **0**
-- Canonical `data/people/date-audits/jinshu/020.json` / **`audited`** status: **blocked** until host resolves holds and independent approval pass (not this artifact alone).
+- Canonical `data/people/date-audits/jinshu/020.json` / **`audited`**: **blocked** until residual holds cleared and independent approval.
 
 ## Out of scope
 
-Owner source edits, extraction changes, registry publish.
+Owner extraction merge on reviewer branch, registry publish, audited seal.
