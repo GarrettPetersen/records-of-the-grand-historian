@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "127"
+  },
+  "reviewerAgentId": "bc-eb51804c-3bb8-476e-8125-1833017ab8b7",
+  "transportSeals": {
+    "transport-part-001.json": "sha256:ca9eacc9c85e83971da291213c21502a80a45411eecfde763d4715d6a13af780",
+    "transport-part-002.json": "sha256:c385d9d877d5ab141c0b9c770e6d5c1bb6479208fa634f83f0a35f3e3326a1b4",
+    "planFingerprint": "sha256:5f85fe70bbd7b66d85b0d672d0cad09be9fe490f5b40b86f50c54cf2669ff5ec"
+  },
+  "queries": [
+    {
+      "route": "GET /v1/manifest",
+      "purpose": "Confirm live lookup generation before optional header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Live revision differs from transport registryProvenance; sealed transport dossiers and unit text are authoritative for this review."
+    },
+    {
+      "route": "GET /v1/people/per_03YXFAC06VBJ2HKHVJDN",
+      "purpose": "Header check for Confucius (孔子) canonical id on overflow case sha256:2b0ace3a…",
+      "blockingNameKeys": ["zh:孔子"]
+    }
+  ],
+  "conclusion": "Membership witnesses and primary Chinese are drawn from sealed transport parts and independently verified against embedded unit text; bounded lookup used only as auxiliary header confirmation and does not override accepted canonical membership.",
+  "englishRepairsArtifact": null
+}
