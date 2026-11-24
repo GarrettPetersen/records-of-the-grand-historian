@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "053"
+  },
+  "ownerAgentId": "bc-488b211f-a9a5-4e20-8945-5268c218df57",
+  "workerId": "cursor-nov24-retained-staging-w1-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "06f9c623c3fc445ae56d9993095310b7072e79d5742476f968463e63a40225c2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-053-8df57",
+  "inputBlobWitness": {
+    "source": "3b76bafe7f3dacdf74c16ddb9f046f8a758d5877",
+    "extraction": "1e39d1ecfdaa3581458b9ac2b65499f5fdb60f12",
+    "dateAudit": "4747ffeca1457d33718da12fc0eb82d36d564bdc",
+    "editorial": "9f7dedeeceb1f4738f0a8db199497a196fbf4f09"
+  },
+  "sealedInputs": {
+    "source": "sha256:b1cd15dd1ecb5530d4a4b206cd66e20ca7f8df415f201e88722be7539380ba09",
+    "extraction": "sha256:5527955689ad4de18954a359794d758f3265f6d13fa8ee51b6bb02d5fc471091",
+    "dateAudit": "sha256:a4fe3ec4893c16b6f35631d7156e824b6f49fc71badacd81fe7cdaf4bffd8dc0",
+    "editorial": "sha256:c68368ab01da04361f96dd4e1a999882c13b38277f1fa3a79489888b61240a86"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 53 Treatises 28: Calendar 9",
+    "englishCoverage": {
+      "sentenceCount": 178,
+      "translatedCount": 178,
+      "bothFieldsComplete": true,
+      "ownerSentenceScan": 178,
+      "missingUnits": []
+    },
+    "chineseReview": "All chapter units read against sealed source; no new English omission or mistranslation found beyond prior accepted editorial repairs."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book qingshigao --chapter 053",
+    "summary": "Scoped person data validation passed for qingshigao/053: 1 extraction(s), 0 local people, 0 mentions, 0 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionValidate": "data/people/extractions/qingshigao/053.json: ok (0 people, 0 mentions, 0 claims, 209 candidates)",
+    "chronologyStatus": "audited",
+    "chronologyStale": false,
+    "dateAuditSummary": "Read all 178 Chinese units of the technical lunar-occultation and parallax procedure, including its worked examples and table instructions. The extraction contains no people and no temporal claims or active-date hints. No personal birth, death, age, event, reign-year attribution, retrospective reference, or omitted chronology appears in this chapter. This approval is chronology-only and does not certify the astronomical calculations themselves.",
+    "dateFindingsCount": 0,
+    "dateReviewedAt": "2026-09-23T21:00:00Z",
+    "editorialDecisionCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "audited"
+  },
+  "substantiveFindings": "Pinned git blobs verified at staging 7cdf8f42e53be7a29bbc018e6d1f93783d741f6a. Scoped validation, extraction validation, and date-audit fingerprint checks pass without stale chronology. Zero-person technical calendar chapter; chronology audited clean. No new owner-proposed extraction, editorial, or chronology edits; preserved reviewed holds and true unknowns unchanged.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "nextGate": "independent-final-chapter-review",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/qingshigao/053.json data/people/extractions/qingshigao/053.json data/people/date-audits/qingshigao/053.json data/people/editorial-decisions/qingshigao/053.json",
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 053",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 053"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; sealed inputs unchanged."
+}
