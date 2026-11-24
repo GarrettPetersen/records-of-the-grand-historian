@@ -34,5 +34,5 @@ jobs:
         run: |
           set -euo pipefail
           for chapter in 030 083 085 115 123; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter"
+            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "$RUNNER_TEMP/qualify-$chapter"
           done
