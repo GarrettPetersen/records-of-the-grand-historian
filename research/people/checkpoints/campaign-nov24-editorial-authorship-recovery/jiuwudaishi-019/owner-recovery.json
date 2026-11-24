@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-owner-recovery",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "019",
+    "worker": "cursor-nov24-retained-editorial-2",
+    "mode": "editorial",
+    "branch": "cursor/nov24-retained-jiuwudaishi-019-d69789",
+    "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9"
+  },
+  "agentId": "bc-569b10df-2bb7-4731-ad12-002ad9d69789",
+  "inputBlobs": {
+    "data/jiuwudaishi/019.json": "bc88af80e8106b8b42b35cd9fad70a53758aa965",
+    "data/people/extractions/jiuwudaishi/019.json": "b45a6cb8041beea4280c604688fc491c3603de20",
+    "data/people/date-audits/jiuwudaishi/019.json": "e18378eb9a158c85f15675cd2485149363d82ad4",
+    "data/people/editorial-decisions/jiuwudaishi/019.json": "45f1583d65f507b327b0f60e463c862148206c11"
+  },
+  "filesConsulted": [
+    "data/jiuwudaishi/019.json",
+    "data/people/extractions/jiuwudaishi/019.json",
+    "data/people/editorial-decisions/jiuwudaishi/019.json",
+    "data/people/date-audits/jiuwudaishi/019.json"
+  ],
+  "commands": [
+    {
+      "command": "validateAppliedEditorialDecisions (pinned)",
+      "result": "applied jiuwudaishi:019:r0024 and r0025 have no matching independent accept/revise authorization"
+    },
+    {
+      "command": "realign to 23 sealed accepts + reconcile-current",
+      "result": "validateAppliedEditorialDecisions PASS; extraction hash fc5291d8491b2486a8d16bfd30be1eb769aade39"
+    }
+  ],
+  "diagnosis": {
+    "preservedAcceptances": "editorial-decisions blob 45f1583d… unchanged (23 accepts).",
+    "staleContext": "Two extra applied repairs (r0024 s0050 literal Yan/Yun; r0025 s0130 idiomatic Qianhua collation) were never in the sealed review."
+  },
+  "supplementalTranslationRepairs": [
+    {
+      "repairId": "jiuwudaishi:019:r0024",
+      "unitId": "s0050",
+      "field": "literal",
+      "reason": "兗 and 鄆 are distinct prefectures Yan and Yun; literal duplicated Yan."
+    },
+    {
+      "repairId": "jiuwudaishi:019:r0025",
+      "unitId": "s0130",
+      "field": "idiomatic",
+      "reason": "Collation restores 乾化元年 (Qianhua 1) per Zizhi Tongjian 268; Kaiping incorrect."
+    }
+  ],
+  "remainingIssues": [
+    "Date audit extractionHash stale after repair-accounting fix.",
+    "Supplemental r0024–r0025 need independent editorial review before application."
+  ],
+  "smallestPathForward": [
+    "Merge extraction realignment.",
+    "Independent date re-audit.",
+    "Second editorial round for supplemental repairs only."
+  ]
+}
