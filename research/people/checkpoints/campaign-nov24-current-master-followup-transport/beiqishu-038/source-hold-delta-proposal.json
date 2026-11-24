@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "beiqishu/038",
+  "ownerAgentId": "bc-8514e599-6ea4-4fff-9f69-0cc0269184d8",
+  "ownerWorkerId": "cursor-nov24-current-master-followup-5",
+  "revisions": {
+    "ownerHead": "b10a82dba9b0eaa9f517de0b9d4d9137dcf54bc3",
+    "ownerBranch": "cursor/beiqishu-038-followup-84d8",
+    "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+    "reviewHead": "fa3e52a01dc0c865a685b0f974a4232fe4832309",
+    "reviewerAgentId": "bc-4177a3cf-7dc4-46de-b186-fe649f9004d3",
+    "sourceInputs": {
+      "data/beiqishu/038.json": {
+        "gitBlob": "28c619ce11f5462e182d6b2f8b3cefcd21888356",
+        "sha256": "sha256:c0103dc57975d06554a68a6a96b3330b3a826198139aa8ea1c911b55a095f4db"
+      },
+      "data/people/extractions/beiqishu/038.json": {
+        "gitBlob": "a9995dfd9ff8efab566e971b7d6b0047129afdf6",
+        "sha256": "sha256:3706bf454d55ef6656c6a2dc97b890b7caf76fa2d797fb538acccf82b31b5c41"
+      },
+      "data/people/date-audits/beiqishu/038.json": {
+        "gitBlob": "a61c5c55dbc2f42685122bb17618e4022fec91cd",
+        "sha256": "sha256:906256d6282ca46fab9e6fca8f15c8f87bf1f386d664f2eb444a2d2d3141ace8"
+      },
+      "data/people/editorial-decisions/beiqishu/038.json": {
+        "gitBlob": "8b72ab550a782b1e48446967dd4d47b0c04106c9",
+        "sha256": "sha256:84cb83396b33a15360f95dcf17e463c24a931e9b68ae8743c313323f1660ab3a"
+      }
+    }
+  },
+  "independentReview": {
+    "pr": 5606,
+    "reportParts": [
+      "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-038/independent-identity-report-part-003.json"
+    ],
+    "lookupReceipt": {
+      "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-038/lookup-receipt.json",
+      "sha256": "sha256:8a65e31d65b0d778f5ec5eda135eda5929bc34048c6368f1c458ca4283ae46c2"
+    }
+  },
+  "summary": "One identity hold: s0062 supports Yuan Wenyao’s resignation and 侍養 but contains no 母 or other kinship surface for a distinct mother person. Proposed deltas retract mother-specific extraction on s0062 and remove the unstated English “mother”; do not invent a named mother or Chinese witness.",
+  "holds": [
+    {
+      "caseId": "sha256:75b4cc39c7fd9f18a6313fc4c1f126f07b8301002f8c6eca046df0f22bf5b09f",
+      "canonicalPersonId": "per_EV6C88SX5D9KF76QJ01G",
+      "targetLocalId": "beiqishu:038:p035",
+      "independentHoldReason": "Sealed primary beiqishu 038 s0062 has no Chinese 母 surface for descriptive-kinship or primary witness on p035.",
+      "diagnosis": "Primary Chinese s0062 reads 以天下方亂，遂解官侍養，隱於林慮山。 The predicate 解官侍養 documents Yuan Wenyao (p002) resigning for home filial care; it does not name 母 or individuate a mother actor. Extraction invented beiqishu:038:p035 “Mother of Yuan Wenyao” with descriptive-kinship zh:母 and kinship-reference surface “mother” on s0062 alone. English literal and idiomatic fields insert “his mother”, which is not attested in the Chinese unit. No other Yuan Wenyao biography unit in this chapter pairs 文遙 with 母. Owner prior witness quote “mother” (English) is invalid under native primary-witness rules.",
+      "sourceUnit": {
+        "book": "beiqishu",
+        "chapter": "038",
+        "unitId": "s0062",
+        "zh": "以天下方亂，遂解官侍養，隱於林慮山。",
+        "englishBefore": {
+          "literal": "As the realm was in turmoil, he resigned office to tend his mother and hid on Mount Linlü.",
+          "idiomatic": "With the realm in turmoil, he resigned to care for his mother and lived in seclusion on Mount Linlü."
+        }
+      },
+      "operations": [
+        {
+          "vocabulary": "translation-repair",
+          "book": "beiqishu",
+          "chapter": "038",
+          "unitId": "s0062",
+          "field": "literal",
+          "before": "As the realm was in turmoil, he resigned office to tend his mother and hid on Mount Linlü.",
+          "after": "As the realm was in turmoil, he therefore resigned from office to practice home filial care and hid on Mount Linlü.",
+          "reason": "侍養 appears without 母 or 父母; English must not assert a mother absent from the Chinese surface."
+        },
+        {
+          "vocabulary": "translation-repair",
+          "book": "beiqishu",
+          "chapter": "038",
+          "unitId": "s0062",
+          "field": "idiomatic",
+          "before": "With the realm in turmoil, he resigned to care for his mother and lived in seclusion on Mount Linlü.",
+          "after": "With the realm in turmoil, he resigned from office to devote himself to home filial care and lived in seclusion on Mount Linlü.",
+          "reason": "Same source constraint; retain filial-care sense of 侍養 without naming mother."
+        },
+        {
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:p035",
+          "predicate": "name",
+          "locatorNote": "Compact person p035 embedded descriptive-kinship name claim (en: Mother of Yuan Wenyao; zh: 母) with evidence [s0062], certainty strongly-inferred",
+          "reason": "No Chinese 母 or personal name in s0062; descriptive-kinship zh:母 cannot be primary-witnessed on this unit.",
+          "sourceWitness": {
+            "unitId": "s0062",
+            "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+          }
+        },
+        {
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:p035",
+          "predicate": "surface",
+          "locatorNote": "Compact surfaces kinship-reference row p035 → en mother on s0062",
+          "reason": "English kinship surface “mother” has no Chinese counterpart in s0062.",
+          "sourceWitness": {
+            "unitId": "s0062",
+            "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+          }
+        },
+        {
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:c0005",
+          "compactClaimIndex": 5,
+          "subject": "beiqishu:038:p035",
+          "predicate": "sex",
+          "reason": "Female sex was inferred only from unsupported mother kinship on s0062.",
+          "sourceWitness": {
+            "unitId": "s0062",
+            "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+          }
+        },
+        {
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:c0022",
+          "compactClaimIndex": 22,
+          "subject": "beiqishu:038:p002",
+          "predicate": "family-relationship",
+          "objectPersonId": "beiqishu:038:p035",
+          "reason": "child-of / kinshipTerm 母 on s0062 lacks Chinese kinship witness in the cited unit.",
+          "sourceWitness": {
+            "unitId": "s0062",
+            "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+          }
+        },
+        {
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:c0096",
+          "compactClaimIndex": 96,
+          "subject": "beiqishu:038:p035",
+          "predicate": "attestation",
+          "reason": "Attestation phrase 解官侍養 documents p002’s activity; it does not establish a separate mother person or nameable mother actor.",
+          "sourceWitness": {
+            "unitId": "s0062",
+            "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+          }
+        },
+        {
+          "vocabulary": "remove-local-person",
+          "localPersonId": "beiqishu:038:p035",
+          "reason": "After retractions, p035 has no source-supported name, mention, or kinship witness in this chapter; retaining the record would preserve an invented mother entity.",
+          "sourceWitness": {
+            "unitId": "s0062",
+            "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+          }
+        },
+        {
+          "vocabulary": "extraction-metadata",
+          "target": "beiqishu:038:p002",
+          "field": "relations",
+          "beforeIncludes": "p035",
+          "after": "Remove p035 from p002 relations array r[]",
+          "reason": "Dependency cleanup after p035 removal."
+        },
+        {
+          "vocabulary": "extraction-metadata",
+          "target": "beiqishu:038:p002",
+          "field": "hints.activeDates",
+          "note": "Retain p002 hints on s0062; only remove mother-specific Western interval on p035 (c0096). No change to audited p002 chronology on this unit unless host ties intervals to retracted p035."
+        }
+      ],
+      "impactedDependencies": [
+        "beiqishu:038:p002 family graph (remove child-of → p035)",
+        "beiqishu:038:p035 attestation AD 534–550 on 解官侍養 (retracted with c0096)",
+        "Identity case per_EV6C88SX5D9KF76QJ01G sole local beiqishu:038:p035 — after apply, chapter has no local member for this canonical cluster unless host merges elsewhere with primary evidence",
+        "Date audit item referencing p035 attestation on s0062 — requires host replay scoped to changed extraction hash",
+        "Owner evidence case sha256:75b4cc39… — witness row must be revised after extraction apply (not in this proposal artifact)"
+      ],
+      "preservedUnchanged": [
+        "Yuan Wenyao (p002) explicit identification on s0050 and other biography units",
+        "All other 66 identity cases and transport parts",
+        "Accepted canonical membership for persons with valid primary witnesses",
+        "Audited date status for the chapter pending host replay on new extraction hash only"
+      ],
+      "requiresHoldAfterApply": false,
+      "postApplyIdentityExpectation": "Independent review may approve or retain uncertainty for per_EV6C88SX5D9KF76QJ01G once p035 is removed and no Chinese mother witness is asserted on s0062; no approve while descriptive-kinship 母 remains on this unit."
+    }
+  ],
+  "validation": {
+    "command": "npm run people:validate -- --book beiqishu --chapter 038",
+    "runAtProposalTime": "2026-11-24T10:50:00.000Z",
+    "passedOnPinnedInputs": true,
+    "note": "Proposal does not mutate canonical data; validation run on unchanged owner-head inputs before host apply."
+  },
+  "notApplied": true,
+  "nextGate": "host-independent-review-and-apply-exact-deltas"
+}
