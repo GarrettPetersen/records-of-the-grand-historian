@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "004"
+  },
+  "ownerAgentId": "bc-3a79620f-ad34-4749-acfc-4bab4104ba67",
+  "worker": "cursor-nov24-retained-staging-w9-o3",
+  "idempotencyKey": "d5c0727073c346e51adab0b14a0adb7a2d4054ae3b2e44af48ab09949f828dea",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-004-4ba67",
+  "inputBlobWitness": {
+    "source": "ac26301ad08199f4d4515eef278ca475b09282fa",
+    "extraction": "3c70502e34dab4a3438b8aba2324f16e51fa6578",
+    "dateAudit": "083b9607b558a52fc26c38b59e99c313576eebe8",
+    "editorial": "598f44348f085630eb70e43fe2cb6b0ae7275935"
+  },
+  "sealedInputs": {
+    "source": "sha256:af89a3138d408f66ded322e3df955469ae65f6ba2b724516a1c5b1255d123f85",
+    "extraction": "sha256:1c7eef603d03a064b57b942bfe0bd88bff94de82ad2fd0a942c01734913bfa73",
+    "dateAudit": "sha256:68417d714651830c94591f1a7ff8ec929d0d009112ba2fe732adc53cfbb8e9b8",
+    "editorial": "sha256:c5b922f8c55754c3e76f548e1a7e4010acef33ccfeed418a6b36034421be21fb"
+  },
+  "nativeDateAudit": {
+    "path": "data/people/date-audits/hanshu/004.json",
+    "contentSha256": "sha256:68417d714651830c94591f1a7ff8ec929d0d009112ba2fe732adc53cfbb8e9b8",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T05:46:32.130Z",
+    "sealedSourceHash": "sha256:fec45dc246fd6728606c556ab825eaf6a30dadd4b61f0bec5a93bac9a2249de3",
+    "sealedExtractionHash": "sha256:7a6ac393248737bf852d3dfc08c646144cd20e5871a9b34f2d9638a2f1837ff2",
+    "currentPacketSourceHash": "sha256:fec45dc246fd6728606c556ab825eaf6a30dadd4b61f0bec5a93bac9a2249de3",
+    "currentPacketExtractionHash": "sha256:f5440eddf76e4cfe4b81f858a82f977769363fe69d84cfe2311f346ce78ba374",
+    "packetHashDrift": true,
+    "workOrderAudit": {
+      "state": "research-blocked",
+      "sha256": "68417d714651830c94591f1a7ff8ec929d0d009112ba2fe732adc53cfbb8e9b8",
+      "affectedItems": 13,
+      "findings": 1
+    },
+    "findingsCount": 1,
+    "preservedAuditBytes": true,
+    "overwrittenAudit": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 106,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnitIds": []
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book hanshu --chapter 004",
+    "peopleValidateSummary": "Scoped person data validation passed for hanshu/004: 1 extraction(s), 44 local people, 339 mentions, 430 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 4 person record(s) without an attestation, 4 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 004",
+      "book": "hanshu",
+      "chapter": "004",
+      "status": "stale",
+      "auditVersion": 1,
+      "rawCounts": {
+        "stale": 1
+      }
+    },
+    "nativeAuditStateRecorded": "research-blocked"
+  },
+  "substantiveFindings": "Verified four input git blobs and date-audit file sha256 68417d714651830c94591f1a7ff8ec929d0d009112ba2fe732adc53cfbb8e9b8. Native date audit status research-blocked with 1 finding group(s); people:dates:verify reports stale. Carried forward 1 distinct native research hold(s) without inventing chronology. Accepted editorial repairs appear reflected in source; no new definite English omission identified.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-169",
+      "personId": "p001",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "高皇后…生惠帝"
+        },
+        "unresolved": true,
+        "unresolvedReason": "Maternity, heir-designation, and an appraisal-era frame are converted into unsupported point dates for Empress Lü, Emperor Hui, and the Former Young Emperor.",
+        "event": "Source-specific relationship or appraisal context retained; no Western personal activity date is asserted."
+      },
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0090",
+          "quote": "高皇后呂氏，生惠帝。"
+        }
+      ],
+      "clauseCitations": [
+        "s0090:「高皇后呂氏，生惠帝。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-176",
+      "personId": "p002",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "生惠帝"
+        },
+        "unresolved": true,
+        "unresolvedReason": "Maternity, heir-designation, and an appraisal-era frame are converted into unsupported point dates for Empress Lü, Emperor Hui, and the Former Young Emperor.",
+        "event": "Source-specific relationship or appraisal context retained; no Western personal activity date is asserted."
+      },
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0090",
+          "quote": "高皇后呂氏，生惠帝。"
+        }
+      ],
+      "clauseCitations": [
+        "s0090:「高皇后呂氏，生惠帝。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-179",
+      "personId": "p002",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "孝惠、高后之時"
+        },
+        "unresolved": true,
+        "unresolvedReason": "Maternity, heir-designation, and an appraisal-era frame are converted into unsupported point dates for Empress Lü, Emperor Hui, and the Former Young Emperor.",
+        "event": "Source-specific relationship or appraisal context retained; no Western personal activity date is asserted."
+      },
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0089",
+          "quote": "贊曰：孝惠、高后之時，海內得離戰國之苦，君臣俱欲無為，故惠帝拱己，高后女主制政，不出房闥，而天下晏然，刑罰罕用，民務稼穡，衣食滋殖。"
+        }
+      ],
+      "clauseCitations": [
+        "s0089:「贊曰：孝惠、高后之時，海內得離戰國之苦，君臣俱欲無為，故惠帝拱己，高后女主制政，不出房闥，而天下晏然，刑罰罕用，民務稼穡」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-184",
+      "personId": "p006",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "以為太子"
+        },
+        "unresolved": true,
+        "unresolvedReason": "Maternity, heir-designation, and an appraisal-era frame are converted into unsupported point dates for Empress Lü, Emperor Hui, and the Former Young Emperor.",
+        "event": "Source-specific relationship or appraisal context retained; no Western personal activity date is asserted."
+      },
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0093",
+          "quote": "太后立帝姊魯元公主女為皇后，無子，取後宮美人子名之以為太子。"
+        }
+      ],
+      "clauseCitations": [
+        "s0093:「太后立帝姊魯元公主女為皇后，無子，取後宮美人子名之以為太子。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-187",
+      "personId": "p007",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "乃立兄子…為王"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The 187 enfeoffment of Lü’s nephews is attributed to the elder-brother relationship record.",
+        "event": "Source-specific relationship or appraisal context retained; no Western personal activity date is asserted."
+      },
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0095",
+          "quote": "乃立兄子呂台、產、祿、台子通四人為王，封諸呂六人為列侯。"
+        }
+      ],
+      "clauseCitations": [
+        "s0095:「乃立兄子呂台、產、祿、台子通四人為王，封諸呂六人為列侯。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "hints-p001",
+      "personId": "p001",
+      "operation": "retain",
+      "currentValue": [
+        "BC 195",
+        "BC 188",
+        "BC 187-180"
+      ],
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0090",
+          "quote": "高皇后呂氏，生惠帝。"
+        }
+      ],
+      "clauseCitations": [
+        "s0090:「高皇后呂氏，生惠帝。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "hints-p002",
+      "personId": "p002",
+      "operation": "retain",
+      "currentValue": [
+        "BC 195",
+        "BC 188"
+      ],
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0090",
+          "quote": "高皇后呂氏，生惠帝。"
+        }
+      ],
+      "clauseCitations": [
+        "s0090:「高皇后呂氏，生惠帝。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "hints-p006",
+      "personId": "p006",
+      "operation": "retain",
+      "currentValue": [
+        "BC 188",
+        "BC 184"
+      ],
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0093",
+          "quote": "太后立帝姊魯元公主女為皇后，無子，取後宮美人子名之以為太子。"
+        }
+      ],
+      "clauseCitations": [
+        "s0093:「太后立帝姊魯元公主女為皇后，無子，取後宮美人子名之以為太子。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "hints-p007",
+      "personId": "p007",
+      "operation": "retain",
+      "currentValue": [
+        "research required: The 187 enfeoffment of Lü’s nephews is attributed to the elder-brother relationship record."
+      ],
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0095",
+          "quote": "乃立兄子呂台、產、祿、台子通四人為王，封諸呂六人為列侯。"
+        }
+      ],
+      "clauseCitations": [
+        "s0095:「乃立兄子呂台、產、祿、台子通四人為王，封諸呂六人為列侯。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    }
+  ],
+  "distinctHolds": [
+    {
+      "findingItems": [
+        "claim-169",
+        "claim-176",
+        "claim-179",
+        "claim-184",
+        "claim-187",
+        "hints-p001",
+        "hints-p002",
+        "hints-p006",
+        "hints-p007",
+        "p001",
+        "p002",
+        "p006",
+        "p007"
+      ],
+      "findingPeople": [],
+      "problem": "The retained maternity, heir-designation, appraisal, and elder-brother references give no local personal Western chronology, even though their non-temporal source facts are preserved.",
+      "action": "Retain each explicit unresolved claim and paired research-required hint; do not infer dates from adjacent accession or enfeoffment events. Re-audit only after precise source or external evidence resolves a particular hold.",
+      "preserve": true
+    }
+  ],
+  "extractionDrift": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs unchanged. Host supplies native final review and validates proposals."
+}
