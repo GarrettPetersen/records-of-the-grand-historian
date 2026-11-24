@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Transfer exactly the accepted Jinshu 094 certificate and date seal to #5430, then verify merge into staging.",
+  "nextAction": "Transfer exact 115 proof to #5470 and verify both candidate heads before staging merges.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:50:01.713Z",
+  "lastCheckedAt": "2026-11-24T00:50:35.660Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -753,7 +753,7 @@
       "reviewPR": 5470,
       "revision": "67657d5033ccdc05b513ddf30036af5cea8f2728",
       "verifiedScopedFiles": 5,
-      "status": "audited-native-report-returned-awaiting-canonical-recording",
+      "status": "native-identity-approved-awaiting-stage",
       "verifiedPreimages": {
         "authorBase": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "stagingBase": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -2624,7 +2624,7 @@
               }
             ],
             "nativeRecording": {
-              "status": "dispatch-intent",
+              "status": "success",
               "requestedAt": "2026-11-24T00:35:10.552Z",
               "partCount": 11,
               "reportCommit": "c32e583ec12500c4fd44fbfc3b293fddd7f90e54",
@@ -2642,7 +2642,18 @@
                   "missingBlockingName": true
                 }
               ],
-              "previousRunId": 45298398998
+              "previousRunId": 45298398998,
+              "runId": 45299573775,
+              "artifactId": 14877464498,
+              "artifactDigest": "sha256:921bea2c5b99fdbba09b3ccd663a44f4e83b93c506f9e6500652b7465c5094b4",
+              "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45299573775",
+              "reviewedCases": 229
+            },
+            "transfer": {
+              "status": "dispatch-intent",
+              "chapterPR": 5470,
+              "reviewedCases": 229,
+              "recordingRunId": 45299573775
             }
           }
         }
@@ -3297,10 +3308,11 @@
             "reviewedCases": 250
           },
           "transfer": {
-            "status": "dispatch-intent",
+            "status": "in_progress",
             "chapterPR": 5430,
             "reviewedCases": 250,
-            "recordingRunId": 45299573988
+            "recordingRunId": 45299573988,
+            "runId": 45300352996
           }
         }
       }
@@ -7050,7 +7062,7 @@
       "method": "Hosted exact sealed-packet comparison before native certificate, preserve reviewer accountability and all unaffected decisions."
     },
     "nativeRecordingBatch": {
-      "status": "active",
+      "status": "success",
       "workflowRuns": [
         45299573988,
         45299573775
@@ -7060,7 +7072,17 @@
         "jinshu/094",
         "jinshu/115"
       ],
-      "workflowCommit": "3f132e61f276d0a0e81506e36de78f3f0055f660"
+      "workflowCommit": "3f132e61f276d0a0e81506e36de78f3f0055f660",
+      "accepted": [
+        {
+          "chapter": "jinshu/094",
+          "runId": 45299573988
+        },
+        {
+          "chapter": "jinshu/115",
+          "runId": 45299573775
+        }
+      ]
     },
     "concurrentScopeCheck": {
       "at": "2026-11-24T00:50:01.712Z",
