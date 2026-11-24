@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "042"
+  },
+  "ownerAgentId": "bc-7c291193-59e6-437c-83d8-347d70592046",
+  "workerId": "cursor-nov24-retained-staging-w6-o2",
+  "model": "composer-2.5",
+  "idempotencyKey": "6deb790d5e4dede6dcc2c93f9b519a7b9dc1a8998b671b13529264b7fb44ec60",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-042-92046",
+  "inputBlobWitness": {
+    "source": "1eaa7c2701739ea1708d686b54013f93f21f350c",
+    "extraction": "2ae037e2a13a7d19cf1f0b80f1161a4f61a5a233",
+    "dateAudit": "ed25778ba64cfdc72d16a2c0df5d2975f1c2e52a",
+    "editorial": "69b60651fb9eb7125331471151390857e577403f"
+  },
+  "sealedInputContentSha256": {
+    "source": "sha256:dc05df2ccb24401833d358db9535b73be28f1cd1011c2355bada1a03afec06d2",
+    "extraction": "sha256:afd2e868a240b2a7eb4e11884465bae4b22ce461969f816c8aaec57011fb0366",
+    "dateAudit": "sha256:70ef674163753f006fee005cca2364aeff75a14f2268830ed24c40458437d04f",
+    "editorial": "sha256:517985c4609aceaf082b396854172ddbb76df31a33918f30c681b62a6b841b4a"
+  },
+  "inputWitnessMismatches": [],
+  "auditRecord": {
+    "state": "research-blocked",
+    "sha256": "70ef674163753f006fee005cca2364aeff75a14f2268830ed24c40458437d04f",
+    "affectedItems": 11,
+    "findings": 1,
+    "preservedReportBytes": true,
+    "reportFileStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T12:19:48.142Z",
+    "summary": "Fresh independent canonical audit of all 374 Chinese units, 67 temporal or active-hint items, and ten people after Jinshi 042 curation. The repaired surrounding-narrative, quoted-precedent, and retrospective records no longer assert unsupported personal intervals. Shizong’s distinct explicit Dading 6 (AD 1166) events remain intact. The chapter cannot date the remaining undated policy, thanksgiving, Zhenzong-precedent, and retrospective-sacrifice contexts further, so this complete review records them as research holds rather than granting date approval."
+  },
+  "sourceCoverage": {
+    "chineseUnits": 374,
+    "translatedCount": 374,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 91657,
+    "localPeople": 10
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jinshi --chapter 042",
+    "peopleValidateSummary": "Scoped person data validation passed for jinshi/042: 1 extraction(s), 10 local people, 41 mentions, 137 claims, 0 proposed repair(s), 35 applied repair(s), 35 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book jinshi --chapter 042",
+    "dateAuditFileStatus": "research-blocked",
+    "dateAuditScopedVerifyStatus": "research-blocked",
+    "datesVerifyExitNonZero": true,
+    "extractionHashAlignedWithAudit": true,
+    "sourceHashAlignedWithAudit": true,
+    "editorialProposalCount": 35,
+    "editorialDecisionCount": 35,
+    "blockedClaimIds": [
+      "claim-6",
+      "claim-15",
+      "claim-37",
+      "claim-39",
+      "claim-80",
+      "claim-84",
+      "hints-p003",
+      "hints-p007"
+    ],
+    "blockedPersonIds": [
+      "p001",
+      "p003",
+      "p007"
+    ],
+    "blobWitnessVerified": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed inputs: Fresh independent canonical audit of all 374 Chinese units, 67 temporal or active-hint items, and ten people after Jinshi 042 curation. The repaired surrounding-narrative, quoted-precedent, and retrospective records no longer assert unsupported personal intervals. Shizong’s distinct explicit Dading 6 (AD 1166) events remain intact. The chapter cannot date the remaining undated policy, thanksgiving, Zhenzong-precedent, and retrospective-sacrifice contexts further, so this complete review records them as research holds rather than granting date approval. Independent date report remains research-blocked with 11 held item(s) in 1 native finding(s). people:validate passed on current extraction without new repairs. No definite English omission identified beyond already-applied editorial decisions (35 applied). Scoped people:dates:verify returns research-blocked, matching the retained report status.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-6",
+        "claim-15",
+        "claim-37",
+        "claim-39",
+        "claim-80",
+        "claim-84",
+        "hints-p003",
+        "hints-p007",
+        "p001",
+        "p003",
+        "p007"
+      ],
+      "problem": "Six source contexts remain intentionally indeterminate after curation: an undated thereafter clause, retrospective earlier thanksgiving, quoted Zhenzong precedent, and undated retrospective Shizong sacrifice. They no longer assert an unsupported life interval, but chapter-local evidence cannot date them further.",
+      "action": "Retain each current explicit unresolved claim and research-required hint. Do not infer chronology from adjacent narrative, a ruler’s full reign, quotation provenance, or retrospective wording; only independent person-specific evidence can resolve these holds.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner handoff only; sealed inputs unchanged.",
+  "completedAt": "2026-11-24T16:44:07.633Z"
+}
