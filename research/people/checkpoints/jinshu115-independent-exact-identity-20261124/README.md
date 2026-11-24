@@ -22,15 +22,20 @@ Independent reviewer: **`bc-84536a48-e6d3-4027-a8ff-2478884deaaf`** (PR #5483).
 | **`transport-part-005.json`** | **28 / 28** authored |
 | **`transport-part-006.json`** | **29 / 29** authored |
 | **`transport-part-007.json`** | **14 / 14** authored |
-| Parts 008–011 | **101** cases **unreviewed** (`identity-review-coverage.json`) |
+| **`transport-part-008.json`** | **14 / 14** authored |
+| **`transport-part-009.json`** | **29 / 29** authored |
+| **`transport-part-010.json`** | **29 / 29** authored |
+| **`transport-part-011.json`** | **29 / 29** authored |
+| **Total** | **229 / 229** (`identity-review-coverage.json` complete) |
 
 Authored judgments live in **`authored-native-part-report-NNN.json`**. **`verify-native-part-report.mjs`** only checks transport byte hashes and witness lint, then copies verified output to **`native-part-report-NNN.json`**.
 
 | Part | `native-part-report` SHA-256 |
 | --- | --- |
-| 005 | `d8131cc910e9a1361c5099fdad63425a10011a653d3d2fd203c5b2ee1a0426a6` |
-| 006 | `a5dfe8c7cf8c0b6710dd19969e72a009f8fbb7dc96fa1246a9663e2c6cdcad04` |
-| 007 | `21393c729453a24ab5303b146b346cf2bcfe7d421840f51feeafc035156c3b59` |
+| 008 | `8c74d2b50033f9e4248c6404f4e2b17e6c89146bf34792306c9d1cc2c9a7c26a` |
+| 009 | `a3c5d190239b95153602f65d5d52fed27816395564a99fef527055920d5b1ca8` |
+| 010 | `8cd1692b8b93ead6eb174e2a9bd51f31554c8c6489c462300ad7cebe19fc77cd` |
+| 011 | `59a98c6373a3e63634f40c1a6648cff309d841de9d6becd957b721c959fa7fa7` |
 
 ## Rejected on this branch
 
