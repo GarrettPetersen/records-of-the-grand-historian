@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "worker": "cursor-nov24-retained-blocked-owner-3",
+  "idempotencyKey": "fe6c05e3310ccd12e4ea8a19613b06b17abf2989ea7910cee78b8b03c5cb0957",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "notes": "Owner handoff only; no canonical edits, deploy, or merge.",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "157"
+  },
+  "observedBlocker": "Date audit report is stale",
+  "handoffBranch": "cursor/nov24-retained-blocked-owner-jiutangshu-157-e9e1b1",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiutangshu/157.json",
+      "gitBlob": "579ab3fe699734dad73529c11df1b1a412f6ca2d",
+      "contentSha256": "sha256:2301d0773ae7b1465ebaf8cfc3184a9908c62f56c52a5ca8eae86f9f09416cba"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiutangshu/157.json",
+      "gitBlob": "9b4d8bd2b829b9f3d2cb750ca642788f83242146",
+      "contentSha256": "sha256:338cea9a4a3e1ea5f78be42ae638585a202e359de60fa5387eb096ba42154733"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiutangshu/157.json",
+      "gitBlob": "297a85aac515bf7119caefd23370b97f5018990a",
+      "contentSha256": "sha256:b8eeea803e87ebb40f528f8c311f5a7cf06767db581d39d6a17197d1e3853a44"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiutangshu/157.json",
+      "gitBlob": "a7fe0a930ccd51cd1ee41563625e57d973a6e4aa",
+      "contentSha256": "sha256:e186658fb2d2f569058ba53df6e9c647d644dca5ce5639cbb624d5ba5ca23310"
+    }
+  },
+  "testedRecoveryFindings": {
+    "staleReason": "extractionHash changed while sourceHash unchanged",
+    "currentPacket": {
+      "sourceHash": "sha256:95c297e20ec29160adc45281284c7dcec7a81e5e7d5d008b20d7a8b42bda1232",
+      "extractionHash": "sha256:f56c48e3a41aff803aaf5750ff77b3e9dd8fb3922524274fea93ba7813c9c43f"
+    },
+    "auditSeal": {
+      "sourceHash": "sha256:95c297e20ec29160adc45281284c7dcec7a81e5e7d5d008b20d7a8b42bda1232",
+      "extractionHash": "sha256:2e482843c7991e14cac19d2e9614321eafd835c9904befc2f527d0bae6ec020f"
+    },
+    "changeCommits": {
+      "sealedExtraction": "41b6a8c6528aff6dffe3ef3da1609e861bee0b53",
+      "taxonomyFix": "a9a3196bb46d3d61775d7612af4a79b22943800b",
+      "taxonomyFixSubject": "people: enforce retrospective reception taxonomy"
+    },
+    "validateCurrentAgainstAudit": "Date audit report is stale",
+    "validateAuditAgainstSealedExtraction": "Date approval retains invalid temporal geometry or reception ownership",
+    "dateAuditItemDeltaCount": 1,
+    "chronologyFactChanges": 0
+  },
+  "affectedChronologyInputs": [
+    {
+      "itemId": "claim-1147",
+      "personId": "p119",
+      "evidenceUnits": [
+        "s0275",
+        "s0276"
+      ],
+      "changeKind": "reception-taxonomy-migration"
+    }
+  ],
+  "concreteProposedPatches": [
+    {
+      "kind": "reception-taxonomy-bridge",
+      "target": "data/people/extractions/jiutangshu/157.json",
+      "note": "Current bytes already include retrospective-reference on claim-1147; no further claim edits required.",
+      "eligibilityProof": "Single delta vs sealed extraction is posthumous-commemoration -> retrospective-reference on claim-1147; westernYear AD 807 and sourceDate 會李锜反 unchanged."
+    }
+  ],
+  "proofReuseCandidate": {
+    "permittedBy": "scripts/lib/people-reception-reconciliation.mjs#reconcileRetrospectiveExtraction",
+    "sealedExtractionCommit": "41b6a8c6528aff6dffe3ef3da1609e861bee0b53",
+    "minimumIndependentContinuation": "Scoped chronology re-check of claim-1147 only, or full packet re-audit against current extractionHash; owner handoff is not approval."
+  },
+  "relatedEvidenceHashes": {
+    "sealedExtractionHash": "sha256:2e482843c7991e14cac19d2e9614321eafd835c9904befc2f527d0bae6ec020f",
+    "currentExtractionHash": "sha256:f56c48e3a41aff803aaf5750ff77b3e9dd8fb3922524274fea93ba7813c9c43f",
+    "preservedDateAuditContentSha256": "sha256:b8eeea803e87ebb40f528f8c311f5a7cf06767db581d39d6a17197d1e3853a44"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Prior audited report preserved; requires independent rebind to current extractionHash after reviewer confirms reception-only delta.",
+    "editorial": "Pinned editorial decisions unchanged.",
+    "identity": "Out of scope for this blocker."
+  },
+  "holds": []
+}
