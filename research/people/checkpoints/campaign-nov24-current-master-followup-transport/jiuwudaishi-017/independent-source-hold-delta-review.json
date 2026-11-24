@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "jiuwudaishi/017",
+  "reviewerAgentId": "bc-95616dc5-8ed6-42b5-a5c1-096ce9c2dbc9",
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "ownerRevision": "785b5fe789281e0d61cb22cdd5dd5cee86e5de88",
+  "proposalSha256": "sha256:39928a68e8e8a656bc64f92aac94c51f50d9f0100fdd9984f9c0e2f48386226f",
+  "decisions": [
+    {
+      "caseId": "sha256:24902c5176fd8bfbc300403dd97754580eafc794088677a0d91b0b51b9f392cb",
+      "verdict": "approve_operations",
+      "operationsApproved": [
+        "extraction-person-display-zh",
+        "extraction-identity-name",
+        "extraction-surface-add"
+      ],
+      "sourceEvidence": {
+        "priorReviewCommit": "55fa6547b6b4615d9470c97a1cdfa89a8ac1318e",
+        "priorHoldMatchesProposal": true,
+        "sealedInputBlobsVerified": {
+          "data/jiuwudaishi/017.json": "8e8cde95c5ed94d9db99a5235a8e0c1ffa141a38",
+          "data/people/extractions/jiuwudaishi/017.json": "22f045e4d5515eec7cd40e0b7c65299f4cf7f696",
+          "data/people/date-audits/jiuwudaishi/017.json": "74451e88f14c9a2a30c11e3488e20f016699d290",
+          "data/people/editorial-decisions/jiuwudaishi/017.json": "bb521cd9293a24b498eb8c74f78d1d815e8adde6"
+        },
+        "extractionBeforeConfirmed": {
+          "targetLocalId": "jiuwudaishi:017:p052",
+          "peopleRowIndex": 51,
+          "displayZh": "劉建鋒",
+          "personalNameZh": "劉建鋒",
+          "personalNameEvidenceUnits": ["s0186"],
+          "enPersonalSurfacesOnly": true
+        },
+        "proposedAfter": {
+          "displayZh": "劉建峰",
+          "personalNameZh": "劉建峰",
+          "personalNameEvidenceUnits": ["s0186", "s0187"],
+          "zhPersonalSurfacesAdded": 2
+        },
+        "primaryChinese": [
+          {
+            "unitId": "s0186",
+            "quote": "後與劉建峰據湖南，推建峰為帥。）〉"
+          },
+          {
+            "unitId": "s0187",
+            "quote": "唐乾寧初，劉建峰據湖南，獨邵州不賓，命都將馬殷討之，期歲未克，而建峰為部下所殺，軍亂，鄰寇且至。"
+          }
+        ],
+        "englishFieldsUnchanged": {
+          "s0186": {
+            "literal": "Later with Liu Jianfeng he seized Hunan and pushed Jianfeng as commander.)〉",
+            "idiomatic": "He later seized Hunan with Liu Jianfeng and made Jianfeng commander.)〉"
+          },
+          "s0187": {
+            "literal": "At the start of Tang Qianning, Liu Jianfeng held Hunan; only Shaozhou would not submit; he ordered capital commander Ma Yin to attack it—a year passed without taking it, and Jianfeng was killed by subordinates, the army in disorder, neighboring enemies about to arrive.",
+            "idiomatic": "Early in Qianning Liu Jianfeng held Hunan while Shaozhou held out; Ma Yin besieged it a year without success, then Jianfeng was murdered, the army mutinied, and enemies closed in."
+          }
+        },
+        "assessment": "Concrete extraction glyph error (鋒 vs source 峰), not descriptive inference or a false-merge signal. Locator people[1] in proposal means p052 display tuple index 1, not array index 1."
+      },
+      "dependencyImpact": {
+        "chronology": "Unchanged. Date-audit p052 already cites s0187 with 劉建峰/建峰 and 乾寧初 → AD 894.",
+        "identity": "Retain per_7P0VY9CFYVBS7N9YKZTZ; no merge or split. Extraction seal change requires transport regen; no new 63-case identity certification in this artifact.",
+        "editorial": "Unchanged (11 sealed decisions).",
+        "translation": "None.",
+        "holdAfterApply": false,
+        "remainingRepair": "Host apply, then re-seal part-003 case as approve with Han witnesses 劉建峰 and 建峰 (simulated post-apply native witness check passes)."
+      }
+    }
+  ]
+}
