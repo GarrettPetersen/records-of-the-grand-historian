@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "029"
+  },
+  "ownerAgentId": "bc-fc6327bb-e8d3-43c7-a312-34b9d3ed7bf0",
+  "workerId": "cursor-nov24-retained-staging-w5-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "94917f99bb8ffd16ab134b720cd7e4e167bda477d58fcbaacfb6933f67a78dd3",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-029-d7bf0",
+  "inputBlobWitness": {
+    "source": "61417c12633723af21ae689002e8a7bf760f38e2",
+    "extraction": "375b0c84607a9375c31cb8638a5ab8d580872845",
+    "dateAudit": "5e3e848001dca45e13135a261c9d0f96d0d0a33f",
+    "editorial": "11868d7a5d6ecd4b9d974c5a5cc88b16fc98c093"
+  },
+  "sealedInputs": {
+    "source": "sha256:b6fab3a64e48593fc01f77424ab83e49063ad5e30dc4df381c951dadd7d84506",
+    "extraction": "sha256:17db53a565b2fe116e7677e7640c1cf5a40228ca3945ef79da4bd7bdbef34496",
+    "dateAudit": "sha256:2ca8b529b5c54cedb306e7329d3fae38a19186ddcdd5fb1f7eb8c0d601596cd6",
+    "editorial": "sha256:1fbe4a1ee4033daf362bdf409b537486c9b5c6707e51ebaa269043b90939ecbb"
+  },
+  "dateAuditWitness": {
+    "contentSha256": "sha256:2ca8b529b5c54cedb306e7329d3fae38a19186ddcdd5fb1f7eb8c0d601596cd6",
+    "gitBlob": "5e3e848001dca45e13135a261c9d0f96d0d0a33f",
+    "reportStatus": "research-blocked",
+    "reportSourceHash": "sha256:047de9a15b5c6d8431a81ea63acd3c1472b69eb6b4a75abce036f3e462fa6bc3",
+    "reportExtractionHash": "sha256:2e5afec563016b5e5af0f6c31b10e5d80ba270c0eba316ee333e668697f4acad",
+    "currentPacketSourceHash": "sha256:047de9a15b5c6d8431a81ea63acd3c1472b69eb6b4a75abce036f3e462fa6bc3",
+    "currentPacketExtractionHash": "sha256:2e5afec563016b5e5af0f6c31b10e5d80ba270c0eba316ee333e668697f4acad",
+    "bytesPreserved": true,
+    "hashesRewritten": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 210,
+    "englishLiteralAndIdiomatic": {
+      "sentenceCount": 210,
+      "translatedCount": 210,
+      "bothFieldsComplete": true
+    },
+    "extractionBytesWitness": 111139,
+    "extractionBytesOnDisk": 111139
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "npm run people:validate -- --book chenshu --chapter 029",
+    "peopleValidateSummary": "Scoped person data validation passed for chenshu/029: 1 extraction(s), 72 local people, 510 mentions, 566 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book chenshu --chapter 029",
+    "datesVerifyScopedStatus": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "chronologyReportStatus": "research-blocked",
+    "chronologyStaleRelativeToPacket": false,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "auditFindingsCount": 1,
+    "auditAffectedItems": 3
+  },
+  "substantiveFindings": "Staging four-part inputs verified. people:validate passes with 72 people. people:dates:verify returns research-blocked. Zhang Yuanji (p072) collation authority at s0204 correctly retained as undated editorial fact without AD activity interval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-207",
+        "hints-p072",
+        "p072"
+      ],
+      "problem": "Zhang Yuanji is cited only as the authority for a single collation reading in s0204. That source preserves an editorial fact but establishes no personal event or activity date in this chapter.",
+      "action": "Retain the source-specific unresolved collation claim and hint, preserve its sourceDate and editorial fact, and do not infer or restore an AD 1867–1959 activity interval without independently sourced personal-date evidence.",
+      "nativeAuditVerdict": "research-blocked",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 029",
+    "datesVerify": "npm run people:dates:verify -- --book chenshu --chapter 029"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; commit owner-handoff without altering sealed source, extraction, date-audit, or editorial blobs. Host supplies native sealed final review packets."
+}
