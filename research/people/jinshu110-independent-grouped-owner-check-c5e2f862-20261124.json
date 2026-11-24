@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-grouped-repairs-verification",
+  "book": "jinshu",
+  "chapter": "110",
+  "ownerPullRequest": 5462,
+  "ownerCommitVerified": "c5e2f862bd7a3f2bf2b112727cece35860811cca",
+  "ownerReceiptPath": "research/people/jinshu110-owner-dependency-receipt-20261124.json",
+  "ownerBaseCommit": "2bb37206cb2a665e5014779a357f35e22c30c104",
+  "independentEvidencePullRequest": 5465,
+  "verifiedAt": "2026-11-24T01:45:00.000Z",
+  "method": "Read-only packet rebuild from owner extraction bytes at c5e2f862; independent parts 001–021 and owner-handoff unchanged.",
+  "nativeValidation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 110",
+    "result": "PASS",
+    "extractionHash": "sha256:42e41cb7a4805e92026fa8f0504f36908a893ca33039a0a82e46bf9dcbfbce7d"
+  },
+  "receiptGroupsVerified": {
+    "yongheSpine": {
+      "receiptClaimCount": 15,
+      "packetWesternInGroup": 0,
+      "packetUnresolvedInGroup": 13,
+      "verdict": "supported",
+      "anchorWitness": {
+        "sharedPassageId": "sp-s0008-yonghe5-accession",
+        "unitId": "s0008",
+        "chinese": "皝死，永和五年，僭即燕王位，依春秋列國故事稱元年，赦於境內。"
+      },
+      "nativeExampleRepresentation": {
+        "claimId": "claim-132",
+        "shape": {
+          "sourceDate": {
+            "text": "永和五年"
+          },
+          "unresolved": true,
+          "event": "qualitative participation/office; no westernBounds on cited unit"
+        }
+      },
+      "jinshu094Parallel": {
+        "note": "094 certifies era labels with sourceDate.text + qualitative event; Western may appear only as inferred interval with uncertain certainty. Owner c5e2 uses the stricter Jinshu 110 post-handoff form: sourceDate + event + unresolved, no westernBounds until native audit.",
+        "citation": "data/people/extractions/jinshu/094.json claims p003 晉 — sourceDate.text + event \"[External dating, inferred: …]\" with westernInterval, certainty uncertain"
+      }
+    },
+    "shengpingShared": {
+      "receiptClaimCount": 158,
+      "packetWesternInGroup": 0,
+      "packetUnresolvedInGroup": 89,
+      "verdict": "supported",
+      "anchorWitness": {
+        "sharedPassageId": "sp-s0164-shengping1",
+        "unitId": "s0164",
+        "chinese": "升平元年，復立次子暐為皇太子，赦其境內，改元曰光壽。"
+      },
+      "nativeExampleRepresentation": {
+        "claimId": "claim-393",
+        "shape": {
+          "sourceDate": {
+            "text": "升平元年"
+          },
+          "unresolved": true,
+          "event": "office/participation attested without inherited AD 357–360"
+        }
+      },
+      "preservedExplicitYear": {
+        "claimId": "claim-670",
+        "outsideSharedPatchIds": true,
+        "unitId": "s0255",
+        "chinese": "昇平四年，俊死，時年四十二，在位十一年。",
+        "independentPriorVerdict": "supported",
+        "stillHasWesternBounds": true,
+        "note": "Only clause-backed death with Chinese year on primary cite retained Western in packet."
+      }
+    },
+    "offChapterBounds": {
+      "receiptClaimIds": [
+        "claim-678",
+        "claim-771"
+      ],
+      "packetWesternInGroup": 0,
+      "verdict": "supported",
+      "witnesses": [
+        {
+          "claimId": "claim-678",
+          "unitId": "s0264",
+          "chinese": "永嘉之亂"
+        },
+        {
+          "claimId": "claim-771",
+          "unitId": "s0188",
+          "chinese": "郅支之首"
+        }
+      ]
+    },
+    "preservedFrom2bb37206": {
+      "claim-137": "undatedSourceAttestation s0004–s0005",
+      "claim-212": "military s0060,s0071",
+      "claim-213": "seal s0076 先是 unresolved",
+      "sevenHintClears": [
+        "p003",
+        "p140",
+        "p142",
+        "p143",
+        "p161",
+        "p169",
+        "p170"
+      ],
+      "englishRepairs": 15
+    }
+  },
+  "oneDefensiblePath": {
+    "yongheEraGroup": "Treat s0008「永和五年」as the sole spine anchor. All relative spine rows (是時, 是歲, 明年 on downstream units) carry sourceDate.text + qualitative event + unresolved until a native conversion audit certifies AD 349/350. Do not attach westernBounds to units that lack a Chinese regnal year on the cited sentence (independent hold-calendar-conversion / hold-narrative-bounds). Owner c5e2 implements this for receipt-listed spine IDs; extend the same rule to mingnian/inherit buckets below.",
+    "shengpingEraGroup": "Treat s0164「升平元年」as narrative frame only. Strip synthetic inherited AD 357–360 from the 158 shared rows (done). Retain westernBounds only where the cited unit states a Chinese year (昇平四年 death on s0255 → claim-670). Relative 及暐立 inherits stay unresolved or conversion-pending, not off-chapter AD 360 injection.",
+    "offChapterSpeech": "Speech allusions (永嘉之亂, 郅支之首) → unresolved chapter-cite on attestation rows; do not pair unresolved attestation (claim-771) with off-chapter death bounds (claim-501) on the same allusion."
+  },
+  "postDeltaStillUnsupportedDatingClaims": {
+    "definition": "Rows that still assert westernBounds (or AD/BC endpoints) not warranted at stated precision by the Chinese on the cited unit per independent review; not a re-audit of unchanged scope.",
+    "totalPacketRowsWithWesternBounds": 169,
+    "buckets": [
+      {
+        "bucketId": "mingnian-yonghe-synthetic-ad350",
+        "count": 39,
+        "sharedWitness": {
+          "anchorUnit": "s0011",
+          "chinese": "明年，俊率三軍南伐，出自盧龍，次於無終。",
+          "appliedToCites": "Many downstream units (e.g. s0015 及冉閔殺石祗) lack 明年 on the cited sentence."
+        },
+        "claimIds": [
+          "claim-71",
+          "claim-72",
+          "claim-73",
+          "claim-75",
+          "claim-76",
+          "claim-102",
+          "claim-106",
+          "claim-107",
+          "claim-108",
+          "claim-109",
+          "claim-110",
+          "claim-112",
+          "claim-114",
+          "claim-115",
+          "claim-117",
+          "claim-119",
+          "claim-120",
+          "claim-122",
+          "claim-124",
+          "claim-125",
+          "claim-127",
+          "claim-128",
+          "claim-130",
+          "claim-131",
+          "claim-135",
+          "claim-144",
+          "claim-145",
+          "claim-149",
+          "claim-151",
+          "claim-152",
+          "claim-153",
+          "claim-154",
+          "claim-155",
+          "claim-156",
+          "claim-157",
+          "claim-158",
+          "claim-159",
+          "claim-160",
+          "claim-161"
+        ],
+        "independentPriorVerdict": "hold-calendar-conversion (e.g. claim-71) or supported death without Western on unit (e.g. claim-72)",
+        "issue": "westernBounds onOrAfter AD 350 states calendar truth on cites that only carry narrative sequence text.",
+        "nativeExampleBad": {
+          "claimId": "claim-72",
+          "sourceDate": {
+            "text": "及冉閔殺石祗 (narrative after 明年, 永和五年+1)"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 350
+            }
+          }
+        }
+      },
+      {
+        "bucketId": "ye-campaign-ad350-inherit",
+        "count": 112,
+        "sharedWitness": {
+          "sharedPassageId": "sp-s0060-s0071-ye",
+          "unitIds": [
+            "s0060",
+            "s0071"
+          ],
+          "chinese": "閔將蔣幹閉城距守。 … 既而蔣幹率銳卒五千出城挑戰…"
+        },
+        "sampleClaimIds": [
+          "claim-194",
+          "claim-195",
+          "claim-196",
+          "claim-197",
+          "claim-198",
+          "claim-202",
+          "claim-203",
+          "claim-204",
+          "claim-205",
+          "claim-208",
+          "claim-209",
+          "claim-210",
+          "claim-212",
+          "claim-277"
+        ],
+        "independentPriorVerdict": "hold-narrative-bounds / supported-relative-undated",
+        "issue": "Synthetic「undated narrative continuing after AD 350」+ westernBounds; no Chinese year on cited units."
+      },
+      {
+        "bucketId": "yonghe-spine-leak-western",
+        "count": 4,
+        "claimIds": [
+          "claim-98",
+          "claim-136",
+          "claim-162",
+          "claim-163"
+        ],
+        "witnesses": [
+          {
+            "claimId": "claim-136",
+            "unit": "s0008",
+            "chinese": "皝為燕王 … 皝死，永和五年",
+            "western": "onOrBefore AD 349"
+          },
+          {
+            "claimId": "claim-98",
+            "unit": "s0023",
+            "chinese": "去歲",
+            "western": "onOrAfter AD 349"
+          }
+        ],
+        "issue": "Yonghe grouped patch did not include these IDs; Western remains while receipt spine rows were stripped."
+      },
+      {
+        "bucketId": "zhizhi-off-chapter-death-leak",
+        "count": 1,
+        "claimIds": [
+          "claim-501"
+        ],
+        "witness": {
+          "unitId": "s0188",
+          "chinese": "郅支之首",
+          "western": "onOrBefore BC 36"
+        },
+        "sourceDisagreement": "claim-771 attestation on same unit is unresolved; claim-501 death still imports off-chapter BC 36."
+      },
+      {
+        "bucketId": "wei-li-shengping4-inherit",
+        "count": 5,
+        "claimIds": [
+          "claim-757",
+          "claim-758",
+          "claim-759",
+          "claim-769",
+          "claim-770"
+        ],
+        "witness": {
+          "unitId": "s0326",
+          "chinese": "及暐立",
+          "western": "onOrAfter AD 360 from preceding 昇平四年 death chunk"
+        },
+        "issue": "Inherited Western on units without 昇平四年 on cite; independent hold-narrative-bounds."
+      },
+      {
+        "bucketId": "misc-western-seven",
+        "count": 7,
+        "claimIds": [
+          "claim-228",
+          "claim-681",
+          "claim-683",
+          "claim-689",
+          "claim-690",
+          "claim-692",
+          "claim-693"
+        ],
+        "issue": "Outside the two era groups; spot-check before next owner patch."
+      }
+    ],
+    "supportedWesternRetain": {
+      "claimIds": [
+        "claim-670"
+      ],
+      "reason": "昇平四年 explicit on s0255 with 俊死"
+    }
+  },
+  "postDeltaWarrantedSourceFormNoWestern": {
+    "definition": "Interpretable Chinese source-form at warranted precision without asserting Western calendar truth; aligns with Jinshu 094 sourceDate + qualitative event pattern (owner often stricter: unresolved without westernInterval).",
+    "categories": [
+      {
+        "shape": "undatedSourceAttestation",
+        "examples": [
+          "claim-137",
+          "claim-774",
+          "claim-775",
+          "claim-776",
+          "claim-777",
+          "claim-778",
+          "claim-779",
+          "claim-780",
+          "claim-781",
+          "claim-782",
+          "claim-783",
+          "claim-784",
+          "claim-785",
+          "claim-786",
+          "claim-787"
+        ],
+        "witness": {
+          "unitId": "s0004",
+          "chinese": "初，廆常言：「吾積福累仁，子孫當有中原。」"
+        }
+      },
+      {
+        "shape": "sourceDate + unresolved + event",
+        "groupIds": [
+          "yongheSpine-receipt-15",
+          "shengpingShared-receipt-158",
+          "offChapterBounds"
+        ],
+        "examples": [
+          "claim-132",
+          "claim-48",
+          "claim-393",
+          "claim-678",
+          "claim-771",
+          "claim-213"
+        ]
+      },
+      {
+        "shape": "supported death/event clause without Western",
+        "note": "Should match independent supported rows once westernBounds stripped from mingnian bucket (e.g. claim-72 殺石祗 on s0015)."
+      }
+    ]
+  },
+  "realRemainingSourceDisagreements": [
+    {
+      "topic": "Jiang Gan units",
+      "status": "resolved at 2bb37206",
+      "note": "claim-213 seal on s0076 先是 unresolved; claim-212 sortie s0071 — unchanged at c5e2f862."
+    },
+    {
+      "topic": "郅支 Zhizhi s0188",
+      "status": "partial",
+      "rows": {
+        "unresolved": "claim-771",
+        "stillOffChapterWestern": "claim-501"
+      },
+      "defensiblePath": "Both unresolved chapter-cite or event-only without BC 36 on death row."
+    },
+    {
+      "topic": "Yonghe spine coverage",
+      "status": "partial",
+      "rows": {
+        "patched": 15,
+        "leaks": [
+          "claim-136",
+          "claim-98",
+          "claim-162",
+          "claim-163"
+        ]
+      },
+      "defensiblePath": "Add leaks to yongheSpine group treatment (unresolved exact Chinese, no AD)."
+    },
+    {
+      "topic": "AD 350 synthetic inherits",
+      "status": "open",
+      "rows": {
+        "mingnian350": 39,
+        "ad350inherit": 112
+      },
+      "defensiblePath": "Second pass: same as shengpingShared — strip westernBounds, keep sourceDate relative phrase + unresolved until conversion audit or explicit 明年/永和 on cited unit."
+    }
+  ],
+  "verdictOnGroupedRepairs": "supported-with-documented-residuals",
+  "notApproved": [
+    "merge",
+    "native date-audits/jinshu/110.json",
+    "calendar certification of AD 349/350/360"
+  ]
+}

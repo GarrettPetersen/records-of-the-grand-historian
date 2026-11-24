@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-dependency-and-apply-receipt",
+  "book": "jinshu",
+  "chapter": "110",
+  "pullRequest": 5462,
+  "draft": true,
+  "stagingHeadBefore": "60679440f5441b2cda542d922d5792c9363c6792",
+  "independentEvidencePullRequest": 5465,
+  "independentEvidenceCommit": "58c9531efd38d03abec73e9c7a7b3275ca3915ca",
+  "independentEvidenceArtifacts": [
+    "research/people/jinshu110-independent-editorial-decisions-20261123-incomplete.json",
+    "research/people/jinshu110-independent-chronology-review-20261123-incomplete.json",
+    "research/people/jinshu110-independent-review-package-20261123-incomplete.json"
+  ],
+  "ownerAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
+  "independentReviewerAgentId": "bc-53e29e7b-3acd-4386-bdb7-68f17317dbc3",
+  "appliedAt": "2026-11-24T00:20:00.000Z",
+  "approvalStatus": "not-self-approved",
+  "missingBindingsIdentifiedNotInventedAsReviewer": [
+    {
+      "binding": "proposals[].unit",
+      "independentHad": "{ id } only",
+      "hostFilledFrom": "native expanded proposalContracts (kind, blockIndex, collection, itemIndex)"
+    },
+    {
+      "binding": "reviewer.kind",
+      "independentHad": "cursor-cloud",
+      "schemaRequires": "allowed editorial reviewer kind (cursor-agent)",
+      "hostAction": "materialized native decision with kind cursor-agent while preserving independent agentId/name/model/completedAt"
+    },
+    {
+      "binding": "reviewer.runId",
+      "independentHad": "absent",
+      "hostAction": "supplied run-independent-jinshu110-editorial-58c9531e for schema completeness"
+    },
+    {
+      "binding": "editorial claimAdditions/claimRevisions for attestation debt",
+      "independentHad": "empty arrays; chronology left as findings-not-audit",
+      "hostAction": "did not author them as reviewer; consolidated via owner date-repair candidate instead"
+    }
+  ],
+  "english": {
+    "workflow": "native people:apply-editorial / apply-people-translation-repairs",
+    "decisionFile": "data/people/editorial-decisions/jinshu/110.json",
+    "acceptedRepairs": 15,
+    "candidateReviewPrepare": "0 new candidates requiring resolution",
+    "beforeAfterExact": true,
+    "independentChineseWitnessPreserved": true,
+    "units": [
+      "s0044",
+      "s0112",
+      "s0158",
+      "s0171",
+      "s0201",
+      "s0202",
+      "s0204",
+      "s0207",
+      "s0294"
+    ],
+    "postEnglishExtractionHash": "sha256:7b19fced7f5311112e6f2ce8b7eb439023a3fbc6d7d4f2db65401575940be836",
+    "postEnglishSourceHash": "sha256:8144104d4ac1315269785914019693c352b302fa79654cdf7f353c42a21b2beb"
+  },
+  "chronology": {
+    "workflow": "owner applyDateRepairProposal candidate (not native date-audit approval)",
+    "independentPin": {
+      "baseRevision": "60679440f5441b2cda542d922d5792c9363c6792",
+      "extractionHash": "sha256:fdebbc44044759b87c672c5e6d8bec7c93df0188fa2499d7ed00ee88165f983a",
+      "sourceHash": "sha256:8850ae8a534107ac4fbba256d838625563cd2a5339fcd74c861aef8c58dac408",
+      "note": "English apply shifted source/extraction hashes; chronology candidate is sealed to the post-English state."
+    },
+    "inventoryBeforePostEnglish": {
+      "peopleWithoutAttestation": 14,
+      "offChapterBounds": 9,
+      "alreadyUnresolvedEventRows": 5,
+      "appliedRepairs": 15
+    },
+    "inventoryAfter": {
+      "peopleWithoutAttestation": 0,
+      "offChapterBounds": 0,
+      "unresolvedEventRowsOnDebtSet": 14,
+      "undatedAttestationsAdded": 14,
+      "hintRebuilds": 14,
+      "appliedRepairs": 15,
+      "extractionHash": "sha256:3472c2e756711082ea542c531d345566d140c7d5e162972c5be5931bf89bc3a6",
+      "sourceHash": "sha256:8144104d4ac1315269785914019693c352b302fa79654cdf7f353c42a21b2beb"
+    },
+    "missingAttestations": [
+      "p069",
+      "p070",
+      "p100",
+      "p101",
+      "p113",
+      "p138",
+      "p139",
+      "p141",
+      "p155",
+      "p156",
+      "p164",
+      "p165",
+      "p178",
+      "p179"
+    ],
+    "offChapterBoundClaims": [
+      "claim-338",
+      "claim-339",
+      "claim-499",
+      "claim-500",
+      "claim-643",
+      "claim-645",
+      "claim-667",
+      "claim-754",
+      "claim-755"
+    ],
+    "alreadyUnresolvedClaims": [
+      "claim-520",
+      "claim-642",
+      "claim-668",
+      "claim-684",
+      "claim-685"
+    ],
+    "preserved": {
+      "validDatedContextsElsewhere": true,
+      "s0008SpineWesternBearingClaims": 25,
+      "referencedPersonIds": ["p140", "p142", "p179"]
+    }
+  },
+  "validation": {
+    "peopleValidateScoped": "pass",
+    "command": "npm run people:validate -- --book jinshu --chapter 110",
+    "detail": "181 people, 918 mentions, 1168 claims, 15 applied repairs, 0 without attestation"
+  },
+  "remainingIndependentGates": [
+    "fresh independent date audit / record against current extractionHash",
+    "bounded-lookup identity certification",
+    "no owner self-approval of dateAudits/jinshu/110.json"
+  ],
+  "forbiddenActionsObserved": {
+    "freshExtractionWave": false,
+    "syntheticApprovals": false,
+    "validatorOrQueueEdits": false,
+    "merge": false,
+    "globalBuild": false
+  }
+}

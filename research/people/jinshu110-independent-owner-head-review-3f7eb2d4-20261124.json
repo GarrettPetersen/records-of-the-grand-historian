@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-owner-head-review",
+  "book": "jinshu",
+  "chapter": "110",
+  "ownerPullRequest": 5462,
+  "priorIndependentEvidenceCommit": "f5602490f491e7c6fc23ce7e962f308ece6057f6",
+  "ownerHeadCommit": "3f7eb2d43500de6548019363b68d05bd00045797",
+  "ownerBaseCommit": "3f986455966bd966adaac92d2631cc5147f7cbd9",
+  "ownerReceipt": "research/people/jinshu110-owner-westernyear-22-strip-receipt-20261124.json",
+  "reviewedAt": "2026-11-24T04:45:00.000Z",
+  "method": "Read-only extraction diff and packet rebuild at owner head; no owner-tree edits.",
+  "verdictOn22WesternYearStrip": "supported",
+  "exactScopeCounts": {
+    "westernYearRemoved": 22,
+    "idsMatchPriorAudit": true,
+    "ids": [
+      "claim-46", "claim-54", "claim-55", "claim-56", "claim-57", "claim-61", "claim-62",
+      "claim-64", "claim-65", "claim-68", "claim-69", "claim-70",
+      "claim-138", "claim-139", "claim-140", "claim-141", "claim-142", "claim-143",
+      "claim-146", "claim-147", "claim-148", "claim-150"
+    ],
+    "holdContradictionSubsetPrior": 13,
+    "supportedLeakSubsetPrior": 9,
+    "packetWesternYearAfter": 0,
+    "extractionHashes": {
+      "before": "sha256:259077cb42eebd52dbc0e17ba9902c0ce0e67e11867fe1c2c6be68f53ede61b9",
+      "after": "sha256:9f1573e0006d086e7f6d11b6aec72324e0179e22b2ff9d5ba134c37666339a8d"
+    }
+  },
+  "inventoryPreservedVerification": {
+    "ownerPacketItems": 631,
+    "touchedClaimRowsOnly": 22,
+    "westernBoundsRemovals168Unchanged": true,
+    "claim670Unchanged": true,
+    "claim94to96UnchangedThisCommit": true,
+    "peopleValidate": "PASS"
+  },
+  "sourceSupportedStripPatterns": [
+    {
+      "pattern": "是時 / 是歲",
+      "exampleAfter": {
+        "claimId": "claim-46",
+        "sourceDate": { "text": "是時" },
+        "unresolved": true,
+        "witness": { "unitId": "s0009", "primaryChinese": "是時石季龍死，趙、魏大亂" }
+      }
+    },
+    {
+      "pattern": "明年",
+      "exampleAfter": {
+        "claimId": "claim-150",
+        "sourceDate": { "text": "明年" },
+        "unresolved": true,
+        "witness": { "unitId": "s0011", "primaryChinese": "明年，俊率三軍南伐，出自盧龍，次於無終。" }
+      }
+    },
+    {
+      "pattern": "death event-only (supported)",
+      "exampleAfter": {
+        "claimId": "claim-68",
+        "note": "Wang Ta 斬 on s0013; westernYear removed",
+        "witness": { "unitId": "s0013", "primaryChinese": "斬王騰于無終。" }
+      }
+    }
+  ],
+  "fourWesternBlockersEvaluation": {
+    "rule": "Genuinely undated source-supported facts use sourceDate + qualitative event / unresolved / undatedSourceAttestation on the cited unit without off-chapter Western. Clause-backed Chinese regnal years may retain conversion holds until native audit.",
+    "entries": [
+      {
+        "claimId": "claim-670",
+        "predicate": "death",
+        "ownerShape": "westernBounds AD 360 on sourceDate 昇平四年",
+        "independentPriorVerdict": "supported",
+        "primaryChinese": {
+          "unitId": "s0255",
+          "text": "昇平四年，俊死，時年四十二，在位十一年。"
+        },
+        "disposition": "conversion-hold-not-undated",
+        "substantiveContradiction": false,
+        "reason": "Death and regnal year are on the cited unit; AD 360 is conversion output pending native era-table certification, not an undated exemplar case."
+      },
+      {
+        "claimId": "claim-94",
+        "predicate": "attestation",
+        "personId": "p019",
+        "ownerShape": "westernInterval BC 551–479 on 仲尼 (recalled)",
+        "independentPriorVerdict": "supported-relative-undated",
+        "primaryChinese": {
+          "unitId": "s0019",
+          "text": "且用兵殺伐，哲王盛典，湯、武親行誅放，而仲尼美之。"
+        },
+        "disposition": "off-chapter-western-contradiction",
+        "substantiveContradiction": true,
+        "requiredShape": "undatedSourceAttestation or unresolved with sourceDate 仲尼; no westernInterval on chapter cite"
+      },
+      {
+        "claimId": "claim-95",
+        "predicate": "attestation",
+        "personId": "p020",
+        "ownerShape": "westernInterval AD 184–220 on 魏武 (recalled)",
+        "independentPriorVerdict": "supported-relative-undated",
+        "primaryChinese": {
+          "unitId": "s0020",
+          "text": "魏武養于宦官，莫知所出，眾不盈旅，遂能終成大功。"
+        },
+        "disposition": "off-chapter-western-contradiction",
+        "substantiveContradiction": true,
+        "requiredShape": "undatedSourceAttestation or unresolved; speech date is not Cao Cao's lifetime on this unit"
+      },
+      {
+        "claimId": "claim-96",
+        "predicate": "attestation",
+        "personId": "p021",
+        "ownerShape": "westernInterval BC 206–195 on 高祖 (recalled)",
+        "independentPriorVerdict": "hold-calendar-conversion",
+        "primaryChinese": {
+          "unitId": "s0021",
+          "text": "暴胡酷亂，蒼生屠膾，寡君奮劍而誅除之，黎元獲濟，可謂功格皇天，勳侔高祖。"
+        },
+        "disposition": "off-chapter-western-contradiction",
+        "substantiveContradiction": true,
+        "requiredShape": "undatedSourceAttestation on 高祖 allusion; no Han Gaozu reign interval imported from outside the cite"
+      }
+    ],
+    "trueContradictionClaimIds": ["claim-94", "claim-95", "claim-96"],
+    "conversionHoldOnlyClaimIds": ["claim-670"]
+  },
+  "auditSealAfterOwnerHead": {
+    "complete": false,
+    "resolvedSinceF560": [
+      "22 westernYear AD 349/350 inherited rows removed"
+    ],
+    "remainingIncomplete": [
+      "claim-94/95/96 westernInterval off-chapter",
+      "claim-670 conversion certification pending",
+      "data/people/date-audits/jinshu/110.json not published",
+      "181 hint structural holds; 14 frozen exemplar carry-forward"
+    ]
+  },
+  "notApproved": ["merge", "write data/people/date-audits/jinshu/110.json on owner branch"]
+}

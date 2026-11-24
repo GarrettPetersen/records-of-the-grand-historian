@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-remaining-date-groups",
+  "book": "jinshu",
+  "chapter": 110,
+  "ownerCommitReviewed": "2bb37206cb2a665e5014779a357f35e22c30c104",
+  "evidencePullRequest": 5465,
+  "completedAt": "2026-11-24T01:30:00.000Z",
+  "warning": "Post-delta grouping for a future owner patch; independent packet verdicts at #5465 remain authoritative until native audit.",
+  "ownerScopedDeltaComplete": [
+    "claim-137",
+    "claim-213",
+    "seven-unsupported-hints",
+    "frozen-774-787-carry-forward",
+    "collateral-s0216-s0217-s0291"
+  ],
+  "coherentPatchGroups": [
+    {
+      "groupId": "yonghe-spine-hold-calendar-conversion",
+      "sourceForm": "Chinese regnal and relatives on anchor s0008; do not certify packet AD 349/350 until conversion audit",
+      "anchorChinese": {
+        "unitId": "s0008",
+        "text": "皝死，永和五年，僭即燕王位，依春秋列國故事稱元年，赦於境內。"
+      },
+      "relativeClauses": [
+        { "unitId": "s0009", "text": "是時石季龍死，趙、魏大亂" },
+        { "unitId": "s0010", "text": "是歲，穆帝使謁者陳沈拜俊" },
+        { "unitId": "s0011", "text": "明年，俊率三軍南伐，出自盧龍，次於無終。" }
+      ],
+      "independentClaimIds": [
+        "claim-39",
+        "claim-41",
+        "claim-42",
+        "claim-44",
+        "claim-45",
+        "claim-58",
+        "claim-59",
+        "claim-60",
+        "claim-63",
+        "claim-132",
+        "claim-133",
+        "claim-134",
+        "claim-48",
+        "claim-50",
+        "claim-52"
+      ],
+      "proposedOwnerPatchShape": "Retain holds; populate date-audit with conversion table rows, not invented AD on undated units."
+    },
+    {
+      "groupId": "shengping-inherited-hold-narrative-bounds",
+      "sourceForm": "升平元年 on s0164; later attestations inherit AD 357–360 without per-unit Chinese year",
+      "anchorChinese": {
+        "unitId": "s0164",
+        "text": "升平元年，復立次子暐為皇太子，赦其境內，改元曰光壽。"
+      },
+      "sampleInherited": [
+        { "unitId": "s0239", "text": "遣其御史中尉陽約數其殘酷之罪" },
+        { "unitId": "s0255", "text": "昇平四年，俊死，時年四十二，在位十一年。" }
+      ],
+      "independentClaimIdsNote": "247 hold-narrative-bounds IDs listed in jinshu110-independent-owner-handoff-20261124.json calendarAndBoundsHolds.holdNarrativeBounds",
+      "proposedOwnerPatchShape": "Either chapter-linked Chinese bounds only, or leave unresolved until clause-level years appear."
+    },
+    {
+      "groupId": "genuinely-undated-exemplar-retained",
+      "sourceForm": "undatedSourceAttestation only; no Western on speech units",
+      "chineseByUnit": {
+        "s0112": "漢以蕭、曹之功，有殊群辟，故劍履上殿，入朝不趨。",
+        "s0216": "宴群臣于蒲池…昔魏武追痛倉舒，孫權悼登無已",
+        "s0247": "吾欲遠追宋宣，以社稷屬汝。",
+        "s0251": "若汝行周公之事，吾復何憂！",
+        "s0270": "故桓文有甯復一匡之功",
+        "s0321": "臣聞豫讓報智伯仇，稱于前史。"
+      },
+      "claimIds": [
+        "claim-774",
+        "claim-775",
+        "claim-776",
+        "claim-777",
+        "claim-778",
+        "claim-779",
+        "claim-780",
+        "claim-781",
+        "claim-782",
+        "claim-783",
+        "claim-784",
+        "claim-785",
+        "claim-786",
+        "claim-787",
+        "claim-336",
+        "claim-337",
+        "claim-338",
+        "claim-339",
+        "claim-644",
+        "claim-646",
+        "claim-772",
+        "claim-773"
+      ],
+      "proposedOwnerPatchShape": "Already applied at 2bb37206 for frozen+b s0216; do not reintroduce off-chapter Western deaths."
+    },
+    {
+      "groupId": "off-chapter-western-still-held",
+      "sourceForm": "Allusive off-chapter bounds not certified from Jinshu 110 cite",
+      "independentClaimIds": [
+        "claim-771",
+        "claim-678"
+      ],
+      "chinesePoints": [
+        {
+          "unitId": "s0188",
+          "text": "郅支之首",
+          "claimId": "claim-771",
+          "note": "Packet BC 36 off-chapter"
+        },
+        {
+          "unitId": "s0264",
+          "text": "永嘉之亂",
+          "claimId": "claim-678",
+          "note": "Owner fixed p169 event; packet row for p158 may still inherit Yongjia bound"
+        }
+      ],
+      "proposedOwnerPatchShape": "Unresolved chapter-cite or strip BC/AD from attestation rows."
+    },
+    {
+      "groupId": "supported-clause-backed-retain",
+      "sourceForm": "Explicit 斬/死/薨/殺 on unit; keep event, hold only inherited AD",
+      "sampleClaimIds": ["claim-670", "claim-68", "claim-119", "claim-742", "claim-759"],
+      "anchorChineseExamples": [
+        { "unitId": "s0255", "text": "昇平四年，俊死" },
+        { "unitId": "s0305", "text": "固辭而歸，死於家。" },
+        { "unitId": "s0328", "text": "績遂憂死。" }
+      ],
+      "proposedOwnerPatchShape": "No change; native audit may add 升平四年 conversion without removing death facts."
+    }
+  ],
+  "hintsPendingConversion": {
+    "count": 137,
+    "spanVerdict": "retained-pending-conversion",
+    "reference": "activeDateHintsAudit.bySpanVerdict in jinshu110-independent-owner-handoff-20261124.json",
+    "note": "Not supported solely because evidence[] is empty; each person has claim-* corroboration."
+  }
+}
