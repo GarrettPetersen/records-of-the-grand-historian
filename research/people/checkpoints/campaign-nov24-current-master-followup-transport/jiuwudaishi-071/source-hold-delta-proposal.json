@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "jiuwudaishi/071",
+  "ownerAgentId": "bc-903d3892-ff92-4352-9793-5f42d1111401",
+  "provenance": {
+    "ownerBranch": "cursor/jiuwudaishi-071-followup-owner-1401",
+    "ownerHead": "d1f7d9539f56b200b87a895444fcd02e1100dcd3",
+    "reviewHead": "b10f1961f25883581b947dfb4d7245ed67d98865",
+    "reviewerAgentId": "bc-3ddb96dd-e421-49ca-b37a-3650f54a7c06",
+    "pullRequest": 5613,
+    "independentReviewParts": [
+      "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-071/independent-identity-report-part-003.json"
+    ]
+  },
+  "sealedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/071.json",
+      "sha256": "sha256:39b1e33e3e4c793fa77a343724cc3fb9deb8a5c31ddc43cf38266fc6fb4729cd",
+      "gitBlob": "3569dbc221c680e9cad6ce581f81afc5ba78cd4b"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/071.json",
+      "sha256": "sha256:8c8891346a4f7e420872cc279bff29e1149263956cefb2743a1f46f070b60323",
+      "gitBlob": "5623c14668d6e4bdcb29dc1a2d0d337d7c46c80b"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/071.json",
+      "sha256": "sha256:a965a170eee37cb6820b4f3a1227acdc1c359590a0038ee51e6a38c8edc3803c",
+      "gitBlob": "9c32366068699e58b488058825c7bc60ce5722f9"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/071.json",
+      "sha256": "sha256:58b7f7d5bfead3527dc14edbc09c1582ff5cce295833556d9ed8218244f9073c",
+      "gitBlob": "6d303ba1afd34921399a7257804ea6ee9c3b4c82"
+    }
+  },
+  "holdDeltas": [
+    {
+      "caseId": "sha256:b14cec00eb9698a31debf60ecdb9bccce32a3095488242928df0705602ea3dfa",
+      "independentVerdict": "hold",
+      "canonicalPersonId": "per_FWWTK5VTTKGKHBTR3Y2Q",
+      "localId": "jiuwudaishi:071:p076",
+      "diagnosis": "The extraction mints a named local person Father of Xu Ji (許寂之父) from strongly-inferred kinship on jiuwudaishi:071:s0145, but that unit’s primary Chinese names only grandfather Xu Mi (祖秘), not a father or 許寂. English at s0145 likewise reads “His grandfather Mi was renowned in Kuaiji.” The owner retain-proposal wrongly cited 許寂 on s0144, which is a different unit and does not witness this intermediary. Certifying canonical membership would assert a quotable father where the source supports only grandfather Mi between the attested lines.",
+      "sourceWitness": {
+        "book": "jiuwudaishi",
+        "chapter": "071",
+        "unitId": "s0145",
+        "zh": "祖秘，名聞會稽。",
+        "enLiteral": "His grandfather Mi was famed in Kuaiji.",
+        "enIdiomatic": "His grandfather Mi was renowned in Kuaiji."
+      },
+      "ownerDispositionError": "owner-evidence.json retain-proposal used quote 許寂 on unit s0144 for p076; independent review requires witness on s0145 where 許寂之父 never appears.",
+      "operations": [
+        {
+          "op": "remove-person",
+          "id": "p076",
+          "beforeName": [
+            "Father of Xu Ji",
+            "許寂之父",
+            null
+          ],
+          "reason": "No primary Chinese or English identity surface for a named father on s0145; kinship is entailed only and must not be a certifiable local person."
+        },
+        {
+          "op": "strip-related",
+          "id": "p061",
+          "removed": [
+            "p076"
+          ],
+          "reason": "Drop fabricated paternal intermediary from Xu Ji related list; keep p062 grandfather link."
+        },
+        {
+          "op": "strip-related",
+          "id": "p062",
+          "removed": [
+            "p076"
+          ],
+          "reason": "Grandfather–father chain on s0145 does not name the intervening parent."
+        },
+        {
+          "op": "remove-claim-target",
+          "subject": "p062",
+          "predicate": "family-relationship",
+          "personId": "p076",
+          "relation": "parent-of",
+          "evidenceUnit": "s0145",
+          "beforeSummary": "p062 parent-of p076 with kinshipTerm 祖 on s0145",
+          "after": "removed"
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "family-relationship",
+          "reason": "All p076 relationship claims retracted with person removal."
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "name",
+          "before": {
+            "kind": "descriptive-kinship",
+            "en": "Father of Xu Ji",
+            "zh": "許寂之父"
+          },
+          "certainty": "strongly-inferred",
+          "evidence": [
+            "s0145"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "sex",
+          "evidence": [
+            "s0145"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "attestation",
+          "beforeSourceDateText": "祖秘，名聞會稽。",
+          "certainty": "strongly-inferred",
+          "evidence": [
+            "s0145"
+          ],
+          "reason": "Interval was inferred for the removed father, not for attested grandfather Mi."
+        }
+      ],
+      "translationRepairs": [],
+      "identityDependencies": {
+        "preserveLocalIds": [
+          "jiuwudaishi:071:p061",
+          "jiuwudaishi:071:p062"
+        ],
+        "preserveCanonicalRecords": "Do not split or re-merge accepted Xu Ji and Xu Mi dossiers; only remove the unsupported p076 local vertex.",
+        "unaffectedCaseIds": "All other transport review cases and owner retain-proposals unchanged."
+      },
+      "chronologyImpact": "Sealed date-audit entries for p076 and hints-p076 become stale after extraction apply; host should reconcile without altering approved p061/p062 chronology derived from their own units.",
+      "holdRequiredUntilApply": true,
+      "holdRequiredAfterApply": false,
+      "rationaleAfterApply": "With p076 removed, no chapter-local record certifies a named father of Xu Ji; grandfather Mi remains on s0145 and Xu Ji on later units. Independent review can close the concrete attribution hold without inventing a father witness."
+    }
+  ],
+  "unaffectedRecords": "No changes to canonical source JSON, editorial decisions, or unrelated extraction people; proposal does not approve identity or alter chronology files on this commit.",
+  "validation": {
+    "preApplyCommand": "npm run people:validate -- --book jiuwudaishi --chapter 071",
+    "preApplyPassed": true,
+    "preApplySummary": "Scoped person data validation passed on pinned extraction (76 local people); proposal artifact only.",
+    "postApplyNote": "Host must re-run scoped validation and identity review after independent application of operations."
+  }
+}
