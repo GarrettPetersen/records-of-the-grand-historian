@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Obtain narrow independent approval for 030 duplicate-witness repair, merge 115 only after exact proof transfer, and collect 083 native validation.",
+  "nextAction": "Complete the 030 localized repair using the approval and retained proof components. Keep advancing 041 and 110 and expand distinct near-ready scopes. Stage eligible chapters, release at threshold or close.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:53:34.143Z",
+  "lastCheckedAt": "2026-11-24T00:54:14.037Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -569,7 +569,7 @@
       "reviewPR": 5447,
       "revision": "7a7c5869773c0ad213a4b8ba3c498ffaf2cbe537",
       "verifiedScopedFiles": 3,
-      "status": "substantive-review-complete-native-canonical-recording-pending",
+      "status": "merged-to-staging",
       "productionInputParity": {
         "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "3bf625e1ebe61fcce00e91062f45aa7bd5ef4efd",
@@ -786,7 +786,7 @@
       "originalPR": 5405,
       "reviewPR": 5474,
       "revision": "2ccc2b14cfd8ca498bc3a8b8a1f38d5b05c8db21",
-      "status": "native-identity-approved-awaiting-stage",
+      "status": "merged-to-staging",
       "ownerAgentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
       "verifiedScopedFiles": 6,
       "preimages": {
@@ -857,7 +857,7 @@
     "stagingHasCampaignApprovals": true,
     "reason": "031 is approved on staging. Build a master-based release batch to preserve five current published Jinshu chapters absent or stale in the staging baseline.",
     "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-    "staging": "42ed000746cdadf6ec57d79d9710c1c7f14292c8",
+    "staging": "2accc978bc855ad74740c04534a09e9f3009038b",
     "stagingAheadBy": 1596,
     "stagingBehindBy": 43,
     "verifiedAt": "2026-11-23T17:15:38.145Z",
@@ -877,6 +877,7 @@
     "releasePreparation": "Once chapters are approved and merged to staging, assemble the production batch from current master with only the approved chapter deltas and required dependencies. Verify retained releases with the full master gate. Keep shared staging and its history.",
     "campaignApprovedOnStaging": [
       "jinshu/031",
+      "jinshu/083",
       "jinshu/094",
       "jinshu/115"
     ],
@@ -1027,7 +1028,7 @@
     },
     "releaseDataPreflight": {
       "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-      "stage": "a863dc2f35f5b952f843a72c646b6df347fb65d4",
+      "stage": "2accc978bc855ad74740c04534a09e9f3009038b",
       "chapters": [
         {
           "chapter": "jinshu/115",
@@ -1128,6 +1129,51 @@
               "before": null,
               "staged": "423ae0a7b42398b7fd1ab929646698bbf3f4697c",
               "after": "423ae0a7b42398b7fd1ab929646698bbf3f4697c",
+              "master": null
+            }
+          ],
+          "preimageDifferences": []
+        },
+        {
+          "chapter": "jinshu/083",
+          "prNumber": 5474,
+          "merge": "2accc978bc855ad74740c04534a09e9f3009038b",
+          "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+          "stage": "2accc978bc855ad74740c04534a09e9f3009038b",
+          "files": [
+            {
+              "path": "data/jinshu/083.json",
+              "before": "cfb683764d604f36fe4ad85d0e1d38538392f835",
+              "staged": "8ae0c514041a0c66c381c1348619a375d3a7111a",
+              "after": "8ae0c514041a0c66c381c1348619a375d3a7111a",
+              "master": "cfb683764d604f36fe4ad85d0e1d38538392f835"
+            },
+            {
+              "path": "data/people/date-audits/jinshu/083.json",
+              "before": null,
+              "staged": "241760a31ae652342588b71996c4a49cf5be911c",
+              "after": "241760a31ae652342588b71996c4a49cf5be911c",
+              "master": null
+            },
+            {
+              "path": "data/people/editorial-decisions/jinshu/083.json",
+              "before": "6442c115d66a54fa1b36222ad64e5b981c75bcf2",
+              "staged": "986174a3c89ac8504844bc6fcdd883c770fec3b5",
+              "after": "986174a3c89ac8504844bc6fcdd883c770fec3b5",
+              "master": "6442c115d66a54fa1b36222ad64e5b981c75bcf2"
+            },
+            {
+              "path": "data/people/extractions/jinshu/083.json",
+              "before": "d8d363c2eacf50d00d64a0ca1551b7d6fbb8e1ff",
+              "staged": "7243f7d91bbac59276e6c9a7a5a9e4b0e242e95e",
+              "after": "7243f7d91bbac59276e6c9a7a5a9e4b0e242e95e",
+              "master": "d8d363c2eacf50d00d64a0ca1551b7d6fbb8e1ff"
+            },
+            {
+              "path": "data/people/identity-reviews/jinshu/083.json",
+              "before": null,
+              "staged": "a7a8e7bce5f215990760f1f71f2865bdc9e70838",
+              "after": "a7a8e7bce5f215990760f1f71f2865bdc9e70838",
               "master": null
             }
           ],
@@ -3160,11 +3206,14 @@
             "reviewedCases": 164
           },
           "transfer": {
-            "status": "in_progress",
+            "status": "merged-to-staging",
             "chapterPR": 5474,
             "reviewedCases": 164,
             "recordingRunId": 45299828350,
-            "runId": 45300710843
+            "runId": 45300710843,
+            "approvedHead": "8d0d85b887d99d4b8ebcc2439be72b434dbdaf2b",
+            "merge": "2accc978bc855ad74740c04534a09e9f3009038b",
+            "certificateBlob": "a7a8e7bce5f215990760f1f71f2865bdc9e70838"
           }
         }
       },
