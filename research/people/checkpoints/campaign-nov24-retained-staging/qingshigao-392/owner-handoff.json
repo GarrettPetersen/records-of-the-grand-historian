@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "392"
+  },
+  "ownerAgentId": "bc-c9732475-9848-45bd-8350-14a7d71a4bd3",
+  "workerId": "cursor-nov24-retained-staging-w13-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "eca314024da0d200d8f244ce4345afb43285250c374b7e8b8d90db540effa817",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-392-a4bd3",
+  "extractionBytes": 90968,
+  "inputBlobWitness": {
+    "source": "3ee7ef1e1dd4c9cfe1b55ab6f20a6ecbc2f89961",
+    "extraction": "798aa883539d5febf8a8c10e2fffd60e3dbc1b08",
+    "editorial": "abaff8897d0ab535b8ff729115086f23f04cec4a"
+  },
+  "sealedInputs": {
+    "source": "sha256:3fa9cde1fefe803b137cc524260060d5cf1a888c43037a43299ee709ee353140",
+    "extraction": "sha256:47a9dcd23c9ffcb652f760b2ef95183f72a7d877c8fe8e8e686dbb34cee20441",
+    "editorial": "sha256:9a1b8d2805f84fb38c29a522e21912d7572ece73251ee0447e8f6a73b55df759"
+  },
+  "workOrder": {
+    "promptVersion": 7,
+    "people": 57,
+    "claims": 324,
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:47a9dcd23c9ffcb652f760b2ef95183f72a7d877c8fe8e8e686dbb34cee20441"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 392 Biographies 179: Sai Shang A, Ne Er Jing E",
+    "chineseUnits": 119,
+    "translatedCount": 119,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "editorialDecisionCount": 1,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "promptVersion": 7,
+    "noExtractionRerun": true,
+    "noEditorialSelfApproval": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-392/date-packet.json",
+    "sha256": "sha256:6fef499da014b6e48b5038e0f7e065ab2afe42192b514196f482ba2c338a583e",
+    "sourceHash": "sha256:4182625c3ec15862039e8e08405ad97fd877eb392acc2caff66d7f87ce33db91",
+    "extractionHash": "sha256:49c1dd085c28ebb0f143fdcf0f43014bd3c8684a43ef68d4a4ea7ed7fcecbab3",
+    "itemCount": 206,
+    "peopleCount": 57,
+    "unitCount": 119,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 392 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-392/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 392",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/392: 1 extraction(s), 57 local people, 250 mentions, 485 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 392",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false,
+      "missingGate": "independent-native-date-audit"
+    },
+    "chronologyStatus": "candidate-packet-sealed",
+    "notIndependentApproval": true
+  },
+  "remainingDependencies": {
+    "independentDateAudit": {
+      "required": true,
+      "reason": "No data/people/date-audits record; people:dates:verify returns un-audited.",
+      "packetSha256": "sha256:6fef499da014b6e48b5038e0f7e065ab2afe42192b514196f482ba2c338a583e",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 392",
+      "auditRunHint": "npm run people:dates:run -- --book qingshigao --chapter 392 --run --model <reviewer-model>"
+    },
+    "independentChapterIdentityReview": {
+      "required": true,
+      "reason": "Canonical identity dossier review is separate from this owner pass."
+    }
+  },
+  "distinctHolds": [],
+  "substantiveFindings": "Pinned git blob witnesses on staging 20b8d0e3 match work-order inputs. Full source read: 119 Chinese units with paired literal and idiomatic English; accepted promptVersion 7 extraction (57 people, work-order claims 324) and applied editorial decisions retained unchanged. people:validate passes scoped. Native date packet sealed at sha256:6fef499da014b6e48b5038e0f7e065ab2afe42192b514196f482ba2c338a583e; chronology is candidate closure only. No definite English omission, source contradiction, or extraction repair found in this owner pass; no owner-authored date repairs.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 392",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 392",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 392 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-392/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs and extraction unchanged; independent native date audit still required."
+}

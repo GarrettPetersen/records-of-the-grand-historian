@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "283"
+  },
+  "ownerAgentId": "bc-c9732475-9848-45bd-8350-14a7d71a4bd3",
+  "workerId": "cursor-nov24-retained-staging-w13-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "eca314024da0d200d8f244ce4345afb43285250c374b7e8b8d90db540effa817",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-283-a4bd3",
+  "extractionBytes": 91118,
+  "inputBlobWitness": {
+    "source": "e7f063b19a7eb977dd8a91718ea3f7aa7ea5c9dd",
+    "extraction": "55243be302fb4076169a60a147b3c0bda6d19fd5",
+    "editorial": "f9eb668de6c971d20d253f31ea6b91fce6fa643d"
+  },
+  "sealedInputs": {
+    "source": "sha256:60aff8eb36e46c884d484d4efc07760997d68c14e45716d9710b82a72ceed329",
+    "extraction": "sha256:efe47222e1b201a27840d2264eb5fbc7a68b77e91120ea092116641288cd63ae",
+    "editorial": "sha256:dc2d1c729e75200ee404d62c30ceccf1f660223fa04da4c3d854b5a49d9c6096"
+  },
+  "workOrder": {
+    "promptVersion": 7,
+    "people": 60,
+    "claims": 193,
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:efe47222e1b201a27840d2264eb5fbc7a68b77e91120ea092116641288cd63ae"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 283 Biographies 70: Jue Luo Wu Mo Ne, Shu Lan, Tu Li Chen, He Guozong",
+    "chineseUnits": 234,
+    "translatedCount": 234,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "editorialDecisionCount": 8,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "promptVersion": 7,
+    "noExtractionRerun": true,
+    "noEditorialSelfApproval": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-283/date-packet.json",
+    "sha256": "sha256:55f0b46bcea8d46b5175c7cfe425b51d81c41512e520e3e20788d864a686d364",
+    "sourceHash": "sha256:536210879a94de0c141c46d4ca4224fde791d4da66dc8081a2c0f4a5e6e15f8d",
+    "extractionHash": "sha256:99cda3f687da75608973a679459a059e8ce416ddccfa62119a7efc1cc438c7e3",
+    "itemCount": 174,
+    "peopleCount": 60,
+    "unitCount": 235,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 283 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-283/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 283",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/283: 1 extraction(s), 60 local people, 277 mentions, 368 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 283",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false,
+      "missingGate": "independent-native-date-audit"
+    },
+    "chronologyStatus": "candidate-packet-sealed",
+    "notIndependentApproval": true
+  },
+  "remainingDependencies": {
+    "independentDateAudit": {
+      "required": true,
+      "reason": "No data/people/date-audits record; people:dates:verify returns un-audited.",
+      "packetSha256": "sha256:55f0b46bcea8d46b5175c7cfe425b51d81c41512e520e3e20788d864a686d364",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 283",
+      "auditRunHint": "npm run people:dates:run -- --book qingshigao --chapter 283 --run --model <reviewer-model>"
+    },
+    "independentChapterIdentityReview": {
+      "required": true,
+      "reason": "Canonical identity dossier review is separate from this owner pass."
+    }
+  },
+  "distinctHolds": [],
+  "substantiveFindings": "Pinned git blob witnesses on staging 20b8d0e3 match work-order inputs. Full source read: 234 Chinese units with paired literal and idiomatic English; accepted promptVersion 7 extraction (60 people, work-order claims 193) and applied editorial decisions retained unchanged. people:validate passes scoped. Native date packet sealed at sha256:55f0b46bcea8d46b5175c7cfe425b51d81c41512e520e3e20788d864a686d364; chronology is candidate closure only. No definite English omission, source contradiction, or extraction repair found in this owner pass; no owner-authored date repairs.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentDateApprovalIssued": false,
+  "independentIdentityApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 283",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 283",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 283 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-283/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs and extraction unchanged; independent native date audit still required."
+}
