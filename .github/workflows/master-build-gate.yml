@@ -5,13 +5,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && endsWith(inputs.chapter, '-certify') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -416,7 +416,7 @@ jobs:
           console.log(JSON.stringify({sourceRevision:receipt.sourceRevision,authority:'Mechanical witness candidates only. Independent identity disposition required.',cases:audit},null,2));
           JS
   native-certificate:
-    if: endsWith(inputs.chapter, '-certify')
+    if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-review-check')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -471,28 +471,60 @@ jobs:
           fs.writeFileSync(process.env.RUNNER_TEMP+'/campaign-pins.json',JSON.stringify({scope,revision,actualAgentId,parts,packetRun:packet.runId,packetArtifactId:packet.artifactId,registryArtifactId:registryId}),{flag:'wx'});
           fs.appendFileSync(process.env.GITHUB_OUTPUT,Object.entries({revision,packet_run:packet.runId,packet_name:packetName,registry_run:registryRun,registry_name:registryName,chapter}).map(([k,v])=>k+'='+v+'\n').join(''));
           JS
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.pins.outputs.revision }}
-          persist-credentials: false
-          fetch-depth: 1
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-      - run: npm install --no-audit --no-fund
       - uses: actions/download-artifact@v4
         with:
           name: ${{ steps.pins.outputs.packet_name }}
           run-id: ${{ steps.pins.outputs.packet_run }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/native-identity
+      - name: Check exact authored decisions against sealed dossier constraints
+        run: |
+          node <<'JS'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const {execFileSync}=require('node:child_process');
+          const {createHash}=require('node:crypto');
+          const temp=process.env.RUNNER_TEMP;
+          const pins=JSON.parse(fs.readFileSync(temp+'/campaign-pins.json'));
+          const packet=JSON.parse(fs.readFileSync(temp+'/native-identity/source-review-packet.json'));
+          const cases=new Map(packet.plan.cases.map(item=>[item.id,item]));
+          const mismatches=[];
+          for(const part of pins.parts){
+            const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+part.path+'?ref='+part.commit],{maxBuffer:2e6});
+            assert.equal(createHash('sha256').update(raw).digest('hex'),part.reportSha256);
+            const payload=JSON.parse(raw);
+            const rows=(payload.requiredReport??payload).reviews;
+            for(const row of rows){
+              const item=cases.get(row.caseId);
+              assert(item,'Unknown identity case');
+              if(row.unresolvedIdentity||!(item.proposal.unresolvedIdentity||item.retrieval.overflow||item.retrieval.missingBlockingName))continue;
+              mismatches.push({part:part.part,caseId:item.id,localPeople:item.localPeople,overflow:item.retrieval.overflow,missingBlockingName:item.retrieval.missingBlockingName,candidateCount:item.candidateDossiers.length,reason:row.reason});
+            }
+          }
+          console.log(JSON.stringify({scope:pins.scope,mismatches},null,2));
+          assert.equal(mismatches.length,0,'Independent reviewer must resolve the listed uncertainty disposition conflicts');
+          JS
+      - uses: actions/checkout@v4
+        if: endsWith(inputs.chapter, '-certify')
+        with:
+          ref: ${{ steps.pins.outputs.revision }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        if: endsWith(inputs.chapter, '-certify')
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+        if: endsWith(inputs.chapter, '-certify')
       - uses: actions/download-artifact@v4
+        if: endsWith(inputs.chapter, '-certify')
         with:
           name: ${{ steps.pins.outputs.registry_name }}
           run-id: ${{ steps.pins.outputs.registry_run }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/registry-archive
       - name: Reproduce exact capture, record identity, and validate chapter
+        if: endsWith(inputs.chapter, '-certify')
         env:
           CHAPTER: ${{ steps.pins.outputs.chapter }}
           REVISION: ${{ steps.pins.outputs.revision }}
@@ -569,6 +601,7 @@ jobs:
           cp "$RUNNER_TEMP/campaign-pins.json" "$RUNNER_TEMP/recorded/campaign-pins.json"
           (cd "$RUNNER_TEMP/recorded" && sha256sum identity-proof.json recording-receipt.json scoped-validation.txt campaign-pins.json > SHA256SUMS)
       - uses: actions/upload-artifact@v4
+        if: endsWith(inputs.chapter, '-certify')
         with:
           name: jinshu-${{ steps.pins.outputs.chapter }}-recorded-canonical-identity
           path: ${{ runner.temp }}/recorded/
@@ -658,7 +691,7 @@ jobs:
               files.push({path:'data/people/date-audit-history/jinshu/'+chapter+'/'+archive+'.json',sha:before.sha});
             }
           }
-          const proof=api('POST','/git/blobs',{encoding:'base64',content:fs.readFileSync('jinshu-'+chapter+'-identity-proof.json').toString('base64')});
+          const proof=api('POST','/git/blobs',{encoding:'base64',content:fs.readFileSync('identity-proof.json').toString('base64')});
           files.push({path:'data/people/identity-reviews/jinshu/'+chapter+'.json',sha:proof.sha});
           const original=api('GET','/git/commits/'+owner);
           const tree=api('POST','/git/trees',{base_tree:original.tree.sha,tree:files.map(file=>({...file,mode:'100644',type:'blob'}))});
