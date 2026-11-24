@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": { "book": "jiuwudaishi", "chapter": "004" },
+  "ownerAgentId": "bc-0e48d1f5-a248-4aeb-b767-52dabf1dcab9",
+  "workerId": "cursor-nov24-retained-staging-w5-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "597b278cbbd00fddce2949ee1ddb691a96dbb0f60307a142361ac4cf1da1602e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-004-dcab9",
+  "extractionBytes": 257379,
+  "inputBlobWitness": {
+    "source": "7f724022cbca985fd594e7c3c90971750b4f211b",
+    "extraction": "9ff59ed79d9d9bb0e517e2d0b055933f224a812c",
+    "dateAudit": "24787b76a88253d9512165e86df60c26f3f104d9",
+    "editorial": "6a286a4a93c718c583188ab3fce98979439d7aa1"
+  },
+  "sealedInputs": {
+    "source": "sha256:e019716821e3097c9dcc339e43f1910e57d5b7a7ac110e47e1f5401206800125",
+    "extraction": "sha256:b71aefe9304a01924a6f2e785b0f2de72127e99fac2f2b6ecd2243a85854710a",
+    "dateAudit": "sha256:3a58cdc25b5fef3c4ded09860782cdea11b4d520e3652bf5e92137b5be38ad6e",
+    "editorial": "sha256:6d0373bbde64507135478904b333d0057321739992a327594cc9277169b94f78"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 253,
+    "translatedCount": 253,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 004",
+    "summary": "Scoped person data validation passed for jiuwudaishi/004: 1 extraction(s), 80 local people, 299 mentions, 1235 claims, 0 proposed repair(s), 29 applied repair(s), 29 editorial decision(s), 1 claim retraction(s), 8 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 2 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 004",
+      "exitCode": 0,
+      "status": "research-blocked",
+      "auditReportSha256": "sha256:3a58cdc25b5fef3c4ded09860782cdea11b4d520e3652bf5e92137b5be38ad6e",
+      "workOrderAuditSha256Verified": true,
+      "findings": 1,
+      "affectedItems": 2
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Chapter research-blocked solely because Wang Jue’s former offices cannot be dated from this source.",
+    "editorialDecisionCount": 29,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Witness-verified staging inputs. Full chapter read confirms Wang Jue (p074) attestation, offices, killing at Xiangyang, and AD 908 posthumous honor are encoded per source with explicit unresolvedReason on undated offices; Wang Qiu (p076) remains undated. Independent final date review bytes preserved at research-blocked with one documented finding covering claim-748 and p074. No concrete source or extraction change in this pass; no new chronology inferred from the posthumous reception.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": ["claim-748", "p074"],
+      "verdict": "research-blocked",
+      "problem": "The notice 「玨，故河陽將，累以軍功為郡守，主留事於襄陽，為小將王求所殺」 attests Wang Jue’s former offices and death but gives no calendar-bearing date. The separate eighth-month AD 908 posthumous grant is a later reception and does not date the offices or killing.",
+      "action": "Retain claim-748 and person p074 as a research hold pending independently sourced chronology. Do not restore an AD 907–908 life interval, and do not borrow the posthumous reception date for Wang Jue’s offices or Wang Qiu’s activity.",
+      "evidenceUnits": ["s0240"],
+      "clauseCitations": [
+        { "unit": "s0240", "quote": "玨，故河陽將，累以軍功為郡守，主留事於襄陽，為小將王求所殺。" }
+      ],
+      "preservedFromNativeAudit": true,
+      "ownerChronologyRepairAuthored": false
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; no sealed input edits."
+}
