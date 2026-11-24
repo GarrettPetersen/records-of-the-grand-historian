@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "030"
+  },
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "idempotencyKey": "537a607b878cb1183defd298f03781516f7cd3af0dd6e62cc5b67fdbf32c4972",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "branch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-030-d91335",
+  "observedBlocker": "Actual extractor identity required for every chunk",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/030.json",
+      "gitBlob": "e218e691a0a7c999b408f64bac528f05e454dbdc",
+      "contentSha256": "sha256:47fea908a1cb785e854e345e1496590b3d24f71c30b43e2eb9aff77d29ac2118"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/030.json",
+      "gitBlob": "aced0573b2490f7d5d0aa46e6ccce06cb7e2c640",
+      "contentSha256": "sha256:563e472b9a2a8d7826a1f2599fa5563da790d065f92b9d11ee9dece8b3468b90"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/030.json",
+      "gitBlob": "697cc734d0d44b651720f26cb24bc928d642aa5f",
+      "contentSha256": "sha256:40724e5ec351116c2240f2545c52f25b6ea9be70d9db0c96616ed6b95659e43b"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/030.json",
+      "gitBlob": "7a8f85c8ac110bf9fa95b4a794ef2fc5ffd24dd4",
+      "contentSha256": "sha256:99b4c97468bb48438bb95d3e2858ead91be319523ce53702226013c719991809"
+    }
+  },
+  "testedRecoveryFindings": {
+    "missingChunkAgentIds": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005",
+      "006"
+    ],
+    "runAgentId": null,
+    "historicalQueueLedgerCommit": "a26341f053",
+    "queueClaimKey": "jiuwudaishi/030",
+    "historicalWorker": "grokbot-24",
+    "chapterFingerprint": "sha256:e3dbe56ecce0bae0e719a201455c4ebb6ef26bd6ab3805a857bf089e7f3f5311",
+    "chapterFingerprintVerified": true,
+    "promotionPullRequest": 3914,
+    "promotionCommit": "2b72d8ad0ba35ccbb5b5dc0bfec9a9a57dbd5625",
+    "promotionFileSha256": "sha256:0c009eb76787a15805f9b45c8ad794f1aef69d14d8fe1ec295c4c56bb86749e0",
+    "promotionJsonHash": "sha256:af5a05825c537441b99b0ee885589763c48101319b1402379f370dd48399d0ee",
+    "currentJsonHash": "sha256:563e472b9a2a8d7826a1f2599fa5563da790d065f92b9d11ee9dece8b3468b90",
+    "chunkRangesVerifiedAgainstPromotion": true,
+    "queueNoteAttachmentSha256": "435ad33ac5fee63d72ed3c3ce8c29c7657a7b84759083124f1916e6baa2600b9",
+    "postPromotionDrift": "candidateDispositions metadata only (alias callbacks); claims and chunk ranges unchanged"
+  },
+  "concreteProposedPatches": [
+    {
+      "kind": "chunk-agentId-restore",
+      "action": "Populate each missing chunk run.chunks[].agentId with grokbot-24; retain run.agentId null and all runId values null",
+      "chunks": [
+        {
+          "chunkId": "001",
+          "startOrder": 0,
+          "endOrderExclusive": 53,
+          "before": {
+            "agentId": null,
+            "runId": null
+          },
+          "after": {
+            "agentId": "grokbot-24",
+            "runId": null
+          }
+        },
+        {
+          "chunkId": "002",
+          "startOrder": 53,
+          "endOrderExclusive": 110,
+          "before": {
+            "agentId": null,
+            "runId": null
+          },
+          "after": {
+            "agentId": "grokbot-24",
+            "runId": null
+          }
+        },
+        {
+          "chunkId": "003",
+          "startOrder": 110,
+          "endOrderExclusive": 146,
+          "before": {
+            "agentId": null,
+            "runId": null
+          },
+          "after": {
+            "agentId": "grokbot-24",
+            "runId": null
+          }
+        },
+        {
+          "chunkId": "004",
+          "startOrder": 146,
+          "endOrderExclusive": 170,
+          "before": {
+            "agentId": null,
+            "runId": null
+          },
+          "after": {
+            "agentId": "grokbot-24",
+            "runId": null
+          }
+        },
+        {
+          "chunkId": "005",
+          "startOrder": 170,
+          "endOrderExclusive": 185,
+          "before": {
+            "agentId": null,
+            "runId": null
+          },
+          "after": {
+            "agentId": "grokbot-24",
+            "runId": null
+          }
+        },
+        {
+          "chunkId": "006",
+          "startOrder": 185,
+          "endOrderExclusive": 208,
+          "before": {
+            "agentId": null,
+            "runId": null
+          },
+          "after": {
+            "agentId": "grokbot-24",
+            "runId": null
+          }
+        }
+      ]
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "promotionFileSha256": "sha256:0c009eb76787a15805f9b45c8ad794f1aef69d14d8fe1ec295c4c56bb86749e0",
+    "chapterFingerprint": "sha256:e3dbe56ecce0bae0e719a201455c4ebb6ef26bd6ab3805a857bf089e7f3f5311",
+    "historicalQueueRevision": "a26341f053"
+  },
+  "remainingIndependentEvidence": {
+    "priorLedgerClaim": {
+      "commit": "a26341f053",
+      "worker": "grokbot-24",
+      "lane": "grokbot"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/030.json",
+      "gitBlob": "697cc734d0d44b651720f26cb24bc928d642aa5f",
+      "contentSha256": "sha256:40724e5ec351116c2240f2545c52f25b6ea9be70d9db0c96616ed6b95659e43b"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/030.json",
+      "gitBlob": "7a8f85c8ac110bf9fa95b4a794ef2fc5ffd24dd4",
+      "contentSha256": "sha256:99b4c97468bb48438bb95d3e2858ead91be319523ce53702226013c719991809"
+    },
+    "preservedDateAuditPath": "data/people/date-audits/jiuwudaishi/030.json",
+    "editorialDecisionsRetained": true
+  },
+  "holds": {
+    "runLevelAgentIdRemainsNull": true,
+    "runIdsRemainUnknown": true,
+    "noChronologyOrClaimEdits": true,
+    "independentReviewRequiredBeforePublication": true
+  },
+  "nativeValidation": {
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/030: 1 extraction(s), 137 local people, 397 mentions, 1018 claims, 0 proposed repair(s), 13 applied repair(s), 14 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "dateAuditFreshAtPinnedExtraction": true
+  },
+  "independentApprovalIssued": false,
+  "notes": "Metadata-only provenance restore; owner does not apply canonical extraction edits in this handoff."
+}
