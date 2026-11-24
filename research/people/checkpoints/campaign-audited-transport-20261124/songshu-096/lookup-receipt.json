@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "songshu",
+    "chapter": "096"
+  },
+  "reviewer": {
+    "agentId": "bc-e596112f-a8c7-44d7-ae09-074032992c58",
+    "name": "cursor-nov24-independent-songshu-096"
+  },
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm lookup generation before dossier header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "registryRevision": "3582f84383dcb6f131f9fedd96809382b278789b",
+      "note": "Live generation differs from transport pinned registry revision 110c2f92; sealed transport dossiers remain authoritative."
+    },
+    {
+      "route": "/v1/people/per_0ZFNGEDT6RMSE8KMER79",
+      "purpose": "Header check Qifu Gangui / 乞伏乾歸",
+      "blockingNameKeys": ["zh:乞伏乾歸", "zh:乾歸"]
+    },
+    {
+      "route": "/v1/people/per_14V15ZK0W0QFMRZBGEH4",
+      "purpose": "Header check 視羆 Shipi p012",
+      "blockingNameKeys": ["zh:視羆"]
+    },
+    {
+      "route": "/v1/people/per_1GCRFFCZP6Y94EW54RG5",
+      "purpose": "Header check 拾皮 Shipi p039 distinct from 視羆",
+      "blockingNameKeys": ["zh:拾皮"]
+    },
+    {
+      "route": "/v1/people/per_N2C9SXC7GP7VH51WP9BF",
+      "purpose": "Header check Chipan 熾磐",
+      "blockingNameKeys": ["zh:熾磐"]
+    }
+  ],
+  "conclusion": "Lookup used only for bounded name-header confirmation and English/Chinese key disjointness checks (e.g. 視羆 vs 拾皮). Membership verdicts and witnesses come from sealed transport, owner anchor fingerprints, and primary data/songshu/096.json Chinese."
+}
