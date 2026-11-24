@@ -1,0 +1,480 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu094-release-repair-mention-reference-eligibility",
+  "stagingBase": "codex/people-glossary-staging-v2",
+  "branch": "codex/cursor-glossary-nov24-2026-jinshu094-release-repair",
+  "pin": "d6c16dd9275d36459cbc6c7914ab694edfec42fe",
+  "buildFailure": {
+    "runId": 45306058689,
+    "canonicalId": "per_6MFKJH0M9DXAV1M9B539",
+    "localPerson": "p279",
+    "error": "Scoped canonical person has no source mention references"
+  },
+  "decision": {
+    "p279": "explicit descriptive-kinship with exact attested 子 + kinship-reference mention (not personal-name without surfaces). Retained child-of p062 and independent witness via family claim.",
+    "alternativeRejected": "Adding a personal-name mention under kind personal would keep a false personal identity for a bare kinship graph; descriptive-kinship is the schema-faithful kind for unnamed kinship individuations."
+  },
+  "inventoryMentionExceptionsBefore": [
+    {
+      "personId": "p261",
+      "preferred": [
+        "Li Xiang",
+        "李驤",
+        null
+      ],
+      "mentionException": "Source-form 李驤 is attested at s0428 but the exact graph is not an isolated preflight surface; retained for independent mention geometry review.",
+      "existingSurfaces": [
+        [
+          "personal-name",
+          "zh",
+          "驤"
+        ]
+      ],
+      "hasSurfaces": true
+    },
+    {
+      "personId": "p262",
+      "preferred": [
+        "Zhai Fasi",
+        "翟法賜",
+        null
+      ],
+      "mentionException": "Source-form 翟法賜 is attested at s0459 but the exact graph is not an isolated preflight surface; retained for independent mention geometry review.",
+      "existingSurfaces": [
+        [
+          "personal-name",
+          "zh",
+          "法賜"
+        ]
+      ],
+      "hasSurfaces": true
+    },
+    {
+      "personId": "p263",
+      "preferred": [
+        "Master Chisong",
+        "赤松",
+        null
+      ],
+      "mentionException": "Source-form 赤松 is attested at s0504 but the exact graph is not an isolated preflight surface; retained for independent mention geometry review.",
+      "existingSurfaces": [
+        [
+          "personal-name",
+          "zh",
+          "松"
+        ]
+      ],
+      "hasSurfaces": true
+    },
+    {
+      "personId": "p279",
+      "preferred": [
+        "Zhang Hua's son",
+        "子",
+        null
+      ],
+      "mentionException": "Unnamed or kinship-only figure at s0188; retained without forcing a display surface.",
+      "existingSurfaces": [],
+      "hasSurfaces": false
+    },
+    {
+      "personId": "p280",
+      "preferred": [
+        "Dong Yang's wife",
+        "妻",
+        null
+      ],
+      "mentionException": "Unnamed or kinship-only figure at s0216; retained without forcing a display surface.",
+      "existingSurfaces": [],
+      "hasSurfaces": false
+    },
+    {
+      "personId": "p281",
+      "preferred": [
+        "Gong Zhuang's father",
+        "父",
+        null
+      ],
+      "mentionException": "Unnamed or kinship-only figure at s0375; retained without forcing a display surface.",
+      "existingSurfaces": [],
+      "hasSurfaces": false
+    },
+    {
+      "personId": "p282",
+      "preferred": [
+        "Gong Zhuang's uncle",
+        "叔",
+        null
+      ],
+      "mentionException": "Unnamed or kinship-only figure at s0375; retained without forcing a display surface.",
+      "existingSurfaces": [],
+      "hasSurfaces": false
+    },
+    {
+      "personId": "p283",
+      "preferred": [
+        "Fan Xuan's elder brother",
+        "兄",
+        null
+      ],
+      "mentionException": "Unnamed or kinship-only figure at s0719; retained without forcing a display surface.",
+      "existingSurfaces": [],
+      "hasSurfaces": false
+    },
+    {
+      "personId": "p284",
+      "preferred": [
+        "Fan Xuan's elder brother's daughter",
+        "兄女",
+        null
+      ],
+      "mentionException": "Unnamed or kinship-only figure at s0719; retained without forcing a display surface.",
+      "existingSurfaces": [],
+      "hasSurfaces": false
+    }
+  ],
+  "appliedKinshipRepairs": [
+    {
+      "personId": "p279",
+      "unit": "s0188",
+      "beforeName": {
+        "kind": "personal",
+        "en": "Zhang Hua's son",
+        "zh": "子"
+      },
+      "afterName": {
+        "kind": "descriptive-kinship",
+        "en": "Zhang Hua's son",
+        "zh": "子"
+      },
+      "zhSurface": "子",
+      "enSurface": "son",
+      "mentionExceptionCleared": true,
+      "familyClaimsRetained": [
+        [
+          "p279",
+          "family-relationship",
+          {
+            "relation": "child-of",
+            "personId": "p062",
+            "kinshipTerm": {
+              "en": "son",
+              "zh": "子"
+            }
+          },
+          "explicit",
+          [
+            "s0188"
+          ]
+        ]
+      ],
+      "reason": "s0188 張華遣子 — exact bare 子; descriptive-kinship + kinship-reference mention is minimal source-faithful fix for public references"
+    },
+    {
+      "personId": "p280",
+      "unit": "s0216",
+      "beforeName": {
+        "kind": "personal",
+        "en": "Dong Yang's wife",
+        "zh": "妻"
+      },
+      "afterName": {
+        "kind": "descriptive-kinship",
+        "en": "Dong Yang's wife",
+        "zh": "妻"
+      },
+      "zhSurface": "妻",
+      "enSurface": "wife",
+      "mentionExceptionCleared": true,
+      "familyClaimsRetained": [
+        [
+          "p280",
+          "family-relationship",
+          {
+            "relation": "kin-of",
+            "personId": "p074",
+            "kinshipTerm": {
+              "en": "wife",
+              "zh": "妻"
+            }
+          },
+          "explicit",
+          [
+            "s0216"
+          ]
+        ]
+      ],
+      "reason": "s0216 與妻荷擔 — exact 妻"
+    },
+    {
+      "personId": "p281",
+      "unit": "s0375",
+      "beforeName": {
+        "kind": "personal",
+        "en": "Gong Zhuang's father",
+        "zh": "父"
+      },
+      "afterName": {
+        "kind": "descriptive-kinship",
+        "en": "Gong Zhuang's father",
+        "zh": "父"
+      },
+      "zhSurface": "父",
+      "enSurface": "father",
+      "mentionExceptionCleared": true,
+      "familyClaimsRetained": [
+        [
+          "p281",
+          "family-relationship",
+          {
+            "relation": "kin-of",
+            "personId": "p124",
+            "kinshipTerm": {
+              "en": "father",
+              "zh": "父"
+            }
+          },
+          "explicit",
+          [
+            "s0375"
+          ]
+        ]
+      ],
+      "reason": "s0375 父叔為李特所害 — exact independent 父"
+    },
+    {
+      "personId": "p282",
+      "unit": "s0375",
+      "beforeName": {
+        "kind": "personal",
+        "en": "Gong Zhuang's uncle",
+        "zh": "叔"
+      },
+      "afterName": {
+        "kind": "descriptive-kinship",
+        "en": "Gong Zhuang's uncle",
+        "zh": "叔"
+      },
+      "zhSurface": "叔",
+      "enSurface": "uncle",
+      "mentionExceptionCleared": true,
+      "familyClaimsRetained": [
+        [
+          "p282",
+          "family-relationship",
+          {
+            "relation": "kin-of",
+            "personId": "p124",
+            "kinshipTerm": {
+              "en": "uncle",
+              "zh": "叔"
+            }
+          },
+          "explicit",
+          [
+            "s0375"
+          ]
+        ]
+      ],
+      "reason": "s0375 父叔為李特所害 — exact independent 叔"
+    },
+    {
+      "personId": "p284",
+      "unit": "s0719",
+      "beforeName": {
+        "kind": "personal",
+        "en": "Fan Xuan's elder brother's daughter",
+        "zh": "兄女"
+      },
+      "afterName": {
+        "kind": "descriptive-kinship",
+        "en": "Fan Xuan's elder brother's daughter",
+        "zh": "兄女"
+      },
+      "zhSurface": "兄女",
+      "enSurface": "niece",
+      "mentionExceptionCleared": true,
+      "familyClaimsRetained": [
+        [
+          "p284",
+          "family-relationship",
+          {
+            "relation": "child-of",
+            "personId": "p283",
+            "kinshipTerm": {
+              "en": "elder brother's daughter",
+              "zh": "兄女"
+            }
+          },
+          "explicit",
+          [
+            "s0719"
+          ]
+        ],
+        [
+          "p284",
+          "family-relationship",
+          {
+            "relation": "kin-of",
+            "personId": "p224",
+            "kinshipTerm": {
+              "en": "wife",
+              "zh": "妻"
+            }
+          },
+          "explicit",
+          [
+            "s0719"
+          ]
+        ]
+      ],
+      "reason": "s0719 以兄女妻焉 — exact 兄女"
+    }
+  ],
+  "clearedStaleNamedExceptions": [
+    {
+      "personId": "p261",
+      "before": "Source-form 李驤 is attested at s0428 but the exact graph is not an isolated preflight surface; retained for independent mention geometry review.",
+      "preferred": [
+        "Li Xiang",
+        "李驤",
+        null
+      ],
+      "surfaces": [
+        [
+          "personal-name",
+          "zh",
+          "驤"
+        ]
+      ]
+    },
+    {
+      "personId": "p262",
+      "before": "Source-form 翟法賜 is attested at s0459 but the exact graph is not an isolated preflight surface; retained for independent mention geometry review.",
+      "preferred": [
+        "Zhai Fasi",
+        "翟法賜",
+        null
+      ],
+      "surfaces": [
+        [
+          "personal-name",
+          "zh",
+          "法賜"
+        ]
+      ]
+    },
+    {
+      "personId": "p263",
+      "before": "Source-form 赤松 is attested at s0504 but the exact graph is not an isolated preflight surface; retained for independent mention geometry review.",
+      "preferred": [
+        "Master Chisong",
+        "赤松",
+        null
+      ],
+      "surfaces": [
+        [
+          "personal-name",
+          "zh",
+          "松"
+        ]
+      ]
+    }
+  ],
+  "skippedUnsupported": [
+    {
+      "personId": "p283",
+      "unit": "s0719",
+      "reason": "兄 appears only as the leading component of 兄女; an independent 兄 surface would overlap p284’s 兄女 mention and is not an isolated exact support. Retain mentionException / unnamed."
+    }
+  ],
+  "preserved": {
+    "westernDates": true,
+    "editorialDecisions": true,
+    "localPersonIds": true,
+    "chapterEvidence": true,
+    "validExistingMentions": true
+  },
+  "hashes": {
+    "extractionBefore": "sha256:8ce68a3ab750bac1d9fe362a8a842e9db18ce26e34d795c91e4075ddd0c1f922",
+    "extractionAfter": "sha256:2d5049b7964b3f285cb45fa74bdad6d11b100f81c85563e2fb2c4bbf270e2d6a",
+    "chapter": "sha256:41fdc45784a18442cbd620a15d29fd7de33c48f219cafa933bb42ee443b77019"
+  },
+  "rebindDependencies": {
+    "note": "No identity rebind; local IDs stable. Public reference eligibility now depends on new kinship-reference mentions for repaired people. p283 remains mentionException-only and may still lack publishable references.",
+    "changedPeople": [
+      "p279",
+      "p280",
+      "p281",
+      "p282",
+      "p284",
+      "p261",
+      "p262",
+      "p263"
+    ],
+    "evidenceUnits": [
+      "s0188",
+      "s0216",
+      "s0375",
+      "s0719",
+      "s0428",
+      "s0459",
+      "s0504"
+    ]
+  },
+  "scopedValidation": {
+    "ok": true,
+    "summary": "Scoped person data validation passed for jinshu/094: 1 extraction(s), 252 local people, 916 mentions, 1262 claims, 0 proposed repair(s), 49 applied repair(s), 49 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 243 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "changedPeopleExact": {
+    "kinshipDescriptiveWithMentions": [
+      "p279",
+      "p280",
+      "p281",
+      "p282",
+      "p284"
+    ],
+    "clearedStaleMentionExceptionOnly": [
+      "p261",
+      "p262",
+      "p263"
+    ],
+    "unchangedUnsupported": [
+      "p283"
+    ]
+  },
+  "evidenceExact": {
+    "p279": {
+      "unit": "s0188",
+      "zh": "中書令張華遣子勸其更仕",
+      "exact": "子",
+      "enExact": "son",
+      "family": "child-of p062"
+    },
+    "p280": {
+      "unit": "s0216",
+      "zh": "乃與妻荷擔入蜀，莫知所終。",
+      "exact": "妻",
+      "enExact": "wife"
+    },
+    "p281": {
+      "unit": "s0375",
+      "zh": "父叔為李特所害…",
+      "exact": "父",
+      "enExact": "father"
+    },
+    "p282": {
+      "unit": "s0375",
+      "zh": "父叔為李特所害…",
+      "exact": "叔",
+      "enExact": "uncle"
+    },
+    "p284": {
+      "unit": "s0719",
+      "zh": "…以兄女妻焉。",
+      "exact": "兄女",
+      "enExact": "niece"
+    }
+  },
+  "artifactDir": "research/people/checkpoints/jinshu094-release-mention-eligibility-20261124"
+}
