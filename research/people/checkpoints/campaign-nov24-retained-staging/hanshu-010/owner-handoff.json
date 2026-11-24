@@ -1,0 +1,2259 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "010"
+  },
+  "ownerAgentId": "bc-0d0266f1-68e3-43d1-a588-b82c7850d884",
+  "worker": "cursor-nov24-retained-staging-w9-o2",
+  "idempotencyKey": "f7a291d673a43eac11f503874ab73f81468a43b3a83114a9af2298b9d0018c1a",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-010-0d884",
+  "inputBlobWitness": {
+    "source": "6aed196cd93c09ead4bb55b7460b48a80862616c",
+    "extraction": "08f7502a69bcc7f056beee23d6056f712eec2e2c",
+    "dateAudit": "f226de98c522e8f08638c81ba0925e97b5f2508a",
+    "editorial": "ad8088cc15fce891213f0f2bfffb050d2fd3acdd"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:0599ecc1fe35f699863824faee7ed47e57c4f4cc086d5b82c2a34851a8f244e7",
+    "extraction": "sha256:883f8051558f3d42a9dfbb1e3274201d23d4a61b5adf4af4aae1c8c1ad9e5b1d",
+    "dateAudit": "sha256:c106866048ee311de03db6a3c82740194513629dd7062d773daba4ee20e98fcf",
+    "editorial": "sha256:bdcdf79890109d55743f25ac01f452f7e9f1ced21d9f89c7071414b6fdeb2a4f"
+  },
+  "dateAuditWitness": {
+    "state": "needs-revision",
+    "contentSha256": "c106866048ee311de03db6a3c82740194513629dd7062d773daba4ee20e98fcf",
+    "findingGroups": 47,
+    "actionableItems": 52,
+    "reviewedAt": "2026-09-23T06:05:53.987Z",
+    "preservedIndependentReport": true,
+    "extractionHashAtAudit": "sha256:db5e833b8ce8cfebcd6a62abef7b7d55267e7b3dc28667457413ce76dc19c802",
+    "currentExtractionHash": "sha256:db5e833b8ce8cfebcd6a62abef7b7d55267e7b3dc28667457413ce76dc19c802"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 256,
+    "missingTranslation": 0,
+    "emptyEnglishField": 0,
+    "bothFieldsPresent": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "peopleValidate": {
+      "passed": true,
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed for hanshu/010: 1 extraction(s), 68 local people, 255 mentions, 523 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs /agent/repos/records-of-the-grand-historian/data/people/extractions/hanshu/010.json",
+      "summary": "data/people/extractions/hanshu/010.json: ok (68 people, 255 mentions, 523 claims, 498 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 010",
+      "exitCode": 1,
+      "audited": false,
+      "status": "needs-revision",
+      "payload": {
+        "total": 1,
+        "counts": {
+          "needs-revision": 1
+        },
+        "chapters": [
+          {
+            "book": "hanshu",
+            "chapter": "010",
+            "status": "needs-revision",
+            "auditVersion": 1,
+            "reviewedAt": "2026-09-23T06:05:53.987Z",
+            "findings": 47
+          }
+        ]
+      }
+    },
+    "localPeople": 68
+  },
+  "substantiveFindings": "Full Chinese read (256 units); literal and idiomatic English complete on all units. Scoped extraction validate ok; people:validate passed. Date audit status needs-revision; native summary: Complete independent audit of all 256 Chinese units, 205 temporal/hint items, and 68 people. It finds 42 incorrect point, dynasty-wide, or inherited active-date records produced from vague phase, kinship, retrospective, and collective-office wording, plus 13 dated-source omission No definite English omission or mistranslation identified in this owner pass. Retained independent date report bytes unchanged; scoped chronology proposals follow native finding actions only.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "findingIndex": 1,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-34"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-34",
+          "personId": "p003",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Empress Xu: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0002",
+              "quote": "母曰共哀許皇后，宣帝微時生民間。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "宣帝微時"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 74,
+              "precision": "year"
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "宣帝微時"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 2,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-38"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-38",
+          "personId": "p004",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Yang Yun: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0006",
+              "quote": "見宣帝所用多文法吏，以刑名繩下，大臣楊惲、盍寬饒等坐刺譏辭語為罪而誅，嘗侍燕從容言：「"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "宣帝時"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 49,
+              "precision": "year"
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "宣帝時"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 3,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-42"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-42",
+          "personId": "p005",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Gai Kuangrao: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0006",
+              "quote": "見宣帝所用多文法吏，以刑名繩下，大臣楊惲、盍寬饒等坐刺譏辭語為罪而誅，嘗侍燕從容言：「"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "宣帝時"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 49,
+              "precision": "year"
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "宣帝時"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 4,
+      "problem": "「黃龍前」 is one-sided chronology. A BC 49 point date discards its direction and must be represented as a before-bound or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-45"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-45",
+          "personId": "p006",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to King of Huaiyang: attestation.",
+          "reason": "「黃龍前」 is one-sided chronology. A BC 49 point date discards its direction and must be represented as a before-bound or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0011",
+              "quote": "繇是疏太子而愛淮陽王，曰：「淮陽王明察好法，宜 為吾子。」"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "黃龍前"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 49,
+              "precision": "year"
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "黃龍前"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "「黃龍前」 is one-sided chronology. A BC 49 point date discards its direction and must be represented as a before-bound or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 5,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-51"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-51",
+          "personId": "p007",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Lady Zhang: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0012",
+              "quote": "而王母張婕妤尤幸。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "宣帝時"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 49,
+              "precision": "year"
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "宣帝時"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 6,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-246"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-246",
+          "personId": "p060",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0252",
+              "quote": "贊曰：臣外祖兄弟為元帝侍中，語臣曰元帝多材藝，善史書。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "及即位"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "及即位"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 7,
+      "problem": "「及即位」 identifies the accession, which is a single accession event at the start of Yuan’s reign; an interval across BC 48–33 falsely turns it into continuous activity.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-256"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-256",
+          "personId": "p060",
+          "predicate": "accession",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: accession.",
+          "reason": "「及即位」 identifies the accession, which is a single accession event at the start of Yuan’s reign; an interval across BC 48–33 falsely turns it into continuous activity.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "及即位"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "及即位"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "「及即位」 identifies the accession, which is a single accession event at the start of Yuan’s reign; an interval across BC 48–33 falsely turns it into continuous activity."
+        }
+      ]
+    },
+    {
+      "findingIndex": 8,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-257"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-257",
+          "personId": "p060",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: event-participation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "kind": "political",
+            "role": "ruler",
+            "action": "summoned Confucian scholars and entrusted government to them",
+            "dateContext": {
+              "sourceDate": {
+                "text": "及即位"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "kind": "political",
+            "role": "ruler",
+            "action": "summoned Confucian scholars and entrusted government to them",
+            "dateContext": {
+              "sourceDate": {
+                "text": "及即位"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 9,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-258"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-258",
+          "personId": "p060",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "employed-as-chancellor",
+            "personId": "p064",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "employed-as-chancellor",
+            "personId": "p064",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 10,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-259"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-259",
+          "personId": "p060",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "employed-as-chancellor",
+            "personId": "p065",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "employed-as-chancellor",
+            "personId": "p065",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 11,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-260"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-260",
+          "personId": "p060",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "employed-as-chancellor",
+            "personId": "p066",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "employed-as-chancellor",
+            "personId": "p066",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 12,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-261"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-261",
+          "personId": "p060",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "employed-as-chancellor",
+            "personId": "p067",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "employed-as-chancellor",
+            "personId": "p067",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 13,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-267"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-267",
+          "personId": "p061",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Appraising historian: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0252",
+              "quote": "贊曰：臣外祖兄弟為元帝侍中，語臣曰元帝多材藝，善史書。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "為元帝侍中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "為元帝侍中"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 14,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-275"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-275",
+          "personId": "p062",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Mother of the appraising historian: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0252",
+              "quote": "贊曰：臣外祖兄弟為元帝侍中，語臣曰元帝多材藝，善史書。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "外祖兄弟"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "外祖兄弟"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 15,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-278"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-278",
+          "personId": "p063",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Maternal grandfather of the appraising historian: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0252",
+              "quote": "贊曰：臣外祖兄弟為元帝侍中，語臣曰元帝多材藝，善史書。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "外祖兄弟"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "外祖兄弟"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 16,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-281"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-281",
+          "personId": "p064",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Gong: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 17,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-282"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-282",
+          "personId": "p064",
+          "predicate": "office",
+          "eventOwnership": "Chronology assigned to Gong: office.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 18,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-283"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-283",
+          "personId": "p064",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Gong: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 19,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-285"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-285",
+          "personId": "p065",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Xue: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 20,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-286"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-286",
+          "personId": "p065",
+          "predicate": "office",
+          "eventOwnership": "Chronology assigned to Xue: office.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 21,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-287"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-287",
+          "personId": "p065",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Xue: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 22,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-289"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-289",
+          "personId": "p066",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Wei: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 23,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-290"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-290",
+          "personId": "p066",
+          "predicate": "office",
+          "eventOwnership": "Chronology assigned to Wei: office.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 24,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-291"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-291",
+          "personId": "p066",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Wei: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 25,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-293"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-293",
+          "personId": "p067",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Kuang: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "貢、薛、韋、匡迭為宰相"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 26,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-294"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-294",
+          "personId": "p067",
+          "predicate": "office",
+          "eventOwnership": "Chronology assigned to Kuang: office.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "label": {
+              "en": "Chancellor",
+              "zh": "宰相"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 27,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-295"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-295",
+          "personId": "p067",
+          "predicate": "relationship",
+          "eventOwnership": "Chronology assigned to Kuang: relationship.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 48,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 33,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "relation": "chancellor-under",
+            "personId": "p060",
+            "dateContext": {
+              "sourceDate": {
+                "text": "貢、薛、韋、匡迭為宰相"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 28,
+      "problem": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "claim-297"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-297",
+          "personId": "p068",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology assigned to Emperor Xuan: attestation.",
+          "reason": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context.",
+          "evidence": [
+            {
+              "unit": "s0255",
+              "quote": "而上牽制文義，優游不斷，孝宣之業衰焉。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "孝宣之業衰焉"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 48,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 33,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": {
+            "sourceDate": {
+              "text": "孝宣之業衰焉"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The cited phase, kinship, retrospective commentary, or collective office statement does not establish this person’s activity at the selected point or throughout the full reign interval. Preserve a source-faithful bound, narrower evidence, or unresolved context."
+        }
+      ]
+    },
+    {
+      "findingIndex": 29,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p003"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p003",
+          "personId": "p003",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Empress Xu: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0002",
+              "quote": "母曰共哀許皇后，宣帝微時生民間。"
+            }
+          ],
+          "before": [
+            "BC 49"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 30,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p004"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p004",
+          "personId": "p004",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Yang Yun: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0006",
+              "quote": "見宣帝所用多文法吏，以刑名繩下，大臣楊惲、盍寬饒等坐刺譏辭語為罪而誅，嘗侍燕從容言：「"
+            }
+          ],
+          "before": [
+            "BC 49"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 31,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p005"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p005",
+          "personId": "p005",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Gai Kuangrao: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0006",
+              "quote": "見宣帝所用多文法吏，以刑名繩下，大臣楊惲、盍寬饒等坐刺譏辭語為罪而誅，嘗侍燕從容言：「"
+            }
+          ],
+          "before": [
+            "BC 49"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 32,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p006"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p006",
+          "personId": "p006",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to King of Huaiyang: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0011",
+              "quote": "繇是疏太子而愛淮陽王，曰：「淮陽王明察好法，宜 為吾子。」"
+            }
+          ],
+          "before": [
+            "BC 49",
+            "BC 37"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 33,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p007"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p007",
+          "personId": "p007",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Lady Zhang: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0012",
+              "quote": "而王母張婕妤尤幸。"
+            }
+          ],
+          "before": [
+            "BC 49"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 34,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p060"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p060",
+          "personId": "p060",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Emperor Yuan: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0252",
+              "quote": "贊曰：臣外祖兄弟為元帝侍中，語臣曰元帝多材藝，善史書。"
+            }
+          ],
+          "before": [
+            "BC 33",
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 35,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p061"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p061",
+          "personId": "p061",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Appraising historian: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0001",
+              "quote": "孝元皇帝，宣帝太子也。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 36,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p062"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p062",
+          "personId": "p062",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Mother of the appraising historian: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0001",
+              "quote": "孝元皇帝，宣帝太子也。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 37,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p063"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p063",
+          "personId": "p063",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Maternal grandfather of the appraising historian: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0001",
+              "quote": "孝元皇帝，宣帝太子也。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 38,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p064"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p064",
+          "personId": "p064",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Gong: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 39,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p065"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p065",
+          "personId": "p065",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Xue: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 40,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p066"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p066",
+          "personId": "p066",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Wei: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 41,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p067"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p067",
+          "personId": "p067",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Kuang: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "少而好儒，及即位，徵用儒生，委之以政，貢、薛、韋、匡迭為宰相。"
+            }
+          ],
+          "before": [
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 42,
+      "problem": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+      "action": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+      "itemIds": [
+        "hints-p068"
+      ],
+      "proposals": [
+        {
+          "itemId": "hints-p068",
+          "personId": "p068",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology assigned to Emperor Xuan: active-date-hints.",
+          "reason": "This active-date hint inherits an unsupported point or dynasty-wide interval from the identified temporal claim. It must not represent personal activity until the underlying source wording supports a bounded date.",
+          "evidence": [
+            {
+              "unit": "s0255",
+              "quote": "而上牽制文義，優游不斷，孝宣之業衰焉。"
+            }
+          ],
+          "before": [
+            "BC 74-48",
+            "BC 48-33"
+          ],
+          "direction": "Repair only this temporal claim or hint using the cited Chinese wording, rebuild the packet, and obtain a fresh independent complete date audit.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 43,
+      "problem": "Explicitly dated source units s0004, s0096, s0097, s0102, s0171, s0196, s0197, s0207, s0208 name Emperor Yuan but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p001"
+      ],
+      "proposals": []
+    },
+    {
+      "findingIndex": 44,
+      "problem": "Explicitly dated source units s0172 name Emperor Xuan but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p002"
+      ],
+      "proposals": []
+    },
+    {
+      "findingIndex": 45,
+      "problem": "Explicitly dated source units s0245 name Emperor Hui but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p040"
+      ],
+      "proposals": []
+    },
+    {
+      "findingIndex": 46,
+      "problem": "Explicitly dated source units s0245 name Filial Wen Empress Dowager but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p042"
+      ],
+      "proposals": []
+    },
+    {
+      "findingIndex": 47,
+      "problem": "Explicitly dated source units s0245 name Grand Empress Dowager Shangguan but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p008"
+      ],
+      "proposals": []
+    },
+    {
+      "findingIndex": 48,
+      "problem": "Explicitly dated source units s0004, s0096, s0097, s0102, s0171, s0196, s0197, s0207, s0208 name Emperor Yuan but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p001"
+      ],
+      "proposals": [
+        {
+          "itemId": "p001",
+          "personId": "p001",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 9 explicitly dated source occurrence(s) naming Emperor Yuan without matching temporal capture: s0004, s0096, s0097, s0102, s0171, s0196, s0197, s0207, s0208. The chapter chronology is incomplete for this person.",
+          "evidence": [
+            {
+              "unit": "s0004",
+              "quote": "八歲，立為太子。"
+            }
+          ],
+          "before": {
+            "note": "Missing temporal capture for auditor-listed units",
+            "personName": [
+              "Emperor Yuan",
+              "孝元皇帝",
+              "Xiaoyuan Huangdi"
+            ],
+            "activeHints": [
+              "BC 49",
+              "BC 48-33"
+            ]
+          },
+          "after": {
+            "direction": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+            "note": "Add source-backed temporal material only for cited units."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 49,
+      "problem": "Explicitly dated source units s0172 name Emperor Xuan but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p002"
+      ],
+      "proposals": [
+        {
+          "itemId": "p002",
+          "personId": "p002",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 explicitly dated source occurrence(s) naming Emperor Xuan without matching temporal capture: s0172. The chapter chronology is incomplete for this person.",
+          "evidence": [
+            {
+              "unit": "s0172",
+              "quote": "夏六月甲戌，孝宣園東闕災。"
+            }
+          ],
+          "before": {
+            "note": "Missing temporal capture for auditor-listed units",
+            "personName": [
+              "Emperor Xuan",
+              "宣帝",
+              "Xuandi"
+            ],
+            "activeHints": [
+              "BC 49"
+            ]
+          },
+          "after": {
+            "direction": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+            "note": "Add source-backed temporal material only for cited units."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 50,
+      "problem": "Explicitly dated source units s0245 name Emperor Hui but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p040"
+      ],
+      "proposals": [
+        {
+          "itemId": "p040",
+          "personId": "p040",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 explicitly dated source occurrence(s) naming Emperor Hui without matching temporal capture: s0245. The chapter chronology is incomplete for this person.",
+          "evidence": [
+            {
+              "unit": "s0245",
+              "quote": "三月癸未，復孝惠皇帝寢廟園、孝文太后、孝昭太后寢園。"
+            }
+          ],
+          "before": {
+            "note": "Missing temporal capture for auditor-listed units",
+            "personName": [
+              "Emperor Hui",
+              "孝惠皇帝",
+              "Xiaohui Huangdi"
+            ],
+            "activeHints": [
+              "BC 39",
+              "BC 33"
+            ]
+          },
+          "after": {
+            "direction": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+            "note": "Add source-backed temporal material only for cited units."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 51,
+      "problem": "Explicitly dated source units s0245 name Filial Wen Empress Dowager but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p042"
+      ],
+      "proposals": [
+        {
+          "itemId": "p042",
+          "personId": "p042",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 explicitly dated source occurrence(s) naming Filial Wen Empress Dowager without matching temporal capture: s0245. The chapter chronology is incomplete for this person.",
+          "evidence": [
+            {
+              "unit": "s0245",
+              "quote": "三月癸未，復孝惠皇帝寢廟園、孝文太后、孝昭太后寢園。"
+            }
+          ],
+          "before": {
+            "note": "Missing temporal capture for auditor-listed units",
+            "personName": [
+              "Filial Wen Empress Dowager",
+              "孝文太后",
+              "Xiaowen Taihou"
+            ],
+            "activeHints": [
+              "BC 38",
+              "BC 33"
+            ]
+          },
+          "after": {
+            "direction": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+            "note": "Add source-backed temporal material only for cited units."
+          }
+        }
+      ]
+    },
+    {
+      "findingIndex": 52,
+      "problem": "Explicitly dated source units s0245 name Grand Empress Dowager Shangguan but the current extraction omits their temporal capture.",
+      "action": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+      "itemIds": [
+        "p008"
+      ],
+      "proposals": [
+        {
+          "itemId": "p008",
+          "personId": "p008",
+          "kind": "chronology-omission",
+          "eventOwnership": "Independent reading found 1 explicitly dated source occurrence(s) naming Grand Empress Dowager Shangguan without matching temporal capture: s0245. The chapter chronology is incomplete for this person.",
+          "evidence": [
+            {
+              "unit": "s0245",
+              "quote": "三月癸未，復孝惠皇帝寢廟園、孝文太后、孝昭太后寢園。"
+            }
+          ],
+          "before": {
+            "note": "Missing temporal capture for auditor-listed units",
+            "personName": [
+              "Grand Empress Dowager Shangguan",
+              "太皇太后上官氏",
+              "Taihuang Taihou Shangguan"
+            ],
+            "activeHints": [
+              "BC 49",
+              "BC 37"
+            ]
+          },
+          "after": {
+            "direction": "Add source-backed temporal claims or active hints for the listed events with correct owner and Chinese date wording, then re-audit independently.",
+            "note": "Add source-backed temporal material only for cited units."
+          }
+        }
+      ]
+    }
+  ],
+  "distinctHolds": [
+    {
+      "kind": "date-audit-needs-revision",
+      "summary": "Native date audit retains 47 finding group(s) and 42 actionable scoped item(s).",
+      "actionableItemIds": [
+        "claim-34",
+        "claim-38",
+        "claim-42",
+        "claim-45",
+        "claim-51",
+        "claim-246",
+        "claim-256",
+        "claim-257",
+        "claim-258",
+        "claim-259",
+        "claim-260",
+        "claim-261",
+        "claim-267",
+        "claim-275",
+        "claim-278",
+        "claim-281",
+        "claim-282",
+        "claim-283",
+        "claim-285",
+        "claim-286",
+        "claim-287",
+        "claim-289",
+        "claim-290",
+        "claim-291",
+        "claim-293",
+        "claim-294",
+        "claim-295",
+        "claim-297",
+        "hints-p003",
+        "hints-p004",
+        "hints-p005",
+        "hints-p006",
+        "hints-p007",
+        "hints-p060",
+        "hints-p061",
+        "hints-p062",
+        "hints-p063",
+        "hints-p064",
+        "hints-p065",
+        "hints-p066",
+        "hints-p067",
+        "hints-p068",
+        "p001",
+        "p002",
+        "p040",
+        "p042",
+        "p008",
+        "p001",
+        "p002",
+        "p040",
+        "p042",
+        "p008"
+      ],
+      "preservedAuditBytes": true,
+      "auditContentSha256": "c106866048ee311de03db6a3c82740194513629dd7062d773daba4ee20e98fcf"
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 010",
+    "validateDates": "npm run people:dates:verify -- --book hanshu --chapter 010"
+  },
+  "notes": "Owner handoff preserves sealed date-audit bytes; proposals carry forward native finding actions without re-approval. [CF-Pages-Skip]"
+}
