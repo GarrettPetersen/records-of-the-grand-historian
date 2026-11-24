@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T01:20:49.077Z",
+  "lastCheckedAt": "2026-11-24T01:22:15.120Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -856,12 +856,19 @@
       "originalPR": 5407,
       "reviewPR": 5478,
       "revision": "425749ace8c3b743648c8e2301a8a5997f08480f",
-      "status": "independently-reviewed-nine-source-chronology-holds",
+      "status": "chronology-audited-historical-extractor-pin-required",
       "ownerAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
       "verifiedScopedFiles": 3,
       "preimages": {
         "original": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
         "staging": "41613a7f88427a475c37ffc02885097239a0b43e"
+      },
+      "verifiedHistoricalExtractor": {
+        "ledgerRevision": "5a65e9815519160ebfd0bd56ccad042225c86014",
+        "worker": "grokbot-24",
+        "sourceRevision": "c96b5fcda7ea50a179c8c092f588d6ef32447432",
+        "sha256": "4aefc66fe0cb6bc014fa41a3438f58e7c95b8ce2dcf751658e8812111f047afb",
+        "pr": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5110"
       }
     },
     "jinshu/030": {
@@ -880,7 +887,7 @@
       "originalPR": 5410,
       "reviewPR": 5487,
       "revision": "d8ad75ef1b702fdf3a76bb848b3b0f2c9498577c",
-      "status": "draft-ready-for-independent-review",
+      "status": "independent-editorial-accepted-awaiting-original-owner",
       "originalRevision": "55dc520dfe1f3037ce4ded1bb8b6091a0a1ba82d",
       "verifiedScopedFiles": 5,
       "verifiedPreimages": {
@@ -1569,7 +1576,7 @@
       "publicationStatus": "held-pending-native-gates"
     },
     "jinshu/063": {
-      "status": "sent",
+      "status": "finished",
       "chapter": "063",
       "chapterPR": 5487,
       "revision": "d8ad75ef1b702fdf3a76bb848b3b0f2c9498577c",
@@ -1586,7 +1593,10 @@
       "agentId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6",
       "runId": "run-2fab7ee5-2a46-41db-bdd7-d21d1858536e",
       "sentAt": "2026-11-24T01:14:01.165Z",
-      "observedProviderStatus": "running"
+      "observedProviderStatus": "finished",
+      "resultRevision": "00be7cfbbb6b286844c0138339f19df2261ff308",
+      "editorialAccepts": 66,
+      "editorialRejects": 0
     }
   },
   "absolute24HourCutoff": "2026-11-24T16:00:22.165Z",
@@ -2064,17 +2074,24 @@
       "retainedEraGroups": 8
     },
     "jinshu/116": {
-      "chapterPR": 5429,
-      "revision": "d04279d2736afc07d9069dd44b5656de92b68af1",
+      "status": "dispatch_pending",
       "agentId": "bc-96175e3c-9233-480b-8bdd-ac02689d9be2",
-      "previousReviewerRunId": "run-081eb562-0931-4f54-9366-778abb06f7f5",
-      "status": "finished",
-      "at": "2026-11-23T16:44:44.241Z",
-      "runId": "run-00cc8576-6318-49f0-a3f7-26efc2587a29",
-      "reviewRevision": "8603f7345cf145509750be11862a15531fc80f0e",
-      "reviewBranch": "cursor/jinshu-116-independent-recheck-9be2",
-      "findingsPR": 5441,
-      "findings": "70 authentic editorial accepts; checked aliases and merges. Residual claim wording, stale chronology and canonical identity remain."
+      "previousRunId": "run-30830ffb-da67-4297-b568-89866109bdc0",
+      "chapterPR": 5429,
+      "revision": "c6d2f8b57e12101afd375e078173f2baa3ff38f3",
+      "findingsRevision": "729d9f643cf45995ce13d16d7042a4821abedfd6",
+      "prompt": "Verify the two exact representation groups changed on Jinshu 116 #5429 c6d2f8b5 using owner two-group-representation-delta-receipt.json and your original 729d9f64 investigation. Preserve saved holds, the 70 accepted source repairs and all prior chronology provenance. Reconcile the exact native claim-12 and hints-p007 remaining unsupported before-AD-56 pair: assess likely source-form reading or absence of licensed Western bound based on the actual actor, raid/counterattack text and available witness, then return one minimal supported change or a precise remaining source contradiction. Check exact existing native IDs and changed dependencies. No general rerun, new allowance of false dates, validator edits, canonical approval, owner edits or merge.",
+      "idempotencyKey": "cursor-nov24-next-retained-116-c6d2f8b57e-rechecks-89866109bdc0",
+      "reservedAt": "2026-11-24T01:22:15.119Z",
+      "lastSendAttempt": {
+        "status": "send-intent",
+        "at": "2026-11-24T01:22:15.119Z"
+      },
+      "preflight": {
+        "mode": "cursor-cloud-github-only",
+        "pressure": 1,
+        "swapUsedBytes": "3365205442"
+      }
     },
     "jinshu/094": {
       "status": "finished",
@@ -2268,7 +2285,7 @@
       "chronology": "295 explicit unresolved containers remain"
     },
     "jinshu/081": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
       "previousRunId": "run-ad36818c-b901-4517-9123-79f87326dd93",
       "chapterPR": 5478,
@@ -2287,7 +2304,11 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-9e08d50b-c047-43c0-a065-8853f7bff642",
-      "sentAt": "2026-11-24T01:18:44.177Z"
+      "sentAt": "2026-11-24T01:18:44.177Z",
+      "resultRevision": "7feb17cc434b652d729f3bc9e3f2346f7c0bd52b",
+      "chronology": "audited-after-scoped-composition",
+      "retainedChecks": 826,
+      "rewitnessedChecks": 14
     },
     "jinshu/028": {
       "status": "finished",
@@ -8024,6 +8045,21 @@
         "reviewBranch": "cursor/jinshu085-recheck-d5be360-e257",
         "findingsPR": 5435,
         "residualChronologyItems": 29
+      }
+    ],
+    "jinshu/116": [
+      {
+        "chapterPR": 5429,
+        "revision": "d04279d2736afc07d9069dd44b5656de92b68af1",
+        "agentId": "bc-96175e3c-9233-480b-8bdd-ac02689d9be2",
+        "previousReviewerRunId": "run-081eb562-0931-4f54-9366-778abb06f7f5",
+        "status": "finished",
+        "at": "2026-11-23T16:44:44.241Z",
+        "runId": "run-00cc8576-6318-49f0-a3f7-26efc2587a29",
+        "reviewRevision": "8603f7345cf145509750be11862a15531fc80f0e",
+        "reviewBranch": "cursor/jinshu-116-independent-recheck-9be2",
+        "findingsPR": 5441,
+        "findings": "70 authentic editorial accepts; checked aliases and merges. Residual claim wording, stale chronology and canonical identity remain."
       }
     ]
   },
