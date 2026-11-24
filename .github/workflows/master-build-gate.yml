@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '123-new-identity', '063-certify', '081-certify', '123-certify', '063-stage', '081-stage', '123-stage']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '081-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -436,7 +436,7 @@ jobs:
           const delta=process.env.CHAPTER_INPUT==='030-delta-certify';
           const holdId='sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a';
           const repo = process.env.GITHUB_REPOSITORY;
-          assert(['030','063','081','083','094','115','123'].includes(chapter));
+          assert(['030','063','081','083','085','094','115','123'].includes(chapter));
           const read = (path, raw) => JSON.parse(execFileSync('gh', ['api', 'repos/'+repo+'/'+path, ...(raw?['-H','Accept: application/vnd.github.raw+json']:[])], {encoding:'utf8',maxBuffer:10e6}));
           const state = read('contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
           const chapters = state.identityRegistryBuild;
@@ -643,7 +643,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
   transfer-certificate:
-    if: inputs.chapter == '030-stage' || inputs.chapter == '063-stage' || inputs.chapter == '081-stage' || inputs.chapter == '123-stage' || inputs.chapter == '083-stage' || inputs.chapter == '094-stage' || inputs.chapter == '115-stage'
+    if: inputs.chapter == '030-stage' || inputs.chapter == '063-stage' || inputs.chapter == '081-stage' || inputs.chapter == '085-stage' || inputs.chapter == '123-stage' || inputs.chapter == '083-stage' || inputs.chapter == '094-stage' || inputs.chapter == '115-stage'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -663,7 +663,7 @@ jobs:
           const root='repos/'+process.env.GITHUB_REPOSITORY;
           const read=(path,raw=false)=>JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
           const chapter=process.env.TRANSFER_INPUT.split('-')[0];
-          const pr=({'030':5479,'063':5487,'081':5478,'083':5474,'094':5430,'115':5470,'123':5439})[chapter];
+          const pr=({'030':5479,'063':5487,'081':5478,'083':5474,'085':5428,'094':5430,'115':5470,'123':5439})[chapter];
           assert(pr);
           const state=read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true).identityRegistryBuild;
           const entry=chapter==='030'?state.chapter030.dateOverlay:chapter==='115'?state.currentChapter115.reseal.witnessRefresh:state.readyChronology?.['jinshu/'+chapter] ?? state.chapters083And094['updated'+chapter];
