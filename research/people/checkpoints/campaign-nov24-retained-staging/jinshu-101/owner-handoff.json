@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "101"
+  },
+  "ownerAgentId": "bc-bbaefc50-2f40-4364-aece-e97754880133",
+  "workerId": "cursor-nov24-retained-staging-w5-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "39dc761601a40cbb24700ca121def2ef3c7181f2724be3ed793248577ef9f7ee",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshu-101-80133",
+  "inputBlobWitness": {
+    "source": "a8a4a86dd62eb732ef1a5dca46d0c640d5405eaa",
+    "extraction": "1c6f36f03fa388c87033a115561d1e424ebef8d0",
+    "dateAudit": "d8b21f58ba4d6b74e42b124719c4e8a8fd885102",
+    "editorial": "a53a83cb7f9a0966873bf061f9c2af046618f792"
+  },
+  "sealedInputs": {
+    "source": "sha256:221808c006bb5d8250863e40a79c07a056dd4f0137f273fe7e91e1c6f22d51c8",
+    "extraction": "sha256:7aae76a6377c5ed33c633a8688fd8db7b0baf9b1e0e1cf984b368d6d53e7ad99",
+    "dateAudit": "sha256:51ce6422288d3f0694533c190c3832479f3d3802e70325e05f5a39a580c4a362",
+    "editorial": "sha256:b0e73c97c9d903c26f32c9822673f18909416a25886fdcfb2e7d9db753fbb061"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 263,
+    "translatedCount": 263,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshu --chapter 101",
+    "summary": "Scoped person data validation passed for jinshu/101: 1 extraction(s), 201 local people, 771 mentions, 1271 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s).",
+    "extractionValidate": "data/people/extractions/jinshu/101.json: ok (201 people, 771 mentions, 1271 claims, 890 candidates)",
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Focused independent examination of three previously approved active-date hints found that their recorded citations refer to unrelated people and do not document the dates. This is a partial evidence hold, not a full chapter audit or a claim that the historical dates are false.",
+    "dateAuditFileSha256": "sha256:51ce6422288d3f0694533c190c3832479f3d3802e70325e05f5a39a580c4a362",
+    "datesVerify": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "extractionFingerprintMatchesAudit": true,
+    "currentExtractionHash": "sha256:ed366dd5d21d5675b6459e5be6622c239ba93116d29f0027320af7e85bb742a0",
+    "auditedExtractionHash": "sha256:ed366dd5d21d5675b6459e5be6622c239ba93116d29f0027320af7e85bb742a0",
+    "sourceFingerprintMatchesAudit": true
+  },
+  "substantiveFindings": "Full sealed review: 263 translated source units, 201 people, 771 mentions, 1271 claims, 9 applied editorial repairs. Native date report bytes preserved at research-blocked (3 findings on retrospective allusion hints). No definite English omission in source or extraction surfaces; no extraction or source edits performed.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "hints-p008",
+        "hints-p009",
+        "hints-p010"
+      ],
+      "taxonomy": "retrospective-allusion active-date hints",
+      "problem": "Independent audit found cited support (s0001 Liu lineage) does not establish Confucius, Guan Zhong, or Emperor Xuan endpoints; chapter mentions at s0014/s0017 are identifications only.",
+      "nativeAction": "Locate independently source-hashed evidence per endpoint or remove unsupported hints through reviewed repair workflow; then whole-chapter re-audit.",
+      "evidenceUnits": [
+        "s0014",
+        "s0017"
+      ]
+    }
+  ],
+  "chapterReady": false,
+  "preservedDateAuditBytes": true,
+  "independentReviewRepeated": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified staging git blobs; full source English scan; scoped people:validate and validate-people-extraction; people:dates:verify; retained native date-audit and editorial bytes without hash substitution.",
+    "completedAt": "2026-11-24T16:29:28.220Z"
+  },
+  "reproduce": {
+    "datesVerify": "npm run people:dates:verify -- --book jinshu --chapter 101",
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 101"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input mutation, publication, or global registry."
+}
