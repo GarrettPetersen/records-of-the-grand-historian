@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-final-identity-repair",
+  "scope": "jiutangshu/131",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "role": "hold-owner",
+  "ownerHead": "18dc49e11c2e44754799ea39ba8e88466846807b",
+  "sourceReviewHead": "44cf4bd76b997d425338f994ec53e8d5c8c3df20",
+  "transportRevision": "18dc49e11c2e44754799ea39ba8e88466846807b",
+  "reviewerAgentId": "bc-7c28138a-8866-43c2-a4d1-30635e1844ae",
+  "pr": 5651,
+  "idempotencyKey": "3926c52c021ccaa580c3e829dd36859c9d90d2da81fd3e26bd3c35cb66574fd3",
+  "holdAssessments": [
+    {
+      "caseId": "sha256:8a2ef4eee57ab047c4602611056acf05f40b9cf3a706b700c63f89d0c89af01b",
+      "localPersonId": "jiutangshu:131:p064",
+      "independentVerdict": "hold",
+      "ownerVerdict": "concur-hold",
+      "sourceWitness": {
+        "unitId": "s0074",
+        "zh": "突董者，即武義可汗之叔父也。",
+        "literal": "Tumidu was the uncle of the Martial-Righteous qaghan.",
+        "idiomatic": "Tumidu was the uncle of the Martial-Righteous qaghan."
+      },
+      "assessment": "s0074 attests Tumidu (突董) as 武義可汗之叔父 (paternal uncle of the Martial-Righteous qaghan). It does not quote 武義可汗之父 or any father personal name. English correctly renders uncle, not father. The extraction defect is certifying p064 with zh label 武義可汗之父 as a name claim on s0074, conflating inferred paternal intermediary with attested uncle kinship on the same unit."
+    }
+  ],
+  "preservedIndependentApprovals": {
+    "totalCases": 64,
+    "approvals": 63,
+    "holds": 1,
+    "note": "Explicit p021–p033 uncle relationship (c0400, explicit on s0074) and all other dossier approvals unchanged."
+  },
+  "extractionDefect": {
+    "localPersonId": "jiutangshu:131:p064",
+    "type": "inferred-unnamed-relative-as-named-zh-surface",
+    "claimsAffected": [
+      "jiutangshu:131:c0248"
+    ],
+    "relationshipClaimsPreservedAsInferred": [
+      "jiutangshu:131:c0399",
+      "jiutangshu:131:c0398",
+      "jiutangshu:131:c0400"
+    ],
+    "rationale": "Paternal father of the qaghan may be inferred as an unnamed node between Tumidu's generation and the qaghan, but s0074 only licenses 叔父 for Tumidu relative to the qaghan—not a quotable father identity."
+  },
+  "candidateAmendments": {
+    "appliesToCanonicalExtraction": false,
+    "extractionBlob": "65f7cde10f17466bb9d00507a7b346085f128563",
+    "personPatches": [
+      {
+        "localId": "jiutangshu:131:p064",
+        "before": {
+          "preferredNameSuggestion": {
+            "en": "Father of the Martial-Righteous Qaghan",
+            "zh": "武義可汗之父"
+          },
+          "mentionException": "Unnamed paternal intermediary entailed by Tumidu as 叔父 of the Martial-Righteous qaghan in s0074; not overtly named in the chapter."
+        },
+        "after": {
+          "preferredNameSuggestion": {
+            "en": "Unnamed father of the Martial-Righteous qaghan (inferred)",
+            "zh": null
+          },
+          "unresolvedIdentity": true,
+          "mentionException": "Inferred unnamed father node; s0074 attests only 突董 as 武義可汗之叔父. Identity certification held."
+        }
+      }
+    ],
+    "claimPatches": [
+      {
+        "claimId": "jiutangshu:131:c0248",
+        "operation": "revise",
+        "before": {
+          "predicate": "name",
+          "value": {
+            "kind": "descriptive-kinship",
+            "en": "Father of the Martial-Righteous qaghan",
+            "zh": "武義可汗之父"
+          },
+          "certainty": "strongly-inferred",
+          "evidence": ["jiutangshu:131:s0074"]
+        },
+        "after": {
+          "predicate": "name",
+          "value": {
+            "kind": "descriptive-kinship",
+            "en": "Unnamed father of the Martial-Righteous qaghan (inferred)",
+            "zh": null
+          },
+          "certainty": "strongly-inferred",
+          "evidence": ["jiutangshu:131:s0074"]
+        },
+        "reason": "Remove zh 武義可汗之父 as if quoted from s0074; unit only contains 叔父 applied to Tumidu, not 之父."
+      }
+    ]
+  },
+  "englishTranslationRepairs": [],
+  "smallestPathForward": [
+    "Apply candidateAmendments; keep explicit c0400 uncle-nephew proof untouched.",
+    "Independent identity reviewer re-checks only p064 after amendment; Tumidu (p021) and Martial-Righteous qaghan (p033) approvals stand.",
+    "Re-run bounded chapter identity validation with unresolvedIdentity on p064."
+  ],
+  "commands": [
+    {
+      "command": "source inspection s0074 zh/en",
+      "result": "confirms hold; uncle not father; no English defect"
+    },
+    {
+      "command": "loadValidatedPeopleChapter + claim trace p064",
+      "result": "c0248 zh 武義可汗之父 unsupported on s0074"
+    }
+  ]
+}
