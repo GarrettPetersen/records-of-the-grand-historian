@@ -75,6 +75,14 @@ test('one full primary and sparse secondary meet the reserve', () => {
 test('reserve uses available bytes and fails even one byte below the boundary', () => {
   assert.match(evaluateDiskPolicy({ availableBytes: RESERVE_BYTES - 1n, primary, worktrees: [tree] })[0], /30 GiB/);
 });
+test('GitHub-only Cursor Cloud admission waives the disk floor but preserves inventory enforcement', () => {
+  const measurement = { availableBytes: RESERVE_BYTES - 1n, primary, worktrees: [tree] };
+  const cloud = { cursorCloudGitHubOnly: true };
+  assert.deepEqual(evaluateDiskPolicy(measurement, cloud), []);
+  assert.match(evaluateDiskPolicy({ ...measurement, worktrees: [tree, { path: '/duplicate', hasPublic: true }] }, cloud)[0], /Secondary checkout/);
+  assert.throws(() => evaluateDiskPolicy({ ...measurement, availableBytes: -1n }, cloud), /Invalid/);
+  assert.throws(() => evaluateDiskPolicy({ ...measurement, worktrees: [] }, cloud), /Primary/);
+});
 test('full secondary fails even with plenty of disk', () => {
   assert.match(evaluateDiskPolicy({ availableBytes: RESERVE_BYTES * 2n, primary,
     worktrees: [tree, { path: '/duplicate', hasPublic: true }] })[0], /Secondary checkout contains public/);
@@ -97,6 +105,12 @@ test('inventory works from a secondary, tolerates spaces, and never changes Git 
   fs.mkdirSync(path.join(repo, 'public'));
   const before = git('status', '--porcelain');
   const report = inspectLocalDisk(secondary);
+  const cloud = inspectLocalDisk(secondary, { cursorCloudGitHubOnly: true });
+  assert.equal(report.admissionMode, 'local');
+  assert.equal(cloud.admissionMode, 'cursor-cloud-github-only');
+  assert.deepEqual(cloud.diskMaintenance, report.diskMaintenance);
+  assert.deepEqual(cloud.errors.filter(error => !cloud.memory.errors.includes(error)),
+    report.errors.filter(error => !report.memory.errors.includes(error) && !error.startsWith('Less than 30 GiB')));
   assert.equal(report.primary, fs.realpathSync(repo));
   assert.equal(report.worktrees.length, 2);
   assert.equal(report.worktrees.find(w => w.path === fs.realpathSync(secondary)).hasPublic, false);

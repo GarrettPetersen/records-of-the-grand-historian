@@ -72,18 +72,18 @@ export function inspectMemory(platform = process.platform, execute = execFileSyn
   };
 }
 
-export function evaluateDiskPolicy({ availableBytes, primary, worktrees }) {
+export function evaluateDiskPolicy({ availableBytes, primary, worktrees }, { cursorCloudGitHubOnly = false } = {}) {
   if (typeof availableBytes !== 'bigint' || availableBytes < 0n) throw new Error('Invalid available disk measurement');
   if (!worktrees.some(tree => tree.path === primary)) throw new Error('Primary checkout missing from worktree inventory');
   const errors = [];
-  if (availableBytes < RESERVE_BYTES) errors.push('Less than 30 GiB available: stop new checkouts/full builds and reclaim only verified completed work.');
+  if (availableBytes < RESERVE_BYTES && !cursorCloudGitHubOnly) errors.push('Less than 30 GiB available: stop new checkouts/full builds and reclaim only verified completed work.');
   for (const tree of worktrees) {
     if (tree.path !== primary && tree.hasPublic) errors.push(`Secondary checkout contains public/: ${tree.path}. Check ownership and recovery before reducing or archiving it.`);
   }
   return errors;
 }
 
-export function inspectLocalDisk(repoRoot) {
+export function inspectLocalDisk(repoRoot, { cursorCloudGitHubOnly = false } = {}) {
   const git = (...args) => execFileSync('git', ['-C', repoRoot, ...args], { encoding: 'utf8' }).trimEnd();
   const common = fs.realpathSync(git('rev-parse', '--path-format=absolute', '--git-common-dir'));
   if (path.basename(common) !== '.git') throw new Error('Expected a non-bare repository with a primary .git directory');
@@ -105,6 +105,8 @@ export function inspectLocalDisk(repoRoot) {
     primary, availableBytes: availableBytes.toString(),
     availableGiB: Number(availableBytes / (1024n ** 2n)) / 1024,
     reserveGiB: 30, worktrees,
+    admissionMode: cursorCloudGitHubOnly ? 'cursor-cloud-github-only' : 'local',
+    localDiskReserveMet: availableBytes >= RESERVE_BYTES,
     diskMaintenance: {
       warningGiB: 35,
       required: availableBytes < LOW_DISK_BYTES,
@@ -114,15 +116,17 @@ export function inspectLocalDisk(repoRoot) {
     },
     memory,
     registryStorage,
-    errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }), ...memory.errors, ...registryStorage.errors],
+    errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }, { cursorCloudGitHubOnly }), ...memory.errors, ...registryStorage.errors],
     scope: 'Registered worktrees only; external clones and service runtimes must also be checked by the host.',
   };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  if (process.argv.length !== 2) throw new Error('Usage: node scripts/check-local-disk.mjs (read-only; no overrides)');
+  const args = process.argv.slice(2);
+  const cursorCloudGitHubOnly = args.length === 1 && args[0] === '--cursor-cloud-github-only';
+  if (args.length && !cursorCloudGitHubOnly) throw new Error('Usage: node scripts/check-local-disk.mjs [--cursor-cloud-github-only]');
   const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  const report = inspectLocalDisk(repoRoot);
+  const report = inspectLocalDisk(repoRoot, { cursorCloudGitHubOnly });
   console.log(JSON.stringify(report, null, 2));
   if (report.errors.length) process.exitCode = 1;
 }

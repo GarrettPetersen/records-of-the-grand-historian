@@ -143,9 +143,10 @@ Every bounded handoff reports **newly published chapters**, **data-qualified cha
 **applied reviewed corrections**, **known holds**, and **code-only work** separately.
 A successful code release is not chapter throughput. A real new finding is useful
 work, but it does not establish convergence. Keep fresh-chat/60-minute boundaries:
-another turn in the same oversized conversation is not a fresh chat. Do not weaken
-resource guards when rotation or disk reserve blocks dispatch. Check disk now, not
-only before the previous batch; about 31 GiB free leaves little working margin.
+another turn in the same oversized conversation is not a fresh chat. Check resources
+before each dispatch. Use the default disk reserve for local work and the
+[GitHub-only preflight](LOCAL_DISK_STRATEGY.md#cursor-cloud-coordination-through-github)
+for eligible Cursor Cloud campaigns.
 
 
 ## Repair English omissions when found

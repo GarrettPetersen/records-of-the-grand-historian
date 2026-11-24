@@ -139,6 +139,16 @@ a small cache never approves dispatch/publication. Run `npm run people:disk:chec
 after any cleanup/external change and resume only on a full actual pass. Inspect
 the receipt's latest measurement even when a prior incident remains latched.
 
+### Cursor Cloud coordination through GitHub
+
+Use `npm run people:disk:check -- --cursor-cloud-github-only` before dispatching
+and while observing a GitHub-only Cursor Cloud campaign. Its claims, PRs, builds,
+validation and artifacts must stay remote. The mode reports free space and whether
+the local reserve is met. It waives only the 30 GiB admission floor. Low-disk
+maintenance, memory limits, duplicate storage checks and measurement errors
+still apply. For every local workspace change, artifact download, build, or
+Mac-hosted MCP execution, run the default guard.
+
 Receipts are in `~/.local/state/24histories-disk-maintenance/`: atomic `state.json`
 and one `incident-*.json` per episode. They record measured before/after space,
 the attempted cleanup, and pending action. No credentials or process arguments
