@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "207"
+  },
+  "workerId": "cursor-nov24-current-master-followup-1",
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "sourcePacketSha256": "227f39d3ba4876dddb1e6a543d23a3ee67949bae7908e65b3fb393ff9219bd46",
+    "planFingerprint": "sha256:7bc9b03490c255dcf336283de986938e235712aa50fe8dd533a0a604e3c8fd72",
+    "transportSha256": "a4e0c986a42fe9dce90e8877e280cf6ecefe690382815b5b85600aecdeeeb555",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "5babdd2031d2885c2407a33bcb016f0c04cef0cc7799e2c8996cf20e669e37b2",
+        "caseCount": 42
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "45a7a5f7ddd1ac2ca2f7f964373f796df118f497b217b2ab3060a9113770f0b7",
+        "caseCount": 42
+      }
+    ],
+    "preparationReceiptSha256": "e43cd55271be4bbd2f64ad134fab846dd392de8b27eb3cdbaa0fd9fa0a779885"
+  },
+  "sealedInputs": {
+    "source": "sha256:7d60746d9b1bc476fccdfab48ee45dc33863a84606967ff1c384797e3935f86a",
+    "extraction": "sha256:6f485282330278375b726d65ec5edebb18bee03f63e5f9d0c58ce82e5c5d8ab4",
+    "editorial": "sha256:e6ba2361459e2c70adc811a1d37925ef053f53ae7424d56234bae1c0d26f4980",
+    "dateAudit": "sha256:9a355c601de69c722e000ecedc89c8b4baf755fc273dbaaee30dc3067e5bda97"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "4 applied editorial decisions; no pending proposals",
+  "reviewCases": 84,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 84 scoped identity cases retain preparation-proposed canonicalPersonId and accepted membership fingerprints. 24 overflow cases preserve bounded-retrieval uncertainty; 68/84 keep unresolvedIdentity true. No concrete wrong-actor or false-merge contradiction found. No canonical extraction or shared-registry edits.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:fca8311867724292770f2d3d49b907285fadaa2d98ad8251bbde5df13fc4e9c4",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 207",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/yuanshi-207/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/yuanshi-207/transport-part-002.json"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 1c48e717."
+}
