@@ -14,4 +14,4 @@ Prior local `jinshu:028:p165` attributed Wang Dun using English idiom only.
 2. **Add** undated attestation on existing `jinshu:028:p100` with evidence `s0341` and literal event wording (no invented personal name on that unit).
 3. **Preserve** all other Wang Dun locals (`p033`, `p100`, `p201`, `p313`), 79 editorials, audited `date-audits/jinshu/028.json` on disk (stale vs new extraction until independent re-audit).
 
-Receipt: `p165-s0341-witness-repair-receipt.json`
+Receipt: `p165-s0341-witness-closure-receipt.json`
