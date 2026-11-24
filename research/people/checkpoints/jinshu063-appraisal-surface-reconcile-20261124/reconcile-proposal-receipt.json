@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu063-appraisal-surface-reconcile-proposal",
+  "book": "jinshu",
+  "chapter": "063",
+  "worker": "cursor-github-nov24-1",
+  "authorAgentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+  "at": "2026-11-24T02:48:51.823Z",
+  "baseCommit": "11cb2c7ae6024949c65651a49617fc0d7f0d35ea",
+  "independentIdentityCheck": {
+    "approved": "188/190",
+    "heldOnly": [
+      {
+        "caseId": "sha256:317eb7ead234ac6608fe8f4e01cb492f2dfe1acf5a3b768ccb24271b4fdb034c",
+        "appraisalLocalId": "jinshu:063:p183",
+        "appraisalChinese": "邵",
+        "biographyAnchorLocalId": "jinshu:063:p001",
+        "biographyChinese": "邵續",
+        "witnesses": [
+          "s0330",
+          "s0339",
+          "s0001"
+        ]
+      },
+      {
+        "caseId": "sha256:d8886c0365360f942d71417ebe98085161d1dd238a9f86bb9db5f6b5e08671a7",
+        "appraisalLocalId": "jinshu:063:p185",
+        "appraisalChinese": "魏",
+        "biographyAnchorLocalId": "jinshu:063:p123",
+        "biographyChinese": "魏浚",
+        "witnesses": [
+          "s0330",
+          "s0222"
+        ]
+      }
+    ]
+  },
+  "samePersonProof": {
+    "strong": true,
+    "reasons": [
+      "Chapter title lists biography subjects 邵續、李矩、段匹磾、魏浚、郭默 in order.",
+      "Appraisal s0330 lists 邵、李、魏、郭 as 諸將 who held towns and kept faith with Jin — surname-only collective pointing at those biography subjects.",
+      "Eulogy s0339 邵李諸將 continues the same appraisal frame for Shao/Li.",
+      "English translation already expands to Shao Xu / Wei Jun; Chinese surfaces now attach only attested 邵 / 魏 (no invented full-name span)."
+    ],
+    "proof": {
+      "chapterTitleZh": "卷六十三 列傳第三十三 邵續 李矩 段匹磾 魏浚 郭默",
+      "s0330": "史臣曰：邵、李、魏、郭等諸將，契闊喪亂之辰，驅馳戎馬之際，威懷足以容眾，勇略足以制人，乃保據危城，折沖千里，招集義勇，抗禦仇讎，雖艱阻備嘗，皆乃心王室。",
+      "s0339": "贊曰：邵李諸將，實惟忠壯。",
+      "s0001": "邵續",
+      "s0222": "魏浚",
+      "offsets": {
+        "s0330_邵": 4,
+        "s0330_魏": 8,
+        "s0339_邵": 3
+      }
+    }
+  },
+  "patch": {
+    "p183": {
+      "nameFormBefore": {
+        "kind": "personal",
+        "zh": "邵續",
+        "evidence": [
+          "s0330"
+        ]
+      },
+      "nameFormAfter": {
+        "kind": "surname",
+        "zh": "邵",
+        "evidence": [
+          "s0330",
+          "s0339"
+        ]
+      },
+      "preferredPreserved": [
+        "Shao Xu",
+        "邵續",
+        "Shao Xu"
+      ],
+      "englishSurfacesPreserved": true,
+      "chineseSurfacesAdded": [
+        {
+          "exact": "邵",
+          "units": {
+            "s0330": [
+              0
+            ],
+            "s0339": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    "p185": {
+      "nameFormBefore": {
+        "kind": "personal",
+        "zh": "魏浚",
+        "evidence": [
+          "s0330"
+        ]
+      },
+      "nameFormAfter": {
+        "kind": "surname",
+        "zh": "魏",
+        "evidence": [
+          "s0330"
+        ]
+      },
+      "preferredPreserved": [
+        "Wei Jun",
+        "魏浚",
+        "Wei Jun"
+      ],
+      "englishSurfacesPreserved": true,
+      "chineseSurfacesAdded": [
+        {
+          "exact": "魏",
+          "units": {
+            "s0330": [
+              0
+            ]
+          }
+        }
+      ]
+    },
+    "membershipReconciliationProposed": {
+      "method": "scripts/link-local-person-records.mjs",
+      "pairs": [
+        "p183=p001",
+        "p185=p123"
+      ],
+      "mergedAutomatically": false,
+      "stableLocalIdsPreserved": true,
+      "linkResult": {
+        "pairCount": 2,
+        "addedClaims": 4
+      },
+      "claimNote": "Owner-proposed same-person from chapter-title biography anchors and appraisal surname witnesses s0330/s0339; pending independent identity rebind. Local IDs preserved.",
+      "reviewerConfirmed": false
+    }
+  },
+  "fingerprints": {
+    "extractionFileBefore": "sha256:823ecbd3fd7f67a4b5e453ada76d858e875f73e4e5f6f4b24b420402385401bc",
+    "extractionFileAfter": "sha256:7c9a4d1f9bdd7241bdd5f74b3739fb7abebb9e189243d08602505e75ab3ce6e4",
+    "chapterFile": "sha256:7fe1f358017e13b575e9cab584cf53f6dbe68d14ea6784fd495f207ca1e5035f",
+    "memberBefore": {
+      "jinshu:063:p001": "sha256:df4ff80dca683c2f0cbbc71bae5e06c70a683c8a9598573a9c164bf2d1739ad0",
+      "jinshu:063:p183": "sha256:65199e38ca36a4a9a7da861db25a93ac3917889ee11917cd1b67429d6b1bac28",
+      "jinshu:063:p123": "sha256:a6e3b3adc118d213f40fa33509ec0c9e1f1c4ed9570452d9ebd71a7310f8b074",
+      "jinshu:063:p185": "sha256:ffa5a442094806dd05798559018b0cde8464acc9bc4eb80d794d0c7e64cd66d1"
+    },
+    "memberAfter": {
+      "jinshu:063:p001": "sha256:df4ff80dca683c2f0cbbc71bae5e06c70a683c8a9598573a9c164bf2d1739ad0",
+      "jinshu:063:p183": "sha256:66686b74ebe37ab73519359b6c941cc7cafd0df271ee46c6c81e04929c47142e",
+      "jinshu:063:p123": "sha256:a6e3b3adc118d213f40fa33509ec0c9e1f1c4ed9570452d9ebd71a7310f8b074",
+      "jinshu:063:p185": "sha256:d04d8868e593091374d297c1977bb05c62b91d04390fc721c5e578270a9223bd"
+    },
+    "heldCaseIds": {
+      "shao": "sha256:317eb7ead234ac6608fe8f4e01cb492f2dfe1acf5a3b768ccb24271b4fdb034c",
+      "wei": "sha256:d8886c0365360f942d71417ebe98085161d1dd238a9f86bb9db5f6b5e08671a7"
+    },
+    "memberAfterNote": "Anchor p001/p123 memberContracts unchanged (same-person not part of memberContract predicates). Appraisal p183/p185 memberContracts advanced from personal→surname name-key change."
+  },
+  "chronologyPacketComparison": {
+    "checkpointDatePacket": {
+      "path": "research/people/checkpoints/jinshu063-author-residual-20261123/date-packet.json",
+      "sourceHash": "sha256:39bcb50ce1fb77e57b78293ce4f0ae1ad595c322860cf67a0b8492a7fea05842",
+      "extractionHash": "sha256:94289736b21ac3b8eb268484e1619da72764a7f2f410dfd539543d4d5a4c6b27"
+    },
+    "liveBeforePatch": {
+      "sourceHash": "sha256:23787acd0acaf87b0e809dfb1fa5f42ba2d57d116a99effaf671ddabcf346a64",
+      "extractionHash": "sha256:bbd248323b6a092442acd5692fce3ecaefe187003e2bb9775287f4562659ddf9"
+    },
+    "liveAfterPatch": {
+      "sourceHash": "sha256:23787acd0acaf87b0e809dfb1fa5f42ba2d57d116a99effaf671ddabcf346a64",
+      "extractionHash": "sha256:2bb4f8fb94448f778dd2060ac53822906452a63f0e8804aa6d2bd5fa38c86230"
+    },
+    "sourceHashUnchanged": true,
+    "extractionHashAdvanced": true,
+    "dateHintsPreserved": {
+      "jinshu:063:p001": [
+        "During the early Taixing era (太興初)"
+      ],
+      "jinshu:063:p123": [
+        "During the late Yongjia era (永嘉末)"
+      ],
+      "jinshu:063:p183": [],
+      "jinshu:063:p185": []
+    },
+    "note": "No chronology approval. Source units unchanged; extractionHash advances from surname reclass, Chinese surfaces, and proposed same-person claims only.",
+    "checkpointVsLiveSource": false,
+    "checkpointVsLiveSourceNote": "Checkpoint date-packet sourceHash predates current live unit encoding after accepted editorial/era work; live before→after sourceHash is unchanged by this patch."
+  },
+  "nonActions": [
+    "no self-approval",
+    "no automatic merge of local records",
+    "no canonical identity writes",
+    "no full identity re-review",
+    "no global generation"
+  ],
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 063",
+    "passed": true,
+    "stats": {
+      "people": 190,
+      "mentions": 1409,
+      "claims": 986,
+      "appliedRepairs": 66,
+      "samePersonClaimsAdded": 4
+    }
+  },
+  "backlinks": {
+    "jinshu:063:p001": [
+      "jinshu:063:p002",
+      "jinshu:063:p007",
+      "jinshu:063:p014",
+      "jinshu:063:p018",
+      "jinshu:063:p019",
+      "jinshu:063:p183"
+    ],
+    "jinshu:063:p183": [
+      "jinshu:063:p001"
+    ],
+    "jinshu:063:p123": [
+      "jinshu:063:p131",
+      "jinshu:063:p185"
+    ],
+    "jinshu:063:p185": [
+      "jinshu:063:p123"
+    ]
+  }
+}
