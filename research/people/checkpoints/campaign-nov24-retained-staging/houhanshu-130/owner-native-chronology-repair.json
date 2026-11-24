@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-native-chronology-repair",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "130"
+  },
+  "ownerAgentId": "bc-488b211f-a9a5-4e20-8945-5268c218df57",
+  "idempotencyKey": "19029665c84590f5ac138d89fa3f99ff26e06e9178a7e5de997c6cd1dd3a51ba",
+  "stageRevision": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "1d9ad1f9157f85c0d07e7b8f5141a22c0e6366fd",
+  "ownerHandoffSha256": "61feda3971c1a9a81d3457d57c3bec92f139d751239bbc094c39164c8c0fa86b",
+  "branch": "cursor/nov24-retained-owner-native-date-houhanshu-130-8df57",
+  "pinnedDateAudit": {
+    "sha256": "96bf9eed437b120e0a4d42545bca821c5862c4cab64dca41ab7e11ad1e5c73e6",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T11:21:42.955Z",
+    "intactBytes": true,
+    "notReApproved": true
+  },
+  "sealedInputBlobs": {
+    "source": "53c53f0c4c345d09e8de1d0ddc72c0fd6e685443",
+    "extraction": "bcb58b79fec6d07ce1ef27dfa48e83d12e417df5",
+    "dateAudit": "cf5e7d316cd67d3ee00e4ca639894c42129bf1e9",
+    "editorial": "2552bd36c8e026dc102b4ba2656698e31b443cf7"
+  },
+  "verifiedFindings": [
+    {
+      "findingItems": [
+        "claim-10",
+        "claim-11",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "Confucius appears only in quotations and retrospective comparison, not a dated personal event. The repair removes false life chronology but the source cannot itself resolve a substitute chronology.",
+      "action": "Keep the source-linked reception records and explicit research holds; do not infer or display a personal activity date from these citations.",
+      "decision": "no-extraction-edit",
+      "reason": "Confucius/Wu/Sun already unresolved reception or bibliographic records without personal AD intervals.",
+      "intactAuditBytes": true
+    },
+    {
+      "findingItems": [
+        "claim-27",
+        "hints-p005",
+        "p005"
+      ],
+      "problem": "Military Methods of Wu and Sun is a bibliographic title, not enough source evidence to identify or date the extracted Wu as an individual.",
+      "action": "Keep the source-linked bibliographic record and research hold; obtain independent identification evidence before assigning any personal chronology.",
+      "decision": "no-extraction-edit",
+      "reason": "Confucius/Wu/Sun already unresolved reception or bibliographic records without personal AD intervals.",
+      "intactAuditBytes": true
+    },
+    {
+      "findingItems": [
+        "claim-32",
+        "hints-p006",
+        "p006"
+      ],
+      "problem": "Military Methods of Wu and Sun is a bibliographic title, not enough source evidence to identify or date the extracted Sun as an individual.",
+      "action": "Keep the source-linked bibliographic record and research hold; obtain independent identification evidence before assigning any personal chronology.",
+      "decision": "no-extraction-edit",
+      "reason": "Confucius/Wu/Sun already unresolved reception or bibliographic records without personal AD intervals.",
+      "intactAuditBytes": true
+    }
+  ],
+  "itemReviews": [
+    {
+      "itemId": "claim-10",
+      "personId": "p002",
+      "predicate": "attestation",
+      "auditQuote": "孔子曰：「其或繼周者",
+      "auditUnit": "s0037",
+      "extractionState": {
+        "sourceDate": "孔子曰",
+        "unresolved": true
+      },
+      "decision": "pending-independent-verification",
+      "reason": "Confucius is quoted in the treatise, but the preserved source does not establish an in-chapter personal event or activity date; the repaired claim correctly remains a literary-reception research hold."
+    },
+    {
+      "itemId": "claim-11",
+      "personId": "p002",
+      "predicate": "attestation",
+      "auditQuote": "所謂孔子乘殷之路者也",
+      "auditUnit": "s0059",
+      "extractionState": {
+        "sourceDate": "所謂孔子乘殷之路者",
+        "unresolved": true
+      },
+      "decision": "pending-independent-verification",
+      "reason": "The institutional comparison retrospectively invokes Confucius without identifying a personal event date; the repaired claim correctly remains a source-linked research hold."
+    },
+    {
+      "itemId": "claim-27",
+      "personId": "p005",
+      "predicate": "attestation",
+      "auditQuote": "吳、孫《兵法》云",
+      "auditUnit": "s0124",
+      "extractionState": {
+        "sourceDate": "吳、孫《兵法》",
+        "unresolved": true
+      },
+      "decision": "pending-independent-verification",
+      "reason": "The quoted Military Methods of Wu and Sun is a bibliographic title. This chapter does not identify the extracted Wu or establish a personal date, so the repaired claim correctly remains a research hold."
+    },
+    {
+      "itemId": "claim-32",
+      "personId": "p006",
+      "predicate": "attestation",
+      "auditQuote": "吳、孫《兵法》云",
+      "auditUnit": "s0124",
+      "extractionState": {
+        "sourceDate": "吳、孫《兵法》",
+        "unresolved": true
+      },
+      "decision": "pending-independent-verification",
+      "reason": "The same bibliographic title does not identify the extracted Sun or establish a personal date, so the repaired claim correctly remains a research hold."
+    },
+    {
+      "itemId": "hints-p002",
+      "personId": "p002",
+      "predicate": "active-date-hints",
+      "auditQuote": "孔子曰",
+      "auditUnit": "s0037",
+      "extractionState": {},
+      "decision": "pending-independent-verification",
+      "reason": "The active-date hint is now an explicit research requirement rather than a derived circa-BC activity range; this chapter alone cannot resolve a personal date for the quotation subject."
+    },
+    {
+      "itemId": "hints-p005",
+      "personId": "p005",
+      "predicate": "active-date-hints",
+      "auditQuote": "吳、孫《兵法》云",
+      "auditUnit": "s0124",
+      "extractionState": {},
+      "decision": "pending-independent-verification",
+      "reason": "The active-date hint is now an explicit research requirement rather than a derived activity range; the work title alone cannot resolve Wu as a dated individual."
+    },
+    {
+      "itemId": "hints-p006",
+      "personId": "p006",
+      "predicate": "active-date-hints",
+      "auditQuote": "吳、孫《兵法》云",
+      "auditUnit": "s0124",
+      "extractionState": {},
+      "decision": "pending-independent-verification",
+      "reason": "The active-date hint is now an explicit research requirement rather than a derived activity range; the work title alone cannot resolve Sun as a dated individual."
+    }
+  ],
+  "nativeDateRepairProposal": null,
+  "definiteTranslationRepairs": [],
+  "residualHolds": {
+    "auditStatusRemains": "research-blocked",
+    "proofGaps": [
+      "Cross-chapter identification for Wu/Sun bibliography remains open"
+    ]
+  },
+  "validation": {
+    "sealedExtractionUnchangedOnDisk": true,
+    "scopedValidate": "Scoped person data validation passed for houhanshu/130: 1 extraction(s), 6 local people, 16 mentions, 56 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionValidate": "data/people/extractions/houhanshu/130.json: ok (6 people, 16 mentions, 56 claims, 123 candidates)",
+    "datesVerify": {
+      "status": "research-blocked",
+      "auditVersion": 1,
+      "reviewedAt": "2026-09-23T11:21:42.955Z",
+      "findings": 3
+    },
+    "nativeProposalReplay": null
+  },
+  "notes": "[CF-Pages-Skip] Owner native chronology triage; pinned date-audit bytes unchanged."
+}
