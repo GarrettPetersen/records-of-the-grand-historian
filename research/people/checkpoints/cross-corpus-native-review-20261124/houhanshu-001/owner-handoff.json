@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "cross-corpus-identity-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "001"
+  },
+  "ownerAgentId": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+  "campaignWorker": "cursor-github-nov24-cross-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sourceRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "transportCommit": "62d0c83abee9a29c7e7a61e66153c24ec50dce7d",
+  "transportBranch": "codex/cursor-glossary-nov24-2026-cross-corpus-transport",
+  "transportSha256": "95ec9da8f9fd485e7d7ae33b4a48be36cc5dce63bc7a359c150dc12b675c9cac",
+  "planFingerprint": "sha256:33f5dabd914c6170cf0ff6895749297195c6ed884c0780465ec71cf33c3f4c80",
+  "reviewCases": 4,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 62d0c83abee9a29c7e7a61e66153c24ec50dce7d:research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 001"
+  },
+  "notes": "Owner evidence is not independent approval."
+}
