@@ -389,7 +389,8 @@ function validateWesternYear(value, label, errors) {
 // explicit source-quoted form; asserted Western/life dates retain normal gates.
 function sourceQuotedQualitativeAttestation(claim, packet) {
  const value=claim.value;
- return claim.predicate==='attestation'&&claim.certainty==='explicit'&&
+ return claim.predicate==='attestation'&&
+  (claim.certainty==='explicit'||claim.certainty==='explicit-event-contextual-date')&&
   typeof value?.sourceDate?.text==='string'&&value.sourceDate.text.trim().length>0&&
   typeof value.qualitative==='string'&&value.qualitative.trim().length>=20&&
   typeof value.event==='string'&&value.event.trim().length>=20&&
@@ -1081,6 +1082,20 @@ function validateFile(file, opts) {
 }
 
 function selfTest() {
+  const quotedPacket = { book: 'testbook', chapter: '001', units: [{ id: 's0001', zh: '永嘉三年，王至。' }] };
+  const contextualAttestation = {
+    predicate: 'attestation', certainty: 'explicit-event-contextual-date',
+    evidence: ['testbook:001:s0001'],
+    value: { sourceDate: { text: '永嘉三年' }, qualitative: 'Exact regnal expression without a Western conversion',
+      event: 'The source records the arrival under this regnal expression.' },
+  };
+  if (!sourceQuotedQualitativeAttestation(contextualAttestation, quotedPacket)) {
+    throw new Error('Explicit event with an exact contextual source date was rejected');
+  }
+  if (sourceQuotedQualitativeAttestation({ ...contextualAttestation, certainty: 'strongly-inferred' }, quotedPacket) ||
+      sourceQuotedQualitativeAttestation(contextualAttestation, { ...quotedPacket, units: [{ id: 's0001', zh: '王至。' }] })) {
+    throw new Error('Inferred or unquoted chronology unexpectedly passed');
+  }
   const sparsePersonIdErrors = [];
   requireIncreasingIds(
     [{ localId: 'testbook:001:p001' }, { localId: 'testbook:001:p003' }],
