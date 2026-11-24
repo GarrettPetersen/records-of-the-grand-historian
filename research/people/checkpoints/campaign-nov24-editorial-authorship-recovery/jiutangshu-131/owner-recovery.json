@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-recovery",
+  "scope": "jiutangshu/131",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "worker": "cursor-nov24-retained-editorial-1",
+  "mode": "editorial",
+  "phase": "hold-pending-independent-review-2",
+  "branch": "cursor/nov24-retained-jiutangshu-131-982823",
+  "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+  "masterPin": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "idempotencyKey": "9e36b2b14e566548b268f89d431ca3694631c4500fc66d2aa813ed966fa57186",
+  "inputBlobs": {
+    "data/jiutangshu/131.json": "3bdeb7b655f1dc43394ae4c9d99108dd3832ff5c",
+    "data/people/extractions/jiutangshu/131.json": "65f7cde10f17466bb9d00507a7b346085f128563",
+    "data/people/date-audits/jiutangshu/131.json": "a22dda0798a4ad36ecfe79bb15ecb8a7b1f61c43",
+    "data/people/editorial-decisions/jiutangshu/131.json": "c4b10faaf12636a2c5032bfc958ee3758a0a3d06"
+  },
+  "observedPriorPR": 5648,
+  "filesConsulted": [
+    "data/jiutangshu/131.json",
+    "data/people/extractions/jiutangshu/131.json",
+    "data/people/date-audits/jiutangshu/131.json",
+    "data/people/editorial-decisions/jiutangshu/131.json",
+    "scripts/lib/people-editorial-decisions.mjs",
+    "scripts/validate-people-data.mjs"
+  ],
+  "commands": [
+    {
+      "command": "npm run people:validate -- --book jiutangshu --chapter 131",
+      "exitCode": 1,
+      "summary": "applied jiutangshu:131:r0001 has no matching independent accept/revise authorization; applied jiutangshu:131:r0002 has no matching independent accept/revise authorization; applied jiutangshu:131:r0003 has no matching independent accept/revise authorization; applied jiutangshu:131:r0004 has no matching independent accept/revise authorization; applied jiutangshu:131:r0005 has no matching independent accept/revise authorization; applied jiutangshu:131:r0006 has no matching independent accept/revise authorization; applied jiutangshu:131:r0007 has no matching independent accept/revise authorization; applied jiutangshu:131:r0008 has no matching independent accept/revise authorization"
+    }
+  ],
+  "gateFailure": {
+    "gate": "editorial",
+    "error": "EditorialDecisionValidationError",
+    "errors": [
+      "applied jiutangshu:131:r0001 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0002 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0003 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0004 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0005 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0006 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0007 has no matching independent accept/revise authorization",
+      "applied jiutangshu:131:r0008 has no matching independent accept/revise authorization"
+    ]
+  },
+  "diagnosis": {
+    "retainedIndependentReview": {
+      "reviewerAgentId": "bc-b4a36992-7840-4232-a068-802ecca76659",
+      "proposalsFingerprint": "sha256:0b7809c254ad4743386b403fe96333e01a749c3a1ae85c8d8aae4863522149a0",
+      "acceptedProposalTargets": [
+        {
+          "repairId": "jiutangshu:131:r0001",
+          "unit": "s0123",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "jiutangshu:131:r0002",
+          "unit": "s0123",
+          "field": "literal"
+        }
+      ],
+      "claimRevisions": 0,
+      "note": "Repair IDs renumbered after review 1. Later applied rows that match review-1 accept contracts by exact unit/field/before/after/reason remain valid even at new IDs."
+    },
+    "unauthorizedAppliedRepairs": [
+      {
+        "id": "jiutangshu:131:r0001",
+        "unit": "s0068",
+        "field": "literal",
+        "reason": "嚴郢 is Yan Ying, not Yan Yi."
+      },
+      {
+        "id": "jiutangshu:131:r0002",
+        "unit": "s0068",
+        "field": "idiomatic",
+        "reason": "嚴郢 is Yan Ying, not Yan Yi."
+      },
+      {
+        "id": "jiutangshu:131:r0003",
+        "unit": "s0069",
+        "field": "literal",
+        "reason": "郢 is Ying, not Yi."
+      },
+      {
+        "id": "jiutangshu:131:r0004",
+        "unit": "s0069",
+        "field": "idiomatic",
+        "reason": "郢 is Ying, not Yi."
+      },
+      {
+        "id": "jiutangshu:131:r0005",
+        "unit": "s0070",
+        "field": "literal",
+        "reason": "Both shortened references identify Yan Ying."
+      },
+      {
+        "id": "jiutangshu:131:r0006",
+        "unit": "s0070",
+        "field": "idiomatic",
+        "reason": "Both shortened references identify Yan Ying."
+      },
+      {
+        "id": "jiutangshu:131:r0007",
+        "unit": "s0071",
+        "field": "literal",
+        "reason": "The shortened reference identifies Yan Ying."
+      },
+      {
+        "id": "jiutangshu:131:r0008",
+        "unit": "s0071",
+        "field": "idiomatic",
+        "reason": "The shortened reference identifies Yan Ying."
+      }
+    ],
+    "cause": "New or reordered translation repairs were applied after independent review 1 without accept/revise records."
+  },
+  "supplementalRepairs": [
+    {
+      "id": "jiutangshu:131:r0001",
+      "unitId": "s0068",
+      "field": "literal",
+      "before": "Early in Jianzhong, Yang Yan held power; Yan Yi, metropolitan governor of Jingzhao, was growing in renown, and Yan wished to bring him down.",
+      "after": "Early in Jianzhong, Yang Yan held power; Yan Ying, metropolitan governor of Jingzhao, was growing in renown, and Yan wished to bring him down.",
+      "reason": "嚴郢 is Yan Ying, not Yan Yi.",
+      "sourceWitness": {
+        "citation": "s0068",
+        "excerpt": "建中初，楊炎執政，以京兆尹嚴郢威名稍著，心欲傾之。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0002",
+      "unitId": "s0068",
+      "field": "idiomatic",
+      "before": "Early in Jianzhong, Yang Yan held power; Yan Yi, metropolitan governor of Jingzhao, was growing in renown, and Yan wished to bring him down.",
+      "after": "Early in Jianzhong, Yang Yan held power; Yan Ying, metropolitan governor of Jingzhao, was growing in renown, and Yan wished to bring him down.",
+      "reason": "嚴郢 is Yan Ying, not Yan Yi.",
+      "sourceWitness": {
+        "citation": "s0068",
+        "excerpt": "建中初，楊炎執政，以京兆尹嚴郢威名稍著，心欲傾之。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0003",
+      "unitId": "s0069",
+      "field": "literal",
+      "before": "Yi was Wang Yi's nephew by marriage.",
+      "after": "Ying was Wang Yi's nephew by marriage.",
+      "reason": "郢 is Ying, not Yi.",
+      "sourceWitness": {
+        "citation": "s0069",
+        "excerpt": "郢，即王翊甥婿也。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0004",
+      "unitId": "s0069",
+      "field": "idiomatic",
+      "before": "Yi was Wang Yi's nephew by marriage.",
+      "after": "Ying was Wang Yi's nephew by marriage.",
+      "reason": "郢 is Ying, not Yi.",
+      "sourceWitness": {
+        "citation": "s0069",
+        "excerpt": "郢，即王翊甥婿也。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0005",
+      "unitId": "s0070",
+      "field": "literal",
+      "before": "When Xiu had broken with the Wang family, Yan heard that Xiu and Yi were at odds; he therefore promoted Xiu from exile to Vice Metropolitan Governor of Jingzhao, ordering him to watch for Yi's faults.",
+      "after": "When Xiu had broken with the Wang family, Yan heard that Xiu and Ying were at odds; he therefore promoted Xiu from exile to Vice Metropolitan Governor of Jingzhao, ordering him to watch for Ying's faults.",
+      "reason": "Both shortened references identify Yan Ying.",
+      "sourceWitness": {
+        "citation": "s0070",
+        "excerpt": "休與王氏離絕之時，炎風聞休、郢有隙，遂擢休自流人為京兆少尹，俾令伺郢過失。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0006",
+      "unitId": "s0070",
+      "field": "idiomatic",
+      "before": "When Xiu had broken with the Wang family, Yan heard that Xiu and Yi were at odds; he therefore promoted Xiu from exile to Vice Metropolitan Governor of Jingzhao, ordering him to watch for Yi's faults.",
+      "after": "When Xiu had broken with the Wang family, Yan heard that Xiu and Ying were at odds; he therefore promoted Xiu from exile to Vice Metropolitan Governor of Jingzhao, ordering him to watch for Ying's faults.",
+      "reason": "Both shortened references identify Yan Ying.",
+      "sourceWitness": {
+        "citation": "s0070",
+        "excerpt": "休與王氏離絕之時，炎風聞休、郢有隙，遂擢休自流人為京兆少尹，俾令伺郢過失。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0007",
+      "unitId": "s0071",
+      "field": "literal",
+      "before": "After Xiu had long been in office he became close to Yi; Yan was angry and memorialized that he should retain his post while also serving as Vice Censor-in-Chief on an embassy to the Uighurs.",
+      "after": "After Xiu had long been in office he became close to Ying; Yan was angry and memorialized that he should retain his post while also serving as Vice Censor-in-Chief on an embassy to the Uighurs.",
+      "reason": "The shortened reference identifies Yan Ying.",
+      "sourceWitness": {
+        "citation": "s0071",
+        "excerpt": "休既職久，與郢親善，炎怒之，奏令以本官兼御史中丞，奉使回紇。"
+      }
+    },
+    {
+      "id": "jiutangshu:131:r0008",
+      "unitId": "s0071",
+      "field": "idiomatic",
+      "before": "After Xiu had long been in office he became close to Yi; Yan was angry and memorialized that he should retain his post while also serving as Vice Censor-in-Chief on an embassy to the Uighurs.",
+      "after": "After Xiu had long been in office he became close to Ying; Yan was angry and memorialized that he should retain his post while also serving as Vice Censor-in-Chief on an embassy to the Uighurs.",
+      "reason": "The shortened reference identifies Yan Ying.",
+      "sourceWitness": {
+        "citation": "s0071",
+        "excerpt": "休既職久，與郢親善，炎怒之，奏令以本官兼御史中丞，奉使回紇。"
+      }
+    }
+  ],
+  "artifacts": {
+    "ownerRecovery": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiutangshu-131/owner-recovery.json",
+    "supplementalReview2Seed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiutangshu-131/supplemental-review-2-seed.json",
+    "retainedReview1V3": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiutangshu-131/retained-review-1-v3.json",
+    "editorialV4RetainedPlusSeed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiutangshu-131/editorial-v4-retained-plus-seed.json"
+  },
+  "remainingIssues": [
+    "applied jiutangshu:131:r0001 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0002 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0003 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0004 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0005 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0006 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0007 has no matching independent accept/revise authorization",
+    "applied jiutangshu:131:r0008 has no matching independent accept/revise authorization"
+  ],
+  "smallestPathForward": [
+    "Independent reviewer accepts supplemental-review-2-seed proposals with sourceWitness entries.",
+    "Publish schema v4 editorial history: byte-preserve review 1, append completed review 2.",
+    "Re-run npm run people:validate -- --book jiutangshu --chapter 131."
+  ],
+  "ownerDelta": "No changes to pinned canonical inputs; recovery and supplemental review seed only."
+}
