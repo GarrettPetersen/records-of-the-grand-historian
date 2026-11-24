@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "045"
+  },
+  "ownerAgentId": "bc-1e7f1743-30db-4b99-9204-5e5b3ca1ccbf",
+  "workerId": "cursor-nov24-retained-staging-w18-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "dd2f7a24c7114f60d6123ca51d7d5561c46f5e28ee1846afdab2fd5e68d66554",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-045-1ccbf",
+  "auditState": "no-native-date-report",
+  "promptVersion": 7,
+  "extractionBytes": 203181,
+  "workOrder": {
+    "sourceExtractionSha256": "sha256:96036462a00bc2b6996b179a8404311c0b06f15eb0d5c2babc4b200c6c049158",
+    "people": 124,
+    "claims": 689
+  },
+  "inputBlobWitness": {
+    "source": "cb9ce73470b76fb2a025728d756dfe5dcb6a9a19",
+    "extraction": "b608e05bcbc84a9c05f8206c11f8020093fd88a0",
+    "editorial": "a461886b76b9b7ce5ee0960d03d411b26b56caa4"
+  },
+  "sealedInputs": {
+    "source": "sha256:1e6b4315627586342d6e43ff799c1c50f5e56dfc7e30b73e2828ebbf26a62887",
+    "extraction": "sha256:96036462a00bc2b6996b179a8404311c0b06f15eb0d5c2babc4b200c6c049158",
+    "editorial": "sha256:19903add9f9d8cbe5cb9bbc6c2b7997c934000a5f4c5bd22d822c808960929ab"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 45 Miscellaneous Biographies 25: Zhang Quanyi, Zhu Youqian, Yuan Xiangxian, Zhu Hanbin, Duan Ning, Liu Qi, Zhou Zhiyu, Lu Siduo",
+    "chineseUnits": 215,
+    "translatedCount": 215,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 0,
+    "fullEnglishCoverage": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionBlob": "b608e05bcbc84a9c05f8206c11f8020093fd88a0",
+    "editorialBlob": "a461886b76b9b7ce5ee0960d03d411b26b56caa4",
+    "extractionContentSha256": "sha256:96036462a00bc2b6996b179a8404311c0b06f15eb0d5c2babc4b200c6c049158",
+    "editorialContentSha256": "sha256:19903add9f9d8cbe5cb9bbc6c2b7997c934000a5f4c5bd22d822c808960929ab",
+    "promptVersion": 7,
+    "appliedTranslationRepairs": 16,
+    "editorialProposals": 9,
+    "editorialDecisions": 9,
+    "ownerDidNotReextract": true,
+    "ownerDidNotAlterSealedInputs": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-045/date-packet.json",
+    "contentSha256": "sha256:69477216f34147ef3bfc394fe975ac1fe89986aed3e25d5d5a7c4a56eba818e6",
+    "itemCount": 334,
+    "sourceHash": "sha256:507e07f532bba73646ab0936da4685c3873e3dec0bba30d639e4f9742069d0a2",
+    "extractionHash": "sha256:f7d003354a856c68030b71a2f42f8a11c6e358b7e5a6b284340b96944e5f541c",
+    "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 045 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-045/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 045",
+    "peopleValidateSummary": "Person data validation failed:",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/xinwudaishi/045.json",
+    "peopleValidateExtractionPassed": true,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 045",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/xinwudaishi/045.json"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "blocked-missing-literal-authorization",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentProofs": {
+    "date": {
+      "gate": "independent-native-date-audit",
+      "detail": "Fresh sealed date packet prepared at pinned extraction; data/people/date-audits missing. Independent reviewer must run native date workflow against this packet and record approval via people:dates:record without self-approval.",
+      "packetSha256": "sha256:69477216f34147ef3bfc394fe975ac1fe89986aed3e25d5d5a7c4a56eba818e6"
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "detail": "Global identity resolution dossiers remain for chapter-local people after date approval; owner pass did not perform merges or canonical identity edits."
+    },
+    "editorial": {
+      "gate": "independent-paired-literal-editorial",
+      "detail": "Applied literal paired repairs for s0012, s0020, s0023, s0027, s0057, s0086, s0194 reuse reviewed idiomatic decisions but have no matching independent editorial decisions; people:validate blocks until an independent reviewer accepts or revises each paired literal contract."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "missing-native-date-report",
+      "detail": "No data/people/date-audits record; people:dates:verify returns un-audited."
+    },
+    {
+      "kind": "editorial-authorization-gap",
+      "detail": "Applied literal paired repairs for s0012, s0020, s0023, s0027, s0057, s0086, s0194 reuse reviewed idiomatic decisions but have no matching independent editorial decisions; people:validate blocks until an independent reviewer accepts or revises each paired literal contract.",
+      "repairIds": [
+        "xinwudaishi:045:r0010",
+        "xinwudaishi:045:r0011",
+        "xinwudaishi:045:r0012",
+        "xinwudaishi:045:r0013",
+        "xinwudaishi:045:r0014",
+        "xinwudaishi:045:r0015",
+        "xinwudaishi:045:r0016"
+      ]
+    }
+  ],
+  "substantiveFindings": "Sealed source and extraction witness-verified; editorial file covers nine idiomatic repairs but seven applied literal paired repairs lack independent authorization, blocking people:validate. Native date packet prepared; independent date audit still missing. Owner made no sealed input edits.",
+  "scopedChronologyOrIdentityChanges": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 045",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 045 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-045/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 045"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no registry, deploy, merge, or sealed canonical edits."
+}
