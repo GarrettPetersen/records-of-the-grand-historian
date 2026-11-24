@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "053"
+  },
+  "ownerAgentId": "bc-753d3cd0-3f52-443f-90cd-27cbf4b14574",
+  "workerId": "cursor-nov24-retained-staging-w2-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f47cb357e6665b0b9b9c68014302ba8f304062d7f799e59688214c08df37db2c",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-053-14574",
+  "inputBlobWitness": {
+    "source": "7c8f22b3b81a9aa6a0001c752b52c7513b67deb5",
+    "extraction": "5bf833169b70df0aabaaeb48efceca7606e6ee0b",
+    "dateAudit": "aa3262748f0ada4e1374bccc3f9d2a29e408abb7",
+    "editorial": "648e97a4940d3c1385a977249d7d3598d9e70be9"
+  },
+  "sealedInputPacketHashes": {
+    "source": "sha256:c0e9dcf6ed87361f2989d2b6a17c81241b22044e09f1f842907b41efe2d6f76b",
+    "extraction": "sha256:ed4cae370d0017075b7c56a6875bced4aaf7766ee2e59a4e60ba39e48625730a",
+    "dateAudit": "sha256:dee034034cc8de7c5d7325dc7ecbf2d4605885cfff16bf3f00ab0d5bbe54a04e",
+    "editorial": "sha256:2b14867e2f9d8c85dd397b9f0c0214856e7a6f7ddb33dbe2118942448d2dca3b"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 280,
+    "sentenceCount": 280,
+    "translatedCount": 280,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "coverageNote": "Chapter meta reports paired literal and idiomatic English via translations[] for all sentences; extraction unitCount may include non-sentence structural units."
+  },
+  "validation": {
+    "notIndependentApproval": true,
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jinshi --chapter 053",
+    "peopleValidateSummary": "Scoped person data validation passed for jinshi/053: 1 extraction(s), 7 local people, 16 mentions, 63 claims, 0 proposed repair(s), 6 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book jinshi --chapter 053",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditReviewedAt": "2026-09-23T20:00:00Z",
+    "dateAuditFindings": 2,
+    "dateAuditResearchBlockedPersons": 2,
+    "datesVerifySnapshot": {
+      "book": "jinshi",
+      "chapter": "053",
+      "status": "research-blocked",
+      "auditVersion": 1,
+      "reviewedAt": "2026-09-23T20:00:00Z",
+      "findings": 2
+    },
+    "extractionBytes": 44431,
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "editorialDecisionCount": 1,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Jin clerical-selection treatise (280 units). Seven people with applied extraction translation repairs and accepted editorial decisions on offices and rank terminology. Independent date audit research-blocked on two source-specific holds (海陵初 and 避顯宗諱) while other Jin reign dates remain internally consistent; two claim revisions already recorded in sealed editorial scope.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "date-audit-finding-1",
+      "kind": "preserved-research-block",
+      "status": "research-blocked",
+      "problem": "The source's relative wording 海陵初 does not identify a numbered calendar year or independently substantiate the full AD 1149–1161 hint. Treating it as a point event in AD 1149 overstates the evidence.",
+      "action": "Retain a source-linked research hold. Consult a source that establishes the intended event's date; then remove the point claim or replace it with a justified bounded/contextual chronology without guessing.",
+      "items": [
+        "claim-8",
+        "hints-p001",
+        "p001"
+      ],
+      "preserved": true
+    },
+    {
+      "id": "date-audit-finding-2",
+      "kind": "preserved-research-block",
+      "status": "research-blocked",
+      "problem": "The only Xianzong evidence says that an office name was later changed to avoid his taboo. It does not date that renaming, establish a personal event in AD 1185, or independently verify the extracted point hint.",
+      "action": "Retain a source-linked research hold. Verify the taboo chronology and the date of the institutional renaming from a suitable Jin historical witness before narrowing, reclassifying, or removing the point chronology.",
+      "items": [
+        "claim-37",
+        "hints-p007",
+        "p007"
+      ],
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; sealed inputs unchanged; host supplies native final review packets.",
+  "completedAt": "2026-11-24T16:07:30.466Z",
+  "authorEvidence": {
+    "method": "Verified pinned git blobs at stagingBase; npm run people:validate and people:dates:verify; reviewed sealed extraction people/claims/mentions, accepted editorial decisions, and independent date-audit scope; no canonical source or extraction edits; no local registry build.",
+    "holdsPreserved": "Two explicit chronology holds for Hailing early-reign wording and Xianzong taboo renaming; five persons independently supported in sealed audit."
+  }
+}
