@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "374"
+  },
+  "ownerAgentId": "bc-80c0c463-058e-40b7-9a6f-d8293170ade7",
+  "workerId": "cursor-nov24-retained-staging-w18-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8da91bb578d168f31f4cf0451971bac12a3f4da6e0922ca07441bfed58cc1007",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-374-0ade7",
+  "extractionBytes": 227705,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:edf307d074f04e3ef9ad16dda6e7c47592223b14bba4d6db67571bfe8b5fc93a",
+    "people": 60,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "aef3e3c573af99d6be8f3782ede312ba1a0a3a0a",
+    "extraction": "46501ac972c45120a003723999fb1522fdb8529e",
+    "editorial": "6cd6982400e704c4dbad37a76cfa5cf799f5af2a",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:efc44a5c787bcbba5cf72625555f6479b1eaa606b2f491ecbb7286091277c685",
+    "extraction": "sha256:edf307d074f04e3ef9ad16dda6e7c47592223b14bba4d6db67571bfe8b5fc93a",
+    "editorial": "sha256:9cd60905833f65a362c7277eeef03c30f2d8515e272d201242e280995d689d94",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 374 Biographies 161: Yao Wentian, Dai Dunyuan, Zhu Shiyan, He Linghan, Li Zhenhu, Zong Shiengui",
+    "chineseUnits": 317,
+    "translatedCount": 317,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "metaSentenceCount": 317,
+    "extractionBytes": 227705
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "editorialDecisionCount": 31,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "proposedRepairsOpen": 0,
+    "noReExtraction": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-374/date-packet.json",
+    "sha256": "sha256:5a09a98f7f959e38fc37483adc5fa7605af6e52fd3a245ab2fb1067a7e2d60b1",
+    "sourceHash": "sha256:5c6e9fdd7f5ac86e3f43c5762c6a78564f6ddbfe18765305f9bae05dd0f467c7",
+    "extractionHash": "sha256:fa36a42540c8b7e888e5e55c3d5dc52e7162599e79868d77de0d030163510925",
+    "itemCount": 427,
+    "peopleCount": 60,
+    "unitCount": 317,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 374 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-374/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 374",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/374: 1 extraction(s), 60 local people, 240 mentions, 1000 claims, 0 proposed repair(s), 31 applied repair(s), 31 editorial decision(s), 1 claim retraction(s), 7 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 374",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs (no native date-audit file). Full chapter Chinese/English read: 317 units with paired literal and idiomatic English. Accepted extraction and applied editorial repairs preserved at pinned blobs. Native date packet sealed at sha256:5a09a98f7f959e38fc37483adc5fa7605af6e52fd3a245ab2fb1067a7e2d60b1. No definite English omission, concrete source–extraction contradiction, or owner-scoped chronology repair required in this pass. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeScopedDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-374/date-packet.json",
+      "packetSha256": "sha256:5a09a98f7f959e38fc37483adc5fa7605af6e52fd3a245ab2fb1067a7e2d60b1",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 374",
+      "verifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 374",
+      "notes": "Independent reviewer must approve full scoped audit against sealed date packet; undated attestations allowed when source-backed."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date",
+      "notes": "Bounded cross-corpus identity review follows independent date approval; owner handoff is not identity certification."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 374",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 374",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 374 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-374/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry build, deploy, or merge."
+}

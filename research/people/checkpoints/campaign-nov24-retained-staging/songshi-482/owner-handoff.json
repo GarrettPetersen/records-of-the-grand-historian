@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "482"
+  },
+  "ownerAgentId": "bc-80c0c463-058e-40b7-9a6f-d8293170ade7",
+  "workerId": "cursor-nov24-retained-staging-w18-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8da91bb578d168f31f4cf0451971bac12a3f4da6e0922ca07441bfed58cc1007",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-482-0ade7",
+  "extractionBytes": 226538,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:517a1831c2fd5c64dc79925753f8edd69a2f3b1aec1f40fba2cb2aeaf6e6fc35",
+    "people": 196,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "84e0877274aa9186c5d9382ace269a477977e9e7",
+    "extraction": "6efa00b50ba05488ac68fa546f73e07519a61ddc",
+    "editorial": "a4016714deafb6107184fc925be19848c550e5c0",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:d7673f059b24c4e469e228b87f091e00bb6e8089d2f949c41ed94fe40b4f3b63",
+    "extraction": "sha256:517a1831c2fd5c64dc79925753f8edd69a2f3b1aec1f40fba2cb2aeaf6e6fc35",
+    "editorial": "sha256:7b7ccb8395d3197155ec117dcec332aa72a4ef27c1bbb5208efad944083f81a8",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 482 Biographies 241, Hereditary Houses 5: Liu Jiyuan of the Northern Han Liu Family (Father: Liu Jun; Elder Brother: Liu Ji'en; Appended: Wei Rong, Zhao Wendu, Li Yun, Ma Feng, Guo Wuwei)",
+    "chineseUnits": 252,
+    "translatedCount": 252,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "metaSentenceCount": 252,
+    "extractionBytes": 226538
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "editorialDecisionCount": 11,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "proposedRepairsOpen": 0,
+    "noReExtraction": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-482/date-packet.json",
+    "sha256": "sha256:4b126aa461d529d782ed22db964738339cb3bb5465ea9107712be7f0681b9edd",
+    "sourceHash": "sha256:b9a2986e076ee2c99283f3a2da4aea81a95d91d80cf02afcc1e867f26c397738",
+    "extractionHash": "sha256:27d371153d78df727fc62696d07ba8ef1f25f25ab9164e2c7b7fde57764ef4e9",
+    "itemCount": 539,
+    "peopleCount": 196,
+    "unitCount": 252,
+    "buildCommand": "npm run people:dates:packet -- --book songshi --chapter 482 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-482/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 482",
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/482: 1 extraction(s), 196 local people, 946 mentions, 1156 claims, 0 proposed repair(s), 11 applied repair(s), 11 editorial decision(s), 3 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 482",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs (no native date-audit file). Full chapter Chinese/English read: 252 units with paired literal and idiomatic English. Accepted extraction and applied editorial repairs preserved at pinned blobs. Native date packet sealed at sha256:4b126aa461d529d782ed22db964738339cb3bb5465ea9107712be7f0681b9edd. No definite English omission, concrete source–extraction contradiction, or owner-scoped chronology repair required in this pass. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "metadata-chunk-agentId-absent",
+      "detail": "8/8 extraction chunks lack chunk agentId; scoped people:validate still passes.",
+      "blocksPublication": false
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "nativeScopedDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-482/date-packet.json",
+      "packetSha256": "sha256:4b126aa461d529d782ed22db964738339cb3bb5465ea9107712be7f0681b9edd",
+      "recordCommand": "npm run people:dates:record -- --book songshi --chapter 482",
+      "verifyCommand": "npm run people:dates:verify -- --book songshi --chapter 482",
+      "notes": "Independent reviewer must approve full scoped audit against sealed date packet; undated attestations allowed when source-backed."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date",
+      "notes": "Bounded cross-corpus identity review follows independent date approval; owner handoff is not identity certification."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 482",
+    "datesVerify": "npm run people:dates:verify -- --book songshi --chapter 482",
+    "datesPacket": "npm run people:dates:packet -- --book songshi --chapter 482 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-482/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry build, deploy, or merge."
+}

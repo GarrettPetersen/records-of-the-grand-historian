@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "161"
+  },
+  "ownerAgentId": "bc-80c0c463-058e-40b7-9a6f-d8293170ade7",
+  "workerId": "cursor-nov24-retained-staging-w18-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8da91bb578d168f31f4cf0451971bac12a3f4da6e0922ca07441bfed58cc1007",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-161-0ade7",
+  "extractionBytes": 228383,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:b6514f40bd3b1995a93615713f0269a1a23fd7518b1ad8e365ab40e5e5815fc2",
+    "people": 216,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "50bcd19d645ecb71b2418465f0a8c019ebce7cd8",
+    "extraction": "43883da603c3082657cea85883e1e87159c944f2",
+    "editorial": "b741d9ed2b44e248891057c5269111bc2346af5f",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:6f6bd9bc87702479842d3472aef8a4bb4ecc4e756375b04fcf70095bfad3f038",
+    "extraction": "sha256:b6514f40bd3b1995a93615713f0269a1a23fd7518b1ad8e365ab40e5e5815fc2",
+    "editorial": "sha256:48fd3c786e908518d9ce4871dd8e7884cd1e52b3d52ed17e76178da924809cce",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 161 Biographies 48: Yang Dayuan, Liu Zheng",
+    "chineseUnits": 224,
+    "translatedCount": 224,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "metaSentenceCount": 224,
+    "extractionBytes": 228383
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "editorialDecisionCount": 4,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "proposedRepairsOpen": 0,
+    "noReExtraction": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-161/date-packet.json",
+    "sha256": "sha256:e9003ce8e19e632d4b92b2d3562efcb1c28c9a48b4370723254312026ce463b8",
+    "sourceHash": "sha256:faa29a00007c9e01d26d4aa64e8078ac98270a1a183becc1d0fcdf08520e6a56",
+    "extractionHash": "sha256:6b8e8a81113d21d82ecdfeab8236be4c14825ba30c1b6bcce1e6041931faba03",
+    "itemCount": 516,
+    "peopleCount": 216,
+    "unitCount": 224,
+    "buildCommand": "npm run people:dates:packet -- --book yuanshi --chapter 161 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-161/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 161",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/161: 1 extraction(s), 216 local people, 728 mentions, 1301 claims, 0 proposed repair(s), 3 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 161",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs (no native date-audit file). Full chapter Chinese/English read: 224 units with paired literal and idiomatic English. Accepted extraction and applied editorial repairs preserved at pinned blobs. Native date packet sealed at sha256:e9003ce8e19e632d4b92b2d3562efcb1c28c9a48b4370723254312026ce463b8. No definite English omission, concrete source–extraction contradiction, or owner-scoped chronology repair required in this pass. Owner does not issue independent date approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "metadata-chunk-agentId-absent",
+      "detail": "8/8 extraction chunks lack chunk agentId; scoped people:validate still passes.",
+      "blocksPublication": false
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "nativeScopedDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-161/date-packet.json",
+      "packetSha256": "sha256:e9003ce8e19e632d4b92b2d3562efcb1c28c9a48b4370723254312026ce463b8",
+      "recordCommand": "npm run people:dates:record -- --book yuanshi --chapter 161",
+      "verifyCommand": "npm run people:dates:verify -- --book yuanshi --chapter 161",
+      "notes": "Independent reviewer must approve full scoped audit against sealed date packet; undated attestations allowed when source-backed."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date",
+      "notes": "Bounded cross-corpus identity review follows independent date approval; owner handoff is not identity certification."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 161",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 161",
+    "datesPacket": "npm run people:dates:packet -- --book yuanshi --chapter 161 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-161/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry build, deploy, or merge."
+}
