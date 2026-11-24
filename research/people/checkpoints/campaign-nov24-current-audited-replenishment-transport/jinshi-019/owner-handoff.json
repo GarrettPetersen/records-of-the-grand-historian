@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-replenishment-transport-identity-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "019"
+  },
+  "ownerAgentId": "bc-baec2f7d-f741-47fb-a885-8403df5166cc",
+  "campaignWorker": "cursor-nov24-replenishment-48-bounded",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-replenishment-48-bounded-owner-transports",
+    "commit": "ceffd5f57793dfba32f5878f510c5f55eed837ae",
+    "planFingerprint": "sha256:d0f7cdfd8617b7ec4126d9f78de66ee9183be144c95fe3cd20325b22baf5c5cc",
+    "sourcePacketSha256": "sha256:f7b719741a6d37a7b2feea0f21a51bb9e83ed582aa69ca914a9d863e8e6af9b8",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:788b8f47d4a26ef57ca890cf086aebfa1fdfeae47d3b8749cc983ba471907ddd",
+        "caseCount": 47
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:32ebf4cf0bb200b08b5828f977ddc37a45cc3fcc6466357b549796007d270437",
+        "caseCount": 48
+      }
+    ],
+    "preparationReceiptSha256": "sha256:0ab578c74860b62b0c749e7e1e655e1711d0f1233c9e5e71caf3cf744f28909c"
+  },
+  "sealedInputs": {
+    "source": "sha256:c53662a333bb2e124b8bddbab82c85bc272ee3ca0c347069d8b4164272b8f5bd",
+    "extraction": "sha256:ece102623f5a3b390c50b65588624f2f685628e1a984f7f738c7c589b58caa8c",
+    "editorial": "sha256:933ac7216f8dc9d2d5aee1d42d7c3a4a3744c03c717cc128b6645fd53b714de2",
+    "dateAudit": "sha256:da47eef0c8fef8e1cdb42028577141b7ae281eb1461ed1f1dde3075e2990b3ca"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "23 applied editorial decisions; no pending proposals",
+  "reviewCases": 95,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 95 cases retain preparation-proposed canonicalPersonId; 81 keep unresolvedIdentity true and 14 clear per sealed proposals. 26 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:0e6b011c2fa375171495c8003c2ec45eca6439b91af55c6fc2e703629d01ea73",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/jinshi-019/preparation-receipt.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/jinshi-019/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/jinshi-019/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/jinshi-019/lookup-receipt.json",
+    "transporttransportpart001": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/jinshi-019/transport-part-001.json",
+    "transporttransportpart002": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/jinshi-019/transport-part-002.json"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 019"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions across all transport parts."
+}
