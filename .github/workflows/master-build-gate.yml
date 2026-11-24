@@ -1,116 +1,77 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Prepare verified Pages recovery artifact
+run-name: Build deployable website files from the exact protected release
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
-  contents: read
-
+  contents: write
 jobs:
-  master-build:
-    name: master-build
+  package:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 48
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: e61eedae77bea163ec10120e88e806cde91315dd
+      RELEASE_TAG: pages-archive-e61eedae77bea163ec10120e88e806cde91315dd
+      NODE_OPTIONS: --max-old-space-size=4608
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
+      - run: npm install --no-audit --no-fund
+      - name: Build and verify the exact web release
         run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          npm run build
+          test -f public/index.html
+          test -f public/people/index.html
+          test -d functions/people
+          if find public -type f \( -iname "*.epub" -o -iname "*.mobi" -o -iname "*.azw" -o -name ".env" \) -print -quit | grep -q .; then echo "Unexpected private/release artifact under public"; exit 1; fi
+      - name: Package website assets and Pages runtime
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/deployable"
+          tar -czf "$RUNNER_TEMP/deployable/website.tar.gz" public functions wrangler.toml
+          test "$(stat -c "%s" "$RUNNER_TEMP/deployable/website.tar.gz")" -le 1900000000
+          find public -type f -printf ".\n" | wc -l > "$RUNNER_TEMP/deployable/public-file-count.txt"
+          printf "%s\n" "$SOURCE" > "$RUNNER_TEMP/deployable/revision.txt"
+          (cd "$RUNNER_TEMP/deployable" && sha256sum website.tar.gz revision.txt public-file-count.txt > SHA256SUMS)
+      - name: Check exact site and Functions contents, then retain one private draft release bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          cd "$RUNNER_TEMP/deployable"
+          sha256sum -c SHA256SUMS
+          test "$(cat revision.txt)" = "$SOURCE"
+          count="$(python3 - website.tar.gz <<'PY'
+          import os, posixpath, sys, tarfile
+          root, seen = sys.argv[1], set()
+          required = {'public/index.html', 'public/people/index.html', 'functions/people/[slug].js', 'wrangler.toml'}
+          count = 0
+          with tarfile.open(root, mode='r|gz') as archive:
+           for member in archive:
+            name = member.name.rstrip('/')
+            if name.startswith('/') or posixpath.normpath(name) != name or name in seen or not (name in {'public','functions','wrangler.toml'} or name.startswith(('public/','functions/'))): raise ValueError('Unexpected archive member')
+            if not (member.isdir() or member.isfile()) or member.size > 25*1024*1024 or any(x in {'.env','.git','node_modules'} for x in name.split('/')) or name.lower().endswith(('.epub','.mobi','.azw','.azw3')): raise ValueError('Unpublishable archive member')
+            seen.add(name)
+            count += member.isfile() and name.startswith('public/')
+          if not required.issubset(seen) or not 1 <= count <= 20000: raise ValueError('Archive is missing required site/runtime files or exceeds Pages free file quota')
+          print(count)
+          PY
+          )"
+          test "$count" -eq "$(cat public-file-count.txt)"
+          test "$(stat -c %s website.tar.gz)" -lt 2000000000
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then echo "An exact release tag already exists; reconcile it before trying again"; exit 1; fi
+          gh release create "$RELEASE_TAG" website.tar.gz SHA256SUMS revision.txt public-file-count.txt --repo "$GITHUB_REPOSITORY" --target "$SOURCE" --draft --prerelease --latest=false --title "Pages deployment archive for ${SOURCE:0:12}" --notes "Verified web publication files and Pages Functions for the recorded protected master revision."
+          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft,targetCommitish,assets,url > "$RUNNER_TEMP/release-receipt.json"
+          jq -e --arg sha "$SOURCE" --arg tag "$RELEASE_TAG" '(.targetCommitish==$sha) and (.tagName==$tag) and (.isDraft==true) and (.assets|length==4)' "$RUNNER_TEMP/release-receipt.json"
+      - uses: actions/upload-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
-        run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
-
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: pages-fallback-draft-release-receipt
+          path: ${{ runner.temp }}/release-receipt.json
+          if-no-files-found: error
+          retention-days: 3
