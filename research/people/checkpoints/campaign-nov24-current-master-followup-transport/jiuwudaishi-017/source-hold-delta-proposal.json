@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "jiuwudaishi/017",
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "revisions": {
+    "ownerHead": "54fe750207cc432197409e3bf5df5af5447ace87",
+    "ownerRef": "cursor/jiuwudaishi-017-followup-73c8",
+    "reviewHead": "55fa6547b6b4615d9470c97a1cdfa89a8ac1318e",
+    "reviewerAgentId": "bc-95616dc5-8ed6-42b5-a5c1-096ce9c2dbc9",
+    "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542"
+  },
+  "sealedInputs": {
+    "source": "sha256:459b5a64937618b563b68b91bc6202d101713ea02eb6dfb69644df3396dc0fbf",
+    "extraction": "sha256:8074f4610d9a39b214f0fb0a58ccb0fdb7284b4aea79cb9b2da078ef359e9b5c",
+    "editorial": "sha256:f81843229fb4cd49e55f14702e8c7a5b7d40e01daaf9b33ac68cf782c6a582d4",
+    "dateAudit": "sha256:7f34680959c0d7f51167895409c5f2cf879bf74384aa351862e591ae530e8e3d"
+  },
+  "holds": [
+    {
+      "caseId": "sha256:24902c5176fd8bfbc300403dd97754580eafc794088677a0d91b0b51b9f392cb",
+      "targetLocalId": "jiuwudaishi:017:p052",
+      "proposedCanonicalPersonId": "per_7P0VY9CFYVBS7N9YKZTZ",
+      "reviewerVerdict": "hold",
+      "diagnosis": "Sealed extraction stores the personal Chinese name 劉建鋒 (锋) for p052, but the pinned chapter source uses 劉建峰 / 建峰 (峰) on s0186 and s0187. English literal and idiomatic fields already transcribe Liu Jianfeng / Jianfeng consistently with 峰; mention surfaces on those units are English-only, so independent Han witnesses cannot be sealed without aligning Chinese identity and adding zh mention spans.",
+      "sourceWitness": {
+        "book": "jiuwudaishi",
+        "chapter": "017",
+        "units": [
+          {
+            "unitId": "s0186",
+            "field": "zh",
+            "literalQuote": "後與劉建峰據湖南，推建峰為帥。）〉"
+          },
+          {
+            "unitId": "s0187",
+            "field": "zh",
+            "literalQuote": "唐乾寧初，劉建峰據湖南，獨邵州不賓，命都將馬殷討之，期歲未克，而建峰為部下所殺，軍亂，鄰寇且至。"
+          }
+        ],
+        "englishFieldsUnchanged": true,
+        "englishNote": "s0186–s0187 literal/idiomatic already use Liu Jianfeng and Jianfeng; no translation repair required for this hold."
+      },
+      "operations": [
+        {
+          "operation": "extraction-person-display-zh",
+          "path": "data/people/extractions/jiuwudaishi/017.json",
+          "locator": { "personId": "p052", "field": "people[1]" },
+          "before": "劉建鋒",
+          "after": "劉建峰",
+          "reason": "Source graph names this actor 劉建峰 on s0186 and s0187."
+        },
+        {
+          "operation": "extraction-identity-name",
+          "path": "data/people/extractions/jiuwudaishi/017.json",
+          "locator": {
+            "personId": "p052",
+            "kind": "personal",
+            "lang": "zh"
+          },
+          "before": {
+            "zh": "劉建鋒",
+            "evidenceUnits": ["s0186"],
+            "certainty": "explicit"
+          },
+          "after": {
+            "zh": "劉建峰",
+            "evidenceUnits": ["s0186", "s0187"],
+            "certainty": "explicit"
+          },
+          "reason": "Align personal zh with primary chapter Chinese and extend explicit spans to both narrative units."
+        },
+        {
+          "operation": "extraction-surface-add",
+          "path": "data/people/extractions/jiuwudaishi/017.json",
+          "records": [
+            {
+              "before": null,
+              "after": [
+                "p052",
+                "personal-name",
+                "zh",
+                "劉建峰",
+                [
+                  ["s0186", [0]],
+                  ["s0187", [0]]
+                ]
+              ]
+            },
+            {
+              "before": null,
+              "after": [
+                "p052",
+                "personal-name",
+                "zh",
+                "建峰",
+                [
+                  ["s0186", [1]],
+                  ["s0187", [1]]
+                ]
+              ]
+            }
+          ],
+          "reason": "Mirror existing en personal-name surfaces with source-backed zh mention spans on s0186 and s0187."
+        }
+      ],
+      "impactedDependencies": {
+        "chronology": "No change: existing attestation on s0185/s0187 (乾寧初 → AD 894) remains valid for the same actor.",
+        "identity": "Retain accepted canonical per_7P0VY9CFYVBS7N9YKZTZ and unresolvedIdentity true; this patch is glyph/witness coverage only, not a merge or split.",
+        "editorial": "No editorial-decision file change; sealed 11 decisions unaffected.",
+        "translation": "None"
+      },
+      "holdRequiredAfterApply": false,
+      "holdRequiredReasonAfterApply": "After zh identity and mention surfaces match s0186–s0187, independent reviewers can seal Han witnesses 劉建峰 / 建峰 without glyph substitution; canonical membership review can proceed."
+    }
+  ],
+  "preservationNote": "All other chapter persons, claims, surfaces, and review case dispositions remain unchanged."
+}
