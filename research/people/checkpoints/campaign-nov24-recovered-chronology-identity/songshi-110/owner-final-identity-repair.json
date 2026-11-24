@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-final-identity-repair",
+  "scope": {
+    "book": "songshi",
+    "chapter": "110"
+  },
+  "ownerAgentId": "bc-7eb9513a-4f87-4189-ae03-a92281c6deea",
+  "ownerBranch": "cursor/nov24-focused-canonical-hold-songshi-110",
+  "parentOwnerHead": "cfb34e1cbe95c34f18aa87d5dee4fb098dc0dd9a",
+  "sourceReviewHead": "56e22f8b8f6033bee5899b1f18b8c6131dc5c0b9",
+  "independentReviewerAgentId": "bc-efbaa0a4-9637-4275-906b-a1417250f386",
+  "caseId": "sha256:1b3ad27d02fc3273385570800137653b43110c68cca825aa841fd69aab499a5f",
+  "localPersonId": "songshi:110:p022",
+  "canonicalPersonId": "per_0YWAV0DRQW5NVPM9NX73",
+  "ownerVerdict": "uphold-hold",
+  "independentHoldPreserved": true,
+  "ownerApproval": false,
+  "sourceWitnessReview": {
+    "unitsOwned": ["s0010", "s0103"],
+    "primaryChinese": [
+      {
+        "unitId": "s0010",
+        "quote": "建隆四年，群臣三上表上尊號，詔俟郊畢受冊。",
+        "blockingFor太祖": false,
+        "blockingFor皇帝": false,
+        "notes": "Ministers and edict only; no imperial personal, temple, or title surface for the honorand."
+      },
+      {
+        "unitId": "s0103",
+        "quote": "建隆元年，詔尊母南陽郡太夫人為皇太后，仍令所司追冊四親廟。",
+        "blockingFor太祖": false,
+        "blockingFor皇帝": false,
+        "notes": "母 implies an issuing son; 皇帝 does not appear in the Chinese line."
+      }
+    ],
+    "englishFields": [
+      {
+        "unitId": "s0103",
+        "field": "idiomatic",
+        "text": "In Jianlong 1, 960, an edict honored the emperor's mother, Lady Nanyang, as empress dowager…",
+        "importsNameFromTranslation": true,
+        "notes": "English supplies 'the emperor' where Chinese has only 詔尊母; not a primary Chinese name witness for Taizu/太祖."
+      }
+    ],
+    "crossChapterAnchor": {
+      "localId": "jiuwudaishi:085:p072",
+      "unitId": "s0132",
+      "quote": "太祖",
+      "disprovesCanonicalMembership": false,
+      "suppliesChapterLocalWitness": false
+    },
+    "conclusion": "Chapter-local primary witness cannot quote 太祖, Taizu, or 皇帝 on owned units. External canonical membership may still stand; identity approval on this chapter-local packet remains blocked."
+  },
+  "extractionRepresentationFindings": [
+    {
+      "defectKind": "explicit-title-without-chinese-surface",
+      "personId": "p022",
+      "location": "people row identityNames + claim-linked surfaces",
+      "before": {
+        "titleSurface": {
+          "kind": "title",
+          "en": "Emperor",
+          "zh": "皇帝",
+          "certainty": "explicit",
+          "units": ["s0010", "s0103"]
+        }
+      },
+      "afterProposed": {
+        "s0010": "Remove p022 title-surface evidence from s0010; retain only attestation keyed to 建隆四年 without treating 皇帝 as explicit.",
+        "s0103": "Downgrade title 皇帝 to strongly-inferred or descriptive-role if retained, citing 母/詔 only; zh witness is 母 not 皇帝."
+      },
+      "reason": "Native primary-witness rules require the Chinese surface in-unit; s0010 contains neither 皇帝 nor a named ruler."
+    },
+    {
+      "defectKind": "preferred-identity-without-chapter-witness",
+      "personId": "p022",
+      "before": {
+        "preferredName": ["Taizu", "太祖", "Taizu"],
+        "note": "Individuated as the Jianlong-era emperor… not named by personal or temple name in owned units."
+      },
+      "afterProposed": "Keep dossier label 太祖 for registry continuity but flag chapter-local identity as unnamed Jianlong-era ruler until a repair separates extrinsic temple name from quotable chapter surfaces.",
+      "reason": "Extraction note already admits absence of naming; hold is not contradicted by stronger chapter evidence."
+    },
+    {
+      "defectKind": "english-name-import-on-related-person",
+      "personId": "p023",
+      "unitId": "s0103",
+      "field": "descriptive-kinship English",
+      "before": "Taizu's mother",
+      "afterProposed": "emperor's mother / son's mother (matching 母 only)",
+      "reason": "English reading imports extrinsic preferred identity; separate editorial repair if pursued—outside this chapter-local identity approval."
+    }
+  ],
+  "supplementalRepairProposal": {
+    "applyToExtraction": false,
+    "status": "documented-only",
+    "claimsAffected": ["p022 title surfaces on s0010", "p022 ruler explicit tags on s0010"],
+    "chronologyImpact": "none — attestation years 建隆元年/建隆四年 unchanged",
+    "dateAuditImpact": "none — audited items unchanged",
+    "editorialImpact": "none",
+    "identityImpact": "Would narrow p022 chapter-local quotable surfaces; does not merge/split canonical IDs"
+  },
+  "groundedHold": {
+    "verdict": "hold",
+    "reason": "Uphold independent hold: songshi:110:p022 lacks quotable 太祖/皇帝 Chinese primary witness on s0010 and s0103; extraction incorrectly marks explicit 皇帝 on s0010. Canonical assignment to per_0YWAV0DRQW5NVPM9NX73 is not disproved by anchor 太祖 in jiuwudaishi 085, but chapter-local approval requires repair or continued hold."
+  },
+  "scopedValidation": {
+    "command": "npm run people:validate -- --book songshi --chapter 110",
+    "result": "passed",
+    "note": "Validation pass does not override primary-witness hold."
+  },
+  "artifactsPreserved": {
+    "independentReports": [
+      "independent-identity-report-part-001.json",
+      "independent-identity-report-part-002.json",
+      "independent-identity-report-part-003.json"
+    ],
+    "unaltered": true
+  },
+  "notes": "Owner does not approve identity or overturn the single independent hold. No changes to data/people/extractions, date audit, or independent report bytes in this commit."
+}
