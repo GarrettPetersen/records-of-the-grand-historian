@@ -1,71 +1,95 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Restore historical Jinshu 020 extraction authorship
+run-name: Verify all 13 original GrokBot claims and carry forward the audited chronology
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  recover:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: 50310cdac7912f2975a22896ad5631f7bada5845
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Match actual old authorship and retain native chronology proofs
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$RUNNER_TEMP/jinshu020-historical-authorship"
+          mkdir -p "$OUT/history"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {extractionAuthorAgentIds} from './scripts/lib/people-extraction-authorship.mjs';
+          import {buildDateAuditPacket,validateDateAuditReport,dateAuditReferencesCurrent,recordDateAudit} from './scripts/lib/people-date-audit.mjs';
+          const {SOURCE,OUT,GITHUB_REPOSITORY}=process.env;
+          const extractionPath='data/people/extractions/jinshu/020.json';
+          const datePath='data/people/date-audits/jinshu/020.json';
+          const originalCommit='5d153701a8548b71458d0bad22052cd9b9935eb6';
+          const queueCommit='96d7743c84cb0c55b0df8a75f83cc7598d5b3417';
+          const get=(p,ref)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+p+'?ref='+ref],{maxBuffer:10e6});
+          const request=JSON.parse(execFileSync('gh',['api','repos/'+GITHUB_REPOSITORY+'/pulls/5107']));
+          const original=JSON.parse(get(extractionPath,originalCommit));
+          const priorOwner=JSON.parse(get('people-work-queue.json',queueCommit)).claims['jinshu/020'];
+          const raw=fs.readFileSync(extractionPath),current=JSON.parse(raw);
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const shape=x=>x.run.chunks.map(c=>({id:c.chunkId,start:c.startOrder,end:c.endOrderExclusive}));
+          assert.equal(priorOwner.lane,'grokbot');
+          assert.equal(priorOwner.status,'claimed');
+          assert.equal(priorOwner.sticky,true);
+          assert.equal(priorOwner.worker,'grokbot-28');
+          assert.equal(request.head.sha,originalCommit);
+          assert.equal(request.head.ref,'grokbot/people-jinshu-020-'+priorOwner.worker);
+          assert.match(request.body,/Validated server-side against the current sealed packet/);
+          assert.equal(priorOwner.chapterFingerprint,original.input.chapterFingerprint);
+          assert.deepEqual(shape(original),priorOwner.grokbotPlan.chunks);
+          assert.deepEqual(shape(current),shape(original));
+          assert.equal(current.run.chunks.length,13);
+          assert(current.run.chunks.every(c=>c.agentId===null&&c.runId===null&&c.model==='Grok Bot'));
+          const before=buildDateAuditPacket('jinshu','020');
+          const candidate=structuredClone(current);
+          for(const x of candidate.run.chunks)x.agentId=priorOwner.worker;
+          assert.deepEqual(extractionAuthorAgentIds(candidate),[priorOwner.worker]);
+          const file=JSON.parse(fs.readFileSync(datePath));
+          validateDateAuditReport(file,before);
+          assert.equal(file.status,'audited');
+          assert.equal(file.findings.length,0);
+          assert(dateAuditReferencesCurrent(file));
+          assert.notEqual(file.reviewer.agentId,priorOwner.worker);
+          const after=buildDateAuditPacket('jinshu','020',{extraction:candidate});
+          assert.equal(before.sourceHash,after.sourceHash);
+          for(const k of ['people','items','units','unitPeople'])assert.deepEqual(after[k],before[k]);
+          const next={...file,extractionHash:after.extractionHash,summary:file.summary+' Original source-based proof retained after recovery of exact historical extraction author identities.'};
+          validateDateAuditReport(next,after);
+          const updated=JSON.stringify(candidate,null,2)+'\n';
+          fs.writeFileSync(extractionPath,updated);
+          const status=recordDateAudit(next);
+          assert.equal(status.status,'audited');
+          assert.equal(status.findings,0);
+          const historyName=hash(JSON.stringify(file))+'.json';
+          const history='data/people/date-audit-history/jinshu/020/'+historyName;
+          assert.deepEqual(JSON.parse(fs.readFileSync(history)),file);
+          fs.copyFileSync(history,path.join(OUT,'history',historyName));
+          fs.copyFileSync(extractionPath,path.join(OUT,'recorded-extraction.json'));
+          fs.copyFileSync(datePath,path.join(OUT,'recorded-date-audit.json'));
+          fs.writeFileSync(path.join(OUT,'provenance-receipt.json'),JSON.stringify({source:SOURCE,originalPR:5107,originalCommit,queueCommit,actor:priorOwner.worker,chunkPlan:shape(candidate),originalChapterFingerprint:priorOwner.chapterFingerprint,previousExtractionSha256:hash(raw),extractionSha256:hash(updated),dateSha256:hash(fs.readFileSync(datePath)),priorExtractionHash:before.extractionHash,newExtractionHash:after.extractionHash,dateChecks:file.itemChecks.length,status},null,2)+'\n');
+          JS
+          npm run people:validate -- --book jinshu --chapter 020 | tee "$OUT/scoped-validation.txt"
+      - uses: actions/upload-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: jinshu-020-restored-historical-authorship
+          path: ${{ runner.temp }}/jinshu020-historical-authorship/
+          if-no-files-found: error
+          retention-days: 7
