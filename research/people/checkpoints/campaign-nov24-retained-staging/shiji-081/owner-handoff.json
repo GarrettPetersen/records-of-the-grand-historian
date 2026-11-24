@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "081"
+  },
+  "ownerAgentId": "bc-bc8282c5-9a08-4f9f-b40f-cdbf21d358ec",
+  "workerId": "cursor-nov24-retained-staging-w16-o11",
+  "idempotencyKey": "9f9b5aa7773dcb30f82fc4cd25afc84102e9d9be69c2fc9b643a16b311e31584",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-081-358ec",
+  "extractionBytes": 166564,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "bb0613eeea6e01f477b44b85deb7686cf17ad463eea224c611ba4c99a9f8c026",
+    "people": 52,
+    "claims": 573,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "1fda55f90cfe8903f73b782d3f34a22e05a3bc8e",
+    "extraction": "1997d316f5194c1a7235e7d91eff9d6b28ef6e7c",
+    "editorial": "e63b1809c68106e7096e29581bccbe35cf812bf7"
+  },
+  "sealedInputs": {
+    "source": "sha256:20a1f67d24bb9d3d0b4df750ec7fe3442c8a31bd4b83f9f819be609a3dc3a6a2",
+    "extraction": "sha256:bb0613eeea6e01f477b44b85deb7686cf17ad463eea224c611ba4c99a9f8c026",
+    "editorial": "sha256:bee9242d018bde2b2e71559e1940ba46638dff7f6b7ee0358aaa37db7fc8aacd"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Biographies of Lian Po and Lin Xiangru",
+    "chineseUnits": 239,
+    "translatedCount": 239,
+    "sentenceCount": 239,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 166564
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "sourceExtractionSha256Verified": true,
+    "editorialDecisionsPreserved": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "status": "reviewed-with-applied-proposals",
+    "path": "data/people/editorial-decisions/shiji/081.json",
+    "blob": "e63b1809c68106e7096e29581bccbe35cf812bf7"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-081/date-packet.json",
+    "sha256": "sha256:aad382a193ca5ea8f4d4d691f5a24a09d5261ac53058d6a63b67dc47570b2a10",
+    "sourceHash": "sha256:40b9cfcade4d07d025c6ed3131e945b9b83dcbadea7241ff61a5c23790a2b9a7",
+    "extractionHash": "sha256:0deac5c94506a582101839f397ebb7b7ec68ab356088268b666f8d9ba8b85e7d",
+    "temporalItemCount": 285,
+    "peopleCount": 52,
+    "reviewedUnitCount": 239,
+    "command": "npm run people:dates:packet -- --book shiji --chapter 081 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-081/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 081",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/081: 1 extraction(s), 52 local people, 642 mentions, 745 claims, 0 proposed repair(s), 15 applied repair(s), 18 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/081.json",
+    "peopleValidateExtractionSummary": "data/people/extractions/shiji/081.json: ok (52 people, 642 mentions, 745 claims, 746 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 081",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeReportPresent": false
+    },
+    "chronologyStatus": "candidate-packet-sealed",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Lian Po and Lin Xiangru biographies: 239 Chinese units fully translated; 52 people with supported Zhao/Chu political chronology claims and 0 legacy attestation debt. Fifteen applied repairs authorized by eighteen editorial decisions; validate-people-extraction and people:validate pass. No owner-authored repairs.",
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "detail": "Native date audit absent; audit sealed packet sha256:aad382a193ca5ea8f4d4d691f5a24a09d5261ac53058d6a63b67dc47570b2a10 (285 items, 52 people, 239 units)."
+    }
+  ],
+  "remainingIndependentProofs": [
+    {
+      "kind": "native-date-audit",
+      "blockedBy": "no-native-date-report",
+      "packetSha256": "sha256:aad382a193ca5ea8f4d4d691f5a24a09d5261ac53058d6a63b67dc47570b2a10",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "runCommand": "npm run people:dates:run -- --book shiji --chapter 081 --worker <stable-id> --lane cursor-sdk --model <model> --run"
+    },
+    {
+      "kind": "chapter-identity-canonical",
+      "detail": "No chapter-local identity merge/split edits in this owner pass; continue corpus identity resolution from validated extraction at current hash after date approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssuedByOwner": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 081",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 081",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 081 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-081/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs and extraction unchanged; candidate date packet stored for independent reviewer."
+}
