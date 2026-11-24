@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T07:30:01.900Z",
+ "lastCheckedAt": "2026-11-24T07:30:42.369Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -22216,7 +22216,7 @@
       "runId": "run-f45dce8a-9d7d-4fd1-800f-d600e9cb7200",
       "observedAt": "2026-11-24T06:49:23.692Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "05b285156dc12ab926e205f884e12a8897d35430",
        "reportSha256": "7ef5dbd964d18f9e963806d0e789a4d164659873db7e9fe6da1f702c32af27ef",
        "summary": {
@@ -22224,7 +22224,8 @@
         "holds": [],
         "repairs": []
        },
-       "reconciled": "Complete native case set in a different order."
+       "reconciled": "Complete native case set in a different order.",
+       "nativeFinding": "Unexpected review envelope fields"
       }
      },
      "xintangshu/064": {
@@ -22661,14 +22662,15 @@
       "runId": "run-aa7c9af4-44b2-4464-95de-7ef18f5a30c2",
       "observedAt": "2026-11-24T07:02:01.258Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "4e546d031f6784fbdd19d664648a080242df5676",
        "reportSha256": "db39592a609c1abfe36dac3f475501f3a8e6aa2d2ac84dd85b2bef19ea1eea70",
        "summary": {
         "cases": 26,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "A chapter-local person lacks independent primary identity coverage"
       }
      },
      "xinwudaishi/020": {
@@ -22694,14 +22696,15 @@
       "runId": "run-e870aaac-f79c-4764-885b-f3c823116cfa",
       "observedAt": "2026-11-24T07:02:01.258Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "83e73d5a05e6e8c8c0893ef5520bc4bfb36d0df4",
        "reportSha256": "d30dcd554714095c804dc6ca3f04e00d38f09f3507ed6639d25951c29daad9f9",
        "summary": {
         "cases": 31,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support this person in the current primary source: chenshu:002:p003 chenshu:002:s0006 quote=\"舜\""
       }
      },
      "liangshu/023": {
@@ -22760,14 +22763,15 @@
       "runId": "run-b6027a6a-8e58-487d-91e5-66458dd37938",
       "observedAt": "2026-11-24T07:02:01.258Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "a604e50c6a58f82e663f7200a4bd661399031228",
        "reportSha256": "9ee70942386e57e2cb920f8c91a1797c68685dde57000277a2c5cc755fe7c8d7",
        "summary": {
         "cases": 36,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support this person in the current primary source: xintangshu:012:p036 xintangshu:012:s0258 quote=\"宣父\""
       }
      },
      "songshu/096": {
@@ -22793,14 +22797,15 @@
       "runId": "run-2e3d7443-0ace-4941-8563-84ea19426053",
       "observedAt": "2026-11-24T07:02:01.258Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "4d5d285f1fb2f2d24762bd63418ec52d5bba0642",
        "reportSha256": "3db22fda564fddbd6b54d5590b592056af2e7bffa261202c98ec35314b3efe05",
        "summary": {
         "cases": 40,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Unexpected review envelope fields"
       }
      },
      "houhanshu/126": {
@@ -23379,7 +23384,7 @@
       "ref": "codex/cursor-glossary-nov24-2026-recovered-native-certify-second",
       "workflowRevision": "795f6421e7819506b237248834dcc705d5ebd93c",
       "source": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-      "status": "in_progress",
+      "status": "completed",
       "jobs": [
        {
         "key": "qingshigao/120",
@@ -23460,9 +23465,63 @@
        }
       ],
       "artifact": "recovered-native-certify-second-evidence",
-      "conclusion": null,
+      "conclusion": "success",
       "runId": 45346102043,
-      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346102043"
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45346102043",
+      "failures": [
+       {
+        "key": "qingshigao/120",
+        "error": "Unexpected review envelope fields"
+       },
+       {
+        "key": "liangshu/008",
+        "error": "A chapter-local person lacks independent primary identity coverage"
+       },
+       {
+        "key": "xinwudaishi/020",
+        "error": "Witness does not support this person in the current primary source: chenshu:002:p003 chenshu:002:s0006 quote=\"舜\""
+       },
+       {
+        "key": "xintangshu/012",
+        "error": "Witness does not support this person in the current primary source: xintangshu:012:p036 xintangshu:012:s0258 quote=\"宣父\""
+       },
+       {
+        "key": "songshu/096",
+        "error": "Unexpected review envelope fields"
+       }
+      ],
+      "stagingHolds": [],
+      "artifactId": 14899161976,
+      "artifactDigest": "sha256:90210c78818e60f134b7a62e353aad3b85fdd505ac4d9fefdcdbc39837b41f92",
+      "stagingTransfer": {
+       "stage": "0cd0cb5ef0d7d53d965c10e6baa3db32e0e727a2",
+       "source": "c6c8fd48e3734fe33a370d7271f0ceb8ef817a0f",
+       "ref": "codex/cursor-glossary-nov24-2026-recovered-qualified-staging-second",
+       "workflowRevision": "86296c1f97d14f923a86902e192244b210ac70f8",
+       "items": [
+        {
+         "key": "liangshu/023",
+         "pr": 5507,
+         "originalHead": "873bbea837825528d2144f33907b85dad84e0c9c",
+         "attachedHead": "9b89ecbfe915f8ce45b0af12116eef4e836fcbb3",
+         "branch": "cursor/liangshu-023-audited-identity-6126",
+         "certificateBlob": "41f6751f48f75a9ff355620d4af9071fc00ef9c3",
+         "reviewer": "bc-9509a5c7-8ebf-43c2-9313-fc0594148d26",
+         "cases": 35
+        },
+        {
+         "key": "houhanshu/126",
+         "pr": 5522,
+         "originalHead": "034077e820a3e2ec332bb41fe4d90ab3f3e1fb76",
+         "attachedHead": "edb39782c1a4c5e419727e941693ba7f43087148",
+         "branch": "cursor/houhanshu-126-audited-owner-1de5",
+         "certificateBlob": "6e6832bed5f83f41994ddc551c3ab9de2a01bdcf",
+         "reviewer": "bc-5928d86b-2d31-4ab9-a836-f82ffd487442",
+         "cases": 41
+        }
+       ],
+       "status": "attachment_pending"
+      }
      },
      {
       "ref": "codex/cursor-glossary-nov24-2026-retrospective-native-certify-current",
