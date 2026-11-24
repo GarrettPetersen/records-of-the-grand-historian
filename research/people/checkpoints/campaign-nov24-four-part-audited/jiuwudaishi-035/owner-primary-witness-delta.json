@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-primary-witness-delta",
+  "mode": "targeted-primary-witness",
+  "chapterKey": "jiuwudaishi/035",
+  "ownerAgentId": "bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f",
+  "campaignWorker": "cursor-nov24-four-part-owner-6",
+  "ownerRevision": "107e7c678765d6148e0f254b7a4ab7c3ff50a5c9",
+  "sourceReviewHead": "8cdc76be2e740309b54f31d15d1ddbf1b304d4d4",
+  "idempotencyKey": "69befe880f982a7f7f43344a4891c17139ff1ee2ec178441e382e7de6950050f",
+  "priorRun": "run-68b6b32e-ae72-4fa0-a8a9-7d6c7cdd4a5b",
+  "cases": [
+    {
+      "caseId": "sha256:dab8aa2c8a3713786e65928d93a67a572946472f08921b8527d9a6ab475b4937",
+      "localId": "jiuwudaishi:035:p112",
+      "independentVerdict": "hold",
+      "ownerDisposition": "accept-hold-propose-extraction-narrowing",
+      "primaryWitnesses": [
+        {
+          "unitId": "s0237",
+          "zh": "從之。",
+          "role": "silent imperial assent to Secretariat memorial; no ruler name or temple on surface"
+        },
+        {
+          "unitId": "s0239",
+          "zh": "壬寅，以樞密副使孔循為樞密使。",
+          "role": "dated court act implying reigning emperor; no 明宗/亶 surface"
+        },
+        {
+          "unitId": "s0240",
+          "zh": "明宗聖德和武欽孝皇帝，諱亶…",
+          "role": "explicit temple and taboo name; owned by biography person jiuwudaishi:035:p001, not p112 annal evidence",
+          "linkedLocalId": "jiuwudaishi:035:p001"
+        }
+      ],
+      "ownerConclusion": "p112 correctly models the unnamed Later Tang imperial subject of s0230–s0237「從之」and the s0239 appointment context. Temple 明宗 is quoted only on biography unit s0240, already explicit on p001 (Li Siyuan/Mingzong). Retain p112 for annal ruler acts without certifying 明宗 on s0237/s0239; do not merge p112 with p001 in this pass."
+    }
+  ],
+  "proposedChanges": [
+    {
+      "target": "data/people/extractions/jiuwudaishi/035.json",
+      "kind": "extraction-person-record",
+      "personId": "p112",
+      "reason": "Primary Chinese on p112 owned units lacks 明宗; temple-name attribution is unsupported under native primary-witness rules.",
+      "sourceCitations": [
+        {
+          "unitId": "s0237",
+          "path": "data/jiuwudaishi/035.json",
+          "quote": "從之。"
+        },
+        {
+          "unitId": "s0240",
+          "path": "data/jiuwudaishi/035.json",
+          "quote": "明宗聖德和武欽孝皇帝，諱亶，初名嗣源，及即位，改今諱，代北人也。"
+        }
+      ],
+      "before": [
+        "p112",
+        [
+          "Mingzong",
+          "明宗",
+          "Mingzong"
+        ],
+        "historical",
+        "Ruler",
+        {
+          "n": [],
+          "r": [],
+          "a": [
+            "AD 926"
+          ],
+          "p": [
+            "Later Tang"
+          ],
+          "x": "Silent imperial subject of the Secretariat memorial's approval and of Kong Xun's appointment; not named on owned-unit wording."
+        },
+        [
+          [
+            {
+              "kind": "temple",
+              "en": "Mingzong",
+              "zh": "明宗",
+              "pinyin": "Mingzong"
+            },
+            "strongly-inferred",
+            [
+              "s0237",
+              "s0239"
+            ]
+          ]
+        ],
+        [
+          [
+            "ruler",
+            "strongly-inferred",
+            [
+              "s0237",
+              "s0239"
+            ]
+          ]
+        ]
+      ],
+      "after": [
+        "p112",
+        [
+          "Later Tang emperor (unnamed on annal surface)",
+          "後唐主",
+          "Later Tang emperor"
+        ],
+        "historical",
+        "Ruler",
+        {
+          "n": [],
+          "r": [
+            "p001"
+          ],
+          "a": [
+            "AD 926"
+          ],
+          "p": [
+            "Later Tang"
+          ],
+          "x": "Annal silent imperial subject at s0237「從之」and s0239; temple 明宗 and taboo 亶 appear only on biography s0240 (jiuwudaishi:035:p001). Cross-person identity with p001 is chronologically plausible but not name-certified on p112 units."
+        },
+        [],
+        [
+          [
+            "ruler",
+            "explicit",
+            [
+              "s0237",
+              "s0239"
+            ]
+          ]
+        ]
+      ],
+      "identityPatch": "Drop unsupported temple-name surfaces; keep explicit ruler role on annal units; retain unresolved cross-reference to p001 without merge."
+    }
+  ],
+  "held": [
+    {
+      "caseId": "sha256:dab8aa2c8a3713786e65928d93a67a572946472f08921b8527d9a6ab475b4937",
+      "localId": "jiuwudaishi:035:p112",
+      "status": "pending-independent-review-of-proposal",
+      "reason": "Independent hold on unsupported 明宗 attribution stands until narrowed person record is reviewed; no canonical file edited in this branch."
+    }
+  ],
+  "validation": {
+    "inputBlobsVerified": true,
+    "canonicalFilesEdited": false,
+    "scopedValidateCommand": "npm run people:validate -- --book jiuwudaishi --chapter 035",
+    "note": "Proposal-only delta; extraction bytes unchanged at owner head 107e7c6787."
+  }
+}
