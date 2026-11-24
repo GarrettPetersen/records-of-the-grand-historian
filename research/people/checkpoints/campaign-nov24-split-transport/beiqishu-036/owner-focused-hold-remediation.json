@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-focused-hold-remediation",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "036"
+  },
+  "ownerAgentId": "bc-978e1690-a3ab-48d2-ae68-23b6a36f76fe",
+  "workerId": "cursor-nov24-partitioned-4",
+  "draftPr": 5554,
+  "ownerBranch": {
+    "ref": "cursor/beiqishu-036-partitioned-4-76fe",
+    "headBeforeRemediation": "819c660ef61906e45a6af7bc61b7aaa0b20826a8"
+  },
+  "independentHold": {
+    "commit": "74d2a8d957e1aea24b19b66caa5251063efd132d",
+    "artifactPrefix": "research/people/checkpoints/campaign-nov24-split-transport/beiqishu-036/",
+    "caseId": "sha256:5debf7c61f479c6acd3e5253d57228688b99bc2a413d79efaf183734e3cd9d81",
+    "verdict": "hold",
+    "preservedUnchanged": true
+  },
+  "primarySource": {
+    "unitId": "s0101",
+    "zh": "事寡嫂甚謹，養孤子恕，慈受特深。",
+    "enIdiomatic": "He cared for his widowed sister-in-law with scrupulous devotion and raised the orphan Shu with an affection that ran unusually deep.",
+    "enLiteral": "In serving his widowed sister-in-law he was most careful; in raising the orphan son Shu, his kindness and acceptance ran especially deep."
+  },
+  "diagnosis": "Owner evidence and sealed extraction labels cite blocking surface 邢卲兄 and witness quote 邢卲兄; neither appears in beiqishu/036 s0101. Elder-brother status for beiqishu:036:p032 is narrative inference from 寡嫂 and 孤子恕 only. Canonical membership certification on per_21FQBGPZN3VEGP98GG4C cannot proceed until extraction display label and identity-name rows stop inventing a Chinese personal surface.",
+  "holdAlignsWithSource": true,
+  "canonicalDataMutation": "none — host-applied delta only after pin",
+  "extractionRepairProposal": {
+    "targetPath": "data/people/extractions/beiqishu/036.json",
+    "sealedInputUnchangedUntilApply": "sha256:15e4c2a6e1fa0adc3e7519027768dd61b0161f3e6726da920a87b3d471978c51",
+    "localPersonId": "beiqishu:036:p032",
+    "patches": [
+      {
+        "op": "replace-people-labels",
+        "personId": "p032",
+        "before": ["Elder brother of Xing Shao", "邢卲兄", null],
+        "after": ["Unnamed elder brother of Xing Shao (inferred)", null, null],
+        "reason": "Chinese column must not assert 邢卲兄; source gives no personal name for the deceased elder brother."
+      },
+      {
+        "op": "remove-identity-name-row",
+        "personId": "p032",
+        "match": {
+          "kind": "descriptive-kinship",
+          "zh": "兄",
+          "units": ["s0101"]
+        },
+        "reason": "Unit s0101 contains 寡嫂 and 孤子恕 but not 兄; kinship to Xing Shao stays on family-relationship rows inferred from 寡嫂 narrative."
+      },
+      {
+        "op": "set-person-metadata",
+        "personId": "p032",
+        "field": "x",
+        "after": "Deceased elder brother of Xing Shao inferred only from 寡嫂 and 孤子恕 at s0101; no attested personal name in chapter.",
+        "historicitySuggestion": "uncertain-identity-surface"
+      }
+    ],
+    "unchangedLocalPeople": [
+      "beiqishu:036:p033",
+      "beiqishu:036:p034",
+      "beiqishu:036:p001"
+    ],
+    "preserveNamedKin": "p034 (恕 / 孤子恕) and p033 (寡嫂) remain explicit chapter people; only p032 name surfaces change."
+  },
+  "ownerEvidenceCaseRepair": {
+    "artifact": "owner-evidence.json",
+    "caseId": "sha256:5debf7c61f479c6acd3e5253d57228688b99bc2a413d79efaf183734e3cd9d81",
+    "canonicalPersonId": "per_21FQBGPZN3VEGP98GG4C",
+    "localId": "beiqishu:036:p032",
+    "beforeDisposition": "retain-proposal",
+    "afterDisposition": "hold-pending-extraction-repair",
+    "beforeUnresolvedIdentity": false,
+    "afterUnresolvedIdentity": true,
+    "ownerConclusion": "Align with independent hold: chapter attests Xing Shao’s care for 寡嫂 and orphan 恕 at s0101 only; do not certify canonical membership for an unnamed inferred elder brother until extraction drops fabricated 邢卲兄 surfaces.",
+    "sourceWitnessesAfter": [
+      {
+        "localId": "beiqishu:036:p033",
+        "book": "beiqishu",
+        "chapter": "036",
+        "unitId": "s0101",
+        "quote": "寡嫂"
+      },
+      {
+        "localId": "beiqishu:036:p034",
+        "book": "beiqishu",
+        "chapter": "036",
+        "unitId": "s0101",
+        "quote": "孤子恕"
+      }
+    ],
+    "removeMiswitness": {
+      "localId": "beiqishu:036:p032",
+      "unitId": "s0101",
+      "quote": "邢卲兄"
+    }
+  },
+  "canonicalDependency": {
+    "canonicalPersonId": "per_21FQBGPZN3VEGP98GG4C",
+    "action": "suspend-chapter-membership-certification",
+    "until": "extractionRepairProposal applied and owner evidence case updated",
+    "anchorLocalIdBeforeRepair": "beiqishu:036:p032",
+    "membershipFingerprintBeforeRepair": "sha256:5a0e6afcfbec4fa9e347bdbb84e29f9e440803b45876ca84d19cca9b1cf90684",
+    "expectedFingerprintChangeAfterRepair": true
+  },
+  "translationNote": {
+    "assessment": "no-change-required",
+    "enFieldsMatchZh": true,
+    "detail": "Idiomatic and literal English for s0101 correctly render 寡嫂 and 孤子恕; defect is extraction/owner identity surfacing, not chapter translation."
+  },
+  "scopedNativeValidationReceipt": {
+    "frozenPinsUnchanged": true,
+    "commandsRun": [
+      {
+        "command": "npm run people:validate -- --book beiqishu --chapter 036",
+        "onCommit": "819c660ef61906e45a6af7bc61b7aaa0b20826a8",
+        "passed": true,
+        "note": "Re-run after host applies extraction repair; expect extraction hash change and identity membership fingerprint change for case p032 only."
+      }
+    ],
+    "transportPinsVerified": {
+      "preparationReceiptSha256": "d8159344fe96bc297c924d85b057fdebae43abc7847c1b893c5d8ca4b05cb97e",
+      "transportPart001Sha256": "f339ef1fc9e86310fb9d6d9fb91c1a0e69de56d0cb73df5017c73b0e5df90905",
+      "transportPart002Sha256": "3aec653e44010e65640e5b17576d45707523d9cc03ac369d7e90ef2edf668e1e"
+    },
+    "postApplyChecklist": [
+      "Recompute extraction seal for beiqishu/036",
+      "Update owner-evidence case disposition and witnesses per ownerEvidenceCaseRepair",
+      "Re-run people:validate --book beiqishu --chapter 036",
+      "Resubmit independent bounded-dossier review on unchanged transport parts"
+    ]
+  },
+  "nextGate": "host-apply-extraction-delta-then-owner-evidence-amendment-then-independent-re-review",
+  "notOwnerApproval": true,
+  "notIndependentApproval": true
+}
