@@ -38,6 +38,9 @@ Staging pin: PR #5489 commit `378771b831b7eb7b7049903eb3e26bb86155db4d`.
 | `partial-date-qiao-deng-20261124.md` | Human summary of chronology pass 7 |
 | `partial-date-report-wu-shilun-hints-20261124.json` | 吳隱之 + 【史论】 + all active-date hints (s0377–s0439) |
 | `partial-date-wu-shilun-hints-20261124.md` | Human summary of final remainder (553/553 item IDs) |
+| `owner-apply-pin-be3d658/` | Pinned #5489 tip `be3d658` owner chronology-apply delta |
+| `chronology-amendment-independent-review-20261124.json` | Independent review of owner apply (claim-60/911/80 + 32 hints) |
+| `chronology-amendment-independent-review-20261124.md` | Summary: blocked on 4 English-AD hints until owner hint strip |
 | `owner-chronology-author-notes.json` | Retained owner notes from staging #5489 + independent progress pointer |
 | `independent-source-review-20261124.md` | Editorial verification notes (r0001–r0033) |
 
@@ -62,3 +65,4 @@ Rebuild:
 - `node research/people/build-jinshu090-partial-date-pan277-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-qiao-deng-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-wu-shilun-hints-20261124.mjs`
+- `node research/people/build-jinshu090-chronology-amendment-independent-review-20261124.mjs`
