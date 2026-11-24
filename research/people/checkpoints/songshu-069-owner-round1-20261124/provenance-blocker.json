@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-gate-provenance-blocker",
+  "scope": { "book": "songshu", "chapter": "069" },
+  "blockedGate": "independent-applied-editorial-history",
+  "nativeRule": "assertChapterGates: applied translationRepairs require data/people/editorial-decisions/songshu/069.json passing validateAppliedEditorialDecisions",
+  "currentState": {
+    "proposedRepairs": 0,
+    "appliedRepairs": 51,
+    "editorialDecisionFileExists": false,
+    "editorialDecisionGitHistory": "no commits on data/people/editorial-decisions/songshu/069.json"
+  },
+  "appliedContractsFingerprint": "sha256:ad0c1e0214fa568f00cfbdecf0bf01a759eff09e1e06a178011e267a283a2341",
+  "sourceAlignment": {
+    "appliedAfterMatchesSource": 51,
+    "appliedTotal": 51,
+    "stillOnBeforeText": 0
+  },
+  "knownProvenance": {
+    "extractionRun": {
+      "model": "Manual bilingual source rereview",
+      "promptVersion": 7,
+      "agentId": null,
+      "runId": null,
+      "completedAt": "2026-08-23T01:00:00.000Z"
+    },
+    "gitCommitHint": "19d4bcf58f9447795d8b959afab9d5055632322d",
+    "gitCommitSubject": "Complete Songshu 69 people rereview",
+    "gitCommitDate": "2026-08-22T22:13:08-07:00"
+  },
+  "absentEvidence": [
+    "Independent reviewer kind/name/agentId/runId on editorial-decisions schema v3",
+    "proposalsFingerprint-linked accept decisions",
+    "Separate review conversation or SDK report artifact in repo"
+  ],
+  "ownerDidNotFabricate": true,
+  "resolutionArtifactNote": "data/people/resolutions/songshu069-manual-2026-08-23.json is identity merge batch only; not editorial repair approval",
+  "unblockPath": "Independent reviewer writes data/people/editorial-decisions/songshu/069.json with accepts for contracts matching appliedContractsFingerprint (or revises and reconciles source/extraction)"
+}
