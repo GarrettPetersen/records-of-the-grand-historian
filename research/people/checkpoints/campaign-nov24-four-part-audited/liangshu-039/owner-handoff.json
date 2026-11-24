@@ -1,39 +1,62 @@
 {
   "schemaVersion": 1,
-  "kind": "audited-four-part-source-owner-handoff",
+  "kind": "four-part-audited-source-owner-handoff",
   "scope": {
     "book": "liangshu",
     "chapter": "039"
   },
   "ownerAgentId": "bc-6b80b860-324e-41c1-b2d6-d2f759052b9c",
-  "campaignWorker": "cursor-nov24-four-part-owner-4",
   "idempotencyKey": "b3ee6ff7d4fa6b71d8897a153d6a628391427220dbd7c73ac6c6b9334a072a5",
-  "baseBranch": "codex/people-glossary-staging-v2",
   "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
   "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
-  "inputBlobs": [
-    {
-      "path": "data/liangshu/039.json",
-      "blob": "56993fc6721d537a923a5a5d810e6d3f91f9efee",
-      "contentSha256": "sha256:d602428f3e9096332b7439d3017c3f76afc896efd8e67123d062bbfc95321ae7"
-    },
-    {
-      "path": "data/people/extractions/liangshu/039.json",
-      "blob": "8e8156c449e2f0fdfe7fc1508e0932bdcf50b800",
-      "contentSha256": "sha256:d785659ee179dafeb5cd6762df1b6293b1a8339daef037f7ddc66fc7d288fe37"
-    },
-    {
-      "path": "data/people/date-audits/liangshu/039.json",
-      "blob": "3a3f96d21b80d072d831d509a0bbad35c706c76e",
-      "contentSha256": "sha256:71e7d022ceb0632efeb8b4e62d084e853ecea82e522bdf234bfdf4945053199a"
-    },
-    {
-      "path": "data/people/editorial-decisions/liangshu/039.json",
-      "blob": "8b2e79be4ed775cf910716ead679a58bae849f36",
-      "contentSha256": "sha256:1116c659257815c5c4a4bd96a858fc0f2e63cf06e84edc2d2ed817bde653634f"
-    }
-  ],
+  "inputBlobWitness": {
+    "source": "56993fc6721d537a923a5a5d810e6d3f91f9efee",
+    "extraction": "8e8156c449e2f0fdfe7fc1508e0932bdcf50b800",
+    "dateAudit": "3a3f96d21b80d072d831d509a0bbad35c706c76e",
+    "editorial": "8b2e79be4ed775cf910716ead679a58bae849f36"
+  },
+  "transportProvenance": {
+    "worker": "cursor-nov24-four-part-owner-4",
+    "agentId": "bc-6b80b860-324e-41c1-b2d6-d2f759052b9c",
+    "priorRun": "run-a4c62f02-fcb7-405e-b2c7-a467a28ae912",
+    "priorOwnerHandoffProof": "db898c9a48d9bca50b66a64d58335f6c9d3b5726",
+    "provider": "github-actions",
+    "artifactName": "nov24-four-part-audited-chapter-packets",
+    "artifactId": 14925649528,
+    "cohortSource": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "cohortStaging": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+    "preparationReceiptSha256": "sha256:6dbc7cf433f2b73edfab78f61b8c60d0c1b799caa27d9da02bf663486ef1231b",
+    "planFingerprint": "sha256:b5b826a731ce69dc560161f4758502d013f898eb8cae7c4eca5a6cd5f05d2483",
+    "identitySourcePacketSha256": "sha256:d43452cdb3c1c2d534dfb2c694a4a3d62bbdc7017e52b416cb025fdecf6a58bb",
+    "transportSha256": "sha256:7bc2430588863866fbbdd6db9b9fb58d37c5e77480b0e90d5adbed452041e5df",
+    "transportBytes": 960286,
+    "transportParts": [
+      {
+        "file": "transport-part-001.json",
+        "sha256": "sha256:646f08ffe5f565c937cb8a8c27ef4e40c76ab7c349a50270fd944e9b0071709c",
+        "caseCount": 9
+      },
+      {
+        "file": "transport-part-002.json",
+        "sha256": "sha256:3042c52aa4e9dbf3156010d4470f628e71da5c09348df5c90a8c2dc3b0006712",
+        "caseCount": 10
+      },
+      {
+        "file": "transport-part-003.json",
+        "sha256": "sha256:45760473f338028e710f770ff0cb180c571ca4626cf6d3f0b1c2e1c55d530fc9",
+        "caseCount": 20
+      },
+      {
+        "file": "transport-part-004.json",
+        "sha256": "sha256:c35ca117c493eb8a73386be317ac5240eecd8aea30b5248a9c09be65fccadde2",
+        "caseCount": 40
+      }
+    ],
+    "identityPreparationCases": 79
+  },
+  "chapterReady": true,
   "validation": {
+    "notIndependentApproval": true,
     "peopleValidatePassed": true,
     "peopleValidateCommand": "npm run people:validate -- --book liangshu --chapter 039",
     "peopleDatesVerifyPassed": true,
@@ -48,8 +71,6 @@
     },
     "dateAuditStatus": "audited",
     "dateAuditFindings": 0,
-    "dateAuditSourceHash": "sha256:845c827ff254a557f5105969901a642f9fec1423d41b3044c66d958352ca8611",
-    "dateAuditExtractionHash": "sha256:bb50f1e52b422b4bbc16a952671e6368770cea9ba76e943b40f0f8b8fe1fd83b",
     "extractionCoverage": {
       "allUnitsVisited": true,
       "preflightCandidatesAccountedFor": true,
@@ -62,10 +83,7 @@
       "editorialPassCompleted": true,
       "unresolvedReferences": []
     },
-    "proposedTranslationRepairs": 0
-  },
-  "authorEvidence": {
-    "extractionAgentIds": [
+    "extractionAuthorAgentIds": [
       "bc-bf4018ce-4be3-41ac-8e87-0e23eebcf704",
       "bc-7e8e0c6c-b26e-4c8d-85bf-ce58eb550706",
       "bc-9e4a20a4-f908-4690-ae13-183316666d62",
@@ -73,25 +91,18 @@
       "bc-564ad3a6-645f-47bf-aa96-551e11232997",
       "bc-91488a1e-c0ab-43fc-b6e2-ed16702d28ef"
     ],
-    "extractionModel": "grok-4.5-chunked",
-    "extractionPromptVersion": 7,
-    "appliedTranslationRepairs": 50,
-    "editorialDecisionCount": 50,
-    "dateAuditReviewedAt": "2026-09-23T08:17:08.855Z",
-    "dateAuditReviewer": "Independent Liangshu 039 initial date auditor"
+    "proposedTranslationRepairs": 0,
+    "sealedInputPacketHashes": {
+      "source": "sha256:d602428f3e9096332b7439d3017c3f76afc896efd8e67123d062bbfc95321ae7",
+      "extraction": "sha256:d785659ee179dafeb5cd6762df1b6293b1a8339daef037f7ddc66fc7d288fe37",
+      "editorial": "sha256:1116c659257815c5c4a4bd96a858fc0f2e63cf06e84edc2d2ed817bde653634f",
+      "dateAudit": "sha256:71e7d022ceb0632efeb8b4e62d084e853ecea82e522bdf234bfdf4945053199a"
+    }
   },
+  "holds": [],
   "definiteTranslationRepairs": [],
   "remainingIndependentEvidence": {
     "identityReviewCases": 79,
-    "identityTransportParts": 4,
-    "preparationArtifact": "nov24-four-part-audited-chapter-packets",
-    "independentIdentityReviewCompleted": false,
-    "boundedDossierReviewRequired": true,
-    "note": "Native four-part identity preparation passed in CI; owner does not re-prepare or approve identity packets."
-  },
-  "chapterReady": true,
-  "holds": [],
-  "canonicalEdits": false,
-  "independentReviewCompleted": false,
-  "notes": "Source-owner pass only: verifies sealed Chinese source, both English fields, accepted extraction/editorial/dates, and records remaining independent identity work. Not publication or identity approval."
+    "identityTransportParts": 4
+  }
 }
