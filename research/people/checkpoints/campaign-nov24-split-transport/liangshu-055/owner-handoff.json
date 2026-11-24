@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "055"
+  },
+  "ownerAgentId": "bc-57d78b4f-f75f-42da-927e-a8e87fa358e5",
+  "campaignWorker": "cursor-nov24-partitioned-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "planFingerprint": "sha256:9abf95742fd35e6bf59464bca0185e0cfbfd1373e89b5ab67c99ea7321d970a5",
+    "sourcePacketSha256": "sha256:7a7e3e9790e4be140ed1677fdf920f7450ec4b55dd29fadb5d0e8e4fb18b3916",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:33cd26ba5d2f74a338aec5ac20ba08ef7d6b8c174193b8ce86cabc48a4e9039c",
+        "caseCount": 28
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:c5aba1dec95dbd06e3c34de7abd48335495ef6b7825cd113b6f049246a2bbfb9",
+        "caseCount": 29
+      }
+    ],
+    "preparationReceiptSha256": "sha256:4235ebbb28d9ed0089f413a49c8ba860f2f08ce14a1b4d1f2aa12377315111f2"
+  },
+  "sealedInputs": {
+    "source": "sha256:30d7bd68374ccd4484ed2c416d8864b377a035ac234ed06480569904e942ba77",
+    "extraction": "sha256:a6b71dd718351ba2d071076f6a5938df39b2b59897e2141d7aba39fac8bd8acc",
+    "editorial": "sha256:35fd497a986cfaa1ad478bd59392e0866dd21f238f983ffd2e92bc38ca595189",
+    "dateAudit": "sha256:5e43e74396af60a102314c840197ac9ba08c35b2f960d7a051941c0be1ed7dd9"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "10 applied editorial decisions; no pending proposals",
+  "reviewCases": 57,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 57 cases retain preparation-proposed canonicalPersonId with unresolvedIdentity true. 23 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:44b9b9ab1c8f8f34b95455db9ee4fa528d600f0851450c140e1edc408bf05e98",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/transport-part-002.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/liangshu-055/transport-part-002.json",
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 055"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
