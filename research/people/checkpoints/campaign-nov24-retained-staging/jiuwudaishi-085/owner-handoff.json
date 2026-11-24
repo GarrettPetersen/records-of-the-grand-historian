@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "085"
+  },
+  "ownerAgentId": "bc-fc6327bb-e8d3-43c7-a312-34b9d3ed7bf0",
+  "workerId": "cursor-nov24-retained-staging-w5-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "94917f99bb8ffd16ab134b720cd7e4e167bda477d58fcbaacfb6933f67a78dd3",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-085-d7bf0",
+  "inputBlobWitness": {
+    "source": "b9bce36e7b37e7dde02f94e14031928a8ad7869b",
+    "extraction": "e4c22281d79def220650173141f6a5189ffa58e3",
+    "dateAudit": "5f3b988e1c7eff0336566f715b2810763086ec91",
+    "editorial": "99e7f3c705775040d953e1345581104e1415924c"
+  },
+  "sealedInputs": {
+    "source": "sha256:ebfc2557522b87d61e46e29adce25c9d619340920bbb4609c17b2c5cc23c69bb",
+    "extraction": "sha256:ebd0b7517002783171254d60373cd4e2da4c4c2871a02527be828c005a4f577b",
+    "dateAudit": "sha256:4cab9fe84f2042d319646efe4e8c876a38bab9cc4032f4ce71b78d9aaa404d8c",
+    "editorial": "sha256:44dcebff3bc8911e4978f31075f1de8f65b485a9d2bfbaad6df68a504907bb0b"
+  },
+  "dateAuditWitness": {
+    "contentSha256": "sha256:4cab9fe84f2042d319646efe4e8c876a38bab9cc4032f4ce71b78d9aaa404d8c",
+    "gitBlob": "5f3b988e1c7eff0336566f715b2810763086ec91",
+    "reportStatus": "research-blocked",
+    "reportSourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+    "reportExtractionHash": "sha256:4e5686241876b2561cbf0d5e63724f6c710f37e0a4e60d12de38a61939b9a318",
+    "currentPacketSourceHash": "sha256:062cbd4528c4058aa6dc79687b1cc0d8119c96b174140fe880f88d51fd2a563d",
+    "currentPacketExtractionHash": "sha256:014e9f48f6ac46ea9c809994bed172d60d0c859c15829fce2c9d5f0138b7527e",
+    "bytesPreserved": true,
+    "hashesRewritten": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 150,
+    "englishLiteralAndIdiomatic": {
+      "sentenceCount": 150,
+      "translatedCount": 150,
+      "bothFieldsComplete": true
+    },
+    "extractionBytesWitness": 97203,
+    "extractionBytesOnDisk": 97203
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "npm run people:validate -- --book jiuwudaishi --chapter 085",
+    "peopleValidateSummary": "Scoped person data validation passed for jiuwudaishi/085: 1 extraction(s), 72 local people, 444 mentions, 434 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 085",
+    "datesVerifyScopedStatus": "stale",
+    "datesVerifyExitCode": 1,
+    "chronologyReportStatus": "research-blocked",
+    "chronologyStaleRelativeToPacket": true,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "auditFindingsCount": 1,
+    "auditAffectedItems": 3
+  },
+  "substantiveFindings": "Staging four-part inputs verified at pinned blobs. people:validate passes with 72 people. Preserved date-audit bytes remain status research-blocked but people:dates:verify returns stale because current extractionHash differs from the report seal. Owner did not rewrite audit hashes or approve the prior report. Current p050 still carries unsupported Western chronology relative to the preserved claim-84 hold; scoped repair proposal drafted for host validation only.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "status": "proposal-only",
+      "reason": "Preserved independent research-blocked report bytes conflict with current extraction packet (dates:verify stale: extractionHash drift). Current p050 still asserts AD 936 active hint and AD 946 westernYear from s0075, which is only a retrospective reference to usurper Wang Congke after self-immolation.",
+      "changes": [
+        {
+          "itemIds": [
+            "claim-84",
+            "hints-p050",
+            "p050"
+          ],
+          "personId": "p050",
+          "evidenceUnits": [
+            "s0075"
+          ],
+          "clauseCitation": "帝進狀曰：「頃以偽主王從珂於洛京大內自焚之後，其真傳國寶不知所在，必是當時焚之。」",
+          "before": {
+            "activeDateHints": [
+              "AD 936"
+            ],
+            "attestation": {
+              "sourceDate": {
+                "text": "開運三年十二月"
+              },
+              "westernYear": {
+                "era": "AD",
+                "year": 946,
+                "precision": "year"
+              }
+            },
+            "claimKind": "explicit-event-contextual-date"
+          },
+          "after": {
+            "activeDateHints": [],
+            "attestation": {
+              "sourceDate": {
+                "text": "開運三年十二月"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retrospective mention of usurper Wang Congke; no personal activity interval is established in this chapter.",
+              "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+            },
+            "claimKind": "explicit-event-contextual-date"
+          },
+          "nativeTaxonomy": "research-required unresolved attestation (matches preserved audit finding)"
+        }
+      ],
+      "applied": false,
+      "auditBytesRewritten": false
+    }
+  ],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-84",
+        "hints-p050",
+        "p050"
+      ],
+      "problem": "Extraction preserves chronology outside admitted conversion evidence.",
+      "action": "Preserve holds pending independently pinned primary chronology.",
+      "nativeAuditVerdict": "research-blocked",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 085",
+    "datesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 085"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; commit owner-handoff without altering sealed source, extraction, date-audit, or editorial blobs. Host supplies native sealed final review packets."
+}
