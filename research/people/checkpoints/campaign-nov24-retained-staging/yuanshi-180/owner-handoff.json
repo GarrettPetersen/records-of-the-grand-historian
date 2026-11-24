@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "180"
+  },
+  "ownerAgentId": "bc-d66bbd4f-f7e8-4538-9bb7-ac3a8edc1110",
+  "workerId": "cursor-nov24-retained-staging-w18-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8f39e82f268e42d3275d303d3641e165573ebb6d657069e0897832fd3e955506",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-180-c1110",
+  "extractionBytes": 230301,
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "5e108c28d93bf45df6b92ab9e9fe51d0703fef259d7d46f0b5d7072c37d8daae",
+    "people": 80,
+    "claims": 843,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "c0740214e91280894a0092d5c5199480aa2136c3",
+    "extraction": "99481df9db86a8c1f10f93c8722783392db94d66",
+    "editorial": "7bf6ddc7887c33b2a626d9c9adb2328a68055700",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:96abeeab987063bb1117bc157a8f7851400ea1cc598f6a06683c5486976e4ded",
+    "extraction": "sha256:5e108c28d93bf45df6b92ab9e9fe51d0703fef259d7d46f0b5d7072c37d8daae",
+    "editorial": "sha256:dd0ba9b9ed8d3e6580be06880ef670d5afda12dfd734604369011909d3374990",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "chineseUnits": 221,
+    "translatedCount": 221,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 221,
+    "titleEn": "Volume 180 Biographies 67: Yelu Xiliang, Zhao Shiyan, Kong Sihui"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/yuanshi/180.json",
+    "gitBlob": "99481df9db86a8c1f10f93c8722783392db94d66",
+    "contentSha256": "sha256:5e108c28d93bf45df6b92ab9e9fe51d0703fef259d7d46f0b5d7072c37d8daae",
+    "promptVersion": 7,
+    "validateExtraction": "ok (80 people, 504 mentions, 1145 claims, 660 candidates)"
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/yuanshi/180.json",
+    "gitBlob": "7bf6ddc7887c33b2a626d9c9adb2328a68055700",
+    "contentSha256": "sha256:dd0ba9b9ed8d3e6580be06880ef670d5afda12dfd734604369011909d3374990",
+    "reviewRounds": 1,
+    "appliedRepairs": 32,
+    "editorialDecisionCount": 32,
+    "status": "reviewed-with-applied-proposals"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-180/date-packet-candidate.json",
+    "contentSha256": "sha256:19fce36b2cab1c1996ad33578ecd4c86eba6debcc29bc0821940133a30929aa1",
+    "sourceHash": "sha256:30a01f01ba6efca32702760bf808e1838c472de3b8740931ae6b98c21a0d6862",
+    "extractionHash": "sha256:ca40e4c08b277a9f1034f4516adcb7b35dd6747d5f397b7ebcac6912cfe286b2",
+    "itemCount": 412,
+    "peopleCount": 80,
+    "unitCount": 221,
+    "buildCommand": "npm run people:dates:packet -- --book yuanshi --chapter 180 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-180/date-packet-candidate.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 180",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/180: 1 extraction(s), 80 local people, 504 mentions, 1145 claims, 0 proposed repair(s), 32 applied repair(s), 32 editorial decision(s), 2 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/yuanshi/180.json",
+    "peopleValidateExtractionSummary": "ok (80 people, 504 mentions, 1145 claims, 660 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 180",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "auditReportSha256": null,
+      "findings": null,
+      "workOrderAuditSha256Verified": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at staging 4394bd71. Git blob witnesses match work-order pins. Full chapter Chinese read with paired literal and idiomatic English on all 221 sentence units; accepted editorial repairs reflected in source. Sealed extraction prompt v7 reused without re-extraction; scoped people:validate and validate-people-extraction pass with zero proposed repairs. Fresh native date packet sealed at sha256:19fce36b2cab1c1996ad33578ecd4c86eba6debcc29bc0821940133a30929aa1 pins 412 date/hint checks for independent audit. No definite English omission or source contradiction requiring owner repair. 4/5 chunks have agentId; run-level agentId null. Native independent date report still absent; owner does not self-approve chronology.",
+  "remainingIndependentEvidence": {
+    "date": {
+      "gate": "independent-scoped-native-date-audit",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-180/date-packet-candidate.json",
+      "packetSha256": "sha256:19fce36b2cab1c1996ad33578ecd4c86eba6debcc29bc0821940133a30929aa1",
+      "recordCommand": "npm run people:dates:record -- --book yuanshi --chapter 180",
+      "verifyAfterRecord": "npm run people:dates:verify -- --book yuanshi --chapter 180"
+    },
+    "identity": {
+      "gate": "independent-bounded-dossier-identity-review",
+      "note": "Corpus-level identity transport not prepared in this owner pass; chapter-local candidates validated only.",
+      "chapterCandidateCount": 660
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "missing-native-date-audit",
+      "detail": "No data/people/date-audits file; people:dates:verify status un-audited. Independent scoped date audit required before chronology approval.",
+      "blocksPublication": true
+    },
+    {
+      "kind": "extraction-chunk-provenance-metadata",
+      "detail": "1/5 chunk(s) missing chunk.agentId; extraction content unchanged and scoped validation passes.",
+      "blocksPublication": false
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 180",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 180",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book yuanshi --chapter 180 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-180/date-packet-candidate.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date audit remains the blocking chronology gate."
+}
