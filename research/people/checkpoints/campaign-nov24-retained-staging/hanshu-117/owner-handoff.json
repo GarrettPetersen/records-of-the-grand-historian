@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "117"
+  },
+  "ownerAgentId": "bc-4f98e261-d538-4cb0-bec9-39c9eafbd1bb",
+  "worker": "cursor-nov24-retained-staging-w4-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "59a04912df122b6bef5844011ff6021e3523dd970d4a308dff88dcd5363db0b7",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-117-bd1bb",
+  "inputBlobWitness": {
+    "source": "6c37c81e048b26adf8b7ce78251341c3f3a8fda3",
+    "extraction": "e0edbba58568b9bff04dd8ceabb5e91d226ed30d",
+    "dateAudit": "8948b4eac2c151150cd6a63db9ac777fd0846a35",
+    "editorial": "ef2175fdb31c621601a737305bb39c8f59ad02ea"
+  },
+  "sealedInputs": {
+    "source": "sha256:4ae71f3920e2e92a6d1e22ca5950d4a5b6f620417c3a1fac26fabc9cfd84c787",
+    "extraction": "sha256:555adf8f716dcd79238e28c21dffd3eead32c4f59697287d4bc73897a8310523",
+    "dateAudit": "sha256:63792a4bec913db55b9e14d9bdfc6c3a019a26e88602bb3943223e3d01ab112a",
+    "editorial": "sha256:678167811473877db2c6ac97463447ea355f6f8197bf95c9cf5a807fd33f0fef"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 287,
+    "sentenceCount": 287,
+    "translatedCount": 287,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "editorialDecisionsReflectedInSource": true,
+    "unresolvedReferences": []
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book hanshu --chapter 117",
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed for hanshu/117: 1 extraction(s), 205 local people, 667 mentions, 1835 claims, 0 proposed repair(s), 34 applied repair(s), 36 editorial decision(s), 1 claim retraction(s), 11 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 117",
+      "exitCode": 0,
+      "status": "audited",
+      "findings": 0,
+      "reviewedAt": "2026-09-29T15:18:03.804Z",
+      "summary": "Initial full audit reviewed all 287 Chinese source units, 470 date/hint checks, and 205 people. All current chronology containers, event owners, active hints, and retrospective distinctions are supported."
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0
+    },
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 36,
+    "dateAuditStatus": "audited"
+  },
+  "substantiveFindings": "Witnessed Git blobs match staging commit 7cdf8f42. Ban-family afterword and biography chapter reviewed at pinned inputs: 205 local people, 667 mentions, and 1835 claims with complete Chinese and paired English across 287 units. Applied editorial repairs (e.g. 兩師 as Bo's teachers Xu Shang and Shi Dan, Yang Xiong 子雲, 不道 as capital crimes, office titles for Wang Shun) are reflected in source. Independent date audit is current with zero findings. Retained reviewed evidence and explicit unknowns (e.g. uncertain speech attribution to the Veritable Record of Han Gaozu) are preserved without new false merges or invented chronology.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "host-sealed-final-independent-review",
+    "notes": "Owner handoff certifies scoped validation, English coverage, and audited chronology at pinned blobs; it is not independent identity or final reviewer approval."
+  },
+  "authorEvidence": {
+    "method": "Git blob witness; content-unit English scan; editorial decision reflection check; npm run people:validate and people:dates:verify on exact staging checkout; chapter-local people, mention, and evidence spot-check; no extraction or source edits.",
+    "sourceTitle": "Volume 100a: Afterword and Family History 1",
+    "completedAt": "2026-11-24T16:25:00.000Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 117",
+    "datesVerify": "npm run people:dates:verify -- --book hanshu --chapter 117"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; handoff documents pinned scope without altering sealed inputs."
+}
