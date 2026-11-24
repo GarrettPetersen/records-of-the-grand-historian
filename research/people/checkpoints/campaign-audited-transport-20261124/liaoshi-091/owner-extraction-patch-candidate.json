@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-extraction-patch-candidate",
+  "authorAgentId": "bc-a1d9fb49-57cd-49f8-a504-e22bc5dcc56f",
+  "handoffRef": "author-repair-handoff.json",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "091"
+  },
+  "nativeFindingCaseId": "sha256:8d05cb0b46af0fe3dc80292cb3168403316a583661522644e45e2435c93c1058",
+  "targetPath": "data/people/extractions/liaoshi/091.json",
+  "extractionSha256Before": "sha256:61a16145458c6fabb1b679a7acba20525f61e8cd489e331839afb42f9630f613",
+  "extractionSha256After": "sha256:f8fc37b7d4ab224d3c704acd92c0bfa28ee6752aa896d8e44aa92b59973927fb",
+  "operations": [
+    {
+      "op": "retract-invalid-chinese-identity-key",
+      "localId": "p011",
+      "unitId": "s0026",
+      "before": "庶母",
+      "after": null,
+      "reason": "Unit attests 於越屋質之庶子 for Tanggu; 庶母 not in chapter source."
+    },
+    {
+      "op": "retract-header-zh",
+      "localId": "p011",
+      "before": "耶律唐古之母",
+      "after": null
+    }
+  ],
+  "affectedRows": {
+    "identity": [
+      "p011 header zh",
+      "p011 descriptive-kinship zh"
+    ],
+    "relationships": [
+      "p011 parent-of p002",
+      "p010 spouse-of p011"
+    ],
+    "chronology": [
+      "p011 attestation s0026",
+      "s0028"
+    ]
+  },
+  "sourceSupportedLiteral": {
+    "localId": "liaoshi:091:p002",
+    "unitId": "s0026",
+    "quote": "耶律唐古"
+  },
+  "applyNotPerformed": true
+}
