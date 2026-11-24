@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "084"
+  },
+  "ownerAgentId": "bc-b0384d75-2b46-40b4-a947-4df142aa025f",
+  "worker": "cursor-nov24-retained-staging-w10-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "c1983c2c5880aed612a7e8a07e056497b9dacbcb77b59e91f7b3d3aa1662ea44",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-084-a025f",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:e46b66aeab01cb811a3d16ae20d371785a01fbe7bf179884a105f13b017350c9",
+    "people": 46,
+    "claims": 181,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "4835de46acdd63b3eab1c94279f384ed52c273cb",
+    "extraction": "8590fb2669c0b451c07ac4bd8216626b11170554",
+    "editorial": "e000b1a9cf69323a7f15d3aca6e250abb720b279"
+  },
+  "sealedInputs": {
+    "source": "sha256:989a2ac202f3821bc9759fd361961a8d4f339e7a6f65d11f8d0244ec61ca6ee1",
+    "extraction": "sha256:e46b66aeab01cb811a3d16ae20d371785a01fbe7bf179884a105f13b017350c9",
+    "editorial": "sha256:24e8d4c7feb59d033a2a0f3a22498e7decec3909f8acaba9f3b3d2c006f299d2"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": 2,
+    "editorialDecisionCount": 2,
+    "note": "Pinned extraction and accepted editorial decisions retained verbatim; owner did not re-extract or self-approve chronology.",
+    "proposalCount": 2
+  },
+  "sourceCoverage": {
+    "sentences": 246,
+    "translated": 246,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "sourceTitle": "Biographies of Qu Yuan and Master Jia",
+    "sourceTitleZh": "屈原賈生列傳"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-084/date-packet.json",
+    "contentSha256": "sha256:53a0a3e4fd8b9357fdc7dafa078808b82e47a8eb4feb8fe26169a2097d81708a",
+    "itemCount": 104,
+    "peopleCount": 46,
+    "sourceUnitCount": 246,
+    "extractionHash": "sha256:3ee36090b40c692ba85445fa0eba18301a820fa5318d819caa2c59e1f06c69fa",
+    "sourceHash": "sha256:18e17d231e45c9e78f383c4ea02c6b7159c1b6d2001c397ffec4eaea612153d8"
+  },
+  "dateEvidenceValidation": {
+    "scanFindings": 0,
+    "nativeScanCommand": "npm run people:dates:scan -- --book shiji --chapter 084",
+    "packetCommand": "npm run people:dates:packet -- --book shiji --chapter 084 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-084/date-packet.json",
+    "chronologyStatus": "un-audited",
+    "nativeDateReportPresent": false,
+    "note": "Candidate chronology packet prepared from current sealed inputs; independent native date audit not yet recorded under data/people/date-audits/."
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 084",
+    "summary": "Scoped person data validation passed for shiji/084: 1 extraction(s), 46 local people, 320 mentions, 326 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction, and editorial blobs match dispatch witness at staging 5cac1d27112abc2084b0d9b0574dc3e7471f426b. Scoped validation passed; dates:scan reports 0 structural finding(s). No definite English omission or chronology contradiction requiring owner repair before independent date review. Undated independent attestation allowed where source-supported.",
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "status": "no-native-date-report",
+      "nextGate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-084/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-audit-report.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book shiji --chapter 084"
+    },
+    "identity": {
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Identity transport preparation deferred to CI-sealed registry per LOCAL_DISK_STRATEGY; follows chronology approval."
+    },
+    "independentReviewCompleted": false
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 084",
+    "prepareDatePacket": "npm run people:dates:packet -- --book shiji --chapter 084 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-084/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 084"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical edits, registry generation, deploy, or merge. Owner does not self-approve independent date audit."
+}

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "014"
+  },
+  "ownerAgentId": "bc-b0384d75-2b46-40b4-a947-4df142aa025f",
+  "worker": "cursor-nov24-retained-staging-w10-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "c1983c2c5880aed612a7e8a07e056497b9dacbcb77b59e91f7b3d3aa1662ea44",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshu-014-a025f",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:7a7741fcb79c35004921878bf018ecd6cbded0fa5bf7f0f15efd6a41c76d6f02",
+    "people": 315,
+    "claims": 1780,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "84048ea5904ffb10eae2e0ac8a79d585b26e7123",
+    "extraction": "1b19ea54772f4439bb16b6339264e5cf3a8a4588",
+    "editorial": "7a7323518361ae94f3ba5d06a03c754fc18a40a3"
+  },
+  "sealedInputs": {
+    "source": "sha256:a3b1ccaca3c9ebbdc5e1088e95012f14216823404b148936b9ba57fd1ac4252e",
+    "extraction": "sha256:7a7741fcb79c35004921878bf018ecd6cbded0fa5bf7f0f15efd6a41c76d6f02",
+    "editorial": "sha256:90c3bc5e74311a6edccda5e7b8b8d55de15d0356a72df475f5d2de7134cb51f7"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": 81,
+    "editorialDecisionCount": 88,
+    "note": "Pinned extraction and accepted editorial decisions retained verbatim; owner did not re-extract or self-approve chronology.",
+    "proposalCount": 88
+  },
+  "sourceCoverage": {
+    "sentences": 1243,
+    "translated": 1243,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "sourceTitle": "Volume 14 Treatises 4: Geography Part One",
+    "sourceTitleZh": "卷十四 志第四 地理上"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-014/date-packet.json",
+    "contentSha256": "sha256:958452b45994e47c22463a927a1f85da561ca5bb331afbeaf92f8be6a0bc3044",
+    "itemCount": 980,
+    "peopleCount": 315,
+    "sourceUnitCount": 1243,
+    "extractionHash": "sha256:b983ed124b193ada59f9028d10b72aefab040e887d4f15b648b9581273c784a0",
+    "sourceHash": "sha256:b834b78ed35d1fa54675756b9bddc6c78880d66d05082216991d5b1f57ec71bf"
+  },
+  "dateEvidenceValidation": {
+    "scanFindings": 0,
+    "nativeScanCommand": "npm run people:dates:scan -- --book jinshu --chapter 014",
+    "packetCommand": "npm run people:dates:packet -- --book jinshu --chapter 014 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-014/date-packet.json",
+    "chronologyStatus": "un-audited",
+    "nativeDateReportPresent": false,
+    "note": "Candidate chronology packet prepared from current sealed inputs; independent native date audit not yet recorded under data/people/date-audits/."
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshu --chapter 014",
+    "summary": "Scoped person data validation passed for jinshu/014: 1 extraction(s), 315 local people, 723 mentions, 2740 claims, 0 proposed repair(s), 87 applied repair(s), 88 editorial decision(s), 22 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction, and editorial blobs match dispatch witness at staging 5cac1d27112abc2084b0d9b0574dc3e7471f426b. Scoped validation passed; dates:scan reports 0 structural finding(s). No definite English omission or chronology contradiction requiring owner repair before independent date review. Undated independent attestation allowed where source-supported.",
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "status": "no-native-date-report",
+      "nextGate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-014/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-audit-report.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book jinshu --chapter 014"
+    },
+    "identity": {
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Identity transport preparation deferred to CI-sealed registry per LOCAL_DISK_STRATEGY; follows chronology approval."
+    },
+    "independentReviewCompleted": false
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 014",
+    "prepareDatePacket": "npm run people:dates:packet -- --book jinshu --chapter 014 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-014/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book jinshu --chapter 014"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical edits, registry generation, deploy, or merge. Owner does not self-approve independent date audit."
+}

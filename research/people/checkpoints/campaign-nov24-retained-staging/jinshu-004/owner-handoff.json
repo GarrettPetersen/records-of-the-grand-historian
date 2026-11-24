@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "004"
+  },
+  "ownerAgentId": "bc-b0384d75-2b46-40b4-a947-4df142aa025f",
+  "worker": "cursor-nov24-retained-staging-w10-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "c1983c2c5880aed612a7e8a07e056497b9dacbcb77b59e91f7b3d3aa1662ea44",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshu-004-a025f",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:32f2ec14bcfaf482b0a4fa61c0a1ab2027e0e42136e02770db1506a6f5de3e74",
+    "people": 329,
+    "claims": 2141,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "cdebfecfa337fac9972e809be51c82b01cb5b28b",
+    "extraction": "c12867adff425cf32e49b25b68b811122a5d4281",
+    "editorial": "cf86cdbcffb460f452cf765ab4e5ee2a3f262fcf"
+  },
+  "sealedInputs": {
+    "source": "sha256:9399721c862f5c50af2e2bd1a49542c63dd618b6eaa00ed971a76843a07871da",
+    "extraction": "sha256:32f2ec14bcfaf482b0a4fa61c0a1ab2027e0e42136e02770db1506a6f5de3e74",
+    "editorial": "sha256:5de7ce4d92a786f559a9969c1ae8d76a970a862ba9233db24575385da53b9e80"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": 42,
+    "editorialDecisionCount": 46,
+    "note": "Pinned extraction and accepted editorial decisions retained verbatim; owner did not re-extract or self-approve chronology.",
+    "proposalCount": 46
+  },
+  "sourceCoverage": {
+    "sentences": 436,
+    "translated": 436,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "sourceTitle": "Volume 4 Annals 4: Emperor Hui",
+    "sourceTitleZh": "卷四 帝紀第四 孝惠帝"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-004/date-packet.json",
+    "contentSha256": "sha256:aa720a7296f16e707c8a4d9a2bb886a9f86a76f65d947776fb25f34ba87be640",
+    "itemCount": 1494,
+    "peopleCount": 329,
+    "sourceUnitCount": 436,
+    "extractionHash": "sha256:c8f16d9bc67d6f9e496bf509ddc2e6465e991d422b05c5cd3cab83b741646338",
+    "sourceHash": "sha256:08857d0e967c8222a01d6b46615c73fff17307be0407315c0d0f0e85c70df72e"
+  },
+  "dateEvidenceValidation": {
+    "scanFindings": 0,
+    "nativeScanCommand": "npm run people:dates:scan -- --book jinshu --chapter 004",
+    "packetCommand": "npm run people:dates:packet -- --book jinshu --chapter 004 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-004/date-packet.json",
+    "chronologyStatus": "un-audited",
+    "nativeDateReportPresent": false,
+    "note": "Candidate chronology packet prepared from current sealed inputs; independent native date audit not yet recorded under data/people/date-audits/."
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshu --chapter 004",
+    "summary": "Scoped person data validation passed for jinshu/004: 1 extraction(s), 329 local people, 1250 mentions, 3443 claims, 0 proposed repair(s), 46 applied repair(s), 46 editorial decision(s), 2 claim retraction(s), 9 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction, and editorial blobs match dispatch witness at staging 5cac1d27112abc2084b0d9b0574dc3e7471f426b. Scoped validation passed; dates:scan reports 0 structural finding(s). No definite English omission or chronology contradiction requiring owner repair before independent date review. Undated independent attestation allowed where source-supported.",
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "status": "no-native-date-report",
+      "nextGate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-004/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-audit-report.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book jinshu --chapter 004"
+    },
+    "identity": {
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Identity transport preparation deferred to CI-sealed registry per LOCAL_DISK_STRATEGY; follows chronology approval."
+    },
+    "independentReviewCompleted": false
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 004",
+    "prepareDatePacket": "npm run people:dates:packet -- --book jinshu --chapter 004 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-004/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book jinshu --chapter 004"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical edits, registry generation, deploy, or merge. Owner does not self-approve independent date audit."
+}
