@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "020"
+  },
+  "workerId": "cursor-nov24-current-master-followup-1",
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "sourcePacketSha256": "914e7da14072919ed6b709d5db2b6ba6d019b6ee3096f0ca5c1beb2559b03cad",
+    "planFingerprint": "sha256:a0563fc7da0df9d072601d5cda548ef86b94db105e009eb7c41b086d3b4b16c4",
+    "transportSha256": "066c66117e24a346f63fd3309c398a25becd431dbc5941f26a411e908f1e7947",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "432b3fed910ecc523f05685794d688422870266c32564cab91205d7555165055",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "46fca4a33e0139a7e51227d1ba42486196d4d9ed1c28349f16aaaf3e0d02fac8",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "00492503e73e67a60e24eec3dc9e0c11f0b88f84552e6a4f1bd412e0ecbf4c75",
+        "caseCount": 30
+      }
+    ],
+    "preparationReceiptSha256": "aa978c19bca6c4fabdba92d3070f8e72abaca8d0a3a8b1e01231ea1acbac1ba4"
+  },
+  "sealedInputs": {
+    "source": "sha256:fa121214f3c89b2827f27fefa7c34496fa74294a3217e8ae7dcc74735fdbb0f9",
+    "extraction": "sha256:58a2b613d7fc0d4d22da28538056e139e0a4900d82b8b0dd4d555d31f9a1b2cf",
+    "editorial": "sha256:9a64b32db20954d9370f47255fa61d2f726ea976d93a3c17730dbd3dae9efeca",
+    "dateAudit": "sha256:341ad389432a18e70ca1fcb92cf13fc0c63db19874168a0de14bd55f07601e05"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "15 applied editorial decisions; no pending proposals",
+  "reviewCases": 60,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 60 scoped identity cases retain preparation-proposed canonicalPersonId and accepted membership fingerprints. Twenty-eight overflow cases preserve bounded-retrieval uncertainty with unresolvedIdentity held where proposed (50/60 unresolved; ten small-candidate or anchor-only cases leave unresolvedIdentity false without a concrete merge). No concrete wrong-actor or false-merge contradiction found in chapter 020 biographies (Wuxi, Pan Liao, Gao Shilian, Hou Ping, Wu Mingche, Han Zigao, Deng Yong, Zhou Di family cluster, and remainder). No canonical extraction or shared-registry edits.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "transportPart003": "transport-part-003.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:c7c632fba96d97f44598c670e9e4580faa63030f4af3443f9d9f34b4b9e778cd",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 020",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-020/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-020/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-020/transport-part-003.json"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 1c48e717."
+}

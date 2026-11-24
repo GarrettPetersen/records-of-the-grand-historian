@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "chenshu/020",
+  "pullRequest": 5591,
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "ownerWorkerId": "cursor-nov24-current-master-followup-1",
+  "ownerHead": "c07f1776ddac452a8714586ada97b41c3bc559c6",
+  "reviewHead": "c9de89ed532ee33a46103ebe7f3d16315ad5b893",
+  "independentReviewerAgentId": "bc-a22d452d-e80b-44aa-8cc4-53701563c14f",
+  "independentReport": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/chenshu-020/independent-identity-report-part-002.json",
+  "sealedInputs": {
+    "sourceGitBlob": "c9ad7ef20d94a5641600733e83171e497d26032d",
+    "sourceSha256": "sha256:fa121214f3c89b2827f27fefa7c34496fa74294a3217e8ae7dcc74735fdbb0f9",
+    "extractionGitBlob": "23b4a78082b0367aed328a5155196e1e9fed3f27",
+    "extractionSha256": "sha256:58a2b613d7fc0d4d22da28538056e139e0a4900d82b8b0dd4d555d31f9a1b2cf",
+    "dateAuditGitBlob": "a9186a52952d2e162f1fb4bbd9cc7b6ccce2fb68",
+    "dateAuditSha256": "sha256:341ad389432a18e70ca1fcb92cf13fc0c63db19874168a0de14bd55f07601e05",
+    "editorialGitBlob": "0418ddb7e7fd88952f4b89247c578f31fcc0692b",
+    "editorialSha256": "sha256:9a64b32db20954d9370f47255fa61d2f726ea976d93a3c17730dbd3dae9efeca"
+  },
+  "diagnosisSummary": "Independent hold on case sha256:7c3e7660…: chenshu:020:p036 is a false individuation. Primary Chinese chenshu/020/s0100 has 兄子 only; the composite 周迪兄 never appears. English idiomatic/literal correctly read 兄子 as Zhou Di's nephew, not a separately named elder brother.",
+  "holds": [
+    {
+      "caseId": "sha256:7c3e7660444dc37583943679accfca4f51c30225adada02f83be2cd60f41fc2f",
+      "canonicalPersonId": "per_2Q1TYAMG55PWHJJSF3RN",
+      "localPeople": ["chenshu:020:p036"],
+      "independentVerdict": "hold",
+      "independentReason": "descriptive-kinship 周迪兄 unsupported on s0100; 兄子 witnesses nephew p037 only",
+      "ownerDiagnosis": "Extraction invented chenshu:020:p036 from an English-style gloss 周迪兄 and inferred a father link to p037. The sole cited unit 周迪謀反，遣其兄子伏甲於船中… attributes the rebel agent to 兄子 (brother's son / nephew), already owned by p037. No source line names Zhou Di's elder brother as a distinct actor.",
+      "sourceWitness": {
+        "book": "chenshu",
+        "chapter": "020",
+        "unitId": "s0100",
+        "path": "data/chenshu/020.json",
+        "zhLiteral": "周迪謀反，遣其兄子伏甲於船中，偽稱賈人，欲於湓城襲皎。",
+        "quotesInUnit": ["周迪", "兄子"],
+        "absentFromUnit": ["周迪兄", "兄"],
+        "enLiteral": "Zhou Di plotted rebellion and sent his elder brother's son to lie in ambush aboard ship, falsely claiming to be merchants, intending to strike Jiao at Pen city.",
+        "enIdiomatic": "Zhou Di rebelled and sent his nephew with hidden troops aboard ship, posing as merchants, to strike Jiao at Pen city."
+      },
+      "impactedDependencies": {
+        "extraction": [
+          "chenshu:020:p036 person row and all p036 subject claims",
+          "chenshu:020:p035 related p036, sibling-of p036, kin-of intermediary p036",
+          "chenshu:020:p037 related p036",
+          "compact claim rows on p036 (name, role, sex, family-relationship, attestation)"
+        ],
+        "chronology": [
+          "Remove duplicate contextual attestation on p036 for s0100; p037 already holds explicit-event-contextual-date attestation on s0100 (天嘉三年 / AD 562)."
+        ],
+        "identity": [
+          "After apply: drop chenshu:020:p036 from canonical cluster per_2Q1TYAMG55PWHJJSF3RN membership (host registry step, not in this file).",
+          "Do not merge per_2Q1TYAMG55PWHJJSF3RN with p037's canonical; p037 remains separately cased."
+        ],
+        "translations": "No change proposed: both English renderings already align with 兄子 as nephew."
+      },
+      "operations": [
+        {
+          "op": "remove-person",
+          "book": "chenshu",
+          "chapter": "020",
+          "personId": "p036",
+          "reason": "not-a-name",
+          "sourceWitness": {
+            "unitId": "s0100",
+            "excerpt": "遣其兄子",
+            "note": "兄子 names a kinship role (nephew), not a distinct elder-brother person 周迪兄."
+          }
+        },
+        {
+          "op": "strip-related",
+          "book": "chenshu",
+          "chapter": "020",
+          "personId": "p035",
+          "removedRelated": ["p036"]
+        },
+        {
+          "op": "strip-related",
+          "book": "chenshu",
+          "chapter": "020",
+          "personId": "p037",
+          "removedRelated": ["p036"]
+        },
+        {
+          "op": "claim-retraction",
+          "book": "chenshu",
+          "chapter": "020",
+          "subject": "p035",
+          "predicate": "family-relationship",
+          "before": {
+            "relation": "sibling-of",
+            "personId": "p036",
+            "kinshipTerm": { "zh": "兄", "en": "elder brother" },
+            "subjectRelativeAge": "younger",
+            "sharedParentage": "uncertain",
+            "certainty": "strongly-inferred",
+            "evidence": ["s0100"]
+          },
+          "after": null,
+          "reason": "s0100 does not attest a named elder brother of Zhou Di; 兄子 is nephew reference only."
+        },
+        {
+          "op": "claim-retraction",
+          "book": "chenshu",
+          "chapter": "020",
+          "subject": "p036",
+          "predicate": "family-relationship",
+          "before": {
+            "relation": "parent-of",
+            "personId": "p037",
+            "kinshipTerm": { "zh": "父", "en": "father" },
+            "parentage": "biological",
+            "subjectRole": "father",
+            "objectRole": "son",
+            "generationDistance": 1,
+            "line": "paternal",
+            "certainty": "strongly-inferred",
+            "evidence": ["s0100"]
+          },
+          "after": null,
+          "reason": "No father named in source; nephew relationship does not license a father individuation."
+        },
+        {
+          "op": "claim-revision",
+          "book": "chenshu",
+          "chapter": "020",
+          "subject": "p035",
+          "predicate": "family-relationship",
+          "before": {
+            "relation": "kin-of",
+            "personId": "p037",
+            "kinshipTerm": { "zh": "兄子", "en": "brother's son" },
+            "subjectRole": "paternal-uncle",
+            "objectRole": "nephew",
+            "generationDistance": 1,
+            "line": "paternal",
+            "intermediaryPersonIds": ["p036"],
+            "certainty": "explicit",
+            "evidence": ["s0100"]
+          },
+          "after": {
+            "relation": "kin-of",
+            "personId": "p037",
+            "kinshipTerm": { "zh": "兄子", "en": "brother's son" },
+            "subjectRole": "paternal-uncle",
+            "objectRole": "nephew",
+            "generationDistance": 1,
+            "line": "paternal",
+            "certainty": "explicit",
+            "evidence": ["s0100"]
+          },
+          "reason": "Retain direct Zhou Di–nephew link from 遣其兄子; remove fabricated intermediary p036."
+        },
+        {
+          "op": "person-row-revision",
+          "book": "chenshu",
+          "chapter": "020",
+          "personId": "p037",
+          "field": "preferredChinese",
+          "before": "周迪兄子",
+          "after": "兄子",
+          "reason": "Preferred Chinese must not invent 周迪兄; explicit name claim already uses 兄子."
+        }
+      ],
+      "holdAfterApply": false,
+      "holdAfterApplyNote": "Once p036 is removed and p035–p037 kinship is source-aligned, the identity hold on certifying elder-brother attribution should clear; p037/nephew review remains a separate bounded case. Canonical registry must stop listing chenshu:020:p036."
+    }
+  ],
+  "preserved": {
+    "unchangedScopes": "All other 59 identity cases and sealed transport artifacts on this branch",
+    "p037NephewAttestation": "Keep p037 explicit 兄子 name claim, rebel role, and s0100 attestation (天嘉三年 / AD 562)",
+    "englishFields": "data/chenshu/020.json units s0100 literal and idiomatic English unchanged"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book chenshu --chapter 020",
+    "atProposalAuthoring": {
+      "applied": false,
+      "result": "PASS on unmodified extraction at ownerHead (proposal not yet applied by host)",
+      "summary": "Scoped person data validation passed for chenshu/020 with current extraction including p036; host must re-validate after apply."
+    }
+  },
+  "notes": "Owner-authored repair scope only; not self-approved. Host applies via native editorial/false-person tooling, then independent identity re-review."
+}
