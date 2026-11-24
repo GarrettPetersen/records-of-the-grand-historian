@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "kind": "scoped-independent-editorial-review",
+  "chapterKey": "jiuwudaishi/103",
+  "dispatchKey": "jiuwudaishi/103-editorial-review",
+  "idempotencyKey": "e16258e29f4bf7f03c5a704202398cfb2fa95223775c558b31a2ce7b9799e220",
+  "reviewedAt": "2026-11-24T17:45:00.000Z",
+  "reviewer": {
+    "kind": "cursor-cloud",
+    "agentId": "bc-c9727923-3c79-42fd-abf5-0964ee4e1b75",
+    "model": "Composer 2.5 Fast",
+    "role": "independent-final-editorial-reviewer"
+  },
+  "owner": {
+    "agentId": "bc-4874e07b-d28e-4955-8863-c1b73d13cb91",
+    "runId": "run-74f18032-ee91-433e-9fe7-ad9b34fa59d8",
+    "handoffPath": "research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-103/owner-handoff.json",
+    "handoffCommit": "dec7790edb1d457d0086b93a00214b4e5c149ea8",
+    "handoffSha256": "c4b39d647cc1a00b52e9cb641578440689370d373480d011cee15ed6e8e5bde3",
+    "repairsReviewed": 10
+  },
+  "stagingRevision": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "branch": "cursor/nov24-jiuwudaishi103-scoped-editorial-independent",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/103.json",
+      "gitBlob": "a96af27a58c0556f600b3aac6cc5dcdd963d6281",
+      "contentSha256": "sha256:182c4c87009c46e56d8e93af7a98c5ea8c52b9ef6c2a6448efa70094a64b45f2"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/103.json",
+      "gitBlob": "d8dcb506c0551e749fc1f8cd09240574a0af013d",
+      "contentSha256": "sha256:09c7973aa4d770178b951682a1713b572d2a83ddb9adff7bdbaa5df6bde0d9f2"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/103.json",
+      "gitBlob": "89a1ebf538a40bb898aaec627750b82b0c5a55be",
+      "contentSha256": "sha256:1299377344686c1349a5d63c1524b1c38715de12a247436e625b336ca8a18011",
+      "status": "audited",
+      "findings": 0
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/103.json",
+      "gitBlob": "7065c4e1ff7c10b238b580ced6b141563b154771",
+      "contentSha256": "sha256:49827c4437e8b60dba2d6c98c9268a5e8e8da634a6b9932e367358ca3ade53ad"
+    }
+  },
+  "verification": {
+    "ownerHandoffSha256Verified": true,
+    "pinnedBlobWitnessVerified": true,
+    "liveEnglishBeforeMatchedHandoff": true,
+    "chineseWitnessReadPerRepair": true,
+    "corpusCrossChecks": [
+      "jiuwudaishi/044 侍中 → Palace Attendant (tr001–tr002, tr009–tr010)",
+      "jiuwudaishi corpus 贈太傅 → Grand Tutor (tr003–tr004)",
+      "jiuwudaishi corpus 兼中書令 → Director of the Secretariat (tr005–tr006)"
+    ],
+    "chronologyPreserved": true,
+    "identityRecordsPreservedExceptApprovedDependents": true,
+    "canonicalEditsOnThisBranch": false
+  },
+  "repairDecisions": [
+    {
+      "id": "jiuwudaishi-103-tr001",
+      "verdict": "accept",
+      "unitId": "s0003",
+      "field": "translations[lang=en].literal",
+      "sourceZh": "丁未，鳳翔節度使、充西南行營都部署趙暉加兼侍中。",
+      "liveBefore": "On day dingwei, Zhao Hui, military commissioner of Fengxiang and overall commander of the southwestern field army, was additionally appointed Vice Grand Councilor.",
+      "proposedAfter": "On day dingwei, Zhao Hui, military commissioner of Fengxiang and overall commander of the southwestern field army, was additionally appointed Palace Attendant.",
+      "rationale": "加兼侍中 appoints the Palace Attendant (侍中) office. Vice Grand Councilor is incorrect; jiuwudaishi/044 and the rest of this book consistently render 侍中 as Palace Attendant. Unaffected clauses preserved."
+    },
+    {
+      "id": "jiuwudaishi-103-tr002",
+      "verdict": "accept",
+      "unitId": "s0003",
+      "field": "translations[lang=en].idiomatic",
+      "sourceZh": "丁未，鳳翔節度使、充西南行營都部署趙暉加兼侍中。",
+      "liveBefore": "On dingwei, Zhao Hui—Fengxiang commissioner and commander of the southwestern campaign—was also made Vice Grand Councilor.",
+      "proposedAfter": "On dingwei, Zhao Hui—Fengxiang commissioner and commander of the southwestern campaign—was also made Palace Attendant.",
+      "rationale": "Same 侍中 misrendering on the idiomatic field; Palace Attendant is the established corpus reading."
+    },
+    {
+      "id": "jiuwudaishi-103-tr003",
+      "verdict": "accept",
+      "unitId": "s0024",
+      "field": "translations[lang=en].literal",
+      "sourceZh": "辛未，故深州刺史史萬山贈太傅。",
+      "liveBefore": "On day xinwei, the late prefect of Shenzhou, Shi Wanshan, was posthumously made Grand Mentor.",
+      "proposedAfter": "On day xinwei, the late prefect of Shenzhou, Shi Wanshan, was posthumously made Grand Tutor.",
+      "rationale": "贈太傅 grants the office 太傅 (Grand Tutor). Grand Mentor in this project is reserved for 太子太傅 and similar compounds, not a standalone posthumous 太傅."
+    },
+    {
+      "id": "jiuwudaishi-103-tr004",
+      "verdict": "accept",
+      "unitId": "s0024",
+      "field": "translations[lang=en].idiomatic",
+      "sourceZh": "辛未，故深州刺史史萬山贈太傅。",
+      "liveBefore": "On xinwei the late Shenzhou prefect Shi Wanshan was posthumously honored as Grand Mentor.",
+      "proposedAfter": "On xinwei the late Shenzhou prefect Shi Wanshan was posthumously honored as Grand Tutor.",
+      "rationale": "Idiomatic field repeats the same 太傅 error; Grand Tutor matches source and corpus usage for posthumous 贈太傅."
+    },
+    {
+      "id": "jiuwudaishi-103-tr005",
+      "verdict": "accept",
+      "unitId": "s0049",
+      "field": "translations[lang=en].literal",
+      "sourceZh": "丙午，以皇弟興元節度使承勛為開封尹，加兼中書令，未出閣。",
+      "liveBefore": "On day bingwu, the emperor's younger brother Chengxun, commissioner of Xingyuan, was made mayor of Kaifeng and additionally Zhongshu Ling, but had not yet left the inner quarters.",
+      "proposedAfter": "On day bingwu, the emperor's younger brother Chengxun, commissioner of Xingyuan, was made mayor of Kaifeng and additionally Director of the Secretariat, but had not yet left the inner quarters.",
+      "rationale": "加兼中書令 is rendered elsewhere in jiuwudaishi as Director of the Secretariat, not romanized Zhongshu Ling. Name and 未出閣 clauses already correct on the live candidate."
+    },
+    {
+      "id": "jiuwudaishi-103-tr006",
+      "verdict": "accept",
+      "unitId": "s0049",
+      "field": "translations[lang=en].idiomatic",
+      "sourceZh": "丙午，以皇弟興元節度使承勛為開封尹，加兼中書令，未出閣。",
+      "liveBefore": "On bingwu the emperor's brother Liu Chengxun, Xingyuan commissioner, was named Kaifeng mayor and concurrent Zhongshu Ling but had not yet left the palace.",
+      "proposedAfter": "On bingwu the emperor's brother Liu Chengxun, Xingyuan commissioner, was named Kaifeng mayor and concurrent Director of the Secretariat but had not yet left the palace.",
+      "rationale": "Concurrent 兼中書令 should follow the book's Director of the Secretariat convention on the idiomatic surface as well."
+    },
+    {
+      "id": "jiuwudaishi-103-tr007",
+      "verdict": "accept",
+      "unitId": "s0157",
+      "field": "translations[lang=en].literal",
+      "sourceZh": "或曰：「可依魏高貴鄉公故事，以公禮葬之。」",
+      "liveBefore": "Someone said: \"It may follow the precedent of the noble village lord of Wei and bury him with ducal rites.\"",
+      "proposedAfter": "Someone said: \"It may follow the precedent of the Duke of Noble Village of Wei and bury him with ducal rites.\"",
+      "rationale": "魏高貴鄉公 is the Wei ruler-title Duke of Noble Village (Cao Mao burial precedent), not a generic \"noble village lord.\" 公 is ducal rank; 以公禮葬之 in the same sentence confirms ducal rites."
+    },
+    {
+      "id": "jiuwudaishi-103-tr008",
+      "verdict": "accept",
+      "unitId": "s0157",
+      "field": "translations[lang=en].idiomatic",
+      "sourceZh": "或曰：「可依魏高貴鄉公故事，以公禮葬之。」",
+      "liveBefore": "Some said, \"Follow the Wei noble village lord precedent and bury him with ducal rites.\"",
+      "proposedAfter": "Some said, \"Follow the Duke of Noble Village of Wei precedent and bury him with ducal rites.\"",
+      "rationale": "Idiomatic surface needs the same title reading as the literal field; \"noble village lord\" drops the proper title 高貴鄉公."
+    },
+    {
+      "id": "jiuwudaishi-103-tr009",
+      "verdict": "accept",
+      "unitId": "s0219",
+      "field": "translations[lang=en].literal",
+      "sourceZh": "壬戌，奉太后誥，命樞密使侍中郭威監國，中外庶事，並取監國處分。",
+      "liveBefore": "On day renxu, following the dowager's proclamation, bureau commissioner and Vice Grand Councilor Guo Wei was ordered to supervise the state; civil and military affairs within and without were all taken at the supervisor's disposal.",
+      "proposedAfter": "On day renxu, following the dowager's proclamation, bureau commissioner and Palace Attendant Guo Wei was ordered to supervise the state; civil and military affairs within and without were all taken at the supervisor's disposal.",
+      "rationale": "樞密使侍中 lists Bureau Commissioner and Palace Attendant (侍中); only the 侍中 gloss was wrong. Bureau commissioner and the監國 disposition clauses are left unchanged."
+    },
+    {
+      "id": "jiuwudaishi-103-tr010",
+      "verdict": "accept",
+      "unitId": "s0219",
+      "field": "translations[lang=en].idiomatic",
+      "sourceZh": "壬戌，奉太后誥，命樞密使侍中郭威監國，中外庶事，並取監國處分。",
+      "liveBefore": "On renxu the dowager ordered vice grand councilor Guo Wei to supervise the state with full civil and military authority.",
+      "proposedAfter": "On renxu the dowager ordered Palace Attendant Guo Wei to supervise the state with full civil and military authority.",
+      "rationale": "The idiomatic line collapses 樞密使侍中 but must not mislabel 侍中 as vice grand councilor; Palace Attendant is the required correction."
+    }
+  ],
+  "dependentRecordDecisions": [
+    {
+      "id": "jiuwudaishi:103:c0719",
+      "repairIds": ["jiuwudaishi-103-tr001", "jiuwudaishi-103-tr002"],
+      "kind": "claim-revision",
+      "verdict": "accept",
+      "rationale": "Office claim for Zhao Hui at s0003 should mirror Palace Attendant for 侍中; date context unchanged."
+    },
+    {
+      "id": "jiuwudaishi:103:c0891",
+      "repairIds": ["jiuwudaishi-103-tr003", "jiuwudaishi-103-tr004"],
+      "kind": "claim-revision",
+      "verdict": "accept",
+      "rationale": "Posthumous 贈太傅 honor on Shi Wanshan should read Grand Tutor, not Grand Mentor; AD 950 date context unchanged."
+    },
+    {
+      "id": "jiuwudaishi:103:c0943",
+      "repairIds": ["jiuwudaishi-103-tr005", "jiuwudaishi-103-tr006"],
+      "kind": "claim-revision",
+      "verdict": "accept",
+      "rationale": "Liu Chengxun's concurrent 兼中書令 office claim should use Director of the Secretariat in English."
+    },
+    {
+      "id": "jiuwudaishi:103:m0144",
+      "repairIds": ["jiuwudaishi-103-tr005", "jiuwudaishi-103-tr006"],
+      "kind": "mention-revision",
+      "verdict": "accept",
+      "rationale": "Mention span on s0049 should match the accepted 兼中書令 English title."
+    }
+  ],
+  "summary": {
+    "repairsAccept": 10,
+    "repairsRevise": 0,
+    "repairsReject": 0,
+    "dependentRecordsAccept": 4,
+    "dependentRecordsRevise": 0,
+    "dependentRecordsReject": 0,
+    "unitsTouched": ["s0003", "s0024", "s0049", "s0157", "s0219"],
+    "editorialApplicationRecommended": true,
+    "chronologyApprovedAsPinned": true,
+    "identityCertificationDeferred": true,
+    "identityTransportCasesRemaining": 214
+  },
+  "preserved": {
+    "unaffectedEnglishClauses": true,
+    "acceptedChronology": "data/people/date-audits/jiuwudaishi/103.json remains audited with zero findings; no date values in owner delta.",
+    "identityRecords": "No person merge/split; only four English-aligned title claim/mention updates bundled with accepted repairs.",
+    "priorEditorialDecisions": "Eleven prior editorial decisions on pinned blob unchanged by this reviewer branch."
+  },
+  "reproduce": {
+    "verifyHandoff": "git show dec7790edb1d457d0086b93a00214b4e5c149ea8:research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-103/owner-handoff.json | sha256sum",
+    "verifySourceBlob": "git rev-parse a96af27a58c0556f600b3aac6cc5dcdd963d6281^{blob}"
+  },
+  "notes": [
+    "[CF-Pages-Skip]",
+    "Independent review evidence only; no canonical chapter, extraction, registry, or deploy edits on this branch.",
+    "Reviewer retains context as chapter independent final reviewer after host applies accepted delta."
+  ]
+}
