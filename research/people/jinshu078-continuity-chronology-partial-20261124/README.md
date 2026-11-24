@@ -74,3 +74,7 @@ See `research/people/jinshu078-unresolved-109-group-decisions-20261124/`.
 ## Verify 106 apply @ 5f2add76
 
 See `research/people/jinshu078-106-apply-verify-5f2add76-20261124/`.
+
+## Final three + native date report @ 80ad020a
+
+See `research/people/jinshu078-final-three-date-report-80ad020a-20261124/`.
