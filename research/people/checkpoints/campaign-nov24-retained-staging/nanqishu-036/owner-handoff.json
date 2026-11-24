@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "036"
+  },
+  "ownerAgentId": "bc-bc8282c5-9a08-4f9f-b40f-cdbf21d358ec",
+  "workerId": "cursor-nov24-retained-staging-w16-o11",
+  "idempotencyKey": "9f9b5aa7773dcb30f82fc4cd25afc84102e9d9be69c2fc9b643a16b311e31584",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-nanqishu-036-358ec",
+  "extractionBytes": 164933,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "1b0d0b5c0a33921e232b2b60ae5d07ef3fcdff457b87380660dc65d7d4413d7b",
+    "people": 69,
+    "claims": 255,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "1fa4ef9be1f64fe156481c068e970034c077352b",
+    "extraction": "21baafef195a36709dea0afda761d82ee08ad63d",
+    "editorial": "1337692c89a4a8356c9c45bd479fcd84005ba115"
+  },
+  "sealedInputs": {
+    "source": "sha256:da4d58c19b4a47c85b9a19910a96cbc9a343a423f9e27cfdb4e8feba65096ae4",
+    "extraction": "sha256:1b0d0b5c0a33921e232b2b60ae5d07ef3fcdff457b87380660dc65d7d4413d7b",
+    "editorial": "sha256:fdc9c11acdff5d900cfc1387da9dc4ac67c5c5195f79d0e93ed62919b0d9f2f8"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 36 Biographies 17: Xie Chaozong, Liu Xiang",
+    "chineseUnits": 243,
+    "translatedCount": 243,
+    "sentenceCount": 243,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 164933
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "sourceExtractionSha256Verified": true,
+    "editorialDecisionsPreserved": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "status": "reviewed-partial-authorization-debt",
+    "path": "data/people/editorial-decisions/nanqishu/036.json",
+    "blob": "1337692c89a4a8356c9c45bd479fcd84005ba115"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-036/date-packet.json",
+    "sha256": "sha256:954c37f7dd27f96f107cc2aa9aaa7194501b2f4ae8fbce6556a3f161e734e26b",
+    "sourceHash": "sha256:25abf7699917df4a038da2e6004b599de253fdeaebd937844ba3b8776c993a7e",
+    "extractionHash": "sha256:8ec0e425bf2c0cacb11d0038d934c90cafc43831cf679bc6f4d8fbdd7e27468c",
+    "temporalItemCount": 173,
+    "peopleCount": 69,
+    "reviewedUnitCount": 243,
+    "command": "npm run people:dates:packet -- --book nanqishu --chapter 036 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-036/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book nanqishu --chapter 036",
+    "peopleValidateSummary": "Person data validation failed:",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/nanqishu/036.json",
+    "peopleValidateExtractionSummary": "data/people/extractions/nanqishu/036.json: ok (69 people, 325 mentions, 487 claims, 329 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 036",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeReportPresent": false
+    },
+    "chronologyStatus": "candidate-packet-sealed",
+    "editorialStatus": "reviewed-partial-authorization-debt",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-match at pinned git blobs. Full chapter read: 243 Chinese units each carry paired literal and idiomatic English; 69 people and claim/evidence units align with citations at prompt version 7. Compact extraction carries 141 applied translation-repair tuples reflecting retained Linked Pearls displacement fixes; sealed editorial decision v3 records 32 independent accept/revise decisions. Native people:validate fails because 109 applied repair IDs lack matching independent accept/revise authorization contracts—editorial reuse is incomplete under the current validator, not a fresh owner translation defect. Fresh people:dates:packet sealed at checkpoint; no native date audit file exists. Owner made no sealed-input edits and proposes no date repairs.",
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "detail": "No data/people/date-audits/nanqishu/036.json; people:dates:verify reports un-audited. Independent reviewer must audit sealed packet sha256:954c37f7dd27f96f107cc2aa9aaa7194501b2f4ae8fbce6556a3f161e734e26b without self-approval."
+    },
+    {
+      "gate": "editorial-authorization-reconciliation",
+      "detail": "people:validate rejects 109 applied translation repairs (nanqishu:036:r0001–r0109) that lack matching independent accept/revise rows in sealed editorial-decisions; reconcile applied-repair history to the 32 recorded decisions or obtain a supplemental independent editorial review before catalog gates."
+    }
+  ],
+  "remainingIndependentProofs": [
+    {
+      "kind": "native-date-audit",
+      "blockedBy": "no-native-date-report",
+      "packetSha256": "sha256:954c37f7dd27f96f107cc2aa9aaa7194501b2f4ae8fbce6556a3f161e734e26b",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "runCommand": "npm run people:dates:run -- --book nanqishu --chapter 036 --worker <stable-id> --lane cursor-sdk --model <model> --run"
+    },
+    {
+      "kind": "editorial-authorization",
+      "blockedBy": "people:validate applied-repair contract",
+      "detail": "Reconcile 141 applied translation repairs with 32 sealed editorial accept/revise decisions before treating editorial closure as complete."
+    },
+    {
+      "kind": "chapter-identity-canonical",
+      "detail": "No chapter-local identity merge/split edits in this owner pass; continue corpus identity resolution from validated extraction at current hash after date approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssuedByOwner": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 036",
+    "datesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 036",
+    "buildDatePacket": "npm run people:dates:packet -- --book nanqishu --chapter 036 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-036/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs and extraction unchanged; candidate date packet stored for independent reviewer."
+}
