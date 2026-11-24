@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "current-master-transport-identity-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "070"
+  },
+  "ownerAgentId": "bc-8068a1ee-9041-4d7f-9ca7-302616febf7d",
+  "campaignWorker": "cursor-nov24-current-master-4",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:3c3ad26b1b2b87c1410ff74998097d915208e6d528417eb2350ca857df393fea",
+    "sourcePacketSha256": "sha256:5e97b82e55364a343dfec52921060b6f614103954243d8b6c067fd6d16394644",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:1ee10386fed2dbf48331c0439eff72c725dc7077a7f7d846217cf5d9ee3085a5",
+        "caseCount": 14
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:d29aa08f397ed49b8dae6420d6df4ca2eabeacd09af16e079c637eb3c7fe8261",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:d05f55306206d91c2c32553b376040377ba465845b2416bbba66d6ad71b64064",
+        "caseCount": 30
+      }
+    ],
+    "preparationReceiptSha256": "sha256:176f4c5bb018a548f73b2f03740080ecd79703966d73c0a223d56128038cf006"
+  },
+  "sealedInputs": {
+    "source": "sha256:6201fa4c03f0ffad61ac0b2e3ec59726c48226f10332d9ac6f6d99f11f2e6168",
+    "extraction": "sha256:62b5cf3afea849e33a77411ff823c53ec83feea30366ba45bfa3cdb5ff6c10c9",
+    "editorial": "sha256:fb9e8c56378b9b25b02fa18331cf2e52da1aa7e30918e0f4e0f36ad1dd70eed4",
+    "dateAudit": "sha256:ec652b261901a8df3626b6d972f514fb4871e66fdf4c871f582bf04913e9472e"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "4 applied editorial decisions; no pending proposals",
+  "reviewCases": 59,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 59 cases reviewed against sealed jiuwudaishi/070 inputs. 29 overflow cases preserve bounded-retrieval uncertainty; 6 cases retain preparation-proposed resolved identity (unresolvedIdentity false). No false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:540d8ebba3042fad335604eb4ce2a43f069f4146b237e1f6412423c8a458d608",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/jiuwudaishi-070/transport-part-003.json",
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 070"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
