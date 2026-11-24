@@ -1,43 +1,46 @@
-# Jinshu 020 — chronology checkpoint (partial)
+# Jinshu 020 — chronology checkpoint (packet-complete partial)
 
-Draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not chapter approval.**
+Draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not chapter approval** — report still `needs-revision`.
 
-## Preserved baseline
+## Preserved prior work
 
-- **97** editorial apply verifications · **38** disposition verifications  
-- **295** distinct `claim-*` decisions through the s0620→s0700 extension (unchanged text/evidence on those rows)  
-- **664** reviewed units **s0037–s0700**
+- **329** item checks through pending-scope completion (unchanged rows)
+- Owner manifest baseline **37** groups / **109** held IDs — regrouped after append with **deduplicated** item IDs (no ID twice across groups)
 
-## Pending reviewer scope — **complete**
+## This extension
 
-| Slice | Receipt | Item IDs |
+| Slice | Checkpoint | Added |
 | --- | --- | --- |
-| `hints-p001`–`p017` + `claim-2`…`17` backfill | `chronology-span-checkpoint-early-backfill-20261124.json` | 27 new checks |
-| `s0696`–`s0700` tail | `chronology-span-checkpoint-s0696-s0700.json` | (units confirmed; no new packet rows) |
+| **claim-80–96** | `chronology-span-checkpoint-claim80-hints-20261124.json` | 17 (Du Yu **s0159a** essay witnesses) |
+| **hints-p018–p325** | same | 304 (person-named Chinese witness each) |
 
-## Current report
+Witness policy: `lib/chronology-witness.mjs` — packet name, zh surface, or prior check; **no** generic shared-only fallback.
+
+## Full packet item coverage
 
 `date-audit-report-partial-s0037-s0700.json`
 
-| Metric | Count |
+| Metric | Value |
 | --- | --- |
-| Item checks | **329** |
-| Unique claims checked | **308** (`claim-1`…`claim-325` except **claim-80–96** never scheduled in span review) |
-| Hints in scope | **p001–p017** complete (+ prior scattered hints) |
+| Item checks | **650** (= full post-editorial packet items) |
+| Unique claims | **325** |
+| Units reviewed | **664** (s0037–s0700) |
 | Status | `needs-revision` |
 
-## Owner deliverable
+## Owner deliverable (updated)
 
-**`owner-chronology-hold-manifest-20261124.json`** — **37** deduped finding groups, **109** unique held item IDs, counts for `incorrect` / `research-blocked`.
+`owner-chronology-hold-manifest-20261124.json`
 
-## Next (outside completed scope)
+| | Prior | Now |
+| --- | --- | --- |
+| Finding groups | 37 | **46** (new groups appended) |
+| Deduped held item IDs | 109 | **378** |
 
-| Field | Value |
-| --- | --- |
-| Next packet item | **`claim-80`** |
-| Remaining packet items | **321** (mostly `hints-p018`…`hints-p325` and `claim-80`–`96`) |
-| Canonical / audited | **Blocked** until full packet coverage |
+## Recording gate
+
+- **Remaining packet items:** **0**
+- Canonical `data/people/date-audits/jinshu/020.json` / **`audited`** status: **blocked** until host resolves holds and independent approval pass (not this artifact alone).
 
 ## Out of scope
 
-Owner extraction edits, merge to canonical `data/people/date-audits/jinshu/020.json`, chapter `audited` status.
+Owner source edits, extraction changes, registry publish.
