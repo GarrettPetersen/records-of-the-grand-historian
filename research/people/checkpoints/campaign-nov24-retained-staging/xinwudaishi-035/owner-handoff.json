@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "035"
+  },
+  "ownerAgentId": "bc-31695779-403f-487c-8b38-86dd88ecb75b",
+  "workerId": "cursor-nov24-retained-staging-w14-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "76d65e866054f79e5d639f5c316a19eeed5078fc7e93b8ce26a9548e6ec13351",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-035-cb75b",
+  "extractionBytes": 105236,
+  "inputBlobWitness": {
+    "source": "7e9f4a7d477a40c93672bb2f987293218c70dda8",
+    "extraction": "3f9cdd8c09c694451bb9eeca7422a7cb1db25a8a",
+    "editorial": "6aa9d1ebf7468ddb765512902c52e75ef78fbbfc"
+  },
+  "sealedInputs": {
+    "source": "sha256:a60e421f80ff04f2ff7190c4f91c4fce1691a8f442068b807cdffc00a06f5256",
+    "extraction": "sha256:b861fa0294b5123c5e54fd6e7dc96956a0897f4085ec9cff2ea6c1f7362cf9a4",
+    "editorial": "sha256:a9f144f500f9fd3f5caa8e7af17d6e40374edef20f7322b9571dbbcb7a8af34f",
+    "dateAudit": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-035/date-packet.json",
+    "sha256": "sha256:471460a1b1978881419f7c466eb29ce0e78c103d13bb537e09ef9223d387e65a",
+    "extractionHash": "sha256:d25210d1a5a10856cb3da4195158bd39d96f249fd5a37f2a64f07a7e5bf0609a",
+    "sourceHash": "sha256:089ed995f5ca1e0efce4842307557ae032929bde3445bfd2925b141b29aee573",
+    "dateHintChecks": 201
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 35 Biographies 15: Zhan Wenyu, Yang She, Zhang Ce, Zhao Guangfeng, Xue Yiju, Su Xun",
+    "chineseUnits": 143,
+    "translatedCount": 143,
+    "sentenceCount": 143,
+    "contentUnits": 143,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 53,
+    "claims": 351,
+    "sourceExtractionSha256": "b861fa0294b5123c5e54fd6e7dc96956a0897f4085ec9cff2ea6c1f7362cf9a4",
+    "sourceExtractionSha256Verified": true,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/xinwudaishi/035.json",
+    "gitBlob": "6aa9d1ebf7468ddb765512902c52e75ef78fbbfc",
+    "status": "accepted-applied-in-source"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book xinwudaishi --chapter 035",
+    "summary": "Scoped person data validation passed for xinwudaishi/035: 1 extraction(s), 53 local people, 383 mentions, 557 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 035",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "reportPath": "data/people/date-audits/xinwudaishi/035.json"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "reason": "No native date report on record; owner prepared sealed candidate date packet only. Independent reviewer must read Chinese units and approve chronology before catalog or publication gates.",
+      "artifacts": {
+        "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-035/date-packet.json",
+        "datePacketSha256": "sha256:471460a1b1978881419f7c466eb29ce0e78c103d13bb537e09ef9223d387e65a"
+      }
+    }
+  ],
+  "remainingIndependentProofs": [
+    {
+      "kind": "native-date-audit",
+      "command": "npm run people:dates:run -- --book xinwudaishi --chapter 035 --run --model <reviewer-model>",
+      "packetCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 035 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-035/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-date-report.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book xinwudaishi --chapter 035"
+    },
+    {
+      "kind": "chapter-identity-dossier-review",
+      "note": "Corpus-level identity resolution remains outside this scoped owner pass; extraction and editorial inputs are sealed and validated."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction (prompt v7, 53 people, 351 claims), and accepted editorial at pinned staging blobs witness-verified. Owner read paired Chinese/English via source units (143 Chinese-bearing units; fullEnglishCoverage=true). Scoped person data validation passed for xinwudaishi/035: 1 extraction(s), 53 local people, 383 mentions, 557 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.. Reused extraction and editorial; no re-extraction and no owner-authored date approval. Native date packet sealed at checkpoint (no-native-date-report); people:dates:verify status un-audited. No definite English omission or extraction/schema contradiction found; chronology closure awaits independent native date audit.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 035",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 035",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 035 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-035/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged; no independent date self-approval."
+}
