@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "053"
+  },
+  "ownerAgentId": "bc-95b52b95-f4f5-4a30-aba0-2157f8206711",
+  "workerId": "cursor-nov24-retained-staging-w3-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2f093d1356d99463ba98f7b7d7697643a6113c23581016740debb9a8ec00a83a",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-053-06711",
+  "inputBlobWitness": {
+    "source": "6cece64a0e3c968007b36dcc572637261e2f4202",
+    "extraction": "00be5a0b02b4afa4e58a9bb5ea4b0608f9651883",
+    "dateAudit": "0487e532bebfe14ce374801d1112843faef8d441",
+    "editorial": "2470454836d1be52166593da6e2bf2ed401a2d44"
+  },
+  "sealedInputs": {
+    "source": "sha256:8cfbf3a07f68873bca86d3806d3df6c5cf9d8814d6de377429f1fe9309a7192d",
+    "extraction": "sha256:9dff4e10ef560f49d57ac385980a89225131175f08ceba5cd31e4bebd92c48fc",
+    "dateAudit": "sha256:0f904fab4c6603e4a111ec2aa1284d0e7399e6eaaf79a009434c1d3822585f24",
+    "editorial": "sha256:e1ead39781c7876268ae6c5bcdd86708e502152e8f2f9e987aa2d2a0771ac5cb"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 114,
+    "translatedCount": 114,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "sourceTitle": "House of Chancellor Xiao",
+    "allUnitsCarryLiteralAndIdiomatic": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 053",
+    "summary": "Scoped person data validation passed for shiji/053: 1 extraction(s), 21 local people, 298 mentions, 226 claims, 0 proposed repair(s), 5 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 053",
+      "status": "research-blocked",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T22:00:00.000Z",
+      "chronologyCurrentAtPinnedBlobs": true
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialRepairsReflectedInSource": true,
+      "proposedRepairCount": 0,
+      "legacyTemporalDebt": 0,
+      "legacyAliasDispositionDebt": 0
+    },
+    "editorialDecisionCount": 6,
+    "editorialAcceptedCount": 5,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "Pinned four-part inputs witness-verified at staging 7cdf8f42e53b; scoped people:validate passed with zero proposed repairs.",
+    "Full Chinese chapter and both English fields reviewed via unit scan; accepted editorial repairs are present in source.",
+    "Complete independent review of all 114 Chinese units, 84 date/hint checks, and 21 people. The chapter’s Han-year chronology supports the dated Xiao He biography and associated events. Seven retrospective or rhetorical figures lack source-established chronology: Li Si, the First Emperor, Jie, Zhou, Sima Qian, Hong Yao, and San Yisheng. Their imported ranges, points, or legendary label are retained as research holds; no source or canonical extraction was modified.",
+    "No new definite English omission, false-merge signal, extraction coverage gap, or owner-scoped chronology/identity amendment identified at sealed blobs."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "shiji:053:date-hold-1",
+      "kind": "research-blocked-chronology",
+      "status": "retained",
+      "items": [
+        "claim-54",
+        "claim-55",
+        "claim-140",
+        "claim-141",
+        "claim-142",
+        "claim-143",
+        "claim-144",
+        "hints-p015",
+        "hints-p016",
+        "hints-p017",
+        "hints-p018",
+        "hints-p019",
+        "hints-p020",
+        "hints-p021",
+        "p015",
+        "p016",
+        "p017",
+        "p018",
+        "p019",
+        "p020",
+        "p021"
+      ],
+      "people": [],
+      "problem": "Retrospective citations and rhetorical comparisons have been encoded as person-specific life/reign ranges, point dates, or a legendary-antiquity classification even though the chapter supplies none of that chronology. The authorial formula 太史公曰 likewise is not a date for Sima Qian.",
+      "preservedAction": "Obtain and pin independent source-specific chronology for each held figure, then retain only date/context supported by those sources or remove the unsupported claims and active-date hints. Submit any repaired extraction for a fresh independent audit.",
+      "source": "data/people/date-audits"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "dateAuditStatus": "research-blocked",
+    "notes": "Owner handoff is not independent identity or chronology approval; retained research-blocked date holds remain explicit in distinctHolds."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 053",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 053"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; no sealed input mutation, registry build, or publication."
+}
