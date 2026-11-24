@@ -137,6 +137,7 @@ function renderEbookGlossaryReferences(person, ebookPeople, chapterTitles, conte
       const en = visibleTableText(englishText(unit));
       if (!zh && !en) throw new Error(`Empty EPUB glossary reference ${ebookPeople.book}:${chapter}:${reference.unitId}`);
       return `<article class="glossary-mention-snippet">` +
+        `${reference.inference ? `<p class="glossary-inference">${escapeXml(reference.inference)}</p>` : ''}` +
         `${zh ? `<a class="glossary-mention-source" lang="zh-Hant" href="${escapeXml(href)}">${escapeXml(zh)}</a>` : ''}` +
         `${en ? `<a class="glossary-mention-link" href="${escapeXml(href)}">${escapeXml(en)}</a>` : ''}` +
         `</article>`;
