@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-primary-witness-delta",
+  "mode": "targeted-primary-witness",
+  "chapterKey": "jiutangshu/072",
+  "ownerAgentId": "bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f",
+  "campaignWorker": "cursor-nov24-four-part-owner-6",
+  "ownerRevision": "0cae152f307a7443e1e048cac7c01bdaa84fe833",
+  "sourceReviewHead": "2cbe03d483b8ffee41ebccf367d9a1baae66590d",
+  "idempotencyKey": "69befe880f982a7f7f43344a4891c17139ff1ee2ec178441e382e7de6950050f",
+  "priorRun": "run-68b6b32e-ae72-4fa0-a8a9-7d6c7cdd4a5b",
+  "cases": [
+    {
+      "caseId": "sha256:402ff3d78855877cd4e91753bc01da1911896229abce86bcd7aa38676aa34cb6",
+      "localId": "jiutangshu:072:p031",
+      "independentVerdict": "hold",
+      "ownerDisposition": "accept-hold-propose-remove-inferred-person",
+      "primaryWitnesses": [
+        {
+          "unitId": "s0042",
+          "zh": "王世充兄子偽代王琬，使於建德軍中，乘隋煬帝所御驄馬，鎧甲甚鮮，迥出軍前以誇眾。",
+          "role": "Quotes nephew 王世充兄子 and names 王琬; does not name or describe Wang Shichong's brother as a separate actor"
+        }
+      ],
+      "ownerConclusion": "s0042 supports p026 (Wang Wan) with explicit descriptive kinship 王世充兄子. An inferred brother person p031 has no quotable 兄 or 王世充之兄 surface; 兄 inside 兄子 is not a witness for a brother record. Remove p031 and dependent claims; keep nephew–uncle link on p026→p018 without intermediary father person."
+    }
+  ],
+  "proposedChanges": [
+    {
+      "target": "data/people/extractions/jiutangshu/072.json",
+      "kind": "extraction-person-removal",
+      "personId": "p031",
+      "reason": "Descriptive-kinship name 王世充之兄 is not attested; 兄子 witnesses nephew relation only.",
+      "sourceCitations": [
+        {
+          "unitId": "s0042",
+          "path": "data/jiutangshu/072.json",
+          "quote": "王世充兄子偽代王琬，使於建德軍中，乘隋煬帝所御驄馬，鎧甲甚鮮，迥出軍前以誇眾。"
+        }
+      ],
+      "removePersonRecord": [
+        "p031",
+        [
+          "Brother of Wang Shichong",
+          "王世充之兄",
+          null
+        ],
+        "historical",
+        "Family Member",
+        {
+          "n": [],
+          "r": [
+            "p018",
+            "p026"
+          ],
+          "a": [
+            "AD 621"
+          ],
+          "p": [
+            "Wang Shichong"
+          ],
+          "x": "Unnamed brother of Wang Shichong entailed by 兄子 in s0042; not named on the owned surface."
+        },
+        [
+          [
+            {
+              "kind": "descriptive-kinship",
+              "en": "Brother of Wang Shichong",
+              "zh": "王世充之兄"
+            },
+            "strongly-inferred",
+            [
+              "s0042"
+            ]
+          ]
+        ],
+        [
+          [
+            "family-member",
+            "strongly-inferred",
+            [
+              "s0042"
+            ]
+          ]
+        ]
+      ],
+      "removeClaims": [
+        [
+          "p031",
+          "sex",
+          {
+            "sex": "male"
+          },
+          "strongly-inferred",
+          [
+            "s0042"
+          ]
+        ],
+        [
+          "p031",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "竇建德營於板渚"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 621,
+              "precision": "year"
+            }
+          },
+          "strongly-inferred",
+          [
+            "s0042"
+          ]
+        ],
+        [
+          "p031",
+          "family-relationship",
+          {
+            "relation": "sibling-of",
+            "personId": "p018",
+            "kinshipTerm": {
+              "zh": "兄",
+              "en": "elder or younger brother"
+            },
+            "parentage": "biological",
+            "subjectRole": "brother",
+            "objectRole": "brother",
+            "line": "paternal",
+            "sharedParentage": "uncertain"
+          },
+          "strongly-inferred",
+          [
+            "s0042"
+          ]
+        ],
+        [
+          "p031",
+          "family-relationship",
+          {
+            "relation": "parent-of",
+            "personId": "p026",
+            "kinshipTerm": {
+              "zh": "父",
+              "en": "father"
+            },
+            "parentage": "biological",
+            "subjectRole": "father",
+            "objectRole": "son",
+            "generationDistance": 1,
+            "line": "paternal"
+          },
+          "strongly-inferred",
+          [
+            "s0042"
+          ]
+        ]
+      ],
+      "patchRelated": [
+        {
+          "kind": "extraction-relationship-array-edit",
+          "personId": "p018",
+          "field": "metadata.r",
+          "before": [
+            "p026",
+            "p031"
+          ],
+          "after": [
+            "p026"
+          ]
+        },
+        {
+          "kind": "extraction-relationship-array-edit",
+          "personId": "p026",
+          "field": "metadata.r",
+          "before": [
+            "p018",
+            "p031"
+          ],
+          "after": [
+            "p018"
+          ]
+        },
+        {
+          "kind": "extraction-claim-replace",
+          "personId": "p026",
+          "predicate": "family-relationship",
+          "before": {
+            "relation": "kin-of",
+            "personId": "p018",
+            "kinshipTerm": {
+              "zh": "兄子",
+              "en": "brother's son"
+            },
+            "parentage": "biological",
+            "subjectRole": "nephew",
+            "objectRole": "paternal-uncle",
+            "generationDistance": 1,
+            "line": "paternal",
+            "intermediaryPersonIds": [
+              "p031"
+            ]
+          },
+          "after": {
+            "relation": "kin-of",
+            "personId": "p018",
+            "kinshipTerm": {
+              "zh": "兄子",
+              "en": "brother's son"
+            },
+            "parentage": "biological",
+            "subjectRole": "nephew",
+            "objectRole": "paternal-uncle",
+            "generationDistance": 1,
+            "line": "paternal"
+          },
+          "evidence": [
+            "s0042"
+          ]
+        }
+      ],
+      "identityPatch": "Retire inferred brother local person; nephew 王琬 remains explicit on s0042."
+    }
+  ],
+  "held": [
+    {
+      "caseId": "sha256:402ff3d78855877cd4e91753bc01da1911896229abce86bcd7aa38676aa34cb6",
+      "localId": "jiutangshu:072:p031",
+      "status": "pending-independent-review-of-proposal",
+      "reason": "Hold remains until reviewer accepts person removal and p026 kinship patch; canonical extraction not edited on this branch."
+    }
+  ],
+  "validation": {
+    "inputBlobsVerified": true,
+    "canonicalFilesEdited": false,
+    "scopedValidateCommand": "npm run people:validate -- --book jiutangshu --chapter 072",
+    "note": "Proposal-only delta; extraction bytes unchanged at owner head 0cae152f30."
+  }
+}
