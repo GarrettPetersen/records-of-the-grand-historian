@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {buildPeopleExtractionPacket,buildPeopleExtractionSeed} from './build-people-extraction-packet.mjs';
-import {buildCompactInput} from './lib/people-compact.mjs';
+import {buildCompactInput,deduplicateCompactMentionOccurrences} from './lib/people-compact.mjs';
+import {reconcilePrivateCandidateDispositions} from './reconcile-people-alias-callbacks.mjs';
 import {loadProperNounMatcher} from './lib/people-candidates.mjs';
 import {validateCompactPeopleExtraction} from './validate-people-extraction.mjs';
 import {combinedDatePacket} from './lib/people-combined-curation-review.mjs';
@@ -30,6 +31,24 @@ test('unknown-source or explicit unresolved chronology cannot become source-only
  const f=fixture();delete f.raw.claims[0][2].sourceDate;assert.throws(()=>validateCompactPeopleExtraction(f.raw,f.packet),/Western/);
  const g=fixture();g.raw.claims[0][2].unresolved=true;g.raw.claims[0][2].unresolvedReason='The source conversion remains an explicitly retained research hold.';
  const dates=combinedDatePacket('test','001',g.source,g.raw);assert.equal(unresolvedDateAuditItems(dates).length,1);
+});
+test('occurrence normalization removes exact duplicates and preserves every unique actor/kind/unit/occurrence',()=>{
+ const {packet,raw}=fixture(),before=structuredClone(raw);raw.surfaces.push(structuredClone(raw.surfaces[0]));
+ const normalized=deduplicateCompactMentionOccurrences(raw);assert.equal(normalized.removed.length,1);assert.deepEqual(normalized.candidate,before);assert.equal(raw.surfaces.length,3);assert.equal(normalized.approvalGranted,false);
+ assert.doesNotThrow(()=>validateCompactPeopleExtraction(normalized.candidate,packet,{strictAliasDispositions:true}));
+ for(const [field,value]of [[0,'p002'],[1,'title-reference'],[2,'en'],[3,'Different surface']]){const copy=structuredClone(before),extra=structuredClone(copy.surfaces[0]);extra[field]=value;copy.surfaces.push(extra);assert.equal(deduplicateCompactMentionOccurrences(copy).removed.length,0);}
+ const otherOccurrence=structuredClone(before);otherOccurrence.surfaces[0][4][0][1].push(1);assert.equal(deduplicateCompactMentionOccurrences(otherOccurrence).removed.length,0);
+});
+test('private disposition adapter reuses native geometry and removes only obsolete, repeated or already linked rows',()=>{
+ const {packet,raw}=fixture(),before=structuredClone(raw),name=packet.preflight.candidates.find(c=>c.exact==='Wang Wei').id.split(':').at(-1);
+ raw.candidateDispositions.push(['not-person','other',[[name,'Stale negative disposition for an already linked name.'],['cand_0000000000000000','Obsolete scanner id.']]],structuredClone(raw.candidateDispositions[0]));
+ const result=reconcilePrivateCandidateDispositions(raw,packet);assert.deepEqual(result.candidate,before);assert.equal(result.removed.length,3);assert.equal(result.approvalGranted,false);assert.equal(raw.candidateDispositions.length,3);
+ assert.doesNotThrow(()=>validateCompactPeopleExtraction(result.candidate,packet,{strictAliasDispositions:true}));
+});
+test('contradictory uncovered dispositions remain a native failure rather than a guessed decision',()=>{
+ const {packet,raw}=fixture();raw.candidateDispositions.push(['duplicate-hint','other',structuredClone(raw.candidateDispositions[0][2])]);
+ const result=reconcilePrivateCandidateDispositions(raw,packet);assert.equal(result.candidate.candidateDispositions.length,2);
+ assert.throws(()=>validateCompactPeopleExtraction(result.candidate,packet,{strictAliasDispositions:true}),/more than once/);
 });
 
 test('explicit-event-contextual-date also completes source-only chronology without Western conversion',()=>{
