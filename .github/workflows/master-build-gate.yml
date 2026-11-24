@@ -497,12 +497,18 @@ jobs:
             for(const row of rows){
               const item=cases.get(row.caseId);
               assert(item,'Unknown identity case');
-              if(row.unresolvedIdentity||!(item.proposal.unresolvedIdentity||item.retrieval.overflow||item.retrieval.missingBlockingName))continue;
-              mismatches.push({part:part.part,caseId:item.id,localPeople:item.localPeople,overflow:item.retrieval.overflow,missingBlockingName:item.retrieval.missingBlockingName,candidateCount:item.candidateDossiers.length,reason:row.reason});
+              const flags=[];
+              if(row.membershipReviewed!==true||row.membershipFingerprint!==item.canonicalMembership.fingerprint) flags.push('membership-binding');
+              if(row.canonicalPersonId!==item.canonicalPersonId) flags.push('canonical-binding');
+              if(!row.unresolvedIdentity&&(item.proposal.unresolvedIdentity||item.retrieval.overflow||item.retrieval.missingBlockingName)) flags.push('uncertainty');
+              const witnesses=new Set(row.sourceWitnesses?.map(w=>w.localId));
+              const missingWitnesses=[...new Set([...item.localPeople,item.canonicalMembership.anchorLocalId])].filter(id=>!witnesses.has(id));
+              if(missingWitnesses.length) flags.push('missing-person-or-anchor-witness');
+              if(flags.length) mismatches.push({part:part.part,caseId:item.id,localPeople:item.localPeople,flags,missingWitnesses,expectedMembershipFingerprint:flags.includes('membership-binding')?item.canonicalMembership.fingerprint:undefined,actualMembershipFingerprint:flags.includes('membership-binding')?row.membershipFingerprint:undefined,overflow:item.retrieval.overflow,missingBlockingName:item.retrieval.missingBlockingName,candidateCount:item.candidateDossiers.length,reason:row.reason});
             }
           }
           console.log(JSON.stringify({scope:pins.scope,mismatches},null,2));
-          assert.equal(mismatches.length,0,'Independent reviewer must resolve the listed uncertainty disposition conflicts');
+          assert.equal(mismatches.length,0,'Independent reviewer must resolve the listed dossier decision conflicts');
           JS
       - uses: actions/checkout@v4
         if: endsWith(inputs.chapter, '-certify')
