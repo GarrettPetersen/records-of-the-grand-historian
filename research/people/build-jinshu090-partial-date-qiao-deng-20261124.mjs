@@ -392,7 +392,7 @@ scope.cumulative = {
   verdicts: verdictRollup(uniqueChecks),
   packetItemsTotal: packet.items.length,
   packetItemsRemaining: packet.items.length - cumulativeIds.length,
-  nextUnreviewedClaimId: 'claim-921',
+  nextUnreviewedClaimId: 'claim-1176',
   nextUnitRange: 's0377–s0428',
 };
 fs.writeFileSync(path.join(OUT_DIR, 'chronology-scope-checkpoint.json'), `${JSON.stringify(scope, null, 2)}\n`);

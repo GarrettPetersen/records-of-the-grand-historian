@@ -25,7 +25,7 @@ Added to `chronology-owner-defect-groups-20261124.json` (schema v2 tranches); pr
 
 ## Next scope
 
-- **吳隱之** `s0377–s0428` (~43 items), start **`claim-921`**
+- **吳隱之** `s0377–s0428` (~43 items), first unreviewed **`claim-1176`** (`s0397`)
 - Then **【史論】** `s0429+`
 
 Rebuild: `node research/people/build-jinshu090-partial-date-qiao-deng-20261124.mjs`
