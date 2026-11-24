@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "035"
+  },
+  "ownerAgentId": "bc-b07f6f8e-5dd0-4f5f-8466-6c7bd3b4577e",
+  "worker": "cursor-nov24-retained-staging-w10-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5d5f80d1677de63cfc4e3fe06b058e285ffe48c047443eda1c58f86d49fbeba",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-035-4577e",
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "inputBlobWitness": {
+    "source": "b31f12ff261672155aa3a7815f9a65d9334b9e11",
+    "extraction": "18c59a43cdf74206abb290b97bb22ef2d8c9a0d6",
+    "editorial": "3471aefa4efd61f290dc9628d5c15665fcd39d4e"
+  },
+  "sealedInputs": {
+    "source": "sha256:8d146043298c4fe0463cebc4f2a88947b790206ee505173496646ecb4ed41e57",
+    "extraction": "sha256:b4de6272f1ec6592869d2daeda2ba1fc9b52f6349fa617486e77a5b9bb64fdc3",
+    "editorial": "sha256:d95300618b88387d794578976da3722505a25730901413f68de5be13459bd96c"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "extractionBytesWitness": 832708,
+    "contentSha256": "sha256:b4de6272f1ec6592869d2daeda2ba1fc9b52f6349fa617486e77a5b9bb64fdc3",
+    "localPeople": 220,
+    "note": "Full extraction retained unchanged; no re-extraction or chunk regeneration."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "pinnedBlob": "3471aefa4efd61f290dc9628d5c15665fcd39d4e",
+    "appliedRepairsWitnessedInSource": false,
+    "note": "Accepted editorial artifact pinned at witness blob; validator reports missing independent authorization for r0001\u2013r0031."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 460,
+    "translatedCount": 460,
+    "bothFieldsComplete": true,
+    "unitCount": 460,
+    "titleZh": "\u5377\u4e09\u5341\u4e94 \u5217\u50b3\u7b2c\u4e94 \u9673\u9a2b \u88f4\u79c0",
+    "titleEn": "Volume 35 Biographies 5: Chen Qian; Pei Xiu",
+    "missingUnits": []
+  },
+  "auditState": {
+    "dispatchLabel": "no-native-date-report",
+    "dateAuditPath": null,
+    "chronologyStatus": "un-audited"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-035/date-packet.json",
+    "contentSha256": "sha256:6010afdba4231c8b251cd8ea7a9aef6c78f67cbd19f5350b43c439f092680639",
+    "itemCount": 696,
+    "peopleCount": 220,
+    "unitCount": 460,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 035 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-035/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 035",
+      "passed": false,
+      "summary": "Person data validation failed: applied jinshu:035:r0001\u2013r0031 lack matching independent accept/revise authorization in editorial decisions file (decisions begin at r0032)."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 035",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "note": "No data/people/date-audits/jinshu/{ch}.json; owner does not self-approve."
+    }
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book jinshu --chapter 035",
+    "npm run people:dates:packet -- --book jinshu --chapter 035 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-035/date-packet.json",
+    "npm run people:dates:verify -- --book jinshu --chapter 035",
+    "npm run people:dates:record -- --book jinshu --chapter 035"
+  ],
+  "substantiveFindings": "Chen Qian / Pei Xiu biographies; extraction and editorial pins witness partial editorial merge drift. Owner makes no canonical edits; no date-repair proposals until editorial authorization hold clears.",
+  "remainingIndependentEvidence": {
+    "dateAudit": "Complete independent native date audit against sealed packet sha256:6010afdba4231c8b251cd8ea7a9aef6c78f67cbd19f5350b43c439f092680639; record via people:dates:record after zero-finding or repaired review.",
+    "identity": "Bounded canonical identity dossier review for chapter-local people after date gate; owner handoff is not identity approval.",
+    "editorial": "Reconcile jinshu:035:r0001\u2013r0031 authorization before scheduling date audit.",
+    "nextGate": "editorial-authorization-reconciliation-then-date-audit"
+  },
+  "holds": [
+    {
+      "kind": "editorial-authorization-gap",
+      "detail": "Extraction reflects applied repairs r0001\u2013r0031 but pinned editorial-decisions.json contains only independent decisions for r0032\u2013r0039; native people:validate fails until independent accept/revise records are reconciled or repairs are reverted in a canonical edit outside this owner pass."
+    },
+    {
+      "kind": "scoped-validation-blocked",
+      "detail": "Chapter-scoped validation must pass before independent date audit scheduling; date packet built for reviewer continuity only."
+    }
+  ],
+  "authorEvidence": {
+    "method": "Witnessed pinned git blobs; read Chinese/English source fields; reused sealed extraction and editorial artifacts; built native date packet; scoped people:validate and people:dates:verify; no registry generation, deploy, merge, or extraction rewrite.",
+    "completedAt": "2026-11-24T17:07:49.004Z"
+  },
+  "reproduce": {
+    "witnessBlobs": {
+      "source": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/jinshu/035.json",
+      "extraction": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/extractions/jinshu/035.json",
+      "editorial": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/editorial-decisions/jinshu/035.json"
+    }
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; sealed inputs not modified."
+}
