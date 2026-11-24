@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -639,7 +639,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
   transfer-certificate:
-    if: inputs.chapter == '083-stage' || inputs.chapter == '094-stage' || inputs.chapter == '115-stage'
+    if: inputs.chapter == '030-stage' || inputs.chapter == '083-stage' || inputs.chapter == '094-stage' || inputs.chapter == '115-stage'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -659,11 +659,11 @@ jobs:
           const root='repos/'+process.env.GITHUB_REPOSITORY;
           const read=(path,raw=false)=>JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
           const chapter=process.env.TRANSFER_INPUT.split('-')[0];
-          const pr=({'083':5474,'094':5430,'115':5470})[chapter];
+          const pr=({'030':5479,'083':5474,'094':5430,'115':5470})[chapter];
           assert(pr);
           const state=read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true).identityRegistryBuild;
-          const entry=chapter==='115'?state.currentChapter115.reseal.witnessRefresh:state.chapters083And094['updated'+chapter];
-          const recording=entry.identityPreparation.nativeRecording;
+          const entry=chapter==='030'?state.chapter030.dateOverlay:chapter==='115'?state.currentChapter115.reseal.witnessRefresh:state.chapters083And094['updated'+chapter];
+          const recording=chapter==='030'?state.chapter030.composedRecording:entry.identityPreparation.nativeRecording;
           const run=read('/actions/runs/'+recording.runId);
           assert.equal(run.conclusion,'success');
           assert.equal(run.path,'.github/workflows/master-build-gate.yml');
@@ -676,7 +676,7 @@ jobs:
           assert.equal(candidate.base.ref,'codex/people-glossary-staging-v2');
           assert.equal(candidate.head.repo.full_name,process.env.GITHUB_REPOSITORY);
           assert.equal(candidate.head.sha,entry.owner);
-          const pins={chapter,pr,branch:candidate.head.ref,owner:entry.owner,revision:entry.revision,files:entry.files??entry.verifiedFiles,reviewedCases:({'083':164,'094':250,'115':229})[chapter],runId:run.id};
+          const pins={chapter,pr,branch:candidate.head.ref,owner:entry.owner,revision:entry.revision,files:entry.files??entry.verifiedFiles,reviewedCases:({'030':206,'083':164,'094':250,'115':229})[chapter],runId:run.id};
           fs.writeFileSync(process.env.RUNNER_TEMP+'/transfer-pins.json',JSON.stringify(pins),{flag:'wx'});
           fs.appendFileSync(process.env.GITHUB_OUTPUT,'name='+name+'\nrun_id='+run.id+'\n');
           JS
