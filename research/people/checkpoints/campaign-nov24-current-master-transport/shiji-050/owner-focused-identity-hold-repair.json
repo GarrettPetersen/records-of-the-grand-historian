@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-focused-identity-hold-repair",
+  "scope": {
+    "book": "shiji",
+    "chapter": "050"
+  },
+  "ownerAgentId": "bc-8068a1ee-9041-4d7f-9ca7-302616febf7d",
+  "campaignWorker": "cursor-nov24-current-master-4",
+  "independentReviewEvidenceCommit": "ab7b8c86eaedd15e229b0b78f207d7bb159f0fe4",
+  "independentReviewerAgentId": "bc-7d3a3c8b-05c2-4153-951c-857cfee14a0d",
+  "hold": {
+    "caseId": "sha256:f557ed058fbb5d0f305122f8d43053b993734f882a0161b9528b052b1993a201",
+    "targetLocalId": "shiji:050:p008",
+    "canonicalPersonId": "per_4GABQR8MQHYAHHXDRRH1",
+    "membershipFingerprint": "sha256:64b786dec3b56e609b24471c7619a7eddeb1a414db007e95401f9117b78f0d11",
+    "verdict": "hold",
+    "reviewerReason": "HOLD: shiji 050 s0009 王次兄仲於代 names Gaozu's younger brother 仲 as early Western Han Dai king material. Accepted membership's Later Han anchor 東萊劉喜 (Hou Hanshu 038 s0144) is a different century, different biography and office. That protected false merge contradicts primary chapter attribution even though Hanshu-era 仲 witnesses are sealed outside this transport slice."
+  },
+  "primarySourceWitnesses": [
+    {
+      "localId": "shiji:050:p008",
+      "unitId": "s0009",
+      "zh": "而王次兄仲於代。",
+      "enLiteral": "He then established his second brother Zhong as king in Dai.",
+      "enIdiomatic": "His second brother, Zhong, was made King of Dai.",
+      "role": "Gaozu’s second brother enfeoffed as King of Dai at founding (Western Han)."
+    },
+    {
+      "localId": "hanshu:002:p041",
+      "unitId": "s0127",
+      "zh": "壬子，以雲中、鴈門、代郡五十三縣立兄宜信侯喜為代王，以膠東、膠西、臨淄、濟北、博陽、城陽郡七十三縣立子肥為齊王，以太原郡三十一縣為韓國，徙 韓王信都晉陽。",
+      "enIdiomatic": "On the renzi day, he established his elder brother Xi, Marquis of Yixin, as King of Dai with Yunzhong, Yanmen, and Dai commanderies, fifty-three counties in all; ...",
+      "role": "Western Han Liu Xi 喜 (also attested 仲) as King of Dai; same dynasty and office line as shiji/050:p008."
+    },
+    {
+      "localId": "hanshu:003:p007",
+      "unitId": "s0031",
+      "zh": "郃陽侯仲薨。",
+      "enIdiomatic": "Marquis Zhong of Heyang passed away.",
+      "role": "Western Han Heyang marquis 仲; continuation of the same early Han prince line."
+    },
+    {
+      "localId": "houhanshu:038:p064",
+      "unitId": "s0144",
+      "zh": "及北鄉侯立，遷太傅，與太尉東萊劉喜參錄尚書事。",
+      "enIdiomatic": "When the Marquis of Beixiang acceded, Feng Shi became grand tutor and, with Grand Commandant Liu Xi of Donglai, shared supervision of the Masters of Writing.",
+      "role": "Eastern Han Donglai Liu Xi 劉喜, grand commandant AD 125; distinct century, polity phase, and biography from the Dai king."
+    }
+  ],
+  "extractionImpact": {
+    "shiji:050:p008": "No extraction edit proposed. Sealed extraction already names only 仲 / King of Dai at s0009 with BC 201 Western Han context; does not attest 東萊 or Later Han office."
+  },
+  "englishOmissions": [],
+  "minimalRepair": {
+    "action": "retract-resolution-merge-and-reanchor-canonical-membership",
+    "summary": "Revoke the erroneous cohort merge of Western Han Liu Xi 喜/Zhong 仲 (hanshu:002:p041) with Eastern Han Donglai Liu Xi 劉喜 (houhanshu:038:p064). Remove houhanshu:038:p064 from per_4GABQR8MQHYAHHXDRRH1; re-anchor that canonical person on hanshu:002:p041 while retaining shiji:050:p008 and hanshu:003:p007. Assign houhanshu:038:p064 to a separate canonical person on apply (host registry), without deleting either local record.",
+    "resolutionSupplement": {
+      "before": {
+        "document": "data/people/resolutions/cohort-2026-08-27-01.json",
+        "entry": {
+          "decision": "merge",
+          "localPeople": [
+            "hanshu:002:p041",
+            "houhanshu:038:p064"
+          ],
+          "basis": [
+            "same-Chinese-name",
+            "compatible-dates",
+            "same-polity-context"
+          ],
+          "confidence": "high",
+          "notes": [
+            "Shared identity markers 劉喜; dossier dates and polity context align."
+          ]
+        }
+      },
+      "after": {
+        "proposedDecision": "keep-separate",
+        "localPeople": [
+          "hanshu:002:p041",
+          "houhanshu:038:p064"
+        ],
+        "basis": [
+          "different-dates",
+          "different-polity-phase",
+          "different-biography",
+          "homonymous-or-shared-reading"
+        ],
+        "confidence": "high",
+        "notes": [
+          "Homographic Liu Xi 劉喜 readings collide on Romanization/en:liu xi, but primary Chinese witnesses separate Western Han Dai king 喜/仲 (BC 201–193 era) from Eastern Han Donglai grand commandant 東萊劉喜 (AD 125). Shiji 050 s0009 and Hou Hanshu 038 s0144 contradict a single actor."
+        ]
+      }
+    },
+    "canonicalMembership": {
+      "canonicalPersonId": "per_4GABQR8MQHYAHHXDRRH1",
+      "before": {
+        "protectedLocalPeople": [
+          "hanshu:002:p041",
+          "hanshu:003:p007",
+          "houhanshu:038:p064",
+          "shiji:050:p008"
+        ],
+        "anchorLocalId": "houhanshu:038:p064",
+        "fingerprint": "sha256:64b786dec3b56e609b24471c7619a7eddeb1a414db007e95401f9117b78f0d11"
+      },
+      "after": {
+        "protectedLocalPeople": [
+          "shiji:050:p008",
+          "hanshu:002:p041",
+          "hanshu:003:p007"
+        ],
+        "anchorLocalId": "hanshu:002:p041",
+        "proposedAnchorRationale": "Western Han annal anchor 宜信侯喜/代王 with explicit alternate 仲 matches shiji s0009 次兄仲於代; not the Later Han Donglai officeholder."
+      }
+    },
+    "separateCanonicalAssignment": {
+      "localId": "houhanshu:038:p064",
+      "action": "split-to-independent-canonical-person",
+      "note": "On registry apply, remove from per_4GABQR8MQHYAHHXDRRH1 and attach to a distinct canonical person for Eastern Han Liu Xi of Donglai (new or existing dossier ID assigned by host validator)."
+    }
+  },
+  "affectedIdentities": [
+    {
+      "localId": "shiji:050:p008",
+      "change": "Retained in per_4GABQR8MQHYAHHXDRRH1; chapter attribution unchanged."
+    },
+    {
+      "localId": "hanshu:002:p041",
+      "change": "Becomes membership anchor for per_4GABQR8MQHYAHHXDRRH1 Western Han cluster."
+    },
+    {
+      "localId": "hanshu:003:p007",
+      "change": "Retained in Western Han cluster; no extraction edit."
+    },
+    {
+      "localId": "houhanshu:038:p064",
+      "change": "Removed from per_4GABQR8MQHYAHHXDRRH1; separate canonical person after merge retraction."
+    }
+  ],
+  "scopedValidation": {
+    "command": "npm run people:validate -- --book shiji --chapter 050",
+    "exitCode": 0,
+    "status": "PASS",
+    "summary": "Scoped person data validation passed for shiji/050: 1 extraction(s), 39 local people, 207 mentions, 369 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "note": "Validation reflects unchanged sealed shiji/050 extraction. Registry membership correction is out of band until host applies resolution supplement."
+  },
+  "ownerAcknowledgement": "Prior owner-evidence for this case incorrectly treated houhanshu:038:p064 as the cross-chapter anchor. Reviewer hold is sustained; this repair proposes registry separation only.",
+  "approvalStatus": "not-self-approved",
+  "remainingBlockers": [
+    "Host must apply resolution supplement (keep-separate) and registry membership update; independent reviewer must re-seal case sha256:f557ed058fbb5d0f305122f8d43053b993734f882a0161b9528b052b1993a201 after apply.",
+    "houhanshu:038:p064 canonical person ID assignment requires native registry generation outside this checkpoint PR."
+  ],
+  "frozenTransportPartSha256": [
+    "sha256:781c757f7913c5c5628a3776ab12b3542391369bc54ca879f7432fd7f760dbaa",
+    "sha256:5a9177e29122e220c41d7a939ee11dbd3d7883a6216924da3f093cd713dc000f",
+    "sha256:f7a4d2f85feec1218fda9e4a3bebd60f87bf48a19ecd48118ead3c8682ac413c"
+  ],
+  "sealedExtractionSha256": "sha256:38b9b83b67f335fed2f96f03cf8ec5255a8bbf11bc2fd34ba9c9e084af66788c"
+}
