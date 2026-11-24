@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-chronology-repair",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "011"
+  },
+  "ownerAgentId": "bc-f6969509-1699-4266-a225-cb3bca5d36ef",
+  "stagingBase": "e43a3b2594804d76972221108e4e7d61c8448f49",
+  "independentHold": {
+    "path": "research/people/checkpoints/campaign-nov24-stale-date-recovery/jiuwudaishi-011/independent-date-recovery.json",
+    "sha256": "fa95548b266af7b34618ffabf1c23490a2faee1ecb10d5ae204a2d93b55a0670",
+    "verdict": "hold"
+  },
+  "sealedInputs": {
+    "source": "ed35e5972b603a00cc2826a8376153666355d840",
+    "extractionBefore": "c531ccd2b3996a1c8c0d4221ab7ed2a5960e8750",
+    "dateAudit": "9b50904d0e663596eda00199f9efe20580c848a2",
+    "editorial": "40bf066e701f582af4b8f0c27cc905d14c975399"
+  },
+  "digests": {
+    "extractionBefore": "sha256:0a8f50635ef32010cb2f4cf0bf6722592df2d011fd24ff258c1157613bf06c39",
+    "extractionAfter": "sha256:3967b0f0e2e603a6e6d7501c79bcfc22de28d5450e9c76775986f30ec01da0b5",
+    "extractionAfterGitBlob": "e05358e11eb263603876040cd4c5c86307df1de9"
+  },
+  "changes": [
+    {
+      "scope": "p002-external-primary",
+      "detail": "Restored historical externalPrimaryChronology (e) and active-date hint from sealed extraction 4f27270f9429"
+    },
+    {
+      "scope": "claims-14-15",
+      "detail": "Consort posthumous reception context -> undatedSourceAttestation without unresolved"
+    },
+    {
+      "scope": "claims-170-178",
+      "detail": "Kaiping 1 v 11 enfeoffment -> westernYear AD 907 ceremony-only"
+    },
+    {
+      "scope": "hints-p026-p028",
+      "detail": "Restored AD 907 enfeoffment-only hints"
+    }
+  ],
+  "validation": {
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/011: 1 extraction(s), 34 local people, 177 mentions, 351 claims, 0 proposed repair(s), 1 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 3 person record(s) without an attestation, 22 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datePacketDiagnostics": "PASS: zero diagnostics",
+    "unresolvedItemIds": []
+  },
+  "packetDiff": {
+    "before": {
+      "extractionHash": "sha256:0a8f50635ef32010cb2f4cf0bf6722592df2d011fd24ff258c1157613bf06c39",
+      "unresolved": [
+        "claim-14",
+        "claim-15",
+        "claim-170",
+        "claim-178"
+      ]
+    },
+    "after": {
+      "extractionHash": "sha256:3967b0f0e2e603a6e6d7501c79bcfc22de28d5450e9c76775986f30ec01da0b5",
+      "unresolved": []
+    }
+  },
+  "remainingIssues": {
+    "independentHoldCleared": false,
+    "ownerApproval": false,
+    "note": "Independent date-recovery re-review required."
+  }
+}
