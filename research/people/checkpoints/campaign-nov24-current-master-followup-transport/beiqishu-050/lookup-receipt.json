@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "050"
+  },
+  "reviewer": {
+    "agentId": "bc-3bce644a-829a-41f2-a445-196112ba7b7c",
+    "name": "cursor-nov24-independent-beiqishu-050"
+  },
+  "queries": [
+    {
+      "source": "data/beiqishu/*.json",
+      "purpose": "Verify anchor-unit Chinese for cross-chapter witnesses absent from partitioned transport units (11 chapter scopes: beiqishu 003–038, songshu 062, weishu 091)."
+    },
+    {
+      "source": "data/people/extractions/{book}/{chapter}.json",
+      "purpose": "Resolve explicit sentence IDs and preferred Chinese surfaces for anchor localId persons when transport people records omit external chapters."
+    },
+    {
+      "source": "sealed transport-part-{001,002,003}.json units[]",
+      "purpose": "Primary beiqishu 050 sentence zh/en for all chapter-local witnesses; sole authoritative units for chapter 050."
+    }
+  ],
+  "conclusion": "No live /v1 lookup API calls; anchor witnesses were verified read-only against current chapter JSON and validated extractions at author commit 05ad7f4f79c86b9976b1e98ddde32674742249e0. Omitted transport partition units are not treated as separation evidence.",
+  "authorAgentId": "bc-8514e599-6ea4-4fff-9f69-0cc0269184d8"
+}
