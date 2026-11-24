@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "077"
+  },
+  "ownerAgentId": "bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2",
+  "workerId": "cursor-nov24-retained-staging-w2-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f4cf09cd546d507e08e020aa81ce8267e147bfa2540f0db9efae200a384a7d6c",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-077-573f2",
+  "inputBlobWitness": {
+    "source": "942935a5c9c22662e9eb5fee297a68b009234ba7",
+    "extraction": "40773d96ec2338a83b582bcec54eb0ac0feb793f",
+    "dateAudit": "582f0d8a3c524cf6ae7a7919fdc203d28ec411cc",
+    "editorial": "e3ba8d0f156a7cdfa59519b7579eaf98d96628d4"
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷七十七 志第三十 律曆十",
+      "en": "Volume 77 Treatises 30: Measures and Calendar 10",
+      "raw": "卷七十七 志第三十 律曆十 Volume 77 Treatises 30: Measures and Calendar 10"
+    },
+    "chineseUnits": 384,
+    "translatedCount": 384,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnits": [],
+    "editorialAccepted": 3,
+    "editorialReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 077",
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/077: 1 extraction(s), 4 local people, 10 mentions, 44 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book songshi --chapter 077",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditFindings": 4,
+    "dateAuditHashesCurrent": {
+      "sourceHash": true,
+      "extractionHash": true
+    },
+    "sealedInputPacketHashes": {
+      "source": "sha256:d5d2d947b18fbc223510b4b1fdda6a4853274245c5e7cf83d189cea6caec8c02",
+      "extraction": "sha256:a2d288f2db2ce78eca640f296a3b2902add214c8a683ec84abaff9cd7d4e8cfa",
+      "dateAudit": "sha256:297439b437608ef791775d06e284250e6e9905416bfc88c21a777183a4d9dd80",
+      "editorial": "sha256:82c8248eccd9b8949a71887d2f286d84b826eb14c80122b678fd9133fd580c48"
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Calendrical treatise: full 384-sentence English coverage; accepted editorial repairs at s0181/s0281 reflected. Four people retained from undated variant note; independent chronology remains research-blocked with current packet hashes. Extraction still asserts AD 1092 personal hints—scoped alignment proposal documents required dependency repair before final approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "personId": "p001-p004",
+      "kind": "chronology-alignment",
+      "reason": "Independent date audit research-blocked: calendar epoch Yuanyou 7 (AD 1092) cannot transfer to undated textual-variant witnesses at s0181.",
+      "affectedClaims": [
+        "claim-5",
+        "claim-6",
+        "claim-7",
+        "claim-8",
+        "claim-20",
+        "claim-21",
+        "claim-22",
+        "claim-23",
+        "claim-24",
+        "claim-25",
+        "claim-26",
+        "claim-27",
+        "hints-p001",
+        "hints-p002",
+        "hints-p003",
+        "hints-p004"
+      ],
+      "before": "Attestation and active-date hints assert westernYear AD 1092 from 元祐七年 calendar epoch on s0003 alongside undated s0181 variant notice.",
+      "after": "Replace personal attestations and active-date hints p001–p004 with unresolved holds citing undated s0181 variant notice; retain calendar epoch only on calendar-work claims, not personal activity.",
+      "evidence": [
+        {
+          "unit": "s0181",
+          "citation": "黃道過宮太史局吳澤等補治有此一段，開封進士吳時舉、國學進士程憙、常州百姓張文進本並無之。"
+        }
+      ],
+      "preserveProof": "data/people/date-audits/songshi/077.json findings 1–4 reviewedAt 2026-09-23"
+    }
+  ],
+  "distinctHolds": [
+    {
+      "id": "date-finding-1",
+      "items": [
+        "claim-5",
+        "claim-20",
+        "claim-21",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "The chapter dates the calendar epoch at Yuanyou 7, but its sole notice for this person is an undated textual-variant note. The note attributes supplementation of the passage to Wu Ze and the Taishi Bureau. It does not state when that copying, supplementation, or comparison occurred, so AD 1092 cannot be treated as this person's activity without independent provenance.",
+      "action": "Keep the current calendar-derived date claims and active hint out of approval; locate a dated, independent witness for this specific textual intervention or copy before proposing any personal chronology.",
+      "preserved": true
+    },
+    {
+      "id": "date-finding-2",
+      "items": [
+        "claim-6",
+        "claim-22",
+        "claim-23",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "The chapter dates the calendar epoch at Yuanyou 7, but its sole notice for this person is an undated textual-variant note. The note identifies Wu Shiju's copy as lacking the passage. It does not state when that copying, supplementation, or comparison occurred, so AD 1092 cannot be treated as this person's activity without independent provenance.",
+      "action": "Keep the current calendar-derived date claims and active hint out of approval; locate a dated, independent witness for this specific textual intervention or copy before proposing any personal chronology.",
+      "preserved": true
+    },
+    {
+      "id": "date-finding-3",
+      "items": [
+        "claim-7",
+        "claim-24",
+        "claim-25",
+        "hints-p003",
+        "p003"
+      ],
+      "problem": "The chapter dates the calendar epoch at Yuanyou 7, but its sole notice for this person is an undated textual-variant note. The note identifies Cheng Xi's copy as lacking the passage. It does not state when that copying, supplementation, or comparison occurred, so AD 1092 cannot be treated as this person's activity without independent provenance.",
+      "action": "Keep the current calendar-derived date claims and active hint out of approval; locate a dated, independent witness for this specific textual intervention or copy before proposing any personal chronology.",
+      "preserved": true
+    },
+    {
+      "id": "date-finding-4",
+      "items": [
+        "claim-8",
+        "claim-26",
+        "claim-27",
+        "hints-p004",
+        "p004"
+      ],
+      "problem": "The chapter dates the calendar epoch at Yuanyou 7, but its sole notice for this person is an undated textual-variant note. The note identifies Zhang Wenjin's copy as lacking the passage. It does not state when that copying, supplementation, or comparison occurred, so AD 1092 cannot be treated as this person's activity without independent provenance.",
+      "action": "Keep the current calendar-derived date claims and active hint out of approval; locate a dated, independent witness for this specific textual intervention or copy before proposing any personal chronology.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; sealed inputs unchanged on staging. Host supplies native sealed final review packets.",
+  "completedAt": "2026-11-24T16:09:11.177Z"
+}
