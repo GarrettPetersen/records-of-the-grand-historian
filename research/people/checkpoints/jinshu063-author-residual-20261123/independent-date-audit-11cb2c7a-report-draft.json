@@ -15,8 +15,8 @@
     "kind": "cursor-agent",
     "model": "composer-2.5-fast"
   },
-  "reviewedAt": "2026-11-24T02:00:20.134Z",
-  "summary": "All 342 units, 414 item checks, and 190 person checks source-aligned including courtesy, sovereign, abbreviated, and collective appraisal surfaces. Qualitative era phrases retained. p183/p001 identity crosswalk is separate from this chronology seal.",
+  "reviewedAt": "2026-11-24T04:33:50.664Z",
+  "summary": "All 342 units, 414 item checks, and 190 person checks source-aligned at PR #5487 bcb829ee. Prior item and person checks reused where native packet and Chinese witnesses match exactly (full parity on artifact 14885244034). Re-reviewed p183/p185 only for verified appraisal surname surfaces 邵 (s0330/s0339) and 魏 (s0330); undated appraisal—no Western year added. Qualitative era phrases retained. Identity crosswalk separate.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -5653,11 +5653,15 @@
       "personId": "p183",
       "verdict": "supported",
       "event": "Active-date hints for p183",
-      "reason": "Empty active-date hints; witness is retrospective appraisal surface naming this actor (courtesy or grouped eulogy), not a personal reign year.",
+      "reason": "Empty active-date hints; witness is verified appraisal surname surface 「邵」 at s0330/s0339 per bcb829ee extraction—no personal reign year.",
       "evidence": [
         {
           "unit": "s0330",
-          "quote": "史臣曰：邵、李、魏、郭等諸將"
+          "quote": "邵、李、魏、郭等諸將"
+        },
+        {
+          "unit": "s0339",
+          "quote": "邵李諸將"
         }
       ]
     },
@@ -5679,7 +5683,7 @@
       "personId": "p185",
       "verdict": "supported",
       "event": "Active-date hints for p185",
-      "reason": "Empty active-date hints; witness is retrospective appraisal surface naming this actor (courtesy or grouped eulogy), not a personal reign year.",
+      "reason": "Empty active-date hints; witness is verified appraisal surname surface 「魏」 at s0330 per bcb829ee extraction—no personal reign year.",
       "evidence": [
         {
           "unit": "s0330",
@@ -7759,11 +7763,15 @@
     {
       "id": "p183",
       "verdict": "supported",
-      "reason": "Chronology: s0330 retrospective 史臣曰 groups 邵 with 李、魏、郭 generals; witness 「史臣曰：邵、李、魏、郭等諸將」 names 邵 in the eulogy collective only—no personal reign date. Identity task (not this seal): local p183 parallels biography-subject p001; owner lane must resolve appraisal-only duplicate vs distinct record using s0330–s0339 without treating this audit as a merge. Checked packet event: Named first in the historian's appraisal and eulogy as a general who held besieged towns and stayed loyal to the Jin royal house.",
+      "reason": "Chronology supported: undated appraisal only. Independent re-check at bcb829ee confirms attested Chinese surfaces 邵 at s0330 (史臣曰：邵、李、魏、郭等諸將) and s0339 (贊曰：邵李諸將)—surname in collective, not a Western year. Identity same-person proposal to biography p001 is outside this seal; no merge. Checked packet event: Named first in the historian appraisal and eulogy as a general who held besieged towns and stayed loyal to the Jin royal house.",
       "evidence": [
         {
           "unit": "s0330",
-          "quote": "史臣曰：邵、李、魏、郭等諸將"
+          "quote": "邵、李、魏、郭等諸將"
+        },
+        {
+          "unit": "s0339",
+          "quote": "邵李諸將"
         }
       ]
     },
@@ -7781,7 +7789,7 @@
     {
       "id": "p185",
       "verdict": "supported",
-      "reason": "Wei Jun appears only in historian appraisal at s0330; 「邵、李、魏、郭等諸將」 is a collective roster label (邵, collective-appraisal-label), not a dated personal activity year. Checked packet event: Listed by the historian with Shao Xu, Li Ju, and Guo Mo as a general who rallied loyal bands amid the collapse.",
+      "reason": "Chronology supported: undated appraisal only. Independent re-check at bcb829ee confirms attested Chinese surface 魏 within s0330 「史臣曰：邵、李、魏、郭等諸將」—surname in collective, not a Western year. Identity same-person proposal to biography p123 is outside this seal; no merge. Checked packet event: Listed by the historian with Shao Xu, Li Ju, and Guo Mo as a general who rallied loyal bands amid the collapse.",
       "evidence": [
         {
           "unit": "s0330",
@@ -8170,5 +8178,30 @@
       }
     ]
   },
-  "validatesWithNativePacket": true
+  "validatesWithNativePacket": true,
+  "stagingPr": 5487,
+  "stagingHead": "bcb829ee43fd93a9d030c45925ae7fa17c6bd9fd",
+  "datePacketArtifact": 14885244034,
+  "independentRepublication": {
+    "at": "2026-11-24T04:33:50.664Z",
+    "reviewer": {
+      "name": "Independent Jinshu 063 chronology reviewer",
+      "agentId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6",
+      "actualAgentId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6",
+      "independentOfExtractor": true,
+      "independentOfRepairAuthor": true,
+      "kind": "cursor-agent",
+      "model": "composer-2.5-fast"
+    },
+    "priorAuditCommit": "6c19bf5294",
+    "itemChecksReused": 414,
+    "personChecksReused": 190,
+    "itemChecksReReviewed": 0,
+    "personChecksReReviewed": 2,
+    "personChecksReReviewedIds": [
+      "p183",
+      "p185"
+    ],
+    "appraisalSurfaceOnlyDelta": true
+  }
 }
