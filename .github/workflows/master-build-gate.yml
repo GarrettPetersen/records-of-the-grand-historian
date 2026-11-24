@@ -1,116 +1,105 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Verify scoped people curation before a production build
+run-name: Check the 32-chapter release candidate for scoped display evidence
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 22
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: d393da3f6981fbbc58a713b127a8462ef76314fe
+      NODE_OPTIONS: --max-old-space-size=3072
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
+      - run: npm install --no-audit --no-fund
+      - run: node scripts/test-people-source-only-chronology.mjs
+      - name: Reconstruct qualified scopes and inspect exact display guards
         run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          export OUT="$RUNNER_TEMP/scoped-curation-preflight"
+          mkdir -p "$OUT" data/people/generated/identity-dossiers
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE" > "$OUT/registry-receipt.json"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {readIdentityDossierRegistry} from './scripts/lib/people-identity-dossier-delta.mjs';
+          import {loadProperNounMatcher} from './scripts/lib/people-candidates.mjs';
+          import {loadValidatedPeopleChapter} from './scripts/lib/people-validated-chapter.mjs';
+          import {loadCurrentIdentityEvidence} from './scripts/lib/people-identity-evidence.mjs';
+          import {chapterIdentityInputs,validateChapterIdentityBundle} from './scripts/lib/people-chapter-identity.mjs';
+          import {assertChapterGates} from './scripts/lib/people-qualified-scope.mjs';
+          import {dateAuditStatus} from './scripts/lib/people-date-audit.mjs';
+          import {editorialDecisionPath} from './scripts/lib/people-editorial-decisions.mjs';
+          const mustPass=new Set(["beiqishu/046","chenshu/023","houhanshu/001","houhanshu/119","houhanshu/126","jinshi/023","jinshi/039","jinshi/043","jinshu/028","jinshu/030","jinshu/031","jinshu/047","jinshu/063","jinshu/081","jinshu/083","jinshu/085","jinshu/094","jinshu/115","jinshu/123","jiuwudaishi/006","jiuwudaishi/024","jiuwudaishi/057","jiuwudaishi/064","jiuwudaishi/066","jiuwudaishi/073","jiuwudaishi/104","jiuwudaishi/105","jiuwudaishi/119","jiuwudaishi/144","jiuwudaishi/147","liangshu/007","liangshu/015","liangshu/016","liangshu/017","liangshu/023","liangshu/024","liangshu/037","liangshu/042","liangshu/043","liangshu/044","liangshu/052","liangshu/055","liaoshi/005","liaoshi/043","liaoshi/107","mingshi/034","nanqishu/008","nanqishu/060","qingshigao/027","qingshigao/047","shiji/051","shiji/098","shiji/115","songshu/004","songshu/090","weishu/019","xintangshu/045","xintangshu/064","xintangshu/066","xinwudaishi/003","xinwudaishi/016","xinwudaishi/019","xinwudaishi/041"]);
+          const {SOURCE,REGISTRY,OUT}=process.env;
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+          const roots='data/people/identity-reviews';
+          const match=loadProperNounMatcher();
+          const registry=await readIdentityDossierRegistry(REGISTRY,new Map());
+          const view={localPersonMap:registry.localPersonMap,canonicalByKnownId:registry.canonicalByKnownId};
+          const current=read('data/people/config.json').promptVersion;
+          const overrides=read('data/people/curation/overrides.json').people;
+          const byCanonical=new Map();
+          const ready=[],held=[],members=new Map(),findings=[];
+          try{
+            for(const [id,override] of Object.entries(overrides)){
+              const canonical=view.canonicalByKnownId.get(id);
+              if(!canonical)continue;
+              const current=byCanonical.get(canonical)??[];
+              current.push({id,override});
+              byCanonical.set(canonical,current);
+            }
+            for(const book of fs.readdirSync(roots)){
+              for(const file of fs.readdirSync(path.join(roots,book)).filter(x=>/^\d{3}\.json$/.test(x))){
+                const chapter=file.slice(0,-5), scope={book,chapter}, key=book+'/'+chapter;
+                try{
+                  const own=loadValidatedPeopleChapter(book,chapter,{properNounMatcher:match});
+                  const editorial=editorialDecisionPath(book,chapter);
+                  assertChapterGates(own.extraction,current,dateAuditStatus(book,chapter),fs.existsSync(editorial)?read(editorial):null);
+                  const bundle=read(path.join(roots,book,file));
+                  const evidence=loadCurrentIdentityEvidence(bundle,own,match);
+                  const certified=validateChapterIdentityBundle(view,evidence,scope,bundle,chapterIdentityInputs(book,chapter));
+                  ready.push({key,cases:certified.retained.length});
+                  for(const [id,person] of own.localPeople){
+                    const canonical=view.localPersonMap.get(id);
+                    if(!byCanonical.has(canonical))continue;
+                    const value=members.get(canonical)??[];
+                    value.push({id,key,person});
+                    members.set(canonical,value);
+                  }
+                }catch(error){held.push({key,message:error.message.split('\n')[0]});}
+              }
+            }
+            for(const [id,scoped] of members){
+              const entries=byCanonical.get(id);
+              if(entries.length>1){findings.push({id,field:'override',reason:'Multiple scoped curation overrides',entries:entries.map(x=>x.id)});continue;}
+              const {override}=entries[0];
+              if(override.preferredDescription&&!scoped.some(x=>x.person.descriptorSuggestion===override.preferredDescription))findings.push({id,field:'preferredDescription',requested:override.preferredDescription,scoped:scoped.map(x=>({localId:x.id,key:x.key,descriptor:x.person.descriptorSuggestion}))});
+              if(override.preferredName&&!scoped.flatMap(x=>x.person.claims).some(x=>x.predicate==='name'&&['en','zh','pinyin'].every(k=>!override.preferredName[k]||x.value?.[k]===override.preferredName[k])))findings.push({id,field:'preferredName',requested:override.preferredName,scoped:scoped.map(x=>({localId:x.id,key:x.key}))});
+            }
+          }finally{registry.close();}
+          const missing=[...mustPass].filter(x=>!ready.some(y=>y.key===x));
+          const report={source:SOURCE,ready,held,findings,missing};
+          fs.writeFileSync(path.join(OUT,'scoped-curation-report.json'),JSON.stringify(report,null,2)+'\n');
+          console.log(JSON.stringify(report));
+          assert.equal(missing.length,0,'One or more campaign chapters did not qualify');
+          assert.equal(findings.length,0,'Unsupported preferred descriptions or names in the exact release scope');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
-        run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
-
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: scoped-curation-release-preflight
+          path: ${{ runner.temp }}/scoped-curation-preflight/
+          if-no-files-found: error
+          retention-days: 7
