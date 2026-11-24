@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-transport-identity-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "023"
+  },
+  "ownerAgentId": "bc-b1b4cecc-160a-4940-add4-09b11b527691",
+  "campaignWorker": "cursor-nov24-audited-recovery-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+    "commit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+    "transportSha256": "2786e52572c6c81592ac238bc03b3ade21c453976682255ed63c94a7d90c7100",
+    "transportBytes": 361943,
+    "planFingerprint": "sha256:700588f716e8570c59d732a7a9f984a82f550e9203ffdb66b2ce7b5af93cf749",
+    "sourcePacketSha256": "45f86dc869f724cb861029c22f2155e172ae0c2f88c1847fde95e5220fee9bfa"
+  },
+  "sealedInputs": {
+    "source": "sha256:19df0165cbcae835d7d40da416d5fdffc5e444d53aa036e5e5871841ed6daff3",
+    "extraction": "sha256:4b920917f14c98a76e90334cec0db3e201d79990b0a04a3bd507779c68bba3a9",
+    "editorial": "sha256:aa06f65b91e64cedaded2b0e22d2d063a55566e84ad0dd248f1de84f80785b32",
+    "dateAudit": "sha256:8f83b9ff8876a2cc45628aabcbfb4bd2adeb8573847a2542b24888e90bf6251f"
+  },
+  "reviewCases": 48,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "ownerEvidenceSha256": "sha256:144ba362aaefb6425832fea8666bb62da436e4823eeabd67e40ad005a4e1b7ba",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/jinshi-023/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/jinshi-023/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/jinshi-023/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/jinshi-023/validation-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/jinshi-023/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 023"
+  },
+  "notes": "48 cases from audited transport; owner evidence is not independent approval. No identity-review.json in this PR."
+}
