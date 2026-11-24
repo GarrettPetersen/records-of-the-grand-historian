@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Run exact Jinshu 030 registry and packet in one hosted job. Collect Jinshu 083/094 packets and actual authored Jinshu 115 part.",
+  "nextAction": "Collect first current authored identity parts for 083 and 094, expanded authored 115 parts, and the combined hosted 030 identity packet. Preserve exact proof and hold scopes.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:15:39.460Z",
+  "lastCheckedAt": "2026-11-24T00:16:27.918Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1630,33 +1630,24 @@
       "findings": "70 authentic editorial accepts; checked aliases and merges. Residual claim wording, stale chronology and canonical identity remain."
     },
     "jinshu/094": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
-      "previousRunId": "run-c6a098fb-9c40-42b5-b682-9e41e0530281",
+      "previousRunId": "run-4f1a8828-071d-457c-82e4-8518ef8afc99",
       "chapterPR": 5430,
       "revision": "11b2111c07a9319debebd89e0c1353ce84452dfe",
-      "findingsRevision": "ed33255af52431ff60e389a1b2e468f7b4e9ef90",
-      "prompt": "Continue as original independent Jinshu 094 reviewer. Exact #5430 11b2111c07a9319debebd89e0c1353ce84452dfe with author changes in research/people/checkpoints/jinshu094-owner-zh-witness-links-20261123. Verify the 127 actual linked Chinese source witnesses, especially the 51 alternate, short, title and variant forms, against actor context and adjacent names; substring presence alone cannot authorize identity. Check no affected native dated event or ownership changed, compare exact prior 536 supported item/people/units in current packet against independently audited ed56650b1724cfdb1002d8eb5ac71a63efccb046, and rebind the native report if all unchanged. Preserve any true unknowns explicitly. Record actionable per-person contradictions rather than guessed anchors. Push scoped independent surface decisions and exact native date receipt. A later current identity packet is required for certification; do not generate scripted approvals or revise validators, queue, or merge.",
+      "findingsRevision": "774611fc0faabd11265f8e50c3bbb1ac1bb874e7",
+      "prompt": "Continue as actual original independent Jinshu 094 reviewer. #5430 exact 11b2111c07a9319debebd89e0c1353ce84452dfe and prior #5484 774611fc0faabd11265f8e50c3bbb1ac1bb874e7 has accepted 127 source links and 536 chronology checks. Current exact identity source 61af8b0a5f15851a41c85ee7c374e7c93d02d108, GitHub Actions 45295088726 artifact 14875898251 jinshu-094-native-identity-evidence. Fetch inside cloud via gh run download 45295088726 -R GarrettPetersen/records-of-the-grand-historian -n jinshu-094-native-identity-evidence -D /tmp/jinshu094-native-current. Verify preparation receipt and unchanged sealed transport hashes. In this continuation review ONLY first THREE sealed transport parts. For each exact case read actual target and anchor Chinese, explicitly reason about actor/role and potential mistaken attribution, preserve any cross-dossier ambiguity and quote native linked source. Write reasons/verdicts directly yourself even for simple cases, never generate them from a script, quote match, candidate counts or proposal text. Preserve original reviewer and real authorship. Push complete authored parts and per-part hashes to #5484, marking all remaining cases unreviewed. No date/editorial/validator edits, new merges, queue change, global build or merge.",
       "idempotencyKey": "cursor-nov24-next-retained-094-11b2111c07",
-      "reservedAt": "2026-11-23T23:57:18.269Z",
+      "reservedAt": "2026-11-24T00:16:27.917Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-23T23:57:18.269Z"
+        "at": "2026-11-24T00:16:27.917Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
         "swapUsedBytes": "3365205442"
-      },
-      "runId": "run-4f1a8828-071d-457c-82e4-8518ef8afc99",
-      "sentAt": "2026-11-23T23:57:23.434Z",
-      "reviewRevision": "774611fc0faabd11265f8e50c3bbb1ac1bb874e7",
-      "resultPR": 5484,
-      "chronology": "audited",
-      "reviewedDateItems": 536,
-      "linkedSurfaceDecisions": 127,
-      "actionableWrongActorFindings": 0,
-      "finishedObservedAt": "2026-11-24T00:03:06.825Z"
+      }
     },
     "jinshu/123": {
       "chapterPR": 5439,
@@ -2545,13 +2536,19 @@
         "conclusion": "success",
         "artifactId": 14875971626,
         "identityPreparation": {
-          "status": "in_progress",
+          "status": "completed",
           "workflowCommit": "83be9285d06c2aef644e49e26908e74ebd6f0f06",
           "workflowBlob": "22f09f885f31aecab580d5561a6e8e63041adc34",
           "requestedAt": "2026-11-24T00:11:10.371Z",
           "runId": 45295088726,
           "runHead": "637e22d4e49a1ec3bbfea46c4ff463986bbb3b41",
-          "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45295088726"
+          "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45295088726",
+          "conclusion": "success",
+          "artifactId": 14875898251,
+          "artifactDigest": "sha256:59bb3de520775b3794ef75196a640a9a8a8913c8fd9c260f03df08ab61d7a919",
+          "sourceRevision": "61af8b0a5f15851a41c85ee7c374e7c93d02d108",
+          "cases": 250,
+          "localPeople": 252
         }
       }
     },
@@ -3704,6 +3701,35 @@
           ],
           "nextAction": "Original owner corrects witnessed Chinese alias/mention links after the active Jinshu 115 owner scope finishes. Confirm actual independent case judgments and replay unchanged proof only after native validation."
         }
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-aa913dc1-24e5-4aaf-9dd8-6d1b0651a008",
+        "previousRunId": "run-c6a098fb-9c40-42b5-b682-9e41e0530281",
+        "chapterPR": 5430,
+        "revision": "11b2111c07a9319debebd89e0c1353ce84452dfe",
+        "findingsRevision": "ed33255af52431ff60e389a1b2e468f7b4e9ef90",
+        "prompt": "Continue as original independent Jinshu 094 reviewer. Exact #5430 11b2111c07a9319debebd89e0c1353ce84452dfe with author changes in research/people/checkpoints/jinshu094-owner-zh-witness-links-20261123. Verify the 127 actual linked Chinese source witnesses, especially the 51 alternate, short, title and variant forms, against actor context and adjacent names; substring presence alone cannot authorize identity. Check no affected native dated event or ownership changed, compare exact prior 536 supported item/people/units in current packet against independently audited ed56650b1724cfdb1002d8eb5ac71a63efccb046, and rebind the native report if all unchanged. Preserve any true unknowns explicitly. Record actionable per-person contradictions rather than guessed anchors. Push scoped independent surface decisions and exact native date receipt. A later current identity packet is required for certification; do not generate scripted approvals or revise validators, queue, or merge.",
+        "idempotencyKey": "cursor-nov24-next-retained-094-11b2111c07",
+        "reservedAt": "2026-11-23T23:57:18.269Z",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-23T23:57:18.269Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "runId": "run-4f1a8828-071d-457c-82e4-8518ef8afc99",
+        "sentAt": "2026-11-23T23:57:23.434Z",
+        "reviewRevision": "774611fc0faabd11265f8e50c3bbb1ac1bb874e7",
+        "resultPR": 5484,
+        "chronology": "audited",
+        "reviewedDateItems": 536,
+        "linkedSurfaceDecisions": 127,
+        "actionableWrongActorFindings": 0,
+        "finishedObservedAt": "2026-11-24T00:03:06.825Z"
       }
     ],
     "jinshu/031": [
