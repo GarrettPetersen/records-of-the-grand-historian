@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "houhanshu/101",
+  "reviewerAgentId": "bc-d6d36e58-8e2f-4f2d-b297-1d5a6a271601",
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "ownerRun": "run-1840d690-8704-4ed7-a5f8-7fc2c4f2a967",
+  "ownerRevision": "b0b2a62027fc9b22c3e45786d46f51bbb3ac3dab",
+  "ownerPr": 5717,
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-retained-blocked/houhanshu-101/owner-handoff.json",
+  "ownerProposalSha256": "eda0bc60de0718a28d5199e3407cd8505baa5d64636e2a3ccd49332483cbca33",
+  "reviewedAt": "2026-11-24T15:34:41.855Z",
+  "originalBlocker": "Date audit report is stale",
+  "verdict": "approved-with-amendments",
+  "verdictSummary": "The stale date audit is caused by exactly five changed dated items, none of which changes chronology. Four honor claims (claim-322/330/336/342) migrated the retired receptionType label posthumous to the sole valid later-reception label retrospective, and the active-date hint hints-p001 was reformatted by the native existing-year normalizer (209–174 BC to BC 209–BC 174). Source bytes are unchanged. All other 644 item checks, 153 person checks and 296 reviewed units remain valid against byte-identical packet items and may be reused through native recording. The owner proposal is approved with amendments: its scope omitted hints-p001 and cited the wrong migration commit. No real contradiction blocks closure. Two definite English omissions in the cited units are recorded separately as supplemental repairs and do not block the date closure.",
+  "approvedChanges": [
+    {
+      "id": "reception-taxonomy-relabels",
+      "ownerPatchKind": "native-date-proof-repin-eligibility",
+      "decision": "approved",
+      "kind": "reception-taxonomy-migration",
+      "changes": [
+        {
+          "itemId": "claim-322",
+          "claimIndex": 321,
+          "personId": "p067",
+          "path": "claims[321][2].receptionType",
+          "before": "posthumous",
+          "after": "retrospective",
+          "unchangedFields": [
+            "item",
+            "action",
+            "grantorPersonId",
+            "dateContext.sourceDate",
+            "dateContext.westernYear",
+            "certainty",
+            "evidence"
+          ],
+          "item": {
+            "en": "600,000 cash; two household members made Gentlemen",
+            "zh": "錢六十萬，以家二人為郎"
+          }
+        },
+        {
+          "itemId": "claim-330",
+          "claimIndex": 329,
+          "personId": "p068",
+          "path": "claims[329][2].receptionType",
+          "before": "posthumous",
+          "after": "retrospective",
+          "unchangedFields": [
+            "item",
+            "action",
+            "grantorPersonId",
+            "dateContext.sourceDate",
+            "dateContext.westernYear",
+            "certainty",
+            "evidence"
+          ],
+          "item": {
+            "en": "100,000 cash; one son made a Gentleman",
+            "zh": "錢十萬，除一子為郎"
+          }
+        },
+        {
+          "itemId": "claim-336",
+          "claimIndex": 335,
+          "personId": "p069",
+          "path": "claims[335][2].receptionType",
+          "before": "posthumous",
+          "after": "retrospective",
+          "unchangedFields": [
+            "item",
+            "action",
+            "grantorPersonId",
+            "dateContext.sourceDate",
+            "dateContext.westernYear",
+            "certainty",
+            "evidence"
+          ],
+          "item": {
+            "en": "100,000 cash; one son made a Gentleman",
+            "zh": "錢十萬，除一子為郎"
+          }
+        },
+        {
+          "itemId": "claim-342",
+          "claimIndex": 341,
+          "personId": "p070",
+          "path": "claims[341][2].receptionType",
+          "before": "posthumous",
+          "after": "retrospective",
+          "unchangedFields": [
+            "item",
+            "action",
+            "grantorPersonId",
+            "dateContext.sourceDate",
+            "dateContext.westernYear",
+            "certainty",
+            "evidence"
+          ],
+          "item": {
+            "en": "100,000 cash; one son made a Gentleman",
+            "zh": "錢十萬，除一子為郎"
+          }
+        }
+      ],
+      "sourceGrounds": [
+        {
+          "unit": "s3329",
+          "zh": "延平元年，鮮卑復寇漁陽，太守張顯率數百人出塞追之。",
+          "point": "Dates the pursuit to 延平元年 (AD 106). The westernYear AD 106 at year precision is unchanged."
+        },
+        {
+          "unit": "s3332",
+          "zh": "唯授力戰，身被十創，手殺數人而死。",
+          "point": "Yan Shou (p068) dies in the battle."
+        },
+        {
+          "unit": "s3333",
+          "zh": "顯中流矢，主簿衛福、功曹徐咸皆自投赴顯，俱歿於陣。",
+          "point": "Zhang Xian (p067), Wei Fu (p069) and Xu Xian (p070) all die in the battle."
+        },
+        {
+          "unit": "s3334",
+          "zh": "鄧太后策書褒歎，賜顯錢六十萬，以家二人為郎；授、福、咸各錢十萬，除一子為郎。",
+          "point": "Empress Dowager Deng (p071) grants the four honors after these deaths, so each is a later reception. Item amounts and recipients match each claim."
+        }
+      ],
+      "rationale": "PEOPLE_DATE_AUDIT.md makes retrospective the only later-reception category and forbids a posthumous subtype. The native personClaimReception already classified both labels as retrospective, so the reception class is unchanged. personReceptionErrors rejects only the retired label. All chronology fields, the grantor, the items, the action, the certainty and the evidence are byte-identical."
+    },
+    {
+      "id": "hint-format-normalization",
+      "decision": "approved-as-amendment-to-owner-scope",
+      "kind": "existing-year-hint-formatting",
+      "itemId": "hints-p001",
+      "personId": "p001",
+      "path": "people[0][4].a[0]",
+      "before": "209–174 BC (reign as Xiongnu chanyu per independent chronology; destroyed the Eastern Hu state early in Han)",
+      "after": "BC 209–BC 174 (reign as Xiongnu chanyu per independent chronology; destroyed the Eastern Hu state early in Han)",
+      "rationale": "The owner reported changedChronologyFacts [] and listed only the four claims, but the hint string also differs between the sealed and current extractions, so it is a fifth changed dated item. Running the native normalizeExtractionDateHints on the intermediate extraction reproduces the current extraction exactly (sha256:fdbddbe6…). The years, the endpoint order and the parenthetical are unchanged. The chapter only places Modu in early Han (s0002 漢初，匈奴冒頓滅其國), and the hint is labelled as independent reign chronology."
+    }
+  ],
+  "ownerProposalAmendments": [
+    {
+      "field": "testedRecoveryFindings.taxonomyOnlyChanges / concreteProposedPatches[0].affectedClaimIds",
+      "amendment": "Add hints-p001 (and person check p001) to the scoped delta. The complete sealed-to-current delta is five leaf values: claims[321|329|335|341][2].receptionType and people[0][4].a[0]."
+    },
+    {
+      "field": "relatedEvidenceHashes.taxonomyMigrationCommit",
+      "amendment": "Replace 07e5abb388dcb485f38f3ed07c1f896bbcdbd908, which is dated 2026-09-08 and predates this chapter's first extraction (37bee4fd, 2026-09-27). The relabel was written by d674f0e9a2a39ca9713e01d086b576cfd2f6872c and promoted by bb9e73078a5fa0aa15aef3b303f175ee61e1ed45. The hint normalization was written by c885eac7e47fc714c454c6ccec09e373649cccf5 and promoted by 2816bd5f73455d32651cccfda8ef8674fa776287."
+    },
+    {
+      "field": "pinnedInputs.*.contentSha256",
+      "amendment": "Label only: these are sha256(JSON.stringify(parsed)) canonical hashes, matching the native packet hashing, not raw file-byte hashes. Raw file-byte hashes are recorded in pinnedEvidence."
+    },
+    {
+      "field": "concreteProposedPatches[0].action (\"repin\")",
+      "amendment": "Do not retag extractionHash on the historical report. Close through native recordDateAudit with a newly composed report, as described in affectedNativeDependencies.dateAudit. The owner hold doNotRetagExtractionHashOnHistoricalReport is upheld."
+    }
+  ],
+  "heldCases": [],
+  "holdAssessment": "No concrete source contradiction, attribution conflict or false-merge risk was found in the changed items or their direct dependencies. The supplemental English repairs below are definite omissions in the idiomatic field of the cited units. They do not alter Chinese evidence or chronology and are not holds on the date closure.",
+  "supplementalEnglishRepairs": [
+    {
+      "book": "houhanshu",
+      "chapter": "101",
+      "unit": "s3329",
+      "field": "idiomatic",
+      "sourcePath": "content[21].sentences[4].translations[0].idiomatic",
+      "before": "Yanping 1: Xianbei raided Yuyang again; Zhang Xian chased with hundreds of men.",
+      "after": "Yanping 1: The Xianbei raided Yuyang again, and Administrator Zhang Xian led several hundred men beyond the frontier in pursuit.",
+      "reason": "The Chinese 太守張顯率數百人出塞追之 says that Administrator Zhang Xian led several hundred men beyond the frontier in pursuit. The idiomatic text drops the office 太守 and the proposition 出塞 (pursuit beyond the frontier), and weakens 數百人 to \"hundreds\". The literal field already has these. \"Administrator\" follows the majority idiomatic rendering of 太守 in this chapter and the extraction descriptor for p067. 復 is kept as \"again\".",
+      "severity": "medium",
+      "literalFieldChecked": "adequate-unchanged",
+      "repeatedUses": "The English string appears only in this unit. The extraction item texts for claims 322/330/336/342 already match the Chinese."
+    },
+    {
+      "book": "houhanshu",
+      "chapter": "101",
+      "unit": "s3334",
+      "field": "idiomatic",
+      "sourcePath": "content[21].sentences[9].translations[0].idiomatic",
+      "before": "Empress Dowager Deng rewarded Zhang Xian with six hundred thousand cash and two kinsmen as court gentlemen; Yan Shou, Wei Fu, and Xu Xian each got one hundred thousand cash and a son appointed gentleman.",
+      "after": "Empress Dowager Deng issued a rescript praising them: Zhang Xian was granted six hundred thousand cash and two members of his household were made court gentlemen; Yan Shou, Wei Fu, and Xu Xian each received one hundred thousand cash, and one son of each was made a gentleman.",
+      "reason": "The Chinese 鄧太后策書褒歎 says that Empress Dowager Deng issued a rescript in praise of them. The idiomatic text omits the rescript and its praise, reducing the clause to \"rewarded\". The repair restores it and keeps every amount and appointment. The literal field (\"Empress Dowager Deng's rescript praised them\") is adequate and unchanged.",
+      "severity": "medium",
+      "literalFieldChecked": "adequate-unchanged",
+      "repeatedUses": "The English string appears only in this unit. The extraction item texts for claims 322/330/336/342 already match the Chinese."
+    }
+  ],
+  "supplementalEnglishRepairsRouting": "Host routes these into the active editorial application with a separate reviewer for worker-authored repairs, kept outside the closed-schema date report. Applying them changes only the en field of s3329 and s3334; zh, literal and blockIndex stay the same. The computed post-repair packet sourceHash is sha256:1297314962546f997fc7cfc771918a129e8722c3514e5613e92486240976d0ac. If they are applied before the date closure (batch repairs before downstream audits), compose the closure against the post-repair source and extraction hashes. The chronology conclusions here carry over unchanged provided the native packet diff shows only those two en values (plus any appended translationRepairs entries for them). Otherwise, reconcile them later as an English-only stale generation.",
+  "pinnedEvidence": {
+    "checkoutHead": "b0b2a62027fc9b22c3e45786d46f51bbb3ac3dab",
+    "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+    "dispatchStage": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+    "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "inputBlobsIdenticalAt": [
+      "b0b2a62027fc9b22c3e45786d46f51bbb3ac3dab",
+      "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+      "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+      "e61eedae77bea163ec10120e88e806cde91315dd"
+    ],
+    "inputs": [
+      {
+        "path": "data/houhanshu/101.json",
+        "gitBlob": "23dd28802eb72a78652b802abc4bd9d080e54b0d",
+        "rawSha256": "sha256:3ef64cf5dcf03b23ae477f036ec9508822a448d69003661af04d6c0217d35d76",
+        "canonicalJsonSha256": "sha256:175a09bd848e0c881745a014af4f13c0e38aca7129f5d85c69885866b3f5fc54",
+        "bytes": 189974,
+        "packetSourceHash": "sha256:94d8437e1f76ec0f3dca8854764c9e52663e448e98cbff0e7c4d0dddb3fe2213",
+        "lastChanged": "811404b5868719b55d0302cd896eb17f44cfa474",
+        "sameBlobAtAuditCommit": "d9d93c8294e5892c5f0ed7ce9ba334ad106c43ee"
+      },
+      {
+        "path": "data/people/extractions/houhanshu/101.json",
+        "gitBlob": "0679ced33ef2a2795762ff030a7d04ffe69d3aa5",
+        "rawSha256": "sha256:c0c39262d0f6e44fd81c6768298db4406b85997df29988ff19069b8d636fb074",
+        "canonicalJsonSha256": "sha256:fdbddbe6c8a51880a8068fc708b575ffa4d0ffd89c112a3a56f9c93b3c35a901",
+        "bytes": 632393,
+        "packetExtractionHash": "sha256:fdbddbe6c8a51880a8068fc708b575ffa4d0ffd89c112a3a56f9c93b3c35a901"
+      },
+      {
+        "path": "data/people/date-audits/houhanshu/101.json",
+        "gitBlob": "cec3269b6c022aeea61540f7efeb4f4e65e04f70",
+        "rawSha256": "sha256:825d66d52cb68622a1964c5c839805fe24533f19353a01832ebf08039068d336",
+        "canonicalJsonSha256": "sha256:20ec271abd3b7f3d9a5a3911553447513cc19b69ebb7fb5473ccc6d589fcccfd",
+        "bytes": 480460,
+        "writtenBy": "d9d93c8294e5892c5f0ed7ce9ba334ad106c43ee"
+      },
+      {
+        "path": "data/people/editorial-decisions/houhanshu/101.json",
+        "gitBlob": "14f6e94a2618a8a648a58b5ec6cd5f2e9616fae6",
+        "rawSha256": "sha256:63b56797eea2765fdeac3df837b67aa4b26875272846cb4ea8a45f1f52f709a9",
+        "canonicalJsonSha256": "sha256:8f81e0944760888553b51b0fb0b90885495193e2f206272f82916ce7e6af630a",
+        "bytes": 38712,
+        "writtenBy": "587ee135b259ded587e8627c5fbda94fc37c24db"
+      }
+    ],
+    "extractionGenerations": [
+      {
+        "generation": "sealed (audited)",
+        "commit": "811404b5868719b55d0302cd896eb17f44cfa474",
+        "gitBlob": "56721e0321c13b1cf1fa6bf16118d47f3a5c7516",
+        "rawSha256": "sha256:ef85f1ef96c25eca9c24e3c1bf608189ed83ce1964f3418417a29fe6e4a75f79",
+        "extractionHash": "sha256:96728c0d2c009ccc1c8fe0adf5834dab985bb80e5b5417296fb495bb1c33357c",
+        "nativeDiagnosticsUnderCurrentCode": 4,
+        "diagnostics": "receptionType must be retrospective (claim-322, claim-330, claim-336, claim-342)"
+      },
+      {
+        "generation": "intermediate",
+        "commit": "d674f0e9a2a39ca9713e01d086b576cfd2f6872c",
+        "promotedBy": "bb9e73078a5fa0aa15aef3b303f175ee61e1ed45",
+        "gitBlob": "a7e188b00da8d414437abb7c8da87b24daf6e02f",
+        "rawSha256": "sha256:f340f1a202728931942237c778fa455ff4542803e5971b923f320877f223fede",
+        "extractionHash": "sha256:38b16caf58c2f88b2e1d4885b6a97fac7aa1956ff4630cee4776bab60f0e9dfb",
+        "leafDiffFromSealed": 4
+      },
+      {
+        "generation": "current",
+        "commit": "c885eac7e47fc714c454c6ccec09e373649cccf5",
+        "promotedBy": "2816bd5f73455d32651cccfda8ef8674fa776287",
+        "gitBlob": "0679ced33ef2a2795762ff030a7d04ffe69d3aa5",
+        "extractionHash": "sha256:fdbddbe6c8a51880a8068fc708b575ffa4d0ffd89c112a3a56f9c93b3c35a901",
+        "leafDiffFromIntermediate": 1,
+        "note": "c885eac7 also re-laid-out JSON whitespace (35,840 raw diff lines); the parsed delta is the single hint string."
+      }
+    ],
+    "historicalAuthorship": {
+      "receptionRelabel": {
+        "writerCommit": "d674f0e9a2a39ca9713e01d086b576cfd2f6872c",
+        "subject": "fix: reconcile retired reception labels",
+        "gitAuthor": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+        "authoredAt": "2026-10-08T22:43:51Z",
+        "filesInCommit": 300,
+        "reproducedBytes": "GitHub contents API: parent 8597eb63 holds blob 56721e03 (sealed) and d674f0e9 holds blob a7e188b0. The commit patch for this file is exactly 4 lines changed, receptionType posthumous to retrospective.",
+        "promotion": "Squash bb9e7307 of PR #4605 (head codex/people-glossary-staging-v2, merged 2026-10-08T23:24:38Z). The commit appears in that PR's paginated 115-commit list; none of the 97 locally present PR commits touch the file.",
+        "priorRule": "4506e84216d0d8309431da61a4ec5aec0b58fda8 (fix: require retrospective reception labels, 2026-10-07)",
+        "agentId": "unknown",
+        "runId": "unknown"
+      },
+      "hintNormalization": {
+        "writerCommit": "c885eac7e47fc714c454c6ccec09e373649cccf5",
+        "subject": "Normalize existing Western date hints for release validation",
+        "gitAuthor": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+        "authoredAt": "2026-10-24T07:53:35-07:00",
+        "reproducedBytes": "Local: parent 351b2e3c holds blob a7e188b0 and c885eac7 holds blob 0679ced3.",
+        "receipt": {
+          "path": "research/people/release-date-hint-formatting-20261024.json",
+          "revisionBefore": "351b2e3c7193d3c8856ae6fcbf044e9c13d61ca9",
+          "beforeHash": "sha256:38b16caf58c2f88b2e1d4885b6a97fac7aa1956ff4630cee4776bab60f0e9dfb",
+          "afterHash": "sha256:fdbddbe6c8a51880a8068fc708b575ffa4d0ffd89c112a3a56f9c93b3c35a901",
+          "change": "p001 index 0"
+        },
+        "promotion": "Squash 2816bd5f of PR #5256.",
+        "agentId": "unknown",
+        "runId": "unknown"
+      },
+      "originalExtraction": {
+        "commit": "37bee4fdfc4d47d24acd0ffedfbbf7d76e509c86",
+        "runModel": "Grok Bot-chunked",
+        "promptVersion": 7,
+        "queueClaim": {
+          "ledgerCommit": "2c9cd43d3154fce7a9deac20de3c50ba36185c90",
+          "lane": "grokbot",
+          "worker": "grokbot-31",
+          "chapterFingerprint": "sha256:e9536a8d245c2f51d7b7e32fa35208767f7f2cbd75133e6ba245e2a0c32933af"
+        },
+        "agentId": "unknown (run.agentId null)",
+        "runId": "unknown (run.runId null)"
+      },
+      "originalDateAudit": {
+        "commit": "d9d93c8294e5892c5f0ed7ce9ba334ad106c43ee",
+        "reviewerName": "Independent Hou Hanshu 101 initial chronology reviewer",
+        "independentOfExtractor": true,
+        "reviewedAt": "2026-09-29T15:25:39.323Z",
+        "agentId": "unknown (not recorded in report; no dateAudits queue entry observed in any ledger revision touching houhanshu/101)"
+      },
+      "editorialReview": {
+        "commit": "587ee135b259ded587e8627c5fbda94fc37c24db",
+        "reviewer": "grok-4.6",
+        "agentId": "bc-a5f8d2b0-30ba-4f25-ba31-cf8fcc8460ca",
+        "runId": "run-bafac409-fb52-46ae-a056-f2e688515328"
+      },
+      "currentOwnerReservation": {
+        "ledgerCommit": "743c6f40ee20e0625ec8276ff19fb58c7642bab1",
+        "jobId": "nov24-separate-transport-houhanshu-101",
+        "worker": "cursor-nov24-retained-blocked-owner-1",
+        "agentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+        "status": "active"
+      }
+    }
+  },
+  "affectedNativeDependencies": {
+    "source": {
+      "changed": false,
+      "note": "Packet sourceHash 94d8437e… equals the audited report. All 296 units and the unitPeople map are identical between the sealed and current packets."
+    },
+    "extraction": {
+      "changedLeafValues": 5,
+      "changedPackItems": [
+        "claim-322",
+        "claim-330",
+        "claim-336",
+        "claim-342",
+        "hints-p001"
+      ],
+      "changedPeople": [
+        "p001"
+      ],
+      "unchangedPacketItems": 644,
+      "scopedPeopleValidate": "pass",
+      "receptionScanFindings": 0
+    },
+    "identity": {
+      "changed": false,
+      "note": "No names, surfaces, relationships, descriptors or claim subjects changed. The p001 hint keeps the same BC 209–174 years, so identity inputs are semantically unchanged."
+    },
+    "editorial": {
+      "changed": false,
+      "note": "The 34 editorial decisions and 34 applied translationRepairs are untouched, and none concerns s3329, s3334, s0001, s0002, s0061 or s0065. The decisions are keyed to source chapterFingerprint e9536a8d…, and the source is unchanged. Prior independent editorial evidence (grok-4.6, bc-a5f8d2b0) is preserved."
+    },
+    "dateAudit": {
+      "status": "stale (native verify exit 1)",
+      "cause": "extractionHash 96728c0d… (sealed) differs from fdbddbe6… (current); sourceHash unchanged",
+      "sealedRestoreNotViable": "Under current code, the original report fails validation against its own sealed extraction with \"Date approval retains invalid temporal geometry or reception ownership\", because of the four retired labels. Reverting the extraction is therefore not a valid closure.",
+      "closure": "Native recordDateAudit (node scripts/people-date-audit.mjs record --report PATH), run by the host at an idle boundary. It archives the current report byte-identical to data/people/date-audit-history/houhanshu/101/20ec271abd3b7f3d9a5a3911553447513cc19b69ebb7fb5473ccc6d589fcccfd.json and writes a newly composed report. Do not edit the historical report or retag its hashes.",
+      "composition": {
+        "sourceHash": "sha256:94d8437e1f76ec0f3dca8854764c9e52663e448e98cbff0e7c4d0dddb3fe2213",
+        "extractionHash": "sha256:fdbddbe6c8a51880a8068fc708b575ffa4d0ffd89c112a3a56f9c93b3c35a901",
+        "status": "audited",
+        "reviewer": {
+          "name": "Hou Hanshu 101 independent scoped chronology delta reviewer (retains initial chronology reviewer checks)",
+          "agentId": "bc-d6d36e58-8e2f-4f2d-b297-1d5a6a271601",
+          "independentOfExtractor": true
+        },
+        "provenance": {
+          "priorReportCanonicalSha256": "sha256:20ec271abd3b7f3d9a5a3911553447513cc19b69ebb7fb5473ccc6d589fcccfd",
+          "priorReportGitBlob": "cec3269b6c022aeea61540f7efeb4f4e65e04f70",
+          "priorReviewerName": "Independent Hou Hanshu 101 initial chronology reviewer",
+          "priorReviewedAt": "2026-09-29T15:25:39.323Z",
+          "retainedFromPrior": "reviewedUnits (296), itemChecks except the five changed ids (644), personChecks except p001 (153), findings [], references [], translationReview"
+        },
+        "retainedVerbatim": {
+          "reviewedUnitsSha256": "sha256:d6c06445942617804c04b8492be40a1a9583d5679889404896b4b49722cd6a74",
+          "retainedItemChecks": 644,
+          "retainedItemChecksSha256": "sha256:1580bf3b6cd59246b5f591fbeeaf4e5fcc5b5f1ce5fde3d6400200b62ef6d6b5",
+          "retainedPersonChecks": 153,
+          "retainedPersonChecksSha256": "sha256:5b2bc423eb0ffe8f24a83fef95cbf93504a64c022883879f39ddcd35b5d5a3a9"
+        },
+        "replacedItemChecks": {
+          "originalSha256": "sha256:0325e9bfcb9f9e6c65c7f577c583b078a155c10fc06de3c9850656aaf17cede4",
+          "replacementSha256": "sha256:eb390768d040ec235ebbea90d0859db200523cc0f35fed6c0a008fa828c6c1f1",
+          "checks": [
+            {
+              "id": "claim-322",
+              "verdict": "supported",
+              "reason": "Scoped delta re-check: the only change since the sealed audit is the retired receptionType label posthumous becoming retrospective, the sole valid later-reception label. Zhang Xian died in the Yanping 1 ambush (s3333 俱歿於陣); the grant of 600,000 cash and two household Gentlemen (s3334) is a later honor by Empress Dowager Deng (p071). sourceDate 延平元年, westernYear AD 106 (year precision), grantor, item, action, certainty and evidence are byte-identical to the audited claim.",
+              "event": "Empress Dowager Deng's rescript honor granted to Zhang Xian (p067) after his death in the Yanping 1 Xianbei pursuit.",
+              "evidence": [
+                {
+                  "unit": "s3329",
+                  "quote": "延平元年，鮮卑復寇漁陽，太守張顯率數百人出塞追之。"
+                },
+                {
+                  "unit": "s3333",
+                  "quote": "顯中流矢，主簿衛福、功曹徐咸皆自投赴顯，俱歿於陣。"
+                },
+                {
+                  "unit": "s3334",
+                  "quote": "鄧太后策書褒歎，賜顯錢六十萬，以家二人為郎"
+                }
+              ]
+            },
+            {
+              "id": "claim-330",
+              "verdict": "supported",
+              "reason": "Scoped delta re-check: only receptionType changed from the retired posthumous label to retrospective. Yan Shou died fighting alone in the Yanping 1 ambush (s3332 手殺數人而死); the 100,000 cash and one son made Gentleman (s3334 授、福、咸各錢十萬，除一子為郎) is a later honor by Empress Dowager Deng (p071). sourceDate 延平元年, westernYear AD 106 (year), grantor, item, action, certainty and evidence are unchanged from the audited claim.",
+              "event": "Empress Dowager Deng's rescript honor granted to Yan Shou (p068) after his death in the Yanping 1 ambush.",
+              "evidence": [
+                {
+                  "unit": "s3329",
+                  "quote": "延平元年，鮮卑復寇漁陽"
+                },
+                {
+                  "unit": "s3332",
+                  "quote": "唯授力戰，身被十創，手殺數人而死。"
+                },
+                {
+                  "unit": "s3334",
+                  "quote": "授、福、咸各錢十萬，除一子為郎。"
+                }
+              ]
+            },
+            {
+              "id": "claim-336",
+              "verdict": "supported",
+              "reason": "Scoped delta re-check: only receptionType changed from the retired posthumous label to retrospective. Wei Fu threw himself to Zhang Xian's side and died in the battle (s3333 主簿衛福…俱歿於陣); the 100,000 cash and one son made Gentleman (s3334) is a later honor by Empress Dowager Deng (p071). sourceDate 延平元年, westernYear AD 106 (year), grantor, item, action, certainty and evidence are unchanged from the audited claim.",
+              "event": "Empress Dowager Deng's rescript honor granted to Wei Fu (p069) after his death in the Yanping 1 ambush.",
+              "evidence": [
+                {
+                  "unit": "s3329",
+                  "quote": "延平元年，鮮卑復寇漁陽"
+                },
+                {
+                  "unit": "s3333",
+                  "quote": "主簿衛福、功曹徐咸皆自投赴顯，俱歿於陣。"
+                },
+                {
+                  "unit": "s3334",
+                  "quote": "授、福、咸各錢十萬，除一子為郎。"
+                }
+              ]
+            },
+            {
+              "id": "claim-342",
+              "verdict": "supported",
+              "reason": "Scoped delta re-check: only receptionType changed from the retired posthumous label to retrospective. Xu Xian threw himself to Zhang Xian's side and died in the battle (s3333 功曹徐咸…俱歿於陣); the 100,000 cash and one son made Gentleman (s3334) is a later honor by Empress Dowager Deng (p071). sourceDate 延平元年, westernYear AD 106 (year), grantor, item, action, certainty and evidence are unchanged from the audited claim.",
+              "event": "Empress Dowager Deng's rescript honor granted to Xu Xian (p070) after his death in the Yanping 1 ambush.",
+              "evidence": [
+                {
+                  "unit": "s3329",
+                  "quote": "延平元年，鮮卑復寇漁陽"
+                },
+                {
+                  "unit": "s3333",
+                  "quote": "主簿衛福、功曹徐咸皆自投赴顯，俱歿於陣。"
+                },
+                {
+                  "unit": "s3334",
+                  "quote": "授、福、咸各錢十萬，除一子為郎。"
+                }
+              ]
+            },
+            {
+              "id": "hints-p001",
+              "verdict": "supported",
+              "reason": "Scoped delta re-check: the audited hint 209–174 BC was rewritten by the native existing-year formatter to BC 209–BC 174; both endpoints were already BC under the shared trailing era, so the years, order and parenthetical are unchanged. The chapter dates Modu's destruction of the Eastern Hu only as early Han (s0002 漢初，匈奴冒頓滅其國); the hint is explicitly labelled as independent reign chronology and implies no in-chapter date.",
+              "event": "Modu's reign as Xiongnu chanyu, during which he destroyed the Eastern Hu state early in the Han.",
+              "evidence": [
+                {
+                  "unit": "s0002",
+                  "quote": "漢初，匈奴冒頓滅其國"
+                },
+                {
+                  "unit": "s0061",
+                  "quote": "烏桓自為冒頓所破"
+                }
+              ]
+            }
+          ]
+        },
+        "replacedPersonChecks": {
+          "originalP001Sha256": "sha256:e37aef99ae4c7ec5cf61bed2473983253dc7ca42d42900240416bff5393b7f74",
+          "replacementSha256": "sha256:7d809468ed7a48480ea12ce6f33632f650b92918565300a93119bfc7643723c6",
+          "checks": [
+            {
+              "id": "p001",
+              "verdict": "supported",
+              "reason": "Scoped delta re-check: Modu's only changed record is the format-only normalization of his active-date hint from 209–174 BC to BC 209–BC 174 (same BC years and order). He appears in the chapter only as the early-Han destroyer of the Eastern Hu (s0002, s0061, s0065); no life or reception chronology is dated in the chapter, and his claims are unchanged.",
+              "evidence": [
+                {
+                  "unit": "s0002",
+                  "quote": "漢初，匈奴冒頓滅其國"
+                },
+                {
+                  "unit": "s0065",
+                  "quote": "以報冒頓之怨"
+                }
+              ]
+            }
+          ]
+        },
+        "composedItemChecksSha256": "sha256:22743420e9996d597d240b66a761f92b79cd408652eab0cd7cba52e55a8887ce",
+        "composedPersonChecksSha256": "sha256:0bed1a8195355ae17df14526b731f08131002931ed3f00cb0777fcc0d4443e2a",
+        "orderRule": "Replace in place by id; keep packet item and person order.",
+        "retainedPersonChecksJustification": "Person checks p067–p070 are retained. Their person records are byte-identical, and their only changed claims keep the same native reception class (retrospective) and chronology."
+      },
+      "precondition": "Before recording, the host re-verifies that the four input blobs equal the pinned values. On any mismatch, stop and reconcile."
+    }
+  },
+  "validation": {
+    "performed": [
+      {
+        "check": "owner proposal sha256",
+        "result": "match eda0bc60…"
+      },
+      {
+        "check": "input git blobs at b0b2a620 (and identical at 40a66372, 5b7ae31b, e61eedae)",
+        "result": "all four match"
+      },
+      {
+        "check": "node scripts/people-date-audit.mjs verify --book houhanshu --chapter 101",
+        "result": "stale, exit 1 (reproduces owner)"
+      },
+      {
+        "check": "node scripts/people-date-audit.mjs scan --book houhanshu --chapter 101",
+        "result": "0 findings on current extraction"
+      },
+      {
+        "check": "node scripts/validate-people-data.mjs --book houhanshu --chapter 101",
+        "result": "pass: 154 local people, 510 mentions, 1144 claims, 34 applied repairs, 34 editorial decisions, 1 claim revision"
+      },
+      {
+        "check": "parsed deep diff of sealed vs intermediate vs current extraction",
+        "result": "4 + 1 leaf values; no other differences"
+      },
+      {
+        "check": "buildDateAuditPacket sealed vs current",
+        "result": "644 identical items; 5 differ; units and unitPeople identical; only person p001 differs"
+      },
+      {
+        "check": "validateDateAuditReport(original, sealed packet) under current code",
+        "result": "fails: invalid temporal geometry or reception ownership (4 retired labels)"
+      },
+      {
+        "check": "in-memory validateDateAuditReport(composed report, current packet) + dateAuditReferencesCurrent",
+        "result": "pass; no file written"
+      },
+      {
+        "check": "normalizeExtractionDateHints(intermediate) == current",
+        "result": "exact (sha256:fdbddbe6…); current is idempotent (0 further changes)"
+      },
+      {
+        "check": "queue ledger (origin/codex/people-work-queue 743c6f40) history for houhanshu/101",
+        "result": "grokbot-31 extraction claim; active owner reservation bc-62d53d82; no dateAudits entry"
+      },
+      {
+        "check": "npm run people:disk:check",
+        "result": "pass (no errors)"
+      }
+    ],
+    "notPerformed": [
+      "build",
+      "canonical data edits",
+      "native record",
+      "queue mutation",
+      "launch",
+      "merge",
+      "new worktree"
+    ],
+    "outOfScopeObservation": "The retained prior report uses one boilerplate reason for all 649 item checks, and every person check cites s0001. It passed native validation as a complete audit and is accepted unrelated work, so it is preserved and not re-litigated here."
+  }
+}
