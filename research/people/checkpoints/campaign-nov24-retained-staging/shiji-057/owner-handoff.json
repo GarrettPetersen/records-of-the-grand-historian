@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "057"
+  },
+  "ownerAgentId": "bc-af796262-7b7e-40fd-9af3-90cf2d1066f5",
+  "worker": "cursor-nov24-retained-staging-w12-o7",
+  "idempotencyKey": "9d1b3929bba248199150535c9424a55ee0dd80152493e2138719a423f5c8dc62",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-057-066f5",
+  "campaign": "campaign-nov24-retained-staging",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "0393930196275bedf476f74bf0b1c725590b77eb350cd723e759b0968840b400",
+    "people": 69,
+    "claims": 197,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "1198fdf4529ae954536345121e4d6b7b25322a5d",
+    "extraction": "8c39a587bed799207663a1bbfd76cfdb6db41013",
+    "editorial": "893e705a72018579145c6e7ce7a539cb81a0f256"
+  },
+  "sealedInputs": {
+    "source": "sha256:33e7c4d4d94102626353c67bd02756a7be295ba51294ea4294613e9e4cd0445d",
+    "extraction": "sha256:0393930196275bedf476f74bf0b1c725590b77eb350cd723e759b0968840b400",
+    "editorial": "sha256:4e5d1e31ed72a2702ab5c93650b443ac89320e5098ca9195a0170f133ecafb11"
+  },
+  "inputWitnessErrors": [],
+  "sourceCoverage": {
+    "english": {
+      "sentenceCount": 230,
+      "translatedCount": 230,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0
+    },
+    "pinnedPeople": 69,
+    "pinnedClaims": 197,
+    "promptVersion": 7
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-057/date-packet.json",
+    "contentSha256": "sha256:29c8813580decaca2c6d85b24a22c7a41e87a1a212774d71f689321c585dcdac",
+    "itemCount": 159,
+    "peopleCount": 69,
+    "unitCount": 230,
+    "sourceHash": "sha256:42cf7e103d9fd3a3c55fc2586c5ea820e854e80ca8ae9ee9e51773196c40c828",
+    "extractionHash": "sha256:219f76ac50e98dcb42377f1422001964e99692c5c991e46949ad3d8ddfb6d1a5"
+  },
+  "dateRepairProposals": [],
+  "extractionReuse": {
+    "path": "data/people/extractions/shiji/057.json",
+    "contentSha256": "sha256:0393930196275bedf476f74bf0b1c725590b77eb350cd723e759b0968840b400",
+    "gitBlob": "8c39a587bed799207663a1bbfd76cfdb6db41013",
+    "reuse": "Current staged extraction retained verbatim; owner did not re-extract or modify claims."
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/shiji/057.json",
+    "decisionCount": 4,
+    "appliedCount": 0,
+    "status": "sealed-unchanged",
+    "reuse": "Pinned editorial decisions retained; no owner edits to extraction or editorial artifacts."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 057",
+    "summary": "Scoped person data validation passed for shiji/057: 1 extraction(s), 69 local people, 488 mentions, 406 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 230,
+      "translatedCount": 230,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "no-native-date-report",
+    "datesVerify": {
+      "exitCode": 0,
+      "command": "npm run people:dates:verify -- --book shiji --chapter 057",
+      "output": "> records-of-the-grand-historian@1.0.0 people:dates:verify\n> node scripts/people-date-audit.mjs verify --book shiji --chapter 057\n\n{\n  \"total\": 1,\n  \"counts\": {\n    \"un-audited\": 1\n  },\n  \"chapters\": [\n    {\n      \"book\": \"shiji\",\n      \"chapter\": \"057\",\n      \"status\": \"un-audited\",\n      \"auditVersion\": 1\n    }\n  ]\n}",
+      "status": "un-audited"
+    },
+    "editorialDecisionCount": 4,
+    "editorialStatus": "sealed-unchanged"
+  },
+  "candidateValidation": {
+    "validate": {
+      "passed": true,
+      "exitCode": 0,
+      "command": "npm run people:validate -- --book shiji --chapter 057",
+      "summary": "Scoped person data validation passed for shiji/057: 1 extraction(s), 69 local people, 488 mentions, 406 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "datesVerify": {
+      "exitCode": 0,
+      "command": "npm run people:dates:verify -- --book shiji --chapter 057",
+      "output": "> records-of-the-grand-historian@1.0.0 people:dates:verify\n> node scripts/people-date-audit.mjs verify --book shiji --chapter 057\n\n{\n  \"total\": 1,\n  \"counts\": {\n    \"un-audited\": 1\n  },\n  \"chapters\": [\n    {\n      \"book\": \"shiji\",\n      \"chapter\": \"057\",\n      \"status\": \"un-audited\",\n      \"auditVersion\": 1\n    }\n  ]\n}",
+      "status": "un-audited"
+    },
+    "packetBuild": "node scripts/people-date-audit.mjs packet --book shiji --chapter 057 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-057/date-packet.json"
+  },
+  "authorEvidence": {
+    "method": "Sealed source/extraction/editorial blobs witnessed at HEAD; native date packet from buildDateAuditPacket; npm run people:validate; people:dates:verify scan; no canonical edits.",
+    "sourceTitle": "House of Zhou Bo, Marquis of Jiang",
+    "sourceTitleZh": "絳侯周勃世家",
+    "completedAt": "2026-11-24T17:15:28.526Z",
+    "localPeople": 69
+  },
+  "chronologyStatus": "no-native-date-report",
+  "independentDateReviewCompleted": false,
+  "substantiveFindings": "Pinned source, extraction, and editorial blobs match dispatch witness. Native date packet prepared from current sealed inputs. No definite English omission or extraction contradiction found in owner spot-check; undated valid attestation preserved where source supports it. Owner did not self-approve an independent date audit.",
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "nextGate": "independent-native-date-audit-from-sealed-packet",
+      "packetSha256": "sha256:29c8813580decaca2c6d85b24a22c7a41e87a1a212774d71f689321c585dcdac",
+      "notes": "data/people/date-audits/ has no accepted report for this chapter at pinned extraction; people:dates:verify cannot pass until an independent reviewer records approval."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-after-date-gate",
+      "notes": "Canonical identity review follows independent chronology approval; owner handoff is not identity approval."
+    }
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 057",
+    "validateDates": "npm run people:dates:verify -- --book shiji --chapter 057",
+    "buildDatePacket": "node scripts/people-date-audit.mjs packet --book shiji --chapter 057 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-057/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner handoff only; no canonical edits, registry generation, deploy, or merge."
+}
