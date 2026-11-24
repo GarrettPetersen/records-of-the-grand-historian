@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "kind": "stale-date-recovery-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "086"
+  },
+  "ownerAgentId": "bc-f6969509-1699-4266-a225-cb3bca5d36ef",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sealedInputs": {
+    "source": {
+      "gitBlob": "a486b418638af01487e63e9211fd10ca9f248601",
+      "path": "data/jiuwudaishi/086.json"
+    },
+    "extraction": {
+      "gitBlob": "70f0f715978277a30048d8ea6011cbc39cf2b00d",
+      "path": "data/people/extractions/jiuwudaishi/086.json"
+    },
+    "dateAudit": {
+      "gitBlob": "972d44c6cf5366f2feebb3d3487a0a7633a5911e",
+      "path": "data/people/date-audits/jiuwudaishi/086.json"
+    },
+    "editorial": {
+      "gitBlob": "5824520565c578c39829941e501ec76ff16a78b2",
+      "path": "data/people/editorial-decisions/jiuwudaishi/086.json"
+    }
+  },
+  "staleReason": "extractionChanged",
+  "sourceChanged": false,
+  "historicalDateAudit": {
+    "status": "audited",
+    "reviewedAt": "2026-09-29T17:38:41.603Z",
+    "extractionHash": "sha256:e58c5e70c6b9ed61cd00a0cd218b040d7c12aa9d92159af15c574c7d7c8079ee",
+    "sourceHash": "sha256:cc93fe8fb774847ecb8158c0cd4e847d037ed0e37307b1848676aeed78db99c1",
+    "preservedPath": "data/people/date-audits/jiuwudaishi/086.json",
+    "extractionHashSeal": "PASS: recovered git extraction matches report extractionHash",
+    "nativeRevalidation": {
+      "status": "FAIL",
+      "detail": "Date approval retains invalid temporal geometry or reception ownership",
+      "note": "Extraction hash still matches recovered commit; preserve historical approval bytes without hash rewrite."
+    }
+  },
+  "oldProofRecovery": {
+    "match": "recovered-from-git",
+    "commit": "e1a98ce8cf158e20501060dbf7080645a5348d8f",
+    "extractionHash": "sha256:e58c5e70c6b9ed61cd00a0cd218b040d7c12aa9d92159af15c574c7d7c8079ee",
+    "packetItemCount": 182
+  },
+  "currentPacket": {
+    "extractionHash": "sha256:9249c85226913247999503fff1e01a8a6cfeba7dc32f165ba509cea7087309c6",
+    "sourceHash": "sha256:cc93fe8fb774847ecb8158c0cd4e847d037ed0e37307b1848676aeed78db99c1",
+    "itemCount": 182
+  },
+  "comparison": {
+    "unchangedCount": 165,
+    "changedFactCount": 10,
+    "structuralAdded": 7,
+    "structuralDropped": 7,
+    "changedFacts": [
+      {
+        "hints": "p002",
+        "before": [
+          "AD 937",
+          "AD 938"
+        ],
+        "after": [
+          "AD 937",
+          "AD 938",
+          "AD 941"
+        ]
+      },
+      {
+        "hints": "p003",
+        "before": [],
+        "after": [
+          "AD 928"
+        ]
+      },
+      {
+        "hints": "p016",
+        "before": [
+          "AD 948"
+        ],
+        "after": [
+          "AD 942",
+          "AD 948"
+        ]
+      },
+      {
+        "hints": "p017",
+        "before": [],
+        "after": [
+          "AD 943"
+        ]
+      },
+      {
+        "hints": "p018",
+        "before": [],
+        "after": [
+          "AD 943"
+        ]
+      },
+      {
+        "hints": "p019",
+        "before": [],
+        "after": [
+          "AD 943"
+        ]
+      },
+      {
+        "hints": "p020",
+        "before": [],
+        "after": [
+          "AD 943"
+        ]
+      },
+      {
+        "hints": "p021",
+        "before": [],
+        "after": [
+          "AD 943"
+        ]
+      },
+      {
+        "hints": "p022",
+        "before": [],
+        "after": [
+          "AD 943",
+          "AD 946"
+        ]
+      },
+      {
+        "hints": "p051",
+        "before": [
+          "AD 937",
+          "AD 941"
+        ],
+        "after": [
+          "AD 937",
+          "AD 941",
+          "AD 942"
+        ]
+      }
+    ],
+    "structuralNotes": "Claim-id renumbering or structural add/drop present; matched by claimHash where available."
+  },
+  "proofReuseCandidate": {
+    "eligible": false,
+    "reason": "10 chronology-related deltas; independent re-audit required."
+  },
+  "validation": {
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/086: 1 extraction(s), 55 local people, 262 mentions, 533 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "book": "jiuwudaishi",
+      "chapter": "086",
+      "status": "stale",
+      "auditVersion": 1
+    },
+    "currentPacketDiagnostics": "PASS: zero diagnostics",
+    "commands": [
+      "npm run people:validate -- --book jiuwudaishi --chapter 086",
+      "npm run people:dates:verify -- --book jiuwudaishi --chapter 086",
+      "buildDateAuditPacket + validateDateAuditReport against recovered extraction",
+      "dateAuditDiagnostics on current packet"
+    ]
+  },
+  "nextGate": "independent-fresh-date-reaudit",
+  "ownerApproval": false,
+  "notes": "Preserves historical date-audit JSON; does not rewrite report hashes. Owner evidence only."
+}
