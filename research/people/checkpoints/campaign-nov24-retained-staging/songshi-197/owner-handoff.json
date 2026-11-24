@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "197"
+  },
+  "ownerAgentId": "bc-290e5136-e686-4015-a4e4-bdf8eb0d329d",
+  "workerId": "cursor-nov24-retained-staging-w13-o9",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "72d654ad88a1b2edfe282cbbdca1f168289f0aff3e6f617dc7f8180a49bf609e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-197-d329d",
+  "extractionBytes": 99446,
+  "inputBlobWitness": {
+    "source": "2705d2bf19e2c3de541d1b2322c7eb64c3445e28",
+    "extraction": "0dc89cacbde54c1a8a585225065f6779801e679f",
+    "editorial": "90ec481caa75a92b55c32d3c19942e6a43a80e51"
+  },
+  "sealedInputs": {
+    "source": "sha256:7793202ad2dfae58c959041d9f3c5aec489c05cd8970179027a6cc2d912e64e7",
+    "extraction": "sha256:0f96d3f577c5d38c44dfa91d74fd677a8376a32fce9c6bf68138ad5dd3dacea8",
+    "editorial": "sha256:4aac39b2103225fded29e8a377bd1f8b349eaea28be085502f611f0c6156ddb5"
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "sourceTitle": "卷一百九十七 志第一百五十 兵十一 Volume 197 Treatises 150: Military 11",
+    "chineseUnits": 278,
+    "translatedCount": 278,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "metaSentenceCount": 278,
+    "metaTranslatedCount": 278,
+    "extractionBytes": 99446
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-197/date-packet.json",
+    "sha256": "sha256:2800d9394b8375e8f3f69f3201da4e9f1563a194a1ac7f2fd8ba078121c865bd",
+    "bytes": 203844,
+    "itemCount": 144,
+    "peopleCount": 67,
+    "unitCount": null,
+    "buildCommand": "npm run people:dates:packet -- --book songshi --chapter 197 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-197/date-packet.json",
+    "extractionHash": "sha256:a83c6c23ba1546a6c3eb3c4c218b927ebdb93b6b940f99636f9ba9e7979f9c00",
+    "sourceHash": "sha256:787a47c6d57302f0e17c64273d63562dfb827e7743a84eb96e8db10cad6852ac"
+  },
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 197",
+    "peopleValidateSummary": "Person data validation failed:\n- data/people/editorial-decisions/songshi/197.json: applied songshi:197:r0005 has no matching independent accept/revise authorization",
+    "validateFailure": "Person data validation failed:\n- data/people/editorial-decisions/songshi/197.json: applied songshi:197:r0005 has no matching independent accept/revise authorization",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 197",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false,
+      "workOrderAuditState": "no-native-date-report"
+    },
+    "chronologyStatus": "pending-independent-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "preserved": true,
+    "reextracted": false,
+    "workOrderPeople": 67,
+    "workOrderClaims": 228,
+    "bytes": 99446,
+    "contentSha256": "sha256:0f96d3f577c5d38c44dfa91d74fd677a8376a32fce9c6bf68138ad5dd3dacea8",
+    "witnessBlob": "0dc89cacbde54c1a8a585225065f6779801e679f",
+    "witnessMatchesWorkOrder": true,
+    "hashMatchesWorkOrder": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 24,
+    "contentSha256": "sha256:4aac39b2103225fded29e8a377bd1f8b349eaea28be085502f611f0c6156ddb5",
+    "witnessBlob": "90ec481caa75a92b55c32d3c19942e6a43a80e51",
+    "witnessMatchesWorkOrder": true,
+    "status": "reviewed-with-applied-proposals"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "native-validation-blocker",
+      "command": "npm run people:validate -- --book songshi --chapter 197",
+      "detail": "Person data validation failed:\n- data/people/editorial-decisions/songshi/197.json: applied songshi:197:r0005 has no matching independent accept/revise authorization",
+      "ownerRepair": false,
+      "note": "Pinned sealed editorial artifact fails current validator; resolve via independent editorial authorization reconciliation, not owner extraction rewrite."
+    }
+  ],
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial) at staging 20b8d0e3. Git blob witnesses match work-order pins. Full chapter read: 278 Chinese units with paired literal and idiomatic English; pinned extraction hash witnessed. people:validate fails on sealed editorial authorization for applied repair songshi:197:r0005 (Pang/雱 vs An); owner does not rewrite sealed editorial or extraction to bypass the gate. Native sealed date packet materialized for independent chronology review. No native date-audit report on branch; owner does not self-approve chronology.",
+  "remainingIndependentEvidence": {
+    "editorialAuthorization": {
+      "required": true,
+      "status": "native-validation-blocker",
+      "repairId": "songshi:197:r0005",
+      "witness": "s0080 大抵雱為此言",
+      "ownerApprovalIssued": false,
+      "note": "Reconcile independent accept/revise authorization for applied Pang idiomatic repair before publication gates."
+    },
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "candidatePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-197/date-packet.json",
+      "candidatePacketSha256": "sha256:2800d9394b8375e8f3f69f3201da4e9f1563a194a1ac7f2fd8ba078121c865bd",
+      "recordCommand": "npm run people:dates:record -- --book songshi --chapter 197",
+      "verifyAfterApproval": "npm run people:dates:verify -- --book songshi --chapter 197",
+      "ownerApprovalIssued": false
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-independent-bounded-dossier-review",
+      "ownerApprovalIssued": false,
+      "note": "Canonical identity evidence follows independent date approval and full-chapter reviewer pass."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 197",
+    "datesVerify": "npm run people:dates:verify -- --book songshi --chapter 197",
+    "datesPacket": "npm run people:dates:packet -- --book songshi --chapter 197 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-197/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge. Independent native date audit remains the missing gate."
+}
