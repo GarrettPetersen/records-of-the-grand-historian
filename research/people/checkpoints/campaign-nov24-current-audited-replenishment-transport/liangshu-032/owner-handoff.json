@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "chapterKey": "liangshu/032",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "032"
+  },
+  "workerId": "cursor-nov24-replenishment-48",
+  "ownerAgentId": "bc-a260894e-dc30-48af-8a17-6fe7807de88e",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-replenishment-48-bounded-owner-transports",
+    "sourcePacketSha256": "543acdb8e1b17aaf962f04a55d649b02d588103919fbb259e3469734ce665cd3",
+    "planFingerprint": "sha256:3b08307b73a55551f017985a9f45d505379a49b5e3db1fd6c4b46048f432a403",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "5c7547c26c9cf43727398a13de925b09345ac2e5a1db1806f9b2292b2cddb2b0",
+        "caseCount": 24
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "d63558fc8cc7711e692cca017ee82dd71ecdb366e3badfa6c3e7e3033d8d8202",
+        "caseCount": 25
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "1ed5526044d0677a64f936bffb0cd7684e64b94602ea124bfab9b1e71b45473a",
+        "caseCount": 49
+      }
+    ],
+    "preparationReceiptSha256": "sha256:5dac07c6bc60525067f1f39569b4108a4be2777160cf40184f0cadd7a3dd2b35"
+  },
+  "sealedInputs": {
+    "source": "sha256:6e4328e900007de559f29313481462e79cbdf2acb22e5e3a19427fd50b3aa80f",
+    "extraction": "sha256:89d22db1a62cc6f21434fc5d0c1f4f208300f49643f2c192a9fc17785c18d3dc",
+    "editorial": "sha256:72fcaef7e737cc46f17e7530fd5bb1bd88421c214ed95ebb317a597eb8a355f4",
+    "dateAudit": "sha256:e303660ea60ff5c56dbaa767262856dab8adc0b19b71724b9e53a77893945f16"
+  },
+  "inputBlobWitness": {
+    "source": "de0e5f5e286f89e9021be8aa37e610b392cb87a3",
+    "extraction": "e18afca964b44425999d360845db4b63e63b856f",
+    "dateAudit": "428606debe185d47183812516f46f187d62f9b22",
+    "editorial": "739fa0b4285b6017a78b7ccdebd568af0ebdeb12"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed-with-applied-proposals",
+  "reviewCases": 98,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 98 scoped identity cases: retain accepted canonical membership; unresolvedIdentity preserved where proposed; no concrete chapter-level actor contradiction or false-merge hold.",
+  "scopedEvidence": {
+    "ownerEvidencePath": "owner-evidence.json",
+    "ownerEvidenceSha256": "sha256:e98ce2db60ed5a49e7d39607e563704f8b706bdafd4560dbdb3f6845f8ddad9a",
+    "retainProposals": 98,
+    "holds": 0,
+    "sourceValidation": {
+      "command": "npm run people:validate -- --book liangshu --chapter 032",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liangshu/032: 1 extraction(s), 98 local people, 534 mentions, 716 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    }
+  },
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "transportPart003": "transport-part-003.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:e98ce2db60ed5a49e7d39607e563704f8b706bdafd4560dbdb3f6845f8ddad9a",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 032"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 3d546f42."
+}
