@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T07:09:47.709Z",
+ "lastCheckedAt": "2026-11-24T07:11:36.128Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -2316,10 +2316,17 @@
     "ref": "codex/cursor-glossary-nov24-2026-release-eighteen-scoped-curation-preflight",
     "source": "c3e701f23fbe682b0100921af3058acfb7ca8690",
     "workflowRevision": "8c6481a975fc0619de0cadfbc53e89e83d024135",
-    "status": "in_progress",
+    "status": "completed",
     "runId": 45345315664,
-    "conclusion": null,
-    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45345315664"
+    "conclusion": "failure",
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45345315664",
+    "finding": "The harness targeted a temporary registry root. The native builder requires its standard shared registry path; no curation result was available.",
+    "retry": {
+     "ref": "codex/cursor-glossary-nov24-2026-release-eighteen-curation-native-path",
+     "workflowRevision": "782f683d353985080588745a2c8f4a4f8d4ad3e9",
+     "source": "c3e701f23fbe682b0100921af3058acfb7ca8690",
+     "status": "dispatch_pending"
+    }
    }
   }
  },
@@ -22020,7 +22027,17 @@
       "reservedAt": "2026-11-24T07:01:22.455Z",
       "idempotencyKey": "6cef6a80c2d77ba8ea505243d85fb1378eaa48987687b1e3d3c46d7ec5e2b7c3",
       "runId": "run-48bbc1b6-38dd-41a6-83bd-a489706f1b57",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "5b136325d724ea94a4905c3e30b5a4f8802d009e",
+       "reportSha256": "f0ebcb67d6a8fb5fb72b912bd099a1e307a099c579d7a5f45e7807d2835b73e2",
+       "summary": {
+        "cases": 12,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "liaoshi/042": {
       "key": "liaoshi/042",
@@ -22043,7 +22060,22 @@
       "reservedAt": "2026-11-24T07:01:25.118Z",
       "idempotencyKey": "405111c3978af47c9e81931f55587d2fa7eff73352afb01c9a5e383f3f2b0a64",
       "runId": "run-60bc5a68-5b06-4a7b-a93c-557a8a8e5d75",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "review-hold",
+       "head": "fea442758c85a13261f58334a9b5d0cc4b68f69c",
+       "reportSha256": "9a17a49df52f1aa2b135748a3a12872e6fc66f4a24902398a49da7b7944e8d54",
+       "summary": {
+        "cases": 13,
+        "holds": [
+         {
+          "caseId": "sha256:6cc6d59d63887ca63f4843924c17fd387d763f811a127899dc19de239a5d8506",
+          "verdict": "hold"
+         }
+        ],
+        "repairs": 0
+       }
+      }
      },
      "shiji/064": {
       "key": "shiji/064",
@@ -22066,7 +22098,17 @@
       "reservedAt": "2026-11-24T07:01:27.606Z",
       "idempotencyKey": "d3d5ce424152f71a3bfb7a69dff8b173d98d4978fe7bdc5e9e7f19dfafe2db8c",
       "runId": "run-4fbe6d9c-d719-40a8-9c2c-64cbfbe6fdd3",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "5ac284fffb0d2fedc59fa6100082bcf29cf62e0a",
+       "reportSha256": "ccf9f20a3ba2600b615c41fde522e3a72d9e3db63c08dd4a6aefec9135855f9b",
+       "summary": {
+        "cases": 14,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "qingshigao/026": {
       "key": "qingshigao/026",
@@ -22089,7 +22131,22 @@
       "reservedAt": "2026-11-24T07:01:30.243Z",
       "idempotencyKey": "3e7ab3cdd1d0b77152f5600acabcdcc1b2828ffe2f8828fcb395b0bbc3223f09",
       "runId": "run-d5626099-dce0-4478-a5ef-279d6ee56ba0",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "review-hold",
+       "head": "5afd385170c326c3bfc3e126466dc36515541af8",
+       "reportSha256": "412e0b9108f24797aaa858b5a390320dbe8fdfbfa45a9e2a840462dba1023d5b",
+       "summary": {
+        "cases": 17,
+        "holds": [
+         {
+          "caseId": "sha256:5b619c6e607e721ab4b3431d368d411c5ba83ce1ac7df037d27c4b2ab64c540f",
+          "verdict": "hold"
+         }
+        ],
+        "repairs": 0
+       }
+      }
      },
      "liangshu/008": {
       "key": "liangshu/008",
@@ -22112,7 +22169,17 @@
       "reservedAt": "2026-11-24T07:01:32.849Z",
       "idempotencyKey": "d34fba39d201ac21e067a6bdde8da9a05c7c9b2a2d91fc11e341ef219150cb26",
       "runId": "run-aa7c9af4-44b2-4464-95de-7ef18f5a30c2",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "4e546d031f6784fbdd19d664648a080242df5676",
+       "reportSha256": "db39592a609c1abfe36dac3f475501f3a8e6aa2d2ac84dd85b2bef19ea1eea70",
+       "summary": {
+        "cases": 26,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "xinwudaishi/020": {
       "key": "xinwudaishi/020",
@@ -22135,7 +22202,17 @@
       "reservedAt": "2026-11-24T07:01:35.516Z",
       "idempotencyKey": "d26818dbe88460d0a98eb665859f4e07dbcca81f3fd4e2de9df683a2064efc93",
       "runId": "run-e870aaac-f79c-4764-885b-f3c823116cfa",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "83e73d5a05e6e8c8c0893ef5520bc4bfb36d0df4",
+       "reportSha256": "d30dcd554714095c804dc6ca3f04e00d38f09f3507ed6639d25951c29daad9f9",
+       "summary": {
+        "cases": 31,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "liangshu/023": {
       "key": "liangshu/023",
@@ -22158,7 +22235,17 @@
       "reservedAt": "2026-11-24T07:01:38.201Z",
       "idempotencyKey": "360998bac2475d69a7330b3d16a279356c4ed4ce8978985ca1bb21dda6692415",
       "runId": "run-aff7c49c-1f0b-4243-b138-6beab4a0be7c",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "7faefea0e3b527904a905227ba0928b5cfbe0e7b",
+       "reportSha256": "d2e54179390957907c26856e8d44f8c9313e3015a06aa35be436130ac65c4b74",
+       "summary": {
+        "cases": 35,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "xintangshu/012": {
       "key": "xintangshu/012",
@@ -22181,7 +22268,17 @@
       "reservedAt": "2026-11-24T07:01:40.865Z",
       "idempotencyKey": "566dfd6e5b77873885a6433f2129c71def7797fe185cb5e5f1a75420435e2da3",
       "runId": "run-b6027a6a-8e58-487d-91e5-66458dd37938",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "a604e50c6a58f82e663f7200a4bd661399031228",
+       "reportSha256": "9ee70942386e57e2cb920f8c91a1797c68685dde57000277a2c5cc755fe7c8d7",
+       "summary": {
+        "cases": 36,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "songshu/096": {
       "key": "songshu/096",
@@ -22204,7 +22301,17 @@
       "reservedAt": "2026-11-24T07:01:43.441Z",
       "idempotencyKey": "2b9e1f1d39595f7cff428ec7800c5efc304210571c65e7ad5610598185a23e27",
       "runId": "run-2e3d7443-0ace-4941-8563-84ea19426053",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "4d5d285f1fb2f2d24762bd63418ec52d5bba0642",
+       "reportSha256": "3db22fda564fddbd6b54d5590b592056af2e7bffa261202c98ec35314b3efe05",
+       "summary": {
+        "cases": 40,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      },
      "houhanshu/126": {
       "key": "houhanshu/126",
@@ -22227,7 +22334,17 @@
       "reservedAt": "2026-11-24T07:01:46.088Z",
       "idempotencyKey": "6dbf27c3d8cf38611424440b4ad28b817d70985706d4ed2b6cf39be277af1331",
       "runId": "run-5eb3735b-f1b1-4eb2-a8a0-c55e67f4ae4b",
-      "observedAt": "2026-11-24T07:02:01.258Z"
+      "observedAt": "2026-11-24T07:02:01.258Z",
+      "capture": {
+       "status": "pending-native-certification",
+       "head": "f8994d75f75b338b5b77429e5f0a56cdd09cd91b",
+       "reportSha256": "d2fd00f9626552af84ca34471402f0fa35ad2fa0b6fbcefc25661274547b19c5",
+       "summary": {
+        "cases": 41,
+        "holds": [],
+        "repairs": 0
+       }
+      }
      }
     },
     "certificationBatches": [
@@ -22462,8 +22579,127 @@
          "cases": 27
         }
        ],
-       "status": "dispatch_pending"
+       "status": "in_progress",
+       "runId": 45345896796,
+       "conclusion": null
       }
+     },
+     {
+      "ref": "codex/cursor-glossary-nov24-2026-recovered-native-certify-second",
+      "workflowRevision": "795f6421e7819506b237248834dcc705d5ebd93c",
+      "source": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+      "status": "dispatch_pending",
+      "jobs": [
+       {
+        "key": "qingshigao/120",
+        "agentId": "bc-7d924c3e-6338-4a3e-ba11-52388f267617",
+        "runId": "run-f45dce8a-9d7d-4fd1-800f-d600e9cb7200",
+        "owner": "bc-fe43ebdf-900b-4477-abde-dd6496d385a0",
+        "packetSha256": "aab0d34fca60d6a34a5c1e5372a8cca38ca1e349bb05a6e6f054c27613d0e98e",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-120/independent-identity-report.json",
+        "evidenceHead": "05b285156dc12ab926e205f884e12a8897d35430",
+        "reportSha256": "7ef5dbd964d18f9e963806d0e789a4d164659873db7e9fe6da1f702c32af27ef",
+        "cases": 3
+       },
+       {
+        "key": "liangshu/008",
+        "agentId": "bc-5c1d9063-5a82-4be2-90d6-08cd90298ca8",
+        "runId": "run-aa7c9af4-44b2-4464-95de-7ef18f5a30c2",
+        "owner": "bc-5782b067-a4f3-49a7-936b-07d6064d1de5",
+        "packetSha256": "4beb3f72d592abc413ac5f405d85f66f504aeb063f90b10cae19123ed2b3110f",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-008/independent-identity-report.json",
+        "evidenceHead": "4e546d031f6784fbdd19d664648a080242df5676",
+        "reportSha256": "db39592a609c1abfe36dac3f475501f3a8e6aa2d2ac84dd85b2bef19ea1eea70",
+        "cases": 26
+       },
+       {
+        "key": "xinwudaishi/020",
+        "agentId": "bc-aa83281c-5ba5-4371-a97d-38e4ceb65a73",
+        "runId": "run-e870aaac-f79c-4764-885b-f3c823116cfa",
+        "owner": "bc-5782b067-a4f3-49a7-936b-07d6064d1de5",
+        "packetSha256": "ae6327e29bf6b9754489c997b600b8f51b60f6182d348200f7959c5f46e8e50d",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/xinwudaishi-020/independent-identity-report.json",
+        "evidenceHead": "83e73d5a05e6e8c8c0893ef5520bc4bfb36d0df4",
+        "reportSha256": "d30dcd554714095c804dc6ca3f04e00d38f09f3507ed6639d25951c29daad9f9",
+        "cases": 31
+       },
+       {
+        "key": "liangshu/023",
+        "agentId": "bc-9509a5c7-8ebf-43c2-9313-fc0594148d26",
+        "runId": "run-aff7c49c-1f0b-4243-b138-6beab4a0be7c",
+        "owner": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+        "packetSha256": "eff30ac4708033f7452ce9830420f9480631c256b2cbb6eb98834517015d12fb",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/independent-identity-report.json",
+        "evidenceHead": "7faefea0e3b527904a905227ba0928b5cfbe0e7b",
+        "reportSha256": "d2e54179390957907c26856e8d44f8c9313e3015a06aa35be436130ac65c4b74",
+        "cases": 35
+       },
+       {
+        "key": "xintangshu/012",
+        "agentId": "bc-633e0883-fd3f-4215-b764-d30fea93e045",
+        "runId": "run-b6027a6a-8e58-487d-91e5-66458dd37938",
+        "owner": "bc-a1d9fb49-57cd-49f8-a504-e22bc5dcc56f",
+        "packetSha256": "ea3c2b851b5dc8f7ee8a5219ab02d85e502b77d8a65b0227e9d98856ef4ab4ff",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/xintangshu-012/independent-identity-report.json",
+        "evidenceHead": "a604e50c6a58f82e663f7200a4bd661399031228",
+        "reportSha256": "9ee70942386e57e2cb920f8c91a1797c68685dde57000277a2c5cc755fe7c8d7",
+        "cases": 36
+       },
+       {
+        "key": "songshu/096",
+        "agentId": "bc-e596112f-a8c7-44d7-ae09-074032992c58",
+        "runId": "run-2e3d7443-0ace-4941-8563-84ea19426053",
+        "owner": "bc-fe43ebdf-900b-4477-abde-dd6496d385a0",
+        "packetSha256": "b3c150e3fb5bd73fbdf9f493ef897e6eb56578a426ff6a833f67db173654af9a",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/songshu-096/independent-identity-report.json",
+        "evidenceHead": "4d5d285f1fb2f2d24762bd63418ec52d5bba0642",
+        "reportSha256": "3db22fda564fddbd6b54d5590b592056af2e7bffa261202c98ec35314b3efe05",
+        "cases": 40
+       },
+       {
+        "key": "houhanshu/126",
+        "agentId": "bc-5928d86b-2d31-4ab9-a836-f82ffd487442",
+        "runId": "run-5eb3735b-f1b1-4eb2-a8a0-c55e67f4ae4b",
+        "owner": "bc-5782b067-a4f3-49a7-936b-07d6064d1de5",
+        "packetSha256": "7a156518e7477cd6b49261f69a58fc718ba8f8aa15d00905e6a281ca72d955ae",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/houhanshu-126/independent-identity-report.json",
+        "evidenceHead": "f8994d75f75b338b5b77429e5f0a56cdd09cd91b",
+        "reportSha256": "d2fd00f9626552af84ca34471402f0fa35ad2fa0b6fbcefc25661274547b19c5",
+        "cases": 41
+       }
+      ],
+      "artifact": "recovered-native-certify-second-evidence"
+     },
+     {
+      "ref": "codex/cursor-glossary-nov24-2026-retrospective-native-certify-current",
+      "workflowRevision": "45e9c8ad388dd1407b6d0962905f9deaf5e4fb72",
+      "source": "32d461ef5297344e103a040cf9ee28fb05837535",
+      "status": "dispatch_pending",
+      "jobs": [
+       {
+        "key": "liaoshi/106",
+        "agentId": "bc-92537d3b-6e49-4933-90f4-4fbc629d5090",
+        "runId": "run-48bbc1b6-38dd-41a6-83bd-a489706f1b57",
+        "owner": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+        "packetSha256": "5ff8fcae158682bbf7bc2be43e675c4d2e0996f8ca876b5a20371ac7cb55ca5e",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-106/independent-identity-report.json",
+        "evidenceHead": "5b136325d724ea94a4905c3e30b5a4f8802d009e",
+        "reportSha256": "f0ebcb67d6a8fb5fb72b912bd099a1e307a099c579d7a5f45e7807d2835b73e2",
+        "cases": 12
+       },
+       {
+        "key": "shiji/064",
+        "agentId": "bc-a235c897-af47-4a42-9a1a-afbf8a402361",
+        "runId": "run-4fbe6d9c-d719-40a8-9c2c-64cbfbe6fdd3",
+        "owner": "bc-47648f6a-9ca6-438d-9cd5-6f14a61294c2",
+        "packetSha256": "fcc94b45c395dadada6bd5d5718e13dae7ce69236550f6e18ad7e27c2d10ff09",
+        "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/independent-identity-report.json",
+        "evidenceHead": "5ac284fffb0d2fedc59fa6100082bcf29cf62e0a",
+        "reportSha256": "ccf9f20a3ba2600b615c41fde522e3a72d9e3db63c08dd4a6aefec9135855f9b",
+        "cases": 14
+       }
+      ],
+      "artifact": "retrospective-native-certify-current-evidence"
      }
     ],
     "ownerContinuations": [
