@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "worker": "cursor-nov24-retained-blocked-owner-3",
+  "idempotencyKey": "fe6c05e3310ccd12e4ea8a19613b06b17abf2989ea7910cee78b8b03c5cb0957",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "notes": "Owner handoff only; no canonical edits, deploy, or merge.",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "039"
+  },
+  "observedBlocker": "Actual extractor identity required for every chunk",
+  "handoffBranch": "cursor/nov24-retained-blocked-owner-houhanshu-039-e9e1b1",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/houhanshu/039.json",
+      "gitBlob": "7e063426dd97a52d1be98c6b180cd01561fc3774",
+      "contentSha256": "sha256:f7e56ebb74dc5567e68542072de4c5ff555e9b75fbc8069dd5dedfef1b3d174c"
+    },
+    "extraction": {
+      "path": "data/people/extractions/houhanshu/039.json",
+      "gitBlob": "cba860752e8e5b45dc2fde62342404ee38a349dd",
+      "contentSha256": "sha256:d846df6e55f0e9188a56e6f4d82bce08dd019a1a00257c25c7e8b2f9ced68373"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/houhanshu/039.json",
+      "gitBlob": "2e60a310d58171ee10a0be50a02ca88b0328eb74",
+      "contentSha256": "sha256:f44a4863cc618ce58568b37860009bcf8e397f0e3a6b9ebef9d19202b483929b"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/houhanshu/039.json",
+      "gitBlob": "943058bcba6c162dcaef9555acd5770b80ba8713",
+      "contentSha256": "sha256:5e6d88f0a590b5e5000cf15e1dfa5efe46ce3ea73bca9069f50d9b9432f5c366"
+    }
+  },
+  "testedRecoveryFindings": {
+    "runLevelAgentId": null,
+    "chunkProvenanceGaps": [
+      "001",
+      "003",
+      "004",
+      "005"
+    ],
+    "chunkProvenancePresent": [
+      {
+        "chunkId": "002",
+        "agentId": "bc-5ecd85e0-b948-4dc7-a235-500ac8e90db0",
+        "runId": "run-309ed9d8-1f93-46d1-8da7-18c4a0589102"
+      }
+    ],
+    "extractionContentHash": "sha256:31c14728fcfc0216f720fd48b3db3db354aebba7268d64f1b589a98e48802887",
+    "queueEvidence": {
+      "cursorSdkClaimCommit": "33fec8d2e1e743cb80862d97012876edb60fd245",
+      "cursorSdkWorker": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "readyCommit": "431e3980e8339d2639d05b9364207a0392efaca6",
+      "readyWorker": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "chapterFingerprintAtReady": "sha256:c03befaa19158dd7c000a62dc2c58f96a7dc3c8a34a10faf35a710fa36680db5",
+      "chapterFingerprintCurrent": "sha256:c03befaa19158dd7c000a62dc2c58f96a7dc3c8a34a10faf35a710fa36680db5",
+      "fingerprintMatchAtReady": true,
+      "model": "grok-4.5-chunked",
+      "chunk002Evidence": {
+        "agentId": "bc-5ecd85e0-b948-4dc7-a235-500ac8e90db0",
+        "runId": "run-309ed9d8-1f93-46d1-8da7-18c4a0589102",
+        "completedAt": "2026-08-27T00:22:13.682Z"
+      },
+      "claimsUnchangedSincePromotion": false,
+      "promotionCommit": "2365a46d8567e31c0e4d2fef7ee97186bb24ac5a",
+      "note": "Mixed lane: cursor-sdk queue worker; chunk 002 retains cloud agent receipt; other chunks lack agentId."
+    },
+    "claimsUnchangedSincePromotion": false
+  },
+  "concreteProposedPatches": [
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/houhanshu/039.json",
+      "perChunk": [
+        {
+          "chunkId": "001",
+          "proposedAgentId": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+          "evidence": "queue ready claim 431e398"
+        },
+        {
+          "chunkId": "002",
+          "proposedAgentId": "bc-5ecd85e0-b948-4dc7-a235-500ac8e90db0",
+          "evidence": "retained chunk metadata"
+        },
+        {
+          "chunkId": "003",
+          "proposedAgentId": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+          "evidence": "queue ready claim 431e398"
+        },
+        {
+          "chunkId": "004",
+          "proposedAgentId": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+          "evidence": "queue ready claim 431e398"
+        },
+        {
+          "chunkId": "005",
+          "proposedAgentId": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+          "evidence": "queue ready claim 431e398"
+        }
+      ],
+      "proposedRunLevelAgentId": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "reason": "No fabrication of new bc- IDs; fill null chunks from queue worker, preserve chunk 002 cloud receipt."
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "extractionContentSha256": "sha256:d846df6e55f0e9188a56e6f4d82bce08dd019a1a00257c25c7e8b2f9ced68373",
+    "queueBranch": "origin/codex/people-work-queue"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Pinned independent date audit unchanged.",
+    "editorial": "Pinned editorial decisions unchanged.",
+    "identity": "Native identity gates still require authorAgentIds including run-level extractor after provenance patch."
+  },
+  "holds": [
+    {
+      "kind": "chunk-level-agent-mapping",
+      "reason": "Chunks 001/003-005 lack direct per-chunk promotion receipts; reviewer must accept queue-worker attribution or hold."
+    }
+  ]
+}
