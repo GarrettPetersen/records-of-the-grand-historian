@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "102"
+  },
+  "ownerAgentId": "bc-8c84e0ce-0d85-42ce-bf30-3ff08e9ee892",
+  "worker": "cursor-nov24-retained-staging-w2-o2",
+  "idempotencyKey": "3b690b67cd82bd11f35b4fdca3221c0d9c8dca3071cd186903608e247f3f68cb",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-102-ee892",
+  "extractionBytes": 39846,
+  "inputBlobWitness": {
+    "source": "124d4f99061cf7d38ddaa448e3cf898a2a50d0a8",
+    "extraction": "2e0bb59a1323ef916fb87b76821abd7a5b08fa62",
+    "dateAudit": "5385700ce1d95234e8dc97cd3cbedf64dbd6bd01",
+    "editorial": "481e811d3f80d5d219eff98950b6c69461ef37e9"
+  },
+  "sealedInputs": {
+    "source": "sha256:0ac92e280b927a505d63b7eac55aedb8fd834aaa9b619de1337298bde08eae5a",
+    "extraction": "sha256:ffc0edf9d55b85500f2edf3e705973b439ae63d8cae8b3f037ffe3a23f68a65d",
+    "dateAudit": "sha256:fed622aa204e12abb8b49130fc744664f4a4fc704bbe61ad8399aacf835b45a5",
+    "editorial": "sha256:95bd9393e630a7c0fb60a73d4a8048921d56d9a1a6e921d47250f59f0ca222da"
+  },
+  "sourceCoverage": {
+    "titleEnglish": "Volume 102 Treatises 55: Punishment and Law 1",
+    "titleChinese": "卷一百〇二 志第五十: 刑法一",
+    "chineseUnits": 357,
+    "translatedCount": 357,
+    "sentenceCount": 357,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "notIndependentApproval": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 102",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/102: 1 extraction(s), 5 local people, 14 mentions, 50 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionValidateCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/yuanshi/102.json",
+    "extractionValidateSummary": "data/people/extractions/yuanshi/102.json: ok (5 people, 14 mentions, 50 claims, 329 candidates)",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book yuanshi --chapter 102",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditCurrent": true,
+    "dateAuditStale": false,
+    "dateAuditReviewedAt": "2026-09-23T12:40:40.371Z",
+    "dateAuditFindingCount": 1,
+    "dateAuditSummary": "Complete initial source-scope chronology audit of all 357 Chinese units, all 19 temporal or active-hint items, and all 5 people. This Yuan criminal-law treatise combines named reigns with retrospective legislative summaries, work-title associations, and a later tax-grant reference. Every extracted date and active hint is retained only as an evidence-grounded research hold pending independent identity, ownership, conversion, and endpoint review; no source, extraction, or canonical person data was changed.",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "editorialProposalCount": 5,
+    "editorialDecisionCount": 5,
+    "proposedTranslationRepairs": 0,
+    "canonicalEdits": false
+  },
+  "substantiveFindings": [
+    "Git blob witness matched pinned staging inputs for all four sealed paths (extraction 39846 bytes).",
+    "Law treatise chapter: reviewed all 357 units, 5 people and legislative chronology claims; editorial repairs are applied and aligned with source. Retained date audit preserves one chapter-level research hold for reign-label and legislative-summary chronology without owner amendment.",
+    "No new definite English omission, unsupported chronology edit, identity merge, or extraction coverage gap identified in this owner pass; retained research holds stay explicit."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "yuanshi:102:date-hold-1",
+      "lane": "chronology",
+      "status": "research-blocked",
+      "itemCount": 24,
+      "problem": "The source’s reign labels, retrospective legislative summaries, work associations, and tax-grant context do not by themselves establish a personally owned life event or justify every imported Western interval endpoint.",
+      "action": "Retain all current chronology as explicit research holds. Before approval, verify each identity, dated Chinese context, event ownership, reign conversion, and interval endpoint; distinguish institutional, work, or retrospective evidence from a lifespan or continuous activity.",
+      "preserve": true
+    }
+  ],
+  "chapterReady": true,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "host-native-final-independent-review",
+    "notes": "Owner handoff is not independent date, editorial, or identity approval. Host supplies sealed final review packets."
+  },
+  "reproduce": {
+    "witnessBlobs": "git hash-object data/yuanshi/102.json data/people/extractions/yuanshi/102.json data/people/date-audits/yuanshi/102.json data/people/editorial-decisions/yuanshi/102.json",
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 102",
+    "verifyDates": "npm run people:dates:verify -- --book yuanshi --chapter 102"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; no sealed input, source, or extraction edits."
+}
