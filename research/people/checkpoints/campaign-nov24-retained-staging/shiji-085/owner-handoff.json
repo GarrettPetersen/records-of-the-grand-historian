@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "085"
+  },
+  "ownerAgentId": "bc-d07043cc-9acf-4e58-b237-fd49d94bdcdd",
+  "workerId": "cursor-nov24-retained-staging-w3-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "1ee89e6f53d2c5f47250ac4c4368b8633472a3b3e47443a09c969f8b62473b56",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-085-bdcdd",
+  "inputBlobWitness": {
+    "source": "756b0c6368b20a46faa3177fc4fe1914ca70ee66",
+    "extraction": "4a3af09dfa0958d14dd08b8c7b9cb9216c89b6c6",
+    "dateAudit": "2c8106d57c6393c78df7bf4feab9c825d6bfae3f",
+    "editorial": "6a9914c127f9d9a47923deb6538f6a0255819e4f"
+  },
+  "sealedInputs": {
+    "source": "sha256:327228d78d4a8bff5670d7459734dd829954831c6b00d3afd2d0ef23273af282",
+    "extraction": "sha256:a61037a58f49325d13bcacc27b95b411b7793c1e3deceb03c6ead99edf85a28b",
+    "dateAudit": "sha256:62badd20046c085cce5138eb8d42e84e71b76ed1dbae899b732c26397c847d72",
+    "editorial": "sha256:a06492aeb06a3f7384bca94caf6c82eebc2f09085020ac8bdb573f92d153cda5"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 98,
+    "metaSentenceCount": 98,
+    "metaTranslatedCount": 98,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "Scoped person data validation passed for shiji/085: 1 extraction(s), 21 local people, 385 mentions, 255 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 085",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book shiji --chapter 085",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditCurrent": true,
+    "dateAuditFindings": 2,
+    "dateAuditReviewedAt": "2026-09-24T01:20:00Z",
+    "extractionValidate": "data/people/extractions/shiji/085.json: ok (21 people, 385 mentions, 255 claims, 434 candidates)",
+    "editorialProposalCount": 2,
+    "proposedTranslationRepairs": 0,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Complete independent audit of all 98 Chinese units, 94 temporal or active-hint checks, and 21 people. Explicit Qin reign years, accessions, appointments, deaths, and dated events are supported. 歲餘 does not establish exact BC endpoints, and the historian/Confucius allusions do not provide the attached life-date claims. No source or canonical extraction was edited.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "shiji:085:date-hold-001",
+      "kind": "reviewed-chronology-hold",
+      "items": [
+        "claim-28",
+        "claim-154"
+      ],
+      "problem": "歲餘 is a relative duration after a prior event, not an exact BC 236–235 interval.",
+      "action": "Retain a source-linked research hold and verify endpoints independently.",
+      "preserved": true
+    },
+    {
+      "id": "shiji:085:date-hold-002",
+      "kind": "reviewed-chronology-hold",
+      "items": [
+        "claim-68",
+        "claim-69",
+        "hints-p020",
+        "hints-p021",
+        "p020",
+        "p021"
+      ],
+      "problem": "The historian and Confucius references are undated allusions, not chapter-internal life chronology.",
+      "action": "Retain source-specific research holds before approving any life interval.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified pinned git blob witnesses; full literal and idiomatic English scan; npm run people:validate; npm run people:dates:verify (not stale); people:validate-extraction; retained independent date-audit and editorial artifacts; no canonical source or extraction edits.",
+    "completedAt": "2026-11-24T16:13:24.247Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 085",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 085",
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/shiji/085.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; push without altering sealed inputs."
+}
