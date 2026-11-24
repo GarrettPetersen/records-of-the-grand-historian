@@ -598,7 +598,7 @@ jobs:
             return {schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope:pins.scope,agentId:record.agentId,runId:record.runId,sourcePacketSha256,transportSha256:seal.sha256,reportSha256:hash(reportBytes),transportFile,reportFile};
           });
           const aggregate=assembleChapterIdentityReviewParts(packet.plan,transportPackets,reports,parts.map(r=>r.agentId),packet.authorAgentIds,packet.reviewCaseIds);
-          assert.equal(aggregate.reviews.length,packet.reviewCaseIds.length);
+          assert.equal(aggregate.reviews.length,packet.reviewCaseIds?.length ?? packet.plan.cases.length);
           if(pins.delta)assert.equal(aggregate.reviews.length,14);
           const reportBytes=Buffer.from(JSON.stringify(aggregate,null,2)+'\n');
           const job={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:pins.scope,agentId:pins.actualAgentId,runId:parts[0].runId,authorAgentIds:packet.authorAgentIds,sourcePacketSha256,reportSha256:hash(reportBytes),transportPolicy:receipt.transportPolicy,parts};
