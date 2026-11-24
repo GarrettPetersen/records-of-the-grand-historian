@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "liangshu/047",
+  "reviewerAgentId": "bc-06f7fa9b-c14e-4b38-b870-36a1c21a053d",
+  "ownerAgentId": "bc-55fcc16a-2fa6-4a05-8ec9-d1a96ced0a7b",
+  "ownerRevision": "612dec17eedc4ae3ebbca3cdaf54610b1231d5b9",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-047/owner-primary-witness-delta.json",
+  "ownerProposalSha256": "a11a311e57e135f503ffa6512bfb773391ddcb300a1e55a8ec87db80b5c52b9f",
+  "previousReviewHead": "f79af9687b492638aa56e381e06eae1ef99d6a82",
+  "priorHoldArtifact": "research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-047/independent-identity-hold-p026.json",
+  "verdict": "approve-supported-patch",
+  "disposition": {
+    "summary": "Owner concur: 荀匠母 is a non-source Chinese gloss on s0050; the unnamed mother of Xun Jiang remains a grounded unknown entailed by 外祖孫謙 addressing Xun Jiang. Proposal correctly removes the false zh blocking surface without dropping the maternal intermediary or rewriting p025–p017 links.",
+    "rejectsOwnerWitnesses": [
+      {
+        "localId": "liangshu:047:p017",
+        "quote": "之",
+        "reason": "Grammar particle in 誡之曰; assertDossierPrimaryWitness fails and must not stand in for p017 or p026 identity on s0050."
+      }
+    ],
+    "acceptsPrimaryLineWitnesses": [
+      {
+        "localId": "liangshu:047:p025",
+        "book": "liangshu",
+        "chapter": "047",
+        "unitId": "s0050",
+        "quote": "外祖",
+        "zhContext": "外祖孫謙誡之曰：「主上以孝治天下，汝行過古人，故發明詔，擢汝此職。",
+        "enContext": "His maternal grandfather Sun Qian warned him: \"The throne rules by filial piety; your conduct exceeds the ancients, hence the edict and this appointment.",
+        "nativeAssert": "pass"
+      },
+      {
+        "localId": "liangshu:047:p025",
+        "book": "liangshu",
+        "chapter": "047",
+        "unitId": "s0050",
+        "quote": "孫謙",
+        "zhContext": "外祖孫謙誡之曰：「主上以孝治天下，汝行過古人，故發明詔，擢汝此職。",
+        "enContext": "His maternal grandfather Sun Qian warned him: \"The throne rules by filial piety; your conduct exceeds the ancients, hence the edict and this appointment.",
+        "nativeAssert": "pass"
+      }
+    ]
+  },
+  "closedCases": [
+    {
+      "caseId": "sha256:05ac81d7030ee6bbf75df95259c56283cb8eca4a147be3a6f8b566eb8fcf2af3",
+      "localPersonIds": ["liangshu:047:p026"],
+      "canonicalPersonId": "per_8DC57RGJJEJZ3GV0C4SG",
+      "closure": "witness-hold-resolved-by-extraction-patch",
+      "unresolvedIdentity": true,
+      "reason": "Hold closed on the false primary witness issue: remove zh:荀匠母. After patch, p026 is English-only descriptive kinship (Mother of Xun Jiang) with maternal line grounded by p025 on s0050; no chapter Han name surface for the mother and no false merge."
+    }
+  ],
+  "heldCases": [],
+  "dependencies": {
+    "inputBlobsUnchanged": {
+      "source": "2b34f57b4101b6d8b69980196d2e3f50c0245868",
+      "extraction": "b66eac7df91a4872d7d95bbeaadb47bb4b7092d9",
+      "dateAudit": "26056236556e0c971474612d48b0c7f371e84227",
+      "editorial": "6ff45dbc3d9757a4edbdb01d9b35ae0ab2870b27"
+    },
+    "affectedPersonIds": ["p026"],
+    "affectedClaimIds": ["liangshu:047:c0107"],
+    "affectedRelations": [
+      "liangshu:047:p025 family-relationship parent-of p026 (unchanged)",
+      "liangshu:047:p026 family-relationship parent-of p017 (unchanged)",
+      "liangshu:047:p025 family-relationship ancestor-of p017 intermediaryPersonIds p026 (unchanged)"
+    ],
+    "chronologyDelta": null,
+    "editorialDelta": null,
+    "unrelatedReviewRowsPreserved": 116,
+    "postApplySteps": [
+      "Owner applies supportedPatch to data/people/extractions/liangshu/047.json",
+      "Amend independent-identity-report-part-002.json held row to approve per identityReportAmendment below",
+      "Re-run dossier transport/record only after extraction blob changes"
+    ]
+  },
+  "supportedPatch": {
+    "artifact": "data/people/extractions/liangshu/047.json",
+    "basisBlob": "b66eac7df91a4872d7d95bbeaadb47bb4b7092d9",
+    "personId": "p026",
+    "localPersonId": "liangshu:047:p026",
+    "rationale": "s0050 names Sun Qian as maternal grandfather (外祖孫謙) and addresses Xun Jiang; it does not quote 荀匠母 or 母 as a mother name. English Mother of Xun Jiang stays; zh display and name claim must be null.",
+    "operations": [
+      {
+        "op": "replace",
+        "path": "people[id=p026]/tuple[1]/zh",
+        "before": "荀匠母",
+        "after": null
+      },
+      {
+        "op": "replace",
+        "path": "people[id=p026]/identityNames[descriptive-kinship]/zh",
+        "before": "荀匠母",
+        "after": null
+      },
+      {
+        "op": "replace",
+        "path": "claims[id=c0107]/value/zh",
+        "before": "荀匠母",
+        "after": null
+      }
+    ],
+    "compactMaterialization": {
+      "peopleRow": [
+        "p026",
+        ["Mother of Xun Jiang", null, null],
+        "historical",
+        "Family Member",
+        {"n": [], "r": ["p017", "p023", "p025"], "a": ["AD 502-519"], "p": ["Liang"], "x": "Strongly inferred intermediary: Sun Qian is maternal grandfather of Xun Jiang."},
+        [[{"kind": "descriptive-kinship", "en": "Mother of Xun Jiang", "zh": null}, "strongly-inferred", ["s0050"]]],
+        [["family-member", "strongly-inferred", ["s0050"]]]
+      ],
+      "claimRow": [
+        "p026",
+        "name",
+        {"kind": "descriptive-kinship", "en": "Mother of Xun Jiang", "zh": null},
+        "strongly-inferred",
+        ["s0050"]
+      ]
+    }
+  },
+  "identityReportAmendment": {
+    "artifact": "research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-047/independent-identity-report-part-002.json",
+    "caseId": "sha256:05ac81d7030ee6bbf75df95259c56283cb8eca4a147be3a6f8b566eb8fcf2af3",
+    "before": {
+      "verdict": "hold",
+      "unresolvedIdentity": true
+    },
+    "after": {
+      "verdict": "approve",
+      "canonicalPersonId": "per_8DC57RGJJEJZ3GV0C4SG",
+      "membershipReviewed": true,
+      "membershipFingerprint": "sha256:e2966dd2969e02dd24b57498c0bd2f387237cefed6911a536d3fae8bac6697ea",
+      "ambiguityReviewed": true,
+      "unresolvedIdentity": true,
+      "reason": "After extraction patch: p026 has no source-quoted zh identity (English Mother of Xun Jiang only). Maternal line in s0050 is certified via Sun Qian 外祖孫謙 (p025); inferred mother between p025 and Xun Jiang (p017) stays a grounded unknown without fabricating 荀匠母.",
+      "sourceWitnesses": [
+        {
+          "localId": "liangshu:047:p025",
+          "book": "liangshu",
+          "chapter": "047",
+          "unitId": "s0050",
+          "quote": "外祖"
+        },
+        {
+          "localId": "liangshu:047:p025",
+          "book": "liangshu",
+          "chapter": "047",
+          "unitId": "s0050",
+          "quote": "孫謙"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "ownerProposalSha256Verified": true,
+    "priorHoldPreserved": true,
+    "unrelatedFourPartReportsUnchanged": true,
+    "scopedExtractionBefore": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/liangshu/047.json",
+      "status": "ok"
+    },
+    "scopedExtractionCandidate": {
+      "command": "node scripts/validate-people-extraction.mjs (simulated patch in memory)",
+      "status": "ok"
+    },
+    "scopedPeopleValidateBefore": {
+      "command": "npm run people:validate -- --book liangshu --chapter 047",
+      "status": "PASS",
+      "extractionBlob": "b66eac7df91a4872d7d95bbeaadb47bb4b7092d9"
+    },
+    "englishFieldsCompared": {
+      "s0050": {
+        "zh": "外祖孫謙誡之曰：「主上以孝治天下，汝行過古人，故發明詔，擢汝此職。",
+        "enLiteral": "His maternal grandfather Sun Qian admonished him, saying: \"The sovereign rules the realm by filial piety; your conduct surpasses the ancients, and therefore the bright edict was issued and you were raised to this post.",
+        "enIdiomatic": "His maternal grandfather Sun Qian warned him: \"The throne rules by filial piety; your conduct exceeds the ancients, hence the edict and this appointment.",
+        "p026EnPreferredBeforeAfter": "Mother of Xun Jiang / Mother of Xun Jiang (unchanged)"
+      }
+    },
+    "nativeWitnessAssertions": {
+      "p025_外祖_s0050": "pass",
+      "p025_孫謙_s0050": "pass",
+      "p026_荀匠母_s0050": "fail-expected",
+      "p017_之_s0050": "fail-rejected"
+    },
+    "notes": "[CF-Pages-Skip] Delta and proposal only; canonical extraction bytes at ownerRevision unchanged in this commit."
+  }
+}
