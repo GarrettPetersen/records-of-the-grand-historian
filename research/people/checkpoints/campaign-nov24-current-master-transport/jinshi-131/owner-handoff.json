@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "131"
+  },
+  "ownerAgentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+  "campaignWorker": "cursor-nov24-current-master-5",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:6cc2111ef2e290040591030798811a8856969c43cc5dd781c2c44da2323d00eb",
+    "sourcePacketSha256": "sha256:0db5ef8ab792842a0cf02a4e98b4aff923f287d6b37990c5b8c53946c8209313",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:39abab525fa2bced28bc84b6d1942e3faa0b0a9af29149d50b311a92a1714a74",
+        "caseCount": 30
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:e10a3581cfa4c0cf3c359d304afe8a0abbb686e88b09caff21339cdfbfb2d9f1",
+        "caseCount": 30
+      }
+    ],
+    "preparationReceiptSha256": "sha256:d77d1d0dd9c199b679bb44558096f1c05232c3071b2e56ea89ad2b2e0862918a"
+  },
+  "sealedInputs": {
+    "source": "sha256:992b001d891442ca803e423b079a95a619b5f74a499c3e93412c16f6c254cf51",
+    "extraction": "sha256:9be9cf06629497125f8de664316b76749ad7e458d86ab5094258ef25bd98c2eb",
+    "editorial": "sha256:cbf02df432e5d7ae4bc9f23082a264f6f18e3820f061bb3d5a6a6828bac54e80",
+    "dateAudit": "sha256:27b7c1c3b712af6bdda4758c16d91d86d276c6c0c30b3b8c6c74b645ccd3ef9c"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "3 applied editorial decisions; no pending proposals",
+  "reviewCases": 60,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 60 cases retain preparation-proposed canonicalPersonId and membership fingerprints. 47 cases keep unresolvedIdentity true (15 with bounded retrieval overflow). No false-merge or wrong-actor contradiction found against sealed source. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:3118dedb57dc4037afc230e6fa12a504dc7839026a759578c48f5879a8f16341",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/preparation-receipt.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/lookup-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/transport-part-002.json"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 131",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/jinshi-131/transport-part-002.json"
+  },
+  "notes": "Owner evidence is not independent approval."
+}
