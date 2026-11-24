@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "398"
+  },
+  "ownerAgentId": "bc-b9d14344-02da-4a1d-90f3-0d2ad7cb26ed",
+  "workerId": "cursor-nov24-retained-staging-w14-o2",
+  "idempotencyKey": "6a1ae710370ce9316ccbd0cffbb3d48550808f645cc26e5204d4b2cc88390a28",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "campaign": "campaign-nov24-retained-staging",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-398-b26ed",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "dea1283d4ba876abeb302753dbcdc9ad29aaad14983a42eeb36c2ed62e3a2706",
+    "people": 58,
+    "claims": 306,
+    "promptVersion": 7,
+    "extractionBytes": 105392
+  },
+  "inputBlobWitness": {
+    "source": "aab769cefd4aa0be956092df9fa4943ef666996c",
+    "extraction": "e33b655a2c6a9426cb5636d72687ae2fe57dd20d",
+    "editorial": "ecc615f590f246f057d53fb45239368bed6bfa0f"
+  },
+  "sealedInputs": {
+    "source": "sha256:9ef10dd35dae9ce8b2a3cec031394c9507a8bd2dfd6ee61129991396ee7f1fff",
+    "extraction": "sha256:dea1283d4ba876abeb302753dbcdc9ad29aaad14983a42eeb36c2ed62e3a2706",
+    "editorial": "sha256:503807689f7c1e2863a1c46b56835e39b9373678cbf208d6563111828df0a0db"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 398 Biographies 185: Zong Shixianghou, Huo Longwu, Fu Zhu Hong A, En Zhang, Chen Shengyuan, Qi Suzao, Chen Kerang, Liu Tongying, Rui Chang, Jie Chun, Xi Ling A",
+    "chineseUnits": 161,
+    "translatedCount": 161,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "sentenceCount": 161,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 105392
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-398/date-packet.json",
+    "contentSha256": "sha256:b519aaf19ebee258b2bcff72d77e79e75c9ca81c996d580adf864f6ed44c2629",
+    "fileSha256": "sha256:b519aaf19ebee258b2bcff72d77e79e75c9ca81c996d580adf864f6ed44c2629",
+    "dateHintChecks": 177,
+    "people": 58,
+    "sourceUnits": 161,
+    "scanFindings": 0
+  },
+  "extractionAndEditorialReuse": {
+    "extraction": "Retained pinned extraction at witness blob; no re-extraction.",
+    "editorial": "Retained 2 accepted editorial decision(s) at witness blob; no new owner repairs.",
+    "promptVersion": 7
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 398",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/398: 1 extraction(s), 58 local people, 307 mentions, 505 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "data/people/extractions/qingshigao/398.json: ok (58 people, 307 mentions, 505 claims, 547 candidates)",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 398",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 398",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 2,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs (source, extraction, editorial) witness-verified at pinned git blobs on staging 20b8d0e3. Full chapter read: all 161 Chinese units carry paired literal and idiomatic English. Accepted extraction and editorial repairs align with source citations. Native date packet prepared (177 checks); people:dates:scan reports zero structural findings. No definite English omission, extraction gap, or source contradiction found. Independent native date audit not performed by owner; chapter remains un-audited.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "remainingIndependentProofs": {
+    "dateAudit": {
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-398/date-packet.json",
+      "packetSha256": "sha256:b519aaf19ebee258b2bcff72d77e79e75c9ca81c996d580adf864f6ed44c2629",
+      "note": "Owner prepared sealed packet only; people:dates:record requires a separate reviewer."
+    },
+    "identityReview": {
+      "status": "pending-after-date-approval",
+      "gate": "independent-bounded-dossier-identity-review",
+      "note": "Corpus identity resolution remains downstream of chronology approval."
+    }
+  },
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 398",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/qingshigao/398.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 398",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 398 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-398/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book qingshigao --chapter 398"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
