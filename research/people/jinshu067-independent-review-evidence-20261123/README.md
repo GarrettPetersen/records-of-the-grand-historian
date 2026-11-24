@@ -30,3 +30,7 @@ Uses **#5456** decision-table method + owner `owner-attestation-repairs-vs-5456.
 2. `node assemble-substantive-report.mjs`
 
 **#5454** all-supported template remains rejected evidence.
+
+## Owner minimum proposals (not applied on candidate)
+
+`owner-minimum-proposals-for-holds.json` — source-witnessed minimum fixes for **two** stable locals `jinshu:067:p041` / `jinshu:067:p166` and **ten** attestation holds; no calendar invention, no author edits on #5445 from this branch.
