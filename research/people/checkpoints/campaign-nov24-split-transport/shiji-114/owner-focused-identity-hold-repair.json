@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-focused-identity-hold-repair",
+  "scope": { "book": "shiji", "chapter": "114" },
+  "ownerAgentId": "bc-3001456e-15de-4e26-b1ca-973d0009ec2d",
+  "campaignWorker": "cursor-nov24-partitioned-3",
+  "independentHold": {
+    "caseId": "sha256:49fb496bb3c9248be8d96ad4179e4c72b7145cd71a730547d3559dd7206b2483",
+    "verdict": "hold",
+    "evidenceCommit": "fe470558020d3d14bdd6b1f15739ead9f5182b99",
+    "ownerAcceptsHold": true,
+    "localId": "shiji:114:p019"
+  },
+  "transportPinsUnchanged": {
+    "transport-part-001.json": "sha256:91c4fd330048ec640855fdddf44a7280aee3306fbc389046c44f057bcd368d16",
+    "transport-part-002.json": "sha256:5204bad8ce8bef0d0253c6af6c1b45d834f596e496dec3e0086db42c812a8426"
+  },
+  "primarySource": {
+    "unitId": "s0041",
+    "chinese": "詔罷兩將兵，曰：「郢等首惡，獨無諸孫繇君丑不與謀焉。」",
+    "literalEnglish": "An edict dismissed both generals' troops, stating: 'Ying and the others were the principal offenders; only Chou, Lord Yao, the grandson of Wuzhu, did not participate in the conspiracy.'",
+    "idiomaticEnglish": "An imperial edict ordered both armies to stand down, declaring: 'Ying and his accomplices were the chief culprits. Only Chou, Lord Yao, a grandson of Wuzhu, had no part in the conspiracy.'",
+    "sourceAttestedStrings": ["郢", "無諸孫", "繇君", "丑"],
+    "notInPrimaryText": ["無諸之子"]
+  },
+  "problem": "Extraction invented local p019 ('Child of Wuzhu') with a strongly-inferred Chinese identity 無諸之子 at s0041. The edict names only 無諸孫繇君丑 (Wuzhu's grandson Chou); it does not name or describe a separate child of Wuzhu. Owner evidence erroneously cited 無諸之子 at unit ss0041.",
+  "minimalRepairStrategy": "Conservative withdrawal of fabricated standalone p019 (jinshu083 precedent: remove unnamed intermediaries with zero direct surfaces). Preserve explicit p018 Chou with 無諸孫 grandson attestation; do not invent the omitted parent as a person record.",
+  "extractionFingerprints": {
+    "beforeGitBlob": "08536b8aac59d4ec4032a08cd6222abbca6bb07e",
+    "beforeContentSha256": "sha256:2153035221c34fdbc63a47f3f9333f8081ab75d3725e4039c9894ef29e0091ac",
+    "afterPreviewGitBlob": "computed-on-apply",
+    "afterPreviewLocals": 36,
+    "afterPreviewClaims": 337
+  },
+  "exactBeforeAfter": {
+    "person_p019": {
+      "before": ["p019", ["Child of Wuzhu", null, null], "historical", "Parent of Chou", { "n": [], "r": ["p001", "p018"], "a": ["BC 135"], "p": ["Minyue"], "x": "Inferred intervening parent between Wuzhu and grandson Chou; unnamed in the chapter." }, [[{"kind": "descriptive-kinship", "en": "Child of Wuzhu", "zh": "無諸之子"}, "strongly-inferred", ["s0041"]]], [["royal-family-member", "strongly-inferred", ["s0041"]], ["family-member", "strongly-inferred", ["s0041"]]]],
+      "after": null
+    },
+    "person_p018_related_array": {
+      "before": ["p001", "p019", "p016", "p017"],
+      "after": ["p001", "p016", "p017"]
+    },
+    "person_p001_related_array": {
+      "before": ["p002", "p003", "p016", "p017", "p018", "p019", "p032"],
+      "after": ["p002", "p003", "p016", "p017", "p018", "p032"]
+    },
+    "person_p016_related_array": {
+      "before": ["p001", "p017", "p018", "p019"],
+      "after": ["p001", "p017", "p018"]
+    },
+    "claim_p018_descendant_of_p001": {
+      "before": {
+        "relation": "descendant-of",
+        "personId": "p001",
+        "kinshipTerm": { "zh": "孫", "en": "grandson" },
+        "generationDistance": 2,
+        "line": "paternal",
+        "intermediaryPersonIds": ["p019"],
+        "provenance": "explicit",
+        "units": ["s0041"]
+      },
+      "after": {
+        "relation": "descendant-of",
+        "personId": "p001",
+        "kinshipTerm": { "zh": "孫", "en": "grandson" },
+        "generationDistance": 2,
+        "line": "paternal",
+        "provenance": "explicit",
+        "units": ["s0041"],
+        "note": "intermediaryPersonIds removed; grandson link remains source-backed via 無諸孫 on p018"
+      }
+    },
+    "claims_removed": [
+      ["p019", "sex", { "sex": "male" }, "strongly-inferred", ["s0041"]],
+      ["p001", "family-relationship", { "relation": "parent-of", "personId": "p019" }, "strongly-inferred", ["s0041"]],
+      ["p019", "family-relationship", { "relation": "parent-of", "personId": "p018" }, "strongly-inferred", ["s0041"]],
+      ["p019", "attestation", { "sourceDate": { "text": "建元六年" } }, "strongly-inferred", ["s0041", "s0026"]]
+    ]
+  },
+  "affectedIdentities": {
+    "withdrawnLocal": "shiji:114:p019",
+    "withdrawnCanonicalProposal": "per_C0TMX6D0YMXMT02X553E",
+    "preservedLocals": [
+      "shiji:114:p001 (Wuzhu)",
+      "shiji:114:p018 (Chou / 丑; explicit 無諸孫 at s0041)"
+    ],
+    "unchangedMembershipReview": "All other 36 chapter locals and 36 non-held identity cases remain as prior owner retain-proposal pending independent review."
+  },
+  "ownerAssessmentCorrection": {
+    "caseId": "sha256:49fb496bb3c9248be8d96ad4179e4c72b7145cd71a730547d3559dd7206b2483",
+    "beforeDisposition": "retain-proposal",
+    "afterDisposition": "withdraw-local-with-extraction-repair",
+    "afterReason": "Independent hold accepted. Withdraw p019; apply extraction repair below. No canonical membership certification for a person the chapter does not attest.",
+    "afterSourceWitnesses": [
+      {
+        "localId": "shiji:114:p018",
+        "unitId": "s0041",
+        "quote": "無諸孫繇君丑"
+      }
+    ]
+  },
+  "operations": [
+    { "op": "remove-person", "id": "p019", "name": ["Child of Wuzhu", null, null] },
+    { "op": "strip-related", "id": "p001", "removed": ["p019"] },
+    { "op": "strip-related", "id": "p016", "removed": ["p019"] },
+    { "op": "strip-related", "id": "p018", "removed": ["p019"] },
+    { "op": "remove-claim-subject", "subject": "p019", "predicate": "sex" },
+    { "op": "remove-claim-subject", "subject": "p019", "predicate": "family-relationship" },
+    { "op": "remove-claim-subject", "subject": "p019", "predicate": "attestation" },
+    {
+      "op": "remove-claim-target",
+      "subject": "p001",
+      "predicate": "family-relationship",
+      "personId": "p019",
+      "relation": "parent-of"
+    },
+    {
+      "op": "strip-intermediaries",
+      "subject": "p018",
+      "predicate": "family-relationship",
+      "target": "p001",
+      "removed": ["p019"]
+    }
+  ],
+  "englishOmissions": [],
+  "englishExtractionNote": {
+    "field": "extraction-only English label",
+    "before": "Child of Wuzhu",
+    "issue": "English kinship label mirrored the fabricated Chinese 無諸之子; not a missing translation in data/shiji/114.json (source never contains that phrase).",
+    "action": "Withdrawn with p019; no separate translation repair required."
+  },
+  "scopedValidationPreview": {
+    "command": "npm run people:validate -- --book shiji --chapter 114",
+    "appliedToWorkingTreeSimulation": true,
+    "passed": true,
+    "summary": "Scoped person data validation passed for shiji/114: 1 extraction(s), 36 local people, 268 mentions, 337 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s).",
+    "sealedExtractionUnchangedUntilHostApply": true
+  },
+  "remainingBlockers": [
+    "Host must apply operations to data/people/extractions/shiji/114.json via editorial gate (owner branch carries proposal only).",
+    "After apply, re-run scoped validation and refresh owner-evidence case disposition; independent identity reviewer must re-close case or confirm withdrawal.",
+    "Transport still lists 37 cases until optional re-preparation; reviewer should treat p019 case as withdrawn not mergeable."
+  ],
+  "doesNotModify": [
+    "data/people/editorial-decisions/shiji/114.json",
+    "data/people/date-audits/shiji/114.json",
+    "data/shiji/114.json",
+    "canonical registry or accepted resolution documents"
+  ]
+}
