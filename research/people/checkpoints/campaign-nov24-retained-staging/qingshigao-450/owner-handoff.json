@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "450"
+  },
+  "ownerAgentId": "bc-31695779-403f-487c-8b38-86dd88ecb75b",
+  "workerId": "cursor-nov24-retained-staging-w14-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "76d65e866054f79e5d639f5c316a19eeed5078fc7e93b8ce26a9548e6ec13351",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-450-cb75b",
+  "extractionBytes": 104633,
+  "inputBlobWitness": {
+    "source": "8e2c7eba9b9c158adf6c66070e749c4faf3a83d6",
+    "extraction": "458948ab81420b1629fee76fe9d484076bc10e86",
+    "editorial": "658dfe16d8d6c4791c33a340e5cc54dbc9652700"
+  },
+  "sealedInputs": {
+    "source": "sha256:452e0dd7999187900cb87614fa6a8f78c7b4bbb913a278d1d9cb8d9aab4ea1a8",
+    "extraction": "sha256:a02d07117d0ed37165ae2241af7eae7bb145e296d73c3acefd3b31cf7383b055",
+    "editorial": "sha256:39144c96a274c6635a8801d7816995ca8d1d9936734ab73282a1a08adec1c0a9",
+    "dateAudit": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-450/date-packet.json",
+    "sha256": "sha256:97de97ebbb025d680c6acbe9f86ca523f19eed99cf161a0ac6378416bb4ac84d",
+    "extractionHash": "sha256:4e7b67cc8f6b31082198bc78a69d28011c0b7b4596a1d683dd8e8308002c65b2",
+    "sourceHash": "sha256:42f3a75db16e434fe9d457593a3ab8210871ae1457c8bd1dadfed3b5cbdd7da6",
+    "dateHintChecks": 183
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 450 Biographies 237: Li Henian, Wen Bin, Ren Daorong, Xu Zhenyi, Wu Dacheng",
+    "chineseUnits": 218,
+    "translatedCount": 218,
+    "sentenceCount": 218,
+    "contentUnits": 219,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 1,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 55,
+    "claims": 368,
+    "sourceExtractionSha256": "a02d07117d0ed37165ae2241af7eae7bb145e296d73c3acefd3b31cf7383b055",
+    "sourceExtractionSha256Verified": true,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/qingshigao/450.json",
+    "gitBlob": "658dfe16d8d6c4791c33a340e5cc54dbc9652700",
+    "status": "accepted-applied-in-source"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book qingshigao --chapter 450",
+    "summary": "Scoped person data validation passed for qingshigao/450: 1 extraction(s), 55 local people, 276 mentions, 546 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 450",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "reportPath": "data/people/date-audits/qingshigao/450.json"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "reason": "No native date report on record; owner prepared sealed candidate date packet only. Independent reviewer must read Chinese units and approve chronology before catalog or publication gates.",
+      "artifacts": {
+        "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-450/date-packet.json",
+        "datePacketSha256": "sha256:97de97ebbb025d680c6acbe9f86ca523f19eed99cf161a0ac6378416bb4ac84d"
+      }
+    }
+  ],
+  "remainingIndependentProofs": [
+    {
+      "kind": "native-date-audit",
+      "command": "npm run people:dates:run -- --book qingshigao --chapter 450 --run --model <reviewer-model>",
+      "packetCommand": "npm run people:dates:packet -- --book qingshigao --chapter 450 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-450/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-date-report.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 450"
+    },
+    {
+      "kind": "chapter-identity-dossier-review",
+      "note": "Corpus-level identity resolution remains outside this scoped owner pass; extraction and editorial inputs are sealed and validated."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction (prompt v7, 55 people, 368 claims), and accepted editorial at pinned staging blobs witness-verified. Owner read paired Chinese/English via source units (218 Chinese-bearing units; fullEnglishCoverage=true). Scoped person data validation passed for qingshigao/450: 1 extraction(s), 55 local people, 276 mentions, 546 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.. Reused extraction and editorial; no re-extraction and no owner-authored date approval. Native date packet sealed at checkpoint (no-native-date-report); people:dates:verify status un-audited. No definite English omission or extraction/schema contradiction found; chronology closure awaits independent native date audit.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 450",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 450",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 450 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-450/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged; no independent date self-approval."
+}
