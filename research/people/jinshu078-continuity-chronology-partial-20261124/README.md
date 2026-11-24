@@ -82,3 +82,7 @@ See `research/people/jinshu078-final-three-date-report-80ad020a-20261124/`.
 ## Coverage compose (337 exact proofs + tranche) @ 80ad020a
 
 See `research/people/jinshu078-coverage-compose-80ad020a-20261124/`.
+
+## Native audited chronology @ 80ad020a
+
+See `research/people/jinshu078-audited-chronology-80ad020a-20261124/`.
