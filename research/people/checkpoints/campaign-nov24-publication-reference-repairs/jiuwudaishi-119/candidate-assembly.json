@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "kind": "publication-reference-candidate-assembly",
+  "dispatch": {
+    "key": "jiuwudaishi/119",
+    "agentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+    "sourceOwnerRun": "run-2f34bfc5-a9e3-442e-aea0-44c619644a9c",
+    "sourceReviewer": "bc-8eeee497-bcaf-47fe-849d-89d9edbfd9da",
+    "phase": "assembly_applied",
+    "idempotencyKey": "68b317503c15b5c9aa6a7a688d47f1f4b45d9b43cb6719e41cb69bc4ae42f073",
+    "stagingBase": "e06abb48f9533ff5e96b24aaa70c3b126998ff90",
+    "ref": "cursor/nov24-reference-assembly-jiuwudaishi-119"
+  },
+  "independentReview": {
+    "head": "b0e91ad1a0198838242b6ad434d08eae1957e728",
+    "path": "research/people/checkpoints/campaign-nov24-publication-reference-repairs/jiuwudaishi-119/independent-source-reference-review.json",
+    "sha256": "sha256:24e1ed6c718237e4d249bcbbba2ffb2ff2ef734669c2015c9943cfb0e7dc1b81",
+    "verdict": "approve",
+    "operationsApplied": 3
+  },
+  "proposal": {
+    "head": "2fd5cbded8e645ca65f0a29917188825cd7a665f",
+    "sha256": "sha256:10eaf578d26b34e770eba99a82b7bddcc01c6a5f9eddc8d0b12bdfeea2d41821"
+  },
+  "sealedInputsUnchanged": {
+    "data/jiuwudaishi/119.json": {
+      "gitBlob": "4044252afba003e3478625f47e0a129baf4b5be9",
+      "sha256": "sha256:4044252afba003e3478625f47e0a129baf4b5be9"
+    },
+    "data/people/date-audits/jiuwudaishi/119.json": {
+      "gitBlob": "1c775a533280ff16a365109935dfbcf83ec390df",
+      "sha256": "sha256:1c775a533280ff16a365109935dfbcf83ec390df",
+      "note": "Bytes unchanged this assembly; extractionHash field inside is stale relative to post-apply extraction."
+    },
+    "data/people/editorial-decisions/jiuwudaishi/119.json": {
+      "gitBlob": "98c4770993e3c9b7d50d09058150faa511c43ad4",
+      "sha256": "sha256:98c4770993e3c9b7d50d09058150faa511c43ad4"
+    }
+  },
+  "extractionChange": {
+    "path": "data/people/extractions/jiuwudaishi/119.json",
+    "before": {
+      "gitBlob": "bda829af54e1c4ad3300d80f0b4f598933eb2f57",
+      "canonicalSemanticSha256": "sha256:8ed7996d3155bcc9f65335307fee3b6a5eaba93e4a3af95972083fcdd9329478"
+    },
+    "after": {
+      "gitBlob": "a28cf41e22d5e4528515adf1a599d7e974134be8",
+      "canonicalSemanticSha256": "sha256:b33b3a041a2af7eb4577e42f302adbe351c63aeded7332d2c4fd8d3c439279e5"
+    },
+    "approvedOperationsApplied": [
+      {
+        "op": "append-surface",
+        "personId": "p067",
+        "kind": "title-reference",
+        "language": "zh",
+        "exact": "禮部尚書",
+        "evidence": [["s0176", [0]]]
+      },
+      {
+        "op": "append-surface",
+        "personId": "p067",
+        "kind": "title-reference",
+        "language": "en",
+        "exact": "minister of rites",
+        "evidence": [["s0176", [0]]]
+      },
+      {
+        "op": "set-person-hint",
+        "personId": "p067",
+        "path": "hints.x",
+        "after": null
+      }
+    ],
+    "mentionsDelta": {
+      "jiuwudaishi:119:p067": {
+        "beforeCount": 0,
+        "afterCount": 2
+      },
+      "chapterMentions": {
+        "before": 413,
+        "after": 415
+      }
+    },
+    "claimsDelta": "none",
+    "neighborsUnchanged": ["jiuwudaishi:119:p068", "jiuwudaishi:119:p066"]
+  },
+  "scopedValidation": [
+    {
+      "command": "validateCompactPeopleExtraction(compact, buildPeopleExtractionPacket(jiuwudaishi,119))",
+      "status": "PASS"
+    },
+    {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/119.json",
+      "status": "PASS",
+      "summary": "69 people, 415 mentions, 441 claims, 582 candidates"
+    },
+    {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 119",
+      "status": "PASS",
+      "summary": "Scoped person data validation passed for jiuwudaishi/119: 1 extraction(s), 69 local people, 415 mentions, 441 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s)."
+    }
+  ],
+  "dateAndIdentityPacketDiagnostics": {
+    "nativeDatePacket": {
+      "command": "npm run people:dates:packet -- --book jiuwudaishi --chapter 119 --out <temp>",
+      "beforeExtractionHashInPacket": "sha256:74bce8ef01eec668c9030a9a0a3b94198dc652e0c441d4c849a1e72b55befe8d",
+      "afterExtractionHashInPacket": "sha256:b33b3a041a2af7eb4577e42f302adbe351c63aeded7332d2c4fd8d3c439279e5",
+      "chronologyItemsForP067Unchanged": true,
+      "note": "Packet JSON differs only in extractionHash metadata and unitPeople indexing (s0176 unit now lists two additional title-reference mentions for p067). No p067 date claim, Western hint, or attestation rows were added or altered."
+    },
+    "sealedDateAuditFile": {
+      "recordedExtractionHash": "sha256:74bce8ef01eec668c9030a9a0a3b94198dc652e0c441d4c849a1e72b55befe8d",
+      "statusAfterApply": "stale-binding",
+      "smallestCurrentProofPath": "Independent reviewer may re-record dated approval binding extractionHash to sha256:b33b3a041a2af7eb4577e42f302adbe351c63aeded7332d2c4fd8d3c439279e5 (canonical JSON.stringify semantic) without reopening chronology findings."
+    },
+    "identityReviewFile": {
+      "path": "data/people/identity-reviews/jiuwudaishi/119.json",
+      "recordedExtractionSeal": "sha256:8ed7996d3155bcc9f65335307fee3b6a5eaba93e4a3af95972083fcdd9329478",
+      "statusAfterApply": "stale-extraction-seal",
+      "p067CaseId": "sha256:af2b6866f0cf3086efc1a73ca04d7204faf5b46ef89e265891b57d2f420037ac",
+      "membershipClaimsUnchanged": true,
+      "note": "Prior independent case reasoning for canonical per_Q84220HE627FP33WNYQ2 and p068 kinship geometry remains valid; only local mention materialization changed. Expect smallest native rebind of p067 member/version after publication apply, not a full 69-case redo."
+    }
+  },
+  "remainingProofBlockers": [
+    {
+      "artifact": "data/people/date-audits/jiuwudaishi/119.json",
+      "kind": "extraction-hash-rebind",
+      "ownerDidNotChange": true
+    },
+    {
+      "artifact": "data/people/identity-reviews/jiuwudaishi/119.json",
+      "kind": "extraction-seal-rebind-or-p067-member-version",
+      "ownerDidNotChange": true
+    }
+  ],
+  "sourceReferenceHolds": {
+    "jiuwudaishi:119:p067": "cleared-by-approved-title-surfaces",
+    "fabricatedPersonalSpan": false
+  },
+  "supplementalTranslationRepairs": {
+    "found": false,
+    "note": "No new English or Chinese defects beyond the approved idiomatic apposition already used for the en title-reference surface."
+  },
+  "ownerApplyAttestation": {
+    "agentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+    "appliedAt": "2026-11-24T12:05:00.000Z",
+    "notIndependentApproval": true,
+    "implementsReviewVerdict": "approve"
+  }
+}
