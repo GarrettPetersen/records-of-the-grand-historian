@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-final-identity-repair",
+  "scope": "jiuwudaishi/069",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "role": "hold-owner",
+  "ownerHead": "9ea755f50bed1089d5ad57b3c37505e06af8165b",
+  "sourceReviewHead": "c7144378f9adc9617e8bc7791c7c459cae01c35c",
+  "transportRevision": "9ea755f50bed1089d5ad57b3c37505e06af8165b",
+  "reviewerAgentId": "bc-410982f3-689c-4b89-a301-f5a0d5217703",
+  "pr": 5652,
+  "idempotencyKey": "3926c52c021ccaa580c3e829dd36859c9d90d2da81fd3e26bd3c35cb66574fd3",
+  "holdAssessments": [
+    {
+      "caseId": "sha256:6742d15071e33f0a47be38970611c96ca97c233aac239dfb10541d6fe1a00a2c",
+      "localPersonId": "jiuwudaishi:069:p036",
+      "independentVerdict": "hold",
+      "ownerVerdict": "concur-hold",
+      "sourceWitness": {
+        "unitId": "s0102",
+        "zh": "胡裝，禮部尚書曾之孫。",
+        "literal": "Hu Zhuang was the grandson of Zeng, minister of rites.",
+        "idiomatic": "Hu Zhuang was the grandson of Zeng, minister of rites."
+      },
+      "assessment": "Primary Chinese names only 胡裝 and 曾 (via 禮部尚書曾之孫). No quoted personal name for Hu Zhuang's father appears in the chapter witness s0102. English translations correctly avoid inventing a father's name. The extraction defect is treating a fabricated label 胡裝之父 as a strongly-inferred Chinese name claim with s0102 evidence, which overstates source support for identity certification."
+    }
+  ],
+  "preservedIndependentApprovals": {
+    "totalCases": 67,
+    "approvals": 66,
+    "holds": 1,
+    "note": "All non-p036 dossier approvals retained unchanged; owner does not re-review or alter independent report blobs."
+  },
+  "extractionDefect": {
+    "localPersonId": "jiuwudaishi:069:p036",
+    "type": "inferred-unnamed-relative-as-named-zh-surface",
+    "claimsAffected": [
+      "jiuwudaishi:069:c0115"
+    ],
+    "relationshipClaimsPreservedAsInferred": [
+      "jiuwudaishi:069:c0295",
+      "jiuwudaishi:069:c0296",
+      "jiuwudaishi:069:c0297"
+    ],
+    "rationale": "Genealogical intermediary between Zeng (p035) and Hu Zhuang (p034) is logically entailed by 曾之孫, but it must remain an unresolved unnamed placeholder—not a certifiable person keyed as 胡裝之父."
+  },
+  "candidateAmendments": {
+    "appliesToCanonicalExtraction": false,
+    "extractionBlob": "5e582e7584242a48059223762d1b7f13073817ab",
+    "personPatches": [
+      {
+        "localId": "jiuwudaishi:069:p036",
+        "before": {
+          "preferredNameSuggestion": {
+            "en": "Father of Hu Zhuang",
+            "zh": "胡裝之父"
+          },
+          "mentionException": "Strongly inferred unnamed father of Hu Zhuang as son of Zeng; chapter states Zhuang is Zeng’s grandson."
+        },
+        "after": {
+          "preferredNameSuggestion": {
+            "en": "Unnamed father of Hu Zhuang (inferred)",
+            "zh": null
+          },
+          "unresolvedIdentity": true,
+          "mentionException": "Inferred unnamed paternal link between 曾 and 胡裝; s0102 attests only 胡裝 and 禮部尚書曾之孫—no quoted father name. Identity certification held."
+        }
+      }
+    ],
+    "claimPatches": [
+      {
+        "claimId": "jiuwudaishi:069:c0115",
+        "operation": "revise",
+        "before": {
+          "predicate": "name",
+          "value": {
+            "kind": "descriptive-kinship",
+            "en": "Father of Hu Zhuang",
+            "zh": "胡裝之父"
+          },
+          "certainty": "strongly-inferred",
+          "evidence": ["jiuwudaishi:069:s0102"]
+        },
+        "after": {
+          "predicate": "name",
+          "value": {
+            "kind": "descriptive-kinship",
+            "en": "Unnamed father of Hu Zhuang (inferred)",
+            "zh": null
+          },
+          "certainty": "strongly-inferred",
+          "evidence": ["jiuwudaishi:069:s0102"]
+        },
+        "reason": "Remove fabricated zh label not present in s0102; retain English descriptive kinship only as inferred placeholder."
+      }
+    ]
+  },
+  "englishTranslationRepairs": [],
+  "smallestPathForward": [
+    "Apply candidateAmendments to extraction after host-owned reconciliation; keep independent hold until identity reviewer certifies unresolvedIdentity=true posture.",
+    "Do not merge or split p034/p035; retain accepted membership for named persons Hu Zhuang and Zeng.",
+    "Re-run bounded identity composition on amended extraction; expect p036 to remain explicitly unresolved, not approved."
+  ],
+  "commands": [
+    {
+      "command": "source inspection s0102 zh/en",
+      "result": "confirms hold; no English omission"
+    },
+    {
+      "command": "loadValidatedPeopleChapter + claim trace p036",
+      "result": "c0115 zh 胡裝之父 falsely tied to s0102"
+    }
+  ]
+}
