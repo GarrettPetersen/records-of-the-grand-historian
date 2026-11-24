@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "449"
+  },
+  "ownerAgentId": "bc-a4d773fe-11dd-4609-88c3-3741edd6232d",
+  "workerId": "cursor-nov24-retained-staging-w18-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "91fbf7a92e6848a2f0428da00134f2126a972d2e6d26ee240b7c64d95df2004d",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-449-6232d",
+  "extractionBytes": 211472,
+  "inputBlobWitness": {
+    "source": "4995bc4d9eb81794d371460f383e68890f276945",
+    "extraction": "46b460514fa847c8c20e15c80932e59b0646c08b",
+    "editorial": "32c7403cb26c0cd5bbc49dd3b7fc3cff73102afe"
+  },
+  "sealedInputs": {
+    "source": "sha256:f6d1731f1bc7ae3a317aaa25d5e875a9baaa2f78ec44862c72f36607164a2b7a",
+    "extraction": "sha256:f45d6353fbae234561b830c7d119d57855639915bb59ae5958718eb575e2493d",
+    "editorial": "sha256:719924bd327010df714c84a08a2153963c2725ac3e3229e10a3be3a5f184d470"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-449/date-packet.json",
+    "contentSha256": "sha256:83bbde6d294f246b60933afcf55024a8f1a820fb7cd097e03c47d85cc939dc24",
+    "packetSourceHash": "sha256:590d330b742cb4ad1d5ad1a757828833d2db374a7462942ffadc069bf124c1ed",
+    "packetExtractionHash": "sha256:bb637ac153ace4603602d303e6adfa4757ee818c3c19b5c8aa2dc57673ebd24a",
+    "dateHintChecks": 347,
+    "peopleInPacket": 53,
+    "prepareCommand": "npm run people:dates:packet -- --book qingshigao --chapter 449 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-449/date-packet.json"
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "f45d6353fbae234561b830c7d119d57855639915bb59ae5958718eb575e2493d",
+    "people": 53,
+    "claims": 720,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 449 Biographies 236: Xi Liang, Zhou Fu, Lu Yuanding, Zhang Cengyang, Yang Shixiang, Feng Xu",
+    "sourceTitleZh": "卷449 列傳二百三十六 锡良 周馥 陆元鼎 张曾敭 杨士骧 冯煦",
+    "chineseUnits": 290,
+    "translatedCount": 0,
+    "missingLiteral": 290,
+    "missingIdiomatic": 290,
+    "missingEnglish": 290,
+    "fullEnglishCoverage": false
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "editorialDecisionCount": 19,
+    "editorialAppliedInSource": 19,
+    "editorialAppliedFailures": 0,
+    "noExtractionRegeneration": true,
+    "noEditorialReReview": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 449",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/449: 1 extraction(s), 53 local people, 300 mentions, 961 claims, 0 proposed repair(s), 19 applied repair(s), 19 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 449",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs for qingshigao/449 (no prior native date report). Git blob witnesses and extraction content sha256 match dispatch pins. Source coverage: 290 Chinese units, fullEnglishCoverage=false. Accepted prompt v7 extraction and 0/19 editorial repairs verified in source. Scoped people:validate passed. Fresh native date packet at sealedNativeDatePacket.contentSha256; owner did not self-approve independent date audit. No definite English omission or source contradiction identified; All accepted editorial after-forms verified in source.",
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:83bbde6d294f246b60933afcf55024a8f1a820fb7cd097e03c47d85cc939dc24",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 449",
+      "verifyAfterApproval": "npm run people:dates:verify -- --book qingshigao --chapter 449"
+    },
+    "chapterAndCanonicalIdentityReview": {
+      "required": true,
+      "status": "pending"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 449",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 449",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 449 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-449/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge.",
+  "editorialReflectionPending": []
+}
