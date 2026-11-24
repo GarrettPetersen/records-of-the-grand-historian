@@ -50,3 +50,18 @@ test('contradictory uncovered dispositions remain a native failure rather than a
  const result=reconcilePrivateCandidateDispositions(raw,packet);assert.equal(result.candidate.candidateDispositions.length,2);
  assert.throws(()=>validateCompactPeopleExtraction(result.candidate,packet,{strictAliasDispositions:true}),/more than once/);
 });
+
+test('explicit-event-contextual-date also completes source-only chronology without Western conversion',()=>{
+ const {packet,raw}=fixture();
+ raw.claims[0][3]='explicit-event-contextual-date';
+ const before=structuredClone(raw);
+ const result=validateCompactPeopleExtraction(raw,packet,{strictAliasDispositions:true});
+ assert.equal(result.stats.people,1);assert.deepEqual(raw,before);
+});
+
+test('a contextual attestation still requires the source date quote',()=>{
+ const {packet,raw}=fixture();
+ raw.claims[0][3]='explicit-event-contextual-date';
+ raw.claims[0][2].sourceDate.text='永和中';
+ assert.throws(()=>validateCompactPeopleExtraction(raw,packet),/Western/);
+});
