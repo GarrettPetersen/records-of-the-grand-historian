@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "023"
+  },
+  "ownerAgentId": "bc-a94c18e0-17af-4d91-a538-da47123a55b8",
+  "workerId": "cursor-nov24-retained-staging-w15-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2dfb67890d47dde94d6648821437f98d95fd887790018284db3d475e31206ca6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-zhoushu-023-a55b8",
+  "extractionBytes": 123178,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 59,
+    "workOrderClaims": 306
+  },
+  "inputBlobWitness": {
+    "source": "db6b21e5c54e4c048ee51da1d3867428e5e7fdb9",
+    "extraction": "2c1bf56ec519935d389166268a4e2e9487e2c50d",
+    "editorial": "f597044dc3f89af4c45b87ec903a277f4f954ef4"
+  },
+  "inputBlobWitnessVerified": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sealedInputs": {
+    "source": "sha256:22271bd4e2e8fc6777cea2b72d6900b79cf1ca77fd321f617af95285331f4f37",
+    "extraction": "sha256:f9f4640730c3eac91c1567884b01d0876001c7d67caf51fad05fcb79e2371551",
+    "editorial": "sha256:7bec1b56509a5986af96e5861144cf8eaab0b10c52abe8514ab522701e2d821e"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/zhoushu/023.json",
+    "promptVersion": 7,
+    "byteLength": 123178,
+    "people": 59,
+    "claims": 306,
+    "note": "Owner pass reuses sealed extraction bytes; no re-extraction or claim graph rebuild."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/zhoushu/023.json",
+    "appliedDecisionCount": 11,
+    "status": "reviewed-with-applied-proposals",
+    "note": "Accepted editorial repairs already reflected in source; owner did not add proposals."
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 23 Biographies 15: Su Chuo",
+    "sourceTitleZh": "卷23 列傳第15 蘇綽",
+    "chineseUnits": 415,
+    "sentenceCount": 415,
+    "translatedCount": 415,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-023/native-date-packet.json",
+    "hash": "sha256:63954cbe6c22aafbbf1b3c07db574377c0e44e7bd70c6f0ebf6988b43c5b8f2d",
+    "command": "npm run people:dates:packet -- --book zhoushu --chapter 023 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-023/native-date-packet.json",
+    "sourceHash": "sha256:8e6dbc301469238d248a862db8b40b442505ac34fa3f59e79ddffbdbb20f731f",
+    "extractionHash": "sha256:0c512b24b68f80be196ed73a7eae718f5a19f98f525658a871f5710b080b377e",
+    "itemCount": 201,
+    "peopleCount": 59,
+    "unitCount": 415
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book zhoushu --chapter 023",
+    "peopleValidateSummary": "Scoped person data validation passed for zhoushu/023: 1 extraction(s), 59 local people, 319 mentions, 519 claims, 0 proposed repair(s), 10 applied repair(s), 11 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book zhoushu --chapter 023",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/zhoushu/023.json",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner closure on sealed source, extraction, and editorial inputs at staging 20b8d0e3. Git blob witnesses match dispatch pins. Full chapter read: 415 Chinese units with paired literal and idiomatic English; accepted editorial repairs are present in source. Scoped people:validate passes with zero proposed repairs; legacy temporal and alias-disposition debt zero in chapter scope. Native date packet sealed at 63954cbe… for independent chronology review. No definite English omission, extraction contradiction, or source hold found in this owner pass; owner did not self-approve dates.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "packetHash": "sha256:63954cbe6c22aafbbf1b3c07db574377c0e44e7bd70c6f0ebf6988b43c5b8f2d",
+      "packetSourceHash": "sha256:8e6dbc301469238d248a862db8b40b442505ac34fa3f59e79ddffbdbb20f731f",
+      "packetExtractionHash": "sha256:0c512b24b68f80be196ed73a7eae718f5a19f98f525658a871f5710b080b377e",
+      "recordCommand": "npm run people:dates:record -- --book zhoushu --chapter 023",
+      "runCommand": "npm run people:dates:run -- --book zhoushu --chapter 023 --run --model <reviewer-model>",
+      "proofRetention": "Independent reviewer must read all source units and packet items, then record approved report at data/people/date-audits path without owner self-approval."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-post-date-approval",
+      "note": "Bounded canonical identity dossier review follows independent date approval on current extraction hash."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book zhoushu --chapter 023",
+    "datesVerify": "npm run people:dates:verify -- --book zhoushu --chapter 023",
+    "datePacket": "npm run people:dates:packet -- --book zhoushu --chapter 023 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-023/native-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}

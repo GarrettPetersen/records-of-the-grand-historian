@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "002"
+  },
+  "ownerAgentId": "bc-a94c18e0-17af-4d91-a538-da47123a55b8",
+  "workerId": "cursor-nov24-retained-staging-w15-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2dfb67890d47dde94d6648821437f98d95fd887790018284db3d475e31206ca6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-002-a55b8",
+  "extractionBytes": 124885,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 73,
+    "workOrderClaims": 371
+  },
+  "inputBlobWitness": {
+    "source": "39a87d7a76636a4e9c17af81df7770ff9e8e8516",
+    "extraction": "707198ebd7da96bb17e727bd64525bd3e09a82ed",
+    "editorial": "dec1646cc643e6217235c0c2394d957b7fe11164"
+  },
+  "inputBlobWitnessVerified": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sealedInputs": {
+    "source": "sha256:8f98e3b2ac32b350c2eb2577143ec35b12aec5795d208a99eb207933546a4279",
+    "extraction": "sha256:550de3eb5413b7da3fe47f8b76f0fd12a0702a5e7be330e59927ab030d5a0403",
+    "editorial": "sha256:0bc76f4b3378ee271eb0ba52f1456c6d9c7e8290e36d5f041450d41ace159cf9"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/xinwudaishi/002.json",
+    "promptVersion": 7,
+    "byteLength": 124885,
+    "people": 73,
+    "claims": 371,
+    "note": "Owner pass reuses sealed extraction bytes; no re-extraction or claim graph rebuild."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/xinwudaishi/002.json",
+    "appliedDecisionCount": 6,
+    "status": "reviewed-with-applied-proposals",
+    "note": "Accepted editorial repairs already reflected in source; owner did not add proposals."
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 2 Later Liang Annals 2: Taizu 2",
+    "sourceTitleZh": "卷二 梁本紀第二: 太祖下",
+    "chineseUnits": 207,
+    "sentenceCount": 207,
+    "translatedCount": 207,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-002/native-date-packet.json",
+    "hash": "sha256:eb87de8e5926c0b3701cc651afa12bcb798699b6e991cae9f4c29ddb75406e15",
+    "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 002 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-002/native-date-packet.json",
+    "sourceHash": "sha256:61b9476d03eddfa83cc0a19963034dca20889cc3ab5f42f61cebc225d1482eed",
+    "extractionHash": "sha256:cb101a3d3f1ff0902695af296c7408aca4c33eff666bfa54536e38193f1f84de",
+    "itemCount": 223,
+    "peopleCount": 73,
+    "unitCount": 207
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 002",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/002: 1 extraction(s), 73 local people, 297 mentions, 623 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 002",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/xinwudaishi/002.json",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner closure on sealed source, extraction, and editorial inputs at staging 20b8d0e3. Git blob witnesses match dispatch pins. Full chapter read: 207 Chinese units with paired literal and idiomatic English; accepted editorial repairs are present in source. Scoped people:validate passes with zero proposed repairs; legacy temporal and alias-disposition debt zero in chapter scope. Native date packet sealed at eb87de8e… for independent chronology review. No definite English omission, extraction contradiction, or source hold found in this owner pass; owner did not self-approve dates.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "packetHash": "sha256:eb87de8e5926c0b3701cc651afa12bcb798699b6e991cae9f4c29ddb75406e15",
+      "packetSourceHash": "sha256:61b9476d03eddfa83cc0a19963034dca20889cc3ab5f42f61cebc225d1482eed",
+      "packetExtractionHash": "sha256:cb101a3d3f1ff0902695af296c7408aca4c33eff666bfa54536e38193f1f84de",
+      "recordCommand": "npm run people:dates:record -- --book xinwudaishi --chapter 002",
+      "runCommand": "npm run people:dates:run -- --book xinwudaishi --chapter 002 --run --model <reviewer-model>",
+      "proofRetention": "Independent reviewer must read all source units and packet items, then record approved report at data/people/date-audits path without owner self-approval."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-post-date-approval",
+      "note": "Bounded canonical identity dossier review follows independent date approval on current extraction hash."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 002",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 002",
+    "datePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 002 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-002/native-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
