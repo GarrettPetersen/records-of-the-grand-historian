@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "chapterKey": "beiqishu/029",
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "revisions": {
+    "ownerHead": "d325cd42b0d3e553a05ccebfa2ceb6d9d7cddf80",
+    "ownerRef": "cursor/beiqishu-029-followup-73c8",
+    "reviewHead": "563276aa3706c1ca7ff28af6a2d43f9f54735033",
+    "reviewerAgentId": "bc-24004124-5bcb-4ae9-b007-d236aa2d5820",
+    "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542"
+  },
+  "sealedInputs": {
+    "source": "sha256:a202d20ebf8019be393da6e2bd8dc2b201a0d29141067239eb33dff0f441d185",
+    "extraction": "sha256:ae8389a2c5811a2875854bfe403049c50886ebef6d8c9d682fd3f92c13a1c5a6",
+    "editorial": "sha256:b4a62b707d5b1b99f7587583faf6c8416fa7b663256fcfce0fc4ae22b845e20a",
+    "dateAudit": "sha256:1a960f88a38a0aa7505b476b72049220477c5dabf262a2f584c10d578bf00196"
+  },
+  "holds": [
+    {
+      "caseId": "sha256:c1cf722f3aeb070d97144f2a66f813d8ed36a726a4192e88ae788552fc94cc52",
+      "targetLocalId": "beiqishu:029:p063",
+      "proposedCanonicalPersonId": "per_Q0RHN6VDK2BXWEB9A7MA",
+      "reviewerVerdict": "hold",
+      "diagnosis": "p063 is a descriptive-kinship record (Sister of Li Xingzhi / inferred mother of Lu Sidao) with English-only identity naming on s0118. Primary Chinese on the cited unit is 范陽盧思道是其舅子…, which supports only the mediated 舅子 link between Li Xingzhi (p060) and Lu Sidao (p062). The source does not supply an independent Han personal name for the sister/mother; English literal/idiomatic correctly render 舅子 as nephew-by-marriage without inventing her name.",
+      "sourceWitness": {
+        "book": "beiqishu",
+        "chapter": "029",
+        "units": [
+          {
+            "unitId": "s0118",
+            "field": "zh",
+            "literalQuote": "范陽盧思道是其舅子，嘗贈詩云：「水衡稱逸人，潘楊有世親，形骸預冠蓋，心思出風塵。」"
+          }
+        ],
+        "englishNote": "Literal: Fan Yang's Lu Sidao was his nephew by marriage …; idiomatic matches. No personal name for p063 in either English field."
+      },
+      "operations": [
+        {
+          "operation": "extraction-identity-name",
+          "path": "data/people/extractions/beiqishu/029.json",
+          "locator": { "personId": "p063", "kind": "descriptive-kinship" },
+          "before": {
+            "en": "Sister of Li Xingzhi",
+            "zh": null,
+            "certainty": "strongly-inferred",
+            "evidenceUnits": ["s0118"]
+          },
+          "after": {
+            "en": "Sister of Li Xingzhi",
+            "zh": "舅子",
+            "certainty": "strongly-inferred",
+            "evidenceUnits": ["s0118"],
+            "witnessNote": "Literal zh on s0118 is the nephew term 舅子, witness to Lu Sidao–Li Xingzhi kinship; not a personal name for p063."
+          },
+          "reason": "Add source-backed zh kin term on the cited unit without inventing a personal name."
+        },
+        {
+          "operation": "extraction-surface-add",
+          "path": "data/people/extractions/beiqishu/029.json",
+          "records": [
+            {
+              "before": null,
+              "after": [
+                "p063",
+                "descriptive-kinship",
+                "zh",
+                "舅子",
+                [["s0118", [1]]]
+              ]
+            }
+          ],
+          "reason": "Seal mediated Han kin term on s0118 parallel to existing en descriptive-kinship evidence."
+        },
+        {
+          "operation": "extraction-person-note",
+          "path": "data/people/extractions/beiqishu/029.json",
+          "locator": { "personId": "p063", "field": "people[6].x" },
+          "before": "Strongly inferred mother of Lu Sidao as sister of Li Xingzhi from 舅子; no independent surface.",
+          "after": "Strongly inferred mother of Lu Sidao as sister of Li Xingzhi from s0118 舅子 (mediated kin only); source gives no independent Han personal name.",
+          "reason": "Document source limit for independent reviewers."
+        }
+      ],
+      "impactedDependencies": {
+        "chronology": "No change: p063 attestation (齊世) on s0118 unchanged.",
+        "identity": "Retain canonical per_Q0RHN6VDK2BXWEB9A7MA; no merge/split; mediated-witness patch only.",
+        "editorial": "No editorial-decision file change.",
+        "translation": "None"
+      },
+      "holdRequiredAfterApply": true,
+      "holdRequiredReasonAfterApply": "Even after zh mediated-kin surfaces, the chapter source still lacks an independent Han personal name for p063; identity assignment may stand but independent primary-name attestation remains incomplete."
+    },
+    {
+      "caseId": "sha256:a2d91dc6ea0e9c289e70e87ea5c29f0746d4538e043afafcf781dacc2d715358",
+      "targetLocalId": "beiqishu:029:p066",
+      "proposedCanonicalPersonId": "per_F3XTF9S96AAJP8YX6HH3",
+      "reviewerVerdict": "hold",
+      "diagnosis": "p066 (Mother of Li Xiao) is descriptive kinship with English-only identity naming on s0125. Primary Chinese 及遷都鄴，曉便寓居清河，託從母兄崔悛宅。 names Li Xiao's maternal cousin Cui Juan (從母兄) but not his mother's personal name. English literal/idiomatic correctly express entrusted himself to his mother's sister's son Cui Juan's house without naming the mother.",
+      "sourceWitness": {
+        "book": "beiqishu",
+        "chapter": "029",
+        "units": [
+          {
+            "unitId": "s0125",
+            "field": "zh",
+            "literalQuote": "及遷都鄴，曉便寓居清河，託從母兄崔悛宅。"
+          }
+        ],
+        "englishNote": "Literal/idiomatic both render 從母兄 as mother's sister's son (Cui Juan); mother herself unnamed."
+      },
+      "operations": [
+        {
+          "operation": "extraction-identity-name",
+          "path": "data/people/extractions/beiqishu/029.json",
+          "locator": { "personId": "p066", "kind": "descriptive-kinship" },
+          "before": {
+            "en": "Mother of Li Xiao",
+            "zh": null,
+            "certainty": "strongly-inferred",
+            "evidenceUnits": ["s0125"]
+          },
+          "after": {
+            "en": "Mother of Li Xiao",
+            "zh": "從母兄",
+            "certainty": "strongly-inferred",
+            "evidenceUnits": ["s0125"],
+            "witnessNote": "Literal zh on s0125 is the cousin term 從母兄 naming Cui Juan's relation to Li Xiao; mother is inferred via kin path, not quoted by personal name."
+          },
+          "reason": "Add literal zh kin compound present on s0125 as mediated witness; do not invent 母 as unattested surface text."
+        },
+        {
+          "operation": "extraction-surface-add",
+          "path": "data/people/extractions/beiqishu/029.json",
+          "records": [
+            {
+              "before": null,
+              "after": [
+                "p066",
+                "descriptive-kinship",
+                "zh",
+                "從母兄",
+                [["s0125", [0]]]
+              ]
+            }
+          ],
+          "reason": "Seal literal zh on cited unit parallel to en descriptive-kinship coverage."
+        },
+        {
+          "operation": "extraction-person-note",
+          "path": "data/people/extractions/beiqishu/029.json",
+          "locator": { "personId": "p066", "field": "people[6].x" },
+          "before": "Strongly inferred mother of Li Xiao from 從母兄 kinship path; no independent surface.",
+          "after": "Strongly inferred mother of Li Xiao from s0125 從母兄→Cui Juan path; source gives no Han personal name for the mother.",
+          "reason": "Preserve uncertainty; cousin term is not the mother's name."
+        }
+      ],
+      "impactedDependencies": {
+        "chronology": "No change: p066 attestation (魏世) on s0125 unchanged.",
+        "identity": "Retain canonical per_F3XTF9S96AAJP8YX6HH3; sibling link to p067 (姊妹) unchanged.",
+        "editorial": "No editorial-decision file change.",
+        "translation": "None"
+      },
+      "holdRequiredAfterApply": true,
+      "holdRequiredReasonAfterApply": "Source still omits any Han personal name for Li Xiao's mother; mediated 從母兄 witness does not satisfy independent primary-name attestation."
+    }
+  ],
+  "preservationNote": "All other chapter persons, claims, surfaces, and review case dispositions remain unchanged. No invented personal names."
+}

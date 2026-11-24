@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "followup-transport-identity-owner-handoff",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "029"
+  },
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "campaignWorker": "cursor-nov24-current-master-followup-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "planFingerprint": "sha256:70251e73037015dc50e79cbefde0cd5c935fe519a763d1f8ca5d992db5602ab6",
+    "sourcePacketSha256": "36b2c1f003918bac5bfc735efbccedb0e024d6be33771a6b815a77b07d1b3929",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:1fea3a52a0c641d73f30beb1fd8b103f1ef458d5ddf4c7842cda3d915fe03006",
+        "caseCount": 19
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:8f503f62bc81009df6ad12d8be875c1278501990a0808e2c293ba7fecf108ede",
+        "caseCount": 20
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:fb5047f0445096b5148f42dd69490bbfb6d0ee9bb97d1de524ceddb738b7f17b",
+        "caseCount": 40
+      }
+    ],
+    "preparationReceiptSha256": "sha256:70ba436be19884eccf656bfc45226f28b7a8d2abb2c7e9a844a7a91deef4f8b7"
+  },
+  "sealedInputs": {
+    "source": "sha256:a202d20ebf8019be393da6e2bd8dc2b201a0d29141067239eb33dff0f441d185",
+    "extraction": "sha256:ae8389a2c5811a2875854bfe403049c50886ebef6d8c9d682fd3f92c13a1c5a6",
+    "editorial": "sha256:b4a62b707d5b1b99f7587583faf6c8416fa7b663256fcfce0fc4ae22b845e20a",
+    "dateAudit": "sha256:1a960f88a38a0aa7505b476b72049220477c5dabf262a2f584c10d578bf00196"
+  },
+  "chronologyStatus": "independent date audit on sealed extraction (audited)",
+  "editorialStatus": "9 applied editorial decisions on sealed extraction",
+  "reviewCases": 79,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 79 cases retain preparation-proposed canonicalPersonId and unresolvedIdentity flags (55 unresolved, 24 resolved). 28 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:634c8b21c409d7b994f39b5a1aaba1301c0d35ee85717abcf3a2d053298e6710",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/transport-part-003.json",
+    "verifyOwnerEvidence": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-029/owner-evidence.json",
+    "validateChapter": "npm run people:validate -- --book beiqishu --chapter 029"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
