@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "worker": "cursor-nov24-retained-blocked-owner-3",
+  "idempotencyKey": "fe6c05e3310ccd12e4ea8a19613b06b17abf2989ea7910cee78b8b03c5cb0957",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "notes": "Owner handoff only; no canonical edits, deploy, or merge.",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "049"
+  },
+  "observedBlocker": "Date audit report is stale",
+  "handoffBranch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-049-e9e1b1",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/049.json",
+      "gitBlob": "5a57e0a6d66feac797d00d8e59c502231f4a0da2",
+      "contentSha256": "sha256:9af89a96f6c4b9eaa22889f99d41eb6528b6af03aada86a2a0c73965c0629673"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/049.json",
+      "gitBlob": "db3ef7990ad7abb7bcccf2e5117cd5282292a34b",
+      "contentSha256": "sha256:08392d8de7c29d621b2bd9384e792eaed9c65214ec51553145230563f313bc6d"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/049.json",
+      "gitBlob": "a172109ee723041887c30c77aef5e713816f23be",
+      "contentSha256": "sha256:3113d2cbc702e3c133223c451597085fdc3a6bf429a6442c25cbfa91466b9255"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/049.json",
+      "gitBlob": "312ac0eb20bba0c096b05c930fd03ce779eec1bf",
+      "contentSha256": "sha256:69b5118e38ceb75bf3a95665eb1621dd800f741bc124b6f5d3fc227a65498705"
+    }
+  },
+  "testedRecoveryFindings": {
+    "staleReason": "extractionHash changed while sourceHash unchanged",
+    "currentPacket": {
+      "sourceHash": "sha256:d79a0d172039985cb10b5e4ab7358c5d0a6e6cf4127b16e439081de89c05ffd2",
+      "extractionHash": "sha256:b5674190bb9551937307cecf3c3ea4695f25bc0d16ede6406bfa008fda6615cf"
+    },
+    "auditSeal": {
+      "sourceHash": "sha256:d79a0d172039985cb10b5e4ab7358c5d0a6e6cf4127b16e439081de89c05ffd2",
+      "extractionHash": "sha256:74390d5048c3f637b01170168c1aa9928cb098ac045cd1ed4cfabc6bfa5bd8b2"
+    },
+    "changeCommits": {
+      "sealedExtraction": "4ecb654eabc71b5e4f5aaed1aa28878c86f02efb",
+      "hintNormalization": "c885eac7e47fc714c454c6ccec09e373649cccf5",
+      "hintNormalizationSubject": "Normalize existing Western date hints for release validation"
+    },
+    "validateCurrentAgainstAudit": "Date audit report is stale",
+    "validateAuditAgainstSealedExtraction": "pass",
+    "dateAuditItemDeltaCount": 1,
+    "chronologyFactChanges": 0
+  },
+  "affectedChronologyInputs": [
+    {
+      "itemId": "hints-p122",
+      "personId": "p122",
+      "before": [
+        "771 BC"
+      ],
+      "after": [
+        "BC 771"
+      ],
+      "changeKind": "active-date-hint-format"
+    }
+  ],
+  "concreteProposedPatches": [
+    {
+      "kind": "hint-normalization-eligibility-proof",
+      "target": "data/people/extractions/jiuwudaishi/049.json",
+      "note": "PEOPLE_DATE_HINT_NORMALIZATION existing-year rewrite only; no Western year or endpoint invented.",
+      "eligibilityProof": "hints-p122 person Baosi retains the same regnal endpoint; only display order BC 771 vs 771 BC."
+    }
+  ],
+  "proofReuseCandidate": {
+    "permittedBy": "PEOPLE_DATE_HINT_NORMALIZATION.md",
+    "fullPacketReauditRequired": false,
+    "minimumIndependentContinuation": "Independent reviewer may rebind audited report to current extractionHash after confirming hint-only delta via dateAuditItems diff."
+  },
+  "relatedEvidenceHashes": {
+    "sealedExtractionHash": "sha256:74390d5048c3f637b01170168c1aa9928cb098ac045cd1ed4cfabc6bfa5bd8b2",
+    "currentExtractionHash": "sha256:b5674190bb9551937307cecf3c3ea4695f25bc0d16ede6406bfa008fda6615cf",
+    "preservedDateAuditContentSha256": "sha256:3113d2cbc702e3c133223c451597085fdc3a6bf429a6442c25cbfa91466b9255"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Complete audited item/person checks preserved; stale only due to hint string format.",
+    "editorial": "Pinned editorial decisions unchanged.",
+    "identity": "Out of scope for this blocker."
+  },
+  "holds": []
+}
