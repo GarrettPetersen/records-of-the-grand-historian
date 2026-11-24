@@ -1,0 +1,46 @@
+{
+  "findings": [
+    {
+      "items": ["claim-137", "claim-138"],
+      "problem": "Attestations cite the full frame 平原君相趙惠文王及孝成王 on s0003 but westernInterval endpoints stop at BC 266 (Huiwen's death). That omits Xiaocheng's reign through at least Pingyuan's death in 趙孝成王十五年 (BC 251), misaligning the cited Chinese source with the encoded interval for the cripple/concubine witnesses.",
+      "action": "Extend interval end to BC 251 (or full chancellorship BC 298–251) on claims tied to s0003; do not truncate at Huiwen alone when the source names both kings."
+    },
+    {
+      "items": ["claim-162"],
+      "problem": "Claim-162 assigns Confucius (p029) a BC 551–479 lifespan from s0164, where Confucius appears only as a quoted exemplum inside Lou Huan's Spring and Autumn anecdote during Zhao–Qin negotiations. The unit does not date Confucius's exile or life in this chapter.",
+      "action": "Remove westernInterval from this attestation; retain qualitative legendary/historical reference only, or omit dated attestation for this mention."
+    },
+    {
+      "items": ["claim-111", "claim-164"],
+      "problem": "Claims pin Wei Qi (p031) to BC 257 (circa) from s0219 魏齊已死, which states prior death without regnal year or narrative year anchor. The Western year is inferred from paragraph order, not source chronology.",
+      "action": "Undate death and attestation rows, or mark unresolved until an explicit source year is identified; do not treat narrative sequence as BC 257 precision."
+    }
+  ],
+  "items": {
+    "claim-137": {
+      "verdict": "incorrect",
+      "event": "Cripple (p004) contextual interval truncates at Huiwen despite dual-king source frame on s0003.",
+      "reason": "sourceDate text names service under both 趙惠文王 and 孝成王, but westernInterval ends BC 266. Evidence s0005 pins the cripple anecdote to that undated chancellorship; endpoints must cover Xiaocheng through at least BC 251, not stop at Huiwen's death alone."
+    },
+    "claim-138": {
+      "verdict": "incorrect",
+      "event": "Concubine (p005) contextual interval truncates at Huiwen despite dual-king source frame on s0003.",
+      "reason": "Same dual-king citation and BC 266 cap as claim-137; the beheading narrative on s0006–s0015 is undated within the fuller chancellorship span and cannot be bounded only by Huiwen's reign."
+    },
+    "claim-162": {
+      "verdict": "incorrect",
+      "event": "Confucius quotation in Lou Huan exemplum (s0164) wrongly carries a lifespan westernInterval.",
+      "reason": "s0164 is the mother's speech citing 孔子逐於魯 as moral comparison in a Lu Zhou anecdote; it does not assert Confucius's life dates or chapter-dated activity. Treating the citation as BC 551–479 personal attestation violates event-ownership rules for retrospective allusions."
+    },
+    "claim-111": {
+      "verdict": "incorrect",
+      "event": "Wei Qi death dated BC 257 from post facto 魏齊已死 without source year.",
+      "reason": "s0219 reports Yu Qing wrote after Wei Qi had died; the sentence gives no reign or calendar year. Importing BC 257 from narrative placement invents precision the Chinese does not supply."
+    },
+    "claim-164": {
+      "verdict": "incorrect",
+      "event": "Wei Qi attestation shares unsupported BC 257 circa from s0219.",
+      "reason": "Attestation duplicates the same derived year as claim-111 from undated 魏齊已死; chronology should remain undated or blocked rather than circa 257."
+    }
+  }
+}
