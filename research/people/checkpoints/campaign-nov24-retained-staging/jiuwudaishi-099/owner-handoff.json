@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "099"
+  },
+  "ownerAgentId": "bc-7deace57-efe0-4d33-9d73-4588cc28b632",
+  "worker": "cursor-nov24-retained-staging-w7-o2",
+  "idempotencyKey": "062710f4c8d853a9a6578375f97c5c3f614467aaa7a053eb52ad720d7bff1bb8",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-099-8b632",
+  "inputBlobWitness": {
+    "source": "b279539f36af7afbd04cfacd5faa0af14f03605b",
+    "extraction": "896e178b71233921b564d9b779bf65a4c6451682",
+    "dateAudit": "1dc0f12e48eeba12520ed47ecfde35fbc2acf441",
+    "editorial": "a538138f64bdd06f0dd3121eed4abd4a177d35a2"
+  },
+  "sealedInputs": {
+    "source": "sha256:fed2d6064d46d0119884e87ee032993231f7830160aaa37d850282f2d88d05ef",
+    "extraction": "sha256:8a331393c9145a70cdc0e660a80ba97655488d5a3e753e75ddc15537d855966b",
+    "dateAudit": "sha256:0a0443f998330670d90d724aac5dcead81d593dfbf1bbbc025ef96ff6bc5c7b7",
+    "editorial": "sha256:946039be60fdeee6cb61cad7640d3b57a256e08c533fc4d049f599b899db6fd0"
+  },
+  "nativeDateAudit": {
+    "status": "research-blocked",
+    "contentSha256": "sha256:0a0443f998330670d90d724aac5dcead81d593dfbf1bbbc025ef96ff6bc5c7b7",
+    "affectedItemsWitness": 21,
+    "findingsCountWitness": 1,
+    "distinctHoldItemIds": [
+      "claim-42",
+      "claim-63",
+      "claim-68",
+      "claim-78",
+      "claim-82",
+      "claim-91",
+      "claim-95",
+      "hints-p002",
+      "hints-p005",
+      "hints-p006",
+      "hints-p007",
+      "hints-p008",
+      "hints-p009",
+      "hints-p010",
+      "p002",
+      "p005",
+      "p006",
+      "p007",
+      "p008",
+      "p009",
+      "p010"
+    ],
+    "distinctHoldItemCount": 21,
+    "holdPersonIdsResolvedInCurrentExtraction": 7,
+    "holdPersonIdsTotal": 7,
+    "reviewedAt": "2026-09-29T17:53:16.891Z",
+    "summary": "Reviewed 166 Chinese source units, 617 chronology and hint checks, and 131 people; unresolved source-limited chronology is preserved without inference.",
+    "translationReview": {
+      "status": "clear",
+      "conclusion": "No chronology-changing translation defect found."
+    },
+    "preservedIndependentReportBytes": true,
+    "notApprovedByOwner": true
+  },
+  "sourceCoverage": {
+    "english": {
+      "sentenceCount": 166,
+      "translatedCount": 166,
+      "bothFieldsComplete": true,
+      "metaCitation": "Translation: Garrett M. Petersen (2026)",
+      "literalAndIdiomaticField": "content[].sentences[].translations[].literal and .idiomatic"
+    },
+    "editorial": {
+      "decisionCount": 26
+    },
+    "extraction": {
+      "schemaVersion": 2,
+      "unitCount": 166,
+      "peopleCount": 131,
+      "byteLength": 303664
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialRepairsApplied": true,
+      "definiteEnglishOmissionInPeopleRecords": false,
+      "chronologyHoldsPreserved": true
+    }
+  },
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 099",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jiuwudaishi/099: 1 extraction(s), 131 local people, 587 mentions, 1515 claims, 0 proposed repair(s), 26 applied repair(s), 26 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 099",
+      "status": "stale",
+      "nativeReportStatus": "research-blocked",
+      "nativeReportSha256": "sha256:0a0443f998330670d90d724aac5dcead81d593dfbf1bbbc025ef96ff6bc5c7b7",
+      "extractionHashSealedInReport": "sha256:c13e4773eb914cd567b1434ae66c6020233bc514fb0df3dc508f45abc28976e1",
+      "extractionHashCurrent": "sha256:8a331393c9145a70cdc0e660a80ba97655488d5a3e753e75ddc15537d855966b",
+      "extractionHashMatch": false,
+      "sourceHashSealedInReport": "sha256:2d84eb1e78f304bd155dd106d05aabbb9680784c0e47497c9bcd1826099756a4",
+      "sourceHashCurrent": "sha256:fed2d6064d46d0119884e87ee032993231f7830160aaa37d850282f2d88d05ef",
+      "sourceHashMatch": false,
+      "reportBytesPreserved": true,
+      "reportRewritten": false
+    }
+  },
+  "substantiveFindings": [
+    "All four pinned git blobs witness-verified at staging 563c2b169c65; native date report SHA-256 matches work-order seal.",
+    "Independent date report remains research-blocked with 1 finding(s) covering 21 distinct item IDs; owner preserves true unknowns and does not approve the prior audit.",
+    "Scoped people:validate passes on current pinned extraction without schema holds.",
+    "No chronology-changing translation defect found.",
+    "Held person rows 7/7 still present in current extraction tuples.",
+    "Genealogy and posthumous-honor rows p002–p010 retain Western intervals inferred outside chapter-local conversion evidence."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "kind": "dependency-seal-drift",
+      "reason": "Pinned extraction content hash differs from hash sealed in the preserved independent date report; owner makes no chronology edits and does not rewrite report bytes.",
+      "sealedExtractionHash": "sha256:c13e4773eb914cd567b1434ae66c6020233bc514fb0df3dc508f45abc28976e1",
+      "currentExtractionHash": "sha256:8a331393c9145a70cdc0e660a80ba97655488d5a3e753e75ddc15537d855966b",
+      "proposal": "Host schedules independent fresh date re-audit against current extraction or recovers proof-reuse only through validated native reconciliation.",
+      "beforeAfterClaims": []
+    }
+  ],
+  "distinctHolds": [
+    {
+      "holdId": "finding-1",
+      "itemIds": [
+        "claim-42",
+        "claim-63",
+        "claim-68",
+        "claim-78",
+        "claim-82",
+        "claim-91",
+        "claim-95",
+        "hints-p002",
+        "hints-p005",
+        "hints-p006",
+        "hints-p007",
+        "hints-p008",
+        "hints-p009",
+        "hints-p010",
+        "p002",
+        "p005",
+        "p006",
+        "p007",
+        "p008",
+        "p009",
+        "p010"
+      ],
+      "distinctItemCount": 21,
+      "problem": "Extraction preserves chronology outside admitted conversion evidence.",
+      "action": "Preserve holds pending independently pinned primary chronology.",
+      "nativeTaxonomy": "research-blocked",
+      "preserve": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "ownerApproval": false,
+  "nextGate": "independent-chronology-research-or-fresh-reaudit",
+  "notes": "[CF-Pages-Skip] Retained staging owner pass; no sealed input mutation; host validates proposals.",
+  "authorEvidence": {
+    "method": "Sealed blob witness; full chapter Chinese read via source JSON; both English fields checked via meta sentence parity and unit spot-check; scoped people:validate; people:dates:verify; native date findings item IDs transcribed; no sealed input edits.",
+    "completedAt": "2026-11-24T16:45:54.481Z",
+    "peopleLookupNote": "Bounded canonical lookup not required for retained holds; uncertainty explicit in distinctHolds."
+  }
+}
