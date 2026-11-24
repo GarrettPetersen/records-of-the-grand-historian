@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "135"
+  },
+  "reviewerAgentId": "bc-a6673e96-a7cb-4c12-a97f-46412e8061eb",
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm live lookup generation before bounded header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Transport sealed dossiers and chapter Chinese units are authoritative for this review; manifest read only."
+    },
+    {
+      "route": "/v1/people/per_01ANZBG7TJVS7CADZ3NV",
+      "purpose": "Header check for Liu Bi (柳泌) canonical retained in case sha256:b1da963…",
+      "blockingNameKeys": ["zh:柳泌"]
+    },
+    {
+      "route": "/v1/people/per_0VHTM97YT5CQ9EY4PXZE",
+      "purpose": "Header check for multi-local Li Gao cluster (p040/p088)",
+      "blockingNameKeys": ["zh:李皋"]
+    }
+  ],
+  "conclusion": "Primary membership and witness quotes verified against sealed transport-part-001/002/003 units; bounded lookup used only for manifest and canonical header confirmation, not as separation or merge evidence."
+}
