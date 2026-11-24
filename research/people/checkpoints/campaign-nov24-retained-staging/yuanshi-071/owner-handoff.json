@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "071"
+  },
+  "ownerAgentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+  "campaignWorker": "cursor-nov24-retained-staging-w1-o4",
+  "idempotencyKey": "5149bbcd4a15927cfffd5e2cf9ecdff63ca8a4ab5109e6cbcf6cb166bc1efab8",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "authorBranch": "cursor/nov24-retained-staging-owner-yuanshi-071-ce781",
+  "inputBlobWitness": {
+    "source": "89032ce163ec4a9cc51d24f97ebc9d3156d8a23f",
+    "extraction": "85129f2add201655e534e931c83f89521fdaca8e",
+    "dateAudit": "ba0ba03508d3f587a1733eb447a50dc9bd62bf94",
+    "editorial": "81021452273e08e896d0ab9764bbaf44e0a45e6f"
+  },
+  "sealedInputs": {
+    "source": "sha256:ee11838d7c005cca5a4415d8c88e4fbfc2d4a3fdce436d6f3955c3647c387828",
+    "extraction": "sha256:6bd1c5886da1462af3ae4bfc542f9bc089dcc113c1247e9bc057a3db39c6e8de",
+    "dateAudit": "sha256:be89a3f0e13c25a80f5c48be0b7d17e7dc9762805ac3ce7ea27ffa1491540162",
+    "editorial": "sha256:9e18cc8bce1307de04f763577768973237c2992cf90eb0160b17d29a245d0c8a",
+    "sourceByte": "sha256:330b82abf45c1cc6840081f0801260d628e5030beac95757b419e9d51556e63f",
+    "extractionByte": "sha256:6a08e5167cc7965e9c81fa189386e34f4e7c23966b5d4d18ff8f7f4bc5c5323e"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 271,
+    "translatedCount": 271,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "bothEnglishFieldsComplete": true,
+    "acceptedEditorialRepairsReflected": true,
+    "title": "Volume 71 Treatises 24: Rites and Music 5"
+  },
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book yuanshi --chapter 071",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for yuanshi/071: 1 extraction(s), 2 local people, 4 mentions, 30 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/yuanshi/071.json",
+      "status": "passed",
+      "summary": "data/people/extractions/yuanshi/071.json: ok (2 people, 4 mentions, 30 claims, 243 candidates)"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 071",
+      "status": "research-blocked",
+      "reviewedAt": "2026-09-23T12:35:01.718Z",
+      "findings": 10,
+      "extractionHashCurrent": true,
+      "sourceHashCurrent": true
+    },
+    "deterministicErrors": []
+  },
+  "substantiveFindings": [
+    "Yuan institutional/chronicle passage with 2 local people; 10 date research holds on nested reign and event dating preserved.",
+    "Owner reread all 271 Chinese units with paired literal and idiomatic English; accepted editorial repairs are present in source; sealed extraction aligns with pinned git blobs and semantic hashes.",
+    "Complete initial source-scope chronology audit of all 271 Chinese units, all 8 temporal or active-hint items, and all 2 people. The limited extracted chronology is retained as evidence-grounded source-specific research holds pending independent event-ownership, conversion, and endpoint verification. No source, extraction, or canonical person data was changed.",
+    "Scoped person data validation passed for yuanshi/071: 1 extraction(s), 2 local people, 4 mentions, 30 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining. Extraction validator: data/people/extractions/yuanshi/071.json: ok (2 people, 4 mentions, 30 claims, 243 candidates)"
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "date-audit-research-blocked",
+      "status": "research-blocked",
+      "findingCount": 10,
+      "reviewedAt": "2026-09-23T12:35:01.718Z",
+      "preservation": "Retain independent date-audit research holds verbatim at sealed report; chronology remains current relative to pinned extraction—no substantive amendment proposed in this owner pass."
+    }
+  ],
+  "chapterReady": true,
+  "nextGate": "independent-final-chapter-review",
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; sealed inputs unchanged. Host supplies native sealed final review packets.",
+  "completedAt": "2026-11-24T16:03:20.678Z",
+  "counts": {
+    "localPeople": 2,
+    "mentions": 0,
+    "claims": 19
+  }
+}
