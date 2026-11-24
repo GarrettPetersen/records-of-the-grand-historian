@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "010"
+  },
+  "ownerAgentId": "bc-3db40fec-d4e3-431d-a996-9287a347fb88",
+  "workerId": "cursor-nov24-retained-staging-w16-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8c55f7e3cc1d09c3b34654acf77a2e12f95608cdcccddc32a8ef4bfec1bf2465",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-zhoushu-010-7fb88",
+  "handoffBranch": "cursor/nov24-retained-staging-w16-handoffs-7fb88",
+  "phase": "dispatch_pending",
+  "extractionBytes": 151759,
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 85,
+    "claims": 353
+  },
+  "inputBlobWitness": {
+    "source": "f5caabc3ce7f5a90f0519d657a4d955cc7a6f95b",
+    "extraction": "453dc35ee2673599158940fce3770664b65cd181",
+    "editorial": "11745a84715f0da16121f1fc80a8ed6815db6e0e",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:9ada2863e3585abfa62ab18b72438684f6d5f6e435683174cd0761acc70e395a",
+    "extraction": "sha256:ccafba4a2112004f18d143ad066ece2c0af1c3e9c85b8a519cbb3897ddc78d56",
+    "editorial": "sha256:cc9e7fe03652a8c96d3761076b17a5858c947435c9512b0fde5246ab6292f177"
+  },
+  "sourceCoverage": {
+    "sourceTitle": {
+      "zh": "卷10 列傳第2 邵惠公顥 杞簡公連 莒莊公洛生 虞國公仲",
+      "en": "Volume 10 Biographies 2: Duke Hao of Shaohui; Duke Lian of Qijian; Duke Luosheng of Juzhuang; Duke Zhong of Yuguo",
+      "raw": "卷10 列傳第2 邵惠公顥 杞簡公連 莒莊公洛生 虞國公仲 Volume 10 Biographies 2: Duke Hao of Shaohui; Duke Lian of Qijian; Duke Luosheng of Juzhuang; Duke Zhong of Yuguo"
+    },
+    "chineseUnits": 240,
+    "translatedCount": 240,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 151759
+  },
+  "extractionAndEditorialReuse": {
+    "reextracted": false,
+    "extractionBlobUnchanged": true,
+    "editorialBlobUnchanged": true,
+    "sourceBlobUnchanged": true,
+    "acceptedEditorialDecisionsRetained": true,
+    "editorialDecisionCount": 17,
+    "editorialStatus": "reviewed-with-applied-proposals-blocked-by-authorization-contract"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-010/date-packet.json",
+    "sha256": "sha256:4d566ec7eeff3980596e9b3d364002eaa5aeb112cb3c31c8d94cd6b8d7ceb29c",
+    "sourceHash": "sha256:3e74e433662fca500d852d43eb5d9a3e343d8affc3aabeeab6ce76efa9527e01",
+    "extractionHash": "sha256:278b137f54d1d68bf7bfb1f2f1bc0de28e64c85d90aa14877c97498be06698cf",
+    "itemChecks": 268,
+    "peopleCount": 85,
+    "unitCount": 240
+  },
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book zhoushu --chapter 010",
+    "peopleValidateSummary": "Person data validation failed: applied zhoushu:010:r0001 has no matching independent accept/revise authorization; applied zhoushu:010:r0002 has no matching independent accept/revise authorization.",
+    "datesScanFindings": 0,
+    "datesScanCommand": "npm run people:dates:scan -- --book zhoushu --chapter 010",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book zhoushu --chapter 010",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "datePacketCommand": "npm run people:dates:packet -- --book zhoushu --chapter 010 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-010/date-packet.json",
+    "chronologyStatus": "un-audited",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at witness-matched blobs. Full chapter English coverage verified (240 units). Native date packet prepared (268 checks); people:dates:verify remains un-audited. people:validate blocked because compact repair ordinals r0001/r0002 (s0070 burial rhetoric) do not align with editorial proposal ids of the same numbers; sealed inputs retained unchanged.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "editorial-authorization-contract",
+      "repairIds": [
+        "zhoushu:010:r0001",
+        "zhoushu:010:r0002"
+      ],
+      "cause": "Schema-v2 compact translationRepairs assign repair ids by application order (r0001/r0002 are s0070 literal/idiomatic burial-rhetoric fixes), while editorial proposal ids r0001/r0002 target s0004 and s0031. validateAppliedEditorialDecisions therefore reports the first two applied repairs as lacking accept/revise authorization even though later ordinals match reviewed decisions.",
+      "unauthorizedAppliedUnits": [
+        {
+          "repairId": "zhoushu:010:r0001",
+          "unit": "s0070",
+          "field": "literal"
+        },
+        {
+          "repairId": "zhoushu:010:r0002",
+          "unit": "s0070",
+          "field": "idiomatic"
+        }
+      ],
+      "nextGate": "independent-editorial-authorship-reconciliation",
+      "ownerAction": "none-retain-sealed-english-and-decisions"
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "status": "required",
+      "currentStatus": "un-audited",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-010/date-packet.json",
+      "artifactSha256": "sha256:4d566ec7eeff3980596e9b3d364002eaa5aeb112cb3c31c8d94cd6b8d7ceb29c",
+      "notes": "Owner prepared candidate chronology packet only; independent reviewer must record people:dates approval via native report."
+    },
+    "chapterIdentityReview": {
+      "required": true,
+      "completed": false,
+      "notes": "Bounded canonical identity review on full chapter people/claims remains after independent date approval."
+    },
+    "editorialRecovery": {
+      "required": true,
+      "repairIds": [
+        "zhoushu:010:r0001",
+        "zhoushu:010:r0002"
+      ],
+      "completed": false
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book zhoushu --chapter 010",
+    "datesVerify": "npm run people:dates:verify -- --book zhoushu --chapter 010",
+    "datesPacket": "npm run people:dates:packet -- --book zhoushu --chapter 010 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-010/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book zhoushu --chapter 010"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry, deploy, or merge. Owner does not self-approve independent date audit."
+}
