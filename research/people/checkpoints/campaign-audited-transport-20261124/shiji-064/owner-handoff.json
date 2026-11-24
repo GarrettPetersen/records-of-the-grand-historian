@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-audited-identity-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "064"
+  },
+  "ownerAgentId": "bc-47648f6a-9ca6-438d-9cd5-6f14a61294c2",
+  "campaignWorker": "cursor-github-nov24-cross-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "baseCommit": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "sourceRevision": "32d461ef5297344e103a040cf9ee28fb05837535",
+  "transportCommit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+  "transportBranch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+  "retrospectiveSeedCommit": "f664afe9cfd3af7a0f19a51baf48b10c05ae441a",
+  "transportSha256": "ac6f5972b63c072b4802cd6f956c9732c0f80d92433b52a3a31a1cdab3320a93",
+  "planFingerprint": "sha256:2a035624074530fcacf4f1899e28f17fcedf3d85f58a0703ac3ce2bd86001154",
+  "reviewCases": 14,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/validation-receipt.json",
+    "chronologyProof": "research/people/checkpoints/retrospective-chronology-20261124/shiji-064.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/shiji-064/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 064",
+    "verifyRetrospective": "git show f664afe9cfd3af7a0f19a51baf48b10c05ae441a:research/people/checkpoints/retrospective-chronology-20261124/shiji-064.json"
+  },
+  "notes": "Preparation seals dateAudit 43b148f… (retrospective-audited). Owner evidence is not independent approval. Chronology blocker cleared via retrospective proof artifact; identity review remains.",
+  "ownerEvidenceSha256": "sha256:8793e6ab83c068f5faa3d014b3507e78787b3a1797b8327c0babbcd3cab13840"
+}
