@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "kind": "targeted-primary-witness-owner-delta",
+  "chapterKey": "houhanshu:093",
+  "mode": "targeted-primary-witness",
+  "ownerAgentId": "bc-977db51c-ec93-4d60-9d14-c6f7f3527c76",
+  "ownerWorker": "cursor-nov24-four-part-owner-5",
+  "ownerRevision": "0442471aad2f8d681496faebb242890916320205",
+  "sourceReviewHead": "3c5bdf7f4403b1d48bd9e46478e1550cb3e664bc",
+  "sourceReviewRef": "cursor/nov24-four-part-independent-houhanshu-093-4817",
+  "idempotencyKey": "e174c3189d550e297fa57b1e8894a8b5bb84f69881075e1e91d242c26c2706c8",
+  "priorRun": "run-7756752f-6888-45d0-89aa-e0cb74613a63",
+  "sealedHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-four-part-audited/houhanshu-093/owner-handoff.json",
+    "sha256": "76b687eb85fcc768343c50ba3bba49cd187a8b595e7f2744b66be24a032c0d09"
+  },
+  "cases": [
+    {
+      "caseId": "sha256:dd7add0d8a793fcab93196e30ed64271b22cd955030abb728701a3f8936fe0ca",
+      "localPersonId": "houhanshu:093:p072",
+      "chapterPersonId": "p072",
+      "canonicalPersonId": "per_D573WNDND2ZV0X38SG1R",
+      "disposition": "agree-hold",
+      "unresolvedIdentity": true,
+      "primaryNameWitnessPresent": false,
+      "summary": "Independent hold is correct. The chapter names Xu Man (许曼, s0044) and his paternal grandfather Xu Jun Jishan (祖父峻/季山, s0045). s0045 does not contain 父, 许曼之父, or any personal name for the intervening generation; only 祖父 links Jun to Man. p072 is a structural kinship entailment, not a quotable named person.",
+      "reason": "Agree with reviewer hold: houhanshu:093:p072 cannot receive primary personal-name certification. Owned Chinese supports Xu Man (p013) and Xu Jun (p014) only. The descriptive surfaces 许曼之父 and 许峻之子 on p072 are model kinship labels, not text present in s0045; they must not be treated as primary quotations. Retain canonical cluster per_D573WNDND2ZV0X38SG1R with unresolved identity and entailed-generation claims; do not invent a father’s name from English glosses or from 父 in claim kinshipTerm metadata alone.",
+      "sourceWitnesses": [
+        {
+          "localId": "houhanshu:093:p013",
+          "chapterPersonId": "p013",
+          "book": "houhanshu",
+          "chapter": "093",
+          "unitId": "s0044",
+          "quote": "许曼",
+          "role": "named-person"
+        },
+        {
+          "localId": "houhanshu:093:p014",
+          "chapterPersonId": "p014",
+          "book": "houhanshu",
+          "chapter": "093",
+          "unitId": "s0045",
+          "quote": "祖父峻",
+          "role": "named-person"
+        },
+        {
+          "localId": "houhanshu:093:p014",
+          "chapterPersonId": "p014",
+          "book": "houhanshu",
+          "chapter": "093",
+          "unitId": "s0045",
+          "quote": "季山",
+          "role": "courtesy-name"
+        },
+        {
+          "localId": "houhanshu:093:p072",
+          "chapterPersonId": "p072",
+          "book": "houhanshu",
+          "chapter": "093",
+          "unitId": "s0045",
+          "quote": "祖父",
+          "role": "kinship-term-only",
+          "note": "Documents the paternal-grandfather link between Xu Jun and Xu Man; does not supply a personal name for the intervening father generation."
+        }
+      ],
+      "namedPersonScope": {
+        "certifiedInChapter": ["p013", "p014"],
+        "entailedUnnamed": ["p072"]
+      },
+      "contradictions": []
+    }
+  ],
+  "proposedChanges": [
+    {
+      "schemaVersion": 1,
+      "kind": "extraction-person-record-narrowing",
+      "book": "houhanshu",
+      "chapter": "093",
+      "targetPath": "data/people/extractions/houhanshu/093.json",
+      "sealedBlob": "4f27129040008ac91f35af569b49652db38a60e9",
+      "affectedPersonIds": ["p072"],
+      "affectedItemIds": ["p072"],
+      "sourceCitation": {
+        "unitId": "s0045",
+        "zh": "祖父峻，字季山，善卜占之术，多有显验，时人方之前世京房。"
+      },
+      "field": "person.names.zh",
+      "before": "许曼之父",
+      "after": null,
+      "reason": "许曼之父 does not appear in owned chapter Chinese; it is an English-driven kinship label, not a primary personal-name surface."
+    },
+    {
+      "schemaVersion": 1,
+      "kind": "extraction-alias-retraction",
+      "book": "houhanshu",
+      "chapter": "093",
+      "targetPath": "data/people/extractions/houhanshu/093.json",
+      "sealedBlob": "4f27129040008ac91f35af569b49652db38a60e9",
+      "affectedPersonIds": ["p072"],
+      "before": {
+        "kind": "descriptive-kinship",
+        "en": "Father of Xu Man and son of Xu Jun",
+        "zh": "许曼之父、许峻之子",
+        "strength": "strongly-inferred",
+        "unitIds": ["s0045"]
+      },
+      "after": null,
+      "reason": "Neither 许曼之父 nor 许峻之子 occurs in s0045 (which reads 祖父峻…). Alias must not attribute non-quotable Chinese strings to the primary unit; retain strongly-inferred family claims that cite only 祖父 and named persons 许曼/峻 elsewhere."
+    }
+  ],
+  "held": [
+    {
+      "caseId": "sha256:dd7add0d8a793fcab93196e30ed64271b22cd955030abb728701a3f8936fe0ca",
+      "localPersonId": "houhanshu:093:p072",
+      "canonicalPersonId": "per_D573WNDND2ZV0X38SG1R",
+      "unresolvedIdentity": true,
+      "ownerAgreesWithReviewerHold": true,
+      "outcome": "source-supported-unknown",
+      "reason": "Entailed unnamed father generation remains valid as structural kinship inference; primary-name certification remains blocked until quotable personal-name evidence appears."
+    }
+  ],
+  "validation": {
+    "reviewedAt": "2026-11-24T15:20:00.000Z",
+    "sealedInputsUnchanged": true,
+    "peopleValidate": "Scoped person data validation passed for houhanshu/093: 1 extraction(s), 105 local people, 672 mentions, 1115 claims, 0 proposed repair(s), 20 applied repair(s), 20 editorial decision(s), 2 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    },
+    "reproduce": {
+      "validateChapter": "npm run people:validate -- --book houhanshu --chapter 093",
+      "validateDates": "npm run people:dates:verify -- --book houhanshu --chapter 093"
+    },
+    "canonicalEditsApplied": false,
+    "notes": "Owner return only; extraction proposals are for independent review and are not applied on this branch."
+  }
+}
