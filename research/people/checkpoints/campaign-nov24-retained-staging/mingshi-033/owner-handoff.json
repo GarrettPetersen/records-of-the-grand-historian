@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "033"
+  },
+  "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+  "workerId": "cursor-nov24-retained-staging-w10-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "892a491c64e2d709f2f81f9d3b925676866762d3c9d6243dc51b67d3f5d63644",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-mingshi-033-0945d",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:f83ebdb64ed6f9bb44440aba18166324b52fc02beb7d46994db2c126d8a804d7",
+    "people": 1,
+    "claims": 12,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "631058f6c5c2aab43caff53e09fdbfc84431cb56",
+    "extraction": "87703b2c1340a1d1445b0f9eb67bdc27d7af5912",
+    "editorial": "402137f60bba5297d47bb5d732351eee8cfff62a"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:e859d37190896cf3c223c6d97adad2cd19c5f655da1a13c33648281afa973afd",
+    "extraction": "sha256:f83ebdb64ed6f9bb44440aba18166324b52fc02beb7d46994db2c126d8a804d7",
+    "editorial": "sha256:8446be2e9007c33483860156f526f251a4ae4d493782548910c3546b53616046"
+  },
+  "datePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-033/date-packet.json",
+    "contentSha256": "sha256:f252489ddadb03cb0809666e936537f16450fb6e34b7b666e2a5206e3b4f61a4",
+    "packetSourceHash": "sha256:562f3ee51dd62518459debdb62c8adb0a92eb89fc7539a1b107c64d2bbb6b066",
+    "packetExtractionHash": "sha256:1c81e22e520a901f08248c104f0f6f559ddfe736be6f2b30c33fdeda75cfc4cb",
+    "itemCount": 2,
+    "peopleInPacket": 1,
+    "unitCount": 633
+  },
+  "sourceCoverage": {
+    "titleEn": "Volume 33 Treatises 9: Calendar 3",
+    "titleZh": "卷三十三 志第九 曆三",
+    "sentenceCount": 633,
+    "translatedCount": 633,
+    "englishComplete": true,
+    "bothFieldsOnUnits": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "gitBlob": "87703b2c1340a1d1445b0f9eb67bdc27d7af5912",
+    "contentSha256": "sha256:f83ebdb64ed6f9bb44440aba18166324b52fc02beb7d46994db2c126d8a804d7",
+    "bytes": 45174,
+    "canonicalEdits": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "402137f60bba5297d47bb5d732351eee8cfff62a",
+    "contentSha256": "sha256:8446be2e9007c33483860156f526f251a4ae4d493782548910c3546b53616046",
+    "acceptedDecisionCount": 2,
+    "repairsReflectedInSource": true,
+    "claimRetractions": 0,
+    "claimRevisions": 0
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book mingshi --chapter 033",
+      "passed": true,
+      "summary": "Scoped person data validation passed for mingshi/033: 1 extraction(s), 1 local people, 2 mentions, 19 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 033",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book mingshi --chapter 033 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-033/date-packet.json",
+      "completed": true
+    }
+  },
+  "substantiveFindings": "Calendar treatise chapter: sole person Mei Wending (梅文鼎) with explicit AD 1633–1721 attestation tied to s0133–s0134; accepted editorial repairs for Mei Wending romanization are present in both literal and idiomatic fields at s0133. No source–extraction contradiction, dangling evidence, or new definite English omission in this owner pass.",
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "completed": false,
+      "reason": "No data/people/date-audits record; people:dates:verify reports un-audited. Owner prepared sealed date-packet only; does not self-approve.",
+      "packetSha256": "sha256:f252489ddadb03cb0809666e936537f16450fb6e34b7b666e2a5206e3b4f61a4",
+      "minimumContinuation": "Independent reviewer records full native date audit via people:dates:record against packet at sha256:f252489ddadb03cb0809666e936537f16450fb6e34b7b666e2a5206e3b4f61a4 without altering pinned extraction or editorial blobs."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "completed": false,
+      "reason": "Chapter-scoped validation passed; corpus-wide merge/split identity review remains outside this owner pass."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "Candidate chronology sealed in date-packet; await separate source reviewer approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "ownerChangesRequired": false,
+  "completedAt": "2026-11-24T17:08:02.951Z",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 033",
+    "verifyDates": "npm run people:dates:verify -- --book mingshi --chapter 033",
+    "buildDatePacket": "npm run people:dates:packet -- --book mingshi --chapter 033 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-033/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass: reuse extraction and editorial; prepare date-packet; no registry, deploy, or merge."
+}
