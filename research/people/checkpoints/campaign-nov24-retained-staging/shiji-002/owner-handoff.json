@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "002"
+  },
+  "ownerAgentId": "bc-6a74b3d1-5ce0-4540-9745-6315dc4ff727",
+  "worker": "cursor-nov24-retained-staging-w5-o5",
+  "idempotencyKey": "f2841825a0f34f983aad3d0066ca6cba7cb5e8d60ae79063582026877c267fd2",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-002-ff727",
+  "inputBlobWitness": {
+    "source": "d4db6b7c58f24ad54fef820a835198ca100070a7",
+    "extraction": "1b292fa19ad83a501ac011ae0cd86ed7c37ec738",
+    "dateAudit": "9fb7e4de16806c76c2709a14c5dfdaf9d88910c4",
+    "editorial": "25d89853071d914ad618465257fd707f68d513ff"
+  },
+  "sealedInputs": {
+    "source": "sha256:3980e510859b34e2a904ef683b56527c45463d946e6332121f874f1ddc682833",
+    "extraction": "sha256:bf6ab30afd493c7a13ed4f65fdb2c94ebcdb2a8ad9df537fd304a710f19c15bc",
+    "dateAudit": "sha256:471786c36ae4eee9b9fc51df364bc6c31822043382508ac3442305507dc7b403",
+    "editorial": "sha256:889acdf2e97e778dbd40d4deae19fbaacb75e849e7a61349072be821aac8ea44"
+  },
+  "sealedDateAuditWitness": {
+    "contentSha256": "sha256:471786c36ae4eee9b9fc51df364bc6c31822043382508ac3442305507dc7b403",
+    "recordedStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T11:28:34.099Z",
+    "findings": 1,
+    "preservedOriginalReportBytes": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 258,
+    "translatedCount": 258,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 002",
+    "summary": "Scoped person data validation passed for shiji/002: 1 extraction(s), 42 local people, 397 mentions, 421 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 002",
+      "status": "research-blocked",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T11:28:34.099Z",
+      "sealedReportStatus": "research-blocked",
+      "exitCodeNonZero": true
+    },
+    "editorialDecisionCount": 5
+  },
+  "substantiveFindings": "Annals of Xia (258 sentences): all units carry paired literal and idiomatic English; s0260–s0261 authorial passages align with retained p040/p042 unresolved attestations and research-required hints. Scoped validation reports 42 people, 421 claims, five applied editorial repairs, zero dangling evidence. Sealed date-audit SHA-256 matches work order; people:dates:verify returns research-blocked for the six-item hold (claim-275, claim-276, hints-p040, hints-p042, p040, p042). No definite English defect or concrete chronology repair from changed evidence; BC 109–91 and BC 551–479 life ranges correctly not restored.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "date-audit-finding-1",
+      "kind": "chronology-research-hold",
+      "itemIds": [
+        "claim-275",
+        "hints-p040",
+        "claim-276",
+        "hints-p042",
+        "p040",
+        "p042"
+      ],
+      "people": [
+        "p040",
+        "p042"
+      ],
+      "problem": "Two explicit source-specific research holds remain after curation: 太史公曰 is an authorial attribution and 孔子正夏時 is an undated attributed act; neither unit gives a personal Western activity interval.",
+      "action": "Preserve these source-linked holds unless separately verified research supplies a source-qualified chronology; do not recreate the removed BC 109–91 or BC 551–479 life ranges.",
+      "sealedDateAuditStatus": "research-blocked",
+      "preservedOriginalReportBytes": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 002",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 002"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; sealed inputs unchanged."
+}
