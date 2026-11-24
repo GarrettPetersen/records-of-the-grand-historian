@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-western-strip-scope-check",
+  "book": "jinshu",
+  "chapter": "110",
+  "ownerPullRequest": 5462,
+  "ownerCommitVerified": "3f986455966bd966adaac92d2631cc5147f7cbd9",
+  "ownerReceipt": "research/people/jinshu110-owner-dependency-receipt-western-bounds-20261124.json",
+  "ownerBaseCommit": "c5e2f862bd7a3f2bf2b112727cece35860811cca",
+  "independentPriorDiagnosis": "research/people/jinshu110-independent-grouped-owner-check-c5e2f862-20261124.json",
+  "verifiedAt": "2026-11-24T01:55:00.000Z",
+  "method": "Read-only: extraction diff c5e2→3f98645596, packet rebuild, prior parts 001–021 checks[] for 168 IDs only.",
+  "exactScopeCounts": {
+    "westernBoundsAtC5e2": 169,
+    "westernBoundsStrippedThisCommit": 168,
+    "westernBoundsValueChangedNotStripped": 0,
+    "westernBoundsRetainedUnchanged": 1,
+    "retainedClaimId": "claim-670",
+    "extractionWesternRowsAfter": 1,
+    "packetRowsWithWesternAfter": 1,
+    "receiptClaimIdUnionMatchesDiff": true,
+    "claimsUneditedByThisCommit": 1000,
+    "totalClaimsInChapter": 1168
+  },
+  "nativeValidation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 110",
+    "result": "PASS",
+    "afterExtractionHash": "sha256:259077cb42eebd52dbc0e17ba9902c0ce0e67e11867fe1c2c6be68f53ede61b9"
+  },
+  "receiptBucketsVerified": {
+    "mingnianYongheSyntheticAd350": {
+      "count": 39,
+      "sharedPrimaryChinese": {
+        "anchorUnit": "s0011",
+        "text": "明年，俊率三軍南伐，出自盧龍，次於無終。",
+        "downstreamExample": {
+          "unitId": "s0015",
+          "text": "及冉閔殺石祗，僭稱大號，遣其使人常煒聘於俊。"
+        }
+      },
+      "independentDispositionAfterStrip": {
+        "supportedSourceForm": 9,
+        "stillHeldUnresolved": 30,
+        "note": "Death rows (e.g. claim-72) event-only without dateContext; participations use unit-native 及冉閔殺石祗 unresolved."
+      },
+      "examplePostStrip": {
+        "claimId": "claim-72",
+        "independentVerdict": "supported",
+        "shape": "death event retained; no westernBounds"
+      }
+    },
+    "yeCampaignAd350Inherit": {
+      "count": 112,
+      "sharedPrimaryChinese": {
+        "sharedPassageId": "sp-s0060-s0071-ye",
+        "unitIds": ["s0060", "s0071"],
+        "text": "閔將蔣幹閉城距守。 … 既而蔣幹率銳卒五千出城挑戰…"
+      },
+      "independentDispositionAfterStrip": {
+        "supportedSourceForm": 31,
+        "stillHeldUnresolved": 81
+      },
+      "examplePostStrip": {
+        "claimId": "claim-212",
+        "independentVerdict": "supported-relative-undated",
+        "shape": "sourceDate 既而, unresolved: true; preserved sortie s0071"
+      }
+    },
+    "yongheSpineLeakWestern": {
+      "count": 4,
+      "claimIds": ["claim-98", "claim-136", "claim-162", "claim-163"],
+      "sharedPrimaryChinese": {
+        "claim-136": { "unitId": "s0008", "text": "皝死，永和五年，僭即燕王位…" },
+        "claim-98": { "unitId": "s0023", "text": "去歲…" }
+      },
+      "independentDispositionAfterStrip": { "stillHeldUnresolved": 4 },
+      "verdictOnStrip": "supported — removes AD 349 not on cited unit"
+    },
+    "zhizhiOffChapterDeathLeak": {
+      "count": 1,
+      "claimIds": ["claim-501"],
+      "sharedPrimaryChinese": {
+        "unitId": "s0188",
+        "text": "郅支之首"
+      },
+      "independentDispositionAfterStrip": {
+        "alignedWith": "claim-771 unresolved attestation",
+        "shape": "death event-only; no BC 36"
+      },
+      "verdictOnStrip": "supported"
+    },
+    "weiLiShengping4Inherit": {
+      "count": 5,
+      "claimIds": ["claim-757", "claim-758", "claim-759", "claim-769", "claim-770"],
+      "sharedPrimaryChinese": {
+        "unitId": "s0326",
+        "text": "及暐立"
+      },
+      "independentDispositionAfterStrip": { "supportedSourceForm": 2, "stillHeldUnresolved": 3 },
+      "verdictOnStrip": "supported — removes inherited AD 360 without 昇平四年 on cite"
+    },
+    "miscWesternSeven": {
+      "count": 7,
+      "independentDispositionAfterStrip": { "stillHeldUnresolved": 7 },
+      "claimIds": ["claim-228", "claim-681", "claim-683", "claim-689", "claim-690", "claim-692", "claim-693"],
+      "examplePostStrip": {
+        "claimId": "claim-228",
+        "chinese": "建元曰元璽",
+        "shape": "unresolved pending conversion"
+      }
+    }
+  },
+  "independentVerdictRollupFor168Stripped": {
+    "mappedFromParts001to021": 168,
+    "priorVerdictCounts": {
+      "hold-narrative-bounds": 98,
+      "hold-calendar-conversion": 27,
+      "supported-relative-undated": 35,
+      "supported": 7,
+      "hold-inherited-narrative": 1
+    },
+    "postOwnerStripDisposition": {
+      "supportedRemediationOfUnsupportedWestern": 168,
+      "independentSourceFactsRetained": 42,
+      "independentHoldsRemainAsUnresolved": 126,
+      "explanation": "Strip does not upgrade holds to approved Western dates; it removes synthetic bounds while keeping independently supported death/event clauses or Chinese-relative unresolved rows."
+    }
+  },
+  "supportedRetainUnchanged": {
+    "claimId": "claim-670",
+    "independentVerdict": "supported",
+    "primaryChinese": {
+      "unitId": "s0255",
+      "text": "昇平四年，俊死，時年四十二，在位十一年。"
+    },
+    "westernBounds": "onOrAfter/onOrBefore AD 360 — sole remaining packet Western row"
+  },
+  "explicitUntouchedGroups": {
+    "notInThis168StripDiff": {
+      "claimCount": 1000,
+      "includes": [
+        "c5e2 yongheSpine 15 IDs (already unresolved, no western)",
+        "c5e2 shengpingShared 158 IDs",
+        "c5e2 offChapter 678/771 (already unresolved)",
+        "2bb37206 scoped: claim-137, claim-213, seven hints, frozen 774–787",
+        "15 applied English repairs",
+        "all other claims never carrying westernBounds at c5e2 baseline"
+      ]
+    },
+    "priorWesternDiagnosis169MinusThisStrip": {
+      "unchangedWesternCount": 1,
+      "unchangedId": "claim-670"
+    },
+    "receiptRemainingEvidenceNote": "Owner receipt lists additional claim IDs under remainingEvidence.remainingWesternRows; extraction bytes at 3f98645596 have westernBounds on claim-670 only — those rows use inherited sourceDate strings without westernBounds (e.g. claim-46, claim-68). Treat receipt block as intent documentation, not live Western inventory."
+  },
+  "preciseStillHeldClaimsAfterStrip": {
+    "definition": "Among the 168 stripped, independent hold-* verdicts now correctly expressed as unresolved / undated / event-only without Western",
+    "count": 126,
+    "holdKinds": [
+      "hold-narrative-bounds (98)",
+      "hold-calendar-conversion (27)",
+      "hold-inherited-narrative (1)"
+    ],
+    "conversionPendingNativeAudit": [
+      "永和五年 anchor s0008",
+      "明年 s0011",
+      "建元曰元璽",
+      "咸和中 / 元璽 era phrases in misc bucket"
+    ],
+    "notReAudited": "463 prior packet items outside the 168-ID strip scope"
+  },
+  "sourceBackedSupportedAfterStrip": {
+    "count": 42,
+    "definition": "Independently supported or supported-relative-undated at prior review; owner strip removes only synthetic Western",
+    "examples": [
+      { "claimId": "claim-72", "unitId": "s0015", "fact": "殺石祗", "verdict": "supported" },
+      { "claimId": "claim-119", "unitId": "s0040", "fact": "death explicit", "verdict": "supported" },
+      { "claimId": "claim-212", "unitId": "s0071", "fact": "sortie", "verdict": "supported-relative-undated" },
+      { "claimId": "claim-501", "unitId": "s0188", "fact": "郅支之首 death event", "verdictStrip": "off-chapter BC removed" }
+    ]
+  },
+  "verdictOnOwnerWesternStrip": "supported-for-scoped-168",
+  "notApproved": ["merge", "data/people/date-audits/jinshu/110.json", "calendar certification"]
+}
