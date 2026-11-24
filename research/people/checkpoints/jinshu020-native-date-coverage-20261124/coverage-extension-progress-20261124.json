@@ -5,6 +5,7 @@
   "ownerRevision": "1106dc44ba8ce3bbd8d76ff9c3a3db7cbdd138c0",
   "manifestCommit": "8cb8e09e5208e760647549723307ad9f1b01d558",
   "reviewerBranch": "cursor/jinshu-020-independent-editorial-review-b1df",
+  "coverageCheckpointRevision": "4c9944eeb4bef680adffb17b7efb411a140a281e",
   "retainedPartialReport": "research/people/jinshu020-cloud-authoring-20261123/date-audit-report-partial-s0037-s0700.json",
   "inputPins": {
     "sourceSha256": "sha256:498b0f5141ce8b201844756864fa4a91abf6531cef14fd1d17cf650a70198a6a",
@@ -19,18 +20,46 @@
   "extensionParts": [
     {
       "part": 1,
-      "unitsArtifact": "research/people/checkpoints/jinshu020-native-date-coverage-20261124/native-date-coverage-units-part1-20261124.json",
-      "personChecksArtifact": "research/people/checkpoints/jinshu020-native-date-coverage-20261124/native-date-coverage-personChecks-part1-20261124.json",
+      "unitsArtifact": "native-date-coverage-units-part1-20261124.json",
+      "personChecksArtifact": "native-date-coverage-personChecks-part1-20261124.json",
+      "manifestPersonSlice": [0, 100],
       "unitsDelivered": 92,
+      "personChecksDelivered": 100
+    },
+    {
+      "part": 2,
+      "personChecksArtifact": "native-date-coverage-personChecks-part2-20261124.json",
+      "manifestPersonSlice": [100, 200],
       "personChecksDelivered": 100,
-      "unitBlockers": 0,
-      "personBlockers": 0,
-      "materialExceptions": []
+      "firstPersonId": "p127",
+      "lastPersonId": "p234"
+    },
+    {
+      "part": 3,
+      "personChecksArtifact": "native-date-coverage-personChecks-part3-20261124.json",
+      "manifestPersonSlice": [200, 281],
+      "personChecksDelivered": 81,
+      "firstPersonId": "p235",
+      "lastPersonId": "p325"
     }
   ],
-  "remainingAfterPart1": {
-    "personChecks": 181,
-    "nextPersonIdStart": "p127"
+  "composition": {
+    "candidateReport": "jinshu020-native-date-audit-candidate-20261124.json",
+    "validationReceipt": "jinshu020-native-date-audit-candidate-validation-20261124.json",
+    "composeScript": "compose-native-date-audit-candidate-20261124.mjs",
+    "counts": {
+      "reviewedUnits": 756,
+      "personChecks": 325,
+      "itemChecksRetained": 650,
+      "priorPersonChecksRetained": 44,
+      "extensionPersonChecks": 281
+    },
+    "nativeValidatorAgainstPinPacket": "passed-needs-revision-status",
+    "notCanonicalDataPath": true
   },
-  "hostComposeNote": "Merge part unitReviews into reviewedUnits and append personChecks; do not regenerate itemChecks. Complete packet needs 325 person checks and 756 reviewed units."
+  "remainingAfterCompletion": {
+    "personChecks": 0,
+    "units": 0
+  },
+  "materialExceptionsTotal": 0
 }

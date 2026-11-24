@@ -52,9 +52,9 @@ Witness policy: `lib/chronology-witness.mjs` — packet name, zh surface, or pri
 
 `independent-hold-amend-verification-20261124.json`: **12/12** scope items accepted, **0** rejected, **0** concrete contradictions; **8** groups closed (002, 004, 007, 011, 013–016). **hold-004** fully closed (**claim-24** undated strip). **claim-112**: Long'an 4 on **s0191** kept; Taiyuan 21 parentage start correctly stripped. Cumulative **22/46** groups closed. Next owner wave: **hold-038** bulk hints — `consolidated-chronology-next-work-20261124.json`. Not audited.
 
-## Native coverage extension (part 1)
+## Native coverage extension (complete)
 
-Manifest `research/people/checkpoints/jinshu020-native-date-coverage-20261124/missing-coverage.json` @ `8cb8e09e`. Part 1: **92** unit reviews + **100** person checks (`native-date-coverage-*-part1-20261124.json`); **181** person checks remain. Blockers: **0**. Progress: `coverage-extension-progress-20261124.json`.
+Manifest @ `8cb8e09e`. Parts 1–3: **92** units + **281** extension person checks + **44** retained = **325** people, **756** units. Candidate compose: `checkpoints/jinshu020-native-date-coverage-20261124/jinshu020-native-date-audit-candidate-20261124.json` (**650** itemChecks unchanged). Pin-packet validator: **passed** (`needs-revision` status). Not canonical `data/people/date-audits/` / not publication.
 
 ## Recording gate
 
