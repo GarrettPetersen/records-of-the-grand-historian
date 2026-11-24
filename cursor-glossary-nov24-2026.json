@@ -5,17 +5,17 @@
   "resetDate": "2026-11-24",
   "resetTime": null,
   "dispatchDeadline": null,
-  "dispatchState": "hold-cursor-billing-verification",
+  "dispatchState": "open-verified-included-usage",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-23T22:21:45.483Z",
-    "cursorModelsUsedPercent": 27,
-    "otherModelsUsedPercent": 64,
+    "verifiedAt": "2026-11-24T04:13:38.849Z",
+    "cursorModelsUsedPercent": 38,
+    "otherModelsUsedPercent": 73,
     "onDemandLimitUsd": 1,
     "onDemandLimitReached": true,
     "lastObservedOnDemandMeterUsd": 2.91,
-    "recentCloudUsageClassification": "Included; verified 067 and 116 cloud agents on Cursor usage dashboard",
-    "resetDisplay": "Nov 24, about 20 hours and 13 minutes remaining at observation"
+    "recentCloudUsageClassification": "Existing Cursor Cloud costs reflected in both included model pools with the displayed on-demand meter unchanged at $2.91.",
+    "resetDisplay": "Nov 24, 14 hours and 19 minutes remaining at observation"
   },
   "workers": {
     "running": [],
@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Verify the original billing cycle, included allowances and unchanged cap, then resume the pinned Cursor wave. In parallel, verify the hosted release candidate.",
+  "nextAction": "Resume the eight highest-priority distinct retained Cursor scopes. Verify run receipts and actual occupancy before adding other work.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:11:55.724Z",
+  "lastCheckedAt": "2026-11-24T04:13:38.850Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -15602,9 +15602,12 @@
     "start": "2026-11-23T22:12:41.641Z"
   },
   "billingAdmissionObservation": {
-    "at": "2026-11-23T22:51:14.636Z",
-    "lastDashboardObservation": "2026-11-23T22:21:45.483Z",
-    "method": "The signed-in Chrome connection is unavailable. The original reset was verified for November 24, the unchanged cutoff is much earlier, and the last observed fixed $1 cap was already reached with both included pools positive. Four existing completion scopes are eligible under that verified cycle and hard cap. Preserve the old observation timestamp and stop if Cursor reports quota or billing errors."
+    "at": "2026-11-24T04:13:38.849Z",
+    "source": "Signed-in Cursor Spending dashboard",
+    "billingCycleStillActive": true,
+    "onDemandCapUnchanged": true,
+    "meterUnchanged": true,
+    "absoluteCutoff": "2026-11-24T16:00:22.165Z"
   },
   "cloudScale": {
     "status": "submitted",
