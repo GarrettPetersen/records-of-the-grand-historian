@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-identity-independent-repair-handoff",
+  "scope": { "book": "liaoshi", "chapter": "114" },
+  "pullRequest": 5526,
+  "authorBranch": "cursor/liaoshi-114-audited-owner-1de5",
+  "authorAgentId": "bc-5782b067-a4f3-49a7-936b-07d6064d1de5",
+  "ownerWorkerId": "cursor-nov24-audited-recovery-5",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-114/independent-identity-report.json",
+    "commit": "f474a5b324cf2954733c0f8a2dea29929a9b6c2e",
+    "sha256": "9e42e4462771898bd5331595b7f7d7de4bafaa8409747d826e73cb7a6d640e1c"
+  },
+  "independentReviewer": {
+    "agentId": "bc-a6fb8446-5911-445b-8851-5ad917a56f8e",
+    "name": "cursor-nov24-independent-liaoshi-114"
+  },
+  "transportSha256": "f2ba7b671b1c6b5d3ce7065aeb3d30251eeb26ff63dc83693c3bbb4e7b6110bd",
+  "sealedInputsUnchanged": {
+    "source": "sha256:9a90547cb2673f99025e92ba0afd43f5537e0aa948cf0b5d96c4196d4d19d8c4",
+    "extraction": "sha256:a5a77766914d3b5a138e515c0dbb24a570a5bfdc44faf6bf749ef3b90fae2a14",
+    "editorial": "sha256:99a007bcb1f32eab98df64743e2c1adbec7aa0e8d86756d7a7cac451a43cceb0",
+    "dateAudit": "sha256:50bab0c42585d59b087bccbdf78c03c79de169f9e66f897e00a5c676cf5a7df7"
+  },
+  "holdCaseCount": 4,
+  "approvedCaseCount": 37,
+  "commonDefect": "Owner cited descriptive-kinship extraction labels (之父/之母/之姊妹) and date-hint sourceDate.text as primary Chinese witnesses; sealed unit text does not contain those literal substrings.",
+  "ownerResponse": {
+    "action": "align-independent-hold",
+    "supplementArtifact": "owner-evidence-descriptive-kinship-hold-alignment.json",
+    "extractionPatchApplied": false,
+    "membershipUnchanged": true
+  },
+  "holds": [
+    {
+      "caseId": "sha256:89a42b8c3ed9458768aa6b1eaa0c750be16c4a8b6a799258338d7a1f6b054659",
+      "localPerson": "liaoshi:114:p040",
+      "sealedWitnesses": ["興宗之孫", "朮烈"]
+    },
+    {
+      "caseId": "sha256:7c9fddc060cca66c71e3235e5b10a6222873ccc6c90125958b831f058593b10e",
+      "localPerson": "liaoshi:114:p008",
+      "sealedWitnesses": ["孝穆", "伯父"]
+    },
+    {
+      "caseId": "sha256:07a07028561567ecdab98aeca0a57ae57f4d2697f6a400ee9af9c7bfb851ec83",
+      "localPerson": "liaoshi:114:p036",
+      "sealedWitnesses": ["甥", "回離保"]
+    },
+    {
+      "caseId": "sha256:f29b4197aa24a18d847aa9215144e5ed412639989b2844f83d0fd5b8feb6a328",
+      "localPerson": "liaoshi:114:p026",
+      "sealedWitnesses": ["撒剌竹", "孟父房滌冽之孫"]
+    }
+  ],
+  "optionalFutureRepair": {
+    "notApplied": true,
+    "summary": "Bounded extraction could add title-reference/zh kinship-context mentions only where substring-proven, or mark descriptive-kinship persons unresolved without inventing label-as-witness spans.",
+    "wouldChangeHashes": ["extraction"]
+  },
+  "nextStepForSameReviewer": "Re-read four hold caseIds against owner-evidence-descriptive-kinship-hold-alignment.json; 37 approve rows in independent-identity-report.json unchanged."
+}
