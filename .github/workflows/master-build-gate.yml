@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '081-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -417,7 +417,7 @@ jobs:
           console.log(JSON.stringify({sourceRevision:receipt.sourceRevision,authority:'Mechanical witness candidates only. Independent identity disposition required.',cases:audit},null,2));
           JS
   native-certificate:
-    if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-review-check') || inputs.chapter == '030-retain'
+    if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-review-check') || endsWith(inputs.chapter, '-retain')
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -432,9 +432,9 @@ jobs:
           const fs = require('node:fs');
           const {execFileSync} = require('node:child_process');
           const chapter = process.env.CHAPTER_INPUT.split('-')[0];
-          const retain=process.env.CHAPTER_INPUT==='030-retain';
+          const retain=process.env.CHAPTER_INPUT.endsWith('-retain');
           const delta=process.env.CHAPTER_INPUT==='030-delta-certify';
-          const holdId='sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a';
+          const holdId=chapter==='030'?'sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a':null;
           const repo = process.env.GITHUB_REPOSITORY;
           assert(['030','063','081','083','085','094','115','123'].includes(chapter));
           const read = (path, raw) => JSON.parse(execFileSync('gh', ['api', 'repos/'+repo+'/'+path, ...(raw?['-H','Accept: application/vnd.github.raw+json']:[])], {encoding:'utf8',maxBuffer:10e6}));
@@ -461,8 +461,8 @@ jobs:
           const latest = new Map(packet.authoredPartReceipts.map(r=>[r.part,r]));
           const parts = [...latest.values()].sort((a,b)=>a.part-b.part);
           const supported = ['pending-native-verification','native-verified'];
-          assert(parts.length && parts.every((r,i)=>r.part===i+1 && (supported.includes(r.status)||(retain&&r.part===11&&r.status==='chapter-hold'))), 'Authored parts incomplete or held for correction');
-          assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===(retain&&r.part===11?1:0)), 'Unexpected held decisions');
+          assert(parts.length && parts.every((r,i)=>r.part===i+1 && (supported.includes(r.status)||(retain&&holdId&&r.part===11&&r.status==='chapter-hold'))), 'Authored parts incomplete or held for correction');
+          assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===(retain&&holdId&&r.part===11?1:0)), 'Unexpected held decisions');
           const scope = {book:'jinshu',chapter};
           const actualAgentId=state.rechecks['jinshu/'+chapter].agentId;
           for(const r of parts){
@@ -517,17 +517,17 @@ jobs:
           assert.equal(mismatches.length,0,'Independent reviewer must resolve the listed dossier decision conflicts');
           JS
       - uses: actions/checkout@v4
-        if: endsWith(inputs.chapter, '-certify') || inputs.chapter == '030-retain'
+        if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-retain')
         with:
           ref: ${{ steps.pins.outputs.revision }}
           persist-credentials: false
           fetch-depth: 2
       - uses: actions/setup-node@v4
-        if: endsWith(inputs.chapter, '-certify') || inputs.chapter == '030-retain'
+        if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-retain')
         with:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
-        if: endsWith(inputs.chapter, '-certify') || inputs.chapter == '030-retain'
+        if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-retain')
       - uses: actions/download-artifact@v4
         if: endsWith(inputs.chapter, '-certify')
         with:
@@ -536,7 +536,7 @@ jobs:
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/registry-archive
       - name: Reproduce exact capture, record identity, and validate chapter
-        if: endsWith(inputs.chapter, '-certify') || inputs.chapter == '030-retain'
+        if: endsWith(inputs.chapter, '-certify') || endsWith(inputs.chapter, '-retain')
         env:
           CHAPTER: ${{ steps.pins.outputs.chapter }}
           REGISTRY_REVISION: ${{ steps.pins.outputs.registry_revision }}
@@ -546,7 +546,7 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$REVISION"
           mkdir "$RUNNER_TEMP/identity-registry" "$RUNNER_TEMP/recorded"
-          if [[ "$CHAPTER_INPUT" != 030-retain ]]; then (
+          if [[ "$CHAPTER_INPUT" != *-retain ]]; then (
             cd "$RUNNER_TEMP/registry-archive"
             sha256sum -c SHA256SUMS
             tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
@@ -606,15 +606,15 @@ jobs:
           fs.writeFileSync(path.join(base,'recording-job.json'),JSON.stringify(job)+'\n',{flag:'wx'});
           if (pins.retain) {
             const components=parts.map(part=>captureIdentityProofComponent(source,fs.readFileSync(part.reportFile),fs.readFileSync(part.transportFile),part,receipt.transportPolicy,job).component);
-            assert.equal(components.length,42);
-            assert.equal(aggregate.reviews.length,207);
-            assert.deepEqual(aggregate.reviews.filter(row=>row.verdict==='hold').map(row=>row.caseId),[pins.holdId]);
-            const proof={schemaVersion:1,kind:'jinshu030-retained-identity-components',scope:pins.scope,sourceRevision:pins.revision,sourcePlan:packet.plan,components,holdId:pins.holdId,coverage:aggregate.reviews.length};
+            assert.equal(components.length,pins.scope.chapter==='030'?42:65);
+            assert.equal(aggregate.reviews.length,pins.scope.chapter==='030'?207:397);
+            assert.deepEqual(aggregate.reviews.filter(row=>row.verdict==='hold').map(row=>row.caseId),pins.holdId?[pins.holdId]:[]);
+            const proof={schemaVersion:1,kind:'jinshu'+pins.scope.chapter+'-retained-identity-components',scope:pins.scope,sourceRevision:pins.revision,sourcePlan:packet.plan,components,holdId:pins.holdId,coverage:aggregate.reviews.length};
             fs.writeFileSync(path.join(temp,'recorded','retained-identity-components.json'),JSON.stringify(proof)+'\n',{flag:'wx'});
             console.log(JSON.stringify({sourceRevision:pins.revision,components:components.length,reviewed:proof.coverage,holdId:pins.holdId}));
           }
           JS
-          if [[ "$CHAPTER_INPUT" == 030-retain ]]; then
+          if [[ "$CHAPTER_INPUT" == *-retain ]]; then
             (cd "$RUNNER_TEMP/recorded" && sha256sum retained-identity-components.json > SHA256SUMS)
             exit 0
           fi
@@ -636,9 +636,9 @@ jobs:
           if-no-files-found: error
           retention-days: 7
       - uses: actions/upload-artifact@v4
-        if: inputs.chapter == '030-retain'
+        if: endsWith(inputs.chapter, '-retain')
         with:
-          name: jinshu-030-retained-identity-components
+          name: jinshu-${{ steps.pins.outputs.chapter }}-retained-identity-components
           path: ${{ runner.temp }}/recorded/
           if-no-files-found: error
           retention-days: 7
