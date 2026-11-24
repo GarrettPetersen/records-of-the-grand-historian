@@ -1,71 +1,128 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Discover next unclaimed date-audited chapters after publication
+run-name: Seal already-audited retained staging candidates
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1]
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SHARD: ${{ matrix.shard }}
+      SOURCE: b05e5e61ea7c611a5a83738910586729228db6f1
+      STAGING: 7cdf8f42e53be7a29bbc018e6d1f93783d741f6a
+      NODE_OPTIONS: --max-old-space-size=3072
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Rank already-audited scopes and prepare the shard
+        timeout-minutes: 32
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
 
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const {SOURCE,STAGING,RUNNER_TEMP,GITHUB_REPOSITORY}=process.env;
+          const queue=JSON.parse(execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/people-work-queue.json?ref=codex/people-work-queue'],{encoding:'utf8',maxBuffer:12e6}));
+          const excluded=new Set();
+          const allowed=[{"xintangshu/016":"bc-7b5747c5-db00-46ef-aba0-96eb4f5359d1","jinshi/029":"bc-7b5747c5-db00-46ef-aba0-96eb4f5359d1","shiji/082":"bc-7b5747c5-db00-46ef-aba0-96eb4f5359d1","songshi/073":"bc-7b5747c5-db00-46ef-aba0-96eb4f5359d1","mingshi/035":"bc-7b5747c5-db00-46ef-aba0-96eb4f5359d1","houhanshu/109":"bc-8c84e0ce-0d85-42ce-bf30-3ff08e9ee892","liaoshi/036":"bc-8c84e0ce-0d85-42ce-bf30-3ff08e9ee892","yuanshi/102":"bc-8c84e0ce-0d85-42ce-bf30-3ff08e9ee892","zhoushu/024":"bc-8c84e0ce-0d85-42ce-bf30-3ff08e9ee892","liaoshi/108":"bc-8c84e0ce-0d85-42ce-bf30-3ff08e9ee892"},{"qingshigao/113":"bc-753d3cd0-3f52-443f-90cd-27cbf4b14574","liaoshi/057":"bc-753d3cd0-3f52-443f-90cd-27cbf4b14574","shiji/062":"bc-753d3cd0-3f52-443f-90cd-27cbf4b14574","qingshigao/143":"bc-753d3cd0-3f52-443f-90cd-27cbf4b14574","jinshi/053":"bc-753d3cd0-3f52-443f-90cd-27cbf4b14574","songshi/077":"bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2","jiuwudaishi/146":"bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2","shiji/061":"bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2","liaoshi/051":"bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2","qingshigao/071":"bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2"}][Number(process.env.SHARD)];
+          const openPR=JSON.parse(execFileSync("gh",["pr","list","--state","open","--limit","300","--json","headRefName,title"],{encoding:"utf8",maxBuffer:5e6,timeout:45000})).map(p=>(p.headRefName+" "+p.title).toLowerCase());
+          for(const [key,record] of Object.entries(queue.chapterOwners??{}))if(['active','ready','resume-required'].includes(record.status)&&record.agentId!==allowed[key])excluded.add(key);
+          for(const lane of ['identityReviews','dateAudits','claims'])for(const [key,record] of Object.entries(queue[lane]??{}))if(['claimed','active','ready','resume-required'].includes(record.status))excluded.add(key);
+          const git=(args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:24e6}).trim();
 
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
+          const dir='data/people/date-audits';
+          const roots=['data','data/people/extractions','data/people/date-audits','data/people/editorial-decisions'];
+          const candidates=[];
+          const skipped={};
+          const skip=k=>{skipped[k]=(skipped[k]??0)+1;};
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+          for(const book of fs.readdirSync(dir)){
+            if(!fs.statSync(path.join(dir,book)).isDirectory())continue;
+            for(const name of fs.readdirSync(path.join(dir,book))){
+              if(!/^\d{3}\.json$/.test(name))continue;
+              const chapter=name.slice(0,-5),key=book+'/'+chapter;
+              if(!allowed[key]||excluded.has(key)||fs.existsSync('data/people/identity-reviews/'+key+'.json')){skip('reserved_or_certified');continue;}
+              const files=roots.map(root=>root+'/'+key+'.json');
+              if(files.some(f=>!fs.existsSync(f))){skip('missing_or_staging_changed');continue;}
+              const audit=read(files[2]);
+              if(audit.status!=='audited'||audit.findings?.length!==0){skip('recorded_status');continue;}
+              const extraction=read(files[1]);
+              const people=extraction.people?.length;
+              if(!Number.isInteger(people)||people===0){skip('empty');continue;}
+              candidates.push({key,book,chapter,people,files});
+            }
+          }
+          candidates.sort((a,b)=>a.people-b.people||a.key.localeCompare(b.key));
+          const receipts=[];
+          const out=path.join(RUNNER_TEMP,'cohort');
+          fs.mkdirSync(out,{recursive:true});
+          const registry=process.env.REGISTRY;
+          let prepared=0;
+          const shard=Number(process.env.SHARD);
+          if(!Number.isInteger(shard)||shard<0||shard>3)throw Error("Invalid preparation shard");
+          const ranked=candidates;
+          const [owner,name]=GITHUB_REPOSITORY.split("/");
+          const currentStageBlobs=new Map();
+          for(let i=0;i<ranked.length;i+=7){
+            const group=ranked.slice(i,i+7).flatMap(c=>c.files);
+            const lines=group.map((file,j)=>"p"+j+":object(expression:"+JSON.stringify(STAGING+":"+file)+"){oid}");
+            const query="query{repository(owner:"+JSON.stringify(owner)+",name:"+JSON.stringify(name)+"){"+lines.join("\n")+"}}";
+            const response=JSON.parse(execFileSync("gh",["api","graphql","--input","-"],{input:JSON.stringify({query}),encoding:"utf8",maxBuffer:3e6,timeout:30000}));
+            if(response.errors?.length||!response.data?.repository)throw Error("GitHub exact-stage blob query failed");
+            group.forEach((path,j)=>currentStageBlobs.set(path,response.data.repository["p"+j]?.oid??null));
+          }
+          const sameStage=ranked.filter(c=>{const exact=c.files.every(p=>currentStageBlobs.get(p)===git(["rev-parse",SOURCE+":"+p])); if(!exact)skip("staging_blob_changed");return exact;});
+          const progress=()=>{
+            const file=path.join(out,"cohort-receipts.json");
+            fs.writeFileSync(file+".tmp",JSON.stringify({source:SOURCE,staging:STAGING,shard,eligibleBeforeStageCheck:ranked.length,sameStage:sameStage.length,skipped,prepared,receipts},null,2)+"\n");
+            fs.renameSync(file+".tmp",file);
+          };
+          progress();
+          for(const c of sameStage){
+            if(prepared>=Object.keys(allowed).length)break;
+            const target=path.join(out,c.key.replace('/','-'));
+            try{
+              const result=await prepareChapterIdentityReview({book:c.book,chapter:c.chapter,sourceRevision:SOURCE,registry,out:target,transportMaxBytes:384*1024});
+              const pin=read(path.join(target,'preparation-receipt.json'));
+              if(!result.metrics?.cases||!result.reviewParts?.length){
+                receipts.push({key:c.key,people:c.people,status:'requires_separate_review_transport',cases:result.metrics?.cases??0,parts:result.reviewParts?.length??0});
+                fs.rmSync(target,{recursive:true,force:true});progress();continue;
+              }
+              const files=c.files.map(p=>({path:p,blob:git(['rev-parse',SOURCE+':'+p])}));
+              receipts.push({key:c.key,people:c.people,status:'ready',cases:result.metrics.cases,planFingerprint:result.planFingerprint,sourcePacketSha256:result.sourcePacketSha256,transportSha256:pin.transportSha256,transportBytes:pin.transportBytes,reviewParts:pin.reviewParts??[],files});
+              prepared+=1;
+            }catch(e){receipts.push({key:c.key,people:c.people,status:'held',reason:e.message.split('\n')[0]});}
+            progress();
+          }
 
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          progress();
+          console.log(JSON.stringify({eligibleBeforeNativeGate:candidates.length,skipped,prepared,held:receipts.filter(x=>x.status==='held').length}));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: nov24-native-retained-stage-wave-2-${{ matrix.shard }}
+          path: ${{ runner.temp }}/cohort/
+          if-no-files-found: error
+          retention-days: 7
