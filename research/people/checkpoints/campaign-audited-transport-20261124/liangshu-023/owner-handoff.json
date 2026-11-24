@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "kind": "cross-corpus-identity-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "023"
+  },
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "campaignWorker": "cursor-nov24-audited-recovery-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sourceRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "stagingRevision": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "transportCommit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+  "transportBranch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+  "transportSha256": "0fb61934ea14b5f2120404dd13babdfb31a90a7922eb5eb2bfdc815ed5566283",
+  "planFingerprint": "sha256:17ecbec97127fadfd6a00b1d17cf22a6a3b40dde047fb2b2b3c6655808fc6c2b",
+  "reviewCases": 35,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/liangshu-023/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 023"
+  },
+  "notes": "Owner evidence is not independent approval; no canonical extraction edits."
+}
