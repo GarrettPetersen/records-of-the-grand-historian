@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -731,3 +731,129 @@ jobs:
           assert.equal(api('PATCH',ref,{sha:commit.sha,force:false}).object.sha,commit.sha);
           console.log(JSON.stringify({chapter:'jinshu/'+chapter,pullRequest:pr,recordingRun:runId,ownerBefore:owner,approvedHead:commit.sha,certificateBlob:proof.sha,files}));
           JS
+  compose-030:
+    if: inputs.chapter == '030-compose'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - id: pins
+        name: Verify immutable retained proof, registry and repaired date source
+        run: |
+          node <<'JS'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const {execFileSync}=require('node:child_process');
+          const root='repos/'+process.env.GITHUB_REPOSITORY;
+          const read=(endpoint,raw=false)=>JSON.parse(execFileSync('gh',['api',root+endpoint,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
+          const journal=read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
+          const info=journal.identityRegistryBuild.chapter030;
+          const retained=info.retainedCapture;
+          const registry=info.repairedOverlay;
+          const date=info.dateOverlay;
+          assert.equal(retained.status,'success');
+          assert.equal(registry.status,'success');
+          assert.equal(date.parent,registry.revision);
+          const name='people-registry-'+registry.revision;
+          for(const [id,run,artifactName] of [[retained.artifactId,retained.runId,'jinshu-030-retained-identity-components'],[registry.artifactId,registry.runId,name]]){
+            const artifact=read('/actions/artifacts/'+id);
+            assert.equal(artifact.workflow_run.id,run);
+            assert.equal(artifact.name,artifactName);
+            assert.equal(artifact.expired,false);
+            assert.equal(read('/actions/runs/'+run).conclusion,'success');
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,Object.entries({revision:date.revision,registry_revision:registry.revision,registry_run:registry.runId,registry_name:name,retained_run:retained.runId,old_revision:retained.sourceRevision}).map(([k,v])=>k+'='+v+'\n').join(''));
+          JS
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pins.outputs.revision }}
+          persist-credentials: false
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with:
+          name: jinshu-030-retained-identity-components
+          run-id: ${{ steps.pins.outputs.retained_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/retained
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.pins.outputs.registry_name }}
+          run-id: ${{ steps.pins.outputs.registry_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry-archive
+      - name: Reuse only unaffected approved identity components
+        env:
+          REVISION: ${{ steps.pins.outputs.revision }}
+          REGISTRY_REVISION: ${{ steps.pins.outputs.registry_revision }}
+          OLD_REVISION: ${{ steps.pins.outputs.old_revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVISION"
+          test "$(git rev-parse HEAD^)" = "$REGISTRY_REVISION"
+          mkdir "$RUNNER_TEMP/identity-registry" "$RUNNER_TEMP/recorded"
+          (cd "$RUNNER_TEMP/retained" && sha256sum -c SHA256SUMS)
+          (
+            cd "$RUNNER_TEMP/registry-archive"
+            sha256sum -c SHA256SUMS
+            tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
+            cmp manifest.json "$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION/manifest.json"
+          )
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { REPO_ROOT } from './scripts/lib/people-content.mjs';
+          import { loadProperNounMatcher } from './scripts/lib/people-candidates.mjs';
+          import { planChapterIdentityReview } from './scripts/lib/people-identity-dossiers.mjs';
+          import { readIdentityDossierRegistry } from './scripts/lib/people-identity-dossier-delta.mjs';
+          import { pinnedIdentityChapterContext, provePinnedDossierReuse } from './scripts/lib/people-pinned-identity-source.mjs';
+          import { reconcileIdentityProofComposition } from './scripts/lib/people-identity-proof-composition.mjs';
+          const temp=process.env.RUNNER_TEMP;
+          const original=JSON.parse(fs.readFileSync(temp+'/retained/retained-identity-components.json'));
+          assert.equal(original.sourceRevision,process.env.OLD_REVISION);
+          assert.deepEqual(original.scope,{book:'jinshu',chapter:'030'});
+          assert.equal(original.components.length,42);
+          const pinned=pinnedIdentityChapterContext(REPO_ROOT,process.env.REVISION);
+          const index=await readIdentityDossierRegistry(temp+'/identity-registry/'+process.env.REGISTRY_REVISION,new Map());
+          try {
+            provePinnedDossierReuse(index.provenance,pinned.snapshot);
+            assert.equal(pinned.dates('jinshu','030').status,'audited');
+            const plan=planChapterIdentityReview(index,original.scope,pinned.inputs('jinshu','030'),original.sourcePlan.limits);
+            const scopes=new Set(['jinshu:030']);
+            for(const component of original.components)for(const person of component.receipt.sourcePeople)scopes.add(person.localId.split(':').slice(0,2).join(':'));
+            const matcher=loadProperNounMatcher();
+            const sources=new Map([...scopes].map(scope=>{
+              const [book,chapter]=scope.split(':');
+              return [scope,pinned.load(book,chapter,{properNounMatcher:matcher,strictAliasDispositions:scope==='jinshu:030'})];
+            }));
+            const view={localPersonMap:index.localPersonMap,canonicalByKnownId:index.canonicalByKnownId};
+            const result=reconcileIdentityProofComposition(view,sources,plan,[original.sourcePlan],original.components);
+            const receipt={scope:plan.scope,planFingerprint:plan.fingerprint,total:plan.cases.length,retained:result.eligible.size,invalidated:result.invalidated,held:result.held,remaining:result.remainingCaseIds};
+            console.log(JSON.stringify(receipt));
+            assert.equal(result.held.length,0,'A prior hold still applies');
+            assert.deepEqual(result.remainingCaseIds,[],'Native composition requires a focused independent review of these remaining cases');
+            assert(result.invalidated.some(row=>row.caseId===original.holdId),'The removed person hold must remain represented in provenance');
+            const bundle={schemaVersion:1,kind:'chapter-identity-review-composition',scope:plan.scope,plan,sourcePlans:[original.sourcePlan],components:original.components,selections:result.selections};
+            fs.writeFileSync(temp+'/composition.json',JSON.stringify(bundle)+'\n',{flag:'wx'});
+            fs.writeFileSync(temp+'/recorded/reconciliation-receipt.json',JSON.stringify(receipt)+'\n',{flag:'wx'});
+          } finally { index.close(); }
+          JS
+          node scripts/record-people-chapter-identity-worker.mjs \
+            --composition "$RUNNER_TEMP/composition.json" \
+            --source-revision "$REVISION" \
+            --registry "$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION" | tee "$RUNNER_TEMP/recorded/recording-receipt.json"
+          jq -e --arg revision "$REVISION" '.nativeIdentityProofAccepted and .sourceRevision == $revision' "$RUNNER_TEMP/recorded/recording-receipt.json"
+          npm run people:validate -- --book jinshu --chapter 030 | tee "$RUNNER_TEMP/recorded/scoped-validation.txt"
+          cp data/people/identity-reviews/jinshu/030.json "$RUNNER_TEMP/recorded/identity-proof.json"
+          (cd "$RUNNER_TEMP/recorded" && sha256sum identity-proof.json reconciliation-receipt.json recording-receipt.json scoped-validation.txt > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu-030-recorded-canonical-identity
+          path: ${{ runner.temp }}/recorded/
+          if-no-files-found: error
+          retention-days: 7
