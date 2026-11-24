@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "098"
+  },
+  "ownerAgentId": "bc-57d78b4f-f75f-42da-927e-a8e87fa358e5",
+  "campaignWorker": "cursor-nov24-partitioned-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "planFingerprint": "sha256:bc082a1c9b4cfb913a444d84761e24f6ffe2c1ca9e17da558f4b3d136670e8e4",
+    "sourcePacketSha256": "sha256:a8f92d200841fff8b0cedbb450a2dfcc621bae6bc84d35eb282cb36a1978dc6c",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:8764e3fad7fcb28727ee7cc8fe538962026f3c38a2b03fa81aa9f4e5235418bd",
+        "caseCount": 26
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:2dd4faed2764a3c6570e62d771c01b3fd77544ff0077010dc37b736c7769ac0c",
+        "caseCount": 27
+      }
+    ],
+    "preparationReceiptSha256": "sha256:1a0ce7418a3c16f9a3fe64cb385c85f369b630d56ee3d7035f3eb2fa61dc9770"
+  },
+  "sealedInputs": {
+    "source": "sha256:c0175c0ef21a849130806f10918edae747f8fa90ef1289be03ff0ebc444c158a",
+    "extraction": "sha256:317d8527eee2b685f833cb773a8df5faee98f92e5d88a59a48e314b96a23b8ab",
+    "editorial": "sha256:de9d92832130bf6849722bdff339ff9b9d7a18e57102ec685a3edcc1462782fc",
+    "dateAudit": "sha256:176e5ea1f02a307f20212da5f12492f42484f4c66cab879ea51d3129943ed02b"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "6 applied editorial decisions; no pending proposals",
+  "reviewCases": 53,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 53 cases retain preparation-proposed canonicalPersonId with unresolvedIdentity true. 32 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:a2490e28f745b296bcb7c85365cc911b1d466291c9271871ee813525313790e0",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/transport-part-002.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/hanshu-098/transport-part-002.json",
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 098"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
