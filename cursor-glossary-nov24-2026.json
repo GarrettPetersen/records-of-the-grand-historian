@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:56:30.753Z",
+  "lastCheckedAt": "2026-11-24T04:57:48.184Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -9537,7 +9537,7 @@
         "028",
         "047"
       ],
-      "status": "in_progress",
+      "status": "held-authorship-metadata-restored-awaiting-native-date-parity",
       "workflowRevision": "3f0eeca768fc026b1f1f2fd7206012242d062eb2",
       "runId": 45328619269,
       "previousRun": {
@@ -9546,7 +9546,12 @@
         "reason": "Production extraction validator rejected exact contextual qualitative attestations with no Western year."
       },
       "validator": "scripts/validate-people-extraction.mjs",
-      "validatorChange": "Allow the already-supported explicit-event-contextual-date label only when the existing exact source quote and qualitative evidence predicates pass; no Western date fallback."
+      "validatorChange": "Allow the already-supported explicit-event-contextual-date label only when the existing exact source quote and qualitative evidence predicates pass; no Western date fallback.",
+      "retry": {
+        "runId": 45328619269,
+        "conclusion": "failure",
+        "reason": "The twelve GrokBot chunk authors had been null"
+      }
     },
     "sharedBatch047063081": {
       "ref": "codex/cursor-glossary-nov24-2026-identity-trio-047-063-081-data",
@@ -17508,6 +17513,16 @@
         "bothExtractionHash": "sha256:b210f8763f6c8c28803401319c79be2ef1c54f36439a06ede17bfd6dbb5e3b13",
         "packetArtifact": 14885710333,
         "next": "Original independent reviewer must diagnose source-hash mismatch under exact pinned owner revision and revalidate only actual affected units. Preserve returned report and individual verdicts. Never rewrite a hash to assume approval."
+      },
+      "authorship028": {
+        "pr": 5477,
+        "ownerRevision": "1185595bbe0f1a6863f10010c7151c2e4ac099c2",
+        "receipt": "research/people/jinshu028-historical-grokbot-authorship-20261124.json",
+        "oldQueue": "04a1884eeb21b5a358687b217b066fcaa9ee74f3",
+        "oldPullRequest": 4698,
+        "worker": "grokbot-28",
+        "oldDateReviewArtifact": 14889602974,
+        "requires": "independent native date extraction-parity"
       }
     },
     "chronology047": {
