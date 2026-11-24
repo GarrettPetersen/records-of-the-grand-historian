@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "101"
+  },
+  "ownerAgentId": "bc-bbaefc50-2f40-4364-aece-e97754880133",
+  "workerId": "cursor-nov24-retained-staging-w5-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "39dc761601a40cbb24700ca121def2ef3c7181f2724be3ed793248577ef9f7ee",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-101-80133",
+  "inputBlobWitness": {
+    "source": "bfb366276803eccff2aca16a91defc553bcdf9fc",
+    "extraction": "1833f445e9bb6574b7c2f75d0176ff8bc6c4c236",
+    "dateAudit": "4dc994ebe8293e96e4b514f73f0fa6f68ff82feb",
+    "editorial": "18e0d895093c86ce7f1e7405ac1021caedce9050"
+  },
+  "sealedInputs": {
+    "source": "sha256:ae0ad897a58ae1d28d7e1175a20a20940964336118b3d80b66d46bef55ad8218",
+    "extraction": "sha256:961af4ca1cc870df1f72339d63ed28683a73f7f999d3335ebac4032087275960",
+    "dateAudit": "sha256:8d957794093126e9eff2a3c252190d850d7d4ee1fc1a5d3e0d76326d1e76be66",
+    "editorial": "sha256:0d0e081ce24cddc25f4455cf29041901b63429d73a6e9854b69a2480e2729bcc"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 181,
+    "translatedCount": 181,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 101",
+    "summary": "Scoped person data validation passed for jiuwudaishi/101: 1 extraction(s), 184 local people, 544 mentions, 1291 claims, 0 proposed repair(s), 13 applied repair(s), 13 editorial decision(s).",
+    "extractionValidate": "data/people/extractions/jiuwudaishi/101.json: ok (184 people, 544 mentions, 1291 claims, 956 candidates)",
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Reviewed 181 Chinese source units, 426 chronology and hint checks, and 184 people; unresolved source-limited chronology is preserved without inference.",
+    "dateAuditFileSha256": "sha256:8d957794093126e9eff2a3c252190d850d7d4ee1fc1a5d3e0d76326d1e76be66",
+    "datesVerify": "stale",
+    "datesVerifyExitCode": 1,
+    "extractionFingerprintMatchesAudit": false,
+    "currentExtractionHash": "sha256:d564ee91388b90c4c6f0474063b73cf998099428ecd8d5a744a7843a1a33d08f",
+    "auditedExtractionHash": "sha256:4947933da472904e67555c7b654c163eab34df9a40ada0d65684821c76e59375",
+    "sourceFingerprintMatchesAudit": true
+  },
+  "substantiveFindings": "Sealed inputs match work-order blobs. Recorded independent date report remains research-blocked (1 finding) at preserved bytes, but people:dates:verify returns stale because current extractionHash differs from the report pin (extraction drift after audit). Owner did not replace report hashes or approve unresolved holds.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-659",
+        "claim-660",
+        "p143",
+        "p141"
+      ],
+      "taxonomy": "source-limited Wuyue succession chronology",
+      "problem": "Deposition/accession context on s0131 does not admit independent Western endpoints for Hongzong deposition and Hongchu accession beyond source wording.",
+      "nativeAction": "Preserve holds pending independently pinned primary chronology; no inference.",
+      "evidenceUnits": [
+        "s0131"
+      ],
+      "clauseCitations": [
+        "先是，其兄宏倧襲父位，尋為部下所廢，以宏俶代之，故特加是命焉。"
+      ]
+    }
+  ],
+  "chapterReady": false,
+  "preservedDateAuditBytes": true,
+  "independentReviewRepeated": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified staging git blobs; full source English scan; scoped people:validate and validate-people-extraction; people:dates:verify; retained native date-audit and editorial bytes without hash substitution.",
+    "completedAt": "2026-11-24T16:29:28.247Z"
+  },
+  "reproduce": {
+    "datesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 101",
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 101"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input mutation, publication, or global registry."
+}
