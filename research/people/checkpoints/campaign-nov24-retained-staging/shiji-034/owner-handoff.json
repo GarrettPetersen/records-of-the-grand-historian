@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "034"
+  },
+  "ownerAgentId": "bc-add067a7-e9db-4f50-907f-1718c8446b67",
+  "workerId": "cursor-nov24-retained-staging-w17-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b645f0c98783a777d7d20e19eb6a4e7ac6968ebe9681dd7bf60c86ffb2d4e3d8",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-034-46b67",
+  "phase": "dispatch_pending",
+  "extractionBytes": 182201,
+  "workOrder": {
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:cd2da448beaf891fe01245e094f77af7822ae0a57e2e20ee80a2f4e832a55c61",
+    "workOrderExtractionSha256Verified": true,
+    "people": 126,
+    "claims": 620,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "232e24c9214a3c41f2ace861c29c432aac16cd47",
+    "extraction": "93db4d11b36c1bfeb73533e0fc01c37bf8aa4cf9",
+    "editorial": "9711046cb3c2065f0d421611904bf8b7ec1cc116",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:f3448f03dd3ff023de707927d3149cfcad8e95afb65c880c6642cfd75b1e4149",
+    "extraction": "sha256:cd2da448beaf891fe01245e094f77af7822ae0a57e2e20ee80a2f4e832a55c61",
+    "editorial": "sha256:65751e57ec23b919a80c53f689d2df8f090dab797dbdd01636e73dc475814895",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sentenceCount": 198,
+    "translatedCount": 198,
+    "chineseSentences": 198,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionBlobUnchanged": true,
+    "editorialBlobUnchanged": true,
+    "appliedTranslationRepairsInExtraction": 10,
+    "editorialDecisions": 8,
+    "editorialProposals": 8,
+    "note": "No sealed input edits in this owner pass."
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-034/date-packet.json",
+    "sha256": "sha256:4c2e90c78bc0061b2ea866c43222151f0beabf2c15c4a7f689c91937e22f25a6",
+    "packetSourceHash": "sha256:8dafb3e6a63133f7733a0cd61416abe10a1f0b10e8afbcf96f21d08bdce57ec3",
+    "packetExtractionHash": "sha256:1aecfe761e09bc9f03a92a171ff362d8b07d0be31af1dcffabcbf48e682a6b82",
+    "dateHintChecks": 392,
+    "peopleInPacket": 126,
+    "sourceUnitsInPacket": 198
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 034",
+    "peopleValidateSummary": "Person data validation failed: applied shiji:034:r0001 and shiji:034:r0002 lack independent accept/revise authorization in editorial decisions.",
+    "validationFailures": [
+      "data/people/editorial-decisions/shiji/034.json: applied shiji:034:r0001 has no matching independent accept/revise authorization",
+      "data/people/editorial-decisions/shiji/034.json: applied shiji:034:r0002 has no matching independent accept/revise authorization"
+    ],
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 034",
+      "status": "un-audited",
+      "auditReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Independent native date audit via people:dates:run on the sealed date-packet artifact; owner does not self-approve.",
+    "identity": "Independent bounded identity/dossier review after date gate when scheduled.",
+    "editorial": "Independent authorization for applied r0001/r0002 before publication validator can pass."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 034",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 034",
+    "datePacket": "npm run people:dates:packet -- --book shiji --chapter 034 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-034/date-packet.json"
+  },
+  "distinctHolds": [
+    {
+      "kind": "editorial-authorization-gap",
+      "detail": "Applied extraction translation repairs shiji:034:r0001 and shiji:034:r0002 (Yi Yin capitalization on s0007) lack matching independent accept/revise rows in data/people/editorial-decisions/shiji/034.json; people:validate fails until a separate reviewer records authorization or repairs are reconciled.",
+      "blockingPublication": true
+    },
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "data/people/date-audits/<book>/<chapter>.json is absent; people:dates:verify reports un-audited. Candidate chronology closure is sealed at research/.../date-packet.json for independent audit only.",
+      "blockingPublication": true
+    },
+    {
+      "kind": "independent-identity-review",
+      "detail": "Corpus identity resolution and bounded dossier review remain outside this owner pass; extraction and editorial bytes are reused unchanged.",
+      "blockingPublication": true
+    }
+  ],
+  "substantiveFindings": "Witness-verified sealed source, extraction, and editorial git blobs at staging 20b8d0e3. Full chapter English read: sentenceCount matches translatedCount; paired idiomatic and literal English on all Chinese sentences. Prompt v7 extraction retained (126 people, 620 claims work-order scope); legacy temporal debt 0 in scoped validate when it passes. Fresh native date packet prepared (392 checks); no data/people/date-audits/shiji/034.json on staging. people:validate blocked on editorial authorization for applied Yi Yin repairs r0001/r0002; other applied repairs match editorial revise decisions r0003–r0010.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no registry, deploy, merge, or sealed canonical input edits."
+}
