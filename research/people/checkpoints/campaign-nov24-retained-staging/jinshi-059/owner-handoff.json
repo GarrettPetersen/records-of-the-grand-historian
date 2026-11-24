@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "059"
+  },
+  "ownerAgentId": "bc-041d7b54-ca95-4d7f-89c4-e108ff0bd368",
+  "workerId": "cursor-nov24-retained-staging-w5-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6f8b490718b057562db75907cda3e65ff6483b7e2ab50adcf3d2bcaed9b4cf2a",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-059-bd368",
+  "inputBlobWitness": {
+    "source": "db6d9abbe41259471f147fceee54c13447fd7f4b",
+    "extraction": "a1312f12c6699828e84c55294f2f579e42010113",
+    "dateAudit": "2befeccb4a90ee726ecc111ce22c6f58b0c2d17e",
+    "editorial": "ace494e237b24a89eb180b2215ac5e49255e6d9b"
+  },
+  "sealedInputs": {
+    "source": "sha256:1f11d989f31dcf923e885d8565bb6d50ff7cebcf88b0a4bb7d332a26c2a333b8",
+    "extraction": "sha256:dfe99bcff38c1aee5adec918098bc7c513db26db4915cc08346a9a13e50d124b",
+    "dateAudit": "sha256:a913260d67e4cb49cc7f80995da8b048db48d1bfbbbc8ea56d852dc021a75b4d",
+    "editorial": "sha256:dff237704618f8cf65806ba12dff75e533f34b0a565457ad8847825526861b80"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 59 Tables 1: Imperial Family",
+    "chineseUnits": 283,
+    "translatedCount": 283,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 69,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 329324
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jinshi --chapter 059",
+    "peopleValidateSummary": "Scoped person data validation passed for jinshi/059: 1 extraction(s), 274 local people, 739 mentions, 1774 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshi --chapter 059",
+      "status": "audited",
+      "auditSha256Verified": "a913260d67e4cb49cc7f80995da8b048db48d1bfbbbc8ea56d852dc021a75b4d",
+      "findings": 0,
+      "reviewedAt": "2026-09-23T22:42:37.728Z",
+      "dateAuditSummary": "Reviewed all 875 Chinese units, 553 records, and 274 people. Retained chronology is source-backed; no repair or research hold is required."
+    },
+    "chronologyStatus": "audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed four-part inputs: full Chinese chapter read; 283 source units with paired literal and idiomatic English on all units carrying Chinese text (69 empty table spacer rows lack English by design). Accepted extraction, applied editorial repairs, and audited chronology align at pinned blobs. people:validate and people:dates:verify pass scoped; no new definite English omission, chronology defect, extraction gap, or source hold found. Independent date report bytes preserved; no hash replacement.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 059",
+    "datesVerify": "npm run people:dates:verify -- --book jinshi --chapter 059"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff without altering sealed inputs."
+}
