@@ -54,7 +54,7 @@ Independent replay on pinned extraction at `11cb2c7ae6024949c65651a49617fc0d7f0d
 - **414/414 item judgments** rebound: **394 invariant**, **20 refreshed** (10 claims + 10 hints).
 - **190/190 person checks** filed in five blocks (`independent-date-audit-person-checks-001.json` … `005.json`); coverage receipt lists exact IDs (`independent-date-audit-person-coverage-receipt.json`).
 - **342/342 unit coverage** attested (`independent-date-audit-unit-coverage-receipt.json`).
-- Native report checkpoint: **`needs-revision`** — **179/179** erroneous empty-hint 邵續 fallbacks replaced with person-specific Chinese (`independent-date-audit-citation-progress.json`); **claim-1** cites s0002+s0028+s0062 (石季龍 = Shi Hu per Jinshu 106/107); **personChecks** re-synced to repaired hints pending bounded reason review (~46 courtesy/group quotes). Owner defect: **p183** appraisal duplicate of p001 (`independent-date-audit-owner-citation-holds.json`). Checkpoint-only.
+- Native report checkpoint: **`audited`** at `11cb2c7a` fingerprints (validate passes); **414 item checks** unchanged; **190 person reasons** aligned to witnesses (46-row pass, no regeneration). **p183/p001** identity crosswalk in `independent-date-audit-identity-p183-p001-hold.json` (s0330–s0339 appraisal — not a chronology merge). Checkpoint-only; no `people:dates:record`.
 
 ## Pending actions (not approved here)
 
