@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-159f19bf-4834-45ac-9043-8f3fc66a8383",
+  "workerId": "cursor-nov24-retained-staging-w3-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b4a5420aa3ab9df71518b8dd5351ccd62355859a0f047e1008b6a18567e84703",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "125"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-houhanshu-125-a8383",
+  "inputBlobWitness": {
+    "source": "2c84bae6725eba60321f5e18648360e6e6e2fb99",
+    "extraction": "16c29c3abc6311511b58198a70d9f0de526efe9c",
+    "dateAudit": "6e65ff9f5d5dc1812908a8a99f4a8f29d0b0b6c6",
+    "editorial": "0b6dbc2c5d7192e48681752524c772900c9f3d91"
+  },
+  "sealedInputs": {
+    "source": "sha256:b6fb48ef886ff95288f25616bcf4a08d852bd5af151a480366d3f6b361fe2d74",
+    "extraction": "sha256:04c11bc6e36ec01d5cd7a99bc7184cd54e50cf732452c36e05c4d215ee0d3fe7",
+    "dateAudit": "sha256:9e3a5098a91d8b55ffe40f211efb3e8753f2645d7a67f66a1a8c41b2264daa21",
+    "editorial": "sha256:2c3c6706388ab369b432fe08afafbdd1fd3f7546fd06ca65dc21d7dd6197fe9b"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 113,
+    "translatedCount": 113,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingUnits": [],
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book houhanshu --chapter 125",
+    "summary": "Scoped person data validation passed for houhanshu/125: 1 extraction(s), 32 local people, 80 mentions, 290 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 113,
+      "translatedCount": 113,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Complete initial source-scope audit of all 113 Chinese units, 76 temporal claims and active-date hints, and 32 people in the Officials Part One treatise. The chapter supplies important dated institutional evidence, but the extraction repeatedly encodes reign labels and retrospective office summaries as full personal activity intervals. Every temporal record is retained with its Chinese evidence as an explicit research hold pending source-critical calendar and endpoint review; no source or extraction data is changed.",
+    "dateAuditReviewedAt": "2026-09-23T11:50:36.390Z",
+    "editorialDecisionCount": 4,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned source, extraction, editorial, and date-audit blobs witness correctly. Full Chinese and English coverage; four accepted editorial repairs (invented Palace before 骠骑 titles; 嫡舅 misread as empress uncle) are already reflected in chapter source. Scoped people validation passes. Independent date audit is research-blocked: institutional treatise chronology retains source-backed holds where reign labels and retrospective office summaries do not establish exact personal intervals; owner found no new definite English omission, extraction coverage gap, or concrete source contradiction warranting canonical edits.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "chronology-research-blocked",
+      "status": "research-blocked",
+      "source": "data/people/date-audits/houhanshu/125.json",
+      "summary": "All temporal claims and active-date hints retained pending reign or calendar conversion and endpoint review; do not discard institutional evidence.",
+      "findingCount": 1
+    }
+  ],
+  "chapterReady": false,
+  "nextGate": "chronology-research-resolution-or-independent-final-review",
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 125",
+    "datesVerify": "npm run people:dates:verify -- --book houhanshu --chapter 125"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging owner pass only; sealed inputs unchanged. Chronology remains research-blocked at pinned audit; chapter not ready for final independent check until audited status or scoped holds resolved."
+}
