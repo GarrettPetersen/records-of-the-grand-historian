@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "097"
+  },
+  "ownerAgentId": "bc-a4d773fe-11dd-4609-88c3-3741edd6232d",
+  "workerId": "cursor-nov24-retained-staging-w18-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "91fbf7a92e6848a2f0428da00134f2126a972d2e6d26ee240b7c64d95df2004d",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-097-6232d",
+  "extractionBytes": 206598,
+  "inputBlobWitness": {
+    "source": "70f64fda88022931788d0b78cdf5bff61ce92281",
+    "extraction": "c2a3937fb3d8443d15e307fa17472ade5a356bd0",
+    "editorial": "42fc43258368bc6ee4eef9fc75321a8c8f20f9d7"
+  },
+  "sealedInputs": {
+    "source": "sha256:a9bf9ede12007ef3b5cfa016d7a9777e11bb55d57fd44c23f4ffaebfeae330a5",
+    "extraction": "sha256:c10174859acabea81f7f62dd2151b5d6b84e79481565e65a4525aaaeb298ab8a",
+    "editorial": "sha256:9c3e5fad6d21df2324744da6ea7b1ac76406c5091f92d4e4ed3e8878df0c446c"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-097/date-packet.json",
+    "contentSha256": "sha256:4dbb1f24e464173d4da41d06028164646f2832bab1cf4cb2c598e19691144f0a",
+    "packetSourceHash": "sha256:5f8808e594d661b8c2b418ad9b2954599f93923a26f98307337ee581689c6afb",
+    "packetExtractionHash": "sha256:68409f8b5f1d89ce7b6d781638d8d187072fa9e34962a35957f93582e5c390b8",
+    "dateHintChecks": 332,
+    "peopleInPacket": 69,
+    "prepareCommand": "npm run people:dates:packet -- --book shiji --chapter 097 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-097/date-packet.json"
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "c10174859acabea81f7f62dd2151b5d6b84e79481565e65a4525aaaeb298ab8a",
+    "people": 69,
+    "claims": 671,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Biographies of Li Yiji and Lu Jia",
+    "sourceTitleZh": "酈生陸賈列傳",
+    "chineseUnits": 236,
+    "translatedCount": 236,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "editorialDecisionCount": 22,
+    "editorialAppliedInSource": 20,
+    "editorialAppliedFailures": 2,
+    "noExtractionRegeneration": true,
+    "noEditorialReReview": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 097",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/097: 1 extraction(s), 69 local people, 660 mentions, 926 claims, 0 proposed repair(s), 22 applied repair(s), 22 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 097",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-pending-source-reflection",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs for shiji/097 (no prior native date report). Git blob witnesses and extraction content sha256 match dispatch pins. Source coverage: 236 Chinese units, fullEnglishCoverage=true. Accepted prompt v7 extraction and 20/22 editorial repairs verified in source. Scoped people:validate passed. Fresh native date packet at sealedNativeDatePacket.contentSha256; owner did not self-approve independent date audit. No definite English omission or source contradiction identified; 2 accepted editorial proposal(s) not yet reflected in chapter source; current source English retained where it matches Chinese witnesses (see editorialReflectionPending). Owner did not apply source edits.",
+  "distinctHolds": [
+    {
+      "kind": "accepted-editorial-not-in-source",
+      "count": 2,
+      "proposalIds": [
+        "shiji:097:r0002",
+        "shiji:097:r0020"
+      ]
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:4dbb1f24e464173d4da41d06028164646f2832bab1cf4cb2c598e19691144f0a",
+      "recordCommand": "npm run people:dates:record -- --book shiji --chapter 097",
+      "verifyAfterApproval": "npm run people:dates:verify -- --book shiji --chapter 097"
+    },
+    "chapterAndCanonicalIdentityReview": {
+      "required": true,
+      "status": "pending"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 097",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 097",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 097 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-097/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge.",
+  "editorialReflectionPending": [
+    {
+      "proposalId": "shiji:097:r0002",
+      "unitId": "s0006",
+      "field": "idiomatic",
+      "reason": "莫為我先 means no one will introduce him first, not an instruction not to speak for him first.",
+      "sourceZh": "騎士歸，酈生見謂之曰：「吾聞沛公慢而易人，多大略，此真吾所願從游，莫為我先。"
+    },
+    {
+      "proposalId": "shiji:097:r0020",
+      "unitId": "s0189",
+      "field": "idiomatic",
+      "reason": "The Chinese 及其成功出之 credits the successful extraction to the prior plot (Pingyuan Jun), not a vague passive release; the ",
+      "sourceZh": "及其成功出之，乃大驚。"
+    }
+  ]
+}
