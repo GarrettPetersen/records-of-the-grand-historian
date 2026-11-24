@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/045",
+  "idempotencyKey": "ac953026a7964633af4d8ab5bed433064782249737ae9a53a35ff13be2940515",
+  "reviewerAgentId": "bc-6a929f4a-98e9-4b23-8acc-10f5b7b4c694",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "ownerRevision": "da74c39d0a94ea86bc41cf0542dce90e15309e96",
+  "ownerProposalSha256": "sha256:a1f9effb81d4c5e4bc82795195715a7cc1a6295d103dc46aa0a808fa0630ab01",
+  "ownerHandoffPath": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-045/owner-handoff.json",
+  "reviewedAt": "2026-11-24T15:55:00.000Z",
+  "verdict": "scoped_approved",
+  "summary": "Independent reviewer approves the sole metadata-only restoration of grokbot-01 on all six Grok Bot chunks at pinned da74c39d. People, claims, surfaces, translation repairs, date-audit item inventory, and pinned source bytes are unchanged by that patch; only run provenance fields move. Owner post-promotion drift hold is discharged on current promotion fingerprints. Separate holds remain for run-level extractor provenance and native date-audit repin after apply.",
+  "approvedChanges": [
+    {
+      "id": "metadata-only-chunk-agentId-001-006",
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/jiuwudaishi/045.json",
+      "field": "run.chunks[*].agentId",
+      "before": null,
+      "after": "grokbot-01",
+      "chunkIds": ["001", "002", "003", "004", "005", "006"],
+      "preserveNullRunIds": true,
+      "preserveNullRunAgentId": true,
+      "reason": "Queue commit 05b808c138a53797797ca5300facd4fc8ce8cc3e records claims[\"jiuwudaishi/045\"] with lane grokbot and worker grokbot-01. Reproduced extraction bytes at da74c39d declare model Grok Bot on every chunk (001–006) under run.model Grok Bot-chunked with null chunk agentIds and null runIds. No contrary worker, lane, or chunk-model evidence appears in pinned queue or extraction bytes. Substantive people/claims content at the audited generation is byte-stable since repair commit 1cbca4368c; later promotion only re-pinned the same extraction hash."
+    }
+  ],
+  "heldCases": [
+    {
+      "caseId": "post-promotion-claim-drift",
+      "disposition": "discharged",
+      "reason": "Independent confirmation at da74c39d: current input.chapterFingerprint sha256:ff24ca87e575201ba5ff3a53acfe5730a9a98d090add75cb13056164d725591a matches ready claim ee44e81a chapterFingerprint. Extraction file bytes are identical to 1cbca4368c (post–glossary-repair generation that the date audit pins). Intro checkpoint 65ba178b drift is historical pre-repair and does not block provenance-only chunk agentId restoration on the pinned audited generation."
+    },
+    {
+      "caseId": "run-level-extractor-agentId",
+      "disposition": "hold",
+      "reason": "Native chapter-identity validation requires nonempty extraction.run.agentId (scripts/lib/people-chapter-identity.mjs). The approved scoped patch intentionally leaves run.agentId null. Minimal follow-up: set run.agentId to grokbot-01 with runIds still null, or record an independently reviewed alternate closure that satisfies the same gate without inventing unknown runIds.",
+      "minimalFix": {
+        "target": "data/people/extractions/jiuwudaishi/045.json",
+        "field": "run.agentId",
+        "proposedValue": "grokbot-01"
+      }
+    },
+    {
+      "caseId": "date-audit-extractionHash-repin",
+      "disposition": "hold",
+      "reason": "Applying chunk agentIds changes extractionHash from sha256:99b0b39da6fb9ef2973e08d0338625d4037261860c94f6548dd71ed6560fd091 to sha256:d7ec8d0ffdd37551b04a9c55842abb45393abf824f06851d411d79b32bd0c10b while sourceHash stays sha256:7f9f780711b8a229a1cacf9cfaee22bd558dd71750bb2ffa965e2e1038c3045d. Simulated patch leaves all 622 date-audit items byte-identical; native closure may explicitly reuse the accepted 2026-09-29 report via metadata-only repin (same pattern as jinshu085 holder diagnosis), not a broad re-audit.",
+      "preservedReportPath": "data/people/date-audits/jiuwudaishi/045.json",
+      "preservedReviewer": "Independent Jiu Wudaishi 045 initial chronology reviewer"
+    },
+    {
+      "caseId": "editorial-input-chapterFingerprint",
+      "disposition": "preserve",
+      "reason": "Pinned editorial decisions retain independent grok-4.5 review at bc-fb3dc73c-d349-487d-9cff-c9bc84bee8dd; input.chapterFingerprint remains the pre-repair c49ad58… fingerprint while extraction uses ff24ca87…. This scoped delta does not alter proposals or decisions. Full native editorial re-validation will need chapterFingerprint realignment to ff24ca87… after source/extraction repair; not part of this chunk-agentId approval."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerRevision": "da74c39d0a94ea86bc41cf0542dce90e15309e96",
+    "source": {
+      "path": "data/jiuwudaishi/045.json",
+      "gitBlob": "982947b9026ea7ca432dddc95b865523c029ed46",
+      "contentSha256": "sha256:e26a2e999036cc7b48687e469277ac278e988909fd631d17bc4783114a479f36",
+      "datePacketSourceHash": "sha256:7f9f780711b8a229a1cacf9cfaee22bd558dd71750bb2ffa965e2e1038c3045d",
+      "verifiedAtOwnerRevision": true
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/045.json",
+      "gitBlob": "5f208bb6f282c05808104e4797ec964bbe3fd788",
+      "contentSha256": "sha256:b9f872a70df0955196dec4fc144e25b9fea80334358fe5cf5ce6ddcea4fb02ee",
+      "datePacketExtractionHash": "sha256:99b0b39da6fb9ef2973e08d0338625d4037261860c94f6548dd71ed6560fd091",
+      "chapterFingerprint": "sha256:ff24ca87e575201ba5ff3a53acfe5730a9a98d090add75cb13056164d725591a",
+      "verifiedAtOwnerRevision": true,
+      "unchangedSinceCommit": "1cbca4368c354f5447c4300762a4e82eaa2b02b9"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/045.json",
+      "gitBlob": "e70ef415836b87a5666033655e5b1839e0962e7f",
+      "contentSha256": "sha256:ea009be0377ee481106fb233c1fa5a3788f0f2797bc7cc64a3618aae875880c9",
+      "status": "audited",
+      "extractionHashMatch": true,
+      "sourceHashMatch": true,
+      "reviewerPreserved": true
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/045.json",
+      "gitBlob": "87ee43d06ec8ba4218474877a9ec9487c723edcb",
+      "contentSha256": "sha256:d2900f793aa7a5a7013cd8813feffb6a076e89d70ac454e9d8e7a2f67c5e9d13",
+      "reviewerAgentId": "bc-fb3dc73c-d349-487d-9cff-c9bc84bee8dd",
+      "reviewerPreserved": true
+    },
+    "queuePromotion": {
+      "grokbotClaimCommit": "05b808c138a53797797ca5300facd4fc8ce8cc3e",
+      "grokbotWorker": "grokbot-01",
+      "grokbotLane": "grokbot",
+      "readyCommit": "ee44e81a47e3178376369bc3dd589103a73b029d",
+      "readyWorker": "Garretts-MacBook-Pro-2.local-cursor-recovery",
+      "readyLane": "cursor-sdk",
+      "readyChapterFingerprint": "sha256:ff24ca87e575201ba5ff3a53acfe5730a9a98d090add75cb13056164d725591a",
+      "fingerprintMatchCurrent": true
+    }
+  },
+  "affectedNativeDependencies": {
+    "extractionValidation": {
+      "impact": "metadata-only",
+      "peopleClaimsSurfacesUnchanged": true
+    },
+    "dateAudit": {
+      "impact": "stale-extractionHash-until-repin",
+      "beforeExtractionHash": "sha256:99b0b39da6fb9ef2973e08d0338625d4037261860c94f6548dd71ed6560fd091",
+      "afterExtractionHash": "sha256:d7ec8d0ffdd37551b04a9c55842abb45393abf824f06851d411d79b32bd0c10b",
+      "itemInventoryUnchanged": true,
+      "nativeReusePath": "metadata-only date report repin with unchanged itemChecks/findings"
+    },
+    "editorial": {
+      "impact": "preserved",
+      "chapterFingerprintMismatch": {
+        "editorialInput": "sha256:c49ad58db7720a27d7b3911b455f8fe558860d16a17f87b21723aa83f3e5c724",
+        "currentExtraction": "sha256:ff24ca87e575201ba5ff3a53acfe5730a9a98d090add75cb13056164d725591a"
+      },
+      "notInvalidatedByChunkAgentIdPatch": true
+    },
+    "identity": {
+      "impact": "blocked-until-run-agentId",
+      "chunkAuthorsAfterPatch": ["grokbot-01"],
+      "runAgentIdAfterPatch": null,
+      "validateChapterIdentityBundleRequiresRunAgentId": true
+    },
+    "englishSource": {
+      "impact": "none",
+      "scopedPatchTouchesEnglish": false,
+      "acceptedEditorialRepairsAppliedInSourceAt": "1cbca4368c354f5447c4300762a4e82eaa2b02b9"
+    }
+  },
+  "validation": {
+    "pinnedByteChecks": {
+      "sourceContentSha256": "pass",
+      "extractionContentSha256": "pass",
+      "dateAuditContentSha256": "pass",
+      "editorialContentSha256": "pass",
+      "ownerHandoffSha256": "pass"
+    },
+    "buildDateAuditPacketAtOwnerRevision": {
+      "sourceHash": "sha256:7f9f780711b8a229a1cacf9cfaee22bd558dd71750bb2ffa965e2e1038c3045d",
+      "extractionHash": "sha256:99b0b39da6fb9ef2973e08d0338625d4037261860c94f6548dd71ed6560fd091",
+      "matchesPinnedDateAudit": true
+    },
+    "simulatedChunkAgentIdPatch": {
+      "dateItemDiffCount": 0,
+      "postPatchExtractionHash": "sha256:d7ec8d0ffdd37551b04a9c55842abb45393abf824f06851d411d79b32bd0c10b"
+    },
+    "extractionIntroVsRepairDrift": {
+      "introCommit": "65ba178b64031725f6825a002c93cbf552c9c2f7",
+      "repairCommit": "1cbca4368c354f5447c4300762a4e82eaa2b02b9",
+      "repairToOwnerRevisionDiffLines": 0
+    },
+    "noCanonicalEditsInThisReview": true,
+    "noBuildRun": true,
+    "cfPagesSkip": true
+  }
+}
