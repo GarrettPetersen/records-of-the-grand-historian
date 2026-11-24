@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Attach the native composed Jinshu 030 proof and exact 496-item date seal to #5479, then verify staging merge.",
+  "nextAction": "Build hosted Jinshu 123 native identity packet from the composed source, complete Jinshu 030 staging and advance exact 081/078 scopes.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T01:28:02.016Z",
+  "lastCheckedAt": "2026-11-24T01:29:19.009Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1892,7 +1892,7 @@
       "finishedObservedAt": "2026-11-24T00:04:42.307Z"
     },
     "jinshu/081": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
       "previousRunId": "run-3503c3a1-69ed-4cea-9258-e31949ede2ed",
       "chapterPR": 5478,
@@ -1911,7 +1911,10 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-f9e10915-75fb-46ec-97aa-2ccd276f83c9",
-      "sentAt": "2026-11-24T01:24:51.760Z"
+      "sentAt": "2026-11-24T01:24:51.760Z",
+      "resultRevision": "28e92c64aea0ba8dfe2d869722629382d2e42b1a",
+      "scopedValidation": "pass",
+      "restoredHistoricalExtractor": "grokbot-24"
     },
     "jinshu/041": {
       "status": "finished",
@@ -2083,7 +2086,7 @@
       "residualChronologyItems": 26
     },
     "jinshu/078": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-7f508e5e-7b4f-4508-9646-49aac6917f05",
       "previousRunId": "run-b0fb0327-cc63-409f-8c35-77abba81f367",
       "chapterPR": 5425,
@@ -2102,7 +2105,18 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-867e4586-a222-4e0c-aea1-5393edbdc818",
-      "sentAt": "2026-11-24T01:24:51.760Z"
+      "sentAt": "2026-11-24T01:24:51.760Z",
+      "resultRevision": "65ce623ce35d47b463dc25db85187d7447c5861a",
+      "coverageUnits": 415,
+      "exactResiduals": [
+        "claim-1033",
+        "claim-1034",
+        "claim-1100",
+        "claim-1046",
+        "claim-1047",
+        "claim-1048",
+        "claim-1049"
+      ]
     },
     "jinshu/065": {
       "status": "finished",
@@ -2186,7 +2200,7 @@
       "resultRevision": "d5ed84e01071a93d8d983a1165670125ed74332c"
     },
     "jinshu/123": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-985e5c79-a8bc-4040-8f8d-4f1fba0f38b2",
       "previousRunId": "run-7a7ee3c2-ca51-4c2e-b2db-5d6574644257",
       "chapterPR": 5439,
@@ -2205,7 +2219,10 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-d4989151-6bb3-420e-a1ee-26f4411d9c62",
-      "sentAt": "2026-11-24T01:24:51.758Z"
+      "sentAt": "2026-11-24T01:24:51.758Z",
+      "resultRevision": "4a8fc930629f485e09838e86d297e76328ec7f49",
+      "chronology": "audited-exact-provenance-rebind",
+      "retainedDateItems": 322
     },
     "jinshu/031": {
       "status": "finished",
@@ -4361,10 +4378,47 @@
         ]
       },
       "transfer": {
-        "status": "dispatch-intent",
+        "status": "in_progress",
         "chapterPR": 5479,
         "recordingRunId": 45304616858,
-        "reviewedCases": 206
+        "reviewedCases": 206,
+        "runId": 45305260479
+      }
+    },
+    "readyChronology": {
+      "jinshu/123": {
+        "status": "dispatch-intent",
+        "pr": 5439,
+        "sourceRevision": "45ec840ab0b4d0a2a000ec12659625fcba5ad6a4",
+        "ref": "codex/cursor-glossary-nov24-2026-identity-123-audited",
+        "ownerRevision": "b377300715a080920ab3df533f89b1628d6ae3cf",
+        "reviewRevision": "4a8fc930629f485e09838e86d297e76328ec7f49",
+        "reviewerId": "bc-985e5c79-a8bc-4040-8f8d-4f1fba0f38b2",
+        "originalExtractor": "grokbot-34",
+        "files": [
+          {
+            "path": "data/jinshu/123.json",
+            "sha": "29f34adbd57b12e257bc677829bd57467c13ccc9"
+          },
+          {
+            "path": "data/people/extractions/jinshu/123.json",
+            "sha": "4f43c4a44e628c26a33f95f0e25ce6d9523b7da9"
+          },
+          {
+            "path": "data/people/editorial-decisions/jinshu/123.json",
+            "sha": "2a9f37a6e5f336eb59abcacffdd562afe4012be1"
+          },
+          {
+            "path": "data/people/date-audits/jinshu/123.json",
+            "sha": "9afaa3e81fadb4abc5e49f5b8132c9035f0412e6"
+          },
+          {
+            "path": "data/people/date-audit-history/jinshu/123/b94c8e98d5438764c59eaf569c5db04f81aa5963eaa3542f536ceb2408968304.json",
+            "sha": "7c7b9989c86ebcc18d89eecacca14dd6c29c4d74"
+          }
+        ],
+        "dateItems": 322,
+        "people": 103
       }
     }
   },
