@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "sanguozhi",
+    "chapter": "041"
+  },
+  "ownerAgentId": "bc-1e7f1743-30db-4b99-9204-5e5b3ca1ccbf",
+  "workerId": "cursor-nov24-retained-staging-w18-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "dd2f7a24c7114f60d6123ca51d7d5561c46f5e28ee1846afdab2fd5e68d66554",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-sanguozhi-041-1ccbf",
+  "auditState": "no-native-date-report",
+  "promptVersion": 7,
+  "extractionBytes": 204256,
+  "workOrder": {
+    "sourceExtractionSha256": "sha256:dc160c86011daae2cd1754651e0c2f9d867abd06231d044c03d59031f1a17162",
+    "people": 158,
+    "claims": 662
+  },
+  "inputBlobWitness": {
+    "source": "dd4f5d63df46cafef68b34ffee6c69d2dcbf1efe",
+    "extraction": "604a9173c5b909b85f735c73e3158058ac06938c",
+    "editorial": "49543efb774093fd94fc10104d36a40a5a2a2a52"
+  },
+  "sealedInputs": {
+    "source": "sha256:8ac4311b37009a8c62351350b790c75c2caf5d6bdfe94067ba4c9240a6642288",
+    "extraction": "sha256:dc160c86011daae2cd1754651e0c2f9d867abd06231d044c03d59031f1a17162",
+    "editorial": "sha256:9c4b36f6bc2c5e7609a9d1d3725af1e088bda4460a992d8dd789a44845ffb8ce"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 41: Book of Shu 11: Biographies of Huo, Wang, Xiang, Zhang, Yang, and Fei",
+    "chineseUnits": 276,
+    "translatedCount": 276,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 0,
+    "fullEnglishCoverage": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionBlob": "604a9173c5b909b85f735c73e3158058ac06938c",
+    "editorialBlob": "49543efb774093fd94fc10104d36a40a5a2a2a52",
+    "extractionContentSha256": "sha256:dc160c86011daae2cd1754651e0c2f9d867abd06231d044c03d59031f1a17162",
+    "editorialContentSha256": "sha256:9c4b36f6bc2c5e7609a9d1d3725af1e088bda4460a992d8dd789a44845ffb8ce",
+    "promptVersion": 7,
+    "appliedTranslationRepairs": 1,
+    "editorialProposals": 2,
+    "editorialDecisions": 2,
+    "ownerDidNotReextract": true,
+    "ownerDidNotAlterSealedInputs": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-041/date-packet.json",
+    "contentSha256": "sha256:2c2709da095b7e0d7fcd17117c71f4048e342cd5601ea7b99d75355a8625e376",
+    "itemCount": 379,
+    "sourceHash": "sha256:95dbae4c366277607116cf637c9e28e8aaa1a577b64ee1ef3b1487801bb53a5c",
+    "extractionHash": "sha256:1d4a784fb8d18a249707f3a5b72d3d81e5a129f536a7fa7cf3ebbd2eec2e7a25",
+    "command": "npm run people:dates:packet -- --book sanguozhi --chapter 041 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-041/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book sanguozhi --chapter 041",
+    "peopleValidateSummary": "Scoped person data validation passed for sanguozhi/041: 1 extraction(s), 158 local people, 887 mentions, 1198 claims, 0 proposed repair(s), 1 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/sanguozhi/041.json",
+    "peopleValidateExtractionPassed": true,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book sanguozhi --chapter 041",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/sanguozhi/041.json"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentProofs": {
+    "date": {
+      "gate": "independent-native-date-audit",
+      "detail": "Fresh sealed date packet prepared at pinned extraction; data/people/date-audits missing. Independent reviewer must run native date workflow against this packet and record approval via people:dates:record without self-approval.",
+      "packetSha256": "sha256:2c2709da095b7e0d7fcd17117c71f4048e342cd5601ea7b99d75355a8625e376"
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "detail": "Global identity resolution dossiers remain for chapter-local people after date approval; owner pass did not perform merges or canonical identity edits."
+    },
+    "editorial": null
+  },
+  "distinctHolds": [
+    {
+      "kind": "missing-native-date-report",
+      "detail": "No data/people/date-audits record; people:dates:verify returns un-audited."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction, and editorial inputs witness-verified at staging 4394bd71. Full chapter English coverage on Chinese-bearing units; extraction prompt v7 retained. Owner prepared native date packet; no definite English contradiction or chronology repair identified in this pass. Chapter not complete: independent date audit still missing.",
+  "scopedChronologyOrIdentityChanges": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book sanguozhi --chapter 041",
+    "datesPacket": "npm run people:dates:packet -- --book sanguozhi --chapter 041 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-041/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book sanguozhi --chapter 041"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no registry, deploy, merge, or sealed canonical edits."
+}
