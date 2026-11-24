@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "075"
+  },
+  "ownerAgentId": "bc-bc8282c5-9a08-4f9f-b40f-cdbf21d358ec",
+  "workerId": "cursor-nov24-retained-staging-w16-o11",
+  "idempotencyKey": "9f9b5aa7773dcb30f82fc4cd25afc84102e9d9be69c2fc9b643a16b311e31584",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-075-358ec",
+  "extractionBytes": 166322,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "dc04668f2f1fc68c80ed7c9a84e817fc36247ecc1d9bd1f7b3b9237efc7fd86b",
+    "people": 53,
+    "claims": 550,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "4009f6236658355065ac346ecc5c3df0f376e366",
+    "extraction": "43171d5c1cdcc90eec52a1480211d15aa3727a1f",
+    "editorial": "c84af0e1dc2c8650f38dedb415ce7b1131da711f"
+  },
+  "sealedInputs": {
+    "source": "sha256:71d27052be645d1b5dbb7a7d094b2198d466bf61f6952d4d3e59c4cdd1470705",
+    "extraction": "sha256:dc04668f2f1fc68c80ed7c9a84e817fc36247ecc1d9bd1f7b3b9237efc7fd86b",
+    "editorial": "sha256:a75ac5679fda569cd80ec0a5a0d12e7286f5d76f7454692d9706e84fa3c0aa59"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Biography of Lord Mengchang",
+    "chineseUnits": 244,
+    "translatedCount": 244,
+    "sentenceCount": 244,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 166322
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "sourceExtractionSha256Verified": true,
+    "editorialDecisionsPreserved": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "status": "reviewed-with-applied-proposals",
+    "path": "data/people/editorial-decisions/shiji/075.json",
+    "blob": "c84af0e1dc2c8650f38dedb415ce7b1131da711f"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-075/date-packet.json",
+    "sha256": "sha256:b2026efea2eb200a687d0602f985f88dd65dff9db30a9c5b0355a89ef9ab8384",
+    "sourceHash": "sha256:9de816f5b28ef6986c4cf893c21d34ef19758c6857e73841a868778a08205679",
+    "extractionHash": "sha256:c4d73182b7baec35b380cae4b65b39acdfd8a0860115b9233086308a3d0f4551",
+    "temporalItemCount": 253,
+    "peopleCount": 53,
+    "reviewedUnitCount": 244,
+    "command": "npm run people:dates:packet -- --book shiji --chapter 075 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-075/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 075",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/075: 1 extraction(s), 53 local people, 594 mentions, 759 claims, 0 proposed repair(s), 18 applied repair(s), 20 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/075.json",
+    "peopleValidateExtractionSummary": "data/people/extractions/shiji/075.json: ok (53 people, 594 mentions, 759 claims, 731 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 075",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeReportPresent": false
+    },
+    "chronologyStatus": "candidate-packet-sealed",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Lord Mengchang biography: 244 Chinese units with full literal/idiomatic English; 53 people, 594 mentions, 759 claims with 0 temporal attestation debt. Eighteen applied translation repairs and twenty editorial accept/revise decisions reconcile in people:validate. Owner found no new definite English or source-contradiction requiring repair. Sealed date packet prepared for independent audit.",
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "detail": "people:dates:verify status un-audited; independent review of packet sha256:b2026efea2eb200a687d0602f985f88dd65dff9db30a9c5b0355a89ef9ab8384 (253 items, 53 people, 244 units) required."
+    }
+  ],
+  "remainingIndependentProofs": [
+    {
+      "kind": "native-date-audit",
+      "blockedBy": "no-native-date-report",
+      "packetSha256": "sha256:b2026efea2eb200a687d0602f985f88dd65dff9db30a9c5b0355a89ef9ab8384",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "runCommand": "npm run people:dates:run -- --book shiji --chapter 075 --worker <stable-id> --lane cursor-sdk --model <model> --run"
+    },
+    {
+      "kind": "chapter-identity-canonical",
+      "detail": "No chapter-local identity merge/split edits in this owner pass; continue corpus identity resolution from validated extraction at current hash after date approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssuedByOwner": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 075",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 075",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 075 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-075/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs and extraction unchanged; candidate date packet stored for independent reviewer."
+}
