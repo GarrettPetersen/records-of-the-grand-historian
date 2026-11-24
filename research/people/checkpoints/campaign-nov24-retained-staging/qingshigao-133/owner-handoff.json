@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "133"
+  },
+  "ownerAgentId": "bc-6717c892-c42b-4f22-a800-2bc5fe9d9042",
+  "workerId": "cursor-nov24-retained-staging-w13-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7c9132bf7aa57d48c7e5f0ba17534a1bfcafa196a677534122252886613e9031",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-133-d9042",
+  "extractionBytes": 102318,
+  "inputBlobWitness": {
+    "source": "b32ddc32916b616642fcaaf2ea5dbc1ad2dc60ba",
+    "extraction": "76921508aa299554f30eddb65fcb7cc235069406",
+    "editorial": "4f174fef0c486e4489aeafc565ffca53ba2110bb"
+  },
+  "sealedInputs": {
+    "source": "sha256:5f182a71f3ab08d45a91457565134dcbf6297aa0d1b33fb797369a062569491d",
+    "extraction": "sha256:3d6c4ad7c71140d74a138dae03025476499c64aaea28dd553db6e2c4e3a9b92e",
+    "editorial": "sha256:81e66fdff99a870c9cc3ddbeb977766ee82feaf7eb131ae2d0fb9e1d6e4c4b90"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-133/date-packet.json",
+    "sha256": "sha256:8deed1917f579dc28f2444c6da0396188eece07f42e8d8e36570f1e3b230d280",
+    "sourceHash": "sha256:8ea4319871262b0eaf0bfb1308b4cbb95338ec9d2b68594ce85f16950d05157a",
+    "extractionHash": "sha256:543de3b0759b06b16dcbcbc379b39e07d671ddc6c1a15cd26c67eac035cc7a3a",
+    "itemCheckCount": 151,
+    "personCheckCount": 65,
+    "sourceUnitCount": 204
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 133 Treatises 108: Military 4, Local Militia",
+    "chineseUnits": 204,
+    "translatedCount": 204,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "sourceExtractionSha256": "3d6c4ad7c71140d74a138dae03025476499c64aaea28dd553db6e2c4e3a9b92e",
+    "rawExtractionFileSha256": "3d6c4ad7c71140d74a138dae03025476499c64aaea28dd553db6e2c4e3a9b92e",
+    "editorialDecisionCount": 2,
+    "appliedEnglishRepairsInSource": 2,
+    "coverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "noExtractionRerun": true,
+    "noEditorialReopen": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 133",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/133: 1 extraction(s), 65 local people, 205 mentions, 496 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 133",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "datesScan": {
+      "command": "node scripts/people-date-audit.mjs scan --book qingshigao --chapter 133",
+      "findings": 0,
+      "reversedIntervals": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book qingshigao --chapter 133",
+    "npm run people:dates:verify -- --book qingshigao --chapter 133",
+    "npm run people:dates:packet -- --book qingshigao --chapter 133 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-133/date-packet.json",
+    "node scripts/people-date-audit.mjs scan --book qingshigao --chapter 133"
+  ],
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "no-native-date-report",
+      "reason": "Missing data/people/date-audits/qingshigao/133.json; owner sealed fresh date packet only and did not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-133/date-packet.json",
+      "packetSha256": "sha256:8deed1917f579dc28f2444c6da0396188eece07f42e8d8e36570f1e3b230d280",
+      "packetSourceHash": "sha256:8ea4319871262b0eaf0bfb1308b4cbb95338ec9d2b68594ce85f16950d05157a",
+      "packetExtractionHash": "sha256:543de3b0759b06b16dcbcbc379b39e07d671ddc6c1a15cd26c67eac035cc7a3a",
+      "recordCommand": "npm run people:dates:record -- --report <independent-qingshigao-133-date-review.json>",
+      "authorNotesPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-133/chronology-author-notes.json"
+    },
+    "identity": {
+      "chapterLocalContradiction": false,
+      "corpusBoundedIdentityReview": "pending per campaign policy; owner found no sealed-input attribution contradiction."
+    }
+  },
+  "substantiveFindings": "Pinned git blob witness verified on staging 20b8d0e3 for source, extraction, and editorial inputs. Full chapter English paired on 204/204 Chinese units; accepted editorial repairs reflected in source JSON. people:validate passed; people:dates:scan reports 0 structural interval findings; deterministic date packet written (151 items, 65 people). No definite English omission, extraction contradiction, or owner-proposed chronology repair in this pass. Treatise-style units with dynasty-wide military policy dates; reviewer reads all 204 Chinese units for omitted event dating.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "blobWitnessVerified": true,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
