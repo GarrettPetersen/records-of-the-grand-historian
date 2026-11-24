@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "115"
+  },
+  "ownerAgentId": "bc-412c624a-b5c9-4162-8ca2-fe3ac714336c",
+  "workerId": "cursor-nov24-retained-staging-w16-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e4683b90ce0421055bf04a8979dd9efc08892571ab1a9357e5626842d4f7f47e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-mingshi-115-4336c",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "8e8af4707c3ca04ffcb4e77f9926d96e968d76f0c3b42151dd9314b71ed090ea",
+    "promptVersion": 7,
+    "people": 112,
+    "claims": 390
+  },
+  "inputBlobWitness": {
+    "source": "60bed1809ed2eb7de7bf1dcc5a20fd7ff5e4104f",
+    "extraction": "a98938a98a733ce578b9ccb10d95aea1c0e2d430",
+    "editorial": "17b553b6c556b84d325ecac22b05d8b114195d10",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:17f97feb09f227670465271e4a7d69e2fad417d0fef8def216bc6a12092f621f",
+    "extraction": "sha256:8e8af4707c3ca04ffcb4e77f9926d96e968d76f0c3b42151dd9314b71ed090ea",
+    "editorial": "sha256:ad9b27eba67464e52857bbdedb90d89d7426d9d656c1c959c04d08e934b15ad9",
+    "dateAudit": null
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "bytes": 143600,
+    "contentSha256": "sha256:8e8af4707c3ca04ffcb4e77f9926d96e968d76f0c3b42151dd9314b71ed090ea",
+    "extractionValidate": "data/people/extractions/mingshi/115.json: ok (112 people, 481 mentions, 719 claims, 576 candidates)"
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 3,
+    "appliedCount": 3,
+    "status": "reviewed-with-applied-proposals",
+    "note": "Applied repair count from scoped people:validate; proposals live in editorial-decisions artifact."
+  },
+  "sourceCoverage": {
+    "sourceTitle": {
+      "zh": "卷一百十五 列傳第三 興宗孝康皇帝 睿宗興獻皇帝",
+      "en": "Volume 115 Biographies 3: Emperor Xingzong Xiaokang, Emperor Ruizong Xingxian",
+      "raw": "卷一百十五 列傳第三 興宗孝康皇帝 睿宗興獻皇帝 Volume 115 Biographies 3: Emperor Xingzong Xiaokang, Emperor Ruizong Xingxian"
+    },
+    "chineseUnits": 198,
+    "unitsWithChinese": 198,
+    "translatedCount": 198,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 143600
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-115/sealed-native-date-packet.json",
+    "hash": "sha256:141d0b77b8fe6f055bdb165909ece4fe0bfb013a9ac09896a2f0b02678f195d6",
+    "sourceHash": "sha256:8ad33b9c2269da17b01c3d2ba118d1fad0188884f4e56f0e1decea3cd12e9ea7",
+    "extractionHash": "sha256:5fef1988ffecae4dc9af82dae0fb3bdfbca6e61d923287c7e0197298a4386992",
+    "itemCount": 284,
+    "peopleCount": 112,
+    "unitCount": 198,
+    "preflightDiagnostics": 0
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book mingshi --chapter 115",
+    "peopleValidateSummary": "Scoped person data validation passed for mingshi/115: 1 extraction(s), 112 local people, 481 mentions, 719 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/mingshi/115.json",
+    "peopleValidateExtractionSummary": "data/people/extractions/mingshi/115.json: ok (112 people, 481 mentions, 719 claims, 576 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 115",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateAuditPath": null,
+      "findings": null
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and applied editorial inputs at pinned staging blobs; no data/people/date-audits/mingshi/115.json. Full chapter Chinese read with idiomatic and literal English fields checked; extraction and editorial artifacts reused without re-extraction or self-approval. people:validate and validate-people-extraction pass scoped. Native sealed date packet prepared for independent chronology review (284 item checks, 112 people, 198 source units). No definite English omission, concrete source contradiction, or date-repair proposal authored in this owner pass.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetHash": "sha256:141d0b77b8fe6f055bdb165909ece4fe0bfb013a9ac09896a2f0b02678f195d6",
+      "packetSourceHash": "sha256:8ad33b9c2269da17b01c3d2ba118d1fad0188884f4e56f0e1decea3cd12e9ea7",
+      "packetExtractionHash": "sha256:5fef1988ffecae4dc9af82dae0fb3bdfbca6e61d923287c7e0197298a4386992",
+      "recordCommand": "npm run people:dates:record -- --report <independent-auditor-report.json>",
+      "verifyAfterRecord": "npm run people:dates:verify -- --book mingshi --chapter 115"
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "note": "Independent bounded dossier identity review remains after native date approval and chapter consolidation; owner pass does not approve identity merges."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 115",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/mingshi/115.json",
+    "datesVerify": "npm run people:dates:verify -- --book mingshi --chapter 115",
+    "datePacket": "npm run people:dates:packet -- --book mingshi --chapter 115 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-115/sealed-native-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged; independent native date audit still required before chapterReady."
+}

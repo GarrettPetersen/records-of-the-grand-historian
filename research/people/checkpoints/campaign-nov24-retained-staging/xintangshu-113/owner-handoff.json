@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "113"
+  },
+  "ownerAgentId": "bc-412c624a-b5c9-4162-8ca2-fe3ac714336c",
+  "workerId": "cursor-nov24-retained-staging-w16-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e4683b90ce0421055bf04a8979dd9efc08892571ab1a9357e5626842d4f7f47e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-113-4336c",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "b2aeaad2446852831eed82bf53f08cd92f06aed5990d389379a4616efe080605",
+    "promptVersion": 7,
+    "people": 101,
+    "claims": 373
+  },
+  "inputBlobWitness": {
+    "source": "ea1f179fe43355e745c9a5702f84265574997054",
+    "extraction": "0b8e48fa0e72511ad2e752f484984d54ffbd97d1",
+    "editorial": "7af647b2d1172413f7ca961b13e712e226bf9319",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:34b4291d263aeb9df43c1dadb76b2ed42c6948b1e90d0502300f26d2d79be328",
+    "extraction": "sha256:b2aeaad2446852831eed82bf53f08cd92f06aed5990d389379a4616efe080605",
+    "editorial": "sha256:c0d0ac340624367c456b36a84b955bcfd359498f803afb447dc8bf86686edd65",
+    "dateAudit": null
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "bytes": 142830,
+    "contentSha256": "sha256:b2aeaad2446852831eed82bf53f08cd92f06aed5990d389379a4616efe080605",
+    "extractionValidate": "data/people/extractions/xintangshu/113.json: ok (101 people, 450 mentions, 725 claims, 553 candidates)"
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 12,
+    "appliedCount": 12,
+    "status": "reviewed-with-applied-proposals",
+    "note": "Applied repair count from scoped people:validate; proposals live in editorial-decisions artifact."
+  },
+  "sourceCoverage": {
+    "sourceTitle": {
+      "zh": "卷一百一十三 列傳第三十八 唐張徐",
+      "en": "Volume 113 Biographies 38: Tang, Zhang, Xu",
+      "raw": "卷一百一十三 列傳第三十八 唐張徐 Volume 113 Biographies 38: Tang, Zhang, Xu"
+    },
+    "chineseUnits": 266,
+    "unitsWithChinese": 266,
+    "translatedCount": 266,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 142830
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-113/sealed-native-date-packet.json",
+    "hash": "sha256:72a1ad4ccb8684ba2655571336ab5ec3bf11f7205ee52cc564a21f4625559961",
+    "sourceHash": "sha256:1dd6a43d9338d425275c0667a8abd487e9bcceac107187202b72963c9d466a9c",
+    "extractionHash": "sha256:b25ede66e0a7ec067e8f342a4ef34ddd2feb2c9aed739b0fe3a88221597cef39",
+    "itemCount": 241,
+    "peopleCount": 101,
+    "unitCount": 266,
+    "preflightDiagnostics": 0
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xintangshu --chapter 113",
+    "peopleValidateSummary": "Scoped person data validation passed for xintangshu/113: 1 extraction(s), 101 local people, 450 mentions, 725 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/xintangshu/113.json",
+    "peopleValidateExtractionSummary": "data/people/extractions/xintangshu/113.json: ok (101 people, 450 mentions, 725 claims, 553 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 113",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateAuditPath": null,
+      "findings": null
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and applied editorial inputs at pinned staging blobs; no data/people/date-audits/xintangshu/113.json. Full chapter Chinese read with idiomatic and literal English fields checked; extraction and editorial artifacts reused without re-extraction or self-approval. people:validate and validate-people-extraction pass scoped. Native sealed date packet prepared for independent chronology review (241 item checks, 101 people, 266 source units). No definite English omission, concrete source contradiction, or date-repair proposal authored in this owner pass.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetHash": "sha256:72a1ad4ccb8684ba2655571336ab5ec3bf11f7205ee52cc564a21f4625559961",
+      "packetSourceHash": "sha256:1dd6a43d9338d425275c0667a8abd487e9bcceac107187202b72963c9d466a9c",
+      "packetExtractionHash": "sha256:b25ede66e0a7ec067e8f342a4ef34ddd2feb2c9aed739b0fe3a88221597cef39",
+      "recordCommand": "npm run people:dates:record -- --report <independent-auditor-report.json>",
+      "verifyAfterRecord": "npm run people:dates:verify -- --book xintangshu --chapter 113"
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "note": "Independent bounded dossier identity review remains after native date approval and chapter consolidation; owner pass does not approve identity merges."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 113",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/xintangshu/113.json",
+    "datesVerify": "npm run people:dates:verify -- --book xintangshu --chapter 113",
+    "datePacket": "npm run people:dates:packet -- --book xintangshu --chapter 113 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-113/sealed-native-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged; independent native date audit still required before chapterReady."
+}
