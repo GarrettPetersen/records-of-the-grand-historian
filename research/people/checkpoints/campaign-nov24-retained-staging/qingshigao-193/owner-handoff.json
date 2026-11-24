@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "193"
+  },
+  "ownerAgentId": "bc-1e7f1743-30db-4b99-9204-5e5b3ca1ccbf",
+  "workerId": "cursor-nov24-retained-staging-w18-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "dd2f7a24c7114f60d6123ca51d7d5561c46f5e28ee1846afdab2fd5e68d66554",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-193-1ccbf",
+  "auditState": "no-native-date-report",
+  "promptVersion": 7,
+  "extractionBytes": 203621,
+  "workOrder": {
+    "sourceExtractionSha256": "sha256:2c0897d0f86b363d32bead1efd8f592836732eacfbb69af19130705994e31ca7",
+    "people": 65,
+    "claims": 646
+  },
+  "inputBlobWitness": {
+    "source": "23b9617392ea0355b358d6528f69176e54d5f5d2",
+    "extraction": "e26e75301c2e92313e5d5e5c34476e4ee732a951",
+    "editorial": "d5816cd5026b96c6f0244adcd7fdd91eff309ae5"
+  },
+  "sealedInputs": {
+    "source": "sha256:5db552dc45d02f0c72f96eaf4ae17bac0e1dabbfbad4a5f5c60f5daf3ec3c215",
+    "extraction": "sha256:2c0897d0f86b363d32bead1efd8f592836732eacfbb69af19130705994e31ca7",
+    "editorial": "sha256:fa8d0f616837c3e25c67ab4d73e8cd6142ede3ad71fe72c376ee5fcf73c05ec0"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 193 Tables 33: Ministers of Boards and Courts Chronological Table 8 Lower",
+    "chineseUnits": 157,
+    "translatedCount": 157,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 35,
+    "fullEnglishCoverage": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionBlob": "e26e75301c2e92313e5d5e5c34476e4ee732a951",
+    "editorialBlob": "d5816cd5026b96c6f0244adcd7fdd91eff309ae5",
+    "extractionContentSha256": "sha256:2c0897d0f86b363d32bead1efd8f592836732eacfbb69af19130705994e31ca7",
+    "editorialContentSha256": "sha256:fa8d0f616837c3e25c67ab4d73e8cd6142ede3ad71fe72c376ee5fcf73c05ec0",
+    "promptVersion": 7,
+    "appliedTranslationRepairs": 4,
+    "editorialProposals": 4,
+    "editorialDecisions": 4,
+    "ownerDidNotReextract": true,
+    "ownerDidNotAlterSealedInputs": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-193/date-packet.json",
+    "contentSha256": "sha256:6a89491fd50033acbaac2d4b5afca27e896af0206a8605aa973ae9da0e129f24",
+    "itemCount": 664,
+    "sourceHash": "sha256:2d62b9819fd61d853b0c81fdb512440732f87407af16a6453944a19160c41e76",
+    "extractionHash": "sha256:7814a5375cb0270defb17bdf9138c86074e6c23f0fd370470c86d169ffd947f9",
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 193 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-193/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 193",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/193: 1 extraction(s), 65 local people, 370 mentions, 776 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/qingshigao/193.json",
+    "peopleValidateExtractionPassed": true,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 193",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/qingshigao/193.json"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentProofs": {
+    "date": {
+      "gate": "independent-native-date-audit",
+      "detail": "Fresh sealed date packet prepared at pinned extraction; data/people/date-audits missing. Independent reviewer must run native date workflow against this packet and record approval via people:dates:record without self-approval.",
+      "packetSha256": "sha256:6a89491fd50033acbaac2d4b5afca27e896af0206a8605aa973ae9da0e129f24"
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "detail": "Global identity resolution dossiers remain for chapter-local people after date approval; owner pass did not perform merges or canonical identity edits."
+    },
+    "editorial": null
+  },
+  "distinctHolds": [
+    {
+      "kind": "missing-native-date-report",
+      "detail": "No data/people/date-audits record; people:dates:verify returns un-audited."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction, and editorial inputs witness-verified at staging 4394bd71. Full chapter English coverage on Chinese-bearing units; extraction prompt v7 retained. Owner prepared native date packet; no definite English contradiction or chronology repair identified in this pass. Chapter not complete: independent date audit still missing.",
+  "scopedChronologyOrIdentityChanges": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 193",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 193 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-193/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 193"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no registry, deploy, merge, or sealed canonical edits."
+}
