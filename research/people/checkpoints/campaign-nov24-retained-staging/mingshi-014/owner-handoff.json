@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-8ced726d-4f52-4008-a889-7b5809c65f14",
+  "workerId": "cursor-nov24-retained-staging-w15-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "09cf11d5616359c9b3f5aae4ec259a9be5ac8126f2a3273012b1f75a679eaf9e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "workOrderBranch": "cursor/nov24-retained-staging-w15-o3-5f14",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "scope": {
+    "book": "mingshi",
+    "chapter": "014"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-mingshi-014-65f14",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "de399f252097368173190d440b5d7941416023839ffe3fea2c0c8d638938cf0b",
+    "people": 71,
+    "claims": 309,
+    "promptVersion": 7
+  },
+  "extractionBytes": 111275,
+  "inputBlobWitness": {
+    "source": "b1f34aa8bd8ff5ca3d3a7cd9061c9a208b8f177c",
+    "extraction": "114b27cfee1cc9f8f489962b107cf7b9203a8862",
+    "editorial": "a99913ddf90fe470dd4e267025abfcb0f4cbb00f",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:d1f19ed547bcddc4070fbb0366b29dc8a1164d1f080a0a28e8a5f01644a3470e",
+    "extraction": "sha256:de399f252097368173190d440b5d7941416023839ffe3fea2c0c8d638938cf0b",
+    "editorial": "sha256:a323cca203b24e9044f5b5fbfaf608d8d40c87f11bf621750e2b4d95f8118a9a",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 14 Annals 14: Xianzong 2",
+    "chineseUnits": 198,
+    "translatedCount": 198,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPreserved": true,
+    "extractionBlob": "114b27cfee1cc9f8f489962b107cf7b9203a8862",
+    "editorialPreserved": true,
+    "editorialBlob": "a99913ddf90fe470dd4e267025abfcb0f4cbb00f",
+    "appliedEditorialRepairs": 7,
+    "editorialDecisionCount": 9,
+    "newExtractionEdits": false,
+    "newEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-014/date-packet.json",
+    "sha256": "sha256:167f8e17218e1cf786e46e54eb4616b722cd8062e646695b502bdfd68e6ed57f",
+    "itemCount": 177,
+    "peopleCount": 71,
+    "sourceUnitCount": 198,
+    "preparedBy": "npm run people:dates:packet",
+    "notApproved": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book mingshi --chapter 014",
+    "peopleValidateSummary": "Scoped person data validation passed for mingshi/014: 1 extraction(s), 71 local people, 243 mentions, 583 claims, 0 proposed repair(s), 7 applied repair(s), 9 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "peopleDatesScanCommand": "npm run people:dates:scan -- --book mingshi --chapter 014",
+    "peopleDatesScanFindings": 0,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 014",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and accepted editorial inputs at staging 20b8d0e. Full chapter Chinese read with paired literal and idiomatic English on all 198 units; people:validate passes with accepted repairs reflected in source. people:dates:scan reports zero automatic chronology findings on current extraction. No data/people/date-audits/mingshi/014.json exists; people:dates:verify remains un-audited. Owner prepared fresh native date packet at sealedNativeDatePacket for independent review; owner does not record or self-approve a date audit. No definite English omission, concrete chronology contradiction, or extraction gap found warranting owner repairs.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "instruction": "Independent reviewer runs full chronology audit against research/people/checkpoints/campaign-nov24-retained-staging/mingshi-014/date-packet.json and records via npm run people:dates:record; owner handoff is not approval."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-post-date",
+      "instruction": "Canonical identity evidence review for whole chapter after independent date approval; retain cross-chapter uncertainty per native gates."
+    }
+  },
+  "distinctHolds": [],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 014",
+    "datesVerify": "npm run people:dates:verify -- --book mingshi --chapter 014",
+    "datesPacket": "npm run people:dates:packet -- --book mingshi --chapter 014 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-014/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book mingshi --chapter 014"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, deploy, merge, or registry generation."
+}

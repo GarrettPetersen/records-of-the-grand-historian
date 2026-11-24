@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-8ced726d-4f52-4008-a889-7b5809c65f14",
+  "workerId": "cursor-nov24-retained-staging-w15-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "09cf11d5616359c9b3f5aae4ec259a9be5ac8126f2a3273012b1f75a679eaf9e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "workOrderBranch": "cursor/nov24-retained-staging-w15-o3-5f14",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "375"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-375-65f14",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "d4d36ce87eebef0e7df611170680d18dd35e7b8d2660423332898105899a3da8",
+    "people": 63,
+    "claims": 348,
+    "promptVersion": 7
+  },
+  "extractionBytes": 113501,
+  "inputBlobWitness": {
+    "source": "19916b5e15716fb68912189bf3dcc4e42f32d19a",
+    "extraction": "7f44ef81f794b259dd4cd4186180a3842384810d",
+    "editorial": "8385d6282e6c4c0a9654220d0311feb1810e7b2b",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:c8b73ad5cf3dfcb0fe441fa618afdba7877cad7eed53e1fed74c991a155d9495",
+    "extraction": "sha256:d4d36ce87eebef0e7df611170680d18dd35e7b8d2660423332898105899a3da8",
+    "editorial": "sha256:0bb03204a410a6c39c59fe7c0db5bcd49895d237c0c9384ac9bddc783dba94dd",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 375 Biographies 162: Bai Rong, Sun Huan, Shi Zhiyan, Na Qingan, Sheng Yin, Li Zongfang, Yao Yuanzhi, He Rulin, Ji Zhichang, Lie Chuan",
+    "chineseUnits": 226,
+    "translatedCount": 226,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPreserved": true,
+    "extractionBlob": "7f44ef81f794b259dd4cd4186180a3842384810d",
+    "editorialPreserved": true,
+    "editorialBlob": "8385d6282e6c4c0a9654220d0311feb1810e7b2b",
+    "appliedEditorialRepairs": 8,
+    "editorialDecisionCount": 8,
+    "newExtractionEdits": false,
+    "newEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-375/date-packet.json",
+    "sha256": "sha256:d9af57bf916252909b2a4d10622e91f05c578eb8d13e25dd7ace2b388c1689c8",
+    "itemCount": 224,
+    "peopleCount": 63,
+    "sourceUnitCount": 227,
+    "preparedBy": "npm run people:dates:packet",
+    "notApproved": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 375",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/375: 1 extraction(s), 63 local people, 222 mentions, 552 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "peopleDatesScanCommand": "npm run people:dates:scan -- --book qingshigao --chapter 375",
+    "peopleDatesScanFindings": 0,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 375",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and accepted editorial inputs at staging 20b8d0e. Full chapter Chinese read with paired literal and idiomatic English on all 226 units; people:validate passes with accepted repairs reflected in source. people:dates:scan reports zero automatic chronology findings on current extraction. No data/people/date-audits/qingshigao/375.json exists; people:dates:verify remains un-audited. Owner prepared fresh native date packet at sealedNativeDatePacket for independent review; owner does not record or self-approve a date audit. No definite English omission, concrete chronology contradiction, or extraction gap found warranting owner repairs.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "instruction": "Independent reviewer runs full chronology audit against research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-375/date-packet.json and records via npm run people:dates:record; owner handoff is not approval."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-post-date",
+      "instruction": "Canonical identity evidence review for whole chapter after independent date approval; retain cross-chapter uncertainty per native gates."
+    }
+  },
+  "distinctHolds": [],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 375",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 375",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 375 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-375/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book qingshigao --chapter 375"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, deploy, merge, or registry generation."
+}

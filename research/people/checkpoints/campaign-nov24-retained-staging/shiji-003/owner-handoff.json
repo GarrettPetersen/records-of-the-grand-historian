@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-8ced726d-4f52-4008-a889-7b5809c65f14",
+  "workerId": "cursor-nov24-retained-staging-w15-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "09cf11d5616359c9b3f5aae4ec259a9be5ac8126f2a3273012b1f75a679eaf9e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "workOrderBranch": "cursor/nov24-retained-staging-w15-o3-5f14",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "scope": {
+    "book": "shiji",
+    "chapter": "003"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-shiji-003-65f14",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "118b65c2fa6425165530374d4b52079dd7f2044e6a18b15a86a587d8a6094b2f",
+    "people": 90,
+    "claims": 289,
+    "promptVersion": 7
+  },
+  "extractionBytes": 111952,
+  "inputBlobWitness": {
+    "source": "959c736b443943d6153d15621a8a7dbc35083dc1",
+    "extraction": "54ae7193fc82742dd70a090034b5e2493ad685ae",
+    "editorial": "d167f0996682716d17abb364fed9525887451c2b",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:aad43f05e85745c3eb86dde590f3b24afb1f33bc631b970bc8c3b5a8a4dfb7a7",
+    "extraction": "sha256:118b65c2fa6425165530374d4b52079dd7f2044e6a18b15a86a587d8a6094b2f",
+    "editorial": "sha256:81a6dad570a9d12a03f6a68a73e33ea10e1c8a3367bde7f97eff82dfea535269",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Annals of Yin",
+    "chineseUnits": 235,
+    "translatedCount": 235,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPreserved": true,
+    "extractionBlob": "54ae7193fc82742dd70a090034b5e2493ad685ae",
+    "editorialPreserved": true,
+    "editorialBlob": "d167f0996682716d17abb364fed9525887451c2b",
+    "appliedEditorialRepairs": 5,
+    "editorialDecisionCount": 5,
+    "newExtractionEdits": false,
+    "newEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-003/date-packet.json",
+    "sha256": "sha256:677c77cd4e7db17286acdfb7ab5ce72b593c5f08cf1153dfd83040d22b746731",
+    "itemCount": 191,
+    "peopleCount": 90,
+    "sourceUnitCount": 235,
+    "preparedBy": "npm run people:dates:packet",
+    "notApproved": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 003",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/003: 1 extraction(s), 90 local people, 675 mentions, 579 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "peopleDatesScanCommand": "npm run people:dates:scan -- --book shiji --chapter 003",
+    "peopleDatesScanFindings": 0,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 003",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and accepted editorial inputs at staging 20b8d0e. Full chapter Chinese read with paired literal and idiomatic English on all 235 units; people:validate passes with accepted repairs reflected in source. people:dates:scan reports zero automatic chronology findings on current extraction. No data/people/date-audits/shiji/003.json exists; people:dates:verify remains un-audited. Owner prepared fresh native date packet at sealedNativeDatePacket for independent review; owner does not record or self-approve a date audit. No definite English omission, concrete chronology contradiction, or extraction gap found warranting owner repairs.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "instruction": "Independent reviewer runs full chronology audit against research/people/checkpoints/campaign-nov24-retained-staging/shiji-003/date-packet.json and records via npm run people:dates:record; owner handoff is not approval."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-post-date",
+      "instruction": "Canonical identity evidence review for whole chapter after independent date approval; retain cross-chapter uncertainty per native gates."
+    }
+  },
+  "distinctHolds": [],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 003",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 003",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 003 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-003/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book shiji --chapter 003"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, deploy, merge, or registry generation."
+}

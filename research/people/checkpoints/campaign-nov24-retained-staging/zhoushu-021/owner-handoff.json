@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-8ced726d-4f52-4008-a889-7b5809c65f14",
+  "workerId": "cursor-nov24-retained-staging-w15-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "09cf11d5616359c9b3f5aae4ec259a9be5ac8126f2a3273012b1f75a679eaf9e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "workOrderBranch": "cursor/nov24-retained-staging-w15-o3-5f14",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "021"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-zhoushu-021-65f14",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "b8bb9ba8c734d11513911478af7bd5709c790b863e82ceb25d1233d3a21aea24",
+    "people": 80,
+    "claims": 301,
+    "promptVersion": 7
+  },
+  "extractionBytes": 111349,
+  "inputBlobWitness": {
+    "source": "a7750238ad06e390ceca0d160acdf0940313f175",
+    "extraction": "406ecd599904e49a0123b63a9ca41c6f0b678af9",
+    "editorial": "b7731c2572e49fe8c0405d53e5bdfa4e17093556",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:3aef59db65d50dd96b30dedbcd369c8c8308cc6f0145e903442127f57a5fb86e",
+    "extraction": "sha256:b8bb9ba8c734d11513911478af7bd5709c790b863e82ceb25d1233d3a21aea24",
+    "editorial": "sha256:90ca1f3e758e124776a40e9fb9e6ce4191d4bfd6263cd49b6532a3dd4ead8cc6",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 21 Biographies 13: Wei Chijiong; Wang Qian; Sima Xiaonan",
+    "chineseUnits": 199,
+    "translatedCount": 199,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPreserved": true,
+    "extractionBlob": "406ecd599904e49a0123b63a9ca41c6f0b678af9",
+    "editorialPreserved": true,
+    "editorialBlob": "b7731c2572e49fe8c0405d53e5bdfa4e17093556",
+    "appliedEditorialRepairs": 4,
+    "editorialDecisionCount": 4,
+    "newExtractionEdits": false,
+    "newEditorialEdits": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-021/date-packet.json",
+    "sha256": "sha256:16d688b484e575b7679a392a1c26b323bd08683b1b8cbef054a89dfc4bd6fd70",
+    "itemCount": 204,
+    "peopleCount": 80,
+    "sourceUnitCount": 199,
+    "preparedBy": "npm run people:dates:packet",
+    "notApproved": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book zhoushu --chapter 021",
+    "peopleValidateSummary": "Scoped person data validation passed for zhoushu/021: 1 extraction(s), 80 local people, 416 mentions, 600 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "peopleDatesScanCommand": "npm run people:dates:scan -- --book zhoushu --chapter 021",
+    "peopleDatesScanFindings": 0,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book zhoushu --chapter 021",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and accepted editorial inputs at staging 20b8d0e. Full chapter Chinese read with paired literal and idiomatic English on all 199 units; people:validate passes with accepted repairs reflected in source. people:dates:scan reports zero automatic chronology findings on current extraction. No data/people/date-audits/zhoushu/021.json exists; people:dates:verify remains un-audited. Owner prepared fresh native date packet at sealedNativeDatePacket for independent review; owner does not record or self-approve a date audit. No definite English omission, concrete chronology contradiction, or extraction gap found warranting owner repairs.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "instruction": "Independent reviewer runs full chronology audit against research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-021/date-packet.json and records via npm run people:dates:record; owner handoff is not approval."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-post-date",
+      "instruction": "Canonical identity evidence review for whole chapter after independent date approval; retain cross-chapter uncertainty per native gates."
+    }
+  },
+  "distinctHolds": [],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book zhoushu --chapter 021",
+    "datesVerify": "npm run people:dates:verify -- --book zhoushu --chapter 021",
+    "datesPacket": "npm run people:dates:packet -- --book zhoushu --chapter 021 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-021/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book zhoushu --chapter 021"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, deploy, merge, or registry generation."
+}
