@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "beiqishu/043",
+  "reviewerAgentId": "bc-a9a912be-7e43-40e4-9087-b51e5d73ae16",
+  "ownerAgentId": "bc-55fcc16a-2fa6-4a05-8ec9-d1a96ced0a7b",
+  "ownerRevision": "14f2c7ac33b2bd29488dddfed6d74da1fa07f2d6",
+  "ownerProposalSha256": "9972166239c7947d4b51501235e49ee2aabfdedd20ab47a718213e81f685326e",
+  "previousReviewHead": "a706933991f6a43e2a4127bde995d774b55eb283",
+  "priorRun": "run-2724e1ad-3ada-4ad4-a14d-677e627246c3",
+  "verdict": "approve_supported_patch; hold_identity_certification",
+  "summary": "Independent review concurs with the owner on the false Chinese surface 源楷之父 and approves the scoped extraction patch. The grounded unnamed father record (p087) may remain with English descriptive metadata and unresolved identity, but native primary-witness certification for the dossier case stays on hold until the host applies the patch and a follow-up identity pass confirms missingBlockingName handling—assertDossierPrimaryWitness still does not admit Han quotes for p087 after the patch.",
+  "closedCases": [
+    {
+      "caseId": "sha256:c1f8daf76cd1983eefb2dda34a5b7366617b7313e8e11e999ca82b4a358ccd0a",
+      "closureKind": "false-chinese-identity-surface",
+      "localPersonId": "beiqishu:043:p087",
+      "canonicalPersonId": "per_WEXNWR9TXKNSRKV1P0T9",
+      "priorIndependentVerdict": "hold",
+      "outcome": "Owner proposal accepted: remove editorial zh:源楷之父 not present in any sealed unit. English Father of Yuan Kai and family claims on s0195 remain source-entailed.",
+      "sourceRationale": "Chapter grep shows zero 源楷之父 in data/beiqishu/043.json. s0195 文宗從父兄楷，字那延… names 楷 and 從父兄; s0148 父子恭… names Zigong only."
+    }
+  ],
+  "heldCases": [
+    {
+      "caseId": "sha256:c1f8daf76cd1983eefb2dda34a5b7366617b7313e8e11e999ca82b4a358ccd0a",
+      "localPersonId": "beiqishu:043:p087",
+      "canonicalPersonId": "per_WEXNWR9TXKNSRKV1P0T9",
+      "verdict": "hold",
+      "membershipFingerprint": "sha256:2ea3ceab3703a5a6b45f231ad3c60070de05b4c2df4f007ea64b95d494c11e58",
+      "unresolvedIdentity": true,
+      "reason": "After the approved patch, p087 has no blocking Chinese identity keys and no zh mention spans; assertDossierPrimaryWitness rejects 從父, 從父兄, 父, and 楷 on p087 in s0195. This is a source-supported unnamed intermediary, not Zigong (p070). Retain separate records; do not treat owner-listed witnesses on p086/p070 as substitutes for anchor p087.",
+      "blockingCondition": "Host applies supportedPatch; re-run scoped identity certification with missingBlockingName=true and unresolvedIdentity=true, or route through host unnamed-intermediary policy.",
+      "preservedPriorReviewRow": {
+        "transportPart": "transport-part-004.json",
+        "transportSha256": "155a2e1a09b3748f631fc7f62c35598af24d67fb0c6f07b4a81356c6b7a47cd3",
+        "note": "All other 91 case rows in independent-identity-report-part-* unchanged."
+      }
+    }
+  ],
+  "dependencies": {
+    "inputBlobsVerified": {
+      "source": "43e9aaa3dc6ed2d56c9ebd5dbbfea6006f2fd20f",
+      "extraction": "096c24a1de320030b38f5ada167c006858dbab32",
+      "dateAudit": "f047dbffe2d7a2012fdf5ff19d943aa4791896d8",
+      "editorial": "41ca14922f1c0553adf47840a3d607012edd27f3"
+    },
+    "primaryUnits": [
+      {
+        "unitId": "s0195",
+        "zh": "文宗從父兄楷，字那延，有器幹，善草隸書。",
+        "enIdiomatic": "Wenzong's elder cousin Kai, styled Nayian, had capacity and drive and was skilled in cursive and clerical script.",
+        "personsAffected": ["beiqishu:043:p071", "beiqishu:043:p086", "beiqishu:043:p087"]
+      },
+      {
+        "unitId": "s0148",
+        "zh": "父子恭，魏中書監、司空，文獻公。",
+        "enIdiomatic": "His father Zigong had been Wei secretariat supervisor, Minister of Works, and Duke Wenxian.",
+        "personsAffected": ["beiqishu:043:p070", "beiqishu:043:p071"]
+      }
+    ],
+    "relationshipClaimsUnchanged": [
+      "beiqishu:043:p086 child-of p087 (s0195)",
+      "beiqishu:043:p086 kin-of p071 via intermediary p087 (s0195)",
+      "beiqishu:043:p087 sibling-of p070 uncertain (s0195)",
+      "beiqishu:043:p087 attestation 永安至武定間 (s0195, s0148)"
+    ],
+    "chronologyDelta": null,
+    "namedWitnessesConfirmed": [
+      {
+        "localId": "beiqishu:043:p086",
+        "unitId": "s0195",
+        "quote": "楷"
+      },
+      {
+        "localId": "beiqishu:043:p070",
+        "unitId": "s0148",
+        "quote": "子恭"
+      }
+    ],
+    "rejectedOwnerEndorsement": {
+      "field": "recommendedIndependentOutcome.verdict",
+      "ownerValue": "approve",
+      "independentValue": "hold",
+      "reason": "Owner contextual witnesses correctly describe s0195/s0148 but do not satisfy per-person Han witness rules for anchor beiqishu:043:p087."
+    }
+  },
+  "supportedPatch": {
+    "artifact": "data/people/extractions/beiqishu/043.json",
+    "baseBlob": "096c24a1de320030b38f5ada167c006858dbab32",
+    "personId": "p087",
+    "localPersonId": "beiqishu:043:p087",
+    "claimIds": ["beiqishu:043:c0405"],
+    "rationale": "Remove fabricated blocking Chinese identity form; preserve English descriptive kinship and strongly-inferred family graph entailed by 從父兄.",
+    "operations": [
+      {
+        "op": "replace",
+        "path": "people[id=p087]/preferredNameSuggestion/zh",
+        "before": "源楷之父",
+        "after": null
+      },
+      {
+        "op": "replace",
+        "path": "people[id=p087]/identityNames[0]/value/zh",
+        "before": "源楷之父",
+        "after": null
+      }
+    ],
+    "compactOperations": [
+      {
+        "op": "replace",
+        "path": "people[.0=p087][1][1]",
+        "before": "源楷之父",
+        "after": null
+      },
+      {
+        "op": "replace",
+        "path": "people[.0=p087][5][0][0].zh",
+        "before": "源楷之父",
+        "after": null
+      }
+    ],
+    "englishPreserved": {
+      "displayEn": "Father of Yuan Kai",
+      "nameClaimEn": "Father of Yuan Kai"
+    },
+    "chronologyPatch": null
+  },
+  "validation": {
+    "ownerProposalSha256Verified": true,
+    "sourceAbsentSubstring": {
+      "substring": "源楷之父",
+      "artifact": "data/beiqishu/043.json",
+      "present": false
+    },
+    "scopedExtractionValidateBefore": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/beiqishu/043.json",
+      "status": "ok"
+    },
+    "scopedExtractionValidateCandidate": {
+      "command": "node scripts/validate-people-extraction.mjs /tmp/beiqishu043-extraction-candidate.json",
+      "status": "ok",
+      "summary": "ok (98 people, 395 mentions, 1205 claims, 638 candidates)"
+    },
+    "scopedPeopleValidateSealedInputs": {
+      "command": "npm run people:validate -- --book beiqishu --chapter 043",
+      "status": "PASS",
+      "note": "Against ownerRevision sealed blobs; patch not yet applied on branch."
+    },
+    "nativeWitnessRecheckAfterPatch": {
+      "localPersonId": "beiqishu:043:p087",
+      "assertDossierPrimaryWitness": "fail",
+      "quotesTried": ["從父", "從父兄", "父", "楷"],
+      "unitId": "s0195"
+    },
+    "preservedUnrelatedReviewRows": true
+  },
+  "notes": "[CF-Pages-Skip] Targeted delta only; no canonical data or prior identity report edits on this commit."
+}
