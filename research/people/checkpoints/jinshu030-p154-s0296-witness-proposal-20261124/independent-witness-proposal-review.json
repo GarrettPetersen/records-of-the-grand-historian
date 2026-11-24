@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu030-p154-s0296-independent-repair-review",
+  "status": "evidence-only",
+  "applied": false,
+  "reviewedAt": "2026-11-24T01:00:00.000Z",
+  "reviewer": {
+    "agentId": "bc-ab2acfed-77c9-4601-afc7-18feb78285d3",
+    "role": "independent-identity-reviewer"
+  },
+  "proposalPin": {
+    "commit": "68ffcd616644dff7f94ec08ba6a5ece93b33bae1",
+    "path": "research/people/checkpoints/jinshu030-p154-s0296-witness-proposal-20261124/hold-proposal.json"
+  },
+  "holdUnchanged": {
+    "transportPart": "011",
+    "caseReasonFingerprint": "sha256:e7143bd675d8cd2098830c427913cd1670198bc92eb936ab62adec96d8ee494a",
+    "verdictRemains": "hold",
+    "otherCasesReviewed": 206,
+    "note": "This file approves owner repair scope only; it does not rewrite part-011 artifacts or the sealed hold row."
+  },
+  "verdict": "approve_with_idiomatic_correction",
+  "summary": "Primary Chinese at s0296 is gesture-only; 張裴 is witnessed at s0252 on p153. Removing English-only p154 and replacing s0296 idiomatic is supported. Literal field needs no change. Drop date-audit rows personChecks:p154 and itemChecks:hints-p154 only; p153 rows stay. No extraction dependents reference p154 beyond its duplicate row.",
+  "chineseWitness": {
+    "s0252": {
+      "zh": "其後，明法掾張裴又注律，表上之，其要曰：",
+      "personalNamePresent": true,
+      "span": "張裴",
+      "p153PrimaryWitness": true
+    },
+    "s0296": {
+      "zh": "仰手似乞，俯手似奪，捧手似謝，擬手似訴，拱臂似自首，攘臂似格鬥，矜莊似威，怡悅似福，喜怒憂歡，貌在聲色。",
+      "zhDigest": "sha256:220475953f41664f6e0f586d17f213a2d92ae6dedc10a8458ae631d470a0c142",
+      "personalNamePresent": false,
+      "discourseContinuesFromS0252": true
+    }
+  },
+  "translationRepairs": {
+    "s0296": {
+      "literal": {
+        "decision": "approve_no_change",
+        "before": "Upturned hands resemble begging; downturned hands resemble seizing; cupped hands resemble thanks; imitative hands resemble pleading; folded arms resemble surrender; flung arms resemble brawl; composed bearing resembles awe; glad faces resemble blessing; joy, anger, grief, pleasure sit in voice and countenance.",
+        "after": "Upturned hands resemble begging; downturned hands resemble seizing; cupped hands resemble thanks; imitative hands resemble pleading; folded arms resemble surrender; flung arms resemble brawl; composed bearing resembles awe; glad faces resemble blessing; joy, anger, grief, pleasure sit in voice and countenance.",
+        "reason": "Verified against data/jinshu/030.json at workspace head; each 仰手–怡悅 parallel and 喜怒憂歡，貌在聲色 is already rendered in order with no injected author name."
+      },
+      "idiomatic": {
+        "decision": "approve_with_correction",
+        "before": "Zhang Pei lists gesture and expression lexicons for inferring intent.",
+        "proposalAfter": "Raised hands resemble begging; lowered hands resemble snatching; cupped hands resemble apology; pointing hands resemble petitioning; folded arms resemble turning oneself in; rolled-up sleeves resemble combat; solemn bearing resembles majesty; a cheerful face resembles good fortune; joy, anger, sorrow, and delight show in voice and countenance.",
+        "approvedAfter": "Raised hands resemble begging; lowered hands resemble snatching; cupped hands resemble giving thanks; mimicking-hand gestures resemble pleading; folded arms resemble turning oneself in; rolled-up sleeves resemble combat; solemn bearing resembles majesty; a cheerful face resembles good fortune; joy, anger, sorrow, and delight show in voice and countenance.",
+        "corrections": [
+          {
+            "clause": "捧手似謝",
+            "proposalPhrase": "cupped hands resemble apology",
+            "approvedPhrase": "cupped hands resemble giving thanks",
+            "reason": "謝 in this parallel list pairs with 乞/謝-style courtesy gestures; literal already uses thanks and 謝 here is thanks-gratitude, not 謝罪 apology."
+          },
+          {
+            "clause": "擬手似訴",
+            "proposalPhrase": "pointing hands resemble petitioning",
+            "approvedPhrase": "mimicking-hand gestures resemble pleading",
+            "reason": "擬手 is imitative/mimicking hand posture and 訴 is plead/sue; there is no pointing-hand lexeme in the Chinese."
+          }
+        ],
+        "sharedWithProposal": "Removes fabricated Zhang Pei attribution; covers all eight 似 parallels plus 喜怒憂歡，貌在聲色; 攘臂 as rolled-up sleeves is acceptable (stronger than literal flung arms)."
+      }
+    }
+  },
+  "extractionRepair": {
+    "decision": "approve",
+    "removeUnsupportedDuplicate": {
+      "p154": true,
+      "scopeVerified": [
+        "person summary row p154",
+        "personal-name en surface Zhang Pei @ s0296 only",
+        "sex/attestation/event-participation/office/commentator claims tied solely to s0296"
+      ],
+      "extractionReferenceCount": 5,
+      "relationshipEdgesToP154": 0
+    },
+    "keepIntact": {
+      "p153": true,
+      "chineseWitnessUnit": "s0252",
+      "zhSurface": "張裴",
+      "englishUnits": [
+        "s0252",
+        "s0260",
+        "s0269"
+      ],
+      "claimsNotRelocatedFromP154": true,
+      "reason": "p153 already holds sex, attestation, office 明法掾, and commentator participation on s0252–s0269; p154 duplicates attestation/event on the wrong unit."
+    },
+    "relocateMentionTo": null,
+    "approval": "Removal-only per proposal; do not add p153 mention on s0296."
+  },
+  "dateAuditScope": {
+    "decision": "approve",
+    "fingerprint": "sha256:2871fd8d343a1fd320f7caeaa428b782e3bcde618543e6265b4e14326d0d2d9a",
+    "removeRowsOnly": [
+      "personChecks:p154",
+      "itemChecks:hints-p154"
+    ],
+    "preserveRows": [
+      "personChecks:p153",
+      "itemChecks:hints-p153"
+    ],
+    "p154EvidenceProblem": "personChecks:p154 cites gesture text at s0296, not 張裴; correct to drop after p154 removal.",
+    "p153Evidence": "[{\"unit\":\"s0252\",\"quote\":\"張裴\"}]"
+  },
+  "dependencyCheck": {
+    "orphanedDependents": false,
+    "notes": "No other jinshu:030 extraction tuples, relationships, or identity tooling edges target p154 only; canonical hold case remains open until post-apply re-review."
+  }
+}
