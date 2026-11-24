@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "book": "jiuwudaishi",
+  "chapter": "069",
+  "input": {
+    "chapterFingerprint": "sha256:a3928522b852fc3a3384a1dc23ecbe33887fc62927105a823f6a0912cb715e6a",
+    "proposalsFingerprint": "sha256:18af49c2ae7ce4ede6492a5e7e551c2d293ecb98c5981242600cf750d7932c6f"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "grok-4.5",
+    "model": "grok-4.5",
+    "agentId": "bc-2df00a96-9e8a-44c9-ac33-1843c14f5659",
+    "runId": "run-357f124f-99a1-4aae-a910-90b48539df9d",
+    "completedAt": "2026-08-13T10:25:26.679Z"
+  },
+  "proposals": [
+    {
+      "id": "jiuwudaishi:069:r0001",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "idiomatic",
+      "before": "Lang said, \"To abandon my uncle's heir thus and die together leaves no regret.\"",
+      "after": "Lang said, \"How could I bear to leave my uncle like this? Dying together leaves no regret.\"",
+      "reason": "Chinese 忍季父如此 means bearing to leave the uncle (季父) in such a state, not \"uncle's heir\".",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:069:r0002",
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 1,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "field": "literal",
+      "before": "Lang said, \"To bear my uncle's heir thus and die together leaves no regret.\"",
+      "after": "Lang said, \"How could I bear my uncle like this? Dying together leaves no regret.\"",
+      "reason": "Chinese 忍季父如此 refers to the uncle (季父), not an heir.",
+      "confidence": "high"
+    },
+    {
+      "id": "jiuwudaishi:069:r0003",
+      "unit": {
+        "id": "s0109",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 7
+      },
+      "field": "idiomatic",
+      "before": "Though I lack talent, I am scarcely inferior to those who advanced Jiu Jiu or welcomed Shu Diao and Yiya to court.",
+      "after": "Though I lack talent, I am scarcely inferior to those who advanced Jiu Jiu or welcomed Shu Diao and Tou Xu to court.",
+      "reason": "Chinese has 頭須 (Tou Xu), not 易牙 (Yiya); literal English already has Tou Xu.",
+      "confidence": "high"
+    }
+  ],
+  "decisions": [
+    {
+      "repairId": "jiuwudaishi:069:r0001",
+      "decision": "accept",
+      "after": null,
+      "reason": "朗曰「忍季父如此，俱死無恨」: 季父 is the uncle (Xian), not an \"uncle's heir\"; rhetorical 忍…如此 rejects abandoning him in that plight. The replacement restores that sense and fits the preceding 吾兒去矣.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "忍季父如此，俱死無恨"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:069:r0002",
+      "decision": "accept",
+      "after": null,
+      "reason": "Same Chinese 忍季父如此: 季父 means uncle, not heir. The proposed literal correctly drops \"uncle's heir\" and keeps the rhetorical bearing of 忍.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0016",
+        "excerpt": "忍季父如此"
+      }
+    },
+    {
+      "repairId": "jiuwudaishi:069:r0003",
+      "decision": "accept",
+      "after": null,
+      "reason": "納豎刁、頭須 names Tou Xu (頭須), not Yiya (易牙). Replacing Yiya with Tou Xu matches the Chinese and the already-correct literal.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0109",
+        "excerpt": "納豎刁、頭須"
+      }
+    }
+  ],
+  "claimRetractions": [],
+  "claimRevisions": []
+}
