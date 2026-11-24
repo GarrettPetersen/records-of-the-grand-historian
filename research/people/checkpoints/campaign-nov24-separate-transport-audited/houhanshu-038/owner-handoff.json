@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "038"
+  },
+  "ownerAgentId": "bc-8b552cba-a56f-4b55-8194-bc17c4abf8a7",
+  "workerId": "cursor-nov24-separate-transport-owner-3",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "bdde53dce4429462d8bd2f123045e6d124b0096fda3a995724e72df206679311",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-houhanshu-038-abf8a7",
+  "inputBlobWitness": {
+    "source": "14b4d227295fcaf781ac59fa764e62caa655ad44",
+    "extraction": "4d5ce4fb33c88b492fcd8a6d926de75a425e5e7c",
+    "dateAudit": "edc7f3a2f0037451a3114721a598cd76ae748a2d",
+    "editorial": "fadb085a0aee9ceae7956db453e5c28f7d31db4f"
+  },
+  "sealedInputs": {
+    "source": "sha256:2a9bda6701107f113db004e88cedd9ad0f8a2dd9ed8d098add89b59554c0ec63",
+    "extraction": "sha256:00efdcda5011e821c743651154266b8e9b7ad0688462982e9648b99aef05290f",
+    "dateAudit": "sha256:ef1f3534ab047f6b538cbc84942292ae7aadb7d04917fc9d8e4ee07e433de86f",
+    "editorial": "sha256:a195697982284ab0a9aad9e753af5b787012a363c5bcd6048201e0aabd57c2b2"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book houhanshu --chapter 038",
+    "summary": "Scoped person data validation passed for houhanshu/038: 1 extraction(s), 136 local people, 703 mentions, 1466 claims, 0 proposed repair(s), 14 applied repair(s), 14 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 288,
+      "translatedCount": 288,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0,
+      "editorialRepairsReflectedInSource": true
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Initial full audit reviewed all 288 Chinese source units, 479 date/hint checks, and 136 people. All current chronology containers, event owners, active hints, and retrospective distinctions are supported.",
+    "editorialDecisionCount": 13,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book houhanshu --chapter 038",
+      "status": "audited",
+      "findings": 0
+    }
+  },
+  "substantiveFindings": "Full Chinese chapter read against sealed extraction, accepted applied editorial repairs, and audited chronology at pinned blobs. All 288 units carry paired literal and idiomatic English; accepted editorial text repairs are present in source. Local person rows, claim evidence units, and name/person references align with primary citations; no dangling evidence, unsupported chronology, false merge signal, or new definite English omission found in this source-owner pass.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 120,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "120 prepared identity review case(s) in 5 sealed transport part(s); owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate and people:dates:verify; editorial source reflection check; chapter-local person and evidence spot-check; no canonical extraction or source edits; no local corpus registry generation.",
+    "sourceTitle": "Volume 33: Biographies of Zhu, Feng, Yu, Zheng, Zhou",
+    "completedAt": "2026-11-24T14:53:29.358Z",
+    "peopleLookupNote": "Bounded corpus dossier lookup deferred to CI-sealed registry generation; chapter-scoped validation and evidence inspection completed without local catalog rebuild per LOCAL_DISK_STRATEGY."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 038"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
