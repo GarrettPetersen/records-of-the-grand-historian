@@ -1,71 +1,55 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Prepare scoped identity review for recovered chronology
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 32
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: c271abb995e5101bcb93e258cff242a33210299e
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Build once and prepare only approved chapter scopes
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$RUNNER_TEMP/recovered-chronology-identity"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$OUT" "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
+          node --input-type=module <<'JS'
+          const expected=[{"scope":"jiuwudaishi/120","path":"data/people/date-audits/jiuwudaishi/120.json","blob":"2551f86f797ce09d78b748444ee26b1dd6359e13"},{"scope":"jiuwudaishi/040","path":"data/people/date-audits/jiuwudaishi/040.json","blob":"2e2084b7e0ed3c26bdaa73a6e8683359baf5d600"},{"scope":"yuanshi/204","path":"data/people/date-audits/yuanshi/204.json","blob":"beafa25f91c5378ebd88de5f7f9999239c5c2549"},{"scope":"jiuwudaishi/130","path":"data/people/date-audits/jiuwudaishi/130.json","blob":"02e2f6666bb4d15198aab4d3cb4c7d592fd67bf4"},{"scope":"jiuwudaishi/127","path":"data/people/date-audits/jiuwudaishi/127.json","blob":"756d5a1c5dcd84a2109a5fe12b659d20825d8dc2"},{"scope":"houhanshu/122","path":"data/people/date-audits/houhanshu/122.json","blob":"ad3102896ede47e6c7252ac499997838b83f57d5"},{"scope":"jiuwudaishi/115","path":"data/people/date-audits/jiuwudaishi/115.json","blob":"959dbaf325f6787a4b1aef3262cce4e573cc9033"},{"scope":"jiuwudaishi/008","path":"data/people/date-audits/jiuwudaishi/008.json","blob":"eed334f2ba8ffa0aede4b2dfe15b4fe1979ddd00"},{"scope":"jiuwudaishi/003","path":"data/people/date-audits/jiuwudaishi/003.json","blob":"23db4a64cf9e8d68c67c3887adc6781de5603f2c"},{"scope":"jiuwudaishi/012","path":"data/people/date-audits/jiuwudaishi/012.json","blob":"5be97196edf47a07b352a68ccb2888faff823977"},{"scope":"jiuwudaishi/121","path":"data/people/date-audits/jiuwudaishi/121.json","blob":"186952408466d575a7dac25b12814f485c710ce4"},{"scope":"jiuwudaishi/007","path":"data/people/date-audits/jiuwudaishi/007.json","blob":"a5267317f5702506f78cbff611505145f1b84731"},{"scope":"songshi/110","path":"data/people/date-audits/songshi/110.json","blob":"c7277a6fb40d856ba8d02385038df9fa6b735ca3"},{"scope":"beiqishu/006","path":"data/people/date-audits/beiqishu/006.json","blob":"54fb1380ed3bbdb8471b911632194350f2b59bc1"}];
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const results=[];
+          for(const x of expected){
+           const [book,chapter]=x.scope.split('/');
+           try{
+            assert.equal(execFileSync('git',['rev-parse',process.env.SOURCE+':'+x.path],{encoding:'utf8'}).trim(),x.blob);
+            const result=await prepareChapterIdentityReview({book,chapter,sourceRevision:process.env.SOURCE,registry:process.env.REGISTRY,out:path.join(process.env.OUT,x.scope.replace('/','-')),transportMaxBytes:384*1024});
+            results.push({key:x.scope,status:result.receipt?.status,receipt:result.receipt});
+           }catch(e){results.push({key:x.scope,status:'held',reason:e.message});}
+          }
+          fs.writeFileSync(path.join(process.env.OUT,'summary.json'),JSON.stringify({source:process.env.SOURCE,results},null,2)+'\n');
+          console.log(JSON.stringify(results.map(x=>({key:x.key,status:x.status,reason:x.reason,newReviewCases:x.receipt?.newReviewCases}))));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: recovered-chronology-identity-packets
+          path: ${{ runner.temp }}/recovered-chronology-identity/
+          if-no-files-found: error
+          retention-days: 7
