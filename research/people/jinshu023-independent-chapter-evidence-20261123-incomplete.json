@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-chapter-evidence-review",
+  "status": "INCOMPLETE",
+  "warning": "Independent review artifact only. Not native certification, publication approval, or queue mutation.",
+  "book": "jinshu",
+  "chapter": "023",
+  "candidateRevision": "2ac477356f2c45918ec874f019b21baa2bef9bd9",
+  "authorPullRequest": 5412,
+  "stagingPullRequest": 5457,
+  "authorAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Cursor independent Jinshu 023 chapter reviewer",
+    "model": "Composer 2.5",
+    "agentId": "bc-873c06e1-3547-4e7e-8ca5-8a1d171840d6",
+    "completedAt": "2026-11-23T18:05:00.000Z"
+  },
+  "preconditions": {
+    "scopedValidation": {
+      "command": "npm run people:validate -- --book jinshu --chapter 023",
+      "result": "PASS",
+      "counts": {
+        "people": 167,
+        "mentions": 576,
+        "claims": 1050,
+        "proposedRepairs": 20
+      }
+    },
+    "sourceHash": "sha256:3eef51572d178debde082791b9a81cd436d3234c91ef53a5f2abd2b697a52acd",
+    "extractionHash": "sha256:65683b5a91258386d62fd48104f9358d8d47dcf4e1bdc29b773207c5ae410eea",
+    "deltaVersusAuthorPr5412": "Matches #5412 evidence except extraction gains s0692 literal repair (r0020); staging replay at 2ac477356.",
+    "editorialDecisionHistoryOnDisk": false,
+    "dateAuditOnDisk": false,
+    "identityReviewOnDisk": false
+  },
+  "editorialReview": {
+    "proposalsReviewed": 20,
+    "accepted": 20,
+    "rejected": 0,
+    "modified": 0,
+    "artifact": "research/people/jinshu023-editorial-independent-decisions-20261123-incomplete.json",
+    "proposalsFingerprint": "sha256:6c9a6aa7e62849549dc5c503604978ee6456808e491b145e15db9615baa02b93",
+    "summaryByGroup": {
+      "hymn-temple-name-and-kinship": ["r0003", "r0004"],
+      "legendary-name-and-lexicon": ["r0006", "r0009", "r0010", "r0011"],
+      "wei-jin-political-narration": ["r0005", "r0007", "r0012", "r0014"],
+      "ritual-lexicon-and-typography": ["r0001", "r0008", "r0013", "r0015"],
+      "prose-historical-translation": ["r0002", "r0016", "r0017", "r0018", "r0019", "r0020"]
+    }
+  },
+  "sourceCoverage": {
+    "unitsInChapter": 716,
+    "authorUnresolvedReferencesRetained": 19,
+    "independentAttributionCorrections": [
+      {
+        "topic": "Song Zhi / Song Zhi variant",
+        "units": ["s0648", "s0656"],
+        "witness": "本十七曲，朱生、宋職、列和等復合之為十三曲。",
+        "verdict": "keep-uncertain-two-rows",
+        "reason": "宋職 appears only with 朱生、列和 in the consolidation sentence; 宋識 appears in the prior musician list. Same-person link stays uncertain; do not merge without graphic-variant proof."
+      },
+      {
+        "topic": "Cai Mo memorial block",
+        "units": ["s0692", "s0695"],
+        "witness": "成帝咸康七年，尚書蔡謨奏",
+        "verdict": "attribution-supported",
+        "reason": "蔡謨 is explicit; translation repairs r0018/r0020 correct reign name and literal field."
+      },
+      {
+        "topic": "Wang Min Round Fan song",
+        "unit": "s0670",
+        "witness": "中書令王瑉與嫂婢有情……嫂捶撓婢過苦",
+        "verdict": "attribution-supported",
+        "reason": "Accept r0019; office and beating are in the Chinese."
+      }
+    ],
+    "noBlanketApproval": true
+  },
+  "chronology": {
+    "status": "spot-check-only",
+    "artifact": "research/people/jinshu023-independent-date-spotcheck-20261123-incomplete.json",
+    "nativeAuditRequired": true,
+    "packetChecks": 437
+  },
+  "identity": {
+    "status": "blocked-upstream",
+    "reason": "No data/people/date-audits/jinshu/023.json; canonical identity certification waits on independent date audit per PEOPLE_CHAPTER_OWNER gates.",
+    "lookupService": {
+      "health": "ok",
+      "registryPin": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "boundedQueriesPerformed": [
+        "GET /v1/manifest",
+        "GET /v1/search?q=Cai Mo&limit=8"
+      ],
+      "note": "Registry returns many Cai Mo homonyms; chapter-local jinshu:023:p163 has no accepted canonical membership until post-audit identity dossier."
+    }
+  },
+  "nativeCertification": {
+    "complete": false,
+    "closedGates": [],
+    "openGates": [
+      "apply-reviewed-editorial-repairs-to-data",
+      "independent-date-audit-record",
+      "bounded-identity-dossier-review",
+      "combined-curation-publication"
+    ]
+  }
+}
