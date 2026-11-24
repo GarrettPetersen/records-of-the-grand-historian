@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "071"
+  },
+  "reviewer": {
+    "agentId": "bc-3ddb96dd-e421-49ca-b37a-3650f54a7c06",
+    "name": "cursor-nov24-independent-jiuwudaishi-071"
+  },
+  "planFingerprint": "sha256:d59fde34dbec8042a8bf67c1fe0fe1862de05cc5fafb13c8036a0cf23dd44818",
+  "authorBaseCommit": "d1f7d9539f56b200b87a895444fcd02e1100dcd3",
+  "registry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+  "service": "https://24histories-people-lookup.garrett-m-petersen.workers.dev",
+  "queries": [
+    {
+      "method": "GET",
+      "path": "/v1/search",
+      "params": {
+        "key": "zh:崇弢",
+        "limit": 8
+      },
+      "responseSummary": {
+        "total": 10,
+        "truncated": true,
+        "idsReturned": 8
+      },
+      "purpose": "Auxiliary check for transport overflow case sha256:af59fb4ad60ad7f7c26ecbc615935051b104c0c38d8fbd23ac72e19a3a26af1d (zh:崇弢 8/10 dossier headers in transport); omitted hits are not separation evidence."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/search",
+      "params": {
+        "key": "zh:郭崇弢",
+        "limit": 8
+      },
+      "responseSummary": {
+        "total": 47,
+        "truncated": true,
+        "idsReturned": 8,
+        "postingFingerprint": "sha256:d3e36502791045f398f2002cbab1a75d603081f88ccffb7591ac0be11315b571"
+      },
+      "purpose": "Auxiliary check for same case overflow on zh:郭崇弢 (8/47 in transport); does not override sealed chapter primary Chinese."
+    }
+  ],
+  "conclusion": "Bounded lookup confirms transport overflow counts for sample 郭崇弢 cluster cases. Primary identity decisions use sealed transport units and native witness rules only; lookup is auxiliary and does not authorize merge or split."
+}
