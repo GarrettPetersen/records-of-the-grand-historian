@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiutangshu/127",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "originalBlocker": "definite-source-translation-repair",
+  "reviewerAgentId": "bc-a47e33eb-ba13-4685-be01-3d25030aa31d",
+  "reviewerModel": "composer-2.5",
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "ownerRevision": "df2123928c1ea82cc43f15498e16ce65c64c60f9",
+  "ownerProposalSha256": "607f27b3b7c9ec77c1080ec0c61f224d42f86ef004d10f01b4a3827311a848c9",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiutangshu-127/owner-handoff.json",
+  "reviewedAt": "2026-11-24T15:22:00.000Z",
+  "scopeNote": "Independent review of the owner handoff scoped delta only. Unrelated sealed source, extraction, date-audit, editorial, and prepared identity work are preserved unchanged.",
+  "verdict": "approve-scoped-delta",
+  "summary": "The sole scoped blocker is a definite English omission at s0108: idiomatic 贈 is mistranslated as enfeoffment while the Chinese clause 特追贈鄭州刺史 and the same unit’s literal field already render posthumous appointment. Owner before/after is source-grounded. Pinned four-part inputs match git blobs and sealed sha256 witnesses. Extraction and audited chronology at s0108 already model posthumous office conferral (not enfeoffment); native closure can reuse unchanged date and claim evidence after the supplemental source repair is applied.",
+  "approvedChanges": [
+    {
+      "kind": "supplemental-english-repair",
+      "book": "jiutangshu",
+      "chapter": "127",
+      "unitId": "s0108",
+      "field": "idiomatic",
+      "sourceZh": "執經上請削官贈父，特追贈鄭州刺史。",
+      "before": "Zhijing petitioned to surrender his own office so his father might be honored posthumously; the throne made a special grant and posthumously enfeoffed Liu Yan as prefect of Zhengzhou.",
+      "after": "Zhijing petitioned to surrender his own office so his father might be honored posthumously; the throne made a special grant and posthumously appointed Liu Yan prefect of Zhengzhou.",
+      "decision": "approve-exact",
+      "rationale": "削官贈父 and 特追贈鄭州刺史 use 贈 in the Tang posthumous-conferral sense (追贈鄭州刺史), not enfeoffment (封). The literal translation on the same unit already has “posthumous appointment as prefect of Zhengzhou”; only idiomatic incorrectly says enfeoffed. Liu Yan (p014) and Zhijing (p041) are named correctly from surrounding s0106–s0107 context.",
+      "literalFieldStatus": "unchanged-already-correct",
+      "extractionAlignment": "data/people/extractions/jiutangshu/127.json already labels s0108 honors/offices as posthumously-granted posthumous appointment; repair removes English/extraction tension without claim edits."
+    }
+  ],
+  "heldCases": [],
+  "preservedOutOfScope": {
+    "identityReviewCases": 87,
+    "identityTransportParts": 6,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "note": "No identity disposition in this scoped delta; owner handoff explicitly defers identity certification."
+  },
+  "pinnedEvidence": {
+    "ownerHandoff": {
+      "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiutangshu-127/owner-handoff.json",
+      "sha256": "607f27b3b7c9ec77c1080ec0c61f224d42f86ef004d10f01b4a3827311a848c9"
+    },
+    "inputs": {
+      "source": {
+        "path": "data/jiutangshu/127.json",
+        "gitBlob": "8bb229a8c30b31a64108aa9ccddae7db62df129c",
+        "sha256": "ac14d73d7cef438f26dc7b9e629b2cf446ffcfcf2648900be557c6522ddd3db8"
+      },
+      "extraction": {
+        "path": "data/people/extractions/jiutangshu/127.json",
+        "gitBlob": "34367a9df504de0756599ae96250b1682158cc0f",
+        "sha256": "214d5b82fd705233a4837ec549fee89add01ba66923ac3ca488c45932c2dd5dd"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/jiutangshu/127.json",
+        "gitBlob": "ba16f2ca36efab6bd22d94505bd8009a9ad8c2e0",
+        "sha256": "f837adef581b5911d3f0c9cd88a25d7cd15033611dcd116835ec3e15358dfa35",
+        "status": "audited"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/jiutangshu/127.json",
+        "gitBlob": "9dea212d6302cb23a6c05aa0fdfc384701923da6",
+        "sha256": "29baf28f807c772ea9ab6c44e6cb3c234aa9c71242f34b287224ea4178b969cf",
+        "priorReviewerAgentId": "bc-28a8df19-70e9-4c74-83b8-70e26e414d57",
+        "priorReviewerModel": "grok-4.6",
+        "appliedDecisionCount": 23,
+        "s0108InPriorBatch": false
+      }
+    },
+    "witnessVerification": "Independent re-read of git blobs at ownerRevision; git hash-object and sha256sum match owner-handoff inputBlobWitness and sealedInputs."
+  },
+  "affectedNativeDependencies": {
+    "source": {
+      "impact": "requires-supplemental-idiomatic-repair-at-s0108",
+      "staleness": "single-unit English only; Chinese and literal unchanged"
+    },
+    "extraction": {
+      "impact": "none",
+      "staleness": "none",
+      "reuse": "All s0108 claims for p014 office/honor and p041 petition remain valid; extraction English labels already match proposed repair."
+    },
+    "dateAudit": {
+      "impact": "none",
+      "staleness": "none",
+      "reuse": "Claims claim-189 (office) and claim-190 (honor) cite s0108 with AD 789 貞元五年 context; repair does not move or invent dates."
+    },
+    "editorial": {
+      "impact": "supplemental-repair-after-prior-23-decisions",
+      "staleness": "none-for-prior-batch",
+      "reuse": "Prior grok-4.6 editorial artifact preserved intact; s0108 was outside the accepted batch."
+    },
+    "identity": {
+      "impact": "none-in-scoped-delta",
+      "staleness": "not-assessed"
+    }
+  },
+  "authorEvidence": {
+    "historicalText": {
+      "titleZh": "卷一百二十三 列傳第七十三: 劉晏 第五琦 班宏 班紹 李巽",
+      "compilerFromBytes": "Liu Xu et al. (劉昫等)",
+      "witness": "data/jiutangshu/127.json meta.bookInfo.author / authorChinese reproduced at ownerRevision without modification"
+    },
+    "englishTranslation": {
+      "chapterTranslatorFromBytes": "Garrett M. Petersen (2026)",
+      "unitS0108ModelFromBytes": "Composer 2.5",
+      "witness": "s0108 translations[].translator and meta.translators on pinned source blob"
+    },
+    "priorIndependentGates": {
+      "chronologyReviewer": "Independent Jiu Tangshu 127 initial chronology reviewer",
+      "editorialReviewer": "grok-4.6 (bc-28a8df19-70e9-4c74-83b8-70e26e414d57)"
+    },
+    "campaignQueue": {
+      "workerId": "cursor-nov24-separate-transport-owner-1",
+      "branch": "cursor/nov24-separate-transport-owner-jiutangshu-127-232f43",
+      "pullRequest": 5710,
+      "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86"
+    }
+  },
+  "validation": {
+    "byteWitnessesMatched": true,
+    "ownerProposalSha256Matched": true,
+    "chineseClauseReviewed": [
+      "執經上請削官贈父，特追贈鄭州刺史。"
+    ],
+    "englishFieldsReviewed": {
+      "s0108": {
+        "literal": "unchanged-correct",
+        "idiomatic": "approved-repair"
+      }
+    },
+    "scopedChronologyDelta": "none",
+    "scopedExtractionDelta": "none",
+    "commands": [
+      {
+        "command": "npm run people:validate -- --book jiutangshu --chapter 127",
+        "result": "PASS",
+        "summary": "Scoped person data validation passed for jiutangshu/127: 1 extraction(s), 110 local people, 683 mentions, 1459 claims, 0 proposed repair(s), 22 applied repair(s), 23 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s)."
+      }
+    ],
+    "canonicalEditsInThisReview": false
+  }
+}
