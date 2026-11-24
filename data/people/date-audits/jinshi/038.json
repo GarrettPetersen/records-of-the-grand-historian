@@ -4,14 +4,15 @@
   "book": "jinshi",
   "chapter": "038",
   "sourceHash": "sha256:c15437694b7e466d136e662b6016516d7de942ae0859f987c6dfe5eec1597ee5",
-  "extractionHash": "sha256:316a930f305f5335703110e8cd89cddc9f971531238990e820e24783a29e335b",
-  "status": "research-blocked",
+  "extractionHash": "sha256:6121e2de9e9cb90959d4512394463a0a66f8504f280783b81173a25d771190ee",
+  "status": "audited",
   "reviewer": {
-    "name": "Codex (independent manual source review)",
+    "name": "Cursor Cloud independent jinshi/038 native chronology reviewer (retained owner repair)",
+    "agentId": "bc-4c6a7f05-b1eb-42bb-9e1e-170a6ae23c1f",
     "independentOfExtractor": true
   },
-  "reviewedAt": "2026-09-24T00:40:00Z",
-  "summary": "Complete independent audit of all 318 Chinese units, 55 temporal or active-hint checks, and 15 people. Numbered Jin reign-year offices, diplomatic missions, and dated court events are supported. 熙宗時 is an undated ruler-period phrase and cannot establish an activity interval spanning AD 1135–1149; the separately explicit 1142 attestation remains supported. No source or canonical extraction was edited.",
+  "reviewedAt": "2026-11-24T17:05:11.252Z",
+  "summary": "Complete independent re-audit on sealed candidate extractionHash 6121e2de: all 318 Chinese units, 55 temporal or active-hint items, and 15 people checked against pinned packet 03de65e2. Reconciled the prior research-blocked 熙宗時 hold: owner native repair correctly retains undatedSourceAttestation for claim-3 and AD 1142-only hints from 皇統二年六月 (s0067, s0069); no false whole-reign AD 1135–1149 interval remains. Jin reign-year offices, diplomatic missions, and dated court events independently verified; retrospective Xizong citations at 大定二十九年三月 (s0080) remain valid event-context attestations. No unresolved chronology or English defect requiring separate repair.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -335,13 +336,17 @@
   "itemChecks": [
     {
       "id": "claim-3",
-      "verdict": "research-blocked",
-      "event": "attestation chronology for Emperor Xizong.",
-      "reason": "熙宗時 supplies only a ruler-period context, not evidence that the person was active throughout the full AD 1135–1149 reign interval.",
+      "verdict": "supported",
+      "event": "undated 熙宗時 attestation for Emperor Xizong",
+      "reason": "熙宗時 at s0067 is an undated ruler-period phrase about Xia envoy protocol; it does not license a whole-reign AD 1135–1149 personal activity interval. The candidate undatedSourceAttestation row preserves the source wording; 皇統二年六月 in the same unit supports the separate AD 1142 claim.",
       "evidence": [
         {
           "unit": "s0067",
           "quote": "熙宗時，夏使入見，改為大起居。"
+        },
+        {
+          "unit": "s0069",
+          "quote": "皇統二年六月，定臣使辭見，臣僚服色拜數止從常朝起居，三國使班品如舊。"
         }
       ]
     },
@@ -815,13 +820,13 @@
     },
     {
       "id": "hints-p001",
-      "verdict": "research-blocked",
-      "event": "active-date-hints chronology for Emperor Xizong.",
-      "reason": "熙宗時 supplies only a ruler-period context, not evidence that the person was active throughout the full AD 1135–1149 reign interval.",
+      "verdict": "supported",
+      "event": "active-date-hints chronology for Emperor Xizong",
+      "reason": "Active hints correctly retain only AD 1142 from explicit 皇統二年六月 attestation; the former AD 1135–1149 span derived from 熙宗時 was removed and is not independently supported.",
       "evidence": [
         {
-          "unit": "s0067",
-          "quote": "熙宗時，夏使入見，改為大起居。"
+          "unit": "s0069",
+          "quote": "皇統二年六月，定臣使辭見，臣僚服色拜數止從常朝起居，三國使班品如舊。"
         }
       ]
     },
@@ -997,12 +1002,16 @@
   "personChecks": [
     {
       "id": "p001",
-      "verdict": "research-blocked",
-      "reason": "The full-reign activity hint overstates an undated ruler-period reference; retain it as a source-specific research hold.",
+      "verdict": "supported",
+      "reason": "Person hints and claims match reconciled packet: undated 熙宗時 attestation plus independently dated 皇統二年六月 (AD 1142); no overstated reign-span hint remains.",
       "evidence": [
         {
           "unit": "s0067",
           "quote": "熙宗時，夏使入見，改為大起居。"
+        },
+        {
+          "unit": "s0069",
+          "quote": "皇統二年六月，定臣使辭見，臣僚服色拜數止從常朝起居，三國使班品如舊。"
         }
       ]
     },
@@ -1161,16 +1170,6 @@
       ]
     }
   ],
-  "findings": [
-    {
-      "items": [
-        "claim-3",
-        "hints-p001",
-        "p001"
-      ],
-      "problem": "熙宗時 is an undated ruler-period context, but the extraction renders it as the complete AD 1135–1149 activity interval.",
-      "action": "Retain a source-linked research hold and use only independently dated evidence before assigning endpoints."
-    }
-  ],
+  "findings": [],
   "references": []
 }
