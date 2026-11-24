@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "beishi",
+    "chapter": "088"
+  },
+  "ownerAgentId": "bc-3a79620f-ad34-4749-acfc-4bab4104ba67",
+  "worker": "cursor-nov24-retained-staging-w9-o3",
+  "idempotencyKey": "d5c0727073c346e51adab0b14a0adb7a2d4054ae3b2e44af48ab09949f828dea",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-beishi-088-4ba67",
+  "inputBlobWitness": {
+    "source": "2e31f5e0cfe0f102447aeb9248a1592482702e4d",
+    "extraction": "8c04155b384a79a47b3b3194a26a023590137f6e",
+    "dateAudit": "b16b38e57776b6f536289bd9b4f750094cac8ac9",
+    "editorial": "52c9ceb7cd481d26c2a8b3f6a927099146737374"
+  },
+  "sealedInputs": {
+    "source": "sha256:1fb03d347e483ed71bb7dc80734fdf1b5dde481e589e8d20b576fe549684e01c",
+    "extraction": "sha256:64c0b882721d552909257a2346682ac2e6a400451955f0b47254ea53dcf4444c",
+    "dateAudit": "sha256:b7437dcce08572db64f20ec2a245e22bf61ec1ba43570a8e4c3502262938c829",
+    "editorial": "sha256:ec1f768584ed7ec19aa3e08eea6fa49cd97ee2023b7542980cf0a6714dd33d06"
+  },
+  "nativeDateAudit": {
+    "path": "data/people/date-audits/beishi/088.json",
+    "contentSha256": "sha256:b7437dcce08572db64f20ec2a245e22bf61ec1ba43570a8e4c3502262938c829",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T03:05:11.557Z",
+    "sealedSourceHash": "sha256:f449bc0e20d7ffdd11d613f99a83a809f74ac654d507ae06daea4e87599575cb",
+    "sealedExtractionHash": "sha256:71a244f9ff6879471c3280d8427a358df40ea0ed98317c08ac699be053a42e31",
+    "currentPacketSourceHash": "sha256:f449bc0e20d7ffdd11d613f99a83a809f74ac654d507ae06daea4e87599575cb",
+    "currentPacketExtractionHash": "sha256:71a244f9ff6879471c3280d8427a358df40ea0ed98317c08ac699be053a42e31",
+    "packetHashDrift": false,
+    "workOrderAudit": {
+      "state": "research-blocked",
+      "sha256": "b7437dcce08572db64f20ec2a245e22bf61ec1ba43570a8e4c3502262938c829",
+      "affectedItems": 13,
+      "findings": 7
+    },
+    "findingsCount": 7,
+    "preservedAuditBytes": true,
+    "overwrittenAudit": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 274,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnitIds": []
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book beishi --chapter 088",
+    "peopleValidateSummary": "Scoped person data validation passed for beishi/088: 1 extraction(s), 100 local people, 439 mentions, 732 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book beishi --chapter 088",
+      "book": "beishi",
+      "chapter": "088",
+      "status": "research-blocked",
+      "auditVersion": 1,
+      "reviewedAt": "2026-09-23T03:05:11.557Z",
+      "findings": 7,
+      "rawCounts": {
+        "research-blocked": 1
+      }
+    },
+    "nativeAuditStateRecorded": "research-blocked"
+  },
+  "substantiveFindings": "Verified four input git blobs and date-audit file sha256 b7437dcce08572db64f20ec2a245e22bf61ec1ba43570a8e4c3502262938c829. Native date audit status research-blocked with 7 finding group(s); people:dates:verify reports research-blocked. Carried forward 7 distinct native research hold(s) without inventing chronology. Accepted editorial repairs appear reflected in source; no new definite English omission identified.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-365",
+      "personId": "p087",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "開皇中"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The Kaihuang office and its AD 581–600 interval belong to Zhang Ju, explicitly identified as Wenxu’s father, not to Zhang Wenxu.",
+        "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+      },
+      "problem": "The dated Kaihuang office belongs to Wenxu’s father Zhang Ju, so the claim correctly carries no Western activity interval for Wenxu.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0239",
+          "quote": "父琚，開皇中，為洹水令，以清正聞。"
+        }
+      ],
+      "clauseCitations": [
+        "s0239:「父琚，開皇中，為洹水令，以清正聞。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-368",
+      "personId": "p087",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "仁壽末……終於家"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The text places Wenxu’s return at the end of Renshou, but his undated death at home does not establish activity continuously through AD 618.",
+        "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+      },
+      "problem": "Wenxu’s end-Renshou return is dated but his later death is undated; the retained hold correctly avoids a continuous AD 604–618 interval.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0245",
+          "quote": "仁壽末，學廢，文詡策杖而歸，灌園為業。"
+        }
+      ],
+      "clauseCitations": [
+        "s0245:「仁壽末，學廢，文詡策杖而歸，灌園為業。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-397",
+      "personId": "p094",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "張文詡妻"
+        },
+        "unresolved": true,
+        "unresolvedReason": "s0256 identifies this person only as Zhang Wenxu’s wife; it supplies no Renshou chronology, death, or personal endpoint.",
+        "event": "Source-specific undated wife reference retained as a research hold; no Western personal chronology is asserted."
+      },
+      "problem": "This is solely an undated wife reference. It gives no Renshou event, death, or personal endpoint for p094.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0256",
+          "quote": "文詡遽遣之，因為隱，謂妻子曰：「吾昨風眩，落坑所致。」"
+        }
+      ],
+      "clauseCitations": [
+        "s0256:「文詡遽遣之，因為隱，謂妻子曰：「吾昨風眩，落坑所致。」」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-410",
+      "personId": "p097",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "論曰"
+        },
+        "unresolved": true,
+        "unresolvedReason": "The commentary identifies Suikua’s conduct but contains no reign, year, or event that supports an AD 386–618 life/activity interval.",
+        "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+      },
+      "problem": "The commentary identifies conduct but supplies no dated endpoint for Suikua.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0264",
+          "quote": "眭誇忘懷纓冕，畢志丘園，或隱不違親，貞不絕俗；"
+        }
+      ],
+      "clauseCitations": [
+        "s0264:「眭誇忘懷纓冕，畢志丘園，或隱不違親，貞不絕俗；」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-413",
+      "personId": "p098",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "論曰"
+        },
+        "unresolved": true,
+        "unresolvedReason": "This undated encomium does not establish that Xu Ze was active throughout AD 581–618.",
+        "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+      },
+      "problem": "The commentary supplies no dated endpoint for Xu Ze.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0266",
+          "quote": "然文詡見傷無慍，徐則志在沈冥，不可親疏，莫能貴賤，皆可謂抱樸之士矣。"
+        }
+      ],
+      "clauseCitations": [
+        "s0266:「然文詡見傷無慍，徐則志在沈冥，不可親疏，莫能貴賤，皆可謂抱樸之士矣。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-419",
+      "personId": "p099",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "論曰"
+        },
+        "unresolved": true,
+        "unresolvedReason": "This undated encomium does not establish Cui Kuo’s activity across AD 386–618.",
+        "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+      },
+      "problem": "The commentary supplies no dated endpoint for Cui Kuo.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0267",
+          "quote": "崔廓感於屈辱，遂以肥遁見稱；"
+        }
+      ],
+      "clauseCitations": [
+        "s0267:「崔廓感於屈辱，遂以肥遁見稱；」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    },
+    {
+      "kind": "retain-research-hold",
+      "itemId": "claim-423",
+      "personId": "p100",
+      "operation": "retain",
+      "currentValue": {
+        "sourceDate": {
+          "text": "論曰"
+        },
+        "unresolved": true,
+        "unresolvedReason": "This undated encomium gives no endpoint evidence for an AD 386–618 interval for Cui Zujun.",
+        "event": "Source-specific undated or reception context retained; no Western activity interval is asserted."
+      },
+      "problem": "The commentary supplies no dated endpoint for Cui Zujun.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "nativeVerdict": "research-blocked",
+      "evidence": [
+        {
+          "unit": "s0268",
+          "quote": "祖浚文籍之美，足以克隆堂構。"
+        }
+      ],
+      "clauseCitations": [
+        "s0268:「祖浚文籍之美，足以克隆堂構。」"
+      ],
+      "note": "No chronology invention; carry exact native blocked scope forward."
+    }
+  ],
+  "distinctHolds": [
+    {
+      "findingItems": [
+        "claim-365",
+        "p087"
+      ],
+      "findingPeople": [],
+      "problem": "The dated Kaihuang office belongs to Wenxu’s father Zhang Ju, so the claim correctly carries no Western activity interval for Wenxu.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    },
+    {
+      "findingItems": [
+        "claim-368",
+        "p087"
+      ],
+      "findingPeople": [],
+      "problem": "Wenxu’s end-Renshou return is dated but his later death is undated; the retained hold correctly avoids a continuous AD 604–618 interval.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    },
+    {
+      "findingItems": [
+        "claim-397",
+        "p094"
+      ],
+      "findingPeople": [],
+      "problem": "This is solely an undated wife reference. It gives no Renshou event, death, or personal endpoint for p094.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    },
+    {
+      "findingItems": [
+        "claim-410",
+        "p097"
+      ],
+      "findingPeople": [],
+      "problem": "The commentary identifies conduct but supplies no dated endpoint for Suikua.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    },
+    {
+      "findingItems": [
+        "claim-413",
+        "p098"
+      ],
+      "findingPeople": [],
+      "problem": "The commentary supplies no dated endpoint for Xu Ze.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    },
+    {
+      "findingItems": [
+        "claim-419",
+        "p099"
+      ],
+      "findingPeople": [],
+      "problem": "The commentary supplies no dated endpoint for Cui Kuo.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    },
+    {
+      "findingItems": [
+        "claim-423",
+        "p100"
+      ],
+      "findingPeople": [],
+      "problem": "The commentary supplies no dated endpoint for Cui Zujun.",
+      "action": "Retain the source-specific research hold; only replace it after independently sourced chronology resolves the endpoint or ownership question.",
+      "preserve": true
+    }
+  ],
+  "extractionDrift": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs unchanged. Host supplies native final review and validates proposals."
+}
