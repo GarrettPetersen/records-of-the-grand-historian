@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "planFingerprint": "sha256:a8037e03f6fb67eb134b61dc98ccc77f1bc917291735a96d54eaa294911697d1",
+  "reviewer": {
+    "agentId": "bc-d24118c6-cdc5-4dfd-b0ff-63ec5f6408e2",
+    "name": "cursor-nov24-native-first-date-w1-r8"
+  },
+  "transportSha256": "41e2d9d7bcd50841f0e54b4c641a3260680375ebba8e2d8df3476259468fd391",
+  "status": "native-witness-hold",
+  "nativeClosure": false,
+  "reviewedAt": "2026-11-24T17:54:15.398Z",
+  "summary": "Independent review of 34 cases: 33 pass native primary-witness picking; one case blocked because accepted anchor hanshu:070:p112 (宣太后) has no quotable blocking Chinese name on sealed anchor unit hanshu:070:s0163 (only 昭王之舅). Chapter shiji units s0001/s0004 contain 宣太后 for shiji:072:p002. Retain accepted canonical membership; no false merge held. Host must reseal anchor evidence or anchor on shiji local before native certificate.",
+  "blockedCases": [
+    {
+      "caseId": "sha256:5d64b1ecd2f461bcc2e9c60a5078ea6cbf8d8beb02cd22130876fa67da8bda27",
+      "canonicalPersonId": "per_6DF1C4FB5QTMR7T8ADWT",
+      "localPeople": [
+        "shiji:072:p002"
+      ],
+      "anchorLocalId": "hanshu:070:p112",
+      "problem": "Sealed anchor unit lacks substring witness for blocking zh:宣太后 per assertDossierPrimaryWitness.",
+      "anchorEvidenceUnit": "hanshu:070:s0163",
+      "anchorUnitExcerpt": "穰侯，昭王之舅也…",
+      "chapterWitnessAvailable": [
+        {
+          "unitId": "s0004",
+          "quote": "羋八子號為宣太后",
+          "localId": "shiji:072:p002"
+        }
+      ],
+      "verdict": "hold",
+      "action": "Extend transport with hanshu primary unit containing 宣太后 for anchor, or set anchorLocalId to shiji:072:p002 for this dossier case."
+    }
+  ],
+  "readyCaseCount": 33,
+  "totalCases": 34,
+  "reviews": [],
+  "witness": {
+    "transportVerified": true,
+    "planFingerprintVerified": true,
+    "dateAuditSha256": "sha256:4ae9d5cd7dcc0f25f23eea40888dcac35af4f472134a5aa052777f0bb7a3798f",
+    "independentReviewer": "bc-d24118c6-cdc5-4dfd-b0ff-63ec5f6408e2",
+    "independentOfExtractor": true
+  }
+}
