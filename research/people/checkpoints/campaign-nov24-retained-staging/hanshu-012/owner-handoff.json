@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "012"
+  },
+  "ownerAgentId": "bc-7c291193-59e6-437c-83d8-347d70592046",
+  "workerId": "cursor-nov24-retained-staging-w6-o2",
+  "model": "composer-2.5",
+  "idempotencyKey": "6deb790d5e4dede6dcc2c93f9b519a7b9dc1a8998b671b13529264b7fb44ec60",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-012-92046",
+  "inputBlobWitness": {
+    "source": "1f35893d546a5fec3a6336f04fc182460bf33d52",
+    "extraction": "cf41ea0258a09f641d48f028ed0731c0c45ae28d",
+    "dateAudit": "3a6a5a086889eff7745ee061a7e5cbecf00ebda8",
+    "editorial": "251f185cffc37497a4399247fed539dee9d1ec87"
+  },
+  "sealedInputContentSha256": {
+    "source": "sha256:3a28367a834f7e92f731e4a7d9b94ea465b5cda1156c5eaa781e614c7f09969c",
+    "extraction": "sha256:f794e92379b7770d2444719c42cbb3dfa557fc8a59e2713c8d00eb19e4e7612e",
+    "dateAudit": "sha256:c4eac5bf2599d9bba643e43200c20a05447df9576d5c642fdbc74f2389ba2e12",
+    "editorial": "sha256:1efc790add21634877c6c261a01278c9dfedc02077a09676b11da4ea4790e6fd"
+  },
+  "inputWitnessMismatches": [],
+  "auditRecord": {
+    "state": "research-blocked",
+    "sha256": "c4eac5bf2599d9bba643e43200c20a05447df9576d5c642fdbc74f2389ba2e12",
+    "affectedItems": 10,
+    "findings": 1,
+    "preservedReportBytes": true,
+    "reportFileStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T06:10:05.615Z",
+    "summary": "Fresh independent post-curation audit of all 156 Chinese units, 204 temporal or active-hint items, and 57 people. Regnal conversions, ownership, age reckoning, death and accession dates, reception classifications, and endpoints were checked directly against the Chinese. Five current source-specific holds are necessary because no defensible Western personal date or endpoint is supplied, so the complete audit is research-blocked."
+  },
+  "sourceCoverage": {
+    "chineseUnits": 156,
+    "translatedCount": 156,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 99737,
+    "localPeople": 57
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book hanshu --chapter 012",
+    "peopleValidateSummary": "Scoped person data validation passed for hanshu/012: 1 extraction(s), 57 local people, 273 mentions, 464 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 4 person record(s) without an attestation, 6 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book hanshu --chapter 012",
+    "dateAuditFileStatus": "research-blocked",
+    "dateAuditScopedVerifyStatus": "stale",
+    "datesVerifyExitNonZero": true,
+    "extractionHashAlignedWithAudit": false,
+    "sourceHashAlignedWithAudit": true,
+    "editorialProposalCount": 5,
+    "editorialDecisionCount": 5,
+    "blockedClaimIds": [
+      "claim-180",
+      "claim-190",
+      "claim-191",
+      "claim-243",
+      "claim-244"
+    ],
+    "blockedPersonIds": [
+      "p027",
+      "p032",
+      "p033",
+      "p056",
+      "p057"
+    ],
+    "blobWitnessVerified": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed inputs: Fresh independent post-curation audit of all 156 Chinese units, 204 temporal or active-hint items, and 57 people. Regnal conversions, ownership, age reckoning, death and accession dates, reception classifications, and endpoints were checked directly against the Chinese. Five current source-specific holds are necessary because no defensible Western personal date or endpoint is supplied, so the complete audit is research-blocked. Independent date report remains research-blocked with 10 held item(s) in 1 native finding(s). people:validate passed on current extraction without new repairs. No definite English omission identified beyond already-applied editorial decisions (5 applied). Scoped people:dates:verify returns stale because extractionHash in the retained audit no longer matches the current packet fingerprint; report bytes were not rewritten.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "kind": "host-reaudit-required",
+      "dependency": "extractionHash",
+      "sealedExtractionBlobWitness": "cf41ea0258a09f641d48f028ed0731c0c45ae28d",
+      "auditReportExtractionHash": "sha256:080456c9d05602b7bd0b6039b720c362c6073dbbe2a1b2084b9b76e2e4c1719c",
+      "currentPacketExtractionHash": "sha256:e7b330cf28178b289023cb75d52d80afa2a546314b0a2444b3a9b23a273aa1a1",
+      "nativeClaimChanges": [],
+      "reason": "Current sealed extraction blob is witnessed, but the retained independent date report’s extractionHash does not match the packet built from that blob. No claim before/after edits are proposed; the retained research-blocked report bytes stay authoritative until a fresh independent audit."
+    }
+  ],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-180",
+        "claim-190",
+        "claim-191",
+        "claim-243",
+        "claim-244",
+        "p027",
+        "p032",
+        "p033",
+        "p056",
+        "p057"
+      ],
+      "problem": "Five current records preserve source-specific mourning, ancient-precedent, or appraisal material without inventing personal chronology. The cited passages do not establish a Western date or activity endpoint for their subjects.",
+      "action": "Keep the unresolved attestations and their research-required hints. Add a Western date or bound only after independently verifying a source-hashed chronology, then conduct a fresh audit.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner handoff only; sealed inputs unchanged.",
+  "completedAt": "2026-11-24T16:44:06.241Z"
+}
