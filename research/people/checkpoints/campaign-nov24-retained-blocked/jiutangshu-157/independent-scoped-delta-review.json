@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiutangshu/157",
+  "idempotencyKey": "841bf01b2643498e46173eb9e8940f88e725d26812325e4104d74d07436a46c5",
+  "reviewerAgentId": "bc-f7614134-daec-4112-8429-7bff7d580aba",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "ownerRevision": "cdc1a5a49db55ef4e92d45d72d2c2b78112f893a",
+  "ownerProposalSha256": "sha256:81445d1b242702ca47c068569a8b851d447c91b85c29ea5144c45150d917d8f7",
+  "reviewedAt": "2026-11-24T15:30:00.000Z",
+  "verdict": "approve_scoped_continuation",
+  "summary": "Stale date audit is solely extractionHash drift after retrospective-reception taxonomy on claim-1147; sourceHash and all non-scoped chronology facts are unchanged. Current extraction passes temporal-geometry diagnostics; independent approval is scoped rebind of the sealed date report to current extractionHash with one item re-witness, preserving 509 unchanged item checks, 136 person checks, zero findings, editorial bytes, and identity work.",
+  "observedBlocker": {
+    "label": "Date audit report is stale",
+    "mechanism": "validateDateAuditReport extractionHash mismatch",
+    "sealedExtractionHash": "sha256:2e482843c7991e14cac19d2e9614321eafd835c9904befc2f527d0bae6ec020f",
+    "currentExtractionHash": "sha256:f56c48e3a41aff803aaf5750ff77b3e9dd8fb3922524274fea93ba7813c9c43f",
+    "sourceHashUnchanged": "sha256:95c297e20ec29160adc45281284c7dcec7a81e5e7d5d008b20d7a8b42bda1232"
+  },
+  "approvedChanges": [
+    {
+      "id": "extraction-claim-1147-taxonomy",
+      "decision": "approve_no_further_edits",
+      "target": "data/people/extractions/jiutangshu/157.json",
+      "note": "Workspace bytes already match reconcileRetrospectiveExtraction output from sealed commit 41b6a8c6528aff6dffe3ef3da1609e861bee0b53; only claim-1147 differs.",
+      "before": {
+        "claimId": "claim-1147",
+        "personId": "p119",
+        "kind": "posthumous-commemoration"
+      },
+      "after": {
+        "claimId": "claim-1147",
+        "personId": "p119",
+        "kind": "retrospective-reference",
+        "role": "honoree",
+        "action": "tomb-granted-five-households-for-upkeep",
+        "dateContext": {
+          "sourceDate": { "text": "會李锜反" },
+          "westernYear": { "era": "AD", "year": 807, "precision": "year" }
+        }
+      },
+      "chronologyDelta": false,
+      "migrationCommit": "a9a3196bb46d3d61775d7612af4a79b22943800b"
+    },
+    {
+      "id": "scoped-date-audit-rebind",
+      "decision": "approve",
+      "target": "data/people/date-audits/jiutangshu/157.json",
+      "note": "Host may rebind extractionHash to current bytes and preserve prior Independent Jiu Tangshu 157 initial chronology reviewer identity, reviewedAt, item/person verdicts, and findings=[] without full-chapter re-audit.",
+      "preservedUnchanged": {
+        "itemCheckCount": 509,
+        "personCheckCount": 136,
+        "findingCount": 0,
+        "reviewedUnitCount": 307,
+        "priorReviewer": "Independent Jiu Tangshu 157 initial chronology reviewer"
+      },
+      "scopedReWitness": {
+        "itemId": "claim-1147",
+        "verdict": "supported",
+        "priorVerdict": "supported",
+        "reasonReuse": "Chinese evidence and chronology context reviewed; AD 807 anchors the court grant during Li Qi's rebellion, not personal activity of deceased p119.",
+        "eventOwnershipBefore": "Reviewed event-participation chronology for p119.",
+        "eventOwnershipAfter": "Reviewed retrospective tomb-grant chronology for deceased p119 (honoree) at AD 807 during Li Qi's rebellion.",
+        "evidence": [
+          { "unit": "s0275", "quote": "乃不毀。" },
+          { "unit": "s0276", "quote": "因賜神通墓五戶，以備灑掃。" }
+        ]
+      },
+      "proofReuse": {
+        "permittedBy": "scripts/lib/people-reception-reconciliation.mjs#reconcileRetrospectiveExtraction",
+        "nativeClosure": "dateAuditDiagnostics(packet) is empty on current extraction; taxonomy-only delta does not alter westernYear, sourceDate text, or evidence units."
+      }
+    },
+    {
+      "id": "english-s0275-s0276",
+      "decision": "approve_no_change",
+      "units": ["s0275", "s0276"],
+      "note": "Both literal and idiomatic English render 乃不毀 and 因賜神通墓五戶，以備灑掃 without omission or mistranslation; out of blocker scope but verified against cited Chinese."
+    }
+  ],
+  "heldCases": [],
+  "pinnedEvidence": {
+    "stagingCommit": "cdc1a5a49db55ef4e92d45d72d2c2b78112f893a",
+    "stageFingerprint": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+    "ownerHandoff": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-blocked/jiutangshu-157/owner-handoff.json",
+      "contentSha256": "sha256:81445d1b242702ca47c068569a8b851d447c91b85c29ea5144c45150d917d8f7"
+    },
+    "inputs": {
+      "source": {
+        "path": "data/jiutangshu/157.json",
+        "gitBlob": "579ab3fe699734dad73529c11df1b1a412f6ca2d",
+        "contentSha256": "sha256:2301d0773ae7b1465ebaf8cfc3184a9908c62f56c52a5ca8eae86f9f09416cba"
+      },
+      "extraction": {
+        "path": "data/people/extractions/jiutangshu/157.json",
+        "gitBlob": "9b4d8bd2b829b9f3d2cb750ca642788f83242146",
+        "contentSha256": "sha256:338cea9a4a3e1ea5f78be42ae638585a202e359de60fa5387eb096ba42154733"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/jiutangshu/157.json",
+        "gitBlob": "297a85aac515bf7119caefd23370b97f5018990a",
+        "contentSha256": "sha256:b8eeea803e87ebb40f528f8c311f5a7cf06767db581d39d6a17197d1e3853a44",
+        "status": "audited",
+        "extractionHashAtSeal": "sha256:2e482843c7991e14cac19d2e9614321eafd835c9904befc2f527d0bae6ec020f",
+        "reviewedAt": "2026-09-29T16:22:28.794Z"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/jiutangshu/157.json",
+        "gitBlob": "a7fe0a930ccd51cd1ee41563625e57d973a6e4aa",
+        "contentSha256": "sha256:e186658fb2d2f569058ba53df6e9c647d644dca5ce5639cbb624d5ba5ca23310",
+        "reviewerAgentId": "bc-4cad0f76-8c19-44a8-baa3-d5ecba07a226"
+      }
+    },
+    "scopedChronologyWitness": {
+      "personId": "p119",
+      "claimId": "claim-1147",
+      "sourceUnits": {
+        "s0272": "會李锜反，有司請毀锜祖父廟墓。",
+        "s0275": "乃不毀。",
+        "s0276": "因賜神通墓五戶，以備灑掃。"
+      },
+      "interpretation": "807 grant to Li Shentong's tomb is a later commemorative act keyed to the rebellion context; honoree p119 is deceased; does not extend p119 life or attested-activity bounds beyond prior founding-period claims."
+    },
+    "historicalAuthorship": {
+      "extractionProvenance": {
+        "model": "grok-4.6-chunked",
+        "promptVersion": 7,
+        "completedAt": "2026-09-05T17:44:57.165Z",
+        "chunkEvidence": "Five chunk rows in extraction.run.chunks with stable bc-* agentIds (e.g. chunk 005 bc-2b5ecb65-53ae-4f1a-a3ea-3b08af433a44 covers orders including claim-1147 evidence s0275-s0276)."
+      },
+      "taxonomyMigration": {
+        "commit": "a9a3196bb46d3d61775d7612af4a79b22943800b",
+        "subject": "people: enforce retrospective reception taxonomy",
+        "scopeFor157": "Single-line claim-1147 kind posthumous-commemoration -> retrospective-reference; not a fresh Grok extraction pass."
+      }
+    }
+  },
+  "affectedNativeDependencies": [
+    {
+      "dependency": "validateDateAuditReport",
+      "currentState": "fails with Date audit report is stale until extractionHash rebind",
+      "afterScopedRebind": "expected pass when extractionHash matches current packet and item claim-1147 event ownership updated"
+    },
+    {
+      "dependency": "dateAuditDiagnostics",
+      "currentState": "empty on current extraction",
+      "sealedExtractionState": "claim-1147 removed posthumous reception kind diagnostic"
+    },
+    {
+      "dependency": "people:dates:verify",
+      "note": "Chapter date gate blocked only by stale hash; not by substantive chronology contradiction"
+    }
+  ],
+  "preservedOutOfScope": {
+    "source": "unchanged bytes",
+    "editorial": "unchanged bytes; independent Grok 4.6 editorial review preserved",
+    "identity": "not part of reception-taxonomy blocker"
+  },
+  "validation": {
+    "reviewedAtCommit": "cdc1a5a49db55ef4e92d45d72d2c2b78112f893a",
+    "commands": [
+      "openssl dgst -sha256 on pinned input paths",
+      "node offline: buildDateAuditPacket, validateDateAuditReport, dateAuditDiagnostics, reconcileRetrospectiveExtraction claim diff"
+    ],
+    "results": {
+      "pinnedSha256MatchOwnerHandoff": true,
+      "claimDiffCount": 1,
+      "claimDiffIds": ["claim-1147"],
+      "reconcileRetrospectiveMatchesCurrentExtraction": true,
+      "dateAuditDiagnosticsCurrent": [],
+      "dateAuditDiagnosticsSealedExtraction": [
+        {
+          "item": "claim-1147",
+          "problem": "Removed posthumous reception kind; reconcile it explicitly to retrospective-reference"
+        }
+      ],
+      "validateDateAuditAgainstCurrentPacket": "Date audit report is stale",
+      "packetItemCount": 510,
+      "packetPersonCount": 136,
+      "editorialAndSourceEdited": false
+    },
+    "independentOfOwner": true,
+    "canonicalEditsPerformed": false
+  }
+}
