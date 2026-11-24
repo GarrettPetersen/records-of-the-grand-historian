@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "060"
+  },
+  "ownerAgentId": "bc-49e6f290-b200-4c74-8373-ec6bd8892443",
+  "workerId": "cursor-nov24-retained-staging-w17-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "75c761c05c9cf4b54876aff4122b0f4d500a5f86df55e73ad7634fedebe63f87",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-060-92443",
+  "extractionBytes": 194365,
+  "inputBlobWitness": {
+    "source": "c8e88b909199cc58459e7e2fdcf208c6dca55ca3",
+    "extraction": "f686ae2391bcf644ea33088ed6a926c50f6f1e37",
+    "editorial": "3fa9dd8d1c63d78082c46d780df429793e09c64b",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:b0bc1f3145c925005653454f5b69860be9fde40fb040a60ad8c22489f3ed56de",
+    "extraction": "sha256:f67330eee52912a1f1767f001eca27c8002ed82adec706927eb4c78659e7ade9",
+    "editorial": "sha256:1bab1462c1f0e56b6d519bd418f21850160b9b77ce7adb1781d7df7fb2272f78"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "House of the Three Kings",
+    "chineseUnits": 244,
+    "translatedCount": 244,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-060/date-packet.json",
+    "packetSha256": "sha256:633bfb8c3b45eeb68bc92d6ac8c9521157de8a340a909b0b29826a4699470e63",
+    "sourceHash": "sha256:c8e676f61c359d27dd2825e8ff7fdbb9d94271a31c603434660c802c59712c1b",
+    "extractionHash": "sha256:272015133862b3128768830ad1c75014f790d8dac678f3e79907367a90604bd1",
+    "dateHintChecks": 268,
+    "peopleInPacket": 78,
+    "sourceUnitsInPacket": 244,
+    "command": "npm run people:dates:packet -- --book shiji --chapter 060 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-060/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPromptVersion": 7,
+    "extractionReused": true,
+    "editorialReused": true,
+    "appliedEditorialDecisions": 21,
+    "editorialReviewerAgentId": "bc-a4782c3a-e520-4dd9-9e3d-8532f31e7f45",
+    "extractionValidate": "data/people/extractions/shiji/060.json: ok (78 people, 470 mentions, 935 claims, 644 candidates)"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 060",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/060: 1 extraction(s), 78 local people, 470 mentions, 935 claims, 0 proposed repair(s), 21 applied repair(s), 21 editorial decision(s), 10 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 060",
+      "status": "un-audited",
+      "priorNativeDateReport": false
+    },
+    "chronologyStatus": "packet-prepared-awaiting-independent-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-verified at staging 20b8d0e3. Source English coverage complete on 244 Chinese units. Accepted extraction (prompt v7) and 21 applied editorial decision(s) preserved; extraction content SHA256 matches work-order pin. Fresh native date packet prepared (268 hint checks, 78 people). No definite English omission or concrete source contradiction found in owner pass; no date-repair proposal filed pending independent chronology review.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/shiji/060.json",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-060/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book shiji --chapter 060",
+      "independentOfExtractor": true,
+      "ownerDidNotSelfApprove": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date-approval",
+      "summary": "Bounded dossier identity review remains after independent date approval; owner pass did not run identity gates."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 060",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 060 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-060/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 060"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged. Missing gate is independent native date audit, not extraction or editorial rework."
+}
