@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:31:23.464Z",
+  "lastCheckedAt": "2026-11-24T00:32:28.150Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1244,7 +1244,7 @@
       "returnedRevision": "0d56e4fb15c27e1b9dcc87d046ee27046ec0b0e4"
     },
     "jinshu/065": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
       "previousRunId": "run-87259c81-661a-41de-b65b-3846360bc7ac",
       "chapterPR": 5426,
@@ -1266,7 +1266,12 @@
       "runId": "run-dd0916c5-081d-423d-b631-0e013da9ea31",
       "dispatchReconciledAt": "2026-11-24T00:28:30.798Z",
       "providerCreatedAt": "2026-11-24T00:26:38.021Z",
-      "dispatchResolution": "Unique newer running cloud run on its reserved existing owner, found via actual Cursor run listing. No resend."
+      "dispatchResolution": "Unique newer running cloud run on its reserved existing owner, found via actual Cursor run listing. No resend.",
+      "resultRevision": "047c6b226ebd47af5946336755ca6797f01bde78",
+      "scopedValidation": "pass",
+      "finishedObservedAt": "2026-11-24T00:32:23.769Z",
+      "chronology": "still-needs-revision",
+      "blocker": "Native unresolved Long’an/Yixi/era-mapping claims remain. Preserve grouped correction and source receipts before any fresh broad review."
     },
     "jinshu/116": {
       "status": "finished",
@@ -1775,26 +1780,24 @@
       "sentAt": "2026-11-24T00:25:37.576Z"
     },
     "jinshu/083": {
-      "status": "sent",
+      "status": "dispatch_pending",
       "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
-      "previousRunId": "run-c39edc3d-683b-4805-8c98-32d9a911b89d",
+      "previousRunId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
       "chapterPR": 5474,
       "revision": "04b8d8360a4f3647eaaf31e4f03e6fba86364cb8",
-      "findingsRevision": "1b5a5bc8d7a1a0854e6b096215fadcabcbb84db1",
-      "prompt": "Continue original independent Jinshu 083 review on sealed artifact 14875662517. Correct part 005 p148: s0318–s0321 are 殷顗's biography (殷顗，字伯通 then 祖融，太常卿). The witness supports Rong as Yin Yi's grandfather; 'Huan ancestor' and 'Yin Yan' are unsupported. Use the exact title and name as shown, keeping other rows unchanged. Preserve the correct p165 and p092 edits. Review sealed parts 007–008 this turn with directly authored actual primary and anchor actor reasoning. Avoid adding unsupported clan names or relationships when the witness only supports a surface; carry uncertainty. Push true authored reports and hashes to #5480 without editing earlier parts except the p148 reason. No scripted reason generation, source editing, validators, queue, build or merge.",
+      "findingsRevision": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+      "prompt": "Finish the original independent Jinshu 083 review on the same artifact 14875662517. In part 005 p148, the Chinese lineage is correctly fixed; replace English 'Yin Yan' with the exact source name 殷顗 or its chapter rendering Yin Yi. Preserve the other part 005 decisions and all other earlier part bytes. Directly author the final sealed parts 009–010 with actual primary/anchor source reasoning and exact case/transport hashes. Give an authored coverage manifest and flag any real remaining holds. Keep prior actual reviewer context; no automated reasons, speculative names, source, date, validator, queue, build or merge changes.",
       "idempotencyKey": "cursor-nov24-next-retained-083-04b8d8360a",
-      "reservedAt": "2026-11-24T00:28:36.189Z",
+      "reservedAt": "2026-11-24T00:32:28.150Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-24T00:28:36.189Z"
+        "at": "2026-11-24T00:32:28.150Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
         "swapUsedBytes": "3365205442"
-      },
-      "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
-      "sentAt": "2026-11-24T00:28:40.691Z"
+      }
     },
     "jinshu/041": {
       "status": "finished",
@@ -2687,6 +2690,40 @@
               "rows": 21,
               "holds": 0,
               "runId": "run-c39edc3d-683b-4805-8c98-32d9a911b89d",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 5,
+              "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-005.json",
+              "commit": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+              "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "reportSha256": "fe263771d06debd65724b03725268ebf74785312127c7d897a431e32525057c3",
+              "rows": 20,
+              "holds": 0,
+              "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
+              "status": "correction-required",
+              "sourceIssue": "p148 correct 殷 lineage, but the English rendering Yin Yan is unsupported; use attested form."
+            },
+            {
+              "part": 7,
+              "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-007.json",
+              "commit": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+              "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "reportSha256": "1cecfca37fb09c4c6e6f5e6b9aa8eff256c3e81c8b765f496270d967d8c69889",
+              "rows": 20,
+              "holds": 0,
+              "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 8,
+              "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-008.json",
+              "commit": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+              "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "reportSha256": "f34a5886f0845bd7d1f8d41383038d0946b3d60cc8fd0704e394f7ab6a02723e",
+              "rows": 21,
+              "holds": 0,
+              "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
               "status": "pending-native-verification"
             }
           ]
@@ -5165,6 +5202,66 @@
           }
         ],
         "finishedObservedAt": "2026-11-24T00:28:30.797Z"
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+        "previousRunId": "run-c39edc3d-683b-4805-8c98-32d9a911b89d",
+        "chapterPR": 5474,
+        "revision": "04b8d8360a4f3647eaaf31e4f03e6fba86364cb8",
+        "findingsRevision": "1b5a5bc8d7a1a0854e6b096215fadcabcbb84db1",
+        "prompt": "Continue original independent Jinshu 083 review on sealed artifact 14875662517. Correct part 005 p148: s0318–s0321 are 殷顗's biography (殷顗，字伯通 then 祖融，太常卿). The witness supports Rong as Yin Yi's grandfather; 'Huan ancestor' and 'Yin Yan' are unsupported. Use the exact title and name as shown, keeping other rows unchanged. Preserve the correct p165 and p092 edits. Review sealed parts 007–008 this turn with directly authored actual primary and anchor actor reasoning. Avoid adding unsupported clan names or relationships when the witness only supports a surface; carry uncertainty. Push true authored reports and hashes to #5480 without editing earlier parts except the p148 reason. No scripted reason generation, source editing, validators, queue, build or merge.",
+        "idempotencyKey": "cursor-nov24-next-retained-083-04b8d8360a",
+        "reservedAt": "2026-11-24T00:28:36.189Z",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-24T00:28:36.189Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
+        "sentAt": "2026-11-24T00:28:40.691Z",
+        "reviewRevision": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+        "authoredParts": [
+          {
+            "part": 5,
+            "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-005.json",
+            "commit": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+            "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+            "reportSha256": "fe263771d06debd65724b03725268ebf74785312127c7d897a431e32525057c3",
+            "rows": 20,
+            "holds": 0,
+            "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
+            "status": "correction-required",
+            "sourceIssue": "p148 correct 殷 lineage, but the English rendering Yin Yan is unsupported; use attested form."
+          },
+          {
+            "part": 7,
+            "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-007.json",
+            "commit": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+            "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+            "reportSha256": "1cecfca37fb09c4c6e6f5e6b9aa8eff256c3e81c8b765f496270d967d8c69889",
+            "rows": 20,
+            "holds": 0,
+            "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
+            "status": "pending-native-verification"
+          },
+          {
+            "part": 8,
+            "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-008.json",
+            "commit": "1d7297cc590c79c00f2e12a4cfab441ba6f189ab",
+            "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+            "reportSha256": "f34a5886f0845bd7d1f8d41383038d0946b3d60cc8fd0704e394f7ab6a02723e",
+            "rows": 21,
+            "holds": 0,
+            "runId": "run-b7c0f56e-866c-42ba-be0e-72bae9fffbe0",
+            "status": "pending-native-verification"
+          }
+        ],
+        "finishedObservedAt": "2026-11-24T00:32:23.767Z"
       }
     ],
     "jinshu/041": [
