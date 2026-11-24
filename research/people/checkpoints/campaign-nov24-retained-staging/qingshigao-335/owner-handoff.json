@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "335"
+  },
+  "worker": "cursor-nov24-retained-staging-w12-o2",
+  "ownerAgentId": "bc-4cd01f5b-9573-4c01-ab10-2b42d4438e70",
+  "idempotencyKey": "f3b6e24470262783b809698e8ebe41ada15ab5cb2271c9bc9bae92e1df688d9c",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-335-38e70",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "inputBlobWitness": {
+    "source": "0c513b991b515c7853064811ea9cec679936c78d",
+    "extraction": "ab1dda810afe8f721ccd3f46bfc24da928a68531",
+    "editorial": "080f696ed88b8eee0007196eeb09cb4a0546c517"
+  },
+  "sealedInputs": {
+    "source": "sha256:8aefe838f1ecd8392a54e26e1878f65647662dd896943cec7d2bc22100d59493",
+    "extraction": "sha256:4f97b5b3e19a711850b0b38b6adbe768424f57d057af590a16ec82102838db20",
+    "editorial": "sha256:9d06b03a822a2cc9639ed0155d74225e6f8566f9a31ad494c6aa683ed6d31133"
+  },
+  "sealedExtractionAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "4f97b5b3e19a711850b0b38b6adbe768424f57d057af590a16ec82102838db20",
+    "people": 37,
+    "claims": 289,
+    "promptVersion": 7,
+    "extractionBytes": 80474,
+    "extractorModel": "grok-4.5",
+    "extractorAgentId": "bc-0f769f56-d922-4983-a17c-4d1f436ae2b2"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "acceptedEditorialPath": "data/people/editorial-decisions/qingshigao/335.json",
+    "extractionPath": "data/people/extractions/qingshigao/335.json",
+    "ownerCanonicalEdits": false,
+    "definiteTranslationRepairs": [],
+    "definiteChronologyRepairs": [],
+    "reason": "Pinned prompt-v7 extraction and accepted editorial repairs pass scoped validation; owner found no new source-contradiction requiring extraction or editorial mutation."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 153,
+    "translatedCount": 153,
+    "scannedMissingBilingualUnits": 0,
+    "bothFieldsComplete": true,
+    "sampleMissingUnitIds": [],
+    "sourceTitleEn": "Volume 335 Biographies 122: Fu Senga, Yi Leitu, Hu Gui, Yu Jin Ao, Yin Dexi, Gang Ta",
+    "unitCoverageFromValidation": "allUnitsVisited via npm run people:validate",
+    "extractionPeople": 37,
+    "supportedClaimsInExtraction": 289,
+    "englishFieldConvention": "translations[].literal and translations[].idiomatic"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-335/date-packet.json",
+    "packetFileSha256": "sha256:cae745569fa6bcac3ee8d160c8a72cec06f234e8bca67fe0697c3c35d55b6c31",
+    "packetSourceHash": "sha256:fa598adde05d274d8194fcea0ba61337c764cb63c360a070cf55cb8afa8b9291",
+    "packetExtractionHash": "sha256:00cf9eca182d500ab1053aa4f7cc1fe3e1ba8c8d09440af10c3149d4b46536fe",
+    "itemCount": 105,
+    "peopleCount": 37,
+    "unitCount": 153,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 335 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-335/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 335",
+      "passed": true,
+      "summary": "Scoped person data validation passed for qingshigao/335: 1 extraction(s), 37 local people, 215 mentions, 406 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 335",
+      "status": "un-audited",
+      "independentDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/qingshigao/335.json",
+      "dateAuditExists": false
+    }
+  },
+  "independentDateStatus": {
+    "missing": true,
+    "ownerSelfApproved": false,
+    "requiredProof": "Independent reviewer completes native date audit against sealedNativeDatePacket at pinned extractionHash; record with npm run people:dates:record. Undated but source-valid attestation may stand when audit confirms.",
+    "candidateWorkflowCommands": [
+      "npm run people:dates:packet -- --book qingshigao --chapter 335 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-335/date-packet.json",
+      "npm run people:dates:run -- --book qingshigao --chapter 335 --run --model <independent-reviewer-model>",
+      "npm run people:dates:record -- --book qingshigao --chapter 335 --report <independent-report.json>",
+      "npm run people:dates:verify -- --book qingshigao --chapter 335"
+    ]
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "No data/people/date-audits/qingshigao/335.json; sealed candidate packet prepared; independent chronology review is the blocking gate.",
+    "identityReview": "Chapter-scoped extraction and aliases retained; independent bounded canonical identity review against dossier evidence still required after date gate unless campaign bundles both.",
+    "identityHolds": [],
+    "dateHolds": []
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "independentApprovalIssued": false,
+  "nextGate": "independent-native-date-audit-then-identity-review",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 335",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 335 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-335/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only at pinned staging blobs; no registry generation, deploy, merge, or self-approved date audit."
+}

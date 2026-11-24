@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "039"
+  },
+  "worker": "cursor-nov24-retained-staging-w12-o2",
+  "ownerAgentId": "bc-4cd01f5b-9573-4c01-ab10-2b42d4438e70",
+  "idempotencyKey": "f3b6e24470262783b809698e8ebe41ada15ab5cb2271c9bc9bae92e1df688d9c",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-039-38e70",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "inputBlobWitness": {
+    "source": "02f21421f07d500cd1c4f52d25acd450c5b37e88",
+    "extraction": "887d125fb7138b9c7d90ea6964f558b4b0d4fc40",
+    "editorial": "1867c17d85479d1da8fd1432082214c792d04a64"
+  },
+  "sealedInputs": {
+    "source": "sha256:49a2b0152673be693a705ff3392a6a2b1674407f10cdb3822d3f506b7bf454f3",
+    "extraction": "sha256:454730c7f4900d89425af2de9d2f2edf30cdf0d1117b993b4380944455131d07",
+    "editorial": "sha256:cdcf10c1d04da29ac0d821b6c77155ec5494a9283b61d34effb93026cc1c80c1"
+  },
+  "sealedExtractionAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "454730c7f4900d89425af2de9d2f2edf30cdf0d1117b993b4380944455131d07",
+    "people": 32,
+    "claims": 172,
+    "promptVersion": 7,
+    "extractionBytes": 80574,
+    "extractorModel": "grok-4.5-chunked",
+    "extractorAgentId": null
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "acceptedEditorialPath": "data/people/editorial-decisions/liaoshi/039.json",
+    "extractionPath": "data/people/extractions/liaoshi/039.json",
+    "ownerCanonicalEdits": false,
+    "definiteTranslationRepairs": [],
+    "definiteChronologyRepairs": [],
+    "reason": "Pinned prompt-v7 extraction and accepted editorial repairs pass scoped validation; owner found no new source-contradiction requiring extraction or editorial mutation."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 288,
+    "translatedCount": 288,
+    "scannedMissingBilingualUnits": 0,
+    "bothFieldsComplete": true,
+    "sampleMissingUnitIds": [],
+    "sourceTitleEn": "Volume 39 Treatises 9: Geography 3",
+    "unitCoverageFromValidation": "allUnitsVisited via npm run people:validate",
+    "extractionPeople": 32,
+    "supportedClaimsInExtraction": 172,
+    "englishFieldConvention": "translations[].literal and translations[].idiomatic"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-039/date-packet.json",
+    "packetFileSha256": "sha256:fa0b42200b3a679bf14e1807d3933029c2faa7a24476bdf43d5e566b507ca2e9",
+    "packetSourceHash": "sha256:51940eba6aff768af1b9ea8a53e03fd0e6583c9ba22f56f8e20efa2288031a65",
+    "packetExtractionHash": "sha256:9e50827f0a936fa734b59b2302fd1e71e41a8f3df916af8039a548820863fd1e",
+    "itemCount": 96,
+    "peopleCount": 32,
+    "unitCount": 288,
+    "buildCommand": "npm run people:dates:packet -- --book liaoshi --chapter 039 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-039/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 039",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/039: 1 extraction(s), 32 local people, 113 mentions, 260 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 039",
+      "status": "un-audited",
+      "independentDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/liaoshi/039.json",
+      "dateAuditExists": false
+    }
+  },
+  "independentDateStatus": {
+    "missing": true,
+    "ownerSelfApproved": false,
+    "requiredProof": "Independent reviewer completes native date audit against sealedNativeDatePacket at pinned extractionHash; record with npm run people:dates:record. Undated but source-valid attestation may stand when audit confirms.",
+    "candidateWorkflowCommands": [
+      "npm run people:dates:packet -- --book liaoshi --chapter 039 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-039/date-packet.json",
+      "npm run people:dates:run -- --book liaoshi --chapter 039 --run --model <independent-reviewer-model>",
+      "npm run people:dates:record -- --book liaoshi --chapter 039 --report <independent-report.json>",
+      "npm run people:dates:verify -- --book liaoshi --chapter 039"
+    ]
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "No data/people/date-audits/liaoshi/039.json; sealed candidate packet prepared; independent chronology review is the blocking gate.",
+    "identityReview": "Chapter-scoped extraction and aliases retained; independent bounded canonical identity review against dossier evidence still required after date gate unless campaign bundles both.",
+    "identityHolds": [],
+    "dateHolds": []
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "independentApprovalIssued": false,
+  "nextGate": "independent-native-date-audit-then-identity-review",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 039",
+    "datePacket": "npm run people:dates:packet -- --book liaoshi --chapter 039 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-039/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only at pinned staging blobs; no registry generation, deploy, merge, or self-approved date audit."
+}

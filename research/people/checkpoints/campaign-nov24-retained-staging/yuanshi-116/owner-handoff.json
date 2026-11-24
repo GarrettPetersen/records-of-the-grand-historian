@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "116"
+  },
+  "worker": "cursor-nov24-retained-staging-w12-o2",
+  "ownerAgentId": "bc-4cd01f5b-9573-4c01-ab10-2b42d4438e70",
+  "idempotencyKey": "f3b6e24470262783b809698e8ebe41ada15ab5cb2271c9bc9bae92e1df688d9c",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-yuanshi-116-38e70",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "inputBlobWitness": {
+    "source": "60ec934d55a870252f6bc498556f3dee9b21bd43",
+    "extraction": "a9b3679df2557ee148be8c3f37e2c55b1ec52bfc",
+    "editorial": "e762af07e3ae7318343dc913222c01d1d551cf20"
+  },
+  "sealedInputs": {
+    "source": "sha256:adbac8774456a7647c89934af093056c8e611454747dbd98d174807ccf1b7e23",
+    "extraction": "sha256:a8edbd7e4c96138c05d5e64d62508067cf57045472eeb6f0c9edf88cf9dec58f",
+    "editorial": "sha256:6a1bda5095695ab723f4f40c39ceee7b0d8edb5a346aab7177259ca9394cc4ee"
+  },
+  "sealedExtractionAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "a8edbd7e4c96138c05d5e64d62508067cf57045472eeb6f0c9edf88cf9dec58f",
+    "people": 42,
+    "claims": 262,
+    "promptVersion": 7,
+    "extractionBytes": 80899,
+    "extractorModel": "grok-4.5",
+    "extractorAgentId": "bc-e6e48572-beae-41e4-b8ff-6cf21dd2f0c0"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "acceptedEditorialPath": "data/people/editorial-decisions/yuanshi/116.json",
+    "extractionPath": "data/people/extractions/yuanshi/116.json",
+    "ownerCanonicalEdits": false,
+    "definiteTranslationRepairs": [],
+    "definiteChronologyRepairs": [],
+    "reason": "Pinned prompt-v7 extraction and accepted editorial repairs pass scoped validation; owner found no new source-contradiction requiring extraction or editorial mutation."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 140,
+    "translatedCount": 140,
+    "scannedMissingBilingualUnits": 0,
+    "bothFieldsComplete": true,
+    "sampleMissingUnitIds": [],
+    "sourceTitleEn": "Volume 116 Biographies 3: Empresses and Consorts 2",
+    "unitCoverageFromValidation": "allUnitsVisited via npm run people:validate",
+    "extractionPeople": 42,
+    "supportedClaimsInExtraction": 262,
+    "englishFieldConvention": "translations[].literal and translations[].idiomatic"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-116/date-packet.json",
+    "packetFileSha256": "sha256:9d042ba122076599e34e693dfa910465f12da7f98d956356fffc980a6874ff89",
+    "packetSourceHash": "sha256:6a718b7f4d2b02e92d3df3fe1441916a63daf3470c71eb57a3a094505b4667d8",
+    "packetExtractionHash": "sha256:bad27f01dd268b5d03d458556f863ebded54010c0b339f8e7af116fc917b05cc",
+    "itemCount": 137,
+    "peopleCount": 42,
+    "unitCount": 140,
+    "buildCommand": "npm run people:dates:packet -- --book yuanshi --chapter 116 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-116/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book yuanshi --chapter 116",
+      "passed": true,
+      "summary": "Scoped person data validation passed for yuanshi/116: 1 extraction(s), 42 local people, 286 mentions, 419 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 116",
+      "status": "un-audited",
+      "independentDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/yuanshi/116.json",
+      "dateAuditExists": false
+    }
+  },
+  "independentDateStatus": {
+    "missing": true,
+    "ownerSelfApproved": false,
+    "requiredProof": "Independent reviewer completes native date audit against sealedNativeDatePacket at pinned extractionHash; record with npm run people:dates:record. Undated but source-valid attestation may stand when audit confirms.",
+    "candidateWorkflowCommands": [
+      "npm run people:dates:packet -- --book yuanshi --chapter 116 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-116/date-packet.json",
+      "npm run people:dates:run -- --book yuanshi --chapter 116 --run --model <independent-reviewer-model>",
+      "npm run people:dates:record -- --book yuanshi --chapter 116 --report <independent-report.json>",
+      "npm run people:dates:verify -- --book yuanshi --chapter 116"
+    ]
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "No data/people/date-audits/yuanshi/116.json; sealed candidate packet prepared; independent chronology review is the blocking gate.",
+    "identityReview": "Chapter-scoped extraction and aliases retained; independent bounded canonical identity review against dossier evidence still required after date gate unless campaign bundles both.",
+    "identityHolds": [],
+    "dateHolds": []
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "independentApprovalIssued": false,
+  "nextGate": "independent-native-date-audit-then-identity-review",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 116",
+    "datePacket": "npm run people:dates:packet -- --book yuanshi --chapter 116 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-116/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only at pinned staging blobs; no registry generation, deploy, merge, or self-approved date audit."
+}
