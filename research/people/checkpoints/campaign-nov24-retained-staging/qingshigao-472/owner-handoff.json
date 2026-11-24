@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "472"
+  },
+  "ownerAgentId": "bc-6717c892-c42b-4f22-a800-2bc5fe9d9042",
+  "workerId": "cursor-nov24-retained-staging-w13-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7c9132bf7aa57d48c7e5f0ba17534a1bfcafa196a677534122252886613e9031",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-472-d9042",
+  "extractionBytes": 101707,
+  "inputBlobWitness": {
+    "source": "6ccc3528c856bc24614e80681062a65f17bc85e3",
+    "extraction": "0ff69a7dddbad47484b17852865944c0413bc29d",
+    "editorial": "ad3f22315698226e3a86382957adb9df32803c8a"
+  },
+  "sealedInputs": {
+    "source": "sha256:0b898308cc9aa9202a5037e1f08b11ff5bb988fb3debf6401ae00dfd2fe3edd7",
+    "extraction": "sha256:9e408804dc37a6cc0c39a36ce65247e5ec12a0a415e0066817185d0c1aa25f0a",
+    "editorial": "sha256:7a430eb00184ab394ccb13d6d099ce2036ae25903d18def6cfc8bb141a5a14d6"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-472/date-packet.json",
+    "sha256": "sha256:6a7ff9bd2ee91d0460f89be86d9cf42b095dbd411c46b839fa94caf6ce37b792",
+    "sourceHash": "sha256:6358ff3f4d8375e561576374fe78fe0e027af737f147a50bfd172aa58479b558",
+    "extractionHash": "sha256:a7ae45b9817628d39d833eff51afbba347edf62ff455cfbfcc7fae6260bd9579",
+    "itemCheckCount": 187,
+    "personCheckCount": 51,
+    "sourceUnitCount": 240
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 472 Biographies 259: Lu Runxiang, Shi Xu, Yi Ketan, Liang Dingfen, Xu Fang, Lao Naixuan, Shen Cengzhi",
+    "chineseUnits": 240,
+    "translatedCount": 240,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "sourceExtractionSha256": "9e408804dc37a6cc0c39a36ce65247e5ec12a0a415e0066817185d0c1aa25f0a",
+    "rawExtractionFileSha256": "9e408804dc37a6cc0c39a36ce65247e5ec12a0a415e0066817185d0c1aa25f0a",
+    "editorialDecisionCount": 6,
+    "appliedEnglishRepairsInSource": 6,
+    "coverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "noExtractionRerun": true,
+    "noEditorialReopen": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 472",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/472: 1 extraction(s), 51 local people, 319 mentions, 467 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 472",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "datesScan": {
+      "command": "node scripts/people-date-audit.mjs scan --book qingshigao --chapter 472",
+      "findings": 0,
+      "reversedIntervals": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book qingshigao --chapter 472",
+    "npm run people:dates:verify -- --book qingshigao --chapter 472",
+    "npm run people:dates:packet -- --book qingshigao --chapter 472 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-472/date-packet.json",
+    "node scripts/people-date-audit.mjs scan --book qingshigao --chapter 472"
+  ],
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "no-native-date-report",
+      "reason": "Missing data/people/date-audits/qingshigao/472.json; owner sealed fresh date packet only and did not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-472/date-packet.json",
+      "packetSha256": "sha256:6a7ff9bd2ee91d0460f89be86d9cf42b095dbd411c46b839fa94caf6ce37b792",
+      "packetSourceHash": "sha256:6358ff3f4d8375e561576374fe78fe0e027af737f147a50bfd172aa58479b558",
+      "packetExtractionHash": "sha256:a7ae45b9817628d39d833eff51afbba347edf62ff455cfbfcc7fae6260bd9579",
+      "recordCommand": "npm run people:dates:record -- --report <independent-qingshigao-472-date-review.json>",
+      "authorNotesPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-472/chronology-author-notes.json"
+    },
+    "identity": {
+      "chapterLocalContradiction": false,
+      "corpusBoundedIdentityReview": "pending per campaign policy; owner found no sealed-input attribution contradiction."
+    }
+  },
+  "substantiveFindings": "Pinned git blob witness verified on staging 20b8d0e3 for source, extraction, and editorial inputs. Full chapter English paired on 240/240 Chinese units; accepted editorial repairs reflected in source JSON. people:validate passed; people:dates:scan reports 0 structural interval findings; deterministic date packet written (187 items, 51 people). No definite English omission, extraction contradiction, or owner-proposed chronology repair in this pass. Guangxu/Xuantong/Tongzhi spans; extractor point years remain candidates only.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "blobWitnessVerified": true,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
