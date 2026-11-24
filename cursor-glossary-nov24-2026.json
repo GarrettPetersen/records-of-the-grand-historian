@@ -40,7 +40,7 @@
   "Cursor displays reset date only; verify exact reset time before new dispatch",
   "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
  ],
- "nextAction": "Reserve independent review for the closest-to-release verified owner PRs and finish collecting the other cohort branches.",
+ "nextAction": "Watch the exact required master build for release PR #5535. Record returned independent portfolio reports and correct owner handoff blockers. Verify Jinshu 028 under the current master baseline with the reviewed one-line rule.",
  "pullRequests": [
   {
    "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T08:47:18.122Z",
+ "lastCheckedAt": "2026-11-24T08:48:27.378Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -3123,6 +3123,19 @@
      "status": "in_progress",
      "conclusion": null,
      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45354306613"
+    },
+    "preflightVerification": {
+     "runId": 45352319199,
+     "head": "4f6cc763cb882f8394c94c064c7552bb1742c8b2",
+     "conclusion": "success",
+     "checkedAt": "2026-11-24T08:48:20.876Z"
+    },
+    "latestRequiredVerification": {
+     "runId": 45354306613,
+     "head": "86fa83c22cf6aa4e8133610406d387c9150478d9",
+     "status": "in_progress",
+     "conclusion": null,
+     "checkedAt": "2026-11-24T08:48:27.123Z"
     }
    }
   }
@@ -20831,6 +20844,28 @@
          "idempotencyKey": "010bfa5b652d100e9f15ecb5eeacbcc7313c5c3a5e372b1291116a0e45a6a029",
          "runId": "run-7b26524a-92f7-424f-a136-71711a572fdd",
          "observedAt": "2026-11-24T08:39:52.847Z"
+        },
+        "mechanicalVerification": {
+         "runId": 45358082393,
+         "head": "93e9c53a841074764cffb72ffbdba43406c271ec",
+         "artifacts": [
+          {
+           "id": 14903462455,
+           "name": "unchanged-date-songshu-069",
+           "digest": "sha256:ac882db9cd67afa3e6bab04c1f0d0c87d5e05e1b0880a15160f98e1d0bf55f19",
+           "counts": {
+            "audited": 1
+           }
+          },
+          {
+           "id": 14902819318,
+           "name": "unchanged-date-houhanshu-111",
+           "digest": "sha256:8764cfdb11726945bbacb3737f41714888f3a5cb82bf35c1576bc327313e1560",
+           "counts": {
+            "audited": 1
+           }
+          }
+         ]
         }
        }
       }
@@ -27023,8 +27058,11 @@
         }
        ],
        "chapterData": "78c96c158a7939e5c70f7dae4091d45c2a51c23d",
-       "status": "dispatch-planned",
-       "artifact": "jinshu-028-with-reviewed-source-only-rule"
+       "status": "in_progress",
+       "artifact": "jinshu-028-with-reviewed-source-only-rule",
+       "runId": 45359186570,
+       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45359186570",
+       "conclusion": null
       }
      },
      "stagingTransfer": {
@@ -31536,6 +31574,15 @@
          "runId": "run-966bb21a-2566-4277-aee4-92d8efc4c1c8",
          "observedAt": "2026-11-24T08:46:49.793Z"
         }
+       },
+       "attachmentLimit": {
+        "failed": [
+         5544,
+         5545,
+         5546,
+         5547
+        ],
+        "reason": "Codex thread attachment limit reached; GitHub PRs and journal remain authoritative."
        }
       }
      },
