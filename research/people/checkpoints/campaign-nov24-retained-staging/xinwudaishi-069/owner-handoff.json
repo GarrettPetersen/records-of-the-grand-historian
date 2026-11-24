@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "069"
+  },
+  "ownerAgentId": "bc-4c1dbcfd-ceee-4ca5-93f7-8174254ca16b",
+  "workerId": "cursor-nov24-retained-staging-w13-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "795681544d842336ee66dda927e44b83953580164a1462fae212702f26780ca6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-069-ca16b",
+  "extractionBytes": 94738,
+  "inputBlobWitness": {
+    "source": "495577221ea1193ba2c6786d28c824cbcca5bd5f",
+    "extraction": "cd5a98d5d1ed3af8e6e69c94d9e7f803d91fad11",
+    "editorial": "41b3d80febe7fd2a716815c50339eb7c7761d3e4"
+  },
+  "sealedInputs": {
+    "source": "sha256:d60d5025f3ab6cb9d0e2e9291366d2dce624921b1bd341afe7ce2b3d1fa9587b",
+    "extraction": "sha256:485eee538c342e5f6d3527caa14765a0e1105b6605f45bde731ca2994fbd5286",
+    "editorial": "sha256:e9294a478e62bef3f77c475a87269891ea5d48283d15d895532bbe8a9082bc95"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-069/date-packet.json",
+    "contentSha256": "sha256:8b7ca7a5e9676712891f316dc4d8774799249cdeadbb88f766f86c8140f1202c",
+    "extractionHash": "sha256:8678cade225e80d24c60a7f5ace6adc8eb4c97560d8c5775679a3fc93eb6ae06",
+    "sourceHash": "sha256:02354b5b7f9f79c61fe12837754cb1a0dee458c85ecca4936c526ed2ee41fc09",
+    "itemCount": 152,
+    "peopleCount": 56,
+    "unitCount": 130
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 69: Hereditary House of Nanping",
+    "chineseUnits": 130,
+    "translatedCount": 130,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "sourceExtractionSha256": "485eee538c342e5f6d3527caa14765a0e1105b6605f45bde731ca2994fbd5286",
+    "sourceExtractionSha256Verified": true,
+    "promptVersion": 7,
+    "peopleCount": 56,
+    "claimsCount": 291,
+    "editorialDecisionCount": 5,
+    "appliedTranslationRepairs": 0,
+    "coverageFlags": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "noFullReextraction": true,
+    "dateAuditFileAbsent": true
+  },
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 069",
+    "peopleValidateSummary": "Person data validation failed: - data/people/editorial-decisions/xinwudaishi/069.json: applied xinwudaishi:069:r0006 has no matching independent accept/revise authorization",
+    "peopleValidateErrors": [
+      "Person data validation failed:",
+      "- data/people/editorial-decisions/xinwudaishi/069.json: applied xinwudaishi:069:r0006 has no matching independent accept/revise authorization"
+    ],
+    "datesPacketCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 069 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-069/date-packet.json",
+    "datesScanCommand": "npm run people:dates:scan -- --book xinwudaishi --chapter 069",
+    "datesScanPreflightFindings": 0,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 069",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "applied-repair-authorization-incomplete",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-verified at pinned staging blobs. Full chapter read: 130 Chinese units with paired literal and idiomatic English; extraction coverage flags complete at prompt v7. Retained editorial accepts r0001–r0005 and claim retraction for Kong Xun; extraction also applies a literal Kong Qing repair on s0024 without sealed independent authorization (r0006). Native date packet prepared; people:dates:scan preflight shows zero diagnostic findings; no native date-audits file. Owner pass does not self-approve chronology or close the editorial authorization gap.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "editorial-authorization-gap",
+      "id": "xinwudaishi:069:r0006",
+      "unit": "s0024",
+      "field": "literal",
+      "before": "He again raised troops, claiming publicly to help Liang attack Jin, in order to invade Xiang Prefecture; he was defeated by Kong, and then cut off tribute and taxes for many years.",
+      "after": "He again raised troops, claiming publicly to help Liang attack Jin, in order to invade Xiang Prefecture; he was defeated by Kong Qing, and then cut off tribute and taxes for many years.",
+      "summary": "Extraction applies literal-field Kong Qing repair on s0024 without matching independent accept/revise in sealed editorial-decisions (r0001–r0005 only).",
+      "blocker": "npm run people:validate fails until independent reviewer records matching literal repair authorization aligned with accepted r0002.",
+      "preserveSealedInputs": true
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-069/date-packet.json",
+      "packetSha256": "sha256:8b7ca7a5e9676712891f316dc4d8774799249cdeadbb88f766f86c8140f1202c",
+      "itemCount": 152,
+      "notes": "Independent reviewer must audit sealed packet and record via people:dates:record; owner handoff is not date approval."
+    },
+    "identityBoundedReview": {
+      "candidateDispositions": 8,
+      "independentReviewCompleted": false,
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "notes": "Chapter-scoped candidate dispositions retained; corpus-level identity transport not prepared in this owner pass."
+    },
+    "chapterCertification": {
+      "independentChapterApproval": false,
+      "blockedBy": [
+        "editorial-authorization-gap",
+        "missing-native-date-audit"
+      ]
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 069",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 069 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-069/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 069",
+    "datesScan": "npm run people:dates:scan -- --book xinwudaishi --chapter 069"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, registry generation, deploy, or merge. Owner handoff is not independent date or identity approval."
+}
