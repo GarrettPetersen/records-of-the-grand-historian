@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "034"
+  },
+  "ownerAgentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+  "campaignWorker": "cursor-nov24-retained-staging-w1-o4",
+  "idempotencyKey": "5149bbcd4a15927cfffd5e2cf9ecdff63ca8a4ab5109e6cbcf6cb166bc1efab8",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "authorBranch": "cursor/nov24-retained-staging-owner-liaoshi-034-ce781",
+  "inputBlobWitness": {
+    "source": "43529c0d7a895bc075c4d9fa8dc962725b362d2d",
+    "extraction": "b44da3f439d7206b713488e3a260d6ef2c69e50b",
+    "dateAudit": "c41d375c10dcf8e6a698d121814cf275a8c4b07b",
+    "editorial": "b53eeb49abddb752ec7cfaacf8959493cf8ac1fb"
+  },
+  "sealedInputs": {
+    "source": "sha256:727b717bf9e735e0ef117605ac8131e13831b6e5820042adb5edcc61dcb8394b",
+    "extraction": "sha256:401f6a0456b73bcb7a590370407d9972d24e80d29e6ec13c53fd4639ef5b25f2",
+    "dateAudit": "sha256:6527667fdbcb5d9f7e958a15c44f455e9acc4ad6c1420220ac166fc4532c2c3c",
+    "editorial": "sha256:e9e910a9839d63872337e0cf067e10359c9397085646caaa9abf7d11028ba781",
+    "sourceByte": "sha256:f948575cdd38c2d0d11f87fa0fe8f7c5831b77388baba35655952f7240b8de36",
+    "extractionByte": "sha256:1d047bdc942a5e50d5e573c469b3cc066c8ffe823d9497ed193c415f127884a4"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 111,
+    "translatedCount": 111,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "bothEnglishFieldsComplete": true,
+    "acceptedEditorialRepairsReflected": true,
+    "title": "Volume 34 Treatises 4: Military 1"
+  },
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 034",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for liaoshi/034: 1 extraction(s), 10 local people, 30 mentions, 130 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/liaoshi/034.json",
+      "status": "passed",
+      "summary": "data/people/extractions/liaoshi/034.json: ok (10 people, 30 mentions, 130 claims, 139 candidates)"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 034",
+      "status": "research-blocked",
+      "reviewedAt": "2026-09-23T12:31:36.332Z",
+      "findings": 66,
+      "extractionHashCurrent": true,
+      "sourceHashCurrent": true
+    },
+    "deterministicErrors": []
+  },
+  "substantiveFindings": [
+    "Treatise on Liao military institutions; 10 local people are illustrative campaign exempla embedded in institutional narrative. Retained 66 evidence-grounded date research holds concern founding-year examples and campaign dating without source contradiction.",
+    "Owner reread all 111 Chinese units with paired literal and idiomatic English; accepted editorial repairs are present in source; sealed extraction aligns with pinned git blobs and semantic hashes.",
+    "Complete initial source-scope chronology audit of all 111 Chinese units, all 56 temporal or active-hint items, and all 10 people. This military-institutions treatise contains dated founding and campaign examples, but extracted chronology is retained as evidence-grounded research holds pending independent source-critical confirmation of event ownership, conversion, endpoint precision, and the distinction between individual activity and broad dynastic or institutional context. No source, extraction, or canonical person data was changed.",
+    "Scoped person data validation passed for liaoshi/034: 1 extraction(s), 10 local people, 30 mentions, 130 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining. Extraction validator: data/people/extractions/liaoshi/034.json: ok (10 people, 30 mentions, 130 claims, 139 candidates)"
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "date-audit-research-blocked",
+      "status": "research-blocked",
+      "findingCount": 66,
+      "reviewedAt": "2026-09-23T12:31:36.332Z",
+      "preservation": "Retain independent date-audit research holds verbatim at sealed report; chronology remains current relative to pinned extraction—no substantive amendment proposed in this owner pass."
+    }
+  ],
+  "chapterReady": true,
+  "nextGate": "independent-final-chapter-review",
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; sealed inputs unchanged. Host supplies native sealed final review packets.",
+  "completedAt": "2026-11-24T16:03:19.194Z",
+  "counts": {
+    "localPeople": 10,
+    "mentions": 0,
+    "claims": 98
+  }
+}
