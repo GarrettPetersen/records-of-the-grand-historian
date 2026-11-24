@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/077",
+  "reviewerAgentId": "bc-ff9c4add-61d0-42db-b5ec-865f4637fd0a",
+  "ownerAgentId": "bc-7e463767-133a-4f87-aab6-c0f63ebf6684",
+  "ownerRevision": "528457a95befb958115d28dd71bbb033efe47661",
+  "ownerProposalSha256": "07b01a079afb7d8c899974acb6d180524a7a2210441f4f3e8b5f19de8661aef0",
+  "reviewedAt": "2026-11-24T15:25:00.000Z",
+  "scope": {
+    "observedBlocker": "Date audit report is stale",
+    "preservedUnrelatedWork": [
+      "source",
+      "editorial",
+      "identity",
+      "non-scoped date item checks"
+    ]
+  },
+  "verdict": "approve-scoped-reception-proof-reuse",
+  "summary": "The sole scoped delta is claim-324 reception taxonomy (posthumous-commemoration → retrospective-reference) on unit s0055 for p039 Li Siben; dateContext is unchanged. Prior audited itemCheck claim-324 remains chronologically valid. reconcileRetrospectiveExtraction on sealed extraction bb824f01006c2bfd0098f0def56c5c10609bbd9a bytes matches live claim-324. Host may refresh date eligibility via native composition without reopening unrelated source, editorial, identity, or English work.",
+  "approvedChanges": [
+    {
+      "target": "native-date-eligibility-or-reaudit",
+      "itemId": "claim-324",
+      "personId": "p039",
+      "evidenceUnits": ["s0055"],
+      "changeKind": "reception-taxonomy-migration",
+      "approval": "proof-reuse",
+      "rationale": "Independent re-read of 戊辰，故振武節度使李嗣本贈太尉。 and both English fields on s0055 (literal and idiomatic) supports the existing AD 938 year pin and posthumous grant wording; only event-participation kind was invalid under retrospective-only vocabulary.",
+      "before": {
+        "kind": "posthumous-commemoration",
+        "role": "honoree",
+        "action": "posthumously-granted-grand-commandant",
+        "dateContext": {
+          "sourceDate": { "text": "五月戊辰" },
+          "westernYear": { "era": "AD", "year": 938, "precision": "year" }
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "honoree",
+        "action": "posthumously-granted-grand-commandant",
+        "dateContext": {
+          "sourceDate": { "text": "五月戊辰" },
+          "westernYear": { "era": "AD", "year": 938, "precision": "year" }
+        }
+      },
+      "priorAuditedItemCheck": {
+        "id": "claim-324",
+        "verdict": "supported",
+        "preserved": true,
+        "note": "Reuse applies to chronology fields only; reception relabel does not invalidate the September 2026 independent reviewer’s temporal finding."
+      }
+    }
+  ],
+  "heldCases": [],
+  "pinnedEvidence": {
+    "ownerRevision": "528457a95befb958115d28dd71bbb033efe47661",
+    "inputs": {
+      "source": {
+        "path": "data/jiuwudaishi/077.json",
+        "gitBlob": "ef2bf41d8a3332adb9589b91344444bdba4adb1f",
+        "contentSha256": "sha256:a33bc12a993b806910872eee2ef65676c8ad005f5f313b2e2c6ee93f189e67c7"
+      },
+      "extraction": {
+        "path": "data/people/extractions/jiuwudaishi/077.json",
+        "gitBlob": "596f419dea4bf63e672105c47141b06560b31202",
+        "contentSha256": "sha256:7df994d47ca7680e2aa2da59a4806a5af69b2b0fea9d377facabdf0f56a4c2b0"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/jiuwudaishi/077.json",
+        "gitBlob": "76244b034c632a1c83f3325752eecd35ba71e720",
+        "contentSha256": "sha256:fbf5d0c468dc7d3f863c2a934415b0988284e36d504ffc803851451e4dbfad20",
+        "extractionHash": "sha256:831dfd14c06ed79567891ac5b6befbc90ea7a07b6e73194eb040acc3c2e30748",
+        "sourceHash": "sha256:989580c7ac653242a5e3792028bfebf8bf702be1dad2a6986de04aa4ca5a730b",
+        "reviewer": {
+          "name": "Independent Jiu Wudai Shi 077 initial chronology reviewer",
+          "independentOfExtractor": true,
+          "preserved": true
+        },
+        "reviewedAt": "2026-09-29T17:29:39.725Z"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/jiuwudaishi/077.json",
+        "gitBlob": "d4d0635103959a214fb412e161ae1b5d6eda1ca4",
+        "contentSha256": "sha256:556c095ccc6fe9eb99557662a0947578d7451400987ac8663c14558a0297e378",
+        "reviewerAgentId": "bc-327645c5-311b-429c-8cdb-95e2af191781",
+        "preserved": true
+      }
+    },
+    "packet": {
+      "sourceHash": "sha256:989580c7ac653242a5e3792028bfebf8bf702be1dad2a6986de04aa4ca5a730b",
+      "extractionHash": "sha256:7df994d47ca7680e2aa2da59a4806a5af69b2b0fea9d377facabdf0f56a4c2b0"
+    },
+    "sealedExtractionCommit": "bb824f01006c2bfd0098f0def56c5c10609bbd9a",
+    "sealedExtractionContentSha256": "sha256:831dfd14c06ed79567891ac5b6befbc90ea7a07b6e73194eb040acc3c2e30748",
+    "staleReasonVerified": "extractionHash changed while sourceHash unchanged; live audit header still sealed to prior extractionHash"
+  },
+  "affectedNativeDependencies": {
+    "dateAuditStatus": {
+      "current": "stale",
+      "until": "extractionHash pin refreshed or host schedules scoped re-audit",
+      "scopedItemIds": ["claim-324"]
+    },
+    "proofReuseCandidate": {
+      "permittedBy": "scripts/lib/people-reception-reconciliation.mjs#reconcileRetrospectiveExtraction",
+      "reconcileRetrospectiveMatchesCurrent": true,
+      "chronologyChangedClaimCount": 0,
+      "changedClaimCount": 1
+    },
+    "commandsNotRun": [
+      "npm run people:validate",
+      "npm run people:dates:verify",
+      "npm run build"
+    ],
+    "hostCompositionRequired": true
+  },
+  "validation": {
+    "gitBlobPins": {
+      "source": true,
+      "extraction": true,
+      "dateAudit": true,
+      "editorial": true
+    },
+    "contentSha256Pins": {
+      "source": true,
+      "extraction": true,
+      "dateAudit": true,
+      "editorial": true
+    },
+    "sourceHashUnchanged": true,
+    "extractionHashDrift": {
+      "audit": "sha256:831dfd14c06ed79567891ac5b6befbc90ea7a07b6e73194eb040acc3c2e30748",
+      "currentPacket": "sha256:7df994d47ca7680e2aa2da59a4806a5af69b2b0fea9d377facabdf0f56a4c2b0"
+    },
+    "sealedExtractionMatchesAuditHash": true,
+    "reconcileSingleChangeClaim324": true,
+    "reconciledClaim324MatchesLiveExtraction": true,
+    "dateAuditStatusStale": true,
+    "englishOmissionsInScope": [],
+    "editorialIndependentEvidenceRewritten": false,
+    "identityScopeTouched": false,
+    "limitations": [
+      "This review approves scoped proof reuse for one reception relabel only; it is not publication, canonical extraction write, date-audit record, or chapter completion.",
+      "Full native people:dates:verify and people:validate remain host-owned at composition time."
+    ]
+  }
+}
