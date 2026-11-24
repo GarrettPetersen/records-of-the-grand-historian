@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-source-reference-proposal",
+  "dispatch": {
+    "key": "jiuwudaishi/066",
+    "agentId": "bc-3001456e-15de-4e26-b1ca-973d0009ec2d",
+    "ref": "cursor/nov24-source-reference-jiuwudaishi-066-09ec2d",
+    "stage": "3d546f4260e36d7982b921c8a25f613f66484100",
+    "localId": "jiuwudaishi:066:p009",
+    "canonicalPersonId": "per_349RREXBD53HSC5DWM3F",
+    "reason": "no-scoped-source-reference",
+    "idempotencyKey": "2766e587f7860bcc59110c1602bef503072bd763a1cac75763cd6738c35ee2d3"
+  },
+  "ownerDecision": "apply-minimal-surface-split",
+  "referenceClass": "literal-personal-name-mention",
+  "notHold": true,
+  "rationale": "Primary text at s0019 names 李虔徽 inside the younger-brother phrase 李虔徽弟. The elder brother is a distinct historical individual (Li Qianhui); the speaker is p010. p009 had an explicit personal name claim but zero surfaces while p010 owned the enclosing compound span, so publication scoped references were empty. Split spans: p009 receives the attested personal-name substring 李虔徽 / Li Qianhui; p010 retains kinship-only 弟 / younger brother without enclosing the elder’s name in its surface.",
+  "primarySource": {
+    "unitId": "jiuwudaishi:066:s0019",
+    "chinese": "無何，有吏人李虔徽弟揚言於眾云：「聞相者言其貴不可言，今將統軍征淮南。」",
+    "literalEnglish": "Before long a clerk, Li Qianhui's younger brother, proclaimed among the crowd: \"I have heard a physiognomist say his nobility is beyond words; he will now command the army to campaign against Huainan.\"",
+    "idiomaticEnglish": "Soon a clerk, younger brother of Li Qianhui, declared in public: \"I hear a fortune-teller say his rank is beyond telling—he is about to lead troops against Huainan.\""
+  },
+  "witnessGeometry": {
+    "p009Zh": { "exact": "李虔徽", "unitId": "s0019", "occurrence": 0, "startCodePoint": 6, "endCodePoint": 9 },
+    "p009En": { "exact": "Li Qianhui", "unitId": "s0019", "occurrence": 0, "field": "idiomatic" },
+    "p010Zh": { "exact": "弟", "unitId": "s0019", "occurrence": 0, "withinCompound": "李虔徽弟" },
+    "p010En": { "exact": "younger brother", "unitId": "s0019", "occurrence": 0, "field": "idiomatic" }
+  },
+  "independentlyAcceptedWitnessesRetained": {
+    "p010": {
+      "descriptiveKinshipClaim": { "zh": "李虔徽弟", "en": "Younger brother of Li Qianhui", "evidence": ["s0019"] },
+      "siblingEdgeToP009": { "relation": "sibling-of", "kinshipTerm": { "zh": "弟", "en": "younger brother" } }
+    },
+    "p009": {
+      "personalNameClaim": { "kind": "personal", "zh": "李虔徽", "en": "Li Qianhui", "certainty": "explicit", "evidence": ["s0019"] }
+    }
+  },
+  "sealedInputsUnchanged": {
+    "sourceBlob": "fa8cc72675c277f81dd9b058620da5637b89eac8",
+    "extractionBlobBeforeApply": "2a3cc9a4d4fed780b36034d78d6da6ab22791568",
+    "dateAudit": "unchanged",
+    "editorial": "unchanged"
+  },
+  "compactExtractionDelta": {
+    "path": "data/people/extractions/jiuwudaishi/066.json",
+    "fieldsTouched": ["surfaces", "people[p009].hints.x"],
+    "surfaces": {
+      "remove": [
+        ["p010", "kinship-reference", "zh", "李虔徽弟", [["s0019", [0]]]],
+        ["p010", "kinship-reference", "en", "younger brother of Li Qianhui", [["s0019", [0]]]]
+      ],
+      "add": [
+        ["p009", "personal-name", "zh", "李虔徽", [["s0019", [0]]]],
+        ["p009", "personal-name", "en", "Li Qianhui", [["s0019", [0]]]],
+        ["p010", "kinship-reference", "zh", "弟", [["s0019", [0]]]],
+        ["p010", "kinship-reference", "en", "younger brother", [["s0019", [0]]]]
+      ]
+    },
+    "personHints": {
+      "before": {
+        "localId": "p009",
+        "mentionException": "Named only inside younger-brother kinship phrase 李虔徽弟 / younger brother of Li Qianhui; no non-overlapping surface."
+      },
+      "after": { "localId": "p009", "mentionException": null }
+    },
+    "claimsUnchanged": true,
+    "translationRepairsUnchanged": true,
+    "candidateDispositionsUnchanged": true
+  },
+  "affectedIdentities": {
+    "primary": "jiuwudaishi:066:p009 → per_349RREXBD53HSC5DWM3F",
+    "co-affectedSurfaceOnly": "jiuwudaishi:066:p010 (kinship surfaces narrowed; claims unchanged)",
+    "notMergedOrRemoved": "Both locals remain separate persons; no collapse into one record."
+  },
+  "englishOmissions": [],
+  "scopedValidationPreview": {
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 066",
+    "beforeApply": "Scoped person data validation passed for jiuwudaishi/066: 1 extraction(s), 53 local people, 466 mentions, 370 claims, 0 proposed repair(s), 4 applied repair(s), 5 editorial decision(s).",
+    "afterSimulatedApply": "Scoped person data validation passed for jiuwudaishi/066: 1 extraction(s), 53 local people, 468 mentions, 370 claims, 0 proposed repair(s), 4 applied repair(s), 5 editorial decision(s).",
+    "simulatedApplyOnly": true,
+    "extractionNotCommittedOnBranch": true
+  },
+  "remainingBlockers": [
+    "Host must apply surfaces delta to sealed extraction via editorial gate; owner branch carries proposal JSON only.",
+    "Independent identity membership for per_349RREXBD53HSC5DWM3F may need rebind after extraction hash changes.",
+    "Full site/certified publication re-scope after apply—not run in this owner turn."
+  ],
+  "rejectedAlternatives": {
+    "removeP009": "Would discard a source-named elder brother attested by 李虔徽 merely to silence the guard.",
+    "fabricateMention": "Inventing a span not equal to source text is forbidden.",
+    "retainCompoundSurfaceOnP010Only": "Leaves p009 without scoped references (current production failure)."
+  }
+}
