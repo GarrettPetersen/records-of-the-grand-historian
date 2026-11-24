@@ -58,3 +58,7 @@ Reused jobs 0–5. Validated remaining jobs 6–15 (full unit coverage **415/415
 
 Coverage: `chronology-partial/coverage.json`  
 Next index: **none** (all 16 jobs complete; still not `assembleDateReview` / not audited).
+
+## Seven-change recheck at `ccbfbfc9`
+
+See `research/people/jinshu078-seven-chronology-recheck-ccbfbfc9-20261124/`.
