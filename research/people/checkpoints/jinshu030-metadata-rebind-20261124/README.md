@@ -8,7 +8,7 @@ Owner recovery: `research/people/jinshu030-historical-authorship-recovery-202611
 ## Delta
 Only `run.chunks[].agentId` → `grokbot-24` (nine ranges). People, claims, surfaces, repairs, `input.unitDigests`, `chapterFingerprint`, and `data/jinshu/030.json` unchanged.
 
-## Reb ind
+## Rebind
 `independent-date-audit-report.json` — **extractionHash** updated; **498** item checks, **208** person checks, **0** findings **unchanged**; `validateDateAuditReport` **PASS**.
 
 Checkpoint only — no `people:dates:record`, no merge, no validator/source/queue edits.
