@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "466"
+  },
+  "ownerAgentId": "bc-48a8605c-93df-4536-be10-902887db2aca",
+  "worker": "cursor-nov24-retained-staging-w12-o1",
+  "idempotencyKey": "90c092cb53bc624fcf43ba2a829999106f0bcf335b32c55dd40f23d2df95cc6b",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-466-b2aca",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 23,
+    "claims": 269,
+    "sourceExtractionSha256": "2810cba5d484aaa11d4c39ec01376887635b6334ea575ccba3ec564b2317a4ed"
+  },
+  "inputBlobWitness": {
+    "source": "531154df24c5da366025469a4bfc090961a6b43b",
+    "extraction": "3d86b908580364293c4424dc50c969c1f0b81939",
+    "editorial": "0e99ead9fe4f577be419f6e56300161fe4f32a94"
+  },
+  "sealedInputs": {
+    "source": "sha256:ec6bb32724e6db751e869ffef0d4a4066d2afd0a0e56901fc6144f4ecec8aa83",
+    "extraction": "sha256:2810cba5d484aaa11d4c39ec01376887635b6334ea575ccba3ec564b2317a4ed",
+    "editorial": "sha256:8821b0bfe879546a620ef3cba5406ec26ea80e137f44eb3f60b65aed55c9489c"
+  },
+  "canonicalDatePacketPins": {
+    "sourceHash": "sha256:985fd743ad0bcacfdb371664d62fb97281c52704f80bf5d34a7dc3386d5fd828",
+    "extractionHash": "sha256:6f107fc398c6b07d08b97628bd619f5584230b725a9e7d70918fcbec8d39aaa0"
+  },
+  "sourceCoverage": {
+    "unitCount": 128,
+    "allUnitsPresent": true,
+    "englishCoverage": {
+      "sentenceCount": 128,
+      "translatedCount": 128,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chineseCoverage": {
+      "complete": true,
+      "missingUnits": []
+    },
+    "promptVersion": 7
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-466/date-packet.json",
+    "contentSha256": "sha256:348cd79d9f9f0663a5f56e8cfa0e90b9944588f4d3c6b10cd39780b96845c301",
+    "itemCount": 155,
+    "peopleCount": 23,
+    "unitCount": 128,
+    "packetDiagnosticsCount": 0
+  },
+  "dateRepairProposal": null,
+  "definiteTranslationRepairs": [],
+  "editorialAndExtractionReuse": {
+    "extractionReused": true,
+    "editorialDecisionsReused": true,
+    "extractionFileContentSha256Verified": true,
+    "note": "Current prompt-v7 extraction and accepted editorial repairs retained unchanged; no owner re-extraction or self-approved date audit."
+  },
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 466",
+      "passed": true,
+      "summary": "Scoped person data validation passed for qingshigao/466: 1 extraction(s), 23 local people, 189 mentions, 365 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:packet": {
+      "command": "npm run people:dates:packet -- --book qingshigao --chapter 466 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-466/date-packet.json",
+      "passed": true
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 466",
+      "status": "un-audited",
+      "auditVersion": 1
+    },
+    "people:dates:scan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 466",
+      "findings": 0
+    },
+    "packetPreflightDiagnostics": []
+  },
+  "ownerChangesRequired": false,
+  "ownerFindings": {
+    "chronologyCandidateReady": true,
+    "definiteEnglishProblems": [],
+    "sourceContradictions": [],
+    "summary": "Pinned source, extraction, and editorial blobs witness correctly at staging. English and Chinese unit coverage complete. Native scoped validation and date-packet preparation pass with zero heuristic scan findings and zero packet preflight diagnostics. No definite owner repair or date-repair proposal; chronology remains candidate-only until independent native review."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "requiredPath": "data/people/date-audits/qingshigao/466.json",
+      "independentApprovalIssued": false,
+      "nextGate": "independent-native-date-audit-from-sealed-packet",
+      "sealedPacketSha256": "sha256:348cd79d9f9f0663a5f56e8cfa0e90b9944588f4d3c6b10cd39780b96845c301",
+      "packetCanonicalHashes": {
+        "sourceHash": "sha256:985fd743ad0bcacfdb371664d62fb97281c52704f80bf5d34a7dc3386d5fd828",
+        "extractionHash": "sha256:6f107fc398c6b07d08b97628bd619f5584230b725a9e7d70918fcbec8d39aaa0"
+      }
+    },
+    "identity": {
+      "independentReviewCompleted": false,
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Scoped validation passed with zero legacy alias-disposition debt; canonical identity evidence not reviewed in this owner pass."
+    }
+  },
+  "holds": [],
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 466",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 466 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-466/date-packet.json",
+    "verifyDateStatus": "npm run people:dates:verify -- --book qingshigao --chapter 466"
+  },
+  "artifacts": {
+    "sealedDatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-466/date-packet.json",
+    "ownerHandoff": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-466/owner-handoff.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner evidence only; no canonical edits, deploy, or merge. Owner handoff is not independent date or identity approval."
+}
