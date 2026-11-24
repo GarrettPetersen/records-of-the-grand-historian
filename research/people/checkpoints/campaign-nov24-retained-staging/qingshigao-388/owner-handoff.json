@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "388"
+  },
+  "ownerAgentId": "bc-c5a93af6-b19b-4366-a3db-cdb46dd2aa7f",
+  "workerId": "cursor-nov24-retained-staging-w17-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "66c19d3d3efe9a1ba7570cf704350ef646112a5296fdecedb636e302961edc6a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-388-2aa7f",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "eb00ff62c0c0443540bd473b940f962e66e56cf17881e46fad27919831b5cbc7",
+    "people": 119,
+    "claims": 553,
+    "promptVersion": 7
+  },
+  "extractionBytes": 188927,
+  "inputBlobWitness": {
+    "source": "27dc1d44f26c93dbc23ee831726c3aff9a02df8a",
+    "extraction": "1c8d70cfd65571f7ba58a02ddfd1dfd0aa5cd7a2",
+    "editorial": "167e201cf5267a0f8773da8857705638a902af1a"
+  },
+  "sealedInputs": {
+    "source": "sha256:f0fb2035e5c143c4f0e148e0802b529c7ca58d832aad6a3262578e318c5972f1",
+    "extraction": "sha256:eb00ff62c0c0443540bd473b940f962e66e56cf17881e46fad27919831b5cbc7",
+    "editorial": "sha256:03a1658088c452d3fb21086c361c96f24a16b73097999b24e54733f95722731e"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": true,
+    "extractionPromptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 388 Biographies 175: Gui Liang, Rui Lin Son: Huai Tabu, Guan Wen, Wen Yu",
+    "chineseUnits": 257,
+    "sentenceCount": 257,
+    "translatedCount": 257,
+    "unitRows": 257,
+    "emptyChineseSpacers": 0,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-388/date-packet.json",
+    "fileSha256": "sha256:1bc333d908f898de956f5161c311b17634bae6848589a865686a843af343088f",
+    "sourceHash": "sha256:8ef906eae8d23ae8d2f81bd6feb08e51845805052f1f4e0a8e271b60df60621b",
+    "extractionHash": "sha256:3804014da6738b36162aaedbb0a08ccd3f34ae2aa8f43532d500a772ae9e8589",
+    "itemCount": 422,
+    "peopleCount": 119,
+    "unitCount": 257
+  },
+  "dateEvidenceScan": {
+    "command": "npm run people:dates:scan -- --book qingshigao --chapter 388",
+    "diagnosticFindings": 0,
+    "note": "Owner pass uses packet build only; scan diagnostics are pre-audit structural checks, not independent approval."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 388",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/388: 1 extraction(s), 119 local people, 473 mentions, 886 claims, 0 proposed repair(s), 11 applied repair(s), 12 editorial decision(s), 1 claim retraction(s), 6 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 388",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Full chapter source read (257 Chinese units, 0 empty spacers); 119 person records and 553 claims at work-order counts. people:validate passes; extraction and accepted editorial repairs retained unchanged. Native date packet prepared (422 checks, 119 people) for independent chronology review. No definite English omission or source contradiction found in owner pass; no date self-approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "instruction": "Separate reviewer reads sealedNativeDatePacket, all Chinese units, and current extraction; records full native date report via people:dates:record. Owner handoff is not date approval.",
+      "reproducePacket": "npm run people:dates:packet -- --book qingshigao --chapter 388 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-388/date-packet.json"
+    },
+    "identity": {
+      "gate": "canonical-identity-at-publication",
+      "status": "deferred-to-host-milestone",
+      "note": "Bounded dossier identity review follows independent date approval when required by host scheduling."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 388",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 388",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 388 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-388/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff and date-packet artifact without altering sealed inputs."
+}

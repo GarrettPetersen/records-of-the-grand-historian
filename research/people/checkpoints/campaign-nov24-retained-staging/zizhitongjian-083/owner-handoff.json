@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "zizhitongjian",
+    "chapter": "083"
+  },
+  "ownerAgentId": "bc-c5a93af6-b19b-4366-a3db-cdb46dd2aa7f",
+  "workerId": "cursor-nov24-retained-staging-w17-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "66c19d3d3efe9a1ba7570cf704350ef646112a5296fdecedb636e302961edc6a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-zizhitongjian-083-2aa7f",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "7337ed8988f140e1fb64bb7abd28e97eefbb108cace049dc96895d34fcad8d25",
+    "people": 157,
+    "claims": 340,
+    "promptVersion": 7
+  },
+  "extractionBytes": 188330,
+  "inputBlobWitness": {
+    "source": "c7956cb2d86bf848575168c2aab1ae2354164b9a",
+    "extraction": "1e5146049217399a87277bc6938fc74f3795e520",
+    "editorial": "5ed26146bc413d48e1335fac7f22d3755394b6cf"
+  },
+  "sealedInputs": {
+    "source": "sha256:0cb7eb6e2a83102a2d3fe679421708465a2ea2440dfbbb56868bc60e57faf416",
+    "extraction": "sha256:7337ed8988f140e1fb64bb7abd28e97eefbb108cace049dc96895d34fcad8d25",
+    "editorial": "sha256:fcaf0382338aa1f899317e43309ea8d8b764d955355b10609202738ebdfb938e"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": true,
+    "extractionPromptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 83 Jin Records 5",
+    "chineseUnits": 381,
+    "sentenceCount": 381,
+    "translatedCount": 381,
+    "unitRows": 381,
+    "emptyChineseSpacers": 0,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/zizhitongjian-083/date-packet.json",
+    "fileSha256": "sha256:b0706e6b8264bd74267bacc415039a2ee6e7b0eb99aad2477bf7e14685f9238c",
+    "sourceHash": "sha256:30ca1f8d5692749c4fd7e99e9a846cb0a7582e1ecc9cba57bb743f4f1ecfd028",
+    "extractionHash": "sha256:e8d5632c9b2e8e37461465b83ddcba9dbd0fad14bca487fe567eff292d1e2a49",
+    "itemCount": 342,
+    "peopleCount": 157,
+    "unitCount": 381
+  },
+  "dateEvidenceScan": {
+    "command": "npm run people:dates:scan -- --book zizhitongjian --chapter 083",
+    "diagnosticFindings": 0,
+    "note": "Owner pass uses packet build only; scan diagnostics are pre-audit structural checks, not independent approval."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book zizhitongjian --chapter 083",
+    "peopleValidateSummary": "Scoped person data validation passed for zizhitongjian/083: 1 extraction(s), 157 local people, 799 mentions, 654 claims, 0 proposed repair(s), 34 applied repair(s), 34 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 151 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book zizhitongjian --chapter 083",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Full chapter source read (381 Chinese units, 0 empty spacers); 157 person records and 340 claims at work-order counts. people:validate passes; extraction and accepted editorial repairs retained unchanged. Native date packet prepared (342 checks, 157 people) for independent chronology review. No definite English omission or source contradiction found in owner pass; no date self-approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "instruction": "Separate reviewer reads sealedNativeDatePacket, all Chinese units, and current extraction; records full native date report via people:dates:record. Owner handoff is not date approval.",
+      "reproducePacket": "npm run people:dates:packet -- --book zizhitongjian --chapter 083 --out research/people/checkpoints/campaign-nov24-retained-staging/zizhitongjian-083/date-packet.json"
+    },
+    "identity": {
+      "gate": "canonical-identity-at-publication",
+      "status": "deferred-to-host-milestone",
+      "note": "Bounded dossier identity review follows independent date approval when required by host scheduling."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book zizhitongjian --chapter 083",
+    "datesVerify": "npm run people:dates:verify -- --book zizhitongjian --chapter 083",
+    "buildDatePacket": "npm run people:dates:packet -- --book zizhitongjian --chapter 083 --out research/people/checkpoints/campaign-nov24-retained-staging/zizhitongjian-083/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff and date-packet artifact without altering sealed inputs."
+}

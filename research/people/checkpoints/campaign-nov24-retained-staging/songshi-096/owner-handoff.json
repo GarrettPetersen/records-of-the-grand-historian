@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "096"
+  },
+  "ownerAgentId": "bc-c5a93af6-b19b-4366-a3db-cdb46dd2aa7f",
+  "workerId": "cursor-nov24-retained-staging-w17-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "66c19d3d3efe9a1ba7570cf704350ef646112a5296fdecedb636e302961edc6a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-096-2aa7f",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "d57b75d2d4c6ad233dae4bf1abc7856014fe8feedd7374cbdcbb6cf6ee082e52",
+    "people": 77,
+    "claims": 551,
+    "promptVersion": 7
+  },
+  "extractionBytes": 189895,
+  "inputBlobWitness": {
+    "source": "d9bbd6a3fb8a86275bdcbddc752a2b0961970ce3",
+    "extraction": "c506cdc5d32c49addb2998837bad5f0f34acdb34",
+    "editorial": "910a0f267abdc2e79ce2020c2a1db9a68c40d541"
+  },
+  "sealedInputs": {
+    "source": "sha256:3671d14ba26e9d3d8f016ae7297f42d5ed6befc609d06eef9e75bdfb3023f235",
+    "extraction": "sha256:d57b75d2d4c6ad233dae4bf1abc7856014fe8feedd7374cbdcbb6cf6ee082e52",
+    "editorial": "sha256:144b98166566e6797122d5f12ed9eedfa96589bcc60b9f3503c285eb0e0ff77a"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": true,
+    "extractionPromptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 96 Treatises 49: Rivers and Canals 6",
+    "chineseUnits": 222,
+    "sentenceCount": 222,
+    "translatedCount": 222,
+    "unitRows": 222,
+    "emptyChineseSpacers": 0,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-096/date-packet.json",
+    "fileSha256": "sha256:b1455887573639375da2815385e955707f8d5f08c3a9b408da806ff694c90d93",
+    "sourceHash": "sha256:f2e7b6258fb2af29bd9353b4c86cbd4f9c2a8a3c17a3e18731236d4d3371262f",
+    "extractionHash": "sha256:a9e2d9300c3db7160cce1dbb3b5624d695c1fb9fb2f4188d274d8c1752c41011",
+    "itemCount": 336,
+    "peopleCount": 77,
+    "unitCount": 222
+  },
+  "dateEvidenceScan": {
+    "command": "npm run people:dates:scan -- --book songshi --chapter 096",
+    "diagnosticFindings": 0,
+    "note": "Owner pass uses packet build only; scan diagnostics are pre-audit structural checks, not independent approval."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 096",
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/096: 1 extraction(s), 77 local people, 214 mentions, 882 claims, 0 proposed repair(s), 17 applied repair(s), 19 editorial decision(s), 0 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 096",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Full chapter source read (222 Chinese units, 0 empty spacers); 77 person records and 551 claims at work-order counts. people:validate passes; extraction and accepted editorial repairs retained unchanged. Native date packet prepared (336 checks, 77 people) for independent chronology review. No definite English omission or source contradiction found in owner pass; no date self-approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "instruction": "Separate reviewer reads sealedNativeDatePacket, all Chinese units, and current extraction; records full native date report via people:dates:record. Owner handoff is not date approval.",
+      "reproducePacket": "npm run people:dates:packet -- --book songshi --chapter 096 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-096/date-packet.json"
+    },
+    "identity": {
+      "gate": "canonical-identity-at-publication",
+      "status": "deferred-to-host-milestone",
+      "note": "Bounded dossier identity review follows independent date approval when required by host scheduling."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 096",
+    "datesVerify": "npm run people:dates:verify -- --book songshi --chapter 096",
+    "buildDatePacket": "npm run people:dates:packet -- --book songshi --chapter 096 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-096/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff and date-packet artifact without altering sealed inputs."
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "405"
+  },
+  "ownerAgentId": "bc-c5a93af6-b19b-4366-a3db-cdb46dd2aa7f",
+  "workerId": "cursor-nov24-retained-staging-w17-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "66c19d3d3efe9a1ba7570cf704350ef646112a5296fdecedb636e302961edc6a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-405-2aa7f",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "57e780113cb471c9aa52a2f853e506b93c483059766f083c2869d179d1ee52b8",
+    "people": 127,
+    "claims": 639,
+    "promptVersion": 7
+  },
+  "extractionBytes": 188883,
+  "inputBlobWitness": {
+    "source": "03e0c3fdcb6da57cd6efe36b26de4ad18a2f771b",
+    "extraction": "05fe6f9582e3d08f62ad87190464e757a3ae548a",
+    "editorial": "1527f8bfe6dae31659ae7510bea18aa2018ed7cc"
+  },
+  "sealedInputs": {
+    "source": "sha256:de057d3e06b117b721428239d468b1bf63301dbfa01a067a9471712b685a506a",
+    "extraction": "sha256:57e780113cb471c9aa52a2f853e506b93c483059766f083c2869d179d1ee52b8",
+    "editorial": "sha256:408b68798a83fd886e0cff786445eeb6f2fbf8a394826d38174a512f9298f914"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReextracted": false,
+    "editorialReopened": false,
+    "appliedEditorialDecisions": true,
+    "extractionPromptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 405 Biographies 192: Ceng Guofan",
+    "chineseUnits": 275,
+    "sentenceCount": 275,
+    "translatedCount": 275,
+    "unitRows": 275,
+    "emptyChineseSpacers": 0,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-405/date-packet.json",
+    "fileSha256": "sha256:76d0e1374417c9200e58fadc955cf29989d710349302635f7432ba719f8408e5",
+    "sourceHash": "sha256:80d92b48d9d4918775ecd7ced53a6a9cd34dae9a3ae693de2c5837da1eb4b12c",
+    "extractionHash": "sha256:934a25b2077fbfa664046785f0f63cd2cc9165143ea1ceb1e3432f570f824821",
+    "itemCount": 314,
+    "peopleCount": 127,
+    "unitCount": 275
+  },
+  "dateEvidenceScan": {
+    "command": "npm run people:dates:scan -- --book qingshigao --chapter 405",
+    "diagnosticFindings": 0,
+    "note": "Owner pass uses packet build only; scan diagnostics are pre-audit structural checks, not independent approval."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 405",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/405: 1 extraction(s), 127 local people, 547 mentions, 1005 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 405",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Full chapter source read (275 Chinese units, 0 empty spacers); 127 person records and 639 claims at work-order counts. people:validate passes; extraction and accepted editorial repairs retained unchanged. Native date packet prepared (314 checks, 127 people) for independent chronology review. No definite English omission or source contradiction found in owner pass; no date self-approval.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "instruction": "Separate reviewer reads sealedNativeDatePacket, all Chinese units, and current extraction; records full native date report via people:dates:record. Owner handoff is not date approval.",
+      "reproducePacket": "npm run people:dates:packet -- --book qingshigao --chapter 405 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-405/date-packet.json"
+    },
+    "identity": {
+      "gate": "canonical-identity-at-publication",
+      "status": "deferred-to-host-milestone",
+      "note": "Bounded dossier identity review follows independent date approval when required by host scheduling."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 405",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 405",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 405 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-405/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff and date-packet artifact without altering sealed inputs."
+}
