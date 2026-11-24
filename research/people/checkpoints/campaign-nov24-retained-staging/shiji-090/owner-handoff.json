@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "090"
+  },
+  "ownerAgentId": "bc-d07043cc-9acf-4e58-b237-fd49d94bdcdd",
+  "workerId": "cursor-nov24-retained-staging-w3-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "1ee89e6f53d2c5f47250ac4c4368b8633472a3b3e47443a09c969f8b62473b56",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-090-bdcdd",
+  "inputBlobWitness": {
+    "source": "9d7587cbe282f39f63133b7a96a96db8d2eb94a4",
+    "extraction": "51d41012a8e97fc474a93e9901a85a32be555859",
+    "dateAudit": "c28803fe4f4030fdcfef01d972d79cf42151af62",
+    "editorial": "9addaed6f0770e45d86710abdaa1114f667d6478"
+  },
+  "sealedInputs": {
+    "source": "sha256:245ebc4eeff22bcc0abb49188ff103b7a48621f3ba4a99f02010012c7b415ab0",
+    "extraction": "sha256:543a3b21abae44d0d39ed93ab77eed4660e0ee5c08bb11f8272d1195fef63db3",
+    "dateAudit": "sha256:06a367a64ebce1df98d9c82d0bf6d37bc15081b7e0ed169b0bd67a1091c6fe8f",
+    "editorial": "sha256:74f2caddb4cbe40320afdd6a6ad33af0f70183dcd6faf17557a81f7dc4c5c569"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 107,
+    "metaSentenceCount": 107,
+    "metaTranslatedCount": 107,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "Scoped person data validation passed for shiji/090: 1 extraction(s), 26 local people, 342 mentions, 248 claims, 0 proposed repair(s), 1 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 090",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book shiji --chapter 090",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditCurrent": true,
+    "dateAuditFindings": 1,
+    "dateAuditReviewedAt": "2026-09-24T01:40:00Z",
+    "extractionValidate": "data/people/extractions/shiji/090.json: ok (26 people, 342 mentions, 248 claims, 400 candidates)",
+    "editorialProposalCount": 2,
+    "proposedTranslationRepairs": 0,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Complete independent audit of all 107 Chinese units, 109 temporal or active-hint checks, and 26 people. Explicit Qin/Han regnal-year political, military, appointment, and death chronology is supported. The 太史公曰 authorial note is undated and does not establish Sima Qian’s BC 100 activity claim. No source or canonical extraction was edited.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "shiji:090:date-hold-001",
+      "kind": "reviewed-chronology-hold",
+      "items": [
+        "claim-69",
+        "hints-p026",
+        "p026"
+      ],
+      "problem": "The 太史公曰 note is undated but the extraction assigns it BC 100.",
+      "action": "Retain a source-linked research hold pending an independent dated witness.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified pinned git blob witnesses; full literal and idiomatic English scan; npm run people:validate; npm run people:dates:verify (not stale); people:validate-extraction; retained independent date-audit and editorial artifacts; no canonical source or extraction edits.",
+    "completedAt": "2026-11-24T16:13:24.247Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 090",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 090",
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/shiji/090.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; push without altering sealed inputs."
+}
