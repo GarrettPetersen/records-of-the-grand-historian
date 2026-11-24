@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:22:02.858Z",
+  "lastCheckedAt": "2026-11-24T00:23:16.036Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1762,26 +1762,24 @@
       "sentAt": "2026-11-24T00:18:56.181Z"
     },
     "jinshu/083": {
-      "status": "sent",
+      "status": "dispatch_pending",
       "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
-      "previousRunId": "run-1dbde3cd-b8e1-4747-ba17-2c3cd18a215b",
+      "previousRunId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
       "chapterPR": 5474,
       "revision": "04b8d8360a4f3647eaaf31e4f03e6fba86364cb8",
-      "findingsRevision": "65880cc10802f5c0fed9621614b53a8d54c7472d",
-      "prompt": "Continue #5480 on same exact Jinshu 083 artifact 14875662517, Actions 45294717807. Correct the p165 row of authored part 001 first: s0371 次協之，黃門 is the second son in the Wang Ya biography (s0340 王雅; s0341 王雅，字茂達; s0370–72 sons), not evidence for 'Xie Xiezhi' or Yuan Gui. Use the recorded source form 協之, independently reconsider attribution, preserve other unchanged rows, and push exact new report hash with this delta. Then directly author exact native case decisions on only parts 003 and 004 using actual primary and anchor context; preserve ambiguity and record contradictions. Include per-part hashes and leave later parts unreviewed. No automated reasoning, boilerplate names, speculative surname expansion, chapter/validator/queue changes or merge.",
+      "findingsRevision": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+      "prompt": "Continue Jinshu 083 original independent review on held exact hosted packet 14875662517. In part 001 p165 is now rightly linked to Wang Ya, but 協之 is the recorded name, not labeled a courtesy name in p165's explicit personal-name claim or s0371. Fix the word 'courtesy' without adding a surname. In part 003 p092 s0202, the patron is Liu Yu 劉裕, and 豹字士蔚 describes Yuan Bao, not Liu Bao. Keep the role distinction and revise that specific case reason; a chapter-local patron mention does not require a biography of the patron. Verify exact recorded Chinese and connected source before correcting any additional similar assertion. Preserve part 002 bytes and all other unchanged case decisions. Then author parts 005–006 on the same sealed plan, using real context-derived interpretations. Push exact authored-only outputs and hashes, no script-generated reasons or auto-approvals, no source, validator, queue or merge changes.",
       "idempotencyKey": "cursor-nov24-next-retained-083-04b8d8360a",
-      "reservedAt": "2026-11-24T00:18:52.468Z",
+      "reservedAt": "2026-11-24T00:23:16.036Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-24T00:18:52.468Z"
+        "at": "2026-11-24T00:23:16.036Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
         "swapUsedBytes": "3365205442"
-      },
-      "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
-      "sentAt": "2026-11-24T00:18:56.180Z"
+      }
     },
     "jinshu/041": {
       "status": "finished",
@@ -2551,6 +2549,41 @@
               "commit": "65880cc10802f5c0fed9621614b53a8d54c7472d",
               "runId": "run-1dbde3cd-b8e1-4747-ba17-2c3cd18a215b",
               "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "status": "pending-native-verification"
+            },
+            {
+              "part": 1,
+              "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-001.json",
+              "commit": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+              "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "reportSha256": "9cba085574fe121fa1be399517fd64c1359557ca63b3ed10599aa27cc1953930",
+              "rows": 10,
+              "holds": 0,
+              "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
+              "status": "correction-required",
+              "sourceIssue": "p165 parentage corrected; source records personal name and does not label it courtesy."
+            },
+            {
+              "part": 3,
+              "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-003.json",
+              "commit": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+              "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "reportSha256": "9c94de9193245b2b3615dedc684218656645db580704edf6b6697202e5d9913c",
+              "rows": 10,
+              "holds": 0,
+              "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
+              "status": "correction-required",
+              "sourceIssue": "p092 reason misidentifies Yuan Bao as Liu Bao."
+            },
+            {
+              "part": 4,
+              "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-004.json",
+              "commit": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+              "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+              "reportSha256": "16c6f939fe55535bb4c79d2d67b7083199c922ed31a40325352fbf39e6652808",
+              "rows": 11,
+              "holds": 0,
+              "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
               "status": "pending-native-verification"
             }
           ]
@@ -4628,6 +4661,67 @@
           }
         ],
         "finishedObservedAt": "2026-11-24T00:18:45.766Z"
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+        "previousRunId": "run-1dbde3cd-b8e1-4747-ba17-2c3cd18a215b",
+        "chapterPR": 5474,
+        "revision": "04b8d8360a4f3647eaaf31e4f03e6fba86364cb8",
+        "findingsRevision": "65880cc10802f5c0fed9621614b53a8d54c7472d",
+        "prompt": "Continue #5480 on same exact Jinshu 083 artifact 14875662517, Actions 45294717807. Correct the p165 row of authored part 001 first: s0371 次協之，黃門 is the second son in the Wang Ya biography (s0340 王雅; s0341 王雅，字茂達; s0370–72 sons), not evidence for 'Xie Xiezhi' or Yuan Gui. Use the recorded source form 協之, independently reconsider attribution, preserve other unchanged rows, and push exact new report hash with this delta. Then directly author exact native case decisions on only parts 003 and 004 using actual primary and anchor context; preserve ambiguity and record contradictions. Include per-part hashes and leave later parts unreviewed. No automated reasoning, boilerplate names, speculative surname expansion, chapter/validator/queue changes or merge.",
+        "idempotencyKey": "cursor-nov24-next-retained-083-04b8d8360a",
+        "reservedAt": "2026-11-24T00:18:52.468Z",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-24T00:18:52.468Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
+        "sentAt": "2026-11-24T00:18:56.180Z",
+        "reviewRevision": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+        "authoredParts": [
+          {
+            "part": 1,
+            "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-001.json",
+            "commit": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+            "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+            "reportSha256": "9cba085574fe121fa1be399517fd64c1359557ca63b3ed10599aa27cc1953930",
+            "rows": 10,
+            "holds": 0,
+            "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
+            "status": "correction-required",
+            "sourceIssue": "p165 parentage corrected; source records personal name and does not label it courtesy."
+          },
+          {
+            "part": 3,
+            "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-003.json",
+            "commit": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+            "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+            "reportSha256": "9c94de9193245b2b3615dedc684218656645db580704edf6b6697202e5d9913c",
+            "rows": 10,
+            "holds": 0,
+            "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
+            "status": "correction-required",
+            "sourceIssue": "p092 reason misidentifies Yuan Bao as Liu Bao."
+          },
+          {
+            "part": 4,
+            "path": "research/people/jinshu083-independent-review-20261123/identity-overlay-5683d375/identity-report-part-004.json",
+            "commit": "c4e97cc12131c14cdcbeac5da7332987d084ccce",
+            "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1",
+            "reportSha256": "16c6f939fe55535bb4c79d2d67b7083199c922ed31a40325352fbf39e6652808",
+            "rows": 11,
+            "holds": 0,
+            "runId": "run-b82fcd7b-2829-4d32-8059-ff1af3c89472",
+            "status": "pending-native-verification"
+          }
+        ],
+        "finishedObservedAt": "2026-11-24T00:23:11.879Z"
       }
     ],
     "jinshu/041": [
