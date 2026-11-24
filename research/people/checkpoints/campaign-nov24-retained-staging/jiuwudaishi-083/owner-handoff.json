@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "083"
+  },
+  "ownerAgentId": "bc-041d7b54-ca95-4d7f-89c4-e108ff0bd368",
+  "workerId": "cursor-nov24-retained-staging-w5-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6f8b490718b057562db75907cda3e65ff6483b7e2ab50adcf3d2bcaed9b4cf2a",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-083-bd368",
+  "inputBlobWitness": {
+    "source": "a81fa7ccefc215178c226062402838411ddb7523",
+    "extraction": "dd55febe39169cd2056b4940fbde986cc9fa7cf8",
+    "dateAudit": "f766526b27eb298b58bb61b54c185ff935ecf971",
+    "editorial": "d40e73b3c01d4e9aa4768c987e5712ede349d166"
+  },
+  "sealedInputs": {
+    "source": "sha256:4d1762857cadf841aefd11158d86ac251ae7e054f29b4f6ef1a078aaf9004619",
+    "extraction": "sha256:bac2ffe1950de0a0e9b8bdc05fa20901f50d1c92b2dee63b28a392e07e050ce2",
+    "dateAudit": "sha256:2211eed8dcc4b50f037133788b6ab54bcf4b80106af1d0deb9fb5eb7c8e389fc",
+    "editorial": "sha256:05e8c21ffee0f55ea695c4ef21e20c7578ec1846f0f775196cd8200c645480c0"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 83 Book of Later Jin 9: Emperor Shao 3",
+    "chineseUnits": 231,
+    "translatedCount": 231,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 254107
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jiuwudaishi --chapter 083",
+    "peopleValidateSummary": "Scoped person data validation passed for jiuwudaishi/083: 1 extraction(s), 181 local people, 486 mentions, 1581 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 083",
+      "status": "audited",
+      "auditSha256Verified": "2211eed8dcc4b50f037133788b6ab54bcf4b80106af1d0deb9fb5eb7c8e389fc",
+      "findings": 0,
+      "reviewedAt": "2026-09-29T17:35:41.596Z",
+      "dateAuditSummary": "Reviewed 231 Chinese source units, 385 chronology and hint checks, and 181 people; no unsupported endpoint or chronology-changing translation defect was found."
+    },
+    "chronologyStatus": "audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed four-part inputs: full Chinese chapter read; all 231 units carry paired literal and idiomatic English. Accepted extraction, applied editorial repairs, and audited chronology align at pinned blobs. people:validate and people:dates:verify pass scoped; no new definite English omission, chronology defect, extraction gap, or source hold found. Independent date report bytes preserved; no hash replacement.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 083",
+    "datesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 083"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff without altering sealed inputs."
+}
