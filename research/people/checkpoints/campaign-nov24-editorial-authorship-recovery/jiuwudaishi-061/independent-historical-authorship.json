@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-historical-authorship",
+  "chapterKey": "jiuwudaishi/061",
+  "reviewerAgentId": "bc-29895637-0fee-4c95-84c9-a4372f416c7f",
+  "ownerAgentId": "bc-7e39e06d-e9bf-40a6-878e-3b988562acfa",
+  "ownerRevision": "c8bed98cab8d999cb3e65efd2d8a3090040fddca",
+  "ownerPullRequest": 5654,
+  "ownerRecoveryProof": {
+    "path": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-061/owner-recovery.json",
+    "sha256": "79f40801448474bde59f95e9f3faac542ffc4ee5099941a9ea4f1644a1c5ab28",
+    "verifiedAt": "2026-11-24T13:30:00Z"
+  },
+  "idempotencyKey": "e13cf5ffa4c6ce1102b8512bcf82ca86b353cfd4c56184ab6d95c6815fd6871f",
+  "verdict": "approved",
+  "verdictScope": "historical per-chunk extractor identity only (six chunk agentId fields → grokbot-23); no substantive extraction, source, editorial, or date-audit edits.",
+  "candidateExtraction": {
+    "path": "data/people/extractions/jiuwudaishi/061.json",
+    "parentGitBlob": "9c5e8cdb7337660adeed5819c2ef2558e6f02726",
+    "candidateGitBlob": "4f48c220ea722e31bd113df4d9c8d4ecd2101111",
+    "candidateSha256": "36b25a8d3bae8b1bc1472e7864c5cc6b52e580276a38e7f96407a81869689a7c",
+    "authorshipFieldsUpdated": 6
+  },
+  "historicalProvenance": {
+    "originalPullRequest": 3910,
+    "originalExtractionCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c",
+    "originalAssembledBytes": 235118,
+    "originalAssembledSha256": "595994333f4692d5e80f1b1302cf80fe51864d46cc28824892f7383ef7634e5d",
+    "originalAssembledSha256Verified": true,
+    "mergeCommitSha": "d57ec2b51a1580eed48f31aaac64337855c14eff",
+    "assemblyCloudAgentId": "bc-aec2eb9e-ce05-4177-964b-1ca39902a53a",
+    "assemblyGitAuthor": "Cursor Agent <cursoragent@cursor.com>",
+    "stableChunkProducer": "grokbot-23",
+    "producerIsPerChunkExtractorNotAssemblerOrGitAuthor": true,
+    "workQueueClaim": {
+      "ledgerRevision": "95fe744fdf25403fef796df0e25440a382441242",
+      "worker": "grokbot-23",
+      "lane": "grokbot",
+      "claimedAt": "2026-08-26T04:31:50.535Z",
+      "chapterFingerprintAtClaim": "sha256:3a6fb18ee87707cdc321ae44ddce17082c8330d2de19956082e27e07e1f77e17",
+      "verifiedIndependentlyFromGitObjectAtRevision": true
+    },
+    "chunkRangesVerifiedOnOwnerCandidate": [
+      ["001", 0, 49],
+      ["002", 49, 83],
+      ["003", 83, 117],
+      ["004", 117, 162],
+      ["005", 162, 199],
+      ["006", 199, 223]
+    ],
+    "chunkClaimsSha256FromOwnerReceipt": "not independently reproduced; algorithm not exposed in master runtime. Chunk unit counts and ranges match original assembly commit; ledger worker and PR #3910 body independently confirm grokbot-23."
+  },
+  "deltaVerification": {
+    "substantivePayloadEqualAfterStrippingChunkAgentIds": true,
+    "onlyChunkAgentIdFieldsChanged": true,
+    "chunkRunIdAndCompletedAtPreservedNull": true,
+    "topLevelRunAgentIdRemainsNull": true,
+    "pinnedInputsUnchanged": {
+      "data/jiuwudaishi/061.json": "e1b0cabde102c615e6c88d4d5c39285d74c959f3",
+      "data/people/extractions/jiuwudaishi/061.json (parent)": "9c5e8cdb7337660adeed5819c2ef2558e6f02726",
+      "data/people/date-audits/jiuwudaishi/061.json": "bb4f280c07d6e7192d913df1ec5fd9282e23fe61",
+      "data/people/editorial-decisions/jiuwudaishi/061.json": "136e3e616efeec5a51a5d4fb2443be1ed57d08d4"
+    }
+  },
+  "nativeGates": {
+    "commands": [
+      {
+        "command": "npm run people:disk:check",
+        "exitCode": 0
+      },
+      {
+        "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/061.json",
+        "exitCode": 0,
+        "summary": "ok (104 people, 562 mentions, 1152 claims, 706 candidates)"
+      },
+      {
+        "command": "extractionAuthorAgentIds (scripts/lib/people-extraction-authorship.mjs) on parent blob 9c5e8cdb…",
+        "exitCode": 1,
+        "error": "Actual extractor identity required for every chunk"
+      },
+      {
+        "command": "extractionAuthorAgentIds on owner candidate 4f48c220…",
+        "exitCode": 0,
+        "result": ["grokbot-23"]
+      },
+      {
+        "command": "npm run people:validate -- --book jiuwudaishi --chapter 061",
+        "exitCode": 0,
+        "summary": "Scoped person data validation passed"
+      },
+      {
+        "command": "npm run people:grokbot:validate -- --book jiuwudaishi --chapter 061",
+        "exitCode": 0,
+        "summary": "jiuwudaishi/061: ok (104 people, 562 mentions, 1152 claims)"
+      },
+      {
+        "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 061",
+        "exitCode": 1,
+        "summary": "status stale (expected after extractionHash change from authorship-only patch)"
+      }
+    ]
+  },
+  "dependencyDigests": {
+    "nativeDatePacketAtReviewHead": {
+      "sourceHash": "sha256:59898a2fabe5d3bd2405408ddd577af98e9dff617536d023dabdbf4c20fcf606",
+      "extractionHashAfterAuthorshipPatch": "sha256:e9c8547e8e048af4a73450603c055814a9d8a9589acdc8c415c647f55946a9af"
+    },
+    "sealedDateAuditFile": {
+      "sourceHash": "sha256:59898a2fabe5d3bd2405408ddd577af98e9dff617536d023dabdbf4c20fcf606",
+      "extractionHash": "sha256:99740e4562ba43a7bcd9ed61c6cc5680adad69001d5b60cf99a8e2f27afdf7a1",
+      "sourceHashMatchesCurrentChapter": true,
+      "extractionHashMatchesParentBlobBeforePatch": true,
+      "extractionHashStaleAfterApprovedAuthorshipPatch": true
+    },
+    "editorialDecisionsInput": {
+      "chapterFingerprint": "sha256:3a6fb18ee87707cdc321ae44ddce17082c8330d2de19956082e27e07e1f77e17",
+      "gitBlobUnchangedAtOwnerRevision": "136e3e616efeec5a51a5d4fb2443be1ed57d08d4"
+    },
+    "extractionInputAtOwnerRevision": {
+      "chapterFingerprint": "sha256:bd9588ea5547ba93aa60723d358271a044f09bc6b4a569799c65b6184d9ab4ab"
+    },
+    "smallestReuseOfProvenWork": "Reuse sealed chronology and editorial bytes as-is. Record authorship recovery via research/people/jiuwudaishi061-historical-authorship-recovery-20261124.json on staging (jinshu030/jinshu063 pattern) so date-audit cross-links pick up native extractionHash after patch without re-extracting or replaying substantive audits. Fresh people:dates:verify pass requires extractionHash realignment or a metadata-only date re-seal — not performed in this review."
+  },
+  "remainingGateBlockers": [
+    "Date audit status stale: sealed extractionHash 99740e45… does not match post-patch native hash e9c8547e…; source hash unchanged.",
+    "Editorial input chapterFingerprint (3a6fb18e…) predates current extraction source resync fingerprint (bd9588ea…); editorial blob bytes unchanged — identity/prepare gates may need witness refresh, out of authorship scope.",
+    "Per-chunk runId and completedAt remain null; no invented run ids.",
+    "Top-level run.agentId remains null (aggregate Grok Bot-chunked assembly).",
+    "Identity review not prepared on owner head."
+  ],
+  "unsupportedOrHeld": {
+    "chunkClaimsSha256PerChunk": "Owner-receipt digests not independently recomputed; hold as supporting attestation only.",
+    "historicalChunkRunReceipts": "No retained sealed per-chunk run receipts located in tracked history; nulls correctly preserved."
+  },
+  "reviewedAt": "2026-11-24T13:30:00Z",
+  "independenceNote": "Reviewer is not the owner agent; verification used pinned owner head artifacts and native validators only — no source, proof, or staging mutations."
+}
