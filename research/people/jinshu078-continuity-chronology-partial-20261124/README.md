@@ -33,3 +33,17 @@ Source-only vs residual: `source-only-vs-residual-defects.json` (no residual def
 ## Explicit non-claims
 
 Not `assembleDateReview`, not `status=audited`, no author edits, no synthetic approval, no merge, no full registry.
+
+
+## Jobs 3–5 continuation (2026-11-24)
+
+Validated and retained jobs 0–2; added:
+
+| Index | Job ID | Units | Notes |
+|------:|--------|-------|-------|
+| 3 | 22df163f20a500cf95be | s0079–s0104 | 義熙四年/317/320 supported; Zhou Zha & Chong/Kan holds |
+| 4 | 77933ffdcc4d9b60869f | s0105–s0130 | Wang Dun / 咸和初 / Sujun onset holds; Wan Mo after 320 |
+| 5 | 556555cf72dd36ecaef0 | s0131–s0156 | Sujun campaign continuum + 肅祖臨崩 hold |
+
+Coverage: `chronology-partial/coverage.json`  
+Next index: **6** (`66d15f889cf1ee453867`, s0157–s0182)
