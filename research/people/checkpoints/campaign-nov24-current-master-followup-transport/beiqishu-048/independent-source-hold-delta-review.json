@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "beiqishu/048",
+  "reviewerAgentId": "bc-6dfa5c15-d808-456d-9087-59fb8bf452a8",
+  "ownerAgentId": "bc-903d3892-ff92-4352-9793-5f42d1111401",
+  "ownerRevision": "183eb4d8e4510f350f06a39522e16d26ef35e30c",
+  "proposalSha256": "sha256:76b5c83a26718c54dc2e74ae3eec1b3b9ac83336023e8ac82a53a4a10ea074a0",
+  "decisions": [
+    {
+      "caseId": "sha256:ff4c70223d32f751de17a7bc2ce4cd324923f92e03b1ffd9cdd91bfc9779d442",
+      "verdict": "approve-operations",
+      "operationsApproved": [
+        "remove-person:p058",
+        "strip-related:p055→p058",
+        "strip-related:p056→p058",
+        "strip-related:p057→p058",
+        "remove-claim-target:p057 family-relationship child-of p058 s0081",
+        "remove-claim-target:p056 family-relationship sibling-of p058 s0081",
+        "strip-intermediaries:p056 kin-of p057 remove intermediary p058 s0081",
+        "remove-claim-subject:p058 name descriptive-kinship 孝靜帝母",
+        "remove-claim-subject:p058 sex s0081",
+        "remove-claim-subject:p058 attestation 魏孝靜帝之舅 s0081",
+        "remove-claim-subject:p058 role royal-family-member s0081",
+        "remove-claim-subject:p058 role family-member s0081"
+      ],
+      "sourceEvidence": {
+        "unitId": "s0081",
+        "zh": "父僧敬，即魏孝靜帝之舅，位至司空。",
+        "enLiteral": "His father Sengjing was the maternal uncle of Emperor Xiaojing of Wei and rose in office to Minister of Works.",
+        "enIdiomatic": "His father Sengjing was the maternal uncle of Emperor Xiaojing of Wei and rose to Minister of Works.",
+        "supportedSurfaceQuotes": {
+          "beiqishu:048:p056": "僧敬",
+          "beiqishu:048:p057": "魏孝靜帝",
+          "beiqishu:048:p058": null
+        },
+        "before": {
+          "localId": "beiqishu:048:p058",
+          "preferredEn": "Mother of Emperor Xiaojing",
+          "preferredZh": "孝靜帝母",
+          "primaryMentionsOnS0081": 0,
+          "verbatimBlockingZhInUnit": false
+        },
+        "afterApply": {
+          "localId": "beiqishu:048:p058",
+          "removed": true,
+          "s0081EnglishUnchanged": true
+        },
+        "inferenceVsContradiction": "Absent mother label is descriptive inference from 舅, not a concrete source contradiction with p056/p057; removing p058 corrects over-extraction, not a merge/split decision."
+      },
+      "dependencyImpact": {
+        "chronologyStaleAfterApply": [
+          "date-audit claim-340",
+          "date-audit hints-p058",
+          "date-audit person p058"
+        ],
+        "chronologyUnchanged": [
+          "p056 attestation on s0081",
+          "p057 attestation on s0081",
+          "all non-p058 date rows"
+        ],
+        "identityProof": "Prior independent hold at review commit 1f262a5ce682e64e6bf44371de9d55a8555876e5 aligns with proposal; after apply this case ID is retired with p058; host must re-seal identity transport (64 locals) before chapter identity certification; other approved cases unaffected.",
+        "registryCrossChapter": "per_838XBG4G6BATMF86NED1 may remain at registry scope; chapter must not certify inventing 孝靜帝母."
+      },
+      "holdRemainingAfterApply": false,
+      "repairIfHoldRemains": null
+    }
+  ]
+}
