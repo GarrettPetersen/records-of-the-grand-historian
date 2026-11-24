@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/049",
+  "reviewerAgentId": "bc-5d821375-e683-44a8-9246-218634d140a1",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "ownerRun": "run-49314c0a-073d-4591-916f-741e9227a1f4",
+  "ownerRevision": "09e6df94cb5076d8d56c65599fb907029ffe5a5b",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-049/owner-handoff.json",
+  "ownerProposalSha256": "5d8c25b26a8e6a190b7f8017d0896f206dd4f402f8fca4548b28157f259f340c",
+  "stage": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "reviewedAt": "2026-11-24T15:48:25Z",
+  "scope": {
+    "observedBlocker": "Date audit report is stale",
+    "reviewedDelta": ["hints-p122"],
+    "directlyCoupledDependencies": ["claim-975", "person check p122"],
+    "preservedUnrelatedWork": ["source", "editorial decisions and their independent reviewer", "identity", "original date-audit report bytes and reviewer", "all 585 other item checks and 147 other person checks"]
+  },
+  "verdict": "approve-hint-normalization-amend-closure-to-native-composition",
+  "summary": "The stale blocker comes from exactly one extraction leaf: people[121][4].a[0] (p122 Baosi, the s0103 commentary allusion) changed from '771 BC' to 'BC 771'. The native normalizeExtractionDateHints reproduces the live extraction exactly from the audited extraction, using both the historical writer-commit library bytes and the current library bytes. Source units, unitPeople, people other than p122, every claim (including claim-975, BC 771) and all 586 date-item IDs are identical, and the original report still validates against its own sealed packet. The exact before and after values are approved. The owner's suggested closure, which rebinds the historical report's extractionHash, is not approved: PEOPLE_DATE_HINT_NORMALIZATION.md and PEOPLE_DATE_RESEARCH_RECOVERY.md forbid retagging approval hashes. The amended closure is a host-run native recordDateAudit of a newly composed report. That report carries forward the 585 unchanged item checks and 147 unchanged person checks with provenance to the original reviewer and replaces only the two directly affected checks (hints-p122 and person p122). Their original citations quote s0001, which concerns Empress Cao, not Baosi. The composition validates in memory against the current packet. There are no holds.",
+  "approvedChanges": [
+    {
+      "target": "data/people/extractions/jiuwudaishi/049.json",
+      "itemId": "hints-p122",
+      "personId": "p122",
+      "path": "people[121][4].a[0]",
+      "changeKind": "existing-year-hint-formatting",
+      "approval": "approve-exact-before-after",
+      "before": "771 BC",
+      "after": "BC 771",
+      "unchanged": ["year 771", "era BC", "single-year form", "claim-975 value {sourceDate: 周之亡, westernYear: BC 771 year}", "p122 names, surfaces, polity hint Zhou, historicity legendary"],
+      "rationale": "This is a PEOPLE_DATE_HINT_NORMALIZATION.md transformation of type '682 BC' -> 'BC 682'. No year, endpoint or qualifier is invented, and no external-primary chronology record links the hint. The hint mirrors claim-975, which dates Baosi's own alluded event, the fall of Western Zhou under King You (conventionally BC 771). It does not date the Later Tang historian's comparison, so the PEOPLE_DATE_AUDIT.md rule against treating allusions as personal activity is respected.",
+      "priorAuditedItemCheck": {"id": "hints-p122", "verdict": "supported", "evidenceUnit": "s0001", "reusableForThisItem": false, "reason": "Its only citation quotes s0001, about Empress Cao, which does not concern Baosi. Because this is the changed item, the composed report replaces it with the scoped check below."},
+      "couplingCheck": {"itemId": "claim-975", "changed": false, "priorVerdict": "supported", "priorEvidenceUnit": "s0103", "reusable": true}
+    }
+  ],
+  "englishReview": {
+    "unit": "s0103",
+    "zh": "周之興也以文母，及其亡也以褒姒。",
+    "literal": "Zhou rose because of Queen Wen, and when it perished, because of Baosi.",
+    "idiomatic": "Zhou rose because of Queen Wen, and when it fell, because of Baosi.",
+    "result": "no-english-change",
+    "reason": "Both fields render every clause: 周之興 / 以文母, and 及其亡 / 以褒姒. 文母 (King Wen's consort, Taisi) as 'Queen Wen' is an accepted rendering. The owner proposed no English repair, there are no translationRepairs or editorial decisions on s0103, and this delta does not touch English."
+  },
+  "composedNativeChecks": {
+    "item": {"id": "hints-p122", "verdict": "supported", "reason": "Formatting-only rewrite of the sole hint from '771 BC' to 'BC 771'; year, era and precision are unchanged. The hint mirrors the unchanged claim-975 attestation, which dates Baosi's own alluded event (the fall of Western Zhou under King You, conventionally BC 771), not the Later Tang historian's comment that alludes to it.", "event": "Baosi's association with the fall of (Western) Zhou, alluded to in the historian's commentary.", "evidence": [{"unit": "s0103", "quote": "及其亡也以褒姒"}]},
+    "person": {"id": "p122", "verdict": "supported", "reason": "Baosi (p122) is attested only in s0103. Her one temporal claim (claim-975, BC 771 for 周之亡) and her one active-date hint ('BC 771') agree; the delta changes only the hint's display order, and no life date is omitted from this unit.", "evidence": [{"unit": "s0103", "quote": "周之興也以文母，及其亡也以褒姒。"}]}
+  },
+  "heldCases": [],
+  "nonBlockingObservations": [
+    {
+      "id": "obs-jwds049-baosi-daji-local-split",
+      "kind": "pre-existing-within-chapter-identity-split",
+      "detail": "The same figures appear under two local IDs each: Baosi as p033 (s0049, hint 'BC 782-771', claim-356 interval BC 782-771) and p122 (s0103, BC 771), and Daji as p034 (s0049) and p120 (s0102). Both records existed in the audited extraction, the delta does not create or change them, and p122's BC 771 lies within p033's interval, so there is no chronology contradiction. No identity resolution references jiuwudaishi:049:p033 or p122. This belongs to normal identity resolution, not to this date-closure blocker."
+    },
+    {
+      "id": "obs-jwds049-generic-prior-reasons",
+      "kind": "prior-report-quality-note",
+      "detail": "All 586 item checks in the 2026-09-29 report share one generic reason string, and 151 cite only s0001. This review preserves that accepted independent work as instructed and replaces only the two checks for the changed item. It does not re-certify the unchanged checks."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerRevision": "09e6df94cb5076d8d56c65599fb907029ffe5a5b",
+    "pinsIdenticalAt": ["7cdf8f42e53be7a29bbc018e6d1f93783d741f6a (stage)", "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86 (owner stagingCommit)", "e61eedae77bea163ec10120e88e806cde91315dd (owner masterCommit)"],
+    "inputs": {
+      "source": {"path": "data/jiuwudaishi/049.json", "gitBlob": "5a57e0a6d66feac797d00d8e59c502231f4a0da2", "rawFileSha256": "sha256:9af89a96f6c4b9eaa22889f99d41eb6528b6af03aada86a2a0c73965c0629673", "canonicalJsonSha256": "sha256:1556a5d25e891f80c691742e98b4bd22b445d9650425ce19d62f39a1c420e0a4", "lastChangedCommit": "4ecb654eabc71b5e4f5aaed1aa28878c86f02efb", "matchesOwner": true},
+      "extraction": {"path": "data/people/extractions/jiuwudaishi/049.json", "gitBlob": "db3ef7990ad7abb7bcccf2e5117cd5282292a34b", "rawFileSha256": "sha256:08392d8de7c29d621b2bd9384e792eaed9c65214ec51553145230563f313bc6d", "canonicalJsonSha256": "sha256:b5674190bb9551937307cecf3c3ea4695f25bc0d16ede6406bfa008fda6615cf", "matchesOwner": true},
+      "dateAudit": {"path": "data/people/date-audits/jiuwudaishi/049.json", "gitBlob": "a172109ee723041887c30c77aef5e713816f23be", "rawFileSha256": "sha256:3113d2cbc702e3c133223c451597085fdc3a6bf429a6442c25cbfa91466b9255", "canonicalJsonSha256": "sha256:473d83853ef3614e00a87f8747365b7b1372596b291b2c387fd73e0470d72a16", "recordedCommit": "8d8e11c1cd022fca82ee1f8c2c9175e2d6e33309", "byteIdenticalAtRecordedCommit": true, "sourceHash": "sha256:d79a0d172039985cb10b5e4ab7358c5d0a6e6cf4127b16e439081de89c05ffd2", "extractionHash": "sha256:74390d5048c3f637b01170168c1aa9928cb098ac045cd1ed4cfabc6bfa5bd8b2", "status": "audited", "reviewer": {"name": "Independent Jiu Wudai Shi 049 initial chronology reviewer", "independentOfExtractor": true, "agentId": "unknown (not recorded in report)", "preserved": true}, "reviewedAt": "2026-09-29T17:03:43.821Z", "coverage": {"reviewedUnits": 169, "itemChecks": 586, "personChecks": 148, "findings": 0, "references": 0}, "matchesOwner": true},
+      "editorial": {"path": "data/people/editorial-decisions/jiuwudaishi/049.json", "gitBlob": "312ac0eb20bba0c096b05c930fd03ce779eec1bf", "rawFileSha256": "sha256:69b5118e38ceb75bf3a95665eb1621dd800f741bc124b6f5d3fc227a65498705", "canonicalJsonSha256": "sha256:35f985f97ba1c7895f24438381b7c5ddb36954ef207d5b667574cc6c222a3e5a", "lastChangedCommit": "4ecb654eabc71b5e4f5aaed1aa28878c86f02efb", "decisions": 19, "reviewer": {"kind": "cursor-agent", "name": "grok-4.6", "agentId": "bc-ab9b5c12-7d69-43a8-ac16-b8ae5319d8fb", "runId": "run-9551e5f6-9b15-4296-ae20-f50592d3bfe9", "completedAt": "2026-09-08T07:08:02.279Z"}, "referencesDelta": false, "preserved": true, "matchesOwner": true}
+    },
+    "hashConventionNote": "The owner's contentSha256 values are raw file-byte SHA-256 digests. All four match. Canonical sha256(JSON.stringify(parsed)) digests are listed separately. The extraction's canonical digest equals the current packet extractionHash.",
+    "currentPacket": {"sourceHash": "sha256:d79a0d172039985cb10b5e4ab7358c5d0a6e6cf4127b16e439081de89c05ffd2", "extractionHash": "sha256:b5674190bb9551937307cecf3c3ea4695f25bc0d16ede6406bfa008fda6615cf", "items": 586, "people": 148, "units": 169},
+    "auditedExtraction": {"commit": "4ecb654eabc71b5e4f5aaed1aa28878c86f02efb", "gitBlob": "c4183a2542ca8873a99e881e978d1da25e96d718", "rawFileSha256": "sha256:7999a03d554afda50420fff207fc202864f1b58ad6aeb52cb2a53f39f8bcba59", "packetExtractionHash": "sha256:74390d5048c3f637b01170168c1aa9928cb098ac045cd1ed4cfabc6bfa5bd8b2", "items": 586, "people": 148, "units": 169},
+    "staleDelta": {
+      "sourceHashUnchanged": true,
+      "unitsIdentical": true,
+      "unitPeopleIdentical": true,
+      "itemIdSetIdentical": true,
+      "topLevelKeysChanged": ["people"],
+      "changedLeaves": [{"path": "people[121][4].a[0]", "before": "771 BC", "after": "BC 771"}],
+      "changedItems": ["hints-p122"],
+      "changedPeople": ["p122"],
+      "claimsChanged": 0,
+      "chronologyValuesChanged": 0,
+      "rawByteNote": "The +44,864-line git diff is a re-serialisation from compact to two-space JSON (the live raw file equals JSON.stringify(parsed, null, 2) + newline). It is not a semantic change."
+    },
+    "historicalAuthorship": {
+      "writerCommit": "c885eac7e47fc714c454c6ccec09e373649cccf5",
+      "writerCommitMessage": "Normalize existing Western date hints for release validation",
+      "writerCommitAuthor": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+      "writerCommitDate": "2026-10-24T07:53:35-07:00",
+      "writerParent": "351b2e3c7193d3c8856ae6fcbf044e9c13d61ca9",
+      "parentBlob": "c4183a2542ca8873a99e881e978d1da25e96d718",
+      "resultBlob": "db3ef7990ad7abb7bcccf2e5117cd5282292a34b",
+      "nativeReceipt": {"path": "research/people/release-date-hint-formatting-20261024.json", "gitBlob": "730e8ab293dd923e739f067a32d6a71d3aa8ce67", "revisionBefore": "351b2e3c7193d3c8856ae6fcbf044e9c13d61ca9", "generatedAt": "2026-10-24T14:53:26.460Z", "chapters": 90, "hints": 715, "entry": {"beforeHash": "sha256:74390d5048c3f637b01170168c1aa9928cb098ac045cd1ed4cfabc6bfa5bd8b2", "afterHash": "sha256:b5674190bb9551937307cecf3c3ea4695f25bc0d16ede6406bfa008fda6615cf", "changes": [{"personId": "p122", "index": 0, "before": "771 BC", "after": "BC 771"}]}, "beforeHashEqualsAuditSeal": true, "afterHashEqualsCurrentPacket": true},
+      "reproducedBy": [
+        "scripts/lib/people-date-hints.mjs normalizeExtractionDateHints at the writer commit (blob 08df2e9580300902f2c8dea42f849189bc16a179, introduced 5d7efb1db1): candidate equals the live extraction; changes [p122 index 0 '771 BC' -> 'BC 771'].",
+        "Same function at HEAD (blob e0f129c53bc534c42c19d458d8362e1c18c788a2): identical candidate and changes; idempotent on the live extraction (no further changes)."
+      ],
+      "promotion": {"pr": 5256, "headRef": "codex/people-glossary-staging-v2", "baseRef": "master", "squashCommitOnMaster": "2816bd5f73455d32651cccfda8ef8674fa776287", "mergedAt": "2026-10-24T15:36:52Z", "writerCommitOnHeadRef": true, "masterBlobAfterPromotion": "db3ef7990ad7abb7bcccf2e5117cd5282292a34b"},
+      "queueEvidence": "In people-work-queue.json at origin/codex/people-work-queue 743c6f40ee, the only jiuwudaishi/049 entry is chapterOwners (cursor-nov24-retained-blocked-owner-3, bc-3f24b1d8..., updated 2026-11-24T14:55:26Z). A -G history search from 2026-09-20 finds only that Nov 24 reservation commit, so no queue claim covers the Oct 24 normalisation, which was a host-level batch operation recorded by the receipt.",
+      "executingAgentOrRunId": "unknown (not observed)",
+      "ownerCitationCheck": "The owner's sealedExtraction (4ecb654e) and hintNormalization (c885eac7) commits are correct. The master promotion via 2816bd5f73 / PR #5256 is added here."
+    }
+  },
+  "affectedNativeDependencies": {
+    "dateAuditStatus": {"current": "stale", "afterThisReview": "stale until the host natively records the composed report"},
+    "closure": {
+      "path": "Host-run native recordDateAudit (node scripts/people-date-audit.mjs record --report PATH) at an idle boundary, under the existing chapterOwners claim.",
+      "historicalReportArchive": "recordDateAudit archives the current report to data/people/date-audit-history/jiuwudaishi/049/473d83853ef3614e00a87f8747365b7b1372596b291b2c387fd73e0470d72a16.json. Its raw bytes equal JSON.stringify(parsed, null, 2) plus a newline, so the archive is byte-identical to blob a172109e. Do not edit the historical report or retag its hashes.",
+      "composition": {
+        "base": "The 2026-09-29 report, byte-preserved, with sourceHash unchanged.",
+        "extractionHash": "sha256:b5674190bb9551937307cecf3c3ea4695f25bc0d16ede6406bfa008fda6615cf",
+        "status": "audited",
+        "reviewerRequirement": "The composed report must name this scoped delta reviewer and record that it retains the initial chronology reviewer's checks, with independentOfExtractor true and the original reviewer name in provenance. The host must not present the composition as the original reviewer's re-approval.",
+        "provenance": {"priorReportCanonicalSha256": "sha256:473d83853ef3614e00a87f8747365b7b1372596b291b2c387fd73e0470d72a16", "priorReportGitBlob": "a172109ee723041887c30c77aef5e713816f23be", "priorReviewer": "Independent Jiu Wudai Shi 049 initial chronology reviewer", "priorReviewedAt": "2026-09-29T17:03:43.821Z", "deltaReceipt": "research/people/release-date-hint-formatting-20261024.json"},
+        "replacedChecks": ["itemChecks[hints-p122] -> composedNativeChecks.item", "personChecks[p122] -> composedNativeChecks.person"],
+        "carriedForwardUnchanged": {"itemChecks": 585, "personChecks": 147, "reviewedUnits": 169, "findings": 0, "references": 0, "translationReview": "unchanged"}
+      }
+    },
+    "extraction": {"approvedChange": ["hints-p122"], "furtherEditsRequired": false, "hintCheckRemaining": 0},
+    "editorial": "Unaffected. The 19 decisions do not reference s0103, s0049, p122 or Baosi, the file has been unchanged since 4ecb654e, and scoped native validation accepts it. The prior independent editorial evidence (grok-4.6, bc-ab9b5c12...) is preserved.",
+    "identity": "Unaffected by this delta. Names, surfaces, unitPeople and claims are identical, and the hint year is unchanged. No resolution references jiuwudaishi:049:p122. See obs-jwds049-baosi-daji-local-split for the pre-existing split.",
+    "source": "Unaffected; sourceHash unchanged, no English repair required."
+  },
+  "validation": {
+    "commands": [
+      {"command": "npm run people:disk:check", "exit": 0, "result": "errors: []"},
+      {"command": "node scripts/validate-people-data.mjs --book jiuwudaishi --chapter 049", "exit": 0, "result": "Scoped person data validation passed for jiuwudaishi/049: 1 extraction(s), 148 local people, 770 mentions, 1764 claims, 0 proposed repair(s), 17 applied repair(s), 19 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s)."},
+      {"command": "node scripts/people-date-audit.mjs status --book jiuwudaishi --chapter 049", "exit": 0, "result": {"status": "stale", "auditVersion": 1}},
+      {"command": "node scripts/people-date-audit.mjs verify --book jiuwudaishi --chapter 049", "exit": 1, "result": "stale (expected until native composition is recorded)"},
+      {"command": "npm run people:hints:normalize -- --book jiuwudaishi --chapter 049 --check", "exit": 0, "result": {"entries": [], "hints": 0, "canonicalWrites": 0}}
+    ],
+    "inMemoryChecks": {
+      "validateDateAuditReport(report, packet from audited extraction)": "ok",
+      "validateDateAuditReport(report, current packet)": "Date audit report is stale",
+      "validateDateAuditReport(report with only extractionHash replaced, current packet)": "ok. This shows only that a mechanical retag would pass the structural validator. Policy forbids it, so it is not the closure.",
+      "validateDateAuditReport(composed report, current packet)": "ok (585/586 item checks and 147/148 person checks byte-identical to the original; IDs and order unchanged)",
+      "dateAuditDiagnostics(current packet)": [],
+      "dateAuditDiagnostics(audited packet)": [],
+      "dateAuditReferencesCurrent": true,
+      "normalizeExtractionDateHints(audited extraction) equals live extraction": true
+    },
+    "noWrites": "No build, worktree, canonical data edit, launch or merge. npm install populated only the gitignored node_modules needed by the native validators. Only this review file is committed."
+  }
+}
