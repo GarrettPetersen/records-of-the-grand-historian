@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "sanguozhi",
+    "chapter": "033"
+  },
+  "ownerAgentId": "bc-49e6f290-b200-4c74-8373-ec6bd8892443",
+  "workerId": "cursor-nov24-retained-staging-w17-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "75c761c05c9cf4b54876aff4122b0f4d500a5f86df55e73ad7634fedebe63f87",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-sanguozhi-033-92443",
+  "extractionBytes": 190709,
+  "inputBlobWitness": {
+    "source": "bd068af1aa536d9a7bb2c20c4a139cc8ade51d1f",
+    "extraction": "e24366196b324987c1009854cdb33f3d23e04492",
+    "editorial": "2609d7c312c8984f8a0cf156bdc6e755b158bccf",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:ae16f1d3bc33afc84c7fefa115f4373f24443aca5f9bd30a62482722bd13f34b",
+    "extraction": "sha256:76e55be552a2ddab2e0b48eeb8c75329e7d62b2ddc80ee8a3947aa5c33f33420",
+    "editorial": "sha256:a9779ee47095dedf8add6ffaa82dad17d42da17c8134bc5e7d0cfa37b87d7b69"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 33: Book of Shu 3: Biography of the Later Lord",
+    "chineseUnits": 266,
+    "translatedCount": 266,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-033/date-packet.json",
+    "packetSha256": "sha256:9672fcbc340521abe66e6115a010ee549a83b5ca39fc538e158e254ff1e100a0",
+    "sourceHash": "sha256:eff59388cbc23318a6f8648b7159453218ee39bddef62e721468e3952ae44cc1",
+    "extractionHash": "sha256:1094edfe38778db7cb38a07096297ea6a46b1f957fd1627ae04f6e4ccc9f3792",
+    "dateHintChecks": 392,
+    "peopleInPacket": 161,
+    "sourceUnitsInPacket": 266,
+    "command": "npm run people:dates:packet -- --book sanguozhi --chapter 033 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-033/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPromptVersion": 7,
+    "extractionReused": true,
+    "editorialReused": true,
+    "appliedEditorialDecisions": 1,
+    "editorialReviewerAgentId": null,
+    "extractionValidate": "data/people/extractions/sanguozhi/033.json: ok (161 people, 672 mentions, 1073 claims, 839 candidates)"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book sanguozhi --chapter 033",
+    "peopleValidateSummary": "Scoped person data validation passed for sanguozhi/033: 1 extraction(s), 161 local people, 672 mentions, 1073 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book sanguozhi --chapter 033",
+      "status": "un-audited",
+      "priorNativeDateReport": false
+    },
+    "chronologyStatus": "packet-prepared-awaiting-independent-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-verified at staging 20b8d0e3. Source English coverage complete on 266 Chinese units. Accepted extraction (prompt v7) and 1 applied editorial decision(s) preserved; extraction content SHA256 matches work-order pin. Fresh native date packet prepared (392 hint checks, 161 people). No definite English omission or concrete source contradiction found in owner pass; no date-repair proposal filed pending independent chronology review.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/sanguozhi/033.json",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-033/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book sanguozhi --chapter 033",
+      "independentOfExtractor": true,
+      "ownerDidNotSelfApprove": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date-approval",
+      "summary": "Bounded dossier identity review remains after independent date approval; owner pass did not run identity gates."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book sanguozhi --chapter 033",
+    "datesPacket": "npm run people:dates:packet -- --book sanguozhi --chapter 033 --out research/people/checkpoints/campaign-nov24-retained-staging/sanguozhi-033/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book sanguozhi --chapter 033"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged. Missing gate is independent native date audit, not extraction or editorial rework."
+}
