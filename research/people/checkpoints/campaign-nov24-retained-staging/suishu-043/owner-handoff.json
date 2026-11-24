@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "043"
+  },
+  "ownerAgentId": "bc-dfa689d0-bb3f-426d-a067-481f502c0852",
+  "worker": "cursor-nov24-retained-staging-w6-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "17955ba2daba6f9e916be8b05811db8a81b2409cf427c8041f0fb23a7d2ea2ea",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-suishu-043-c0852",
+  "inputBlobWitness": {
+    "source": "5f75832396f5c8362f1eea4c7e0e84d4b7ae4617",
+    "extraction": "872a30bd6a2673f98e8cba83a1df720115a34566",
+    "dateAudit": "1c236e2e6a3a05108f4c08d5c58887699d04899b",
+    "editorial": "04db524548ea59070c09bda36abd0a35684ee03d"
+  },
+  "inputBlobWitnessVerified": {
+    "source": true,
+    "extraction": true,
+    "dateAudit": true,
+    "editorial": true
+  },
+  "sealedInputs": {
+    "source": "sha256:68aae9930316b88371ef5e8e7c76d82732533a554bb4fec33fb124922457ca48",
+    "extraction": "sha256:475520f6a6d41af9f5976eae6edc2b4a4d538fe08566f1394c57a7c4c1a7cc2a",
+    "dateAudit": "sha256:f3e4530bce48d37e03e634a1884d1a8eacb2a3b7af8f7f26873b8ecfff5889d8",
+    "editorial": "sha256:dd6613d8a23cb1de8c160245f77b5293db3f510d3f78c8e3997144274a2cfb3c"
+  },
+  "workOrderAudit": {
+    "state": "research-blocked",
+    "sha256": "f3e4530bce48d37e03e634a1884d1a8eacb2a3b7af8f7f26873b8ecfff5889d8",
+    "affectedItems": 9,
+    "findings": 3,
+    "verifiedAgainstBytes": true
+  },
+  "priorDateAudit": {
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-22T23:55:00.000Z",
+    "extractionHash": "sha256:eb1d4689e001c246d819fcd1cd807f11a53da216b63f9b28e6cf1165bf27ca4d",
+    "sourceHash": "sha256:68aae9930316b88371ef5e8e7c76d82732533a554bb4fec33fb124922457ca48",
+    "preserved": true,
+    "overwritten": false,
+    "summary": "Fresh full independent canonical audit after 0aa6d2ad96: all 206 Chinese units, all 154 temporal or active-hint items, and all 63 people were rechecked against the current extraction. The repaired Jianyi claims for Emperor Wuyuan and Zhou Taizu now correctly preserve a single AD 534 event, and Empress Xian’s non-personal mausoleum reference no longer asserts a life chronology. Three deliberate holds remain: Yang Aijing’s undated early death, Lady Guo’s undated maternal reference, and Empress Xian’s undated mausoleum reference. They are preserved rather than supplied with invented dates, so the complete report is research-blocked and does not approve the chapter."
+  },
+  "staleReason": "extractionHash changed after independent review while sourceHash is unchanged; npm run people:dates:verify may report stale against current packet even when report bytes remain research-blocked.",
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷43 列傳第8 河間王弘 楊處綱 楊子崇 觀德王雄",
+      "en": "Volume 43 Biographies 8: He Jian Wanghong, Yang Chugang, Yang Zichong, Guang De, Wang Xiong",
+      "raw": "卷43 列傳第8 河間王弘 楊處綱 楊子崇 觀德王雄 Volume 43 Biographies 8: He Jian Wanghong, Yang Chugang, Yang Zichong, Guang De, Wang Xiong"
+    },
+    "sentenceCount": 206,
+    "extractionBytes": 104784,
+    "englishComplete": true,
+    "editorialAppliedRepairs": 4
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book suishu --chapter 043",
+      "passed": true,
+      "summary": "Scoped person data validation passed for suishu/043: 1 extraction(s), 63 local people, 387 mentions, 533 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book suishu --chapter 043",
+      "passed": false,
+      "nativeStatus": "stale",
+      "recordedReportStatus": "research-blocked",
+      "result": {
+        "total": 1,
+        "counts": {
+          "stale": 1
+        },
+        "chapters": [
+          {
+            "book": "suishu",
+            "chapter": "043",
+            "status": "stale",
+            "auditVersion": 1
+          }
+        ]
+      },
+      "fingerprintWitness": {
+        "reportSourceHash": "sha256:68aae9930316b88371ef5e8e7c76d82732533a554bb4fec33fb124922457ca48",
+        "packetSourceHash": "sha256:68aae9930316b88371ef5e8e7c76d82732533a554bb4fec33fb124922457ca48",
+        "sourceMatch": true,
+        "reportExtractionHash": "sha256:eb1d4689e001c246d819fcd1cd807f11a53da216b63f9b28e6cf1165bf27ca4d",
+        "packetExtractionHash": "sha256:475520f6a6d41af9f5976eae6edc2b4a4d538fe08566f1394c57a7c4c1a7cc2a",
+        "extractionMatch": false
+      }
+    },
+    "englishCoverage": {
+      "sentenceCount": 206,
+      "translatedCount": 206,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "stale",
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "All four work-order git blobs verified; date-audit file sha256 matches work-order audit.sha256 (f3e4530b…).",
+    "Fresh full independent canonical audit after 0aa6d2ad96: all 206 Chinese units, all 154 temporal or active-hint items, and all 63 people were rechecked against the current extraction. The repaired Jianyi claims for Emperor Wuyuan and Zhou Taizu now correctly preserve a single AD 534 event, and Empress Xian’s non-personal mausoleum reference no longer asserts a life chronology. Three deliberate holds remain: Yang Aijing’s undated early death, Lady Guo’s undated maternal reference, and Empress Xian’s undated mausoleum reference. They are preserved rather than supplied with invented dates, so the complete report is research-blocked and does not approve the chapter.",
+    "Extraction fingerprint drifted from sealed report; native verify returns stale; owner preserved report bytes.",
+    "No canonical extraction or source edits in this owner pass."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-50",
+        "hints-p004",
+        "p004"
+      ],
+      "problem": "Yang Aijing is only said to have died young, with no personal year, era, or dated event. The unresolved claim is correct but remains a research hold.",
+      "action": "Preserve the unresolved claim and research-required hint unless independent source evidence establishes a personal chronology; do not borrow dates from Yang Yuansun’s later narrative.",
+      "evidence": [
+        {
+          "unit": "s0005",
+          "quote": "祖愛敬，早卒。"
+        }
+      ],
+      "quote": "祖愛敬，早卒。",
+      "unit": "s0005"
+    },
+    {
+      "itemIds": [
+        "claim-61",
+        "hints-p006",
+        "p006"
+      ],
+      "problem": "Lady Guo is only named in an undated maternal-childhood account. The unresolved claim is correct but remains a research hold.",
+      "action": "Preserve the unresolved claim and research-required hint unless independent source evidence establishes her chronology; do not assign the Jianyi event to her.",
+      "evidence": [
+        {
+          "unit": "s0006",
+          "quote": "父元孫，少孤，隨母郭氏養于舅族。"
+        }
+      ],
+      "quote": "父元孫，少孤，隨母郭氏養于舅族。",
+      "unit": "s0006"
+    },
+    {
+      "itemIds": [
+        "claim-270",
+        "hints-p063",
+        "p063"
+      ],
+      "problem": "Empress Xian is named only in an undated mausoleum-arrangement reference. The sentence identifies Yang Da as the participant and gives no personal life or death chronology for her.",
+      "action": "Keep the current unresolved claim and research-required hint; do not infer Empress Xian’s activity from Yang Da’s memorial work. Add a personal chronology only with an independent witness.",
+      "evidence": [
+        {
+          "unit": "s0175",
+          "quote": "獻皇后及高祖山陵制度，達並參豫焉。"
+        }
+      ],
+      "quote": "獻皇后及高祖山陵制度，達並參豫焉。",
+      "unit": "s0175"
+    }
+  ],
+  "researchBlockedItemWitness": [
+    {
+      "id": "claim-50",
+      "event": "Yang Aijing is described only as having died young.",
+      "evidence": [
+        {
+          "unit": "s0005",
+          "quote": "祖愛敬，早卒。"
+        }
+      ],
+      "reason": "祖愛敬，早卒 gives Yang Aijing’s death manner but no year, era, age, or dated event. The local narrative cannot borrow his son’s later Jianyi episode as his own chronology; the explicit unresolved claim and research-required hint correctly preserve that gap."
+    },
+    {
+      "id": "claim-61",
+      "event": "Lady Guo is named only in an undated maternal-childhood account.",
+      "evidence": [
+        {
+          "unit": "s0006",
+          "quote": "父元孫，少孤，隨母郭氏養于舅族。"
+        }
+      ],
+      "reason": "隨母郭氏養于舅族 identifies Lady Guo as Yang Yuansun’s mother but gives no personal date. The subsequent Jianyi sentence names Yuansun, not Lady Guo, so it cannot supply her chronology; the unresolved claim correctly retains the research hold."
+    },
+    {
+      "id": "claim-270",
+      "event": "Empress Xian is named in an undated mausoleum-arrangement reference.",
+      "evidence": [
+        {
+          "unit": "s0175",
+          "quote": "獻皇后及高祖山陵制度，達並參豫焉。"
+        }
+      ],
+      "reason": "The current claim correctly treats the Empress Xian mausoleum reference as undated and non-personal: Yang Da, not the empress, is the named participant. The source gives no personal chronology for her, so the explicit unresolved record remains a research hold."
+    },
+    {
+      "id": "hints-p004",
+      "event": "Active-date summary for Yang Aijing.",
+      "evidence": [
+        {
+          "unit": "s0005",
+          "quote": "祖愛敬，早卒。"
+        }
+      ],
+      "reason": "The source supplies only the undated statement that Yang Aijing died young. It cannot justify a personal AD interval, and the retained research-required hint properly declines to invent one."
+    },
+    {
+      "id": "hints-p006",
+      "event": "Active-date summary for Lady Guo.",
+      "evidence": [
+        {
+          "unit": "s0006",
+          "quote": "父元孫，少孤，隨母郭氏養于舅族。"
+        }
+      ],
+      "reason": "Lady Guo occurs only in the undated maternal-childhood statement. The research-required hint correctly avoids treating the named male relative’s later event as her personal activity."
+    },
+    {
+      "id": "hints-p063",
+      "event": "Active-date summary for Empress Xian.",
+      "evidence": [
+        {
+          "unit": "s0175",
+          "quote": "獻皇后及高祖山陵制度，達並參豫焉。"
+        }
+      ],
+      "reason": "The active-date summary correctly says research required and does not infer Empress Xian’s living activity from Yang Da’s mausoleum-arrangements participation. A personal chronology witness is still required."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; blob witness; English scan; npm run people:validate; npm run people:dates:verify; retained independent date and editorial artifacts.",
+    "completedAt": "2026-11-24T16:44:42.084Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 043",
+    "verifyDates": "npm run people:dates:verify -- --book suishu --chapter 043"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; preserved date-audit bytes unchanged."
+}
