@@ -6,33 +6,27 @@
     "agentId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6",
     "independentOfExtractor": true
   },
-  "corrections": [
+  "corrections": [],
+  "claim1Verification": {
+    "itemId": "claim-1",
+    "personId": "p001",
+    "witnessUnits": ["s0002", "s0028", "s0062"],
+    "shihuIdentityNote": "Corpus Jinshu 106/107 titles 石季龍（石虎） identify 石季龍 with Shi Hu; extraction English 'Shi Hu' for capture is not contradicted by s0028 石季龍 witness alone.",
+    "citationSupport": "s0002 identifies subject; s0028 attests capture by 石季龍; s0062 attests death 遇害; combined undated summary claim remains supported without mandatory split."
+  },
+  "remainingOwnerDefects": [
     {
       "target": "extraction",
-      "book": "jinshu",
-      "chapter": "063",
-      "itemId": "claim-1",
-      "personId": "p001",
-      "field": "value.event",
-      "issue": "English event names capture by Shi Hu but primary capture witness at s0028 is 石季龍 (Shi Le’s son); death at s0062 is unspecific 遇害.",
-      "action": "Owner should align event wording to source actors (石勒/石季龍 chain) or split attestations; independent review retains undated supported verdict with corrected citations only.",
-      "witnessUnits": [
-        "s0028",
-        "s0062"
-      ]
+      "personId": "p183",
+      "itemIds": ["claim-515", "hints-p183"],
+      "issue": "Local person p183 is again labeled Shao Xu solely for historian appraisal/eulogy mentions (s0330/s0339), parallel to p001 biography subject.",
+      "action": "Owner identity lane should decide separate appraisal-only record vs merge; independent review cites s0330 邵 group witness only."
     }
   ],
   "checkpointHolds": [],
-  "globalPattern": {
-    "emptyActiveDateHintRows": 180,
-    "mechanicalFallback": "hints-* used bare 邵續 @ s0001/s0002 unrelated to hinted person",
-    "remediation": "Re-anchor each hints-* to that person’s claim evidence unit or mark research-blocked with owner extraction hint correction; do not reuse biography-subject strings.",
-    "untouchedSoundRowsEstimate": 233,
-    "noNameInQuoteClaims": 81,
-    "note": "noNameInQuote may be valid for title-only mentions; requires row-by-row block audit."
-  },
-  "spotRepairs": [
-    "claim-1",
-    "hints-p122"
-  ]
+  "citationSweep": {
+    "emptyHintBareShaoFallback": 0,
+    "repairedHintRows": 179,
+    "personCheckRealignmentPending": "partial — person rows copied from repaired hints; block review still required"
+  }
 }
