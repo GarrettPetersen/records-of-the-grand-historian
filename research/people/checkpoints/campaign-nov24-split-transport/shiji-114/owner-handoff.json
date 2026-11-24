@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "114"
+  },
+  "campaignWorker": "cursor-nov24-partitioned-3",
+  "ownerAgentId": "bc-3001456e-15de-4e26-b1ca-973d0009ec2d",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "authorBranch": "cursor/shiji-114-split-transport-owner-ec2d",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "sourcePacketSha256": "sha256:bbadbe8e9f04c818accb81924a57bd255bc34078d89b39f2e2e80eaae2a4a025",
+    "planFingerprint": "sha256:966b32db5a5937fc76c1ba00a5717329690a5a744b8c3d67469800cfe743eb8f",
+    "parts": {
+      "transport-part-001.json": "sha256:91c4fd330048ec640855fdddf44a7280aee3306fbc389046c44f057bcd368d16",
+      "transport-part-002.json": "sha256:5204bad8ce8bef0d0253c6af6c1b45d834f596e496dec3e0086db42c812a8426"
+    },
+    "preparationReceiptSha256": "sha256:ceb667c6b2c67e5c7ed796c6fb4ab355e6f434236f2170a705cdba293b012843"
+  },
+  "sealedInputs": {
+    "source": "sha256:0f14c822bdf07c986805106088c971c8884c7dbf9f81960e3bbb0e7146abea77",
+    "extraction": "sha256:2153035221c34fdbc63a47f3f9333f8081ab75d3725e4039c9894ef29e0091ac",
+    "editorial": "sha256:c2875e908472aaefb82f1a51f0e372e8bd524a6307ef34c517d6bcae77eebaaa",
+    "dateAudit": "sha256:55bfba6b1b9a75e6429356fd57cdbee467f58a085e66ddbb5a28457d2f9e92ef"
+  },
+  "inputBlobWitness": {
+    "source": "61c8bae53266f09e469f35db9ad57df96187e0f8",
+    "extraction": "08536b8aac59d4ec4032a08cd6222abbca6bb07e",
+    "dateAudit": "3a331f289952dee96b77bd95afd213cc78b91902",
+    "editorial": "3ed3be9b243689aede8b7359a9169e5d8d7a856e"
+  },
+  "chronologyEditorialStatus": {
+    "dateAuditAccepted": true,
+    "editorialSealed": true,
+    "canonicalEdits": []
+  },
+  "reviewCases": 37,
+  "substantiveFindings": [
+    "Eastern Yue chapter (37 locals): all retain-proposal; no positive merges or canonical edits.",
+    "Grand Historian p036: historian-judgment voice, not Yue person; Sima Qian cluster with overflow.",
+    "Founder line Wuzhu/Yao/Yao–Zou lineage: chapter-attested Min-Yue founders kept resolved where source names are explicit.",
+    "Goujian p003: retrospective ancestor reference only; unresolvedIdentity retained for cross-corpus Goujian.",
+    "Han sovereigns (Gao, Hui, Jing, Wu): title/deferential references aligned to accepted Han emperor memberships.",
+    "Sixteen overflow cases: bounded dossier caps acknowledged; omitted homograph keys are not separation evidence."
+  ],
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "scopedValidatorOutput": "Scoped person data validation passed for shiji/114: 1 extraction(s), 37 local people, 268 mentions, 344 claims.",
+  "reproduce": {
+    "verifyPart001": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/shiji-114/transport-part-001.json",
+    "verifyPart002": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/shiji-114/transport-part-002.json",
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 114"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:e8ffbcbcbe9f6ee647383360c30441d29888ff43d396995352d0fdb2069e62dc",
+  "notes": "Owner evidence is not approval. Reviewer reads both transport parts requiredReport and owner-evidence assessments."
+}
