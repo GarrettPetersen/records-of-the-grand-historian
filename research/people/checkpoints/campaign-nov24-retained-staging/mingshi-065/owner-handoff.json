@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "065"
+  },
+  "ownerAgentId": "bc-48a8605c-93df-4536-be10-902887db2aca",
+  "worker": "cursor-nov24-retained-staging-w12-o1",
+  "idempotencyKey": "90c092cb53bc624fcf43ba2a829999106f0bcf335b32c55dd40f23d2df95cc6b",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-mingshi-065-b2aca",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 23,
+    "claims": 170,
+    "sourceExtractionSha256": "e5890343a7d04c9dcc63e78a640e8c312b40589f6ed6c9f1b12fad186157b7f6"
+  },
+  "inputBlobWitness": {
+    "source": "fd919b4670773111fedc682f9c815b585d486462",
+    "extraction": "447259e206a6051522cc65156dfcc8521dbc993e",
+    "editorial": "f5c3c279aebac6a2e98f1bc1893a0dcdde7d892d"
+  },
+  "sealedInputs": {
+    "source": "sha256:52c9bae605156e6b4394ee997f99d8c66b93433ccec878d302f1c2fe9bb40d2d",
+    "extraction": "sha256:e5890343a7d04c9dcc63e78a640e8c312b40589f6ed6c9f1b12fad186157b7f6",
+    "editorial": "sha256:8cf24c3262cc07ec629716fc08bd69b64e2aff3f10fc8774a8530ad8288597fe"
+  },
+  "canonicalDatePacketPins": {
+    "sourceHash": "sha256:2abdce56b6da58bdc944748067a9b08f2ca99208bd3db199e9960d386ea9f30e",
+    "extractionHash": "sha256:9948851f639c1cbee544e51c6175ed1d02254ee5a3b9f5a9909fe0350ac7661e"
+  },
+  "sourceCoverage": {
+    "unitCount": 365,
+    "allUnitsPresent": true,
+    "englishCoverage": {
+      "sentenceCount": 365,
+      "translatedCount": 365,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chineseCoverage": {
+      "complete": true,
+      "missingUnits": []
+    },
+    "promptVersion": 7
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-065/date-packet.json",
+    "contentSha256": "sha256:eee0ff4d89f52092d6f79c7ad7bda8ea94bced42391f2dfef2013d5972d97e5d",
+    "itemCount": 88,
+    "peopleCount": 23,
+    "unitCount": 365,
+    "packetDiagnosticsCount": 0
+  },
+  "dateRepairProposal": null,
+  "definiteTranslationRepairs": [],
+  "editorialAndExtractionReuse": {
+    "extractionReused": true,
+    "editorialDecisionsReused": true,
+    "extractionFileContentSha256Verified": true,
+    "note": "Current prompt-v7 extraction and accepted editorial repairs retained unchanged; no owner re-extraction or self-approved date audit."
+  },
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book mingshi --chapter 065",
+      "passed": true,
+      "summary": "Scoped person data validation passed for mingshi/065: 1 extraction(s), 23 local people, 66 mentions, 261 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:packet": {
+      "command": "npm run people:dates:packet -- --book mingshi --chapter 065 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-065/date-packet.json",
+      "passed": true
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 065",
+      "status": "un-audited",
+      "auditVersion": 1
+    },
+    "people:dates:scan": {
+      "command": "npm run people:dates:scan -- --book mingshi --chapter 065",
+      "findings": 0
+    },
+    "packetPreflightDiagnostics": []
+  },
+  "ownerChangesRequired": false,
+  "ownerFindings": {
+    "chronologyCandidateReady": true,
+    "definiteEnglishProblems": [],
+    "sourceContradictions": [],
+    "summary": "Pinned source, extraction, and editorial blobs witness correctly at staging. English and Chinese unit coverage complete. Native scoped validation and date-packet preparation pass with zero heuristic scan findings and zero packet preflight diagnostics. No definite owner repair or date-repair proposal; chronology remains candidate-only until independent native review."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "requiredPath": "data/people/date-audits/mingshi/065.json",
+      "independentApprovalIssued": false,
+      "nextGate": "independent-native-date-audit-from-sealed-packet",
+      "sealedPacketSha256": "sha256:eee0ff4d89f52092d6f79c7ad7bda8ea94bced42391f2dfef2013d5972d97e5d",
+      "packetCanonicalHashes": {
+        "sourceHash": "sha256:2abdce56b6da58bdc944748067a9b08f2ca99208bd3db199e9960d386ea9f30e",
+        "extractionHash": "sha256:9948851f639c1cbee544e51c6175ed1d02254ee5a3b9f5a9909fe0350ac7661e"
+      }
+    },
+    "identity": {
+      "independentReviewCompleted": false,
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Scoped validation passed with zero legacy alias-disposition debt; canonical identity evidence not reviewed in this owner pass."
+    }
+  },
+  "holds": [],
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 065",
+    "buildDatePacket": "npm run people:dates:packet -- --book mingshi --chapter 065 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-065/date-packet.json",
+    "verifyDateStatus": "npm run people:dates:verify -- --book mingshi --chapter 065"
+  },
+  "artifacts": {
+    "sealedDatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-065/date-packet.json",
+    "ownerHandoff": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-065/owner-handoff.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner evidence only; no canonical edits, deploy, or merge. Owner handoff is not independent date or identity approval."
+}
