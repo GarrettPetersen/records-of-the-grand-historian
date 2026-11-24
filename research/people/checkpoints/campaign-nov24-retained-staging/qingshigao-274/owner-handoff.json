@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "274"
+  },
+  "ownerAgentId": "bc-29e4f10c-b5ca-4b63-a7bd-bf84049027a3",
+  "workerId": "cursor-nov24-retained-staging-w16-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6cf51816242cc2e4e4645052f22c64b037f83bca8cb13e4bec01c3aaee736b9a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-274-027a3",
+  "phase": "dispatch_pending",
+  "inputBlobWitness": {
+    "source": "3e3e2b5159f7af8e91c98c5d4c52a7cdbc70d4e2",
+    "extraction": "3603864dc9b7026de306b3558220e1c3594806d9",
+    "editorial": "1ad667e2c22ad1235d671a4bd4fa8b32fa4704f2"
+  },
+  "inputBlobWitnessVerified": true,
+  "sealedInputs": {
+    "source": "sha256:eaf06f68ca5a88b7e8c703e121c8a52e2fb2ac27f406626482b977eba94e1dbb",
+    "extraction": "sha256:79fe6f3768d204148ef52e2a11b58313749e5803f0af5b4a45e404c86dd9186d",
+    "editorial": "sha256:ca71ff145447aba71d6c08f5be19ef75dec9573c5f3d4d9f1aea6a2d13f49035"
+  },
+  "sealedInputsExtractionFileSha256": "79fe6f3768d204148ef52e2a11b58313749e5803f0af5b4a45e404c86dd9186d",
+  "workOrderSourceExtractionSha256": "79fe6f3768d204148ef52e2a11b58313749e5803f0af5b4a45e404c86dd9186d",
+  "extractionBytes": 137676,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "unitCount": 271,
+    "model": "grok-4.5-chunked",
+    "chunkAgentIdGaps": []
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 17,
+    "path": "data/people/editorial-decisions/qingshigao/274.json"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 274 Biographies 61: Yang Yongjian, Yao Diyu, Zhu Hongzuo, Wang Zhi, Song Luo, Chen Shen",
+    "chineseUnits": 270,
+    "translatedCount": 270,
+    "metaSentenceCount": 270,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionUnitCount": 271,
+    "unitCountAligned": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-274/date-packet.json",
+    "contentSha256": "sha256:322541e1b3fbc2eab5c0ff5227834fd06f344ad32e0062fca2f6f3b94317427f",
+    "sourceHash": "sha256:5e666b9145e45385b8ab85bc7d80cc69940dcbc7636ea30c6e36ff49061d0010",
+    "extractionHash": "sha256:5692ac4b058c2302a1b4acc259c62593e45c74440ba6f43456657ebc3d38deb5",
+    "checkCount": 236,
+    "peopleInPacket": 66,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 274 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-274/date-packet.json"
+  },
+  "nativeDateAudit": {
+    "present": false,
+    "expectedPath": "data/people/date-audits/qingshigao/274.json",
+    "status": "no-native-date-report"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 274",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/274: 1 extraction(s), 66 local people, 290 mentions, 642 claims, 0 proposed repair(s), 17 applied repair(s), 17 editorial decision(s), 1 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 274",
+      "status": "un-audited"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, accepted extraction, and applied editorial decisions at pinned git blobs (3e3e2b51 source, 3603864d extraction, 1ad667e2 editorial). Owner verified Chinese zh and English literal/idiomatic fields across 270 sentence units; meta sentenceCount 270 equals translatedCount 270. npm run people:validate passes with zero proposed repairs. Sealed native date packet sha256:322541e1b3fbc2eab5c0ff5227834fd06f344ad32e0062fca2f6f3b94317427f built from current hashes (source 5e666b9145e4…, extraction 5692ac4b058c…) with 236 chronology/hint checks. data/people/date-audits/qingshigao/274.json is absent; people:dates:verify status un-audited. Owner did not self-approve chronology or identity. Extraction unitCount 271 exceeds source sentenceCount 270 by one biography-heading row; npm run people:validate still passes and evidence references remain in the sealed unit digest set. No definite English omission or extraction-schema contradiction requiring owner repair.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:322541e1b3fbc2eab5c0ff5227834fd06f344ad32e0062fca2f6f3b94317427f",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-274/date-packet.json",
+      "runCommand": "npm run people:dates:run -- --book qingshigao --chapter 274 --run --model <independent-reviewer>",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 274",
+      "verifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 274"
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-after-date"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 274",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 274 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-274/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 274"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report still missing."
+}

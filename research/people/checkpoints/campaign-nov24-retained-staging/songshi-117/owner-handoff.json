@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "117"
+  },
+  "ownerAgentId": "bc-29e4f10c-b5ca-4b63-a7bd-bf84049027a3",
+  "workerId": "cursor-nov24-retained-staging-w16-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6cf51816242cc2e4e4645052f22c64b037f83bca8cb13e4bec01c3aaee736b9a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-117-027a3",
+  "phase": "dispatch_pending",
+  "inputBlobWitness": {
+    "source": "20bfa90215732ab6d59904a9985b694f3d4bb96a",
+    "extraction": "322636d9f7c62b43748f1c56ed60ce1f055c4a3f",
+    "editorial": "345595d24b5f528781fdd59c39a5bc194bcdd836"
+  },
+  "inputBlobWitnessVerified": true,
+  "sealedInputs": {
+    "source": "sha256:cb775146512c00b37275265268da3b120b0b938040a27728fb363257137282e0",
+    "extraction": "sha256:ac5c024f2d20419f1fa89fc6d7c7f182690a91e195c7141969746020a1bd0191",
+    "editorial": "sha256:67bb1fa5623e15c6d01f2fd6ee816030165b6b744ae2665e0c4eef1bd16738ba"
+  },
+  "sealedInputsExtractionFileSha256": "ac5c024f2d20419f1fa89fc6d7c7f182690a91e195c7141969746020a1bd0191",
+  "workOrderSourceExtractionSha256": "ac5c024f2d20419f1fa89fc6d7c7f182690a91e195c7141969746020a1bd0191",
+  "extractionBytes": 138452,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "unitCount": 273,
+    "model": "grok-4.6-chunked",
+    "chunkAgentIdGaps": []
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 27,
+    "path": "data/people/editorial-decisions/songshi/117.json"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 117 Treatises 70: Rites 20",
+    "chineseUnits": 273,
+    "translatedCount": 273,
+    "metaSentenceCount": 273,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionUnitCount": 273,
+    "unitCountAligned": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-117/date-packet.json",
+    "contentSha256": "sha256:83c74488a35b6762c0aa0f80e2e9ff2344a181fd5c63474f5cb7043e08cbb8f8",
+    "sourceHash": "sha256:9f0000f6617a1a549c1110508f94fdfce60272e5924c3716db35092e48cac75d",
+    "extractionHash": "sha256:815a68f3d7bcee6e6b440585e448962fc446f8991b45cfa1bacddc569966b9b9",
+    "checkCount": 164,
+    "peopleInPacket": 34,
+    "command": "npm run people:dates:packet -- --book songshi --chapter 117 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-117/date-packet.json"
+  },
+  "nativeDateAudit": {
+    "present": false,
+    "expectedPath": "data/people/date-audits/songshi/117.json",
+    "status": "no-native-date-report"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 117",
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/117: 1 extraction(s), 34 local people, 145 mentions, 466 claims, 0 proposed repair(s), 27 applied repair(s), 27 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 117",
+      "status": "un-audited"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, accepted extraction, and applied editorial decisions at pinned git blobs (20bfa902 source, 322636d9 extraction, 345595d2 editorial). Owner verified Chinese zh and English literal/idiomatic fields across 273 sentence units; meta sentenceCount 273 equals translatedCount 273. npm run people:validate passes with zero proposed repairs. Sealed native date packet sha256:83c74488a35b6762c0aa0f80e2e9ff2344a181fd5c63474f5cb7043e08cbb8f8 built from current hashes (source 9f0000f6617a…, extraction 815a68f3d7bc…) with 164 chronology/hint checks. data/people/date-audits/songshi/117.json is absent; people:dates:verify status un-audited. Owner did not self-approve chronology or identity. No definite English omission or extraction-schema contradiction requiring owner repair.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:83c74488a35b6762c0aa0f80e2e9ff2344a181fd5c63474f5cb7043e08cbb8f8",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-117/date-packet.json",
+      "runCommand": "npm run people:dates:run -- --book songshi --chapter 117 --run --model <independent-reviewer>",
+      "recordCommand": "npm run people:dates:record -- --book songshi --chapter 117",
+      "verifyCommand": "npm run people:dates:verify -- --book songshi --chapter 117"
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-after-date"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 117",
+    "datesPacket": "npm run people:dates:packet -- --book songshi --chapter 117 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-117/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book songshi --chapter 117"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report still missing."
+}

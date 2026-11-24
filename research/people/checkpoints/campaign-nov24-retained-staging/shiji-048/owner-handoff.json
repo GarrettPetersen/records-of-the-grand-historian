@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "048"
+  },
+  "ownerAgentId": "bc-29e4f10c-b5ca-4b63-a7bd-bf84049027a3",
+  "workerId": "cursor-nov24-retained-staging-w16-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6cf51816242cc2e4e4645052f22c64b037f83bca8cb13e4bec01c3aaee736b9a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-048-027a3",
+  "phase": "dispatch_pending",
+  "inputBlobWitness": {
+    "source": "e6779d245bc4ed401be92156e3fed97849376afc",
+    "extraction": "d6f20d7897aa9ccaeabd852ad601335b44a3c0b0",
+    "editorial": "9aa37f064106060a3c05f97f5bc11881de8417fa"
+  },
+  "inputBlobWitnessVerified": true,
+  "sealedInputs": {
+    "source": "sha256:d2647d665425d0dbd2b11eaee3e04b959cd928fd47ed2440f2d7831c83145173",
+    "extraction": "sha256:181efab04c04c5b8398c11b76e79914783d81cab9c13e7a93dc06fc861cdf628",
+    "editorial": "sha256:1f5bae7e02c42470ca31ff5908a467c0e7af831471a3b86b386c3e1311cf3a7c"
+  },
+  "sealedInputsExtractionFileSha256": "181efab04c04c5b8398c11b76e79914783d81cab9c13e7a93dc06fc861cdf628",
+  "workOrderSourceExtractionSha256": "181efab04c04c5b8398c11b76e79914783d81cab9c13e7a93dc06fc861cdf628",
+  "extractionBytes": 136552,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "unitCount": 201,
+    "model": "grok-4.5-chunked",
+    "chunkAgentIdGaps": []
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 17,
+    "path": "data/people/editorial-decisions/shiji/048.json"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "House of Chen She",
+    "chineseUnits": 201,
+    "translatedCount": 201,
+    "metaSentenceCount": 201,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionUnitCount": 201,
+    "unitCountAligned": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-048/date-packet.json",
+    "contentSha256": "sha256:2e9046f3b413cae00e2545a7bbbb329bcb92fa4f014deeb272ae729f77ea04a7",
+    "sourceHash": "sha256:c1196f0806c00e1086cdf4fdd98798413c5e244842a7e76dd6aba5fefee6f1e4",
+    "extractionHash": "sha256:acd9a867b18d7e60cedd1cf2a97a17a6c174bfe71893511fc700d623b9055845",
+    "checkCount": 230,
+    "peopleInPacket": 88,
+    "command": "npm run people:dates:packet -- --book shiji --chapter 048 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-048/date-packet.json"
+  },
+  "nativeDateAudit": {
+    "present": false,
+    "expectedPath": "data/people/date-audits/shiji/048.json",
+    "status": "no-native-date-report"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 048",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/048: 1 extraction(s), 88 local people, 520 mentions, 635 claims, 0 proposed repair(s), 17 applied repair(s), 17 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 048",
+      "status": "un-audited"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, accepted extraction, and applied editorial decisions at pinned git blobs (e6779d24 source, d6f20d78 extraction, 9aa37f06 editorial). Owner verified Chinese zh and English literal/idiomatic fields across 201 sentence units; meta sentenceCount 201 equals translatedCount 201. npm run people:validate passes with zero proposed repairs. Sealed native date packet sha256:2e9046f3b413cae00e2545a7bbbb329bcb92fa4f014deeb272ae729f77ea04a7 built from current hashes (source c1196f0806c0…, extraction acd9a867b18d…) with 230 chronology/hint checks. data/people/date-audits/shiji/048.json is absent; people:dates:verify status un-audited. Owner did not self-approve chronology or identity. No definite English omission or extraction-schema contradiction requiring owner repair.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:2e9046f3b413cae00e2545a7bbbb329bcb92fa4f014deeb272ae729f77ea04a7",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-048/date-packet.json",
+      "runCommand": "npm run people:dates:run -- --book shiji --chapter 048 --run --model <independent-reviewer>",
+      "recordCommand": "npm run people:dates:record -- --book shiji --chapter 048",
+      "verifyCommand": "npm run people:dates:verify -- --book shiji --chapter 048"
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-after-date"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 048",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 048 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-048/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 048"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report still missing."
+}

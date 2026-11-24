@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "252"
+  },
+  "ownerAgentId": "bc-29e4f10c-b5ca-4b63-a7bd-bf84049027a3",
+  "workerId": "cursor-nov24-retained-staging-w16-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "6cf51816242cc2e4e4645052f22c64b037f83bca8cb13e4bec01c3aaee736b9a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-252-027a3",
+  "phase": "dispatch_pending",
+  "inputBlobWitness": {
+    "source": "7ff1f65a53551ba581ebac1b8f674b03a77d2388",
+    "extraction": "7416771dba7fe98b3a1b91d06f30d8186ad816db",
+    "editorial": "3e0c4636ad0052c37103695ccc68ae5a8a089ee2"
+  },
+  "inputBlobWitnessVerified": true,
+  "sealedInputs": {
+    "source": "sha256:071660ca5064a9e1c615b1ee946ea5489cc0e267844293b2823dc78f8edcb43e",
+    "extraction": "sha256:9be676f5456a3c7bc6ee41f87b79297f44429655bdc2b00010f695bacb7a6932",
+    "editorial": "sha256:c4258f10bdd006621a1bc42e5a5b200815d1186da6abeeb40c597a2f5bf1391b"
+  },
+  "sealedInputsExtractionFileSha256": "9be676f5456a3c7bc6ee41f87b79297f44429655bdc2b00010f695bacb7a6932",
+  "workOrderSourceExtractionSha256": "9be676f5456a3c7bc6ee41f87b79297f44429655bdc2b00010f695bacb7a6932",
+  "extractionBytes": 136838,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "unitCount": 188,
+    "model": "grok-4.5-chunked",
+    "chunkAgentIdGaps": []
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "decisionCount": 9,
+    "path": "data/people/editorial-decisions/qingshigao/252.json"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 252 Biographies 39: Gan Wenkun, Fan Chengmo, Ma Xiongzhen, Fu Honglie",
+    "chineseUnits": 187,
+    "translatedCount": 187,
+    "metaSentenceCount": 187,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionUnitCount": 188,
+    "unitCountAligned": false
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-252/date-packet.json",
+    "contentSha256": "sha256:076ae9e7ae607cd395ea15a124a38fc0c9e81fbd1275c20866cb4575e033c3a7",
+    "sourceHash": "sha256:680596bd70d0a2b2508f65cfed734a4e4de4da049a802b8ca7987d4bcac36400",
+    "extractionHash": "sha256:e6937e9582292d464af515a94d82408b6cb03a7247b7eb3f0b63cb0a476ee2ce",
+    "checkCount": 241,
+    "peopleInPacket": 94,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 252 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-252/date-packet.json"
+  },
+  "nativeDateAudit": {
+    "present": false,
+    "expectedPath": "data/people/date-audits/qingshigao/252.json",
+    "status": "no-native-date-report"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 252",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/252: 1 extraction(s), 94 local people, 536 mentions, 623 claims, 0 proposed repair(s), 8 applied repair(s), 9 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 252",
+      "status": "un-audited"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, accepted extraction, and applied editorial decisions at pinned git blobs (7ff1f65a source, 7416771d extraction, 3e0c4636 editorial). Owner verified Chinese zh and English literal/idiomatic fields across 187 sentence units; meta sentenceCount 187 equals translatedCount 187. npm run people:validate passes with zero proposed repairs. Sealed native date packet sha256:076ae9e7ae607cd395ea15a124a38fc0c9e81fbd1275c20866cb4575e033c3a7 built from current hashes (source 680596bd70d0…, extraction e6937e958229…) with 241 chronology/hint checks. data/people/date-audits/qingshigao/252.json is absent; people:dates:verify status un-audited. Owner did not self-approve chronology or identity. Extraction unitCount 188 exceeds source sentenceCount 187 by one biography-heading row; npm run people:validate still passes and evidence references remain in the sealed unit digest set. No definite English omission or extraction-schema contradiction requiring owner repair.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:076ae9e7ae607cd395ea15a124a38fc0c9e81fbd1275c20866cb4575e033c3a7",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-252/date-packet.json",
+      "runCommand": "npm run people:dates:run -- --book qingshigao --chapter 252 --run --model <independent-reviewer>",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 252",
+      "verifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 252"
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-after-date"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 252",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 252 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-252/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 252"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report still missing."
+}
