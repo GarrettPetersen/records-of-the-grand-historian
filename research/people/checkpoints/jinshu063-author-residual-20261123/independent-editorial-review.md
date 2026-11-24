@@ -33,12 +33,21 @@ This records editorial decisions on **66 proposed translation repairs only**. It
 
 Native artifact: `independent-editorial-decisions.json` (schema v3) passes `validateEditorialDecisions` against the pinned compact extraction.
 
+## Apply verification (`92b6c31f`)
+
+Independent replay vs `changed-dependency-receipt.json`: decisions hash match, 66/66 repairs applied to accepted `after` text, `npm run people:validate` pass, nine dependent deltas verified (see `apply-dependency-independent-verification.json`). No apply blockers.
+
+## Chronology scope 1 (`independent-date-audit-scope-001.json`)
+
+Units **s0021–s0028** read once. Ten packet items checked; **no Western years invented**; four **太興初** holds on s0026 retained; no scope blockers. **Chapter date approval remains false.**
+
+**Next exact span:** scope 2 — **s0068–s0076**, primary witness **永嘉初** @ **s0073**.
+
 ## Pending actions (not approved here)
 
-1. **Extraction deltas** in `source-review-findings.json` — name/pinyin surfaces, p116/p118 kinship, office English, Yin/Han surfaces, disposition person-id fixes — await host application pass with repairs.
-2. **Chronology** — `date-packet.json` research holds stand; no date approval on this candidate fingerprint.
-3. **Identity** — 文鴦 triple p011/p100/p110 membership question; lookup was unavailable to the owner and was not used here except for Wenyang transliteration clarity.
-4. **Coverage** — 304 units had no proposed repair; this is not a full-chapter editorial seal.
+1. **Chronology** — continue scoped passes; owner `date-packet.json` on d8ad75ef fingerprint retained as historical seal.
+2. **Identity** — 文鴦 triple p011/p100/p110 membership question.
+3. **Coverage** — 304 units had no proposed repair; not a full-chapter editorial seal.
 
 ## Prior proof retained unchanged
 
