@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "169"
+  },
+  "ownerAgentId": "bc-b1524905-c914-4161-8283-fb44e76947f1",
+  "workerId": "cursor-nov24-retained-staging-w15-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "08cda70c9fa8613d8c0579e302faec7e9f71c71ccf34fe72c79c7bc1142ed8b6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-mingshi-169-947f1",
+  "extractionBytes": 114689,
+  "inputBlobWitness": {
+    "source": "65a4c7961e7d187fa32820b4185dd6d52a5e7b15",
+    "extraction": "23e06cdb2678d212580f457d2b1467778ea3279f",
+    "editorial": "37ebd043d6a9f3d05740358d57658db2c505836b"
+  },
+  "sealedInputs": {
+    "source": "sha256:464c10bd3403582c681ecab484fb56fff18a38e45d4a5b1e93de49424eb0452e",
+    "extraction": "sha256:cc5c86368049a66ac3e35e24a40c93334dd04d9a342524790b7b2d3ba7084af0",
+    "editorial": "sha256:2621b35768cc329e7148e1dd2fe077ac30e0ac6fe39fe924f1b35cf9fdf69d7a"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 259,
+    "translatedCount": 259,
+    "missingEnglish": 0,
+    "sourceTitle": "Volume 169 Biographies 57: Gao Gu, Hu Ying, Wang Zhi",
+    "fullEnglishCoverage": true,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 78,
+    "claimsInWorkOrder": 269,
+    "noReextraction": true,
+    "sourceExtractionSha256Verified": "sha256:cc5c86368049a66ac3e35e24a40c93334dd04d9a342524790b7b2d3ba7084af0"
+  },
+  "editorialReuse": {
+    "acceptedDecisionCount": 6,
+    "status": "reviewed-with-applied-proposals",
+    "noReseal": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-169/date-packet.json",
+    "sha256": "sha256:346f1076f9755311965e2092c8cb594416a525d526e1799410b470473333fe39",
+    "command": "npm run people:dates:packet -- --book mingshi --chapter 169 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-169/date-packet.json",
+    "dateHintChecks": 221,
+    "peopleInPacket": 78,
+    "sourceUnitsInPacket": 0,
+    "extractionHashInPacket": "sha256:a3b64632fb49f914cae9e78f685e760789c3157af78ed961fbcf0470a5c78270"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book mingshi --chapter 169",
+    "peopleValidateSummary": "Scoped person data validation passed for mingshi/169: 1 extraction(s), 78 local people, 552 mentions, 515 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 169",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "independentDateAuditMissing": true,
+    "notIndependentApproval": true,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned three-part inputs witness-verified at staging 20b8d0e3. No data/people/date-audits/mingshi/169.json (no-native-date-report). Source English coverage complete on all 259 Chinese units; sealed extraction and 6 accepted editorial repairs pass people:validate with zero proposed repairs. Native date packet sealed; people:dates:verify un-audited — owner did not record independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/mingshi/169.json",
+      "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-169/date-packet.json",
+      "datePacketSha256": "sha256:346f1076f9755311965e2092c8cb594416a525d526e1799410b470473333fe39",
+      "instruction": "Independent reviewer audits all 221 packet items; record with people:dates:record. Owner handoff is not date approval."
+    },
+    "identity": {
+      "gate": "independent-canonical-identity-review",
+      "instruction": "Bounded dossier identity review on sealed extraction after date gate; owner did not seal identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 169",
+    "datesVerify": "npm run people:dates:verify -- --book mingshi --chapter 169",
+    "datesPacket": "npm run people:dates:packet -- --book mingshi --chapter 169 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-169/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, registry, deploy, or merge."
+}
