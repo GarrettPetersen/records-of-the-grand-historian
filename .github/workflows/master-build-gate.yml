@@ -5,13 +5,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && endsWith(inputs.chapter, '-certify') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && endsWith(inputs.chapter, '-certify') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -574,3 +574,95 @@ jobs:
           path: ${{ runner.temp }}/recorded/
           if-no-files-found: error
           retention-days: 7
+  transfer-certificate:
+    if: inputs.chapter == '083-stage' || inputs.chapter == '115-stage'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TRANSFER_INPUT: ${{ inputs.chapter }}
+    steps:
+      - id: pins
+        name: Verify the candidate and exact successful recording run
+        run: |
+          node <<'JS'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const {execFileSync}=require('node:child_process');
+          const root='repos/'+process.env.GITHUB_REPOSITORY;
+          const read=(path,raw=false)=>JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
+          const chapter=process.env.TRANSFER_INPUT.split('-')[0];
+          const pr=({'083':5474,'115':5470})[chapter];
+          assert(pr);
+          const state=read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true).identityRegistryBuild;
+          const entry=chapter==='083'?state.chapters083And094.updated083:state.currentChapter115.reseal.witnessRefresh;
+          const recording=entry.identityPreparation.nativeRecording;
+          const run=read('/actions/runs/'+recording.runId);
+          assert.equal(run.conclusion,'success');
+          assert.equal(run.path,'.github/workflows/master-build-gate.yml');
+          assert.equal(run.head_branch,'codex/cursor-glossary-nov24-2026');
+          const name='jinshu-'+chapter+'-recorded-canonical-identity';
+          const artifacts=read('/actions/runs/'+run.id+'/artifacts').artifacts.filter(item=>item.name===name&&!item.expired);
+          assert.equal(artifacts.length,1);
+          const candidate=read('/pulls/'+pr);
+          assert.equal(candidate.state,'open');
+          assert.equal(candidate.base.ref,'codex/people-glossary-staging-v2');
+          assert.equal(candidate.head.repo.full_name,process.env.GITHUB_REPOSITORY);
+          assert.equal(candidate.head.sha,entry.owner);
+          const pins={chapter,pr,branch:candidate.head.ref,owner:entry.owner,revision:entry.revision,files:entry.files,reviewedCases:chapter==='083'?164:229,runId:run.id};
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/transfer-pins.json',JSON.stringify(pins),{flag:'wx'});
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'name='+name+'\nrun_id='+run.id+'\n');
+          JS
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.pins.outputs.name }}
+          run-id: ${{ steps.pins.outputs.run_id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/recorded
+      - name: Attach exact certificate and reviewed inputs to the owner draft
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/recorded"
+          sha256sum -c SHA256SUMS
+          node <<'JS'
+          const {execFileSync}=require('node:child_process');
+          const {createHash}=require('node:crypto');
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const root='repos/'+process.env.GITHUB_REPOSITORY;
+          const {chapter,pr,branch,owner,revision,files:sealedFiles,reviewedCases,runId}=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/transfer-pins.json'));
+          const receipt=JSON.parse(fs.readFileSync('recording-receipt.json'));
+          assert.equal(receipt.nativeIdentityProofAccepted,true);
+          assert.equal(receipt.sourceRevision,revision);
+          assert.equal(receipt.reviewedCases,reviewedCases);
+          assert(fs.readFileSync('scoped-validation.txt','utf8').includes('Scoped person data validation passed for jinshu/'+chapter));
+          const api=(method,url,body)=>JSON.parse(execFileSync('gh',['api','-X',method,root+url,...(body?['--input','-']:[])],{input:body?JSON.stringify(body):undefined,encoding:'utf8',maxBuffer:10e6}));
+          const ref='/git/refs/heads/'+branch;
+          assert.equal(api('GET',ref).object.sha,owner);
+          const entry=(rev,path)=>api('GET','/contents/'+path+'?ref='+rev);
+          const date='data/people/date-audits/jinshu/'+chapter+'.json';
+          const files=[];
+          for(const path of ['data/jinshu/'+chapter+'.json','data/people/extractions/jinshu/'+chapter+'.json','data/people/editorial-decisions/jinshu/'+chapter+'.json',date]){
+            const before=entry(owner,path), after=entry(revision,path);
+            if(before.sha===after.sha)continue;
+            assert(sealedFiles.some(seal=>seal.path===path&&seal.sha===after.sha),'Unexpected difference: '+path);
+            files.push({path,sha:after.sha});
+            if(path===date){
+              const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json',root+'/contents/'+date+'?ref='+owner],{maxBuffer:10e6});
+              const archive=createHash('sha256').update(JSON.stringify(JSON.parse(raw))).digest('hex');
+              files.push({path:'data/people/date-audit-history/jinshu/'+chapter+'/'+archive+'.json',sha:before.sha});
+            }
+          }
+          const proof=api('POST','/git/blobs',{encoding:'base64',content:fs.readFileSync('jinshu-'+chapter+'-identity-proof.json').toString('base64')});
+          files.push({path:'data/people/identity-reviews/jinshu/'+chapter+'.json',sha:proof.sha});
+          const original=api('GET','/git/commits/'+owner);
+          const tree=api('POST','/git/trees',{base_tree:original.tree.sha,tree:files.map(file=>({...file,mode:'100644',type:'blob'}))});
+          const commit=api('POST','/git/commits',{message:'Attach verified Jinshu '+chapter+' identity and chronology',tree:tree.sha,parents:[owner]});
+          for(const {path,sha} of files)assert.equal(entry(commit.sha,path).sha,sha);
+          assert.equal(api('PATCH',ref,{sha:commit.sha,force:false}).object.sha,commit.sha);
+          console.log(JSON.stringify({chapter:'jinshu/'+chapter,pullRequest:pr,recordingRun:runId,ownerBefore:owner,approvedHead:commit.sha,certificateBlob:proof.sha,files}));
+          JS
