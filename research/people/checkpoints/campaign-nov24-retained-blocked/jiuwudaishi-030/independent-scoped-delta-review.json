@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/030",
+  "reviewerAgentId": "bc-ff7c9705-b7e8-4bc4-8cc9-30de1787949c",
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "ownerRevision": "f98c033da5e063b3f6cc12a5e15d301fb692cb28",
+  "ownerProposalSha256": "sha256:9531a88042676f07f26114ab033d59d07afe401dd4366db5ca852fc4e2f33066",
+  "scope": {
+    "observedBlocker": "Actual extractor identity required for every chunk",
+    "excludes": [
+      "source translation edits",
+      "claim or chronology edits",
+      "editorial decision corpus",
+      "identity dossier review",
+      "run-level agentId invention",
+      "chunk runId invention"
+    ]
+  },
+  "verdict": "approve",
+  "approvedChanges": [
+    {
+      "kind": "chunk-agentId-restore",
+      "path": "data/people/extractions/jiuwudaishi/030.json",
+      "action": "Populate each run.chunks[].agentId with grokbot-24; retain run.agentId null and all runId values null",
+      "historicalAuthor": "grokbot-24",
+      "chunks": [
+        {
+          "chunkId": "001",
+          "startOrder": 0,
+          "endOrderExclusive": 53,
+          "before": { "agentId": null, "runId": null },
+          "after": { "agentId": "grokbot-24", "runId": null }
+        },
+        {
+          "chunkId": "002",
+          "startOrder": 53,
+          "endOrderExclusive": 110,
+          "before": { "agentId": null, "runId": null },
+          "after": { "agentId": "grokbot-24", "runId": null }
+        },
+        {
+          "chunkId": "003",
+          "startOrder": 110,
+          "endOrderExclusive": 146,
+          "before": { "agentId": null, "runId": null },
+          "after": { "agentId": "grokbot-24", "runId": null }
+        },
+        {
+          "chunkId": "004",
+          "startOrder": 146,
+          "endOrderExclusive": 170,
+          "before": { "agentId": null, "runId": null },
+          "after": { "agentId": "grokbot-24", "runId": null }
+        },
+        {
+          "chunkId": "005",
+          "startOrder": 170,
+          "endOrderExclusive": 185,
+          "before": { "agentId": null, "runId": null },
+          "after": { "agentId": "grokbot-24", "runId": null }
+        },
+        {
+          "chunkId": "006",
+          "startOrder": 185,
+          "endOrderExclusive": 208,
+          "before": { "agentId": null, "runId": null },
+          "after": { "agentId": "grokbot-24", "runId": null }
+        }
+      ],
+      "independentRationale": "Historical queue ledger commit a26341f053 records jiuwudaishi/030 claimed by worker grokbot-24 in lane grokbot with status ready. Promotion commit 2b72d8ad0ba35ccbb5b5dc0bfec9a9a57dbd5625 (PR 3914) carries the same six chunk order ranges as the pinned extraction. Promotion-era chunks also had null agentId; this restore does not alter people, claims, surfaces, translationRepairs, or chunk boundaries—only provenance metadata."
+    }
+  ],
+  "heldCases": [
+    {
+      "id": "run-level-agentId",
+      "verdict": "hold",
+      "reason": "run.agentId correctly remains null. Queue and promotion bytes do not supply a defensible single run-level Cursor agent identity; inventing one would exceed scope."
+    },
+    {
+      "id": "chunk-runIds",
+      "verdict": "hold",
+      "reason": "All chunk runId fields remain null. No reproduced historical bytes bind a specific Grok Bot run id; keep unknown."
+    },
+    {
+      "id": "date-audit-extractionHash-after-apply",
+      "verdict": "hold",
+      "reason": "Pinned data/people/date-audits/jiuwudaishi/030.json records extractionHash sha256:563e472b9a2a8d7826a1f2599fa5563da790d065f92b9d11ee9dece8b3468b90 at status audited. Simulated chunk agentId restore changes stable extractionHash to sha256:1ed450894e3b4054f3e0f99b7367f68d60a7c87bdc178e093ad9e8d91ae5e96d without changing source units or dated claim payloads. Native chronology closure may explicitly reuse unchanged item-level evidence (jinshu063 pattern); this review does not re-approve audited status on the post-restore hash."
+    },
+    {
+      "id": "queue-note-attachment-sha256",
+      "verdict": "hold",
+      "reason": "Ledger note cites attachment sha256 435ad33ac5fee63d72ed3c3ce8c29c7657a7b84759083124f1916e6baa2600b9. Reproduced promotion file bytes at 2b72d8ad hash to 0c009eb76787a15805f9b45c8ad794f1aef69d14d8fe1ec295c4c56bb86749e0 (raw) and af5a05825c537441b99b0ee885589763c48101319b1402379f370dd48399d0ee (stable JSON). Worker grokbot-24 and chunk-range proof stand on ledger plus promotion; attachment hash is supplementary and not reproduced here."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerHandoff": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-030/owner-handoff.json",
+      "contentSha256": "sha256:9531a88042676f07f26114ab033d59d07afe401dd4366db5ca852fc4e2f33066"
+    },
+    "inputs": {
+      "source": {
+        "path": "data/jiuwudaishi/030.json",
+        "gitBlob": "e218e691a0a7c999b408f64bac528f05e454dbdc",
+        "contentSha256": "sha256:47fea908a1cb785e854e345e1496590b3d24f71c30b43e2eb9aff77d29ac2118",
+        "verifiedAtOwnerRevision": true,
+        "inputChapterFingerprint": "sha256:0455cac930dbc11f02b73ab88ebc99032b2b71279485ae24798e1d43ccb71392"
+      },
+      "extraction": {
+        "path": "data/people/extractions/jiuwudaishi/030.json",
+        "gitBlob": "aced0573b2490f7d5d0aa46e6ccce06cb7e2c640",
+        "contentSha256": "sha256:563e472b9a2a8d7826a1f2599fa5563da790d065f92b9d11ee9dece8b3468b90",
+        "verifiedAtOwnerRevision": true,
+        "missingChunkAgentIds": ["001", "002", "003", "004", "005", "006"]
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/jiuwudaishi/030.json",
+        "gitBlob": "697cc734d0d44b651720f26cb24bc928d642aa5f",
+        "contentSha256": "sha256:40724e5ec351116c2240f2545c52f25b6ea9be70d9db0c96616ed6b95659e43b",
+        "verifiedAtOwnerRevision": true,
+        "extractionHash": "sha256:563e472b9a2a8d7826a1f2599fa5563da790d065f92b9d11ee9dece8b3468b90",
+        "status": "audited",
+        "priorReviewerPreserved": {
+          "name": "Independent Jiu Wudaishi 030 initial chronology reviewer",
+          "independentOfExtractor": true
+        }
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/jiuwudaishi/030.json",
+        "gitBlob": "7a8f85c8ac110bf9fa95b4a794ef2fc5ffd24dd4",
+        "contentSha256": "sha256:99b4c97468bb48438bb95d3e2858ead91be319523ce53702226013c719991809",
+        "verifiedAtOwnerRevision": true,
+        "inputChapterFingerprintHistorical": "sha256:e3dbe56ecce0bae0e719a201455c4ebb6ef26bd6ab3805a857bf089e7f3f5311",
+        "independentPriorEvidencePreserved": true
+      }
+    },
+    "historicalAuthorship": {
+      "queueLedgerCommit": "a26341f05308236ec8cd6619f7fe435a20392d6d",
+      "queueClaimKey": "jiuwudaishi/030",
+      "worker": "grokbot-24",
+      "lane": "grokbot",
+      "queueChapterFingerprint": "sha256:e3dbe56ecce0bae0e719a201455c4ebb6ef26bd6ab3805a857bf089e7f3f5311",
+      "promotionPullRequest": 3914,
+      "promotionCommit": "2b72d8ad0ba35ccbb5b5dc0bfec9a9a57dbd5625",
+      "promotionFileSha256Raw": "sha256:0c009eb76787a15805f9b45c8ad794f1aef69d14d8fe1ec295c4c56bb86749e0",
+      "promotionJsonHash": "sha256:af5a05825c537441b99b0ee885589763c48101319b1402379f370dd48399d0ee",
+      "currentJsonHash": "sha256:563e472b9a2a8d7826a1f2599fa5563da790d065f92b9d11ee9dece8b3468b90",
+      "postPromotionDriftVerified": "people, claims, surfaces, translationRepairs, and chunk ranges identical between promotion commit and pinned extraction; candidateDispositions differ only in alias-callback metadata"
+    }
+  },
+  "englishReview": {
+    "inScope": false,
+    "note": "Owner proposal is metadata-only. Fourteen applied editorial decisions and thirteen translation repairs remain sealed; no new English before/after pairs in scope."
+  },
+  "affectedNativeDependencies": {
+    "extractionProvenance": {
+      "effect": "chunk agentId fields populated with grokbot-24",
+      "substantiveExtractionUnchanged": true
+    },
+    "identityReview": {
+      "effect": "authorAgentIds must include grokbot-24 after apply",
+      "currentBlocker": "run.chunks[].agentId null prevents actual extraction author in identity receipts"
+    },
+    "chronology": {
+      "effect": "extractionHash changes on apply; pinned date audit extractionHash becomes stale",
+      "sourceUnitsUnchanged": true,
+      "nativeReusePath": "Scoped item-level replay against unchanged source and claim bytes (same pattern as jinshu063-historical-authorship-recovery); not executed in this review"
+    },
+    "editorial": {
+      "effect": "none",
+      "contentSha256UnchangedByProposal": true
+    },
+    "source": {
+      "effect": "none",
+      "gitBlobUnchanged": true
+    }
+  },
+  "validation": {
+    "pinVerification": {
+      "method": "git blob match plus stable JSON.stringify contentSha256 at ownerRevision f98c033",
+      "allPinnedInputsVerified": true
+    },
+    "ownerNativeValidationReplayed": {
+      "peopleValidateSummary": "Scoped person data validation passed for jiuwudaishi/030: 1 extraction(s), 137 local people, 397 mentions, 1018 claims, 0 proposed repair(s), 13 applied repair(s), 14 editorial decision(s)",
+      "dateAuditFreshAtPinnedExtraction": true,
+      "independentCorroboration": "Substantive field fingerprints match promotion commit 2b72d8ad; chunk ranges match owner proposal"
+    },
+    "localValidatorNotRun": "node_modules absent; scoped validate-people-data CLI not executed in this review turn per no-build constraint"
+  },
+  "reviewedAt": "2026-11-24T15:30:00.000Z",
+  "idempotencyKey": "dc199664e95295761149e8f84f979f82909e77b766705ea2fd0a3c36604b7d20"
+}
