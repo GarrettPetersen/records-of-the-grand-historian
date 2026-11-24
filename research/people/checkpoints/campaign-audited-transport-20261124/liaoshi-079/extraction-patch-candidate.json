@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-extraction-patch-candidate",
+  "scope": { "book": "liaoshi", "chapter": "079" },
+  "pullRequest": 5501,
+  "authorBranch": "cursor/liaoshi-079-audited-identity-6126",
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "handoffRef": "owned-evidence-proposal.json",
+  "caseId": "sha256:5b5ce57d638c54a696f2eb4cbac3ecd3b80f3dbc9588a989b4a3fcc798da1085",
+  "localPerson": "liaoshi:079:p012",
+  "targetPath": "data/people/extractions/liaoshi/079.json",
+  "applied": false,
+  "hashes": {
+    "extractionBefore": "sha256:47a5e5a333523874929db6ec26a9337ea3c218bd3d0622ecfe8b03574490b5fd",
+    "extractionAfterPreview": "sha256:d8d4d8f1a78b17ceb3c55a76a82dea30046213c7170deeee4945de4c939c1375",
+    "afterHashNote": "Preview from in-memory apply + JSON.stringify(2); native apply may differ slightly in formatting but same semantic delta.",
+    "unchanged": ["source", "editorial", "dateAudit"]
+  },
+  "operations": [
+    {
+      "op": "add-surface",
+      "personId": "p012",
+      "kind": "title-reference",
+      "lang": "zh",
+      "value": "上",
+      "units": [
+        { "unitId": "s0020", "mentionIndex": 0 },
+        { "unitId": "s0023", "mentionIndex": 0 },
+        { "unitId": "s0026", "mentionIndex": 0 },
+        { "unitId": "s0029", "mentionIndex": 0 },
+        { "unitId": "s0078", "mentionIndex": 0 }
+      ],
+      "reason": "Primary honorific for Tonghe sovereign in sealed Chinese; links assertDossierPrimaryWitness quote 上 at s0020/s0078."
+    }
+  ],
+  "affectedRows": {
+    "people": ["p012"],
+    "surfacesAdded": ["p012 title-reference/zh/上 @ s0020,s0023,s0026,s0029,s0078"],
+    "claimsUnchanged": [
+      "p012 title-reference en the emperor / The emperor",
+      "p012 attestation and polity-association rows"
+    ],
+    "chronologyUnchanged": true,
+    "identityMembershipUnchanged": true,
+    "canonicalPersonId": "per_0Q0C7VBJ6ZHF39324R0A",
+    "unresolvedIdentity": true
+  },
+  "genuineReferencesPreserved": {
+    "anchorLocalId": "liaoshi:008:p042",
+    "anchorWitness": { "unitId": "s0063", "quote": "隆緒" },
+    "independentReportCommit": "f2f57424d105faef325dc6702c738bbb4756383e"
+  },
+  "expectedValidationAfterApply": "npm run people:validate -- --book liaoshi --chapter 079"
+}

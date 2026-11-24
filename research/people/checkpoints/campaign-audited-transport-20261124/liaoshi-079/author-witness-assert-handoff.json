@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-audited-identity-author-repair-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "079"
+  },
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "campaignWorker": "cursor-nov24-audited-recovery-2",
+  "branch": "cursor/liaoshi-079-audited-identity-6126",
+  "pr": 5501,
+  "artifacts": {
+    "transportPacket": "transport-packet.json",
+    "preparationReceipt": "preparation-receipt.json",
+    "ownerEvidence": "owner-evidence.json",
+    "independentIdentityReport": "independent-identity-report.json",
+    "independentReportCommit": "f2f57424d105faef325dc6702c738bbb4756383e",
+    "independentReportSha256": "894a03a96da41177218a8002ce669ea965901c5657b3514db0184074f4b50e1c",
+    "ownedEvidenceProposal": "owned-evidence-proposal.json",
+    "authorWitnessAssertHandoff": "author-witness-assert-handoff.json"
+  },
+  "nativeFinding": {
+    "assertion": "scripts/lib/people-identity-dossiers.mjs assertDossierPrimaryWitness",
+    "message": "Witness does not support this person in the current primary source: liaoshi:079:p012 liaoshi:079:s0020 quote=\"上\"",
+    "caseId": "sha256:5b5ce57d638c54a696f2eb4cbac3ecd3b80f3dbc9588a989b4a3fcc798da1085",
+    "localId": "liaoshi:079:p012",
+    "witnessLocalIds": ["liaoshi:079:p012"],
+    "failingWitnesses": [
+      { "unitId": "s0020", "quote": "上", "unitText": "初，晉國公主建佛寺於南京，上許賜額。" },
+      { "unitId": "s0078", "quote": "上", "unitText": "四年春，宋將曹彬、米信等侵燕，上親征，阿沒裏為都監，屢破敵軍。" }
+    ]
+  },
+  "diagnosis": "Liao Tonghe sovereign liaoshi:079:p012 has English-only title name claims and empty zh mention spans, though the sealed chapter text and person descriptor both attest honorific 上 at s0020 and s0078. Native witness assert requires a Han quote tied to this person’s Chinese name evidence on that unit; quoting 上 from the primary source is correct editorially but fails until extraction links 上 to p012.",
+  "resolution": {
+    "chapterInputChangeRequired": true,
+    "action": "apply-owned-extraction-proposal-then-replay-native-cert",
+    "independentReportRewrite": false,
+    "preserveIndependentReviewer": {
+      "agentId": "bc-7030f98c-710c-48fc-a098-a7dd54b7a289",
+      "name": "cursor-nov24-independent-liaoshi-079"
+    },
+    "retainAfterRepair": {
+      "verdict": "approve",
+      "canonicalPersonId": "per_0Q0C7VBJ6ZHF39324R0A",
+      "membershipFingerprint": "sha256:072db4ac565306aaaab8c66bf4589aa48508bb37f8f974f339793ae06465a6ec",
+      "unresolvedIdentity": true,
+      "anchorLocalId": "liaoshi:008:p042",
+      "independentReasonUnchanged": true,
+      "sourceWitnessesAfterExtractionLink": [
+        { "localId": "liaoshi:079:p012", "book": "liaoshi", "chapter": "079", "unitId": "s0020", "quote": "上" },
+        { "localId": "liaoshi:079:p012", "book": "liaoshi", "chapter": "079", "unitId": "s0078", "quote": "上" },
+        { "localId": "liaoshi:008:p042", "book": "liaoshi", "chapter": "008", "unitId": "s0063", "quote": "隆緒" }
+      ]
+    }
+  },
+  "inputHashImpact": {
+    "unchanged": {
+      "source": "sha256:7af8aea632bd66d3eaca703a6a3ec6a0bd63ca22198bf9b28944785a5b63dae4",
+      "editorial": "sha256:d47afab9f5fd04b990f3c0e04fb65b2aa22b027d4f08e86e61dc75c1c67c5186",
+      "dateAudit": "sha256:7f361a9dfc34d862e50e6c603eb024b74f12416196473b1228b7a642aba07e50",
+      "planFingerprint": "sha256:78c17259d9d8324c5f88a579c5f5913a0e3f385b91be1583eaf8dfd0caf6ed37",
+      "transportSha256": "0f5f553b77a47e3ae299b539318ca81c42cc09f6165456815571de987b43dd17"
+    },
+    "wouldChangeIfProposalApplied": {
+      "extraction": "sha256:47a5e5a333523874929db6ec26a9337ea3c218bd3d0622ecfe8b03574490b5fd",
+      "packetFingerprint": "sha256:abe56e935ac2d0f66065cc92ff59cd4d44969f69a335d093a7d1997000c4692f",
+      "identityReviewInputs": "recomputed after scoped extraction validate"
+    }
+  },
+  "affectedScope": {
+    "cases": ["sha256:5b5ce57d638c54a696f2eb4cbac3ecd3b80f3dbc9588a989b4a3fcc798da1085"],
+    "localPeople": ["liaoshi:079:p012"],
+    "productionPathsProposedNotEditedHere": ["data/people/extractions/liaoshi/079.json"]
+  },
+  "notes": "Owner evidence already cited anchor 隆緒 only; independent report witnesses are source-correct but pre-link. No hold verdicts in this chapter."
+}
