@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-recovery",
+  "scope": "qingshigao/152",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "worker": "cursor-nov24-retained-editorial-1",
+  "mode": "editorial",
+  "phase": "hold-pending-independent-review-2",
+  "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+  "masterPin": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "idempotencyKey": "482806da21892d3ac015ece3d20c3013a557e703eb0d6af03388de14555b098b",
+  "inputBlobs": {
+    "data/qingshigao/152.json": "40976862a8c327a3a57a8b8f5dd4cfd7f639b002",
+    "data/people/extractions/qingshigao/152.json": "6c4dd3385f320fc074799801b75b90f8f0a5d582",
+    "data/people/date-audits/qingshigao/152.json": "166f12000b2f562ca2c352ae0ef2b20796ffb07e",
+    "data/people/editorial-decisions/qingshigao/152.json": "64c7fec514791ca7a3ad596081fc2fab2efea7f3"
+  },
+  "filesConsulted": [
+    "data/qingshigao/152.json",
+    "data/people/extractions/qingshigao/152.json",
+    "data/people/editorial-decisions/qingshigao/152.json",
+    "data/people/date-audits/qingshigao/152.json",
+    "scripts/lib/people-editorial-decisions.mjs",
+    "scripts/lib/people-qualified-scope.mjs",
+    "scripts/validate-people-data.mjs"
+  ],
+  "commands": [
+    {
+      "command": "npm run people:disk:check",
+      "exitCode": 0,
+      "summary": "disk guard passed"
+    },
+    {
+      "command": "npm run people:validate -- --book qingshigao --chapter 152",
+      "exitCode": 1,
+      "summary": "Editorial decision validation failed for r0004 and r0005"
+    },
+    {
+      "command": "node validateAppliedEditorialDecisions via loadValidatedPeopleChapter",
+      "exitCode": 1,
+      "summary": "applied qingshigao:152:r0004 and r0005 lack independent accept/revise authorization"
+    }
+  ],
+  "gateFailure": {
+    "gate": "editorial",
+    "error": "EditorialDecisionValidationError",
+    "errors": [
+      "applied qingshigao:152:r0004 has no matching independent accept/revise authorization",
+      "applied qingshigao:152:r0005 has no matching independent accept/revise authorization"
+    ]
+  },
+  "diagnosis": {
+    "retainedIndependentReview": {
+      "reviewerAgentId": "bc-576a586d-37d8-41ee-bd0a-4dcb4ce0afd8",
+      "proposalsFingerprint": "sha256:0eef4ae25765ac12e46b0f621cf0373e3a73385285bb7995d70e085881055da4",
+      "acceptedRepairs": [
+        "qingshigao:152:r0001",
+        "qingshigao:152:r0002",
+        "qingshigao:152:r0003"
+      ],
+      "rejectedRepair": {
+        "id": "qingshigao:152:r0004",
+        "unit": "s0086",
+        "field": "literal",
+        "note": "Stale proposal id: this r0004 targeted s0086 mail numerals, not the current extraction r0004. Independent rejection is correct—idiomatic s0086 already reads 362,216,239 pieces; changing 二百二十一 in the literal alone would break internal consistency."
+      }
+    },
+    "unauthorizedAppliedRepairs": [
+      {
+        "id": "qingshigao:152:r0004",
+        "unit": "s0020",
+        "field": "literal",
+        "chinese": "委員李奎",
+        "crossWitness": "s0038 州同李圭",
+        "englishDelta": "Li Kui → Li Gui"
+      },
+      {
+        "id": "qingshigao:152:r0005",
+        "unit": "s0020",
+        "field": "idiomatic",
+        "chinese": "委員李奎",
+        "crossWitness": "s0038 州同李圭",
+        "englishDelta": "Li Kui → Li Gui"
+      }
+    ],
+    "cause": "Repair renumbering after independent review left two Li Gui normalizations applied in extraction and source without a second independent accept/revise record."
+  },
+  "supplementalRepairs": [
+    {
+      "book": "qingshigao",
+      "chapter": "152",
+      "unitId": "s0020",
+      "field": "literal",
+      "before": "During the eleventh year of Guangxu, the former intendant of Ning-Shao-Tai circuit in Zhejiang, Xue Fucheng, on the basis of a submitted plan by commissioner Li Kui, requested that China establish its own bureaus to recover profit rights; Customs Commissioner Thomas Gell also went to Hong Kong and Japan to negotiate with those countries about withdrawing the British and Japanese postal bureaus set up in Shanghai, and there were already signs of progress.",
+      "after": "During the eleventh year of Guangxu, the former intendant of Ning-Shao-Tai circuit in Zhejiang, Xue Fucheng, on the basis of a submitted plan by commissioner Li Gui, requested that China establish its own bureaus to recover profit rights; Customs Commissioner Thomas Gell also went to Hong Kong and Japan to negotiate with those countries about withdrawing the British and Japanese postal bureaus set up in Shanghai, and there were already signs of progress.",
+      "reason": "The chapter repeats the same Guangxu 11 postal proposal at s0038 and gives its author's name as 李圭, Li Gui. The 李奎 form at s0020 is a textual variant, not a different person, so the English name is normalized to Li Gui.",
+      "sourceWitness": {
+        "citation": "s0020",
+        "excerpt": "委員李奎條陳",
+        "crossCitation": "s0038",
+        "crossExcerpt": "州同李圭條陳郵政利益"
+      }
+    },
+    {
+      "book": "qingshigao",
+      "chapter": "152",
+      "unitId": "s0020",
+      "field": "idiomatic",
+      "before": "In the eleventh year of Guangxu, Xue Fucheng, formerly intendant of the Ning-Shao-Tai circuit, acting on a proposal by Li Kui, urged China to open its own offices to recover commercial rights; Commissioner Gell had also gone to Hong Kong and Japan to negotiate withdrawal of the British and Japanese post offices in Shanghai, and progress was already visible.",
+      "after": "In the eleventh year of Guangxu, Xue Fucheng, formerly intendant of the Ning-Shao-Tai circuit, acting on a proposal by Li Gui, urged China to open its own offices to recover commercial rights; Commissioner Gell had also gone to Hong Kong and Japan to negotiate withdrawal of the British and Japanese post offices in Shanghai, and progress was already visible.",
+      "reason": "The chapter repeats the same Guangxu 11 postal proposal at s0038 and gives its author's name as 李圭, Li Gui. The 李奎 form at s0020 is a textual variant, not a different person, so the English name is normalized to Li Gui.",
+      "sourceWitness": {
+        "citation": "s0020",
+        "excerpt": "委員李奎條陳",
+        "crossCitation": "s0038",
+        "crossExcerpt": "州同李圭條陳郵政利益"
+      }
+    }
+  ],
+  "artifacts": {
+    "ownerRecovery": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/qingshigao-152/owner-recovery.json",
+    "supplementalReview2Seed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/qingshigao-152/supplemental-review-2-seed.json",
+    "retainedReview1V3": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/qingshigao-152/retained-review-1-v3.json",
+    "editorialV4RetainedPlusSeed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/qingshigao-152/editorial-v4-retained-plus-seed.json"
+  },
+  "remainingIssues": [
+    "Editorial gate fails until an independent reviewer records accept/revise for qingshigao:152:r0004 and qingshigao:152:r0005 against the current applied repair contracts.",
+    "Canonical data/people/editorial-decisions/qingshigao/152.json remains schema v3 with a stale proposals fingerprint; upgrade to schema v4 with review 1 preserved, then append review 2."
+  ],
+  "smallestPathForward": [
+    "Independent reviewer opens supplemental-review-2-seed.json, verifies 李奎/李圭 witnesses on s0020 and s0038, and writes accept decisions with sourceWitness for r0004 and r0005.",
+    "Publish editorial history as schema v4: byte-preserve review 1 (r0001–r0003 accepted; rejected s0086 literal proposal), append completed review 2.",
+    "Re-run npm run people:validate -- --book qingshigao --chapter 152; extraction and source blobs need no change if accept reasons match applied repair reasoning exactly."
+  ],
+  "ownerDelta": "No changes to pinned canonical inputs; recovery and supplemental review seed only."
+}
