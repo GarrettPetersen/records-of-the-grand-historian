@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "kind": "targeted-primary-witness-owner-delta",
+  "chapterKey": "jiuwudaishi:059",
+  "mode": "targeted-primary-witness",
+  "ownerAgentId": "bc-977db51c-ec93-4d60-9d14-c6f7f3527c76",
+  "ownerWorker": "cursor-nov24-four-part-owner-5",
+  "ownerRevision": "2eba5a7615722ce911d930cdf234e96b12a2b7ec",
+  "sourceReviewHead": "94de8049baa3ae323305e278916d3d1b73df39e2",
+  "sourceReviewRef": "cursor/nov24-four-part-independent-jiuwudaishi-059",
+  "idempotencyKey": "03f1896e9ca5d4430535d7792c3557656c2f0d6e5150fd4c809da2724a09857e",
+  "priorRun": "run-7756752f-6888-45d0-89aa-e0cb74613a63",
+  "sealedHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-four-part-audited/jiuwudaishi-059/owner-handoff.json",
+    "sha256": "5e17dbc6a9b7c8c592cfc6cc889bf835a17a4b2a789dc7f206d7215a4a711060"
+  },
+  "cases": [
+    {
+      "caseId": "sha256:45576463b73cad3a214daeacd917574ba46f27d66cad52f2c7a372d3c69d0569",
+      "localPersonId": "jiuwudaishi:059:p082",
+      "chapterPersonId": "p082",
+      "canonicalPersonId": "per_GXGACAEXJKCZPRSB4WED",
+      "disposition": "agree-hold",
+      "unresolvedIdentity": true,
+      "primaryNameWitnessPresent": false,
+      "summary": "Independent hold is correct. s0141 names Wang Zan’s beloved son-in-law and guard officer Xin Tingwei (愛婿牙將辛廷蔚); it does not name his daughter or contain「瓚女」. The blocking zh surface「瓚女」is an editorial compound (Wang Zan’s name 瓚 + 女), not quotable chapter Chinese.",
+      "reason": "Agree with reviewer hold: jiuwudaishi:059:p082 cannot receive primary personal-name certification on s0141 or elsewhere in owned units. Primary witnesses in the passage are 辛廷蔚 (p081) and the kinship term 愛婿 describing Xin Tingwei’s relation to Wang Zan (p080). An unnamed daughter may be entailed by 愛婿 / spouse claims, but that is not a quotable personal-name surface and must not be certified as「瓚女」. Retain canonical cluster per_GXGACAEXJKCZPRSB4WED with unresolved identity until evidence is repaired.",
+      "sourceWitnesses": [
+        {
+          "localId": "jiuwudaishi:059:p080",
+          "chapterPersonId": "p080",
+          "book": "jiuwudaishi",
+          "chapter": "059",
+          "unitId": "s0142",
+          "quote": "瓚",
+          "role": "named-person",
+          "note": "Wang Zan’s personal name appears in adjacent capital-levy context; not on s0141."
+        },
+        {
+          "localId": "jiuwudaishi:059:p081",
+          "chapterPersonId": "p081",
+          "book": "jiuwudaishi",
+          "chapter": "059",
+          "unitId": "s0141",
+          "quote": "辛廷蔚",
+          "role": "named-person"
+        },
+        {
+          "localId": "jiuwudaishi:059:p081",
+          "chapterPersonId": "p081",
+          "book": "jiuwudaishi",
+          "chapter": "059",
+          "unitId": "s0141",
+          "quote": "愛婿",
+          "role": "kinship-term",
+          "note": "Identifies Xin Tingwei as Wang Zan’s son-in-law; does not name the wife/daughter."
+        },
+        {
+          "localId": "jiuwudaishi:059:p082",
+          "chapterPersonId": "p082",
+          "book": "jiuwudaishi",
+          "chapter": "059",
+          "unitId": "s0141",
+          "quote": "愛婿",
+          "role": "kinship-term-only",
+          "note": "Entails an unnamed daughter/wife linked to Wang Zan; no primary personal name for p082 appears in this unit."
+        }
+      ],
+      "namedPersonScope": {
+        "certifiedInPassage": ["p080", "p081"],
+        "incorrectBlockingSurface": "瓚女",
+        "entailedUnnamed": ["p082"]
+      },
+      "contradictions": []
+    }
+  ],
+  "proposedChanges": [
+    {
+      "schemaVersion": 1,
+      "kind": "extraction-person-record-narrowing",
+      "book": "jiuwudaishi",
+      "chapter": "059",
+      "targetPath": "data/people/extractions/jiuwudaishi/059.json",
+      "sealedBlob": "b36602664ba38c42bf090d6f8de2a0b5ef823d06",
+      "affectedPersonIds": ["p082"],
+      "affectedItemIds": ["p082"],
+      "sourceCitation": {
+        "unitId": "s0141",
+        "zh": "及尹正京邑，委政於愛婿牙將辛廷蔚，曲法納賄，因緣為奸。"
+      },
+      "field": "person.names.zh",
+      "before": "瓚女",
+      "after": null,
+      "reason": "「瓚女」does not occur in owned chapter Chinese; it is not a primary quotation and must not block identity certification."
+    },
+    {
+      "schemaVersion": 1,
+      "kind": "extraction-alias-retraction",
+      "book": "jiuwudaishi",
+      "chapter": "059",
+      "targetPath": "data/people/extractions/jiuwudaishi/059.json",
+      "sealedBlob": "b36602664ba38c42bf090d6f8de2a0b5ef823d06",
+      "affectedPersonIds": ["p082"],
+      "before": {
+        "kind": "descriptive-kinship",
+        "en": "Daughter of Wang Zan",
+        "zh": "瓚女",
+        "strength": "strongly-inferred",
+        "unitIds": ["s0141"]
+      },
+      "after": null,
+      "reason": "s0141 does not contain「瓚女」; the alias falsely attributes a non-quotable Chinese string to the primary unit. Retain strongly-inferred spouse/child claims keyed on 愛婿 and 辛廷蔚 without inventing a daughter personal-name surface."
+    }
+  ],
+  "held": [
+    {
+      "caseId": "sha256:45576463b73cad3a214daeacd917574ba46f27d66cad52f2c7a372d3c69d0569",
+      "localPersonId": "jiuwudaishi:059:p082",
+      "canonicalPersonId": "per_GXGACAEXJKCZPRSB4WED",
+      "unresolvedIdentity": true,
+      "ownerAgreesWithReviewerHold": true,
+      "outcome": "source-supported-unknown",
+      "reason": "Unnamed daughter entailed by 愛婿 remains structurally valid; primary-name certification and membership remain blocked until blocking「瓚女」surfaces are retracted or replaced with quotable evidence."
+    }
+  ],
+  "validation": {
+    "reviewedAt": "2026-11-24T14:50:00.000Z",
+    "sealedInputsUnchanged": true,
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/059: 1 extraction(s), 125 local people, 627 mentions, 1485 claims, 0 proposed repair(s), 36 applied repair(s), 37 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    },
+    "reproduce": {
+      "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 059",
+      "validateDates": "npm run people:dates:verify -- --book jiuwudaishi --chapter 059"
+    },
+    "canonicalEditsApplied": false,
+    "notes": "Owner return only; extraction proposals are for independent review and are not applied on this branch."
+  }
+}
