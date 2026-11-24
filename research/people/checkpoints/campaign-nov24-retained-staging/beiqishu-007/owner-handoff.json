@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "007"
+  },
+  "ownerAgentId": "bc-6a74b3d1-5ce0-4540-9745-6315dc4ff727",
+  "worker": "cursor-nov24-retained-staging-w5-o5",
+  "idempotencyKey": "f2841825a0f34f983aad3d0066ca6cba7cb5e8d60ae79063582026877c267fd2",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-beiqishu-007-ff727",
+  "inputBlobWitness": {
+    "source": "8ce3638db0e3ed4415c328bdb1fb14b36b32dbf5",
+    "extraction": "c0c8ca1f48ca4fe4507fab16690552f62ac35d56",
+    "dateAudit": "4a210b24ce53e64bda50a80be3dd411794996f3d",
+    "editorial": "e26dfbe11efd224b41c8befdb1f6f9882602ac32"
+  },
+  "sealedInputs": {
+    "source": "sha256:2c31baf977f2413f505adebd400ad6b90039838031ce34ec2ea559ff1227676f",
+    "extraction": "sha256:b887f95d65899f257132a8f5cb7f33a6b79a4f4376d864d108812f5c06ca30aa",
+    "dateAudit": "sha256:4fbc3e4922520cc9e3094c4507161ffc809c787cb30ccedbbb8294d88533ff99",
+    "editorial": "sha256:8c2719fcc4dadbe9bfbf5c90e78180e5cb75584bef49998071b291b09283d087"
+  },
+  "sealedDateAuditWitness": {
+    "contentSha256": "sha256:4fbc3e4922520cc9e3094c4507161ffc809c787cb30ccedbbb8294d88533ff99",
+    "recordedStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T01:31:58.724Z",
+    "findings": 1,
+    "preservedOriginalReportBytes": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 124,
+    "translatedCount": 124,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book beiqishu --chapter 007",
+    "summary": "Scoped person data validation passed for beiqishu/007: 1 extraction(s), 49 local people, 212 mentions, 438 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book beiqishu --chapter 007",
+      "status": "stale",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T01:31:58.724Z",
+      "sealedReportStatus": "research-blocked",
+      "exitCodeNonZero": true
+    },
+    "editorialDecisionCount": 5
+  },
+  "substantiveFindings": "Biography chapter at 124 sentences with full English coverage. Scoped validation: 49 people, 438 claims, five applied editorial repairs. Sealed report bytes remain research-blocked for the undated s0003 marriage narrative (hints-p002, hints-p004, hints-p005, p002, p004, p005); adjacent s0005 Yuanxiang AD 538–539 correctly belongs only to Gao Zhan. people:dates:verify returns stale because report source/extraction hashes predate current pinned blobs—envelope reconciled as distinct hold without replacing audit bytes. No definite English omission or new chronology proposal from changed evidence.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "date-audit-finding-1",
+      "kind": "chronology-research-hold",
+      "itemIds": [
+        "hints-p002",
+        "hints-p004",
+        "hints-p005",
+        "p002",
+        "p004",
+        "p005"
+      ],
+      "people": [],
+      "problem": "The exact s0003 marriage narrative names Emperor Shenwu, Anluochen, and Princess Linhe without a calendar date. The next unit, s0005, dates only Gao Zhan’s Yuanxiang enfeoffment; assigning its AD 538–539 interval to the marriage participants would fabricate activity.",
+      "action": "Retain the three source-undated marriage attestations and their research-required active-date hints. Do not infer a date from the adjacent Gao Zhan enfeoffment; resolve only with independent source evidence for the marriage chronology.",
+      "sealedDateAuditStatus": "research-blocked",
+      "preservedOriginalReportBytes": true
+    },
+    {
+      "id": "date-audit-envelope-stale",
+      "kind": "date-audit-envelope-stale",
+      "problem": "Scoped people:dates:verify reports stale because sealed date-audit sourceHash or extractionHash no longer matches current pinned chapter inputs at staging.",
+      "action": "Reconcile with host idle-boundary date workflow; preserve sealed research-blocked report bytes and do not replace audit hashes without independent re-audit.",
+      "sealedDateAuditFileSha256": "sha256:4fbc3e4922520cc9e3094c4507161ffc809c787cb30ccedbbb8294d88533ff99",
+      "sealedDateAuditRecordedStatus": "research-blocked",
+      "datesVerifyStatus": "stale",
+      "pinnedSourceHash": "sha256:2c31baf977f2413f505adebd400ad6b90039838031ce34ec2ea559ff1227676f",
+      "pinnedExtractionHash": "sha256:b887f95d65899f257132a8f5cb7f33a6b79a4f4376d864d108812f5c06ca30aa",
+      "sealedReportSourceHash": "sha256:594ca71e125285fbcb6d97355d80e9f414be82fa0a60e61adf04e1358bfffecf",
+      "sealedReportExtractionHash": "sha256:3a4ba7d78d499c4d31b27af6c6f2f15d0c857a97e616ead4e9b590c2404856e3"
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book beiqishu --chapter 007",
+    "datesVerify": "npm run people:dates:verify -- --book beiqishu --chapter 007"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; sealed inputs unchanged."
+}
