@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu078-owner-identity-witness-hold-amendment",
+  "pr": 5425,
+  "baseHead": "80ad020ac36019d39d54c068898a626d9b805bde",
+  "independentEvidence": {
+    "pr": 5438,
+    "commit": "25f8b351afa90c00c2077c03fe9c214b9892803b",
+    "approve": 128,
+    "hold": 4,
+    "holdLocalIds": [
+      "jinshu:078:p115",
+      "jinshu:078:p081",
+      "jinshu:078:p082",
+      "jinshu:078:p084"
+    ]
+  },
+  "preservedApprovedIdentityDecisions": 128,
+  "reopenedApprovedCases": [],
+  "selfApproved": false,
+  "merged": false,
+  "editorialSha256Unchanged": true,
+  "editorialSha256": "c52dc425983076763722f03c630adc9389aa5e6675f5adabd35ebfd385570131",
+  "extractionSha256Before": "8e5f434fa99520a715cd47bf7f9fc79b2169f538a921c3343bdbc399b6a6bf66",
+  "extractionSha256After": "3dbf150f530d8efc956efd1d6f12ed5ee22c0ec345468b41a63e679dda37a3c7",
+  "unitChecks": {
+    "s0278": {
+      "zh": "群字敬林，嚴叔父也。",
+      "note": "群字敬林，嚴叔父也 — 叔父 predicates Kong Qun (群) as Yan’s paternal uncle; no separate father name token."
+    },
+    "s0186": {
+      "zh": "聖上寬明，宰輔弘納，雖射鉤之隙，賞之故行，雍齒之恨，侯之列國。",
+      "note": "射鉤之隙 / 雍齒之恨，侯之列國 — writes 射鉤 and 雍齒; does not write 桓公、管仲、 or 劉邦."
+    }
+  },
+  "scopes": [
+    {
+      "personId": "p115",
+      "caseId": "sha256:e56a0a7529afe089b58db01687c003a2481a95269adceed16e4a7dd412b15266",
+      "unitId": "s0278",
+      "unitZh": "群字敬林，嚴叔父也。",
+      "sourceSupportedZhWitness": false,
+      "explanation": "Primary unit s0278 supports Kong Qun (群/敬林) as Kong Yan’s 叔父 (claim-828). It does not write a name or kinship label for Yan’s father as a distinct referent. Attaching zh「叔父」to p115 would mis-attribute Qun’s role text; native review already rejected that quote. Minimal correction: keep p115 ID as unnamed entailed father; English-only descriptive-kinship; remove invented kinshipTerm zh「父」and misuse of「叔父」on the sibling edge. Chronology attestation left undated.",
+      "before": {
+        "name": [
+          "Father of Kong Yan",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "descriptive-kinship",
+              "en": "Father of Kong Yan"
+            },
+            "strongly-inferred",
+            [
+              "s0278"
+            ]
+          ]
+        ],
+        "x": "Anonymous paternal intermediary entailed by 叔父 in s0278; unnamed on the surface.",
+        "a": [
+          "research required: entailed only as Kong Yan's father by 叔父"
+        ]
+      },
+      "after": {
+        "name": [
+          "Father of Kong Yan",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "descriptive-kinship",
+              "en": "Father of Kong Yan"
+            },
+            "strongly-inferred",
+            [
+              "s0278"
+            ]
+          ]
+        ],
+        "x": "No Chinese personal or kinship token on s0278 names Kong Yan’s father. 「嚴叔父也」assigns 叔父 to Kong Qun (p113) relative to Kong Yan (p114). p115 remains an unnamed entailed paternal intermediary only; zh surface deliberately omitted (native assertDossierPrimaryWitness rejects quoting 叔父 for this localId)."
+      },
+      "claimFixes": [
+        {
+          "id": "claim-829",
+          "before": {
+            "relation": "sibling-of",
+            "personId": "p115",
+            "kinshipTerm": {
+              "zh": "叔父",
+              "en": "younger brother of the father"
+            },
+            "line": "paternal",
+            "sharedParentage": "uncertain",
+            "subjectRelativeAge": "younger",
+            "subjectRole": "younger brother",
+            "objectRole": "elder brother",
+            "parentage": "biological"
+          },
+          "after": {
+            "relation": "sibling-of",
+            "personId": "p115",
+            "kinshipTerm": {
+              "en": "elder brother (entailed: Qun is Yan's 叔父)"
+            },
+            "line": "paternal",
+            "sharedParentage": "uncertain",
+            "subjectRelativeAge": "younger",
+            "subjectRole": "younger brother",
+            "objectRole": "elder brother",
+            "parentage": "biological"
+          }
+        },
+        {
+          "id": "claim-830",
+          "before": {
+            "relation": "parent-of",
+            "personId": "p114",
+            "kinshipTerm": {
+              "zh": "父",
+              "en": "father"
+            },
+            "parentage": "biological",
+            "line": "paternal",
+            "subjectRole": "father",
+            "objectRole": "son",
+            "generationDistance": 1
+          },
+          "after": {
+            "relation": "parent-of",
+            "personId": "p114",
+            "kinshipTerm": {
+              "en": "father"
+            },
+            "parentage": "biological",
+            "line": "paternal",
+            "subjectRole": "father",
+            "objectRole": "son",
+            "generationDistance": 1
+          }
+        }
+      ],
+      "inventedNames": false
+    },
+    {
+      "personId": "p081",
+      "caseId": "sha256:46d3696365f00ed6ba33381b29eaeb27d986c100fd9ac6a37fd7231fa2c329ac",
+      "unitId": "s0186",
+      "unitZh": "聖上寬明，宰輔弘納，雖射鉤之隙，賞之故行，雍齒之恨，侯之列國。",
+      "sourceSupportedZhWitness": false,
+      "explanation": "Primary unit s0186 supports the allusion phrase「射鉤之隙」and names「雍齒」, but does not write 桓公. No source-supported Chinese name/title surface for p081; do not invent 桓公. Minimal correction: English title-only surface; certainty strongly-inferred; preserve person ID and undated attestation.",
+      "before": {
+        "name": [
+          "Duke Huan",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "title",
+              "en": "Duke Huan"
+            },
+            "explicit",
+            [
+              "s0186"
+            ]
+          ]
+        ],
+        "x": "Named only in the English rendering of the 射鉤 allusion; Chinese does not write 桓公."
+      },
+      "after": {
+        "name": [
+          "Duke Huan",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "title",
+              "en": "Duke Huan"
+            },
+            "strongly-inferred",
+            [
+              "s0186"
+            ]
+          ]
+        ],
+        "x": "s0186 writes「射鉤之隙」only. Chinese does not write 桓公/齊桓公. English title “Duke Huan” is classical identification of the allusion, not a primary Chinese name witness; zh not invented."
+      },
+      "inventedNames": false
+    },
+    {
+      "personId": "p082",
+      "caseId": "sha256:1e28ab0c692b7b1cb5ca2c0288cc8f09fdef29a651c8112b1eb7359fbacaec46",
+      "unitId": "s0186",
+      "unitZh": "聖上寬明，宰輔弘納，雖射鉤之隙，賞之故行，雍齒之恨，侯之列國。",
+      "sourceSupportedZhWitness": false,
+      "explanation": "Primary unit s0186 does not write 管仲.「射鉤之隙」is an incident phrase, not a personal name for Guan Zhong; attaching zh「射鉤」as a name would invent identity evidence the independent review forbade. Minimal correction: drop false explicit personal-name/zh; English conventional title surface only; preserve person ID and undated chronology.",
+      "before": {
+        "name": [
+          "Guan Zhong",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "personal-name",
+              "en": "Guan Zhong"
+            },
+            "explicit",
+            [
+              "s0186"
+            ]
+          ]
+        ],
+        "x": "Named only in the English rendering of the 射鉤 allusion; Chinese does not write 管仲."
+      },
+      "after": {
+        "name": [
+          "Guan Zhong",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "title",
+              "en": "Guan Zhong"
+            },
+            "strongly-inferred",
+            [
+              "s0186"
+            ]
+          ]
+        ],
+        "x": "s0186 writes「射鉤之隙」only. Chinese does not write 管仲. English “Guan Zhong” is classical identification of the arrow-hook allusion partner, not a primary Chinese name witness; zh not invented."
+      },
+      "inventedNames": false
+    },
+    {
+      "personId": "p084",
+      "caseId": "sha256:72499abd1d450f1a62cac296cccff0b3c568a3421b189bb1d9a7a609b8095b3e",
+      "unitId": "s0186",
+      "unitZh": "聖上寬明，宰輔弘納，雖射鉤之隙，賞之故行，雍齒之恨，侯之列國。",
+      "sourceSupportedZhWitness": false,
+      "explanation": "Primary unit s0186 supports 雍齒 (p083) with zh「雍齒」. The enfeoffing sovereign is implied by「侯之列國」but not named. No source-supported Chinese name for p084; do not invent 劉邦/高祖. Minimal correction: English conventional label only; strongly-inferred; preserve person ID, relation to p083, and undated attestation.",
+      "before": {
+        "name": [
+          "Liu Bang",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "personal-name",
+              "en": "Liu Bang"
+            },
+            "explicit",
+            [
+              "s0186"
+            ]
+          ]
+        ],
+        "x": "Named only in the English rendering of the 雍齒 enfeoffment; Chinese does not write 劉邦."
+      },
+      "after": {
+        "name": [
+          "Liu Bang",
+          null,
+          null
+        ],
+        "mentions": [
+          [
+            {
+              "kind": "title",
+              "en": "Liu Bang"
+            },
+            "strongly-inferred",
+            [
+              "s0186"
+            ]
+          ]
+        ],
+        "x": "s0186 writes「雍齒之恨，侯之列國」. Chinese names 雍齒 (p083) but does not write 劉邦/高祖. English “Liu Bang” is classical identification of the enfeoffing sovereign in the Yong Chi anecdote, not a primary Chinese name witness; zh not invented."
+      },
+      "inventedNames": false
+    }
+  ],
+  "policy": {
+    "inventNames": false,
+    "renameUnrelatedRecords": false,
+    "preservePersonIds": [
+      "p115",
+      "p081",
+      "p082",
+      "p084"
+    ],
+    "preserveAcceptedChronology": true
+  },
+  "validation": {
+    "validateExtraction": "ok",
+    "validateExtractionNormalize": "ok",
+    "peopleValidateScoped": "ok",
+    "note": "English idiomatic s0186 contains Duke Huan / Guan Zhong / Liu Bang; Chinese primary still lacks 桓公/管仲/劉邦. s0278 English has uncle for Qun, not Father of Kong Yan."
+  },
+  "tip": "cf7b62a358bb4735077983f48b64806c3f19084a"
+}
