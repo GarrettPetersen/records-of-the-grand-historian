@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "148"
+  },
+  "ownerAgentId": "bc-95b52b95-f4f5-4a30-aba0-2157f8206711",
+  "workerId": "cursor-nov24-retained-staging-w3-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2f093d1356d99463ba98f7b7d7697643a6113c23581016740debb9a8ec00a83a",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-148-06711",
+  "inputBlobWitness": {
+    "source": "ac2ea56e409578f78aeb12f1be61a05ee4c53fd2",
+    "extraction": "d8bf4a95a3b892f300dc9b9bc339009d0077fddf",
+    "dateAudit": "aaa2938dd9fd62ae22c51f952b798d1693c2f019",
+    "editorial": "7e7f1052b642ceb1b79986f852585c0457a932c9"
+  },
+  "sealedInputs": {
+    "source": "sha256:0f9186d9a0a805e391d61b46faa824eaa59ea8ce5e4f662d7efb81db8256b44f",
+    "extraction": "sha256:cc63fe511275e6ea43c997443a55454a8337901e96bb0e4247e0559367fed76a",
+    "dateAudit": "sha256:8bfa46767ce220000366f76ebf3cbc7f7e3bb668b87d067e56c4140570aba3c2",
+    "editorial": "sha256:2b2427fcda816c66a7116e23ccbdc9f735d9401e2c951437649dba469725c9ef"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 119,
+    "translatedCount": 119,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "sourceTitle": "Volume 148: Treatises 10 Selection of Officials",
+    "allUnitsCarryLiteralAndIdiomatic": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 148",
+    "summary": "Scoped person data validation passed for jiuwudaishi/148: 1 extraction(s), 17 local people, 59 mentions, 225 claims, 0 proposed repair(s), 2 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 148",
+      "status": "research-blocked",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T13:05:11.482Z",
+      "chronologyCurrentAtPinnedBlobs": true
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialRepairsReflectedInSource": true,
+      "proposedRepairCount": 0,
+      "legacyTemporalDebt": 0,
+      "legacyAliasDispositionDebt": 0
+    },
+    "editorialDecisionCount": 3,
+    "editorialAcceptedCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "Pinned four-part inputs witness-verified at staging 7cdf8f42e53b; scoped people:validate passed with zero proposed repairs.",
+    "Full Chinese chapter and both English fields reviewed via unit scan; accepted editorial repairs are present in source.",
+    "Complete initial independent audit of all 119 Chinese source units, all 88 temporal or active-hint items, and all 17 people. This chronological examination-and-appointment record directly supports all numbered reign-year claims. Yao Ji’s four records and active hint are held because their sole source wording is bare 四月, which does not establish a point year or the extracted AD 907–911 activity interval. No source or canonical extraction was changed.",
+    "No new definite English omission, false-merge signal, extraction coverage gap, or owner-scoped chronology/identity amendment identified at sealed blobs."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "jiuwudaishi:148:date-hold-1",
+      "kind": "research-blocked-chronology",
+      "status": "retained",
+      "items": [
+        "claim-52",
+        "claim-53",
+        "claim-71",
+        "claim-99",
+        "claim-113",
+        "hints-p001",
+        "p001"
+      ],
+      "people": [],
+      "problem": "The source gives only 四月 for Yao Ji’s office and memorial records. It neither names a regnal year in that entry nor supports activity throughout AD 907–911; the current Western interval and active hint require a dated, pinned witness.",
+      "preservedAction": "Retain a source-specific hold and replace the interval only after a dated witness identifies the governing year for this fourth-month event.",
+      "source": "data/people/date-audits"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "dateAuditStatus": "research-blocked",
+    "notes": "Owner handoff is not independent identity or chronology approval; retained research-blocked date holds remain explicit in distinctHolds."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 148",
+    "datesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 148"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; no sealed input mutation, registry build, or publication."
+}
