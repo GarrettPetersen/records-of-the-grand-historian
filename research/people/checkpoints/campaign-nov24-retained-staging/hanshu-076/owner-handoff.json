@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "076"
+  },
+  "ownerAgentId": "bc-433154af-e56e-454a-9678-f98f1041d2fb",
+  "worker": "cursor-nov24-retained-staging-w7-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "d8e152b3f4102228fa43a8fde4834976e2379fc12859fbc91feaeeef7b5f4bbf",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-076-1d2fb",
+  "inputBlobWitness": {
+    "source": "70f6beb5726a0aacc91164d1d1a4675ec98729ca",
+    "extraction": "d5c10d0356f760e1adc805816be0f2f3856cdfc2",
+    "dateAudit": "3989776312fcaed7ebcdcbccb281a0dc507514c2",
+    "editorial": "a5c9715ea2423869909c8ef1b01ce20bb34592e1"
+  },
+  "sealedInputs": {
+    "source": "sha256:bea817b714bf4bebce738a84b8d005504aaf57d70844cf540b4489d467e0088b",
+    "extraction": "sha256:608afa5031bdcffaee3366684c206520b1c76761275fafe7a53f49af0eb0c44d",
+    "dateAudit": "sha256:105b86ca65ac7f27d35a2380abd7c76ceab5f1d8c96c9ee6419d22459b916537",
+    "editorial": "sha256:a481b1842e7e5cb440d19f36f2cc505e1b6739aec5a952df46d3ddf16ea60169"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 348,
+    "translatedCount": 348,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book hanshu --chapter 076",
+    "peopleValidateSummary": "Scoped person data validation passed for hanshu/076: 1 extraction(s), 122 local people, 646 mentions, 435 claims, 0 proposed repair(s), 17 applied repair(s), 17 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 118 person record(s) without an attestation, 116 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "sealedDateAudit": {
+      "status": "research-blocked",
+      "contentSha256": "sha256:105b86ca65ac7f27d35a2380abd7c76ceab5f1d8c96c9ee6419d22459b916537",
+      "reviewedAt": "2026-09-23T07:16:07.079Z",
+      "summary": "Fresh complete audit 348 units/140 items/122 people; explicit holds remain, no new defect.",
+      "findingCount": 1,
+      "affectedItems": 17,
+      "extractionHashSealed": "sha256:4b34ba4099aa9ffbae16f299d5de9b8407f0a26e17521001332b09f8fb33c80b",
+      "sourceHashSealed": "sha256:12d2c203cfd19432841a18bdde1d16e0deb903a5506df33974ed3403b6163c57",
+      "preservedReportBytes": true,
+      "overwritten": false
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 076",
+      "runtimeStatus": "research-blocked",
+      "runtimeFindings": 1,
+      "runtimeReviewedAt": "2026-09-23T07:16:07.079Z",
+      "packetExtractionHash": "sha256:4b34ba4099aa9ffbae16f299d5de9b8407f0a26e17521001332b09f8fb33c80b",
+      "packetSourceHash": "sha256:12d2c203cfd19432841a18bdde1d16e0deb903a5506df33974ed3403b6163c57",
+      "sealedExtractionHashMatchesPacket": true,
+      "sealedSourceHashMatchesPacket": true,
+      "note": "Sealed report status matches native scoped verify."
+    },
+    "extractionCoverage": {
+      "editorialPassCompleted": true,
+      "note": "Scoped validation passed; no new extraction coverage gap found in owner pass."
+    }
+  },
+  "substantiveFindings": "Retained staging owner review at pinned blobs: Fresh complete audit 348 units/140 items/122 people. People validation passed; English literal and idiomatic coverage complete on all Chinese units in scope. Sealed independent date report remains research-blocked with 17 distinct hold item IDs across 1 finding(s); all are source-qualified unknowns or non-local chronology—no concrete changed evidence requiring a new scoped chronology repair in this pass. people:dates:verify confirms research-blocked status at current packet hashes. No definite English omission or mistranslation found; no canonical source, extraction, editorial, or date-audit edits.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "items": [
+        "claim-23",
+        "claim-27",
+        "claim-41",
+        "claim-44",
+        "claim-59",
+        "claim-64",
+        "claim-114",
+        "hints-p013",
+        "hints-p022",
+        "p016",
+        "p017",
+        "p021",
+        "p022",
+        "p028",
+        "p084",
+        "p010",
+        "p013"
+      ],
+      "problem": "Explicit source-specific holds remain.",
+      "action": "Preserve holds pending source qualification.",
+      "preserve": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 076",
+    "validateDates": "npm run people:dates:verify -- --book hanshu --chapter 076"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; no sealed input edits; independent final review and date re-audit remain pending while research holds persist."
+}
