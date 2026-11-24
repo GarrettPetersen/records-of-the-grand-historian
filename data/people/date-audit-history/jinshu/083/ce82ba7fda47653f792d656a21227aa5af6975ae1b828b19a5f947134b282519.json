@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "book": "jinshu",
+  "chapter": "083",
+  "sourceHash": "sha256:e319248128286fa0a30defb276a8a11d20d93baf9499066ea3e806a13a4fd5c4",
+  "extractionHash": "sha256:59bfc30d630db14a0d84380c22772b9722c48715ced74aaca03118b509c9792b",
+  "status": "needs-revision",
+  "reviewer": {
+    "name": "Composer 2.5 (Jinshu 083 independent reviewer)",
+    "independentOfExtractor": true,
+    "agentId": "bc-d3bf973d-547f-4079-9663-0ac999f1c2b1"
+  },
+  "reviewedAt": "2026-11-23T22:18:59.565Z",
+  "summary": "Follow-up on owner 1d31857750: AD 300 cap removed from c0814/claim-212; native unresolved hold is supported (sourceDate + unresolved, no western bounds). Mei→Gui kinship claims verified. One residual hint debt on hints-p026. Editorial v4 r0017–r0037 unchanged. Full chapter approval still blocked on hint cleanup; no new incorrect Western date contradictions.",
+  "reviewedUnits": [
+    "s0053",
+    "s0076",
+    "s0077",
+    "s0154",
+    "s0376",
+    "s0381"
+  ],
+  "itemChecks": [
+    {
+      "id": "claim-169",
+      "verdict": "supported",
+      "event": "Retrospective reception of earlier ministers leaving mourning during Gu He’s argument.",
+      "evidence": [
+        {
+          "unit": "s0053",
+          "quote": "昔先朝政道休明"
+        }
+      ],
+      "reason": "claim-169 correctly marks retrospective reference separate from Shan Jia’s own life dating; unchanged from prior acceptable extraction geometry."
+    },
+    {
+      "id": "claim-212",
+      "verdict": "supported",
+      "event": "Historical contrast 山賈諸公皆釋服從時 inside Gu He’s memorial; Shan Jia is not given a Western Jin career endpoint.",
+      "evidence": [
+        {
+          "unit": "s0053",
+          "quote": "山賈諸公皆釋服從時"
+        }
+      ],
+      "reason": "Native rules allow sourceDate plus unresolved:true without westernBounds when no convertible year is stated. Removing the unsupported onOrBefore AD 300 cap fixes the prior contradiction; this is a grounded undated reference, not a blocking date error."
+    },
+    {
+      "id": "hints-p026",
+      "verdict": "research-blocked",
+      "event": "Active-date hint for p026 (Shan Jia) still echoes the retired AD 300 cap language while claim-212 is correctly held.",
+      "evidence": [
+        {
+          "unit": "s0053",
+          "quote": "山賈諸公皆釋服從時"
+        }
+      ],
+      "reason": "The hint text “before AD 300” must not remain as living chronology after the claim hold; retain an explicit research flag without reintroducing the falsified endpoint."
+    }
+  ],
+  "personChecks": [
+    {
+      "id": "p026",
+      "verdict": "research-blocked",
+      "reason": "Person-level hints still reference the retired AD 300 cap; claims are held correctly but hints need host cleanup before chronology approval.",
+      "evidence": [
+        {
+          "unit": "s0053",
+          "quote": "昔先朝政道休明，中夏隆盛，山賈諸公皆釋服"
+        }
+      ]
+    },
+    {
+      "id": "p036",
+      "verdict": "supported",
+      "reason": "袁瑰 / Yuan Gui heading and body records align; chapter-local same-person link to p037 is source-grounded.",
+      "evidence": [
+        {
+          "unit": "s0076",
+          "quote": "袁瑰"
+        }
+      ]
+    },
+    {
+      "id": "p037",
+      "verdict": "supported",
+      "reason": "袁瑰 / Yuan Gui heading and body records align; chapter-local same-person link to p037 is source-grounded.",
+      "evidence": [
+        {
+          "unit": "s0077",
+          "quote": "袁瑰，字山甫，陳郡陽夏人，魏郎中令渙之曾"
+        }
+      ]
+    },
+    {
+      "id": "p070",
+      "verdict": "supported",
+      "reason": "Mononym 瑰 in Yuan You section matches Yuan Gui with explicit same-person claims and s0154 少與瑰齊名.",
+      "evidence": [
+        {
+          "unit": "s0154",
+          "quote": "猷字申甫，少與瑰齊名。"
+        }
+      ]
+    },
+    {
+      "id": "p168",
+      "verdict": "supported",
+      "reason": "Appraisal 山甫 and 袁子 are Yuan Gui’s courtesy and honorific surfaces; same-person claims to p037 are conservative and source-backed, but records remain separate pending lookup.",
+      "evidence": [
+        {
+          "unit": "s0376",
+          "quote": "而君孝固情禮而違顯命，山甫獻誠讜而振頹風"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "hints-p026",
+        "p026"
+      ],
+      "problem": "Active hint still embeds “before AD 300” after claim-212 moved to unresolved hold; hints must not revive falsified Western endpoints.",
+      "action": "Rewrite p026 active-date hint to a neutral research hold (no AD 300 endpoint) or clear the hint once independent date audit accepts claim-212 only."
+    }
+  ],
+  "references": [
+    {
+      "kind": "chapter",
+      "book": "jinshu",
+      "chapter": "083",
+      "unit": "s0053",
+      "quote": "山賈諸公皆釋服從時",
+      "sourceHash": "sha256:e13d2c0714d3acd9711fc103ca906633fe135c7b016de843e80c8c6ba7620967",
+      "reason": "Quoted contrast inside Gu He memorial; independent review confirms no source year for Shan Jia’s own service endpoint."
+    }
+  ],
+  "priorReviewCommit": "fede91fee456bc69e3bde17211a5f659ba6afa72",
+  "ownerRecheckCommit": "1d31857750bb6c3f6110885228614fa103793462"
+}
