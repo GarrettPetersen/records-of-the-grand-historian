@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-applied-reviewed-delta",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "028",
+    "chapterKey": "jiuwudaishi/028"
+  },
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "ownerRunId": "run-1840d690-8704-4ed7-a5f8-7fc2c4f2a967",
+  "idempotencyKey": "fb625fedafed025fea1bf3a3cbe8c1d8fed52b11a37496c6e0364a2ac693d534",
+  "parentRevision": "54b36d3c78de1e3bd7e1f49287673a73d81bc84b",
+  "stagingRevision": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "draftPullRequest": 5719,
+  "ownerBranch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-028-d91335",
+  "applyBranch": "cursor/nov24-owner-apply-approved-delta-jiuwudaishi-028",
+  "independentReview": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-028/independent-scoped-delta-review.json",
+    "gitRef": "880ef54dc38440ed19d1543c5a4d285075168426",
+    "sha256": "2d3101c604790bdabc80e681db4c3e1d751342a14759b899b843ac35dd8a40ee",
+    "reviewerAgentId": "bc-8c1c68f1-c96e-4b8b-b6d3-a53c5b96bda2",
+    "runId": "run-7e0cb861-442f-4d80-bd57-790f3b6773fb",
+    "verdict": "approve"
+  },
+  "ownerProposal": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-028/owner-handoff.json",
+    "sha256": "bc7c8a0816271a517bca4ca9e369193d6a793fa2a15a36cd90191a80b0cd84da"
+  },
+  "approvedDelta": {
+    "kind": "chunk-agentId-restore",
+    "worker": "grokbot-29",
+    "chunkIds": ["001", "002", "003", "004", "005", "006", "007", "008"],
+    "runAgentIdRemainsNull": true,
+    "runIdsRemainNull": true,
+    "serializer": "serializeCompactPeopleExtraction",
+    "verifiedOutput": {
+      "fileSha256": "sha256:18d0780251bf15e39912fb05e3dd1498618b7e03ca0481dcaa40dce7953fbbb3",
+      "jsonHash": "sha256:65abfc35c65a06f542b83b243cb239774645fc819aebc27d56903ce1bf441f26",
+      "extractionAuthorAgentIds": ["grokbot-29"]
+    }
+  },
+  "affectedPaths": {
+    "data/people/extractions/jiuwudaishi/028.json": {
+      "beforeGitBlob": "e746a4a823e54e76cc986b1612d742122e29e855",
+      "afterGitBlob": "03be6453994bab838d2ee469a6f2934e85c1dcc4",
+      "beforeFileSha256": "sha256:0bf0826d8e7533ebc1f9925f5f230511f3801b600d645b7be1462b48b4a7086a",
+      "afterFileSha256": "sha256:18d0780251bf15e39912fb05e3dd1498618b7e03ca0481dcaa40dce7953fbbb3",
+      "beforeJsonHash": "sha256:56e86fe68e44d1ab840c3a9c85491bb51eeab7ed22e994d1d216a4d70cb53664",
+      "afterJsonHash": "sha256:65abfc35c65a06f542b83b243cb239774645fc819aebc27d56903ce1bf441f26",
+      "semanticDeltaPointers": [
+        "/run/chunks/0/agentId",
+        "/run/chunks/1/agentId",
+        "/run/chunks/2/agentId",
+        "/run/chunks/3/agentId",
+        "/run/chunks/4/agentId",
+        "/run/chunks/5/agentId",
+        "/run/chunks/6/agentId",
+        "/run/chunks/7/agentId"
+      ]
+    }
+  },
+  "unchangedPinnedInputs": {
+    "data/jiuwudaishi/028.json": "d0f0dcc3478f167df72470de14d67e9736ff69d3",
+    "data/people/date-audits/jiuwudaishi/028.json": "fbc2772ac2daa395e7158e69f57a710c31d8beef",
+    "data/people/editorial-decisions/jiuwudaishi/028.json": "4badc210afa88fa44444e5a9819d30d4e82a8473"
+  },
+  "chronologyAndEditorialProof": {
+    "sourceHashUnchanged": true,
+    "datePacketItemsDeepEqual": true,
+    "editorialDecisionsValidOnPatchedExtraction": true,
+    "dateAuditBytesPreserved": true,
+    "dateAuditNotRepinned": true
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 028",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jiuwudaishi/028: 1 extraction(s), 151 local people, 789 mentions, 940 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 2 claim retraction(s), 4 claim revision(s), 0 claim addition(s)."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 028",
+      "status": "stale",
+      "expectedAfterAuthorshipMetadataEdit": true,
+      "note": "Prior audited report preserved byte-identical; fresh independent date record required on new extractionHash per review."
+    }
+  },
+  "residualDependencies": [
+    {
+      "gate": "date-audit-freshness",
+      "path": "data/people/date-audits/jiuwudaishi/028.json",
+      "status": "stale",
+      "requiredAction": "Independent native people:dates:record on current packet; not authorized in this apply turn"
+    },
+    {
+      "gate": "chapter-identity-review",
+      "status": "not-produced",
+      "note": "authorAgentIds should include grokbot-29 when prepared on master-synchronized identity code"
+    }
+  ],
+  "residualGates": {
+    "publication": "not approved by this delta",
+    "dateApproval": "not granted; prior report preserved"
+  },
+  "notes": "Metadata-only chunk agentId restore; no claim, person, mention, source, editorial, or date-audit body edits."
+}
