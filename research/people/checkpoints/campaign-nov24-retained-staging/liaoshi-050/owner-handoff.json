@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "050"
+  },
+  "ownerAgentId": "bc-488b211f-a9a5-4e20-8945-5268c218df57",
+  "workerId": "cursor-nov24-retained-staging-w1-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "06f9c623c3fc445ae56d9993095310b7072e79d5742476f968463e63a40225c2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-050-8df57",
+  "inputBlobWitness": {
+    "source": "ad94eb08eaff1c9968111469532f5961d842ad3d",
+    "extraction": "5d17285c08b8154194483875d0fdc0d85a9c2ce5",
+    "dateAudit": "347f685e9d2e2c6c2b5eed2a439122b8fa917824",
+    "editorial": "89db1d2f7a2079014cee955c608da58bb8e0b723"
+  },
+  "sealedInputs": {
+    "source": "sha256:3dad6be53a8687578308234526e493cd32993087e07ded08ef098695ed5b7636",
+    "extraction": "sha256:786c71b0e3f87ddd4f919bfd7bcc4acd8b47d1e8b5f3e6c7df0165bbee50dbf7",
+    "dateAudit": "sha256:ca311b37801f2127926874d4fe040aff3bf3f18a6f2c67661e54f39b5398cc4c",
+    "editorial": "sha256:d98c8e2b104b23e4f8b2958dd05c79446b908fd2a184a04d83f9d3c6b6789dfa"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 50 Treatises 20: Rites 2",
+    "englishCoverage": {
+      "sentenceCount": 177,
+      "translatedCount": 177,
+      "bothFieldsComplete": true,
+      "ownerSentenceScan": 177,
+      "missingUnits": []
+    },
+    "chineseReview": "All chapter units read against sealed source; no new English omission or mistranslation found beyond prior accepted editorial repairs."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book liaoshi --chapter 050",
+    "summary": "Scoped person data validation passed for liaoshi/050: 1 extraction(s), 9 local people, 65 mentions, 102 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionValidate": "data/people/extractions/liaoshi/050.json: ok (9 people, 65 mentions, 102 claims, 119 candidates)",
+    "chronologyStatus": "research-blocked",
+    "chronologyStale": false,
+    "dateAuditSummary": "Fresh complete independent canonical audit after curation 74d5d30d39: all 177 Chinese units, all 31 temporal or active-hint items, and all 9 people were checked. Directly named imperial deaths and funeral participants retain their source-specific AD 1031, 1055, and 1101 evidence. The former AD 1031–1101 activity intervals for 皇太后, 太皇太后, and 南朝皇帝 are gone: each is now an undated source-linked generic-title hold, not a personal chronology. Those three identity holds require separate false-person resolution, so this complete audit is research-blocked and does not approve the chapter.",
+    "dateFindingsCount": 3,
+    "dateReviewedAt": "2026-09-23T12:18:52.094Z",
+    "editorialDecisionCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned git blobs verified at staging 7cdf8f42e53be7a29bbc018e6d1f93783d741f6a. Scoped validation, extraction validation, and date-audit fingerprint checks pass without stale chronology. Nine people; generic-title identity/chronology holds. No new owner-proposed extraction, editorial, or chronology edits; preserved reviewed holds and true unknowns unchanged.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "items": [
+        "claim-69",
+        "hints-p007",
+        "p007"
+      ],
+      "problem": "皇太后 is a generic title in this ritual formulary, not an identified continuous person. The repaired extraction correctly retains only an undated source-linked hold and no AD 1031–1101 personal interval.",
+      "action": "Keep the unresolved claim and research-required hint. Resolve or reclassify the generic person through the separate person-correction workflow; do not infer a holder or personal chronology from the formularies.",
+      "preserved": true
+    },
+    {
+      "items": [
+        "claim-70",
+        "hints-p008",
+        "p008"
+      ],
+      "problem": "太皇太后 is a generic ceremonial title, not evidence for one person active across the separate funeral and diplomatic procedures. The repaired extraction correctly retains no AD 1031–1101 personal interval.",
+      "action": "Keep the unresolved claim and research-required hint. Resolve or reclassify the generic person through the separate person-correction workflow; do not infer a holder or personal chronology from the formularies.",
+      "preserved": true
+    },
+    {
+      "items": [
+        "claim-71",
+        "hints-p009",
+        "p009"
+      ],
+      "problem": "南朝皇帝 is a generic diplomatic title in the Song-envoy formula, not a uniquely identified emperor. The repaired extraction correctly retains no AD 1031–1101 personal interval.",
+      "action": "Keep the unresolved claim and research-required hint. Resolve or reclassify the generic person through the separate person-correction workflow; do not infer a holder or personal chronology from the formularies.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "nextGate": "independent-final-chapter-review",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/liaoshi/050.json data/people/extractions/liaoshi/050.json data/people/date-audits/liaoshi/050.json data/people/editorial-decisions/liaoshi/050.json",
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 050",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 050"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; sealed inputs unchanged."
+}
