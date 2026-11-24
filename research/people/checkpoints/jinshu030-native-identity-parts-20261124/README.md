@@ -1,27 +1,23 @@
-# Jinshu 030 native identity — transport parts 001–007
+# Jinshu 030 native identity — transport parts 001–015
 
 Independent reviewer: `bc-ab2acfed-77c9-4601-afc7-18feb78285d3`.
 
-Sealed packet: GitHub Actions run `45295382073`, artifact `jinshu-030-native-identity-evidence` (artifact id `14876786838` in workflow metadata). Pins: staging `33756287500867672ab5692bfbb9d1f9dc8b4470`, prior evidence `65e28f9b817df4097a319383d6497684764ff8b3`, overlay `4250c15c07f1416179ea73b9645b87d009cf5a47`. Plan fingerprint `sha256:885623b648ec5396debd3454b9d7a4fe0b90d76fd524baba52a3f2b5a6783f78` (207 cases, 42 transport parts).
+Sealed packet: GitHub Actions run `45295382073`, artifact `jinshu-030-native-identity-evidence` (`14876786838`). Plan fingerprint `sha256:885623b648ec5396debd3454b9d7a4fe0b90d76fd524baba52a3f2b5a6783f78` (207 cases, 42 transport parts).
 
-## Reviewed parts (38 cases)
+## Reviewed (77 cases)
 
-| Part | Transport SHA-256 (prefix) | Cases | Report fingerprint (prefix) |
-|------|----------------------------|-------|-----------------------------|
-| 001 | `a79feec4…` | 3 | `40a4e5ea…` (p192 reason corrected: Eastern Jin 中興 / 刁協 at s0534) |
-| 002 | `100b838c…` | 3 | `203339f3…` |
-| 003 | `a3b37389…` | 6 | `dd1b8006…` |
-| 004 | `1a6571bf…` | 6 | `afa7a47e…` |
-| 005 | `31bcf7db…` | 7 | `aa0f450e…` |
-| 006 | `2e179b69…` | 6 | `b816f7f7…` |
-| 007 | `87fac828…` | 7 | `795babda…` |
+| Parts | Cases (cumulative) | Notes |
+|-------|-------------------|--------|
+| 001–007 | 38 | p192 corrected (Eastern Jin 中興 / 刁協 at s0534) |
+| 008–015 | +39 in this batch | Sealed report + `hand-reasons-NNN.json` per part |
+| **Total** | **77** | |
 
-Bodies: `transport-part-NNN-independent-review.json`. Validation: `validation-receipt.json` (all seven parts passed witness checks against downloaded transport bytes).
+One **hold** in part 011 (p154 / s0296): witnessed Chinese has gesture gloss only, no personal-name span.
 
-## Stop rule (40-case cap)
+## Cap
 
-Part 008 would bring cumulative reviewed cases to **44** (above the 40-case continuation cap). **Parts 008–042 are explicitly unreviewed.**
+This batch authored **39 new cases** (parts 008–015); part **016** would exceed the **40 new-case** continuation cap. **Parts 016–042 unreviewed.**
 
-## Out of scope
+Per-part transport SHA-256 and report fingerprints: `validation-receipt.json`, `hash-verification-receipt.json`. Witnessed reasons live in `hand-reasons-00N.json` beside each sealed `transport-part-00N-independent-review.json`.
 
-No source, chronology, validator, identity queue, merge, or global build edits.
+No source, validator, queue, merge, or build edits.
