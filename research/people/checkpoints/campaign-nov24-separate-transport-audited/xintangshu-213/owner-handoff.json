@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "213"
+  },
+  "ownerAgentId": "bc-31959fae-132e-4d10-86f7-24a41b42d3ab",
+  "workerId": "cursor-nov24-separate-transport-owner-4",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "a8eec7e5a23407ace2e2e0d352c5c333ec667014b70c5e1c806b6c17cc6c180d",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-xintangshu-213-42d3ab",
+  "inputBlobWitness": {
+    "source": "adddff837fd3eda919f9e013ffdd75910a5d009c",
+    "extraction": "8fa4b476badf3f162c7e687dd4df82f55cc61baa",
+    "dateAudit": "aa024fc1b86738300be9694718988d55b80d71b8",
+    "editorial": "1708ba8badaf6ea02ba2e8a1dc4bdbc56d1a4b5f"
+  },
+  "sealedInputs": {
+    "source": "sha256:51709ebbaef1edad659048c373c4fa9365d76f4c756a32f85c2781bbd579541b",
+    "extraction": "sha256:50415063d624112016727ce4fdf24509bc31d82cdf05e5eb49e3148341e2ca96",
+    "dateAudit": "sha256:b395d0722109bd6d3eacfe1d8c2d7bb51d745ba02c3714a050eb175d5c166576",
+    "editorial": "sha256:38e8209844358a6addc90f18d23f164459d275ee8e01d047f6569c86a40041c9"
+  },
+  "chapterReady": true,
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book xintangshu --chapter 213",
+    "summary": "Scoped person data validation passed for xintangshu/213: 1 extraction(s), 143 local people, 686 mentions, 1422 claims, 0 proposed repair(s), 16 applied repair(s), 16 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 208,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/xintangshu/213.json",
+      "status": "ok",
+      "summary": "data/people/extractions/xintangshu/213.json: ok (143 people, 686 mentions, 1422 claims, 645 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 213",
+      "status": "audited",
+      "findings": 0
+    },
+    "chronologyStatus": "audited",
+    "chronologySummary": "Complete independent audit of 208 Chinese units, 379 temporal/hint items, and 143 people; source dating, event ownership, and active hints were checked with no unresolved chronology finding."
+  },
+  "substantiveFindings": "Owner read all 208 Chinese units with paired literal and idiomatic English for Volume 213 Biographies 138: Buffer Regions: the Black, Green, and Yellow Seas. New Tang buffer-region biographies (Black, Green, and Yellow Seas). Sealed extraction, applied editorial history, and independent date audit align at pinned git blobs; scoped validation and extraction checks pass with zero proposed repairs. No new definite English omission, source contradiction, false merge, or chronology defect in this pass. Bounded name-index lookup (generation cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac) exercised for cross-chapter name surfaces; truncation retained as uncertainty not separation evidence.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 122,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation targets 122 cases across 5 sealed transport parts. Owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    }
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 213",
+    "validateDates": "npm run people:dates:verify -- --book xintangshu --chapter 213"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
