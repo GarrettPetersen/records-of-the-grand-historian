@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-source-reference-review",
+  "reviewerAgentId": "bc-8eeee497-bcaf-47fe-849d-89d9edbfd9da",
+  "reviewerName": "cursor-nov24-independent-jiuwudaishi-119",
+  "chapterKey": "jiuwudaishi/119",
+  "localId": "jiuwudaishi:119:p067",
+  "caseId": "sha256:af2b6866f0cf3086efc1a73ca04d7204faf5b46ef89e265891b57d2f420037ac",
+  "canonicalPersonId": "per_Q84220HE627FP33WNYQ2",
+  "ownerAgentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+  "proposalSha256": "sha256:10eaf578d26b34e770eba99a82b7bddcc01c6a5f9eddc8d0b12bdfeea2d41821",
+  "proposalRevision": "2fd5cbded8e645ca65f0a29917188825cd7a665f",
+  "dispatchIdempotencyKey": "1b9b98e0a7869f69ba5a606bdee85d0413c0260cf024fc147aaf70513761a1ef",
+  "verdict": "approve",
+  "summary": "Approve scoped title-reference surfaces for Dou Ninggu (p067) on s0176. The minister's office「禮部尚書」and idiomatic English「minister of rites」are disjoint from p068's kinship spans inside「竇寧固之女」; minting a personal-name surface for p067 would collide with the daughter's kinship geometry. Claims, p068 surfaces, and father–daughter records remain unchanged.",
+  "verifiedPrimarySource": {
+    "unitId": "s0176",
+    "chinese": "浣娶禮部尚書竇寧固之女，年甲稍高，成婚之夕，竇女出參，濤輒望塵下拜，浣驚曰：「大哥風狂耶？",
+    "englishIdiomatic": "Huan married the daughter of Dou Ninggu, minister of rites, who was somewhat advanced in years. On the wedding night, when the bride came out to pay respects, Tao bowed low in the dust. Huan cried: \"Elder brother, are you mad?",
+    "englishLiteral": "Huan married the daughter of Minister of Rites Dou Ninggu, who was somewhat advanced in years. On the wedding night, when the Dou girl came out to pay respects, Tao at once bowed in the dust. Huan cried in alarm: \"Elder brother, are you mad?",
+    "sourceSha256": "sha256:89030a797598c70796b9119a4201036207fae48cb6ac5452899edeb7922b9fc5",
+    "extractionBeforeSha256": "sha256:8ed7996d3155bcc9f65335307fee3b6a5eaba93e4a3af95972083fcdd9329478"
+  },
+  "overlapAnalysis": {
+    "p068KinshipZh": {
+      "exact": "竇寧固之女",
+      "startCodePoint": 6,
+      "endCodePoint": 11,
+      "confirmedInCurrentSource": true
+    },
+    "p067PersonalNameZh": {
+      "exact": "竇寧固",
+      "startCodePoint": 6,
+      "endCodePoint": 9,
+      "overlapsP068Kinship": true,
+      "verdict": "Cannot add personal-name surface for p067 without overlapping p068 kinship-reference."
+    },
+    "approvedTitleZh": {
+      "exact": "禮部尚書",
+      "startCodePoint": 2,
+      "endCodePoint": 6,
+      "overlapsP068": false,
+      "attributesP067OfficeClaim": true
+    },
+    "approvedTitleEn": {
+      "field": "idiomatic",
+      "exact": "minister of rites",
+      "startCodePoint": 41,
+      "endCodePoint": 58,
+      "overlapsP068KinshipEn": false,
+      "note": "English apposition refers to the father's office in the marriage clause, not the bride; distinct from p068 surfaces「daughter of Dou Ninggu」on the same unit."
+    }
+  },
+  "approvedOperations": [
+    {
+      "op": "append-surface",
+      "personId": "p067",
+      "kind": "title-reference",
+      "language": "zh",
+      "exact": "禮部尚書",
+      "evidence": [
+        [
+          "s0176",
+          [
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "op": "append-surface",
+      "personId": "p067",
+      "kind": "title-reference",
+      "language": "en",
+      "exact": "minister of rites",
+      "translationField": "idiomatic",
+      "evidence": [
+        [
+          "s0176",
+          [
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "op": "set-person-hint",
+      "personId": "p067",
+      "path": "hints.x",
+      "before": "Named only inside the kinship phrase 竇寧固之女 / daughter of Dou Ninggu in s0176; no non-overlapping surface is possible without colliding with p068.",
+      "after": null
+    }
+  ],
+  "independentValidation": {
+    "command": "validateCompactPeopleExtraction(proposedCompact, buildPeopleExtractionPacket(jiuwudaishi,119))",
+    "beforeMentionCountP067": 0,
+    "afterMentionCountP067": 2,
+    "p068MentionsOnS0176Unchanged": true,
+    "expectedExtractionHashAfterApply": "sha256:b33b3a041a2af7eb4577e42f302adbe351c63aeded7332d2c4fd8d3c439279e5",
+    "note": "Expected post-apply extraction digest verified independently by applying proposal operations and validating; this review does not write or replace sealed audit files."
+  },
+  "proofDependencies": {
+    "mustRevalidateAfterOwnerApply": [
+      {
+        "artifact": "data/people/extractions/jiuwudaishi/119.json",
+        "reason": "Compact surfaces and p067 hints.x change extraction bytes; host must confirm digest matches expectedExtractionHashAfterApply and `validateCompactPeopleExtraction` passes.",
+        "expectedDigestAfterApply": "sha256:b33b3a041a2af7eb4577e42f302adbe351c63aeded7332d2c4fd8d3c439279e5"
+      },
+      {
+        "artifact": "chapter people validation",
+        "reason": "Publication cite for p067 becomes mention-backed; run scoped chapter validation after apply only.",
+        "commandHint": "npm run people:validate -- --book jiuwudaishi --chapter 119"
+      }
+    ],
+    "unchangedNoRereviewRequired": [
+      {
+        "seal": "data/people/date-audits/jiuwudaishi/119.json",
+        "reason": "No date claims or Western active intervals added or altered for p067 or p068."
+      },
+      {
+        "seal": "data/people/editorial-decisions/jiuwudaishi/119.json",
+        "reason": "No English translation edits; title-reference uses existing idiomatic apposition."
+      },
+      {
+        "artifact": "independent identity dossier review (69 cases, caseId sha256:af2b6866…)",
+        "reason": "Canonical membership, claims (personal name, office, parent-of), and p068 kinship surfaces unchanged; prior primary witness「竇寧固」in s0176 remains valid for identity. This repair only materializes non-overlapping title mentions for publication scope."
+      },
+      {
+        "neighbors": [
+          "jiuwudaishi:119:p068",
+          "jiuwudaishi:119:p066"
+        ],
+        "reason": "No edits to their surfaces, claims, or relationships in approved operations."
+      }
+    ]
+  },
+  "reviewedAt": "2026-11-24T11:35:00.000Z",
+  "approvalStatus": "independent-approve-not-owner-apply"
+}
