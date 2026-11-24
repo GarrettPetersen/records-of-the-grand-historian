@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "021"
+  },
+  "ownerAgentId": "bc-79978f16-ef63-4b23-8034-c964719fc3a1",
+  "workerId": "cursor-nov24-retained-staging-w6-o3",
+  "idempotencyKey": "044ebdb7768ef7b736a4907017935affdf6d4bf611cc284eab4a5c663ef289cb",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-021-fc3a1",
+  "inputBlobWitness": {
+    "source": "7d2aad38a26ccb8cee0087e51e6dcc1d1ad46ea7",
+    "extraction": "97a539b8680bc7f8b805da82f51c22097860ed09",
+    "dateAudit": "34730970ac1b1fc897105da13f3009181a098f53",
+    "editorial": "869809bfedb368dbc9ddf8c7af82fbbec108f8bc"
+  },
+  "sealedInputs": {
+    "source": "sha256:7bbd7772bad29ad67500e66a2c9a0f1722d4c7d1e04fa2bc9835f8044de90a06",
+    "extraction": "sha256:ed71bcce0492829e269c64295d205b713547a2b569d64baa341e546111b1a3d2",
+    "dateAudit": "sha256:4c420c4979e795bcd7e8dd0fbe260ef4ad5f33c6c94b0a8c8a39afb6eda561d9",
+    "editorial": "sha256:8fdcb0c5e9a81e2440fb714b4fbe8a566a5476593cb0d207bc7d26997742a763"
+  },
+  "workOrderAudit": {
+    "state": "research-blocked",
+    "sha256": "sha256:4c420c4979e795bcd7e8dd0fbe260ef4ad5f33c6c94b0a8c8a39afb6eda561d9",
+    "sha256Verified": true,
+    "affectedItems": 12,
+    "findings": 1
+  },
+  "sourceCoverage": {
+    "sentenceCount": 251,
+    "translatedCount": 251,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book hanshu --chapter 021",
+    "summary": "Scoped person data validation passed for hanshu/021: 1 extraction(s), 66 local people, 240 mentions, 425 claims, 0 proposed repair(s), 43 applied repair(s), 43 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 251,
+      "translatedCount": 251,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerifyCommand": "npm run people:dates:verify -- --book hanshu --chapter 021",
+    "datesVerify": "research-blocked",
+    "dateAuditSummary": "Full audit reviewed all 251 Chinese source units, 254 date/hint checks, and 66 people; 8 source-limited checks across 4 people remain held without an admissible Western-year basis.",
+    "editorialDecisionCount": 43,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "packetPeople": 66,
+    "packetItems": 254,
+    "packetUnits": 251
+  },
+  "substantiveFindings": [
+    "Pinned staging inputs at a50a027ba2793c194f1114769516b3731fcb47d9; native scoped validation passed; chronology remains research-blocked with 1 documented finding(s) and 12 distinct held item id(s).",
+    "Full audit reviewed all 251 Chinese source units, 254 date/hint checks, and 66 people; 8 source-limited checks across 4 people remain held without an admissible Western-year basis.",
+    "Full-sentence English literal and idiomatic coverage complete on sealed source.",
+    "No concrete changed-evidence chronology repair proposed in owner pass; independent date report bytes preserved unchanged."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "holdId": "finding-1",
+      "itemIds": [
+        "claim-58",
+        "claim-59",
+        "claim-60",
+        "claim-61",
+        "hints-p018",
+        "hints-p019",
+        "hints-p020",
+        "hints-p021",
+        "p018",
+        "p019",
+        "p020",
+        "p021"
+      ],
+      "people": [],
+      "problem": "The current extraction explicitly preserves chronology outside the packet’s admitted reign conversion table.",
+      "action": "Preserve the holds; add a Western endpoint only after independently pinned primary chronology establishes it, then re-audit.",
+      "preserved": true
+    }
+  ],
+  "distinctItemIds": [
+    "claim-58",
+    "claim-59",
+    "claim-60",
+    "claim-61",
+    "hints-p018",
+    "hints-p019",
+    "hints-p020",
+    "hints-p021",
+    "p018",
+    "p019",
+    "p020",
+    "p021"
+  ],
+  "historicalDateAudit": {
+    "preserved": true,
+    "path": "data/people/date-audits/hanshu/021.json",
+    "contentSha256": "sha256:4c420c4979e795bcd7e8dd0fbe260ef4ad5f33c6c94b0a8c8a39afb6eda561d9",
+    "gitBlob": "34730970ac1b1fc897105da13f3009181a098f53",
+    "overwritten": false,
+    "approved": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "nextGate": "independent-chronology-discharge-or-accept-research-holds",
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; translations-array English coverage scan; npm run people:validate; npm run people:dates:verify; reviewed distinct holds and retained date audit bytes; no canonical edits.",
+    "completedAt": "2026-11-24T16:45:06.304Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 021",
+    "datesVerify": "npm run people:dates:verify -- --book hanshu --chapter 021"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; no sealed input edits."
+}
