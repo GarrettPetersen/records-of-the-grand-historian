@@ -68,19 +68,30 @@ export function verifyAuthoredPartReport(partNumber, reportPath) {
   return report;
 }
 
+function writeVerifiedPart(partNumber) {
+  const label = String(partNumber).padStart(3, '0');
+  const authored = path.join(CHECKPOINT, `authored-native-part-report-${label}.json`);
+  if (!fs.existsSync(authored)) return null;
+  const report = verifyAuthoredPartReport(partNumber, authored);
+  const out = path.join(CHECKPOINT, `native-part-report-${label}.json`);
+  fs.writeFileSync(out, `${JSON.stringify(report, null, 2)}\n`);
+  const hash = identityArtifactHash(fs.readFileSync(out));
+  fs.writeFileSync(path.join(CHECKPOINT, `native-part-report-${label}.json.sha256`), `${hash}\n`);
+  return { out, hash, count: report.reviews.length };
+}
+
 function main() {
-  const { mismatches } = verifyTransportHashes();
+  const { receipt, mismatches } = verifyTransportHashes();
   if (mismatches.length) {
     console.error('Transport hash mismatch:', mismatches);
     process.exit(1);
   }
-  const authored = path.join(CHECKPOINT, 'authored-native-part-report-001.json');
-  const report = verifyAuthoredPartReport(1, authored);
-  const out = path.join(CHECKPOINT, 'native-part-report-001.json');
-  fs.writeFileSync(out, `${JSON.stringify(report, null, 2)}\n`);
-  const hash = identityArtifactHash(fs.readFileSync(out));
-  fs.writeFileSync(path.join(CHECKPOINT, 'native-part-report-001.json.sha256'), `${hash}\n`);
-  console.log('Verified authored part 001; wrote', out, hash);
+  const parts = process.argv.slice(2).map(Number).filter(Boolean);
+  const targets = parts.length ? parts : receipt.reviewParts.map((_, i) => i + 1);
+  for (const n of targets) {
+    const result = writeVerifiedPart(n);
+    if (result) console.log(`Verified part ${String(n).padStart(3, '0')}:`, result.out, result.hash, `(${result.count} cases)`);
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();

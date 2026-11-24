@@ -15,8 +15,11 @@ Independent reviewer: **`bc-84536a48-e6d3-4027-a8ff-2478884deaaf`** (PR #5483).
 
 | Scope | Count |
 | --- | --- |
-| **`transport-part-001.json`** | **14 / 14** independently authored |
-| Parts 002–011 | **215** cases explicitly **unreviewed** (`identity-review-coverage.json`) |
+| **`transport-part-001.json`** | **14 / 14** (frozen @ `fc2d7f9e87`) |
+| **`transport-part-002.json`** | **14 / 14** authored |
+| **`transport-part-003.json`** | **14 / 14** authored |
+| **`transport-part-004.json`** | **15 / 15** authored |
+| Parts 005–011 | **172** cases **unreviewed** (`identity-review-coverage.json`) |
 
 Authored judgments live in **`authored-native-part-report-001.json`**. **`verify-native-part-report.mjs`** only checks transport byte hashes and witness lint, then copies verified output to **`native-part-report-001.json`**.
 
