@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-a4d76336-fefe-485e-b919-88a5185f4501",
+  "worker": "cursor-nov24-retained-staging-w12-o5",
+  "idempotencyKey": "fcb9a734d56ec9507fdba8d4f9fba1782efb80e4c359d81cabb9c581e0d71f18",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7
+  },
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "holds": [],
+  "scope": {
+    "book": "mingshi",
+    "chapter": "008"
+  },
+  "handoffBranch": "cursor/nov24-retained-staging-owner-mingshi-008-f4501",
+  "inputBlobWitness": {
+    "source": "40f6e8b0b75240fcf8a8868efe4c8bde6d3ec8b7",
+    "extraction": "617a643b29b1ae15acf42d6c233293d41b811a7c",
+    "editorial": "67ae795e8d03fc4b2cdc80ba00f0143386143045"
+  },
+  "sealedInputs": {
+    "source": "sha256:9ef66f55a408dda2099c8aa97c02dd9f5fa9613ce7f181fbd2f98d70a46d80f7",
+    "extraction": "sha256:3a092f55233b19e7607a53d04e4afccaa6a7ecb301fc35543d858724a15f5ebd",
+    "editorial": "sha256:10bd1857ee161a0d59a6da091447c0885e88d90b03a991d04b9cb35cc3bbd468"
+  },
+  "inputBlobWitnessOk": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 159,
+    "translatedCount": 159,
+    "bothFieldsComplete": true,
+    "titleEnglish": "Volume 8 Annals 8: Renzong",
+    "titleChinese": "卷八 本紀第八 仁宗",
+    "missingUnits": []
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "contentSha256": "sha256:3a092f55233b19e7607a53d04e4afccaa6a7ecb301fc35543d858724a15f5ebd",
+    "gitBlob": "617a643b29b1ae15acf42d6c233293d41b811a7c",
+    "dispatchPeopleCount": 60,
+    "dispatchClaimCount": 191,
+    "ownerVerifiedPeopleCount": 60,
+    "ownerVerifiedClaimCount": 191,
+    "reextractAuthorized": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "67ae795e8d03fc4b2cdc80ba00f0143386143045",
+    "contentSha256": "sha256:10bd1857ee161a0d59a6da091447c0885e88d90b03a991d04b9cb35cc3bbd468",
+    "acceptedProposalCount": 8,
+    "status": "reviewed-with-applied-proposals",
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-cad89180-2fff-4537-b1b7-89dcbc8c3a35",
+      "runId": "run-aba19469-bed1-4bfb-b8fb-ea71702033c1",
+      "completedAt": "2026-08-12T10:14:50.432Z"
+    }
+  },
+  "chronologyPreparation": {
+    "nativeDateAuditReportPresent": false,
+    "priorAuditState": "no-native-date-report",
+    "sealedNativeDatePacket": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-008/date-packet.json",
+      "sha256": "sha256:486a7fbcfc0a7a2d21e270e9cd984de9f39dcb93c2e092822eea5538f5a72b7b",
+      "sourceHash": "sha256:b63dca9a108dca1b219dd359ff4bdbb8d85bac5419c7af80e3373c989934ac3d",
+      "extractionHash": "sha256:8f31b39cf691cc6dc5fd539c46b47f9030d56425d740568a13d880c846725956",
+      "dateHintChecks": null,
+      "itemCount": 186,
+      "peopleCount": 60
+    },
+    "ownerSelfApprovedDateAudit": false
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book mingshi --chapter 008",
+      "passed": true,
+      "summary": "Scoped person data validation passed for mingshi/008: 1 extraction(s), 60 local people, 286 mentions, 384 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 008",
+      "status": "un-audited",
+      "result": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "mingshi",
+            "chapter": "008",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      }
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book mingshi --chapter 008 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-008/date-packet.json",
+      "completed": true
+    }
+  },
+  "ownerSubstantiveFindings": "Ming Renzong annals chapter; chronology-dense reign dates retained in extraction. Owner found no concrete source–extraction contradiction and no new English repair beyond accepted editorial decisions.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "gate": "independent-native-chronology-audit",
+      "artifactPath": "data/people/date-audits/mingshi/008.json",
+      "present": false,
+      "instruction": "Seal independent reviewer report with npm run people:dates:record against the pinned sealedNativeDatePacket; owner handoff is not date approval."
+    },
+    "identity": {
+      "required": true,
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "instruction": "Separate reviewer covers full chapter result and canonical identity evidence; bounded lookup only."
+    }
+  },
+  "reproduce": {
+    "witnessBlobs": "git hash-object data/mingshi/008.json data/people/extractions/mingshi/008.json data/people/editorial-decisions/mingshi/008.json",
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 008",
+    "verifyDates": "npm run people:dates:verify -- --book mingshi --chapter 008",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book mingshi --chapter 008 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-008/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass only: no re-extraction, no self-approved date audit, no canonical merge, deploy, or registry generation."
+}

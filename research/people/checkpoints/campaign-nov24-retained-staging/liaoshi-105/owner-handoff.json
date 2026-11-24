@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-a4d76336-fefe-485e-b919-88a5185f4501",
+  "worker": "cursor-nov24-retained-staging-w12-o5",
+  "idempotencyKey": "fcb9a734d56ec9507fdba8d4f9fba1782efb80e4c359d81cabb9c581e0d71f18",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7
+  },
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "holds": [],
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "105"
+  },
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-105-f4501",
+  "inputBlobWitness": {
+    "source": "033c83eee5b075a74a1c40a53d78f1f9427db9c9",
+    "extraction": "8f8005fc282e1bb5d54b7a8954a190dfb37ed5de",
+    "editorial": "44fa8f465b953c07a895a6e7cfd2856d81d848b6"
+  },
+  "sealedInputs": {
+    "source": "sha256:2b805899aa5722007e827f37087c4800f9867d6ce7bf1d0863d74dab0ef145fa",
+    "extraction": "sha256:c51d9562b7ea450cde0b97e8f25e6d2cfe3ef0b0846ef6e4be937c252fca2892",
+    "editorial": "sha256:1aa8ad746c1c23ca9705a0498d473fbb9b185ed66631d32fe88805f080ca4e3f"
+  },
+  "inputBlobWitnessOk": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 174,
+    "translatedCount": 174,
+    "bothFieldsComplete": true,
+    "titleEnglish": "Volume 105 Biographies 35: Capable Officials",
+    "titleChinese": "卷一百〇五 列傳第三十五: 能吏",
+    "missingUnits": []
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "contentSha256": "sha256:c51d9562b7ea450cde0b97e8f25e6d2cfe3ef0b0846ef6e4be937c252fca2892",
+    "gitBlob": "8f8005fc282e1bb5d54b7a8954a190dfb37ed5de",
+    "dispatchPeopleCount": 38,
+    "dispatchClaimCount": 308,
+    "ownerVerifiedPeopleCount": 38,
+    "ownerVerifiedClaimCount": 308,
+    "reextractAuthorized": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "44fa8f465b953c07a895a6e7cfd2856d81d848b6",
+    "contentSha256": "sha256:1aa8ad746c1c23ca9705a0498d473fbb9b185ed66631d32fe88805f080ca4e3f",
+    "acceptedProposalCount": 2,
+    "status": "reviewed-with-applied-proposals",
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-f953278d-1d64-4e6a-aef5-92ffd9f9b019",
+      "runId": "run-d720c80c-d5e2-47b6-85f6-0793622a73ca",
+      "completedAt": "2026-08-12T07:14:54.892Z"
+    }
+  },
+  "chronologyPreparation": {
+    "nativeDateAuditReportPresent": false,
+    "priorAuditState": "no-native-date-report",
+    "sealedNativeDatePacket": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-105/date-packet.json",
+      "sha256": "sha256:29e7e2a98a2af7051370e1045408d5327c3746a69bae2d12ae344329199aecf1",
+      "sourceHash": "sha256:e5207d508da66ec68386a609a4b1ffe1e82ded6f810d14a3ab7008c910fcc5ad",
+      "extractionHash": "sha256:a7649379f2f4e8b5e3c0a76ab63608e273270c830841ef15af270fdfcd7bdc03",
+      "dateHintChecks": null,
+      "itemCount": 118,
+      "peopleCount": 38
+    },
+    "ownerSelfApprovedDateAudit": false
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 105",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/105: 1 extraction(s), 38 local people, 219 mentions, 472 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 105",
+      "status": "un-audited",
+      "result": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "liaoshi",
+            "chapter": "105",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      }
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 105 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-105/date-packet.json",
+      "completed": true
+    }
+  },
+  "ownerSubstantiveFindings": "Liao capable-officials biographies; bounded claims and aliases match supported source units. No definite English or chronology contradiction located in owner pass.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "gate": "independent-native-chronology-audit",
+      "artifactPath": "data/people/date-audits/liaoshi/105.json",
+      "present": false,
+      "instruction": "Seal independent reviewer report with npm run people:dates:record against the pinned sealedNativeDatePacket; owner handoff is not date approval."
+    },
+    "identity": {
+      "required": true,
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "instruction": "Separate reviewer covers full chapter result and canonical identity evidence; bounded lookup only."
+    }
+  },
+  "reproduce": {
+    "witnessBlobs": "git hash-object data/liaoshi/105.json data/people/extractions/liaoshi/105.json data/people/editorial-decisions/liaoshi/105.json",
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 105",
+    "verifyDates": "npm run people:dates:verify -- --book liaoshi --chapter 105",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 105 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-105/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass only: no re-extraction, no self-approved date audit, no canonical merge, deploy, or registry generation."
+}

@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-a4d76336-fefe-485e-b919-88a5185f4501",
+  "worker": "cursor-nov24-retained-staging-w12-o5",
+  "idempotencyKey": "fcb9a734d56ec9507fdba8d4f9fba1782efb80e4c359d81cabb9c581e0d71f18",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7
+  },
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "holds": [],
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "017"
+  },
+  "handoffBranch": "cursor/nov24-retained-staging-owner-nanqishu-017-f4501",
+  "inputBlobWitness": {
+    "source": "c198581ce4446bbdf3a60819f37b1afaf7d9c57b",
+    "extraction": "fb252105130b2623c9c8d1e9cde9ad5693ab66d1",
+    "editorial": "ab839d3947c84b2bdd41e5a5dc600ca5618a3251"
+  },
+  "sealedInputs": {
+    "source": "sha256:66487779d204e4fe30bd03aad9948accac3302f9ea5a816cbe6926e8d8bebef4",
+    "extraction": "sha256:b22f9be9087a02b05e4a8d334eec4f2a7e426b3bc0ee18ad3e84526e5ee2f4ac",
+    "editorial": "sha256:855d030bc9b072d5f29a0bfab890647c1e6d4ad9933f656bfe9d21551e086a74"
+  },
+  "inputBlobWitnessOk": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 269,
+    "translatedCount": 269,
+    "bothFieldsComplete": true,
+    "titleEnglish": "Volume 17 Treatises 9: Caraiges and Dress",
+    "titleChinese": "卷十七 志第九 輿服",
+    "missingUnits": []
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "contentSha256": "sha256:b22f9be9087a02b05e4a8d334eec4f2a7e426b3bc0ee18ad3e84526e5ee2f4ac",
+    "gitBlob": "fb252105130b2623c9c8d1e9cde9ad5693ab66d1",
+    "dispatchPeopleCount": 43,
+    "dispatchClaimCount": 195,
+    "ownerVerifiedPeopleCount": 43,
+    "ownerVerifiedClaimCount": 195,
+    "reextractAuthorized": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "ab839d3947c84b2bdd41e5a5dc600ca5618a3251",
+    "contentSha256": "sha256:855d030bc9b072d5f29a0bfab890647c1e6d4ad9933f656bfe9d21551e086a74",
+    "acceptedProposalCount": 8,
+    "status": "reviewed-with-applied-proposals",
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-53bf0d0c-7769-425d-a3f4-cc3d96498a87",
+      "runId": "run-52b6d3d9-6893-4524-93d4-31e55b543a7e",
+      "completedAt": "2026-08-13T14:47:59.972Z"
+    }
+  },
+  "chronologyPreparation": {
+    "nativeDateAuditReportPresent": false,
+    "priorAuditState": "no-native-date-report",
+    "sealedNativeDatePacket": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-017/date-packet.json",
+      "sha256": "sha256:6c63528b0e7e57fbceb152159d4e03220c071ce9fc49fc286785ab64eddc7d5b",
+      "sourceHash": "sha256:d4f71daaef426f91deaa138d030faded21fc98623748d4271aea4500b17002ea",
+      "extractionHash": "sha256:16f8674e687f0756e16a7162bb457968b1fda72013d27da55bc41c87734ac4c7",
+      "dateHintChecks": null,
+      "itemCount": 93,
+      "peopleCount": 43
+    },
+    "ownerSelfApprovedDateAudit": false
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book nanqishu --chapter 017",
+      "passed": true,
+      "summary": "Scoped person data validation passed for nanqishu/017: 1 extraction(s), 43 local people, 105 mentions, 386 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 017",
+      "status": "un-audited",
+      "result": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "nanqishu",
+            "chapter": "017",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      }
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book nanqishu --chapter 017 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-017/date-packet.json",
+      "completed": true
+    }
+  },
+  "ownerSubstantiveFindings": "Treatise chapter (車服); institutional and ritual wording reviewed against zh/translations pairs. Valid undated attestations retained where source gives no year; no owner date repair proposed.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "gate": "independent-native-chronology-audit",
+      "artifactPath": "data/people/date-audits/nanqishu/017.json",
+      "present": false,
+      "instruction": "Seal independent reviewer report with npm run people:dates:record against the pinned sealedNativeDatePacket; owner handoff is not date approval."
+    },
+    "identity": {
+      "required": true,
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "instruction": "Separate reviewer covers full chapter result and canonical identity evidence; bounded lookup only."
+    }
+  },
+  "reproduce": {
+    "witnessBlobs": "git hash-object data/nanqishu/017.json data/people/extractions/nanqishu/017.json data/people/editorial-decisions/nanqishu/017.json",
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 017",
+    "verifyDates": "npm run people:dates:verify -- --book nanqishu --chapter 017",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book nanqishu --chapter 017 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-017/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass only: no re-extraction, no self-approved date audit, no canonical merge, deploy, or registry generation."
+}

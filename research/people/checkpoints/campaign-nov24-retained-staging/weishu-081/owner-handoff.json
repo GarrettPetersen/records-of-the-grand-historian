@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-a4d76336-fefe-485e-b919-88a5185f4501",
+  "worker": "cursor-nov24-retained-staging-w12-o5",
+  "idempotencyKey": "fcb9a734d56ec9507fdba8d4f9fba1782efb80e4c359d81cabb9c581e0d71f18",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7
+  },
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "holds": [],
+  "scope": {
+    "book": "weishu",
+    "chapter": "081"
+  },
+  "handoffBranch": "cursor/nov24-retained-staging-owner-weishu-081-f4501",
+  "inputBlobWitness": {
+    "source": "7494866223c1af29d1c950d0710ce4596a061fdb",
+    "extraction": "0d76edaf26d358a774ce75ff55d49b5f64641276",
+    "editorial": "1559dcb428458bf9671ff07e3b7b8cf1d24deae9"
+  },
+  "sealedInputs": {
+    "source": "sha256:640c17b8c7933271a35f59826b1fa8e27cb5cf4995d961cdffafbbe3ef34f06b",
+    "extraction": "sha256:fee1402e926b88bb9a611183f84ece7fb4345b8b699d9a669bd0a74e62c64679",
+    "editorial": "sha256:31fddc8c444c86df029fc9b80d452f3d80e7edb35c6d40f269116805e7e89338"
+  },
+  "inputBlobWitnessOk": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 166,
+    "translatedCount": 166,
+    "bothFieldsComplete": true,
+    "titleEnglish": "Volume 76: Lu Tong, Zhang Lie",
+    "titleChinese": "卷76 盧同 張烈",
+    "missingUnits": []
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "contentSha256": "sha256:fee1402e926b88bb9a611183f84ece7fb4345b8b699d9a669bd0a74e62c64679",
+    "gitBlob": "0d76edaf26d358a774ce75ff55d49b5f64641276",
+    "dispatchPeopleCount": 49,
+    "dispatchClaimCount": 268,
+    "ownerVerifiedPeopleCount": 49,
+    "ownerVerifiedClaimCount": 268,
+    "reextractAuthorized": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "1559dcb428458bf9671ff07e3b7b8cf1d24deae9",
+    "contentSha256": "sha256:31fddc8c444c86df029fc9b80d452f3d80e7edb35c6d40f269116805e7e89338",
+    "acceptedProposalCount": 5,
+    "status": "reviewed-with-applied-proposals",
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-7f040f88-fc87-4c7b-beef-79547b5042f0",
+      "runId": "run-03925482-d44a-44cf-b9d5-e5c6c1e55de2",
+      "completedAt": "2026-08-12T16:19:47.067Z"
+    }
+  },
+  "chronologyPreparation": {
+    "nativeDateAuditReportPresent": false,
+    "priorAuditState": "no-native-date-report",
+    "sealedNativeDatePacket": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-081/date-packet.json",
+      "sha256": "sha256:53e3d865abc709053a0fcefffd0ef7afce127e78ee356496847aedd96d3754b5",
+      "sourceHash": "sha256:9d96fc070469e64f8ecfeaf78fbd84ac8965b87f28a881129564c35d6d5edad6",
+      "extractionHash": "sha256:b5e2785776eac480af4565abfab74493e2099bae009a29aec36bfe2711e48a83",
+      "dateHintChecks": null,
+      "itemCount": 122,
+      "peopleCount": 49
+    },
+    "ownerSelfApprovedDateAudit": false
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book weishu --chapter 081",
+      "passed": true,
+      "summary": "Scoped person data validation passed for weishu/081: 1 extraction(s), 49 local people, 238 mentions, 427 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 081",
+      "status": "un-audited",
+      "result": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "weishu",
+            "chapter": "081",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      }
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book weishu --chapter 081 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-081/date-packet.json",
+      "completed": true
+    }
+  },
+  "ownerSubstantiveFindings": "Northern Wei biographies (盧統、張烈); pinned extraction and editorial artifacts match source quotations and unit coverage. No owner-identified false merge, wrong actor, or definite mistranslation.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "gate": "independent-native-chronology-audit",
+      "artifactPath": "data/people/date-audits/weishu/081.json",
+      "present": false,
+      "instruction": "Seal independent reviewer report with npm run people:dates:record against the pinned sealedNativeDatePacket; owner handoff is not date approval."
+    },
+    "identity": {
+      "required": true,
+      "gate": "independent-chapter-and-canonical-identity-review",
+      "instruction": "Separate reviewer covers full chapter result and canonical identity evidence; bounded lookup only."
+    }
+  },
+  "reproduce": {
+    "witnessBlobs": "git hash-object data/weishu/081.json data/people/extractions/weishu/081.json data/people/editorial-decisions/weishu/081.json",
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 081",
+    "verifyDates": "npm run people:dates:verify -- --book weishu --chapter 081",
+    "rebuildDatePacket": "npm run people:dates:packet -- --book weishu --chapter 081 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-081/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass only: no re-extraction, no self-approved date audit, no canonical merge, deploy, or registry generation."
+}
