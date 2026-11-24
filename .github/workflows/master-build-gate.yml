@@ -647,11 +647,12 @@ jobs:
           const date='data/people/date-audits/jinshu/'+chapter+'.json';
           const files=[];
           for(const path of ['data/jinshu/'+chapter+'.json','data/people/extractions/jinshu/'+chapter+'.json','data/people/editorial-decisions/jinshu/'+chapter+'.json',date]){
-            const before=entry(owner,path), after=entry(revision,path);
-            if(before.sha===after.sha)continue;
+            const after=entry(revision,path);
+            const before=path===date ? api('GET','/contents/'+date.slice(0,date.lastIndexOf('/'))+'?ref='+owner).find(item=>item.path===date) : entry(owner,path);
+            if(before?.sha===after.sha)continue;
             assert(sealedFiles.some(seal=>seal.path===path&&seal.sha===after.sha),'Unexpected difference: '+path);
             files.push({path,sha:after.sha});
-            if(path===date){
+            if(path===date&&before){
               const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json',root+'/contents/'+date+'?ref='+owner],{maxBuffer:10e6});
               const archive=createHash('sha256').update(JSON.stringify(JSON.parse(raw))).digest('hex');
               files.push({path:'data/people/date-audit-history/jinshu/'+chapter+'/'+archive+'.json',sha:before.sha});
