@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "014"
+  },
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "workerId": "cursor-nov24-four-part-owner-1",
+  "campaign": "campaign-nov24-four-part-audited",
+  "idempotencyKey": "ba8fc1d8800bbb7b8d234460b2bf3d30955bb8ea6e52f162918c8ade43dfb97a",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-four-part-owner-jiuwudaishi-014-664b73",
+  "inputBlobWitness": {
+    "source": "e16f32d56befe33a522903d9e65c69902b83faca",
+    "extraction": "c03333756c28f9fe88195aa502973f4e3d20d9da",
+    "dateAudit": "b25cb6464ac1ae1100ac682774aa23c54a501895",
+    "editorial": "025ec8de2fe3d5a1fde4847a99f3a76ae63bec77"
+  },
+  "sealedInputs": {
+    "source": "sha256:c7cd0e4507f78686631af18dcfb2af93fc5a2f12b015155921dea9f48cca582e",
+    "extraction": "sha256:5d91e948f18671e97d31d7359372023e805e6039c20a302bd91a0d0a66404d6b",
+    "dateAudit": "sha256:9f6ae3ec602a9a80aae16d5498f2b32cd542d4f2b7ad047bcf3021ab0b4651df",
+    "editorial": "sha256:873854fccc7f75d133f03f2bb4be3ff2cad9610893a25175d142526afb98cb6d"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 014",
+    "summary": "Scoped person data validation passed for jiuwudaishi/014: 1 extraction(s), 110 local people, 622 mentions, 1531 claims, 0 proposed repair(s), 36 applied repair(s), 36 editorial decision(s), 0 claim retraction(s), 7 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 248,
+      "translatedCount": 248,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 248 units, 545 checks, and 110 people.",
+    "editorialDecisionCount": 36,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 14 Book of Later Liang 14: Biographies 4: Luo Shaowei, Zhao Chou, Wang Ke",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. No new definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 108 prepared cases remains for independent bounded dossier review across 4 transport parts."
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 108,
+    "transportParts": 4,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-four-part-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 014"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
