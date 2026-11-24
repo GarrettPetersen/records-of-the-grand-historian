@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "037"
+  },
+  "workerId": "cursor-nov24-current-master-followup-1",
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "sourcePacketSha256": "0db7330c1359f1e123c061cc5fe5685e1e5d23ef9f6b3b5f251f638125e4dd08",
+    "planFingerprint": "sha256:5ddecf31a4f296916db1b8d9226e959aba7945e260cf8e3cbfc2907fe1c5c8a3",
+    "transportSha256": "9d06899871fe775f0ac7d20e0c9a8446ecc2b2bc89b17d437b3dc63f53f0f170",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "eadc1209a975f9acd2b65189da1be8df365363d30f9e30e9efbb56e672887e5f",
+        "caseCount": 18
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "fe68bd432f8ff0d669d3b45f769697d3c30dc64c76eae8d9d79f976b0d280f49",
+        "caseCount": 18
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "b33f193a2dc010bb826867cb01fd5535a5d5a801c2a2d87c007e73d050cb351f",
+        "caseCount": 36
+      }
+    ],
+    "preparationReceiptSha256": "2afa9c5c2bfc6728e83beaa071a07ccd59654cd10d2cbc808026ac37f67d88a6"
+  },
+  "sealedInputs": {
+    "source": "sha256:8a6878adea904c5163f569a18574774b608dc6decc2dea99eaf32d6e93172600",
+    "extraction": "sha256:b8357c8cc9867046287ff529e015a219a4abe67c3b15aa0806c4cac5ded685a6",
+    "editorial": "sha256:62df0c5bd68298c9c16fdde7804e7a6dd87ee6e200e7a4fd33eb5f63780f3711",
+    "dateAudit": "sha256:88ffd62cfa9f12a125a44fecfa1b11b76bd46420f8447068a0f11c0f6e46c98f"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "4 applied editorial decisions; no pending proposals",
+  "reviewCases": 72,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 72 scoped identity cases retain preparation-proposed canonicalPersonId and accepted membership fingerprints. 37 overflow cases preserve bounded-retrieval uncertainty; 61/72 keep unresolvedIdentity true. No concrete wrong-actor or false-merge contradiction found. No canonical extraction or shared-registry edits.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "transportPart003": "transport-part-003.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:e6722935238702ca221eb93f51164f94f5aa9d79710fdc5546b53e8cc496bda1",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 037",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-037/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-037/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-037/transport-part-003.json"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 1c48e717."
+}
