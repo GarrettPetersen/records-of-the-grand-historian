@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "015"
+  },
+  "ownerAgentId": "bc-1e7f1743-30db-4b99-9204-5e5b3ca1ccbf",
+  "workerId": "cursor-nov24-retained-staging-w18-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "dd2f7a24c7114f60d6123ca51d7d5561c46f5e28ee1846afdab2fd5e68d66554",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-015-1ccbf",
+  "auditState": "no-native-date-report",
+  "promptVersion": 7,
+  "extractionBytes": 203586,
+  "workOrder": {
+    "sourceExtractionSha256": "sha256:4e5783b334d0d6adb13555c43cead3240fd99defcf44f706cc9597fca4d0e4c9",
+    "people": 101,
+    "claims": 643
+  },
+  "inputBlobWitness": {
+    "source": "46c1d1d997ff11a382105af77791d4374576b4c6",
+    "extraction": "b21c1ad5288dee9ad04bbf4cf679c5652bd95b2a",
+    "editorial": "2cd225f78a3528176d70707393ec2f8ff07704bb"
+  },
+  "sealedInputs": {
+    "source": "sha256:5f8d0754c3d0724eef878eed7421709b9a517f5817bf1f7755a8fe6e08502301",
+    "extraction": "sha256:4e5783b334d0d6adb13555c43cead3240fd99defcf44f706cc9597fca4d0e4c9",
+    "editorial": "sha256:e7859f0dcd2aa5741b191209bf4109c713eab72818c339d1638349b9789ea63b"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 15: Mingzong of Later Tang's Family",
+    "chineseUnits": 239,
+    "translatedCount": 239,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 0,
+    "fullEnglishCoverage": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionBlob": "b21c1ad5288dee9ad04bbf4cf679c5652bd95b2a",
+    "editorialBlob": "2cd225f78a3528176d70707393ec2f8ff07704bb",
+    "extractionContentSha256": "sha256:4e5783b334d0d6adb13555c43cead3240fd99defcf44f706cc9597fca4d0e4c9",
+    "editorialContentSha256": "sha256:e7859f0dcd2aa5741b191209bf4109c713eab72818c339d1638349b9789ea63b",
+    "promptVersion": 7,
+    "appliedTranslationRepairs": 16,
+    "editorialProposals": 16,
+    "editorialDecisions": 16,
+    "ownerDidNotReextract": true,
+    "ownerDidNotAlterSealedInputs": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-015/date-packet.json",
+    "contentSha256": "sha256:9aa56d7a50c1a4d36ae358ceaa209c9f8c0f20bb0b42808bee821c81a8773539",
+    "itemCount": 365,
+    "sourceHash": "sha256:b9adfbc75edbeca7c28815820644e9bd413e9935aca5c73ebc6198ecc81c9c6e",
+    "extractionHash": "sha256:63b515936b245b92ffb1f4a7f9acc953450252b9c7cd51ef743197638a98ddcc",
+    "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 015 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-015/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 015",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/015: 1 extraction(s), 101 local people, 787 mentions, 1002 claims, 0 proposed repair(s), 16 applied repair(s), 16 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/xinwudaishi/015.json",
+    "peopleValidateExtractionPassed": true,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 015",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/xinwudaishi/015.json"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentProofs": {
+    "date": {
+      "gate": "independent-native-date-audit",
+      "detail": "Fresh sealed date packet prepared at pinned extraction; data/people/date-audits missing. Independent reviewer must run native date workflow against this packet and record approval via people:dates:record without self-approval.",
+      "packetSha256": "sha256:9aa56d7a50c1a4d36ae358ceaa209c9f8c0f20bb0b42808bee821c81a8773539"
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "detail": "Global identity resolution dossiers remain for chapter-local people after date approval; owner pass did not perform merges or canonical identity edits."
+    },
+    "editorial": null
+  },
+  "distinctHolds": [
+    {
+      "kind": "missing-native-date-report",
+      "detail": "No data/people/date-audits record; people:dates:verify returns un-audited."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction, and editorial inputs witness-verified at staging 4394bd71. Full chapter English coverage on Chinese-bearing units; extraction prompt v7 retained. Owner prepared native date packet; no definite English contradiction or chronology repair identified in this pass. Chapter not complete: independent date audit still missing.",
+  "scopedChronologyOrIdentityChanges": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 015",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 015 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-015/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 015"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no registry, deploy, merge, or sealed canonical edits."
+}
