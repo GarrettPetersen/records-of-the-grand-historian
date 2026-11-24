@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { buildPeopleExtractionPacket } from './build-people-extraction-packet.mjs';
 import {
   compactPeopleExtraction,
+  expandPeopleExtraction,
   isCompactPeopleExtraction,
   serializeCompactPeopleExtraction,
 } from './lib/people-compact.mjs';
@@ -315,6 +316,25 @@ function reconcileSafeDispositions(raw, normalized, packet, contained, wrapped) 
     ]));
   }
   return compact;
+}
+
+// Private draft adapter for the same production geometry rules. No canonical
+// writes or new identity decisions. Raw removed notes remain in the receipt.
+export function reconcilePrivateCandidateDispositions(raw,packet){
+ if(!isCompactPeopleExtraction(raw)||raw.book!==packet.book||raw.chapter!==packet.chapter)throw Error('Matching compact private draft required');
+ const namespace=packet.book+':'+packet.chapter+':',known=new Set(packet.preflight.candidates.map(c=>c.id));
+ const normalized=expandPeopleExtraction(raw,packet),conflicts=normalized.candidateDispositions.map(d=>({candidate:d.candidate}));
+ const contained=safelyContainedCandidateIds(normalized,packet,conflicts),wrapped=safelyWrappedCandidateIds(normalized,packet,conflicts,contained);
+ const candidate=reconcileSafeDispositions(raw,normalized,packet,contained,wrapped),removed=[],seen=new Set();
+ candidate.candidateDispositions=candidate.candidateDispositions.flatMap(([disposition,reason,entries])=>{
+  const keep=entries.filter(entry=>{
+   const id=namespace+entry[0],key=JSON.stringify([disposition,reason,entry[0]]);
+   if(!known.has(id)||seen.has(key)){removed.push({disposition,reason,entry:structuredClone(entry),cause:known.has(id)?'duplicate-identical-disposition':'obsolete-candidate-id'});return false;}
+   seen.add(key);return true;
+  });return keep.length?[[disposition,reason,keep]]:[];
+ });
+ for(const [disposition,reason,entries]of raw.candidateDispositions)for(const entry of entries)if(contained.has(namespace+entry[0])||wrapped.has(namespace+entry[0]))removed.push({disposition,reason,entry:structuredClone(entry),cause:contained.has(namespace+entry[0])?'already-contained-in-native-mention':'native-wrapped-same-person-mention'});
+ return{candidate,removed,contained:[...contained],wrapped:[...wrapped],approvalGranted:false};
 }
 
 function processChapter(item, opts, matcher) {
