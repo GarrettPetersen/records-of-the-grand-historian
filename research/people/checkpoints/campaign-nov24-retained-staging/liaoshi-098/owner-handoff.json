@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "098"
+  },
+  "ownerAgentId": "bc-a0dd73da-8de0-4b98-accd-4dbf772d16fa",
+  "workerId": "cursor-nov24-retained-staging-w13-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8da2a4c6cf3985da6eb956dd02566900fb44339f1ea562c1c529377ded6eecc0",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-098-d16fa",
+  "extractionBytes": 95934,
+  "inputBlobWitness": {
+    "source": "b19f48659f0bd66217cbc4f4d4e039b0cb64f51c",
+    "extraction": "7b569a2f8b5ae2fd13e92ca81a2ae847dffc6d50",
+    "editorial": "672439bdf38d92c3b8f8a781be9adca9ca759ade"
+  },
+  "sealedInputs": {
+    "source": "sha256:1c79860e3131f7b53f4a98f11e5395c5796f1f03388d32cb609bbcedf9243178",
+    "extraction": "sha256:5fe2eca0719b00fa64aa0fe18020f6c7a198c286c3979fb9e1d62f3952270e8b",
+    "editorial": "sha256:2ba715c2d6051e4f34574bbadd8b918116f93b10aeb9151d03891cdf5938db0f"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-098/date-packet.json",
+    "sha256": "sha256:b05cdfab2ba015f3498315cd69e3556135f85f5d682761e0751c0f655adf3058",
+    "items": 170,
+    "people": 42,
+    "sourceUnits": 124,
+    "extractionHashInPacket": "sha256:449c38a0879f4affa0ec6654d665bc2dcad0c3ce9572bafa76afb6e935f10792",
+    "sourceHashInPacket": "sha256:7f26abd55aa974761e3c58084734539efb7fc3d79db6ff6bc52b0d5623e5ffbe",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 98 Biographies 28: Xiao Wuna, Yelu Yan, Liu Shen, Yelu Hulu",
+    "chineseUnits": 124,
+    "translatedCount": 124,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "localPeople": 42,
+    "claimsInValidation": 404,
+    "mentions": 237,
+    "appliedEditorialRepairs": 1,
+    "editorialDecisions": 1,
+    "noExtractionEdits": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 098",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/098: 1 extraction(s), 42 local people, 237 mentions, 404 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesScanCommand": "npm run people:dates:scan -- --book liaoshi --chapter 098",
+    "datesScanSummary": {
+      "extractedChapters": 1,
+      "findings": 0,
+      "chaptersWithFindings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 098",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "candidate-closure-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifactPath": "data/people/date-audits/liaoshi/098.json",
+      "packetReady": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "gate": "independent-bounded-dossier-identity-review"
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, accepted editorial). Git blob witnesses match dispatch pins on staging 20b8d0e3. Full chapter read: 124 Chinese units with paired literal and idiomatic English; accepted editorial repair r0001 (先朝 → former reign) already applied in source. Extraction at promptVersion 7 unchanged; people:validate passes; people:dates:scan reports zero pre-audit diagnostics. Native date packet sealed for independent reviewer; no data/people/date-audits/liaoshi/098.json — owner did not self-approve chronology. No definite English omission, unsupported chronology edit, or schema hold in this pass.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 098",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 098",
+    "datesPacket": "npm run people:dates:packet -- --book liaoshi --chapter 098 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-098/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book liaoshi --chapter 098"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

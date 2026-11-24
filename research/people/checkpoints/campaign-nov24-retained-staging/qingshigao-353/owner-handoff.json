@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "353"
+  },
+  "ownerAgentId": "bc-a0dd73da-8de0-4b98-accd-4dbf772d16fa",
+  "workerId": "cursor-nov24-retained-staging-w13-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8da2a4c6cf3985da6eb956dd02566900fb44339f1ea562c1c529377ded6eecc0",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-353-d16fa",
+  "extractionBytes": 96659,
+  "inputBlobWitness": {
+    "source": "51f561ff0eeaea2c60d6bf1fa9cf7792dd559b18",
+    "extraction": "de8ca65f8a97f9b66adbff85343e6fe33b087627",
+    "editorial": "99e03a77e25974768f71d14438c672735278427a"
+  },
+  "sealedInputs": {
+    "source": "sha256:6336ffbedf8d9bb2ad8ea2cd96ac88e96631bfa1efe3d2c2289746581d60eaa8",
+    "extraction": "sha256:d7693cb7f4bf90a2a5f26ee01e9525619210eae8174312449cc2d9049d48e34d",
+    "editorial": "sha256:7c200225d82454c265689af218f1a92704dab48f6de7fe9f2504227f4e31cf50"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-353/date-packet.json",
+    "sha256": "sha256:2fd9185ec4e4aeff61d775b560c34e11d82eb7385cafc128b3f8e54e79ba7aba",
+    "items": 184,
+    "people": 49,
+    "sourceUnits": 189,
+    "extractionHashInPacket": "sha256:9e706b85cf7d419c16d4f21f46774a9afe735d9d8a30637293c085a04312821d",
+    "sourceHashInPacket": "sha256:3866227901d4d6c6f04f694320ddda8f576772cb085c4d12fdf2975fab5eb40d",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 353 Biographies 140: Da Chun | Son: Sa Bin Tu, Tie Bao Younger Brother: Yu Bao, He Ying, Jue Luo Gui Fang",
+    "chineseUnits": 187,
+    "translatedCount": 0,
+    "missingLiteral": 187,
+    "missingIdiomatic": 187,
+    "missingEnglish": 187,
+    "fullEnglishCoverage": false
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "dispatchPeople": 49,
+    "dispatchClaims": 304,
+    "appliedEditorialRepairs": 8,
+    "editorialDecisions": 8,
+    "noExtractionEdits": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 353",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/353: 1 extraction(s), 49 local people, 221 mentions, 469 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScanCommand": "npm run people:dates:scan -- --book qingshigao --chapter 353",
+    "datesScanSummary": {
+      "extractedChapters": 1,
+      "findings": 0,
+      "chapters": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 353",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "candidate-closure-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifactPath": "data/people/date-audits/qingshigao/353.json",
+      "packetReady": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "gate": "independent-bounded-dossier-identity-review"
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs. Git blob witnesses match dispatch pins. Full chapter English coverage verified; extraction promptVersion 7 unchanged; people:validate passes; people:dates:scan findings 0. Native date packet sealed; no native date audit artifact — owner did not self-approve chronology. No definite English omission or owner-scoped chronology repair required.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 353",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 353",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 353 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-353/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book qingshigao --chapter 353"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
