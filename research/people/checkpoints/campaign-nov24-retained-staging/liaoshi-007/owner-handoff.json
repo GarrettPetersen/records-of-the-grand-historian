@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "007"
+  },
+  "ownerAgentId": "bc-b1524905-c914-4161-8283-fb44e76947f1",
+  "workerId": "cursor-nov24-retained-staging-w15-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "08cda70c9fa8613d8c0579e302faec7e9f71c71ccf34fe72c79c7bc1142ed8b6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-007-947f1",
+  "extractionBytes": 115904,
+  "inputBlobWitness": {
+    "source": "f30731dc9bfbc082e9b0fef4c6ef843f5224a90d",
+    "extraction": "a41cc2685d9f5c3ddd1f9f8ef4ea1d7e592a8b4d",
+    "editorial": "22b228a083139cec7639474449404587f4d7621c"
+  },
+  "sealedInputs": {
+    "source": "sha256:30c21705fa2e7778ddbf1e47f1f48e64a0fb9932bbb7b1563c7fb3183b8dc3fa",
+    "extraction": "sha256:2e8f601f6cf4c933993b0695f7c3b78b41e5721b810d8c505b7f4de7ceda733e",
+    "editorial": "sha256:c26749e3df655d6d4897ba48a1818bb765cee133beafdd707563cf664975c564"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 141,
+    "translatedCount": 141,
+    "missingEnglish": 0,
+    "sourceTitle": "Volume 7 Annals 7: Muzong 2",
+    "fullEnglishCoverage": true,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 91,
+    "claimsInWorkOrder": 347,
+    "noReextraction": true,
+    "sourceExtractionSha256Verified": "sha256:2e8f601f6cf4c933993b0695f7c3b78b41e5721b810d8c505b7f4de7ceda733e"
+  },
+  "editorialReuse": {
+    "acceptedDecisionCount": 3,
+    "status": "reviewed-with-applied-proposals",
+    "noReseal": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-007/date-packet.json",
+    "sha256": "sha256:3a6fe4ff029995d7555da15187dbe3c87126770e8099ebcb1f71575ca67d6fdd",
+    "command": "npm run people:dates:packet -- --book liaoshi --chapter 007 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-007/date-packet.json",
+    "dateHintChecks": 319,
+    "peopleInPacket": 91,
+    "sourceUnitsInPacket": 0,
+    "extractionHashInPacket": "sha256:4d16cfdd6e42c35547a327ca7c7d1849c38cde9ede1723a3844480c3f53f0ac4"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 007",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/007: 1 extraction(s), 91 local people, 268 mentions, 614 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 1 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 007",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "independentDateAuditMissing": true,
+    "notIndependentApproval": true,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned three-part inputs witness-verified at staging 20b8d0e3. No data/people/date-audits/liaoshi/007.json (no-native-date-report). Source English coverage complete on all 141 Chinese units; sealed extraction and 3 accepted editorial repairs pass people:validate with zero proposed repairs. Native date packet sealed; people:dates:verify un-audited — owner did not record independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/liaoshi/007.json",
+      "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-007/date-packet.json",
+      "datePacketSha256": "sha256:3a6fe4ff029995d7555da15187dbe3c87126770e8099ebcb1f71575ca67d6fdd",
+      "instruction": "Independent reviewer audits all 319 packet items; record with people:dates:record. Owner handoff is not date approval."
+    },
+    "identity": {
+      "gate": "independent-canonical-identity-review",
+      "instruction": "Bounded dossier identity review on sealed extraction after date gate; owner did not seal identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 007",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 007",
+    "datesPacket": "npm run people:dates:packet -- --book liaoshi --chapter 007 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-007/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, registry, deploy, or merge."
+}
