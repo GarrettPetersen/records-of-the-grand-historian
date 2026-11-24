@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "followup-transport-identity-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "017"
+  },
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "campaignWorker": "cursor-nov24-current-master-followup-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "planFingerprint": "sha256:01c81bae14cc6e6a92af8d122e9a3a9ba90ebb6ff180f0bc83a17a750453d301",
+    "sourcePacketSha256": "682ddf5048592ecc405084092b8d63b5b4e39eaf90b998585ec4a5c83f94602d",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:594d98eac2c7585e1b4a67cb882f9a225d43734234ab16885c4a4f51d3dba9c9",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:e125bc10540b3e03a3de416753086b5044bad0f419c940831b56a1ef8d2fc446",
+        "caseCount": 16
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:cdacc02016da7c4701161d71c1f74bc176cf165113c946d708edbfae92e6ef00",
+        "caseCount": 32
+      }
+    ],
+    "preparationReceiptSha256": "sha256:41d1b2f9dbfb33910a13eb2904c2a45c8dc3acf26e469a6305fbc3425979a07e"
+  },
+  "sealedInputs": {
+    "source": "sha256:459b5a64937618b563b68b91bc6202d101713ea02eb6dfb69644df3396dc0fbf",
+    "extraction": "sha256:8074f4610d9a39b214f0fb0a58ccb0fdb7284b4aea79cb9b2da078ef359e9b5c",
+    "editorial": "sha256:f81843229fb4cd49e55f14702e8c7a5b7d40e01daaf9b33ac68cf782c6a582d4",
+    "dateAudit": "sha256:7f34680959c0d7f51167895409c5f2cf879bf74384aa351862e591ae530e8e3d"
+  },
+  "chronologyStatus": "independent date audit on sealed extraction (audited)",
+  "editorialStatus": "11 applied editorial decisions on sealed extraction",
+  "reviewCases": 63,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 63 cases retain preparation-proposed canonicalPersonId and unresolvedIdentity flags (58 unresolved, 5 resolved). Thirty-three overflow and five missingBlockingName header-bucket cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found against chapter source or bilingual fields. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:524b797cc9e9f3034e373e90bd959037c128feaf6586ea2f1b50d2b1bf29edb8",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/transport-part-003.json",
+    "verifyOwnerEvidence": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/jiuwudaishi-017/owner-evidence.json",
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 017"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
