@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-owner-recovery",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "027",
+    "branch": "cursor/nov24-retained-jiuwudaishi-027-d69789",
+    "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9"
+  },
+  "agentId": "bc-569b10df-2bb7-4731-ad12-002ad9d69789",
+  "inputBlobs": {
+    "data/jiuwudaishi/027.json": "4012695926b9250f1701b59dcb002d43244c261d",
+    "data/people/extractions/jiuwudaishi/027.json": "58cf5ba0176bf1d400754cbccd1f6db7714f8864",
+    "data/people/date-audits/jiuwudaishi/027.json": "07d10ae091accc009db0eb37d24d16d43f10d24b",
+    "data/people/editorial-decisions/jiuwudaishi/027.json": "175e4eb4d25feb975950dfd01d813bc799e699e5"
+  },
+  "diagnosis": "Dropped unauthorized applied r0007 (s0001 literal Xiao for 孝). Realigned six sealed accepts.",
+  "supplementalTranslationRepairs": [
+    {
+      "repairId": "jiuwudaishi:027:r0007",
+      "unitId": "s0001",
+      "field": "literal",
+      "reason": "Paired literal must use Xiao for 孝, matching idiomatic correction."
+    }
+  ],
+  "commands": [
+    { "command": "validateAppliedEditorialDecisions (pinned)", "result": "r0007 unauthorized" },
+    { "command": "realign + reconcile-current", "result": "PASS (6 repairs)" }
+  ],
+  "remainingIssues": ["Stale date audit after extraction hash change."]
+}
