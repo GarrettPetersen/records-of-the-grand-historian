@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-identity-owner-witness-repair-handoff",
+  "scope": { "book": "qingshigao", "chapter": "027" },
+  "pr": 5515,
+  "ownerAgentId": "bc-fe43ebdf-900b-4477-abde-dd6496d385a0",
+  "independentReport": {
+    "path": "independent-identity-report.json",
+    "commit": "8bcbfb4c4024ea0c16293d8f533aad2a38882c66",
+    "sha256": "57ed789c871cca2ae5894a3a81ae007745026498dacd6f9cb5b494095600462c",
+    "reviewerAgentId": "bc-33f707a1-3112-465b-86cb-45c720a62fb5",
+    "preservedUnchanged": true
+  },
+  "nativeFinding": "Witness does not support this person in the current primary source: qingshigao:027:p001 qingshigao:027:s0005 quote=\"康熙八年\"",
+  "diagnosis": "Owner sourceWitnesses used regnal date strings (康熙八年, 乾隆九年). Native assertDossierPrimaryWitness requires a Chinese literal tied to this person's name keys in the same unit; dates are attestation context only (s0005/s0007 still cite 聖祖 and 高宗).",
+  "repair": {
+    "artifact": "owner-evidence.json",
+    "priorOwnerEvidenceSha256": "sha256:9df1e669a0fac5ee76b6f146a3c5c47f03eea5673fe2ff5ba3eeb037cea34c2f",
+    "sealedInputsUnchanged": true,
+    "transportSha256Unchanged": "6dc5e024b49aeff639b5adfcb266063cc5f504c03d6fdda3631ba1fa0efb073f",
+    "canonicalEdits": [],
+    "caseRepairs": [
+      {
+        "caseId": "sha256:663e61e5a3062aced684896b94d0ea4dc547f7ac9b2a962d396a843e2c3c8ecd",
+        "action": "remove-witness",
+        "removed": { "localId": "qingshigao:027:p001", "unitId": "s0005", "quote": "康熙八年" },
+        "retainedNameWitness": { "localId": "qingshigao:027:p001", "unitId": "s0005", "quote": "聖祖" }
+      },
+      {
+        "caseId": "sha256:1782d303b50e9bcecf6a8d55441c831b63e36c35fc39c62b138f06499455d3b6",
+        "action": "remove-witness",
+        "removed": { "localId": "qingshigao:027:p003", "unitId": "s0007", "quote": "乾隆九年" },
+        "retainedNameWitness": { "localId": "qingshigao:027:p003", "unitId": "s0007", "quote": "高宗" }
+      }
+    ]
+  },
+  "dispositionsUnchanged": ["retain-proposal on all 3 cases"],
+  "sourceHashesWouldChange": [],
+  "nextGate": "revalidate-owner-witnesses-then-resubmit-independent-certificate"
+}
