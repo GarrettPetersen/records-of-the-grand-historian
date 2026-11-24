@@ -389,7 +389,7 @@ function validateWesternYear(value, label, errors) {
 // explicit source-quoted form; asserted Western/life dates retain normal gates.
 function sourceQuotedQualitativeAttestation(claim, packet) {
  const value=claim.value;
- return claim.predicate==='attestation'&&claim.certainty==='explicit'&&
+ return claim.predicate==='attestation'&&(claim.certainty==='explicit'||claim.certainty==='explicit-event-contextual-date')&&
   typeof value?.sourceDate?.text==='string'&&value.sourceDate.text.trim().length>0&&
   typeof value.qualitative==='string'&&value.qualitative.trim().length>=20&&
   typeof value.event==='string'&&value.event.trim().length>=20&&
