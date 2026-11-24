@@ -78,3 +78,7 @@ See `research/people/jinshu078-106-apply-verify-5f2add76-20261124/`.
 ## Final three + native date report @ 80ad020a
 
 See `research/people/jinshu078-final-three-date-report-80ad020a-20261124/`.
+
+## Coverage compose (337 exact proofs + tranche) @ 80ad020a
+
+See `research/people/jinshu078-coverage-compose-80ad020a-20261124/`.
