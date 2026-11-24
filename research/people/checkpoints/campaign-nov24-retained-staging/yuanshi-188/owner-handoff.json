@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "188"
+  },
+  "ownerAgentId": "bc-49e6f290-b200-4c74-8373-ec6bd8892443",
+  "workerId": "cursor-nov24-retained-staging-w17-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "75c761c05c9cf4b54876aff4122b0f4d500a5f86df55e73ad7634fedebe63f87",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-188-92443",
+  "extractionBytes": 192698,
+  "inputBlobWitness": {
+    "source": "4a2297814b005066c85e6f0e85f6b0979bfed07f",
+    "extraction": "655b3db99d518c560e1e43035016b184cd6eae87",
+    "editorial": "b07b7ced30e0ca5198b96d04f4f5aba1217f595c",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:897546b8df0faa306c75596c9aab4b7b62172802caa6bb7c94130796a2f97f77",
+    "extraction": "sha256:19d2e80bee1cd7b05cb11f96593bc5f046efde8ca3f889322d5babff4d7df251",
+    "editorial": "sha256:b5c1adc2cec5c7200b90c9e5a5d5822f3fc1cdf982acd943e39d3c934dba879e"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 188 Biographies 75: Dong Tuanxiao, Liuhalabuhua, Wang Ying, Shimoyisun",
+    "chineseUnits": 240,
+    "translatedCount": 240,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-188/date-packet.json",
+    "packetSha256": "sha256:064721b556af43b0b5fab27c9ec3f4bd235f989ab41d5fb5efc857da20a26bf2",
+    "sourceHash": "sha256:e3d26a90e45c5b2c23a70e333b6cf9a3b5ed46db6502d83d6f22b39cb3cf274f",
+    "extractionHash": "sha256:0d9c8438c0a49f0bdd22384d487905df0f3a00b247319b5ac46e1f6faf8ed34a",
+    "dateHintChecks": 306,
+    "peopleInPacket": 67,
+    "sourceUnitsInPacket": 240,
+    "command": "npm run people:dates:packet -- --book yuanshi --chapter 188 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-188/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPromptVersion": 7,
+    "extractionReused": true,
+    "editorialReused": true,
+    "appliedEditorialDecisions": 14,
+    "editorialReviewerAgentId": "bc-c4dabad6-80f2-4926-a2e9-e0573ebe2713",
+    "extractionValidate": "data/people/extractions/yuanshi/188.json: ok (67 people, 404 mentions, 931 claims, 669 candidates)"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 188",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/188: 1 extraction(s), 67 local people, 404 mentions, 931 claims, 0 proposed repair(s), 14 applied repair(s), 14 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 188",
+      "status": "un-audited",
+      "priorNativeDateReport": false
+    },
+    "chronologyStatus": "packet-prepared-awaiting-independent-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-verified at staging 20b8d0e3. Source English coverage complete on 240 Chinese units. Accepted extraction (prompt v7) and 14 applied editorial decision(s) preserved; extraction content SHA256 matches work-order pin. Fresh native date packet prepared (306 hint checks, 67 people). No definite English omission or concrete source contradiction found in owner pass; no date-repair proposal filed pending independent chronology review.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/yuanshi/188.json",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-188/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book yuanshi --chapter 188",
+      "independentOfExtractor": true,
+      "ownerDidNotSelfApprove": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date-approval",
+      "summary": "Bounded dossier identity review remains after independent date approval; owner pass did not run identity gates."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 188",
+    "datesPacket": "npm run people:dates:packet -- --book yuanshi --chapter 188 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-188/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 188"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged. Missing gate is independent native date audit, not extraction or editorial rework."
+}
