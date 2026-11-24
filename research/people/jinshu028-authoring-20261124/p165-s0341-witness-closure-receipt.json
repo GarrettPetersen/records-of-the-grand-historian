@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu028-p165-s0341-witness-repair",
+  "book": "jinshu",
+  "chapter": "028",
+  "pr": 5477,
+  "ownerTip": "288a641a9929f5c6bdfdb0254b026f865d1060ff",
+  "identityHold": {
+    "caseId": "sha256:0c1bce807f648559c9926c540cb7d04ced4dde073dbdacc9e2852652d217042a",
+    "localPerson": "jinshu:028:p165",
+    "canonicalPersonId": "per_WGQBC8Y7B0S1AVNBYS10",
+    "reviewPart": "research/people/checkpoints/jinshu028-split-native-identity-20261124/part-017.result.json",
+    "reviewBranch": "cursor/jinshu028-native-reviews-1e208b",
+    "reviewCommit": "e51b06305256e24ae3bd138e454668db663f0355",
+    "defect": "s0341 及石頭之事 lacks a primary Chinese personal-name surface for 王敦; prior p165 attribution relied on English idiom only."
+  },
+  "repairAt": "2026-11-24T07:12:00.000Z",
+  "authorAgentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
+  "diagnosis": "Removed erroneous duplicate local Wang Dun record p165 sourced only from s0341. Re-homed the s0341 Shitou-affair event as an undated attestation on p100 (existing Wang Dun with primary witnesses s0180/s0182 including 王敦有石頭之變). No invented names, quotes, dates, or canonical merge.",
+  "dependencyHashes": {
+    "before": {
+      "source": "sha256:a882c4fa64c2972cc2da23220c89ac46fdf363ba1604890af80640c61dc4d2eb",
+      "extraction": "sha256:70143960e3db4cf205f4d395937f796b6f1ed49a1180682096a848df60136c12",
+      "editorial": "sha256:0572b35f1f4984677b03f33efdbdf5e0b759ac193ce07cb4cebb8d4d1147ee8d",
+      "dateAudit": "sha256:599756a0e6183852bb13b5725af377272bcdce513fc4684cd4e6592bb35eada3"
+    },
+    "after": {
+      "source": "sha256:a882c4fa64c2972cc2da23220c89ac46fdf363ba1604890af80640c61dc4d2eb",
+      "editorial": "sha256:0572b35f1f4984677b03f33efdbdf5e0b759ac193ce07cb4cebb8d4d1147ee8d",
+      "dateAudit": "sha256:599756a0e6183852bb13b5725af377272bcdce513fc4684cd4e6592bb35eada3",
+      "extraction": "sha256:ad6870963016c38b90a45e7b4cc4014a3f88b6c918dbcdc9b52d36055d5b9d42"
+    }
+  },
+  "affected": {
+    "removedLocalPeople": [
+      "jinshu:028:p165"
+    ],
+    "removedIdentityCase": "sha256:0c1bce807f648559c9926c540cb7d04ced4dde073dbdacc9e2852652d217042a",
+    "staleDateAuditItems": [
+      "hints-p165",
+      "p165",
+      "claim rows formerly on p165 (sex, attestation, personal-name surfaces)"
+    ],
+    "retainedWangDunLocals": [
+      "jinshu:028:p033",
+      "jinshu:028:p100",
+      "jinshu:028:p201",
+      "jinshu:028:p313"
+    ],
+    "addedClaims": [
+      {
+        "personId": "jinshu:028:p100",
+        "predicate": "attestation",
+        "evidence": [
+          "s0341"
+        ],
+        "event": "At the Shitou affair the six armies routed; soldiers plundered the capital, reaching both palaces.",
+        "sourceWitnessZh": "及石頭之事，六軍大潰，兵人抄掠京邑，爰及二宮。"
+      }
+    ]
+  },
+  "counts": {
+    "peopleBefore": 403,
+    "peopleAfter": 402,
+    "claimsBefore": 2016,
+    "claimsAfter": 2013,
+    "mentionsBefore": 1217,
+    "mentionsAfter": 1216
+  },
+  "preserved": {
+    "editorialDecisions": 79,
+    "nativeIdentityApprovals": 389,
+    "auditedDateAuditFile": "data/people/date-audits/jinshu/028.json",
+    "noSelfReview": true,
+    "noRecordDateAudit": true,
+    "noGlobalBuild": true
+  },
+  "validation": {
+    "extraction": "data/people/extractions/jinshu/028.json: ok (402 people, 1216 mentions, 2013 claims, 1932 candidates)",
+    "peopleData": "Scoped person data validation passed (402 people)",
+    "datesVerify": "stale expected (extractionHash drifted before repair; no owner recordDateAudit)"
+  }
+}

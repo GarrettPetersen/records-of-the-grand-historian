@@ -31,3 +31,18 @@ test('unknown-source or explicit unresolved chronology cannot become source-only
  const g=fixture();g.raw.claims[0][2].unresolved=true;g.raw.claims[0][2].unresolvedReason='The source conversion remains an explicitly retained research hold.';
  const dates=combinedDatePacket('test','001',g.source,g.raw);assert.equal(unresolvedDateAuditItems(dates).length,1);
 });
+
+test('explicit-event-contextual-date also completes source-only chronology without Western conversion',()=>{
+ const {packet,raw}=fixture();
+ raw.claims[0][3]='explicit-event-contextual-date';
+ const before=structuredClone(raw);
+ const result=validateCompactPeopleExtraction(raw,packet,{strictAliasDispositions:true});
+ assert.equal(result.stats.people,1);assert.deepEqual(raw,before);
+});
+
+test('a contextual attestation still requires the source date quote',()=>{
+ const {packet,raw}=fixture();
+ raw.claims[0][3]='explicit-event-contextual-date';
+ raw.claims[0][2].sourceDate.text='永和中';
+ assert.throws(()=>validateCompactPeopleExtraction(raw,packet),/Western/);
+});
