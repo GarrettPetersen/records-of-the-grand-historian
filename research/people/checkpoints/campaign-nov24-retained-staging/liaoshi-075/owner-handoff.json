@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "075"
+  },
+  "ownerAgentId": "bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2",
+  "worker": "cursor-nov24-retained-staging-w11-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "88169cfdce4d911b7472a72d521711753a41df050fad65681949b1c826e87a27",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-retained-staging-owner-liaoshi-075-b2ee2",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:770a7ae21734e325425f8d7868fe0a959b4fa9bad63e7fa018dece900d38b503",
+    "people": 42,
+    "claims": 231,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "bc1bb71c3c204cf6643c4b7e347bc94d97069984",
+    "extraction": "c7d2dd6ce5539b7af6fb1b3e4b082ef3658f5ee6",
+    "editorial": "83761a8999f3133d976063ba154b5ca0eda0cb3c"
+  },
+  "sealedInputs": {
+    "source": "sha256:57a49433cfb3aa432625f2f694b374efe61d4ab97a44add3d097f630b7f3bddf",
+    "extraction": "sha256:770a7ae21734e325425f8d7868fe0a959b4fa9bad63e7fa018dece900d38b503",
+    "editorial": "sha256:94093f6e926eb21b91e1a38c886a801c4bfc025ce563babac282b1ab3210cb0b"
+  },
+  "dateAuditPresent": false,
+  "editorialAndExtractionReuse": {
+    "reextract": false,
+    "editorialOverwrite": false,
+    "extractionPath": "data/people/extractions/liaoshi/075.json",
+    "editorialPath": "data/people/editorial-decisions/liaoshi/075.json",
+    "extractionBytes": 75057,
+    "editorialDecisionCount": 4,
+    "appliedRepairCount": 4,
+    "extractorAgentId": "bc-c89811bc-0764-4839-87ed-e2e7f06dc584",
+    "extractorModel": "grok-4.5",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitleEn": "Volume 75 Biographies 5: Yelu Dilie, Yelu Duozhen, Wang Yu, Yelu Tulujiong",
+    "sourceTitleZh": "卷七十五 列傳第五: 耶律覿烈 耶律鐸臻 王郁 耶律圖魯窘",
+    "sentenceCount": 130,
+    "translatedCount": 130,
+    "parsedSentenceCount": 130,
+    "englishCoverage": {
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "claimEvidenceIntegrity": {
+      "invalidEvidenceRefs": [],
+      "invalidCount": 0
+    }
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-075/date-packet.json",
+    "contentSha256": "sha256:178ed2b9ca3b3bb01bebf36246006923e6a9bcf4b72f4675f8f119db8c6e136e",
+    "packetSourceHash": "sha256:3e6d7b2bf78f9dde0b35746b0cb47cf9a5a0a522fb1281bed1b44a5b348cdb23",
+    "packetExtractionHash": "sha256:73d8faec5723611927d4967c728b31e7dbbebeb8fc34a74864d21bceecd632a5",
+    "dateHintCheckCount": 118,
+    "peopleCount": 42,
+    "command": "npm run people:dates:packet -- --book liaoshi --chapter 075 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-075/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "definiteEnglishProblems": [],
+  "holds": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book liaoshi --chapter 075",
+    "summary": "Scoped person data validation passed for liaoshi/075: 1 extraction(s), 42 local people, 319 mentions, 396 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionCoverage": {
+      "allClaimProvenanceValid": true,
+      "peopleCountObserved": 42,
+      "claimsCountObserved": 231,
+      "proposedRepairs": 0
+    },
+    "chronologyStatus": "un-audited",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 075",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/liaoshi/075.json",
+      "nativeDateReportPresent": false
+    }
+  },
+  "authorEvidence": {
+    "method": "Verified pinned staging git blobs and raw file content SHA-256; read Chinese source units with English literal/idiomatic fields; retained accepted prompt-v7 extraction and applied editorial decisions without re-extraction; npm run people:validate; native people:dates:packet at checkpoint; owner does not issue independent date approval.",
+    "reviewedAt": "2026-11-24T17:11:33.599Z",
+    "conclusion": "Pinned source, extraction, and editorial inputs align at witnessed blobs. Full English coverage on all source units; claim evidence references resolve; native validator reports zero proposed repairs and zero legacy temporal debt. No concrete source contradiction, definite English omission, or owner-scope chronology repair identified. Sealed date packet is ready for independent native chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "completed": false,
+      "status": "un-audited",
+      "candidatePacket": "sha256:178ed2b9ca3b3bb01bebf36246006923e6a9bcf4b72f4675f8f119db8c6e136e",
+      "candidatePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-075/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --book liaoshi --chapter 075",
+      "runCommand": "npm run people:dates:run -- --book liaoshi --chapter 075 --worker <stable-id> --lane cursor-sdk --model <model> --run",
+      "notes": "Missing gate is an independent native date audit against the sealed packet at current extraction/source fingerprints. Owner pass does not substitute for people:dates:record approval."
+    },
+    "independentIdentityReview": {
+      "required": true,
+      "completed": false,
+      "notes": "Canonical identity membership for chapter-local people remains for a separate independent reviewer after chronology approval; no identity transport artifacts were re-sealed in this owner pass."
+    }
+  },
+  "independentApprovalIssued": false,
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 075",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 075 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-075/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book liaoshi --chapter 075"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 075",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 075 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-075/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book liaoshi --chapter 075"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical data edits, registry generation, deploy, or merge. Still missing: independent native date audit (and subsequent identity review)."
+}
