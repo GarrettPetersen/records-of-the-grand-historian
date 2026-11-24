@@ -108,9 +108,9 @@
       "extractionErrors": [],
       "chronologyGeometryErrors": [],
       "serializationStable": true,
-      "afterDateRepairExtractionHash": "sha256:ff747b98365b0df72ddf06c1478b544af5bb2639b349ce46e452fcff8654e450",
-      "candidateExtractionHash": "sha256:2df06d49884403ffe7047cc0be9830e12f6688c9c63060bae623baa932bd608f",
-      "candidateExtractionBytes": 46928,
+      "afterDateRepairExtractionHash": "sha256:3a5aadfa4fee374da0689e8e1dd5594629149dd4b52c059b1c80ccd0eb0552c5",
+      "candidateExtractionHash": "sha256:8cff98dbb34aecc40cd279e3f84ce5471d02121063293cc0a1fa900ece9f7a22",
+      "candidateExtractionBytes": 46961,
       "candidateCounts": {
         "people": 26,
         "claims": 104,
@@ -147,9 +147,9 @@
     "Verified all four input blobs at staging 7cdf8f42 and in the working tree (extraction 47,349 bytes). Pinned validators pass; the date receipt is hash-current, status research-blocked, with one blanket finding over all 60 items.",
     "Read all 204 units (Treatise on Carriages and Dress, part two) in both English fields. Accepted repairs r0001 (s0066) and r0002 (s0150) are present in the source.",
     "English: 24 definite field repairs across 17 units. Mistranslations: 翬翟/榮華 (pheasants and blossoms, not kingfishers and sable), 爵頭色 (sparrow-head color), 大難 = 大儺 (the Great Exorcism, not a crisis), 中黃門童子佩刀 (the pages' girdle-knife, not boys given as gifts), 繆織 (interwoven, not \"wrongly\"), the s0195 reversed ending, the s0146 invented \"summer face\", and the s0149 numeric error (29.9 chi is nearly thirty feet, not three yards). Attribution/name errors: the s0005 \"tailors\" and the s0052 \"he\" (Confucius); \"Marquis Huiwen\" for 趙惠文 (King Huiwen of Zhao); \"Shi clan cap\" for 術氏冠; \"Zhao’s martial king\"; and \"Kings of blood\", a repeat of the wording accepted repair r0002 already removed at s0150.",
-    "Chronology: 56 of 60 items verify as correct era conversions, reign or career containing bounds, or legendary qualitative hints; two of these (Duke of Zhou and King Cheng, BC 1042-) are conventional reconstructions kept with explicit uncertainty. Four concrete defects: claim-38 dates 高祖微時 (before Gaozu's rising) to the post-rising BC 209-206 window; claim-45 invents a BC 400 start for 楚王嘗獲之; claim-46 merges the unnamed xiezhi king with the ruler Qin conquered in BC 223; and claim-52 dates Zi Zang of Zheng to BC 580-570, contradicting the cited Zuo Commentary (Duke Xi 24, 636 BC). A native date-repair proposal makes these four items undated or removes them and empties the two dependent hints.",
+    "Chronology: 52 of 60 items verify as-is as correct era conversions, reign or career containing bounds for events the chapter narrates, or legendary qualitative hints. Four of these (the Duke of Zhou and King Cheng, BC 1042-) are conventional reconstructions kept with explicit uncertainty. Five concrete defects: claim-38 dates 高祖微時 (before Gaozu's rising) to the post-rising BC 209-206 window; claim-45 invents a BC 400 start for 楚王嘗獲之; claim-46 merges the unnamed xiezhi king with the ruler Qin conquered in BC 223; and claim-52 dates Zi Zang of Zheng to BC 580-570, contradicting the cited Zuo Commentary (Duke Xi 24, 636 BC); and claim-47 treats the eponymous \"Zhao Huiwen cap\" (s0070) as King Huiwen's own activity across his BC 298-266 reign, although a cap name is a retrospective reference and the chapter traces the cap to King Wuling (s0071). A native date-repair proposal makes these five items undated or removes them and empties the three dependent hints. Figures whose own acts the chapter narrates (Fan Kuai and Xiang Yu at Hongmen, King Wuling's adoption of Hu dress, Confucius's robe, the Duke of Zhou's anecdote, Hu Guang's explanations) keep their containing bounds.",
     "Identity and mentions: p015 merges two unidentified Chu rulers (s0066 vs the 其君 of s0068); the proposal retracts the s0068 defeated-ruler claim and removes s0068 from p015's name and role evidence. p016 carries an unsupported title name \"Marquis Huiwen\", replaced by the personal name \"Zhao Huiwen\". The s0066 English mention span covered a whole clause and is narrowed to \"the king of Chu\". The s0099 mention follows the name repair. No new people or missing mentions were found; no merges or canonical identifications are proposed.",
-    "The fully combined candidate passes the native extraction validator in memory, after the native input refresh and reconciliation of 10 preflight English candidates, with no chronology geometry errors. Candidate extraction sha256:2df06d49884403ffe7047cc0be9830e12f6688c9c63060bae623baa932bd608f."
+    "The fully combined candidate passes the native extraction validator in memory, after the native input refresh and reconciliation of 10 preflight English candidates, with no chronology geometry errors. Candidate extraction sha256:8cff98dbb34aecc40cd279e3f84ce5471d02121063293cc0a1fa900ece9f7a22."
   ],
   "definiteTranslationRepairs": [
     {
@@ -762,6 +762,57 @@
           ],
           "after": [],
           "reason": "The only chronology for p019 was the unsupported BC 580-570 interval, which conflicts with the Zuo Commentary's Duke Xi 24 (636 BC) placement. With the attestation undated, the hint must not keep the wrong window."
+        },
+        {
+          "kind": "replace",
+          "id": "claim-47",
+          "before": [
+            "p016",
+            "attestation",
+            {
+              "sourceDate": {
+                "text": "謂之「趙惠文冠」"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 298,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 266,
+                  "precision": "year"
+                }
+              }
+            },
+            "strongly-inferred",
+            [
+              "s0070"
+            ]
+          ],
+          "after": [
+            "p016",
+            "attestation",
+            {
+              "undatedSourceAttestation": true,
+              "event": "The palace attendants’ gold-knob cicada cap with sable tail is called the “Zhao Huiwen cap” (謂之「趙惠文冠」); the chapter attributes no dated act to Huiwen himself."
+            },
+            "explicit",
+            [
+              "s0070"
+            ]
+          ],
+          "reason": "An eponymous cap name is a retrospective reference, not evidence of the honoree’s activity (PEOPLE_DATE_AUDIT.md: allusions and commemorations are not evidence that their subjects were alive; the same treatment as the accepted jiuwudaishi/004 Prince Xiao curation). The chapter itself traces this cap’s origin to King Wuling of Zhao (s0071, Hu Guang: 趙武靈王效胡服，以金璫飾首，前插貂尾), not to any act of Huiwen. So King Huiwen’s reign, BC 298-266, is outside knowledge about the namesake and not a bound for an attested event."
+        },
+        {
+          "kind": "hints",
+          "personId": "p016",
+          "before": [
+            "BC 298-266"
+          ],
+          "after": [],
+          "reason": "p016 is known in this chapter only from the cap name at s0070. With that attestation undated, the BC 298-266 reign window is not supported as an active-date hint."
         }
       ]
     },
@@ -928,9 +979,7 @@
           {
             "n": [],
             "r": [],
-            "a": [
-              "BC 298-266"
-            ],
+            "a": [],
             "p": [
               "Zhao"
             ],
@@ -983,9 +1032,7 @@
           {
             "n": [],
             "r": [],
-            "a": [
-              "BC 298-266"
-            ],
+            "a": [],
             "p": [
               "Zhao"
             ],
@@ -1015,7 +1062,7 @@
             ]
           ]
         ],
-        "reason": "Drop the unsupported title name \"Marquis Huiwen\" (趙惠文 is King Huiwen of Zhao; no marquisate appears). Align the personal-name English form with the source-order surface \"Zhao Huiwen\" used in the repaired s0070 English."
+        "reason": "Drop the unsupported title name \"Marquis Huiwen\" (趙惠文 is King Huiwen of Zhao; no marquisate appears). Align the personal-name English form with the source-order surface \"Zhao Huiwen\" used in the repaired s0070 English. (Active hints are already [] after the date proposal.)"
       },
       {
         "lane": "mention",
@@ -1255,12 +1302,14 @@
         "claim-38",
         "claim-45",
         "claim-46 (removed)",
+        "claim-47",
         "claim-52",
         "claim-83 (retracted: p015 Chu-destroyed-by-Qin)",
         "claim-85 (p017 loved-Shi-clan-cap -> loved-Shu-clan-cap)"
       ],
       "hints": [
         "hints-p015",
+        "hints-p016",
         "hints-p019"
       ],
       "units": [
@@ -1411,8 +1460,8 @@
       {
         "id": "claim-47",
         "personId": "p016",
-        "ownerVerdict": "verified-supported",
-        "basis": "趙惠文冠 (s0070) names King Huiwen of Zhao. His reign, BC 298-266, bounds the eponymous cap reference. Strongly-inferred."
+        "ownerVerdict": "change-proposed",
+        "basis": "An eponymous cap name is a retrospective reference, not evidence of the honoree’s activity (PEOPLE_DATE_AUDIT.md: allusions and commemorations are not evidence that their subjects were alive; the same treatment as the accepted jiuwudaishi/004 Prince Xiao curation). The chapter itself traces this cap’s origin to King Wuling of Zhao (s0071, Hu Guang: 趙武靈王效胡服，以金璫飾首，前插貂尾), not to any act of Huiwen. So King Huiwen’s reign, BC 298-266, is outside knowledge about the namesake and not a bound for an attested event."
       },
       {
         "id": "claim-48",
@@ -1585,8 +1634,8 @@
       {
         "id": "hints-p016",
         "personId": "p016",
-        "ownerVerdict": "verified-supported",
-        "basis": "The hint matches this person's retained, verified attestation bounds (see the corresponding claim verdicts). It is an identity hint, not a life span."
+        "ownerVerdict": "change-proposed",
+        "basis": "p016 is known in this chapter only from the cap name at s0070. With that attestation undated, the BC 298-266 reign window is not supported as an active-date hint."
       },
       {
         "id": "hints-p017",
@@ -1703,7 +1752,7 @@
       "status": "pending-final-independent-review",
       "items": 60,
       "problem": "The September 23 date receipt is a research-blocked hold, not an approval. Applying the proposed source/extraction changes will make it stale.",
-      "action": "The final independent reviewer issues current date verdicts for all 60 items, using ownerItemVerification; 4 items carry scoped changes and the rest are verified as-is.",
+      "action": "The final independent reviewer issues current date verdicts for all 60 items, using ownerItemVerification; 8 items carry native date changes and the rest are verified as-is.",
       "preserve": true
     },
     {
@@ -1734,8 +1783,8 @@
     }
   ],
   "chapterReady": false,
-  "readiness": "Owner pass complete. The chapter is ready for one final independent check once the host applies the 24 English repairs (with independent editorial review), the native date proposal and the extraction edits. Without these the chapter keeps definite English errors and four concrete chronology defects.",
+  "readiness": "Owner pass complete. The chapter is ready for one final independent check once the host applies the 24 English repairs (with independent editorial review), the native date proposal and the extraction edits. Without these the chapter keeps definite English errors and five concrete chronology defects.",
   "nextGate": "host-application-of-scoped-proposals-then-one-final-independent-chapter-review",
   "canonicalEdits": false,
-  "completedAt": "2026-11-24T16:24:44.289Z"
+  "completedAt": "2026-11-24T16:33:57.571Z"
 }
