@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "054"
+  },
+  "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+  "workerId": "cursor-nov24-retained-staging-w10-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "892a491c64e2d709f2f81f9d3b925676866762d3c9d6243dc51b67d3f5d63644",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-054-0945d",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:09bdb2029567f69f485abcdb328035fd0d50c9ede35be1bed2e1829f0de72ee8",
+    "people": 28,
+    "claims": 128,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "4c0fdef1b89e417e4a095b3b120725922ada48a6",
+    "extraction": "1838d8674e0e5264618b7fadf1190f794100d4b8",
+    "editorial": "6e683972e2ed62aa6b48fe3862843b2dedd7b92d"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:c6ebe4ddeacab10b0b3040aa582f6900d5d91affdf15fe459abeda046dfc1adf",
+    "extraction": "sha256:09bdb2029567f69f485abcdb328035fd0d50c9ede35be1bed2e1829f0de72ee8",
+    "editorial": "sha256:4dd622e487326ed8312f52c8149eaff2d5ad09d92596551392a762f77b1af697"
+  },
+  "datePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-054/date-packet.json",
+    "contentSha256": "sha256:641942a93d69d7a60d88a427f57a3354b7a219e25b760fa77f7a42439c4d73ab",
+    "packetSourceHash": "sha256:4c597136f845d4d52d7bc0e51450258f078c135f7a37796c1a4e1a2bb9283c07",
+    "packetExtractionHash": "sha256:a2fd0cc9cdec4a28f83d8b154b13e13d406c09355db9b2c01d8f40ae710e3086",
+    "itemCount": 76,
+    "peopleInPacket": 28,
+    "unitCount": 214
+  },
+  "sourceCoverage": {
+    "titleEn": "Volume 54 Treatises 24: Music",
+    "titleZh": "卷五十四 志第二十三: 樂志",
+    "sentenceCount": 214,
+    "translatedCount": 214,
+    "englishComplete": true,
+    "bothFieldsOnUnits": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "gitBlob": "1838d8674e0e5264618b7fadf1190f794100d4b8",
+    "contentSha256": "sha256:09bdb2029567f69f485abcdb328035fd0d50c9ede35be1bed2e1829f0de72ee8",
+    "bytes": 61340,
+    "canonicalEdits": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "6e683972e2ed62aa6b48fe3862843b2dedd7b92d",
+    "contentSha256": "sha256:4dd622e487326ed8312f52c8149eaff2d5ad09d92596551392a762f77b1af697",
+    "acceptedDecisionCount": 5,
+    "repairsReflectedInSource": true,
+    "claimRetractions": 0,
+    "claimRevisions": 0
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 054",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/054: 1 extraction(s), 28 local people, 92 mentions, 222 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 054",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 054 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-054/date-packet.json",
+      "completed": true
+    }
+  },
+  "substantiveFindings": "Liao music treatise: twenty-eight people, 128 claims; six accepted editorial repairs (Hejian lord title, Emperor Shengzong/Xingzong attribution, plural antecedent, Palace Domestic Service title) reflected in source. Seventy-six packet chronology rows prepared for independent review. Scoped validation passed.",
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "completed": false,
+      "reason": "No data/people/date-audits record; people:dates:verify reports un-audited. Owner prepared sealed date-packet only; does not self-approve.",
+      "packetSha256": "sha256:641942a93d69d7a60d88a427f57a3354b7a219e25b760fa77f7a42439c4d73ab",
+      "minimumContinuation": "Independent reviewer records full native date audit via people:dates:record against packet at sha256:641942a93d69d7a60d88a427f57a3354b7a219e25b760fa77f7a42439c4d73ab without altering pinned extraction or editorial blobs."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "completed": false,
+      "reason": "Chapter-scoped validation passed; corpus-wide merge/split identity review remains outside this owner pass."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "Candidate chronology sealed in date-packet; await separate source reviewer approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "ownerChangesRequired": false,
+  "completedAt": "2026-11-24T17:08:04.412Z",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 054",
+    "verifyDates": "npm run people:dates:verify -- --book liaoshi --chapter 054",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 054 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-054/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass: reuse extraction and editorial; prepare date-packet; no registry, deploy, or merge."
+}
