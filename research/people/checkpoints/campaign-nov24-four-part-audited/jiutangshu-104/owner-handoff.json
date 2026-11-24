@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-four-part-source-owner-handoff",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "104"
+  },
+  "ownerAgentId": "bc-6b80b860-324e-41c1-b2d6-d2f759052b9c",
+  "campaignWorker": "cursor-nov24-four-part-owner-4",
+  "idempotencyKey": "b3ee6ff7d4fa6b71d8897a153d6a628391427220dbd7c73ac6c6b9334a072a5",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "inputBlobs": [
+    {
+      "path": "data/jiutangshu/104.json",
+      "blob": "efc7477fecdf33f536ee847332361b13e5783931",
+      "contentSha256": "sha256:1e1a935635cd844246cd18f812b20c7ac816a2049d80f2c233b4e90a3ba94d51"
+    },
+    {
+      "path": "data/people/extractions/jiutangshu/104.json",
+      "blob": "93015154d0d33aba956e6e0bda0495b7dc5d7527",
+      "contentSha256": "sha256:9ba7332fb38df3c2a2f97f81f30e622dcf5dcbff4830a557bb26ee1b0306864f"
+    },
+    {
+      "path": "data/people/date-audits/jiutangshu/104.json",
+      "blob": "b606652916179fb778a16ff71e7ee8cf9533476b",
+      "contentSha256": "sha256:7a42635fcedd4d576bdd229c520c10a16f6db3dcc8a0809fb716b4005dc3598a"
+    },
+    {
+      "path": "data/people/editorial-decisions/jiutangshu/104.json",
+      "blob": "9c1844a939c7f5ca870c1060c4276a09b002d40b",
+      "contentSha256": "sha256:dc84d06cbbb4829a9c65965c58657ba4a5d4a09838f24d9c45ff1a6d372fe79d"
+    }
+  ],
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jiutangshu --chapter 104",
+    "peopleDatesVerifyPassed": true,
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book jiutangshu --chapter 104",
+    "sourceCoverage": {
+      "chineseUnits": 297,
+      "translatedCount": 297,
+      "missingEnglish": 0,
+      "missingLiteral": 0,
+      "missingIdiomatic": 0,
+      "fullEnglishCoverage": true
+    },
+    "dateAuditStatus": "audited",
+    "dateAuditFindings": 0,
+    "dateAuditSourceHash": "sha256:1436b28041985eeb2694744a7bcc6cbafd6df17416aad72e93dd9fe8dc26c2b3",
+    "dateAuditExtractionHash": "sha256:1066af8cb7b9f906f31051416ee6a7d04454d3ddbb53a30bf1e5e09dd2deafaf",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "proposedTranslationRepairs": 0
+  },
+  "authorEvidence": {
+    "extractionAgentIds": [
+      "bc-d4c95a1b-2f31-449d-993c-9405dbb7c110",
+      "bc-3abd6e04-f26f-4140-a6ce-b79b4b81f03a",
+      "bc-4ccce2d5-de59-4cf5-aba4-227a1d70d109",
+      "bc-9ecccc8f-b4d4-4575-ac63-f4cf3f675bd0",
+      "bc-33cebd66-7e12-4344-9526-6bbd265b3d5a",
+      "bc-24d9db22-1c08-4e77-b7fd-359073e73f80"
+    ],
+    "extractionModel": "grok-4.6-chunked",
+    "extractionPromptVersion": 7,
+    "appliedTranslationRepairs": 20,
+    "editorialDecisionCount": 21,
+    "dateAuditReviewedAt": "2026-09-29T02:20:22.821Z",
+    "dateAuditReviewer": "Independent Jiu Tangshu 104 initial chronology reviewer"
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 92,
+    "identityTransportParts": 4,
+    "preparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "independentIdentityReviewCompleted": false,
+    "boundedDossierReviewRequired": true,
+    "note": "Native four-part identity preparation passed in CI; owner does not re-prepare or approve identity packets."
+  },
+  "chapterReady": true,
+  "holds": [],
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "notes": "Source-owner pass only: verifies sealed Chinese source, both English fields, accepted extraction/editorial/dates, and records remaining independent identity work. Not publication or identity approval."
+}
