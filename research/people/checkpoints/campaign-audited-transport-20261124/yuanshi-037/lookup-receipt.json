@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "037"
+  },
+  "reviewer": {
+    "agentId": "bc-ea569238-493d-4d7e-b4b0-4683322b30a9",
+    "name": "cursor-nov24-independent-yuanshi-037"
+  },
+  "transportSha256": "ad007624b2df5c2f82d2f8e618b5f61be24deaefd9a497e80a2a86de56d3f24f",
+  "planFingerprint": "sha256:33f34d3b8dcde4e594b69f9f828a2d3c40ddde1b79fb2e7d34784a39213cb771",
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm lookup generation before dossier header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Live lookup revision may differ from pinned transport registryProvenance 110c2f92; sealed transport canonicalMembership is authoritative for this review."
+    },
+    {
+      "route": "/v1/people/per_0J3JN6RCVTG2HY61C99B",
+      "purpose": "Header check for Shizu (世祖) retained id",
+      "blockingNameKeys": ["zh:世祖", "zh:元世祖", "zh:忽必烈"]
+    },
+    {
+      "route": "/v1/people/per_0S3F9E8T7XTVHA9YE9VR",
+      "purpose": "Header check for Taizu (太祖) retained id",
+      "blockingNameKeys": ["zh:元太祖", "zh:太祖"]
+    },
+    {
+      "route": "/v1/people/per_08GY1FKX8FEJ9RXC1W7J",
+      "purpose": "Header check for Gegeen (格堅) retained id",
+      "blockingNameKeys": ["zh:格坚", "zh:格堅"]
+    }
+  ],
+  "conclusion": "Lookup used only for bounded canonical header confirmation on overflow-prone sovereign titles. Membership decisions, Chinese witnesses, and unresolvedIdentity flags are drawn solely from sealed transport-packet.json and quoted primary units; omitted search results are not separation evidence."
+}
