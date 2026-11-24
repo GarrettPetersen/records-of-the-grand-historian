@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "beiqishu/032",
+  "reviewerAgentId": "bc-002dbbab-2d33-4327-a1cc-0be5279ab140",
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "ownerRevision": "921f8bb796105a0c4f76193b35bde6686b4bbe06",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-four-part-audited/beiqishu-032/owner-primary-witness-delta.json",
+  "ownerProposalSha256": "e209b0439dcb4383b260bdda6cae0d4c78b64d1bd1e3ffda271a936fc367aa71",
+  "ownerProposalHead": "c2379706c0bd5e6055d8367a7d6c7deef54e682a",
+  "previousReviewHead": "7391110605352238b023d67409789dddabc1ce72",
+  "previousReviewRef": "cursor/nov24-four-part-independent-beiqishu-032",
+  "idempotencyKey": "e04c7bf7bf413fc41958fc265254a481325e35fb22c7decaca250592406de89d",
+  "verdict": "approve-owner-proposal",
+  "summary": "Independent targeted review confirms the owner correctly retracts unwitnessed local p073 (珉之女 / 裴景暉妻) while preserving the explicit s0195 婿 link between Pei Jinghui (p071) and Wang Min (p072). English for s0195 already names 婿 as son-in-law; no chapter translation edit required.",
+  "preservedUnrelatedReview": {
+    "identityPartReports": [
+      "independent-identity-report-part-001.json",
+      "independent-identity-report-part-002.json",
+      "independent-identity-report-part-004.json"
+    ],
+    "unchangedApprovedCases": 88,
+    "note": "Part 003 retains 21 prior approves unchanged; only the single held case is addressed here."
+  },
+  "closedCases": [
+    {
+      "caseId": "sha256:077a44c0d6ef2a0da9ae17d892cba25d0d6b2a8c5192d31b1855866b7eb7c423",
+      "canonicalPersonId": "per_52G8R8E6GF08G711N811",
+      "localPersonId": "beiqishu:032:p073",
+      "priorVerdict": "hold",
+      "closure": "remove-unwitnessed-local-person",
+      "sourceUnit": "s0195",
+      "primaryChinese": "陳合州刺史裴景暉，琳兄珉之婿也，請以私屬導引齊師。",
+      "englishLiteral": "Chen's Inspector of Hezhou Pei Jinghui was son-in-law to Lin's elder brother Min; he asked to guide the Qi army with his private followers.",
+      "englishIdiomatic": "Chen's inspector of Hezhou Pei Jinghui was son-in-law to Lin's elder brother Min; he asked to guide the Qi army with his private followers.",
+      "witnessAssessment": "s0195 quotes 裴景暉 and 琳兄珉之婿; it does not quote 珉之女, 裴景暉妻, 女, or 妻 as referring expressions. Native primary-witness rules cannot certify p073. Marriage is entailed by 婿 but the wife remains an unnamed grounded unknown, not a separate person record.",
+      "independentApproval": "Owner removal of p073 and dependent claims is source-correct; direct kin-of p071→p072 retains 琳兄珉之婿 without intermediaryPersonIds."
+    }
+  ],
+  "heldCases": [],
+  "dependencies": {
+    "inputBlobsUnchanged": {
+      "source": "013ec124a3d6a0f75446162e72c053b8960f9f5a",
+      "dateAudit": "62c22a6d7c34d3f1f24c7b5af66ca21c008e54be",
+      "editorial": "e8a395216cb608437287f8d7d61b5faac20acaec"
+    },
+    "extractionAfterApply": {
+      "expectedLocalPeople": 100,
+      "removedLocalId": "beiqishu:032:p073",
+      "affectedLocalIds": ["p068", "p071", "p072"],
+      "unchangedNamedWitnesses": {
+        "p071": { "unitId": "s0195", "quote": "裴景暉" },
+        "p072": { "unitId": "s0195", "quote": "珉" }
+      }
+    },
+    "chronologyMinimalDelta": {
+      "requiredOnExtractionApply": [
+        {
+          "id": "p073",
+          "action": "withdraw-person-audit-row",
+          "reason": "Local person removed; date-audit row at pinned blob is stale."
+        },
+        {
+          "id": "hints-p073",
+          "action": "withdraw-hints-audit-row",
+          "reason": "Active-date hints target retracted local; no independent chronology defect on remaining persons."
+        }
+      ],
+      "unchangedDateOwners": ["p071", "p072", "p068"],
+      "compositionNote": "No new date-audit items; host withdraws two p073-scoped rows against current audit blob after extraction repair lands."
+    },
+    "identityHostFollowUp": {
+      "partition": "independent-identity-report-part-003.json",
+      "action": "recompose-or-supersede-held-row",
+      "caseId": "sha256:077a44c0d6ef2a0da9ae17d892cba25d0d6b2a8c5192d31b1855866b7eb7c423"
+    }
+  },
+  "supportedPatch": {
+    "proposalId": "beiqishu-032-retract-p073",
+    "target": "data/people/extractions/beiqishu/032.json",
+    "beforeExtractionBlobWitness": "c2d7eaa79c0f5564e7b065b63ec4c4e20f40f774",
+    "affectedPersonIds": ["p068", "p071", "p072", "p073"],
+    "affectedClaimIds": [
+      "beiqishu:032:c0298",
+      "beiqishu:032:c0299",
+      "beiqishu:032:c0300",
+      "beiqishu:032:c1127",
+      "beiqishu:032:c1128"
+    ],
+    "operationsApproved": [
+      "remove-person p073",
+      "patch-person-relations remove p073 from p068/p071/p072",
+      "retract p073 sex and attestation",
+      "retract p071 spouse-of and p072 parent-of toward p073",
+      "revise p071 kin-of p072: drop intermediaryPersonIds p073; retain 婿 on s0195"
+    ],
+    "keyRevision": {
+      "selector": ["p071", "family-relationship", "p072", "kin-of"],
+      "before": {
+        "relation": "kin-of",
+        "personId": "p072",
+        "kinshipTerm": { "zh": "婿", "en": "son-in-law" },
+        "subjectRole": "son-in-law",
+        "objectRole": "father-in-law",
+        "intermediaryPersonIds": ["p073"]
+      },
+      "after": {
+        "relation": "kin-of",
+        "personId": "p072",
+        "kinshipTerm": { "zh": "婿", "en": "son-in-law" },
+        "subjectRole": "son-in-law",
+        "objectRole": "father-in-law"
+      },
+      "sourceQuote": "琳兄珉之婿",
+      "evidence": ["s0195"]
+    },
+    "p072Annotation": {
+      "field": "x",
+      "after": "s0195 names Pei Jinghui as son-in-law (婿) to Min; the wife is unnamed and receives no quotable surface in this chapter."
+    },
+    "ownerArtifactOperations": "research/people/checkpoints/campaign-nov24-four-part-audited/beiqishu-032/owner-primary-witness-delta.json#proposedChanges[0].operations"
+  },
+  "validation": {
+    "ownerProposalSha256Verified": true,
+    "scopedBefore": {
+      "command": "npm run people:validate -- --book beiqishu --chapter 032",
+      "pinnedExtractionBlob": "c2d7eaa79c0f5564e7b065b63ec4c4e20f40f774",
+      "localPeople": 101,
+      "passed": true
+    },
+    "candidateAfterOwnerPatch": {
+      "command": "npm run people:validate -- --book beiqishu --chapter 032",
+      "method": "Ephemeral apply of approved owner operations to chapter extraction only; canonical tree restored after check.",
+      "localPeople": 100,
+      "claims": 1310,
+      "passed": true
+    },
+    "primaryWitnessSpotCheck": {
+      "p071KinOfP072": {
+        "witness": { "localId": "beiqishu:032:p071", "unitId": "s0195", "quote": "琳兄珉之婿" },
+        "note": "Post-patch structure matches quote without inventing daughter surface."
+      }
+    },
+    "independentReviewerDistinctFromOwner": true
+  },
+  "completedAt": "2026-11-24T14:40:00.000Z",
+  "notes": "[CF-Pages-Skip] Targeted independent witness delta only; no canonical extraction commit on this branch."
+}
