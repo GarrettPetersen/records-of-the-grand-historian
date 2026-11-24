@@ -22,6 +22,9 @@ Staging pin: PR #5489 commit `378771b831b7eb7b7049903eb3e26bb86155db4d`.
 | `date-packet-pin.json` | Pinned native date packet (~553 items) for this review generation |
 | `partial-date-report-preface-20261124.json` | Validated `needs-revision` partial report (preface units only) |
 | `partial-date-preface-20261124.md` | Human summary of chronology pass 1 |
+| `partial-date-report-lu-zhi-20261124.json` | Validated partial report (魯芝 s0016–s0057) |
+| `partial-date-lu-zhi-20261124.md` | Human summary of chronology pass 2 |
+| `chronology-cumulative-checkpoint-20261124.json` | Unique item-ID coverage across completed groups |
 | `owner-chronology-author-notes.json` | Retained owner notes from staging #5489 + independent progress pointer |
 | `independent-source-review-20261124.md` | Editorial verification notes (r0001–r0033) |
 
@@ -30,7 +33,7 @@ Staging pin: PR #5489 commit `378771b831b7eb7b7049903eb3e26bb86155db4d`.
 - `validatePeopleExtraction` on expanded `jinshu/090` extraction
 - `validateEditorialDecisionDocument` on schema4 artifact
 - `validateAppliedEditorialDecisions(schema4, extraction)` → **no errors**
-- `validateDateAuditReport` on preface partial report against pinned packet → **pass**
+- `validateDateAuditReport` on preface and Lu Zhi partial reports against pinned packet → **pass**
 
 Production `npm run people:validate -- --book jinshu --chapter 090` still fails until the host applies editorial schema4 history. No file under `data/people/date-audits/jinshu/090.json` is installed.
 
@@ -39,3 +42,4 @@ Rebuild:
 - `node research/people/build-jinshu090-independent-editorial-20261124.mjs`
 - `node research/people/verify-jinshu090-editorial-install-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-preface-20261124.mjs`
+- `node research/people/build-jinshu090-partial-date-lu-zhi-20261124.mjs`
