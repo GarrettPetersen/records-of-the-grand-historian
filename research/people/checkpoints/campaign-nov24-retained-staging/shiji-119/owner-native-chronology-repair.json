@@ -1,0 +1,490 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "shiji",
+    "chapter": "119"
+  },
+  "ownerAgentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+  "idempotencyKey": "82403d3016f1a537775993ad0963ff85dc33bfd907293db7288690efb8479b2f",
+  "priorOwnerRevision": "b8e3a7db24f3d38a243080285c7f915e930ced32",
+  "authorBranch": "cursor/nov24-retained-owner-native-date-shiji-119-ce781",
+  "pinnedDateAudit": {
+    "byteHash": "sha256:261e0587922828812f3687b200d4bebb82490aa69c3aae65c27adaa3f52a055c",
+    "status": "research-blocked",
+    "preservedUntouched": true,
+    "note": "Original independent date-audit file bytes unchanged on this branch."
+  },
+  "sealedInputsUnchanged": {
+    "source": "sha256:a210cfd50e694e37ea69980fed4ba573a7d10476d478cdf8d2d51d9df746f71d",
+    "extraction": "sha256:d8dad144f3dd59d7c60478a58b7cd3aab4e4b1d2967fad6a86353ba0f5d1a2a2",
+    "extractionByte": "sha256:4456e726e071c08c0012feee4b7a6f1f98a42bd037513c71345824fcf490bcff"
+  },
+  "verifiedFindings": {
+    "count": 1,
+    "coveredItems": 49,
+    "auditSummary": "Complete initial source-scope chronology audit of all 79 Chinese units, all 34 temporal or active-hint items, and all 15 people. This exemplar collection uses retrospective authorial summaries, reign-era framing, family descriptions, and moral anecdotes. Every extracted date and active hint is retained only as an evidence-grounded research hold pending independent identity, ownership, conversion, and endpoint review; no source, extraction, or canonical person data was changed."
+  },
+  "dateRepairProposal": {
+    "schemaVersion": 1,
+    "kind": "date-repair-proposal",
+    "book": "shiji",
+    "chapter": "119",
+    "sourceHash": "sha256:a210cfd50e694e37ea69980fed4ba573a7d10476d478cdf8d2d51d9df746f71d",
+    "extractionHash": "sha256:d8dad144f3dd59d7c60478a58b7cd3aab4e4b1d2967fad6a86353ba0f5d1a2a2",
+    "pinnedDateAuditByteHash": "sha256:261e0587922828812f3687b200d4bebb82490aa69c3aae65c27adaa3f52a055c",
+    "author": {
+      "name": "Retained staging native chronology owner",
+      "agentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+      "worker": "cursor-nov24-retained-staging-w1-o4"
+    },
+    "changes": [
+      {
+        "kind": "replace",
+        "id": "claim-2",
+        "before": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "太史公曰"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 91,
+              "precision": "year"
+            }
+          },
+          "strongly-inferred",
+          [
+            "s0001",
+            "s0077"
+          ]
+        ],
+        "after": [
+          "p001",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "s0001 太史公曰 is authorial commentary without a calendar-bearing personal event in this chapter unit."
+          },
+          "strongly-inferred",
+          [
+            "s0001",
+            "s0077"
+          ]
+        ],
+        "reason": "Remove false BC 91 westernYear from 太史公曰 attestation; the introducer is not a source calendar."
+      },
+      {
+        "kind": "hints",
+        "personId": "p001",
+        "before": [
+          "BC 91"
+        ],
+        "after": [],
+        "reason": "Clear unsupported Taishigong active hint after undating authorial 太史公曰 attestation in this chapter."
+      }
+    ]
+  },
+  "proposalSealedHash": "sha256:6fbd843a2b67e69a7cabf5468e4b0e94ad5823eb113879b297c859574350d670",
+  "affectedItems": [
+    {
+      "target": "claim-2",
+      "kind": "replace"
+    },
+    {
+      "target": "hints-p001",
+      "kind": "hints"
+    }
+  ],
+  "sourceEvidenceReviewed": [
+    {
+      "itemId": "claim-2",
+      "event": "Chronology context for The Grand Historian / 太史公 / Taishi gong: attestation",
+      "disposition": "included-in-native-proposal",
+      "reason": "Addressed in embedded native date-repair-proposal.",
+      "sourceUnit": "s0001",
+      "sourceQuote": "太史公曰：法令所以導民也，刑罰所以禁姦也。"
+    },
+    {
+      "itemId": "hints-p001",
+      "event": "Chronology context for The Grand Historian / 太史公 / Taishi gong: active-date-hints",
+      "disposition": "included-in-native-proposal",
+      "reason": "Addressed in embedded native date-repair-proposal.",
+      "sourceUnit": "s0001",
+      "sourceQuote": "太史公曰：法令所以導民也，刑罰所以禁姦也。"
+    }
+  ],
+  "residualHolds": [
+    {
+      "itemId": "claim-11",
+      "event": "Chronology context for Sun Shuao / 孫叔敖 / Sun Shuao: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0004",
+      "sourceQuote": "孫叔敖者，楚之處士也。"
+    },
+    {
+      "itemId": "claim-26",
+      "event": "Chronology context for Yu Qiu / 虞丘 / Yu Qiu: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0005",
+      "sourceQuote": "虞丘相進之於楚莊王，以自代也。"
+    },
+    {
+      "itemId": "claim-32",
+      "event": "Chronology context for King Zhuang of Chu / 楚莊王 / Chu Zhuang wang: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0005",
+      "sourceQuote": "虞丘相進之於楚莊王，以自代也。"
+    },
+    {
+      "itemId": "claim-39",
+      "event": "Chronology context for Zi Chan / 子產 / Zi Chan: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0026",
+      "sourceQuote": "子產者，鄭之列大夫也。"
+    },
+    {
+      "itemId": "claim-49",
+      "event": "Chronology context for Zi Chan / 子產 / Zi Chan: death",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0034",
+      "sourceQuote": "治鄭二十六年而死，丁壯號哭，老人兒啼，曰：「子產去我死乎！"
+    },
+    {
+      "itemId": "claim-50",
+      "event": "Chronology context for Zi Chan / 子產 / Zi Chan: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0034",
+      "sourceQuote": "治鄭二十六年而死，丁壯號哭，老人兒啼，曰：「子產去我死乎！"
+    },
+    {
+      "itemId": "claim-53",
+      "event": "Chronology context for Duke Zhao of Zheng / 鄭昭君 / Zheng Zhao jun: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0027",
+      "sourceQuote": "鄭昭君之時，以所愛徐摯為相，國亂，上下不親，父子不和。"
+    },
+    {
+      "itemId": "claim-58",
+      "event": "Chronology context for Xu Zhi / 徐摯 / Xu Zhi: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0027",
+      "sourceQuote": "鄭昭君之時，以所愛徐摯為相，國亂，上下不親，父子不和。"
+    },
+    {
+      "itemId": "claim-63",
+      "event": "Chronology context for Dagong Ziqi / 大宮子期 / Dagong Ziqi: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0028",
+      "sourceQuote": "大宮子期言之君，以子產為相。"
+    },
+    {
+      "itemId": "claim-67",
+      "event": "Chronology context for Gongyi Xiu / 公儀休 / Gongyi Xiu: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0037",
+      "sourceQuote": "公儀休者，魯博士也。"
+    },
+    {
+      "itemId": "claim-83",
+      "event": "Chronology context for Wife of Gongyi Xiu: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0049",
+      "sourceQuote": "見其家織布好，而疾出其家婦，燔其機，云「欲令農士工女安所讎其貨乎」？"
+    },
+    {
+      "itemId": "claim-88",
+      "event": "Chronology context for Shi She / 石奢 / Shi She: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0050",
+      "sourceQuote": "石奢者，楚昭王相也。"
+    },
+    {
+      "itemId": "claim-100",
+      "event": "Chronology context for Shi She / 石奢 / Shi She: death",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0063",
+      "sourceQuote": "遂不受令，自刎而死。"
+    },
+    {
+      "itemId": "claim-103",
+      "event": "Chronology context for King Zhao of Chu / 楚昭王 / Chu Zhao wang: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0050",
+      "sourceQuote": "石奢者，楚昭王相也。"
+    },
+    {
+      "itemId": "claim-109",
+      "event": "Chronology context for Father of Shi She: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0052",
+      "sourceQuote": "行縣，道有殺人者，相追之，乃其父也。"
+    },
+    {
+      "itemId": "claim-115",
+      "event": "Chronology context for Li Li / 李離 / Li Li: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0064",
+      "sourceQuote": "李離者，晉文公之理也。"
+    },
+    {
+      "itemId": "claim-123",
+      "event": "Chronology context for Li Li / 李離 / Li Li: death",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0076",
+      "sourceQuote": "遂不受令，伏劍而死。"
+    },
+    {
+      "itemId": "claim-127",
+      "event": "Chronology context for Duke Wen of Jin / 晉文公 / Jin Wen gong: attestation",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0064",
+      "sourceQuote": "李離者，晉文公之理也。"
+    },
+    {
+      "itemId": "hints-p002",
+      "event": "Chronology context for Sun Shuao / 孫叔敖 / Sun Shuao: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0004",
+      "sourceQuote": "孫叔敖者，楚之處士也。"
+    },
+    {
+      "itemId": "hints-p003",
+      "event": "Chronology context for Yu Qiu / 虞丘 / Yu Qiu: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0005",
+      "sourceQuote": "虞丘相進之於楚莊王，以自代也。"
+    },
+    {
+      "itemId": "hints-p004",
+      "event": "Chronology context for King Zhuang of Chu / 楚莊王 / Chu Zhuang wang: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0005",
+      "sourceQuote": "虞丘相進之於楚莊王，以自代也。"
+    },
+    {
+      "itemId": "hints-p005",
+      "event": "Chronology context for Zi Chan / 子產 / Zi Chan: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0026",
+      "sourceQuote": "子產者，鄭之列大夫也。"
+    },
+    {
+      "itemId": "hints-p006",
+      "event": "Chronology context for Duke Zhao of Zheng / 鄭昭君 / Zheng Zhao jun: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0027",
+      "sourceQuote": "鄭昭君之時，以所愛徐摯為相，國亂，上下不親，父子不和。"
+    },
+    {
+      "itemId": "hints-p007",
+      "event": "Chronology context for Xu Zhi / 徐摯 / Xu Zhi: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0027",
+      "sourceQuote": "鄭昭君之時，以所愛徐摯為相，國亂，上下不親，父子不和。"
+    },
+    {
+      "itemId": "hints-p008",
+      "event": "Chronology context for Dagong Ziqi / 大宮子期 / Dagong Ziqi: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0028",
+      "sourceQuote": "大宮子期言之君，以子產為相。"
+    },
+    {
+      "itemId": "hints-p009",
+      "event": "Chronology context for Gongyi Xiu / 公儀休 / Gongyi Xiu: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0037",
+      "sourceQuote": "公儀休者，魯博士也。"
+    },
+    {
+      "itemId": "hints-p010",
+      "event": "Chronology context for Wife of Gongyi Xiu: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0049",
+      "sourceQuote": "見其家織布好，而疾出其家婦，燔其機，云「欲令農士工女安所讎其貨乎」？"
+    },
+    {
+      "itemId": "hints-p011",
+      "event": "Chronology context for Shi She / 石奢 / Shi She: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0050",
+      "sourceQuote": "石奢者，楚昭王相也。"
+    },
+    {
+      "itemId": "hints-p012",
+      "event": "Chronology context for King Zhao of Chu / 楚昭王 / Chu Zhao wang: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0050",
+      "sourceQuote": "石奢者，楚昭王相也。"
+    },
+    {
+      "itemId": "hints-p013",
+      "event": "Chronology context for Father of Shi She: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0052",
+      "sourceQuote": "行縣，道有殺人者，相追之，乃其父也。"
+    },
+    {
+      "itemId": "hints-p014",
+      "event": "Chronology context for Li Li / 李離 / Li Li: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0064",
+      "sourceQuote": "李離者，晉文公之理也。"
+    },
+    {
+      "itemId": "hints-p015",
+      "event": "Chronology context for Duke Wen of Jin / 晉文公 / Jin Wen gong: active-date-hints",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0064",
+      "sourceQuote": "李離者，晉文公之理也。"
+    },
+    {
+      "itemId": "p001",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for The Grand Historian / 太史公 / Taishi gong, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "太史公曰：法令所以導民也，刑罰所以禁姦也。"
+    },
+    {
+      "itemId": "p002",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Sun Shuao / 孫叔敖 / Sun Shuao, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "孫叔敖者，楚之處士也。"
+    },
+    {
+      "itemId": "p003",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Yu Qiu / 虞丘 / Yu Qiu, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "虞丘相進之於楚莊王，以自代也。"
+    },
+    {
+      "itemId": "p004",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for King Zhuang of Chu / 楚莊王 / Chu Zhuang wang, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "虞丘相進之於楚莊王，以自代也。"
+    },
+    {
+      "itemId": "p005",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Zi Chan / 子產 / Zi Chan, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "子產者，鄭之列大夫也。"
+    },
+    {
+      "itemId": "p006",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Duke Zhao of Zheng / 鄭昭君 / Zheng Zhao jun, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "鄭昭君之時，以所愛徐摯為相，國亂，上下不親，父子不和。"
+    },
+    {
+      "itemId": "p007",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Xu Zhi / 徐摯 / Xu Zhi, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "鄭昭君之時，以所愛徐摯為相，國亂，上下不親，父子不和。"
+    },
+    {
+      "itemId": "p008",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Dagong Ziqi / 大宮子期 / Dagong Ziqi, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "大宮子期言之君，以子產為相。"
+    },
+    {
+      "itemId": "p009",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Gongyi Xiu / 公儀休 / Gongyi Xiu, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "公儀休者，魯博士也。"
+    },
+    {
+      "itemId": "p010",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Wife of Gongyi Xiu, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "見其家織布好，而疾出其家婦，燔其機，云「欲令農士工女安所讎其貨乎」？"
+    },
+    {
+      "itemId": "p011",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Shi She / 石奢 / Shi She, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "石奢者，楚昭王相也。"
+    },
+    {
+      "itemId": "p012",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for King Zhao of Chu / 楚昭王 / Chu Zhao wang, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "石奢者，楚昭王相也。"
+    },
+    {
+      "itemId": "p013",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Father of Shi She, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "行縣，道有殺人者，相追之，乃其父也。"
+    },
+    {
+      "itemId": "p014",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Li Li / 李離 / Li Li, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "李離者，晉文公之理也。"
+    },
+    {
+      "itemId": "p015",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed for Duke Wen of Jin / 晉文公 / Jin Wen gong, but the chapter's exemplary anecdotes, retrospective authorial summary, family descriptions, and reign contexts require independent source-critical review before any extracted date can be treated as approved personal chronology.",
+      "sourceQuote": "李離者，晉文公之理也。"
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "applyDateRepairProposal": "passed",
+    "validateCompactPeopleExtraction": "passed",
+    "dateAuditGeometryErrors": [],
+    "extractionStats": {
+      "units": 79,
+      "candidates": 77,
+      "people": 15,
+      "mentions": 128,
+      "claims": 176,
+      "repairs": 3,
+      "dispositions": 17,
+      "aliasDispositionConflicts": 0
+    }
+  },
+  "intactApprovals": {
+    "dateAuditFile": "data/people/date-audits/shiji/119.json",
+    "dateAuditByteHash": "sha256:261e0587922828812f3687b200d4bebb82490aa69c3aae65c27adaa3f52a055c",
+    "extractionUnchangedOnBranch": true
+  },
+  "notes": "[CF-Pages-Skip] Native proposal handoff only; host assembles candidate and runs independent re-audit.",
+  "completedAt": "2026-11-24T16:20:52.289Z"
+}
