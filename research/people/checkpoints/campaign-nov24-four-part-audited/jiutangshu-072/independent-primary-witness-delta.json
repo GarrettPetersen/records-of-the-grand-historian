@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "jiutangshu/072",
+  "reviewerAgentId": "bc-7087452d-b9cd-4bcb-b459-4409e59dec27",
+  "ownerAgentId": "bc-7e44ff29-fd0a-40b3-afba-2b66bc99de9f",
+  "ownerRevision": "0cae152f307a7443e1e048cac7c01bdaa84fe833",
+  "ownerProposalSha256": "c6106f2dc13d9068c30b9f6758ff1d449b03ec98a66e880bed02cdeea78b9199",
+  "previousReviewHead": "2cbe03d483b8ffee41ebccf367d9a1baae66590d",
+  "verdict": "approve-supported-patch",
+  "closedCases": [
+    {
+      "caseId": "sha256:402ff3d78855877cd4e91753bc01da1911896229abce86bcd7aa38676aa34cb6",
+      "canonicalPersonId": "per_BG9HK4434J07TPXXNYX8",
+      "localId": "jiutangshu:072:p031",
+      "priorIndependentVerdict": "hold",
+      "resolution": "remove-inferred-local-person",
+      "rationale": "Independent hold stands: s0042 Chinese「王世充兄子偽代王琬…」explicitly names nephew 王琬 (p026) via 王世充兄子; English literal/idiomatic both render nephew of Wang Shichong, not a separate brother actor. 兄 inside 兄子 does not quote 王世充之兄 or any brother surface for p031. Owner removal retires the out-of-scope inferred brother record rather than fabricating a witness; nephew–uncle linkage remains on p026→p018 with explicit 兄子 on s0042 after dropping intermediaryPersonIds."
+    }
+  ],
+  "heldCases": [],
+  "dependencies": {
+    "preservedReviewArtifacts": {
+      "independentIdentityReports": "research/people/checkpoints/campaign-nov24-four-part-audited/jiutangshu-072/independent-identity-report-part-001.json through part-004 at previousReviewHead; 138 approve rows unchanged; part-002 hold row for this caseId superseded only after owner applies supportedPatch and host reconciles identity transport.",
+      "inputBlobs": {
+        "data/jiutangshu/072.json": "98bb4e1c256b72a2449ba0b6936fc1d549656b99",
+        "data/people/extractions/jiutangshu/072.json": "93d6268e12fb5c1199ff998d711181068dbd40b0",
+        "data/people/date-audits/jiutangshu/072.json": "cc134eed6f8524407e73beeb26dd82e6a5c123d7",
+        "data/people/editorial-decisions/jiutangshu/072.json": "bd78792ee408f055472b02ef3e75dc32d88940c8"
+      }
+    },
+    "postApplyHostGates": [
+      "Regenerate chapter identity transport; retire case per_BG9HK4434J07TPXXNYX8 when p031 no longer exists.",
+      "Date-audit delta: remove or re-audit rows id p031 and hints-p031 (currently cite s0042 nephew surface only); rerun people:dates:verify for jiutangshu/072 after extraction bytes change."
+    ],
+    "chronologyDelta": {
+      "required": true,
+      "minimalComposition": "Drop person-scope audit items tied to removed local p031; retain p026/p018/p018 attestation rows unchanged. No western-year change on surviving persons."
+    }
+  },
+  "supportedPatch": {
+    "target": "data/people/extractions/jiutangshu/072.json",
+    "summary": "Remove p031; trim p018/p026 relatedLocalPeople; simplify p026 kin-of p018 claim; keep p026 explicit name/kinship on s0042.",
+    "personIdsRemoved": ["p031"],
+    "personIdsTouched": ["p018", "p026"],
+    "claimIdsAffected": [
+      "jiutangshu:072:p026 family-relationship (kin-of p018, remove intermediaryPersonIds)"
+    ],
+    "operations": [
+      {
+        "op": "remove-person",
+        "personId": "p031"
+      },
+      {
+        "op": "remove-claims-for-person",
+        "personId": "p031",
+        "predicates": ["name", "role", "sex", "attestation", "family-relationship"]
+      },
+      {
+        "op": "metadata-r-edit",
+        "personId": "p018",
+        "field": "metadata.r",
+        "before": ["p026", "p031"],
+        "after": ["p026"]
+      },
+      {
+        "op": "metadata-r-edit",
+        "personId": "p026",
+        "field": "metadata.r",
+        "before": ["p018", "p031"],
+        "after": ["p018"]
+      },
+      {
+        "op": "claim-replace",
+        "personId": "p026",
+        "predicate": "family-relationship",
+        "before": {
+          "relation": "kin-of",
+          "personId": "p018",
+          "kinshipTerm": { "zh": "兄子", "en": "brother's son" },
+          "parentage": "biological",
+          "subjectRole": "nephew",
+          "objectRole": "paternal-uncle",
+          "generationDistance": 1,
+          "line": "paternal",
+          "intermediaryPersonIds": ["p031"]
+        },
+        "after": {
+          "relation": "kin-of",
+          "personId": "p018",
+          "kinshipTerm": { "zh": "兄子", "en": "brother's son" },
+          "parentage": "biological",
+          "subjectRole": "nephew",
+          "objectRole": "paternal-uncle",
+          "generationDistance": 1,
+          "line": "paternal"
+        },
+        "evidence": ["s0042"]
+      }
+    ],
+    "sourceRationale": {
+      "unitId": "s0042",
+      "zh": "王世充兄子偽代王琬，使於建德軍中，乘隋煬帝所御驄馬，鎧甲甚鮮，迥出軍前以誇眾。",
+      "enLiteral": "Wang Shichong's nephew the false Prince of Dai Wang Wan, envoy in Jiande's army, rode the piebald horse Emperor Yang of Sui had used, his armor very bright, standing far out before the army to display pride to the masses.",
+      "enIdiomatic": "Wang Shichong's nephew Wang Wan, the rebel Prince of Dai, was with Dou's army; he rode Emperor Yang's famous piebald stallion in gleaming armor, prancing before the lines to impress the troops."
+    },
+    "ownerProposalPath": "research/people/checkpoints/campaign-nov24-four-part-audited/jiutangshu-072/owner-primary-witness-delta.json",
+    "ownerProposalHead": "1b7fca96bbbb44914566d447766f9d874ec11b3e"
+  },
+  "validation": {
+    "ownerProposalSha256Verified": true,
+    "scopedBefore": {
+      "command": "npm run people:validate -- --book jiutangshu --chapter 072",
+      "ownerRevision": "0cae152f307a7443e1e048cac7c01bdaa84fe833",
+      "exitCode": 0,
+      "localPeople": 147
+    },
+    "candidateAfterPatch": {
+      "method": "validateCompactPeopleExtraction on in-memory compact extraction with owner-equivalent removals",
+      "exitCode": 0,
+      "localPeople": 146,
+      "errors": 0
+    },
+    "sourceWitnessCheck": {
+      "p026AdmissibleQuotesOnS0042": ["王琬", "王世充兄子"],
+      "p031AdmissibleQuotesOnS0042": [],
+      "note": "Post-patch, no identity case should remain for removed p031; p026 retains explicit primary surfaces."
+    },
+    "englishFieldsOnS0042Unchanged": true,
+    "canonicalDataEditedOnThisBranch": false
+  }
+}
