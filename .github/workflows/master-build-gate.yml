@@ -5,13 +5,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check'
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && endsWith(inputs.chapter, '-certify') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -415,3 +415,162 @@ jobs:
           assert.equal(audit.length,6);
           console.log(JSON.stringify({sourceRevision:receipt.sourceRevision,authority:'Mechanical witness candidates only. Independent identity disposition required.',cases:audit},null,2));
           JS
+  native-certificate:
+    if: endsWith(inputs.chapter, '-certify')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CHAPTER_INPUT: ${{ inputs.chapter }}
+    steps:
+      - id: pins
+        name: Seal authored parts from this campaign journal revision
+        run: |
+          node <<'JS'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const {execFileSync} = require('node:child_process');
+          const chapter = process.env.CHAPTER_INPUT.split('-')[0];
+          const repo = process.env.GITHUB_REPOSITORY;
+          assert(['030','083','094','115'].includes(chapter));
+          const read = (path, raw) => JSON.parse(execFileSync('gh', ['api', 'repos/'+repo+'/'+path, ...(raw?['-H','Accept: application/vnd.github.raw+json']:[])], {encoding:'utf8',maxBuffer:10e6}));
+          const state = read('contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
+          const chapters = state.identityRegistryBuild;
+          const entry = chapter === '030' ? chapters.chapter030 :
+            chapter === '115' ? chapters.currentChapter115.reseal.witnessRefresh :
+            chapters.chapters083And094['updated'+chapter];
+          const packet = chapter === '030' ? entry : entry.identityPreparation;
+          const revision = entry.sourceRevision ?? entry.revision;
+          const registryId = chapter === '030' ? entry.registryArtifactId : entry.artifactId;
+          const registryRun = entry.runId;
+          const packetName = 'jinshu-'+chapter+'-native-identity-evidence';
+          const registryName = 'people-registry-'+revision;
+          assert.match(revision,/^[a-f0-9]{40}$/);
+          for(const [id, run, name] of [[packet.artifactId,packet.runId,packetName],[registryId,registryRun,registryName]]){
+            assert(Number.isSafeInteger(id) && Number.isSafeInteger(run));
+            const meta=read('actions/artifacts/'+id,false);
+            assert.equal(meta.name,name);
+            assert.equal(meta.workflow_run.id,run);
+            assert.equal(meta.expired,false);
+          }
+          const latest = new Map(packet.authoredPartReceipts.map(r=>[r.part,r]));
+          const parts = [...latest.values()].sort((a,b)=>a.part-b.part);
+          const supported = ['pending-native-verification','native-verified'];
+          assert(parts.length && parts.every((r,i)=>r.part===i+1 && supported.includes(r.status)), 'Authored parts incomplete or held for correction');
+          assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===0), 'An authored part contains held decisions');
+          const scope = {book:'jinshu',chapter};
+          const actualAgentId=state.rechecks['jinshu/'+chapter].agentId;
+          for(const r of parts){
+            assert.equal(r.agentId,actualAgentId);
+            assert.match(r.commit,/^[a-f0-9]{40}$/);
+            assert.match(r.runId,/^run-[0-9a-f-]+$/);
+            assert.match(r.reportSha256,/^[a-f0-9]{64}$/);
+            assert.match(r.path,/^research\/people\/[a-zA-Z0-9][a-zA-Z0-9/.\-_]*\.json$/);
+            assert(!r.path.split('/').includes('..'));
+          }
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/campaign-pins.json',JSON.stringify({scope,revision,actualAgentId,parts,packetRun:packet.runId,packetArtifactId:packet.artifactId,registryArtifactId:registryId}),{flag:'wx'});
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,Object.entries({revision,packet_run:packet.runId,packet_name:packetName,registry_run:registryRun,registry_name:registryName,chapter}).map(([k,v])=>k+'='+v+'\n').join(''));
+          JS
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pins.outputs.revision }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.pins.outputs.packet_name }}
+          run-id: ${{ steps.pins.outputs.packet_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/native-identity
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ steps.pins.outputs.registry_name }}
+          run-id: ${{ steps.pins.outputs.registry_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry-archive
+      - name: Reproduce exact capture, record identity, and validate chapter
+        env:
+          CHAPTER: ${{ steps.pins.outputs.chapter }}
+          REVISION: ${{ steps.pins.outputs.revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVISION"
+          mkdir "$RUNNER_TEMP/identity-registry" "$RUNNER_TEMP/recorded"
+          (
+            cd "$RUNNER_TEMP/registry-archive"
+            sha256sum -c SHA256SUMS
+            tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
+            cmp manifest.json "$RUNNER_TEMP/identity-registry/$REVISION/manifest.json"
+          )
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash as hash} from './scripts/lib/people-identity-artifacts.mjs';
+          import {assembleChapterIdentityReviewParts} from './scripts/lib/people-identity-review-transport.mjs';
+          const temp=process.env.RUNNER_TEMP;
+          const base=path.join(temp,'native-identity');
+          const pins=JSON.parse(fs.readFileSync(path.join(temp,'campaign-pins.json')));
+          const source=fs.readFileSync(path.join(base,'source-review-packet.json'));
+          const packet=JSON.parse(source);
+          const receipt=JSON.parse(fs.readFileSync(path.join(base,'preparation-receipt.json')));
+          assert.equal(receipt.sourceRevision,pins.revision);
+          assert.deepEqual(packet.scope,pins.scope);
+          const sourcePacketSha256=hash(source);
+          assert.equal(sourcePacketSha256,receipt.sourcePacketSha256);
+          assert(!packet.authorAgentIds.includes(pins.actualAgentId));
+          assert.equal(pins.parts.length,receipt.reviewParts.length,'Missing exact authored part');
+          const transportPackets=[], reports=[];
+          const parts=pins.parts.map((record,i)=>{
+            const seal=receipt.reviewParts[i];
+            const bytes=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+record.path+'?ref='+record.commit],{maxBuffer:2e6});
+            assert.equal(hash(bytes),record.reportSha256,'Authored source report digest changed');
+            const payload=JSON.parse(bytes);
+            const content=payload.requiredReport?.reviews ? payload.requiredReport : payload;
+            const {schemaVersion,planFingerprint,reviewer,reviews}=content;
+            const report={schemaVersion,planFingerprint,reviewer,reviews};
+            assert.equal(reviewer.agentId,pins.actualAgentId);
+            assert.equal(planFingerprint,packet.plan.fingerprint);
+            assert.equal(reviews.length,record.rows);
+            assert(reviews.every(row=>row.verdict==='approve' && row.sourceWitnesses?.length),'Independent decisions contain an explicit hold or missing witness');
+            assert.deepEqual(reviews.map(row=>row.caseId).sort(),[...seal.caseIds].sort());
+            const transportFile=path.join(base,seal.file);
+            const transportBytes=fs.readFileSync(transportFile);
+            assert.equal(hash(transportBytes),seal.sha256);
+            assert.equal(transportBytes.length,seal.bytes);
+            const reportBytes=Buffer.from(JSON.stringify(report)+'\n');
+            const reportFile=path.join(base,'verified-report-'+record.part+'.json');
+            fs.writeFileSync(reportFile,reportBytes,{flag:'wx'});
+            transportPackets.push(JSON.parse(transportBytes));
+            reports.push(report);
+            return {schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope:pins.scope,agentId:record.agentId,runId:record.runId,sourcePacketSha256,transportSha256:seal.sha256,reportSha256:hash(reportBytes),transportFile,reportFile};
+          });
+          const aggregate=assembleChapterIdentityReviewParts(packet.plan,transportPackets,reports,parts.map(r=>r.agentId),packet.authorAgentIds,packet.reviewCaseIds);
+          assert.equal(aggregate.reviews.length,packet.plan.cases.length);
+          const reportBytes=Buffer.from(JSON.stringify(aggregate,null,2)+'\n');
+          const job={schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:pins.scope,agentId:pins.actualAgentId,runId:parts[0].runId,authorAgentIds:packet.authorAgentIds,sourcePacketSha256,reportSha256:hash(reportBytes),transportPolicy:receipt.transportPolicy,parts};
+          fs.writeFileSync(path.join(base,'recording-report.json'),reportBytes,{flag:'wx'});
+          fs.writeFileSync(path.join(base,'recording-job.json'),JSON.stringify(job)+'\n',{flag:'wx'});
+          JS
+          node scripts/record-people-chapter-identity-worker.mjs \
+            --packet "$RUNNER_TEMP/native-identity/source-review-packet.json" \
+            --report "$RUNNER_TEMP/native-identity/recording-report.json" \
+            --job "$RUNNER_TEMP/native-identity/recording-job.json" \
+            --registry "$RUNNER_TEMP/identity-registry/$REVISION" | tee "$RUNNER_TEMP/recorded/recording-receipt.json"
+          jq -e --arg revision "$REVISION" '.nativeIdentityProofAccepted and .sourceRevision == $revision' "$RUNNER_TEMP/recorded/recording-receipt.json"
+          npm run people:validate -- --book jinshu --chapter "$CHAPTER" | tee "$RUNNER_TEMP/recorded/scoped-validation.txt"
+          cp "data/people/identity-reviews/jinshu/$CHAPTER.json" "$RUNNER_TEMP/recorded/identity-proof.json"
+          cp "$RUNNER_TEMP/campaign-pins.json" "$RUNNER_TEMP/recorded/campaign-pins.json"
+          (cd "$RUNNER_TEMP/recorded" && sha256sum identity-proof.json recording-receipt.json scoped-validation.txt campaign-pins.json > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu-${{ steps.pins.outputs.chapter }}-recorded-canonical-identity
+          path: ${{ runner.temp }}/recorded/
+          if-no-files-found: error
+          retention-days: 7
