@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "022"
+  },
+  "ownerAgentId": "bc-17e1969d-e1ec-437d-8f24-1b6049e2e12a",
+  "workerId": "cursor-nov24-retained-staging-w13-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "67fea3249bfe1b396445e20996115f40b99ff254f553c321099a7a69539f4690",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-022-2e12a",
+  "phase": "dispatch_pending",
+  "inputBlobWitness": {
+    "source": "d46d3a25f6afebac7bc028f09d8d8d5c9c5479b2",
+    "extraction": "c8dacd39404a3a65db82c441396de057c8f92f8c",
+    "editorial": "83625aabca0ce6ea6f26cbd595e2ed9981cb03be"
+  },
+  "sealedInputs": {
+    "source": "sha256:28161e6039dc49075c5d68c29e9b43b83c9409d0a925758e490bf0a301155120",
+    "extraction": "sha256:0fd67b7849fbd17c122dc1f6713c477a2119c0c5d5b8c8afa964e238dcac0936",
+    "editorial": "sha256:c39a820dd699effc6567db15f00de2209f5a21dae3d52631dc49859f0969d60b"
+  },
+  "extractionBytes": 91715,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "0fd67b7849fbd17c122dc1f6713c477a2119c0c5d5b8c8afa964e238dcac0936",
+    "people": 50,
+    "claims": 236,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 22 Treatises 12: Rites and Music 12",
+    "chineseUnits": 156,
+    "translatedCount": 156,
+    "sentenceCount": 156,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 91715
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-022/sealed-native-date-packet.json",
+    "contentSha256": "sha256:dbe21f36846364a23a5b63991b44673233b3cfe877eb2752aa0759034257860d",
+    "packetSourceHash": "sha256:2a45fd86120117245e005ac742bf7d533c88804bf1d47832030e281acbbd18e7",
+    "packetExtractionHash": "sha256:6b569e6380c3e4b10400ac88012b3ac037acf2fe3f796c89c620d4b761c71bb2",
+    "summary": "xintangshu/022: 109 date/hint checks, 50 people, 156 source units",
+    "itemChecks": 0,
+    "personChecks": 0
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReuse": "Pinned prompt v7 extraction at witness git blob; no re-extraction, claim edits, or hash replacement.",
+    "editorialReuse": "Pinned editorial decisions (9) retained with accepted repairs already applied in sealed inputs where recorded.",
+    "dateAuditReuse": "No data/people/date-audits artifact; owner prepared candidate packet only and did not self-approve."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xintangshu --chapter 022",
+    "peopleValidateSummary": "Scoped person data validation passed for xintangshu/022: 1 extraction(s), 50 local people, 131 mentions, 451 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book xintangshu --chapter 022",
+      "findings": 0,
+      "chapters": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 022",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "missingGate": "independent-native-date-audit"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "candidateValidationCommands": {
+    "prepareDatePacket": "npm run people:dates:packet -- --book xintangshu --chapter 022 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-022/sealed-native-date-packet.json",
+    "recordDateAudit": "npm run people:dates:record -- --report <independent-review.json>",
+    "verifyDates": "npm run people:dates:verify -- --book xintangshu --chapter 022",
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 022"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "substantiveFindings": "Owner pass on sealed source, prompt-v7 extraction, and accepted editorial at staging 20b8d0e3: git blob witnesses match work-order pins; paired literal and idiomatic English on all 156 Chinese units; people:validate passes; people:dates:scan reports 0 structural interval defects; xintangshu/022: 109 date/hint checks, 50 people, 156 source units; sealed packet hash sha256:dbe21f36846364a23a5b63991b44673233b3cfe877eb2752aa0759034257860d. No owner-authored definite English repair or concrete chronology contradiction requiring edit before independent review. Still missing: committed native date audit (status un-audited).",
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-022/sealed-native-date-packet.json",
+      "packetContentSha256": "sha256:dbe21f36846364a23a5b63991b44673233b3cfe877eb2752aa0759034257860d",
+      "instruction": "Independent reviewer audits sealed packet item/person checks with primary unit quotes; record via people:dates:record in separate context."
+    },
+    "independentIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "instruction": "Bounded dossier identity review remains after chronology approval when resolver schedules this chapter."
+    },
+    "independentReviewCompleted": false
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 022",
+    "prepareDatePacket": "npm run people:dates:packet -- --book xintangshu --chapter 022 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-022/sealed-native-date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book xintangshu --chapter 022"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; not publication or merge approval."
+}
