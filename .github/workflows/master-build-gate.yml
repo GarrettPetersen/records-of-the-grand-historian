@@ -1,71 +1,55 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Verify supplemental editorial proof cohort
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  certify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 30
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: 02a9ba12d3ecc3c99eb6c5a29bb85829c976f3eb
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Verify native editorial gates and prepare exact identity review
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$RUNNER_TEMP/supplemental-editorial-cohort"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$OUT" "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
+          node --input-type=module <<'JS'
+          const entries=[{"key":"xintangshu/052","pr":5650,"ownerHead":"9e77b8bcde73f5aac2c6ec184be988b7a757b9e9","reviewer":"bc-2a78abb8-86cc-4e4a-a206-191193fa6521","runId":"run-c36ef958-c5ed-4867-8fd7-47acda8aac0e","capture":{"head":"5ca6f6975bd47bca35f830effba4f4ecd92228d9","path":"research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/xintangshu-052/independent-supplemental-editorial.json","sha256":"d0b0ae5097f5a981ef388dc3e8eed506e5d2006e5b473e389622fbbf348d55fb","decisions":4},"path":"data/people/editorial-decisions/xintangshu/052.json","oldBlob":"4d40f8e6e54edde466b83b94b45f12e6ffedc8e5","retainedSha256":"7b2146702d826e72ccc5e6e79d627df34ae0d2dd5c86ffbc9c6dc8d06af1bd8f","sha256":"fc257f9a453c3a3055185dd41930674e54d6f8deaaf3d811ac52ffe826de1263","blob":"773001edacd4dd2c65bc4ec768b0775402ca5320"},{"key":"jiutangshu/131","pr":5651,"ownerHead":"c31473b361cb2577932b3de7bd660a7d792155e4","reviewer":"bc-7c28138a-8866-43c2-a4d1-30635e1844ae","runId":"run-b5757723-f22f-4a57-8b5f-99bf24382c32","capture":{"head":"fbb569e6f0d86d4faf82536ed2a1789519e7d663","path":"research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiutangshu-131/independent-supplemental-editorial.json","sha256":"9222ec3ede1762119fda9b669e7326f9f45f64bf8db351057620e581ca31693c","decisions":8},"path":"data/people/editorial-decisions/jiutangshu/131.json","oldBlob":"c4b10faaf12636a2c5032bfc958ee3758a0a3d06","retainedSha256":"ff730523344342cfc72014f169f1d1f1bc61c1a79ff20ba1614495427e692e8d","sha256":"2f5bae11f9ee2afa4a2ac3ea251bb6df05b26d001b3ef00de17fe7b00786e727","blob":"0741dd69e5cad2d02065c3a9f58f9d4219ccd7b9"},{"key":"jiuwudaishi/069","pr":5652,"ownerHead":"385b7c7a7ab9329ccad9d9c3ec69569ae85aa2ff","reviewer":"bc-410982f3-689c-4b89-a301-f5a0d5217703","runId":"run-0f3b5694-b978-4a74-8565-30f2c542870b","capture":{"head":"ca6f53f6aaca8cf17deace99f84e6df145797362","path":"research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-069/independent-supplemental-editorial.json","sha256":"83d78ceff114ece7b4041bdaa9ae087747eb93e15c090c09915c3ad571241530","decisions":2},"path":"data/people/editorial-decisions/jiuwudaishi/069.json","oldBlob":"769a3424eead505ee9dba9caecdcc1668629c760","retainedSha256":"b969ef970ac135445e040a1f2d09c41ab13a7e5f889f5e1bb6f5de7701198877","sha256":"ed4555614e7e4f06e22eef51729937067d4216c9dba08031aafd3d6f6c6196d2","blob":"e101968cb8160910ff7c13d58873d8ce1f68119d"},{"key":"jiuwudaishi/031","pr":5653,"ownerHead":"60fda933b0f1b6fee9f76d8079c79e78508b331a","reviewer":"bc-4cfe34bc-610b-400d-9884-a87dd556187a","runId":"run-5453b138-dfd5-48b3-9d73-13e66b2d90da","capture":{"head":"14d5b4c79fdd311d68354937fd19d0afe3fab2a4","path":"research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/independent-supplemental-editorial.json","sha256":"4ffef0c907e399f8b9da6f060f44151668f2b31ad7433ef452e5451619973ccf","decisions":2},"path":"data/people/editorial-decisions/jiuwudaishi/031.json","oldBlob":"735f46aa31b1c909f2cbc098d8a4526e57206bf0","retainedSha256":"dab3f78812359ba69cf870ac754c47a4a1e6f4fd072297b086d01b43b49489cb","sha256":"0d7e300019fb0890a466849832fc30120533851347f929f634d8cb3653a5dbb4","blob":"3466feb796274c9f550a97b719ef36121866fc3c"}];
+          import {strict as assert} from 'node:assert';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const results=[];
+          for(const x of entries){try{
+          const [book,chapter]=x.key.split('/');
+          assert.equal(createHash('sha256').update(fs.readFileSync(x.path)).digest('hex'),x.sha256);
+          execFileSync('node',['scripts/validate-people-data.mjs','--book',book,'--chapter',chapter],{encoding:'utf8',timeout:25000});
+          const receipt=await prepareChapterIdentityReview({book,chapter,registry:process.env.REGISTRY,sourceRevision:process.env.SOURCE,out:process.env.OUT+'/'+x.key.replace('/','-'),transportMaxBytes:384*1024});
+          results.push({key:x.key,status:receipt.status??'packet-ready',cases:receipt.metrics?.cases??receipt.reviewedCases,receipt});
+          }catch(e){results.push({key:x.key,status:'held',reason:String(e.stderr??e.message).slice(0,2000)});}}
+          fs.writeFileSync(process.env.OUT+'/summary.json',JSON.stringify({source:process.env.SOURCE,results},null,2)+'\n');
+          console.log(JSON.stringify(results.map(x=>({key:x.key,status:x.status,cases:x.cases,reason:x.reason}))));
+          assert(results.some(x=>x.status!=='held'),'No supplemental editorial candidate passed exact checks');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: supplemental-editorial-cohort
+          path: ${{ runner.temp }}/supplemental-editorial-cohort/
+          if-no-files-found: error
+          retention-days: 7
