@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-four-part-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "078"
+  },
+  "ownerAgentId": "bc-6b80b860-324e-41c1-b2d6-d2f759052b9c",
+  "campaignWorker": "cursor-nov24-four-part-owner-4",
+  "idempotencyKey": "b3ee6ff7d4fa6b71d8897a153d6a628391427220dbd7c73ac6c6b9334a072a5",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "inputBlobs": [
+    {
+      "path": "data/jiuwudaishi/078.json",
+      "blob": "7fc31cc80a274124ec5969d64bfc47ce4e823c7a",
+      "contentSha256": "sha256:91677d2c15755ff5040f8a5567509501c2c5bff2f4428d03b0ba4ea65c42e7a9"
+    },
+    {
+      "path": "data/people/extractions/jiuwudaishi/078.json",
+      "blob": "a49eb1060144b6599710fcc2db632f26be8b2c3a",
+      "contentSha256": "sha256:bd077217e7d7cd74012988c2e4c655cccacd3f1a6c31e8c6cbc438c929455e7c"
+    },
+    {
+      "path": "data/people/date-audits/jiuwudaishi/078.json",
+      "blob": "192707266c058cf65bd263218aa7a9ce89f5099f",
+      "contentSha256": "sha256:a9fd0227d48c8b50da3a0ac01b18bac36b723f200b77f936a9a69db0e3aa9678"
+    },
+    {
+      "path": "data/people/editorial-decisions/jiuwudaishi/078.json",
+      "blob": "b0034f00ccf490db022b47be903af6e58cfd5ee2",
+      "contentSha256": "sha256:b723912608fd4111b3b94f362a40fbccb468a3886e8779a28188912ff2246da8"
+    }
+  ],
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jiuwudaishi --chapter 078",
+    "peopleDatesVerifyPassed": true,
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book jiuwudaishi --chapter 078",
+    "sourceCoverage": {
+      "chineseUnits": 189,
+      "translatedCount": 189,
+      "missingEnglish": 0,
+      "missingLiteral": 0,
+      "missingIdiomatic": 0,
+      "fullEnglishCoverage": true
+    },
+    "dateAuditStatus": "audited",
+    "dateAuditFindings": 0,
+    "dateAuditSourceHash": "sha256:a22703bb992682b7235e89c39c259c24529cb0cb9d662255e818cba4afb088e2",
+    "dateAuditExtractionHash": "sha256:2896c90451fdd60a7a1066205d0d44f35b14adac60f0ac09ecf0a02971d6a6b8",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "proposedTranslationRepairs": 0
+  },
+  "authorEvidence": {
+    "extractionAgentIds": [
+      "bc-0af32e79-9ab9-4255-824b-09a18eb42549",
+      "bc-9745646f-50ce-4db7-a857-52caa79d2090"
+    ],
+    "extractionModel": "grok-4.5-chunked",
+    "extractionPromptVersion": 7,
+    "appliedTranslationRepairs": 10,
+    "editorialDecisionCount": 10,
+    "dateAuditReviewedAt": "2026-09-29T17:30:40.245Z",
+    "dateAuditReviewer": "Independent Jiu Wudai Shi 078 initial chronology reviewer"
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 119,
+    "identityTransportParts": 4,
+    "preparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "independentIdentityReviewCompleted": false,
+    "boundedDossierReviewRequired": true,
+    "note": "Native four-part identity preparation passed in CI; owner does not re-prepare or approve identity packets."
+  },
+  "chapterReady": true,
+  "holds": [],
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "notes": "Source-owner pass only: verifies sealed Chinese source, both English fields, accepted extraction/editorial/dates, and records remaining independent identity work. Not publication or identity approval."
+}
