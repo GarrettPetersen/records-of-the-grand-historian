@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "045"
+  },
+  "ownerAgentId": "bc-b07f6f8e-5dd0-4f5f-8466-6c7bd3b4577e",
+  "worker": "cursor-nov24-retained-staging-w10-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5d5f80d1677de63cfc4e3fe06b058e285ffe48c047443eda1c58f86d49fbeba",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-045-4577e",
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "inputBlobWitness": {
+    "source": "1cef3ebef95114fba36e735735f83b6e93fb8fcc",
+    "extraction": "b6952db225fa2d8169bc0c22e4bd973e2381bb1d",
+    "editorial": "efa1c62fffb849778d41333f94b7409fa39a1125"
+  },
+  "sealedInputs": {
+    "source": "sha256:64adf571a8be67ffb1bb12043b0ce16b6f20b96d8435a0b0effd77d9c13af9c9",
+    "extraction": "sha256:648aac278cd5df0b8990e8bdf1f20066722ff45038520493775519e7ebbcf2da",
+    "editorial": "sha256:39b20d196c479e3f3648772d6c393b519066d3b51dedaf9c3261f4f48b24cf37"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "extractionBytesWitness": 969139,
+    "contentSha256": "sha256:648aac278cd5df0b8990e8bdf1f20066722ff45038520493775519e7ebbcf2da",
+    "localPeople": 250,
+    "note": "Full extraction retained unchanged; no re-extraction or chunk regeneration."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "pinnedBlob": "efa1c62fffb849778d41333f94b7409fa39a1125",
+    "appliedRepairsWitnessedInSource": true,
+    "note": "Accepted editorial artifact pinned at witness blob; native validator confirms applied repairs match independent decisions."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 548,
+    "translatedCount": 548,
+    "bothFieldsComplete": true,
+    "unitCount": 548,
+    "titleZh": "\u5377\u56db\u5341\u4e94 \u5217\u50b3\u7b2c\u5341\u4e94 \u5289\u6bc5 \u548c\u5da0 \u6b66\u9654 \u4efb\u6137 \u5d14\u6d2a \u90ed\u5955 \u4faf\u53f2\u5149 \u4f55\u6500",
+    "titleEn": "Volume 45 Biographies 15: Liu Yi; Cheng Wei; He Jiao; Wu Gai; Ren Kai; Cui Hong; Guo Yi; Hou Shiguang; He Pan",
+    "missingUnits": []
+  },
+  "auditState": {
+    "dispatchLabel": "no-native-date-report",
+    "dateAuditPath": null,
+    "chronologyStatus": "un-audited"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-045/date-packet.json",
+    "contentSha256": "sha256:1d3c0a76d272d304e75ba4717656ea31509a2a37fa7602d6d9c62bb0473b3635",
+    "itemCount": 790,
+    "peopleCount": 250,
+    "unitCount": 548,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 045 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-045/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 045",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/045: 1 extraction(s), 250 local people, 1178 mentions, 2459 claims, 0 proposed repair(s), 25 applied repair(s), 25 editorial decision(s), 3 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 1 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 045",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "note": "No data/people/date-audits/jinshu/{ch}.json; owner does not self-approve."
+    }
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book jinshu --chapter 045",
+    "npm run people:dates:packet -- --book jinshu --chapter 045 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-045/date-packet.json",
+    "npm run people:dates:verify -- --book jinshu --chapter 045",
+    "npm run people:dates:record -- --book jinshu --chapter 045"
+  ],
+  "substantiveFindings": "Large biography cluster (Liu Yi, He Jiao, Wu Kai, Ren Kai, Cui Hong, Guo Yi, Hou Dan); twenty-five applied editorial repairs; no owner date repairs. Independent date audit and bounded identity review remain.",
+  "remainingIndependentEvidence": {
+    "dateAudit": "Complete independent native date audit against sealed packet sha256:1d3c0a76d272d304e75ba4717656ea31509a2a37fa7602d6d9c62bb0473b3635; record via people:dates:record after zero-finding or repaired review.",
+    "identity": "Bounded canonical identity dossier review for chapter-local people after date gate; owner handoff is not identity approval.",
+    "editorial": "Pinned editorial decisions unchanged; independent reviewer confirms applied repairs remain source-faithful.",
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [
+    {
+      "kind": "legacy-temporal-debt",
+      "detail": "One local person row lacks active-date hint per validator; reviewer confirms source-supported undated attestation."
+    }
+  ],
+  "authorEvidence": {
+    "method": "Witnessed pinned git blobs; read Chinese/English source fields; reused sealed extraction and editorial artifacts; built native date packet; scoped people:validate and people:dates:verify; no registry generation, deploy, merge, or extraction rewrite.",
+    "completedAt": "2026-11-24T17:07:49.004Z"
+  },
+  "reproduce": {
+    "witnessBlobs": {
+      "source": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/jinshu/045.json",
+      "extraction": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/extractions/jinshu/045.json",
+      "editorial": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/editorial-decisions/jinshu/045.json"
+    }
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; sealed inputs not modified."
+}
