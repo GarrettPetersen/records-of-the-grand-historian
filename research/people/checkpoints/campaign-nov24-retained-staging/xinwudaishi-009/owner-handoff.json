@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "009"
+  },
+  "ownerAgentId": "bc-cc5eb7ad-b7ef-447d-bb53-48f7ef25d700",
+  "workerId": "cursor-nov24-retained-staging-w16-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "0d6603c10b8d6b495d90fcdc878a09c279a6caad6cec6cc90837fe72454b193a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-009-5d700",
+  "extractionBytes": 140996,
+  "inputBlobWitness": {
+    "source": "047653410ac89c407fa520118c83139ce89f5604",
+    "extraction": "4d1cf534ae8fa63d75c69b6bee4b72a2e7c7772b",
+    "editorial": "162a70c2e21d7b955875b26d951535e7c620eef2",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:598781079480eeddea9df7a440e38d32e21c2cb46b004747935283921cbf2ec9",
+    "extraction": "sha256:ccbdec3b0da6b624afce61182df03964677a652624c95a0c895f49dee3ce9019",
+    "editorial": "sha256:e713b10830eee74d45cbf9ddff727c9d0d81943c780cdc0b7198bd57a6ec7ad8"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 9 Later Jin Annals 2: the Emperor That Fled",
+    "chineseUnits": 206,
+    "translatedCount": 206,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "metaSentenceCount": 206,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 140996
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-009/date-packet.json",
+    "sha256": "sha256:5c3c067f5dbad9d7df3a66877cc47e1113fac49bcb7c91773253843153aa86bd",
+    "itemCount": 276,
+    "peopleCount": 97,
+    "unitCount": null,
+    "sourceHash": "sha256:16c95057e758b7cc4a822ef0c6824ca4139f30e3d8bdfc3051f61c8c4b26a696",
+    "extractionHash": "sha256:8a0354ac55d75f4a08ca6d87841eff274d62f0677922db05c4ca158557bc198c",
+    "buildCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 009 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-009/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 009",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/009: 1 extraction(s), 97 local people, 366 mentions, 622 claims, 0 proposed repair(s), 7 applied repair(s), 8 editorial decision(s), 1 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 009",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 8,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "dispatchPeople": 97,
+      "dispatchClaims": 347,
+      "reused": true,
+      "reextracted": false
+    },
+    "notIndependentApproval": true,
+    "dispatchAuditState": "no-native-date-report"
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Full chapter English coverage verified (206 Chinese units, 0 missing idiomatic). Existing extraction and accepted editorial decisions reused; people:validate passes scoped. No native independent date report exists (people:dates:verify=un-audited). Fresh native date packet sealed at 5c3c067f5dba… for separate independent chronology review; owner does not self-approve dates.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    "Independent scoped native date audit required before catalog/publication chronology gates.",
+    "No data/people/date-audits/xinwudaishi/009.json on disk."
+  ],
+  "remainingIndependentProofs": {
+    "date": "Independent reviewer must audit sealed date packet (research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-009/date-packet.json, sha256:5c3c067f5dbad9d7df3a66877cc47e1113fac49bcb7c91773253843153aa86bd) against current source and extraction hashes without re-extraction.",
+    "identity": "Chapter-scoped identity/canonical certification remains with separate independent reviewer after owner closure; no canonical registry edits in this handoff."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 009",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 009",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 009 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-009/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge."
+}

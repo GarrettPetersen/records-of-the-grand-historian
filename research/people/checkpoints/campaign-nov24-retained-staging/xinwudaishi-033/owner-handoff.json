@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "033"
+  },
+  "ownerAgentId": "bc-cc5eb7ad-b7ef-447d-bb53-48f7ef25d700",
+  "workerId": "cursor-nov24-retained-staging-w16-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "0d6603c10b8d6b495d90fcdc878a09c279a6caad6cec6cc90837fe72454b193a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-033-5d700",
+  "extractionBytes": 141310,
+  "inputBlobWitness": {
+    "source": "3e69172debf1c53d1c0c66b2befee7a0d0023743",
+    "extraction": "da48c969d7cc47e7f0b007fe72b0de4dc4c04a61",
+    "editorial": "bae4e2631e2175547b204d1f0905fb90cecdd7dc",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:aa8037caea6a36102dcfef9cf5ecba2929b4d06db131bde27471edaad7e082b3",
+    "extraction": "sha256:6ead98c4bf05c7e98dacdc7c7dc9a0c73097ec1d1fcc95f4c10baf8248e3727e",
+    "editorial": "sha256:e584f3a7c60a577fee10c2a90f8ca2f9bd30c27936bd3626b59608cea6597776"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 33 Biographies of Martyrs to Service 13: Zhang Yuande, Xia Luqi, Yao Hong, Wang Sitong, Zhang Jingda, Di Jinzong, Shen Bin, Wang Qing, Shi Yanchao, Sun Cheng",
+    "chineseUnits": 203,
+    "translatedCount": 203,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "metaSentenceCount": 203,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 141310
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-033/date-packet.json",
+    "sha256": "sha256:7845a98a15782ffa60221ba41d0298ae96a05c9c01c6a857501443afd69faca2",
+    "itemCount": 234,
+    "peopleCount": 86,
+    "unitCount": null,
+    "sourceHash": "sha256:84dbad373ceb5489904f725ac76bf8b0e010215fa40150ef5d5fc68072359066",
+    "extractionHash": "sha256:6a0bc33d2e212bb18d1bfdf3a32748aed64e0dece069d2b3c5a378346943bd42",
+    "buildCommand": "npm run people:dates:packet -- --book xinwudaishi --chapter 033 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-033/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 033",
+    "peopleValidateSummary": "Scoped person data validation passed for xinwudaishi/033: 1 extraction(s), 86 local people, 641 mentions, 721 claims, 0 proposed repair(s), 10 applied repair(s), 10 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 033",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 10,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "dispatchPeople": 86,
+      "dispatchClaims": 456,
+      "reused": true,
+      "reextracted": false
+    },
+    "notIndependentApproval": true,
+    "dispatchAuditState": "no-native-date-report"
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Martyrs biography chapter (死事傳): 203 Chinese units with full English. Ten editorial decisions (accept/revise) including 出帝/Chu Emperor of Later Jin, 副晟 deputy grammar, and 非景敵 comparison are reflected in source at s0129, s0185, s0187. Extraction promptVersion 7 retained (86 people). people:validate passes. Dispatch state no-native-date-report; fresh sealed packet (234 checks) for independent chronology only.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    "Independent scoped native date audit required before catalog/publication chronology gates.",
+    "No data/people/date-audits/xinwudaishi/033.json on disk."
+  ],
+  "remainingIndependentProofs": {
+    "date": "Independent reviewer must audit sealed date packet (research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-033/date-packet.json, sha256:7845a98a15782ffa60221ba41d0298ae96a05c9c01c6a857501443afd69faca2) against current source and extraction hashes without re-extraction.",
+    "identity": "Chapter-scoped identity/canonical certification remains with separate independent reviewer after owner closure; no canonical registry edits in this handoff."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 033",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 033",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 033 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-033/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge."
+}

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "458"
+  },
+  "ownerAgentId": "bc-cc5eb7ad-b7ef-447d-bb53-48f7ef25d700",
+  "workerId": "cursor-nov24-retained-staging-w16-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "0d6603c10b8d6b495d90fcdc878a09c279a6caad6cec6cc90837fe72454b193a",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-458-5d700",
+  "extractionBytes": 141280,
+  "inputBlobWitness": {
+    "source": "8a6d2d80293bb3106f07b8368559b9ebb910946a",
+    "extraction": "8357c7878c0a3394df1ca34e2d2977b593ffb427",
+    "editorial": "e7e840f9ec9fe25509914a062729fabdaed83d3d",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:ae634a9a02ccf19310e12835ab39c5a9a63c6ef14b99cd62229c0b3cd9f4dabc",
+    "extraction": "sha256:1294c8a383e93dddc0f70e7239c09713c19391451de24a1422374b4f4ae1dc92",
+    "editorial": "sha256:640e00bffe1d874298e3690f5bf8f559f3adf8e646fae413a86e5e7796809d6f"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 458 Biographies 245: Xu Yanxu, Tang Jiong, He Jing, Zhang Zhaodong",
+    "chineseUnits": 182,
+    "translatedCount": 182,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "metaSentenceCount": 182,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 141280
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-458/date-packet.json",
+    "sha256": "sha256:a8dc78372770a1a7c181e953a70fac8038ed03f5a6fb709c8a9b13601be1a064",
+    "itemCount": 316,
+    "peopleCount": 45,
+    "unitCount": null,
+    "sourceHash": "sha256:f9fa517290437094686ecd364d476a749d1a8e9e173e1920cd8f832fbbd4657e",
+    "extractionHash": "sha256:c6bb625845806ccdc56a76036cf34bd3233995357f79deee6398c18dc355e407",
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 458 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-458/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 458",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/458: 1 extraction(s), 45 local people, 303 mentions, 555 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 458",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 7,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "dispatchPeople": 45,
+      "dispatchClaims": 418,
+      "reused": true,
+      "reextracted": false
+    },
+    "notIndependentApproval": true,
+    "dispatchAuditState": "no-native-date-report"
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Full chapter English coverage verified (182 Chinese units, 0 missing idiomatic). Existing extraction and accepted editorial decisions reused; people:validate passes scoped. No native independent date report exists (people:dates:verify=un-audited). Fresh native date packet sealed at a8dc78372770… for separate independent chronology review; owner does not self-approve dates.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    "Independent scoped native date audit required before catalog/publication chronology gates.",
+    "No data/people/date-audits/qingshigao/458.json on disk."
+  ],
+  "remainingIndependentProofs": {
+    "date": "Independent reviewer must audit sealed date packet (research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-458/date-packet.json, sha256:a8dc78372770a1a7c181e953a70fac8038ed03f5a6fb709c8a9b13601be1a064) against current source and extraction hashes without re-extraction.",
+    "identity": "Chapter-scoped identity/canonical certification remains with separate independent reviewer after owner closure; no canonical registry edits in this handoff."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 458",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 458",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 458 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-458/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge."
+}
