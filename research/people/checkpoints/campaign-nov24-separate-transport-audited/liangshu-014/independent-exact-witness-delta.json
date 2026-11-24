@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-exact-witness-delta",
+  "chapterKey": "liangshu/014",
+  "reviewerAgentId": "bc-b3f5d397-cc9d-4d87-997d-c0a8243e0a22",
+  "ownerAgentId": "bc-e207215c-b48a-483e-b53d-c526ad7cb717",
+  "ownerRevision": "711c5b764e76851f9f8e6484a87e34264fb6cdd1",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/owner-after-independent-holds.json",
+  "ownerProposalSha256": "sha256:2b9fce06f02c052e7a0f7559f5f68b4f9959f478613106e88809b8a516d1c9b0",
+  "priorReviewHead": "1650fd456ffa1853df07e70f7e5a0a56fdd9a6be",
+  "priorReviewRun": "run-c11cde87-d7d9-4a9f-9e42-7b104eec56f9",
+  "ownerRun": "run-09ecbc7b-4899-4656-872f-5657d7688080",
+  "inputBlobWitness": {
+    "source": "6876c97361108d1809d044704f67da3b3f5a910f",
+    "extraction": "7ada4a8b9dcdf0e9de626ad6fa339158e8027e44",
+    "dateAudit": "1c1d361cfcedd2116850d9ad5700c9018bb9333b",
+    "editorial": "ea1f4237352c328449b2a15f1910bb0820cd8fe5"
+  },
+  "planFingerprint": "sha256:f7fae1f2e0330236f51a474484089edf8017702cc597fe1fbdf47c7e8297acd2",
+  "verdict": "approve-supported-patch",
+  "reviewedAt": "2026-11-24T16:05:00.000Z",
+  "changedCaseIds": [
+    "sha256:067dce2f4ce3f0b2d222af2a6fad5689e98912a68c64539e4b9f12b700d4264f"
+  ],
+  "closedCases": [
+    {
+      "caseId": "sha256:067dce2f4ce3f0b2d222af2a6fad5689e98912a68c64539e4b9f12b700d4264f",
+      "priorVerdict": "hold",
+      "outcome": "close-by-local-retire-p079",
+      "retiredLocalIds": [
+        "liangshu:014:p079"
+      ],
+      "retainedLocalIds": [
+        "liangshu:014:p058"
+      ],
+      "preparedCanonicalPersonId": "per_5T755BG3EGBTXSA6KBZ9",
+      "retainedCanonicalPersonId": "per_853W30JZBZ2MEVRJ14VR",
+      "reason": "Independent hold confirmed: p079 sealed name claims on liangshu:014:s0229 lack any 劉峻/孝標 Chinese. Chapter introduces the quoted author at s0193「平原劉孝標爲著論曰」; p058 already carries zh mention spans on s0193 and passes assertDossierPrimaryWitness for quote 劉孝標 with current literal and idiomatic English. Retiring duplicate local p079 and re-pointing speaker attribution to p058 matches primary source; bounded Liu Jun registry overflow remains unresolvedIdentity, not separation.",
+      "independentSourceWitnesses": [
+        {
+          "localId": "liangshu:014:p058",
+          "book": "liangshu",
+          "chapter": "014",
+          "unitId": "s0193",
+          "quote": "劉孝標"
+        },
+        {
+          "localId": "liangshu:014:p058",
+          "book": "liangshu",
+          "chapter": "014",
+          "unitId": "s0193",
+          "quote": "平原劉孝標"
+        }
+      ],
+      "primaryChineseAndEnglish": [
+        {
+          "unitId": "s0193",
+          "zh": "平原劉孝標爲著論曰：",
+          "literal": "Liu Xiaobiao of Pingyuan wrote a discourse, saying:",
+          "idiomatic": "Liu Xiaobiao of Pingyuan wrote a discourse, saying:"
+        },
+        {
+          "unitId": "s0194",
+          "zh": "客問主人曰：「朱公叔《絕交論》，爲是乎？",
+          "literal": "The guest asked the host: \"Was Zhu Gongshu's Discourse on Severing Friendship right?",
+          "idiomatic": "The guest asked the host, \"Was Zhu Gongshu's Discourse on Severing Friendship right?"
+        },
+        {
+          "unitId": "s0229",
+          "zh": "陸大夫燕喜西都，郭有道人倫東國，公卿貴其籍甚，搢紳羨其登仙。",
+          "literal": "Grand Master Lu feasted in the western capital; Guo the Worthy ranked men in the eastern state; dukes and ministers prized his great fame, gentry envied his ascent to immortals.",
+          "idiomatic": "Grand Master Lu feasted in the western capital; Guo the Worthy ranked men in the eastern state; nobles prized his fame, gentry envied his ascent among immortals."
+        }
+      ]
+    }
+  ],
+  "heldCases": [],
+  "supportedPatch": {
+    "changeId": "liangshu-014-retire-p079",
+    "status": "approved",
+    "approvedOperations": [
+      "remove-person:liangshu:014:p079",
+      "replace-person:liangshu:014:p109.identityHints.relatedLocalPeople p079→p058",
+      "repoint-attribution-and-speaker-provenance p079→p058 across quoted discourse s0193–s0278"
+    ],
+    "scopedPaths": [
+      "data/people/extractions/liangshu/014.json"
+    ],
+    "dependsOn": [
+      "data/people/date-audits/liangshu/014.json"
+    ],
+    "beforeGitBlob": "7ada4a8b9dcdf0e9de626ad6fa339158e8027e44",
+    "proposedAfterGitBlob": "a86c5b04d249db3223d8f6258c6d18428af19b04",
+    "proposedAfterContentSha256": "sha256:c9e8c3c0ccd533f38a12a78cf4f5e98acab101b2c0067a5fd3b84aabf2d38efc",
+    "afterBlobMaterializedInRepo": false,
+    "hostApplyRequired": true,
+    "staleRegistryResolutionRefs": "Six keep-separate rows referencing liangshu:014:p079 become inapplicable after retire; no cross-corpus merge asserted in this patch."
+  },
+  "independentApprovedPartialRepairs": [
+    {
+      "scope": "extraction-attribution-metadata",
+      "localId": "liangshu:014:p058",
+      "field": "claims.attribution.work",
+      "verdict": "amend-before-apply",
+      "reason": "Owner proposal replaces p079 attribution work en/zh with generic discourse on friendship / 論. Primary unit s0194 names the underlying work 絕交論 with both English fields Discourse on Severing Friendship. Prefer explicit work title aligned to quoted dialogue, not a generic 論 label.",
+      "before": {
+        "en": "Expanded Treatise on Severing Relations",
+        "zh": "廣絕交論"
+      },
+      "ownerProposedAfter": {
+        "en": "discourse on friendship",
+        "zh": "論"
+      },
+      "independentSuggestedAfter": {
+        "en": "Discourse on Severing Friendship",
+        "zh": "絕交論"
+      },
+      "sourceWitnesses": [
+        {
+          "unitId": "s0194",
+          "quote": "絕交論"
+        }
+      ],
+      "blockingChapterClosure": false
+    }
+  ],
+  "unaffectedEvidenceReuse": {
+    "priorIdentityReports": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-001.json",
+        "sha256": "sha256:e6297e60ae5cbed0137e8c436daef49e9526b8442ad37956a20e414afb4e4d14",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-002.json",
+        "sha256": "sha256:7ee36d30f64a01463164664b9165373e36b662bace01ec1ff15a601006669578",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-003.json",
+        "sha256": "sha256:382b78bdb372cbe03e8771e8f963633371d80429d970e7dbfcc52cc9dabe76c4",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-004.json",
+        "sha256": "sha256:dcd5e24aba639f2dd16c68d92cd00659d6faba9994f0393c290218a303edbada",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-005.json",
+        "sha256": "sha256:4b6617a86d82045e59a72ed5297aca44e040bc840105e2d3aff27d0ef4f8652e",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-006.json",
+        "sha256": "sha256:4b4a7f4894bf27bdfeabbd9bd7196518ad991f3f6bddf5e57d2225bbbc8647a8",
+        "reuse": "reuse-29-approves-hold-row-superseded-by-delta",
+        "note": "Case sha256:067dce… hold in part-006 replaced by this delta closure; other 29 approves in part-006 stand."
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/independent-identity-report-part-007.json",
+        "sha256": "sha256:4065a5bf98774229b5ea39d60ac2274d4bffcd675c755df66e64091f932547f0",
+        "reuse": "unchanged"
+      }
+    ],
+    "unchangedApproveCount": 118,
+    "ownerHandoffSha256Unchanged": "research/people/checkpoints/campaign-nov24-separate-transport-audited/liangshu-014/owner-handoff.json at ownerRevision 8e9279cf"
+  },
+  "nativeValidation": {
+    "proposalHashVerified": true,
+    "priorReportHashesVerified": true,
+    "inputBlobsVerified": true,
+    "peopleValidateCurrentSealedChapter": {
+      "command": "npm run people:validate -- --book liangshu --chapter 014",
+      "passed": true
+    },
+    "assertDossierPrimaryWitness": {
+      "liangshu:014:p058:s0193:劉孝標": "pass",
+      "liangshu:014:p058:s0193:平原劉孝標": "pass",
+      "liangshu:014:p079:s0193:平原劉孝標": "fail-as-expected",
+      "liangshu:014:p079:s0229:劉峻": "fail-as-expected"
+    },
+    "ownerInMemoryExtractionValidation": {
+      "citedInProposal": true,
+      "independentlyReproducedAfterBlob": false,
+      "reason": "Proposed after git blob a86c5b04… is not materialized on proposal branch; apply exactEdits on host then re-run people:validate and people:dates:verify."
+    },
+    "dateAuditAfterExtractionChange": {
+      "required": true,
+      "beforeBlob": "1c1d361cfcedd2116850d9ad5700c9018bb9333b",
+      "ownerChronologyPatchDescribed": true,
+      "independentReAuditRecorded": false
+    }
+  },
+  "residualHolds": [],
+  "notes": "[CF-Pages-Skip] Delta only; no extraction or date-audit bytes committed. Host applies approved patch, optional attribution amend, refreshes date audit, then re-stages identity transport."
+}
