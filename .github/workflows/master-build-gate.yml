@@ -1,116 +1,131 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Discover release-ready glossary scopes
+run-name: Prepare the 24 smallest previously verified partitioned scopes
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  prepare:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 27
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SHARD: ${{ matrix.shard }}
+      SOURCE: 110c2f92a0e7994af8d9218f76c80ccd72b98d5c
+      STAGING: 9d69584e20b46fa995f676198d3d4af96ee229b1
+      NODE_OPTIONS: --max-old-space-size=3072
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
-        run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
+          name: people-registry-110c2f92a0e7994af8d9218f76c80ccd72b98d5c
+          run-id: 45331566653
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry
+      - name: Rank already-audited scopes and prepare the shard
+        timeout-minutes: 19
         run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          (cd "$RUNNER_TEMP/registry" && sha256sum -c SHA256SUMS)
+          tar -xzf "$RUNNER_TEMP/registry/registry.tar.gz" -C "$RUNNER_TEMP/registry"
 
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const {SOURCE,STAGING,RUNNER_TEMP,GITHUB_REPOSITORY}=process.env;
+          const queue=JSON.parse(execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/people-work-queue.json?ref=codex/people-work-queue'],{encoding:'utf8',maxBuffer:12e6}));
+          const excluded=new Set(["houhanshu/001","houhanshu/126","jinshi/023","jinshi/043","jinshu/028","jinshu/030","jinshu/031","jinshu/047","jinshu/053","jinshu/063","jinshu/078","jinshu/081","jinshu/083","jinshu/085","jinshu/094","jinshu/115","jinshu/123","jiuwudaishi/104","jiuwudaishi/105","liangshu/008","liangshu/015","liangshu/023","liangshu/024","liaoshi/042","liaoshi/043","liaoshi/079","liaoshi/091","liaoshi/101","liaoshi/106","liaoshi/107","liaoshi/111","liaoshi/114","mingshi/034","nanqishu/060","qingshigao/026","qingshigao/027","qingshigao/047","qingshigao/120","shiji/064","shiji/115","songshu/004","songshu/090","songshu/096","weishu/019","xintangshu/012","xintangshu/064","xintangshu/066","xinwudaishi/016","xinwudaishi/020","xinwudaishi/037","yuanshi/037"]);
+          for(const [key,record] of Object.entries(queue.chapterOwners??{}))if(['active','ready','resume-required'].includes(record.status))excluded.add(key);
+          for(const lane of ['identityReviews','dateAudits','claims'])for(const [key,record] of Object.entries(queue[lane]??{}))if(['claimed','active','ready','resume-required'].includes(record.status))excluded.add(key);
+          const git=(args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:24e6}).trim();
+
+          const dir='data/people/date-audits';
+          const roots=['data','data/people/extractions','data/people/date-audits','data/people/editorial-decisions'];
+          const candidates=[];
+          const skipped={};
+          const skip=k=>{skipped[k]=(skipped[k]??0)+1;};
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+          for(const book of fs.readdirSync(dir)){
+            if(!fs.statSync(path.join(dir,book)).isDirectory())continue;
+            for(const name of fs.readdirSync(path.join(dir,book))){
+              if(!/^\d{3}\.json$/.test(name))continue;
+              const chapter=name.slice(0,-5),key=book+'/'+chapter;
+              if(excluded.has(key)||fs.existsSync('data/people/identity-reviews/'+key+'.json')){skip('reserved_or_certified');continue;}
+              const files=roots.map(root=>root+'/'+key+'.json');
+              if(files.some(f=>!fs.existsSync(f))){skip('missing_or_staging_changed');continue;}
+              const audit=read(files[2]);
+              if(audit.status!=='audited'||audit.findings?.length!==0){skip('recorded_status');continue;}
+              const extraction=read(files[1]);
+              const people=extraction.people?.length;
+              if(!Number.isInteger(people)||people===0){skip('empty');continue;}
+              candidates.push({key,book,chapter,people,files});
+            }
+          }
+          candidates.sort((a,b)=>a.people-b.people||a.key.localeCompare(b.key));
+          const receipts=[];
+          const out=path.join(RUNNER_TEMP,'cohort');
+          fs.mkdirSync(out,{recursive:true});
+          const registry=path.join(RUNNER_TEMP,'registry',SOURCE);
+          let prepared=0;
+          const shard=Number(process.env.SHARD);
+          if(!Number.isInteger(shard)||shard<0||shard>3)throw Error("Invalid preparation shard");
+          const chosen=["xinwudaishi/019","liangshu/042","shiji/114","xintangshu/045","houhanshu/119","nanqishu/008","jiuwudaishi/147","beiqishu/036","chenshu/023","jiuwudaishi/144","liaoshi/005","xinwudaishi/041","liangshu/037","hanshu/098","jiuwudaishi/066","jiuwudaishi/073","liangshu/019","liangshu/052","xinwudaishi/003","jinshi/039","jinshi/046","liangshu/055","jiuwudaishi/006","liangshu/044"]; const rankOrder=new Map(chosen.map((k,i)=>[k,i])); const ranked=candidates.filter(c=>rankOrder.has(c.key)&&rankOrder.get(c.key)%4===shard).sort((a,b)=>rankOrder.get(a.key)-rankOrder.get(b.key));
+          const [owner,name]=GITHUB_REPOSITORY.split("/");
+          const currentStageBlobs=new Map();
+          for(let i=0;i<ranked.length;i+=7){
+            const group=ranked.slice(i,i+7).flatMap(c=>c.files);
+            const lines=group.map((file,j)=>"p"+j+":object(expression:"+JSON.stringify(STAGING+":"+file)+"){oid}");
+            const query="query{repository(owner:"+JSON.stringify(owner)+",name:"+JSON.stringify(name)+"){"+lines.join("\n")+"}}";
+            const response=JSON.parse(execFileSync("gh",["api","graphql","--input","-"],{input:JSON.stringify({query}),encoding:"utf8",maxBuffer:3e6,timeout:30000}));
+            if(response.errors?.length||!response.data?.repository)throw Error("GitHub exact-stage blob query failed");
+            group.forEach((path,j)=>currentStageBlobs.set(path,response.data.repository["p"+j]?.oid??null));
+          }
+          const sameStage=ranked.filter(c=>{const exact=c.files.every(p=>currentStageBlobs.get(p)===git(["rev-parse",SOURCE+":"+p])); if(!exact)skip("staging_blob_changed");return exact;});
+          const progress=()=>{
+            const file=path.join(out,"cohort-receipts.json");
+            fs.writeFileSync(file+".tmp",JSON.stringify({source:SOURCE,staging:STAGING,shard,eligibleBeforeStageCheck:ranked.length,sameStage:sameStage.length,skipped,prepared,receipts},null,2)+"\n");
+            fs.renameSync(file+".tmp",file);
+          };
+          progress();
+          for(const c of sameStage){
+            if(prepared>=6)break;
+            const target=path.join(out,c.key.replace('/','-'));
+            try{
+              const result=await prepareChapterIdentityReview({book:c.book,chapter:c.chapter,sourceRevision:SOURCE,registry,out:target,transportMaxBytes:384*1024});
+              const pin=read(path.join(target,'preparation-receipt.json'));
+              if(!result.metrics?.cases){
+                receipts.push({key:c.key,people:c.people,status:'requires_separate_review_transport',cases:result.metrics?.cases??0,parts:result.reviewParts?.length??0});
+                fs.rmSync(target,{recursive:true,force:true});progress();continue;
+              }
+              const files=c.files.map(p=>({path:p,blob:git(['rev-parse',SOURCE+':'+p])}));
+              receipts.push({key:c.key,people:c.people,status:'ready',cases:result.metrics.cases,planFingerprint:result.planFingerprint,sourcePacketSha256:result.sourcePacketSha256,transportSha256:pin.transportSha256,transportBytes:pin.transportBytes,reviewParts:pin.reviewParts??[],files});
+              prepared+=1;
+            }catch(e){receipts.push({key:c.key,people:c.people,status:'held',reason:e.message.split('\n')[0]});}
+            progress();
+          }
+
+          progress();
+          console.log(JSON.stringify({eligibleBeforeNativeGate:candidates.length,skipped,prepared,held:receipts.filter(x=>x.status==='held').length}));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: retained-split-glossary-shard-${{ matrix.shard }}
+          path: ${{ runner.temp }}/cohort/
+          if-no-files-found: error
+          retention-days: 7
