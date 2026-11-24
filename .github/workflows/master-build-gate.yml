@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '081-new-identity', '123-new-identity']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -876,5 +876,74 @@ jobs:
         with:
           name: jinshu-030-native-residual-identity-evidence
           path: ${{ runner.temp }}/residual-identity/
+          if-no-files-found: error
+          retention-days: 7
+  prepare-after-chronology:
+    if: endsWith(inputs.chapter, '-new-identity')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CHAPTER_INPUT: ${{ inputs.chapter }}
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - name: Pin the exact repaired chapter and independent chronology
+        id: pins
+        run: |
+          node <<'JS'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const {execFileSync}=require('node:child_process');
+          const repo='repos/'+process.env.GITHUB_REPOSITORY;
+          const get=(p,raw=false)=>JSON.parse(execFileSync('gh',['api',repo+p,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
+          const chapter=process.env.CHAPTER_INPUT.split('-')[0];
+          const state=get('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
+          const entry=state.identityRegistryBuild.readyChronology['jinshu/'+chapter];
+          assert.match(entry.sourceRevision,/^[a-f0-9]{40}$/);
+          assert.equal(get('/git/ref/heads/'+entry.ref).object.sha,entry.sourceRevision);
+          assert.equal(get('/pulls/'+entry.pr).head.sha,entry.ownerRevision);
+          const date=get('/contents/data/people/date-audits/jinshu/'+chapter+'.json?ref='+entry.sourceRevision,true);
+          assert.equal(date.status,'audited');
+          assert.equal(date.reviewer.agentId,entry.reviewerId);
+          assert.equal(date.findings.length,0);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'chapter='+chapter+'\nrevision='+entry.sourceRevision+'\n');
+          JS
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pins.outputs.revision }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - name: Build the source-pinned shared registry and native review transport
+        env:
+          REVISION: ${{ steps.pins.outputs.revision }}
+          CHAPTER: ${{ steps.pins.outputs.chapter }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVISION"
+          root="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers"
+          mkdir -p "$root" "$RUNNER_TEMP/registry-export"
+          node scripts/people-identity-registry-worker.mjs --out "$root/$REVISION" --revision "$REVISION"
+          node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter "$CHAPTER" \
+            --source-revision "$REVISION" --registry "$root/$REVISION" --out "$RUNNER_TEMP/native-identity"
+          cp "$root/$REVISION/manifest.json" "$RUNNER_TEMP/registry-export/manifest.json"
+          tar -czf "$RUNNER_TEMP/registry-export/registry.tar.gz" -C "$root" "$REVISION"
+          (cd "$RUNNER_TEMP/registry-export" && sha256sum registry.tar.gz manifest.json > SHA256SUMS)
+          test "$(stat -c %s "$RUNNER_TEMP/registry-export/registry.tar.gz")" -le 167772160
+      - uses: actions/upload-artifact@v4
+        with:
+          name: people-registry-${{ steps.pins.outputs.revision }}
+          path: ${{ runner.temp }}/registry-export/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu-${{ steps.pins.outputs.chapter }}-native-identity-evidence
+          path: ${{ runner.temp }}/native-identity/
           if-no-files-found: error
           retention-days: 7
