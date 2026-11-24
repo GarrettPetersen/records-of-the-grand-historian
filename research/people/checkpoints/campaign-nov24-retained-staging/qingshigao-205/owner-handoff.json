@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "205"
+  },
+  "ownerAgentId": "bc-add067a7-e9db-4f50-907f-1718c8446b67",
+  "workerId": "cursor-nov24-retained-staging-w17-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b645f0c98783a777d7d20e19eb6a4e7ac6968ebe9681dd7bf60c86ffb2d4e3d8",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-205-46b67",
+  "phase": "dispatch_pending",
+  "extractionBytes": 181120,
+  "workOrder": {
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:f8840aceac93367997316cdffe0f39e08e16278a5d03edd1236197882277ead7",
+    "workOrderExtractionSha256Verified": true,
+    "people": 54,
+    "claims": 274,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "162cd096b8c373fcaf097c2b69faf1f2d939ebeb",
+    "extraction": "4bfc09810aa08e52bda18de7fb932299c3b521ad",
+    "editorial": "778b6c0573e12bb9e91e862d4fc68f0d3cf52697",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:3004527dde6c4f66467fcb1084478bf90b9f0fa64250679d23530a2c4a6b2c5e",
+    "extraction": "sha256:f8840aceac93367997316cdffe0f39e08e16278a5d03edd1236197882277ead7",
+    "editorial": "sha256:c01d514130a970fa686ce05d7a60ba0b69aeabcd199302d06625d158f92488de",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sentenceCount": 353,
+    "translatedCount": 353,
+    "chineseSentences": 353,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionBlobUnchanged": true,
+    "editorialBlobUnchanged": true,
+    "appliedTranslationRepairsInExtraction": 30,
+    "editorialDecisions": 30,
+    "editorialProposals": 30,
+    "note": "No sealed input edits in this owner pass."
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-205/date-packet.json",
+    "sha256": "sha256:45bed524d76c5e43929c0cc2cf4a48ff531477a05b975541fddf3a8b5eb6ed5c",
+    "packetSourceHash": "sha256:95e9bb76fae0de013335ec38f04d3227105b5abf856f626e4528345061f53748",
+    "packetExtractionHash": "sha256:7c5d2883a88e991495b5b902bcbe5b49dc21f6ddf12ee8c2a36d9c7969170b98",
+    "dateHintChecks": 220,
+    "peopleInPacket": 54,
+    "sourceUnitsInPacket": 1900
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 205",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/205: 1 extraction(s), 54 local people, 607 mentions, 432 claims, 0 proposed repair(s), 30 applied repair(s), 30 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "validationFailures": [],
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 205",
+      "status": "un-audited",
+      "auditReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Independent native date audit via people:dates:run on the sealed date-packet artifact; owner does not self-approve.",
+    "identity": "Independent bounded identity/dossier review after date gate when scheduled.",
+    "editorial": "Pinned editorial decisions unchanged."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 205",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 205",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 205 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-205/date-packet.json"
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "data/people/date-audits/<book>/<chapter>.json is absent; people:dates:verify reports un-audited. Candidate chronology closure is sealed at research/.../date-packet.json for independent audit only.",
+      "blockingPublication": true
+    },
+    {
+      "kind": "independent-identity-review",
+      "detail": "Corpus identity resolution and bounded dossier review remain outside this owner pass; extraction and editorial bytes are reused unchanged.",
+      "blockingPublication": true
+    }
+  ],
+  "substantiveFindings": "Witness-verified sealed source, extraction, and editorial git blobs at staging 20b8d0e3. Full chapter English read: sentenceCount matches translatedCount; paired idiomatic and literal English on all Chinese sentences. Prompt v7 extraction retained (54 people, 274 claims work-order scope); legacy temporal debt 0 in scoped validate when it passes. Fresh native date packet prepared (220 checks); no data/people/date-audits/qingshigao/205.json on staging. people:validate passes scoped; no new definite English omission or chronology contradiction found in owner read.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no registry, deploy, merge, or sealed canonical input edits."
+}
