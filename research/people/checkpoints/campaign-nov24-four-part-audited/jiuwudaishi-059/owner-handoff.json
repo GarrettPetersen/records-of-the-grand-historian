@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "059"
+  },
+  "ownerAgentId": "bc-977db51c-ec93-4d60-9d14-c6f7f3527c76",
+  "campaignWorker": "cursor-nov24-four-part-owner-5",
+  "idempotencyKey": "8718eea6ef7c825f572d2d340b023df2ce952c0946018cc7788ff5b456beff64",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "branchRef": "cursor/nov24-four-part-owner-jiuwudaishi-059-527c76",
+  "sealedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/059.json",
+      "gitBlob": "f08cb60226534a776394043a42bce9e196c4d6e8"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/059.json",
+      "gitBlob": "b36602664ba38c42bf090d6f8de2a0b5ef823d06"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/059.json",
+      "gitBlob": "ffaad734bd17fca3f9a65963ed1a294c043da8e8"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/059.json",
+      "gitBlob": "1fa0480462dec963e8196bd4c6694d321da3ef0d"
+    }
+  },
+  "validation": {
+    "chapterReady": true,
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/059: 1 extraction(s), 125 local people, 627 mentions, 1485 claims, 0 proposed repair(s), 36 applied repair(s), 37 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    }
+  },
+  "authorEvidence": {
+    "reviewedAt": "2026-11-24T13:45:04.385Z",
+    "chineseUnits": 221,
+    "literalCoverage": 221,
+    "idiomaticCoverage": 221,
+    "missingChinese": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "localPeople": 125,
+    "proposedExtractionRepairs": 0,
+    "summary": "Source-owner pass on sealed inputs: all 221 Chinese units retain nonempty literal and idiomatic English; extraction coverage flags are satisfied; chronology is independently audited with zero findings; applied editorial repairs are accepted with no pending proposals. No new definite English omission or mistranslation identified beyond closed editorial history."
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "gate": "independent-bounded-dossier-identity-review",
+    "identityReviewCases": 122,
+    "identityTransportParts": 4,
+    "preparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "independentReviewCompleted": false,
+    "instruction": "Independent reviewer uses the four retained native identity transport parts and preparation receipt from GitHub Actions; owner handoff is not identity approval."
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 059",
+    "validateDates": "npm run people:dates:verify -- --book jiuwudaishi --chapter 059"
+  },
+  "notes": "Source-owner pass only; exact four-part identity packets prepared off-VM."
+}
