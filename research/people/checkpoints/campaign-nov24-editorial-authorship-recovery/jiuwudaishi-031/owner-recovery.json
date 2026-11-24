@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-recovery",
+  "scope": "jiuwudaishi/031",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "worker": "cursor-nov24-retained-editorial-1",
+  "mode": "editorial",
+  "phase": "hold-pending-independent-review-2",
+  "branch": "cursor/nov24-retained-jiuwudaishi-031-982823",
+  "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+  "masterPin": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "idempotencyKey": "9e36b2b14e566548b268f89d431ca3694631c4500fc66d2aa813ed966fa57186",
+  "inputBlobs": {
+    "data/jiuwudaishi/031.json": "2ab1368d60b9aee366f3db2f6c88bd55f172c8bf",
+    "data/people/extractions/jiuwudaishi/031.json": "726a5a4568da72ac227c58a7bf899f73b65e3c7a",
+    "data/people/date-audits/jiuwudaishi/031.json": "04af961cbb11cf41cb7d24fa558c5dbaa6b31a43",
+    "data/people/editorial-decisions/jiuwudaishi/031.json": "735f46aa31b1c909f2cbc098d8a4526e57206bf0"
+  },
+  "observedPriorPR": 5648,
+  "filesConsulted": [
+    "data/jiuwudaishi/031.json",
+    "data/people/extractions/jiuwudaishi/031.json",
+    "data/people/date-audits/jiuwudaishi/031.json",
+    "data/people/editorial-decisions/jiuwudaishi/031.json",
+    "scripts/lib/people-editorial-decisions.mjs",
+    "scripts/validate-people-data.mjs"
+  ],
+  "commands": [
+    {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 031",
+      "exitCode": 1,
+      "summary": "applied jiuwudaishi:031:r0009 has no matching independent accept/revise authorization; applied jiuwudaishi:031:r0010 has no matching independent accept/revise authorization"
+    }
+  ],
+  "gateFailure": {
+    "gate": "editorial",
+    "error": "EditorialDecisionValidationError",
+    "errors": [
+      "applied jiuwudaishi:031:r0009 has no matching independent accept/revise authorization",
+      "applied jiuwudaishi:031:r0010 has no matching independent accept/revise authorization"
+    ]
+  },
+  "diagnosis": {
+    "retainedIndependentReview": {
+      "reviewerAgentId": "bc-7c50d625-1bf8-4482-8007-d3295a860a89",
+      "proposalsFingerprint": "sha256:12054d9faa513c9ba175714f0955c40508b39467d06686237e679ab3a35713f2",
+      "acceptedProposalTargets": [
+        {
+          "repairId": "jiuwudaishi:031:r0001",
+          "unit": "s0002",
+          "field": "literal"
+        },
+        {
+          "repairId": "jiuwudaishi:031:r0002",
+          "unit": "s0087",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "jiuwudaishi:031:r0003",
+          "unit": "s0087",
+          "field": "literal"
+        },
+        {
+          "repairId": "jiuwudaishi:031:r0004",
+          "unit": "s0140",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "jiuwudaishi:031:r0005",
+          "unit": "s0140",
+          "field": "literal"
+        },
+        {
+          "repairId": "jiuwudaishi:031:r0006",
+          "unit": "s0171",
+          "field": "idiomatic"
+        }
+      ],
+      "claimRevisions": 0,
+      "note": "Repair IDs renumbered after review 1. Later applied rows that match review-1 accept contracts by exact unit/field/before/after/reason remain valid even at new IDs."
+    },
+    "unauthorizedAppliedRepairs": [
+      {
+        "id": "jiuwudaishi:031:r0009",
+        "unit": "s0160",
+        "field": "literal",
+        "reason": "The surname-only 孔 is Kong Qing: his biography in Jiu Wudai Shi 64 records the same Xiangzhou command before his subsequ"
+      },
+      {
+        "id": "jiuwudaishi:031:r0010",
+        "unit": "s0160",
+        "field": "idiomatic",
+        "reason": "The office sequence identifies 孔 as Kong Qing, whose biography records his Xiangzhou military governorship. The full Eng"
+      }
+    ],
+    "cause": "New or reordered translation repairs were applied after independent review 1 without accept/revise records."
+  },
+  "supplementalRepairs": [
+    {
+      "id": "jiuwudaishi:031:r0009",
+      "unitId": "s0160",
+      "field": "literal",
+      "before": "Xiangzhou military commissioner Kong remained acting Grand Tutor, co-equal chief minister, and Xiangzhou military commissioner as before.",
+      "after": "Xiangzhou military commissioner Kong Qing remained acting Grand Tutor, co-equal chief minister, and Xiangzhou military commissioner as before.",
+      "reason": "The surname-only 孔 is Kong Qing: his biography in Jiu Wudai Shi 64 records the same Xiangzhou command before his subsequent Luzhou, Zelu, and Heyang appointments. Expanding the English reference disambiguates the person without altering the Chinese source.",
+      "sourceWitness": {
+        "citation": "s0160",
+        "excerpt": "以襄州節度使孔依前檢校太傅、同平章事、襄州節度使。"
+      }
+    },
+    {
+      "id": "jiuwudaishi:031:r0010",
+      "unitId": "s0160",
+      "field": "idiomatic",
+      "before": "Kong of Xiang kept acting Grand Tutor, chancellor, and Xiang commission.",
+      "after": "Kong Qing of Xiang kept acting Grand Tutor, chancellor, and Xiang commission.",
+      "reason": "The office sequence identifies 孔 as Kong Qing, whose biography records his Xiangzhou military governorship. The full English name makes the reference intelligible.",
+      "sourceWitness": {
+        "citation": "s0160",
+        "excerpt": "以襄州節度使孔依前檢校太傅、同平章事、襄州節度使。"
+      }
+    }
+  ],
+  "artifacts": {
+    "ownerRecovery": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/owner-recovery.json",
+    "supplementalReview2Seed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/supplemental-review-2-seed.json",
+    "retainedReview1V3": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/retained-review-1-v3.json",
+    "editorialV4RetainedPlusSeed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/editorial-v4-retained-plus-seed.json"
+  },
+  "remainingIssues": [
+    "applied jiuwudaishi:031:r0009 has no matching independent accept/revise authorization",
+    "applied jiuwudaishi:031:r0010 has no matching independent accept/revise authorization"
+  ],
+  "smallestPathForward": [
+    "Independent reviewer accepts supplemental-review-2-seed proposals with sourceWitness entries.",
+    "Publish schema v4 editorial history: byte-preserve review 1, append completed review 2.",
+    "Re-run npm run people:validate -- --book jiuwudaishi --chapter 031."
+  ],
+  "ownerDelta": "No changes to pinned canonical inputs; recovery and supplemental review seed only."
+}
