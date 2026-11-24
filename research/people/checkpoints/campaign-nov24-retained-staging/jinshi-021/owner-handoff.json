@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "021"
+  },
+  "ownerAgentId": "bc-95b52b95-f4f5-4a30-aba0-2157f8206711",
+  "workerId": "cursor-nov24-retained-staging-w3-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2f093d1356d99463ba98f7b7d7697643a6113c23581016740debb9a8ec00a83a",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-021-06711",
+  "inputBlobWitness": {
+    "source": "36a6d19e2e4dad345cd15b2fc9caa99eeab72133",
+    "extraction": "0dd0ed440a7c6bfebd250af1182ef2bcfd3c3da1",
+    "dateAudit": "8708754b01169e8401b8c5ed7eb8a222cdaeb0b7",
+    "editorial": "1e86cbfc73eb296d8f439cfa82c920bf59da40fc"
+  },
+  "sealedInputs": {
+    "source": "sha256:6840c04a0a1172e1954fd1b965068fee492002a7749f942928a71700a0086ae2",
+    "extraction": "sha256:77eb535a19138880681800005282ea0be4be69af34ac286c3e54806d7dc2caa0",
+    "dateAudit": "sha256:841bd27502a6c9d2974ccd8e354bbd7bab9fca9fa2a1934f76c75a9b513e0b1c",
+    "editorial": "sha256:cbc37b15a22c9fb9ade6342143a04decf96a939d7ba56a84ad6aaa9f5fc0c2b4"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 278,
+    "translatedCount": 278,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "sourceTitle": "Volume 21 Treatises 2: Calendar 1: Seasonal Phases and Month Beginnings 1, Phases and Divination 2, Phases of the Sun's Path 3",
+    "allUnitsCarryLiteralAndIdiomatic": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshi --chapter 021",
+    "summary": "Scoped person data validation passed for jinshi/021: 1 extraction(s), 5 local people, 20 mentions, 68 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshi --chapter 021",
+      "status": "research-blocked",
+      "findings": 2,
+      "reviewedAt": "2026-09-23T11:18:40.278Z",
+      "chronologyCurrentAtPinnedBlobs": true
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialRepairsReflectedInSource": true,
+      "proposedRepairCount": 0,
+      "legacyTemporalDebt": 0,
+      "legacyAliasDispositionDebt": 0
+    },
+    "editorialDecisionCount": 6,
+    "editorialAcceptedCount": 6,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "Pinned four-part inputs witness-verified at staging 7cdf8f42e53b; scoped people:validate passed with zero proposed repairs.",
+    "Full Chinese chapter and both English fields reviewed via unit scan; accepted editorial repairs are present in source.",
+    "Fresh independent canonical audit after Jinshi 021 date-repair curation: all 278 Chinese units, all 24 temporal or active-hint items, and all five people were checked against the current extraction. The repair correctly confines Zhao Zhiwei’s revision to Dading 11, preserves the later institutional use of his calendar without treating it as a life span, and removes the false AD 1190 precision from early Mingchang. The latter two source-specific holds are correctly retained, so this chapter remains research-blocked rather than approved.",
+    "No new definite English omission, false-merge signal, extraction coverage gap, or owner-scoped chronology/identity amendment identified at sealed blobs."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "jinshi:021:date-hold-1",
+      "kind": "research-blocked-chronology",
+      "status": "retained",
+      "items": [
+        "claim-20"
+      ],
+      "people": [
+        "p002"
+      ],
+      "problem": "The end-of-Jin statement describes institutional use of Zhao Zhiwei’s calendar, rather than a dateable personal activity interval for Zhao.",
+      "preservedAction": "Retain the source-specific unresolved institutional-reception context; do not turn it into Zhao Zhiwei’s life chronology.",
+      "source": "data/people/date-audits"
+    },
+    {
+      "id": "jinshi:021:date-hold-2",
+      "kind": "research-blocked-chronology",
+      "status": "retained",
+      "items": [
+        "claim-42",
+        "claim-43",
+        "claim-47",
+        "hints-p005",
+        "p005"
+      ],
+      "people": [
+        "p005"
+      ],
+      "problem": "Early Mingchang is an indeterminate era phrase and does not establish a precise personal date or endpoint for Zhang Xingjian.",
+      "preservedAction": "Retain the source-specific unresolved chronology and research-required hint; do not infer a point date from early Mingchang.",
+      "source": "data/people/date-audits"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "dateAuditStatus": "research-blocked",
+    "notes": "Owner handoff is not independent identity or chronology approval; retained research-blocked date holds remain explicit in distinctHolds."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 021",
+    "datesVerify": "npm run people:dates:verify -- --book jinshi --chapter 021"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; no sealed input mutation, registry build, or publication."
+}
