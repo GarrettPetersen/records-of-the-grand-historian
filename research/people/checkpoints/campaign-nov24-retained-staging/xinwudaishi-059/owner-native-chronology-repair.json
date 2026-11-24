@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "059"
+  },
+  "ownerAgentId": "bc-b6d2481d-79b0-4d5e-b8c2-c042356f094b",
+  "idempotencyKey": "7c8f0ec3f6fcf67d4b74f61c5c208bbf786e4b3282562374759762e9dfca0f7e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "branchRef": "cursor/nov24-retained-owner-native-date-xinwudaishi-059-f094b",
+  "priorOwnerHead": "4f1be06dc2b2f89dfd9d59adcefa3ac048efa8d3",
+  "priorOwnerHandoffSha256": "282f8770322001765d70a46ba8f231624d7a2a877a2356cccad1d40b46834a27",
+  "pinnedAudit": {
+    "sha256": "sha256:170a87d8272f494f6a938d6e1e18f33e57fbf8be8d1aefcb85b4bac7e31a7cd5",
+    "status": "research-blocked",
+    "auditReviewedAt": "2026-09-23T12:59:21.933Z",
+    "findings": 1
+  },
+  "intactApprovals": {
+    "dateAuditBytesUnchanged": true,
+    "dateAuditGitBlob": "170a87d8272f494f6a938d6e1e18f33e57fbf8be8d1aefcb85b4bac7e31a7cd5",
+    "editorialAndSourceUnchanged": true,
+    "note": "Owner did not record, approve, or rewrite the independent date-audit report."
+  },
+  "verifiedFindings": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-7",
+        "claim-8",
+        "claim-9",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "The chapter names Confucius in undated philosophical and literary allusions, but gives neither a birth nor death year nor a dated event from which BC 551–479 follows. That imported life interval and its active-date hint need an independently pinned biographical source; the chapter itself does not supply it.",
+      "action": "Retain the undated Chinese allusions and death statement, but replace the imported Confucius range and matching hint only after a short, pinned independent biographical source establishes the claimed dates.",
+      "sourceQuotes": [
+        {
+          "itemId": "claim-7",
+          "unit": "s0001",
+          "quote": "昔孔子作《春秋》而天人備。"
+        },
+        {
+          "itemId": "claim-8",
+          "unit": "s0004",
+          "quote": "自堯、舜、三代以來，莫不稱天以舉事，孔子刪《詩》、《書》不去也。"
+        },
+        {
+          "itemId": "claim-9",
+          "unit": "s0007",
+          "quote": "《春秋》雖書日食、星變之類，孔子未嘗道其所以然者，故其弟子之徒，莫得有所述於後世也。"
+        }
+      ]
+    }
+  ],
+  "affectedItemIds": [
+    "claim-7",
+    "claim-8",
+    "claim-9",
+    "hints-p001",
+    "p001"
+  ],
+  "nativeProposal": {
+    "schemaVersion": 1,
+    "kind": "date-repair-proposal",
+    "book": "xinwudaishi",
+    "chapter": "059",
+    "sourceHash": "sha256:ba791136be34512015ca9e23ced2b4c136b7826d028304bb2f3dba46c3e678e4",
+    "extractionHash": "sha256:dfa46f3d35f8e92c4f5796fa750afc9ada825942df67846f90a333737de10f54",
+    "author": {
+      "name": "Retained staging owner native chronology repair",
+      "agentId": "bc-b6d2481d-79b0-4d5e-b8c2-c042356f094b"
+    },
+    "auditEvidenceHash": "sha256:170a87d8272f494f6a938d6e1e18f33e57fbf8be8d1aefcb85b4bac7e31a7cd5",
+    "changes": [
+      {
+        "kind": "replace",
+        "id": "claim-7",
+        "before": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "昔"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 551,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 479,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0001",
+            "s0002",
+            "s0005",
+            "s0010",
+            "s0012",
+            "s0035"
+          ]
+        ],
+        "after": [
+          "p001",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "“昔孔子作《春秋》” is an undated philosophical allusion; this chapter supplies no calendar-bearing personal life span for Confucius."
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0001",
+            "s0002",
+            "s0005",
+            "s0010",
+            "s0012",
+            "s0035"
+          ]
+        ],
+        "reason": "The chapter names Confucius in undated philosophical and literary allusions, but gives neither a birth nor death year nor a dated event from which BC 551–479 follows. That imported life interval and its active-date hint need an independently pinned biographical source; the chapter itself does not supply it."
+      },
+      {
+        "kind": "replace",
+        "id": "claim-8",
+        "before": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "自堯、舜、三代以來"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 551,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 479,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0004"
+          ]
+        ],
+        "after": [
+          "p001",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "“自堯、舜、三代以來” cites Confucius editing the classics without dating his life; no BC 551–479 interval follows from this chapter."
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0004"
+          ]
+        ],
+        "reason": "The chapter names Confucius in undated philosophical and literary allusions, but gives neither a birth nor death year nor a dated event from which BC 551–479 follows. That imported life interval and its active-date hint need an independently pinned biographical source; the chapter itself does not supply it."
+      },
+      {
+        "kind": "replace",
+        "id": "claim-9",
+        "before": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "《春秋》雖書日食、星變之類"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 551,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 479,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0007"
+          ]
+        ],
+        "after": [
+          "p001",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "“《春秋》雖書日食、星變之類” discusses Spring and Autumn annals without dating Confucius’s lifespan."
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0007"
+          ]
+        ],
+        "reason": "The chapter names Confucius in undated philosophical and literary allusions, but gives neither a birth nor death year nor a dated event from which BC 551–479 follows. That imported life interval and its active-date hint need an independently pinned biographical source; the chapter itself does not supply it."
+      },
+      {
+        "kind": "hints",
+        "personId": "p001",
+        "before": [
+          "BC 551-479"
+        ],
+        "after": [],
+        "reason": "The chapter names Confucius in undated philosophical and literary allusions, but gives neither a birth nor death year nor a dated event from which BC 551–479 follows. That imported life interval and its active-date hint need an independently pinned biographical source; the chapter itself does not supply it."
+      }
+    ]
+  },
+  "nativeValidation": {
+    "passed": true,
+    "commands": [
+      "applyDateRepairProposal on sealed extraction",
+      "validateCompactPeopleExtraction",
+      "dateAuditDiagnostics"
+    ],
+    "candidateExtractionHash": "sha256:6b7132e20f3c6ce207a06675b1e297c4ab742ce7932bcbab798ebaa7322fd27f",
+    "sealedProposalHash": "sha256:05e6f9fd38a5acc1e8dbe9b6e741f0de2e4abed4d669bbc4892e30e8d6ec3862",
+    "compactStats": {
+      "units": 285,
+      "candidates": 517,
+      "people": 3,
+      "mentions": 20,
+      "claims": 34,
+      "repairs": 16,
+      "dispositions": 511,
+      "aliasDispositionConflicts": 0
+    },
+    "geometryDiagnostics": 0
+  },
+  "residualHolds": [
+    {
+      "findingId": "finding-1",
+      "items": [
+        "claim-7",
+        "claim-8",
+        "claim-9",
+        "hints-p001",
+        "p001"
+      ],
+      "note": "Post-repair extraction should be independently re-audited; original blocker bytes preserved."
+    }
+  ],
+  "noEditNeeded": false
+}
