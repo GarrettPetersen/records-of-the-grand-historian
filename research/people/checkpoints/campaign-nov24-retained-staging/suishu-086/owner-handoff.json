@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "086"
+  },
+  "ownerAgentId": "bc-b6d2481d-79b0-4d5e-b8c2-c042356f094b",
+  "workerId": "cursor-nov24-retained-staging-w3-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "a3679b61740cd2696c6fa60df8c75b2dfd6edc4b2fadc4f7af0afb8ef7ab2390",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-retained-staging-owner-suishu-086-f094b",
+  "inputBlobWitness": {
+    "source": "bad091da8ad1ab6f84fe5b023c5018010b5aaca6",
+    "extraction": "1c55266565fb77c897c11e2cc23de171311e3847",
+    "dateAudit": "085d1a6cd87a94006f841d8e2c90325f0562a44f",
+    "editorial": "b32a8d54d4a70630c436f7c23f3dc12f91439a90"
+  },
+  "sealedInputs": {
+    "source": "sha256:ff6d8a09fcf5b37df7fab4ff1eb1f70013dc24108538405844dc2f64d11d0c9e",
+    "extraction": "sha256:9a463d9eceb655ef45f3ef85746ddf1e6aea76298405a8338cdffc2ff4a173e0",
+    "dateAudit": "sha256:134920282a67f1f7bf8279a0ce55b521478d77893bf2d35a271505257679c606",
+    "editorial": "sha256:c3d43a93ad23d74decf25875a681555f34eed65b88bf0e3db1b23f90caf162f6"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 39,
+    "translatedCount": 39,
+    "sentenceCount": 39,
+    "bothFieldsComplete": true,
+    "fullLiteralAndIdiomaticEnglish": true,
+    "missingUnits": [],
+    "sourceTitleEn": "Volume 86: the Second Year of the Tian Sheng Reign Publication Mark",
+    "sourceTitleZh": "原跋 宋天聖二年隋書刊本原跋"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "Scoped person data validation passed for suishu/086: 1 extraction(s), 21 local people, 83 mentions, 282 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "command": "npm run people:validate -- --book suishu --chapter 086",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book suishu --chapter 086",
+      "status": "research-blocked",
+      "auditVersion": 1,
+      "reviewedAt": "2026-09-22T22:00:00.000Z",
+      "findings": 3,
+      "hashesCurrent": true,
+      "stale": false
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialPassCompleted": true,
+      "editorialDecisionCount": 5,
+      "editorialStatus": "reviewed-with-applied-proposals",
+      "proposedRepairs": 0,
+      "extractionBytesWitness": 53311
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Fresh independent re-audit against the repaired current extraction: all 39 Chinese units, all 76 temporal items, and all 21 person summaries were checked. The repaired Western conversions and ownership changes are source-supported, including Wude-5 month 12 in AD 623, the former-office and later-title corrections, the maternal death upper bound, and Huang Jians one-sided succession bound. Three deliberately unresolved personal chronologies remain: Jing Bos undated collaboration, Li Yanshous mothers non-personal mourning reference, and Chus qualified undated preface attribution. Those holds are retained rather than invented dates, so this complete report is research-blocked and does not approve the chapter."
+  },
+  "substantiveFindings": [
+    "Pinned git blobs match staging 7cdf8f42e53b; native people:validate passed; date-audit seals current (not stale).",
+    "Full literal and idiomatic English on all 39 Chinese units; no definite omission in owner pass.",
+    "Independent date audit retains 3 research-blocked finding group(s) with no incorrect verdicts; preserved holds not reopened.",
+    "All 5 editorial decision(s) already applied; no pending proposal queue and no canonical extraction or source edits proposed."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-133",
+        "p014",
+        "hints-p014"
+      ],
+      "problem": "Jing Bos collaboration is explicit but has no personal date in the chapter; the only nearby AD 641 commission names different people.",
+      "action": "Keep the undated claim and research hold; do not infer a date from shared project membership.",
+      "preserved": true,
+      "kind": "research-blocked-chronology"
+    },
+    {
+      "id": "finding-2",
+      "items": [
+        "claim-139",
+        "p015",
+        "hints-p015"
+      ],
+      "problem": "The maternal reference occurs through Li Yanshous dated mourning leave and cannot establish the mothers living activity or exact death year.",
+      "action": "Keep the supported on-or-before death bound and retain research hold pending an independent maternal chronology witness.",
+      "preserved": true,
+      "kind": "research-blocked-chronology"
+    },
+    {
+      "id": "finding-3",
+      "items": [
+        "claim-142",
+        "p016",
+        "hints-p016"
+      ],
+      "problem": "Chu Suiliangs preface attribution is undated and qualified by an editorial doubt about his broader commission.",
+      "action": "Keep the undated attribution and research hold; require a personal chronology witness before assigning activity dates.",
+      "preserved": true,
+      "kind": "research-blocked-chronology"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "nextGate": "independent-final-chapter-review",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 086",
+    "validateDates": "npm run people:dates:verify -- --book suishu --chapter 086"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; push owner-handoff without altering sealed inputs."
+}
