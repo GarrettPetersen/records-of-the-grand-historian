@@ -29,6 +29,8 @@ Staging pin: PR #5489 commit `378771b831b7eb7b7049903eb3e26bb86155db4d`.
 | `partial-date-hu-wei-20261124.md` | Human summary of chronology pass 3 |
 | `partial-date-report-du-zhen-20261124.json` | Validated partial report (杜軫 s0093–s0135) |
 | `partial-date-du-zhen-20261124.md` | Human summary of chronology pass 4 |
+| `partial-date-report-biog136-212-20261124.json` | 竇允–王宏–曹攄 tranche (s0136–s0212) |
+| `partial-date-biog136-212-20261124.md` | Human summary of chronology pass 5 |
 | `owner-chronology-author-notes.json` | Retained owner notes from staging #5489 + independent progress pointer |
 | `independent-source-review-20261124.md` | Editorial verification notes (r0001–r0033) |
 
@@ -49,3 +51,4 @@ Rebuild:
 - `node research/people/build-jinshu090-partial-date-lu-zhi-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-hu-wei-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-du-zhen-20261124.mjs`
+- `node research/people/build-jinshu090-partial-date-biog136-212-20261124.mjs`
