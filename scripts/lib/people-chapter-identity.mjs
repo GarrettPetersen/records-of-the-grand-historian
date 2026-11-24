@@ -4,8 +4,12 @@ import { createHash } from 'node:crypto';
 import { PEOPLE_DIR, DATA_DIR, extractionPath, readJson, contentUnits } from './people-content.mjs';
 import { editorialDecisionPath } from './people-editorial-decisions.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
+import { extractionAuthorAgentIds } from './people-extraction-authorship.mjs';
+import { assertCapturedIdentityReviewParts } from './people-identity-review-transport.mjs';
 import { localNameKeys } from './people-resolution.mjs';
 import { validateDossierIdentityEvidence, memberContract } from './people-identity-dossiers.mjs';
+import { validateIdentityProofComposition } from './people-identity-proof-composition.mjs';
+import { identityChapterChineseFingerprint } from './people-identity-semantic-source.mjs';
 
 export class ChapterIdentityReviewError extends Error {}
 const validatedCertificates = new WeakSet();
@@ -48,14 +52,23 @@ export function acceptedCatalogIdentityView(catalog) {
 // sourceChapters contains ONLY current native-validated chapter/anchor material.
 // External chapters supply identity evidence; this grants none of their facts.
 export function validateChapterIdentityBundle(view, sourceChapters, scope, bundle, inputs) {
+  if (bundle?.kind === 'chapter-identity-review-composition') {
+    try {
+      const certificate = validateIdentityProofComposition(view, sourceChapters, scope, bundle, inputs);
+      validatedCertificates.add(certificate); return certificate;
+    } catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
+  }
   need(only(bundle, ['schemaVersion', 'kind', 'scope', 'plan', 'report', 'receipt']) &&
     bundle.schemaVersion === 1 && bundle.kind === 'chapter-identity-review' &&
     peopleDigest(bundle.scope) === peopleDigest(scope) && peopleDigest(bundle.plan.scope) === peopleDigest(scope), 'Malformed or wrong-scope chapter identity proof');
-  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese']) &&
+  need(only(bundle.receipt, ['actualReviewerAgentId', 'authorAgentIds', 'planFingerprint', 'reportFingerprint', 'sourcePeople', 'chapterChinese', ...(bundle.receipt?.reviewParts !== undefined ? ['reviewParts'] : [])]) &&
     bundle.receipt.planFingerprint === bundle.plan.fingerprint && bundle.receipt.reportFingerprint === peopleDigest(bundle.report), 'Identity review transport receipt does not match the preserved report');
+  try { assertCapturedIdentityReviewParts(bundle.report, bundle.receipt); } catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
   const chapterKey = `${scope.book}:${scope.chapter}`, own = sourceChapters.get(chapterKey);
-  need(own && typeof own.extraction.run.agentId === 'string' && own.extraction.run.agentId, 'Current extractor provenance required');
-  need(bundle.receipt.authorAgentIds.includes(own.extraction.run.agentId), 'Actual extraction author missing from identity review provenance');
+  need(own, 'Current extractor provenance required');
+  let actualAuthors;
+  try { actualAuthors = extractionAuthorAgentIds(own.extraction); } catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
+  need(actualAuthors.every(id => bundle.receipt.authorAgentIds.includes(id)), 'Actual extraction author missing from identity review provenance');
   need(bundle.receipt.chapterChinese === chapterChineseEvidenceFingerprint(own.packet), 'Reviewed chapter Chinese source or unit inventory changed; fresh source coverage is required');
   const localPeople = new Map(), memberVersions = new Map(), sourceUnits = new Map(), subjects = new Map();
   for (const [key, source] of sourceChapters) {
@@ -118,6 +131,17 @@ export function chapterIdentityEvidenceScopes(bundle) {
     const [book, chapter] = id.split(':'); chapterIdentityReviewPath(book, chapter);
     scopes.set(`${book}:${chapter}`, { book, chapter });
   }
+  if (bundle.kind === 'chapter-identity-review-composition') {
+    need(Array.isArray(bundle.components), 'Missing immutable identity source components');
+    for (const component of bundle.components) {
+      need(Array.isArray(component.receipt?.sourcePeople), 'Missing captured composition dependencies');
+      for (const person of component.receipt.sourcePeople) {
+        const [book,chapter] = person.localId.split(':'); chapterIdentityReviewPath(book,chapter);
+        scopes.set(`${book}:${chapter}`,{ book,chapter });
+      }
+    }
+    return [...scopes.values()];
+  }
   // Witnesses to optional retrieved candidates must also be verified against
   // actual source, rather than trusting the model's quoted attachment.
   for (const row of bundle.report.reviews) for (const witness of row.sourceWitnesses) {
@@ -155,30 +179,31 @@ export function assessCorpusIdentityReviews(corpus, clusters) {
   const catalog = { localPersonMap: {}, people: clusters.map(cluster => ({ id: cluster.canonicalPersonId, retiredIds: cluster.retiredIds })) };
   for (const cluster of clusters) for (const id of cluster.localPeople) catalog.localPersonMap[id] = cluster.canonicalPersonId;
   const view = acceptedCatalogIdentityView(catalog), chapters = new Map(), pendingLocalPeople = new Set(), certificates = [], work = {};
-  for (const { extraction } of corpus.chapters) chapters.set(`${extraction.book}:${extraction.chapter}`, { extraction, localPeople: new Map() });
-  for (const [id, person] of corpus.localPeople) {
-    const chapter = chapters.get(`${person.book}:${person.chapter}`);
-    need(chapter, `Missing validated chapter for ${id}`); chapter.localPeople.set(id, person);
+  for (const { extraction } of corpus.chapters) chapters.set(`${extraction.book}:${extraction.chapter}`, { extraction, localIds: [] });
+  for (const id of corpus.localPeople.keys()) {
+    const chapter = chapters.get(id.split(':').slice(0, 2).join(':'));
+    need(chapter, `Missing validated chapter for ${id}`); chapter.localIds.push(id);
   }
   const materialize = (book, chapter) => {
     const key = `${book}:${chapter}`, result = chapters.get(key);
     need(result, `Missing validated identity source chapter ${key}`);
+    if (!result.localPeople) result.localPeople = new Map(result.localIds.map(id => [id, corpus.localPeople.get(id)]));
     if (!result.packet) result.packet = { units: contentUnits(readJson(path.join(DATA_DIR, book, `${chapter}.json`))) };
     return result;
   };
   for (const [key, own] of chapters) {
-    const { book, chapter } = own.extraction, cases = new Set([...own.localPeople.keys()].map(id => view.localPersonMap.get(id))).size;
+    const { book, chapter } = own.extraction, cases = new Set(own.localIds.map(id => view.localPersonMap.get(id))).size;
     let certificate = null, reason = null;
     if (cases) {
       try {
         const bundle = readChapterIdentityBundle(book, chapter), evidence = new Map();
         for (const scope of chapterIdentityEvidenceScopes(bundle)) evidence.set(`${scope.book}:${scope.chapter}`, materialize(scope.book, scope.chapter));
         certificate = validateChapterIdentityBundle(view, evidence, { book, chapter }, bundle, chapterIdentityInputs(book, chapter, { requireAuditReport: false }));
-        assertReviewedIdentityCoverage(own, view, [certificate]); certificates.push(certificate);
+        assertReviewedIdentityCoverage(materialize(book, chapter), view, [certificate]); certificates.push(certificate);
       } catch (error) {
         if (!(error instanceof ChapterIdentityReviewError)) throw error;
         reason = error.message;
-        for (const id of own.localPeople.keys()) pendingLocalPeople.add(id);
+        for (const id of own.localIds) pendingLocalPeople.add(id);
       }
     }
     work[key] = { targetCases: cases, approvedCases: certificate ? certificate.retained.length : 0,
@@ -209,7 +234,6 @@ export function identitySourceEvidenceFingerprint(person, packet) {
 // previously unmentioned units. A metadata/English edit may reuse unchanged person
 // proofs; inserting an unseen actor in an unmentioned Chinese unit may not.
 export function chapterChineseEvidenceFingerprint(packet) {
-  need(Array.isArray(packet?.units) && packet.units.every(unit => typeof unit.id === 'string' && typeof unit.zh === 'string') &&
-    new Set(packet.units.map(unit => unit.id)).size === packet.units.length, 'Complete current Chinese source units required');
-  return peopleDigest(packet.units.map(unit => [unit.id, unit.zh]));
+  try { return identityChapterChineseFingerprint(packet); }
+  catch (error) { throw new ChapterIdentityReviewError(error.message, { cause: error }); }
 }
