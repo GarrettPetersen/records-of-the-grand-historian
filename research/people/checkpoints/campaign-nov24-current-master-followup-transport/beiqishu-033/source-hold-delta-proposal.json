@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "033"
+  },
+  "provenance": {
+    "ownerAgentId": "bc-eeaa196d-ea97-4936-887c-4655bc41f139",
+    "ownerBranch": "cursor/beiqishu-033-followup-owner-f139",
+    "ownerHead": "92c196c8e465daed493edbb0dbb430abef414c1c",
+    "reviewHead": "a50bd67d25236a81868c01394ec33cf471895848",
+    "reviewerAgentId": "bc-f22bd99f-2219-45f6-81da-414b096e4320",
+    "independentReviewParts": [
+      "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-033/independent-identity-report-part-003.json"
+    ],
+    "additionalEvidence": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-033/independent-review-lookup-receipt.json",
+        "blob": "d891f2ee5a116a524899914be1270f708e2487f3",
+        "sha256": "f8bc9823709132b0168a78a820148025d9fd6f22de5caae12f667d683efbf9a9"
+      }
+    ],
+    "sealedInputs": {
+      "source": {
+        "path": "data/beiqishu/033.json",
+        "blob": "7022fed34e8f2c3d9b0298a86d9064d584e31e0d",
+        "sha256": "sha256:5cb8535e95e6b461ee9891ef19875f79758cda55eef647891f240fe5f8d7e7cb"
+      },
+      "extraction": {
+        "path": "data/people/extractions/beiqishu/033.json",
+        "blob": "fd58b38102104d682e08e38f853af2a630ac26d7",
+        "sha256": "sha256:76249574a2a771d34643152a5c435a4d87af4684c587a8b0235361631dd48161"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/beiqishu/033.json",
+        "blob": "4c5cc4500b455513e87cc728ff4b237ad36190ba",
+        "sha256": "sha256:b72ac1aceeaf105ad1e9a97f4deda65134bca840ad25cd89703ea4e8812b8ebc"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/beiqishu/033.json",
+        "blob": "f6b0f7f8e8514280f79c47956dd112e0cbc38a65",
+        "sha256": "sha256:edf722382337ec33ffdfac3ebc37cf283db60331b3ff62585bf1ee1f4a33c5bd"
+      }
+    }
+  },
+  "holdResponses": [
+    {
+      "caseId": "sha256:25d30c4301ad1e31718177473825286cb846607c0e5fbd16db70181a5c878a21",
+      "localPersonId": "beiqishu:033:p067",
+      "canonicalPersonId": "per_HJMGJZRW44JKJECPXZ9P",
+      "membershipFingerprint": "sha256:3532699f0d074620fce505b2af9071f39d1e895129e0aa2fb55bbbfb8f139f12",
+      "independentVerdict": "hold",
+      "diagnosis": "Local beiqishu:033:p067 is modeled as Li He's sister with 姊妹 on s0161, but s0161 only attests 諧 fleeing and meeting his nephew 高德正; 姊妹 does not appear and no Chinese span names this sister.",
+      "sourceUnit": {
+        "book": "beiqishu",
+        "chapter": "033",
+        "unitId": "s0161",
+        "zh": "諧遽出避之，道逢其甥高德正。",
+        "enLiteral": "He fled at once to avoid him; on the road he met his nephew Gao Dezheng.",
+        "enIdiomatic": "He fled at once to avoid him. On the road he met his nephew Gao Dezheng."
+      },
+      "extractionOperations": [
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "claimId": "beiqishu:033:c0250"
+          },
+          "before": {
+            "id": "beiqishu:033:c0250",
+            "subject": "beiqishu:033:p067",
+            "predicate": "name",
+            "value": {
+              "kind": "descriptive-kinship",
+              "en": "sister of Li He",
+              "zh": "姊妹"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["beiqishu:033:s0161"]
+          },
+          "after": null,
+          "reason": "姊妹 is absent from s0161; nephew 甥 names Gao Dezheng, not a sister."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "claimId": "beiqishu:033:c0251"
+          },
+          "before": {
+            "id": "beiqishu:033:c0251",
+            "subject": "beiqishu:033:p067",
+            "predicate": "role",
+            "value": {
+              "roleId": "family-member"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["beiqishu:033:s0161"]
+          },
+          "after": null,
+          "reason": "No person-linked surface on s0161 supports a family-member attestation for p067."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "claimId": "beiqishu:033:c0351"
+          },
+          "before": {
+            "id": "beiqishu:033:c0351",
+            "subject": "beiqishu:033:p067",
+            "predicate": "sex",
+            "value": {
+              "sex": "female"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["beiqishu:033:s0161"]
+          },
+          "after": null,
+          "reason": "Female sex on s0161 was inferred only from the unsupported sister label."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "claimId": "beiqishu:033:c0391"
+          },
+          "before": {
+            "id": "beiqishu:033:c0391",
+            "subject": "beiqishu:033:p067",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "beiqishu:033:p065",
+              "kinshipTerm": {
+                "zh": "姊妹",
+                "en": "sibling"
+              },
+              "sharedParentage": "full",
+              "subjectRole": "sister",
+              "objectRole": "brother"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["beiqishu:033:s0161"]
+          },
+          "after": null,
+          "reason": "Sibling link requires 姊妹 or equivalent on s0161; only 諧 and 甥 高德正 appear."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "claimId": "beiqishu:033:c0392"
+          },
+          "before": {
+            "id": "beiqishu:033:c0392",
+            "subject": "beiqishu:033:p067",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "parent-of",
+              "personId": "beiqishu:033:p051",
+              "kinshipTerm": {
+                "zh": "母",
+                "en": "mother"
+              },
+              "parentage": "biological",
+              "subjectRole": "mother",
+              "objectRole": "son"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["beiqishu:033:s0161"]
+          },
+          "after": null,
+          "reason": "Maternal link to nephew inferred from absent sister; s0161 attests 甥 only."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "claimId": "beiqishu:033:c0479"
+          },
+          "before": {
+            "id": "beiqishu:033:c0479",
+            "subject": "beiqishu:033:p067",
+            "predicate": "attestation",
+            "value": {
+              "sourceDate": {
+                "text": "齊世"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 550,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 570,
+                  "precision": "year"
+                }
+              }
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["beiqishu:033:s0161"]
+          },
+          "after": null,
+          "reason": "齊世 interval on s0161 contextualizes Li He's flight; not an owned attestation for unnamed p067."
+        },
+        {
+          "kind": "revise-person-preferred-name",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "localPersonId": "beiqishu:033:p067",
+            "field": "preferredNameSuggestion"
+          },
+          "before": {
+            "en": "Sister of Li He",
+            "zh": "李諧之姊妹",
+            "pinyin": "Li He zhi zimei"
+          },
+          "after": {
+            "en": "Sister of Li He"
+          },
+          "reason": "李諧之姊妹 is not a literal source form on s0161; retain descriptive English only without invented Chinese."
+        },
+        {
+          "kind": "revise-person-context",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "localPersonId": "beiqishu:033:p067",
+            "field": "extendedContext"
+          },
+          "before": null,
+          "after": "Unnamed local kin placeholder; s0161 attests 諧 and nephew 高德正 only, with no 姊妹 or other Chinese surface for this record.",
+          "reason": "Document reviewed uncertainty without false primary witness."
+        },
+        {
+          "kind": "revise-person-active-date-hints",
+          "target": {
+            "book": "beiqishu",
+            "chapter": "033",
+            "localPersonId": "beiqishu:033:p067",
+            "field": "identityHints.activeDateHints"
+          },
+          "before": ["AD 550-570"],
+          "after": [],
+          "reason": "Western interval came only from retracted attestation c0479 on s0161."
+        }
+      ],
+      "translationOperations": [],
+      "identityDependencies": [
+        "beiqishu:033:p065",
+        "beiqishu:033:p051",
+        "beiqishu:033:p066",
+        "canonical:per_HJMGJZRW44JKJECPXZ9P"
+      ],
+      "chronologyDependencies": [
+        "beiqishu:033:c0479",
+        "beiqishu:033:p067 identityHints.activeDateHints"
+      ],
+      "holdRequiredAfterApply": true,
+      "holdReasonAfterApply": "Retained canonical membership with reviewed uncertainty; chapter still lacks primary Chinese naming this sister on s0161."
+    }
+  ],
+  "unaffectedPolicy": "No other review cases or transport artifacts are modified by this proposal.",
+  "validation": {
+    "appliedToCanonical": false,
+    "scopedPeopleValidateCommand": "npm run people:validate -- --book beiqishu --chapter 033",
+    "scopedPeopleValidateAtProposal": "pass (unchanged canonical inputs)",
+    "independentApproval": false
+  }
+}
