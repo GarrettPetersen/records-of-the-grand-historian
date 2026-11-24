@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshu",
+    "chapter": "089"
+  },
+  "ownerAgentId": "bc-0b2c6a42-5c04-4285-8e37-1f266d3effd1",
+  "workerId": "cursor-nov24-retained-staging-w9-o5",
+  "idempotencyKey": "61a720d44471b56d18fc5a455e767fb68e74efb67cf7da6dd76d5da87b1e240f",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshu-089-effd1",
+  "inputBlobWitness": {
+    "source": "9a2bbfcdd7b59e10d85984615c993b44e34e6b87",
+    "extraction": "d047a945cdc6a0c2e9aa65d6d35c272510fb97b5",
+    "dateAudit": "fb084118d169caf9ca727e02029f06e2429bea5f",
+    "editorial": "dd0f31ee26ed5629f521724f6c9d7eebc362323f",
+    "verified": true
+  },
+  "sealedInputs": {
+    "source": "sha256:822d594d2493272aef04c54283c3830a01c157579b4d841a95493e824730a6a4",
+    "extraction": "sha256:9fa7620dd4b76a03a7858eba0d306c9e159cdf7eaf6e70a8424d34160c20e17f",
+    "dateAudit": "sha256:06b71d00c8d9450a7925183791c90dde7cd8515cebb6cd13e7b9bbf97b6b0325",
+    "editorial": "sha256:5090e2d4b30262c15a5b9df78c6f74670e9ff2faff6eafccb802374820da7ccc"
+  },
+  "priorDateAudit": {
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-28T17:00:44.079Z",
+    "reportSha256": "sha256:06b71d00c8d9450a7925183791c90dde7cd8515cebb6cd13e7b9bbf97b6b0325",
+    "reportSha256WitnessMatch": true,
+    "extractionHash": "sha256:ae758c3facfc66bf8f199c0adc13c2bcce9f3eede90b9e281dbc1ba0f82b1205",
+    "sourceHash": "sha256:58e0bc74286027728dee42c25f486961fec081f2c5434e189cd98c33c7eb4c27",
+    "preserved": true,
+    "overwritten": false,
+    "nativeFindingsCount": 5,
+    "researchBlockedItemCount": 75,
+    "incorrectItemCount": 0,
+    "schemaDiagnosticsCount": 0
+  },
+  "sourceCoverage": {
+    "chineseUnits": 121,
+    "translatedCount": 121,
+    "missingEnglish": [],
+    "fullEnglishCoverage": true,
+    "localPeople": 57,
+    "extractionBytes": 90624
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book songshu --chapter 089",
+    "summary": "Scoped person data validation passed for songshu/089: 1 extraction(s), 57 local people, 333 mentions, 427 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshu --chapter 089",
+      "status": "research-blocked",
+      "findings": 5,
+      "auditSha256Verified": true,
+      "schemaDiagnostics": []
+    }
+  },
+  "substantiveFindings": "Owner pass on sealed staging blobs at 563c2b169c65: 57 people, 121 Chinese units with idiomatic/literal English on every unit. Independent date audit remains research-blocked with 5 native finding group(s) and 75 research-blocked scoped checks; zero incorrect verdicts and zero schema diagnostics on current extraction. Scoped people:validate passed. No extraction, date-report, or source blob edits in this pass; historical audit bytes and hashes preserved.",
+  "definiteTranslationRepairs": [
+    {
+      "repairId": "songshu:089:r0001:literal",
+      "unit": "s0101",
+      "field": "literal",
+      "before": "In the first year of Taishi under Emperor Ming, he was transferred to Left Army Staff Officer of the Ministry of Rites, General Who Conquers, and Governor of Southern Donghai.",
+      "after": "In the first year of Taishi under Emperor Ming, he was transferred to Left Chief Clerk to the Minister of Education (Situ), Champion General, and Governor of Southern Donghai.",
+      "reason": "司徒 is Situ (Minister of Education), not the Ministry of Rites; 冠軍將軍 is Champion General.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0101",
+        "excerpt": "轉司徒左長史，冠軍將軍"
+      },
+      "confidence": "high",
+      "appliedInSource": false
+    },
+    {
+      "repairId": "songshu:089:r0002:literal",
+      "unit": "s0051",
+      "field": "literal",
+      "before": "When affairs were settled, he was made Supervisor of the Secretariat, with his original title as Commissioner with the Golden Grandee's insignia and ceremonial staff equal to the Three Dukes, heading the Ministry of Rites; Yang Province was dissolved as his headquarters—he firmly refused to move.",
+      "after": "When affairs were settled, he was made Supervisor of the Secretariat, with his original title as Commissioner with ceremonial staff equal to the Three Dukes, heading the Minister of Education (Situ) post; the Yang Province headquarters building was assigned as his office—he firmly refused to move.",
+      "reason": "領司徒 means heading the Situ post, not Ministry of Rites; 以揚州解為府 means using the Yang Province office as his headquarters.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0051",
+        "excerpt": "領司徒，以揚州解為府"
+      },
+      "confidence": "high",
+      "appliedInSource": false
+    },
+    {
+      "repairId": "songshu:089:r0003:literal",
+      "unit": "s0111",
+      "field": "literal",
+      "before": "When Emperor Shun took the throne, he was moved to Supervisor of the Secretariat, with his posts as Minister of Rites and Palace Attendant unchanged.",
+      "after": "When Emperor Shun took the throne, he was moved to Supervisor of the Secretariat, with his posts as Minister of Education (Situ) and Palace Attendant unchanged.",
+      "reason": "司徒 is Situ, not Minister of Rites.",
+      "sourceWitness": {
+        "source": "chapter-text",
+        "citation": "s0111",
+        "excerpt": "司徒、侍中如故"
+      },
+      "confidence": "high",
+      "appliedInSource": false
+    }
+  ],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "songshu:089:finding-1",
+      "kind": "research-blocked-chronology",
+      "items": [
+        "claim-170",
+        "claim-171",
+        "claim-172",
+        "claim-173",
+        "claim-174",
+        "claim-175",
+        "hints-p002",
+        "hints-p003",
+        "hints-p004",
+        "hints-p006",
+        "hints-p007",
+        "hints-p008",
+        "p002",
+        "p003",
+        "p004",
+        "p006",
+        "p007",
+        "p008"
+      ],
+      "people": [
+        "p002",
+        "p003",
+        "p004",
+        "p006",
+        "p007",
+        "p008"
+      ],
+      "problem": "Undated genealogy, bereavement, and kinship wording does not establish the named relatives’ Western activity or lifespan.",
+      "action": "Retain the source-specific unresolved attestations and research-required hints; do not reconstruct dates from Yuan Can’s biography chronology.",
+      "carryForward": true
+    },
+    {
+      "id": "songshu:089:finding-2",
+      "kind": "research-blocked-chronology",
+      "items": [
+        "claim-186",
+        "claim-187",
+        "claim-188",
+        "hints-p019",
+        "hints-p023",
+        "hints-p024",
+        "p019",
+        "p023",
+        "p024"
+      ],
+      "people": [
+        "p019",
+        "p023",
+        "p024"
+      ],
+      "problem": "Literary comparison and local contextual language do not establish Ji Kang, Xun Fengqian, or Jiang Liu’s personal Western chronology.",
+      "action": "Retain the unresolved source-specific holds and seek independent historical evidence before adding any personal point, interval, or bound.",
+      "carryForward": true
+    },
+    {
+      "id": "songshu:089:finding-3",
+      "kind": "research-blocked-chronology",
+      "items": [
+        "claim-197",
+        "claim-198",
+        "claim-199",
+        "claim-200",
+        "claim-201",
+        "claim-202",
+        "claim-203",
+        "claim-204",
+        "claim-205",
+        "hints-p033",
+        "hints-p034",
+        "hints-p035",
+        "hints-p036",
+        "hints-p037",
+        "hints-p038",
+        "hints-p039",
+        "hints-p040",
+        "hints-p041",
+        "p033",
+        "p034",
+        "p035",
+        "p036",
+        "p037",
+        "p038",
+        "p039",
+        "p040",
+        "p041"
+      ],
+      "people": [
+        "p033",
+        "p034",
+        "p035",
+        "p036",
+        "p037",
+        "p038",
+        "p039",
+        "p040",
+        "p041"
+      ],
+      "problem": "The succession narrative names participants but does not prove each person active in AD 477 or throughout a reign.",
+      "action": "Retain the unresolved sequence holds; do not translate narrative position into a point year or reign-wide active interval.",
+      "carryForward": true
+    },
+    {
+      "id": "songshu:089:finding-4",
+      "kind": "research-blocked-chronology",
+      "items": [
+        "claim-214",
+        "claim-215",
+        "claim-216",
+        "claim-217",
+        "claim-218",
+        "hints-p051",
+        "hints-p052",
+        "hints-p053",
+        "hints-p054",
+        "hints-p055",
+        "p051",
+        "p052",
+        "p053",
+        "p054",
+        "p055"
+      ],
+      "people": [
+        "p051",
+        "p052",
+        "p053",
+        "p054",
+        "p055"
+      ],
+      "problem": "Retrospective examples and mourning language do not establish the referenced individuals’ personal living chronology.",
+      "action": "Retain the unresolved holds and separately research each person before asserting Western chronology.",
+      "carryForward": true
+    },
+    {
+      "id": "songshu:089:finding-5",
+      "kind": "research-blocked-chronology",
+      "items": [
+        "claim-222",
+        "claim-223",
+        "hints-p021",
+        "hints-p022",
+        "p021",
+        "p022"
+      ],
+      "people": [
+        "p021",
+        "p022"
+      ],
+      "problem": "The Yang Xiong and Yan Zun comparisons are literary allusions rather than source-specific personal chronology.",
+      "action": "Retain the unresolved attestation and active-date holds; do not add a Western point, interval, or bound without independent research.",
+      "carryForward": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; sealed inputs unchanged; host applies accepted translation repairs and retains research-blocked chronology holds.",
+  "completedAt": "2026-11-24T17:03:18.192Z"
+}
