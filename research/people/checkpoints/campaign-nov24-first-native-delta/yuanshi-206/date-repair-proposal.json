@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "date-repair-proposal",
+  "book": "yuanshi",
+  "chapter": "206",
+  "sourceHash": "sha256:14962057337fd6d41e7e725461ec1c9b92deb62e572027cf4c4ae609585b8515",
+  "extractionHash": "sha256:beb7f296b824ebe8f031bd34da7d0500fd38ddb5ff57101cf28d400bd2010a29",
+  "findingIds": [
+    "claim-95"
+  ],
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-nov24-first-independent-date/yuanshi-206/independent-date-report.json",
+    "revision": "f9020e659bf0170e12d1d4d3a0c835b3fc58766b",
+    "contentSha256": "sha256:sha256:6a5000852162c1cab327b8c59e7aaac34bde1fdb6a82a45255bdbf7f9a269777",
+    "status": "needs-revision"
+  },
+  "changes": [
+    {
+      "kind": "replace",
+      "id": "claim-95",
+      "before": [
+        "p003",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "太祖十六年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1221,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0002"
+        ]
+      ],
+      "after": [
+        "p003",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Alternate Xu-clan provenance: father served as Yangzhou judicial administrator; Li Quan adopted Li Tan per 或曰 account"
+        },
+        "explicit",
+        [
+          "s0002"
+        ]
+      ],
+      "reason": "Unit s0002 (或曰璮本衢州徐氏子…) has no 太祖十六年 or other reign-year phrase; AD 1221 was wrongly inherited from a different narrative line."
+    },
+    {
+      "kind": "hints",
+      "personId": "p003",
+      "before": [
+        "AD 1221"
+      ],
+      "after": [],
+      "reason": "Clear the fabricated active-date hint because p003 now has only an explicitly undated attestation on the legend clause."
+    }
+  ]
+}

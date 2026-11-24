@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-owner-repair",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "206"
+  },
+  "ownerAgentId": "bc-2611d474-8cb0-4a36-9128-27ad94b55c2b",
+  "worker": "cursor-nov24-retained-staging-w11-o2",
+  "idempotencyKey": "797b586b2822d545602f91f481cfaf34214f40e3409920282ceb1abe01b64404",
+  "phase": "dispatch_pending",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "handoffBranch": "cursor/nov24-first-native-date-delta-w2-55c2b",
+  "independentReviewer": {
+    "agentId": "bc-d24118c6-cdc5-4dfd-b0ff-63ec5f6408e2",
+    "report": {
+      "path": "research/people/checkpoints/campaign-nov24-first-independent-date/yuanshi-206/independent-date-report.json",
+      "contentSha256": "sha256:6a5000852162c1cab327b8c59e7aaac34bde1fdb6a82a45255bdbf7f9a269777",
+      "expectedSha256": "sha256:6a5000852162c1cab327b8c59e7aaac34bde1fdb6a82a45255bdbf7f9a269777",
+      "hashVerified": true,
+      "revision": "f9020e659bf0170e12d1d4d3a0c835b3fc58766b",
+      "status": "needs-revision",
+      "findingsAddressed": 1,
+      "preservedCopy": "research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-206/independent-date-report-preserved.json"
+    }
+  },
+  "inputBlobWitness": {
+    "source": "0ee1c8dbe3e4bde22e2b787fb9ea614f6f6e54cc",
+    "extraction": "235b41c2980a5601e1647e43c08003e4d048bd94",
+    "editorial": "8bf4412d806b5485b9f6462074bc8b7df41140e9"
+  },
+  "inputContentSha256": {
+    "source": "sha256:ad49fa1a97e30c61875b61f8533757bbda4b6faa9dd8d91353de70b62422fee3",
+    "extraction": "sha256:a55752551884f6e04de00e231cdebfd29f8a10dc92470b5d406f12385e10646c",
+    "editorial": "sha256:cdc0caf3bbc59a48250bf6f8bfea29f1972311256b18eed6430530786ac87bf8",
+    "preRepairDatePacket": "sha256:a4c8bd2fceb501c696f0469a9357ac6f96498239cb4229378cc4a6046f19c98d"
+  },
+  "preRepairPacketPins": {
+    "sourceHash": "sha256:14962057337fd6d41e7e725461ec1c9b92deb62e572027cf4c4ae609585b8515",
+    "extractionHash": "sha256:beb7f296b824ebe8f031bd34da7d0500fd38ddb5ff57101cf28d400bd2010a29"
+  },
+  "outputContentSha256": {
+    "candidateExtraction": "sha256:2c94b285a62d0b7e7167944735d22b2554386e1a6a6e13a5353446a26c9e4114",
+    "candidateDatePacket": "sha256:378c381fbc3f4fdbc16a96fa1b35e6651d1ac1b8a6dcf0938a33bd1d064d3088",
+    "dateRepairProposal": "sha256:398b9923d1f59ccf9582475fdff028ad1d7fd98e850c04d2e4276c6cc26cb22a"
+  },
+  "outputPacketPins": {
+    "sourceHash": "sha256:14962057337fd6d41e7e725461ec1c9b92deb62e572027cf4c4ae609585b8515",
+    "extractionHash": "sha256:0a0a9e03cb37b2241fa22fcd21a88cb2f52641e326824dabbc728693778ded9c"
+  },
+  "changedItemIds": [
+    "claim-95"
+  ],
+  "changedDependencies": [
+    "p003-hints"
+  ],
+  "findingsAddressed": [
+    {
+      "findingItem": "claim-95",
+      "personId": "p003",
+      "evidenceUnit": "s0002",
+      "sourceQuote": "或曰璮本衢州徐氏子，父嘗為揚州司理參軍，全蓋養之為子云。",
+      "repair": "Replaced fabricated 太祖十六年 / AD 1221 attestation with undatedSourceAttestation on the legend clause only; cleared p003 active hint AD 1221.",
+      "independentAction": "Drop explicit Western year for the Xu-clan legend clause or relocate dating to a unit that states 太祖十六年; hold uncertain kin attribution without invented precision."
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "reusedUnchanged": {
+    "itemChecksSupported": 124,
+    "peopleChecksSupported": 56,
+    "unitsReviewed": 132,
+    "editorialDecisions": "unchanged",
+    "nonTemporalClaims": "unchanged except claim-95 attestation value"
+  },
+  "nativeValidation": {
+    "applyDateRepairProposal": "PASS",
+    "validateCompactPeopleExtraction": "PASS",
+    "dateAuditDiagnostics": "PASS (zero)",
+    "peopleValidateNote": "Scoped validator not rerun against checkpoint candidate; compact extraction validator passed on candidate bytes."
+  },
+  "remainingHolds": [
+    "Independent delta re-audit of candidate-date-packet.json before people:dates:record",
+    "Bounded identity dossier review unchanged from retained-staging owner handoff"
+  ],
+  "artifacts": {
+    "focusedOwnerRepair": "research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-206/focused-owner-repair.json",
+    "dateRepairProposal": "research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-206/date-repair-proposal.json",
+    "candidateExtraction": "research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-206/candidate-extraction.json",
+    "candidateDatePacket": "research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-206/candidate-date-packet.json",
+    "independentDateReportPreserved": "research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-206/independent-date-report-preserved.json"
+  },
+  "independentApprovalIssued": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Checkpoint-only candidate; does not overwrite data/people/extractions or publish date audit."
+}
