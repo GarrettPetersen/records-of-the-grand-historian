@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "ownerAgentId": "bc-3f24b1d8-0c5c-447a-9d70-1c2da5e9e1b1",
+  "worker": "cursor-nov24-retained-blocked-owner-3",
+  "idempotencyKey": "fe6c05e3310ccd12e4ea8a19613b06b17abf2989ea7910cee78b8b03c5cb0957",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "phase": "dispatch_pending",
+  "independentReviewCompleted": false,
+  "notes": "Owner handoff only; no canonical edits, deploy, or merge.",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "045"
+  },
+  "observedBlocker": "Actual extractor identity required for every chunk",
+  "handoffBranch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-045-e9e1b1",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/045.json",
+      "gitBlob": "982947b9026ea7ca432dddc95b865523c029ed46",
+      "contentSha256": "sha256:e26a2e999036cc7b48687e469277ac278e988909fd631d17bc4783114a479f36"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/045.json",
+      "gitBlob": "5f208bb6f282c05808104e4797ec964bbe3fd788",
+      "contentSha256": "sha256:b9f872a70df0955196dec4fc144e25b9fea80334358fe5cf5ce6ddcea4fb02ee"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/045.json",
+      "gitBlob": "e70ef415836b87a5666033655e5b1839e0962e7f",
+      "contentSha256": "sha256:ea009be0377ee481106fb233c1fa5a3788f0f2797bc7cc64a3618aae875880c9"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/045.json",
+      "gitBlob": "87ee43d06ec8ba4218474877a9ec9487c723edcb",
+      "contentSha256": "sha256:d2900f793aa7a5a7013cd8813feffb6a076e89d70ac454e9d8e7a2f67c5e9d13"
+    }
+  },
+  "testedRecoveryFindings": {
+    "runLevelAgentId": null,
+    "chunkProvenanceGaps": [
+      "001",
+      "002",
+      "003",
+      "004",
+      "005",
+      "006"
+    ],
+    "chunkProvenancePresent": [],
+    "extractionContentHash": "sha256:99b0b39da6fb9ef2973e08d0338625d4037261860c94f6548dd71ed6560fd091",
+    "queueEvidence": {
+      "grokbotClaimCommit": "05b808c138a53797797ca5300facd4fc8ce8cc3e",
+      "grokbotWorker": "grokbot-01",
+      "grokbotLane": "grokbot",
+      "readyCommit": "ee44e81a47e3178376369bc3dd589103a73b029d",
+      "readyWorker": "Garretts-MacBook-Pro-2.local-cursor-recovery",
+      "readyLane": "cursor-sdk",
+      "chapterFingerprintAtReady": "sha256:ff24ca87e575201ba5ff3a53acfe5730a9a98d090add75cb13056164d725591a",
+      "chapterFingerprintCurrent": "sha256:ff24ca87e575201ba5ff3a53acfe5730a9a98d090add75cb13056164d725591a",
+      "fingerprintMatchAtReady": true,
+      "model": "Grok Bot-chunked",
+      "claimsUnchangedSincePromotion": false,
+      "note": "Grok Bot-chunked extraction promoted via recovery; byte drift after intro commit 65ba178b."
+    },
+    "claimsUnchangedSincePromotion": false
+  },
+  "concreteProposedPatches": [
+    {
+      "kind": "metadata-only-chunk-agentId",
+      "target": "data/people/extractions/jiuwudaishi/045.json",
+      "field": "run.chunks[*].agentId",
+      "proposedValue": "grokbot-01",
+      "preserveNullRunIds": true,
+      "reason": "Queue claim 05b808c assigns jiuwudaishi/045 to grokbot-01; model Grok Bot on every chunk; no contradictory agent evidence."
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "extractionContentSha256": "sha256:b9f872a70df0955196dec4fc144e25b9fea80334358fe5cf5ce6ddcea4fb02ee",
+    "queueBranch": "origin/codex/people-work-queue"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Pinned independent date audit unchanged.",
+    "editorial": "Pinned editorial decisions unchanged.",
+    "identity": "Native identity gates still require authorAgentIds including run-level extractor after provenance patch."
+  },
+  "holds": [
+    {
+      "kind": "post-promotion-claim-drift",
+      "reason": "Claims/people bytes differ from intro checkpoint 65ba178b; independent reviewer must confirm promotion fingerprint before provenance-only patch."
+    }
+  ]
+}
