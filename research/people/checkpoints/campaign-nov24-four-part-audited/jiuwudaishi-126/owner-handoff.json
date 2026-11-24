@@ -1,17 +1,26 @@
 {
   "schemaVersion": 1,
   "kind": "four-part-audited-source-owner-handoff",
-  "chapterKey": "jiuwudaishi/126",
   "scope": {
     "book": "jiuwudaishi",
     "chapter": "126"
   },
-  "workerId": "cursor-nov24-four-part-owner-2",
   "ownerAgentId": "bc-2e8802ad-6e60-4700-b09f-9b27d9b1b316",
-  "sourceRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "workerId": "cursor-nov24-four-part-owner-2",
+  "campaign": "campaign-nov24-four-part-audited",
+  "idempotencyKey": "42073ff08ec8747b551ff3f082f26431abd19dafc1953cdd67450b83ffac74ba",
   "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
   "baseBranch": "codex/people-glossary-staging-v2",
   "branch": "cursor/nov24-four-part-owner-jiuwudaishi-126-b1b316",
+  "providerProvenance": {
+    "mode": "transport-provenance",
+    "priorRun": "run-16421bc7-921a-4fcf-9512-bbbd7a9864b8",
+    "priorHandoffCommit": "788e7cf692df9c8e8defbc81e0e69acd9021f045",
+    "identityPreparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "workflow": ".github/workflows/master-build-gate.yml",
+    "notes": "Exact four-part identity transport retained by GitHub Actions at native preliminary preparation; not re-sealed by this owner correction pass."
+  },
   "inputBlobWitness": {
     "source": "bebe27620f3e1eb07704a04774ebd5cb738bc4d6",
     "extraction": "2c6a1454e90f3fad99a89e63839b3bb5fa182cf1",
@@ -21,74 +30,56 @@
   "sealedInputs": {
     "source": "sha256:c75f0311de26516d2b4a818d22f819816e9f5c51f163babce64c2f36d98dcdca",
     "extraction": "sha256:309e064ef4afd63256a7be1f34ee86cd5255c8cc73cb0c04b49404afff954dda",
-    "editorial": "sha256:7ebddbfffd1921bf2fb547bf9020cf4a3194960b357a6d6e9946ecae66504991",
-    "dateAudit": "sha256:4dddde9bad08df001b6e654efb78de70a720026dc5f85388cdf3a865260c7255"
+    "dateAudit": "sha256:4dddde9bad08df001b6e654efb78de70a720026dc5f85388cdf3a865260c7255",
+    "editorial": "sha256:7ebddbfffd1921bf2fb547bf9020cf4a3194960b357a6d6e9946ecae66504991"
   },
-  "transport": {
-    "planFingerprint": "sha256:533c768ed01b1d6005a3ea303958367491c4e63856a95685c8c0039aa5456904",
-    "sourcePacketSha256": "1de168d1bfaea1f88578615d5de25715656967a265d05ccf0d9d0cf32d63ec41",
-    "transportSha256": "38ed4b3709f5f517034c05c78b03e91370f295c24640bc170f50d21725ef176f",
-    "transportBytes": 770126,
-    "preparationReceiptSha256": "sha256:cf79ca2d2fa89354c3b23307d71aaf0f0ca9db92cf11df2e61ca4a17cf2afc33",
-    "parts": [
-      {
-        "path": "transport-part-001.json",
-        "sha256": "e4a0ad07ce0e906876166f962d1741efbd307b1645d63df364f345299143d9a3",
-        "caseCount": 11
-      },
-      {
-        "path": "transport-part-002.json",
-        "sha256": "81112c246791da2b4f9fe4855dab095f1890741ede3ca0dc2473fc4d5c0b3bcb",
-        "caseCount": 11
-      },
-      {
-        "path": "transport-part-003.json",
-        "sha256": "278ae3b82d7e3356505a30ea2b71e240a0a61f7b0d25ea9cd104c6fdb5c61d14",
-        "caseCount": 23
-      },
-      {
-        "path": "transport-part-004.json",
-        "sha256": "658458c45338ae00de174bd77ffd3a20a61755a6fb69db97a5d093aaf1cea805",
-        "caseCount": 46
-      }
-    ]
-  },
-  "chronologyStatus": "audited",
-  "editorialStatus": "reviewed",
-  "sourceCoverage": {
-    "allUnitsVisited": true,
-    "preflightCandidatesAccountedFor": true,
-    "allNamedPeopleAndMentionsCaptured": true,
-    "allDurableFactsCaptured": true,
-    "allChronologyCaptured": true,
-    "allPersonEventsCaptured": true,
-    "allClaimProvenanceCaptured": true,
-    "allFamilyRelationshipsCaptured": true,
-    "editorialPassCompleted": true,
-    "unresolvedReferences": []
-  },
-  "definiteTranslationRepairs": [],
+  "chapterReady": true,
   "validation": {
-    "command": "npm run people:validate -- --book jiuwudaishi --chapter 126",
     "passed": true,
-    "summary": "Scoped person data validation passed for jiuwudaishi/126: 1 extraction(s), 95 local people, 587 mentions, 1353 claims, 0 proposed repair(s), 21 applied repair(s), 21 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 1 person record(s) without an attestation, 32 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 126",
+    "summary": "Scoped person data validation passed for jiuwudaishi/126: 1 extraction(s), 95 local people, 587 mentions, 1353 claims, 0 proposed repair(s), 21 applied repair(s), 21 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 1 person record(s) without an attestation, 32 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 239,
+      "translatedCount": 239,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 239 Chinese source units, 481 chronology and hint checks, and 95 people; no unsupported endpoint or chronology-changing translation defect was found.",
+    "editorialDecisionCount": 21,
+    "editorialStatus": "reviewed-with-applied-proposals"
   },
-  "scopedEvidence": {
-    "retainProposals": 91,
-    "holds": 0,
-    "reviewCases": 91,
-    "independentReviewCompleted": false,
-    "substantiveFindings": "Source-owner pass: full Chinese and paired English coverage, aligned extraction and audited chronology; 91 identity cases retain accepted canonical membership pending independent dossier review."
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English literal and idiomatic coverage scan; npm run people:validate; retained accepted extraction, audited chronology, and applied editorial artifacts; no canonical file edits.",
+    "sourceTitle": "Volume 126 Book of Later Zhou 28: Biographies 6: Feng Dao",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. No definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 91 prepared cases remains for independent bounded dossier review across 4 transport parts."
   },
+  "holds": [],
+  "definiteTranslationRepairs": [],
   "remainingIndependentEvidence": {
-    "gate": "independent-bounded-dossier-identity-review",
-    "reviewCases": 91,
-    "transportParts": 4,
-    "note": "Owner assessments are not independent approval."
+    "identityReviewCases": 91,
+    "identityTransportParts": 4,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-four-part-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
   },
-  "nextGate": "independent-bounded-dossier-identity-review",
+  "canonicalEdits": false,
   "reproduce": {
     "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 126"
   },
-  "notes": "Chapter-only source-owner handoff on staging base; identity transport retained in four parts."
+  "notes": "[CF-Pages-Skip] Transport-provenance correction; commit only owner-handoff without altering sealed inputs."
 }
