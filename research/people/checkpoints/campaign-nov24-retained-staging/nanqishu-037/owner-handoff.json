@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "037"
+  },
+  "ownerAgentId": "bc-fc6327bb-e8d3-43c7-a312-34b9d3ed7bf0",
+  "workerId": "cursor-nov24-retained-staging-w5-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "94917f99bb8ffd16ab134b720cd7e4e167bda477d58fcbaacfb6933f67a78dd3",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-nanqishu-037-d7bf0",
+  "inputBlobWitness": {
+    "source": "db72dee60f3fb8cee3f7994bb564c1d43c5f30c4",
+    "extraction": "3596ce3a61171c82faa24e73f2892cde92306bb8",
+    "dateAudit": "79f179e57bef562963c33ef869f428489a0ab292",
+    "editorial": "3cafe454f5ac5c789f2e3ddc5ff76bd62699f9bf"
+  },
+  "sealedInputs": {
+    "source": "sha256:4aca455d9193fdf1efca773c78634a0c90776dcc1c6f8835257e0fb5e1a142a9",
+    "extraction": "sha256:17292f0c297276b77295db2d784f3f9d7b43b434952d59a38dc1a948fd66da3b",
+    "dateAudit": "sha256:bc6c1fad25e893bc8c0ba4460fe19272b205b37e1d08eca0183a81eeda4209d1",
+    "editorial": "sha256:6fd11c0aded943b837c6da24c075f0f95789df48c262a15d7ac25c90a6da6ab4"
+  },
+  "dateAuditWitness": {
+    "contentSha256": "sha256:bc6c1fad25e893bc8c0ba4460fe19272b205b37e1d08eca0183a81eeda4209d1",
+    "gitBlob": "79f179e57bef562963c33ef869f428489a0ab292",
+    "reportStatus": "research-blocked",
+    "reportSourceHash": "sha256:4942950cce40506901ac3cb89108597e6082fcc1f9e1b5c594291c75c3089fab",
+    "reportExtractionHash": "sha256:05206fe17a7ab0ed9c991fe235fd1ed1cdae25480b335e9265b476647e700c3d",
+    "currentPacketSourceHash": "sha256:4942950cce40506901ac3cb89108597e6082fcc1f9e1b5c594291c75c3089fab",
+    "currentPacketExtractionHash": "sha256:05206fe17a7ab0ed9c991fe235fd1ed1cdae25480b335e9265b476647e700c3d",
+    "bytesPreserved": true,
+    "hashesRewritten": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 272,
+    "englishLiteralAndIdiomatic": {
+      "sentenceCount": 272,
+      "translatedCount": 272,
+      "bothFieldsComplete": true
+    },
+    "extractionBytesWitness": 197004,
+    "extractionBytesOnDisk": 197004
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "npm run people:validate -- --book nanqishu --chapter 037",
+    "peopleValidateSummary": "Scoped person data validation passed for nanqishu/037: 1 extraction(s), 123 local people, 593 mentions, 1032 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s), 1 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 037",
+    "datesVerifyScopedStatus": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "chronologyReportStatus": "research-blocked",
+    "chronologyStaleRelativeToPacket": false,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "auditFindingsCount": 1,
+    "auditAffectedItems": 3
+  },
+  "substantiveFindings": "Staging four-part inputs verified. people:validate passes with 123 people. people:dates:verify returns research-blocked. King Yuan of Chu (p029) undated genealogical descent correctly held without converting retrospective ancestry into life dates.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-218",
+        "hints-p029",
+        "p029"
+      ],
+      "problem": "King Yuan of Chu is named only in an undated early-Han genealogical descent. The current unresolved claim and research-required hint accurately avoid converting that retrospective ancestry into a life-date assertion, but neither can establish his chronology from this chapter.",
+      "action": "Keep the unresolved claim and research-required hint. Obtain a separately source-hashed chronology witness for King Yuan of Chu before proposing any date repair, then regenerate the packet and conduct a fresh independent whole-chapter audit.",
+      "nativeAuditVerdict": "research-blocked",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 037",
+    "datesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 037"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; commit owner-handoff without altering sealed source, extraction, date-audit, or editorial blobs. Host supplies native sealed final review packets."
+}
