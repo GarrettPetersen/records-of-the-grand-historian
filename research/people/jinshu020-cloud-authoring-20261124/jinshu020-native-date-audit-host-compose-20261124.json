@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "auditVersion": 1,
+  "kind": "jinshu020-native-date-audit-host-compose",
+  "book": "jinshu",
+  "chapter": "020",
+  "status": "independent-packet-complete-ready-for-host-compose",
+  "notReviewerCanonicalWrite": true,
+  "generatedAt": "2026-11-24T06:00:00.000Z",
+  "ownerDraft": {
+    "pullRequest": 5488,
+    "extractionHeadForHostPin": "1106dc44ba8ce3bbd8d76ff9c3a3db7cbdd138c0"
+  },
+  "reviewerEvidence": {
+    "branch": "cursor/jinshu-020-independent-editorial-review-b1df",
+    "checkpointBeforeWave": "96988f562f1135b47d17e767b574c53ed77edab0",
+    "independentVerification": "research/people/jinshu020-cloud-authoring-20261123/independent-residual-claims-verification-20261124.json",
+    "reviewer": {
+      "kind": "cursor-agent",
+      "model": "Composer 2.5 Fast",
+      "independentOfOwnerAgent": true
+    }
+  },
+  "inputPins": {
+    "sourcePath": "data/jinshu/020.json",
+    "sourceSha256": "sha256:ea4c955dcfebe4b9ec6f7ff187319a9f589b9497cb12c158344b469e44d9c0a2",
+    "partialItemReport": "research/people/jinshu020-cloud-authoring-20261123/date-audit-report-partial-s0037-s0700.json",
+    "editorialSha256": "bf110209c162bcb0f5a1ba7105a944ed9a73c730546256cf335cc6ab5413c635"
+  },
+  "packetProof": {
+    "itemChecksInPartialReport": 650,
+    "uniqueClaimsReviewed": 325,
+    "reviewedUnits": "s0037-s0700",
+    "holdManifestFindingGroups": 46,
+    "holdManifestDedupedItemIds": 378,
+    "allHoldItemsAddressedByOwnerWaves": true,
+    "priorOwnerWavesIndependentlyAccepted": 4,
+    "retainedSupportedWithoutOwnerEdit": ["claim-238"]
+  },
+  "summary": "Independent reviewer accepts owner #5488 through 1106dc44: all 378 hold-manifest items are addressed across four owner waves plus this residual batch. This artifact composes only the 68 changed bindings from the residual wave (p279 contradiction clear + hold-021–036 claims). No fabricated Western dates. Host must pin owner extraction at 1106dc44, re-run native validators, and write data/people/date-audits/jinshu/020.json after merge — not on the reviewer evidence branch.",
+  "changedBindingsCompose": {
+    "wave": "owner-residual-claims-20261124",
+    "count": 68,
+    "batches": 16,
+    "judgmentsArtifact": "research/people/jinshu020-cloud-authoring-20261124/residual-claims-wave-item-judgments-20261124.json",
+    "dispositionCounts": {
+      "accept-supported-unknown-date": 64,
+      "accept-contradiction-clear": 2,
+      "accept-hint-strip": 2,
+      "retain-supported-unchanged": 0
+    }
+  },
+  "unchangedBindingPolicy": {
+    "priorAcceptedWaves": [
+      {
+        "wave": "incorrect-30",
+        "artifact": "research/people/jinshu020-cloud-authoring-20261123/independent-incorrect-30-verification-20261124.json"
+      },
+      {
+        "wave": "hold-amend",
+        "artifact": "research/people/jinshu020-cloud-authoring-20261123/independent-hold-amend-verification-20261124.json"
+      },
+      {
+        "wave": "hold-038-046-hints",
+        "artifact": "research/people/jinshu020-cloud-authoring-20261123/independent-hold038-046-verification-20261124.json",
+        "note": "p279 keep rejection cleared in residual wave"
+      }
+    ],
+    "composeInstruction": "Host copies unchanged item dispositions from partial report plus accepted owner repairs; apply changedBindingsCompose judgments only for the 68 residual IDs."
+  },
+  "hostGates": [
+    "npm run people:validate after pinning extraction at owner head",
+    "people:dates:verify against composed candidate before audited status",
+    "Do not treat this JSON as data/people/date-audits/jinshu/020.json"
+  ],
+  "blockerGroups": []
+}

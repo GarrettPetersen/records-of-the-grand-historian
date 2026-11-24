@@ -40,6 +40,10 @@ Witness policy: `lib/chronology-witness.mjs` — packet name, zh surface, or pri
 
 `independent-incorrect-30-verification-20261124.json`: **30/30** judgments supported, **0** rejected; **14** hold groups closed; **hold-004** partial (**claim-24**). Editorial 97 unchanged on owner receipt. Not audited.
 
+## Owner residual claims (`1106dc44` / apply `3ab91d91`)
+
+`independent-residual-claims-verification-20261124.json`: **68/68** accepted (**p279** + **claim-278** contradiction clear; **66** undated claim normalizations; **claim-238** retained supported). **46/46** hold groups closed; **378/378** manifest items addressed. Host compose (changed bindings only): `jinshu020-native-date-audit-host-compose-20261124.json`. Not canonical `audited` on reviewer branch.
+
 ## Owner hold-038–046 (`a2299d4576` / amend `f78a325e`)
 
 `independent-hold038-046-verification-20261124.json`: **260** strip/skip accepted, **8** explicit-date keeps accepted, **1** rejected (**p279** Xiankang 2 on wrong line); **8** hint groups fully closed, **hold-045** partial. Cumulative **30/46** closed (plus partial). Consolidated partial native report: `consolidated-chronology-native-report-20261124.json`. **67** claim items remain (hold-021–036). Not audited.
