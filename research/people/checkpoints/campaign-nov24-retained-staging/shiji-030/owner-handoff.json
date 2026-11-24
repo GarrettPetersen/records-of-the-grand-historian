@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "030"
+  },
+  "ownerAgentId": "bc-b4149c56-a08e-4d47-9d88-528282fdde81",
+  "workerId": "cursor-nov24-retained-staging-w17-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "1f39c5009a92e779bc570108bda23a82630ca4268fdf2cd9af35deff41b9282e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-030-dde81",
+  "inputBlobWitness": {
+    "source": "fecb8230134eef8ea89a558086fbe871219a6098",
+    "extraction": "9a79dcdab47e5ba5c8ab2ff8c7d9ebd4d2506696",
+    "editorial": "148f67f527178c0d9df02cab4f70b1772d65c127"
+  },
+  "sealedInputs": {
+    "source": "sha256:d4e0d620d91e0434c5c13b008dfa720fa75bba685f5297a4d165837e8f217948",
+    "extraction": "sha256:3670c5d0e193e9b2a37046d686f7eeafc7c2fb2e9f4b1a0eb8552c075430fdc1",
+    "editorial": "sha256:94d5e6863f6d027769d08afe05950d462cc50a7baec90a972bbeef35d959849f"
+  },
+  "extractionBytes": 186016,
+  "extractionReuse": {
+    "promptVersion": 7,
+    "contentSha256": "sha256:3670c5d0e193e9b2a37046d686f7eeafc7c2fb2e9f4b1a0eb8552c075430fdc1",
+    "peopleCount": 76,
+    "scheduledClaimCount": 630,
+    "modified": false
+  },
+  "editorialReuse": {
+    "decisionsGitBlob": "148f67f527178c0d9df02cab4f70b1772d65c127",
+    "contentSha256": "sha256:94d5e6863f6d027769d08afe05950d462cc50a7baec90a972bbeef35d959849f",
+    "appliedRepairCount": 18,
+    "editorialDecisionCount": 18,
+    "modified": false
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Treatise on the Balanced Standard",
+    "chineseUnits": 286,
+    "translatedCount": 286,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 186016
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-030/date-packet.json",
+    "fileSha256": "sha256:65661f9f46beb209087f36d797246029ea3e24ab7359a6abfb001f06ced92ba4",
+    "packetSourceHash": "sha256:32845dc9078062f591a912272ce33dda8a76d0798b0b2bb8ae771958e47c1303",
+    "packetExtractionHash": "sha256:e220e4d2e278258a4d4dd71c83933d09ea6d43b6940d13f0b95a66f79c0f0386",
+    "itemCount": 234,
+    "peopleCount": 76,
+    "unitCount": null,
+    "buildCommand": "npm run people:dates:packet -- --book shiji --chapter 030 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-030/date-packet.json"
+  },
+  "candidateChronologyAndSourceClosure": {
+    "status": "prepared-not-audited",
+    "nativeDateAuditArtifact": null,
+    "ownerDidNotIssueIndependentDateApproval": true,
+    "summary": "Fresh native date packet sealed at research/people/checkpoints/campaign-nov24-retained-staging/shiji-030/date-packet.json from current pinned source, extraction, and editorial inputs. All 234 temporal or active-hint rows and 286 Chinese source units are in scope for the next independent reviewer; owner pass did not write or self-approve data/people/date-audits/shiji/030.json."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 030",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/030: 1 extraction(s), 76 local people, 374 mentions, 922 claims, 0 proposed repair(s), 18 applied repair(s), 18 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 030",
+      "status": "un-audited",
+      "auditState": "no-native-date-report",
+      "nativeDateReportPresent": false,
+      "auditVersion": 1
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial blobs at staging 20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca: git blob witness verified; full chapter Chinese read with paired literal and idiomatic English (286 units, 0 missing English fields). Accepted extraction prompt v7 and 18 applied editorial repair(s) reused without edits. people:validate passes scoped; no definite English omission or schema hold found. Native independent chronology report is still missing; people:dates:verify returns un-audited. Candidate date packet hash sha256:65661f9f46beb209087f36d797246029ea3e24ab7359a6abfb001f06ced92ba4 is ready for a separate independent date audit and recording via people:dates:record. Owner did not modify sealed canonical inputs.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "gate": "independent-native-date-audit",
+      "packetFileSha256": "sha256:65661f9f46beb209087f36d797246029ea3e24ab7359a6abfb001f06ced92ba4",
+      "packetExtractionHash": "sha256:e220e4d2e278258a4d4dd71c83933d09ea6d43b6940d13f0b95a66f79c0f0386",
+      "packetSourceHash": "sha256:32845dc9078062f591a912272ce33dda8a76d0798b0b2bb8ae771958e47c1303",
+      "command": "npm run people:dates:run -- --book shiji --chapter 030 --run --model <reviewer>",
+      "recordCommand": "npm run people:dates:record",
+      "notes": "No data/people/date-audits file at pinned staging; owner prepared packet only. Undated valid attestations may remain after audit."
+    },
+    "identityReview": {
+      "required": true,
+      "gate": "independent-bounded-dossier-identity-review",
+      "notes": "Chapter extraction validates at current hash; corpus identity scheduling remains separate from this chronology gate."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": true,
+  "publicationReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 030",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 030",
+    "datePacket": "npm run people:dates:packet -- --book shiji --chapter 030 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-030/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff and checkpoint date packet without altering sealed inputs or claiming independent date approval."
+}
