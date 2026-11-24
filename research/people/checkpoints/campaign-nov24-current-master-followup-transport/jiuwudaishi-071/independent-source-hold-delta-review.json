@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "jiuwudaishi/071",
+  "reviewerAgentId": "bc-3ddb96dd-e421-49ca-b37a-3650f54a7c06",
+  "ownerAgentId": "bc-903d3892-ff92-4352-9793-5f42d1111401",
+  "ownerRevision": "b5427d9f43a345497849ee921ff4e697a634bacd",
+  "proposalSha256": "sha256:3c0a386374682f8ce781b7c51b0b494ce5130de309d7288b783f93f89e713bd0",
+  "decisions": [
+    {
+      "caseId": "sha256:b14cec00eb9698a31debf60ecdb9bccce32a3095488242928df0705602ea3dfa",
+      "verdict": "approve",
+      "operationsApproved": [
+        {
+          "op": "remove-person",
+          "id": "p076",
+          "beforeName": [
+            "Father of Xu Ji",
+            "許寂之父",
+            null
+          ]
+        },
+        {
+          "op": "strip-related",
+          "id": "p061",
+          "removed": [
+            "p076"
+          ]
+        },
+        {
+          "op": "strip-related",
+          "id": "p062",
+          "removed": [
+            "p076"
+          ]
+        },
+        {
+          "op": "remove-claim-target",
+          "subject": "p062",
+          "predicate": "family-relationship",
+          "personId": "p076",
+          "evidenceUnit": "s0145"
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "family-relationship"
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "name",
+          "before": {
+            "kind": "descriptive-kinship",
+            "en": "Father of Xu Ji",
+            "zh": "許寂之父"
+          },
+          "evidence": [
+            "s0145"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "sex",
+          "evidence": [
+            "s0145"
+          ]
+        },
+        {
+          "op": "remove-claim-subject",
+          "subject": "p076",
+          "predicate": "attestation",
+          "beforeSourceDateText": "祖秘，名聞會稽。",
+          "evidence": [
+            "s0145"
+          ]
+        }
+      ],
+      "sourceEvidence": {
+        "independentPriorReviewCommit": "b10f1961f25883581b947dfb4d7245ed67d98865",
+        "holdReasonAlignedWithProposal": true,
+        "witnessUnit": {
+          "book": "jiuwudaishi",
+          "chapter": "071",
+          "unitId": "s0145",
+          "zh": "祖秘，名聞會稽。",
+          "enLiteral": "His grandfather Mi was famed in Kuaiji.",
+          "enIdiomatic": "His grandfather Mi was renowned in Kuaiji."
+        },
+        "contextUnit": {
+          "unitId": "s0144",
+          "zh": "許寂，字閑閑。",
+          "enLiteral": "Xu Ji, courtesy name Xianxian.",
+          "enIdiomatic": "Xu Ji, styled Xianxian."
+        },
+        "notPresentOnS0145": [
+          "父",
+          "許寂",
+          "許寂之父"
+        ],
+        "sealedInputBlobsVerified": {
+          "data/jiuwudaishi/071.json": "3569dbc221c680e9cad6ce581f81afc5ba78cd4b",
+          "data/people/extractions/jiuwudaishi/071.json": "5623c14668d6e4bdcb29dc1a2d0d337d7c46c80b",
+          "data/people/date-audits/jiuwudaishi/071.json": "9c32366068699e58b488058825c7bc60ce5722f9",
+          "data/people/editorial-decisions/jiuwudaishi/071.json": "6d303ba1afd34921399a7257804ea6ee9c3b4c82"
+        },
+        "distinction": "Grandfather Mi (祖秘) on s0145 is source-supported for p062; a named father local person is descriptive inference only—not a source contradiction between Xu Ji and Xu Mi records."
+      },
+      "dependencyImpact": {
+        "chronology": "Stale after apply: date-audit personChecks p076 and itemChecks hints-p076; host must reconcile. p061/p062 approved chronology from their own units unchanged.",
+        "identity": "per_FWWTK5VTTKGKHBTR3Y2Q was p076-only; removal closes the attribution hold without splitting accepted Xu Ji/Xu Mi canonical memberships. Other 75 independent approve rows unaffected.",
+        "english": "No translation repair; s0145 English fields already match 祖秘 grandfather reading."
+      },
+      "remainingHold": {
+        "requiredUntilApply": true,
+        "requiredAfterApply": false,
+        "explanation": "Independent hold remains in force on pinned extraction until host applies approved operations; after apply no named father remains to certify and no quotable witness is required for a removed local person."
+      },
+      "repairPath": "If operations are not applied: keep hold on case sha256:b14cec00…; do not approve canonical membership for p076. Approved path: apply all eight operations, drop p076 from date-audit, re-run scoped validation (75 locals), then close identity on the chapter without new certification from this reviewer."
+    }
+  ]
+}
