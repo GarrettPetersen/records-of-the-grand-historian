@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "liaoshi079-owned-extraction-witness-proposal",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "079"
+  },
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "caseId": "sha256:5b5ce57d638c54a696f2eb4cbac3ecd3b80f3dbc9588a989b4a3fcc798da1085",
+  "localId": "liaoshi:079:p012",
+  "priority": "native-certification-blocker",
+  "issue": "English-only title claims for Tonghe sovereign; zh name evidence map empty on s0020/s0078 despite source honorific 上.",
+  "sourceBasis": [
+    {
+      "unitId": "s0020",
+      "zh": "初，晉國公主建佛寺於南京，上許賜額。",
+      "honorific": "上",
+      "codePointStart": 13
+    },
+    {
+      "unitId": "s0078",
+      "zh": "四年春，宋將曹彬、米信等侵燕，上親征，阿沒裏為都監，屢破敵軍。",
+      "honorific": "上",
+      "codePointStart": 15
+    }
+  ],
+  "minimumEdits": [
+    {
+      "target": "claim liaoshi:079:c0061",
+      "field": "value.zh",
+      "before": null,
+      "after": "上",
+      "reason": "Explicit honorific for the reigning sovereign at s0020/s0026 per primary Chinese."
+    },
+    {
+      "target": "claim liaoshi:079:c0062",
+      "field": "value.zh",
+      "before": null,
+      "after": "上",
+      "reason": "Same honorific at s0023/s0029."
+    },
+    {
+      "target": "mentions title-reference for p012",
+      "field": "spans.zh",
+      "values": [
+        { "unit": "liaoshi:079:s0020", "exact": "上", "startCodePoint": 13, "endCodePoint": 14 },
+        { "unit": "liaoshi:079:s0026", "exact": "上" },
+        { "unit": "liaoshi:079:s0023", "exact": "上" },
+        { "unit": "liaoshi:079:s0029", "exact": "上" },
+        { "unit": "liaoshi:079:s0078", "exact": "上", "startCodePoint": 15, "endCodePoint": 16 }
+      ],
+      "reason": "Link person-linked Chinese spans so assertDossierPrimaryWitness accepts quote 上 on chapter-local witnesses."
+    }
+  ],
+  "doNotChange": [
+    "canonicalPersonId per_0Q0C7VBJ6ZHF39324R0A",
+    "anchor liaoshi:008:p042 / membership fingerprint",
+    "unresolvedIdentity true",
+    "independent reviewer verdicts on other 32 cases"
+  ],
+  "afterApply": {
+    "independentWitnessesValidWithoutRewording": true,
+    "scopedValidateRequired": "npm run people:validate -- --book liaoshi --chapter 079"
+  },
+  "notAppliedOnThisBranch": true
+}
