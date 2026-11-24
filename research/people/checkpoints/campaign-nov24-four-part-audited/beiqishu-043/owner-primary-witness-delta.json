@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "kind": "targeted-primary-witness-owner-return",
+  "chapterKey": "beiqishu/043",
+  "ownerAgentId": "bc-55fcc16a-2fa6-4a05-8ec9-d1a96ced0a7b",
+  "campaignWorker": "cursor-nov24-four-part-owner-3",
+  "priorRun": "run-440315f8-03d2-46f1-9da8-21ab4ec34f2a",
+  "ownerRevision": "14f2c7ac33b2bd29488dddfed6d74da1fa07f2d6",
+  "sourceReviewHead": "a706933991f6a43e2a4127bde995d774b55eb283",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "originalIdempotencyKey": "b9617b4f2c5ac3c1609c70775aab9bf84379c8c548a96e7cfa390b2af3ac6326",
+  "idempotencyKey": "416822efb0627f8590f649b4ab4f8068e4ba91ecf6b47b350aed94d1dd821d71",
+  "mode": "targeted-primary-witness",
+  "ownerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-four-part-audited/beiqishu-043/owner-handoff.json",
+    "sha256": "dbdef9020c00517a9e973db6f192f0d34eb681ab88a4e34f1193683d710251c8"
+  },
+  "inputBlobs": {
+    "source": {
+      "path": "data/beiqishu/043.json",
+      "blob": "43e9aaa3dc6ed2d56c9ebd5dbbfea6006f2fd20f"
+    },
+    "extraction": {
+      "path": "data/people/extractions/beiqishu/043.json",
+      "blob": "096c24a1de320030b38f5ada167c006858dbab32"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/beiqishu/043.json",
+      "blob": "f047dbffe2d7a2012fdf5ff19d943aa4791896d8"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/beiqishu/043.json",
+      "blob": "41ca14922f1c0553adf47840a3d607012edd27f3"
+    }
+  },
+  "cases": [
+    {
+      "caseId": "sha256:c1f8daf76cd1983eefb2dda34a5b7366617b7313e8e11e999ca82b4a358ccd0a",
+      "localPersonId": "beiqishu:043:p087",
+      "canonicalPersonId": "per_WEXNWR9TXKNSRKV1P0T9",
+      "reviewerVerdict": "hold",
+      "ownerDisposition": "concur-with-reviewer",
+      "summary": "The independent hold is correct: 源楷之父 is not an exact Chinese surface in the sealed chapter and cannot serve as a primary identity witness. The person remains a valid unnamed family record entailed by 從父兄 between 文宗 and 楷 in s0195, with Zigong named only as Yuan Biao's father in s0148. After the proposed extraction corrections, the case should approve with unresolvedIdentity true and no false merge.",
+      "rejectedWitnesses": [
+        {
+          "purportedQuote": "源楷之父",
+          "artifact": "data/people/extractions/beiqishu/043.json",
+          "personId": "p087",
+          "reason": "Editorial kinship gloss; this substring never appears in any sealed Chinese unit."
+        }
+      ],
+      "primaryWitnesses": [
+        {
+          "localId": "beiqishu:043:p086",
+          "book": "beiqishu",
+          "chapter": "043",
+          "unitId": "s0195",
+          "quote": "楷",
+          "zhContext": "文宗從父兄楷，字那延，有器幹，善草隸書。",
+          "witnessUse": "Names Yuan Kai; does not name his father."
+        },
+        {
+          "localId": "beiqishu:043:p086",
+          "book": "beiqishu",
+          "chapter": "043",
+          "unitId": "s0195",
+          "quote": "從父兄",
+          "zhContext": "文宗從父兄楷，字那延，有器幹，善草隸書。",
+          "witnessUse": "Admits elder paternal cousin relation to 文宗, entailing an unnamed paternal uncle / father of Kai."
+        },
+        {
+          "localId": "beiqishu:043:p070",
+          "book": "beiqishu",
+          "chapter": "043",
+          "unitId": "s0148",
+          "quote": "父子恭",
+          "zhContext": "父子恭，魏中書監、司空，文獻公。",
+          "witnessUse": "Names Zigong as Yuan Biao's father only; does not name Zigong's brothers or Kai's father."
+        }
+      ],
+      "distinctions": [
+        "Yuan Kai (p086) is a named person with quotable 楷 in s0195.",
+        "p087 is an unnamed structural intermediary required by 從父兄; it is not interchangeable with Zigong (p070).",
+        "English Father of Yuan Kai is descriptive metadata only; it must not backfill a false Chinese identity key."
+      ],
+      "recommendedIndependentOutcome": {
+        "verdict": "approve",
+        "unresolvedIdentity": true,
+        "membershipReviewed": true,
+        "blockingCondition": "Apply proposed extraction name corrections before certification; use primaryWitnesses above, not 源楷之父."
+      }
+    }
+  ],
+  "proposedChanges": [
+    {
+      "artifact": "data/people/extractions/beiqishu/043.json",
+      "kind": "extraction-proposal",
+      "personId": "p087",
+      "claimDependencies": ["beiqishu:043:c0405"],
+      "patches": [
+        {
+          "op": "replace",
+          "path": "/people[p087]/displayNameZh",
+          "before": "源楷之父",
+          "after": null,
+          "reason": "Remove non-source Chinese display name; the chapter never quotes this string."
+        },
+        {
+          "op": "replace",
+          "path": "/people[p087]/identityNames/0/zh",
+          "before": "源楷之父",
+          "after": null,
+          "reason": "Descriptive-kinship name must not assert a quotable zh form; s0195 supplies 從父兄 and 楷 only."
+        }
+      ],
+      "requiredIdentityPatch": "Drop blocking zh:源楷之父 from canonical name keys for per_WEXNWR9TXKNSRKV1P0T9; retain English descriptive label and unresolvedIdentity.",
+      "requiredChronologyPatch": null
+    }
+  ],
+  "held": [],
+  "validation": {
+    "inputBlobPinsVerified": true,
+    "ownerHandoffSha256Verified": true,
+    "scopedPeopleValidate": {
+      "command": "npm run people:validate -- --book beiqishu --chapter 043",
+      "status": "PASS",
+      "summary": "Scoped validation still passes on sealed inputs; proposed changes are narrow name-surface corrections only."
+    },
+    "canonicalEditsApplied": false,
+    "notes": "Owner return is witness evidence and a host-routed extraction proposal only; sealed extraction bytes on ownerRevision are unchanged in this commit."
+  },
+  "notes": "[CF-Pages-Skip] Owner concurs with the single independent identity hold. No contrary primary Chinese exists; a source-supported unnamed father record is a valid outcome after removing false 源楷之父 surfaces."
+}
