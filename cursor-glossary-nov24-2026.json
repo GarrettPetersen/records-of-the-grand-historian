@@ -40,7 +40,7 @@
   "Cursor displays reset date only; verify exact reset time before new dispatch",
   "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
  ],
- "nextAction": "Verify the Cloudflare production deployment for exact merged commit a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9 and confirm deployed chapter and person pages. Continue finishing independently reviewed chapters for the next batch.",
+ "nextAction": "Verify canonical Cloudflare a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9 and rendered chapter/person links before crediting live publication. Collect partitioned native proof and finish Jinshu 028 canonical acceptance on the independently reviewed runtime.",
  "pullRequests": [
   {
    "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T08:55:42.938Z",
+ "lastCheckedAt": "2026-11-24T08:56:18.577Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -3183,7 +3183,30 @@
      "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
      "86fa83c22cf6aa4e8133610406d387c9150478d9"
     ],
-    "mergeTree": "aa164c1a9c7cf3b4fbfa19f9bb9f5a7ee90fcd85"
+    "mergeTree": "aa164c1a9c7cf3b4fbfa19f9bb9f5a7ee90fcd85",
+    "deploymentMonitoring": {
+     "checkedAt": "2026-11-24T08:56:14.633Z",
+     "current": {
+      "id": "6a04401e-2de1-4595-adb4-ca103d95cbce",
+      "commit": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+      "status": "active",
+      "stage": "clone_repo",
+      "started": "2026-11-24T08:55:37.920567Z",
+      "modified": "2026-11-24T08:55:40.597063Z",
+      "url": "https://6a04401e.records-of-the-grand-historian.pages.dev",
+      "environment": "production"
+     },
+     "canonical": {
+      "id": "00a3b5b1-ec60-45c3-82cb-37b0174ae722",
+      "commit": "1a1da073a7ca743d163df0422a4143ce0de4af35",
+      "status": "success",
+      "stage": "deploy",
+      "started": "2026-11-18T09:08:22.386199Z",
+      "modified": "2026-11-18T09:41:22.640185Z",
+      "url": "https://00a3b5b1.records-of-the-grand-historian.pages.dev",
+      "environment": "production"
+     }
+    }
    }
   }
  },
@@ -27105,11 +27128,15 @@
         }
        ],
        "chapterData": "78c96c158a7939e5c70f7dae4091d45c2a51c23d",
-       "status": "in_progress",
+       "status": "completed",
        "artifact": "jinshu-028-with-reviewed-source-only-rule",
        "runId": 45359186570,
        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45359186570",
-       "conclusion": null
+       "conclusion": "success",
+       "artifactId": 14903399488,
+       "artifactDigest": "sha256:11b8a47c84253abebd4123319f5861cc919ca1adedbb3469e65fc3303dc2f3cc",
+       "verifiedPeople": 402,
+       "chronologyFindings": 0
       }
      },
      "stagingTransfer": {
@@ -31956,7 +31983,7 @@
        "nativeVerification": {
         "ref": "codex/cursor-glossary-nov24-2026-partitioned-native-verification",
         "workflowRevision": "76b8b1ec1fd5be5305dd5a175bd941b8560de1ec",
-        "status": "dispatch-planned",
+        "status": "in_progress",
         "expected": [
          {
           "key": "liangshu/042",
@@ -32348,7 +32375,10 @@
           ],
           "reviewHead": "d10b748279e6b54672fedf8427880b85ec56f19e"
          }
-        ]
+        ],
+        "runId": 45360156734,
+        "conclusion": null,
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45360156734"
        },
        "ownerRepairs": {
         "cursor-nov24-partitioned-1": {
