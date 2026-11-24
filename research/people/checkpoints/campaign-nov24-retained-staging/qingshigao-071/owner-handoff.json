@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "071"
+  },
+  "ownerAgentId": "bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2",
+  "workerId": "cursor-nov24-retained-staging-w2-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f4cf09cd546d507e08e020aa81ce8267e147bfa2540f0db9efae200a384a7d6c",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-071-573f2",
+  "inputBlobWitness": {
+    "source": "6ee181d43a455ca2cc6aaafb5cc2d592c6d83f1e",
+    "extraction": "e3208a8feb963183a872e6534f75616e8c486489",
+    "dateAudit": "e5dbf80744448520a13380dee2479c6755e06226",
+    "editorial": "123a62e4e7610f972083f9480450d18b70c73c92"
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷71 志四十六 地理十八 臺湾",
+      "en": "Volume 71 Treatises 46: Geography 18, Tai Wan",
+      "raw": "卷71 志四十六 地理十八 臺湾"
+    },
+    "chineseUnits": 208,
+    "translatedCount": 208,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnits": [],
+    "editorialAccepted": 3,
+    "editorialReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 071",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/071: 1 extraction(s), 10 local people, 24 mentions, 101 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 071",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditFindings": 2,
+    "dateAuditHashesCurrent": {
+      "sourceHash": true,
+      "extractionHash": true
+    },
+    "sealedInputPacketHashes": {
+      "source": "sha256:ab8be19d1dd9593ae723f6696371441084b16b8cfba46e39d659df2269947728",
+      "extraction": "sha256:d0304258f388d0baf6922f8b88fe704e18989914d7fce407ebd91b2de9cf230f",
+      "dateAudit": "sha256:842629a34cbfd026a83f9ab899f8e625fff8aed336038d1439b5127a9f9e7842",
+      "editorial": "sha256:fd7d9cf4d77079810e20781ce55c39774e85435c4a0b39d5eb0ac38323e2495e"
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Taiwan geography 208 sentences; seven accepted editorial repairs reflected including 州/departments and directional bounds. Two person-date holds require extraction alignment proposals; no new English omissions.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "personId": "p006",
+      "kind": "chronology-alignment",
+      "reason": "Zheng Jing activity at s0010 is undated; Kangxi 22 at s0011 dates pacification not Zheng Jing.",
+      "affectedClaims": [
+        "claim-26",
+        "hints-p006"
+      ],
+      "before": "westernInterval AD 1661–1683 on p006 from adjacent Shunzhi/Kangxi spans.",
+      "after": "Unresolved attestation for s0010 only; remove derived interval.",
+      "evidence": [
+        {
+          "unit": "s0010",
+          "citation": "其子鄭經改東都為東寧省，升二縣為州。"
+        },
+        {
+          "unit": "s0011",
+          "citation": "康熙二十二年討平之"
+        }
+      ],
+      "preserveProof": "data/people/date-audits/qingshigao/071.json finding 1"
+    },
+    {
+      "personId": "p010",
+      "kind": "chronology-alignment",
+      "reason": "Cen Yuying proposal undated at s0027; memorial date AD 1887 belongs to Yang/Liu report.",
+      "affectedClaims": [
+        "claim-31",
+        "hints-p010"
+      ],
+      "before": "westernYear AD 1887 on p010 from 光緒十三年 memorial framing.",
+      "after": "Unresolved attestation; retain office/proposal claims without memorial-date transfer.",
+      "evidence": [
+        {
+          "unit": "s0027",
+          "citation": "前撫臣岑毓英廣設庫藏橋孜圖等議"
+        },
+        {
+          "unit": "s0014",
+          "citation": "光緒十三年"
+        }
+      ],
+      "preserveProof": "data/people/date-audits/qingshigao/071.json finding 2"
+    }
+  ],
+  "distinctHolds": [
+    {
+      "id": "date-finding-1",
+      "items": [
+        "claim-26",
+        "hints-p006",
+        "p006"
+      ],
+      "problem": "The sentence identifies Zheng Jing as the son who renamed Eastern Capital, but supplies no date. The following Kangxi 22 sentence dates Taiwan's pacification, not Zheng Jing's activity or survival, so the AD 1661–1683 life/activity interval is unsupported by this source.",
+      "action": "Retain this source-specific research hold and replace the derived date only after a dated independent witness establishes the person's own event; do not transfer an adjacent Taiwan or memorial date to that person.",
+      "preserved": true
+    },
+    {
+      "id": "date-finding-2",
+      "items": [
+        "claim-31",
+        "hints-p010",
+        "p010"
+      ],
+      "problem": "The 1887 joint memorial says its plan follows a proposal by former governor Cen Yuying, but does not date Cen Yuying's proposal. The memorial date is the date of Yang Changjun and Liu Mingchuan's report, not an attestation of Cen's activity in AD 1887.",
+      "action": "Retain this source-specific research hold and replace the derived date only after a dated independent witness establishes the person's own event; do not transfer an adjacent Taiwan or memorial date to that person.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; sealed inputs unchanged on staging. Host supplies native sealed final review packets.",
+  "completedAt": "2026-11-24T16:09:13.125Z"
+}
