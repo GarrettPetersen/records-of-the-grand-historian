@@ -664,10 +664,10 @@ jobs:
           const root='repos/'+process.env.GITHUB_REPOSITORY;
           const read=(path,raw=false)=>JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
           const chapter=process.env.TRANSFER_INPUT.split('-')[0];
-          const pr=({'030':5479,'063':5487,'081':5478,'083':5474,'085':5428,'094':5430,'115':5470,'123':5439})[chapter];
-          assert(pr);
           const state=read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true).identityRegistryBuild;
           const entry=chapter==='030'?state.chapter030.dateOverlay:chapter==='115'?state.currentChapter115.reseal.witnessRefresh:state.readyChronology?.['jinshu/'+chapter] ?? state.chapters083And094['updated'+chapter];
+          const pr=entry.pr??({'030':5479,'063':5487,'081':5478,'083':5474,'085':5428,'094':5430,'115':5470,'123':5439})[chapter];
+          assert(Number.isSafeInteger(pr));
           const recording=chapter==='030'?state.chapter030.composedRecording:entry.identityPreparation.nativeRecording;
           const run=read('/actions/runs/'+recording.runId);
           assert.equal(run.conclusion,'success');
