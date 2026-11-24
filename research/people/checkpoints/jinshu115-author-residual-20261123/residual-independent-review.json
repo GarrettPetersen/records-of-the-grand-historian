@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-author-residual-independent-review",
+  "book": "jinshu",
+  "chapter": "115",
+  "worker": "cursor-github-nov24-1",
+  "authorAgentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
+  "authoredAt": "2026-11-23T16:01:51.615Z",
+  "baseCommit": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "approvalGranted": false,
+  "pins": {
+    "sourceSha256": "sha256:c647289fc8cc1dee31029844ea9b01200ff4b2fcfbf9c9d4e6f15bfaa529abf5",
+    "extractionSha256": "sha256:7a53354c4a7932ebd7096342d11b4e276212ee6248445e39539c0bd8534fd1c3",
+    "chapterFingerprint": "sha256:9c64aaf4193b7860c2c61574569a3bdf1896d6dedd8061ea2c7128cebc4d5f3f"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 115",
+    "passed": true,
+    "stats": {
+      "units": 342,
+      "candidates": 1155,
+      "people": 232,
+      "mentions": 1079,
+      "claims": 1353,
+      "repairs": 27,
+      "dispositions": 536,
+      "aliasDispositionConflicts": 0
+    },
+    "proposedRepairs": 27
+  },
+  "appliedNow": {
+    "extractionFixes": [
+      "removed erroneous Fu Yin alias from p032",
+      "renamed preferred identity p065 to Bai Weiping",
+      "renamed preferred identity p100 to Bai Weiping",
+      "renamed preferred identity p120 to Bai Weiping",
+      "added p036 office 建威將軍 from s0047",
+      "removed false p117 death claim from s0145 dying speech",
+      "corrected p129 sex male -> female",
+      "corrected p168 sex male -> female"
+    ],
+    "note": "Source English unchanged; English surfaces for Fu Yin / Wei Ping / Bai Wei deferred until repair apply. Missing people (Gengshi Emperor, Shun) left for residual extraction/identity work."
+  },
+  "residualIndependentReview": {
+    "editorial": {
+      "status": "pending",
+      "reason": "Author cannot approve own translation repairs.",
+      "proposedRepairCount": 27
+    },
+    "chronology": {
+      "status": "pending-independent-date-audit",
+      "reason": "Un-audited; chapter mostly uses regnal/relative durations without Western conversions.",
+      "notes": [
+        {
+          "unit": "s0011",
+          "note": "Fu Pi's accession is explicitly placed in Taiyuan 10; no Western-year conversion is asserted here."
+        },
+        {
+          "unit": "s0127",
+          "note": "The source states that Fu Pi's reign lasted two years."
+        },
+        {
+          "unit": "s0160",
+          "note": "Fu Deng's accession is explicitly placed in Taiyuan 11; no Western-year conversion is asserted here."
+        },
+        {
+          "unit": "s0255",
+          "note": "Fu Deng describes his armed service as nearly one ji (one twelve-year cycle), an approximate duration rather than exactly twelve years."
+        },
+        {
+          "unit": "s0280",
+          "note": "The source states that Fu Deng reigned nine years and died aged fifty-two."
+        },
+        {
+          "unit": "s0284",
+          "note": "The retrospective summary dates Fu Jian the founder's accession to Yonghe 7, says Former Qin lasted five generations and forty-four years, and places its end in Taiyuan 19; no Western years are added."
+        }
+      ],
+      "datePacketPath": "research/people/checkpoints/jinshu115-author-residual-20261123/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-bounded-lookup-and-independent-canonical-review",
+      "reason": "PEOPLE_LOOKUP_TOKEN unavailable; duplicate local clusters (Mao Xing, Empress Mao, Bai Weiping) not merged.",
+      "extractionIssues": [
+        {
+          "id": "jinshu-115-ex-001",
+          "unit": "s0045",
+          "people": [
+            "p032"
+          ],
+          "issue": "The alias \"Fu Yin\" has the wrong surname.",
+          "reason": "The person is Liang Xi's son Liang Yin, established in s0043; the erroneous alias follows the translation defect."
+        },
+        {
+          "id": "jinshu-115-ex-002",
+          "unit": "s0047",
+          "people": [
+            "p036"
+          ],
+          "issue": "Suo Pan's office 建威 is missing and was mistaken for part of an administrative jurisdiction.",
+          "reason": "The source gives Suo Pan the military title General Who Establishes Might in addition to Administrator of Xijun."
+        },
+        {
+          "id": "jinshu-115-ex-003",
+          "unit": "s0082",
+          "people": [
+            "p065",
+            "p100",
+            "p120"
+          ],
+          "issue": "Bai Weiping's full name is mis-segmented as Wei Ping, with the incomplete alias Bai Wei.",
+          "reason": "The first full mention is 臨清柏衛平: surname 柏, given name 衛平. Later 衛平 mentions refer to the same Bai Weiping."
+        },
+        {
+          "id": "jinshu-115-ex-004",
+          "unit": "s0145",
+          "people": [
+            "p117"
+          ],
+          "issue": "The death claim \"Died besieged by Yao Shuode\" is not what the source says and conflicts with the explicit account.",
+          "reason": "s0145 only introduces Mao Xing's dying speech during the conflict; s0086 explicitly says the Di of Fuhan killed him, which p049 records correctly."
+        },
+        {
+          "id": "jinshu-115-ex-005",
+          "unit": "s0175",
+          "people": [
+            "p129"
+          ],
+          "issue": "Empress Mao is assigned male sex.",
+          "reason": "The source explicitly identifies Mao as Fu Deng's wife and empress."
+        },
+        {
+          "id": "jinshu-115-ex-006",
+          "unit": "s0217",
+          "people": [
+            "p168"
+          ],
+          "issue": "The later extraction segment again assigns male sex to Empress Mao.",
+          "reason": "The unit explicitly identifies Mao as Fu Deng's wife, and s0175 had already established her as his empress."
+        },
+        {
+          "id": "jinshu-115-ex-007",
+          "unit": "s0179",
+          "people": [],
+          "issue": "The Gengshi Emperor (聖公, Liu Xuan) is omitted.",
+          "reason": "The unit explicitly invokes Guangwu's deference to 聖公 as its historical precedent."
+        },
+        {
+          "id": "jinshu-115-ex-008",
+          "unit": "s0238",
+          "people": [],
+          "issue": "Shun (舜) is omitted.",
+          "reason": "The source explicitly pairs Yao and Shun (堯、舜), but only Yao was extracted."
+        }
+      ],
+      "missingPeoplePendingAuthoring": [
+        {
+          "unit": "s0179",
+          "zh": "聖公",
+          "note": "Gengshi Emperor (Liu Xuan) omitted"
+        },
+        {
+          "unit": "s0238",
+          "zh": "舜",
+          "note": "Shun omitted beside Yao"
+        }
+      ],
+      "lookupBlocked": true
+    }
+  },
+  "sourceReviewCoverage": {
+    "noDefectUnitsCount": 321,
+    "summary": "Reviewed all 342 units and both English fields, plus the complete extraction and its 0 existing proposed repairs. Found 27 conservative translation repairs across 17 units, 8 extraction issues, and 6 chronology notes; 321 units had no identified translation or extraction defect. The most consequential defects are the s0273 casualty fraction (20–30%, not two-thirds), the mis-segmentation of Bai Weiping's name, the wrong surname for Liang Yin, omission of the Gengshi Emperor and Shun from extraction, and male-sex claims for Empress Mao. No Western years were invented."
+  }
+}

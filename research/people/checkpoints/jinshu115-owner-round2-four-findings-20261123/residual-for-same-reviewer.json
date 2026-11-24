@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu115-owner-round2-four-findings-residual",
+  "book": "jinshu",
+  "chapter": "115",
+  "stagingPr": 5470,
+  "stagingPinBefore": "6cc3b19eade8f36eeb36ca1026344d678bc20d00",
+  "independentFindingsPr": 5483,
+  "independentFindingsCommit": "d78592a9b663cf5ee1200f0c73b7ea2560dcaef1",
+  "continuesReviewerHint": "cursor/jinshu-115-independent-review-eaaf",
+  "repairs": [
+    {
+      "items": ["claim-513", "claim-514", "claim-515"],
+      "persons": ["p168", "p157", "p158"],
+      "evidence": ["s0217"],
+      "before": "Killed by Yao Chang at Dajie.",
+      "after": "Killed by Yao Chang at the camp 大界營.",
+      "rationale": "Preserve exact Chinese 大界營 as a camp/place description; do not invent unsupported bare Dajie."
+    },
+    {
+      "items": ["claim-625"],
+      "persons": ["p185"],
+      "beforeEvidence": ["s0279"],
+      "afterEvidence": ["s0279", "s0280"],
+      "statement": "Killed in battle by Yao Xing, aged 52.",
+      "rationale": "Keep s0279 登被殺 as death evidence; cite s0280 時年五十二 for age fifty-two."
+    }
+  ],
+  "preserved": {
+    "translationRepairsAccepted": 26,
+    "translationRepairRejected": ["jinshu:115:r0025"],
+    "newPeople": ["p233", "p234"],
+    "localSamePersonContinuity": true
+  },
+  "pins": {
+    "sourceHash": "sha256:d381274a8ce568a13440bea3a5958f0a9472e85187b0270506b15f59fecdf00b",
+    "priorExtractionHash": "sha256:811bbbd9abd64152e3ec18a98b9d715c85e777a275a5efae3155ee7a21908190",
+    "extractionHash": "sha256:2ff20474cbd1c5548f4f485ccf36c84221b72766ef324d4ce3e36b2b1d416d4a"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 115",
+    "passed": true,
+    "stats": "234 people, 1090 mentions, 1373 claims, 26 applied repairs, 27 editorial decisions"
+  },
+  "dateApproval": "NONE",
+  "identityPublication": "PENDING",
+  "queueEdited": false,
+  "merged": false,
+  "nextAsk": "Same independent chronology reviewer: recheck the four repaired death claims against s0217 / s0279 / s0280; preserve prior editorial and local continuity approvals from round 2."
+}
