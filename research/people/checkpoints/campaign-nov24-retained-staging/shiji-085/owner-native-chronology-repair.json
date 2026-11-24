@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "shiji",
+    "chapter": "085"
+  },
+  "ownerAgentId": "bc-d07043cc-9acf-4e58-b237-fd49d94bdcdd",
+  "idempotencyKey": "2ff3605f0404805547b12640da9a4e77d12ae80c59ce9aeb683f87eb18932639",
+  "campaign": "campaign-nov24-retained-staging",
+  "stageRevision": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "01817036feac64f26b413578309a003639adb0c6",
+  "priorOwnerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-085/owner-handoff.json",
+    "sha256": "d484e473eb2a8296540a53cbca14d1a42a45c05b6280db2468f9652ef4a8e173"
+  },
+  "branch": "cursor/nov24-retained-owner-native-date-shiji-085-bdcdd",
+  "pinnedDateAudit": {
+    "path": "data/people/date-audits/shiji/085.json",
+    "sha256": "62badd20046c085cce5138eb8d42e84e71b76ed1dbae899b732c26397c847d72",
+    "gitBlob": "2c8106d57c6393c78df7bf4feab9c825d6bfae3f",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-24T01:20:00Z",
+    "bytesPreserved": true,
+    "approvalNotMutated": true
+  },
+  "inputBlobWitness": {
+    "source": "756b0c6368b20a46faa3177fc4fe1914ca70ee66",
+    "extraction": "4a3af09dfa0958d14dd08b8c7b9cb9216c89b6c6",
+    "dateAudit": "2c8106d57c6393c78df7bf4feab9c825d6bfae3f",
+    "editorial": "6a9914c127f9d9a47923deb6538f6a0255819e4f"
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "items": [
+        "claim-28",
+        "claim-154"
+      ],
+      "problem": "歲餘 is a relative duration after a prior event, not an exact BC 236–235 interval.",
+      "sourceQuotes": [
+        {
+          "unitId": "s0082",
+          "zh": "秦王十年十月"
+        },
+        {
+          "unitId": "s0084",
+          "zh": "歲餘，諸侯賓客使者相望於道，請文信侯。"
+        }
+      ],
+      "disposition": "replace-false-interval-with-unresolved-relative"
+    },
+    {
+      "findingIndex": 1,
+      "items": [
+        "claim-68",
+        "claim-69",
+        "hints-p020",
+        "hints-p021",
+        "p020",
+        "p021"
+      ],
+      "problem": "The historian and Confucius references are undated allusions, not chapter-internal life chronology.",
+      "sourceQuotes": [
+        {
+          "unitId": "s0093",
+          "zh": "太史公曰"
+        },
+        {
+          "unitId": "s0099",
+          "zh": "孔子"
+        }
+      ],
+      "disposition": "undated-source-attestation-and-clear-hints"
+    }
+  ],
+  "nativeDateRepairProposal": {
+    "sourceHash": "sha256:38867481be308c0506679753f48da231dabf5d915dfc354834df9a74f0ac333b",
+    "extractionHash": "sha256:5a7ef9d139e82dd31b8ddc42226ed7e89c44e317cc7639a8230140d4ebf0deb5",
+    "changes": [
+      {
+        "kind": "replace",
+        "id": "claim-28",
+        "before": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "歲餘"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 236,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 235,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0084",
+            "s0090"
+          ]
+        ],
+        "after": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "歲餘"
+            },
+            "unresolved": true,
+            "unresolvedReason": "歲餘 is a relative duration after the prior dated event (秦王十年十月, BC 237 in s0082); the chapter does not supply exact calendar endpoints for this interval.",
+            "event": "After more than a year, envoys of the feudal lords lined the roads (s0084); Wei Bao later died by poison (s0090)."
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0084",
+            "s0090"
+          ]
+        ],
+        "reason": "歲餘 marks relative time after BC 237; converting it to exact BC 236–235 invents precision the source does not state."
+      },
+      {
+        "kind": "replace",
+        "id": "claim-154",
+        "before": [
+          "p001",
+          "death",
+          {
+            "manner": "suicide by poison",
+            "cause": "fear of execution",
+            "dateContext": {
+              "sourceDate": {
+                "text": "歲餘"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "BC",
+                  "year": 236,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "BC",
+                  "year": 235,
+                  "precision": "year"
+                }
+              }
+            }
+          },
+          "explicit",
+          [
+            "s0090"
+          ]
+        ],
+        "after": [
+          "p001",
+          "death",
+          {
+            "manner": "suicide by poison",
+            "cause": "fear of execution",
+            "dateContext": {
+              "sourceDate": {
+                "text": "歲餘"
+              },
+              "unresolved": true,
+              "unresolvedReason": "歲餘 is a relative duration after the prior dated event (秦王十年十月, BC 237 in s0082); the chapter does not supply exact calendar endpoints for this interval.",
+              "event": "After more than a year, envoys of the feudal lords lined the roads (s0084); Wei Bao later died by poison (s0090)."
+            }
+          },
+          "explicit",
+          [
+            "s0090"
+          ]
+        ],
+        "reason": "Wei Bao’s death is dated only by 歲餘 after the prior event; remove the false BC 236–235 Western interval from the death context."
+      },
+      {
+        "kind": "replace",
+        "id": "claim-68",
+        "before": [
+          "p020",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "太史公曰"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 100,
+              "precision": "year"
+            }
+          },
+          "explicit",
+          [
+            "s0093"
+          ]
+        ],
+        "after": [
+          "p020",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "The Grand Historian authorial note (太史公曰) in this chapter comments without regnal year or calendar dating."
+          },
+          "explicit",
+          [
+            "s0093"
+          ]
+        ],
+        "reason": "太史公曰 in s0093 supplies no dated temporal wording; BC 100 active dating is unsupported in this chapter."
+      },
+      {
+        "kind": "replace",
+        "id": "claim-69",
+        "before": [
+          "p021",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "孔子"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 551,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 479,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit",
+          [
+            "s0099"
+          ]
+        ],
+        "after": [
+          "p021",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "Confucius (孔子) is cited as a moral exemplar in s0099 without chapter-internal life dates."
+          },
+          "explicit",
+          [
+            "s0099"
+          ]
+        ],
+        "reason": "孔子 here is an undated classical allusion, not a dated biography within this narrative."
+      },
+      {
+        "kind": "hints",
+        "personId": "p020",
+        "before": [
+          "BC 100"
+        ],
+        "after": [],
+        "reason": "Clear invented BC 100 hint for undated Grand Historian note."
+      },
+      {
+        "kind": "hints",
+        "personId": "p021",
+        "before": [
+          "BC 551-479"
+        ],
+        "after": [],
+        "reason": "Clear invented Confucius lifespan hint derived from external knowledge, not this chapter."
+      }
+    ]
+  },
+  "claimEditsSkipped": [],
+  "skipClaimReason": null,
+  "affectedPersonIds": [
+    "p001",
+    "p020",
+    "p021"
+  ],
+  "affectedItemIds": [
+    "claim-28",
+    "claim-154",
+    "claim-68",
+    "claim-69",
+    "hints-p020",
+    "hints-p021"
+  ],
+  "definiteTranslationRepairs": [],
+  "intactApprovals": {
+    "dateAuditUnmodified": true,
+    "editorialUnmodified": true,
+    "sourceUnmodified": true,
+    "extractionUnmodifiedOnBranch": true
+  },
+  "nativeValidation": {
+    "applyDateRepairProposal": "passed",
+    "peopleValidateExtraction": "../../../tmp/shiji-085-repair-candidate.json: ok (21 people, 385 mentions, 255 claims, 434 candidates)",
+    "peopleValidateExtractionCommand": "npm run people:validate-extraction -- <candidate-after-shiji-085.json>",
+    "candidateExtractionHashAfterRepair": "6b022f59a1f67c7b03cc8a7272956088e11b785253594eb0a09395b5643a6bb1"
+  },
+  "residualHolds": [],
+  "proofGaps": [],
+  "notes": "[CF-Pages-Skip] Owner native chronology repair proposal only; host assembles and validates; sealed audit bytes unchanged."
+}
