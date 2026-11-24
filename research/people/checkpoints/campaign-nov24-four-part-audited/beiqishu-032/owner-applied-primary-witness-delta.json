@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-applied-primary-witness-delta",
+  "chapterKey": "beiqishu/032",
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "idempotencyKey": "dcb2ee832b8d61d67e363161bda46ad2f54081b59c135ceec3d87ef0a62945ed",
+  "ownerRevision": "302b20c19108c9a599ca6d90bf8050ce0b1986a5",
+  "ownerHead": "921f8bb796105a0c4f76193b35bde6686b4bbe06",
+  "ownerProposalSha256": "e209b0439dcb4383b260bdda6cae0d4c78b64d1bd1e3ffda271a936fc367aa71",
+  "ownerProposalHead": "c2379706c0bd5e6055d8367a7d6c7deef54e682a",
+  "priorIndependentReviewSha256": "89c0791ff064f33f5ecaf63ec84b1b17e2318612ed299e0a25f7d1b3c832ca34",
+  "priorIndependentReviewHead": "a6f7cd2fdd05ec20881befd9125bd2ee388a40f5",
+  "independentReviewerAgentId": "bc-002dbbab-2d33-4327-a1cc-0be5279ab140",
+  "beforeExtractionSha256": "sha256:ca79682a6ed28edd8f776404c841299985749fa81dd88f6b757aba9f19cde4fd",
+  "afterExtractionSha256": "sha256:45f2c2de6ce58ec12c7f66512fede8428aef14de63645b6f6d6447f314fedbb8",
+  "extractionPath": "data/people/extractions/beiqishu/032.json",
+  "inputBlobWitnessUnchanged": {
+    "source": "013ec124a3d6a0f75446162e72c053b8960f9f5a",
+    "dateAudit": "62c22a6d7c34d3f1f24c7b5af66ca21c008e54be",
+    "editorial": "e8a395216cb608437287f8d7d61b5faac20acaec"
+  },
+  "changedPersonIds": [
+    "p073"
+  ],
+  "changedClaimIds": [
+    "beiqishu:032:p073:sex",
+    "beiqishu:032:p073:attestation",
+    "beiqishu:032:p071:family-relationship:spouse-of:p073",
+    "beiqishu:032:p071:family-relationship:kin-of:p072",
+    "beiqishu:032:p072:family-relationship:parent-of:p073"
+  ],
+  "patchSummary": "Removed unwitnessed daughter placeholder p073 (珉之女 / 裴景暉妻); retained explicit s0195 婿 link between Pei Jinghui (p071) and Wang Min (p072) without intermediaryPersonIds.",
+  "closedCaseIds": [
+    "sha256:077a44c0d6ef2a0da9ae17d892cba25d0d6b2a8c5192d31b1855866b7eb7c423"
+  ],
+  "chronologyDelta": {
+    "chronologyCompleted": false,
+    "status": "stale-person-rows-after-extraction-retract",
+    "requiredHostFollowUp": {
+      "target": "data/people/date-audits/beiqishu/032.json",
+      "removePersonCheckIds": [
+        "hints-p073",
+        "p073"
+      ],
+      "note": "Independent witness delta requested person-row withdrawal only; date audit blob unchanged in this commit."
+    }
+  },
+  "nativeExtractionValidation": {
+    "passed": true,
+    "command": "validateCompactPeopleExtraction with packet from data/beiqishu/032.json",
+    "stats": {
+      "units": 264,
+      "people": 100,
+      "mentions": 674,
+      "claims": 1310
+    },
+    "scopedChapterValidation": {
+      "command": "npm run people:validate -- --book beiqishu --chapter 032",
+      "passed": true,
+      "summary": "1 claim retraction(s), 2 claim revision(s)"
+    }
+  },
+  "sourceModified": false,
+  "notes": "[CF-Pages-Skip] Applied independently approved supportedPatch only; canonical owner PR head unchanged."
+}
