@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "stale-date-recovery-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "115"
+  },
+  "ownerAgentId": "bc-4f27effc-3b5c-4adf-ac00-6f5e76da3109",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "pinnedInputs": {
+    "stagingGitBlobs": {
+      "source": "91aebe6f4d68aecf840a61140d9b779d73a2b1cb",
+      "extraction": "6bc1342061fa1ee55406235029e44969eabdbbb3",
+      "date": "4f9531c35a4883c4906e8e6b92a89068e1f83cca",
+      "editorial": "a9c157be5513c43a38b93054dcca5e14f30cd26b"
+    },
+    "source": "sha256:d109b8cac3f4d40188bc03f437ac2de4b50f87107433c3b079be06bca0ccd9f4",
+    "extraction": "sha256:172655819606caf13f44e2aa9c037d7096d5e970b3e2789fafa382be5ce91fe3",
+    "editorial": "sha256:d517b4a231eb611b4f62d5f152fc46190ccba2fbced6c75279503ac256813018",
+    "dateAudit": "sha256:9f62c5bedc612ce998a334e97f0f49d3deb05a1d722a4fffcb0923e3cf72b5bf"
+  },
+  "priorDateApproval": {
+    "status": "audited",
+    "reviewedAt": "2026-09-29T18:10:10.636Z",
+    "extractionHash": "sha256:6666ef0232c71f9cd0666fac4815a8ccb2c23c37747fa6cc4fff7ea980fe04ef",
+    "sourceHash": "sha256:4afe181cba809368d8663ffb06b92d01909af832bb1b4331a10cf5aeed6b6225",
+    "findings": 0,
+    "preservedPath": "data/people/date-audits/jiuwudaishi/115.json",
+    "staleReason": "extractionHash changed; sourceHash unchanged"
+  },
+  "sealedExtractionRecovery": {
+    "matched": true,
+    "recovery": "data/people/date-repairs/jiuwudaishi/115/staged-candidate-6ab279d18f81e9abd21e.json#candidate",
+    "extractionHash": "sha256:6666ef0232c71f9cd0666fac4815a8ccb2c23c37747fa6cc4fff7ea980fe04ef",
+    "verified": true
+  },
+  "currentExtraction": {
+    "extractionHash": "sha256:fe3e3db66fd86381e21322296f79fabea1b34a9a43fc3fbabbfcb5d631391221",
+    "sourceHash": "sha256:4afe181cba809368d8663ffb06b92d01909af832bb1b4331a10cf5aeed6b6225"
+  },
+  "changedChronologyFacts": [],
+  "taxonomyOnlyChanges": [
+    {
+      "id": "claim-242",
+      "before": {
+        "sourceDate": {
+          "text": "顯德二年"
+        },
+        "western": {
+          "era": "AD",
+          "year": 955,
+          "precision": "year"
+        },
+        "receptionType": null,
+        "taxonomyKind": "posthumous-reference",
+        "evidence": [
+          "s0015"
+        ],
+        "english": null
+      },
+      "after": {
+        "sourceDate": {
+          "text": "顯德二年"
+        },
+        "western": {
+          "era": "AD",
+          "year": 955,
+          "precision": "year"
+        },
+        "receptionType": null,
+        "taxonomyKind": "retrospective-reference",
+        "evidence": [
+          "s0015"
+        ],
+        "english": null
+      }
+    }
+  ],
+  "structuralPacketChanges": [],
+  "sourceOrEditorialDefects": [],
+  "proofReuseCandidate": {
+    "eligible": true,
+    "mechanism": "Independent reviewer may adopt native combined-curation repin only after confirming taxonomy-only or metadata-only deltas; owner does not approve.",
+    "condition": "Zero factual chronology deltas versus sealed packet; prior audited report had zero findings."
+  },
+  "minimumContinuation": {
+    "date": "Independent reviewer verifies taxonomy-only reception relabeling (posthumous → retrospective) against primary evidence; if confirmed, native repin at current extractionHash may close stale status without re-reading entire chapter.",
+    "identity": "No identity merge/split edits in this handoff; continue from validated chapter extraction at current hash."
+  },
+  "nativeValidation": {
+    "people:dates:verify": {
+      "status": "stale",
+      "auditVersion": 1
+    },
+    "people:validate": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 115",
+      "passed": true
+    },
+    "people:validateOutput": "Scoped person data validation passed for jiuwudaishi/115: 1 extraction(s), 95 local people, 285 mentions, 437 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 13 person record(s) without an attestation, 13 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book jiuwudaishi --chapter 115 --out <path>",
+      "itemCount": 328,
+      "peopleCount": 95,
+      "unitCount": 193
+    }
+  },
+  "independentApprovalIssued": false,
+  "notes": "Historical editorial, extraction, and date-audit files are not overwritten in this handoff."
+}
