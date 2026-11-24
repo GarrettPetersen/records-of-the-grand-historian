@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "beiqishu/047",
+  "reviewerAgentId": "bc-6e0f06ce-d521-43f2-ab36-8b8eb89b54e8",
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "ownerRevision": "a1b4b2df6d83080db6708d6bf4538211da1ce579",
+  "proposalSha256": "sha256:3421433887d899cde10d7b298e43c21d36c57b60dabae3de58f211e938396f93",
+  "decisions": [
+    {
+      "caseId": "sha256:40b2e28e65a2e0939b393e9f31c1669c15ae82c4e716d10bd3644ef97033df48",
+      "verdict": "approve-delta",
+      "priorIndependentVerdict": "hold",
+      "priorReportCommit": "ccd9254b48e1ee0759afcab26a74bbfc0e7554ab",
+      "priorHoldReasonMatchesProposal": true,
+      "operationsApproved": [
+        {
+          "op": "remove-person",
+          "personId": "p079",
+          "approved": true,
+          "rationale": "s0198 attests 義雲之姑卽子默祖母 only. Substrings 子默母 and 鄭子默母 are absent from chapter primary Chinese (verified on sealed data/beiqishu/047.json). English literal and idiomatic fields already render grandmother kinship only; no English change required."
+        },
+        {
+          "op": "strip-related",
+          "personId": "p078",
+          "removedRelated": ["p079"],
+          "approved": true,
+          "rationale": "p079 is descriptive inference, not a source person."
+        },
+        {
+          "op": "strip-related",
+          "personId": "p080",
+          "removedRelated": ["p079"],
+          "approved": true,
+          "rationale": "p080 retains explicit 姑 and 子默祖母 on s0198."
+        },
+        {
+          "op": "claim-retraction",
+          "subject": "p078",
+          "predicate": "family-relationship",
+          "approved": true,
+          "verifiedBefore": {
+            "relation": "child-of",
+            "personId": "p079",
+            "kinshipTerm": { "zh": "母", "en": "mother" },
+            "evidence": ["s0198"]
+          },
+          "verifiedAfter": null,
+          "rationale": "Mother kinship on s0198 is not source-supported; grandmother line is on p080."
+        },
+        {
+          "op": "claim-retraction",
+          "subject": "p079",
+          "predicate": "family-relationship",
+          "approved": true,
+          "verifiedBefore": {
+            "relation": "child-of",
+            "personId": "p080",
+            "kinshipTerm": { "zh": "女", "en": "daughter" },
+            "evidence": ["s0198"]
+          },
+          "verifiedAfter": null,
+          "rationale": "Misreads 祖母 as licensing an unnamed daughter/mother person; redundant with remove-person but consistent."
+        }
+      ],
+      "operationsRejected": [],
+      "sourceEvidence": {
+        "sealedInputBlobsVerified": {
+          "data/beiqishu/047.json": "24c26f830e368760238b86a9a5426bf06b260396",
+          "data/people/extractions/beiqishu/047.json": "b28a3e787c5b9824261234060a7ecf9790cd7b89",
+          "data/people/date-audits/beiqishu/047.json": "005f5b6ae9d56fc47195346b6699f87c802fd46d",
+          "data/people/editorial-decisions/beiqishu/047.json": "0efd49823225bb6495f83bfa67f65a853ce10b12"
+        },
+        "unitId": "s0198",
+        "zhLiteral": "鄭子默正被任用，義雲之姑卽子默祖母，遂除度支尚書，攝左丞。",
+        "witnessesVerified": [
+          { "localId": "beiqishu:047:p078", "quote": "鄭子默" },
+          { "localId": "beiqishu:047:p080", "quote": "子默祖母" },
+          { "localId": "beiqishu:047:p080", "quote": "義雲之姑" }
+        ],
+        "absentSubstrings": ["子默母", "鄭子默母"],
+        "englishFields": {
+          "literal": "Zheng Zimo was then in active use; Yi Yun's paternal aunt was Zimo's grandmother, and he was therefore made Minister of Revenue and acting Left Vice Director.",
+          "idiomatic": "Zheng Zimo was then in favor; Yiyun's aunt was Zimo's grandmother, so he was made minister of revenue and acting left vice director.",
+          "changeRequired": false
+        },
+        "inferenceVsContradiction": "Owner and independent hold identify descriptive inference (entailing a mother from an aunt–grandmother clause), not a second readable person in the Chinese. This is a concrete false-person / wrong-kinship contradiction, not legitimate cross-chapter ambiguity."
+      },
+      "dependencyImpact": {
+        "extraction": "Removes p079 row, name claim 子默母 (en: Mother of Zheng Zimo), attestation/sex/role claims on s0198, and relatedLocalPeople edges. p078 and p080 remain with supported s0198 evidence.",
+        "chronology": "Date audit entries claim-79 (p079 attestation on s0198), hints-p079, and person review id p079 become stale after apply; p078 and p080 s0198 attestations (claim-78, claim-80, etc.) do not depend on p079 and need no semantic change. Host should reconcile p079 date-audit rows on apply, not re-audit the full chapter.",
+        "identity": "Transport case per_EC0TRZ54QD8E1YX6EEGC was single-local p079; after apply the hold case should disappear from chapter coverage and canonical membership for that id is a host registry step only. p080 case and anchors elsewhere on transport parts are unaffected. No merge of p079 into p080.",
+        "translations": "No unit translation edits; both en fields already match Chinese.",
+        "unaffectedCases": "Other 90 identity transport cases and independent approve rows unchanged."
+      },
+      "remainingHold": null,
+      "remainingHoldNote": "After host apply and people:validate, independent identity can re-certify p078/p080 on s0198; no mother record should remain.",
+      "repairGuidance": "If apply fails validation, inspect orphan mentions/claims referencing p079 beyond the five listed operations; do not invent a mother surface. Do not alter p004 kin-of p080 (姑) on s0198."
+    }
+  ]
+}
