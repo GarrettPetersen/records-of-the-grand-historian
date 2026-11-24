@@ -66,3 +66,7 @@ See `research/people/jinshu078-seven-chronology-recheck-ccbfbfc9-20261124/`.
 ## Verify seven undated @ 54d2e91c
 
 See `research/people/jinshu078-seven-undated-verify-54d2e91c-20261124/`.
+
+## Independent 28-group / 109 decisions @ 6bb589b7
+
+See `research/people/jinshu078-unresolved-109-group-decisions-20261124/`.
