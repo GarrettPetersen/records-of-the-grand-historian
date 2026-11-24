@@ -21,6 +21,37 @@ jobs:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
       - run: node scripts/validate-people-extraction.mjs --self-test
+      - name: Verify and seal exact historical independent proof
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          import assert from 'node:assert/strict';
+          import {identityArtifactHash as hash} from './scripts/lib/people-identity-artifacts.mjs';
+          import {captureIdentityProofComponent} from './scripts/lib/people-identity-proof-composition.mjs';
+          import {identityReviewTransportPolicy} from './scripts/lib/people-identity-review-transport.mjs';
+          const root='repos/'+process.env.GITHUB_REPOSITORY+'/git/blobs/';
+          const read=id=>Buffer.from(JSON.parse(execFileSync('gh',['api',root+id],{encoding:'utf8',maxBuffer:6e6})).content,'base64');
+          const packet=read('b7089fd0a24f6638992921160a799e96d2869120');
+          const report=read('fc411fa406382e5de51c71040e4372adb0c2615e');
+          const envelope=read('e413743d4ccc01e98e686221898178e37a3bbf2d');
+          const adopted=JSON.parse(read('e1140dac4b40bc04c868ab5d3760efd68c9d842f'));
+          const job=JSON.parse(read('0e68d96fce006fa9652f07a04513b3a2cc622247'));
+          assert.equal(job.origin.actualDecisionSha256,'sha256:'+hash(JSON.stringify(adopted)));
+          assert.equal(adopted.verdict,'approve'); assert.equal(adopted.reviewerAgentId,job.agentId);
+          assert.equal(job.origin.reviewPacketSha256,'sha256:'+hash(envelope));
+          assert.equal(job.sourcePacketSha256,hash(packet)); assert.equal(job.reportSha256,hash(report));
+          const transport=Buffer.from(JSON.stringify(JSON.parse(envelope).source)+'\n');
+          job.transportSha256=hash(transport);
+          const {sourcePlan,component}=captureIdentityProofComponent(packet,report,transport,job,identityReviewTransportPolicy(768*1024));
+          assert.equal(component.id,'sha256:56521780bcf6790f0e90fc1525b630558c3dfdd280da3aee312913e29150a570');
+          assert.equal(component.receipt.reviewedCaseIds.length,72);
+          const retained={schemaVersion:1,kind:'chapter-identity-review-composition',scope:sourcePlan.scope,plan:sourcePlan,sourcePlans:[],components:[component],selections:[]};
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/retained-053.json',JSON.stringify(retained)+'\n',{flag:'wx'});
+          JS
       - name: Prepare one source-pinned registry and the protected chapter dossier
         run: |
           set -euo pipefail
@@ -37,7 +68,7 @@ jobs:
           import path from 'node:path';
           import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
           for (const chapter of ['053']) {
-            const result=await prepareChapterIdentityReview({book:'jinshu',chapter,sourceRevision:process.env.SOURCE,registry:process.env.REGISTRY,out:path.join(process.env.RUNNER_TEMP,'identity-'+chapter),transportMaxBytes:384*1024});
+            const result=await prepareChapterIdentityReview({book:'jinshu',chapter,sourceRevision:process.env.SOURCE,registry:process.env.REGISTRY,out:path.join(process.env.RUNNER_TEMP,'identity-'+chapter),retainedComposition:path.join(process.env.RUNNER_TEMP,'retained-053.json'),transportMaxBytes:384*1024});
             console.log(JSON.stringify(result));
           }
           JS
