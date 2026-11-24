@@ -1,0 +1,1039 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "068"
+  },
+  "ownerAgentId": "bc-a13ba65a-bbe0-4230-b2f3-0d0b0f356206",
+  "worker": "cursor-nov24-retained-staging-w9-o7",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "aee7588e4635b0878a3a0d9465b4391e04552152b3a6bbcda19aef20430b8fdf",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-068-56206",
+  "inputBlobWitness": {
+    "source": "dc927e78754b188cca6fa05bd5203954d911fa81",
+    "extraction": "45c02da84c47bf0c52f0c019812eee1c30ac8c42",
+    "dateAudit": "3256cce49e14ba9ad27fe7eddedc89d654f76535",
+    "editorial": "4b375a9cf8ae06b46d6d25549050b2eb79e4254f"
+  },
+  "sealedInputs": {
+    "source": "sha256:7c388292ea2368d8c0be97a04c6a63bd5b982221dddad349879a10906ceff769",
+    "extraction": "sha256:fec491c7690b56ea576717cdb10166ee991bd46b7ea20fea40830a39d361c076",
+    "dateAudit": "sha256:40ccc2488a1c39b9ef8fc81e00269a2b5ae1941c34de1ee8d200fcb7dc812615",
+    "editorial": "sha256:76aa65d207a934e568f9e1e2bdb77e53fc782361b13e1fc02a384606df98d47f"
+  },
+  "dateAuditReceipt": {
+    "status": "research-blocked",
+    "contentSha256": "sha256:40ccc2488a1c39b9ef8fc81e00269a2b5ae1941c34de1ee8d200fcb7dc812615",
+    "auditVersion": 1,
+    "reviewedAt": "2026-09-23T13:27:19.792Z",
+    "findingsCount": 95,
+    "affectedItems": 95,
+    "preservedNativeReportBytes": true,
+    "notReapproved": true
+  },
+  "sourceCoverage": {
+    "reviewedChineseAndBothEnglishFields": true,
+    "sentenceCount": 191,
+    "bothEnglishFields": 191,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "extractionByteCount": 58804,
+    "reviewedUnitsInDateAudit": 191,
+    "summary": "Reviewed all 191 Chinese units, 69 date and hint records, and 26 people. The chapter supplies relative, regnal, genealogical, and retrospective temporal contexts, but no self-sufficient absolute Western-date personal endpoints. All current chronology records therefore remain source-specific research holds rather than inferred approvals."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 068",
+    "summary": "Scoped person data validation passed for shiji/068: 1 extraction(s), 26 local people, 329 mentions, 257 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 068",
+      "status": "research-blocked",
+      "contentSha256": "sha256:40ccc2488a1c39b9ef8fc81e00269a2b5ae1941c34de1ee8d200fcb7dc812615",
+      "findings": 95,
+      "affectedItems": 95
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Reviewed all 191 Chinese units, 69 date and hint records, and 26 people. The chapter supplies relative, regnal, genealogical, and retrospective temporal contexts, but no self-sufficient absolute Western-date personal endpoints.",
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned staging blobs verified; independent date report remains research-blocked at sha256:40ccc2488a1c39b9ef8fc81e00269a2b5ae1941c34de1ee8d200fcb7dc812615; owner did not overwrite audit hashes or declare approval. Reviewed all 191 Chinese units, 69 date and hint records, and 26 people. The chapter supplies relative, regnal, genealogical, and retrospective temporal contexts, but no self-sufficient absolute Western-date personal endpoints. 1 definite translation repair(s) documented for host application without altering pinned inputs in this pass.",
+  "definiteTranslationRepairs": [
+    {
+      "book": "shiji",
+      "chapter": "068",
+      "unitId": "s0126",
+      "field": "structure",
+      "before": "literal and idiomatic stored on sentence root without translations[] entry",
+      "after": "Move existing literal and idiomatic into translations[{lang:\"en\",translator:\"Garrett M. Petersen (2026)\",...}] without altering English text",
+      "reason": "s0126 retains English on the sentence root while every other unit uses translations[]; validators scanning lang=en miss this unit even though both fields are populated.",
+      "sourceWitness": {
+        "citation": "s0126",
+        "excerpt": "孔丘有言曰：『推賢而戴者進，聚不肖而王者退。』"
+      }
+    }
+  ],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "shiji:068:hold-1",
+      "itemIds": [
+        "claim-30"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-30 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-2",
+      "itemIds": [
+        "claim-31"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-31 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-3",
+      "itemIds": [
+        "claim-32"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-32 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-4",
+      "itemIds": [
+        "claim-33"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-33 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-5",
+      "itemIds": [
+        "claim-34"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-34 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-6",
+      "itemIds": [
+        "claim-35"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-35 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-7",
+      "itemIds": [
+        "claim-36"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-36 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-8",
+      "itemIds": [
+        "claim-37"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-37 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-9",
+      "itemIds": [
+        "claim-38"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-38 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-10",
+      "itemIds": [
+        "claim-39"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-39 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-11",
+      "itemIds": [
+        "claim-40"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-40 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-12",
+      "itemIds": [
+        "claim-41"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-41 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-13",
+      "itemIds": [
+        "claim-42"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-42 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-14",
+      "itemIds": [
+        "claim-43"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-43 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-15",
+      "itemIds": [
+        "claim-44"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-44 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-16",
+      "itemIds": [
+        "claim-45"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-45 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-17",
+      "itemIds": [
+        "claim-46"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-46 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-18",
+      "itemIds": [
+        "claim-47"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-47 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-19",
+      "itemIds": [
+        "claim-48"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-48 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-20",
+      "itemIds": [
+        "claim-49"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-49 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-21",
+      "itemIds": [
+        "claim-50"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-50 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-22",
+      "itemIds": [
+        "claim-51"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-51 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-23",
+      "itemIds": [
+        "claim-52"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-52 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-24",
+      "itemIds": [
+        "claim-53"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-53 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-25",
+      "itemIds": [
+        "claim-54"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-54 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-26",
+      "itemIds": [
+        "claim-55"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-55 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-27",
+      "itemIds": [
+        "claim-56"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-56 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-28",
+      "itemIds": [
+        "claim-57"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-57 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-29",
+      "itemIds": [
+        "claim-58"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-58 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-30",
+      "itemIds": [
+        "claim-59"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-59 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-31",
+      "itemIds": [
+        "claim-76"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-76 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-32",
+      "itemIds": [
+        "claim-78"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-78 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-33",
+      "itemIds": [
+        "claim-81"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-81 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-34",
+      "itemIds": [
+        "claim-91"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-91 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-35",
+      "itemIds": [
+        "claim-105"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-105 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-36",
+      "itemIds": [
+        "claim-113"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-113 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-37",
+      "itemIds": [
+        "claim-123"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-123 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-38",
+      "itemIds": [
+        "claim-133"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-133 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-39",
+      "itemIds": [
+        "claim-137"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-137 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-40",
+      "itemIds": [
+        "claim-138"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-138 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-41",
+      "itemIds": [
+        "claim-155"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-155 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-42",
+      "itemIds": [
+        "claim-158"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-158 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-43",
+      "itemIds": [
+        "claim-165"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: claim-165 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-44",
+      "itemIds": [
+        "hints-p001"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p001 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-45",
+      "itemIds": [
+        "hints-p002"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p002 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-46",
+      "itemIds": [
+        "hints-p003"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p003 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-47",
+      "itemIds": [
+        "hints-p004"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p004 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-48",
+      "itemIds": [
+        "hints-p005"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p005 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-49",
+      "itemIds": [
+        "hints-p006"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p006 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-50",
+      "itemIds": [
+        "hints-p007"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p007 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-51",
+      "itemIds": [
+        "hints-p008"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p008 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-52",
+      "itemIds": [
+        "hints-p009"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p009 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-53",
+      "itemIds": [
+        "hints-p010"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p010 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-54",
+      "itemIds": [
+        "hints-p011"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p011 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-55",
+      "itemIds": [
+        "hints-p012"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p012 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-56",
+      "itemIds": [
+        "hints-p013"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p013 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-57",
+      "itemIds": [
+        "hints-p014"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p014 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-58",
+      "itemIds": [
+        "hints-p015"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p015 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-59",
+      "itemIds": [
+        "hints-p016"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p016 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-60",
+      "itemIds": [
+        "hints-p017"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p017 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-61",
+      "itemIds": [
+        "hints-p018"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p018 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-62",
+      "itemIds": [
+        "hints-p019"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p019 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-63",
+      "itemIds": [
+        "hints-p020"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p020 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-64",
+      "itemIds": [
+        "hints-p021"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p021 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-65",
+      "itemIds": [
+        "hints-p022"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p022 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-66",
+      "itemIds": [
+        "hints-p023"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p023 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-67",
+      "itemIds": [
+        "hints-p024"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p024 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-68",
+      "itemIds": [
+        "hints-p025"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p025 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-69",
+      "itemIds": [
+        "hints-p026"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported Western chronology: hints-p026 relies on contextual Chinese wording rather than a direct personal Western-date endpoint.",
+      "action": "Keep this record research-blocked; do not infer or expand a personal interval without source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-70",
+      "itemIds": [
+        "p001"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p001: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-71",
+      "itemIds": [
+        "p002"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p002: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-72",
+      "itemIds": [
+        "p003"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p003: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-73",
+      "itemIds": [
+        "p004"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p004: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-74",
+      "itemIds": [
+        "p005"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p005: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-75",
+      "itemIds": [
+        "p006"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p006: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-76",
+      "itemIds": [
+        "p007"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p007: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-77",
+      "itemIds": [
+        "p008"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p008: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-78",
+      "itemIds": [
+        "p009"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p009: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-79",
+      "itemIds": [
+        "p010"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p010: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-80",
+      "itemIds": [
+        "p011"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p011: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-81",
+      "itemIds": [
+        "p012"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p012: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-82",
+      "itemIds": [
+        "p013"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p013: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-83",
+      "itemIds": [
+        "p014"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p014: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-84",
+      "itemIds": [
+        "p015"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p015: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-85",
+      "itemIds": [
+        "p016"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p016: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-86",
+      "itemIds": [
+        "p017"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p017: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-87",
+      "itemIds": [
+        "p018"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p018: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-88",
+      "itemIds": [
+        "p019"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p019: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-89",
+      "itemIds": [
+        "p020"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p020: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-90",
+      "itemIds": [
+        "p021"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p021: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-91",
+      "itemIds": [
+        "p022"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p022: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-92",
+      "itemIds": [
+        "p023"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p023: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-93",
+      "itemIds": [
+        "p024"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p024: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-94",
+      "itemIds": [
+        "p025"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p025: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    },
+    {
+      "id": "shiji:068:hold-95",
+      "itemIds": [
+        "p026"
+      ],
+      "affectedItemCount": 1,
+      "problem": "Unsupported personal chronology for p026: the chapter does not give a directly verified Western-date activity interval.",
+      "action": "Keep the person chronology research-blocked pending source-specific chronological evidence.",
+      "preserve": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 068",
+    "validateDates": "npm run people:dates:verify -- --book shiji --chapter 068"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; sealed inputs unchanged; host validates repairs and any chronology follow-up."
+}
