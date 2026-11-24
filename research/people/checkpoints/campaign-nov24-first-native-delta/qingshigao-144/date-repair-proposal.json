@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "kind": "date-repair-proposal",
+  "book": "qingshigao",
+  "chapter": "144",
+  "sourceHash": "sha256:f338fca01bba79f6e6a06f1caa488dfb3f4299075196582fdaf1afa7e80d2c52",
+  "extractionHash": "sha256:e561d31b910e593c9a38824d247082eaca4687831b9684027b0f74d773a08ba2",
+  "author": {
+    "name": "Retained-staging focused owner delta",
+    "agentId": "bc-4e183857-b0ba-4bce-baa6-eec0311d4e13"
+  },
+  "auditReportHash": "sha256:07429885d34e4a699eee30517c50a512b4ece42e32c21824c159aedd9cb7094e",
+  "changes": [
+    {
+      "kind": "replace",
+      "id": "claim-41",
+      "before": [
+        "p005",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "嗣（乾隆四十九年後）"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1784,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0079",
+          "s0080"
+        ]
+      ],
+      "after": [
+        "p005",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "嗣（乾隆四十九年後）"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1784,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0080"
+        ]
+      ],
+      "reason": "Ruan Kuisheng's compilation is dated from s0080 嗣（乾隆四十九年後）; s0079 only records Qianlong 49 legal expansion, not Ruan's editorial work."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-76",
+      "before": [
+        "p009",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "乾隆十八年",
+            "regnalYear": 18
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1753,
+            "precision": "year"
+          }
+        },
+        "explicit",
+        [
+          "s0119"
+        ]
+      ],
+      "after": [
+        "p009",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Unit s0119 narrates Jiaqing 7 and cites a Qianlong 18 instruction; it does not witness dated Qianlong activity on this sentence."
+        },
+        "explicit",
+        [
+          "s0119"
+        ]
+      ],
+      "reason": "Remove unsupported Qianlong 18 Western dating of Gaozong on s0119; the cited instruction is retrospective backdrop inside a Jiaqing memorial."
+    },
+    {
+      "kind": "replace",
+      "id": "claim-106",
+      "before": [
+        "p012",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "嘉慶七年",
+            "regnalYear": 7
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1802,
+            "precision": "year"
+          }
+        },
+        "explicit",
+        [
+          "s0118",
+          "s0119"
+        ]
+      ],
+      "after": [
+        "p012",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "s0118 attests Renzong's legal proficiency with no regnal-year wording."
+        },
+        "explicit",
+        [
+          "s0118"
+        ]
+      ],
+      "reason": "Drop嘉慶七年 borrowed from s0119; Renzong's skill on s0118 is explicitly undated in the source."
+    },
+    {
+      "kind": "add",
+      "after": [
+        "p012",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "嘉慶七年",
+            "regnalYear": 7
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1802,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0119",
+          "s0120"
+        ]
+      ],
+      "reason": "Relocate Jiaqing 7 to Renzong's conference ruling on s0120 within the s0119 frame; s0118 stays undated per independent review."
+    }
+  ]
+}
