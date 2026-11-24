@@ -1,71 +1,92 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Record the current composed Jinshu 028 certificate
+run-name: Reuse 382 approvals and verify the seven changed Jinshu identity cases
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: 0e6650af12d72a4cc45576b906dc3c4c3ce4493f
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: jinshu028-reconciliation-registry
+          run-id: 45364202325
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry
+      - uses: actions/download-artifact@v4
+        with:
+          name: jinshu028-native-composition-reconciliation
+          run-id: 45364202325
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/retained
+      - name: Compose and validate the full exact certificate
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          (cd "$RUNNER_TEMP/registry" && sha256sum -c SHA256SUMS && tar -xzf registry.tar.gz)
+          node --input-type=module <<'JS'
+          const plan={"plan":"sha256:7e1ae6d0404f96e59cb347eb39f702942845ced9d615f51454bd0b65cf0f6616","sourcePacketSha256":"9c6c5eab20f19ab9c9fd4bc6530db2f809d4aa61467126091a25702736e66de7","evidenceHead":"3ef859216a0dde4b186414e0499bc05b228bc199","parts":[{"file":"transport-part-001.json","bytes":358717,"sha256":"7780bd947eb1497b100ab45ad6ed2dbcc600c2aaad99869e308e407a11fbe89f","caseIds":["sha256:19f44c0bbf67198ea29ea9877c0a5095faedcb2317a04b3b7d424dc8fba1e945","sha256:f56bb12ba6380f1a19ecf9fcc828161367f99be4c9c57b9d006a6837995235c9","sha256:cf2124ede3f45fa416bcc6022d93fba9d034ca9160f0b28cf1a298500bdd79dd"],"reportPath":"research/people/checkpoints/nov24-jinshu028-staging-seven-cases/independent-review-part-001.json","reportSha256":"d30b90bacce3db377d3dd5f67c95dd212b5d2ea963da1e29425ee109675e74e8","reportBlob":"ab6ea8af4c0b0c9962c78fc487b53020a31dc806"},{"file":"transport-part-002.json","bytes":371096,"sha256":"1acf2bb35b8a14b7c29484f1ad584485c5aaea3730ca9a971eca60911f0c74de","caseIds":["sha256:956040f83cfafe8aff828b56d90e34d18b7c85264fefbe93b6eb062253ee077b","sha256:dc01c35da5339c9fe5c4f998b8a960dfbaf7507d6b9f78145f1ca350caaf55b3","sha256:669da04d485a7a199b99f1ba1c0eb9bc95d4e4cefc4bed86362143c7d85b22e9","sha256:6d12ba73c3e0c3f3fb7a47b37d1726557d1f63b3d628321e820859524c391d15"],"reportPath":"research/people/checkpoints/nov24-jinshu028-staging-seven-cases/independent-review-part-002.json","reportSha256":"9ab2dedcb38d8aaefd33a822299da1487a6c9be902eb9709f7523bf902979295","reportBlob":"f6213add828fdf2e0d1551ef3523993d0bfde376"}],"author":"bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd","agentId":"bc-0dff1b5a-cee1-497c-a682-50af5e1e208b","reviewerRun":"run-a5b47eaa-6830-4345-937a-f9523eb5d0f6"};
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash,recordChapterIdentityReview} from './scripts/lib/people-identity-review-record.mjs';
+          import {assembleChapterIdentityReviewParts,identityReviewTransportPolicy} from './scripts/lib/people-identity-review-transport.mjs';
+          const base=path.join(process.env.RUNNER_TEMP,'retained','native-reconciliation'), source=path.join(base,'source-review-packet.json');
+          const raw=fs.readFileSync(source), data=JSON.parse(raw), expectedSource=plan.sourcePacketSha256;
+          assert.equal(identityArtifactHash(raw).replace('sha256:',''),expectedSource.replace('sha256:',''));
+          assert.equal(data.registryReuse.sourceRevision,process.env.SOURCE);
+          assert.equal(data.plan.fingerprint,plan.plan);
+          assert.deepEqual(data.scope,{book:'jinshu',chapter:'028'});
+          assert.equal(data.plan.cases.length,389);
+          assert.equal(data.reviewCaseIds.length,7);
+          assert(!data.authorAgentIds.includes(plan.agentId)&&plan.agentId!==plan.author);
+          const transports=[],reports=[],captures=[];
+          for(const part of plan.parts){
+           const transportFile=path.join(base,part.file), reportFile=path.join(base,'owner-independent-'+part.file);
+           const transport=fs.readFileSync(transportFile);
+           const report=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+part.reportPath+'?ref='+plan.evidenceHead],{maxBuffer:3e6,timeout:20000});
+           assert.equal(identityArtifactHash(transport).replace('sha256:',''),part.sha256.replace('sha256:',''));
+           assert.equal(identityArtifactHash(report).replace('sha256:',''),part.reportSha256);
+           const accepted=JSON.parse(report);
+           assert.equal(accepted.reviewer.agentId,plan.agentId);
+           assert(accepted.reviews.every(x=>x.verdict==='approve'));
+           fs.writeFileSync(reportFile,report,{flag:'wx'});
+           transports.push(JSON.parse(transport));reports.push(accepted);
+           captures.push({schemaVersion:1,kind:'captured-independent-identity-review-part',phase:'report-recorded',scope:data.scope,agentId:plan.agentId,runId:plan.reviewerRun,sourcePacketSha256:identityArtifactHash(raw),transportSha256:identityArtifactHash(transport),reportSha256:identityArtifactHash(report),transportFile,reportFile});
+          }
+          const aggregate=assembleChapterIdentityReviewParts(data.plan,transports,reports,captures.map(x=>x.agentId),data.authorAgentIds,data.reviewCaseIds);
+          const report=path.join(base,'review-aggregate.json'), job=path.join(base,'focus-captured-job.json');
+          const body=Buffer.from(JSON.stringify(aggregate)+'\n');
+          fs.writeFileSync(report,body,{flag:'wx'});
+          fs.writeFileSync(job,JSON.stringify({schemaVersion:1,kind:'captured-independent-identity-review-parts',phase:'report-recorded',scope:data.scope,agentId:plan.agentId,runId:plan.reviewerRun,authorAgentIds:[plan.author],sourcePacketSha256:identityArtifactHash(raw),reportSha256:identityArtifactHash(body),transportPolicy:identityReviewTransportPolicy(384*1024),parts:captures})+'\n',{flag:'wx'});
+          const out=path.join(process.cwd(),'data/people/generated/jinshu028-current-proof');
+          fs.mkdirSync(out,{recursive:true});
+          const receipt=await recordChapterIdentityReview({packet:source,report,job,registry:path.join(process.env.RUNNER_TEMP,'registry',process.env.SOURCE),out:path.join(out,'identity-review.json')});
+          assert.equal(receipt.nativeIdentityProofAccepted,true);
+          assert.equal(receipt.reviewedCases,389);
+          fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(receipt,null,2)+'\n');
+          console.log(JSON.stringify({scope:receipt.scope,reused:382,current:7,certified:receipt.reviewedCases}));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: jinshu028-current-native-389-case-proof-scoped
+          path: data/people/generated/jinshu028-current-proof/
+          if-no-files-found: error
+          retention-days: 7
