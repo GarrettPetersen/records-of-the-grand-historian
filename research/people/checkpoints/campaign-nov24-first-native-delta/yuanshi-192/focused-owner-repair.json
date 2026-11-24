@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-owner-repair",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "192"
+  },
+  "ownerAgentId": "bc-4530d5ef-ed07-436e-a29d-7f361d270c64",
+  "idempotencyKey": "986d664bef2720c685304c5b7c7fc9dcaed04401a3bbfc4ec135842bb17c5c3c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "branch": "cursor/nov24-first-native-date-delta-w2-70c64",
+  "notIndependentApproval": true,
+  "notes": "[CF-Pages-Skip] Focused owner delta only; no canonical data/, registry, deploy, or merge.",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/yuanshi/192.json",
+      "gitBlob": "e4ad1ed70240c5a831d1dee0f3e98e701880e21d",
+      "contentSha256": "sha256:007f9b4a2d2dcf1dc2f65b1b0aa2df04cc21119ca58ba27f8465bd83e469b55f"
+    },
+    "extraction": {
+      "path": "data/people/extractions/yuanshi/192.json",
+      "gitBlob": "f3b5c6195f41074420484ad3046a6658d210d33b",
+      "contentSha256": "sha256:0bdb742dedb93d9374e84e6f70bb791c435a2a672b9d258ce0af93bfe7b66bd3"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/yuanshi/192.json",
+      "gitBlob": "4ba4d1fa2824118f998a74e9bcc571de35cb5f48",
+      "contentSha256": "sha256:69af8ba227bcafce41ef637e2db3251e18c2294d4e517a09e39c52c1aafaa5bf"
+    }
+  },
+  "preservedIndependentReport": {
+    "path": "research/people/checkpoints/campaign-nov24-first-independent-date/yuanshi-192/independent-date-report.json",
+    "revision": "2c0f1244a8de0dd31d3e8fc8bc87a43e15497f69",
+    "gitBlob": "8b8940600b4e47adae5078ae1433852b70fe2195",
+    "contentSha256": "sha256:e12106da24262e208cb612c4c57e4bf8b9f74bb8086e3bbdd9bb6442674dd9ad",
+    "status": "needs-revision",
+    "findingsCount": 1,
+    "copiedTo": "preserved-independent-date-report.json",
+    "copiedSha256": "sha256:e12106da24262e208cb612c4c57e4bf8b9f74bb8086e3bbdd9bb6442674dd9ad",
+    "preservedUnmodified": true
+  },
+  "priorSealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-192/date-packet.json",
+    "fileSha256": "sha256:d4f76d58c800b7c11adc873bd16ff8bcd8e6b7a2ba234380e7ad1ebccb42dfac",
+    "sourceHash": "sha256:007f9b4a2d2dcf1dc2f65b1b0aa2df04cc21119ca58ba27f8465bd83e469b55f",
+    "extractionHash": "sha256:56601715e0750f4559eefa8fe214f9341c86a5b48e919eb617dd00f4d7db98b1",
+    "independentReviewerAgentId": "bc-c96f4ba9-a575-4feb-a6b2-f4d4456c544a"
+  },
+  "candidateBundle": {
+    "candidateExtraction": {
+      "path": "candidate-extraction.json",
+      "contentSha256": "sha256:bd0f4b8cdd8504c8bb17b0c105e57af0a7d8ac61b2dd12f479b8076f39392251"
+    },
+    "candidateDatePacket": {
+      "path": "candidate-date-packet.json",
+      "contentSha256": "sha256:753840882ff71fb9b1908b89a9269d1a652eaf94a17553761385cd69242564c9",
+      "sourceHash": "sha256:007f9b4a2d2dcf1dc2f65b1b0aa2df04cc21119ca58ba27f8465bd83e469b55f",
+      "extractionHash": "sha256:86c63f5c6337a5d2b2521599d2e06e410d34e9c151d3038bdabb3bc3e2d60c3a",
+      "itemCount": 115
+    }
+  },
+  "addressedFindingIds": [
+    "finding-0"
+  ],
+  "changedAuditItemIds": [
+    "claim-29",
+    "hints-p003",
+    "p003"
+  ],
+  "extractionChanges": [
+    {
+      "finding": "Independent report finding on claim-29 / hints-p003 / p003",
+      "sourceUnits": [
+        "s0018",
+        "s0019"
+      ],
+      "sourceWitness": {
+        "s0018": {
+          "zh": "至元十一年，河北、河東、山東盜賊充斥，直聚其鄉黨族屬，結壘自保。"
+        },
+        "s0019": {
+          "zh": "世祖命大將略地晉城，直以其眾歸之，幕府承製，署直潞州元帥府右監軍。"
+        }
+      },
+      "rows": [
+        {
+          "target": "claims[p003:attestation]",
+          "auditItemId": "claim-29",
+          "before": [
+            "p003",
+            "attestation",
+            {
+              "sourceDate": {
+                "text": "至元十一年",
+                "reignId": "yuan-zhiyuan",
+                "regnalYear": 11
+              },
+              "westernYear": {
+                "era": "AD",
+                "year": 1274,
+                "precision": "year"
+              }
+            },
+            "explicit",
+            [
+              "s0019"
+            ]
+          ],
+          "after": [
+            "p003",
+            "attestation",
+            {
+              "undatedSourceAttestation": true,
+              "event": "On unit s0019 Shizu orders the Jincheng campaign; the clause 世祖命大將略地晉城 has no 至元 date phrase."
+            },
+            "explicit",
+            [
+              "s0019"
+            ]
+          ],
+          "reason": "s0019 names Shizu’s Jincheng order without any 至元 year; 至元十一年 appears only on Duan Zhi’s banditry sentence in s0018."
+        },
+        {
+          "target": "people[p003].hints.active",
+          "auditItemId": "hints-p003",
+          "before": [
+            "AD 1274"
+          ],
+          "after": [],
+          "reason": "Active hint AD 1274 was derived only from the removed false attestation on s0019."
+        }
+      ]
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "candidateExtractionValidator": "node scripts/validate-people-extraction.mjs candidate-extraction.json → ok (40 people, 457 claims)",
+    "unchangedCanonicalInputs": true
+  },
+  "remainingHolds": [
+    {
+      "kind": "independent-delta-review",
+      "reason": "Owner repaired only the one needs-revision finding; independent reviewer must re-audit candidate-date-packet against preserved report."
+    }
+  ],
+  "reproduce": {
+    "validateCandidate": "node scripts/validate-people-extraction.mjs research/people/checkpoints/campaign-nov24-first-native-delta/yuanshi-192/candidate-extraction.json",
+    "rebuildPacket": "npm run people:dates:packet -- --book yuanshi --chapter 192 --out /tmp/packet.json (after staging candidate into data path for local check only)"
+  }
+}
