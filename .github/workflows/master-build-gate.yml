@@ -954,7 +954,7 @@ jobs:
           root="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers"
           mkdir -p "$root" "$RUNNER_TEMP/registry-export"
           node scripts/people-identity-registry-worker.mjs --out "$root/$REVISION" --revision "$REVISION"
-          options=()
+          retainedFile=''
           if [[ -n "$RETAINED_REVISION" ]]; then
             (
               cd "$RUNNER_TEMP/retained"
@@ -964,10 +964,18 @@ jobs:
               jq '{schemaVersion:1,kind:"chapter-identity-review-composition",scope,plan:.sourcePlan,sourcePlans:[],components,selections:[]}' \
                 retained-identity-components.json > "$RUNNER_TEMP/retained-composition.json"
             )
-            options+=(--retained-composition "$RUNNER_TEMP/retained-composition.json")
+            retainedFile="$RUNNER_TEMP/retained-composition.json"
           fi
-          node scripts/prepare-people-chapter-identity.mjs --book jinshu --chapter "$CHAPTER" \
-            --source-revision "$REVISION" --registry "$root/$REVISION" --out "$RUNNER_TEMP/native-identity" "${options[@]}"
+          REGISTRY_PATH="$root/$REVISION" RETAINED_FILE="$retainedFile" node --input-type=module <<'JS'
+          import path from 'node:path';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const {CHAPTER,REVISION,REGISTRY_PATH,RETAINED_FILE,RUNNER_TEMP}=process.env;
+          const options={book:'jinshu',chapter:CHAPTER,sourceRevision:REVISION,registry:REGISTRY_PATH,out:path.join(RUNNER_TEMP,'native-identity')};
+          if(RETAINED_FILE)options.retainedComposition=RETAINED_FILE;
+          // The original Jinshu 094 transport used 384 KiB to include all 869 Chinese units in each part.
+          if(CHAPTER==='094')options.transportMaxBytes=384*1024;
+          console.log(JSON.stringify(await prepareChapterIdentityReview(options),null,2));
+          JS
           cp "$root/$REVISION/manifest.json" "$RUNNER_TEMP/registry-export/manifest.json"
           tar -czf "$RUNNER_TEMP/registry-export/registry.tar.gz" -C "$root" "$REVISION"
           (cd "$RUNNER_TEMP/registry-export" && sha256sum registry.tar.gz manifest.json > SHA256SUMS)
