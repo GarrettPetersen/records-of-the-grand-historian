@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "liangshu/012",
+  "reviewerAgentId": "bc-195fb2ca-f1a6-48db-883e-7021763711d9",
+  "ownerAgentId": "bc-2e8802ad-6e60-4700-b09f-9b27d9b1b316",
+  "ownerRevision": "08eb0633eb40da7e11bd311b54ec3e855dcd6b97",
+  "ownerProposalHead": "25b92d0fe017a5e8da097db8b46fd0f4b00411fc",
+  "ownerProposalSha256": "ae8ee390c70be934ef902a22ffbc60cff5ba922767d001fb392177882c749698",
+  "previousReviewHead": "8b916264c052d64bb6d2729cfd01ea80718ec736",
+  "inputBlobWitness": {
+    "source": "9440d456aeffb81b6753c61e6f74fecd0a9ba5c7",
+    "extraction": "78bf171f46688e2f05970b1e1baa4d2ae4a519c9",
+    "dateAudit": "0f6a8808cba2c698238956aaf76fc20653c73f35",
+    "editorial": "357441efc09ee55bbe11791909ed2a88ae98eb1a"
+  },
+  "preservedIndependentReview": {
+    "unchangedApproveRows": 92,
+    "unchangedParts": [
+      "independent-identity-report-part-001.json",
+      "independent-identity-report-part-002.json",
+      "independent-identity-report-part-003.json",
+      "independent-identity-report-part-004.json (non-held rows only)"
+    ],
+    "note": "No rewrite of prior four-part identity reports; only the four held case rows are superseded after host application of supportedPatch."
+  },
+  "verdict": "accept_owner_proposals_with_amendments",
+  "caseDecisions": [
+    {
+      "caseId": "sha256:18d0689a160fc2225ccbe059ef10aed528b961b9c646356606b0b3d3bc05c17f",
+      "personIds": ["liangshu:012:p005", "liangshu:012:p092", "liangshu:012:p108"],
+      "priorIndependentVerdict": "hold",
+      "independentDisposition": "approve_witness_repair_with_amendment",
+      "ownerProposalId": "liangshu:012:ow-witness-p108-names",
+      "rationale": "Independent hold on p108 was correct: s0260 has no 愛. Owner correctly relocates explicit given-name provenance to s0239 (叡族弟愛), matching Chinese and English (idiomatic: Rui's cousin Ai). s0260 remains valid for offices and biography only.",
+      "primaryWitnessAfterPatch": {
+        "localId": "liangshu:012:p108",
+        "book": "liangshu",
+        "chapter": "012",
+        "unitId": "s0239",
+        "quote": "愛"
+      },
+      "independentAmendments": [
+        "Add Chinese mention row [\"p108\",\"personal-name\",\"zh\",\"愛\",[[\"s0239\",[4]]]]; owner after only moved English mention without a zh span required for native witness rules."
+      ]
+    },
+    {
+      "caseId": "sha256:462888a1a93c98a43dfc43c2a0c688368992493366535d292033784e1ecc7ba4",
+      "personIds": ["liangshu:012:p040"],
+      "priorIndependentVerdict": "hold",
+      "independentDisposition": "approve_person_retraction",
+      "ownerProposalId": "liangshu:012:ow-retract-p040",
+      "rationale": "s0093 quotes 內兄王憕 and 姨弟杜惲 only; English does not name a wife. Retraction removes an out-of-scope identity person; unnamed spouse remains a source-supported unknown via 內兄 on p030–p039, not a false merge."
+    },
+    {
+      "caseId": "sha256:9e4c4e1cceeb8d3917989b3f5ac10f880eaa44a5052c1cd7b3a5d8788841c621",
+      "personIds": ["liangshu:012:p042"],
+      "priorIndependentVerdict": "hold",
+      "independentDisposition": "approve_person_retraction",
+      "ownerProposalId": "liangshu:012:ow-retract-p042",
+      "rationale": "No 母 or 韋叡母 in chapter Chinese; 姨弟 entails maternal kin but does not name Wei Rui's mother as a chapter person."
+    },
+    {
+      "caseId": "sha256:c57e04d1c694a12fd0f74c904e745c6abbd4a639924de0494b7d7dcd38bf4fba",
+      "personIds": ["liangshu:012:p043"],
+      "priorIndependentVerdict": "hold",
+      "independentDisposition": "approve_person_retraction",
+      "ownerProposalId": "liangshu:012:ow-retract-p043",
+      "rationale": "No 姨母 or 杜惲母 surfaces; same s0093 kinship-only evidence as independent hold."
+    }
+  ],
+  "closedCases": [
+    {
+      "caseId": "sha256:18d0689a160fc2225ccbe059ef10aed528b961b9c646356606b0b3d3bc05c17f",
+      "closureCondition": "After supportedPatch is applied to pinned extraction, re-open bounded dossier review for this case only; p108 should certify with quote 愛 at s0239; p005/p092 already witness via s0239.",
+      "status": "approved_pending_host_application"
+    }
+  ],
+  "heldCases": [
+    {
+      "caseId": "sha256:462888a1a93c98a43dfc43c2a0c688368992493366535d292033784e1ecc7ba4",
+      "personId": "liangshu:012:p040",
+      "status": "retraction_approved_pending_application",
+      "sourceSupportedUnknown": true,
+      "reason": "Identity hold persists until p040 and dependent claims are removed; no concrete contradiction with owner proposal."
+    },
+    {
+      "caseId": "sha256:9e4c4e1cceeb8d3917989b3f5ac10f880eaa44a5052c1cd7b3a5d8788841c621",
+      "personId": "liangshu:012:p042",
+      "status": "retraction_approved_pending_application",
+      "sourceSupportedUnknown": true,
+      "reason": "Unnamed maternal line entailed by 姨弟 only; retraction approved."
+    },
+    {
+      "caseId": "sha256:c57e04d1c694a12fd0f74c904e745c6abbd4a639924de0494b7d7dcd38bf4fba",
+      "personId": "liangshu:012:p043",
+      "status": "retraction_approved_pending_application",
+      "sourceSupportedUnknown": true,
+      "reason": "Aunt/mother-of-Du-Yun labels unsupported; retraction approved."
+    }
+  ],
+  "dependencies": {
+    "priorFourPartReportsHead": "8b916264c052d64bb6d2729cfd01ea80718ec736",
+    "ownerHandoffPath": "research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-012/owner-handoff.json",
+    "ownerProposalPath": "research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-012/owner-primary-witness-delta.json",
+    "sourceUnitsCompared": {
+      "s0093": {
+        "zh": "時叡內兄王憕、姨弟杜惲，並有鄉里盛名。",
+        "enIdiomatic": "Then his brother-in-law Wang Cheng and cousin Du Yun were famed in the district."
+      },
+      "s0239": {
+        "zh": "叡族弟愛。",
+        "enIdiomatic": "Rui's cousin Ai."
+      },
+      "s0260": {
+        "zh": "高祖受禪，進號輔國將軍，仍爲驍騎將軍，尋除寧蜀太守，與益州刺史鄧元起西上襲劉季連，行至公安，道病卒，贈衛尉卿。",
+        "enIdiomatic": "When Gaozu took the throne, Ai was advanced to General Who Assists the State, then kept as General of Valiant Cavalry, made administrator of Ning Shu, and with Yizhou inspector Deng Yuanqi went west against Liu Jilian; at Gong'an he died on the road and was posthumously made Minister of the Guard."
+      }
+    },
+    "chronologyDeltaRequired": false,
+    "chronologyRationale": "Scoped edits retract unattested persons and revise name-unit pointers only; audited date-audit blob witness unchanged. Attestations on removed persons (p040/p042/p043) drop with retraction; no new western dates asserted.",
+    "editorialDeltaRequired": false
+  },
+  "supportedPatch": {
+    "targetFile": "data/people/extractions/liangshu/012.json",
+    "baselineExtractionBlob": "78bf171f46688e2f05970b1e1baa4d2ae4a519c9",
+    "operations": [
+      {
+        "id": "indep-p108-person-meta-and-names",
+        "caseId": "sha256:18d0689a160fc2225ccbe059ef10aed528b961b9c646356606b0b3d3bc05c17f",
+        "changeKind": "identity-name-provenance-revision",
+        "table": "people",
+        "personId": "p108",
+        "before": {
+          "meta.x": "Named in preceding biography units outside this chunk; owned units continue by silent Chinese subject and English Ai.",
+          "identityNames": [
+            ["personal", "愛", "explicit", ["s0260"]],
+            ["surname", "韋", "strongly-inferred", ["s0260", "s0261"]]
+          ]
+        },
+        "after": {
+          "meta.x": "Named 愛 at s0239 (叡族弟愛) and chapter rubric 族弟愛; s0259–s0260 continue biography with silent Chinese subject; offices at s0260 are not personal-name witnesses.",
+          "identityNames": [
+            ["personal", "愛", "explicit", ["s0239"]],
+            ["surname", "韋", "strongly-inferred", ["s0239", "s0261"]]
+          ]
+        },
+        "sourceRationale": "s0239 is the only chapter-local Chinese with the character 愛 for this biography's 族弟愛 subject."
+      },
+      {
+        "id": "indep-p108-mentions",
+        "caseId": "sha256:18d0689a160fc2225ccbe059ef10aed528b961b9c646356606b0b3d3bc05c17f",
+        "changeKind": "mention-span-revision",
+        "table": "mentions",
+        "before": [
+          ["p108", "personal-name", "en", "Ai", [["s0260", [0]]]]
+        ],
+        "after": [
+          ["p108", "personal-name", "en", "Ai", [["s0239", [3]]]],
+          ["p108", "personal-name", "zh", "愛", [["s0239", [4]]]]
+        ],
+        "sourceRationale": "Independent amendment: zh span required for assertDossierPrimaryWitness on 愛 at s0239."
+      },
+      {
+        "id": "indep-retract-person-p040",
+        "caseId": "sha256:462888a1a93c98a43dfc43c2a0c688368992493366535d292033784e1ecc7ba4",
+        "changeKind": "person-record-retraction",
+        "personId": "p040",
+        "removePersonRow": true,
+        "removeClaimsPredicates": ["sex", "attestation", "family-relationship", "name", "historicity", "role", "family-member"],
+        "reviseRelationships": [
+          {
+            "subject": "p030",
+            "predicate": "family-relationship",
+            "action": "remove",
+            "match": { "relation": "spouse-of", "personId": "p040" }
+          },
+          {
+            "subject": "p030",
+            "predicate": "family-relationship",
+            "action": "revise",
+            "match": { "relation": "kin-of", "personId": "p039" },
+            "removeIntermediaryPersonIds": ["p040"],
+            "retainEvidence": ["s0093"]
+          },
+          {
+            "subject": "p039",
+            "predicate": "family-relationship",
+            "action": "remove",
+            "match": { "relation": "sibling-of", "personId": "p040" }
+          },
+          {
+            "subject": "p030",
+            "predicate": "people.relatedLocalPeople",
+            "action": "removeId",
+            "value": "p040"
+          },
+          {
+            "subject": "p039",
+            "predicate": "people.relatedLocalPeople",
+            "action": "removeId",
+            "value": "p040"
+          }
+        ],
+        "sourceRationale": "Chapter names 內兄王憕 only; 韋叡妻 is not primary text."
+      },
+      {
+        "id": "indep-retract-person-p042",
+        "caseId": "sha256:9e4c4e1cceeb8d3917989b3f5ac10f880eaa44a5052c1cd7b3a5d8788841c621",
+        "changeKind": "person-record-retraction",
+        "personId": "p042",
+        "removePersonRow": true,
+        "reviseRelationships": [
+          {
+            "subject": "p030",
+            "predicate": "family-relationship",
+            "action": "remove",
+            "match": { "relation": "child-of", "personId": "p042" }
+          },
+          {
+            "subject": "p030",
+            "predicate": "family-relationship",
+            "action": "revise",
+            "match": { "relation": "kin-of", "personId": "p041" },
+            "removeIntermediaryPersonIds": ["p042", "p043"],
+            "retainEvidence": ["s0093"]
+          },
+          {
+            "subject": "p035",
+            "predicate": "family-relationship",
+            "action": "remove",
+            "match": { "relation": "spouse-of", "personId": "p042" }
+          }
+        ],
+        "sourceRationale": "韋叡母 does not appear in cited units."
+      },
+      {
+        "id": "indep-retract-person-p043",
+        "caseId": "sha256:c57e04d1c694a12fd0f74c904e745c6abbd4a639924de0494b7d7dcd38bf4fba",
+        "changeKind": "person-record-retraction",
+        "personId": "p043",
+        "removePersonRow": true,
+        "reviseRelationships": [
+          {
+            "subject": "p041",
+            "predicate": "family-relationship",
+            "action": "remove",
+            "match": { "relation": "child-of", "personId": "p043" }
+          }
+        ],
+        "sourceRationale": "姨母/杜惲母 not quoted in chapter."
+      }
+    ]
+  },
+  "validation": {
+    "passed": true,
+    "scopedBeforeValidation": {
+      "command": "npm run people:validate -- --book liangshu --chapter 012",
+      "result": "pass",
+      "extractionBlob": "78bf171f46688e2f05970b1e1baa4d2ae4a519c9"
+    },
+    "ownerProposalSha256Verified": true,
+    "unitsInspected": ["s0002", "s0093", "s0239", "s0259", "s0260", "s0261"],
+    "nativeWitnessSimulation": {
+      "p108AfterAmendedPatch": {
+        "quote": "愛",
+        "unitId": "s0239",
+        "assertDossierPrimaryWitness": "pass"
+      }
+    },
+    "contradictionsFound": false,
+    "englishInventedNamesOnScopedUnits": false,
+    "candidateAfterValidation": {
+      "method": "Structural patch review plus native witness simulation on p108 amended claims; full extraction validator deferred to host after sealed application.",
+      "chronologyPatchRequired": false
+    },
+    "notes": "Approve all four owner dispositions; one independent amendment on p108 zh mention. Retraction cases remain held until patch application; not false merges."
+  },
+  "notes": "[CF-Pages-Skip] Independent targeted witness delta only; no canonical edit in this commit."
+}
