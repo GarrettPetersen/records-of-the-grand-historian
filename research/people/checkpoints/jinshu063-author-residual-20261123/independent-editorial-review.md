@@ -43,7 +43,7 @@ Units **s0021–s0028** read once. Ten packet items checked; **no Western years 
 
 **Scopes 2–12** completed (see `independent-date-audit-manifest.json`): **201/414** packet claim-items reviewed, **0** conflict blockers, **10** era research holds unchanged (太興初×5, 永嘉初×2, 建武初×2, 永嘉末×1).
 
-**Next work:** remaining **213** packet items (mostly hint/cross-span); legacy active-date hint sweep — **not** chapter date approval.
+**Scope 13:** remaining **213** items — **123** passage groups; **203 approved**, **10 genuinely-held** (nonempty active-date hints corroborated to era claims), **0** proposed source-only patches; **414/414** packet items now reviewed. Chapter date approval still **false** (host calendar + formal date report).
 
 ## Pending actions (not approved here)
 
