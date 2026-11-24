@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Verify hosted native certification for Jinshu 115 and 083; transfer only validated proofs to their exact chapter PRs. Preserve ongoing Jinshu 030 and 094 review scopes.",
+  "nextAction": "Identify the exact Jinshu 115 uncertainty conflicts, then send only those rows back to the original reviewer. Reuse all unaffected decisions.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T00:38:27.475Z",
+  "lastCheckedAt": "2026-11-24T00:41:24.344Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -2465,11 +2465,14 @@
               }
             ],
             "nativeRecording": {
-              "status": "in-progress",
+              "status": "needs-focused-uncertainty-correction",
               "requestedAt": "2026-11-24T00:35:10.552Z",
               "partCount": 11,
               "reportCommit": "0bb3a6f8b2bacf5fa472cf1013b3d500d69e8b13",
-              "runId": 45298398998
+              "runId": 45298398998,
+              "conclusion": "failure",
+              "diagnosticRunId": 45299146835,
+              "reason": "Native validation found sealed candidate or overflow ambiguity marked resolved in at least one independently authored row. Exact mismatches are being listed from the immutable packet and authored bytes."
             }
           }
         }
