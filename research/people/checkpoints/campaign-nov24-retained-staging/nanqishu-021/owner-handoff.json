@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "021"
+  },
+  "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+  "workerId": "cursor-nov24-retained-staging-w10-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "892a491c64e2d709f2f81f9d3b925676866762d3c9d6243dc51b67d3f5d63644",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-nanqishu-021-0945d",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:497b196db952addfb49713febf0fff4739f981f7b2b3c4908edf4b3c9d690788",
+    "people": 32,
+    "claims": 176,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "61b8125220280159683b63d867f1dca581800ce1",
+    "extraction": "261f496d135e6cf356a0c0a93006e5560d2409b6",
+    "editorial": "40eb8f8b2cae3d714c3d8abc2f267642d75ad1be"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:3e3004804c9bf21ce2b86121bb27c737aa4e885e4af687692674b952934d1b1f",
+    "extraction": "sha256:497b196db952addfb49713febf0fff4739f981f7b2b3c4908edf4b3c9d690788",
+    "editorial": "sha256:4230dacfebe1d54bca6d17dc16e79f1046b87c7ce45089eedc098231bbf2639a"
+  },
+  "datePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-021/date-packet.json",
+    "contentSha256": "sha256:dd6f43dcf83ed6f500e3ac66eb792b1bdc5ef92338b13f46f9f1771ab2217b52",
+    "packetSourceHash": "sha256:7ba7227f8d84f389e831a33ac714a31251a50725a9b6b87d3462c656c88202a4",
+    "packetExtractionHash": "sha256:b6161aecf7bf0fdc6436676691f18ce16d20d3b497d9a55d502a1cd3028ed8ee",
+    "itemCount": 97,
+    "peopleInPacket": 32,
+    "unitCount": 137
+  },
+  "sourceCoverage": {
+    "titleEn": "Volume 21 Biographies 2: Crown Prince Wenhui",
+    "titleZh": "卷二十一 列傳第二 文惠太子",
+    "sentenceCount": 137,
+    "translatedCount": 137,
+    "englishComplete": true,
+    "bothFieldsOnUnits": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "gitBlob": "261f496d135e6cf356a0c0a93006e5560d2409b6",
+    "contentSha256": "sha256:497b196db952addfb49713febf0fff4739f981f7b2b3c4908edf4b3c9d690788",
+    "bytes": 61830,
+    "canonicalEdits": false
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "40eb8f8b2cae3d714c3d8abc2f267642d75ad1be",
+    "contentSha256": "sha256:4230dacfebe1d54bca6d17dc16e79f1046b87c7ce45089eedc098231bbf2639a",
+    "acceptedDecisionCount": 2,
+    "repairsReflectedInSource": true,
+    "claimRetractions": 0,
+    "claimRevisions": 0
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book nanqishu --chapter 021",
+      "passed": true,
+      "summary": "Scoped person data validation passed for nanqishu/021: 1 extraction(s), 32 local people, 272 mentions, 296 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 021",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "datePacketBuild": {
+      "command": "npm run people:dates:packet -- --book nanqishu --chapter 021 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-021/date-packet.json",
+      "completed": true
+    }
+  },
+  "substantiveFindings": "Crown Prince Wenhui biography cluster: thirty-two people, 176 claims; two accepted editorial repairs reflected in source. Ninety-seven native date-packet rows. No proposed date repairs; extraction and editorial artifacts reused unchanged.",
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "completed": false,
+      "reason": "No data/people/date-audits record; people:dates:verify reports un-audited. Owner prepared sealed date-packet only; does not self-approve.",
+      "packetSha256": "sha256:dd6f43dcf83ed6f500e3ac66eb792b1bdc5ef92338b13f46f9f1771ab2217b52",
+      "minimumContinuation": "Independent reviewer records full native date audit via people:dates:record against packet at sha256:dd6f43dcf83ed6f500e3ac66eb792b1bdc5ef92338b13f46f9f1771ab2217b52 without altering pinned extraction or editorial blobs."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "completed": false,
+      "reason": "Chapter-scoped validation passed; corpus-wide merge/split identity review remains outside this owner pass."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "detail": "Candidate chronology sealed in date-packet; await separate source reviewer approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "ownerChangesRequired": false,
+  "completedAt": "2026-11-24T17:08:04.882Z",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 021",
+    "verifyDates": "npm run people:dates:verify -- --book nanqishu --chapter 021",
+    "buildDatePacket": "npm run people:dates:packet -- --book nanqishu --chapter 021 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-021/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner pass: reuse extraction and editorial; prepare date-packet; no registry, deploy, or merge."
+}
