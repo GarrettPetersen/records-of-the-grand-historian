@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-focused-identity-hold-repair",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "046"
+  },
+  "ownerAgentId": "bc-23529211-836c-4588-b3ee-a1d4918b098f",
+  "workerId": "cursor-nov24-partitioned-1",
+  "branch": "cursor/jinshi-046-partitioned-owner-098f",
+  "branchHeadBeforeCommit": "8bcb2d489e804fa951c0f493244276d18cc10df5",
+  "independentReviewCommit": "7c95105c7392726daaad7c707ce4fae9869e8989",
+  "caseId": "sha256:891c1aec4521fb8c62b43f956102fe4d023d99f9b9c959bc4d2acec2b03c9ea3",
+  "localPersonId": "jinshi:046:p010",
+  "canonicalPersonId": "per_02AW44T8PXPEWJ24STSX",
+  "canonicalAnchorLocalId": "beiqishu:003:p023",
+  "membershipFingerprint": "sha256:87382f16429160979770d45ed26c36d7577b2c42dd92ca54628f62acd0ec4b92",
+  "transportParts": [
+    {
+      "path": "transport-part-001.json",
+      "sha256": "34ca74ad2c68062a05f425873d006cb85452462cb2a6066879612354e64b4308"
+    },
+    {
+      "path": "transport-part-002.json",
+      "sha256": "1be205af3fa13f4666c76da7e982b879f88475ef91920f800d8b2791f4654251"
+    }
+  ],
+  "hold": {
+    "verdict": "hold",
+    "reason": "Hold jinshi:046:p010 (extraction title 紂王 / King Zhou): sealed primary jinshi:046:s0051 is allusive only (鹿台、钜橋) and contains no Han graph from the member's Chinese name keys (紂王); mention zh spans are empty and title-reference is English-only in transport, so 鹿台 is a material-association item, not a dossier primary name witness. Retained canonical anchor beiqishu:003:p023 remains supported in beiqishu:003:s0083「紂」; accepted cross-chapter membership is not contradicted, but independent approve requires a valid Han witness on the chapter-local person. Preserve unresolvedIdentity."
+  },
+  "sourceContext": {
+    "jinshi:046:s0051": {
+      "zh": "曆觀自古財聚民散，以至亡國，若鹿台、钜橋之類，不足論也。",
+      "enLiteral": "Looking through antiquity, gathering wealth while scattering the people until the state perished—like Lutai and Juqiao types—need not be discussed.",
+      "enIdiomatic": "History shows states ruined by amassing wealth while dispersing the people—think of King Zhou's Lutai or the Juqiao hoard—cases too familiar to rehearse."
+    },
+    "crossChapterAnchor": {
+      "localId": "beiqishu:003:p023",
+      "witnessUnit": "beiqishu:003:s0083",
+      "quote": "紂"
+    },
+    "chapterLocalHanSearch": "No jinshi/046 unit contains 紂 or 紂王 in verified source JSON."
+  },
+  "ownerConclusion": "Accept independent hold. Keep p010 and canonical membership; stop treating s0051 as an explicit title/name witness for 紂王. s0051 only supports material-association with 鹿台 (allusive); identity title keys must not be pinned to this unit. Chapter-local independent approve stays blocked until a real Han surface exists or policy accepts anchor-only certification with unresolvedIdentity.",
+  "extractionRepair": {
+    "targetPath": "data/people/extractions/jinshi/046.json",
+    "pinnedExtractionSha256": "sha256:0827fb42148f1857561569b317b7242e2d088df435d9105cf172196151d8f336",
+    "applyOnHostOnly": true,
+    "operations": [
+      {
+        "op": "retract-person-identity-claim",
+        "personId": "p010",
+        "unitId": "s0051",
+        "before": {
+          "kind": "title",
+          "en": "King Zhou",
+          "zh": "紂王"
+        },
+        "certainty": "explicit",
+        "reason": "s0051 has no 紂/紂王 graph; 鹿台 is toponym/treasury allusion only."
+      },
+      {
+        "op": "retract-person-disposition",
+        "personId": "p010",
+        "unitId": "s0051",
+        "disposition": "ruler",
+        "certainty": "explicit",
+        "reason": "Ruler role on s0051 depended on false explicit title witness."
+      },
+      {
+        "op": "retract-mention",
+        "personId": "p010",
+        "kind": "title-reference",
+        "language": "en",
+        "surface": "King Zhou",
+        "unitId": "s0051",
+        "reason": "English-only title-reference without Chinese span or primary Han witness."
+      },
+      {
+        "op": "retract-claim",
+        "personId": "p010",
+        "predicate": "historicity",
+        "unitIds": ["s0051"],
+        "before": { "historicity": "legendary" },
+        "certainty": "explicit",
+        "reason": "Unit is general historiographical comparison, not an individual attestation of 紂王."
+      },
+      {
+        "op": "retract-claim",
+        "personId": "p010",
+        "predicate": "sex",
+        "unitIds": ["s0051"],
+        "before": { "sex": "male" },
+        "certainty": "strongly-inferred",
+        "reason": "Inference chain relied on explicit title on s0051."
+      },
+      {
+        "op": "retract-claim",
+        "personId": "p010",
+        "predicate": "attestation",
+        "unitIds": ["s0051"],
+        "before": { "qualitative": "legendary antiquity" },
+        "certainty": "explicit",
+        "reason": "s0051 does not name the person attested."
+      },
+      {
+        "op": "revise-person-row",
+        "personId": "p010",
+        "field": "notes",
+        "before": null,
+        "after": "Chapter-local link is allusive only: jinshi:046:s0051 鹿台 without 紂/紂王. Preferred title 紂王 retained for cross-chapter dossier; Han identity witness is beiqishu:003 anchor, not fabricated in jinshi/046.",
+        "reason": "Document source-backed unknown for chapter-local Han witness without deleting person."
+      }
+    ],
+    "preservedClaims": [
+      {
+        "personId": "p010",
+        "predicate": "material-association",
+        "unitId": "s0051",
+        "value": {
+          "item": { "en": "Lutai treasury", "zh": "鹿台" },
+          "relation": "associated-with"
+        },
+        "certainty": "explicit",
+        "note": "Primary chapter-local evidence for p010 after repair."
+      },
+      {
+        "personId": "p010",
+        "field": "preferredName",
+        "value": ["King Zhou", "紂王", "Zhòu wáng"],
+        "note": "Cross-chapter identity header; not re-attributed to s0051."
+      }
+    ]
+  },
+  "affectedIdentities": {
+    "localPersonId": "jinshi:046:p010",
+    "canonicalPersonId": "per_02AW44T8PXPEWJ24STSX",
+    "unchangedMembership": true,
+    "unresolvedIdentity": true,
+    "chapterLocalHanWitnessAfterRepair": "鹿台 (material-association only)",
+    "anchorWitness": "beiqishu:003:s0083「紂」"
+  },
+  "englishRepairs": [
+    {
+      "unitId": "s0051",
+      "field": "idiomatic",
+      "before": "History shows states ruined by amassing wealth while dispersing the people—think of King Zhou's Lutai or the Juqiao hoard—cases too familiar to rehearse.",
+      "after": "History shows states ruined by amassing wealth while dispersing the people—think of Lutai and Juqiao-type hoards—cases too familiar to rehearse.",
+      "reason": "Chinese names only 鹿台、钜橋; idiomatic must not introduce proper name 紂/ King Zhou absent from the source sentence.",
+      "artifactPath": "data/jinshi/046.json",
+      "applyVia": "editorial-decision queue (separate from extraction pin)"
+    }
+  ],
+  "scopedValidationReceipt": {
+    "command": "npm run people:validate -- --book jinshi --chapter 046",
+    "exitCode": 0,
+    "recordedAt": "2026-11-24T09:52:00.000Z",
+    "status": "PASS",
+    "summary": "Scoped person data validation passed for jinshi/046: 1 extraction(s), 58 local people, 170 mentions, 586 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s), 1 claim retraction(s).",
+    "interpretation": "Structural validation passes on pinned extraction; p010 identity hold remains until extractionRepair removes false s0051 title/mention witnesses. After repair, expect mention/claim count decrease for p010 without removing the person record."
+  },
+  "remainingBlocker": "Independent chapter-local approve for case sha256:891c1aec… still requires either (a) accepted policy for anchor-only Han witness with unresolvedIdentity, or (b) a future jinshi/046 unit with literal 紂/紂王—none exists in current source.",
+  "dependencyChanges": [
+    "Host applies extractionRepair to data/people/extractions/jinshi/046.json.",
+    "Optional: apply englishRepairs[0] via editorial workflow on data/jinshi/046.json.",
+    "Owner updates owner-evidence case disposition to hold with witnesses 鹿台 only after extraction pin; independent re-review.",
+    "Do not merge canonical per_02AW44T8PXPEWJ24STSX membership from this artifact alone."
+  ],
+  "notIndependentApproval": true
+}
