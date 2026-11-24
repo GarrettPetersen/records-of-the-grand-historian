@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "191"
+  },
+  "ownerAgentId": "bc-b1524905-c914-4161-8283-fb44e76947f1",
+  "workerId": "cursor-nov24-retained-staging-w15-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "08cda70c9fa8613d8c0579e302faec7e9f71c71ccf34fe72c79c7bc1142ed8b6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-191-947f1",
+  "extractionBytes": 115209,
+  "inputBlobWitness": {
+    "source": "8be16a0a460d8131be2c254d5bfe7fd7c69c9e81",
+    "extraction": "06ba69c963ff774631852b17806827795240a540",
+    "editorial": "08e30e75b88b36f0d83c0000abcc75b9964abd9f"
+  },
+  "sealedInputs": {
+    "source": "sha256:17aa171b4f105c68860d10146fa9699b72ae0fe0b11c971b7b88f695e132f3ec",
+    "extraction": "sha256:23ff917cd49bd5fd649cc53c0ca0cef29c7c784871580f816e7dad7df9e962c0",
+    "editorial": "sha256:6aaaf0b12fb356ecfe6ad08168744c337453b4aafaab8d030b1c61108021fe9b"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 172,
+    "translatedCount": 172,
+    "missingEnglish": 0,
+    "sourceTitle": "Volume 191 Biographies 78: Virtuous Officials 1",
+    "fullEnglishCoverage": true,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 60,
+    "claimsInWorkOrder": 348,
+    "noReextraction": true,
+    "sourceExtractionSha256Verified": "sha256:23ff917cd49bd5fd649cc53c0ca0cef29c7c784871580f816e7dad7df9e962c0"
+  },
+  "editorialReuse": {
+    "acceptedDecisionCount": 6,
+    "status": "reviewed-with-applied-proposals",
+    "noReseal": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-191/date-packet.json",
+    "sha256": "sha256:63b56ed41dc4c62506b9c7aef00b8ccca679d25c4611c78170d2750e6821b932",
+    "command": "npm run people:dates:packet -- --book yuanshi --chapter 191 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-191/date-packet.json",
+    "dateHintChecks": 185,
+    "peopleInPacket": 60,
+    "sourceUnitsInPacket": 0,
+    "extractionHashInPacket": "sha256:71fe52251a80c7a455f3c083a946403a04bf86b0c61ddd8ab903097dc92cf269"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 191",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/191: 1 extraction(s), 60 local people, 339 mentions, 517 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 191",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "independentDateAuditMissing": true,
+    "notIndependentApproval": true,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned three-part inputs witness-verified at staging 20b8d0e3. No data/people/date-audits/yuanshi/191.json (no-native-date-report). Source English coverage complete on all 172 Chinese units; sealed extraction and 6 accepted editorial repairs pass people:validate with zero proposed repairs. Native date packet sealed; people:dates:verify un-audited — owner did not record independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/yuanshi/191.json",
+      "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-191/date-packet.json",
+      "datePacketSha256": "sha256:63b56ed41dc4c62506b9c7aef00b8ccca679d25c4611c78170d2750e6821b932",
+      "instruction": "Independent reviewer audits all 185 packet items; record with people:dates:record. Owner handoff is not date approval."
+    },
+    "identity": {
+      "gate": "independent-canonical-identity-review",
+      "instruction": "Bounded dossier identity review on sealed extraction after date gate; owner did not seal identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 191",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 191",
+    "datesPacket": "npm run people:dates:packet -- --book yuanshi --chapter 191 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-191/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, registry, deploy, or merge."
+}
