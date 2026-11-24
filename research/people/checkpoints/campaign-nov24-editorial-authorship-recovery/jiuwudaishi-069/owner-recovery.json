@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-recovery",
+  "scope": "jiuwudaishi/069",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "worker": "cursor-nov24-retained-editorial-1",
+  "mode": "editorial",
+  "phase": "hold-pending-independent-review-2",
+  "branch": "cursor/nov24-retained-jiuwudaishi-069-982823",
+  "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+  "masterPin": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "idempotencyKey": "9e36b2b14e566548b268f89d431ca3694631c4500fc66d2aa813ed966fa57186",
+  "inputBlobs": {
+    "data/jiuwudaishi/069.json": "47062339714c235917269ad31f17acd4267c6ec5",
+    "data/people/extractions/jiuwudaishi/069.json": "9128ab26f3b6110d27ac06b587aa90bb64da820b",
+    "data/people/date-audits/jiuwudaishi/069.json": "bf61a900688122bf45424e564994323111f97916",
+    "data/people/editorial-decisions/jiuwudaishi/069.json": "769a3424eead505ee9dba9caecdcc1668629c760"
+  },
+  "observedPriorPR": 5648,
+  "filesConsulted": [
+    "data/jiuwudaishi/069.json",
+    "data/people/extractions/jiuwudaishi/069.json",
+    "data/people/date-audits/jiuwudaishi/069.json",
+    "data/people/editorial-decisions/jiuwudaishi/069.json",
+    "scripts/lib/people-editorial-decisions.mjs",
+    "scripts/validate-people-data.mjs"
+  ],
+  "commands": [
+    {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 069",
+      "exitCode": 1,
+      "summary": "applied jiuwudaishi:069:r0004 has no matching independent accept/revise authorization; applied jiuwudaishi:069:r0005 has no matching independent accept/revise authorization"
+    }
+  ],
+  "gateFailure": {
+    "gate": "editorial",
+    "error": "EditorialDecisionValidationError",
+    "errors": [
+      "applied jiuwudaishi:069:r0004 has no matching independent accept/revise authorization",
+      "applied jiuwudaishi:069:r0005 has no matching independent accept/revise authorization"
+    ]
+  },
+  "diagnosis": {
+    "retainedIndependentReview": {
+      "reviewerAgentId": "bc-2df00a96-9e8a-44c9-ac33-1843c14f5659",
+      "proposalsFingerprint": "sha256:18af49c2ae7ce4ede6492a5e7e551c2d293ecb98c5981242600cf750d7932c6f",
+      "acceptedProposalTargets": [
+        {
+          "repairId": "jiuwudaishi:069:r0001",
+          "unit": "s0016",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "jiuwudaishi:069:r0002",
+          "unit": "s0016",
+          "field": "literal"
+        },
+        {
+          "repairId": "jiuwudaishi:069:r0003",
+          "unit": "s0109",
+          "field": "idiomatic"
+        }
+      ],
+      "claimRevisions": 0,
+      "note": "Repair IDs renumbered after review 1. Later applied rows that match review-1 accept contracts by exact unit/field/before/after/reason remain valid even at new IDs."
+    },
+    "unauthorizedAppliedRepairs": [
+      {
+        "id": "jiuwudaishi:069:r0004",
+        "unit": "s0136",
+        "field": "literal",
+        "reason": "The Luzhou prefect 府帥孔 is Kong Qing: his biography records the same transfer from Xiangzhou to Luzhou. Expanding the Eng"
+      },
+      {
+        "id": "jiuwudaishi:069:r0005",
+        "unit": "s0136",
+        "field": "idiomatic",
+        "reason": "The office sequence in Kong Qing's biography identifies the surname-only Luzhou prefect, so the full English name is war"
+      }
+    ],
+    "cause": "New or reordered translation repairs were applied after independent review 1 without accept/revise records."
+  },
+  "supplementalRepairs": [
+    {
+      "id": "jiuwudaishi:069:r0004",
+      "unitId": "s0136",
+      "field": "literal",
+      "before": "At the beginning of Tongguang he was made vice minister of personnel; his civil-service selection was careless and mistaken, and he was demoted to a frontier post. He rode post-horses to Luzhou and sent a letter to the prefect Kong, saying, \"For fifteen years in the Gucheng mountains I called myself a recluse;",
+      "after": "At the beginning of Tongguang he was made vice minister of personnel; his civil-service selection was careless and mistaken, and he was demoted to a frontier post. He rode post-horses to Luzhou and sent a letter to the prefect Kong Qing, saying, \"For fifteen years in the Gucheng mountains I called myself a recluse;",
+      "reason": "The Luzhou prefect 府帥孔 is Kong Qing: his biography records the same transfer from Xiangzhou to Luzhou. Expanding the English reference disambiguates him from other men surnamed Kong.",
+      "sourceWitness": {
+        "citation": "s0136",
+        "excerpt": "同光初，除吏部侍郎，銓選疏謬，貶官塞地，馳驛至潞州，致書於府帥孔曰：「十五年穀城山裏，自謂逸人；"
+      }
+    },
+    {
+      "id": "jiuwudaishi:069:r0005",
+      "unitId": "s0136",
+      "field": "idiomatic",
+      "before": "At the beginning of Tongguang he was made vice minister of personnel; his civil-service selection was careless and mistaken, and he was demoted to a frontier post. He rode post-horses to Luzhou and sent a letter to the prefect Kong, saying, \"For fifteen years in the Gucheng mountains I called myself a recluse;",
+      "after": "At the beginning of Tongguang he was made vice minister of personnel; his civil-service selection was careless and mistaken, and he was demoted to a frontier post. He rode post-horses to Luzhou and sent a letter to the prefect Kong Qing, saying, \"For fifteen years in the Gucheng mountains I called myself a recluse;",
+      "reason": "The office sequence in Kong Qing's biography identifies the surname-only Luzhou prefect, so the full English name is warranted.",
+      "sourceWitness": {
+        "citation": "s0136",
+        "excerpt": "同光初，除吏部侍郎，銓選疏謬，貶官塞地，馳驛至潞州，致書於府帥孔曰：「十五年穀城山裏，自謂逸人；"
+      }
+    }
+  ],
+  "artifacts": {
+    "ownerRecovery": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-069/owner-recovery.json",
+    "supplementalReview2Seed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-069/supplemental-review-2-seed.json",
+    "retainedReview1V3": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-069/retained-review-1-v3.json",
+    "editorialV4RetainedPlusSeed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-069/editorial-v4-retained-plus-seed.json"
+  },
+  "remainingIssues": [
+    "applied jiuwudaishi:069:r0004 has no matching independent accept/revise authorization",
+    "applied jiuwudaishi:069:r0005 has no matching independent accept/revise authorization"
+  ],
+  "smallestPathForward": [
+    "Independent reviewer accepts supplemental-review-2-seed proposals with sourceWitness entries.",
+    "Publish schema v4 editorial history: byte-preserve review 1, append completed review 2.",
+    "Re-run npm run people:validate -- --book jiuwudaishi --chapter 069."
+  ],
+  "ownerDelta": "No changes to pinned canonical inputs; recovery and supplemental review seed only."
+}
