@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-unresolved-hold-plan-and-apply",
+  "book": "jinshu",
+  "chapter": "081",
+  "pullRequest": 5478,
+  "stagingHeadBefore": "1c6bd6d6ae16bceba2fa0225d6b4a1e818a261b4",
+  "independentReportCommit": "36299ce8d68f0843a2d2062a3dbdfe09032af213",
+  "independentReport": "research/people/jinshu081-date-audit-report-20261123-post-1c6bd6d6.json",
+  "independentSealProof": "research/people/jinshu081-date-audit-seal-proof-20261123-post-1c6bd6d6.json",
+  "ownerAgentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
+  "independentReviewerAgentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
+  "approvalStatus": "not-self-approved",
+  "reportSnapshot": {
+    "incorrect": 0,
+    "unresolvedBlockers": 89,
+    "itemChecksSupported": 840,
+    "personChecksSupported": 397,
+    "retainedPriorSupportedClaimChecks": 340,
+    "extractionHash": "sha256:1441a38474f9212b2ebee252d0accf90682d00a406979a70223dbd2aa4ceb700",
+    "sourceHash": "sha256:d6cf710bc3ab26109aacc25c1ff5bd2e7466cd27b8360c91ccb411c1842ed045"
+  },
+  "preserved": {
+    "approvedExactVerdicts": "all 840 supported item checks / 397 person checks retained as prior evidence; not mechanically overturned",
+    "englishRepairs": 15,
+    "sourceSupportedWestern": ["claim-44 AD 310", "claim-1202 AD 326", "claim-1342 AD 393"],
+    "clearedOutsideKnowledgeHints": true,
+    "primaryOwnerChapterOnly": "081; 023/031/047/110 left pinned"
+  },
+  "groupingReadOnce": {
+    "method": "Read each of 89 unresolved rationales once; cluster by actual shared clause/representation cause (not by finding label alone).",
+    "groups": [
+      {
+        "cause": "paired-attestation-research-hold-for-unresolved-death",
+        "count": 43,
+        "sharedReason": "Paired death residual lacks a convertible reign year; keep this attestation as an explicit research hold…",
+        "note": "Most sourceDate texts were non-calendar linked snippets required by native schema pairing."
+      },
+      {
+        "cause": "death-verb-without-reign-year",
+        "count": 40,
+        "phrases": ["卒", "害", "斬", "卒官", "死之", "殺", "薨", "所殺", "死于", "夜中卒", "斬撫", "斬之", "所害", "誅", "發憤卒", "死", "溺死", "遂薨", "病卒", "共殺", "襲殺", "尋卒"],
+        "note": "Death recorded with verb/phrase only; no reign/year on the death unit."
+      },
+      {
+        "cause": "reign-or-era-phrase-unresolved",
+        "count": 6,
+        "chinese": ["太寧末", "惠帝末", "成帝即位", "安帝反正", "永嘉中"],
+        "ids": ["claim-168", "claim-169", "claim-295", "claim-964", "claim-52", "claim-521"]
+      }
+    ]
+  },
+  "scopedPlan": {
+    "A_explicitSourceDateOrRelativeEvidence": {
+      "treatment": "Keep unresolved with exact linked Chinese; English stays in event/reason.",
+      "examples": [
+        {
+          "id": "claim-4",
+          "chinese": "遜在州十四年",
+          "schema": "attestation.sourceDate + unresolved",
+          "note": "Relative tenure evidence; paired with 太寧末 death hold."
+        },
+        {
+          "id": "claim-52",
+          "chinese": "惠帝末",
+          "schema": "attestation.sourceDate + unresolved"
+        },
+        {
+          "id": "claim-521",
+          "chinese": "永嘉中",
+          "schema": "attestation.sourceDate + unresolved"
+        }
+      ]
+    },
+    "B_genuinelyUndatedNoDatingClaim": {
+      "treatment": "Native contract: undatedSourceAttestation + event-only death (undated+unresolvedDeath fails Western gate). Applied where death Chinese is death-verb-only and no other date-bearing claims exist.",
+      "countApplied": 40,
+      "schema": {
+        "attestation": "undatedSourceAttestation:true + substantive event (≥20 chars); no sourceDate/western/unresolved",
+        "death": "event only; no dateContext"
+      },
+      "forbiddenAlternatives": [
+        "Mechanical clear of unresolved while leaving dating fields",
+        "Invented Western years",
+        "Validator edits"
+      ]
+    },
+    "C_realUnresolvedDatedAssertions": {
+      "treatment": "Retain unresolved; do not convert to undated.",
+      "deaths": [
+        { "id": "claim-168", "chinese": "太寧末" },
+        { "id": "claim-169", "chinese": "惠帝末" },
+        { "id": "claim-295", "chinese": "成帝即位" },
+        { "id": "claim-964", "chinese": "安帝反正" }
+      ],
+      "attestations": [
+        { "id": "claim-52", "chinese": "惠帝末" },
+        { "id": "claim-521", "chinese": "永嘉中" }
+      ],
+      "pairedAttestationHoldsRetained": 4,
+      "nextSource": "Independent reign/era conversion on the cited Chinese, or a later approved event-only death path if the auditor reclassifies the death unit as undated."
+    }
+  },
+  "applied": {
+    "claimChanges": 84,
+    "hintRebuilds": 40,
+    "afterUnresolvedItems": 9,
+    "afterUndatedAttestations": 381,
+    "afterDeathEventOnly": 40,
+    "extractionHash": "sha256:62827ed16cc88cf2d4aea9fac16773bf229e371900aec81826881a46241595e6",
+    "sourceHash": "sha256:d6cf710bc3ab26109aacc25c1ff5bd2e7466cd27b8360c91ccb411c1842ed045"
+  },
+  "validation": {
+    "command": "npm run people:validate -- --book jinshu --chapter 081",
+    "result": "PASS",
+    "appliedRepairs": 15
+  },
+  "concreteRemainingHolds": [
+    {
+      "ids": ["claim-168", "claim-4"],
+      "chinese": ["太寧末", "遜在州十四年"],
+      "reason": "Reign-end death + relative tenure attestation; native pairing requires attestation hold while death stays unresolved.",
+      "nextSource": "Independent conversion of 太寧末 / tenure endpoints from chapter-linked calendar evidence."
+    },
+    {
+      "ids": ["claim-169", "claim-52"],
+      "chinese": ["惠帝末"],
+      "reason": "Shared 惠帝末 milieu for Southwest revolt / Li Yi death; no single Western year.",
+      "nextSource": "Independent mid/late Emperor Hui conversion with event ownership."
+    },
+    {
+      "ids": ["claim-295", "claim-196"],
+      "chinese": ["成帝即位", "羊鑒"],
+      "reason": "Death dated 成帝即位; attestation units lack that phrase—hold retained for schema pairing.",
+      "nextSource": "Either bind attestation evidence to units carrying 成帝即位 when ownership is clear, or convert death only after independent undated/event-only approval."
+    },
+    {
+      "ids": ["claim-964", "claim-882"],
+      "chinese": ["安帝反正", "俄而季子"],
+      "reason": "Death milieu 安帝反正; attestation wording is non-calendar—hold retained for schema pairing.",
+      "nextSource": "Independent conversion of 安帝反正 or reclassification of death representation."
+    },
+    {
+      "ids": ["claim-521"],
+      "chinese": ["永嘉中"],
+      "reason": "Era-mid flight date without single-year conversion.",
+      "nextSource": "Independent Yongjia-mid conversion."
+    }
+  ],
+  "notDone": [
+    "No dateAudits/jinshu/081.json self-approval",
+    "No full audit rerun",
+    "No validator/queue edits",
+    "Identity completion still open"
+  ]
+}
