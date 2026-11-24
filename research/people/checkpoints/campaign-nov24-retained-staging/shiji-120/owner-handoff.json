@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "120"
+  },
+  "ownerAgentId": "bc-3e599c12-65a6-4321-81f6-bb56e9b8947a",
+  "worker": "cursor-nov24-retained-staging-w10-o5",
+  "idempotencyKey": "3527819b537633f8b9b49358f473fd0f32f09eb1522a1d9c3a0a3c08360b9838",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-120-8947a",
+  "campaign": "campaign-nov24-retained-staging",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "inputBlobWitness": {
+    "source": "65ad0c18d2fb4c0e205fda554da31463a94a1aff",
+    "extraction": "b22d0aeae07922ee34f183ca1917c220c6187593",
+    "editorial": "8e3f021d8ffe73e2f0b6bc8478800db060801279",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:0e01b56c5c59a64b0c66c2e2fb8949711a3d3f54dc6138c4a9043d5eed948391",
+    "extraction": "sha256:25d1462d228de5275ec632b36dfeabde64d61acf8344020ae8fe91e7661409bb",
+    "editorial": "sha256:e102c8abb660b802a05774d424bed7d22b62ac8ac7625624dcdc5c808e18dd7d"
+  },
+  "pinnedAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 37,
+    "claims": 212,
+    "extractionBytes": 69515,
+    "extractionContentSha256": "sha256:25d1462d228de5275ec632b36dfeabde64d61acf8344020ae8fe91e7661409bb"
+  },
+  "sourceCoverage": {
+    "titleEn": "Biographies of Ji and Zheng",
+    "sentenceCount": 160,
+    "translatedCount": 160,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "method": "Read chapter source JSON literal and idiomatic fields; meta sentenceCount cross-check."
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/shiji/120.json",
+    "gitBlob": "b22d0aeae07922ee34f183ca1917c220c6187593",
+    "promptVersion": 7,
+    "validation": "ok (37 people, 464 mentions, 324 claims, 423 candidates)",
+    "ownerEdits": false,
+    "note": "Pinned promptVersion 7 extraction retained verbatim; no re-extraction."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/shiji/120.json",
+    "gitBlob": "8e3f021d8ffe73e2f0b6bc8478800db060801279",
+    "appliedDecisionCount": 2,
+    "proposalCount": 2,
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-80579fdf-b733-4026-ba06-b4e8369ddcd6",
+      "runId": "run-6fc55115-7a1b-4731-8750-e5c376557c1b",
+      "completedAt": "2026-08-12T20:10:53.831Z"
+    },
+    "ownerEdits": false,
+    "note": "Accepted applied editorial decisions retained; no new proposals."
+  },
+  "chronologyStatus": "un-audited",
+  "nativeDateEvidence": {
+    "dateAuditFilePresent": false,
+    "peopleDatesStatus": "un-audited",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book shiji --chapter 120",
+    "sealedCandidateDatePacket": {
+      "reproductionCommand": "npm run people:dates:packet -- --book shiji --chapter 120 --out /tmp/shiji-120-date-packet.json",
+      "packetFileSha256": "sha256:7544fefa54f72a8fe73b74f36b4c5cf02ca326d202c89748858c95713bc0131b",
+      "packetSourceHash": "sha256:3947b60348242b6a6f3f5edff46f24aede88593ca5c10acfde3a7220dfbfa91a",
+      "packetExtractionHash": "sha256:8fafed5722fd661848265df256f9775d3f956de55b376b562b9bcc5ad345a5bb",
+      "itemCount": 92,
+      "peopleCount": 37,
+      "unitCount": 160,
+      "builtAtStaging": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+      "note": "Owner-built candidate packet for independent reviewer; not an approval."
+    }
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 120",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/120: 1 extraction(s), 37 local people, 464 mentions, 324 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s)."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/120.json",
+      "passed": true,
+      "summary": "ok (37 people, 464 mentions, 324 claims, 423 candidates)"
+    },
+    "blobWitnessMatch": {
+      "passed": true,
+      "method": "git hash-object on worktree paths matches inputBlobWitness at stagingBase"
+    },
+    "legacyTemporalDebt": "0 person records without attestation; 0 without active-date hint per people:validate"
+  },
+  "ownerFindings": {
+    "method": "Verify pinned git blobs and content SHA-256; full-sentence English coverage; native people:validate and extraction validator; rebuild date packet; people:dates:verify status. No independent date self-approval.",
+    "substantiveChangesRequired": false,
+    "rationale": "Sealed source, extraction, and applied editorial artifacts align at pinned blobs. Scoped validation passed with zero proposed repairs. No definite English omission or source-extraction contradiction found in owner pass. Valid undated attestations may remain subject to independent chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "artifact": "data/people/date-audits/shiji/120.json",
+      "requiredAction": "Independent reviewer audits sealedCandidateDatePacket, then records with people:dates:record",
+      "ownerApproved": false
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "note": "Native extraction validation surfaced identity resolution candidates; bounded dossier review follows accepted chronology.",
+      "ownerApproved": false
+    }
+  },
+  "holds": [],
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 120",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/120.json",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 120 --out /tmp/shiji-120-date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 120",
+    "datesStatus": "npm run people:dates:status -- --book shiji --chapter 120"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report remains the missing gate."
+}

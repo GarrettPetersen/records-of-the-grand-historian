@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "089"
+  },
+  "ownerAgentId": "bc-3e599c12-65a6-4321-81f6-bb56e9b8947a",
+  "worker": "cursor-nov24-retained-staging-w10-o5",
+  "idempotencyKey": "3527819b537633f8b9b49358f473fd0f32f09eb1522a1d9c3a0a3c08360b9838",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-089-8947a",
+  "campaign": "campaign-nov24-retained-staging",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "inputBlobWitness": {
+    "source": "18e5b7f745fbfa09e4c22922be7a0f6dca15d712",
+    "extraction": "442bb56bd49eb9ed1143a9841eabd99cf6a185d8",
+    "editorial": "79ded89106dd221ac1b4a6260b80fcb7b39b1843",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:6916b9811d269df6ad0a393cd9b3cf1f6c8fa7e80e423f5a80bfab6747c62ce9",
+    "extraction": "sha256:2ee6583e1bc9923d74650624fbb6bfad6d13edf75cbe94ad88c0a6474f7408f0",
+    "editorial": "sha256:0eac8d2e5adc289c47aab253ebea435bc36fef4da77e6d4aa4790e5b738cfd7d"
+  },
+  "pinnedAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 27,
+    "claims": 228,
+    "extractionBytes": 67971,
+    "extractionContentSha256": "sha256:2ee6583e1bc9923d74650624fbb6bfad6d13edf75cbe94ad88c0a6474f7408f0"
+  },
+  "sourceCoverage": {
+    "titleEn": "Volume 89 Biographies 19: Yelu Shucheng, Yang Ji, Yelu Hanliu, Yang Ji, Yelu Heshang",
+    "sentenceCount": 134,
+    "translatedCount": 134,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "method": "Read chapter source JSON literal and idiomatic fields; meta sentenceCount cross-check."
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/liaoshi/089.json",
+    "gitBlob": "442bb56bd49eb9ed1143a9841eabd99cf6a185d8",
+    "promptVersion": 7,
+    "validation": "ok (27 people, 196 mentions, 347 claims, 274 candidates)",
+    "ownerEdits": false,
+    "note": "Pinned promptVersion 7 extraction retained verbatim; no re-extraction."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/liaoshi/089.json",
+    "gitBlob": "79ded89106dd221ac1b4a6260b80fcb7b39b1843",
+    "appliedDecisionCount": 6,
+    "proposalCount": 6,
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-e3a21219-3134-4c20-a5d6-90f1b065aeb6",
+      "runId": "run-ffacf256-3adb-40ae-9fae-d7cca4617e28",
+      "completedAt": "2026-08-12T04:17:30.072Z"
+    },
+    "ownerEdits": false,
+    "note": "Accepted applied editorial decisions retained; no new proposals."
+  },
+  "chronologyStatus": "un-audited",
+  "nativeDateEvidence": {
+    "dateAuditFilePresent": false,
+    "peopleDatesStatus": "un-audited",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 089",
+    "sealedCandidateDatePacket": {
+      "reproductionCommand": "npm run people:dates:packet -- --book liaoshi --chapter 089 --out /tmp/liaoshi-089-date-packet.json",
+      "packetFileSha256": "sha256:55a585f4f822e9e96a1b725e3abebf7ac37aa45d64baaa49b5451ea7dac4198d",
+      "packetSourceHash": "sha256:7400b62258e924478d013f6a5ff751fab6f61d8a367b372419e0bd3f6ff11cb7",
+      "packetExtractionHash": "sha256:7982bab687b4478cdf8fe8c95b7ae85963a246c72b013d13455eaa7e28620419",
+      "itemCount": 82,
+      "peopleCount": 27,
+      "unitCount": 134,
+      "builtAtStaging": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+      "note": "Owner-built candidate packet for independent reviewer; not an approval."
+    }
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 089",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/089: 1 extraction(s), 27 local people, 196 mentions, 347 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s)."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/liaoshi/089.json",
+      "passed": true,
+      "summary": "ok (27 people, 196 mentions, 347 claims, 274 candidates)"
+    },
+    "blobWitnessMatch": {
+      "passed": true,
+      "method": "git hash-object on worktree paths matches inputBlobWitness at stagingBase"
+    },
+    "legacyTemporalDebt": "0 person records without attestation; 0 without active-date hint per people:validate"
+  },
+  "ownerFindings": {
+    "method": "Verify pinned git blobs and content SHA-256; full-sentence English coverage; native people:validate and extraction validator; rebuild date packet; people:dates:verify status. No independent date self-approval.",
+    "substantiveChangesRequired": false,
+    "rationale": "Sealed source, extraction, and applied editorial artifacts align at pinned blobs. Scoped validation passed with zero proposed repairs. No definite English omission or source-extraction contradiction found in owner pass. Valid undated attestations may remain subject to independent chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "artifact": "data/people/date-audits/liaoshi/089.json",
+      "requiredAction": "Independent reviewer audits sealedCandidateDatePacket, then records with people:dates:record",
+      "ownerApproved": false
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "note": "Native extraction validation surfaced identity resolution candidates; bounded dossier review follows accepted chronology.",
+      "ownerApproved": false
+    }
+  },
+  "holds": [],
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 089",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/liaoshi/089.json",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 089 --out /tmp/liaoshi-089-date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book liaoshi --chapter 089",
+    "datesStatus": "npm run people:dates:status -- --book liaoshi --chapter 089"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report remains the missing gate."
+}

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "066"
+  },
+  "ownerAgentId": "bc-3e599c12-65a6-4321-81f6-bb56e9b8947a",
+  "worker": "cursor-nov24-retained-staging-w10-o5",
+  "idempotencyKey": "3527819b537633f8b9b49358f473fd0f32f09eb1522a1d9c3a0a3c08360b9838",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-yuanshi-066-8947a",
+  "campaign": "campaign-nov24-retained-staging",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "inputBlobWitness": {
+    "source": "77050cc5db7fbd340c9b8dd497e365c991498bd4",
+    "extraction": "aaec858877e6ba2b075e64ef431616bc3f7426f5",
+    "editorial": "be18ddf074c5d63d6a9f3bf40ea757ab80c10382",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:3e2432d7addf4fde2d10c7a466caab223fde363b9bf24586781b205d1d7fdc87",
+    "extraction": "sha256:05534bc4003b2665c92034e54b84e4ca50f50245fd8ebdb96dbfa5a469b64558",
+    "editorial": "sha256:bb69a927f0514b304dcd70ba8d7972c728fec05d71921b7723f3fa303dbe43ba"
+  },
+  "pinnedAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 28,
+    "claims": 182,
+    "extractionBytes": 69118,
+    "extractionContentSha256": "sha256:05534bc4003b2665c92034e54b84e4ca50f50245fd8ebdb96dbfa5a469b64558"
+  },
+  "sourceCoverage": {
+    "titleEn": "Volume 66 Treatises 19: Rivers and Canals 3",
+    "sentenceCount": 246,
+    "translatedCount": 246,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "method": "Read chapter source JSON literal and idiomatic fields; meta sentenceCount cross-check."
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/yuanshi/066.json",
+    "gitBlob": "aaec858877e6ba2b075e64ef431616bc3f7426f5",
+    "promptVersion": 7,
+    "validation": "ok (28 people, 142 mentions, 301 claims, 519 candidates)",
+    "ownerEdits": false,
+    "note": "Pinned promptVersion 7 extraction retained verbatim; no re-extraction."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/yuanshi/066.json",
+    "gitBlob": "be18ddf074c5d63d6a9f3bf40ea757ab80c10382",
+    "appliedDecisionCount": 3,
+    "proposalCount": 3,
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "grok-4.5",
+      "model": "grok-4.5",
+      "agentId": "bc-19609e3e-6b95-4d68-8bb5-d87ccd2f3d75",
+      "runId": "run-98e9b406-7213-47d6-bd22-6067a3987e6a",
+      "completedAt": "2026-08-13T14:56:21.111Z"
+    },
+    "ownerEdits": false,
+    "note": "Accepted applied editorial decisions retained; no new proposals."
+  },
+  "chronologyStatus": "un-audited",
+  "nativeDateEvidence": {
+    "dateAuditFilePresent": false,
+    "peopleDatesStatus": "un-audited",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 066",
+    "sealedCandidateDatePacket": {
+      "reproductionCommand": "npm run people:dates:packet -- --book yuanshi --chapter 066 --out /tmp/yuanshi-066-date-packet.json",
+      "packetFileSha256": "sha256:c4c824101c6792787793324836a67584b75f07070a1394cad520ff998b768b3f",
+      "packetSourceHash": "sha256:25adb85b5b1988b758b9642328440ec3a46463256b2cac2f210c1020803d8649",
+      "packetExtractionHash": "sha256:fb899f9d5a804af75a0a9b1e2b6e999312c744481e5366d2917b53e00cb0e49d",
+      "itemCount": 67,
+      "peopleCount": 28,
+      "unitCount": 246,
+      "builtAtStaging": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+      "note": "Owner-built candidate packet for independent reviewer; not an approval."
+    }
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book yuanshi --chapter 066",
+      "passed": true,
+      "summary": "Scoped person data validation passed for yuanshi/066: 1 extraction(s), 28 local people, 142 mentions, 301 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s)."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/yuanshi/066.json",
+      "passed": true,
+      "summary": "ok (28 people, 142 mentions, 301 claims, 519 candidates)"
+    },
+    "blobWitnessMatch": {
+      "passed": true,
+      "method": "git hash-object on worktree paths matches inputBlobWitness at stagingBase"
+    },
+    "legacyTemporalDebt": "0 person records without attestation; 0 without active-date hint per people:validate"
+  },
+  "ownerFindings": {
+    "method": "Verify pinned git blobs and content SHA-256; full-sentence English coverage; native people:validate and extraction validator; rebuild date packet; people:dates:verify status. No independent date self-approval.",
+    "substantiveChangesRequired": false,
+    "rationale": "Sealed source, extraction, and applied editorial artifacts align at pinned blobs. Scoped validation passed with zero proposed repairs. No definite English omission or source-extraction contradiction found in owner pass. Valid undated attestations may remain subject to independent chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "chronology": {
+      "gate": "independent-native-date-audit",
+      "artifact": "data/people/date-audits/yuanshi/066.json",
+      "requiredAction": "Independent reviewer audits sealedCandidateDatePacket, then records with people:dates:record",
+      "ownerApproved": false
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "note": "Native extraction validation surfaced identity resolution candidates; bounded dossier review follows accepted chronology.",
+      "ownerApproved": false
+    }
+  },
+  "holds": [],
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 066",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/yuanshi/066.json",
+    "buildDatePacket": "npm run people:dates:packet -- --book yuanshi --chapter 066 --out /tmp/yuanshi-066-date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book yuanshi --chapter 066",
+    "datesStatus": "npm run people:dates:status -- --book yuanshi --chapter 066"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input edits, registry build, deploy, or merge. Independent native date report remains the missing gate."
+}
