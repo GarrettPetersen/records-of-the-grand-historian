@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "118"
+  },
+  "ownerAgentId": "bc-2e8802ad-6e60-4700-b09f-9b27d9b1b316",
+  "workerId": "cursor-nov24-four-part-owner-2",
+  "campaign": "campaign-nov24-four-part-audited",
+  "idempotencyKey": "42073ff08ec8747b551ff3f082f26431abd19dafc1953cdd67450b83ffac74ba",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-four-part-owner-jiuwudaishi-118-b1b316",
+  "providerProvenance": {
+    "mode": "transport-provenance",
+    "priorRun": "run-16421bc7-921a-4fcf-9512-bbbd7a9864b8",
+    "priorHandoffCommit": "ff7b4d2865384806e4f9310bdf10695a23fde6fb",
+    "identityPreparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "workflow": ".github/workflows/master-build-gate.yml",
+    "notes": "Exact four-part identity transport retained by GitHub Actions at native preliminary preparation; not re-sealed by this owner correction pass."
+  },
+  "inputBlobWitness": {
+    "source": "fd4ebb83701da9026081240628655fec4192664d",
+    "extraction": "1e79fa7958e4fda3c69abd91ff7dc9db80824c32",
+    "dateAudit": "212fbcf58eb3a7c52072e6934e100c181a9b6113",
+    "editorial": "4662e943bf870fb9c5a096410285a67c5672b070"
+  },
+  "sealedInputs": {
+    "source": "sha256:cd9229a2d434df8e0fd9385b7606d63ab34f5b2ec1b5b2010a12c39006a45f13",
+    "extraction": "sha256:3d9c0f222f28de9cfff08bccea3c8d8b5c492a18bdb633efe1ce8ccf05b17461",
+    "dateAudit": "sha256:4157f6477eb6b640cef4d3a0ddbd4cf73f2effcd5907fbadfe65d6c43fe588d0",
+    "editorial": "sha256:1dd9799fd4df2fda781b3cde826d74d78bc846238921d9fd56bdb134afa138cb"
+  },
+  "chapterReady": true,
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 118",
+    "summary": "Scoped person data validation passed for jiuwudaishi/118: 1 extraction(s), 130 local people, 484 mentions, 1580 claims, 0 proposed repair(s), 15 applied repair(s), 15 editorial decision(s), 1 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 15 person record(s) without an attestation, 15 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 195,
+      "translatedCount": 195,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 195 Chinese source units, 581 chronology and hint checks, and 130 people; no unsupported endpoint or chronology-changing translation defect was found.",
+    "editorialDecisionCount": 15,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English literal and idiomatic coverage scan; npm run people:validate; retained accepted extraction, audited chronology, and applied editorial artifacts; no canonical file edits.",
+    "sourceTitle": "Volume 118 Book of Later Zhou 20: Shizong Annals 5",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. No definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 108 prepared cases remains for independent bounded dossier review across 4 transport parts."
+  },
+  "holds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 108,
+    "identityTransportParts": 4,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-four-part-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 118"
+  },
+  "notes": "[CF-Pages-Skip] Transport-provenance correction; commit only owner-handoff without altering sealed inputs."
+}
