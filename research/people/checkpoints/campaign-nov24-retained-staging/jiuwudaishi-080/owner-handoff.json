@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "080"
+  },
+  "ownerAgentId": "bc-4f98e261-d538-4cb0-bec9-39c9eafbd1bb",
+  "worker": "cursor-nov24-retained-staging-w4-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "59a04912df122b6bef5844011ff6021e3523dd970d4a308dff88dcd5363db0b7",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiuwudaishi-080-bd1bb",
+  "inputBlobWitness": {
+    "source": "37564b642a99be6ef4a8852b395af1bf054e9281",
+    "extraction": "57f31a6ec526abd5130e28aad3c48242e24579b8",
+    "dateAudit": "f80be622d23bf916e463eea1fb9e3911e5a01162",
+    "editorial": "c7990b2c12d0111189b7500dd270a2cebc40cb09"
+  },
+  "sealedInputs": {
+    "source": "sha256:8a3e91137c9c5f1ca1d68d82d73925afba8cd272ac36694414067c19a2ea10f6",
+    "extraction": "sha256:dbd99f56d8dbf75f32a3e97f0204a35e9ab8ecce601d3fb79a9f7133e491161b",
+    "dateAudit": "sha256:0b6517ecf082ae909449630d0df1ec0e593593dc5637d96456b3b2a11bfc09cc",
+    "editorial": "sha256:169e78e1778953023a706f6efac6dbfddc8c1298bb9cf0042afd0db4f6a7f9cc"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 237,
+    "sentenceCount": 237,
+    "translatedCount": 237,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "editorialDecisionsReflectedInSource": true,
+    "unresolvedReferences": []
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 080",
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed for jiuwudaishi/080: 1 extraction(s), 183 local people, 476 mentions, 1860 claims, 0 proposed repair(s), 15 applied repair(s), 16 editorial decision(s), 2 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 080",
+      "exitCode": 0,
+      "status": "audited",
+      "findings": 0,
+      "reviewedAt": "2026-09-29T17:32:56.490Z",
+      "summary": "Reviewed 237 Chinese source units, 583 chronology and hint checks, and 183 people; no unsupported endpoint or chronology-changing translation defect was found."
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0
+    },
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 16,
+    "dateAuditStatus": "audited"
+  },
+  "substantiveFindings": "Witnessed Git blobs match staging commit 7cdf8f42. Full chapter read at pinned inputs: 183 named local people, 476 mentions, and 1860 claims align with Chinese annals text for Later Jin Gaozu annals 6 (Tianfu 6–7). Paired literal and idiomatic English is complete for all 237 units; accepted and revised editorial decisions (Yunzhou/Chanzhou/Yingzhou fixes, Xu Prefecture disambiguation, Chong'ai name form, and related claim revisions/retractions) are present in source. Independent date audit is current with zero findings. No new definite English omission, unsupported chronology, research-blocked identity hold, or source-hash gate surfaced in this owner pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "host-sealed-final-independent-review",
+    "notes": "Owner handoff certifies scoped validation, English coverage, and audited chronology at pinned blobs; it is not independent identity or final reviewer approval."
+  },
+  "authorEvidence": {
+    "method": "Git blob witness; content-unit English scan; editorial decision reflection check; npm run people:validate and people:dates:verify on exact staging checkout; chapter-local people, mention, and evidence spot-check; no extraction or source edits.",
+    "sourceTitle": "Volume 80 Book of Later Jin 6: Gaozu Annals 6",
+    "completedAt": "2026-11-24T16:20:00.000Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 080",
+    "datesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 080"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; handoff documents pinned scope without altering sealed inputs."
+}
