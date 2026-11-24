@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "022"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e6ad0ed95e8ca016f0e9ca8bd0bd83e8f77f90fbea7eefa56f8f5b486b70140c",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "ef2805fec5ce8d03df76a303fc401636a7662c7e",
+  "branch": "cursor/nov24-retained-owner-native-date-hanshu-022-8382d",
+  "ownerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/hanshu-022/owner-handoff.json",
+    "sha256": "d6442c5593e4ec771dc2388bdaf0851d5ccc12f325a2e45ae58910161a7eb574"
+  },
+  "inputBlobWitness": {
+    "source": "b218412fb9fd973a7fbd63bb8d90c02c448172e2",
+    "extraction": "0c5388dfbf1e128648dc1811895f8085ca8fe78c",
+    "dateAudit": "296d200758b43f003b69ac26e2a681cc6c1b2484",
+    "editorial": "4ded50d2a9d64a467c90f09f967484d403a05ba1"
+  },
+  "pinnedAuditEvidence": {
+    "sha256": "a03df043d016e096b4832ccd9e2d73237f5391578310fe51b8e0af98a60eefe8",
+    "status": "research-blocked",
+    "auditReviewedAt": "2026-09-23T06:28:22.217Z",
+    "coveredItems": 56,
+    "findings": 1,
+    "bytesPreserved": true
+  },
+  "sealedPacket": {
+    "sourceHash": "sha256:7404229a94394b655e1eae4483c7f5abc6449aa2d19e905ead5e55e1c0c1b38d",
+    "extractionHash": "sha256:6920530ba89f50de836dedc53c2d77797e727e915c797aab6cbff96f3bea9b89"
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "items": "56-item aggregate (claims, hints, people p001–p031)",
+      "problem": "Intentional source-specific research holds remain for quotations, commentary, retrospective exempla, and historiographical references without personal Western activity chronology.",
+      "sourceQuotes": [
+        {
+          "unit": "s0031",
+          "zh": "自女媧以下，帝鴻以前，諸子傳記，互有舛駮，敘說不同，無所取正，大要知其古帝之號而已。"
+        }
+      ],
+      "auditAction": "Retain holds and qualitative legendary-antiquity records; resolve only with separately verified person-specific evidence."
+    }
+  ],
+  "findingsDisposition": [
+    {
+      "findingIndex": 0,
+      "action": "no-extraction-edit",
+      "reason": "Owner spot-check of all 56 listed audit items found zero research-blocked rows carrying point westernYear without unresolved flags. Legendary-antiquity and Ban Gu historiographical voices are already non-Western or explicitly held; aggregate finding documents scheduling scope, not a single false date to repair in one change.",
+      "affectedPersonIds": ["p001", "p004", "p016", "p017", "p018", "p019", "p020", "p021", "p022", "p023", "p024", "p025", "p026", "p027", "p028", "p029", "p030", "p031"],
+      "perCaseReview": "Host independent reviewer should traverse the 56 item IDs in findings[0].items; owner pass found no contradictory precision to remove."
+    }
+  ],
+  "nativeDateRepairProposal": null,
+  "nativeValidation": {
+    "command": "npm run people:dates:verify -- --book hanshu --chapter 022",
+    "passed": true,
+    "detail": "research-blocked status matches pinned audit; applyDateRepairProposal not applicable."
+  },
+  "intactApprovals": {
+    "dateAuditFileUnchanged": true,
+    "qualitativeAntiquityRecordsPreserved": true
+  },
+  "definiteTranslationRepairs": [],
+  "residualHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Chapter remains research-blocked, not audited, until per-item holds resolve with person-specific evidence.",
+      "items": ["finding-0 aggregate"]
+    }
+  ],
+  "notes": "[CF-Pages-Skip] Aggregate hold preserved; per-case approval remains for host reviewer."
+}
