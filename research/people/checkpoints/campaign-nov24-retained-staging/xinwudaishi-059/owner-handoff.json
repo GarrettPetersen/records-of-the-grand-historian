@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "059"
+  },
+  "ownerAgentId": "bc-b6d2481d-79b0-4d5e-b8c2-c042356f094b",
+  "workerId": "cursor-nov24-retained-staging-w3-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "a3679b61740cd2696c6fa60df8c75b2dfd6edc4b2fadc4f7af0afb8ef7ab2390",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-retained-staging-owner-xinwudaishi-059-f094b",
+  "inputBlobWitness": {
+    "source": "4c9a5e969fc144bbf1efe545c4260e413497d7f0",
+    "extraction": "eb554b2b68329a687c756b9b23c845ce3343c87b",
+    "dateAudit": "be1327d938283f09d926cdc169d7bc0a061436e1",
+    "editorial": "3c7de4ea0ec3f20ae768da3dda153ab70ec2a751"
+  },
+  "sealedInputs": {
+    "source": "sha256:ba791136be34512015ca9e23ced2b4c136b7826d028304bb2f3dba46c3e678e4",
+    "extraction": "sha256:dfa46f3d35f8e92c4f5796fa750afc9ada825942df67846f90a333737de10f54",
+    "dateAudit": "sha256:c9ea0757a42f20e49d7f3cbb9d86207a1b9e7d9c2316c5801fb5e5db2fe91a14",
+    "editorial": "sha256:6fff99d8e59f258c69e26770bd823ae974a6a449dfe673e49133f945484d2944"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 285,
+    "translatedCount": 285,
+    "sentenceCount": 285,
+    "bothFieldsComplete": true,
+    "fullLiteralAndIdiomaticEnglish": true,
+    "missingUnits": [],
+    "sourceTitleEn": "Volume 59: Examination on Astronomy",
+    "sourceTitleZh": "卷五十九 司天考第二"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "Scoped person data validation passed for xinwudaishi/059: 1 extraction(s), 3 local people, 20 mentions, 34 claims, 0 proposed repair(s), 16 applied repair(s), 16 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "command": "npm run people:validate -- --book xinwudaishi --chapter 059",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 059",
+      "status": "research-blocked",
+      "auditVersion": 1,
+      "reviewedAt": "2026-09-23T12:59:21.933Z",
+      "findings": 1,
+      "hashesCurrent": true,
+      "stale": false
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialPassCompleted": true,
+      "editorialDecisionCount": 16,
+      "editorialStatus": "reviewed-with-applied-proposals",
+      "proposedRepairs": 0,
+      "extractionBytesWitness": 52444
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Complete initial independent audit of all 285 Chinese source units, all nine temporal or active-hint items, and all three people. This chapter is an astronomical annals record prefaced by a philosophical discussion of heaven and human affairs. Its Confucius references are undated literary allusions and its phrase 聖人既沒 supplies an undated death statement, not the external BC 551–479 lifespan presently attached to three attestations and the active hint. Those four derived records are source-specific research holds. The Yao and Shun qualitative legendary-antiquity records remain supported without invented Western chronology. No source or canonical extraction was changed."
+  },
+  "substantiveFindings": [
+    "Pinned git blobs match staging 7cdf8f42e53b; native people:validate passed; date-audit seals current (not stale).",
+    "Full literal and idiomatic English on all 285 Chinese units; no definite omission in owner pass.",
+    "Independent date audit retains 1 research-blocked finding group(s) with no incorrect verdicts; preserved holds not reopened.",
+    "All 16 editorial decision(s) already applied; no pending proposal queue and no canonical extraction or source edits proposed."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-7",
+        "claim-8",
+        "claim-9",
+        "hints-p001",
+        "p001"
+      ],
+      "problem": "The chapter names Confucius in undated philosophical and literary allusions, but gives neither a birth nor death year nor a dated event from which BC 551–479 follows. That imported life interval and its active-date hint need an independently pinned biographical source; the chapter itself does not supply it.",
+      "action": "Retain the undated Chinese allusions and death statement, but replace the imported Confucius range and matching hint only after a short, pinned independent biographical source establishes the claimed dates.",
+      "preserved": true,
+      "kind": "research-blocked-chronology"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "nextGate": "independent-final-chapter-review",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 059",
+    "validateDates": "npm run people:dates:verify -- --book xinwudaishi --chapter 059"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; push owner-handoff without altering sealed inputs."
+}
