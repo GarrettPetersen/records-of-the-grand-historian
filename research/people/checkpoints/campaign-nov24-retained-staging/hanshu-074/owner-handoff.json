@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "074"
+  },
+  "ownerAgentId": "bc-7c291193-59e6-437c-83d8-347d70592046",
+  "workerId": "cursor-nov24-retained-staging-w6-o2",
+  "model": "composer-2.5",
+  "idempotencyKey": "6deb790d5e4dede6dcc2c93f9b519a7b9dc1a8998b671b13529264b7fb44ec60",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-074-92046",
+  "inputBlobWitness": {
+    "source": "d34a44f1254f739ed8fef95f589c52e1f01caf4e",
+    "extraction": "c760c6d5f932fc5e492cffd25dbca8f30224f323",
+    "dateAudit": "e5fb60d6a6a1eaf41cf9675415079c71aab06d42",
+    "editorial": "4a32da733c7af930a5ffad9ff66d00312526668c"
+  },
+  "sealedInputContentSha256": {
+    "source": "sha256:6e1fe4da8e48e2f1f405303fba8d1cd1f44d345c767d34c1e3ab703bdb00f256",
+    "extraction": "sha256:f5f6411be03453d497d07319642079a66f60185bed9036b13858168813cd59f6",
+    "dateAudit": "sha256:4e9b27d14f555b409eed86c297c5600dfeac8e34e09fae80b0ea51f0e9ee09b3",
+    "editorial": "sha256:777bfd22a13e111c1d572c250ff9d5f81f20bb8c1d8c278ad779367a88d68b3f"
+  },
+  "inputWitnessMismatches": [],
+  "auditRecord": {
+    "state": "research-blocked",
+    "sha256": "4e9b27d14f555b409eed86c297c5600dfeac8e34e09fae80b0ea51f0e9ee09b3",
+    "affectedItems": 11,
+    "findings": 1,
+    "preservedReportBytes": true,
+    "reportFileStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T07:12:04.075Z",
+    "summary": "Fresh complete audit 372 units/103 items/82 people; explicit holds remain and no new defect found."
+  },
+  "sourceCoverage": {
+    "chineseUnits": 372,
+    "translatedCount": 372,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 96644,
+    "localPeople": 82
+  },
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book hanshu --chapter 074",
+    "peopleValidateSummary": "Scoped person data validation passed for hanshu/074: 1 extraction(s), 82 local people, 519 mentions, 357 claims, 0 proposed repair(s), 8 applied repair(s), 9 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 75 person record(s) without an attestation, 75 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book hanshu --chapter 074",
+    "dateAuditFileStatus": "research-blocked",
+    "dateAuditScopedVerifyStatus": "research-blocked",
+    "datesVerifyExitNonZero": true,
+    "extractionHashAlignedWithAudit": true,
+    "sourceHashAlignedWithAudit": true,
+    "editorialProposalCount": 9,
+    "editorialDecisionCount": 9,
+    "blockedClaimIds": [
+      "claim-20",
+      "claim-36",
+      "claim-69",
+      "hints-p003",
+      "hints-p011",
+      "hints-p019",
+      "hints-p053"
+    ],
+    "blockedPersonIds": [
+      "p003",
+      "p011",
+      "p019",
+      "p053"
+    ],
+    "blobWitnessVerified": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed inputs: Fresh complete audit 372 units/103 items/82 people; explicit holds remain and no new defect found. Independent date report remains research-blocked with 11 held item(s) in 1 native finding(s). people:validate passed on current extraction without new repairs. No definite English omission identified beyond already-applied editorial decisions (9 applied). Scoped people:dates:verify returns research-blocked, matching the retained report status.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-20",
+        "claim-36",
+        "claim-69",
+        "hints-p003",
+        "hints-p011",
+        "hints-p019",
+        "hints-p053",
+        "p019",
+        "p003",
+        "p053",
+        "p011"
+      ],
+      "problem": "Explicit source-specific holds remain.",
+      "action": "Preserve holds pending source qualification.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner handoff only; sealed inputs unchanged.",
+  "completedAt": "2026-11-24T16:44:08.326Z"
+}
