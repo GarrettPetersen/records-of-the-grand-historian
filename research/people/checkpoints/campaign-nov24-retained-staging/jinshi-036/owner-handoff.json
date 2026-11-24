@@ -1,0 +1,2219 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "036"
+  },
+  "ownerAgentId": "bc-0d0266f1-68e3-43d1-a588-b82c7850d884",
+  "worker": "cursor-nov24-retained-staging-w9-o2",
+  "idempotencyKey": "f7a291d673a43eac11f503874ab73f81468a43b3a83114a9af2298b9d0018c1a",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-036-0d884",
+  "inputBlobWitness": {
+    "source": "a9a4aae8b8d68b44fcc35de0429737261260830a",
+    "extraction": "0799b241a61ac960dd43439085304a0995fe4632",
+    "dateAudit": "341a4dc6750547381075cdf3206baf2c0891dca2",
+    "editorial": "aaddb10ceb57b75cbd5dc617eafceee3e1b6f103"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:f47cdb0ae9e1ff93dcc568ef744c9734e74b6fa9663c9fb79c9794dc662a7b8e",
+    "extraction": "sha256:1409c8f4679406715c90d3526a08436e0a6e6d62cef5c839d864d25682e19894",
+    "dateAudit": "sha256:f8d2cf0936e92ef760824c987ab31928f4ae7b1ba2923aa59c97755c77a79345",
+    "editorial": "sha256:1b9e9f46d27350ad3a22b9e58e1dd2829e9d8984cf6f9f804f1be9318ac89eed"
+  },
+  "dateAuditWitness": {
+    "state": "stale",
+    "contentSha256": "f8d2cf0936e92ef760824c987ab31928f4ae7b1ba2923aa59c97755c77a79345",
+    "findingGroups": 1,
+    "actionableItems": 54,
+    "reviewedAt": "2026-09-23T13:47:44.269Z",
+    "preservedIndependentReport": true,
+    "extractionHashAtAudit": "sha256:e7003d37379631a218117c7ff650051c5c87aa6d38e7066619224626c12d4b8d",
+    "currentExtractionHash": "sha256:d1eded5f1dfc98ac8534ccade42abd57e337463f24fcf366f84453162061a4fe",
+    "researchBlockedPersonIds": [
+      "p011",
+      "p012",
+      "p013",
+      "p014",
+      "p015",
+      "p016",
+      "p017",
+      "p023",
+      "p024",
+      "p025"
+    ]
+  },
+  "sourceCoverage": {
+    "chineseUnits": 366,
+    "missingTranslation": 0,
+    "emptyEnglishField": 0,
+    "bothFieldsPresent": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "peopleValidate": {
+      "passed": true,
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed for jinshi/036: 1 extraction(s), 25 local people, 212 mentions, 350 claims, 0 proposed repair(s), 20 applied repair(s), 20 editorial decision(s), 0 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs /agent/repos/records-of-the-grand-historian/data/people/extractions/jinshi/036.json",
+      "summary": "data/people/extractions/jinshi/036.json: ok (25 people, 212 mentions, 350 claims, 508 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshi --chapter 036",
+      "exitCode": 1,
+      "audited": false,
+      "status": "stale",
+      "payload": {
+        "total": 1,
+        "counts": {
+          "stale": 1
+        },
+        "chapters": [
+          {
+            "book": "jinshi",
+            "chapter": "036",
+            "status": "stale",
+            "auditVersion": 1
+          }
+        ]
+      }
+    },
+    "localPeople": 25
+  },
+  "substantiveFindings": "Full Chinese read (366 units); literal and idiomatic English complete on all units. Scoped extraction validate ok; people:validate passed. Date audit status stale; native summary: Complete independent audit of all 366 Chinese units, 163 temporal/hint checks, and 25 people. Direct named Jin regnal-year events are retained as supported. 34 claims and 10 active hints instead turn generic undated ritual-procedure roles into artificial Western spans and require No definite English omission or mistranslation identified in this owner pass. Retained independent date report bytes unchanged; scoped chronology proposals follow native finding actions only. Stale audit hold: extraction hash drift requires reconciliation before re-audit.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "findingIndex": 1,
+      "problem": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology.",
+      "action": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content.",
+      "itemIds": [
+        "claim-88",
+        "claim-92",
+        "claim-96",
+        "claim-100",
+        "claim-104",
+        "claim-108",
+        "claim-112",
+        "claim-113",
+        "claim-114",
+        "claim-115",
+        "claim-116",
+        "claim-117",
+        "claim-118",
+        "claim-119",
+        "claim-120",
+        "claim-121",
+        "claim-122",
+        "claim-123",
+        "claim-125",
+        "claim-126",
+        "claim-127",
+        "claim-128",
+        "claim-130",
+        "claim-131",
+        "claim-132",
+        "claim-133",
+        "claim-134",
+        "claim-135",
+        "claim-136",
+        "claim-227",
+        "claim-228",
+        "claim-241",
+        "claim-242",
+        "claim-257",
+        "hints-p011",
+        "hints-p012",
+        "hints-p013",
+        "hints-p014",
+        "hints-p015",
+        "hints-p016",
+        "hints-p017",
+        "hints-p023",
+        "hints-p024",
+        "hints-p025",
+        "p011",
+        "p012",
+        "p013",
+        "p014",
+        "p015",
+        "p016",
+        "p017",
+        "p023",
+        "p024",
+        "p025"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-88",
+          "personId": "p011",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Grand Commandant / 太尉 / Taiwei: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-92",
+          "personId": "p012",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Minister of Education / 司徒 / Situ: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-96",
+          "personId": "p013",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Director of the Secretariat / 中書令 / Zhongshuling: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-100",
+          "personId": "p014",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-104",
+          "personId": "p015",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Director of the Court of Imperial Sacrifices / 太常卿 / Taichangqing: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-108",
+          "personId": "p016",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Vice Minister of Personnel / 吏部侍郎 / Libu shilang: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-112",
+          "personId": "p017",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Vice Minister of Rites / 禮部侍郎 / Libu shilang: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初即位儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-113",
+          "personId": "p011",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Grand Commandant / 太尉 / Taiwei: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Grand Commandant",
+              "zh": "太尉"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Grand Commandant",
+              "zh": "太尉"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-114",
+          "personId": "p011",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Grand Commandant / 太尉 / Taiwei: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Grand Commandant presenting the book",
+              "zh": "奉冊太尉"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Grand Commandant presenting the book",
+              "zh": "奉冊太尉"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-115",
+          "personId": "p011",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Grand Commandant / 太尉 / Taiwei: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "presented-investiture-book",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "presented-investiture-book",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-116",
+          "personId": "p011",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Grand Commandant / 太尉 / Taiwei: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0062",
+              "quote": "奉冊太尉從升，至褥位，搢笏，少前跪置訖，執笏，俯伏，興、樂止，退於前楹稍西立以俟。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "knelt-and-set-down-book",
+            "place": {
+              "en": "cushioned station on the hall platform",
+              "zh": "殿上褥位"
+            },
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "knelt-and-set-down-book",
+            "place": {
+              "en": "cushioned station on the hall platform",
+              "zh": "殿上褥位"
+            },
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-117",
+          "personId": "p012",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Minister of Education / 司徒 / Situ: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Minister of Education",
+              "zh": "司徒"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Minister of Education",
+              "zh": "司徒"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-118",
+          "personId": "p012",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Minister of Education / 司徒 / Situ: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0056",
+              "quote": "次通事舍人、太常博士又二員分引寶，禮部侍郎押寶而行，奉寶司徒、讀寶侍中、舉寶官於寶後以次從之，詣西階下，至冊寶褥位少置冊北，寶南，樂止。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Minister of Education presenting the seal",
+              "zh": "奉寶司徒"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Minister of Education presenting the seal",
+              "zh": "奉寶司徒"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-119",
+          "personId": "p012",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Minister of Education / 司徒 / Situ: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "presented-investiture-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "presented-investiture-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-120",
+          "personId": "p012",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Minister of Education / 司徒 / Situ: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0083",
+              "quote": "奉寶司徒從升，至褥位，搢笏，少前跪置，訖，執笏，俯伏，興，樂止。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "knelt-and-set-down-seal",
+            "place": {
+              "en": "cushioned station on the hall platform",
+              "zh": "殿上褥位"
+            },
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "presenter",
+            "action": "knelt-and-set-down-seal",
+            "place": {
+              "en": "cushioned station on the hall platform",
+              "zh": "殿上褥位"
+            },
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-121",
+          "personId": "p013",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Director of the Secretariat / 中書令 / Zhongshuling: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Director of the Secretariat",
+              "zh": "中書令"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Director of the Secretariat",
+              "zh": "中書令"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-122",
+          "personId": "p013",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Director of the Secretariat / 中書令 / Zhongshuling: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Director of the Secretariat reading the book",
+              "zh": "讀冊中書令"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Director of the Secretariat reading the book",
+              "zh": "讀冊中書令"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-123",
+          "personId": "p013",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Director of the Secretariat / 中書令 / Zhongshuling: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0061",
+              "quote": "進至殿上，博士舍人分左右於前楹立以俟，讀冊中書令于欄子外前楹稍西立以俟，舉冊官、捧冊官立於其後。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "read-investiture-book",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "read-investiture-book",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-125",
+          "personId": "p013",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Director of the Secretariat / 中書令 / Zhongshuling: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0071",
+              "quote": "中書令俟冊興，先退。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "withdrew-by-eastern-steps",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "withdrew-by-eastern-steps",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-126",
+          "personId": "p014",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Palace Attendant",
+              "zh": "侍中"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Palace Attendant",
+              "zh": "侍中"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-127",
+          "personId": "p014",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0056",
+              "quote": "次通事舍人、太常博士又二員分引寶，禮部侍郎押寶而行，奉寶司徒、讀寶侍中、舉寶官於寶後以次從之，詣西階下，至冊寶褥位少置冊北，寶南，樂止。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Palace Attendant reading the seal",
+              "zh": "讀寶侍中"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Palace Attendant reading the seal",
+              "zh": "讀寶侍中"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-128",
+          "personId": "p014",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0081",
+              "quote": "讀寶侍中於欄子外前楹間稍西立以俟。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "read-investiture-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "read-investiture-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-130",
+          "personId": "p014",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0092",
+              "quote": "侍中俟寶興先退，通事舍人引，降自西階，複本班，訖，舁寶官進前，與捧寶舉寶官等取寶盝興，置於殿之西間褥位案上，東向。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "withdrew-by-western-steps",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "reader",
+            "action": "withdrew-by-western-steps",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-131",
+          "personId": "p015",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Director of the Court of Imperial Sacrifices / 太常卿 / Taichangqing: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Director of the Court of Imperial Sacrifices",
+              "zh": "太常卿"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Director of the Court of Imperial Sacrifices",
+              "zh": "太常卿"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-132",
+          "personId": "p015",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Director of the Court of Imperial Sacrifices / 太常卿 / Taichangqing: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "guide",
+            "action": "preceded-book-and-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "guide",
+            "action": "preceded-book-and-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-133",
+          "personId": "p016",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Vice Minister of Personnel / 吏部侍郎 / Libu shilang: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Vice Minister of Personnel",
+              "zh": "吏部侍郎"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Vice Minister of Personnel",
+              "zh": "吏部侍郎"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-134",
+          "personId": "p016",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Vice Minister of Personnel / 吏部侍郎 / Libu shilang: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "escort",
+            "action": "escorted-investiture-book",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "escort",
+            "action": "escorted-investiture-book",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-135",
+          "personId": "p017",
+          "verdict": "incorrect",
+          "predicate": "office",
+          "eventOwnership": "Chronology context for Vice Minister of Rites / 禮部侍郎 / Libu shilang: office",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "title": {
+              "en": "Vice Minister of Rites",
+              "zh": "禮部侍郎"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "title": {
+              "en": "Vice Minister of Rites",
+              "zh": "禮部侍郎"
+            },
+            "action": "held",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-136",
+          "personId": "p017",
+          "verdict": "incorrect",
+          "predicate": "event-participation",
+          "eventOwnership": "Chronology context for Vice Minister of Rites / 禮部侍郎 / Libu shilang: event-participation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0056",
+              "quote": "次通事舍人、太常博士又二員分引寶，禮部侍郎押寶而行，奉寶司徒、讀寶侍中、舉寶官於寶後以次從之，詣西階下，至冊寶褥位少置冊北，寶南，樂止。"
+            }
+          ],
+          "before": {
+            "kind": "ritual",
+            "role": "escort",
+            "action": "escorted-investiture-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1115,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1123,
+                  "precision": "year"
+                }
+              }
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "kind": "ritual",
+            "role": "escort",
+            "action": "escorted-investiture-seal",
+            "dateContext": {
+              "sourceDate": {
+                "text": "國初即位儀"
+              },
+              "unresolved": true
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-227",
+          "personId": "p023",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Emperor / 皇帝 / Huangdi: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0309",
+              "quote": "竿木伎人四人，緣繩爭上竿，取雞所銜絳幡，展示訖，三呼「萬歲」。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初／肆赦儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初／肆赦儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-228",
+          "personId": "p023",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Emperor / 皇帝 / Huangdi: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0339",
+              "quote": "宣赦日，于應天門外設香案，及設香輿於案前，又於東側設卓子，自皇太子宰臣以下序班定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "宣赦日"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "宣赦日"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-241",
+          "personId": "p024",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Crown Prince / 皇太子 / Huang taizi: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "典贊儀引皇太子至班前褥位立定，典儀曰：「拜。」"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初／肆赦儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初／肆赦儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-242",
+          "personId": "p024",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Crown Prince / 皇太子 / Huang taizi: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0339",
+              "quote": "宣赦日，于應天門外設香案，及設香輿於案前，又於東側設卓子，自皇太子宰臣以下序班定。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "宣赦日"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "宣赦日"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "claim-257",
+          "personId": "p025",
+          "verdict": "incorrect",
+          "predicate": "attestation",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: attestation",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0327",
+              "quote": "侍中於御座前承旨，退臨軒宣曰：「有制。」"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "國初／肆赦儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "after": {
+            "sourceDate": {
+              "text": "國初／肆赦儀"
+            },
+            "unresolved": true,
+            "unresolvedReason": "Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p011",
+          "personId": "p011",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Grand Commandant / 太尉 / Taiwei: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p012",
+          "personId": "p012",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Minister of Education / 司徒 / Situ: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p013",
+          "personId": "p013",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Director of the Secretariat / 中書令 / Zhongshuling: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p014",
+          "personId": "p014",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p015",
+          "personId": "p015",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Director of the Court of Imperial Sacrifices / 太常卿 / Taichangqing: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p016",
+          "personId": "p016",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Vice Minister of Personnel / 吏部侍郎 / Libu shilang: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p017",
+          "personId": "p017",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Vice Minister of Rites / 禮部侍郎 / Libu shilang: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p023",
+          "personId": "p023",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Emperor / 皇帝 / Huangdi: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0309",
+              "quote": "竿木伎人四人，緣繩爭上竿，取雞所銜絳幡，展示訖，三呼「萬歲」。"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p024",
+          "personId": "p024",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Crown Prince / 皇太子 / Huang taizi: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "典贊儀引皇太子至班前褥位立定，典儀曰：「拜。」"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "hints-p025",
+          "personId": "p025",
+          "verdict": "incorrect",
+          "predicate": "active-date-hints",
+          "eventOwnership": "Chronology context for Palace Attendant / 侍中 / Shizhong: active-date-hints",
+          "reason": "The source describes an undated ritual role or procedure. Its imported dynasty-wide Western interval is not a date of this person or event; retain the Chinese wording as an unresolved source-specific hold.",
+          "evidence": [
+            {
+              "unit": "s0327",
+              "quote": "侍中於御座前承旨，退臨軒宣曰：「有制。」"
+            }
+          ],
+          "before": [
+            "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+          ],
+          "after": {
+            "after": []
+          },
+          "direction": "Replace only these listed claim intervals and their corresponding active hints with source-specific unresolved research holds; retain sourceDate, evidence, identity, predicate, and all non-date content."
+        },
+        {
+          "itemId": "p011",
+          "personId": "p011",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Grand Commandant",
+              "太尉",
+              "Taiwei"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p012",
+          "personId": "p012",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Minister of Education",
+              "司徒",
+              "Situ"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p013",
+          "personId": "p013",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Director of the Secretariat",
+              "中書令",
+              "Zhongshuling"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p014",
+          "personId": "p014",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Palace Attendant",
+              "侍中",
+              "Shizhong"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p015",
+          "personId": "p015",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0054",
+              "quote": "太常博士、通事舍人二員分引冊，太常卿前導，吏部侍郎押冊而行，奉冊太尉、讀冊中書令、舉冊官於冊後以次從之。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Director of the Court of Imperial Sacrifices",
+              "太常卿",
+              "Taichangqing"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p016",
+          "personId": "p016",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Vice Minister of Personnel",
+              "吏部侍郎",
+              "Libu shilang"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p017",
+          "personId": "p017",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0052",
+              "quote": "太常博士、通事舍人四員再引太尉、司徒、中書令、侍中、吏禮部侍郎複進至冊寶所稍南，立定。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Vice Minister of Rites",
+              "禮部侍郎",
+              "Libu shilang"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p023",
+          "personId": "p023",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0309",
+              "quote": "竿木伎人四人，緣繩爭上竿，取雞所銜絳幡，展示訖，三呼「萬歲」。"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Emperor",
+              "皇帝",
+              "Huangdi"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p024",
+          "personId": "p024",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0322",
+              "quote": "典贊儀引皇太子至班前褥位立定，典儀曰：「拜。」"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Crown Prince",
+              "皇太子",
+              "Huang taizi"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        },
+        {
+          "itemId": "p025",
+          "personId": "p025",
+          "verdict": "research-blocked",
+          "kind": "research-blocked-person-hold",
+          "eventOwnership": "This is a generic ritual office or an undated procedural participant. The chapter supplies no individual life chronology or finite active span; research is required rather than asserting the imported interval.",
+          "evidence": [
+            {
+              "unit": "s0327",
+              "quote": "侍中於御座前承旨，退臨軒宣曰：「有制。」"
+            }
+          ],
+          "before": {
+            "personName": [
+              "Palace Attendant",
+              "侍中",
+              "Shizhong"
+            ],
+            "activeHints": [
+              "research required: Generic offices and procedural roles in 國初即位儀, 肆赦儀, and 宣赦日 are undated. The extracted AD 1115–1123 and AD 1115–1234 intervals convert a chapter-level institutional setting into personal chronology."
+            ]
+          },
+          "after": {
+            "preserveUnknown": true,
+            "direction": "Retain research-blocked status; do not invent Western spans for undated ritual roles."
+          }
+        }
+      ]
+    }
+  ],
+  "distinctHolds": [
+    {
+      "kind": "stale-date-audit",
+      "summary": "Sealed date audit extractionHash no longer matches current extraction after applied editorial claim revisions.",
+      "auditExtractionHash": "sha256:e7003d37379631a218117c7ff650051c5c87aa6d38e7066619224626c12d4b8d",
+      "currentExtractionHash": "sha256:d1eded5f1dfc98ac8534ccade42abd57e337463f24fcf366f84453162061a4fe",
+      "resolution": "Reconcile under stale-date workflow: preserve prior audit bytes, validate scoped repairs against current packet, then independent re-audit."
+    },
+    {
+      "kind": "research-blocked-chronology",
+      "summary": "Ten ritual-role people remain research-blocked in the sealed audit; preserve without Western interval invention.",
+      "personIds": [
+        "p011",
+        "p012",
+        "p013",
+        "p014",
+        "p015",
+        "p016",
+        "p017",
+        "p023",
+        "p024",
+        "p025"
+      ]
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 036",
+    "validateDates": "npm run people:dates:verify -- --book jinshi --chapter 036"
+  },
+  "notes": "Owner handoff preserves sealed date-audit bytes; proposals carry forward native finding actions without re-approval. [CF-Pages-Skip]"
+}
