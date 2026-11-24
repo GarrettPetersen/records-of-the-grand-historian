@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "361"
+  },
+  "ownerAgentId": "bc-49e6f290-b200-4c74-8373-ec6bd8892443",
+  "workerId": "cursor-nov24-retained-staging-w17-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "75c761c05c9cf4b54876aff4122b0f4d500a5f86df55e73ad7634fedebe63f87",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-361-92443",
+  "extractionBytes": 189951,
+  "inputBlobWitness": {
+    "source": "036b705cb264076ecc24ae929ec485c3585bb016",
+    "extraction": "86a3106a6e0fc21f5e5c9a9db3a41b319ffd275e",
+    "editorial": "f6a1ef26e632dbe8cb68494cbea0b796776ab4a0",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:29cf230714883734ec49aee1cadbcc6296ff6ac85f2baca8e0d362f44291df98",
+    "extraction": "sha256:3d729378b8f071b62ab52b47925e8a58246f025b2ea1ad8c03f48527338fdf1b",
+    "editorial": "sha256:171ddb2fc0a3a99c2c34ff2853ef0958476d9bbb27410d7f3940052f6980eb36"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 361 Biographies 148: Liu Qing, Fu Nai, Yan Ruyi Son: Zheng Ji",
+    "chineseUnits": 263,
+    "translatedCount": 263,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-361/date-packet.json",
+    "packetSha256": "sha256:7b27a884437a9220e212870a03fc5a269f92d652578734ee43a32ac064cb5ba2",
+    "sourceHash": "sha256:a88b27e10e16ec363edfd40ad326f6a878dd2038feda8964f0071067922a8c9e",
+    "extractionHash": "sha256:fd8459ff5e1c698df1f08411ffff8a68fcd04791808a5f047866f505e62246ce",
+    "dateHintChecks": 331,
+    "peopleInPacket": 88,
+    "sourceUnitsInPacket": 264,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 361 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-361/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPromptVersion": 7,
+    "extractionReused": true,
+    "editorialReused": true,
+    "appliedEditorialDecisions": 23,
+    "editorialReviewerAgentId": "bc-4106f5b8-e058-47df-869e-7450bdbf68e2",
+    "extractionValidate": "data/people/extractions/qingshigao/361.json: ok (88 people, 340 mentions, 916 claims, 564 candidates)"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 361",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/361: 1 extraction(s), 88 local people, 340 mentions, 916 claims, 0 proposed repair(s), 23 applied repair(s), 23 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 361",
+      "status": "un-audited",
+      "priorNativeDateReport": false
+    },
+    "chronologyStatus": "packet-prepared-awaiting-independent-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-verified at staging 20b8d0e3. Source read: 263 Chinese sentences with paired literal and idiomatic English; spot-check confirms applied editorial repairs (e.g. s0027 參贊 as Eledengbao title) are in source. Accepted extraction and editorial decisions preserved; extraction content SHA256 matches work-order pin. Fresh native date packet prepared from current inputs (331 hint checks, 88 people). No definite English omission or concrete source contradiction found in owner pass; no date-repair proposal filed because no extraction or source chronology defect was identified pending independent review.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/qingshigao/361.json",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-361/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 361",
+      "independentOfExtractor": true,
+      "ownerDidNotSelfApprove": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-date-approval",
+      "summary": "Bounded dossier identity review remains after independent date approval; owner pass did not run identity gates."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 361",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 361 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-361/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 361"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged. Missing gate is independent native date audit, not extraction or editorial rework."
+}
