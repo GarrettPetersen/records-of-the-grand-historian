@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu081-owner-witness-repair-independent-check",
+  "ownerRevision": "7bec9ac5168d4c4e3f0a4f38c969ff77e294d7b8",
+  "ownerPullRequest": 5478,
+  "witnessRepairCommit": "4c85e1d7b2c6d2af563411fba91ebe293f00bd5c",
+  "priorIndependentEvidence": "9eb48ddbcf7b93c4fd3185401389531d60ac49cd",
+  "method": "Read-only `git show` of compact extraction schema 2: name claim zh fields + zh personal-name surfaces",
+  "checks": [
+    {
+      "personId": "p238",
+      "nameClaimZh": "謝琰",
+      "surface": { "unit": "s0433", "quote": "琰", "kind": "personal-name" },
+      "independentVerdict": "supported",
+      "reason": "Owner adds value.zh and zh surface 琰 on s0433; matches narrative 安復請為為參軍，轉安子琰征虜司馬。"
+    },
+    {
+      "personId": "p355",
+      "nameClaimZh": "朱燾",
+      "surface": { "unit": "s0548", "quote": "燾", "kind": "personal-name" },
+      "independentVerdict": "supported",
+      "reason": "Owner adds value.zh and zh surface 燾 on s0548; matches 父燾 in Zhu Xu pedigree."
+    },
+    {
+      "personId": "p358",
+      "nameClaimZh": "朱序",
+      "surface": { "unit": "s0562", "quote": "序", "kind": "personal-name" },
+      "additionalArcUnits": ["s0564", "s0565", "s0568", "s0569", "s0571"],
+      "independentVerdict": "supported",
+      "reason": "Arc-local p358 gains value.zh and mononym zh spans on each name-claim unit; distinct from biography p354 at s0547 朱序。"
+    },
+    {
+      "personId": "p397",
+      "action": "removed at 7bec9ac",
+      "sourceUnit": "s0601",
+      "chinese": "遜、豹、宣、胤服勤於太興之間，毛、鄧、劉、朱馳騖乎咸和之後。",
+      "independentVerdict": "removal-supported",
+      "reason": "Only reign-era 太興 appears; no 司馬睿 or 元帝 token. Prior English Emperor Yuan gloss was unsupported person attribution; Emperor Yuan remains on authenticated 元帝 locals elsewhere."
+    }
+  ],
+  "eraAsPersonRule": "Never treat era name 太興 as a person; removal is chronologically and identically sound."
+}
