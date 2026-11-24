@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-exact-witness-delta",
+  "chapterKey": "jiuwudaishi/034",
+  "pullRequest": 5694,
+  "reviewerAgentId": "bc-48377864-ecae-4963-ac05-b322c6426607",
+  "ownerAgentId": "bc-8b552cba-a56f-4b55-8194-bc17c4abf8a7",
+  "ownerRevision": "0d6dd72341a602e4d874615956d3609449dd4ed1",
+  "ownerProposalHead": "94aba1804821bc489e094889e4e474d88e67415c",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/owner-after-independent-holds.json",
+  "ownerProposalSha256": "sha256:23ec18847214090da77c2a1152cfa4558eba73361734064eba0f345a6a374cda",
+  "ownerProposalBlob": "71ded492a5df9640a13f6bf51d6b160adc1b88cc",
+  "priorReviewHead": "9bf20a83e80163286b70dc675fe2689df06ca071",
+  "priorIndependentRun": "run-ac7fd369-949e-4b08-b9d4-eb491873080e",
+  "ownerRun": "run-0469b812-05d2-4cb3-90d0-542df8c0f207",
+  "idempotencyKey": "83268ff0d58ba9f7958ae1428b5b5d2630ac96315be1d84fcfa3ceb8d17af0a1",
+  "inputBlobWitness": {
+    "source": "9fcc75e14ba4f7d76cc638bb40368b648d22aa60",
+    "extraction": "8d71904267941b481da3ab2a18f0868b177edeec",
+    "dateAudit": "1597d845ec527262778ece40eb447b0f74981d9c",
+    "editorial": "bd0ac12a8b47d41bd8a9df87491170ab09cb9959"
+  },
+  "verdict": "scoped-patch-approved",
+  "summary": "Independently verified owner return on the two prior native witness holds. Accept both scoped extraction operations (kinship surface for p003; remove inferred p010 and dependent claims). Retain all 97 unaffected approve rows from prior partitioned reports without re-reading transport. No definite English repair required on s0007 or s0019.",
+  "closedCases": [
+    {
+      "caseId": "sha256:6b891bd2de5b7e4c65fdb112bf273bcf28240f9fe9ebb613d4a949fd33120057",
+      "localId": "jiuwudaishi:034:p003",
+      "canonicalPersonId": "per_1ZV1A5MJSGTAYR6FD2XA",
+      "priorVerdict": "hold",
+      "deltaVerdict": "approve-after-scoped-patch",
+      "unresolvedIdentity": true,
+      "reason": "Primary s0007「西川王衍父子及偽署將相官吏，除已行刑憲外，一切釋放。」pairs literal \"father and son\" with idiomatic \"his son\"; adding attested kinship-reference surface 子 at s0007 occurrence 0 makes witness quote「王衍父子」admissible under assertDossierPrimaryWitness while retaining descriptive label 王衍之子. Whether 父子 is one son or several remains source-supported uncertainty, not a contradiction.",
+      "sourceWitnesses": [
+        {
+          "localId": "jiuwudaishi:034:p003",
+          "book": "jiuwudaishi",
+          "chapter": "034",
+          "unitId": "s0007",
+          "quote": "王衍父子"
+        }
+      ],
+      "englishVerified": {
+        "unitId": "s0007",
+        "literal": "Wang Yan of Shu, father and son, and the falsely appointed generals, ministers, and officials, except those already punished under criminal law, were all released.",
+        "idiomatic": "Wang Yan of Shu, his son, and Shu's puppet ministers and officials were freed except those already executed.",
+        "definiteEnglishOmission": false
+      }
+    },
+    {
+      "caseId": "sha256:925c8c384017fb7fa86cea854320d114a3ee11b9629518cb50e0203059b9e964",
+      "localId": "jiuwudaishi:034:p010",
+      "canonicalPersonId": "per_TT90SGB056CNMRPB377R",
+      "priorVerdict": "hold",
+      "deltaVerdict": "case-closed-by-local-removal",
+      "reason": "s0019「存乂，郭崇韜之子婿也，故亦及於禍。」supports only Guo Chongtao→Cunyi son-in-law via 子婿; it does not name a daughter. Inferred jiuwudaishi:034:p010 and singleton per_TT90SGB056CNMRPB377R should be removed; kin-of claim between p009 and p006 without intermediaryPersonIds is the faithful representation. Idiomatic English already glosses 子婿 correctly; no repair.",
+      "sourceWitnesses": [
+        {
+          "localId": "jiuwudaishi:034:p009",
+          "book": "jiuwudaishi",
+          "chapter": "034",
+          "unitId": "s0019",
+          "quote": "存乂"
+        },
+        {
+          "localId": "jiuwudaishi:034:p006",
+          "book": "jiuwudaishi",
+          "chapter": "034",
+          "unitId": "s0019",
+          "quote": "郭崇韜"
+        }
+      ],
+      "englishVerified": {
+        "unitId": "s0019",
+        "literal": "Cunyi was Guo Chongtao's son-in-law; hence he too met disaster.",
+        "idiomatic": "Cunyi had married Guo Chongtao's daughter, so he fell with the Guo clan.",
+        "definiteEnglishOmission": false
+      }
+    }
+  ],
+  "heldCases": [],
+  "partialRepairsApproved": [
+    {
+      "changeId": "jiuwudaishi:034:owner-witness-p003",
+      "caseId": "sha256:6b891bd2de5b7e4c65fdb112bf273bcf28240f9fe9ebb613d4a949fd33120057",
+      "kind": "extraction-surface-addition",
+      "independentApproval": true,
+      "hostApplyRequired": true
+    },
+    {
+      "changeId": "jiuwudaishi:034:owner-witness-p010",
+      "caseId": "sha256:925c8c384017fb7fa86cea854320d114a3ee11b9629518cb50e0203059b9e964",
+      "kind": "extraction-person-removal",
+      "independentApproval": true,
+      "hostApplyRequired": true
+    }
+  ],
+  "supportedPatch": {
+    "proposedChanges": [
+      "jiuwudaishi:034:owner-witness-p003",
+      "jiuwudaishi:034:owner-witness-p010"
+    ],
+    "targetExtractionBlob": "8d71904267941b481da3ab2a18f0868b177edeec",
+    "expectedAfterApply": {
+      "people": 139,
+      "mentions": 580,
+      "claims": 1737,
+      "p003WitnessQuote": "王衍父子",
+      "p010Removed": true
+    },
+    "independentNote": "Approve host apply of owner proposedChanges[] exactly; do not broaden to other chapter rows. Regenerate identity transport after apply; then flip the two case rows in identity-report parts 003 and 006 only."
+  },
+  "unaffectedEvidenceReuse": {
+    "priorReportPins": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/independent-identity-report-part-001.json",
+        "sha256": "574778128d2746aa7a46eeeed396056321ddd08e13d4db375dbea5dea46ef4b3",
+        "reuse": "unchanged-97-case-approve-baseline"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/independent-identity-report-part-002.json",
+        "sha256": "1c4e2b0d5e0ebeed906bfacfb442e5248d1d07dd9d8c4f205b1397eb1d107660",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/independent-identity-report-part-003.json",
+        "sha256": "5b184170d480fb457e8b853a49dfc0ff0b8722749623c00eac2a9fb57f04117f",
+        "reuse": "update-one-case-row-after-apply-only"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/independent-identity-report-part-004.json",
+        "sha256": "1d2f47b61c67a58de79bc8d74cbae74fe0fcbbbef8906a8afb1024fdec93e871",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/independent-identity-report-part-005.json",
+        "sha256": "1a8c948ba1769565af5a78afcf28cd13bcbdecb4d8299c88575b4fedad19207f",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-034/independent-identity-report-part-006.json",
+        "sha256": "1ac081bb37a5aea8032fc34459fb36f1a23c99789d659b2f7320c7d3641f42fc",
+        "reuse": "update-one-case-row-after-apply-only"
+      }
+    ],
+    "unchangedApproveCount": 97,
+    "changedCaseCount": 2,
+    "transportRevision": "0f4d80bbd793ec5119921282664f5296b8bef7e4"
+  },
+  "nativeValidation": {
+    "priorReportSha256Verified": true,
+    "ownerProposalSha256Verified": true,
+    "ownerProposalBlobVerified": true,
+    "inputBlobsVerifiedAtOwnerRevision": true,
+    "primaryChineseEnglishVerified": {
+      "units": ["s0007", "s0019"],
+      "bothEnglishFieldsComplete": true
+    },
+    "operationReplay": {
+      "method": "Replay proposedChanges operations by matching before tuples; apply in independent scratch copy of pinned compact extraction 8d71904267941b481da3ab2a18f0868b177edeec.",
+      "result": "equal",
+      "validateCompactPeopleExtractionExitCode": 0,
+      "validatePeopleExtractionCli": "node scripts/validate-people-extraction.mjs /tmp/jiuwudaishi-034.full-patched.json",
+      "summary": "139 people, 580 mentions, 1737 claims"
+    },
+    "assertDossierPrimaryWitness": {
+      "p003BeforePatch": "rejected",
+      "p003AfterPatchQuote王衍父子": "admissible",
+      "p010AfterPatch": "person-absent-as-required"
+    },
+    "scopedPeopleValidateAtOwnerRevision": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 034",
+      "revision": "0d6dd72341a602e4d874615956d3609449dd4ed1",
+      "exitCode": 0,
+      "note": "Pre-apply baseline at owner revision; post-apply validation expected on patched extraction only."
+    },
+    "canonicalFilesEditedByIndependentReviewer": false
+  },
+  "residualHolds": [],
+  "definiteTranslationRepairs": [],
+  "completedAt": "2026-11-24T15:55:00.000Z",
+  "notes": "[CF-Pages-Skip] Independent exact-witness delta only; no canonical apply in this commit."
+}
