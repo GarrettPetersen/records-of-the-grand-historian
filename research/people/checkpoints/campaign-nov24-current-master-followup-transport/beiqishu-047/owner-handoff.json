@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "047"
+  },
+  "workerId": "cursor-nov24-current-master-followup-1",
+  "ownerAgentId": "bc-0fa2c5a7-1dcc-4526-9fd8-172656dd1d79",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "sourcePacketSha256": "63d96f0501424974194dc99ca86c0a8ad5d945498053751a2a09062f05cc3cc0",
+    "planFingerprint": "sha256:9a41b4cca245cfa597c22e1521358bd6c60fdefa5534d810f7d035e96b0fc475",
+    "transportSha256": "b6056aa5543cbbf293b9f37e313a510f2044fe262312ab6db50e4d13e80f8714",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "bc60037e55b3ad7c611b8234daa5b5351f07164074f5932eaf969c3ac3778c72",
+        "caseCount": 22
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "59708150f1036cc8cbbd6bb83409563b4f4cdf7c8eb4ce01aaa8ba9b043da6e5",
+        "caseCount": 23
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "c8b1d4e513e6131626f1b15b5d21d7ed727d63bd81c89aa542ea6272affbce7c",
+        "caseCount": 46
+      }
+    ],
+    "preparationReceiptSha256": "d0fb76c97a0d636e247ad3c9960b124adfe1424506fb33042d14ff5e36ff86e5"
+  },
+  "sealedInputs": {
+    "source": "sha256:ab26e72e846569ca047fe0104ce230ffc1c8be7dacb72957c84ff470eb62d58d",
+    "extraction": "sha256:fbf76094db09b10be5dd9ec38a98f6336e214e895afb2a131eb759fe84c87f3f",
+    "editorial": "sha256:089bea3752f5d8bee77677e4321fa5a17be3397b70bc7b3cfcebc237fa157dee",
+    "dateAudit": "sha256:069909cf452e41afce97c66094ca7b67c9cab0ff1d95aff32c04f334282c0265"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "6 applied editorial decisions; no pending proposals",
+  "reviewCases": 91,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 91 scoped identity cases retain preparation-proposed canonicalPersonId and accepted membership fingerprints. 37 overflow cases preserve bounded-retrieval uncertainty; 77/91 keep unresolvedIdentity true. No concrete wrong-actor or false-merge contradiction found. No canonical extraction or shared-registry edits.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "transportPart003": "transport-part-003.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:cbe9283383fc58c7204e3003bf0d96dad8146071276f15caa3e85fe553beb684",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book beiqishu --chapter 047",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/beiqishu-047/transport-part-003.json"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 1c48e717."
+}
