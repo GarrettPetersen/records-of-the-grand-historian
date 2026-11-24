@@ -1,28 +1,36 @@
-# Jinshu 067 independent review — substantive evidence (pin 73a655)
+# Jinshu 067 independent chronology evidence @ `f96a8b`
 
-**Candidate PR #5445** @ `73a655fb8523f92a12f58a5d1cd7cb0e815b3012`.  
-**Evidence branch only** — no edits to `data/people/extractions`, `data/people/date-audits`, registry, or queue.
+**Candidate #5445** pin `f96a8b20294d52d2489b17b70f1358e2daeba3cf`.  
+Uses **#5456** decision-table method + owner `owner-attestation-repairs-vs-5456.json`.
 
-## Superseded (not evidence)
+## Native report (research only)
 
-- **#5454 / `build-date-audit.mjs`**: default `supported` on every packet item with generic `zh.slice(0,8)` quotes. Passes structural validation only; **rejected** as chronology approval.
+- `date-audit-report-substantive.json` — **`needs-revision`**, **452/452** `itemChecks`, **174/174** `personChecks`
+- **No** `data/people/date-audits/jinshu/067.json` on this branch (candidate chronology gate still **un-audited** in repo path)
+- **Identity not started** (per pin until `audited` chronology)
 
-## This bundle
+## Attestation repairs verified
 
-| File | Role |
-| ---- | ---- |
-| `reviewed-decision-table.json` | Exhaustive decision source; no default verdicts in serializer |
-| `assemble-substantive-report.mjs` | Fails if quote ∉ unit; emits native report from table only |
-| `date-audit-report-substantive.json` | **`status: needs-revision`** — passes `validateDateAuditReport` |
-| `native-validation-receipt.json` | Validator pass + exact coverage counts |
-| `continuity-and-xi-yin-retained.json` | Preserved verified continuity + Xi Yin decisions |
+| Bucket | Count | Reviewer verdict |
+|--------|------:|----------------|
+| repin + correct | 51 | **supported** (quote ∈ cited unit) |
+| uncertain | 10 | **research-blocked** (circuit-breaker hold) |
 
-## Native coverage (honest)
+## Empty hints
 
-- **269 / 452** packet `itemChecks` (28 vital/hint + 241 attestation ownership)
-- **171 / 578** `reviewedUnits` (units touched by substantive checks)
-- **4** `personChecks` (p178, p029, p041, p166)
-- **61** attestation items **incorrect** (event quote not in cited unit)
-- **170** empty `active-date-hint` rows **not** substantively reviewed
+**170** empty `active-date-hint` rows independently reviewed with per-person Chinese witness (no blanket default).
 
-Native `people:dates:verify` on candidate remains **un-audited** (no `data/people/date-audits/jinshu/067.json` on candidate).
+## Preserved
+
+- Xi Yin **AD 384** (`s0373`), Wen Jiao undated death, 3 editorial accepts, continuity (Cai Mo, Wen Jiao merge; Liu Xia split).
+
+## Rebuild
+
+1. `node build-f96-decision-table.mjs`
+2. `node assemble-substantive-report.mjs`
+
+**#5454** all-supported template remains rejected evidence.
+
+## Owner minimum proposals (not applied on candidate)
+
+`owner-minimum-proposals-for-holds.json` — source-witnessed minimum fixes for **two** stable locals `jinshu:067:p041` / `jinshu:067:p166` and **ten** attestation holds; no calendar invention, no author edits on #5445 from this branch.
