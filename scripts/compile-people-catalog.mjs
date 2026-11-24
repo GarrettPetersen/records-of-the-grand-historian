@@ -716,7 +716,7 @@ function canonicalRecord(cluster, members, localMap, roleLabels, unresolvedLocal
 }
 
 function identityPairKey(left, right) {
-  return [left, right].sort().join('^@');
+  return [left, right].sort().join('\u0000');
 }
 
 export function unresolvedCandidateState(
@@ -728,7 +728,7 @@ export function unresolvedCandidateState(
   // Separation decisions may use a merged member outside this name block.
   const separatedCanonicalPairs = new Set();
   for (const key of keepSeparate) {
-    const localIds = key.split('^@');
+    const localIds = key.split('\u0000');
     if (localIds.length !== 2 || localIds.some((id) => !localMap.has(id))) {
       throw new Error(`Separation refers to an unknown local person: ${key}`);
     }
