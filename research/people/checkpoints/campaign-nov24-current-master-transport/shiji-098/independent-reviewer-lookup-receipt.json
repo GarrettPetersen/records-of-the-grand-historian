@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "shiji",
+    "chapter": "098"
+  },
+  "reviewerAgentId": "bc-3e66cb77-fda4-4ed2-a9f1-fd4956d42c22",
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm live lookup generation before optional header reads",
+      "generation": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Transport sealed cases and pinned chapter JSON are authoritative; lookup is auxiliary."
+    },
+    {
+      "route": "/v1/search?q=zh%3A%E5%82%85%E5%AF%AC&limit=3",
+      "purpose": "Sanity check bounded search route for reviewer session",
+      "blockingNameKeys": ["zh:傅寬"]
+    },
+    {
+      "route": "/v1/people/per_04CJ00AGP2A1MKD6AZ81",
+      "purpose": "Header confirmation for Grand Historian canonical id (transport part 001 case 1)"
+    }
+  ],
+  "conclusion": "Lookup used only for bounded auxiliary confirmation during independent review. All sourceWitnesses quotes, membership fingerprints, and verdicts are drawn from sealed transport parts, chapter extractions, and primary book JSON."
+}
