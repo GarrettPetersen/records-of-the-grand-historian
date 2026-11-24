@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "011"
+  },
+  "reviewerAgentId": "bc-5f478bc9-6d88-4c5b-8483-25c9084fb70c",
+  "reviewerName": "cursor-nov24-independent-liangshu-011",
+  "conclusion": "Auxiliary authenticated lookups on the pinned registry snapshot corroborate transport overflow buckets; omitted or empty search results are not separation evidence. Primary disposition rests on sealed transport Chinese witnesses and accepted membership fingerprints.",
+  "registrySnapshot": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+  "queries": [
+    {
+      "route": "GET /v1/search?key=zh:曹景宗&limit=8",
+      "total": 15,
+      "truncated": true,
+      "postingFingerprint": "sha256:dc5361ad44659938b96dc3789687dcaa9f75a57884d77af7dc8553f963db3183",
+      "note": "Matches transport overflow zh:曹景宗 (8 of 15 visited); does not disprove accepted chapter attribution."
+    },
+    {
+      "route": "GET /v1/search?key=zh:高祖&limit=8",
+      "total": 133,
+      "truncated": true,
+      "postingFingerprint": "sha256:f831d9bfdb715d67834fcfa8445d44f11a9e52a7f55900ff4d5718c5b3fe9202",
+      "note": "Dynasty-ambiguous title bucket; chapter units fix Liang-context Gaozu where attested."
+    },
+    {
+      "route": "GET /v1/search?key=zh:王奂&limit=8",
+      "total": 0,
+      "truncated": false,
+      "postingFingerprint": null,
+      "note": "Empty search on simplified-variant key is not uniqueness proof; primary witness uses traditional 王奐 in liangshu/011."
+    }
+  ]
+}
