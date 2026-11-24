@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "085"
+  },
+  "ownerAgentId": "bc-d5f71bc2-6ae8-4a92-b991-f7b98a18ea23",
+  "workerId": "cursor-nov24-retained-staging-w14-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "874b2e7369023fc9642cd3d323d142ed4db984631b4fc3560c2736da0f9d654c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-085-8ea23",
+  "extractionBytes": 106130,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 61,
+    "workOrderClaims": 315
+  },
+  "inputBlobWitness": {
+    "source": "1d7bcaeadd48ceec9371ba7233b404961c7fa460",
+    "extraction": "2f8bafac876983b0d08f778c462120196b161c15",
+    "editorial": "e184440db1874937dde3e006c13e8d66ed76f3ee",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:a14a8389b7720225a9d7fd112b141e8bd95619ad47cfaa0e3f8e0ca44329159c",
+    "extraction": "sha256:b7491a4d283f020d5f131cbaa9827fafb88343f50ef60659c6b523da8031ce44",
+    "editorial": "sha256:e9d0850a36e28740b268e19c28fd13cf215756d637e866a2df190ff3e0c08eed",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 85 Biographies 15: Xiao Talin, Xiao Guanyinnu, Yelu Tizi, Yelu Xieli, Yelu Nugua, Xiao Liu, Gao Xun, Xi Heshuonu, Xiao Taliege, Yelu Sahe",
+    "chineseUnits": 138,
+    "translatedCount": 138,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-085/date-packet.json",
+    "sha256": "sha256:55c37a2bc9b5ddd1afbde41c6cacafa4937b628ce8326c61a2ebd6b5e057df46",
+    "itemCount": 230,
+    "peopleCount": 61,
+    "unitCount": 138,
+    "sourceHash": "sha256:8ae403a6135b38d70f44d8b67704256b8249159732e581dc41e7a6f910c0fc97",
+    "extractionHash": "sha256:043e164fb58b1c9c7d0e7a4c90e2f8af3053a2e04432c488d4bb3734f46cd119",
+    "buildCommand": "npm run people:dates:packet -- --book liaoshi --chapter 085 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-085/date-packet.json"
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "agentId": "bc-37f47e87-60f3-4e66-94ff-eb41aab1cad5",
+    "completedAt": "2026-08-12T15:57:12.836Z",
+    "reextractAuthorized": false,
+    "sourceExtractionSha256Verified": true
+  },
+  "editorialReuse": {
+    "appliedRepairCount": 3,
+    "decisionCount": 3,
+    "status": "reviewed-with-applied-proposals",
+    "reReviewRequired": false
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 085",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 085",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true,
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/085: 1 extraction(s), 61 local people, 289 mentions, 528 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidatePassed": true
+  },
+  "candidateValidationCommands": {
+    "peopleValidate": "npm run people:validate -- --book liaoshi --chapter 085",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 085",
+    "datePacket": "npm run people:dates:packet -- --book liaoshi --chapter 085 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-085/date-packet.json"
+  },
+  "substantiveFindings": "Sealed three-part inputs (source, extraction, editorial) witness-verified at pinned git blobs on staging 20b8d0e3. Full chapter source read: 138 Chinese sentences with paired literal and idiomatic English. Prompt v7 extraction, accepted editorial repairs, and native people:validate pass at current fingerprints. No definite English omission or concrete source–extraction contradiction found in this owner pass; no owner-proposed date repairs. Missing gate: no data/people/date-audits/liaoshi/085.json — independent native chronology review still required before chapter completion.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "no-native-date-report",
+      "detail": "Fresh sealed date packet at research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-085/date-packet.json; reviewer must complete independent audit via people:dates:run or equivalent and record with people:dates:record. Owner does not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetSha256": "sha256:55c37a2bc9b5ddd1afbde41c6cacafa4937b628ce8326c61a2ebd6b5e057df46",
+      "itemCount": 230
+    },
+    "identity": "Corpus-level canonical identity review remains outside this chapter-owner scope unless transport dossier is separately assigned."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 085",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 085",
+    "datePacket": "npm run people:dates:packet -- --book liaoshi --chapter 085 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-085/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
