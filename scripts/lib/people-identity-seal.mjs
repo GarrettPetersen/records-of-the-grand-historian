@@ -99,8 +99,23 @@ function identityInputFiles(root) {
 }
 
 function fingerprintInputFiles(root, files) {
-  return peopleDigest(files.map(file => [file.split(path.sep).join('/'),
-    crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));
+  // Rechecking the seal runs alongside the resident compiled catalog. Reuse one
+  // bounded buffer rather than allocating a whole-file Buffer for every input;
+  // external-memory pressure can otherwise force repeated full-heap collections.
+  const buffer = Buffer.allocUnsafe(64 * 1024);
+  return peopleDigest(files.map(file => {
+    const digest = crypto.createHash('sha256');
+    const fd = fs.openSync(path.join(root, file), 'r');
+    try {
+      let bytes;
+      while ((bytes = fs.readSync(fd, buffer, 0, buffer.length, null)) !== 0) {
+        digest.update(buffer.subarray(0, bytes));
+      }
+    } finally {
+      fs.closeSync(fd);
+    }
+    return [file.split(path.sep).join('/'), digest.digest('hex')];
+  }));
 }
 
 export function identityInputSeal(root = REPO_ROOT) {
