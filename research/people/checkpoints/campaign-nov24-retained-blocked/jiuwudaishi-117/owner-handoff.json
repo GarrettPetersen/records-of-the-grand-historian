@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "117"
+  },
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "idempotencyKey": "537a607b878cb1183defd298f03781516f7cd3af0dd6e62cc5b67fdbf32c4972",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "branch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-117-d91335",
+  "observedBlocker": "Date audit report is stale",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/117.json",
+      "gitBlob": "71f8752e61f76073b3272b97843da1502f7f64ae",
+      "contentSha256": "sha256:2ef9c0a60450c8396d8292902efefb791991180fffa605c52a1ea01d2be44f88"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/117.json",
+      "gitBlob": "33bb141644ff163a5f3665e8c8f101af2e1151df",
+      "contentSha256": "sha256:cbe477071527ab7324b82f3c9cc52ca4c25e3e39a65af345e039759687745e0a"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/117.json",
+      "gitBlob": "a2f15edd0b77abd098c8c31a1b9218d19b6f9f89",
+      "contentSha256": "sha256:11306ad164771d224db2f01d96ee8845960ba626b8d2c2c040aae65c14405881"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/117.json",
+      "gitBlob": "e95348a1489e8423e69543bb8ca0097db485d43c",
+      "contentSha256": "sha256:7228fd0dc2631ccbba7eec4248680cc570afeb72a044593fd327feeb3673324a"
+    }
+  },
+  "testedRecoveryFindings": {
+    "sourceHashUnchanged": true,
+    "extractionHashChanged": true,
+    "sealedExtractionCommit": "194dae2acbb596e7b34af9d94e36b689e763a414",
+    "sealedExtractionHash": "sha256:46bec13d2080bdf458b78afbb0c6c69e6c2f4c5b17e0133912adda82afa61ace",
+    "currentExtractionHash": "sha256:cbe477071527ab7324b82f3c9cc52ca4c25e3e39a65af345e039759687745e0a",
+    "priorAuditStatus": "audited",
+    "priorFindingCount": 0,
+    "staleReason": "extractionHash changed while sourceHash unchanged; reception taxonomy migration on current extraction",
+    "changedChronologyFacts": [],
+    "taxonomyOnlyChanges": [
+      {
+        "id": "claim-844",
+        "changeKind": "reception-taxonomy-migration",
+        "chronologyUnchanged": true,
+        "before": {
+          "kind": "posthumous-commemoration",
+          "receptionType": "posthumous",
+          "role": "honoree",
+          "action": "posthumously granted Grand Commandant (贈太尉)"
+        },
+        "after": {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "honoree",
+          "action": "posthumously granted Grand Commandant (贈太尉)"
+        }
+      },
+      {
+        "id": "claim-849",
+        "changeKind": "reception-taxonomy-migration",
+        "chronologyUnchanged": true,
+        "before": {
+          "kind": "posthumous-commemoration",
+          "receptionType": "posthumous",
+          "role": "honoree",
+          "action": "posthumously granted Wuqing Army commissioner (贈武清軍節度使)"
+        },
+        "after": {
+          "kind": "retrospective-reference",
+          "receptionType": "retrospective",
+          "role": "honoree",
+          "action": "posthumously granted Wuqing Army commissioner (贈武清軍節度使)"
+        }
+      }
+    ],
+    "validateSealedAgainstAudit": {
+      "ok": false,
+      "error": "Date approval retains invalid temporal geometry or reception ownership"
+    },
+    "validateCurrentAgainstAudit": {
+      "ok": false,
+      "error": "Date audit report is stale"
+    }
+  },
+  "concreteProposedPatches": [
+    {
+      "kind": "native-date-proof-repin-eligibility",
+      "action": "Independent reviewer confirms taxonomy-only reception relabels, then native composition may repin date audit to current extractionHash without re-reading entire chapter",
+      "affectedClaimIds": [
+        "claim-844",
+        "claim-849"
+      ],
+      "chronologyFieldsUnchanged": true
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "sealedExtractionHash": "sha256:46bec13d2080bdf458b78afbb0c6c69e6c2f4c5b17e0133912adda82afa61ace",
+    "currentExtractionHash": "sha256:cbe477071527ab7324b82f3c9cc52ca4c25e3e39a65af345e039759687745e0a",
+    "sourceHash": "sha256:ea6ddf1e9f77837d89b28542c63f0ebfa3727ce8324ac6c3e4b1326772679dbf",
+    "taxonomyMigrationCommit": "07e5abb388dcb485f38f3ed07c1f896bbcdbd908"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/117.json",
+      "gitBlob": "a2f15edd0b77abd098c8c31a1b9218d19b6f9f89",
+      "contentSha256": "sha256:11306ad164771d224db2f01d96ee8845960ba626b8d2c2c040aae65c14405881"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/117.json",
+      "gitBlob": "e95348a1489e8423e69543bb8ca0097db485d43c",
+      "contentSha256": "sha256:7228fd0dc2631ccbba7eec4248680cc570afeb72a044593fd327feeb3673324a"
+    },
+    "preservedDateAuditPath": "data/people/date-audits/jiuwudaishi/117.json",
+    "editorialDecisionsRetained": true
+  },
+  "holds": {
+    "independentDateApprovalRequired": true,
+    "ownerDoesNotApproveProofReuse": true,
+    "doNotRetagExtractionHashOnHistoricalReport": true
+  },
+  "nativeValidation": {
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/117: 1 extraction(s), 132 local people, 492 mentions, 1259 claims, 0 proposed repair(s), 30 applied repair(s), 30 editorial decision(s), 1 claim retraction(s), 6 claim revision(s), 0 claim addition(s). Legacy temporal debt: 12 person record(s) without an attestation, 10 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "status": "stale",
+      "auditVersion": 1
+    }
+  },
+  "independentApprovalIssued": false,
+  "notes": "Preserve historical date-audit bytes; owner handoff is not approval."
+}
