@@ -1,0 +1,1594 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-stale-date-recovery-review",
+  "chapterKey": "jiuwudaishi/096",
+  "reviewerAgentId": "bc-9c5d0985-3f04-4c99-b777-785ea0e30aab",
+  "ownerAgentId": "bc-4f27effc-3b5c-4adf-ac00-6f5e76da3109",
+  "ownerRevision": "86b39fa04fae33a410e9a545f86ed603590f3985",
+  "ownerSha256": "sha256:b5817d532946b8c48ccb02a4cfe69e0c21a0f83d505205ebcc63630bba0a56ef",
+  "verdict": "hold",
+  "reviewedAt": "2026-11-24T11:51:46.845Z",
+  "reviewer": {
+    "name": "Independent Jiuwudaishi 096 stale-date recovery chronology reviewer",
+    "agentId": "bc-9c5d0985-3f04-4c99-b777-785ea0e30aab",
+    "independentOfExtractor": true,
+    "independentOfOwner": true
+  },
+  "reviewEvidence": {
+    "pinnedInputsVerified": {
+      "source": "sha256:c1cb365e445c526306c5fa9ec1f5beaa193b6a81d2e7cc2b7fe60ac8be8b54ab",
+      "extraction": "sha256:92a49ccdc807e33308f00d3016e0dc5a7d35b4921fa5a53bd3eeb3f4ff1ade59",
+      "dateAudit": "sha256:02f965bf042b5138908aeae74c9f5a27f19acad96a98ad65c3f91058cfb64bbe",
+      "editorial": "sha256:7f389dcba8311238826a4bc10258e4094171a9f34327ee8a73bbe60b89adbf0f",
+      "stagingGitBlobs": {
+        "source": "a50718a5e75fcb0143f8dd9dabab90005fc91559",
+        "extraction": "c8ad7eac268c609c58becbc3b43827a4ea77abf1",
+        "date": "1d5f93d4f729ffeae535b2db926cfe4f007d4df1"
+      }
+    },
+    "historicalPacketProof": {
+      "status": "PASS",
+      "detail": "Native validateDateAuditReport accepts the preserved 2026-09-29 audit against the sealed candidatePacket (extraction sha256:16e0e6b85b4f63491a8695fa827232fe74a25474914ef7f6d11665fa5c178dfe).",
+      "historicalExtractionHash": "sha256:16e0e6b85b4f63491a8695fa827232fe74a25474914ef7f6d11665fa5c178dfe",
+      "preservedAuditExtractionHash": "sha256:16e0e6b85b4f63491a8695fa827232fe74a25474914ef7f6d11665fa5c178dfe",
+      "sealedRecoveryPath": "data/people/date-repairs/jiuwudaishi/096/staged-candidate-8b09fad4ce0dfc1bce5b.json#candidatePacket",
+      "sealedCandidateHash": "sha256:8b09fad4ce0dfc1bce5b89f5e642a729529ab8320c50714984f2df6d0b978c12"
+    },
+    "currentPacket": {
+      "sourceHash": "sha256:afce1ceddc4afacfe8410af12be907f2070d440b937184bde679bd64013dbeb6",
+      "extractionHash": "sha256:7f8d21860d0ea1e72e06d5ba1a8c90dec2d1a820d35f3c1c35da56b47fc2dd18",
+      "itemCount": 209,
+      "peopleCount": 71,
+      "unitCount": 210
+    },
+    "packetComparison": {
+      "identicalToHistoricalItems": 151,
+      "changedItems": 58,
+      "unchangedCarryPolicy": "151 rows match the historical audited packet byte-for-byte on predicate, certainty, evidence, and temporal value; prior supported itemChecks remain valid without re-quoting because packet equivalence was verified independently."
+    },
+    "scopedOwnerDelta": [
+      "claim-9",
+      "claim-45",
+      "claim-60"
+    ]
+  },
+  "unchangedCarryover": {
+    "itemCount": 151,
+    "allPriorSupported": true,
+    "note": "No candidate audit is issued; carryover is documented only as equivalence evidence against the historical packet, not as approval on the stale current extraction hash."
+  },
+  "changedChecks": [
+    {
+      "id": "claim-3",
+      "personId": "p001",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0002",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p001 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-9",
+      "personId": "p001",
+      "predicate": "office",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0002",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold office chronology for p001 against current extraction geometry.",
+      "reason": "Chinese 天福中 on s0002 and English “During the Tianfu era” support Tianfu phase dating only. westernInterval.end AD 944 exceeds the AD 942 Tianfu cap and reintroduces the Kaiyun extension; the audited historical packet used AD 942.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-22",
+      "personId": "p003",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0015",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p003 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-44",
+      "personId": "p005",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0015",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p005 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-45",
+      "personId": "p005",
+      "predicate": "office",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0015",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold office chronology for p005 against current extraction geometry.",
+      "reason": "s0015 names 天福中 for Weihan’s chief-ministership context and Baoji’s bureau service. The event is Tianfu-phase office activity, not Kaiyun; AD 944 end is unsupported relative to the audited AD 936–942 interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-53",
+      "personId": "p007",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0015",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p007 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-56",
+      "personId": "p008",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0026",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p008 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-60",
+      "personId": "p008",
+      "predicate": "office",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0026",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold office chronology for p008 against current extraction geometry.",
+      "reason": "s0026 天福中，授左贊善大夫 is a Tianfu-era appointment only. Matching English “In the Tianfu era he was appointed left mentor” does not justify extending the interval to AD 944.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-74",
+      "personId": "p009",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0032",
+          "quote": "杜重威之鎮東平也，瑜父欽祚為節度副使，及重威移鎮常山，瑜乃詭計於重威，使"
+        }
+      ],
+      "event": "Hold attestation chronology for p009 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-82",
+      "personId": "p010",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0026",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p010 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-86",
+      "personId": "p011",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0026",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p011 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-90",
+      "personId": "p012",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0032",
+          "quote": "杜重威之鎮東平也，瑜父欽祚為節度副使，及重威移鎮常山，瑜乃詭計於重威，使"
+        }
+      ],
+      "event": "Hold attestation chronology for p012 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-131",
+      "personId": "p020",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0055",
+          "quote": "張繼祚，故齊王全義之子也。"
+        }
+      ],
+      "event": "Hold attestation chronology for p020 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "全義卒前",
+          "westernEnd": 926,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-149",
+      "personId": "p025",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0063",
+          "quote": "及敗，宰臣桑維翰以父珙早事齊王，奏欲雪之，高祖不允，"
+        }
+      ],
+      "event": "Hold attestation chronology for p025 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "齊王時",
+          "westernEnd": 926,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-157",
+      "personId": "p027",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0190",
+          "quote": "唐莊宗略地山東"
+        }
+      ],
+      "event": "Hold attestation chronology for p027 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "唐莊宗略地山東",
+          "westernEnd": 926,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-159",
+      "personId": "p027",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0194",
+          "quote": "末帝嗣位"
+        }
+      ],
+      "event": "Hold attestation chronology for p027 against current extraction geometry.",
+      "reason": "末帝嗣位/登極 names a single Later Tang Last Emperor accession event (AD 934), not continued activity across AD 934–936.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "末帝嗣位",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "末帝嗣位",
+          "westernEnd": 936,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-173",
+      "personId": "p029",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0194",
+          "quote": "末帝嗣位"
+        }
+      ],
+      "event": "Hold attestation chronology for p029 against current extraction geometry.",
+      "reason": "末帝嗣位/登極 names a single Later Tang Last Emperor accession event (AD 934), not continued activity across AD 934–936.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "末帝嗣位",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "末帝嗣位",
+          "westernEnd": 936,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-183",
+      "personId": "p032",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0070",
+          "quote": "唐明宗鎮其地"
+        }
+      ],
+      "event": "Hold attestation chronology for p032 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "唐明宗鎮其地",
+          "westernEnd": 926,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-184",
+      "personId": "p032",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0074",
+          "quote": "天成末"
+        }
+      ],
+      "event": "Hold attestation chronology for p032 against current extraction geometry.",
+      "reason": "天成末 is late Tiancheng (AD 929–930), not the whole Tiancheng era through AD 930.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天成末",
+          "westernEnd": 930,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天成末",
+          "westernEnd": 930,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-202",
+      "personId": "p035",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0074",
+          "quote": "天成末"
+        }
+      ],
+      "event": "Hold attestation chronology for p035 against current extraction geometry.",
+      "reason": "天成末 is late Tiancheng (AD 929–930), not the whole Tiancheng era through AD 930.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天成末",
+          "westernEnd": 930,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天成末",
+          "westernEnd": 930,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-205",
+      "personId": "p036",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0074",
+          "quote": "天成末"
+        }
+      ],
+      "event": "Hold attestation chronology for p036 against current extraction geometry.",
+      "reason": "天成末 is late Tiancheng (AD 929–930), not the whole Tiancheng era through AD 930.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天成末",
+          "westernEnd": 930,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天成末",
+          "westernEnd": 930,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-215",
+      "personId": "p038",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0085",
+          "quote": "莊宗入汴"
+        }
+      ],
+      "event": "Hold attestation chronology for p038 against current extraction geometry.",
+      "reason": "莊宗入汴 names the AD 923 Bian-entry event, not a full AD 923–926 reign window.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "莊宗入汴",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "莊宗入汴",
+          "westernEnd": 926,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-238",
+      "personId": "p041",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0190",
+          "quote": "莊宗"
+        }
+      ],
+      "event": "Hold attestation chronology for p041 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "莊宗",
+          "westernEnd": 926,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-241",
+      "personId": "p042",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0094",
+          "quote": "高祖即位之二年，授鳳州防禦使，加檢校司徒，會丁母憂，起復，授內客省使、右"
+        }
+      ],
+      "event": "Hold attestation chronology for p042 against current extraction geometry.",
+      "reason": "高祖即位之二年 is exactly the second year after accession (AD 937); 前後 with no Western year is imprecise relative to the source.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "高祖即位之二年",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "高祖即位之二年前後",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "claim-249",
+      "personId": "p044",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0204",
+          "quote": "末帝登極"
+        }
+      ],
+      "event": "Hold attestation chronology for p044 against current extraction geometry.",
+      "reason": "末帝嗣位/登極 names a single Later Tang Last Emperor accession event (AD 934), not continued activity across AD 934–936.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "末帝登極",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "末帝登極",
+          "westernEnd": 936,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-262",
+      "personId": "p046",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0204",
+          "quote": "末帝登極"
+        }
+      ],
+      "event": "Hold attestation chronology for p046 against current extraction geometry.",
+      "reason": "末帝嗣位/登極 names a single Later Tang Last Emperor accession event (AD 934), not continued activity across AD 934–936.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "末帝登極",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "末帝登極",
+          "westernEnd": 936,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-313",
+      "personId": "p057",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0122",
+          "quote": "唐"
+        }
+      ],
+      "event": "Hold attestation chronology for p057 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "唐",
+          "westernEnd": 820,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-317",
+      "personId": "p058",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0123",
+          "quote": "余慶生浣，浣生從讜，兩為太原節度使，再登相位。"
+        }
+      ],
+      "event": "Hold attestation chronology for p058 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "唐",
+          "westernEnd": 860,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-321",
+      "personId": "p059",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0123",
+          "quote": "余慶生浣，浣生從讜，兩為太原節度使，再登相位。"
+        }
+      ],
+      "event": "Hold attestation chronology for p059 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "唐",
+          "westernEnd": 890,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-326",
+      "personId": "p060",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0124",
+          "quote": "從讜兄處誨，為汴州節度使。"
+        }
+      ],
+      "event": "Hold attestation chronology for p060 against current extraction geometry.",
+      "reason": "This row is kinship, genealogy, or retrospective ruler context only. The Chinese does not supply a personal event with defensible Western endpoints; explicit undated attestation is required instead of a borrowed dynasty or reign interval.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": "唐",
+          "westernEnd": 890,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "claim-331",
+      "personId": "p061",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0131",
+          "quote": "高祖晏駕，以不赴國哀停任，會赦，拜京兆少尹。"
+        }
+      ],
+      "event": "Hold attestation chronology for p061 against current extraction geometry.",
+      "reason": "天福七年至八年 is AD 942–943 and requires an explicit narrow interval, not an undated phrase alone.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福七年至八年",
+          "westernEnd": 943,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福七年至八年",
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "claim-374",
+      "personId": "p068",
+      "predicate": "attestation",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [
+        {
+          "unit": "s0184",
+          "quote": "天福中"
+        }
+      ],
+      "event": "Hold attestation chronology for p068 against current extraction geometry.",
+      "reason": "The source names only 天福中 (later Jin Tianfu phase). The conservative Tianfu era cap is AD 936–942; assigning westernInterval.end AD 944 imports the unsupported Kaiyun-era extension that the sealed repair proof already removed.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": "天福中",
+          "westernEnd": 942,
+          "valueShape": "western-interval"
+        },
+        "after": {
+          "sourceDate": "天福中",
+          "westernEnd": 944,
+          "valueShape": "western-interval"
+        }
+      }
+    },
+    {
+      "id": "hints-p001",
+      "personId": "p001",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p001 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p003",
+      "personId": "p003",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p003 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p005",
+      "personId": "p005",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p005 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p007",
+      "personId": "p007",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p007 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p008",
+      "personId": "p008",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p008 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p009",
+      "personId": "p009",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p009 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p010",
+      "personId": "p010",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p010 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p011",
+      "personId": "p011",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p011 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p012",
+      "personId": "p012",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p012 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p020",
+      "personId": "p020",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p020 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p025",
+      "personId": "p025",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p025 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p027",
+      "personId": "p027",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p027 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p029",
+      "personId": "p029",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p029 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p032",
+      "personId": "p032",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p032 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p035",
+      "personId": "p035",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p035 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p036",
+      "personId": "p036",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p036 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p038",
+      "personId": "p038",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p038 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p041",
+      "personId": "p041",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p041 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p042",
+      "personId": "p042",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p042 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p044",
+      "personId": "p044",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p044 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p046",
+      "personId": "p046",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p046 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p057",
+      "personId": "p057",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p057 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p058",
+      "personId": "p058",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p058 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p059",
+      "personId": "p059",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p059 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p060",
+      "personId": "p060",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p060 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    },
+    {
+      "id": "hints-p068",
+      "personId": "p068",
+      "predicate": "active-date-hints",
+      "verdict": "incorrect",
+      "priorAuditedVerdict": "supported",
+      "evidence": [],
+      "event": "Hold active-date-hints chronology for p068 against current extraction geometry.",
+      "reason": "Active-date hints must follow the corrected claim chronology; current hints still reflect the unrestored extraction geometry.",
+      "packetDelta": {
+        "before": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        },
+        "after": {
+          "sourceDate": null,
+          "westernEnd": null,
+          "valueShape": "explicit-undated"
+        }
+      }
+    }
+  ],
+  "findings": [
+    {
+      "items": [
+        "claim-3",
+        "claim-9",
+        "claim-22",
+        "claim-44",
+        "claim-45",
+        "claim-53",
+        "claim-56",
+        "claim-60",
+        "claim-74",
+        "claim-82",
+        "claim-86",
+        "claim-90",
+        "claim-374"
+      ],
+      "problem": "Thirteen current extraction rows extend 天福中 conversions through AD 944, but Later Jin Tianfu in this chapter is independently capped at AD 942; Kaiyun begins after that cap.",
+      "action": "Apply the sealed AD 936–942 Tianfu intervals (or explicit undated treatment where appropriate) before any audited approval on the current extraction hash."
+    },
+    {
+      "items": [
+        "claim-131",
+        "claim-149",
+        "claim-157",
+        "claim-183",
+        "claim-238",
+        "claim-313",
+        "claim-317",
+        "claim-321",
+        "claim-326"
+      ],
+      "problem": "Current extraction reattaches dynasty- or reign-wide Western intervals to kinship, genealogy, and retrospective ruler mentions that the audited historical packet left explicitly undated.",
+      "action": "Remove borrowed dynasty intervals and retain source-only undated attestations on the listed rows."
+    },
+    {
+      "items": [
+        "claim-159",
+        "claim-173",
+        "claim-184",
+        "claim-202",
+        "claim-205",
+        "claim-215",
+        "claim-241",
+        "claim-249",
+        "claim-262",
+        "claim-331"
+      ],
+      "problem": "Current extraction widens or weakens several phase-specific Chinese labels (末帝嗣位/登極, 天成末, 莊宗入汴, 高祖即位之二年, 天福七年至八年) relative to the narrower audited geometry.",
+      "action": "Restore single-event, late-era, or explicit interval conversions matching each cited Chinese phrase before re-audit."
+    },
+    {
+      "items": [
+        "hints-p001",
+        "hints-p003",
+        "hints-p005",
+        "hints-p007",
+        "hints-p008",
+        "hints-p009",
+        "hints-p010",
+        "hints-p011",
+        "hints-p012",
+        "hints-p020",
+        "hints-p025",
+        "hints-p027",
+        "hints-p029",
+        "hints-p032",
+        "hints-p035",
+        "hints-p036",
+        "hints-p038",
+        "hints-p041",
+        "hints-p042",
+        "hints-p044",
+        "hints-p046",
+        "hints-p057",
+        "hints-p058",
+        "hints-p059",
+        "hints-p060",
+        "hints-p068"
+      ],
+      "problem": "Twenty-six active-date hint rows still propagate the unrestored claim chronology.",
+      "action": "Recompute hints only after claim repairs are curated onto the canonical extraction."
+    }
+  ],
+  "validation": {
+    "validateDateAuditReportHistorical": "PASS",
+    "validateDateAuditReportCurrentCandidate": "SKIPPED: verdict hold; no candidateAudit attached",
+    "substantiveItemReasons": true,
+    "substantiveEventFields": true,
+    "productionMutation": "NONE"
+  },
+  "notes": [
+    "Preserved audit bytes in data/people/date-audits/jiuwudaishi/096.json remain untouched.",
+    "Current canonical extraction hash sha256:7f8d21860d0ea1e72e06d5ba1a8c90dec2d1a820d35f3c1c35da56b47fc2dd18 remains stale until repairs are applied and a fresh audited report is recorded.",
+    "[CF-Pages-Skip]"
+  ]
+}
