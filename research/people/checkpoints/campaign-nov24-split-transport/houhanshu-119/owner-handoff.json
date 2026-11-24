@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "119"
+  },
+  "workerId": "cursor-nov24-partitioned-1",
+  "ownerAgentId": "bc-23529211-836c-4588-b3ee-a1d4918b098f",
+  "sourceRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "sourcePacketSha256": "b22ef670e98fe3bf759a77c608cfeffe5e222c66dab2722ff3b35907e2296a65",
+    "planFingerprint": "sha256:7b3ca225fa6938caf5608b7bbb0c9835f7d7eaaf34faec1f365b96906c0b9660",
+    "transportSha256": "sha256:746a781400cb860b4b576c7f937da243874fa0a81b06569622fe38b3bb9d6e72",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "de4a63bdd12d7044f30bf2be31ac9f14e95f53fcd75e4700cc9574f90a20d11d",
+        "caseCount": 22
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "10b3d3286d2c0e6bde4fcdc60b507fe2fea28f1f2f7306da59d79002c210bf90",
+        "caseCount": 22
+      }
+    ],
+    "preparationReceiptSha256": "450960bd0a6cb0d84133db5c75466487b6e08624306c9446a40818cc3985f4b1"
+  },
+  "sealedInputs": {
+    "source": "sha256:15a9a257e971d6cb9f3ac74f49581d9844a5a4a4bb99ed5483537fc417dbff55",
+    "extraction": "sha256:140689a475ba965997b644a0095938c941c3b3fa9e78979ce28d9ba35039d2fc",
+    "editorial": "sha256:14775c81ddf36bbde52762c6c73010f23bc0ada893bf97e531836f23fef8582b",
+    "dateAudit": "sha256:f1d9b1a5b1b372a147586b071783c565cc95c8a249defd909690a0446eba6c65"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed-with-applied-proposals",
+  "reviewCases": 44,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 44 scoped identity cases: retain accepted canonical membership; unresolvedIdentity preserved where proposed; no concrete chapter-level actor contradiction or false-merge hold.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:94861573ad7d80100765d262dbd69ed04e34c15054c7439ded22a60c2254e9cd",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 119"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 79ae4c4."
+}
