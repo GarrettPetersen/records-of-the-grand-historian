@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "247"
+  },
+  "ownerAgentId": "bc-6717c892-c42b-4f22-a800-2bc5fe9d9042",
+  "workerId": "cursor-nov24-retained-staging-w13-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7c9132bf7aa57d48c7e5f0ba17534a1bfcafa196a677534122252886613e9031",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-247-d9042",
+  "extractionBytes": 101651,
+  "inputBlobWitness": {
+    "source": "4297328a1a885104607dbc10b9f4de01e878b7b1",
+    "extraction": "cb3e4917f40316acc00928c02cf1189b5701235f",
+    "editorial": "7fcc3d67c2214412a9a23d78ab81d078b1ad5fa5"
+  },
+  "sealedInputs": {
+    "source": "sha256:c37798bd44a8c431860b21e1ba81ecdc0acde5dd0686a6b39996c7170eac5e8b",
+    "extraction": "sha256:e1453dc21c1228b46af124fcd66b1a127991d461d97ecf32c91ed6a8b208ddff",
+    "editorial": "sha256:46da933eadd3187b78c9e2b957670a5eb2d5e518d958cfb9b333b6477fc7a94b"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-247/date-packet.json",
+    "sha256": "sha256:1786696191e4f7f9cea610a19f67da450e2af202b7a96a8af670629566c7d4b3",
+    "sourceHash": "sha256:df7ecc44e2ab6623892f42f0639d74aa681bf775bfd77893d4f25cf4f788760d",
+    "extractionHash": "sha256:49209e794eac3959fbc7db4facc556962cb1ed7cb2775f2485033b1d89428393",
+    "itemCheckCount": 177,
+    "personCheckCount": 45,
+    "sourceUnitCount": 226
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 247 Biographies 34: Peng Ershu, Lu Zhenfen, Yao Yanzhu, Bi Zhenji, Fang Guodong, Yu Pengju, Wang Tianjian, Yue Tingbiao",
+    "chineseUnits": 226,
+    "translatedCount": 226,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "sourceExtractionSha256": "e1453dc21c1228b46af124fcd66b1a127991d461d97ecf32c91ed6a8b208ddff",
+    "rawExtractionFileSha256": "e1453dc21c1228b46af124fcd66b1a127991d461d97ecf32c91ed6a8b208ddff",
+    "editorialDecisionCount": 6,
+    "appliedEnglishRepairsInSource": 6,
+    "coverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "noExtractionRerun": true,
+    "noEditorialReopen": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 247",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/247: 1 extraction(s), 45 local people, 314 mentions, 454 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 247",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "datesScan": {
+      "command": "node scripts/people-date-audit.mjs scan --book qingshigao --chapter 247",
+      "findings": 0,
+      "reversedIntervals": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book qingshigao --chapter 247",
+    "npm run people:dates:verify -- --book qingshigao --chapter 247",
+    "npm run people:dates:packet -- --book qingshigao --chapter 247 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-247/date-packet.json",
+    "node scripts/people-date-audit.mjs scan --book qingshigao --chapter 247"
+  ],
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "no-native-date-report",
+      "reason": "Missing data/people/date-audits/qingshigao/247.json; owner sealed fresh date packet only and did not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-247/date-packet.json",
+      "packetSha256": "sha256:1786696191e4f7f9cea610a19f67da450e2af202b7a96a8af670629566c7d4b3",
+      "packetSourceHash": "sha256:df7ecc44e2ab6623892f42f0639d74aa681bf775bfd77893d4f25cf4f788760d",
+      "packetExtractionHash": "sha256:49209e794eac3959fbc7db4facc556962cb1ed7cb2775f2485033b1d89428393",
+      "recordCommand": "npm run people:dates:record -- --report <independent-qingshigao-247-date-review.json>",
+      "authorNotesPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-247/chronology-author-notes.json"
+    },
+    "identity": {
+      "chapterLocalContradiction": false,
+      "corpusBoundedIdentityReview": "pending per campaign policy; owner found no sealed-input attribution contradiction."
+    }
+  },
+  "substantiveFindings": "Pinned git blob witness verified on staging 20b8d0e3 for source, extraction, and editorial inputs. Full chapter English paired on 226/226 Chinese units; accepted editorial repairs reflected in source JSON. people:validate passed; people:dates:scan reports 0 structural interval findings; deterministic date packet written (177 items, 45 people). No definite English omission, extraction contradiction, or owner-proposed chronology repair in this pass. Qing reign conversions (順治初, 康熙, etc.) and Ming remnant datings need line-by-line audit; no native date report exists.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "blobWitnessVerified": true,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
