@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T03:06:42.280Z",
+  "lastCheckedAt": "2026-11-24T03:07:34.362Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1650,6 +1650,17 @@
       "lastSuccessfulDeploymentId": "00a3b5b1-ec60-45c3-82cb-37b0174ae722",
       "lastSuccessfulCommit": "1a1da073a7ca743d163df0422a4143ce0de4af35",
       "activeProductionDeployments": 0
+    },
+    "buildPerformanceCandidate": {
+      "status": "prepared",
+      "ref": "codex/cursor-glossary-nov24-2026-build-performance",
+      "revision": "1e7eab410e13c46b7cb5fd7d5822d45365e9b6b8",
+      "parent": "27bdef9780609853f79a030dcd8a5750a3ffb97a",
+      "paths": [
+        "scripts/compile-people-catalog.mjs"
+      ],
+      "hypothesis": "Separate chapter-local dossiers from cross-chapter read batches to reduce repeated native normalization. Bound temporary in-memory member references and preserve dossier and output order.",
+      "comparison": "Compare full-site build and existing release checks against the exact unchanged-data preflight, including chapter loads, compile time and heap."
     }
   },
   "reviewRuns": {
