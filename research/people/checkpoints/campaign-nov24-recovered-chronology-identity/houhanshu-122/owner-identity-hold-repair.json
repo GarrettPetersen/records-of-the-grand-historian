@@ -369,7 +369,12 @@
       "dateAudit": "sha256:eefee08ec90d34df8fefdf084f859f97985fb7a6bb59b3c7b963acdd7232daa9"
     }
   },
-  "scopedDateEffects": "none (identity surfaces only; date packet item hashes unchanged on spot check)",
+  "scopedDateEffects": {
+    "datePacketItemsByteIdentical": true,
+    "extractionHashChanged": true,
+    "peopleDatesVerifyAfterRepair": "stale",
+    "note": "Identity-only surface adds; chronology facts unchanged. Host or independent reviewer must repin date audit if required; owner did not rewrite date-audits/houhanshu/122.json."
+  },
   "validation": {
     "validateCompactPeopleExtraction": {
       "passed": true,
