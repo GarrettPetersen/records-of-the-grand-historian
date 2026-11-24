@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-transport-identity-owner-handoff",
+  "scope": {
+    "book": "weishu",
+    "chapter": "019"
+  },
+  "ownerAgentId": "bc-b1b4cecc-160a-4940-add4-09b11b527691",
+  "campaignWorker": "cursor-nov24-audited-recovery-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+    "commit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+    "transportSha256": "cc396ebd5a88b2f31e9a556842e1d42ed2a4fb7bc0a37bfd36ca4a692db90071",
+    "transportBytes": 258158,
+    "planFingerprint": "sha256:a988cb5651f64cba8b218521a11da0af6be57457c47bda1e968965689d6e9cd8",
+    "sourcePacketSha256": "77ea602d24283979567d3e82a3d180eef45da9164ec7e34620f5931b520ad00a"
+  },
+  "sealedInputs": {
+    "source": "sha256:450bebf76600ced33eb8b29e11ea4881531ce253fa5278b2feb4fc5e0bf82281",
+    "extraction": "sha256:8381b4e58cf16cd69255a96ed4c9ac2622f62813f09ec63806d92201fef05946",
+    "editorial": "sha256:9c0bad08c3c375625fa08f453cfeecd7a9de188cf7167c4f9cd121da33cddf87",
+    "dateAudit": "sha256:16ef2461cdeaae41394afe8422e9ff306e4d9966d0772565fef373317bcc5c7a"
+  },
+  "reviewCases": 31,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "ownerEvidenceSha256": "sha256:b9970baf92855b47050622f92e335eedf8701f22483de2a309562521c23fc345",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/weishu-019/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/weishu-019/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/weishu-019/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/weishu-019/validation-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/weishu-019/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 019"
+  },
+  "notes": "31 cases from audited transport; owner evidence is not independent approval. No identity-review.json in this PR."
+}
