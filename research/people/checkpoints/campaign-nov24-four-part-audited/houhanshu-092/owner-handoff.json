@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "092"
+  },
+  "ownerAgentId": "bc-977db51c-ec93-4d60-9d14-c6f7f3527c76",
+  "campaignWorker": "cursor-nov24-four-part-owner-5",
+  "idempotencyKey": "8718eea6ef7c825f572d2d340b023df2ce952c0946018cc7788ff5b456beff64",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "branchRef": "cursor/nov24-four-part-owner-houhanshu-092-527c76",
+  "sealedInputs": {
+    "source": {
+      "path": "data/houhanshu/092.json",
+      "gitBlob": "e291f6a2f898310fad8080ebe63eed712f0e4338"
+    },
+    "extraction": {
+      "path": "data/people/extractions/houhanshu/092.json",
+      "gitBlob": "8377a69b141193f30152d0484e04271a2eee0bb3"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/houhanshu/092.json",
+      "gitBlob": "f682abb16bf71f91f80b9ee7c40dd0f33bebfc0d"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/houhanshu/092.json",
+      "gitBlob": "4e943665796479da680ab8bc0b2ee18d75772f5e"
+    }
+  },
+  "validation": {
+    "chapterReady": true,
+    "peopleValidate": "Scoped person data validation passed for houhanshu/092: 1 extraction(s), 112 local people, 551 mentions, 882 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 1 claim retraction(s), 1 claim revision(s), 1 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    }
+  },
+  "authorEvidence": {
+    "reviewedAt": "2026-11-24T13:45:04.385Z",
+    "chineseUnits": 378,
+    "literalCoverage": 378,
+    "idiomaticCoverage": 378,
+    "missingChinese": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "localPeople": 112,
+    "proposedExtractionRepairs": 0,
+    "summary": "Source-owner pass on sealed inputs: all 378 Chinese units retain nonempty literal and idiomatic English; extraction coverage flags are satisfied; chronology is independently audited with zero findings; applied editorial repairs are accepted with no pending proposals. No new definite English omission or mistranslation identified beyond closed editorial history."
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "gate": "independent-bounded-dossier-identity-review",
+    "identityReviewCases": 111,
+    "identityTransportParts": 4,
+    "preparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "independentReviewCompleted": false,
+    "instruction": "Independent reviewer uses the four retained native identity transport parts and preparation receipt from GitHub Actions; owner handoff is not identity approval."
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 092",
+    "validateDates": "npm run people:dates:verify -- --book houhanshu --chapter 092"
+  },
+  "notes": "Source-owner pass only; exact four-part identity packets prepared off-VM."
+}
