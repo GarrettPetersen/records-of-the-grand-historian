@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "109"
+  },
+  "ownerAgentId": "bc-e207215c-b48a-483e-b53d-c526ad7cb717",
+  "campaignWorker": "cursor-nov24-separate-transport-owner-2",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "0d61245aa3d964eac616404879394c19718149a948f4251a021639758a884416",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-separate-transport-owner-jiuwudaishi-109-7cb717",
+  "inputBlobWitness": {
+    "source": "090dfdaad33dfcad68f5634470155bc5320025c5",
+    "extraction": "16c6aa7941c8eca80b5637d632aa26b4fad97e47",
+    "dateAudit": "66a41bb3291a571a089124f5f0ea11074a8fc1c1",
+    "editorial": "0b1fcfeeb9e473c0f93b0a3bb317ed3a907d3961"
+  },
+  "sealedInputs": {
+    "source": "sha256:73fe93885c073435db8fcf669648354872926b8c6be99c4abc59f516de8ba22f",
+    "extraction": "sha256:5ccf1dce2e521bf2d29135e4c8905fdecc0120ffbfe36c7736de44240f53a059",
+    "dateAudit": "sha256:aaf93a14f280192e2aa2aa12e88f253f21168b9bc58e09d67ffd5b2bcb2a2ea9",
+    "editorial": "sha256:284a0f4ea32ed047dc3b33fbb1ee3cfa2e9ed932154ad3be6554251b76be6d25"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 109",
+    "summary": "Scoped person data validation passed for jiuwudaishi/109: 1 extraction(s), 128 local people, 751 mentions, 1600 claims, 0 proposed repair(s), 20 applied repair(s), 20 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 1 person record(s) without an attestation, 1 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 211,
+      "translatedCount": 211,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditFindings": 0,
+    "editorialDecisionCount": 20,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; npm run people:dates:verify; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 109 Book of Later Jin 11: Biographies 6: Du Zhongwei, Li Shouzhen, Zhao Siwan",
+    "sourceTitleZh": "卷一百〇九 漢書11: 列傳六 杜重威 李守貞 趙思綰",
+    "reviewedAt": "2026-11-24T14:52:51.051Z",
+    "localPeople": 128,
+    "conclusion": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 211 Chinese units; extraction coverage flags satisfied; date audit reports zero findings. Legacy temporal-debt flag on Ma Ling (馬令) reflects citation-only historian referenced in Southern Tang History; source supports sex, authorship, and bibliographic event claims without a chapter attestation. No new definite English omission, chronology defect, false merge, or unsupported-people hold in owner pass. Identity membership for 105 prepared cases remains for independent bounded dossier review across 6 transport parts."
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 211 Chinese units; extraction coverage flags satisfied; date audit reports zero findings. Legacy temporal-debt flag on Ma Ling (馬令) reflects citation-only historian referenced in Southern Tang History; source supports sex, authorship, and bibliographic event claims without a chapter attestation. No new definite English omission, chronology defect, false merge, or unsupported-people hold in owner pass. Identity membership for 105 prepared cases remains for independent bounded dossier review across 6 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 105,
+    "identityTransportParts": 6,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation prepares five to seven sealed transport parts off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 109",
+    "validateDates": "npm run people:dates:verify -- --book jiuwudaishi --chapter 109"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
