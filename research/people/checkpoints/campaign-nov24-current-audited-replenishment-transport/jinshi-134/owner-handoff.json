@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "chapterKey": "jinshi/134",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "134"
+  },
+  "workerId": "cursor-nov24-replenishment-48",
+  "ownerAgentId": "bc-a260894e-dc30-48af-8a17-6fe7807de88e",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-replenishment-48-bounded-owner-transports",
+    "sourcePacketSha256": "e93cccd65902a189a5df05a22db3cb7c7956642663d5927561369b7a8f6b49f7",
+    "planFingerprint": "sha256:9aad36453bedf3f54bfb5b100db17b1b313d2a4bd3d77a179de9c76ef129c0f0",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "96049068844cc70af6f5b43e69410d4de6abcf19659af0d3b9f4c2a0195e7767",
+        "caseCount": 61
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "5ca8bd713370af2ad3b8b63d186db719617dac1a04d833bdb97da0ffcf286155",
+        "caseCount": 61
+      }
+    ],
+    "preparationReceiptSha256": "sha256:03b52ec519f5dbe37f58c1437a569a79e211ed66d6f9f454a0e4ae311c9c6bb7"
+  },
+  "sealedInputs": {
+    "source": "sha256:1d725fc2369bb0234a6063821f22dbd33693ee5cb73ff501ddd88e3d74b1835a",
+    "extraction": "sha256:c32dabd9fe59d936260995c4ecc31ddade0a97a175382e765033c8d13e72427d",
+    "editorial": "sha256:196da3109f174990a894ee06c18baf365983847d5891312c00fdb452d85d5d36",
+    "dateAudit": "sha256:e56e538d21cd4522c92550661fcc4ffdff908040506aee1d287e4969777fb99a"
+  },
+  "inputBlobWitness": {
+    "source": "9f5064ec427c6f8fb10dc9446bd5650c458856c3",
+    "extraction": "f19af9f2b61e562d43ded41f8f8bc2cf91f0a534",
+    "dateAudit": "29230af21535fdf88d5a8e47267938c9261142d1",
+    "editorial": "f4c21424af5b35f959cfa62ea8e40c97587d1ab9"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed-with-applied-proposals",
+  "reviewCases": 122,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 122 scoped identity cases: retain accepted canonical membership; unresolvedIdentity preserved where proposed; no concrete chapter-level actor contradiction or false-merge hold.",
+  "scopedEvidence": {
+    "ownerEvidencePath": "owner-evidence.json",
+    "ownerEvidenceSha256": "sha256:bc917181087a133d183594225b569058b98d5043da3270734506e6ff1f437687",
+    "retainProposals": 122,
+    "holds": 0,
+    "sourceValidation": {
+      "command": "npm run people:validate -- --book jinshi --chapter 134",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshi/134: 1 extraction(s), 126 local people, 461 mentions, 754 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 3 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    }
+  },
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:bc917181087a133d183594225b569058b98d5043da3270734506e6ff1f437687",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 134"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 3d546f42. Shard-3 packet uses two transport parts."
+}
