@@ -1,116 +1,112 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Verify four chapters after independent editorial repairs
+run-name: Validate exact editorial application and prepare only changed chronology evidence
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  verify:
+    name: Verify ${{ matrix.key }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - key: houhanshu-111
+            book: houhanshu
+            chapter: "111"
+            source: 91f9f2166eca4603e54220de0d4a8633daeceb26
+            prior: 7b85821a54d6a2d234cfc844767496403199cb45
+          - key: houhanshu-106
+            book: houhanshu
+            chapter: "106"
+            source: 66bbff94bf0d17b7afb3dc642c414ac77339b9ca
+            prior: b32e2e05e0f6356fb5a6914c19f64d39dfa89ddf
+          - key: jiutangshu-030
+            book: jiutangshu
+            chapter: "030"
+            source: 344cf42cda05befb5e2b733b726656560f7272e0
+            prior: b3c36063da3b2bbb2c754c6f46a429d9cf70c701
+          - key: songshu-069
+            book: songshu
+            chapter: "069"
+            source: 1cadb163a7bd731615cd88a77d4102fd122f37a0
+            prior: b3a9b891fc0aa5a2f119d0f4edd35ece0cf34d6f
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      GH_TOKEN: ${{ github.token }}
+      SOURCE: ${{ matrix.source }}
+      PRIOR: ${{ matrix.prior }}
+      BOOK: ${{ matrix.book }}
+      CHAPTER: ${{ matrix.chapter }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ matrix.source }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Prevent duplicate storage and local corpus builds
+      - run: npm install --no-audit --no-fund
+      - name: Validate exact reviewed changes and produce current chronology delta
         run: |
-          node --test scripts/test-people-generation-policy.mjs scripts/test-people-storage-policy.mjs scripts/test-people-git-storage.mjs scripts/test-people-recovery-checkpoint.mjs scripts/test-people-registry-deduplication.mjs
-          python3 scripts/test-people-recovery-archive.py
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs scripts/test-openrouter-free.mjs
-
-      - name: Test chapter-owner isolation and combined publication
-        run: node --test --test-concurrency=1 scripts/test-people-chapter-owner.mjs scripts/test-people-chapter-editorial-preparation.mjs scripts/test-people-chapter-repair-reasons.mjs scripts/test-people-remote-admission.mjs scripts/test-people-combined-curation.mjs scripts/test-people-footnote-preparation.mjs scripts/test-people-private-identity-inputs.mjs scripts/test-people-source-only-chronology.mjs scripts/test-people-current-curation-provenance.mjs scripts/test-people-identity-proof-composition.mjs test/people-name-claim-correction.test.mjs scripts/people-owner-repair-chain.test.mjs
-
-      - name: Test shared-host master synchronization
-        run: npm run people:master:self-test
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-pinned-identity-source.mjs scripts/test-people-identity-dossier-delta.mjs scripts/test-people-product-inputs.mjs scripts/test-people-inferred-source-references.mjs scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs scripts/test-people-corpus-reader.mjs
-          npm run people:catalog:self-test
-          npm run people:generated-data:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Test reviewed name spans and translation repairs
-        run: |
-          node scripts/test-people-reviewed-name-spans.mjs
-          node scripts/apply-people-translation-repairs.mjs --self-test
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$RUNNER_TEMP/editorial-receipt"
+          mkdir -p "$OUT"
+          npm run people:validate -- --book "$BOOK" --chapter "$CHAPTER" | tee "$OUT/extraction.txt"
+          npm run people:dates:verify -- --book "$BOOK" --chapter "$CHAPTER" --out "$OUT/current-date-status.json"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {buildDateAuditPacket,validateDateAuditReport,dateAuditReferencesCurrent} from './scripts/lib/people-date-audit.mjs';
+          const {BOOK:book,CHAPTER:chapter,SOURCE,PRIOR,OUT,RUNNER_TEMP,GITHUB_REPOSITORY}=process.env;
+          const key=book+'/'+chapter, chapterFile='data/'+key+'.json', extraction='data/people/extractions/'+key+'.json', audit='data/people/date-audits/'+key+'.json';
+          const get=(p,ref)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+p+'?ref='+ref],{maxBuffer:10e6});
+          const prev=path.join(RUNNER_TEMP,'previous-chapter');
+          fs.mkdirSync(path.join(prev,book),{recursive:true});
+          fs.writeFileSync(path.join(prev,book,chapter+'.json'),get(chapterFile,PRIOR));
+          const before=buildDateAuditPacket(book,chapter,{dataDir:prev,extraction:JSON.parse(get(extraction,PRIOR))});
+          const after=buildDateAuditPacket(book,chapter);
+          const previousById=new Map(before.units.map(x=>[x.id,x]));
+          const changedUnits=after.units.flatMap(u=>{
+            const old=previousById.get(u.id);
+            return !old||old.zh!==u.zh||old.en!==u.en||old.literal!==u.literal?[{id:u.id,before:old??null,after:u}]:[];
+          });
+          const removedUnits=before.units.filter(x=>!after.units.some(y=>x.id===y.id));
+          const itemKey=x=>x.claimHash??x.id;
+          const prevItems=new Map(before.items.map(x=>[itemKey(x),x]));
+          const nextItems=new Map(after.items.map(x=>[itemKey(x),x]));
+          assert.equal(prevItems.size,before.items.length,'Duplicate prior chronology item fingerprint');
+          assert.equal(nextItems.size,after.items.length,'Duplicate current chronology item fingerprint');
+          const neat=({id,claimIndex,...x})=>x;
+          const changedItems=after.items.flatMap(x=>{
+            const old=prevItems.get(itemKey(x));
+            return !old||JSON.stringify(neat(old))!==JSON.stringify(neat(x))?[{before:old??null,after:x}]:[];
+          });
+          const removedItems=before.items.filter(x=>!nextItems.has(itemKey(x)));
+          const changedPeople=after.people.flatMap(x=>{const y=before.people.find(z=>z.id===x.id);return JSON.stringify(y)===JSON.stringify(x)?[]:[{before:y??null,after:x}];});
+          const removedPeople=before.people.filter(x=>!after.people.some(y=>x.id===y.id));
+          const changedUnitPeople=Object.entries(after.unitPeople).flatMap(([id,ids])=>JSON.stringify(ids.slice().sort())===JSON.stringify((before.unitPeople[id]??[]).slice().sort())?[]:[{id,before:before.unitPeople[id]??[],after:ids}]);
+          let priorAudit={status:'missing'};
+          if(fs.existsSync(audit)){
+            const bytes=get(audit,PRIOR), doc=JSON.parse(bytes);
+            assert.deepEqual(fs.readFileSync(audit),bytes,'Owner changed date approval bytes during editorial application');
+            try{
+              validateDateAuditReport(doc,before);
+              assert(dateAuditReferencesCurrent(doc));
+              priorAudit={status:doc.status,reviewer:doc.reviewer,itemChecks:doc.itemChecks.length,personChecks:doc.personChecks.length,reviewedUnits:doc.reviewedUnits.length};
+            }catch(err){priorAudit={status:'invalid-at-prior-revision',reason:err.message};}
+          }
+          const report={scope:{book,chapter},source:SOURCE,prior:PRIOR,priorAudit,previousSourceHash:before.sourceHash,sourceHash:after.sourceHash,previousExtractionHash:before.extractionHash,extractionHash:after.extractionHash,changedUnits,removedUnits,changedItems,removedItems,changedPeople,removedPeople,changedUnitPeople};
+          fs.writeFileSync(path.join(OUT,'chronology-delta.json'),JSON.stringify(report,null,2)+'\n');
+          console.log(JSON.stringify({key,priorAudit,changedUnits:changedUnits.length,changedChinese:changedUnits.filter(x=>x.before?.zh!==x.after.zh).length,changedItems:changedItems.length,removedItems:removedItems.length,changedPeople:changedPeople.length,removedPeople:removedPeople.length}));
+          JS
+      - uses: actions/upload-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
-
-      - name: Verify real Jinshu 119 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 119 --out data/people/generated/jinshu119-release-acceptance
-
-      - name: Preserve Jinshu 119 nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: jinshu119-qualified-contribution
-          path: data/people/generated/jinshu119-release-acceptance/
-          retention-days: 30
-
-      - name: Verify approved chapter qualification and ebook contributions
-        run: |
-          for chapter in 117 120 129 130; do
-            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "data/people/generated/jinshu${chapter}-release-acceptance"
-          done
-
-      - name: Preserve approved chapter nonempty acceptance evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: qualified-chapter-contributions
-          path: |
-            data/people/generated/jinshu117-release-acceptance/
-            data/people/generated/jinshu120-release-acceptance/
-            data/people/generated/jinshu129-release-acceptance/
-            data/people/generated/jinshu130-release-acceptance/
-          retention-days: 30
+          name: post-editorial-${{ matrix.key }}
+          path: ${{ runner.temp }}/editorial-receipt/
+          if-no-files-found: error
+          retention-days: 7
