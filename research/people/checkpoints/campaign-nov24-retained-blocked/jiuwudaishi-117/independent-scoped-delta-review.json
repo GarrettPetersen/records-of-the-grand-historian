@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/117",
+  "reviewerAgentId": "bc-3a364f9f-49a5-4970-8411-68db8664805d",
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "ownerRun": "run-1840d690-8704-4ed7-a5f8-7fc2c4f2a967",
+  "ownerRevision": "f77411c65b98d95afe92265c504aa0a89ec29cd3",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-retained-blocked/jiuwudaishi-117/owner-handoff.json",
+  "ownerProposalSha256": "a70277a463c6d47f472f7f9cc8ecc2cf1f6fac65d23804357b66a463962a5fb8",
+  "stage": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+  "reviewedAt": "2026-11-24T15:27:13Z",
+  "scope": {
+    "observedBlocker": "Date audit report is stale",
+    "reviewedDelta": ["claim-844", "claim-849"],
+    "directlyCoupledDependencies": ["claim-845", "claim-850", "hints-p131", "hints-p132"],
+    "preservedUnrelatedWork": ["source", "editorial decisions", "identity", "original date-audit report bytes and reviewer", "all non-defective date item checks"]
+  },
+  "verdict": "approve-scoped-reception-relabel-hold-date-closure",
+  "summary": "The stale blocker is the exact explicit retrospective-reception migration of two compact claims (claim-844 p131 Bai Yanyu, claim-849 p132 Tang Jingsi, both on s0176): kind posthumous-commemoration -> retrospective-reference and receptionType posthumous -> retrospective, with role and action unchanged and no temporal fields on either claim. reconcileRetrospectiveExtraction on the audited extraction reproduces the live extraction exactly; units, people, unit ownership and all 429 date-item IDs are otherwise identical. The relabels are approved. Native date closure by reusing the September 29 report is held: the reused checks for the directly coupled death bounds of the same two people (claim-845, claim-850, hints-p131, hints-p132) and fourteen other unchanged late-twelfth-month items assert AD 957 for dates that convert to January AD 958 under both Julian and proleptic Gregorian reckoning. These need a minimal date repair before a new independent native date record; the original report and reviewer remain preserved.",
+  "approvedChanges": [
+    {
+      "target": "data/people/extractions/jiuwudaishi/117.json",
+      "itemId": "claim-844",
+      "claimIndex": 843,
+      "personId": "p131",
+      "predicate": "event-participation",
+      "evidenceUnits": ["s0176"],
+      "changeKind": "reception-taxonomy-migration",
+      "approval": "approve-exact-before-after",
+      "before": ["p131", "event-participation", {"kind": "posthumous-commemoration", "receptionType": "posthumous", "role": "honoree", "action": "posthumously granted Grand Commandant (贈太尉)"}, "explicit", ["s0176"]],
+      "after": ["p131", "event-participation", {"kind": "retrospective-reference", "receptionType": "retrospective", "role": "honoree", "action": "posthumously granted Grand Commandant (贈太尉)"}, "explicit", ["s0176"]],
+      "rationale": "故同州節度使白延遇贈太尉 is a court grant to an already-deceased person: later reception, not living activity. PEOPLE_DATE_AUDIT.md makes retrospective the sole later-reception category; personClaimReception classified both the retired and the new labels as retrospective, so activity and chronology handling are unchanged. The claim carries no temporal value; the prior check verdict 'supported' remains valid for the ownership and reception question.",
+      "priorAuditedItemCheck": {"id": "claim-844", "verdict": "supported", "quoteUnit": "s0176", "reusableForThisItem": true}
+    },
+    {
+      "target": "data/people/extractions/jiuwudaishi/117.json",
+      "itemId": "claim-849",
+      "claimIndex": 848,
+      "personId": "p132",
+      "predicate": "event-participation",
+      "evidenceUnits": ["s0176"],
+      "changeKind": "reception-taxonomy-migration",
+      "approval": "approve-exact-before-after",
+      "before": ["p132", "event-participation", {"kind": "posthumous-commemoration", "receptionType": "posthumous", "role": "honoree", "action": "posthumously granted Wuqing Army commissioner (贈武清軍節度使)"}, "explicit", ["s0176"]],
+      "after": ["p132", "event-participation", {"kind": "retrospective-reference", "receptionType": "retrospective", "role": "honoree", "action": "posthumously granted Wuqing Army commissioner (贈武清軍節度使)"}, "explicit", ["s0176"]],
+      "rationale": "故濠州刺史唐景思贈武清軍節度使 is likewise a posthumous grant to a deceased official. Same mechanical, chronology-neutral relabel; no temporal fields; role/action unchanged.",
+      "priorAuditedItemCheck": {"id": "claim-849", "verdict": "supported", "quoteUnit": "s0176", "reusableForThisItem": true}
+    }
+  ],
+  "englishReview": {
+    "unit": "s0176",
+    "zh": "丙子，故同州節度使白延遇贈太尉，故濠州刺史唐景思贈武清軍節度使。",
+    "literal": "On the day bingzi, the late military commissioner of Tongzhou Bai Yanyu was posthumously made Grand Marshal; the late Prefect of Haozhou Tang Jingsi was posthumously made military commissioner of the Wuqing Army.",
+    "idiomatic": "On bingzi, the late Tongzhou commissioner Bai Yanyu was posthumously honored as Grand Marshal, and the late Haozhou prefect Tang Jingsi as military commissioner of the Wuqing Army.",
+    "result": "no-english-change",
+    "reason": "Both fields render every clause (date 丙子, both 故 'late' offices, both names, both 贈 grants). The owner proposed no English repair. 太尉 appears as 'Grand Marshal' in both English fields and the claim-847 honor label but as 'Grand Commandant' in the unchanged claim-844 action string; both are accepted renderings, so this is terminology variance, not a definite mistranslation, and it is not part of this delta."
+  },
+  "heldCases": [
+    {
+      "id": "hold-jwds117-xiande4-m12-year-boundary",
+      "kind": "chronology-conversion-defect-in-reused-evidence",
+      "blocks": "Native date closure that reuses the 2026-09-29 report's item checks (including any extractionHash repin/retag of the historical report).",
+      "doesNotBlock": "The approved claim-844/claim-849 relabels, or preservation of all other item checks.",
+      "problem": "The chapter's twelfth month of 顯德四年 runs from 壬子/癸丑 (Julian 957-12-23/24) and the next new year is 958-01-22/23 Julian. Anchors in the chapter verify the computation: 正月己丑朔 = Julian 957-02-03, 五月丁亥朔, 九月甲申朔 and 十一月癸未朔 = Julian 957-11-24 are all consistent, with no intercalary month. s0176 丙子 is Julian 958-01-16, proleptic Gregorian 958-01-21. The bounds 'onOrBefore AD 957' on claim-845/claim-850 therefore add an unsupported endpoint up to 21 days early. The audit cites no external reference narrowing either death. PEOPLE_DATE_AUDIT.md requires proleptic-Gregorian normalisation of verified month/day dates and warns that Julian December dates may fall in the next Gregorian year; approved audits apply this (for example liaoshi/117).",
+      "exactMinimalFixes": [
+        {"itemId": "claim-845", "personId": "p131", "unit": "s0176", "field": "value.dateContext.westernBounds.onOrBefore.year", "before": 957, "after": 958, "reason": "Death known only as before the 十二月丙子 grant = Julian 958-01-16 / Gregorian 958-01-21."},
+        {"itemId": "claim-850", "personId": "p132", "unit": "s0176", "field": "value.dateContext.westernBounds.onOrBefore.year", "before": 957, "after": 958, "reason": "Same as claim-845 for Tang Jingsi."},
+        {"itemId": "hints-p131", "personId": "p131", "field": "people[p131][4].a (compact activeDateHints)", "before": ["on or before AD 957"], "after": ["on or before AD 958"], "reason": "Sole evidence is s0176; hint must follow the corrected bound."},
+        {"itemId": "hints-p132", "personId": "p132", "field": "people[p132][4].a (compact activeDateHints)", "before": ["on or before AD 957"], "after": ["on or before AD 958"], "reason": "Sole evidence is s0176; hint must follow the corrected bound."}
+      ],
+      "sameDefectUnchangedItems": [
+        {"itemId": "claim-796", "personId": "p124", "unit": "s0159", "sourceDate": "顯德四年十二月戊午", "julian": "957-12-29", "gregorian": "958-01-03", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-797", "personId": "p124", "unit": "s0161", "sourceDate": "顯德四年十二月辛酉", "julian": "958-01-01", "gregorian": "958-01-06", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-799", "personId": "p124", "unit": "s0176", "sourceDate": "顯德四年十二月丙子", "julian": "958-01-16", "gregorian": "958-01-21", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-805", "personId": "p124", "unit": "s0177", "sourceDate": "顯德四年十二月丁丑", "julian": "958-01-17", "gregorian": "958-01-22", "field": "value.dateContext.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-807", "personId": "p125", "unit": "s0159", "sourceDate": "顯德四年十二月戊午", "julian": "957-12-29", "gregorian": "958-01-03", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-808", "personId": "p125", "unit": "s0161", "sourceDate": "顯德四年十二月辛酉", "julian": "958-01-01", "gregorian": "958-01-06", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-813", "personId": "p126", "unit": "s0161", "sourceDate": "顯德四年十二月辛酉", "julian": "958-01-01", "gregorian": "958-01-06", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-817", "personId": "p126", "unit": "s0174", "sourceDate": "顯德四年十二月丙寅", "julian": "958-01-06", "gregorian": "958-01-11", "field": "value.dateContext.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-819", "personId": "p127", "unit": "s0166", "sourceDate": "顯德四年十二月壬戌", "julian": "958-01-02", "gregorian": "958-01-07", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-820", "personId": "p127", "unit": "s0168", "sourceDate": "顯德四年十二月丙寅", "julian": "958-01-06", "gregorian": "958-01-11", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-824", "personId": "p127", "unit": "s0168,s0173", "sourceDate": "顯德四年十二月丙寅", "julian": "958-01-06", "gregorian": "958-01-11", "field": "value.dateContext.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-828", "personId": "p128", "unit": "s0167", "sourceDate": "顯德四年十二月乙丑", "julian": "958-01-05", "gregorian": "958-01-10", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-834", "personId": "p129", "unit": "s0171,s0172", "sourceDate": "顯德四年十二月丙寅", "julian": "958-01-06", "gregorian": "958-01-11", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-835", "personId": "p129", "unit": "s0175", "sourceDate": "顯德四年十二月丙子", "julian": "958-01-16", "gregorian": "958-01-21", "field": "value.westernYear.year", "before": 957, "after": 958},
+        {"itemId": "claim-839", "personId": "p130", "unit": "s0174", "sourceDate": "顯德四年十二月丙寅", "julian": "958-01-06", "gregorian": "958-01-11", "field": "value.westernYear.year", "before": 957, "after": 958}
+      ],
+      "notDefective": [
+        {"itemId": "claim-790", "personId": "p123", "unit": "s0158", "sourceDate": "顯德四年十二月乙卯", "julian": "957-12-26", "gregorian": "957-12-31", "reason": "AD 957 is correct under both reckonings; hints-p123 'AD 957' stands."}
+      ],
+      "hintsRequiringNativeReconciliation": ["hints-p124", "hints-p125", "hints-p126", "hints-p127", "hints-p128", "hints-p129", "hints-p130"],
+      "hintNote": "Each hint currently reads 'AD 957'. Reconcile each one against the repaired attestations and that person's full chapter evidence within the same date repair. p124 also carries claim-798 (956–957 interval for 修艦逾歲), which is not definitely wrong and is not changed here. No exact hint text is asserted for these persons.",
+      "requiredClosurePath": "Owner applies the minimal date repair above through the native date workflow; hint normalisation precedes sealing. A separate independent reviewer then issues a new complete report through people:dates:record, which archives the September 29 report in date-audit-history. That report may carry forward every unaffected item check with provenance to the original reviewer, but must re-check the repaired items. Do not retag the extractionHash on the historical report."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerRevision": "f77411c65b98d95afe92265c504aa0a89ec29cd3",
+    "inputs": {
+      "source": {"path": "data/jiuwudaishi/117.json", "gitBlob": "71f8752e61f76073b3272b97843da1502f7f64ae", "canonicalJsonSha256": "sha256:2ef9c0a60450c8396d8292902efefb791991180fffa605c52a1ea01d2be44f88", "rawFileSha256": "sha256:c379a3878fa4b081180c6981145af119a29f3f62c06a4cf628e974b4bcd67922", "lastChangedCommit": "1cbca4368c"},
+      "extraction": {"path": "data/people/extractions/jiuwudaishi/117.json", "gitBlob": "33bb141644ff163a5f3665e8c8f101af2e1151df", "canonicalJsonSha256": "sha256:cbe477071527ab7324b82f3c9cc52ca4c25e3e39a65af345e039759687745e0a", "rawFileSha256": "sha256:10c0c2137378e253a3459b8d9b535c002b5560adda93fff8e74e8d6edf9210dd"},
+      "dateAudit": {"path": "data/people/date-audits/jiuwudaishi/117.json", "gitBlob": "a2f15edd0b77abd098c8c31a1b9218d19b6f9f89", "canonicalJsonSha256": "sha256:11306ad164771d224db2f01d96ee8845960ba626b8d2c2c040aae65c14405881", "rawFileSha256": "sha256:811f2048474a4fcf47c633a5b49e63a0d2089cdb4c67fa3021596c1f8a1d0f86", "recordedCommit": "0ed9355fa2", "byteIdenticalAtRecordedCommit": true, "sourceHash": "sha256:ea6ddf1e9f77837d89b28542c63f0ebfa3727ce8324ac6c3e4b1326772679dbf", "extractionHash": "sha256:46bec13d2080bdf458b78afbb0c6c69e6c2f4c5b17e0133912adda82afa61ace", "status": "audited", "reviewer": {"name": "Independent Jiu Wudai Shi 117 initial chronology reviewer", "independentOfExtractor": true, "agentId": "unknown (not recorded in report)", "preserved": true}, "reviewedAt": "2026-09-29T18:12:00.091Z", "coverage": {"reviewedUnits": 172, "itemChecks": 429, "personChecks": 132, "findings": 0, "references": 0}},
+      "editorial": {"path": "data/people/editorial-decisions/jiuwudaishi/117.json", "gitBlob": "e95348a1489e8423e69543bb8ca0097db485d43c", "canonicalJsonSha256": "sha256:7228fd0dc2631ccbba7eec4248680cc570afeb72a044593fd327feeb3673324a", "rawFileSha256": "sha256:92e1dcdd24d435d0a62c4489ea4a0c536244bc124f51473b8dcdec182ddc9cb6", "lastChangedCommit": "1cbca4368c", "reviewer": {"kind": "cursor-agent", "agentId": "bc-3d766ad3-60df-44b7-88be-2c38402d06e5", "runId": "run-9101fd95-70fd-4250-ae7b-7865f3283cfa", "completedAt": "2026-08-26T17:27:11.438Z"}, "preserved": true, "referencesDelta": false}
+    },
+    "hashConventionNote": "The owner's 'contentSha256' values are sha256(JSON.stringify(parsed file)), not raw file bytes. All four match. Raw-byte digests are recorded separately here.",
+    "currentPacket": {"sourceHash": "sha256:ea6ddf1e9f77837d89b28542c63f0ebfa3727ce8324ac6c3e4b1326772679dbf", "extractionHash": "sha256:cbe477071527ab7324b82f3c9cc52ca4c25e3e39a65af345e039759687745e0a", "items": 429, "people": 132, "units": 172},
+    "auditedExtraction": {"commit": "194dae2acbb596e7b34af9d94e36b689e763a414", "gitBlob": "d25bd7fa21b3640d833d1d9b89d1b1febbe09944", "packetExtractionHash": "sha256:46bec13d2080bdf458b78afbb0c6c69e6c2f4c5b17e0133912adda82afa61ace", "rawFileSha256": "sha256:aac358a13b67915cc9b09df9b2df9d55d17b6a4315aaf8848f64b2a846a3175d"},
+    "staleDelta": {
+      "sourceHashUnchanged": true,
+      "unitsIdentical": true,
+      "peopleIdentical": true,
+      "unitPeopleIdentical": true,
+      "itemIdSetIdentical": true,
+      "changedItems": ["claim-844", "claim-849"],
+      "changedFields": ["value.kind", "value.receptionType"],
+      "temporalFieldsChanged": false
+    },
+    "historicalAuthorship": {
+      "writerCommit": "d674f0e9a2a39ca9713e01d086b576cfd2f6872c",
+      "writerCommitMessage": "fix: reconcile retired reception labels",
+      "writerCommitAuthor": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+      "writerCommitDate": "2026-10-08T15:43:51-07:00",
+      "parentBlob": "d25bd7fa21b3640d833d1d9b89d1b1febbe09944",
+      "resultBlob": "33bb141644ff163a5f3665e8c8f101af2e1151df",
+      "reproducedBy": "scripts/lib/people-reception-reconciliation.mjs reconcileRetrospectiveExtraction (blob ac962dad6d711642bc47da52adfff82542f8f91e, identical at d674f0e9 and f77411c; introduced in 84b8c0d47e). Applied to the audited extraction, it reproduces the live extraction exactly and reports changes [claim-844, claim-849].",
+      "promotion": {"pr": 4605, "headRef": "codex/people-glossary-staging-v2", "squashCommitOnMaster": "bb9e73078a5fa0aa15aef3b303f175ee61e1ed45", "mergedAt": "2026-10-08T23:24:38Z"},
+      "queueEvidence": "In people-work-queue.json at 743c6f40ee, the only entry for jiuwudaishi/117 is chapterOwners (bc-62d53d82…, reserved 2026-11-24). A -G history search from 2026-09-20 to 2026-11-24 finds only that Nov 24 reservation commit, so no queue claim covers the Oct 8 migration.",
+      "executingAgentOrRunId": "unknown (not observed)",
+      "ownerCitationCorrection": "The owner's taxonomyMigrationCommit 07e5abb388 (2026-09-08, 'Reconcile legacy people alias callbacks') does not touch jiuwudaishi/117 and predates the audited extraction. The actual writer is d674f0e9, promoted through bb9e730."
+    }
+  },
+  "affectedNativeDependencies": {
+    "dateAuditStatus": {"current": "stale", "afterThisReview": "stale until the held repair is applied and a new independent report is natively recorded"},
+    "extraction": {"approvedRelabels": ["claim-844", "claim-849"], "heldDateRepairItems": ["claim-845", "claim-850", "hints-p131", "hints-p132", "claim-796", "claim-797", "claim-799", "claim-805", "claim-807", "claim-808", "claim-813", "claim-817", "claim-819", "claim-820", "claim-824", "claim-828", "claim-834", "claim-835", "claim-839", "hints-p124", "hints-p125", "hints-p126", "hints-p127", "hints-p128", "hints-p129", "hints-p130"]},
+    "editorial": "Unaffected. The decisions do not reference s0176, p131, p132 or reception labels, and scoped native validation accepts them unchanged. A held date repair changes the extraction fingerprint only; re-run scoped validation afterwards.",
+    "identity": "Unaffected. People rows, names, surfaces and unit ownership are byte-identical across the delta, and the relabel does not change any identity key.",
+    "source": "Unaffected; sourceHash unchanged, no English repair required.",
+    "reusableEvidence": "The 2026-09-29 checks for all items except those listed under heldDateRepairItems are reusable, with provenance, in the new independent report, including claim-844 and claim-849 under their new labels."
+  },
+  "validation": {
+    "commands": [
+      {"command": "npm run people:disk:check", "result": "pass (errors: []; memory guard not-applicable on linux)"},
+      {"command": "node scripts/validate-people-data.mjs --book jiuwudaishi --chapter 117", "exit": 0, "result": "Scoped person data validation passed for jiuwudaishi/117: 1 extraction(s), 132 local people, 492 mentions, 1259 claims, 0 proposed repair(s), 30 applied repair(s), 30 editorial decision(s), 1 claim retraction(s), 6 claim revision(s), 0 claim addition(s)."},
+      {"command": "node scripts/people-date-audit.mjs status --book jiuwudaishi --chapter 117", "result": {"status": "stale", "auditVersion": 1}},
+      {"command": "node scripts/people-date-audit.mjs verify --book jiuwudaishi --chapter 117", "exit": 1}
+    ],
+    "inMemoryChecks": {
+      "validateDateAuditReport(report, packet built from audited extraction)": "Date approval retains invalid temporal geometry or reception ownership (dateAuditDiagnostics: claim-844 and claim-849 retired reception labels)",
+      "validateDateAuditReport(report, current packet)": "Date audit report is stale",
+      "dateAuditDiagnostics(current packet)": [],
+      "validateDateAuditReport(report with only extractionHash replaced, current packet)": "ok. This shows only that a mechanical retag would pass the structural validator. It is not approval, and the held conversion defect means it must not be used.",
+      "dateAuditReferencesCurrent": true,
+      "reconcileRetrospectiveExtraction(audited) equals live extraction": true
+    },
+    "noWrites": "No build, worktree, canonical data edit, launch or merge. Only this review file is committed."
+  }
+}
