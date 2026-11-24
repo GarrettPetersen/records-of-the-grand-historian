@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "weishu",
+    "chapter": "007"
+  },
+  "ownerAgentId": "bc-a4d773fe-11dd-4609-88c3-3741edd6232d",
+  "workerId": "cursor-nov24-retained-staging-w18-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "91fbf7a92e6848a2f0428da00134f2126a972d2e6d26ee240b7c64d95df2004d",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-weishu-007-6232d",
+  "extractionBytes": 211616,
+  "inputBlobWitness": {
+    "source": "4dfb52e442ed2744077dd9e281c8bd484272c4ce",
+    "extraction": "1aa58557964dbe8a4c56d2263138c3df27180ccf",
+    "editorial": "f49fb87d8b0c32cadb676c3c8a48f0dd8b3e70cf"
+  },
+  "sealedInputs": {
+    "source": "sha256:cab119982a7d076ba90326a544ca5280121365cdcba1bee49d77341b1dfcdc5b",
+    "extraction": "sha256:a03477cca072d56b71d0989c40385e999cb577e419c070d76da3361f14753cad",
+    "editorial": "sha256:e5705d0a60dbb6f6798cf6ca03706b19e5aa84f47ab4b82294d7af2aeef071dd"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-007/date-packet.json",
+    "contentSha256": "sha256:c4a635048311d0697b1ba956defcceb830116c2e73549684b6cdb91ae63e9dd5",
+    "packetSourceHash": "sha256:129e345b927393c414c4caad4adba87854ac0c820f3d703d9cd9d80de8288e6d",
+    "packetExtractionHash": "sha256:497e97bb41534ab3145ce438be65682c282460edbbfe0db3a7629e862c9ecaa0",
+    "dateHintChecks": 413,
+    "peopleInPacket": 103,
+    "prepareCommand": "npm run people:dates:packet -- --book weishu --chapter 007 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-007/date-packet.json"
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "a03477cca072d56b71d0989c40385e999cb577e419c070d76da3361f14753cad",
+    "people": 103,
+    "claims": 732,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 6 Annals: Xianzu (Emperor Xianwen)",
+    "sourceTitleZh": "卷6 顯祖紀",
+    "chineseUnits": 192,
+    "translatedCount": 192,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "extractionReused": true,
+    "editorialReused": true,
+    "extractionPromptVersion": 7,
+    "editorialDecisionCount": 15,
+    "editorialAppliedInSource": 9,
+    "editorialAppliedFailures": 6,
+    "noExtractionRegeneration": true,
+    "noEditorialReReview": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book weishu --chapter 007",
+    "peopleValidateSummary": "Scoped person data validation passed for weishu/007: 1 extraction(s), 103 local people, 425 mentions, 1135 claims, 0 proposed repair(s), 15 applied repair(s), 15 editorial decision(s), 0 claim retraction(s), 6 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 007",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-pending-source-reflection",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs for weishu/007 (no prior native date report). Git blob witnesses and extraction content sha256 match dispatch pins. Source coverage: 192 Chinese units, fullEnglishCoverage=true. Accepted prompt v7 extraction and 9/15 editorial repairs verified in source. Scoped people:validate passed. Fresh native date packet at sealedNativeDatePacket.contentSha256; owner did not self-approve independent date audit. Six accepted editorial after-forms are not in source text: spot-check shows s0070 馮翊公 correctly rendered Fengyi (not Pingyi), and s0115 拾寅 correctly Shiyin (not Shibin)—owner retained source-backed readings and did not treat those proposals as definite repairs. Remaining pending rows are minor function-word or edict-syntax variants (r0004, r0009, r0010). No owner canonical edits.",
+  "distinctHolds": [
+    {
+      "kind": "accepted-editorial-not-in-source",
+      "count": 6,
+      "proposalIds": [
+        "weishu:007:r0003",
+        "weishu:007:r0004",
+        "weishu:007:r0007",
+        "weishu:007:r0008",
+        "weishu:007:r0009",
+        "weishu:007:r0010"
+      ]
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "nativeIndependentDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:c4a635048311d0697b1ba956defcceb830116c2e73549684b6cdb91ae63e9dd5",
+      "recordCommand": "npm run people:dates:record -- --book weishu --chapter 007",
+      "verifyAfterApproval": "npm run people:dates:verify -- --book weishu --chapter 007"
+    },
+    "chapterAndCanonicalIdentityReview": {
+      "required": true,
+      "status": "pending"
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 007",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 007",
+    "datesPacket": "npm run people:dates:packet -- --book weishu --chapter 007 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-007/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge.",
+  "editorialReflectionPending": [
+    {
+      "proposalId": "weishu:007:r0003",
+      "unitId": "s0070",
+      "field": "idiomatic",
+      "reason": "Chinese 馮翊公 is Duke of Pingyi (Fengyi); Fenyang would be 汾陽.",
+      "sourceZh": "丁巳，進馮翊公李白爵梁郡王。"
+    },
+    {
+      "proposalId": "weishu:007:r0004",
+      "unitId": "s0042",
+      "field": "idiomatic",
+      "reason": "English \"palace attendant giving\" for 給事中 is unnatural and obscures the office title.",
+      "sourceZh": "殿中尚書、鎮西大將軍、西河公元石都督荊、豫、南雍州諸軍事，給事中、京兆侯張窮奇為副，出西道救懸瓠。"
+    },
+    {
+      "proposalId": "weishu:007:r0007",
+      "unitId": "s0115",
+      "field": "idiomatic",
+      "reason": "Chinese 匹婁拔累 is one personal name; splitting it into Pilouba and Lei invents a second person.",
+      "sourceZh": "戊申，長孫觀軍至曼頭山，大破拾寅，拾寅與麾下數百騎宵遁，拾寅從弟豆勿來及其渠帥匹婁拔累等率所領降附。"
+    },
+    {
+      "proposalId": "weishu:007:r0008",
+      "unitId": "s0115",
+      "field": "literal",
+      "reason": "Chinese 匹婁拔累 is a single name, not two names Pilouba and Lei.",
+      "sourceZh": "戊申，長孫觀軍至曼頭山，大破拾寅，拾寅與麾下數百騎宵遁，拾寅從弟豆勿來及其渠帥匹婁拔累等率所領降附。"
+    },
+    {
+      "proposalId": "weishu:007:r0009",
+      "unitId": "s0135",
+      "field": "idiomatic",
+      "reason": "給事中 is the office title 'Palace Attendant' / 'Gentleman Attendant at the Palace'; 'giving' is a gloss error from 給 and i",
+      "sourceZh": "夏四月，西部敕勒叛，詔汝陰王天賜、給事中羅雲討之。"
+    },
+    {
+      "proposalId": "weishu:007:r0010",
+      "unitId": "s0135",
+      "field": "literal",
+      "reason": "Same office mistranslation: 給事中 should not be rendered 'Palace Attendant Giving'.",
+      "sourceZh": "夏四月，西部敕勒叛，詔汝陰王天賜、給事中羅雲討之。"
+    }
+  ]
+}
