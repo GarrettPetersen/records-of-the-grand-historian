@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "038"
+  },
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "workerId": "cursor-nov24-four-part-owner-1",
+  "campaign": "campaign-nov24-four-part-audited",
+  "idempotencyKey": "ba8fc1d8800bbb7b8d234460b2bf3d30955bb8ea6e52f162918c8ade43dfb97a",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-four-part-owner-liangshu-038-664b73",
+  "inputBlobWitness": {
+    "source": "d0e714152ef8fea3abcc925455470d3444ff8a80",
+    "extraction": "a8910370bf9a48289ed478fcc912efd370302bdd",
+    "dateAudit": "8d1527c77149df8374771aeb1db50ff012976ab4",
+    "editorial": "8ee2a065efdec183d800285892b5fb189cd92109"
+  },
+  "sealedInputs": {
+    "source": "sha256:2eeeab5d3e5f41ba8c5037dd95d4852b2f25a2004ce318a99942e02f4cccc322",
+    "extraction": "sha256:8387734810a3a8a8b207c51052834355aaa0fb0aaa60b855743b03ac407429cb",
+    "dateAudit": "sha256:10da1a722bd0772f566b72888f53a94c589aec55b3101747c73e11385e6b379e",
+    "editorial": "sha256:6b9af2bb9d43156801bf2310d54050f1ee03a3121fb47aad1b2ffc0f71788562"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book liangshu --chapter 038",
+    "summary": "Scoped person data validation passed for liangshu/038: 1 extraction(s), 53 local people, 321 mentions, 581 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 360,
+      "translatedCount": 360,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Complete independent audit of 360 Chinese units, 195 temporal/hint items, and 53 people; no chronology defect or research hold found.",
+    "editorialDecisionCount": 8,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 38: Zhu Yi; He Chen",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. No new definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 49 prepared cases remains for independent bounded dossier review across 4 transport parts."
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 49,
+    "transportParts": 4,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-four-part-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 038"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
