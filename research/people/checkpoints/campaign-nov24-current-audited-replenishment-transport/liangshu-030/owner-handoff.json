@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-replenishment-transport-identity-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "030"
+  },
+  "ownerAgentId": "bc-baec2f7d-f741-47fb-a885-8403df5166cc",
+  "campaignWorker": "cursor-nov24-replenishment-48-bounded",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-replenishment-48-bounded-owner-transports",
+    "commit": "ceffd5f57793dfba32f5878f510c5f55eed837ae",
+    "planFingerprint": "sha256:87330e029ddde6820161b439f53e697a748971ca84cabe05e6859fa20a792425",
+    "sourcePacketSha256": "sha256:696128eebafbea5db65f4b4923f700773b36a21584a5b61335811f7b2f67ea44",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:702151f83ee9643e31d809e357c4f1db9c9577edd17a748687663d861f44308b",
+        "caseCount": 22
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:cfdd71b2fc546944eb1bb7fbd6cc3d1c77cea9e24970d41f841179e680dce56d",
+        "caseCount": 23
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:7f03d22632ce59a9ecfe296f8a2ec23e77958a24543ea9481a6d764d9a23da87",
+        "caseCount": 46
+      }
+    ],
+    "preparationReceiptSha256": "sha256:6cc65dc4f51738cfab6120cff2c96a5328789103ebe534c63235a09d114a0057"
+  },
+  "sealedInputs": {
+    "source": "sha256:8d4e9e38b6950630bf73655cf8aa2db087e2495bb1f20e749b248934d9945079",
+    "extraction": "sha256:b296c39da77718b8d2cbb77126ea11c1fab72f6d11a6357e27bee5aea337941e",
+    "editorial": "sha256:29e45079d66a8abe3c26152d799b008a669ede60c32fd65f35c195246924cafd",
+    "dateAudit": "sha256:fa9a221118b877eb2681e3df71433fac93780b74e5ee1cfe60d5e09bc6b3a25a"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "5 applied editorial decisions; no pending proposals",
+  "reviewCases": 91,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 91 cases retain preparation-proposed canonicalPersonId; 80 keep unresolvedIdentity true and 11 clear per sealed proposals. 45 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:80c4d386606d18d9ccf6ff84a4f2fb581658d0f558e23361342c808d784b9efc",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/preparation-receipt.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/lookup-receipt.json",
+    "transporttransportpart001": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/transport-part-001.json",
+    "transporttransportpart002": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/transport-part-002.json",
+    "transporttransportpart003": "research/people/checkpoints/campaign-nov24-current-audited-replenishment-transport/liangshu-030/transport-part-003.json"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 030"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions across all transport parts."
+}
