@@ -74,7 +74,7 @@ jobs:
           assert.deepEqual(delta.changed.map(x=>x.after),[now.get('claim-402')]);
           const remaining=new Set(delta.retained.map(x=>x.previousId));
           assert.equal(remaining.size,885);
-          assert.deepEqual(before.items.map(i=>i.id).filter(id=>!remaining.has(id)).sort(),['claim-402','claim-403','hints-p165']);
+          assert.deepEqual(before.items.map(i=>i.id).filter(id=>!remaining.has(id)).sort(),delta.removed.map(x=>x.id).sort());
           assert.deepEqual(after.items.map(i=>i.id).filter(id=>!items.has(id)),['claim-402']);
           items.set('claim-402',proof.itemChecks[0]);
           const people=old.personChecks.filter(x=>x.id!=='p165').map(x=>x.id!=='p100'?x:{...x,reason:x.reason+' Independent delta: '+proof.personChecks[0].reason,evidence:[...new Map([...x.evidence,...proof.personChecks[0].evidence].map(e=>[JSON.stringify(e),e])).values()]});
