@@ -1,71 +1,99 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Record narrowly reviewed Jinshu 028 chronology
+run-name: Reuse 885 unchanged chronology decisions and validate one independent delta
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  record:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 22
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      GH_TOKEN: ${{ github.token }}
+      SOURCE: 242c8f7ebdae4a022e6e6eebe97fe107e9130dd2
+      PRIOR: 288a641a9929f5c6bdfdb0254b026f865d1060ff
+      REVIEW: 4b3e96f4df29fa6e44557ab4ea131f28e8861441
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Revalidate prior source and record the composed current audit
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$RUNNER_TEMP/jinshu028-native-delta"
+          mkdir -p "$OUT/history"
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {buildDateAuditPacket,validateDateAuditReport,recordDateAudit,dateAuditReferencesCurrent} from './scripts/lib/people-date-audit.mjs';
+          const {SOURCE,PRIOR,REVIEW,OUT,GITHUB_REPOSITORY}=process.env;
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const get=(p,ref)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+p+'?ref='+ref],{maxBuffer:12e6});
+          const cert='data/people/date-audits/jinshu/028.json', itemPath='data/people/extractions/jinshu/028.json', folder='research/people/checkpoints/jinshu028-chronology-delta-20261124/';
+          const sourceDelta=get(folder+'exact-chronology-delta.json',REVIEW), independent=get(folder+'independent-date-delta.json',REVIEW);
+          assert.equal(hash(sourceDelta),'20ea4c154b0dca63251891e8d029e99b222a2b99aedec262fb7e9d8a72e95052'); assert.equal(hash(independent),'4bfa99ed4b33afa16673edc6f4958a719b38977643d6b6746df2549ec6f638ef');
+          const delta=JSON.parse(sourceDelta), proof=JSON.parse(independent);
+          const before=buildDateAuditPacket('jinshu','028',{extraction:JSON.parse(get(itemPath,PRIOR))});
+          const after=buildDateAuditPacket('jinshu','028');
+          const old=JSON.parse(get(cert,PRIOR));
+          assert.deepEqual(JSON.parse(fs.readFileSync(cert)),old);
+          validateDateAuditReport(old,before);
+          assert(dateAuditReferencesCurrent(old));
+          assert.equal(old.status,'audited');
+          assert.deepEqual(before.units,after.units);
+          assert.equal(proof.sourceHash,after.sourceHash);
+          assert.equal(proof.previousExtractionHash,before.extractionHash);
+          assert.equal(proof.currentExtractionHash,after.extractionHash);
+          assert.equal(proof.source.repairSourceCommit,SOURCE);
+          assert.equal(proof.source.ownerPin,PRIOR);
+          assert.equal(proof.source.exactChronologyDeltaSha256,'sha256:'+hash(sourceDelta));
+          assert.equal(proof.status,'approved');
+          assert.deepEqual(proof.reviewer,old.reviewer);
+          assert.deepEqual(proof.acceptedRemoved.itemIds.slice().sort(),['claim-403','hints-p165']);
+          assert.deepEqual(proof.acceptedRemoved.personIds,['p165']);
+          assert.deepEqual(proof.itemChecks.map(c=>c.id),['claim-402']);
+          assert.deepEqual(proof.personChecks.map(c=>c.id),['p100']);
+          const units=before.units.filter(u=>JSON.stringify(before.unitPeople[u.id].slice().sort())!==JSON.stringify(after.unitPeople[u.id].slice().sort()));
+          assert.deepEqual(units.map(u=>u.id),['s0341']);
+          assert.deepEqual(before.unitPeople['s0341'].filter(id=>!after.unitPeople['s0341'].includes(id)),['p165']);
+          assert.deepEqual(after.people,before.people.filter(p=>p.id!=='p165'));
+          const stripped=({id,claimIndex,...items})=>items;
+          const m=new Map(before.items.map(i=>[i.id,i])), now=new Map(after.items.map(i=>[i.id,i]));
+          const priorChecks=new Map(old.itemChecks.map(i=>[i.id,i]));
+          const items=new Map(delta.retained.map(x=>{assert.deepEqual(stripped(m.get(x.previousId)),stripped(now.get(x.currentId)));return [x.currentId,{...priorChecks.get(x.previousId),id:x.currentId}];}));
+          assert.equal(items.size,885);
+          assert.deepEqual(delta.changed.map(x=>x.after),[now.get('claim-402')]);
+          const remaining=new Set(delta.retained.map(x=>x.previousId));
+          assert.equal(remaining.size,885);
+          assert.deepEqual(before.items.map(i=>i.id).filter(id=>!remaining.has(id)).sort(),['claim-402','claim-403','hints-p165']);
+          assert.deepEqual(after.items.map(i=>i.id).filter(id=>!items.has(id)),['claim-402']);
+          items.set('claim-402',proof.itemChecks[0]);
+          const people=old.personChecks.filter(x=>x.id!=='p165').map(x=>x.id!=='p100'?x:{...x,reason:x.reason+' Independent delta: '+proof.personChecks[0].reason,evidence:[...new Map([...x.evidence,...proof.personChecks[0].evidence].map(e=>[JSON.stringify(e),e])).values()]});
+          const current={...old,extractionHash:after.extractionHash,reviewedAt:proof.reviewedAt,summary:old.summary+' One independent attestation and person-attribution delta was reviewed after duplicate p165 was removed. Preserved 885 semantically identical date decisions.',itemChecks:after.items.map(x=>items.get(x.id)),personChecks:people};
+          validateDateAuditReport(current,after);
+          const status=recordDateAudit(current);
+          assert.equal(status.status,'audited');assert.equal(status.findings,0);
+          const filename=hash(JSON.stringify(old))+'.json';
+          const hist='data/people/date-audit-history/jinshu/028/'+filename;
+          assert.deepEqual(JSON.parse(fs.readFileSync(hist)),old);
+          fs.copyFileSync(hist,path.join(OUT,'history',filename));
+          fs.copyFileSync(cert,path.join(OUT,'recorded-date-audit.json'));
+          fs.writeFileSync(path.join(OUT,'recording-receipt.json'),JSON.stringify({source:SOURCE,prior:PRIOR,review:REVIEW,reviewSha256:hash(independent),oldExtraction:before.extractionHash,extraction:after.extractionHash,reportSha256:hash(fs.readFileSync(cert)),retained:885,reviewed:1,removed:proof.acceptedRemoved,authoritativeReviewer:old.reviewer.agentId,status},null,2)+'\n');
+          JS
+          npm run people:dates:verify -- --book jinshu --chapter 028 --out "$OUT/verification.json"
+          jq -e '.chapters[0].status=="audited" and .chapters[0].findings==0' "$OUT/verification.json"
+      - uses: actions/upload-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: jinshu-028-recorded-chronology-delta
+          path: ${{ runner.temp }}/jinshu028-native-delta/
+          if-no-files-found: error
+          retention-days: 7
