@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "346"
+  },
+  "ownerAgentId": "bc-5e14e278-5674-49bb-9378-80b418cf39db",
+  "workerId": "cursor-nov24-retained-staging-w18-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "4f86760800d6b2d7d7e824508e00d024035be7c25ca280f9f85c267239a49318",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-346-f39db",
+  "extractionBytes": 213172,
+  "inputBlobWitness": {
+    "source": "2c07538b03b81923f68e4ab572070c0951995f89",
+    "extraction": "dce31761d1a8f602f008e0693278456e6c1ab316",
+    "editorial": "08aeac703a3a93749c4f0ab13f162821db5477aa"
+  },
+  "sealedInputs": {
+    "source": "sha256:fbfc567cdc270b84b3c3a7c064692e4ec8e839247e40866a9ad25685c4d59359",
+    "extraction": "sha256:3a9afb2d25ca186094af949ee9ae7d75595872093468ed094cebfb6dd6430327",
+    "editorial": "sha256:cf175d4d079291844ff3c8341890a55be0eef9f7c97a61ed79c23dfad2f74f12"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 346 Biographies 133: Heng Rui, Qing Cheng, Qi Shi Wu, Fu Zhina, Liang Lu",
+    "chineseUnits": 212,
+    "translatedCount": 212,
+    "sentenceCount": 212,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 213172
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-346/date-packet.json",
+    "contentSha256": "sha256:72fecd41c1a4206110fd84d21a3bedc7e591922d8bc3a24c2261bb3b30f9cdfc",
+    "packetSourceHash": "sha256:1f39c55869755598946e9709e70db482bed1d8ea0872f94b1f05b39bfb645ce9",
+    "packetExtractionHash": "sha256:fb8d7e0e178d5965809403ca2e28d8b20de2926b4ee5d3ab789bf36d59c5efaf",
+    "dateHintChecks": 468,
+    "peopleInPacket": 169,
+    "sourceUnitsInPacket": 212,
+    "nativeDiagnosticsCount": 0
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "model": "Grok Bot-chunked",
+    "bytes": 213172,
+    "peopleCount": 169,
+    "claimsInAudit": 713,
+    "reused": true,
+    "note": "No re-extraction; owner reads sealed extraction at pinned blob."
+  },
+  "editorialStatus": {
+    "appliedRepairs": 9,
+    "decisions": 9,
+    "status": "reviewed-with-applied-proposals",
+    "reuse": "accepted editorial bytes unchanged"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 346",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/346: 1 extraction(s), 169 local people, 648 mentions, 1133 claims, 0 proposed repair(s), 3 applied repair(s), 9 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateErrors": [],
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 346",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditState": "no-native-date-report",
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "datePacketDiagnostics": [],
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": {
+    "chronology": {
+      "gate": "native independent date audit (people:dates:record after reviewer pass)",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-346/date-packet.json",
+      "packetHash": "sha256:72fecd41c1a4206110fd84d21a3bedc7e591922d8bc3a24c2261bb3b30f9cdfc",
+      "blockedBy": "data/people/date-audits/qingshigao/346.json absent"
+    },
+    "identity": {
+      "gate": "independent canonical identity review against accepted extraction and dossier rules",
+      "dependsOn": [
+        "chronology-independent-date-approval"
+      ]
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial); no native date-audit file on staging. Git blob witnesses match dispatch pins. Full chapter English read via translations[] on all 212 Chinese units; people:validate passes; native date packet prepared (468 checks, 0 pre-audit diagnostics). Extraction and accepted editorial repairs reused without mutation. Owner does not self-approve chronology; independent date report still missing.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 346",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 346",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 346 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-346/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

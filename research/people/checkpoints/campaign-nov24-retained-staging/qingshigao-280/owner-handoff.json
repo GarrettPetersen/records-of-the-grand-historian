@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "280"
+  },
+  "ownerAgentId": "bc-5e14e278-5674-49bb-9378-80b418cf39db",
+  "workerId": "cursor-nov24-retained-staging-w18-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "4f86760800d6b2d7d7e824508e00d024035be7c25ca280f9f85c267239a49318",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-280-f39db",
+  "extractionBytes": 218422,
+  "inputBlobWitness": {
+    "source": "19e63543bcc7433b761fbfd1b41238d6dd9b6ccb",
+    "extraction": "56c3d5c452e33e8c1821751c24d1c1b028acc49e",
+    "editorial": "acf95feebb26b5eaba59b5636f758c8be6e5157a"
+  },
+  "sealedInputs": {
+    "source": "sha256:ddc663b1f2b75b61f02466549936b58cadbb956030df13ef56f52fda52c83ac2",
+    "extraction": "sha256:9a59c0257f90739fd071262a17bd4ee1317a6bc6de9bccafaf0f2a6c37f42e7b",
+    "editorial": "sha256:657660cc3fedc269b82103e991ffed577b77fe1b2eb9c250422531dcb5577ceb"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 280 Biographies 67: Lang Tan, Peng Chun, Sa Bu Su, Ma La",
+    "chineseUnits": 194,
+    "translatedCount": 194,
+    "sentenceCount": 194,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 218422
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-280/date-packet.json",
+    "contentSha256": "sha256:2a2de0b30f1d0cdef035eb2c3fb99aef1e0d3894995b1f045bfb385ef128c750",
+    "packetSourceHash": "sha256:359369870a764b9ca4324c8d2cd020586e353b0eee22349fc5014a817eeddba2",
+    "packetExtractionHash": "sha256:c6d0538749854a3decd23b3a8456a42be53507e44abfc3934819f690cc62c22d",
+    "dateHintChecks": 444,
+    "peopleInPacket": 99,
+    "sourceUnitsInPacket": 194,
+    "nativeDiagnosticsCount": 0
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "model": "grok-4.5-chunked",
+    "bytes": 218422,
+    "peopleCount": 99,
+    "claimsInAudit": 690,
+    "reused": true,
+    "note": "No re-extraction; owner reads sealed extraction at pinned blob."
+  },
+  "editorialStatus": {
+    "appliedRepairs": 22,
+    "decisions": 22,
+    "status": "reviewed-with-applied-proposals",
+    "reuse": "accepted editorial bytes unchanged"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 280",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/280: 1 extraction(s), 99 local people, 426 mentions, 1034 claims, 0 proposed repair(s), 22 applied repair(s), 22 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateErrors": [],
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 280",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditState": "no-native-date-report",
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "datePacketDiagnostics": [],
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": {
+    "chronology": {
+      "gate": "native independent date audit (people:dates:record after reviewer pass)",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-280/date-packet.json",
+      "packetHash": "sha256:2a2de0b30f1d0cdef035eb2c3fb99aef1e0d3894995b1f045bfb385ef128c750",
+      "blockedBy": "data/people/date-audits/qingshigao/280.json absent"
+    },
+    "identity": {
+      "gate": "independent canonical identity review against accepted extraction and dossier rules",
+      "dependsOn": [
+        "chronology-independent-date-approval"
+      ]
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial); no native date-audit file on staging. Git blob witnesses match dispatch pins. Full chapter English read via translations[] on all 194 Chinese units; people:validate passes; native date packet prepared (444 checks, 0 pre-audit diagnostics). Extraction and accepted editorial repairs reused without mutation. Owner does not self-approve chronology; independent date report still missing.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 280",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 280",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 280 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-280/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

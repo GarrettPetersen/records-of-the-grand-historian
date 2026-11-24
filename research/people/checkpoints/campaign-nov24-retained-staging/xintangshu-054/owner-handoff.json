@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "054"
+  },
+  "ownerAgentId": "bc-5e14e278-5674-49bb-9378-80b418cf39db",
+  "workerId": "cursor-nov24-retained-staging-w18-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "4f86760800d6b2d7d7e824508e00d024035be7c25ca280f9f85c267239a49318",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-054-f39db",
+  "extractionBytes": 218164,
+  "inputBlobWitness": {
+    "source": "ff201e1c84068644ce1c8eb098f2ab3d7f4df1c2",
+    "extraction": "ea0935385944c4ba1c38a943b172acb83c32330d",
+    "editorial": "dfb0eff0ac94c33882a391df80cc49fe4150a1b9"
+  },
+  "sealedInputs": {
+    "source": "sha256:41c870333fd4660271a428fb98daa6d6523fbbb29fe95f209c2dc70c778407b0",
+    "extraction": "sha256:6724cbe73368888b46e321269bf92b08246dbc367cb6349784219c61863e85c3",
+    "editorial": "sha256:fcdfc2a3e2eaf26d5d7eee05251fea689552be19cd0f35ee3b360112fcd68193"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 54 Treatises 50: Finance and Economics 3",
+    "chineseUnits": 264,
+    "translatedCount": 264,
+    "sentenceCount": 264,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 218164
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-054/date-packet.json",
+    "contentSha256": "sha256:d38e960eb6f1c8cd575716072e575b1dc196bbef99e3b45a51dd6404c353a482",
+    "packetSourceHash": "sha256:1338f9d7dcef8e496371b3e80676638c327274e9f7abc63630afd17b0d6b7e7d",
+    "packetExtractionHash": "sha256:3bce36f544f051a439b52d91d691b3791599654698dd3a295d3e10996b8d5a70",
+    "dateHintChecks": 317,
+    "peopleInPacket": 95,
+    "sourceUnitsInPacket": 264,
+    "nativeDiagnosticsCount": 0
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "model": "grok-4.5-chunked",
+    "bytes": 218164,
+    "peopleCount": 95,
+    "claimsInAudit": 722,
+    "reused": true,
+    "note": "No re-extraction; owner reads sealed extraction at pinned blob."
+  },
+  "editorialStatus": {
+    "appliedRepairs": 30,
+    "decisions": 30,
+    "status": "reviewed-with-applied-proposals",
+    "reuse": "accepted editorial bytes unchanged"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book xintangshu --chapter 054",
+    "peopleValidateSummary": "Scoped person data validation passed for xintangshu/054: 1 extraction(s), 95 local people, 250 mentions, 1089 claims, 0 proposed repair(s), 30 applied repair(s), 30 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateErrors": [],
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 054",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditState": "no-native-date-report",
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "datePacketDiagnostics": [],
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": {
+    "chronology": {
+      "gate": "native independent date audit (people:dates:record after reviewer pass)",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-054/date-packet.json",
+      "packetHash": "sha256:d38e960eb6f1c8cd575716072e575b1dc196bbef99e3b45a51dd6404c353a482",
+      "blockedBy": "data/people/date-audits/xintangshu/054.json absent"
+    },
+    "identity": {
+      "gate": "independent canonical identity review against accepted extraction and dossier rules",
+      "dependsOn": [
+        "chronology-independent-date-approval"
+      ]
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial); no native date-audit file on staging. Git blob witnesses match dispatch pins. Full chapter English read via translations[] on all 264 Chinese units; people:validate passes; native date packet prepared (317 checks, 0 pre-audit diagnostics). Extraction and accepted editorial repairs reused without mutation. Owner does not self-approve chronology; independent date report still missing.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 054",
+    "datesVerify": "npm run people:dates:verify -- --book xintangshu --chapter 054",
+    "datesPacket": "npm run people:dates:packet -- --book xintangshu --chapter 054 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-054/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

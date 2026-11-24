@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "430"
+  },
+  "ownerAgentId": "bc-5e14e278-5674-49bb-9378-80b418cf39db",
+  "workerId": "cursor-nov24-retained-staging-w18-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "4f86760800d6b2d7d7e824508e00d024035be7c25ca280f9f85c267239a49318",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-430-f39db",
+  "extractionBytes": 217590,
+  "inputBlobWitness": {
+    "source": "7a9a5572582027aa986ad0b3070eb1805212865e",
+    "extraction": "fecd0b0e2d94b20736dcd826d3d7332ad7515693",
+    "editorial": "98c95073bc33698f4ed38b933e75a84025f9acf6"
+  },
+  "sealedInputs": {
+    "source": "sha256:eeb6eacd043a19f8f9e7171423266b5814f4901b9400d2c35795d5171ba71430",
+    "extraction": "sha256:6b7efbfd9d95cc6910600c4ce9f6c643b61baa2c23679fb28b70826a708610c9",
+    "editorial": "sha256:9467049cf3682f0947f728ec5f703320056309071fd2d27cf6f0c81ac496dd6a"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 430 Biographies 217: Lei Zhengwan, Tao Maolin, Cao Kezhong, Hu Zhonghe, He Shengbi, Xiao Qinggao, Yang Fudong, Zhou Dawu, Li Huiwu, Tang Yougeng",
+    "chineseUnits": 271,
+    "translatedCount": 271,
+    "sentenceCount": 271,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 217590
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-430/date-packet.json",
+    "contentSha256": "sha256:0e43415ba64fd3b0dfdf76c38aec5de4f0bf3af0a25a42e60a72cdad52e9740c",
+    "packetSourceHash": "sha256:ce7bb347898d96596886f249bbd058868c96959a56ce28bf746796913f420f55",
+    "packetExtractionHash": "sha256:b69b0e76325490546e7c6f2d9df8766b0a75c426c2319e57bc95528c8d73da03",
+    "dateHintChecks": 441,
+    "peopleInPacket": 128,
+    "sourceUnitsInPacket": 271,
+    "nativeDiagnosticsCount": 0
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "model": "Grok Bot-chunked",
+    "bytes": 217590,
+    "peopleCount": 128,
+    "claimsInAudit": 795,
+    "reused": true,
+    "note": "No re-extraction; owner reads sealed extraction at pinned blob."
+  },
+  "editorialStatus": {
+    "appliedRepairs": 10,
+    "decisions": 10,
+    "status": "reviewed-with-applied-proposals",
+    "reuse": "accepted editorial bytes unchanged"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 430",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/430: 1 extraction(s), 128 local people, 554 mentions, 1196 claims, 0 proposed repair(s), 10 applied repair(s), 10 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateErrors": [],
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 430",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditState": "no-native-date-report",
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "datePacketDiagnostics": [],
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": {
+    "chronology": {
+      "gate": "native independent date audit (people:dates:record after reviewer pass)",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-430/date-packet.json",
+      "packetHash": "sha256:0e43415ba64fd3b0dfdf76c38aec5de4f0bf3af0a25a42e60a72cdad52e9740c",
+      "blockedBy": "data/people/date-audits/qingshigao/430.json absent"
+    },
+    "identity": {
+      "gate": "independent canonical identity review against accepted extraction and dossier rules",
+      "dependsOn": [
+        "chronology-independent-date-approval"
+      ]
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial); no native date-audit file on staging. Git blob witnesses match dispatch pins. Full chapter English read via translations[] on all 271 Chinese units; people:validate passes; native date packet prepared (441 checks, 0 pre-audit diagnostics). Extraction and accepted editorial repairs reused without mutation. Owner does not self-approve chronology; independent date report still missing.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 430",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 430",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 430 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-430/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
