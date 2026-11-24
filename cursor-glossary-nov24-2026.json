@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T01:43:11.599Z",
+  "lastCheckedAt": "2026-11-24T01:44:12.652Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1750,29 +1750,24 @@
   "dispatchRule": "Before each new batch confirm original billing period still active in the Cursor dashboard, included capacity remains and hard overage cap remains unchanged. Use 24-hour absolute cap and close on observed rollover. Exact reset hour remains unverified.",
   "ownerCorrections": {
     "jinshu/085": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
-      "previousRunId": "run-6aee6140-7d7e-4cd9-9221-51eccca38b52",
+      "previousRunId": "run-c7a6c1cb-8278-4ac2-bab0-914b80d08ffd",
       "chapterPR": 5428,
-      "revision": "2ebb84a4958d1d5ac8977384fc845ab791597277",
-      "findingsRevision": "56966e665f3e60bd1cf45131266fd5e06a3bafb5",
-      "prompt": "Resume Jinshu 085 only while 116 is independently reviewed. The previous owner pass verified historic Grok Bot worker but left all native agentId fields null. The exact original ledger 833c4c1e6d42f820e86655a471d38d96690d127e and merged #4900 bfb36c7de8b7c7a0dfc08c52d6f6fd67c930d9d7 confirm actual worker grokbot-30 and hash 46f6727a8e2babdf2718d945b418891a8c474aaae43059cca91e36c03caf5bf0. Restore chunk agentId only where exact immutable chunk ranges align, same pattern as completed 081 and 123. Preserve unknown run IDs. Leave already verified 24 unresolved chronology entries, claims, source and English decisions exactly intact. Push native scoped validation and metadata-only proof. No date proof, gate change, other chapter or merge.",
-      "idempotencyKey": "cursor-nov24-next-retained-085-2ebb84a495-ownerCorrections-51eccca38b52",
-      "reservedAt": "2026-11-24T01:33:23.361Z",
+      "revision": "85ae667155011e728b4eba029e6641c99fef47c9",
+      "findingsRevision": "6ea06857cd6eef2c9c4a66cd582470664d58f4a8",
+      "prompt": "Resume only original Jinshu 085 owner. Apply exact independently diagnosed changes from 6ea06857 in jinshu085-independent-holder-diagnosis-85ae6671-20261124. For 12 named claims (9,237,296,341–343,352–353,407–410), keep text exactly at its supported Chinese precision and remove provisional uncertainty only when the schema honestly represents the cited fact. For nine named undated role claims (280–281,379–382,399–400,412), the reviewer supports exact removal of unsupported dateContext while preserving event and primary evidence. Keep 395–397 年十八 held if real; preserve age, strip unrelated assumed era precision only. Preserve all approved repairs, current historical provenance and 13 English decisions. Scoped validation + exact dependency receipt on #5428. No self-approval, repeated broader audit, unrelated edits or merge.",
+      "idempotencyKey": "cursor-nov24-next-retained-085-85ae667155-ownerCorrections-914b80d08ffd",
+      "reservedAt": "2026-11-24T01:44:12.651Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-24T01:33:23.361Z"
+        "at": "2026-11-24T01:44:12.651Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
         "swapUsedBytes": "3365205442"
-      },
-      "runId": "run-014ec108-14bb-4433-bd92-f7dcadbbfa16",
-      "sentAt": "2026-11-24T01:33:27.640Z",
-      "resultRevision": "85ae667155011e728b4eba029e6641c99fef47c9",
-      "restoredHistoricalExtractor": "grokbot-30",
-      "scopedValidation": "pass"
+      }
     },
     "jinshu/078": {
       "status": "finished",
@@ -2158,7 +2153,7 @@
       "dependentDeltas": 9
     },
     "jinshu/020": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
       "previousRunId": "run-76464a3f-ac4e-400f-b77c-6e27dd4027e4",
       "chapterPR": 5488,
@@ -2177,12 +2172,16 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-d89f5a79-df75-4f45-a2ad-8d37ac09f101",
-      "sentAt": "2026-11-24T01:35:55.482Z"
+      "sentAt": "2026-11-24T01:35:55.482Z",
+      "resultRevision": "3694dc935781de7f687d304a1500f1af2e537133",
+      "scopedValidation": "pass",
+      "appliedEditorialDecisions": 97,
+      "dependentSurfacesReconciled": 38
     }
   },
   "rechecks": {
     "jinshu/085": {
-      "status": "sent",
+      "status": "finished",
       "agentId": "bc-65fb5d6a-4638-432a-aaa2-0356929fe257",
       "previousRunId": "run-f4bd47b2-3ace-4753-b957-3ec28938cb16",
       "chapterPR": 5428,
@@ -2201,7 +2200,12 @@
         "swapUsedBytes": "3365205442"
       },
       "runId": "run-4bc5bfc7-3d6c-4e77-a122-67df3b53907b",
-      "sentAt": "2026-11-24T01:38:13.268Z"
+      "sentAt": "2026-11-24T01:38:13.268Z",
+      "resultRevision": "6ea06857cd6eef2c9c4a66cd582470664d58f4a8",
+      "provenanceVerified": true,
+      "supportedChineseCases": 12,
+      "undatedRoleCases": 9,
+      "genuineAgeHolds": 3
     },
     "jinshu/047": {
       "key": "jinshu/047",
@@ -2600,6 +2604,26 @@
       },
       "runId": "run-71f60ed7-3741-4017-8910-8dacc4c5be05",
       "sentAt": "2026-11-24T01:41:44.061Z"
+    },
+    "jinshu/020": {
+      "status": "dispatch_pending",
+      "agentId": "bc-ca56fb16-d4fd-4ced-a2fb-3640376ab1df",
+      "previousRunId": "run-8288ae94-ce2a-4860-97de-62cac3871d00",
+      "chapterPR": 5488,
+      "revision": "3694dc935781de7f687d304a1500f1af2e537133",
+      "findingsRevision": "3090cd32b68fe0f770af2fe5dd52968acaa7bb64",
+      "prompt": "Continue original independent Jinshu 020 reviewer. Verify exact native apply of your 97 decisions (83 accept +14 revise) at #5488 3694dc93 using owner changed-dependency receipt. Check 38 associated candidate dispositions against primary Chinese and your preserved editorial decisions. If sound, start current native chronology review using coherent source spans, reuse prior evidence, without repeated line-by-line editorial work. Report exact scope and next span and persist partial native item decisions with citations. Keep source changes with owner, real uncertainty and no fabricated approval/merges.",
+      "idempotencyKey": "cursor-nov24-next-retained-020-3694dc9357-rechecks-62cac3871d00",
+      "reservedAt": "2026-11-24T01:44:12.651Z",
+      "lastSendAttempt": {
+        "status": "send-intent",
+        "at": "2026-11-24T01:44:12.651Z"
+      },
+      "preflight": {
+        "mode": "cursor-cloud-github-only",
+        "pressure": 1,
+        "swapUsedBytes": "3365205442"
+      }
     }
   },
   "identityRegistryBuild": {
@@ -5994,6 +6018,31 @@
         "textualDateRepairs": 21,
         "undatedResiduals": 3,
         "historicalAuthorPinVerified": true
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
+        "previousRunId": "run-6aee6140-7d7e-4cd9-9221-51eccca38b52",
+        "chapterPR": 5428,
+        "revision": "2ebb84a4958d1d5ac8977384fc845ab791597277",
+        "findingsRevision": "56966e665f3e60bd1cf45131266fd5e06a3bafb5",
+        "prompt": "Resume Jinshu 085 only while 116 is independently reviewed. The previous owner pass verified historic Grok Bot worker but left all native agentId fields null. The exact original ledger 833c4c1e6d42f820e86655a471d38d96690d127e and merged #4900 bfb36c7de8b7c7a0dfc08c52d6f6fd67c930d9d7 confirm actual worker grokbot-30 and hash 46f6727a8e2babdf2718d945b418891a8c474aaae43059cca91e36c03caf5bf0. Restore chunk agentId only where exact immutable chunk ranges align, same pattern as completed 081 and 123. Preserve unknown run IDs. Leave already verified 24 unresolved chronology entries, claims, source and English decisions exactly intact. Push native scoped validation and metadata-only proof. No date proof, gate change, other chapter or merge.",
+        "idempotencyKey": "cursor-nov24-next-retained-085-2ebb84a495-ownerCorrections-51eccca38b52",
+        "reservedAt": "2026-11-24T01:33:23.361Z",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-24T01:33:23.361Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "runId": "run-014ec108-14bb-4433-bd92-f7dcadbbfa16",
+        "sentAt": "2026-11-24T01:33:27.640Z",
+        "resultRevision": "85ae667155011e728b4eba029e6641c99fef47c9",
+        "restoredHistoricalExtractor": "grokbot-30",
+        "scopedValidation": "pass"
       }
     ],
     "jinshu/116": [
@@ -8904,6 +8953,33 @@
         "reviewedReported": 201,
         "totalReported": 414,
         "nextScope": 13
+      }
+    ],
+    "jinshu/020": [
+      {
+        "status": "finished",
+        "chapter": "020",
+        "chapterPR": 5488,
+        "revision": "9faf511034d929f9fb7d7b69edf5678c8059c991",
+        "ownerAgentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
+        "model": "composer-2.5",
+        "idempotencyKey": "cursor-nov24-020-independent-9faf511034d9",
+        "reservedAt": "2026-11-24T01:26:38.080Z",
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "provisionalAgentId": "bc-ca56fb16-d4fd-4ced-a2fb-3640376ab1df",
+        "agentId": "bc-ca56fb16-d4fd-4ced-a2fb-3640376ab1df",
+        "runId": "run-8288ae94-ce2a-4860-97de-62cac3871d00",
+        "sentAt": "2026-11-24T01:26:48.332Z",
+        "resultRevision": "3090cd32b68fe0f770af2fe5dd52968acaa7bb64",
+        "editorialAccepts": 83,
+        "editorialRevisions": 14,
+        "editorialRejects": 0,
+        "artifactPath": "research/people/jinshu020-cloud-authoring-20261123/independent-editorial-decisions.json",
+        "priorPhase": "independent-editorial"
       }
     ]
   },
