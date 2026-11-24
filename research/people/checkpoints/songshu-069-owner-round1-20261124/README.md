@@ -31,3 +31,7 @@ Independent reviewer must **not** treat owner inventory as approval. Options:
 2. Reject/revise any repair that fails source check and reconcile source + extraction.
 
 Identity dossier preparation remains blocked until `editorial-decisions` validates against applied repairs.
+
+**Applied contracts fingerprint:** `sha256:ad0c1e0214fa568f00cfbdecf0bf01a759eff09e1e06a178011e267a283a2341`
+
+See `provenance-blocker.json` and `exact-chapter-handoff.json` for the narrow gate receipt.
