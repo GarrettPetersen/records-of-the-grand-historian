@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-transport-identity-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "047"
+  },
+  "ownerAgentId": "bc-b1b4cecc-160a-4940-add4-09b11b527691",
+  "campaignWorker": "cursor-nov24-audited-recovery-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+    "commit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+    "transportSha256": "99d3d1804454607e1ac41474e127e11543f62f7fe5e29c92760a08784468a7ea",
+    "transportBytes": 173825,
+    "planFingerprint": "sha256:bd8d28be674f9b78d372e0471087cfbe2c8e8d8c752bc30240ce3e92a56d68fe",
+    "sourcePacketSha256": "09b55dfa230bea34fddec70d4e5eedc04022e54f31c3acccd18185bdb509703b"
+  },
+  "sealedInputs": {
+    "source": "sha256:55fe228790415ada1d17ecc62e7090816e0084d25b62fac4bef798be7732d3fb",
+    "extraction": "sha256:0f2199a736d5763c421fe85157f021b747ac171f6dbd822de2407725f309048e",
+    "editorial": "sha256:111ed62188e584872091b55f8d2e4f81bf35dc665024fa7bb447fd77dc863358",
+    "dateAudit": "sha256:bfb682f5464b8a817ecdde9a239df0f4e99776012997b94c57f0cca34d2debde"
+  },
+  "reviewCases": 3,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-047/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-047/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-047/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-047/validation-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-047/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 047",
+    "reviewerReads": [
+      "transport-packet.json requiredReport",
+      "owner-evidence.json cases",
+      "Pinned qingshigao/047 extraction and cross-chapter units cited in owner evidence"
+    ],
+    "reviewerProduces": "identity-review.json per requiredReport; owner evidence is not approval"
+  },
+  "ownerEvidenceSha256": "sha256:7f4273f1b30f379d55603acc4da5b6dc2a2d423c709da3b37ccb5b57cb508795",
+  "notes": "Calendar treatise chapter: Western astronomer transliterations only. No identity-review.json or certificate in this PR."
+}
