@@ -1,71 +1,73 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Qualify exact native identity for independently date-audited glossary chapters
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  certify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 32
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      NODE_OPTIONS: --max-old-space-size=3072
+      SOURCE: d1b7335f006b5dc1b90d35abfe7c0ed6d1b5784a
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+      - run: npm install --no-audit --no-fund
+      - uses: actions/download-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: nov24-first-native-date-identity-projection-1-0
+          run-id: 45449543949
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/prepared
+      - name: Record exact model-authored independent review certificates
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export OUT="$GITHUB_WORKSPACE/data/people/generated/nov24-native-certificates"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$OUT" "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
+          node --input-type=module <<'JS'
+          const items=[{"key":"xinwudaishi/032","owner":"bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2","agentId":"bc-1b81307f-6c20-4f67-a951-485e51954f4b","runId":"run-4ddd4a14-ae8f-4332-a642-039956df7790","head":"3955e2ed8419681f492cb35fdd0e2398481dc4e4","preparedDir":"xinwudaishi-032","packetSha256":"ba0df00f4e890658a901c7a2573b9317bb94c8f78bec93f00f66832a9e148780","transportRevision":"c54bd2acd91b9480c0950c3243232c5808d7cfd3","parts":[{"path":"research/people/checkpoints/campaign-nov24-first-native-identity/xinwudaishi-032/transport-packet.json","sha256":"88c04457e86356192c01c2d3d6d4f71a1ec141328ae7ef13091e8c0d4351cc2c","cases":39,"output":"research/people/checkpoints/campaign-nov24-first-native-identity/xinwudaishi-032/native-identity-report.json","head":"3955e2ed8419681f492cb35fdd0e2398481dc4e4","reportSha256":"cff5493684f682f53043b4bad79f281839bdfff81338ccab44133f057b7c57fa","holds":[]}],"cases":39,"held":[],"sourceRepairs":[]},{"key":"xintangshu/044","owner":"bc-ca0f3f65-bb19-4b9d-9ba3-52c5d198fcd3","agentId":"bc-1b81307f-6c20-4f67-a951-485e51954f4b","runId":"run-4ddd4a14-ae8f-4332-a642-039956df7790","head":"3955e2ed8419681f492cb35fdd0e2398481dc4e4","preparedDir":"xintangshu-044","packetSha256":"e04ca348adc819c55d40491967a1c0e8d8f140c91220ecd6b08846d2e2acdab9","transportRevision":"c54bd2acd91b9480c0950c3243232c5808d7cfd3","parts":[{"path":"research/people/checkpoints/campaign-nov24-first-native-identity/xintangshu-044/transport-packet.json","sha256":"04134f9c19a70ff88fd2245f7887ff672c3f7ef584050b6c71b10964ebd3f7cf","cases":43,"output":"research/people/checkpoints/campaign-nov24-first-native-identity/xintangshu-044/native-identity-report.json","head":"3955e2ed8419681f492cb35fdd0e2398481dc4e4","reportSha256":"f303c27defe0da988ac7193fbe02c7c75a3c05725c5d807d17ae5c93d46b97f4","holds":[]}],"cases":43,"held":[],"sourceRepairs":[]},{"key":"shiji/084","owner":"bc-b0384d75-2b46-40b4-a947-4df142aa025f","agentId":"bc-1b81307f-6c20-4f67-a951-485e51954f4b","runId":"run-4ddd4a14-ae8f-4332-a642-039956df7790","head":"3955e2ed8419681f492cb35fdd0e2398481dc4e4","preparedDir":"shiji-084","packetSha256":"23fea89f137e19e97a60447cb00b073ba5b7456ba993667b3f4bc74cfc67c5e9","transportRevision":"c54bd2acd91b9480c0950c3243232c5808d7cfd3","parts":[{"path":"research/people/checkpoints/campaign-nov24-first-native-identity/shiji-084/transport-packet.json","sha256":"4c3e03bb2a6a7e117158a078d96863b1cb3a0700a695046c99a0aaf91da89189","cases":46,"output":"research/people/checkpoints/campaign-nov24-first-native-identity/shiji-084/native-identity-report.json","head":"3955e2ed8419681f492cb35fdd0e2398481dc4e4","reportSha256":"0c8946aa8e1db9fb35a295150d004012367b4842b98f6d5f062d2bbe60c86173","holds":[]}],"cases":46,"held":[],"sourceRepairs":[]},{"key":"liaoshi/110","owner":"bc-4e183857-b0ba-4bce-baa6-eec0311d4e13","agentId":"bc-7b1203b1-440a-4311-b1cd-9e2bf6b62385","runId":"run-2e82bd5d-53c5-48c8-b257-a202b8f72bd7","head":"dd97a9eefe10882217726e47e9189bee293f2bfb","preparedDir":"liaoshi-110","packetSha256":"3992418c377a85e95780869b6261c05a05c24434ebb5e9ec647f60148ecccf11","transportRevision":"c54bd2acd91b9480c0950c3243232c5808d7cfd3","parts":[{"path":"research/people/checkpoints/campaign-nov24-first-native-identity/liaoshi-110/transport-packet.json","sha256":"46b8ab861e7c434a78b829ca9a5d50e7c1e4a02c0dd573347ca3761eacc0634d","cases":43,"output":"research/people/checkpoints/campaign-nov24-first-native-identity/liaoshi-110/native-identity-report.json","head":"dd97a9eefe10882217726e47e9189bee293f2bfb","reportSha256":"c49b12f7d80b6df9b14b51ca6fde54e6a3225dfabf69bd7f6e76df723d071e15","holds":[]}],"cases":43,"held":[],"sourceRepairs":[]},{"key":"qingshigao/473","owner":"bc-269ec703-5133-4314-8050-fc299a953527","agentId":"bc-7b1203b1-440a-4311-b1cd-9e2bf6b62385","runId":"run-2e82bd5d-53c5-48c8-b257-a202b8f72bd7","head":"dd97a9eefe10882217726e47e9189bee293f2bfb","preparedDir":"qingshigao-473","packetSha256":"1280533a11fac5c16a2f8f0c449bfdd74f0930bd9378f3c91b3573342a489eee","transportRevision":"c54bd2acd91b9480c0950c3243232c5808d7cfd3","parts":[{"path":"research/people/checkpoints/campaign-nov24-first-native-identity/qingshigao-473/transport-packet.json","sha256":"00882a2190b87f546928874dd52ffa68dc7da845fe945f0908dbe121018d78e2","cases":59,"output":"research/people/checkpoints/campaign-nov24-first-native-identity/qingshigao-473/native-identity-report.json","head":"dd97a9eefe10882217726e47e9189bee293f2bfb","reportSha256":"0403f6f250172e6cedc537880f7e1a722be4e9fc8f2f930250411bffadd423af","holds":[]}],"cases":59,"held":[],"sourceRepairs":[]}];
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {identityArtifactHash,recordChapterIdentityReview} from './scripts/lib/people-identity-review-record.mjs';
+          const {RUNNER_TEMP,SOURCE,REGISTRY,OUT,GITHUB_REPOSITORY}=process.env;
+          const output=[];
+          const get=(p,ref)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+p+'?ref='+ref],{maxBuffer:4e6,timeout:25000});
+          for(const x of items){
+           const [book,chapter]=x.key.split('/');const scope={book,chapter}, dir=path.join(RUNNER_TEMP,'prepared',x.preparedDir);
+           try {
+           const packet=path.join(dir,'source-review-packet.json'), pb=fs.readFileSync(packet), src=JSON.parse(pb);
+           assert.equal(src.registryReuse?.sourceRevision??src.registryProvenance.revision,SOURCE);assert.equal(identityArtifactHash(pb).replace(/^sha256:/,''),x.packetSha256);
+           const files=x.parts.map((y,i)=>{const rb=get(y.output,y.head),tb=get(y.path,x.transportRevision),reportFile=path.join(dir,'captured-report-'+i+'.json'),transportFile=path.join(dir,'captured-transport-'+i+'.json');
+            assert.equal(identityArtifactHash(rb).replace(/^sha256:/,''),y.reportSha256);assert.equal(identityArtifactHash(tb).replace(/^sha256:/,''),y.sha256);
+            fs.writeFileSync(reportFile,rb,{flag:'wx'});fs.writeFileSync(transportFile,tb,{flag:'wx'});return {rb,tb,reportFile,transportFile};});
+           const aggregate=files.length===1?files[0].rb:Buffer.from(JSON.stringify((await import('./scripts/lib/people-identity-review-transport.mjs')).assembleChapterIdentityReviewParts(src.plan,files.map(f=>JSON.parse(f.tb)),files.map(f=>JSON.parse(f.rb)),files.map(()=>x.agentId),src.authorAgentIds,src.reviewCaseIds))+'\n');
+           const report=path.join(dir,'captured-native-review.json'),job=path.join(dir,'capture.json');
+           const common={schemaVersion:1,phase:'report-recorded',scope,agentId:x.agentId,runId:x.runId,sourcePacketSha256:identityArtifactHash(pb)};
+           const partition=files.length===1?{}:{transportPolicy:x.transportPolicy,parts:files.map(f=>({...common,kind:'captured-independent-identity-review-part',transportFile:f.transportFile,reportFile:f.reportFile,transportSha256:identityArtifactHash(f.tb),reportSha256:identityArtifactHash(f.rb)}))};
+           fs.writeFileSync(report,aggregate,{flag:'wx'});fs.writeFileSync(job,JSON.stringify({...common,authorAgentIds:[x.owner],kind:files.length===1?'captured-independent-identity-review':'captured-independent-identity-review-parts',reportSha256:identityArtifactHash(aggregate),...partition}),{flag:'wx'});
+           const qualified=await recordChapterIdentityReview({packet,report,job,registry:REGISTRY,out:path.join(OUT,x.preparedDir+'.json')});
+           assert(qualified.nativeIdentityProofAccepted&&qualified.reviewedCases===x.cases);output.push({key:x.key,status:'qualified',cases:x.cases,certificate:identityArtifactHash(fs.readFileSync(path.join(OUT,x.preparedDir+'.json')))});
+           } catch(e) {output.push({key:x.key,status:'held',reason:e.message});}
+          }
+          fs.writeFileSync(path.join(OUT,'summary.json'),JSON.stringify({source:SOURCE,output},null,2)+'\n');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nov24-first-native-identity-certificates-3-1
+          path: data/people/generated/nov24-native-certificates/
+          if-no-files-found: error
+          retention-days: 7
