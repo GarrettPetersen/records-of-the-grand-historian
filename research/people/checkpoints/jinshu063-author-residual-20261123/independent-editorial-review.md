@@ -45,6 +45,14 @@ Units **s0021–s0028** read once. Ten packet items checked; **no Western years 
 
 **Scope 13:** remaining **213** items — **123** passage groups; **203 approved**, **10 genuinely-held** (nonempty active-date hints corroborated to era claims), **0** proposed source-only patches; **414/414** packet items now reviewed. Chapter date approval still **false** (host calendar + formal date report).
 
+## Staging delta `11cb2c7a` (PR #5487)
+
+Independent replay on pinned extraction at `11cb2c7ae6024949c65651a49617fc0d7f0d35ea` (chapter English/source unchanged vs post-apply `92b6c31f`):
+
+- **Ten era hint/claim pairs** (`tenEraHintClaimPairs`): all five Chinese witnesses present (s0026, s0073, s0170, s0226, s0288); each pair keeps `sourceDate.text` only, adds qualitative English without Western years, and clears the old `unresolved` flag — **verified, not approved for chapter `audited`** (host reign calendar still external).
+- **Six grokbot-27 chunk producers** restored on unchanged ranges 001–006; semantic extraction matches `92b6c31f` aside from the era round above (`independent-date-audit-11cb2c7a-verification.json`).
+- **414/414 item judgments** rebound: **394 invariant**, **20 refreshed** (10 claims + 10 hints). Native draft report validates against the live packet but is **checkpoint-only** — **190 `personChecks` missing** (`independent-date-audit-11cb2c7a-report-draft.json`, status `needs-revision`). **No `people:dates:record`** and no canonical `data/people` edits.
+
 ## Pending actions (not approved here)
 
 1. **Chronology** — continue scoped passes; owner `date-packet.json` on d8ad75ef fingerprint retained as historical seal.
