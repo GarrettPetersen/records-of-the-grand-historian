@@ -6,7 +6,7 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '081-certify', '085-certify', '123-certify', '063-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
@@ -462,8 +462,13 @@ jobs:
           const parts = [...latest.values()].sort((a,b)=>a.part-b.part);
           const supported = ['pending-native-verification','native-verified'];
           const retainedCases=chapter==='030'?207:packet.cases;
-          assert(parts.length && parts.every((r,i)=>r.part===i+1 && (supported.includes(r.status)||(retain&&holdId&&r.part===11&&r.status==='chapter-hold'))), 'Authored parts incomplete or held for correction');
-          assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===(retain&&holdId&&r.part===11?1:0)), 'Unexpected held decisions');
+          const retainedHolds=retain?(holdId?[{part:11,id:holdId}]:(packet.exactRetainedHolds??[])):[];
+          assert.equal(retainedHolds.length,retain?({'030':1,'063':2}[chapter]??0):0);
+          const holdIds=retainedHolds.map(x=>x.id);
+          assert.equal(new Set(holdIds).size,holdIds.length);
+          assert(retainedHolds.every(x=>Number.isSafeInteger(x.part)&&x.part>0&&x.part<=parts.length&&/^sha256:[a-f0-9]{64}$/.test(x.id)));
+          assert(parts.length && parts.every((r,i)=>r.part===i+1 && (supported.includes(r.status)||(retain&&retainedHolds.some(x=>x.part===r.part)&&r.status==='chapter-hold'))), 'Authored parts incomplete or held for correction');
+          assert(parts.every(r=>Number.isSafeInteger(r.rows) && r.rows>0 && r.holds===retainedHolds.filter(x=>x.part===r.part).length), 'Unexpected held decisions');
           const scope = {book:'jinshu',chapter};
           const actualAgentId=state.rechecks['jinshu/'+chapter].agentId;
           for(const r of parts){
@@ -474,7 +479,7 @@ jobs:
             assert.match(r.path,/^research\/people\/[a-zA-Z0-9][a-zA-Z0-9/.\-_]*\.json$/);
             assert(!r.path.split('/').includes('..'));
           }
-          fs.writeFileSync(process.env.RUNNER_TEMP+'/campaign-pins.json',JSON.stringify({scope,revision,actualAgentId,parts,retain,holdId,retainedCases,delta,packetRun:packet.runId,packetArtifactId:packet.artifactId,registryArtifactId:registryId}),{flag:'wx'});
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/campaign-pins.json',JSON.stringify({scope,revision,actualAgentId,parts,retain,holdId,holdIds,retainedCases,delta,packetRun:packet.runId,packetArtifactId:packet.artifactId,registryArtifactId:registryId}),{flag:'wx'});
           fs.appendFileSync(process.env.GITHUB_OUTPUT,Object.entries({revision,registry_revision:registryRevision,packet_run:packet.runId,packet_name:packetName,registry_run:registryRun,registry_name:registryName,chapter}).map(([k,v])=>k+'='+v+'\n').join(''));
           JS
       - uses: actions/download-artifact@v4
@@ -503,7 +508,7 @@ jobs:
             for(const row of rows){
               const item=cases.get(row.caseId);
               assert(item,'Unknown identity case');
-              if(pins.retain&&row.caseId===pins.holdId&&row.verdict==='hold')continue;
+              if(pins.retain&&pins.holdIds.includes(row.caseId)&&row.verdict==='hold')continue;
               const flags=[];
               if(row.membershipReviewed!==true||row.membershipFingerprint!==item.canonicalMembership.fingerprint) flags.push('membership-binding');
               if(row.canonicalPersonId!==item.canonicalPersonId) flags.push('canonical-binding');
@@ -585,7 +590,7 @@ jobs:
             assert.equal(reviewer.agentId,pins.actualAgentId);
             assert.equal(planFingerprint,packet.plan.fingerprint);
             assert.equal(reviews.length,record.rows);
-            assert(reviews.every(row=>(row.verdict==='approve'||(pins.retain&&row.verdict==='hold'&&row.caseId===pins.holdId)) && row.sourceWitnesses?.length),'Independent decisions contain an explicit hold or missing witness');
+            assert(reviews.every(row=>(row.verdict==='approve'||(pins.retain&&row.verdict==='hold'&&pins.holdIds.includes(row.caseId))) && row.sourceWitnesses?.length),'Independent decisions contain an explicit hold or missing witness');
             assert.deepEqual(reviews.map(row=>row.caseId).sort(),[...seal.caseIds].sort());
             const transportFile=path.join(base,seal.file);
             const transportBytes=fs.readFileSync(transportFile);
@@ -609,7 +614,7 @@ jobs:
             const components=parts.map(part=>captureIdentityProofComponent(source,fs.readFileSync(part.reportFile),fs.readFileSync(part.transportFile),part,receipt.transportPolicy,job).component);
             assert.equal(components.length,receipt.reviewParts.length);
             assert.equal(aggregate.reviews.length,pins.retainedCases);
-            assert.deepEqual(aggregate.reviews.filter(row=>row.verdict==='hold').map(row=>row.caseId),pins.holdId?[pins.holdId]:[]);
+            assert.deepEqual(aggregate.reviews.filter(row=>row.verdict==='hold').map(row=>row.caseId).sort(),[...pins.holdIds].sort());
             const proof={schemaVersion:1,kind:'jinshu'+pins.scope.chapter+'-retained-identity-components',scope:pins.scope,sourceRevision:pins.revision,sourcePlan:packet.plan,components,holdId:pins.holdId,coverage:aggregate.reviews.length};
             fs.writeFileSync(path.join(temp,'recorded','retained-identity-components.json'),JSON.stringify(proof)+'\n',{flag:'wx'});
             console.log(JSON.stringify({sourceRevision:pins.revision,components:components.length,reviewed:proof.coverage,holdId:pins.holdId}));
