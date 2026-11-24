@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "147"
+  },
+  "reviewer": {
+    "agentId": "bc-9b162765-bf7d-41bf-90da-16e648a6468a",
+    "name": "cursor-nov24-independent-jiuwudaishi-147"
+  },
+  "transportParts": {
+    "transport-part-001.json": "sha256:6a34141fd8da637bc97320d1a535b4d91f10b4952a0ac8b828ab569237cf12f6",
+    "transport-part-002.json": "sha256:a09d82328ab6320127adbf518f6959417c0bd6e1fccb839f929eea19b845075d"
+  },
+  "planFingerprint": "sha256:e79b0b56567dc18447154922ca5ed5ad794480091d8c2a4fc68552e9abcfd502",
+  "queries": [
+    {
+      "route": "sealed-transport",
+      "purpose": "Primary Chinese witnesses and anchor units from transport-part-001/002 only",
+      "note": "Independent review did not require live registry mutation; transport people/units are authoritative primary evidence for this chapter."
+    },
+    {
+      "route": "data/people/generated (pinned revision 110c2f92)",
+      "purpose": "Confirm canonicalPersonId headers align with accepted membership fingerprints sealed in transport cases",
+      "note": "No merge or split authorized by this review."
+    }
+  ],
+  "conclusion": "Lookup provenance is bounded to sealed split-transport parts and primary unit zh text; omitted dossier overflow keys are not separation evidence."
+}
