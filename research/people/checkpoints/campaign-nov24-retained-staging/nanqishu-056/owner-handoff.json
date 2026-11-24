@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "056"
+  },
+  "ownerAgentId": "bc-93e93000-8c02-4b30-b328-18bab2f112de",
+  "workerId": "cursor-nov24-retained-staging-w13-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b56a8ed6834376f733854499fca046244ef0e64657c6f8016eb9d52a2951c670",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-nanqishu-056-112de",
+  "extractionBytes": 98392,
+  "workOrder": {
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "80f0c62b0cf38dcec64fd2621a449f4e74830e93e7a3d6d6c16edcf271309f0b",
+    "promptVersion": 7,
+    "workOrderPeople": 61,
+    "workOrderClaims": 265
+  },
+  "inputBlobWitness": {
+    "source": "c6fb792f4c347c5df4913919aebc2438cafd5c8e",
+    "extraction": "054090edacb2d6d180b074ec10e6fc1ec83002e4",
+    "editorial": "a8b8738cf79211e8b80ac0df6104d0986e917959"
+  },
+  "sealedInputs": {
+    "source": "sha256:37e470003e53db17d6f5df74b32d493de05ccb5f4a4365da757f63ff2da19cf8",
+    "extraction": "sha256:80f0c62b0cf38dcec64fd2621a449f4e74830e93e7a3d6d6c16edcf271309f0b",
+    "editorial": "sha256:5bec3891b2bec7d7004682a923bbe5e3bf4c2eca2a9091970aca3ca58aec7967"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 56 Biographies 37: Trusted Officials",
+    "chineseUnits": 228,
+    "sentenceCount": 228,
+    "translatedCount": 228,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 98392
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-056/date-packet.json",
+    "contentSha256": "sha256:0a250d25b150927bf2f165879740ec108c0e8804bf97fe6511b9b9ceae141433",
+    "itemCount": 170,
+    "peopleCount": 61,
+    "unitCount": 228,
+    "buildCommand": "npm run people:dates:packet -- --book nanqishu --chapter 056 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-056/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book nanqishu --chapter 056",
+    "peopleValidateSummary": "Scoped person data validation passed for nanqishu/056: 1 extraction(s), 61 local people, 383 mentions, 483 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 056",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditVersion": 1
+    },
+    "chronologyStatus": "pending-independent-date-audit",
+    "editorialStatus": "accepted-decisions-retained",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned staging blobs; no data/people/date-audits/nanqishu/056.json exists. Full chapter source read: 228 Chinese sentences (Volume 56 Biographies 37: Trusted Officials) with literal and idiomatic English on all units carrying Chinese text per meta translatedCount 228. Extraction and accepted editorial align at witnessed blobs; people:dates:scan reports 0 pre-audit diagnostics. people:validate passes scoped; native date packet sealed at sha256:0a250d25b150927bf2f165879740ec108c0e8804bf97fe6511b9b9ceae141433. No definite English omission, extraction defect, or concrete source contradiction found in this owner pass. Independent native chronology review remains the missing gate; owner does not self-approve.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "kind": "independent-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:0a250d25b150927bf2f165879740ec108c0e8804bf97fe6511b9b9ceae141433",
+      "note": "Independent reviewer must approve native date packet and record via people:dates:record; chapter is un-audited in baseline."
+    },
+    {
+      "kind": "independent-identity-review",
+      "status": "required-at-chapter-boundary",
+      "note": "Canonical identity evidence review follows independent date approval per PEOPLE completion path."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 056",
+    "datesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 056",
+    "buildDatePacket": "npm run people:dates:packet -- --book nanqishu --chapter 056 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-056/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, no registry, no deploy."
+}
