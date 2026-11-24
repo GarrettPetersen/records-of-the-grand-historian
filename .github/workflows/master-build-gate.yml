@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 30
     env:
       NODE_OPTIONS: --max-old-space-size=3072
-      SOURCE: 2b7088ac31bdbee472ae2be3065c00abbb234090
+      SOURCE: d7792dea1fbe820b026ab75675067c31d09059dc
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,6 +20,7 @@ jobs:
         with:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
+      - run: node scripts/validate-people-extraction.mjs --self-test
       - name: Prepare one source-pinned registry and two sealed dossiers
         run: |
           set -euo pipefail
