@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '030-compose', '030-stage', '030-residual']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
+    if: inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && inputs.chapter != '030-retain' && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -732,10 +732,11 @@ jobs:
           console.log(JSON.stringify({chapter:'jinshu/'+chapter,pullRequest:pr,recordingRun:runId,ownerBefore:owner,approvedHead:commit.sha,certificateBlob:proof.sha,files}));
           JS
   compose-030:
-    if: inputs.chapter == '030-compose'
+    if: inputs.chapter == '030-compose' || inputs.chapter == '030-residual'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
+      CHAPTER_INPUT: ${{ inputs.chapter }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - id: pins
@@ -804,6 +805,14 @@ jobs:
             tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
             cmp manifest.json "$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION/manifest.json"
           )
+          if [[ "$CHAPTER_INPUT" == 030-residual ]]; then
+            jq '{schemaVersion:1,kind:"chapter-identity-review-composition",scope,plan:.sourcePlan,sourcePlans:[],components,selections:[]}' "$RUNNER_TEMP/retained/retained-identity-components.json" > "$RUNNER_TEMP/retained-030.json"
+            node scripts/prepare-people-chapter-identity.mjs \
+              --book jinshu --chapter 030 --source-revision "$REVISION" \
+              --registry "$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION" \
+              --out "$RUNNER_TEMP/residual-identity" --retained-composition "$RUNNER_TEMP/retained-030.json"
+            exit 0
+          fi
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
@@ -852,8 +861,16 @@ jobs:
           cp data/people/identity-reviews/jinshu/030.json "$RUNNER_TEMP/recorded/identity-proof.json"
           (cd "$RUNNER_TEMP/recorded" && sha256sum identity-proof.json reconciliation-receipt.json recording-receipt.json scoped-validation.txt > SHA256SUMS)
       - uses: actions/upload-artifact@v4
+        if: inputs.chapter == '030-compose'
         with:
           name: jinshu-030-recorded-canonical-identity
           path: ${{ runner.temp }}/recorded/
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: inputs.chapter == '030-residual'
+        with:
+          name: jinshu-030-native-residual-identity-evidence
+          path: ${{ runner.temp }}/residual-identity/
           if-no-files-found: error
           retention-days: 7
