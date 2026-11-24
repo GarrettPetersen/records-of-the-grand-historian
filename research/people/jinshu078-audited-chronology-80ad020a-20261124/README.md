@@ -1,0 +1,19 @@
+# Jinshu 078 native date audit @ `80ad020a`
+
+**Status:** `audited`  
+sourceHash `sha256:8d7f4d213c6a7635ce7fbc28cbaea85ac79d4c640a2d1799c767f91f48350dfd`  
+extractionHash `sha256:c196ba5f2ea27ca45beebe718c63d646424c7970da3bea229ff67c3bc421a794`  
+Reviewer `bc-7f508e5e-7b4f-4508-9646-49aac6917f05` · Snapshot `db0945f96ae6b1273da5ac0dbe21a9ccc6db82e5` / `sha256:724bd82e967731decc93bdf43d26b5bc139f49885c980e5b89bb9a03ffad08a2`
+
+## Retention kept
+337 composed · 26 tranche · 57 hints (**57** supported / **0** held) · persons **173/173** · units **415/415** inspected · unresolved **0**
+
+## Validation
+```
+{
+  "ok": true
+}
+```
+
+## Non-actions
+No owner edits · no merge · receipts preserved
