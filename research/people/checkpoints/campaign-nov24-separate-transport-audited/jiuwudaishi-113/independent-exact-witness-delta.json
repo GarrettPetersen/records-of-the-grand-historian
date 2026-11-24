@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-exact-witness-delta",
+  "chapterKey": "jiuwudaishi/113",
+  "reviewerAgentId": "bc-63c971aa-b258-43cf-867f-d2f9f9d3ea5f",
+  "ownerAgentId": "bc-31959fae-132e-4d10-86f7-24a41b42d3ab",
+  "ownerRevision": "172958a7f13da687d2f648d9d63768a4ea6d3504",
+  "ownerProposalSha256": "sha256:3c303237d5e446942b525d87bad9f6efbe0f4d7580b4a69aebd636f880fdbe05",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/owner-after-independent-holds.json",
+  "priorReviewHead": "4cf67519bccc77e4fd9f1cb555bb6100eb673ee2",
+  "priorIndependentRun": "run-a9e0c490-7e0e-4678-8a81-54b86dd90bff",
+  "ownerRun": "run-892e5480-3942-452c-996d-95f625f75195",
+  "pr": 5700,
+  "verdict": "supports-owner-patch",
+  "summary": "Pinned prior partitions and owner proposal verified. Two identity holds resolved: p133 approved with Hanshu anchor witnesses; p035 hold closed by scoped extraction re-home to p006. One unrelated owner chronology note stays outside this identity delta. All 111 unaffected prior approvals remain byte-pinned.",
+  "closedCases": [
+    {
+      "caseId": "sha256:840f2828b7a5094467dc83e0fc522e30bd40e80bc0b1965779f6e3dafabd5629",
+      "localId": "jiuwudaishi:113:p133",
+      "canonicalPersonId": "per_0KZ3YX9Y94M2Y2D9DA3G",
+      "priorVerdict": "hold",
+      "verdict": "approve",
+      "closure": "retain-accepted-membership",
+      "reason": "Prior hold misread compact-transport anchor bytes. Validated hanshu:005:p001 member contract digest sha256:4c8caad7455369228e0b3f16c336eacbd820eefb206b621aca2a275bd1dd6eb3 matches sealed canonicalMembership.anchorVersion. Chapter jiuwudaishi:113:p133 (Emperor Wen of Han / 漢文帝) is supported in s0183; cross-chapter anchor 孝文皇帝 in Hanshu 005 s0001. Both English surfaces on s0183 are present (idiomatic and literal). No false merge or attribution contradiction.",
+      "sourceWitnesses": [
+        {
+          "localId": "hanshu:005:p001",
+          "book": "hanshu",
+          "chapter": "005",
+          "unitId": "s0001",
+          "quote": "孝文皇帝"
+        },
+        {
+          "localId": "jiuwudaishi:113:p133",
+          "book": "jiuwudaishi",
+          "chapter": "113",
+          "unitId": "s0183",
+          "quote": "漢文帝"
+        }
+      ],
+      "supportedProposalChangeId": "no-change-840f2828b7a5",
+      "englishVerified": {
+        "unit": "jiuwudaishi:113:s0183",
+        "zh": "汝不聞漢文帝儉素，葬在霸陵原，至今見在。",
+        "enComplete": true,
+        "literalComplete": true,
+        "englishRepairs": []
+      }
+    },
+    {
+      "caseId": "sha256:2f982b42e77db1ac84e8c240d1e552d581388d2425bfe3989841ef2d24f761b1",
+      "localId": "jiuwudaishi:113:p035",
+      "canonicalPersonId": "per_N7B254GDBJ2SFMEA1F45",
+      "priorVerdict": "hold",
+      "verdict": "closed-by-scoped-repair",
+      "closure": "remove-placeholder-rehome-to-p006",
+      "reason": "Hold stands for p035 as an identity record: annal units s0041/s0049/s0057/s0067 lack admissible 太祖 or 帝 Chinese for the placeholder; attempted quotes 帝/太祖 at s0057 fail assertDossierPrimaryWitness. Owner patch removes p035 and re-homes acts to jiuwudaishi:113:p006 (title-reference 帝) which already has native witnesses at s0016/s0020/s0026. Later Zhou sovereign identity for this chapter remains on per_352JD3W7NYS0MF66S1NW (p006), previously approved in independent-identity-report-part-001. No separate Taizu temple-name person is source-supported in annal Chinese for this chapter slice.",
+      "sourceWitnesses": [
+        {
+          "localId": "jiuwudaishi:113:p006",
+          "book": "jiuwudaishi",
+          "chapter": "113",
+          "unitId": "s0016",
+          "quote": "帝"
+        }
+      ],
+      "supportedProposalChangeId": "jiuwudaishi-113-p035-rehome-p006",
+      "englishVerified": {
+        "units": [
+          "jiuwudaishi:113:s0041",
+          "jiuwudaishi:113:s0049",
+          "jiuwudaishi:113:s0057",
+          "jiuwudaishi:113:s0067",
+          "jiuwudaishi:113:s0016"
+        ],
+        "enLiteralComplete": true,
+        "englishRepairs": []
+      },
+      "postRepairIdentityNote": "Identity case retires with placeholder removal; do not fabricate Taizu approval. Fresh identity preparation required after extraction sha256:a6739cce… lands."
+    }
+  ],
+  "heldCases": [
+    {
+      "id": "jiuwudaishi-113-chunk003-year",
+      "scope": "out-of-identity-delta",
+      "status": "owner-routed-to-date-lane",
+      "reason": "Concrete chronology repair (954 vs 953) noted in owner proposal; not part of the two independent identity holds or this exact-witness delta.",
+      "sourceCitations": {
+        "units": [
+          "jiuwudaishi:113:s0069",
+          "jiuwudaishi:113:s0075",
+          "jiuwudaishi:113:s0111"
+        ]
+      }
+    }
+  ],
+  "supportedPatch": {
+    "accepted": [
+      {
+        "id": "no-change-840f2828b7a5",
+        "caseId": "sha256:840f2828b7a5094467dc83e0fc522e30bd40e80bc0b1965779f6e3dafabd5629",
+        "kind": "retain-accepted-membership",
+        "target": "data/people/extractions/jiuwudaishi/113.json",
+        "targetSha256": "sha256:7b1fd27805ee2e757a546d9e17808d4daadb6266299b4fb7091093fb19a76f2c",
+        "independentDisposition": "accept"
+      },
+      {
+        "id": "jiuwudaishi-113-p035-rehome-p006",
+        "caseId": "sha256:2f982b42e77db1ac84e8c240d1e552d581388d2425bfe3989841ef2d24f761b1",
+        "kind": "extraction-remove-unnamed-placeholder-and-rehome",
+        "target": "data/people/extractions/jiuwudaishi/113.json",
+        "targetSha256": "sha256:7b1fd27805ee2e757a546d9e17808d4daadb6266299b4fb7091093fb19a76f2c",
+        "candidateSha256": "sha256:a6739cce8765953b43a85ea5892dd6e4de4190aad59ed4a0df888ebdffffe6ab",
+        "operationCount": 18,
+        "independentDisposition": "accept",
+        "afterCounts": {
+          "people": 142,
+          "claims": 2022
+        }
+      }
+    ],
+    "rejected": []
+  },
+  "nativeValidation": {
+    "priorReportsSha256Verified": true,
+    "ownerProposalSha256Verified": true,
+    "pinnedInputExtractionSha256": "sha256:7b1fd27805ee2e757a546d9e17808d4daadb6266299b4fb7091093fb19a76f2c",
+    "operationReplay": {
+      "ownerReportedIdentical": true,
+      "inputSha256": "sha256:7b1fd27805ee2e757a546d9e17808d4daadb6266299b4fb7091093fb19a76f2c",
+      "outputSha256": "sha256:a6739cce8765953b43a85ea5892dd6e4de4190aad59ed4a0df888ebdffffe6ab",
+      "independentExtractionShaAtReview": "sha256:7b1fd27805ee2e757a546d9e17808d4daadb6266299b4fb7091093fb19a76f2c",
+      "note": "Candidate bytes not materialized on this branch; metadata and witness rules independently checked."
+    },
+    "assertDossierPrimaryWitness": {
+      "jiuwudaishi:113:p133": true,
+      "hanshu:005:p001": true,
+      "jiuwudaishi:113:p006": true,
+      "jiuwudaishi:113:p035_s0057_帝": false,
+      "jiuwudaishi:113:p035_s0057_太祖": false
+    },
+    "anchorMemberDigest": {
+      "hanshu:005:p001": "sha256:4c8caad7455369228e0b3f16c336eacbd820eefb206b621aca2a275bd1dd6eb3",
+      "matchesSealedAnchorVersion": true
+    }
+  },
+  "unaffectedEvidenceReuse": {
+    "strategy": "byte-pin-prior-six-partitions",
+    "priorApproveCount": 111,
+    "priorHoldCount": 2,
+    "reports": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/independent-identity-report-part-001.json",
+        "sha256": "sha256:c1dfc27adfd07d321c1e5f992db2ea72d85cf64869299f5f62c36f14af735820",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/independent-identity-report-part-002.json",
+        "sha256": "sha256:5e3d475438d0301a9007b50e50aa369d88b4f44bec59fe5aeed025b0518feb8f",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/independent-identity-report-part-003.json",
+        "sha256": "sha256:355eb0d7200dc62e98f236228a09604a7e8ede6b02507cd183a1bd69f15fe8c9",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/independent-identity-report-part-004.json",
+        "sha256": "sha256:41e422e357c721d4910b2bfc8d85420a10176fcf6774298858134006eb973a05",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/independent-identity-report-part-005.json",
+        "sha256": "sha256:f7fe94cff3c9ca9ea58f7a5a1e63af5f6544f0ea31aa4fd635422911961e7960",
+        "reuse": "unchanged"
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-113/independent-identity-report-part-006.json",
+        "sha256": "sha256:7298a09214802ccb120a7177e3e890ea934d46dc6d052ef06c963a4628c7ca8f",
+        "reuse": "unchanged-except-held-rows-superseded-by-delta"
+      }
+    ],
+    "nextStepAfterOwnerAppliesPatch": "Merge two hold resolutions into part reports or regenerate identity transport; 111 prior approve rows remain valid without re-review."
+  },
+  "definiteEnglishRepairs": [],
+  "idempotencyKey": "d15ed45fd2b80bd00ebb0b8752663de107d6ef3cd98df5933c40f75721b0acda"
+}
