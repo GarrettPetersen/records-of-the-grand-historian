@@ -1,0 +1,236 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+const RUNTIME_CODE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+import { peopleDigest } from './people-identity-seal.mjs';
+import { REPO_ROOT, contentUnits, sha256 } from './people-content.mjs';
+import { buildPeopleExtractionPacket } from '../build-people-extraction-packet.mjs';
+import { validateCompactPeopleExtraction, validatePeopleExtraction } from '../validate-people-extraction.mjs';
+import { isCompactPeopleExtraction } from './people-compact.mjs';
+import { peopleForExtraction } from './people-validated-chapter.mjs';
+import { dateAuditItems, validateDateAuditReport, DATE_AUDIT_VERSION } from './people-date-audit.mjs';
+import { loadProperNounMatcher } from './people-candidates.mjs';
+import { localNameKeys } from './people-resolution.mjs';
+import { memberContract } from './people-identity-dossiers.mjs';
+import { chapterChineseEvidenceFingerprint, identitySourceEvidenceFingerprint } from './people-chapter-identity.mjs';
+import { pinnedModuleDependencies } from './people-pinned-module-parser.mjs';
+
+const need = (ok, message) => { if (!ok) throw new Error(message); };
+const registryEntries = ['people-identity-registry-workflow', 'people-corpus', 'people-resolution', 'people-identity-dossiers', 'people-identity-member-store', 'people-identity-dossier-store'].map(n => `scripts/lib/${n}.mjs`);
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const blobHash = bytes => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
+const packageContract = pkg => Object.fromEntries(Object.entries(pkg).filter(([key]) => key !== 'scripts'));
+const dataInput = file => /^data\/(?!people\/)[^/]+\/\d{3}\.json$/u.test(file) ||
+  /^data\/people\/(?:extractions|resolutions|curation|chronology|schema)\/.*\.json$/u.test(file) || ['data/people/config.json', 'data/glossary.json'].includes(file);
+const legacyInput = file => dataInput(file) || /^scripts\/.*\.(?:mjs|js)$/u.test(file) || /^[^/]+\.(?:mjs|js)$/u.test(file) || file === 'package.json';
+
+export function gitIdentitySnapshot(root, revision) {
+  need(/^[a-f0-9]{40}$/u.test(revision ?? ''), 'Exact Git commit required for pinned identity evidence');
+  const git = (...args) => execFileSync('git', ['-C', root, ...args], { maxBuffer: 16 * 1024 * 1024 });
+  need(git('rev-parse', `${revision}^{commit}`).toString().trim() === revision, 'Pinned identity revision is not a commit');
+  const files = new Map();
+  for (const entry of git('ls-tree', '-r', '-l', '-z', revision).toString().split('\0').filter(Boolean)) {
+    const match = /^(\d+) (\w+) ([a-f0-9]{40})\s+(\d+|-)\t([\s\S]+)$/u.exec(entry);
+    need(match, 'Invalid Git tree inventory');
+    files.set(match[5], { mode: match[1], type: match[2], oid: match[3], bytes: Number(match[4]) });
+  }
+  const regular = file => { const row = files.get(file); need(row?.type === 'blob' && ['100644','100755'].includes(row.mode), `Missing/nonregular pinned identity input ${file}`); return row; };
+  const read = file => { need(!file.split('/').includes('..') && !path.isAbsolute(file), 'Invalid pinned identity path'); return git('cat-file', 'blob', regular(file).oid); };
+  const json = file => JSON.parse(read(file));
+  // Match the original filesystem-based registry seal, including every original
+  // script. Bound batch bytes; no corpus-sized string or checkout is created.
+  const legacySeal = () => {
+    const selected = [...files.keys()].filter(legacyInput).sort(), rows = [];
+    for (let start = 0; start < selected.length;) {
+      const batch = []; let bytes = 0;
+      while (start < selected.length && (batch.length === 0 || bytes + regular(selected[start]).bytes < 16 * 1024 * 1024)) {
+        const file = selected[start++], row = regular(file); need(row.bytes < 64 * 1024 * 1024, `Oversized pinned input ${file}`); batch.push(file); bytes += row.bytes;
+      }
+      const output = execFileSync('git', ['-C', root, 'cat-file', '--batch'], { input: batch.map(f => regular(f).oid).join('\n') + '\n', maxBuffer: bytes + batch.length * 128 + 1024 });
+      let offset = 0;
+      for (const file of batch) {
+        const row = regular(file), end = output.indexOf(10, offset); need(end >= offset, 'Missing Git object header');
+        need(output.subarray(offset, end).toString() === `${row.oid} blob ${row.bytes}`, 'Pinned Git object mismatch'); offset = end + 1;
+        rows.push([file, hash(output.subarray(offset, offset + row.bytes))]); offset += row.bytes;
+        need(output[offset++] === 10, 'Truncated pinned Git object');
+      }
+      need(offset === output.length, 'Unexpected pinned Git object bytes');
+    }
+    return peopleDigest(rows);
+  };
+  const codeDependencies = () => {
+    const seen = new Set(), pending = [...registryEntries];
+    while (pending.length) {
+      const file = pending.pop(); if (seen.has(file)) continue; regular(file); seen.add(file);
+      const source = read(file), text = source.toString();
+      // Parse static imports with Node's own JavaScript parser without linking
+      // or executing the module. Quoted import names and multiline declarations
+      // must not silently hide a dependency. Computed loading stays unsupported.
+      const gap = String.raw`(?:\s|/\*[\s\S]*?\*/|//[^\n]*(?:\n|$))*`;
+      need(!new RegExp(String.raw`\b(?:import|require|eval)${gap}\(`, 'u').test(text) && !new RegExp(String.raw`\bnew${gap}Function${gap}\(`, 'u').test(text), `Computed index dependency in ${file}`);
+      const imports = pinnedModuleDependencies(source);
+      for (const specifier of imports) {
+        if (!specifier.startsWith('.')) continue;
+        const dependency = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
+        need(!dependency.startsWith('../') && /\.(?:mjs|js)$/u.test(dependency), `Unsupported index dependency ${specifier}`); pending.push(dependency);
+      }
+    }
+    return [...seen].sort();
+  };
+  return { root, revision, files, regular, read, json, legacySeal, codeDependencies };
+}
+
+// A source/editorial repair can change file bytes without changing a single
+// indexed person. Prove that explicitly; never change the original generation,
+// accepted membership, or the independent approvals attached to either source.
+export function proveUnchangedIdentityChapter(before, after) {
+  need(chapterChineseEvidenceFingerprint(before.packet) === chapterChineseEvidenceFingerprint(after.packet), 'Dossier primary Chinese changed; update affected dossiers');
+  const oldIds = [...before.localPeople.keys()].sort(), newIds = [...after.localPeople.keys()].sort();
+  need(peopleDigest(oldIds) === peopleDigest(newIds), 'Dossier person inventory changed; update affected dossiers');
+  const members = [];
+  for (const id of oldIds) {
+    const oldPerson = before.localPeople.get(id), person = after.localPeople.get(id);
+    const contract = peopleDigest(memberContract(person, localNameKeys(person)));
+    need(contract === peopleDigest(memberContract(oldPerson, localNameKeys(oldPerson))), `Dossier member changed: ${id}; update affected dossiers`);
+    const sourceEvidence = identitySourceEvidenceFingerprint(person, after.packet);
+    need(sourceEvidence === identitySourceEvidenceFingerprint(oldPerson, before.packet), `Dossier source evidence changed: ${id}; update affected dossiers`);
+    members.push([id, contract, sourceEvidence]);
+  }
+  return { people: members.length, members: peopleDigest(members), chinese: chapterChineseEvidenceFingerprint(after.packet) };
+}
+
+// These fields are consumed by public product projection, never by accepted
+// membership or native dossier construction. This proves only a display delta;
+// source-backed public names/descriptions still pass normal product qualification.
+export function proveDisplayCurationDelta(before, after) {
+  const object = value => value && typeof value === 'object' && !Array.isArray(value);
+  const keys = value => Object.keys(value).sort();
+  for (const document of [before, after]) {
+    need(object(document) && peopleDigest(keys(document)) === peopleDigest(['people', 'schemaVersion']) &&
+      document.schemaVersion === 1 && object(document.people), 'Invalid display curation document');
+    for (const [id, entry] of Object.entries(document.people)) {
+      need(/^per_[0-9A-HJKMNP-TV-Z]{20}$/u.test(id) && object(entry) &&
+        keys(entry).every(key => ['preferredName', 'preferredDescription', 'preferredSlug', 'reason'].includes(key)) &&
+        typeof entry.reason === 'string' && entry.reason.trim(), 'Non-display or invalid curation entry');
+      need(entry.preferredName !== undefined || entry.preferredDescription !== undefined || entry.preferredSlug !== undefined,
+        'Empty display curation entry');
+      if (entry.preferredName !== undefined) {
+        const name = entry.preferredName;
+        need(object(name) && keys(name).every(key => ['kind', 'en', 'zh', 'pinyin'].includes(key)) &&
+          typeof name.kind === 'string' && name.kind.trim() &&
+          ['en', 'zh', 'pinyin'].every(key => name[key] === undefined || name[key] === null || typeof name[key] === 'string') &&
+          ['en', 'zh', 'pinyin'].some(key => typeof name[key] === 'string' && name[key].trim()), 'Invalid display preferred name');
+      }
+      if (entry.preferredDescription !== undefined) need(typeof entry.preferredDescription === 'string' &&
+        entry.preferredDescription.trim() && entry.preferredDescription.length <= 200, 'Invalid display description');
+      if (entry.preferredSlug !== undefined) need(typeof entry.preferredSlug === 'string' &&
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(entry.preferredSlug), 'Invalid display slug');
+    }
+  }
+  need(peopleDigest(keys(before.people)) === peopleDigest(keys(after.people)), 'Display curation person inventory changed');
+  return {file: 'data/people/curation/overrides.json', before: peopleDigest(before), after: peopleDigest(after),
+    changedPeople: keys(before.people).filter(id => peopleDigest(before.people[id]) !== peopleDigest(after.people[id])),
+    membershipChanges: 0, dossierFactsChanged: false, contentApproval: false};
+}
+
+export function inspectPinnedDossierChanges(registryProvenance, current, { runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT } = {}) {
+  const retained = gitIdentitySnapshot(current.root, registryProvenance.revision);
+  need(retained.legacySeal() === registryProvenance.identityInputs, 'Retained registry does not match its original Git source seal');
+  const beforeData = [...retained.files.keys()].filter(dataInput).sort(), afterData = [...current.files.keys()].filter(dataInput).sort();
+  need(peopleDigest(beforeData) === peopleDigest(afterData), 'Dossier data inventory changed; update affected dossiers before preparing new work');
+  const changedData = beforeData.filter(f => retained.regular(f).oid !== current.regular(f).oid);
+  const changedChapters = new Map(), displayCurationChanges = [];
+  for (const file of changedData) {
+    if (file === 'data/people/curation/overrides.json') {
+      displayCurationChanges.push(proveDisplayCurationDelta(retained.json(file), current.json(file)));
+      continue;
+    }
+    const match = /^data\/(?:people\/extractions\/)?([a-z0-9_-]+)\/(\d{3})\.json$/u.exec(file);
+    need(match, `Dossier data changed: ${file}; update affected dossiers before preparing new work`);
+    changedChapters.set(`${match[1]}:${match[2]}`, { book: match[1], chapter: match[2] });
+  }
+  const beforeCode = retained.codeDependencies(), afterCode = current.codeDependencies();
+  need(peopleDigest(beforeCode) === peopleDigest(afterCode) && beforeCode.every(f => retained.regular(f).oid === current.regular(f).oid), 'Dossier construction code changed; refresh the immutable registry');
+  need(peopleDigest(packageContract(retained.json('package.json'))) === peopleDigest(packageContract(current.json('package.json'))), 'Registry package contract changed');
+  assertPinnedIdentityRuntime(current, runtimeRoot, codeRoot);
+  return { retained, current, changedData, changedChapters, displayCurationChanges, afterData, afterCode };
+}
+
+export function provePinnedDossierReuse(registryProvenance, current, options = {}) {
+  const { retained, changedData, changedChapters, displayCurationChanges, afterData, afterCode } = inspectPinnedDossierChanges(registryProvenance, current, options);
+  const unchangedChapters = [];
+  if (changedChapters.size) {
+    const before = pinnedIdentityChapterContext(current.root, retained.revision), after = pinnedIdentityChapterContext(current.root, current.revision);
+    // assertPinnedIdentityRuntime above already checks the glossary bytes and
+    // the transitive matcher/scanner code against this exact pinned snapshot.
+    const properNounMatcher = loadProperNounMatcher();
+    for (const [key, scope] of [...changedChapters].sort(([a], [b]) => a.localeCompare(b, 'en'))) {
+      // Match native registry construction's production validation contract.
+      // Strict alias-disposition checks remain mandatory for the TARGET in
+      // preparation/recording; index reuse grants no chapter approval and must
+      // not recursively require publication readiness of evidence chapters.
+      const options = { properNounMatcher, strictAliasDispositions: false };
+      let proof;
+      try { proof = proveUnchangedIdentityChapter(before.load(scope.book, scope.chapter, options), after.load(scope.book, scope.chapter, options)); }
+      catch (error) { throw new Error(`Unchanged dossier proof failed for ${key}: ${error.message}`, { cause: error }); }
+      unchangedChapters.push({ scope: key, ...proof });
+    }
+  }
+  return { schemaVersion: 1, kind: 'pinned-unchanged-dossier-input-proof', retainedRevision: retained.revision, sourceRevision: current.revision,
+    retainedOriginalSeal: registryProvenance.identityInputs, dataFiles: afterData.length, constructionCodeFiles: afterCode.length,
+    dataInventory: peopleDigest(afterData.map(f => [f, current.regular(f).oid])), constructionCode: peopleDigest(afterCode.map(f => [f, current.regular(f).oid])),
+    ...(displayCurationChanges.length ? { displayCurationChanges } : {}),
+    ...(changedData.length ? { changedData, unchangedChapters, normalizationGlossaryBlob: current.regular('data/glossary.json').oid } : {}),
+    registryBytesChanged: false, generatedPairs: 0, chapterApproval: false };
+}
+
+export function assertPinnedIdentityRuntime(current, runtimeRoot = REPO_ROOT, codeRoot = RUNTIME_CODE_ROOT) {
+  const code = current.codeDependencies(), data = [...current.files.keys()].filter(dataInput).sort();
+  const runtimeBytes = (file, root = runtimeRoot) => { const full = path.join(root, file), stat = fs.lstatSync(full); need(stat.isFile() && !stat.isSymbolicLink(), `Runtime input must be a regular file: ${file}`); return fs.readFileSync(full); };
+  for (const file of code) need(blobHash(runtimeBytes(file, codeRoot)) === current.regular(file).oid, `Runtime index dependency differs from pinned revision: ${file}`);
+  const runtimeData = data.filter(f => !/^data\/(?!people\/)[^/]+\/\d{3}\.json$/u.test(f) && !/^data\/people\/(?:extractions|resolutions)\//u.test(f));
+  for (const directory of ['data/people/curation', 'data/people/schema', 'data/people/chronology']) {
+    const actual = [], visit = relative => { const full = path.join(runtimeRoot, relative); if (!fs.existsSync(full)) return; const stat = fs.lstatSync(full); need(!stat.isSymbolicLink(), `Runtime inventory must not use symlinks: ${relative}`); if (stat.isDirectory()) for (const name of fs.readdirSync(full)) visit(`${relative}/${name}`); else if (relative.endsWith('.json')) actual.push(relative); };
+    visit(directory); need(peopleDigest(actual.sort()) === peopleDigest(runtimeData.filter(f => f.startsWith(directory + '/'))), `Runtime index configuration inventory differs: ${directory}`);
+  }
+  for (const file of runtimeData) need(blobHash(runtimeBytes(file)) === current.regular(file).oid, `Runtime index configuration differs: ${file}`);
+  for (const root of new Set([runtimeRoot, codeRoot])) need(peopleDigest(packageContract(JSON.parse(runtimeBytes('package.json', root)))) === peopleDigest(packageContract(current.json('package.json'))), 'Runtime package contract differs');
+}
+
+export function pinnedIdentityChapterContext(root, revision) {
+  const snapshot = gitIdentitySnapshot(root, revision);
+  const scope = (book, chapter) => need(/^[a-z0-9_-]+$/u.test(book) && /^\d{3}$/u.test(chapter), 'Invalid pinned chapter scope');
+  const optional = file => snapshot.files.has(file) ? snapshot.json(file) : null;
+  const inputs = (book, chapter, { requireAuditReport = true } = {}) => { scope(book, chapter); const source = `data/${book}/${chapter}.json`, extraction = `data/people/extractions/${book}/${chapter}.json`, editorial = `data/people/editorial-decisions/${book}/${chapter}.json`, date = `data/people/date-audits/${book}/${chapter}.json`;
+    need(!requireAuditReport || snapshot.files.has(date), `Missing required independent date report: ${book}:${chapter}`);
+    return { source: sha256(snapshot.read(source)), extraction: sha256(snapshot.read(extraction)), editorial: sha256(snapshot.files.has(editorial) ? snapshot.read(editorial) : Buffer.from('null')), dateAudit: sha256(snapshot.files.has(date) ? snapshot.read(date) : Buffer.from('null')) }; };
+  const load = (book, chapter, { properNounMatcher, strictAliasDispositions = true }) => {
+    scope(book, chapter); const raw = snapshot.json(`data/people/extractions/${book}/${chapter}.json`), source = snapshot.json(`data/${book}/${chapter}.json`);
+    need(raw.book === book && raw.chapter === chapter, 'Pinned extraction scope mismatch');
+    const packet = buildPeopleExtractionPacket(book, chapter, { chapterData: source, chapterFile: path.join(root, `data/${book}/${chapter}.json`), properNounMatcher });
+    const { normalized: extraction } = isCompactPeopleExtraction(raw) ? validateCompactPeopleExtraction(raw, packet, { strictAliasDispositions }) : validatePeopleExtraction(raw, packet, { strictAliasDispositions });
+    return { raw, packet, extraction, localPeople: peopleForExtraction(extraction) };
+  };
+  const editorial = (book, chapter) => optional(`data/people/editorial-decisions/${book}/${chapter}.json`);
+  const dates = (book, chapter) => {
+    scope(book, chapter); const source = snapshot.json(`data/${book}/${chapter}.json`), raw = snapshot.json(`data/people/extractions/${book}/${chapter}.json`), report = snapshot.json(`data/people/date-audits/${book}/${chapter}.json`);
+    const units = contentUnits(source).map(({ id, zh, en, literal, blockIndex }) => ({ id, zh, en, literal, blockIndex }));
+    const packet = { schemaVersion: 1, auditVersion: DATE_AUDIT_VERSION, book, chapter, units, sourceHash: sha256(JSON.stringify(units)), extractionHash: sha256(JSON.stringify(raw)), extractor: raw.run, ...dateAuditItems(raw) };
+    validateDateAuditReport(report, packet);
+    for (const reference of report.references) {
+      if (reference.kind === 'external') need(reference.sourceHash === sha256(reference.quote), 'Pinned external date reference changed');
+      else { const unit = contentUnits(snapshot.json(`data/${reference.book}/${reference.chapter}.json`)).find(u => u.id === reference.unit); need(unit && sha256(unit.zh) === reference.sourceHash && unit.zh.includes(reference.quote), 'Pinned chapter date reference changed'); }
+    }
+    return { status: report.status, auditVersion: DATE_AUDIT_VERSION, reviewedAt: report.reviewedAt, findings: report.findings.length };
+  };
+  return { snapshot, inputs, load, editorial, dates, config: snapshot.json('data/people/config.json') };
+}
+
+// Code-only sparse runtimes share the primary checkout's recovery/lock domain.
+export function pinnedIdentityHostGeneratedDirectory(root = REPO_ROOT) {
+  const common = fs.realpathSync(execFileSync('git', ['-C', root, 'rev-parse', '--path-format=absolute', '--git-common-dir'], { encoding: 'utf8' }).trim());
+  need(path.basename(common) === '.git', 'Explicit primary Git checkout required for pinned identity recording');
+  return path.join(path.dirname(common), 'data/people/generated');
+}

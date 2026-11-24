@@ -23,6 +23,8 @@ try {
   fs.mkdirSync(path.join(scratch, 'scripts'));
   fs.copyFileSync(path.join(root, 'package.json'), path.join(scratch, 'package.json'));
   fs.copyFileSync(path.join(root, 'scripts/assert-people-production-build.mjs'), path.join(scratch, 'scripts/assert-people-production-build.mjs'));
+  fs.mkdirSync(path.join(scratch, 'scripts/lib'));
+  fs.copyFileSync(path.join(root, 'scripts/lib/people-generation-policy.mjs'), path.join(scratch, 'scripts/lib/people-generation-policy.mjs'));
   fs.writeFileSync(path.join(scratch, 'scripts/test-people-production-build.mjs'),
     "import fs from 'node:fs'; fs.writeFileSync(process.env.PEOPLE_TEST_MARKER, 'guard passed'); process.exitCode = 93;\n");
   const env = { ...process.env, PEOPLE_TEST_MARKER: marker };
@@ -32,7 +34,13 @@ try {
   assert.equal(preview.status, 1, preview.stderr);
   assert.match(preview.stderr, /refuses PEOPLE_SITE_PREVIEW=1/);
   assert.equal(fs.existsSync(marker), false, 'no subsequent build command may run in preview');
-  const normalEnv = { ...env }; delete normalEnv.PEOPLE_SITE_PREVIEW;
+  const localEnv = { ...env };
+  for (const key of ['PEOPLE_SITE_PREVIEW', 'CF_PAGES', 'CF_PAGES_COMMIT_SHA', 'CF_PAGES_BUILD_ID', 'GITHUB_ACTIONS', 'RUNNER_ENVIRONMENT']) delete localEnv[key];
+  const local = runBuild(localEnv);
+  assert.equal(local.status, 1);
+  assert.match(local.stderr, /requires GitHub-hosted CI or Cloudflare Pages/);
+  assert.equal(fs.existsSync(marker), false, 'local builds must stop before generating anything');
+  const normalEnv = { ...env, GITHUB_ACTIONS: 'true', RUNNER_ENVIRONMENT: 'github-hosted' }; delete normalEnv.PEOPLE_SITE_PREVIEW;
   const guard = spawnSync(process.execPath, [path.join(root, 'scripts/assert-people-production-build.mjs')], { encoding: 'utf8', env: normalEnv });
   assert.ifError(guard.error);
   assert.equal(guard.status, 0, guard.stderr);

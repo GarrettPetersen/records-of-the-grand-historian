@@ -1241,7 +1241,7 @@ for (const failure of ['fatal', 'usage_limit_exceeded', null]) test(`real wait h
   const h = harness({ async wait(run, options, agent) {
     agent.artifact = { complete: true };
     return waitForCursorRun({ ...run, wait: async () => ({ ...run,
-      status: failure ? 'error' : 'completed', error: terminalError,
+      status: failure ? 'error' : 'finished', error: terminalError,
     }) }, { ...options, pollMs: 0,
       readUsage: async () => ({ usage: { totalTokens: 100 }, cost: { rawCostCents: 324 } }),
     });
@@ -1255,9 +1255,27 @@ for (const failure of ['fatal', 'usage_limit_exceeded', null]) test(`real wait h
   } else {
     assert.equal((await h.worker(task)).complete, true);
     assert.equal(h.calls('download').length, 1);
+    assert.equal(task.state.runLimitStop.metric, 'raw-cost');
+    assert.equal(task.state.runLimitStop.observed, 324);
+    assert.equal(task.state.runLimitStop.limit, 300);
   }
   assert.equal(h.calls('send').length, 1);
   assert.equal(h.calls('create').length, 1);
+  assertUsageCheckpoint(h, task);
+});
+
+for (const status of ['error', 'cancelled', 'running', 'completed']) test(`terminal ${status} cannot supply a successful bounded-stop artifact`, async () => {
+  const stop = new CursorRunLimitExceededError('terminal cost stop', {
+    runId: 'prior-run', metric: 'raw-cost', observed: 324, limit: 300,
+    terminalStatus: status, terminalError: null,
+  });
+  const h = harness({ wait() { throw stop; } });
+  h.addAgent('retained', { artifact: { complete: true }, runs: [{ id: 'prior-run', status: 'running' }] });
+  const task = reviewTask(undefined, { agentId: 'retained', sent: true });
+  await assert.rejects(h.worker(task), error => error === stop);
+  assert.equal(h.calls('artifacts').length, 0);
+  assert.equal(h.calls('send').length, 0);
+  assert.equal(h.calls('create').length, 0);
   assertUsageCheckpoint(h, task);
 });
 

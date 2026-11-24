@@ -3,7 +3,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { createHash, randomUUID } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
-import { REPO_ROOT, writeTextAtomic } from './people-content.mjs';
+import { REPO_ROOT, writeTextAtomic, contentUnits } from './people-content.mjs';
 import { acquireProcessRunLock } from './process-run-lock.mjs';
 import { claimIsActive, dateExecutorIsBusy, mutateRemotePeopleWorkLedger, validatePeopleWorkLedger } from './people-work-queue.mjs';
 import { validateDateAuditScope, validateDateAuditReport } from './people-date-audit.mjs';
@@ -75,12 +75,18 @@ function workflowSnapshot(directory) {
 }
 const workflowHash = rows => documentHash(rows.map(r => ({ name: r.name, sha256: r.content.sha256 })));
 
+function beforeGeneration(book, chapter, source, extraction) {
+  if (extraction !== null) return combinedDatePacket(book, chapter, source, extraction);
+  const units = contentUnits(source).map(({ id, zh, en, literal, blockIndex }) => ({ id, zh, en, literal, blockIndex }));
+  return { sourceHash: documentHash(units), extractionHash: null };
+}
+
 export function inspectCombinedBefore({ root = REPO_ROOT, book, chapter }) {
   const p = paths(root, book, chapter);
   for (const key of [...ROLES, 'state', 'workflow']) safeDestination(root, p[key]);
   const documents = Object.fromEntries(ROLES.map(role => [role, maybeSnapshot(p[role])]));
   const workflow = workflowSnapshot(p.workflow);
-  const packet = combinedDatePacket(book, chapter, parse(documents.source), parse(documents.extraction));
+  const packet = beforeGeneration(book, chapter, parse(documents.source), documents.extraction === null ? null : parse(documents.extraction));
   return { sourceHash: packet.sourceHash, extractionHash: packet.extractionHash,
     ...Object.fromEntries(ROLES.map(role => [`${role}ByteHash`, documents[role]?.sha256 ?? null])),
     stateByteHash: maybeSnapshot(p.state)?.sha256 ?? null, workflowHash: workflowHash(workflow) };
@@ -92,7 +98,9 @@ export function prepareCombinedCuration(spec) {
   const { root = REPO_ROOT, book, chapter, materializedDir, reviewDir, before, priorClaim, authorAgentIds } = spec;
   const p = paths(root, book, chapter);
   requireEqual(inspectCombinedBefore({ root, book, chapter }), before, 'exact-before source/extraction/editorial/workflow pins');
-  if (!priorClaim || !spec.claimHash) throw new Error('An exact pinned prior queue claim is required');
+  const firstInstall = before.extractionByteHash === null;
+  if ((!firstInstall && !priorClaim) || !spec.claimHash) throw new Error('An exact pinned prior queue claim is required');
+  if (firstInstall) requireEqual(priorClaim, null, 'first install has no prior date claim');
   requireEqual(documentHash(priorClaim), spec.claimHash, 'prior queue claim pin');
   const inputPaths = {
     source: path.join(materializedDir, 'data', book, `${chapter}.json`),
@@ -119,6 +127,7 @@ export function prepareCombinedCuration(spec) {
   });
   const receipt = { schemaVersion: 1, kind: KIND, root, book, chapter, beforePins: before,
     priorClaim, claimHash: spec.claimHash, authorAgentIds,
+    ...(firstInstall ? { initialOwner: spec.initialOwner, initialOwnerHash: spec.initialOwnerHash } : {}),
     before: Object.fromEntries(ROLES.map(role => [role, maybeSnapshot(p[role])])),
     workflow: workflowSnapshot(p.workflow), inputs, protectedInputs };
   const hash = documentHash(receipt);
@@ -126,18 +135,43 @@ export function prepareCombinedCuration(spec) {
   return { receipt, hash };
 }
 
+// Absence is an exact-before condition, never a synthesized unfinished state.
+// Only a reservation that has not started any date work may use this path.
+function retainedWorkflowState(receipt) {
+  if (receipt.before.extraction === null) {
+    requireEqual(receipt.workflow, [], 'first install cannot discard retained workflow artifacts');
+    requireEqual([receipt.beforePins.stateByteHash, receipt.before.editorial, receipt.before.dateReport], [null, null, null], 'first install requires real canonical absence');
+    return null;
+  }
+  const row = receipt.workflow.find(r => r.name === 'state.json');
+  if (row) return parse(row.content);
+  const claim = receipt.priorClaim;
+  const initialFields = ['worker', 'lane', 'status', 'sourceHash', 'extractionHash', 'jobs', 'updatedAt', 'generationId', 'reviewPlans'];
+  if (receipt.workflow.length || receipt.beforePins.stateByteHash !== null || receipt.before.dateReport ||
+      claim.status !== 'active' || Object.keys(claim.jobs).length ||
+      (claim.reviewPlans !== undefined && (!claim.reviewPlans || typeof claim.reviewPlans !== 'object' ||
+        Array.isArray(claim.reviewPlans) || Object.keys(claim.reviewPlans).length)) ||
+      Object.keys(claim).some(key => !initialFields.includes(key))) {
+    throw new Error('Missing workflow state requires an untouched initial date reservation');
+  }
+  return null;
+}
+
 function completeState(receipt, hash) {
-  const old = parse(receipt.workflow.find(r => r.name === 'state.json').content);
+  const old = retainedWorkflowState(receipt);
+  const prior = old ?? receipt.priorClaim ?? receipt.beforePins;
   const identity = parse(receipt.inputs.identity.content);
-  return { schemaVersion: old.schemaVersion, workflowVersion: old.workflowVersion,
+  return { schemaVersion: old?.schemaVersion ?? 1, workflowVersion: old?.workflowVersion ?? 1,
+    ...(!old && prior.generationId ? { generationId: prior.generationId } : {}),
     sourceHash: identity.sourceHash, extractionHash: identity.extractionHash,
     round: 0, phase: 'complete', jobs: {}, reviewReceipt: { kind: KIND, hash },
-    reviewedGenerationTransition: { before: { sourceHash: old.sourceHash, extractionHash: old.extractionHash },
+    reviewedGenerationTransition: { before: { sourceHash: prior.sourceHash, extractionHash: prior.extractionHash },
       after: { sourceHash: identity.sourceHash, extractionHash: identity.extractionHash }, historyReceipt: hash } };
 }
 function completeClaim(receipt, hash) {
   const state = completeState(receipt, hash);
-  return { worker: receipt.priorClaim.worker, lane: receipt.priorClaim.lane, status: 'ready',
+  const owner = receipt.priorClaim ?? receipt.initialOwner;
+  return { worker: owner.worker, lane: owner.lane, status: 'ready',
     sourceHash: state.sourceHash, extractionHash: state.extractionHash, jobs: {},
     reviewReceipt: state.reviewReceipt, reviewedGenerationTransition: state.reviewedGenerationTransition };
 }
@@ -151,10 +185,10 @@ function canonicalState(receipt, hash, requireBefore) {
     const after = receipt.inputs[role].content.sha256;
     if (current !== before && (requireBefore || current !== after)) throw new Error(`Canonical ${role} is neither exact before nor reviewed after`);
   }
-  const oldState = receipt.workflow.find(r => r.name === 'state.json').content;
+  const oldState = receipt.workflow.find(r => r.name === 'state.json')?.content ?? null;
   const currentState = maybeSnapshot(p.state)?.sha256 ?? null;
   const finalState = encode(jsonBytes(completeState(receipt, hash)));
-  if (currentState !== oldState.sha256 && (requireBefore || currentState !== finalState.sha256)) throw new Error('Local workflow state drift');
+  if (currentState !== (oldState?.sha256 ?? null) && (requireBefore || currentState !== finalState.sha256)) throw new Error('Local workflow state drift');
   if (currentState === finalState.sha256) {
     for (const role of ROLES) requireEqual(maybeSnapshot(p[role])?.sha256, receipt.inputs[role].content.sha256, 'complete state requires all canonical after documents');
   }
@@ -173,7 +207,7 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   requireEqual(documentHash(receipt), expectedHash, 'externally pinned receipt hash');
   requireEqual(receipt.root, root, 'publication root');
   requireEqual([receipt.schemaVersion, receipt.kind], [1, KIND], 'combined receipt protocol');
-  keys(receipt, ['schemaVersion', 'kind', 'root', 'book', 'chapter', 'beforePins', 'priorClaim', 'claimHash', 'authorAgentIds', 'before', 'workflow', 'inputs', 'protectedInputs'], 'fixed receipt fields');
+  keys(receipt, ['schemaVersion', 'kind', 'root', 'book', 'chapter', 'beforePins', 'priorClaim', 'claimHash', 'authorAgentIds', 'before', 'workflow', 'inputs', 'protectedInputs', ...(receipt.before.extraction === null ? ['initialOwner', 'initialOwnerHash'] : [])], 'fixed receipt fields');
   keys(receipt.before, ROLES, 'fixed before document roles');
   keys(receipt.inputs, [...ROLES, 'materialization', 'identity', 'validation', 'seal'], 'fixed reviewed document roles');
   const p = paths(root, receipt.book, receipt.chapter);
@@ -181,28 +215,41 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
     if (!path.isAbsolute(entry.file) || Object.values(p).includes(entry.file) || entry.file.startsWith(`${p.workflow}/`)) throw new Error('Review inputs must be separate absolute artifact paths');
   }
   if (new Set(Object.values(receipt.inputs).map(e => e.file)).size !== Object.keys(receipt.inputs).length) throw new Error('Review input roles must not alias');
-  const beforeSource = parse(receipt.before.source), beforeExtraction = parse(receipt.before.extraction), beforeEditorial = parse(receipt.before.editorial);
-  const oldPacket = combinedDatePacket(receipt.book, receipt.chapter, beforeSource, beforeExtraction);
+  const beforeSource = parse(receipt.before.source), beforeExtraction = receipt.before.extraction === null ? null : parse(receipt.before.extraction), beforeEditorial = receipt.before.editorial === null ? null : parse(receipt.before.editorial);
+  const firstInstall = beforeExtraction === null;
+  if (!firstInstall && beforeEditorial === null) throw new Error('An existing extraction requires its retained editorial history');
+  const oldPacket = beforeGeneration(receipt.book, receipt.chapter, beforeSource, beforeExtraction);
+  if (firstInstall) {
+    requireEqual(receipt.priorClaim, null, 'first install has no original date claim');
+    const owner = receipt.initialOwner;
+    if (!owner || typeof owner.jobId !== 'string' || !owner.jobId.startsWith(receipt.book+'-'+receipt.chapter+'-') || typeof owner.worker !== 'string' || !owner.worker || owner.worker !== owner.worker.trim() ||
+        !['cursor-sdk', 'grokbot', 'manual', 'openrouter'].includes(owner.lane) || owner.status !== 'active' ||
+        !Number.isFinite(Date.parse(owner.updatedAt))) throw new Error('First install requires an exact active chapter-owner reservation');
+    keys(owner, ['jobId', 'worker', 'lane', 'status', 'updatedAt'], 'initial chapter-owner fields');
+    requireEqual(documentHash(owner), receipt.initialOwnerHash, 'original chapter-owner pin');
+  }
   requireEqual(documentHash(receipt.priorClaim), receipt.claimHash, 'original queue claim');
   const oldState = receipt.workflow.find(r => r.name === 'state.json');
-  if (!oldState || new Set(receipt.workflow.map(r => r.name)).size !== receipt.workflow.length) throw new Error('Missing or duplicate retained workflow state');
+  if (new Set(receipt.workflow.map(r => r.name)).size !== receipt.workflow.length) throw new Error('Duplicate retained workflow state');
   for (const row of receipt.workflow) {
     if (!row.name || row.name.split('/').some(part => part === '..' || part === '.' || !part) || path.isAbsolute(row.name)) throw new Error('Invalid retained artifact path');
     bytes(row.content);
   }
-  const state = parse(oldState.content);
-  requireEqual([state.schemaVersion, state.workflowVersion], [1, 1], 'retained workflow protocol');
-  if (!state.jobs || !['audit', 'repair', 'reaudit', 'publish'].includes(state.phase)) throw new Error('Combined curation needs an unfinished retained generation');
+  const state = retainedWorkflowState(receipt);
+  if (state) {
+    requireEqual([state.schemaVersion, state.workflowVersion], [1, 1], 'retained workflow protocol');
+    if (!state.jobs || !['audit', 'repair', 'reaudit', 'publish'].includes(state.phase)) throw new Error('Combined curation needs an unfinished retained generation');
+  }
   // Extraction reservation treats ready date claims as unowned, regardless of
   // executor tokens. Do not admit that inconsistent state into this workflow.
-  if (!['active', 'research-blocked'].includes(receipt.priorClaim.status)) throw new Error('Unfinished combined curation requires an active or research-blocked date claim, not ready');
-  for (const doc of [state, receipt.priorClaim]) requireEqual([doc.sourceHash, doc.extractionHash], [oldPacket.sourceHash, oldPacket.extractionHash], 'old generation source/extraction pins');
-  if (receipt.priorClaim.combinedCuration || receipt.priorClaim.reviewReceipt) throw new Error('Cannot supersede an already transitioned claim with this receipt');
-  validatePeopleWorkLedger({ schemaVersion: 1, claims: {}, dateAudits: { [`${receipt.book}/${receipt.chapter}`]: receipt.priorClaim } });
+  if (!firstInstall && !['active', 'research-blocked'].includes(receipt.priorClaim.status)) throw new Error('Unfinished combined curation requires an active or research-blocked date claim, not ready');
+  for (const doc of [state, receipt.priorClaim].filter(Boolean)) requireEqual([doc.sourceHash, doc.extractionHash], [oldPacket.sourceHash, oldPacket.extractionHash], 'old generation source/extraction pins');
+  if (receipt.priorClaim?.combinedCuration || receipt.priorClaim?.reviewReceipt) throw new Error('Cannot supersede an already transitioned claim with this receipt');
+  if (!firstInstall) validatePeopleWorkLedger({ schemaVersion: 1, claims: {}, dateAudits: { [`${receipt.book}/${receipt.chapter}`]: receipt.priorClaim } });
   if (receipt.before.dateReport) validateDateAuditReport(parse(receipt.before.dateReport), oldPacket);
   requireEqual(receipt.beforePins, { sourceHash: oldPacket.sourceHash, extractionHash: oldPacket.extractionHash,
     ...Object.fromEntries(ROLES.map(role => [`${role}ByteHash`, receipt.before[role]?.sha256 ?? null])),
-    stateByteHash: oldState.content.sha256, workflowHash: workflowHash(receipt.workflow) }, 'before content pins');
+    stateByteHash: oldState?.content.sha256 ?? null, workflowHash: workflowHash(receipt.workflow) }, 'before content pins');
 
   const docs = Object.fromEntries(Object.entries(receipt.inputs).map(([role, entry]) => [role, parse(entry.content)]));
   const seal = docs.seal;
@@ -211,7 +258,7 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   if (new Set(receipt.protectedInputs.map(e => e.file)).size !== receipt.protectedInputs.length) throw new Error('Duplicate protected input');
   for (const [i, entry] of receipt.protectedInputs.entries()) {
     requireEqual([entry.content.sha256, bytes(entry.content).length], [seal.protectedFiles[i].sha256, seal.protectedFiles[i].bytes], 'sealed protected bytes');
-    if (entry.file === p.state) requireEqual(entry.content, oldState.content, 'sealed original local state');
+    if (entry.file === p.state) requireEqual(entry.content, oldState?.content ?? null, 'sealed original local state');
   }
   for (const role of ['source', 'extraction', 'editorial', 'materialization']) {
     const input = receipt.inputs[role];
@@ -220,7 +267,8 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   }
   for (const role of ['source', 'extraction', 'editorial']) {
     const sealed = receipt.protectedInputs.find(e => e.file === p[role]);
-    requireEqual(sealed?.content, receipt.before[role], `review seal must pin canonical before ${role}`);
+    if (receipt.before[role] === null) requireEqual(sealed, undefined, `cannot seal nonexistent canonical before ${role}`);
+    else requireEqual(sealed?.content, receipt.before[role], `review seal must pin canonical before ${role}`);
   }
   for (const r of [docs.identity, docs.dateReport]) {
     const context = r.reviewContext;
@@ -232,7 +280,7 @@ export function verifyCombinedCuration(receipt, expectedHash, { root = REPO_ROOT
   requireEqual(docs.materialization.sourceByteHash, receipt.inputs.source.content.sha256, 'materialized source bytes');
   requireEqual(docs.materialization.extractionByteHash, receipt.inputs.extraction.content.sha256, 'materialized extraction bytes');
   const authors = new Set(receipt.authorAgentIds);
-  for (const jobs of [state.jobs, receipt.priorClaim.jobs]) {
+  for (const jobs of [state?.jobs ?? {}, receipt.priorClaim?.jobs ?? {}]) {
     for (const [key, job] of Object.entries(jobs)) if (key.startsWith('repair-') && job.agentId) authors.add(job.agentId);
   }
   const result = validateCombinedReviews({ book: receipt.book, chapter: receipt.chapter,
@@ -280,28 +328,43 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
     if (exists) requireEqual(JSON.parse(fs.readFileSync(receiptFile, 'utf8')), receipt, 'existing durable receipt');
     verifyCombinedCuration(receipt, expectedHash, { root, requireBefore: !exists });
     const finalClaim = completeClaim(receipt, expectedHash);
+    const firstInstall = receipt.before.extraction === null;
+    // An initial reservation is a fenced, uncompleted publication of the exact
+    // reviewed after generation, never an accepted empty extraction.
+    const pendingInitial = firstInstall ? { worker: receipt.initialOwner.worker, lane: receipt.initialOwner.lane,
+      status: 'active', sourceHash: finalClaim.sourceHash, extractionHash: finalClaim.extractionHash, jobs: {} } : null;
+    const pinnedPriorClaim = firstInstall ? pendingInitial : receipt.priorClaim;
     const transaction = fn => mutateLedger(ledger => {
       validatePeopleWorkLedger(ledger);
+      if (firstInstall) {
+        requireEqual(ledger.chapterOwners?.[key], receipt.initialOwner, 'owned initial chapter reservation');
+        if (Object.hasOwn(ledger.claims, key) || Object.hasOwn(ledger.identityReviews ?? {}, key)) throw new Error('Initial publication has conflicting extraction or identity ownership');
+      }
       if (claimIsActive(ledger.claims[key]) && !['ready', 'complete'].includes(ledger.claims[key].status)) throw new Error('Concurrent extraction owns this chapter');
       const result = fn(ledger);
       validatePeopleWorkLedger(ledger);
       return result;
     }, { message: `Reviewed combined curation ${key}` });
     const reservation = transaction(ledger => {
-      const claim = ledger.dateAudits?.[key];
-      if (!claim) throw new Error('Missing original shared date claim');
+      let claim = ledger.dateAudits?.[key];
+      const absentInitial = firstInstall && !claim;
+      if (!claim && firstInstall) {
+        ledger.dateAudits ??= {};
+        claim = ledger.dateAudits[key] = structuredClone(pendingInitial);
+      } else if (!claim) throw new Error('Missing original shared date claim');
       if (isDeepStrictEqual(claim, finalClaim)) {
         if (!exists) throw new Error('Completed queue claim without durable receipt');
         requireEqual(maybeSnapshot(p.state), encode(jsonBytes(completeState(receipt, expectedHash))), 'completed queue requires completed local state');
-        if (!ledger.dateAuditHistory?.[key]?.some(c => isDeepStrictEqual(c, receipt.priorClaim))) throw new Error('Completed queue lost original claim history');
+        if (!firstInstall && !ledger.dateAuditHistory?.[key]?.some(c => isDeepStrictEqual(c, receipt.priorClaim))) throw new Error('Completed queue lost original claim history');
         return 'complete';
       }
+      if (firstInstall && !absentInitial && !claim.combinedCuration) throw new Error('Initial date claim appeared without this publication receipt');
       if (dateExecutorIsBusy(claim, { executorToken: token })) throw new Error('Concurrent date executor holds the shared lease');
       if (claim.executorHost && claim.executorHost !== os.hostname()) throw new Error('Foreign host executor must be reconciled before combined publication');
       if (claim.combinedCuration) {
         requireEqual(claim.combinedCuration, { kind: KIND, receiptHash: expectedHash }, 'pending queue receipt');
-        requireEqual(retainedClaim(claim), retainedClaim(receipt.priorClaim), 'pending old generation claim drift');
-      } else requireEqual(claim, receipt.priorClaim, 'exact-before shared queue claim');
+        requireEqual(retainedClaim(claim), retainedClaim(pinnedPriorClaim), 'pending old generation claim drift');
+      } else requireEqual(claim, pinnedPriorClaim, 'exact-before shared queue claim');
       claim.executorToken = token;
       claim.executorHost = os.hostname();
       claim.executorExpiresAt = new Date(Date.now() + 3600000).toISOString();
@@ -322,7 +385,7 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
         const claim = ledger.dateAudits?.[key];
         if (!claim || claim.executorToken !== token || Date.parse(claim.executorExpiresAt) <= Date.now()) throw new Error('Lost combined publication executor lease');
         requireEqual(claim.combinedCuration, { kind: KIND, receiptHash: expectedHash }, 'owned lease receipt');
-        requireEqual(retainedClaim(claim), retainedClaim(receipt.priorClaim), 'owned generation drift');
+        requireEqual(retainedClaim(claim), retainedClaim(pinnedPriorClaim), 'owned generation drift');
         claim.executorExpiresAt = new Date(Date.now() + 3600000).toISOString();
       });
     };
@@ -359,9 +422,11 @@ export function publishCombinedCuration(receipt, expectedHash, options = {}) {
       if (ledger.dateAudits[key]?.executorToken !== token || Date.parse(ledger.dateAudits[key].executorExpiresAt) <= Date.now()) throw new Error('Lost lease at generation transition');
       assertDurableReceipt();
       canonicalState(receipt, expectedHash, false);
-      ledger.dateAuditHistory ??= {};
-      const history = ledger.dateAuditHistory[key] ??= [];
-      if (!history.some(c => isDeepStrictEqual(c, receipt.priorClaim))) history.push(structuredClone(receipt.priorClaim));
+      if (!firstInstall) {
+        ledger.dateAuditHistory ??= {};
+        const history = ledger.dateAuditHistory[key] ??= [];
+        if (!history.some(c => isDeepStrictEqual(c, receipt.priorClaim))) history.push(structuredClone(receipt.priorClaim));
+      }
       ledger.dateAudits[key] = finalClaim;
     });
     checkpoint('queue');

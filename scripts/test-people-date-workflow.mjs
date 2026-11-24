@@ -5,7 +5,7 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { writeJsonAtomic, readJson, sha256 } from './lib/people-content.mjs';
 import { buildDateAuditPacket, dateAuditStatus, dateAuditReferencesCurrent } from './lib/people-date-audit.mjs';
-import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
+import { completedDateClaimEvidence, dateReviewJobs, retainedDateReviewJobs, dateRepairJobs, applyDateRepairProposal, applyDateRepairEditorialAmendment, dateRepairDifference, runDateWorkflow, dateWorkflowDirectory, publishDateRepair, validateDateJobResult, revisePendingDateRepair, resolvedDatePreflight, sealedDateRepairProposalHash, validateStagedDateRepairReview } from './lib/people-date-workflow.mjs';
 import { editorialDecisionSeed } from './lib/people-editorial-decisions.mjs';
 import { createDateWorkerPool } from './lib/people-date-concurrency.mjs';
 import { validatePeopleWorkLedger, reservePeopleTargetsInLedger, dateExecutorIsBusy, extractionClaimBlocksDateAudit } from './lib/people-work-queue.mjs';
@@ -42,6 +42,221 @@ function repair(task) {
     {kind:'replace',id:'claim-1',before,after,reason:'The fixture first-year event supports year one, not year two.'},
     {kind:'hints',personId:'p001',before:['AD 2'],after:['AD 1'],reason:'Synchronize the fixture hint with the corrected personal event.'}]};
 }
+
+async function unresolvedRepairFixture(t) {
+  const f = fixture(t), calls = [];
+  const worker = async task => {
+    calls.push({kind:task.kind,key:task.key});
+    if (task.kind !== 'repair') return review(task);
+    task.save({status:'returned'});
+    const before = task.extraction.claims[0], after = structuredClone(before);
+    after[2] = {sourceDate:{text:'元年'},unresolved:true,
+      unresolvedReason:'The fixture has competing source anchors requiring focused research.'};
+    return {sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,changes:[
+      {kind:'replace',id:'claim-1',before,after,reason:'Preserve the explicitly unresolved source chronology without inventing a Western year.'},
+      {kind:'hints',personId:'p001',before:['AD 2'],after:[],reason:'Withdraw the unsupported Western hint while the source anchors remain unresolved.'},
+    ]};
+  };
+  const original = fs.readFileSync(f.file);
+  const result = await runDateWorkflow({book:'fixture',chapter:'001'},worker,f.options);
+  const directory = dateWorkflowDirectory('fixture','001',f.options.peopleDir);
+  return {...f,calls,original,result,directory};
+}
+
+test('unresolved repair preflight preserves the candidate and stops before a fresh review', async t => {
+  const f = await unresolvedRepairFixture(t);
+  assert.equal(f.result.status,'research-blocked');
+  assert.equal(f.result.researchPreflight.unresolvedItems,1);
+  assert(!f.calls.some(call=>call.key.startsWith('reaudit-')));
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  const state = readJson(path.join(f.directory,'state.json'));
+  assert.equal(state.phase,'reaudit');
+  assert.equal(state.round,1);
+  const candidate = readJson(path.join(f.directory,state.candidate));
+  assert.equal(candidate.claims[0][2].unresolved,true);
+  const preflight = readJson(path.join(f.directory,f.result.researchPreflight.file));
+  assert.equal(f.result.researchPreflight.contentHash,sha256(JSON.stringify(preflight)));
+  assert.equal(preflight.extractionHash,sha256(JSON.stringify(candidate)));
+  assert.equal(preflight.items[0].id,'claim-1');
+  assert.equal(preflight.items[0].value.unresolved,true);
+  assert.equal(preflight.candidateFile,state.candidate);
+  assert.deepEqual(preflight.people.map(person=>person.id),['p001']);
+  assert(preflight.units.some(unit=>unit.id === 's0001' && unit.zh === '元年甲卒。'));
+  const again = await runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('No new review allowed');},f.options);
+  assert.deepEqual(again,f.result);
+  writeJsonAtomic(path.join(f.directory,f.result.researchPreflight.file),{tampered:true});
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('No new review allowed');},f.options),/Retained research preflight changed/);
+});
+
+function resolveResearchFixture(f) {
+  const state = readJson(path.join(f.directory,'state.json'));
+  const candidate = readJson(path.join(f.directory,state.candidate));
+  const packet = buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  const before = candidate.claims[0], after = structuredClone(before);
+  after[2] = {sourceDate:{text:'元年'},westernYear:{era:'AD',year:1,precision:'year'}};
+  const proposal = {sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,
+    author:{agentId:'independent-source-researcher'},changes:[
+      {kind:'replace',id:'claim-1',before,after,reason:'The independent fixture researcher resolves the source anchor to the first year.'},
+      {kind:'hints',personId:'p001',before:[],after:['AD 1'],reason:'Restore the supported activity hint after resolving the source anchor.'},
+    ]};
+  revisePendingDateRepair({book:'fixture',chapter:'001'},proposal,f.options);
+  return {sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,researchPreflights:[f.result.researchPreflight]};
+}
+
+test('source-resolved candidates still need fresh independent approval after the preflight hold', async t => {
+  const f = await unresolvedRepairFixture(t), claim = resolveResearchFixture(f);
+  const resolution = resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options);
+  assert.equal(resolution.authorAgentId,'independent-source-researcher');
+  assert.equal(resolution.preflightContentHash,f.result.researchPreflight.contentHash);
+  assert.equal(resolution.round,2);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  let freshReviews = 0;
+  const result = await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{
+    assert.equal(task.kind,'review');
+    assert(task.key.startsWith('reaudit-2-'));
+    freshReviews += 1;
+    return review(task);
+  },f.options);
+  assert.equal(result.status,'audited');
+  assert(freshReviews > 0);
+  assert.equal(readJson(f.file).claims[0][2].westernYear.year,1);
+});
+
+test('a worker blocker or unchanged source preflight cannot use the native amendment retry', async t => {
+  const f = await unresolvedRepairFixture(t);
+  const claim={sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash};
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options),/worker research supplement or saved chapter preflight/);
+  claim.researchPreflights=[f.result.researchPreflight];
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options),/phase and round hold/);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+});
+
+test('source-preflight retry reaches independent approval in the last legal re-audit round',async t=>{
+  const f=await unresolvedRepairFixture(t),state=readJson(path.join(f.directory,'state.json'));
+  const candidate=readJson(path.join(f.directory,state.candidate)),packet=buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  const before=candidate.claims[0],after=structuredClone(before);
+  after[2].unresolvedReason+=' The competing fixture anchor still needs research.';
+  revisePendingDateRepair({book:'fixture',chapter:'001'},{sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,author:{agentId:'first-researcher'},changes:[{kind:'replace',id:'claim-1',before,after,reason:'Preserve the genuine source research question until its anchor is established.'}]},f.options);
+  const held=await runDateWorkflow({book:'fixture',chapter:'001'},()=>{throw Error('Still-unresolved source must not dispatch review');},f.options);
+  assert.equal(held.researchPreflight.round,2);
+  const claim=resolveResearchFixture({...f,result:held});
+  const resolution=resolvedDatePreflight({book:'fixture',chapter:'001'},claim,{...f.options,maxRounds:3});
+  assert.equal(resolution.round,3);
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,{...f.options,maxRounds:2}),/phase and round hold/);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  let reviews=0;
+  const result=await runDateWorkflow({book:'fixture',chapter:'001'},task=>{assert(task.key.startsWith('reaudit-3-'));reviews++;return review(task);},{...f.options,maxRounds:3});
+  assert.equal(result.status,'audited');assert(reviews>0);
+});
+
+for (const [label,alter,expected] of [
+  ['preflight bytes',f=>{const file=path.join(f.directory,f.result.researchPreflight.file),p=readJson(file);p.items[0].value.unresolvedReason+=' Changed.';writeJsonAtomic(file,p);},/preflight changed/],
+  ['held candidate',f=>{const file=path.join(f.directory,'candidate-1.json'),c=readJson(file);c.claims[0][2].unresolvedReason+=' Changed.';writeJsonAtomic(file,c);},/held source evidence changed/],
+  ['amendment provenance',f=>{const file=path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`),p=readJson(file);p.author.agentId='unrecorded-author';writeJsonAtomic(file,p);},/amendment provenance/],
+  ['candidate facts',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].westernYear.year=777;writeJsonAtomic(file,c);},/differs from the native source amendment/],
+  ['unresolved candidate',f=>{const file=path.join(f.directory,'candidate-2.json'),c=readJson(file);c.claims[0][2].unresolved=true;writeJsonAtomic(file,c);},/differs from the native source amendment/],
+  ['combined replay',f=>{const file=path.join(f.directory,'combined-proposal.json'),p=readJson(file);p.changes.find(c=>c.kind==='replace').after[2].westernYear.year=777;writeJsonAtomic(file,p);},/does not reproduce/],
+  ['canonical source',f=>{const s=readJson(f.sourceFile);s.content[0].sentences[0].zh+='改';writeJsonAtomic(f.sourceFile,s);},/canonical source or extraction changed/],
+  ['round circuit',f=>{const file=path.join(f.directory,'state.json'),s=readJson(file);s.circuitBreaker={reason:'retained hold'};writeJsonAtomic(file,s);},/phase and round hold/],
+]) test(`source-preflight retry rejects changed ${label} without approving the chapter`,async t=>{
+  const f=await unresolvedRepairFixture(t),claim=resolveResearchFixture(f);
+  alter(f);
+  assert.throws(()=>resolvedDatePreflight({book:'fixture',chapter:'001'},claim,f.options),expected);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  assert.notEqual(dateAuditStatus('fixture','001',f.options).status,'audited');
+});
+
+async function interruptedRepairAfterPreflight(t) {
+  const f=await unresolvedRepairFixture(t);
+  resolveResearchFixture(f);
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},async task=>{
+    if(task.kind==='repair')throw Error('fixture repair after preflight interrupted');
+    const result=review(task);
+    if(task.job.ownedPeople.includes('p002')) {
+      result.personChecks.find(check=>check.id==='p002').verdict='incorrect';
+      result.findings.push({items:['p002','hints-p002'],problem:'The second fixture hint needs its source-year qualifier.',action:'Clarify the existing source-year hint and obtain another independent review.'});
+    }
+    return result;
+  },{...f.options,maxAttempts:1}),/repair after preflight interrupted/);
+  return f;
+}
+
+test('a negative review after a native preflight amendment resumes repair and requires last-round approval',async t=>{
+  const f=await interruptedRepairAfterPreflight(t),scope={book:'fixture',chapter:'001'};
+  assert(!fs.existsSync(path.join(f.directory,'review-1.json')));
+  assert.equal(readJson(path.join(f.directory,'state.json')).phase,'repair');
+  const calls=[];
+  const worker=async task=>{
+    calls.push(task.key);
+    if(task.kind!=='repair')return review(task);
+    return {sourceHash:task.packet.sourceHash,extractionHash:task.packet.extractionHash,author:{agentId:'second-repair-author'},changes:[{
+      kind:'hints',personId:'p002',before:['AD 1'],after:['AD 1 (fixture source year)'],reason:'Clarify the existing source-year hint without changing its year.'}]};
+  };
+  // Stop at a real invocation boundary after applying the repair and before its
+  // final audit; both the repair phase and the next reaudit must prove the gap.
+  await assert.rejects(runDateWorkflow(scope,task=>{
+    if(task.kind==='review')throw Error('fixture last-round audit interrupted');
+    return worker(task);
+  },{...f.options,maxAttempts:1}),/last-round audit interrupted/);
+  assert.equal(readJson(path.join(f.directory,'state.json')).round,3);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+  assert.equal((await runDateWorkflow(scope,worker,f.options)).status,'audited');
+  assert(calls.some(key=>key.startsWith('repair-2-')));
+  assert(calls.some(key=>key.startsWith('reaudit-3-')));
+  assert(!fs.existsSync(path.join(f.directory,'review-1.json')));
+});
+
+for(const [name,change] of [
+  ['missing preflight',f=>fs.unlinkSync(path.join(f.directory,f.result.researchPreflight.file))],
+  ['changed preflight',f=>amend(path.join(f.directory,f.result.researchPreflight.file),p=>{p.items=[];})],
+  ['changed held candidate',f=>amend(path.join(f.directory,'candidate-1.json'),p=>{p.claims[0][2].unresolvedReason+=' Changed.';})],
+  ['missing native amendment',f=>fs.unlinkSync(path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`))],
+  ['changed amendment author',f=>amend(path.join(f.directory,`repair-1-${f.result.researchPreflight.extractionHash.slice(7,27)}.json`),p=>{p.author.agentId='forged-author';})],
+  ['started review job',f=>amend(path.join(f.directory,'state.json'),s=>{s.jobs['reaudit-1-owned']={agentId:'retained-reviewer'};})],
+  ['started review plan',f=>amend(path.join(f.directory,'state.json'),s=>{s.reviewPlans['reaudit-1']={};})],
+  ['started review artifact',f=>writeJsonAtomic(path.join(f.directory,'reaudit-1-owned.json'),{})],
+  ['missing actual negative review',f=>fs.unlinkSync(path.join(f.directory,'review-2.json'))],
+  ['changed latest review pointer',f=>amend(path.join(f.directory,'state.json'),s=>{s.review='review-0.json';})],
+])test(`preflight ancestry rejects ${name} before any worker or write`,async t=>{
+  const f=await interruptedRepairAfterPreflight(t);change(f);
+  const files=fs.readdirSync(f.directory).sort().map(name=>[name,fs.readFileSync(path.join(f.directory,name))]);
+  let calls=0;
+  await assert.rejects(runDateWorkflow({book:'fixture',chapter:'001'},()=>{calls++;throw Error('unexpected worker');},f.options),/cannot be safely seeded/);
+  assert.equal(calls,0);
+  assert.deepEqual(fs.readdirSync(f.directory).sort().map(name=>[name,fs.readFileSync(path.join(f.directory,name))]),files);
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+});
+function amend(file,change){const value=readJson(file);change(value);writeJsonAtomic(file,value);}
+
+test('unresolved preflight preserves an already-owned re-audit recovery path', async t => {
+  const f = await unresolvedRepairFixture(t), stateFile = path.join(f.directory,'state.json');
+  const state = readJson(stateFile), candidate = readJson(path.join(f.directory,state.candidate));
+  const packet = buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+  const {jobs} = retainedDateReviewJobs(packet,state,f.options);
+  const retainedKey = `reaudit-1-${jobs[0].id}`;
+  state.jobs[retainedKey] = {agentId:'retained-source-reviewer',status:'interrupted'};
+  writeJsonAtomic(stateFile,state);
+  let recovered = false;
+  const result = await runDateWorkflow({book:'fixture',chapter:'001'},async task=>{
+    assert.equal(task.kind,'review');
+    const report = review(task);
+    if (task.key === retainedKey) {
+      assert.equal(task.state.agentId,'retained-source-reviewer');
+      report.reviewer.agentId = task.state.agentId;
+      recovered = true;
+    }
+    for (const item of task.job.items.filter(item=>task.job.ownedItems.includes(item.id) && item.value?.unresolved)) {
+      report.itemChecks.find(check=>check.id === item.id).verdict = 'incorrect';
+      report.findings.push({items:[item.id],problem:'The retained reviewer confirms unresolved source anchors.',
+        action:'Complete focused source research before the candidate can be approved.'});
+    }
+    return report;
+  },{...f.options,maxRounds:1});
+  assert.equal(recovered,true);
+  assert.equal(result.status,'needs-revision');
+  assert.equal(readJson(stateFile).jobs[retainedKey].agentId,'retained-source-reviewer');
+  assert.deepEqual(fs.readFileSync(f.file),f.original);
+});
 
 test('date claim recovery requires its own completed generation report', async t => {
   const f=fixture(t),scope={book:'fixture',chapter:'001'};
@@ -177,6 +392,82 @@ test('reception reconciliation preserves event content',t=>{
   const bad=structuredClone(proposal);bad.changes[0].after[2].action='a different event';
   assert.throws(()=>applyDateRepairProposal(before,bad,packet),/non-temporal/);
 });
+for (const predicate of ['honor', 'event-participation']) {
+  test(`existing dated ${predicate} can gain retrospective classification and replay its final delta`, t => {
+    const f = fixture(t);
+    const row = ['p001', predicate, {kind:'ritual', action:'posthumous-honor', role:'honoree',
+      dateContext:{sourceDate:{text:'元年'}, westernYear:{era:'AD',year:2,precision:'year'}}}, 'explicit', ['s0001']];
+    const before = {...f.extraction, claims:[...f.extraction.claims, row]};
+    const packet = buildDateAuditPacket('fixture','001',{...f.options, extraction:before});
+    const after = structuredClone(row);
+    after[2].receptionType = 'retrospective';
+    after[2].dateContext.westernYear.year = 1;
+    const proposal = {sourceHash:packet.sourceHash, extractionHash:packet.extractionHash,
+      changes:[{kind:'replace',id:'claim-4',before:row,after,
+        reason:'The source records an honor after death, so its date belongs to later reception.'}]};
+    const candidate = applyDateRepairProposal(before,proposal,packet);
+    assert.deepEqual(candidate.claims[3],after);
+    const collapsed = dateRepairDifference(before,candidate,packet);
+    assert.equal(collapsed.changes[0].kind,'replace');
+    assert.deepEqual(applyDateRepairProposal(before,collapsed,packet),candidate);
+    assert.deepEqual(before.claims[3],row);
+    for (const mutate of [
+      c => {c.after[2].action = 'a different event';},
+      c => {c.after[2].role = 'a different participant';},
+      c => {c.after[3] = 'derived';},
+      c => {c.after[4] = ['s0002'];},
+      c => {c.after[2].receptionType = 'unrecognized-reception';},
+    ]) {
+      const invalid = structuredClone(proposal); mutate(invalid.changes[0]);
+      assert.throws(()=>applyDateRepairProposal(before,invalid,packet),/non-temporal/);
+    }
+    const withdrawal = {sourceHash:packet.sourceHash,extractionHash:sha256(JSON.stringify(candidate)),
+      changes:[{...proposal.changes[0],before:after,after:row}]};
+    const candidatePacket = buildDateAuditPacket('fixture','001',{...f.options,extraction:candidate});
+    assert.throws(()=>applyDateRepairProposal(candidate,withdrawal,candidatePacket),/non-temporal/);
+  });
+}
+
+test('reception classification cannot replace an undated non-temporal claim', t => {
+  const f = fixture(t), before = f.extraction.claims[2], after = structuredClone(before);
+  after[2].receptionType = 'retrospective';
+  const proposal = {sourceHash:f.packet.sourceHash,extractionHash:f.packet.extractionHash,
+    changes:[{kind:'replace',id:'claim-3',before,after,reason:'An undated role must not enter a temporal replacement through classification.'}]};
+  assert.throws(()=>applyDateRepairProposal(f.extraction,proposal,f.packet),/unique temporal claim/);
+});
+
+test('a rejected independent re-audit cannot publish a reception-classified candidate', async t => {
+  const f = fixture(t), row = ['p001','honor',{action:'posthumous-honor',
+    dateContext:{sourceDate:{text:'元年'},westernYear:{era:'AD',year:2,precision:'year'}}},'explicit',['s0001']];
+  f.extraction.claims.push(row); writeJsonAtomic(f.file,f.extraction);
+  const original = fs.readFileSync(f.file), initial = buildDateAuditPacket('fixture','001',f.options);
+  let freshAuditCheckedClassification = false;
+  const worker = async task => {
+    if (task.kind === 'repair') {
+      const proposal = repair(task), after = structuredClone(row);
+      after[2].dateContext.westernYear.year = 1; after[2].receptionType = 'retrospective';
+      proposal.changes.unshift({kind:'replace',id:'claim-4',before:row,after,
+        reason:'Propose later-reception classification for independent source verification.'});
+      return proposal;
+    }
+    const report = review(task);
+    if (task.packet.extractionHash !== initial.extractionHash) {
+      const item = task.job.items.find(i=>i.predicate === 'honor');
+      if (item) {
+        freshAuditCheckedClassification = true;
+        report.itemChecks.find(c=>c.id === item.id).verdict = 'incorrect';
+        report.findings.push({items:[item.id],problem:'The independent fixture source reviewer rejects this reception classification.',
+          action:'Keep the original extraction unpublished until this classification is resolved.'});
+      }
+    }
+    return report;
+  };
+  const result = await runDateWorkflow({book:'fixture',chapter:'001'},worker,{...f.options,maxRounds:1});
+  assert.equal(result.status,'needs-revision');
+  assert.equal(freshAuditCheckedClassification,true);
+  assert.deepEqual(fs.readFileSync(f.file),original);
+});
+
 test('repair findings are split without dropping or rewriting a finding',t=>{
   const findings=[
     {items:['claim-1'],problem:'First fixture chronology is wrong.',action:'Correct the first fixture date.'},

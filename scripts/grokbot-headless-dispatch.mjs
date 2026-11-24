@@ -424,7 +424,7 @@ async function selectWorker(session, worker, timeoutMs = 10000) {
   throw new Error(`Grok Bot Search found no exact result for ${worker.worker}`);
 }
 
-async function liveRunningAgentIds(cdpUrl) {
+export async function liveRunningAgentIds(cdpUrl) {
   const main = await grokBotMain(cdpUrl);
   if (!main) throw new Error('Grok Bot main renderer is unavailable');
   try {

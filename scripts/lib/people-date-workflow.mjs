@@ -7,7 +7,7 @@ import { normalizeExtractionDateHints } from './people-date-hints.mjs';
 import { dateWorkerInput } from './people-date-worker.mjs';
 import { mapDateReviewJobs } from './people-date-concurrency.mjs';
 import { reconcileRetrospectiveValue, reconcileRetrospectiveProposal } from './people-reception-reconciliation.mjs';
-import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent } from './people-date-audit.mjs';
+import { buildDateAuditPacket, dateAuditItems, dateAuditStatus, recordDateAudit, validateDateAuditReport, dateAuditReferencesCurrent, unresolvedDateAuditItems } from './people-date-audit.mjs';
 import { personClaimReception, personReceptionErrors } from './people-reception.mjs';
 import { deathOnlyChronology, hasConcreteWesternChronology, hasDateBearingChronology } from './people-date-values.mjs';
 import {
@@ -133,6 +133,20 @@ const isReceptionEvent = row => Array.isArray(row) && row.length === 5 && row[1]
 const sameNonDateClaim = (before, after) => before[0] === after[0] && before[1] === after[1]
   && same(withoutDates(reconcileRetrospectiveValue(before[2])), withoutDates(after[2]));
 
+// Existing dated honors/events need the same reception classification that a
+// newly added reception event already carries. This narrowly permits adding the
+// sole accepted label; it does not permit rewriting the underlying fact. The
+// resulting candidate still requires a fresh independent source/date audit.
+const sameDateRepairClaim = (before, after) => {
+  if (sameNonDateClaim(before, after)) return true;
+  if (before[0] !== after[0] || before[1] !== after[1] || lifePredicates.has(before[1]) ||
+      before[3] !== after[3] || !same(before[4], after[4]) ||
+      before[2]?.receptionType !== undefined || after[2]?.receptionType !== 'retrospective') return false;
+  const unclassified = structuredClone(after);
+  delete unclassified[2].receptionType;
+  return sameNonDateClaim(before, unclassified);
+};
+
 // Candidate extraction bytes are not a sufficient review identity: removing a
 // sealed no-op can leave those bytes unchanged while changing the proposal a
 // reviewer must approve. New staged handoffs therefore bind reviews to both.
@@ -171,18 +185,57 @@ const withoutEditorialAmendmentDates = value => Array.isArray(value)
       .map(([key, item]) => [key, withoutEditorialAmendmentDates(item)]))
     : value;
 
+// An imported conversion can be withdrawn in favor of the exact source's
+// undated attestation. This cannot replace an office, polity or other fact.
+function undatedEditorialAttestation(before, after) {
+  return before?.predicate === 'attestation' && after?.predicate === 'attestation' &&
+    before.value && after.value && before.value.event === undefined &&
+    (before.value.dateContext === undefined || (before.value.dateContext && typeof before.value.dateContext === 'object' &&
+      !Array.isArray(before.value.dateContext) && Object.keys(before.value.dateContext).every(key =>
+        ['sourceDate', 'westernYear', 'westernInterval', 'westernBounds', 'unresolved', 'unresolvedReason'].includes(key)))) &&
+    ['westernYear', 'westernInterval', 'westernBounds', 'dateContext'].some(key => before.value[key] !== undefined) &&
+    Object.keys(before.value).every(key => ['sourceDate', 'westernYear', 'westernInterval', 'westernBounds', 'dateContext'].includes(key)) &&
+    after.value.undatedSourceAttestation === true &&
+    typeof after.value.event === 'string' && after.value.event.trim().length >= 20 &&
+    Object.keys(after.value).every(key => ['undatedSourceAttestation', 'event'].includes(key)) &&
+    (before.certainty === after.certainty || (before.certainty === 'strongly-inferred' && after.certainty === 'explicit'));
+}
+
 function assertDateOnlyEditorialClaimAmendment(before, after) {
   if (!before || !after || before.id !== after.id || before.subject !== after.subject ||
-      before.predicate !== after.predicate || before.certainty !== after.certainty ||
+      before.predicate !== after.predicate ||
+      (before.certainty !== after.certainty && !undatedEditorialAttestation(before, after)) ||
       !same(before.evidence, after.evidence)) {
     throw new Error('Editorial amendment must preserve the reviewed claim identity, certainty, and evidence');
   }
+  if (undatedEditorialAttestation(before, after)) return;
   if (!same(withoutEditorialAmendmentDates(before.value), withoutEditorialAmendmentDates(after.value))) {
     throw new Error('Editorial amendment may change only chronology fields in the reviewed replacement fact');
   }
   if (before.value?.event !== undefined && before.value.event !== after.value?.event) {
     throw new Error('Editorial amendment cannot alter an existing non-date event description');
   }
+}
+
+// Accepted historical facts advanced only by chronology-only changes now in the
+// candidate. Reviewed history is checked against this projection when the date
+// amendment is derived; every other current change faces final validation.
+export function historicalDateProjection(acceptedClaims, currentClaims) {
+  if (!Array.isArray(acceptedClaims) || !Array.isArray(currentClaims)) throw new Error('Historical date projection requires accepted and current claims');
+  const core = claim => [claim.subject, claim.predicate, claim.value, claim.certainty, claim.evidence];
+  const used = new Set();
+  return acceptedClaims.map(before => {
+    if (currentClaims.some(claim => same(core(claim), core(before)))) return structuredClone(before);
+    const matches = currentClaims.filter(claim => claim.subject === before.subject && claim.predicate === before.predicate &&
+      same(claim.evidence, before.evidence) && (undatedEditorialAttestation(before, { ...before, value: claim.value, certainty: claim.certainty }) ||
+        (claim.certainty === before.certainty && !same(claim.value, before.value) &&
+          same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(before.value)) &&
+          (before.value?.event === undefined || before.value.event === claim.value?.event))));
+    if (!matches.length) return structuredClone(before);
+    if (matches.length !== 1 || used.has(matches[0])) throw new Error(`Historical date projection is ambiguous for ${before.id}`);
+    used.add(matches[0]);
+    return { ...structuredClone(before), value: structuredClone(matches[0].value), certainty: matches[0].certainty };
+  });
 }
 
 export function applyDateRepairEditorialAmendment(document, amendment, candidate) {
@@ -238,16 +291,20 @@ export function deriveDateRepairEditorialAmendment(document, candidate) {
       revision.after.evidence.every(item => claim.evidence.includes(item)),
     );
     if (exact) continue;
-    const matches = candidate.claims.filter(claim =>
-      claim.subject === revision.after.subject && claim.predicate === revision.after.predicate &&
-      claim.certainty === revision.after.certainty &&
-      same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(revision.after.value)) &&
-      revision.after.evidence.every(item => claim.evidence.includes(item)),
-    );
+    const matches = candidate.claims.filter(claim => {
+      if (claim.subject !== revision.after.subject || claim.predicate !== revision.after.predicate ||
+          !revision.after.evidence.every(item => claim.evidence.includes(item))) return false;
+      const after = { ...revision.after, value: claim.value, certainty: claim.certainty };
+      return (same(claim.evidence, revision.after.evidence) && undatedEditorialAttestation(revision.after, after)) ||
+        (claim.certainty === revision.after.certainty &&
+          same(withoutEditorialAmendmentDates(claim.value), withoutEditorialAmendmentDates(revision.after.value)) &&
+          (revision.after.value?.event === undefined || revision.after.value.event === claim.value?.event));
+    });
     if (matches.length === 0) continue;
-    if (matches.length !== 1) throw new Error(`Date-only editorial amendment is ambiguous for ${revision.after.id}`);
+    if (matches.some(claim => !same([claim.value, claim.certainty], [matches[0].value, matches[0].certainty]))) throw new Error(`Date-only editorial amendment is ambiguous for ${revision.after.id}`);
     const after = structuredClone(revision.after);
     after.value = structuredClone(matches[0].value);
+    after.certainty = matches[0].certainty;
     claimRevisions.push({
       repairId: revision.repairId,
       claimId: revision.after.id,
@@ -489,7 +546,7 @@ export function applyDateRepairProposal(stored, proposal, packet) {
       }
       else {
         if (!Array.isArray(change.after) || change.after.length !== 5 || change.after[0] !== change.before[0] || change.after[1] !== change.before[1]) throw new Error('Date repair cannot change a claim subject or predicate');
-        if (!lifePredicates.has(change.before[1]) && !sameNonDateClaim(change.before,change.after)) throw new Error('Date repair altered non-temporal event fields');
+        if (!lifePredicates.has(change.before[1]) && !sameDateRepairClaim(change.before,change.after)) throw new Error('Date repair altered non-temporal event fields');
         candidate.claims[index] = change.after;
       }
     } else if (change.kind === 'add' || change.kind === 'add-reception-event') {
@@ -544,8 +601,7 @@ function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, 
   try {
     if (!['repair', 'reaudit'].includes(state.phase) || !Number.isSafeInteger(state.round) || state.round < 1 ||
         state.schemaVersion !== 1 || state.workflowVersion !== DATE_WORKFLOW_VERSION || state.editorialAmendment ||
-        state.candidate !== `candidate-${state.round}.json` ||
-        state.review !== `review-${state.round - (state.phase === 'reaudit' ? 1 : 0)}.json`) {
+        state.candidate !== `candidate-${state.round}.json` || !/^review-\d+\.json$/.test(state.review ?? '')) {
       throw new Error('Retained phase, round, or candidate/review linkage is not a repair progression');
     }
     const original = readJson(path.join(options.peopleDir ?? PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
@@ -557,14 +613,27 @@ function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, 
     validateDateAuditReport(report, originalPacket);
     const names = fs.readdirSync(directory);
     let baseline = original;
+    let lastReview;
     for (let round = 0; round <= state.round; round += 1) {
       const packet = buildDateAuditPacket(book, chapter, { ...options, extraction: baseline });
       const reviewFile = `review-${round}.json`;
       if (round < state.round || state.phase === 'repair') {
+        if (round > 0 && round < state.round && !names.includes(reviewFile)) {
+          // Native source research can advance an unreviewed preflight round.
+          // Prove that exact transition, including the absence of started review
+          // ownership, rather than inventing a negative review for the gap.
+          const preflight = dateResearchPreflight(packet, round, `candidate-${round}.json`);
+          const pin = { file: `research-preflight-${round}-${hash(preflight).slice(7,27)}.json`,
+            contentHash: hash(preflight), extractionHash: packet.extractionHash,
+            candidateFile: `candidate-${round}.json`, round };
+          baseline = proveDatePreflightAmendment({ book, chapter }, { state, directory, pin, originalPacket }, options).candidate;
+          continue;
+        }
         const review = readJson(path.join(directory, reviewFile));
         validateDateAuditReport(review, packet);
         if (!dateAuditReferencesCurrent(review, options)) throw new Error('Retained negative review has stale source references');
         if (!['needs-revision', 'research-blocked'].includes(review.status)) throw new Error('Repair ancestry requires negative reviews');
+        lastReview = reviewFile;
         if (round > 0) {
           const reviewState = structuredClone(state);
           reviewState.phase = 'reaudit'; reviewState.round = round;
@@ -599,6 +668,7 @@ function assertRetainedNegativeReviewAncestry({ book, chapter }, state, report, 
       baseline = readJson(path.join(directory, `candidate-${round + 1}.json`));
       if (!same(expected, baseline)) throw new Error('Retained round candidate differs from its repair progression');
     }
+    if (state.review !== lastReview) throw new Error('Retained review pointer differs from its last completed review');
     const combined = readJson(path.join(directory, 'combined-proposal.json'));
     if (!same(applyDateRepairProposal(original, combined, originalPacket), baseline)) {
       throw new Error('Combined proposal differs from the current staged candidate');
@@ -805,6 +875,23 @@ export async function runDateWorkflow({ book, chapter }, worker, options = {}) {
   const original = readJson(path.join(options.peopleDir ?? PEOPLE_DIR, 'extractions', book, `${chapter}.json`));
   for (; state.round <= (options.maxRounds ?? 3);) {
     let active = state.candidate ? buildDateAuditPacket(book, chapter, { ...options, extraction: readJson(path.join(directory, state.candidate)) }) : packet;
+    // A fresh re-audit cannot approve an explicitly unresolved candidate. Keep
+    // retained review ownership intact, and route new work to focused research
+    // before buying another complete source review.
+    const reviewPrefix = `reaudit-${state.round}-`;
+    const unresolved = state.phase === 'reaudit' ? unresolvedDateAuditItems(active) : [];
+    const reviewStarted = unresolved.length > 0 && (Object.keys(state.jobs).some(key => key.startsWith(reviewPrefix)) ||
+      fs.readdirSync(directory).some(name => name.startsWith(reviewPrefix)));
+    if (unresolved.length && !reviewStarted) {
+      const preflight = dateResearchPreflight(active, state.round, state.candidate);
+      const preflightFile = `research-preflight-${state.round}-${hash(preflight).slice(7,27)}.json`;
+      const file = path.join(directory,preflightFile);
+      if (fs.existsSync(file) && !same(readJson(file),preflight)) throw new Error('Retained research preflight changed');
+      if (!fs.existsSync(file)) writeJsonAtomic(file,preflight);
+      return {status:'research-blocked',reason:`${unresolved.length} unresolved date items require focused source research before a fresh re-audit.`,
+        researchPreflight:{file:preflightFile,contentHash:hash(preflight),sourceHash:active.sourceHash,
+          extractionHash:active.extractionHash,candidateFile:state.candidate,round:state.round,unresolvedItems:unresolved.length}};
+    }
     if (state.phase === 'audit' || state.phase === 'reaudit') {
       const {key:planKey,plan,jobs} = retainedDateReviewJobs(active,state,options);
       save();
@@ -1054,7 +1141,7 @@ export function dateRepairDifference(before, after, packet) {
   // Replacements of dated non-life events must stay replacements, not additions.
   for (const claim of remaining) {
     const removed = changes.find(c=>c.kind==='remove' && c.before[0]===claim[0] && c.before[1]===claim[1]
-      && (lifePredicates.has(claim[1]) || sameNonDateClaim(c.before,claim)));
+      && (lifePredicates.has(claim[1]) || sameDateRepairClaim(c.before,claim)));
     if (removed) { removed.kind = 'replace'; removed.after = claim; }
     else changes.push({ kind:isReceptionEvent(claim)?'add-reception-event':'add', after:claim, reason:'Added source-backed chronology or separate later reception after independent re-audit.' });
   }
@@ -1093,4 +1180,63 @@ export function revisePendingDateRepair({book,chapter},proposal,options={}) {
   state.round+=1;state.candidate=`candidate-${state.round}.json`;
   writeJsonAtomic(path.join(directory,state.candidate),candidate);writeJsonAtomic(stateFile,state);
   return buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
+}
+
+function dateResearchPreflight(packet, round, candidateFile) {
+  const items = unresolvedDateAuditItems(packet);
+  const people = new Set(items.map(item => item.personId));
+  const units = new Set(items.flatMap(item => item.evidence));
+  return {schemaVersion:1,kind:'date-reaudit-research-preflight',book:packet.book,chapter:packet.chapter,
+    sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,round,candidateFile,
+    items,people:packet.people.filter(person=>people.has(person.id)),units:packet.units.filter(unit=>units.has(unit.id))};
+}
+
+// Shared by retry admission and later ancestry recovery. This proves a saved
+// native transition; it never treats the absence of a review as approval.
+function proveDatePreflightAmendment({book,chapter},{state,directory,pin,originalPacket},options) {
+  const fail=message=>{throw new Error(`Preflight research retry: ${message}`);};
+  if(!pin || !/^research-preflight-\d+-[a-f0-9]{20}\.json$/.test(pin.file??''))fail('a fingerprint-bound worker research supplement or saved chapter preflight is required');
+  if(!Number.isSafeInteger(pin.round) || pin.round<1 || pin.candidateFile!==`candidate-${pin.round}.json`)fail('invalid native candidate path');
+  const preflight=readJson(path.join(directory,pin.file));
+  if(preflight.schemaVersion!==1 || preflight.kind!=='date-reaudit-research-preflight' || preflight.book!==book || preflight.chapter!==chapter ||
+    hash(preflight)!==pin.contentHash || preflight.sourceHash!==originalPacket.sourceHash || preflight.extractionHash!==pin.extractionHash ||
+    preflight.round!==pin.round || preflight.candidateFile!==pin.candidateFile)fail('saved research preflight changed');
+  const held=readJson(path.join(directory,pin.candidateFile)),heldPacket=buildDateAuditPacket(book,chapter,{...options,extraction:held});
+  if(heldPacket.extractionHash!==pin.extractionHash || !unresolvedDateAuditItems(heldPacket).length)fail('held source evidence changed');
+  if(!same(preflight,dateResearchPreflight(heldPacket,pin.round,pin.candidateFile)))fail('saved research preflight differs from held source evidence');
+  const prefix=`reaudit-${pin.round}-`;
+  if(state.reviewPlans?.[`reaudit-${pin.round}`] || Object.keys(state.jobs??{}).some(key=>key.startsWith(prefix)) ||
+    fs.readdirSync(directory).some(name=>name===`review-${pin.round}.json` || name.startsWith(prefix) || name.startsWith(`repair-candidate-${pin.round}-`)))fail('independent review or ordinary repair already started for the held round');
+  const key=`repair-${pin.round}-${pin.extractionHash.slice(7,27)}`,proposal=readJson(path.join(directory,`${key}.json`));
+  const author=proposalAuthorId(proposal);
+  if(!author || state.jobs[key]?.proposalAuthorId!==author || proposal.sourceHash!==heldPacket.sourceHash || proposal.extractionHash!==heldPacket.extractionHash)fail('native source amendment provenance is missing');
+  const amended=applyDateRepairProposal(held,proposal,heldPacket),candidate=readJson(path.join(directory,`candidate-${pin.round+1}.json`));
+  const active=buildDateAuditPacket(book,chapter,{...options,extraction:candidate});
+  if(active.extractionHash===heldPacket.extractionHash)fail('source research has not changed the held candidate');
+  // Native replay may move changed rows. Compare all facts as a multiset, then
+  // require the saved original-to-final proposal to reproduce its fingerprint.
+  const facts=value=>hash({...value,claims:value.claims.map(row=>JSON.stringify(row)).sort()});
+  if(facts(amended)!==facts(candidate))fail('candidate differs from the native source amendment');
+  return {candidate,active,resolution:{preflightContentHash:pin.contentHash,sourceHash:originalPacket.sourceHash,originalExtractionHash:originalPacket.extractionHash,
+    beforeExtractionHash:heldPacket.extractionHash,candidateExtractionHash:active.extractionHash,
+    amendmentFile:`${key}.json`,amendmentContentHash:hash(proposal),authorAgentId:author,round:pin.round+1}};
+}
+
+// A chapter preflight has no blocked model artifact to supplement. Resume only
+// after proving the exact native amendment; the worker-blocker path stays intact.
+export function resolvedDatePreflight({book,chapter},claim,options={}) {
+  const fail=message=>{throw new Error(`Preflight research retry: ${message}`);};
+  const pin=claim.researchPreflights?.at(-1);
+  if(!pin || !/^research-preflight-\d+-[a-f0-9]{20}\.json$/.test(pin.file??''))fail('a fingerprint-bound worker research supplement or saved chapter preflight is required');
+  const directory=dateWorkflowDirectory(book,chapter,options.peopleDir),state=readJson(path.join(directory,'state.json'));
+  if(state.schemaVersion!==1 || state.workflowVersion!==DATE_WORKFLOW_VERSION || state.phase!=='reaudit' || state.circuitBreaker || state.round!==pin.round+1 || state.round>(options.maxRounds??3))fail('preserve the existing phase and round hold');
+  if(state.candidate!==`candidate-${state.round}.json`)fail('invalid native candidate path');
+  const originalPacket=buildDateAuditPacket(book,chapter,options);
+  if([state,claim].some(value=>value.sourceHash!==originalPacket.sourceHash || value.extractionHash!==originalPacket.extractionHash))fail('canonical source or extraction changed');
+  const {candidate,active,resolution}=proveDatePreflightAmendment({book,chapter},{state,directory,pin,originalPacket},options);
+  if(unresolvedDateAuditItems(active).length)fail('source research has not resolved the held candidate');
+  const original=readJson(path.join(options.peopleDir??PEOPLE_DIR,'extractions',book,`${chapter}.json`));
+  const replay=applyDateRepairProposal(original,readJson(path.join(directory,'combined-proposal.json')),originalPacket);
+  if(hash(replay)!==active.extractionHash)fail('combined source repair does not reproduce the candidate');
+  return resolution;
 }

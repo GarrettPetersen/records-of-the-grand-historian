@@ -507,7 +507,14 @@ export function validateAppliedEditorialDecisions(document, extraction) {
       }
     }
     for (const revision of review.claimRevisions ?? []) {
-      const replacementPresent = containsReviewedClaim(extraction, revision.after);
+      const replacementPresent = containsReviewedClaim(extraction, revision.after) ||
+        supersededByLaterNameCorrection(revision.after, reviews.slice(index + 1).filter((later) =>
+          !(pendingFingerprint && later.input.proposalsFingerprint === pendingFingerprint) &&
+          !(later.reviewer?.agentId && later.reviewer.agentId === extraction.run?.agentId)), {
+          book: document.book, chapter: document.chapter,
+          present: (claim) => containsReviewedClaim(extraction, claim),
+          applied: (claim) => exactReviewedClaimMatches(extraction, claim).length > 0,
+        });
       if (exactReviewedClaimMatches(extraction, revision.before).length > 0) {
         errors.push(`${prefix}revised ${revision.before.id}, but its old fact remains applied`);
       }
@@ -552,6 +559,8 @@ export function validateAppliedEditorialDecisions(document, extraction) {
   if (errors.length > 0) throw new EditorialDecisionValidationError(errors);
   return documentResult;
 }
+
+import { supersededByLaterNameCorrection } from './people-name-claim-correction.mjs';
 
 function exactReviewedClaimMatches(extraction, reviewedClaim) {
   const reviewedCore = claimCoreContract(reviewedClaim);

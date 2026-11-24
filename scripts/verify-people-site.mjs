@@ -77,10 +77,9 @@ function loadSearchEntries(outputRoot, errors) {
 
 export function verifyPeopleSite(options = parseArgs([])) {
   const errors = [];
-  const context = loadPeopleSiteContext({ allowMissing: false, allowPreview: false });
-  const { catalog, siteIndex } = context;
   const statusPath = path.join(options.outputRoot, 'data', 'people', 'site-status.json');
   if (!fs.existsSync(statusPath)) {
+    const context = loadPeopleSiteContext({ allowMissing: false, allowPreview: false });
     if (!context.active && !options.allowPreview) {
       const staleIndex = path.join(options.outputRoot, 'people', 'index.html');
       if (fs.existsSync(staleIndex)) throw new Error('Incomplete catalog left stale published people pages');
@@ -90,6 +89,10 @@ export function verifyPeopleSite(options = parseArgs([])) {
     throw new Error('Missing generated people site status');
   }
   const status = readJson(statusPath);
+  // This reconstructs and checks the current certified scope. Use that exact
+  // context for the artifact checks instead of qualifying the corpus twice.
+  const context = assertPeopleSiteCertificate(status.certificate);
+  const { catalog, siteIndex } = context;
   assert(status.generatedAt === catalog.generatedAt, 'People site status is stale relative to catalog', errors);
   assert(status.people === catalog.people.length, 'People site status count differs from catalog', errors);
   assert(status.sourceChapters === catalog.stats.sourceChapters,
@@ -98,7 +101,6 @@ export function verifyPeopleSite(options = parseArgs([])) {
     'People site status extracted-chapter count differs from catalog', errors);
   assert(status.missingChapters === catalog.stats.missingChapters,
     'People site status missing-chapter count differs from catalog', errors);
-  assertPeopleSiteCertificate(status.certificate);
   if (status.preview) {
     assert(!status.published && status.publication?.mode === 'diagnostic-preview' &&
       status.publication.publishedChapters === 0 && status.publication.publishedPeople === 0,

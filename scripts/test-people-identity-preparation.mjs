@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { writePreparedIdentityReviewArtifacts } from './prepare-people-chapter-identity.mjs';
+import { writePreparedIdentityReviewArtifacts, validatePreparedIdentityReviewArtifacts, collectChapterIdentityPrimaryUnits } from './prepare-people-chapter-identity.mjs';
 import { identityArtifactHash } from './lib/people-identity-artifacts.mjs';
+import { identityReviewTransportPolicy } from './lib/people-identity-review-transport.mjs';
 
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'identity-preparation-test-'));
@@ -14,7 +15,7 @@ function fixture(t) {
   const transport = { kind: 'bounded-dossier-source-review-transport', rows: [['s0001', '王偉𠀀至。', 'Wang Wei arrived.']] };
   const sourceBytes = Buffer.from(JSON.stringify(packet, null, 2) + '\n');
   const transportBytes = Buffer.from(JSON.stringify(transport) + '\n');
-  const receipt = { packetBytes: sourceBytes.length, sourcePacketSha256: identityArtifactHash(sourceBytes),
+  const receipt = { transportPolicy: identityReviewTransportPolicy(), packetBytes: sourceBytes.length, sourcePacketSha256: identityArtifactHash(sourceBytes),
     transportBytes: transportBytes.length, transportSha256: identityArtifactHash(transportBytes) };
   return { root, out: path.join(root, 'prepared'), value: { plan, packet, transport, receipt }, sourceBytes, transportBytes };
 }
@@ -29,6 +30,14 @@ test('prepared transport and primary source files match their sealed UTF-8 bytes
   assert.equal(bytes.length, receipt.transportBytes);
   assert.equal(identityArtifactHash(bytes), receipt.transportSha256);
   assert.notEqual(bytes.length, Buffer.byteLength(JSON.stringify(f.value.transport, null, 2) + '\n'));
+});
+
+test('dispatch preflight rejects absent or invalid pinned transport policy before writing', t => {
+  for (const policy of [undefined, { schemaVersion: 1, maxBytes: 769 * 1024 }, { schemaVersion: 1, maxBytes: 256 * 1024, extra: true }]) {
+    const f = fixture(t); f.value.receipt.transportPolicy = policy;
+    assert.throws(() => validatePreparedIdentityReviewArtifacts(f.value), /Explicit sealed identity transport policy/);
+    assert.equal(fs.existsSync(f.out), false);
+  }
 });
 
 test('changed source or transport seals fail before creating an output directory', t => {
@@ -51,4 +60,13 @@ test('oversized transport stays rejected and existing immutable output is never 
   const before = fs.readFileSync(path.join(f.out, 'transport-packet.json'));
   assert.throws(() => writePreparedIdentityReviewArtifacts(f.out, f.value), /EEXIST/);
   assert.deepEqual(fs.readFileSync(path.join(f.out, 'transport-packet.json')), before);
+});
+
+
+test('primary packet includes complete target chapter and all anchor claim and mention units',()=>{
+ const own={extraction:{book:'fixture',chapter:'001'},packet:{units:[{id:'s0001',zh:'王至。'},{id:'s0002',zh:'後事。'}]}};
+ const anchor={packet:{units:[{id:'s0001',zh:'王生。'},{id:'s0002',zh:'王仕。'}]}};
+ const sources=new Map([['fixture:001',own],['fixture:002',anchor]]),person={localId:'fixture:002:p001',claims:[{evidence:['fixture:002:s0001']}],mentions:[{unit:{id:'s0002'}}]};
+ const units=collectChapterIdentityPrimaryUnits(own,sources,new Map([[person.localId,person]]));assert.deepEqual([...units.keys()],['fixture:001:s0001','fixture:001:s0002','fixture:002:s0001','fixture:002:s0002']);
+ person.mentions[0].unit.id='s0003';assert.throws(()=>collectChapterIdentityPrimaryUnits(own,sources,new Map([[person.localId,person]])),/Missing current primary unit/);
 });

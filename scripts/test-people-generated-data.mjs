@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 import {
   readPeopleCatalog,
   readPeopleResolutionCandidates,
@@ -50,6 +52,52 @@ try {
   writePeopleSiteIndex(siteIndexFile, siteIndex);
   assert.equal(readJson(siteIndexFile).schemaVersion, 3);
   assert.deepEqual(readPeopleSiteIndex(siteIndexFile), siteIndex);
+
+  const specialChapter = {
+    book: 'special', chapter: '001', mentions: [], unicode: '史記😀\ud800',
+    escaped: '\"\\\n\t', omitted: undefined, fn: () => {}, symbol: Symbol('omitted'),
+    array: [undefined, , NaN, Infinity, -0, null, {}, []],
+    date: new Date('2026-11-18T00:00:00Z'),
+    custom: { toJSON(key) { return { key, value: 'converted' }; } },
+    boxed: [new Number(3), new String('text'), new Boolean(false)],
+    long: '漢😀'.repeat(30_000),
+  };
+  const specialFile = path.join(directory, 'special.json');
+  writePeopleSiteIndex(specialFile, { ...siteIndex, chapters: { 'special:001': specialChapter } });
+  const specialPart = readJson(specialFile).shards.chapters[0];
+  assert.equal(fs.readFileSync(path.join(directory, specialPart.file), 'utf8'),
+    JSON.stringify({ schemaVersion: 1, entries: [['special:001', specialChapter]] }, null, 2) + '\n');
+  const specialManifest = fs.readFileSync(specialFile);
+  const circular = { book: 'special' }; circular.self = circular;
+  assert.throws(() => writePeopleSiteIndex(specialFile, {
+    ...siteIndex, generatedAt: '2026-11-18T00:01:00Z', chapters: { 'special:001': circular },
+  }), /circular/);
+  assert.deepEqual(fs.readFileSync(specialFile), specialManifest, 'failed shard must preserve the published manifest');
+  assert.throws(() => writePeopleSiteIndex(specialFile, {
+    ...siteIndex, generatedAt: '2026-11-18T00:02:00Z', chapters: { 'special:001': { book: 'special', invalid: Object(1n) } },
+  }), /BigInt/);
+  assert.deepEqual(fs.readFileSync(specialFile), specialManifest);
+  assert.deepEqual(readPeopleSiteIndex(specialFile).chapters, JSON.parse(JSON.stringify({ 'special:001': specialChapter })));
+  for (const generation of fs.readdirSync(path.join(directory, 'special-shards'))) {
+    assert(!fs.readdirSync(path.join(directory, 'special-shards', generation)).some(name => name.endsWith('.tmp')));
+  }
+
+  // Exercise serialization headroom, without loading or copying the corpus.
+  // A single ~50 MiB shard must write under a 32 MiB V8 heap using shared text.
+  const boundedWriter = spawnSync(process.execPath, ['--max-old-space-size=32', '--input-type=module', '-e', `
+    import fs from 'node:fs';
+    import path from 'node:path';
+    import { writePeopleSiteIndex } from ${JSON.stringify(pathToFileURL(path.resolve('scripts/lib/people-generated-data.mjs')).href)};
+    const file = path.join(process.argv[1], 'bounded.json');
+    const text = 'x'.repeat(200_000);
+    writePeopleSiteIndex(file, { schemaVersion: 2, generatedAt: 'bounded', chapters: {
+      'fixture:001': { book: 'fixture', chapter: '001', mentions: Array.from({ length: 256 }, () => ({ en: text })) },
+    } });
+    const manifest = JSON.parse(fs.readFileSync(file));
+    if (fs.statSync(path.join(process.argv[1], manifest.shards.chapters[0].file)).size < 50_000_000) throw Error('Missing bounded output');
+  `, directory], { encoding: 'utf8', timeout: 30_000, maxBuffer: 16_384 });
+  assert.ifError(boundedWriter.error);
+  assert.equal(boundedWriter.status, 0, boundedWriter.stderr);
 
   const candidatesFile = path.join(directory, 'resolution-candidates.json');
   const candidates = {
