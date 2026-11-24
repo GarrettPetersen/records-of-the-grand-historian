@@ -830,23 +830,13 @@ export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPe
 
 function compileCanonicalRecordsInSourceBatches(clusters, localPeople, makeRecord) {
   const sourceOrdered = [...clusters].sort((left, right) => left.localPeople[0].localeCompare(right.localPeople[0]));
-  const people = [], crossChapter = [];
-  const chapterOf = localId => localId.slice(0, localId.lastIndexOf(':'));
-
-  // A cross-chapter dossier evicts unrelated entries from the chapter reader.
-  // Compile chapter-local dossiers in one pass, then group cross-chapter reads
-  // in bounded batches. Keep the original member order within each dossier.
-  for (const cluster of sourceOrdered) {
-    const chapter = chapterOf(cluster.localPeople[0]);
-    if (cluster.localPeople.every(localId => chapterOf(localId) === chapter)) {
-      people.push(makeRecord(cluster, cluster.localPeople.map(localId => localPeople.get(localId))));
-    } else {
-      crossChapter.push(cluster);
-    }
-  }
-
+  const people = [];
   const maxBatchPeople = 1024;
   let batch = [], memberIds = [];
+
+  // Canonical clusters can have members in several chapters. Group reads by
+  // chapter across a bounded set of clusters so those lookups do not evict a
+  // chapter that the next cluster needs. Preserve each cluster's member order.
   const compileBatch = () => {
     const byId = new Map(memberIds.sort().map(localId => [localId, localPeople.get(localId)]));
     for (const cluster of batch) {
@@ -855,8 +845,12 @@ function compileCanonicalRecordsInSourceBatches(clusters, localPeople, makeRecor
     batch = [];
     memberIds = [];
   };
-  for (const cluster of crossChapter) {
+  for (const cluster of sourceOrdered) {
     if (batch.length && memberIds.length + cluster.localPeople.length > maxBatchPeople) compileBatch();
+    if (cluster.localPeople.length > maxBatchPeople) {
+      people.push(makeRecord(cluster, cluster.localPeople.map(localId => localPeople.get(localId))));
+      continue;
+    }
     batch.push(cluster);
     memberIds.push(...cluster.localPeople);
   }
