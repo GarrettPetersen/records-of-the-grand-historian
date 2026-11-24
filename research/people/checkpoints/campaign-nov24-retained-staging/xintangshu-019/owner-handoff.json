@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "019"
+  },
+  "ownerAgentId": "bc-d2fb5af2-bbe6-40d1-9a15-668ce4a44a01",
+  "worker": "cursor-nov24-retained-staging-w10-o3",
+  "idempotencyKey": "dd035fb915474061f34dd82c2e7a14446c13a0472fab06e561ae99fdc72f5b25",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-w10-44a01",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-xintangshu-019-44a01",
+  "campaign": "campaign-nov24-retained-staging",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "independentApprovalIssuedByOwner": false,
+  "inputBlobWitness": {
+    "source": "424dd3c0426daa3c35a8d13fafc8427c9c008a1d",
+    "extraction": "106e14744f04421873082cf913f9680e364fa8cd",
+    "editorial": "735777ce0d90da7b1863980d35afa151fc67898a",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:db0ba92128a593828324b77fd6a194c4ebd7c3f784a560a8e14f37c4aaa50916",
+    "extraction": "sha256:047b2385ca6b3bb5fce0faa87dc88beff4280f6e998c994863b42b68b00c3922",
+    "editorial": "sha256:9e1724f7d1a494a74e6e8265d1d2493f9cc8e7d7260502607601eb91e14f3c53",
+    "dateAudit": null
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "047b2385ca6b3bb5fce0faa87dc88beff4280f6e998c994863b42b68b00c3922",
+    "people": 1,
+    "claims": 14,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "titleZh": "卷十九 志第九 禮樂九",
+    "titleEn": "Volume 19 Treatises 9: Rites and Music 9",
+    "sentenceCount": 378,
+    "translatedCount": 378,
+    "bothFieldsComplete": true,
+    "scannedUnits": 378,
+    "missingEnglishUnits": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-019/date-packet-candidate.json",
+    "contentSha256": "sha256:e46ca6406d460e3aaf057178c62932bff2ce74137622d2b280ba5f5bb98c924f",
+    "packetSourceHash": "sha256:71655e425ffd19bf1dfd156104e6e8b3dbfff4cbfa78881c3bae0a36fdf03dcf",
+    "packetExtractionHash": "sha256:f6daaf80941d11b3da8630b9b6b5c0c6dab6e6d4a902cb56f7a95d5767044ea8",
+    "dateHintCheckCount": 3,
+    "peopleCount": 1,
+    "sourceUnitCount": 378,
+    "buildCommand": "node scripts/people-date-audit.mjs packet --book xintangshu --chapter 019 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-019/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "extractionAndEditorialReuse": {
+    "reuseCurrentExtraction": true,
+    "reuseAcceptedEditorial": true,
+    "canonicalDataMutationInThisPass": "none",
+    "editorialDecisionCount": 28,
+    "editorialPassCompleted": true,
+    "extractionFingerprintWitness": "047b2385ca6b3bb5fce0faa87dc88beff4280f6e998c994863b42b68b00c3922",
+    "extractionFingerprintMatchesPinned": true
+  },
+  "chronologyStatus": "no-native-date-report",
+  "scopedValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xintangshu --chapter 019",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for xintangshu/019: 1 extraction(s), 1 local people, 13 mentions, 17 claims, 0 proposed repair(s), 25 applied repair(s), 28 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 019",
+      "status": "un-audited",
+      "note": "No data/people/date-audits file; independent native date report still missing."
+    },
+    "peopleDatesPacketRebuild": {
+      "command": "node scripts/people-date-audit.mjs packet --book xintangshu --chapter 019 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-019/date-packet-candidate.json",
+      "status": "built"
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "sourceOrEditorialDefects": [],
+  "holds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-019/date-packet-candidate.json",
+      "instruction": "Independent reviewer reads sealed packet against primary source; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Canonical identity evidence not approved in this owner pass."
+    }
+  },
+  "substantiveFindings": "Rites treatise with one consolidated sovereign person (Kaiyuan Shenwu Huangdi) and 14 ritual/attestation claims across cited units; 28 accepted editorial decisions including applied translation repairs on court-office titles (e.g. 光祿卿). Sparse named-person coverage is source-appropriate; undated attestation claims remain valid pending independent date review of 3 packet checks.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 019",
+    "verifyDates": "npm run people:dates:verify -- --book xintangshu --chapter 019",
+    "buildDatePacket": "node scripts/people-date-audit.mjs packet --book xintangshu --chapter 019 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-019/date-packet-candidate.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no deploy, merge, registry generation, or canonical mutation.",
+  "authorEvidence": {
+    "method": "Witnessed git blobs at staging; bilingual unit scan (literal+idiomatic); npm run people:validate; native date-packet build via people-date-audit.mjs packet; retained accepted extraction and editorial without re-extraction or self-approved date audit.",
+    "sourceTitleEn": "Volume 19 Treatises 9: Rites and Music 9",
+    "completedAt": "2026-11-24T17:07:59.906Z",
+    "ownerDoesNotApproveDates": true
+  }
+}

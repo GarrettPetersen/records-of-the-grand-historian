@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "065"
+  },
+  "ownerAgentId": "bc-d2fb5af2-bbe6-40d1-9a15-668ce4a44a01",
+  "worker": "cursor-nov24-retained-staging-w10-o3",
+  "idempotencyKey": "dd035fb915474061f34dd82c2e7a14446c13a0472fab06e561ae99fdc72f5b25",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-w10-44a01",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-065-44a01",
+  "campaign": "campaign-nov24-retained-staging",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "independentApprovalIssuedByOwner": false,
+  "inputBlobWitness": {
+    "source": "462efc8e7724ea3dd488f9e6e61e578f711ac5fc",
+    "extraction": "7ea46393002eaddf8637b6a9ee85b0c6d9f4ef09",
+    "editorial": "8bc64c3c94213c19d48e0d094b86a15dfbac84aa",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:c7284ac9364011f0ece46628be6000196dd728dc9d721fc352dfc2f5d9adb077",
+    "extraction": "sha256:6d5fef1b0da7d48103de53b59fde190d4ae655b6d1883d095c41b4d0abcd1795",
+    "editorial": "sha256:87dfad8e56a4cea27252d9ec7d3b09223a6f153348ad01b9529edcfc1a1535ee",
+    "dateAudit": null
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "6d5fef1b0da7d48103de53b59fde190d4ae655b6d1883d095c41b4d0abcd1795",
+    "people": 32,
+    "claims": 167,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "titleZh": "孫子吳起列傳",
+    "titleEn": "Biographies of Sun Tzu and Wu Qi",
+    "sentenceCount": 161,
+    "translatedCount": 161,
+    "bothFieldsComplete": true,
+    "scannedUnits": 161,
+    "missingEnglishUnits": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-065/date-packet-candidate.json",
+    "contentSha256": "sha256:07c7b5a9919bc9211510c416a8d169dde463b05898daddafc930dbac59f416f1",
+    "packetSourceHash": "sha256:81f5dda7bcf011df86840fa04f9e681b6c700862029aed7cf059b0b06fab479a",
+    "packetExtractionHash": "sha256:2fa559fd2885dc10c3e1179548c16be432278048b5ef6357452cf0dac2eeae35",
+    "dateHintCheckCount": 80,
+    "peopleCount": 32,
+    "sourceUnitCount": 161,
+    "buildCommand": "node scripts/people-date-audit.mjs packet --book shiji --chapter 065 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-065/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "extractionAndEditorialReuse": {
+    "reuseCurrentExtraction": true,
+    "reuseAcceptedEditorial": true,
+    "canonicalDataMutationInThisPass": "none",
+    "editorialDecisionCount": 7,
+    "editorialPassCompleted": true,
+    "extractionFingerprintWitness": "6d5fef1b0da7d48103de53b59fde190d4ae655b6d1883d095c41b4d0abcd1795",
+    "extractionFingerprintMatchesPinned": true
+  },
+  "chronologyStatus": "no-native-date-report",
+  "scopedValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 065",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for shiji/065: 1 extraction(s), 32 local people, 365 mentions, 275 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 065",
+      "status": "un-audited",
+      "note": "No data/people/date-audits file; independent native date report still missing."
+    },
+    "peopleDatesPacketRebuild": {
+      "command": "node scripts/people-date-audit.mjs packet --book shiji --chapter 065 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-065/date-packet-candidate.json",
+      "status": "built"
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "sourceOrEditorialDefects": [],
+  "holds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-065/date-packet-candidate.json",
+      "instruction": "Independent reviewer reads sealed packet against primary source; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Canonical identity evidence not approved in this owner pass."
+    }
+  },
+  "substantiveFindings": "Sima Qian military-biography chapter: 32 people, 167 claims; 7 applied editorial repairs at pinned blobs; 161/161 translated units; validate passed with zero alias-disposition debt. Independent native date report still missing (80 packet checks prepared).",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 065",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 065",
+    "buildDatePacket": "node scripts/people-date-audit.mjs packet --book shiji --chapter 065 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-065/date-packet-candidate.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no deploy, merge, registry generation, or canonical mutation.",
+  "authorEvidence": {
+    "method": "Witnessed git blobs at staging; bilingual unit scan (literal+idiomatic); npm run people:validate; native date-packet build via people-date-audit.mjs packet; retained accepted extraction and editorial without re-extraction or self-approved date audit.",
+    "sourceTitleEn": "Biographies of Sun Tzu and Wu Qi",
+    "completedAt": "2026-11-24T17:07:59.906Z",
+    "ownerDoesNotApproveDates": true
+  }
+}

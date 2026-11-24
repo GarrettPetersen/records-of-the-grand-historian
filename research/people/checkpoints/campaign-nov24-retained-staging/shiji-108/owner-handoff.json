@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "108"
+  },
+  "ownerAgentId": "bc-d2fb5af2-bbe6-40d1-9a15-668ce4a44a01",
+  "worker": "cursor-nov24-retained-staging-w10-o3",
+  "idempotencyKey": "dd035fb915474061f34dd82c2e7a14446c13a0472fab06e561ae99fdc72f5b25",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-w10-44a01",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-108-44a01",
+  "campaign": "campaign-nov24-retained-staging",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "independentApprovalIssuedByOwner": false,
+  "inputBlobWitness": {
+    "source": "75c5cc425c9696b0db373ad6bc7e455a448f1eab",
+    "extraction": "201f025d79085c4af3f16af416c0f5fcfa842a79",
+    "editorial": "6872c774c51e881a13e962bea376979cabe2bbff",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:73df210fcbb55e173687ca7284d5447286e3aff2bb3b81c086d7970338f5dedc",
+    "extraction": "sha256:628f25ebd65522872bda11eba80dddbf13a93c5fe5b7775ea56cfcf201187b66",
+    "editorial": "sha256:e5a877230de26c831d04dee0e5075ea47ab474e1e1a1b3cfc93bcfa0f929a731",
+    "dateAudit": null
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "628f25ebd65522872bda11eba80dddbf13a93c5fe5b7775ea56cfcf201187b66",
+    "people": 35,
+    "claims": 163,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "titleZh": "韓長孺列傳",
+    "titleEn": "Biography of Han Changru",
+    "sentenceCount": 147,
+    "translatedCount": 147,
+    "bothFieldsComplete": true,
+    "scannedUnits": 147,
+    "missingEnglishUnits": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-108/date-packet-candidate.json",
+    "contentSha256": "sha256:0ad523c33f162f4cb8d378f425ad675ba119b6c9110a3339e3ebb5c49e16d00e",
+    "packetSourceHash": "sha256:83bd04ef72ddb5eee60ab86f5679b4b0adc12b7557a78247715c2194b9a19c98",
+    "packetExtractionHash": "sha256:a2c0c9c6c399a734961285191549031435cb922bfd8a1d9d16ff7dd655159283",
+    "dateHintCheckCount": 103,
+    "peopleCount": 35,
+    "sourceUnitCount": 147,
+    "buildCommand": "node scripts/people-date-audit.mjs packet --book shiji --chapter 108 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-108/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "extractionAndEditorialReuse": {
+    "reuseCurrentExtraction": true,
+    "reuseAcceptedEditorial": true,
+    "canonicalDataMutationInThisPass": "none",
+    "editorialDecisionCount": 2,
+    "editorialPassCompleted": true,
+    "extractionFingerprintWitness": "628f25ebd65522872bda11eba80dddbf13a93c5fe5b7775ea56cfcf201187b66",
+    "extractionFingerprintMatchesPinned": true
+  },
+  "chronologyStatus": "no-native-date-report",
+  "scopedValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 108",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for shiji/108: 1 extraction(s), 35 local people, 418 mentions, 282 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 108",
+      "status": "un-audited",
+      "note": "No data/people/date-audits file; independent native date report still missing."
+    },
+    "peopleDatesPacketRebuild": {
+      "command": "node scripts/people-date-audit.mjs packet --book shiji --chapter 108 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-108/date-packet-candidate.json",
+      "status": "built"
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "sourceOrEditorialDefects": [],
+  "holds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-108/date-packet-candidate.json",
+      "instruction": "Independent reviewer reads sealed packet against primary source; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Canonical identity evidence not approved in this owner pass."
+    }
+  },
+  "substantiveFindings": "Single-subject Shiji biography: 35 people, 163 claims; 2 editorial decisions; 147 translated units with complete bilingual fields. No owner-proposed chronology or English repairs; 103-item date packet candidate awaits independent audit.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 108",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 108",
+    "buildDatePacket": "node scripts/people-date-audit.mjs packet --book shiji --chapter 108 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-108/date-packet-candidate.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no deploy, merge, registry generation, or canonical mutation.",
+  "authorEvidence": {
+    "method": "Witnessed git blobs at staging; bilingual unit scan (literal+idiomatic); npm run people:validate; native date-packet build via people-date-audit.mjs packet; retained accepted extraction and editorial without re-extraction or self-approved date audit.",
+    "sourceTitleEn": "Biography of Han Changru",
+    "completedAt": "2026-11-24T17:07:59.906Z",
+    "ownerDoesNotApproveDates": true
+  }
+}

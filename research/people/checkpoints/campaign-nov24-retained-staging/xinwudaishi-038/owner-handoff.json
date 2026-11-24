@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "038"
+  },
+  "ownerAgentId": "bc-d2fb5af2-bbe6-40d1-9a15-668ce4a44a01",
+  "worker": "cursor-nov24-retained-staging-w10-o3",
+  "idempotencyKey": "dd035fb915474061f34dd82c2e7a14446c13a0472fab06e561ae99fdc72f5b25",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-w10-44a01",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-xinwudaishi-038-44a01",
+  "campaign": "campaign-nov24-retained-staging",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "independentApprovalIssuedByOwner": false,
+  "inputBlobWitness": {
+    "source": "edc97759f9be5fddc45487d99056a67eaa0d1ce2",
+    "extraction": "1ed0952b751a8218e06ebf47b0f03f0f1728964e",
+    "editorial": "923d22cb632359f62a7290e10ad813f296cfc53e",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:2a5f2aa7977e5138d24b011b9725e860b8c4ee1ed4b299183a56f935f8f17078",
+    "extraction": "sha256:00192b418b6da017d97edd12521d308edc072bde7817b8e390aa9c9873fb6bf2",
+    "editorial": "sha256:3d19a00ae5e2b199b51dad16ca10e4a131fb31d5a401e89a1021ca4a0ce35090",
+    "dateAudit": null
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "00192b418b6da017d97edd12521d308edc072bde7817b8e390aa9c9873fb6bf2",
+    "people": 32,
+    "claims": 187,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "titleZh": "卷三十八 宦者傳第二十六: 張承業 張居翰",
+    "titleEn": "Volume 38 Biographies 18: Zhang Chengye, Zhang Juhan",
+    "sentenceCount": 125,
+    "translatedCount": 125,
+    "bothFieldsComplete": true,
+    "scannedUnits": 125,
+    "missingEnglishUnits": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-038/date-packet-candidate.json",
+    "contentSha256": "sha256:6daaf8f334a3d406d6edcaa47ebc29bbcf262fea4c0a0277c5536a11f7119905",
+    "packetSourceHash": "sha256:446f207644ede62e312f2f953dbb3656b83bd57b78aeedaacdfc7b9286beaba8",
+    "packetExtractionHash": "sha256:1d89838c67bcde87ed1910a4a3f82b3732775052042ff7225fbb7b6e636655d4",
+    "dateHintCheckCount": 104,
+    "peopleCount": 32,
+    "sourceUnitCount": 125,
+    "buildCommand": "node scripts/people-date-audit.mjs packet --book xinwudaishi --chapter 038 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-038/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "extractionAndEditorialReuse": {
+    "reuseCurrentExtraction": true,
+    "reuseAcceptedEditorial": true,
+    "canonicalDataMutationInThisPass": "none",
+    "editorialDecisionCount": 3,
+    "editorialPassCompleted": true,
+    "extractionFingerprintWitness": "00192b418b6da017d97edd12521d308edc072bde7817b8e390aa9c9873fb6bf2",
+    "extractionFingerprintMatchesPinned": true
+  },
+  "chronologyStatus": "no-native-date-report",
+  "scopedValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xinwudaishi --chapter 038",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for xinwudaishi/038: 1 extraction(s), 32 local people, 313 mentions, 319 claims, 0 proposed repair(s), 2 applied repair(s), 3 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 038",
+      "status": "un-audited",
+      "note": "No data/people/date-audits file; independent native date report still missing."
+    },
+    "peopleDatesPacketRebuild": {
+      "command": "node scripts/people-date-audit.mjs packet --book xinwudaishi --chapter 038 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-038/date-packet-candidate.json",
+      "status": "built"
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "sourceOrEditorialDefects": [],
+  "holds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-038/date-packet-candidate.json",
+      "instruction": "Independent reviewer reads sealed packet against primary source; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Canonical identity evidence not approved in this owner pass."
+    }
+  },
+  "substantiveFindings": "Eunuch-biography chapter: 32 people, 187 claims at pinned prompt-v7 extraction; 3 accepted editorial decisions and 1 claim retraction incorporated; full literal/idiomatic English on 125 units; no dangling evidence or temporal debt in validate. Native date audit file absent — candidate packet seals 104 date/hint checks for independent review.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 038",
+    "verifyDates": "npm run people:dates:verify -- --book xinwudaishi --chapter 038",
+    "buildDatePacket": "node scripts/people-date-audit.mjs packet --book xinwudaishi --chapter 038 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-038/date-packet-candidate.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no deploy, merge, registry generation, or canonical mutation.",
+  "authorEvidence": {
+    "method": "Witnessed git blobs at staging; bilingual unit scan (literal+idiomatic); npm run people:validate; native date-packet build via people-date-audit.mjs packet; retained accepted extraction and editorial without re-extraction or self-approved date audit.",
+    "sourceTitleEn": "Volume 38 Biographies 18: Zhang Chengye, Zhang Juhan",
+    "completedAt": "2026-11-24T17:07:59.905Z",
+    "ownerDoesNotApproveDates": true
+  }
+}

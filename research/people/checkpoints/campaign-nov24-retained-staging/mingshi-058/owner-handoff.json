@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "058"
+  },
+  "ownerAgentId": "bc-d2fb5af2-bbe6-40d1-9a15-668ce4a44a01",
+  "worker": "cursor-nov24-retained-staging-w10-o3",
+  "idempotencyKey": "dd035fb915474061f34dd82c2e7a14446c13a0472fab06e561ae99fdc72f5b25",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-w10-44a01",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-mingshi-058-44a01",
+  "campaign": "campaign-nov24-retained-staging",
+  "phase": "dispatch_pending",
+  "model": "composer-2.5",
+  "independentReviewCompleted": false,
+  "independentApprovalIssuedByOwner": false,
+  "inputBlobWitness": {
+    "source": "74687567a5eaa4817af124c3a8c5ce889a5115fd",
+    "extraction": "26e951722bc0695319d516e904cec388fa126490",
+    "editorial": "7e59767f899cde59f8b6d52863f67b725fa8cd8f",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:df27447d911cd931f61585b825a3de7489a705b8b39698d76fbb5ab16682be4e",
+    "extraction": "sha256:f97920a60b975e13d43b54f3fe06946c2a4f24c06e0a4dad8922706c9cb240d7",
+    "editorial": "sha256:4d110ecc15ec20f97d408e7d6f93764a01651e87534fccc84520267dc4a6347c",
+    "dateAudit": null
+  },
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "f97920a60b975e13d43b54f3fe06946c2a4f24c06e0a4dad8922706c9cb240d7",
+    "people": 30,
+    "claims": 173,
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "titleZh": "卷五十八 志第三十四 禮十二",
+    "titleEn": "Volume 58 Treatises 34: Rites 12",
+    "sentenceCount": 233,
+    "translatedCount": 233,
+    "bothFieldsComplete": true,
+    "scannedUnits": 233,
+    "missingEnglishUnits": []
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-058/date-packet-candidate.json",
+    "contentSha256": "sha256:629aaae7f86fba6c8012c84aab34d3cad004544c19f31ace026a36e83dea55e8",
+    "packetSourceHash": "sha256:3055a2a3b3ba568cfa47b2e6ce14db9a79610a7e7c40d552afe9e55bd33b4f4d",
+    "packetExtractionHash": "sha256:7c54f586250dcb61fab2fcf0358282c4b08e704ddf34054b713438a815af0fb9",
+    "dateHintCheckCount": 86,
+    "peopleCount": 30,
+    "sourceUnitCount": 233,
+    "buildCommand": "node scripts/people-date-audit.mjs packet --book mingshi --chapter 058 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-058/date-packet-candidate.json"
+  },
+  "dateRepairProposals": [],
+  "extractionAndEditorialReuse": {
+    "reuseCurrentExtraction": true,
+    "reuseAcceptedEditorial": true,
+    "canonicalDataMutationInThisPass": "none",
+    "editorialDecisionCount": 4,
+    "editorialPassCompleted": true,
+    "extractionFingerprintWitness": "f97920a60b975e13d43b54f3fe06946c2a4f24c06e0a4dad8922706c9cb240d7",
+    "extractionFingerprintMatchesPinned": true
+  },
+  "chronologyStatus": "no-native-date-report",
+  "scopedValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book mingshi --chapter 058",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for mingshi/058: 1 extraction(s), 30 local people, 222 mentions, 299 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 058",
+      "status": "un-audited",
+      "note": "No data/people/date-audits file; independent native date report still missing."
+    },
+    "peopleDatesPacketRebuild": {
+      "command": "node scripts/people-date-audit.mjs packet --book mingshi --chapter 058 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-058/date-packet-candidate.json",
+      "status": "built"
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "sourceOrEditorialDefects": [],
+  "holds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-058/date-packet-candidate.json",
+      "instruction": "Independent reviewer reads sealed packet against primary source; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-bounded-dossier-identity-review",
+      "note": "Canonical identity evidence not approved in this owner pass."
+    }
+  },
+  "substantiveFindings": "Ming rites treatise: 30 people, 173 claims; 4 editorial decisions; 233/233 translated units. Scoped validation reports zero unattested-person debt; 86 date/hint checks sealed in candidate packet for independent native chronology gate.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 058",
+    "verifyDates": "npm run people:dates:verify -- --book mingshi --chapter 058",
+    "buildDatePacket": "node scripts/people-date-audit.mjs packet --book mingshi --chapter 058 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-058/date-packet-candidate.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no deploy, merge, registry generation, or canonical mutation.",
+  "authorEvidence": {
+    "method": "Witnessed git blobs at staging; bilingual unit scan (literal+idiomatic); npm run people:validate; native date-packet build via people-date-audit.mjs packet; retained accepted extraction and editorial without re-extraction or self-approved date audit.",
+    "sourceTitleEn": "Volume 58 Treatises 34: Rites 12",
+    "completedAt": "2026-11-24T17:07:59.907Z",
+    "ownerDoesNotApproveDates": true
+  }
+}
