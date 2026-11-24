@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-159f19bf-4834-45ac-9043-8f3fc66a8383",
+  "workerId": "cursor-nov24-retained-staging-w3-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b4a5420aa3ab9df71518b8dd5351ccd62355859a0f047e1008b6a18567e84703",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "026"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-beiqishu-026-a8383",
+  "inputBlobWitness": {
+    "source": "f38159318b59b16ddb3998982900dd67be166a0b",
+    "extraction": "d9c59bb4b5b8fbbb848c945d01ba3d7530f930f8",
+    "dateAudit": "d952257d2c99e5a363a0fe2bd5a4ff170ee07fed",
+    "editorial": "1371bcb46d9156b1a1de5b50117f9226b818aae2"
+  },
+  "sealedInputs": {
+    "source": "sha256:544b1052b96bd839fa75ac0369a9a8d354ad12110d1104138142f4fc8c768121",
+    "extraction": "sha256:2e60ac2d11f7bbba47b4b47878172f11dac8d3187f1995664ac74a320391a53d",
+    "dateAudit": "sha256:6380777e89680459dc6e19f28a95d28b76cb6aa01b1a81940c14823b220ddc2d",
+    "editorial": "sha256:ca14f9b3ce8a72b64baa3488a02427d7c45281070889b3c01b079371b0a8307a"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 96,
+    "translatedCount": 96,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingUnits": [],
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book beiqishu --chapter 026",
+    "summary": "Scoped person data validation passed for beiqishu/026: 1 extraction(s), 24 local people, 148 mentions, 260 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 96,
+      "translatedCount": 96,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Fresh complete independent canonical audit after curation 5fe0e77a94: all 96 Chinese units, 75 temporal or active-hint items, and 24 people were checked. 9 source-specific claim holds and 9 matching hint holds remain where Chinese context supplies no independently usable personal chronology. No additional date, ownership, conversion, reception, geometry, or omitted-life-date defect was found.",
+    "dateAuditReviewedAt": "2026-09-23T02:21:33.865Z",
+    "editorialDecisionCount": 4,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned blobs verified. Biography chapter: 24 people, 260 claims, full English, four applied editorial repairs and one claim retraction per sealed editorial file. Independent canonical date audit is research-blocked with nine paired claim and hint holds where Chinese context supplies no usable personal chronology; auditor reported no additional defect beyond those holds. Owner preserves retained evidence; no scoped chronology or identity canonical change proposed.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "chronology-research-blocked",
+      "status": "research-blocked",
+      "source": "data/people/date-audits/beiqishu/026.json",
+      "summary": "Nine source-specific claim and matching hint holds; no further date or geometry defect recorded.",
+      "findingCount": 1
+    }
+  ],
+  "chapterReady": false,
+  "nextGate": "chronology-research-resolution-or-independent-final-review",
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book beiqishu --chapter 026",
+    "datesVerify": "npm run people:dates:verify -- --book beiqishu --chapter 026"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging owner pass only; sealed inputs unchanged. Chronology remains research-blocked at pinned audit; chapter not ready for final independent check until audited status or scoped holds resolved."
+}
