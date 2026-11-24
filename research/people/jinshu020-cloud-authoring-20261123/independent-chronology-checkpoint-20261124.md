@@ -2,44 +2,39 @@
 
 Draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not chapter approval.**
 
-## Preserved (not re-opened)
+## Preserved
 
 - **97** editorial, **38** dispositions
-- **125** item checks through **s0320** / **284** units (verbatim in merged partial)
+- **189** item checks through **s0480** / **182** unique claims on those rows / **444** units
 
 ## Current scope
 
-**Units:** `s0037`–`s0480` (**444** units)
+**Units:** `s0037`–`s0620` (**584**)
 
-**Report:** `date-audit-report-partial-s0037-s0480.json` — **189** item checks, **182** unique `claim-*` ids
+**Report:** `date-audit-report-partial-s0037-s0620.json` — **254** item checks, **247** unique `claim-*` ids
 
-| Span | Receipt | New |
+### Span checkpoints (this run)
+
+| Span | Receipt | New checks |
 | --- | --- | --- |
-| `s0321`–`s0400` | `chronology-span-checkpoint-s0321-s0400.json` | **21** |
-| `s0401`–`s0480` | `chronology-span-checkpoint-s0401-s0480.json` | **43** |
+| `s0481`–`s0560` | `chronology-span-checkpoint-s0481-s0560.json` | **30** |
+| `s0561`–`s0620` | `chronology-span-checkpoint-s0561-s0620.json` | **35** |
 
-### This run
+### Highlights
 
-**s0321–s0400:** Che Yin ministry acceptance (**s0326**); mourning-music cases (**s0332–s0354**); Zhi Yu reforms (**s0357–s0385**); Wei–Jin funeral frugality (**s0388–s0400**).
+- **s0481–s0558:** Wang Chang former-wife debate closure; **太兴初** Gan Bao (**claim-234** supported); most memorial actors **research-blocked** for Taikang 2 (extends prior holds).
+- **s0559–s0562:** Liu Zhongwu / Guqiu wives — **supported** at narrative precision; **claim-238** holds Western AD year.
+- **s0563–s0619:** Dual-wife cases; **建武元年** Wen Jiao (**claim-262**); **太兴二年** bandit parents (**claim-274**); **咸康二年** Li Fan opening (**claim-276**); **claim-277** partial (residual evidence past s0619).
 
-**s0401–s0480:** Wei/Jin tomb practice (**s0401–s0406**); **咸康七年** Du empress (**s0407**); **太元四年** Xiaowu empress (**s0420**); tomb visitation law (**s0433–s0444**); **太康七年** Zheng Mo statute (**s0448**); Wang Chang stepmother debate (**s0450–s0480**).
+## Next (precise)
 
-### Open owner issues (new / extended)
+| Field | Value |
+| --- | --- |
+| **Unit span** | `s0621`–`s0720` |
+| **Next item ID** | **`claim-278`** (primary evidence `s0623`, `s0634`) |
 
-| Group | Items | Issue |
-| --- | --- | --- |
-| Yuan Guangchang | **claim-151** | No Taixing year on **s0334** |
-| Wrong witness | **claim-159** | Che Yin claim cites **王彪之** at **s0349** |
-| Zhi Yu Taian attach | **claim-162**, **claim-163** | No Taian year on reform units |
-| Undated Ming | **claim-169** | **s0400** without AD 230 |
-| Jiangzuo Yuan/Ming | **claim-176**, **claim-177** | **s0406** without reign years |
-| Funeral-gate debate | **claim-180**, **claim-181** | No Xiankang on **s0412**/**s0415** |
-| Wang Chang debate | **claim-202–212** (subset) | Taikang 2 table-only on memorial lines |
-
-## Next untouched span
-
-**`s0481`–`s0560`** — residual Wang Chang / ritual debate closure and late codification entries (~34 packet items).
+**Note:** Packet rows **claim-2**–**claim-17** etc. on already-reviewed early units remain unscheduled; they are not the next chronological frontier.
 
 ## Out of scope
 
-Owner source, merge, canonical date-audit recording, identity dossier, registry.
+Owner edits, merge, global build, canonical date-audit recording.
