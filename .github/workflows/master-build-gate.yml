@@ -78,6 +78,25 @@ jobs:
       - name: Build and validate the full site
         run: npm run build
 
+      - name: Verify exact candidate glossary chapters and ebook contributions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for chapter in 030 083 085 115 123; do
+            out="$RUNNER_TEMP/campaign-jinshu$chapter"
+            node scripts/verify-people-chapter-release.mjs --book jinshu --chapter "$chapter" --out "$out" > "$RUNNER_TEMP/campaign-jinshu$chapter.log"
+            jq -e --arg chapter "$chapter" '.scope=={book:"jinshu",chapter:$chapter} and .dataQualified and (.people>0) and (.reviewedCases>0) and .ebookContribution.verified' "$out/qualification-and-contribution.json" >/dev/null
+            jq -c '{scope,people,reviewedCases,bilingualMentionLinks,ebookContribution:{verified:.ebookContribution.verified}}' "$out/qualification-and-contribution.json"
+          done
+
+      - name: Preserve exact candidate qualification receipts
+        uses: actions/upload-artifact@v4
+        with:
+          name: campaign-five-chapter-qualification
+          path: ${{ runner.temp }}/campaign-jinshu*/qualification-and-contribution.json
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Verify real Jinshu 053 qualification and ebook contribution
         run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
 
