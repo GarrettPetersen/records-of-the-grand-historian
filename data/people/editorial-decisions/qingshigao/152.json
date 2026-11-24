@@ -1,127 +1,204 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "book": "qingshigao",
   "chapter": "152",
-  "input": {
-    "chapterFingerprint": "sha256:41493efb59e8e5902e33a1ac932b89a8d4106f059628ce6006449c4d35fd67fe",
-    "proposalsFingerprint": "sha256:0eef4ae25765ac12e46b0f621cf0373e3a73385285bb7995d70e085881055da4"
-  },
-  "reviewer": {
-    "kind": "cursor-agent",
-    "name": "grok-4.5",
-    "model": "grok-4.5",
-    "agentId": "bc-576a586d-37d8-41ee-bd0a-4dcb4ce0afd8",
-    "runId": "run-0ddb0632-e518-4e73-bf48-51bc36421a8b",
-    "completedAt": "2026-08-12T11:10:06.909Z"
-  },
-  "proposals": [
+  "reviews": [
     {
-      "id": "qingshigao:152:r0001",
-      "unit": {
-        "id": "s0043",
-        "kind": "paragraph-sentence",
-        "blockIndex": 3,
-        "collection": "sentences",
-        "itemIndex": 9
+      "input": {
+        "chapterFingerprint": "sha256:41493efb59e8e5902e33a1ac932b89a8d4106f059628ce6006449c4d35fd67fe",
+        "proposalsFingerprint": "sha256:0eef4ae25765ac12e46b0f621cf0373e3a73385285bb7995d70e085881055da4"
       },
-      "field": "idiomatic",
-      "before": "In the fifth month of the nineteenth year, Li Hongzhang and Liu Kunyi relayed Nie Jigui's report that British and American post offices in Shanghai planned new branch offices at every port—making any later Chinese expansion far harder.",
-      "after": "In the fifth month of the nineteenth year, Li Hongzhang and Liu Kunyi relayed Nie Jigui's report that the British and American municipal councils in Shanghai were now planning to add letter offices at the various ports—making any later Chinese expansion far harder.",
-      "reason": "Chinese 英、美工部局 denotes the British and American municipal councils (Works Bureaus), not post offices; 信局 are the letter offices they planned to add.",
-      "confidence": "high"
+      "reviewer": {
+        "kind": "cursor-agent",
+        "name": "grok-4.5",
+        "model": "grok-4.5",
+        "agentId": "bc-576a586d-37d8-41ee-bd0a-4dcb4ce0afd8",
+        "runId": "run-0ddb0632-e518-4e73-bf48-51bc36421a8b",
+        "completedAt": "2026-08-12T11:10:06.909Z"
+      },
+      "proposals": [
+        {
+          "id": "qingshigao:152:r0001",
+          "unit": {
+            "id": "s0043",
+            "kind": "paragraph-sentence",
+            "blockIndex": 3,
+            "collection": "sentences",
+            "itemIndex": 9
+          },
+          "field": "idiomatic",
+          "before": "In the fifth month of the nineteenth year, Li Hongzhang and Liu Kunyi relayed Nie Jigui's report that British and American post offices in Shanghai planned new branch offices at every port—making any later Chinese expansion far harder.",
+          "after": "In the fifth month of the nineteenth year, Li Hongzhang and Liu Kunyi relayed Nie Jigui's report that the British and American municipal councils in Shanghai were now planning to add letter offices at the various ports—making any later Chinese expansion far harder.",
+          "reason": "Chinese 英、美工部局 denotes the British and American municipal councils (Works Bureaus), not post offices; 信局 are the letter offices they planned to add.",
+          "confidence": "high"
+        },
+        {
+          "id": "qingshigao:152:r0002",
+          "unit": {
+            "id": "s0052",
+            "kind": "paragraph-sentence",
+            "blockIndex": 3,
+            "collection": "sentences",
+            "itemIndex": 18
+          },
+          "field": "idiomatic",
+          "before": "Since the eighteenth year, a single U.S. postal revenue statement listed collections of sixty-four trillion, two hundred nine thousand, four hundred ninety dollars.",
+          "after": "Since the eighteenth year, a single U.S. postal revenue statement listed collections of sixty-four million two hundred nine thousand four hundred ninety dollars.",
+          "reason": "In this fiscal context 六十四兆二十萬九千四百九十 means 64,209,490; rendering 兆 as trillion yields an impossible figure.",
+          "confidence": "high"
+        },
+        {
+          "id": "qingshigao:152:r0003",
+          "unit": {
+            "id": "s0052",
+            "kind": "paragraph-sentence",
+            "blockIndex": 3,
+            "collection": "sentences",
+            "itemIndex": 18
+          },
+          "field": "literal",
+          "before": "Tracing back from the eighteenth year, on a single postal statement sheet for the United States alone, the silver dollars collected reached as many as sixty-four trillion, two hundred nine thousand, four hundred ninety dollars.",
+          "after": "Tracing back from the eighteenth year, on a single postal statement sheet for the United States alone, the silver dollars collected reached as many as sixty-four million two hundred nine thousand four hundred ninety dollars.",
+          "reason": "Same 兆-to-million correction as in the idiomatic field for the U.S. postal revenue figure.",
+          "confidence": "high"
+        },
+        {
+          "id": "qingshigao:152:r0004",
+          "unit": {
+            "id": "s0086",
+            "kind": "paragraph-sentence",
+            "blockIndex": 5,
+            "collection": "sentences",
+            "itemIndex": 3
+          },
+          "field": "literal",
+          "before": "Its mail, ordinary and special, totaled three hundred million plus sixty-two million two hundred ten thousand six hundred thirty-nine pieces.",
+          "after": "Its mail, ordinary and special, totaled three hundred million plus sixty-two million two hundred twenty-one thousand six hundred thirty-nine pieces.",
+          "reason": "Chinese 六千二百二十一萬 has 二百二十一 (221), not two hundred ten.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "qingshigao:152:r0001",
+          "decision": "accept",
+          "after": null,
+          "reason": "s0043 has 上海英、美工部局現議增設各口信局: 工部局 are the British and American municipal councils, and 信局 are the letter offices they planned to add. The prior idiomatic wrongly turns 工部局 into post offices and 信局 into branch offices; the proposed wording restores both terms.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0043",
+            "excerpt": "上海英、美工部局現議增設各口信局"
+          }
+        },
+        {
+          "repairId": "qingshigao:152:r0002",
+          "decision": "accept",
+          "after": null,
+          "reason": "In s0052, 六十四兆二十萬九千四百九十 in this late-Qing fiscal comparison means 64,209,490 (兆 as million), not sixty-four trillion. The following British figure of 三四千萬 taels confirms the million scale; the proposed idiomatic figure matches the Chinese.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0052",
+            "excerpt": "六十四兆二十萬九千四百九十圓"
+          }
+        },
+        {
+          "repairId": "qingshigao:152:r0003",
+          "decision": "accept",
+          "after": null,
+          "reason": "The same numeral 六十四兆二十萬九千四百九十 must be read as 64,209,490 dollars. The prior literal's trillion reading is impossible beside the British 三四千萬 comparison; the proposed million reading is correct.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0052",
+            "excerpt": "六十四兆二十萬九千四百九十圓"
+          }
+        },
+        {
+          "repairId": "qingshigao:152:r0004",
+          "decision": "reject",
+          "after": null,
+          "reason": "三萬萬六千二百二十一萬六千二百三十九 is 300,000,000 + 6,221×10,000 + 6,239 = 362,216,239. Expanding 六千二百二十一萬 as sixty-two million two hundred ten thousand is correct; changing it to two hundred twenty-one thousand invents 62,221,000 and conflicts with the idiomatic 362,216,239.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0086",
+            "excerpt": "三萬萬六千二百二十一萬六千二百三十九"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": []
     },
     {
-      "id": "qingshigao:152:r0002",
-      "unit": {
-        "id": "s0052",
-        "kind": "paragraph-sentence",
-        "blockIndex": 3,
-        "collection": "sentences",
-        "itemIndex": 18
+      "input": {
+        "chapterFingerprint": "sha256:8c49003c0b00214c2fe99c4432cde1a1b608ebb0e7c7c2f7d27a36820be1077b",
+        "proposalsFingerprint": "sha256:5a785d89d117967296fb61a16080d8664d4bcaf5eaed98161df1e805c50f0195"
       },
-      "field": "idiomatic",
-      "before": "Since the eighteenth year, a single U.S. postal revenue statement listed collections of sixty-four trillion, two hundred nine thousand, four hundred ninety dollars.",
-      "after": "Since the eighteenth year, a single U.S. postal revenue statement listed collections of sixty-four million two hundred nine thousand four hundred ninety dollars.",
-      "reason": "In this fiscal context 六十四兆二十萬九千四百九十 means 64,209,490; rendering 兆 as trillion yields an impossible figure.",
-      "confidence": "high"
-    },
-    {
-      "id": "qingshigao:152:r0003",
-      "unit": {
-        "id": "s0052",
-        "kind": "paragraph-sentence",
-        "blockIndex": 3,
-        "collection": "sentences",
-        "itemIndex": 18
+      "reviewer": {
+        "kind": "cursor-agent",
+        "name": "Composer 2.5",
+        "model": "composer-2.5-fast",
+        "agentId": "bc-46f83c47-f346-4df8-8c80-813d48ba59b6",
+        "runId": "bc-46f83c47-f346-4df8-8c80-813d48ba59b6",
+        "completedAt": "2026-11-24T12:45:00.000Z"
       },
-      "field": "literal",
-      "before": "Tracing back from the eighteenth year, on a single postal statement sheet for the United States alone, the silver dollars collected reached as many as sixty-four trillion, two hundred nine thousand, four hundred ninety dollars.",
-      "after": "Tracing back from the eighteenth year, on a single postal statement sheet for the United States alone, the silver dollars collected reached as many as sixty-four million two hundred nine thousand four hundred ninety dollars.",
-      "reason": "Same 兆-to-million correction as in the idiomatic field for the U.S. postal revenue figure.",
-      "confidence": "high"
-    },
-    {
-      "id": "qingshigao:152:r0004",
-      "unit": {
-        "id": "s0086",
-        "kind": "paragraph-sentence",
-        "blockIndex": 5,
-        "collection": "sentences",
-        "itemIndex": 3
-      },
-      "field": "literal",
-      "before": "Its mail, ordinary and special, totaled three hundred million plus sixty-two million two hundred ten thousand six hundred thirty-nine pieces.",
-      "after": "Its mail, ordinary and special, totaled three hundred million plus sixty-two million two hundred twenty-one thousand six hundred thirty-nine pieces.",
-      "reason": "Chinese 六千二百二十一萬 has 二百二十一 (221), not two hundred ten.",
-      "confidence": "high"
+      "proposals": [
+        {
+          "id": "qingshigao:152:r0004",
+          "unit": {
+            "id": "s0020",
+            "kind": "paragraph-sentence",
+            "blockIndex": 2,
+            "collection": "sentences",
+            "itemIndex": 7
+          },
+          "field": "literal",
+          "before": "During the eleventh year of Guangxu, the former intendant of Ning-Shao-Tai circuit in Zhejiang, Xue Fucheng, on the basis of a submitted plan by commissioner Li Kui, requested that China establish its own bureaus to recover profit rights; Customs Commissioner Thomas Gell also went to Hong Kong and Japan to negotiate with those countries about withdrawing the British and Japanese postal bureaus set up in Shanghai, and there were already signs of progress.",
+          "after": "During the eleventh year of Guangxu, the former intendant of Ning-Shao-Tai circuit in Zhejiang, Xue Fucheng, on the basis of a submitted plan by commissioner Li Gui, requested that China establish its own bureaus to recover profit rights; Customs Commissioner Thomas Gell also went to Hong Kong and Japan to negotiate with those countries about withdrawing the British and Japanese postal bureaus set up in Shanghai, and there were already signs of progress.",
+          "reason": "The chapter repeats the same Guangxu 11 postal proposal at s0038 and gives its author's name as 李圭, Li Gui. The 李奎 form at s0020 is a textual variant, not a different person, so the English name is normalized to Li Gui.",
+          "confidence": "high"
+        },
+        {
+          "id": "qingshigao:152:r0005",
+          "unit": {
+            "id": "s0020",
+            "kind": "paragraph-sentence",
+            "blockIndex": 2,
+            "collection": "sentences",
+            "itemIndex": 7
+          },
+          "field": "idiomatic",
+          "before": "In the eleventh year of Guangxu, Xue Fucheng, formerly intendant of the Ning-Shao-Tai circuit, acting on a proposal by Li Kui, urged China to open its own offices to recover commercial rights; Commissioner Gell had also gone to Hong Kong and Japan to negotiate withdrawal of the British and Japanese post offices in Shanghai, and progress was already visible.",
+          "after": "In the eleventh year of Guangxu, Xue Fucheng, formerly intendant of the Ning-Shao-Tai circuit, acting on a proposal by Li Gui, urged China to open its own offices to recover commercial rights; Commissioner Gell had also gone to Hong Kong and Japan to negotiate withdrawal of the British and Japanese post offices in Shanghai, and progress was already visible.",
+          "reason": "The chapter repeats the same Guangxu 11 postal proposal at s0038 and gives its author's name as 李圭, Li Gui. The 李奎 form at s0020 is a textual variant, not a different person, so the English name is normalized to Li Gui.",
+          "confidence": "high"
+        }
+      ],
+      "decisions": [
+        {
+          "repairId": "qingshigao:152:r0004",
+          "decision": "accept",
+          "after": null,
+          "reason": "The chapter repeats the same Guangxu 11 postal proposal at s0038 and gives its author's name as 李圭, Li Gui. The 李奎 form at s0020 is a textual variant, not a different person, so the English name is normalized to Li Gui.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0038",
+            "excerpt": "州同李圭條陳郵政利益"
+          }
+        },
+        {
+          "repairId": "qingshigao:152:r0005",
+          "decision": "accept",
+          "after": null,
+          "reason": "The chapter repeats the same Guangxu 11 postal proposal at s0038 and gives its author's name as 李圭, Li Gui. The 李奎 form at s0020 is a textual variant, not a different person, so the English name is normalized to Li Gui.",
+          "sourceWitness": {
+            "source": "chapter-text",
+            "citation": "s0038",
+            "excerpt": "州同李圭條陳郵政利益"
+          }
+        }
+      ],
+      "claimRetractions": [],
+      "claimRevisions": [],
+      "claimAdditions": []
     }
-  ],
-  "decisions": [
-    {
-      "repairId": "qingshigao:152:r0001",
-      "decision": "accept",
-      "after": null,
-      "reason": "s0043 has 上海英、美工部局現議增設各口信局: 工部局 are the British and American municipal councils, and 信局 are the letter offices they planned to add. The prior idiomatic wrongly turns 工部局 into post offices and 信局 into branch offices; the proposed wording restores both terms.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0043",
-        "excerpt": "上海英、美工部局現議增設各口信局"
-      }
-    },
-    {
-      "repairId": "qingshigao:152:r0002",
-      "decision": "accept",
-      "after": null,
-      "reason": "In s0052, 六十四兆二十萬九千四百九十 in this late-Qing fiscal comparison means 64,209,490 (兆 as million), not sixty-four trillion. The following British figure of 三四千萬 taels confirms the million scale; the proposed idiomatic figure matches the Chinese.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0052",
-        "excerpt": "六十四兆二十萬九千四百九十圓"
-      }
-    },
-    {
-      "repairId": "qingshigao:152:r0003",
-      "decision": "accept",
-      "after": null,
-      "reason": "The same numeral 六十四兆二十萬九千四百九十 must be read as 64,209,490 dollars. The prior literal's trillion reading is impossible beside the British 三四千萬 comparison; the proposed million reading is correct.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0052",
-        "excerpt": "六十四兆二十萬九千四百九十圓"
-      }
-    },
-    {
-      "repairId": "qingshigao:152:r0004",
-      "decision": "reject",
-      "after": null,
-      "reason": "三萬萬六千二百二十一萬六千二百三十九 is 300,000,000 + 6,221×10,000 + 6,239 = 362,216,239. Expanding 六千二百二十一萬 as sixty-two million two hundred ten thousand is correct; changing it to two hundred twenty-one thousand invents 62,221,000 and conflicts with the idiomatic 362,216,239.",
-      "sourceWitness": {
-        "source": "chapter-text",
-        "citation": "s0086",
-        "excerpt": "三萬萬六千二百二十一萬六千二百三十九"
-      }
-    }
-  ],
-  "claimRetractions": [],
-  "claimRevisions": []
+  ]
 }
