@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "437"
+  },
+  "ownerAgentId": "bc-31695779-403f-487c-8b38-86dd88ecb75b",
+  "workerId": "cursor-nov24-retained-staging-w14-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "76d65e866054f79e5d639f5c316a19eeed5078fc7e93b8ce26a9548e6ec13351",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-437-cb75b",
+  "extractionBytes": 104015,
+  "inputBlobWitness": {
+    "source": "70a45de24795adcfd234bda274b9c7511e8fc7b7",
+    "extraction": "d53895834e608f5ae7fdc0a1fde8e1a42bb1d3e9",
+    "editorial": "520d37ba041a6ad10685279f4528922dbd216f69"
+  },
+  "sealedInputs": {
+    "source": "sha256:5b2e0c7df425579308a3adbb43e6c95908b2642d95173d3d7b03f89c371d55a3",
+    "extraction": "sha256:f79912b47c80f8ccc35dab5ecdc33d1ff7eb491d6739e1dca3cdde79cedd0576",
+    "editorial": "sha256:693faa5b3b746e61d6818b58785d767c50e109f0e9faba765133f65f7b3f7e13",
+    "dateAudit": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-437/date-packet.json",
+    "sha256": "sha256:f630456c8e00c381459a21a1c9b60e7b8e2de31a5db2f386af815cb899ccba1a",
+    "extractionHash": "sha256:7106bce57cec0d55737730b5639143f5440abafaf42459554c9145b4039702cd",
+    "sourceHash": "sha256:99e39661365f8cde0a361f2f6d4607218fae108d81a95ec1dce321bf16bba7c6",
+    "dateHintChecks": 195
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 437 Biographies 224: Rong Lu, Wang Wenshao, Zhang Zhidong, Qu Hongji",
+    "chineseUnits": 242,
+    "translatedCount": 242,
+    "sentenceCount": 242,
+    "contentUnits": 242,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 63,
+    "claims": 271,
+    "sourceExtractionSha256": "f79912b47c80f8ccc35dab5ecdc33d1ff7eb491d6739e1dca3cdde79cedd0576",
+    "sourceExtractionSha256Verified": true,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/qingshigao/437.json",
+    "gitBlob": "520d37ba041a6ad10685279f4528922dbd216f69",
+    "status": "accepted-applied-in-source"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book qingshigao --chapter 437",
+    "summary": "Scoped person data validation passed for qingshigao/437: 1 extraction(s), 63 local people, 351 mentions, 487 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 437",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "reportPath": "data/people/date-audits/qingshigao/437.json"
+    },
+    "chronologyStatus": "pending-independent-native-date-audit",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "reason": "No native date report on record; owner prepared sealed candidate date packet only. Independent reviewer must read Chinese units and approve chronology before catalog or publication gates.",
+      "artifacts": {
+        "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-437/date-packet.json",
+        "datePacketSha256": "sha256:f630456c8e00c381459a21a1c9b60e7b8e2de31a5db2f386af815cb899ccba1a"
+      }
+    }
+  ],
+  "remainingIndependentProofs": [
+    {
+      "kind": "native-date-audit",
+      "command": "npm run people:dates:run -- --book qingshigao --chapter 437 --run --model <reviewer-model>",
+      "packetCommand": "npm run people:dates:packet -- --book qingshigao --chapter 437 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-437/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-date-report.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 437"
+    },
+    {
+      "kind": "chapter-identity-dossier-review",
+      "note": "Corpus-level identity resolution remains outside this scoped owner pass; extraction and editorial inputs are sealed and validated."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction (prompt v7, 63 people, 271 claims), and accepted editorial at pinned staging blobs witness-verified. Owner read paired Chinese/English via source units (242 Chinese-bearing units; fullEnglishCoverage=true). Scoped person data validation passed for qingshigao/437: 1 extraction(s), 63 local people, 351 mentions, 487 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.. Reused extraction and editorial; no re-extraction and no owner-authored date approval. Native date packet sealed at checkpoint (no-native-date-report); people:dates:verify status un-audited. No definite English omission or extraction/schema contradiction found; chronology closure awaits independent native date audit.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 437",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 437",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 437 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-437/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged; no independent date self-approval."
+}
