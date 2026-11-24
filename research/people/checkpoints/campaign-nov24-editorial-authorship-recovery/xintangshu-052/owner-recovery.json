@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-recovery",
+  "scope": "xintangshu/052",
+  "agentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "worker": "cursor-nov24-retained-editorial-1",
+  "mode": "editorial",
+  "phase": "hold-pending-independent-review-2",
+  "branch": "cursor/nov24-retained-xintangshu-052-982823",
+  "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+  "masterPin": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "idempotencyKey": "9e36b2b14e566548b268f89d431ca3694631c4500fc66d2aa813ed966fa57186",
+  "inputBlobs": {
+    "data/xintangshu/052.json": "e292bfd1f2e8931d01180a2859e2fd586048ff21",
+    "data/people/extractions/xintangshu/052.json": "5e582e7584242a48059223762d1b7f13073817ab",
+    "data/people/date-audits/xintangshu/052.json": "6098027c585fca3a39bf7e3dc140d8646e2c5780",
+    "data/people/editorial-decisions/xintangshu/052.json": "4d40f8e6e54edde466b83b94b45f12e6ffedc8e5"
+  },
+  "observedPriorPR": 5648,
+  "filesConsulted": [
+    "data/xintangshu/052.json",
+    "data/people/extractions/xintangshu/052.json",
+    "data/people/date-audits/xintangshu/052.json",
+    "data/people/editorial-decisions/xintangshu/052.json",
+    "scripts/lib/people-editorial-decisions.mjs",
+    "scripts/validate-people-data.mjs"
+  ],
+  "commands": [
+    {
+      "command": "npm run people:validate -- --book xintangshu --chapter 052",
+      "exitCode": 1,
+      "summary": "applied xintangshu:052:r0001 has no matching independent accept/revise authorization; applied xintangshu:052:r0002 has no matching independent accept/revise authorization; applied xintangshu:052:r0003 has no matching independent accept/revise authorization; applied xintangshu:052:r0004 has no matching independent accept/revise authorization"
+    }
+  ],
+  "gateFailure": {
+    "gate": "editorial",
+    "error": "EditorialDecisionValidationError",
+    "errors": [
+      "applied xintangshu:052:r0001 has no matching independent accept/revise authorization",
+      "applied xintangshu:052:r0002 has no matching independent accept/revise authorization",
+      "applied xintangshu:052:r0003 has no matching independent accept/revise authorization",
+      "applied xintangshu:052:r0004 has no matching independent accept/revise authorization"
+    ]
+  },
+  "diagnosis": {
+    "retainedIndependentReview": {
+      "reviewerAgentId": "bc-42c56e47-b2e9-49f1-9fc6-e56cef7ecf7e",
+      "proposalsFingerprint": "sha256:79d242ff4cbed6b3dfad306a426319baf309e25f57ab1d311fd6d9166df5fb6a",
+      "acceptedProposalTargets": [
+        {
+          "repairId": "xintangshu:052:r0001",
+          "unit": "s0171",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "xintangshu:052:r0002",
+          "unit": "s0196",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "xintangshu:052:r0003",
+          "unit": "s0196",
+          "field": "literal"
+        },
+        {
+          "repairId": "xintangshu:052:r0004",
+          "unit": "s0246",
+          "field": "idiomatic"
+        },
+        {
+          "repairId": "xintangshu:052:r0005",
+          "unit": "s0253",
+          "field": "idiomatic"
+        }
+      ],
+      "claimRevisions": 1,
+      "note": "Repair IDs renumbered after review 1. Later applied rows that match review-1 accept contracts by exact unit/field/before/after/reason remain valid even at new IDs."
+    },
+    "unauthorizedAppliedRepairs": [
+      {
+        "id": "xintangshu:052:r0001",
+        "unit": "s0165",
+        "field": "literal",
+        "reason": "李錡 is Li Qi, not Li Qian."
+      },
+      {
+        "id": "xintangshu:052:r0002",
+        "unit": "s0165",
+        "field": "idiomatic",
+        "reason": "李錡 is Li Qi, not Li Qian."
+      },
+      {
+        "id": "xintangshu:052:r0003",
+        "unit": "s0190",
+        "field": "literal",
+        "reason": "李錡 is Li Qi, not Li Qian."
+      },
+      {
+        "id": "xintangshu:052:r0004",
+        "unit": "s0190",
+        "field": "idiomatic",
+        "reason": "李錡 is Li Qi, not Li Qian."
+      }
+    ],
+    "cause": "New or reordered translation repairs were applied after independent review 1 without accept/revise records."
+  },
+  "supplementalRepairs": [
+    {
+      "id": "xintangshu:052:r0001",
+      "unitId": "s0165",
+      "field": "literal",
+      "before": "The military governor of Jiannan West Wei Gao had \"daily presentation,\" the observation commissioner of Jiangxi Li Jian had \"monthly presentation\"; the military governors Du Ya of Huainan, Liu Zan of Xuan-She, Wang Wei and Li Qian of Zhenhai all angled for favor, entering regular levies as tribute under the name \"surplus.\"",
+      "after": "The military governor of Jiannan West Wei Gao had \"daily presentation,\" the observation commissioner of Jiangxi Li Jian had \"monthly presentation\"; the military governors Du Ya of Huainan, Liu Zan of Xuan-She, Wang Wei and Li Qi of Zhenhai all angled for favor, entering regular levies as tribute under the name \"surplus.\"",
+      "reason": "李錡 is Li Qi, not Li Qian.",
+      "sourceWitness": {
+        "citation": "s0165",
+        "excerpt": "劍南西川節度使韋皋有「日進」，江西觀察使李兼有「月進」，淮南節度使杜亞、宣歙觀察使劉贊、鎮海節度使王緯李錡皆徼射恩澤，以常賦入貢，名為「羨餘」。"
+      }
+    },
+    {
+      "id": "xintangshu:052:r0002",
+      "unitId": "s0165",
+      "field": "idiomatic",
+      "before": "Wei Gao in Jiannan sent \"daily tribute,\" Li Jian in Jiangxi \"monthly tribute\"; Du Ya, Liu Zan, Wang Wei, and Li Qian converted regular taxes into \"surplus\" gifts for favor.",
+      "after": "Wei Gao in Jiannan sent \"daily tribute,\" Li Jian in Jiangxi \"monthly tribute\"; Du Ya, Liu Zan, Wang Wei, and Li Qi converted regular taxes into \"surplus\" gifts for favor.",
+      "reason": "李錡 is Li Qi, not Li Qian.",
+      "sourceWitness": {
+        "citation": "s0165",
+        "excerpt": "劍南西川節度使韋皋有「日進」，江西觀察使李兼有「月進」，淮南節度使杜亞、宣歙觀察使劉贊、鎮海節度使王緯李錡皆徼射恩澤，以常賦入貢，名為「羨餘」。"
+      }
+    },
+    {
+      "id": "xintangshu:052:r0003",
+      "unitId": "s0190",
+      "field": "literal",
+      "before": "After Liu Pi and Li Qian were pacified, stored wealth all entered the inner treasury.",
+      "after": "After Liu Pi and Li Qi were pacified, stored wealth all entered the inner treasury.",
+      "reason": "李錡 is Li Qi, not Li Qian.",
+      "sourceWitness": {
+        "citation": "s0190",
+        "excerpt": "及劉闢、李錡既平，訾藏皆入內庫。"
+      }
+    },
+    {
+      "id": "xintangshu:052:r0004",
+      "unitId": "s0190",
+      "field": "idiomatic",
+      "before": "After suppressing Liu Pi and Li Qian, seized wealth filled the inner treasury.",
+      "after": "After suppressing Liu Pi and Li Qi, seized wealth filled the inner treasury.",
+      "reason": "李錡 is Li Qi, not Li Qian.",
+      "sourceWitness": {
+        "citation": "s0190",
+        "excerpt": "及劉闢、李錡既平，訾藏皆入內庫。"
+      }
+    }
+  ],
+  "artifacts": {
+    "ownerRecovery": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/xintangshu-052/owner-recovery.json",
+    "supplementalReview2Seed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/xintangshu-052/supplemental-review-2-seed.json",
+    "retainedReview1V3": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/xintangshu-052/retained-review-1-v3.json",
+    "editorialV4RetainedPlusSeed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/xintangshu-052/editorial-v4-retained-plus-seed.json"
+  },
+  "remainingIssues": [
+    "applied xintangshu:052:r0001 has no matching independent accept/revise authorization",
+    "applied xintangshu:052:r0002 has no matching independent accept/revise authorization",
+    "applied xintangshu:052:r0003 has no matching independent accept/revise authorization",
+    "applied xintangshu:052:r0004 has no matching independent accept/revise authorization"
+  ],
+  "smallestPathForward": [
+    "Independent reviewer accepts supplemental-review-2-seed proposals with sourceWitness entries.",
+    "Publish schema v4 editorial history: byte-preserve review 1, append completed review 2.",
+    "Re-run npm run people:validate -- --book xintangshu --chapter 052."
+  ],
+  "ownerDelta": "No changes to pinned canonical inputs; recovery and supplemental review seed only."
+}
