@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "060"
+  },
+  "ownerAgentId": "bc-e207215c-b48a-483e-b53d-c526ad7cb717",
+  "campaignWorker": "cursor-nov24-separate-transport-owner-2",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "0d61245aa3d964eac616404879394c19718149a948f4251a021639758a884416",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-separate-transport-owner-jiuwudaishi-060-7cb717",
+  "inputBlobWitness": {
+    "source": "e95cd2953c6ba3e1e17447f4853ea4d2e74f1618",
+    "extraction": "c70c801dc994916e5131d19965eb87ae1ca62fc2",
+    "dateAudit": "d29f216620f9d8df0ed8029f93722eb41507d162",
+    "editorial": "1f39e4d3163e1aa8bfd2d0ad5143f950acb02889"
+  },
+  "sealedInputs": {
+    "source": "sha256:1398703682b4bfdf3a773ad3608e976b659f9448907da76bb5cdf4c4ee92f97c",
+    "extraction": "sha256:3e09305768597cbfb43a86fd027dcde5c29e069fdc40f994b121c0ce3db0f651",
+    "dateAudit": "sha256:bfd4d4fd120618ecb3113e2e7a39b987684a074981a260c6f1173021becb74cc",
+    "editorial": "sha256:591d8187d6cc47aa95b911d42f1d2edb1b50e3e671db8ed62604a6de9380fe82"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 060",
+    "summary": "Scoped person data validation passed for jiuwudaishi/060: 1 extraction(s), 114 local people, 643 mentions, 1451 claims, 0 proposed repair(s), 33 applied repair(s), 33 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 236,
+      "translatedCount": 236,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditFindings": 0,
+    "editorialDecisionCount": 33,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; npm run people:dates:verify; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 60 Book of Later Tang 36: Biographies 12: Li Xiji, Wang Jian, Li Jingyi, Lu Rubi, Li Dexiu, Su Xun",
+    "sourceTitleZh": "卷六十 唐書36: 列傳12 李襲吉 王緘 李敬義 盧汝弼 李德休 蘇循",
+    "reviewedAt": "2026-11-24T14:52:51.051Z",
+    "localPeople": 114,
+    "conclusion": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 236 Chinese units; extraction coverage flags satisfied; date audit reports zero findings. No new definite English omission, chronology defect, false merge, or unsupported-people hold in owner pass. Identity membership for 99 prepared cases remains for independent bounded dossier review across 6 transport parts."
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 236 Chinese units; extraction coverage flags satisfied; date audit reports zero findings. No new definite English omission, chronology defect, false merge, or unsupported-people hold in owner pass. Identity membership for 99 prepared cases remains for independent bounded dossier review across 6 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 99,
+    "identityTransportParts": 6,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation prepares five to seven sealed transport parts off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 060",
+    "validateDates": "npm run people:dates:verify -- --book jiuwudaishi --chapter 060"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
