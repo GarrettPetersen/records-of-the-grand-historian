@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-english-field-candidate-edits",
+  "scope": { "book": "yuanshi", "chapter": "037" },
+  "pullRequest": 5510,
+  "authorBranch": "cursor/yuanshi-037-audited-owner-c56f",
+  "independentEnglishCorrections": {
+    "path": "research/people/checkpoints/campaign-audited-transport-20261124/yuanshi-037/independent-english-corrections.json",
+    "reviewerAgentId": "bc-ea569238-493d-4d7e-b4b0-4683322b30a9",
+    "sha256Note": "Pinned on independent-review branch codex-identity-review-yuanshi-037-2b30a9; not rewritten on owner branch."
+  },
+  "applied": false,
+  "sealedInputHashesUnchanged": {
+    "source": "sha256:d26d973cd5c24dc8b6abd8f1735ff41e39a3962059d165a5dc24226f051aa682",
+    "extraction": "sha256:3849cb8f8af815df6585c59ac6d692224b5b0441a20b53ec69ec19165e5782d4",
+    "editorial": "sha256:34abe47bccab295f3870e6fb75a0625db70b43c6e4fe10dc00b4330e41ade2f2",
+    "dateAudit": "sha256:af8feadba9f6b8abd712e256ac8ae99dc2b9328e34ae2a60a69ff28e6688c8fd"
+  },
+  "candidateEdits": [
+    {
+      "editId": "yuanshi-037-en-s0026-gegeen",
+      "caseId": "sha256:fd3f2a9f4201c793c0dd6fdebebfb0ff0beea9198d9d6f73bda61c51a3229138",
+      "localPerson": "yuanshi:037:p025",
+      "unitId": "s0026",
+      "sourceWitness": {
+        "zh": "以及格堅皇帝",
+        "quote": "格堅皇帝"
+      },
+      "fields": [
+        {
+          "target": "data/yuanshi/037.json",
+          "unitId": "s0026",
+          "field": "translations[].literal",
+          "before": "Gegegen",
+          "after": "Gegeen"
+        },
+        {
+          "target": "data/yuanshi/037.json",
+          "unitId": "s0026",
+          "field": "translations[].idiomatic",
+          "before": "Gegegen",
+          "after": "Gegeen"
+        }
+      ],
+      "extractionRows": [
+        {
+          "target": "data/people/extractions/yuanshi/037.json",
+          "rowKind": "people",
+          "personId": "p025",
+          "path": "displayName[0]",
+          "before": "Gegegen",
+          "after": "Gegeen"
+        },
+        {
+          "target": "data/people/extractions/yuanshi/037.json",
+          "rowKind": "identity-name",
+          "personId": "p025",
+          "path": "native-language-name.en",
+          "before": "Gegegen",
+          "after": "Gegeen"
+        },
+        {
+          "target": "data/people/extractions/yuanshi/037.json",
+          "rowKind": "surfaces",
+          "personId": "p025",
+          "surface": "alternate-name/en/Gegegen",
+          "after": "alternate-name/en/Gegeen"
+        }
+      ],
+      "identityImpact": {
+        "chineseUnchanged": true,
+        "membershipUnchanged": true,
+        "dateClaimsUnchanged": ["p025 attestation 至順三年 @ s0022/s0026"],
+        "relationshipUnchanged": ["p024 predecessor-of p025 @ s0026"]
+      },
+      "expectedHashesAfterApply": {
+        "sourceNote": "Chapter JSON change only if committed; preview not computed here.",
+        "extractionPreview": "Re-hash extraction after en surface row replacement for p025"
+      }
+    }
+  ]
+}
