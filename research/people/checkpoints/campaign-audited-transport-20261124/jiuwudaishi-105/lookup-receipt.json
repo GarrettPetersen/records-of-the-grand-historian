@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "105"
+  },
+  "reviewerAgentId": "bc-e0b2e941-2137-4092-a2e9-6e3e37f274b0",
+  "transportSha256": "917f0faf3f364276218d2506f970f864747016e599f15acbf219df8181d13d9c",
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm live lookup generation before bounded header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Live lookup revision differs from transport registryProvenance revision 110c2f92; sealed transport candidate dossiers and protected membership are authoritative for this review."
+    },
+    {
+      "route": "/v1/people/per_031244TV52C4BZPJMD97",
+      "purpose": "Header confirmation for Wang Jun retained canonical id",
+      "blockingNameKeys": ["zh:王峻"]
+    },
+    {
+      "route": "/v1/people/per_07YMFYCJFHDYTC9VWQTD",
+      "purpose": "Header confirmation for Liu Yun retained canonical id",
+      "blockingNameKeys": ["zh:劉赟"]
+    },
+    {
+      "route": "/v1/people/per_516CCK1J8WZ88DX3M8RV",
+      "purpose": "Header confirmation for Guo Wei retained canonical id",
+      "blockingNameKeys": ["zh:郭威"]
+    }
+  ],
+  "conclusion": "Lookup used only for bounded canonical-id header confirmation on overflow-heavy cases; membership, ambiguity, and witnesses are grounded in sealed transport primary Chinese and independently verified anchor units."
+}
