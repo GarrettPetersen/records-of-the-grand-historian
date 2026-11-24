@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "097"
+  },
+  "ownerAgentId": "bc-4e183857-b0ba-4bce-baa6-eec0311d4e13",
+  "worker": "cursor-nov24-retained-staging-w12-o4",
+  "idempotencyKey": "7695f54b092286e7a3454471e72e51827c1bfc9ed418125e96d233cb04b546e5",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-097-d4e13",
+  "phase": "owner_completed",
+  "cfPagesSkip": true,
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 35,
+    "claims": 295,
+    "sourceExtractionSha256": "8c2fce6f0890511cefec676a2e7d8b5416b85cac00221e9f6f3293bb1937bdee"
+  },
+  "inputBlobWitness": {
+    "source": "0b37f71b8fbd577df01d7d8d28a81baf6c2faeaf",
+    "extraction": "6b6a7143a159dfeeacf38ca3dc6b688edca8a017",
+    "editorial": "1641258ab14cd845059d9a126a435960157bf35e",
+    "dateAudit": null
+  },
+  "pinnedContentSha256": {
+    "source": "sha256:5f3dff34a9a45e90bc6d446821c34c84fa9648b01aee7ce59e4c5eeccfd33250",
+    "extraction": "sha256:8c2fce6f0890511cefec676a2e7d8b5416b85cac00221e9f6f3293bb1937bdee",
+    "editorial": "sha256:bc18bc2bf2d1e5ca9d2da62feba1c316dc8edb9151b2e3eb8d9fe07065e9e885"
+  },
+  "blobWitnessVerified": true,
+  "sourceCoverage": {
+    "sentenceCount": 113,
+    "title": {
+      "zh": "卷九十七 列傳第二十七: 耶律斡特剌 孩里 竇景庸 耶律引吉 楊績 趙徽 王觀 耶律喜孫",
+      "en": "Volume 97 Biographies 27: Yelu Wotela, Hai Li, Dou Jingyong, Yelu Yinji, Yang Ji, Zhao Hui, Wang Guan, Yelu Xisun",
+      "raw": "卷九十七 列傳第二十七: 耶律斡特剌 孩里 竇景庸 耶律引吉 楊績 趙徽 王觀 耶律喜孫 Volume 97 Biographies 27: Yelu Wotela, Hai Li, Dou Jingyong, Yelu Yinji, Yang Ji, Zhao Hui, Wang Guan, Yelu Xisun"
+    },
+    "url": "https://chinesenotes.com/liaoshi/liaoshi097.html",
+    "notes": "Full Chinese and English translation arrays present on every sentence unit; owner spot-checked evidence quotations against source ids referenced in date packet.",
+    "sourceSentenceUnits": 113,
+    "dateHintChecksInPacket": 153
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-097/date-packet.json",
+    "artifact": "date-packet.json",
+    "sha256": "sha256:6de3723d645299702c7401d3a5e5de8104e3ace358b68036215e153d078d154e",
+    "sourceHash": "sha256:2b9b979758cd89d8aca3f2d291723daf30b01f0af8c1eac6e981a57f21f05e66",
+    "extractionHash": "sha256:0214b009f9eeb1c03f2855965f377590e7e40eb0683d1bb204a03408196deace",
+    "dateHintChecks": 153,
+    "peopleInPacket": 35
+  },
+  "dateRepairProposal": null,
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "extractionPromptVersion": 7,
+    "editorialDecisionsRetained": true,
+    "editorialProposalCount": 2,
+    "editorialAppliedCount": 2,
+    "ownerEnglishRepairs": [],
+    "reason": "Accepted editorial decisions and validated extraction bytes match pinned blobs; scoped validator reports zero proposed repairs and no new English contradictions found in owner pass."
+  },
+  "candidateChronologyClosure": {
+    "packetPrepared": true,
+    "ownerDateRepairs": [],
+    "undatedAttestationsAllowed": true,
+    "notes": "Candidate chronology fingerprinted in sealed date packet for independent reviewer; owner did not self-approve audit."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 097",
+      "passed": true,
+      "output": "Scoped person data validation passed for liaoshi/097: 1 extraction(s), 35 local people, 211 mentions, 440 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/liaoshi/097.json",
+      "passed": true,
+      "output": "data/people/extractions/liaoshi/097.json: ok (35 people, 211 mentions, 440 claims, 295 candidates)"
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 097 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-097/date-packet.json",
+      "artifactSha256": "sha256:6de3723d645299702c7401d3a5e5de8104e3ace358b68036215e153d078d154e"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 097",
+      "status": "un-audited",
+      "independentDateReportPresent": false
+    }
+  },
+  "remainingIndependentProofs": {
+    "dateAudit": "Missing data/people/date-audits/liaoshi/097.json; require separate independent native date audit against sealed packet sha256 6de3723d645299702c7401d3a5e5de8104e3ace358b68036215e153d078d154e.",
+    "identity": "Corpus-level bounded identity review not in scope for this owner handoff; chapter extraction validates with zero alias-disposition debt.",
+    "canonicalCertification": "Independent final reviewer must approve whole chapter, canonical identity evidence, and record via people:dates:record after audit."
+  },
+  "holds": [],
+  "ownerChangesRequired": false,
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Owner evidence only; no deploy, merge, registry, or self-approved date audit. Historical extraction and editorial files not overwritten."
+}

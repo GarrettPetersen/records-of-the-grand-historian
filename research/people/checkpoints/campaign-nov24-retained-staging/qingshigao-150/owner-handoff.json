@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "150"
+  },
+  "ownerAgentId": "bc-4e183857-b0ba-4bce-baa6-eec0311d4e13",
+  "worker": "cursor-nov24-retained-staging-w12-o4",
+  "idempotencyKey": "7695f54b092286e7a3454471e72e51827c1bfc9ed418125e96d233cb04b546e5",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-150-d4e13",
+  "phase": "owner_completed",
+  "cfPagesSkip": true,
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 30,
+    "claims": 210,
+    "sourceExtractionSha256": "0f6b7459fe658181dbabb6f05e1b87256083e5b0b5b00f3884dbe92ba2b31c1a"
+  },
+  "inputBlobWitness": {
+    "source": "fd581779296c54ffb17302070a8adb6b03591960",
+    "extraction": "9d9d65bb4f543d8c1a7cfe21f0a9f7d5c4e830f5",
+    "editorial": "af4e1a257c4652fb1e2f8fcb99855a7ee6f8e11c",
+    "dateAudit": null
+  },
+  "pinnedContentSha256": {
+    "source": "sha256:ead6cc81b477a728cfc0e9c46a54d08865175b88917bf2a0490ee923024cc1df",
+    "extraction": "sha256:0f6b7459fe658181dbabb6f05e1b87256083e5b0b5b00f3884dbe92ba2b31c1a",
+    "editorial": "sha256:c0632903a6d30d23fe4041a00402114aebba78060693cc2b986e68b8474afb5b"
+  },
+  "blobWitnessVerified": true,
+  "sourceCoverage": {
+    "sentenceCount": 190,
+    "title": {
+      "zh": "卷150 志一百二十五 交通二 轮船",
+      "en": "Volume 150 Treatises 125: Transportation 2, Lun Chuan",
+      "raw": "卷150 志一百二十五 交通二 轮船"
+    },
+    "url": "https://zh.wikisource.org/wiki/清史稿/卷150?action=raw",
+    "notes": "Full Chinese and English translation arrays present on every sentence unit; owner spot-checked evidence quotations against source ids referenced in date packet.",
+    "sourceSentenceUnits": 190,
+    "dateHintChecksInPacket": 116
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-150/date-packet.json",
+    "artifact": "date-packet.json",
+    "sha256": "sha256:83394e79664631d63b61dcd97fe9f4f4d2e15a20d53d081a7af451915d9d0c85",
+    "sourceHash": "sha256:68dc21858929a7412517a8575a0d5cf34f4293e832b5947909495528b32bb420",
+    "extractionHash": "sha256:ec912e5be5e4c33651e5a47bbcfa86d776e1498e1d079654e39ca3f95729f764",
+    "dateHintChecks": 116,
+    "peopleInPacket": 30
+  },
+  "dateRepairProposal": null,
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "extractionPromptVersion": 7,
+    "editorialDecisionsRetained": true,
+    "editorialProposalCount": 13,
+    "editorialAppliedCount": 13,
+    "ownerEnglishRepairs": [],
+    "reason": "Accepted editorial decisions and validated extraction bytes match pinned blobs; scoped validator reports zero proposed repairs and no new English contradictions found in owner pass."
+  },
+  "candidateChronologyClosure": {
+    "packetPrepared": true,
+    "ownerDateRepairs": [],
+    "undatedAttestationsAllowed": true,
+    "notes": "Candidate chronology fingerprinted in sealed date packet for independent reviewer; owner did not self-approve audit."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 150",
+      "passed": true,
+      "output": "Scoped person data validation passed for qingshigao/150: 1 extraction(s), 30 local people, 125 mentions, 330 claims, 0 proposed repair(s), 13 applied repair(s), 13 editorial decision(s), 2 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/qingshigao/150.json",
+      "passed": true,
+      "output": "data/people/extractions/qingshigao/150.json: ok (30 people, 125 mentions, 330 claims, 556 candidates)"
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book qingshigao --chapter 150 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-150/date-packet.json",
+      "artifactSha256": "sha256:83394e79664631d63b61dcd97fe9f4f4d2e15a20d53d081a7af451915d9d0c85"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 150",
+      "status": "un-audited",
+      "independentDateReportPresent": false
+    }
+  },
+  "remainingIndependentProofs": {
+    "dateAudit": "Missing data/people/date-audits/qingshigao/150.json; require separate independent native date audit against sealed packet sha256 83394e79664631d63b61dcd97fe9f4f4d2e15a20d53d081a7af451915d9d0c85.",
+    "identity": "Corpus-level bounded identity review not in scope for this owner handoff; chapter extraction validates with zero alias-disposition debt.",
+    "canonicalCertification": "Independent final reviewer must approve whole chapter, canonical identity evidence, and record via people:dates:record after audit."
+  },
+  "holds": [],
+  "ownerChangesRequired": false,
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Owner evidence only; no deploy, merge, registry, or self-approved date audit. Historical extraction and editorial files not overwritten."
+}

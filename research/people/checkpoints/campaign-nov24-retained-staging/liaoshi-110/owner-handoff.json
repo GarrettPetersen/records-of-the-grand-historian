@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "110"
+  },
+  "ownerAgentId": "bc-4e183857-b0ba-4bce-baa6-eec0311d4e13",
+  "worker": "cursor-nov24-retained-staging-w12-o4",
+  "idempotencyKey": "7695f54b092286e7a3454471e72e51827c1bfc9ed418125e96d233cb04b546e5",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-110-d4e13",
+  "phase": "owner_completed",
+  "cfPagesSkip": true,
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 43,
+    "claims": 263,
+    "sourceExtractionSha256": "ab27619b249318cb09b9fb505afa46dac8850a5b6bf5b24a8813185e787207d2"
+  },
+  "inputBlobWitness": {
+    "source": "0d26020596327d08d0795b08bb65d2160244e0d3",
+    "extraction": "bed37abdeda884ce3d076e985d8175f0846cd6b2",
+    "editorial": "6c134e14399b2226a31c6945599e743943646fd3",
+    "dateAudit": null
+  },
+  "pinnedContentSha256": {
+    "source": "sha256:ae20ab4d5f7998705cbc8ab09e7d737dfabf1a2769b7d1c079b63622acb18f9f",
+    "extraction": "sha256:ab27619b249318cb09b9fb505afa46dac8850a5b6bf5b24a8813185e787207d2",
+    "editorial": "sha256:8700ef70d39edb2ec876c6b6a541bb4317d1ea00c87d52a32a15ad6105ee926e"
+  },
+  "blobWitnessVerified": true,
+  "sourceCoverage": {
+    "sentenceCount": 151,
+    "title": {
+      "zh": "卷一百一十 列傳第四十: 姦臣上",
+      "en": "Volume 110 Biographies 40: Treacherous Ministers 1",
+      "raw": "卷一百一十 列傳第四十: 姦臣上 Volume 110 Biographies 40: Treacherous Ministers 1"
+    },
+    "url": "https://chinesenotes.com/liaoshi/liaoshi110.html",
+    "notes": "Full Chinese and English translation arrays present on every sentence unit; owner spot-checked evidence quotations against source ids referenced in date packet.",
+    "sourceSentenceUnits": 151,
+    "dateHintChecksInPacket": 145
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-110/date-packet.json",
+    "artifact": "date-packet.json",
+    "sha256": "sha256:ca4925ed1cb5f6953227772ef592e82d88d5fd11a57c2c7889cdae68a814d180",
+    "sourceHash": "sha256:064f01c80edd766378d544de2b9b79788d87140e1ba7efaf459704eb625e9965",
+    "extractionHash": "sha256:4234d75c20e11a7826172c28037f3367631fade04804a2a49d9e038b2e254832",
+    "dateHintChecks": 145,
+    "peopleInPacket": 43
+  },
+  "dateRepairProposal": null,
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "extractionPromptVersion": 7,
+    "editorialDecisionsRetained": true,
+    "editorialProposalCount": 1,
+    "editorialAppliedCount": 1,
+    "ownerEnglishRepairs": [],
+    "reason": "Accepted editorial decisions and validated extraction bytes match pinned blobs; scoped validator reports zero proposed repairs and no new English contradictions found in owner pass."
+  },
+  "candidateChronologyClosure": {
+    "packetPrepared": true,
+    "ownerDateRepairs": [],
+    "undatedAttestationsAllowed": true,
+    "notes": "Candidate chronology fingerprinted in sealed date packet for independent reviewer; owner did not self-approve audit."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 110",
+      "passed": true,
+      "output": "Scoped person data validation passed for liaoshi/110: 1 extraction(s), 43 local people, 440 mentions, 431 claims, 0 proposed repair(s), 0 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/liaoshi/110.json",
+      "passed": true,
+      "output": "data/people/extractions/liaoshi/110.json: ok (43 people, 440 mentions, 431 claims, 311 candidates)"
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 110 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-110/date-packet.json",
+      "artifactSha256": "sha256:ca4925ed1cb5f6953227772ef592e82d88d5fd11a57c2c7889cdae68a814d180"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 110",
+      "status": "un-audited",
+      "independentDateReportPresent": false
+    }
+  },
+  "remainingIndependentProofs": {
+    "dateAudit": "Missing data/people/date-audits/liaoshi/110.json; require separate independent native date audit against sealed packet sha256 ca4925ed1cb5f6953227772ef592e82d88d5fd11a57c2c7889cdae68a814d180.",
+    "identity": "Corpus-level bounded identity review not in scope for this owner handoff; chapter extraction validates with zero alias-disposition debt.",
+    "canonicalCertification": "Independent final reviewer must approve whole chapter, canonical identity evidence, and record via people:dates:record after audit."
+  },
+  "holds": [],
+  "ownerChangesRequired": false,
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Owner evidence only; no deploy, merge, registry, or self-approved date audit. Historical extraction and editorial files not overwritten."
+}

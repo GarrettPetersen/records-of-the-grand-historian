@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "026"
+  },
+  "ownerAgentId": "bc-4e183857-b0ba-4bce-baa6-eec0311d4e13",
+  "worker": "cursor-nov24-retained-staging-w12-o4",
+  "idempotencyKey": "7695f54b092286e7a3454471e72e51827c1bfc9ed418125e96d233cb04b546e5",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-xinwudaishi-026-d4e13",
+  "phase": "owner_completed",
+  "cfPagesSkip": true,
+  "audit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 55,
+    "claims": 203,
+    "sourceExtractionSha256": "40797f7d4869cec5c8d681abe4ad20c961fef528b3d27a010a5dcadc699f82e1"
+  },
+  "inputBlobWitness": {
+    "source": "0d5224b1e3967525f27d03750b6f192f927b1023",
+    "extraction": "45eee71b1f080d5042940583c8ceef58234b1e52",
+    "editorial": "a9280bd2efeb81b9782608e7c3bb8b767e39b2cf",
+    "dateAudit": null
+  },
+  "pinnedContentSha256": {
+    "source": "sha256:6404fc07198f348227a595e5ca782c247b9adffd632943e75b17d03959872814",
+    "extraction": "sha256:40797f7d4869cec5c8d681abe4ad20c961fef528b3d27a010a5dcadc699f82e1",
+    "editorial": "sha256:54396a83078d8c76e3f95069fbed0e0b5597e85b18e55f692b89111e62d0286c"
+  },
+  "blobWitnessVerified": true,
+  "sourceCoverage": {
+    "sentenceCount": 188,
+    "title": {
+      "zh": "卷二十六 唐臣傳第十四: 符習 烏震 孔謙 張延朗 李嚴 李仁矩 毛璋",
+      "en": "Volume 26 Later Tang Biographies 6: Fu Xi, Wu Zhen, Kong Qian, Zhang Yanlang, Li Yan, Li Renju, Mao Zhang",
+      "raw": "卷二十六 唐臣傳第十四: 符習 烏震 孔謙 張延朗 李嚴 李仁矩 毛璋 Volume 26 Later Tang Biographies 6: Fu Xi, Wu Zhen, Kong Qian, Zhang Yanlang, Li Yan, Li Renju, Mao Zhang"
+    },
+    "url": "https://chinesenotes.com/xinwudaishi/xinwudaishi026.html",
+    "notes": "Full Chinese and English translation arrays present on every sentence unit; owner spot-checked evidence quotations against source ids referenced in date packet.",
+    "sourceSentenceUnits": 188,
+    "dateHintChecksInPacket": 138
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-026/date-packet.json",
+    "artifact": "date-packet.json",
+    "sha256": "sha256:9bd6c7e75f7979ba7a1a4b779059c2eefb14838c6635a155ef3a5aa6b0bbd680",
+    "sourceHash": "sha256:25c783802e6241038e3c3f9c08230d402998d1e86f966aa45545f5afd63676f8",
+    "extractionHash": "sha256:9b0202cd48c9a6ebb188abb1e8cbaeddf4c7c74e097a4c5299458cfcc48e345c",
+    "dateHintChecks": 138,
+    "peopleInPacket": 55
+  },
+  "dateRepairProposal": null,
+  "editorialAndExtractionReuse": {
+    "extractionReextracted": false,
+    "extractionPromptVersion": 7,
+    "editorialDecisionsRetained": true,
+    "editorialProposalCount": 4,
+    "editorialAppliedCount": 4,
+    "ownerEnglishRepairs": [],
+    "reason": "Accepted editorial decisions and validated extraction bytes match pinned blobs; scoped validator reports zero proposed repairs and no new English contradictions found in owner pass."
+  },
+  "candidateChronologyClosure": {
+    "packetPrepared": true,
+    "ownerDateRepairs": [],
+    "undatedAttestationsAllowed": true,
+    "notes": "Candidate chronology fingerprinted in sealed date packet for independent reviewer; owner did not self-approve audit."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xinwudaishi --chapter 026",
+      "passed": true,
+      "output": "Scoped person data validation passed for xinwudaishi/026: 1 extraction(s), 55 local people, 641 mentions, 319 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/xinwudaishi/026.json",
+      "passed": true,
+      "output": "data/people/extractions/xinwudaishi/026.json: ok (55 people, 641 mentions, 319 claims, 617 candidates)"
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 026 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-026/date-packet.json",
+      "artifactSha256": "sha256:9bd6c7e75f7979ba7a1a4b779059c2eefb14838c6635a155ef3a5aa6b0bbd680"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 026",
+      "status": "un-audited",
+      "independentDateReportPresent": false
+    }
+  },
+  "remainingIndependentProofs": {
+    "dateAudit": "Missing data/people/date-audits/xinwudaishi/026.json; require separate independent native date audit against sealed packet sha256 9bd6c7e75f7979ba7a1a4b779059c2eefb14838c6635a155ef3a5aa6b0bbd680.",
+    "identity": "Corpus-level bounded identity review not in scope for this owner handoff; chapter extraction validates with zero alias-disposition debt.",
+    "canonicalCertification": "Independent final reviewer must approve whole chapter, canonical identity evidence, and record via people:dates:record after audit."
+  },
+  "holds": [],
+  "ownerChangesRequired": false,
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "notes": "[CF-Pages-Skip] Owner evidence only; no deploy, merge, registry, or self-approved date audit. Historical extraction and editorial files not overwritten."
+}
