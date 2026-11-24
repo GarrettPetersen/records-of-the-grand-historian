@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "090"
+  },
+  "workerId": "cursor-nov24-current-master-followup-5",
+  "ownerAgentId": "bc-8514e599-6ea4-4fff-9f69-0cc0269184d8",
+  "sourceRevision": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "sourcePacketSha256": "c554e8e1d76f3e9dcbd1240267e5ccc0df2e3a614d7327070e0d3a1504dfb639",
+    "planFingerprint": "sha256:2715bad03546a3db398f0c9a30859b7b15ed7afcf6e3bc2cb084fa9c85e8fb97",
+    "transportSha256": "sha256:b9af6c3536329c0f41b219365eb4d791459d8dcb9f09f64fd26836e81844e7eb",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "1ec790da58adf3aa2988bfc1f65f211250ea30b3ec1778a57fa445651a0c8071",
+        "caseCount": 18
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "445241455def4250267c2651b1b0d35ba1095cbf57b2ed562a6608dc74af0bd2",
+        "caseCount": 18
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "4281ea51b8ccb2559364a403f82dfba2ee1d5d8f94d4ef7edd4632c37489b28e",
+        "caseCount": 36
+      }
+    ],
+    "preparationReceiptSha256": "f16aed5fdc5b27783cef338ac027970db867ae6841bafba672165a0ecafe4468"
+  },
+  "sealedInputs": {
+    "source": "sha256:346713d897526f67d84e706c0365df1d71b8eb65fe867d8a2a260d9005ec15e6",
+    "extraction": "sha256:fc2fd78da2b843b5adab7df1dade4fd490f2d8e64bde61893695b0042f202bdf",
+    "editorial": "sha256:63d6f975499c058879a64ca494a672a7f73bb0f4d41e7b28b14ed3120de1ffab",
+    "dateAudit": "sha256:b0fdf81ccaf1056f78c8a85d48f6e2b868dbb0dd6871ec4b370d1d27fa980ac6"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed-with-applied-proposals",
+  "reviewCases": 72,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 72 scoped identity cases: retain accepted canonical membership; unresolvedIdentity preserved where proposed; no concrete chapter-level actor contradiction or false-merge hold. Bounded overflow acknowledged where applicable; omitted homonyms not treated as separation evidence. No supplemental English repairs required in owner pass.",
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "transportPart003": "transport-part-003.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:c169a3784356de0ad5a681383b2d2b47cef0b115bea02511253af8f1ac0be9d3",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 090"
+  },
+  "notes": "Owner evidence is not independent approval. Transport parts copied unchanged from followup transport commit 9094f586; chapter-only scope on staging base 1c48e717."
+}
