@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "022"
+  },
+  "ownerAgentId": "bc-fc6327bb-e8d3-43c7-a312-34b9d3ed7bf0",
+  "workerId": "cursor-nov24-retained-staging-w5-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "94917f99bb8ffd16ab134b720cd7e4e167bda477d58fcbaacfb6933f67a78dd3",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-022-d7bf0",
+  "inputBlobWitness": {
+    "source": "0436f46910f4520515a1308f733bfcb526fcefdb",
+    "extraction": "66688119155b89f492afaa9ca3adb7b4093b5dca",
+    "dateAudit": "56efbca12c56d344a8ba9e327afb8ff9f22ea03e",
+    "editorial": "8665dd6e3cd0a9e88a4310701012bc847a21220c"
+  },
+  "sealedInputs": {
+    "source": "sha256:b6534bea83013285152cf17d44eeffc9933db209a9c0a558814f6b58e6bd4a4b",
+    "extraction": "sha256:c3c620def0c050991985a7658c848294755997501b8b695d00f7680e180a0ae6",
+    "dateAudit": "sha256:2dda7b373ab84b2ca2bfb5cb9fff69ebee80cecb0e1d82f1c687cf9e63b8408a",
+    "editorial": "sha256:59282639bdd41e28b5f776d5e0292cff7ab9b25ee1006d027ebf3f8764483032"
+  },
+  "dateAuditWitness": {
+    "contentSha256": "sha256:2dda7b373ab84b2ca2bfb5cb9fff69ebee80cecb0e1d82f1c687cf9e63b8408a",
+    "gitBlob": "56efbca12c56d344a8ba9e327afb8ff9f22ea03e",
+    "reportStatus": "research-blocked",
+    "reportSourceHash": "sha256:a70d0c8ac0cd00e6a59df9dc25c53d91db4df33a091a871527829110f8ba293c",
+    "reportExtractionHash": "sha256:21c6f1bf590d30c9017957b604559224f2763b9258868215c8ed36b0702eedec",
+    "currentPacketSourceHash": "sha256:a70d0c8ac0cd00e6a59df9dc25c53d91db4df33a091a871527829110f8ba293c",
+    "currentPacketExtractionHash": "sha256:21c6f1bf590d30c9017957b604559224f2763b9258868215c8ed36b0702eedec",
+    "bytesPreserved": true,
+    "hashesRewritten": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 95,
+    "englishLiteralAndIdiomatic": {
+      "sentenceCount": 95,
+      "translatedCount": 95,
+      "bothFieldsComplete": true
+    },
+    "extractionBytesWitness": 97136,
+    "extractionBytesOnDisk": 97136
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "npm run people:validate -- --book chenshu --chapter 022",
+    "peopleValidateSummary": "Scoped person data validation passed for chenshu/022: 1 extraction(s), 42 local people, 269 mentions, 552 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book chenshu --chapter 022",
+    "datesVerifyScopedStatus": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "chronologyReportStatus": "research-blocked",
+    "chronologyStaleRelativeToPacket": false,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "auditFindingsCount": 1,
+    "auditAffectedItems": 3
+  },
+  "substantiveFindings": "Staging four-part inputs verified at pinned blobs. people:validate passes with 42 people. people:dates:verify returns research-blocked for the preserved independent report. Zhang Liang (p042) rhetorical comparison at s0094 correctly remains a source-specific unresolved hold; extraction attestation already uses research-required unresolved packaging. No new definite English omission after applied editorial repairs.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-372",
+        "hints-p042",
+        "p042"
+      ],
+      "problem": "s0094 asks whether Luo Ya was Zhang Liang’s peer. It is rhetorical comparison, not a date-bearing Zhang Liang event in this chapter.",
+      "action": "Retain the source-specific unresolved allusion claim and paired research-required hint. Preserve Zhang Liang and the comparison fact without treating borrowed chronology as local activity.",
+      "nativeAuditVerdict": "research-blocked",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 022",
+    "datesVerify": "npm run people:dates:verify -- --book chenshu --chapter 022"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; commit owner-handoff without altering sealed source, extraction, date-audit, or editorial blobs. Host supplies native sealed final review packets."
+}
