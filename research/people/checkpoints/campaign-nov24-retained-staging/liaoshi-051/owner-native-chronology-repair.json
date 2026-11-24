@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "051"
+  },
+  "ownerAgentId": "bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2",
+  "idempotencyKey": "b679c08b4e02faa24607a7ce734f3b09ecac5cd085527b43b0d5ecf5324a3966",
+  "priorRun": "run-31257d01-ab5b-4888-ac46-98a9bea6a5bf",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "branch": "cursor/nov24-retained-owner-native-date-liaoshi-051-573f2",
+  "priorOwnerRevision": {
+    "ownerHead": "10d298dfebe70f89b39a9f3dad1ecc074900b181",
+    "ownerHandoff": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-051/owner-handoff.json",
+      "sha256": "1e75b399b7e218038b0dde34047eba737a8c509f3164afa887a871a29aedd73b"
+    }
+  },
+  "inputBlobWitness": {
+    "source": "dd6593cf0f9401e7b2624517f8bffb2a6edc8fef",
+    "extraction": "840cef3fdf431ed3229478ea4f429aa735ee38d3",
+    "dateAudit": "2f0f6a5abafeae2208aa478b7415891a3edd4602",
+    "editorial": "49280f1c2e979fcafc9b04e97589935962727aa3"
+  },
+  "sealedInputHashes": {
+    "source": "sha256:f76c390c153689565d8c57082d3d16f74c450e0d291330c59813d8cd6856bc9a",
+    "extraction": "sha256:00159af2206713fcf4754a4dd93e80815eddf276c69bdc9a4624bebaffc45227",
+    "dateAudit": "sha256:5535ed71c158c2fdb621c1b13fa6eb0a8e640056de71064fb42b5308c8f4a91f",
+    "editorial": "sha256:df71e4909a2706be1377106816bb2a0e881d3b1031ae0e512b1802e644c2f33e"
+  },
+  "auditEvidence": {
+    "path": "data/people/date-audits/liaoshi/051.json",
+    "sha256": "5535ed71c158c2fdb621c1b13fa6eb0a8e640056de71064fb42b5308c8f4a91f",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T20:20:00.000Z",
+    "reviewer": "Codex (independent manual source review)",
+    "sourceHash": "sha256:0332a9b9806a52c4127b7f5a24c8530367a47ae3491e59d9a830c2f4c0b2e5cf",
+    "extractionHash": "sha256:313374f404ae07b8a3fc07f16015c5be2b8d8fed0e103c48725e6d923b488f9a",
+    "hashesCurrent": true,
+    "findings": 1,
+    "bytesPreserved": true
+  },
+  "verifiedFindings": [
+    {
+      "index": 1,
+      "items": [
+        "claim-6",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "The Wang Xun claim and active-date hint convert an undated ceremonial reference into a full AD 1009–1031 interval. The chapter contains no year, regnal context, or dated personal event that supports that range.",
+      "action": "Obtain and pin an independent source specifically establishing Wang Xun’s reign and decide whether this undated protocol reference should retain no life-date claim; otherwise remove the imported interval and active-date hint before fresh independent audit.",
+      "ownerVerification": "confirmed against the cited Chinese",
+      "sealedRows": [
+        {
+          "id": "claim-6",
+          "row": [
+            "p002",
+            "attestation",
+            {
+              "sourceDate": {
+                "text": "高麗國王詢"
+              },
+              "westernInterval": {
+                "start": {
+                  "era": "AD",
+                  "year": 1009,
+                  "precision": "year"
+                },
+                "end": {
+                  "era": "AD",
+                  "year": 1031,
+                  "precision": "year"
+                }
+              }
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0283",
+              "s0286"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceQuotes": [
+    {
+      "unit": "s0283",
+      "zh": "閣門傳宣「王詢安否」，使副皆跪，大使奏「臣等來時詢安」。",
+      "literal": "The Privy Council gate conveys the announcement, \"Is Wang Xun well?\"; the envoys all kneel; the lead envoy reports, \"When we departed, Xun was well.\"",
+      "idiomatic": "The Privy Council gate conveys the announcement, \"Is Wang Xun well?\" The envoys all kneel, and the lead envoy replies, \"When we departed, Xun was well.\""
+    },
+    {
+      "unit": "s0286",
+      "zh": "控鶴官起居畢，引進使鞠躬，通高麗國王詢進奉。",
+      "literal": "When officers of the Crane Control guard complete obeisance, the usher bows and announces that Wang Xun, King of Goryeo, presents tribute.",
+      "idiomatic": "After the Crane Control officers complete obeisance, the usher bows and announces that Wang Xun, King of Goryeo, presents tribute."
+    }
+  ],
+  "nativeProposal": {
+    "schemaVersion": 1,
+    "kind": "date-repair-proposal",
+    "book": "liaoshi",
+    "chapter": "051",
+    "sourceHash": "sha256:0332a9b9806a52c4127b7f5a24c8530367a47ae3491e59d9a830c2f4c0b2e5cf",
+    "extractionHash": "sha256:313374f404ae07b8a3fc07f16015c5be2b8d8fed0e103c48725e6d923b488f9a",
+    "author": {
+      "name": "Retained-staging chapter owner liaoshi/051",
+      "agentId": "bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2"
+    },
+    "changes": [
+      {
+        "kind": "replace",
+        "id": "claim-6",
+        "before": [
+          "p002",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "高麗國王詢"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 1009,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 1031,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0283",
+            "s0286"
+          ]
+        ],
+        "after": [
+          "p002",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "The undated audience protocol names Wang Xun (王詢), King of Goryeo, in the envoys’ health-inquiry formula and as principal of the tribute presentation; it gives no reign year or date for this audience."
+          },
+          "explicit",
+          [
+            "s0283",
+            "s0286"
+          ]
+        ],
+        "reason": "The Wang Xun claim and active-date hint convert an undated ceremonial reference into a full AD 1009–1031 interval. The chapter contains no year, regnal context, or dated personal event that supports that range."
+      },
+      {
+        "kind": "hints",
+        "personId": "p002",
+        "before": [
+          "AD 1009-1031"
+        ],
+        "after": [],
+        "reason": "Remove the AD 1009–1031 reign span imported from outside this chapter; the repaired attestation records the protocol as genuinely undated and no other Wang Xun row carries chronology."
+      }
+    ]
+  },
+  "nativeProposalHash": "sha256:5dfdec7059b80a30525b0ed830733fb4663a6eddc726181fbab468fa33cb4e56",
+  "candidate": {
+    "extractionHash": "sha256:737c3f53b94066c2e0b1168e191a24a5bf9ed345ad4b91bb63b0f6b22490bb1c",
+    "compactSerializationHash": "sha256:800ba8bbdafe255d9b794c1c99b87dae63c03aeac87065d85c3960de40b31529",
+    "dateItems": 2,
+    "unresolvedItemsAfter": []
+  },
+  "affected": {
+    "items": [
+      "claim-6",
+      "hints-p002"
+    ],
+    "people": [
+      "p002"
+    ],
+    "peopleWithRemainingConcreteChronology": []
+  },
+  "intactApprovals": {
+    "priorAuditReportUnchanged": true,
+    "editorialDecisionsRevalidatedAgainstCandidate": 8,
+    "unchangedDateItems": 0,
+    "unchangedItemsPreviouslySupported": 0,
+    "changedItems": [
+      "claim-6",
+      "hints-p002"
+    ],
+    "canonicalFilesWritten": false
+  },
+  "nativeValidation": {
+    "command": "node scripts/stage-retained-owner-native-chronology.mjs --scope liaoshi/051 --out <path>",
+    "applyDateRepairProposal": "PASS",
+    "proposalReplay": "PASS",
+    "validateCompactPeopleExtraction": "PASS",
+    "validateAppliedEditorialDecisions": "PASS",
+    "chronologyDiagnostics": "PASS",
+    "compactSerializationRoundTrip": "PASS",
+    "approvalPreconditionZeroUnresolved": "PASS",
+    "stats": {
+      "units": 354,
+      "candidates": 449,
+      "people": 1,
+      "mentions": 6,
+      "claims": 12,
+      "repairs": 8,
+      "dispositions": 445,
+      "aliasDispositionConflicts": 0
+    }
+  },
+  "definiteTranslationRepairs": [],
+  "residualHolds": [
+    {
+      "id": "independent-date-reaudit",
+      "gate": "people:dates:record via publishDateRepair",
+      "detail": "The pinned audit (sha256:5535ed71c158c2fdb621c1b13fa6eb0a8e640056de71064fb42b5308c8f4a91f) stays research-blocked and byte-preserved. Native publication requires one fresh independent audit of this candidate that records status audited; this owner proposal is not approval and changes no audit hash."
+    },
+    {
+      "id": "external-reign-not-imported",
+      "gate": "none under the undated-source contract",
+      "detail": "Wang Xun (王詢) is conventionally identified outside this chapter with King Hyeonjong of Goryeo (r. 1009–1031). No pinned witness is supplied here, so no reign interval is asserted. Optional future research only."
+    },
+    {
+      "id": "identity-unchanged",
+      "gate": "bounded identity review",
+      "detail": "No identity edit. Any cross-chapter identification of 王詢 with Goryeo records elsewhere stays with the normal bounded identity review."
+    }
+  ],
+  "ownerNotes": "No definite English omission or mistranslation found in s0283/s0286; the eight accepted editorial repairs remain reflected in both English fields."
+}
