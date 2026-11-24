@@ -1,0 +1,2765 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "key": "mingshi/032",
+    "book": "mingshi",
+    "chapter": "032",
+    "title": {
+      "zh": "卷三十二 志第八 曆二",
+      "en": "Volume 32 Treatises 8: Calendar 2",
+      "raw": "卷三十二 志第八 曆二 Volume 32 Treatises 8: Calendar 2"
+    }
+  },
+  "ownerAgentId": "bc-718a042a-9ceb-40af-943a-9d9961e573bc",
+  "worker": "cursor-nov24-retained-staging-w1-o1",
+  "model": "claude-opus-5-5",
+  "idempotencyKey": "78e6018a7622966df4c7eb52d7a2a6d29d0ba9be2572bea595e94008427ac56c",
+  "stagingBase": {
+    "branch": "codex/people-glossary-staging-v2",
+    "revision": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a"
+  },
+  "masterRevision": {
+    "revision": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "relationToStagingBase": "not an ancestor of stagingBase; merge-base 9fb028cbfa31abbf88e24f642dd8516d4713c258",
+    "use": "process documents read from master (PEOPLE_CHAPTER_OWNER_PROCESS.md, PEOPLE_CHAPTER_COMPLETION_RULES.md, PEOPLE_SINGLE_OWNER_WORKFLOW.md, PEOPLE_LOOKUP_API.md); no chapter data taken from master"
+  },
+  "outputRef": "cursor/nov24-retained-staging-owner-mingshi-032-573bc",
+  "inputBlobWitness": {
+    "allVerified": true,
+    "inputs": [
+      {
+        "path": "data/mingshi/032.json",
+        "expectedBlob": "20dafebea1fa8740cfc8f4493346b42f53585bc4",
+        "stagingBlob": "20dafebea1fa8740cfc8f4493346b42f53585bc4",
+        "workingTreeBlob": "20dafebea1fa8740cfc8f4493346b42f53585bc4",
+        "bytes": 109765,
+        "sha256": "sha256:64748b27497bedd87f8bb134ee3a01b5ee5a52819c7bc69644cbcbe9fef24481",
+        "verified": true
+      },
+      {
+        "path": "data/people/extractions/mingshi/032.json",
+        "expectedBlob": "410e1114679e3a00db2caaaacbac1b9c99fccfa6",
+        "stagingBlob": "410e1114679e3a00db2caaaacbac1b9c99fccfa6",
+        "workingTreeBlob": "410e1114679e3a00db2caaaacbac1b9c99fccfa6",
+        "bytes": 24720,
+        "sha256": "sha256:41aad7b228efd2f2486bf15485b5723d6bc50e0b3637028e887cecd90ad09ad3",
+        "verified": true
+      },
+      {
+        "path": "data/people/date-audits/mingshi/032.json",
+        "expectedBlob": "85134307761b8612fc2ca1effe9fca76eb4fabd9",
+        "stagingBlob": "85134307761b8612fc2ca1effe9fca76eb4fabd9",
+        "workingTreeBlob": "85134307761b8612fc2ca1effe9fca76eb4fabd9",
+        "bytes": 8163,
+        "sha256": "sha256:0e009816ece55782f203905aa3f1a394e11fa7adabbee62cfccd067e0ba9cd05",
+        "verified": true
+      },
+      {
+        "path": "data/people/editorial-decisions/mingshi/032.json",
+        "expectedBlob": "b8508e0862623ff1aa5a1665ac970f46c440be3f",
+        "stagingBlob": "b8508e0862623ff1aa5a1665ac970f46c440be3f",
+        "workingTreeBlob": "b8508e0862623ff1aa5a1665ac970f46c440be3f",
+        "bytes": 4278,
+        "sha256": "sha256:c9e906d27183ee61510c49d4161789544e3d6cbfe629ca6d685b9238ca4736c9",
+        "verified": true
+      }
+    ]
+  },
+  "sourceCoverage": {
+    "unitCount": 162,
+    "metaSentenceCount": 162,
+    "firstUnit": "s0001",
+    "lastUnit": "s0162",
+    "unitIdsSha256": "sha256:388dfb3cd9ef6034f90bc5fc1c703195de5e595a974034220fe595fc1bef5a09",
+    "unitsWithChinese": 162,
+    "unitsWithLiteral": 162,
+    "unitsWithIdiomatic": 162,
+    "fieldsRead": [
+      "zh",
+      "literal",
+      "idiomatic"
+    ],
+    "chapterCharacter": "Ming History calendar treatise 2 (大統曆法一上 法原): sources and method origins of the Datong/Shoushi system, gnomon surveying at Beijing, arc-sagitta circle division with worked root extraction, ecliptic-equator conversion, inner/outer degrees and the white-path node. Three people are named only bibliographically: Guo Shoujing (s0007, s0112 as received 郭敬), Qi Lüqian (s0007) and Li Qian (s0008). 至元 (s0115) is the title 至元曆經; no other individual is named.",
+    "readMethod": "Every unit's Chinese, literal and idiomatic field read in full in bounded portions, with each unit that differs from the Siku witness re-read beside its Siku excerpt.",
+    "mechanicalChecks": [
+      "Every unit aligned against the Siku Quanshu Wenyuange text of 明史 卷32 (Kanripo KR2a0038 commit eccd6fe93126bde61b837240e6142e1343c22639, file KR2a0038_032.txt sha256 3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5).",
+      "Every value in the worked examples (s0014-s0025, s0053-s0073, s0089-s0105, s0143-s0150, s0155-s0162) was recomputed; the corrupt received values are those listed in definiteTranslationRepairs, and received values that the arithmetic confirms against a Siku error are kept (s0024 一百度七十三分; s0141 小弧弦, confirmed by s0149).",
+      "Both English fields searched for every fraction rendering (半, 少, 太): every 30″/\"slightly less/more\" rendering is in the repair batch."
+    ]
+  },
+  "existingWorkInventory": {
+    "extraction": {
+      "status": "current",
+      "people": 3,
+      "mentions": 8,
+      "claims": 41,
+      "candidates": 143,
+      "candidateDispositions": "138 not-person (9 book titles, 14 places/pole terms, 2 至元 reign-period title uses, 113 non-names); confirmed correct",
+      "promptVersion": 7,
+      "run": "grok-4.5 bc-47b2324c-1025-47f2-9fed-181221df2ae0",
+      "translationRepairs": "3 applied (s0072, s0073, s0091 literal)"
+    },
+    "editorialDecisions": {
+      "status": "current",
+      "schemaVersion": 3,
+      "decisions": 3,
+      "accepted": [
+        "mingshi:032:r0001",
+        "mingshi:032:r0002",
+        "mingshi:032:r0003"
+      ],
+      "retainedVerbatim": true
+    },
+    "dateAudit": {
+      "status": "research-blocked",
+      "reviewedAt": "2026-09-23T11:51:39.000Z",
+      "reviewer": "fresh_audit_mingshi032 (independent)",
+      "history": [
+        "date-audit-history/mingshi/032/a3ad4727…json: initial audit needs-revision (false AD 1264-1294 intervals from the 至元曆經 title)",
+        "date-repairs/mingshi/032/85bb46ee…: staged candidate, independent candidate review (accept-for-host-curation), host curation (6 operations, staging-only)",
+        "current report: fresh audit research-blocked (repair correct; chapter supplies no personal chronology)"
+      ],
+      "circuitBreaker": "one repair round used of three; no saved breaker state"
+    }
+  },
+  "validation": {
+    "extraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/mingshi/032.json",
+      "exitCode": 0,
+      "output": "data/people/extractions/mingshi/032.json: ok (3 people, 8 mentions, 41 claims, 143 candidates)"
+    },
+    "scopedPeopleData": {
+      "command": "node scripts/validate-people-data.mjs --book mingshi --chapter 032",
+      "exitCode": 0,
+      "output": "Scoped person data validation passed for mingshi/032: 1 extraction(s), 3 local people, 8 mentions, 41 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "dateAuditVerify": {
+      "command": "node scripts/people-date-audit.mjs verify --book mingshi --chapter 032",
+      "exitCode": 0,
+      "output": "{\"book\":\"mingshi\",\"chapter\":\"032\",\"status\":\"research-blocked\",\"auditVersion\":1,\"reviewedAt\":\"2026-09-23T11:51:39.000Z\",\"findings\":1}"
+    },
+    "scratchCandidate": {
+      "command": "node scripts/validate-people-extraction.mjs /tmp/<scratch>/data/people/extractions/mingshi/032.json (staging extraction with C1-C3 applied; not committed)",
+      "exitCode": 0,
+      "output": "ok (3 people, 8 mentions, 39 claims, 143 candidates)"
+    },
+    "deterministicErrors": [],
+    "notes": [
+      "Validators were run against the unchanged staging inputs (all pass). The C1-C3 candidate was validated on a scratch copy outside the repository; English repairs are not applied (host work after editorial review)."
+    ]
+  },
+  "substantiveFindings": [
+    {
+      "id": "mingshi:032:F1",
+      "severity": "definite-translation-defect",
+      "summary": "52 English field defects in 29 units. Corrupt received digits are translated as values (s0018, s0033, s0060, s0066, s0070, s0103, s0147, s0156), the centesimal fractions 半/少/太 are rendered as 30″ or \"slightly less/more\" (s0015, s0016, s0020, s0021, s0023, s0024, s0027, s0028, s0029, s0054, s0144), the Sun's noon altitude is called a \"south declination\" (s0015, s0020), corrupt terms are translated (s0017 支, s0088, s0095, s0112, s0126, s0155) and a heading is omitted (s0012). The other three defects are s0094 literal \"eighty seconds\", s0159 \"nearest degree\" and s0008 (F2).",
+      "resolution": "definiteTranslationRepairs"
+    },
+    {
+      "id": "mingshi:032:F2",
+      "severity": "person-data-defect (contradicted attribution and invented work title)",
+      "summary": "From the corrupt 議祿 at s0008 the extraction gives Li Qian a \"Discourse on Official Emoluments\" (claims 18, 20, 22). From an ambiguous reading it also makes him author of the Calendar Classic (claims 19, 21). The Yuan History states Li Qian wrote the 曆議 and that Xu Heng, Wang Xun, Guo Shoujing and others compiled the 曆經.",
+      "resolution": "scopedChronologyOrIdentityChanges: revise claims 18, 20, 22; retract claims 19, 21; s0008 English repair"
+    },
+    {
+      "id": "mingshi:032:F3",
+      "severity": "person-data-defect (false alias)",
+      "summary": "Guo Shoujing's name claim \"Guo Jing 郭敬\" (alternate, explicit) comes from a dropped 守 in s0112 and is now the dossier's blocking key zh:郭敬 (claimRef mingshi:032:c0002), shared with eight unrelated dossiers.",
+      "resolution": "scopedChronologyOrIdentityChanges: native textual-variant name"
+    },
+    {
+      "id": "mingshi:032:F4",
+      "severity": "label-defect",
+      "summary": "Guo Shoujing's claim 6 label \"including ecliptic difference\" follows the corrupt 黃道差; the method is the ecliptic-equator difference.",
+      "resolution": "scopedChronologyOrIdentityChanges: revise claim 6 English label"
+    },
+    {
+      "id": "mingshi:032:F5",
+      "severity": "retained-hold",
+      "summary": "The research-blocked date finding is a genuinely undated chapter, which the November 15 rules treat as undated under the approved schema, not as a permanent research hold.",
+      "resolution": "distinctHolds[0] proposes the native undatedSourceAttestation treatment for the same independent reviewer"
+    },
+    {
+      "id": "mingshi:032:F6",
+      "severity": "dependency",
+      "summary": "Applying the English repairs changes the extraction chapterFingerprint and the date-audit sourceHash; applying the claim changes changes the extraction hash and renumbers claims after the two removals.",
+      "resolution": "Host applies through the production appliers, re-fingerprints, and the final independent reviewer records the date audit natively on the amended candidate. No hash relabeling."
+    }
+  ],
+  "definiteTranslationRepairs": [
+    {
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "zh": "《元史》漫無採摭，僅存李謙之《議祿》、《曆經》之初稿。",
+      "field": "literal",
+      "before": "The Yuan History excerpts almost nothing at random; only the draft of Li Qian's Discourse on Emoluments and Calendar Classic survives.",
+      "after": "The Yuan History excerpts almost nothing at random; only Li Qian's Deliberations and the first draft of the Calendar Classic survive.",
+      "reason": "Received 《議祿》 is corrupt for 《議錄》 (Siku 僅存李謙之議録曆經之初稿). The Yuan History says Li Qian was commissioned to write the 曆議 (Calendar Deliberations), while the 曆經 was compiled by Xu Heng, Wang Xun, Guo Shoujing and others (衡恂守敬等所撰曆經及謙曆議故存). 李謙之議錄、曆經之初稿 is two parallel phrases. Both English fields invent a \"Discourse on (Official) Emoluments\" and attribute the Calendar Classic draft to Li Qian.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0008",
+          "excerpt": "僅存李謙之《議祿》、《曆經》之初稿"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "僅存李謙之議録厯經之初稿",
+          "sourceHash": "sha256:d110e8b13957dac6cda36d59c2098b5ce34b8094d19c879a42674ab74d60165b"
+        },
+        {
+          "source": "external",
+          "title": "元史 卷五十二 志第四 曆一 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0036/e2cf641b7f57ad9847edca32c2b851c0e875ee4c/KR2a0036_052.txt",
+          "repository": "kanripo/KR2a0036",
+          "commit": "e2cf641b7f57ad9847edca32c2b851c0e875ee4c",
+          "fileSha256": "sha256:d4166f907ef50a90efc8c9badfc92f8ad263221088add0e50d73331b87f2509d",
+          "accessedAt": "2026-11-24T17:10:00Z",
+          "excerpt": "二十年詔太子諭德李謙為厯議",
+          "sourceHash": "sha256:642bcf52b2711e76ff13abfcaa9faf443a59b599bc7632aa207978b748cea2f0"
+        },
+        {
+          "source": "external",
+          "title": "元史 卷五十二 志第四 曆一 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0036/e2cf641b7f57ad9847edca32c2b851c0e875ee4c/KR2a0036_052.txt",
+          "repository": "kanripo/KR2a0036",
+          "commit": "e2cf641b7f57ad9847edca32c2b851c0e875ee4c",
+          "fileSha256": "sha256:d4166f907ef50a90efc8c9badfc92f8ad263221088add0e50d73331b87f2509d",
+          "accessedAt": "2026-11-24T17:10:00Z",
+          "excerpt": "今衡恂守敬等所撰厯經及謙厯議故存",
+          "sourceHash": "sha256:71bde61268e1f5c31c7ee387095109596f6a5a577ef62a03702708cbbb7cfc0e"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:01"
+    },
+    {
+      "unit": {
+        "id": "s0008",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "zh": "《元史》漫無採摭，僅存李謙之《議祿》、《曆經》之初稿。",
+      "field": "idiomatic",
+      "before": "The Yuan History excerpts almost nothing; only Li Qian's draft Discourse on Official Emoluments and Calendar Classic remains.",
+      "after": "The Yuan History excerpts almost nothing; only Li Qian's Deliberations and the first draft of the Calendar Classic remain.",
+      "reason": "Received 《議祿》 is corrupt for 《議錄》 (Siku 僅存李謙之議録曆經之初稿). The Yuan History says Li Qian was commissioned to write the 曆議 (Calendar Deliberations), while the 曆經 was compiled by Xu Heng, Wang Xun, Guo Shoujing and others (衡恂守敬等所撰曆經及謙曆議故存). 李謙之議錄、曆經之初稿 is two parallel phrases. Both English fields invent a \"Discourse on (Official) Emoluments\" and attribute the Calendar Classic draft to Li Qian.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0008",
+          "excerpt": "僅存李謙之《議祿》、《曆經》之初稿"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "僅存李謙之議録厯經之初稿",
+          "sourceHash": "sha256:d110e8b13957dac6cda36d59c2098b5ce34b8094d19c879a42674ab74d60165b"
+        },
+        {
+          "source": "external",
+          "title": "元史 卷五十二 志第四 曆一 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0036/e2cf641b7f57ad9847edca32c2b851c0e875ee4c/KR2a0036_052.txt",
+          "repository": "kanripo/KR2a0036",
+          "commit": "e2cf641b7f57ad9847edca32c2b851c0e875ee4c",
+          "fileSha256": "sha256:d4166f907ef50a90efc8c9badfc92f8ad263221088add0e50d73331b87f2509d",
+          "accessedAt": "2026-11-24T17:10:00Z",
+          "excerpt": "二十年詔太子諭德李謙為厯議",
+          "sourceHash": "sha256:642bcf52b2711e76ff13abfcaa9faf443a59b599bc7632aa207978b748cea2f0"
+        },
+        {
+          "source": "external",
+          "title": "元史 卷五十二 志第四 曆一 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0036/e2cf641b7f57ad9847edca32c2b851c0e875ee4c/KR2a0036_052.txt",
+          "repository": "kanripo/KR2a0036",
+          "commit": "e2cf641b7f57ad9847edca32c2b851c0e875ee4c",
+          "fileSha256": "sha256:d4166f907ef50a90efc8c9badfc92f8ad263221088add0e50d73331b87f2509d",
+          "accessedAt": "2026-11-24T17:10:00Z",
+          "excerpt": "今衡恂守敬等所撰厯經及謙厯議故存",
+          "sourceHash": "sha256:71bde61268e1f5c31c7ee387095109596f6a5a577ef62a03702708cbbb7cfc0e"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:02"
+    },
+    {
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "zh": "而法原之目七：曰句股測望，曰弧矢割圓，曰黃赤道內外度，曰白道交周，曰日月五星平立定三差，曰裏差刻漏。",
+      "field": "literal",
+      "before": "The headings of origins of method are seven: called gnomonic surveying; called arc-sagitta circle division; called ecliptic and equator inner and outer degrees; called white-path crossing circuit; called sun, moon, and five planets mean, upright, and fixed three differences; called terrestrial parallax and clepsydra.",
+      "after": "The headings of origins of method are seven: called gnomonic surveying; called arc-sagitta circle division; [called ecliptic–equator difference;] called ecliptic and equator inner and outer degrees; called white-path crossing circuit; called sun, moon, and five planets mean, upright, and fixed three differences; called terrestrial parallax and clepsydra.",
+      "reason": "The sentence announces seven headings (法原之目七) but the received text lists six: 曰黃赤道差 was lost by eye-skip before 曰黃赤道內外度. The Siku text has it, and the chapter has the section 黃赤道差 (s0075). Both English fields say \"seven\" and list six; the missing heading is restored in brackets.",
+      "confidence": "high",
+      "defectClass": "omission",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0012",
+          "excerpt": "而法原之目七"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0075",
+          "excerpt": "黃赤道差"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "曰弧矢割圓曰黄赤道差曰黄赤道内外度",
+          "sourceHash": "sha256:22df59d6b7bd6c1e40e006ab473cb37d1437006c27592d27955501085003fd27"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:03"
+    },
+    {
+      "unit": {
+        "id": "s0012",
+        "kind": "paragraph-sentence",
+        "blockIndex": 2,
+        "collection": "sentences",
+        "itemIndex": 9
+      },
+      "zh": "而法原之目七：曰句股測望，曰弧矢割圓，曰黃赤道內外度，曰白道交周，曰日月五星平立定三差，曰裏差刻漏。",
+      "field": "idiomatic",
+      "before": "The origins of the method comprise seven topics: gnomonic surveying; arc-sagitta circle division; ecliptic and equatorial inner and outer degrees; the white path's crossing circuit; the mean, upright, and fixed three differences for the sun, moon, and five planets; and terrestrial parallax with clepsydra graduations.",
+      "after": "The origins of the method comprise seven topics: gnomonic surveying; arc-sagitta circle division; [the ecliptic–equator difference;] ecliptic and equatorial inner and outer degrees; the white path's crossing circuit; the mean, upright, and fixed three differences for the sun, moon, and five planets; and terrestrial parallax with clepsydra graduations.",
+      "reason": "The sentence announces seven headings (法原之目七) but the received text lists six: 曰黃赤道差 was lost by eye-skip before 曰黃赤道內外度. The Siku text has it, and the chapter has the section 黃赤道差 (s0075). Both English fields say \"seven\" and list six; the missing heading is restored in brackets.",
+      "confidence": "high",
+      "defectClass": "omission",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0012",
+          "excerpt": "而法原之目七"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0075",
+          "excerpt": "黃赤道差"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "曰弧矢割圓曰黄赤道差曰黄赤道内外度",
+          "sourceHash": "sha256:22df59d6b7bd6c1e40e006ab473cb37d1437006c27592d27955501085003fd27"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:04"
+    },
+    {
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "隨以簡儀測到太陽南至地平二十六度四十六分半，爲半弧背。",
+      "field": "literal",
+      "before": "Then with the simplified armillary the Sun south of the equator was measured to the horizon at twenty-six degrees forty-six minutes and a half, as the half-arc back.",
+      "after": "Then with the simplified armillary the Sun was measured southward down to the horizon at twenty-six degrees forty-six minutes and a half, as the half-arc back.",
+      "reason": "太陽南至地平 measures from the Sun down to the southern horizon at noon, i.e. the noon altitude, not a declination: the summer value 74°26′ cannot be a southern declination, and s0024 adds the two values as solstice altitudes to get the equator's altitude. 半 in this centesimal notation is half a fen = 50 miao (s0024: 26.465 + 74.265 = 100.73, half 50.365 = 五十度三十六分半); \"30″\" treats it as sexagesimal.",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "以二至日度相併，得一百度七十三分，折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0024",
+          "field": "idiomatic",
+          "excerpt": "Adding the two solstice altitudes"
+        },
+        {
+          "source": "arithmetic",
+          "check": "26.465 + 74.265 = 100.73; 100.73 / 2 = 50.365"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0015",
+          "excerpt": "太陽南至地平二十六度四十六分半"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:05"
+    },
+    {
+      "unit": {
+        "id": "s0015",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "隨以簡儀測到太陽南至地平二十六度四十六分半，爲半弧背。",
+      "field": "idiomatic",
+      "before": "The simplified armillary then gave the Sun's south declination above the horizon as 26°46′30″, taken as the half-arc back.",
+      "after": "The simplified armillary then gave the Sun's noon altitude above the southern horizon as 26°46′50″, taken as the half-arc back.",
+      "reason": "太陽南至地平 measures from the Sun down to the southern horizon at noon, i.e. the noon altitude, not a declination: the summer value 74°26′ cannot be a southern declination, and s0024 adds the two values as solstice altitudes to get the equator's altitude. 半 in this centesimal notation is half a fen = 50 miao (s0024: 26.465 + 74.265 = 100.73, half 50.365 = 五十度三十六分半); \"30″\" treats it as sexagesimal.",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "以二至日度相併，得一百度七十三分，折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0024",
+          "field": "idiomatic",
+          "excerpt": "Adding the two solstice altitudes"
+        },
+        {
+          "source": "arithmetic",
+          "check": "26.465 + 74.265 = 100.73; 100.73 / 2 = 50.365"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0015",
+          "excerpt": "太陽南至地平二十六度四十六分半"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:06"
+    },
+    {
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "隨以簡儀測到太陽南至地平七十四度二十六分半，爲半弧背。",
+      "field": "literal",
+      "before": "Then with the simplified armillary the Sun south of the equator was measured to the horizon at seventy-four degrees twenty-six minutes and a half, as the half-arc back.",
+      "after": "Then with the simplified armillary the Sun was measured southward down to the horizon at seventy-four degrees twenty-six minutes and a half, as the half-arc back.",
+      "reason": "太陽南至地平 measures from the Sun down to the southern horizon at noon, i.e. the noon altitude, not a declination: the summer value 74°26′ cannot be a southern declination, and s0024 adds the two values as solstice altitudes to get the equator's altitude. 半 in this centesimal notation is half a fen = 50 miao (s0024: 26.465 + 74.265 = 100.73, half 50.365 = 五十度三十六分半); \"30″\" treats it as sexagesimal.",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "以二至日度相併，得一百度七十三分，折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0024",
+          "field": "idiomatic",
+          "excerpt": "Adding the two solstice altitudes"
+        },
+        {
+          "source": "arithmetic",
+          "check": "26.465 + 74.265 = 100.73; 100.73 / 2 = 50.365"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0020",
+          "excerpt": "太陽南至地平七十四度二十六分半"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:07"
+    },
+    {
+      "unit": {
+        "id": "s0020",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "隨以簡儀測到太陽南至地平七十四度二十六分半，爲半弧背。",
+      "field": "idiomatic",
+      "before": "The simplified armillary then gave the Sun's south declination above the horizon as 74°26′30″, taken as the half-arc back.",
+      "after": "The simplified armillary then gave the Sun's noon altitude above the southern horizon as 74°26′50″, taken as the half-arc back.",
+      "reason": "太陽南至地平 measures from the Sun down to the southern horizon at noon, i.e. the noon altitude, not a declination: the summer value 74°26′ cannot be a southern declination, and s0024 adds the two values as solstice altitudes to get the equator's altitude. 半 in this centesimal notation is half a fen = 50 miao (s0024: 26.465 + 74.265 = 100.73, half 50.365 = 五十度三十六分半); \"30″\" treats it as sexagesimal.",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "以二至日度相併，得一百度七十三分，折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0024",
+          "field": "idiomatic",
+          "excerpt": "Adding the two solstice altitudes"
+        },
+        {
+          "source": "arithmetic",
+          "check": "26.465 + 74.265 = 100.73; 100.73 / 2 = 50.365"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0020",
+          "excerpt": "太陽南至地平七十四度二十六分半"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:08"
+    },
+    {
+      "unit": {
+        "id": "s0016",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "求得矢度，五度九十一分半。",
+      "field": "idiomatic",
+      "before": "The sagitta came to 5°91′30″.",
+      "after": "The sagitta came to 5°91′50″.",
+      "reason": "In this centesimal notation (100 miao to the fen) 分半 is half a fen = 50 miao, not 30″: s0024 halves 100.73 to 50.365 = 五十度三十六分半, and s0144 subtracts 58.3569 from 六十零度八十七分半 to leave 2.5181 (= 60.875). The idiomatic value is wrong by 20 miao.",
+      "confidence": "high",
+      "defectClass": "value-notation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0144",
+          "excerpt": "置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 58.3569 = 2.5181"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:09"
+    },
+    {
+      "unit": {
+        "id": "s0023",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "zh": "以句弦別股術，求得股五十八度四十五分半，爲日出地半弧弦。",
+      "field": "idiomatic",
+      "before": "Applying the leg–chord separation to obtain the base leg yielded 58°45′30″ as the half-arc chord of the Sun's altitude above the horizon.",
+      "after": "Applying the leg–chord separation to obtain the base leg yielded 58°45′50″ as the half-arc chord of the Sun's altitude above the horizon.",
+      "reason": "In this centesimal notation (100 miao to the fen) 分半 is half a fen = 50 miao, not 30″: s0024 halves 100.73 to 50.365 = 五十度三十六分半, and s0144 subtracts 58.3569 from 六十零度八十七分半 to leave 2.5181 (= 60.875). The idiomatic value is wrong by 20 miao.",
+      "confidence": "high",
+      "defectClass": "value-notation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0144",
+          "excerpt": "置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 58.3569 = 2.5181"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:10"
+    },
+    {
+      "unit": {
+        "id": "s0024",
+        "kind": "paragraph-sentence",
+        "blockIndex": 6,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "zh": "以二至日度相併，得一百度七十三分，折半得五十度三十六分半，爲北京赤道出地度。",
+      "field": "idiomatic",
+      "before": "Adding the two solstice altitudes gives 100°73′; halving yields 50°36′30″ as Beijing's equatorial altitude above the horizon.",
+      "after": "Adding the two solstice altitudes gives 100°73′; halving yields 50°36′50″ as Beijing's equatorial altitude above the horizon.",
+      "reason": "In this centesimal notation (100 miao to the fen) 分半 is half a fen = 50 miao, not 30″: s0024 halves 100.73 to 50.365 = 五十度三十六分半, and s0144 subtracts 58.3569 from 六十零度八十七分半 to leave 2.5181 (= 60.875). The idiomatic value is wrong by 20 miao.",
+      "confidence": "high",
+      "defectClass": "value-notation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0144",
+          "excerpt": "置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 58.3569 = 2.5181"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:11"
+    },
+    {
+      "unit": {
+        "id": "s0029",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "半徑六十零度八十七分半。",
+      "field": "idiomatic",
+      "before": "The half-diameter is 60°87′30″.",
+      "after": "The half-diameter is 60°87′50″.",
+      "reason": "In this centesimal notation (100 miao to the fen) 分半 is half a fen = 50 miao, not 30″: s0024 halves 100.73 to 50.365 = 五十度三十六分半, and s0144 subtracts 58.3569 from 六十零度八十七分半 to leave 2.5181 (= 60.875). The idiomatic value is wrong by 20 miao.",
+      "confidence": "high",
+      "defectClass": "value-notation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0144",
+          "excerpt": "置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 58.3569 = 2.5181"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:12"
+    },
+    {
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "術曰：「置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒，爲黃赤道小弧矢。",
+      "field": "literal",
+      "before": "The procedure says: \"Set the semidiameter at 60 du 87 fen 30 miao; subtract within it the equatorial small chord at 44 degrees ecliptic of 58 du 35 fen 69 miao; the remainder of 2 du 51 fen 81 miao is the yellow-red small arc-versine.",
+      "after": "The procedure says: \"Set the semidiameter at 60 du 87 fen 50 miao; subtract within it the equatorial small chord at 44 degrees ecliptic of 58 du 35 fen 69 miao; the remainder of 2 du 51 fen 81 miao is the yellow-red small arc-versine.",
+      "reason": "In this centesimal notation (100 miao to the fen) 分半 is half a fen = 50 miao, not 30″: s0024 halves 100.73 to 50.365 = 五十度三十六分半, and s0144 subtracts 58.3569 from 六十零度八十七分半 to leave 2.5181 (= 60.875). The idiomatic value is wrong by 20 miao.",
+      "confidence": "high",
+      "defectClass": "value-notation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0144",
+          "excerpt": "置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 58.3569 = 2.5181"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:13"
+    },
+    {
+      "unit": {
+        "id": "s0144",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "術曰：「置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒，爲黃赤道小弧矢。",
+      "field": "idiomatic",
+      "before": "The procedure says: \"Set the semidiameter at 60°87′30″. Subtract the equatorial small chord at ecliptic 44° (58°35′69″); the remainder of 2°51′81″ is the ecliptic–equator small arc-versine.",
+      "after": "The procedure says: \"Set the semidiameter at 60°87′50″. Subtract the equatorial small chord at ecliptic 44° (58°35′69″); the remainder of 2°51′81″ is the ecliptic–equator small arc-versine.",
+      "reason": "In this centesimal notation (100 miao to the fen) 分半 is half a fen = 50 miao, not 30″: s0024 halves 100.73 to 50.365 = 五十度三十六分半, and s0144 subtracts 58.3569 from 六十零度八十七分半 to leave 2.5181 (= 60.875). The idiomatic value is wrong by 20 miao.",
+      "confidence": "high",
+      "defectClass": "value-notation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0024",
+          "excerpt": "折半得五十度三十六分半"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0144",
+          "excerpt": "置半徑六十零度八十七分半，內減黃道四十四度下赤道小弦五十八度三十五分六十九秒，餘二度五十一分八十一秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 58.3569 = 2.5181"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:14"
+    },
+    {
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "zh": "置周天半徑，截矢餘五十四度九十六分爲股，乃本地支戴日下之度。",
+      "field": "literal",
+      "before": "Set the half-radius of the circuit of heaven; cut the sagitta remainder fifty-four degrees ninety-six minutes as the leg—this is the local degree of the branch bearing the subsolar point.",
+      "after": "Set the half-radius of the circuit of heaven; cut the sagitta remainder fifty-four degrees ninety-six minutes as the leg—this is the local degree away from the subsolar point.",
+      "reason": "Received 本地支戴日下之度 has 支 for 去: the Siku text and the parallel s0022 read 本地去戴日下之度, which s0022 renders \"the local degree away from / distance from the subsolar point\". \"Branch\" translates the corrupt character; \"colatitude\" is not what the leg (radius minus sagitta) measures.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0017",
+          "excerpt": "乃本地支戴日下之度"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "乃本地去戴日下之度"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0022",
+          "field": "idiomatic",
+          "excerpt": "the local distance from the subsolar point"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "乃本地去戴日下之度",
+          "sourceHash": "sha256:350be6e2e718530b867090a399a750fcaf94d02ffa34be5648f5895e73d49015"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:15"
+    },
+    {
+      "unit": {
+        "id": "s0017",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 3
+      },
+      "zh": "置周天半徑，截矢餘五十四度九十六分爲股，乃本地支戴日下之度。",
+      "field": "idiomatic",
+      "before": "Take the celestial half-diameter and subtract the sagitta; the remainder, 54°96′, is the leg—the local colatitude under the subsolar point.",
+      "after": "Take the celestial half-diameter and subtract the sagitta; the remainder, 54°96′, is the leg—the local distance from the subsolar point.",
+      "reason": "Received 本地支戴日下之度 has 支 for 去: the Siku text and the parallel s0022 read 本地去戴日下之度, which s0022 renders \"the local degree away from / distance from the subsolar point\". \"Branch\" translates the corrupt character; \"colatitude\" is not what the leg (radius minus sagitta) measures.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0017",
+          "excerpt": "乃本地支戴日下之度"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "乃本地去戴日下之度"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0022",
+          "field": "idiomatic",
+          "excerpt": "the local distance from the subsolar point"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "乃本地去戴日下之度",
+          "sourceHash": "sha256:350be6e2e718530b867090a399a750fcaf94d02ffa34be5648f5895e73d49015"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:16"
+    },
+    {
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "zh": "以弦股別句術，求得句二十六度一下七分六十六秒，爲日出地半弧弦。",
+      "field": "literal",
+      "before": "By the chord-and-leg method for separating the leg, the leg was obtained as twenty-six degrees, one fen down, seven fen sixty-six seconds, as the half-arc chord of the Sun's emergence from earth.",
+      "after": "By the chord-and-leg method for separating the leg, the leg was obtained as twenty-six degrees seventeen minutes sixty-six seconds, as the half-arc chord of the Sun's emergence from earth.",
+      "reason": "Received 二十六度一下七分 has 下 for 十: the Siku text reads 二十六度一十七分六十六秒, and the leg from chord 60.875 and leg 54.96 (s0017) is √(60.875² − 54.96²) = 26.18. \"26°07′66″\" and the literal \"one fen down\" are both wrong.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0018",
+          "excerpt": "求得句二十六度一下七分六十六秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0017",
+          "excerpt": "截矢餘五十四度九十六分爲股"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "求得句二十六度一十七分六十六秒",
+          "sourceHash": "sha256:b8c8f4a75d6461f7b3ceb565c216a8b039491703770bb50164abc9fdadc9030c"
+        },
+        {
+          "source": "arithmetic",
+          "check": "sqrt(60.875^2 - 54.96^2) = 26.18"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:17"
+    },
+    {
+      "unit": {
+        "id": "s0018",
+        "kind": "paragraph-sentence",
+        "blockIndex": 4,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "zh": "以弦股別句術，求得句二十六度一下七分六十六秒，爲日出地半弧弦。",
+      "field": "idiomatic",
+      "before": "Applying the chord–leg separation to obtain the other leg yielded 26°07′66″ as the half-arc chord of the Sun's altitude above the horizon.",
+      "after": "Applying the chord–leg separation to obtain the other leg yielded 26°17′66″ as the half-arc chord of the Sun's altitude above the horizon.",
+      "reason": "Received 二十六度一下七分 has 下 for 十: the Siku text reads 二十六度一十七分六十六秒, and the leg from chord 60.875 and leg 54.96 (s0017) is √(60.875² − 54.96²) = 26.18. \"26°07′66″\" and the literal \"one fen down\" are both wrong.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0018",
+          "excerpt": "求得句二十六度一下七分六十六秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0017",
+          "excerpt": "截矢餘五十四度九十六分爲股"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "求得句二十六度一十七分六十六秒",
+          "sourceHash": "sha256:b8c8f4a75d6461f7b3ceb565c216a8b039491703770bb50164abc9fdadc9030c"
+        },
+        {
+          "source": "arithmetic",
+          "check": "sqrt(60.875^2 - 54.96^2) = 26.18"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:18"
+    },
+    {
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "求得矢度，四十三度七十四分少。",
+      "field": "literal",
+      "before": "The sagitta was obtained: forty-three degrees seventy-four minutes, slightly less.",
+      "after": "The sagitta was obtained: forty-three degrees seventy-four minutes and a quarter.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:19"
+    },
+    {
+      "unit": {
+        "id": "s0021",
+        "kind": "paragraph-sentence",
+        "blockIndex": 5,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "求得矢度，四十三度七十四分少。",
+      "field": "idiomatic",
+      "before": "The sagitta came to 43°74′, slightly less.",
+      "after": "The sagitta came to 43°74′25″.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:20"
+    },
+    {
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "zh": "周天經一百二十一度七十五分少。",
+      "field": "literal",
+      "before": "The circuit of heaven's diameter is one hundred twenty-one degrees seventy-five minutes, slightly less.",
+      "after": "The circuit of heaven's diameter is one hundred twenty-one degrees seventy-five minutes and a quarter.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:21"
+    },
+    {
+      "unit": {
+        "id": "s0027",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "zh": "周天經一百二十一度七十五分少。",
+      "field": "idiomatic",
+      "before": "The celestial diameter is fixed at 121°75′, slightly less.",
+      "after": "The celestial diameter is fixed at 121°75′25″.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:22"
+    },
+    {
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "少不用。",
+      "field": "literal",
+      "before": "The 'slightly less' is not used.",
+      "after": "The quarter is not used.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:23"
+    },
+    {
+      "unit": {
+        "id": "s0028",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "少不用。",
+      "field": "idiomatic",
+      "before": "The 'slightly less' fraction is dropped in use.",
+      "after": "The quarter-minute fraction is dropped in use.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:24"
+    },
+    {
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒，爲上廉。",
+      "field": "literal",
+      "before": "Set the circuit-of-heaven diameter one hundred twenty-one degrees slightly more and square it, obtaining fourteen thousand eight hundred twenty-three degrees six minutes twenty-five seconds as the upper excess.",
+      "after": "Set the circuit-of-heaven diameter one hundred twenty-one degrees and three-quarters and square it, obtaining fourteen thousand eight hundred twenty-three degrees six minutes twenty-five seconds as the upper excess.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:25"
+    },
+    {
+      "unit": {
+        "id": "s0054",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒，爲上廉。",
+      "field": "idiomatic",
+      "before": "Square the celestial diameter 121° slightly more to obtain 14,823°06′25″ as the upper excess.",
+      "after": "Square the celestial diameter 121¾° (121°75′) to obtain 14,823°06′25″ as the upper excess.",
+      "reason": "少 in this notation is a quarter (of a fen), as 半 is a half and 太 three-quarters, not \"slightly less/more\": the sagitta 43.7425 is the half-diameter minus the leg (60.875 − 17.1325, s0021/s0022), the diameter 121.7525 is the Shoushi circuit 365.2575 divided by 3, and 121度太 squared is 14,823.0625 (s0054).",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0022",
+          "excerpt": "截矢餘一十七度一十三分二十五秒爲句"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0054",
+          "excerpt": "置周天徑一百二十一度太自之，得一萬四千八百二十三度零六分二十五秒"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 17.1325 = 43.7425; 365.2575 / 3 = 121.7525; 121.75^2 = 14823.0625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:26"
+    },
+    {
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "zh": "二至黃赤道弧矢四度八十四分十二秒。",
+      "field": "literal",
+      "before": "At the two solstices the yellow-and-red arc sagitta is four degrees eighty-four minutes twelve seconds.",
+      "after": "At the two solstices the yellow-and-red arc sagitta is four degrees eighty-four minutes eighty-two seconds.",
+      "reason": "Received 四度八十四分十二秒 drops 八: the Siku text reads 四度八十四分八十二秒, and the great base leg in s0035 is the half-diameter minus this sagitta (s0036): 60.875 − 4.8482 = 56.0268.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0033",
+          "excerpt": "四度八十四分十二秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0035",
+          "excerpt": "黃赤道大股五十六度零二分六十八秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0036",
+          "excerpt": "半徑內減去矢度之數"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "二至黄赤道弧矢四度八十四分八十二秒",
+          "sourceHash": "sha256:0add33735f0c94ce6bf58236316be4622b5759f7514d24897e1bac70f69efd1d"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 4.8482 = 56.0268"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:27"
+    },
+    {
+      "unit": {
+        "id": "s0033",
+        "kind": "paragraph-sentence",
+        "blockIndex": 8,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "zh": "二至黃赤道弧矢四度八十四分十二秒。",
+      "field": "idiomatic",
+      "before": "At the solstices the ecliptic–equatorial arc sagitta is 4°84′12″.",
+      "after": "At the solstices the ecliptic–equatorial arc sagitta is 4°84′82″.",
+      "reason": "Received 四度八十四分十二秒 drops 八: the Siku text reads 四度八十四分八十二秒, and the great base leg in s0035 is the half-diameter minus this sagitta (s0036): 60.875 − 4.8482 = 56.0268.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0033",
+          "excerpt": "四度八十四分十二秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0035",
+          "excerpt": "黃赤道大股五十六度零二分六十八秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0036",
+          "excerpt": "半徑內減去矢度之數"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "二至黄赤道弧矢四度八十四分八十二秒",
+          "sourceHash": "sha256:0add33735f0c94ce6bf58236316be4622b5759f7514d24897e1bac70f69efd1d"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875 - 4.8482 = 56.0268"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:28"
+    },
+    {
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "zh": "又置初商八十秒自之，得六十四微，以減下廉餘二百四十三度四九九三六。",
+      "field": "literal",
+      "before": "Again set initial quotient eighty seconds squared, obtaining sixty-four micro-units; subtract from lower excess remainder two hundred forty-three degrees forty-nine ninety-three six.",
+      "after": "Again set initial quotient eighty seconds squared, obtaining sixty-four micro-units; subtract from lower excess remainder two hundred forty-three degrees forty-nine ninety-nine thirty-six.",
+      "reason": "Received 四九九三六 drops a 九: the lower excess 243.5 (s0057) minus 64 wei (0.000064) is 243.499936, as the Siku text reads (四九九九三六) and s0061 uses (243.499936 × 0.008 = 1.947999488).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0057",
+          "excerpt": "得二百四十三度五十分，爲下廉"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0061",
+          "excerpt": "得一度九四七九九九四八八"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "以減下廉餘二百四十三度四九九九三六",
+          "sourceHash": "sha256:9fd2fd8bbe157a005cc7b33c10145d011d4c386637cbef53814643c5ddce2ba1"
+        },
+        {
+          "source": "arithmetic",
+          "check": "243.5 - 0.000064 = 243.499936; 243.499936 * 0.008 = 1.947999488"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:29"
+    },
+    {
+      "unit": {
+        "id": "s0060",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 8
+      },
+      "zh": "又置初商八十秒自之，得六十四微，以減下廉餘二百四十三度四九九三六。",
+      "field": "idiomatic",
+      "before": "Square the first quotient 80″ to obtain 64 micro-units; subtract from the lower-excess remainder 243°49936.",
+      "after": "Square the first quotient 80″ to obtain 64 micro-units; subtract from the lower-excess remainder 243°499936.",
+      "reason": "Received 四九九三六 drops a 九: the lower excess 243.5 (s0057) minus 64 wei (0.000064) is 243.499936, as the Siku text reads (四九九九三六) and s0061 uses (243.499936 × 0.008 = 1.947999488).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0057",
+          "excerpt": "得二百四十三度五十分，爲下廉"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0061",
+          "excerpt": "得一度九四七九九九四八八"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "以減下廉餘二百四十三度四九九九三六",
+          "sourceHash": "sha256:9fd2fd8bbe157a005cc7b33c10145d011d4c386637cbef53814643c5ddce2ba1"
+        },
+        {
+          "source": "arithmetic",
+          "check": "243.5 - 0.000064 = 243.499936; 243.499936 * 0.008 = 1.947999488"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:30"
+    },
+    {
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "zh": "加次商二委六十二秒，乘上廉一萬四千八百二十三度零六二五，得二百四十零度一三三六一二五，以減益從方，餘一百八十零萬四千四百六十七二五七六二五，爲從方。",
+      "field": "literal",
+      "before": "Add second quotient two yielding sixty-two seconds; multiply upper excess fourteen thousand eight hundred twenty-three degrees six minutes twenty-five, obtaining two hundred forty degrees thirteen minutes thirty-six twelve five; subtract from augmenting companion square; remainder one million eight hundred four thousand four hundred sixty-seven degrees twenty-five seventy-six twenty-five as companion square.",
+      "after": "Add second quotient two seconds, obtaining one minute sixty-two seconds; multiply upper excess fourteen thousand eight hundred twenty-three degrees six minutes twenty-five, obtaining two hundred forty degrees thirteen minutes thirty-six twelve five; subtract from augmenting companion square; remainder one million eight hundred four thousand four hundred sixty-seven degrees seventy-two fifty-seven sixty-two five as companion square.",
+      "reason": "Received 加次商二委六十二秒 is corrupt for 加次商二秒得一分六十二秒 (Siku): doubled first quotient 1′60″ (s0065) plus 2″ is 1′62″ = 0.0162, which s0069 uses and which gives the stated product 240.1336125. The remainder drops 度七: 1,804,707.859375 − 240.1336125 = 1,804,467.7257625 (Siku 一百八十零萬四千四百六十七度七二五七六二五).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0065",
+          "excerpt": "得一分六十秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0069",
+          "excerpt": "以前所得一分六十二秒乘之"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "加次商二秒得一分六十二秒",
+          "sourceHash": "sha256:28b8d06a883a482ee29911adc1a1ed6ab5bf46ade9d993f80b751599a43431e5"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "餘一百八十○萬四千四百六十七度七二五七六二五",
+          "sourceHash": "sha256:0a1ded895b55e0a2beb3740f8587c9c585d259470fe7066b63d2dacaa1673367"
+        },
+        {
+          "source": "arithmetic",
+          "check": "0.0162 * 14823.0625 = 240.1336125; 1804707.859375 - 240.1336125 = 1804467.7257625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:31"
+    },
+    {
+      "unit": {
+        "id": "s0066",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "zh": "加次商二委六十二秒，乘上廉一萬四千八百二十三度零六二五，得二百四十零度一三三六一二五，以減益從方，餘一百八十零萬四千四百六十七二五七六二五，爲從方。",
+      "field": "idiomatic",
+      "before": "Add the second quotient 2″ to obtain 82″; multiply by the upper excess 14,823°0625 to obtain 240°1336125; subtract from the augmenting companion square; the remainder 1,804,467°257625 is the companion square.",
+      "after": "Add the second quotient 2″ to obtain 1′62″; multiply by the upper excess 14,823°0625 to obtain 240°1336125; subtract from the augmenting companion square; the remainder 1,804,467°7257625 is the companion square.",
+      "reason": "Received 加次商二委六十二秒 is corrupt for 加次商二秒得一分六十二秒 (Siku): doubled first quotient 1′60″ (s0065) plus 2″ is 1′62″ = 0.0162, which s0069 uses and which gives the stated product 240.1336125. The remainder drops 度七: 1,804,707.859375 − 240.1336125 = 1,804,467.7257625 (Siku 一百八十零萬四千四百六十七度七二五七六二五).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0065",
+          "excerpt": "得一分六十秒"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0069",
+          "excerpt": "以前所得一分六十二秒乘之"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "加次商二秒得一分六十二秒",
+          "sourceHash": "sha256:28b8d06a883a482ee29911adc1a1ed6ab5bf46ade9d993f80b751599a43431e5"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "餘一百八十○萬四千四百六十七度七二五七六二五",
+          "sourceHash": "sha256:0a1ded895b55e0a2beb3740f8587c9c585d259470fe7066b63d2dacaa1673367"
+        },
+        {
+          "source": "arithmetic",
+          "check": "0.0162 * 14823.0625 = 240.1336125; 1804707.859375 - 240.1336125 = 1804467.7257625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:32"
+    },
+    {
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "zh": "以從廉、從方並，得一百八十零萬四千四百七十一度六十七分零四六零三七八，爲下法。",
+      "field": "literal",
+      "before": "Combine companion excess and companion square, obtaining one million eight hundred four thousand four hundred seventy-one degrees sixty-seven minutes four six zero three seven eight as lower divisor.",
+      "after": "Combine companion excess and companion square, obtaining one million eight hundred four thousand four hundred seventy-one degrees sixty-seven minutes zero four six zero three seven seven eight as lower divisor.",
+      "reason": "Received 六十七分零四六零三七八 drops a 七: companion square 1,804,467.7257625 plus companion excess 3.9446978778 (s0069) is 1,804,471.6704603778 (Siku 六七零四六零三七七八), and s0071 uses that divisor (× 0.0002 = 360.89433409207556).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0069",
+          "excerpt": "得三度九十四分四六九七八七七八"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0071",
+          "excerpt": "得三百六十零度八九四三三四零九二零七五五六"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "一百八十○萬四千四百七十一度六十七分○四六○三七七八",
+          "sourceHash": "sha256:f481b5db75e2397ef60f92e11cc30e33e4f43a93ffa65d6ada5dde09c45cca5a"
+        },
+        {
+          "source": "arithmetic",
+          "check": "1804467.7257625 + 3.9446978778 = 1804471.6704603778"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:33"
+    },
+    {
+      "unit": {
+        "id": "s0070",
+        "kind": "paragraph-sentence",
+        "blockIndex": 10,
+        "collection": "sentences",
+        "itemIndex": 18
+      },
+      "zh": "以從廉、從方並，得一百八十零萬四千四百七十一度六十七分零四六零三七八，爲下法。",
+      "field": "idiomatic",
+      "before": "Add companion excess and companion square to obtain 1,804,471°670460378 as the lower divisor.",
+      "after": "Add companion excess and companion square to obtain 1,804,471°6704603778 as the lower divisor.",
+      "reason": "Received 六十七分零四六零三七八 drops a 七: companion square 1,804,467.7257625 plus companion excess 3.9446978778 (s0069) is 1,804,471.6704603778 (Siku 六七零四六零三七七八), and s0071 uses that divisor (× 0.0002 = 360.89433409207556).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0069",
+          "excerpt": "得三度九十四分四六九七八七七八"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0071",
+          "excerpt": "得三百六十零度八九四三三四零九二零七五五六"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "一百八十○萬四千四百七十一度六十七分○四六○三七七八",
+          "sourceHash": "sha256:f481b5db75e2397ef60f92e11cc30e33e4f43a93ffa65d6ada5dde09c45cca5a"
+        },
+        {
+          "source": "arithmetic",
+          "check": "1804467.7257625 + 3.9446978778 = 1804471.6704603778"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:34"
+    },
+    {
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "zh": "以差加赤道半弧，爲赤道積度。",
+      "field": "literal",
+      "before": "Add the difference to the equatorial half-arc; that is the accumulated equatorial degree.",
+      "after": "Add the difference to the equatorial half-arc chord; that is the accumulated equatorial degree.",
+      "reason": "Received 赤道半弧 drops 弦: the Siku text reads 以差加赤道半弧弦, and the worked example adds the back-chord difference to the equatorial half-arc chord (s0104 置赤道半弧弦…加赤道背弦差，爲赤道積度). The half-arc is a different quantity.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0088",
+          "excerpt": "以差加赤道半弧"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0104",
+          "excerpt": "置赤道半弧弦一度零八分六十五秒，加赤道背弦差，爲赤道積度"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "以差加赤道半弧弦為赤道積度",
+          "sourceHash": "sha256:1196f8e15dfa5a8a907e265c3bbc487fbab19d615794b205e8280233290a6243"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:35"
+    },
+    {
+      "unit": {
+        "id": "s0088",
+        "kind": "paragraph-sentence",
+        "blockIndex": 13,
+        "collection": "sentences",
+        "itemIndex": 12
+      },
+      "zh": "以差加赤道半弧，爲赤道積度。",
+      "field": "idiomatic",
+      "before": "Add this correction to the equatorial half-arc to obtain the accumulated equatorial degree.",
+      "after": "Add this correction to the equatorial half-arc chord to obtain the accumulated equatorial degree.",
+      "reason": "Received 赤道半弧 drops 弦: the Siku text reads 以差加赤道半弧弦, and the worked example adds the back-chord difference to the equatorial half-arc chord (s0104 置赤道半弧弦…加赤道背弦差，爲赤道積度). The half-arc is a different quantity.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0088",
+          "excerpt": "以差加赤道半弧"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0104",
+          "excerpt": "置赤道半弧弦一度零八分六十五秒，加赤道背弦差，爲赤道積度"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "以差加赤道半弧弦為赤道積度",
+          "sourceHash": "sha256:1196f8e15dfa5a8a907e265c3bbc487fbab19d615794b205e8280233290a6243"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:36"
+    },
+    {
+      "unit": {
+        "id": "s0094",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "zh": "置矢度八十二秒自之，得六十七微，以全徑一百二十一度七五爲法，除之得五十五纖，爲黃道平半背弦差。",
+      "field": "literal",
+      "before": "Set sagitta eighty seconds squared, obtaining sixty-seven micro-units; take full diameter one hundred twenty-one degrees seventy-five as divisor; divide to obtain fifty-five fine units as ecliptic level half-back chord difference.",
+      "after": "Set sagitta eighty-two seconds squared, obtaining sixty-seven micro-units; take full diameter one hundred twenty-one degrees seventy-five as divisor; divide to obtain fifty-five fine units as ecliptic level half-back chord difference.",
+      "reason": "The Chinese reads 八十二秒 (82″), as the idiomatic field and s0073 have; the literal field drops \"two\".",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0094",
+          "excerpt": "置矢度八十二秒自之"
+        },
+        {
+          "source": "chapter-english",
+          "citation": "s0094",
+          "field": "idiomatic",
+          "excerpt": "Square the sagitta 82″"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:37"
+    },
+    {
+      "unit": {
+        "id": "s0095",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "zh": "置黃道半弧弦一度，內減黃道半背弦差，餘爲半弧弦，因因差在微以下不減，即用一度爲半弧弦。",
+      "field": "literal",
+      "before": "Set ecliptic half-arc chord one degree; within subtract ecliptic half-back chord difference; remainder is half-arc chord; because the difference lies below micro-units it is not subtracted—use one degree directly as half-arc chord.",
+      "after": "Set ecliptic half-arc back one degree; within subtract ecliptic half-back chord difference; remainder is half-arc chord; because the difference lies below micro-units it is not subtracted—use one degree directly as half-arc chord.",
+      "reason": "Received 置黃道半弧弦一度 is corrupt for 置黃道半弧背一度 (Siku): the example starts from a half-arc back of one degree (s0089), and back minus the half-back chord difference gives the chord (s0081-s0083). Starting from the chord makes the step circular.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0089",
+          "excerpt": "如黃道半弧背一度"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0083",
+          "excerpt": "餘爲黃道半弧弦"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "置黄道半弧背一度内減黄道半背弦差餘為半弧弦",
+          "sourceHash": "sha256:59248b3ed297f041799dd4daad8f3324a50317bac8107af8516de4c346ae37d7"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:38"
+    },
+    {
+      "unit": {
+        "id": "s0095",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 6
+      },
+      "zh": "置黃道半弧弦一度，內減黃道半背弦差，餘爲半弧弦，因因差在微以下不減，即用一度爲半弧弦。",
+      "field": "idiomatic",
+      "before": "Set the ecliptic half-arc chord at 1°; subtract the half-back chord correction; because the correction lies below the micro-unit it is not subtracted—take 1° directly as the half-arc chord.",
+      "after": "Set the ecliptic half-arc back at 1°; subtract the half-back chord correction; because the correction lies below the micro-unit it is not subtracted—take 1° directly as the half-arc chord.",
+      "reason": "Received 置黃道半弧弦一度 is corrupt for 置黃道半弧背一度 (Siku): the example starts from a half-arc back of one degree (s0089), and back minus the half-back chord difference gives the chord (s0081-s0083). Starting from the chord makes the step circular.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0089",
+          "excerpt": "如黃道半弧背一度"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0083",
+          "excerpt": "餘爲黃道半弧弦"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "置黄道半弧背一度内減黄道半背弦差餘為半弧弦",
+          "sourceHash": "sha256:59248b3ed297f041799dd4daad8f3324a50317bac8107af8516de4c346ae37d7"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:39"
+    },
+    {
+      "unit": {
+        "id": "s0103",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "zh": "置赤道橫弧矢九十七秒自之，得九十四微零九，以全徑爲法除之，得七十纖，爲赤道背弦差。",
+      "field": "literal",
+      "before": "Set the equatorial transverse arc-versine of 97 miao and square it, obtaining 94 wei 09; divide by the full diameter as divisor, obtaining 70 xian as the equatorial back-chord difference.",
+      "after": "Set the equatorial transverse arc-versine of 97 miao and square it, obtaining 94 wei 09; divide by the full diameter as divisor, obtaining 77 xian as the equatorial back-chord difference.",
+      "reason": "Received 七十纖 drops 七: 94 wei 09 (0.00009409) divided by the full diameter 121.75 is 0.000000773 = 77 xian (Siku 七十七纎).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0103",
+          "excerpt": "得九十四微零九，以全徑爲法除之，得七十纖"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "以全徑為法除之得七十七纎",
+          "sourceHash": "sha256:e7eae10981855b96de87aeb36f8bb6bd66a26de2bc5c26e87200718637ed3b95"
+        },
+        {
+          "source": "arithmetic",
+          "check": "0.00009409 / 121.75 = 0.000000773"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:40"
+    },
+    {
+      "unit": {
+        "id": "s0103",
+        "kind": "paragraph-sentence",
+        "blockIndex": 14,
+        "collection": "sentences",
+        "itemIndex": 14
+      },
+      "zh": "置赤道橫弧矢九十七秒自之，得九十四微零九，以全徑爲法除之，得七十纖，爲赤道背弦差。",
+      "field": "idiomatic",
+      "before": "Square the equatorial transverse arc-versine of 97″ to get 94 wei 09; dividing by the full diameter yields 70 xian as the equatorial back-chord correction.",
+      "after": "Square the equatorial transverse arc-versine of 97″ to get 94 wei 09; dividing by the full diameter yields 77 xian as the equatorial back-chord correction.",
+      "reason": "Received 七十纖 drops 七: 94 wei 09 (0.00009409) divided by the full diameter 121.75 is 0.000000773 = 77 xian (Siku 七十七纎).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0103",
+          "excerpt": "得九十四微零九，以全徑爲法除之，得七十纖"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "以全徑為法除之得七十七纎",
+          "sourceHash": "sha256:e7eae10981855b96de87aeb36f8bb6bd66a26de2bc5c26e87200718637ed3b95"
+        },
+        {
+          "source": "arithmetic",
+          "check": "0.00009409 / 121.75 = 0.000000773"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:41"
+    },
+    {
+      "unit": {
+        "id": "s0112",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "zh": "按郭敬創法五端，內一曰黃道差，此其根率也。",
+      "field": "literal",
+      "before": "Commentary: Guo Shoujing established five methods, of which one is ecliptic difference—this is its root rate.",
+      "after": "Commentary: Guo Shoujing established five methods, of which one is the ecliptic–equator difference—this is its root rate.",
+      "reason": "Received 黃道差 drops 赤: the Siku text reads 內一曰黄赤道差, the commentary follows the section 黃赤道差 (s0075, s0106 即得黃赤道差), and this is the quantity whose root rates are tabulated. \"Ecliptic difference\" names the wrong quantity.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0112",
+          "excerpt": "內一曰黃道差"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0075",
+          "excerpt": "黃赤道差"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0106",
+          "excerpt": "即得黃赤道差"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "按郭守敬創法五端内一曰黄赤道差",
+          "sourceHash": "sha256:5255ea7fbe23279d5dbf5753987f0b78367a6f8f1390785e21d1741c6553433d"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:42"
+    },
+    {
+      "unit": {
+        "id": "s0112",
+        "kind": "paragraph-sentence",
+        "blockIndex": 20,
+        "collection": "sentences",
+        "itemIndex": 0
+      },
+      "zh": "按郭敬創法五端，內一曰黃道差，此其根率也。",
+      "field": "idiomatic",
+      "before": "Commentary: Guo Shoujing established five methods; ecliptic difference is one of them, and these are its fundamental rates.",
+      "after": "Commentary: Guo Shoujing established five methods; the ecliptic–equator difference is one of them, and these are its fundamental rates.",
+      "reason": "Received 黃道差 drops 赤: the Siku text reads 內一曰黄赤道差, the commentary follows the section 黃赤道差 (s0075, s0106 即得黃赤道差), and this is the quantity whose root rates are tabulated. \"Ecliptic difference\" names the wrong quantity.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0112",
+          "excerpt": "內一曰黃道差"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0075",
+          "excerpt": "黃赤道差"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0106",
+          "excerpt": "即得黃赤道差"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "按郭守敬創法五端内一曰黄赤道差",
+          "sourceHash": "sha256:5255ea7fbe23279d5dbf5753987f0b78367a6f8f1390785e21d1741c6553433d"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:43"
+    },
+    {
+      "unit": {
+        "id": "s0126",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "從北極平視，則黃道在赤道內，有赤道各度，即各有其半弧弦，以生大名股。",
+      "field": "literal",
+      "before": "Viewing from the north pole on the plane, the ecliptic lies within the equator; for each equatorial degree there is its half arc-chord, producing the great-name base.",
+      "after": "Viewing from the north pole on the plane, the ecliptic lies within the equator; for each equatorial degree there is its half arc-chord, producing the great right triangle.",
+      "reason": "Received 大名股 is corrupt for 大句股 (Siku 以生大句股), the \"great right triangle\" of the parallel s0123 生大句股 and of s0127 生小句股. \"Great-name base\" translates the corrupt 名.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0126",
+          "excerpt": "以生大名股"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0123",
+          "excerpt": "生大句股"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0127",
+          "excerpt": "以生小句股"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "即各有其半弧弦以生大句股",
+          "sourceHash": "sha256:52b6c91ab7a9197e6aa4090a3912633450ea26b1bd65a23b5d30f91451a7a668"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:44"
+    },
+    {
+      "unit": {
+        "id": "s0126",
+        "kind": "paragraph-sentence",
+        "blockIndex": 24,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "從北極平視，則黃道在赤道內，有赤道各度，即各有其半弧弦，以生大名股。",
+      "field": "idiomatic",
+      "before": "Viewed from the north pole in the plane, the ecliptic lies inside the equator; each equatorial degree has its half arc-chord, yielding the great base.",
+      "after": "Viewed from the north pole in the plane, the ecliptic lies inside the equator; each equatorial degree has its half arc-chord, yielding the great right triangle.",
+      "reason": "Received 大名股 is corrupt for 大句股 (Siku 以生大句股), the \"great right triangle\" of the parallel s0123 生大句股 and of s0127 生小句股. \"Great-name base\" translates the corrupt 名.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0126",
+          "excerpt": "以生大名股"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0123",
+          "excerpt": "生大句股"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0127",
+          "excerpt": "以生小句股"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "即各有其半弧弦以生大句股",
+          "sourceHash": "sha256:52b6c91ab7a9197e6aa4090a3912633450ea26b1bd65a23b5d30f91451a7a668"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:45"
+    },
+    {
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "zh": "置黃赤道小弦，以二至黃赤道內外半弧弦二十三度七十一分乘之，得一千零五十零度五十一分四二三八爲實，以黃赤道大弦六十零度八七五爲法除之，得一十七度二十五分十九秒爲黃赤道小弧弦。",
+      "field": "literal",
+      "before": "Set the yellow-red small chord and multiply by the solstitial yellow-red inner-and-outer half arc-chord of 23 du 71 fen, obtaining 1050 du 51 fen 4238 as dividend; divide by the yellow-red great chord of 60 du 87 fen 50 miao as divisor, obtaining 17 du 25 fen 19 miao as the yellow-red small arc-chord.",
+      "after": "Set the yellow-red small chord and multiply by the solstitial yellow-red inner-and-outer half arc-chord of 23 du 71 fen, obtaining 1050 du 51 fen 4238 as dividend; divide by the yellow-red great chord of 60 du 87 fen 50 miao as divisor, obtaining 17 du 25 fen 69 miao as the yellow-red small arc-chord.",
+      "reason": "Received 二十五分十九秒 drops 六: 1050.514238 / 60.875 = 17.2569, which the Siku text reads (一十七度二十五分六十九秒) and s0149 uses (以差加黃赤道小弧弦一十七度二十五分六十九秒).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0149",
+          "excerpt": "以差加黃赤道小弧弦一十七度二十五分六十九秒"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "得一十七度二十五分六十九秒為黄赤道小弧弦",
+          "sourceHash": "sha256:2375fcdde1a44aedd60164c8dd3c97b89c83ed145ddd077d8bc42baa1b2d9ecd"
+        },
+        {
+          "source": "arithmetic",
+          "check": "1050.514238 / 60.875 = 17.2569"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:46"
+    },
+    {
+      "unit": {
+        "id": "s0147",
+        "kind": "paragraph-sentence",
+        "blockIndex": 28,
+        "collection": "sentences",
+        "itemIndex": 4
+      },
+      "zh": "置黃赤道小弦，以二至黃赤道內外半弧弦二十三度七十一分乘之，得一千零五十零度五十一分四二三八爲實，以黃赤道大弦六十零度八七五爲法除之，得一十七度二十五分十九秒爲黃赤道小弧弦。",
+      "field": "idiomatic",
+      "before": "Multiply the ecliptic–equator small chord by the solstitial inner-and-outer half arc-chord of 23°71′ to obtain 1050°51′4238 as dividend; dividing by the ecliptic–equator great chord of 60°87′50″ yields 17°25′19″ as the ecliptic–equator small arc-chord.",
+      "after": "Multiply the ecliptic–equator small chord by the solstitial inner-and-outer half arc-chord of 23°71′ to obtain 1050°51′4238 as dividend; dividing by the ecliptic–equator great chord of 60°87′50″ yields 17°25′69″ as the ecliptic–equator small arc-chord.",
+      "reason": "Received 二十五分十九秒 drops 六: 1050.514238 / 60.875 = 17.2569, which the Siku text reads (一十七度二十五分六十九秒) and s0149 uses (以差加黃赤道小弧弦一十七度二十五分六十九秒).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0149",
+          "excerpt": "以差加黃赤道小弧弦一十七度二十五分六十九秒"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "得一十七度二十五分六十九秒為黄赤道小弧弦",
+          "sourceHash": "sha256:2375fcdde1a44aedd60164c8dd3c97b89c83ed145ddd077d8bc42baa1b2d9ecd"
+        },
+        {
+          "source": "arithmetic",
+          "check": "1050.514238 / 60.875 = 17.2569"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:47"
+    },
+    {
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "術曰：「置實測白道出入黃道內外六度爲半徑弧弦，又爲大圖弧矢，又爲股弦差。",
+      "field": "literal",
+      "before": "The procedure says: \"Set the empirically measured white path's entry and exit within and without the ecliptic at 6 degrees as semidiameter arc-chord, also as great-circle arc-versine, and also as base–hypotenuse difference.",
+      "after": "The procedure says: \"Set the empirically measured white path's entry and exit within and without the ecliptic at 6 degrees as half arc-chord, also as great-circle arc-versine, and also as base–hypotenuse difference.",
+      "reason": "Received 半徑弧弦 is corrupt for 半弧弦 (Siku 為半弧弦); the 6° node-path separation is a half arc-chord, as in s0158 二至出入半弧弦. The half-diameter is a separate quantity (60.875, s0156).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0155",
+          "excerpt": "六度爲半徑弧弦"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0158",
+          "excerpt": "二至出入半弧弦"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "内外六度為半弧弦",
+          "sourceHash": "sha256:50affbbc98ead96306696cf2a191855becf148bcbfe3f8cc1becadf510ffb610"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:48"
+    },
+    {
+      "unit": {
+        "id": "s0155",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 1
+      },
+      "zh": "術曰：「置實測白道出入黃道內外六度爲半徑弧弦，又爲大圖弧矢，又爲股弦差。",
+      "field": "idiomatic",
+      "before": "The procedure says: \"Take the empirically measured white path's separation from the ecliptic at 6° as semidiameter arc-chord, also as great-circle arc-versine, and also as base–hypotenuse difference.",
+      "after": "The procedure says: \"Take the empirically measured white path's separation from the ecliptic at 6° as half arc-chord, also as great-circle arc-versine, and also as base–hypotenuse difference.",
+      "reason": "Received 半徑弧弦 is corrupt for 半弧弦 (Siku 為半弧弦); the 6° node-path separation is a half arc-chord, as in s0158 二至出入半弧弦. The half-diameter is a separate quantity (60.875, s0156).",
+      "confidence": "high",
+      "defectClass": "corrupt-source-mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0155",
+          "excerpt": "六度爲半徑弧弦"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0158",
+          "excerpt": "二至出入半弧弦"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "内外六度為半弧弦",
+          "sourceHash": "sha256:50affbbc98ead96306696cf2a191855becf148bcbfe3f8cc1becadf510ffb610"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:49"
+    },
+    {
+      "unit": {
+        "id": "s0156",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "置半徑六十零度七五自之，得三千七百零五度七六五六二五，以矢六度而一，得六百一十七度六十三分爲股弦和，加矢六度，共六百二十三度六十三分爲大圓徑。",
+      "field": "literal",
+      "before": "Set the semidiameter at 60 du 75 miao and square it, obtaining 3705 du 765625; divide by the versine of 6 degrees, obtaining 617 du 63 fen as base–hypotenuse sum; add the versine of 6 degrees, totaling 623 du 63 fen as the great-circle diameter.",
+      "after": "Set the semidiameter at 60 du 87 fen 50 miao and square it, obtaining 3705 du 765625; divide by the versine of 6 degrees, obtaining 617 du 63 fen as base–hypotenuse sum; add the versine of 6 degrees, totaling 623 du 63 fen as the great-circle diameter.",
+      "reason": "Received 六十零度七五 drops 八: the half-diameter is 60.875 (s0029, s0161), and 60.875² = 3705.765625, the stated square (60.75² would be 3690.5625). The Siku text reads 六十零度八七五.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0156",
+          "excerpt": "得三千七百零五度七六五六二五"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0161",
+          "excerpt": "置半徑六十零度八七五爲大弦"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "置半徑六十○度八七五自之得三千七百○五度七六五六二五",
+          "sourceHash": "sha256:441c5bdb60d70a51f5225da41f7270c7c93de2d86fcad3318bc0c5957bb63b05"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875^2 = 3705.765625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:50"
+    },
+    {
+      "unit": {
+        "id": "s0156",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 2
+      },
+      "zh": "置半徑六十零度七五自之，得三千七百零五度七六五六二五，以矢六度而一，得六百一十七度六十三分爲股弦和，加矢六度，共六百二十三度六十三分爲大圓徑。",
+      "field": "idiomatic",
+      "before": "Square the semidiameter of 60°75″ to obtain 3705°765625; dividing by the 6° versine yields 617°63′ as the base–hypotenuse sum; adding the 6° versine gives 623°63′ as the great-circle diameter.",
+      "after": "Square the semidiameter of 60°87′50″ to obtain 3705°765625; dividing by the 6° versine yields 617°63′ as the base–hypotenuse sum; adding the 6° versine gives 623°63′ as the great-circle diameter.",
+      "reason": "Received 六十零度七五 drops 八: the half-diameter is 60.875 (s0029, s0161), and 60.875² = 3705.765625, the stated square (60.75² would be 3690.5625). The Siku text reads 六十零度八七五.",
+      "confidence": "high",
+      "defectClass": "corrupt-source-value",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0156",
+          "excerpt": "得三千七百零五度七六五六二五"
+        },
+        {
+          "source": "chapter-text",
+          "citation": "s0161",
+          "excerpt": "置半徑六十零度八七五爲大弦"
+        },
+        {
+          "source": "external",
+          "title": "明史 卷三十二 志第八 曆二 (欽定四庫全書 文淵閣本 WYG)",
+          "url": "https://raw.githubusercontent.com/kanripo/KR2a0038/eccd6fe93126bde61b837240e6142e1343c22639/KR2a0038_032.txt",
+          "repository": "kanripo/KR2a0038",
+          "commit": "eccd6fe93126bde61b837240e6142e1343c22639",
+          "fileSha256": "sha256:3aad94405cd27f648d7503187149caf96ddf538649512d93e5f9ce94363003d5",
+          "accessedAt": "2026-11-24T16:55:00Z",
+          "excerpt": "置半徑六十○度八七五自之得三千七百○五度七六五六二五",
+          "sourceHash": "sha256:441c5bdb60d70a51f5225da41f7270c7c93de2d86fcad3318bc0c5957bb63b05"
+        },
+        {
+          "source": "arithmetic",
+          "check": "60.875^2 = 3705.765625"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:51"
+    },
+    {
+      "unit": {
+        "id": "s0159",
+        "kind": "paragraph-sentence",
+        "blockIndex": 32,
+        "collection": "sentences",
+        "itemIndex": 5
+      },
+      "zh": "以大句爲法，除大股五十六度零六分五十秒，得二度三十七分就整爲度差。",
+      "field": "idiomatic",
+      "before": "Divide the great base of 56°06′50″ by the great leg as divisor, obtaining 2°37′ rounded to the nearest degree as the degree difference.",
+      "after": "Divide the great base of 56°06′50″ by the great leg as divisor, obtaining 2°37′, rounded off, as the degree difference.",
+      "reason": "就整 rounds the quotient 56.065 / 23.71 = 2.3646 to 2.37; it is not rounded to a whole degree, which the stated 2°37′ itself contradicts.",
+      "confidence": "high",
+      "defectClass": "mistranslation",
+      "sourceWitnesses": [
+        {
+          "source": "chapter-text",
+          "citation": "s0159",
+          "excerpt": "得二度三十七分就整爲度差"
+        },
+        {
+          "source": "arithmetic",
+          "check": "56.065 / 23.71 = 2.3646"
+        }
+      ],
+      "proposalKey": "mingshi:032:owner-nov24:52"
+    }
+  ],
+  "repairBatchNotes": {
+    "count": 52,
+    "units": 29,
+    "chineseUnitsChanged": 0,
+    "routing": "Worker-authored English repairs: new schema-4 editorial review alongside retained r0001-r0003 (next free mingshi:032:r0004); a separate reviewer accepts, revises or rejects each. Chinese units unchanged, following the accepted mingshi/038 r0005-r0007 precedent.",
+    "deliberatelyNotRepaired": [
+      {
+        "unit": "s0024",
+        "reason": "Received 一百度七十三分 is right (26.465 + 74.265 = 100.73); the Siku 七十三度 is the error."
+      },
+      {
+        "unit": "s0141",
+        "reason": "Received 小弧弦 is right (s0149 adds the difference to the small arc-chord 17.2569); the Siku 小弧矢 is the error."
+      },
+      {
+        "unit": "s0081, s0082, s0084, s0085, s0099",
+        "reason": "Corrupt received characters (直, 黃赤道 for 黃道, 小股 for 小弦) whose English already renders the correct quantity or does not mislead."
+      },
+      {
+        "unit": "s0011, s0014, s0115, s0154, s0162",
+        "reason": "Glyph/title variants (因/曆, 辰/長, 略/甚略, 北極/極, 婁) with no value or attribution change in the English."
+      }
+    ]
+  },
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "id": "mingshi:032:C1",
+      "route": "date-repair (native replace/hints operations; same independent reviewer)",
+      "operations": [
+        {
+          "kind": "replace",
+          "id": "claim-4",
+          "before": [
+            "p001",
+            "attestation",
+            {
+              "sourceDate": {
+                "text": "《至元曆經》 (calendar classic title)"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Guo Shoujing is mentioned in bibliographical context, but this chapter supplies no dated personal event; 《至元曆經》 is a text title, not the Yuan Zhiyuan reign.",
+              "event": "Bibliographical reference involving Guo Shoujing is retained with the calendar-classic title; no personal activity date is asserted."
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0007",
+              "s0115",
+              "s0112"
+            ]
+          ],
+          "after": [
+            "p001",
+            "attestation",
+            {
+              "undatedSourceAttestation": true,
+              "event": "s0007 cites Guo Shoujing's biography for the titles of his calendar works and s0112 credits him with five new methods; neither passage, nor the 至元曆經 title in s0115, gives a calendar-bearing date for him."
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0007",
+              "s0115",
+              "s0112"
+            ]
+          ],
+          "reason": "Genuinely undated source attestation: the retained finding (2026-09-23 fresh audit) confirms the chapter supplies no personal chronology; the native undated representation replaces the open research hold without inventing a date."
+        },
+        {
+          "kind": "replace",
+          "id": "claim-12",
+          "before": [
+            "p002",
+            "attestation",
+            {
+              "sourceDate": {
+                "text": "《至元曆經》 (calendar classic title)"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Qi Luqian is mentioned in bibliographical context, but this chapter supplies no dated personal event; 《至元曆經》 is a text title, not the Yuan Zhiyuan reign.",
+              "event": "Bibliographical reference involving Qi Luqian is retained with the calendar-classic title; no personal activity date is asserted."
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0007",
+              "s0115"
+            ]
+          ],
+          "after": [
+            "p002",
+            "attestation",
+            {
+              "undatedSourceAttestation": true,
+              "event": "s0007 cites Qi Lüqian's biography only for the titles of his calendar works; neither it nor the 至元曆經 title in s0115 gives a calendar-bearing date for him."
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0007",
+              "s0115"
+            ]
+          ],
+          "reason": "Genuinely undated source attestation: the retained finding (2026-09-23 fresh audit) confirms the chapter supplies no personal chronology; the native undated representation replaces the open research hold without inventing a date."
+        },
+        {
+          "kind": "replace",
+          "id": "claim-17",
+          "before": [
+            "p003",
+            "attestation",
+            {
+              "sourceDate": {
+                "text": "《至元曆經》 (calendar classic title)"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Li Qian is mentioned in bibliographical context, but this chapter supplies no dated personal event; 《至元曆經》 is a text title, not the Yuan Zhiyuan reign.",
+              "event": "Bibliographical reference involving Li Qian is retained with the calendar-classic title; no personal activity date is asserted."
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0008",
+              "s0115"
+            ]
+          ],
+          "after": [
+            "p003",
+            "attestation",
+            {
+              "undatedSourceAttestation": true,
+              "event": "s0008 names Li Qian's surviving Deliberations (議錄) as preserved in the Yuan History; neither it nor the 至元曆經 title in s0115 gives a calendar-bearing date for him."
+            },
+            "explicit-event-contextual-date",
+            [
+              "s0008",
+              "s0115"
+            ]
+          ],
+          "reason": "Genuinely undated source attestation: the retained finding (2026-09-23 fresh audit) confirms the chapter supplies no personal chronology; the native undated representation replaces the open research hold without inventing a date."
+        },
+        {
+          "kind": "hints",
+          "personId": "p001",
+          "before": [
+            "research required: Guo Shoujing is genuinely mentioned in a bibliographical cross-reference, but this chapter contains no dated personal event, birth, death, age, or defensible activity interval."
+          ],
+          "after": [],
+          "reason": "The research-required hint text is replaced by no active-date hint, as for other genuinely undated attestations (native undatedOnlyEvidence path)."
+        },
+        {
+          "kind": "hints",
+          "personId": "p002",
+          "before": [
+            "research required: Qi Luqian is genuinely mentioned in a bibliographical cross-reference, but this chapter contains no dated personal event, birth, death, age, or defensible activity interval."
+          ],
+          "after": [],
+          "reason": "The research-required hint text is replaced by no active-date hint, as for other genuinely undated attestations (native undatedOnlyEvidence path)."
+        },
+        {
+          "kind": "hints",
+          "personId": "p003",
+          "before": [
+            "research required: Li Qian is genuinely mentioned as the author of drafts, but this chapter contains no dated personal event, birth, death, age, or defensible activity interval."
+          ],
+          "after": [],
+          "reason": "The research-required hint text is replaced by no active-date hint, as for other genuinely undated attestations (native undatedOnlyEvidence path)."
+        }
+      ]
+    },
+    {
+      "id": "mingshi:032:C2",
+      "route": "editorial claimRevisions/claimRetractions (separate reviewer)",
+      "revisions": [
+        {
+          "kind": "replace",
+          "id": "claim-18",
+          "before": [
+            "p003",
+            "authorship",
+            {
+              "work": {
+                "en": "Discourse on Official Emoluments",
+                "zh": "議祿"
+              },
+              "relation": "author",
+              "status": "draft"
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "after": [
+            "p003",
+            "authorship",
+            {
+              "work": {
+                "en": "Deliberations (Calendar Deliberations)",
+                "zh": "議錄"
+              },
+              "relation": "author"
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "reason": "Received 議祿 is corrupt for 議錄: Siku reads 僅存李謙之議録曆經之初稿 and Yuanshi 52 records 詔太子諭德李謙為曆議 … 謙曆議故存. The work is Li Qian's Calendar Deliberations, not a \"Discourse on Official Emoluments\"; 初稿 qualifies the Calendar Classic, so status draft is dropped."
+        },
+        {
+          "kind": "replace",
+          "id": "claim-20",
+          "before": [
+            "p003",
+            "work-association",
+            {
+              "work": {
+                "en": "Discourse on Official Emoluments",
+                "zh": "議祿"
+              },
+              "relation": "author"
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "after": [
+            "p003",
+            "work-association",
+            {
+              "work": {
+                "en": "Deliberations (Calendar Deliberations)",
+                "zh": "議錄"
+              },
+              "relation": "author"
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "reason": "Same corrected work title as claim-18."
+        },
+        {
+          "kind": "replace",
+          "id": "claim-22",
+          "before": [
+            "p003",
+            "event-participation",
+            {
+              "kind": "scholarly",
+              "role": "author",
+              "action": "drafts-preserved",
+              "label": {
+                "en": "only his draft Discourse on Official Emoluments and Calendar Classic survive in the Yuan History excerpts",
+                "zh": "僅存李謙之《議祿》、《曆經》之初稿"
+              }
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "after": [
+            "p003",
+            "event-participation",
+            {
+              "kind": "scholarly",
+              "role": "author",
+              "action": "deliberations-preserved",
+              "label": {
+                "en": "only his Deliberations survives in the Yuan History, beside the first draft of the Calendar Classic",
+                "zh": "僅存李謙之《議祿》"
+              }
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "reason": "Label corrected for the 議錄 title and the parallel 李謙之議錄、曆經之初稿 reading; the Calendar Classic draft is not attributed to Li Qian."
+        },
+        {
+          "kind": "replace",
+          "id": "claim-6",
+          "before": [
+            "p001",
+            "event-participation",
+            {
+              "kind": "scholarly",
+              "role": "creator",
+              "action": "established-five-methods",
+              "label": {
+                "en": "established five calendar methods, including ecliptic difference",
+                "zh": "創法五端，內一曰黃道差"
+              }
+            },
+            "explicit",
+            [
+              "s0112"
+            ]
+          ],
+          "after": [
+            "p001",
+            "event-participation",
+            {
+              "kind": "scholarly",
+              "role": "creator",
+              "action": "established-five-methods",
+              "label": {
+                "en": "established five calendar methods, including the ecliptic–equator difference",
+                "zh": "創法五端，內一曰黃道差"
+              }
+            },
+            "explicit",
+            [
+              "s0112"
+            ]
+          ],
+          "reason": "Received 黃道差 drops 赤: Siku reads 內一曰黄赤道差, the section heading (s0075) is 黃赤道差 and Yuanshi 52 lists 黃赤道差 among Guo Shoujing's new methods. The English label names the wrong quantity; the zh quote stays verbatim."
+        }
+      ],
+      "retractions": [
+        {
+          "kind": "remove",
+          "id": "claim-19",
+          "before": [
+            "p003",
+            "authorship",
+            {
+              "work": {
+                "en": "Calendar Classic",
+                "zh": "曆經"
+              },
+              "relation": "author",
+              "status": "draft"
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "reason": "Contradicted attribution: Yuanshi 52 names 衡、恂、守敬等所撰曆經 (Xu Heng, Wang Xun, Guo Shoujing and others) as authors of the Calendar Classic and Li Qian as author of the 曆議; s0008 李謙之議錄、曆經之初稿 is two parallel phrases. No source supports Li Qian as an author of the Calendar Classic."
+        },
+        {
+          "kind": "remove",
+          "id": "claim-21",
+          "before": [
+            "p003",
+            "work-association",
+            {
+              "work": {
+                "en": "Calendar Classic",
+                "zh": "曆經"
+              },
+              "relation": "author"
+            },
+            "explicit",
+            [
+              "s0008"
+            ]
+          ],
+          "reason": "Contradicted attribution: Yuanshi 52 names 衡、恂、守敬等所撰曆經 (Xu Heng, Wang Xun, Guo Shoujing and others) as authors of the Calendar Classic and Li Qian as author of the 曆議; s0008 李謙之議錄、曆經之初稿 is two parallel phrases. No source supports Li Qian as an author of the Calendar Classic."
+        }
+      ]
+    },
+    {
+      "id": "mingshi:032:C3",
+      "route": "editorial claimRevisions on the p001 name claim (canonical claimRef mingshi:032:c0002)",
+      "operations": [
+        {
+          "kind": "name",
+          "personId": "p001",
+          "index": 1,
+          "before": [
+            {
+              "kind": "alternate",
+              "en": "Guo Jing",
+              "zh": "郭敬",
+              "pinyin": "Guo Jing"
+            },
+            "explicit",
+            [
+              "s0112"
+            ]
+          ],
+          "after": [
+            {
+              "kind": "textual-variant",
+              "en": "Guo Jing",
+              "zh": "郭敬",
+              "pinyin": "Guo Jing",
+              "provenance": {
+                "mode": "source-critical-emendation",
+                "reference": "Mingshi 032 Siku WYG (KR2a0038 juan 32): 按郭守敬創法五端; s0007 郭守敬",
+                "note": "The received s0112 drops 守 from 郭守敬. The form is preserved as a textual variant of Guo Shoujing, not as a separate alternate name."
+              }
+            },
+            "textual-variant",
+            [
+              "s0112"
+            ]
+          ],
+          "reason": "Received 郭敬 at s0112 is a scribal omission of 守 (Siku 按郭守敬創法五端; s0007 郭守敬). Recording it as an \"alternate\" name asserts an alias the source does not support. The native textual-variant form (precedent: songshu/010 p025 劉候, shiji/094 p015) keeps the s0112 mention and surface while marking the form as a corruption. Note: the current resolver still derives the blocking key zh:郭敬 from any name claim (see nonBlockingObservations)."
+        }
+      ]
+    }
+  ],
+  "distinctHolds": [
+    {
+      "id": "mingshi:032:H1",
+      "origin": "data/people/date-audits/mingshi/032.json findings[0] (research-blocked, 2026-09-23), preserved",
+      "items": [
+        "claim-4",
+        "claim-12",
+        "claim-17",
+        "hints-p001",
+        "hints-p002",
+        "hints-p003",
+        "p001",
+        "p002",
+        "p003"
+      ],
+      "classification": "source-supported unknown (genuinely undated bibliographical mentions); no source contradiction",
+      "proposedTreatment": "C1: replace the three unresolved title-context attestations with undatedSourceAttestation:true and a source-specific event, and replace the research-required hint text with no hint. This is the native representation for a genuinely undated source (validator undatedOnlyEvidence path; precedents jiuwudaishi/004, jiuwudaishi/008, jiutangshu/072). No date is invented and the 至元曆經 title is not converted.",
+      "notProposed": "External biography dates for Guo Shoujing, Qi Lüqian or Li Qian (Yuanshi biographies) are optional-field research and are not proposed.",
+      "reviewer": "the same independent final reviewer; breaker round 2 of 3"
+    }
+  ],
+  "nonBlockingObservations": [
+    {
+      "observation": "Resolver: scripts/lib/people-resolution.mjs builds blocking keys from every name claim, and textual-variant is not in NON_BLOCKING_NAME_KINDS, so even after C3 the form 郭敬 keeps producing review pairs with eight Guo Jing dossiers. That is a shared host policy question (one code change, not a chapter review); the C3 representation is correct either way."
+    },
+    {
+      "observation": "Qi Lüqian (per_VHMQXQD6JXNZZM5PT5MY) is a single-member dossier. No cross-chapter match is proposed (no recursive completion)."
+    }
+  ],
+  "boundedLookup": {
+    "used": true,
+    "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "requests": "about 40 GET requests",
+    "results": [
+      {
+        "member": "mingshi:032:p001",
+        "dossier": "per_1KMTQT0BD5BAXH67NXN3",
+        "dossierVersion": "sha256:042b429d2a7cceba31480f417ea028f3b9c5ef4e15874ae86f749b2aff61d752",
+        "members": 6,
+        "note": "Guo Shoujing; zh:郭敬 is blocking, sourced only from mingshi:032:c0002; key zh:郭敬 matches 8 dossiers"
+      },
+      {
+        "member": "mingshi:032:p002",
+        "dossier": "per_VHMQXQD6JXNZZM5PT5MY",
+        "dossierVersion": "sha256:2b6a5b2eca590af9cf7b80b35f5782680f3eca3283f39a31036f33a539458050",
+        "members": 1,
+        "note": "Qi Lüqian; single member"
+      },
+      {
+        "member": "mingshi:032:p003",
+        "dossier": "per_1ZS00J2VAGYM19Q6Y637",
+        "dossierVersion": "sha256:503716ce943cf41cc49aea603296c24f5c43694fbda3585c51d77cf1fca981a7",
+        "members": 4,
+        "note": "Li Qian (zh:李謙), members yuanshi:115/174"
+      }
+    ],
+    "conclusion": "Memberships are consistent; no identity merge or split proposed. Retrieval is not approval."
+  },
+  "chapterReady": {
+    "ready": false,
+    "outcome": "nonempty chapter (3 people) with English repairs, scoped claim corrections and an undated-attestation proposal for the retained hold",
+    "blocker": "52 worker-authored English repairs, the claim revisions/retractions (C2, C3) and the undated-attestation treatment (C1) all need independent review and host application; the date audit must then be recorded natively on the amended candidate",
+    "nextGate": "one final independent review covering definiteTranslationRepairs, C1-C3, H1 and canonical certification of p001-p003",
+    "preservedProofs": [
+      "data/people/editorial-decisions/mingshi/032.json blob b8508e0862623ff1aa5a1665ac970f46c440be3f (r0001-r0003 retained)",
+      "data/people/date-audits/mingshi/032.json blob 85134307761b8612fc2ca1effe9fca76eb4fabd9 and its history/repair receipts (unchanged)",
+      "extraction mentions, surfaces and all claims outside C1-C3"
+    ],
+    "canonicalWrites": "none"
+  }
+}
