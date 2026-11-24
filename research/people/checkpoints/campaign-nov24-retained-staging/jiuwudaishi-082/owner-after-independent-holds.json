@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-after-independent-identity-holds",
+  "chapterKey": "jiuwudaishi/082",
+  "ownerAgentId": "bc-041d7b54-ca95-4d7f-89c4-e108ff0bd368",
+  "ownerRevision": "46c9b7df23b37614ea81521ab7fc9e9e2f9bdca5",
+  "sourceReviewHead": "29803e54cefc666cb88af8d046908cf90cc4b0a5",
+  "idempotencyKey": "0561e926005905e1ac9fd36c171a656d3200cf4a262c6f9f3617b042cfe461da",
+  "branch": "cursor/nov24-exact-witness-owner-jiuwudaishi-082",
+  "inputBlobWitness": {
+    "source": "f703ee319dbcf48773d81dfc2096eab4abd4fc69",
+    "extraction": "d85894592fad2deaa8989fe2ba9c6d65d9247cca",
+    "dateAudit": "641598e82eab12a0fb78a5f8350650a774cadfaa",
+    "editorial": "e0d8b4413f290d7ec777dc34e4449c3f4823ca0a"
+  },
+  "transportBlob": "1595d4bfa7d2cc1f155d8c4b15b201fe82f667b3",
+  "independentIdentityReports": [
+    {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-082/independent-identity-report-part-001.json",
+      "sha256": "sha256:7958e6e7a99f0ff7fce7745f614435f50311740b833befe3326aebc7ada66415",
+      "verified": true
+    },
+    {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-082/independent-identity-report-part-002.json",
+      "sha256": "sha256:4eae0a89706ec59ec1fc281d406a85374a6b8e102618da57366afd05d1322610",
+      "verified": true
+    },
+    {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-082/independent-identity-report-part-003.json",
+      "sha256": "sha256:8df63bfff53e0f3cfd03599b0a559f4fe6da8578cdffac1e923b68fa8f610f14",
+      "verified": true
+    },
+    {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-082/independent-identity-report-part-004.json",
+      "sha256": "sha256:703dc64c4f1bdaeaefd27c2140e41758d62dcf86210507644da60e2e94583294",
+      "verified": true
+    },
+    {
+      "path": "research/people/checkpoints/campaign-nov24-retained-staging/jiuwudaishi-082/independent-identity-report-part-005.json",
+      "sha256": "sha256:5043e896fe915342e2caf1603eada1a64073da64512dc3e3b10d2d07ffe3f880",
+      "verified": true
+    }
+  ],
+  "cases": [
+    {
+      "caseId": "sha256:e51532996ac7226a1b2319394171622812af8d2cf6e13fe88a1cf5d3a36a5c52",
+      "localPersonId": "jiuwudaishi:082:p131",
+      "personId": "p131",
+      "independentVerdict": "hold",
+      "addressedByProposal": true
+    }
+  ],
+  "proposedChanges": [
+    {
+      "changeId": "sha256:040b6ec08010a4293281b75c9d1f466a6b3da0cc582fc864b4deb13366b69de4",
+      "caseId": "sha256:e51532996ac7226a1b2319394171622812af8d2cf6e13fe88a1cf5d3a36a5c52",
+      "path": "data/people/extractions/jiuwudaishi/082.json",
+      "target": "people[] row p131 (display name + identity name evidence)",
+      "before": {
+        "display": [
+          "Concubine of Wang Xu",
+          "王緒妾",
+          null
+        ],
+        "identity": [
+          {
+            "kind": "descriptive-kinship",
+            "en": "Concubine of Wang Xu",
+            "zh": "王緒妾",
+            "strength": "explicit",
+            "units": [
+              "s0165"
+            ]
+          }
+        ]
+      },
+      "after": {
+        "display": [
+          "Wang Xu's concubine",
+          "妾",
+          null
+        ],
+        "identity": [
+          {
+            "kind": "descriptive-kinship",
+            "en": "concubine",
+            "zh": "妾",
+            "strength": "explicit",
+            "units": [
+              "s0165"
+            ]
+          }
+        ],
+        "notes": "Retain p132 妾之兄 wiring unchanged (primary quote contains 妾之兄)."
+      },
+      "sourceWitnesses": [
+        {
+          "unitId": "s0165",
+          "zh": "緒家於青州，常致書於楊光遠，緒有妾之兄慊緒不為赒給，遂告與光遠連謀，密書述朝廷機事，遂收捕斬之。",
+          "quote": "緒有妾",
+          "englishIdiomatic": "Xu had a concubine whose elder brother resented that Xu would not support him"
+        }
+      ],
+      "affectedPersonIds": [
+        "p131"
+      ],
+      "affectedClaims": [
+        "p131 name",
+        "p130 spouse-of p131 (kinshipTerm 妾 unchanged)",
+        "p132 sibling-of p131"
+      ],
+      "dependencies": {
+        "chronology": "No attestation or s0165 date edits",
+        "identity": "Removes composed 王緒妾 false surface; does not split Wang Xu (p130) or brother (p132)"
+      }
+    }
+  ],
+  "heldCases": [],
+  "retainedUncertainty": [],
+  "nativeValidation": {
+    "sealedExtractionUnchanged": true,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 082",
+      "summary": "Scoped person data validation passed for jiuwudaishi/082: 1 extraction(s), 170 local people, 504 mentions, 1864 claims, 0 proposed repair(s), 37 applied repair(s), 37 editorial decision(s), 0 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 082",
+      "result": {
+        "book": "jiuwudaishi",
+        "chapter": "082",
+        "status": "audited",
+        "auditVersion": 1,
+        "reviewedAt": "2026-09-29T17:34:44.420Z",
+        "findings": 0
+      }
+    },
+    "postApplyGate": "Host applies proposedChanges to extraction then re-runs validate + bounded identity re-review"
+  },
+  "notes": "[CF-Pages-Skip] Proposal-only commit; sealed source/date/editorial bytes preserved."
+}
