@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "127"
+  },
+  "ownerAgentId": "bc-e2d6f64e-5934-4156-826b-86badf6777db",
+  "worker": "cursor-nov24-retained-staging-w11-o8",
+  "idempotencyKey": "e2c00228863a23592e11283b45d25cd1dd23c0c8ca8806d9ab16b99633cb7922",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-mingshi-127-777db",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "6eb23f94767a2b654a1d14de22911a07d31c78a5a0260b9be60085845ded0707",
+    "people": 53,
+    "claims": 221,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "177e34194223294c7cc1822f2b0d835bcf5018e7",
+    "extraction": "55cd3d9d4f4ef6eca78fcf22ed5a07b72f486355",
+    "editorial": "697867cfa887abd2102f41dbb963c6e2e520cf1a"
+  },
+  "pinnedInputPaths": {
+    "source": "data/mingshi/127.json",
+    "extraction": "data/people/extractions/mingshi/127.json",
+    "editorial": "data/people/editorial-decisions/mingshi/127.json"
+  },
+  "sealedInputs": {
+    "source": "sha256:677c2922b32940447a8494b23494b945169aa751227b0b3c75afa93434bde518",
+    "extraction": "sha256:6eb23f94767a2b654a1d14de22911a07d31c78a5a0260b9be60085845ded0707",
+    "editorial": "sha256:e84e81bc0a8174829b3010adfaa66f7e752f73f4c5afd257f8d65c5019d05253"
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/mingshi/127.json",
+    "promptVersion": 7,
+    "peopleCount": 53,
+    "claimsCount": 221,
+    "editorialAppliedInExtraction": true,
+    "canonicalEdits": false,
+    "notes": "Existing extraction bytes and accepted editorial decisions retained; no re-extraction or owner self-approved date audit."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/mingshi/127.json",
+    "decisionCount": 2,
+    "status": "reviewed-with-applied-proposals"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-127/date-packet.json",
+    "contentSha256": "sha256:2a289baf62146e590690f6cafb93988e7099926e11c6d6472a0d1a5eafb8654e",
+    "semanticSourceHash": "sha256:3a897f43a74cdf286b10d2124b4d0bd220cee64d524a666fa2c3b749b4459497",
+    "semanticExtractionHash": "sha256:f5c6256574d79cf8108f7980f691329fb3c0666b1f30c3d14ce2184725ee1691",
+    "dateHintCheckCount": 135,
+    "peopleCount": 53,
+    "command": "npm run people:dates:packet -- --book mingshi --chapter 127 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-127/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "sourceCoverage": {
+    "titleEn": "Volume 127 Biographies 15: Li Shanzhang, Wang Guangyang",
+    "titleZh": "卷一百二十七 列傳第十五 李善長 汪廣洋",
+    "englishCoverage": {
+      "sentenceCount": 150,
+      "translatedCount": 150,
+      "bothFieldsComplete": true,
+      "missingUnits": [],
+      "verifiedByOwnerScan": true
+    },
+    "extractionPromptVersion": 7,
+    "dispatchPeopleCount": 53,
+    "dispatchClaimsCount": 221,
+    "ownerMethod": "Verified pinned git blobs; read Chinese (zh) and English (literal+idiomatic) fields; npm run people:validate; fresh people:dates:packet candidate only (not independent approval)."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book mingshi --chapter 127",
+      "passed": true,
+      "summary": "Scoped person data validation passed for mingshi/127: 1 extraction(s), 53 local people, 458 mentions, 404 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 127",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyClosure": {
+    "ownerRepairs": false,
+    "candidatePacketReady": true,
+    "independentDateAuditStatus": "missing",
+    "notes": "data/people/date-audits/mingshi/127.json absent; owner prepared sealed candidate packet for independent native chronology review only."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction (prompt v7), and editorial artifacts match staging witnesses. Scoped people:validate passed. English literal and idiomatic fields complete on source scan. No definite English omission or chronology contradiction repaired in owner pass. Native independent date audit still missing.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "not-started",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-127/date-packet.json",
+      "candidatePacketSha256": "sha256:2a289baf62146e590690f6cafb93988e7099926e11c6d6472a0d1a5eafb8654e",
+      "recordCommand": "npm run people:dates:record -- --book mingshi --chapter 127",
+      "notes": "Separate reviewer must approve full chapter chronology from candidate packet; owner did not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Independent bounded dossier identity review of canonical evidence after date gate."
+    },
+    "independentReviewCompleted": false,
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "verifyBlobs": "git rev-parse HEAD:data/mingshi/127.json; git rev-parse HEAD:data/people/extractions/mingshi/127.json; git rev-parse HEAD:data/people/editorial-decisions/mingshi/127.json",
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 127",
+    "buildDatePacket": "npm run people:dates:packet -- --book mingshi --chapter 127 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-127/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book mingshi --chapter 127"
+  },
+  "artifacts": {
+    "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-127/date-packet.json",
+    "ownerHandoff": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-127/owner-handoff.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner evidence only; no deploy, merge, registry generation, or canonical input edits."
+}

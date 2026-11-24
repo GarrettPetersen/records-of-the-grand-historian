@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "436"
+  },
+  "ownerAgentId": "bc-e2d6f64e-5934-4156-826b-86badf6777db",
+  "worker": "cursor-nov24-retained-staging-w11-o8",
+  "idempotencyKey": "e2c00228863a23592e11283b45d25cd1dd23c0c8ca8806d9ab16b99633cb7922",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-436-777db",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "b193b6c24921a2c6a7c34f727bb710f614c3f56ebaa4535dcbd5a9495b032908",
+    "people": 44,
+    "claims": 223,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "0e76525c902f2c15e661cc1fcddb021602d50296",
+    "extraction": "032c29e1cd4e5fa28d7c2fedcbda2f93296ffe6a",
+    "editorial": "21a49f0075ad578e9c80042664ddabe5daa3ae38"
+  },
+  "pinnedInputPaths": {
+    "source": "data/qingshigao/436.json",
+    "extraction": "data/people/extractions/qingshigao/436.json",
+    "editorial": "data/people/editorial-decisions/qingshigao/436.json"
+  },
+  "sealedInputs": {
+    "source": "sha256:00914c0ba0ab2547d460ed10afb4ae4cd682d43630f0aeec7fd404bddc2afc06",
+    "extraction": "sha256:b193b6c24921a2c6a7c34f727bb710f614c3f56ebaa4535dcbd5a9495b032908",
+    "editorial": "sha256:37b9a8a212ca59b00dee59f99e74142f5a27b2dcb29554dec23359b5e24eccf8"
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/qingshigao/436.json",
+    "promptVersion": 7,
+    "peopleCount": 44,
+    "claimsCount": 223,
+    "editorialAppliedInExtraction": true,
+    "canonicalEdits": false,
+    "notes": "Existing extraction bytes and accepted editorial decisions retained; no re-extraction or owner self-approved date audit."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/qingshigao/436.json",
+    "decisionCount": 6,
+    "status": "reviewed-with-applied-proposals"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-436/date-packet.json",
+    "contentSha256": "sha256:68b354ce24093bdce22c523116ba466e742e21ef39559e518fd933163d0b8544",
+    "semanticSourceHash": "sha256:66be4e75b8b59bf294b61c006addad01a809f0233e6042ca72b509aab82c9a35",
+    "semanticExtractionHash": "sha256:d0fa159875d2c6e0f55d95299bab90d48a0ff0524dc7874341e8ec231303feb7",
+    "dateHintCheckCount": 158,
+    "peopleCount": 44,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 436 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-436/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "sourceCoverage": {
+    "titleEn": "Volume 436 Biographies 223: Shen Guifen, Li Hongzao, Weng Tonghe, Sun Yuwen",
+    "titleZh": "卷436 列傳二百二十三 沈桂芬 李鸿藻 翁同龢 孙毓汶",
+    "englishCoverage": {
+      "sentenceCount": 204,
+      "translatedCount": 204,
+      "bothFieldsComplete": true,
+      "missingUnits": [],
+      "verifiedByOwnerScan": true
+    },
+    "extractionPromptVersion": 7,
+    "dispatchPeopleCount": 44,
+    "dispatchClaimsCount": 223,
+    "ownerMethod": "Verified pinned git blobs; read Chinese (zh) and English (literal+idiomatic) fields; npm run people:validate; fresh people:dates:packet candidate only (not independent approval)."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 436",
+      "passed": true,
+      "summary": "Scoped person data validation passed for qingshigao/436: 1 extraction(s), 44 local people, 276 mentions, 380 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 436",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyClosure": {
+    "ownerRepairs": false,
+    "candidatePacketReady": true,
+    "independentDateAuditStatus": "missing",
+    "notes": "data/people/date-audits/qingshigao/436.json absent; owner prepared sealed candidate packet for independent native chronology review only."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction (prompt v7), and editorial artifacts match staging witnesses. Scoped people:validate passed. English literal and idiomatic fields complete on source scan. No definite English omission or chronology contradiction repaired in owner pass. Native independent date audit still missing.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "not-started",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-436/date-packet.json",
+      "candidatePacketSha256": "sha256:68b354ce24093bdce22c523116ba466e742e21ef39559e518fd933163d0b8544",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 436",
+      "notes": "Separate reviewer must approve full chapter chronology from candidate packet; owner did not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Independent bounded dossier identity review of canonical evidence after date gate."
+    },
+    "independentReviewCompleted": false,
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "verifyBlobs": "git rev-parse HEAD:data/qingshigao/436.json; git rev-parse HEAD:data/people/extractions/qingshigao/436.json; git rev-parse HEAD:data/people/editorial-decisions/qingshigao/436.json",
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 436",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 436 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-436/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 436"
+  },
+  "artifacts": {
+    "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-436/date-packet.json",
+    "ownerHandoff": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-436/owner-handoff.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner evidence only; no deploy, merge, registry generation, or canonical input edits."
+}

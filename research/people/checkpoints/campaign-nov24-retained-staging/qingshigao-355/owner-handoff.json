@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "355"
+  },
+  "ownerAgentId": "bc-e2d6f64e-5934-4156-826b-86badf6777db",
+  "worker": "cursor-nov24-retained-staging-w11-o8",
+  "idempotencyKey": "e2c00228863a23592e11283b45d25cd1dd23c0c8ca8806d9ab16b99633cb7922",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-355-777db",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "00366916f8767e3df4595c4e858be640ef622f354c5b0d0486c44fde7c05c9c7",
+    "people": 73,
+    "claims": 162,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "079fd1804df54612baefb37faf5351bc379d06db",
+    "extraction": "23bc03eecf4f1b5a8101c951ac3bf1992bbab2e9",
+    "editorial": "e5a2375ad1dd98d3eeb89d962359dd3fa750320c"
+  },
+  "pinnedInputPaths": {
+    "source": "data/qingshigao/355.json",
+    "extraction": "data/people/extractions/qingshigao/355.json",
+    "editorial": "data/people/editorial-decisions/qingshigao/355.json"
+  },
+  "sealedInputs": {
+    "source": "sha256:5d8db5fa60593e346970657fe7260b831cc7027bfcbab6db784e07b606a0433c",
+    "extraction": "sha256:00366916f8767e3df4595c4e858be640ef622f354c5b0d0486c44fde7c05c9c7",
+    "editorial": "sha256:6ff23466d42bc609c4837a136bd743e9575a21c704ddcf4f8d5276c3d28ecf52"
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/qingshigao/355.json",
+    "promptVersion": 7,
+    "peopleCount": 73,
+    "claimsCount": 162,
+    "editorialAppliedInExtraction": true,
+    "canonicalEdits": false,
+    "notes": "Existing extraction bytes and accepted editorial decisions retained; no re-extraction or owner self-approved date audit."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/qingshigao/355.json",
+    "decisionCount": 3,
+    "status": "reviewed-with-applied-proposals"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-355/date-packet.json",
+    "contentSha256": "sha256:4a27ee5666a98f166ad806ba9dde786c6fe7f67563a1ce5f18fbafd4268bf709",
+    "semanticSourceHash": "sha256:54083ab94182b761cf7293142695b5db79a07941de80588afb48a00402198f2b",
+    "semanticExtractionHash": "sha256:678b3e2f0a331d5babe2a07932b62ca1307f1a35579e75ba4470d73b3dbaf2cf",
+    "dateHintCheckCount": 182,
+    "peopleCount": 73,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 355 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-355/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "sourceCoverage": {
+    "titleEn": "Volume 355 Biographies 142: Kui Lun, Guang Xing, Chu Peng Ling",
+    "titleZh": "卷355 列傳一百四十二 魁伦 广兴 初彭龄",
+    "englishCoverage": {
+      "sentenceCount": 142,
+      "translatedCount": 142,
+      "bothFieldsComplete": true,
+      "missingUnits": [],
+      "verifiedByOwnerScan": true
+    },
+    "extractionPromptVersion": 7,
+    "dispatchPeopleCount": 73,
+    "dispatchClaimsCount": 162,
+    "ownerMethod": "Verified pinned git blobs; read Chinese (zh) and English (literal+idiomatic) fields; npm run people:validate; fresh people:dates:packet candidate only (not independent approval)."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 355",
+      "passed": true,
+      "summary": "Scoped person data validation passed for qingshigao/355: 1 extraction(s), 73 local people, 344 mentions, 385 claims, 0 proposed repair(s), 2 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 355",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyClosure": {
+    "ownerRepairs": false,
+    "candidatePacketReady": true,
+    "independentDateAuditStatus": "missing",
+    "notes": "data/people/date-audits/qingshigao/355.json absent; owner prepared sealed candidate packet for independent native chronology review only."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction (prompt v7), and editorial artifacts match staging witnesses. Scoped people:validate passed. English literal and idiomatic fields complete on source scan. No definite English omission or chronology contradiction repaired in owner pass. Native independent date audit still missing.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "not-started",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-355/date-packet.json",
+      "candidatePacketSha256": "sha256:4a27ee5666a98f166ad806ba9dde786c6fe7f67563a1ce5f18fbafd4268bf709",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 355",
+      "notes": "Separate reviewer must approve full chapter chronology from candidate packet; owner did not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Independent bounded dossier identity review of canonical evidence after date gate."
+    },
+    "independentReviewCompleted": false,
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "verifyBlobs": "git rev-parse HEAD:data/qingshigao/355.json; git rev-parse HEAD:data/people/extractions/qingshigao/355.json; git rev-parse HEAD:data/people/editorial-decisions/qingshigao/355.json",
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 355",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 355 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-355/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 355"
+  },
+  "artifacts": {
+    "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-355/date-packet.json",
+    "ownerHandoff": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-355/owner-handoff.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner evidence only; no deploy, merge, registry generation, or canonical input edits."
+}

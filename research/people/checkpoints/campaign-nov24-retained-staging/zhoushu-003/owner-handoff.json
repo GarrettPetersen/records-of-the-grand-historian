@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "003"
+  },
+  "ownerAgentId": "bc-e2d6f64e-5934-4156-826b-86badf6777db",
+  "worker": "cursor-nov24-retained-staging-w11-o8",
+  "idempotencyKey": "e2c00228863a23592e11283b45d25cd1dd23c0c8ca8806d9ab16b99633cb7922",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-zhoushu-003-777db",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "50e301e74fb2560c9c7874d1f6a31ead77684c79c9bb9b61cb8d4c6d288c5170",
+    "people": 42,
+    "claims": 182,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "928c72c33b320b4b3a7f6ef8ab266e1dfc90fc2f",
+    "extraction": "6a0eda7cd6d6308874132b3e5bf1cdcd5514af83",
+    "editorial": "fb1078321f302511540ed36c67f9536cb0e6357e"
+  },
+  "pinnedInputPaths": {
+    "source": "data/zhoushu/003.json",
+    "extraction": "data/people/extractions/zhoushu/003.json",
+    "editorial": "data/people/editorial-decisions/zhoushu/003.json"
+  },
+  "sealedInputs": {
+    "source": "sha256:f536c4802fe133e20730982d33857f4d962e291407d30b566b58a52ad9a330a0",
+    "extraction": "sha256:50e301e74fb2560c9c7874d1f6a31ead77684c79c9bb9b61cb8d4c6d288c5170",
+    "editorial": "sha256:002a02722f085f652aa21053d3b86a62fb3a615c0ab65d4a8aae4ec583abb5c6"
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/zhoushu/003.json",
+    "promptVersion": 7,
+    "peopleCount": 42,
+    "claimsCount": 182,
+    "editorialAppliedInExtraction": true,
+    "canonicalEdits": false,
+    "notes": "Existing extraction bytes and accepted editorial decisions retained; no re-extraction or owner self-approved date audit."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/zhoushu/003.json",
+    "decisionCount": 4,
+    "status": "reviewed-with-applied-proposals"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-003/date-packet.json",
+    "contentSha256": "sha256:2cc514c88233a80093d418a8a4f80ea46028b4b16e68e6ff911d4053f92a1815",
+    "semanticSourceHash": "sha256:0e9ea9f6378b746361bd5e32278d84a18756a8926608ac100e4733f22e984ac8",
+    "semanticExtractionHash": "sha256:7e16b7091c11dc868a651fb742512e2fb8e9253c74435db5b3298af6ab185444",
+    "dateHintCheckCount": 156,
+    "peopleCount": 42,
+    "command": "npm run people:dates:packet -- --book zhoushu --chapter 003 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-003/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "sourceCoverage": {
+    "titleEn": "Volume 3 Annals 3: Emperor Xiaomin",
+    "titleZh": "卷3 帝紀第3 孝閔帝",
+    "englishCoverage": {
+      "sentenceCount": 155,
+      "translatedCount": 155,
+      "bothFieldsComplete": true,
+      "missingUnits": [],
+      "verifiedByOwnerScan": true
+    },
+    "extractionPromptVersion": 7,
+    "dispatchPeopleCount": 42,
+    "dispatchClaimsCount": 182,
+    "ownerMethod": "Verified pinned git blobs; read Chinese (zh) and English (literal+idiomatic) fields; npm run people:validate; fresh people:dates:packet candidate only (not independent approval)."
+  },
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book zhoushu --chapter 003",
+      "passed": true,
+      "summary": "Scoped person data validation passed for zhoushu/003: 1 extraction(s), 42 local people, 291 mentions, 359 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book zhoushu --chapter 003",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyClosure": {
+    "ownerRepairs": false,
+    "candidatePacketReady": true,
+    "independentDateAuditStatus": "missing",
+    "notes": "data/people/date-audits/zhoushu/003.json absent; owner prepared sealed candidate packet for independent native chronology review only."
+  },
+  "definiteTranslationRepairs": [],
+  "substantiveFindings": "Pinned source, extraction (prompt v7), and editorial artifacts match staging witnesses. Scoped people:validate passed. English literal and idiomatic fields complete on source scan. No definite English omission or chronology contradiction repaired in owner pass. Native independent date audit still missing.",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "not-started",
+      "candidatePacket": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-003/date-packet.json",
+      "candidatePacketSha256": "sha256:2cc514c88233a80093d418a8a4f80ea46028b4b16e68e6ff911d4053f92a1815",
+      "recordCommand": "npm run people:dates:record -- --book zhoushu --chapter 003",
+      "notes": "Separate reviewer must approve full chapter chronology from candidate packet; owner did not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Independent bounded dossier identity review of canonical evidence after date gate."
+    },
+    "independentReviewCompleted": false,
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "verifyBlobs": "git rev-parse HEAD:data/zhoushu/003.json; git rev-parse HEAD:data/people/extractions/zhoushu/003.json; git rev-parse HEAD:data/people/editorial-decisions/zhoushu/003.json",
+    "validateChapter": "npm run people:validate -- --book zhoushu --chapter 003",
+    "buildDatePacket": "npm run people:dates:packet -- --book zhoushu --chapter 003 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-003/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book zhoushu --chapter 003"
+  },
+  "artifacts": {
+    "datePacket": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-003/date-packet.json",
+    "ownerHandoff": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-003/owner-handoff.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner evidence only; no deploy, merge, registry generation, or canonical input edits."
+}
