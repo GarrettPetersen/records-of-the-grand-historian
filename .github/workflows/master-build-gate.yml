@@ -5,7 +5,7 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['031', '083', '094', '115', '031-record', '031-stage', '083-witness-check']
+        options: ['030', '031', '083', '094', '115', '031-record', '031-stage', '083-witness-check']
 permissions:
   contents: read
   actions: read
@@ -20,6 +20,7 @@ jobs:
       - id: pin
         run: |
           case "$CHAPTER" in
+            030) revision=4250c15c07f1416179ea73b9645b87d009cf5a47; registry_run=0 ;;
             031) revision=f65754d727561484a4a9a75453cdcd67ecec5c4d; registry_run=45284855296 ;;
             083) revision=5683d3756bf9e220572bba2738a7cea89775f898; registry_run=45293507945 ;;
             094) revision=61af8b0a5f15851a41c85ee7c374e7c93d02d108; registry_run=45293954323 ;;
@@ -36,7 +37,33 @@ jobs:
         with:
           node-version-file: .node-version
       - run: npm install --no-audit --no-fund
+      - name: Build the source-pinned registry on the same hosted runner
+        if: inputs.chapter == '030'
+        env:
+          SOURCE_REVISION: ${{ steps.pin.outputs.revision }}
+          NODE_OPTIONS: --max-old-space-size=3072
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
+          root="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers"
+          mkdir -p "$root" "$RUNNER_TEMP/registry-direct"
+          node scripts/people-identity-registry-worker.mjs --out "$root/$SOURCE_REVISION" --revision "$SOURCE_REVISION"
+          cp "$root/$SOURCE_REVISION/manifest.json" "$RUNNER_TEMP/registry-direct/manifest.json"
+          tar -czf "$RUNNER_TEMP/registry-direct/registry.tar.gz" -C "$root" "$SOURCE_REVISION"
+          cd "$RUNNER_TEMP/registry-direct"
+          sha256sum registry.tar.gz manifest.json > SHA256SUMS
+          test "$(stat -c %s registry.tar.gz)" -le 167772160
+      - uses: actions/upload-artifact@v4
+        if: inputs.chapter == '030'
+        with:
+          name: people-registry-${{ steps.pin.outputs.revision }}
+          path: ${{ runner.temp }}/registry-direct/
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
       - uses: actions/download-artifact@v4
+        if: inputs.chapter != '030'
         with:
           name: people-registry-${{ steps.pin.outputs.registry_revision }}
           run-id: ${{ steps.pin.outputs.registry_run }}
@@ -116,13 +143,18 @@ jobs:
           if [[ "$REGISTRY_REVISION" != "$SOURCE_REVISION" ]]; then
             git fetch --depth=1 --no-tags origin "$REGISTRY_REVISION"
           fi
-          cd "$RUNNER_TEMP/registry-archive"
-          sha256sum -c SHA256SUMS
-          mkdir "$RUNNER_TEMP/identity-registry"
-          tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
-          registry="$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION"
-          cmp manifest.json "$registry/manifest.json"
-          cd "$GITHUB_WORKSPACE"
+          if [[ "$CHAPTER" == 030 ]]; then
+            registry="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE_REVISION"
+            test -f "$registry/manifest.json"
+          else
+            cd "$RUNNER_TEMP/registry-archive"
+            sha256sum -c SHA256SUMS
+            mkdir "$RUNNER_TEMP/identity-registry"
+            tar -xzf registry.tar.gz -C "$RUNNER_TEMP/identity-registry"
+            registry="$RUNNER_TEMP/identity-registry/$REGISTRY_REVISION"
+            cmp manifest.json "$registry/manifest.json"
+            cd "$GITHUB_WORKSPACE"
+          fi
           extra=()
           if [[ "$CHAPTER" == 031 ]]; then
             extra+=(--retained-composition "$RUNNER_TEMP/retained-031.json")
