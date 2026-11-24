@@ -6,13 +6,13 @@ on:
       chapter:
         required: true
         type: choice
-        options: ['030', '031', '031-release-dependencies', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
+        options: ['030', '031', '031-release-dependencies', '028-scoped-check', '063-scoped-check', '081-scoped-check', '083', '094', '115', '031-record', '031-stage', '083-witness-check', '030-certify', '083-certify', '094-certify', '115-certify', '083-stage', '115-stage', '083-review-check', '115-review-check', '094-stage', '030-retain', '063-retain', '081-retain', '094-retain', '030-compose', '030-stage', '030-residual', '030-delta-certify', '063-new-identity', '078-new-identity', '081-new-identity', '085-new-identity', '094-new-identity', '123-new-identity', '063-certify', '078-certify', '081-certify', '085-certify', '123-certify', '063-stage', '078-stage', '081-stage', '085-stage', '123-stage']
 permissions:
   contents: read
   actions: read
 jobs:
   prepare:
-    if: inputs.chapter != '031-release-dependencies' && inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '078-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
+    if: endsWith(inputs.chapter, '-scoped-check') == false && inputs.chapter != '031-release-dependencies' && inputs.chapter != '031-record' && inputs.chapter != '031-stage' && inputs.chapter != '083-witness-check' && inputs.chapter != '083-stage' && inputs.chapter != '115-stage' && inputs.chapter != '094-stage' && endsWith(inputs.chapter, '-retain') == false && inputs.chapter != '030-compose' && inputs.chapter != '030-stage' && inputs.chapter != '030-residual' && inputs.chapter != '063-stage' && inputs.chapter != '078-stage' && inputs.chapter != '081-stage' && inputs.chapter != '085-stage' && inputs.chapter != '123-stage' && endsWith(inputs.chapter, '-certify') == false && endsWith(inputs.chapter, '-review-check') == false && endsWith(inputs.chapter, '-new-identity') == false
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -1060,5 +1060,72 @@ jobs:
         with:
           name: jinshu031-published-053-dependency-scope
           path: ${{ runner.temp }}/jinshu031-dependency-scope.json
+          if-no-files-found: error
+          retention-days: 7
+
+  scoped-owner-evidence:
+    if: endsWith(inputs.chapter, '-scoped-check')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CHAPTER_INPUT: ${{ inputs.chapter }}
+    steps:
+      - id: pins
+        name: Verify the exact existing owner candidate
+        run: |
+          node <<'JS'
+          const assert=require('node:assert/strict');
+          const fs=require('node:fs');
+          const {execFileSync}=require('node:child_process');
+          const root='repos/'+process.env.GITHUB_REPOSITORY;
+          const read=(path,raw=false)=>JSON.parse(execFileSync('gh',['api',root+path,...(raw?['-H','Accept: application/vnd.github.raw+json']:[])],{encoding:'utf8',maxBuffer:10e6}));
+          const chapter=process.env.CHAPTER_INPUT.split('-')[0];
+          assert(['028','063','081'].includes(chapter));
+          const journal=read('/contents/cursor-glossary-nov24-2026.json?ref='+process.env.GITHUB_SHA,true);
+          const entry=journal.ownerCorrections['jinshu/'+chapter];
+          const pr=read('/pulls/'+entry.chapterPR);
+          assert.equal(entry.status,'finished');
+          assert.equal(pr.state,'open');
+          assert.equal(pr.base.ref,'codex/people-glossary-staging-v2');
+          assert.equal(pr.head.repo.full_name,process.env.GITHUB_REPOSITORY);
+          assert.equal(pr.head.sha,entry.resultRevision);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'chapter='+chapter+'\nrevision='+entry.resultRevision+'\n');
+          JS
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pins.outputs.revision }}
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: |
+            data
+            scripts
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm install --no-audit --no-fund
+      - name: Validate chapter and enumerate chronology dependencies
+        env:
+          CHAPTER: ${{ steps.pins.outputs.chapter }}
+          REVISION: ${{ steps.pins.outputs.revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$REVISION"
+          if [[ "$CHAPTER" == 028 ]]; then node --test scripts/test-people-source-only-chronology.mjs; fi
+          npm run people:validate -- --book jinshu --chapter "$CHAPTER"
+          npm run people:dates:packet -- --book jinshu --chapter "$CHAPTER" --out "$RUNNER_TEMP/chapter-date-packet.json"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import {unresolvedDateAuditItems,dateAuditDiagnostics} from './scripts/lib/people-date-audit.mjs';
+          const packet=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/chapter-date-packet.json'));
+          console.log(JSON.stringify({revision:process.env.REVISION,scope:packet.book+'/'+packet.chapter,
+            sourceHash:packet.sourceHash,extractionHash:packet.extractionHash,items:packet.items.length,people:packet.people.length,
+            units:packet.units.length,unresolved:unresolvedDateAuditItems(packet).map(x=>x.id),diagnostics:dateAuditDiagnostics(packet)}));
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jinshu-${{ steps.pins.outputs.chapter }}-owner-date-packet
+          path: ${{ runner.temp }}/chapter-date-packet.json
           if-no-files-found: error
           retention-days: 7
