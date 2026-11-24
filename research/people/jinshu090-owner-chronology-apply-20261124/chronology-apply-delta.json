@@ -1,0 +1,6380 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu090-consolidated-chronology-owner-apply",
+  "baseTip": "ef13baad99a0483a6af51480252c7e01d46549dd",
+  "independentEvidence": "041d402f4e180d7d149f1c02c4882eddff2d8bf8",
+  "packetItems": 553,
+  "preservedEditorialDecisions": 50,
+  "editorialSha": "sha256:d5fa33f723282e6fe6aeacdc9491a5bf34a46fe1dfc232b6174d399dca078015",
+  "soleIncorrect": {
+    "itemId": "claim-60",
+    "applied": true
+  },
+  "trueContradiction": {
+    "itemId": "claim-911",
+    "applied": true,
+    "note": "Retyped death→undated attestation"
+  },
+  "projectionRepairs": 80,
+  "appliedTotal": 84,
+  "applied": [
+    {
+      "itemId": "claim-60",
+      "kind": "incorrect-remove-unsupported-ad265",
+      "defectId": "incorrect-preface-ad265",
+      "tranche": "preface",
+      "personId": "p006",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "而帝寬厚"
+          },
+          "event": "Lenient rule after Taishi",
+          "westernYear": {
+            "era": "AD",
+            "year": 265,
+            "precision": "year"
+          }
+        },
+        "certainty": "explicit-event-contextual-date",
+        "evidence": [
+          "s0010"
+        ]
+      },
+      "after": {
+        "value": {
+          "undatedSourceAttestation": true,
+          "event": "Emperor described as generous enough to rule the people (而帝寬厚); cited Chinese at s0010 has no reign year or 泰始 marker — AD 265 removed as unsupported projection."
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "s0010"
+        ]
+      },
+      "chinese": {
+        "s0010": "而帝寬厚足以君人，明威未能厲俗，政刑以之私謁，賄賂於此公行，結綬者以放濁為通，彈冠者以苟得為貴，流遁忘反，浸以為常。"
+      },
+      "classification": "unsupported-date-projection"
+    },
+    {
+      "itemId": "hints-p006",
+      "kind": "same-person-hint-align",
+      "before": [
+        "AD 265 Taishi accession",
+        "AD 273 Taishi 9, mourning for Lu Zhi"
+      ],
+      "after": [
+        "AD 273 Taishi 9, mourning for Lu Zhi"
+      ]
+    },
+    {
+      "itemId": "claim-911",
+      "kind": "true-contradiction-retype-death-to-undated-attestation",
+      "defectId": "inferred-death-without-source",
+      "tranche": "qiao-deng",
+      "personId": "p114",
+      "predicateBefore": "death",
+      "predicateAfter": "attestation",
+      "before": {
+        "value": {
+          "manner": "killed, later avenged by Zhang Dui"
+        },
+        "certainty": "strongly-inferred",
+        "evidence": [
+          "s0283"
+        ]
+      },
+      "after": {
+        "value": {
+          "undatedSourceAttestation": true,
+          "event": "Referenced as Zhang Dui’s father in the vengeance-and-mercy narrative (部人張兌為父報仇…智明湣之，停其獄 at s0283); Chinese has no separate death sentence for this person — prior death manner was extraction inference."
+        },
+        "certainty": "explicit",
+        "evidence": [
+          "s0283"
+        ]
+      },
+      "chinese": {
+        "s0283": "部人張兌為父報仇，母老單身，有妻無子，智明湣之，停其獄。"
+      },
+      "classification": "true-source-contradiction"
+    },
+    {
+      "itemId": "hints-p114",
+      "kind": "same-person-hint-align",
+      "before": [
+        "killed before Zhang Dui's vengeance case (before AD 304)"
+      ],
+      "after": [
+        "source-only undated kinship reference via 為父報仇 / 停其獄 (s0283); no death sentence, no Western bound"
+      ]
+    },
+    {
+      "itemId": "claim-740",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuankang-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p093",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元康中"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 291,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 299,
+              "precision": "year"
+            }
+          },
+          "event": "Additionally appointed General of the Left and died in office in the Yuankang era."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元康中"
+          },
+          "event": "Additionally appointed General of the Left and died in office in the Yuankang era.",
+          "qualitative": "元康中 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0242"
+      ],
+      "chinese": [
+        {
+          "u": "s0242",
+          "zh": "元康中，加左將軍，卒于官。"
+        }
+      ],
+      "ownerPatchHint": "Downgrade to sourceDate 元康中 only or cite annals per Fan Chang death sentence."
+    },
+    {
+      "itemId": "claim-759",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuankang-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p093",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "General of the Left",
+            "zh": "左將軍"
+          },
+          "action": "additionally-appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元康中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 291,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 299,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "General of the Left",
+            "zh": "左將軍"
+          },
+          "action": "additionally-appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元康中"
+            },
+            "qualitative": "元康中 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0242"
+      ],
+      "chinese": [
+        {
+          "u": "s0242",
+          "zh": "元康中，加左將軍，卒于官。"
+        }
+      ],
+      "ownerPatchHint": "Downgrade to sourceDate 元康中 only or cite annals per Fan Chang death sentence."
+    },
+    {
+      "itemId": "claim-760",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuankang-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p093",
+      "predicate": "death",
+      "before": {
+        "value": {
+          "place": {
+            "en": "in office",
+            "zh": "卒于官"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "元康中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 291,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 299,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "place": {
+            "en": "in office",
+            "zh": "卒于官"
+          },
+          "dateContext": {
+            "sourceDate": {
+              "text": "元康中"
+            },
+            "qualitative": "元康中 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0242"
+      ],
+      "chinese": [
+        {
+          "u": "s0242",
+          "zh": "元康中，加左將軍，卒于官。"
+        }
+      ],
+      "ownerPatchHint": "Downgrade to sourceDate 元康中 only or cite annals per Fan Chang death sentence."
+    },
+    {
+      "itemId": "claim-769",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuandi-bounds",
+      "tranche": "pan-fan-ding",
+      "personId": "p095",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Appointed magistrate of Tangyi under Emperor Yuan's provisional regime."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "event": "Appointed magistrate of Tangyi under Emperor Yuan's provisional regime.",
+          "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0250"
+      ],
+      "chinese": [
+        {
+          "u": "s0250",
+          "zh": "元帝承制，以為堂邑令。"
+        }
+      ],
+      "ownerPatchHint": "Shared Fan Guang/Fan Zhi office records on Tangyi—split or undated until Yuan Di year explicit."
+    },
+    {
+      "itemId": "claim-777",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuandi-bounds",
+      "tranche": "pan-fan-ding",
+      "personId": "p095",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "magistrate of Tangyi",
+            "zh": "堂邑令"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元帝承制"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 317,
+                "precision": "year"
+              }
+            },
+            "event": "Emperor Yuan exercising interim authority"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "magistrate of Tangyi",
+            "zh": "堂邑令"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元帝承制"
+            },
+            "event": "Emperor Yuan exercising interim authority",
+            "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0250"
+      ],
+      "chinese": [
+        {
+          "u": "s0250",
+          "zh": "元帝承制，以為堂邑令。"
+        }
+      ],
+      "ownerPatchHint": "Shared Fan Guang/Fan Zhi office records on Tangyi—split or undated until Yuan Di year explicit."
+    },
+    {
+      "itemId": "claim-778",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuandi-bounds",
+      "tranche": "pan-fan-ding",
+      "personId": "p095",
+      "predicate": "polity-association",
+      "before": {
+        "value": {
+          "polityId": "eastern-jin",
+          "relation": "served",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元帝承制"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 317,
+                "precision": "year"
+              }
+            },
+            "event": "Emperor Yuan exercising interim authority"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "polityId": "eastern-jin",
+          "relation": "served",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元帝承制"
+            },
+            "event": "Emperor Yuan exercising interim authority",
+            "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0250"
+      ],
+      "chinese": [
+        {
+          "u": "s0250",
+          "zh": "元帝承制，以為堂邑令。"
+        }
+      ],
+      "ownerPatchHint": "Shared Fan Guang/Fan Zhi office records on Tangyi—split or undated until Yuan Di year explicit."
+    },
+    {
+      "itemId": "claim-797",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuandi-bounds",
+      "tranche": "pan-fan-ding",
+      "personId": "p100",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Emperor Yuan exercising interim authority"
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "event": "Emperor Yuan exercising interim authority",
+          "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0250"
+      ],
+      "chinese": [
+        {
+          "u": "s0250",
+          "zh": "元帝承制，以為堂邑令。"
+        }
+      ],
+      "ownerPatchHint": "Shared Fan Guang/Fan Zhi office records on Tangyi—split or undated until Yuan Di year explicit."
+    },
+    {
+      "itemId": "claim-801",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuandi-bounds",
+      "tranche": "pan-fan-ding",
+      "personId": "p101",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Assistant magistrate under Fan Guang at Tangyi."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "event": "Assistant magistrate under Fan Guang at Tangyi.",
+          "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0251",
+        "s0250"
+      ],
+      "chinese": [
+        {
+          "u": "s0251",
+          "zh": "丞劉榮坐事當死，郡劾以付縣。"
+        },
+        {
+          "u": "s0250",
+          "zh": "元帝承制，以為堂邑令。"
+        }
+      ],
+      "ownerPatchHint": "Shared Fan Guang/Fan Zhi office records on Tangyi—split or undated until Yuan Di year explicit."
+    },
+    {
+      "itemId": "claim-802",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuandi-bounds",
+      "tranche": "pan-fan-ding",
+      "personId": "p102",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Alive as Liu Rong's aged mother during festival releases."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "event": "Alive as Liu Rong's aged mother during festival releases.",
+          "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0252",
+        "s0250"
+      ],
+      "chinese": [
+        {
+          "u": "s0252",
+          "zh": "榮即縣人，家有老母，至節，廣輒聽暫還，榮亦如期而反。"
+        },
+        {
+          "u": "s0250",
+          "zh": "元帝承制，以為堂邑令。"
+        }
+      ],
+      "ownerPatchHint": "Shared Fan Guang/Fan Zhi office records on Tangyi—split or undated until Yuan Di year explicit."
+    },
+    {
+      "itemId": "claim-720",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-guangwu-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p089",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "光武時"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 25,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 57,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "光武時"
+          },
+          "qualitative": "光武時 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0216"
+      ],
+      "chinese": [
+        {
+          "u": "s0216",
+          "zh": "京曰：「鄙郡本名義陵，在辰陽縣界，與夷相接，數為所攻，光武時移東出，遂得全完，共議易號。"
+        }
+      ],
+      "ownerPatchHint": "Keep retrospective Guangwu reference; strip WesternInterval from speech-in-dialogue claims."
+    },
+    {
+      "itemId": "claim-723",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-guangwu-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p089",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "retrospective-reference",
+          "role": "recalled-ruler",
+          "action": "Wuling commandery was moved east in his reign",
+          "dateContext": {
+            "sourceDate": {
+              "text": "光武時"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 25,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 57,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "kind": "retrospective-reference",
+          "role": "recalled-ruler",
+          "action": "Wuling commandery was moved east in his reign",
+          "dateContext": {
+            "sourceDate": {
+              "text": "光武時"
+            },
+            "qualitative": "光武時 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0216"
+      ],
+      "chinese": [
+        {
+          "u": "s0216",
+          "zh": "京曰：「鄙郡本名義陵，在辰陽縣界，與夷相接，數為所攻，光武時移東出，遂得全完，共議易號。"
+        }
+      ],
+      "ownerPatchHint": "Keep retrospective Guangwu reference; strip WesternInterval from speech-in-dialogue claims."
+    },
+    {
+      "itemId": "claim-813",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-campaign-death-bound",
+      "tranche": "pan-fan-ding",
+      "personId": "p104",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "討破汲桑"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 307,
+              "precision": "year"
+            }
+          },
+          "event": "Defeated Ji Sang after reaching Ji Province."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "討破汲桑"
+          },
+          "event": "Defeated Ji Sang after reaching Ji Province.",
+          "qualitative": "Source label「討破汲桑」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0271"
+      ],
+      "chinese": [
+        {
+          "u": "s0271",
+          "zh": "到鎮，率州兵討破汲桑有功，加甯北將軍、假節、監冀州諸軍事。"
+        }
+      ],
+      "ownerPatchHint": "討破汲桑 and 暴疾而卒 lack years—match Wang Hong duplicate line 天亡冀州 pattern."
+    },
+    {
+      "itemId": "claim-814",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-campaign-death-bound",
+      "tranche": "pan-fan-ding",
+      "personId": "p104",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "暴疾而卒"
+          },
+          "westernBounds": {
+            "onOrBefore": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            }
+          },
+          "event": "Died of violent illness; Emperor Huai later granted a posthumous generalship."
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "暴疾而卒"
+          },
+          "event": "Died of violent illness; Emperor Huai later granted a posthumous generalship.",
+          "qualitative": "Source label「暴疾而卒」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0275",
+        "s0276"
+      ],
+      "chinese": [
+        {
+          "u": "s0275",
+          "zh": "暴疾而卒，臨終歎曰：「此乃天亡冀州，豈吾命哉！」"
+        },
+        {
+          "u": "s0276",
+          "zh": "懷帝策贈車騎將軍。"
+        }
+      ],
+      "ownerPatchHint": "討破汲桑 and 暴疾而卒 lack years—match Wang Hong duplicate line 天亡冀州 pattern."
+    },
+    {
+      "itemId": "claim-847",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-campaign-death-bound",
+      "tranche": "pan-fan-ding",
+      "personId": "p106",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "討破汲桑"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 307,
+              "precision": "year"
+            }
+          },
+          "event": "Defeated by Ding Shao."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "討破汲桑"
+          },
+          "event": "Defeated by Ding Shao.",
+          "qualitative": "Source label「討破汲桑」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0271"
+      ],
+      "chinese": [
+        {
+          "u": "s0271",
+          "zh": "到鎮，率州兵討破汲桑有功，加甯北將軍、假節、監冀州諸軍事。"
+        }
+      ],
+      "ownerPatchHint": "討破汲桑 and 暴疾而卒 lack years—match Wang Hong duplicate line 天亡冀州 pattern."
+    },
+    {
+      "itemId": "claim-838",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-huai-di-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p104",
+      "predicate": "honor",
+      "before": {
+        "value": {
+          "label": {
+            "en": "General of Chariots and Cavalry",
+            "zh": "車騎將軍"
+          },
+          "action": "posthumously-appointed",
+          "receptionType": "retrospective",
+          "dateContext": {
+            "sourceDate": {
+              "text": "懷帝"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 307,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 313,
+                "precision": "year"
+              }
+            }
+          },
+          "authorityPersonId": "p109"
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "General of Chariots and Cavalry",
+            "zh": "車騎將軍"
+          },
+          "action": "posthumously-appointed",
+          "receptionType": "retrospective",
+          "dateContext": {
+            "sourceDate": {
+              "text": "懷帝"
+            },
+            "qualitative": "Source label「懷帝」retained without Western conversion"
+          },
+          "authorityPersonId": "p109"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0276"
+      ],
+      "chinese": [
+        {
+          "u": "s0276",
+          "zh": "懷帝策贈車騎將軍。"
+        }
+      ],
+      "ownerPatchHint": "策贈車騎將軍: retain 懷帝 reign label; block interval until edict date pinned."
+    },
+    {
+      "itemId": "claim-856",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-huai-di-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p109",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "懷帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 307,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "懷帝"
+          },
+          "qualitative": "Source label「懷帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0276"
+      ],
+      "chinese": [
+        {
+          "u": "s0276",
+          "zh": "懷帝策贈車騎將軍。"
+        }
+      ],
+      "ownerPatchHint": "策贈車騎將軍: retain 懷帝 reign label; block interval until edict date pinned."
+    },
+    {
+      "itemId": "claim-859",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-huai-di-interval",
+      "tranche": "pan-fan-ding",
+      "personId": "p109",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "retrospective-reference",
+          "role": "authority",
+          "otherPersonId": "p104",
+          "action": "posthumously appointed Ding Shao General of Chariots and Cavalry by edict",
+          "dateContext": {
+            "sourceDate": {
+              "text": "懷帝"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 307,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 313,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "kind": "retrospective-reference",
+          "role": "authority",
+          "otherPersonId": "p104",
+          "action": "posthumously appointed Ding Shao General of Chariots and Cavalry by edict",
+          "dateContext": {
+            "sourceDate": {
+              "text": "懷帝"
+            },
+            "qualitative": "Source label「懷帝」retained without Western conversion"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0276"
+      ],
+      "chinese": [
+        {
+          "u": "s0276",
+          "zh": "懷帝策贈車騎將軍。"
+        }
+      ],
+      "ownerPatchHint": "策贈車騎將軍: retain 懷帝 reign label; block interval until edict date pinned."
+    },
+    {
+      "itemId": "claim-860",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 301,
+            "precision": "year"
+          },
+          "event": "After Ying defeated Lun, memorialized as general and dual-county magistrate."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "event": "After Ying defeated Lun, memorialized as general and dual-county magistrate.",
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0281"
+      ],
+      "chinese": [
+        {
+          "u": "s0281",
+          "zh": "穎之敗趙王倫也，表智明為殄寇將軍、隆慮、共二縣令。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-861",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 304,
+            "precision": "year"
+          },
+          "event": "Appointed General Who Charges the Enemy on the vanguard staff."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "event": "Appointed General Who Charges the Enemy on the vanguard staff.",
+          "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0290"
+      ],
+      "chinese": [
+        {
+          "u": "s0290",
+          "zh": "惠帝之伐鄴也，穎以智明為折沖將軍、參丞相前鋒軍事。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-871",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "General Who Exterminates Brigands",
+            "zh": "殄寇將軍"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "穎之敗趙王倫"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 301,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "General Who Exterminates Brigands",
+            "zh": "殄寇將軍"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "穎之敗趙王倫"
+            },
+            "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0281"
+      ],
+      "chinese": [
+        {
+          "u": "s0281",
+          "zh": "穎之敗趙王倫也，表智明為殄寇將軍、隆慮、共二縣令。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-872",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "magistrate of Longlu and Gong",
+            "zh": "隆慮、共二縣令"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "穎之敗趙王倫"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 301,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "magistrate of Longlu and Gong",
+            "zh": "隆慮、共二縣令"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "穎之敗趙王倫"
+            },
+            "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0281"
+      ],
+      "chinese": [
+        {
+          "u": "s0281",
+          "zh": "穎之敗趙王倫也，表智明為殄寇將軍、隆慮、共二縣令。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-876",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "General Who Charges the Enemy",
+            "zh": "折沖將軍"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "惠帝之伐鄴"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 304,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "General Who Charges the Enemy",
+            "zh": "折沖將軍"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "惠帝之伐鄴"
+            },
+            "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0290"
+      ],
+      "chinese": [
+        {
+          "u": "s0290",
+          "zh": "惠帝之伐鄴也，穎以智明為折沖將軍、參丞相前鋒軍事。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-877",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "adjutant on the prime minister's vanguard staff",
+            "zh": "參丞相前鋒軍事"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "惠帝之伐鄴"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 304,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "adjutant on the prime minister's vanguard staff",
+            "zh": "參丞相前鋒軍事"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "惠帝之伐鄴"
+            },
+            "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0290"
+      ],
+      "chinese": [
+        {
+          "u": "s0290",
+          "zh": "惠帝之伐鄴也，穎以智明為折沖將軍、參丞相前鋒軍事。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-881",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p111",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 301,
+            "precision": "year"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0281"
+      ],
+      "chinese": [
+        {
+          "u": "s0281",
+          "zh": "穎之敗趙王倫也，表智明為殄寇將軍、隆慮、共二縣令。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-882",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p111",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 304,
+            "precision": "year"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0290"
+      ],
+      "chinese": [
+        {
+          "u": "s0290",
+          "zh": "惠帝之伐鄴也，穎以智明為折沖將軍、參丞相前鋒軍事。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-883",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p112",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 301,
+            "precision": "year"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0281"
+      ],
+      "chinese": [
+        {
+          "u": "s0281",
+          "zh": "穎之敗趙王倫也，表智明為殄寇將軍、隆慮、共二縣令。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-888",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p111",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "military",
+          "role": "victor",
+          "otherPersonId": "p112",
+          "action": "defeated Sima Lun",
+          "dateContext": {
+            "sourceDate": {
+              "text": "穎之敗趙王倫"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 301,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "kind": "military",
+          "role": "victor",
+          "otherPersonId": "p112",
+          "action": "defeated Sima Lun",
+          "dateContext": {
+            "sourceDate": {
+              "text": "穎之敗趙王倫"
+            },
+            "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0281"
+      ],
+      "chinese": [
+        {
+          "u": "s0281",
+          "zh": "穎之敗趙王倫也，表智明為殄寇將軍、隆慮、共二縣令。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-891",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p113",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 301,
+            "precision": "year"
+          },
+          "event": "Case under Qiao Zhiming after Lun's defeat; amnestied later."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "event": "Case under Qiao Zhiming after Lun's defeat; amnestied later.",
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0283",
+        "s0288"
+      ],
+      "chinese": [
+        {
+          "u": "s0283",
+          "zh": "部人張兌為父報仇，母老單身，有妻無子，智明湣之，停其獄。"
+        },
+        {
+          "u": "s0288",
+          "zh": "會赦，得免。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-893",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p115",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 301,
+            "precision": "year"
+          },
+          "event": "Old and living alone during the stayed case."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "event": "Old and living alone during the stayed case.",
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0283"
+      ],
+      "chinese": [
+        {
+          "u": "s0283",
+          "zh": "部人張兌為父報仇，母老單身，有妻無子，智明湣之，停其獄。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-894",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p116",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 301,
+            "precision": "year"
+          },
+          "event": "Wife present at the case; later entered jail."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "event": "Wife present at the case; later entered jail.",
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0283",
+        "s0284"
+      ],
+      "chinese": [
+        {
+          "u": "s0283",
+          "zh": "部人張兌為父報仇，母老單身，有妻無子，智明湣之，停其獄。"
+        },
+        {
+          "u": "s0284",
+          "zh": "歲餘，令兌將妻入獄，兼陰縱之。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-913",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p118",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 304,
+            "precision": "year"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0290"
+      ],
+      "chinese": [
+        {
+          "u": "s0290",
+          "zh": "惠帝之伐鄴也，穎以智明為折沖將軍、參丞相前鋒軍事。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-977",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p122",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "military",
+          "role": "recruited-officer",
+          "action": "summoned-for-talent",
+          "otherPersonId": "p123",
+          "dateContext": {
+            "sourceDate": {
+              "text": "鐘會伐蜀"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 263,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "kind": "military",
+          "role": "recruited-officer",
+          "action": "summoned-for-talent",
+          "otherPersonId": "p123",
+          "dateContext": {
+            "sourceDate": {
+              "text": "鐘會伐蜀"
+            },
+            "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0299"
+      ],
+      "chinese": [
+        {
+          "u": "s0299",
+          "zh": "鐘會伐蜀，奇其才，自黽池令召為主簿。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-978",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p122",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "chief clerk",
+            "zh": "主簿"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "鐘會伐蜀"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 263,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "chief clerk",
+            "zh": "主簿"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "鐘會伐蜀"
+            },
+            "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0299"
+      ],
+      "chinese": [
+        {
+          "u": "s0299",
+          "zh": "鐘會伐蜀，奇其才，自黽池令召為主簿。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-987",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p122",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 263,
+            "precision": "year"
+          },
+          "event": "Summoned during Zhong Hui Shu campaign."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "event": "Summoned during Zhong Hui Shu campaign.",
+          "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0299"
+      ],
+      "chinese": [
+        {
+          "u": "s0299",
+          "zh": "鐘會伐蜀，奇其才，自黽池令召為主簿。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-989",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p123",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "campaigned-against-Shu",
+          "dateContext": {
+            "sourceDate": {
+              "text": "鐘會伐蜀"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 263,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "campaigned-against-Shu",
+          "dateContext": {
+            "sourceDate": {
+              "text": "鐘會伐蜀"
+            },
+            "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0299"
+      ],
+      "chinese": [
+        {
+          "u": "s0299",
+          "zh": "鐘會伐蜀，奇其才，自黽池令召為主簿。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-990",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-event-label-western-year",
+      "tranche": "qiao-deng",
+      "personId": "p123",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 263,
+            "precision": "year"
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0299"
+      ],
+      "chinese": [
+        {
+          "u": "s0299",
+          "zh": "鐘會伐蜀，奇其才，自黽池令召為主簿。"
+        }
+      ],
+      "ownerPatchHint": "Keep sourceDate event text; strip AD 301/304/263 unless annal pinned separately."
+    },
+    {
+      "itemId": "claim-862",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-anarchy-interval",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉之亂"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 307,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            }
+          },
+          "event": "After Yongjia turmoil, served Liu Yao."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉之亂"
+          },
+          "event": "After Yongjia turmoil, served Liu Yao.",
+          "qualitative": "Source event/relative clause「永嘉之亂」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0295"
+      ],
+      "chinese": [
+        {
+          "u": "s0295",
+          "zh": "尋屬永嘉之亂，仕于劉曜。"
+        }
+      ],
+      "ownerPatchHint": "Undated service under Liu Yao or source 永嘉之亂 only."
+    },
+    {
+      "itemId": "claim-879",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-anarchy-interval",
+      "tranche": "qiao-deng",
+      "personId": "p110",
+      "predicate": "polity-association",
+      "before": {
+        "value": {
+          "polity": {
+            "en": "Han-Zhao",
+            "zh": "漢趙"
+          },
+          "relation": "served",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永嘉之亂"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 307,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 313,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "polity": {
+            "en": "Han-Zhao",
+            "zh": "漢趙"
+          },
+          "relation": "served",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永嘉之亂"
+            },
+            "qualitative": "Source event/relative clause「永嘉之亂」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0295"
+      ],
+      "chinese": [
+        {
+          "u": "s0295",
+          "zh": "尋屬永嘉之亂，仕于劉曜。"
+        }
+      ],
+      "ownerPatchHint": "Undated service under Liu Yao or source 永嘉之亂 only."
+    },
+    {
+      "itemId": "claim-917",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-anarchy-interval",
+      "tranche": "qiao-deng",
+      "personId": "p119",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉之亂"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 307,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉之亂"
+          },
+          "qualitative": "Source event/relative clause「永嘉之亂」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0295"
+      ],
+      "chinese": [
+        {
+          "u": "s0295",
+          "zh": "尋屬永嘉之亂，仕于劉曜。"
+        }
+      ],
+      "ownerPatchHint": "Undated service under Liu Yao or source 永嘉之亂 only."
+    },
+    {
+      "itemId": "claim-1031",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-end-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "captivity",
+          "role": "captive",
+          "action": "fell-into-Shi-Le-hands",
+          "otherPersonId": "p137",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永嘉末"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 311,
+                "precision": "year"
+              },
+              "onOrBefore": {
+                "era": "AD",
+                "year": 313,
+                "precision": "year"
+              }
+            },
+            "event": "Captured at the end of Yongjia."
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "kind": "captivity",
+          "role": "captive",
+          "action": "fell-into-Shi-Le-hands",
+          "otherPersonId": "p137",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永嘉末"
+            },
+            "event": "Captured at the end of Yongjia.",
+            "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Narrative 永嘉末 without onOrBefore AD merge."
+    },
+    {
+      "itemId": "claim-1032",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-end-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "status",
+      "before": {
+        "value": {
+          "status": "captive",
+          "action": "entered",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永嘉末"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 311,
+                "precision": "year"
+              },
+              "onOrBefore": {
+                "era": "AD",
+                "year": 313,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "status": "captive",
+          "action": "entered",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永嘉末"
+            },
+            "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Narrative 永嘉末 without onOrBefore AD merge."
+    },
+    {
+      "itemId": "claim-1115",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-end-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p139",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            }
+          },
+          "event": "Invoked during captivity under Shi Le."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "event": "Invoked during captivity under Shi Le.",
+          "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0329",
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0329",
+          "zh": "攸度不可與爭，遂對以弟婦散發溫酒為辭。"
+        },
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Narrative 永嘉末 without onOrBefore AD merge."
+    },
+    {
+      "itemId": "claim-1116",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-end-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p137",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Narrative 永嘉末 without onOrBefore AD merge."
+    },
+    {
+      "itemId": "claim-1117",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-end-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p138",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0323",
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0323",
+          "zh": "勒長史張賓先與攸比舍，重攸名操，因稱攸於勒。"
+        },
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Narrative 永嘉末 without onOrBefore AD merge."
+    },
+    {
+      "itemId": "claim-1120",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongjia-end-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            }
+          },
+          "event": "Captured at Yongjia's end."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "event": "Captured at Yongjia's end.",
+          "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Narrative 永嘉末 without onOrBefore AD merge."
+    },
+    {
+      "itemId": "claim-972",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-cross-jiang-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "family-relationship",
+      "before": {
+        "value": {
+          "relation": "spouse-of",
+          "personId": "p153",
+          "kinshipTerm": {
+            "zh": "妾",
+            "en": "concubine"
+          },
+          "unionCategory": "concubinage",
+          "subjectRole": "husband",
+          "objectRole": "concubine",
+          "relationshipState": "ended",
+          "dateContext": {
+            "sourceDate": {
+              "text": "過江"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 317,
+                "precision": "year"
+              }
+            },
+            "event": "After crossing the Yangzi; ended when she was identified as niece."
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "relation": "spouse-of",
+          "personId": "p153",
+          "kinshipTerm": {
+            "zh": "妾",
+            "en": "concubine"
+          },
+          "unionCategory": "concubinage",
+          "subjectRole": "husband",
+          "objectRole": "concubine",
+          "relationshipState": "ended",
+          "dateContext": {
+            "sourceDate": {
+              "text": "過江"
+            },
+            "event": "After crossing the Yangzi; ended when she was identified as niece.",
+            "qualitative": "Source event/relative clause「過江」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0373",
+        "s0374"
+      ],
+      "chinese": [
+        {
+          "u": "s0373",
+          "zh": "過江，納妾，甚寵之，訊其家屬，說是北人遭亂，憶父母姓名，乃攸之甥。"
+        },
+        {
+          "u": "s0374",
+          "zh": "攸素有德行，聞之感恨，遂不復畜妾，卒以無嗣。"
+        }
+      ],
+      "ownerPatchHint": "過江 / 江東 clauses—undated migration until Yongjia year explicit."
+    },
+    {
+      "itemId": "claim-1059",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-cross-jiang-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p142",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "至新鄭，投李矩"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            }
+          },
+          "event": "Received You after the post-Yongjia flight."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "至新鄭，投李矩"
+          },
+          "event": "Received You after the post-Yongjia flight.",
+          "qualitative": "Source label「至新鄭，投李矩」retained without Western conversion"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0339",
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0339",
+          "zh": "至新鄭，投李矩。"
+        },
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "過江 / 江東 clauses—undated migration until Yongjia year explicit."
+    },
+    {
+      "itemId": "claim-1064",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-cross-jiang-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p145",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "遂至江東"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Crossed south with You in the Yuan restoration window."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "遂至江東"
+          },
+          "event": "Crossed south with You in the Yuan restoration window.",
+          "qualitative": "Source label「遂至江東」retained without Western conversion"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0343",
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0343",
+          "zh": "攸與刁協、周顗素厚，遂至江東。"
+        },
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": "過江 / 江東 clauses—undated migration until Yongjia year explicit."
+    },
+    {
+      "itemId": "claim-1065",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-cross-jiang-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p146",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "遂至江東"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Crossed south with You."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "遂至江東"
+          },
+          "event": "Crossed south with You.",
+          "qualitative": "Source label「遂至江東」retained without Western conversion"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0343",
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0343",
+          "zh": "攸與刁協、周顗素厚，遂至江東。"
+        },
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": "過江 / 江東 clauses—undated migration until Yongjia year explicit."
+    },
+    {
+      "itemId": "claim-1106",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-cross-jiang-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "personal",
+          "role": "husband",
+          "action": "took-concubine-later-identified-as-niece",
+          "otherPersonId": "p153",
+          "dateContext": {
+            "sourceDate": {
+              "text": "過江"
+            },
+            "westernBounds": {
+              "onOrAfter": {
+                "era": "AD",
+                "year": 317,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "kind": "personal",
+          "role": "husband",
+          "action": "took-concubine-later-identified-as-niece",
+          "otherPersonId": "p153",
+          "dateContext": {
+            "sourceDate": {
+              "text": "過江"
+            },
+            "qualitative": "Source event/relative clause「過江」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0373"
+      ],
+      "chinese": [
+        {
+          "u": "s0373",
+          "zh": "過江，納妾，甚寵之，訊其家屬，說是北人遭亂，憶父母姓名，乃攸之甥。"
+        }
+      ],
+      "ownerPatchHint": "過江 / 江東 clauses—undated migration until Yongjia year explicit."
+    },
+    {
+      "itemId": "claim-1108",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-cross-jiang-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p153",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "過江，納妾"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            }
+          },
+          "event": "Taken as concubine after You crossed the Yangzi."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "過江，納妾"
+          },
+          "event": "Taken as concubine after You crossed the Yangzi.",
+          "qualitative": "Source event/relative clause「過江，納妾」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0373"
+      ],
+      "chinese": [
+        {
+          "u": "s0373",
+          "zh": "過江，納妾，甚寵之，訊其家屬，說是北人遭亂，憶父母姓名，乃攸之甥。"
+        }
+      ],
+      "ownerPatchHint": "過江 / 江東 clauses—undated migration until Yongjia year explicit."
+    },
+    {
+      "itemId": "claim-1000",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-kinship-age-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p126",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "攸七歲喪父"
+          },
+          "westernBounds": {
+            "before": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            }
+          },
+          "event": "Died in You's childhood, before You was already a commandery administrator at Yongjia's end."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "攸七歲喪父"
+          },
+          "event": "Died in You's childhood, before You was already a commandery administrator at Yongjia's end.",
+          "qualitative": "Source event/relative clause「攸七歲喪父」without Western year on the cited line"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0306",
+        "s0317",
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0306",
+          "zh": "攸七歲喪父，尋喪母及祖母，居喪九年，以孝致稱。"
+        },
+        {
+          "u": "s0317",
+          "zh": "出為河東太守。"
+        },
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Retain kinship facts; drop Western childhood endpoints."
+    },
+    {
+      "itemId": "claim-1001",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-kinship-age-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p127",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "尋喪母及祖母"
+          },
+          "westernBounds": {
+            "before": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            }
+          },
+          "event": "Died soon after You's father in childhood."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "尋喪母及祖母"
+          },
+          "event": "Died soon after You's father in childhood.",
+          "qualitative": "Source event/relative clause「尋喪母及祖母」without Western year on the cited line"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0306",
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0306",
+          "zh": "攸七歲喪父，尋喪母及祖母，居喪九年，以孝致稱。"
+        },
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Retain kinship facts; drop Western childhood endpoints."
+    },
+    {
+      "itemId": "claim-1002",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-kinship-age-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p128",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "尋喪母及祖母"
+          },
+          "westernBounds": {
+            "before": {
+              "era": "AD",
+              "year": 311,
+              "precision": "year"
+            }
+          },
+          "event": "Died in You's childhood mourning sequence."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "尋喪母及祖母"
+          },
+          "event": "Died in You's childhood mourning sequence.",
+          "qualitative": "Source event/relative clause「尋喪母及祖母」without Western year on the cited line"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0306",
+        "s0318"
+      ],
+      "chinese": [
+        {
+          "u": "s0306",
+          "zh": "攸七歲喪父，尋喪母及祖母，居喪九年，以孝致稱。"
+        },
+        {
+          "u": "s0318",
+          "zh": "永嘉末，沒于石勒。"
+        }
+      ],
+      "ownerPatchHint": "Retain kinship facts; drop Western childhood endpoints."
+    },
+    {
+      "itemId": "claim-979",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-jia-chong-wu-interval",
+      "tranche": "qiao-deng",
+      "personId": "p122",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "senior clerk",
+            "zh": "長史"
+          },
+          "action": "appointed",
+          "otherPersonId": "p124",
+          "dateContext": {
+            "sourceDate": {
+              "text": "賈充伐吳"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 279,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 280,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "senior clerk",
+            "zh": "長史"
+          },
+          "action": "appointed",
+          "otherPersonId": "p124",
+          "dateContext": {
+            "sourceDate": {
+              "text": "賈充伐吳"
+            },
+            "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0300"
+      ],
+      "chinese": [
+        {
+          "u": "s0300",
+          "zh": "賈充伐吳，請殷為長史。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-988",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-jia-chong-wu-interval",
+      "tranche": "qiao-deng",
+      "personId": "p122",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "賈充伐吳"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 279,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 280,
+              "precision": "year"
+            }
+          },
+          "event": "Senior clerk on Jia Chong Wu expedition."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "賈充伐吳"
+          },
+          "event": "Senior clerk on Jia Chong Wu expedition.",
+          "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0300"
+      ],
+      "chinese": [
+        {
+          "u": "s0300",
+          "zh": "賈充伐吳，請殷為長史。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-991",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-jia-chong-wu-interval",
+      "tranche": "qiao-deng",
+      "personId": "p124",
+      "predicate": "event-participation",
+      "before": {
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "campaigned-against-Wu",
+          "dateContext": {
+            "sourceDate": {
+              "text": "賈充伐吳"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 279,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 280,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "kind": "military",
+          "role": "commander",
+          "action": "campaigned-against-Wu",
+          "dateContext": {
+            "sourceDate": {
+              "text": "賈充伐吳"
+            },
+            "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0300"
+      ],
+      "chinese": [
+        {
+          "u": "s0300",
+          "zh": "賈充伐吳，請殷為長史。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-992",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-jia-chong-wu-interval",
+      "tranche": "qiao-deng",
+      "personId": "p124",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "賈充伐吳"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 279,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 280,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "賈充伐吳"
+          },
+          "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0300"
+      ],
+      "chinese": [
+        {
+          "u": "s0300",
+          "zh": "賈充伐吳，請殷為長史。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1057",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-min-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p143",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "湣帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 316,
+              "precision": "year"
+            }
+          },
+          "event": "Appointed You under Emperor Min."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "湣帝"
+          },
+          "event": "Appointed You under Emperor Min.",
+          "qualitative": "Source label「湣帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0341"
+      ],
+      "chinese": [
+        {
+          "u": "s0341",
+          "zh": "荀組以為陳郡、汝南太守，湣帝徵為尚書左丞、長水校尉，皆不果就。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1058",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-min-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p144",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "湣帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 313,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 316,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "湣帝"
+          },
+          "qualitative": "Source label「湣帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0341"
+      ],
+      "chinese": [
+        {
+          "u": "s0341",
+          "zh": "荀組以為陳郡、汝南太守，湣帝徵為尚書左丞、長水校尉，皆不果就。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1067",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuan-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "attendant of the crown prince household",
+            "zh": "太子中庶子"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元帝"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 317,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 323,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "attendant of the crown prince household",
+            "zh": "太子中庶子"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "元帝"
+            },
+            "qualitative": "Source label「元帝」retained without Western conversion"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1068",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuan-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p147",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "qualitative": "Source label「元帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1075",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuan-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p148",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          },
+          "event": "Wu famine mission under Yuan."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "event": "Wu famine mission under Yuan.",
+          "qualitative": "Source label「元帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0348",
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0348",
+          "zh": "臺遣散騎常侍桓彝、虞慰勞饑人，觀聽善不，乃劾攸以擅出穀。"
+        },
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1076",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuan-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p149",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          },
+          "event": "Wu famine mission under Yuan."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "event": "Wu famine mission under Yuan.",
+          "qualitative": "Source label「元帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0348",
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0348",
+          "zh": "臺遣散騎常侍桓彝、虞慰勞饑人，觀聽善不，乃劾攸以擅出穀。"
+        },
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1084",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuan-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p150",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          },
+          "event": "Named in song at You's Wu departure under Yuan."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "event": "Named in song at You's Wu departure under Yuan.",
+          "qualitative": "Source label「元帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0355",
+        "s0345"
+      ],
+      "chinese": [
+        {
+          "u": "s0355",
+          "zh": "鄧侯挽不留，謝令推不去。」"
+        },
+        {
+          "u": "s0345",
+          "zh": "時吳郡闕守，人多欲之，帝以授攸。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1121",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yuan-di-interval",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 317,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          },
+          "event": "Appointed by Emperor Yuan."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "event": "Appointed by Emperor Yuan.",
+          "qualitative": "Source label「元帝」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0344"
+      ],
+      "chinese": [
+        {
+          "u": "s0344",
+          "zh": "元帝以攸為太子中庶子。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1088",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongchang-interval",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "General Who Guards the Army",
+            "zh": "護軍將軍"
+          },
+          "action": "succeeded",
+          "otherPersonId": "p146",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永昌中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 322,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 323,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "General Who Guards the Army",
+            "zh": "護軍將軍"
+          },
+          "action": "succeeded",
+          "otherPersonId": "p146",
+          "dateContext": {
+            "sourceDate": {
+              "text": "永昌中"
+            },
+            "qualitative": "永昌中 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0361"
+      ],
+      "chinese": [
+        {
+          "u": "s0361",
+          "zh": "永昌中，代周顗為護軍將軍，"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1122",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-yongchang-interval",
+      "tranche": "qiao-deng",
+      "personId": "p121",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "永昌中"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 322,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 323,
+              "precision": "year"
+            }
+          },
+          "event": "Succeeded Zhou Yi as guards general."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "永昌中"
+          },
+          "event": "Succeeded Zhou Yi as guards general.",
+          "qualitative": "永昌中 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0361"
+      ],
+      "chinese": [
+        {
+          "u": "s0361",
+          "zh": "永昌中，代周顗為護軍將軍，"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-892",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-prison-mercy-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p114",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "為父報仇"
+          },
+          "westernBounds": {
+            "before": {
+              "era": "AD",
+              "year": 304,
+              "precision": "year"
+            }
+          },
+          "event": "Killed before Zhang Dui's vengeance; case precedes Hui's Ye campaign."
+        },
+        "certainty": "strongly-inferred"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "為父報仇"
+          },
+          "event": "Killed before Zhang Dui's vengeance; case precedes Hui's Ye campaign.",
+          "qualitative": "Source event/relative clause「為父報仇」without Western year on the cited line"
+        },
+        "certainty": "strongly-inferred"
+      },
+      "evidence": [
+        "s0283",
+        "s0290"
+      ],
+      "chinese": [
+        {
+          "u": "s0283",
+          "zh": "部人張兌為父報仇，母老單身，有妻無子，智明湣之，停其獄。"
+        },
+        {
+          "u": "s0290",
+          "zh": "惠帝之伐鄴也，穎以智明為折沖將軍、參丞相前鋒軍事。"
+        }
+      ],
+      "ownerPatchHint": "Prison-mercy narrative only; remove AD 304 before-bounds."
+    },
+    {
+      "itemId": "claim-895",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-prison-mercy-bounds",
+      "tranche": "qiao-deng",
+      "personId": "p117",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "歲餘…於獄產一男"
+          },
+          "westernBounds": {
+            "after": {
+              "era": "AD",
+              "year": 301,
+              "precision": "year"
+            }
+          },
+          "event": "Born in jail more than a year after detention began."
+        },
+        "certainty": "explicit-event-contextual-date"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "歲餘…於獄產一男"
+          },
+          "event": "Born in jail more than a year after detention began.",
+          "qualitative": "Source event/relative clause「歲餘…於獄產一男」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0284",
+        "s0287"
+      ],
+      "chinese": [
+        {
+          "u": "s0284",
+          "zh": "歲餘，令兌將妻入獄，兼陰縱之。"
+        },
+        {
+          "u": "s0287",
+          "zh": "於獄產一男。"
+        }
+      ],
+      "ownerPatchHint": "Prison-mercy narrative only; remove AD 304 before-bounds."
+    },
+    {
+      "itemId": "claim-1176",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-longan-interval",
+      "tranche": "wu-shilun-hints",
+      "personId": "p155",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "隆安中"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 397,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 401,
+              "precision": "year"
+            }
+          },
+          "event": "Appointed dragon general and Inspector of Guang Province"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "隆安中"
+          },
+          "event": "Appointed dragon general and Inspector of Guang Province",
+          "qualitative": "隆安中 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0397"
+      ],
+      "chinese": [
+        {
+          "u": "s0397",
+          "zh": "朝廷欲革嶺南之弊，隆安中，以隱之為龍驤將軍、廣州刺史、假節，領平越中郎將。"
+        }
+      ],
+      "ownerPatchHint": "Retain 隆安中 on Wu Yin-zhi appointment; drop AD 397–401 interval until annal pinned."
+    },
+    {
+      "itemId": "claim-1228",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-longan-interval",
+      "tranche": "wu-shilun-hints",
+      "personId": "p155",
+      "predicate": "office",
+      "before": {
+        "value": {
+          "label": {
+            "en": "General Who Rouses the Dragon, Inspector of Guang Province with credentials, concurrent colonel who pacifies the Yue",
+            "zh": "龍驤將軍、廣州刺史、假節，領平越中郎將"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "隆安中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 397,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 401,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "label": {
+            "en": "General Who Rouses the Dragon, Inspector of Guang Province with credentials, concurrent colonel who pacifies the Yue",
+            "zh": "龍驤將軍、廣州刺史、假節，領平越中郎將"
+          },
+          "action": "appointed",
+          "dateContext": {
+            "sourceDate": {
+              "text": "隆安中"
+            },
+            "qualitative": "隆安中 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0397"
+      ],
+      "chinese": [
+        {
+          "u": "s0397",
+          "zh": "朝廷欲革嶺南之弊，隆安中，以隱之為龍驤將軍、廣州刺史、假節，領平越中郎將。"
+        }
+      ],
+      "ownerPatchHint": "Retain 隆安中 on Wu Yin-zhi appointment; drop AD 397–401 interval until annal pinned."
+    },
+    {
+      "itemId": "claim-1229",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-longan-interval",
+      "tranche": "wu-shilun-hints",
+      "personId": "p155",
+      "predicate": "place-association",
+      "before": {
+        "value": {
+          "place": {
+            "en": "Guang Province",
+            "zh": "廣州"
+          },
+          "relation": "posted-to",
+          "dateContext": {
+            "sourceDate": {
+              "text": "隆安中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 397,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 401,
+                "precision": "year"
+              }
+            }
+          }
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "place": {
+            "en": "Guang Province",
+            "zh": "廣州"
+          },
+          "relation": "posted-to",
+          "dateContext": {
+            "sourceDate": {
+              "text": "隆安中"
+            },
+            "qualitative": "隆安中 (qualitative source wording; no Western year asserted)"
+          }
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0397",
+        "s0403"
+      ],
+      "chinese": [
+        {
+          "u": "s0397",
+          "zh": "朝廷欲革嶺南之弊，隆安中，以隱之為龍驤將軍、廣州刺史、假節，領平越中郎將。"
+        },
+        {
+          "u": "s0403",
+          "zh": "及在州，清操逾厲，常食不過菜及幹魚而已，帷帳器服皆付外庫，時人頗謂其矯，然亦終始不易。"
+        }
+      ],
+      "ownerPatchHint": "Retain 隆安中 on Wu Yin-zhi appointment; drop AD 397–401 interval until annal pinned."
+    },
+    {
+      "itemId": "claim-1203",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-shilun-retrospective-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p177",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "世英盡節曹氏"
+          },
+          "westernBounds": {
+            "onOrBefore": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          },
+          "event": "Exhausted fidelity to the house of Cao, forcing gates"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "世英盡節曹氏"
+          },
+          "event": "Exhausted fidelity to the house of Cao, forcing gates",
+          "qualitative": "Source label「世英盡節曹氏」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0430",
+        "s0436"
+      ],
+      "chinese": [
+        {
+          "u": "s0430",
+          "zh": "史臣曰：魯芝等建旟剖竹，布政宣條，存樹威恩，沒留遺愛，咸見知明主，流譽當年。"
+        },
+        {
+          "u": "s0436",
+          "zh": "世英盡節曹氏，犯門斬關，宣帝收雷霆之威，獎忠貞之烈，豈非既已在我，欲其罵人者歟！"
+        }
+      ],
+      "ownerPatchHint": "Editorial retrospective—undated praise; remove Jin/Wei AD bounds."
+    },
+    {
+      "itemId": "claim-1204",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-shilun-retrospective-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p178",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "晉代良能"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 420,
+              "precision": "year"
+            }
+          },
+          "event": "Cited among the ablest Jin administrators"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "晉代良能"
+          },
+          "event": "Cited among the ablest Jin administrators",
+          "qualitative": "Source label「晉代良能」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0431"
+      ],
+      "chinese": [
+        {
+          "u": "s0431",
+          "zh": "若伯武之潔己克勤，顏遠之申冤緩獄，鄧攸贏糧以述職，吳隱酌水以厲精，晉代良能，此焉為最。"
+        }
+      ],
+      "ownerPatchHint": "Editorial retrospective—undated praise; remove Jin/Wei AD bounds."
+    },
+    {
+      "itemId": "claim-1205",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-shilun-retrospective-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p179",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "晉代良能"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 420,
+              "precision": "year"
+            }
+          },
+          "event": "Cited for rectifying wrongs and easing prisons"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "晉代良能"
+          },
+          "event": "Cited for rectifying wrongs and easing prisons",
+          "qualitative": "Source label「晉代良能」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0431"
+      ],
+      "chinese": [
+        {
+          "u": "s0431",
+          "zh": "若伯武之潔己克勤，顏遠之申冤緩獄，鄧攸贏糧以述職，吳隱酌水以厲精，晉代良能，此焉為最。"
+        }
+      ],
+      "ownerPatchHint": "Editorial retrospective—undated praise; remove Jin/Wei AD bounds."
+    },
+    {
+      "itemId": "claim-1206",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-shilun-retrospective-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p180",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "晉代良能"
+          },
+          "westernBounds": {
+            "onOrAfter": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            },
+            "onOrBefore": {
+              "era": "AD",
+              "year": 420,
+              "precision": "year"
+            }
+          },
+          "event": "Cited for bearing grain to office and for abandoning his son"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "晉代良能"
+          },
+          "event": "Cited for bearing grain to office and for abandoning his son",
+          "qualitative": "Source label「晉代良能」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0431",
+        "s0432"
+      ],
+      "chinese": [
+        {
+          "u": "s0431",
+          "zh": "若伯武之潔己克勤，顏遠之申冤緩獄，鄧攸贏糧以述職，吳隱酌水以厲精，晉代良能，此焉為最。"
+        },
+        {
+          "u": "s0432",
+          "zh": "而攸棄子存侄，以義斷恩，若力所不能，自可割情忍痛，何至預加徽纆，絕其奔走者乎！"
+        }
+      ],
+      "ownerPatchHint": "Editorial retrospective—undated praise; remove Jin/Wei AD bounds."
+    },
+    {
+      "itemId": "claim-1207",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-shilun-retrospective-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p183",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "宣帝收雷霆之威"
+          },
+          "westernBounds": {
+            "onOrBefore": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          },
+          "event": "Restrained wrath and rewarded Lu Zhi"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "宣帝收雷霆之威"
+          },
+          "event": "Restrained wrath and rewarded Lu Zhi",
+          "qualitative": "Source label「宣帝收雷霆之威」retained without Western conversion"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0436"
+      ],
+      "chinese": [
+        {
+          "u": "s0436",
+          "zh": "世英盡節曹氏，犯門斬關，宣帝收雷霆之威，獎忠貞之烈，豈非既已在我，欲其罵人者歟！"
+        }
+      ],
+      "ownerPatchHint": "Editorial retrospective—undated praise; remove Jin/Wei AD bounds."
+    },
+    {
+      "itemId": "claim-1181",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-wei-retrospective-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p156",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "魏侍中"
+          },
+          "westernBounds": {
+            "onOrBefore": {
+              "era": "AD",
+              "year": 266,
+              "precision": "year"
+            }
+          },
+          "event": "Attendant of the inner court in Wei"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "魏侍中"
+          },
+          "event": "Attendant of the inner court in Wei",
+          "qualitative": "魏侍中 (qualitative source wording; no Western year asserted)"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0378"
+      ],
+      "chinese": [
+        {
+          "u": "s0378",
+          "zh": "吳隱之，字處默，濮陽鄄城人，魏侍中質六世孫也。"
+        }
+      ],
+      "ownerPatchHint": null
+    },
+    {
+      "itemId": "claim-1182",
+      "kind": "strip-unsupported-western-projection",
+      "defectId": "import-kinship-age-bounds",
+      "tranche": "wu-shilun-hints",
+      "personId": "p157",
+      "predicate": "attestation",
+      "before": {
+        "value": {
+          "sourceDate": {
+            "text": "年十餘，丁父憂"
+          },
+          "westernBounds": {
+            "before": {
+              "era": "AD",
+              "year": 397,
+              "precision": "year"
+            }
+          },
+          "event": "Died while Wu Yin-zhi was over ten sui"
+        },
+        "certainty": "explicit"
+      },
+      "after": {
+        "value": {
+          "sourceDate": {
+            "text": "年十餘，丁父憂"
+          },
+          "event": "Died while Wu Yin-zhi was over ten sui",
+          "qualitative": "Source event/relative clause「年十餘，丁父憂」without Western year on the cited line"
+        },
+        "certainty": "explicit"
+      },
+      "evidence": [
+        "s0381"
+      ],
+      "chinese": [
+        {
+          "u": "s0381",
+          "zh": "年十餘，丁父憂，每號泣，行人為之流涕。"
+        }
+      ],
+      "ownerPatchHint": null
+    }
+  ],
+  "groupStats": [
+    {
+      "tranche": "pan-fan-ding",
+      "defectId": "import-yuankang-interval",
+      "items": 3,
+      "applied": 3,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "pan-fan-ding",
+      "defectId": "import-yuandi-bounds",
+      "items": 6,
+      "applied": 6,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "pan-fan-ding",
+      "defectId": "import-guangwu-interval",
+      "items": 2,
+      "applied": 2,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "pan-fan-ding",
+      "defectId": "import-campaign-death-bound",
+      "items": 3,
+      "applied": 3,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "pan-fan-ding",
+      "defectId": "import-huai-di-interval",
+      "items": 3,
+      "applied": 3,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-event-label-western-year",
+      "items": 19,
+      "applied": 19,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-yongjia-anarchy-interval",
+      "items": 3,
+      "applied": 3,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-yongjia-end-bounds",
+      "items": 6,
+      "applied": 6,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-cross-jiang-bounds",
+      "items": 6,
+      "applied": 6,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-kinship-age-bounds",
+      "items": 3,
+      "applied": 3,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-jia-chong-wu-interval",
+      "items": 4,
+      "applied": 4,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-min-di-interval",
+      "items": 2,
+      "applied": 2,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-yuan-di-interval",
+      "items": 6,
+      "applied": 6,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-yongchang-interval",
+      "items": 2,
+      "applied": 2,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "import-prison-mercy-bounds",
+      "items": 2,
+      "applied": 2,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "qiao-deng",
+      "defectId": "inferred-death-without-source",
+      "items": 1,
+      "applied": 0,
+      "skipped": 1,
+      "held": 0
+    },
+    {
+      "tranche": "wu-shilun-hints",
+      "defectId": "import-longan-interval",
+      "items": 3,
+      "applied": 3,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "wu-shilun-hints",
+      "defectId": "import-shilun-retrospective-bounds",
+      "items": 5,
+      "applied": 5,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "wu-shilun-hints",
+      "defectId": "import-wei-retrospective-bounds",
+      "items": 1,
+      "applied": 1,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "wu-shilun-hints",
+      "defectId": "import-kinship-age-bounds",
+      "items": 1,
+      "applied": 1,
+      "skipped": 0,
+      "held": 0
+    },
+    {
+      "tranche": "wu-shilun-hints",
+      "defectId": "hint-undated-english-summary",
+      "items": 24,
+      "applied": 0,
+      "skipped": 0,
+      "held": 24
+    },
+    {
+      "tranche": "wu-shilun-hints",
+      "defectId": "hint-unresolved-genealogy",
+      "items": 8,
+      "applied": 0,
+      "skipped": 0,
+      "held": 8
+    }
+  ],
+  "heldResiduals": [
+    {
+      "itemId": "hints-p047",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p053",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p057",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p060",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p075",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p076",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p081",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p082",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p097",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p099",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p103",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p105",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p115",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p116",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p117",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p129",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p158",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p160",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p162",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p174",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p176",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p181",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p182",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p191",
+      "defectId": "hint-undated-english-summary",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: undated English without Chinese anchor"
+    },
+    {
+      "itemId": "hints-p049",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p050",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p052",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p054",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p055",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p056",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p073",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p186",
+      "defectId": "hint-unresolved-genealogy",
+      "classification": "research-hold-hint",
+      "reason": "Active-date hints: research-required genealogy (p073)"
+    },
+    {
+      "itemId": "hints-p073",
+      "classification": "true-unresolved-genealogy",
+      "hints": [
+        "research required: inferred intervening son of Cao Zhao and father of Cao Shu; no independent dated act"
+      ],
+      "issue": "Genealogical intermediary without independent dated act — preserved as research hold."
+    }
+  ],
+  "classificationPolicy": {
+    "unsupportedDateProjection": "Strip westernYear/Interval/Bounds; keep exact sourceDate; add qualitative when needed for native gate.",
+    "trueSourceContradiction": "Retype or hold; do not invent dates. claim-911 death without killing sentence → undated kinship attestation.",
+    "researchHoldHints": "hint-undated-english-summary and genealogy holds retained for later person-specific Chinese anchors — no blanket clearing."
+  },
+  "attestationUndatedConversions": [
+    {
+      "itemId": "claim-740",
+      "personId": "p093",
+      "before": {
+        "sourceDate": {
+          "text": "元康中"
+        },
+        "event": "Additionally appointed General of the Left and died in office in the Yuankang era.",
+        "qualitative": "元康中 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Additionally appointed General of the Left and died in office in the Yuankang era. Source clause「元康中」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-769",
+      "personId": "p095",
+      "before": {
+        "sourceDate": {
+          "text": "元帝承制"
+        },
+        "event": "Appointed magistrate of Tangyi under Emperor Yuan's provisional regime.",
+        "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Appointed magistrate of Tangyi under Emperor Yuan's provisional regime. Source clause「元帝承制」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-797",
+      "personId": "p100",
+      "before": {
+        "sourceDate": {
+          "text": "元帝承制"
+        },
+        "event": "Emperor Yuan exercising interim authority",
+        "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Emperor Yuan exercising interim authority Source clause「元帝承制」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-801",
+      "personId": "p101",
+      "before": {
+        "sourceDate": {
+          "text": "元帝承制"
+        },
+        "event": "Assistant magistrate under Fan Guang at Tangyi.",
+        "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Assistant magistrate under Fan Guang at Tangyi. Source clause「元帝承制」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-802",
+      "personId": "p102",
+      "before": {
+        "sourceDate": {
+          "text": "元帝承制"
+        },
+        "event": "Alive as Liu Rong's aged mother during festival releases.",
+        "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Alive as Liu Rong's aged mother during festival releases. Source clause「元帝承制」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-720",
+      "personId": "p089",
+      "before": {
+        "sourceDate": {
+          "text": "光武時"
+        },
+        "qualitative": "光武時 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「光武時」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-813",
+      "personId": "p104",
+      "before": {
+        "sourceDate": {
+          "text": "討破汲桑"
+        },
+        "event": "Defeated Ji Sang after reaching Ji Province.",
+        "qualitative": "Source label「討破汲桑」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Defeated Ji Sang after reaching Ji Province. Source clause「討破汲桑」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-814",
+      "personId": "p104",
+      "before": {
+        "sourceDate": {
+          "text": "暴疾而卒"
+        },
+        "event": "Died of violent illness; Emperor Huai later granted a posthumous generalship.",
+        "qualitative": "Source label「暴疾而卒」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Died of violent illness; Emperor Huai later granted a posthumous generalship. Source clause「暴疾而卒」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-847",
+      "personId": "p106",
+      "before": {
+        "sourceDate": {
+          "text": "討破汲桑"
+        },
+        "event": "Defeated by Ding Shao.",
+        "qualitative": "Source label「討破汲桑」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Defeated by Ding Shao. Source clause「討破汲桑」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-856",
+      "personId": "p109",
+      "before": {
+        "sourceDate": {
+          "text": "懷帝"
+        },
+        "qualitative": "Source label「懷帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「懷帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-860",
+      "personId": "p110",
+      "before": {
+        "sourceDate": {
+          "text": "穎之敗趙王倫"
+        },
+        "event": "After Ying defeated Lun, memorialized as general and dual-county magistrate.",
+        "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "After Ying defeated Lun, memorialized as general and dual-county magistrate. Source clause「穎之敗趙王倫」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-861",
+      "personId": "p110",
+      "before": {
+        "sourceDate": {
+          "text": "惠帝之伐鄴"
+        },
+        "event": "Appointed General Who Charges the Enemy on the vanguard staff.",
+        "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Appointed General Who Charges the Enemy on the vanguard staff. Source clause「惠帝之伐鄴」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-881",
+      "personId": "p111",
+      "before": {
+        "sourceDate": {
+          "text": "穎之敗趙王倫"
+        },
+        "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「穎之敗趙王倫」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-882",
+      "personId": "p111",
+      "before": {
+        "sourceDate": {
+          "text": "惠帝之伐鄴"
+        },
+        "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「惠帝之伐鄴」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-883",
+      "personId": "p112",
+      "before": {
+        "sourceDate": {
+          "text": "穎之敗趙王倫"
+        },
+        "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「穎之敗趙王倫」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-891",
+      "personId": "p113",
+      "before": {
+        "sourceDate": {
+          "text": "穎之敗趙王倫"
+        },
+        "event": "Case under Qiao Zhiming after Lun's defeat; amnestied later.",
+        "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Case under Qiao Zhiming after Lun's defeat; amnestied later. Source clause「穎之敗趙王倫」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-893",
+      "personId": "p115",
+      "before": {
+        "sourceDate": {
+          "text": "穎之敗趙王倫"
+        },
+        "event": "Old and living alone during the stayed case.",
+        "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Old and living alone during the stayed case. Source clause「穎之敗趙王倫」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-894",
+      "personId": "p116",
+      "before": {
+        "sourceDate": {
+          "text": "穎之敗趙王倫"
+        },
+        "event": "Wife present at the case; later entered jail.",
+        "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Wife present at the case; later entered jail. Source clause「穎之敗趙王倫」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-913",
+      "personId": "p118",
+      "before": {
+        "sourceDate": {
+          "text": "惠帝之伐鄴"
+        },
+        "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「惠帝之伐鄴」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-987",
+      "personId": "p122",
+      "before": {
+        "sourceDate": {
+          "text": "鐘會伐蜀"
+        },
+        "event": "Summoned during Zhong Hui Shu campaign.",
+        "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Summoned during Zhong Hui Shu campaign. Source clause「鐘會伐蜀」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-990",
+      "personId": "p123",
+      "before": {
+        "sourceDate": {
+          "text": "鐘會伐蜀"
+        },
+        "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「鐘會伐蜀」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-862",
+      "personId": "p110",
+      "before": {
+        "sourceDate": {
+          "text": "永嘉之亂"
+        },
+        "event": "After Yongjia turmoil, served Liu Yao.",
+        "qualitative": "Source event/relative clause「永嘉之亂」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "After Yongjia turmoil, served Liu Yao. Source clause「永嘉之亂」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-917",
+      "personId": "p119",
+      "before": {
+        "sourceDate": {
+          "text": "永嘉之亂"
+        },
+        "qualitative": "Source event/relative clause「永嘉之亂」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「永嘉之亂」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1115",
+      "personId": "p139",
+      "before": {
+        "sourceDate": {
+          "text": "永嘉末"
+        },
+        "event": "Invoked during captivity under Shi Le.",
+        "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Invoked during captivity under Shi Le. Source clause「永嘉末」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1116",
+      "personId": "p137",
+      "before": {
+        "sourceDate": {
+          "text": "永嘉末"
+        },
+        "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「永嘉末」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1117",
+      "personId": "p138",
+      "before": {
+        "sourceDate": {
+          "text": "永嘉末"
+        },
+        "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「永嘉末」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1120",
+      "personId": "p121",
+      "before": {
+        "sourceDate": {
+          "text": "永嘉末"
+        },
+        "event": "Captured at Yongjia's end.",
+        "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Captured at Yongjia's end. Source clause「永嘉末」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1059",
+      "personId": "p142",
+      "before": {
+        "sourceDate": {
+          "text": "至新鄭，投李矩"
+        },
+        "event": "Received You after the post-Yongjia flight.",
+        "qualitative": "Source label「至新鄭，投李矩」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Received You after the post-Yongjia flight. Source clause「至新鄭，投李矩」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1064",
+      "personId": "p145",
+      "before": {
+        "sourceDate": {
+          "text": "遂至江東"
+        },
+        "event": "Crossed south with You in the Yuan restoration window.",
+        "qualitative": "Source label「遂至江東」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Crossed south with You in the Yuan restoration window. Source clause「遂至江東」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1065",
+      "personId": "p146",
+      "before": {
+        "sourceDate": {
+          "text": "遂至江東"
+        },
+        "event": "Crossed south with You.",
+        "qualitative": "Source label「遂至江東」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Crossed south with You. Source clause「遂至江東」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1108",
+      "personId": "p153",
+      "before": {
+        "sourceDate": {
+          "text": "過江，納妾"
+        },
+        "event": "Taken as concubine after You crossed the Yangzi.",
+        "qualitative": "Source event/relative clause「過江，納妾」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Taken as concubine after You crossed the Yangzi. Source clause「過江，納妾」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1000",
+      "personId": "p126",
+      "before": {
+        "sourceDate": {
+          "text": "攸七歲喪父"
+        },
+        "event": "Died in You's childhood, before You was already a commandery administrator at Yongjia's end.",
+        "qualitative": "Source event/relative clause「攸七歲喪父」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Died in You's childhood, before You was already a commandery administrator at Yongjia's end. Source clause「攸七歲喪父」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1001",
+      "personId": "p127",
+      "before": {
+        "sourceDate": {
+          "text": "尋喪母及祖母"
+        },
+        "event": "Died soon after You's father in childhood.",
+        "qualitative": "Source event/relative clause「尋喪母及祖母」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Died soon after You's father in childhood. Source clause「尋喪母及祖母」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1002",
+      "personId": "p128",
+      "before": {
+        "sourceDate": {
+          "text": "尋喪母及祖母"
+        },
+        "event": "Died in You's childhood mourning sequence.",
+        "qualitative": "Source event/relative clause「尋喪母及祖母」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Died in You's childhood mourning sequence. Source clause「尋喪母及祖母」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-988",
+      "personId": "p122",
+      "before": {
+        "sourceDate": {
+          "text": "賈充伐吳"
+        },
+        "event": "Senior clerk on Jia Chong Wu expedition.",
+        "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Senior clerk on Jia Chong Wu expedition. Source clause「賈充伐吳」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-992",
+      "personId": "p124",
+      "before": {
+        "sourceDate": {
+          "text": "賈充伐吳"
+        },
+        "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「賈充伐吳」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1057",
+      "personId": "p143",
+      "before": {
+        "sourceDate": {
+          "text": "湣帝"
+        },
+        "event": "Appointed You under Emperor Min.",
+        "qualitative": "Source label「湣帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Appointed You under Emperor Min. Source clause「湣帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1058",
+      "personId": "p144",
+      "before": {
+        "sourceDate": {
+          "text": "湣帝"
+        },
+        "qualitative": "Source label「湣帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「湣帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1068",
+      "personId": "p147",
+      "before": {
+        "sourceDate": {
+          "text": "元帝"
+        },
+        "qualitative": "Source label「元帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Source clause「元帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1075",
+      "personId": "p148",
+      "before": {
+        "sourceDate": {
+          "text": "元帝"
+        },
+        "event": "Wu famine mission under Yuan.",
+        "qualitative": "Source label「元帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Wu famine mission under Yuan. Source clause「元帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1076",
+      "personId": "p149",
+      "before": {
+        "sourceDate": {
+          "text": "元帝"
+        },
+        "event": "Wu famine mission under Yuan.",
+        "qualitative": "Source label「元帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Wu famine mission under Yuan. Source clause「元帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1084",
+      "personId": "p150",
+      "before": {
+        "sourceDate": {
+          "text": "元帝"
+        },
+        "event": "Named in song at You's Wu departure under Yuan.",
+        "qualitative": "Source label「元帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Named in song at You's Wu departure under Yuan. Source clause「元帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1121",
+      "personId": "p121",
+      "before": {
+        "sourceDate": {
+          "text": "元帝"
+        },
+        "event": "Appointed by Emperor Yuan.",
+        "qualitative": "Source label「元帝」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Appointed by Emperor Yuan. Source clause「元帝」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1122",
+      "personId": "p121",
+      "before": {
+        "sourceDate": {
+          "text": "永昌中"
+        },
+        "event": "Succeeded Zhou Yi as guards general.",
+        "qualitative": "永昌中 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Succeeded Zhou Yi as guards general. Source clause「永昌中」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-892",
+      "personId": "p114",
+      "before": {
+        "sourceDate": {
+          "text": "為父報仇"
+        },
+        "event": "Killed before Zhang Dui's vengeance; case precedes Hui's Ye campaign.",
+        "qualitative": "Source event/relative clause「為父報仇」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Killed before Zhang Dui's vengeance; case precedes Hui's Ye campaign. Source clause「為父報仇」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-895",
+      "personId": "p117",
+      "before": {
+        "sourceDate": {
+          "text": "歲餘…於獄產一男"
+        },
+        "event": "Born in jail more than a year after detention began.",
+        "qualitative": "Source event/relative clause「歲餘…於獄產一男」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Born in jail more than a year after detention began. Source clause「歲餘…於獄產一男」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1176",
+      "personId": "p155",
+      "before": {
+        "sourceDate": {
+          "text": "隆安中"
+        },
+        "event": "Appointed dragon general and Inspector of Guang Province",
+        "qualitative": "隆安中 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Appointed dragon general and Inspector of Guang Province Source clause「隆安中」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1203",
+      "personId": "p177",
+      "before": {
+        "sourceDate": {
+          "text": "世英盡節曹氏"
+        },
+        "event": "Exhausted fidelity to the house of Cao, forcing gates",
+        "qualitative": "Source label「世英盡節曹氏」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Exhausted fidelity to the house of Cao, forcing gates Source clause「世英盡節曹氏」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1204",
+      "personId": "p178",
+      "before": {
+        "sourceDate": {
+          "text": "晉代良能"
+        },
+        "event": "Cited among the ablest Jin administrators",
+        "qualitative": "Source label「晉代良能」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Cited among the ablest Jin administrators Source clause「晉代良能」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1205",
+      "personId": "p179",
+      "before": {
+        "sourceDate": {
+          "text": "晉代良能"
+        },
+        "event": "Cited for rectifying wrongs and easing prisons",
+        "qualitative": "Source label「晉代良能」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Cited for rectifying wrongs and easing prisons Source clause「晉代良能」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1206",
+      "personId": "p180",
+      "before": {
+        "sourceDate": {
+          "text": "晉代良能"
+        },
+        "event": "Cited for bearing grain to office and for abandoning his son",
+        "qualitative": "Source label「晉代良能」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Cited for bearing grain to office and for abandoning his son Source clause「晉代良能」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1207",
+      "personId": "p183",
+      "before": {
+        "sourceDate": {
+          "text": "宣帝收雷霆之威"
+        },
+        "event": "Restrained wrath and rewarded Lu Zhi",
+        "qualitative": "Source label「宣帝收雷霆之威」retained without Western conversion"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Restrained wrath and rewarded Lu Zhi Source clause「宣帝收雷霆之威」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1181",
+      "personId": "p156",
+      "before": {
+        "sourceDate": {
+          "text": "魏侍中"
+        },
+        "event": "Attendant of the inner court in Wei",
+        "qualitative": "魏侍中 (qualitative source wording; no Western year asserted)"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Attendant of the inner court in Wei Source clause「魏侍中」attested without Western year on the cited Chinese line."
+      }
+    },
+    {
+      "itemId": "claim-1182",
+      "personId": "p157",
+      "before": {
+        "sourceDate": {
+          "text": "年十餘，丁父憂"
+        },
+        "event": "Died while Wu Yin-zhi was over ten sui",
+        "qualitative": "Source event/relative clause「年十餘，丁父憂」without Western year on the cited line"
+      },
+      "after": {
+        "undatedSourceAttestation": true,
+        "event": "Died while Wu Yin-zhi was over ten sui Source clause「年十餘，丁父憂」attested without Western year on the cited Chinese line."
+      }
+    }
+  ],
+  "hintAlignRound2": [
+    {
+      "personId": "p093",
+      "before": [
+        "Yuankang era (AD 291–299): General of the Left; died in office"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p095",
+      "before": [
+        "magistrate of Tangyi under Emperor Yuan's provisional authority (on or after AD 317)",
+        "died in office"
+      ],
+      "after": [
+        "died in office"
+      ]
+    },
+    {
+      "personId": "p100",
+      "before": [
+        "on or after AD 317 as Emperor Yuan exercising interim authority"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p101",
+      "before": [
+        "on or after AD 317: assistant magistrate of Tangyi under Fan Guang during Emperor Yuan's 承制"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p102",
+      "before": [
+        "on or after AD 317: alive as Liu Rong's aged mother during Fan Guang's Tangyi magistracy under Emperor Yuan's 承制"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p089",
+      "before": [
+        "AD 25–57"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p104",
+      "before": [
+        "defeated Ji Sang on or after AD 307",
+        "died of sudden illness on or before AD 313"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p106",
+      "before": [
+        "defeated by Ding Shao on or after AD 307"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p109",
+      "before": [
+        "AD 307–313"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p110",
+      "before": [
+        "after Sima Ying defeated Sima Lun (AD 301)",
+        "Emperor Hui's campaign against Ye (AD 304)",
+        "served Liu Yao after Yongjia turmoil (AD 307–313)"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p111",
+      "before": [
+        "defeated Sima Lun AD 301",
+        "Emperor Hui's Ye campaign AD 304"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p112",
+      "before": [
+        "Prince of Zhao; defeated by Sima Ying in AD 301"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p113",
+      "before": [
+        "tried under Qiao Zhiming after AD 301; amnestied before Hui's Ye campaign"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p115",
+      "before": [
+        "alive, old and alone, during Zhang Dui's case after AD 301"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p116",
+      "before": [
+        "entered jail with Zhang Dui more than a year after detention began, after AD 301"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p118",
+      "before": [
+        "AD 290–306; campaign against Ye AD 304"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p122",
+      "before": [
+        "Zhong Hui Shu campaign, AD 263",
+        "Jia Chong Wu campaign, AD 279-280"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p123",
+      "before": [
+        "campaign against Shu, AD 263"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p119",
+      "before": [
+        "Qiao Zhiming served him after Yongjia turmoil (on or after AD 307)"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p139",
+      "before": [
+        "named in You night-fire excuse under Shi Le, on or after AD 311"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p137",
+      "before": [
+        "Yongjia end, AD 311-313"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p138",
+      "before": [
+        "Shi Le senior clerk on or after AD 311"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p142",
+      "before": [
+        "on or after AD 311",
+        "received Deng You at Xinzheng after the post-Yongjia flight"
+      ],
+      "after": [
+        "received Deng You at Xinzheng after the post-Yongjia flight"
+      ]
+    },
+    {
+      "personId": "p145",
+      "before": [
+        "crossed to Jiangdong with You, on or after AD 317"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p146",
+      "before": [
+        "crossed south on or after AD 317",
+        "guards general before Yongchang succession, AD 322-323"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p153",
+      "before": [
+        "taken as concubine after You crossed the Yangzi, on or after AD 317"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p126",
+      "before": [
+        "died when Deng You was seven, before AD 311"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p127",
+      "before": [
+        "died soon after Deng You father, before AD 311"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p128",
+      "before": [
+        "died in You childhood mourning sequence, before AD 311"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p124",
+      "before": [
+        "campaign against Wu, AD 279-280"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p143",
+      "before": [
+        "appointed You under Emperor Min, AD 313-316"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p144",
+      "before": [
+        "AD 313-316"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p147",
+      "before": [
+        "AD 317-323"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p148",
+      "before": [
+        "Wu famine inspection under Emperor Yuan, AD 317-323"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p149",
+      "before": [
+        "sent with Huan Yi to Wu, AD 317-323"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p150",
+      "before": [
+        "named in Wu song at You departure, AD 317-323"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p117",
+      "before": [
+        "born in jail after more than a year of detention, after AD 301"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p156",
+      "before": [
+        "Wei attendant of the inner court (onOrBefore AD 266)"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    },
+    {
+      "personId": "p157",
+      "before": [
+        "died when Wu Yin-zhi was over ten sui, before Yin-zhi's dated Long'an (AD 397–401) career"
+      ],
+      "after": [
+        "source-only undated event/relative clauses in owned Chinese (Western projections stripped)"
+      ]
+    }
+  ],
+  "dateContextDrops": [
+    {
+      "itemId": "claim-759",
+      "predicate": "office",
+      "personId": "p093",
+      "droppedSourceDate": "元康中",
+      "before": {
+        "label": {
+          "en": "General of the Left",
+          "zh": "左將軍"
+        },
+        "action": "additionally-appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "元康中"
+          },
+          "qualitative": "元康中 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "General of the Left",
+          "zh": "左將軍"
+        },
+        "action": "additionally-appointed"
+      }
+    },
+    {
+      "itemId": "claim-760",
+      "predicate": "death",
+      "personId": "p093",
+      "droppedSourceDate": "元康中",
+      "before": {
+        "place": {
+          "en": "in office",
+          "zh": "卒于官"
+        },
+        "dateContext": {
+          "sourceDate": {
+            "text": "元康中"
+          },
+          "qualitative": "元康中 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "place": {
+          "en": "in office",
+          "zh": "卒于官"
+        }
+      }
+    },
+    {
+      "itemId": "claim-777",
+      "predicate": "office",
+      "personId": "p095",
+      "droppedSourceDate": "元帝承制",
+      "before": {
+        "label": {
+          "en": "magistrate of Tangyi",
+          "zh": "堂邑令"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "event": "Emperor Yuan exercising interim authority",
+          "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "magistrate of Tangyi",
+          "zh": "堂邑令"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-778",
+      "predicate": "polity-association",
+      "personId": "p095",
+      "droppedSourceDate": "元帝承制",
+      "before": {
+        "polityId": "eastern-jin",
+        "relation": "served",
+        "dateContext": {
+          "sourceDate": {
+            "text": "元帝承制"
+          },
+          "event": "Emperor Yuan exercising interim authority",
+          "qualitative": "Source event/relative clause「元帝承制」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "polityId": "eastern-jin",
+        "relation": "served"
+      }
+    },
+    {
+      "itemId": "claim-723",
+      "predicate": "event-participation",
+      "personId": "p089",
+      "droppedSourceDate": "光武時",
+      "before": {
+        "kind": "retrospective-reference",
+        "role": "recalled-ruler",
+        "action": "Wuling commandery was moved east in his reign",
+        "dateContext": {
+          "sourceDate": {
+            "text": "光武時"
+          },
+          "qualitative": "光武時 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "recalled-ruler",
+        "action": "Wuling commandery was moved east in his reign"
+      }
+    },
+    {
+      "itemId": "claim-838",
+      "predicate": "honor",
+      "personId": "p104",
+      "droppedSourceDate": "懷帝",
+      "before": {
+        "label": {
+          "en": "General of Chariots and Cavalry",
+          "zh": "車騎將軍"
+        },
+        "action": "posthumously-appointed",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "懷帝"
+          },
+          "qualitative": "Source label「懷帝」retained without Western conversion"
+        },
+        "authorityPersonId": "p109"
+      },
+      "after": {
+        "label": {
+          "en": "General of Chariots and Cavalry",
+          "zh": "車騎將軍"
+        },
+        "action": "posthumously-appointed",
+        "receptionType": "retrospective",
+        "authorityPersonId": "p109"
+      }
+    },
+    {
+      "itemId": "claim-859",
+      "predicate": "event-participation",
+      "personId": "p109",
+      "droppedSourceDate": "懷帝",
+      "before": {
+        "kind": "retrospective-reference",
+        "role": "authority",
+        "otherPersonId": "p104",
+        "action": "posthumously appointed Ding Shao General of Chariots and Cavalry by edict",
+        "dateContext": {
+          "sourceDate": {
+            "text": "懷帝"
+          },
+          "qualitative": "Source label「懷帝」retained without Western conversion"
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "authority",
+        "otherPersonId": "p104",
+        "action": "posthumously appointed Ding Shao General of Chariots and Cavalry by edict"
+      }
+    },
+    {
+      "itemId": "claim-871",
+      "predicate": "office",
+      "personId": "p110",
+      "droppedSourceDate": "穎之敗趙王倫",
+      "before": {
+        "label": {
+          "en": "General Who Exterminates Brigands",
+          "zh": "殄寇將軍"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "General Who Exterminates Brigands",
+          "zh": "殄寇將軍"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-872",
+      "predicate": "office",
+      "personId": "p110",
+      "droppedSourceDate": "穎之敗趙王倫",
+      "before": {
+        "label": {
+          "en": "magistrate of Longlu and Gong",
+          "zh": "隆慮、共二縣令"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "magistrate of Longlu and Gong",
+          "zh": "隆慮、共二縣令"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-876",
+      "predicate": "office",
+      "personId": "p110",
+      "droppedSourceDate": "惠帝之伐鄴",
+      "before": {
+        "label": {
+          "en": "General Who Charges the Enemy",
+          "zh": "折沖將軍"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "General Who Charges the Enemy",
+          "zh": "折沖將軍"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-877",
+      "predicate": "office",
+      "personId": "p110",
+      "droppedSourceDate": "惠帝之伐鄴",
+      "before": {
+        "label": {
+          "en": "adjutant on the prime minister's vanguard staff",
+          "zh": "參丞相前鋒軍事"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "惠帝之伐鄴"
+          },
+          "qualitative": "Source event/relative clause「惠帝之伐鄴」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "adjutant on the prime minister's vanguard staff",
+          "zh": "參丞相前鋒軍事"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-888",
+      "predicate": "event-participation",
+      "personId": "p111",
+      "droppedSourceDate": "穎之敗趙王倫",
+      "before": {
+        "kind": "military",
+        "role": "victor",
+        "otherPersonId": "p112",
+        "action": "defeated Sima Lun",
+        "dateContext": {
+          "sourceDate": {
+            "text": "穎之敗趙王倫"
+          },
+          "qualitative": "Source event/relative clause「穎之敗趙王倫」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "kind": "military",
+        "role": "victor",
+        "otherPersonId": "p112",
+        "action": "defeated Sima Lun"
+      }
+    },
+    {
+      "itemId": "claim-977",
+      "predicate": "event-participation",
+      "personId": "p122",
+      "droppedSourceDate": "鐘會伐蜀",
+      "before": {
+        "kind": "military",
+        "role": "recruited-officer",
+        "action": "summoned-for-talent",
+        "otherPersonId": "p123",
+        "dateContext": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "kind": "military",
+        "role": "recruited-officer",
+        "action": "summoned-for-talent",
+        "otherPersonId": "p123"
+      }
+    },
+    {
+      "itemId": "claim-978",
+      "predicate": "office",
+      "personId": "p122",
+      "droppedSourceDate": "鐘會伐蜀",
+      "before": {
+        "label": {
+          "en": "chief clerk",
+          "zh": "主簿"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "chief clerk",
+          "zh": "主簿"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-989",
+      "predicate": "event-participation",
+      "personId": "p123",
+      "droppedSourceDate": "鐘會伐蜀",
+      "before": {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned-against-Shu",
+        "dateContext": {
+          "sourceDate": {
+            "text": "鐘會伐蜀"
+          },
+          "qualitative": "Source event/relative clause「鐘會伐蜀」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned-against-Shu"
+      }
+    },
+    {
+      "itemId": "claim-879",
+      "predicate": "polity-association",
+      "personId": "p110",
+      "droppedSourceDate": "永嘉之亂",
+      "before": {
+        "polity": {
+          "en": "Han-Zhao",
+          "zh": "漢趙"
+        },
+        "relation": "served",
+        "dateContext": {
+          "sourceDate": {
+            "text": "永嘉之亂"
+          },
+          "qualitative": "Source event/relative clause「永嘉之亂」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "polity": {
+          "en": "Han-Zhao",
+          "zh": "漢趙"
+        },
+        "relation": "served"
+      }
+    },
+    {
+      "itemId": "claim-1031",
+      "predicate": "event-participation",
+      "personId": "p121",
+      "droppedSourceDate": "永嘉末",
+      "before": {
+        "kind": "captivity",
+        "role": "captive",
+        "action": "fell-into-Shi-Le-hands",
+        "otherPersonId": "p137",
+        "dateContext": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "event": "Captured at the end of Yongjia.",
+          "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "kind": "captivity",
+        "role": "captive",
+        "action": "fell-into-Shi-Le-hands",
+        "otherPersonId": "p137"
+      }
+    },
+    {
+      "itemId": "claim-1032",
+      "predicate": "status",
+      "personId": "p121",
+      "droppedSourceDate": "永嘉末",
+      "before": {
+        "status": "captive",
+        "action": "entered",
+        "dateContext": {
+          "sourceDate": {
+            "text": "永嘉末"
+          },
+          "qualitative": "永嘉末 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "status": "captive",
+        "action": "entered"
+      }
+    },
+    {
+      "itemId": "claim-972",
+      "predicate": "family-relationship",
+      "personId": "p121",
+      "droppedSourceDate": "過江",
+      "before": {
+        "relation": "spouse-of",
+        "personId": "p153",
+        "kinshipTerm": {
+          "zh": "妾",
+          "en": "concubine"
+        },
+        "unionCategory": "concubinage",
+        "subjectRole": "husband",
+        "objectRole": "concubine",
+        "relationshipState": "ended",
+        "dateContext": {
+          "sourceDate": {
+            "text": "過江"
+          },
+          "event": "After crossing the Yangzi; ended when she was identified as niece.",
+          "qualitative": "Source event/relative clause「過江」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "relation": "spouse-of",
+        "personId": "p153",
+        "kinshipTerm": {
+          "zh": "妾",
+          "en": "concubine"
+        },
+        "unionCategory": "concubinage",
+        "subjectRole": "husband",
+        "objectRole": "concubine",
+        "relationshipState": "ended"
+      }
+    },
+    {
+      "itemId": "claim-1106",
+      "predicate": "event-participation",
+      "personId": "p121",
+      "droppedSourceDate": "過江",
+      "before": {
+        "kind": "personal",
+        "role": "husband",
+        "action": "took-concubine-later-identified-as-niece",
+        "otherPersonId": "p153",
+        "dateContext": {
+          "sourceDate": {
+            "text": "過江"
+          },
+          "qualitative": "Source event/relative clause「過江」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "kind": "personal",
+        "role": "husband",
+        "action": "took-concubine-later-identified-as-niece",
+        "otherPersonId": "p153"
+      }
+    },
+    {
+      "itemId": "claim-979",
+      "predicate": "office",
+      "personId": "p122",
+      "droppedSourceDate": "賈充伐吳",
+      "before": {
+        "label": {
+          "en": "senior clerk",
+          "zh": "長史"
+        },
+        "action": "appointed",
+        "otherPersonId": "p124",
+        "dateContext": {
+          "sourceDate": {
+            "text": "賈充伐吳"
+          },
+          "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "senior clerk",
+          "zh": "長史"
+        },
+        "action": "appointed",
+        "otherPersonId": "p124"
+      }
+    },
+    {
+      "itemId": "claim-991",
+      "predicate": "event-participation",
+      "personId": "p124",
+      "droppedSourceDate": "賈充伐吳",
+      "before": {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned-against-Wu",
+        "dateContext": {
+          "sourceDate": {
+            "text": "賈充伐吳"
+          },
+          "qualitative": "Source event/relative clause「賈充伐吳」without Western year on the cited line"
+        }
+      },
+      "after": {
+        "kind": "military",
+        "role": "commander",
+        "action": "campaigned-against-Wu"
+      }
+    },
+    {
+      "itemId": "claim-1067",
+      "predicate": "office",
+      "personId": "p121",
+      "droppedSourceDate": "元帝",
+      "before": {
+        "label": {
+          "en": "attendant of the crown prince household",
+          "zh": "太子中庶子"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "元帝"
+          },
+          "qualitative": "Source label「元帝」retained without Western conversion"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "attendant of the crown prince household",
+          "zh": "太子中庶子"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-1088",
+      "predicate": "office",
+      "personId": "p121",
+      "droppedSourceDate": "永昌中",
+      "before": {
+        "label": {
+          "en": "General Who Guards the Army",
+          "zh": "護軍將軍"
+        },
+        "action": "succeeded",
+        "otherPersonId": "p146",
+        "dateContext": {
+          "sourceDate": {
+            "text": "永昌中"
+          },
+          "qualitative": "永昌中 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "General Who Guards the Army",
+          "zh": "護軍將軍"
+        },
+        "action": "succeeded",
+        "otherPersonId": "p146"
+      }
+    },
+    {
+      "itemId": "claim-1228",
+      "predicate": "office",
+      "personId": "p155",
+      "droppedSourceDate": "隆安中",
+      "before": {
+        "label": {
+          "en": "General Who Rouses the Dragon, Inspector of Guang Province with credentials, concurrent colonel who pacifies the Yue",
+          "zh": "龍驤將軍、廣州刺史、假節，領平越中郎將"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "隆安中"
+          },
+          "qualitative": "隆安中 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "label": {
+          "en": "General Who Rouses the Dragon, Inspector of Guang Province with credentials, concurrent colonel who pacifies the Yue",
+          "zh": "龍驤將軍、廣州刺史、假節，領平越中郎將"
+        },
+        "action": "appointed"
+      }
+    },
+    {
+      "itemId": "claim-1229",
+      "predicate": "place-association",
+      "personId": "p155",
+      "droppedSourceDate": "隆安中",
+      "before": {
+        "place": {
+          "en": "Guang Province",
+          "zh": "廣州"
+        },
+        "relation": "posted-to",
+        "dateContext": {
+          "sourceDate": {
+            "text": "隆安中"
+          },
+          "qualitative": "隆安中 (qualitative source wording; no Western year asserted)"
+        }
+      },
+      "after": {
+        "place": {
+          "en": "Guang Province",
+          "zh": "廣州"
+        },
+        "relation": "posted-to"
+      }
+    }
+  ],
+  "editorialUnchanged": true,
+  "summary": {
+    "soleIncorrect": "claim-60 undated (AD 265 stripped)",
+    "trueContradiction": "claim-911 death→undated attestation",
+    "projectionClaimRepairs": 80,
+    "attestationUndatedConversions": 54,
+    "dateContextDrops": 26,
+    "hintResiduals": 33
+  }
+}
