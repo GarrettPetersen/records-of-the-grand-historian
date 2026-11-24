@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-hold-delta-proposal",
+  "scope": {
+    "book": "songshu",
+    "chapter": "086"
+  },
+  "provenance": {
+    "ownerAgentId": "bc-eeaa196d-ea97-4936-887c-4655bc41f139",
+    "ownerBranch": "cursor/songshu-086-followup-owner-f139",
+    "ownerHead": "c8dd1c2b4f3912832d201baef51d4b022afe8e43",
+    "reviewHead": "8639c603390cf45e858860710610c7ecc50ad453",
+    "reviewerAgentId": "bc-52fed3a9-931a-4300-a99c-3db0cacf5e60",
+    "independentReviewParts": [
+      "research/people/checkpoints/campaign-nov24-current-master-followup-transport/songshu-086/independent-identity-report-part-001.json"
+    ],
+    "additionalEvidence": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/songshu-086/lookup-receipt.json",
+        "blob": "b5d6c16ebbbc94be6518c032259285153266a82a",
+        "sha256": "cc815945eb41f8e38ef0e0dac4139309b677d0695721c311e1eff3803d5dc983"
+      }
+    ],
+    "sealedInputs": {
+      "source": {
+        "path": "data/songshu/086.json",
+        "blob": "3449fc3146be50a590066ddc6cf6dee3a7156342",
+        "sha256": "sha256:7ddf674c3cfe67c612cbe7dfa29e1463b378d4793e9f70fef452580d91406515"
+      },
+      "extraction": {
+        "path": "data/people/extractions/songshu/086.json",
+        "blob": "daa8afd5959a4fc10c8bd174bb39d15f61fe5e21",
+        "sha256": "sha256:88cd0685484acfe3f4fbda7449b667d8968d9374d66a6d8f67697a5d23078d53"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/songshu/086.json",
+        "blob": "a43f755291058254522031dc4a12171fe42397f9",
+        "sha256": "sha256:bdd0699633710be977398e0fa5c65e50a9f500fe460939b55b52ee7635c2a30f"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/songshu/086.json",
+        "blob": "a40e9cf054fa8dc4da17e8b472aafdea582ac939",
+        "sha256": "sha256:882258254051f89d8226bf9239b18cb711b582ab244d0c696e150b458b0097fa"
+      }
+    }
+  },
+  "holdResponses": [
+    {
+      "caseId": "sha256:f6fcb17de285abf66ef9057a5ebfadfc8ad8545277cd7838e026cf99b2ae3848",
+      "localPersonId": "songshu:086:p071",
+      "canonicalPersonId": "per_2ZF434PP6PB43PH3P69C",
+      "membershipFingerprint": "sha256:da6d814d8cc61228ef5c0186f032d2853d8b914a6c98c22c687c7fa7ff82eeee",
+      "independentVerdict": "hold",
+      "diagnosis": "Extraction treats songshu:086:p071 as Yin Xiaozu's sister with primary evidence on s0016, but the unit's Chinese only attests 孝祖外甥葛僧韶 (Xiaozu's nephew Ge Sengshao). The substring 姊妹 does not appear; 外甥 names the nephew on p013, not an unnamed sister.",
+      "sourceUnit": {
+        "book": "songshu",
+        "chapter": "086",
+        "unitId": "s0016",
+        "zh": "太宗初即位，四方反叛，孝祖外甥司徒參軍潁川葛僧韶建議銜命徵孝祖入朝，上遣之。",
+        "enLiteral": "When Emperor Ming first took the throne, rebellion broke out on all sides. Xiaozu's nephew Ge Sengshao of Yingchuan, a staff officer in the Secretariat, proposed that an imperial order summon Xiaozu to court, and the emperor sent him.",
+        "enIdiomatic": "When Emperor Ming had just ascended the throne, rebellions erupted throughout the realm. Xiaozu's nephew Ge Sengshao of Yingchuan, a staff officer in the Secretariat, urged that an imperial summons bring Xiaozu to the capital, and the emperor dispatched him."
+      },
+      "extractionOperations": [
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "claimId": "songshu:086:c0272"
+          },
+          "before": {
+            "id": "songshu:086:c0272",
+            "subject": "songshu:086:p071",
+            "predicate": "name",
+            "value": {
+              "kind": "descriptive-kinship",
+              "en": "Sister of Yin Xiaozu",
+              "zh": "姊妹"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["songshu:086:s0016"]
+          },
+          "after": null,
+          "reason": "s0016 contains 外甥 (nephew), not 姊妹; do not treat kinship label as attested on this unit."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "claimId": "songshu:086:c0273"
+          },
+          "before": {
+            "id": "songshu:086:c0273",
+            "subject": "songshu:086:p071",
+            "predicate": "role",
+            "value": {
+              "roleId": "family-member"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["songshu:086:s0016"]
+          },
+          "after": null,
+          "reason": "No person-linked surface on s0016 supports a local family-member attestation for p071."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "claimId": "songshu:086:c0681"
+          },
+          "before": {
+            "id": "songshu:086:c0681",
+            "subject": "songshu:086:p071",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "sibling-of",
+              "personId": "songshu:086:p001",
+              "kinshipTerm": {
+                "zh": "姊妹",
+                "en": "sister"
+              },
+              "sharedParentage": "full"
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["songshu:086:s0016"]
+          },
+          "after": null,
+          "reason": "Sibling link inferred from absent 姊妹 text; s0016 only names the nephew relation explicitly."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "claimId": "songshu:086:c0683"
+          },
+          "before": {
+            "id": "songshu:086:c0683",
+            "subject": "songshu:086:p071",
+            "predicate": "sex",
+            "value": {
+              "sex": "female"
+            },
+            "certainty": "explicit",
+            "evidence": ["songshu:086:s0016"]
+          },
+          "after": null,
+          "reason": "Female sex was marked explicit on s0016 without a Chinese kinship or name span for this person on that unit."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "claimId": "songshu:086:c0684"
+          },
+          "before": {
+            "id": "songshu:086:c0684",
+            "subject": "songshu:086:p071",
+            "predicate": "attestation",
+            "value": {
+              "sourceDate": {
+                "text": "太宗初即位"
+              },
+              "westernYear": {
+                "era": "AD",
+                "year": 465,
+                "precision": "year"
+              }
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["songshu:086:s0016"]
+          },
+          "after": null,
+          "reason": "Event dating on s0016 applies to Ge Sengshao's mission and Xiaozu; not tied to a named or described sister on the surface."
+        },
+        {
+          "kind": "claim-retraction",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "claimId": "songshu:086:c0682"
+          },
+          "before": {
+            "id": "songshu:086:c0682",
+            "subject": "songshu:086:p013",
+            "predicate": "family-relationship",
+            "value": {
+              "relation": "child-of",
+              "personId": "songshu:086:p071",
+              "parentage": "biological",
+              "kinshipTerm": {
+                "zh": "子",
+                "en": "son"
+              },
+              "line": "maternal",
+              "intermediaryPersonIds": []
+            },
+            "certainty": "strongly-inferred",
+            "evidence": ["songshu:086:s0016"]
+          },
+          "after": null,
+          "reason": "Maternal parent p071 was inferred only from the unsupported sister reading; s0016 explicitly attests 外甥 (nephew of Xiaozu) on p013 instead."
+        },
+        {
+          "kind": "revise-person-context",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "localPersonId": "songshu:086:p071",
+            "field": "extendedContext"
+          },
+          "before": "Strongly inferred sister of Yin Xiaozu as mother of maternal nephew Ge Sengshao; not named on the surface.",
+          "after": "Unnamed local kin placeholder; s0016 attests only 孝祖外甥葛僧韶 with no 姊妹 or other Chinese span for this record. Retain reviewed uncertainty; do not invent a named sister.",
+          "reason": "Align person notes with primary Chinese; preserve separate uncertain identity without false s0016 witness."
+        },
+        {
+          "kind": "revise-person-active-date-hints",
+          "target": {
+            "book": "songshu",
+            "chapter": "086",
+            "localPersonId": "songshu:086:p071",
+            "field": "identityHints.activeDateHints"
+          },
+          "before": ["AD 465"],
+          "after": [],
+          "reason": "AD 465 hint derived only from retracted attestation c0684 on s0016."
+        }
+      ],
+      "translationOperations": [],
+      "identityDependencies": [
+        "songshu:086:p001",
+        "songshu:086:p013",
+        "canonical:per_2ZF434PP6PB43PH3P69C"
+      ],
+      "chronologyDependencies": [
+        "songshu:086:c0684",
+        "songshu:086:p071 identityHints.activeDateHints"
+      ],
+      "holdRequiredAfterApply": true,
+      "holdReasonAfterApply": "Accepted canonical membership for per_2ZF434PP6PB43PH3P69C remains with reviewed uncertainty; chapter still lacks primary Chinese naming or describing this sister on s0016."
+    }
+  ],
+  "unaffectedPolicy": "No other review cases or transport artifacts are modified by this proposal.",
+  "validation": {
+    "appliedToCanonical": false,
+    "scopedPeopleValidateCommand": "npm run people:validate -- --book songshu --chapter 086",
+    "scopedPeopleValidateAtProposal": "pass (unchanged canonical inputs)",
+    "independentApproval": false
+  }
+}
