@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "012"
+  },
+  "ownerAgentId": "bc-dfa689d0-bb3f-426d-a067-481f502c0852",
+  "worker": "cursor-nov24-retained-staging-w6-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "17955ba2daba6f9e916be8b05811db8a81b2409cf427c8041f0fb23a7d2ea2ea",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-012-c0852",
+  "inputBlobWitness": {
+    "source": "9ba68700cd95d9a12e218f52b10a53ba2bcf0949",
+    "extraction": "4cb499ab02f5b3e515d912a08a40bbf05d8d51e1",
+    "dateAudit": "7fb0ba24ca87dca2e35be57787ab9e74fb9967b0",
+    "editorial": "c4fb6901343fd1d966ba3bf54919c89de4508809"
+  },
+  "sealedInputs": {
+    "source": "sha256:c7bb9946c192431b8fbff0383953b42fe9995cbb747c53f54c088bb053e8c68c",
+    "extraction": "sha256:c59d4ff8d37b58e482d886001890240404d29e4b5cdee90b79658c8a52daebfa",
+    "dateAudit": "sha256:7e553b3b14fd78f986ee70f0ea2a201b0bf84aeae2e2b285cb91857f85458e51",
+    "editorial": "sha256:3d08dafb6c012a7ae330b4972aaed633aa81100662a58e3ef00c9ce60f059055"
+  },
+  "workOrderAudit": {
+    "state": "research-blocked",
+    "sha256": "7e553b3b14fd78f986ee70f0ea2a201b0bf84aeae2e2b285cb91857f85458e51",
+    "affectedItems": 9,
+    "findings": 1,
+    "verifiedAgainstBytes": true
+  },
+  "priorDateAudit": {
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T04:20:00.000Z",
+    "extractionHash": "sha256:c59d4ff8d37b58e482d886001890240404d29e4b5cdee90b79658c8a52daebfa",
+    "sourceHash": "sha256:c7bb9946c192431b8fbff0383953b42fe9995cbb747c53f54c088bb053e8c68c",
+    "preserved": true,
+    "overwritten": false,
+    "summary": "Complete fresh canonical audit: all 203 Chinese units, 336 temporal or active-hint items, and 85 people were reviewed. Current supported chronology is source-grounded and passes geometry scanning. Three commentary-only persons retain precise research holds because the separate AD 582 accession belongs to Shen Ke; research-blocked is therefore the correct non-approval status."
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷十二 列傳第六: 胡穎 徐度 杜稜 沈恪",
+      "en": "Volume 12: Hu Ying; Xu Du; Du Leng; Shen Ke",
+      "raw": "卷十二 列傳第六: 胡穎 徐度 杜稜 沈恪 Volume 12: Hu Ying; Xu Du; Du Leng; Shen Ke"
+    },
+    "sentenceCount": 203,
+    "extractionBytes": 171472
+  },
+  "validation": {
+    "passed": false,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book chenshu --chapter 012",
+      "passed": false,
+      "deterministicErrors": [
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0001 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0002 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0003 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0004 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0005 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0006 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0007 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0008 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0009 has no matching independent accept/revise authorization",
+        "- data/people/editorial-decisions/chenshu/012.json: applied chenshu:012:r0010 has no matching independent accept/revise authorization"
+      ]
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book chenshu --chapter 012",
+      "passed": false,
+      "nativeStatus": "research-blocked",
+      "recordedReportStatus": "research-blocked",
+      "result": {
+        "total": 1,
+        "counts": {
+          "research-blocked": 1
+        },
+        "chapters": [
+          {
+            "book": "chenshu",
+            "chapter": "012",
+            "status": "research-blocked",
+            "auditVersion": 1,
+            "reviewedAt": "2026-09-23T04:20:00.000Z",
+            "findings": 1
+          }
+        ]
+      },
+      "fingerprintWitness": {
+        "reportExtractionHash": "sha256:c59d4ff8d37b58e482d886001890240404d29e4b5cdee90b79658c8a52daebfa",
+        "packetExtractionHash": "sha256:c59d4ff8d37b58e482d886001890240404d29e4b5cdee90b79658c8a52daebfa",
+        "extractionMatch": true,
+        "sourceMatch": true
+      }
+    },
+    "schemaHold": "Editorial application without independent accept/revise authorization for chenshu:012:r0001–r0010; host must reconcile editorial gate before chapterReady."
+  },
+  "substantiveFindings": [
+    "All four git blobs verified; date-audit sha256 matches work order.",
+    "people:dates:verify returns research-blocked with one commentary-person hold cluster (Hu Ying, Xu Du, Du Leng vs Shen Ke AD 582).",
+    "people:validate fails: ten applied editorial repairs lack independent accept/revise authorization in sealed editorial artifact — schema hold, not owner-fixed."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-494",
+        "claim-498",
+        "claim-502",
+        "hints-p083",
+        "hints-p084",
+        "hints-p085",
+        "p083",
+        "p084",
+        "p085"
+      ],
+      "problem": "The closing historiographer commentary names Hu Ying, Xu Du, and Du Leng alongside Shen Ke, but it does not date their activity. Shen Ke’s AD 582 accession in the preceding unit cannot be inherited by the other three.",
+      "action": "Retain the existing source-specific unresolved claims and matching research-required active-date hints; obtain independent evidence of each person’s own dated activity before replacing the holds.",
+      "evidence": [
+        {
+          "unit": "s0201",
+          "quote": "史臣曰：胡穎、徐度、杜稜、沈恪並附騏驥而騰躍，依日月之光輝，始覯王佐之才，方悟公輔之量，生則肉食，終以配饗。"
+        },
+        {
+          "unit": "s0197",
+          "quote": "後主即位，以疾改授散騎常侍、特進、金紫光祿大夫。"
+        }
+      ],
+      "quote": "史臣曰：胡穎、徐度、杜稜、沈恪並附騏驥而騰躍，依日月之光輝，始覯王佐之才，方悟公輔之量，生則肉食，終以配饗。",
+      "unit": "s0201"
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; preserved sealed inputs."
+}
