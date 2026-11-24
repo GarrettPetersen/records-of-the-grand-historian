@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-independent-hold-repair-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "042"
+  },
+  "ownerAgentId": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+  "pr": 5519,
+  "branchHeadAtAuthoring": "afe11399ba86ed874b75278e334d1210e47fa883",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-042/independent-identity-report.json",
+    "commit": "fea442758c85a13261f58334a9b5d0cc4b68f69c",
+    "sha256": "9a17a49df52f1aa2b135748a3a12872e6fc66f4a24902398a49da7b7944e8d54",
+    "reviewerAgentId": "bc-f9bd7e95-8fcd-4811-9416-8d586d816210",
+    "reviewerName": "cursor-nov24-independent-liaoshi-042"
+  },
+  "chapterInputsUnchanged": {
+    "liaoshiSourceSha256": "sha256:eaaa439a7de0a2f0ba087eb83d5464d8fe32324db9a939cda8c605586707a603",
+    "liaoshiExtractionSha256": "sha256:b6399878b8fe28aea55852d4c826db609a974ef2f9400264f45e454ac4fbf0f5"
+  },
+  "heldCase": {
+    "caseId": "sha256:6cc6d59d63887ca63f4843924c17fd387d763f811a127899dc19de239a5d8506",
+    "targetLocalId": "liaoshi:042:p009",
+    "canonicalPersonId": "per_0BWWX628A7R2M172X4XN",
+    "membershipFingerprint": "sha256:26fb1708abba6ecbf40f95d917e7192e9286fd86d45f6019959d83aa53f8d3ee"
+  },
+  "ownerDisposition": "concur-hold",
+  "summary": "Independent hold is source-correct: liaoshi:042:p009 is a bibliographic author citation only; the contradicted merge sits on anchor chenshu:030:p036, where 沈約 in Congdian’s childhood anecdote is cited collection authorship, not biography-subject identity.",
+  "liaoshiWitnesses": [
+    {
+      "localId": "liaoshi:042:p009",
+      "book": "liaoshi",
+      "chapter": "042",
+      "unitId": "s0234",
+      "quote": "《大明曆》本宋祖沖之法，具見沈約《宋書》。",
+      "reading": "沈約 names the Song Shu compiler; extraction already records work-association author of 宋書 with no actor role in this chapter."
+    }
+  ],
+  "anchorDefectWitnesses": [
+    {
+      "localId": "chenshu:030:p003",
+      "book": "chenshu",
+      "chapter": "030",
+      "unitId": "s0068",
+      "quote": "八歲，讀沈約集，見回文研銘，從典援筆擬之，便有佳致。",
+      "reading": "Biography subject is 從典 Congdian (p003); 沈約集 is the cited collection; 沈約 is not the chapter’s actor."
+    },
+    {
+      "localId": "chenshu:030:p036",
+      "book": "chenshu",
+      "chapter": "030",
+      "unitId": "s0068",
+      "quote": "沈約",
+      "reading": "Current extraction p036 mislabels this surface as Shen Yue the poet—concrete false merge driver for protected membership."
+    }
+  ],
+  "proposedReplacementAnchor": {
+    "localId": "liangshu:035:p054",
+    "unitId": "s0100",
+    "quote": "嘗著《鴻序賦》，尚書令沈約見而稱曰：「可謂得明道之高致，蓋《幽通》之流也。」",
+    "reading": "沈約 as named official and speaking actor—suitable Shen Yue anchor once chenshu:030:p036 is removed from the cluster."
+  },
+  "minimalRepairProposal": {
+    "applyInScope": false,
+    "defectChapter": {
+      "book": "chenshu",
+      "chapter": "030"
+    },
+    "action": "Retract or replace chenshu:030:p036 as a Shen Yue person record; model s0068 沈約 as cited-work authorship on Congdian (p003) only, matching sealed English that names Congdian as brush-wielder.",
+    "liaoshi042Unchanged": true,
+    "hashesWouldChangeIfApplied": [
+      {
+        "path": "data/people/extractions/chenshu/030.json",
+        "currentSha256": "d001747262bbe4347b2b0c95f1dc124d5653473eec3045d28b5c57878f1464ab",
+        "reason": "Remove false Shen Yue actor on s0068; add cited-author/work surface on p003 if needed."
+      }
+    ],
+    "hashesUnchanged": [
+      {
+        "path": "data/liaoshi/042.json",
+        "sha256": "sha256:eaaa439a7de0a2f0ba087eb83d5464d8fe32324db9a939cda8c605586707a603"
+      },
+      {
+        "path": "data/people/extractions/liaoshi/042.json",
+        "sha256": "sha256:b6399878b8fe28aea55852d4c826db609a974ef2f9400264f45e454ac4fbf0f5"
+      }
+    ],
+    "registryNote": "Accepted canonical per_0BWWX628A7R2M172X4XN for liaoshi:042:p009 stands; membership fingerprint should be recomputed after chenshu repair and anchor swap to liangshu:035:p054—not edited in this PR."
+  },
+  "independentReReviewAsk": {
+    "sameReviewer": true,
+    "request": "After acknowledging the extrinsic chenshu:030:p036 defect and proposed liangshu:035:p054 anchor, re-review liaoshi:042:p009 for approve-with-unresolvedIdentity on sealed liaoshi bytes only; twelve approved cases remain untouched."
+  },
+  "transportSha256": "88b746f3f43ebede163b0208046650e99870299da06e225adc4a022aa6ac7479"
+}
