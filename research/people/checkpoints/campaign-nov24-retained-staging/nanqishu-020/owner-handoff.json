@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "020"
+  },
+  "ownerAgentId": "bc-d68b1c60-8adb-4121-b598-13233dc9da35",
+  "workerId": "cursor-nov24-retained-staging-w15-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "47ac2dfd80292790c463a83feccbaaff984d1b6921ddf369a9081d4cae544141",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-nanqishu-020-9da35",
+  "extractionBytes": 109414,
+  "auditWitness": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "8b2040331260bca3966f599c86d32dccf162150acf7ccd1df5a3b7facbfa86ad",
+    "people": 66,
+    "claims": 326,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "6ce2915850eef9d30867216ed37ee32cdeffc146",
+    "extraction": "e4167ab2f0ed3e72937f3ac6f44469a36d589bc4",
+    "editorial": "b3dde6a4cffc5120db83c821a934ab850f5f263f"
+  },
+  "sealedInputs": {
+    "source": "sha256:bb512ee7d129cddc4b9b83ecb05f6cebfa17da66bbe02d03961bb43eb3e666b5",
+    "extraction": "sha256:8b2040331260bca3966f599c86d32dccf162150acf7ccd1df5a3b7facbfa86ad",
+    "editorial": "sha256:164cc9505ae51eb94a2f8ce365d18f8273f01f2313bd005f34071de58b59ebcd"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 20 Biographies 1: Empresses and Consorts",
+    "chineseUnits": 131,
+    "sentenceCount": 131,
+    "translatedCount": 131,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 109414
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-020/date-packet.json",
+    "sha256": "sha256:01731d9d5c55b6b9eb32331e0192bcabedfae97b4600075b13bb9e2b3eac5fd8",
+    "packetSourceHash": "sha256:a7ded2e0bb12bba2ccfa18148272b7a74a362cb09dc4038eb31c9d5d7ba69ce6",
+    "packetExtractionHash": "sha256:f7bf74569c5c56b6a37db06f247ed61c412d61f438c92a497bd37fa4eccfbeb1",
+    "itemCount": 178,
+    "peopleCount": 66,
+    "unitCount": 131
+  },
+  "nativeDateDiagnostics": {
+    "command": "npm run people:dates:scan -- --book nanqishu --chapter 020",
+    "findings": 0,
+    "problems": []
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book nanqishu --chapter 020",
+    "peopleValidateSummary": "Scoped person data validation passed for nanqishu/020: 1 extraction(s), 66 local people, 311 mentions, 588 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 020",
+      "status": "un-audited",
+      "missingNativeDateReport": true,
+      "note": "No data/people/date-audits file; independent chronology review is the remaining gate."
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": "Current extraction bytes at pinned git blob; no re-extraction.",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "definiteTranslationRepairsReason": "Owner pass found no definite English omission or mistranslation requiring a concrete replacement row.",
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs at staging 20b8d0e3. Git blob witnesses match dispatch pins; people:validate passes; native date packet built (178 checks, 131 units). Automated date scan reports 0 geometry/reception diagnostic(s). Accepted editorial decisions and prompt-v7 extraction reused unchanged. No canonical edits, repairs, or self-approved chronology.",
+  "remainingIndependentProofs": {
+    "date": "Independent full-chapter native date audit against sealed packet sha256:01731d9d5c55… via npm run people:dates:packet and reviewer record workflow; owner did not call people:dates:record.",
+    "identity": "Corpus-level identity resolution and merge review remain outside this scoped chapter-owner pass."
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 020",
+    "datesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 020",
+    "datePacket": "npm run people:dates:packet -- --book nanqishu --chapter 020 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-020/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent date audit still missing."
+}

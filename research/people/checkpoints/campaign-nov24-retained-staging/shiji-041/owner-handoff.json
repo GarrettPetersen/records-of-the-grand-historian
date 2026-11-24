@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "041"
+  },
+  "ownerAgentId": "bc-d68b1c60-8adb-4121-b598-13233dc9da35",
+  "workerId": "cursor-nov24-retained-staging-w15-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "47ac2dfd80292790c463a83feccbaaff984d1b6921ddf369a9081d4cae544141",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-041-9da35",
+  "extractionBytes": 110362,
+  "auditWitness": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "8bab4f279efbe0e91daf16fdb5d83a3df59a13fd5b83de7eca760ec8794cba11",
+    "people": 44,
+    "claims": 332,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "b1a3919ed8ce163a090f1d12bf4c2eee34dd460d",
+    "extraction": "8dc050a7371b684fb71a3cfc94f4c3314b42aad6",
+    "editorial": "1b3887f5df10a659d1e5a55eb65463f5b9c9c9f2"
+  },
+  "sealedInputs": {
+    "source": "sha256:69ffca808dd39d13d3d4402ef2e11552d33ca94fd088a13aedd25ffbfe2650ff",
+    "extraction": "sha256:8bab4f279efbe0e91daf16fdb5d83a3df59a13fd5b83de7eca760ec8794cba11",
+    "editorial": "sha256:6a92b65e8642dc49ba9e716976de38477b8d7f132cedf1271f55001273f34d65"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "House of King Goujian of Yue",
+    "chineseUnits": 236,
+    "sentenceCount": 236,
+    "translatedCount": 236,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 110362
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-041/date-packet.json",
+    "sha256": "sha256:cc0117244f4a94756fe1b6b3332a6568afd8af8a8fa769001ff42a3e2d482b32",
+    "packetSourceHash": "sha256:9af102ea1d08ddc6b5126ef61ca4bf8f6ed16cecd5ca4a605615b870107682db",
+    "packetExtractionHash": "sha256:337145347dc71c9e07593d50730928659ff9259fff087e9f048dcc6b897e6e3c",
+    "itemCount": 120,
+    "peopleCount": 44,
+    "unitCount": 236
+  },
+  "nativeDateDiagnostics": {
+    "command": "npm run people:dates:scan -- --book shiji --chapter 041",
+    "findings": 0,
+    "problems": []
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 041",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/041: 1 extraction(s), 44 local people, 596 mentions, 451 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 041",
+      "status": "un-audited",
+      "missingNativeDateReport": true,
+      "note": "No data/people/date-audits file; independent chronology review is the remaining gate."
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": "Current extraction bytes at pinned git blob; no re-extraction.",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "definiteTranslationRepairsReason": "Owner pass found no definite English omission or mistranslation requiring a concrete replacement row.",
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs at staging 20b8d0e3. Git blob witnesses match dispatch pins; people:validate passes; native date packet built (120 checks, 236 units). Automated date scan reports 0 geometry/reception diagnostic(s). Accepted editorial decisions and prompt-v7 extraction reused unchanged. No canonical edits, repairs, or self-approved chronology.",
+  "remainingIndependentProofs": {
+    "date": "Independent full-chapter native date audit against sealed packet sha256:cc0117244f4a… via npm run people:dates:packet and reviewer record workflow; owner did not call people:dates:record.",
+    "identity": "Corpus-level identity resolution and merge review remain outside this scoped chapter-owner pass."
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 041",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 041",
+    "datePacket": "npm run people:dates:packet -- --book shiji --chapter 041 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-041/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent date audit still missing."
+}

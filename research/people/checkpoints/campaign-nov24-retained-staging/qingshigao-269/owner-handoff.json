@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "269"
+  },
+  "ownerAgentId": "bc-d68b1c60-8adb-4121-b598-13233dc9da35",
+  "workerId": "cursor-nov24-retained-staging-w15-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "47ac2dfd80292790c463a83feccbaaff984d1b6921ddf369a9081d4cae544141",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-269-9da35",
+  "extractionBytes": 110506,
+  "auditWitness": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "539c74c0d0ad9f68a979682b8ad24a7e56f8037cc3989bd2048aa733fd64c707",
+    "people": 74,
+    "claims": 394,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "d33d7db640e7ff23a8eab52e8950f7b9405160b1",
+    "extraction": "732e200452035e207adc6d2b0e09adf13836b341",
+    "editorial": "d7934fbcb46d85d1eaaf3955a2a493b9a84c48ae"
+  },
+  "sealedInputs": {
+    "source": "sha256:e3f86f36ed07de3a40981bfefe80cdf443366c4ad30445a4360f74d91cb36dbf",
+    "extraction": "sha256:539c74c0d0ad9f68a979682b8ad24a7e56f8037cc3989bd2048aa733fd64c707",
+    "editorial": "sha256:f588c877a601278ecd7aa62c1098a41e14f63b83685e1d1168245a0dcf6af383"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 269 Biographies 56: Suo Etu, Ming Zhu",
+    "chineseUnits": 183,
+    "sentenceCount": 183,
+    "translatedCount": 183,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 110506
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-269/date-packet.json",
+    "sha256": "sha256:5d39ec638b53b1e6c1a5b10ce088cbba1d6a2b77ebf41c3a166f2f88052a8582",
+    "packetSourceHash": "sha256:4e3b8d0d77eff827abdd9a2f91a559da07ed10c0df9304085279bb1e8d449d6e",
+    "packetExtractionHash": "sha256:8ee1ec71d6baf3342c26b834c4cac785fa67acd19384ddf2e92a67630721c4d7",
+    "itemCount": 236,
+    "peopleCount": 74,
+    "unitCount": 186
+  },
+  "nativeDateDiagnostics": {
+    "command": "npm run people:dates:scan -- --book qingshigao --chapter 269",
+    "findings": 0,
+    "problems": []
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 269",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/269: 1 extraction(s), 74 local people, 492 mentions, 605 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 269",
+      "status": "un-audited",
+      "missingNativeDateReport": true,
+      "note": "No data/people/date-audits file; independent chronology review is the remaining gate."
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 6,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": "Current extraction bytes at pinned git blob; no re-extraction.",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "definiteTranslationRepairsReason": "Owner pass found no definite English omission or mistranslation requiring a concrete replacement row.",
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs at staging 20b8d0e3. Git blob witnesses match dispatch pins; people:validate passes; native date packet built (236 checks, 186 units). Automated date scan reports 0 geometry/reception diagnostic(s). Accepted editorial decisions and prompt-v7 extraction reused unchanged. No canonical edits, repairs, or self-approved chronology.",
+  "remainingIndependentProofs": {
+    "date": "Independent full-chapter native date audit against sealed packet sha256:5d39ec638b53… via npm run people:dates:packet and reviewer record workflow; owner did not call people:dates:record.",
+    "identity": "Corpus-level identity resolution and merge review remain outside this scoped chapter-owner pass."
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 269",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 269",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 269 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-269/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent date audit still missing."
+}
