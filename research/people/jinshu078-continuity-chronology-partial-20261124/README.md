@@ -47,3 +47,14 @@ Validated and retained jobs 0–2; added:
 
 Coverage: `chronology-partial/coverage.json`  
 Next index: **6** (`66d15f889cf1ee453867`, s0157–s0182)
+
+## Jobs 6–15 continuation (2026-11-24)
+
+Reused jobs 0–5. Validated remaining jobs 6–15 (full unit coverage **415/415**).
+
+- Supported year-numeral anchors include 三康元年/335, 元帝稱制/317, 及帝踐阼/318, 太興三年/320, 成帝踐阼/325, 康帝即位/342, 咸和二年/327.
+- Concrete holds retained for unresolved external events (石勒新死, 會王敦反, 蘇峻*, 敦死, 沈充之反, 八月十五日, undated careers).
+- **Residual defects (incorrect):** claim-1033/1034/1100 (AD 324), claim-1046–1049 (AD 327–328 intervals) — Chinese lacks year numerals.
+
+Coverage: `chronology-partial/coverage.json`  
+Next index: **none** (all 16 jobs complete; still not `assembleDateReview` / not audited).
