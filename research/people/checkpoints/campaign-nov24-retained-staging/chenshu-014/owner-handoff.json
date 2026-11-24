@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "014"
+  },
+  "ownerAgentId": "bc-fc6327bb-e8d3-43c7-a312-34b9d3ed7bf0",
+  "workerId": "cursor-nov24-retained-staging-w5-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "94917f99bb8ffd16ab134b720cd7e4e167bda477d58fcbaacfb6933f67a78dd3",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-014-d7bf0",
+  "inputBlobWitness": {
+    "source": "94f02899cfc60a4529a9521ed2c9a734a325db0f",
+    "extraction": "afa7efa524b5f9e2920a045172b4f451f065764d",
+    "dateAudit": "b826df78258a5a264b667b18cfab560a00aa6deb",
+    "editorial": "9bf3b0991f3c6ce99450962ec4203f5719ca3166"
+  },
+  "sealedInputs": {
+    "source": "sha256:aa018e06bed21221b9a9b07b4ef810f632bedd6ba4f8ff60cd8a97228b84145d",
+    "extraction": "sha256:55e3b3469fa9dc9efbc850abf7f08e15ec53f72426dca74d564c25338b651d95",
+    "dateAudit": "sha256:0859cea1ea1c5f27bdd54384939f0bbbd2cbaff93070e3aec5e3d59f6aa33209",
+    "editorial": "sha256:44057ac01e8f5bacb69e13c611d8e6d5faa73bafa001c6e3e9a81ebd9ea128f2"
+  },
+  "dateAuditWitness": {
+    "contentSha256": "sha256:0859cea1ea1c5f27bdd54384939f0bbbd2cbaff93070e3aec5e3d59f6aa33209",
+    "gitBlob": "b826df78258a5a264b667b18cfab560a00aa6deb",
+    "reportStatus": "research-blocked",
+    "reportSourceHash": "sha256:ba716d702b5495e2ce325c4490090929d3f44514c20601553f19a7548077d8c5",
+    "reportExtractionHash": "sha256:0867584d327c2a8940cca8745d34eae32fd23ef2a7da53e7f47219b41aaf10d8",
+    "currentPacketSourceHash": "sha256:ba716d702b5495e2ce325c4490090929d3f44514c20601553f19a7548077d8c5",
+    "currentPacketExtractionHash": "sha256:0867584d327c2a8940cca8745d34eae32fd23ef2a7da53e7f47219b41aaf10d8",
+    "bytesPreserved": true,
+    "hashesRewritten": false
+  },
+  "sourceCoverage": {
+    "chineseUnits": 162,
+    "englishLiteralAndIdiomatic": {
+      "sentenceCount": 162,
+      "translatedCount": 162,
+      "bothFieldsComplete": true
+    },
+    "extractionBytesWitness": 97239,
+    "extractionBytesOnDisk": 97239
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "npm run people:validate -- --book chenshu --chapter 014",
+    "peopleValidateSummary": "Scoped person data validation passed for chenshu/014: 1 extraction(s), 58 local people, 369 mentions, 449 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book chenshu --chapter 014",
+    "datesVerifyScopedStatus": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "chronologyReportStatus": "research-blocked",
+    "chronologyStaleRelativeToPacket": false,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "auditFindingsCount": 1,
+    "auditAffectedItems": 3
+  },
+  "substantiveFindings": "Staging four-part inputs verified. people:validate passes with 58 people. people:dates:verify returns research-blocked. Zheng Shaoshu (p055) retrospective title 梁司州刺史 at s0152 is correctly held without invented personal dates. No definite English defects beyond applied editorial.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-123",
+        "hints-p055",
+        "p055"
+      ],
+      "problem": "s0152 identifies Zheng Shaoshu through the retrospective title 梁司州刺史. It preserves no appointment date, end date, or independently dated personal activity, so historical chronology cannot be completed from this chapter.",
+      "action": "Retain claim-123 and p055’s matching research-required hint as the current source-specific hold. Replace it only with independently verified personal temporal evidence; do not infer activity from the Liang dynasty label.",
+      "nativeAuditVerdict": "research-blocked",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book chenshu --chapter 014",
+    "datesVerify": "npm run people:dates:verify -- --book chenshu --chapter 014"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; commit owner-handoff without altering sealed source, extraction, date-audit, or editorial blobs. Host supplies native sealed final review packets."
+}
