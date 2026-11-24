@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-four-part-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "018"
+  },
+  "ownerAgentId": "bc-6b80b860-324e-41c1-b2d6-d2f759052b9c",
+  "campaignWorker": "cursor-nov24-four-part-owner-4",
+  "idempotencyKey": "b3ee6ff7d4fa6b71d8897a153d6a628391427220dbd7c73ac6c6b9334a072a5",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "inputBlobs": [
+    {
+      "path": "data/jiuwudaishi/018.json",
+      "blob": "00db851bd9323c9b02d27c7e38020e9484d4e3d9",
+      "contentSha256": "sha256:718a44ae2c649727ceaaa69d9afc697b7f9f4c055b1a89fdf91444263e972acd"
+    },
+    {
+      "path": "data/people/extractions/jiuwudaishi/018.json",
+      "blob": "ee7f18bb6dba8d3528ee665afb6a11cf516a2cd6",
+      "contentSha256": "sha256:81acadde1994ae77cfab6727977445b1097095ec7c2734e4272c699590633416"
+    },
+    {
+      "path": "data/people/date-audits/jiuwudaishi/018.json",
+      "blob": "10c3537d8bcbcdfcf4f523ab1a58696130defc9f",
+      "contentSha256": "sha256:465748bcde06e13a12f1c15b7e7ec2d12e5e398fe56bcb19e686832800fbb412"
+    },
+    {
+      "path": "data/people/editorial-decisions/jiuwudaishi/018.json",
+      "blob": "b32456d655ff16385c7a84c9038f4af4ad0d1430",
+      "contentSha256": "sha256:2cec00c22e4edaaad7360ce89b1df860791877e99c7d3929ae0ad862587758cb"
+    }
+  ],
+  "validation": {
+    "peopleValidatePassed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jiuwudaishi --chapter 018",
+    "peopleDatesVerifyPassed": true,
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book jiuwudaishi --chapter 018",
+    "sourceCoverage": {
+      "chineseUnits": 228,
+      "translatedCount": 228,
+      "missingEnglish": 0,
+      "missingLiteral": 0,
+      "missingIdiomatic": 0,
+      "fullEnglishCoverage": true
+    },
+    "dateAuditStatus": "audited",
+    "dateAuditFindings": 0,
+    "dateAuditSourceHash": "sha256:1921dab211b7dfa12fd4085213c5a864ca57de98a6e24754453da1c2397c2887",
+    "dateAuditExtractionHash": "sha256:7776c4c211614e3a3dd4305125e71d026d636b984b224112fd852de7a38110c6",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "proposedTranslationRepairs": 0
+  },
+  "authorEvidence": {
+    "extractionAgentIds": [
+      "bc-9f79f792-cf24-4d07-b885-a07f20659c09",
+      "bc-3ffee438-b9e5-4dfc-8f00-bc60b8cacc29",
+      "bc-3faa5e7c-40a4-4d57-82c5-d245d41b8d82",
+      "bc-1ff4ec41-bfcc-49ca-a124-aefa272e8bd3",
+      "bc-72968979-75b4-4946-b54a-bb216581aa07",
+      "bc-c5fdd9b4-2614-40eb-ac11-3711f4110780",
+      "bc-81cc49f3-7cb8-4fd1-976c-2e43080afc06"
+    ],
+    "extractionModel": "grok-4.5-chunked",
+    "extractionPromptVersion": 7,
+    "appliedTranslationRepairs": 33,
+    "editorialDecisionCount": 33,
+    "dateAuditReviewedAt": "2026-09-29T16:31:04.953Z",
+    "dateAuditReviewer": "Independent Jiu Wudaishi 018 initial chronology reviewer"
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 109,
+    "identityTransportParts": 4,
+    "preparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "independentIdentityReviewCompleted": false,
+    "boundedDossierReviewRequired": true,
+    "note": "Native four-part identity preparation passed in CI; owner does not re-prepare or approve identity packets."
+  },
+  "chapterReady": true,
+  "holds": [],
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "notes": "Source-owner pass only: verifies sealed Chinese source, both English fields, accepted extraction/editorial/dates, and records remaining independent identity work. Not publication or identity approval."
+}
