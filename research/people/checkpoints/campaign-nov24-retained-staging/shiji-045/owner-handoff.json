@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "045"
+  },
+  "ownerAgentId": "bc-aebd4fe3-2466-4006-92bb-c9cebffa3008",
+  "workerId": "cursor-nov24-retained-staging-w15-o12",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5a406e9e06e1b43be5fe871c36f13f752c19102a03443d7e384c1e481cb39ea",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-045-a3008",
+  "inputBlobWitness": {
+    "source": "6346fadeac4e4c5c23f7088f0b7130d08a2c7113",
+    "extraction": "18848bfc764f2a5d065ae984d5affd8ea0896ae7",
+    "editorial": "086f3359bc906386b64e628d9243e895aafaf8c1",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:e3323e22076fa7c44759950c5871a6053d16c97c4fdfc7a77360df0ce7966145",
+    "extraction": "sha256:9a1c151ab923898df374daabd058493daa1a0c14f7facadbfe0c73025cb7d03f",
+    "editorial": "sha256:34f1a9efe720c51d7b2ab0430768c5d2c10c055a1218ca198046bb16d41f2719",
+    "dateAudit": null
+  },
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 93,
+    "claims": 364,
+    "sourceExtractionSha256": "sha256:9a1c151ab923898df374daabd058493daa1a0c14f7facadbfe0c73025cb7d03f"
+  },
+  "extractionReuse": {
+    "bytes": 130566,
+    "promptVersion": 7,
+    "path": "data/people/extractions/shiji/045.json",
+    "altered": false
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/shiji/045.json",
+    "appliedProposals": 5,
+    "status": "reviewed-with-applied-proposals",
+    "altered": false
+  },
+  "sourceCoverage": {
+    "sourceTitle": "House of Han",
+    "chineseUnits": 196,
+    "translatedCount": 196,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 196,
+    "extractionBytes": 130566
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-045/date-packet.json",
+    "sha256": "sha256:a8e2be7160f95639ffc03ee5e1ff313f94a3b0ef691908a7646f264f3b564c96",
+    "sourceHash": "sha256:315446afb08d79e64e9a6b1eb026f6f2ddea6b1035af72d2283851221560fb8b",
+    "extractionHash": "sha256:dd9299949aaae3998f2548b4850b40f710b2be6a9088a76987d6e7a7292fe5a3",
+    "dateHintChecks": 266,
+    "peopleInPacket": 93,
+    "summary": "shiji/045: 266 date/hint checks, 93 people, 196 source units",
+    "checkCount": 266
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 045",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/045: 1 extraction(s), 93 local people, 422 mentions, 654 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 045",
+      "status": "un-audited",
+      "missingReport": true,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (no data/people/date-audits/shiji/045.json). Full chapter read confirms paired literal and idiomatic English on all Chinese-bearing units. Existing extraction and accepted editorial repairs preserved at pinned git blobs; people:validate passes. Native date packet prepared at research/people/checkpoints/campaign-nov24-retained-staging/shiji-045/date-packet.json (sha256:a8e2be7160f95639ffc03ee5e1ff313f94a3b0ef691908a7646f264f3b564c96) for independent review. Owner found no definite English omission, concrete chronology contradiction, or extraction/source hold requiring repair in this pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-045/date-packet.json",
+      "packetSha256": "sha256:a8e2be7160f95639ffc03ee5e1ff313f94a3b0ef691908a7646f264f3b564c96",
+      "recordCommand": "npm run people:dates:record -- --book shiji --chapter 045",
+      "runCommand": "npm run people:dates:run -- --book shiji --chapter 045 --run --model <reviewer-model>",
+      "note": "Owner prepared and sealed the native date packet only; does not self-approve an independent audit."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "scope": "93 chapter-local people",
+      "note": "Independent canonical identity dossier review remains at publication gate; owner pass does not approve identity merges or separations."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 045",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 045",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 045 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-045/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}

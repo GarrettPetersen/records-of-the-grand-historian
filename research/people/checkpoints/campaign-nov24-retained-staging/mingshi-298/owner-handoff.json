@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "298"
+  },
+  "ownerAgentId": "bc-aebd4fe3-2466-4006-92bb-c9cebffa3008",
+  "workerId": "cursor-nov24-retained-staging-w15-o12",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5a406e9e06e1b43be5fe871c36f13f752c19102a03443d7e384c1e481cb39ea",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-mingshi-298-a3008",
+  "inputBlobWitness": {
+    "source": "66a07d1aa31a3db2266498edc01c0c5b24be2381",
+    "extraction": "e253ec775989bb82624a7e999a4b796b8ede0aab",
+    "editorial": "3f5ae04f26de648f4cc6f7dadde5a969d11d7cc7",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:8225ef8674bbdb541d08053b8a74b672469dbac008e1cb9bd873d270c3ce43f5",
+    "extraction": "sha256:4a7ea1b8bff4119c01ff8f70b802bd35a74bf67ab0bc54e29a4a51288dc19b03",
+    "editorial": "sha256:89f7666df17c62f0ae1ec6fda53463c2bf4b7d0b774b7db6d4f4dfdcbe1cef61",
+    "dateAudit": null
+  },
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 107,
+    "claims": 430,
+    "sourceExtractionSha256": "sha256:4a7ea1b8bff4119c01ff8f70b802bd35a74bf67ab0bc54e29a4a51288dc19b03"
+  },
+  "extractionReuse": {
+    "bytes": 132225,
+    "promptVersion": 7,
+    "path": "data/people/extractions/mingshi/298.json",
+    "altered": false
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/mingshi/298.json",
+    "appliedProposals": 4,
+    "status": "reviewed-with-applied-proposals",
+    "altered": false
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 298 Biographies 186: Recluses",
+    "chineseUnits": 211,
+    "translatedCount": 211,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 211,
+    "extractionBytes": 132225
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-298/date-packet.json",
+    "sha256": "sha256:afa3bc6be405c5f374e80709089919feb767cccf7ad208dcc71b2da9396165bc",
+    "sourceHash": "sha256:c67fe255eaf80b245fe2bc7774a8d0057a8d1df8aa47926bf851da7c4faf2577",
+    "extractionHash": "sha256:177f17f4a2bbbed672e3b22ccb0fed495045b31ccd0bfed433e10a293faa9a64",
+    "dateHintChecks": 244,
+    "peopleInPacket": 107,
+    "summary": "mingshi/298: 244 date/hint checks, 107 people, 211 source units",
+    "checkCount": 244
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book mingshi --chapter 298",
+    "peopleValidateSummary": "Scoped person data validation passed for mingshi/298: 1 extraction(s), 107 local people, 378 mentions, 761 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 298",
+      "status": "un-audited",
+      "missingReport": true,
+      "findings": null
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (no data/people/date-audits/mingshi/298.json). Full chapter read confirms paired literal and idiomatic English on all Chinese-bearing units. Existing extraction and accepted editorial repairs preserved at pinned git blobs; people:validate passes. Native date packet prepared at research/people/checkpoints/campaign-nov24-retained-staging/mingshi-298/date-packet.json (sha256:afa3bc6be405c5f374e80709089919feb767cccf7ad208dcc71b2da9396165bc) for independent review. Owner found no definite English omission, concrete chronology contradiction, or extraction/source hold requiring repair in this pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-298/date-packet.json",
+      "packetSha256": "sha256:afa3bc6be405c5f374e80709089919feb767cccf7ad208dcc71b2da9396165bc",
+      "recordCommand": "npm run people:dates:record -- --book mingshi --chapter 298",
+      "runCommand": "npm run people:dates:run -- --book mingshi --chapter 298 --run --model <reviewer-model>",
+      "note": "Owner prepared and sealed the native date packet only; does not self-approve an independent audit."
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "scope": "107 chapter-local people",
+      "note": "Independent canonical identity dossier review remains at publication gate; owner pass does not approve identity merges or separations."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 298",
+    "datesVerify": "npm run people:dates:verify -- --book mingshi --chapter 298",
+    "datesPacket": "npm run people:dates:packet -- --book mingshi --chapter 298 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-298/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
