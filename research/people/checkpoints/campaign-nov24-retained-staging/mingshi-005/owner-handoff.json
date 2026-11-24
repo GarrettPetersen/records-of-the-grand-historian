@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "005"
+  },
+  "ownerAgentId": "bc-f6a1ca74-b1a2-466b-8e7e-5b285d6a98c0",
+  "workerId": "cursor-nov24-retained-staging-w15-o6",
+  "idempotencyKey": "ff5655f96dab6b93a18fb7c37512b4e8db275982da0a396523f579b6715c4d7f",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "workBranch": "cursor/nov24-retained-staging-w15-o6-a98c0",
+  "campaign": "campaign-nov24-retained-staging",
+  "branch": "cursor/nov24-retained-staging-owner-mingshi-005-a98c0",
+  "extractionBytes": 119807,
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "1063865b9487d2e8a4294caf94786a0cf9c9b228e918655ca633995d607058d5",
+    "people": 99,
+    "claims": 308,
+    "promptVersion": 7,
+    "witnessVerified": true
+  },
+  "inputBlobWitness": {
+    "source": "895b2fa1407963c5c0dc0912cac0eec7b50af937",
+    "extraction": "55a3aa1b76adfb0ff0b062f2d8b5710896a69a99",
+    "editorial": "f64cbd7b9f032118424bf49f8895ba5b5a24dcd4"
+  },
+  "sealedInputs": {
+    "source": "sha256:260e0dd1073d4220a14883fdb8e32a2df3d7949d9aefbf5a38f205b561c06738",
+    "extraction": "sha256:1063865b9487d2e8a4294caf94786a0cf9c9b228e918655ca633995d607058d5",
+    "editorial": "sha256:c60c5095558f1400ea7535d55f5874eb5db4257f1c8eeefb5b506fcc2b978d98"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 5 Annals 5: Chengzu 1",
+    "sourceTitleZh": "卷五 本紀第五 成祖一",
+    "sentenceCount": 212,
+    "translatedCount": 212,
+    "chineseSentences": 212,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "missingUnitSample": [],
+    "extractionPeople": 99,
+    "extractionClaims": 308
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-005/date-packet.json",
+    "sha256": "sha256:0502cb11b98abfa6dbd423f0ba7b33d53e1e574a94731f460b431b2c4a782030",
+    "itemCount": 265,
+    "peopleCount": 99,
+    "unitCount": 212,
+    "sourceHash": "sha256:adef1e98a5468164a4a743b8addb7a4d7360b7cd827e1b74c89518a402525371",
+    "extractionHash": "sha256:3f43b8ff1c1ab7fa983e77556321d10e14593cc9f3b6a243b925837caaae73c7"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionBytes": 119807,
+    "extractionSha256": "sha256:1063865b9487d2e8a4294caf94786a0cf9c9b228e918655ca633995d607058d5",
+    "extractionPeople": 99,
+    "extractionClaims": 308,
+    "editorialDecisionCount": 6,
+    "editorialStatus": "accepted-decisions-retained",
+    "editorialRepairsAppliedInSource": true,
+    "reextracted": false,
+    "ownerExtractionEdits": false
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book mingshi --chapter 005",
+    "peopleValidateSummary": "Scoped person data validation passed for mingshi/005: 1 extraction(s), 99 local people, 574 mentions, 582 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 005",
+      "status": "un-audited",
+      "auditVersion": 1
+    },
+    "chronologyStatus": "un-audited",
+    "dateAuditSummary": null,
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "dateRepairProposals": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained-staging owner pass on sealed source, extraction, and editorial inputs at pinned git blobs on staging 20b8d0e3. Git blob witness verified. Source meta and sentence scan: 212 units, 212 Chinese sentences; paired literal and idiomatic English complete on all scanned sentences; accepted editorial repairs reflected in source where spot-checked. Reused prompt v7 extraction (99 people, 308 claims) and 6 accepted editorial proposal(s); npm run people:validate passed with zero legacy temporal debt. Native date packet sealed at sha256:0502cb11b98abfa6dbd423f0ba7b33d53e1e574a94731f460b431b2c4a782030 (265 date/hint checks, 99 people, 212 source units) for independent reviewer. Missing gate: data/people/date-audits/mingshi/005.json (un-audited). Owner does not self-approve chronology or canonical identity; no owner-side extraction, editorial, or date-repair edits.",
+  "remainingIndependentEvidence": {
+    "independentDateReviewCompleted": false,
+    "nextGate": "independent-native-date-audit",
+    "nativeDatePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-005/date-packet.json",
+    "nativeDatePacketSha256": "sha256:0502cb11b98abfa6dbd423f0ba7b33d53e1e574a94731f460b431b2c4a782030",
+    "recordCommand": "npm run people:dates:record -- --report <independent-auditor-report.json>",
+    "identityReview": "deferred-to-corpus-independent-reviewer-after-date-gate",
+    "proofsRetained": [
+      "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-005/date-packet.json",
+      "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-005/owner-handoff.json"
+    ]
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book mingshi --chapter 005",
+    "npm run people:dates:verify -- --book mingshi --chapter 005",
+    "npm run people:dates:packet -- --book mingshi --chapter 005 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-005/date-packet.json"
+  ],
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 005",
+    "datesVerify": "npm run people:dates:verify -- --book mingshi --chapter 005",
+    "buildDatePacket": "npm run people:dates:packet -- --book mingshi --chapter 005 --out research/people/checkpoints/campaign-nov24-retained-staging/mingshi-005/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, no registry, no deploy."
+}
