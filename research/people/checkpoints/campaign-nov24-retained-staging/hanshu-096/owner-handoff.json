@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "096"
+  },
+  "ownerAgentId": "bc-bbaefc50-2f40-4364-aece-e97754880133",
+  "workerId": "cursor-nov24-retained-staging-w5-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "39dc761601a40cbb24700ca121def2ef3c7181f2724be3ed793248577ef9f7ee",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-096-80133",
+  "inputBlobWitness": {
+    "source": "6412235ff5b295d43df5facd5c176138a68b7b7c",
+    "extraction": "376a15f04c0d1cb0fb6b061d4083a8a9db53106d",
+    "dateAudit": "316ea8ceb9c97bc9713f63b7e6b018dc621eefe7",
+    "editorial": "1b589d5308120d55afe504b89248375629d04722"
+  },
+  "sealedInputs": {
+    "source": "sha256:dd6931f1c67d5315d0188bd5b2004d8f2495cf467ebfa7ea329ddf4d11dc215c",
+    "extraction": "sha256:a0201ccba46673e4cd451ce12972f74fd37892be5c61adc0f7d2ef0a60282d6e",
+    "dateAudit": "sha256:7a451b456a8c47fba85275d18bfc9d2cc61edaf4d134fda4baf46aed49b33853",
+    "editorial": "sha256:2522d55c94311cc136c4413ba3d386954a1df9edd8ddd269f4699388db4df3b9"
+  },
+  "sourceCoverage": {
+    "sentenceCount": 329,
+    "translatedCount": 329,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "langMetadataNote": "s0235–s0237 carry literal and idiomatic English without lang:\"en\"; not treated as omissions."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book hanshu --chapter 096",
+    "summary": "Scoped person data validation passed for hanshu/096: 1 extraction(s), 111 local people, 504 mentions, 493 claims, 0 proposed repair(s), 6 applied repair(s), 7 editorial decision(s). Legacy temporal debt noted (93 without active-date hint).",
+    "extractionValidate": "data/people/extractions/hanshu/096.json: ok (111 people, 504 mentions, 493 claims, 624 candidates)",
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Complete fresh post-curation audit: all 329 source units, 119 temporal/hint items, and 111 people reviewed. Curated source-specific holds remain unresolved, so approval is blocked pending independently source-qualified chronology.",
+    "dateAuditFileSha256": "sha256:7a451b456a8c47fba85275d18bfc9d2cc61edaf4d134fda4baf46aed49b33853",
+    "datesVerify": "research-blocked",
+    "datesVerifyExitCode": 0,
+    "extractionFingerprintMatchesAudit": true,
+    "currentExtractionHash": "sha256:d428a4501f6f831586250966f625b5b2574d75d1d8216107a9fcb85f89bcfe47",
+    "auditedExtractionHash": "sha256:d428a4501f6f831586250966f625b5b2574d75d1d8216107a9fcb85f89bcfe47",
+    "sourceFingerprintMatchesAudit": true
+  },
+  "substantiveFindings": "329 source units; full English on all narrative units (summation lines s0235–s0237 include both English fields without lang metadata). Post-curation audit research-blocked on p031/p071 cluster only. No new definite translation repair identified in owner pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-20",
+        "hints-p031",
+        "hints-p071",
+        "p031",
+        "p071"
+      ],
+      "taxonomy": "source-specific personal chronology hold",
+      "problem": "Curation removed unsupported broad Western intervals; cited contexts (e.g. s0256) do not independently establish replacement Western personal chronology for Tan and Yong.",
+      "nativeAction": "Retain source-specific holds; obtain independently source-qualified chronology before approval.",
+      "evidenceUnits": [
+        "s0256"
+      ],
+      "clauseCitations": [
+        "平阿侯譚年次當繼大將軍鳳輔政，尤與永善。"
+      ]
+    }
+  ],
+  "chapterReady": false,
+  "preservedDateAuditBytes": true,
+  "independentReviewRepeated": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified staging git blobs; full source English scan; scoped people:validate and validate-people-extraction; people:dates:verify; retained native date-audit and editorial bytes without hash substitution.",
+    "completedAt": "2026-11-24T16:29:28.255Z"
+  },
+  "reproduce": {
+    "datesVerify": "npm run people:dates:verify -- --book hanshu --chapter 096",
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 096"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no sealed input mutation, publication, or global registry."
+}
