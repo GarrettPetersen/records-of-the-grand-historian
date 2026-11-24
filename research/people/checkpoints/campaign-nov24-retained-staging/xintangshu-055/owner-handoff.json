@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "055"
+  },
+  "ownerAgentId": "bc-95b52b95-f4f5-4a30-aba0-2157f8206711",
+  "workerId": "cursor-nov24-retained-staging-w3-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2f093d1356d99463ba98f7b7d7697643a6113c23581016740debb9a8ec00a83a",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xintangshu-055-06711",
+  "inputBlobWitness": {
+    "source": "a92eaa7a168fa1feca9ad5896a125aef2db31688",
+    "extraction": "70a7c917ef7316625f19557a8b53342fb9e45bb7",
+    "dateAudit": "573481af47bb7ecd80859666afac97a68fc6c57e",
+    "editorial": "28b67598826f010a8c0aa6bfb10084cd09f43f37"
+  },
+  "sealedInputs": {
+    "source": "sha256:a9cec86cfd9edc2dedc19c9750ca77831d230bbb1ccebb3081500ffa07cf8e85",
+    "extraction": "sha256:e130027401a52e28afb436017ba17eefbf005387776312d6dcfcb3df2ec20b37",
+    "dateAudit": "sha256:4acfdec4a032da70a267f64b97ce15f455e38db350f4ea725f9572dfc2a8671b",
+    "editorial": "sha256:a4913388b2fa545f7e144f7807d5e6e968380be2830334735b91ef7fa88a4356"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 208,
+    "translatedCount": 208,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "sourceTitle": "Volume 55 Treatises 51: Finance and Economics 4",
+    "allUnitsCarryLiteralAndIdiomatic": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book xintangshu --chapter 055",
+    "summary": "Scoped person data validation passed for xintangshu/055: 1 extraction(s), 18 local people, 42 mentions, 175 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 055",
+      "status": "research-blocked",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T22:20:00.000Z",
+      "chronologyCurrentAtPinnedBlobs": true
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialRepairsReflectedInSource": true,
+      "proposedRepairCount": 0,
+      "legacyTemporalDebt": 0,
+      "legacyAliasDispositionDebt": 0
+    },
+    "editorialDecisionCount": 3,
+    "editorialAcceptedCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "Pinned four-part inputs witness-verified at staging 7cdf8f42e53b; scoped people:validate passed with zero proposed repairs.",
+    "Full Chinese chapter and both English fields reviewed via unit scan; accepted editorial repairs are present in source.",
+    "Complete independent review of all 208 Chinese units, 38 temporal/hint checks, and 18 people. Explicit regnal-year claims are supported. Twelve people retain source-specific research holds where imprecise or one-sided language has become a closed interval/point, where Dali is narrowed without evidence, or where the Yuanhe-13 sequence is mismapped to AD 836–840. No source or canonical extraction was changed.",
+    "No new definite English omission, false-merge signal, extraction coverage gap, or owner-scoped chronology/identity amendment identified at sealed blobs."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "xintangshu:055:date-hold-1",
+      "kind": "research-blocked-chronology",
+      "status": "retained",
+      "items": [
+        "claim-59",
+        "claim-69",
+        "claim-77",
+        "claim-78",
+        "claim-90",
+        "claim-93",
+        "claim-96",
+        "claim-104",
+        "claim-105",
+        "claim-108",
+        "claim-112",
+        "claim-116",
+        "claim-121",
+        "claim-125",
+        "hints-p001",
+        "hints-p004",
+        "hints-p006",
+        "hints-p009",
+        "hints-p010",
+        "hints-p011",
+        "hints-p013",
+        "hints-p014",
+        "hints-p015",
+        "hints-p016",
+        "hints-p017",
+        "hints-p018",
+        "p001",
+        "p004",
+        "p006",
+        "p009",
+        "p010",
+        "p011",
+        "p013",
+        "p014",
+        "p015",
+        "p016",
+        "p017",
+        "p018"
+      ],
+      "people": [],
+      "problem": "Several records convert imprecise, one-sided, or narrative-relative Chinese chronology into unjustified Western intervals or points. Most notably, 建中三年之後 becomes AD 787–789, 元和十年之後 becomes AD 815, and a Yuanhe-13 sequence is treated as AD 836–840; Dali is also narrowed to AD 777–779 without source support.",
+      "preservedAction": "Pin independent source-specific chronology and replace each value with source-supported point, period, or one-sided bounds. Remove any date/hint that remains unsupported, then submit the repaired extraction for fresh independent audit.",
+      "source": "data/people/date-audits"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "dateAuditStatus": "research-blocked",
+    "notes": "Owner handoff is not independent identity or chronology approval; retained research-blocked date holds remain explicit in distinctHolds."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 055",
+    "datesVerify": "npm run people:dates:verify -- --book xintangshu --chapter 055"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; no sealed input mutation, registry build, or publication."
+}
