@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-native-date-owner-repair",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "033"
+  },
+  "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+  "workerId": "cursor-nov24-retained-staging-w10-o2",
+  "idempotencyKey": "bd4670c30b747d85fce69dd99c3f95e90968d2b042d666b1e0457da1bded48af",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "branch": "cursor/nov24-first-native-date-delta-w1-0945d",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-nov24-first-independent-date/mingshi-033/independent-date-report.json",
+    "contentSha256": "sha256:7364ede448640659f3afd889a8493c0a1999d6c01b6fbac2451dee4cf074efef",
+    "status": "needs-revision",
+    "preserved": true,
+    "ownerDidNotModifyReport": true
+  },
+  "priorOwnerPacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/mingshi-033/date-packet.json",
+    "contentSha256": "sha256:f252489ddadb03cb0809666e936537f16450fb6e34b7b666e2a5206e3b4f61a4"
+  },
+  "inputBlobWitness": {
+    "source": "631058f6c5c2aab43caff53e09fdbfc84431cb56",
+    "extraction": "87703b2c1340a1d1445b0f9eb67bdc27d7af5912",
+    "editorial": "402137f60bba5297d47bb5d732351eee8cfff62a"
+  },
+  "inputContentSha256": {
+    "source": "sha256:e859d37190896cf3c223c6d97adad2cd19c5f655da1a13c33648281afa973afd",
+    "extraction": "sha256:1c81e22e520a901f08248c104f0f6f559ddfe736be6f2b30c33fdeda75cfc4cb",
+    "editorial": "sha256:8446be2e9007c33483860156f526f251a4ae4d493782548910c3546b53616046"
+  },
+  "outputContentSha256": {
+    "candidateExtraction": "sha256:303093580abf1049d301621926219932b5dcac5c2b2f240d61a2ae8c7dbd4ad6",
+    "candidateDatePacket": "sha256:b24a54c1c98507fff6cce3b37f0327ec6f18a9b933807650888b22c536834e73"
+  },
+  "changedItemIds": [
+    "claim-4",
+    "hints-p001"
+  ],
+  "findingCoverage": {
+    "allReportFindingsTargeted": true,
+    "addressedIndependentFindingCount": 3
+  },
+  "repairs": [
+    {
+      "itemId": "claim-4",
+      "action": "scoped-extraction-date-repair"
+    },
+    {
+      "itemId": "hints-p001",
+      "action": "scoped-extraction-date-repair"
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "artifacts": {
+    "candidateExtraction": "research/people/checkpoints/campaign-nov24-first-native-delta/mingshi-033/candidate-extraction.json",
+    "candidateDatePacket": "research/people/checkpoints/campaign-nov24-first-native-delta/mingshi-033/candidate-date-packet.json"
+  },
+  "nativeValidation": {
+    "validateCompactExtraction": {
+      "passed": true,
+      "errorCount": 0
+    },
+    "datePacketBuild": {
+      "itemCount": 2,
+      "unitCount": 633
+    }
+  },
+  "remainingHolds": [
+    {
+      "kind": "independent-delta-date-reaudit",
+      "detail": "Independent reviewer must approve candidate extraction and packet SHA256 pair; owner did not run people:dates:record."
+    }
+  ],
+  "independentApprovalIssued": false,
+  "canonicalDataPathsModified": false,
+  "completedAt": "2026-11-24T17:34:56.328Z",
+  "notes": "[CF-Pages-Skip] Checkpoint candidate only; sealed source/editorial blobs unchanged; no registry or deploy.",
+  "findingResponses": [
+    {
+      "findingIndex": 0,
+      "items": [
+        "claim-4"
+      ],
+      "addressed": "Removed westernInterval; unresolved retrospective attestation on s0133–s0134."
+    },
+    {
+      "findingIndex": 1,
+      "items": [
+        "hints-p001"
+      ],
+      "addressed": "Cleared AD 1633–1721 active-date hint."
+    },
+    {
+      "findingIndex": 2,
+      "items": [
+        "p001"
+      ],
+      "addressed": "Person scheduling follows repaired claim-4 and cleared hints."
+    }
+  ],
+  "reusableHandoff": {
+    "ownerAgentId": "bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d",
+    "preserved": true
+  }
+}
