@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-native-witness-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "106"
+  },
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "pr": 5520,
+  "branchHeadAtAuthoring": "23c54e948f6817d978e1b9302cbc179566a4a262",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-106/independent-identity-report.json",
+    "commit": "5b136325d724ea94a4905c3e30b5a4f8802d009e",
+    "sha256": "f0ebcb67d6a8fb5fb72b912bd099a1e307a099c579d7a5f45e7807d2835b73e2",
+    "reviewerAgentId": "bc-92537d3b-6e49-4933-90f4-4fbc629d5090"
+  },
+  "nativeFinding": {
+    "text": "Witness does not support liaoshi:106:p007 in s0019, quote 林牙斡魯之孫.",
+    "caseId": "sha256:ea75b2285ae50dd86e586964a19bd306674996b388fc279b2c683baacb2702ed"
+  },
+  "chapterInputsUnchanged": {
+    "sourceSha256": "sha256:eb99fe9cc852402b965c8a4b344995200a0ee052982e01d15b2591c034e1cca9",
+    "extractionSha256": "sha256:a7fa93190bb68e5c391dede6337f6f71ff94af3e962b20e2d2e03b9eb933b317"
+  },
+  "diagnosis": "Native gate is correct: the substring 林牙斡魯之孫 is not a personal-name witness for p007. It is the grandson line on biography subject 耶律官奴 (p002). p007 is a strongly-inferred intervening parent with no independent surface; the sealed extraction already records descriptive-kinship on s0019. Owner evidence incorrectly attributed the full s0019 sentence to localId p007 as if it named that record.",
+  "disposition": "literal-attribution-correction",
+  "correctedWitnesses": [
+    {
+      "role": "primary-actor",
+      "localId": "liaoshi:106:p002",
+      "book": "liaoshi",
+      "chapter": "106",
+      "unitId": "s0019",
+      "quote": "耶律官奴，字奚隱，林牙斡魯之孫。",
+      "reading": "Named biography subject and explicit grandson-to-斡魯 linkage."
+    },
+    {
+      "role": "kinship-inference-for-unnamed-parent",
+      "localId": "liaoshi:106:p007",
+      "book": "liaoshi",
+      "chapter": "106",
+      "unitId": "s0019",
+      "quote": "林牙斡魯之孫",
+      "witnessKind": "descriptive-kinship-inference",
+      "reading": "Grandson relation implies one unnamed intervening parent between 林牙斡魯 (p006) and 官奴 (p002); not a personal Chinese name for p007.",
+      "extractionAlignment": "data/people/extractions/liaoshi/106.json row p007 alias kind descriptive-kinship Parent of Yelü Guannu, attestation strongly-inferred on s0019"
+    },
+    {
+      "role": "corroborating-grandparent",
+      "localId": "liaoshi:106:p006",
+      "book": "liaoshi",
+      "chapter": "106",
+      "unitId": "s0019",
+      "quote": "林牙斡魯",
+      "reading": "Named grandfather line in the same sentence."
+    }
+  ],
+  "independentAlignment": "Independent approve on this case used 林牙斡魯之孫 as kinship support for the unnamed parent record, not as a false personal-name reading; corrected owner packet attribution matches that approve without changing chapter bytes.",
+  "extractionPatchCandidate": null,
+  "transportSha256": "67c43dc4bc264a6c949c1c15af995dacb55b5a2354fbec9c3d652b1d03686c91",
+  "ownerWorkerId": "cursor-nov24-audited-recovery-2",
+  "copiedFrom": "research/people/checkpoints/campaign-audited-native-review-20261124/liaoshi-106/native-witness-owner-handoff.json"
+}

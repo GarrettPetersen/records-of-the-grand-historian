@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-primary-witness-diagnosis",
+  "scope": { "book": "liaoshi", "chapter": "106" },
+  "pullRequest": 5520,
+  "authorBranch": "cursor/liaoshi106-audited-owner-handoff-3a0e",
+  "independentIdentityReport": {
+    "referenceBranch": "cursor/codex-identity-review-liaoshi-106-9d5090",
+    "verdictSummary": "12/12 approve; independent report unchanged on owner branch."
+  },
+  "diagnosis": [
+    {
+      "caseId": "sha256:b02947eb43feccd49ebfcf53aced4a4ef1ffac2486a8dcb5dd9250fc3d2e0dc8",
+      "localPerson": "liaoshi:106:p010",
+      "failedWitnessPattern": "Cite bare 父母 as if it were a personal name for Pulibu's father.",
+      "receivedPrimary": {
+        "unitId": "s0033",
+        "zh": "父母蚤喪，鞠於祖父兀古匿。",
+        "validWitness": "父母蚤喪"
+      },
+      "literalAttributionCorrection": "Individuates an unnamed father only; no removable personal-name graph; retain descriptive-kinship chapter-local record.",
+      "disposition": "align-independent-approve"
+    },
+    {
+      "caseId": "sha256:840e106587f50b66bc1875f30f6da63a81d926b877915aba9bffb346487b3506",
+      "localPerson": "liaoshi:106:p011",
+      "failedWitnessPattern": "Duplicate the plural 父母 witness as a separate mother name without the 蚤喪 kinship context.",
+      "receivedPrimary": {
+        "unitId": "s0033",
+        "quote": "父母蚤喪"
+      },
+      "literalAttributionCorrection": "Same unit supports a distinct unnamed mother record; must not invent 母/父 given names or merge with 魏國王惠.",
+      "disposition": "align-independent-approve"
+    },
+    {
+      "caseId": "sha256:ea75b2285ae50dd86e586964a19bd306674996b388fc279b2c683baacb2702ed",
+      "localPerson": "liaoshi:106:p007",
+      "failedWitnessPattern": "Infer a named parent of 耶律官奴 when the chapter only gives 林牙斡魯之孫.",
+      "receivedPrimary": {
+        "unitId": "s0019",
+        "witnessToUse": "林牙斡魯之孫",
+        "invalidInference": "A named father/mother person between 斡魯 and 官奴"
+      },
+      "literalAttributionCorrection": "Retain one intervening unnamed generation; hold any invented parent identity.",
+      "disposition": "align-independent-approve"
+    }
+  ],
+  "sealedInputsUnchanged": true,
+  "dateProofBranch": "codex/cursor-glossary-nov24-2026-retrospective-owner-liaoshi-106"
+}

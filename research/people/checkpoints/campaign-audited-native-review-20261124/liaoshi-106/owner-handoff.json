@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "audited-owner-identity-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "106"
+  },
+  "ownerAgentId": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+  "campaignWorker": "cursor-github-nov24-cross-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "baseRevision": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "seedBranch": "codex/cursor-glossary-nov24-2026-retrospective-owner-liaoshi-106",
+  "seedCommit": "72e7cd2016550d7c933d75650178b3b5d26a541b",
+  "sourceRevision": "32d461ef5297344e103a040cf9ee28fb05837535",
+  "transportCommit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+  "transportBranch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+  "transportSha256": "67c43dc4bc264a6c949c1c15af995dacb55b5a2354fbec9c3d652b1d03686c91",
+  "planFingerprint": "sha256:512ddb617820745a98aa49488aaa8c88bc74112a2beb412c196714a41c8296ff",
+  "reviewCases": 12,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-106/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-106/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-native-review-20261124/liaoshi-106/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-native-review-20261124/liaoshi-106/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-audited-native-review-20261124/liaoshi-106/lookup-receipt.json",
+    "retrospectiveChronology": "research/people/checkpoints/retrospective-chronology-20261124/liaoshi-106.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-106/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 106"
+  },
+  "notes": "Owner evidence is not independent approval. Reuses source/editorial/extraction/date inputs; no canonical membership edits."
+}
