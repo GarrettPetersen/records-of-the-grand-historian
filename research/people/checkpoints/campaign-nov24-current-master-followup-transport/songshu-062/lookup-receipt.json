@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "songshu",
+    "chapter": "062"
+  },
+  "reviewer": {
+    "agentId": "bc-9d6043c9-9937-4358-a28f-1640b7492543",
+    "name": "cursor-nov24-independent-songshu-062"
+  },
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "method": "GET",
+      "service": "https://24histories-people-lookup.garrett-m-petersen.workers.dev",
+      "purpose": "Confirm read-only lookup generation before review; bounded dossier headers remain secondary to sealed transport primary Chinese.",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "httpStatus": 200,
+      "timestamp": "2026-11-24T10:45:00.000Z"
+    }
+  ],
+  "conclusion": "Membership review used sealed transport units (scoped by book/chapter/unitId) and current data/*.json for anchor chapters. Lookup manifest only; no dossier search substituted for primary-unit witnesses.",
+  "independentReviewTransportParts": [
+    {
+      "path": "transport-part-001.json",
+      "sha256": "753c7bf14855719ecf21d0cff1efc204ac834f06d72a6832880a8c1b48d76eb7"
+    },
+    {
+      "path": "transport-part-002.json",
+      "sha256": "35c1d638edabc0a462e5993f57a89b39afd0f5bdd85a09b7c42786eb02d94a88"
+    },
+    {
+      "path": "transport-part-003.json",
+      "sha256": "f08158409b7afd784bb86618876b24e2f827d23a8b9d321abb1bd7f3faea0e23"
+    }
+  ]
+}
