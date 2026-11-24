@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "116"
+  },
+  "ownerAgentId": "bc-95b52b95-f4f5-4a30-aba0-2157f8206711",
+  "workerId": "cursor-nov24-retained-staging-w3-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2f093d1356d99463ba98f7b7d7697643a6113c23581016740debb9a8ec00a83a",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-116-06711",
+  "inputBlobWitness": {
+    "source": "91fcf0a50a24230b747d127f31142cb4242530f0",
+    "extraction": "64a801e4ba219d498142911714ed204a738fd72c",
+    "dateAudit": "c117a2508d91dd5f111db8927943e731511c4b6b",
+    "editorial": "6178dabfffb4e8fec2dc10c379237d9bd84969d2"
+  },
+  "sealedInputs": {
+    "source": "sha256:31ca244c2a215ecb25ae087856b7fc770f02b5e42aa05c689fc715135021b928",
+    "extraction": "sha256:9ca15552cc7cb81dd4acb5304d50d42e050ae4afe056b999707e598a536d20c6",
+    "dateAudit": "sha256:1ff77448df12230e55887c97734426b43eaae0f92f0658fc3b69a05f2b84deb1",
+    "editorial": "sha256:7cef6390e63614eab206c97e8e22b6dedf3faca96dd493b9c3c2448a1e2d48be"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 79,
+    "translatedCount": 79,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "sourceTitle": "Treatise on the Southwestern Yi People",
+    "allUnitsCarryLiteralAndIdiomatic": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 116",
+    "summary": "Scoped person data validation passed for shiji/116: 1 extraction(s), 25 local people, 126 mentions, 209 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 116",
+      "status": "research-blocked",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T23:30:00.000Z",
+      "chronologyCurrentAtPinnedBlobs": true
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "editorialRepairsReflectedInSource": true,
+      "proposedRepairCount": 0,
+      "legacyTemporalDebt": 0,
+      "legacyAliasDispositionDebt": 0
+    },
+    "editorialDecisionCount": 2,
+    "editorialAcceptedCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "Pinned four-part inputs witness-verified at staging 7cdf8f42e53b; scoped people:validate passed with zero proposed repairs.",
+    "Full Chinese chapter and both English fields reviewed via unit scan; accepted editorial repairs are present in source.",
+    "Complete independent review of all 79 Chinese units, 65 temporal/hint checks, and 25 people. Direct Han regnal-year and ruler-bounded events are supported. Eight people remain research-blocked where an ancestry/allusive reference has gained imported chronology or a one-sided post-conquest sequence is incorrectly encoded as a closed interval or point. No source or canonical extraction was changed.",
+    "No new definite English omission, false-merge signal, extraction coverage gap, or owner-scoped chronology/identity amendment identified at sealed blobs."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "shiji:116:date-hold-1",
+      "kind": "research-blocked-chronology",
+      "status": "retained",
+      "items": [
+        "claim-34",
+        "claim-35",
+        "claim-49",
+        "claim-50",
+        "claim-57",
+        "claim-58",
+        "claim-59",
+        "claim-60",
+        "claim-61",
+        "claim-102",
+        "claim-103",
+        "hints-p003",
+        "hints-p004",
+        "hints-p015",
+        "hints-p021",
+        "hints-p022",
+        "hints-p023",
+        "hints-p024",
+        "hints-p025",
+        "p003",
+        "p004",
+        "p015",
+        "p021",
+        "p022",
+        "p023",
+        "p024",
+        "p025"
+      ],
+      "people": [],
+      "problem": "Undated ancestral and authorial references have been assigned imported life/reign ranges, while 南越破後 is a one-sided sequence converted into closed intervals or point dates. The chapter does not independently establish those values.",
+      "preservedAction": "Pin independent source-specific chronology and replace entries with exact dates, valid one-sided bounds, or no chronology as warranted; remove unsupported generic ancestry records before fresh independent audit.",
+      "source": "data/people/date-audits"
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "remainingIndependentEvidence": {
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "dateAuditStatus": "research-blocked",
+    "notes": "Owner handoff is not independent identity or chronology approval; retained research-blocked date holds remain explicit in distinctHolds."
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 116",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 116"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner pass only; no sealed input mutation, registry build, or publication."
+}
