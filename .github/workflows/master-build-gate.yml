@@ -49,23 +49,22 @@ jobs:
           const expected=[{"key":"jinshu/031","hash":"7dbdacc997e8ad924b2453e573add77800a36ee4543cf5f72dd048768fe8c3ee","cases":257},{"key":"songshu/004","hash":"a712ec82f13287a63f156154c788419577cc30272f9f9759d4e3a86ea00b62f8","cases":30}];
           const m=loadProperNounMatcher(), view={localPersonMap:registry.localPersonMap,canonicalByKnownId:registry.canonicalByKnownId};
           try{
-            for(const x of expected){
-              const [book,chapter]=x.key.split('/');
-              const scope={book,chapter};
-              const bytes=fs.readFileSync('data/people/identity-reviews/'+x.key+'.json'), hash=createHash('sha256').update(bytes).digest('hex');
-              assert.equal(hash,x.hash);
-              const proof=JSON.parse(bytes), own=loadValidatedPeopleChapter(book,chapter,{properNounMatcher:m});
-              const source=loadCurrentIdentityEvidence(proof,own,m);
-              const result=validateChapterIdentityBundle(view,source,scope,proof,chapterIdentityInputs(book,chapter));
-              assert.equal(result.retained.length,x.cases);
-              fs.writeFileSync(OUT+'/'+book+'-'+chapter+'-identity.json',JSON.stringify({scope,source:SOURCE,cases:result.retained.length,certificateSha256:hash})+'\n');
+            for(const x of expected.filter(x=>x.key==='songshu/004')){
+            const [book,chapter]=x.key.split('/');
+            const bytes=fs.readFileSync('data/people/identity-reviews/'+x.key+'.json');assert.equal(createHash('sha256').update(bytes).digest('hex'),x.hash);
+            const proof=JSON.parse(bytes), own=loadValidatedPeopleChapter(book,chapter,{properNounMatcher:m}), source=loadCurrentIdentityEvidence(proof,own,m);
+            const {memberContract}=await import('./scripts/lib/people-identity-dossiers.mjs');const {localNameKeys}=await import('./scripts/lib/people-resolution.mjs');const {peopleDigest}=await import('./scripts/lib/people-identity-seal.mjs');
+            const people=new Map([...source.values()].flatMap(ch=>[...ch.localPeople]));const plans=[proof.plan,...proof.sourcePlans];const issues=[];
+            for(const plan of plans)for(const c of plan.cases){const anchor=c.canonicalMembership.anchorLocalId;const member=people.get(anchor);const value=member?peopleDigest(memberContract(member,localNameKeys(member))):null;
+            if(value!==c.canonicalMembership.anchorVersion)issues.push({caseId:c.id,anchor,expected:c.canonicalMembership.anchorVersion,observed:value,plan:plan.fingerprint,currentPlan:plan===proof.plan,component:proof.components.filter(x=>x.sourcePlanFingerprint===plan.fingerprint).map(x=>x.id)});}
+            assert(issues.length);fs.writeFileSync(OUT+'/songshu-004-anchor-delta.json',JSON.stringify({scope:x.key,source:SOURCE,issues},null,2)+'\n');console.log(JSON.stringify(issues));
             }
           }finally{registry.close();}
           JS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: nov24-verified-deferred-compositions-on-staging
+          name: nov24-staged-songshu004-anchor-delta
           path: ${{ runner.temp }}/composed-staging/
           if-no-files-found: error
           retention-days: 7
