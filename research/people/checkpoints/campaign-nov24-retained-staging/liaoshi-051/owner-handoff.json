@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "051"
+  },
+  "ownerAgentId": "bc-664d3ec0-32fc-4a5e-8d7e-3eb0d0b573f2",
+  "workerId": "cursor-nov24-retained-staging-w2-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "f4cf09cd546d507e08e020aa81ce8267e147bfa2540f0db9efae200a384a7d6c",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-051-573f2",
+  "inputBlobWitness": {
+    "source": "dd6593cf0f9401e7b2624517f8bffb2a6edc8fef",
+    "extraction": "840cef3fdf431ed3229478ea4f429aa735ee38d3",
+    "dateAudit": "2f0f6a5abafeae2208aa478b7415891a3edd4602",
+    "editorial": "49280f1c2e979fcafc9b04e97589935962727aa3"
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷五十一 志第二十: 禮志三 禮志四",
+      "en": "Volume 51 Treatises 21: Rites 3 And 4",
+      "raw": "卷五十一 志第二十: 禮志三 禮志四 Volume 51 Treatises 21: Rites 3 And 4"
+    },
+    "chineseUnits": 354,
+    "translatedCount": 354,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "missingUnits": [],
+    "editorialAccepted": 8,
+    "editorialReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 051",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/051: 1 extraction(s), 1 local people, 6 mentions, 12 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book liaoshi --chapter 051",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditFindings": 1,
+    "dateAuditHashesCurrent": {
+      "sourceHash": true,
+      "extractionHash": true
+    },
+    "sealedInputPacketHashes": {
+      "source": "sha256:0332a9b9806a52c4127b7f5a24c8530367a47ae3491e59d9a830c2f4c0b2e5cf",
+      "extraction": "sha256:313374f404ae07b8a3fc07f16015c5be2b8d8fed0e103c48725e6d923b488f9a",
+      "dateAudit": "sha256:5535ed71c158c2fdb621c1b13fa6eb0a8e640056de71064fb42b5308c8f4a91f",
+      "editorial": "sha256:df71e4909a2706be1377106816bb2a0e881d3b1031ae0e512b1802e644c2f33e"
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "354-sentence rites protocol: eight accepted editorial repairs correct Wang Xun/詢 disambiguation at s0283/s0286. Extraction still carries unsupported AD 1009–1031 interval flagged by date audit—scoped alignment proposal supplied, no canonical edit in this pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "personId": "p002",
+      "kind": "chronology-alignment",
+      "reason": "Independent date audit research-blocked: undated ceremonial references at s0283/s0286 do not establish Wang Xun reign interval.",
+      "affectedClaims": [
+        "claim-6",
+        "hints-p002"
+      ],
+      "before": "p002 attestation westernInterval AD 1009–1031 and active-date hint AD 1009-1031 from 高麗國王詢 formula.",
+      "after": "Remove imported westernInterval and active-date hint; attestation unresolved with sourceDate 高麗國王詢 and undated ceremonial context only.",
+      "evidence": [
+        {
+          "unit": "s0283",
+          "citation": "閣門傳宣「王詢安否」…大使奏「臣等來時詢安」"
+        },
+        {
+          "unit": "s0286",
+          "citation": "通高麗國王詢進奉"
+        }
+      ],
+      "preserveProof": "data/people/date-audits/liaoshi/051.json finding reviewedAt 2026-09-23"
+    }
+  ],
+  "distinctHolds": [
+    {
+      "id": "date-finding-1",
+      "items": [
+        "claim-6",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "The Wang Xun claim and active-date hint convert an undated ceremonial reference into a full AD 1009–1031 interval. The chapter contains no year, regnal context, or dated personal event that supports that range.",
+      "action": "Obtain and pin an independent source specifically establishing Wang Xun’s reign and decide whether this undated protocol reference should retain no life-date claim; otherwise remove the imported interval and active-date hint before fresh independent audit.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass only; sealed inputs unchanged on staging. Host supplies native sealed final review packets.",
+  "completedAt": "2026-11-24T16:09:12.661Z"
+}
