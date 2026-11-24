@@ -8,14 +8,14 @@
   "dispatchState": "open-verified-included-usage",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-24T04:23:30.926Z",
+    "verifiedAt": "2026-11-24T04:32:52.702Z",
     "cursorModelsUsedPercent": 39,
     "otherModelsUsedPercent": 73,
     "onDemandLimitUsd": 1,
     "onDemandLimitReached": true,
     "lastObservedOnDemandMeterUsd": 2.91,
     "recentCloudUsageClassification": "Existing Cursor Cloud costs reflected in both included model pools with the displayed on-demand meter unchanged at $2.91.",
-    "resetDisplay": "Nov 24, 14 hours and 10 minutes remaining at observation"
+    "resetDisplay": "Nov 24, 14 hours and 1 minute remaining at observation"
   },
   "workers": {
     "running": [],
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:30:40.880Z",
+  "lastCheckedAt": "2026-11-24T04:32:52.704Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1923,7 +1923,11 @@
         "data/people/identity-reviews/jinshu/123.json"
       ],
       "status": "prepared-needs-production-preflight",
-      "preparedAt": "2026-11-24T04:30:40.878Z"
+      "preparedAt": "2026-11-24T04:30:40.878Z",
+      "preflight": {
+        "runId": 45326926260,
+        "status": "in_progress"
+      }
     }
   },
   "reviewRuns": {
@@ -15709,7 +15713,7 @@
     "start": "2026-11-23T22:12:41.641Z"
   },
   "billingAdmissionObservation": {
-    "at": "2026-11-24T04:23:30.926Z",
+    "at": "2026-11-24T04:32:52.702Z",
     "source": "Signed-in Cursor Spending dashboard",
     "billingCycleStillActive": true,
     "onDemandCapUnchanged": true,
@@ -16455,7 +16459,7 @@
           "providerObservedAt": "2026-11-24T04:21:45.180Z"
         },
         "jinshu/041": {
-          "status": "sent",
+          "status": "finished",
           "agentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
           "previousRunId": "run-54b0b747-eca6-4bc9-aaec-5b06eda26b6b",
           "role": "owner",
@@ -16467,7 +16471,11 @@
           "runId": "run-7dcd301a-b6f2-476c-9671-bbc60e806c90",
           "observedAt": "2026-11-24T04:17:06.206Z",
           "providerStatus": "running",
-          "providerObservedAt": "2026-11-24T04:21:45.180Z"
+          "providerObservedAt": "2026-11-24T04:21:45.180Z",
+          "returnedEvidence": {
+            "revision": "4bbb3a8b07938036ec74b182c4d1947d9080b732",
+            "pr": 5476
+          }
         },
         "jinshu/065": {
           "status": "finished",
@@ -16557,7 +16565,7 @@
       ],
       "dispatches": {
         "jinshu/047": {
-          "status": "sent",
+          "status": "finished",
           "agentId": "bc-f5b6b706-b1a5-4233-a9e0-855c2834d8b5",
           "previousRunId": "run-a2f291cf-09a5-43dd-a2e9-d11b80e22b88",
           "role": "recheck",
@@ -16569,10 +16577,15 @@
           "runId": "run-2f72a791-0134-4b2d-b76d-4304c70f04c4",
           "observedAt": "2026-11-24T04:24:07.787Z",
           "providerStatus": "running",
-          "providerObservedAt": "2026-11-24T04:24:46.415Z"
+          "providerObservedAt": "2026-11-24T04:24:46.415Z",
+          "returnedEvidence": {
+            "revision": "003651fa5797a372497a8149fe14168c18120c4c",
+            "recordedDatePath": "data/people/date-audits/jinshu/047.json",
+            "dateBlob": "6dd0d5994817c813283faf20747ea7bdcd86e132"
+          }
         },
         "jinshu/090": {
-          "status": "sent",
+          "status": "finished",
           "agentId": "bc-3794b569-dd8b-4e85-ae88-2c86a0bef9f8",
           "previousRunId": "run-be354fe3-e0ee-42ec-a56c-b50157f83cbe",
           "role": "recheck",
@@ -16584,7 +16597,16 @@
           "runId": "run-444b36a9-a740-42b2-81f0-fd64110e35c7",
           "observedAt": "2026-11-24T04:24:07.787Z",
           "providerStatus": "running",
-          "providerObservedAt": "2026-11-24T04:24:46.415Z"
+          "providerObservedAt": "2026-11-24T04:24:46.415Z",
+          "returnedEvidence": {
+            "concreteContradictionHints": [
+              "p075",
+              "p076",
+              "p158",
+              "p176"
+            ],
+            "status": "owner-patch-required"
+          }
         },
         "jinshu/110": {
           "status": "sent",
@@ -16618,6 +16640,39 @@
         }
       },
       "plannedAt": "2026-11-24T04:23:30.926Z"
+    },
+    "nextEvidenceWave": {
+      "scopes": [
+        {
+          "key": "jinshu/063",
+          "actor": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6",
+          "role": "recheck",
+          "pr": 5487,
+          "revision": "bcb829ee43fd93a9d030c45925ae7fa17c6bd9fd",
+          "previousRun": "run-b303d015-82ac-4dda-8eca-215abc892abc",
+          "prompt": "At #5487 bcb829ee43fd93a9d030c45925ae7fa17c6bd9fd, use sealed hosted chronology packet 14885244034 and prior accepted date review for your exact #5487 chapter. The only candidate difference relevant to this task is verified appraisal surfaces p183 and p185. Reuse covered item and person checks if the native data and source witnesses match exactly, review any true differences and publish the full native date report into GitHub on your existing review evidence branch. Record exact commit and report path. No canonical membership merge or author edits. If evidence does not permit a native audit, report the concrete discrepancy."
+        },
+        {
+          "key": "jinshu/041",
+          "actor": "bc-64f55949-b3a6-4213-b7a2-6e6256473515",
+          "role": "recheck",
+          "pr": 5476,
+          "revision": "4bbb3a8b07938036ec74b182c4d1947d9080b732",
+          "previousRun": "run-513b2796-98b1-463a-bd7b-5c40d721917d",
+          "prompt": "Review owner #5476 tip 4bbb3a8b07938036ec74b182c4d1947d9080b732 with your retained 224a3ed8 audit. For the two exact undated-death claims 283 and 484, decide whether source-supported missing dates qualify. For the specifically inventoried 293 Western packaging rows, reuse primary era evidence you already checked, report native representation constraints where allowed as in the established 028 path, and consolidate only actual chronology defects for the owner. No uncited blanket pass, repetitive full audit, source writes or merge. Publish separate exact review evidence to GitHub."
+        },
+        {
+          "key": "jinshu/078",
+          "actor": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
+          "role": "owner",
+          "pr": 5425,
+          "revision": "80ad020ac36019d39d54c068898a626d9b805bde",
+          "previousRun": "run-ec3b8ec7-ba90-4d9e-a5dc-6c8241d897b9",
+          "prompt": "Resume your retained owner draft #5425 at 80ad020ac36019d39d54c068898a626d9b805bde. Use independent #5438 commit 25f8b351 and its four identity witness holds p115/p081/p082/p084 only. Verify primary Chinese units supporting each personal/kinship reference, then apply source-backed minimal name/surface corrections preserving existing person IDs and accepted chronology where possible. If no source-supported witness exists, record concrete explanation; do not invent names or rename unrelated records. Preserve 128 approved identity decisions and publish exact changed dependencies to your existing PR after scoped validation. No self-approval or merge."
+        }
+      ],
+      "dispatches": {},
+      "plannedAt": "2026-11-24T04:32:52.702Z"
     }
   },
   "processAudit": {
@@ -16872,6 +16927,11 @@
         "reason": "Hosted runner lacked installed ajv dependency before invoking the recorder."
       },
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45326470911"
+    },
+    "chronology047": {
+      "runId": 45326966330,
+      "revision": "6c3b31100bd2bf93cb6c62d15c2b6f520418c3d9",
+      "status": "in_progress"
     }
   },
   "hostedRunReceipts": {
