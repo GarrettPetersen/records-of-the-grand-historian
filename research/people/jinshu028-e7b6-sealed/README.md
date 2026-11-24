@@ -1,0 +1,1 @@
+Read-only snapshot #5477 @ `e7b6d6fe5b7ee4c8507f117f94c043ff92b198dc` for independent source-event verification and date packet build.

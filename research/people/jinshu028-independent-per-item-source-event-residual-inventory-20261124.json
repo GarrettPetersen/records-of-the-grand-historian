@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu028-independent-per-item-source-event-residual-inventory",
+  "book": "jinshu",
+  "chapter": "028",
+  "candidateCommit": "e7b6d6fe5b7ee4c8507f117f94c043ff92b198dc",
+  "priorEvidenceCommit": "ca16b810076308802998b8ceb568dab1070572ea",
+  "ownerReceipt": "research/people/jinshu028-authoring-20261123/source-event-delta-receipt.json",
+  "ownerInventory": "research/people/jinshu028-authoring-20261123/source-event-residual-inventory.json",
+  "verificationArtifact": "research/people/jinshu028-independent-source-event-verification-20261124.json",
+  "sourceDefects": [],
+  "nativeRepresentationConstraints": {
+    "kind": "western-only-unresolved-flag",
+    "count": 178,
+    "description": "Attestation rows pass source-only review (literal calendrical phrase on owned evidence, substantive event, valid certainty) but extraction still sets unresolved=true with unresolvedReason citing unpinned Western conversion. This blocks audited status under validateDateAuditReport without implying Chinese dating defects.",
+    "claimIdsArtifact": "research/people/jinshu028-independent-source-event-verification-20261124.json#representationConstraints"
+  },
+  "planVerification": {
+    "replace-sourceDate-from-evidence": { "planned": 120, "supported": 120 },
+    "contextual-sourceDate-expand-evidence": { "planned": 55, "supported": 55 },
+    "undate-witnessed-event": { "planned": 162, "supported": 162 },
+    "refine-sourceDate": { "planned": 3, "supported": 3 }
+  },
+  "preserved": {
+    "supportedChecks": 547,
+    "editorialDecisions": 79,
+    "chapterUnchangedFrom88ed": true
+  },
+  "auditOutcome": {
+    "status": "research-blocked",
+    "notAuditedBecause": "178 unresolved=true flags remain in packet items despite source-only satisfaction; Western conversion not required for reviewer support but unresolved geometry blocks audited closure."
+  }
+}
