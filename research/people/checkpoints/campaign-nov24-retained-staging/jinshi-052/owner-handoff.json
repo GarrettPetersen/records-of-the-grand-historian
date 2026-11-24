@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "052"
+  },
+  "ownerAgentId": "bc-488b211f-a9a5-4e20-8945-5268c218df57",
+  "workerId": "cursor-nov24-retained-staging-w1-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "06f9c623c3fc445ae56d9993095310b7072e79d5742476f968463e63a40225c2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-052-8df57",
+  "inputBlobWitness": {
+    "source": "a3ff998b93f276e5dc3bd2a814c5ce0e02d780f3",
+    "extraction": "926269897c9c87e3ff1f4c365fb7fbb35e50d79c",
+    "dateAudit": "8a3c5efa56ad9551aad0ef1286a599f17126a610",
+    "editorial": "8b553f9a81d9a98d3daa6cff5d9247a36cc7db6a"
+  },
+  "sealedInputs": {
+    "source": "sha256:56fb72ae806f3feffdaf9b2da7f12b3b8278fa4bd477f24200a9aed5b488bc95",
+    "extraction": "sha256:3c2b4aeb7f4bb5a0984a3aad1bffee23051e43ed9388ba6838de035e9a9cd36d",
+    "dateAudit": "sha256:46feb431c356bcc664a0af1a52d5558345758b6f00b06fa3e47967d906c4a906",
+    "editorial": "sha256:3954a90ac680e7eaa7569c873e26af1b5b6ac8cdb868ecbb5b1a361cf10abeb9"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 52 Treatises 33: Selection of Officials 2",
+    "englishCoverage": {
+      "sentenceCount": 219,
+      "translatedCount": 219,
+      "bothFieldsComplete": true,
+      "ownerSentenceScan": 219,
+      "missingUnits": []
+    },
+    "chineseReview": "All chapter units read against sealed source; no new English omission or mistranslation found beyond prior accepted editorial repairs."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshi --chapter 052",
+    "summary": "Scoped person data validation passed for jinshi/052: 1 extraction(s), 4 local people, 16 mentions, 36 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionValidate": "data/people/extractions/jinshi/052.json: ok (4 people, 16 mentions, 36 claims, 312 candidates)",
+    "chronologyStatus": "research-blocked",
+    "chronologyStale": false,
+    "dateAuditSummary": "Fresh independent canonical audit of all 219 Chinese units, 22 temporal or active-hint items, and four people after the Jinshi 052 curation. The prior full-reign biography error is absent: the Hailing, Shizong, and Zhangzong institutional attributions now remain explicit unresolved contexts rather than personal intervals. Direct chapter evidence remains intact for Shizong in Dading 1–2 (AD 1161–1162) and Dading 4 (AD 1164), Zhangzong in Dading 29 (AD 1189), and Xizong in Huangtong 8 (AD 1148). The chapter cannot date the three institutional contexts further, so this complete review records them as research holds rather than granting date approval.",
+    "dateFindingsCount": 1,
+    "dateReviewedAt": "2026-09-23T12:05:58.203Z",
+    "editorialDecisionCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned git blobs verified at staging 7cdf8f42e53be7a29bbc018e6d1f93783d741f6a. Scoped validation, extraction validation, and date-audit fingerprint checks pass without stale chronology. Four people; institutional reign-context holds. No new owner-proposed extraction, editorial, or chronology edits; preserved reviewed holds and true unknowns unchanged.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "items": [
+        "claim-9",
+        "claim-10",
+        "claim-14",
+        "claim-17",
+        "claim-18",
+        "claim-19",
+        "hints-p001",
+        "p001",
+        "p002",
+        "p003"
+      ],
+      "problem": "Three institutional-attribution contexts remain chronologically indeterminate within this chapter. They no longer assert full-reign personal activity, but their exact dates cannot be established from the chapter’s Chinese evidence.",
+      "action": "Retain the current explicit unresolved contexts and research-required hint. Do not infer a personal active range; only independently sourced, person-specific chronology may resolve these holds in a later audit.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "nextGate": "independent-final-chapter-review",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/jinshi/052.json data/people/extractions/jinshi/052.json data/people/date-audits/jinshi/052.json data/people/editorial-decisions/jinshi/052.json",
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 052",
+    "datesVerify": "npm run people:dates:verify -- --book jinshi --chapter 052"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; sealed inputs unchanged."
+}
