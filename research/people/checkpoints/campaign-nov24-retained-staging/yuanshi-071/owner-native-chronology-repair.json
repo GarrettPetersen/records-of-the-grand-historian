@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "071"
+  },
+  "ownerAgentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+  "idempotencyKey": "82403d3016f1a537775993ad0963ff85dc33bfd907293db7288690efb8479b2f",
+  "priorOwnerRevision": "5e48fa2dd1594accbe460ce9f899f3dd3d0c2d1e",
+  "authorBranch": "cursor/nov24-retained-owner-native-date-yuanshi-071-ce781",
+  "pinnedDateAudit": {
+    "byteHash": "sha256:be89a3f0e13c25a80f5c48be0b7d17e7dc9762805ac3ce7ea27ffa1491540162",
+    "status": "research-blocked",
+    "preservedUntouched": true,
+    "note": "Original independent date-audit file bytes unchanged on this branch."
+  },
+  "sealedInputsUnchanged": {
+    "source": "sha256:ee11838d7c005cca5a4415d8c88e4fbfc2d4a3fdce436d6f3955c3647c387828",
+    "extraction": "sha256:6bd1c5886da1462af3ae4bfc542f9bc089dcc113c1247e9bc057a3db39c6e8de",
+    "extractionByte": "sha256:6a08e5167cc7965e9c81fa189386e34f4e7c23966b5d4d18ff8f7f4bc5c5323e"
+  },
+  "verifiedFindings": {
+    "count": 10,
+    "coveredItems": 10,
+    "auditSummary": "Complete initial source-scope chronology audit of all 271 Chinese units, all 8 temporal or active-hint items, and all 2 people. The limited extracted chronology is retained as evidence-grounded source-specific research holds pending independent event-ownership, conversion, and endpoint verification. No source, extraction, or canonical person data was changed."
+  },
+  "dateRepairProposal": {
+    "schemaVersion": 1,
+    "kind": "date-repair-proposal",
+    "book": "yuanshi",
+    "chapter": "071",
+    "sourceHash": "sha256:ee11838d7c005cca5a4415d8c88e4fbfc2d4a3fdce436d6f3955c3647c387828",
+    "extractionHash": "sha256:6bd1c5886da1462af3ae4bfc542f9bc089dcc113c1247e9bc057a3db39c6e8de",
+    "pinnedDateAuditByteHash": "sha256:be89a3f0e13c25a80f5c48be0b7d17e7dc9762805ac3ce7ea27ffa1491540162",
+    "author": {
+      "name": "Retained staging native chronology owner",
+      "agentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+      "worker": "cursor-nov24-retained-staging-w1-o4"
+    },
+    "changes": [
+      {
+        "kind": "date-context",
+        "id": "claim-4",
+        "before": {
+          "sourceDate": {
+            "text": "金"
+          },
+          "westernInterval": {
+            "start": {
+              "era": "AD",
+              "year": 1115,
+              "precision": "year"
+            },
+            "end": {
+              "era": "AD",
+              "year": 1234,
+              "precision": "year"
+            }
+          }
+        },
+        "after": {
+          "sourceDate": {
+            "text": "金"
+          },
+          "unresolved": true,
+          "unresolvedReason": "s0031 cites Jin costume regulations (金制) in Zhang Zhen’s quoted work; 金 marks the described polity, not a calendar office tenure."
+        },
+        "reason": "Remove false Jin-dynasty westernInterval from Zhang Zhen office claim; source 金制 is polity description not tenure dates."
+      },
+      {
+        "kind": "replace",
+        "id": "claim-8",
+        "before": [
+          "p001",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "金"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 1115,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 1234,
+                "precision": "year"
+              }
+            }
+          },
+          "explicit",
+          [
+            "s0031"
+          ]
+        ],
+        "after": [
+          "p001",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "s0031 quotation attributes Jin dance costume rules to archivist Zhang Zhen but supplies no calendar-bearing personal event."
+          },
+          "explicit",
+          [
+            "s0031"
+          ]
+        ],
+        "reason": "Mark claim-8 undated source attestation; s0031 gives Zhang Zhen authorship without calendar personal event."
+      },
+      {
+        "kind": "hints",
+        "personId": "p001",
+        "before": [
+          "AD 1115-1234"
+        ],
+        "after": [],
+        "reason": "Clear p001 active hint: no chapter source gives Zhang Zhen personal calendar endpoints."
+      }
+    ]
+  },
+  "proposalSealedHash": "sha256:89b218eb643077875ed68db3fdb483817632916f3c0de88e2824698012b2cfa2",
+  "affectedItems": [
+    {
+      "target": "claim-4",
+      "kind": "date-context"
+    },
+    {
+      "target": "claim-8",
+      "kind": "replace"
+    },
+    {
+      "target": "hints-p001",
+      "kind": "hints"
+    }
+  ],
+  "sourceEvidenceReviewed": [
+    {
+      "itemId": "claim-4",
+      "event": "Source-linked office context for Zhang Zhen / 張珍",
+      "disposition": "included-in-native-proposal",
+      "reason": "Addressed in embedded native date-repair-proposal.",
+      "sourceUnit": "s0031",
+      "sourceQuote": "〈（金太常寺掌故張珍所著《疊代世範》載金制：舞人服黑衫，皆四襖，有黃插口，左右垂之，黃綾抹帶，其衫以綢為之，胸背二答、兩肩二答，前後和一答，皆彩色，繡二鸞盤飛之狀，綴之於衫。"
+    },
+    {
+      "itemId": "claim-8",
+      "event": "Source-linked attestation context for Zhang Zhen / 張珍",
+      "disposition": "included-in-native-proposal",
+      "reason": "Addressed in embedded native date-repair-proposal.",
+      "sourceUnit": "s0031",
+      "sourceQuote": "〈（金太常寺掌故張珍所著《疊代世範》載金制：舞人服黑衫，皆四襖，有黃插口，左右垂之，黃綾抹帶，其衫以綢為之，胸背二答、兩肩二答，前後和一答，皆彩色，繡二鸞盤飛之狀，綴之於衫。"
+    },
+    {
+      "itemId": "hints-p001",
+      "event": "Active-date hint for Zhang Zhen / 張珍",
+      "disposition": "included-in-native-proposal",
+      "reason": "Addressed in embedded native date-repair-proposal.",
+      "sourceUnit": "s0031",
+      "sourceQuote": "〈（金太常寺掌故張珍所著《疊代世範》載金制：舞人服黑衫，皆四襖，有黃插口，左右垂之，黃綾抹帶，其衫以綢為之，胸背二答、兩肩二答，前後和一答，皆彩色，繡二鸞盤飛之狀，綴之於衫。"
+    }
+  ],
+  "residualHolds": [
+    {
+      "itemId": "claim-13",
+      "event": "Source-linked office context for Zheng Xiu / 鄭秀",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0184",
+      "sourceQuote": "玉宸樂院判官鄭秀乃考音律，分定清濁，增改如今制。"
+    },
+    {
+      "itemId": "claim-15",
+      "event": "Source-linked attestation context for Zheng Xiu / 鄭秀",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0184",
+      "sourceQuote": "玉宸樂院判官鄭秀乃考音律，分定清濁，增改如今制。"
+    },
+    {
+      "itemId": "claim-16",
+      "event": "Source-linked event-participation context for Zheng Xiu / 鄭秀",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0184",
+      "sourceQuote": "玉宸樂院判官鄭秀乃考音律，分定清濁，增改如今制。"
+    },
+    {
+      "itemId": "claim-18",
+      "event": "Source-linked material-association context for Zheng Xiu / 鄭秀",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0184",
+      "sourceQuote": "玉宸樂院判官鄭秀乃考音律，分定清濁，增改如今制。"
+    },
+    {
+      "itemId": "hints-p002",
+      "event": "Active-date hint for Zheng Xiu / 鄭秀",
+      "disposition": "per-case-residual-hold",
+      "reason": "Independent verification of identity, event ownership, conversion, and endpoints still required; no definite false precision identified in this scoped pass.",
+      "sourceUnit": "s0184",
+      "sourceQuote": "玉宸樂院判官鄭秀乃考音律，分定清濁，增改如今制。"
+    },
+    {
+      "itemId": "p001",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed, but Zhang Zhen / 張珍 requires independent identity, event-ownership, conversion, and endpoint research before chronology approval.",
+      "sourceQuote": "〈（金太常寺掌故張珍所著《疊代世範》載金制：舞人服黑衫，皆四襖，有黃插口，左右垂之，黃綾抹帶，其衫以綢為之，胸背二答、兩肩二答，前後和一答，皆彩色，繡二鸞盤飛之狀，綴之於衫。"
+    },
+    {
+      "itemId": "p002",
+      "disposition": "residual-hold-pending-independent-chapter-review",
+      "reason": "All Chinese units were reviewed, but Zheng Xiu / 鄭秀 requires independent identity, event-ownership, conversion, and endpoint research before chronology approval.",
+      "sourceQuote": "玉宸樂院判官鄭秀乃考音律，分定清濁，增改如今制。"
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "applyDateRepairProposal": "passed",
+    "validateCompactPeopleExtraction": "passed",
+    "dateAuditGeometryErrors": [],
+    "extractionStats": {
+      "units": 271,
+      "candidates": 243,
+      "people": 2,
+      "mentions": 4,
+      "claims": 30,
+      "repairs": 8,
+      "dispositions": 241,
+      "aliasDispositionConflicts": 0
+    }
+  },
+  "intactApprovals": {
+    "dateAuditFile": "data/people/date-audits/yuanshi/071.json",
+    "dateAuditByteHash": "sha256:be89a3f0e13c25a80f5c48be0b7d17e7dc9762805ac3ce7ea27ffa1491540162",
+    "extractionUnchangedOnBranch": true
+  },
+  "notes": "[CF-Pages-Skip] Native proposal handoff only; host assembles candidate and runs independent re-audit.",
+  "completedAt": "2026-11-24T16:20:52.181Z"
+}
