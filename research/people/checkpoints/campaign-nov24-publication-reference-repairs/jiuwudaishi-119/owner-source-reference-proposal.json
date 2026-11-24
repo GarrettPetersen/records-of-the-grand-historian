@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-source-reference-proposal",
+  "dispatch": {
+    "key": "jiuwudaishi/119",
+    "agentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+    "ref": "cursor/nov24-source-reference-jiuwudaishi-119-618ee9",
+    "stage": "3d546f4260e36d7982b921c8a25f613f66484100",
+    "localId": "jiuwudaishi:119:p067",
+    "canonicalPersonId": "per_Q84220HE627FP33WNYQ2",
+    "reason": "no-scoped-source-reference",
+    "citedNameTypes": [
+      {
+        "kind": "personal",
+        "certainty": "explicit",
+        "evidence": ["jiuwudaishi:119:s0176"]
+      }
+    ],
+    "phase": "dispatch_pending",
+    "idempotencyKey": "cbf480e154f645c12b3b69af906694fc664c224f7c1d96c5ffa2ab9b11f2064e"
+  },
+  "ownerAgentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "sealedInputs": {
+    "source": "sha256:4044252afba003e3478625f47e0a129baf4b5be9",
+    "extractionBefore": "sha256:bda829af54e1c4ad3300d80f0b4f598933eb2f57"
+  },
+  "diagnosis": {
+    "summary": "p067 carries an explicit personal name claim on s0176 but has zero compact surfaces rows, so expanded mentions are empty and scoped publication cannot attach mention references. The only Chinese occurrences of 竇寧固 in this chapter sit inside p068's kinship surfaces (竇寧固之女, 竇女); a personal-name surface for 竇寧固 would overlap those spans. The office 禮部尚書 and English apposition minister of rites are literal, non-overlapping attributions to this father in the same unit.",
+    "acceptedNeighborsUnchanged": ["jiuwudaishi:119:p068", "jiuwudaishi:119:p066"],
+    "identityReviewWitnessRetained": "Accepted identity review quoted 竇寧固 in s0176 for canonical membership; the gap is mention/surface materialization for publication, not a false merge with the daughter record."
+  },
+  "sourceWitness": {
+    "unitId": "s0176",
+    "chinese": "浣娶禮部尚書竇寧固之女，年甲稍高，成婚之夕，竇女出參，濤輒望塵下拜，浣驚曰：「大哥風狂耶？",
+    "english": {
+      "idiomatic": "Huan married the daughter of Dou Ninggu, minister of rites, who was somewhat advanced in years. On the wedding night, when the bride came out to pay respects, Tao bowed low in the dust. Huan cried: \"Elder brother, are you mad?",
+      "literal": "Huan married the daughter of Minister of Rites Dou Ninggu, who was somewhat advanced in years. On the wedding night, when the Dou girl came out to pay respects, Tao at once bowed in the dust. Huan cried in alarm: \"Elder brother, are you mad?"
+    }
+  },
+  "overlapAnalysis": {
+    "p068KinshipZh": {
+      "exact": "竇寧固之女",
+      "startCodePoint": 6,
+      "endCodePoint": 11
+    },
+    "p067PersonalNameZh": {
+      "exact": "竇寧固",
+      "startCodePoint": 6,
+      "endCodePoint": 9,
+      "overlapsP068": true,
+      "verdict": "Cannot mint personal-name surface without colliding with p068 kinship-reference."
+    },
+    "proposedTitleZh": {
+      "exact": "禮部尚書",
+      "startCodePoint": 2,
+      "endCodePoint": 6,
+      "overlapsP068": false
+    },
+    "proposedTitleEn": {
+      "exact": "minister of rites",
+      "startCodePoint": 41,
+      "endCodePoint": 58,
+      "overlapsP068": false
+    }
+  },
+  "repair": {
+    "action": "add-compact-surfaces",
+    "mentionTreatment": "literal",
+    "notInferredCollective": true,
+    "rationale": "Add title-reference surfaces for the minister's office title already asserted by the existing office claim on s0176. Do not fabricate a personal-name span inside 竇寧固之女; do not remove p067 or collapse father and daughter.",
+    "proofFieldsDelta": [
+      "surfaces (append two rows for p067)",
+      "people[p067].hints.x (clear mentionException once mentions exist)"
+    ],
+    "unchangedProofFields": [
+      "claims (including personal name, office, family-relationship, attestation)",
+      "people[p067] preferred identity tuple",
+      "p068 surfaces and claims",
+      "source chapter bytes",
+      "date-audit and editorial decision seals for the chapter"
+    ],
+    "compactPersonRowBefore": [
+      "p067",
+      ["Dou Ninggu", "竇寧固", "Dou Ninggu"],
+      "historical",
+      "Official",
+      {
+        "n": [],
+        "r": ["p068"],
+        "a": [],
+        "p": ["Later Zhou"],
+        "x": "Named only inside the kinship phrase 竇寧固之女 / daughter of Dou Ninggu in s0176; no non-overlapping surface is possible without colliding with p068."
+      },
+      [
+        [
+          {
+            "kind": "personal",
+            "en": "Dou Ninggu",
+            "zh": "竇寧固",
+            "pinyin": "Dou Ninggu"
+          },
+          "explicit",
+          ["s0176"]
+        ]
+      ],
+      [["official", "explicit", ["s0176"]]]
+    ],
+    "compactPersonRowAfter": [
+      "p067",
+      ["Dou Ninggu", "竇寧固", "Dou Ninggu"],
+      "historical",
+      "Official",
+      {
+        "n": [],
+        "r": ["p068"],
+        "a": [],
+        "p": ["Later Zhou"],
+        "x": null
+      },
+      [
+        [
+          {
+            "kind": "personal",
+            "en": "Dou Ninggu",
+            "zh": "竇寧固",
+            "pinyin": "Dou Ninggu"
+          },
+          "explicit",
+          ["s0176"]
+        ]
+      ],
+      [["official", "explicit", ["s0176"]]]
+    ],
+    "surfacesBefore": [],
+    "surfacesAfter": [
+      ["p067", "title-reference", "zh", "禮部尚書", [["s0176", [0]]]],
+      ["p067", "title-reference", "en", "minister of rites", [["s0176", [0]]]]
+    ]
+  },
+  "scopedValidation": {
+    "schemaVersion": 1,
+    "kind": "scoped-source-reference-proposal-validation",
+    "scope": {
+      "book": "jiuwudaishi",
+      "chapter": "119",
+      "localId": "jiuwudaishi:119:p067"
+    },
+    "command": "validateCompactPeopleExtraction(proposedCompact, buildPeopleExtractionPacket(jiuwudaishi,119))",
+    "exitCode": 0,
+    "status": "PASS",
+    "beforeMentionCount": 0,
+    "afterMentionCount": 2,
+    "proposedMentions": [
+      {
+        "kind": "title-reference",
+        "unitId": "s0176",
+        "spans": {
+          "en": [
+            {
+              "exact": "minister of rites",
+              "occurrence": 0,
+              "startCodePoint": 41,
+              "endCodePoint": 58,
+              "unitTextHash": "sha256:7f36931870953865017b854d7257b2d5e9b94ce0516a5bd4f5eb5056eb10848e"
+            }
+          ]
+        }
+      },
+      {
+        "kind": "title-reference",
+        "unitId": "s0176",
+        "spans": {
+          "zh": [
+            {
+              "exact": "禮部尚書",
+              "occurrence": 0,
+              "startCodePoint": 2,
+              "endCodePoint": 6,
+              "unitTextHash": "sha256:e7c4264c90af35e14aa9f033abac3d9068ae5d0aba4e0f0a2e2e72a89cd96b58"
+            }
+          ]
+        }
+      }
+    ],
+    "extractionHashAfterProposal": "sha256:b33b3a041a2af7eb4577e42f302adbe351c63aeded7332d2c4fd8d3c439279e5"
+  },
+  "holdIfRejected": {
+    "summary": "If an independent reviewer rejects title-reference as the scoped cite for this father, hold publication for jiuwudaishi:119:p067 while keeping p068 and all other chapter members unchanged. Do not invent a personal-name span inside 竇寧固之女 or remove the accepted canonical link without contrary primary evidence.",
+    "noFabrication": true
+  },
+  "approvalStatus": "owner-proposal-not-independent-approval"
+}
