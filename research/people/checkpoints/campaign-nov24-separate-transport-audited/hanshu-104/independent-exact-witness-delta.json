@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "hanshu/104",
+  "reviewerAgentId": "bc-a890bb7d-5c6b-407b-b2a6-38339a77f456",
+  "ownerAgentId": "bc-31959fae-132e-4d10-86f7-24a41b42d3ab",
+  "ownerRevision": "1fdfbc739a0c6e3b64fe5ff7b2d85cfd1ed7f63c",
+  "ownerProposalSha256": "ae69305c44a7632330e42f940fa34e254cd1854244c4c53583f4f76ef19fa68c",
+  "priorReviewHead": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+  "priorIndependentRun": "run-d5abb439-29d4-4112-a3f9-0f3d387ef676",
+  "ownerRun": "run-892e5480-3942-452c-996d-95f625f75195",
+  "idempotencyKey": "3e030fe8e0c8a42fbefbee862df4b855debd1b290e68d85182d2fc6d44ec5b64",
+  "verdict": "residual-holds-with-approved-scoped-patch",
+  "closedCases": [],
+  "heldCases": [
+    {
+      "caseId": "sha256:4b8e336fe4cb07167cc50e7ae7ea29a9b04777326fef4d239c93e8d2e96c2c37",
+      "canonicalPersonId": "per_2BD7QS0RXVBW6FZBSG7S",
+      "localId": "hanshu:104:p099",
+      "status": "host-native-witness-binding-required",
+      "independentVerdict": "hold",
+      "ownerAlignment": "approved",
+      "reason": "Father of Chen Zun remains source-supported unnamed kin only. Verified Chinese: s0162 遵少孤，與張竦伯松俱為京兆史。; s0297 祖父遂，字長子，宣帝微時與有故，相隨博弈，數負進。 English (s0162): literal \"Zun in youth was orphaned; together with Zhang Song courtesy Bosong he was a Metropolitan clerk.\"; idiomatic \"Orphaned young, Chen Zun served as a clerk in the Metropolitan District alongside Zhang Song, courtesy name Bosong.\" — both faithful. No chronology or attribution contradiction; native validator still rejects 遵少孤 as a name witness for p099 because grandfather→father chains are not in DESCENT (only 曾孫/外孫) and s0297 names the grandfather on Chen Sui (p094), not the father. Grounded uncertainty: keep the local as reviewed unknown father or drop it; do not fabricate a witness.",
+      "residualAction": "Host adds a reviewed grandfather-grandson inferred-kin witness rule, or owner removes/represents hanshu:104:p099 without a separate canonical.",
+      "sourceWitnessesVerified": [
+        {
+          "unitId": "s0162",
+          "zh": "遵少孤，與張竦伯松俱為京兆史。",
+          "admissibleForP099": false,
+          "note": "少孤 entails a deceased father but is not a name witness."
+        },
+        {
+          "unitId": "s0297",
+          "zh": "祖父遂，字長子，宣帝微時與有故，相隨博弈，數負進。",
+          "admissibleForP099": false,
+          "note": "祖父…遂 names Chen Sui (p094); does not individuate the unnamed father."
+        }
+      ]
+    },
+    {
+      "caseId": "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31",
+      "canonicalPersonId": "per_318GJPXG1RWRAPC68A5T",
+      "localIds": [
+        "hanshu:104:p021",
+        "hanshu:104:p047"
+      ],
+      "status": "concrete-false-merge",
+      "independentVerdict": "hold",
+      "ownerAlignment": "approved",
+      "reason": "Concrete false existing merge unchanged. Verified Hanshu: s0026 自魏其、武安、淮南之後，天子切齒，衛、霍改節。; s0092 衛將軍為言：「郭解家貧，不中徙。」 Literal s0026 \"Wei and Huo changed their conduct\"; idiomatic names Wei Qing and Huo Qubing — consistent with 衛/衛將軍. Verified Beiqishu: s0043 文略嘗大遺魏收金，請為其父作佳傳，收論尒朱榮比韋、彭、伊、霍，蓋由是也。 — 韋 is 豕韋 in a comparison set with 大彭, 伊尹, 霍光, not Wei Qing 衛青. Transport membership with anchor beiqishu:048:p029 must stay blocked until the anchor is repaired or clusters are split.",
+      "residualAction": "Curated split/repair of beiqishu:048:p029 before any approve on this case; extraction unchanged in this pass.",
+      "sourceWitnessesVerified": [
+        {
+          "localId": "hanshu:104:p021",
+          "unitId": "s0026",
+          "quote": "衛、霍改節",
+          "zh": "自魏其、武安、淮南之後，天子切齒，衛、霍改節。"
+        },
+        {
+          "localId": "hanshu:104:p047",
+          "unitId": "s0092",
+          "quote": "衛將軍",
+          "zh": "衛將軍為言：「郭解家貧，不中徙。」"
+        },
+        {
+          "localId": "beiqishu:048:p029",
+          "unitId": "s0043",
+          "quote": "比韋、彭、伊、霍",
+          "zh": "文略嘗大遺魏收金，請為其父作佳傳，收論尒朱榮比韋、彭、伊、霍，蓋由是也。"
+        }
+      ]
+    }
+  ],
+  "supportedPatch": {
+    "independentlyApprovedPartialRepairs": [
+      {
+        "proposalId": "hanshu-104-wei-qing-false-merge-hold",
+        "caseId": "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31",
+        "kind": "identity-split-required",
+        "verdict": "approve",
+        "scope": "No Hanshu extraction edit; block transport merge into beiqishu:048:p029; keep hanshu:104:p021 and bundled Wei Qing locals separate with unresolvedIdentity until anchor repair.",
+        "operations": [],
+        "target": "data/people/extractions/hanshu/104.json",
+        "extractionOperations": [],
+        "hostCuratedOperations": [
+          {
+            "action": "repair-or-split-canonical-anchor",
+            "anchorLocalId": "beiqishu:048:p029",
+            "evidenceUnit": "beiqishu:048:s0043",
+            "note": "Detach or relabel anchor misread 韋 as Wei Qing."
+          }
+        ]
+      }
+    ],
+    "independentlyApprovedDispositions": [
+      {
+        "caseId": "sha256:4b8e336fe4cb07167cc50e7ae7ea29a9b04777326fef4d239c93e8d2e96c2c37",
+        "localId": "hanshu:104:p099",
+        "ownerDisposition": "held-host-witness-binding",
+        "verdict": "approve",
+        "note": "Owner correctly treats this as reviewed uncertain unnamed father pending native witness binding; no extraction patch proposed."
+      }
+    ],
+    "ownerProposalAmendments": [
+      {
+        "kind": "evidence-correction",
+        "caseId": "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31",
+        "field": "cases[1].sourceCitations[0].zh",
+        "ownerValue": "故樓船將軍楊僕與故丞相韓曾子順德侯慶底誅，衛、霍改節，稱謹上書，無救於禍。",
+        "verifiedValue": "自魏其、武安、淮南之後，天子切齒，衛、霍改節。",
+        "verifiedUnit": "hanshu:104:s0026",
+        "impact": "Substance unchanged (衛、霍 still refers to Wei Qing and Huo Qubing); owner pasted unrelated text."
+      },
+      {
+        "kind": "localId-correction",
+        "caseId": "sha256:4b8e336fe4cb07167cc50e7ae7ea29a9b04777326fef4d239c93e8d2e96c2c37",
+        "ownerLocalId": "hanshu:104:p026",
+        "correctLocalId": "hanshu:104:p099",
+        "note": "p026 is Chen Zun; the held transport target is Father of Chen Zun p099."
+      }
+    ],
+    "englishRepairsInThisPass": []
+  },
+  "nativeValidation": {
+    "ownerProposalSha256Verified": true,
+    "ownerProposalBlob": "f51fe7e891888f5a2578fc0ba62dd04c8e78dc75",
+    "priorReportsVerified": [
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-001.json",
+        "sha256": "fddb1fb04e3e04ca3d856ad2f7d72bf2bd36544da30f102a7579f496610a3259",
+        "atGitRef": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+        "checkReport": {
+          "cases": 34,
+          "approvals": 32,
+          "holds": 2,
+          "errors": [
+            "4b8e336fe4cb Witness does not support this person in the current primary source: hanshu:104:p099 hanshu:104:s0162 quote=\"遵少孤\""
+          ]
+        }
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-002.json",
+        "sha256": "ae81617da954b7dd7988734590769f0390cc53864492721f3e5194c906cbeaad",
+        "atGitRef": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+        "checkReport": {
+          "cases": 17,
+          "approvals": 17,
+          "holds": 0,
+          "errors": []
+        }
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-003.json",
+        "sha256": "792aa55334db3f97c8699f2b6cebd6dc62412eabc297834f43d20cd0f5a37638",
+        "atGitRef": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+        "checkReport": {
+          "cases": 17,
+          "approvals": 17,
+          "holds": 0,
+          "errors": []
+        }
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-004.json",
+        "sha256": "72dfbb0b81aa209801839ba475eb2afa91787c4f328669dd347b40ad2d23c2e8",
+        "atGitRef": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+        "checkReport": {
+          "cases": 34,
+          "approvals": 34,
+          "holds": 0,
+          "errors": []
+        }
+      },
+      {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-identity-report-part-005.json",
+        "sha256": "11087aa19101e5dcda9a7b2a91335394baae2d295b7ad8923d920c0aab276c26",
+        "atGitRef": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+        "checkReport": {
+          "cases": 34,
+          "approvals": 34,
+          "holds": 0,
+          "errors": []
+        }
+      }
+    ],
+    "dispatchInputBlobsVerified": {
+      "data/hanshu/104.json": {
+        "gitBlob": "8ff99418e2e22c6942a15355836d388dce63afd1",
+        "matchesHead": true
+      },
+      "data/people/extractions/hanshu/104.json": {
+        "gitBlob": "8ee0b3fcccea4fc18bf89be9430fb5c313711eeb",
+        "matchesHead": true
+      },
+      "data/people/date-audits/hanshu/104.json": {
+        "gitBlob": "b3988323ab9ecd5df8e0514477431804f43068c8",
+        "matchesHead": true
+      },
+      "data/people/editorial-decisions/hanshu/104.json": {
+        "gitBlob": "ce60c795f08c9e617c3ff3630e81b8473d28d6e6",
+        "matchesHead": true
+      }
+    },
+    "extractionUnchanged": true,
+    "canonicalFilesEdited": false,
+    "changedCasesOnly": [
+      "sha256:4b8e336fe4cb07167cc50e7ae7ea29a9b04777326fef4d239c93e8d2e96c2c37",
+      "sha256:5b2b660e30e6f59ad6ea28a5f329f2e6d017614a28b604f8e4ba0b3be6b42e31"
+    ],
+    "unaffectedEvidenceReusePlan": {
+      "reusePriorPartReportsVerbatim": true,
+      "priorReviewHead": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+      "unaffectedApprovedCases": 134,
+      "unaffectedParts": [
+        {
+          "part": "002",
+          "sha256": "ae81617da954b7dd7988734590769f0390cc53864492721f3e5194c906cbeaad",
+          "action": "retain without re-review"
+        },
+        {
+          "part": "003",
+          "sha256": "792aa55334db3f97c8699f2b6cebd6dc62412eabc297834f43d20cd0f5a37638",
+          "action": "retain without re-review"
+        },
+        {
+          "part": "004",
+          "sha256": "72dfbb0b81aa209801839ba475eb2afa91787c4f328669dd347b40ad2d23c2e8",
+          "action": "retain without re-review"
+        },
+        {
+          "part": "005",
+          "sha256": "11087aa19101e5dcda9a7b2a91335394baae2d295b7ad8923d920c0aab276c26",
+          "action": "retain without re-review"
+        },
+        {
+          "part": "001",
+          "sha256": "fddb1fb04e3e04ca3d856ad2f7d72bf2bd36544da30f102a7579f496610a3259",
+          "action": "retain 32 approved rows unchanged; only rows 4b8e336f and 5b2b660e remain hold until host/owner actions above"
+        }
+      ],
+      "scopedEnglishOmissionsArtifact": {
+        "path": "research/people/checkpoints/campaign-nov24-separate-transport-audited/hanshu-104/independent-english-omissions.json",
+        "atGitRef": "b1c22f5c6e0d678245d37e472f13098a3cb86bbe",
+        "action": "retain; unrelated to these two holds"
+      }
+    }
+  }
+}
