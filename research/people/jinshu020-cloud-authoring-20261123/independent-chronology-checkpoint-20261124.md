@@ -54,7 +54,7 @@ Witness policy: `lib/chronology-witness.mjs` — packet name, zh surface, or pri
 
 ## Native coverage extension (complete)
 
-Manifest @ `8cb8e09e`. Parts 1–3: **92** units + **281** extension person checks + **44** retained = **325** people, **756** units. Candidate compose: `checkpoints/jinshu020-native-date-coverage-20261124/jinshu020-native-date-audit-candidate-20261124.json` (**650** itemChecks unchanged). Pin-packet validator: **passed** (`needs-revision` status). Not canonical `data/people/date-audits/` / not publication.
+Manifest @ `8cb8e09e`. Parts 1–3: **92** units + **281** extension person checks + **44** retained = **325** people, **756** units. Partial candidate: `jinshu020-native-date-audit-candidate-20261124.json` (650 items, `needs-revision`). **Replayed attributable candidate** @ owner `1106dc44`: `jinshu020-native-date-audit-candidate-replayed-20261124.json` — **377** wave-replayed item promotions, **650/650** supported; `validateDateAuditReport` vs `pinned-owner-packet-1106dc44-20261124.json` → **`audited`**. Row mappings: `jinshu020-native-date-audit-row-mappings-20261124.json`. Not canonical `data/people/date-audits/` / not publication.
 
 ## Recording gate
 
