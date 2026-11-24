@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "jiuwudaishi/011",
+  "reviewerAgentId": "bc-8e760a8a-a6d0-4dfe-a1f8-5a81bd0fae6d",
+  "ownerAgentId": "bc-f6969509-1699-4266-a225-cb3bca5d36ef",
+  "ownerRevision": "48a2831f1b14fd8aef29f31f3ae965a4f2d9236e",
+  "ownerSha256": "064032d02ca0406f2f7796c58398e8845ecfaac1756ddf86edf0c80a48363e3a",
+  "verdict": "hold",
+  "reviewedAt": "2026-11-24T12:15:00.000Z",
+  "notes": "[CF-Pages-Skip] Independent chronology review artifact only; production date-audit bytes preserved.",
+  "reviewEvidence": {
+    "sealedInputsVerified": {
+      "data/jiuwudaishi/011.json": "ed35e5972b603a00cc2826a8376153666355d840",
+      "data/people/extractions/jiuwudaishi/011.json": "c531ccd2b3996a1c8c0d4221ab7ed2a5960e8750",
+      "data/people/date-audits/jiuwudaishi/011.json": "9b50904d0e663596eda00199f9efe20580c848a2",
+      "data/people/editorial-decisions/jiuwudaishi/011.json": "40bf066e701f582af4b8f0c27cc905d14c975399"
+    },
+    "historicalProof": {
+      "recoveredExtractionCommit": "4f27270f9429fa35d8798095c2a759d163c14e1e",
+      "reportExtractionHash": "sha256:45a32db209baba5559763efc1fddfbf9dee13af54b77101e326b07d3bd838d09",
+      "recoveredExtractionHash": "sha256:45a32db209baba5559763efc1fddfbf9dee13af54b77101e326b07d3bd838d09",
+      "extractionHashSeal": "PASS",
+      "historicalPacketItemCount": 89,
+      "reportSourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+      "historicalPacketSourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+      "nativeValidateHistoricalAuditedClose": {
+        "result": "FAIL",
+        "error": "Date approval retains invalid temporal geometry or reception ownership",
+        "diagnosticCount": 14,
+        "note": "Historical report bytes match recovered extraction and source hashes; sealed audited status does not re-close under current native geometry rules. Preserve report without hash rewrite."
+      }
+    },
+    "currentPacket": {
+      "sourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+      "extractionHash": "sha256:0a8f50635ef32010cb2f4cf0bf6722592df2d011fd24ff258c1157613bf06c39",
+      "itemCount": 93,
+      "peopleCount": 34,
+      "unitCount": 57,
+      "diagnosticCount": 0,
+      "unresolvedItemIds": ["claim-14", "claim-15", "claim-170", "claim-178"]
+    },
+    "packetComparison": {
+      "claimHashMatchedUnchangedValue": 78,
+      "claimHashMatchedChangedValue": 3,
+      "structuralOnlyOld": 8,
+      "structuralOnlyNew": 12,
+      "changedActiveDateHints": [
+        {
+          "personId": "p002",
+          "before": ["AD 852-912 (external primary birth and death witnesses; no chapter reception date treated as life activity)"],
+          "after": ["research required: the chapter gives only relative “after usurpation” context, not a personal life-date endpoint."]
+        },
+        {
+          "personId": "p026",
+          "before": ["AD 907 (enfeoffment only; no life-wide interval inferred)"],
+          "after": ["research required: a dated enfeoffment does not establish a life-wide activity endpoint."]
+        },
+        {
+          "personId": "p028",
+          "before": ["AD 907 (enfeoffment only; no life-wide interval inferred)"],
+          "after": ["research required: a dated enfeoffment does not establish a life-wide activity endpoint."]
+        }
+      ],
+      "carryoverQuoteVerification": {
+        "unchangedValueChecksWithValidChineseQuotes": 69,
+        "failed": 0,
+        "method": "Matched current packet items to historical packet by claimHash where JSON value and personId/predicate agree; verified historical itemCheck Chinese quotes still substring-match pinned chapter units."
+      }
+    }
+  },
+  "holds": [
+    {
+      "scope": "chapter-close",
+      "problem": "Current extraction retains four temporal records with unresolved:true, so native validateDateAuditReport cannot approve status audited on the current packet.",
+      "action": "Reconcile extraction unresolved flags or complete research-blocked findings across the full 93-item packet before a host may record a fresh audited report.",
+      "affectedItems": ["claim-14", "claim-15", "claim-170", "claim-178"]
+    },
+    {
+      "scope": "p002-active-date-hints",
+      "before": "AD 852-912 (external primary birth and death witnesses; no chapter reception date treated as life activity)",
+      "after": "research required: the chapter gives only relative “after usurpation” context, not a personal life-date endpoint.",
+      "problem": "Chapter 011 correctly withholds personal birth and death from consort-biography reception lines, but the prior independently approved bound came from hash-pinned Taizu primary witnesses outside this juan. Removing that bound without an equivalent source-supported replacement regresses Zhu Wen person chronology coverage.",
+      "chineseEvidence": [
+        { "unit": "s0001", "quote": "文惠皇太后王氏，開平初追諡。", "role": "mother's posthumous reception; not founder life activity" },
+        { "unit": "s0042", "quote": "及僭號後，大縱朋淫", "role": "relative after-usurpation narrative context only" }
+      ],
+      "englishNote": "Idiomatic s0042: \"After he usurped the imperial title, he gave free rein to debauchery…\""
+    },
+    {
+      "scope": "p026-p028-ceremony",
+      "before": "AD 907 (enfeoffment only; no life-wide interval inferred)",
+      "after": "research required: a dated enfeoffment does not establish a life-wide activity endpoint.",
+      "problem": "開平元年五月十一日封 is a direct chapter ceremony date for each princess enfeoffment. Prior audit retained AD 907 as ceremony-only without a life interval. The new hint abandons the verified Western ceremony year while adding redundant unresolved attestations on the same sentences.",
+      "chineseEvidence": [
+        { "unit": "s0052", "quote": "長樂公主，降趙岩，開平元年五月十一日封。", "westernCeremony": "Kaiping 1 v 11 ≈ AD 907" },
+        { "unit": "s0053", "quote": "普寧公主，降昭祚王氏，開平元年五月十一日封。", "westernCeremony": "Kaiping 1 v 11 ≈ AD 907" }
+      ]
+    }
+  ],
+  "changedChecks": [
+    {
+      "id": "hints-p002",
+      "kind": "item",
+      "verdict": "research-blocked",
+      "event": "active-date-hints for Zhu Wen in consort-biography chapter scope",
+      "reason": "The revised hint correctly refuses to treat Empress Dowager or Empress posthumous receptions as founder life dates, but it also drops the prior hash-pinned AD 852–912 external-primary bound without substituting any chapter-local Western endpoint.",
+      "evidence": [
+        { "unit": "s0001", "quote": "文惠皇太后王氏，開平初追諡。" },
+        { "unit": "s0042", "quote": "及僭號後，大縱朋淫，骨肉聚麀，帷薄荒穢，以致友珪之禍，起於婦人。" }
+      ]
+    },
+    {
+      "id": "p002",
+      "kind": "person",
+      "verdict": "research-blocked",
+      "event": "Zhu Wen person-level chronology after extraction revision",
+      "reason": "Historical approval bound Zhu Wen to AD 852–912 using external Taizu witnesses. Current person hints are research-only for this chapter, and two new unresolved attestations retain only 開平初 and 乾化中 reception contexts that name other consorts.",
+      "evidence": [
+        { "unit": "s0002", "quote": "太祖性孝願，奉太后未嘗小失色，朝夕視膳，為士君子之規範。" },
+        { "unit": "s0028", "quote": "元貞皇后張氏，乾化中追諡。" }
+      ]
+    },
+    {
+      "id": "claim-14",
+      "kind": "item",
+      "verdict": "research-blocked",
+      "event": "Empress Dowager Wenhui posthumous title reception attributed to Zhu Wen attestation",
+      "reason": "開平初追諡 in s0001 dates the mother's posthumous reception. The extraction marks the founder attestation unresolved; that hold is chronologically sound, but it contributes to a chapter-wide unresolved set that blocks audited closure.",
+      "evidence": [
+        { "unit": "s0001", "quote": "文惠皇太后王氏，開平初追諡。" }
+      ]
+    },
+    {
+      "id": "claim-15",
+      "kind": "item",
+      "verdict": "research-blocked",
+      "event": "Empress Yuanzhen posthumous title reception attributed to Zhu Wen attestation",
+      "reason": "乾化中追諡 in s0028 is Empress Zhang's posthumous reception. It cannot establish Zhu Wen's personal activity year; unresolved:true is appropriate, yet native approval requires clearing or formally blocking the whole packet.",
+      "evidence": [
+        { "unit": "s0028", "quote": "元貞皇后張氏，乾化中追諡。" }
+      ]
+    },
+    {
+      "id": "hints-p026",
+      "kind": "item",
+      "verdict": "incorrect",
+      "event": "active-date-hints for Princess Changle",
+      "reason": "The chapter states an explicit enfeoffment date 開平元年五月十一日封. The prior ceremony-only AD 907 hint matched that source without inferring birth or death; the new research-only hint removes the supported Western ceremony year.",
+      "evidence": [
+        { "unit": "s0052", "quote": "長樂公主，降趙岩，開平元年五月十一日封。" }
+      ]
+    },
+    {
+      "id": "hints-p028",
+      "kind": "item",
+      "verdict": "incorrect",
+      "event": "active-date-hints for Princess Puning",
+      "reason": "Same ceremony sentence pattern as Changle: 開平元年五月十一日封 is a dated enfeoffment in this chapter. A ceremony-only AD 907 hint remains source-faithful; pure research-required wording overstates uncertainty for the Western year of that ceremony.",
+      "evidence": [
+        { "unit": "s0053", "quote": "普寧公主，降昭祚王氏，開平元年五月十一日封。" }
+      ]
+    },
+    {
+      "id": "p026",
+      "kind": "person",
+      "verdict": "research-blocked",
+      "event": "Princess Changle person-level chronology",
+      "reason": "Person hints no longer record the AD 907 enfeoffment ceremony that the Chinese text and prior audit both retained as a non-life-wide endpoint.",
+      "evidence": [
+        { "unit": "s0052", "quote": "長樂公主，降趙岩，開平元年五月十一日封。" }
+      ]
+    },
+    {
+      "id": "p028",
+      "kind": "person",
+      "verdict": "research-blocked",
+      "event": "Princess Puning person-level chronology",
+      "reason": "Identical ceremony-date issue as p026: chapter text fixes Kaiping 1 v 11 enfeoffment while hints and an unresolved attestation withhold the supported ceremony Western year.",
+      "evidence": [
+        { "unit": "s0053", "quote": "普寧公主，降昭祚王氏，開平元年五月十一日封。" }
+      ]
+    },
+    {
+      "id": "claim-170",
+      "kind": "item",
+      "verdict": "research-blocked",
+      "event": "Princess Changle enfeoffment attestation with unresolved flag",
+      "reason": "SourceDate text 開平元年五月十一日 is present in the claim. Marking unresolved because the event is not a life endpoint is methodologically fine, but four such flags collectively prevent audited approval until extraction or a full research-blocked report is completed.",
+      "evidence": [
+        { "unit": "s0052", "quote": "長樂公主，降趙岩，開平元年五月十一日封。" }
+      ]
+    },
+    {
+      "id": "claim-178",
+      "kind": "item",
+      "verdict": "research-blocked",
+      "event": "Princess Puning enfeoffment attestation with unresolved flag",
+      "reason": "Parallel to claim-170: explicit enfeoffment date in Chinese, unresolved:true blocks chapter audited close under current native validator.",
+      "evidence": [
+        { "unit": "s0053", "quote": "普寧公主，降昭祚王氏，開平元年五月十一日封。" }
+      ]
+    }
+  ],
+  "validation": {
+    "validateDateAuditReport": {
+      "currentPacketFingerprints": {
+        "sourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+        "extractionHash": "sha256:0a8f50635ef32010cb2f4cf0bf6722592df2d011fd24ff258c1157613bf06c39"
+      },
+      "auditedCandidateAttempt": {
+        "attempted": true,
+        "result": "FAIL",
+        "error": "Unresolved chronology cannot be approved",
+        "note": "Full 93-item audited report not emitted; unresolved items remain in current extraction."
+      },
+      "historicalReportAgainstRecoveredPacket": {
+        "result": "FAIL",
+        "error": "Date approval retains invalid temporal geometry or reception ownership",
+        "diagnosticCount": 14
+      },
+      "substantiveReasonGate": "PASS for changedChecks entries (all reasons ≥20 characters with Chinese quotations verified against data/jiuwudaishi/011.json)."
+    },
+    "peopleDatesVerifyStatus": "stale",
+    "dateAuditDiagnosticsCurrentPacket": "PASS: zero diagnostics"
+  }
+}
