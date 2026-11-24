@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-primary-witness-delta",
+  "mode": "targeted-primary-witness",
+  "chapterKey": "beiqishu/032",
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "workerId": "cursor-nov24-four-part-owner-1",
+  "ownerRevision": "7cf3acc62cdbc6a58371ab616a8b35a96107b340",
+  "sourceReviewHead": "7391110605352238b023d67409789dddabc1ce72",
+  "sourceReviewRef": "cursor/nov24-four-part-independent-beiqishu-032",
+  "ownerHead": "921f8bb796105a0c4f76193b35bde6686b4bbe06",
+  "ownerHeadRef": "cursor/nov24-four-part-owner-beiqishu-032-664b73",
+  "idempotencyKey": "ff378e8507e3167ac530b4ebfa95acab5a8a037e08d5fdaffb4b2fc065454dcf",
+  "originalIdempotencyKey": "ba8fc1d8800bbb7b8d234460b2bf3d30955bb8ea6e52f162918c8ade43dfb97a",
+  "inputBlobWitness": {
+    "source": "013ec124a3d6a0f75446162e72c053b8960f9f5a",
+    "extraction": "c2d7eaa79c0f5564e7b065b63ec4c4e20f40f774",
+    "dateAudit": "62c22a6d7c34d3f1f24c7b5af66ca21c008e54be",
+    "editorial": "e8a395216cb608437287f8d7d61b5faac20acaec"
+  },
+  "cases": [
+    {
+      "caseId": "sha256:077a44c0d6ef2a0da9ae17d892cba25d0d6b2a8c5192d31b1855866b7eb7c423",
+      "localPersonId": "beiqishu:032:p073",
+      "priorReviewerVerdict": "hold",
+      "ownerDisposition": "propose-remove-unwitnessed-local-person",
+      "sourceWitness": {
+        "unitId": "s0195",
+        "zh": "陳合州刺史裴景暉，琳兄珉之婿也，請以私屬導引齊師。",
+        "quotedFormsInUnit": [
+          "裴景暉",
+          "琳兄珉",
+          "珉",
+          "婿"
+        ],
+        "absentForms": [
+          "珉之女",
+          "裴景暉妻",
+          "女",
+          "妻"
+        ]
+      },
+      "assessment": "s0195 explicitly names Pei Jinghui and states he is son-in-law (婿) to Wang Lin’s elder brother Min (琳兄珉之婿). That supports p071’s kinship to p072 and entails a marriage existed, but no Chinese unit quotes the daughter or uses 珉之女 / 裴景暉妻 as a referring expression. The descriptive-kinship person p073 is an inferred placeholder, not a primary name witness."
+    }
+  ],
+  "proposedChanges": [
+    {
+      "id": "beiqishu-032-retract-p073",
+      "kind": "extraction-repair-proposal",
+      "target": "data/people/extractions/beiqishu/032.json",
+      "affectedPersonIds": [
+        "p073"
+      ],
+      "reason": "Remove unnamed daughter record; retain explicit 婿 link between Pei Jinghui and Wang Min.",
+      "operations": [
+        {
+          "op": "remove-person",
+          "personId": "p073"
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p068",
+          "path": "/3/r",
+          "afterRemoves": [
+            "p073"
+          ]
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p071",
+          "path": "/3/r",
+          "afterRemoves": [
+            "p073"
+          ]
+        },
+        {
+          "op": "patch-person-relations",
+          "personId": "p072",
+          "path": "/3/r",
+          "afterRemoves": [
+            "p073"
+          ]
+        },
+        {
+          "op": "retract-claims",
+          "personId": "p073",
+          "claimSelectors": [
+            [
+              "p073",
+              "sex"
+            ],
+            [
+              "p073",
+              "attestation"
+            ]
+          ]
+        },
+        {
+          "op": "retract-claims",
+          "personId": "p071",
+          "claimSelectors": [
+            [
+              "p071",
+              "family-relationship",
+              "p073"
+            ]
+          ]
+        },
+        {
+          "op": "retract-claims",
+          "personId": "p072",
+          "claimSelectors": [
+            [
+              "p072",
+              "family-relationship",
+              "p073"
+            ]
+          ]
+        },
+        {
+          "op": "revise-claim",
+          "selector": [
+            "p071",
+            "family-relationship",
+            "p072"
+          ],
+          "before": {
+            "relation": "kin-of",
+            "personId": "p072",
+            "kinshipTerm": {
+              "zh": "婿",
+              "en": "son-in-law"
+            },
+            "subjectRole": "son-in-law",
+            "objectRole": "father-in-law",
+            "intermediaryPersonIds": [
+              "p073"
+            ]
+          },
+          "after": {
+            "relation": "kin-of",
+            "personId": "p072",
+            "kinshipTerm": {
+              "zh": "婿",
+              "en": "son-in-law"
+            },
+            "subjectRole": "son-in-law",
+            "objectRole": "father-in-law"
+          },
+          "evidence": [
+            "s0195"
+          ],
+          "sourceQuote": "琳兄珉之婿"
+        },
+        {
+          "op": "annotate-person",
+          "personId": "p072",
+          "field": "x",
+          "after": "s0195 names Pei Jinghui as son-in-law (婿) to Min; the wife is unnamed and receives no quotable surface in this chapter."
+        }
+      ]
+    }
+  ],
+  "held": [],
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "primaryWitnessReview": "complete",
+    "canonicalFilesModified": false,
+    "reproduce": "npm run people:validate -- --book beiqishu --chapter 032",
+    "note": "Artifact-only extraction repair proposal; pinned extraction unchanged until independent repair acceptance."
+  },
+  "notes": "[CF-Pages-Skip] Owner primary-witness delta; marriage entailed by 婿 but daughter not a nameable person record."
+}
