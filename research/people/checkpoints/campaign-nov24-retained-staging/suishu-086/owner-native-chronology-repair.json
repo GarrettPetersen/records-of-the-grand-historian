@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "suishu",
+    "chapter": "086"
+  },
+  "ownerAgentId": "bc-b6d2481d-79b0-4d5e-b8c2-c042356f094b",
+  "idempotencyKey": "7c8f0ec3f6fcf67d4b74f61c5c208bbf786e4b3282562374759762e9dfca0f7e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "branchRef": "cursor/nov24-retained-owner-native-date-suishu-086-f094b",
+  "priorOwnerHead": "ba78ab86c3f000c8cda3069db9747716aa90a383",
+  "priorOwnerHandoffSha256": "05d2e59ce5cbf873be2a62b10ea116963c08a1327bc4b538d0aa989154f1a375",
+  "pinnedAudit": {
+    "sha256": "sha256:33e181f060643be4887bebcd359a7acce40004a51a708542afdcbf9398b90e43",
+    "status": "research-blocked",
+    "auditReviewedAt": "2026-09-22T22:00:00.000Z",
+    "findings": 3
+  },
+  "intactApprovals": {
+    "dateAuditBytesUnchanged": true,
+    "dateAuditGitBlob": "33e181f060643be4887bebcd359a7acce40004a51a708542afdcbf9398b90e43",
+    "editorialAndSourceUnchanged": true,
+    "note": "Owner did not record, approve, or rewrite the independent date-audit report."
+  },
+  "verifiedFindings": [
+    {
+      "id": "finding-1",
+      "items": [
+        "claim-133",
+        "p014",
+        "hints-p014"
+      ],
+      "problem": "Jing Bos collaboration is explicit but has no personal date in the chapter; the only nearby AD 641 commission names different people.",
+      "action": "Keep the undated claim and research hold; do not infer a date from shared project membership.",
+      "sourceQuotes": [
+        {
+          "itemId": "claim-133",
+          "unit": "s0012",
+          "quote": "十五年，又詔左僕射于志寧、太史令李淳風、著作郎韋安仁、符璽郎李延壽同修五代史志。"
+        },
+        {
+          "itemId": "p014",
+          "unit": "s0012",
+          "quote": "十五年，又詔左僕射于志寧、太史令李淳風、著作郎韋安仁、符璽郎李延壽同修五代史志。"
+        },
+        {
+          "itemId": "hints-p014",
+          "unit": "s0012",
+          "quote": "十五年，又詔左僕射于志寧、太史令李淳風、著作郎韋安仁、符璽郎李延壽同修五代史志。"
+        }
+      ]
+    },
+    {
+      "id": "finding-2",
+      "items": [
+        "claim-139",
+        "p015",
+        "hints-p015"
+      ],
+      "problem": "The maternal reference occurs through Li Yanshous dated mourning leave and cannot establish the mothers living activity or exact death year.",
+      "action": "Keep the supported on-or-before death bound and retain research hold pending an independent maternal chronology witness.",
+      "sourceQuotes": [
+        {
+          "itemId": "claim-139",
+          "unit": "s0029",
+          "quote": "按延壽貞觀三年與顏師古同被勑修隋史，其年以內憂去職。"
+        },
+        {
+          "itemId": "p015",
+          "unit": "s0029",
+          "quote": "按延壽貞觀三年與顏師古同被勑修隋史，其年以內憂去職。"
+        },
+        {
+          "itemId": "hints-p015",
+          "unit": "s0029",
+          "quote": "按延壽貞觀三年與顏師古同被勑修隋史，其年以內憂去職。"
+        }
+      ]
+    },
+    {
+      "id": "finding-3",
+      "items": [
+        "claim-142",
+        "p016",
+        "hints-p016"
+      ],
+      "problem": "Chu Suiliangs preface attribution is undated and qualified by an editorial doubt about his broader commission.",
+      "action": "Keep the undated attribution and research hold; require a personal chronology witness before assigning activity dates.",
+      "sourceQuotes": [
+        {
+          "itemId": "claim-142",
+          "unit": "s0012",
+          "quote": "十五年，又詔左僕射于志寧、太史令李淳風、著作郎韋安仁、符璽郎李延壽同修五代史志。"
+        },
+        {
+          "itemId": "p016",
+          "unit": "s0032",
+          "quote": "五行志序，諸本云褚遂良作。"
+        },
+        {
+          "itemId": "hints-p016",
+          "unit": "s0032",
+          "quote": "五行志序，諸本云褚遂良作。"
+        }
+      ]
+    }
+  ],
+  "affectedItemIds": [
+    "claim-133",
+    "p014",
+    "hints-p014",
+    "claim-139",
+    "p015",
+    "hints-p015",
+    "claim-142",
+    "p016",
+    "hints-p016"
+  ],
+  "noEditNeeded": true,
+  "noEditReason": "All three sealed findings already retain source-faithful unresolved attestations and research active-hints; no false Western conversion or invented personal interval remains to remove.",
+  "nativeValidation": {
+    "passed": true,
+    "command": "npm run people:validate",
+    "note": "No date-repair proposal staged; sealed extraction already matches research-blocked audit holds."
+  },
+  "residualHolds": [
+    {
+      "findingId": "finding-1",
+      "items": [
+        "claim-133",
+        "p014",
+        "hints-p014"
+      ],
+      "problem": "Jing Bos collaboration is explicit but has no personal date in the chapter; the only nearby AD 641 commission names different people.",
+      "preserved": true
+    },
+    {
+      "findingId": "finding-2",
+      "items": [
+        "claim-139",
+        "p015",
+        "hints-p015"
+      ],
+      "problem": "The maternal reference occurs through Li Yanshous dated mourning leave and cannot establish the mothers living activity or exact death year.",
+      "preserved": true
+    },
+    {
+      "findingId": "finding-3",
+      "items": [
+        "claim-142",
+        "p016",
+        "hints-p016"
+      ],
+      "problem": "Chu Suiliangs preface attribution is undated and qualified by an editorial doubt about his broader commission.",
+      "preserved": true
+    }
+  ]
+}
