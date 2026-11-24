@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "kind": "consolidated-independent-chronology-delta-receipt",
+  "book": "jinshu",
+  "chapter": "085",
+  "candidate": {
+    "pr": 5428,
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu085",
+    "commit": "3f01a1ef3dbb9c9abff8c55994746a763b90f21a",
+    "priorRecheckCommit": "c56dcc6a1bf6c94f4e93f2fc7e2315da8dde22d8",
+    "priorRecheckPrBranch": "cursor/jinshu085-recheck-d5be360-e257",
+    "baseBeforeResiduals": "d5be3605fe57a5330afd0b599f61e350b0d83250",
+    "sourceSha256": "sha256:6b616104f7e5f2f626ca52a9d3c45900830f3b99a40f96cdfff35dea051fc203",
+    "extractionSha256": "sha256:e0314eae039e38b6843a36263f4401c9c0f1a84d5dff4ce3910b278fc00ea8f8",
+    "datePacketSourceHash": "sha256:76706a52e0cf3d0959a4ccd988ed381bb53e6fb33c453f72d9145be60892c2da",
+    "datePacketExtractionHash": "sha256:5eedf54a4e175a8896f8c8e5e142fe71f2d617a7917fc1986aa6918bc8d2d229",
+    "editorialSha256": "sha256:7fb822bbad7f2fe53b21615df63b387f0ac44322b726ba4dc6fa8d3b0de5e440"
+  },
+  "reviewer": {
+    "kind": "cursor-agent",
+    "name": "Composer",
+    "model": "Composer",
+    "agentId": "bc-65fb5d6a-4638-432a-aaa2-0356929fe257",
+    "independentOfAuthor": true,
+    "sameReviewerAsPrior": true,
+    "reviewedAt": "2026-11-24T01:11:54.456Z",
+    "scope": "delta-only-29-chronology-residuals; no source edit; no general re-audit"
+  },
+  "ownerManifest": {
+    "path": "research/people/jinshu085-authoring-20261123/changed-item-dependency-manifest.json",
+    "evidenceCommit": "c56dcc6a1bf6c94f4e93f2fc7e2315da8dde22d8",
+    "changedItemCount": 29,
+    "setEqualityVsC56dcc6aIncorrectList": true,
+    "missingIds": [],
+    "extraIds": []
+  },
+  "deltaVerification": {
+    "artifact": "verify-29-residuals.json",
+    "westernScanArtifact": "western-scan.json",
+    "verifiedCount": 29,
+    "issueFreeSemanticPass": true,
+    "note": "Three verifier labels unknown-action:expand-and-unresolve are schema-name noise only; live packet state for claim-353/400/408 matches manifest (western stripped, unresolved, expanded evidence).",
+    "groups": {
+      "G1_era_evidence_expand": {
+        "count": 2,
+        "ids": ["claim-207", "claim-392"],
+        "result": "era phrase now on evidence units; Western endpoints retained"
+      },
+      "G2_age_phrase_no_western": {
+        "count": 3,
+        "ids": ["claim-395", "claim-396", "claim-397"],
+        "result": "年十八 kept; invented Western interval removed; unresolved"
+      },
+      "G3_relative_non_era_unresolved": {
+        "count": 17,
+        "ids": [
+          "claim-9", "claim-237", "claim-280", "claim-281", "claim-341",
+          "claim-342", "claim-343", "claim-352", "claim-379", "claim-380",
+          "claim-381", "claim-382", "claim-399", "claim-407", "claim-409",
+          "claim-410", "claim-412"
+        ],
+        "result": "non-era sourceDate kept; Western removed; unresolved"
+      },
+      "G4_retarget_or_clear_mismatched": {
+        "count": 7,
+        "ids": [
+          "claim-282", "claim-296", "claim-339", "claim-340",
+          "claim-353", "claim-400", "claim-408"
+        ],
+        "result": "clears absent from packet; retarget/expand-and-unresolve hold Chinese wording without Western"
+      }
+    },
+    "remainingInventedWesternEndpoints": 0,
+    "c56dcc6aIncorrectIdsAllAddressed": true
+  },
+  "gates": {
+    "editorialEnglish": {
+      "satisfied": true,
+      "acceptedRows": 13,
+      "editorialSha256": "sha256:7fb822bbad7f2fe53b21615df63b387f0ac44322b726ba4dc6fa8d3b0de5e440",
+      "detail": "Schema-3 accept ×13 unchanged; validateAppliedEditorialDecisions / people:validate PASS."
+    },
+    "chronology": {
+      "satisfied": false,
+      "auditedNativeReportRecorded": false,
+      "reasonNotAudited": "24 unresolvedDateAuditItems remain by design after residual repairs; audited requires zero unresolved blockers plus full coverage.",
+      "liveAuditBeforeDelta": {
+        "path": "data/people/date-audits/jinshu/085.json",
+        "status": "stale",
+        "note": "Prior needs-revision audit still pinned to extractionHash sha256:5f97bbd7… (d5be360); tip packet extractionHash is sha256:5eedf54a… — not overwritten; no general re-audit."
+      },
+      "unresolvedDateAuditItemCount": 24,
+      "unresolvedDateAuditItemIds": [
+        "claim-9", "claim-237", "claim-280", "claim-281", "claim-296",
+        "claim-341", "claim-342", "claim-343", "claim-352", "claim-353",
+        "claim-379", "claim-380", "claim-381", "claim-382", "claim-395",
+        "claim-396", "claim-397", "claim-399", "claim-400", "claim-407",
+        "claim-408", "claim-409", "claim-410", "claim-412"
+      ],
+      "preservedRealDates": {
+        "claim-205": "隆安中 retained with Western",
+        "claim-208": "義熙中 death retained with Western",
+        "claim-207": "隆安中 evidence expanded to include s0143; Western kept",
+        "claim-392": "義熙初 evidence expanded to include s0292; Western kept"
+      },
+      "noInventedReplacementWesternYears": true
+    },
+    "canonicalIdentity": {
+      "satisfied": false,
+      "nativeIdentityReviewRecorded": false,
+      "blockers": [
+        "Chronology not audited (24 unresolved)",
+        "extraction.run.agentId remains null (historical pin only)",
+        "Within-chapter duplicate locals: 26 clusters / unresolvedIdentity=true / mergeApplied=false / 49 extras"
+      ]
+    }
+  },
+  "extractorMetadataSeparate": {
+    "extractionRunAgentId": null,
+    "historicalPin": {
+      "found": true,
+      "source": "github-historical-provenance",
+      "pullRequest": 4900,
+      "headBranch": "grokbot/people-jinshu-085-grokbot-30",
+      "commit": "bfb36c7de8b7c7a0dfc08c52d6f6fd67c930d9d7",
+      "mergeCommit": "75d7fb1b920b7bf02733049b488d8857e17c0b31",
+      "model": "Grok Bot-chunked",
+      "workerLaneFromBranch": "grokbot-30",
+      "note": "PR #4900 documents Grok Bot MCP extraction; run.agentId remains null in the sealed extraction and is not fabricated."
+    }
+  },
+  "localIdentityUncertainties": {
+    "artifact": "research/people/jinshu085-authoring-20261123/duplicate-locals-adjudication.json",
+    "unresolvedIdentity": true,
+    "mergeApplied": false,
+    "clusterCount": 26,
+    "extraLocalCount": 49,
+    "sampleClusters": [
+      { "chineseName": "劉毅", "englishName": "Liu Yi", "localIds": ["p001", "p040", "p049", "p063", "p087", "p106", "p129"] }
+    ],
+    "note": "Owner source adjudication holds without silent merges; not a native identity seal."
+  },
+  "scopedValidation": {
+    "peopleValidate": "passed: 142 people, 965 mentions, 859 claims, 13 editorial decisions; 14 persons without active-date hint",
+    "peopleDatesVerify": "stale (expected; live audit not refreshed)",
+    "log": "people-validate.log"
+  },
+  "ownerReturn": {
+    "sameOwner": "cursor-github-nov24-2 / bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
+    "status": "29 c56dcc6a residuals verified repaired; chronology still not natively audited",
+    "next": [
+      "Independent full date audit against tip packet (extractionHash sha256:5eedf54a…) may record audited only after resolving or accepting the 24 unresolved items under native rules",
+      "Do not invent Western years for unresolved relative/age/office phrases",
+      "Identity certification still blocked until chronology audited and extractor agentId/pin policy satisfied"
+    ]
+  }
+}
