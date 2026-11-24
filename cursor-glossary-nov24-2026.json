@@ -8,14 +8,14 @@
  "dispatchState": "open-verified-included-usage",
  "usage": {
   "source": "Cursor spending dashboard",
-  "verifiedAt": "2026-11-24T06:28:36.000Z",
+  "verifiedAt": "2026-11-24T06:33:58.000Z",
   "cursorModelsUsedPercent": 42,
   "otherModelsUsedPercent": 73,
   "onDemandLimitUsd": 1,
   "onDemandLimitReached": true,
   "lastObservedOnDemandMeterUsd": 2.91,
   "recentCloudUsageClassification": "Existing Cursor Cloud costs reflected in both included model pools with the displayed on-demand meter unchanged at $2.91.",
-  "resetDisplay": "Nov 24, 12 hours and 4 minutes remaining at observation"
+  "resetDisplay": "Nov 24, 11 hours and 59 minutes remaining at observation"
  },
  "workers": {
   "running": [],
@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T06:33:34.309Z",
+ "lastCheckedAt": "2026-11-24T06:35:38.623Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -18648,13 +18648,132 @@
     "staging": "e83b6d26a67b8dd319b9208393b28c95c10aea36",
     "ref": "codex/cursor-glossary-nov24-2026-audited-no-editorial-cohort",
     "workflowRevision": "bd62cc804ae49a8dfa998f4237795e2d89e7cc6d",
-    "status": "in_progress",
+    "status": "completed",
     "plannedShards": 2,
     "maxPerShard": 8,
     "criterion": "Native gate permits missing editorial file only with no applied or proposed repair.",
     "runId": 45339950142,
-    "conclusion": null,
-    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45339950142"
+    "conclusion": "success",
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45339950142",
+    "editorialRecovery": {
+     "worker": "cursor-nov24-editorial-recovery-1",
+     "agentId": "bc-340a6bc1-9a52-4e4e-88fd-a75cb8c3b429",
+     "stage": "284051c488f61dcfac2bb59284a10ddff0db3110",
+     "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+     "primary": "shiji/027",
+     "scopes": [
+      {
+       "key": "shiji/027",
+       "people": 29,
+       "gate": "Existing editorial proposals remain pending.",
+       "pins": [
+        {
+         "path": "data/shiji/027.json",
+         "blob": "b88791eb599ad985323c8fa4a6df51cfff875a14"
+        },
+        {
+         "path": "data/people/extractions/shiji/027.json",
+         "blob": "2a2ab57af9a48011496153fdf925c4525139de81"
+        },
+        {
+         "path": "data/people/date-audits/shiji/027.json",
+         "blob": "514ecc189de27388f5f4582657e0d8b99555417f"
+        }
+       ]
+      },
+      {
+       "key": "songshu/069",
+       "people": 96,
+       "gate": "Recover actual independent applied editorial history; if source proof is missing, stage the exact edits for review.",
+       "pins": [
+        {
+         "path": "data/songshu/069.json",
+         "blob": "10695bb84f0d314e4fd929015789c9054009fad7"
+        },
+        {
+         "path": "data/people/extractions/songshu/069.json",
+         "blob": "f717f33d7943df0ae9a2924c43bb428a1725b054"
+        },
+        {
+         "path": "data/people/date-audits/songshu/069.json",
+         "blob": "ac3e2241d82f296c5b60ce2e4cd3eb07ee93ff75"
+        }
+       ]
+      },
+      {
+       "key": "houhanshu/111",
+       "people": 99,
+       "gate": "Existing editorial proposals remain pending.",
+       "pins": [
+        {
+         "path": "data/houhanshu/111.json",
+         "blob": "ddeb1035b23d9a55bbaa521436fec3e214419e9b"
+        },
+        {
+         "path": "data/people/extractions/houhanshu/111.json",
+         "blob": "6ddf22e5033ae0c24cfe08960c2dad54f84d9099"
+        },
+        {
+         "path": "data/people/date-audits/houhanshu/111.json",
+         "blob": "0dd22c64d96ff43f2907737beb4a33f9606d4e71"
+        }
+       ]
+      },
+      {
+       "key": "houhanshu/106",
+       "people": 105,
+       "gate": "Existing editorial proposals remain pending.",
+       "pins": [
+        {
+         "path": "data/houhanshu/106.json",
+         "blob": "53df4b7a187c44b443ebdeb6ac944b3be3f163b1"
+        },
+        {
+         "path": "data/people/extractions/houhanshu/106.json",
+         "blob": "524d6394d289235ff050c6edf961fc41c4b9ce13"
+        },
+        {
+         "path": "data/people/date-audits/houhanshu/106.json",
+         "blob": "a55cf957a5ee1ff3430ee2bc4ffb5425a1b6d993"
+        }
+       ]
+      },
+      {
+       "key": "jiutangshu/030",
+       "people": 287,
+       "gate": "Existing editorial proposals remain pending; use focused approved source scope, not a retranslation.",
+       "pins": [
+        {
+         "path": "data/jiutangshu/030.json",
+         "blob": "c8699e76f3b2dda8488c3bb33d1fa0f4459561d1"
+        },
+        {
+         "path": "data/people/extractions/jiutangshu/030.json",
+         "blob": "6d4dfe8ebe9876c3c3da3fc52c45a581e35d738e"
+        },
+        {
+         "path": "data/people/date-audits/jiutangshu/030.json",
+         "blob": "08def831ee06d864a86e225165dcfc32b28b6549"
+        }
+       ]
+      }
+     ],
+     "claimRevision": "f39a8a0d4b7e18bcaaadbffc258e7b68c0de29c1",
+     "scanRun": 45339950142,
+     "artifactIds": [
+      14896086204,
+      14896245671
+     ],
+     "status": "dispatch_pending",
+     "reservedAt": "2026-11-24T06:35:35.300Z",
+     "idempotencyKey": "b7bff7a664c901efef13cbb0631f94455aa99d397d9e49b5e8ed17ea84b99009"
+    },
+    "preparedWithoutIntervention": 0,
+    "eligibleChecked": 33,
+    "artifactIds": [
+     14896086204,
+     14896245671
+    ]
    }
   },
   "narrowChronologyReview": {
