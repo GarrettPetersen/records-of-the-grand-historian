@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "kind": "chapter-independent-review-consolidation",
+  "status": "needs-revision",
+  "chapterApproval": false,
+  "nativeCertificationsIssued": {
+    "editorial": false,
+    "dateAudit": false,
+    "identity": false,
+    "combinedCuration": false
+  },
+  "book": "jinshu",
+  "chapter": "065",
+  "reviewedAt": "2026-11-23T16:30:00.000Z",
+  "reviewer": {
+    "role": "independent-final-reviewer",
+    "agentId": "bc-da377046-9b9e-4ac1-9446-54d48d252b76",
+    "name": "Independent Jinshu 065 glossary review",
+    "independentOfAuthorAgents": [
+      "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
+      "bc-8357f29c-62c6-4bc1-823c-565ee1c375c8",
+      "bc-92be9cea-9556-4c75-bb13-5a20434811c5",
+      "bc-896e1c2b-f88a-4291-979a-2bd85f1f6ee1",
+      "bc-58b51735-9dab-48b5-9ec2-682df5ed9d62",
+      "bc-dc96a4ab-54e6-422f-8ee3-75673f758251",
+      "bc-57e15598-1695-4a09-8a25-0ed955ac65ae",
+      "bc-b4e6a3a9-148d-4086-aebd-7629d2925733"
+    ]
+  },
+  "candidate": {
+    "pullRequest": 5426,
+    "pullRequestUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5426",
+    "branch": "codex/cursor-glossary-nov24-2026-jinshu065",
+    "base": "codex/people-glossary-staging-v2",
+    "revision": "09ad5383251b59697ade682efba6f8e71f8d1446",
+    "revisionVerified": true,
+    "sourceFingerprint": "sha256:6c883982929fa93b75b07ad47a53096e87508d72e7005043f38ee93842a53b07",
+    "sourceSha256": "1ca9397078b2ac0b8ae5c714f2cd3753083fe54ba9e59be1b8740bfd40f4fa6c",
+    "extractionSha256": "1b4d248cf97357cecf96a8e6c7f7b7ec3317217ce1a0d82d2911cd8d5da9f98f",
+    "editorialDecisionsSha256": "e778d6e89494199b118f8bddaec336d01fda3d041483fde41af8715da8b4dc59"
+  },
+  "lookup": {
+    "pinnedGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "manifestMatched": true,
+    "dossierCount": 228270,
+    "boundedQueries": [
+      "zh:琅邪王裒",
+      "zh:司馬裒",
+      "zh:裒",
+      "en:Sima Pou",
+      "zh:茂弘",
+      "member jinshu:065:p001",
+      "member jinshu:065:p028",
+      "member jinshu:065:p036",
+      "member jinshu:065:p162"
+    ],
+    "notes": [
+      "Broad 王導 / Wang Dao postings are truncated (79 / 87); courtesy-name 茂弘 was used to bound to five dossiers.",
+      "Lookup responses are candidate evidence only; they are not identity or chronology approvals."
+    ]
+  },
+  "validators": {
+    "extraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/jinshu/065.json",
+      "result": "ok",
+      "summary": "180 people, 1049 mentions, 1837 claims, 816 candidates"
+    },
+    "peopleDataScoped": {
+      "command": "npm run people:validate -- --book jinshu --chapter 065",
+      "result": "failed-expected-for-unauthorized-residual-repair",
+      "errors": [
+        "data/people/editorial-decisions/jinshu/065.json: applied jinshu:065:r0017 has no matching independent accept/revise authorization"
+      ],
+      "note": "Under compact expansion the new s0125 literal Pou repair is repair id jinshu:065:r0017. Author residual labeled it r0018 against the older proposal numbering that still includes rejected r0002. Authorization matching is by unit/field/before/after/reason contract, not by stable id."
+    }
+  },
+  "reusedStillValidDecisions": [
+    {
+      "scope": "editorial",
+      "item": "jinshu:065:r0002 reject (s0058 idiomatic house of Jin)",
+      "status": "reuse",
+      "evidence": "Current s0058 idiomatic still reads 'house of Jin'; Chinese 王室. Reject remains reflected; do not re-apply."
+    },
+    {
+      "scope": "editorial",
+      "item": "prior accept/revise set r0001 and r0003–r0016 under old proposal ids",
+      "status": "reuse-via-exact-contract",
+      "evidence": "people:validate reports only the new residual literal as unauthorized; previously authorized applied wording remains matched by exact before/after/reason contracts despite compact resequencing."
+    },
+    {
+      "scope": "editorial",
+      "item": "old r0017 revise for s0431 奭望 → Shi and Wang",
+      "status": "reuse",
+      "evidence": "Current s0431 idiomatic is 'Shi and Wang lined every wagon-track—Wang Dao matches neither half their deed.' Compact applied id is now jinshu:065:r0016."
+    },
+    {
+      "scope": "editorial",
+      "item": "old r0007 accept for s0125 idiomatic Sima Pou",
+      "status": "reuse",
+      "evidence": "Current idiomatic already has Sima Pou; compact applied id is now jinshu:065:r0006."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "disposition": "repair-required",
+      "area": "editorial",
+      "severity": false,
+      "title": "Authorize residual s0125 literal Sima Pou repair on current fingerprint",
+      "detail": "Chinese s0125 is 初，帝愛琅邪王裒，將有奪嫡之議，以問導。 Given name 裒 is Pou, not 攸/You. Idiomatic was already corrected; literal now correctly reads Sima Pou and extraction p036 / name claim c0135 / surfaces match. Host must record an independent accept for this exact applied repair on fingerprint sha256:6c883982929fa93b75b07ad47a53096e87508d72e7005043f38ee93842a53b07. This reviewer finds the wording source-correct but does not write canonical editorial-decisions in this follow-up (artifact-only).",
+      "expandedRepairId": "jinshu:065:r0017",
+      "authorResidualLabel": "jinshu:065:r0018",
+      "unit": "s0125",
+      "field": "literal",
+      "before": "At first the emperor loved Prince Langye, Sima You, and there was discussion of displacing the heir apparent; he consulted Dao.",
+      "after": "At first the emperor loved Prince Langye, Sima Pou, and there was discussion of displacing the heir apparent; he consulted Dao.",
+      "recommendedDecision": "accept"
+    },
+    {
+      "id": "F2",
+      "disposition": "repair-required",
+      "area": "extraction-coverage",
+      "severity": false,
+      "title": "Clear stale unresolvedReference claiming idiomatic still has Sima You",
+      "detail": "coverage.unresolvedReferences still includes s0125 description '琅邪王裒 is rendered Sima You in the idiomatic English; the Chinese given name is 裒, not 攸.' Both English fields are now Pou. Remove or rewrite that stale note when the residual editorial accept is recorded."
+    },
+    {
+      "id": "F3",
+      "disposition": "repair-required",
+      "area": "identity",
+      "severity": true,
+      "title": "Within-chapter false split of Wang Dao across p001 / p028 / p162",
+      "detail": "Source shows one person: biography subject 王導/茂弘 (p001), mid-chapter 導/茂弘 on the imperial couch and Maohong address (s0089, s0114 → p028), and historian appraisal 王導/茂弘/仲父 (s0407–s0434 → p162). Pinned lookup maps them to three separate dossiers (per_57D652GD4HJMZXKPXTG2, per_V4AMZHJ7MS7JJJ7Z3G9W, per_XH7N9MKWWAB9ES1CS1EQ), none editorial/chronology/publication approved. This is a concrete false-split contradiction. Merge to one chapter-local person (or an explicit reviewed same-as cluster with one canonical target) before identity certification. Do not treat truncated 王導 search emptiness/non-uniqueness as proof.",
+      "locals": [
+        "jinshu:065:p001",
+        "jinshu:065:p028",
+        "jinshu:065:p162"
+      ],
+      "dossiers": [
+        "per_57D652GD4HJMZXKPXTG2",
+        "per_V4AMZHJ7MS7JJJ7Z3G9W",
+        "per_XH7N9MKWWAB9ES1CS1EQ"
+      ]
+    },
+    {
+      "id": "F4",
+      "disposition": "research-hold",
+      "area": "identity",
+      "severity": true,
+      "title": "Sima Pou chapter local vs cross-chapter same-name dossiers",
+      "detail": "jinshu:065:p036 correctly names 琅邪王裒 / Sima Pou and anchors dossier per_TN1B4T2AA091150X7XAQ. That dossier still carries stale preferred English 'Prince Sima You of Langye' in the pinned November 3 snapshot while also listing blocking en:sima pou from the current claim. Bounded search also yields per_X94MXHZDKT3JY31BJ5BS (jinshu:006:p032; 司馬裒 with 宣城公 and 琅邪王), per_A98NDDTHBG874C11RVG1 (jinshu:032:p010; preferred English 'Prince Ai'), per_9EHZ07PS42KSR152DC1H (jinshu:078:p135; preferred English 'Prince Shou'), and per_ZWEEVV19YQ5859H2C8W9 (jinshu:037:p142). Do not auto-merge. Host should open native identity cases; plausible same-person retention as possible-same-as is allowed, but false-merge of distinct princes would block. Snapshot English preferred-name staleness is not by itself a chapter source defect once local English is Pou.",
+      "local": "jinshu:065:p036",
+      "primaryDossier": "per_TN1B4T2AA091150X7XAQ",
+      "relatedCandidateDossiers": [
+        "per_X94MXHZDKT3JY31BJ5BS",
+        "per_A98NDDTHBG874C11RVG1",
+        "per_9EHZ07PS42KSR152DC1H",
+        "per_ZWEEVV19YQ5859H2C8W9"
+      ]
+    },
+    {
+      "id": "F5",
+      "disposition": "research-hold",
+      "area": "chronology",
+      "severity": true,
+      "title": "No native date audit; cannot approve chronology",
+      "detail": "data/people/date-audits/jinshu/065.json is absent on the candidate, staging, and master refs checked. people:dates:packet builds 525 checks / 180 people / 436 units for inspection only. p036 is correctly an undatedSourceAttestation on s0125. Many active-date hints remain 'research required…'. Wang Dao chronology is fragmented across the p001/p028/p162 split. This review does not record a native audited/needs-revision/research-blocked date report and does not approve chronology."
+    },
+    {
+      "id": "F6",
+      "disposition": "repair-required",
+      "area": "editorial-provenance",
+      "severity": false,
+      "title": "Editorial decisions fingerprint is stale relative to residual source edit",
+      "detail": "data/people/editorial-decisions/jinshu/065.json still pins chapterFingerprint sha256:121b79a66bc84505f561aa7f33a614f0f5a5c12cd7bdfbb51b0ef6b9b9f91194 while the candidate source fingerprint is sha256:6c883982929fa93b75b07ad47a53096e87508d72e7005043f38ee93842a53b07. Host must attach the residual accept on the current fingerprint without rewriting hashes of prior approvals."
+    }
+  ],
+  "ownerActions": [
+    "Record independent editorial accept for the exact s0125 literal Pou repair (expanded id r0017) on fingerprint 6c88398…; preserve rejected r0002 and the s0431 Shi/Wang revise.",
+    "Clear the stale s0125 unresolvedReference about idiomatic Sima You.",
+    "Merge chapter-local Wang Dao false split p001/p028/p162 (and reconcile dossier membership) before requesting identity certification.",
+    "Prepare native identity cases for p036 against bounded Pou dossiers without exhaustive pair graphs; keep explicit uncertainty if evidence is insufficient.",
+    "Run independent date audit after editorial/identity-affecting extraction repairs; do not treat author chronology notes or this consolidation as a date approval.",
+    "Re-run scoped validators after repairs; only then request final independent re-check of changed components."
+  ],
+  "nonActions": [
+    "No edit to author branch codex/cursor-glossary-nov24-2026-jinshu065.",
+    "No merge of PR 5426.",
+    "No manufactured native editorial-decisions, date-audits, identity seals, or combined-curation receipts in data/people.",
+    "No corpus/registry/site build.",
+    "No environment secret disclosure."
+  ]
+}
