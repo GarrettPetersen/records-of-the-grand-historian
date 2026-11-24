@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "130"
+  },
+  "ownerAgentId": "bc-79978f16-ef63-4b23-8034-c964719fc3a1",
+  "workerId": "cursor-nov24-retained-staging-w6-o3",
+  "idempotencyKey": "044ebdb7768ef7b736a4907017935affdf6d4bf611cc284eab4a5c663ef289cb",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-130-fc3a1",
+  "inputBlobWitness": {
+    "source": "af0b5bd2e4b5a2aa9708d11ec7b642b8b3524441",
+    "extraction": "0697d78373cc6401abf995127277cd93b75e5dd7",
+    "dateAudit": "0e7f43394e7e0d27b4dd1cb6344f4b81862d844f",
+    "editorial": "80a50f9f026b1c37f5b68b4433a6d9294db08ad5"
+  },
+  "sealedInputs": {
+    "source": "sha256:da67edb05176105b41f02d14c00c8d1c5a98d114c5810c0e115410d015440f9e",
+    "extraction": "sha256:d41ccbc47c0264807f79894f68eb05559484ba8b3fcd7c4feef5ebaf984c22a7",
+    "dateAudit": "sha256:ed8772cbf2714eca39cd908c6930e289920d48ccce6116ebb2fad35647d1e2f1",
+    "editorial": "sha256:2c5fe5a305440f15f4caff1027bcf974d9061c01d8c11a7b295bcef0b7289675"
+  },
+  "workOrderAudit": {
+    "state": "research-blocked",
+    "sha256": "sha256:ed8772cbf2714eca39cd908c6930e289920d48ccce6116ebb2fad35647d1e2f1",
+    "sha256Verified": true,
+    "affectedItems": 12,
+    "findings": 2
+  },
+  "sourceCoverage": {
+    "sentenceCount": 185,
+    "translatedCount": 185,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshi --chapter 130",
+    "summary": "Scoped person data validation passed for jinshi/130: 1 extraction(s), 94 local people, 497 mentions, 643 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 185,
+      "translatedCount": 185,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerifyCommand": "npm run people:dates:verify -- --book jinshi --chapter 130",
+    "datesVerify": "research-blocked",
+    "dateAuditSummary": "Fresh independent audit after curation ad90978674cf88cd4e1904dfe2f0bcfc49d49148. Read all 185 Chinese units and reviewed all 230 temporal/hint items and all 94 extracted people. The corrected Tianhui interval and removal of imported Fan Ye and Su-family precision are retained. Four people remain deliberately source-insufficient: the Chinese gives Fan Ye only as a historian and gives Ziyou, Dongpo, and Shudang only a family/burial reference. Those four unresolved claims (and their hints) require independently pinned research before audit approval; no extraction mutation is made here.",
+    "editorialDecisionCount": 4,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "packetPeople": 94,
+    "packetItems": 230,
+    "packetUnits": 185
+  },
+  "substantiveFindings": [
+    "Pinned staging inputs at a50a027ba2793c194f1114769516b3731fcb47d9; native scoped validation passed; chronology remains research-blocked with 2 documented finding(s) and 12 distinct held item id(s).",
+    "Fresh independent audit after curation ad90978674cf88cd4e1904dfe2f0bcfc49d49148. Read all 185 Chinese units and reviewed all 230 temporal/hint items and all 94 extracted people. The corrected Tianhui interval and removal of imported Fan Ye and Su-family precision are retained. Four people remain deliberately source-insufficient: the Chinese gives Fan Ye only as a historian and gives Ziyou, Dongpo, and Shudang only a family/burial reference. Those four unresolved claims (and their hints) require independently pinned research before audit approval; no extraction mutation is made here.",
+    "Full-sentence English literal and idiomatic coverage complete on sealed source.",
+    "No concrete changed-evidence chronology repair proposed in owner pass; independent date report bytes preserved unchanged."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "holdId": "finding-1",
+      "itemIds": [
+        "claim-39",
+        "hints-p036",
+        "p036"
+      ],
+      "people": [],
+      "problem": "Fan Ye is named only by 范曄始載之漢史. The chapter has no calendar wording that can support an AD 445 attestation or active-date hint.",
+      "action": "Keep the existing unresolved claim and research-required hint. Obtain and pin independent source evidence before proposing any Western-year value, then conduct a fresh audit.",
+      "preserved": true
+    },
+    {
+      "holdId": "finding-2",
+      "itemIds": [
+        "claim-89",
+        "claim-90",
+        "claim-91",
+        "hints-p086",
+        "hints-p087",
+        "hints-p088",
+        "p086",
+        "p087",
+        "p088"
+      ],
+      "people": [],
+      "problem": "The Su-family material names Ziyou, Dongpo, and Shudang in kinship and burial context, but gives no personal life date. A shared AD 1037–1101 range would falsely transfer one biography chronology to all three.",
+      "action": "Keep the existing unresolved claims and research-required hints. Obtain separately pinned identity and chronology evidence for each person before proposing dates, then conduct a fresh audit.",
+      "preserved": true
+    }
+  ],
+  "distinctItemIds": [
+    "claim-39",
+    "hints-p036",
+    "p036",
+    "claim-89",
+    "claim-90",
+    "claim-91",
+    "hints-p086",
+    "hints-p087",
+    "hints-p088",
+    "p086",
+    "p087",
+    "p088"
+  ],
+  "historicalDateAudit": {
+    "preserved": true,
+    "path": "data/people/date-audits/jinshi/130.json",
+    "contentSha256": "sha256:ed8772cbf2714eca39cd908c6930e289920d48ccce6116ebb2fad35647d1e2f1",
+    "gitBlob": "0e7f43394e7e0d27b4dd1cb6344f4b81862d844f",
+    "overwritten": false,
+    "approved": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "nextGate": "independent-chronology-discharge-or-accept-research-holds",
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; translations-array English coverage scan; npm run people:validate; npm run people:dates:verify; reviewed distinct holds and retained date audit bytes; no canonical edits.",
+    "completedAt": "2026-11-24T16:45:06.304Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 130",
+    "datesVerify": "npm run people:dates:verify -- --book jinshi --chapter 130"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; no sealed input edits."
+}
