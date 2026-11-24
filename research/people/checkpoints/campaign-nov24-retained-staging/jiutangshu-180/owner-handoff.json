@@ -1,0 +1,1747 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "180"
+  },
+  "ownerAgentId": "bc-0d0266f1-68e3-43d1-a588-b82c7850d884",
+  "worker": "cursor-nov24-retained-staging-w9-o2",
+  "idempotencyKey": "f7a291d673a43eac11f503874ab73f81468a43b3a83114a9af2298b9d0018c1a",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jiutangshu-180-0d884",
+  "inputBlobWitness": {
+    "source": "225033d8c2bec3eb50adb60e408478566dcc6d2c",
+    "extraction": "e43b6c8c54dc87733bb6c39f2a503f93b9854838",
+    "dateAudit": "4eff7a9e7b36346beb3b3120306799d7a628b6f3",
+    "editorial": "6a2e02a8c26c8b16a73dd03fc06243ded04f83d8"
+  },
+  "sealedContentSha256": {
+    "source": "sha256:148959860302a40d52e39f68cc9711bb52d7cd5c21004844b1b70bf9eeb76e69",
+    "extraction": "sha256:1d1198c5b080612e3603cec78c8f39e8c35548c5f2abc58e6f28b4aa0e06de4f",
+    "dateAudit": "sha256:247d104b383cae510c380e26db3bb14f29588ca6aeae1a68b6690163df2821ca",
+    "editorial": "sha256:a69223fad4198bdab7ddd424cf83253408f4c939ac5173bc3ed7554046b30956"
+  },
+  "dateAuditWitness": {
+    "state": "needs-revision",
+    "contentSha256": "247d104b383cae510c380e26db3bb14f29588ca6aeae1a68b6690163df2821ca",
+    "findingGroups": 4,
+    "actionableItems": 52,
+    "reviewedAt": "2026-09-28T00:00:00.000Z",
+    "preservedIndependentReport": true,
+    "extractionHashAtAudit": "sha256:d481d9f22f3bdc6512cce3830be08190cc15a03cfc141dfa83f30f8cf1c68849",
+    "currentExtractionHash": "sha256:d481d9f22f3bdc6512cce3830be08190cc15a03cfc141dfa83f30f8cf1c68849"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 264,
+    "missingTranslation": 0,
+    "emptyEnglishField": 0,
+    "bothFieldsPresent": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "peopleValidate": {
+      "passed": true,
+      "exitCode": 0,
+      "summary": "Scoped person data validation passed for jiutangshu/180: 1 extraction(s), 110 local people, 532 mentions, 1311 claims, 0 proposed repair(s), 22 applied repair(s), 23 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs /agent/repos/records-of-the-grand-historian/data/people/extractions/jiutangshu/180.json",
+      "summary": "data/people/extractions/jiutangshu/180.json: ok (110 people, 532 mentions, 1311 claims, 632 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiutangshu --chapter 180",
+      "exitCode": 1,
+      "audited": false,
+      "status": "needs-revision",
+      "payload": {
+        "total": 1,
+        "counts": {
+          "needs-revision": 1
+        },
+        "chapters": [
+          {
+            "book": "jiutangshu",
+            "chapter": "180",
+            "status": "needs-revision",
+            "auditVersion": 1,
+            "reviewedAt": "2026-09-28T00:00:00.000Z",
+            "findings": 4
+          }
+        ]
+      }
+    },
+    "localPeople": 110
+  },
+  "substantiveFindings": "Full Chinese read (264 units); literal and idiomatic English complete on all units. Scoped extraction validate ok; people:validate passed. Date audit status needs-revision; native summary: Independent full-source review read all 264 Chinese units, all 338 temporal/active-hint items, and all 110 people. It found 27 unsupported personal chronology claims and 25 matching malformed active-date hints: literary allusions, undated inscription-title references, owner/relat No definite English omission or mistranslation identified in this owner pass. Retained independent date report bytes unchanged; scoped chronology proposals follow native finding actions only.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "findingIndex": 1,
+      "problem": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people.",
+      "action": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+      "itemIds": [
+        "claim-381",
+        "claim-384",
+        "claim-389",
+        "claim-403",
+        "claim-411",
+        "claim-415",
+        "hints-p052",
+        "hints-p053",
+        "hints-p054",
+        "hints-p055",
+        "hints-p057",
+        "hints-p058"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-381",
+          "personId": "p052",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The poem’s “Zhizhi” is a Han-era comparison, not a dated event in Zhizhi’s life; its BC 36 point date is unsupported by this unit.",
+          "evidence": [
+            {
+              "unit": "s0245",
+              "quote": "歸計強漢，郅支嫚辭；"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "郅支 (Han-era allusion)"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 36,
+              "precision": "year"
+            }
+          },
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "郅支 (Han-era allusion)"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people."
+        },
+        {
+          "itemId": "claim-384",
+          "personId": "p053",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The inscription’s imperial title is not dated in the cited lines; the AD 841–846 interval is imported rather than stated.",
+          "evidence": [
+            {
+              "unit": "s0250",
+              "quote": "皇赫斯怒，羽檄征兵；"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "inscription campaign narrative"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 846,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "inscription campaign narrative"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people."
+        },
+        {
+          "itemId": "claim-389",
+          "personId": "p054",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The inscription narrative does not state an AD 841–846 date for Zhongwu; the broad interval is unsupported in these cited lines.",
+          "evidence": [
+            {
+              "unit": "s0253",
+              "quote": "漁陽突騎，燕歌壯氣，赳赳元戎，眈眈虎視。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "inscription campaign narrative"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 846,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "inscription campaign narrative"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people."
+        },
+        {
+          "itemId": "claim-403",
+          "personId": "p055",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The inscription calls Zhongwu’s younger brother to the campaign but supplies no Western endpoint for his activity; AD 841–846 is inferred.",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "金鼓誓眾，幹旄蔽地，爰命其弟，屬之大事。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "inscription campaign narrative"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 846,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "inscription campaign narrative"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people."
+        },
+        {
+          "itemId": "claim-411",
+          "personId": "p057",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The inscription’s captured chanyu is not dated in the cited line; the AD 841–846 interval is not source-stated.",
+          "evidence": [
+            {
+              "unit": "s0261",
+              "quote": "終取單於，系之徽索。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "inscription capture of the chanyu"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 846,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "inscription capture of the chanyu"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people."
+        },
+        {
+          "itemId": "claim-415",
+          "personId": "p058",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The stele’s composition is described but its cited line gives no date for Li Deyu; the AD 841–846 interval is inferred.",
+          "evidence": [
+            {
+              "unit": "s0264",
+              "quote": "儒臣篆美，刊石垂鴻。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "stele inscription composition"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 846,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "stele inscription composition"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "Poetic allusion and inscription titles were converted into personal Western chronology although the cited Chinese lines provide no date for the referenced people."
+        },
+        {
+          "itemId": "hints-p052",
+          "personId": "p052",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0245",
+              "quote": "歸計強漢，郅支嫚辭；"
+            }
+          ],
+          "before": [
+            "BC 36"
+          ],
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p053",
+          "personId": "p053",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0250",
+              "quote": "皇赫斯怒，羽檄征兵；"
+            }
+          ],
+          "before": [
+            "AD 841-846"
+          ],
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p054",
+          "personId": "p054",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0119",
+              "quote": "仲武歷官至司徒、中書門下平章事。"
+            }
+          ],
+          "before": [
+            "AD 841-846",
+            "AD 847-860"
+          ],
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p055",
+          "personId": "p055",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0254",
+              "quote": "金鼓誓眾，幹旄蔽地，爰命其弟，屬之大事。"
+            }
+          ],
+          "before": [
+            "AD 841-846"
+          ],
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p057",
+          "personId": "p057",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0261",
+              "quote": "終取單於，系之徽索。"
+            }
+          ],
+          "before": [
+            "AD 841-846"
+          ],
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p058",
+          "personId": "p058",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0264",
+              "quote": "儒臣篆美，刊石垂鴻。"
+            }
+          ],
+          "before": [
+            "AD 841-846"
+          ],
+          "direction": "Remove unsupported date containers and matching active-date components; retain source-backed allusion, title, relationship, and inscription content as explicitly undated attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 2,
+      "problem": "One-sided relative chronology and another person’s dated office were converted into exact or broad personal activity/death dates.",
+      "action": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+      "itemIds": [
+        "claim-522",
+        "claim-524",
+        "claim-526",
+        "claim-537",
+        "claim-543",
+        "hints-p069",
+        "hints-p070",
+        "hints-p072",
+        "hints-p073"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-522",
+          "personId": "p069",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "“Died before Zhang Yunshen” is one-sided relative chronology, not a death in AD 872; the exact point date is unsupported.",
+          "evidence": [
+            {
+              "unit": "s0151",
+              "quote": "簡真，幽府左司馬，先允伸卒。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "先允伸卒"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 872,
+              "precision": "year"
+            }
+          },
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "先允伸卒"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "One-sided relative chronology and another person’s dated office were converted into exact or broad personal activity/death dates."
+        },
+        {
+          "itemId": "claim-524",
+          "personId": "p069",
+          "predicate": "death",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The source gives only that Jianzhen died before Zhang Yunshen, so a point death date of AD 872 invents precision.",
+          "evidence": [
+            {
+              "unit": "s0151",
+              "quote": "簡真，幽府左司馬，先允伸卒。"
+            }
+          ],
+          "before": {
+            "dateContext": {
+              "sourceDate": {
+                "text": "先允伸卒"
+              },
+              "westernYear": {
+                "era": "AD",
+                "year": 872,
+                "precision": "year"
+              }
+            },
+            "statement": "died before Zhang Yunshen"
+          },
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": {
+            "dateContext": {
+              "sourceDate": {
+                "text": "先允伸卒"
+              },
+              "unresolved": true,
+              "unresolvedReason": "Retained Chinese date witness without unsupported Western conversion"
+            },
+            "statement": "died before Zhang Yunshen",
+            "undatedSourceAttestation": true
+          },
+          "note": "One-sided relative chronology and another person’s dated office were converted into exact or broad personal activity/death dates."
+        },
+        {
+          "itemId": "claim-526",
+          "personId": "p070",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The undated statement that Zhang Yunshen had fourteen sons contains no event for Jianshou in AD 872; the inherited point year is unsupported.",
+          "evidence": [
+            {
+              "unit": "s0152",
+              "quote": "簡壽，右領軍衛大將軍。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "有子十四人"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 872,
+              "precision": "year"
+            }
+          },
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "有子十四人"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "One-sided relative chronology and another person’s dated office were converted into exact or broad personal activity/death dates."
+        },
+        {
+          "itemId": "claim-537",
+          "personId": "p072",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The Xiantong-mid dating in s0155 applies to Zhang Gongsu’s office, not to Zhang Yunshen’s life; the interval is misattributed.",
+          "evidence": [
+            {
+              "unit": "s0156",
+              "quote": "事張允伸，累遷至平州刺史。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "咸通中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 860,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 873,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "咸通中"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "One-sided relative chronology and another person’s dated office were converted into exact or broad personal activity/death dates."
+        },
+        {
+          "itemId": "claim-543",
+          "personId": "p073",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The succession sequence names Zhang Jianhui but gives no Xiantong-wide date for him; the interval is inferred from another person’s dated office.",
+          "evidence": [
+            {
+              "unit": "s0157",
+              "quote": "允伸卒，子簡會權主留後事，公素領本郡兵赴焉。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "咸通中"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 860,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 873,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": {
+            "sourceDate": {
+              "text": "咸通中"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "One-sided relative chronology and another person’s dated office were converted into exact or broad personal activity/death dates."
+        },
+        {
+          "itemId": "hints-p069",
+          "personId": "p069",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0151",
+              "quote": "簡真，幽府左司馬，先允伸卒。"
+            }
+          ],
+          "before": [
+            "AD 872"
+          ],
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p070",
+          "personId": "p070",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0152",
+              "quote": "簡壽，右領軍衛大將軍。"
+            }
+          ],
+          "before": [
+            "AD 872"
+          ],
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p072",
+          "personId": "p072",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0156",
+              "quote": "事張允伸，累遷至平州刺史。"
+            }
+          ],
+          "before": [
+            "AD 860-873"
+          ],
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p073",
+          "personId": "p073",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0157",
+              "quote": "允伸卒，子簡會權主留後事，公素領本郡兵赴焉。"
+            }
+          ],
+          "before": [
+            "AD 860-873"
+          ],
+          "direction": "Remove inherited point years and intervals. Preserve Jianzhen’s before-Zhang-Yunshen wording without inventing an endpoint; retain undated sibling, ruler, and succession attestations.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 3,
+      "problem": "An undated reference to Zhang Zhongwu’s defeat of the Uyghurs was converted into AD 842–843 activity intervals for both named people.",
+      "action": "Remove unsupported intervals and matching active-date components while retaining the undated source relationship or event reference.",
+      "itemIds": [
+        "claim-580",
+        "claim-607",
+        "hints-p075",
+        "hints-p077"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-580",
+          "personId": "p075",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "“When Zhang Zhongwu defeated the Uyghurs” supplies no year range for Li Maoxun; AD 842–843 is unstated in the cited Chinese.",
+          "evidence": [
+            {
+              "unit": "s0162",
+              "quote": "張仲武破回鶻，可舉父茂勛與本部侯王降焉。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "張仲武破回鶻"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 842,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 843,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported intervals and matching active-date components while retaining the undated source relationship or event reference.",
+          "after": {
+            "sourceDate": {
+              "text": "張仲武破回鶻"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "An undated reference to Zhang Zhongwu’s defeat of the Uyghurs was converted into AD 842–843 activity intervals for both named people."
+        },
+        {
+          "itemId": "claim-607",
+          "personId": "p077",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The reference to Zhongwu’s defeat of the Uyghurs supplies no year range for Zhongwu; AD 842–843 is unstated in the cited Chinese.",
+          "evidence": [
+            {
+              "unit": "s0162",
+              "quote": "張仲武破回鶻，可舉父茂勛與本部侯王降焉。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "張仲武破回鶻"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 842,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 843,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove unsupported intervals and matching active-date components while retaining the undated source relationship or event reference.",
+          "after": {
+            "sourceDate": {
+              "text": "張仲武破回鶻"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "An undated reference to Zhang Zhongwu’s defeat of the Uyghurs was converted into AD 842–843 activity intervals for both named people."
+        },
+        {
+          "itemId": "hints-p075",
+          "personId": "p075",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0160",
+              "quote": "無幾，李茂勛奪其位，公素歸闕，貶復州司戶參軍。"
+            }
+          ],
+          "before": [
+            "AD 842-843",
+            "AD 871-873"
+          ],
+          "direction": "Remove unsupported intervals and matching active-date components while retaining the undated source relationship or event reference.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p077",
+          "personId": "p077",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0162",
+              "quote": "張仲武破回鶻，可舉父茂勛與本部侯王降焉。"
+            }
+          ],
+          "before": [
+            "AD 842-843"
+          ],
+          "direction": "Remove unsupported intervals and matching active-date components while retaining the undated source relationship or event reference.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    },
+    {
+      "findingIndex": 4,
+      "problem": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations.",
+      "action": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+      "itemIds": [
+        "claim-381",
+        "claim-819",
+        "claim-820",
+        "claim-821",
+        "claim-822",
+        "claim-823",
+        "claim-824",
+        "claim-825",
+        "claim-826",
+        "claim-827",
+        "claim-828",
+        "claim-829",
+        "claim-830",
+        "claim-831",
+        "claim-832",
+        "hints-p098",
+        "hints-p099",
+        "hints-p100",
+        "hints-p101",
+        "hints-p102",
+        "hints-p103",
+        "hints-p104",
+        "hints-p105",
+        "hints-p106",
+        "hints-p107",
+        "hints-p108",
+        "hints-p109",
+        "hints-p110"
+      ],
+      "proposals": [
+        {
+          "itemId": "claim-381",
+          "personId": "p052",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The poem’s “Zhizhi” is a Han-era comparison, not a dated event in Zhizhi’s life; its BC 36 point date is unsupported by this unit.",
+          "evidence": [
+            {
+              "unit": "s0245",
+              "quote": "歸計強漢，郅支嫚辭；"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "郅支 (Han-era allusion)"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 36,
+              "precision": "year"
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "郅支 (Han-era allusion)"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-819",
+          "personId": "p098",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The historian’s allusion to Tian Guang is a comparison, not an event dated in Tian Guang’s life; the BC interval is imported.",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "田光、荊卿"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "BC",
+                "year": 230,
+                "precision": "year"
+              },
+              "end": {
+                "era": "BC",
+                "year": 227,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "田光、荊卿"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-820",
+          "personId": "p099",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The historian’s allusion to Jing Qing is a comparison, not an event dated in Jing Ke’s life; BC 227 is imported.",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "田光、荊卿"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 227,
+              "precision": "year"
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "田光、荊卿"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-821",
+          "personId": "p100",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The historian’s allusion to An Lushan is a comparison, not an event dated in An Lushan’s life; the AD interval is imported.",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "祿山、思明"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 755,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 757,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "祿山、思明"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-822",
+          "personId": "p101",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The historian’s allusion to Shi Siming is a comparison, not an event dated in Shi Siming’s life; the AD interval is imported.",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "祿山、思明"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 757,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 761,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "祿山、思明"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-823",
+          "personId": "p102",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Li Zaiyi gives no date or endpoint for his activity; AD 826–831 is imported.",
+          "evidence": [
+            {
+              "unit": "s0230",
+              "quote": "若李載義、張仲武、張允伸因利乘便，獲領旌旗，以仁守之，恭順朝旨，亦足多也。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "李載義"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 826,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 831,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "李載義"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-824",
+          "personId": "p103",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Zhang Zhongwu gives no date or endpoint for his activity; AD 841–849 is imported.",
+          "evidence": [
+            {
+              "unit": "s0230",
+              "quote": "若李載義、張仲武、張允伸因利乘便，獲領旌旗，以仁守之，恭順朝旨，亦足多也。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "張仲武"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 849,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "張仲武"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-825",
+          "personId": "p104",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Zhang Yunshen gives no date or endpoint for his activity; AD 850–872 is imported.",
+          "evidence": [
+            {
+              "unit": "s0230",
+              "quote": "若李載義、張仲武、張允伸因利乘便，獲領旌旗，以仁守之，恭順朝旨，亦足多也。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "張允伸"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 850,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 872,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "張允伸"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-826",
+          "personId": "p105",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Zhu Kerong gives no date or endpoint for his activity; AD 821–826 is imported.",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "硃克融"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 821,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 826,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "硃克融"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-827",
+          "personId": "p106",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Yang Zhicheng gives no date or endpoint for his activity; AD 831–834 is imported.",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "楊志誠"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 831,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 834,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "楊志誠"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-828",
+          "personId": "p107",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Shi Yuanzhong gives no date or endpoint for his activity; AD 834–841 is imported.",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "史元忠"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 834,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 841,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "史元忠"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-829",
+          "personId": "p108",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Zhang Gongsu gives no date or endpoint for his activity; AD 872–875 is imported.",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "張公素"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 872,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 875,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "張公素"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-830",
+          "personId": "p109",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Li Keju gives no date or endpoint for his activity; AD 876–885 is imported.",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "李可舉"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 876,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 885,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "李可舉"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-831",
+          "personId": "p110",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "The verdict’s bare mention of Li Quanzhong gives no date or endpoint for his activity; AD 885–886 is imported.",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "李全忠"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 885,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 886,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "李全忠"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "claim-832",
+          "personId": "p110",
+          "predicate": "attestation",
+          "eventOwnership": "The cited source is being checked for whether it supports the encoded personal chronology.",
+          "reason": "“The Li father and sons, three generations, perished in ten years” is a collective retrospective statement, not a dated attestation of Li Quanzhong’s life.",
+          "evidence": [
+            {
+              "unit": "s0223",
+              "quote": "李氏父子三葉，十年而亡。"
+            }
+          ],
+          "before": {
+            "sourceDate": {
+              "text": "李氏父子三葉，十年而亡"
+            },
+            "westernInterval": {
+              "start": {
+                "era": "AD",
+                "year": 885,
+                "precision": "year"
+              },
+              "end": {
+                "era": "AD",
+                "year": 895,
+                "precision": "year"
+              }
+            }
+          },
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": {
+            "sourceDate": {
+              "text": "李氏父子三葉，十年而亡"
+            },
+            "undatedSourceAttestation": true
+          },
+          "note": "The final historian’s commentary uses exemplary and retrospective names without dated occurrences, but the extraction imports external life/activity ranges into their attestations."
+        },
+        {
+          "itemId": "hints-p098",
+          "personId": "p098",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": [
+            "BC 230-227"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p099",
+          "personId": "p099",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": [
+            "BC 227"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p100",
+          "personId": "p100",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": [
+            "AD 755-757"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p101",
+          "personId": "p101",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0227",
+              "quote": "遠則慕田光、荊卿之義，近則染祿山、思明之風。"
+            }
+          ],
+          "before": [
+            "AD 757-761"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p102",
+          "personId": "p102",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0230",
+              "quote": "若李載義、張仲武、張允伸因利乘便，獲領旌旗，以仁守之，恭順朝旨，亦足多也。"
+            }
+          ],
+          "before": [
+            "AD 826-831"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p103",
+          "personId": "p103",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0230",
+              "quote": "若李載義、張仲武、張允伸因利乘便，獲領旌旗，以仁守之，恭順朝旨，亦足多也。"
+            }
+          ],
+          "before": [
+            "AD 841-849"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p104",
+          "personId": "p104",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0230",
+              "quote": "若李載義、張仲武、張允伸因利乘便，獲領旌旗，以仁守之，恭順朝旨，亦足多也。"
+            }
+          ],
+          "before": [
+            "AD 850-872"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p105",
+          "personId": "p105",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": [
+            "AD 821-826"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p106",
+          "personId": "p106",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": [
+            "AD 831-834"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p107",
+          "personId": "p107",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": [
+            "AD 834-841"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p108",
+          "personId": "p108",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": [
+            "AD 872-875"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p109",
+          "personId": "p109",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": [
+            "AD 876-885"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        },
+        {
+          "itemId": "hints-p110",
+          "personId": "p110",
+          "predicate": "active-date-hints",
+          "eventOwnership": "The active-date hint is being checked against the chapter’s direct Chinese evidence.",
+          "reason": "This active-date hint includes a Western date or interval imported from an allusion, title, relative sequence, or retrospective mention rather than a dated personal event in the cited source; remove only the unsupported component(s).",
+          "evidence": [
+            {
+              "unit": "s0231",
+              "quote": "如硃克融、楊志誠、史元忠、張公素、李可舉、李全忠，以不仁得之，靡更曩志。"
+            }
+          ],
+          "before": [
+            "AD 885-886"
+          ],
+          "direction": "Remove imported Western dates and active-date hints. Keep commentary mentions as explicitly undated retrospective or comparative evidence; do not infer personal life chronology from the verdict.",
+          "after": [],
+          "note": "Rebuild active-date hints after underlying claim repairs; remove inherited unsupported Western components."
+        }
+      ]
+    }
+  ],
+  "distinctHolds": [
+    {
+      "kind": "date-audit-needs-revision",
+      "summary": "Native date audit retains 4 finding group(s) and 52 actionable scoped item(s).",
+      "actionableItemIds": [
+        "claim-381",
+        "claim-384",
+        "claim-389",
+        "claim-403",
+        "claim-411",
+        "claim-415",
+        "hints-p052",
+        "hints-p053",
+        "hints-p054",
+        "hints-p055",
+        "hints-p057",
+        "hints-p058",
+        "claim-522",
+        "claim-524",
+        "claim-526",
+        "claim-537",
+        "claim-543",
+        "hints-p069",
+        "hints-p070",
+        "hints-p072",
+        "hints-p073",
+        "claim-580",
+        "claim-607",
+        "hints-p075",
+        "hints-p077",
+        "claim-819",
+        "claim-820",
+        "claim-821",
+        "claim-822",
+        "claim-823",
+        "claim-824",
+        "claim-825",
+        "claim-826",
+        "claim-827",
+        "claim-828",
+        "claim-829",
+        "claim-830",
+        "claim-831",
+        "claim-832",
+        "hints-p098",
+        "hints-p099",
+        "hints-p100",
+        "hints-p101",
+        "hints-p102",
+        "hints-p103",
+        "hints-p104",
+        "hints-p105",
+        "hints-p106",
+        "hints-p107",
+        "hints-p108",
+        "hints-p109",
+        "hints-p110"
+      ],
+      "preservedAuditBytes": true,
+      "auditContentSha256": "247d104b383cae510c380e26db3bb14f29588ca6aeae1a68b6690163df2821ca"
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiutangshu --chapter 180",
+    "validateDates": "npm run people:dates:verify -- --book jiutangshu --chapter 180"
+  },
+  "notes": "Owner handoff preserves sealed date-audit bytes; proposals carry forward native finding actions without re-approval. [CF-Pages-Skip]"
+}
