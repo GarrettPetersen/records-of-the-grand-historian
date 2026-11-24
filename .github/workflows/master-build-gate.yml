@@ -46,7 +46,7 @@ jobs:
           import {loadCurrentIdentityEvidence} from './scripts/lib/people-identity-evidence.mjs';
           import {chapterIdentityInputs,validateChapterIdentityBundle} from './scripts/lib/people-chapter-identity.mjs';
           const {SOURCE,REGISTRY,OUT}=process.env, registry=await readIdentityDossierRegistry(REGISTRY,new Map());
-          const expected=[{"key":"jinshu/031","hash":"7dbdacc997e8ad924b2453e573add77800a36ee4543cf5f72dd048768fe8c3ee","cases":257},{"key":"songshu/004","hash":"a712ec82f13287a63f156154c788419577cc30272f9f9759d4e3a86ea00b62f8"}];
+          const expected=[{"key":"jinshu/031","hash":"7dbdacc997e8ad924b2453e573add77800a36ee4543cf5f72dd048768fe8c3ee","cases":257},{"key":"songshu/004","hash":"a712ec82f13287a63f156154c788419577cc30272f9f9759d4e3a86ea00b62f8","cases":30}];
           const m=loadProperNounMatcher(), view={localPersonMap:registry.localPersonMap,canonicalByKnownId:registry.canonicalByKnownId};
           try{
             for(const x of expected){
