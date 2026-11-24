@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "085"
+  },
+  "ownerAgentId": "bc-a70be32e-b8ab-4b27-912b-4d5dbaf91cd7",
+  "workerId": "cursor-nov24-retained-staging-w14-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "36712f8b1737b075ef53fcad01e803a17a9f29cdbf565b048d4a09eb4c66e49b",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-327-91cd7",
+  "extractionBytes": 108235,
+  "inputBlobWitness": {
+    "source": "47bbb618376da4c73e62d1147fe62107cbdf90e2",
+    "extraction": "dca8c8e9fe662e6631feafbc386930ee3f19adc0",
+    "editorial": "c3ae739ebf949116ab556792d1199c1d78817091",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:695ad6b72240a8c1393e5356aaf1f06aeb808909684f442e851ca5956404cc81",
+    "extraction": "sha256:ef5d11450b3ac488287be1ff4173ce191e0401ac06dacc1f185f4111cfacbd5e",
+    "editorial": "sha256:8616852d7cd2c8f3c280fd1db56b9a8f619ce837092f2e0314c7ff0079735cad",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "chineseUnits": 231,
+    "translatedCount": 231,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "peopleCount": 78,
+    "rawFileSha256": "sha256:ef5d11450b3ac488287be1ff4173ce191e0401ac06dacc1f185f4111cfacbd5e",
+    "packetExtractionHash": "sha256:7c998326241f25021232ff670564c1548e93710d70a303cf158aabbe828c5032",
+    "packetSourceHash": "sha256:c68cefbfe4237eacd02c733df3ec39fab9f9006fd24a70c6bf655a975b126f68",
+    "noReextraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedDecisionCount": 6,
+    "status": "reviewed-with-applied-proposals",
+    "noOwnerEdits": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jiutangshu-085/sealed-native-date-packet.json",
+    "contentSha256": "sha256:9ca1a66c430cfe889ea10d762e11659b96c72fd1b8422d7968fe404ed89800c7",
+    "itemCount": 206,
+    "peopleInPacket": 78,
+    "sourceUnitsInPacket": 231,
+    "packetSourceHash": "sha256:c68cefbfe4237eacd02c733df3ec39fab9f9006fd24a70c6bf655a975b126f68",
+    "packetExtractionHash": "sha256:7c998326241f25021232ff670564c1548e93710d70a303cf158aabbe828c5032"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book jiutangshu --chapter 085",
+    "peopleValidateSummary": "Scoped person data validation passed for jiutangshu/085: 1 extraction(s), 78 local people, 405 mentions, 530 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book jiutangshu --chapter 085",
+      "findings": 0,
+      "note": "Automated scan only; not independent chronology approval."
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiutangshu --chapter 085",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "workOrderAuditState": "no-native-date-report"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "instruction": "Independent reviewer reads sealed-native-date-packet.json at pinned staging, reviews every packet item against Chinese/English source units and extraction claims, then records native report via npm run people:dates:record -- --report <path>.",
+      "forbidSelfApproval": true
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-after-chronology",
+      "note": "Corpus identity milestones require audited chronology; no separate owner identity transport in this retained-staging pass."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "substantiveFindings": "Pinned git blobs at staging 20b8d0e3 witness-verified. Full chapter read: 231 Chinese sentences with paired literal and idiomatic English on all units. Retained prompt v7 extraction (78 people) and 6 accepted editorial repair(s) unchanged. people:validate passes; people:dates:scan reports zero automated defects. No definite English omission, source contradiction, or owner chronology repair in this pass. Native independent date report remains absent (un-audited).",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse 20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca:data/jiutangshu/085.json data/people/extractions/jiutangshu/085.json data/people/editorial-decisions/jiutangshu/085.json",
+    "validateChapter": "npm run people:validate -- --book jiutangshu --chapter 085",
+    "datesPacket": "npm run people:dates:packet -- --book jiutangshu --chapter 085 --out research/people/checkpoints/campaign-nov24-retained-staging/jiutangshu-085/sealed-native-date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book jiutangshu --chapter 085",
+    "independentDateRecord": "npm run people:dates:record -- --report <independent-review-report.json>"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}

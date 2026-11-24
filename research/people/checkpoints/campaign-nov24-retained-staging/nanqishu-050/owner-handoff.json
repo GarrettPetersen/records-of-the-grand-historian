@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "050"
+  },
+  "ownerAgentId": "bc-a70be32e-b8ab-4b27-912b-4d5dbaf91cd7",
+  "workerId": "cursor-nov24-retained-staging-w14-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "36712f8b1737b075ef53fcad01e803a17a9f29cdbf565b048d4a09eb4c66e49b",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-327-91cd7",
+  "extractionBytes": 107556,
+  "inputBlobWitness": {
+    "source": "3f8596bf2486bc97535b3eaa7a6d56ad47685c83",
+    "extraction": "e40a60a814e1595e90ca38595d3c77c50a283157",
+    "editorial": "6bc34892350e3765d9968183416b21a30a4b6282",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:e8cee3a040cfe6c2778ef4e6b60334f8cff165bf7e4121dffdb077970932311a",
+    "extraction": "sha256:767beece500d56d03e6051a78ede1caa8465374c825f105ecf4658bf562daad6",
+    "editorial": "sha256:2086dec97fd102c95ddc2a00be75f37fccd587a219a1a0e75ee83b3a4f3be926",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "chineseUnits": 119,
+    "translatedCount": 119,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "peopleCount": 46,
+    "rawFileSha256": "sha256:767beece500d56d03e6051a78ede1caa8465374c825f105ecf4658bf562daad6",
+    "packetExtractionHash": "sha256:ee68fe493f2aaa772ef8631ed41654e64108f04a0e2572ac18055f02867c572b",
+    "packetSourceHash": "sha256:5c7e64e1dea5146e36fd87707aa6bf647b66ebfae1136498164c8da0955aff65",
+    "noReextraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedDecisionCount": 4,
+    "status": "reviewed-with-applied-proposals",
+    "noOwnerEdits": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-050/sealed-native-date-packet.json",
+    "contentSha256": "sha256:eb7d310d58b3f2ed3140e103d6732d4b61a6de2675482a6639a3fa6dec4781e2",
+    "itemCount": 167,
+    "peopleInPacket": 46,
+    "sourceUnitsInPacket": 119,
+    "packetSourceHash": "sha256:5c7e64e1dea5146e36fd87707aa6bf647b66ebfae1136498164c8da0955aff65",
+    "packetExtractionHash": "sha256:ee68fe493f2aaa772ef8631ed41654e64108f04a0e2572ac18055f02867c572b"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book nanqishu --chapter 050",
+    "peopleValidateSummary": "Scoped person data validation passed for nanqishu/050: 1 extraction(s), 46 local people, 283 mentions, 509 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s).",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book nanqishu --chapter 050",
+      "findings": 0,
+      "note": "Automated scan only; not independent chronology approval."
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 050",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "workOrderAuditState": "no-native-date-report"
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "instruction": "Independent reviewer reads sealed-native-date-packet.json at pinned staging, reviews every packet item against Chinese/English source units and extraction claims, then records native report via npm run people:dates:record -- --report <path>.",
+      "forbidSelfApproval": true
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-after-chronology",
+      "note": "Corpus identity milestones require audited chronology; no separate owner identity transport in this retained-staging pass."
+    }
+  },
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "substantiveFindings": "Pinned git blobs at staging 20b8d0e3 witness-verified. Full chapter read: 119 Chinese sentences with paired literal and idiomatic English on all units. Retained prompt v7 extraction (46 people) and 4 accepted editorial repair(s) unchanged. people:validate passes; people:dates:scan reports zero automated defects. No definite English omission, source contradiction, or owner chronology repair in this pass. Native independent date report remains absent (un-audited).",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse 20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca:data/nanqishu/050.json data/people/extractions/nanqishu/050.json data/people/editorial-decisions/nanqishu/050.json",
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 050",
+    "datesPacket": "npm run people:dates:packet -- --book nanqishu --chapter 050 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-050/sealed-native-date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 050",
+    "independentDateRecord": "npm run people:dates:record -- --report <independent-review-report.json>"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
