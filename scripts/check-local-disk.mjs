@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { LOW_DISK_BYTES } from './lib/local-disk-maintenance.mjs';
+import { inspectPeopleRegistryStorage } from './lib/people-storage-policy.mjs';
 
 export const RESERVE_BYTES = 30n * 1024n ** 3n;
 export const SWAP_WARNING_BYTES = 4n * 1024n ** 3n;
@@ -52,11 +54,12 @@ export function inspectMemory(platform = process.platform, execute = execFileSyn
     errors: [],
   };
   const read = (command, args) => execute(command, args, { encoding: 'utf8', timeout: 5000, maxBuffer: 2 * 1024 * 1024 });
-  const swapUsedBytes = parseMacSwapUsage(read('sysctl', ['vm.swapusage']));
+  // launchd services have a minimal PATH. These macOS tools have stable system paths.
+  const swapUsedBytes = parseMacSwapUsage(read('/usr/sbin/sysctl', ['vm.swapusage']));
   // Executable names only: never collect process arguments, environment or credentials.
-  const codexProcesses = parseCodexResidentUsage(read('ps', ['-axo', 'pid=,rss=,comm=']));
+  const codexProcesses = parseCodexResidentUsage(read('/bin/ps', ['-axo', 'pid=,rss=,comm=']));
   const codexResidentBytes = codexProcesses.reduce((total, row) => total + BigInt(row.residentBytes), 0n);
-  const rawPressure = read('sysctl', ['-n', 'kern.memorystatus_vm_pressure_level']).trim();
+  const rawPressure = read('/usr/sbin/sysctl', ['-n', 'kern.memorystatus_vm_pressure_level']).trim();
   if (!/^[124]$/.test(rawPressure)) throw new Error('Unrecognized macOS memory pressure measurement');
   const pressureLevel = Number(rawPressure);
   return {
@@ -94,12 +97,24 @@ export function inspectLocalDisk(repoRoot) {
       return { path: checkout, hasPublic: fs.existsSync(path.join(checkout, 'public')) };
     });
   const memory = inspectMemory();
+  // Tiny external test repositories do not carry this project's policy. A real
+  // people checkout must carry it, and never silently accepts unbudgeted copies.
+  const registryStorage = fs.existsSync(path.join(primary, 'data/people/config.json'))
+    ? inspectPeopleRegistryStorage(primary) : { fullRegistries: 0, fullRegistryBytes: 0, errors: [] };
   return {
     primary, availableBytes: availableBytes.toString(),
     availableGiB: Number(availableBytes / (1024n ** 2n)) / 1024,
     reserveGiB: 30, worktrees,
+    diskMaintenance: {
+      warningGiB: 35,
+      required: availableBytes < LOW_DISK_BYTES,
+      command: 'node scripts/maintain-local-disk.mjs run',
+      procedure: 'LOCAL_DISK_STRATEGY.md#automatic-low-disk-procedure',
+      guardRemainsReadOnly: true,
+    },
     memory,
-    errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }), ...memory.errors],
+    registryStorage,
+    errors: [...evaluateDiskPolicy({ availableBytes, primary, worktrees }), ...memory.errors, ...registryStorage.errors],
     scope: 'Registered worktrees only; external clones and service runtimes must also be checked by the host.',
   };
 }

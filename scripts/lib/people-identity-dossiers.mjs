@@ -1,3 +1,6 @@
+import {inferredSpouseWitness} from './people-inferred-spouse-witness.mjs';
+import {inferredIntermediaryWitness} from './people-inferred-intermediary-witness.mjs';
+import {inferredPaternalWitness} from './people-inferred-paternal-witness.mjs';
 import { peopleDigest } from './people-identity-seal.mjs';
 import { chineseVariantComparisonKey } from './people-chinese-variants.mjs';
 import { identityNameKeyState } from './people-resolution.mjs';
@@ -224,7 +227,7 @@ export function validateDossierIdentityEvidence(index, plan, report, sourceUnits
       const person = index.localPeople.get(witness.localId), sourceId = `${witness.book}:${witness.chapter}:${witness.unitId}`;
       requireValue(person && (caseMembers.has(witness.localId) || witness.localId === item.canonicalMembership.anchorLocalId || item.candidateDossiers.some(dossier =>
         index.localPersonMap.get(witness.localId) === index.canonicalByKnownId.get(dossier.id))), 'Witness person is outside this case');
-      assertDossierPrimaryWitness(witness, person, sourceUnits, nameKeysForPerson, nameEvidence);
+      assertDossierPrimaryWitness(witness, person, sourceUnits, nameKeysForPerson, nameEvidence,index.localPeople,index.localPersonMap);
       witnessedMembers.add(witness.localId); witnessedCandidates.add(index.localPersonMap.get(witness.localId));
     }
     requireValue(witnessedMembers.has(item.canonicalMembership.anchorLocalId), 'The accepted canonical dossier requires a primary identity-anchor witness');
@@ -241,11 +244,86 @@ export function validateDossierIdentityEvidence(index, plan, report, sourceUnits
     grantsNewMerges: false, grantsNewSeparations: false, chronologyApproval: false, sourceEditorialApproval: false, publicationApproval: false };
 }
 
-export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKeysForPerson, nameEvidence = new Map()) {
-  requireValue(hasOnlyKeys(witness, ['localId', 'book', 'chapter', 'unitId', 'quote']), 'Unexpected witness fields');
-  requireValue(person && person.localId === witness.localId, `Missing current primary witness person ${witness.localId}`);
-  const sourceId = `${witness.book}:${witness.chapter}:${witness.unitId}`, quote = witness.quote, text = sourceUnits.get(sourceId);
-      if (person && !nameEvidence.has(witness.localId)) {
+// 兄子 individuates an unnamed elder brother as the named nephew's father.
+// Native extraction permits this intermediary with an explicit mentionException;
+// it must not acquire an invented literal name or a fabricated direct mention.
+function inferredElderBrotherFatherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence){
+  const names=person.claims.filter(c=>c.predicate==='name');
+  if(typeof person.mentionException!=='string'||!person.mentionException.trim()||
+    (person.mentions??[]).length||!names.length||!names.every(c=>c.certainty==='strongly-inferred'&&c.value.kind==='descriptive-kinship')||
+    typeof quote!=='string'||!quote.includes('兄子')||!(sourcePeople instanceof Map))return false;
+  const relations=person.claims.filter(c=>c.subject===person.localId&&c.predicate==='family-relationship'&&
+    c.certainty==='strongly-inferred'&&c.evidence.includes(sourceId));
+  return relations.some(s=>s.value.relation==='sibling-of'&&s.value.kinshipTerm?.zh==='兄'&&
+    s.value.subjectRole==='elder-brother'&&s.value.subjectRelativeAge==='elder'&&
+    ['younger-brother','younger-sibling'].includes(s.value.objectRole)&&
+    relations.some(p=>p.value.relation==='parent-of'&&p.value.kinshipTerm?.zh==='父'&&
+      p.value.subjectRole==='father'&&p.value.objectRole==='son'&&
+      typeof s.value.personId==='string'&&typeof p.value.personId==='string'&&
+      s.value.personId!==p.value.personId&&s.value.personId!==person.localId&&p.value.personId!==person.localId&&
+      [s.value.personId,p.value.personId].every((id,index)=>{
+        const relative=sourcePeople.get(id);if(!relative||relative.localId!==id)return false;
+        if(!nameEvidence.has(id))nameEvidence.set(id,primaryWitnessNameEvidence(relative,nameKeysForPerson));
+        return [...(nameEvidence.get(id).get(sourceId)??[])].some(name=>name&&
+          (index===0?normalizeKey('zh:'+text).slice(3).includes(name):normalizeKey('zh:'+quote).slice(3).includes(normalizeKey('zh:兄子').slice(3)+name)));
+      })));
+}
+
+function sourceNameOccurs(person,sourceId,text,nameKeysForPerson,nameEvidence){
+  if(!person)return false;
+  if(!nameEvidence.has(person.localId))nameEvidence.set(person.localId,primaryWitnessNameEvidence(person,nameKeysForPerson));
+  return [...(nameEvidence.get(person.localId).get(sourceId)??[])].some(name=>name&&normalizeKey('zh:'+text).slice(3).includes(name));
+}
+
+// Current native Chinese name evidence for a relative in exactly this unit.
+function sourceUnitNames(person,sourceId,nameKeysForPerson,nameEvidence){
+  if(!person)return [];
+  if(!nameEvidence.has(person.localId))nameEvidence.set(person.localId,primaryWitnessNameEvidence(person,nameKeysForPerson));
+  return [...(nameEvidence.get(person.localId).get(sourceId)??[])].filter(Boolean);
+}
+
+function inferredMotherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence){
+  const names=person.claims.filter(c=>c.predicate==='name');
+  if(typeof person.mentionException!=='string'||!person.mentionException.trim()||(person.mentions??[]).length||
+    !names.length||!names.every(c=>c.certainty==='strongly-inferred'&&c.value.kind==='descriptive-kinship')||!(sourcePeople instanceof Map))return false;
+  const parents=person.claims.filter(c=>c.subject===person.localId&&c.predicate==='family-relationship'&&c.certainty==='strongly-inferred'&&c.evidence.includes(sourceId)&&
+    c.value.relation==='parent-of'&&c.value.kinshipTerm?.zh==='母'&&c.value.subjectRole==='mother'&&c.value.objectRole==='son'&&c.value.line==='maternal'&&c.value.personId!==person.localId);
+  const relations=p=>(p?.claims??[]).filter(c=>c.subject===p.localId&&c.predicate==='family-relationship'&&c.evidence.includes(sourceId));
+  // 母弟 identifies two brothers as sharing the otherwise unnamed mother.
+  if(quote.includes('母弟'))for(const a of parents)for(const b of parents){
+    if(a.value.personId===b.value.personId)continue;
+    const child=sourcePeople.get(a.value.personId),other=sourcePeople.get(b.value.personId);
+    if(other&&sourceNameOccurs(child,sourceId,text,nameKeysForPerson,nameEvidence)&&relations(child).some(c=>
+      c.certainty==='explicit'&&c.value.relation==='sibling-of'&&c.value.personId===other.localId&&c.value.kinshipTerm?.zh==='母弟'&&
+      c.value.subjectRole==='younger-brother'&&c.value.objectRole==='elder-brother'&&c.value.line==='maternal'&&c.value.sharedParentage==='full'))return true;
+  }
+  // X舅Y names a maternal uncle and nephew; their supported sister/mother
+  // intermediary stays unnamed. Both graph edges and the quoted nephew name
+  // are required in this exact source unit.
+  if(quote.includes('舅'))for(const parent of parents){
+    const child=sourcePeople.get(parent.value.personId);if(!child)continue;
+    if(!nameEvidence.has(child.localId))nameEvidence.set(child.localId,primaryWitnessNameEvidence(child,nameKeysForPerson));
+    if(![...(nameEvidence.get(child.localId).get(sourceId)??[])].some(name=>name&&normalizeKey('zh:'+quote).slice(3).includes(name+normalizeKey('zh:舅').slice(3))))continue;
+    for(const uncle of sourcePeople.values()){
+      if(!uncle.localId.startsWith(person.localId.split(':').slice(0,2).join(':')+':')||uncle.localId===person.localId||uncle.localId===child.localId)continue;
+      const edges=relations(uncle);
+      if(edges.some(c=>c.certainty==='strongly-inferred'&&c.value.relation==='sibling-of'&&c.value.personId===person.localId&&c.value.kinshipTerm?.zh==='舅'&&c.value.subjectRole==='brother'&&c.value.objectRole==='sister'&&c.value.line==='maternal')&&
+        edges.some(c=>c.certainty==='explicit'&&c.value.relation==='kin-of'&&c.value.personId===child.localId&&c.value.kinshipTerm?.zh==='舅'&&c.value.subjectRole==='maternal-uncle'&&c.value.objectRole==='nephew'&&c.value.line==='maternal')&&
+        sourceNameOccurs(uncle,sourceId,text,nameKeysForPerson,nameEvidence))return true;
+    }
+  }
+  return false;
+}
+
+function acceptedAliasWitness(person,sourceId,quote,sourcePeople,acceptedCanonical,nameKeysForPerson,nameEvidence){
+  if(typeof person.mentionException!=='string'||!person.mentionException.trim()||(person.mentions??[]).length||
+    !(sourcePeople instanceof Map)||!(acceptedCanonical instanceof Map)||!acceptedCanonical.get(person.localId))return false;
+  return person.claims.some(c=>c.subject===person.localId&&c.predicate==='same-person'&&['explicit','strongly-inferred'].includes(c.certainty)&&c.evidence.includes(sourceId)&&
+    c.value.personId!==person.localId&&acceptedCanonical.get(c.value.personId)===acceptedCanonical.get(person.localId)&&
+    sourceNameOccurs(sourcePeople.get(c.value.personId),sourceId,quote,nameKeysForPerson,nameEvidence));
+}
+
+function primaryWitnessNameEvidence(person,nameKeysForPerson){
         const evidence = new Map(), claims = new Map(person.claims.filter(claim => claim.predicate === 'name').map(claim => [claim.id, claim.evidence]));
         for (const key of nameKeysForPerson(person)) if (key.language === 'zh') for (const claimId of key.sources) {
           for (const unit of claims.get(claimId) ?? []) { if (!evidence.has(unit)) evidence.set(unit, new Set()); evidence.get(unit).add(normalizeKey(key.key).slice(3)); }
@@ -260,8 +338,20 @@ export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKe
           if (!evidence.has(unit)) evidence.set(unit, new Set());
           evidence.get(unit).add(normalizeKey('zh:' + span.exact).slice(3));
         }
-        nameEvidence.set(witness.localId, evidence);
-      }
+        return evidence;
+}
+
+export function assertDossierPrimaryWitness(witness, person, sourceUnits, nameKeysForPerson, nameEvidence = new Map(),sourcePeople=null,acceptedCanonical=null) {
+  requireValue(hasOnlyKeys(witness, ['localId', 'book', 'chapter', 'unitId', 'quote']), 'Unexpected witness fields');
+  requireValue(person && person.localId === witness.localId, `Missing current primary witness person ${witness.localId}`);
+  const sourceId = `${witness.book}:${witness.chapter}:${witness.unitId}`, quote = witness.quote, text = sourceUnits.get(sourceId);
+      if (!nameEvidence.has(witness.localId))nameEvidence.set(witness.localId,primaryWitnessNameEvidence(person,nameKeysForPerson));
       requireValue(typeof text === 'string' && typeof quote === 'string' && /\p{Script=Han}/u.test(quote) && text.includes(quote) &&
-        [...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
+        ([...(nameEvidence.get(witness.localId).get(sourceId) ?? [])].some(name => name && normalizeKey('zh:' + quote).slice(3).includes(name))||
+          inferredElderBrotherFatherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
+          inferredPaternalWitness(person,sourceId,quote,text,sourcePeople,(relative,quote)=>sourceNameOccurs(relative,sourceId,quote,nameKeysForPerson,nameEvidence))||
+          inferredMotherWitness(person,sourceId,quote,text,sourcePeople,nameKeysForPerson,nameEvidence)||
+          inferredIntermediaryWitness(person,sourceId,quote,text,sourcePeople,relative=>sourceUnitNames(relative,sourceId,nameKeysForPerson,nameEvidence),value=>normalizeKey('zh:'+value).slice(3))||
+          inferredSpouseWitness(person,sourceId,quote,text,sourcePeople,relative=>sourceUnitNames(relative,sourceId,nameKeysForPerson,nameEvidence),value=>normalizeKey('zh:'+value).slice(3))||
+          acceptedAliasWitness(person,sourceId,quote,sourcePeople,acceptedCanonical,nameKeysForPerson,nameEvidence)), `Witness does not support this person in the current primary source: ${witness.localId} ${sourceId} quote=${JSON.stringify(quote)}`);
 }
