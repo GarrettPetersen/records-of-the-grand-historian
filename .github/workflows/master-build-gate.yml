@@ -1,5 +1,5 @@
-name: Reconcile audited retrospective label migrations
-run-name: Validate preserved Liao Shi 106 and Shi Ji 064 chronology
+name: Reconcile three audited retrospective label migrations
+run-name: Validate preserved Liao Shi 042, 106 and Shi Ji 064 chronology
 on:
   workflow_dispatch:
 permissions:
@@ -38,11 +38,12 @@ jobs:
           const {SOURCE,BEFORE,OUT,GITHUB_REPOSITORY}=process.env;
           const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
           const rows=[];
-          for(const [book,chapter,expected] of [['liaoshi','106',['claim-135']],['shiji','064',['claim-112','claim-113','claim-114']]]){
+          for(const [book,chapter,expected] of [['liaoshi','042',['claim-63','claim-64','claim-66']],['liaoshi','106',['claim-135']],['shiji','064',['claim-112','claim-113','claim-114']]]){
             const target=book+'/'+chapter;
+            const beforeRevision=target==='liaoshi/042'?'6d56c89ad27427d2d9ea5a759dc854ec3c4320ea':BEFORE;
             const file='data/people/extractions/'+target+'.json';
             const audit='data/people/date-audits/'+target+'.json';
-            const previous=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+file+'?ref='+BEFORE],{maxBuffer:5e6});
+            const previous=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+file+'?ref='+beforeRevision],{maxBuffer:5e6});
             const old=JSON.parse(previous), current=JSON.parse(fs.readFileSync(file));
             const originalBytes=fs.readFileSync(audit), original=JSON.parse(originalBytes);
             const {candidate,changes}=reconcileRetrospectiveExtraction(old);
@@ -63,16 +64,17 @@ jobs:
             fs.mkdirSync(dest);
             fs.writeFileSync(path.join(dest,'recorded-date-audit.json'),fs.readFileSync(audit));
             fs.writeFileSync(path.join(dest,'prior-date-audit.json'),originalBytes);
-            fs.writeFileSync(path.join(dest,'composition.json'),JSON.stringify({schemaVersion:1,book,chapter,sourceRevision:SOURCE,historicalExtractionRevision:BEFORE,sourceHash:packet.sourceHash,previousExtractionHash:original.extractionHash,currentExtractionHash:packet.extractionHash,priorReportSha256:hash(originalBytes),recordedReportSha256:hash(fs.readFileSync(audit)),exactLabelOnlyChangedItems:expected,unchangedItemProofs:original.itemChecks.length,status:receipt},null,2)+'\n');
+            fs.writeFileSync(path.join(dest,'composition.json'),JSON.stringify({schemaVersion:1,book,chapter,sourceRevision:SOURCE,historicalExtractionRevision:beforeRevision,sourceHash:packet.sourceHash,previousExtractionHash:original.extractionHash,currentExtractionHash:packet.extractionHash,priorReportSha256:hash(originalBytes),recordedReportSha256:hash(fs.readFileSync(audit)),exactLabelOnlyChangedItems:expected,unchangedItemProofs:original.itemChecks.length,status:receipt},null,2)+'\n');
             rows.push({book,chapter,changed:expected.length,checks:original.itemChecks.length});
           }
           console.log(JSON.stringify(rows));
           JS
+          npm run people:validate -- --book liaoshi --chapter 042 | tee "$OUT/liaoshi-042/validation.txt"
           npm run people:validate -- --book liaoshi --chapter 106 | tee "$OUT/liaoshi-106/validation.txt"
           npm run people:validate -- --book shiji --chapter 064 | tee "$OUT/shiji-064/validation.txt"
       - uses: actions/upload-artifact@v4
         with:
-          name: retrospective-normalization-chronology-two
+          name: retrospective-normalization-chronology-three
           path: ${{ runner.temp }}/retrospective-reconciled-chronology/
           if-no-files-found: error
           retention-days: 7
