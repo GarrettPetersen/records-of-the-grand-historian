@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "009",
+    "key": "jiuwudaishi/009"
+  },
+  "ownerAgentId": "bc-7e463767-133a-4f87-aab6-c0f63ebf6684",
+  "worker": "cursor-nov24-retained-blocked-owner-2",
+  "idempotencyKey": "f12e8580a3b67064e94c0e5fcf0879fa39b18613c0c26db4d14fc58cf9290f89",
+  "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterCommit": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-blocked-owner-jiuwudaishi-009-bf6684",
+  "observedBlocker": "Editorial decision validation failed:",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/009.json",
+      "gitBlob": "6255f36719b3141f3b8d9a7961e7faa64eb1d64f",
+      "contentSha256": "sha256:4b86940959b8924c6e661a0d5a6e8c53fefad1271168c6494824f57caffdf0cd"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/009.json",
+      "gitBlob": "8225ec49501a297def4a1d5584866f204cad7837",
+      "contentSha256": "sha256:0186c158ddb91a69f9871d7f30d20d6f2b20de615e4c934e61c73ac6ec578d6c"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/009.json",
+      "gitBlob": "c05082d2f84cefe19337f2e73aac025b219b8224",
+      "contentSha256": "sha256:642878e0258921bfaf6d87a5da27ddbe8ed12678f3fdae5060cda05a3f829406"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/009.json",
+      "gitBlob": "27341c5229ebfcdd429277f144c2b72c74ea5ed3",
+      "contentSha256": "sha256:67408e8c7ae2f04d24e28c70ea8893c133b647e2de8fcea2d53106ce0f02de6a"
+    }
+  },
+  "testedRecoveryFindings": {
+    "peopleDatesVerify": "audited",
+    "editorialProposalCount": 32,
+    "editorialDecisionCount": 32,
+    "appliedTranslationRepairCount": 49,
+    "unauthorizedAppliedRepairIds": [
+      "jiuwudaishi:009:r0033",
+      "jiuwudaishi:009:r0034",
+      "jiuwudaishi:009:r0035",
+      "jiuwudaishi:009:r0036",
+      "jiuwudaishi:009:r0037",
+      "jiuwudaishi:009:r0038",
+      "jiuwudaishi:009:r0039",
+      "jiuwudaishi:009:r0040",
+      "jiuwudaishi:009:r0041",
+      "jiuwudaishi:009:r0042",
+      "jiuwudaishi:009:r0043",
+      "jiuwudaishi:009:r0044",
+      "jiuwudaishi:009:r0045",
+      "jiuwudaishi:009:r0046",
+      "jiuwudaishi:009:r0047",
+      "jiuwudaishi:009:r0048",
+      "jiuwudaishi:009:r0049"
+    ],
+    "validationCommand": "npm run people:validate -- --book jiuwudaishi --chapter 009",
+    "rootCause": "Supplemental symmetric literal/idiomatic repairs r0033–r0049 were applied in extraction.translationRepairs without matching proposals/decisions in editorial-decisions/009.json"
+  },
+  "concreteProposedPatches": [
+    {
+      "target": "data/people/editorial-decisions/jiuwudaishi/009.json",
+      "kind": "editorial-closure-amendment",
+      "description": "Append proposals r0033–r0049 mirroring applied repair contracts, each with independent accept decisions and Chinese sourceWitness excerpts; do not alter r0001–r0032 decisions",
+      "repairs": [
+        {
+          "repairId": "jiuwudaishi:009:r0033",
+          "unit": "s0001",
+          "field": "literal",
+          "before": "On wuwu, first month of spring of Zhenming 3, former Zi prefect Gao Yunqi was made Right Forest-Unicorn commander.",
+          "after": "On wuwu, in the first month of spring of Zhenming 3, former Zi Prefecture Inspector Gao Yunqi was made commander of the Right Feathered Forest.",
+          "reason": "Independent review corrected the symmetric literal field: 淄州刺史 is Inspector of Zi Prefecture and 羽林 is the Feathered Forest imperial guard.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0001",
+            "excerpt": "貞明三年春正月戊午，以前淄州刺史高允奇為右羽林統軍。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0034",
+          "unit": "s0006",
+          "field": "literal",
+          "before": "On jiashen in the second month, the Prince of Jin attacked our Liyang; Liu Zhen resisted and drove him back.",
+          "after": "On jiashen in the second month, the Prince of Jin attacked our Liyang; Liu Xun resisted him and drove him back.",
+          "reason": "劉鄩 is Liu Xun, not Liu Zhen; the pronouns are also made explicit without changing the action.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0006",
+            "excerpt": "二月甲申，晉王攻我黎陽，劉鄩拒之而退。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0035",
+          "unit": "s0006",
+          "field": "idiomatic",
+          "before": "On jiashen in the second month the Prince of Jin struck Liyang; Liu Zhen held him off and forced a withdrawal.",
+          "after": "On jiashen in the second month, the Prince of Jin attacked Liyang; Liu Xun held him off and forced a withdrawal.",
+          "reason": "劉鄩 is Liu Xun, not Liu Zhen; punctuation and the military action are rendered naturally.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0006",
+            "excerpt": "二月甲申，晉王攻我黎陽，劉鄩拒之而退。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0036",
+          "unit": "s0008",
+          "field": "literal",
+          "before": "On dinghai, former Right Forest-Unicorn commander Liang Jiye was made Left Guard senior general.",
+          "after": "On dinghai, former Right Feathered Forest commander Liang Jiye was made Senior General of the Left Guard.",
+          "reason": "右羽林軍統軍 is commander of the Right Feathered Forest, not a Forest-Unicorn office.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0008",
+            "excerpt": "丁亥，以前右羽林軍統軍梁繼業為左衛上將軍。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0037",
+          "unit": "s0008",
+          "field": "idiomatic",
+          "before": "On dinghai, Liang Jiye, former commander of the Right Forest-Unicorn Army, became senior general of the Left Guard.",
+          "after": "On dinghai, Liang Jiye, former commander of the Right Feathered Forest, became Senior General of the Left Guard.",
+          "reason": "右羽林軍統軍 is commander of the Right Feathered Forest, not a Forest-Unicorn office.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0008",
+            "excerpt": "丁亥，以前右羽林軍統軍梁繼業為左衛上將軍。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0038",
+          "unit": "s0036",
+          "field": "literal",
+          "before": "On jihai, Merit-for-Restoring the Sage, Aligning Fortune, and Shared Virtue, circuit military marshal, Huainan, Zhenhai, and Zhendong military commissioner, commander of the Huainan, Xuan, and Run four-sided line camp, Grand Preceptor of the Palace Gate, Minister-President, and King of Wu-Yue Qian Liu was made marshal of all-under-Heaven's armies.",
+          "after": "On jihai, Qian Liu, Merit-for-Restoring the Sage, Aligning Fortune, and Shared Virtue, marshal of the circuits' armies, military commissioner of Huainan, Zhenhai, and Zhendong, supreme commander of the Huainan, Xuan, and Run field armies on all fronts, holder of Open Office with Rank Equal to the Three Excellencies, President of the Department of State Affairs, and King of Wuyue, was made marshal of all armies under Heaven.",
+          "reason": "開府儀同三司 is rank equal to the Three Excellencies, not Grand Preceptor of the Palace Gate; the long title chain is reordered around Qian Liu for intelligibility.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0036",
+            "excerpt": "己亥，以啟聖匡運同德功臣、諸道兵馬元帥、淮南鎮海鎮東等軍節度使、充淮南宣潤等四面行營都統、開府儀同三司、尚書令、吳越王錢鏐為天下兵馬元帥。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0039",
+          "unit": "s0053",
+          "field": "idiomatic",
+          "before": "Chancellor Jing Xiang argued: \"Since Liu Zhen's defeat the treasury is empty and the people are squeezed dry for the armies; suburban rites mean lavish rewards—a hollow title at real cost.",
+          "after": "Chancellor Jing Xiang argued: \"Since Liu Xun's defeat, the treasury is empty and the people are squeezed dry to supply the armies. The suburban rites would require lavish rewards, taking a hollow name at real cost.",
+          "reason": "劉鄩 is Liu Xun; the fiscal argument is clarified and the quotation remains open because the speech continues in s0054.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0053",
+            "excerpt": "宰臣敬翔奏曰：「國家自劉鄩失律以來，府藏殫竭，箕斂百姓，供軍不暇，郊祀之禮，頒行賞賚，所謂取虛名而受實弊也。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0040",
+          "unit": "s0070",
+          "field": "literal",
+          "before": "On renyin, Zhenhai and Zhendong Army campaign chief of staff, Qin military commissioner, honorary Grand Mentor, and Grand Counselor Ma Chuo was advanced to honorary Grand Preceptor and Grand Counselor, continuing as Zhenhai and Zhendong campaign chief of staff with the rest unchanged, at Qian Liu's request.",
+          "after": "On renyin, Ma Chuo, campaign chief of staff for the Zhenhai and Zhendong armies, military commissioner of Qinzhou, honorary Grand Mentor, and Grand Counselor, was advanced to honorary Grand Commandant and Grand Counselor, continuing as campaign chief of staff for Zhenhai and Zhendong with his other titles unchanged, at Qian Liu's request.",
+          "reason": "檢校太尉 is honorary Grand Commandant, not honorary Grand Preceptor; the office chain is reordered for readability.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0070",
+            "excerpt": "壬寅，鎮海鎮東等軍節度行軍司馬、秦州節度使、檢校太傅、同平章事馬綽加檢校太尉、同平章事，依前鎮海、鎮東等軍節度行軍司馬，餘如故，從錢鏐之請也。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0041",
+          "unit": "s0070",
+          "field": "idiomatic",
+          "before": "On renyin, at Qian Liu's request, Ma Chuo, campaign chief of staff for the Zhenhai and Zhendong armies, military commissioner of Qinzhou, honorary Grand Mentor, and Grand Counselor, was promoted to honorary Grand Preceptor and Grand Counselor while retaining the Zhenhai-Zhendong staff post and his other titles.",
+          "after": "On renyin, at Qian Liu's request, Ma Chuo, campaign chief of staff for the Zhenhai and Zhendong armies, military commissioner of Qinzhou, honorary Grand Mentor, and Grand Counselor, was promoted to honorary Grand Commandant and Grand Counselor while retaining the Zhenhai-Zhendong staff post and his other titles.",
+          "reason": "檢校太尉 is honorary Grand Commandant, not honorary Grand Preceptor.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0070",
+            "excerpt": "壬寅，鎮海鎮東等軍節度行軍司馬、秦州節度使、檢校太傅、同平章事馬綽加檢校太尉、同平章事，依前鎮海、鎮東等軍節度行軍司馬，餘如故，從錢鏐之請也。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0042",
+          "unit": "s0079",
+          "field": "literal",
+          "before": "On jiwei, Lingwu military commissioner Han Zhu left mourning restoration and was given Grand Preceptor of the Palace Gate, continuing as honorary Grand Mentor and Grand Counselor.",
+          "after": "On jiwei, Lingwu military commissioner Han Zhu was released from his provisional return to office during mourning and granted Open Office with Rank Equal to the Three Excellencies, while retaining his titles as honorary Grand Mentor and Grand Counselor.",
+          "reason": "落起復 ends provisional service during mourning, and 開府儀同三司 is rank equal to the Three Excellencies rather than Grand Preceptor of the Palace Gate.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0079",
+            "excerpt": "己未，靈武節度使韓洙落起復，授開府儀同三司，依前檢校太傅、同平章事。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0043",
+          "unit": "s0079",
+          "field": "idiomatic",
+          "before": "On jiwei, Han Zhu of Lingwu ended mourning restoration and received Grand Preceptor of the Palace Gate while keeping honorary Grand Mentor and Grand Counselor.",
+          "after": "On jiwei, Han Zhu, military commissioner of Lingwu, was released from provisional service during mourning and granted Open Office with Rank Equal to the Three Excellencies while retaining his other honors.",
+          "reason": "The revision corrects both 落起復 and 開府儀同三司 while retaining Han Zhu's existing honors.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0079",
+            "excerpt": "己未，靈武節度使韓洙落起復，授開府儀同三司，依前檢校太傅、同平章事。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0044",
+          "unit": "s0140",
+          "field": "literal",
+          "before": "Liu Zhen was still ordered Yan disposition and pacification commissioner and to lead troops to attack him.",
+          "after": "Liu Xun was then appointed pacification and disposition commissioner within Yan Prefecture and ordered to lead troops against him.",
+          "reason": "劉鄩 is Liu Xun; 仍命 marks the continuing response to Zhang Shoujin's rebellion rather than the adverb still modifying an order.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0140",
+            "excerpt": "仍命劉鄩為兗州管內安撫製置使，領兵以攻之。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0045",
+          "unit": "s0140",
+          "field": "idiomatic",
+          "before": "Liu Zhen was sent as Yan pacification commissioner to lead troops against him.",
+          "after": "Liu Xun was appointed pacification commissioner for Yan and sent with troops against him.",
+          "reason": "劉鄩 is Liu Xun and the appointment is stated explicitly.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0140",
+            "excerpt": "仍命劉鄩為兗州管內安撫製置使，領兵以攻之。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0046",
+          "unit": "s0156",
+          "field": "literal",
+          "before": "That month Liu Zhen took Yan, captured Zhang Shoujin, and exterminated his clan.",
+          "after": "That month Liu Xun captured Yan Prefecture, seized Zhang Shoujin, and exterminated his clan.",
+          "reason": "劉鄩 is Liu Xun; 兗州 is identified as Yan Prefecture in the literal field.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0156",
+            "excerpt": "是月，劉鄩攻下兗州，擒張守進，夷其族。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0047",
+          "unit": "s0156",
+          "field": "idiomatic",
+          "before": "That month Liu Zhen seized Yan, took Zhang Shoujin, and wiped out his clan.",
+          "after": "That month Liu Xun took Yan, captured Zhang Shoujin, and exterminated his clan.",
+          "reason": "劉鄩 is Liu Xun and the action 擒 is rendered as captured.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0156",
+            "excerpt": "是月，劉鄩攻下兗州，擒張守進，夷其族。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0048",
+          "unit": "s0157",
+          "field": "literal",
+          "before": "On dingchou in the eleventh month, Yan pacification and disposition commissioner, specially advanced, honorary Grand Mentor, and Duke of Dapeng Commandery Liu Zhen was made Yan military commissioner, Grand Preceptor of the Palace Gate, honorary Grand Preceptor, and Grand Counselor, rewarding the pacification of Yan.",
+          "after": "On dingchou in the eleventh month, Liu Xun, pacification and disposition commissioner of Yan Prefecture, Specially Advanced, honorary Grand Mentor, and Founding Duke of Dapeng Commandery, was made military commissioner of Yan, granted Open Office with Rank Equal to the Three Excellencies, and promoted to honorary Grand Commandant and Grand Counselor in reward for pacifying Yan.",
+          "reason": "The revision corrects Liu Xun, 開府儀同三司, and 檢校太尉 while preserving his full prior and new title chains.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0157",
+            "excerpt": "十一月丁丑，以兗州安撫製置使、特進、檢校太傅、大彭郡開國公劉鄩為兗州節度使、開府儀同三司、檢校太尉、同平章事，賞平兗之功也。"
+          }
+        },
+        {
+          "repairId": "jiuwudaishi:009:r0049",
+          "unit": "s0157",
+          "field": "idiomatic",
+          "before": "On dingchou in the eleventh month, Liu Zhen was made Yan commissioner and Grand Preceptor with honors for pacifying Yan.",
+          "after": "On dingchou in the eleventh month, Liu Xun was made military commissioner of Yan, granted Open Office with Rank Equal to the Three Excellencies, and promoted to honorary Grand Commandant and Grand Counselor in reward for pacifying Yan.",
+          "reason": "The old idiomatic omitted major offices and mistranslated both the person's name and the honors; the revision restores the appointment chain succinctly.",
+          "proposedDecision": "accept",
+          "sourceWitness": {
+            "citation": "s0157",
+            "excerpt": "十一月丁丑，以兗州安撫製置使、特進、檢校太傅、大彭郡開國公劉鄩為兗州節度使、開府儀同三司、檢校太尉、同平章事，賞平兗之功也。"
+          }
+        }
+      ]
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "extractionTranslationRepairsFingerprint": "sha256:ddc5841cd359b19a3d273c79a563717a293e33ba305aeeb32f6b7ba3c4ab9cc0",
+    "editorialDecisionsContentSha256": "sha256:67408e8c7ae2f04d24e28c70ea8893c133b647e2de8fcea2d53106ce0f02de6a"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Audited at pin c05082d2…",
+    "identity": "Unchanged pending editorial gate"
+  },
+  "holds": [],
+  "independentReviewCompleted": false
+}
