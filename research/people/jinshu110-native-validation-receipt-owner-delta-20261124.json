@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-validation-receipt",
+  "scope": "owner-delta-review-only",
+  "ownerPullRequest": 5462,
+  "ownerCommit": "2bb37206cb2a665e5014779a357f35e22c30c104",
+  "independentEvidencePullRequest": 5465,
+  "independentHandoffCommit": "05ba840300b9e70ccf3c740bf3a5cb00b067008e",
+  "reviewer": {
+    "agentId": "bc-53e29e7b-3acd-4386-bdb7-68f17317dbc3",
+    "model": "Composer 2.5",
+    "completedAt": "2026-11-24T01:30:00.000Z"
+  },
+  "warning": "Receipt only; does not approve merge or write date-audits/jinshu/110.json.",
+  "hashes": {
+    "chapterSource": "sha256:8144104d4ac1315269785914019693c352b302fa79654cdf7f353c42a21b2beb",
+    "extractionBefore": "sha256:3472c2e756711082ea542c531d345566d140c7d5e162972c5be5931bf89bc3a6",
+    "extractionAfterOwner": "sha256:964d6dca84c2b0b3d60df7c8ad467f0b410398356f8779c0a28c24b34edc6a42"
+  },
+  "validations": [
+    {
+      "command": "npm run people:validate -- --book jinshu --chapter 110",
+      "method": "owner extraction bytes at 2bb37206 against workspace chapter JSON",
+      "result": "PASS",
+      "counts": {
+        "people": 181,
+        "mentions": 918,
+        "claims": 1168,
+        "legacyWithoutAttestation": 0,
+        "legacyWithoutActiveDateHint": 4
+      }
+    },
+    {
+      "command": "node scripts/people-date-audit.mjs packet --book jinshu --chapter 110",
+      "method": "packet rebuilt from owner extraction at 2bb37206",
+      "result": "PASS",
+      "itemCount": 645
+    }
+  ],
+  "claimReceipts": [
+    {
+      "id": "claim-137",
+      "independentPriorVerdict": "residual-failure",
+      "ownerDeltaVerdict": "supported-undated-form",
+      "packetMatch": true,
+      "chinesePoints": [
+        {
+          "unitId": "s0004",
+          "quote": "初，廆常言：「吾積福累仁，子孫當有中原。」"
+        },
+        {
+          "unitId": "s0005",
+          "quote": "既而生俊，廆曰：「此兒骨相不恆，吾家得之矣。」"
+        }
+      ],
+      "notes": "Removed Yonghe-imported s0008/s0010 witnesses and onOrBefore AD 349; undatedSourceAttestation limited to prophecy/birth."
+    },
+    {
+      "id": "claim-213",
+      "independentPriorVerdict": "hold-evidence-unit-mismatch",
+      "ownerDeltaVerdict": "supported-unit-distinction-with-unresolved-先是",
+      "packetMatch": true,
+      "chinesePoints": [
+        {
+          "unitId": "s0071",
+          "quote": "既而蔣幹率銳卒五千出城挑戰，慕容評等擊敗之，斬首四千餘級，幹單騎還鄴。",
+          "relation": "sortie row; remains on claim-212 military participation"
+        },
+        {
+          "unitId": "s0076",
+          "quote": "先是，蔣幹以傳國璽送於建鄴，俊欲神其事業，言曆運在己，乃詐云閔妻得之以獻，賜號曰「奉璽君」，因以僭即皇帝位，大赦境內，建元曰元璽，署置百官。",
+          "relation": "seal delivery; sole evidence on claim-213 with 先是 unresolved"
+        }
+      ],
+      "notes": "Independent mismatch closed by separating sortie (s0071) from seal (s0076); Western year still not stated on s0076."
+    }
+  ],
+  "frozenExemplarReceipts": {
+    "ids": [
+      "claim-774",
+      "claim-775",
+      "claim-776",
+      "claim-777",
+      "claim-778",
+      "claim-779",
+      "claim-780",
+      "claim-781",
+      "claim-782",
+      "claim-783",
+      "claim-784",
+      "claim-785",
+      "claim-786",
+      "claim-787"
+    ],
+    "packetCheck": "all undatedSourceAttestation true at owner commit",
+    "reReviewed": false,
+    "carryForward": "jinshu110-independent-date-evidence-20261124-incomplete.json chronologyCandidateReview.personVerdicts"
+  },
+  "hintReceipts": {
+    "clearedUnsupportedSpans": [
+      "hints-p003",
+      "hints-p140",
+      "hints-p142",
+      "hints-p143",
+      "hints-p161",
+      "hints-p169",
+      "hints-p170"
+    ],
+    "verifiedOnOwnerExtraction": {
+      "hints-p003": { "activeHints": [] },
+      "hints-p140": { "activeHints": [] },
+      "hints-p142": { "activeHints": [] },
+      "hints-p169": {
+        "activeHints": [
+          "Chapter cite lacks a convertible reign-year Western date for this person"
+        ],
+        "witness": "永嘉之亂 event unresolved at s0291"
+      }
+    }
+  },
+  "approvalStatus": "independent-receipt-only-not-merge"
+}
