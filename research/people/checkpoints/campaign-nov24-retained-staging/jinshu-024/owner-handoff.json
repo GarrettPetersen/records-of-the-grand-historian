@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "024"
+  },
+  "ownerAgentId": "bc-b07f6f8e-5dd0-4f5f-8466-6c7bd3b4577e",
+  "worker": "cursor-nov24-retained-staging-w10-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5d5f80d1677de63cfc4e3fe06b058e285ffe48c047443eda1c58f86d49fbeba",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-024-4577e",
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "inputBlobWitness": {
+    "source": "afc1b309fb6cc68064d2db1122bc92acd8e9f78a",
+    "extraction": "fbcdf3a9397ce9c53502ea29fdac04f963420cab",
+    "editorial": "51caaeba740ce2baabcda67fd07ea36e519335b9"
+  },
+  "sealedInputs": {
+    "source": "sha256:1002d4b18699652e614cd78abce650dcc76d2c400a32e1b52c169ecb9c2c4002",
+    "extraction": "sha256:9e8cda32c44d8ec3ab3b71149901e6e93473f0879e92c8cd3b6fcd48461831a3",
+    "editorial": "sha256:6d3a99b43ae1d0323aad71b96d6b26e5618d17a684a630ff770d8976753abfb9"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "extractionBytesWitness": 660008,
+    "contentSha256": "sha256:9e8cda32c44d8ec3ab3b71149901e6e93473f0879e92c8cd3b6fcd48461831a3",
+    "localPeople": 169,
+    "note": "Full extraction retained unchanged; no re-extraction or chunk regeneration."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "pinnedBlob": "51caaeba740ce2baabcda67fd07ea36e519335b9",
+    "appliedRepairsWitnessedInSource": true,
+    "note": "Accepted editorial artifact pinned at witness blob; native validator confirms applied repairs match independent decisions."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 487,
+    "translatedCount": 487,
+    "bothFieldsComplete": true,
+    "unitCount": 487,
+    "titleZh": "\u5377\u4e8c\u5341\u56db \u5fd7\u7b2c\u5341\u56db \u8077\u5b98",
+    "titleEn": "Volume 24 Treatises 14: Government Service",
+    "missingUnits": []
+  },
+  "auditState": {
+    "dispatchLabel": "no-native-date-report",
+    "dateAuditPath": null,
+    "chronologyStatus": "un-audited"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-024/date-packet.json",
+    "contentSha256": "sha256:2cdd2d4fe5dd66084d1a40cc6596b23480fd9f5afa1c91c2e7a6268e23ecdcba",
+    "itemCount": 590,
+    "peopleCount": 169,
+    "unitCount": 487,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 024 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-024/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 024",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/024: 1 extraction(s), 169 local people, 452 mentions, 1452 claims, 0 proposed repair(s), 33 applied repair(s), 35 editorial decision(s), 5 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 1 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 024",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "note": "No data/people/date-audits/jinshu/{ch}.json; owner does not self-approve."
+    }
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book jinshu --chapter 024",
+    "npm run people:dates:packet -- --book jinshu --chapter 024 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-024/date-packet.json",
+    "npm run people:dates:verify -- --book jinshu --chapter 024",
+    "npm run people:dates:record -- --book jinshu --chapter 024"
+  ],
+  "substantiveFindings": "Offices treatise chapter; thirty-three applied editorial repairs with five claim retractions at pinned extraction; no native date audit file. Owner found no chronology contradiction warranting date-repair proposal.",
+  "remainingIndependentEvidence": {
+    "dateAudit": "Complete independent native date audit against sealed packet sha256:2cdd2d4fe5dd66084d1a40cc6596b23480fd9f5afa1c91c2e7a6268e23ecdcba; record via people:dates:record after zero-finding or repaired review.",
+    "identity": "Bounded canonical identity dossier review for chapter-local people after date gate; owner handoff is not identity approval.",
+    "editorial": "Pinned editorial decisions unchanged; independent reviewer confirms applied repairs remain source-faithful.",
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [
+    {
+      "kind": "legacy-temporal-debt",
+      "detail": "One local person row lacks active-date hint per validator; attestation coverage otherwise complete\u2014reviewer confirms undated attestation is source-supported rather than omission."
+    }
+  ],
+  "authorEvidence": {
+    "method": "Witnessed pinned git blobs; read Chinese/English source fields; reused sealed extraction and editorial artifacts; built native date packet; scoped people:validate and people:dates:verify; no registry generation, deploy, merge, or extraction rewrite.",
+    "completedAt": "2026-11-24T17:07:49.004Z"
+  },
+  "reproduce": {
+    "witnessBlobs": {
+      "source": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/jinshu/024.json",
+      "extraction": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/extractions/jinshu/024.json",
+      "editorial": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/editorial-decisions/jinshu/024.json"
+    }
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; sealed inputs not modified."
+}
