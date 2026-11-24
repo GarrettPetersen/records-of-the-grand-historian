@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "075"
+  },
+  "ownerAgentId": "bc-2e8802ad-6e60-4700-b09f-9b27d9b1b316",
+  "workerId": "cursor-nov24-four-part-owner-2",
+  "campaign": "campaign-nov24-four-part-audited",
+  "idempotencyKey": "42073ff08ec8747b551ff3f082f26431abd19dafc1953cdd67450b83ffac74ba",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-four-part-owner-jiuwudaishi-075-b1b316",
+  "providerProvenance": {
+    "mode": "transport-provenance",
+    "priorRun": "run-16421bc7-921a-4fcf-9512-bbbd7a9864b8",
+    "priorHandoffCommit": "fe86de79126c02dc89b5e60a1e33980be9ee9916",
+    "identityPreparationArtifact": "nov24-four-part-audited-chapter-packets",
+    "workflow": ".github/workflows/master-build-gate.yml",
+    "notes": "Exact four-part identity transport retained by GitHub Actions at native preliminary preparation; not re-sealed by this owner correction pass."
+  },
+  "inputBlobWitness": {
+    "source": "f5af2836960340002ac9ce0b166fe304259bf981",
+    "extraction": "a675bffdb806974504f01ef5cd5ffa080939be0e",
+    "dateAudit": "fa259011eb973750bf2f7e1587f32b4358e5112d",
+    "editorial": "e63192ab8aefda4efb98899c4560e8ec60b956f3"
+  },
+  "sealedInputs": {
+    "source": "sha256:61bc674ee381723c78ccf90b1d3ca29eef77032181444f9ec909faf909b0eed1",
+    "extraction": "sha256:00077975526e174ac59b201a2e32c08e5b452408b85c4617c6ac1c4a27c77dd5",
+    "dateAudit": "sha256:7d605823ee276218dd465f30327b29c7953dfb2f4fdccc74ab65487167959e18",
+    "editorial": "sha256:8e64515cb105fc4454d52ec7368b11bf6383aa5efd7b16e8b692d69c4417fcef"
+  },
+  "chapterReady": true,
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 075",
+    "summary": "Scoped person data validation passed for jiuwudaishi/075: 1 extraction(s), 79 local people, 591 mentions, 1256 claims, 0 proposed repair(s), 38 applied repair(s), 39 editorial decision(s), 0 claim retraction(s), 5 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 249,
+      "translatedCount": 249,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 249 Chinese source units, 565 chronology and hint checks, and 79 people; no unsupported endpoint or chronology-changing translation defect was found.",
+    "editorialDecisionCount": 39,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English literal and idiomatic coverage scan; npm run people:validate; retained accepted extraction, audited chronology, and applied editorial artifacts; no canonical file edits.",
+    "sourceTitle": "Volume 75 Book of Later Jin 1: Gaozu Annals 1",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. No definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 70 prepared cases remains for independent bounded dossier review across 4 transport parts."
+  },
+  "holds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 70,
+    "identityTransportParts": 4,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-four-part-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 075"
+  },
+  "notes": "[CF-Pages-Skip] Transport-provenance correction; commit only owner-handoff without altering sealed inputs."
+}
