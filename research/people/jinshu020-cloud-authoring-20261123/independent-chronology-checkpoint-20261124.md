@@ -40,6 +40,10 @@ Witness policy: `lib/chronology-witness.mjs` — packet name, zh surface, or pri
 
 `independent-incorrect-30-verification-20261124.json`: **30/30** judgments supported, **0** rejected; **14** hold groups closed; **hold-004** partial (**claim-24**). Editorial 97 unchanged on owner receipt. Not audited.
 
+## Owner hold-amend (`18c4459e` / amend `0d4406503`)
+
+`independent-hold-amend-verification-20261124.json`: **12/12** scope items accepted, **0** rejected, **0** concrete contradictions; **8** groups closed (002, 004, 007, 011, 013–016). **hold-004** fully closed (**claim-24** undated strip). **claim-112**: Long'an 4 on **s0191** kept; Taiyuan 21 parentage start correctly stripped. Cumulative **22/46** groups closed. Next owner wave: **hold-038** bulk hints — `consolidated-chronology-next-work-20261124.json`. Not audited.
+
 ## Recording gate
 
 - **Remaining packet items:** **0**
