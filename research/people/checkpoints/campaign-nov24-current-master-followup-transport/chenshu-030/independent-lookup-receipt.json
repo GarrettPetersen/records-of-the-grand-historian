@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "chenshu",
+    "chapter": "030"
+  },
+  "reviewerAgentId": "bc-cadb92f7-2061-481b-b44c-71c9b4fd211c",
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm live lookup generation before bounded header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Transport registry provenance revision a8b5bf79 pins an earlier generation; sealed transport dossiers and primary units remain authoritative for this review."
+    },
+    {
+      "route": "/v1/search?key=zh:梁武帝",
+      "purpose": "Overflow spot-check for Chen Shu 030 p007 (Liang Wudi) case",
+      "total": 49,
+      "visited": 8,
+      "firstId": "per_0375B8QMR9M3DA30DY1A",
+      "postingFingerprint": "sha256:09ed7f964ea67f031c35a2ad7db606e6841c50d1104257472b00d6b5d675ef24",
+      "conclusion": "Truncated header list; does not contradict chapter attribution to retained canonical."
+    },
+    {
+      "route": "/v1/people/per_0375B8QMR9M3DA30DY1A",
+      "purpose": "Header confirmation for first 梁武帝 search hit",
+      "blockingNameKeys": ["zh:梁武帝", "zh:武帝"]
+    }
+  ],
+  "conclusion": "Auxiliary bounded lookup used only where transport overflow cases required generation confirmation; membership decisions and Chinese witnesses come from sealed transport units. No lookup result supplied separation or merge evidence."
+}
