@@ -18,7 +18,7 @@ const localPeople = new Map(packet.people.map((p) => [p.localId, { ...p, book: '
 const caseById = new Map(plan.cases.map((c) => [c.id, c]));
 const nameEvidence = new Map();
 
-const PARTS = (process.env.JINSHU083_PARTS ?? '001,002,003,004,005,006').split(',');
+const PARTS = (process.env.JINSHU083_PARTS ?? '001,002,003,004,005,006,007,008').split(',');
 for (const partNum of PARTS) {
   const part = receipt.reviewParts.find((p) => p.file === `transport-part-${partNum}.json`);
   const bytes = fs.readFileSync(path.join(ARTIFACT, part.file));
