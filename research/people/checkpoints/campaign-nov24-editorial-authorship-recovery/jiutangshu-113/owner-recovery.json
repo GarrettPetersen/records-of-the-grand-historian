@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-owner-recovery",
+  "campaign": {
+    "idempotencyKey": "a8cec5fee8dfbc0daa7b54d446adf8a2267c7034ccf397a6d8d4599e68fdf362",
+    "stage": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+    "master": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "phase": "dispatch_pending",
+    "priorRun": "run-1f01d450-0f92-4e05-9b40-d90e68f474f3",
+    "priorObservedScope": "xintangshu/065"
+  },
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "113",
+    "key": "jiutangshu/113"
+  },
+  "owner": {
+    "worker": "cursor-nov24-retained-authorship-3",
+    "agentId": "bc-c338e8ee-f05e-4de2-a574-cd3ca50b0195",
+    "mode": "authorship",
+    "branch": "cursor/nov24-retained-jiutangshu-113-0b0195",
+    "parentRevision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9"
+  },
+  "pinnedInputs": {
+    "repositoryUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian",
+    "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "stagingRevision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+    "files": [
+      {
+        "path": "data/jiutangshu/113.json",
+        "gitBlob": "888ea76d71fc06ee509df7a0f521e435bb83d2f1"
+      },
+      {
+        "path": "data/people/extractions/jiutangshu/113.json",
+        "gitBlob": "4b27109ad494613b3f0a7c3d3852f5d04b0cc54e",
+        "role": "baseline on staging (unchanged)"
+      },
+      {
+        "path": "data/people/date-audits/jiutangshu/113.json",
+        "gitBlob": "347f87a62d181fb30f75b2f18f048a86b00e7de8"
+      },
+      {
+        "path": "data/people/editorial-decisions/jiutangshu/113.json",
+        "gitBlob": "1f7354aff7ec37ee7e9a3ca08be38d11338d298f"
+      }
+    ]
+  },
+  "gateFailure": {
+    "nativeMessage": "Actual extractor identity required for every chunk",
+    "module": "scripts/lib/people-extraction-authorship.mjs",
+    "reproducedAt": "2026-11-24T13:15:00Z",
+    "commands": [
+      {
+        "cmd": "node --input-type=module -e \"import { readJson } from './scripts/lib/people-content.mjs'; import { extractionAuthorAgentIds } from './scripts/lib/people-extraction-authorship.mjs'; extractionAuthorAgentIds(readJson('data/people/extractions/jiutangshu/113.json'));\"",
+        "revision": "e61eedae77bea163ec10120e88e806cde91315dd",
+        "result": "throws: Actual extractor identity required for every chunk (chunk 001ba orders 99–148 has agentId null)"
+      },
+      {
+        "cmd": "node scripts/validate-people-extraction.mjs data/people/extractions/jiutangshu/113.json",
+        "revision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+        "result": "ok"
+      }
+    ]
+  },
+  "historicalProvenance": {
+    "introducingCommit": {
+      "sha": "b9facd9c1edb7ea918b23d98d4629d61765b4671",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/commit/b9facd9c1edb7ea918b23d98d4629d61765b4671",
+      "author": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+      "message": "Recover people chapters and replace stale agents",
+      "note": "File first appears in this commit with grok-4.5-chunked run and four chunks. Chunk 001ba (orders 99–148) had agentId null, runId null, and completedAt null from introduction. Neighbor chunks retain bc-e5cb1328-57f2-4cca-98bf-1548e0bb06a4, bc-5a18b87e-de69-4cd8-b51e-9779a25cb4b2, and bc-541f1e7b-597a-43b1-8ab8-4fe46008ce93 with runIds. No earlier revision of this extraction exists in git."
+    },
+    "workQueueClaim": {
+      "revision": "431e3980e8339d2639d05b9364207a0392efaca6",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/blob/431e3980e8339d2639d05b9364207a0392efaca6/people-work-queue.json",
+      "lane": "cursor-sdk",
+      "worker": "Garretts-MacBook-Pro-2.local-cursor-sdk",
+      "status": "ready",
+      "claimedAt": "2026-09-09T06:10:33.098Z",
+      "chapterFingerprintAtClaim": "sha256:eebd857eb4592bece07a0b56114e6629138fc06b1f854cc5e352dbc6ce19a12c",
+      "note": "Chapter-level Cursor SDK reservation only. It does not name a bc-* agent or map to adaptive split chunk 001ba."
+    },
+    "chunkOrderRanges": [
+      {
+        "chunkId": "001a",
+        "startOrder": 0,
+        "endOrderExclusive": 99,
+        "model": "grok-4.5",
+        "agentId": "bc-e5cb1328-57f2-4cca-98bf-1548e0bb06a4",
+        "runId": "run-7c61100a-14cd-47cf-8689-ec64987f24f3"
+      },
+      {
+        "chunkId": "001ba",
+        "startOrder": 99,
+        "endOrderExclusive": 148,
+        "model": "grok-4.5",
+        "agentId": null,
+        "runId": null,
+        "holdReason": "Adaptive split middle segment with no tracked Cursor cloud agent, runId, or chunk-extraction receipt"
+      },
+      {
+        "chunkId": "001bb",
+        "startOrder": 148,
+        "endOrderExclusive": 198,
+        "model": "grok-4.5",
+        "agentId": "bc-5a18b87e-de69-4cd8-b51e-9779a25cb4b2",
+        "runId": "run-b64a25c8-4817-484d-91c7-d09927ce8d83"
+      },
+      {
+        "chunkId": "002",
+        "startOrder": 198,
+        "endOrderExclusive": 223,
+        "model": "grok-4.5",
+        "agentId": "bc-541f1e7b-597a-43b1-8ab8-4fe46008ce93",
+        "runId": "run-a1cf5b65-c4b6-4dce-8b92-f784e1e3cf4b"
+      }
+    ],
+    "chunkByteProvenance": {
+      "status": "not-tracked",
+      "reason": "No data/people/generated/chunk-extractions entry, SDK conversation export, or cloud-agent transcript in the repository ties sentence orders 99–148 to a specific bc-* identity."
+    }
+  },
+  "filesConsulted": [
+    "data/people/extractions/jiutangshu/113.json",
+    "data/jiutangshu/113.json",
+    "data/people/editorial-decisions/jiutangshu/113.json",
+    "data/people/date-audits/jiutangshu/113.json",
+    "people-work-queue.json@431e3980e8",
+    "scripts/lib/people-extraction-authorship.mjs@e61eedae77bea163ec10120e88e806cde91315dd"
+  ],
+  "preservedRecords": {
+    "sourceExtractionEditorialDateUnchangedInProposal": true,
+    "dateAuditStatus": "audited",
+    "editorialDecisions": 18,
+    "independentDateApprovalIntact": true
+  },
+  "candidateProposal": {
+    "status": "hold",
+    "description": "Do not patch extraction metadata until a primary receipt names the Cursor agent for chunk 001ba (orders 99–148).",
+    "blockingGap": "Missing per-chunk bc-* agentId for adaptive split chunk 001ba; chapter-level cursor-sdk queue claim is insufficient.",
+    "extractionPatchCommitted": false
+  },
+  "remainingIssues": [
+    "Native authorship gate remains blocked on staging/master until chunk 001ba receives an independently verified bc-* agentId.",
+    "Inferring 001ba author from neighboring chunks bc-e5cb1328 or bc-5a18b87e is not allowed under campaign rules."
+  ],
+  "smallestPathForward": "Locate a retained Cursor SDK run receipt or ignored chunk file that covers orders 99–148, then file a metadata-only proposal setting chunk 001ba agentId to that bc-* value without changing facts."
+}
