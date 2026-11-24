@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-owner-recovery",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "061",
+    "key": "jiuwudaishi/061"
+  },
+  "campaign": {
+    "phase": "dispatch_pending",
+    "stagingRevision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+    "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "idempotencyKey": "ff5b21eb1618e68d1c96d51b6de399bd2d80ad63b6fd72253d19d63d12ed0636"
+  },
+  "ownerAgentId": "bc-7e39e06d-e9bf-40a6-878e-3b988562acfa",
+  "worker": "cursor-nov24-retained-authorship-4",
+  "mode": "authorship",
+  "branch": "cursor/nov24-retained-jiuwudaishi-061-62acfa",
+  "pinnedInputBlobs": {
+    "data/jiuwudaishi/061.json": "e1b0cabde102c615e6c88d4d5c39285d74c959f3",
+    "data/people/extractions/jiuwudaishi/061.json": "9c5e8cdb7337660adeed5819c2ef2558e6f02726",
+    "data/people/date-audits/jiuwudaishi/061.json": "bb4f280c07d6e7192d913df1ec5fd9282e23fe61",
+    "data/people/editorial-decisions/jiuwudaishi/061.json": "136e3e616efeec5a51a5d4fb2443be1ed57d08d4"
+  },
+  "gateFailure": {
+    "message": "Actual extractor identity required for every chunk",
+    "source": "scripts/lib/people-extraction-authorship.mjs (master runtime; extractionAuthorAgentIds)",
+    "reproducedAt": "2026-11-24T12:23:00Z",
+    "reproducer": "node -e \"import {extractionAuthorAgentIds} from './scripts/lib/people-extraction-authorship.mjs'\" against pinned extraction blob 9c5e8cdb…: all six chunk agentId fields null"
+  },
+  "commandsAndResults": [
+    {
+      "command": "npm run people:disk:check",
+      "exitCode": 0,
+      "note": "preflight passed"
+    },
+    {
+      "command": "node (master) extractionAuthorAgentIds on blob 9c5e8cdb7337660adeed5819c2ef2558e6f02726",
+      "exitCode": 1,
+      "stderr": "Actual extractor identity required for every chunk"
+    },
+    {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/061.json (before patch)",
+      "exitCode": 0,
+      "stdout": "ok (104 people, 562 mentions, 1152 claims, 706 candidates)"
+    },
+    {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/061.json (after authorship-only patch)",
+      "exitCode": 0,
+      "stdout": "ok (104 people, 562 mentions, 1152 claims, 706 candidates)"
+    },
+    {
+      "command": "node (master) extractionAuthorAgentIds on patched extraction",
+      "exitCode": 0,
+      "stdout": "[\"grokbot-23\"]"
+    }
+  ],
+  "filesConsulted": [
+    "data/people/extractions/jiuwudaishi/061.json",
+    "data/people/editorial-decisions/jiuwudaishi/061.json",
+    "data/people/date-audits/jiuwudaishi/061.json",
+    "data/jiuwudaishi/061.json",
+    "scripts/lib/people-extraction-authorship.mjs",
+    "scripts/lib/people-chapter-identity.mjs",
+    "GROKBOT_PEOPLE_LANE.md",
+    "research/people/jinshu031-historical-authorship-recovery-20261123.json (staging precedent)",
+    "research/people/jinshu030-historical-authorship-recovery-20261124.json (staging precedent)"
+  ],
+  "historicalProvenance": {
+    "status": "recovered",
+    "stableChunkProducer": "grokbot-23",
+    "repositoryUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian",
+    "originalPullRequest": {
+      "number": 3910,
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/3910",
+      "headRef": "grokbot/people-jiuwudaishi-061-grokbot-23",
+      "mergeCommitSha": "d57ec2b51a1580eed48f31aaac64337855c14eff",
+      "extractionCommitSha": "3e6d6921cc045f905cd31136f02e57ac54054b4c",
+      "assembledBytes": 235118,
+      "assembledSha256": "595994333f4692d5e80f1b1302cf80fe51864d46cc28824892f7383ef7634e5d",
+      "assemblyCloudAgentId": "bc-aec2eb9e-ce05-4177-964b-1ca39902a53a",
+      "assemblyCloudAgentUrl": "https://cursor.com/agents/bc-aec2eb9e-ce05-4177-964b-1ca39902a53a",
+      "note": "Cloud agent ID is the PR assembly publisher only; chunk authorship is the ledger-assigned Grok Bot stable worker, not the Git commit author (Cursor Agent)."
+    },
+    "workQueueClaim": {
+      "branch": "codex/people-work-queue",
+      "claimCommitSha": "95fe744fdf25403fef796df0e25440a382441242",
+      "ledgerRevisionAtClaim": "95fe744fdf25403fef796df0e25440a382441242",
+      "worker": "grokbot-23",
+      "lane": "grokbot",
+      "claimedAt": "2026-08-26T04:31:50.535Z",
+      "chapterFingerprintAtClaim": "sha256:3a6fb18ee87707cdc321ae44ddce17082c8330d2de19956082e27e07e1f77e17"
+    },
+    "chunkByteProvenance": [
+      {
+        "chunkId": "001",
+        "startOrder": 0,
+        "endOrderExclusive": 49,
+        "claimCount": 49,
+        "claimsSha256": "ddf2c04fdf983fd8e4ab6b50b6636d61e0082515df2444f4766386714af4d20e",
+        "unchangedSinceAssemblyCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c"
+      },
+      {
+        "chunkId": "002",
+        "startOrder": 49,
+        "endOrderExclusive": 83,
+        "claimCount": 34,
+        "claimsSha256": "967959cd10d45ddcd343761a7ea492e9b442ed59eb096c23680e24d0c77cfb85",
+        "unchangedSinceAssemblyCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c"
+      },
+      {
+        "chunkId": "003",
+        "startOrder": 83,
+        "endOrderExclusive": 117,
+        "claimCount": 34,
+        "claimsSha256": "87ba0d5148d81a8302dad0f5f313630728aeb4d23979050e377f6ac06c61da12",
+        "unchangedSinceAssemblyCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c"
+      },
+      {
+        "chunkId": "004",
+        "startOrder": 117,
+        "endOrderExclusive": 162,
+        "claimCount": 45,
+        "claimsSha256": "309fa55ec3c1729bc285d2f586f06b011ecbcce8dd7d3427788fbaf5fe805dae",
+        "unchangedSinceAssemblyCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c"
+      },
+      {
+        "chunkId": "005",
+        "startOrder": 162,
+        "endOrderExclusive": 199,
+        "claimCount": 37,
+        "claimsSha256": "42e4e29b9ff297ccebf8761d31746bc3dc8e2590ef8c8a5442d08810f0f78e68",
+        "unchangedSinceAssemblyCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c"
+      },
+      {
+        "chunkId": "006",
+        "startOrder": 199,
+        "endOrderExclusive": 223,
+        "claimCount": 24,
+        "claimsSha256": "ccc34615a8676ac9e62913957054711aa2fa7d365cdc5ff8fff9ff78050cf95b",
+        "unchangedSinceAssemblyCommit": "3e6d6921cc045f905cd31136f02e57ac54054b4c"
+      }
+    ],
+    "currentExtractionSha256": "e5c19a85a7ea1ee0a244138a82b117395319261a9b16605d14e1836527c67815",
+    "postReviewCommit": "3e9d2e9156af453224c351c29a9f0ccee092eeda"
+  },
+  "proposal": {
+    "description": "Authorship-only delta: set each chunk agentId to verified stable producer grokbot-23; preserve null runId and completedAt where historical records do not supply them (per jinshu030/jinshu031 recovery precedent). No people, mention, claim, date, or editorial edits.",
+    "path": "data/people/extractions/jiuwudaishi/061.json",
+    "parentBlob": "9c5e8cdb7337660adeed5819c2ef2558e6f02726",
+    "proposedGitBlob": "4f48c220ea722e31bd113df4d9c8d4ecd2101111",
+    "proposedSha256": "36b25a8d3bae8b1bc1472e7864c5cc6b52e580276a38e7f96407a81869689a7c",
+    "requiresIndependentApproval": true
+  },
+  "preservedRecords": {
+    "source": "unchanged (pinned blob e1b0cab…)",
+    "dateAudit": "unchanged (pinned blob bb4f280c…)",
+    "editorialDecisions": "unchanged (pinned blob 136e3e61…)"
+  },
+  "remainingIssues": [
+    "Per-chunk runId and completedAt remain null: no retained sealed chunk receipts with exact run ids found in tracked history; do not invent.",
+    "Top-level run.agentId remains null (aggregate Grok Bot-chunked assembly).",
+    "Editorial input chapterFingerprint still references pre–source-resync digest 3a6fb18e… while current source uses bd9588ea…; out of scope for this authorship gate.",
+    "Identity review not yet prepared; depends on approved authorship patch and master-native prepare gate."
+  ],
+  "pathForward": [
+    "Independent reviewer approves authorship-only extraction blob 4f48c220… against this receipt.",
+    "Host records historical-extraction-authorship recovery on staging if required by date-audit cross-links.",
+    "Resume identity/editorial authorship campaign gates on master runtime after merge."
+  ]
+}
