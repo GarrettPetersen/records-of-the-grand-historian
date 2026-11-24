@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "113"
+  },
+  "ownerAgentId": "bc-31959fae-132e-4d10-86f7-24a41b42d3ab",
+  "workerId": "cursor-nov24-separate-transport-owner-4",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "a8eec7e5a23407ace2e2e0d352c5c333ec667014b70c5e1c806b6c17cc6c180d",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-jiuwudaishi-113-42d3ab",
+  "inputBlobWitness": {
+    "source": "5cbba2fa1bf4aef14b63b52e9c970bd5f1c5cf6c",
+    "extraction": "54ff88955dbd25b76197c468509924c79559721d",
+    "dateAudit": "07eed3ed92f535b14b382b055045e45922711ad7",
+    "editorial": "58c5296b0a045d93b1d1d7ccb0636f84f5999a6c"
+  },
+  "sealedInputs": {
+    "source": "sha256:a412f9ae94ccc0665728bafb885745737a8fee4760850c51fbdfd602f914ad00",
+    "extraction": "sha256:7b1fd27805ee2e757a546d9e17808d4daadb6266299b4fb7091093fb19a76f2c",
+    "dateAudit": "sha256:1c04a3bc63023d1598a0358792f5ec1e8275f67fbd1ba282f7b30584067102c0",
+    "editorial": "sha256:a99624ea0591377a9b80cf5945abf74c3661413c6a41de6664db73685c256605"
+  },
+  "chapterReady": true,
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiuwudaishi --chapter 113",
+    "summary": "Scoped person data validation passed for jiuwudaishi/113: 1 extraction(s), 143 local people, 543 mentions, 2027 claims, 0 proposed repair(s), 41 applied repair(s), 42 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 226,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionValidate": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/113.json",
+      "status": "ok",
+      "summary": "data/people/extractions/jiuwudaishi/113.json: ok (143 people, 543 mentions, 2027 claims, 818 candidates)"
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 113",
+      "status": "audited",
+      "findings": 0
+    },
+    "chronologyStatus": "audited",
+    "chronologySummary": "Reviewed 226 Chinese source units, 949 chronology and hint checks, and 143 people; no unsupported endpoint or chronology-changing translation defect was found."
+  },
+  "substantiveFindings": "Owner read all 226 Chinese units with paired literal and idiomatic English for Volume 113 Book of Later Zhou 15: Taizu Annals 4. Later Zhou Taizu annals segment with dense campaign chronology. Sealed extraction, applied editorial history, and independent date audit align at pinned git blobs; scoped validation and extraction checks pass with zero proposed repairs. No new definite English omission, source contradiction, false merge, or chronology defect in this pass. Bounded name-index lookup (generation cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac) exercised for cross-chapter name surfaces; truncation retained as uncertainty not separation evidence.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 113,
+    "identityTransportParts": 6,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation targets 113 cases across 6 sealed transport parts. Owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    }
+  },
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 113",
+    "validateDates": "npm run people:dates:verify -- --book jiuwudaishi --chapter 113"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
