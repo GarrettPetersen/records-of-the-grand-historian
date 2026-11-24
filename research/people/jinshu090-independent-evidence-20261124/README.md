@@ -15,16 +15,27 @@ Staging pin: PR #5489 commit `378771b831b7eb7b7049903eb3e26bb86155db4d`.
 | File | Role |
 |------|------|
 | `source-reviewed-editorial-decisions.json` | Schema 4 history: independent batch + retained grok batch |
+| `editorial-install-verification.json` | Confirms 33+17 install contract vs unchanged production v3 producer |
 | `composition-plan.json` | Host merge plan (`append-schema4-review`); fingerprint rebind still required |
-| `coverage-checkpoint.json` | Repair ID / unit / field coverage receipt |
-| `independent-source-review-20261124.md` | Human-readable verification notes |
+| `coverage-checkpoint.json` | Editorial repair ID / unit / field coverage receipt |
+| `chronology-scope-checkpoint.json` | Date audit progress and next biography groups |
+| `date-packet-pin.json` | Pinned native date packet (~553 items) for this review generation |
+| `partial-date-report-preface-20261124.json` | Validated `needs-revision` partial report (preface units only) |
+| `partial-date-preface-20261124.md` | Human summary of chronology pass 1 |
+| `owner-chronology-author-notes.json` | Retained owner notes from staging #5489 + independent progress pointer |
+| `independent-source-review-20261124.md` | Editorial verification notes (r0001–r0033) |
 
 ## Native checks run locally
 
 - `validatePeopleExtraction` on expanded `jinshu/090` extraction
 - `validateEditorialDecisionDocument` on schema4 artifact
 - `validateAppliedEditorialDecisions(schema4, extraction)` → **no errors**
+- `validateDateAuditReport` on preface partial report against pinned packet → **pass**
 
-Production `npm run people:validate -- --book jinshu --chapter 090` still fails until the host applies this history to `data/people/editorial-decisions/jinshu/090.json` and rebinding fingerprints.
+Production `npm run people:validate -- --book jinshu --chapter 090` still fails until the host applies editorial schema4 history. No file under `data/people/date-audits/jinshu/090.json` is installed.
 
-Rebuild: `node research/people/build-jinshu090-independent-editorial-20261124.mjs`
+Rebuild:
+
+- `node research/people/build-jinshu090-independent-editorial-20261124.mjs`
+- `node research/people/verify-jinshu090-editorial-install-20261124.mjs`
+- `node research/people/build-jinshu090-partial-date-preface-20261124.mjs`
