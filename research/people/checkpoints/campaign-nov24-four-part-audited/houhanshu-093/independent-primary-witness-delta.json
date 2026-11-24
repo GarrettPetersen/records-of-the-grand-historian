@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-primary-witness-delta",
+  "chapterKey": "houhanshu:093",
+  "reviewerAgentId": "bc-58e92096-d5fc-4a70-ba53-aa2586f74817",
+  "ownerAgentId": "bc-977db51c-ec93-4d60-9d14-c6f7f3527c76",
+  "ownerRevision": "0442471aad2f8d681496faebb242890916320205",
+  "ownerProposalSha256": "7977e2816c6c55577b812b6602a631fd790a3fae70a3b0203f90175c2c2fb9e5",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-four-part-audited/houhanshu-093/owner-primary-witness-delta.json",
+  "ownerProposalHead": "ab8f2d043b3e65ce6d9f63b693273c5b4e5992f0",
+  "previousReviewHead": "3c5bdf7f4403b1d48bd9e46478e1550cb3e664bc",
+  "previousReviewRef": "cursor/nov24-four-part-independent-houhanshu-093-4817",
+  "priorRun": "run-7bfe8c9d-598b-40a8-82ac-67fcd8028dd6",
+  "idempotencyKey": "d775667062b33eb5b4790dae68065931360ae19b3f974105c87b289e35e342f1",
+  "verdict": "approve-with-amendment",
+  "summary": "Independent hold on p072 is correct. Owner agrees and proposes narrowing fabricated Chinese name surfaces. Approve preferred-name zh nulling and removal of non-quotable zh from the descriptive-kinship claim; amend full alias retraction to en-only descriptive-kinship so compact schema keeps at least one name claim. Identity primary-name certification for p072 remains blocked; entailed kinship record and family claims citing 祖父 are preserved.",
+  "sourceInspection": {
+    "unitIds": ["s0044", "s0045"],
+    "units": [
+      {
+        "unitId": "s0044",
+        "zh": "许曼者，汝南平舆人也。",
+        "enIdiomatic": "Xu Man came from Pingyu in Runan.",
+        "namedPersonsSupported": ["p013"]
+      },
+      {
+        "unitId": "s0045",
+        "zh": "祖父峻，字季山，善卜占之术，多有显验，时人方之前世京房。",
+        "enIdiomatic": "His grandfather Xu Jun, styled Jishan, excelled at yarrow divination and racked up striking hits; contemporaries likened him to the Jing Fang of old.",
+        "namedPersonsSupported": ["p014", "p015"],
+        "entailedGeneration": "祖父 links Xu Jun (峻/季山) to Xu Man without naming the intervening father generation"
+      }
+    ],
+    "fabricatedSurfacesRejected": [
+      "许曼之父",
+      "许峻之子",
+      "许曼之父、许峻之子"
+    ]
+  },
+  "closedCases": [
+    {
+      "caseId": "sha256:dd7add0d8a793fcab93196e30ed64271b22cd955030abb728701a3f8936fe0ca",
+      "localPersonId": "houhanshu:093:p072",
+      "canonicalPersonId": "per_D573WNDND2ZV0X38SG1R",
+      "priorIndependentVerdict": "hold",
+      "witnessDeltaVerdict": "source-supported-unknown",
+      "ownerDispositionAgreed": true,
+      "primaryNameCertification": false,
+      "outcome": "Agree with independent hold and owner agree-hold. p072 remains an entailed unnamed father generation; extraction must not attribute quotable Chinese personal names absent from s0045. Scoped extraction patch approved (with amendment). No change to canonical membership fingerprint."
+    }
+  ],
+  "heldCases": [
+    {
+      "caseId": "sha256:dd7add0d8a793fcab93196e30ed64271b22cd955030abb728701a3f8936fe0ca",
+      "localPersonId": "houhanshu:093:p072",
+      "canonicalPersonId": "per_D573WNDND2ZV0X38SG1R",
+      "unresolvedIdentity": true,
+      "identityBundleVerdict": "hold",
+      "reason": "Even after approved extraction narrowing, native primary-name certification for p072 is still blocked: s0045 supplies 祖父 linking Xu Jun and Xu Man, not a personal name for the intervening father. English gloss Father of Xu Man remains an editorial descriptive label, not a primary quotation."
+    }
+  ],
+  "dependencies": {
+    "sealedExtractionBlob": "4f27129040008ac91f35af569b49652db38a60e9",
+    "affectedPersonIds": ["p072"],
+    "relatedPersonIds": ["p013", "p014"],
+    "affectedClaimThemes": [
+      "p072 person preferred zh name",
+      "p072 descriptive-kinship name claim on s0045"
+    ],
+    "preservedClaims": [
+      "p013 family-relationship descendant-of p014 with intermediaryPersonIds p072 (s0045)",
+      "p013 family-relationship child-of p072 (s0045)",
+      "p014 family-relationship ancestor-of p013 with intermediaryPersonIds p072 (s0045)",
+      "p014 family-relationship parent-of p072 (s0045)",
+      "p072 family-relationship child-of p014 / parent-of p013 (s0045)",
+      "p072 other-person-fact entailed-kinship via 祖父 (s0045)",
+      "p072 attestation AD 100-158 derived interval (s0045)"
+    ],
+    "dateAuditDelta": {
+      "required": false,
+      "reason": "Patch removes only non-quotable Chinese name surfaces; no attestation, westernInterval, or event-context dates on p072/p013/p014 are changed."
+    },
+    "priorReportPreserved": "research/people/checkpoints/campaign-nov24-four-part-audited/houhanshu-093/independent-identity-report-part-001.json through part-004 at 3c5bdf7f (103 unrelated approve rows unchanged)"
+  },
+  "ownerProposalReview": {
+    "agreeHold": true,
+    "agreeNamedScope": {
+      "certifiedInChapter": ["p013", "p014"],
+      "entailedUnnamed": ["p072"]
+    },
+    "amendments": [
+      {
+        "proposalItem": "extraction-alias-retraction",
+        "ownerIntendedAfter": null,
+        "independentAfter": "Replace descriptive-kinship claim with en-only form (remove zh key); compact schema requires /people/*/5 minItems 1.",
+        "rationale": "npm run people:validate failed when name-claims array was emptied; en-only descriptive-kinship preserves grounded inference without fabricating Chinese."
+      }
+    ],
+    "rejectedElements": []
+  },
+  "supportedPatch": {
+    "schemaVersion": 1,
+    "kind": "scoped-extraction-patch",
+    "targetPath": "data/people/extractions/houhanshu/093.json",
+    "sealedBlobBefore": "4f27129040008ac91f35af569b49652db38a60e9",
+    "candidateBlobAfter": "sha256:722556ddc7f3a23fb634e47f5ea676acd31af705d8cc0daebfad593fb80802e6",
+    "operations": [
+      {
+        "op": "replace",
+        "path": "/people/[id=p072]/1/1",
+        "field": "person.preferredNameSuggestion.zh",
+        "before": "许曼之父",
+        "after": null,
+        "affectedItemIds": ["p072"],
+        "sourceRationale": "许曼之父 does not appear in s0044 or s0045; it is not a primary Chinese personal-name surface."
+      },
+      {
+        "op": "replace",
+        "path": "/people/[id=p072]/5/0",
+        "field": "person.nameClaims[0]",
+        "before": {
+          "kind": "descriptive-kinship",
+          "en": "Father of Xu Man and son of Xu Jun",
+          "zh": "许曼之父、许峻之子",
+          "certainty": "strongly-inferred",
+          "evidence": ["s0045"]
+        },
+        "after": {
+          "kind": "descriptive-kinship",
+          "en": "Father of Xu Man and son of Xu Jun",
+          "certainty": "strongly-inferred",
+          "evidence": ["s0045"]
+        },
+        "affectedItemIds": ["p072"],
+        "sourceRationale": "s0045 reads 祖父峻… only; neither 许曼之父 nor 许峻之子 is present. English descriptive kinship may remain strongly-inferred from 祖父 structure."
+      }
+    ],
+    "compactRowBefore": [
+      "p072",
+      ["Father of Xu Man", "许曼之父", null],
+      "historical",
+      "Unnamed Intervening Kinsman",
+      {
+        "n": [],
+        "r": ["p013", "p014"],
+        "a": ["AD 100-158 (the generation between Xu Jun and Xu Man, whose divinations are dated AD 158-162)"],
+        "p": ["Eastern Han (Later Han)"],
+        "x": "Unnamed intermediary entailed by 祖父 (paternal grandfather) linking Xu Jun and Xu Man; no visible surface."
+      },
+      [
+        [
+          {
+            "kind": "descriptive-kinship",
+            "en": "Father of Xu Man and son of Xu Jun",
+            "zh": "许曼之父、许峻之子"
+          },
+          "strongly-inferred",
+          ["s0045"]
+        ]
+      ],
+      [["family-member", "strongly-inferred", ["s0045"]]]
+    ],
+    "compactRowAfter": [
+      "p072",
+      ["Father of Xu Man", null, null],
+      "historical",
+      "Unnamed Intervening Kinsman",
+      {
+        "n": [],
+        "r": ["p013", "p014"],
+        "a": ["AD 100-158 (the generation between Xu Jun and Xu Man, whose divinations are dated AD 158-162)"],
+        "p": ["Eastern Han (Later Han)"],
+        "x": "Unnamed intermediary entailed by 祖父 (paternal grandfather) linking Xu Jun and Xu Man; no visible surface."
+      },
+      [
+        [
+          {
+            "kind": "descriptive-kinship",
+            "en": "Father of Xu Man and son of Xu Jun"
+          },
+          "strongly-inferred",
+          ["s0045"]
+        ]
+      ],
+      [["family-member", "strongly-inferred", ["s0045"]]]
+    ],
+    "notAppliedOnBranch": true
+  },
+  "validation": {
+    "reviewedAt": "2026-11-24T15:45:00.000Z",
+    "ownerProposalSha256Verified": true,
+    "sealedInputsUnchanged": true,
+    "beforeArtifact": {
+      "path": "data/people/extractions/houhanshu/093.json",
+      "sha256": "sha256:40e54780961652b8ec94c09fb9e1752f99e69800b67de077415835c05b71bf5e"
+    },
+    "candidateArtifact": {
+      "path": "data/people/extractions/houhanshu/093.json",
+      "sha256": "sha256:722556ddc7f3a23fb634e47f5ea676acd31af705d8cc0daebfad593fb80802e6",
+      "peopleValidate": "Scoped person data validation passed for houhanshu/093 (candidate patch applied locally, then restored)",
+      "peopleValidateExitCode": 0
+    },
+    "peopleDatesVerify": {
+      "status": "audited",
+      "auditVersion": 1,
+      "findings": 0,
+      "deltaRequired": false
+    },
+    "reproduce": {
+      "validateBefore": "npm run people:validate -- --book houhanshu --chapter 093",
+      "validateCandidate": "apply supportedPatch.compactRowAfter to p072 row, then validate",
+      "validateDates": "npm run people:dates:verify -- --book houhanshu --chapter 093"
+    },
+    "nativeNotes": "Owner proposal to set nameClaims array to null fails compact minItems; independent amendment is the minimal validated alternative achieving the same source-boundary."
+  },
+  "completedAt": "2026-11-24T15:45:00.000Z"
+}
