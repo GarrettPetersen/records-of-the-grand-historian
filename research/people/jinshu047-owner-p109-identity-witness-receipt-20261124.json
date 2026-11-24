@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-identity-witness-hold-resolution",
+  "book": "jinshu",
+  "chapter": "047",
+  "pullRequest": 5423,
+  "baseOwnerCommit": "b19c24324f342737a5eaa948b51d32561e6c1a3d",
+  "independentReviewCommit": "5ec9a048dcd534f5260ac02f34a6644d23153ec8",
+  "independentHoldCaseId": "sha256:2a42e97cf3de3563b58cb523e6ff4e77f626f1d39ee2c1d6760817473f16d5b1",
+  "independentHoldSummary": "jinshu:047:p109 — cited s0257 supports 駿之婿也 (Pei Zan), not a daughter name「女」.",
+  "beforeExtractionHash": "sha256:15c98a5c4bdabfaeb1ff697eee3d2841309491fc5d38a4f372c9587de04d297e",
+  "afterExtractionHash": "sha256:1bf570b96cbecc3912eb671e09e83e6da1d75000a30a54febaacd15e505e8c69",
+  "sourceHash": "sha256:a861c9b72a867252169600e8bb26375fb81db2ab59f03790e3d70846da27f61b",
+  "approvalStatus": "not-self-approved",
+  "sourceInspection": {
+    "unitId": "s0257",
+    "zh": "駿既伏誅，裴楷息瓚，駿之婿也，為亂兵所害。",
+    "en": "When Jun fell, Pei Kai’s son Pei Zan—Jun’s son-in-law—was cut down by mutinous troops.",
+    "exactQuoteSupported": "駿之婿也",
+    "daughterToken女Present": false,
+    "inferredKinshipContract": "Extraction prompt entails anonymous intermediaries for some kinship paths, but identity witness requires an exact Chinese primary-name quote on the cited unit. s0257 supplies 婿 for Pei Zan only; inventing zh「女」/楊駿女 fails that contract."
+  },
+  "decision": {
+    "action": "remove-unproved-daughter-and-rewire-explicit-son-in-law",
+    "rationale": "Exact source permits Pei Zan (p108) as Yang Jun’s (p105) son-in-law via 駿之婿也. It does not name or quote a daughter. Removing p109 stops the false「女」name-claim witness; replacing spouse-of-p109 with explicit kin-of p105 preserves the supported fact without inventing a zh name or asserting an unproved daughter."
+  },
+  "exactAffectedFields": {
+    "removedPersonId": "p109",
+    "removedPersonBefore": [
+      "p109",
+      [
+        "Daughter of Yang Jun",
+        "楊駿女",
+        null
+      ],
+      "historical",
+      "Family Member",
+      {
+        "n": [],
+        "r": [
+          "p105",
+          "p108"
+        ],
+        "a": [
+          "onOrAfter AD 290"
+        ],
+        "p": [
+          "Western Jin"
+        ],
+        "x": "Individuated only as Yang Jun's daughter implied by Pei Zan being Jun's son-in-law."
+      },
+      [
+        [
+          {
+            "kind": "descriptive-kinship",
+            "en": "Daughter of Yang Jun",
+            "zh": "女"
+          },
+          "strongly-inferred",
+          [
+            "s0257"
+          ]
+        ]
+      ],
+      [
+        [
+          "family-member",
+          "strongly-inferred",
+          [
+            "s0257"
+          ]
+        ]
+      ]
+    ],
+    "removedClaimIds": [
+      "claim-744",
+      "claim-763",
+      "claim-764",
+      "claim-765",
+      "claim-766"
+    ],
+    "rewrittenClaims": [
+      {
+        "claimId": "claim-744",
+        "action": "remove-false-parent-of-daughter",
+        "before": [
+          "p105",
+          "family-relationship",
+          {
+            "relation": "parent-of",
+            "personId": "p109",
+            "kinshipTerm": {
+              "zh": "女",
+              "en": "daughter"
+            },
+            "parentage": "biological",
+            "subjectRole": "father",
+            "objectRole": "daughter"
+          },
+          "strongly-inferred",
+          [
+            "s0257"
+          ]
+        ]
+      },
+      {
+        "claimId": "claim-760",
+        "action": "rewire-explicit-son-in-law-to-yang-jun",
+        "before": [
+          "p108",
+          "family-relationship",
+          {
+            "relation": "spouse-of",
+            "personId": "p109",
+            "kinshipTerm": {
+              "zh": "婿",
+              "en": "son-in-law"
+            },
+            "unionCategory": "marriage",
+            "subjectRole": "husband",
+            "objectRole": "wife"
+          },
+          "strongly-inferred",
+          [
+            "s0257"
+          ]
+        ],
+        "after": [
+          "p108",
+          "family-relationship",
+          {
+            "relation": "kin-of",
+            "personId": "p105",
+            "kinshipTerm": {
+              "zh": "婿",
+              "en": "son-in-law"
+            },
+            "subjectRole": "son-in-law",
+            "objectRole": "father-in-law"
+          },
+          "explicit",
+          [
+            "s0257"
+          ]
+        ]
+      }
+    ],
+    "hintUpdates": {
+      "p105": {
+        "before": [
+          "p108",
+          "p109"
+        ],
+        "after": [
+          "p108"
+        ]
+      },
+      "p108": {
+        "before": [
+          "p105",
+          "p107",
+          "p109"
+        ],
+        "after": [
+          "p105",
+          "p107"
+        ]
+      }
+    }
+  },
+  "preserved": {
+    "otherLocalPeople": [
+      "p001",
+      "p002",
+      "p003",
+      "p004",
+      "p005",
+      "p006",
+      "p007",
+      "p008",
+      "p009",
+      "p010",
+      "p011",
+      "p012",
+      "p013",
+      "p014",
+      "p015",
+      "p016",
+      "p017",
+      "p018",
+      "p019",
+      "p020",
+      "p021",
+      "p022",
+      "p023",
+      "p024",
+      "p025",
+      "p026",
+      "p027",
+      "p028",
+      "p029",
+      "p030",
+      "p031",
+      "p032",
+      "p033",
+      "p034",
+      "p035",
+      "p036",
+      "p037",
+      "p038",
+      "p039",
+      "p040",
+      "p041",
+      "p042",
+      "p043",
+      "p044",
+      "p045",
+      "p046",
+      "p047",
+      "p048",
+      "p049",
+      "p050",
+      "p051",
+      "p052",
+      "p053",
+      "p054",
+      "p055",
+      "p056",
+      "p057",
+      "p058",
+      "p059",
+      "p060",
+      "p061",
+      "p062",
+      "p063",
+      "p064",
+      "p065",
+      "p066",
+      "p067",
+      "p068",
+      "p069",
+      "p070",
+      "p071",
+      "p072",
+      "p073",
+      "p074",
+      "p075",
+      "p076",
+      "p077",
+      "p078",
+      "p079",
+      "p080",
+      "p081",
+      "p082",
+      "p083",
+      "p084",
+      "p085",
+      "p086",
+      "p087",
+      "p088",
+      "p089",
+      "p090",
+      "p091",
+      "p092",
+      "p093",
+      "p094",
+      "p095",
+      "p096",
+      "p097",
+      "p098",
+      "p099",
+      "p100",
+      "p101",
+      "p102",
+      "p103",
+      "p104",
+      "p105",
+      "p106",
+      "p107",
+      "p108",
+      "p110",
+      "p111",
+      "p112",
+      "p113",
+      "p114",
+      "p115",
+      "p116",
+      "p117",
+      "p118",
+      "p119",
+      "p120",
+      "p121",
+      "p122",
+      "p123",
+      "p124",
+      "p125",
+      "p126",
+      "p127",
+      "p128",
+      "p129",
+      "p130",
+      "p131",
+      "p132",
+      "p133",
+      "p134",
+      "p135",
+      "p136",
+      "p137",
+      "p138",
+      "p139",
+      "p140",
+      "p141",
+      "p142",
+      "p143",
+      "p144",
+      "p145",
+      "p146",
+      "p147",
+      "p148",
+      "p149"
+    ],
+    "otherLocalPeopleCount": 148,
+    "acceptedIdentityCasesNotReopened": 147,
+    "dateAuditFileUntouched": "data/people/date-audits/jinshu/047.json",
+    "approvedEnglishApplied": 16,
+    "peiZanP108SurfacesAndNames": {
+      "names": [
+        "Pei Zan",
+        "裴瓚",
+        "Pei Zan"
+      ],
+      "nameClaims": [
+        [
+          {
+            "kind": "personal-name",
+            "en": "Pei Zan",
+            "zh": "裴瓚",
+            "pinyin": "Pei Zan"
+          },
+          "explicit",
+          [
+            "s0257"
+          ]
+        ],
+        [
+          {
+            "kind": "given",
+            "en": "Zan",
+            "zh": "瓚",
+            "pinyin": "Zan"
+          },
+          "explicit",
+          [
+            "s0257"
+          ]
+        ]
+      ]
+    },
+    "yangJunP105Names": [
+      "Yang Jun",
+      "楊駿",
+      "Yang Jun"
+    ]
+  },
+  "notDone": [
+    "no invented zh daughter name",
+    "no unproved daughter person retained",
+    "no validator edits",
+    "no date-audits/jinshu/047.json edits",
+    "no reopen of 147 approved identity cases",
+    "no self-approval",
+    "no merge"
+  ]
+}
