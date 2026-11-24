@@ -26,7 +26,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$SOURCE"
           export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
           export OUT="$RUNNER_TEMP/scoped-curation-preflight"
-          mkdir "$OUT"
+          mkdir -p "$OUT" data/people/generated/identity-dossiers
           node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE" > "$OUT/registry-receipt.json"
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
