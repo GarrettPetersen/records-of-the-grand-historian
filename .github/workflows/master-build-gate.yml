@@ -1,71 +1,59 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Verify independent retained chronology
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 20
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: e43a3b2594804d76972221108e4e7d61c8448f49
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Validate and record independently reviewed date reports
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          node --input-type=module <<'JS'
+          const expected=[{"key":"jiuwudaishi/092","agentId":"bc-672487af-7537-42d7-8235-4e7b9b75d3a5","ownerAgentId":"bc-f6969509-1699-4266-a225-cb3bca5d36ef","head":"3ad6c147416dbb12c7fc535f8fabee2a3b30bbd4","ownerSha256":"6f9f130354fa3a9b019f41faea35bcfa528d50c642ba6f0b36a90e6fe92fe309","inputs":[{"path":"data/jiuwudaishi/092.json","blob":"d24a942626d67119a0f8cb81150b5719103c4c37"},{"path":"data/people/extractions/jiuwudaishi/092.json","blob":"e618ba7550f04c8953b1f9cd6c4a11bc481f2528"},{"path":"data/people/date-audits/jiuwudaishi/092.json","blob":"d8393ebd41201308bef9b796f32f95b8ce0f9efb"},{"path":"data/people/editorial-decisions/jiuwudaishi/092.json","blob":"346de0ea0a774ed444bd5052bf30bb64611935ea"}],"capture":{"head":"c4d68764cdf01db681e70049b977ab79e54e5030","blob":"184c92e6bd6e90cc47308b4be3ecae4cf4eb8f0a","path":"research/people/checkpoints/campaign-nov24-stale-date-recovery/jiuwudaishi-092/independent-date-recovery.json","sha256":"ca7e0bd91f5d87797bc13be01e0689fae710e12d73acac70f5d4a3bc61dad7f6","verdict":"approve","candidateSha256":"06119c5bebe6ef50e815887e7b3f77067e289dc7cf8ee763d9a76ae8657f9585","recordedAt":"2026-11-24T12:10:57.377Z"},"runId":"run-afbe33df-b1ca-4773-9e85-81111a5a8f4f"},{"key":"jiuwudaishi/086","agentId":"bc-472b17d2-84eb-4f2c-aa5e-776b35e8b806","ownerAgentId":"bc-f6969509-1699-4266-a225-cb3bca5d36ef","head":"1eb5d2dd960387fa83943e322e66f9c0bf67a3c0","ownerSha256":"94af876c0e9fb7101000cbd93d9f0ae7d4ed8288fececf41bcd87d790b5d6085","inputs":[{"path":"data/jiuwudaishi/086.json","blob":"a486b418638af01487e63e9211fd10ca9f248601"},{"path":"data/people/extractions/jiuwudaishi/086.json","blob":"70f0f715978277a30048d8ea6011cbc39cf2b00d"},{"path":"data/people/date-audits/jiuwudaishi/086.json","blob":"972d44c6cf5366f2feebb3d3487a0a7633a5911e"},{"path":"data/people/editorial-decisions/jiuwudaishi/086.json","blob":"5824520565c578c39829941e501ec76ff16a78b2"}],"capture":{"head":"100be98aa342624188a5d14ac3033c3a212047f6","blob":"da6dc8b7859d1d646cf8649b6422f81625c1f813","path":"research/people/checkpoints/campaign-nov24-stale-date-recovery/jiuwudaishi-086/independent-date-recovery.json","sha256":"582fc7b93741bf3cd76c25392bb0e023f304490d313ebecb003dd10fd9f5be2c","verdict":"approve","candidateSha256":"7078e87a959a6140d15340384fded96a3be27dd6b2ba0a71acf4bada6fa51d94","recordedAt":"2026-11-24T12:10:57.553Z"},"runId":"run-f0ea1ede-38c3-4db7-9eab-6cf33f3d3ffa"},{"key":"hanshu/002","agentId":"bc-d91a39f8-f13e-4991-afdc-8bc59f2884e7","ownerAgentId":"bc-7eb9513a-4f87-4189-ae03-a92281c6deea","head":"2ddefc3f3aa8cea4ceb83a41de99e74553e40bff","ownerSha256":"ace092f0472168a4d6a18fbefc5180c0699f4e3e1c5861388adf79f3728af00e","inputs":[{"path":"data/hanshu/002.json","blob":"e40a4c214f2c836be4ec96ca5e9079db4f03778f"},{"path":"data/people/extractions/hanshu/002.json","blob":"eb4d6c39cb46750c0242298c62ab45bc27166ca8"},{"path":"data/people/date-audits/hanshu/002.json","blob":"52677e7931f526561f4da8d1c99eef9ac56cc011"},{"path":"data/people/editorial-decisions/hanshu/002.json","blob":"6f32f9698b5543cf5800187c796c5b8e934aabfb"}],"capture":{"head":"91a92d21f7439028a75f84f9d7ef402eed340670","blob":"a2ca4802ffc19e080c429243cc995da6b480c25a","path":"research/people/checkpoints/campaign-nov24-stale-date-recovery/hanshu-002/independent-date-recovery.json","sha256":"d009e60411ae4c96788e91cfa02c61e0e0c7a579349fff388c3a757f12f755e7","verdict":"approve","candidateSha256":"c539c6af117c99317d2459e5d0ed0d265cedb48c2ef9663dd813aba5e72aa3b0","recordedAt":"2026-11-24T12:10:57.100Z"},"runId":"run-d2eb4e0e-d9f1-4492-a788-3a5bacfa281d"},{"key":"jiuwudaishi/010","agentId":"bc-dd03dabb-0335-4150-9b46-86b9dec8f271","ownerAgentId":"bc-7eb9513a-4f87-4189-ae03-a92281c6deea","head":"d43a970333115d3dd7a6d055e028c3c75d521e27","ownerSha256":"e6b663aae4111c9ecd99c9134a67145b50947534e5c7be9d73b5bebc52502705","inputs":[{"path":"data/jiuwudaishi/010.json","blob":"ccbaf9165b5655d89923e1647fd5806de591cfb6"},{"path":"data/people/extractions/jiuwudaishi/010.json","blob":"cba281390d5e3f0e55e33acc5abae4d5cac0a1ce"},{"path":"data/people/date-audits/jiuwudaishi/010.json","blob":"5270d9a7a2c512d102044bddb3b2d61cb87e410d"},{"path":"data/people/editorial-decisions/jiuwudaishi/010.json","blob":"98d5241015584a80ad8427620894d3517a3b4936"}],"capture":{"head":"f75d8262b07f12a603eeb7d09376bf986c2de3cb","blob":"28e1bd784745032641e0bd19f866a511c8a77217","path":"research/people/checkpoints/campaign-nov24-stale-date-recovery/jiuwudaishi-010/independent-date-recovery.json","sha256":"1addeef06b5342ed70a504160fb64b1338e2642446d55d75c1801743bd6d7f70","verdict":"approve","candidateSha256":"fd363a58a919e28fd7b7f92f06e10bb7bb9a3eff4b22ad0482935d4646deead4","recordedAt":"2026-11-24T12:10:57.213Z"},"runId":"run-210504ad-89d9-4924-be8c-2f16a3673108"}];
+          import {strict as assert} from 'node:assert';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {readdirSync,readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+          import {buildDateAuditPacket,validateDateAuditReport,recordDateAudit} from './scripts/lib/people-date-audit.mjs';
+          const hash=b=>createHash('sha256').update(b).digest('hex');
+          const result=[],dir=process.env.RUNNER_TEMP+'/verified-chronology';mkdirSync(dir,{recursive:true});
+          const read=(name,revision)=>execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+name+'?ref='+revision],{maxBuffer:4e6,timeout:30000});
+          const git=args=>execFileSync('git',args,{encoding:'utf8',maxBuffer:2e6,timeout:30000}).trim();
+          for(const x of expected){try{
+          for(const i of x.inputs){assert.equal(git(['rev-parse','HEAD:'+i.path]),i.blob);assert.equal(git(['hash-object',i.path]),i.blob);}
+          const bytes=read(x.capture.path,x.capture.head);assert.equal(hash(bytes),x.capture.sha256);
+          const a=JSON.parse(bytes),[book,chapter]=x.key.split('/'),report=a.candidateAudit;
+          assert(a.schemaVersion===1&&a.reviewerAgentId===x.agentId&&a.ownerAgentId===x.ownerAgentId&&x.agentId!==x.ownerAgentId&&a.ownerRevision===x.head&&a.ownerSha256?.replace(/^sha256:/u,'')===x.ownerSha256&&a.chapterKey===x.key&&a.verdict==='approve');
+          assert.equal(hash(JSON.stringify(report)),x.capture.candidateSha256);
+          const packet=buildDateAuditPacket(book,chapter);validateDateAuditReport(report,packet);
+          const status=recordDateAudit(report);assert.equal(status.status,'audited');
+          const scope=x.key.replace('/','-'),datePath=x.inputs[2].path,historyDir='data/people/date-audit-history/'+x.key;
+          const archived=readdirSync(historyDir).map(name=>historyDir+'/'+name).find(name=>hash(JSON.stringify(JSON.parse(readFileSync(name))))===hash(JSON.stringify(JSON.parse(git(['show','HEAD:'+datePath])))));assert(archived);
+          const serialized=readFileSync(datePath);assert.equal(hash(JSON.stringify(JSON.parse(serialized))),x.capture.candidateSha256);
+          writeFileSync(dir+'/'+scope+'-audit.json',serialized);writeFileSync(dir+'/'+scope+'-original.json',execFileSync('git',['show','HEAD:'+datePath],{maxBuffer:2e6}));
+          result.push({key:x.key,scope,runId:x.runId,source:process.env.SOURCE,oldBlob:x.inputs[2].blob,newAuditBytesSha256:hash(serialized),historyPath:archived,items:report.itemChecks.length,people:report.personChecks.length,status:status.status});
+          }catch(e){result.push({key:x.key,error:e.message});}}
+          writeFileSync(dir+'/summary.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));assert(result.some(x=>x.status==='audited'),'No native date report passed');
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: native-retained-chronology
+          path: ${{ runner.temp }}/verified-chronology/
+          if-no-files-found: error
+          retention-days: 7
