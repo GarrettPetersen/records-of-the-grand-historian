@@ -4,7 +4,7 @@
   "book": "jinshu",
   "chapter": "041",
   "stagingDraftPr": 5476,
-  "stagingDraftSha": "76896c492bffcc7a5fdd843d30da2be55bffe568",
+  "stagingDraftSha": "3c757829eb842f650be91ae3f478454611d3d6ee",
   "sourceOwnerPr": 5418,
   "sourceOwnerAgentId": "bc-e9c3ed78-9d42-4a75-8ea8-b7bd764b43cd",
   "reviewer": {
@@ -13,7 +13,7 @@
     "agentId": "bc-64f55949-b3a6-4213-b7a2-6e6256473515",
     "independentOfOwner": true
   },
-  "reviewedAt": "2026-11-23T23:58:00.000Z",
+  "reviewedAt": "2026-11-24T01:05:00.000Z",
   "chapterTitle": {
     "zh": "卷四十一 列傳第十一 魏舒 李憙 劉寔 高光",
     "en": "Volume 41 Biographies 11: Wei Shu; Li Xi; Liu Shi; Gao Guang"
@@ -26,8 +26,9 @@
     "extraction": {
       "path": "data/people/extractions/jinshu/041.json",
       "sha256": "sha256:c4b7005f2c3c437ea1a56d25c28ddd4a7e5319bae3fbe12fea0b3ee891a78752",
-      "stagingCandidateSha256": "sha256:604a6660ce80b5300f13b02928f07f6f5e7872ea0b45b1c4d46839097dd8be3a",
-      "note": "stagingCandidate at PR #5476 commit 76896c492; production pin unchanged on reviewer branch"
+      "stagingCandidateSha256": "sha256:83ab3ce443f02602fffd2fcd91ab305b0c081d985528975a6f49f0353f61408e",
+      "stagingPacketExtractionHash": "sha256:d74f9ff11be1a48b401908811331157b95018d95a00928ae0f4fa31c05c0d4e6",
+      "note": "stagingCandidate at PR #5476 commit 3c757829; production pin unchanged on reviewer branch"
     },
     "editorial": {
       "path": "data/people/editorial-decisions/jinshu/041.json",
@@ -80,6 +81,24 @@
     "chapterCanClose": false,
     "exactDependenciesPath": "research/people/jinshu041-independent-review-20261123/manifest.json"
   },
+  "hintsQualDependencyMerge": {
+    "stagingDraftSha": "3c757829eb842f650be91ae3f478454611d3d6ee",
+    "dependencyManifest": "research/people/jinshu041-authoring-20261123/changed-item-dependency-manifest.json",
+    "compactReport": "research/people/jinshu041-independent-review-20261123/date-audit-report-hints-qual-compact-20261124.json",
+    "packet": "research/people/jinshu041-independent-review-20261123/date-packet-staging-3c757829.json",
+    "verification": "research/people/jinshu041-independent-review-20261123/hints-qual-delta-independent-verification-20261124.json",
+    "changedVerified": 131,
+    "rejectedResiduals": 0,
+    "preservedInventoryApprovals": 38,
+    "preservedExplicitReignYear": 8,
+    "unchangedItemChecksReused": 365,
+    "nativeAuditedEligible": false,
+    "unresolvedContainers": 295,
+    "packetHashes": {
+      "sourceHash": "sha256:6a3c9baa458a6a4b6d41068407b18acaf95f2cde19dff10078aac44f0ac89545",
+      "extractionHash": "sha256:d74f9ff11be1a48b401908811331157b95018d95a00928ae0f4fa31c05c0d4e6"
+    }
+  },
   "decisions": [
     {
       "gate": "source-english-editorial",
@@ -95,13 +114,14 @@
     {
       "gate": "chronology",
       "verdict": "research-blocked",
-      "kind": "narrow-chrono-proof-on-staging-76896c492",
-      "artifact": "research/people/jinshu041-independent-review-20261123/narrow-chrono-independent-proof-20261123.json",
+      "kind": "hints-qual-dependency-merge-on-staging-3c757829",
+      "artifact": "research/people/jinshu041-independent-review-20261123/date-audit-report-hints-qual-compact-20261124.json",
       "itemCount": 496,
       "incorrectItemsAfterDelta": 0,
-      "narrowAppliedVerified": 228,
-      "explicitWesternSupported": 8,
-      "reason": "228 narrow-delta claims independently matched to Chinese witnesses on staging extraction 604a6660…; eight explicit regnal-year tokens (太熙元年, 九年) carry supported source-calendar Western mappings with person-specific reasons. Remaining 295 unresolved / 24 undated bundles are valid native holds, not blanket approval. 108/127 active hints still assert derived Gregorian without per-hint sealing. Chapter cannot close until manifest exactDependencies clear. No recordDateAudit; no full rerun."
+      "hintsQualVerified": 131,
+      "rejectedResiduals": 0,
+      "nativeAudited": false,
+      "reason": "All 108 hint and 23 qualitative repairs match changed-item-dependency-manifest receipts and Chinese witnesses; 38 inventory + 8 explicit regnal rows preserved; 365 itemChecks reused by verified dependency (no claim mutation outside hints/qual vs 76896c492). 295 unresolved containers prevent audited status — compact native report validates; no recordDateAudit."
     },
     {
       "gate": "identity",
