@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "072"
+  },
+  "ownerAgentId": "bc-1e7f1743-30db-4b99-9204-5e5b3ca1ccbf",
+  "workerId": "cursor-nov24-retained-staging-w18-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "dd2f7a24c7114f60d6123ca51d7d5561c46f5e28ee1846afdab2fd5e68d66554",
+  "stagingBase": "4394bd71e4ddea797aefde7d83407e881868262a",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-suishu-072-1ccbf",
+  "auditState": "no-native-date-report",
+  "promptVersion": 7,
+  "extractionBytes": 203519,
+  "workOrder": {
+    "sourceExtractionSha256": "sha256:902c41b52f6b6c0d60d414c0a649a7e0de3963a56f7d695fd3f088d9f5eb1c2d",
+    "people": 88,
+    "claims": 665
+  },
+  "inputBlobWitness": {
+    "source": "d8c3fded6f5e525feabc03bee6e9b6435c4127ab",
+    "extraction": "2469d352c62b101a441ec59bdb12a95a27f0118a",
+    "editorial": "b1e6bf662854addc90b2dfd1b8b08d5705ea159f"
+  },
+  "sealedInputs": {
+    "source": "sha256:35586202415a1575cb543e91c433adf2213c3333c16a305b102aba30cf3a1946",
+    "extraction": "sha256:902c41b52f6b6c0d60d414c0a649a7e0de3963a56f7d695fd3f088d9f5eb1c2d",
+    "editorial": "sha256:61942e02a5214477923e6d4e3384c1c38bd71f78c1a15c3d06f91ed14d13313d"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 72 Biographies 37: Filial Piety",
+    "chineseUnits": 258,
+    "translatedCount": 258,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseTableSpacers": 0,
+    "fullEnglishCoverage": true
+  },
+  "editorialAndExtractionReuse": {
+    "extractionBlob": "2469d352c62b101a441ec59bdb12a95a27f0118a",
+    "editorialBlob": "b1e6bf662854addc90b2dfd1b8b08d5705ea159f",
+    "extractionContentSha256": "sha256:902c41b52f6b6c0d60d414c0a649a7e0de3963a56f7d695fd3f088d9f5eb1c2d",
+    "editorialContentSha256": "sha256:61942e02a5214477923e6d4e3384c1c38bd71f78c1a15c3d06f91ed14d13313d",
+    "promptVersion": 7,
+    "appliedTranslationRepairs": 22,
+    "editorialProposals": 22,
+    "editorialDecisions": 22,
+    "ownerDidNotReextract": true,
+    "ownerDidNotAlterSealedInputs": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/suishu-072/date-packet.json",
+    "contentSha256": "sha256:c10d4b8011b96e11f382ca48791180739bd2defe094d57079eaa62d285978e5d",
+    "itemCount": 265,
+    "sourceHash": "sha256:693bdb382b4e94b2269266e10c3ba8b767d819c579473e848f2ef29ab1f5c8ad",
+    "extractionHash": "sha256:80333aee2d9ea2c0eb42fff7ed3e415bf4a292f4769d9322c588f1e8c972edd0",
+    "command": "npm run people:dates:packet -- --book suishu --chapter 072 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-072/date-packet.json"
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book suishu --chapter 072",
+    "peopleValidateSummary": "Scoped person data validation passed for suishu/072: 1 extraction(s), 88 local people, 487 mentions, 969 claims, 0 proposed repair(s), 22 applied repair(s), 22 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/suishu/072.json",
+    "peopleValidateExtractionPassed": true,
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book suishu --chapter 072",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "dateAuditPath": "data/people/date-audits/suishu/072.json"
+    },
+    "chronologyStatus": "candidate-packet-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "remainingIndependentProofs": {
+    "date": {
+      "gate": "independent-native-date-audit",
+      "detail": "Fresh sealed date packet prepared at pinned extraction; data/people/date-audits missing. Independent reviewer must run native date workflow against this packet and record approval via people:dates:record without self-approval.",
+      "packetSha256": "sha256:c10d4b8011b96e11f382ca48791180739bd2defe094d57079eaa62d285978e5d"
+    },
+    "identity": {
+      "gate": "independent-bounded-identity-review",
+      "detail": "Global identity resolution dossiers remain for chapter-local people after date approval; owner pass did not perform merges or canonical identity edits."
+    },
+    "editorial": null
+  },
+  "distinctHolds": [
+    {
+      "kind": "missing-native-date-report",
+      "detail": "No data/people/date-audits record; people:dates:verify returns un-audited."
+    }
+  ],
+  "substantiveFindings": "Sealed source, extraction, and editorial inputs witness-verified at staging 4394bd71. Full chapter English coverage on Chinese-bearing units; extraction prompt v7 retained. Owner prepared native date packet; no definite English contradiction or chronology repair identified in this pass. Chapter not complete: independent date audit still missing.",
+  "scopedChronologyOrIdentityChanges": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 072",
+    "datesPacket": "npm run people:dates:packet -- --book suishu --chapter 072 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-072/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book suishu --chapter 072"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no registry, deploy, merge, or sealed canonical edits."
+}
