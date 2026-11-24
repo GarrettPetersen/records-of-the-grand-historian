@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T07:31:46.125Z",
+ "lastCheckedAt": "2026-11-24T07:32:24.361Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -2583,7 +2583,10 @@
    "preflight": {
     "ref": "codex/cursor-glossary-nov24-2026-release-twenty-four-scoped-preflight",
     "workflowRevision": "d8a6b46cc603d5633c45f12ed459e20ec627f917",
-    "status": "dispatch_pending"
+    "status": "in_progress",
+    "runId": 45348463823,
+    "conclusion": null,
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45348463823"
    }
   }
  },
@@ -23524,7 +23527,10 @@
          "cases": 41
         }
        ],
-       "status": "dispatch_pending"
+       "status": "in_progress",
+       "runId": 45348594735,
+       "conclusion": null,
+       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45348594735"
       }
      },
      {
@@ -23644,7 +23650,10 @@
        }
       ],
       "artifact": "recovered-native-certify-third-evidence",
-      "status": "dispatch_pending"
+      "status": "completed",
+      "runId": 45347785332,
+      "conclusion": "success",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45347785332"
      }
     ],
     "ownerContinuations": [
@@ -23802,10 +23811,19 @@
      "staging": "0cd0cb5ef0d7d53d965c10e6baa3db32e0e727a2",
      "certificateBlob": "80b40b49bb61c7628b9cfef6211a5a649305eb14",
      "certificateSha256": "07f642f8c08aade4ad1013922863913e0bc2ebaf1b7b8b422c57b138450064d6",
-     "status": "in_progress",
+     "status": "completed",
      "runId": 45347603356,
-     "conclusion": null,
-     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45347603356"
+     "conclusion": "failure",
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45347603356",
+     "finding": "Staging had an older identity runtime. Source and chronology passed; the semantic reviewer never ran.",
+     "retry": {
+      "ref": "codex/cursor-glossary-nov24-2026-songshu004-staging-source-current-runtime",
+      "workflowRevision": "f396757a71f232578656687eb674818178c71e29",
+      "source": "74bf7b59f83b12050dca2b48e83ca26b99caec3b",
+      "status": "dispatch_pending",
+      "runtime": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+      "unchangedStagingDataBase": "9dd20cd8ab5e3f70b6f377c0e109d8ccc3f4e14a"
+     }
     },
     "focusedReviewRepairWave": [
      {
@@ -24086,7 +24104,42 @@
       "runId": "run-c2399949-2eb8-4196-bced-61ae7207679a",
       "observedAt": "2026-11-24T07:26:53.361Z"
      }
-    ]
+    ],
+    "envelopeProjection": {
+     "ref": "codex/cursor-glossary-nov24-2026-native-envelope-provenance",
+     "workflowRevision": "110f6686cd17ec513826393b7d4a501c71f1c4ae",
+     "source": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+     "status": "dispatch_pending",
+     "jobs": [
+      {
+       "key": "qingshigao/120",
+       "agentId": "bc-7d924c3e-6338-4a3e-ba11-52388f267617",
+       "runId": "run-f45dce8a-9d7d-4fd1-800f-d600e9cb7200",
+       "owner": "bc-fe43ebdf-900b-4477-abde-dd6496d385a0",
+       "packetSha256": "aab0d34fca60d6a34a5c1e5372a8cca38ca1e349bb05a6e6f054c27613d0e98e",
+       "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/qingshigao-120/independent-identity-report.json",
+       "evidenceHead": "05b285156dc12ab926e205f884e12a8897d35430",
+       "reportSha256": "7ef5dbd964d18f9e963806d0e789a4d164659873db7e9fe6da1f702c32af27ef",
+       "cases": 3,
+       "transportSha256": "440f500bf76e9867a09e4be2ffb0816f7318802bcc67f84884fc63c222559560",
+       "authorHead": "baa383cc0b5d9533938f066b00365a446f6d9200"
+      },
+      {
+       "key": "songshu/096",
+       "agentId": "bc-e596112f-a8c7-44d7-ae09-074032992c58",
+       "runId": "run-2e3d7443-0ace-4941-8563-84ea19426053",
+       "owner": "bc-fe43ebdf-900b-4477-abde-dd6496d385a0",
+       "packetSha256": "b3c150e3fb5bd73fbdf9f493ef897e6eb56578a426ff6a833f67db173654af9a",
+       "reportPath": "research/people/checkpoints/campaign-audited-transport-20261124/songshu-096/independent-identity-report.json",
+       "evidenceHead": "4d5d285f1fb2f2d24762bd63418ec52d5bba0642",
+       "reportSha256": "3db22fda564fddbd6b54d5590b592056af2e7bffa261202c98ec35314b3efe05",
+       "cases": 40,
+       "transportSha256": "dd956c096abaa2b9c2789f12fef2bf523ab3c7710f64fbf54720f8f9bf9f6c76",
+       "authorHead": "bc09397f909cf48381f617c04ddcef59dee0fb13"
+      }
+     ],
+     "artifact": "native-envelope-receipts"
+    }
    },
    "replenishment": {
     "source": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
@@ -24095,7 +24148,10 @@
     "workflowRevision": "db8fee602053019481ce2a2f2bde46f95d2e003e",
     "artifact": "replenished-audited-glossary-evidence",
     "maxPrepared": 24,
-    "status": "dispatch_pending"
+    "status": "in_progress",
+    "runId": 45348468021,
+    "conclusion": null,
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45348468021"
    }
   },
   "narrowChronologyReview": {
