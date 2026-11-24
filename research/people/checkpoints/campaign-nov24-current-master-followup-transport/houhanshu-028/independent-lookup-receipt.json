@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-identity-review-lookup-receipt",
+  "scope": { "book": "houhanshu", "chapter": "028" },
+  "reviewer": {
+    "agentId": "bc-8e6c42b1-5b92-4f2c-b37d-a31d3aa17df0",
+    "name": "cursor-nov24-independent-houhanshu-028"
+  },
+  "planFingerprint": "sha256:78a459f333150570072851164668459aa79ce43c3994f8672c3c0d564e19a645",
+  "authorStagingCommit": "6f7b4847ec0f8c65483a0b38a6c6657cc60b5a8e",
+  "registrySnapshot": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+  "lookupBaseUrl": "https://24histories-people-lookup.garrett-m-petersen.workers.dev",
+  "requests": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm read-only registry generation for auxiliary overflow cross-check",
+      "outcome": "generation cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac; dossierCount 228270"
+    },
+    {
+      "route": "/v1/search?key=zh:紂",
+      "purpose": "Overflow context King Zhou case (transport zh:紂 62 dossiers, 8 visited)",
+      "outcome": "total 62, truncated true — not separation evidence"
+    },
+    {
+      "route": "/v1/search?key=zh:董卓",
+      "purpose": "Overflow context Dong Zhuo membership",
+      "outcome": "total 53, truncated true — not separation evidence"
+    },
+    {
+      "route": "/v1/search?key=zh:竇憲",
+      "purpose": "Dou Xian canonical key probe",
+      "outcome": "total 0 on this snapshot key form; chapter-primary 車騎將軍竇憲 governs attribution"
+    }
+  ],
+  "note": "Auxiliary lookup only; independent approval rests on sealed transport primary Chinese and pinned data/houhanshu/028.json for chapter units plus bounded anchor units loaded from data/{book}/{chapter}.json."
+}
