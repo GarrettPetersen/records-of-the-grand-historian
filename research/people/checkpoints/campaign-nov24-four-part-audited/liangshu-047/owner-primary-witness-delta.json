@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "targeted-primary-witness-owner-return",
+  "chapterKey": "liangshu/047",
+  "ownerAgentId": "bc-55fcc16a-2fa6-4a05-8ec9-d1a96ced0a7b",
+  "campaignWorker": "cursor-nov24-four-part-owner-3",
+  "priorRun": "run-440315f8-03d2-46f1-9da8-21ab4ec34f2a",
+  "ownerRevision": "612dec17eedc4ae3ebbca3cdaf54610b1231d5b9",
+  "sourceReviewHead": "f79af9687b492638aa56e381e06eae1ef99d6a82",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterPin": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "originalIdempotencyKey": "b9617b4f2c5ac3c1609c70775aab9bf84379c8c548a96e7cfa390b2af3ac6326",
+  "idempotencyKey": "391a4bcbfd70bcad7540947202389758a9542c87caebd9782904592dc4797009",
+  "mode": "targeted-primary-witness",
+  "ownerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-four-part-audited/liangshu-047/owner-handoff.json",
+    "sha256": "6400a37c44c751d80f74b7a528a92c72918b9beb8c611db33e32c29b0075fa8a"
+  },
+  "inputBlobs": {
+    "source": {
+      "path": "data/liangshu/047.json",
+      "blob": "2b34f57b4101b6d8b69980196d2e3f50c0245868"
+    },
+    "extraction": {
+      "path": "data/people/extractions/liangshu/047.json",
+      "blob": "b66eac7df91a4872d7d95bbeaadb47bb4b7092d9"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/liangshu/047.json",
+      "blob": "26056236556e0c971474612d48b0c7f371e84227"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/liangshu/047.json",
+      "blob": "6ff45dbc3d9757a4edbdb01d9b35ae0ab2870b27"
+    }
+  },
+  "cases": [
+    {
+      "caseId": "sha256:05ac81d7030ee6bbf75df95259c56283cb8eca4a147be3a6f8b566eb8fcf2af3",
+      "localPersonId": "liangshu:047:p026",
+      "canonicalPersonId": "per_8DC57RGJJEJZ3GV0C4SG",
+      "reviewerVerdict": "hold",
+      "ownerDisposition": "concur-with-reviewer",
+      "summary": "Mother of Xun Jiang is a valid unnamed family record entailed by 外祖孫謙 addressing Xun Jiang in s0050, but 荀匠母 is an editorial Chinese gloss not quoted in source. No 母 name surface appears in the sealed unit.",
+      "rejectedWitnesses": [
+        {
+          "purportedQuote": "荀匠母",
+          "personId": "p026",
+          "evidenceUnits": ["s0050"],
+          "reason": "Editorial descriptive label; s0050 reads 外祖孫謙誡之曰 and does not contain 荀匠母 or a standalone 母 naming the mother."
+        }
+      ],
+      "primaryWitnesses": [
+        {
+          "localId": "liangshu:047:p025",
+          "book": "liangshu",
+          "chapter": "047",
+          "unitId": "s0050",
+          "quote": "外祖",
+          "zhContext": "外祖孫謙誡之曰：「主上以孝治天下，汝行過古人，故發明詔，擢汝此職。",
+          "witnessUse": "Names Sun Qian as Xun Jiang's maternal grandfather; supports maternal line without naming the mother."
+        },
+        {
+          "localId": "liangshu:047:p025",
+          "unitId": "s0050",
+          "quote": "孫謙",
+          "zhContext": "外祖孫謙誡之曰：「主上以孝治天下，汝行過古人，故發明詔，擢汝此職。",
+          "witnessUse": "Personal name of the quoted maternal grandfather witness."
+        },
+        {
+          "localId": "liangshu:047:p017",
+          "unitId": "s0050",
+          "quote": "之",
+          "zhContext": "外祖孫謙誡之曰",
+          "witnessUse": "Apostrophic address to Xun Jiang (匠); does not supply the mother's name or the morpheme 母."
+        }
+      ],
+      "distinctions": [
+        "p025 Sun Qian is explicitly named in s0050.",
+        "p026 remains an inferred maternal parent between Sun Qian and Xun Jiang.",
+        "Grandfather speech must not be misread as a mother name witness."
+      ],
+      "recommendedIndependentOutcome": {
+        "verdict": "approve",
+        "unresolvedIdentity": true,
+        "blockingCondition": "Remove zh:荀匠母 blocking surface; certify unnamed mother via 外祖 kinship structure and separate p025 witness."
+      }
+    }
+  ],
+  "proposedChanges": [
+    {
+      "artifact": "data/people/extractions/liangshu/047.json",
+      "kind": "extraction-proposal",
+      "personId": "p026",
+      "patches": [
+        {
+          "op": "replace",
+          "path": "/people[p026]/displayNameZh",
+          "before": "荀匠母",
+          "after": null,
+          "reason": "Non-source Chinese display string."
+        },
+        {
+          "op": "replace",
+          "path": "/people[p026]/identityNames/0/zh",
+          "before": "荀匠母",
+          "after": null,
+          "reason": "Bind descriptive kinship to 外祖 structure via p025 on s0050, not to a fabricated name quote."
+        }
+      ],
+      "requiredIdentityPatch": "Canonical membership may retain singleton mother record with unresolvedIdentity; no zh blocking key from 荀匠母.",
+      "requiredChronologyPatch": null
+    }
+  ],
+  "held": [],
+  "validation": {
+    "inputBlobPinsVerified": true,
+    "ownerHandoffSha256Verified": true,
+    "scopedPeopleValidate": {
+      "command": "npm run people:validate -- --book liangshu --chapter 047",
+      "status": "PASS",
+      "summary": "Sealed inputs unchanged; proposal removes only false Chinese identity surfaces on p026."
+    },
+    "canonicalEditsApplied": false,
+    "notes": "[CF-Pages-Skip] Owner return is witness evidence and extraction proposal only; canonical extraction bytes on ownerRevision are unchanged in this commit."
+  }
+}
