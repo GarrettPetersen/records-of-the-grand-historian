@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-historical-authorship-review",
+  "chapterKey": "jiuwudaishi/053",
+  "reviewerAgentId": "bc-a6a37b21-3b9c-4021-8729-ad7cbc35f5a9",
+  "ownerAgentId": "bc-7e39e06d-e9bf-40a6-878e-3b988562acfa",
+  "ownerRevision": "643c681c9a149fe47dd06eb976f87cb1ee257541",
+  "ownerPullRequest": 5656,
+  "reviewedAt": "2026-11-24T13:45:00.000Z",
+  "verdict": "approved",
+  "proof": {
+    "ownerRecoveryArtifact": {
+      "path": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-053/owner-recovery.json",
+      "sha256": "35536611ca8ba8a0f2bbd88eabcb06bdb109e0abcddd68bfb51384a5da8ba7d3"
+    },
+    "pinnedInputBlobs": {
+      "data/jiuwudaishi/053.json": "2c670c8c0dd8dd4c00adf854ce78ca18e2f5bfe3",
+      "data/people/extractions/jiuwudaishi/053.json": "86a70737521c26e03c7873bfef95573283697a76",
+      "data/people/date-audits/jiuwudaishi/053.json": "a1db6ad5052960e163c95fb9fd9854a1d6cccbca",
+      "data/people/editorial-decisions/jiuwudaishi/053.json": "2c4a187a5e4d9ce44b434248b950ebafecc27502"
+    },
+    "patch": {
+      "path": "data/people/extractions/jiuwudaishi/053.json",
+      "parentGitBlob": "86a70737521c26e03c7873bfef95573283697a76",
+      "candidateGitBlob": "d105640d157f7ba2cbda8eebecb04556a1dc9b63",
+      "parentSha256": "c29b1480ba255ed95808dba1cdeeef5e784b8a8a19b1085079c272fc198ff3a4",
+      "candidateSha256": "f31ad5dbca3e0690b006b7aceea7997429b6092e3b6ccd3bc3bea6ee8cdbd78f",
+      "chunks": 6,
+      "diffFields": [
+        "run.chunks[0].agentId",
+        "run.chunks[1].agentId",
+        "run.chunks[2].agentId",
+        "run.chunks[3].agentId",
+        "run.chunks[4].agentId",
+        "run.chunks[5].agentId"
+      ],
+      "contentEqualAfterStrippingContributorMetadata": true
+    },
+    "historicalProducerEvidence": {
+      "stableWorker": "grokbot-01",
+      "workQueueClaimCommit": "7b1387baf6e2e16a31586f76880f77a46706aa1f",
+      "workQueueClaimRecord": {
+        "lane": "grokbot",
+        "worker": "grokbot-01",
+        "status": "claimed",
+        "claimedAt": "2026-08-25T18:37:00.522Z",
+        "chapterFingerprint": "sha256:b2361ca74d2caea3652c875216a109a231f262f0ca4d055edef36fb788b2b12f",
+        "source": "people-work-queue.json on GitHub commit 7b1387baf6e2e16a31586f76880f77a46706aa1f (queue broker author, not extraction commit author)"
+      },
+      "introductionCommit": "0f5c91a4220ad55c8a3b007e0991f36924f9bc4b",
+      "introductionGitBlob": "36fd4ceac0d605d1b169508a165589602df2359b",
+      "introductionSha256": "b99456a8c05b27ce41fc01c70a85b3c1e3d3f693a9c0b36440f9ec44a8e003c9",
+      "introductionRunMetadata": {
+        "model": "Grok Bot-chunked",
+        "promptVersion": 7,
+        "completedAt": "2026-08-25T18:54:45.269Z",
+        "chunkCount": 6,
+        "chunkRangesMatchOwnerReceipt": true
+      },
+      "promotedBatchPullRequest": null,
+      "parentRevisionAfterReconcile": "07e5abb388dcb485f38f3ed07c1f896bbcdbd908"
+    },
+    "idempotencyKey": "5a991a8eec4ff9ba4333b9efbf861fd7f0c948ed503a04ab932184405f7d5ba5"
+  },
+  "validation": {
+    "scopedExtraction": {
+      "command": "npm run people:validate-extraction -- data/people/extractions/jiuwudaishi/053.json",
+      "exitCode": 0,
+      "output": "data/people/extractions/jiuwudaishi/053.json: ok (107 people, 572 mentions, 1131 claims, 716 candidates)"
+    },
+    "scopedChapterData": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 053",
+      "exitCode": 0,
+      "output": "Scoped person data validation passed for jiuwudaishi/053: 1 extraction(s), 107 local people, 572 mentions, 1131 claims, 0 proposed repair(s), 17 applied repair(s), 19 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "dateSealDiagnostic": {
+      "command": "npm run people:dates:verify -- --book jiuwudaishi --chapter 053",
+      "exitCode": 0,
+      "output": {
+        "status": "stale",
+        "auditVersion": 1,
+        "recordedExtractionHash": "sha256:bc87e87a381996b1b049d52767a21f665e65b02fc9fabde4cce91cc13b017482",
+        "note": "Stale solely because contributor metadata on chunks changed the native extraction fingerprint; scoped substantive validation still passes."
+      }
+    },
+    "editorialSeal": {
+      "pinnedBlobUnchanged": true,
+      "reviewerAgentIdNull": true
+    },
+    "authorshipGate": {
+      "allChunkAgentIdsPopulatedWithRecoveredWorker": true,
+      "inventedRunIdsOrChunkCompletedAt": false
+    }
+  },
+  "remainingIssues": [
+    {
+      "code": "date-audit-stale",
+      "severity": "hold-for-qualification",
+      "summary": "Native date seal is stale against the post-recovery extraction fingerprint.",
+      "minimumReuse": "Rebind or re-verify the existing audited date report against the recovered extraction using native scoped date workflow only (no re-extraction, no chapter or editorial blob edits, no corpus build)."
+    },
+    {
+      "code": "provider-run-ids-unknown",
+      "severity": "informational",
+      "summary": "Chunk and top-level runId fields remain null; chunk completedAt values remain null on the recovered file."
+    },
+    {
+      "code": "chunk-byte-provenance-unverified",
+      "severity": "informational",
+      "summary": "Owner-reported per-chunk claimsSha256 digests were not independently reproduced in this review; primary worker evidence rests on the GitHub queue claim and introduction Grok Bot-chunked assembly metadata."
+    },
+    {
+      "code": "editorial-reviewer-null",
+      "severity": "informational",
+      "summary": "Pinned editorial-decisions reviewer.agentId is null on the historical introduction commit; unchanged by this authorship-only patch."
+    }
+  ],
+  "nonActions": [
+    "No merge",
+    "No canonical registry or corpus build",
+    "No modification of historical proof commits",
+    "No worktree"
+  ]
+}
