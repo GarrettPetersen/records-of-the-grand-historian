@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "023"
+  },
+  "ownerAgentId": "bc-35ae9fa6-acb9-44bd-ac5a-f4a51d0ce781",
+  "campaignWorker": "cursor-nov24-retained-staging-w1-o4",
+  "idempotencyKey": "5149bbcd4a15927cfffd5e2cf9ecdff63ca8a4ab5109e6cbcf6cb166bc1efab8",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "authorBranch": "cursor/nov24-retained-staging-owner-shiji-023-ce781",
+  "inputBlobWitness": {
+    "source": "76cd4e570512d07228ed55d067efaa2397a0cc3e",
+    "extraction": "81f39d5b88d4bc4e00b641a5f6bca25319cacd7c",
+    "dateAudit": "2a3103f6ece4e5da0bf70a3215e1c4dfb481ace6",
+    "editorial": "c1e6f043d9f928bafadf7b2a81e7185b66e690be"
+  },
+  "sealedInputs": {
+    "source": "sha256:ec2b9f8093f27bdc08a3fb65cf46017a3b7f1701b53df51b35bb7e080481be25",
+    "extraction": "sha256:d5c928bdb5479a86f3d4940d334c92637a185f09d6437bffae04306ed6e6328b",
+    "dateAudit": "sha256:2cba1206500053690045c128a6c6388a88e04cb6e18fc47cfc81d44c2b8ef8d0",
+    "editorial": "sha256:4a5d5f0db5f892f59746ed108054e70b7399fbaab34a34efad42fddbd5e58881",
+    "sourceByte": "sha256:0d911a8a6ae3996c06d078cb851f269bfd820dc2f7ceb7cd1ad13d4861c5d047",
+    "extractionByte": "sha256:3d5bfcebc17e9b82db7de236e10cc93fa608f85fc1ff1125a329872a816014b8"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 155,
+    "translatedCount": 155,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "bothEnglishFieldsComplete": true,
+    "acceptedEditorialRepairsReflected": true,
+    "title": "Treatise on Ritual"
+  },
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 023",
+      "status": "passed",
+      "summary": "Scoped person data validation passed for shiji/023: 1 extraction(s), 17 local people, 56 mentions, 143 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleValidateExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/023.json",
+      "status": "passed",
+      "summary": "data/people/extractions/shiji/023.json: ok (17 people, 56 mentions, 143 claims, 122 candidates)"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 023",
+      "status": "research-blocked",
+      "reviewedAt": "2026-09-23T12:34:55.036Z",
+      "findings": 1,
+      "extractionHashCurrent": true,
+      "sourceHashCurrent": true
+    },
+    "deterministicErrors": []
+  },
+  "substantiveFindings": [
+    "Ritual treatise (Book of Rites framing); 17 people in historical exempla. Single consolidated date research hold covers ritual-historical exemplum dating pending ownership review.",
+    "Owner reread all 155 Chinese units with paired literal and idiomatic English; accepted editorial repairs are present in source; sealed extraction aligns with pinned git blobs and semantic hashes.",
+    "Complete initial source-scope chronology audit of all 155 Chinese units, all 52 temporal or active-hint items, and all 17 people. This ritual treatise combines authorial framing with retrospective historical exempla, quotations, reign labels, and allusions. Every extracted date and active hint is retained only as an evidence-grounded research hold pending independent identity, ownership, conversion, and endpoint review; no source, extraction, or canonical person data was changed.",
+    "Scoped person data validation passed for shiji/023: 1 extraction(s), 17 local people, 56 mentions, 143 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining. Extraction validator: data/people/extractions/shiji/023.json: ok (17 people, 56 mentions, 143 claims, 122 candidates)"
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "date-audit-research-blocked",
+      "status": "research-blocked",
+      "findingCount": 1,
+      "reviewedAt": "2026-09-23T12:34:55.036Z",
+      "preservation": "Retain independent date-audit research holds verbatim at sealed report; chronology remains current relative to pinned extraction—no substantive amendment proposed in this owner pass."
+    }
+  ],
+  "chapterReady": true,
+  "nextGate": "independent-final-chapter-review",
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; sealed inputs unchanged. Host supplies native sealed final review packets.",
+  "completedAt": "2026-11-24T16:03:19.939Z",
+  "counts": {
+    "localPeople": 17,
+    "mentions": 0,
+    "claims": 95
+  }
+}
