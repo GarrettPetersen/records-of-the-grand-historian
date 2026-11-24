@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-chapter-identity-owner-handoff",
+  "chapterKey": "houhanshu/094",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "094"
+  },
+  "workerId": "cursor-nov24-replenishment-48",
+  "ownerAgentId": "bc-a260894e-dc30-48af-8a17-6fe7807de88e",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-replenishment-48-bounded-owner-transports",
+    "sourcePacketSha256": "ea555e5ee60a992c7d6e8c74c66faccbd0b946a23ed695d684b6a03f9ee342a3",
+    "planFingerprint": "sha256:5f6bcdbc263941cc99fee71c36d34ac43d95df8cb0441c2f93bf6362cb3234c1",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "6cee8825b8590a97d8ad4c5fc9298e79a2530bf513c1548406bb473915ef9774",
+        "caseCount": 26
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "fc7206bd7d5d3db1a80741fb2af860af167784a5be3f05f528e9de9030e92776",
+        "caseCount": 26
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "d02137b45e852501bba0121e4b9818453b990f504b1de8a6d97f3f9074d4e62a",
+        "caseCount": 53
+      }
+    ],
+    "preparationReceiptSha256": "sha256:f13643de11d0af561f4eb9ee0c99b95898847fe6f759595ff9797190726efee3"
+  },
+  "sealedInputs": {
+    "source": "sha256:e0d49db71509e4d5f891244429e642d481912973905434329e00bde742990c2b",
+    "extraction": "sha256:bbc8e4b90d89b5a915287a090e534ae6afde21626c13ebbcf315975bd113d213",
+    "editorial": "sha256:a90b4f2f7c8b85f19df1517e8d8ef155e4ebd59e9405aab6895bffe2aa35befa",
+    "dateAudit": "sha256:059dd026d1107e11b6a1d2ee25ad288179fab9cdcfd513a1e65a2be075093a56"
+  },
+  "inputBlobWitness": {
+    "source": "4943f17730823b6409c451e971bf1eb591e86712",
+    "extraction": "53b8eb2ff8f4fb3848802a903b41996924c77f1a",
+    "dateAudit": "6635611cb94e2be7876ac6fc8aa3a8d143c7efb3",
+    "editorial": "5a1e26af621f4a7bf5842a449217a89d85a8efbb"
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed-with-applied-proposals",
+  "reviewCases": 105,
+  "canonicalEdits": [],
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 105 scoped identity cases: retain accepted canonical membership; unresolvedIdentity preserved where proposed; no concrete chapter-level actor contradiction or false-merge hold.",
+  "scopedEvidence": {
+    "ownerEvidencePath": "owner-evidence.json",
+    "ownerEvidenceSha256": "sha256:2697f01749ae6b4b6b023d013c420e74f29d62a2b62378ab56ce4a1dc830222c",
+    "retainProposals": 105,
+    "holds": 0,
+    "sourceValidation": {
+      "command": "npm run people:validate -- --book houhanshu --chapter 094",
+      "passed": true,
+      "summary": "Scoped person data validation passed for houhanshu/094: 1 extraction(s), 110 local people, 570 mentions, 797 claims, 0 proposed repair(s), 14 applied repair(s), 14 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    }
+  },
+  "artifacts": {
+    "preparationReceipt": "preparation-receipt.json",
+    "transportPart001": "transport-part-001.json",
+    "transportPart002": "transport-part-002.json",
+    "transportPart003": "transport-part-003.json",
+    "ownerEvidence": "owner-evidence.json",
+    "validationReceipt": "validation-receipt.json"
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "ownerEvidenceSha256": "sha256:2697f01749ae6b4b6b023d013c420e74f29d62a2b62378ab56ce4a1dc830222c",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 094"
+  },
+  "notes": "Owner evidence is not independent approval. Chapter-only scope on staging base 3d546f42."
+}
