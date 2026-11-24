@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "118"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "3c98aee976a8cc637024225ec4b35a052744f7cbbaa8f36295381f0baef1adb2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-houhanshu-118-8382d",
+  "inputBlobWitness": {
+    "source": "16dd735ce05e020995354411017c079532b4f4d6",
+    "extraction": "27344ad6506492013c15b880583dae84e31820d2",
+    "dateAudit": "ed7a2528ff6d9f4fcfd255d48a696d3b8df8d04f",
+    "editorial": "cc39a18c2159f1a74b6bb7302ef04ecd89abab62"
+  },
+  "sealedInputs": {
+    "source": "sha256:1ac65544fa72634825aeb2b7fd6db6ca8a3fc1870217f078dac7b9a6131fbc1e",
+    "extraction": "sha256:0fec125355402d6b79015993070c1cbb073f22d8c434f83d6013b633786b1e65",
+    "dateAudit": "sha256:962846b5f0dfe113f9263565984fb588e9a9904907ade1ea6abdcf3ef121e9e8",
+    "editorial": "sha256:b265074f3c1717e4305bf9662ec4bf29d498673632fd7233e26f8baefb23c46c"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 107: Five Elements Part Five",
+    "chineseUnits": 93,
+    "translatedCount": 93,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "editorialRepairsReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book houhanshu --chapter 118",
+    "summary": "Scoped person data validation passed for houhanshu/118: 1 extraction(s), 36 local people, 123 mentions, 272 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s).",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book houhanshu --chapter 118",
+      "status": "research-blocked",
+      "findings": 1
+    },
+    "editorialDecisionCount": 3
+  },
+  "substantiveFindings": "All input blobs match dispatch witness. Full chapter review of Chinese, English literal and idiomatic fields, 36 retained people, mentions, claims, and three applied editorial repairs shows no new definite English omission, false merge, or extraction coverage gap. Date audit is an initial complete-scope receipt withholding approval until independent calendar verification; preserved holds remain current.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Initial independent chronology receipt for 93 units / 90 temporal items / 36 people withholds approval pending source-critical verification.",
+      "items": ["chapter-wide itemChecks", "findings[0]"]
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 118",
+    "verifyDates": "npm run people:dates:verify -- --book houhanshu --chapter 118"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed staging inputs unchanged."
+}
