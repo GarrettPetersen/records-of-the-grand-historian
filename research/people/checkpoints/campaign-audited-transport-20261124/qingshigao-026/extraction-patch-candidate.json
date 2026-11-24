@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-extraction-patch-candidate",
+  "scope": { "book": "qingshigao", "chapter": "026" },
+  "pullRequest": 5525,
+  "authorBranch": "cursor/qingshigao-026-audited-owner-1de5",
+  "repairHandoffSha256": "b1b233701d8453763c9183f3c0c59b42b5c419e9d436a2eddacde5944e2cb8ba",
+  "caseId": "sha256:5b619c6e607e721ab4b3431d368d411c5ba83ce1ac7df037d27c4b2ab64c540f",
+  "localPerson": "qingshigao:026:p001",
+  "applied": false,
+  "sourceWitness": {
+    "unitId": "s0001",
+    "quote": "史記·天官書",
+    "excerpt": "歷代天文誌，自《史記·天官書》後，唯晉、隋兩誌，備述天體、儀象、星占，唐、宋加詳，皆未盡也。"
+  },
+  "invalidExtractionBasis": "Personal-name zh fields 司馬遷/司馬/遷 and authorship/sex claims at s0001 lack any matching substring in sealed Chinese; only the cited book title appears.",
+  "hashes": {
+    "extractionBefore": "sha256:d47f9d57c9d414346320653b679639a454a7e3150b00b14c5992b123fac0df8a",
+    "extractionAfterPreview": "sha256:a828d3895ea411abc7cb91bc456d34cb49b6972a2bc82d4dd33b2f973bae2d49",
+    "afterHashNote": "Preview from in-memory apply + JSON.stringify(2); native apply may differ slightly in formatting but same semantic delta.",
+    "unchanged": ["source", "editorial", "dateAudit"]
+  },
+  "affectedRows": {
+    "people": ["p001"],
+    "identityNamesRemoved": [
+      "personal-name zh 司馬遷 @ s0001",
+      "surname zh 司馬 @ s0001",
+      "given zh 遷 @ s0001"
+    ],
+    "identityNamesAdded": [
+      "title-reference zh 史記·天官書 @ s0001 (explicit)"
+    ],
+    "claimsRetracted": [
+      "p001 sex @ s0001",
+      "p001 work-association author 天官書 @ s0001",
+      "p001 authorship 史記 @ s0001"
+    ],
+    "claimsRetained": [
+      "p001 attestation sourceDate 史記·天官書 @ s0001 (substring-supported)"
+    ],
+    "surfacesReplaced": [
+      "p001 personal-name en Sima Qian → title-reference zh/en 史記·天官書"
+    ],
+    "chronologyUnchanged": true,
+    "identityMembershipUnchanged": true,
+    "canonicalPersonId": "per_04CJ00AGP2A1MKD6AZ81"
+  },
+  "personRecordAfter": {
+    "id": "p001",
+    "disposition": "uncertain",
+    "description": "Chapter-cited treatise title; retain English Sima Qian label only as translation-facing unresolved attribution",
+    "preferredEnglish": "Sima Qian",
+    "unresolvedIdentity": true,
+    "unresolvedReason": "No personal Chinese graphs at s0001; 《史記·天官書》 is a work title citation, not a personal name."
+  },
+  "genuineReferencesPreserved": {
+    "crossChapterAnchor": "beishi:088:p058 馬遷",
+    "membershipCluster": "retain per repair-handoff; patch does not split canonical membership"
+  }
+}
