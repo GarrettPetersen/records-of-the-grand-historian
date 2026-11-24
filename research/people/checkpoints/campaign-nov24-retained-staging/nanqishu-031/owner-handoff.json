@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "031"
+  },
+  "ownerAgentId": "bc-1c736b0a-e0f6-4ff0-8c48-abe80623c603",
+  "worker": "cursor-nov24-retained-staging-w10-o4",
+  "idempotencyKey": "c88b365347a621521b275ff3c428efde6f9646128511289f7a1bca819272f402",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffRef": "cursor/nov24-retained-staging-owner-nanqishu-031-3c603",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:40d1cc406d8af212cb6b24297fcc969756b7fa32d99e33c497d5cba38f3d538b",
+    "people": 35,
+    "claims": 164,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "d2c585ae09d9cd30599b32f289f49ce51ec9de5a",
+    "extraction": "66503d9ddc5de8095f62f1ef96453532ba3880e2",
+    "editorial": "ad5ffb2774af9fa122d64053be3545c97ef6521c"
+  },
+  "sealedInputs": {
+    "source": "sha256:272337729374f7775662bfeec014d3cb0ed7d1daa06287310f565c8f02db65fe",
+    "extraction": "sha256:40d1cc406d8af212cb6b24297fcc969756b7fa32d99e33c497d5cba38f3d538b",
+    "editorial": "sha256:e96ce33afcdf442e4e481372a13d9c17917c0ec0263892bbc41a689d5bfffbca"
+  },
+  "canonicalFingerprints": {
+    "sourceHash": "sha256:e564170140f30376d11e8a25753185ba9525d1f02a4c5f5534af0a3d4f526d45",
+    "extractionHash": "sha256:0b2278e941458c7847a76a0fc3a2eda2852616f880f08ff766f21aecf9e6805c"
+  },
+  "inputReuse": {
+    "extraction": {
+      "preserved": true,
+      "path": "data/people/extractions/nanqishu/031.json",
+      "bytes": 67406,
+      "editorialAppliedInSource": true
+    },
+    "editorial": {
+      "preserved": true,
+      "decisionCount": 10,
+      "status": "accepted-applied"
+    },
+    "dateAudit": {
+      "preserved": false,
+      "path": "data/people/date-audits/nanqishu/031.json",
+      "status": "missing",
+      "reason": "No native independent date report on record at pinned staging."
+    }
+  },
+  "sourceCoverage": {
+    "sentenceCount": 150,
+    "translatedCount": 150,
+    "bothFieldsComplete": true,
+    "title": {
+      "zh": "卷三十一 列傳第十二 江謐 荀伯玉",
+      "en": "Volume 31 Biographies 12: Jiang Mi, Xun Boyu",
+      "raw": "卷三十一 列傳第十二 江謐 荀伯玉 Volume 31 Biographies 12: Jiang Mi, Xun Boyu"
+    },
+    "extractionUnitCoverage": {
+      "people": 35,
+      "claims": 164,
+      "unitCount": 150,
+      "chapterFingerprint": "sha256:863989d226493e5905585d093430ab5f3c9b810d3527e2a48db20ee8dd383dad"
+    },
+    "dateDiagnostics": {
+      "findingCount": 0,
+      "findings": []
+    },
+    "englishFieldNote": "Source units store English in sentences[].translations[{literal,idiomatic}]; meta.translatedCount matches meta.sentenceCount."
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-031/date-packet.json",
+    "contentSha256": "sha256:06a966c928079826a9d8318c2df34749b60d224f026d7e9b05616cd4f9e538d6",
+    "itemCount": 109,
+    "peopleCount": 35,
+    "unitCount": 150,
+    "sourceHash": "sha256:e564170140f30376d11e8a25753185ba9525d1f02a4c5f5534af0a3d4f526d45",
+    "extractionHash": "sha256:0b2278e941458c7847a76a0fc3a2eda2852616f880f08ff766f21aecf9e6805c"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "changedChronologyFacts": [],
+  "ownerChangesRequired": false,
+  "ownerChangesRationale": "Pinned extraction and accepted editorial decisions pass scoped validation; English coverage complete on all source units; no concrete source contradiction or definite English omission found in owner read of Chinese/English fields. Chronology candidate packet prepared from current seals; owner does not self-approve independent date audit.",
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book nanqishu --chapter 031",
+      "passed": true,
+      "summary": "Scoped person data validation passed for nanqishu/031: 1 extraction(s), 35 local people, 299 mentions, 287 claims, 0 proposed repair(s), 10 applied repair(s), 10 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 031",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book nanqishu --chapter 031 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-031/date-packet.json",
+      "completed": true
+    }
+  },
+  "remainingIndependentEvidence": {
+    "independentNativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-031/date-packet.json",
+      "packetHash": "sha256:06a966c928079826a9d8318c2df34749b60d224f026d7e9b05616cd4f9e538d6",
+      "notes": "Independent reviewer must audit all packet items against primary source and record with people:dates:record. Owner prepared candidate chronology only."
+    },
+    "independentChapterIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Final independent reviewer covers entire chapter result including canonical identity evidence after date gate."
+    },
+    "independentApprovalIssued": false
+  },
+  "holds": [],
+  "canonicalEdits": false,
+  "chapterComplete": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 031",
+    "datesVerify": "npm run people:dates:verify -- --book nanqishu --chapter 031",
+    "datesPacket": "npm run people:dates:packet -- --book nanqishu --chapter 031 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-031/date-packet.json"
+  },
+  "authorEvidence": {
+    "method": "Verified staging git blob witnesses; byte/file sha256 seals; scoped people:validate; people:dates:verify (un-audited); native date packet build; meta-level English coverage; editorial decision count vs validator applied repairs; no extraction/editorial/source edits.",
+    "completedAt": "2026-11-24T17:07:59.414Z"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; no deploy, merge, registry generation, or self-approved date audit."
+}

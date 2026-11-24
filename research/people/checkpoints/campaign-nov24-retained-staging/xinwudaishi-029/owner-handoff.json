@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "029"
+  },
+  "ownerAgentId": "bc-1c736b0a-e0f6-4ff0-8c48-abe80623c603",
+  "worker": "cursor-nov24-retained-staging-w10-o4",
+  "idempotencyKey": "c88b365347a621521b275ff3c428efde6f9646128511289f7a1bca819272f402",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffRef": "cursor/nov24-retained-staging-owner-xinwudaishi-029-3c603",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:e971086d33b7253a1a4144f0ff4cace2cf7aa2627f1a4410cf007048481b9fdd",
+    "people": 36,
+    "claims": 185,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "298b22e0c187c1ea7624918082a28fade7c27aca",
+    "extraction": "fb5b726443ead0f52e208bfad591639a16bb8e7c",
+    "editorial": "b4e1fc70e33c62b76a2f53cec530302466e99192"
+  },
+  "sealedInputs": {
+    "source": "sha256:19a6fc289e7f4a9e02d381097df165ca7ada7e81895e058716e8c3425580ba40",
+    "extraction": "sha256:e971086d33b7253a1a4144f0ff4cace2cf7aa2627f1a4410cf007048481b9fdd",
+    "editorial": "sha256:1591fadd6a4468e9af4dce10f9da98be47cb4c7eab122e68cb90a46f05eb5b0a"
+  },
+  "canonicalFingerprints": {
+    "sourceHash": "sha256:081eb8ded0cc6a662f5504b941cdac50e2a915e8baddaf0288537c8a5d308822",
+    "extractionHash": "sha256:9f809802668632b90199d4bb24db84c92e06989c7b967b6cc851058016689465"
+  },
+  "inputReuse": {
+    "extraction": {
+      "preserved": true,
+      "path": "data/people/extractions/xinwudaishi/029.json",
+      "bytes": 65504,
+      "editorialAppliedInSource": true
+    },
+    "editorial": {
+      "preserved": true,
+      "decisionCount": 4,
+      "status": "accepted-applied"
+    },
+    "dateAudit": {
+      "preserved": false,
+      "path": "data/people/date-audits/xinwudaishi/029.json",
+      "status": "missing",
+      "reason": "No native independent date report on record at pinned staging."
+    }
+  },
+  "sourceCoverage": {
+    "sentenceCount": 125,
+    "translatedCount": 125,
+    "bothFieldsComplete": true,
+    "title": {
+      "zh": "卷二十九 晉臣傳第十七: 桑維翰 景延廣 吳巒",
+      "en": "Volume 29 Later Jin Biographies 9: Sang Weihan, Jing Yanguang, Wu Luan",
+      "raw": "卷二十九 晉臣傳第十七: 桑維翰 景延廣 吳巒 Volume 29 Later Jin Biographies 9: Sang Weihan, Jing Yanguang, Wu Luan"
+    },
+    "extractionUnitCoverage": {
+      "people": 36,
+      "claims": 185,
+      "unitCount": 125,
+      "chapterFingerprint": "sha256:b09cfeddb23919facd2ad632891dfa13da80271923cd4ebe364b88c544a486f7"
+    },
+    "dateDiagnostics": {
+      "findingCount": 0,
+      "findings": []
+    },
+    "englishFieldNote": "Source units store English in sentences[].translations[{literal,idiomatic}]; meta.translatedCount matches meta.sentenceCount."
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-029/date-packet.json",
+    "contentSha256": "sha256:0941623b9055c1547e7ce43e7ed63d02bcf62ccc174a51a8a2bf67c9106a2bb4",
+    "itemCount": 106,
+    "peopleCount": 36,
+    "unitCount": 125,
+    "sourceHash": "sha256:081eb8ded0cc6a662f5504b941cdac50e2a915e8baddaf0288537c8a5d308822",
+    "extractionHash": "sha256:9f809802668632b90199d4bb24db84c92e06989c7b967b6cc851058016689465"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "changedChronologyFacts": [],
+  "ownerChangesRequired": false,
+  "ownerChangesRationale": "Pinned extraction and accepted editorial decisions pass scoped validation; English coverage complete on all source units; no concrete source contradiction or definite English omission found in owner read of Chinese/English fields. Chronology candidate packet prepared from current seals; owner does not self-approve independent date audit.",
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xinwudaishi --chapter 029",
+      "passed": true,
+      "summary": "Scoped person data validation passed for xinwudaishi/029: 1 extraction(s), 36 local people, 407 mentions, 314 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 029",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 029 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-029/date-packet.json",
+      "completed": true
+    }
+  },
+  "remainingIndependentEvidence": {
+    "independentNativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-029/date-packet.json",
+      "packetHash": "sha256:0941623b9055c1547e7ce43e7ed63d02bcf62ccc174a51a8a2bf67c9106a2bb4",
+      "notes": "Independent reviewer must audit all packet items against primary source and record with people:dates:record. Owner prepared candidate chronology only."
+    },
+    "independentChapterIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Final independent reviewer covers entire chapter result including canonical identity evidence after date gate."
+    },
+    "independentApprovalIssued": false
+  },
+  "holds": [],
+  "canonicalEdits": false,
+  "chapterComplete": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 029",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 029",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 029 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-029/date-packet.json"
+  },
+  "authorEvidence": {
+    "method": "Verified staging git blob witnesses; byte/file sha256 seals; scoped people:validate; people:dates:verify (un-audited); native date packet build; meta-level English coverage; editorial decision count vs validator applied repairs; no extraction/editorial/source edits.",
+    "completedAt": "2026-11-24T17:07:58.016Z"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; no deploy, merge, registry generation, or self-approved date audit."
+}

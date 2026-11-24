@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "104"
+  },
+  "ownerAgentId": "bc-1c736b0a-e0f6-4ff0-8c48-abe80623c603",
+  "worker": "cursor-nov24-retained-staging-w10-o4",
+  "idempotencyKey": "c88b365347a621521b275ff3c428efde6f9646128511289f7a1bca819272f402",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffRef": "cursor/nov24-retained-staging-owner-liaoshi-104-3c603",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:532c0f6957123be8547fe315d27cf8315d94d7cf942cdefe1393dfe6338ba395",
+    "people": 32,
+    "claims": 218,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "a72e7f91d5d1cf441acbcd6c535dc1a5068e6323",
+    "extraction": "5fdb3d6955b3848ee604a29b8abc74bbb8548820",
+    "editorial": "5d06813921d4f9481544e3ff81927a924ddaf3ac"
+  },
+  "sealedInputs": {
+    "source": "sha256:3d9342fc1e813ee340e9596e584921f1d207c1a68627d07922d74a729c7c76e4",
+    "extraction": "sha256:532c0f6957123be8547fe315d27cf8315d94d7cf942cdefe1393dfe6338ba395",
+    "editorial": "sha256:4a6a347aa7744cdb3fae4bccad850976a9a11efa9ccc49acf562cf728909cba5"
+  },
+  "canonicalFingerprints": {
+    "sourceHash": "sha256:058f51637de1f873825a07e4289af7b27d459c5639ee0c2109bdda4ff84ad30b",
+    "extractionHash": "sha256:b3ea174b326beece50eb3e9e4c1c78094d986e7cdbfc01100c34ede7d0afc746"
+  },
+  "inputReuse": {
+    "extraction": {
+      "preserved": true,
+      "path": "data/people/extractions/liaoshi/104.json",
+      "bytes": 65524,
+      "editorialAppliedInSource": true
+    },
+    "editorial": {
+      "preserved": true,
+      "decisionCount": 4,
+      "status": "accepted-applied"
+    },
+    "dateAudit": {
+      "preserved": false,
+      "path": "data/people/date-audits/liaoshi/104.json",
+      "status": "missing",
+      "reason": "No native independent date report on record at pinned staging."
+    }
+  },
+  "sourceCoverage": {
+    "sentenceCount": 115,
+    "translatedCount": 115,
+    "bothFieldsComplete": true,
+    "title": {
+      "zh": "卷一百〇四 列傳第三十四: 文學下",
+      "en": "Volume 104 Biographies 34: Literature 2",
+      "raw": "卷一百〇四 列傳第三十四: 文學下 Volume 104 Biographies 34: Literature 2"
+    },
+    "extractionUnitCoverage": {
+      "people": 32,
+      "claims": 218,
+      "unitCount": 115,
+      "chapterFingerprint": "sha256:1a59a85492d2c6eec04a34e5cb85f7cb88af99f7ce2dc6a69815a2fbdf8741ae"
+    },
+    "dateDiagnostics": {
+      "findingCount": 0,
+      "findings": []
+    },
+    "englishFieldNote": "Source units store English in sentences[].translations[{literal,idiomatic}]; meta.translatedCount matches meta.sentenceCount."
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-104/date-packet.json",
+    "contentSha256": "sha256:5be8af35532231bd0a2981a4dc0cb6ea6ce457016a4714e074ebcb669d484bc3",
+    "itemCount": 92,
+    "peopleCount": 32,
+    "unitCount": 115,
+    "sourceHash": "sha256:058f51637de1f873825a07e4289af7b27d459c5639ee0c2109bdda4ff84ad30b",
+    "extractionHash": "sha256:b3ea174b326beece50eb3e9e4c1c78094d986e7cdbfc01100c34ede7d0afc746"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "changedChronologyFacts": [],
+  "ownerChangesRequired": false,
+  "ownerChangesRationale": "Pinned extraction and accepted editorial decisions pass scoped validation; English coverage complete on all source units; no concrete source contradiction or definite English omission found in owner read of Chinese/English fields. Chronology candidate packet prepared from current seals; owner does not self-approve independent date audit.",
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 104",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/104: 1 extraction(s), 32 local people, 152 mentions, 347 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 104",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 104 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-104/date-packet.json",
+      "completed": true
+    }
+  },
+  "remainingIndependentEvidence": {
+    "independentNativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-104/date-packet.json",
+      "packetHash": "sha256:5be8af35532231bd0a2981a4dc0cb6ea6ce457016a4714e074ebcb669d484bc3",
+      "notes": "Independent reviewer must audit all packet items against primary source and record with people:dates:record. Owner prepared candidate chronology only."
+    },
+    "independentChapterIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "notes": "Final independent reviewer covers entire chapter result including canonical identity evidence after date gate."
+    },
+    "independentApprovalIssued": false
+  },
+  "holds": [],
+  "canonicalEdits": false,
+  "chapterComplete": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 104",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 104",
+    "datesPacket": "npm run people:dates:packet -- --book liaoshi --chapter 104 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-104/date-packet.json"
+  },
+  "authorEvidence": {
+    "method": "Verified staging git blob witnesses; byte/file sha256 seals; scoped people:validate; people:dates:verify (un-audited); native date packet build; meta-level English coverage; editorial decision count vs validator applied repairs; no extraction/editorial/source edits.",
+    "completedAt": "2026-11-24T17:07:58.476Z"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; no deploy, merge, registry generation, or self-approved date audit."
+}
