@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-native-chronology-repair",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "021"
+  },
+  "ownerAgentId": "bc-95b52b95-f4f5-4a30-aba0-2157f8206711",
+  "idempotencyKey": "99b581ea8d9fd70321ef64737aeacce86d45980c936e183722b3ee07c0f0f22e",
+  "ownerRevision": "95e9f3349e4730deac3e5fea0354b643030f58a1",
+  "branch": "cursor/nov24-retained-owner-native-date-jinshi-021-06711",
+  "pinnedDateAudit": {
+    "sha256": "841bd27502a6c9d2974ccd8e354bbd7bab9fca9fa2a1934f76c75a9b513e0b1c",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T11:18:40.278Z",
+    "blobWitness": "8708754b01169e8401b8c5ed7eb8a222cdaeb0b7",
+    "preservedBytes": true
+  },
+  "priorExtractionHash": "sha256:19ff1627b4b0d2ef10c85ca705f3e41a05f8576e6bdaee305c8449d788c1d140",
+  "extractionHashAfter": "sha256:19ff1627b4b0d2ef10c85ca705f3e41a05f8576e6bdaee305c8449d788c1d140",
+  "nativeProposal": null,
+  "proposalApplied": false,
+  "applyError": null,
+  "validation": {
+    "command": "npm run people:validate -- --book jinshi --chapter 021",
+    "passed": true,
+    "summary": "Scoped person data validation passed for jinshi/021: 1 extraction(s), 5 local people, 20 mentions, 68 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "problem": "The end-of-Jin statement describes institutional use of Zhao Zhiwei’s calendar, rather than a dateable personal activity interval for Zhao.",
+      "preservedAction": "Retain the source-specific unresolved institutional-reception context; do not turn it into Zhao Zhiwei’s life chronology.",
+      "items": [
+        "claim-20"
+      ],
+      "dispositions": [
+        {
+          "item": "claim-20",
+          "action": "no-native-edit",
+          "reason": "Extraction rows already use unresolved/source-specific holds matching the pinned research-blocked audit."
+        },
+        {
+          "item": "claim-42",
+          "action": "no-native-edit",
+          "reason": "See finding-level note."
+        },
+        {
+          "item": "claim-43",
+          "action": "no-native-edit",
+          "reason": "See finding-level note."
+        },
+        {
+          "item": "claim-47",
+          "action": "no-native-edit",
+          "reason": "See finding-level note."
+        },
+        {
+          "item": "hints-p005",
+          "action": "no-native-edit",
+          "reason": "See finding-level note."
+        },
+        {
+          "item": "p005",
+          "action": "no-native-edit",
+          "reason": "See finding-level note."
+        }
+      ]
+    },
+    {
+      "findingIndex": 1,
+      "problem": "Early Mingchang is an indeterminate era phrase and does not establish a precise personal date or endpoint for Zhang Xingjian.",
+      "preservedAction": "Retain the source-specific unresolved chronology and research-required hint; do not infer a point date from early Mingchang.",
+      "items": [
+        "claim-42",
+        "claim-43",
+        "claim-47",
+        "hints-p005",
+        "p005"
+      ],
+      "dispositions": []
+    }
+  ],
+  "intactApprovals": {
+    "dateAuditFileUnmodified": true,
+    "editorialInputsUnmodified": true,
+    "sourceChapterUnmodified": true
+  },
+  "residualHolds": [
+    {
+      "items": [
+        "claim-20"
+      ],
+      "people": [
+        "p002"
+      ],
+      "problem": "The end-of-Jin statement describes institutional use of Zhao Zhiwei’s calendar, rather than a dateable personal activity interval for Zhao.",
+      "action": "Retain the source-specific unresolved institutional-reception context; do not turn it into Zhao Zhiwei’s life chronology."
+    },
+    {
+      "items": [
+        "claim-42",
+        "claim-43",
+        "claim-47",
+        "hints-p005",
+        "p005"
+      ],
+      "people": [
+        "p005"
+      ],
+      "problem": "Early Mingchang is an indeterminate era phrase and does not establish a precise personal date or endpoint for Zhang Xingjian.",
+      "action": "Retain the source-specific unresolved chronology and research-required hint; do not infer a point date from early Mingchang."
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "notes": "[CF-Pages-Skip] Owner-native chronology repair only; host re-audit required. Date audit bytes preserved.",
+  "noExtractionEditReason": "Pinned extraction already encodes the independent audit's retained unresolved chronology (no false Western precision to remove)."
+}
