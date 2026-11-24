@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "179"
+  },
+  "ownerAgentId": "bc-f7c532bb-1816-4d7c-8abf-772e1d43bd87",
+  "workerId": "cursor-nov24-retained-staging-w16-o10",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7fcfe8c9cea35167d376579b11ac28fe692e40990c47c66b9e1e4e2beec158c1",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-179-3bd87",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "dispatchPeople": 66,
+    "dispatchClaims": 491,
+    "sourceExtractionSha256": "dd44548c6219fc3da1a7056bdb50667845535b5fd750c90ab770de7fc5cdaf01"
+  },
+  "extractionBytes": 164315,
+  "inputBlobWitness": {
+    "source": "9d550adae2ffa2e8edfd2c42a7c9eea0a942d12b",
+    "extraction": "c67dc37a293f2852b7d9ca72dc190d721ae2ed30",
+    "editorial": "0e4b4e86ec94615d2db927e0504a6af4106e05d6",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:e0440d383084206591819819656ed3aacb0a3031f4c9073281d4937aa6d789fa",
+    "extraction": "sha256:dd44548c6219fc3da1a7056bdb50667845535b5fd750c90ab770de7fc5cdaf01",
+    "editorial": "sha256:0ba50752b5b59dec8e05475fa1fd7d1c28acd949f83cbeef1481b00973153873"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 179 Tables 19: Ministers of Boards and Courts Chronological Table 1 Lower",
+    "chineseUnits": 190,
+    "emptyChineseTableSpacers": 34,
+    "totalSentences": 224,
+    "translatedCount": 190,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/qingshigao/179.json",
+    "promptVersion": 7,
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/qingshigao/179.json",
+    "validateExtractionSummary": "ok (66 people, 414 mentions, 625 claims, 572 candidates)",
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/qingshigao/179.json",
+    "appliedDecisionCount": 12,
+    "editorialStatus": "reviewed-with-applied-proposals-in-source",
+    "ownerRepairsAuthored": 0
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-179/date-packet.json",
+    "fileSha256": "sha256:8c4caf555a534468eb27abfa6ba2de5e8be1cd2fd2a8ae6a2ad06a1ff8c92fb9",
+    "extractionHash": "sha256:a7eed52d61de7fd8e13da94b40a76f23910bb546437bd84b56690671e456163e",
+    "sourceHash": "sha256:e9b61697ffd13397e3b4df0d35850e8b2b89e6ed7d3e6d32d5457ab8bd831c9a",
+    "dateHintCheckCount": 491,
+    "peopleInPacket": 66,
+    "sourceUnitsInPacket": 224,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 179 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-179/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 179",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/179: 1 extraction(s), 66 local people, 414 mentions, 625 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s), 3 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "66 people, 414 mentions, 625 claims, 572 candidates",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 179",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "findings": null,
+      "missingNativeReport": true
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true,
+    "ownerApproval": false
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained-staging owner closure on sealed source, prompt-v7 extraction, and accepted editorial decisions at git-blob witnesses on staging 20b8d0e3. Full chapter read of Chinese units with paired literal and idiomatic English on every nonempty Chinese sentence; 34 empty table spacer rows lack Chinese and English by design. people:validate and people:validate-extraction pass scoped; legacy temporal debt is zero. Fresh native date packet built at pinned extraction/source hashes (491 hint checks). No data/people/date-audits/qingshigao/179.json exists; people:dates:verify returns un-audited. Owner did not self-approve chronology and found no definite English omission or source contradiction requiring a new repair proposal in this pass.",
+  "remainingIndependentProofs": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-179/date-packet.json",
+      "packetFileSha256": "sha256:8c4caf555a534468eb27abfa6ba2de5e8be1cd2fd2a8ae6a2ad06a1ff8c92fb9",
+      "nextCommands": [
+        "npm run people:dates:run -- --book qingshigao --chapter 179 --run --model <reviewer>",
+        "npm run people:dates:record -- --report <independent-report-path>",
+        "npm run people:dates:verify -- --book qingshigao --chapter 179"
+      ],
+      "note": "Independent reviewer must approve whole chapter chronology from the sealed packet; valid undated attestation may remain undated after audit."
+    },
+    "canonicalIdentityEvidence": {
+      "required": true,
+      "status": "pending-independent-review",
+      "note": "Bounded dossier / canonical identity review is a separate gate after chronology approval; owner handoff is not identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 179",
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/qingshigao/179.json",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 179",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 179 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-179/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, no registry build, no deploy or merge."
+}

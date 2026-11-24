@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "114"
+  },
+  "ownerAgentId": "bc-f7c532bb-1816-4d7c-8abf-772e1d43bd87",
+  "workerId": "cursor-nov24-retained-staging-w16-o10",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7fcfe8c9cea35167d376579b11ac28fe692e40990c47c66b9e1e4e2beec158c1",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-114-3bd87",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "dispatchPeople": 100,
+    "dispatchClaims": 454,
+    "sourceExtractionSha256": "656b2e3909079e73f134ed521f9c4149be780d8c462c02ecc4939bbebb2924e3"
+  },
+  "extractionBytes": 163050,
+  "inputBlobWitness": {
+    "source": "1a565a6ba70e7a53e82bd50101e4231b527e99f6",
+    "extraction": "f246f899be06c8e7ebaa2b1428ae1d0e7cfccd35",
+    "editorial": "03d628231a42b3f69004f5c3ecd84fa814235013",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:858fd26e0a30a5d5da31fe30e6b0e78a0d6ccb0c95b223e5447e33f22886599a",
+    "extraction": "sha256:656b2e3909079e73f134ed521f9c4149be780d8c462c02ecc4939bbebb2924e3",
+    "editorial": "sha256:c3c29248389fa039c8094cc00d0de12927e340e3c87e9456425af1bf7da1862e"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 114 Biographies 1: Empresses and Consorts 1",
+    "chineseUnits": 292,
+    "emptyChineseTableSpacers": 0,
+    "translatedCount": 292,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/yuanshi/114.json",
+    "promptVersion": 7,
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/yuanshi/114.json",
+    "validateExtractionSummary": "ok (100 people, 462 mentions, 781 claims, 511 candidates)",
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/yuanshi/114.json",
+    "appliedDecisionCount": 19,
+    "editorialStatus": "reviewed-with-applied-proposals-in-source",
+    "ownerRepairsAuthored": 0
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-114/date-packet.json",
+    "fileSha256": "sha256:45c425ea3266f45dafbebf7f051ba9e16b3ea20d327a7d8aa8d9fe22b8a6df89",
+    "extractionHash": "sha256:20c968792f4405ed0bc9558d6f725368b5f1b1122ce83364c6ab9be578c4fd59",
+    "sourceHash": "sha256:f482e20377abc5291dcf3d66028bdedd84db3c68da8ed7a9a2c2cf4f0fe602d4",
+    "dateHintCheckCount": 260,
+    "peopleInPacket": 100,
+    "sourceUnitsInPacket": 292,
+    "command": "npm run people:dates:packet -- --book yuanshi --chapter 114 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-114/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 114",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/114: 1 extraction(s), 100 local people, 462 mentions, 781 claims, 0 proposed repair(s), 19 applied repair(s), 19 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "100 people, 462 mentions, 781 claims, 511 candidates",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 114",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "findings": null,
+      "missingNativeReport": true
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true,
+    "ownerApproval": false
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained-staging owner closure on sealed source, prompt-v7 extraction, and accepted editorial decisions at git-blob witnesses on staging 20b8d0e3. Full chapter read of Chinese units with paired literal and idiomatic English on every nonempty Chinese sentence. people:validate and people:validate-extraction pass scoped; legacy temporal debt is zero. Fresh native date packet built at pinned extraction/source hashes (260 hint checks). No data/people/date-audits/yuanshi/114.json exists; people:dates:verify returns un-audited. Owner did not self-approve chronology and found no definite English omission or source contradiction requiring a new repair proposal in this pass.",
+  "remainingIndependentProofs": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-114/date-packet.json",
+      "packetFileSha256": "sha256:45c425ea3266f45dafbebf7f051ba9e16b3ea20d327a7d8aa8d9fe22b8a6df89",
+      "nextCommands": [
+        "npm run people:dates:run -- --book yuanshi --chapter 114 --run --model <reviewer>",
+        "npm run people:dates:record -- --report <independent-report-path>",
+        "npm run people:dates:verify -- --book yuanshi --chapter 114"
+      ],
+      "note": "Independent reviewer must approve whole chapter chronology from the sealed packet; valid undated attestation may remain undated after audit."
+    },
+    "canonicalIdentityEvidence": {
+      "required": true,
+      "status": "pending-independent-review",
+      "note": "Bounded dossier / canonical identity review is a separate gate after chronology approval; owner handoff is not identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 114",
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/yuanshi/114.json",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 114",
+    "datesPacket": "npm run people:dates:packet -- --book yuanshi --chapter 114 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-114/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, no registry build, no deploy or merge."
+}

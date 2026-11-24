@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "098"
+  },
+  "ownerAgentId": "bc-f7c532bb-1816-4d7c-8abf-772e1d43bd87",
+  "workerId": "cursor-nov24-retained-staging-w16-o10",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7fcfe8c9cea35167d376579b11ac28fe692e40990c47c66b9e1e4e2beec158c1",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-098-3bd87",
+  "dispatchAudit": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "dispatchPeople": 61,
+    "dispatchClaims": 403,
+    "sourceExtractionSha256": "5f8d5c7e19276f7a904b0a7aab71c81dfd9fe8fd213888dcd82bd012979aebab"
+  },
+  "extractionBytes": 164466,
+  "inputBlobWitness": {
+    "source": "95c8a0321bb5ccfa1a842e9e0174a8c91c6c38cd",
+    "extraction": "e1523dbc4fbbb0c8278acc400a17030bbfdcb671",
+    "editorial": "a6559396b750513d751c2c276032209574a1fbf2",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:2214b5da0c5c280c99b3cc8e86c3134706b6d11d75d7ca7ee907aee2b121b7c5",
+    "extraction": "sha256:5f8d5c7e19276f7a904b0a7aab71c81dfd9fe8fd213888dcd82bd012979aebab",
+    "editorial": "sha256:a9683c8e41b947b073270c26326984444e3b26038dcdf24e45b2f6c8a79f23c0"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 98 Treatises 51: Rites 1",
+    "chineseUnits": 200,
+    "emptyChineseTableSpacers": 0,
+    "translatedCount": 200,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/songshi/098.json",
+    "promptVersion": 7,
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/songshi/098.json",
+    "validateExtractionSummary": "ok (61 people, 135 mentions, 651 claims, 629 candidates)",
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/songshi/098.json",
+    "appliedDecisionCount": 21,
+    "editorialStatus": "reviewed-with-applied-proposals-in-source",
+    "ownerRepairsAuthored": 0
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-098/date-packet.json",
+    "fileSha256": "sha256:27da2bac4ecf69f53fdff9e21ab92c4cb377c27802d9531a402b3137c7e7c27e",
+    "extractionHash": "sha256:222eb91c5c199ad5cd7f9a4c5189d18f5607748580c782277d10e3875597d737",
+    "sourceHash": "sha256:91135cdebc832e79d979898335da706067aaf362557f59c0a89af3b2d2010755",
+    "dateHintCheckCount": 240,
+    "peopleInPacket": 61,
+    "sourceUnitsInPacket": 200,
+    "command": "npm run people:dates:packet -- --book songshi --chapter 098 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-098/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 098",
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/098: 1 extraction(s), 61 local people, 135 mentions, 651 claims, 0 proposed repair(s), 21 applied repair(s), 21 editorial decision(s), 0 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "61 people, 135 mentions, 651 claims, 629 candidates",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 098",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "findings": null,
+      "missingNativeReport": true
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true,
+    "ownerApproval": false
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "substantiveFindings": "Retained-staging owner closure on sealed source, prompt-v7 extraction, and accepted editorial decisions at git-blob witnesses on staging 20b8d0e3. Full chapter read of Chinese units with paired literal and idiomatic English on every nonempty Chinese sentence. people:validate and people:validate-extraction pass scoped; legacy temporal debt is zero. Fresh native date packet built at pinned extraction/source hashes (240 hint checks). No data/people/date-audits/songshi/098.json exists; people:dates:verify returns un-audited. Owner did not self-approve chronology and found no definite English omission or source contradiction requiring a new repair proposal in this pass.",
+  "remainingIndependentProofs": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-098/date-packet.json",
+      "packetFileSha256": "sha256:27da2bac4ecf69f53fdff9e21ab92c4cb377c27802d9531a402b3137c7e7c27e",
+      "nextCommands": [
+        "npm run people:dates:run -- --book songshi --chapter 098 --run --model <reviewer>",
+        "npm run people:dates:record -- --report <independent-report-path>",
+        "npm run people:dates:verify -- --book songshi --chapter 098"
+      ],
+      "note": "Independent reviewer must approve whole chapter chronology from the sealed packet; valid undated attestation may remain undated after audit."
+    },
+    "canonicalIdentityEvidence": {
+      "required": true,
+      "status": "pending-independent-review",
+      "note": "Bounded dossier / canonical identity review is a separate gate after chronology approval; owner handoff is not identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 098",
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/songshi/098.json",
+    "datesVerify": "npm run people:dates:verify -- --book songshi --chapter 098",
+    "datesPacket": "npm run people:dates:packet -- --book songshi --chapter 098 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-098/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, no registry build, no deploy or merge."
+}
