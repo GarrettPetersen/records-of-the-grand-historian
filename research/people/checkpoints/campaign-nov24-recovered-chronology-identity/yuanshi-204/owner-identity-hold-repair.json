@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-identity-hold-repair",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "204"
+  },
+  "ownerAgentId": "bc-8490c614-fab6-4384-8868-077febf76dfc",
+  "reviewerAgentId": "bc-d9461a17-c708-4efc-9331-3d672c2bea07",
+  "reviewHead": "418bcfe2ddfc23c75e47fc4713e32094138f1fc8",
+  "ownerRevision": "72340233f505a308737b2461aad7a16d0ddf2001",
+  "heldCase": {
+    "caseId": "sha256:bfec3c3a021a980f1c21577d033731267dd55861a5e6429806c2008b61c00f2d",
+    "canonicalPersonId": "per_36FCRXS1ER1EW89D8MYM",
+    "localPersonId": "yuanshi:204:p034"
+  },
+  "priorHashes": {
+    "source": "sha256:5af8cc216db420748e9152adc5cd971945fd8661cab29f9577691356577aa92d",
+    "extraction": "sha256:ab0429b34ea540222d5f0eb9a1ea831ba43da0ad26184dfb8b157a58c278b82b",
+    "editorial": "sha256:c180864f911ca7551c95d4e72fdcfa22ad0e663df5138b73ec7b6c35ac4864a6",
+    "dateAudit": "sha256:828ebcd4ea5f7e6a44837586da0bd93bfb2fe3f52ee440a645b58ffc7a362741"
+  },
+  "sourceWitness": {
+    "unitId": "s0075",
+    "zh": "時老的沙執其事頗力，皇太子因惡之，而皇后又譖之於內，帝以老的沙母舅故，封為雍王，遣歸國。",
+    "en": "At that time Laodasha enforced the matter with considerable force, so the heir apparent hated him for it, and the empress also slandered him within the palace; because the emperor treated Laodasha as his maternal uncle, he enfeoffed him as Prince of Yong and sent him back to his domain.",
+    "ownedQuotes": {
+      "p028": "老的沙",
+      "p005": "皇后",
+      "kinshipMorphemeForP034": "母"
+    },
+    "notes": "母 appears inside 母舅 at s0075; 至正帝之母 does not appear in the chapter."
+  },
+  "independentHoldReason": "Fabricated Chinese nominal surface 至正帝之母 on p034; kinship-only extraction cannot quote an independent Han label for the inferred mother.",
+  "proposal": {
+    "disposition": "source-supported-representation-repair",
+    "summary": "Remove invented 至正帝之母 label; retain kinship intermediary p034 with quotable morpheme 母 from 母舅 at s0075; preserve family relationships and chronology.",
+    "extractionChanges": [
+      {
+        "target": "person",
+        "personId": "p034",
+        "field": "preferredName",
+        "before": ["Mother of the Zhizheng-era emperor", "至正帝之母", null],
+        "after": ["Emperor's mother (inferred kinship intermediary)", "母", null]
+      },
+      {
+        "target": "person",
+        "personId": "p034",
+        "field": "mentionException",
+        "before": "Inferred maternal intermediary entailed by Laodasha as the emperor's maternal uncle (母舅); no independent visible referring expression in owned units.",
+        "after": "Maternal line from 母 within 母舅 at s0075; remove invented 至正帝之母; 皇后 is Empress Qi (p005)."
+      },
+      {
+        "target": "person",
+        "personId": "p034",
+        "field": "nameAlias",
+        "before": {
+          "kind": "descriptive-kinship",
+          "en": "Mother of the Zhizheng-era emperor",
+          "zh": "至正帝之母",
+          "certainty": "strongly-inferred",
+          "evidence": ["s0075"]
+        },
+        "after": {
+          "kind": "descriptive-kinship",
+          "en": "Emperor's mother (inferred)",
+          "zh": "母",
+          "certainty": "strongly-inferred",
+          "evidence": ["s0075"]
+        }
+      }
+    ],
+    "canonicalDataMutation": "none until host applies approved repair",
+    "englishOmissionRepairs": []
+  },
+  "dateEffects": {
+    "expectedChange": false,
+    "reason": "Attestation and kinship claims on s0075 unchanged; only alias zh surface corrected."
+  },
+  "scopedValidation": {
+    "validateCompactPeopleExtractionAfterApply": "passed in owner simulation",
+    "peopleValidateCurrentHead": "passed without applying proposal"
+  },
+  "witnessReReview": {
+    "required": true,
+    "caseIds": ["sha256:bfec3c3a021a980f1c21577d033731267dd55861a5e6429806c2008b61c00f2d"],
+    "instruction": "Independent reviewer confirms 母 at s0075 supports kinship intermediary labeling without treating 皇后 as p034; unresolvedIdentity may remain true."
+  },
+  "preservedApprovals": "37 other identity cases from independent reports unchanged; no merge/split."
+}
