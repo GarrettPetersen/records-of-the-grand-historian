@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "113"
+  },
+  "ownerAgentId": "bc-707421d5-780b-41b1-b7a9-c1d9ed8951c2",
+  "workerId": "cursor-nov24-retained-staging-w13-o12",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "c55dfc42cbe9080c1eefbb004596a4132e04396e1d8c26d2a82b853942768a3e",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-113-951c2",
+  "auditDispatchState": "no-native-date-report",
+  "promptVersion": 7,
+  "inputBlobWitness": {
+    "source": "87d6711d2b23072efd6498d40200d7c605af3f88",
+    "extraction": "5d0cd0f82bdb52d4a6674b771948cae06f20a36f",
+    "editorial": "8ad57b55b0503874f4bf68d5170d2a5ca0b00f5d",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:ba41e1423d7a7569856b8bda5a494aa6e2daa48209af528c2b3b49e6a9a2a750",
+    "extraction": "sha256:8c6f003cdb83ec66fb3a3f63835c950a9ec43f2d1aa8b2025bb5f7c33f0054d2",
+    "editorial": "sha256:f4d55f4f3f8638462a6ba7826e15e88371b41c85d5fe01ef5dd2cf2f73112791"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-113/date-packet.json",
+    "sha256": "sha256:9d197a78e1aad837ad43442a6567613faaacd650260d04d36d568fa30bf24b75",
+    "sourceHash": "sha256:ac30f5fbc13de37f6346760f696dc7a1e3b9b16f28508079113c2903654db030",
+    "extractionHash": "sha256:eed3ce069a184de475d89d264344ac2bc8301f86380f93fe1b721b96f8fbeaa7",
+    "items": 153,
+    "people": 53,
+    "units": 144
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Treatise on the Nanyue",
+    "chineseUnits": 144,
+    "translatedCount": 144,
+    "sentenceCount": 144,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 102976,
+    "sealedPeopleCount": 53,
+    "workOrderClaimCount": 312
+  },
+  "extractionAndEditorialReuse": {
+    "extractionUnchanged": true,
+    "extractionSha256Verified": "8c6f003cdb83ec66fb3a3f63835c950a9ec43f2d1aa8b2025bb5f7c33f0054d2",
+    "editorialDecisionsRetained": true,
+    "editorialDecisionPath": "data/people/editorial-decisions/shiji/113.json",
+    "editorialDecisionCount": 6,
+    "noReextraction": true,
+    "noSelfApprovedDateAudit": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 113",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/113: 1 extraction(s), 53 local people, 432 mentions, 497 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtractionCommand": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/113.json",
+    "peopleValidateExtractionSummary": "data/people/extractions/shiji/113.json: ok (53 people, 432 mentions, 497 claims, 608 candidates)",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 113",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditVersion": 1,
+      "findings": null
+    },
+    "datesPacket": {
+      "command": "npm run people:dates:packet -- --book shiji --chapter 113 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-113/date-packet.json",
+      "status": "prepared",
+      "sha256": "sha256:9d197a78e1aad837ad43442a6567613faaacd650260d04d36d568fa30bf24b75"
+    },
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book shiji --chapter 113",
+      "automatedFindings": 0
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned staging blobs; no data/people/date-audits/shiji/113.json. Full chapter Chinese/English read; extraction validator and people:validate pass; automated people:dates:scan reports zero findings. Fresh native date packet sealed at sha256:9d197a78e1aad837ad43442a6567613faaacd650260d04d36d568fa30bf24b75 for independent chronology review. No definite English omission or source contradiction found; no owner chronology or extraction edits.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "independentNativeDateAudit": {
+      "gate": "independent-native-date-audit",
+      "requiredArtifact": "data/people/date-audits/shiji/113.json",
+      "datePacketSha256": "sha256:9d197a78e1aad837ad43442a6567613faaacd650260d04d36d568fa30bf24b75",
+      "status": "missing"
+    },
+    "independentChapterConsolidatedReview": {
+      "gate": "independent-chapter-owner-consolidated-review",
+      "status": "pending"
+    },
+    "canonicalIdentityEvidence": {
+      "gate": "bounded-identity-source-review",
+      "status": "pending-after-chronology"
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 113",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/shiji/113.json",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 113",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 113 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-113/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed date packet for independent audit; no canonical input edits."
+}
