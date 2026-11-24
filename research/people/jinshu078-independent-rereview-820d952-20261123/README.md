@@ -18,3 +18,8 @@ Inspected only owner follow-up deltas on staging draft #5425: schema4 editorial 
 | Canonical identity | **Not sealed** — no dossier packet; lookup pin only |
 
 See `changed-evidence-review.json`.
+
+## Follow-on at `db0945f` (2026-11-24)
+
+Continuity + partial native chronology saved under
+`research/people/jinshu078-continuity-chronology-partial-20261124/`.
