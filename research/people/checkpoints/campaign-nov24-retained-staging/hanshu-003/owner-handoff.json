@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "003"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "3c98aee976a8cc637024225ec4b35a052744f7cbbaa8f36295381f0baef1adb2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-hanshu-003-8382d",
+  "inputBlobWitness": {
+    "source": "5481db3914652060eb6ae0b1edf88586d587e1fe",
+    "extraction": "e55e0e69fdfc00ab889a435cb59f4d68a9f5efe7",
+    "dateAudit": "aa3461ba6d976cd6ccad9cd99279b4ca369dbef0",
+    "editorial": "dfdfc7727e0aedcee88e5e4a22697204cbd5f1df"
+  },
+  "sealedInputs": {
+    "source": "sha256:04f312ab74b87dbc23d20dce9197cbd71af628584c51458269c7fcccee43337e",
+    "extraction": "sha256:40d93fcbbad244d0c269866abba3ac2bef5613017eadebcb7ae61a03b4d5e5dc",
+    "dateAudit": "sha256:ba00ffb3bc29ac1eef89a003b1b368b639983e5d8a2f492ee3da5b6be81dc84c",
+    "editorial": "sha256:ce68c7cb46a1f2351f45d22e423938c736988af0d15d1582f5a2220bfdfb9fc4"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 2: Annals of Emperor Hui",
+    "chineseUnits": 67,
+    "translatedCount": 67,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "editorialRepairsReflectedInSource": false,
+    "editorialReflectionNotes": "s0044 idiomatic reflects accepted hanshu:003:r0005; literal still uses fused Changlegong/Hongtai wording."
+  },
+  "validation": {
+    "passed": false,
+    "command": "npm run people:validate -- --book hanshu --chapter 003",
+    "errors": [
+      "data/people/editorial-decisions/hanshu/003.json: applied hanshu:003:r0005 has no matching independent accept/revise authorization"
+    ],
+    "deterministicErrorDetail": "Proposal hanshu:003:r0005 seals unit blockIndex 15 while the current extraction packet has s0044 at blockIndex 14, so the authorization contract does not match the applied repair row.",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book hanshu --chapter 003",
+      "status": "stale",
+      "note": "Audit sourceHash/extractionHash do not match the current rebuilt packet fingerprints at pinned blobs."
+    },
+    "editorialDecisionCount": 5,
+    "appliedTranslationRepairs": 5
+  },
+  "substantiveFindings": "All four input blobs match the dispatch witness at stagingBase. Whole-chapter read of Chinese, extraction people/mentions/claims, accepted repairs r0001–r0004, and retained Fei/Cao research holds aligns with sealed evidence. Deterministic validation fails on editorial authorization for r0005 (stale unit coordinates). Date verify reports stale fingerprint linkage; retained independent audit content still documents two source-critical death conflicts without emendation.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [
+    {
+      "kind": "editorial-dependency-repair",
+      "scope": "data/people/editorial-decisions/hanshu/003.json",
+      "repairId": "hanshu:003:r0005",
+      "problem": "Accepted repair is applied in extraction but independent authorization contract fails because proposal unit.blockIndex is 15 while current packet unit s0044 is blockIndex 14.",
+      "action": "Host re-seals the proposal unit coordinates to the current packet witness and preserves the existing accept decision reasoning, without re-running extraction.",
+      "preservedProofs": [
+        "data/people/editorial-decisions/hanshu/003.json decisions[4] accept reason",
+        "data/hanshu/003.json s0044 zh 長樂宮鴻臺災"
+      ]
+    },
+    {
+      "kind": "source-english-application",
+      "scope": "data/hanshu/003.json",
+      "unitId": "s0044",
+      "field": "literal",
+      "before": "Changlegong's Hongtai suffered disaster.",
+      "after": "The Hong Terrace of Changle Palace suffered a fire.",
+      "citation": "長樂宮鴻臺災",
+      "reason": "Accepted r0005 already updates idiomatic; literal still omits the accepted repair wording.",
+      "dependsOn": "hanshu:003:r0005 editorial authorization reconciliation"
+    }
+  ],
+  "distinctHolds": [
+    {
+      "gate": "editorial-validation",
+      "summary": "people:validate fails until r0005 independent authorization matches current unit coordinates."
+    },
+    {
+      "gate": "date-audit-fingerprint",
+      "summary": "people:dates:verify reports stale relative to current packet hashes; do not rewrite audit hashes without substantive re-audit."
+    },
+    {
+      "gate": "date-research-blocked",
+      "summary": "Liu Fei (p005) death: Hanshu s0067 六年冬十月辛丑 vs Shiji 22 year-six month seven; BC 190–189 competing-witness interval preserved.",
+      "items": ["claim-45", "claim-104", "hints-p005", "p005"]
+    },
+    {
+      "gate": "date-research-blocked",
+      "summary": "Cao Can (p014) death: Hanshu s0052 五年秋八月己丑 vs Shiji 22 乙丑; shared 190 BC year with unresolved day.",
+      "items": ["claim-48", "claim-114", "hints-p014", "p014"]
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 003",
+    "verifyDates": "npm run people:dates:verify -- --book hanshu --chapter 003"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed staging inputs unchanged."
+}
