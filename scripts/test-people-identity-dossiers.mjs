@@ -1,12 +1,97 @@
+import './test-people-inferred-intermediary-witness.mjs';
+import './test-people-inferred-paternal-witness.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';
 import { localNameKeys } from './lib/people-resolution.mjs';
-import { buildIdentityDossierIndex, planChapterIdentityReview, validateRetainedDossierReview } from './lib/people-identity-dossiers.mjs';
+import { buildIdentityDossierIndex, planChapterIdentityReview, validateRetainedDossierReview, assertDossierPrimaryWitness } from './lib/people-identity-dossiers.mjs';
 
 const inputs = Object.fromEntries(['source', 'extraction', 'editorial', 'dateAudit'].map((key, i) => [key, `sha256:${String(i + 1).repeat(64)}`]));
 const limits = { maxDossiersPerCase: 8, maxKeysPerCase: 16, maxPostingReadsPerKey: 8 };
 const keyReader = person => person.keys;
+function inferredFatherFixture(text='楊盛遣兄子倦入寇長蛇。',relativeNames=['楊盛','倦']){
+ const localId='fixture:001:p099',unit='fixture:001:s0001';
+ const father={localId,mentionException:'Individuated only as the elder brother and father implied by 兄子.',mentions:[],claims:[
+  {id:'n',subject:localId,predicate:'name',value:{kind:'descriptive-kinship',zh:'楊盛兄'},certainty:'strongly-inferred',evidence:[unit]},
+  {id:'s',subject:localId,predicate:'family-relationship',value:{relation:'sibling-of',personId:'fixture:001:p001',kinshipTerm:{zh:'兄'},subjectRole:'elder-brother',objectRole:'younger-sibling',subjectRelativeAge:'elder'},certainty:'strongly-inferred',evidence:[unit]},
+  {id:'p',subject:localId,predicate:'family-relationship',value:{relation:'parent-of',personId:'fixture:001:p002',kinshipTerm:{zh:'父'},subjectRole:'father',objectRole:'son'},certainty:'strongly-inferred',evidence:[unit]},
+ ]};
+ const relatives=new Map(relativeNames.map((name,i)=>{const localId=`fixture:001:p00${i+1}`;return[localId,{localId,mentions:[],claims:[{id:'n'+i,subject:localId,predicate:'name',value:{kind:'personal',zh:name},certainty:'explicit',evidence:[unit]}]}];}));
+ const keys=p=>p.claims.filter(c=>c.predicate==='name').map(c=>({language:'zh',key:'zh:'+c.value.zh,sources:[c.id]}));
+ return{father,keys,relatives,source:new Map([[unit,text]]),witness:{localId,book:'fixture',chapter:'001',unitId:'s0001',quote:text}};
+}
+test('source-individuated unnamed elder-brother fathers retain their existing 兄子 witnesses',()=>{
+ for(const [text,names] of [['楊盛遣兄子倦入寇長蛇。',['楊盛','倦']],['勃勃遣兄子提南侵池陽。',['勃勃','提']],['德迎其兄子超于長安',['德','超']]]){
+  const f=inferredFatherFixture(text,names);assert.doesNotThrow(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives));
+  f.witness.quote='兄子'+names[1];assert.doesNotThrow(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives));
+ }
+});
+test('inferred intermediary witness requires both exact source-linked relations and roles',()=>{
+ const mutations=[
+  f=>delete f.father.mentionException,
+  f=>{f.father.claims=f.father.claims.filter(c=>c.id!=='s');},
+  f=>{f.father.claims=f.father.claims.filter(c=>c.id!=='p');},
+  f=>{f.father.claims[2].evidence=['fixture:001:s0002'];},
+  f=>{f.father.claims[1].value.subjectRole='younger-brother';},
+  f=>{f.father.claims[2].value.objectRole='father';},
+  f=>{f.father.claims[2].value.personId=f.father.claims[1].value.personId;},
+  f=>{f.father.claims[1].certainty='explicit';},
+  f=>{f.father.claims[0].value.kind='personal';},
+  f=>{f.father.mentions=[{unit:{id:'s0001'},spans:{zh:[],en:[]}}];},
+ ];
+ for(const mutate of mutations){const f=inferredFatherFixture();mutate(f);assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives),/current primary source/);}
+});
+test('inferred intermediary witness still requires the entire quoted 兄子 compound in the exact current unit',()=>{
+ for(const quote of ['兄','兄子','父','德兄','兄子倦不存在']){const f=inferredFatherFixture();f.witness.quote=quote;assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives),/current primary source/);}
+ const f=inferredFatherFixture();f.witness.unitId='s0002';assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,()=>[]),/current primary source/);
+});
+test('unnamed intermediary witness requires independently source-linked sibling and nephew names',()=>{
+ for(const mutate of [f=>f.relatives.delete('fixture:001:p002'),f=>{f.relatives.get('fixture:001:p002').claims[0].evidence=['fixture:001:s0002'];},f=>{f.relatives.get('fixture:001:p001').claims[0].value.zh='不存在';}]){
+  const f=inferredFatherFixture();mutate(f);assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives),/current primary source/);
+ }
+ const f=inferredFatherFixture();assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys),/current primary source/);
+});
+function inferredMotherFixture(shared=false){
+ const f=inferredFatherFixture(shared?'懿左常侍張敞諫懿曰：殿下以母弟之親。':'恢舅苟和時為立節將軍。',shared?['懿','泓']:['恢','苟和']),id=f.father.localId,unit='fixture:001:s0001';
+ f.father.claims=[{id:'n',subject:id,predicate:'name',value:{kind:'descriptive-kinship',zh:shared?'姚泓之母':'姚恢之母'},certainty:'strongly-inferred',evidence:[unit]},
+  {id:'p',subject:id,predicate:'family-relationship',value:{relation:'parent-of',personId:'fixture:001:p001',kinshipTerm:{zh:'母'},subjectRole:'mother',objectRole:'son',line:'maternal'},certainty:'strongly-inferred',evidence:[unit]}];
+ if(shared){
+  f.father.claims.push({...structuredClone(f.father.claims[1]),id:'p2',value:{...f.father.claims[1].value,personId:'fixture:001:p002'}});
+  f.relatives.get('fixture:001:p001').claims.push({id:'s',subject:'fixture:001:p001',predicate:'family-relationship',value:{relation:'sibling-of',personId:'fixture:001:p002',kinshipTerm:{zh:'母弟'},subjectRole:'younger-brother',objectRole:'elder-brother',line:'maternal',sharedParentage:'full'},certainty:'explicit',evidence:[unit]});
+  f.witness.quote='母弟';
+ }else{
+  const uncle=f.relatives.get('fixture:001:p002');
+  uncle.claims.push({id:'s',subject:uncle.localId,predicate:'family-relationship',value:{relation:'sibling-of',personId:id,kinshipTerm:{zh:'舅'},subjectRole:'brother',objectRole:'sister',line:'maternal'},certainty:'strongly-inferred',evidence:[unit]},
+   {id:'k',subject:uncle.localId,predicate:'family-relationship',value:{relation:'kin-of',personId:'fixture:001:p001',kinshipTerm:{zh:'舅'},subjectRole:'maternal-uncle',objectRole:'nephew',line:'maternal'},certainty:'explicit',evidence:[unit]});
+  f.witness.quote='恢舅';
+ }
+ return f;
+}
+test('explicit maternal-uncle and same-mother source constructions support unnamed mothers',()=>{
+ for(const shared of [false,true]){const f=inferredMotherFixture(shared);assert.doesNotThrow(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives));}
+});
+test('unnamed-mother witness rejects incomplete, paternal or detached source graphs',()=>{
+ const cases=[
+  [false,f=>{f.relatives.get('fixture:001:p002').claims=f.relatives.get('fixture:001:p002').claims.filter(c=>c.id!=='s');}],
+  [false,f=>{f.relatives.get('fixture:001:p002').claims.find(c=>c.id==='k').value.line='paternal';}],
+  [false,f=>{f.relatives.get('fixture:001:p002').claims.find(c=>c.id==='s').evidence=['fixture:001:s0002'];}],
+  [false,f=>{f.witness.quote='舅';}],
+  [true,f=>{f.father.claims.pop();}],
+  [true,f=>{f.relatives.get('fixture:001:p001').claims.find(c=>c.id==='s').value.sharedParentage='uncertain';}],
+  [true,f=>{f.relatives.get('fixture:001:p001').claims.find(c=>c.id==='s').value.line='paternal';}],
+  [true,f=>{f.relatives.delete('fixture:001:p002');}],
+ ];
+ for(const[shared,mutate]of cases){const f=inferredMotherFixture(shared);mutate(f);assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives),/current primary source/);}
+});
+test('non-mention same-person witness requires already accepted membership and exact linked name evidence',()=>{
+ const f=inferredFatherFixture('姚泓，興之長子也。',['興','泓']),id=f.father.localId,unit='fixture:001:s0001';
+ f.father.claims=[{id:'n',subject:id,predicate:'name',value:{kind:'personal',zh:'姚興'},certainty:'explicit',evidence:[unit]},
+  {id:'same',subject:id,predicate:'same-person',value:{personId:'fixture:001:p001'},certainty:'strongly-inferred',evidence:[unit]}];
+ f.witness.quote='興';const accepted=new Map([[id,'accepted-canonical'],['fixture:001:p001','accepted-canonical']]);
+ assert.doesNotThrow(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives,accepted));
+ accepted.set(id,'separate-canonical');assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives,accepted),/current primary source/);
+ accepted.set(id,'accepted-canonical');f.father.claims[1].evidence=['fixture:001:s0002'];assert.throws(()=>assertDossierPrimaryWitness(f.witness,f.father,f.source,f.keys,new Map(),f.relatives,accepted),/current primary source/);
+});
 function person(id, name = '王偉', english = 'Wang Wei') {
   const [book, chapter] = id.split(':'); const claimId = `${book}:${chapter}:c${id.split(':p')[1]}`;
   return { localId: id, promptVersion: 7, preferredNameSuggestion: { zh: name, en: english }, keys: [
