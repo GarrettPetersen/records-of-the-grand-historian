@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiuwudaishi/129",
+  "reviewerAgentId": "bc-0be7859d-553b-4965-a0ed-e636b3089234",
+  "reviewerModel": "claude-opus-5-5",
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "ownerRun": "run-5c9ccc7e-25d7-4137-91d0-e2eec5486424",
+  "ownerRevision": "20b67a689c16ea349488a56182dc71a5accd0a54",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-separate-transport-audited/jiuwudaishi-129/owner-handoff.json",
+  "ownerProposalSha256": "94ae9bdbca4e0d10153b2e57dea18293f183f57a9ab08ac886133ea07f0e4d1b",
+  "pr": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5711",
+  "reviewedAt": "2026-11-24T15:26:35Z",
+  "scope": {
+    "observedBlocker": "definite-source-translation-repair",
+    "reviewedDelta": "Six owner-proposed English repairs (s0117, s0131, s0212; literal and idiomatic) plus their directly changed extraction, editorial and chronology dependencies.",
+    "preservedUnrelatedWork": [
+      "all 242 other source units and both English fields byte-identical",
+      "38 previously applied translation repairs byte-identical",
+      "original grok-4.6 editorial review (bc-5959e1eb-60a4-4b99-948a-833b52d3af4c) preserved as review 1, including its rejected proposal and the c0334 Tang Jingsi claim revision",
+      "September 29 independent date audit preserved via native date-audit-history archive; 684 of 685 item checks and all 111 person checks reused unchanged",
+      "people, surfaces, mentions, candidate dispositions, coverage and run provenance byte-identical except p037 activeDateHints (see affectedNativeDependencies)",
+      "identity work untouched (no accepted identity review exists yet for this chapter)"
+    ]
+  },
+  "verdict": "approve-with-reviewer-amendment",
+  "summary": "All six owner English repairs are approved exactly as written: each cited unit is a bare 贈/制贈 posthumous grant of an office (黔南節度使, 武信軍節度使, 太子太師), never a fief, and both English fields carried the identical 'enfeoffed' error. The scope is complete: the only other 'enfeoff' rendering in the chapter, s0242 追封彭城郡王, is a genuine posthumous enfeoffment and is correctly kept. The owner missed one directly changed dependency: extraction chunk 003 encoded the s0117 and s0131 grants with the predicate 'enfeoffment', which the mistranslation induced and the Chinese contradicts. The parallel s0212 grant and the four previously accepted 贈 repairs (s0021, s0053, s0074, s0097) all use 'honor'. I supply the exact minimal amendment as native claim retraction plus addition (predicate only; value, certainty, date context and evidence unchanged). The full composition was dry-run with the native applier and validators in a scratch PEOPLE_REPO_ROOT and passes. Chronology becomes natively stale only through hash pins; no dated value changes. Closure can explicitly reuse 684 prior checks and needs one re-reviewed hint set (hints-p037), which I approve.",
+  "approvedChanges": [
+    {
+      "target": "source-english",
+      "path": "data/jiuwudaishi/129.json",
+      "unitId": "s0117",
+      "field": "literal",
+      "approval": "accept-exact",
+      "before": "He was posthumously enfeoffed as military governor of Qiannan.",
+      "after": "He was posthumously appointed military governor of Qiannan.",
+      "reason": "贈黔南節度使 confers a posthumous office; 贈 is not enfeoffment.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0117", "excerpt": "贈黔南節度使。" }
+    },
+    {
+      "target": "source-english",
+      "path": "data/jiuwudaishi/129.json",
+      "unitId": "s0117",
+      "field": "idiomatic",
+      "approval": "accept-exact",
+      "before": "He was posthumously enfeoffed as military governor of Qiannan.",
+      "after": "He was posthumously appointed military governor of Qiannan.",
+      "reason": "Same 贈/enfeoffment error on both fields.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0117", "excerpt": "贈黔南節度使。" }
+    },
+    {
+      "target": "source-english",
+      "path": "data/jiuwudaishi/129.json",
+      "unitId": "s0131",
+      "field": "literal",
+      "approval": "accept-exact",
+      "before": "He was posthumously enfeoffed as military governor of Wuxin.",
+      "after": "He was posthumously appointed military governor of Wuxin.",
+      "reason": "贈武信軍節度使 is a posthumous office grant.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0131", "excerpt": "贈武信軍節度使。" }
+    },
+    {
+      "target": "source-english",
+      "path": "data/jiuwudaishi/129.json",
+      "unitId": "s0131",
+      "field": "idiomatic",
+      "approval": "accept-exact",
+      "before": "He was posthumously enfeoffed as military governor of Wuxin.",
+      "after": "He was posthumously appointed military governor of Wuxin.",
+      "reason": "Same 贈/enfeoffment error on both fields.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0131", "excerpt": "贈武信軍節度使。" }
+    },
+    {
+      "target": "source-english",
+      "path": "data/jiuwudaishi/129.json",
+      "unitId": "s0212",
+      "field": "literal",
+      "approval": "accept-exact",
+      "before": "An edict posthumously enfeoffed him as Grand Preceptor of the Heir Apparent.",
+      "after": "An edict posthumously granted him the office of Grand Preceptor of the Heir Apparent.",
+      "reason": "制贈太子太師 is an edict conferring a posthumous office.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0212", "excerpt": "制贈太子太師。" }
+    },
+    {
+      "target": "source-english",
+      "path": "data/jiuwudaishi/129.json",
+      "unitId": "s0212",
+      "field": "idiomatic",
+      "approval": "accept-exact",
+      "before": "By edict he was posthumously enfeoffed as Grand Preceptor of the Heir Apparent.",
+      "after": "By edict he was posthumously granted the office of Grand Preceptor of the Heir Apparent.",
+      "reason": "Same 制贈/enfeoffment error on both fields.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0212", "excerpt": "制贈太子太師。" }
+    },
+    {
+      "target": "extraction-claim",
+      "path": "data/people/extractions/jiuwudaishi/129.json",
+      "approval": "reviewer-amendment",
+      "personId": "p037",
+      "personName": "Li Jianchong 李建崇",
+      "nativeMechanism": "claimRetraction + claimAddition tied to the s0117 literal proposal (claim revisions must preserve predicate)",
+      "priorDateItemId": "claim-507",
+      "priorExpandedClaimId": "jiuwudaishi:129:c0958",
+      "before": ["p037", "enfeoffment", { "title": { "en": "military governor of Qiannan", "zh": "黔南節度使" }, "action": "posthumously-granted", "dateContext": { "sourceDate": { "text": "廣順三年春", "season": "spring", "regnalYear": 3 }, "westernYear": { "era": "AD", "year": 953, "precision": "year" } } }, "explicit-event-contextual-date", ["s0117"]],
+      "after": ["p037", "honor", { "title": { "en": "military governor of Qiannan", "zh": "黔南節度使" }, "action": "posthumously-granted", "dateContext": { "sourceDate": { "text": "廣順三年春", "season": "spring", "regnalYear": 3 }, "westernYear": { "era": "AD", "year": 953, "precision": "year" } } }, "explicit-event-contextual-date", ["s0117"]],
+      "retractionReason": "贈黔南節度使。 confers a posthumous office, not a fief; the enfeoffment predicate came from the mistranslated English.",
+      "additionReason": "贈黔南節度使。 is a posthumous office honor; value, certainty, date context and evidence are unchanged.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0117", "excerpt": "贈黔南節度使。" },
+      "consistencyEvidence": "Same chapter encodes 贈/制贈/詔贈 office grants as honor: s0021 p001, s0053 p016, s0074 p022, s0097 p035, s0212 p086 (claim-976)."
+    },
+    {
+      "target": "extraction-claim",
+      "path": "data/people/extractions/jiuwudaishi/129.json",
+      "approval": "reviewer-amendment",
+      "personId": "p048",
+      "personName": "Wang Zhongyi 王重裔",
+      "nativeMechanism": "claimRetraction + claimAddition tied to the s0131 literal proposal (claim revisions must preserve predicate)",
+      "priorDateItemId": "claim-592",
+      "priorExpandedClaimId": "jiuwudaishi:129:c1043",
+      "before": ["p048", "enfeoffment", { "title": { "en": "military governor of Wuxin", "zh": "武信軍節度使" }, "action": "posthumously-granted", "dateContext": { "sourceDate": { "text": "廣順元年夏", "season": "summer", "regnalYear": 1 }, "westernYear": { "era": "AD", "year": 951, "precision": "year" } } }, "explicit-event-contextual-date", ["s0131"]],
+      "after": ["p048", "honor", { "title": { "en": "military governor of Wuxin", "zh": "武信軍節度使" }, "action": "posthumously-granted", "dateContext": { "sourceDate": { "text": "廣順元年夏", "season": "summer", "regnalYear": 1 }, "westernYear": { "era": "AD", "year": 951, "precision": "year" } } }, "explicit-event-contextual-date", ["s0131"]],
+      "retractionReason": "贈武信軍節度使。 confers a posthumous office, not a fief; the enfeoffment predicate came from the mistranslated English.",
+      "additionReason": "贈武信軍節度使。 is a posthumous office honor; value, certainty, date context and evidence are unchanged.",
+      "sourceWitness": { "source": "chapter-text", "citation": "s0131", "excerpt": "贈武信軍節度使。" },
+      "consistencyEvidence": "Catalog impact is nil (compile-people-catalog maps both enfeoffment and honor to titlesAndHonors); the fix corrects claim semantics only."
+    },
+    {
+      "target": "date-audit-item",
+      "path": "data/people/date-audits/jiuwudaishi/129.json",
+      "approval": "independent-re-review",
+      "itemId": "hints-p037",
+      "before": ["AD 900-908", "AD 921", "AD 923-926", "AD 926", "AD 942", "AD 947", "AD 951", "AD 953"],
+      "after": ["AD 900-908", "AD 921", "AD 923-926", "AD 926", "AD 936-942", "AD 942", "AD 947", "AD 951", "AD 953"],
+      "cause": "The native applier rebuilds a subject's activeDateHints from all final claims when a dated claim is retracted or added (applyReviewedTemporalHintChanges).",
+      "verdict": "supported",
+      "reason": "The only new hint, AD 936-942, derives solely from already-audited claim-485 (入晉為申州刺史, verdict supported). It is bounded by the Later Jin founding in 936 and the 天福七年冬 942 entry at s0109. No new endpoint or person is introduced. p048 hints rebuild byte-identically.",
+      "evidence": [
+        { "unit": "s0108", "quote": "入晉為申州刺史。" },
+        { "unit": "s0109", "quote": "天福七年冬" },
+        { "unit": "s0116", "quote": "廣順三年春卒。" }
+      ]
+    }
+  ],
+  "heldCases": [],
+  "outOfScopeObservations": [
+    {
+      "unitId": "s0213",
+      "note": "Chinese 張穎，太原人，駙馬都尉永德 is cut off by an inserted 〈《宋史》 note, and its English ('father of Commissioner of the Imperial Son-in-Law's Household Yongde') renders 駙馬都尉 loosely. The truncated source makes this not a definite, self-contained defect, and it is outside this blocker's directly changed dependencies. It is not a hold and was not altered."
+    }
+  ],
+  "pinnedEvidence": {
+    "ownerRevision": "20b67a689c16ea349488a56182dc71a5accd0a54",
+    "ownerParentStagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+    "dispatchStage": {
+      "commit": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+      "relation": "later staging commit, not an ancestor of the owner revision",
+      "scopedInputsIdentical": true,
+      "note": "All four chapter input blobs at 5b7ae31 equal the owner-revision blobs, so no scoped input moved on staging after the handoff."
+    },
+    "inputs": {
+      "source": {
+        "path": "data/jiuwudaishi/129.json",
+        "gitBlob": "98333efe7b5c90d17639f78dd53dce3d9dffca32",
+        "contentSha256": "sha256:1672c7dca114c370d28901bfe4a1cb8ae10a42c045a78bcfb6e46e20d75b3b1e",
+        "chapterFingerprint": "sha256:69fb09ec9af2df0311207474c62d37061f6d2c7d6c47522ce406a45580c0805c"
+      },
+      "extraction": {
+        "path": "data/people/extractions/jiuwudaishi/129.json",
+        "gitBlob": "e306c58403a38924106651cd5b47954af67694f0",
+        "contentSha256": "sha256:5a626e974668031e8580c070854817c10ae256ef17375354e661e87ccb8e8279",
+        "inputChapterFingerprint": "sha256:69fb09ec9af2df0311207474c62d37061f6d2c7d6c47522ce406a45580c0805c"
+      },
+      "dateAudit": {
+        "path": "data/people/date-audits/jiuwudaishi/129.json",
+        "gitBlob": "bfbba86a7a3c81a71a9d523008441b1c3367a5f4",
+        "contentSha256": "sha256:844ab7a0c1f487632aba779a7fa0eb8566dbea44490f6ca9479448066864e3e5",
+        "sourceHash": "sha256:1d9483070c225ad5ef135b6a08260d41a14c12f699014503f5a5e350f2ff0094",
+        "extractionHash": "sha256:cc0dd1909a77c2777c6a15a65df1c7516426d7a0d04f304929015bdad706b8d7",
+        "currentPacketMatches": true,
+        "reviewer": { "name": "Independent Jiu Wudai Shi 129 initial chronology reviewer", "independentOfExtractor": true, "agentId": "unknown (not recorded)", "preserved": true },
+        "reviewedAt": "2026-09-29T18:23:37.454Z",
+        "commit": "98a35045623da32cae506fa017abf1ff23293a5c"
+      },
+      "editorial": {
+        "path": "data/people/editorial-decisions/jiuwudaishi/129.json",
+        "gitBlob": "ec9379728d71fcc57dfe5f90b73dd8d3da619f86",
+        "contentSha256": "sha256:9b2e690c3dec841f077237e45af72a073c20e2ce43b772e593edf4985bc3fc40",
+        "inputChapterFingerprint": "sha256:58ea6101c188ecd69ab1f4aa9b35f56bf3508c3bcd0529f72fb0a01a7ad4430a",
+        "reviewer": { "kind": "cursor-agent", "model": "grok-4.6", "agentId": "bc-5959e1eb-60a4-4b99-948a-833b52d3af4c", "runId": "run-f0a65662-1551-4296-bd3b-d116c3be06c8", "preserved": true },
+        "decisions": { "accept": 38, "reject": 1 },
+        "claimRevisions": 1
+      }
+    },
+    "ownerSealedHashesVerified": true,
+    "beforeTextsVerifiedAgainstSourceBytes": true,
+    "historicalAuthorship": {
+      "defectiveEnglish": {
+        "introducedBy": "6b6f7805b80ec99d86a4a2fb471472ca74f44e30",
+        "promotion": "squash merge of PR #3863 'Final 350 Chapter Translations' from translation-staging, merged 2026-05-27T02:09:27Z",
+        "firstParentState": "s0117 literal/idiomatic empty",
+        "unitMetadata": { "translator": "Garrett M. Petersen (2026)", "model": "Composer 2.5" },
+        "writerAgentId": "unknown (not observed in reproduced bytes, commit message or PR metadata)"
+      },
+      "enfeoffmentClaims": {
+        "introducedBy": "9f480156cb99017fca175518e20d4d93f08246db",
+        "chunk": "003 (unit orders 99-131; s0117 order 116, s0131 order 130)",
+        "writerAgentId": "bc-fdde293c-c697-464a-b9ec-01241bc0e430",
+        "writerRunId": "run-1918a154-c74f-492b-9d90-f971bc1b0ce3",
+        "writerModel": "grok-4.6",
+        "basis": "extraction run.chunks provenance in the pinned extraction bytes"
+      },
+      "s0212HonorClaim": {
+        "chunk": "005 (unit orders 169-211; s0212 order 210)",
+        "writerAgentId": "bc-3ab3cb0f-0351-41f1-820a-96c0aa720ac7"
+      },
+      "ownerHandoff": {
+        "commit": "20b67a689c16ea349488a56182dc71a5accd0a54",
+        "commitAuthor": "Cursor Agent",
+        "claimedOwnerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+        "basis": "handoff JSON ownerAgentId, dispatch ownerAgentId and branch suffix 232f43 agree"
+      },
+      "independence": "Reviewer bc-0be7859d-553b-4965-a0ed-e636b3089234 is distinct from the owner, all six extraction chunk agents, and the prior editorial reviewer."
+    }
+  },
+  "affectedNativeDependencies": {
+    "source": {
+      "changedUnits": ["s0117", "s0131", "s0212"],
+      "changedFields": 6,
+      "chineseUnchanged": true,
+      "postApplicationChapterFingerprint": "sha256:52fcf84f6361c386c3c61c947b330a721df07b06e3a7264613447021a064b596"
+    },
+    "extraction": {
+      "inputRebinding": "chapterFingerprint and unitDigests for s0117, s0131, s0212 only",
+      "translationRepairs": "38 existing entries byte-identical; 6 appended with status applied and the exact owner reasons",
+      "claims": "claims[0..505] byte-identical; claim-507 and claim-592 removed and their honor replacements appended (count stays 1156)",
+      "people": "only p037 identityHints.activeDateHints changes (adds AD 936-942); p048 unchanged",
+      "unchanged": ["surfaces", "candidateDispositions", "coverage", "run"]
+    },
+    "editorial": {
+      "composition": "mergeEditorialDecisionReview produces schemaVersion 4 with reviews[0] = preserved grok-4.6 review (content-identical) and reviews[1] = new supplemental review: 6 proposals r0039-r0044, 6 accept decisions whose reasons equal the applied repair reasons, 2 claimRetractions and 2 claimAdditions above",
+      "supplementalReviewerAgentId": "bc-0be7859d-553b-4965-a0ed-e636b3089234",
+      "proposalIds": {
+        "jiuwudaishi:129:r0039": "s0117 literal",
+        "jiuwudaishi:129:r0040": "s0117 idiomatic",
+        "jiuwudaishi:129:r0041": "s0131 literal",
+        "jiuwudaishi:129:r0042": "s0131 idiomatic",
+        "jiuwudaishi:129:r0043": "s0212 literal",
+        "jiuwudaishi:129:r0044": "s0212 idiomatic"
+      },
+      "claimChangesAttachedTo": { "p037": "jiuwudaishi:129:r0039", "p048": "jiuwudaishi:129:r0041" }
+    },
+    "dateAudit": {
+      "statusAfterApplication": "stale (hash pins only)",
+      "packetAfter": {
+        "sourceHash": "sha256:7954013aedc922f5437f08faa699747f177e85ddf15b6eb662ca3b2347391ab5",
+        "extractionHash": "sha256:ce3100bb98dfe0613681bc13c7dbd0608317ea2090a9223ec0b0b0621c946abe"
+      },
+      "changedDatedValues": [],
+      "datePacketUnitChanges": "s0117, s0131, s0212 English only; every zh unchanged",
+      "itemReuse": {
+        "byteIdenticalClaimHash": 682,
+        "byteIdenticalButRenumbered": 315,
+        "predicateOnlyCarried": { "claim-507": "claim-1155", "claim-592": "claim-1156" },
+        "reReviewed": ["hints-p037"],
+        "personChecksReused": 111,
+        "reviewedUnitsReused": 245
+      },
+      "renumberingWarning": "Positional claim-N IDs shift from claim-508 onward because retracted claims are removed and additions appended. Re-key prior checks by claimHash, never by position.",
+      "nativeClosure": "Host composes a complete report from the prior checks re-keyed by claimHash, the two carried checks (event text 'Reviewed honor chronology'), and the hints-p037 check above. It must record through people:dates:record / recordDateAudit, which archives the September 29 report into date-audit-history. Keep the original reviewer object and add delta provenance (reviewer agent ID, prior reviewedAt, reused and re-reviewed check lists)."
+    },
+    "identity": {
+      "status": "independent bounded identity review still pending (105 prepared cases across 6 transport parts per owner handoff)",
+      "impact": "Prepared transport parts were built from extraction blob e306c584. Re-prepare or rebind them to the post-application extraction before identity review. Person set, names, surfaces and mentions are unchanged; only p037/p048 claim predicates and p037 hints differ.",
+      "acceptedIdentityWorkInvalidated": false
+    },
+    "chapterReady": false
+  },
+  "validation": {
+    "resourceGuard": "npm run people:disk:check passed (228 GiB free; Linux memory guard not applicable)",
+    "atOwnerRevision": {
+      "peopleValidate": "Scoped person data validation passed for jiuwudaishi/129: 111 local people, 565 mentions, 1607 claims, 38 applied repairs, 39 editorial decisions, 1 claim revision",
+      "datesVerify": "audited (reviewedAt 2026-09-29T18:23:37.454Z, 0 findings)",
+      "extractionValidate": "data/people/extractions/jiuwudaishi/129.json: ok (111 people, 565 mentions, 1607 claims, 808 candidates)"
+    },
+    "scratchComposition": {
+      "method": "PEOPLE_REPO_ROOT=/tmp scratch root with only the four chapter files plus read-only symlinks to shared reference files; canonical checkout verified clean afterwards",
+      "applier": "node scripts/apply-people-translation-repairs.mjs --book jiuwudaishi --chapter 129 -> Applied 6 independently reviewed repair(s) to jiuwudaishi/129; 111 people and 808 candidates remain valid.",
+      "peopleValidate": "Scoped person data validation passed for jiuwudaishi/129: 111 local people, 565 mentions, 1607 claims, 0 proposed repair(s), 44 applied repair(s), 45 editorial decision(s), 2 claim retraction(s), 1 claim revision(s), 2 claim addition(s).",
+      "extractionValidate": "ok (111 people, 565 mentions, 1607 claims, 808 candidates)",
+      "negativeControl": "Reverting one applied English field makes validate-people-extraction fail with 'compact input fingerprints or unit digests do not match the current packet'",
+      "dateClosure": "Status stale before record; recordDateAudit with re-keyed checks plus hints-p037 gives audited; people-date-audit verify reports audited with 0 findings; prior report archived in date-audit-history",
+      "composedFileSha256": {
+        "source": "sha256:11da1e1d244a806fc78fa9ba1e5f3842ff7e75f194cf7553d7c8f60696098aa0",
+        "extraction": "sha256:9dfbf3738f88d2d5ba5d366c4bbcd804461f7c57db59f6a6b3c70b9a9d016bcd"
+      }
+    },
+    "englishCoverage": "Both fields checked for all 245 units; the only remaining 'enfeoff' rendering is s0242 追封彭城郡王, which is correct.",
+    "noCanonicalEdits": true,
+    "noBuild": true,
+    "noNewWorktree": true
+  }
+}
