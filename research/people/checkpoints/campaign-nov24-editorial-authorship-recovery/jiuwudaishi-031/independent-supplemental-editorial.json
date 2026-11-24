@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "jiuwudaishi/031",
+  "reviewerAgentId": "bc-4cfe34bc-610b-400d-9884-a87dd556187a",
+  "ownerAgentId": "bc-ffd8c215-a9f0-4a40-9f06-7ccb25982823",
+  "ownerRevision": "60fda933b0f1b6fee9f76d8079c79e78508b331a",
+  "idempotencyKey": "1b19b8ceb31a6883fed97877577921a370f59297c99e0821379ea83a8cd9f472",
+  "verdict": "approve",
+  "provenance": {
+    "pr": 5653,
+    "headRef": "cursor/nov24-retained-jiuwudaishi-031-982823",
+    "reviewBranch": "cursor/nov24-independent-editorial-jiuwudaishi-031-56187a",
+    "seed": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/supplemental-review-2-seed.json",
+    "prior": "research/people/checkpoints/campaign-nov24-editorial-authorship-recovery/jiuwudaishi-031/retained-review-1-v3.json",
+    "retainedAuthorAgentId": "bc-7c50d625-1bf8-4482-8007-d3295a860a89",
+    "inputBlobs": {
+      "data/jiuwudaishi/031.json": "2ab1368d60b9aee366f3db2f6c88bd55f172c8bf",
+      "data/people/extractions/jiuwudaishi/031.json": "726a5a4568da72ac227c58a7bf899f73b65e3c7a",
+      "data/people/date-audits/jiuwudaishi/031.json": "04af961cbb11cf41cb7d24fa558c5dbaa6b31a43",
+      "data/people/editorial-decisions/jiuwudaishi/031.json": "735f46aa31b1c909f2cbc098d8a4526e57206bf0"
+    }
+  },
+  "decisionReview": {
+    "schemaVersion": 3,
+    "book": "jiuwudaishi",
+    "chapter": "031",
+    "input": {
+      "chapterFingerprint": "sha256:daa3d4873195d1f28844fb664b03639b768edf32a9af1be4501973fe73c69167",
+      "proposalsFingerprint": "sha256:10506da295ddea0dd8487cd5535bfbd91e53b59777220907073e85bbaf6567c0"
+    },
+    "reviewer": {
+      "kind": "cursor-agent",
+      "name": "Composer 2.5",
+      "model": "composer-2.5-fast",
+      "agentId": "bc-4cfe34bc-610b-400d-9884-a87dd556187a",
+      "runId": "bc-4cfe34bc-610b-400d-9884-a87dd556187a",
+      "completedAt": "2026-11-24T12:55:00.000Z"
+    },
+    "proposals": [
+      {
+        "id": "jiuwudaishi:031:r0009",
+        "unit": {
+          "id": "s0160",
+          "kind": "paragraph-sentence",
+          "blockIndex": 12,
+          "collection": "sentences",
+          "itemIndex": 4
+        },
+        "field": "literal",
+        "before": "Xiangzhou military commissioner Kong remained acting Grand Tutor, co-equal chief minister, and Xiangzhou military commissioner as before.",
+        "after": "Xiangzhou military commissioner Kong Qing remained acting Grand Tutor, co-equal chief minister, and Xiangzhou military commissioner as before.",
+        "reason": "The surname-only 孔 is Kong Qing: his biography in Jiu Wudai Shi 64 records the same Xiangzhou command before his subsequent Luzhou, Zelu, and Heyang appointments. Expanding the English reference disambiguates the person without altering the Chinese source.",
+        "confidence": "high"
+      },
+      {
+        "id": "jiuwudaishi:031:r0010",
+        "unit": {
+          "id": "s0160",
+          "kind": "paragraph-sentence",
+          "blockIndex": 12,
+          "collection": "sentences",
+          "itemIndex": 4
+        },
+        "field": "idiomatic",
+        "before": "Kong of Xiang kept acting Grand Tutor, chancellor, and Xiang commission.",
+        "after": "Kong Qing of Xiang kept acting Grand Tutor, chancellor, and Xiang commission.",
+        "reason": "The office sequence identifies 孔 as Kong Qing, whose biography records his Xiangzhou military governorship. The full English name makes the reference intelligible.",
+        "confidence": "high"
+      }
+    ],
+    "decisions": [
+      {
+        "repairId": "jiuwudaishi:031:r0009",
+        "decision": "accept",
+        "after": null,
+        "reason": "The surname-only 孔 is Kong Qing: his biography in Jiu Wudai Shi 64 records the same Xiangzhou command before his subsequent Luzhou, Zelu, and Heyang appointments. Expanding the English reference disambiguates the person without altering the Chinese source.",
+        "sourceWitness": {
+          "source": "chapter-text",
+          "citation": "jiuwudaishi/031 s0160",
+          "excerpt": "以襄州節度使孔依前檢校太傅、同平章事、襄州節度使。"
+        }
+      },
+      {
+        "repairId": "jiuwudaishi:031:r0010",
+        "decision": "accept",
+        "after": null,
+        "reason": "The office sequence identifies 孔 as Kong Qing, whose biography records his Xiangzhou military governorship. The full English name makes the reference intelligible.",
+        "sourceWitness": {
+          "source": "chapter-text",
+          "citation": "jiuwudaishi/031 s0160",
+          "excerpt": "以襄州節度使孔依前檢校太傅、同平章事、襄州節度使。"
+        }
+      }
+    ],
+    "claimRetractions": [],
+    "claimRevisions": [],
+    "claimAdditions": []
+  },
+  "validation": {
+    "proposalContractsVerified": true,
+    "chapterFingerprintVerified": true,
+    "proposalsFingerprintVerified": true,
+    "chineseWitness": "以襄州節度使孔依前檢校太傅、同平章事、襄州節度使。",
+    "englishFieldsReviewed": [
+      "literal",
+      "idiomatic"
+    ],
+    "native": {
+      "validateEditorialDecisionDocument": "pass",
+      "validateAppliedEditorialDecisions": "pass",
+      "mergedReviewSchemaVersion": 4
+    },
+    "independentFindings": [
+      "s0160 Chinese attests only 孔; Kong Qian (孔謙) is a distinct chapter person at 租庸使 in s0070–s0071.",
+      "Xiangzhou military commissioner with acting Grand Tutor and co-equal chief minister matches Kong Qing (孔勍) per Jiu Wudai Shi 64 biography and parallel jiuwudaishi/030 s0171 English.",
+      "Both paired English fields require the same expansion; proposal contracts match applied extraction repairs r0009 and r0010."
+    ]
+  },
+  "remainingIssues": []
+}
