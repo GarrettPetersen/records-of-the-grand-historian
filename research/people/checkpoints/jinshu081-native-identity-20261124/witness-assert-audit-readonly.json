@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu081-native-identity-witness-assert-audit",
+  "scope": { "book": "jinshu", "chapter": "081" },
+  "provenance": {
+    "actionsArtifactId": 14881795767,
+    "actionsRunId": 45305815644,
+    "certificationRejectionRunId": 45311432240,
+    "reviewerBranch": "cursor/jinshu081-independent-review-b72f",
+    "sourcePacketSha256": "sha256:6f8bc83ee40bfbe30d836efb07f238ffe52d4504a0bd5d03a05eb53ed0f8bfdb",
+    "planFingerprint": "sha256:b21e77825473a8c8526e84cc93b154f63937ee93f68a0119b0e5003cb5907e89",
+    "assertion": "scripts/lib/people-identity-dossiers.mjs assertDossierPrimaryWitness",
+    "personSource": "loadValidatedPeopleChapter(jinshu,081) primary units",
+    "auditedAt": "2026-11-24T02:30:00.000Z"
+  },
+  "summary": {
+    "reviewDecisions": 397,
+    "witnessRows": 404,
+    "assertFailuresBeforeRepair": 6,
+    "assertFailuresAfterProvenWitnessRepair": 5,
+    "holdVerdicts": 0,
+    "uniqueFailingLocalIds": [
+      "jinshu:081:p358",
+      "jinshu:081:p397",
+      "jinshu:081:p238",
+      "jinshu:081:p071",
+      "jinshu:081:p355"
+    ]
+  },
+  "failures": [
+    {
+      "part": "002",
+      "caseId": "sha256:612fe8de671f6ca7ebbc480c1fb9daf1a942b706bb6950b8349d9eeb5bd59d4c",
+      "canonicalPersonId": "per_0GH67PQN62FT7CW9E8NC",
+      "anchorLocalId": "jinshu:081:p358",
+      "witnessIndex": 0,
+      "localId": "jinshu:081:p358",
+      "sourceId": "jinshu:081:s0562",
+      "quote": "序",
+      "zhEvidenceInUnit": [],
+      "witnessRepairOnEvidenceBranch": false,
+      "blocker": "p358 has English-only personal-name mentions and name claim c0965 without value.zh; preferred zh:朱序 does not populate unit evidence. Cannot borrow p354 s0547 朱序 witness for p358.",
+      "minimumAuthorChange": "On jinshu:081:p358 claim jinshu:081:c0965 add value.zh 朱序; add native-validated zh mention spans on each claim evidence unit (s0562→序, s0564→序, s0565→序, s0568→序, s0569→序, s0571→序) so mononym witnesses match person-linked evidence."
+    },
+    {
+      "part": "002",
+      "caseId": "sha256:612fe8de671f6ca7ebbc480c1fb9daf1a942b706bb6950b8349d9eeb5bd59d4c",
+      "canonicalPersonId": "per_0GH67PQN62FT7CW9E8NC",
+      "anchorLocalId": "jinshu:081:p358",
+      "witnessIndex": 1,
+      "localId": "jinshu:081:p358",
+      "sourceId": "jinshu:081:s0569",
+      "quote": "序",
+      "zhEvidenceInUnit": [],
+      "witnessRepairOnEvidenceBranch": false,
+      "blocker": "Same as witnessIndex 0 (narrative arc local p358 vs biography p354)."
+    },
+    {
+      "part": "030",
+      "caseId": "sha256:f294e0304b077c76439b5fcd1ed3eb0b722acf6110c386410831954c501f36d4",
+      "localId": "jinshu:081:p397",
+      "sourceId": "jinshu:081:s0601",
+      "quote": "太興",
+      "zhEvidenceInUnit": [],
+      "witnessRepairOnEvidenceBranch": false,
+      "blocker": "Posthumous claim c1072 (Emperor Yuan) has no zh linked to s0601; era string 太興 is in source text but not in person zh evidence map.",
+      "minimumAuthorChange": "Add posthumous-name or era mention on s0601 for p397 with zh span exact 太興 tied to claim c1072 evidence (reign-era linkage, not personal 司馬睿 on this unit)."
+    },
+    {
+      "part": "034",
+      "caseId": "sha256:bcf51da4fd099fba0bb6372ef7516ce4f1d86425e77f0cd6067ec36da8ec88f9",
+      "localId": "jinshu:081:p238",
+      "sourceId": "jinshu:081:s0433",
+      "quote": "琰",
+      "zhEvidenceInUnit": [],
+      "witnessRepairOnEvidenceBranch": false,
+      "blocker": "Name claim c0637 English-only; no zh mention span on s0433.",
+      "minimumAuthorChange": "Add value.zh 謝琰 on c0637 and zh mention span 琰 on jinshu:081:s0433."
+    },
+    {
+      "part": "035",
+      "caseId": "sha256:af71f3144fa3c7aa2336b3e98bde153690d57bdd53a90856dbdf1872e362cbec",
+      "localId": "jinshu:081:p071",
+      "sourceId": "jinshu:081:s0085",
+      "quote": "肥",
+      "zhEvidenceInUnit": ["齊悼惠王肥"],
+      "witnessRepairOnEvidenceBranch": true,
+      "provenRepair": {
+        "quoteAfter": "齊悼惠王肥",
+        "assertPassesWithValidatedChapter": true,
+        "preservesReasonAndMembership": true
+      }
+    },
+    {
+      "part": "062",
+      "caseId": "sha256:9b1d3e0e565d8b13a9310c5914390aff63c5b543a3169d59e319570b4bbe6883",
+      "localId": "jinshu:081:p355",
+      "sourceId": "jinshu:081:s0548",
+      "quote": "燾",
+      "zhEvidenceInUnit": [],
+      "witnessRepairOnEvidenceBranch": false,
+      "blocker": "Name claim c0958 English-only; source has 父燾 but no zh span linked to p355.",
+      "minimumAuthorChange": "Add value.zh 朱燾 on c0958 and zh mention span 燾 (or 父燾 if span exact) on jinshu:081:s0548."
+    }
+  ],
+  "notes": [
+    "Transport-part people payloads alone are not valid for assert; use current native-validated chapter localPeople.",
+    "p354 (biography 朱序) has zh:朱序 on s0547; p358 (arc mentions) is a separate local with the same preferred zh but no Chinese spans—certification failure on p358 is expected until author links arc mononyms to p358."
+  ]
+}

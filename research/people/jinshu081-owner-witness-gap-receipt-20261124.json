@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-witness-gap-receipt",
+  "book": "jinshu",
+  "chapter": "081",
+  "pullRequest": 5478,
+  "independentSweepCommit": "9eb48ddbcf7b93c4fd3185401389531d60ac49cd",
+  "beforeExtractionHash": "sha256:7b3362ca9ea59d2e3107ece49685c5a6d0b7ef25897d0ab4c3828bf6240d2313",
+  "afterExtractionHash": "sha256:6fd0a93192781e4e4cf1c4756636076274e3335dca8f46ae803c5c01d1688c06",
+  "sourceHash": "sha256:d6cf710bc3ab26109aacc25c1ff5bd2e7466cd27b8360c91ccb411c1842ed045",
+  "approvalStatus": "not-self-approved",
+  "exactChangedIds": {
+    "people": [
+      "p238",
+      "p355",
+      "p358",
+      "p397"
+    ],
+    "nameClaimZhAdded": [
+      {
+        "personId": "p238",
+        "zh": "謝琰"
+      },
+      {
+        "personId": "p355",
+        "zh": "朱燾"
+      },
+      {
+        "personId": "p358",
+        "zh": "朱序"
+      }
+    ],
+    "zhSurfacesAdded": [
+      {
+        "personId": "p238",
+        "exact": "琰",
+        "units": [
+          "s0433"
+        ]
+      },
+      {
+        "personId": "p355",
+        "exact": "燾",
+        "units": [
+          "s0548"
+        ]
+      },
+      {
+        "personId": "p358",
+        "exact": "序",
+        "units": [
+          "s0562",
+          "s0564",
+          "s0565",
+          "s0568",
+          "s0569",
+          "s0571",
+          "s0572",
+          "s0574",
+          "s0577",
+          "s0580",
+          "s0583",
+          "s0587",
+          "s0591",
+          "s0592",
+          "s0594"
+        ]
+      }
+    ],
+    "p397": {
+      "removedSurface": "posthumous-name/en/Emperor Yuan@s0601",
+      "mentionException": "s0601 states era 太興 only; English “Emperor Yuan” is a translator gloss, not a primary named mention. No zh person/posthumous span may be minted from the era name.",
+      "refused": "did not tag era 太興 as person/posthumous name"
+    }
+  },
+  "identityImpact": {
+    "p238": {
+      "change": "name.zh 謝琰 + zh span 琰@s0433 (安子琰)",
+      "dateImpact": "none"
+    },
+    "p355": {
+      "change": "name.zh 朱燾 + zh span 燾@s0548 (父燾)",
+      "context": "p354 biography opens s0547 朱序",
+      "dateImpact": "none"
+    },
+    "p354_p358": {
+      "preservedIds": [
+        "p354",
+        "p358"
+      ],
+      "proposedReconciliation": {
+        "kind": "same-person-candidate",
+        "left": "p354",
+        "right": "p358",
+        "witnesses": [
+          {
+            "unitId": "s0547",
+            "zh": "朱序，字次倫，義陽人也。"
+          },
+          {
+            "unitId": "s0562",
+            "zh": "序累戰破賊，人情勞懈，又以賊退稍遠，疑未能來，守備不謹，督護李伯護密與賊相應，襄陽遂沒，序陷於苻堅。"
+          }
+        ],
+        "note": "Local split biography vs arc; preserve IDs; no canonical write"
+      },
+      "dateImpact": "p358 AD 393 / 太元十八年 death chronology preserved"
+    },
+    "p397": {
+      "chineseOnS0601": "遜、豹、宣、胤服勤於太興之間，毛、鄧、劉、朱馳騖乎咸和之後。",
+      "finding": "era 太興 only; English Emperor Yuan is translator gloss",
+      "dependentCanonicalMemberships": {
+        "existingYuanEmperorLocalsWith元帝": [
+          {
+            "localId": "p038",
+            "preferred": [
+              "Emperor Yuan of Jin",
+              "司馬睿",
+              null
+            ],
+            "nameZh": "元帝",
+            "evidenceUnits": [
+              "s0030",
+              "s0045",
+              "s0051",
+              "s0059"
+            ]
+          },
+          {
+            "localId": "p057",
+            "preferred": [
+              "Emperor Yuan of Jin",
+              "司馬睿",
+              null
+            ],
+            "nameZh": "元帝",
+            "evidenceUnits": [
+              "s0079",
+              "s0102",
+              "s0103",
+              "s0106",
+              "s0616"
+            ]
+          },
+          {
+            "localId": "p092",
+            "preferred": [
+              "Emperor Yuan of Jin",
+              "司馬睿",
+              null
+            ],
+            "nameZh": "元帝",
+            "evidenceUnits": [
+              "s0131",
+              "s0133"
+            ]
+          },
+          {
+            "localId": "p314",
+            "preferred": [
+              "Emperor Yuan of Jin",
+              "司馬睿",
+              null
+            ],
+            "nameZh": "元帝",
+            "evidenceUnits": [
+              "s0504",
+              "s0505"
+            ]
+          }
+        ],
+        "recommendation": "p397 should not mint Emperor Yuan from s0601; depend on p038/p057/p092/p314"
+      },
+      "dateImpact": "no Western invented; undated attestation/status preserved"
+    }
+  },
+  "preserved": {
+    "priorAuthorizedClaims": true,
+    "chronologyUntouched": true,
+    "noCanonicalWrites": true,
+    "englishRepairs": 15
+  },
+  "notDone": [
+    "no merge",
+    "no canonical identity publication",
+    "p397 stub until identity reconciliation",
+    "p354/p358 same-person not sealed"
+  ]
+}

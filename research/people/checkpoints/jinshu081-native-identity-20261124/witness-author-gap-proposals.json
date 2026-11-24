@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu081-native-identity-minimum-author-gaps",
+  "scope": { "book": "jinshu", "chapter": "081" },
+  "provenance": {
+    "frozenArtifactId": 14881795767,
+    "extractionRevision": "af7a7acacfc3d7d8860f2c27a0bc1673d85e3df5",
+    "instruction": "Owner extraction edits only; independent review verdicts/reasons/membership fingerprints unchanged."
+  },
+  "gaps": [
+    {
+      "localId": "jinshu:081:p358",
+      "priority": "certification-blocker",
+      "issue": "English-only arc person; witnesses quote 序 on s0562/s0569 without person-linked zh evidence.",
+      "doNot": "Do not point witnesses at jinshu:081:p354 on s0547 朱序—different localId; assert requires current person's name evidence.",
+      "minimumEdits": [
+        {
+          "target": "claim jinshu:081:c0965",
+          "field": "value.zh",
+          "value": "朱序"
+        },
+        {
+          "target": "mentions on evidence units of c0965",
+          "field": "spans.zh[].exact",
+          "values": [
+            { "unit": "jinshu:081:s0562", "exact": "序" },
+            { "unit": "jinshu:081:s0564", "exact": "序" },
+            { "unit": "jinshu:081:s0565", "exact": "序" },
+            { "unit": "jinshu:081:s0568", "exact": "序" },
+            { "unit": "jinshu:081:s0569", "exact": "序" },
+            { "unit": "jinshu:081:s0571", "exact": "序" }
+          ]
+        }
+      ],
+      "afterAuthorChange": "Retain existing review quotes 序 on s0562 and s0569 unchanged."
+    },
+    {
+      "localId": "jinshu:081:p397",
+      "priority": "certification-blocker",
+      "minimumEdits": [
+        {
+          "target": "claim jinshu:081:c1072",
+          "field": "mention on jinshu:081:s0601",
+          "value": "zh span exact 太興 for posthumous / reign-era reference in 遜、豹、宣、胤服勤於太興之間"
+        }
+      ]
+    },
+    {
+      "localId": "jinshu:081:p238",
+      "priority": "certification-blocker",
+      "minimumEdits": [
+        { "target": "claim jinshu:081:c0637", "field": "value.zh", "value": "謝琰" },
+        { "target": "mention", "field": "spans.zh[].exact", "value": { "unit": "jinshu:081:s0433", "exact": "琰" } }
+      ]
+    },
+    {
+      "localId": "jinshu:081:p355",
+      "priority": "certification-blocker",
+      "minimumEdits": [
+        { "target": "claim jinshu:081:c0958", "field": "value.zh", "value": "朱燾" },
+        { "target": "mention", "field": "spans.zh[].exact", "value": { "unit": "jinshu:081:s0548", "exact": "燾" } }
+      ]
+    }
+  ],
+  "evidenceOnlyRepair": [
+    {
+      "part": "035",
+      "caseId": "sha256:af71f3144fa3c7aa2336b3e98bde153690d57bdd53a90856dbdf1872e362cbec",
+      "localId": "jinshu:081:p071",
+      "change": "sourceWitnesses[0].quote 肥 → 齊悼惠王肥",
+      "rationale": "Existing zh mention span 齊悼惠王肥 on s0085 for posthumous claim c0184; no extraction change required."
+    }
+  ]
+}
