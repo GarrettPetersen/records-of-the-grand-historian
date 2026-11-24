@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-owner-repair",
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "018"
+  },
+  "ownerAgentId": "bc-648a287f-90a4-4ae8-b119-f71b19addc5b",
+  "idempotencyKey": "171afdf337ff351edc226b424186f5ea707bc09e9b6178c3d92a70c2fde78f8d",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "phase": "dispatch_pending",
+  "branch": "cursor/nov24-first-native-date-delta-w1-ddc5b",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-nov24-first-independent-date/zhoushu-018/independent-date-report.json",
+    "contentSha256": "9fe4321413b69aa16b3b3433cfdd39cbaabcb754c050e3773b1a5e986ec695be",
+    "gitBlob": "5a4260fd839f6faab45a5a99d7dcc6b494825a35",
+    "status": "needs-revision",
+    "preservedUnmodified": true
+  },
+  "inputHashes": {
+    "source": "sha256:25526918cc6df79aa293a58d7dc4d7bd488da43b72e9590c77325aa18d57df42",
+    "extraction": "sha256:10e0d08f0cf1de27fa445701fb58c35f3f63b7413a324497609db9e87f2768ad",
+    "editorial": "sha256:11eb5313423d73eb9c75b388bef8274938ebd7380cabdc2520e026c18a42d4d3"
+  },
+  "outputHashes": {
+    "candidateExtraction": "sha256:a3f1ed74779517be01965887c651af8a1dabebcbc07389aab4842c5406960dea",
+    "candidateDatePacket": "sha256:30b41b2c65011947f96fa83042b52e341c04fe292df34f872c6700aed806b3ed"
+  },
+  "inputBlobWitnessVerified": true,
+  "itemChanges": [
+    {
+      "itemId": "claim-61",
+      "personId": "p002",
+      "kind": "replace-attestation-chronology",
+      "before": {
+        "sourceDate": {
+          "text": "弱冠…先羆卒"
+        },
+        "westernInterval": {
+          "start": {
+            "era": "AD",
+            "year": 477,
+            "precision": "year"
+          },
+          "end": {
+            "era": "AD",
+            "year": 541,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "sourceDate": {
+          "text": "弱冠…先羆卒"
+        },
+        "westernBounds": {
+          "onOrBefore": {
+            "era": "AD",
+            "year": 541,
+            "precision": "year"
+          }
+        },
+        "event": "At weak crown Qingyuan was made direct-pavilion general as a meritorious minister’s son and died before Wang Pi in Datong year 7 (AD 541); source gives no Taihe-era lower bound."
+      },
+      "reason": "Independent finding: drop unsupported AD 477 start; retain sourced upper bound from 大統七年 / 先羆卒 linkage.",
+      "evidenceUnits": [
+        "s0068",
+        "s0069"
+      ]
+    },
+    {
+      "itemId": "hints-p002",
+      "personId": "p002",
+      "kind": "replace-active-date-hints",
+      "before": [
+        "AD 477-541"
+      ],
+      "after": [
+        "AD 541"
+      ],
+      "reason": "Hints must not import removed AD 477 bound."
+    }
+  ],
+  "findingsAddressed": "research/people/checkpoints/campaign-nov24-first-independent-date/zhoushu-018/independent-date-report.json",
+  "remainingHolds": [],
+  "definiteTranslationRepairs": [],
+  "sealedNativeDatePacket": {
+    "beforePath": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-018/native-date-packet.json",
+    "afterPath": "research/people/checkpoints/campaign-nov24-first-native-delta/zhoushu-018/candidate-date-packet.json",
+    "afterSha256": "sha256:30b41b2c65011947f96fa83042b52e341c04fe292df34f872c6700aed806b3ed",
+    "diagnosticCount": 0,
+    "diagnostics": []
+  },
+  "validation": {
+    "validateCandidateExtraction": "node -e \"import('./scripts/validate-people-extraction.mjs').then(m=>m.validateCompactPeopleExtraction)\" # embedded in nov24-retained-staging-date-delta.mjs",
+    "scopedExtractionValidation": "passed",
+    "peopleDatesPacket": "npm run people:dates:packet -- --book zhoushu --chapter 018 --out research/people/checkpoints/campaign-nov24-first-native-delta/zhoushu-018/candidate-date-packet.json"
+  },
+  "independentReviewCompleted": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Focused owner repair checkpoint only; candidate files are not merged into data/people/extractions/."
+}
