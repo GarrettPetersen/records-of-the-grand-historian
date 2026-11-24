@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-extraction-patch-candidate",
+  "authorAgentId": "bc-a1d9fb49-57cd-49f8-a504-e22bc5dcc56f",
+  "handoffRef": "author-repair-handoff.json",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "037"
+  },
+  "nativeFindingCaseId": "sha256:96b2d16622ce2452843fede229b13c81dc0df4552460c7f7c01f3a910974ed91",
+  "targetPath": "data/people/extractions/xinwudaishi/037.json",
+  "extractionSha256Before": "sha256:457b0b912106ff6da00dacab847fef6c191631f0c867faeec45961a4723b944c",
+  "extractionSha256After": "sha256:34da681c4f01330600cd683cd1d734621d778ac561b3541a8e7bb54e23e792d4",
+  "operations": [
+    {
+      "op": "retract-invalid-chinese-identity-key",
+      "localId": "p017",
+      "unitId": "s0072",
+      "before": "郭崇韜女",
+      "after": null,
+      "reason": "s0072 attests 崇韬之婿 for Cunyi; no daughter name span in chapter."
+    },
+    {
+      "op": "retract-descriptive-kinship-zh",
+      "localId": "p017",
+      "removeZh": "郭崇韜女",
+      "retainEn": "Daughter of Guo Chongtao"
+    }
+  ],
+  "affectedRows": {
+    "identity": [
+      "p017 header zh",
+      "p017 descriptive-kinship zh"
+    ],
+    "relationships": [
+      "p010 parent-of p017",
+      "p016 spouse-of p017",
+      "p016 kin-of p010"
+    ],
+    "chronology": [
+      "p017 attestation s0072"
+    ]
+  },
+  "relationshipsRetained": true,
+  "applyNotPerformed": true
+}

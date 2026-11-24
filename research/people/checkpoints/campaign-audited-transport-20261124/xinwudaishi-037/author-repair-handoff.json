@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "kind": "campaign-audited-identity-author-repair-handoff",
+  "scope": { "book": "xinwudaishi", "chapter": "037" },
+  "authorAgentId": "bc-a1d9fb49-57cd-49f8-a504-e22bc5dcc56f",
+  "pullRequest": 5512,
+  "branch": "cursor/xinwudaishi-037-audited-owner-c56f",
+  "pinnedOwnerHead": "4d00f90e4be4410264cc0bdeeb7200ef685d960c",
+  "independentReport": {
+    "path": "independent-identity-report.json",
+    "commit": "95bcd63b698db9f4f682c785dd96522e31acb2de",
+    "sha256": "6bf5140fdb7d4af33d078030eb92992e6870bc5952811bd7d5156fb08bf0e26a",
+    "reviewerAgentId": "bc-bdc60850-9367-4592-a2fd-98da9227f080",
+    "reviewerName": "cursor-nov24-independent-xinwudaishi-037"
+  },
+  "nativeFinding": {
+    "message": "Witness does not support this person in the current primary source: xinwudaishi:037:p017 xinwudaishi:037:s0072 quote=\"崇韜\"",
+    "caseId": "sha256:96b2d16622ce2452843fede229b13c81dc0df4552460c7f7c01f3a910974ed91"
+  },
+  "sealedInputsUnchanged": {
+    "source": "sha256:10f9a8bf662b87cb2fe1cb02dd07b33e171bdc2a0988f1a584e8d05586d42586",
+    "extraction": "sha256:457b0b912106ff6da00dacab847fef6c191631f0c867faeec45961a4723b944c",
+    "editorial": "sha256:2ae5a3b9c8badc98410560cd8946dd5eb53a953eedd4c9b1f02ef4bdb5fef838",
+    "dateAudit": "sha256:f9d726d996a83c1c72dee452a57604789066afdc98cd3bb727835b045bd5c1d4"
+  },
+  "defect": {
+    "localId": "xinwudaishi:037:p017",
+    "kind": "descriptive-kinship-without-chapter-literal",
+    "unitId": "s0072",
+    "unitZh": "皇弟存乂，崇韜之壻也，進讒於莊宗曰：「存乂且反，為婦翁報仇。」",
+    "claimedNameZh": "郭崇韜女",
+    "notes": "Sealed extraction ties name claim c0074 to s0072 but the unit attests 崇韜之壻 (son-in-law Cunyi), not 郭崇韜女 or any daughter surface. No Chinese mention spans on p017. assertDossierPrimaryWitness cannot be satisfied on xinwudaishi:037:p017 for any substring of s0072."
+  },
+  "preservedDecisions": {
+    "otherCases": 25,
+    "independentApprovals": "All other reviews in independent-identity-report.json unchanged",
+    "doNotRewriteIndependentReport": true
+  },
+  "proposal": {
+    "chapterInputsMutation": "NONE",
+    "minimalExtractionRepairOutOfScopeHere": "Retract c0074 name evidence on s0072 or remove p017 if a future extraction PR is opened; would change extraction hash only.",
+    "ownerEvidenceSupplement": "owner-evidence-repair-supplement.json",
+    "independentRecorderAction": "Re-run native witness binding for this case only: apply supplement verdict hold; drop chapter-local witness on p017; keep membershipFingerprint and cross-chapter reasoning from preserved report body."
+  },
+  "affectedScope": ["xinwudaishi:037:p017", "case sha256:96b2d16622ce2452843fede229b13c81dc0df4552460c7f7c01f3a910974ed91"]
+}
