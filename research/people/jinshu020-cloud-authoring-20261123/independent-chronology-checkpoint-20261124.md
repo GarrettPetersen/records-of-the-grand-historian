@@ -1,46 +1,37 @@
 # Jinshu 020 — chronology checkpoint (partial)
 
-Independent reviewer `bc-ca56fb16-d4fd-4ced-a2fb-3640376ab1df`, after verified editorial apply at draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not date approval** for the chapter.
+Independent reviewer `bc-ca56fb16-d4fd-4ced-a2fb-3640376ab1df`, draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not chapter approval.**
 
-## Verified prerequisites (unchanged)
+## Preserved (not re-opened)
 
-| Step | Result |
-| --- | --- |
-| Editorial apply (97 decisions) | Verified; not re-opened |
-| 38 candidate dispositions | Concurred; not re-opened |
-| Prior partial `s0037`–`s0095` | Decisions preserved verbatim in merged artifact |
+- **97** editorial apply verification, **38** candidate dispositions
+- **99** prior item checks through **s0200** / **164** units (verbatim in merged partial)
 
 ## Current scope
 
-**Units reviewed:** `s0037`–`s0200` (164 units).
+**Units reviewed:** `s0037`–`s0320` (**284** units).
 
-**Native report:** `date-audit-report-partial-s0037-s0200.json` — `status: needs-revision`.
+**Native report:** `date-audit-report-partial-s0037-s0320.json` — **125** item checks, **118** unique `claim-*` ids.
 
-**Span checkpoints (this run):**
+### Span checkpoints (cumulative)
 
-| Span | Receipt | New item checks |
+| Span | Receipt | New checks |
 | --- | --- | --- |
 | `s0096`–`s0150` | `chronology-span-checkpoint-s0096-s0150.json` | 36 |
 | `s0151`–`s0200` | `chronology-span-checkpoint-s0151-s0200.json` | 35 |
+| `s0201`–`s0260` | `chronology-span-checkpoint-s0201-s0260.json` | **16** |
+| `s0261`–`s0320` | `chronology-span-checkpoint-s0261-s0320.json` | **10** |
 
-**Cumulative coverage:** 99 item checks; 92 unique `claim-*` ids touched; 97 English + 38 dispositions preserved.
+### This run (highlights)
 
-### Span summaries
+**s0201–s0260:** Honored Lady Chen aftermath (**claim-123**); **太安元年** grand-heir (**claim-124–128**); Zhi Yu ritual reform cluster (**claim-129–132**); **咸寧二年** Anping Mu (**claim-133–138**).
 
-1. **s0096–s0150** — Ningkang intercalary xiang debate; Huan Wen / Xu Guang table-only years flagged; music suspension catalogue; **泰始十年** Yang empress and crown-prince mourning reform (Du Yu cluster opens).
-2. **s0151–s0200** — Du Yu / Duan Chang proofs; Yang foster-mourning; **建元元年** Kangdi memorial; **興寧/寧康/隆安** grade cases; **太元十五年** Honored Lady Chen.
+**s0261–s0320:** Sun Yu / Song Chang Anping (**claim-139–141**); Chenliu Wei precedent (**claim-142**); Donghai **穆帝时** vs table **永和六年** (**claim-143**, **claim-145** **incorrect**; **claim-144** supported); Che Yin **太元十七/十八** (**claim-146**); **升平四年** Wuling (**claim-147**); **興甯三年** Liang (**claim-148**).
 
-### New finding groups (extend prior holds)
+## Next untouched span
 
-- **claim-39, claim-51, claim-52:** undated lines with table-only reign years.
-- **claim-55:** Chu Pou death without Yonghe on line (extends music-example holds).
-- **claim-107:** 寧康中 mislabeled Taiyuan 9.
-- **claim-109–111, claim-100–101, claim-112, claim-120:** research-blocked pending sourced years.
-
-## Exact next span
-
-**`s0201`–`s0260`** — crown-prince Chen mourning deliberation continuation and mid-chapter grade catalogue (12+ packet items with primary evidence in this band).
+**`s0321`–`s0400`** — Che Yin follow-up, ministry memorial on庶子之服, late grade codification (~22 new packet items with primary evidence).
 
 ## Out of scope
 
-Owner canonical paths, merge, `data/people/date-audits/jinshu/020.json` recording, identity dossier, registry builds.
+Owner source, merge, canonical `data/people/date-audits/jinshu/020.json`, identity dossier, registry.
