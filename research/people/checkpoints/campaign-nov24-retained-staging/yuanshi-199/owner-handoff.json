@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "199"
+  },
+  "ownerAgentId": "bc-b9d14344-02da-4a1d-90f3-0d2ad7cb26ed",
+  "workerId": "cursor-nov24-retained-staging-w14-o2",
+  "idempotencyKey": "6a1ae710370ce9316ccbd0cffbb3d48550808f645cc26e5204d4b2cc88390a28",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "campaign": "campaign-nov24-retained-staging",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-199-b26ed",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "fd5e5fb6de7b94372be5a21bcc99791288ec369903842af38d041c4f26cd9b15",
+    "people": 52,
+    "claims": 377,
+    "promptVersion": 7,
+    "extractionBytes": 105817
+  },
+  "inputBlobWitness": {
+    "source": "6272d2d36203ba5ca7559240725eb8b067d6a734",
+    "extraction": "abc2e0daee97ec95d8b1f5abb8cbd2638d167e69",
+    "editorial": "80a02ad33afda34ca4a20490b4437eec00cfcbdd"
+  },
+  "sealedInputs": {
+    "source": "sha256:34d750c75bde8a79fec0acadfe9f63849226ad6b96ad0c8da3ecb1f8cadc03ea",
+    "extraction": "sha256:fd5e5fb6de7b94372be5a21bcc99791288ec369903842af38d041c4f26cd9b15",
+    "editorial": "sha256:8c9e2f0ca656138404df35ef61ad16b40630f179b453c518da55b1366de774da"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 199 Biographies 86: Recluses",
+    "chineseUnits": 151,
+    "translatedCount": 151,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "sentenceCount": 151,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 105817
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-199/date-packet.json",
+    "contentSha256": "sha256:b4363caaf69963486e76f4c13bdd4b25667725e8b08e4ff734e2f455e3e03cbd",
+    "fileSha256": "sha256:b4363caaf69963486e76f4c13bdd4b25667725e8b08e4ff734e2f455e3e03cbd",
+    "dateHintChecks": 142,
+    "people": 52,
+    "sourceUnits": 151,
+    "scanFindings": 0
+  },
+  "extractionAndEditorialReuse": {
+    "extraction": "Retained pinned extraction at witness blob; no re-extraction.",
+    "editorial": "Retained 2 accepted editorial decision(s) at witness blob; no new owner repairs.",
+    "promptVersion": 7
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 199",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/199: 1 extraction(s), 52 local people, 238 mentions, 607 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateExtraction": "data/people/extractions/yuanshi/199.json: ok (52 people, 238 mentions, 607 claims, 404 candidates)",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book yuanshi --chapter 199",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 199",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "editorialDecisionCount": 2,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs (source, extraction, editorial) witness-verified at pinned git blobs on staging 20b8d0e3. Full chapter read: all 151 Chinese units carry paired literal and idiomatic English. Accepted extraction and editorial repairs align with source citations. Native date packet prepared (142 checks); people:dates:scan reports zero structural findings. No definite English omission, extraction gap, or source contradiction found. Independent native date audit not performed by owner; chapter remains un-audited.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "remainingIndependentProofs": {
+    "dateAudit": {
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifact": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-199/date-packet.json",
+      "packetSha256": "sha256:b4363caaf69963486e76f4c13bdd4b25667725e8b08e4ff734e2f455e3e03cbd",
+      "note": "Owner prepared sealed packet only; people:dates:record requires a separate reviewer."
+    },
+    "identityReview": {
+      "status": "pending-after-date-approval",
+      "gate": "independent-bounded-dossier-identity-review",
+      "note": "Corpus identity resolution remains downstream of chronology approval."
+    }
+  },
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book yuanshi --chapter 199",
+    "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/yuanshi/199.json",
+    "datesVerify": "npm run people:dates:verify -- --book yuanshi --chapter 199",
+    "datesPacket": "npm run people:dates:packet -- --book yuanshi --chapter 199 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-199/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book yuanshi --chapter 199"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
