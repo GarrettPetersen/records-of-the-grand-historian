@@ -2,50 +2,42 @@
 
 Draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not chapter approval.**
 
-## Preserved through s0620
+## Preserved baseline
 
-- **97** editorial · **38** dispositions  
-- **254** item-check rows · **247** unique `claim-*` · **584** reviewed units (unchanged except **claim-277** enriched per merge rule)
+- **97** editorial apply verifications · **38** disposition verifications  
+- **295** distinct `claim-*` decisions through the s0620→s0700 extension (unchanged text/evidence on those rows)  
+- **664** reviewed units **s0037–s0700**
 
-## Current scope
+## Pending reviewer scope — **complete**
 
-**Units:** `s0037`–`s0700` (**664** units — chapter packet ends at **s0700**)
-
-**Report:** `date-audit-report-partial-s0037-s0700.json`  
-- **302** item-check rows  
-- **295** unique `claim-*` ids (all claim rows through **claim-325**)
-
-### Span checkpoints (this run)
-
-| Span | Receipt | New / updated IDs |
+| Slice | Receipt | Item IDs |
 | --- | --- | --- |
-| `s0621`–`s0651` | `chronology-span-checkpoint-s0621-s0651.json` | Li Fan cluster incl. **claim-277** merge |
-| `s0652`–`s0663` | `chronology-span-checkpoint-s0652-s0663.json` | Posthumous-title debate |
-| `s0664`–`s0695` | `chronology-span-checkpoint-s0664-s0695.json` | Wen Jiao consorts + taboo |
+| `hints-p001`–`p017` + `claim-2`…`17` backfill | `chronology-span-checkpoint-early-backfill-20261124.json` | 27 new checks |
+| `s0696`–`s0700` tail | `chronology-span-checkpoint-s0696-s0700.json` | (units confirmed; no new packet rows) |
 
-### Merge note (**claim-277**)
+## Current report
 
-One `itemCheck` with **three** witnesses: `s0619` 咸康二年 · `s0623` 庾亮 · `s0646` 亮從愆期議定. Verdict **supported** (replaces prior single-witness hold).
+`date-audit-report-partial-s0037-s0700.json`
 
-### Holds (new / extended)
-
-| Group | Items |
+| Metric | Count |
 | --- | --- |
-| Wei 谥号 narrative | **claim-290–293** (no Taishi on s0648–s0649) |
-| Taikang 8 speakers | **claim-295–299** |
-| Wen Jiao years | **claim-306–309** |
-| Consort panel years | **claim-313,315,317** incorrect |
-| Xun Yi rule | **claim-322** blocked |
+| Item checks | **329** |
+| Unique claims checked | **308** (`claim-1`…`claim-325` except **claim-80–96** never scheduled in span review) |
+| Hints in scope | **p001–p017** complete (+ prior scattered hints) |
+| Status | `needs-revision` |
 
-## Next (precise)
+## Owner deliverable
+
+**`owner-chronology-hold-manifest-20261124.json`** — **37** deduped finding groups, **109** unique held item IDs, counts for `incorrect` / `research-blocked`.
+
+## Next (outside completed scope)
 
 | Field | Value |
 | --- | --- |
-| Units | `s0696`–`s0700` (tail) |
-| **Next item ID** | **`hints-p001`** (then early `claim-2`… on already-reviewed units) |
-
-Complete chapter **claim** coverage through **claim-325** is done; remaining packet work is **hints** + early **claim-2–17** backfill — not approval until full packet review.
+| Next packet item | **`claim-80`** |
+| Remaining packet items | **321** (mostly `hints-p018`…`hints-p325` and `claim-80`–`96`) |
+| Canonical / audited | **Blocked** until full packet coverage |
 
 ## Out of scope
 
-Owner source, merge, global build, canonical recording.
+Owner extraction edits, merge to canonical `data/people/date-audits/jinshu/020.json`, chapter `audited` status.
