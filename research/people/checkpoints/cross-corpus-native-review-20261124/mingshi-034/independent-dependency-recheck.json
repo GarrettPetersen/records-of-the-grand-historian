@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-cross-corpus-recheck",
+  "reviewerAgentId": "bc-77bf0e6f-d0fe-437b-a4df-83de0224062f",
+  "reviewerName": "cursor-nov24-independent-mingshi-034",
+  "ownerRevisionReviewed": "8ecdc7f8389731e42fde7fb19d97855a38454cac",
+  "sealedIdentityTransportSha256": "7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e",
+  "verdict": "accept",
+  "defects": [],
+  "englishRecheck": {
+    "unitId": "s0011",
+    "acceptOwnerApplyIdiomaticOnly": true,
+    "primaryEvidence": {
+      "mingshi034S0011Zh": "按《元史》，至正十七年《授時曆》成。",
+      "yuanShi52Witness": "十七年冬至，曆成，詔賜名曰《授時曆》。",
+      "literalEnAtOwner": "Commentary: According to the Yuan History, in the seventeenth year of Zhizheng the Season Granting Calendar was completed.",
+      "idiomaticEnAtOwner": "Note: According to the Yuan History, the Season Granting Calendar was completed in the seventeenth year of Zhiyuan."
+    },
+    "firstReviewDefectCorrected": "Schema v1 correction targeted field en only; independent recheck requires idiomatic Zhiyuan with literal Zhizheng preserved."
+  },
+  "identityCases": {
+    "transportUnchanged": true,
+    "reportRecomposeRequired": false,
+    "cases": [
+      {
+        "caseId": "sha256:d8e24f4d8f829f94de00e72f03e114df1fae6d2c6bf20eade609a3e00c9a51b9",
+        "verdict": "approve-unchanged",
+        "membershipFingerprint": "sha256:eff7d4568b69e25b9b0dc9a869389ccf0ce1f8e99d51be66408760046ce31e4d",
+        "witnessUnits": ["s0012", "s0014"],
+        "primaryChineseAtOwner": {
+          "s0012": "十九年王恂卒，時歷雖頒，然立成之數尚皆有定藁。"
+        },
+        "note": "s0011 idiomatic edit does not alter 王恂 graphs at s0012/s0014 or anchor witnesses."
+      },
+      {
+        "caseId": "sha256:05af3b95589f53b9d353ba1735222b2dacbac9a11ced3786a0fbc4d625ff41ba",
+        "verdict": "approve-unchanged",
+        "membershipFingerprint": "sha256:c03e44ce7c2ec0af0416cfb52ddbc6e4816e0c8f6b9024460af45d7d50d231ac",
+        "witnessUnits": ["s0013", "s0015"],
+        "primaryChineseAtOwner": {
+          "s0013": "郭守敬比類編次，整齊分秒，裁爲二卷。"
+        },
+        "note": "Guo Shoujing identity anchored on s0013; editorial English on s0011 does not change Chinese attribution."
+      }
+    ]
+  },
+  "dateAuditPacket": {
+    "reportUpdateRequired": false,
+    "sealedReportSha256Unchanged": "sha256:50df3de9f0d168ad99a40688af9e8a06c166fc5e0da485f41f55b57302ea352e",
+    "reason": "Approved date report already quotes s0011 至正 surface and explains 至元 historical reading; idiomatic English alignment does not change Chinese source bindings or personChecks."
+  },
+  "dependencies": {
+    "unchanged": [
+      {
+        "artifact": "transport-packet.json",
+        "sha256": "7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e"
+      },
+      {
+        "artifact": "data/people/date-audits/mingshi/034.json",
+        "sha256": "sha256:50df3de9f0d168ad99a40688af9e8a06c166fc5e0da485f41f55b57302ea352e"
+      },
+      {
+        "artifact": "s0011 zh",
+        "value": "按《元史》，至正十七年《授時曆》成。"
+      },
+      {
+        "artifact": "independent-identity-report.json",
+        "binding": "Valid against sealed transport; no row change required."
+      }
+    ],
+    "changedAtOwner": [
+      {
+        "artifact": "data/mingshi/034.json",
+        "sealed": "sha256:4738d931985345b844a354e2df04d90568ce33fe180e823e396f7821e7a7baf3",
+        "atOwner": "sha256:f3736c675a9aa0965426d981259b9656d74f053aa9749348a86af653efbabf3e",
+        "change": "s0011 idiomatic en only; zh and literal en unchanged in substance"
+      },
+      {
+        "artifact": "data/people/extractions/mingshi/034.json",
+        "sealed": "sha256:67465877be595da3f100f19da3e2c4e029325c1711d49ce3c3c4c5754e8ca128",
+        "atOwner": "sha256:e1810495a05dc57bd0136f0cc33bb69ca7745ee9dd56d0a66be7a4ddb90aecca",
+        "change": "s0011 unit digest plus applied translationRepairs entry for idiomatic Zhiyuan"
+      },
+      {
+        "artifact": "data/people/editorial-decisions/mingshi/034.json",
+        "sealed": "sha256:d277ef06d30a9361412f71efeb3d3389b8b2db2d6ff5a3fd808ca5bbd0d33b6c",
+        "atOwner": "sha256:24ab5c50b252f6c9612841b1d39e1342b8185e393911d448e6dea9d8a6abe17c",
+        "change": "Accepted r0002 per schema-4 editorial review"
+      }
+    ]
+  },
+  "publicationBindingNote": "Post-owner chapter qualification must re-pin source/extraction/editorial hashes; identity transport and date-audit bytes require no independent recomputation for this English scope."
+}

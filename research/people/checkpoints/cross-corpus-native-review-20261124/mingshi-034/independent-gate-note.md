@@ -3,10 +3,13 @@
 | Pin | Value |
 |-----|-------|
 | Reviewer | `bc-77bf0e6f-d0fe-437b-a4df-83de0224062f` (`cursor-nov24-independent-mingshi-034`) |
-| Owner HEAD reviewed | `0a685b5841232600601da819de1de3bb1d97fe64` |
-| Transport SHA-256 | `7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e` |
-| Source revision | `110c2f92a0e7994af8d9218f76c80ccd72b98d5c` |
+| Owner recheck revision | `8ecdc7f8389731e42fde7fb19d97855a38454cac` |
+| Sealed transport SHA-256 | `7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e` |
 
-**Outcome:** Both identity cases **approved** with retained canonical IDs and `unresolvedIdentity: true` (overflow buckets; no merge/split). One supplemental English correction filed in `independent-english-corrections.json` (`s0011` Zhiyuan vs Zhizheng); identity gates not held for that translation defect.
+**English (s0011):** **Accept** owner idiomatic-only Zhiyuan; literal keeps Zhizheng; Chinese 至正 unchanged. Corrects reviewer v1 `field: en` overreach. See `independent-dependency-recheck.json`.
 
-**Preserved prior gates:** Owner `validation-receipt.json` PASS unchanged; no certificate, registry rebuild, or chapter input edits on this branch.
+**Identity (2 cases):** **Unchanged approval** — `independent-identity-report.json` still bound to sealed transport; s0012/s0013 Chinese witnesses intact.
+
+**Date audit:** **No report update** — sealed hash `50df3de9…` unchanged; bindings already quote 至正 and explain 至元.
+
+**Changed deps at owner:** source, extraction, editorial. **Unchanged:** transport, date audit, s0011 zh, identity membership fingerprints.

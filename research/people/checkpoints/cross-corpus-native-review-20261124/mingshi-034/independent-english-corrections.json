@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "kind": "independent-identity-english-corrections",
   "reviewerAgentId": "bc-77bf0e6f-d0fe-437b-a4df-83de0224062f",
   "scope": {
@@ -7,17 +7,31 @@
     "chapter": "034"
   },
   "transportSha256": "7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e",
-  "repairs": [
+  "ownerRevisionReviewed": "8ecdc7f8389731e42fde7fb19d97855a38454cac",
+  "supersedes": {
+    "schemaVersion": 1,
+    "defect": "field en treated both English surfaces as one; literal must keep received 至正 as Zhizheng"
+  },
+  "unit": {
+    "unitId": "s0011",
+    "zh": "按《元史》，至正十七年《授時曆》成。",
+    "zhUnchangedAtOwner": true
+  },
+  "corrections": [
     {
-      "book": "mingshi",
-      "chapter": "034",
-      "unitId": "s0011",
-      "field": "en",
+      "field": "idiomatic",
       "before": "Note: According to the Yuan History, the Season Granting Calendar was completed in the seventeenth year of Zhizheng.",
       "after": "Note: According to the Yuan History, the Season Granting Calendar was completed in the seventeenth year of Zhiyuan.",
-      "reason": "Chapter source 按《元史》，至正十七年《授時曆》成 preserves a scribal 至正 surface, but the calendar-reform context with Wang Xun and Guo Shoujing and Yuan shi 52 witness require Yuan Shizu 至元十七年 (AD 1280); English must not render the anachronistic Zhizheng reign.",
+      "reason": "Idiomatic English should name Yuan Shizu 至元十七年 (AD 1280) per Yuan shi 52 and the Wang Xun–Guo Shoujing calendar context; Chinese 至正 remains the received Mingshi surface and is not emended in source.",
       "relatedLocalId": "mingshi:034:p001",
       "relatedCaseId": "sha256:d8e24f4d8f829f94de00e72f03e114df1fae6d2c6bf20eade609a3e00c9a51b9"
     }
-  ]
+  ],
+  "literalPreservation": {
+    "field": "literal",
+    "text": "Commentary: According to the Yuan History, in the seventeenth year of Zhizheng the Season Granting Calendar was completed.",
+    "reason": "Renders received 至正 faithfully; preserves the textual discrepancy between surface graph and historical reign identification documented in extraction textual-variant and date audit."
+  },
+  "ownerApplicationVerdict": "accept",
+  "ownerApplicationNote": "Owner commit 8ecdc7f applies idiomatic-only Zhiyuan per r0002; literal Zhizheng unchanged; primary Chinese unchanged."
 }
