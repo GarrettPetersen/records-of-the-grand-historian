@@ -31,6 +31,9 @@ Staging pin: PR #5489 commit `378771b831b7eb7b7049903eb3e26bb86155db4d`.
 | `partial-date-du-zhen-20261124.md` | Human summary of chronology pass 4 |
 | `partial-date-report-biog136-212-20261124.json` | 竇允–王宏–曹攄 tranche (s0136–s0212) |
 | `partial-date-biog136-212-20261124.md` | Human summary of chronology pass 5 |
+| `partial-date-report-pan-fan-ding-20261124.json` | 潘京–丁紹 tranche (s0213–s0276) |
+| `chronology-owner-defect-groups-20261124.json` | Recurring blocked patterns for owner patch |
+| `partial-date-pan-fan-ding-20261124.md` | Human summary of chronology pass 6 |
 | `owner-chronology-author-notes.json` | Retained owner notes from staging #5489 + independent progress pointer |
 | `independent-source-review-20261124.md` | Editorial verification notes (r0001–r0033) |
 
@@ -52,3 +55,4 @@ Rebuild:
 - `node research/people/build-jinshu090-partial-date-hu-wei-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-du-zhen-20261124.mjs`
 - `node research/people/build-jinshu090-partial-date-biog136-212-20261124.mjs`
+- `node research/people/build-jinshu090-partial-date-pan277-20261124.mjs`
