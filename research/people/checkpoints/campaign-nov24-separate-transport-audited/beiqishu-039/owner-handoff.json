@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "beiqishu",
+    "chapter": "039"
+  },
+  "ownerAgentId": "bc-54ef0ff8-01f5-4d4d-8b50-9835f376f5c9",
+  "workerId": "cursor-nov24-additional-separate-transport-owner-1",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "d2cb697dc171af2a5de722f7e836a82bc79479a9dcea853f22bd284b49bf5cf6",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-beiqishu-039-76f5c9",
+  "inputBlobWitness": {
+    "source": "c3414837d4fe7788c781339e80de3998d4451908",
+    "extraction": "cf190d378818d62e07656edce1035e235e6d0f36",
+    "dateAudit": "4f555cc888b56d98454dcf6051b67c42573a231c",
+    "editorial": "6ace95a263c681376204ce5cbc482d883808ca91"
+  },
+  "sealedInputs": {
+    "source": "sha256:f3c8453f9649ab555943010240e147af2803a583f0e2fd2acf32b15752dc5a65",
+    "extraction": "sha256:a78517d7bc2a452c86cf75bf27707d319f5f7928eddf7964feb14411f88f8956",
+    "dateAudit": "sha256:ed0aa4c7722720418d4aa89a09951580e5a1e8f3089b5176c20c516b0969e771",
+    "editorial": "sha256:82d8da55c9c135af15a68308c2a30e07cfd7c483727ff9ed98d682e25ad3d88a"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book beiqishu --chapter 039",
+    "summary": "Scoped person data validation passed for beiqishu/039: 1 extraction(s), 151 local people, 870 mentions, 1763 claims, 0 proposed repair(s), 21 applied repair(s), 21 editorial decision(s), 1 claim retraction(s), 5 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 270,
+      "translatedCount": 270,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0,
+      "editorialRepairsReflectedInSource": true
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Complete independent audit of all 270 Chinese units, 499 temporal or active-hint items, and 151 people.",
+    "editorialDecisionCount": 21,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book beiqishu --chapter 039",
+      "status": "audited",
+      "findings": 0
+    }
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full literal and idiomatic English coverage on all 270 Chinese units; scoped validation passed; date audit reports zero findings. Accepted editorial decision text (including revised final forms) is present in source; claim retractions and revisions are reflected in extraction. Local person rows, evidence units, and name/person references match primary citations on spot-check; no dangling evidence, unsupported chronology, false-merge signal, or new definite English omission in this source-owner pass. Identity membership for 132 prepared cases remains for independent bounded dossier review across 6 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 132,
+    "identityTransportParts": 6,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "132 prepared identity review case(s) in 6 sealed transport part(s); owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate and people:dates:verify; editorial source reflection check against accepted and revised decision forms; chapter-local person and evidence spot-check; no canonical extraction or source edits; no local corpus registry generation.",
+    "sourceTitle": "Volume 39 Biographies 31: Cui Jishu; Zu Ting",
+    "sourceTitleZh": "卷三九 補列傳第三一 崔季舒 祖珽",
+    "completedAt": "2026-11-24T15:49:12.219Z",
+    "localPeople": 151,
+    "peopleLookupNote": "Bounded corpus dossier lookup deferred to CI-sealed registry generation; chapter-scoped validation and evidence inspection completed without local catalog rebuild per LOCAL_DISK_STRATEGY."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book beiqishu --chapter 039",
+    "validateDates": "npm run people:dates:verify -- --book beiqishu --chapter 039"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
