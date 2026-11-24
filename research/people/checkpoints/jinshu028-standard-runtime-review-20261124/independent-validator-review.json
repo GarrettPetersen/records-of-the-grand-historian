@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu-028-independent-validator-review",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "028"
+  },
+  "reviewer": {
+    "name": "Jinshu 028 independent completion review",
+    "agentId": "bc-0dff1b5a-cee1-497c-a682-50af5e1e208b",
+    "independentOfExtractor": true
+  },
+  "ownerContext": {
+    "pr": 5477,
+    "authorHead": "85a51c22a2ddc8b15c9a5733d9ffee72908b71c5",
+    "comparatorHead": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+    "immutableDiagnostic": {
+      "run": 45356099758,
+      "artifact": 14903051888,
+      "affectedPeopleCount": 55
+    }
+  },
+  "priorIndependentEvidencePreserved": [
+    "research/people/checkpoints/jinshu028-chronology-delta-20261124/independent-date-delta.json",
+    "research/people/checkpoints/jinshu028-reconciled-identity-20261124/independent-review-part-001.json",
+    "research/people/checkpoints/jinshu028-split-native-identity-20261124/part-001.result.json"
+  ],
+  "scopedChange": {
+    "summary": "Allow explicit-event-contextual-date attestations through sourceQuotedQualitativeAttestation when the same literal source-quoted filter passes (quoted sourceDate.text in evidence unit zh, substantive qualitative/event, no asserted Western bounds).",
+    "files": [
+      {
+        "path": "scripts/validate-people-extraction.mjs",
+        "blobSha": "6f5bd44790d81383c0801a5dc8a1309f9575d7ef",
+        "comparatorBlobSha": "fe7bdcc005a0305193e297bd20137796a96a6e86"
+      },
+      {
+        "path": "scripts/test-people-source-only-chronology.mjs",
+        "blobSha": "c4d4bdf9758ba8cb1b9e28fc8e2c90ade4d73446",
+        "comparatorBlobSha": "61fc93ca51c7bdbd3fbd3e03727b9a02c8b75456"
+      }
+    ]
+  },
+  "verdict": "approve",
+  "status": "approved",
+  "reviewedAt": "2026-11-24T08:40:00.000Z",
+  "substantiveFindings": [
+    {
+      "id": "fidelity-source-quoted-filter",
+      "severity": "informational",
+      "summary": "The one-line comparator change does not relax quote-in-unit, qualitative length, event length, or Western-field prohibitions; it only treats explicit-event-contextual-date like explicit when those predicates already hold.",
+      "sourceBasis": "scripts/validate-people-extraction.mjs sourceQuotedQualitativeAttestation"
+    },
+    {
+      "id": "alignment-55-contextual-attestations",
+      "severity": "informational",
+      "summary": "Author extraction at 85a51c22 contains exactly 55 explicit-event-contextual-date attestations on the diagnostic person set; native validation succeeds with the proposed validator (402 people).",
+      "sourceBasis": "data/people/extractions/jinshu/028.json at author head"
+    },
+    {
+      "id": "cross-unit-contextual-still-blocked",
+      "severity": "uncertainty",
+      "summary": "Attestations whose sourceDate.text is not a substring of cited evidence unit Chinese still cannot use sourceDateOnlyEvidence; independent date audit remains required for cross-unit reign context.",
+      "sourceBasis": "Prior Jinshu 028 date delta and identity reviews"
+    }
+  ],
+  "scopedTestRun": {
+    "command": "node --test scripts/test-people-source-only-chronology.mjs",
+    "outcome": "5 passed, 0 failed",
+    "cases": [
+      {
+        "name": "exact source era remains structured and reviewable without an invented Western conversion or unresolved flag",
+        "result": "pass"
+      },
+      {
+        "name": "source-only exception rejects an unquoted era, missing substantive context, or an inferred attestation",
+        "result": "pass"
+      },
+      {
+        "name": "an asserted Western year or another dated life claim keeps the original Western chronology gates",
+        "result": "pass"
+      },
+      {
+        "name": "unknown-source or explicit unresolved chronology cannot become source-only completion",
+        "result": "pass"
+      },
+      {
+        "name": "explicit-event-contextual-date also completes source-only chronology without Western conversion",
+        "result": "pass"
+      }
+    ],
+    "scopedValidation": {
+      "command": "node scripts/validate-people-extraction.mjs <author jinshu/028 extraction>",
+      "result": "ok (402 people)"
+    }
+  },
+  "missingRegressionCoverage": [
+    "Removed offline tests for deduplicateCompactMentionOccurrences and reconcilePrivateCandidateDispositions in the same test file are outside this chronology rule change; restore in a separate validator PR if still required.",
+    "No added negative test for explicit-event-contextual-date where sourceDate.text is absent from all cited evidence units (fail-closed path remains implicit in sourceQuotedQualitativeAttestation)."
+  ],
+  "remediationRequirements": [],
+  "reason": "Approved: the scoped change faithfully allows source-quoted, undated contextual attestations without fabricating Western years, preserves existing Western and unresolved gates, matches completion policy that supported Chinese source dates may remain without conversion, and clears the 55 false-positive Western-year requirements on owner data when primary quotes are present in evidence units."
+}
