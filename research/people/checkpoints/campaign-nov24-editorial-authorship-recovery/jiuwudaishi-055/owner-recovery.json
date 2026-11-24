@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-owner-recovery",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "055",
+    "branch": "cursor/nov24-retained-jiuwudaishi-055-d69789",
+    "stagingParent": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9"
+  },
+  "agentId": "bc-569b10df-2bb7-4731-ad12-002ad9d69789",
+  "inputBlobs": {
+    "data/jiuwudaishi/055.json": "e5438d71c47418c9cc066f1afb71341a0f048619",
+    "data/people/extractions/jiuwudaishi/055.json": "116bdde5198e49500cca9f6c577da80a968abff9",
+    "data/people/date-audits/jiuwudaishi/055.json": "46316f050db1d69db834cccf1cf2eed767e8de70",
+    "data/people/editorial-decisions/jiuwudaishi/055.json": "711e867632668239064f8dbaae13ab77504c938d"
+  },
+  "diagnosis": "Dropped unauthorized applied r0012–r0015 (paired literal posthumous-office and Fuzhou fixes). Realigned eleven sealed accepts.",
+  "supplementalTranslationRepairs": [
+    { "repairId": "jiuwudaishi:055:r0012", "unitId": "s0034", "field": "literal", "reason": "贈太傅 posthumous honorary, not enfeoffment." },
+    { "repairId": "jiuwudaishi:055:r0013", "unitId": "s0103", "field": "literal", "reason": "鄜州 is Fuzhou, not Binzhou." },
+    { "repairId": "jiuwudaishi:055:r0014", "unitId": "s0176", "field": "literal", "reason": "追贈太師 posthumous honorary." },
+    { "repairId": "jiuwudaishi:055:r0015", "unitId": "s0206", "field": "literal", "reason": "贈太尉 posthumous honorary." }
+  ],
+  "commands": [
+    { "command": "validateAppliedEditorialDecisions (pinned)", "result": "r0012–r0015 unauthorized" },
+    { "command": "realign + reconcile-current", "result": "PASS (11 repairs)" }
+  ],
+  "remainingIssues": ["Stale date audit after extraction hash change."]
+}
