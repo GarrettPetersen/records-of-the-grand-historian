@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Verify the shared identity preparation and Jinshu 063 recording, then dispatch exact native identity reviewers. Capture the corrected protected and chronology reviews before release.",
+  "nextAction": "Prepare retained identity deltas for audited Jinshu 063 and 081. Compose the corrected four-case Jinshu 053 proof through the native certificate path.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:46:25.095Z",
+  "lastCheckedAt": "2026-11-24T04:47:44.945Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1789,7 +1789,7 @@
       }
     },
     "exactCohortVerification": {
-      "status": "in_progress",
+      "status": "completed",
       "ref": "codex/cursor-glossary-nov24-2026-cohort-verification-v2",
       "revision": "5900e5d7295df0610e0ac68ebed5dad4523cdeba",
       "performanceRevision": "ef995d54824017254b05d032912999047ec6127d",
@@ -1824,7 +1824,8 @@
         "baselineSeconds": 2094,
         "cloudflareBuildWindowSeconds": 1800
       },
-      "qualificationArtifact": 14890247728
+      "qualificationArtifact": 14890247728,
+      "conclusion": "success"
     },
     "exactCohortVerificationHistory": [
       {
@@ -9460,9 +9461,9 @@
         "028",
         "047"
       ],
-      "status": "retry-requested",
+      "status": "in_progress",
       "workflowRevision": "3f0eeca768fc026b1f1f2fd7206012242d062eb2",
-      "runId": 45327792678,
+      "runId": 45328619269,
       "previousRun": {
         "id": 45327792678,
         "status": "failure",
@@ -17251,13 +17252,26 @@
     "chronology063": {
       "ref": "codex/cursor-glossary-nov24-2026-jinshu063-chronology",
       "revision": "69a8ce990ff658d2f0c55f2839dc74d9c71a139f",
-      "status": "in_progress",
-      "runId": 45327944451
+      "status": "native-audited",
+      "runId": 45327944451,
+      "artifactId": 14889769507,
+      "pr": 5487,
+      "ownerBefore": "bcb829ee43fd93a9d030c45925ae7fa17c6bd9fd",
+      "ownerRevision": "455e84c817cce16b40f2ba951721ed198fa676dd",
+      "reportBlob": "3b817ae69ee593f914e04c6ed3cd7f5625711f7e",
+      "reviewerId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6"
     },
     "chronology081": {
       "ref": "codex/cursor-glossary-nov24-2026-jinshu081-chronology",
       "revision": "c58e6ba1f19e101ccc8530ed37223f1a8d277a9a",
-      "status": "requested"
+      "status": "native-audited",
+      "runId": 45328199431,
+      "artifactId": 14890394432,
+      "pr": 5478,
+      "ownerBefore": "7bec9ac5168d4c4e3f0a4f38c969ff77e294d7b8",
+      "ownerRevision": "2f7a9887aa8edb393a05a80e87fb3fedd2156956",
+      "reportBlob": "da5a12129b1ea15a2ba0321f8fb58f0770cea491",
+      "reviewerId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f"
     }
   },
   "hostedRunReceipts": {
