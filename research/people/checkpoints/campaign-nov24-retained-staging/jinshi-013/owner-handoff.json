@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "013"
+  },
+  "ownerAgentId": "bc-dfa689d0-bb3f-426d-a067-481f502c0852",
+  "worker": "cursor-nov24-retained-staging-w6-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "17955ba2daba6f9e916be8b05811db8a81b2409cf427c8041f0fb23a7d2ea2ea",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-013-c0852",
+  "inputBlobWitness": {
+    "source": "208c3863951a7ab0996f9fa63f0ff2d12628bd71",
+    "extraction": "b94204b66c12c95bc731a2ad8c51a9278d6959ac",
+    "dateAudit": "991305b5fe208e960518049bc550a24be48e945a",
+    "editorial": "5bd97626448020583067abdde9c407b65e90fb05"
+  },
+  "inputBlobWitnessVerified": {
+    "source": true,
+    "extraction": true,
+    "dateAudit": true,
+    "editorial": true
+  },
+  "sealedInputs": {
+    "source": "sha256:2601f166e56fc7364077b742fc52863a33f7e4a7e04a00e56501a77d525488cb",
+    "extraction": "sha256:f13679371a97eb5c48c54dbd4aca69b366e229fec719753684c791a45e8e2327",
+    "dateAudit": "sha256:2f244e52fc82b7d459f2c6c017cb3609ed62c69a383e52940c2b709ab7d05572",
+    "editorial": "sha256:345cd28da814b902467b92a68e7c4388bae94c352d2a12e3c34efc19f233f75f"
+  },
+  "workOrderAudit": {
+    "state": "research-blocked",
+    "sha256": "2f244e52fc82b7d459f2c6c017cb3609ed62c69a383e52940c2b709ab7d05572",
+    "affectedItems": 9,
+    "findings": 3,
+    "verifiedAgainstBytes": true
+  },
+  "priorDateAudit": {
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-23T11:07:25.486Z",
+    "extractionHash": "sha256:f13679371a97eb5c48c54dbd4aca69b366e229fec719753684c791a45e8e2327",
+    "sourceHash": "sha256:2601f166e56fc7364077b742fc52863a33f7e4a7e04a00e56501a77d525488cb",
+    "preserved": true,
+    "overwritten": false,
+    "summary": "Fresh independent audit after curation of all 220 Chinese units, 212 temporal or active-hint items, and 71 people. The three repaired ownership contexts are correct: the Zhangzong-era taboo edict is not Emperor Xianzong’s activity, and the History Office list supplies no personal Daan/Chongqing date for Yang Yunyi or Old Chen. All other current chronology is source-grounded. The three explicit research holds are preserved, so this chapter remains research-blocked rather than approved."
+  },
+  "staleReason": null,
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷十三 本紀第十三: 衞紹王",
+      "en": "Volume 13 Annals 13: Wei Shaowang",
+      "raw": "卷十三 本紀第十三: 衞紹王 Volume 13 Annals 13: Wei Shaowang"
+    },
+    "sentenceCount": 220,
+    "extractionBytes": 113287,
+    "englishComplete": true,
+    "editorialAppliedRepairs": 12
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jinshi --chapter 013",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshi/013: 1 extraction(s), 71 local people, 372 mentions, 538 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshi --chapter 013",
+      "passed": false,
+      "nativeStatus": "research-blocked",
+      "recordedReportStatus": "research-blocked",
+      "result": {
+        "total": 1,
+        "counts": {
+          "research-blocked": 1
+        },
+        "chapters": [
+          {
+            "book": "jinshi",
+            "chapter": "013",
+            "status": "research-blocked",
+            "auditVersion": 1,
+            "reviewedAt": "2026-09-23T11:07:25.486Z",
+            "findings": 3
+          }
+        ]
+      },
+      "fingerprintWitness": {
+        "reportSourceHash": "sha256:2601f166e56fc7364077b742fc52863a33f7e4a7e04a00e56501a77d525488cb",
+        "packetSourceHash": "sha256:2601f166e56fc7364077b742fc52863a33f7e4a7e04a00e56501a77d525488cb",
+        "sourceMatch": true,
+        "reportExtractionHash": "sha256:f13679371a97eb5c48c54dbd4aca69b366e229fec719753684c791a45e8e2327",
+        "packetExtractionHash": "sha256:f13679371a97eb5c48c54dbd4aca69b366e229fec719753684c791a45e8e2327",
+        "extractionMatch": true
+      }
+    },
+    "englishCoverage": {
+      "sentenceCount": 220,
+      "translatedCount": 220,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": [
+    "All four work-order git blobs verified; date-audit file sha256 matches work-order audit.sha256 (2f244e52…).",
+    "Fresh independent audit after curation of all 220 Chinese units, 212 temporal or active-hint items, and 71 people. The three repaired ownership contexts are correct: the Zhangzong-era taboo edict is not Emperor Xianzong’s activity, and the History Office list supplies no personal Daan/Chongqing date for Yang Yunyi or Old Chen. All other current chronology is source-grounded. The three explicit research holds are preserved, so this chapter remains research-blocked rather than approved.",
+    "Current extraction fingerprint matches the sealed date report; native verify returns research-blocked due to retained holds (not stale).",
+    "No canonical extraction or source edits in this owner pass."
+  ],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": [
+        "claim-105",
+        "hints-p003",
+        "p003"
+      ],
+      "problem": "The Zhangzong-era taboo-name edict concerns Emperor Xianzong’s name but does not state a personal activity date for him.",
+      "action": "Retain the contextual source claim and research hold; obtain independent evidence before adding any personal chronology.",
+      "evidence": [
+        {
+          "unit": "s0001",
+          "quote": "章宗時避顯宗諱，詔改「允」為「永」。"
+        }
+      ],
+      "quote": "章宗時避顯宗諱，詔改「允」為「永」。",
+      "unit": "s0001"
+    },
+    {
+      "itemIds": [
+        "claim-179",
+        "hints-p069",
+        "p069"
+      ],
+      "problem": "The History Office list names Yang Yunyi’s notes but supplies no personal date within the Daan or Chongqing period.",
+      "action": "Retain the contextual archival claim and research hold; obtain independent evidence before adding any personal chronology.",
+      "evidence": [
+        {
+          "unit": "s0193",
+          "quote": "金禮部尚書楊雲翼日錄四十條，"
+        }
+      ],
+      "quote": "金禮部尚書楊雲翼日錄四十條，",
+      "unit": "s0193"
+    },
+    {
+      "itemIds": [
+        "claim-180",
+        "hints-p070",
+        "p070"
+      ],
+      "problem": "The History Office list names Old Chen’s notes but supplies no personal date within the Daan or Chongqing period.",
+      "action": "Retain the contextual archival claim and research hold; obtain independent evidence before adding any personal chronology.",
+      "evidence": [
+        {
+          "unit": "s0193",
+          "quote": "陳老日錄三十條，藏在史館。"
+        }
+      ],
+      "quote": "陳老日錄三十條，藏在史館。",
+      "unit": "s0193"
+    }
+  ],
+  "researchBlockedItemWitness": [
+    {
+      "id": "claim-105",
+      "event": "Canonical chronology and ownership were checked after the repair.",
+      "evidence": [
+        {
+          "unit": "s0001",
+          "quote": "章宗時避顯宗諱，詔改「允」為「永」。"
+        }
+      ],
+      "reason": "The dated action is Zhangzong’s taboo-name edict about Xianzong, not an activity by Emperor Xianzong."
+    },
+    {
+      "id": "claim-179",
+      "event": "Canonical chronology and ownership were checked after the repair.",
+      "evidence": [
+        {
+          "unit": "s0193",
+          "quote": "金禮部尚書楊雲翼日錄四十條，"
+        }
+      ],
+      "reason": "The archival list identifies Yang Yunyi’s notes but supplies no personal Daan or Chongqing activity date."
+    },
+    {
+      "id": "claim-180",
+      "event": "Canonical chronology and ownership were checked after the repair.",
+      "evidence": [
+        {
+          "unit": "s0193",
+          "quote": "陳老日錄三十條，藏在史館。"
+        }
+      ],
+      "reason": "The archival list identifies Old Chen’s notes but supplies no personal Daan or Chongqing activity date."
+    },
+    {
+      "id": "hints-p003",
+      "event": "Canonical chronology and ownership were checked after the repair.",
+      "evidence": [
+        {
+          "unit": "s0001",
+          "quote": "章宗時避顯宗諱，詔改「允」為「永」。"
+        }
+      ],
+      "reason": "The chapter does not independently date Emperor Xianzong’s activity; the retained hint correctly requires research."
+    },
+    {
+      "id": "hints-p069",
+      "event": "Canonical chronology and ownership were checked after the repair.",
+      "evidence": [
+        {
+          "unit": "s0193",
+          "quote": "金禮部尚書楊雲翼日錄四十條，"
+        }
+      ],
+      "reason": "The chapter has no independent personal date for Yang Yunyi; the retained hint correctly requires research."
+    },
+    {
+      "id": "hints-p070",
+      "event": "Canonical chronology and ownership were checked after the repair.",
+      "evidence": [
+        {
+          "unit": "s0193",
+          "quote": "陳老日錄三十條，藏在史館。"
+        }
+      ],
+      "reason": "The chapter has no independent personal date for Old Chen; the retained hint correctly requires research."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; blob witness; English scan; npm run people:validate; npm run people:dates:verify; retained independent date and editorial artifacts.",
+    "completedAt": "2026-11-24T16:44:42.697Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 013",
+    "verifyDates": "npm run people:dates:verify -- --book jinshi --chapter 013"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; preserved date-audit bytes unchanged."
+}
