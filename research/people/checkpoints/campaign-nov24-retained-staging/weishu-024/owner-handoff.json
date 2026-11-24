@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "weishu",
+    "chapter": "024"
+  },
+  "ownerAgentId": "bc-97c39cfb-74d2-4543-b9d9-a9c6d75d02d6",
+  "workerId": "cursor-nov24-retained-staging-w15-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "48cba8538414dbe727b07659190025dc082a964dbaff3aacc92d8d77cd27c8fc",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-weishu-024-d02d6",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "people": 63,
+    "claims": 367,
+    "promptVersion": 7,
+    "sourceExtractionSha256": "sha256:356e552900d94a43669b17001928c736a152d261b80bed16d49c83add20a5865",
+    "sourceExtractionSha256Verified": true
+  },
+  "extractionBytes": 116325,
+  "inputBlobWitness": {
+    "source": "5f4aa56cbf0dc57fd17a6997385d37004fc08404",
+    "extraction": "da9afac2aa7065db90df08c0be73ae7242433794",
+    "editorial": "3aabbdedb5f145dc4300bcce8e6a0b2284aafed4"
+  },
+  "sealedInputs": {
+    "source": "sha256:82d55ab4c81a0470e845210de342cce70491359c0f7c63178c36ee492d05b686",
+    "extraction": "sha256:356e552900d94a43669b17001928c736a152d261b80bed16d49c83add20a5865",
+    "editorial": "sha256:daba217c88c0015f5c2a657fc5a3b5af027a775984328a6e6b457a55f1b8f541"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 155,
+    "translatedCount": 155,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCount": 155
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-024/packets/date-packet.json",
+    "sha256": "sha256:f64ad910e46ebe5f3a587cae7a366ee15a1a5ac24a31dd664d2f42ffb0a7a758",
+    "sourceHash": "sha256:32188cef5824574cf69d823d397a2d386635ced6b3cfc49d4409d1b2956fa637",
+    "extractionHash": "sha256:8391985accb098f06373f346f64572a2213ea1368d447e67b0ed081c4ebfce71",
+    "itemCount": 182,
+    "peopleCount": 63,
+    "unitCount": 155,
+    "buildCommand": "npm run people:dates:packet -- --book weishu --chapter 024 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-024/packets/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPreserved": true,
+    "editorialPreserved": true,
+    "promptVersion": 7,
+    "appliedEditorialDecisionCount": 5,
+    "proposedRepairCount": 0,
+    "note": "Pinned extraction and accepted editorial decisions reused without re-extraction or owner self-approval."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book weishu --chapter 024",
+    "peopleValidateSummary": "Scoped person data validation passed for weishu/024: 1 extraction(s), 63 local people, 330 mentions, 630 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book weishu --chapter 024",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 024",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "independentDateReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "substantiveFindings": "Sealed source, extraction, and editorial git blobs witness-verified at staging 20b8d0e3. Full chapter read: all 155 Chinese sentences carry paired literal and idiomatic English. Accepted prompt v7 extraction and applied editorial repairs validate scoped; people:dates:scan reports zero structural interval defects. Native date packet sealed at f64ad910… for independent reviewer. No definite English omission, source contradiction, or owner-side chronology repair required in this pass. Independent native date audit is still absent (no data/people/date-audits/weishu/024.json).",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:f64ad910e46ebe5f3a587cae7a366ee15a1a5ac24a31dd664d2f42ffb0a7a758",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-024/packets/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "detail": "Independent reviewer must cover all 155 Chinese units, 182 packet temporal/hint items, and 63 people using the sealed packet bytes; attestation-only items may remain undated when source-supported."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-corpus-review",
+      "detail": "Scoped people:validate passed; no chapter-local alias-disposition debt. Canonical identity merge/split evidence remains for independent cross-corpus reviewer after chronology approval."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "people:dates:verify reports un-audited; owner did not self-approve."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 024",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 024",
+    "datesPacket": "npm run people:dates:packet -- --book weishu --chapter 024 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-024/packets/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book weishu --chapter 024"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff without altering sealed inputs."
+}

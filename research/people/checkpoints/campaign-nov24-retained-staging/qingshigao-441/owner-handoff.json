@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "441"
+  },
+  "ownerAgentId": "bc-97c39cfb-74d2-4543-b9d9-a9c6d75d02d6",
+  "workerId": "cursor-nov24-retained-staging-w15-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "48cba8538414dbe727b07659190025dc082a964dbaff3aacc92d8d77cd27c8fc",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-441-d02d6",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "people": 78,
+    "claims": 312,
+    "promptVersion": 7,
+    "sourceExtractionSha256": "sha256:220f9a86d5f886393dc3275f5e5c95f059d4797682a8e4fa0e13baaadca7d550",
+    "sourceExtractionSha256Verified": true,
+    "claimsNote": "Work-order claims 312; validated extraction carries 589 claims."
+  },
+  "extractionBytes": 117398,
+  "inputBlobWitness": {
+    "source": "3bad211fd722505b379351e5cddb5d04beddfa48",
+    "extraction": "3746706f87b19c784f63b2781d43e45e125e08a7",
+    "editorial": "d13c4ab6ae20b09a973d1d408386c97838e0b956"
+  },
+  "sealedInputs": {
+    "source": "sha256:0a4462cdf59904659603adc11a188a7ed1f31cb1bfcee52c4ef2e0e7f0727c99",
+    "extraction": "sha256:220f9a86d5f886393dc3275f5e5c95f059d4797682a8e4fa0e13baaadca7d550",
+    "editorial": "sha256:5bff5b85fdfb55f33adac8c5e453a3f7594390d26579ed9cb7efbcd52ba4f680"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 252,
+    "translatedCount": 252,
+    "missingIdiomatic": 0,
+    "missingLiteral": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCount": 252
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-441/packets/date-packet.json",
+    "sha256": "sha256:d3a093ababa407f275265e34558fd0f4f3bb5821c1551f9244007ff8ac2dc95d",
+    "sourceHash": "sha256:f3185c6c0e5c6dbb86569e151708c8490983b60ae4ba81ae627e6f4ef160aa92",
+    "extractionHash": "sha256:dd109f59d57c40e09e5b58b3da79edd29ba40c3e41bcc7258e1e3d03ca105531",
+    "itemCount": 226,
+    "peopleCount": 78,
+    "unitCount": 252,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 441 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-441/packets/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPreserved": true,
+    "editorialPreserved": true,
+    "promptVersion": 7,
+    "appliedEditorialDecisionCount": 7,
+    "proposedRepairCount": 0,
+    "note": "Pinned extraction and accepted editorial decisions reused without re-extraction or owner self-approval."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 441",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/441: 1 extraction(s), 78 local people, 298 mentions, 589 claims, 0 proposed repair(s), 6 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 441",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 441",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "independentDateReportPresent": false
+    },
+    "chronologyStatus": "no-native-date-report",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "substantiveFindings": "Sealed source, extraction, and editorial git blobs witness-verified at staging 20b8d0e3. Full chapter read: all 252 Chinese sentences carry paired literal and idiomatic English. Accepted prompt v7 extraction and applied editorial repairs validate scoped; people:dates:scan reports zero structural interval defects. Native date packet sealed at d3a093ab… for independent reviewer. No definite English omission, source contradiction, or owner-side chronology repair required in this pass. Independent native date audit is still absent (no data/people/date-audits/qingshigao/441.json).",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "packetSha256": "sha256:d3a093ababa407f275265e34558fd0f4f3bb5821c1551f9244007ff8ac2dc95d",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-441/packets/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "detail": "Independent reviewer must cover all 252 Chinese units, 226 packet temporal/hint items, and 78 people using the sealed packet bytes; attestation-only items may remain undated when source-supported."
+    },
+    "identity": {
+      "required": true,
+      "status": "pending-corpus-review",
+      "detail": "Scoped people:validate passed; no chapter-local alias-disposition debt. Canonical identity merge/split evidence remains for independent cross-corpus reviewer after chronology approval."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "people:dates:verify reports un-audited; owner did not self-approve."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 441",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 441",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 441 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-441/packets/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book qingshigao --chapter 441"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; owner-handoff without altering sealed inputs."
+}
