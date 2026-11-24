@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "052"
+  },
+  "ownerAgentId": "bc-b07f6f8e-5dd0-4f5f-8466-6c7bd3b4577e",
+  "worker": "cursor-nov24-retained-staging-w10-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b5d5f80d1677de63cfc4e3fe06b058e285ffe48c047443eda1c58f86d49fbeba",
+  "phase": "dispatch_pending",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-052-4577e",
+  "independentReviewCompleted": false,
+  "independentDateApprovalIssued": false,
+  "canonicalEdits": false,
+  "chapterReady": false,
+  "inputBlobWitness": {
+    "source": "03504a86442e33cdb69834f5a708f962338d7e6a",
+    "extraction": "9dd08da1bb74d3c4f781f437e9de1e4f35df8cb0",
+    "editorial": "e0203739143d9845968cdaba4fcdc49bd16e3c5d"
+  },
+  "sealedInputs": {
+    "source": "sha256:e831ae09347c5dee726d3db5005163ab7d9d433e030026f777bca629823080d9",
+    "extraction": "sha256:1093219f29c4553ffd1c925812295c3f0dfd4cfaeeaf25b2a51e1aa576a62836",
+    "editorial": "sha256:419270a990580b450c84d56e71ed3bf6df928a46968d74261cda7d266f42e90b"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "extractionBytesWitness": 485873,
+    "contentSha256": "sha256:1093219f29c4553ffd1c925812295c3f0dfd4cfaeeaf25b2a51e1aa576a62836",
+    "localPeople": 127,
+    "note": "Full extraction retained unchanged; no re-extraction or chunk regeneration."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "pinnedBlob": "e0203739143d9845968cdaba4fcdc49bd16e3c5d",
+    "appliedRepairsWitnessedInSource": true,
+    "note": "Accepted editorial artifact pinned at witness blob; native validator confirms applied repairs match independent decisions."
+  },
+  "sourceCoverage": {
+    "sentenceCount": 444,
+    "translatedCount": 444,
+    "bothFieldsComplete": true,
+    "unitCount": 444,
+    "titleZh": "\u5377\u4e94\u5341\u4e8c \u5217\u50b3\u7b2c\u4e8c\u5341\u4e8c \u90e4\u8a75 \u962e\u79cd \u83ef\u8b5a",
+    "titleEn": "Volume 52 Biographies 22: Xi Shen; Ruan Zhong; Hua Tan; Yuan Fu",
+    "missingUnits": []
+  },
+  "auditState": {
+    "dispatchLabel": "no-native-date-report",
+    "dateAuditPath": null,
+    "chronologyStatus": "un-audited"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-052/date-packet.json",
+    "contentSha256": "sha256:d14fa165c67a387c557cc70372c4642d61731c21bdecaf9acd2baa2bcda61705",
+    "itemCount": 399,
+    "peopleCount": 127,
+    "unitCount": 444,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-052/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "nativeValidation": {
+    "people:validate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 052",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/052: 1 extraction(s), 127 local people, 468 mentions, 1196 claims, 0 proposed repair(s), 16 applied repair(s), 16 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "people:dates:verify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 052",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "note": "No data/people/date-audits/jinshu/{ch}.json; owner does not self-approve."
+    }
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book jinshu --chapter 052",
+    "npm run people:dates:packet -- --book jinshu --chapter 052 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-052/date-packet.json",
+    "npm run people:dates:verify -- --book jinshu --chapter 052",
+    "npm run people:dates:record -- --book jinshu --chapter 052"
+  ],
+  "substantiveFindings": "Biographies of Xi Shen, Ruan Chong, Hua Tan et al.; sealed extraction and sixteen applied editorial repairs align with pinned blobs; scoped validation passed. No owner-proposed date repairs or English contradictions. Missing gate is independent native date audit only.",
+  "remainingIndependentEvidence": {
+    "dateAudit": "Complete independent native date audit against sealed packet sha256:d14fa165c67a387c557cc70372c4642d61731c21bdecaf9acd2baa2bcda61705; record via people:dates:record after zero-finding or repaired review.",
+    "identity": "Bounded canonical identity dossier review for chapter-local people after date gate; owner handoff is not identity approval.",
+    "editorial": "Pinned editorial decisions unchanged; independent reviewer confirms applied repairs remain source-faithful.",
+    "nextGate": "independent-native-date-audit"
+  },
+  "holds": [],
+  "authorEvidence": {
+    "method": "Witnessed pinned git blobs; read Chinese/English source fields; reused sealed extraction and editorial artifacts; built native date packet; scoped people:validate and people:dates:verify; no registry generation, deploy, merge, or extraction rewrite.",
+    "completedAt": "2026-11-24T17:07:49.004Z"
+  },
+  "reproduce": {
+    "witnessBlobs": {
+      "source": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/jinshu/052.json",
+      "extraction": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/extractions/jinshu/052.json",
+      "editorial": "git rev-parse 5cac1d27112abc2084b0d9b0574dc3e7471f426b:data/people/editorial-decisions/jinshu/052.json"
+    }
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter owner evidence only; sealed inputs not modified."
+}
