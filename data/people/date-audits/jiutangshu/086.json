@@ -3,15 +3,16 @@
   "auditVersion": 1,
   "book": "jiutangshu",
   "chapter": "086",
-  "sourceHash": "sha256:5f7e50e521bfb70e2aa14b606cc32e0b42461a8f8cba217a2b154af9b47ff4f0",
-  "extractionHash": "sha256:968830dce12bcf16f56ff572b23d7543a4c6ded3b7d0ccdb21e767b05b046477",
+  "sourceHash": "sha256:8e6726a1a61ebef6c971a8e0bbc8294fa3b7483983309389bcf15236b1807eef",
+  "extractionHash": "sha256:95b34d7cd65ac5301988079c6f76c98028f6b2d4ec74929d41622fba797778dd",
   "status": "audited",
   "reviewer": {
-    "name": "Independent Jiu Tangshu 086 initial chronology reviewer",
+    "name": "Independent scoped delta chronology reviewer (jiutangshu 086)",
+    "agentId": "bc-cf4edc5e-c410-4c98-bb18-374a12a3eb35",
     "independentOfExtractor": true
   },
-  "reviewedAt": "2026-09-29T16:13:07.796Z",
-  "summary": "Reviewed 270 units, 449 checks, and 163 people.",
+  "reviewedAt": "2026-11-24T15:45:00.000Z",
+  "summary": "Scoped stale-date closure: ten reception-taxonomy rows re-read on the post-repair extraction packet; supplemental English and claim-411 honor fixes applied per independent review. All other September 2026 item and person checks carried forward verbatim.",
   "reviewedUnits": [
     "s0001",
     "s0002",
@@ -1264,9 +1265,13 @@
     {
       "id": "claim-220",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed honor chronology for p040.",
+      "event": "Xianqing 3 (AD 658) posthumous grant of Prefect of Jizhou to Xu Shanxin, father of Xu Jingzong; retrospective honor to a Sui official already dead.",
+      "reason": "s0047 opens 顯慶元年 and s0048 continues 三年…尋贈其父善心為冀州刺史, so the grant belongs to Xianqing 3 = AD 658 at year precision. Shanxin was a Sui official (active-date hint before AD 618), so receptionType retrospective is correct. The delta changed only the reception label; title, action, sourceDate 三年 and westernYear AD 658 are byte-identical to the audited generation.",
       "evidence": [
+        {
+          "unit": "s0047",
+          "quote": "顯慶元年"
+        },
         {
           "unit": "s0048",
           "quote": "三年，進封郡公，尋贈其父善心為冀州刺史。"
@@ -1276,12 +1281,16 @@
     {
       "id": "claim-221",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed event-participation chronology for p040.",
+      "event": "Xu Shanxin as honoree of the AD 658 posthumous grant of Prefect of Jizhou; retrospective reception, not personal activity in 658.",
+      "reason": "Same dated event as claim-220: 顯慶元年 (s0047) followed by 三年 (s0048) fixes AD 658 at year precision. Shanxin is the recipient of a 贈 grant after death, so kind retrospective-reference with role honoree and receptionType retrospective is the correct taxonomy. Only kind and receptionType changed; role, action and dateContext are unchanged.",
       "evidence": [
         {
+          "unit": "s0047",
+          "quote": "顯慶元年"
+        },
+        {
           "unit": "s0048",
-          "quote": "三年，進封郡公，尋贈其父善心為冀州刺史。"
+          "quote": "尋贈其父善心為冀州刺史"
         }
       ]
     },
@@ -1752,24 +1761,44 @@
     {
       "id": "claim-304",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed honor chronology for p046.",
+      "event": "Xianheng 3 (AD 672) posthumous grant of Kaifu Yitong Sansi and Area Commander-in-Chief of Yangzhou to Xu Jingzong after his death.",
+      "reason": "s0078 opens 咸亨元年 and s0079 records 三年薨，年八十一 (Xianheng 3 = AD 672). s0080 places the 冊贈 grant inside the mourning sequence for that death, so AD 672 at year precision is supported. The honor follows death, so receptionType retrospective is correct. Only the reception label changed; sourceDate anchor 冊贈 and westernYear are unchanged.",
       "evidence": [
         {
+          "unit": "s0078",
+          "quote": "咸亨元年"
+        },
+        {
+          "unit": "s0079",
+          "quote": "三年薨，年八十一。"
+        },
+        {
           "unit": "s0080",
-          "quote": "高宗為之舉哀，廢朝三日，詔文武百官就第赴哭，冊贈開府儀同三司、揚州大都督，陪葬昭陵。"
+          "quote": "冊贈開府儀同三司、揚州大都督"
         }
       ]
     },
     {
       "id": "claim-305",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed event-participation chronology for p046.",
+      "event": "Xu Jingzong as honoree of Gaozong's mourning rites and attendant burial at Zhaoling following his AD 672 death.",
+      "reason": "The mourning (舉哀, suspended court three days) and 陪葬昭陵 in s0080 follow directly on the death in Xianheng 3 recorded in s0079 after 咸亨元年 in s0078, supporting AD 672 at year precision. These are later reception events for a deceased honoree, so retrospective-reference / retrospective is correct. Role, action and dateContext are unchanged by the delta.",
       "evidence": [
         {
+          "unit": "s0078",
+          "quote": "咸亨元年"
+        },
+        {
+          "unit": "s0079",
+          "quote": "三年薨"
+        },
+        {
           "unit": "s0080",
-          "quote": "高宗為之舉哀，廢朝三日，詔文武百官就第赴哭，冊贈開府儀同三司、揚州大都督，陪葬昭陵。"
+          "quote": "高宗為之舉哀，廢朝三日"
+        },
+        {
+          "unit": "s0080",
+          "quote": "陪葬昭陵"
         }
       ]
     },
@@ -2196,28 +2225,36 @@
     {
       "id": "claim-372",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed honor chronology for p076.",
+      "event": "Qin Xiu's assignment of the posthumous name Duke Miu Chou to the Western Jin official He Zeng, cited as precedent in the Tang debate.",
+      "reason": "s0096 and s0097 recount a Jin precedent inside the debate over Xu Jingzong's posthumous name. The claim carries no dateContext and asserts no Tang-era activity by He Zeng, so no endpoint is required. The name was conferred after He Zeng died (何曾薨), so receptionType retrospective is correct. Only the reception label changed.",
       "evidence": [
         {
           "unit": "s0096",
-          "quote": "答曰：「昔晉司空何曾薨，太常博士秦秀謚為繆丑公。"
+          "quote": "昔晉司空何曾薨，太常博士秦秀謚為繆丑公。"
         },
         {
           "unit": "s0097",
-          "quote": "何曾既忠且孝，徒以日食萬錢，所以貶為繆丑。"
+          "quote": "所以貶為繆丑。"
         }
       ]
     },
     {
       "id": "claim-373",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed honor chronology for p078.",
+      "event": "Edict adopting the posthumous name Gong for Xu Jingzong after the renewed deliberation following his AD 672 death.",
+      "reason": "The deliberation in s0099 and the edict 詔從其議 in s0100 follow the Xianheng 3 death recorded in s0079 after 咸亨元年 in s0078; no intervening era or year marker appears between s0080 and s0100, so AD 672 at year precision is supported. A posthumous name is retrospective reception. Only the reception label changed.",
       "evidence": [
         {
+          "unit": "s0078",
+          "quote": "咸亨元年"
+        },
+        {
+          "unit": "s0079",
+          "quote": "三年薨"
+        },
+        {
           "unit": "s0099",
-          "quote": "時有詔令尚書省五品已上重議，禮部尚書袁思敬議稱：「按謚法『既過能改曰恭』，請謚曰『恭』。」"
+          "quote": "請謚曰『恭』"
         },
         {
           "unit": "s0100",
@@ -2536,24 +2573,40 @@
     {
       "id": "claim-411",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed honor chronology for p101.",
+      "event": "Xianqing 3 (AD 658) posthumous grant of Prefect of Weizhou to Li Desheng, father of Li Yifu.",
+      "reason": "s0157 opens 顯慶元年, s0166 continues 二年 and s0168 三年，又追贈其父德晟為魏州刺史, so the grant is Xianqing 3 = AD 658 at year precision. 追贈 marks a grant after death, so receptionType retrospective is correct. The reception label is the only delta. The separate title.zh and action wording repair for this row does not touch the date.",
       "evidence": [
         {
+          "unit": "s0157",
+          "quote": "顯慶元年"
+        },
+        {
+          "unit": "s0166",
+          "quote": "二年，代崔敦禮為中書令"
+        },
+        {
           "unit": "s0168",
-          "quote": "三年，又追贈其父德晟為魏州刺史，諸子孩抱者並列清官，詔為造甲第，榮寵莫之能比。"
+          "quote": "三年，又追贈其父德晟為魏州刺史"
         }
       ]
     },
     {
       "id": "claim-412",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed event-participation chronology for p101.",
+      "event": "Li Desheng as honoree of the AD 658 posthumous grant; retrospective reception, not personal activity in 658.",
+      "reason": "Same dated event as claim-411: 顯慶元年 (s0157), 二年 (s0166) and 三年 (s0168) fix Xianqing 3 = AD 658 at year precision. Desheng receives a 追贈 grant after death, so kind retrospective-reference with role honoree and receptionType retrospective is the correct taxonomy. Only kind and receptionType changed.",
       "evidence": [
         {
+          "unit": "s0157",
+          "quote": "顯慶元年"
+        },
+        {
+          "unit": "s0166",
+          "quote": "二年"
+        },
+        {
           "unit": "s0168",
-          "quote": "三年，又追贈其父德晟為魏州刺史，諸子孩抱者並列清官，詔為造甲第，榮寵莫之能比。"
+          "quote": "又追贈其父德晟為魏州刺史"
         }
       ]
     },
@@ -3076,24 +3129,40 @@
     {
       "id": "claim-540",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed honor chronology for p118.",
+      "event": "Ruyi 1 (AD 692) posthumous grant by Empress Wu of Area Commander-in-Chief of Yangzhou to Li Yifu.",
+      "reason": "s0267 states 如意元年 explicitly; Ruyi 1 is AD 692 at year precision. Li Yifu had already died in exile in Qianfeng 1 (AD 666, s0232 乾封元年…發疾卒), so the 追贈 grant is retrospective reception. Only the reception label changed; title, action, sourceDate and westernYear are unchanged.",
       "evidence": [
         {
           "unit": "s0267",
-          "quote": "如意元年，則天以義府與許敬宗、御史大夫崔義玄、中書舍人王德儉、大理正侯善業、大理丞袁公瑜等六人，在永徽中有翊贊之功，追贈義府揚州大都督，義玄益州大都督，德儉魏州刺史，公瑜江州刺史。"
+          "quote": "如意元年"
+        },
+        {
+          "unit": "s0267",
+          "quote": "追贈義府揚州大都督"
+        },
+        {
+          "unit": "s0232",
+          "quote": "乾封元年"
         }
       ]
     },
     {
       "id": "claim-541",
       "verdict": "supported",
-      "reason": "Chinese evidence and chronology context reviewed; no unsupported endpoint found.",
-      "event": "Reviewed event-participation chronology for p118.",
+      "event": "Li Yifu as honoree of Empress Wu's AD 692 posthumous grant for his Yonghui-era support; retrospective reception after his AD 666 death.",
+      "reason": "s0267 dates the grant 如意元年 (AD 692) and names 義府 first among the six honored for 翊贊之功 in the Yonghui era; s0232 records his death in 乾封元年 (AD 666). This is later reception of a deceased honoree, so retrospective-reference / retrospective is correct. Only kind and receptionType changed.",
       "evidence": [
         {
           "unit": "s0267",
-          "quote": "如意元年，則天以義府與許敬宗、御史大夫崔義玄、中書舍人王德儉、大理正侯善業、大理丞袁公瑜等六人，在永徽中有翊贊之功，追贈義府揚州大都督，義玄益州大都督，德儉魏州刺史，公瑜江州刺史。"
+          "quote": "如意元年，則天以義府與許敬宗"
+        },
+        {
+          "unit": "s0267",
+          "quote": "在永徽中有翊贊之功"
+        },
+        {
+          "unit": "s0232",
+          "quote": "乾封元年，大赦，長流人不許還，義府憂憤發疾卒"
         }
       ]
     },
@@ -7574,5 +7643,10 @@
   "translationReview": {
     "status": "clear",
     "conclusion": "No chronology-changing translation defect found."
+  },
+  "priorReportDigest": "be542f6397c3d1dd6231a575de1570e22bc702a54e46b69ec2d43a7adc53ebda",
+  "priorReviewer": {
+    "name": "Independent Jiu Tangshu 086 initial chronology reviewer",
+    "reviewedAt": "2026-09-29T16:13:07.796Z"
   }
 }

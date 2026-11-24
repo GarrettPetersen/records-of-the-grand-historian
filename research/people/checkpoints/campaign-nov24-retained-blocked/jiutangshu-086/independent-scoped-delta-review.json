@@ -1,0 +1,1128 @@
+{
+  "schemaVersion": 1,
+  "kind": "independent-scoped-delta-review",
+  "chapterKey": "jiutangshu/086",
+  "idempotencyKey": "b4f652c2b722a3619fb99c6f15d0a6b56b78466b261ff1c55f93e7be0f10a754",
+  "reviewerAgentId": "bc-cf4edc5e-c410-4c98-bb18-374a12a3eb35",
+  "reviewerModel": "claude-opus-5-5 (effort high)",
+  "ownerAgentId": "bc-7e463767-133a-4f87-aab6-c0f63ebf6684",
+  "ownerRun": "run-6c20b0ac-dc73-4f2b-b9af-b3d3cbc18a42",
+  "ownerRevision": "c5a9e16b93e799dc2c9458fedc5a87374b85e09d",
+  "ownerProposalPath": "research/people/checkpoints/campaign-nov24-retained-blocked/jiutangshu-086/owner-handoff.json",
+  "ownerProposalSha256": "903edb1ef1f98b011583ab9d0ada6102b36e0441c4b1b16a668edef6c3c3a4bf",
+  "pr": {
+    "number": 5713,
+    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5713",
+    "headRef": "cursor/nov24-retained-blocked-owner-jiutangshu-086-bf6684"
+  },
+  "reviewedAt": "2026-11-24T15:30:00.000Z",
+  "scope": {
+    "concreteBlocker": "Date audit report is stale",
+    "reviewedDelta": "the 10 claim rows named by the owner handoff, their cited Chinese units (both English fields), and the date-audit item checks that depend on them",
+    "preservedUnrelatedWork": [
+      "source outside s0080/s0168/s0267 English fields",
+      "all 621 unchanged extraction claim rows, 163 people, surfaces and coverage",
+      "both prior editorial reviews and their 11 decisions",
+      "identity work",
+      "original date-audit report bytes and reviewer attribution",
+      "jiutangshu/086 chapter-owner reservation"
+    ]
+  },
+  "verdict": "approve-owner-delta-with-required-supplemental-repairs",
+  "summary": "Owner handoff confirmed exactly. All 10 rows reproduce as native reconcileRetrospectiveExtraction output over the audited extraction bytes (blob 0d28e10f, packet hash 968830dc...). Only reception labels changed (receptionType posthumous to retrospective, and kind posthumous-commemoration to retrospective-reference on 4 event rows). dateContext, title, action, role, certainty, evidence, people, surfaces and all other rows are byte-identical. Source packet hash is unchanged. No chronology fact differs. The stale report cannot be re-tagged in place under its original reviewer. Native closure is a host-recorded complete report (people:dates:record) that explicitly reuses the 439 unchanged item checks, 163 person checks and 270 reviewed units, plus the 10 fresh item checks below. This composition passes production validateDateAuditReport against the current packet and against the post-repair simulation. The owner missed one concrete extraction contradiction in a changed row (claim-411 title.zh 渭州 vs source 魏州) and definite English mistranslations in the cited units s0080, s0168 and s0267. Exact fixes are recorded below and must be batched before date closure.",
+  "approvedChanges": [
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-220",
+      "personId": "p040",
+      "evidenceUnits": [
+        "s0048"
+      ],
+      "before": {
+        "title": {
+          "en": "Prefect of Jizhou",
+          "zh": "冀州刺史"
+        },
+        "action": "posthumously granted",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "title": {
+          "en": "Prefect of Jizhou",
+          "zh": "冀州刺史"
+        },
+        "action": "posthumously granted",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-220",
+        "verdict": "supported",
+        "event": "Xianqing 3 (AD 658) posthumous grant of Prefect of Jizhou to Xu Shanxin, father of Xu Jingzong; retrospective honor to a Sui official already dead.",
+        "reason": "s0047 opens 顯慶元年 and s0048 continues 三年…尋贈其父善心為冀州刺史, so the grant belongs to Xianqing 3 = AD 658 at year precision. Shanxin was a Sui official (active-date hint before AD 618), so receptionType retrospective is correct. The delta changed only the reception label; title, action, sourceDate 三年 and westernYear AD 658 are byte-identical to the audited generation.",
+        "evidence": [
+          {
+            "unit": "s0047",
+            "quote": "顯慶元年"
+          },
+          {
+            "unit": "s0048",
+            "quote": "三年，進封郡公，尋贈其父善心為冀州刺史。"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-221",
+      "personId": "p040",
+      "evidenceUnits": [
+        "s0048"
+      ],
+      "before": {
+        "kind": "posthumous-commemoration",
+        "role": "honoree",
+        "action": "posthumously granted Prefect of Jizhou",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "honoree",
+        "action": "posthumously granted Prefect of Jizhou",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-221",
+        "verdict": "supported",
+        "event": "Xu Shanxin as honoree of the AD 658 posthumous grant of Prefect of Jizhou; retrospective reception, not personal activity in 658.",
+        "reason": "Same dated event as claim-220: 顯慶元年 (s0047) followed by 三年 (s0048) fixes AD 658 at year precision. Shanxin is the recipient of a 贈 grant after death, so kind retrospective-reference with role honoree and receptionType retrospective is the correct taxonomy. Only kind and receptionType changed; role, action and dateContext are unchanged.",
+        "evidence": [
+          {
+            "unit": "s0047",
+            "quote": "顯慶元年"
+          },
+          {
+            "unit": "s0048",
+            "quote": "尋贈其父善心為冀州刺史"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-304",
+      "personId": "p046",
+      "evidenceUnits": [
+        "s0080"
+      ],
+      "before": {
+        "title": {
+          "en": "Kaifu Yitong Sansi and Yangzhou Area Commander-in-Chief",
+          "zh": "開府儀同三司、揚州大都督"
+        },
+        "action": "posthumously granted",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "冊贈"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 672,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "title": {
+          "en": "Kaifu Yitong Sansi and Yangzhou Area Commander-in-Chief",
+          "zh": "開府儀同三司、揚州大都督"
+        },
+        "action": "posthumously granted",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "冊贈"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 672,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-304",
+        "verdict": "supported",
+        "event": "Xianheng 3 (AD 672) posthumous grant of Kaifu Yitong Sansi and Area Commander-in-Chief of Yangzhou to Xu Jingzong after his death.",
+        "reason": "s0078 opens 咸亨元年 and s0079 records 三年薨，年八十一 (Xianheng 3 = AD 672). s0080 places the 冊贈 grant inside the mourning sequence for that death, so AD 672 at year precision is supported. The honor follows death, so receptionType retrospective is correct. Only the reception label changed; sourceDate anchor 冊贈 and westernYear are unchanged.",
+        "evidence": [
+          {
+            "unit": "s0078",
+            "quote": "咸亨元年"
+          },
+          {
+            "unit": "s0079",
+            "quote": "三年薨，年八十一。"
+          },
+          {
+            "unit": "s0080",
+            "quote": "冊贈開府儀同三司、揚州大都督"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-305",
+      "personId": "p046",
+      "evidenceUnits": [
+        "s0080"
+      ],
+      "before": {
+        "kind": "posthumous-commemoration",
+        "role": "honoree",
+        "action": "mourned by Gaozong; buried attendant to Zhaoling",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "陪葬昭陵"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 672,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "honoree",
+        "action": "mourned by Gaozong; buried attendant to Zhaoling",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "陪葬昭陵"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 672,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-305",
+        "verdict": "supported",
+        "event": "Xu Jingzong as honoree of Gaozong's mourning rites and attendant burial at Zhaoling following his AD 672 death.",
+        "reason": "The mourning (舉哀, suspended court three days) and 陪葬昭陵 in s0080 follow directly on the death in Xianheng 3 recorded in s0079 after 咸亨元年 in s0078, supporting AD 672 at year precision. These are later reception events for a deceased honoree, so retrospective-reference / retrospective is correct. Role, action and dateContext are unchanged by the delta.",
+        "evidence": [
+          {
+            "unit": "s0078",
+            "quote": "咸亨元年"
+          },
+          {
+            "unit": "s0079",
+            "quote": "三年薨"
+          },
+          {
+            "unit": "s0080",
+            "quote": "高宗為之舉哀，廢朝三日"
+          },
+          {
+            "unit": "s0080",
+            "quote": "陪葬昭陵"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-372",
+      "personId": "p076",
+      "evidenceUnits": [
+        "s0096",
+        "s0097"
+      ],
+      "before": {
+        "title": {
+          "en": "Duke Miu Chou",
+          "zh": "繆丑公"
+        },
+        "action": "posthumously named",
+        "receptionType": "posthumous"
+      },
+      "after": {
+        "title": {
+          "en": "Duke Miu Chou",
+          "zh": "繆丑公"
+        },
+        "action": "posthumously named",
+        "receptionType": "retrospective"
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-372",
+        "verdict": "supported",
+        "event": "Qin Xiu's assignment of the posthumous name Duke Miu Chou to the Western Jin official He Zeng, cited as precedent in the Tang debate.",
+        "reason": "s0096 and s0097 recount a Jin precedent inside the debate over Xu Jingzong's posthumous name. The claim carries no dateContext and asserts no Tang-era activity by He Zeng, so no endpoint is required. The name was conferred after He Zeng died (何曾薨), so receptionType retrospective is correct. Only the reception label changed.",
+        "evidence": [
+          {
+            "unit": "s0096",
+            "quote": "昔晉司空何曾薨，太常博士秦秀謚為繆丑公。"
+          },
+          {
+            "unit": "s0097",
+            "quote": "所以貶為繆丑。"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-373",
+      "personId": "p078",
+      "evidenceUnits": [
+        "s0099",
+        "s0100"
+      ],
+      "before": {
+        "title": {
+          "en": "Gong",
+          "zh": "恭"
+        },
+        "action": "posthumously named",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "詔從其議"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 672,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "title": {
+          "en": "Gong",
+          "zh": "恭"
+        },
+        "action": "posthumously named",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "詔從其議"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 672,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-373",
+        "verdict": "supported",
+        "event": "Edict adopting the posthumous name Gong for Xu Jingzong after the renewed deliberation following his AD 672 death.",
+        "reason": "The deliberation in s0099 and the edict 詔從其議 in s0100 follow the Xianheng 3 death recorded in s0079 after 咸亨元年 in s0078; no intervening era or year marker appears between s0080 and s0100, so AD 672 at year precision is supported. A posthumous name is retrospective reception. Only the reception label changed.",
+        "evidence": [
+          {
+            "unit": "s0078",
+            "quote": "咸亨元年"
+          },
+          {
+            "unit": "s0079",
+            "quote": "三年薨"
+          },
+          {
+            "unit": "s0099",
+            "quote": "請謚曰『恭』"
+          },
+          {
+            "unit": "s0100",
+            "quote": "詔從其議。"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-411",
+      "personId": "p101",
+      "evidenceUnits": [
+        "s0168"
+      ],
+      "before": {
+        "title": {
+          "en": "prefect of Weizhou",
+          "zh": "渭州刺史"
+        },
+        "action": "posthumously enfeoffed",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "title": {
+          "en": "prefect of Weizhou",
+          "zh": "渭州刺史"
+        },
+        "action": "posthumously enfeoffed",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-411",
+        "verdict": "supported",
+        "event": "Xianqing 3 (AD 658) posthumous grant of Prefect of Weizhou to Li Desheng, father of Li Yifu.",
+        "reason": "s0157 opens 顯慶元年, s0166 continues 二年 and s0168 三年，又追贈其父德晟為魏州刺史, so the grant is Xianqing 3 = AD 658 at year precision. 追贈 marks a grant after death, so receptionType retrospective is correct. The reception label is the only delta. The separate title.zh and action wording repair for this row does not touch the date.",
+        "evidence": [
+          {
+            "unit": "s0157",
+            "quote": "顯慶元年"
+          },
+          {
+            "unit": "s0166",
+            "quote": "二年，代崔敦禮為中書令"
+          },
+          {
+            "unit": "s0168",
+            "quote": "三年，又追贈其父德晟為魏州刺史"
+          }
+        ]
+      },
+      "amendment": "Taxonomy delta approved. The same row also needs the supplemental title.zh/action repair (requiredSupplementalRepairs.extraction[0]); the repair leaves its chronology unchanged."
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-412",
+      "personId": "p101",
+      "evidenceUnits": [
+        "s0168"
+      ],
+      "before": {
+        "kind": "posthumous-commemoration",
+        "role": "honoree",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "honoree",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "三年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 658,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-412",
+        "verdict": "supported",
+        "event": "Li Desheng as honoree of the AD 658 posthumous grant; retrospective reception, not personal activity in 658.",
+        "reason": "Same dated event as claim-411: 顯慶元年 (s0157), 二年 (s0166) and 三年 (s0168) fix Xianqing 3 = AD 658 at year precision. Desheng receives a 追贈 grant after death, so kind retrospective-reference with role honoree and receptionType retrospective is the correct taxonomy. Only kind and receptionType changed.",
+        "evidence": [
+          {
+            "unit": "s0157",
+            "quote": "顯慶元年"
+          },
+          {
+            "unit": "s0166",
+            "quote": "二年"
+          },
+          {
+            "unit": "s0168",
+            "quote": "又追贈其父德晟為魏州刺史"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-540",
+      "personId": "p118",
+      "evidenceUnits": [
+        "s0267"
+      ],
+      "before": {
+        "title": {
+          "en": "Yangzhou Area Commander-in-Chief",
+          "zh": "揚州大都督"
+        },
+        "action": "posthumously granted",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "如意元年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 692,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "title": {
+          "en": "Yangzhou Area Commander-in-Chief",
+          "zh": "揚州大都督"
+        },
+        "action": "posthumously granted",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "如意元年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 692,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-540",
+        "verdict": "supported",
+        "event": "Ruyi 1 (AD 692) posthumous grant by Empress Wu of Area Commander-in-Chief of Yangzhou to Li Yifu.",
+        "reason": "s0267 states 如意元年 explicitly; Ruyi 1 is AD 692 at year precision. Li Yifu had already died in exile in Qianfeng 1 (AD 666, s0232 乾封元年…發疾卒), so the 追贈 grant is retrospective reception. Only the reception label changed; title, action, sourceDate and westernYear are unchanged.",
+        "evidence": [
+          {
+            "unit": "s0267",
+            "quote": "如意元年"
+          },
+          {
+            "unit": "s0267",
+            "quote": "追贈義府揚州大都督"
+          },
+          {
+            "unit": "s0232",
+            "quote": "乾封元年"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reception-taxonomy-migration-proof-reuse-eligibility",
+      "itemId": "claim-541",
+      "personId": "p118",
+      "evidenceUnits": [
+        "s0267"
+      ],
+      "before": {
+        "kind": "posthumous-commemoration",
+        "role": "honoree",
+        "receptionType": "posthumous",
+        "dateContext": {
+          "sourceDate": {
+            "text": "如意元年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 692,
+            "precision": "year"
+          }
+        }
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "role": "honoree",
+        "receptionType": "retrospective",
+        "dateContext": {
+          "sourceDate": {
+            "text": "如意元年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 692,
+            "precision": "year"
+          }
+        }
+      },
+      "exactMatchToBytes": {
+        "beforeAtBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+        "afterAtBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+        "allListedFieldsEqual": true
+      },
+      "chronologyFieldsUnchanged": true,
+      "priorItemVerdict": "supported",
+      "freshItemCheck": {
+        "id": "claim-541",
+        "verdict": "supported",
+        "event": "Li Yifu as honoree of Empress Wu's AD 692 posthumous grant for his Yonghui-era support; retrospective reception after his AD 666 death.",
+        "reason": "s0267 dates the grant 如意元年 (AD 692) and names 義府 first among the six honored for 翊贊之功 in the Yonghui era; s0232 records his death in 乾封元年 (AD 666). This is later reception of a deceased honoree, so retrospective-reference / retrospective is correct. Only kind and receptionType changed.",
+        "evidence": [
+          {
+            "unit": "s0267",
+            "quote": "如意元年，則天以義府與許敬宗"
+          },
+          {
+            "unit": "s0267",
+            "quote": "在永徽中有翊贊之功"
+          },
+          {
+            "unit": "s0232",
+            "quote": "乾封元年，大赦，長流人不許還，義府憂憤發疾卒"
+          }
+        ]
+      }
+    }
+  ],
+  "requiredSupplementalRepairs": {
+    "note": "Definite defects in directly changed rows and their cited primary units. These are exact minimal fixes, not holds. This reviewer authored them, so the host must route them through the active editorial application with a separate reviewer. Batch them before the date closure: English edits change sourceHash (units include en and literal), and the claim-411 edit changes extractionHash. Chinese text is unchanged.",
+    "extraction": [
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "target": "extraction",
+        "itemId": "claim-411",
+        "claimIndex": 410,
+        "personId": "p101",
+        "predicate": "honor",
+        "evidenceUnits": [
+          "s0168"
+        ],
+        "zh": "三年，又追贈其父德晟為魏州刺史，諸子孩抱者並列清官，詔為造甲第，榮寵莫之能比。",
+        "fields": [
+          {
+            "field": "value.title.zh",
+            "before": "渭州刺史",
+            "after": "魏州刺史",
+            "reason": "s0168 reads 魏州刺史. 渭州 is a different prefecture, and no 渭州 occurs anywhere in the chapter. The romanized title.en \"prefect of Weizhou\" already fits 魏州, so only the Chinese title is wrong. This contradicts the source but has an exact fix, so it is not an unresolved hold."
+          },
+          {
+            "field": "value.action",
+            "before": "posthumously enfeoffed",
+            "after": "posthumously granted",
+            "reason": "追贈…為魏州刺史 is a posthumous grant of an office, not an enfeoffment. The replacement matches the parallel honor claims claim-220, claim-304 and claim-540 for the same construction."
+          }
+        ],
+        "chronologyImpact": "none: dateContext (sourceDate 三年, westernYear AD 658 year) and receptionType retrospective are untouched",
+        "identityImpact": "none: honor-claim title, not a name, surface or person record",
+        "blocksCompletionUntilApplied": true,
+        "routing": "Host claim revision through the editorial application path, with exact before-row and a separate reviewer, because this reviewer authored the repair."
+      }
+    ],
+    "english": [
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "unit": "s0080",
+        "field": "idiomatic",
+        "zh": "高宗為之舉哀，廢朝三日，詔文武百官就第赴哭，冊贈開府儀同三司、揚州大都督，陪葬昭陵。",
+        "before": "Gaozong mourned for him, suspended court for three days, and ordered civil and military officials to go to his residence to wail. He was posthumously granted Grand Master of the Palace with Golden Seal and Ribbon of the First Rank and Area Commander-in-Chief of Yangzhou, and was buried with honor at Zhaoling.",
+        "after": "Gaozong mourned for him, suspended court for three days, and ordered civil and military officials to go to his residence to wail. He was posthumously granted the honorary rank Kaifu Yitong Sansi (Opening an Office with Ceremonial Equal to the Three Excellencies) and the post of Area Commander-in-Chief of Yangzhou, and was buried with honor at Zhaoling.",
+        "reason": "The source title is 開府儀同三司. 'Grand Master of the Palace with Golden Seal' renders a different prestige title, 金紫光祿大夫, as in 18 of the 21 Jiu Tangshu units that use 'Golden Seal'. The replacement uses the same Kaifu Yitong Sansi form as extraction claim-304 and keeps the rest of the sentence."
+      },
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "unit": "s0080",
+        "field": "literal",
+        "zh": "高宗為之舉哀，廢朝三日，詔文武百官就第赴哭，冊贈開府儀同三司、揚州大都督，陪葬昭陵。",
+        "before": "Gaozong mourned for him, suspended court for three days, and ordered civil and military officials to go to his residence to wail. By edict he was posthumously granted the titles Grand Master of the Palace with Golden Seal and Ribbon of the First Rank and Area Commander-in-Chief of Yangzhou, and he was buried with honor at Zhaoling.",
+        "after": "Gaozong mourned for him, suspended court for three days, and ordered civil and military officials to go to his residence to wail. By edict he was posthumously granted the titles Opening an Office with Ceremonial Equal to the Three Excellencies (Kaifu Yitong Sansi) and Area Commander-in-Chief of Yangzhou, and he was buried with honor at Zhaoling.",
+        "reason": "Same mistranslation as the idiomatic field: 開府儀同三司 is not 金紫光祿大夫. The literal replacement translates 開府 (open an office), 儀同 (ceremonial equal to) and 三司 (the Three Excellencies) and keeps the transliteration."
+      },
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "unit": "s0168",
+        "field": "idiomatic",
+        "zh": "三年，又追贈其父德晟為魏州刺史，諸子孩抱者並列清官，詔為造甲第，榮寵莫之能比。",
+        "before": "In the third year his father Desheng was posthumously enfeoffed as prefect of Weizhou; all his sons, even those still in arms, were given posts in the pure offices. An edict ordered a grand mansion built for him—honor and favor none could match.",
+        "after": "In the third year his father Desheng was also posthumously granted the title Prefect of Weizhou; all his sons, even those still in arms, were given posts in the pure offices. An edict ordered a grand mansion built for him—honor and favor none could match.",
+        "reason": "追贈…為魏州刺史 confers an office posthumously; 刺史 is a prefectural post, not a fief, so 'enfeoffed' is a mistranslation. The replacement also restores 又 ('also'), which marks this as a further favor after Li Yifu's own promotions in s0166-s0167."
+      },
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "unit": "s0168",
+        "field": "literal",
+        "zh": "三年，又追贈其父德晟為魏州刺史，諸子孩抱者並列清官，詔為造甲第，榮寵莫之能比。",
+        "before": "In the third year his father Desheng was posthumously enfeoffed as prefect of Weizhou; all his sons, even those still in arms, were given posts in the pure offices. An edict ordered a grand mansion built for him—honor and favor none could match.",
+        "after": "In the third year his father Desheng was further posthumously granted the office of Prefect of Weizhou; all his sons, even those still in arms, were given posts in the pure offices. An edict ordered a grand mansion built for him—honor and favor none could match.",
+        "reason": "Same correction in the literal field: 追贈 is a posthumous grant of the office 魏州刺史, not an enfeoffment, and 又 (further) was omitted."
+      },
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "unit": "s0267",
+        "field": "idiomatic",
+        "zh": "如意元年，則天以義府與許敬宗、御史大夫崔義玄、中書舍人王德儉、大理正侯善業、大理丞袁公瑜等六人，在永徽中有翊贊之功，追贈義府揚州大都督，義玄益州大都督，德儉魏州刺史，公瑜江州刺史。",
+        "before": "In 692 Empress Zetian, because Yifu together with Xu Jingzong, Censor-in-Chief Cui Yixuan, Palace Secretariat Drafter Wang Dejian, Senior Corrector of the Court of Judicial Review Hou Shanye, and Corrector of the Court of Judicial Review Yuan Gongyu—the six men who during the Yonghui era had rendered meritorious support—posthumously enfeoffed Yifu as Area Commander-in-Chief of Yangzhou, Yixuan as Area Commander-in-Chief of Yizhou, Dejian as Prefect of Weizhou, and Gongyu as Prefect of Jiangzhou.",
+        "after": "In 692, because Yifu, together with Xu Jingzong, Censor-in-Chief Cui Yixuan, Palace Secretariat Drafter Wang Dejian, Senior Corrector of the Court of Judicial Review Hou Shanye, and Corrector of the Court of Judicial Review Yuan Gongyu—six men in all—had rendered meritorious support during the Yonghui era, Empress Zetian posthumously granted Yifu the title Area Commander-in-Chief of Yangzhou, Yixuan Area Commander-in-Chief of Yizhou, Dejian Prefect of Weizhou, and Gongyu Prefect of Jiangzhou.",
+        "reason": "追贈 confers posthumous offices (大都督, 刺史), not fiefs, so 'enfeoffed' is a mistranslation. The before text also leaves the 'because' clause (以…有翊贊之功) without a finite verb, because 'had rendered' sits inside the parenthetical. The replacement keeps all six names and all four grants exactly as in the source."
+      },
+      {
+        "book": "jiutangshu",
+        "chapter": "086",
+        "unit": "s0267",
+        "field": "literal",
+        "zh": "如意元年，則天以義府與許敬宗、御史大夫崔義玄、中書舍人王德儉、大理正侯善業、大理丞袁公瑜等六人，在永徽中有翊贊之功，追贈義府揚州大都督，義玄益州大都督，德儉魏州刺史，公瑜江州刺史。",
+        "before": "In the first year of Ruyi, Zetian, because Yifu together with Xu Jingzong, Censor-in-Chief Cui Yixuan, Palace Secretariat Drafter Wang Dejian, Senior Corrector of the Court of Judicial Review Hou Shanye, and Corrector of the Court of Judicial Review Yuan Gongyu—six men who during Yonghui had rendered meritorious support—posthumously enfeoffed Yifu as Area Commander-in-Chief of Yangzhou, Yixuan as Area Commander-in-Chief of Yizhou, Dejian as Prefect of Weizhou, and Gongyu as Prefect of Jiangzhou.",
+        "after": "In the first year of Ruyi, Zetian, because Yifu together with Xu Jingzong, Censor-in-Chief Cui Yixuan, Palace Secretariat Drafter Wang Dejian, Senior Corrector of the Court of Judicial Review Hou Shanye, and Corrector of the Court of Judicial Review Yuan Gongyu—six men—had rendered meritorious support during Yonghui, posthumously granted Yifu [the post of] Area Commander-in-Chief of Yangzhou, Yixuan Area Commander-in-Chief of Yizhou, Dejian Prefect of Weizhou, and Gongyu Prefect of Jiangzhou.",
+        "reason": "Same correction in the literal field: 追贈 is a posthumous grant of office, not an enfeoffment, and 有翊贊之功 needs to be the finite verb of the 以 ('because') clause rather than a relative clause inside the dash parenthetical."
+      }
+    ],
+    "englishRepairsDocumentSha256": "sha256:8790aa0ab836ad84e0a3065c0a97b6ea575336a215463804a62c5ee33e5e3a65",
+    "checkedWithoutChange": [
+      {
+        "unit": "s0048",
+        "fields": [
+          "idiomatic",
+          "literal"
+        ],
+        "result": "accurate: 尋贈其父善心為冀州刺史 is rendered as a posthumous grant of Prefect of Jizhou"
+      },
+      {
+        "unit": "s0096",
+        "fields": [
+          "idiomatic",
+          "literal"
+        ],
+        "result": "accurate: Qin Xiu gave He Zeng the posthumous name Duke Miu Chou"
+      },
+      {
+        "unit": "s0097",
+        "fields": [
+          "idiomatic",
+          "literal"
+        ],
+        "result": "accurate; the idiomatic \"demeaning name\" and the literal \"demoted to\" both render 貶"
+      },
+      {
+        "unit": "s0099",
+        "fields": [
+          "idiomatic",
+          "literal"
+        ],
+        "result": "accurate"
+      },
+      {
+        "unit": "s0100",
+        "fields": [
+          "idiomatic",
+          "literal"
+        ],
+        "result": "accurate"
+      }
+    ]
+  },
+  "heldCases": [],
+  "staleChronologyDetermination": {
+    "staleCause": "extractionHash only. The report pins sha256:968830dce12bcf16f56ff572b23d7543a4c6ded3b7d0ccdb21e767b05b046477, the native packet hash of extraction blob 0d28e10f (commit 8199d626). The current packet hash is sha256:042bfdf87fdf8ad0161d4eed93f327d5a6262e07101e6357e889c2d3157f60a2. sourceHash sha256:5f7e50e521bfb70e2aa14b606cc32e0b42461a8f8cba217a2b154af9b47ff4f0 is equal on both.",
+    "differingItems": [
+      "claim-220",
+      "claim-221",
+      "claim-304",
+      "claim-305",
+      "claim-372",
+      "claim-373",
+      "claim-411",
+      "claim-412",
+      "claim-540",
+      "claim-541"
+    ],
+    "differingFields": "receptionType on all 10 rows; kind on claim-221, claim-305, claim-412 and claim-541. No dateContext, westernYear, sourceDate, certainty or evidence field differs.",
+    "unchangedPacketComponents": {
+      "units": 270,
+      "people": 163,
+      "unitPeople": "identical",
+      "itemIds": "449 identical and same order",
+      "unchangedItems": 439
+    },
+    "sealedReportAgainstSealedExtraction": "fails under current code with \"Date approval retains invalid temporal geometry or reception ownership\" (14 diagnostics, all removed-posthumous-label errors on the 10 rows). The defect is taxonomy only.",
+    "reTagOriginalInPlace": "not permitted: it would attribute approval of the current extraction to \"Independent Jiu Tangshu 086 initial chronology reviewer\", who reviewed only the older labels",
+    "nativeClosure": {
+      "viable": true,
+      "mechanism": "Host-owned `npm run people:dates:record -- --report <composed>` (recordDateAudit). It runs production validateDateAuditReport and dateAuditReferencesCurrent, archives the original report to data/people/date-audit-history/jiutangshu/086/be542f6397c3d1dd6231a575de1570e22bc702a54e46b69ec2d43a7adc53ebda.json, then writes the new report.",
+      "composition": "Start from the original report document (sha256:be542f63...). Set sourceHash/extractionHash to the final post-repair packet. Set reviewer to this independent scoped reviewer with independentOfExtractor true. Keep reviewedUnits, personChecks, findings [], references [], translationReview and the 439 unchanged itemChecks verbatim. Replace only the 10 changed itemChecks with freshItemCheck above. Record reuse provenance (original report hash, original reviewer name, reviewedAt 2026-09-29T16:13:07.796Z) in the host receipt.",
+      "notApplicable": [
+        "scripts/reconcile-stale-people-date-workflow.mjs: requires a dateAudits reservation, and none exists or ever existed for jiutangshu/086 in the ledger history",
+        "combined curation: requires an unfinished retained date generation and an active/research-blocked date claim, neither of which exists"
+      ],
+      "hostPrerequisites": [
+        "reserve the dateAudits key under the normal shared-queue rules before recording",
+        "apply and separately review the supplemental repairs first, then build the final packet",
+        "confirm the final packet changes only claim-411 among items and no zh text"
+      ]
+    }
+  },
+  "historicalAuthorship": {
+    "extraction": {
+      "lane": "grokbot",
+      "worker": "grokbot-28",
+      "model": "Grok Bot-chunked",
+      "promptVersion": 7,
+      "chunks": 7,
+      "chunkRunIds": [
+        "jts086-c001",
+        "jts086-c002",
+        "jts086-c003",
+        "jts086-c004",
+        "jts086-c005",
+        "jts086-c006",
+        "jts086-c007"
+      ],
+      "runAgentId": null,
+      "evidence": "extraction.run bytes; ledger claim (commits d65f726e37, b619742487^) note \"Imported direct attachment ... sha256 e7718f68bd8a77c1d6155dfc721a9c88f757d6c965054784f410cd98ffa9c9f8\", which equals the raw bytes of extraction blob c918dc28 at commit 47a2307774"
+    },
+    "sealedGeneration": {
+      "commit": "8199d626bf14b0a33ccd94d597a3fca8545334b6",
+      "subject": "Correct reviewed Jiutangshu names and reign references in both English fields",
+      "gitAuthor": "GarrettPetersen",
+      "extractionBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+      "packetExtractionHash": "sha256:968830dce12bcf16f56ff572b23d7543a4c6ded3b7d0ccdb21e767b05b046477",
+      "editorialReviewerAgentIds": [
+        "019ea934-1759-7410-a2ad-48546e8db30a",
+        "01a0a135-0b59-71c0-bc4f-cfdffef6f4a4"
+      ]
+    },
+    "dateAudit": {
+      "commit": "227f3cb5e8d039006ed051b2a29ce9e9a586d27c",
+      "gitAuthor": "GarrettPetersen",
+      "reviewerName": "Independent Jiu Tangshu 086 initial chronology reviewer",
+      "reviewerAgentId": "unknown (not recorded in report bytes; no dateAudits ledger reservation observed)",
+      "reviewedAt": "2026-09-29T16:13:07.796Z"
+    },
+    "taxonomyMigration": {
+      "writerCommit": "d674f0e9a2a39ca9713e01d086b576cfd2f6872c",
+      "subject": "fix: reconcile retired reception labels",
+      "gitAuthor": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+      "authoredAt": "2026-10-08T22:43:51Z",
+      "parent": "8597eb63180f803a8bafa251c8bf15eb07a8d2f6",
+      "blobTransition": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45 -> a55920bec3288e86ae8d95adb08e5561d84b9578 (10 additions, 10 deletions)",
+      "reproduced": "reconcileRetrospectiveExtraction(parsed blob 0d28e10f) yields packet hash sha256:042bfdf8... exactly, with exactly the 10 changed rows",
+      "promotion": {
+        "pr": 4605,
+        "squashCommit": "bb9e73078a5fa0aa15aef3b303f175ee61e1ed45",
+        "base": "master",
+        "head": "codex/people-glossary-staging-v2",
+        "mergedAt": "2026-10-08T23:24:38Z",
+        "bytesUnchangedSincePromotion": true
+      },
+      "executingAgentId": "unknown (not observed; the plan receipt data/people/generated/retrospective-taxonomy-reconciliation-20261006.json is ignored local state absent from this checkout)"
+    },
+    "ownerHandoff": {
+      "commit": "c5a9e16b93e799dc2c9458fedc5a87374b85e09d",
+      "gitAuthor": "Cursor Agent",
+      "ownerAgentId": "bc-7e463767-133a-4f87-aab6-c0f63ebf6684",
+      "ledgerChapterOwner": {
+        "jobId": "nov24-separate-transport-jiutangshu-086",
+        "worker": "cursor-nov24-retained-blocked-owner-2",
+        "status": "active",
+        "queueCommit": "743c6f40ee20e0625ec8276ff19fb58c7642bab1"
+      }
+    }
+  },
+  "ownerHandoffCorrections": [
+    "pinnedInputs.*.contentSha256 are parsed-JSON document hashes (sha256 of JSON.stringify), not raw file-byte hashes. Raw byte hashes are listed in pinnedEvidence. The values are correct for what they actually measure.",
+    "proofReuseCandidate.permittedBy names reconcileRetrospectiveExtraction. That function proves the delta but grants no reuse. Reuse requires the recorded composition described under staleChronologyDetermination.nativeClosure.",
+    "The handoff reports no defects in the changed rows, but claim-411 title.zh contradicts s0168, and the cited units s0080, s0168 and s0267 carry definite English mistranslations (see requiredSupplementalRepairs)."
+  ],
+  "pinnedEvidence": {
+    "ownerRevision": "c5a9e16b93e799dc2c9458fedc5a87374b85e09d",
+    "stagingCommit": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+    "source": {
+      "path": "data/jiutangshu/086.json",
+      "gitBlob": "14177b014e00f5c5b20c8e6434c659a6534cb71c",
+      "byteSha256": "sha256:9be0a745d5182a942cea527c49674f9b84bc90ed032af5583c3a75e9dc83eab4",
+      "documentSha256": "sha256:1b8237a39debc5d680aa46d76288f7ba7f699c8b381e87c1cd0608dbca625637",
+      "packetSourceHash": "sha256:5f7e50e521bfb70e2aa14b606cc32e0b42461a8f8cba217a2b154af9b47ff4f0",
+      "lastChangedCommit": "8199d626bf14b0a33ccd94d597a3fca8545334b6",
+      "unchangedVersusPriorAudit": true
+    },
+    "sealedExtraction": {
+      "path": "data/people/extractions/jiutangshu/086.json",
+      "commit": "8199d626bf14b0a33ccd94d597a3fca8545334b6",
+      "gitBlob": "0d28e10f372bfea39dcd5e0de17cab4bdbee6b45",
+      "byteSha256": "sha256:3f6d03fea839ccda59b9ac80a2811a9bfc4c3a1fabf6caaf156db31cb6529481",
+      "packetExtractionHash": "sha256:968830dce12bcf16f56ff572b23d7543a4c6ded3b7d0ccdb21e767b05b046477"
+    },
+    "currentExtraction": {
+      "path": "data/people/extractions/jiutangshu/086.json",
+      "gitBlob": "a55920bec3288e86ae8d95adb08e5561d84b9578",
+      "byteSha256": "sha256:41a554d85a9e7b5e113e785132e250ff319b078b52b63c1d685f142a7f38e50e",
+      "packetExtractionHash": "sha256:042bfdf87fdf8ad0161d4eed93f327d5a6262e07101e6357e889c2d3157f60a2",
+      "claims": 631
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiutangshu/086.json",
+      "gitBlob": "94a4f47369582fe7bfa1981c4184647fba045915",
+      "byteSha256": "sha256:e546864b0e758510493f70ea0d306e7211300cb1dd1d37e24d58f4531623992f",
+      "documentSha256": "sha256:be542f6397c3d1dd6231a575de1570e22bc702a54e46b69ec2d43a7adc53ebda",
+      "status": "audited",
+      "extractionHashPinned": "sha256:968830dce12bcf16f56ff572b23d7543a4c6ded3b7d0ccdb21e767b05b046477",
+      "reviewer": {
+        "name": "Independent Jiu Tangshu 086 initial chronology reviewer",
+        "independentOfExtractor": true
+      },
+      "reviewedAt": "2026-09-29T16:13:07.796Z",
+      "counts": {
+        "reviewedUnits": 270,
+        "itemChecks": 449,
+        "personChecks": 163,
+        "findings": 0,
+        "references": 0
+      },
+      "preserveOriginalBytesAndReviewer": true,
+      "doNotRetagExtractionHashOnHistoricalReport": true
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiutangshu/086.json",
+      "gitBlob": "0b03a8b5d4390e7a713bf69bc56b73fae47a9fd2",
+      "byteSha256": "sha256:425994882a910ea66b2ea841a2d1133f001d94d2fcc576165f3f378aa4e70235",
+      "documentSha256": "sha256:54a46b13f728ba41f42b525e02d9b1342785a8711602d2081d2a5639b1eb9b89",
+      "reviews": 2,
+      "decisions": 11,
+      "touchesChangedRowsOrUnits": false,
+      "retainUnchangedAndOrdered": true
+    },
+    "ownerProposal": {
+      "path": "research/people/checkpoints/campaign-nov24-retained-blocked/jiutangshu-086/owner-handoff.json",
+      "sha256": "903edb1ef1f98b011583ab9d0ada6102b36e0441c4b1b16a668edef6c3c3a4bf",
+      "patchCount": 10,
+      "allBeforeAfterFieldsMatchBytes": true
+    }
+  },
+  "affectedNativeDependencies": [
+    {
+      "dependency": "data/people/date-audits/jiutangshu/086.json",
+      "currentStatus": "stale",
+      "reason": "extractionHash mismatch only",
+      "approvedAction": "after the supplemental repairs, host records the composed complete report via people:dates:record; the original is archived to date-audit-history automatically",
+      "expectedAfter": "audited"
+    },
+    {
+      "dependency": "data/people/extractions/jiutangshu/086.json",
+      "currentStatus": "valid (people:validate passes)",
+      "approvedAction": "retain the 10 taxonomy rows; apply the claim-411 title.zh/action revision; record translationRepairs for the six English field fixes; refresh input fingerprints through the normal editorial application",
+      "expectedPacketItemDelta": [
+        "claim-411"
+      ]
+    },
+    {
+      "dependency": "data/jiutangshu/086.json",
+      "currentStatus": "unchanged since 8199d626",
+      "approvedAction": "apply the English fixes to s0080, s0168 and s0267 (literal and idiomatic); no zh change",
+      "effect": "packet sourceHash and chapterFingerprint change; chronology checks are zh-based and remain valid"
+    },
+    {
+      "dependency": "data/people/editorial-decisions/jiutangshu/086.json",
+      "currentStatus": "valid",
+      "approvedAction": "append one new review for the supplemental repairs by a reviewer other than this author; keep the two prior reviews (019ea934..., 01a0a135...) byte-identical and ordered"
+    },
+    {
+      "dependency": "identity",
+      "currentStatus": "unchanged",
+      "approvedAction": "none: no person, name, surface or mention row is touched by the delta or the repairs"
+    },
+    {
+      "dependency": "npm run people:dates:verify -- --book jiutangshu --chapter 086",
+      "currentStatus": "stale (exit 1)",
+      "expectedAfter": "audited"
+    }
+  ],
+  "validation": {
+    "environment": "shared host checkout at exact owner revision; npm install of gitignored dependencies only; no build, no worktree, no canonical write",
+    "resourceGuard": {
+      "command": "npm run people:disk:check",
+      "passed": true,
+      "errors": []
+    },
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jiutangshu --chapter 086",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jiutangshu/086: 1 extraction(s), 163 local people, 617 mentions, 1070 claims, 0 proposed repair(s), 8 applied repair(s), 11 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s)."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jiutangshu --chapter 086",
+      "passed": false,
+      "status": "stale",
+      "exitCode": 1,
+      "note": "this is the blocker under review, not a chronology defect"
+    },
+    "nativePacket": {
+      "builder": "buildDateAuditPacket",
+      "sourceHash": "sha256:5f7e50e521bfb70e2aa14b606cc32e0b42461a8f8cba217a2b154af9b47ff4f0",
+      "extractionHash": "sha256:042bfdf87fdf8ad0161d4eed93f327d5a6262e07101e6357e889c2d3157f60a2",
+      "items": 449,
+      "people": 163,
+      "units": 270,
+      "diagnostics": 0,
+      "unresolved": 0
+    },
+    "reconciliationReplay": {
+      "function": "reconcileRetrospectiveExtraction",
+      "input": "blob 0d28e10f (commit 8199d626)",
+      "outputPacketHash": "sha256:042bfdf87fdf8ad0161d4eed93f327d5a6262e07101e6357e889c2d3157f60a2",
+      "matchesCurrent": true,
+      "changedRows": 10,
+      "topLevelDrift": "none"
+    },
+    "originalReportAgainstCurrentPacket": {
+      "result": "Date audit report is stale",
+      "expected": true
+    },
+    "composedReportAgainstCurrentPacket": {
+      "function": "validateDateAuditReport + dateAuditReferencesCurrent",
+      "passed": true,
+      "reusedItemChecks": 439,
+      "freshItemChecks": 10,
+      "personChecks": 163,
+      "reviewedUnits": 270
+    },
+    "composedReportAgainstPostRepairSimulation": {
+      "passed": true,
+      "simulatedSourceHash": "sha256:8e6726a1a61ebef6c971a8e0bbc8294fa3b7483983309389bcf15236b1807eef",
+      "simulatedExtractionHash": "sha256:da6c15e3c02494d20322a7711ab03f039336f6e9997a826badac3b3c8076c5d9",
+      "itemsChanged": [
+        "claim-411"
+      ],
+      "zhChanged": false,
+      "note": "In-memory simulation only. It omits the extraction input-fingerprint and translationRepairs updates of the real editorial application, so the final hashes will differ. The host must recompute them."
+    },
+    "chronologyRechecked": {
+      "Xianqing 3": "AD 658 (s0047/s0157 顯慶元年 anchors)",
+      "Xianheng 3": "AD 672 (s0078 咸亨元年, s0079 三年薨)",
+      "Ruyi 1": "AD 692 (s0267 explicit)",
+      "Li Yifu death": "Qianfeng 1, AD 666 (s0232), before the 692 grant"
+    },
+    "freshItemChecksDocumentSha256": "sha256:fc5c58d4ee47b564b6c4bf843306d0648b3dfa158094c095cd6a56a8b6982288"
+  },
+  "notes": "Owner handoff is not approval, and neither is this review: it is the independent scoped delta approval only. Canonical source, extraction, editorial and date-audit files are untouched. The host performs repair application, separate review of these worker-authored repairs, the dateAudits reservation, recording and publication."
+}
