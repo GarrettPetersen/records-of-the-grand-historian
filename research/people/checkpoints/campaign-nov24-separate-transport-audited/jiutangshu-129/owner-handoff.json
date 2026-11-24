@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "129"
+  },
+  "ownerAgentId": "bc-8b552cba-a56f-4b55-8194-bc17c4abf8a7",
+  "workerId": "cursor-nov24-separate-transport-owner-3",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "bdde53dce4429462d8bd2f123045e6d124b0096fda3a995724e72df206679311",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-jiutangshu-129-abf8a7",
+  "inputBlobWitness": {
+    "source": "25e344ce633b9bc301a46299f0cdcc35ed2fe212",
+    "extraction": "fce5bedadd55807d123d711aebf82ea7d30293ad",
+    "dateAudit": "2b74d80d09247960efa5e20fb430509a48b187a1",
+    "editorial": "2c3b4f8be7527aeed39dfabad35f814df36acf81"
+  },
+  "sealedInputs": {
+    "source": "sha256:7d12f045eae916c6fac41d550f9e30664f1eaca1ef40f2f8d226897f995321aa",
+    "extraction": "sha256:57cbcd45c2ded6683496f8cbc40f33651c00f09732d006998a369a8d4221d817",
+    "dateAudit": "sha256:47c3f1bdde6fa84b567e3501f575c242932128b83ff5dab757e5ef288b751cba",
+    "editorial": "sha256:05bd49e883f711d1cc5c993c0befb553e0bc3e821df5731b203b85d843e64b9e"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiutangshu --chapter 129",
+    "summary": "Scoped person data validation passed for jiutangshu/129: 1 extraction(s), 139 local people, 679 mentions, 1769 claims, 0 proposed repair(s), 26 applied repair(s), 26 editorial decision(s), 1 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 249,
+      "translatedCount": 249,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": [],
+      "danglingEvidenceUnits": 0,
+      "editorialRepairsReflectedInSource": true
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Reviewed 249 units, 652 checks, and 139 people.",
+    "editorialDecisionCount": 25,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book jiutangshu --chapter 129",
+      "status": "audited",
+      "findings": 0
+    }
+  },
+  "substantiveFindings": "Full Chinese chapter read against sealed extraction, accepted applied editorial repairs, and audited chronology at pinned blobs. All 249 units carry paired literal and idiomatic English; accepted editorial text repairs are present in source. Local person rows, claim evidence units, and name/person references align with primary citations; no dangling evidence, unsupported chronology, false merge signal, or new definite English omission found in this source-owner pass.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 115,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "115 prepared identity review case(s) in 5 sealed transport part(s); owner handoff is not independent identity approval."
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate and people:dates:verify; editorial source reflection check; chapter-local person and evidence spot-check; no canonical extraction or source edits; no local corpus registry generation.",
+    "sourceTitle": "Volume 125 Biographies 75: Zhang Yi, Liu Congyi, Xiao Fu, Liu Hun",
+    "completedAt": "2026-11-24T14:53:29.367Z",
+    "peopleLookupNote": "Bounded corpus dossier lookup deferred to CI-sealed registry generation; chapter-scoped validation and evidence inspection completed without local catalog rebuild per LOCAL_DISK_STRATEGY."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiutangshu --chapter 129"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
