@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "144"
+  },
+  "ownerAgentId": "bc-57d78b4f-f75f-42da-927e-a8e87fa358e5",
+  "campaignWorker": "cursor-nov24-partitioned-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "79ae4c4de6c6739c3dc12f011c3b789dba50e3c1",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-partitioned-owner-transports",
+    "commit": "9be1bddf9a2d45496c8f0694583a74b973ec027c",
+    "planFingerprint": "sha256:3162b1297f707b84e6518f683844c70f1e094bd280ea95087e99f63d36f16b12",
+    "sourcePacketSha256": "sha256:45d6811332b366d290e1fe81f7dd884f6ae72f2ebcda21e5fe2ad8ffc9290e47",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:3e136576d0fd0b1f30c8f99fd63f1c7b60ed2e329d70701555fd21203da85d65",
+        "caseCount": 23
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:b630fb80f2ad68bad9b2bd4aa6171868b40dc9d8868964b9acb6d3a87827afcf",
+        "caseCount": 23
+      }
+    ],
+    "preparationReceiptSha256": "sha256:7b4928181c94ef6c6fea23b1a29a35608aa8956ebbc4f792c5ad9d7865dab301"
+  },
+  "sealedInputs": {
+    "source": "sha256:e08f3a21a464ca29cc08665bced0747294e16cea50274e331693abc690fb9778",
+    "extraction": "sha256:29d0ac6c900bba44851fe82af62a673306e1b8f5943902936204634f1f0da2a9",
+    "editorial": "sha256:0b79d217940704df07c492ff76baffe61d1f4fbe553d66b13404d5839036ce54",
+    "dateAudit": "sha256:16bf2296a65aa6344534febf664f4100371b854a7185359ded2d4e54fcc59a35"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "7 applied editorial decisions; no pending proposals",
+  "reviewCases": 46,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 46 cases retain preparation-proposed canonicalPersonId with unresolvedIdentity true. 28 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:d5cc5f0d3524738316215f4d5b33766346e1a09f7ab9705360823e6bbdbd9571",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/transport-part-002.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-144/transport-part-002.json",
+    "validateChapter": "npm run people:validate -- --book jiuwudaishi --chapter 144"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
