@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T03:07:34.362Z",
+  "lastCheckedAt": "2026-11-24T03:08:54.875Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1654,13 +1654,20 @@
     "buildPerformanceCandidate": {
       "status": "prepared",
       "ref": "codex/cursor-glossary-nov24-2026-build-performance",
-      "revision": "1e7eab410e13c46b7cb5fd7d5822d45365e9b6b8",
+      "revision": "6fe2ba7f3ab5e6ed587c7737b7950c2b66de09dc",
       "parent": "27bdef9780609853f79a030dcd8a5750a3ffb97a",
       "paths": [
         "scripts/compile-people-catalog.mjs"
       ],
-      "hypothesis": "Separate chapter-local dossiers from cross-chapter read batches to reduce repeated native normalization. Bound temporary in-memory member references and preserve dossier and output order.",
-      "comparison": "Compare full-site build and existing release checks against the exact unchanged-data preflight, including chapter loads, compile time and heap."
+      "hypothesis": "Group exact source reads across bounded sets of adjacent canonical dossiers without changing member or output order.",
+      "comparison": "Compare full-site build and existing release checks against the exact unchanged-data preflight, including chapter loads, compile time and heap.",
+      "fixture": {
+        "chapters": 100,
+        "dossiers": 2401,
+        "retainedMemberOrder": true,
+        "baselineLoads": 203,
+        "batchedLoads": 120
+      }
     }
   },
   "reviewRuns": {
