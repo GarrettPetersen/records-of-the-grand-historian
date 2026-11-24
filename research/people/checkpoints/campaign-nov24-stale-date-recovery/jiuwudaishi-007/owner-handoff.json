@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "stale-date-recovery-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "007"
+  },
+  "ownerAgentId": "bc-7eb9513a-4f87-4189-ae03-a92281c6deea",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingCommit": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "gitSourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "staleReason": "extractionHash changed while sourceHash unchanged; prior audited date report sealed to older extraction",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/jiuwudaishi/007.json",
+      "gitBlob": "975eee16f61e2d86d6a35b188f28e7dae0eac4df",
+      "contentSha256": "sha256:cddbf0ead60f3ed1efc9ac585eb39c5bb82a9f8738ecf9d19585105c7984257d"
+    },
+    "extraction": {
+      "path": "data/people/extractions/jiuwudaishi/007.json",
+      "gitBlob": "d2acf89a730e90b504c30a68bebb83393938e034",
+      "contentSha256": "sha256:46fcd90fb8610f6b4ef9436e25a282d3b9c549c576ddfb765d473d0876715c12"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/jiuwudaishi/007.json",
+      "gitBlob": "210051e13df7bd392a6c946c0a7482c93410b7e0",
+      "contentSha256": "sha256:4513e5ab701440b2975479381e379e906c6bbe00c41a983e08adcd43d32f078f"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/jiuwudaishi/007.json",
+      "gitBlob": "386a8806b40dfc3d1890520d22c4ffd44bfd92f5",
+      "contentSha256": "sha256:d9bc829fd4a10ae54275c80701caa8efb807118237588db5de3f11286d43d261"
+    }
+  },
+  "priorDateAudit": {
+    "status": "audited",
+    "reviewedAt": "2026-09-28T21:27:46.985Z",
+    "extractionHash": "sha256:95796d250b534c3c6eb0ac3d4aebaa05aa9ff7a42ee4f3b1891e220044c4c0d8",
+    "sourceHash": "sha256:cddbf0ead60f3ed1efc9ac585eb39c5bb82a9f8738ecf9d19585105c7984257d",
+    "preserved": true,
+    "overwritten": false
+  },
+  "oldProofMatching": {
+    "sealedExtractionLocated": true,
+    "sealedCommit": "206baee3e00a58a33a5d5e1fbd1b7b4462416001",
+    "auditExtractionHashMatch": true,
+    "validateAgainstSealedPacket": {
+      "ok": false,
+      "error": "Date approval retains invalid temporal geometry or reception ownership",
+      "diagnostics": [
+        {
+          "item": "claim-232",
+          "personId": "p009",
+          "problem": "receptionType must be retrospective"
+        },
+        {
+          "item": "claim-232",
+          "personId": "p009",
+          "problem": "Removed posthumous reception kind; reconcile it explicitly to retrospective-reference"
+        }
+      ]
+    },
+    "validateAgainstCurrentPacket": {
+      "ok": false,
+      "error": "Date audit report is stale"
+    }
+  },
+  "affectedClaims": [
+    {
+      "itemId": "claim-232",
+      "personId": "p009",
+      "evidenceUnits": [
+        "s0016"
+      ],
+      "chronologyUnchanged": true,
+      "changeKind": "reception-taxonomy-migration",
+      "before": {
+        "kind": "posthumous-commemoration",
+        "receptionType": "posthumous"
+      },
+      "after": {
+        "kind": "retrospective-reference",
+        "receptionType": "retrospective"
+      }
+    }
+  ],
+  "proofReuseCandidate": {
+    "permittedBy": "scripts/lib/people-reception-reconciliation.mjs#reconcileRetrospectiveExtraction",
+    "sealedExtractionRecovery": {
+      "commit": "206baee3e00a58a33a5d5e1fbd1b7b4462416001",
+      "extractionHash": "sha256:95796d250b534c3c6eb0ac3d4aebaa05aa9ff7a42ee4f3b1891e220044c4c0d8",
+      "matchesAuditSeal": true
+    },
+    "reconciledExtractionMatchesCurrent": true,
+    "chronologyFactChanges": 0,
+    "receptionRelabelClaims": 1,
+    "note": "Native reconciliation bridges sealed extraction to current without chronology edits. Owner does not approve proof reuse."
+  },
+  "minimumIndependentContinuation": {
+    "chronology": "Confirm every reconcileRetrospectiveExtraction change is reception-only; re-read affected items if any chronology field diverges.",
+    "identity": "No extraction person-ID churn; scope identity unchanged pending normal gates.",
+    "dateAudit": "Either scoped re-audit of reception relabels or full chronology re-audit against current packet; owner handoff is not approval."
+  },
+  "nativeValidation": {
+    "peopleValidate": "npm run people:validate -- --book jiuwudaishi --chapter 007",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book jiuwudaishi --chapter 007",
+    "currentPacketDiagnostics": [],
+    "sealedPacketDiagnostics": [
+      {
+        "item": "claim-232",
+        "personId": "p009",
+        "problem": "receptionType must be retrospective"
+      },
+      {
+        "item": "claim-232",
+        "personId": "p009",
+        "problem": "Removed posthumous reception kind; reconcile it explicitly to retrospective-reference"
+      }
+    ]
+  },
+  "independentReviewCompleted": false,
+  "notes": "Preserve historical date-audit JSON bytes; do not retag extractionHash on the report."
+}
