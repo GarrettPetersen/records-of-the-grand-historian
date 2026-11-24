@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "kind": "cross-corpus-identity-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "107"
+  },
+  "ownerAgentId": "bc-0eb589e8-bd06-4e8c-bf58-1afc35d46126",
+  "campaignWorker": "cursor-nov24-audited-recovery-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sourceRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "stagingRevision": "4fb37f54d87fb2a0788d1c6b03014b46071d6254",
+  "transportCommit": "92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6",
+  "transportBranch": "codex/cursor-glossary-nov24-2026-audited-owner-transport",
+  "transportSha256": "0f5f553b77a47e3ae299b539318ca81c42cc09f6165456815571de987b43dd17",
+  "planFingerprint": "sha256:e2b3d3c259f3e0c7f375b647a4ff8f5a344c6fbe590859822326b417e2bb71a7",
+  "reviewCases": 26,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-107/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-107/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-107/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-107/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-107/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransport": "git show 92a27d3c8d2ce5fd4ec58c08e081d401bd5534d6:research/people/checkpoints/campaign-audited-transport-20261124/liaoshi-107/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 107"
+  },
+  "notes": "Owner evidence is not independent approval; no canonical extraction edits."
+}
