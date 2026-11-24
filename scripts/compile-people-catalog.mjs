@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
 import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
+import { createPeopleCorpusReader, loadValidatedPeopleCorpusOnDemand } from './lib/people-corpus-reader.mjs';
 import { identityInputSeal, peopleDigest } from './lib/people-identity-seal.mjs';
+import { assertRemotePeopleGeneration } from './lib/people-generation-policy.mjs';
 import { dateAuditStatus } from './lib/people-date-audit.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assessCorpusIdentityReviews, applyReviewedIdentityUncertainty } from './lib/people-chapter-identity.mjs';
-import { loadValidatedPeopleCorpus, loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
+import { loadValidatedResolutionDocuments } from './lib/people-corpus.mjs';
 import { PEOPLE_DIR, REPO_ROOT, readJson, writeJsonAtomic } from './lib/people-content.mjs';
 import {
   writePeopleCatalog,
@@ -18,6 +21,7 @@ import {
   peopleCatalogIsComplete,
 } from './lib/people-publication.mjs';
 import { personSlug, resolveAcceptedPeopleClusters } from './lib/people-resolution.mjs';
+import { reviewedInferredSourceReferences } from './lib/people-inferred-source-references.mjs';
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const CANONICAL_SCHEMA_ID = 'https://24histories.com/schema/people/canonical-person-v1.json';
@@ -616,8 +620,7 @@ function buildPeopleSiteIndex(corpus, catalog, getDateStatus = dateAuditStatus) 
   return siteIndex;
 }
 
-function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion, override) {
-  const members = cluster.localPeople.map((localId) => corpus.localPeople.get(localId));
+function canonicalRecord(cluster, members, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion, override) {
   const preferred = preferredName(members, override, cluster.canonicalPersonId);
   const slugName = sourcePreferredNameSuggestion(members);
   const roles = canonicalRoles(members, roleLabels);
@@ -825,6 +828,36 @@ export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPe
     }]));
 }
 
+function compileCanonicalRecordsInSourceBatches(clusters, localPeople, makeRecord) {
+  const sourceOrdered = [...clusters].sort((left, right) => left.localPeople[0].localeCompare(right.localPeople[0]));
+  const people = [];
+  const maxBatchPeople = 1024;
+  let batch = [], memberIds = [];
+
+  // Canonical clusters can have members in several chapters. Group reads by
+  // chapter across a bounded set of clusters so those lookups do not evict a
+  // chapter that the next cluster needs. Preserve each cluster's member order.
+  const compileBatch = () => {
+    const byId = new Map(memberIds.sort().map(localId => [localId, localPeople.get(localId)]));
+    for (const cluster of batch) {
+      people.push(makeRecord(cluster, cluster.localPeople.map(localId => byId.get(localId))));
+    }
+    batch = [];
+    memberIds = [];
+  };
+  for (const cluster of sourceOrdered) {
+    if (batch.length && memberIds.length + cluster.localPeople.length > maxBatchPeople) compileBatch();
+    if (cluster.localPeople.length > maxBatchPeople) {
+      people.push(makeRecord(cluster, cluster.localPeople.map(localId => localPeople.get(localId))));
+      continue;
+    }
+    batch.push(cluster);
+    memberIds.push(...cluster.localPeople);
+  }
+  if (batch.length) compileBatch();
+  return people.sort((left, right) => left.id.localeCompare(right.id));
+}
+
 export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}, { getDateStatus = dateAuditStatus } = {}) {
   if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
       !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
@@ -834,7 +867,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       corpus.coverage.sourceChapters !== corpus.coverage.extractedChapters + corpus.coverage.missingChapterIds.length) {
     throw new Error('People corpus chapter coverage metadata is internally inconsistent');
   }
-  for (const person of corpus.localPeople.values()) {
+  for (const person of (corpus.identityConstraints ?? corpus.localPeople).values()) {
     for (const claim of person.claims) {
       if (!['same-person', 'different-person'].includes(claim.predicate)) continue;
       const target = claim.value?.personId ?? claim.value?.person;
@@ -843,7 +876,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       }
     }
   }
-  const resolved = resolveAcceptedPeopleClusters(corpus.localPeople, resolutionDocuments);
+  const resolved = resolveAcceptedPeopleClusters(corpus.identityConstraints ?? corpus.localPeople, resolutionDocuments);
   const currentPromptVersion = readJson(path.join(PEOPLE_DIR, 'config.json')).promptVersion;
   const localMap = new Map();
   for (const cluster of resolved.clusters) {
@@ -887,10 +920,10 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       unsupportedPreferredNames.map((error) => `- ${error}`).join('\n'),
     );
   }
-  const people = resolved.clusters.map((cluster) =>
+  const people = compileCanonicalRecordsInSourceBatches(resolved.clusters, corpus.localPeople, (cluster, members) =>
     canonicalRecord(
       cluster,
-      corpus,
+      members,
       localMap,
       roleLabels,
       unresolvedLocalPeople,
@@ -922,7 +955,9 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
   }
   if (errors.length > 0) throw new Error(`Canonical person validation failed:\n${errors.map((item) => `- ${item}`).join('\n')}`);
 
-  const legacyLocalPeople = [...corpus.localPeople.values()].filter((person) => person.promptVersion < currentPromptVersion).length;
+  const legacyLocalPeople = corpus.promptVersionCounts
+    ? [...corpus.promptVersionCounts].reduce((sum, [version, count]) => sum + (version < currentPromptVersion ? count : 0), 0)
+    : [...corpus.localPeople.values()].filter((person) => person.promptVersion < currentPromptVersion).length;
   const legacyChapters = corpus.chapters.filter(({ extraction }) =>
     extraction.run.promptVersion < currentPromptVersion
   ).length;
@@ -977,7 +1012,7 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
 
 // Reconstruct every public fact from freshly qualified source members. The
 // globally compiled mapping supplies identity and URL stability, never facts.
-export function projectPeopleProduct(corpus, globalCatalog, roleLabels, overrides = {}, getDateStatus = dateAuditStatus) {
+export function projectPeopleProduct(corpus, globalCatalog, roleLabels, overrides = {}, getDateStatus = dateAuditStatus, identityCertificates = []) {
   const globalById = new Map(globalCatalog.people.map(person => [person.id, person]));
   const localMap = new Map();
   const membersByCanonical = new Map();
@@ -1006,8 +1041,11 @@ export function projectPeopleProduct(corpus, globalCatalog, roleLabels, override
         !override.preferredName[key] || claim.value?.[key] === override.preferredName[key]))) {
       throw new Error(`Preferred name for ${id} lacks scoped source support`);
     }
-    const person = canonicalRecord(cluster, corpus, localMap, roleLabels, new Set(),
+    const person = canonicalRecord(cluster, members, localMap, roleLabels, new Set(),
       globalCatalog.currentPromptVersion, override);
+    if (person.references.length === 0) {
+      person.references = reviewedInferredSourceReferences(members, corpus, id, identityCertificates);
+    }
     if (person.references.length === 0) {
       throw new Error(`Scoped canonical person ${id} has no source mention references; repair chapter attribution before publication`);
     }
@@ -1191,7 +1229,27 @@ function selfTest() {
       decision: 'merge', localPeople: [left.localId, right.localId], basis: ['fixture'], confidence: 'high',
     }],
   }];
-  const result = compilePeopleCatalog(corpus, resolution).catalog;
+  for (const row of corpus.chapters) {
+    const members = [...corpus.localPeople.values()].filter(person => person.chapter === row.extraction.chapter);
+    row.extraction.mentions = members.flatMap(person => person.mentions.map((mention, index) => ({ ...mention,
+      id: `fixture:${row.extraction.chapter}:m${String(index + 1).padStart(4, '0')}`,
+      spans: Object.fromEntries(Object.entries(mention.spans).map(([language, spans]) => [language, spans.map(span => ({ ...span, occurrence: 1 }))])),
+    })));
+  }
+  const originalResult = compilePeopleCatalog(corpus, resolution);
+  const result = originalResult.catalog;
+  const byChapter = new Map(corpus.chapters.map(row => [`${row.extraction.book}:${row.extraction.chapter}`, {
+    ...row, localPeople: new Map([...corpus.localPeople].filter(([, person]) => person.chapter === row.extraction.chapter)),
+  }]));
+  const lazy = createPeopleCorpusReader(consume => {
+    for (const row of byChapter.values()) consume(row);
+    return { coverage: corpus.coverage };
+  }, key => structuredClone(byChapter.get(key)), { cacheSize: 1 });
+  const lazyResult = compilePeopleCatalog(lazy, resolution);
+  for (const output of ['catalog', 'siteIndex']) {
+    assert.deepEqual({ ...lazyResult[output], generatedAt: null }, { ...originalResult[output], generatedAt: null }, `On-demand ${output} differs from full corpus`);
+  }
+  assert.deepEqual(lazyResult.identityReviewMetrics, originalResult.identityReviewMetrics);
   const filteredCorpus = structuredClone(corpus);
   filteredCorpus.localPeople.delete(child.localId);
   let rejectedFilteredTarget = false;
@@ -1382,11 +1440,13 @@ function selfTest() {
   console.log('compile-people-catalog self-test: ok');
 }
 
-function main() {
-  const options = parseArgs(process.argv.slice(2));
-  if (options.selfTest) return selfTest();
+// Return only the compiled products. The source reader, validation indexes and
+// resolution inputs must become collectible before hashing inputs and writing
+// output alongside the much larger catalog and site index.
+function compileCurrentPeopleCatalog() {
   const inputSeal = identityInputSeal();
-  const corpus = loadValidatedPeopleCorpus();
+  const corpus = loadValidatedPeopleCorpusOnDemand();
+  console.log(JSON.stringify({ phase: 'validated-corpus-index', chapters: corpus.chapters.length, localPeople: corpus.localPeople.size, ...process.memoryUsage() }));
   const resolutions = loadValidatedResolutionDocuments(corpus.localPeople);
   const curation = readJson(path.join(PEOPLE_DIR, 'curation', 'overrides.json'));
   if (curation.schemaVersion !== 1 || !curation.people || Array.isArray(curation.people) ||
@@ -1413,8 +1473,19 @@ function main() {
     }
   }
   const result = compilePeopleCatalog(corpus, resolutions, curation.people);
+  console.log(JSON.stringify({ phase: 'compiled-catalog', chapterLoads: corpus.metrics.chapterLoads, ...process.memoryUsage() }));
+  return { result, inputSeal };
+}
+
+function main() {
+  const options = parseArgs(process.argv.slice(2));
+  if (options.selfTest) return selfTest();
+  assertRemotePeopleGeneration('Corpus catalog and site-index generation');
+  const { result, inputSeal } = compileCurrentPeopleCatalog();
   if (identityInputSeal() !== inputSeal) throw new Error('Identity inputs changed during compilation; refusing publication');
+  console.log(JSON.stringify({ phase: 'rechecked-catalog-inputs', ...process.memoryUsage() }));
   writeCompiledPeopleOutputs(result, options);
+  console.log(JSON.stringify({ phase: 'wrote-catalog-outputs', ...process.memoryUsage() }));
   writeJsonAtomic(`${options.out}.identity-seal.json`, {
     schemaVersion: 2, kind: 'people-accepted-identity-seal', inputs: inputSeal,
     catalog: peopleDigest(result.catalog), siteIndex: peopleDigest(result.siteIndex),
