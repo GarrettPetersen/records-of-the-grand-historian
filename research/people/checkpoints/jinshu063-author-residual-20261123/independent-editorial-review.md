@@ -41,7 +41,9 @@ Independent replay vs `changed-dependency-receipt.json`: decisions hash match, 6
 
 Units **s0021–s0028** read once. Ten packet items checked; **no Western years invented**; four **太興初** holds on s0026 retained; no scope blockers. **Chapter date approval remains false.**
 
-**Next exact span:** scope 2 — **s0068–s0076**, primary witness **永嘉初** @ **s0073**.
+**Scopes 2–12** completed (see `independent-date-audit-manifest.json`): **201/414** packet claim-items reviewed, **0** conflict blockers, **10** era research holds unchanged (太興初×5, 永嘉初×2, 建武初×2, 永嘉末×1).
+
+**Next work:** remaining **213** packet items (mostly hint/cross-span); legacy active-date hint sweep — **not** chapter date approval.
 
 ## Pending actions (not approved here)
 
