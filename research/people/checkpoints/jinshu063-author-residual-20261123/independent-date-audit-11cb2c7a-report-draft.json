@@ -5,7 +5,7 @@
   "chapter": "063",
   "sourceHash": "sha256:23787acd0acaf87b0e809dfb1fa5f42ba2d57d116a99effaf671ddabcf346a64",
   "extractionHash": "sha256:bbd248323b6a092442acd5692fce3ecaefe187003e2bb9775287f4562659ddf9",
-  "status": "audited",
+  "status": "needs-revision",
   "reviewer": {
     "name": "Independent Jinshu 063 chronology reviewer",
     "agentId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6",
@@ -367,11 +367,19 @@
       "personId": "p001",
       "verdict": "supported",
       "event": "Biography subject; captured by Shi Hu and finally killed.",
-      "reason": "Undated attestation aligns with source unit; no calendar contradiction. (Rebound from prior 414-item review; packet binding invariant at sha256:fc8c0770bebf10fa6d6067b4809547ae56e4ad0bb2e609bad0797a6614d13560.)",
+      "reason": "Undated attestation aligns with source units for subject, capture, and death endpoints; no Western calendar asserted. Primary witnesses split across s0002, s0028 (石季龍), and s0062.",
       "evidence": [
         {
           "unit": "s0002",
           "quote": "邵續，字嗣祖，魏郡安陽人也。"
+        },
+        {
+          "unit": "s0028",
+          "quote": "遂為季龍所得，使續降其城。"
+        },
+        {
+          "unit": "s0062",
+          "quote": "續竟亦遇害。"
         }
       ]
     },
@@ -4852,11 +4860,11 @@
       "personId": "p122",
       "verdict": "supported",
       "event": "Active-date hints for p122",
-      "reason": "Empty active-date hint list matches undated-only claim profile for this person; evidence[] absence is structural, not missing chronology. (Rebound from prior 414-item review; packet binding invariant at hint-item.)",
+      "reason": "Empty active-date hint list; witness is Murong Ke’s own clause at s0221, not biography-subject 邵續. (Prior 414-item verdict retained.)",
       "evidence": [
         {
-          "unit": "s0001",
-          "quote": "邵續"
+          "unit": "s0221",
+          "quote": "俊遣慕容恪擊之，勤懼而降。"
         }
       ]
     },
@@ -7837,7 +7845,23 @@
       ]
     }
   ],
-  "findings": [],
+  "findings": [
+    {
+      "problem": "179 empty active-date hint itemChecks still cite unrelated biography-subject 邵續 from s0001/s0002 (mechanical generator fallback), misaligning actor and chronology witnesses for persons such as Murong Ke (hints-p122 was one instance before repair).",
+      "action": "Continue bounded citation blocks on the checkpoint report: re-anchor each hints-pNNN to that person's own claim evidence unit without recycling 邵續 strings; withhold audited seal until all 414 evidence rows pass source attribution. Owner extraction event wording for claim-1 capture actor remains separately noted in independent-date-audit-owner-citation-holds.json.",
+      "items": [
+        "hints-p002",
+        "hints-p003",
+        "hints-p004",
+        "hints-p005",
+        "hints-p006",
+        "hints-p007",
+        "hints-p008",
+        "hints-p009",
+        "hints-p010"
+      ]
+    }
+  ],
   "references": [
     {
       "kind": "internal",
@@ -7850,8 +7874,13 @@
     }
   ],
   "checkpointOnly": true,
-  "validatesWithNativePacket": true,
   "itemJudgmentsCommit": "8eca0f0b0fdd073bfdaf264231ecec40106bf02a",
   "reviewerProvenanceAmendedAt": "2026-11-24T02:07:00.000Z",
-  "reviewerProvenanceNote": "Structured reviewer.agentId only; 414 item checks, 190 person checks, 342 units, hashes, and findings unchanged."
+  "reviewerProvenanceNote": "Structured reviewer.agentId; citation block-001 repairs on claim-1 and hints-p122; seal withheld pending hints sweep.",
+  "sealWithheld": true,
+  "citationSweep": {
+    "block001Complete": true,
+    "remainingBareShaoHintFallbacks": 179,
+    "itemJudgmentsRetained": 414
+  }
 }

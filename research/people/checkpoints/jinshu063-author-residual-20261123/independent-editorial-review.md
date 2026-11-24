@@ -54,7 +54,7 @@ Independent replay on pinned extraction at `11cb2c7ae6024949c65651a49617fc0d7f0d
 - **414/414 item judgments** rebound: **394 invariant**, **20 refreshed** (10 claims + 10 hints).
 - **190/190 person checks** filed in five blocks (`independent-date-audit-person-checks-001.json` … `005.json`); coverage receipt lists exact IDs (`independent-date-audit-person-coverage-receipt.json`).
 - **342/342 unit coverage** attested (`independent-date-audit-unit-coverage-receipt.json`).
-- Native report checkpoint **`independent-date-audit-11cb2c7a-report-draft.json`** now **`audited`** and passes `validateDateAuditReport` at extraction `11cb2c7a` — still **checkpoint-only** (no `people:dates:record`, no `data/people/date-audits` write on this branch).
+- Native report checkpoint **`independent-date-audit-11cb2c7a-report-draft.json`**: structured `reviewer.agentId` present; **citation block-001** repaired `claim-1` (s0002+s0028+s0062) and `hints-p122` (s0221); scope-001 claims sound; **179 hints-* rows** still hold mechanical 邵續 fallbacks — status **`needs-revision`**, seal withheld (`independent-date-audit-citation-audit-block-001.json`, owner holds `independent-date-audit-owner-citation-holds.json`). Still **checkpoint-only**.
 
 ## Pending actions (not approved here)
 
