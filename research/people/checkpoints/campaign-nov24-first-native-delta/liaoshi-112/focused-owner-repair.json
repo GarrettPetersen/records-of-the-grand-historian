@@ -1,0 +1,720 @@
+{
+  "schemaVersion": 1,
+  "kind": "focused-owner-repair",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "112"
+  },
+  "ownerAgentId": "bc-6676d427-4e73-44d1-ad27-16c3dc3efcef",
+  "idempotencyKey": "6d82c8414e7708f24eba4afa05d457ed40872c392f80fef7eafd4f32e8d26031",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "branch": "cursor/nov24-first-native-date-delta-w1-efcef",
+  "independentReport": {
+    "path": "research/people/checkpoints/campaign-nov24-first-independent-date/liaoshi-112/independent-date-report.json",
+    "revision": "ab8b76b7044f9bb01a9cccb9a8acd27740f612d5",
+    "sha256": "sha256:95afaf6ad538db4aacc6412cb8f2dbb127082c59f2551439ddd45f64f4f240c6",
+    "blob": "bcd54ab5c56b34d3614c6fca95a34576555cb288",
+    "status": "needs-revision"
+  },
+  "pinnedInputsWitness": {
+    "data/liaoshi/112.json": {
+      "gitBlob": "628af22969ef942ee474c64d7cb012f3571faf40",
+      "contentSha256": "sha256:643c3ce3900ba5c9e886898cd204a12da56f42d960f8528a93b6a67d449bd610"
+    },
+    "data/people/extractions/liaoshi/112.json": {
+      "gitBlob": "f68627fc61cb6139fda76792b73215943a2d8bfd",
+      "contentSha256": "sha256:f579a3e693a1ea568b5fc73c1b26f6742d4515a1f25d8211407b147acf9c4fd5"
+    },
+    "data/people/editorial-decisions/liaoshi/112.json": {
+      "gitBlob": "4d606e866104cf6ea9cac635ffc7f3b4d31b7874",
+      "contentSha256": "sha256:9d740db6cc2395e343924cf540666b64df3d470d778a15b5d2265bb032acb0eb"
+    }
+  },
+  "hashes": {
+    "baselineExtraction": "sha256:f579a3e693a1ea568b5fc73c1b26f6742d4515a1f25d8211407b147acf9c4fd5",
+    "candidateExtraction": "sha256:12d84e754df672c0ea256abee1049c806f6ebfb79678b37ee3d876a128fd8ad6",
+    "candidateDatePacket": "sha256:563175d7fb2c5a7352926745b9e19f14f259ee0bcfd80dcafd5be04269575a95"
+  },
+  "changedItems": [
+    {
+      "claimId": "claim-3",
+      "reason": "s0051 lacks 太祖即位 calendrical witness for Western AD 916.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-6",
+      "reason": "天祿五年 not on owned evidence units.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-31",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-34",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-35",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-36",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-37",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-38",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-39",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-40",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-11",
+      "reason": "Align Qingning dating with owned unit wording; remove unsupported Western precision.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-50",
+      "reason": "s0143 九年 without Western conversion on owned unit.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-51",
+      "reason": "Owned units lack 清寧九年 label.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-52",
+      "reason": "Owned units lack 清寧九年 label.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-53",
+      "reason": "Owned units lack 清寧九年 label.",
+      "findingAddressed": true
+    },
+    {
+      "claimId": "claim-29",
+      "reason": "Western AD 947 unsupported on cited units.",
+      "findingAddressed": true
+    }
+  ],
+  "claimRepairs": [
+    {
+      "claimId": "claim-3",
+      "reason": "s0051 lacks 太祖即位 calendrical witness for Western AD 916.",
+      "before": [
+        "p002",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "太祖即位"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 916,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0051"
+        ]
+      ],
+      "after": [
+        "p002",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "即位"
+          },
+          "unresolved": true,
+          "unresolvedReason": "s0051 cites 即位 without a witnessed accession year label on the owned sentence."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0051"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-6",
+      "reason": "天祿五年 not on owned evidence units.",
+      "before": [
+        "p003",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0091",
+          "s0094"
+        ]
+      ],
+      "after": [
+        "p003",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Coup-night narrative at s0091 and s0094 names no reign year on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0091",
+          "s0094"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-31",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p024",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0091",
+          "s0094"
+        ]
+      ],
+      "after": [
+        "p024",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0091",
+          "s0094"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-34",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p027",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0093",
+          "s0094"
+        ]
+      ],
+      "after": [
+        "p027",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0093",
+          "s0094"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-35",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p028",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0097",
+          "s0098"
+        ]
+      ],
+      "after": [
+        "p028",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0097",
+          "s0098"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-36",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p029",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0100"
+        ]
+      ],
+      "after": [
+        "p029",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0100"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-37",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p030",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0100"
+        ]
+      ],
+      "after": [
+        "p030",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0100"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-38",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p031",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0102"
+        ]
+      ],
+      "after": [
+        "p031",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0102"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-39",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p032",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0105",
+          "s0113"
+        ]
+      ],
+      "after": [
+        "p032",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0105",
+          "s0113"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-40",
+      "reason": "Owned units lack 天祿五年; keep attestation undated.",
+      "before": [
+        "p033",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "天祿五年"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 951,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0108"
+        ]
+      ],
+      "after": [
+        "p033",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Mutiny narrative units omit 天祿五年 on the cited sentences."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0108"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-11",
+      "reason": "Align Qingning dating with owned unit wording; remove unsupported Western precision.",
+      "before": [
+        "p006",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "清寧九年",
+            "reignId": "liao-qingning",
+            "regnalYear": 9
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1063,
+            "precision": "year"
+          }
+        },
+        "explicit",
+        [
+          "s0143",
+          "s0144"
+        ]
+      ],
+      "after": [
+        "p006",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "九年"
+          },
+          "qualitative": "Hunt-crisis sentence bears regnal year nine without dynasty prefix on the owned unit.",
+          "event": "Person acts during the ninth-year autumn hunt narrated at s0143."
+        },
+        "explicit",
+        [
+          "s0143",
+          "s0144"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-50",
+      "reason": "s0143 九年 without Western conversion on owned unit.",
+      "before": [
+        "p040",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "清寧九年",
+            "reignId": "liao-qingning",
+            "regnalYear": 9
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1063,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0143"
+        ]
+      ],
+      "after": [
+        "p040",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "九年"
+          },
+          "unresolved": true,
+          "unresolvedReason": "Owned unit s0143 gives year nine without dynasty prefix or witnessed Western conversion."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0143"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-51",
+      "reason": "Owned units lack 清寧九年 label.",
+      "before": [
+        "p041",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "清寧九年",
+            "reignId": "liao-qingning",
+            "regnalYear": 9
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1063,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0145"
+        ]
+      ],
+      "after": [
+        "p041",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Action units cite the hunt crisis without 清寧九年 on the owned sentence."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0145"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-52",
+      "reason": "Owned units lack 清寧九年 label.",
+      "before": [
+        "p042",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "清寧九年",
+            "reignId": "liao-qingning",
+            "regnalYear": 9
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1063,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0146"
+        ]
+      ],
+      "after": [
+        "p042",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Action units cite the hunt crisis without 清寧九年 on the owned sentence."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0146"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-53",
+      "reason": "Owned units lack 清寧九年 label.",
+      "before": [
+        "p043",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "清寧九年",
+            "reignId": "liao-qingning",
+            "regnalYear": 9
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 1063,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0146"
+        ]
+      ],
+      "after": [
+        "p043",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Action units cite the hunt crisis without 清寧九年 on the owned sentence."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0146"
+        ]
+      ]
+    },
+    {
+      "claimId": "claim-29",
+      "reason": "Western AD 947 unsupported on cited units.",
+      "before": [
+        "p022",
+        "attestation",
+        {
+          "sourceDate": {
+            "text": "世宗即位於鎮陽"
+          },
+          "westernYear": {
+            "era": "AD",
+            "year": 947,
+            "precision": "year"
+          }
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0073",
+          "s0074"
+        ]
+      ],
+      "after": [
+        "p022",
+        "attestation",
+        {
+          "undatedSourceAttestation": true,
+          "event": "Counsel units s0073–s0074 discuss returning to Shizong without the 鎮陽 accession wording."
+        },
+        "explicit-event-contextual-date",
+        [
+          "s0073",
+          "s0074"
+        ]
+      ]
+    }
+  ],
+  "definiteEnglishRepairs": [],
+  "validation": {
+    "passed": true,
+    "validateExtraction": "research/people/checkpoints/campaign-nov24-first-native-delta/liaoshi-112/candidate-extraction.json: ok (46 people, 342 mentions, 431 claims, 276 candidates)",
+    "validateOutput": "research/people/checkpoints/campaign-nov24-first-native-delta/liaoshi-112/candidate-extraction.json: ok (46 people, 342 mentions, 431 claims, 276 candidates)\n"
+  },
+  "remainingHolds": [
+    {
+      "gate": "independent-native-date-delta-review",
+      "note": "Prior needs-revision report preserved; reviewer re-audits candidate packet only."
+    }
+  ],
+  "ownerApproval": false,
+  "canonicalPathEdits": false,
+  "notes": "[CF-Pages-Skip] Scoped owner delta checkpoint; does not replace data/people/extractions.",
+  "artifacts": {
+    "preservedIndependentReport": "research/people/checkpoints/campaign-nov24-first-independent-date/liaoshi-112/independent-date-report.json",
+    "candidateExtraction": "research/people/checkpoints/campaign-nov24-first-native-delta/liaoshi-112/candidate-extraction.json",
+    "candidateDatePacket": "research/people/checkpoints/campaign-nov24-first-native-delta/liaoshi-112/candidate-date-packet.json",
+    "focusedOwnerRepair": "research/people/checkpoints/campaign-nov24-first-native-delta/liaoshi-112/focused-owner-repair.json"
+  }
+}
