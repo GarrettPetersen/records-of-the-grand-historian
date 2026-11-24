@@ -28,7 +28,9 @@ jobs:
           run-id: 45380649693
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/prior
-      - name: Reconstruct qualified scopes and inspect exact display guards
+      - name: Record exact proof compositions
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$SOURCE"
