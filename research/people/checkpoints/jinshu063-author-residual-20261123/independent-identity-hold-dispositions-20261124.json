@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "kind": "jinshu063-independent-identity-hold-dispositions",
+  "reviewer": {
+    "agentId": "bc-18497843-2dfa-4ad5-a806-d31015cce1c6"
+  },
+  "verifiedAt": "2026-11-24T04:20:00.000Z",
+  "ownerPr": 5487,
+  "ownerHead": "bcb829ee43fd93a9d030c45925ae7fa17c6bd9fd",
+  "priorIdentityEvidenceRetained": {
+    "commit": "27caba9d147d3191364b171a22157cfd3b6f9cc8",
+    "transportArtifact": 14883549051,
+    "planOverlay": "4d27c47ad4e4bf2b33ac172ad8a3df10a5297fe9",
+    "role": "Prior candidate native transport only; supersedes neither chronology nor owner proposal approval."
+  },
+  "appraisalChineseSurfacesVerified": {
+    "s0330": "史臣曰：邵、李、魏、郭等諸將，契闊喪亂之辰，驅馳戎馬之際，威懷足以容眾，勇略足以制人，乃保據危城，折沖千里，招集義勇，抗禦仇讎，雖艱阻備嘗，皆乃心王室。",
+    "s0339": "贊曰：邵李諸將，實惟忠壯。",
+    "offsetsVerifiedOnSource": {
+      "s0330_邵_codePoint": 4,
+      "s0330_魏_codePoint": 8,
+      "s0339_邵_codePoint": 3
+    },
+    "chapterTitleOrder": "邵續、李矩、段匹磾、魏浚、郭默"
+  },
+  "ownerSamePersonProposal": {
+    "pairs": [
+      {
+        "appraisal": "jinshu:063:p183",
+        "biography": "jinshu:063:p001",
+        "appraisalChineseWitness": { "unitId": "s0330", "quote": "邵" },
+        "biographyChineseWitness": { "unitId": "s0002", "quote": "邵續" }
+      },
+      {
+        "appraisal": "jinshu:063:p185",
+        "biography": "jinshu:063:p123",
+        "appraisalChineseWitness": { "unitId": "s0330", "quote": "魏" },
+        "biographyChineseWitness": { "unitId": "s0222", "quote": "魏浚" }
+      }
+    ],
+    "reciprocalSamePersonClaims": 4,
+    "assertDossierPrimaryWitnessOnOwnerExtraction": true,
+    "independentApprovalOfLinkage": "Source-backed surname collective + chapter title order supports treating appraisal locals as epithets of the biography subjects; same-person claims on bcb829ee are independently witnessed.",
+    "mergeOrCanonicalWriteApproved": false
+  },
+  "holdDispositions": [
+    {
+      "localId": "jinshu:063:p183",
+      "priorTransportVerdict": "hold",
+      "priorReason": "Personal 邵續 on s0330 without Chinese span; assert failed on overlay 4d27c47 extraction.",
+      "afterOwnerSurfacePatch": "assert PASS on 邵 at s0330 and s0339 with surname name-key; same-person → p001.",
+      "independentIdentityVerdict": "approve-retained-separate-canonical-pending-native-rereview",
+      "canonicalPersonIdUnchanged": "per_WTYRQ3SB9M6RM6F5878E on prior plan; host must refresh identity plan at bcb829ee before certificate."
+    },
+    {
+      "localId": "jinshu:063:p185",
+      "priorTransportVerdict": "hold",
+      "priorReason": "Personal 魏浚 on s0330 without full-name Chinese; assert failed prior extraction.",
+      "afterOwnerSurfacePatch": "assert PASS on 魏 at s0330; same-person → p123.",
+      "independentIdentityVerdict": "approve-retained-separate-canonical-pending-native-rereview",
+      "canonicalPersonIdUnchanged": "per_GTDRDFAB5VVAC445WHS3 on prior plan; host must refresh identity plan at bcb829ee before certificate."
+    }
+  ],
+  "constrainedMembershipWork": {
+    "automaticMerge": false,
+    "stableLocalIdsPreserved": true,
+    "biographyMemberContractsUnchanged": [
+      "jinshu:063:p001",
+      "jinshu:063:p123"
+    ],
+    "appraisalMemberContractsChanged": "name personal→surname only on p183/p185 per owner fingerprints",
+    "ownerProposalReceipt": "jinshu063-appraisal-surface-reconcile-20261124/reconcile-proposal-receipt.json @ bcb829ee",
+    "independentRequiredNextStep": "Fresh bounded identity transport + part review on bcb829ee extractionHash; prior 14883549051 transport retained as historical evidence only."
+  }
+}
