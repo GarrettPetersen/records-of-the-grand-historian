@@ -8,14 +8,14 @@
  "dispatchState": "open-verified-included-usage",
  "usage": {
   "source": "Cursor spending dashboard",
-  "verifiedAt": "2026-11-24T05:34:49.000Z",
-  "cursorModelsUsedPercent": 40,
+  "verifiedAt": "2026-11-24T05:39:06.000Z",
+  "cursorModelsUsedPercent": 41,
   "otherModelsUsedPercent": 73,
   "onDemandLimitUsd": 1,
   "onDemandLimitReached": true,
   "lastObservedOnDemandMeterUsd": 2.91,
   "recentCloudUsageClassification": "Existing Cursor Cloud costs reflected in both included model pools with the displayed on-demand meter unchanged at $2.91.",
-  "resetDisplay": "Nov 24, 12 hours and 58 minutes remaining at observation"
+  "resetDisplay": "Nov 24, 12 hours and 54 minutes remaining at observation"
  },
  "workers": {
   "running": [],
@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T05:36:53.146Z",
+ "lastCheckedAt": "2026-11-24T05:40:13.131Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -2046,13 +2046,16 @@
    "ref": "codex/cursor-glossary-nov24-2026-pages-heap-preflight",
    "workflowRevision": "c7a74dfe521308cd97d56a25b1c577c16ca50c0a",
    "sourceRevision": "ef995d54824017254b05d032912999047ec6127d",
-   "status": "requested",
+   "status": "completed",
    "oldHeapMiB": 3072,
    "candidateHeapMiB": 4608,
    "priorFullBuildSeconds": 2248,
    "billingSettingsChanged": false,
    "supersededRun": 45331200298,
-   "runId": 45331263400
+   "runId": 45331263400,
+   "conclusion": "success",
+   "buildSeconds": 1263,
+   "hostedOnly": true
   },
   "nineChapterCandidate": {
    "revision": "f47162cf132f511b6d5e4b4073867f1e58ac9860",
@@ -8486,7 +8489,9 @@
      "sourceRevision": "288a641a9929f5c6bdfdb0254b026f865d1060ff",
      "workflowRevision": "60c693dc881c2d0871898cd4b8cbe5ab91a4cf4a",
      "ref": "codex/cursor-glossary-nov24-2026-028-native-identity-exact",
-     "status": "dispatch_pending"
+     "status": "in_progress",
+     "runId": 45334570547,
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45334570547"
     }
    },
    "jinshu/047": {
@@ -17035,12 +17040,32 @@
       "liaoshi/042",
       "liaoshi/106"
      ],
-     "status": "sent",
+     "status": "finished",
      "reservedAt": "2026-11-24T05:26:06.880Z",
      "agentId": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
      "idempotencyKey": "393165cffc61ccb5698d08d35e0ea59834fed63c06c733fa3d70c5df2069c5b4",
      "runId": "run-fea3e7e3-8020-44ae-8c9a-50bf52df06e7",
-     "observedAt": "2026-11-24T05:32:12.513Z"
+     "observedAt": "2026-11-24T05:32:12.513Z",
+     "handoffs": [
+      {
+       "key": "mingshi/034",
+       "number": 5492,
+       "head": "0a685b5841232600601da819de1de3bb1d97fe64",
+       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5492"
+      },
+      {
+       "key": "houhanshu/001",
+       "number": 5493,
+       "head": "d5c6f11d4f5b75f54ed33aee0fe85158080a65f3",
+       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5493"
+      },
+      {
+       "key": "liaoshi/043",
+       "number": 5494,
+       "head": "0e46b667783e1de44ff10847fe5bf3b318c123ca",
+       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5494"
+      }
+     ]
     },
     {
      "id": "cursor-github-nov24-cross-2",
@@ -17076,6 +17101,71 @@
    "ownerCreateReconciliation": {
     "observedAt": "2026-11-24T05:32:07.392Z",
     "result": "The initial attempt stopped while using the wrong SDK property, before send. Three pages of Cursor agents including archived matched no portfolio names or tags. Installed SDK creates a local handle until send. Stable provider IDs and idempotent sends are reserved here."
+   },
+   "reviewerJobs": {
+    "mingshi/034": {
+     "key": "mingshi/034",
+     "number": 5492,
+     "head": "0a685b5841232600601da819de1de3bb1d97fe64",
+     "headRef": "cursor/mingshi034-cross-owner-handoff-3a0e",
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5492",
+     "pin": {
+      "key": "mingshi/034",
+      "cases": 2,
+      "planFingerprint": "sha256:d4b527939ccd0c5ee9d583d67ff36622e270890126c5bb0b1f6564edad57575a",
+      "sourcePacketSha256": "7ae547112fdf43af32f5452e4995a1ade4886964e8f12edf85f01d8041d09e21",
+      "transportSha256": "7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e",
+      "transportBytes": 43519,
+      "path": "research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/transport-packet.json"
+     },
+     "owner": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+     "reviewer": "bc-77bf0e6f-d0fe-437b-a4df-83de0224062f",
+     "status": "dispatch_pending",
+     "reservedAt": "2026-11-24T05:40:11.110Z",
+     "idempotencyKey": "316a584fa31bf56ae51e3662a79c5795504f4e5061cdbc7a14c1dbe39cab75b8"
+    },
+    "houhanshu/001": {
+     "key": "houhanshu/001",
+     "number": 5493,
+     "head": "d5c6f11d4f5b75f54ed33aee0fe85158080a65f3",
+     "headRef": "cursor/houhanshu001-cross-owner-handoff-3a0e",
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5493",
+     "pin": {
+      "key": "houhanshu/001",
+      "cases": 4,
+      "planFingerprint": "sha256:33f5dabd914c6170cf0ff6895749297195c6ed884c0780465ec71cf33c3f4c80",
+      "sourcePacketSha256": "59460a65ebb2e0e3b257530988adf117afd78e037b2481014f90f39b23f7fd58",
+      "transportSha256": "95ec9da8f9fd485e7d7ae33b4a48be36cc5dce63bc7a359c150dc12b675c9cac",
+      "transportBytes": 52317,
+      "path": "research/people/checkpoints/cross-corpus-native-review-20261124/houhanshu-001/transport-packet.json"
+     },
+     "owner": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+     "reviewer": "bc-420723ab-2665-4ced-8f96-f5f59c1bcce6",
+     "status": "dispatch_pending",
+     "reservedAt": "2026-11-24T05:40:11.907Z",
+     "idempotencyKey": "4194a44970d7fc6feccd97a8f27e611945af346ff49e879b5c8d54feb0287a32"
+    },
+    "liaoshi/043": {
+     "key": "liaoshi/043",
+     "number": 5494,
+     "head": "0e46b667783e1de44ff10847fe5bf3b318c123ca",
+     "headRef": "cursor/liaoshi043-cross-owner-handoff-3a0e",
+     "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5494",
+     "pin": {
+      "key": "liaoshi/043",
+      "cases": 5,
+      "planFingerprint": "sha256:2538e6538333cf61aed01195970485a3c2be051706d31709b080748435b0aa55",
+      "sourcePacketSha256": "ffd7fd1566224994dddf36a34e32a5a97283bcb2e8c1514a85f215b944090ccf",
+      "transportSha256": "4e221d9f61a24241ea64690413f28e8cfd99f9e712ad0e43f591521f11358370",
+      "transportBytes": 108975,
+      "path": "research/people/checkpoints/cross-corpus-native-review-20261124/liaoshi-043/transport-packet.json"
+     },
+     "owner": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+     "reviewer": "bc-1a8beaf6-6fbf-40b5-8ce9-0a5c6410b41e",
+     "status": "dispatch_pending",
+     "reservedAt": "2026-11-24T05:40:12.590Z",
+     "idempotencyKey": "a6c2affae97ae2bd52bf6af0d29e476470ef6cc60b5a7f994df3304529375fc8"
+    }
    }
   },
   "protectedNativeWave": {
