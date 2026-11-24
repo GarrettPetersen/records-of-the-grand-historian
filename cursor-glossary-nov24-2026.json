@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Attach accepted chronology and 250-case identity proof to PR #5490, then validate the production candidate. Diagnose full-site timing from the completed GitHub run.",
+  "nextAction": "Prepare corrected Jinshu 094 overlays for the master-based release cohort and verify production qualification. Continue hosted chronology recording and preserve Jinshu 053 independent dependency evidence.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:28:06.436Z",
+  "lastCheckedAt": "2026-11-24T04:29:48.897Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -1859,7 +1859,16 @@
       "requiredAt": "actual release PR merge candidate",
       "preflightRunId": 45321066107,
       "preflightEvent": "workflow_dispatch"
-    }
+    },
+    "jinshu094CorrectedStaging": {
+      "pr": 5490,
+      "merge": "8b8464f39de8b3807ba7779f2d4db87fcc918ece",
+      "head": "60b56623b84346838c4f18c51f8d65a351981dd5",
+      "nativeRecordingRun": 45325874207,
+      "nativeArtifact": 14889597325,
+      "status": "approved-on-staging-production-delta-pending"
+    },
+    "latestStaging": "8b8464f39de8b3807ba7779f2d4db87fcc918ece"
   },
   "reviewRuns": {
     "jinshu/047": {
@@ -9255,10 +9264,18 @@
             "conclusion": "success"
           },
           "transfer": {
-            "status": "requested",
+            "status": "success",
             "pr": 5490,
             "ownerRevision": "0f174c3d52b3762d5989b78b3632cba3c6dbdd59",
-            "requestedAt": "2026-11-24T04:28:06.435Z"
+            "requestedAt": "2026-11-24T04:28:06.435Z",
+            "runId": 45326604104,
+            "approvedHead": "60b56623b84346838c4f18c51f8d65a351981dd5"
+          },
+          "stagingMerge": {
+            "pr": 5490,
+            "merge": "8b8464f39de8b3807ba7779f2d4db87fcc918ece",
+            "head": "60b56623b84346838c4f18c51f8d65a351981dd5",
+            "confirmedAt": "2026-11-24T04:29:48.896Z"
           }
         }
       },
