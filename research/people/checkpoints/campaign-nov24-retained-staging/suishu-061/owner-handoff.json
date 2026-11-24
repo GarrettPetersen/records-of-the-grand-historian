@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "061"
+  },
+  "ownerAgentId": "bc-ed0d1048-1994-4bda-a969-6d4212d1b6ac",
+  "workerId": "cursor-nov24-retained-staging-w15-o10",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "827f6f256038028fd2c33e19b9c37d98f1ff7081f187bd2012619c250e461746",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-suishu-061-1b6ac",
+  "phase": "dispatch_pending",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "5dff262f6dc46843f35f86901fb2a9c10cb249b052f9b810ff144ebfe929aa91",
+    "people": 73,
+    "claims": 340,
+    "promptVersion": 7
+  },
+  "extractionBytes": 126474,
+  "inputBlobWitness": {
+    "source": "733a2e723818aea0b058b562937139047dc0d33f",
+    "extraction": "1ee3093cf8e54dc61da5f1eb17d40261a3c08a64",
+    "editorial": "cf1d465e837b4a781e327c1b68cd2fc2a61cbdf1"
+  },
+  "sealedInputs": {
+    "source": "sha256:eae5a5f55b4ab22e9b4c718833a73d67bf524d6fae0890d81965b2c47226d30c",
+    "extraction": "sha256:5dff262f6dc46843f35f86901fb2a9c10cb249b052f9b810ff144ebfe929aa91",
+    "editorial": "sha256:20938563de7818548b363f99a1ebee99f25a723ddfa1e44f165a5af4bf400781"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 61 Biographies 26: Yu Wenshu, Guo Yan",
+    "chineseUnits": 217,
+    "translatedCount": 217,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 126474
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "gitBlob": "1ee3093cf8e54dc61da5f1eb17d40261a3c08a64",
+    "contentSha256": "sha256:5dff262f6dc46843f35f86901fb2a9c10cb249b052f9b810ff144ebfe929aa91",
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "cf1d465e837b4a781e327c1b68cd2fc2a61cbdf1",
+    "contentSha256": "sha256:20938563de7818548b363f99a1ebee99f25a723ddfa1e44f165a5af4bf400781",
+    "appliedRepairCount": 13,
+    "status": "reviewed-with-applied-proposals",
+    "noSelfApproval": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/suishu-061/date-packet.json",
+    "contentSha256": "sha256:8173000a48812f34a2e1c12564895dab9549269a58bfbd714e79021e4b4baa58",
+    "itemCount": 213,
+    "peopleCount": 73,
+    "sourceUnitCount": 217,
+    "buildCommand": "npm run people:dates:packet -- --book suishu --chapter 061 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-061/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book suishu --chapter 061",
+    "peopleValidateSummary": "Scoped person data validation passed for suishu/061: 1 extraction(s), 73 local people, 547 mentions, 598 claims, 0 proposed repair(s), 13 applied repair(s), 13 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book suishu --chapter 061",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book suishu --chapter 061",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "exitCode": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed source, extraction, and editorial inputs at git blobs pinned on staging 20b8d0e3. Full chapter Chinese read with paired literal and idiomatic English on every unit carrying Chinese text. people:validate passes at sealed extraction; people:dates:scan reports zero diagnostic findings. No native date-audit report exists for suishu/061; owner prepared fresh native date packet only and does not self-approve chronology. No definite English omission, extraction contradiction, or owner-scoped chronology/identity edit required.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:8173000a48812f34a2e1c12564895dab9549269a58bfbd714e79021e4b4baa58",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/suishu-061/date-packet.json",
+      "instruction": "Review full sealed date packet against Chinese source units; record approval through people:dates:record only. Undated valid attestations permitted when source-supported."
+    },
+    {
+      "gate": "independent-chapter-identity-review",
+      "status": "required-after-date",
+      "instruction": "Bounded dossier identity review on validated extraction after chronology is independently audited; owner handoff is not approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 061",
+    "datesVerify": "npm run people:dates:verify -- --book suishu --chapter 061",
+    "datesPacket": "npm run people:dates:packet -- --book suishu --chapter 061 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-061/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry build, deploy, or merge."
+}

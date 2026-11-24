@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "012"
+  },
+  "ownerAgentId": "bc-ed0d1048-1994-4bda-a969-6d4212d1b6ac",
+  "workerId": "cursor-nov24-retained-staging-w15-o10",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "827f6f256038028fd2c33e19b9c37d98f1ff7081f187bd2012619c250e461746",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-012-1b6ac",
+  "phase": "dispatch_pending",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "69284b402b693c414270d6d360f1dea853bb980ef47958bc17070d43bb3ef216",
+    "people": 83,
+    "claims": 413,
+    "promptVersion": 7
+  },
+  "extractionBytes": 126957,
+  "inputBlobWitness": {
+    "source": "0f8a4e54bbae1ec1a827601e28acb8c1fea384ba",
+    "extraction": "610733d2e7d0b68f22b8a905ff8b791e94ac5313",
+    "editorial": "4e5c9d4ad7ce4fadd442ad12d611268d1e72cb14"
+  },
+  "sealedInputs": {
+    "source": "sha256:2b6af9a04303ecfe75b54ef604ae9d0932c1d6ef971896fb5095e61987832101",
+    "extraction": "sha256:69284b402b693c414270d6d360f1dea853bb980ef47958bc17070d43bb3ef216",
+    "editorial": "sha256:7646ea84c06906fdb8e3c7f29e26b1ec34ccf91f6ee1f1cf24acf31486f0b337"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 12 Annals 12: Shengzong 3",
+    "chineseUnits": 183,
+    "translatedCount": 183,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 126957
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "gitBlob": "610733d2e7d0b68f22b8a905ff8b791e94ac5313",
+    "contentSha256": "sha256:69284b402b693c414270d6d360f1dea853bb980ef47958bc17070d43bb3ef216",
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "4e5c9d4ad7ce4fadd442ad12d611268d1e72cb14",
+    "contentSha256": "sha256:7646ea84c06906fdb8e3c7f29e26b1ec34ccf91f6ee1f1cf24acf31486f0b337",
+    "appliedRepairCount": 8,
+    "status": "reviewed-with-applied-proposals",
+    "noSelfApproval": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-012/date-packet.json",
+    "contentSha256": "sha256:558eeb0dbade96efc88782c5cc399e34e2bc3d02bec26d257b58ffdddbda40ff",
+    "itemCount": 202,
+    "peopleCount": 83,
+    "sourceUnitCount": 183,
+    "buildCommand": "npm run people:dates:packet -- --book liaoshi --chapter 012 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-012/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 012",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/012: 1 extraction(s), 83 local people, 302 mentions, 724 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book liaoshi --chapter 012",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 012",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "exitCode": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed source, extraction, and editorial inputs at git blobs pinned on staging 20b8d0e3. Full chapter Chinese read with paired literal and idiomatic English on every unit carrying Chinese text. people:validate passes at sealed extraction; people:dates:scan reports zero diagnostic findings. No native date-audit report exists for liaoshi/012; owner prepared fresh native date packet only and does not self-approve chronology. No definite English omission, extraction contradiction, or owner-scoped chronology/identity edit required.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:558eeb0dbade96efc88782c5cc399e34e2bc3d02bec26d257b58ffdddbda40ff",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-012/date-packet.json",
+      "instruction": "Review full sealed date packet against Chinese source units; record approval through people:dates:record only. Undated valid attestations permitted when source-supported."
+    },
+    {
+      "gate": "independent-chapter-identity-review",
+      "status": "required-after-date",
+      "instruction": "Bounded dossier identity review on validated extraction after chronology is independently audited; owner handoff is not approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 012",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 012",
+    "datesPacket": "npm run people:dates:packet -- --book liaoshi --chapter 012 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-012/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry build, deploy, or merge."
+}

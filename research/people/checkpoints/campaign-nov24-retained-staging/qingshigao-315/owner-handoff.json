@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "315"
+  },
+  "ownerAgentId": "bc-ed0d1048-1994-4bda-a969-6d4212d1b6ac",
+  "workerId": "cursor-nov24-retained-staging-w15-o10",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "827f6f256038028fd2c33e19b9c37d98f1ff7081f187bd2012619c250e461746",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-315-1b6ac",
+  "phase": "dispatch_pending",
+  "workOrderAudit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "3caf7efd273c16309513fba97d558c77de01b6c441ea2db2e51ca69f86bbabd8",
+    "people": 95,
+    "claims": 417,
+    "promptVersion": 7
+  },
+  "extractionBytes": 127076,
+  "inputBlobWitness": {
+    "source": "7feca250010ff7f6044443fdb8c57c740deeb27b",
+    "extraction": "7aec5663ea6cfe2a379316b3f04b80788a685b17",
+    "editorial": "205d191f2fdd5ecaf1170e7756884cac4503fbeb"
+  },
+  "sealedInputs": {
+    "source": "sha256:0489cfb5f9cf9aede0cd0d87bbb5a7c392b69c915ee27c973c3c7f593267bfed",
+    "extraction": "sha256:3caf7efd273c16309513fba97d558c77de01b6c441ea2db2e51ca69f86bbabd8",
+    "editorial": "sha256:43d20843b7ebea1a1efff01f1417e9c3d4f517549635df6661cedde71d545f4b"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 315 Biographies 102: Gao Tianxi, E Shi, San Ge, He Qi, Tang Kalu, A Min Dao, Man Fu, Dou Bin, Duan Ji Bu, Nuo Er Ben",
+    "chineseUnits": 215,
+    "translatedCount": 215,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 127076
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "gitBlob": "7aec5663ea6cfe2a379316b3f04b80788a685b17",
+    "contentSha256": "sha256:3caf7efd273c16309513fba97d558c77de01b6c441ea2db2e51ca69f86bbabd8",
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "gitBlob": "205d191f2fdd5ecaf1170e7756884cac4503fbeb",
+    "contentSha256": "sha256:43d20843b7ebea1a1efff01f1417e9c3d4f517549635df6661cedde71d545f4b",
+    "appliedRepairCount": 4,
+    "status": "reviewed-with-applied-proposals",
+    "noSelfApproval": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-315/date-packet.json",
+    "contentSha256": "sha256:9354b37c5c7f9cd731e82493632deca8c770e8b9d443cd4de0d20fcf16b9c91c",
+    "itemCount": 229,
+    "peopleCount": 95,
+    "sourceUnitCount": 215,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 315 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-315/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 315",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/315: 1 extraction(s), 95 local people, 649 mentions, 669 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 315",
+      "findings": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 315",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "exitCode": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained staging owner pass on sealed source, extraction, and editorial inputs at git blobs pinned on staging 20b8d0e3. Full chapter Chinese read with paired literal and idiomatic English on every unit carrying Chinese text. people:validate passes at sealed extraction; people:dates:scan reports zero diagnostic findings. No native date-audit report exists for qingshigao/315; owner prepared fresh native date packet only and does not self-approve chronology. No definite English omission, extraction contradiction, or owner-scoped chronology/identity edit required.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:9354b37c5c7f9cd731e82493632deca8c770e8b9d443cd4de0d20fcf16b9c91c",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-315/date-packet.json",
+      "instruction": "Review full sealed date packet against Chinese source units; record approval through people:dates:record only. Undated valid attestations permitted when source-supported."
+    },
+    {
+      "gate": "independent-chapter-identity-review",
+      "status": "required-after-date",
+      "instruction": "Bounded dossier identity review on validated extraction after chronology is independently audited; owner handoff is not approval."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 315",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 315",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 315 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-315/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner evidence only; no sealed input edits, registry build, deploy, or merge."
+}
