@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "086"
+  },
+  "ownerAgentId": "bc-a94c18e0-17af-4d91-a538-da47123a55b8",
+  "workerId": "cursor-nov24-retained-staging-w15-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "2dfb67890d47dde94d6648821437f98d95fd887790018284db3d475e31206ca6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-086-a55b8",
+  "extractionBytes": 123270,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 55,
+    "workOrderClaims": 440
+  },
+  "inputBlobWitness": {
+    "source": "c062677154fe163119fbd7ab7527cac641a1f215",
+    "extraction": "945757fa2d07ade0d9bb5be2d7a58302d5c1c44e",
+    "editorial": "9eb9f310d0efc94d0cb023bb449b08fd2982a9c0"
+  },
+  "inputBlobWitnessVerified": {
+    "source": true,
+    "extraction": true,
+    "editorial": true
+  },
+  "sealedInputs": {
+    "source": "sha256:e7a929d3d21d5077299168c8685eb280dd10876e9f97c08503979fdc6e23d80f",
+    "extraction": "sha256:4a1d2d348228c84d8b676c3af06ecfc2ee9644e9e0e157459952094bc8843895",
+    "editorial": "sha256:0bd16ead42fdaae2cb28c471becc4c9337daa35b55d73cd74ef1c136408b9dbd"
+  },
+  "extractionReuse": {
+    "preserved": true,
+    "path": "data/people/extractions/liaoshi/086.json",
+    "promptVersion": 7,
+    "byteLength": 123270,
+    "people": 55,
+    "claims": 440,
+    "note": "Owner pass reuses sealed extraction bytes; no re-extraction or claim graph rebuild."
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "path": "data/people/editorial-decisions/liaoshi/086.json",
+    "appliedDecisionCount": 5,
+    "status": "reviewed-with-applied-proposals",
+    "note": "Accepted editorial repairs already reflected in source; owner did not add proposals."
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 86 Biographies 16: Yelu Hezhu, Liu Jing, Liu Liufu, Ye Luniaolu, Niu Wenshu, Du Fang, Xiao Heshang, Yelu Helizhi, Yelu Pode",
+    "sourceTitleZh": "卷八十六 列傳第十六: 耶律合住 劉景 劉六符 耶律褭履 牛溫舒 杜防 蕭和尚 耶律合里只 耶律頗的",
+    "chineseUnits": 187,
+    "sentenceCount": 187,
+    "translatedCount": 187,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-086/native-date-packet.json",
+    "hash": "sha256:ed5d0ceaec9ad54980c25b98a4d959f660c35c14b348a642e68bf88a6313da03",
+    "command": "npm run people:dates:packet -- --book liaoshi --chapter 086 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-086/native-date-packet.json",
+    "sourceHash": "sha256:c2779997846ef68a280a55b0145e6c8470822706f563c60d44f111a3b5cf76d6",
+    "extractionHash": "sha256:c4c824dd4f3ba4da112389320ad7ce7d3438f012314b42657b8199f3fe7ce4db",
+    "itemCount": 188,
+    "peopleCount": 55,
+    "unitCount": 187
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 086",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/086: 1 extraction(s), 55 local people, 284 mentions, 643 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 086",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/liaoshi/086.json",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner closure on sealed source, extraction, and editorial inputs at staging 20b8d0e3. Git blob witnesses match dispatch pins. Full chapter read: 187 Chinese units with paired literal and idiomatic English; accepted editorial repairs are present in source. Scoped people:validate passes with zero proposed repairs; legacy temporal and alias-disposition debt zero in chapter scope. Native date packet sealed at ed5d0cea… for independent chronology review. No definite English omission, extraction contradiction, or source hold found in this owner pass; owner did not self-approve dates.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "packetHash": "sha256:ed5d0ceaec9ad54980c25b98a4d959f660c35c14b348a642e68bf88a6313da03",
+      "packetSourceHash": "sha256:c2779997846ef68a280a55b0145e6c8470822706f563c60d44f111a3b5cf76d6",
+      "packetExtractionHash": "sha256:c4c824dd4f3ba4da112389320ad7ce7d3438f012314b42657b8199f3fe7ce4db",
+      "recordCommand": "npm run people:dates:record -- --book liaoshi --chapter 086",
+      "runCommand": "npm run people:dates:run -- --book liaoshi --chapter 086 --run --model <reviewer-model>",
+      "proofRetention": "Independent reviewer must read all source units and packet items, then record approved report at data/people/date-audits path without owner self-approval."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending-post-date-approval",
+      "note": "Bounded canonical identity dossier review follows independent date approval on current extraction hash."
+    },
+    "independentReviewCompleted": false
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 086",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 086",
+    "datePacket": "npm run people:dates:packet -- --book liaoshi --chapter 086 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-086/native-date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}

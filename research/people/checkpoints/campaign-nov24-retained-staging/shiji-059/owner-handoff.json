@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "059"
+  },
+  "ownerAgentId": "bc-b1524905-c914-4161-8283-fb44e76947f1",
+  "workerId": "cursor-nov24-retained-staging-w15-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "08cda70c9fa8613d8c0579e302faec7e9f71c71ccf34fe72c79c7bc1142ed8b6",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-059-947f1",
+  "extractionBytes": 114582,
+  "inputBlobWitness": {
+    "source": "7caec80b9d93dc24b6792ba36b50f9bf78d9a214",
+    "extraction": "bf4f6e3e8cb0a4cd082e701a9b30c627df8250b7",
+    "editorial": "fdf1ea910e34e9a8cbd92804dda2fc4c95218a95"
+  },
+  "sealedInputs": {
+    "source": "sha256:56eb0c57ed858a2242d878d1d35642cc6fcc0b904b5f499e6b782217ff788041",
+    "extraction": "sha256:f11f6af8d6b1079e299b9d830ab9424361b8158010cdba8f006c798d9ef6aef6",
+    "editorial": "sha256:054b9d85554b796ae574a396c94fbf76b7e1ddf12b9bc4ae9693ae8638414a67"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "House of the Five Clans",
+    "chineseUnits": 166,
+    "translatedCount": 166,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "people": 60,
+    "claimsInWorkOrder": 338,
+    "noReextraction": true,
+    "sourceExtractionSha256Verified": "sha256:f11f6af8d6b1079e299b9d830ab9424361b8158010cdba8f006c798d9ef6aef6"
+  },
+  "editorialReuse": {
+    "acceptedDecisionCount": 7,
+    "status": "reviewed-with-applied-proposals",
+    "noReseal": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-059/date-packet.json",
+    "sha256": "sha256:e1b4115d2db11f72e896884e9c43ff84e5231ce67cec5745705a63b246d3b982",
+    "command": "npm run people:dates:packet -- --book shiji --chapter 059 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-059/date-packet.json",
+    "dateHintChecks": 183,
+    "peopleInPacket": 60,
+    "sourceUnitsInPacket": 166,
+    "extractionHashInPacket": "sha256:98f751326bb661735f1dd09bd4d65c2d6ce30e8a451ddc2778a3ebd963783472"
+  },
+  "dateRepairProposals": [],
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 059",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/059: 1 extraction(s), 60 local people, 510 mentions, 569 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 059",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "independentDateAuditMissing": true,
+    "notIndependentApproval": true,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned three-part inputs (source, extraction, editorial) witness-verified at staging 20b8d0e3. No data/people/date-audits/shiji/059.json on branch (no-native-date-report). Full chapter read: 166 Chinese units with paired literal and idiomatic English; 60 people, 510 mentions, and claim/evidence units align with citations at sealed extraction. Seven accepted editorial repairs reflected in source; zero new proposed repairs. Native date packet sealed at checkpoint; people:dates:verify remains un-audited — owner did not record independent date approval.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "gate": "independent-native-date-audit",
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/shiji/059.json",
+      "datePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-059/date-packet.json",
+      "datePacketSha256": "sha256:e1b4115d2db11f72e896884e9c43ff84e5231ce67cec5745705a63b246d3b982",
+      "instruction": "Independent reviewer audits all 183 packet items against source units and reception/attestation rules; record with people:dates:record. Owner handoff is not date approval."
+    },
+    "identity": {
+      "gate": "independent-canonical-identity-review",
+      "instruction": "Bounded dossier identity review on sealed extraction after date gate; owner did not seal identity approval."
+    }
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 059",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 059",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 059 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-059/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; no sealed input edits, registry, deploy, or merge."
+}
