@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "weishu",
+    "chapter": "093"
+  },
+  "ownerAgentId": "bc-d5f71bc2-6ae8-4a92-b991-f7b98a18ea23",
+  "workerId": "cursor-nov24-retained-staging-w14-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "874b2e7369023fc9642cd3d323d142ed4db984631b4fc3560c2736da0f9d654c",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-weishu-093-8ea23",
+  "extractionBytes": 106644,
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "workOrderPeople": 89,
+    "workOrderClaims": 249
+  },
+  "inputBlobWitness": {
+    "source": "f519f2be2357df35dec248a53fba09a55382b7bd",
+    "extraction": "7205411dd112cd6d0f70cc09437b16b1d09e13db",
+    "editorial": "53a2b068aa801eb8f25dbe676860c8ebb6878e2b",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:30ae60c978e8f64589962d648308813b823b3a88a9c90b3f5e030c1563945421",
+    "extraction": "sha256:29dc9ae4f7597eb2268231a497ff49b64cd981413abc6f1b5d20fc75e9d626cc",
+    "editorial": "sha256:df9ea4b65bba020375b529f99a8e8182c6880aef87f6107bb2c80ab3a9c56d61",
+    "dateAudit": null
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 87: Morality and Righteousness: Yu Shenmen, Duan Jin, Shi Wende, Ji Gu, Wang Xuanwei, Lou Ti, Liu Kehou",
+    "chineseUnits": 203,
+    "translatedCount": 203,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-093/date-packet.json",
+    "sha256": "sha256:841c39166dd49c0ca7e0ac7bea7b48e3e81b6147af646146940f0e37fdb12481",
+    "itemCount": 196,
+    "peopleCount": 89,
+    "unitCount": 203,
+    "sourceHash": "sha256:28a7894b12aba54a262980487b907ee7e83521d11f819392bba6e9e8480861d7",
+    "extractionHash": "sha256:9607aa8080001e549b866186f8e691d98beb88a451ba8744264123ffed9d4c3e",
+    "buildCommand": "npm run people:dates:packet -- --book weishu --chapter 093 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-093/date-packet.json"
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "agentId": "bc-978b0a10-1194-4518-990f-f237bbf3fa2a",
+    "completedAt": "2026-08-12T19:19:37.245Z",
+    "reextractAuthorized": false,
+    "sourceExtractionSha256Verified": true
+  },
+  "editorialReuse": {
+    "appliedRepairCount": 1,
+    "decisionCount": 1,
+    "status": "reviewed-with-applied-proposals",
+    "reReviewRequired": false
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book weishu --chapter 093",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 093",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true,
+    "peopleValidateSummary": "Scoped person data validation passed for weishu/093: 1 extraction(s), 89 local people, 473 mentions, 562 claims, 0 proposed repair(s), 1 applied repair(s), 1 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidatePassed": true
+  },
+  "candidateValidationCommands": {
+    "peopleValidate": "npm run people:validate -- --book weishu --chapter 093",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 093",
+    "datePacket": "npm run people:dates:packet -- --book weishu --chapter 093 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-093/date-packet.json"
+  },
+  "substantiveFindings": "Sealed three-part inputs (source, extraction, editorial) witness-verified at pinned git blobs on staging 20b8d0e3. Full chapter source read: 203 Chinese sentences with paired literal and idiomatic English. Prompt v7 extraction, accepted editorial repairs, and native people:validate pass at current fingerprints. No definite English omission or concrete source–extraction contradiction found in this owner pass; no owner-proposed date repairs. Missing gate: no data/people/date-audits/weishu/093.json — independent native chronology review still required before chapter completion.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "no-native-date-report",
+      "detail": "Fresh sealed date packet at research/people/checkpoints/campaign-nov24-retained-staging/weishu-093/date-packet.json; reviewer must complete independent audit via people:dates:run or equivalent and record with people:dates:record. Owner does not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetSha256": "sha256:841c39166dd49c0ca7e0ac7bea7b48e3e81b6147af646146940f0e37fdb12481",
+      "itemCount": 196
+    },
+    "identity": "Corpus-level canonical identity review remains outside this chapter-owner scope unless transport dossier is separately assigned."
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 093",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 093",
+    "datePacket": "npm run people:dates:packet -- --book weishu --chapter 093 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-093/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
