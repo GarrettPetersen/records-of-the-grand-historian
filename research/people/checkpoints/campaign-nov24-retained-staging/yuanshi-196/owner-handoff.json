@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "yuanshi",
+    "chapter": "196"
+  },
+  "ownerAgentId": "bc-6717c892-c42b-4f22-a800-2bc5fe9d9042",
+  "workerId": "cursor-nov24-retained-staging-w13-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "7c9132bf7aa57d48c7e5f0ba17534a1bfcafa196a677534122252886613e9031",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-yuanshi-196-d9042",
+  "extractionBytes": 102565,
+  "inputBlobWitness": {
+    "source": "af177381a817bac17ddd8bcff109cb64475d69ca",
+    "extraction": "3a2e090fd5e1cefdce9c638c6fc92a6ad45b46de",
+    "editorial": "da2a609749df951032c32cce44b14f772025d531"
+  },
+  "sealedInputs": {
+    "source": "sha256:ab06ef9a450c251e75f9a4c957a0087aa3f4906c770c699f22cebdaa9bc40150",
+    "extraction": "sha256:633b6167f3dac1a2c354018037fa5a203563a6d1acbe8ab7fc3892bf9360d3a8",
+    "editorial": "sha256:baaf5fad5a7c7828b9841545f28bfd460e20fcd458cf15744a0ef93cf2edb775"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-196/date-packet.json",
+    "sha256": "sha256:929b12f2164f6494a98a8a508a4c9761ca482f3266be2987809cd41292b51073",
+    "sourceHash": "sha256:c4b939b078857ff58ad6ce596b17b9cebbd18a0ba2280b041081372d5257aca9",
+    "extractionHash": "sha256:d649b38f314a07b4eacb2afd41780882a53fa48da2a2fe7213cf7c2dce827f67",
+    "itemCheckCount": 192,
+    "personCheckCount": 65,
+    "sourceUnitCount": 169
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 196 Biographies 83: Loyal and Righteous Acts 4",
+    "chineseUnits": 169,
+    "translatedCount": 169,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionAndEditorialReuse": {
+    "promptVersion": 7,
+    "sourceExtractionSha256": "633b6167f3dac1a2c354018037fa5a203563a6d1acbe8ab7fc3892bf9360d3a8",
+    "rawExtractionFileSha256": "633b6167f3dac1a2c354018037fa5a203563a6d1acbe8ab7fc3892bf9360d3a8",
+    "editorialDecisionCount": 2,
+    "appliedEnglishRepairsInSource": 2,
+    "coverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "noExtractionRerun": true,
+    "noEditorialReopen": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book yuanshi --chapter 196",
+    "peopleValidateSummary": "Scoped person data validation passed for yuanshi/196: 1 extraction(s), 65 local people, 293 mentions, 550 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book yuanshi --chapter 196",
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "findings": null
+    },
+    "datesScan": {
+      "command": "node scripts/people-date-audit.mjs scan --book yuanshi --chapter 196",
+      "findings": 0,
+      "reversedIntervals": 0
+    },
+    "chronologyStatus": "un-audited",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentDateApproval": true
+  },
+  "candidateValidationCommands": [
+    "npm run people:validate -- --book yuanshi --chapter 196",
+    "npm run people:dates:verify -- --book yuanshi --chapter 196",
+    "npm run people:dates:packet -- --book yuanshi --chapter 196 --out research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-196/date-packet.json",
+    "node scripts/people-date-audit.mjs scan --book yuanshi --chapter 196"
+  ],
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "independent-native-date-audit",
+      "status": "no-native-date-report",
+      "reason": "Missing data/people/date-audits/yuanshi/196.json; owner sealed fresh date packet only and did not self-approve."
+    }
+  ],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-196/date-packet.json",
+      "packetSha256": "sha256:929b12f2164f6494a98a8a508a4c9761ca482f3266be2987809cd41292b51073",
+      "packetSourceHash": "sha256:c4b939b078857ff58ad6ce596b17b9cebbd18a0ba2280b041081372d5257aca9",
+      "packetExtractionHash": "sha256:d649b38f314a07b4eacb2afd41780882a53fa48da2a2fe7213cf7c2dce827f67",
+      "recordCommand": "npm run people:dates:record -- --report <independent-yuanshi-196-date-review.json>",
+      "authorNotesPath": "research/people/checkpoints/campaign-nov24-retained-staging/yuanshi-196/chronology-author-notes.json"
+    },
+    "identity": {
+      "chapterLocalContradiction": false,
+      "corpusBoundedIdentityReview": "pending per campaign policy; owner found no sealed-input attribution contradiction."
+    }
+  },
+  "substantiveFindings": "Pinned git blob witness verified on staging 20b8d0e3 for source, extraction, and editorial inputs. Full chapter English paired on 169/169 Chinese units; accepted editorial repairs reflected in source JSON. people:validate passed; people:dates:scan reports 0 structural interval findings; deterministic date packet written (192 items, 65 people). No definite English omission, extraction contradiction, or owner-proposed chronology repair in this pass. Yuan reign sequence; no unresolvedReferences in sealed extraction coverage.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "blobWitnessVerified": true,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; sealed inputs unchanged; independent native date audit still missing."
+}
