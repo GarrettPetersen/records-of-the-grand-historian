@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-applied-reviewed-delta",
+  "scope": {
+    "book": "songshu",
+    "chapter": "063",
+    "chapterKey": "songshu/063"
+  },
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "ownerRunId": "run-1840d690-8704-4ed7-a5f8-7fc2c4f2a967",
+  "idempotencyKey": "d5eaf2535615918041faa8cf5cb5e5d491b6fac4490821c8af44c8ae64d0bf0d",
+  "parentRevision": "ef72a978e6ffd7625f4a8682a611832a37c03a6e",
+  "stagingRevision": "5b7ae31b8011c3f51b7cc4623dd973256d5f0b21",
+  "draftPullRequest": 5716,
+  "ownerBranch": "cursor/nov24-retained-blocked-owner-songshu-063-d91335",
+  "applyBranch": "cursor/nov24-owner-apply-approved-delta-songshu-063",
+  "independentReview": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-blocked/songshu-063/independent-scoped-delta-review.json",
+    "gitRef": "ddc7494f4bdb1f8b74cd5530c55d0ca9e975ed10",
+    "sha256": "8e3c413c66c6e055c3d1fd0a5f2dafd8f3dfdde2874b437ac68f30b147119fc3",
+    "reviewerAgentId": "bc-623d7b06-efd6-4ef3-817d-d2552f45aef5",
+    "runId": "run-d6094b6d-683c-4dca-bccf-2d57b98e373a",
+    "verdict": "approve-native-date-proof-repin"
+  },
+  "ownerProposal": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-blocked/songshu-063/owner-handoff.json",
+    "sha256": "dd3b2e1785adaaa5392c0914c93f039d876ff4336d02b563a2c195c69648540a"
+  },
+  "approvedDelta": {
+    "kind": "native-date-proof-repin",
+    "claimIds": ["claim-695"],
+    "changeKind": "reception-taxonomy-migration",
+    "chronologyUnchanged": true,
+    "reconciliationProof": {
+      "sealedExtractionCommit": "a70e3040257e5a44af61472e78f02a5c716d41f3",
+      "nativeReconcileRetrospectiveExtractionMatchesCurrent": true,
+      "reconcileChangeCount": 1
+    }
+  },
+  "affectedPaths": {
+    "data/people/date-audits/songshu/063.json": {
+      "beforeGitBlob": "923242cbca088fe4b73cb26b9ed97cc4b49ddcdf",
+      "afterGitBlob": "a7c9b168f663b56a10a251462ac071ff7393df6d",
+      "fieldChange": {
+        "extractionHash": {
+          "before": "sha256:4730137fe08b9ee1612e1e4e66a2a1331ec745f318b8ef9a6ef1ccdfefe85a38",
+          "after": "sha256:4ca850d3a62509e21e2094be8d4b1cbd9d528ac90048b3a3a38ec3d44a11afac"
+        }
+      },
+      "unchangedFields": [
+        "sourceHash",
+        "status",
+        "reviewer",
+        "reviewedAt",
+        "summary",
+        "itemChecks",
+        "personChecks",
+        "findings",
+        "references"
+      ]
+    },
+    "data/people/date-audit-history/songshu/063/dce52c7b40600d588f1420509263bea4ff1faa40aad8822e5755b364c7264413.json": {
+      "action": "archived-predecessor-by-recordDateAudit",
+      "priorGitBlob": "923242cbca088fe4b73cb26b9ed97cc4b49ddcdf",
+      "contentSha256": "sha256:dce52c7b40600d588f1420509263bea4ff1faa40aad8822e5755b364c7264413"
+    }
+  },
+  "unchangedPinnedInputs": {
+    "data/songshu/063.json": "aec329844d88586ce9418b2efda9bf6ed05bd6c2",
+    "data/people/extractions/songshu/063.json": "7b124b0a84ab85c36ad7e52b5ea6c53d8f3326a8",
+    "data/people/editorial-decisions/songshu/063.json": "2f793dc9b3b20c03c7c76040bab105da201049ba"
+  },
+  "nativeValidation": {
+    "validateDateAuditReportBeforeApply": {
+      "repinnedReportValidates": true
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book songshu --chapter 063",
+      "passed": true,
+      "status": "audited",
+      "findings": 0,
+      "reviewedAt": "2026-09-23T07:45:22.674Z"
+    },
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book songshu --chapter 063",
+      "passed": true,
+      "summary": "Scoped person data validation passed for songshu/063: 1 extraction(s), 137 local people, 735 mentions, 1674 claims, 0 proposed repair(s), 24 applied repair(s), 24 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s)."
+    }
+  },
+  "residualDependencies": [],
+  "residualGates": {
+    "identityResolution": "unchanged; not in scope",
+    "publication": "not approved by this delta"
+  },
+  "notes": "Applied only the independently approved native date proof repin. Original auditor attribution and item rows preserved; predecessor report bytes archived under date-audit-history."
+}
