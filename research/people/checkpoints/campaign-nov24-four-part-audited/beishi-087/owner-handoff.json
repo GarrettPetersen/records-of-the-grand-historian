@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "scope": {
+    "book": "beishi",
+    "chapter": "087"
+  },
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "workerId": "cursor-nov24-four-part-owner-1",
+  "campaign": "campaign-nov24-four-part-audited",
+  "idempotencyKey": "ba8fc1d8800bbb7b8d234460b2bf3d30955bb8ea6e52f162918c8ade43dfb97a",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-four-part-owner-beishi-087-664b73",
+  "inputBlobWitness": {
+    "source": "8ad8022c70ea5da744db622ada94f0868efc1b04",
+    "extraction": "74f5654edfbbae715077359189dde8d9798a5e30",
+    "dateAudit": "8459d128e96b4484cc3763d4db3ccc9f6ff5945d",
+    "editorial": "da8ee6baca8debf11420ada405a95ac9b34dc8de"
+  },
+  "sealedInputs": {
+    "source": "sha256:d94866dbd2c174baff94625b606fe791d2773e64d34e25a6bbf5a3778b49de40",
+    "extraction": "sha256:ca97f73c28f5e51753794f43324a0d464e2b48b5472d9a9d127dd8c29b3c0af6",
+    "dateAudit": "sha256:2b169e860e0d20ae654a3daf4fc2c1a2d63cc7055cfddce311a51d3d90ced65a",
+    "editorial": "sha256:727a29ff49c887d22efd91b45cad83bb8e61da4396bdd5a2c28ed2617cff8d58"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book beishi --chapter 087",
+    "summary": "Scoped person data validation passed for beishi/087: 1 extraction(s), 115 local people, 610 mentions, 1543 claims, 0 proposed repair(s), 31 applied repair(s), 31 editorial decision(s), 0 claim retraction(s), 10 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 304,
+      "translatedCount": 304,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Complete independent audit of all 304 Chinese units, 504 temporal or active-hint items, and 115 people. Current chronology, ownership, conversions, and receptions are source-supported; no findings remain.",
+    "editorialDecisionCount": 31,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 87 Biographies 75: Cruel Officials",
+    "peopleLookupGeneration": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+    "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. No new definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 115 prepared cases remains for independent bounded dossier review across 4 transport parts."
+  },
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 115,
+    "transportParts": 4,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-four-part-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book beishi --chapter 087"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
