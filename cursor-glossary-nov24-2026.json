@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T02:07:46.831Z",
+  "lastCheckedAt": "2026-11-24T02:10:23.499Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -497,7 +497,14 @@
             "jinshu053-current-renew-merge-014-large-f-20261025.json"
           ]
         }
-      ]
+      ],
+      "releaseHold": {
+        "caseId": "per_6MFKJH0M9DXAV1M9B539",
+        "localId": "jinshu:094:p279",
+        "unit": "s0188",
+        "cause": "Jinshu 094 p279 (Zhang Hua’s unnamed son) has no mention or qualifying reviewed inferred citation. Its personal-name classification conflicts with explicit kinship-only source evidence.",
+        "preflightRunId": 45306058689
+      }
     },
     "jinshu/123": {
       "originalPR": 5419,
@@ -904,6 +911,14 @@
           "data/jinshu/063.json",
           "data/people/extractions/jinshu/063.json"
         ]
+      },
+      "reviewEvidenceHold": {
+        "revision": "042f3cde40d63b47a5a8c13736a22de75d7843f2",
+        "claims": [
+          "claim-1",
+          "hints-p122"
+        ],
+        "reason": "Sampled source witnesses do not support the reviewed assertions. Exact reviewer provenance and passage-level audit reconciliation are required before accepting the report."
       }
     },
     "jinshu/020": {
@@ -1407,15 +1422,32 @@
       "verifiedAt": "2026-11-24T01:52:16.676Z",
       "preflightHistory": [
         {
-          "status": "in_progress",
+          "status": "completed",
           "revision": "52f608a80f5fb031ca01dfdf433930ae074d47d9",
           "requiredCheck": "master-build",
           "requestedAt": "2026-11-24T01:34:33.918Z",
           "purpose": "Find integration failures early on the approved five-chapter release candidate. The final production PR still needs its required merge-commit check.",
           "runId": 45306058689,
-          "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45306058689"
+          "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45306058689",
+          "conclusion": "failure",
+          "failure": "Jinshu 094 p279 (Zhang Hua’s unnamed son) has no mention or qualifying reviewed inferred citation. Its personal-name classification conflicts with explicit kinship-only source evidence."
         }
       ]
+    },
+    "isolatedFallback": {
+      "ref": "codex/cursor-glossary-nov24-2026-release-without-094",
+      "revision": "09bc082abc4995c56b7aa922669d6755a315df83",
+      "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+      "chapters": [
+        "jinshu/030",
+        "jinshu/031",
+        "jinshu/083",
+        "jinshu/115",
+        "jinshu/123"
+      ],
+      "status": "preflight-intent",
+      "blockedChapter": "jinshu/094",
+      "sourceCandidate": "4f6f1277c465db94b7e7d83b17e6e612c874e0cf"
     }
   },
   "reviewRuns": {
