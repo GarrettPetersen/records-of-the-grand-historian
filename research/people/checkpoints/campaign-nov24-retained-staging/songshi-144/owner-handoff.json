@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "144"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "3c98aee976a8cc637024225ec4b35a052744f7cbbaa8f36295381f0baef1adb2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-144-8382d",
+  "inputBlobWitness": {
+    "source": "f8af080581892163b78f4be6c21ec77c019c5d0b",
+    "extraction": "6f55a1e3207c39954c0efc7eb4e0858580133809",
+    "dateAudit": "4605e9976a5f18c496d562c3fb84009f9506c95f",
+    "editorial": "f6b7a54fbf16b6a52d23f2187cfecff26fbfb952"
+  },
+  "sealedInputs": {
+    "source": "sha256:9e6eda863661f4e503f6d12f058c76f54358a3458426c6dfc6cea776d0a29441",
+    "extraction": "sha256:74cb21a364087aa7804a419a1d9412b986dd80b90e3c8ef3ca2d6619e3dc10ad",
+    "dateAudit": "sha256:86cea810c3b8e20f93cffcff7866e8bee70a636c47778b71f03c87fdcf4387bb",
+    "editorial": "sha256:8c313b788302194f300852974065c4a8722206fce59e38402a8d2de5f9a0f9e9"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 144 Treatises 97: Ceremonial Guards 2",
+    "chineseUnits": 216,
+    "translatedCount": 216,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "fullEnglishCoverage": true,
+    "editorialRepairsReflectedInSource": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book songshi --chapter 144",
+    "summary": "Scoped person data validation passed for songshi/144: 1 extraction(s), 19 local people, 85 mentions, 169 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s).",
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "chronologyStatus": "research-blocked",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 144",
+      "status": "research-blocked",
+      "findings": 2
+    },
+    "editorialDecisionCount": 2
+  },
+  "substantiveFindings": "All input blobs match dispatch witness. Chapter reread confirms full English coverage, 19 people, evidence linkage, and applied editorial repairs at pinned staging data. Post-curation independent date audit preserves Taiping Xingguo初 and 高宗將迎韋太后 as explicit research holds without invented Western dates; misowned AD 1067 duplicate absent per audit summary. No owner-proposed chronology or identity mutation beyond retaining those holds.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Emperor Taizong attestation retains 太平興國初 without point Western year (s0014).",
+      "items": ["claim-53", "hints-p001", "p001"]
+    },
+    {
+      "gate": "date-research-blocked",
+      "summary": "Gaozong welcome of Empress Wei remains undated in its passage; no invented reign-wide interval.",
+      "items": ["claim-64", "claim-66", "hints-p007", "p007"]
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 144",
+    "verifyDates": "npm run people:dates:verify -- --book songshi --chapter 144"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed staging inputs unchanged."
+}
