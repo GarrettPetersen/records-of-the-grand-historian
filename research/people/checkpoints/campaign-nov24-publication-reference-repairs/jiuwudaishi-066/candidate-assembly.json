@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-source-reference-candidate-assembly",
+  "chapterKey": "jiuwudaishi/066",
+  "authorAgentId": "bc-3001456e-15de-4e26-b1ca-973d0009ec2d",
+  "sourceOwnerRun": "run-a0256c0f-3bd1-4a3b-b885-07d82ac768aa",
+  "assemblyBranch": "cursor/nov24-reference-assembly-jiuwudaishi-066",
+  "stagingParent": "e06abb48f9533ff5e96b24aaa70c3b126998ff90",
+  "idempotencyKey": "12c8a3f01ef883656f89a3610a959a04535f10c2dedad0875e9a4e7d4b19ea66",
+  "independentReview": {
+    "path": "research/people/checkpoints/campaign-nov24-publication-reference-repairs/jiuwudaishi-066/independent-source-reference-review.json",
+    "reviewerAgentId": "bc-00c7149d-17fc-4b3c-a634-30b3ebd2be3a",
+    "reviewerRef": "cursor/nov24-jiuwudaishi-066-source-review-exact-parent",
+    "reviewerHead": "8f9cd8b49d8580bb45b931710f485e31413a5e7a",
+    "reviewBlob": "c9852b58d9860b6b3663ed847f26280e1e8b4ee3",
+    "reviewContentSha256": "18039440d2f3fbb4ddc4ae10d060328445efd0846aa7226c2122f66b67dff472",
+    "verdict": "approve",
+    "operationsApplied": 3
+  },
+  "proposal": {
+    "path": "research/people/checkpoints/campaign-nov24-publication-reference-repairs/jiuwudaishi-066/owner-source-reference-proposal.json",
+    "ownerHead": "636564ff6ed3b7f9b86b113d5035633549e67705",
+    "proposalBlob": "266ab8ae0c2ca47d283b4b46d353c2eec1d2e2a1",
+    "proposalContentSha256": "2f74ec8ff3dfdfbb632b2576caebc27f45b84a5940e8dda40742069e07e7913f"
+  },
+  "approvedOperationsApplied": [
+    {
+      "op": "surfaces.remove",
+      "rows": [
+        ["p010", "kinship-reference", "zh", "李虔徽弟", [["s0019", [0]]]],
+        ["p010", "kinship-reference", "en", "younger brother of Li Qianhui", [["s0019", [0]]]]
+      ]
+    },
+    {
+      "op": "surfaces.add",
+      "rows": [
+        ["p009", "personal-name", "zh", "李虔徽", [["s0019", [0]]]],
+        ["p009", "personal-name", "en", "Li Qianhui", [["s0019", [0]]]],
+        ["p010", "kinship-reference", "zh", "弟", [["s0019", [0]]]],
+        ["p010", "kinship-reference", "en", "younger brother", [["s0019", [0]]]]
+      ]
+    },
+    {
+      "op": "personHints",
+      "localId": "p009",
+      "after": { "x": null }
+    }
+  ],
+  "sealedInputs": {
+    "source": { "path": "data/jiuwudaishi/066.json", "gitBlob": "fa8cc72675c277f81dd9b058620da5637b89eac8", "contentSha256": "sha256:19059b529a49c9a224bc217b51e9c31e703cf265cd38b66373cdf9c96efb21cb", "changed": false },
+    "dateAudit": { "path": "data/people/date-audits/jiuwudaishi/066.json", "gitBlob": "ddd502e18d827c21214dbbcd5039d27975059de2", "contentSha256": "sha256:c2ed89cf127ef5635374f2f1436ef96cc54eda005abba45aae828dd3ca051505", "changed": false },
+    "editorial": { "path": "data/people/editorial-decisions/jiuwudaishi/066.json", "gitBlob": "83f87a2dfa8727f816e6e54cc94e5310f8773724", "contentSha256": "sha256:859862c202ede0cfb71eeaeca2b15deae377f2d6ccaa97cae14ac8a22446af89", "changed": false }
+  },
+  "extraction": {
+    "path": "data/people/extractions/jiuwudaishi/066.json",
+    "before": {
+      "gitBlob": "2a3cc9a4d4fed780b36034d78d6da6ab22791568",
+      "contentSha256": "sha256:b8c9206cad03e0c043c8a4fbce7f7d410a4caa99103a4bea3d32a31deeda39a6",
+      "mentions": 466
+    },
+    "after": {
+      "gitBlob": "2e067554945b1cfc03f2e56eca8fc4d6cebe4773",
+      "contentSha256": "sha256:7593ef3366cdcb686b226891a54c116e701fa093ee0633b311351cf73c04228b",
+      "mentions": 468,
+      "claims": 370,
+      "localPeople": 53
+    }
+  },
+  "validation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jiuwudaishi --chapter 066",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jiuwudaishi/066: 1 extraction(s), 53 local people, 468 mentions, 370 claims, 0 proposed repair(s), 4 applied repair(s), 5 editorial decision(s)."
+    },
+    "validateCompactPeopleExtraction": {
+      "command": "node scripts/validate-people-extraction.mjs data/people/extractions/jiuwudaishi/066.json",
+      "passed": true,
+      "summary": "data/people/extractions/jiuwudaishi/066.json: ok (53 people, 468 mentions, 370 claims, 432 candidates)"
+    }
+  },
+  "auditDiagnostics": {
+    "dateAudit": {
+      "fileBytesUnchanged": true,
+      "recordedExtractionHashInFile": "sha256:22922ffb2fe49902154728c8c8a9722f86ab8604281fa95d2b934f2be63c6605",
+      "priorExtractionContentSha256": "sha256:b8c9206cad03e0c043c8a4fbce7f7d410a4caa99103a4bea3d32a31deeda39a6",
+      "newExtractionContentSha256": "sha256:7593ef3366cdcb686b226891a54c116e701fa093ee0633b311351cf73c04228b",
+      "chronologyClaimsTouched": false,
+      "attestationsOnS0019Unchanged": true,
+      "semanticDateEvidenceUnchanged": true,
+      "staleProofLinkage": "date-audit extractionHash still pins pre-repair extraction; independent reviewer should issue minimal reaffirmation or seal refresh without rewriting chronology content."
+    },
+    "identityPacket": {
+      "affectedLocal": "jiuwudaishi:066:p009",
+      "canonicalPersonId": "per_349RREXBD53HSC5DWM3F",
+      "membershipSubstanceUnchanged": true,
+      "memberVersionWillChange": true,
+      "reason": "Surface-only delta; name claims 李虔徽 / Li Qianhui unchanged. Independent split-transport owner evidence and identity reports remain valid in substance; extraction-scoped seal must rebind to new content hash.",
+      "priorOwnerEvidencePath": "research/people/checkpoints/campaign-nov24-split-transport/jiuwudaishi-066/owner-evidence.json",
+      "identityReportsUntouchedByThisCommit": true
+    }
+  },
+  "remainingProofBlockers": [
+    "Independent date-audit receipt: extraction linkage stale until reviewer records minimal current proof (file bytes unchanged; chronology substance unchanged per approved review scopeConfirmations).",
+    "Independent identity seal: chapter extraction content hash changed; re-seal jiuwudaishi:066:p009 member version without altering accepted canonical membership decision.",
+    "Publication/certified site qualification not run in this assembly turn."
+  ],
+  "authorClaimsNoApproval": true,
+  "englishSupplementalRepairs": [],
+  "sourceReferenceHoldsPreserved": []
+}
