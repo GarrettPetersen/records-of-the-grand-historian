@@ -62,3 +62,7 @@ Next index: **none** (all 16 jobs complete; still not `assembleDateReview` / not
 ## Seven-change recheck at `ccbfbfc9`
 
 See `research/people/jinshu078-seven-chronology-recheck-ccbfbfc9-20261124/`.
+
+## Verify seven undated @ 54d2e91c
+
+See `research/people/jinshu078-seven-undated-verify-54d2e91c-20261124/`.
