@@ -2,39 +2,50 @@
 
 Draft **#5488** `3694dc935781de7f687d304a1500f1af2e537133`. **Not chapter approval.**
 
-## Preserved
+## Preserved through s0620
 
-- **97** editorial, **38** dispositions
-- **189** item checks through **s0480** / **182** unique claims on those rows / **444** units
+- **97** editorial · **38** dispositions  
+- **254** item-check rows · **247** unique `claim-*` · **584** reviewed units (unchanged except **claim-277** enriched per merge rule)
 
 ## Current scope
 
-**Units:** `s0037`–`s0620` (**584**)
+**Units:** `s0037`–`s0700` (**664** units — chapter packet ends at **s0700**)
 
-**Report:** `date-audit-report-partial-s0037-s0620.json` — **254** item checks, **247** unique `claim-*` ids
+**Report:** `date-audit-report-partial-s0037-s0700.json`  
+- **302** item-check rows  
+- **295** unique `claim-*` ids (all claim rows through **claim-325**)
 
 ### Span checkpoints (this run)
 
-| Span | Receipt | New checks |
+| Span | Receipt | New / updated IDs |
 | --- | --- | --- |
-| `s0481`–`s0560` | `chronology-span-checkpoint-s0481-s0560.json` | **30** |
-| `s0561`–`s0620` | `chronology-span-checkpoint-s0561-s0620.json` | **35** |
+| `s0621`–`s0651` | `chronology-span-checkpoint-s0621-s0651.json` | Li Fan cluster incl. **claim-277** merge |
+| `s0652`–`s0663` | `chronology-span-checkpoint-s0652-s0663.json` | Posthumous-title debate |
+| `s0664`–`s0695` | `chronology-span-checkpoint-s0664-s0695.json` | Wen Jiao consorts + taboo |
 
-### Highlights
+### Merge note (**claim-277**)
 
-- **s0481–s0558:** Wang Chang former-wife debate closure; **太兴初** Gan Bao (**claim-234** supported); most memorial actors **research-blocked** for Taikang 2 (extends prior holds).
-- **s0559–s0562:** Liu Zhongwu / Guqiu wives — **supported** at narrative precision; **claim-238** holds Western AD year.
-- **s0563–s0619:** Dual-wife cases; **建武元年** Wen Jiao (**claim-262**); **太兴二年** bandit parents (**claim-274**); **咸康二年** Li Fan opening (**claim-276**); **claim-277** partial (residual evidence past s0619).
+One `itemCheck` with **three** witnesses: `s0619` 咸康二年 · `s0623` 庾亮 · `s0646` 亮從愆期議定. Verdict **supported** (replaces prior single-witness hold).
+
+### Holds (new / extended)
+
+| Group | Items |
+| --- | --- |
+| Wei 谥号 narrative | **claim-290–293** (no Taishi on s0648–s0649) |
+| Taikang 8 speakers | **claim-295–299** |
+| Wen Jiao years | **claim-306–309** |
+| Consort panel years | **claim-313,315,317** incorrect |
+| Xun Yi rule | **claim-322** blocked |
 
 ## Next (precise)
 
 | Field | Value |
 | --- | --- |
-| **Unit span** | `s0621`–`s0720` |
-| **Next item ID** | **`claim-278`** (primary evidence `s0623`, `s0634`) |
+| Units | `s0696`–`s0700` (tail) |
+| **Next item ID** | **`hints-p001`** (then early `claim-2`… on already-reviewed units) |
 
-**Note:** Packet rows **claim-2**–**claim-17** etc. on already-reviewed early units remain unscheduled; they are not the next chronological frontier.
+Complete chapter **claim** coverage through **claim-325** is done; remaining packet work is **hints** + early **claim-2–17** backfill — not approval until full packet review.
 
 ## Out of scope
 
-Owner edits, merge, global build, canonical date-audit recording.
+Owner source, merge, global build, canonical recording.
