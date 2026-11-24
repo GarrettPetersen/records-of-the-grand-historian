@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:42:06.289Z",
+  "lastCheckedAt": "2026-11-24T04:45:43.244Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -9421,7 +9421,7 @@
         "people": 403,
         "reviewerId": "bc-0dff1b5a-cee1-497c-a682-50af5e1e208b",
         "status": "audited-hosted-shared-identity-preparation-pending",
-        "sourceRevision": "2b7088ac31bdbee472ae2be3065c00abbb234090",
+        "sourceRevision": "d7792dea1fbe820b026ab75675067c31d09059dc",
         "ref": "codex/cursor-glossary-nov24-2026-identity-pair-028-047-data"
       },
       "jinshu/047": {
@@ -9449,20 +9449,27 @@
         "dateItems": 553,
         "people": 149,
         "status": "audited-hosted-shared-identity-preparation-pending",
-        "sourceRevision": "2b7088ac31bdbee472ae2be3065c00abbb234090",
+        "sourceRevision": "d7792dea1fbe820b026ab75675067c31d09059dc",
         "ref": "codex/cursor-glossary-nov24-2026-identity-pair-028-047-data"
       }
     },
     "sharedBatch028047": {
       "ref": "codex/cursor-glossary-nov24-2026-identity-pair-028-047-data",
-      "sourceRevision": "2b7088ac31bdbee472ae2be3065c00abbb234090",
+      "sourceRevision": "d7792dea1fbe820b026ab75675067c31d09059dc",
       "chapters": [
         "028",
         "047"
       ],
-      "status": "in_progress",
-      "workflowRevision": "9ef27c95a600a41fb0eb0464eaa2f82841ade185",
-      "runId": 45327792678
+      "status": "retry-requested",
+      "workflowRevision": "3f0eeca768fc026b1f1f2fd7206012242d062eb2",
+      "runId": 45327792678,
+      "previousRun": {
+        "id": 45327792678,
+        "status": "failure",
+        "reason": "Production extraction validator rejected exact contextual qualitative attestations with no Western year."
+      },
+      "validator": "scripts/validate-people-extraction.mjs",
+      "validatorChange": "Allow the already-supported explicit-event-contextual-date label only when the existing exact source quote and qualitative evidence predicates pass; no Western date fallback."
     }
   },
   "dateReviewRuns": {
