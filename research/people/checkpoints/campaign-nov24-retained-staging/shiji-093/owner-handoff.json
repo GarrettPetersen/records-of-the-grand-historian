@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "093"
+  },
+  "ownerAgentId": "bc-4530d5ef-ed07-436e-a29d-7f361d270c64",
+  "workerId": "cursor-nov24-retained-staging-w13-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e8f9814fc41f0b6fa7ae2c97bdb46f063cd48f86745062952e34b0507cb72897",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-shiji-093-70c64",
+  "extractionBytes": 93476,
+  "inputBlobWitness": {
+    "source": "9d87a466bc146f7f962835edddc9bda520234e0c",
+    "extraction": "ee6b5b54995d7c68f9a6cec11132c80d860fb95b",
+    "editorial": "0b61a491b55a198f8083bd12b782c87905d4f265"
+  },
+  "sealedInputs": {
+    "source": "sha256:ab50face884c221f03028257b1f2cb640a069748aa8b6c7cafc64b3ce9c95380",
+    "extraction": "sha256:b2e85f71441b55fabde498fd6c540174a4763faac3ddc5e6034754b7fe7dd053",
+    "editorial": "sha256:0c453f8cfba966b5f3607ac7f3c462e26bf0d951b474fc71df28923f26aa1e32"
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "sourceTitle": "Biographies of Han Xin (King of Han) and Lu Wan",
+    "chineseUnits": 163,
+    "translatedCount": 163,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 163,
+    "translatedCountMeta": 163,
+    "extractionBytes": 93476
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 63,
+    "claims": 236,
+    "sourceExtractionSha256": "b2e85f71441b55fabde498fd6c540174a4763faac3ddc5e6034754b7fe7dd053"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-093/date-packet.json",
+    "fileSha256": "sha256:28bf8acb8cacd25d1094b820e4e060d87d385121b93f52e489b6267ac9acd38b",
+    "sourceHash": "sha256:dc7460860d33962714df9b1ddd58426d29ea0998c9375a9d27f81e5356c95e1d",
+    "extractionHash": "sha256:eec99ecc0ce85da67311e8f1b539fb12433f4887acdc106d696f6b6f1aab488f",
+    "checkCount": 157
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book shiji --chapter 093",
+    "peopleValidateSummary": "Scoped person data validation passed for shiji/093: 1 extraction(s), 63 local people, 512 mentions, 457 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 093",
+      "raw": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "shiji",
+            "chapter": "093",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      },
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "preserved": true
+    },
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "data/people/date-audits missing; people:dates:verify reports un-audited",
+      "requiredProof": "Independent reviewer approval via npm run people:dates:record after native date audit using sealed date packet at pinned hashes"
+    },
+    {
+      "kind": "independent-chapter-completion-review",
+      "reason": "Owner prepared chronology packet and validated extraction reuse only; does not self-approve date or identity gates",
+      "requiredProof": "Separate reviewer signs whole chapter against canonical dossier after date audit recorded"
+    }
+  ],
+  "remainingIndependentProofs": [
+    "native-date-audit-report-at-current-extraction-hash",
+    "independent-final-chapter-review"
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 093",
+    "datesVerify": "npm run people:dates:verify -- --book shiji --chapter 093",
+    "datesPacket": "npm run people:dates:packet -- --book shiji --chapter 093 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-093/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "substantiveFindings": "Owner pass on sealed source, prompt-v7 extraction, and accepted editorial at staging 20b8d0e3: all 163 Chinese sentence units carry paired literal and idiomatic English; two accepted quote-boundary repairs on s0031 are present in live source (且兩主不相緱」…胡騎稍引去). Extraction input.unitCount matches source units; people:validate passes with 63 people and zero temporal/alias debt. Native date packet lists 157 chronology checks for independent audit; no data/people/date-audits report exists and people:dates:verify remains un-audited. No owner chronology edits, definite English repairs, or contradiction holds.",
+  "ownerReview": {
+    "completedAt": "2026-11-24T17:28:47.044Z",
+    "model": "composer-2.5",
+    "extractionUnitCountMatchesSource": true,
+    "definiteEnglishRepairsAuthored": 0,
+    "chronologyRepairsAuthored": 0,
+    "selfApprovedDateAudit": false
+  }
+}

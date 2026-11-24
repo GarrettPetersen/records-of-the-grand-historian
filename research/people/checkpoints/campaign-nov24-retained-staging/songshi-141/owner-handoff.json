@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "141"
+  },
+  "ownerAgentId": "bc-4530d5ef-ed07-436e-a29d-7f361d270c64",
+  "workerId": "cursor-nov24-retained-staging-w13-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e8f9814fc41f0b6fa7ae2c97bdb46f063cd48f86745062952e34b0507cb72897",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshi-141-70c64",
+  "extractionBytes": 93754,
+  "inputBlobWitness": {
+    "source": "ca923475a777123bc133a11acafceb0a8cc4bd70",
+    "extraction": "e869cd081dfca7928fd11f6253d4b1bd528f7190",
+    "editorial": "a6f619da080529d2e9654c4d14b528a5921c600e"
+  },
+  "sealedInputs": {
+    "source": "sha256:29c24d09414f4c5c5f5d1afd1be36bd81a0f856aa8a3c95dd060cc402b297110",
+    "extraction": "sha256:26a525c0f3e54b5b6e8b5166325577eed09cb0fbe00a5b6e61a0ff2b01597c98",
+    "editorial": "sha256:e268a404aa591a8fd99bf73740bcdc86817dbd631c7267807b59524903ea2e51"
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 141 Treatises 94: Music 16",
+    "chineseUnits": 484,
+    "translatedCount": 484,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 484,
+    "translatedCountMeta": 484,
+    "extractionBytes": 93754
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 32,
+    "claims": 225,
+    "sourceExtractionSha256": "26a525c0f3e54b5b6e8b5166325577eed09cb0fbe00a5b6e61a0ff2b01597c98"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-141/date-packet.json",
+    "fileSha256": "sha256:3d89609fae81d7c36f0e1db1f5cb54b24627c564b8c60bb10f4c0415d41cf130",
+    "sourceHash": "sha256:c705fe1c9bb1cbadeea04cc0bfe0a335eeb68ddea0442a61a49655d774af9524",
+    "extractionHash": "sha256:ea29fdea83d553e686159dfc9d6c0a77e7786dd2440a3aa7f6d7795c256fc526",
+    "checkCount": 103
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book songshi --chapter 141",
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/141: 1 extraction(s), 32 local people, 159 mentions, 353 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshi --chapter 141",
+      "raw": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "songshi",
+            "chapter": "141",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      },
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "preserved": true
+    },
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "data/people/date-audits missing; people:dates:verify reports un-audited",
+      "requiredProof": "Independent reviewer approval via npm run people:dates:record after native date audit using sealed date packet at pinned hashes"
+    },
+    {
+      "kind": "independent-chapter-completion-review",
+      "reason": "Owner prepared chronology packet and validated extraction reuse only; does not self-approve date or identity gates",
+      "requiredProof": "Separate reviewer signs whole chapter against canonical dossier after date audit recorded"
+    }
+  ],
+  "remainingIndependentProofs": [
+    "native-date-audit-report-at-current-extraction-hash",
+    "independent-final-chapter-review"
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshi --chapter 141",
+    "datesVerify": "npm run people:dates:verify -- --book songshi --chapter 141",
+    "datesPacket": "npm run people:dates:packet -- --book songshi --chapter 141 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-141/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "substantiveFindings": "Sealed three-part inputs witness-verified. Full English coverage on all Chinese-bearing units in chapter; three accepted editorial decisions reflected in source. Extraction retains 32 people and 225 production claims at pinned bytes; people:validate passes with zero legacy temporal debt. Date packet prepared (103 items) from current hashes; chapter lacks native date-audit artifact. No extraction or chronology owner edits; independent date approval is the blocking gate.",
+  "ownerReview": {
+    "completedAt": "2026-11-24T17:28:47.050Z",
+    "model": "composer-2.5",
+    "extractionUnitCountMatchesSource": true,
+    "definiteEnglishRepairsAuthored": 0,
+    "chronologyRepairsAuthored": 0,
+    "selfApprovedDateAudit": false
+  }
+}

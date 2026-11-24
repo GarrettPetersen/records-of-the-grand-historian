@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "026"
+  },
+  "ownerAgentId": "bc-4530d5ef-ed07-436e-a29d-7f361d270c64",
+  "workerId": "cursor-nov24-retained-staging-w13-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e8f9814fc41f0b6fa7ae2c97bdb46f063cd48f86745062952e34b0507cb72897",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-zhoushu-026-70c64",
+  "extractionBytes": 94496,
+  "inputBlobWitness": {
+    "source": "431eb130a4da3a37975e57618833bbaa8539621e",
+    "extraction": "5e47fb21ff36055ce5f6728d8eab31ed09f303e4",
+    "editorial": "75f7ddc1a2ada5105bd166e6851f42f8359991d2"
+  },
+  "sealedInputs": {
+    "source": "sha256:f635927cfb704033d6305d1037997eaafd8bc22de22f171424928e9c3a28c987",
+    "extraction": "sha256:bc7dd0c238458129960f604f1449fb430db52e78590632bcc77689f467485dd0",
+    "editorial": "sha256:dbded99cc36760a050e45b65e16cf7fdae63c8fc32ca997bac8958b7e1b58d2b"
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 26 Biographies 18: Zhang Sunjian; Zhangsun Shaoyuan; Younger Brother Cheng; Elder Brother Si; Hu Sizheng",
+    "chineseUnits": 181,
+    "translatedCount": 181,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 181,
+    "translatedCountMeta": 181,
+    "extractionBytes": 94496
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 45,
+    "claims": 289,
+    "sourceExtractionSha256": "bc7dd0c238458129960f604f1449fb430db52e78590632bcc77689f467485dd0"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-026/date-packet.json",
+    "fileSha256": "sha256:d6bbc419e416ec246696dc216a4d08fb829cb957b7aee7a68f1bd2fdda4f145e",
+    "sourceHash": "sha256:c1beadc9f67c4e1a7c90ea0bb3d1138513192a5aa870bf9e88317ae3eccc64c2",
+    "extractionHash": "sha256:18997062fcc460a685b4b8cd499cf72ec6bc0ab8dac7dcb8d9075a989b06ff2c",
+    "checkCount": 129
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book zhoushu --chapter 026",
+    "peopleValidateSummary": "Scoped person data validation passed for zhoushu/026: 1 extraction(s), 45 local people, 358 mentions, 474 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book zhoushu --chapter 026",
+      "raw": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "zhoushu",
+            "chapter": "026",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      },
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 4,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "preserved": true
+    },
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "data/people/date-audits missing; people:dates:verify reports un-audited",
+      "requiredProof": "Independent reviewer approval via npm run people:dates:record after native date audit using sealed date packet at pinned hashes"
+    },
+    {
+      "kind": "independent-chapter-completion-review",
+      "reason": "Owner prepared chronology packet and validated extraction reuse only; does not self-approve date or identity gates",
+      "requiredProof": "Separate reviewer signs whole chapter against canonical dossier after date audit recorded"
+    }
+  ],
+  "remainingIndependentProofs": [
+    "native-date-audit-report-at-current-extraction-hash",
+    "independent-final-chapter-review"
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book zhoushu --chapter 026",
+    "datesVerify": "npm run people:dates:verify -- --book zhoushu --chapter 026",
+    "datesPacket": "npm run people:dates:packet -- --book zhoushu --chapter 026 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-026/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "substantiveFindings": "Zhoushu 026 sealed inputs verified against dispatch blobs. 181 Chinese units with full English; four accepted editorial decisions applied. Extraction prompt v7 preserved; people:validate passes (45 people). Date packet 129 items ready for separate native audit; owner does not record dates or approve completion.",
+  "ownerReview": {
+    "completedAt": "2026-11-24T17:28:47.055Z",
+    "model": "composer-2.5",
+    "extractionUnitCountMatchesSource": true,
+    "definiteEnglishRepairsAuthored": 0,
+    "chronologyRepairsAuthored": 0,
+    "selfApprovedDateAudit": false
+  }
+}

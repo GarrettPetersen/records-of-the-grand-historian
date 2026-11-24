@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "300"
+  },
+  "ownerAgentId": "bc-4530d5ef-ed07-436e-a29d-7f361d270c64",
+  "workerId": "cursor-nov24-retained-staging-w13-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e8f9814fc41f0b6fa7ae2c97bdb46f063cd48f86745062952e34b0507cb72897",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-300-70c64",
+  "extractionBytes": 93817,
+  "inputBlobWitness": {
+    "source": "88ab8b5c9d33edc0d8482a1a0d4fc9ddc094a2c2",
+    "extraction": "cd801ad2f9831ddff982aff780104c59a603305b",
+    "editorial": "cedc161716494e006b206aab3971450ade4aefac"
+  },
+  "sealedInputs": {
+    "source": "sha256:56ba06777d7f3771807cdcd361a3a61a76a613d1cd7894f5c802b0f9b1c718cf",
+    "extraction": "sha256:2b0a661dfbc426816442d1445cfd6173f018f502b949c2f0b4ad01730c8d0ddb",
+    "editorial": "sha256:652c66c5ef197ba0ce8552ae49278c2a577389879c1bdd950589acfb0d6f588e"
+  },
+  "inputBlobWitnessVerified": true,
+  "sourceCoverage": {
+    "sourceTitle": "Volume 300 Biographies 87: Chen Qi Yuan, He Shijian, Tang Jizu, Ma Weihan, Yu Dian, Wang Yezi, Liu Erwei",
+    "chineseUnits": 235,
+    "translatedCount": 235,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true,
+    "sentenceCountMeta": 235,
+    "translatedCountMeta": 235,
+    "extractionBytes": 93817
+  },
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "promptVersion": 7,
+    "people": 41,
+    "claims": 273,
+    "sourceExtractionSha256": "2b0a661dfbc426816442d1445cfd6173f018f502b949c2f0b4ad01730c8d0ddb"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-300/date-packet.json",
+    "fileSha256": "sha256:5de5f3dd76a4f76e49136985bf9681981e515bd3467ff519e92bdcc765e6ce7c",
+    "sourceHash": "sha256:2bdfabb11e196b315026a4ba5b40e97b201b40412b9486f6e79dcda42077b3dc",
+    "extractionHash": "sha256:344f1678bd58c09900fb81db3e8d6fbca8c1a1aaf28c71866c606f463db0a77e",
+    "checkCount": 153
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 300",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/300: 1 extraction(s), 41 local people, 313 mentions, 456 claims, 0 proposed repair(s), 3 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 300",
+      "raw": {
+        "total": 1,
+        "counts": {
+          "un-audited": 1
+        },
+        "chapters": [
+          {
+            "book": "qingshigao",
+            "chapter": "300",
+            "status": "un-audited",
+            "auditVersion": 1
+          }
+        ]
+      },
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "preserved": true
+    },
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "independent-native-date-audit",
+      "reason": "data/people/date-audits missing; people:dates:verify reports un-audited",
+      "requiredProof": "Independent reviewer approval via npm run people:dates:record after native date audit using sealed date packet at pinned hashes"
+    },
+    {
+      "kind": "independent-chapter-completion-review",
+      "reason": "Owner prepared chronology packet and validated extraction reuse only; does not self-approve date or identity gates",
+      "requiredProof": "Separate reviewer signs whole chapter against canonical dossier after date audit recorded"
+    }
+  ],
+  "remainingIndependentProofs": [
+    "native-date-audit-report-at-current-extraction-hash",
+    "independent-final-chapter-review"
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 300",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 300",
+    "datesPacket": "npm run people:dates:packet -- --book qingshigao --chapter 300 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-300/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry, deploy, or merge.",
+  "substantiveFindings": "Witnessed blobs on staging; 236 source units read with complete literal/idiomatic English pairing. Accepted editorial count three; validate scoped clean for 41 people. Date packet at pinned extraction/source fingerprints contains 153 audit items; verify status un-audited. Owner found no definite mistranslation or source-contradiction requiring repair proposal.",
+  "ownerReview": {
+    "completedAt": "2026-11-24T17:28:47.052Z",
+    "model": "composer-2.5",
+    "extractionUnitCountMatchesSource": true,
+    "definiteEnglishRepairsAuthored": 0,
+    "chronologyRepairsAuthored": 0,
+    "selfApprovedDateAudit": false
+  }
+}
