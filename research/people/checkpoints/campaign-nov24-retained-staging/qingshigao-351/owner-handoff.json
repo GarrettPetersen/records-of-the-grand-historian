@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "351"
+  },
+  "ownerAgentId": "bc-d8ee21b1-064e-494d-bfa3-a82f3dde05c0",
+  "worker": "cursor-nov24-retained-staging-w11-o1",
+  "idempotencyKey": "b3d2a6e881e7470def2db3b8ea2fe29a338094c5bdfa7eb2d22a106d937a7ada",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-qingshigao-351-e05c0",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "f1a3ab5d285ceadf01102ea53a3f189977515a98db0dd47c68769c7c65ddaeb5",
+    "people": 33,
+    "claimsAtDispatch": 196,
+    "promptVersion": 7,
+    "extractionBytes": 71275
+  },
+  "inputBlobWitness": {
+    "source": "780fae3c0500420460bf00427dca913b8c4bdcb4",
+    "extraction": "f900f57dbbb4441a1458bc4050f707367cf72012",
+    "editorial": "26256874300f05d051470fa9cf0eedf8bf0cf5b6",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:28676a774387b021495be257ce1c7fedc9a26c4df2336e54e3d41e4780020932",
+    "extraction": "sha256:f1a3ab5d285ceadf01102ea53a3f189977515a98db0dd47c68769c7c65ddaeb5",
+    "editorial": "sha256:39e3f182dbbef920227df3c0eab49ed166e44eba6d40fce5117a3147038b6424",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedRepairCount": 2,
+    "editorialDecisionCount": 2,
+    "noCanonicalRewrites": true
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷351 列傳一百三十八 沈初 金士松 邹炳泰 戴联奎 王懿修子：宗诚 黄钺",
+      "en": "Volume 351 Biographies 138: Shen Chu, Jin Shisong, Zou Bingtai, Dai Liankui, Wang Yixiu Son: Zong Cheng, Huang Yue",
+      "raw": "卷351 列傳一百三十八 沈初 金士松 邹炳泰 戴联奎 王懿修子：宗诚 黄钺"
+    },
+    "sentenceCount": 136,
+    "translatedCount": 136,
+    "bothFieldsComplete": true,
+    "chineseUnitsReviewed": "meta and validator parity; owner read Chinese and English witness fields for chapter closure except where scale requires independent reviewer completion",
+    "unitsWithChinese": 136,
+    "unitsWithEnglishWitness": 136,
+    "missingEnglishUnitIds": [],
+    "extractionPeople": 33
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-351/date-packet.json",
+    "sha256": "sha256:407fb536988df418b301236c0cbbdc257d1c2811dd5a34d80899aa9c3118bb76",
+    "sourceHash": "sha256:3a425a8f1942f7a656799a8517f53b14598a0dbbcdb244f3b672ed4551e7969e",
+    "extractionHash": "sha256:ce1a35f0894e79ed719eae767bbba5131aa3a67b08b952b0cde23385b75b0796",
+    "itemCount": 133,
+    "peopleCount": 33,
+    "unitCount": 136,
+    "buildCommand": "npm run people:dates:packet -- --book qingshigao --chapter 351 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-351/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "independentDateApprovalIssued": false,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book qingshigao --chapter 351",
+      "passed": true,
+      "summary": "Scoped person data validation passed for qingshigao/351: 1 extraction(s), 33 local people, 197 mentions, 330 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 351",
+      "status": "un-audited"
+    },
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book qingshigao --chapter 351",
+      "structuralFindings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Pinned sealed source, extraction, and editorial blobs; scoped people:validate; native date packet rebuilt at current fingerprints; people:dates:scan structural pass; no extraction or editorial file edits; no date self-approval.",
+    "substantiveFindings": "All 136 source units carry Garrett Petersen (2026) idiomatic/literal witnesses. Accepted editorial repairs qingshigao:351:r0001 and r0002 already correct s0120 and s0007 English misreadings. No new definite English omission or chronology contradiction found in owner pass. Western dating in packet remains extractor capture pending independent audit.",
+    "concreteContradictionsFound": false
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "required": "Independent native date audit report at data/people/date-audits/qingshigao/351.json recorded through people:dates:record after review of sealedNativeDatePacket",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-351/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-after-date",
+      "note": "Bounded canonical identity dossier review remains after independent date approval; no identity transport prepared in this owner pass."
+    }
+  },
+  "holds": [
+    {
+      "kind": "independent-date-audit",
+      "detail": "No native date report exists; owner did not self-approve chronology."
+    }
+  ],
+  "chapterComplete": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 351",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 351 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-351/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 351"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs preserved; no registry, deploy, or merge."
+}

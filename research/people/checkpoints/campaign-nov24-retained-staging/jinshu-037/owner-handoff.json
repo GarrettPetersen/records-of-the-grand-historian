@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "037"
+  },
+  "ownerAgentId": "bc-d8ee21b1-064e-494d-bfa3-a82f3dde05c0",
+  "worker": "cursor-nov24-retained-staging-w11-o1",
+  "idempotencyKey": "b3d2a6e881e7470def2db3b8ea2fe29a338094c5bdfa7eb2d22a106d937a7ada",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-037-e05c0",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "e7979cb5aeb2e98fe4ce79608b55e7838af2789055f8bb31fdf590a5829718c8",
+    "people": 479,
+    "claimsAtDispatch": 1493,
+    "promptVersion": 7,
+    "extractionBytes": 1417799
+  },
+  "inputBlobWitness": {
+    "source": "90b7edb5c25ea381877e07662d1077bc11d58a26",
+    "extraction": "7b377697250298a59bf95df5c4023f2df2005e6a",
+    "editorial": "d93a785356f0c0e3d8d7d8817489639449a40beb",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:36b66e8f61a14e16715a0823369944cc3528909469b0820980e0028d9e0f689c",
+    "extraction": "sha256:e7979cb5aeb2e98fe4ce79608b55e7838af2789055f8bb31fdf590a5829718c8",
+    "editorial": "sha256:82d6c6a665b8fd636df401f40543db1e6d030cb0e5aebc8a083c7cce51062f6f",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedRepairCount": 90,
+    "editorialDecisionCount": 92,
+    "noCanonicalRewrites": true
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷三十七 列傳第七 宗室",
+      "en": "Volume 37 Biographies 7: Imperial Clan",
+      "raw": "卷三十七 列傳第七 宗室 Volume 37 Biographies 7: Imperial Clan"
+    },
+    "sentenceCount": 871,
+    "translatedCount": 871,
+    "bothFieldsComplete": true,
+    "chineseUnitsReviewed": "meta and validator parity; owner read Chinese and English witness fields for chapter closure except where scale requires independent reviewer completion",
+    "unitsWithChinese": 871,
+    "unitsWithEnglishWitness": 871,
+    "missingEnglishUnitIds": [],
+    "extractionPeople": 479
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-037/date-packet.json",
+    "sha256": "sha256:560316fa9ab4c7ecd49954972ebffa9c38822f02983260d8df8650f417b58429",
+    "sourceHash": "sha256:27b6bd9c147a0ca211d98df04c63a12e8bb0d5bbfe6e4a18db217c2546cdcc7f",
+    "extractionHash": "sha256:acfc72745a0b7506f392674333cb19543243927fc2eab9e65974840a01eabc74",
+    "itemCount": 985,
+    "peopleCount": 479,
+    "unitCount": 871,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 037 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-037/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "independentDateApprovalIssued": false,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 037",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/037: 1 extraction(s), 479 local people, 2373 mentions, 2895 claims, 0 proposed repair(s), 90 applied repair(s), 92 editorial decision(s), 2 claim retraction(s), 28 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 437 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 037",
+      "status": "un-audited"
+    },
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book jinshu --chapter 037",
+      "structuralFindings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Pinned sealed source, extraction, and editorial blobs; scoped people:validate; native date packet rebuilt at current fingerprints; people:dates:scan structural pass; no extraction or editorial file edits; no date self-approval.",
+    "substantiveFindings": "Chapter source translation coverage is complete at 871 units. Sealed extraction and accepted editorial repairs pass scoped validate with 0 proposed translation repairs. No owner-authored canonical edits. 437 local people lack an active-date hint per legacy temporal debt counter; independent date audit must still review whether any omit required source-backed dating.",
+    "concreteContradictionsFound": false
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "required": "Independent native date audit report at data/people/date-audits/jinshu/037.json recorded through people:dates:record after review of sealedNativeDatePacket",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-037/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-after-date",
+      "note": "Bounded canonical identity dossier review remains after independent date approval; no identity transport prepared in this owner pass."
+    }
+  },
+  "holds": [
+    {
+      "kind": "chronology-candidate-note",
+      "detail": "437 local people lack an active-date hint per legacy temporal debt counter; independent date audit must still review whether any omit required source-backed dating."
+    },
+    {
+      "kind": "independent-date-audit",
+      "detail": "No native date report exists; owner did not self-approve chronology."
+    }
+  ],
+  "chapterComplete": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 037",
+    "buildDatePacket": "npm run people:dates:packet -- --book jinshu --chapter 037 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-037/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book jinshu --chapter 037"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs preserved; no registry, deploy, or merge."
+}

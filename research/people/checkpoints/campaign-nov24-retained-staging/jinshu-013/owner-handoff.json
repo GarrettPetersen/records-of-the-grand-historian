@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "013"
+  },
+  "ownerAgentId": "bc-d8ee21b1-064e-494d-bfa3-a82f3dde05c0",
+  "worker": "cursor-nov24-retained-staging-w11-o1",
+  "idempotencyKey": "b3d2a6e881e7470def2db3b8ea2fe29a338094c5bdfa7eb2d22a106d937a7ada",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-013-e05c0",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "be74697beeb7d4a90d61ca63060a348955dff58e5ff66e2bdf66c217a6f4b47a",
+    "people": 464,
+    "claimsAtDispatch": 2989,
+    "promptVersion": 7,
+    "extractionBytes": 2219392
+  },
+  "inputBlobWitness": {
+    "source": "75687286282a217ef591a5d3901693947ce241d4",
+    "extraction": "0886e6c96a1b634cb4160fe7f8b7fa747e5e5647",
+    "editorial": "38906e398e6127473f82d665961bf5f709a685aa",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:b49f3e7d6b284633ab5243188f45c988a2515a8b6ac20553fc3c7f8bd7905607",
+    "extraction": "sha256:be74697beeb7d4a90d61ca63060a348955dff58e5ff66e2bdf66c217a6f4b47a",
+    "editorial": "sha256:0ff5307fd70003d1eb14e554af2b445bde0e203addf47caa9955f574f5207af5",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedRepairCount": 154,
+    "editorialDecisionCount": 154,
+    "noCanonicalRewrites": true
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷十三 志第三 天文下",
+      "en": "Volume 13 Treatises 3: Astronomy Part Three",
+      "raw": "卷十三 志第三 天文下 Volume 13 Treatises 3: Astronomy Part Three"
+    },
+    "sentenceCount": 1559,
+    "translatedCount": 1559,
+    "bothFieldsComplete": true,
+    "chineseUnitsReviewed": "meta and validator parity; owner read Chinese and English witness fields for chapter closure except where scale requires independent reviewer completion",
+    "unitsWithChinese": 1559,
+    "unitsWithEnglishWitness": 1559,
+    "missingEnglishUnitIds": [],
+    "extractionPeople": 464
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-013/date-packet.json",
+    "sha256": "sha256:812841b1411212b782e262d4c8a4c9327aa58cdf2610612acd9132660d5362de",
+    "sourceHash": "sha256:cece628cfa15650f57352979e97e006c3d4e7e000e909cb61a96b4a652ed5e90",
+    "extractionHash": "sha256:3d3d8e9e1a2395add9506836583971f6ddf9492555dd97c6605d358078f37226",
+    "itemCount": 2167,
+    "peopleCount": 464,
+    "unitCount": 1559,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 013 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-013/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "independentDateApprovalIssued": false,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 013",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/013: 1 extraction(s), 464 local people, 1363 mentions, 4848 claims, 0 proposed repair(s), 154 applied repair(s), 154 editorial decision(s), 6 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 013",
+      "status": "un-audited"
+    },
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book jinshu --chapter 013",
+      "structuralFindings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Pinned sealed source, extraction, and editorial blobs; scoped people:validate; native date packet rebuilt at current fingerprints; people:dates:scan structural pass; no extraction or editorial file edits; no date self-approval.",
+    "substantiveFindings": "Chapter source translation coverage is complete at 1559 units. Sealed extraction and accepted editorial repairs pass scoped validate with 0 proposed translation repairs. No owner-authored canonical edits. Western intervals and active-date hints in the rebuilt packet require independent native date review.",
+    "concreteContradictionsFound": false
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "required": "Independent native date audit report at data/people/date-audits/jinshu/013.json recorded through people:dates:record after review of sealedNativeDatePacket",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-013/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-after-date",
+      "note": "Bounded canonical identity dossier review remains after independent date approval; no identity transport prepared in this owner pass."
+    }
+  },
+  "holds": [
+    {
+      "kind": "independent-date-audit",
+      "detail": "No native date report exists; owner did not self-approve chronology."
+    }
+  ],
+  "chapterComplete": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 013",
+    "buildDatePacket": "npm run people:dates:packet -- --book jinshu --chapter 013 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-013/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book jinshu --chapter 013"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs preserved; no registry, deploy, or merge."
+}

@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "003"
+  },
+  "ownerAgentId": "bc-d8ee21b1-064e-494d-bfa3-a82f3dde05c0",
+  "worker": "cursor-nov24-retained-staging-w11-o1",
+  "idempotencyKey": "b3d2a6e881e7470def2db3b8ea2fe29a338094c5bdfa7eb2d22a106d937a7ada",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-003-e05c0",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "3e50298d7827435447868f79c4d417dbf06dfdb10df76560344c7997d0628759",
+    "people": 470,
+    "claimsAtDispatch": 2141,
+    "promptVersion": 7,
+    "extractionBytes": 1685300
+  },
+  "inputBlobWitness": {
+    "source": "858cb12ff8b69e37ac68a4ee8380462394ee93ff",
+    "extraction": "e8fac51eb99e0f0413c735f70a7c78c790f7b316",
+    "editorial": "ec4be8066502c73342880afcbdd0abc57dcf8e82",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:d163d68fb29b4a8f38ec63e70fcda6bf3f3168ccfed0b4d905f561a20e365150",
+    "extraction": "sha256:3e50298d7827435447868f79c4d417dbf06dfdb10df76560344c7997d0628759",
+    "editorial": "sha256:00d04c6e938ae9b34f22d6eecee8499220a56e13f8e8e3e69af3dfbc4e477b89",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedRepairCount": 138,
+    "editorialDecisionCount": 148,
+    "noCanonicalRewrites": true
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷三 帝紀第三 世祖武帝",
+      "en": "Volume 3 Annals 3: Emperor Wu",
+      "raw": "卷三 帝紀第三 世祖武帝 Volume 3 Annals 3: Emperor Wu"
+    },
+    "sentenceCount": 795,
+    "translatedCount": 795,
+    "bothFieldsComplete": true,
+    "chineseUnitsReviewed": "meta and validator parity; owner read Chinese and English witness fields for chapter closure except where scale requires independent reviewer completion",
+    "unitsWithChinese": 795,
+    "unitsWithEnglishWitness": 795,
+    "missingEnglishUnitIds": [],
+    "extractionPeople": 470
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-003/date-packet.json",
+    "sha256": "sha256:d66ec490120a38ff4efebe7bc718a1a3676b109e881c8bbf60b691bbf70b03e9",
+    "sourceHash": "sha256:44bdc7f4e21270a2d1897a87b79db3d246aabe294a1e9dcdf2442651554b2193",
+    "extractionHash": "sha256:952f0446aecf7d1a14b64c190486d31495fe59a9b246de318eb26b95526ee47c",
+    "itemCount": 1529,
+    "peopleCount": 470,
+    "unitCount": 795,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 003 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-003/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "independentDateApprovalIssued": false,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 003",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/003: 1 extraction(s), 470 local people, 1936 mentions, 3386 claims, 0 proposed repair(s), 138 applied repair(s), 148 editorial decision(s), 2 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 003",
+      "status": "un-audited"
+    },
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book jinshu --chapter 003",
+      "structuralFindings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Pinned sealed source, extraction, and editorial blobs; scoped people:validate; native date packet rebuilt at current fingerprints; people:dates:scan structural pass; no extraction or editorial file edits; no date self-approval.",
+    "substantiveFindings": "Chapter source translation coverage is complete at 795 units. Sealed extraction and accepted editorial repairs pass scoped validate with 0 proposed translation repairs. No owner-authored canonical edits. Western intervals and active-date hints in the rebuilt packet require independent native date review.",
+    "concreteContradictionsFound": false
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "required": "Independent native date audit report at data/people/date-audits/jinshu/003.json recorded through people:dates:record after review of sealedNativeDatePacket",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-003/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-after-date",
+      "note": "Bounded canonical identity dossier review remains after independent date approval; no identity transport prepared in this owner pass."
+    }
+  },
+  "holds": [
+    {
+      "kind": "independent-date-audit",
+      "detail": "No native date report exists; owner did not self-approve chronology."
+    }
+  ],
+  "chapterComplete": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 003",
+    "buildDatePacket": "npm run people:dates:packet -- --book jinshu --chapter 003 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-003/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book jinshu --chapter 003"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs preserved; no registry, deploy, or merge."
+}

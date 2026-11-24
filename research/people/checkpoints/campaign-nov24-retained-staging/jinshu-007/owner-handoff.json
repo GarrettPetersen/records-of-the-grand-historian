@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "jinshu",
+    "chapter": "007"
+  },
+  "ownerAgentId": "bc-d8ee21b1-064e-494d-bfa3-a82f3dde05c0",
+  "worker": "cursor-nov24-retained-staging-w11-o1",
+  "idempotencyKey": "b3d2a6e881e7470def2db3b8ea2fe29a338094c5bdfa7eb2d22a106d937a7ada",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "phase": "dispatch_pending",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-jinshu-007-e05c0",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "119d864b05a428e621dac145331b0803a06a3b3199cad541e8a1a9f3011e8329",
+    "people": 308,
+    "claimsAtDispatch": 2271,
+    "promptVersion": 7,
+    "extractionBytes": 1414939
+  },
+  "inputBlobWitness": {
+    "source": "52fa5e6547c62e24dd6ae837beb1a7d7b27fc8e9",
+    "extraction": "70cfb9c8a8c910f4a854fe2e4cafa75b8dcdd3f3",
+    "editorial": "da486005f423d2d1acccd94fcf19c8d74e1f393c",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:d26f39a7fc5989297986f1b8e3a791f4729403e22fbf88a0f90f2b6f709bb766",
+    "extraction": "sha256:119d864b05a428e621dac145331b0803a06a3b3199cad541e8a1a9f3011e8329",
+    "editorial": "sha256:041f913974e6a875b6a9c7ff91f8fe00be8207b0ce2c45160d31d7f8c665b36d",
+    "dateAudit": null
+  },
+  "inputBlobWitnessVerified": true,
+  "extractionReuse": {
+    "preserved": true,
+    "promptVersion": 7,
+    "noReExtraction": true
+  },
+  "editorialReuse": {
+    "preserved": true,
+    "appliedRepairCount": 44,
+    "editorialDecisionCount": 44,
+    "noCanonicalRewrites": true
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷七 帝紀第七 顯宗成帝 康帝",
+      "en": "Volume 7 Annals 7: Emperor Cheng; Emperor Kang",
+      "raw": "卷七 帝紀第七 顯宗成帝 康帝 Volume 7 Annals 7: Emperor Cheng; Emperor Kang"
+    },
+    "sentenceCount": 369,
+    "translatedCount": 369,
+    "bothFieldsComplete": true,
+    "chineseUnitsReviewed": "meta and validator parity; owner read Chinese and English witness fields for chapter closure except where scale requires independent reviewer completion",
+    "unitsWithChinese": 369,
+    "unitsWithEnglishWitness": 369,
+    "missingEnglishUnitIds": [],
+    "extractionPeople": 308
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-007/date-packet.json",
+    "sha256": "sha256:1656058a9576bd9610d0810905793c615084f102a8d09f26ed180213ac659ee9",
+    "sourceHash": "sha256:354faa8f51b5f288fdefd322fb316064a96321386505359fffbb78a39d181668",
+    "extractionHash": "sha256:c86c796eaec45914d11490fd8ac6643f64a8fdf2671c6e07a7cce3de6db70a40",
+    "itemCount": 1594,
+    "peopleCount": 308,
+    "unitCount": 369,
+    "buildCommand": "npm run people:dates:packet -- --book jinshu --chapter 007 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-007/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "chronologyStatus": "un-audited",
+  "independentDateApprovalIssued": false,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book jinshu --chapter 007",
+      "passed": true,
+      "summary": "Scoped person data validation passed for jinshu/007: 1 extraction(s), 308 local people, 1065 mentions, 3571 claims, 0 proposed repair(s), 44 applied repair(s), 44 editorial decision(s), 6 claim retraction(s), 6 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book jinshu --chapter 007",
+      "status": "un-audited"
+    },
+    "peopleDatesScan": {
+      "command": "npm run people:dates:scan -- --book jinshu --chapter 007",
+      "structuralFindings": 0
+    }
+  },
+  "authorEvidence": {
+    "method": "Pinned sealed source, extraction, and editorial blobs; scoped people:validate; native date packet rebuilt at current fingerprints; people:dates:scan structural pass; no extraction or editorial file edits; no date self-approval.",
+    "substantiveFindings": "Chapter source translation coverage is complete at 369 units. Sealed extraction and accepted editorial repairs pass scoped validate with 0 proposed translation repairs. No owner-authored canonical edits. Western intervals and active-date hints in the rebuilt packet require independent native date review.",
+    "concreteContradictionsFound": false
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "status": "missing",
+      "required": "Independent native date audit report at data/people/date-audits/jinshu/007.json recorded through people:dates:record after review of sealedNativeDatePacket",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/jinshu-007/date-packet.json"
+    },
+    "identity": {
+      "status": "pending-after-date",
+      "note": "Bounded canonical identity dossier review remains after independent date approval; no identity transport prepared in this owner pass."
+    }
+  },
+  "holds": [
+    {
+      "kind": "independent-date-audit",
+      "detail": "No native date report exists; owner did not self-approve chronology."
+    }
+  ],
+  "chapterComplete": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshu --chapter 007",
+    "buildDatePacket": "npm run people:dates:packet -- --book jinshu --chapter 007 --out research/people/checkpoints/campaign-nov24-retained-staging/jinshu-007/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book jinshu --chapter 007"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; sealed inputs preserved; no registry, deploy, or merge."
+}
