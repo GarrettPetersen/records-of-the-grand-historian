@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "four-part-audited-source-owner-handoff",
+  "chapterKey": "liangshu/012",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "012"
+  },
+  "workerId": "cursor-nov24-four-part-owner-2",
+  "ownerAgentId": "bc-2e8802ad-6e60-4700-b09f-9b27d9b1b316",
+  "sourceRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "stagingBase": "7004d0b43c1447fd514c71ff1d8684edce658ae7",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-four-part-owner-liangshu-012-b1b316",
+  "inputBlobWitness": {
+    "source": "9440d456aeffb81b6753c61e6f74fecd0a9ba5c7",
+    "extraction": "78bf171f46688e2f05970b1e1baa4d2ae4a519c9",
+    "dateAudit": "0f6a8808cba2c698238956aaf76fc20653c73f35",
+    "editorial": "357441efc09ee55bbe11791909ed2a88ae98eb1a"
+  },
+  "sealedInputs": {
+    "source": "sha256:8d01a623b30ed317bf317347e4129651fa041545d304402500b78709cbd16e5c",
+    "extraction": "sha256:dee8b6dd743931127615186d7e0516f8e2906f3adaf1f5d7d99157d0993ddd3d",
+    "editorial": "sha256:1ccf1fdfeb42099b5db77bfbc748c58ee06db97dc4378903df208bf453d0ced2",
+    "dateAudit": "sha256:95b518376f6a9d5cf00bc8b47d5e4e0d68ffae9522117dd1f654348b5508f723"
+  },
+  "transport": {
+    "planFingerprint": "sha256:15287c6e047f76231907c0f9665537f6d97bf5af02046f3acfd8eecec9c17442",
+    "sourcePacketSha256": "4a692d34f883002b1e9e26055ed7dd90a9e75aeae5258386a1d03ee5f5443d92",
+    "transportSha256": "3f634bd4abc0107fd4adfbd1d9c79d98711323618d2c2da31fbfd743bd849da9",
+    "transportBytes": 928684,
+    "preparationReceiptSha256": "sha256:e3ca2528b0cd089be056b3b4bbce792e90e02421ca951680a56a4f268be04666",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "1b4373244a6b60f88e143bb7420d922df564045e7a07ff8eaa4f29b88ad65cc3",
+        "caseCount": 12
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "f448bf903df562d104446692321c883e84614557e6d2bd0471ab3673fae51928",
+        "caseCount": 12
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "be78a246d5ac956ec8c5275d38941328886a081abebb849bcba24782262e1632",
+        "caseCount": 24
+      },
+      {
+        "path": "transport-part-004.json",
+        "sha256": "3a0421ef902e87dfbb9f2652cb4e752202fa3fa452ef34935f491c6ee5872ba3",
+        "caseCount": 48
+      }
+    ]
+  },
+  "chronologyStatus": "audited",
+  "editorialStatus": "reviewed",
+  "sourceCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": [
+      {
+        "unit": "s0044",
+        "description": "蕭令君 / Commander Xiao is an allusive title in Chen's speech; the chapter does not supply the speaker's full personal name for this recalled figure."
+      },
+      {
+        "unit": "s0045",
+        "description": "崔氏 / Cui is identified only by surname/clan designation as the force Commander Xiao defeated; the chapter does not supply a full personal name."
+      }
+    ]
+  },
+  "definiteTranslationRepairs": [],
+  "validation": {
+    "command": "npm run people:validate -- --book liangshu --chapter 012",
+    "passed": true,
+    "summary": "Scoped person data validation passed for liangshu/012: 1 extraction(s), 117 local people, 588 mentions, 1594 claims, 0 proposed repair(s), 24 applied repair(s), 24 editorial decision(s), 0 claim retraction(s), 3 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "scopedEvidence": {
+    "retainProposals": 96,
+    "holds": 0,
+    "reviewCases": 96,
+    "independentReviewCompleted": false,
+    "substantiveFindings": "Source-owner pass: full Chinese and paired English coverage, aligned extraction and audited chronology; 96 identity cases retain accepted canonical membership pending independent dossier review."
+  },
+  "remainingIndependentEvidence": {
+    "gate": "independent-bounded-dossier-identity-review",
+    "reviewCases": 96,
+    "transportParts": 4,
+    "note": "Owner assessments are not independent approval."
+  },
+  "nextGate": "independent-bounded-dossier-identity-review",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 012"
+  },
+  "notes": "Chapter-only source-owner handoff on staging base; identity transport retained in four parts."
+}
