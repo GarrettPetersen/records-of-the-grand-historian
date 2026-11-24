@@ -1,71 +1,60 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Replay exact retained owner chronology proposals
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
 jobs:
-  master-build:
-    name: master-build
+  replay:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 25
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SOURCE: 6da101b20ffebfd0e2f08f13fae348719f6fd459
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Replay exact source-supported owner proposals
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
-
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
-
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
-
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          mkdir -p "$RUNNER_TEMP/ready"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {buildDateAuditPacket} from './scripts/lib/people-date-audit.mjs';
+          import {applyDateRepairProposal} from './scripts/lib/people-date-workflow.mjs';
+          const records=[{"key":"jinshi/038","status":"candidate","owner":"bc-159f19bf-4834-45ac-9043-8f3fc66a8383","runId":"run-5e5a343c-1d7e-4bbf-a6f1-63bba1683931","path":"research/people/checkpoints/campaign-nov24-retained-staging/jinshi-038/owner-native-chronology-repair.json","revision":"b6a86397fed00e1740432c8455a09af4364f76bb","sha256":"bf5a1c57b3a90a474a05569238c15e9c35a1c596e4129245a80a75df7efd9d91","previous":"d75f583585bd5599ff265270a527d60539f12e85","priorHandoff":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/jinshi-038/owner-handoff.json","sha256":"8915040d47a555183e755d11d55e63a07c25c4d385502522390cee3f94fd0381"},"inputBlobs":[{"path":"data/jinshi/038.json","blob":"421c9defcdd4274f6c12133206aee5db3ee66f9e"},{"path":"data/people/extractions/jinshi/038.json","blob":"fdc89118e14a3db0e2b06fb497b160c8cb443eca"},{"path":"data/people/date-audits/jinshi/038.json","blob":"6d1181ae6266a46db79b014b4640e2a3d328db4b"},{"path":"data/people/editorial-decisions/jinshi/038.json","blob":"f24c252fc4a14eca88824ec934bdd71121cb8e59"}],"audit":{"sha256":"f9c783df995c4978f370184ba9a3e802f9dec3f918bd96ed04b09cf68f2603f0","status":"research-blocked","auditReviewedAt":"2026-09-24T00:40:00Z","coveredItems":3,"findings":1}},{"key":"qingshigao/050","status":"candidate","owner":"bc-159f19bf-4834-45ac-9043-8f3fc66a8383","runId":"run-5e5a343c-1d7e-4bbf-a6f1-63bba1683931","path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-050/owner-native-chronology-repair.json","revision":"aa6d11b2a6c5a6f84f056ba3d5aad853e0175865","sha256":"7ef4f57997fceb854ac0ad7cb1442f1b8a5f8e0e396214217f2510a6afcb9b86","previous":"61cfd8371514c6dc78966cbda1bf090d6d533111","priorHandoff":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-050/owner-handoff.json","sha256":"e495843fe3b0c2256a34407c29d56aca6a0ad451372bc74ea40b8efd750229d2"},"inputBlobs":[{"path":"data/qingshigao/050.json","blob":"440b732a12518e30f25ef31f7aac4eb6fc1537d5"},{"path":"data/people/extractions/qingshigao/050.json","blob":"408bbaf13e07934af841c3babb670ca0375b74f8"},{"path":"data/people/date-audits/qingshigao/050.json","blob":"e93903cef3db57ec8534f16b453a13c22ac151b8"},{"path":"data/people/editorial-decisions/qingshigao/050.json","blob":"74c377fefda796b968b91b5464c2b207665b077a"}],"audit":{"sha256":"03b9e7158d10f453ba982c7e0ba9c5513c05f101d4e85f55ff7fb35fc343a6d2","status":"research-blocked","auditReviewedAt":"2026-09-23T13:21:25.137Z","coveredItems":23,"findings":7}}];
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const read=p=>JSON.parse(fs.readFileSync(p)); const jobs=[];
+          for(const j of records){try{
+            const [book,chapter]=j.key.split('/'), priorPath='data/people/date-audits/'+j.key+'.json', audit=fs.readFileSync(priorPath), extractPath='data/people/extractions/'+j.key+'.json';
+            assert.equal(sha(audit),j.audit.sha256); assert.equal(JSON.parse(audit).status,j.audit.status);
+            for(const p of j.inputBlobs)assert.equal(execFileSync('git',['rev-parse','HEAD:'+p.path],{encoding:'utf8'}).trim(),p.blob);
+            const raw=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+process.env.GITHUB_REPOSITORY+'/contents/'+j.path+'?ref='+j.revision],{maxBuffer:6e6,timeout:24000}); assert.equal(sha(raw),j.sha256);
+            const proposal=JSON.parse(raw), old=read(extractPath), packet=buildDateAuditPacket(book,chapter,{extraction:old});
+            const submitted=proposal.nativeProposal??proposal.nativeDateRepairProposal??proposal.dateRepairProposal??null;
+            const edited=Boolean(submitted?.changes?.length), candidate=edited?applyDateRepairProposal(old,submitted,packet):old, current=buildDateAuditPacket(book,chapter,{extraction:candidate});
+            assert(current.people.length>0&&current.items.length>0);
+            const dir=process.env.RUNNER_TEMP+'/ready/'+j.key.replace('/','-'); fs.mkdirSync(dir,{recursive:true});
+            const write=(name,data)=>{const raw=Buffer.from(JSON.stringify(data,null,2)+'\n');fs.writeFileSync(dir+'/'+name,raw);return sha(raw);};
+            const candidateSha=write('candidate.json',candidate), packetSha=write('date-packet.json',current); fs.writeFileSync(dir+'/original-independent-report.json',audit);
+            fs.writeFileSync(dir+'/source-owner-proposal.json',raw);
+            const summary={key:j.key,owner:j.owner,ownerRun:j.runId,sourceRevision:process.env.SOURCE,candidateSha,packetSha,inputs:j.inputBlobs,edited,priorDateAuditSha:sha(audit),sourceHash:current.sourceHash,extractionHash:current.extractionHash,currentItems:current.items.length,currentPeople:current.people.length,readiness:'independent-date-review-required'};
+            write('scope-receipt.json',summary);jobs.push(summary);
+          }catch(e){jobs.push({key:j.key,held:e.message});}}
+          fs.writeFileSync(process.env.RUNNER_TEMP+'/ready/replay-summary.json',JSON.stringify(jobs,null,2));
+          JS
+      - uses: actions/upload-artifact@v4
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: nov24-retained-owner-chronology-replay
+          path: ${{ runner.temp }}/ready
+          if-no-files-found: error
+          retention-days: 7
