@@ -1,71 +1,136 @@
-name: Master build gate
-
-# Run on the proposed PR merge commit, not just the topic branch. Keep this
-# workflow unfiltered so its required check is always reported for master PRs.
+name: Discover next unclaimed date-audited chapters after publication
+run-name: Validate exact first native dates and prepare bounded identity review batch 2
 on:
-  pull_request:
-    branches: [master]
-  push:
-    branches: [master]
-  merge_group:
-    types: [checks_requested]
-
+  workflow_dispatch:
 permissions:
   contents: read
-
+  actions: read
 jobs:
-  master-build:
-    name: master-build
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0]
     env:
-      NODE_OPTIONS: --max-old-space-size=6144
+      SHARD: ${{ matrix.shard }}
+      SOURCE: a420e47ce0671c45a9cad463401c071c96bff460
+      STAGING: a420e47ce0671c45a9cad463401c071c96bff460
+      NODE_OPTIONS: --max-old-space-size=3072
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-
+          ref: ${{ env.SOURCE }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Test people date-hint normalization
-        run: npm run people:hints:self-test
-
-      - name: Test unresolved people-date holds
-        run: node scripts/test-people-unresolved-hold.mjs
-
-      - name: Test Cursor date-worker recovery
-        run: node --test scripts/test-people-date-worker.mjs scripts/test-people-date-send-recovery.mjs scripts/test-people-date-workflow.mjs scripts/test-people-date-ownership.mjs scripts/test-people-date-preflight-diagnostics.mjs
-
-      - name: Install ebook publication verification tools
+      - run: npm install --no-audit --no-fund
+      - name: Rank already-audited scopes and prepare the shard
+        timeout-minutes: 32
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libxml2-utils imagemagick zip unzip
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE"
+          export REGISTRY="$GITHUB_WORKSPACE/data/people/generated/identity-dossiers/$SOURCE"
+          mkdir -p "$(dirname "$REGISTRY")"
+          node scripts/people-identity-registry-worker.mjs --out "$REGISTRY" --revision "$SOURCE"
 
-      - name: Test certified ebook people provenance and publication gates
-        run: node --test scripts/test-people-identity-seal.mjs scripts/test-ebook-certified-people.mjs scripts/test-ebook-certified-cli.mjs scripts/test-ebook-people-readiness.mjs scripts/test-ebook-current-date-audits.mjs scripts/test-people-date-audit.mjs scripts/test-people-editorial-rejections.mjs
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {execFileSync} from 'node:child_process';
+          import {prepareChapterIdentityReview} from './scripts/prepare-people-chapter-identity.mjs';
+          const {SOURCE,STAGING,RUNNER_TEMP,GITHUB_REPOSITORY}=process.env;
+          const queue=JSON.parse(execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/people-work-queue.json?ref=codex/people-work-queue'],{encoding:'utf8',maxBuffer:12e6}));
+          const excluded=new Set();
+          const allowed={"mingshi/065":"bc-48a8605c-93df-4536-be10-902887db2aca","qingshigao/466":"bc-48a8605c-93df-4536-be10-902887db2aca","liaoshi/046":"bc-4c1dbcfd-ceee-4ca5-93f7-8174254ca16b","shiji/100":"bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d","nanqishu/021":"bc-f7cb81ae-3fc7-4cae-92d0-36013bc0945d","qingshigao/151":"bc-20f814f3-2250-46a1-b0f8-4ab0cb08933b","qingshigao/463":"bc-1c736b0a-e0f6-4ff0-8c48-abe80623c603","songshi/141":"bc-4530d5ef-ed07-436e-a29d-7f361d270c64","shiji/072":"bc-648a287f-90a4-4ae8-b119-f71b19addc5b","qingshigao/141":"bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2","qingshigao/300":"bc-4530d5ef-ed07-436e-a29d-7f361d270c64","qingshigao/391":"bc-269ec703-5133-4314-8050-fc299a953527","xinwudaishi/049":"bc-7bd97b7f-52be-4243-a9bd-88408f559891","liaoshi/075":"bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2","liaoshi/098":"bc-a0dd73da-8de0-4b98-accd-4dbf772d16fa","qingshigao/354":"bc-4c1dbcfd-ceee-4ca5-93f7-8174254ca16b","shiji/063":"bc-648a287f-90a4-4ae8-b119-f71b19addc5b","nanqishu/017":"bc-a4d76336-fefe-485e-b919-88a5185f4501","shiji/080":"bc-435d82fd-aa5d-4f20-97e5-f4035d15281f","qingshigao/378":"bc-20f814f3-2250-46a1-b0f8-4ab0cb08933b","liaoshi/077":"bc-4c1dbcfd-ceee-4ca5-93f7-8174254ca16b","qingshigao/353":"bc-a0dd73da-8de0-4b98-accd-4dbf772d16fa","liaoshi/113":"bc-7bd97b7f-52be-4243-a9bd-88408f559891","songshi/013":"bc-20f814f3-2250-46a1-b0f8-4ab0cb08933b"};
+          const openPR=JSON.parse(execFileSync("gh",["pr","list","--state","open","--limit","300","--json","headRefName,title"],{encoding:"utf8",maxBuffer:5e6,timeout:45000})).map(p=>(p.headRefName+" "+p.title).toLowerCase());
+          for(const [key,record] of Object.entries(queue.chapterOwners??{}))if(['active','ready','resume-required'].includes(record.status)&&record.agentId!==allowed[key])excluded.add(key);
+          for(const lane of ['identityReviews','dateAudits','claims'])for(const [key,record] of Object.entries(queue[lane]??{}))if(['claimed','active','ready','resume-required'].includes(record.status))excluded.add(key);
+          const git=(args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:24e6}).trim();
 
-      - name: Test bounded canonical-person dossiers and chapter proofs
-        run: |
-          node --test scripts/test-people-identity-dossiers.mjs scripts/test-people-identity-dossier-store.mjs scripts/test-people-chapter-identity.mjs scripts/test-people-progress-ui.mjs
-          npm run people:catalog:self-test
+          const dir='data/people/date-audits';
+          const roots=['data','data/people/extractions','data/people/date-audits','data/people/editorial-decisions'];
+          const candidates=[];
+          const skipped={};
+          const skip=k=>{skipped[k]=(skipped[k]??0)+1;};
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+          for(const book of fs.readdirSync(dir)){
+            if(!fs.statSync(path.join(dir,book)).isDirectory())continue;
+            for(const name of fs.readdirSync(path.join(dir,book))){
+              if(!/^\d{3}\.json$/.test(name))continue;
+              const chapter=name.slice(0,-5),key=book+'/'+chapter;
+              if(!allowed[key]||excluded.has(key)||fs.existsSync('data/people/identity-reviews/'+key+'.json')){skip('reserved_or_certified');continue;}
+              const files=roots.map(root=>root+'/'+key+'.json');
+              if(files.some(f=>!fs.existsSync(f))){skip('missing_or_staging_changed');continue;}
+              const audit=read(files[2]);
+              if(audit.status!=='audited'||audit.findings?.length!==0){skip('recorded_status');continue;}
+              const extraction=read(files[1]);
+              const people=extraction.people?.length;
+              if(!Number.isInteger(people)||people===0){skip('empty');continue;}
+              candidates.push({key,book,chapter,people,files});
+            }
+          }
+          candidates.sort((a,b)=>a.people-b.people||a.key.localeCompare(b.key));
+          const receipts=[];
+          const out=path.join(RUNNER_TEMP,'cohort');
+          fs.mkdirSync(out,{recursive:true});
+          const registry=process.env.REGISTRY;
+          let prepared=0;
+          const shard=Number(process.env.SHARD);
+          if(!Number.isInteger(shard)||shard<0||shard>3)throw Error("Invalid preparation shard");
+          const ranked=candidates;
+          const [owner,name]=GITHUB_REPOSITORY.split("/");
+          const currentStageBlobs=new Map();
+          for(let i=0;i<ranked.length;i+=7){
+            const group=ranked.slice(i,i+7).flatMap(c=>c.files);
+            const lines=group.map((file,j)=>"p"+j+":object(expression:"+JSON.stringify(STAGING+":"+file)+"){oid}");
+            const query="query{repository(owner:"+JSON.stringify(owner)+",name:"+JSON.stringify(name)+"){"+lines.join("\n")+"}}";
+            const response=JSON.parse(execFileSync("gh",["api","graphql","--input","-"],{input:JSON.stringify({query}),encoding:"utf8",maxBuffer:3e6,timeout:30000}));
+            if(response.errors?.length||!response.data?.repository)throw Error("GitHub exact-stage blob query failed");
+            group.forEach((path,j)=>currentStageBlobs.set(path,response.data.repository["p"+j]?.oid??null));
+          }
+          const sameStage=ranked.filter(c=>{const exact=c.files.every(p=>currentStageBlobs.get(p)===git(["rev-parse",SOURCE+":"+p])); if(!exact)skip("staging_blob_changed");return exact;});
+          const progress=()=>{
+            const file=path.join(out,"cohort-receipts.json");
+            fs.writeFileSync(file+".tmp",JSON.stringify({source:SOURCE,staging:STAGING,shard,eligibleBeforeStageCheck:ranked.length,sameStage:sameStage.length,skipped,prepared,receipts},null,2)+"\n");
+            fs.renameSync(file+".tmp",file);
+          };
+          progress();
+          for(const c of sameStage){
+            if(prepared>=Object.keys(allowed).length)break;
+            const target=path.join(out,c.key.replace('/','-'));
+            try{
+              const expected=[{"key":"mingshi/065","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/mingshi-065/date-packet.json","sha256":"eee0ff4d89f52092d6f79c7ad7bda8ea94bced42391f2dfef2013d5972d97e5d","items":88,"people":23,"units":365,"sourceHash":"sha256:2abdce56b6da58bdc944748067a9b08f2ca99208bd3db199e9960d386ea9f30e","extractionHash":"sha256:9948851f639c1cbee544e51c6175ed1d02254ee5a3b9f5a9909fe0350ac7661e","revision":"ad0ddd87d375f93323b01341afc768b741b38143"}},{"key":"qingshigao/466","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-466/date-packet.json","sha256":"348cd79d9f9f0663a5f56e8cfa0e90b9944588f4d3c6b10cd39780b96845c301","items":155,"people":23,"units":128,"sourceHash":"sha256:985fd743ad0bcacfdb371664d62fb97281c52704f80bf5d34a7dc3386d5fd828","extractionHash":"sha256:6f107fc398c6b07d08b97628bd619f5584230b725a9e7d70918fcbec8d39aaa0","revision":"0e768ed2cd9e09cf91c6abcd2de3b8de9fea2628"}},{"key":"liaoshi/046","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-046/date-packet.json","sha256":"6faec2625ae17bd5bee799665cb520af321e2b331c0078ec3462175ffcdab6d1","items":95,"people":26,"units":385,"sourceHash":"sha256:8fb36fa623394394c29d5f7d98a3d35e50624498ed099a21381fac23939306bc","extractionHash":"sha256:1f88d92ac6c4f779af5b8ca2514dc5e7e71ec9fb49dd77e002f1e7c66c9a9526","revision":"e5f93fc995b05a1eb4b039b5c06bf22aef92e700"}},{"key":"shiji/100","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/shiji-100/date-packet.json","sha256":"d81585069e6114e0548ca05dca726021c324d2de3e10bd1f0d569bd0db8e8f82","items":96,"people":31,"units":110,"sourceHash":"sha256:b857de08122c0a607a83d0486ca0d1356be62edebbcbcfd458eb9d73a32ddd8c","extractionHash":"sha256:879ad38bbde02327423a6f1ac3eaa6391d8921cd3318ef9ef8d425a4570a33af","revision":"47b4b2cbda32ead160d80ed100ee180ec491fceb"}},{"key":"nanqishu/021","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-021/date-packet.json","sha256":"dd6f43dcf83ed6f500e3ac66eb792b1bdc5ef92338b13f46f9f1771ab2217b52","items":97,"people":32,"units":137,"sourceHash":"sha256:7ba7227f8d84f389e831a33ac714a31251a50725a9b6b87d3462c656c88202a4","extractionHash":"sha256:b6161aecf7bf0fdc6436676691f18ce16d20d3b497d9a55d502a1cd3028ed8ee","revision":"22d0b7202702b64941139bb13cce68b88b384868"}},{"key":"qingshigao/151","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-151/date-packet.json","sha256":"a614ef013b543b848896c767b7d151391f5680c6c31b35d9d6aa15c069fd7931","items":100,"people":32,"units":298,"sourceHash":"sha256:b9a2372b3865064831f8be2ede7a893e641312b0d1ec9a22820b105789757025","extractionHash":"sha256:bcd0d8b5e1070cb840b1ebd7f2308a44de8b9259b977053c5ea586fbb6752391","revision":"1b047fbe491df1f411bf72e21af727a2a38ea66c"}},{"key":"qingshigao/463","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-463/date-packet.json","sha256":"4031e65b6d90e21acbbdf73f917c01bc787e0f7f1ec8540a64a6ce080dac72ab","items":97,"people":32,"units":126,"sourceHash":"sha256:6f0e21611fde3de23e411f2562e441fe70e2f3a0d9c6353baa43a234993b69b7","extractionHash":"sha256:f554a83cc6d8bd9dd28fb4b9c78108f4c787d2cd6393280efbe337ae525bebf6","revision":"a1575ee240bcad4958f251a8a681219b5edc28f9"}},{"key":"songshi/141","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/songshi-141/date-packet.json","sha256":"3d89609fae81d7c36f0e1db1f5cb54b24627c564b8c60bb10f4c0415d41cf130","items":103,"people":32,"units":484,"sourceHash":"sha256:c705fe1c9bb1cbadeea04cc0bfe0a335eeb68ddea0442a61a49655d774af9524","extractionHash":"sha256:ea29fdea83d553e686159dfc9d6c0a77e7786dd2440a3aa7f6d7795c256fc526","revision":"b14d753f08f0351cd4dab579aa37ad64b65dc324"}},{"key":"shiji/072","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/shiji-072/native-date-packet.json","sha256":"c73e0307e00b6031163d58b1d475bf7d9be9b3d28b16e8c20dcf435d7b0668c2","items":124,"people":34,"units":116,"sourceHash":"sha256:fc6576be9ef7ec1ab54074aecbb65e9b23b49ebcd23b5eddbc32a7e4b788c796","extractionHash":"sha256:c39d3690f25c9b7bfca8d3b30e349b671d02a78556c54d785e5d867e10970f10","revision":"8d51d932c6e6e373ff35c3bcadb561ae38335c04"}},{"key":"qingshigao/141","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-141/date-packet.json","sha256":"efec95f8bb01e84562971bef0c3e22ab43445ed5f504ca6a0d1d035185f33ab8","items":125,"people":35,"units":174,"sourceHash":"sha256:d7a564d7cd80d84e40fbe85e2f6b69037ce0bbd5032fdbde7bf3a5dcd3fff79c","extractionHash":"sha256:a390ac40420f724b29e9f4587c313df30d08ba29dcf376aaa5f76123cf98d9eb","revision":"718cfc6e0a7376ac1fc386cc37da5030f34799ce"}},{"key":"qingshigao/300","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-300/date-packet.json","sha256":"5de5f3dd76a4f76e49136985bf9681981e515bd3467ff519e92bdcc765e6ce7c","items":153,"people":41,"units":236,"sourceHash":"sha256:2bdfabb11e196b315026a4ba5b40e97b201b40412b9486f6e79dcda42077b3dc","extractionHash":"sha256:344f1678bd58c09900fb81db3e8d6fbca8c1a1aaf28c71866c606f463db0a77e","revision":"b14d753f08f0351cd4dab579aa37ad64b65dc324"}},{"key":"qingshigao/391","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-391/date-packet.json","sha256":"a3ce17b47bf806c61aa89f135bcec61299a98d2b2dd57a47bd61fc8de976869c","items":173,"people":41,"units":202,"sourceHash":"sha256:d2cd73f1e4b3f6c142a8d17d730ec673c0eb778c3bd900c426dd96ec27bb3ed7","extractionHash":"sha256:b711e66e4589334f0ccac98cc11066acee6b999beab38fb77e1162b95d1b63d2","revision":"5a709fb02f727af0bc993d80b3a751a6750ca8af"}},{"key":"xinwudaishi/049","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-049/date-packet.json","sha256":"5f48e93313376092ab04fe406c9ce82bd5f7a0e38e6cc640c2100d83315c87dd","items":168,"people":41,"units":152,"sourceHash":"sha256:68c11089540ad53fae6caebff43f6591bd15133a8ae1f25003fd0310cb6f3a69","extractionHash":"sha256:50a16d730f90dad218d2e5b638bf26e8ea482af55d8bdc69028a62719c926c66","revision":"0fa7e9dae1021812241828086aafb51f0473af8e"}},{"key":"liaoshi/075","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-075/date-packet.json","sha256":"178ed2b9ca3b3bb01bebf36246006923e6a9bcf4b72f4675f8f119db8c6e136e","items":118,"people":42,"units":130,"sourceHash":"sha256:3e6d7b2bf78f9dde0b35746b0cb47cf9a5a0a522fb1281bed1b44a5b348cdb23","extractionHash":"sha256:73d8faec5723611927d4967c728b31e7dbbebeb8fc34a74864d21bceecd632a5","revision":"718cfc6e0a7376ac1fc386cc37da5030f34799ce"}},{"key":"liaoshi/098","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-098/date-packet.json","sha256":"b05cdfab2ba015f3498315cd69e3556135f85f5d682761e0751c0f655adf3058","items":170,"people":42,"units":124,"sourceHash":"sha256:7f26abd55aa974761e3c58084734539efb7fc3d79db6ff6bc52b0d5623e5ffbe","extractionHash":"sha256:449c38a0879f4affa0ec6654d665bc2dcad0c3ce9572bafa76afb6e935f10792","revision":"dd51170a272a7e388d708e895421455062580c7d"}},{"key":"qingshigao/354","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-354/date-packet.json","sha256":"5af68e93c558aa04a880487ddc55b16b01e0b782fd5817851ea13a0b461df79e","items":186,"people":42,"units":208,"sourceHash":"sha256:be62ab83e617f23b1e3598f7cbabfcb29ceb7b3433449b22f3d7881de85fff67","extractionHash":"sha256:7a1445a726a8c8bf68be53e0452818b4a6679a9e2d3caff10f4eac6b41deee65","revision":"e5f93fc995b05a1eb4b039b5c06bf22aef92e700"}},{"key":"shiji/063","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/shiji-063/native-date-packet.json","sha256":"11d3837e09a4096370bbe92de13f5e1190ae0cef7cdb464efe68ef2aed575563","items":98,"people":42,"units":144,"sourceHash":"sha256:4832ef185f9e6f87745bf1bbec47727598238c1fcc0732624148da51e1233c7e","extractionHash":"sha256:54452dcff5b19b8675436525210835f3a89477b02044df86ba8ade432ff3f9b6","revision":"8d51d932c6e6e373ff35c3bcadb561ae38335c04"}},{"key":"nanqishu/017","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-017/date-packet.json","sha256":"6c63528b0e7e57fbceb152159d4e03220c071ce9fc49fc286785ab64eddc7d5b","items":93,"people":43,"units":269,"sourceHash":"sha256:d4f71daaef426f91deaa138d030faded21fc98623748d4271aea4500b17002ea","extractionHash":"sha256:16f8674e687f0756e16a7162bb457968b1fda72013d27da55bc41c87734ac4c7","revision":"d2446b9c1f304ca8f6e77cacce254ec6aea628b3"}},{"key":"shiji/080","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/shiji-080/date-packet.json","sha256":"cf3dbaec4661ad99e628427398f4b2b349bab425108fb38d66921e3f92816638","items":100,"people":46,"units":121,"sourceHash":"sha256:c3be22d447fb3e70a57d0e30dd4d77d68cb80244883151b65f30d23b2b298000","extractionHash":"sha256:4197919c5ae1df7ec376ef7b306703963311bc561cb2654fd06f6b1fc73c3dcf","revision":"1d6c62a50a3014b41f22cd075b34f0369047426a"}},{"key":"qingshigao/378","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-378/date-packet.json","sha256":"4fce937fce78a1c943b77e223c1ff51e39c084e46a239bba64bcbb2a9c206023","items":155,"people":47,"units":223,"sourceHash":"sha256:ae7a5263e030fd352033f6869d1191c4ad2d19d96a364da17f9518a0f6560b57","extractionHash":"sha256:a2bdcdbd4dd97fa1d28f68303156cf80a9bc9d140d6ec66ee49fd2d0f6c46948","revision":"1b047fbe491df1f411bf72e21af727a2a38ea66c"}},{"key":"liaoshi/077","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-077/date-packet.json","sha256":"262333e5167a68ec29485030b4b5b80f033507895ed871dd88c16d16e1bddebb","items":173,"people":48,"units":221,"sourceHash":"sha256:767bbe725fffb5f2bbe87ea367487f2661cbed9c5dbf5869ed322e6682e8bf42","extractionHash":"sha256:a5d6fd9cfad4ae27d1d397a266a52a1fe596f3c81683c67efe0f75a768803f3c","revision":"e5f93fc995b05a1eb4b039b5c06bf22aef92e700"}},{"key":"qingshigao/353","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-353/date-packet.json","sha256":"2fd9185ec4e4aeff61d775b560c34e11d82eb7385cafc128b3f8e54e79ba7aba","items":184,"people":49,"units":189,"sourceHash":"sha256:3866227901d4d6c6f04f694320ddda8f576772cb085c4d12fdf2975fab5eb40d","extractionHash":"sha256:9e706b85cf7d419c16d4f21f46774a9afe735d9d8a30637293c085a04312821d","revision":"dd51170a272a7e388d708e895421455062580c7d"}},{"key":"liaoshi/113","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-113/date-packet.json","sha256":"15520ba23d1ff13a98deba71ab01820d334163f819adc00694f53f034ccb03cb","items":186,"people":54,"units":161,"sourceHash":"sha256:25808ae3f497841f75044217493a2fe3339e7e6f340a0e5589d71422ebd9b6b1","extractionHash":"sha256:287d709ca9e08ea5972029e5dfff154421e89cb126d5eba223e9e1fb61a06536","revision":"0fa7e9dae1021812241828086aafb51f0473af8e"}},{"key":"songshi/013","packet":{"path":"research/people/checkpoints/campaign-nov24-retained-staging/songshi-013/date-packet.json","sha256":"9ca18c4a2ca838a10109d71f4c48819e34838e39d291d30ab8fa5791b70aa4fc","items":177,"people":55,"units":216,"sourceHash":"sha256:ab32dd2985ac14de828f7a14b752f5c644d48a80a7e2eb62f4ef42911a7f3660","extractionHash":"sha256:fbdecdcb555daf1b7b051dc97effe18ea01fe476d3a24e57dd8448cfa83c7d97","revision":"1b047fbe491df1f411bf72e21af727a2a38ea66c"}}];
+              const sealed=expected.find(x=>x.key===c.key);
+              const packetBytes=execFileSync('gh',['api','-H','Accept: application/vnd.github.raw+json','repos/'+GITHUB_REPOSITORY+'/contents/'+sealed.packet.path+'?ref='+sealed.packet.revision],{maxBuffer:6e6,timeout:20000});
+              const hash=(await import('node:crypto')).createHash('sha256').update(packetBytes).digest('hex');
+              if(hash!==sealed.packet.sha256)throw Error('Exact native date packet changed');
+              const audit=(await import('./scripts/lib/people-date-audit.mjs'));
+              audit.validateDateAuditReport(read('data/people/date-audits/'+c.key+'.json'),JSON.parse(packetBytes));
+              if(audit.dateAuditStatus(c.book,c.chapter).status!=='audited')throw Error('Exact live chronology did not validate');
+              const result=await prepareChapterIdentityReview({book:c.book,chapter:c.chapter,sourceRevision:SOURCE,registry,out:target,transportMaxBytes:384*1024});
+              const pin=read(path.join(target,'preparation-receipt.json'));
+              if(!result.metrics?.cases){
+                receipts.push({key:c.key,people:c.people,status:'requires_separate_review_transport',cases:result.metrics?.cases??0,parts:result.reviewParts?.length??0});
+                fs.rmSync(target,{recursive:true,force:true});progress();continue;
+              }
+              const files=c.files.map(p=>({path:p,blob:git(['rev-parse',SOURCE+':'+p])}));
+              receipts.push({key:c.key,people:c.people,status:'ready',cases:result.metrics.cases,planFingerprint:result.planFingerprint,sourcePacketSha256:result.sourcePacketSha256,transportSha256:pin.transportSha256,transportBytes:pin.transportBytes,reviewParts:pin.reviewParts??[],files});
+              prepared+=1;
+            }catch(e){receipts.push({key:c.key,people:c.people,status:'held',reason:e.message.split('\n')[0]});}
+            progress();
+          }
 
-      - name: Test certified website people publication
-        run: node --test scripts/test-people-qualified-site.mjs scripts/test-people-site.mjs scripts/test-people-html-link-detection.mjs
-
-      - name: Build and validate the full site
-        run: npm run build
-
-      - name: Verify real Jinshu 053 qualification and ebook contribution
-        run: node scripts/verify-people-chapter-release.mjs --book jinshu --chapter 053 --out data/people/generated/jinshu053-release-acceptance
-
-      - name: Preserve nonempty chapter acceptance evidence
-        uses: actions/upload-artifact@v4
+          progress();
+          console.log(JSON.stringify({eligibleBeforeNativeGate:candidates.length,skipped,prepared,held:receipts.filter(x=>x.status==='held').length}));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: jinshu053-qualified-contribution
-          path: data/people/generated/jinshu053-release-acceptance/
-          retention-days: 30
+          name: nov24-first-native-date-identity-projection-2-${{ matrix.shard }}
+          path: ${{ runner.temp }}/cohort/
+          if-no-files-found: error
+          retention-days: 7
