@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "beiqishu/029",
+  "reviewerAgentId": "bc-24004124-5bcb-4ae9-b007-d236aa2d5820",
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "ownerRevision": "4ce7f41d2d6371c5941c08454e0ac5e244a76f91",
+  "proposalSha256": "sha256:e665a3bed4dc8a46f04e2e25108c077563d151451096dc1d664dfd770608d30b",
+  "priorReviewCommit": "563276aa3706c1ca7ff28af6a2d43f9f54735033",
+  "assessmentSummary": "Owner diagnosis matches both independent holds from the prior part-003 report: descriptive-kinship locals p063 and p066 lack validator-accepted primary Han naming, not a false merge. Proposed extraction patches add literal mediated kin terms from s0118/s0125 without inventing personal names. Approve identity-name and person-note operations; approve surface-add only with schema fixes (kinship-reference kind, occurrence index). Identity-case hold remains after apply because no independent personal Han name exists in source.",
+  "decisions": [
+    {
+      "caseId": "sha256:c1cf722f3aeb070d97144f2a66f813d8ed36a726a4192e88ae788552fc94cc52",
+      "targetLocalId": "beiqishu:029:p063",
+      "verdict": "approve-partial",
+      "operationsApproved": [
+        {
+          "operation": "extraction-identity-name",
+          "note": "before/after verified against data/people/extractions/beiqishu/029.json blob 5a1c8dc8…; adding zh 舅子 on descriptive-kinship matches chapter precedent (e.g. p015 老母, p026 伯姊) as mediated literal from source, not a personal name."
+        },
+        {
+          "operation": "extraction-person-note",
+          "note": "Clarifies mediated-only inference; before/after accurate."
+        },
+        {
+          "operation": "extraction-surface-add",
+          "amendmentsRequired": "Surface kind must be kinship-reference (compact-extraction.schema.json §surface), not descriptive-kinship. Occurrence on s0118 must be [0] (single 舅子 in unit), not [1]."
+        }
+      ],
+      "operationsRejected": [],
+      "sourceEvidence": {
+        "literalQuoteVerified": "范陽盧思道是其舅子，嘗贈詩云：「水衡稱逸人，潘楊有世親，形骸預冠蓋，心思出風塵。」",
+        "unitId": "s0118",
+        "sourceBlob": "dcb854c696d765997b643b947d4e6db65825cad4",
+        "extractionBlob": "5a1c8dc831949e3d4a01234ed9a502d6f60c44f8",
+        "englishFields": "Literal and idiomatic both render 舅子 as nephew-by-marriage of Li Xingzhi (其); neither English field invents a name for p063. No translation repair required.",
+        "contradictionAssessment": "No wrong-actor or false-merge contradiction. 舅子 in primary Chinese predicates Lu Sidao–Li Xingzhi kinship; p063 remains strongly inferred sister/mother via family-relationship claims already on s0118, not direct surface naming."
+      },
+      "dependencyImpact": {
+        "chronology": "unchanged — p063 attestation 齊世 on s0118 and date-audit blob 9394d291… unaffected",
+        "identity": "canonical per_Q0RHN6VDK2BXWEB9A7MA retained; no merge/split; p060/p062 kin edges unchanged",
+        "editorial": "unchanged — editorial blob f09cefe3… untouched",
+        "translation": "none",
+        "otherIdentityProofs": "No other chapter case depends on inventing a Han name for p063"
+      },
+      "remainingHold": {
+        "required": true,
+        "reason": "After apply, independent primary attestation still lacks a Han personal name for this localId; 舅子 is a mediated kin term in Lu–Li rhetoric, not p063's name. Retain unresolvedIdentity=false and case disposition per preparation only after host validates extraction; do not clear identity hold for personal-name coverage.",
+        "repairPath": "Source cannot support a personal name without over-reading 舅子; acceptable outcomes are (a) retain descriptive-kinship record with sealed zh mediated witness and held identity primary-name gap, or (b) retract p063 if policy requires named surfaces only — not proposed here."
+      }
+    },
+    {
+      "caseId": "sha256:a2d91dc6ea0e9c289e70e87ea5c29f0746d4538e043afafcf781dacc2d715358",
+      "targetLocalId": "beiqishu:029:p066",
+      "verdict": "approve-partial",
+      "operationsApproved": [
+        {
+          "operation": "extraction-identity-name",
+          "note": "before/after verified; zh 從母兄 is literal on s0125. Parallel to p067 descriptive-kinship zh 從母 on same unit; correctly avoids unattested lone 母."
+        },
+        {
+          "operation": "extraction-person-note",
+          "note": "Accurate statement that 從母兄 names cousin path via Cui Juan, not mother's personal name."
+        },
+        {
+          "operation": "extraction-surface-add",
+          "amendmentsRequired": "Use surface kind kinship-reference, not descriptive-kinship; occurrence [0] on s0125 is correct."
+        }
+      ],
+      "operationsRejected": [],
+      "sourceEvidence": {
+        "literalQuoteVerified": "及遷都鄴，曉便寓居清河，託從母兄崔悛宅。",
+        "unitId": "s0125",
+        "sourceBlob": "dcb854c696d765997b643b947d4e6db65825cad4",
+        "extractionBlob": "5a1c8dc831949e3d4a01234ed9a502d6f60c44f8",
+        "englishFields": "Literal/idiomatic render 從母兄 as mother's sister's son (Cui Juan); mother unnamed in both fields. No English defect.",
+        "contradictionAssessment": "No false merge with p065 (Cui Juan) or p067 (從母 aunt); p065 explicit kin-of p007 with intermediaryPersonIds p066/p067 is consistent with mediated reading."
+      },
+      "dependencyImpact": {
+        "chronology": "unchanged — p066 attestation 魏世 on s0125 unchanged",
+        "identity": "canonical per_F3XTF9S96AAJP8YX6HH3 retained; p066–p067 姊妹 link and p065 從母兄 chain unchanged",
+        "editorial": "unchanged",
+        "translation": "none",
+        "otherIdentityProofs": "Independent identity review for other 77 cases unaffected; no registry edit"
+      },
+      "remainingHold": {
+        "required": true,
+        "reason": "Source still omits Han personal name for Li Xiao's mother; 從母兄 witnesses cousin relation text, not maternal personal naming. Matches owner holdRequiredAfterApply.",
+        "repairPath": "Do not invent 母 or a surname; retain descriptive kinship with sealed 從母兄 witness or hold until host policy accepts mediated-kin completion without personal-name clearance."
+      }
+    }
+  ]
+}
