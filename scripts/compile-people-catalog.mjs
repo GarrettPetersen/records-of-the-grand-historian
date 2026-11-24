@@ -620,8 +620,7 @@ function buildPeopleSiteIndex(corpus, catalog, getDateStatus = dateAuditStatus) 
   return siteIndex;
 }
 
-function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion, override) {
-  const members = cluster.localPeople.map((localId) => corpus.localPeople.get(localId));
+function canonicalRecord(cluster, members, localMap, roleLabels, unresolvedLocalPeople, currentPromptVersion, override) {
   const preferred = preferredName(members, override, cluster.canonicalPersonId);
   const slugName = sourcePreferredNameSuggestion(members);
   const roles = canonicalRoles(members, roleLabels);
@@ -717,7 +716,7 @@ function canonicalRecord(cluster, corpus, localMap, roleLabels, unresolvedLocalP
 }
 
 function identityPairKey(left, right) {
-  return [left, right].sort().join('\u0000');
+  return [left, right].sort().join('^@');
 }
 
 export function unresolvedCandidateState(
@@ -729,7 +728,7 @@ export function unresolvedCandidateState(
   // Separation decisions may use a merged member outside this name block.
   const separatedCanonicalPairs = new Set();
   for (const key of keepSeparate) {
-    const localIds = key.split('\u0000');
+    const localIds = key.split('^@');
     if (localIds.length !== 2 || localIds.some((id) => !localMap.has(id))) {
       throw new Error(`Separation refers to an unknown local person: ${key}`);
     }
@@ -829,6 +828,42 @@ export function buildResolutionWorkByChapter(unresolvedBlocks, unresolvedLocalPe
     }]));
 }
 
+function compileCanonicalRecordsInSourceBatches(clusters, localPeople, makeRecord) {
+  const sourceOrdered = [...clusters].sort((left, right) => left.localPeople[0].localeCompare(right.localPeople[0]));
+  const people = [], crossChapter = [];
+  const chapterOf = localId => localId.slice(0, localId.lastIndexOf(':'));
+
+  // A cross-chapter dossier evicts unrelated entries from the chapter reader.
+  // Compile chapter-local dossiers in one pass, then group cross-chapter reads
+  // in bounded batches. Keep the original member order within each dossier.
+  for (const cluster of sourceOrdered) {
+    const chapter = chapterOf(cluster.localPeople[0]);
+    if (cluster.localPeople.every(localId => chapterOf(localId) === chapter)) {
+      people.push(makeRecord(cluster, cluster.localPeople.map(localId => localPeople.get(localId))));
+    } else {
+      crossChapter.push(cluster);
+    }
+  }
+
+  const maxBatchPeople = 1024;
+  let batch = [], memberIds = [];
+  const compileBatch = () => {
+    const byId = new Map(memberIds.sort().map(localId => [localId, localPeople.get(localId)]));
+    for (const cluster of batch) {
+      people.push(makeRecord(cluster, cluster.localPeople.map(localId => byId.get(localId))));
+    }
+    batch = [];
+    memberIds = [];
+  };
+  for (const cluster of crossChapter) {
+    if (batch.length && memberIds.length + cluster.localPeople.length > maxBatchPeople) compileBatch();
+    batch.push(cluster);
+    memberIds.push(...cluster.localPeople);
+  }
+  if (batch.length) compileBatch();
+  return people.sort((left, right) => left.id.localeCompare(right.id));
+}
+
 export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationOverrides = {}, { getDateStatus = dateAuditStatus } = {}) {
   if (!corpus.coverage || !Number.isInteger(corpus.coverage.sourceChapters) ||
       !Number.isInteger(corpus.coverage.extractedChapters) || !Array.isArray(corpus.coverage.missingChapterIds)) {
@@ -891,19 +926,17 @@ export function compilePeopleCatalog(corpus, resolutionDocuments = [], curationO
       unsupportedPreferredNames.map((error) => `- ${error}`).join('\n'),
     );
   }
-  // Resolve in source order so the bounded reader reuses each chapter. Restore
-  // the native canonical-ID order before family graphs, validation and output.
-  const people = [...resolved.clusters].sort((left, right) => left.localPeople[0].localeCompare(right.localPeople[0])).map((cluster) =>
+  const people = compileCanonicalRecordsInSourceBatches(resolved.clusters, corpus.localPeople, (cluster, members) =>
     canonicalRecord(
       cluster,
-      corpus,
+      members,
       localMap,
       roleLabels,
       unresolvedLocalPeople,
       currentPromptVersion,
       resolvedCurationOverrides[cluster.canonicalPersonId] ?? null,
     )
-  ).sort((left, right) => left.id.localeCompare(right.id));
+  );
   const peopleBySlug = new Map();
   for (const person of people) {
     const existing = peopleBySlug.get(person.slug);
@@ -1014,7 +1047,7 @@ export function projectPeopleProduct(corpus, globalCatalog, roleLabels, override
         !override.preferredName[key] || claim.value?.[key] === override.preferredName[key]))) {
       throw new Error(`Preferred name for ${id} lacks scoped source support`);
     }
-    const person = canonicalRecord(cluster, corpus, localMap, roleLabels, new Set(),
+    const person = canonicalRecord(cluster, members, localMap, roleLabels, new Set(),
       globalCatalog.currentPromptVersion, override);
     if (person.references.length === 0) {
       person.references = reviewedInferredSourceReferences(members, corpus, id, identityCertificates);
