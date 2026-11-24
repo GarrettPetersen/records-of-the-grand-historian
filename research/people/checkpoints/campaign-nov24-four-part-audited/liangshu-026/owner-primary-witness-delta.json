@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "liangshu/026",
+  "ownerAgentId": "bc-6b80b860-324e-41c1-b2d6-d2f759052b9c",
+  "ownerRevision": null,
+  "sourceReviewHead": "6af2e8078df38d4efd666976280da53c54b67080",
+  "mode": "targeted-primary-witness",
+  "worker": "cursor-nov24-four-part-owner-4",
+  "priorRun": "run-a4c62f02-fcb7-405e-b2c7-a467a28ae912",
+  "idempotencyKey": "b3ee6ff7d4fa6b71d8897a153d6a628391427220dbd7c73ac6c6b9334a072a5",
+  "ownerHandoffHead": "4091912390d7c64ce8623aebaa3601cc7d572516",
+  "handoffSha256": "sha256:82b2f9acd82808f2972ea8418b9d00ba455bade3194befad3539d13233c97aeb",
+  "cases": [
+    {
+      "caseId": "sha256:5583e019434e4b3c8f437ee033de150b0f0bd934ae657eeeb6ef61892d9efd32",
+      "localId": "liangshu:026:p025",
+      "independentVerdict": "hold",
+      "ownerDisposition": "agree-hold",
+      "canonicalPersonId": "per_X5BQDGY4PMMKE75B31MP",
+      "primaryWitness": {
+        "unitId": "s0045",
+        "zh": "十一，隨外祖於朱雀航賣曆日。",
+        "literalEn": "At eleven he followed his maternal grandfather to sell almanacs at the Zhuque ferry.",
+        "idiomaticEn": "At eleven he helped his maternal grandfather sell almanacs at the Zhuque ferry.",
+        "quotableSurfaces": [
+          "外祖"
+        ],
+        "analysis": "The line attests Fu Zhao (p019) at age eleven with his maternal grandfather (外祖) at Zhuque ferry; it does not name or describe a mother. 傅昭母 is an editorial compound not present in the Chinese. Maternal-line kinship may be structurally inferred for graph bookkeeping, but it is not a quotable named-person identity under primary-witness rules."
+      },
+      "surroundingContext": [
+        {
+          "unitId": "s0042",
+          "zh": "祖和之，父淡，善《三禮》，知名宋世。"
+        },
+        {
+          "unitId": "s0044",
+          "zh": "昭六歲而孤，哀毀如成人者，宗黨咸異之。"
+        }
+      ]
+    },
+    {
+      "caseId": "sha256:3d89224b53a3ce006f13f4d6bbbeb3c42d3482b350f7321807a3b0684c6c2a49",
+      "localId": "liangshu:026:p049",
+      "independentVerdict": "hold",
+      "ownerDisposition": "agree-hold-partial-repair",
+      "canonicalPersonId": "per_Y4D2WZYMNKN7V4JWYZR6",
+      "primaryWitness": {
+        "unitId": "s0100",
+        "zh": "三歲而孤。",
+        "literalEn": "He was orphaned at three.",
+        "idiomaticEn": "He was orphaned at the age of three.",
+        "quotableSurfaces": [],
+        "analysis": "s0100 follows s0099 (映字徽遠，昭弟也) and records Fu Ying's orphanhood. 孤 supports a deceased parent context but does not surface 父 or any personal name. It cannot witness a named father record or the invented surface 傅昭映父."
+      },
+      "correctiveWitness": {
+        "unitId": "s0042",
+        "zh": "祖和之，父淡，善《三禮》，知名宋世。",
+        "quotableSurfaces": [
+          "父",
+          "淡"
+        ],
+        "analysis": "In Fu Zhao's biography, the historian explicitly names his father 淡 (Fu Dan, sealed local person p022). The same Fu Zhao (p043) and younger brother Fu Ying (p048, s0099 昭弟) share this paternal line. Father identity should anchor on s0042 via p022, not on s0100."
+      }
+    }
+  ],
+  "proposedChanges": [
+    {
+      "changeId": "liangshu-026-p025-remove-invented-mother",
+      "kind": "extraction-person-removal",
+      "targetPersonId": "p025",
+      "caseId": "sha256:5583e019434e4b3c8f437ee033de150b0f0bd934ae657eeeb6ef61892d9efd32",
+      "before": {
+        "peopleRow": [
+          "p025",
+          [
+            "Mother of Fu Zhao",
+            null,
+            null
+          ],
+          "historical",
+          "Family Member"
+        ],
+        "nameSurface": {
+          "kind": "descriptive-kinship",
+          "en": "Mother of Fu Zhao",
+          "zh": "傅昭母",
+          "certainty": "strongly-inferred",
+          "evidence": [
+            "s0045"
+          ]
+        }
+      },
+      "after": {
+        "action": "remove-local-person-and-dependent-claims",
+        "retainWitnessedMaternalGrandfather": {
+          "personId": "p024",
+          "evidence": [
+            "s0045"
+          ],
+          "surface": "外祖"
+        },
+        "retainFuZhaoEvent": {
+          "personId": "p019",
+          "evidence": [
+            "s0045"
+          ]
+        },
+        "graphRepair": "Remove intermediaryPersonIds ['p025'] from p024→p019 maternal-grandfather claim; remove p022 spouse-of p025 claim sourced only from s0045; do not introduce a replacement mother localId."
+      },
+      "sourceCitation": {
+        "book": "liangshu",
+        "chapter": "026",
+        "unitId": "s0045",
+        "quote": "十一，隨外祖於朱雀航賣曆日。"
+      },
+      "reason": "No primary Chinese names or describes Fu Zhao's mother; 傅昭母 is unsupported for identity certification."
+    },
+    {
+      "changeId": "liangshu-026-p049-consolidate-father-into-p022",
+      "kind": "extraction-person-removal-with-reassignment",
+      "targetPersonId": "p049",
+      "reassignToPersonId": "p022",
+      "caseId": "sha256:3d89224b53a3ce006f13f4d6bbbeb3c42d3482b350f7321807a3b0684c6c2a49",
+      "before": {
+        "peopleRow": [
+          "p049",
+          [
+            "Father of Fu Zhao and Fu Ying",
+            "傅昭映父",
+            null
+          ],
+          "historical",
+          "Family Member"
+        ],
+        "nameSurface": {
+          "kind": "descriptive-kinship",
+          "en": "Father of Fu Zhao and Fu Ying",
+          "zh": "父",
+          "certainty": "strongly-inferred",
+          "evidence": [
+            "s0100"
+          ]
+        }
+      },
+      "after": {
+        "action": "remove-local-person-p049",
+        "fatherIdentity": {
+          "personId": "p022",
+          "personalNameZh": "淡",
+          "surnameZh": "傅",
+          "identityEvidence": [
+            "s0042",
+            "s0043"
+          ],
+          "descriptiveEvidence": [
+            "s0042"
+          ]
+        },
+        "childLinks": [
+          {
+            "parentId": "p022",
+            "childId": "p043",
+            "evidenceAdd": [
+              "s0042",
+              "s0099"
+            ]
+          },
+          {
+            "parentId": "p022",
+            "childId": "p048",
+            "evidenceAdd": [
+              "s0042",
+              "s0099"
+            ],
+            "orphanhoodEvidence": [
+              "s0100"
+            ]
+          }
+        ],
+        "s0100Scope": "Retain on p048 for orphanhood/status/death-context claims only; remove from any p049 identity or naming surfaces."
+      },
+      "sourceCitations": [
+        {
+          "book": "liangshu",
+          "chapter": "026",
+          "unitId": "s0100",
+          "quote": "三歲而孤。"
+        },
+        {
+          "book": "liangshu",
+          "chapter": "026",
+          "unitId": "s0042",
+          "quote": "祖和之，父淡，善《三禮》，知名宋世。"
+        },
+        {
+          "book": "liangshu",
+          "chapter": "026",
+          "unitId": "s0099",
+          "quote": "映字徽遠，昭弟也。"
+        }
+      ],
+      "reason": "Father's quotable personal name is 淡 at s0042 (already p022); s0100 cannot name the father."
+    }
+  ],
+  "definiteTranslationRepairs": [],
+  "held": [
+    {
+      "caseId": "sha256:5583e019434e4b3c8f437ee033de150b0f0bd934ae657eeeb6ef61892d9efd32",
+      "localId": "liangshu:026:p025",
+      "until": "extraction repair removes p025 and dependent s0045 name attribution",
+      "reason": "Primary witness cannot quote mother identity from s0045; owner agrees with independent hold."
+    },
+    {
+      "caseId": "sha256:3d89224b53a3ce006f13f4d6bbbeb3c42d3482b350f7321807a3b0684c6c2a49",
+      "localId": "liangshu:026:p049",
+      "until": "extraction repair removes p049 and reassigns father links to p022 with s0042 evidence",
+      "reason": "s0100 alone cannot support father naming; corrective witness s0042 supplies 父淡. Owner does not approve canonical merge—only local extraction evidence repair."
+    }
+  ],
+  "validation": {
+    "notIndependentApproval": true,
+    "pinnedInputsUnchanged": true,
+    "inputBlobWitness": {
+      "source": "263a498a2ad2e7ad6c1ca8c45f3d56de1f756e67",
+      "extraction": "a76d44f3778f6dd2dc638ffa2b423a75d050941a",
+      "dateAudit": "a54db7ad50399ca0c6fef7ad27dbd6e4365159fc",
+      "editorial": "47a4e5dfd6e67168fcc867bcb8c13413f7697922"
+    },
+    "englishCoverageOnHeldUnits": {
+      "s0045": {
+        "literalPresent": true,
+        "idiomaticPresent": true
+      },
+      "s0100": {
+        "literalPresent": true,
+        "idiomaticPresent": true
+      },
+      "s0042": {
+        "literalPresent": true,
+        "idiomaticPresent": true
+      }
+    },
+    "scopedCommandsOnPinnedExtraction": {
+      "peopleValidatePassed": true,
+      "peopleDatesVerifyPassed": true
+    },
+    "notes": "Delta proposes extraction repairs only; sealed extraction bytes on master were not modified in this commit."
+  }
+}
