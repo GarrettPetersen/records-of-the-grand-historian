@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "028"
+  },
+  "ownerAgentId": "bc-d07043cc-9acf-4e58-b237-fd49d94bdcdd",
+  "workerId": "cursor-nov24-retained-staging-w3-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "1ee89e6f53d2c5f47250ac4c4368b8633472a3b3e47443a09c969f8b62473b56",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-028-bdcdd",
+  "inputBlobWitness": {
+    "source": "de757d569ea02c940ec6b9cc5faa0095885013a1",
+    "extraction": "114cdc28391d3348b69d998af3ba7d6fd551d646",
+    "dateAudit": "6ecc42f6a52d492267615df2262639127758d592",
+    "editorial": "6c0f473610917ee410087a0ec76d9582b1a6e932"
+  },
+  "sealedInputs": {
+    "source": "sha256:63129a12138a48d43f0b2963df903b9eab6254b96d2c1a3fddedd0b2aa4191b8",
+    "extraction": "sha256:4ac942a763d46fc61f9d15e72b2aea43fe539395c4706e2ae29eb9dc929875c5",
+    "dateAudit": "sha256:de2326207122dd88dab8a560e4544c0ea60b4d8399cbbd72a860e8e9e374b156",
+    "editorial": "sha256:c5a7df9f1ad57fe82530a39a425fa389ac80f6a436031e667f5b36a9e4db17e3"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 183,
+    "metaSentenceCount": 181,
+    "metaTranslatedCount": 181,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "Scoped person data validation passed for qingshigao/028: 1 extraction(s), 11 local people, 27 mentions, 98 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 028",
+    "peopleDatesVerifyCommand": "npm run people:dates:verify -- --book qingshigao --chapter 028",
+    "dateAuditStatus": "research-blocked",
+    "dateAuditCurrent": true,
+    "dateAuditFindings": 1,
+    "dateAuditReviewedAt": "2026-09-24T02:00:00Z",
+    "extractionValidate": "data/people/extractions/qingshigao/028.json: ok (11 people, 27 mentions, 98 claims, 396 candidates)",
+    "editorialProposalCount": 6,
+    "proposedTranslationRepairs": 0,
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Fresh independent canonical audit after host curation. All 183 Chinese units, 28 current temporal or active-hint items, and eleven people were reread. The current canonical extraction retains twenty source-specific unresolved chronology holds and preserves the supported Kangxi 13 / AD 1674 Guo Shoujing institutional record. No source or canonical extraction was edited.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "qingshigao:028:date-hold-001",
+      "kind": "reviewed-chronology-hold",
+      "items": [
+        "claim-5",
+        "claim-9",
+        "claim-15",
+        "claim-28",
+        "claim-31",
+        "claim-34",
+        "claim-40",
+        "claim-41",
+        "claim-42",
+        "claim-48",
+        "claim-53",
+        "claim-54",
+        "hints-p002",
+        "hints-p003",
+        "hints-p004",
+        "hints-p006",
+        "hints-p007",
+        "hints-p008",
+        "hints-p009",
+        "hints-p010",
+        "p002",
+        "p003",
+        "p004",
+        "p006",
+        "p007",
+        "p008",
+        "p009",
+        "p010",
+        "p011"
+      ],
+      "problem": "Current author/dynasty/catalog and retrospective references do not supply verified personal Western endpoints.",
+      "action": "Retain the current source-specific holds; approve no personal chronology without an independent dated witness.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Verified pinned git blob witnesses; full literal and idiomatic English scan; npm run people:validate; npm run people:dates:verify (not stale); people:validate-extraction; retained independent date-audit and editorial artifacts; no canonical source or extraction edits.",
+    "completedAt": "2026-11-24T16:13:24.247Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 028",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 028",
+    "validateExtraction": "npm run people:validate-extraction -- data/people/extractions/qingshigao/028.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; push without altering sealed inputs."
+}
