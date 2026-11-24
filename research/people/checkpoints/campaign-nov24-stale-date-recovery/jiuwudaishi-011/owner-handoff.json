@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "kind": "stale-date-recovery-owner-handoff",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "011"
+  },
+  "ownerAgentId": "bc-f6969509-1699-4266-a225-cb3bca5d36ef",
+  "sourceRevision": "a8b5bf79f39c400f8adb2360f03d6aa6fa2f20d9",
+  "stagingBase": "3d546f4260e36d7982b921c8a25f613f66484100",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sealedInputs": {
+    "source": {
+      "gitBlob": "ed35e5972b603a00cc2826a8376153666355d840",
+      "path": "data/jiuwudaishi/011.json"
+    },
+    "extraction": {
+      "gitBlob": "c531ccd2b3996a1c8c0d4221ab7ed2a5960e8750",
+      "path": "data/people/extractions/jiuwudaishi/011.json"
+    },
+    "dateAudit": {
+      "gitBlob": "9b50904d0e663596eda00199f9efe20580c848a2",
+      "path": "data/people/date-audits/jiuwudaishi/011.json"
+    },
+    "editorial": {
+      "gitBlob": "40bf066e701f582af4b8f0c27cc905d14c975399",
+      "path": "data/people/editorial-decisions/jiuwudaishi/011.json"
+    }
+  },
+  "staleReason": "extractionChanged",
+  "sourceChanged": false,
+  "historicalDateAudit": {
+    "status": "audited",
+    "reviewedAt": "2026-09-29T01:10:00.000Z",
+    "extractionHash": "sha256:45a32db209baba5559763efc1fddfbf9dee13af54b77101e326b07d3bd838d09",
+    "sourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+    "preservedPath": "data/people/date-audits/jiuwudaishi/011.json",
+    "extractionHashSeal": "PASS: recovered git extraction matches report extractionHash",
+    "nativeRevalidation": {
+      "status": "FAIL",
+      "detail": "Date approval retains invalid temporal geometry or reception ownership",
+      "note": "Extraction hash still matches recovered commit; preserve historical approval bytes without hash rewrite."
+    }
+  },
+  "oldProofRecovery": {
+    "match": "recovered-from-git",
+    "commit": "4f27270f9429fa35d8798095c2a759d163c14e1e",
+    "extractionHash": "sha256:45a32db209baba5559763efc1fddfbf9dee13af54b77101e326b07d3bd838d09",
+    "packetItemCount": 89
+  },
+  "currentPacket": {
+    "extractionHash": "sha256:0a8f50635ef32010cb2f4cf0bf6722592df2d011fd24ff258c1157613bf06c39",
+    "sourceHash": "sha256:d476e3806ff45586a556ebff16032b8d546965eb30fdff1aacf4f9d3706b9162",
+    "itemCount": 93
+  },
+  "comparison": {
+    "unchangedCount": 78,
+    "changedFactCount": 3,
+    "structuralAdded": 12,
+    "structuralDropped": 8,
+    "changedFacts": [
+      {
+        "hints": "p002",
+        "before": [
+          "AD 852-912 (external primary birth and death witnesses; no chapter reception date treated as life activity)"
+        ],
+        "after": [
+          "research required: the chapter gives only relative “after usurpation” context, not a personal life-date endpoint."
+        ]
+      },
+      {
+        "hints": "p026",
+        "before": [
+          "AD 907 (enfeoffment only; no life-wide interval inferred)"
+        ],
+        "after": [
+          "research required: a dated enfeoffment does not establish a life-wide activity endpoint."
+        ]
+      },
+      {
+        "hints": "p028",
+        "before": [
+          "AD 907 (enfeoffment only; no life-wide interval inferred)"
+        ],
+        "after": [
+          "research required: a dated enfeoffment does not establish a life-wide activity endpoint."
+        ]
+      }
+    ],
+    "structuralNotes": "Claim-id renumbering or structural add/drop present; matched by claimHash where available."
+  },
+  "proofReuseCandidate": {
+    "eligible": false,
+    "reason": "3 chronology-related deltas; independent re-audit required."
+  },
+  "validation": {
+    "peopleValidate": "Scoped person data validation passed for jiuwudaishi/011: 1 extraction(s), 34 local people, 177 mentions, 351 claims, 0 proposed repair(s), 1 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 3 person record(s) without an attestation, 22 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "book": "jiuwudaishi",
+      "chapter": "011",
+      "status": "stale",
+      "auditVersion": 1
+    },
+    "currentPacketDiagnostics": "PASS: zero diagnostics",
+    "commands": [
+      "npm run people:validate -- --book jiuwudaishi --chapter 011",
+      "npm run people:dates:verify -- --book jiuwudaishi --chapter 011",
+      "buildDateAuditPacket + validateDateAuditReport against recovered extraction",
+      "dateAuditDiagnostics on current packet"
+    ]
+  },
+  "nextGate": "independent-fresh-date-reaudit",
+  "ownerApproval": false,
+  "notes": "Preserves historical date-audit JSON; does not rewrite report hashes. Owner evidence only."
+}
