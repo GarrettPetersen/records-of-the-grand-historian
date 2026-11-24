@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "124"
+  },
+  "ownerAgentId": "bc-ca0f3f65-bb19-4b9d-9ba3-52c5d198fcd3",
+  "worker": "cursor-nov24-retained-staging-w12-o3",
+  "idempotencyKey": "a40af8553b21ddfc487e94d51ab74a46e56f8c551353d8991c33f9a468a93cc7",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-124-8fcd3",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "b1976e53d65eda98955c06a49e58002e07475f46461e104d68999bdf263dca2f",
+    "people": 60,
+    "claims": 265,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "0951ed75e935027c8cbbcb059134f8be6b20947e",
+    "extraction": "d11a4f6a45c84239da61a8e3cd92f4c6a2c0b428",
+    "editorial": "e9a02b531cf84c8303ac5e3dd9807410c55bf95c",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:92399bcf25ea0c24c728d5285ae047af356f98d41c9aacdfcf4d1844c2c43633",
+    "extraction": "sha256:b1976e53d65eda98955c06a49e58002e07475f46461e104d68999bdf263dca2f",
+    "editorial": "sha256:ca34c61730e5b98eba79c0757762c2d8fa21f43fdc642e7e87036bc65ec7124b"
+  },
+  "sourceExtractionContentSha256": "sha256:b1976e53d65eda98955c06a49e58002e07475f46461e104d68999bdf263dca2f",
+  "nativeDateFingerprints": {
+    "sourceHash": "sha256:ced8d6e6b6db1139d178089061efb40fa741c3de5733c578efc54368238fa0ec",
+    "extractionHash": "sha256:b76c14b533a4d3111ce903abe4376661441065697f59d63afd95e854116a53ec"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-124/date-packet.json",
+    "contentSha256": "sha256:487ebc023c9b94697aba2747f48d64c9bb15a8973293f0a3196be2394ad5b049",
+    "itemCount": 135,
+    "peopleCount": 60,
+    "unitCount": 126
+  },
+  "extractionReuse": {
+    "bytes": 83242,
+    "promptVersion": 7,
+    "peopleCount": 60,
+    "claimsCount": 265,
+    "sealed": true
+  },
+  "editorialReuse": {
+    "decisionCount": 4,
+    "proposalCount": 4,
+    "claimRetractions": 0,
+    "claimRevisions": 0,
+    "sealed": true
+  },
+  "sourceCoverage": {
+    "title": "Biographies of Knight-errants",
+    "sentenceCount": 126,
+    "translatedCount": 126,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "metaTranslatedCount": 126
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposal": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 124",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/124: 1 extraction(s), 60 local people, 232 mentions, 458 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book shiji --chapter 124 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-124/date-packet.json",
+      "sealedDatePacketSha256": "sha256:487ebc023c9b94697aba2747f48d64c9bb15a8973293f0a3196be2394ad5b049"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 124",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyStatus": "candidate-packet-prepared",
+  "independentDateAudit": {
+    "status": "missing",
+    "path": "data/people/date-audits/shiji/124.json",
+    "note": "No native date audit artifact; owner does not self-approve. Sealed date packet prepared from current pinned source and extraction for separate independent reviewer."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit via people:dates:run or equivalent reviewer using sealed date packet at pinned hashes.",
+    "identity": "Corpus-scoped bounded identity dossier review after chronology approval.",
+    "independentReviewCompleted": false,
+    "nextGates": [
+      "independent-native-date-audit",
+      "independent-bounded-identity-review"
+    ]
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, accepted extraction, and applied editorial decisions verified at witness blobs. Full sentence-level English coverage; scoped people:validate passed. No new definite English omission or chronology contradiction found requiring owner repair. Native independent date report remains absent.",
+  "authorEvidence": {
+    "method": "Witness blob verification; Chinese/English sentence coverage scan; npm run people:validate; npm run people:dates:packet; people:dates:verify (un-audited); no canonical extraction, source, or date-audit edits."
+  },
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; no deploy, merge, registry generation, or self-approved date audit.",
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": []
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 124",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 124 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-124/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 124"
+  }
+}

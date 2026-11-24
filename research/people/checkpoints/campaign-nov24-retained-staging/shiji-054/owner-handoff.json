@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "054"
+  },
+  "ownerAgentId": "bc-ca0f3f65-bb19-4b9d-9ba3-52c5d198fcd3",
+  "worker": "cursor-nov24-retained-staging-w12-o3",
+  "idempotencyKey": "a40af8553b21ddfc487e94d51ab74a46e56f8c551353d8991c33f9a468a93cc7",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-054-8fcd3",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "f019a618e91a21e83b5dd82305b10dff8313f1ab81c3829d7d28b558ce18e720",
+    "people": 53,
+    "claims": 248,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "8e13e02a76640d5879e5d68218b930f02f386d18",
+    "extraction": "a82cc582935fc5e23d387aaa068711d3ae093375",
+    "editorial": "6ddb50243a8e170102b42684ca04f949e1856168",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:d9ff67cb79b73995f370e316330025eb457f0d29d06a526f2e2bb4f6888c1f84",
+    "extraction": "sha256:f019a618e91a21e83b5dd82305b10dff8313f1ab81c3829d7d28b558ce18e720",
+    "editorial": "sha256:ddb9e258759c8a1d2b4a3ebf8608c79acff0d70e86f70bebc98c74adc5c643fa"
+  },
+  "sourceExtractionContentSha256": "sha256:f019a618e91a21e83b5dd82305b10dff8313f1ab81c3829d7d28b558ce18e720",
+  "nativeDateFingerprints": {
+    "sourceHash": "sha256:e85a4b5cf0de85e0c23f193de26ea26f8bddf3fdccedd924beedfb133b3a8d2a",
+    "extractionHash": "sha256:826475ff30a31dcac3e673f92551ad8c8951644f77e49ef40f13c4840e92e52e"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-054/date-packet.json",
+    "contentSha256": "sha256:70df9b9be83af542b8c4ccdd8e806deb5d31f2cf10b663ad3c4c8fca97ce1dc8",
+    "itemCount": 156,
+    "peopleCount": 53,
+    "unitCount": 147
+  },
+  "extractionReuse": {
+    "bytes": 83071,
+    "promptVersion": 7,
+    "peopleCount": 53,
+    "claimsCount": 248,
+    "sealed": true
+  },
+  "editorialReuse": {
+    "decisionCount": 7,
+    "proposalCount": 7,
+    "claimRetractions": 0,
+    "claimRevisions": 0,
+    "sealed": true
+  },
+  "sourceCoverage": {
+    "title": "House of Chancellor Cao",
+    "sentenceCount": 147,
+    "translatedCount": 147,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "metaTranslatedCount": 147
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposal": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 054",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/054: 1 extraction(s), 53 local people, 382 mentions, 409 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book shiji --chapter 054 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-054/date-packet.json",
+      "sealedDatePacketSha256": "sha256:70df9b9be83af542b8c4ccdd8e806deb5d31f2cf10b663ad3c4c8fca97ce1dc8"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 054",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyStatus": "candidate-packet-prepared",
+  "independentDateAudit": {
+    "status": "missing",
+    "path": "data/people/date-audits/shiji/054.json",
+    "note": "No native date audit artifact; owner does not self-approve. Sealed date packet prepared from current pinned source and extraction for separate independent reviewer."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit via people:dates:run or equivalent reviewer using sealed date packet at pinned hashes.",
+    "identity": "Corpus-scoped bounded identity dossier review after chronology approval.",
+    "independentReviewCompleted": false,
+    "nextGates": [
+      "independent-native-date-audit",
+      "independent-bounded-identity-review"
+    ]
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, accepted extraction, and applied editorial decisions verified at witness blobs. Full sentence-level English coverage; scoped people:validate passed. No new definite English omission or chronology contradiction found requiring owner repair. Native independent date report remains absent.",
+  "authorEvidence": {
+    "method": "Witness blob verification; Chinese/English sentence coverage scan; npm run people:validate; npm run people:dates:packet; people:dates:verify (un-audited); no canonical extraction, source, or date-audit edits."
+  },
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; no deploy, merge, registry generation, or self-approved date audit.",
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": []
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 054",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 054 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-054/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 054"
+  }
+}

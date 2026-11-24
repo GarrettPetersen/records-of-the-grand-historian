@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "074"
+  },
+  "ownerAgentId": "bc-ca0f3f65-bb19-4b9d-9ba3-52c5d198fcd3",
+  "worker": "cursor-nov24-retained-staging-w12-o3",
+  "idempotencyKey": "a40af8553b21ddfc487e94d51ab74a46e56f8c551353d8991c33f9a468a93cc7",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-liaoshi-074-8fcd3",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "676348e0b008ae7db9334a4066de8e0585f6ef47f56491fa82d2738df19e0585",
+    "people": 48,
+    "claims": 280,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "1de8b252b61dd18ade6f2b3a8ad79b80a4ef9cee",
+    "extraction": "e9ce9578dd0115680a7913289409aa1e92aff4eb",
+    "editorial": "aa258b3b1a2d368c091e6cd88eb57fa6d64704f6",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:abf5199dcafaf6d35ecdcb9339c33da0a66d7946fadccba82f610bee9bcdd21c",
+    "extraction": "sha256:676348e0b008ae7db9334a4066de8e0585f6ef47f56491fa82d2738df19e0585",
+    "editorial": "sha256:38c44f40b09de416ce460c2844cabc17f89e43f35d79ad6b0ea69d7000f0cce1"
+  },
+  "sourceExtractionContentSha256": "sha256:676348e0b008ae7db9334a4066de8e0585f6ef47f56491fa82d2738df19e0585",
+  "nativeDateFingerprints": {
+    "sourceHash": "sha256:cc94021981e1fdcdf1c7766c156f53e6287b4bea307fa68b3711be13e6a12088",
+    "extractionHash": "sha256:49f11cc701e208ca21ac5739395d581db02459907c9e9367b9fd3f26da5a9d78"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-074/date-packet.json",
+    "contentSha256": "sha256:6f5c1d0544618ddc44b595a2afb3a7ca90978823cba42c0055ef0e841c327d92",
+    "itemCount": 130,
+    "peopleCount": 48,
+    "unitCount": 156
+  },
+  "extractionReuse": {
+    "bytes": 83036,
+    "promptVersion": 7,
+    "peopleCount": 48,
+    "claimsCount": 280,
+    "sealed": true
+  },
+  "editorialReuse": {
+    "decisionCount": 9,
+    "proposalCount": 9,
+    "claimRetractions": 2,
+    "claimRevisions": 2,
+    "sealed": true
+  },
+  "sourceCoverage": {
+    "title": "Volume 74 Biographies 4: Yelu Dila, Xiao Hendu, Kang Moji, Han Yanhui, Han Zhigu",
+    "sentenceCount": 156,
+    "translatedCount": 156,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "metaTranslatedCount": 156
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposal": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book liaoshi --chapter 074",
+      "passed": true,
+      "summary": "Scoped person data validation passed for liaoshi/074: 1 extraction(s), 48 local people, 292 mentions, 443 claims, 0 proposed repair(s), 9 applied repair(s), 9 editorial decision(s), 2 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book liaoshi --chapter 074 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-074/date-packet.json",
+      "sealedDatePacketSha256": "sha256:6f5c1d0544618ddc44b595a2afb3a7ca90978823cba42c0055ef0e841c327d92"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 074",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyStatus": "candidate-packet-prepared",
+  "independentDateAudit": {
+    "status": "missing",
+    "path": "data/people/date-audits/liaoshi/074.json",
+    "note": "No native date audit artifact; owner does not self-approve. Sealed date packet prepared from current pinned source and extraction for separate independent reviewer."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit via people:dates:run or equivalent reviewer using sealed date packet at pinned hashes.",
+    "identity": "Corpus-scoped bounded identity dossier review after chronology approval.",
+    "independentReviewCompleted": false,
+    "nextGates": [
+      "independent-native-date-audit",
+      "independent-bounded-identity-review"
+    ]
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, accepted extraction, and applied editorial decisions verified at witness blobs. Full sentence-level English coverage; scoped people:validate passed. No new definite English omission or chronology contradiction found requiring owner repair. Native independent date report remains absent.",
+  "authorEvidence": {
+    "method": "Witness blob verification; Chinese/English sentence coverage scan; npm run people:validate; npm run people:dates:packet; people:dates:verify (un-audited); no canonical extraction, source, or date-audit edits."
+  },
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; no deploy, merge, registry generation, or self-approved date audit.",
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": []
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 074",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 074 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-074/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book liaoshi --chapter 074"
+  }
+}

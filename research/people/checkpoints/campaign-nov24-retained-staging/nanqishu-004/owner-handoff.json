@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "nanqishu",
+    "chapter": "004"
+  },
+  "ownerAgentId": "bc-ca0f3f65-bb19-4b9d-9ba3-52c5d198fcd3",
+  "worker": "cursor-nov24-retained-staging-w12-o3",
+  "idempotencyKey": "a40af8553b21ddfc487e94d51ab74a46e56f8c551353d8991c33f9a468a93cc7",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-nanqishu-004-8fcd3",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "c8afece933e194722931003c50f3b30b82ebddfd480908ff629c98ea47f347fd",
+    "people": 52,
+    "claims": 196,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "1f86c3dfb8805cd09267eb5d575af6f6f1820dcb",
+    "extraction": "6cfc4fb750a840a71b6b225da29a1b9653b35593",
+    "editorial": "4d61426a04fcd2eae3253be34b7ab71f7baca488",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:8ad85d99ad2ba7324b1ad5e4f73362cdecc4b36183b5de6c2adb1ec1ad61829a",
+    "extraction": "sha256:c8afece933e194722931003c50f3b30b82ebddfd480908ff629c98ea47f347fd",
+    "editorial": "sha256:efd742bc564488ed0b2caf516c5b2a3af02ed8a35283b9707deca407f35269dc"
+  },
+  "sourceExtractionContentSha256": "sha256:c8afece933e194722931003c50f3b30b82ebddfd480908ff629c98ea47f347fd",
+  "nativeDateFingerprints": {
+    "sourceHash": "sha256:5c5014c0f2fe023441a0b28fc4a7f8ba16082f16af87dcf1933766849458efdc",
+    "extractionHash": "sha256:267f66fe0ef741b73d14766e470786b17ac4d4c5f0437025744389cfade81487"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-004/date-packet.json",
+    "contentSha256": "sha256:a445ba656621fc7dd6e5fc1947f03356fbe9629dc3331e1f01c7798638fd3f64",
+    "itemCount": 173,
+    "peopleCount": 52,
+    "unitCount": 126
+  },
+  "extractionReuse": {
+    "bytes": 82340,
+    "promptVersion": 7,
+    "peopleCount": 52,
+    "claimsCount": 196,
+    "sealed": true
+  },
+  "editorialReuse": {
+    "decisionCount": 6,
+    "proposalCount": 6,
+    "claimRetractions": 0,
+    "claimRevisions": 0,
+    "sealed": true
+  },
+  "sourceCoverage": {
+    "title": "Volume 4 Annals 4: Prince of Yulin",
+    "sentenceCount": 126,
+    "translatedCount": 126,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "metaTranslatedCount": 126
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposal": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book nanqishu --chapter 004",
+      "passed": true,
+      "summary": "Scoped person data validation passed for nanqishu/004: 1 extraction(s), 52 local people, 307 mentions, 403 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book nanqishu --chapter 004 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-004/date-packet.json",
+      "sealedDatePacketSha256": "sha256:a445ba656621fc7dd6e5fc1947f03356fbe9629dc3331e1f01c7798638fd3f64"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book nanqishu --chapter 004",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyStatus": "candidate-packet-prepared",
+  "independentDateAudit": {
+    "status": "missing",
+    "path": "data/people/date-audits/nanqishu/004.json",
+    "note": "No native date audit artifact; owner does not self-approve. Sealed date packet prepared from current pinned source and extraction for separate independent reviewer."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit via people:dates:run or equivalent reviewer using sealed date packet at pinned hashes.",
+    "identity": "Corpus-scoped bounded identity dossier review after chronology approval.",
+    "independentReviewCompleted": false,
+    "nextGates": [
+      "independent-native-date-audit",
+      "independent-bounded-identity-review"
+    ]
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, accepted extraction, and applied editorial decisions verified at witness blobs. Full sentence-level English coverage; scoped people:validate passed. No new definite English omission or chronology contradiction found requiring owner repair. Native independent date report remains absent.",
+  "authorEvidence": {
+    "method": "Witness blob verification; Chinese/English sentence coverage scan; npm run people:validate; npm run people:dates:packet; people:dates:verify (un-audited); no canonical extraction, source, or date-audit edits."
+  },
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; no deploy, merge, registry generation, or self-approved date audit.",
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": []
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book nanqishu --chapter 004",
+    "buildDatePacket": "npm run people:dates:packet -- --book nanqishu --chapter 004 --out research/people/checkpoints/campaign-nov24-retained-staging/nanqishu-004/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book nanqishu --chapter 004"
+  }
+}

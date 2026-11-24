@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "044"
+  },
+  "ownerAgentId": "bc-ca0f3f65-bb19-4b9d-9ba3-52c5d198fcd3",
+  "worker": "cursor-nov24-retained-staging-w12-o3",
+  "idempotencyKey": "a40af8553b21ddfc487e94d51ab74a46e56f8c551353d8991c33f9a468a93cc7",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-xintangshu-044-8fcd3",
+  "phase": "dispatch_pending",
+  "auditDispatch": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "7bd82ab7f5a32b6550cc36ad9f18366f6f7d071a00c825858f950f84eca7f13c",
+    "people": 43,
+    "claims": 269,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "b40cd674448e9d0e0f22124bb5353fe561170b70",
+    "extraction": "65dc934315cb0ef5c3d63593d84605755cb69b82",
+    "editorial": "8ffcdf095f1539263672b04bf976010b887d7208",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:b1fae707f3d7c48176fe75a7667c61ad75c3623dd42572ee256cf2d6716fb048",
+    "extraction": "sha256:7bd82ab7f5a32b6550cc36ad9f18366f6f7d071a00c825858f950f84eca7f13c",
+    "editorial": "sha256:cf81e79d4d561ac8fb7062fd216ecd7ddc5cccaffdfcc0ccd315cacd97fdcf40"
+  },
+  "sourceExtractionContentSha256": "sha256:7bd82ab7f5a32b6550cc36ad9f18366f6f7d071a00c825858f950f84eca7f13c",
+  "nativeDateFingerprints": {
+    "sourceHash": "sha256:45bb5039e920b6d38f51d1887346636c1b44e30ef17781150bcb2c785d2b645d",
+    "extractionHash": "sha256:3bd56bf743a2dea20124da5ef23c8cf0c50ea764edb2f969c6c27667a57338da"
+  },
+  "sealedDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-044/date-packet.json",
+    "contentSha256": "sha256:fd287f25310b2448c55d023ba7d5c824875b0ce97f4673af3e5a5d5d40bf2ec8",
+    "itemCount": 102,
+    "peopleCount": 43,
+    "unitCount": 227
+  },
+  "extractionReuse": {
+    "bytes": 83389,
+    "promptVersion": 7,
+    "peopleCount": 43,
+    "claimsCount": 269,
+    "sealed": true
+  },
+  "editorialReuse": {
+    "decisionCount": 3,
+    "proposalCount": 3,
+    "claimRetractions": 0,
+    "claimRevisions": 0,
+    "sealed": true
+  },
+  "sourceCoverage": {
+    "title": "Volume 44 Treatises 39: Selecting and Appointing Officials 1",
+    "sentenceCount": 227,
+    "translatedCount": 227,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "metaTranslatedCount": 227
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposal": null,
+  "nativeValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book xintangshu --chapter 044",
+      "passed": true,
+      "summary": "Scoped person data validation passed for xintangshu/044: 1 extraction(s), 43 local people, 118 mentions, 370 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesPacket": {
+      "command": "npm run people:dates:packet -- --book xintangshu --chapter 044 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-044/date-packet.json",
+      "sealedDatePacketSha256": "sha256:fd287f25310b2448c55d023ba7d5c824875b0ce97f4673af3e5a5d5d40bf2ec8"
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xintangshu --chapter 044",
+      "status": "un-audited",
+      "nativeDateReportPresent": false
+    }
+  },
+  "chronologyStatus": "candidate-packet-prepared",
+  "independentDateAudit": {
+    "status": "missing",
+    "path": "data/people/date-audits/xintangshu/044.json",
+    "note": "No native date audit artifact; owner does not self-approve. Sealed date packet prepared from current pinned source and extraction for separate independent reviewer."
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": "Fresh independent native date audit via people:dates:run or equivalent reviewer using sealed date packet at pinned hashes.",
+    "identity": "Corpus-scoped bounded identity dossier review after chronology approval.",
+    "independentReviewCompleted": false,
+    "nextGates": [
+      "independent-native-date-audit",
+      "independent-bounded-identity-review"
+    ]
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, accepted extraction, and applied editorial decisions verified at witness blobs. Full sentence-level English coverage; scoped people:validate passed. No new definite English omission or chronology contradiction found requiring owner repair. Native independent date report remains absent.",
+  "authorEvidence": {
+    "method": "Witness blob verification; Chinese/English sentence coverage scan; npm run people:validate; npm run people:dates:packet; people:dates:verify (un-audited); no canonical extraction, source, or date-audit edits."
+  },
+  "canonicalEdits": false,
+  "independentApprovalIssued": false,
+  "chapterReady": false,
+  "notes": "[CF-Pages-Skip] Owner handoff only; no deploy, merge, registry generation, or self-approved date audit.",
+  "extractionCoverage": {
+    "allUnitsVisited": true,
+    "preflightCandidatesAccountedFor": true,
+    "allNamedPeopleAndMentionsCaptured": true,
+    "allDurableFactsCaptured": true,
+    "allChronologyCaptured": true,
+    "allPersonEventsCaptured": true,
+    "allClaimProvenanceCaptured": true,
+    "allFamilyRelationshipsCaptured": true,
+    "editorialPassCompleted": true,
+    "unresolvedReferences": []
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xintangshu --chapter 044",
+    "buildDatePacket": "npm run people:dates:packet -- --book xintangshu --chapter 044 --out research/people/checkpoints/campaign-nov24-retained-staging/xintangshu-044/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book xintangshu --chapter 044"
+  }
+}
