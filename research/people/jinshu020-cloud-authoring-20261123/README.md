@@ -1,16 +1,18 @@
 # Jinshu 020 residual review
 
-Rites treatise chapter. Extraction validates with **97 proposed** translation repairs and **no** editorial-decisions document yet.
+Rites treatise chapter. Independent editorial decisions applied on staging draft #5488.
 
-## Authoring this pass
+## Done this owner apply
 
-- Verified proposed-repair `before` texts still match source (0 stale).
-- Spot-checked proposal quality; left all as `proposed` for independent editorial (author cannot self-approve).
-- No additional definite English defects found beyond the existing proposal set.
+- Independent decisions (`3090cd32`): **83 accept + 14 revise**, 0 reject — applied via native applier.
+- Exact reviewer identity preserved on `data/people/editorial-decisions/jinshu/020.json`.
+- 38 new English-surface candidates resolved (see `editorial-candidate-resolution.json`).
+- Scoped extraction + people validate pass; 97 repairs now `applied`.
 
-## Independent review still needed
+Owner apply receipt: `research/people/jinshu020-owner-editorial-apply-20261124/`.
 
-1. Editorial pass over all 97 proposals → apply accepted set
-2. Date audit
-3. Identity/dossier + lookup
-4. Combined curation / publication
+## Still needed (not this turn)
+
+1. Date audit (against post-editorial candidate hash)
+2. Identity/dossier + lookup
+3. Combined curation / publication
