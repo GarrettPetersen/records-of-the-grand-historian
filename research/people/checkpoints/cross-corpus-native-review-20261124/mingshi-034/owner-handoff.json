@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "cross-corpus-identity-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "034"
+  },
+  "ownerAgentId": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e",
+  "campaignWorker": "cursor-github-nov24-cross-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "sourceRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+  "transportCommit": "62d0c83abee9a29c7e7a61e66153c24ec50dce7d",
+  "transportBranch": "codex/cursor-glossary-nov24-2026-cross-corpus-transport",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/preparation-receipt.json",
+    "transportPacket": "research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/transport-packet.json",
+    "ownerEvidence": "research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/lookup-receipt.json"
+  },
+  "transportSha256": "7d1034a5b3c4b8b1904634abac0cf50577da417e7a70ec1a51458dcb255f9e8e",
+  "planFingerprint": "sha256:d4b527939ccd0c5ee9d583d67ff36622e270890126c5bb0b1f6564edad57575a",
+  "reviewCases": 2,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "verifyTransport": "git show 62d0c83abee9a29c7e7a61e66153c24ec50dce7d:research/people/checkpoints/cross-corpus-native-review-20261124/mingshi-034/transport-packet.json | sha256sum",
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 034",
+    "reviewerReads": [
+      "transport-packet.json requiredReport",
+      "owner-evidence.json cases",
+      "Pinned data/mingshi/034.json and cross-chapter units named in transport"
+    ],
+    "reviewerProduces": "identity-review.json in requiredReport schema with independent reviewer agentId; owner evidence is not approval"
+  },
+  "notes": "Chronology holds for liaoshi/042 and liaoshi/106 are out of portfolio. No identity-review.json or certificate in this PR."
+}

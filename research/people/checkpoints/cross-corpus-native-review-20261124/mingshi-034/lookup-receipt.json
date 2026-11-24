@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "034"
+  },
+  "queries": [
+    {
+      "route": "/v1/manifest",
+      "purpose": "Confirm lookup generation before dossier header reads",
+      "generation": "cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+      "note": "Live lookup revision differs from pinned 110c2f92 registry; transport sealed dossiers are authoritative for this review."
+    },
+    {
+      "route": "/v1/people/per_0NG6SRR9C29WDD4MJC61",
+      "purpose": "Header check for Wang Xun canonical id",
+      "blockingNameKeys": ["zh:王恂"]
+    },
+    {
+      "route": "/v1/people/per_1KMTQT0BD5BAXH67NXN3",
+      "purpose": "Header check for Guo Shoujing canonical id",
+      "blockingNameKeys": ["zh:郭守敬"]
+    }
+  ],
+  "conclusion": "Lookup used only for bounded name-header confirmation; membership and witnesses are drawn from sealed transport and primary chapter JSON.",
+  "ownerAgentId": "bc-c4ccc606-4e91-4f57-8419-94b8fb4d3a0e"
+}
