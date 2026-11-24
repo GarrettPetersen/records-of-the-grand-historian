@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "weishu",
+    "chapter": "092"
+  },
+  "ownerAgentId": "bc-93e93000-8c02-4b30-b328-18bab2f112de",
+  "workerId": "cursor-nov24-retained-staging-w13-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b56a8ed6834376f733854499fca046244ef0e64657c6f8016eb9d52a2951c670",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-weishu-092-112de",
+  "extractionBytes": 99038,
+  "workOrder": {
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "e5eaedb6f4f67d0bebb9d4230c015ade921c613767f6f6ccddbed2ae7ce2f1e0",
+    "promptVersion": 7,
+    "workOrderPeople": 72,
+    "workOrderClaims": 360
+  },
+  "inputBlobWitness": {
+    "source": "3600fd87f8429d35c1293a39da359fdb1336cbb1",
+    "extraction": "5a6f13f692ebbc26969379fc4d0f6bdb905b83a5",
+    "editorial": "3361721b3b11040777de5fb70681ccaa9421d877"
+  },
+  "sealedInputs": {
+    "source": "sha256:a6e073d4f72ba361d96b80329346a1d9994c39f569f596220569329777f3d534",
+    "extraction": "sha256:e5eaedb6f4f67d0bebb9d4230c015ade921c613767f6f6ccddbed2ae7ce2f1e0",
+    "editorial": "sha256:2dfc63b3e4f311ba86e7333dd863b2d01df8ea51f0f2eafe875f2de6cf22472e"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 86: Filial Piety: Zhao Yan, Zhang Sunlu, Qifu Bao, Sun Yide, Dong Luosheng, Yang Yin",
+    "chineseUnits": 143,
+    "sentenceCount": 143,
+    "translatedCount": 143,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 99038
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/weishu-092/date-packet.json",
+    "contentSha256": "sha256:24f442ee2224ced8cf96cc85e31ec593a0caea28fd3e9d7a6cf96123d1660468",
+    "itemCount": 185,
+    "peopleCount": 72,
+    "unitCount": 143,
+    "buildCommand": "npm run people:dates:packet -- --book weishu --chapter 092 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-092/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book weishu --chapter 092",
+    "peopleValidateSummary": "Scoped person data validation passed for weishu/092: 1 extraction(s), 72 local people, 259 mentions, 573 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book weishu --chapter 092",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditVersion": 1
+    },
+    "chronologyStatus": "pending-independent-date-audit",
+    "editorialStatus": "accepted-decisions-retained",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned staging blobs; no data/people/date-audits/weishu/092.json exists. Full chapter source read: 143 Chinese sentences (Volume 86: Filial Piety: Zhao Yan, Zhang Sunlu, Qifu Bao, Sun Yide, Dong Luosheng, Yang Yin) with literal and idiomatic English on all units carrying Chinese text per meta translatedCount 143. Extraction and accepted editorial align at witnessed blobs; people:dates:scan reports 0 pre-audit diagnostics. people:validate passes scoped; native date packet sealed at sha256:24f442ee2224ced8cf96cc85e31ec593a0caea28fd3e9d7a6cf96123d1660468. No definite English omission, extraction defect, or concrete source contradiction found in this owner pass. Independent native chronology review remains the missing gate; owner does not self-approve.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "kind": "independent-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:24f442ee2224ced8cf96cc85e31ec593a0caea28fd3e9d7a6cf96123d1660468",
+      "note": "Independent reviewer must approve native date packet and record via people:dates:record; chapter is un-audited in baseline."
+    },
+    {
+      "kind": "independent-identity-review",
+      "status": "required-at-chapter-boundary",
+      "note": "Canonical identity evidence review follows independent date approval per PEOPLE completion path."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book weishu --chapter 092",
+    "datesVerify": "npm run people:dates:verify -- --book weishu --chapter 092",
+    "buildDatePacket": "npm run people:dates:packet -- --book weishu --chapter 092 --out research/people/checkpoints/campaign-nov24-retained-staging/weishu-092/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, no registry, no deploy."
+}

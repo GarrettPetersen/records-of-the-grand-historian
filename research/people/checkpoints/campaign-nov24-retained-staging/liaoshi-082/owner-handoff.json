@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "082"
+  },
+  "ownerAgentId": "bc-93e93000-8c02-4b30-b328-18bab2f112de",
+  "workerId": "cursor-nov24-retained-staging-w13-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b56a8ed6834376f733854499fca046244ef0e64657c6f8016eb9d52a2951c670",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-082-112de",
+  "extractionBytes": 98862,
+  "workOrder": {
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "1e26a6a65a7ac16762b6ac9816f1da848373c45c765502c12fffab410a31e639",
+    "promptVersion": 7,
+    "workOrderPeople": 60,
+    "workOrderClaims": 274
+  },
+  "inputBlobWitness": {
+    "source": "4a8e3020d168c926da197ec0113249262a787f42",
+    "extraction": "c283eec9f0e124c6a47969b5c7723f8badd46396",
+    "editorial": "045aa2670da4dabdfb5dc324f9589eafa49d87be"
+  },
+  "sealedInputs": {
+    "source": "sha256:47ea2bb8693196bd48e7c79ed3be23f0d808b2ad071b40fca64431ca96fa93cb",
+    "extraction": "sha256:1e26a6a65a7ac16762b6ac9816f1da848373c45c765502c12fffab410a31e639",
+    "editorial": "sha256:e0cd666cbcafd8d4eb5485be533c67637161c8f69f62d29b6dfebc835aa92c9f"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 82 Biographies 12: Yelu Longyun, Yelu Boguzhe, Xiao Yanga, Wu Bai, Xiao Changge, Yelu Hugu",
+    "chineseUnits": 160,
+    "sentenceCount": 160,
+    "translatedCount": 160,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 98862
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-082/date-packet.json",
+    "contentSha256": "sha256:c01db29ebde58bd4b1d20099efeb81c7e5d8dce063ef5cdaeef321c0e4bd2906",
+    "itemCount": 164,
+    "peopleCount": 60,
+    "unitCount": 160,
+    "buildCommand": "npm run people:dates:packet -- --book liaoshi --chapter 082 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-082/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 082",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/082: 1 extraction(s), 60 local people, 319 mentions, 512 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 082",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditVersion": 1
+    },
+    "chronologyStatus": "pending-independent-date-audit",
+    "editorialStatus": "accepted-decisions-retained",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned staging blobs; no data/people/date-audits/liaoshi/082.json exists. Full chapter source read: 160 Chinese sentences (Volume 82 Biographies 12: Yelu Longyun, Yelu Boguzhe, Xiao Yanga, Wu Bai, Xiao Changge, Yelu Hugu) with literal and idiomatic English on all units carrying Chinese text per meta translatedCount 160. Extraction and accepted editorial align at witnessed blobs; people:dates:scan reports 0 pre-audit diagnostics. people:validate passes scoped; native date packet sealed at sha256:c01db29ebde58bd4b1d20099efeb81c7e5d8dce063ef5cdaeef321c0e4bd2906. No definite English omission, extraction defect, or concrete source contradiction found in this owner pass. Independent native chronology review remains the missing gate; owner does not self-approve.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "kind": "independent-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:c01db29ebde58bd4b1d20099efeb81c7e5d8dce063ef5cdaeef321c0e4bd2906",
+      "note": "Independent reviewer must approve native date packet and record via people:dates:record; chapter is un-audited in baseline."
+    },
+    {
+      "kind": "independent-identity-review",
+      "status": "required-at-chapter-boundary",
+      "note": "Canonical identity evidence review follows independent date approval per PEOPLE completion path."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 082",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 082",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 082 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-082/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, no registry, no deploy."
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liaoshi",
+    "chapter": "006"
+  },
+  "ownerAgentId": "bc-93e93000-8c02-4b30-b328-18bab2f112de",
+  "workerId": "cursor-nov24-retained-staging-w13-o8",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b56a8ed6834376f733854499fca046244ef0e64657c6f8016eb9d52a2951c670",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liaoshi-006-112de",
+  "extractionBytes": 98870,
+  "workOrder": {
+    "auditState": "no-native-date-report",
+    "sourceExtractionSha256": "69851cf4769627a532774b001fdd6fceb16bf7de7338ebf09562a152c0da3386",
+    "promptVersion": 7,
+    "workOrderPeople": 61,
+    "workOrderClaims": 216
+  },
+  "inputBlobWitness": {
+    "source": "296abc72d06d4f3e4a278b42045b48c4c9bb9dd9",
+    "extraction": "89f9accb26d09cdadbe9f2dbb37d21b7f2aa6fe1",
+    "editorial": "1a61384cba2149d5353ee7232cde8bf05eff1d41"
+  },
+  "sealedInputs": {
+    "source": "sha256:1accf0c217d0a0d28c7f11a259f8268859831b6c703880abae5240797f68200a",
+    "extraction": "sha256:69851cf4769627a532774b001fdd6fceb16bf7de7338ebf09562a152c0da3386",
+    "editorial": "sha256:37db014343d4fe453b251b70e25cb5dfb41194a92972fbd029a0ca6e2568964b"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 6 Annals 6: Muzong 1",
+    "chineseUnits": 192,
+    "sentenceCount": 192,
+    "translatedCount": 192,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "emptyChineseSpacers": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 98870
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-006/date-packet.json",
+    "contentSha256": "sha256:b6704fe1d83f497aa99b5b5b59bb8682b6b92ec81e6520bf946e8676874ee875",
+    "itemCount": 192,
+    "peopleCount": 61,
+    "unitCount": 192,
+    "buildCommand": "npm run people:dates:packet -- --book liaoshi --chapter 006 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-006/date-packet.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book liaoshi --chapter 006",
+    "peopleValidateSummary": "Scoped person data validation passed for liaoshi/006: 1 extraction(s), 61 local people, 219 mentions, 440 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book liaoshi --chapter 006",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "auditVersion": 1
+    },
+    "chronologyStatus": "pending-independent-date-audit",
+    "editorialStatus": "accepted-decisions-retained",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs (source, extraction, editorial) at pinned staging blobs; no data/people/date-audits/liaoshi/006.json exists. Full chapter source read: 192 Chinese sentences (Volume 6 Annals 6: Muzong 1) with literal and idiomatic English on all units carrying Chinese text per meta translatedCount 192. Extraction and accepted editorial align at witnessed blobs; people:dates:scan reports 0 pre-audit diagnostics. people:validate passes scoped; native date packet sealed at sha256:b6704fe1d83f497aa99b5b5b59bb8682b6b92ec81e6520bf946e8676874ee875. No definite English omission, extraction defect, or concrete source contradiction found in this owner pass. Independent native chronology review remains the missing gate; owner does not self-approve.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentProofs": [
+    {
+      "kind": "independent-date-audit",
+      "status": "required",
+      "packetSha256": "sha256:b6704fe1d83f497aa99b5b5b59bb8682b6b92ec81e6520bf946e8676874ee875",
+      "note": "Independent reviewer must approve native date packet and record via people:dates:record; chapter is un-audited in baseline."
+    },
+    {
+      "kind": "independent-identity-review",
+      "status": "required-at-chapter-boundary",
+      "note": "Canonical identity evidence review follows independent date approval per PEOPLE completion path."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liaoshi --chapter 006",
+    "datesVerify": "npm run people:dates:verify -- --book liaoshi --chapter 006",
+    "buildDatePacket": "npm run people:dates:packet -- --book liaoshi --chapter 006 --out research/people/checkpoints/campaign-nov24-retained-staging/liaoshi-006/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, no registry, no deploy."
+}
