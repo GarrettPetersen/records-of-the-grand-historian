@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-identity-hold-repair",
+  "scope": {
+    "book": "jiuwudaishi",
+    "chapter": "130"
+  },
+  "ownerAgentId": "bc-8490c614-fab6-4384-8868-077febf76dfc",
+  "reviewerAgentId": "bc-817bb69c-ab66-41e6-b24a-6c00e781d591",
+  "reviewHead": "c84ba98b8466734801c701416bc95e8c585b30bb",
+  "ownerRevision": "ca4fd9bc324e33ab26ed547786ed7c16a5ab1d1b",
+  "heldCase": {
+    "caseId": "sha256:a6b343016e24f509a5de807e996dae92931fd10cf31f91226e32d7d8056a33f4",
+    "canonicalPersonId": "per_SZ6WTD8X7AKTCR0FNFF1",
+    "localPersonId": "jiuwudaishi:130:p037"
+  },
+  "priorHashes": {
+    "source": "sha256:a1edf62c065994adf6ebb5d57c599bce330d2d2a547714660565675a5387c0c6",
+    "extraction": "sha256:b64926909527866c1037ef7a3292e32252e87bea6f44cc9d1d57a6b163587dd9",
+    "editorial": "sha256:3effba0a48bbc9439a55d13a7884bd3015a4c13dc34ed3f4dad57bdec7f7a1f9",
+    "dateAudit": "sha256:b64448f920a2c08166a5b0d586134af0a23da108d1c3e0324335adf21f2e5baf"
+  },
+  "sourceWitness": {
+    "unitId": "s0104",
+    "zh": "為兗州節度使，彥超即漢高祖之同產弟也。",
+    "en": "He served as military governor of Yanzhou; Yanchao was the younger uterine brother of Han Founder.",
+    "ownedQuotes": {
+      "p019": "彥超",
+      "p007": "漢高祖",
+      "siblingKinship": "同產弟"
+    },
+    "notes": "No 同產母 or 劉知遠母 span in owned units."
+  },
+  "independentHoldReason": "p037 labels use 同產母 and 劉知遠母 without quotable Chinese surfaces; only sibling 同產弟 is attested.",
+  "proposal": {
+    "disposition": "minimal-representation-repair-pending-re-review",
+    "summary": "Remove fabricated Chinese labels 同產母 / 劉知遠母 from p037; retain structural mother intermediary and explicit sibling claim quoting 同產弟; identity case remains unresolved until reviewer accepts kinship-only record.",
+    "extractionChanges": [
+      {
+        "target": "person",
+        "personId": "p037",
+        "field": "preferredName",
+        "before": ["Mother of Liu Zhiyuan", "劉知遠母", null],
+        "after": ["Shared mother (inferred kinship intermediary)", null, null]
+      },
+      {
+        "target": "person",
+        "personId": "p037",
+        "field": "mentionException",
+        "before": "Individuated only as the shared biological mother entailed by 同產弟 in s0104; not named in owned units.",
+        "after": "No quotable Chinese personal label; shared parent entailed only through 同產弟 witness on sibling claim at s0104; p037 has no owned nominal Han surface."
+      },
+      {
+        "target": "person",
+        "personId": "p037",
+        "field": "nameAlias",
+        "before": {
+          "kind": "descriptive-kinship",
+          "en": "Mother of Liu Zhiyuan and Murong Yanchao",
+          "zh": "同產母",
+          "certainty": "strongly-inferred",
+          "evidence": ["s0104"]
+        },
+        "after": {
+          "kind": "descriptive-kinship",
+          "en": "Shared mother of Liu Zhiyuan and Murong Yanchao (inferred)",
+          "zh": "同產弟",
+          "certainty": "strongly-inferred",
+          "evidence": ["s0104"],
+          "ownerNote": "同產弟 is the witnessed sibling term on s0104, not a maternal name; reviewer must accept kinship-intermediary reading or retain hold."
+        }
+      }
+    ],
+    "canonicalDataMutation": "none until host applies approved repair",
+    "englishOmissionRepairs": []
+  },
+  "dateEffects": {
+    "expectedChange": false,
+    "reason": "Undated attestation on s0104 and sibling/parent claims unchanged."
+  },
+  "scopedValidation": {
+    "validateCompactPeopleExtractionAfterApply": "passed in owner simulation (alias uses witnessed 同產弟 span)",
+    "peopleValidateCurrentHead": "passed without applying proposal"
+  },
+  "witnessReReview": {
+    "required": true,
+    "caseIds": ["sha256:a6b343016e24f509a5de807e996dae92931fd10cf31f91226e32d7d8056a33f4"],
+    "instruction": "Reviewer decides whether kinship intermediary p037 may cite 同產弟 on s0104 without inventing 同產母/劉知遠母; retain unresolvedIdentity unless explicitly approved."
+  },
+  "preservedApprovals": "47 other identity cases from independent reports unchanged; no merge/split."
+}
