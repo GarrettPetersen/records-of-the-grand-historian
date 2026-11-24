@@ -40,7 +40,7 @@
     "Cursor displays reset date only; verify exact reset time before new dispatch",
     "Glossary staging diverges from master by 1596 ahead and 43 behind; replay scoped candidate changes against reconciled inputs before retargeting older PRs"
   ],
-  "nextAction": "Build hosted Jinshu 123 native identity packet from the composed source, complete Jinshu 030 staging and advance exact 081/078 scopes.",
+  "nextAction": "Carry forward newly staged Jinshu 030 to the five-chapter release candidate. Complete 081 provenance-only chronology rebind, 123 identity preparation and 078 focused repair.",
   "pullRequests": [
     {
       "headRefOid": "f29cecc7983e160b592c48801f5fece19372a55a",
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T01:29:19.009Z",
+  "lastCheckedAt": "2026-11-24T01:30:22.628Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -875,7 +875,7 @@
       "originalPR": 5421,
       "reviewPR": 5479,
       "revision": "a8c157f5611b0ced987f361262fb6173725f0571",
-      "status": "native-identity-approved-awaiting-stage",
+      "status": "merged-to-staging",
       "ownerAgentId": "bc-64160cca-fb61-4c6e-ba29-27cd0fc0ada1",
       "verifiedScopedFiles": 5,
       "preimages": {
@@ -920,7 +920,7 @@
     "stagingHasCampaignApprovals": true,
     "reason": "031 is approved on staging. Build a master-based release batch to preserve five current published Jinshu chapters absent or stale in the staging baseline.",
     "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-    "staging": "2accc978bc855ad74740c04534a09e9f3009038b",
+    "staging": "f635cf7855f88fa614627713a1a881be50c50ac0",
     "stagingAheadBy": 1596,
     "stagingBehindBy": 43,
     "verifiedAt": "2026-11-23T17:15:38.145Z",
@@ -939,6 +939,7 @@
     ],
     "releasePreparation": "Once chapters are approved and merged to staging, assemble the production batch from current master with only the approved chapter deltas and required dependencies. Verify retained releases with the full master gate. Keep shared staging and its history.",
     "campaignApprovedOnStaging": [
+      "jinshu/030",
       "jinshu/031",
       "jinshu/083",
       "jinshu/094",
@@ -1091,7 +1092,7 @@
     },
     "releaseDataPreflight": {
       "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
-      "stage": "2accc978bc855ad74740c04534a09e9f3009038b",
+      "stage": "f635cf7855f88fa614627713a1a881be50c50ac0",
       "chapters": [
         {
           "chapter": "jinshu/115",
@@ -1237,6 +1238,58 @@
               "before": null,
               "staged": "a7a8e7bce5f215990760f1f71f2865bdc9e70838",
               "after": "a7a8e7bce5f215990760f1f71f2865bdc9e70838",
+              "master": null
+            }
+          ],
+          "preimageDifferences": []
+        },
+        {
+          "chapter": "jinshu/030",
+          "prNumber": 5479,
+          "merge": "f635cf7855f88fa614627713a1a881be50c50ac0",
+          "master": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+          "stage": "f635cf7855f88fa614627713a1a881be50c50ac0",
+          "files": [
+            {
+              "path": "data/jinshu/030.json",
+              "before": "e741bea0bcf844e28b64d42b48acbffa932190f2",
+              "staged": "0be06cb8277560a4d5ab3fc4a9b81b4016d258fc",
+              "after": "0be06cb8277560a4d5ab3fc4a9b81b4016d258fc",
+              "master": "e741bea0bcf844e28b64d42b48acbffa932190f2"
+            },
+            {
+              "path": "data/people/date-audits/jinshu/030.json",
+              "before": null,
+              "staged": "a9f0217b4169c22330e690d720af45d9482e8a2d",
+              "after": "a9f0217b4169c22330e690d720af45d9482e8a2d",
+              "master": null
+            },
+            {
+              "path": "data/people/editorial-candidate-decisions/jinshu/030.json",
+              "before": null,
+              "staged": "1e6dfb78120a6aad9fd144e89e3b5e0d41298c2b",
+              "after": "1e6dfb78120a6aad9fd144e89e3b5e0d41298c2b",
+              "master": null
+            },
+            {
+              "path": "data/people/editorial-decisions/jinshu/030.json",
+              "before": null,
+              "staged": "cc87737dc7ba859e87f80913b03e5ed4dd2b4c27",
+              "after": "cc87737dc7ba859e87f80913b03e5ed4dd2b4c27",
+              "master": null
+            },
+            {
+              "path": "data/people/extractions/jinshu/030.json",
+              "before": "bdfe90325e4a078e3c1fcf9deaa539b9b96d6ef7",
+              "staged": "1501eb61fe7f64644efb37a27135996dd61f48a2",
+              "after": "1501eb61fe7f64644efb37a27135996dd61f48a2",
+              "master": "bdfe90325e4a078e3c1fcf9deaa539b9b96d6ef7"
+            },
+            {
+              "path": "data/people/identity-reviews/jinshu/030.json",
+              "before": null,
+              "staged": "cf5bf01f200f07e419d52d99e7fe9ccc95d282ab",
+              "after": "cf5bf01f200f07e419d52d99e7fe9ccc95d282ab",
               "master": null
             }
           ],
@@ -1665,31 +1718,24 @@
       "historicalAuthorPinVerified": true
     },
     "jinshu/078": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
-      "previousRunId": "run-9f5a5160-107c-4e43-939c-d70f32fa8285",
+      "previousRunId": "run-c553d971-5db4-4cc1-8ac6-8d06bca897c2",
       "chapterPR": 5425,
-      "revision": "820d95223c9059598d9db07983cb19406c9d48c6",
-      "findingsRevision": "13b3225fb9dbc08494937f86ddbc8678b86e9699",
-      "prompt": "Resume original Jinshu 078 owner on #5425. At independent delta review 13b3225f, adjudicate the seven residual chapter-local continuity groups only: p002/p037, p003/p041, p004/p044, p091 with p006/p114, p113 with p007/p172, p160 Liang vs Yu Liang, and p106/p165 Emperor Cheng. Read exact Chinese and independently demonstrated antecedents, preserve the 33 accepted links and p002 distinct from p166; retain defensible uncertainty. Apply supported local corrections using native extraction validators, retain English/chronology evidence, push scoped changed dependencies to #5425. Then prepare the same chapter for exact retained chronology review if the local scope is closed. Your existing five-chapter queue is 078, 065, 083 (staged), 020, 090. Keep 078 primary and leave other chapter files alone during this run.",
-      "idempotencyKey": "cursor-nov24-next-retained-078-820d95223c",
-      "reservedAt": "2026-11-24T00:57:06.826Z",
+      "revision": "db0945f96ae6b1273da5ac0dbe21a9ccc6db82e5",
+      "findingsRevision": "65ce623ce35d47b463dc25db85187d7447c5861a",
+      "prompt": "Resume original sole Jinshu 078 owner. Independent coverage is 415/415 on #5438 at 65ce623c. Resolve only concrete incorrect year/interval rows claim-1033, claim-1034, claim-1100 and claim-1046 through 1049 shown in final chronology parts; support any retained year/bound with exact Chinese, otherwise preserve actual undated/relative facts without inherited year. Preserve 41 vetted same-person links, two accepted English repairs, and approved chronological items. For other retained source holds return exact minimal representation options only with supported evidence. Run scoped, push to #5425 with exact changed dependency receipt, no fake approval, broad re-audit, other chapter or merge.",
+      "idempotencyKey": "cursor-nov24-next-retained-078-db0945f96a-ownerCorrections-8d06bca897c2",
+      "reservedAt": "2026-11-24T01:30:22.627Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-24T00:57:06.826Z"
+        "at": "2026-11-24T01:30:22.627Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
         "swapUsedBytes": "3365205442"
-      },
-      "runId": "run-0be3428b-c38c-4110-9745-58147fc61760",
-      "sentAt": "2026-11-24T00:57:13.885Z",
-      "resultRevision": "db0945f96ae6b1273da5ac0dbe21a9ccc6db82e5",
-      "scopedValidation": "pass",
-      "localLinks": 41,
-      "retainedPairs": 33,
-      "dateItems": 573
+      }
     },
     "jinshu/047": {
       "status": "finished",
@@ -2366,30 +2412,24 @@
       "chronology": "295 explicit unresolved containers remain"
     },
     "jinshu/081": {
-      "status": "finished",
+      "status": "dispatch_pending",
       "agentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
-      "previousRunId": "run-ad36818c-b901-4517-9123-79f87326dd93",
+      "previousRunId": "run-9e08d50b-c047-43c0-a065-8853f7bff642",
       "chapterPR": 5478,
-      "revision": "6cc9b15833e0079ae3372594896ae4bbe1d9cb5e",
-      "findingsRevision": "19b654dc78d7c6e8990847adf7a6dc9067e8aa7d",
-      "prompt": "Verify original independent Jinshu 081 nine remaining chronology representations on exact #5478 6cc9b15833e0079ae3372594896ae4bbe1d9cb5e. Preserve recovered independent article/date proofs, three supported Western dates and 15 editorial decisions; use prior 716 unchanged and 124 rewitnessed checks only with exact dependency validation. Check event-only death vs explicitly named era attribution and each retained timing phrase at exact Chinese witness, no speculative time. If eligible, return exact native audited report plus scoped reproducible composition receipt, with zero residual, actual independent provenance and all required coverage. No full review redo, owner edits or merge.",
-      "idempotencyKey": "cursor-nov24-next-retained-081-6cc9b15833-rechecks-79f87326dd93",
-      "reservedAt": "2026-11-24T01:18:39.093Z",
+      "revision": "28e92c64aea0ba8dfe2d869722629382d2e42b1a",
+      "findingsRevision": "7feb17cc434b652d729f3bc9e3f2346f7c0bd52b",
+      "prompt": "Jinshu 081 original independent reviewer. Compare exact #5478 28e92c64 against your audited 7feb17cc and prior owner 6cc9b158. Original merged #5110 plus queue 5a65e981 pin grokbot-24 for all twelve original chunks. Require date item/person/unit/claims/mentions/evidence equality outside exact historical extractor metadata. Reuse all 840 audited decisions and preserve their exact semantic fields and witnesses plus prior findings history. If native validation passes, emit current independently reviewed native date report and exact composition/replay receipt on the same branch. No new full review or changes to owner source or identity.",
+      "idempotencyKey": "cursor-nov24-next-retained-081-28e92c64ae-rechecks-8853f7bff642",
+      "reservedAt": "2026-11-24T01:30:22.627Z",
       "lastSendAttempt": {
         "status": "send-intent",
-        "at": "2026-11-24T01:18:39.093Z"
+        "at": "2026-11-24T01:30:22.627Z"
       },
       "preflight": {
         "mode": "cursor-cloud-github-only",
         "pressure": 1,
         "swapUsedBytes": "3365205442"
-      },
-      "runId": "run-9e08d50b-c047-43c0-a065-8853f7bff642",
-      "sentAt": "2026-11-24T01:18:44.177Z",
-      "resultRevision": "7feb17cc434b652d729f3bc9e3f2346f7c0bd52b",
-      "chronology": "audited-after-scoped-composition",
-      "retainedChecks": 826,
-      "rewitnessedChecks": 14
+      }
     },
     "jinshu/028": {
       "status": "finished",
@@ -4378,16 +4418,19 @@
         ]
       },
       "transfer": {
-        "status": "in_progress",
+        "status": "merged-to-staging",
         "chapterPR": 5479,
         "recordingRunId": 45304616858,
         "reviewedCases": 206,
-        "runId": 45305260479
+        "runId": 45305260479,
+        "approvedHead": "54ad4dbd0d18f1c20fcb1f29915056396ba4677b",
+        "merge": "f635cf7855f88fa614627713a1a881be50c50ac0",
+        "certificateBlob": "cf5bf01f200f07e419d52d99e7fe9ccc95d282ab"
       }
     },
     "readyChronology": {
       "jinshu/123": {
-        "status": "dispatch-intent",
+        "status": "in_progress",
         "pr": 5439,
         "sourceRevision": "45ec840ab0b4d0a2a000ec12659625fcba5ad6a4",
         "ref": "codex/cursor-glossary-nov24-2026-identity-123-audited",
@@ -4418,7 +4461,9 @@
           }
         ],
         "dateItems": 322,
-        "people": 103
+        "people": 103,
+        "runId": 45305415871,
+        "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45305415871"
       }
     }
   },
@@ -5673,6 +5718,33 @@
         "at": "2026-11-23T16:22:30.576Z",
         "runId": "run-9f5a5160-107c-4e43-939c-d70f32fa8285",
         "returnedRevision": "820d95223c9059598d9db07983cb19406c9d48c6"
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
+        "previousRunId": "run-9f5a5160-107c-4e43-939c-d70f32fa8285",
+        "chapterPR": 5425,
+        "revision": "820d95223c9059598d9db07983cb19406c9d48c6",
+        "findingsRevision": "13b3225fb9dbc08494937f86ddbc8678b86e9699",
+        "prompt": "Resume original Jinshu 078 owner on #5425. At independent delta review 13b3225f, adjudicate the seven residual chapter-local continuity groups only: p002/p037, p003/p041, p004/p044, p091 with p006/p114, p113 with p007/p172, p160 Liang vs Yu Liang, and p106/p165 Emperor Cheng. Read exact Chinese and independently demonstrated antecedents, preserve the 33 accepted links and p002 distinct from p166; retain defensible uncertainty. Apply supported local corrections using native extraction validators, retain English/chronology evidence, push scoped changed dependencies to #5425. Then prepare the same chapter for exact retained chronology review if the local scope is closed. Your existing five-chapter queue is 078, 065, 083 (staged), 020, 090. Keep 078 primary and leave other chapter files alone during this run.",
+        "idempotencyKey": "cursor-nov24-next-retained-078-820d95223c",
+        "reservedAt": "2026-11-24T00:57:06.826Z",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-24T00:57:06.826Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "runId": "run-0be3428b-c38c-4110-9745-58147fc61760",
+        "sentAt": "2026-11-24T00:57:13.885Z",
+        "resultRevision": "db0945f96ae6b1273da5ac0dbe21a9ccc6db82e5",
+        "scopedValidation": "pass",
+        "localLinks": 41,
+        "retainedPairs": 33,
+        "dateItems": 573
       }
     ],
     "jinshu/085": [
@@ -7408,6 +7480,32 @@
           "claim-882",
           "claim-521"
         ]
+      },
+      {
+        "status": "finished",
+        "agentId": "bc-5f27e7da-8973-464f-8ba9-78b4e044b72f",
+        "previousRunId": "run-ad36818c-b901-4517-9123-79f87326dd93",
+        "chapterPR": 5478,
+        "revision": "6cc9b15833e0079ae3372594896ae4bbe1d9cb5e",
+        "findingsRevision": "19b654dc78d7c6e8990847adf7a6dc9067e8aa7d",
+        "prompt": "Verify original independent Jinshu 081 nine remaining chronology representations on exact #5478 6cc9b15833e0079ae3372594896ae4bbe1d9cb5e. Preserve recovered independent article/date proofs, three supported Western dates and 15 editorial decisions; use prior 716 unchanged and 124 rewitnessed checks only with exact dependency validation. Check event-only death vs explicitly named era attribution and each retained timing phrase at exact Chinese witness, no speculative time. If eligible, return exact native audited report plus scoped reproducible composition receipt, with zero residual, actual independent provenance and all required coverage. No full review redo, owner edits or merge.",
+        "idempotencyKey": "cursor-nov24-next-retained-081-6cc9b15833-rechecks-79f87326dd93",
+        "reservedAt": "2026-11-24T01:18:39.093Z",
+        "lastSendAttempt": {
+          "status": "send-intent",
+          "at": "2026-11-24T01:18:39.093Z"
+        },
+        "preflight": {
+          "mode": "cursor-cloud-github-only",
+          "pressure": 1,
+          "swapUsedBytes": "3365205442"
+        },
+        "runId": "run-9e08d50b-c047-43c0-a065-8853f7bff642",
+        "sentAt": "2026-11-24T01:18:44.177Z",
+        "resultRevision": "7feb17cc434b652d729f3bc9e3f2346f7c0bd52b",
+        "chronology": "audited-after-scoped-composition",
+        "retainedChecks": 826,
+        "rewitnessedChecks": 14
       }
     ],
     "jinshu/028": [
