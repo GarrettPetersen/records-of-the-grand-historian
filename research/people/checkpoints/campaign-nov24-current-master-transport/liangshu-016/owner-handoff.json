@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "current-master-transport-identity-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "016"
+  },
+  "ownerAgentId": "bc-bb21451a-7280-4821-83b7-a61b1bae197a",
+  "campaignWorker": "cursor-nov24-current-master-1",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "authorBranch": "cursor/liangshu-016-current-master-197a",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:67b78a08e12176c42b8bbed283d8b7c2b52e79af679f4736cba99f6ac2c05cc8",
+    "sourcePacketSha256": "sha256:c65aa709e1acd4d54463e012d400a238c3c2cbd6e9f381eb7193b4f8bff52a19",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:33409e098f72267d54ff4c975e7ed4e3497a46f4fdb66523dbdeb1c56313f495",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:54946613b8e92d77008ba70ceb52bb07405d50d5936dc89e17e015ecc1c94d03",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:1983d7d0735f5428d236d2c61c63cbb1a1b809761857fede00816c05fb6bffd6",
+        "caseCount": 30
+      }
+    ],
+    "preparationReceiptSha256": "sha256:a1a56f26a7807e1ddd195dbfb182981b24fa74c00cba2ed299e6c20b25cd9221"
+  },
+  "sealedInputs": {
+    "source": "sha256:6b4f130f11f3f732a6e3e169039472f93d5c046d663b2fb8603906e918876dfc",
+    "extraction": "sha256:8b1d0f0b2b55459bfccfe3ab4fe1024a87237de07de52d72512921c6d3f2a516",
+    "editorial": "sha256:fe8ac30397cbf6df208ebec88981af9d7917634a6d237a229dc24a0d628bab3b",
+    "dateAudit": "sha256:4af9e5e2abe1344134efd5b13334b6a05f0839e5a312f3c671c174eaa56294e5",
+    "gitBlobs": {
+      "data/liangshu/016.json": "013bf1873e4b4958f6a9dd4901abd1c1e8d9b48a",
+      "data/people/extractions/liangshu/016.json": "32ec775508ec983a27443a14d26abebd5043f65e",
+      "data/people/date-audits/liangshu/016.json": "dbc9e4d3bbc0d6f95cede06ae803a4debb1c34db",
+      "data/people/editorial-decisions/liangshu/016.json": "87fe479c7c63753bcaf49225e858586bbdb49f98"
+    }
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "10 accepted editorial repairs on sealed inputs",
+  "reviewCases": 60,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 60 cases retain preparation-proposed canonicalPersonId with unresolvedIdentity true. 36 overflow cases preserve bounded-retrieval uncertainty; 20 self-anchored chapter memberships. No false-merge or wrong-actor contradiction found in scoped review. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:6b291bbabde0d9a5f40c89244f1f262c6ce30602531f7d1f50c72aa0f04fec84",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/preparation-receipt.json",
+    "transportPart01": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/transport-part-001.json",
+    "transportPart02": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/transport-part-002.json",
+    "transportPart03": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/liangshu-016/lookup-receipt.json"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 016"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
