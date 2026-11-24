@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "044"
+  },
+  "ownerAgentId": "bc-a0dd73da-8de0-4b98-accd-4dbf772d16fa",
+  "workerId": "cursor-nov24-retained-staging-w13-o6",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "8da2a4c6cf3985da6eb956dd02566900fb44339f1ea562c1c529377ded6eecc0",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-suishu-044-d16fa",
+  "extractionBytes": 96156,
+  "inputBlobWitness": {
+    "source": "d91d9c835cffbd2e7a329e29afe58e48a5935ca4",
+    "extraction": "3b358923b95cc82836d3bee9b8ee56de4576df4d",
+    "editorial": "95b42c58e11fc52e057692eadf713132f137e7ba"
+  },
+  "sealedInputs": {
+    "source": "sha256:b6a60d148a7af103aba512b6748a4c882d4968a7da2d6ddef1b2b5a8cc708edb",
+    "extraction": "sha256:7752e28eecd7cab42838bf602db31a9700bfcc27655bb3f647b91ee13b0cc02b",
+    "editorial": "sha256:a345567d1d816ee2f93e14193124ee77e2db8687fe16d791ce0c455240611096"
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/suishu-044/date-packet.json",
+    "sha256": "sha256:a72a6ab6f9e4a0e4b6e5677e9953d6cb676bbb8b7c5d760b4d7241a96b07b17a",
+    "items": 143,
+    "people": 49,
+    "sourceUnits": 158,
+    "extractionHashInPacket": "sha256:3f712e8ede23f26136491131fb60167de10de49b28ccdcc42a322e288e543581",
+    "sourceHashInPacket": "sha256:45a6af33ccbeb878c068c4561139088842fe3c04922bc82c0c185144bdd67f8c",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 44 Biographies 9: Teng Mu Wangzan, Daodao Wangjing, Caiwang Zhiji",
+    "chineseUnits": 158,
+    "translatedCount": 158,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "extractionReuse": {
+    "promptVersion": 7,
+    "dispatchPeople": 49,
+    "dispatchClaims": 296,
+    "appliedEditorialRepairs": 5,
+    "editorialDecisions": 5,
+    "noExtractionEdits": true
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book suishu --chapter 044",
+    "peopleValidateSummary": "Scoped person data validation passed for suishu/044: 1 extraction(s), 49 local people, 337 mentions, 496 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesScanCommand": "npm run people:dates:scan -- --book suishu --chapter 044",
+    "datesScanSummary": {
+      "extractedChapters": 1,
+      "findings": 0,
+      "chapters": 0
+    },
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book suishu --chapter 044",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    },
+    "chronologyStatus": "candidate-closure-prepared",
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "notIndependentApproval": true
+  },
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "gate": "independent-native-date-audit",
+      "artifactPath": "data/people/date-audits/suishu/044.json",
+      "packetReady": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending",
+      "gate": "independent-bounded-dossier-identity-review"
+    }
+  },
+  "substantiveFindings": "Retained-staging owner pass on sealed three-part inputs. Git blob witnesses match dispatch pins. Full chapter English coverage verified; extraction promptVersion 7 unchanged; people:validate passes; people:dates:scan findings 0. Native date packet sealed; no native date audit artifact — owner did not self-approve chronology. No definite English omission or owner-scoped chronology repair required.",
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "nextGate": "independent-native-date-audit",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 044",
+    "datesVerify": "npm run people:dates:verify -- --book suishu --chapter 044",
+    "datesPacket": "npm run people:dates:packet -- --book suishu --chapter 044 --out research/people/checkpoints/campaign-nov24-retained-staging/suishu-044/date-packet.json",
+    "datesScan": "npm run people:dates:scan -- --book suishu --chapter 044"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
