@@ -8,14 +8,14 @@
  "dispatchState": "open-verified-included-usage",
  "usage": {
   "source": "Cursor spending dashboard",
-  "verifiedAt": "2026-11-24T07:29:28Z",
-  "cursorModelsUsedPercent": 46,
+  "verifiedAt": "2026-11-24T07:35:48Z",
+  "cursorModelsUsedPercent": 47,
   "otherModelsUsedPercent": 73,
   "onDemandLimitUsd": 1,
   "onDemandLimitReached": true,
   "lastObservedOnDemandMeterUsd": 2.91,
   "recentCloudUsageClassification": "Existing Cursor Cloud costs reflected in both included model pools with the displayed on-demand meter unchanged at $2.91.",
-  "resetDisplay": "Nov 24 (11 hours and 4 minutes left)"
+  "resetDisplay": "Nov 24 (10 hours and 58 minutes left)"
  },
  "workers": {
   "running": [],
@@ -176,7 +176,7 @@
    "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
   }
  ],
- "lastCheckedAt": "2026-11-24T07:35:47.675Z",
+ "lastCheckedAt": "2026-11-24T07:36:46.539Z",
  "lookup": {
   "authenticatedManifestVerified": true,
   "access": "read-only",
@@ -1772,6 +1772,14 @@
     "activeProductionDeployments": 0,
     "canonicalCommit": "1a1da073a7ca743d163df0422a4143ce0de4af35",
     "latestProductionCommit": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
+    "latestProductionStatus": "failure",
+    "latestProductionPhase": "build"
+   },
+   "latestExact": {
+    "at": "2026-11-24T07:36:46.289Z",
+    "project": "records-of-the-grand-historian",
+    "canonicalRevision": "1a1da073a7ca743d163df0422a4143ce0de4af35",
+    "latestProductionRevision": "110c2f92a0e7994af8d9218f76c80ccd72b98d5c",
     "latestProductionStatus": "failure",
     "latestProductionPhase": "build"
    }
@@ -22924,7 +22932,7 @@
       "runId": "run-5b7203f7-b10c-4f5e-a014-99219faa3fe3",
       "observedAt": "2026-11-24T07:12:36.845Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "378b707b32106fd68c1050d92fecebdfbe460b2e",
        "reportSha256": "4ba6a7aa5057578ce1e9fa52aba5157156e49170144daf82055526006ea1245a",
        "supplemental": null,
@@ -22932,7 +22940,8 @@
         "cases": 43,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "The accepted canonical dossier requires a primary identity-anchor witness"
       }
      },
      "yuanshi/037": {
@@ -23029,7 +23038,7 @@
       "runId": "run-1989c7d1-9421-492c-9a61-e2e1d69ac509",
       "observedAt": "2026-11-24T07:16:21.271Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "fbd8c2fa2380bb79f30fed42a345f34e170189b2",
        "reportSha256": "f9bdb663ceb4ae02e429c5857f3e2fd2a3a2d559ce3046fa1de080b3c4de4de2",
        "supplemental": null,
@@ -23037,7 +23046,8 @@
         "cases": 29,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support this person in the current primary source: liaoshi:101:p011 liaoshi:101:s0011 quote=\"帝欲召用\""
       }
      },
      "weishu/019": {
@@ -23097,7 +23107,7 @@
       "runId": "run-24010762-afa5-4e5e-a3d2-a9e6f517048d",
       "observedAt": "2026-11-24T07:16:21.271Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "53bfbf6f8583d26889d966ebc44a7e1f53f891d2",
        "reportSha256": "5ffbcd62c6d31665b015a63ac71cd82676f9537faac12e11a0c06496a7217a63",
        "supplemental": null,
@@ -23105,7 +23115,8 @@
         "cases": 34,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support this person in the current primary source: hanshu:117:p055 hanshu:117:s0092 quote=\"年二十\""
       }
      },
      "jinshi/023": {
@@ -23131,7 +23142,7 @@
       "runId": "run-a5344272-6ae7-4a54-9024-7711335ef407",
       "observedAt": "2026-11-24T07:16:21.271Z",
       "capture": {
-       "status": "pending-native-certification",
+       "status": "native-witness-hold",
        "head": "1eab0d132f79c474cd636219ca508bdb1e1bdea5",
        "reportSha256": "70a3d9f7aca66832263fb6a180555c7411245fc219ae496df9750699eca325d4",
        "supplemental": null,
@@ -23139,7 +23150,8 @@
         "cases": 48,
         "holds": [],
         "repairs": 0
-       }
+       },
+       "nativeFinding": "Witness does not support this person in the current primary source: jinshi:023:p026 jinshi:023:s0106 quote=\"而喜兒前三年已死\""
       }
      }
     },
@@ -23659,7 +23671,57 @@
       "status": "completed",
       "runId": 45347785332,
       "conclusion": "success",
-      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45347785332"
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/actions/runs/45347785332",
+      "failures": [
+       {
+        "key": "liaoshi/111",
+        "error": "The accepted canonical dossier requires a primary identity-anchor witness"
+       },
+       {
+        "key": "liaoshi/101",
+        "error": "Witness does not support this person in the current primary source: liaoshi:101:p011 liaoshi:101:s0011 quote=\"帝欲召用\""
+       },
+       {
+        "key": "liangshu/024",
+        "error": "Witness does not support this person in the current primary source: hanshu:117:p055 hanshu:117:s0092 quote=\"年二十\""
+       },
+       {
+        "key": "jinshi/023",
+        "error": "Witness does not support this person in the current primary source: jinshi:023:p026 jinshi:023:s0106 quote=\"而喜兒前三年已死\""
+       }
+      ],
+      "stagingHolds": [],
+      "artifactId": 14898259269,
+      "artifactDigest": "sha256:626400e5f27c48c2d449bbcaadfc3d9c099566c5371682dd591d51c1cc6bd24a",
+      "stagingTransfer": {
+       "stage": "d45edce59dc1875bc94c4a239265fcc32cec341c",
+       "source": "8ec80b2af8f97a133806ee5fd8c8d951805a42ef",
+       "ref": "codex/cursor-glossary-nov24-2026-recovered-qualified-staging-third",
+       "workflowRevision": "a4cdcf2fe961046f2779d50167cd5873ff185373",
+       "items": [
+        {
+         "key": "liangshu/015",
+         "pr": 5505,
+         "originalHead": "125426155369bf17981b3a4f6bd39738668addde",
+         "attachedHead": "ffb4bc353e0c65a2ab908971eb7d79bae63689f9",
+         "branch": "cursor/liangshu-015-audited-identity-6126",
+         "certificateBlob": "5def11628e73b5f8f8e48d05269e22082392aa67",
+         "reviewer": "bc-45e2f91f-23a4-4edd-8f80-6b89c70ec36a",
+         "cases": 46
+        },
+        {
+         "key": "weishu/019",
+         "pr": 5533,
+         "originalHead": "643b0dbcca95e07b1916d6f1918a27986d5cc1ed",
+         "attachedHead": "cce0f661c636e303b79d3c19b9d196f75a514274",
+         "branch": "cursor/weishu-019-audited-identity-7691",
+         "certificateBlob": "98c3443803191ed72368758b8cdecd6b13ea72d8",
+         "reviewer": "bc-dfa59da4-faa0-4b68-9f14-c89ae401b259",
+         "cases": 31
+        }
+       ],
+       "status": "attachment_pending"
+      }
      }
     ],
     "ownerContinuations": [
