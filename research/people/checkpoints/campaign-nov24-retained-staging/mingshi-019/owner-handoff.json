@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "mingshi",
+    "chapter": "019"
+  },
+  "ownerAgentId": "bc-c42390a5-1ece-4935-8d14-02b00f9917e6",
+  "worker": "cursor-nov24-retained-staging-w11-o6",
+  "idempotencyKey": "0986757bf5b615fab85d40ce43487f68fe4e3215a8eaef6813226df35014db5d",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-mingshi-019-917e6",
+  "phase": "dispatch_pending",
+  "auditState": "no-native-date-report",
+  "inputBlobWitness": {
+    "paths": {
+      "source": "data/mingshi/019.json",
+      "extraction": "data/people/extractions/mingshi/019.json",
+      "editorial": "data/people/editorial-decisions/mingshi/019.json",
+      "dateAudit": "data/people/date-audits/mingshi/019.json"
+    },
+    "gitBlobs": {
+      "source": "89efbbf31ec0427347bd2f360495ea4543831d72",
+      "extraction": "546ffbf8afe622741f7bfe1b829185f3323e513f",
+      "editorial": "d30ac44080d234a4ecd94ddfcfec38976eebcf2e"
+    },
+    "dateAuditPresent": false,
+    "contentSha256": {
+      "source": "sha256:7130e64ffcc8e58432ae685b6945492d0f27c47c1d9379de2500bec705a01a39",
+      "extraction": "sha256:6fa344e30bf11f40258dcc3ad550bbd82b5be04b91287c2ec76102af3a354de5",
+      "editorial": "sha256:adc3bcdbc2036c32607656406bacd446cb9fb1fe2ebe169f01ae6e0b04510627"
+    },
+    "verifiedAtStaging": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+    "witnessMethod": "git hash-object on pinned staging checkout; content sha256 of working tree bytes"
+  },
+  "sealedReuse": {
+    "extraction": {
+      "preserved": true,
+      "bytes": 76604,
+      "promptVersion": 7,
+      "peopleInAuditManifest": 50,
+      "claimsInAuditManifest": 160,
+      "peopleInFile": 50,
+      "claimsInFile": 160,
+      "agentIds": [
+        "bc-4f6b59fe-5b9e-44a0-a6cc-44f58350f0e5"
+      ],
+      "reason": "Retained validated extraction at pinned blob; owner pass does not re-extract."
+    },
+    "editorial": {
+      "preserved": true,
+      "decisionCount": 4,
+      "status": "accepted-applied",
+      "reason": "Pinned editorial decisions unchanged; scoped validation shows applied repairs only."
+    }
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "卷十九 本紀第十九 穆宗",
+      "en": "Volume 19 Annals 19: Muzong",
+      "raw": "卷十九 本紀第十九 穆宗 Volume 19 Annals 19: Muzong"
+    },
+    "chineseUnits": 148,
+    "sentenceCountMeta": 148,
+    "translatedCountMeta": 148,
+    "missingLiteral": [],
+    "missingIdiomatic": [],
+    "fullEnglishCoverage": true,
+    "bothFieldsComplete": true
+  },
+  "nativeDatePacket": {
+    "command": "npm run people:dates:packet -- --book mingshi --chapter 019 --out <path>",
+    "packetSha256": "sha256:bc4a81772fa5b13afa712286283779a6da6a01ce4bca017bf90ef1f430d2d7ff",
+    "itemCount": 182,
+    "unitCount": 148,
+    "peopleCount": 50,
+    "buildSummary": "mingshi/019: 182 date/hint checks, 50 people, 148 source units",
+    "sourceHash": "sha256:ec25dc95d1f16f86c7086188e0c4d2d9285034bec3763efe81f333980ff7d063",
+    "extractionHash": "sha256:8c1eaf3e0853f540ee233890f54f5e0ad4757297f5eaaa328de3b9a0dbde0a31",
+    "sealedToHandoffOnly": true,
+    "note": "Candidate packet hash for independent reviewer; not written to data/people/date-audits."
+  },
+  "dateRepairProposals": [],
+  "ownerChronologyRepairs": {
+    "applied": false,
+    "reason": "No definite source-extraction chronology contradiction identified in owner pass; independent native date audit still required."
+  },
+  "definiteTranslationRepairs": [],
+  "candidateValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book mingshi --chapter 019",
+      "passed": true,
+      "summary": "Scoped person data validation passed for mingshi/019: 1 extraction(s), 50 local people, 191 mentions, 320 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book mingshi --chapter 019",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    }
+  },
+  "extractionCoverage": {
+    "editorialPassCompleted": true,
+    "allUnitsVisited": null,
+    "preflightAccounted": null,
+    "unresolvedReferences": []
+  },
+  "chapterReady": false,
+  "independentApprovalIssued": false,
+  "completionBlockedBy": "missing-independent-native-date-audit",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit-from-sealed-packet",
+      "packetSha256": "sha256:bc4a81772fa5b13afa712286283779a6da6a01ce4bca017bf90ef1f430d2d7ff",
+      "recordCommand": "npm run people:dates:record -- --book mingshi --chapter 019",
+      "notes": "people:dates:verify reports un-audited; no data/people/date-audits file at pinned staging. Owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-final-reviewer-whole-chapter-and-canonical-identity",
+      "notes": "Corpus-wide identity dossier review remains after date approval; owner pass used chapter-scoped validation only without local registry generation."
+    }
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, extraction (prompt v7), and accepted editorial decisions match staging git blobs. Scoped people:validate passed. English literal and idiomatic fields present on all 148 Chinese units inspected. Fresh native date packet prepared (182 checks). No native date audit on file; owner makes no chronology edits and issues no independent approval.",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book mingshi --chapter 019",
+    "buildDatePacket": "npm run people:dates:packet -- --book mingshi --chapter 019 --out <path>",
+    "verifyDates": "npm run people:dates:verify -- --book mingshi --chapter 019"
+  },
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}

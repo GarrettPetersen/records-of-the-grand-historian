@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "026"
+  },
+  "ownerAgentId": "bc-c42390a5-1ece-4935-8d14-02b00f9917e6",
+  "worker": "cursor-nov24-retained-staging-w11-o6",
+  "idempotencyKey": "0986757bf5b615fab85d40ce43487f68fe4e3215a8eaef6813226df35014db5d",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-shiji-026-917e6",
+  "phase": "dispatch_pending",
+  "auditState": "no-native-date-report",
+  "inputBlobWitness": {
+    "paths": {
+      "source": "data/shiji/026.json",
+      "extraction": "data/people/extractions/shiji/026.json",
+      "editorial": "data/people/editorial-decisions/shiji/026.json",
+      "dateAudit": "data/people/date-audits/shiji/026.json"
+    },
+    "gitBlobs": {
+      "source": "8b4990cf3989c4686d27fe8d36d068641685e14d",
+      "extraction": "bb88aa592d7ee221cf78a5dacc3a142cdf0a4d06",
+      "editorial": "7fba88d874b2335ddf4eeb844a8c55a13f264470"
+    },
+    "dateAuditPresent": false,
+    "contentSha256": {
+      "source": "sha256:3af64f00009c524c04e6e8057afb06f8aa148ffc96339f2bd7122ba35cd60442",
+      "extraction": "sha256:5c521e4fb9a78c910d8b5c2934a639d948861a35835550a406e2907447d7ca72",
+      "editorial": "sha256:dadbb8e33cdbea125b3964e215b6efd6040567f212ade583b5a1b13412fc35e1"
+    },
+    "verifiedAtStaging": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+    "witnessMethod": "git hash-object on pinned staging checkout; content sha256 of working tree bytes"
+  },
+  "sealedReuse": {
+    "extraction": {
+      "preserved": true,
+      "bytes": 77165,
+      "promptVersion": 7,
+      "peopleInAuditManifest": 26,
+      "claimsInAuditManifest": 122,
+      "peopleInFile": 26,
+      "claimsInFile": 122,
+      "agentIds": [
+        "bc-e1b699db-6d68-485b-b1d0-6753a95393f7",
+        "bc-aae668d8-5001-4fd7-b73d-d44028b80e1f"
+      ],
+      "reason": "Retained validated extraction at pinned blob; owner pass does not re-extract."
+    },
+    "editorial": {
+      "preserved": true,
+      "decisionCount": 7,
+      "status": "accepted-applied",
+      "reason": "Pinned editorial decisions unchanged; scoped validation shows applied repairs only."
+    }
+  },
+  "sourceCoverage": {
+    "title": {
+      "zh": "歷書",
+      "en": "Treatise on the Calendar",
+      "raw": "《歷書》 Treatise on the Calendar"
+    },
+    "chineseUnits": 297,
+    "sentenceCountMeta": 297,
+    "translatedCountMeta": 297,
+    "missingLiteral": [],
+    "missingIdiomatic": [],
+    "fullEnglishCoverage": true,
+    "bothFieldsComplete": true
+  },
+  "nativeDatePacket": {
+    "command": "npm run people:dates:packet -- --book shiji --chapter 026 --out <path>",
+    "packetSha256": "sha256:70424484450487f906b30974edc4e933c21a01d0d9e6e4b6c1502d9bdacb4288",
+    "itemCount": 56,
+    "unitCount": 297,
+    "peopleCount": 26,
+    "buildSummary": "shiji/026: 56 date/hint checks, 26 people, 297 source units",
+    "sourceHash": "sha256:8caa13b061a8519c26a5b5bb4a1c55924c61c2192a3c19758f3658926e0cee64",
+    "extractionHash": "sha256:de0005224e1359a5b3cc3b091b0c36c5986d441943b9d41c5308360cce0a39c8",
+    "sealedToHandoffOnly": true,
+    "note": "Candidate packet hash for independent reviewer; not written to data/people/date-audits."
+  },
+  "dateRepairProposals": [],
+  "ownerChronologyRepairs": {
+    "applied": false,
+    "reason": "No definite source-extraction chronology contradiction identified in owner pass; independent native date audit still required."
+  },
+  "definiteTranslationRepairs": [],
+  "candidateValidation": {
+    "peopleValidate": {
+      "command": "npm run people:validate -- --book shiji --chapter 026",
+      "passed": true,
+      "summary": "Scoped person data validation passed for shiji/026: 1 extraction(s), 26 local people, 67 mentions, 205 claims, 0 proposed repair(s), 7 applied repair(s), 7 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+    },
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 026",
+      "status": "un-audited",
+      "nativeDateReportPresent": false,
+      "findings": null
+    }
+  },
+  "extractionCoverage": {
+    "editorialPassCompleted": true,
+    "allUnitsVisited": null,
+    "preflightAccounted": null,
+    "unresolvedReferences": []
+  },
+  "chapterReady": false,
+  "independentApprovalIssued": false,
+  "completionBlockedBy": "missing-independent-native-date-audit",
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing",
+      "nextGate": "independent-native-date-audit-from-sealed-packet",
+      "packetSha256": "sha256:70424484450487f906b30974edc4e933c21a01d0d9e6e4b6c1502d9bdacb4288",
+      "recordCommand": "npm run people:dates:record -- --book shiji --chapter 026",
+      "notes": "people:dates:verify reports un-audited; no data/people/date-audits file at pinned staging. Owner does not self-approve."
+    },
+    "identityReview": {
+      "required": true,
+      "status": "pending",
+      "nextGate": "independent-final-reviewer-whole-chapter-and-canonical-identity",
+      "notes": "Corpus-wide identity dossier review remains after date approval; owner pass used chapter-scoped validation only without local registry generation."
+    }
+  },
+  "holds": [],
+  "substantiveFindings": "Pinned source, extraction (prompt v7), and accepted editorial decisions match staging git blobs. Scoped people:validate passed. English literal and idiomatic fields present on all 297 Chinese units inspected. Fresh native date packet prepared (56 checks). No native date audit on file; owner makes no chronology edits and issues no independent approval.",
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 026",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 026 --out <path>",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 026"
+  },
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; no sealed input edits, registry generation, deploy, or merge."
+}
