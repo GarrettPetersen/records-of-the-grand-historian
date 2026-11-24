@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "130"
+  },
+  "ownerAgentId": "bc-488b211f-a9a5-4e20-8945-5268c218df57",
+  "workerId": "cursor-nov24-retained-staging-w1-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "06f9c623c3fc445ae56d9993095310b7072e79d5742476f968463e63a40225c2",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-houhanshu-130-8df57",
+  "inputBlobWitness": {
+    "source": "53c53f0c4c345d09e8de1d0ddc72c0fd6e685443",
+    "extraction": "bcb58b79fec6d07ce1ef27dfa48e83d12e417df5",
+    "dateAudit": "cf5e7d316cd67d3ee00e4ca639894c42129bf1e9",
+    "editorial": "2552bd36c8e026dc102b4ba2656698e31b443cf7"
+  },
+  "sealedInputs": {
+    "source": "sha256:09314c606c5e7ece60e8d296df0a85591374055337a00dc006dd2f686751c1ed",
+    "extraction": "sha256:0ab5f90f0aedfcb91841d15e20d59a8e46fe93af7668685613922a8b54cc0452",
+    "dateAudit": "sha256:96bf9eed437b120e0a4d42545bca821c5862c4cab64dca41ab7e11ad1e5c73e6",
+    "editorial": "sha256:46fac798f16c232679a53ed38ab1e3d2179ccfa834897da838b314bc7032635c"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 119: Travel and Dress Part One",
+    "englishCoverage": {
+      "sentenceCount": 173,
+      "translatedCount": 173,
+      "bothFieldsComplete": true,
+      "ownerSentenceScan": 173,
+      "missingUnits": []
+    },
+    "chineseReview": "All chapter units read against sealed source; no new English omission or mistranslation found beyond prior accepted editorial repairs."
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book houhanshu --chapter 130",
+    "summary": "Scoped person data validation passed for houhanshu/130: 1 extraction(s), 6 local people, 16 mentions, 56 claims, 0 proposed repair(s), 2 applied repair(s), 2 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionValidate": "data/people/extractions/houhanshu/130.json: ok (6 people, 16 mentions, 56 claims, 123 candidates)",
+    "chronologyStatus": "research-blocked",
+    "chronologyStale": false,
+    "dateAuditSummary": "Fresh independent canonical audit read all 173 Chinese units, all 15 temporal or active-hint items, and all six people after the dated-claim repair. King Yi of Zhou and Emperor Jing retain source-bound historical evidence, and Xi Zhong remains conservatively legendary. Confucius quotations and the Wu-and-Sun military work title no longer assert personal life chronology; they are intentionally retained as explicit research holds because this chapter cannot identify or date the referenced individuals. The complete review is therefore research-blocked, not approved.",
+    "dateFindingsCount": 3,
+    "dateReviewedAt": "2026-09-23T11:21:42.955Z",
+    "editorialDecisionCount": 2,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned git blobs verified at staging 7cdf8f42e53be7a29bbc018e6d1f93783d741f6a. Scoped validation, extraction validation, and date-audit fingerprint checks pass without stale chronology. Six people; Confucius/Wu/Sun research-blocked chronology holds retained. No new owner-proposed extraction, editorial, or chronology edits; preserved reviewed holds and true unknowns unchanged.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "items": [
+        "claim-10",
+        "claim-11",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "Confucius appears only in quotations and retrospective comparison, not a dated personal event. The repair removes false life chronology but the source cannot itself resolve a substitute chronology.",
+      "action": "Keep the source-linked reception records and explicit research holds; do not infer or display a personal activity date from these citations.",
+      "preserved": true
+    },
+    {
+      "items": [
+        "claim-27",
+        "hints-p005",
+        "p005"
+      ],
+      "problem": "Military Methods of Wu and Sun is a bibliographic title, not enough source evidence to identify or date the extracted Wu as an individual.",
+      "action": "Keep the source-linked bibliographic record and research hold; obtain independent identification evidence before assigning any personal chronology.",
+      "preserved": true
+    },
+    {
+      "items": [
+        "claim-32",
+        "hints-p006",
+        "p006"
+      ],
+      "problem": "Military Methods of Wu and Sun is a bibliographic title, not enough source evidence to identify or date the extracted Sun as an individual.",
+      "action": "Keep the source-linked bibliographic record and research hold; obtain independent identification evidence before assigning any personal chronology.",
+      "preserved": true
+    }
+  ],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "nextGate": "independent-final-chapter-review",
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/houhanshu/130.json data/people/extractions/houhanshu/130.json data/people/date-audits/houhanshu/130.json data/people/editorial-decisions/houhanshu/130.json",
+    "validateChapter": "npm run people:validate -- --book houhanshu --chapter 130",
+    "datesVerify": "npm run people:dates:verify -- --book houhanshu --chapter 130"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner handoff only; sealed inputs unchanged."
+}
