@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": { "book": "chenshu", "chapter": "015" },
+  "ownerAgentId": "bc-0e48d1f5-a248-4aeb-b767-52dabf1dcab9",
+  "workerId": "cursor-nov24-retained-staging-w5-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "597b278cbbd00fddce2949ee1ddb691a96dbb0f60307a142361ac4cf1da1602e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-chenshu-015-dcab9",
+  "extractionBytes": 84119,
+  "inputBlobWitness": {
+    "source": "e3bc93abc755e3529b0c03b5c942b9a1b6ded176",
+    "extraction": "a8ba3ea704fc4994e600e9b7efc6f497fe70afcb",
+    "dateAudit": "9f0ba7099be98b34d1cd72909b54c61b44cab2cb",
+    "editorial": "0ed0392c1f5149e3c091d87812254f889103807c"
+  },
+  "sealedInputs": {
+    "source": "sha256:0bfa4b64df644ab8a8a5ee16afbc562d6e735d88e1711c9aaa4da957d9674845",
+    "extraction": "sha256:2b6708f558bd7069cb5a5328205ef3a4fe71e37fad61553b902bf291237e6670",
+    "dateAudit": "sha256:6119b36733f54d8090d1ad1a43505b9f927f2903082409c838bba63fcf083565",
+    "editorial": "sha256:e5fd0d7698e5667d534ef1c387d242901369f0cfbfa108c6bacd6eae9ae565be"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 71,
+    "translatedCount": 71,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book chenshu --chapter 015",
+    "summary": "Scoped person data validation passed for chenshu/015: 1 extraction(s), 38 local people, 249 mentions, 463 claims, 0 proposed repair(s), 3 applied repair(s), 3 editorial decision(s), 0 claim retraction(s), 4 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book chenshu --chapter 015",
+      "exitCode": 0,
+      "status": "research-blocked",
+      "auditReportSha256": "sha256:6119b36733f54d8090d1ad1a43505b9f927f2903082409c838bba63fcf083565",
+      "workOrderAuditSha256Verified": true,
+      "findings": 1,
+      "affectedItems": 3
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Chen Huiji’s death remains source-bounded on-or-after AD 589; chapter supplies no exact death year.",
+    "editorialDecisionCount": 3,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Pinned blobs verified. Chen Huiji (p003) death claim-164 correctly uses westernBounds on-or-after AD 589 with unresolvedReason tied to s0066–s0067 (入隋…頃之卒). Active hint AD 557–589 and supported claims otherwise pass validation. Independent post-curation audit bytes preserved at research-blocked; owner did not infer a point death year or alter audit hashes.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "itemIds": ["claim-164", "hints-p003", "p003"],
+      "verdict": "research-blocked",
+      "problem": "s0066 places Chen Huiji’s entry into Sui in AD 589 and s0067 states only 頃之卒 (“died soon afterward”). The chapter does not state a death year.",
+      "action": "Retain the source-backed on-or-after AD 589 death bound and the AD 557-589 active hint. Replace the unresolved hold only with independently verified personal death evidence; do not infer a point death from “soon afterward.”",
+      "evidenceUnits": ["s0066", "s0067"],
+      "clauseCitations": [
+        { "unit": "s0066", "quote": "入隋，依例授儀同三司。" },
+        { "unit": "s0067", "quote": "頃之卒。" }
+      ],
+      "currentNativeEncoding": {
+        "claim-164": {
+          "kind": "death",
+          "westernBounds": { "onOrAfter": { "era": "AD", "year": 589, "precision": "year" } },
+          "unresolved": true
+        }
+      },
+      "preservedFromNativeAudit": true,
+      "ownerChronologyRepairAuthored": false
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; no sealed input edits."
+}
