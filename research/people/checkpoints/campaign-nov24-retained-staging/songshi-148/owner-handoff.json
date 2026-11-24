@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshi",
+    "chapter": "148"
+  },
+  "ownerAgentId": "bc-6676d427-4e73-44d1-ad27-16c3dc3efcef",
+  "worker": "cursor-nov24-retained-staging-w11-o5",
+  "idempotencyKey": "f5a4b5b11996bfe20ab74c8e8ae0aae8971d419bfa316136b4f939dec18801ff",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "handoffBranch": "cursor/nov24-retained-staging-owner-songshi-148-efcef",
+  "phase": "dispatch_pending",
+  "campaign": "campaign-nov24-retained-staging",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "2ad7ce64b9cbfddce8dec48341b61a70cf609e6ec0b4db4c36401708309d2b56",
+    "people": 19,
+    "claims": 123,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "87cffc152ea12c8182cede7a5ec7d949ef59d6bd",
+    "extraction": "534cf862ad28aed93c8d0ea6d50e968f057a4792",
+    "editorial": "48cb591d02d44a1b85562fb677e9bb43f1517e57",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:7b5253e89c62aa10ec19e154e5f6ca6f459d41b8eb58625ae9608db105790fc0",
+    "extraction": "sha256:2ad7ce64b9cbfddce8dec48341b61a70cf609e6ec0b4db4c36401708309d2b56",
+    "editorial": "sha256:19aa98d8e78087a8f6fd0eddb4bbd6b30a4d5b06bb521b4ddaa999532e8e8020",
+    "dateAudit": null
+  },
+  "extractionReuse": {
+    "path": "data/people/extractions/songshi/148.json",
+    "gitBlob": "534cf862ad28aed93c8d0ea6d50e968f057a4792",
+    "contentSha256": "sha256:2ad7ce64b9cbfddce8dec48341b61a70cf609e6ec0b4db4c36401708309d2b56",
+    "semanticExtractionHash": "sha256:65786e585cb59044fd0593a7685917942eebec531626af2917aaf3710851dbab",
+    "promptVersion": 7,
+    "extractionBytes": 76214,
+    "validated": "data/people/extractions/songshi/148.json: ok (19 people, 40 mentions, 177 claims, 514 candidates)",
+    "ownerEdits": false
+  },
+  "editorialReuse": {
+    "path": "data/people/editorial-decisions/songshi/148.json",
+    "gitBlob": "48cb591d02d44a1b85562fb677e9bb43f1517e57",
+    "contentSha256": "sha256:19aa98d8e78087a8f6fd0eddb4bbd6b30a4d5b06bb521b4ddaa999532e8e8020",
+    "appliedDecisionCount": 13,
+    "ownerEdits": false,
+    "note": "All accepted editorial decisions retained; no new owner proposals.",
+    "acceptedDecisions": 13
+  },
+  "sourceCoverage": {
+    "title": "Volume 148 Treatises 101: Ceremonial Guards 6",
+    "sentenceCount": 310,
+    "translatedCount": 310,
+    "bothFieldsComplete": true,
+    "missingUnits": [],
+    "method": "Walked zh/en translation fields for every content sentence; counts match meta."
+  },
+  "candidateChronology": {
+    "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/songshi-148/date-packet.json",
+    "packetContentSha256": "sha256:c26ee7eca3fedb402d25d0c6c40820e56b9ee936db750033d2936f4c67957394",
+    "packetSourceHash": "sha256:5bbacc97d847f99dbf125ab0b2538b196111c725324daa64f43b45f1ad5530f9",
+    "packetExtractionHash": "sha256:65786e585cb59044fd0593a7685917942eebec531626af2917aaf3710851dbab",
+    "itemCheckCount": 64,
+    "peopleInPacket": 19,
+    "preparationCommand": "npm run people:dates:packet -- --book songshi --chapter 148 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-148/date-packet.json",
+    "ownerSelfApproved": false
+  },
+  "chronologyStatus": "pending-independent-native-date-audit",
+  "nativeDateAuditPath": "data/people/date-audits/songshi/148.json",
+  "nativeDateAuditPresent": false,
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "definiteEnglishRepairs": [],
+  "validation": {
+    "passed": true,
+    "commands": {
+      "peopleValidate": "npm run people:validate -- --book songshi --chapter 148",
+      "validateExtraction": "node scripts/validate-people-extraction.mjs data/people/extractions/songshi/148.json",
+      "datesPacket": "npm run people:dates:packet -- --book songshi --chapter 148 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-148/date-packet.json"
+    },
+    "peopleValidateSummary": "Scoped person data validation passed for songshi/148: 1 extraction(s), 19 local people, 40 mentions, 177 claims, 0 proposed repair(s), 13 applied repair(s), 13 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "validateExtractionSummary": "data/people/extractions/songshi/148.json: ok (19 people, 40 mentions, 177 claims, 514 candidates)"
+  },
+  "ownerFindings": "Pinned source, extraction, and applied editorial blobs witness-matched at staging HEAD. Native extraction and scoped people:validate passed. English and Chinese fields complete on all units. No definite English omission or source-contradictory repair identified in owner pass. Candidate date packet prepared from current sealed inputs; owner did not record or self-approve a native date audit.",
+  "remainingIndependentEvidence": {
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/songshi/148.json",
+      "candidatePacketSha256": "sha256:c26ee7eca3fedb402d25d0c6c40820e56b9ee936db750033d2936f4c67957394",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "verifyCommand": "npm run people:dates:verify",
+      "note": "Independent reviewer must audit all packet items with separate context and independentOfExtractor:true; undated supported attestations are valid where source-backed."
+    },
+    "chapterConsolidatedReview": {
+      "required": true,
+      "status": "pending",
+      "includes": [
+        "chronology closure",
+        "canonical identity evidence"
+      ]
+    },
+    "identityResolution": {
+      "required": true,
+      "status": "pending-bounded-review",
+      "aliasDispositionDebt": 0
+    }
+  },
+  "holds": [],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "complete": false,
+  "reproduce": {
+    "witnessBlobs": "git rev-parse HEAD:data/songshi/148.json (and extraction/editorial paths)",
+    "regeneratePacket": "npm run people:dates:packet -- --book songshi --chapter 148 --out research/people/checkpoints/campaign-nov24-retained-staging/songshi-148/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Owner handoff only; no canonical edits, registry generation, deploy, or merge. Missing gate is independent native date audit, not re-extraction."
+}
