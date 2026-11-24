@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "013"
+  },
+  "ownerAgentId": "bc-49e6f290-b200-4c74-8373-ec6bd8892443",
+  "workerId": "cursor-nov24-retained-staging-w17-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "75c761c05c9cf4b54876aff4122b0f4d500a5f86df55e73ad7634fedebe63f87",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-xinwudaishi-013-92443",
+  "extractionBytes": 195684,
+  "inputBlobWitness": {
+    "source": "7347e10b104f4fc8f118d2b276af56ba39d54bec",
+    "extraction": "66734b3a6716307893c7d703df9a8fcdeb1eb0b9",
+    "editorial": "4439c7ac5aa53ffe1a590bd9afee069cb7de41ce",
+    "dateAudit": null
+  },
+  "sealedInputs": {
+    "source": "sha256:73f9d1668ce18094c8da37246af583f9c0269f8112caeb10fa2e3cc20427356c",
+    "extraction": "sha256:7faf72e39809fad770f42beddbd8f0a2d8bd3fbca7aaf8e03be8a0d5808a712c",
+    "editorial": "sha256:97f734dc8457eb9238f3f58e7ead7628d7de6f5cf591ef7396f718464dbbc953"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 13: The Later Liang Imperial Family",
+    "chineseUnits": 223,
+    "translatedCount": 223,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-013/date-packet.json",
+    "packetSha256": "sha256:8d17d643ce47d371250f5d9761fc94f178ad2e79429125c7b1dea82afd6c8d24",
+    "sourceHash": "sha256:11c2941178b1f6daa8b5f15078a8edbee13c32bcbb28030a4e419fac3e53b61b",
+    "extractionHash": "sha256:7ac80671b13dc8f2c75cba24be7c07365a89be1ad32da19dbe4300a72d8fd1ff",
+    "dateHintChecks": 293,
+    "peopleInPacket": 109,
+    "sourceUnitsInPacket": 223,
+    "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 013 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-013/date-packet.json"
+  },
+  "extractionAndEditorialReuse": {
+    "extractionPromptVersion": 7,
+    "extractionReused": true,
+    "editorialReused": true,
+    "appliedEditorialDecisions": 14,
+    "editorialReviewerAgentId": null,
+    "extractionValidate": "data/people/extractions/xinwudaishi/013.json: ok (109 people, 568 mentions, 935 claims, 485 candidates)"
+  },
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "validation": {
+    "passed": false,
+    "peopleValidateCommand": "npm run people:validate -- --book xinwudaishi --chapter 013",
+    "peopleValidateSummary": "Person data validation failed: applied xinwudaishi:013:r0014 through r0023 lack matching independent accept/revise authorization against sealed editorial-decisions/xinwudaishi/013.json (proposals end at r0014; reviewer.agentId is null).",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 013",
+      "status": "un-audited",
+      "priorNativeDateReport": false
+    },
+    "chronologyStatus": "packet-prepared-awaiting-independent-audit",
+    "editorialStatus": "applied-with-authorization-debt",
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed three-part inputs witness-verified at staging 20b8d0e3. Source English coverage complete on 223 Chinese units. Extraction content SHA256 matches work-order pin. Fresh native date packet prepared (293 hint checks, 109 people). Owner pass did not alter sealed inputs. Native people:validate fails on editorial closure: source carries applied repairs r0014–r0023 without matching accept/revise authorization records (editorial file lists 14 proposals/decisions through r0014 only). This is a pre-existing sealed authorization debt, not a new owner repair.",
+  "remainingIndependentEvidence": {
+    "editorialAuthorization": {
+      "required": true,
+      "status": "blocked",
+      "repairIds": [
+        "xinwudaishi:013:r0014",
+        "xinwudaishi:013:r0015",
+        "xinwudaishi:013:r0016",
+        "xinwudaishi:013:r0017",
+        "xinwudaishi:013:r0018",
+        "xinwudaishi:013:r0019",
+        "xinwudaishi:013:r0020",
+        "xinwudaishi:013:r0021",
+        "xinwudaishi:013:r0022",
+        "xinwudaishi:013:r0023"
+      ],
+      "summary": "Reconcile applied source repairs with independent editorial accept/revise decisions before chapter gates; owner did not self-authorize."
+    },
+    "nativeDateAudit": {
+      "required": true,
+      "status": "missing",
+      "artifactPath": "data/people/date-audits/xinwudaishi/013.json",
+      "packetPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-013/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --report <independent-review.json>",
+      "verifyCommand": "npm run people:dates:verify -- --book xinwudaishi --chapter 013",
+      "independentOfExtractor": true,
+      "ownerDidNotSelfApprove": true
+    },
+    "canonicalIdentityReview": {
+      "required": true,
+      "status": "pending-after-editorial-and-date-approval",
+      "summary": "Identity review follows editorial authorization repair and independent date approval."
+    }
+  },
+  "distinctHolds": [
+    {
+      "kind": "editorial-authorization-debt",
+      "detail": "people:validate rejects applied repairs r0014–r0023 without independent accept/revise pairing in pinned editorial blob 4439c7ac."
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 013",
+    "datesPacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 013 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-013/date-packet.json",
+    "datesVerify": "npm run people:dates:verify -- --book xinwudaishi --chapter 013"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner pass only; sealed inputs unchanged. Editorial authorization debt and missing native date audit block completion."
+}
