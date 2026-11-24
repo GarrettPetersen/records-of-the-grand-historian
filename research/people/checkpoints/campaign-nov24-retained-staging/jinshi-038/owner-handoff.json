@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "ownerAgentId": "bc-159f19bf-4834-45ac-9043-8f3fc66a8383",
+  "workerId": "cursor-nov24-retained-staging-w3-o5",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "b4a5420aa3ab9df71518b8dd5351ccd62355859a0f047e1008b6a18567e84703",
+  "stagingBase": "7cdf8f42e53be7a29bbc018e6d1f93783d741f6a",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "scope": {
+    "book": "jinshi",
+    "chapter": "038"
+  },
+  "branch": "cursor/nov24-retained-staging-owner-jinshi-038-a8383",
+  "inputBlobWitness": {
+    "source": "421c9defcdd4274f6c12133206aee5db3ee66f9e",
+    "extraction": "fdc89118e14a3db0e2b06fb497b160c8cb443eca",
+    "dateAudit": "6d1181ae6266a46db79b014b4640e2a3d328db4b",
+    "editorial": "f24c252fc4a14eca88824ec934bdd71121cb8e59"
+  },
+  "sealedInputs": {
+    "source": "sha256:695fb6a6963004fea41e105e7711532de4bb74d99d1c304bd0a7bcbe933e5c9d",
+    "extraction": "sha256:e582fbb03ea068fa36bfef10c4f95ba71416709b67f1c99c6c7601a4979befe3",
+    "dateAudit": "sha256:f9c783df995c4978f370184ba9a3e802f9dec3f918bd96ed04b09cf68f2603f0",
+    "editorial": "sha256:1f0c988eedefc235becb671f73073a74a1eb606fc2840d651eccb427ce083dc6"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 318,
+    "translatedCount": 318,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingUnits": [],
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jinshi --chapter 038",
+    "summary": "Scoped person data validation passed for jinshi/038: 1 extraction(s), 15 local people, 41 mentions, 166 claims, 0 proposed repair(s), 5 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 318,
+      "translatedCount": 318,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "chronologyStatus": "research-blocked",
+    "dateAuditSummary": "Complete independent audit of all 318 Chinese units, 55 temporal or active-hint checks, and 15 people. Numbered Jin reign-year offices, diplomatic missions, and dated court events are supported. 熙宗時 is an undated ruler-period phrase and cannot establish an activity interval spanning AD 1135–1149; the separately explicit 1142 attestation remains supported. No source or canonical extraction was edited.",
+    "dateAuditReviewedAt": "2026-09-24T00:40:00Z",
+    "editorialDecisionCount": 5,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "research-blocked"
+  },
+  "substantiveFindings": "Pinned blobs verified. Diplomatic and court chapter: fifteen people, full English on 318 units, five applied editorial repairs. Numbered Jin reign offices and dated events supported; 熙宗時 undated ruler-period phrase held without spanning AD 1135–1149 while explicit 1142 attestation remains supported. No owner canonical edits.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "kind": "chronology-research-blocked",
+      "status": "research-blocked",
+      "source": "data/people/date-audits/jinshi/038.json",
+      "summary": "Undated ruler-period phrase cannot establish whole activity interval; explicit dated attestations retained.",
+      "findingCount": 1
+    }
+  ],
+  "chapterReady": false,
+  "nextGate": "chronology-research-resolution-or-independent-final-review",
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jinshi --chapter 038",
+    "datesVerify": "npm run people:dates:verify -- --book jinshi --chapter 038"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging owner pass only; sealed inputs unchanged. Chronology remains research-blocked at pinned audit; chapter not ready for final independent check until audited status or scoped holds resolved."
+}
