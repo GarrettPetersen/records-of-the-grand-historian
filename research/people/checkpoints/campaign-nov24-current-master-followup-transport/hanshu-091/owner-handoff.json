@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "followup-transport-identity-owner-handoff",
+  "scope": {
+    "book": "hanshu",
+    "chapter": "091"
+  },
+  "ownerAgentId": "bc-9c0ce645-8155-4f97-9353-f991ee0773c8",
+  "campaignWorker": "cursor-nov24-current-master-followup-2",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "1c48e717db8614a1f2a2c5bf3900e817ce295542",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-unclaimed-followup-owner-transports",
+    "commit": "9094f5860702af124e1cff98aa6d06597ec062af",
+    "planFingerprint": "sha256:49cbfcbf83d29f17d1a6f8116f3aceb72b53fc0e690579bf464f6ce671aea788",
+    "sourcePacketSha256": "ab47b0709537f009006594e39c863a0293104381a351d0bfb5f9d2b8de13f1cb",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:b95582f017fe1b197dd64beba910fbad6502a6f16a754970939bb14d9fc524b1",
+        "caseCount": 21
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:8a13ee1fd5c8c1ce6db90569a5af0a437f67d956a2aefc9ecadf0aa5e5694e55",
+        "caseCount": 21
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:70debdf84837e75cc2d4f718b2a146f3ca9ab09e487f953b3acc9e1ce216b799",
+        "caseCount": 43
+      }
+    ],
+    "preparationReceiptSha256": "sha256:f41693975982d92b65ee37b8bcf0c7d6e06c20027469eab304ef748cbefafc73"
+  },
+  "sealedInputs": {
+    "source": "sha256:52455616192c7d998ce94b79c43855f714471e9c4dea0fe57b2e70db8d340f8f",
+    "extraction": "sha256:0945d83764571770740809a425498798125c277c01035cd64bf5cd5bece36a31",
+    "editorial": "sha256:841aae9e4bdadc5264c89504cf8e9bb15ac5c2d673cd0d19547afa1b1deaa8fb",
+    "dateAudit": "sha256:392eb04d0b24bd05600bde789e6d0a63914119a5bfafb907655923e9b3178a22"
+  },
+  "chronologyStatus": "independent date audit on sealed extraction (audited)",
+  "editorialStatus": "1 applied editorial decisions on sealed extraction",
+  "reviewCases": 85,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 85 cases retain preparation-proposed canonicalPersonId and unresolvedIdentity flags (74 unresolved, 11 resolved). 41 overflow cases preserve bounded-retrieval uncertainty; no false-merge or wrong-actor contradiction found. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:7fa13177adc543d6f80839715dc73de3d2c4909a054eaafeee2d0c7f39647b83",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/preparation-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/transport-part-003.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/lookup-receipt.json"
+  },
+  "reproduce": {
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/transport-part-003.json",
+    "verifyOwnerEvidence": "sha256sum research/people/checkpoints/campaign-nov24-current-master-followup-transport/hanshu-091/owner-evidence.json",
+    "validateChapter": "npm run people:validate -- --book hanshu --chapter 091"
+  },
+  "notes": "Owner evidence is not independent approval. Reviewer must seal requiredReport per transport instructions."
+}
