@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-blocked-chapter-owner-handoff",
+  "scope": {
+    "book": "songshu",
+    "chapter": "063"
+  },
+  "ownerAgentId": "bc-62d53d82-7e47-4cf7-a7d2-25e1b2d91335",
+  "idempotencyKey": "537a607b878cb1183defd298f03781516f7cd3af0dd6e62cc5b67fdbf32c4972",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "branch": "cursor/nov24-retained-blocked-owner-songshu-063-d91335",
+  "observedBlocker": "Date audit report is stale",
+  "pinnedInputs": {
+    "source": {
+      "path": "data/songshu/063.json",
+      "gitBlob": "aec329844d88586ce9418b2efda9bf6ed05bd6c2",
+      "contentSha256": "sha256:8e22bedcf237877f3c16c5ed05f07634c13e91ea89a70058b8b1f558681cb345"
+    },
+    "extraction": {
+      "path": "data/people/extractions/songshu/063.json",
+      "gitBlob": "7b124b0a84ab85c36ad7e52b5ea6c53d8f3326a8",
+      "contentSha256": "sha256:4ca850d3a62509e21e2094be8d4b1cbd9d528ac90048b3a3a38ec3d44a11afac"
+    },
+    "dateAudit": {
+      "path": "data/people/date-audits/songshu/063.json",
+      "gitBlob": "923242cbca088fe4b73cb26b9ed97cc4b49ddcdf",
+      "contentSha256": "sha256:dce52c7b40600d588f1420509263bea4ff1faa40aad8822e5755b364c7264413"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/songshu/063.json",
+      "gitBlob": "2f793dc9b3b20c03c7c76040bab105da201049ba",
+      "contentSha256": "sha256:989b00c07471bdf3d05cd0bdd41c0385e46a7d8effc2e281aee2159d506b646c"
+    }
+  },
+  "testedRecoveryFindings": {
+    "sourceHashUnchanged": true,
+    "extractionHashChanged": true,
+    "sealedExtractionCommit": "a70e3040257e5a44af61472e78f02a5c716d41f3",
+    "sealedExtractionHash": "sha256:4730137fe08b9ee1612e1e4e66a2a1331ec745f318b8ef9a6ef1ccdfefe85a38",
+    "currentExtractionHash": "sha256:4ca850d3a62509e21e2094be8d4b1cbd9d528ac90048b3a3a38ec3d44a11afac",
+    "priorAuditStatus": "audited",
+    "priorFindingCount": 0,
+    "staleReason": "extractionHash changed while sourceHash unchanged; reception taxonomy migration on current extraction",
+    "changedChronologyFacts": [],
+    "taxonomyOnlyChanges": [
+      {
+        "id": "claim-695",
+        "changeKind": "reception-taxonomy-migration",
+        "chronologyUnchanged": true,
+        "before": {
+          "kind": "posthumous-commemoration",
+          "role": "honoree",
+          "action": "sacrifice-ordered",
+          "dateContext": {
+            "sourceDate": {
+              "text": "世祖大明五年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 461,
+              "precision": "year"
+            }
+          }
+        },
+        "after": {
+          "kind": "retrospective-reference",
+          "role": "honoree",
+          "action": "sacrifice-ordered",
+          "dateContext": {
+            "sourceDate": {
+              "text": "世祖大明五年"
+            },
+            "westernYear": {
+              "era": "AD",
+              "year": 461,
+              "precision": "year"
+            }
+          }
+        }
+      }
+    ],
+    "validateSealedAgainstAudit": {
+      "ok": false,
+      "error": "Date approval retains invalid temporal geometry or reception ownership"
+    },
+    "validateCurrentAgainstAudit": {
+      "ok": false,
+      "error": "Date audit report is stale"
+    }
+  },
+  "concreteProposedPatches": [
+    {
+      "kind": "native-date-proof-repin-eligibility",
+      "action": "Independent reviewer confirms taxonomy-only reception relabels, then native composition may repin date audit to current extractionHash without re-reading entire chapter",
+      "affectedClaimIds": [
+        "claim-695"
+      ],
+      "chronologyFieldsUnchanged": true
+    }
+  ],
+  "relatedEvidenceHashes": {
+    "sealedExtractionHash": "sha256:4730137fe08b9ee1612e1e4e66a2a1331ec745f318b8ef9a6ef1ccdfefe85a38",
+    "currentExtractionHash": "sha256:4ca850d3a62509e21e2094be8d4b1cbd9d528ac90048b3a3a38ec3d44a11afac",
+    "sourceHash": "sha256:32019507a2398b8762c1ab99f27578bb52ab3b13aec3b3d903044a39d718111a",
+    "taxonomyMigrationCommit": "07e5abb388dcb485f38f3ed07c1f896bbcdbd908"
+  },
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "path": "data/people/date-audits/songshu/063.json",
+      "gitBlob": "923242cbca088fe4b73cb26b9ed97cc4b49ddcdf",
+      "contentSha256": "sha256:dce52c7b40600d588f1420509263bea4ff1faa40aad8822e5755b364c7264413"
+    },
+    "editorial": {
+      "path": "data/people/editorial-decisions/songshu/063.json",
+      "gitBlob": "2f793dc9b3b20c03c7c76040bab105da201049ba",
+      "contentSha256": "sha256:989b00c07471bdf3d05cd0bdd41c0385e46a7d8effc2e281aee2159d506b646c"
+    },
+    "preservedDateAuditPath": "data/people/date-audits/songshu/063.json",
+    "editorialDecisionsRetained": true
+  },
+  "holds": {
+    "independentDateApprovalRequired": true,
+    "ownerDoesNotApproveProofReuse": true,
+    "doNotRetagExtractionHashOnHistoricalReport": true
+  },
+  "nativeValidation": {
+    "peopleValidate": "Scoped person data validation passed for songshu/063: 1 extraction(s), 137 local people, 735 mentions, 1674 claims, 0 proposed repair(s), 24 applied repair(s), 24 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "peopleDatesVerify": {
+      "status": "stale",
+      "auditVersion": 1
+    }
+  },
+  "independentApprovalIssued": false,
+  "notes": "Preserve historical date-audit bytes; owner handoff is not approval."
+}
