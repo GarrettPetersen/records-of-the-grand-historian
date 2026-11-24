@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "shiji",
+    "chapter": "103"
+  },
+  "ownerAgentId": "bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2",
+  "worker": "cursor-nov24-retained-staging-w11-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "88169cfdce4d911b7472a72d521711753a41df050fad65681949b1c826e87a27",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-retained-staging-owner-shiji-103-b2ee2",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:12f398af7170d224ac240cccfbd71adcd7170dbe4b740452b79f1baa16b5cc79",
+    "people": 38,
+    "claims": 250,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "767411f2483a5a92b8733ebccfa3837f44c33775",
+    "extraction": "0f137ce29018fd67240de847d44da7e0d140784c",
+    "editorial": "21b8a818699c5e6b8e5812cff9f820eb9839ee01"
+  },
+  "sealedInputs": {
+    "source": "sha256:dd0363b499129cee754ae81682cdc53a3c4791cda41dc747c82ff7c6ff3825dd",
+    "extraction": "sha256:12f398af7170d224ac240cccfbd71adcd7170dbe4b740452b79f1baa16b5cc79",
+    "editorial": "sha256:5e84ca42edec0e750868af1277f706caf8b6836e018fbadfd6aef38c24d10f3c"
+  },
+  "dateAuditPresent": false,
+  "editorialAndExtractionReuse": {
+    "reextract": false,
+    "editorialOverwrite": false,
+    "extractionPath": "data/people/extractions/shiji/103.json",
+    "editorialPath": "data/people/editorial-decisions/shiji/103.json",
+    "extractionBytes": 75149,
+    "editorialDecisionCount": 4,
+    "appliedRepairCount": 4,
+    "extractorAgentId": "bc-96bdc3d0-4ebc-4d42-b638-837da00a8da1",
+    "extractorModel": "grok-4.5",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitleEn": "Biographies of Wan Shi and Zhang Shu",
+    "sourceTitleZh": "萬石張叔列傳",
+    "sentenceCount": 156,
+    "translatedCount": 156,
+    "parsedSentenceCount": 156,
+    "englishCoverage": {
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "claimEvidenceIntegrity": {
+      "invalidEvidenceRefs": [],
+      "invalidCount": 0
+    }
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-103/date-packet.json",
+    "contentSha256": "sha256:bbe61e90d980e6471d438c366266f9cf79921d9f8e961dd2898862aab6dc0b88",
+    "packetSourceHash": "sha256:6675956b28398d8098612b9b3b39e008bbe2ecf84dfa3d8a73d5bd9a15d81971",
+    "packetExtractionHash": "sha256:20dc4c841471c9344619e2ea474508cd8e9b45695294d1eee127c8979cbd05f1",
+    "dateHintCheckCount": 114,
+    "peopleCount": 38,
+    "command": "npm run people:dates:packet -- --book shiji --chapter 103 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-103/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "definiteEnglishProblems": [],
+  "holds": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book shiji --chapter 103",
+    "summary": "Scoped person data validation passed for shiji/103: 1 extraction(s), 38 local people, 365 mentions, 392 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionCoverage": {
+      "allClaimProvenanceValid": true,
+      "peopleCountObserved": 38,
+      "claimsCountObserved": 250,
+      "proposedRepairs": 0
+    },
+    "chronologyStatus": "un-audited",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book shiji --chapter 103",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/shiji/103.json",
+      "nativeDateReportPresent": false
+    }
+  },
+  "authorEvidence": {
+    "method": "Verified pinned staging git blobs and raw file content SHA-256; read Chinese source units with English literal/idiomatic fields; retained accepted prompt-v7 extraction and applied editorial decisions without re-extraction; npm run people:validate; native people:dates:packet at checkpoint; owner does not issue independent date approval.",
+    "reviewedAt": "2026-11-24T17:11:33.602Z",
+    "conclusion": "Pinned source, extraction, and editorial inputs align at witnessed blobs. Full English coverage on all source units; claim evidence references resolve; native validator reports zero proposed repairs and zero legacy temporal debt. No concrete source contradiction, definite English omission, or owner-scope chronology repair identified. Sealed date packet is ready for independent native chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "completed": false,
+      "status": "un-audited",
+      "candidatePacket": "sha256:bbe61e90d980e6471d438c366266f9cf79921d9f8e961dd2898862aab6dc0b88",
+      "candidatePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-103/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --book shiji --chapter 103",
+      "runCommand": "npm run people:dates:run -- --book shiji --chapter 103 --worker <stable-id> --lane cursor-sdk --model <model> --run",
+      "notes": "Missing gate is an independent native date audit against the sealed packet at current extraction/source fingerprints. Owner pass does not substitute for people:dates:record approval."
+    },
+    "independentIdentityReview": {
+      "required": true,
+      "completed": false,
+      "notes": "Canonical identity membership for chapter-local people remains for a separate independent reviewer after chronology approval; no identity transport artifacts were re-sealed in this owner pass."
+    }
+  },
+  "independentApprovalIssued": false,
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 103",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 103 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-103/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 103"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book shiji --chapter 103",
+    "buildDatePacket": "npm run people:dates:packet -- --book shiji --chapter 103 --out research/people/checkpoints/campaign-nov24-retained-staging/shiji-103/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book shiji --chapter 103"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical data edits, registry generation, deploy, or merge. Still missing: independent native date audit (and subsequent identity review)."
+}

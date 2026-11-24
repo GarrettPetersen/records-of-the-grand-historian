@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "141"
+  },
+  "ownerAgentId": "bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2",
+  "worker": "cursor-nov24-retained-staging-w11-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "88169cfdce4d911b7472a72d521711753a41df050fad65681949b1c826e87a27",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-retained-staging-owner-qingshigao-141-b2ee2",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:2ebbb5c12aced9d17ebc06ca72246f490095f2193827638f0b44ed32c7c8cca8",
+    "people": 35,
+    "claims": 206,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "0e7285b050f812254c3e1659101f91b02fed10f7",
+    "extraction": "8edea964772848f6db49394add12b189235b6bff",
+    "editorial": "0274b42f95a42f7b432309e0e1ddfda9f83ae44b"
+  },
+  "sealedInputs": {
+    "source": "sha256:2e814825c675411d5e96986e21a1c6bd55759618fd37327fd9d9b9c582a1b36a",
+    "extraction": "sha256:2ebbb5c12aced9d17ebc06ca72246f490095f2193827638f0b44ed32c7c8cca8",
+    "editorial": "sha256:62587394e8cb9b559a2ed7f527dc6a4afd701914f122ce25b9b9b1f670600f79"
+  },
+  "dateAuditPresent": false,
+  "editorialAndExtractionReuse": {
+    "reextract": false,
+    "editorialOverwrite": false,
+    "extractionPath": "data/people/extractions/qingshigao/141.json",
+    "editorialPath": "data/people/editorial-decisions/qingshigao/141.json",
+    "extractionBytes": 74789,
+    "editorialDecisionCount": 4,
+    "appliedRepairCount": 4,
+    "extractorAgentId": "bc-84fdc4da-cb89-4b5c-a892-cb20593b0ccd",
+    "extractorModel": "grok-4.5",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitleEn": "Volume 141 Treatises 116: Military 12, Horse Administration",
+    "sourceTitleZh": "卷141 志一百十六 兵十二 马政",
+    "sentenceCount": 174,
+    "translatedCount": 174,
+    "parsedSentenceCount": 174,
+    "englishCoverage": {
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "claimEvidenceIntegrity": {
+      "invalidEvidenceRefs": [],
+      "invalidCount": 0
+    }
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-141/date-packet.json",
+    "contentSha256": "sha256:efec95f8bb01e84562971bef0c3e22ab43445ed5f504ca6a0d1d035185f33ab8",
+    "packetSourceHash": "sha256:d7a564d7cd80d84e40fbe85e2f6b69037ce0bbd5032fdbde7bf3a5dcd3fff79c",
+    "packetExtractionHash": "sha256:a390ac40420f724b29e9f4587c313df30d08ba29dcf376aaa5f76123cf98d9eb",
+    "dateHintCheckCount": 125,
+    "peopleCount": 35,
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 141 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-141/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "definiteEnglishProblems": [],
+  "holds": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book qingshigao --chapter 141",
+    "summary": "Scoped person data validation passed for qingshigao/141: 1 extraction(s), 35 local people, 69 mentions, 320 claims, 0 proposed repair(s), 4 applied repair(s), 4 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionCoverage": {
+      "allClaimProvenanceValid": true,
+      "peopleCountObserved": 35,
+      "claimsCountObserved": 206,
+      "proposedRepairs": 0
+    },
+    "chronologyStatus": "un-audited",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 141",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/qingshigao/141.json",
+      "nativeDateReportPresent": false
+    }
+  },
+  "authorEvidence": {
+    "method": "Verified pinned staging git blobs and raw file content SHA-256; read Chinese source units with English literal/idiomatic fields; retained accepted prompt-v7 extraction and applied editorial decisions without re-extraction; npm run people:validate; native people:dates:packet at checkpoint; owner does not issue independent date approval.",
+    "reviewedAt": "2026-11-24T17:11:33.596Z",
+    "conclusion": "Pinned source, extraction, and editorial inputs align at witnessed blobs. Full English coverage on all source units; claim evidence references resolve; native validator reports zero proposed repairs and zero legacy temporal debt. No concrete source contradiction, definite English omission, or owner-scope chronology repair identified. Sealed date packet is ready for independent native chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "completed": false,
+      "status": "un-audited",
+      "candidatePacket": "sha256:efec95f8bb01e84562971bef0c3e22ab43445ed5f504ca6a0d1d035185f33ab8",
+      "candidatePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-141/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --book qingshigao --chapter 141",
+      "runCommand": "npm run people:dates:run -- --book qingshigao --chapter 141 --worker <stable-id> --lane cursor-sdk --model <model> --run",
+      "notes": "Missing gate is an independent native date audit against the sealed packet at current extraction/source fingerprints. Owner pass does not substitute for people:dates:record approval."
+    },
+    "independentIdentityReview": {
+      "required": true,
+      "completed": false,
+      "notes": "Canonical identity membership for chapter-local people remains for a separate independent reviewer after chronology approval; no identity transport artifacts were re-sealed in this owner pass."
+    }
+  },
+  "independentApprovalIssued": false,
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 141",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 141 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-141/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 141"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 141",
+    "buildDatePacket": "npm run people:dates:packet -- --book qingshigao --chapter 141 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-141/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book qingshigao --chapter 141"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical data edits, registry generation, deploy, or merge. Still missing: independent native date audit (and subsequent identity review)."
+}

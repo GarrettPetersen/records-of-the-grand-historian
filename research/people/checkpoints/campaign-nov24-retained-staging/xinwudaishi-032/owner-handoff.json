@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "xinwudaishi",
+    "chapter": "032"
+  },
+  "ownerAgentId": "bc-91341f68-c5ae-4372-9bbe-1e1dde5b2ee2",
+  "worker": "cursor-nov24-retained-staging-w11-o4",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "88169cfdce4d911b7472a72d521711753a41df050fad65681949b1c826e87a27",
+  "stagingBase": "5cac1d27112abc2084b0d9b0574dc3e7471f426b",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branchRef": "cursor/nov24-retained-staging-owner-xinwudaishi-032-b2ee2",
+  "phase": "dispatch_pending",
+  "audit": {
+    "state": "no-native-date-report",
+    "sourceExtractionSha256": "sha256:b173b81abeff26414dcbe407c99b8b862d39ed40127be1cde97009f9533d4767",
+    "people": 39,
+    "claims": 270,
+    "promptVersion": 7
+  },
+  "inputBlobWitness": {
+    "source": "93d9acd046d75ce958f4a7748fe7abef86429af2",
+    "extraction": "8425e8e52eb1755153ca09cae6a32ec938b08a19",
+    "editorial": "e4a4574afbf9958fa96958e097d03ab8704b0642"
+  },
+  "sealedInputs": {
+    "source": "sha256:2beda0d42e9bb0a6c1aeeb5da85bd35a8f50a63b02d97580a3a69f17ec494a19",
+    "extraction": "sha256:b173b81abeff26414dcbe407c99b8b862d39ed40127be1cde97009f9533d4767",
+    "editorial": "sha256:e16894d3fbe983edc74bc05b8c4d91ed0526fdbb70c7f4b4557268281b1123dc"
+  },
+  "dateAuditPresent": false,
+  "editorialAndExtractionReuse": {
+    "reextract": false,
+    "editorialOverwrite": false,
+    "extractionPath": "data/people/extractions/xinwudaishi/032.json",
+    "editorialPath": "data/people/editorial-decisions/xinwudaishi/032.json",
+    "extractionBytes": 75540,
+    "editorialDecisionCount": 8,
+    "appliedRepairCount": 8,
+    "extractorAgentId": "bc-a662c7cf-59fc-485e-9431-f57bc9db5afc",
+    "extractorModel": "grok-4.5",
+    "promptVersion": 7
+  },
+  "sourceCoverage": {
+    "sourceTitleEn": "Volume 32 Biographies of Martyrs to Virtue 12: Wang Yanzhang",
+    "sourceTitleZh": "卷三十二 死節傳第二十: 王彥章",
+    "sentenceCount": 114,
+    "translatedCount": 114,
+    "parsedSentenceCount": 114,
+    "englishCoverage": {
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "claimEvidenceIntegrity": {
+      "invalidEvidenceRefs": [],
+      "invalidCount": 0
+    }
+  },
+  "sealedNativeDatePacket": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-032/date-packet.json",
+    "contentSha256": "sha256:086172bcad161757e708d6379bb8c74f4555ccfcead7da2ede9239e7d1545d83",
+    "packetSourceHash": "sha256:fd63cca6d7050080eedab092364453cfb683b7a7eb70b6dec59f7480366aa274",
+    "packetExtractionHash": "sha256:2d13271cbf9031585da067491d36bdad7764531217bb02bef139a886803ae500",
+    "dateHintCheckCount": 100,
+    "peopleCount": 39,
+    "command": "npm run people:dates:packet -- --book xinwudaishi --chapter 032 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-032/date-packet.json"
+  },
+  "dateRepairProposals": [],
+  "definiteTranslationRepairs": [],
+  "definiteEnglishProblems": [],
+  "holds": [],
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book xinwudaishi --chapter 032",
+    "summary": "Scoped person data validation passed for xinwudaishi/032: 1 extraction(s), 39 local people, 370 mentions, 391 claims, 0 proposed repair(s), 8 applied repair(s), 8 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "extractionCoverage": {
+      "allClaimProvenanceValid": true,
+      "peopleCountObserved": 39,
+      "claimsCountObserved": 270,
+      "proposedRepairs": 0
+    },
+    "chronologyStatus": "un-audited",
+    "peopleDatesVerify": {
+      "command": "npm run people:dates:verify -- --book xinwudaishi --chapter 032",
+      "status": "un-audited",
+      "auditVersion": 1,
+      "nativeDateReportPath": "data/people/date-audits/xinwudaishi/032.json",
+      "nativeDateReportPresent": false
+    }
+  },
+  "authorEvidence": {
+    "method": "Verified pinned staging git blobs and raw file content SHA-256; read Chinese source units with English literal/idiomatic fields; retained accepted prompt-v7 extraction and applied editorial decisions without re-extraction; npm run people:validate; native people:dates:packet at checkpoint; owner does not issue independent date approval.",
+    "reviewedAt": "2026-11-24T17:11:33.605Z",
+    "conclusion": "Pinned source, extraction, and editorial inputs align at witnessed blobs. Full English coverage on all source units; claim evidence references resolve; native validator reports zero proposed repairs and zero legacy temporal debt. No concrete source contradiction, definite English omission, or owner-scope chronology repair identified. Sealed date packet is ready for independent native chronology review."
+  },
+  "remainingIndependentEvidence": {
+    "independentDateAudit": {
+      "required": true,
+      "completed": false,
+      "status": "un-audited",
+      "candidatePacket": "sha256:086172bcad161757e708d6379bb8c74f4555ccfcead7da2ede9239e7d1545d83",
+      "candidatePacketPath": "research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-032/date-packet.json",
+      "recordCommand": "npm run people:dates:record -- --book xinwudaishi --chapter 032",
+      "runCommand": "npm run people:dates:run -- --book xinwudaishi --chapter 032 --worker <stable-id> --lane cursor-sdk --model <model> --run",
+      "notes": "Missing gate is an independent native date audit against the sealed packet at current extraction/source fingerprints. Owner pass does not substitute for people:dates:record approval."
+    },
+    "independentIdentityReview": {
+      "required": true,
+      "completed": false,
+      "notes": "Canonical identity membership for chapter-local people remains for a separate independent reviewer after chronology approval; no identity transport artifacts were re-sealed in this owner pass."
+    }
+  },
+  "independentApprovalIssued": false,
+  "independentReviewCompleted": false,
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "candidateValidationCommands": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 032",
+    "buildDatePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 032 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-032/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book xinwudaishi --chapter 032"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book xinwudaishi --chapter 032",
+    "buildDatePacket": "npm run people:dates:packet -- --book xinwudaishi --chapter 032 --out research/people/checkpoints/campaign-nov24-retained-staging/xinwudaishi-032/date-packet.json",
+    "verifyDates": "npm run people:dates:verify -- --book xinwudaishi --chapter 032"
+  },
+  "notes": "[CF-Pages-Skip] Retained staging chapter-owner pass only; no canonical data edits, registry generation, deploy, or merge. Still missing: independent native date audit (and subsequent identity review)."
+}
