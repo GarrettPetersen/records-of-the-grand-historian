@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "houhanshu",
+    "chapter": "108"
+  },
+  "ownerAgentId": "bc-171befa0-4583-4074-a86f-8c58c468382d",
+  "workerId": "cursor-nov24-retained-staging-w3-o3",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "e6ad0ed95e8ca016f0e9ca8bd0bd83e8f77f90fbea7eefa56f8f5b486b70140c",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "49436e451bb57f7943afbcb6490aa7f5f1f37f55",
+  "branch": "cursor/nov24-retained-owner-native-date-houhanshu-108-8382d",
+  "ownerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/houhanshu-108/owner-handoff.json",
+    "sha256": "b8de8f2f6509bd30dca96e55aa6e5e71325deea3883ae0513eefa506445f6bbb"
+  },
+  "inputBlobWitness": {
+    "source": "8da744bf61cfd3a324587f6f8a681e76c7b8932f",
+    "extraction": "f410e0ff921d2e085bce32aa318b8e6e5186ec28",
+    "dateAudit": "527d53a7d82ad5fd5a8aacca92f37806a3c88e14",
+    "editorial": "7219925d8b080916059930019b7a55040387af52"
+  },
+  "pinnedAuditEvidence": {
+    "sha256": "fba195e611d1f8a2cf73c7f17602b0dbbfdb30a73b0f71ebc0ba0f08bbb49a4b",
+    "status": "research-blocked",
+    "auditReviewedAt": "2026-09-23T10:56:02.327Z",
+    "coveredItems": 102,
+    "findings": 1,
+    "bytesPreserved": true
+  },
+  "sealedPacket": {
+    "sourceHash": "sha256:b77f8cc5de15291c19703fdae56cd775bdb854d5952147b8c651e1168817a92a",
+    "extractionHash": "sha256:bb1f4e83649869d6627364c1cb121bbe4a60d1f1d3d1c66c4adda6e1ffe05c4c"
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "items": "chapter-wide chronology receipt (102 itemChecks)",
+      "problem": "Chapter has not yet received independent source-critical verification for extracted chronology, active-date hints, Western-era conversions, or event ownership.",
+      "sourceQuotes": [
+        {
+          "unit": "s0007",
+          "zh": "建武元年，光武即位于鄗，爲壇營於鄗之陽。"
+        }
+      ],
+      "auditAction": "Perform bounded independent source audit of each cited record; preserve unresolved evidence as research holds rather than inventing dates."
+    }
+  ],
+  "findingsDisposition": [
+    {
+      "findingIndex": 0,
+      "action": "no-extraction-edit",
+      "reason": "Pinned audit is an initial complete-scope receipt that deliberately withholds approval for 102 items. No itemCheck verdict incorrect; owner pass found no single false Western conversion contradicting a retained unresolved hold on the same unit (unlike songshi/144 claim-86). Bulk Western years on supported rows await independent verification, not owner emendation without per-item incorrect verdict.",
+      "affectedPersonIds": ["chapter-wide"],
+      "perCaseReview": "Each of 102 itemChecks requires bounded calendar verification; this owner artifact does not batch-approve or batch-repair."
+    }
+  ],
+  "nativeDateRepairProposal": null,
+  "nativeValidation": {
+    "command": "npm run people:validate -- --book houhanshu --chapter 108; npm run people:dates:verify -- --book houhanshu --chapter 108",
+    "passed": true,
+    "detail": "people:validate passed; dates:verify reports research-blocked at pinned audit. applyDateRepairProposal not invoked."
+  },
+  "intactApprovals": {
+    "dateAuditFileUnchanged": true,
+    "initialReceiptPreserved": true
+  },
+  "definiteTranslationRepairs": [],
+  "residualHolds": [
+    {
+      "gate": "date-research-blocked",
+      "summary": "Whole-chapter date approval withheld pending 102-item independent verification.",
+      "items": ["finding-0", "102 itemChecks"]
+    },
+    {
+      "gate": "proof",
+      "summary": "No host shortcut to audited status; aggregate finding is scheduling truth, not evidence that extraction introduced false precision."
+    }
+  ],
+  "notes": "[CF-Pages-Skip] Initial receipt preserved; per-item audit work remains for host."
+}
