@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": { "book": "beishi", "chapter": "084" },
+  "ownerAgentId": "bc-0e48d1f5-a248-4aeb-b767-52dabf1dcab9",
+  "workerId": "cursor-nov24-retained-staging-w5-o2",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "597b278cbbd00fddce2949ee1ddb691a96dbb0f60307a142361ac4cf1da1602e",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-beishi-084-dcab9",
+  "extractionBytes": 349923,
+  "inputBlobWitness": {
+    "source": "6f5b9bd780db652f56508c995adb26b7e9ed63e5",
+    "extraction": "21690cab86da1e77bdf0db889610ddd83b2c0bc4",
+    "dateAudit": "33ff656244432583ec4bae7f051669154b8ded19",
+    "editorial": "4499b0c89e2914775f6d36b6bd51d108711c15e0"
+  },
+  "sealedInputs": {
+    "source": "sha256:1ba605b2f88fb66aae540d8cc9f8fbf718934f534cfb5e2ad6940c0bea880416",
+    "extraction": "sha256:6e1b8c983d6ab3234ffaf83fae420feb490b9b2b0c0b66bb24bbe9ff28920884",
+    "dateAudit": "sha256:9c860571cab248a2dd363dabd85ddffe266dc22a2bcea4f798117550784220f0",
+    "editorial": "sha256:72f2d9febe6f5c9804112b3286c93301cec244b2a6d765d58e2e7e78a2e48bd8"
+  },
+  "sourceCoverage": {
+    "chineseUnits": 373,
+    "translatedCount": 373,
+    "missingEnglish": 0,
+    "missingLiteral": 0,
+    "fullEnglishCoverage": true
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book beishi --chapter 084",
+    "summary": "Scoped person data validation passed for beishi/084: 1 extraction(s), 176 local people, 718 mentions, 1838 claims, 0 proposed repair(s), 24 applied repair(s), 24 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book beishi --chapter 084",
+      "exitCode": 0,
+      "status": "audited",
+      "auditReportSha256": "sha256:9c860571cab248a2dd363dabd85ddffe266dc22a2bcea4f798117550784220f0",
+      "workOrderAuditSha256Verified": true,
+      "findings": 0,
+      "affectedItems": 0
+    },
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Complete independent audit of all 373 Chinese units, 554 temporal or active-hint items, and 176 people.",
+    "editorialDecisionCount": 24,
+    "editorialStatus": "reviewed-with-applied-proposals"
+  },
+  "substantiveFindings": "Sealed four-part inputs at pinned git blobs witness-verified on staging a50a027b. Full chapter read: all 373 Chinese units carry paired idiomatic and literal English; 176 person records, 718 mentions, and claim/evidence units align with citations. Accepted editorial repairs are reflected in source. Independent date report bytes unchanged; people:dates:verify returns audited with zero findings. No definite English omission, unsupported chronology, or schema hold found in this owner pass.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "notes": "[CF-Pages-Skip] Retained-staging source-owner handoff only; no sealed input edits."
+}
