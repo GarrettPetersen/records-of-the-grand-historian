@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "qingshigao",
+    "chapter": "373"
+  },
+  "ownerAgentId": "bc-04f92207-11bf-4f99-b76b-d6dab98daca3",
+  "workerId": "cursor-nov24-retained-staging-w15-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "5af313a7e3eb0952119bf9d81f2157100f89c96418c2a2947707e482a330a5d8",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-qingshigao-373-daca3",
+  "extractionBytes": 130088,
+  "inputBlobWitness": {
+    "source": "aefe0551b8f9c510445c585c6bf07ea012979c0b",
+    "extraction": "0339ddf72e25307c04ca3856ee765fe8a36fd5ea",
+    "editorial": "5a99be5e53472973aa0d184934ee13e352b7ed1a"
+  },
+  "sealedInputs": {
+    "source": "sha256:6d96ab20e935367de64f7683ceedd6e7ddaa3092340a6fddaae49e835805eac2",
+    "extraction": "sha256:b4a61f2aef2685f93ce937d90f7451f485f953c7359f04f8301d7998b7778a56",
+    "editorial": "sha256:da29fb21e8e96fb0e33321e41ad35bd79b5d46b02587b434d64422ccf28134c1"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 373 Biographies 160: Zong Shiyishan, Long Wen, Zong Shiyijing, Wen Wei, Te Yi Shun, Yu Buyun",
+    "chineseUnits": 176,
+    "translatedCount": 176,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 130088
+  },
+  "sealedNativeDatePacket": {
+    "command": "npm run people:dates:packet -- --book qingshigao --chapter 373 --out <path>",
+    "sha256": "sha256:2f86f3caf26aaf3c93bf03b7278fa89552e9321d3033345372e200914a4f80df",
+    "sourceHash": "sha256:54ff2f6624d4ac9c89b792d5ee5eb0b927b2d4d1965388b2e3cb91fa63cc24dd",
+    "extractionHash": "sha256:e87e1c48748d58366b6ba23328c4be799a35b6fdbacabb1cd074eb109e28394d",
+    "itemCount": 220,
+    "peopleCount": 59,
+    "unitCount": 176,
+    "artifactPath": "research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-373/date-packet-candidate.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book qingshigao --chapter 373",
+    "peopleValidateSummary": "Scoped person data validation passed for qingshigao/373: 1 extraction(s), 59 local people, 317 mentions, 686 claims, 0 proposed repair(s), 6 applied repair(s), 6 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book qingshigao --chapter 373",
+      "exitCode": 0,
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "workOrderAuditState": "no-native-date-report",
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 6,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "byteSha256": "b4a61f2aef2685f93ce937d90f7451f485f953c7359f04f8301d7998b7778a56",
+      "preserved": true
+    },
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed source, extraction, and editorial inputs witness-verified at pinned staging blobs; full chapter English (literal+idiomatic) read via meta counts and unit scan. Six accepted editorial repairs applied in source; one claim revision in extraction per validator. people:validate passes with zero legacy temporal/alias debt. Native date packet built at sha256:2f86f3caf26aaf3c93bf03b7278fa89552e9321d3033345372e200914a4f80df; no data/people/date-audits/qingshigao/373.json — independent chronology review remains the sole missing gate. No new definite English omission or concrete chronology contradiction found in owner pass; no owner-authored date repairs.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "packetSha256": "sha256:2f86f3caf26aaf3c93bf03b7278fa89552e9321d3033345372e200914a4f80df",
+      "command": "npm run people:dates:record -- --book qingshigao --chapter 373",
+      "note": "Separate reviewer must complete native date audit against sealed packet fingerprints; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": false,
+      "note": "No campaign identity transport attached; chapter-local extraction validated only."
+    },
+    "independentReviewCompleted": false,
+    "nextGate": "independent-native-date-audit"
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book qingshigao --chapter 373",
+    "datesVerify": "npm run people:dates:verify -- --book qingshigao --chapter 373",
+    "datePacket": "npm run people:dates:packet -- --book qingshigao --chapter 373 --out research/people/checkpoints/campaign-nov24-retained-staging/qingshigao-373/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "zhoushu",
+    "chapter": "008"
+  },
+  "ownerAgentId": "bc-04f92207-11bf-4f99-b76b-d6dab98daca3",
+  "workerId": "cursor-nov24-retained-staging-w15-o11",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "5af313a7e3eb0952119bf9d81f2157100f89c96418c2a2947707e482a330a5d8",
+  "stagingBase": "20b8d0e3cd33c64ab1c91984c5d53cc80cd09aca",
+  "masterRevision": "f0d05f497f31af4b93ad4d8d4a84c2b8fdfda366",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-zhoushu-008-daca3",
+  "extractionBytes": 129487,
+  "inputBlobWitness": {
+    "source": "40b02a4503e1c90a7a485564d29526d797564604",
+    "extraction": "6af029d5da5247d0b35554e218afef0aea96b1c2",
+    "editorial": "aa57a63743bc12cb5be94682d519079618bd1bdd"
+  },
+  "sealedInputs": {
+    "source": "sha256:6b9c6e4935b38bed4a5b45cd23b00648ffa113b342ae13d1bc1ccf68ed52d62c",
+    "extraction": "sha256:1ca91598b95affbfe89bae101d724c6d325462b733e417a4d09c1d1448f0f26a",
+    "editorial": "sha256:0b8c50a3fef7e7f9926ae2388734302cc799468b9b6440c0daab07673cd71048"
+  },
+  "sourceCoverage": {
+    "sourceTitle": "Volume 8 Annals 8: Emperor Jing",
+    "chineseUnits": 151,
+    "translatedCount": 151,
+    "missingLiteral": 0,
+    "missingIdiomatic": 0,
+    "missingEnglish": 0,
+    "fullEnglishCoverage": true,
+    "extractionBytes": 129487
+  },
+  "sealedNativeDatePacket": {
+    "command": "npm run people:dates:packet -- --book zhoushu --chapter 008 --out <path>",
+    "sha256": "sha256:57f04f7c13b9e80f1fa179def844c78724f2513170d50c78336f99481ee61108",
+    "sourceHash": "sha256:4422b189f2c98b4cf617f3202513ba923b3a05e25dd811129bd3e63096a7b4d5",
+    "extractionHash": "sha256:62415970995c14b5461a7b515bf09e3d1771e2882e80af1c7add88f2291b6be3",
+    "itemCount": 327,
+    "peopleCount": 69,
+    "unitCount": 151,
+    "artifactPath": "research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-008/date-packet-candidate.json"
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidateCommand": "npm run people:validate -- --book zhoushu --chapter 008",
+    "peopleValidateSummary": "Scoped person data validation passed for zhoushu/008: 1 extraction(s), 69 local people, 313 mentions, 632 claims, 0 proposed repair(s), 4 applied repair(s), 5 editorial decision(s), 0 claim retraction(s), 0 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book zhoushu --chapter 008",
+      "exitCode": 0,
+      "status": "un-audited",
+      "auditReportPresent": false,
+      "workOrderAuditState": "no-native-date-report",
+      "findings": null
+    },
+    "chronologyStatus": "un-audited",
+    "editorialDecisionCount": 5,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "extractionReuse": {
+      "promptVersion": 7,
+      "byteSha256": "1ca91598b95affbfe89bae101d724c6d325462b733e417a4d09c1d1448f0f26a",
+      "preserved": true
+    },
+    "notIndependentApproval": true
+  },
+  "substantiveFindings": "Sealed source, extraction, and editorial inputs witness-verified at pinned staging blobs; full chapter English (literal+idiomatic) read via meta counts and unit scan. Five editorial decisions: four accepted repairs carried as applied translationRepairs in extraction (Heba Fu'en, Di leader, two Jin prefectures, Shiping title); r0002 rejected — Prince Zhao Zhao matches chapter convention. people:validate passes with zero legacy temporal/alias debt. Native date packet built at sha256:57f04f7c13b9e80f1fa179def844c78724f2513170d50c78336f99481ee61108; no data/people/date-audits/zhoushu/008.json — independent chronology review remains the sole missing gate. No new definite English omission or concrete chronology contradiction found in owner pass; no owner-authored date repairs.",
+  "definiteTranslationRepairs": [],
+  "dateRepairProposals": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [],
+  "remainingIndependentEvidence": {
+    "dateAudit": {
+      "required": true,
+      "status": "missing-native-report",
+      "packetSha256": "sha256:57f04f7c13b9e80f1fa179def844c78724f2513170d50c78336f99481ee61108",
+      "command": "npm run people:dates:record -- --book zhoushu --chapter 008",
+      "note": "Separate reviewer must complete native date audit against sealed packet fingerprints; owner does not self-approve."
+    },
+    "identityReview": {
+      "required": false,
+      "note": "No campaign identity transport attached; chapter-local extraction validated only."
+    },
+    "independentReviewCompleted": false,
+    "nextGate": "independent-native-date-audit"
+  },
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book zhoushu --chapter 008",
+    "datesVerify": "npm run people:dates:verify -- --book zhoushu --chapter 008",
+    "datePacket": "npm run people:dates:packet -- --book zhoushu --chapter 008 --out research/people/checkpoints/campaign-nov24-retained-staging/zhoushu-008/date-packet.json"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter-owner handoff only; no sealed input edits, registry build, deploy, or merge."
+}
