@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "kind": "owner-applied-primary-witness-delta",
+  "chapterKey": "liangshu/038",
+  "ownerAgentId": "bc-dffa34d0-07eb-4b8f-a0cb-73b78c664b73",
+  "idempotencyKey": "dcb2ee832b8d61d67e363161bda46ad2f54081b59c135ceec3d87ef0a62945ed",
+  "ownerRevision": "319d32e53e17a0f4817232f0b42bc4b75dcc15d1",
+  "ownerHead": "cf8ef6304d11267e9d0d122f309315f9812cf1dc",
+  "ownerProposalSha256": "4b4592a2dc07034835988e35851691021dd57928681c56c097797c551393e153",
+  "ownerProposalHead": "f276686279f635ca9ebd2e2a305dd69a234be2a5",
+  "priorIndependentReviewSha256": "96f8fd11337b9cbd448f7e7e31a9ff61956b90d7cec96ff839858bb518d46c4c",
+  "priorIndependentReviewHead": "ccf4b2923b28f898d8356fb12eea28ad2a84eefa",
+  "independentReviewerAgentId": "bc-e74d3ff7-ae55-4881-95e9-48f6e61a33c0",
+  "beforeExtractionSha256": "sha256:8387734810a3a8a8b207c51052834355aaa0fb0aaa60b855743b03ac407429cb",
+  "afterExtractionSha256": "sha256:9cbde58ef61257c20e99a9cbfa32fe8b5ae07fcda852feabc5686764c5f693d2",
+  "extractionPath": "data/people/extractions/liangshu/038.json",
+  "inputBlobWitnessUnchanged": {
+    "source": "d0e714152ef8fea3abcc925455470d3444ff8a80",
+    "dateAudit": "8d1527c77149df8374771aeb1db50ff012976ab4",
+    "editorial": "8ee2a065efdec183d800285892b5fb189cd92109"
+  },
+  "changedPersonIds": ["p025", "p006"],
+  "changedClaimSummary": [
+    "retracted all p025 and p006 local claims",
+    "retracted p005 parent-of p006",
+    "revised p005 ancestor-of p001: removed intermediaryPersonIds p006 (witness 外祖顧歡撫之 s0005)",
+    "revised p024 kin-of p002: removed intermediaryPersonIds p025 (witness 伯父蒨 s0078)"
+  ],
+  "patchSummary": "Removed unwitnessed descriptive-kinship locals 賀琛之父 (p025) and 朱异之母 (p006); retained explicit 伯父蒨 and 外祖顧歡 evidence paths.",
+  "closedCaseIds": [
+    "sha256:f7565542d998756e08fb689f974cc6feb8b5d8e058533653bd2d42b4f7f4911d",
+    "sha256:381daba7cf8e9eb43c1188321d715eca681352a2c89c1e63d4df6a0c11e052a7"
+  ],
+  "chronologyDelta": {
+    "chronologyCompleted": false,
+    "status": "stale-person-rows-after-extraction-retract",
+    "requiredHostFollowUp": {
+      "target": "data/people/date-audits/liangshu/038.json",
+      "removePersonCheckIds": ["hints-p006", "p006", "hints-p025", "p025"],
+      "note": "Approved independent witness delta requested person-row prune only; date audit blob unchanged in this commit."
+    }
+  },
+  "nativeExtractionValidation": {
+    "passed": true,
+    "command": "validateCompactPeopleExtraction with packet from data/liangshu/038.json",
+    "stats": {
+      "units": 360,
+      "people": 51,
+      "mentions": 321,
+      "claims": 567
+    },
+    "scopedChapterValidation": {
+      "command": "npm run people:validate -- --book liangshu --chapter 038",
+      "passed": true
+    }
+  },
+  "sourceModified": false,
+  "notes": "[CF-Pages-Skip] Applied independently approved supportedPatch only; canonical owner PR head unchanged."
+}
