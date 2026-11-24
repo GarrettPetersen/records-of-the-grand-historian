@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "split-transport-identity-owner-handoff",
+  "scope": {
+    "book": "suishu",
+    "chapter": "052"
+  },
+  "ownerAgentId": "bc-ba535de0-6357-4346-9b55-6a7365618ee9",
+  "campaignWorker": "cursor-nov24-current-master-5",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "stagingBase": "116d26fec8ae43dc070a8f9d7a8be7e0525c57a7",
+  "transport": {
+    "branch": "codex/cursor-glossary-nov24-2026-new-master-owner-transports",
+    "commit": "9f68d0379d1f3010cf0d19be5664a1aa31a863b5",
+    "planFingerprint": "sha256:62e12e67f217c40237b8bcd40eb046e4bb6de418d14d0daf09ec6003559ab213",
+    "sourcePacketSha256": "sha256:9f2f0590ac3ce2456a9caa284f4895fa744d0cb207e9437e7a4f43aa31fa62a7",
+    "parts": [
+      {
+        "path": "transport-part-001.json",
+        "sha256": "sha256:15319588c7f4a698fb63fbff7695a374b5ce142ae6fdbc85846cafb256ba307d",
+        "caseCount": 15
+      },
+      {
+        "path": "transport-part-002.json",
+        "sha256": "sha256:5845008e5cf631b69e2fc5c4940212d0f730203d017d1379aff9e9e777883424",
+        "caseCount": 16
+      },
+      {
+        "path": "transport-part-003.json",
+        "sha256": "sha256:7abf892606e69eb9b11082d2c4b2d69a7da899df17fadcb74cb6afbf8afbf572",
+        "caseCount": 32
+      }
+    ],
+    "preparationReceiptSha256": "sha256:90cf18185d1c685f9844aa9ccd8a6c31bb861d9558f599300c53d33aae5254a9"
+  },
+  "sealedInputs": {
+    "source": "sha256:db138ced0084bda2c331588d21b3f6e6bc5054920e1db479cf08256b7a28eed7",
+    "extraction": "sha256:3a4e7eeba4d3cef77b7a00520c8eb0b7c94fbd15e2d8288ee8f806e203ced006",
+    "editorial": "sha256:1535cf322433efa1afbc337c498c6380d1a2225ff0d4bb15921d60354662f113",
+    "dateAudit": "sha256:3cf5d8ee5b49c19058e72b6cdeb9d93465be18b02afc09274d33136aaf658a41"
+  },
+  "chronologyStatus": "audited (independent date audit on sealed extraction)",
+  "editorialStatus": "6 applied editorial decisions; no pending proposals",
+  "reviewCases": 63,
+  "canonicalEdits": false,
+  "independentReviewCompleted": false,
+  "substantiveFindings": "All 63 cases retain preparation-proposed canonicalPersonId and membership fingerprints. 52 cases keep unresolvedIdentity true (31 with bounded retrieval overflow). No false-merge or wrong-actor contradiction found against sealed source. No canonical extraction or shared-registry edits.",
+  "ownerEvidenceSha256": "sha256:667d9666f10b794e6537a11878c780212c5267c27f0c03cfc69e3bf0260b35a2",
+  "artifacts": {
+    "preparationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/preparation-receipt.json",
+    "ownerEvidence": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/owner-evidence.json",
+    "validationReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/validation-receipt.json",
+    "lookupReceipt": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/lookup-receipt.json",
+    "transportPart001": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/transport-part-001.json",
+    "transportPart002": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/transport-part-002.json",
+    "transportPart003": "research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/transport-part-003.json"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book suishu --chapter 052",
+    "verifyTransportPart001": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/transport-part-001.json",
+    "verifyTransportPart002": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/transport-part-002.json",
+    "verifyTransportPart003": "sha256sum research/people/checkpoints/campaign-nov24-current-master-transport/suishu-052/transport-part-003.json"
+  },
+  "notes": "Owner evidence is not independent approval."
+}
