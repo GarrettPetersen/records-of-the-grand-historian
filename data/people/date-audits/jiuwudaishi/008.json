@@ -4,15 +4,15 @@
   "book": "jiuwudaishi",
   "chapter": "008",
   "sourceHash": "sha256:7c9f7effb432abc80505993ee2b0de95f66a06df1e59fc66d57f38b22142efa5",
-  "extractionHash": "sha256:3116ba9387aa8c20b5f8a08cffaac0c83ec7acdccc7e5fa2d68d881f86600b8e",
+  "extractionHash": "sha256:5426c35b507dd68d67dee8bbc462747c64ac1ac2ad2c1077784bd32d496ff21c",
   "reviewer": {
-    "name": "Independent Jiuwudaishi 008 final curated-date auditor",
-    "agentId": "audit_jiuwudaishi008_final_curated_dates",
+    "name": "Independent stale-date recovery reviewer (jiuwudaishi 008)",
+    "agentId": "bc-de770be7-662c-4860-8713-a45a963e6897",
     "independentOfExtractor": true
   },
-  "reviewedAt": "2026-09-28T22:12:00.000Z",
+  "reviewedAt": "2026-11-24T12:00:00.000Z",
   "status": "audited",
-  "summary": "Fresh independent full canonical audit after the residual posthumous-reception curation. All 256 Chinese source units, 340 temporal or active-date-hint records, and 118 people were checked. The chapter chronology is internally grounded from Tang Wende 1 (AD 888) through Zhenming 2 (AD 916). Zhu Youwen’s AD 912 execution/life evidence remains separate from the AD 913 honors-restoration and ordered-reburial event, which is explicitly classified as posthumous commemoration; no residual date or event-ownership defect was found.",
+  "summary": "Independent stale-date recovery: sealed historical audit (extraction sha256:3116ba93…) structurally matches its packet (340 items, 118 people, 256 units, zero prior findings). Current extraction differs only in claim-553 reception taxonomy (posthumous → retrospective-reference); all other claim hashes are identical. Native validateDateAuditReport passes on the repinned candidate at current fingerprints.",
   "reviewedUnits": [
     "s0243",
     "s0244",
@@ -3171,12 +3171,16 @@
     {
       "id": "claim-553",
       "verdict": "supported",
-      "event": "The complete Chinese chronology was independently checked for event ownership, source wording, era conversion, date precision, reception classification, and active-date-hint support.",
-      "reason": "The new claim correctly dates the later order under Qianhua 3 / AD 913 and classifies Zhu Youwen as posthumous honoree, so neither its date nor honors restoration extends his AD 912 active-date hint.",
+      "event": "AD 913 Qianhua-3 imperial order restoring Zhu Youwen’s titles and directing burial, recorded as retrospective commemoration after his AD 912 execution.",
+      "reason": "The Chinese addresses Zhu Youwen as 故博王友文 (s0039) and orders 復官爵…歸葬 (s0048) only after s0043 documents his wrongful execution and demotion. Retrospective-reference reception preserves AD 913 as a commemorative order without extending his AD 912 active-date hint; current native geometry requires this vocabulary instead of legacy posthumous-commemoration.",
       "evidence": [
         {
           "unit": "s0039",
           "quote": "故博王友文，才兼文武，識達古今，俾分憂於在浚之郊，亦共理於興王之地，一心無易，二紀於茲。"
+        },
+        {
+          "unit": "s0043",
+          "quote": "仍奪博王封爵，又改姓名，冤恥兩深，欺誑何極。"
         },
         {
           "unit": "s0048",
