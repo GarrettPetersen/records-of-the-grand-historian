@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "006"
+  },
+  "ownerAgentId": "bc-13a370d3-bd0b-473d-a358-d1bd79979332",
+  "workerId": "cursor-nov24-retained-staging-w8-o1",
+  "campaign": "campaign-nov24-retained-staging",
+  "idempotencyKey": "18da87ea19588f2ca4bd7606ce2160b30bac6af5cb6fc337aecb5f4abffd45d7",
+  "stagingBase": "563c2b169c6545c78973ea44659fae65e4020601",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-liangshu-006-79332",
+  "inputBlobWitness": {
+    "source": "d96f535d67be531e69ddf0cc3431193038489b83",
+    "extraction": "f8c328184af74c23cc6c8bdc4ddbfc0aeffca4b7",
+    "dateAudit": "0883840ccb24f9ff1d54e0b2d5dba022981ea1f9",
+    "editorial": "4c38986a7ceacbdc88549dc484ed708d72c43210"
+  },
+  "sealedInputs": {
+    "source": "sha256:db08ca52f51507ceb56072ad054610215906b4630e75ea946c35d1a2b3f4dbac",
+    "extraction": "sha256:3796b251a3eb58fe2fc0f0a2426dff625cf194f4039bff1bd947bac7f224406c",
+    "dateAudit": "sha256:c33248c001fad442a850ad2a54e7115334a836b82a57de70ca3f8edc78e4f691",
+    "editorial": "sha256:50570d9a3d2e6fc8972c87a9384aa9e19db1d0f4db4ee8a8a8469b18af70597b"
+  },
+  "sealedDateAudit": {
+    "status": "research-blocked",
+    "contentSha256": "c33248c001fad442a850ad2a54e7115334a836b82a57de70ca3f8edc78e4f691",
+    "affectedItems": 49,
+    "findings": 16,
+    "workOrderAffectedItems": 49,
+    "workOrderFindings": 16,
+    "distinctItemIds": [
+      "claim-167",
+      "claim-246",
+      "claim-250",
+      "claim-270",
+      "claim-277",
+      "claim-281",
+      "claim-285",
+      "claim-289",
+      "claim-297",
+      "claim-301",
+      "claim-306",
+      "claim-325",
+      "claim-328",
+      "claim-331",
+      "claim-335",
+      "claim-345",
+      "claim-90",
+      "hints-p002",
+      "hints-p057",
+      "hints-p074",
+      "hints-p075",
+      "hints-p076",
+      "hints-p077",
+      "hints-p078",
+      "hints-p079",
+      "hints-p080",
+      "hints-p081",
+      "hints-p082",
+      "hints-p083",
+      "hints-p084",
+      "hints-p085",
+      "hints-p086",
+      "hints-p088",
+      "p002",
+      "p057",
+      "p074",
+      "p075",
+      "p076",
+      "p077",
+      "p078",
+      "p079",
+      "p080",
+      "p081",
+      "p082",
+      "p083",
+      "p084",
+      "p085",
+      "p086",
+      "p088"
+    ],
+    "extractionHash": "sha256:3003b702d15ad59a6e1dcf384052a893a20267dd49b188c754305b6f360333c3",
+    "sourceHash": "sha256:f02cd5eb074030912578305a12cc6343351d1d4f077d27bf220bd900f43bb85e",
+    "reviewedAt": "2026-09-28T00:00:00.000Z",
+    "bytesPreserved": true,
+    "notReapproved": true
+  },
+  "sourceCoverage": {
+    "method": "Pinned blobs; npm run people:validate; retained extraction people/mentions/claims; editorial applied repairs reflected in source where accepted.",
+    "validateSummary": "Scoped person data validation passed for liangshu/006: 1 extraction(s), 88 local people, 407 mentions, 635 claims, 0 proposed repair(s), 23 applied repair(s), 23 editorial decision(s), 0 claim retraction(s), 1 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining."
+  },
+  "validation": {
+    "passed": true,
+    "peopleValidate": "npm run people:validate -- --book liangshu --chapter 006",
+    "peopleDatesVerify": "npm run people:dates:verify -- --book liangshu --chapter 006",
+    "datesVerifyResult": {
+      "verifyStatus": "stale",
+      "sealedReportStatus": "research-blocked",
+      "staleFingerprintMismatch": true,
+      "packetFingerprintWitness": {
+        "sourceHashAligned": true,
+        "sealedReportExtractionHash": "sha256:3003b702d15ad59a6e1dcf384052a893a20267dd49b188c754305b6f360333c3",
+        "currentPacketExtractionHash": "sha256:78189d6bd9527293785c0cb7df94807d974db89d2d562ed307c865edd74e2c97"
+      },
+      "deterministicError": "people:dates:verify reports stale because current extractionHash differs from sealed date-audit report (sourceHash matches). Report bytes and research-blocked status preserved; owner did not reconcile fingerprints or re-approve."
+    },
+    "chronologyStatus": "stale-sealed-report"
+  },
+  "substantiveFindings": "Sealed four-part inputs verified at pinned git blobs. Scoped people:validate passed. Sealed independent date report remains research-blocked (16 findings, 49 distinct held items) at verified SHA-256 c33248c001fad442a850ad2a54e7115334a836b82a57de70ca3f8edc78e4f691; bytes not rewritten. people:dates:verify returns stale against current packet fingerprints—re-audit or fingerprint reconciliation required before audited status; owner did not alter report hashes or approve the prior hold.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "findingIndex": 0,
+      "items": [
+        "claim-90",
+        "hints-p002",
+        "p002"
+      ],
+      "problem": "世祖第九子 identifies Emperor Yuan as father but supplies no calendar evidence for the asserted Western life chronology.",
+      "action": "Retain the source-limited chronology hold unless separately pinned evidence establishes a relevant date.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 1,
+      "items": [
+        "claim-167",
+        "hints-p057",
+        "p057"
+      ],
+      "problem": "The 557 edict invokes 夫子 posthumously and supplies no calendar evidence for Confucius’s Western life chronology.",
+      "action": "Retain the source-limited chronology hold unless separately pinned evidence establishes a relevant date.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 2,
+      "items": [
+        "claim-246",
+        "hints-p074",
+        "p074"
+      ],
+      "problem": "魏徵曰 identifies the commentator but supplies no calendar evidence for a Western life date.",
+      "action": "Retain the source-limited chronology hold unless separately pinned evidence establishes a relevant date.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 3,
+      "items": [
+        "claim-250",
+        "claim-270",
+        "hints-p075",
+        "p075"
+      ],
+      "problem": "The Gaozu allusions and the manner-of-death statement supply no calendar evidence for a Western point or interval.",
+      "action": "Retain the source-limited chronology holds; do not convert retrospective language into a life date.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 4,
+      "items": [
+        "claim-277",
+        "hints-p076",
+        "p076"
+      ],
+      "problem": "曰紂可伐 is an allusion and supplies no calendar evidence for King Zhou’s Western life chronology.",
+      "action": "Retain the source-limited chronology hold unless separately pinned evidence establishes a relevant date.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 5,
+      "items": [
+        "claim-281",
+        "hints-p077",
+        "p077"
+      ],
+      "problem": "The Confucius allusions supply no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the allusion.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 6,
+      "items": [
+        "claim-285",
+        "hints-p078",
+        "p078"
+      ],
+      "problem": "The Mozi allusion supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the allusion.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 7,
+      "items": [
+        "claim-289",
+        "hints-p079",
+        "p079"
+      ],
+      "problem": "The Taizong retrospective passage supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the retrospective passage.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 8,
+      "items": [
+        "claim-297",
+        "hints-p080",
+        "p080"
+      ],
+      "problem": "The comparison with Zhou Song supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the comparison.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 9,
+      "items": [
+        "claim-301",
+        "hints-p081",
+        "p081"
+      ],
+      "problem": "The comparison with Han Zhuang supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the comparison.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 10,
+      "items": [
+        "claim-306",
+        "hints-p082",
+        "p082"
+      ],
+      "problem": "The Emperor Yuan retrospective account supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from retrospective evaluation.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 11,
+      "items": [
+        "claim-325",
+        "hints-p083",
+        "p083"
+      ],
+      "problem": "The Wang Mang allusion supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the allusion.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 12,
+      "items": [
+        "claim-328",
+        "hints-p084",
+        "p084"
+      ],
+      "problem": "The Zhuo allusion supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the allusion.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 13,
+      "items": [
+        "claim-331",
+        "hints-p085",
+        "p085"
+      ],
+      "problem": "The Duke of Zhou talent comparison supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the comparison.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 14,
+      "items": [
+        "claim-335",
+        "hints-p086",
+        "p086"
+      ],
+      "problem": "敬帝 is discussed retrospectively without a calendar statement establishing a Western life date.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from retrospective evaluation.",
+      "preservedFromAudit": true
+    },
+    {
+      "findingIndex": 15,
+      "items": [
+        "claim-345",
+        "hints-p088",
+        "p088"
+      ],
+      "problem": "The Huo allusion supplies no calendar evidence for a Western point or interval in this chapter.",
+      "action": "Retain the source-limited chronology hold; do not infer an activity range from the allusion.",
+      "preservedFromAudit": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book liangshu --chapter 006",
+    "validateDates": "npm run people:dates:verify -- --book liangshu --chapter 006"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging owner pass; commit owner-handoff only. No canonical input edits, no audit hash rewrite, no publication."
+}
