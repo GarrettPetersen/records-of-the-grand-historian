@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-owner-native-chronology-repair",
+  "scope": {
+    "book": "shiji",
+    "chapter": "090"
+  },
+  "ownerAgentId": "bc-d07043cc-9acf-4e58-b237-fd49d94bdcdd",
+  "idempotencyKey": "2ff3605f0404805547b12640da9a4e77d12ae80c59ce9aeb683f87eb18932639",
+  "campaign": "campaign-nov24-retained-staging",
+  "stageRevision": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "priorOwnerRevision": "d0cdc8262f51f618d6188cd77639851b7e1128df",
+  "priorOwnerHandoff": {
+    "path": "research/people/checkpoints/campaign-nov24-retained-staging/shiji-090/owner-handoff.json",
+    "sha256": "67aecd38a7ab72317e9e7341c7134ed5e030ba1c4f278cf5ee3305394d29a6b1"
+  },
+  "branch": "cursor/nov24-retained-owner-native-date-shiji-090-bdcdd",
+  "pinnedDateAudit": {
+    "path": "data/people/date-audits/shiji/090.json",
+    "sha256": "06a367a64ebce1df98d9c82d0bf6d37bc15081b7e0ed169b0bd67a1091c6fe8f",
+    "gitBlob": "c28803fe4f4030fdcfef01d972d79cf42151af62",
+    "status": "research-blocked",
+    "reviewedAt": "2026-09-24T01:40:00Z",
+    "bytesPreserved": true,
+    "approvalNotMutated": true
+  },
+  "inputBlobWitness": {
+    "source": "9d7587cbe282f39f63133b7a96a96db8d2eb94a4",
+    "extraction": "51d41012a8e97fc474a93e9901a85a32be555859",
+    "dateAudit": "c28803fe4f4030fdcfef01d972d79cf42151af62",
+    "editorial": "9addaed6f0770e45d86710abdaa1114f667d6478"
+  },
+  "verifiedFindings": [
+    {
+      "findingIndex": 0,
+      "items": [
+        "claim-69",
+        "hints-p026",
+        "p026"
+      ],
+      "problem": "The 太史公曰 note is undated but the extraction assigns it BC 100.",
+      "sourceQuotes": [
+        {
+          "unitId": "s0104",
+          "zh": "太史公曰：魏豹、彭越雖故賤，然已席卷千里，南面稱孤，喋血乘勝日有聞矣。"
+        }
+      ],
+      "disposition": "false-western-conversion-removed"
+    }
+  ],
+  "nativeDateRepairProposal": {
+    "sourceHash": "sha256:91b46603a99f9ad320c2fcff2aeb16454af863fc9b3b2c24a17abf71f6ebc299",
+    "extractionHash": "sha256:aa6a0fc7a364686a5438410317ecc7e9ed8a09b5dde5d58dfdb298d48464f6ba",
+    "changes": [
+      {
+        "kind": "replace",
+        "id": "claim-69",
+        "before": [
+          "p026",
+          "attestation",
+          {
+            "sourceDate": {
+              "text": "太史公曰"
+            },
+            "westernYear": {
+              "era": "BC",
+              "year": 100,
+              "precision": "year"
+            }
+          },
+          "explicit-event-contextual-date",
+          [
+            "s0104"
+          ]
+        ],
+        "after": [
+          "p026",
+          "attestation",
+          {
+            "undatedSourceAttestation": true,
+            "event": "The Grand Historian authorial note (太史公曰) in s0104 assesses Wei Bao and Peng Yue without regnal year or calendar dating."
+          },
+          "explicit",
+          [
+            "s0104"
+          ]
+        ],
+        "reason": "Source unit s0104 opens with 太史公曰 and gives no dated temporal wording; BC 100 is an unsupported Western conversion for this historian note."
+      },
+      {
+        "kind": "hints",
+        "personId": "p026",
+        "before": [
+          "BC 100"
+        ],
+        "after": [],
+        "reason": "Remove the invented BC 100 active hint; the 太史公曰 passage in this chapter is genuinely undated."
+      }
+    ]
+  },
+  "claimEditsSkipped": [],
+  "skipClaimReason": null,
+  "affectedPersonIds": [
+    "p026"
+  ],
+  "affectedItemIds": [
+    "claim-69",
+    "hints-p026"
+  ],
+  "definiteTranslationRepairs": [],
+  "intactApprovals": {
+    "dateAuditUnmodified": true,
+    "editorialUnmodified": true,
+    "sourceUnmodified": true,
+    "extractionUnmodifiedOnBranch": true
+  },
+  "nativeValidation": {
+    "applyDateRepairProposal": "passed",
+    "peopleValidateExtraction": "../../../tmp/shiji-090-repair-candidate.json: ok (26 people, 342 mentions, 248 claims, 400 candidates)",
+    "peopleValidateExtractionCommand": "npm run people:validate-extraction -- <candidate-after-shiji-090.json>",
+    "candidateExtractionHashAfterRepair": "bedf0e439d8b44e831c95514b0679acc354d52a70aabf440e7c7f8f13b160a18"
+  },
+  "residualHolds": [],
+  "proofGaps": [],
+  "notes": "[CF-Pages-Skip] Owner native chronology repair proposal only; host assembles and validates; sealed audit bytes unchanged."
+}
