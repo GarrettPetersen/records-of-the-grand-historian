@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-people-lookup-receipt",
+  "scope": {
+    "book": "liangshu",
+    "chapter": "036"
+  },
+  "reviewer": {
+    "agentId": "bc-96f6e610-fc94-4fcf-87e7-bf8a1dce255a",
+    "name": "cursor-nov24-independent-liangshu-036"
+  },
+  "registry": "snapshots/cb756c508e0265caad63cdac5c50b49c06d4ca2d2d19bb6e1ef9bde48db40aac",
+  "conclusion": "Auxiliary bounded GET /v1/search calls confirm same-name dossier overflow is truncation, not separation evidence. Primary membership decisions rest on sealed transport units and data/liangshu/036.json (sha256:37ea5ce06b714dd448cc7c8f6414526bc3fc0474f34ef94ef1d28a57b6b587ee).",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/v1/search",
+      "query": { "key": "zh:萧衍", "limit": 3 },
+      "at": "2026-11-24T09:48:00Z",
+      "resultSummary": {
+        "total": 134,
+        "idsReturned": 3,
+        "truncated": true,
+        "postingFingerprint": "sha256:b54d5d3a5114049cd707ad28141d22e8d78673d6aa1a09869608ad7838e377c4",
+        "acceptedCanonicalInIds": "per_0375B8QMR9M3DA30DY1A"
+      },
+      "use": "Overflow spot-check for liangshu:036:p019 (Emperor Wu); accepted id appears among truncated headers; remainder unreviewed."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/search",
+      "query": { "key": "zh:范雲", "limit": 3 },
+      "at": "2026-11-24T09:48:00Z",
+      "resultSummary": {
+        "total": 0,
+        "idsReturned": 0,
+        "truncated": false,
+        "postingFingerprint": null
+      },
+      "use": "Registry native-key form zh:范雲 returns no dossier headers; chapter-primary 范雲/雲 witnesses in liangshu 036 s0013–s0014 still govern p016 attribution. Empty lookup is not negative proof."
+    }
+  ],
+  "planFingerprint": "sha256:d13b7fe5b38a8320e2f9102a124811c27ba3701312e0c6d2fa648f3acd149f0b"
+}
