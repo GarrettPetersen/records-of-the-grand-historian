@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "kind": "separate-transport-audited-source-owner-handoff",
+  "scope": {
+    "book": "jiutangshu",
+    "chapter": "112"
+  },
+  "ownerAgentId": "bc-1cece8a1-2eac-4165-9087-3dea34232f43",
+  "workerId": "cursor-nov24-separate-transport-owner-1",
+  "campaign": "campaign-nov24-separate-transport-audited",
+  "idempotencyKey": "56afd5735d8f903d18ac8d496e81c7ebc50b6fd3d9b2db85aecad4b6ef0cf4c2",
+  "stagingBase": "40a663728b6aeee83a9e94fbaa30ae5cf47c3e86",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-separate-transport-owner-jiutangshu-112-232f43",
+  "inputBlobWitness": {
+    "source": "44a4e70da409b3e79e3decf1b17fdf38b3af1fc0",
+    "extraction": "06b2ee6b68531ecc5e829bc26d99f07a6fc53eac",
+    "dateAudit": "12adeec3809c3a06998008917202c41826cd100b",
+    "editorial": "9c13bcb059c8d267b24685271b06c6c3d1c5000d"
+  },
+  "sealedInputs": {
+    "source": "sha256:27259c8a5ad2d2842581effaa85deefd1f0fd304f00b78f44a4ca908a5d181d4",
+    "extraction": "sha256:f2cfb22490b094e2b7d6c6c84215efd0661647314e381227f8bd969b831de31d",
+    "dateAudit": "sha256:6f8ffef6b9cbb1e59bd99c32353c66c1540503e4d6deca4f90967dd7580f2936",
+    "editorial": "sha256:93bdeb4205265d24a69c343b46e6b1237f68ceca8c0ff28f6ee50b72ee5b8aff"
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book jiutangshu --chapter 112",
+    "summary": "Scoped person data validation passed for jiutangshu/112: 1 extraction(s), 108 local people, 587 mentions, 1525 claims, 0 proposed repair(s), 24 applied repair(s), 24 editorial decision(s), 1 claim retraction(s), 5 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "englishCoverage": {
+      "sentenceCount": 237,
+      "translatedCount": 237,
+      "bothFieldsComplete": true,
+      "missingUnits": []
+    },
+    "extractionCoverage": {
+      "allUnitsVisited": true,
+      "preflightCandidatesAccountedFor": true,
+      "allNamedPeopleAndMentionsCaptured": true,
+      "allDurableFactsCaptured": true,
+      "allChronologyCaptured": true,
+      "allPersonEventsCaptured": true,
+      "allClaimProvenanceCaptured": true,
+      "allFamilyRelationshipsCaptured": true,
+      "editorialPassCompleted": true,
+      "unresolvedReferences": []
+    },
+    "extractionValidate": "data/people/extractions/jiutangshu/112.json: ok (108 people, 587 mentions, 1525 claims, 722 candidates)",
+    "chronologyStatus": "audited",
+    "dateAuditSummary": "Initial full audit reviewed all 237 Chinese source units, 528 date/hint checks, and 108 people. All current chronology containers, owners, active hints, and reception distinctions are supported.",
+    "editorialDecisionCount": 24,
+    "editorialStatus": "reviewed-with-applied-proposals",
+    "datesVerify": "audited"
+  },
+  "substantiveFindings": "Chapter source, accepted extraction, audited chronology, and applied editorial repairs align at pinned blobs. Full-sentence English coverage is complete; no new definite English omission, chronology defect, or extraction coverage gap found in source-owner pass. Identity membership for 86 prepared cases remains for independent bounded dossier review across 5 transport parts.",
+  "distinctHolds": [],
+  "definiteTranslationRepairs": [],
+  "remainingIndependentEvidence": {
+    "identityReviewCases": 86,
+    "identityTransportParts": 5,
+    "independentReviewCompleted": false,
+    "nextGate": "independent-bounded-dossier-identity-review",
+    "artifactRetention": "GitHub Actions artifact nov24-separate-transport-audited-chapter-packets",
+    "notes": "Native preliminary identity preparation passed; exact transport parts retained off-repo. Owner handoff is not independent identity approval."
+  },
+  "chapterReady": true,
+  "canonicalEdits": false,
+  "authorEvidence": {
+    "method": "Sealed four-part inputs; full-sentence English/literal+idiomatic coverage scan; npm run people:validate; people:dates:verify; validate-people-extraction; retained independent date and editorial artifacts; no canonical extraction or source edits.",
+    "sourceTitle": "Volume 108 Biographies 58: Wei Jiansu, Cui Yuan, Cui Huan, Du Hongjian",
+    "completedAt": "2026-11-24T14:53:58.204Z"
+  },
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book jiutangshu --chapter 112"
+  },
+  "notes": "[CF-Pages-Skip] Source-owner pass only; push owner-handoff without altering sealed inputs."
+}
