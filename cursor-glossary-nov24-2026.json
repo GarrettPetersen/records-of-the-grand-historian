@@ -8,14 +8,14 @@
   "dispatchState": "open-verified-included-usage",
   "usage": {
     "source": "Cursor spending dashboard",
-    "verifiedAt": "2026-11-24T04:48:47.759Z",
+    "verifiedAt": "2026-11-24T05:01:03.117Z",
     "cursorModelsUsedPercent": 40,
     "otherModelsUsedPercent": 73,
     "onDemandLimitUsd": 1,
     "onDemandLimitReached": true,
     "lastObservedOnDemandMeterUsd": 2.91,
     "recentCloudUsageClassification": "Existing Cursor Cloud costs reflected in both included model pools with the displayed on-demand meter unchanged at $2.91.",
-    "resetDisplay": "Nov 24, 13 hours and 49 minutes remaining at browser observation"
+    "resetDisplay": "Nov 24, 13 hours and 35 minutes remaining at browser observation"
   },
   "workers": {
     "running": [],
@@ -176,7 +176,7 @@
       "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/pull/5405"
     }
   ],
-  "lastCheckedAt": "2026-11-24T04:57:48.184Z",
+  "lastCheckedAt": "2026-11-24T05:01:03.117Z",
   "lookup": {
     "authenticatedManifestVerified": true,
     "access": "read-only",
@@ -9659,7 +9659,9 @@
           }
         }
       ],
-      "status": "sealed"
+      "status": "in_progress",
+      "runId": 45329901610,
+      "workflowRevision": "b6afcef2c6f3f7dffcf09a4520542b531cc45f1e"
     }
   },
   "dateReviewRuns": {
@@ -15979,7 +15981,7 @@
     "start": "2026-11-23T22:12:41.641Z"
   },
   "billingAdmissionObservation": {
-    "at": "2026-11-24T04:48:47.759Z",
+    "at": "2026-11-24T05:01:03.117Z",
     "source": "Signed-in Cursor Spending dashboard",
     "billingCycleStillActive": true,
     "onDemandCapUnchanged": true,
@@ -17201,7 +17203,7 @@
       ],
       "dispatches": {
         "jinshu/078": {
-          "status": "sent",
+          "status": "finished",
           "agentId": "bc-7f508e5e-7b4f-4508-9646-49aac6917f05",
           "previousRunId": "run-19e087c1-15c8-444f-b421-8fa9e2b992e9",
           "role": "recheck",
@@ -17211,10 +17213,18 @@
           "idempotencyKey": "6d04dfd4ab8f69446785215ebaa9ec3c5314f616694732be90b31c0a10fc303a",
           "reservedAt": "2026-11-24T04:49:09.823Z",
           "runId": "run-364e3c2f-c237-404e-84fd-ecf40b8921e3",
-          "observedAt": "2026-11-24T04:49:17.742Z"
+          "observedAt": "2026-11-24T04:49:17.742Z",
+          "providerStatus": "finished",
+          "returnedEvidence": {
+            "status": "identity-held",
+            "findingsPR": 5438,
+            "revision": "83e41d84",
+            "nativeWitnessHolds": 4,
+            "priorApprovalsPreserved": 128
+          }
         },
         "jinshu/090": {
-          "status": "sent",
+          "status": "finished",
           "agentId": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
           "previousRunId": "run-925d32d3-f320-4d06-9822-4dfa71d947ea",
           "role": "owner",
@@ -17224,10 +17234,16 @@
           "idempotencyKey": "b6a2e9a1517859249cb24a80445707b9166bbc9d0ba7567e87af0e39d7b04794",
           "reservedAt": "2026-11-24T04:49:09.823Z",
           "runId": "run-d10bb093-623f-4f94-b27a-76ea40d6c63b",
-          "observedAt": "2026-11-24T04:49:17.743Z"
+          "observedAt": "2026-11-24T04:49:17.743Z",
+          "providerStatus": "finished",
+          "returnedEvidence": {
+            "pr": 5489,
+            "revision": "5ff5c1e8d1f790777330bf88e0edec69bef1b521",
+            "fixedHints": 4
+          }
         },
         "jinshu/110": {
-          "status": "sent",
+          "status": "finished",
           "agentId": "bc-1d294055-ba1a-4edb-9343-adeb9881920a",
           "previousRunId": "run-df554a71-9867-4706-9f24-53a52d0f7a07",
           "role": "owner",
@@ -17237,10 +17253,54 @@
           "idempotencyKey": "877d96bc608e1c5d6157165b172c7f5f3a5d2ba667c546f0b99055f48e131875",
           "reservedAt": "2026-11-24T04:49:09.823Z",
           "runId": "run-bda1e3dd-ec9f-4462-baab-e63aae511119",
-          "observedAt": "2026-11-24T04:49:17.743Z"
+          "observedAt": "2026-11-24T04:49:17.743Z",
+          "providerStatus": "finished",
+          "returnedEvidence": {
+            "pr": 5462,
+            "headPrefix": "59a8688",
+            "fixedClaims": [
+              94,
+              95,
+              96
+            ],
+            "remaining181Hints": true
+          }
         }
       },
       "plannedAt": "2026-11-24T04:48:47.759Z"
+    },
+    "releaseEvidenceWave": {
+      "scopes": [
+        {
+          "key": "jinshu/028",
+          "actor": "bc-0dff1b5a-cee1-497c-a682-50af5e1e208b",
+          "role": "recheck",
+          "pr": 5477,
+          "revision": "1185595bbe0f1a6863f10010c7151c2e4ac099c2",
+          "previousRun": "run-c9a2c2a4-6fd0-4de4-be5a-6d37038dbb3d",
+          "prompt": "On exact #5477 1185595bbe0f1a6863f10010c7151c2e4ac099c2, use research/people/jinshu028-historical-grokbot-authorship-20261124.json and your already accepted 863-unit, 887-item, 403-person report. Verify the 12 historical author IDs against original #4698 and assignment, and establish source and item/person/representation parity on the exact new native packet. Publish the validated independent report on your evidence branch. No manual hash substitution, new broad review, or author edits."
+        },
+        {
+          "key": "jinshu/090",
+          "actor": "bc-3794b569-dd8b-4e85-ae88-2c86a0bef9f8",
+          "role": "recheck",
+          "pr": 5489,
+          "revision": "5ff5c1e8d1f790777330bf88e0edec69bef1b521",
+          "previousRun": "run-444b36a9-a740-42b2-81f0-fd64110e35c7",
+          "prompt": "Independently verify the four exact repairs p075/p076/p158/p176 at #5489 5ff5c1e8d1f790777330bf88e0edec69bef1b521. Reuse all unaffected receipts. Distinguish eight genealogy unknowns from concrete contradictions; preserve supported undated evidence. Host native amended audit if qualified and return exact evidence ref, otherwise aggregate precise substantive blockers. No author edits."
+        },
+        {
+          "key": "jinshu/020",
+          "actor": "bc-628852eb-7d2a-4e84-8196-b422ab4a68e8",
+          "role": "owner",
+          "pr": 5488,
+          "revision": "18c4459e770c79885ba8a02fe6d13e9197d8a96b",
+          "previousRun": "run-d10bb093-623f-4f94-b27a-76ea40d6c63b",
+          "prompt": "Continue #5488 at 18c4459e770c79885ba8a02fe6d13e9197d8a96b from your independent collaborator's 22/46 group scope. Prioritize hold-038 bulk person hints, then 039–046, per research/people/jinshu020-cloud-authoring-20261124/consolidated-chronology-next-work-20261124.json. Remove unsupported projections only and preserve every explicit source date, vetted repairs and 97 editorials. Push reviewed-scope amendments and exact validator receipt on existing draft."
+        }
+      ],
+      "dispatches": {},
+      "plannedAt": "2026-11-24T05:01:03.117Z"
     }
   },
   "processAudit": {
