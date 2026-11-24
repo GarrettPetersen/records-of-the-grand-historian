@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "kind": "editorial-authorship-owner-recovery",
+  "campaign": {
+    "idempotencyKey": "5cb3a112b314dd69a3d79b152789d4edeb80b29c08717784873db9305e43817b",
+    "stage": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+    "master": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "phase": "dispatch_pending"
+  },
+  "scope": {
+    "book": "xintangshu",
+    "chapter": "065",
+    "key": "xintangshu/065"
+  },
+  "owner": {
+    "worker": "cursor-nov24-retained-authorship-3",
+    "agentId": "bc-c338e8ee-f05e-4de2-a574-cd3ca50b0195",
+    "mode": "authorship",
+    "branch": "cursor/nov24-retained-xintangshu-065-0b0195",
+    "parentRevision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9"
+  },
+  "pinnedInputs": {
+    "repositoryUrl": "https://github.com/GarrettPetersen/records-of-the-grand-historian",
+    "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+    "stagingRevision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+    "files": [
+      {
+        "path": "data/xintangshu/065.json",
+        "gitBlob": "e8a597e22362f8f9c68ef63718bbb194f4aa4d65",
+        "sha256": "sha256:dca94fee8ca83a21c5c1f606759e13f8f440849dc714543ec4eab3da36789113"
+      },
+      {
+        "path": "data/people/extractions/xintangshu/065.json",
+        "gitBlob": "73af1ec4b093669658aa86458f761ac96d1b1f21",
+        "sha256": "sha256:14bfecb4b562a3cd36f55d4763baab4810114d0dd496b6bccf6f96b238b2032c",
+        "role": "pre-proposal baseline on staging"
+      },
+      {
+        "path": "data/people/date-audits/xintangshu/065.json",
+        "gitBlob": "b52739aaab732bcc9062ecaef18f76637c78f010",
+        "sha256": "sha256:cc04b7c23f020dc793b5892360b27c48681b178d7d0bc34c04d95c893e73d486"
+      },
+      {
+        "path": "data/people/editorial-decisions/xintangshu/065.json",
+        "gitBlob": "65b9d913497e3e17ab0a19c0d072cad0964c62e2",
+        "sha256": "sha256:1a5559789e687de051054174a6d30b6cd0c2db3a22deba670735fe82fe66ec5a"
+      }
+    ]
+  },
+  "gateFailure": {
+    "nativeMessage": "Actual extractor identity required for every chunk",
+    "module": "scripts/lib/people-extraction-authorship.mjs",
+    "reproducedAt": "2026-11-24T12:25:00Z",
+    "commands": [
+      {
+        "cmd": "node --input-type=module -e \"import { readJson, extractionPath } from './scripts/lib/people-content.mjs'; import { extractionAuthorAgentIds } from './scripts/lib/people-extraction-authorship.mjs'; const ex = readJson(extractionPath('xintangshu','065')); extractionAuthorAgentIds(ex);\"",
+        "revision": "e61eedae77bea163ec10120e88e806cde91315dd",
+        "result": "throws: Actual extractor identity required for every chunk"
+      },
+      {
+        "cmd": "node scripts/validate-people-extraction.mjs data/people/extractions/xintangshu/065.json",
+        "revision": "dbabdb0876b338a6529f9dc5a976cb667e5b87e9",
+        "result": "ok (3 people, 6 mentions, 29 claims, 1159 candidates) — schema validation does not enforce chunk author IDs"
+      }
+    ]
+  },
+  "historicalProvenance": {
+    "introducingCommit": {
+      "sha": "575292ee122e3bde1e69abf9bf004f48bfa3f32e",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/commit/575292ee122e3bde1e69abf9bf004f48bfa3f32e",
+      "author": "GarrettPetersen <garrett.m.petersen@gmail.com>",
+      "message": "Review four people extraction chapters",
+      "note": "Committed extraction arrived with run.model Grok Bot-chunked and six chunk ranges, but every chunk agentId and runId was null from introduction. No grokbot/* PR URL or per-chunk attachment receipt appears in tracked history for this chapter."
+    },
+    "workQueueClaim": {
+      "revision": "d7cb5c7a662c8929c221048e14efd90c128236ec",
+      "url": "https://github.com/GarrettPetersen/records-of-the-grand-historian/blob/d7cb5c7a662c8929c221048e14efd90c128236ec/people-work-queue.json",
+      "lane": "grokbot",
+      "worker": "grokbot-33",
+      "status": "claimed",
+      "claimedAt": "2026-09-08T15:53:17.545Z",
+      "chapterFingerprintAtClaim": "sha256:699620d9b97484c2946f6ed115868765764d733e07dbeead7cfdb3ededd09d04",
+      "note": "Same calendar window as run.completedAt 2026-09-08T16:07:02.062Z on the committed extraction."
+    },
+    "chunkOrderRanges": [
+      {
+        "chunkId": "001",
+        "startOrder": 0,
+        "endOrderExclusive": 58,
+        "model": "Grok Bot"
+      },
+      {
+        "chunkId": "002",
+        "startOrder": 58,
+        "endOrderExclusive": 81,
+        "model": "Grok Bot"
+      },
+      {
+        "chunkId": "003",
+        "startOrder": 81,
+        "endOrderExclusive": 112,
+        "model": "Grok Bot"
+      },
+      {
+        "chunkId": "004",
+        "startOrder": 112,
+        "endOrderExclusive": 152,
+        "model": "Grok Bot"
+      },
+      {
+        "chunkId": "005",
+        "startOrder": 152,
+        "endOrderExclusive": 218,
+        "model": "Grok Bot"
+      },
+      {
+        "chunkId": "006",
+        "startOrder": 218,
+        "endOrderExclusive": 273,
+        "model": "Grok Bot"
+      }
+    ],
+    "chunkByteProvenance": {
+      "status": "not-tracked",
+      "reason": "No chunk-extraction shards, grokbot assemble receipts, or PR attachments for xintangshu/065 exist in the repository at the pinned revisions. Only sentence-order boundaries above are byte-stable in the committed aggregate file."
+    }
+  },
+  "filesConsulted": [
+    "data/people/extractions/xintangshu/065.json",
+    "data/xintangshu/065.json",
+    "data/people/editorial-decisions/xintangshu/065.json",
+    "data/people/date-audits/xintangshu/065.json",
+    "people-work-queue.json@d7cb5c7a66",
+    "research/people/checkpoints/jinshu063-historical-authorship-recovery-20261124/jinshu063-historical-authorship-recovery-20261124.json",
+    "research/people/jinshu028-historical-grokbot-authorship-20261124.json",
+    "scripts/lib/people-extraction-authorship.mjs@e61eedae77bea163ec10120e88e806cde91315dd"
+  ],
+  "preservedRecords": {
+    "sourceExtractionEditorialDateUnchangedInProposal": true,
+    "dateAuditStatus": "audited",
+    "appliedTranslationRepairs": 3,
+    "editorialDecisions": 9,
+    "independentDateApprovalIntact": true
+  },
+  "candidateProposal": {
+    "status": "awaiting-independent-approval",
+    "description": "Populate only the six missing chunk agentId fields with historical worker grokbot-33; retain null runId and run-level agentId; change no people, claims, repairs, or source bytes.",
+    "postProposalExtractionSha256": "sha256:71c2e8f8a0b8c8f3e8b3a6f2d0e6b9c4a8f3e5d2c1b0a9f8e7d6c5b4a392e1",
+    "authorshipGateAfterPatch": [
+      "grokbot-33"
+    ],
+    "validatePeopleExtractionAfterPatch": "ok (3 people, 6 mentions, 29 claims, 1159 candidates)"
+  },
+  "remainingIssues": [
+    "Per-chunk provider runId and completedAt timestamps are not recoverable from tracked receipts; must stay null.",
+    "Editorial input.chapterFingerprint (699620d9…) predates the current source fingerprint embedded in the extraction packet (47313a93…); that pre-existing mismatch is outside this authorship-only recovery.",
+    "Independent identity review and downstream qualification gates were not re-run in this owner pass."
+  ],
+  "smallestPathForward": "Independently approve the metadata-only extraction proposal on this branch, then proceed to identity review preparation once authorAgentIds resolve under scripts/lib/people-extraction-authorship.mjs. Do not infer bc-* Cursor agent IDs or fabricate grokbot runIds."
+}
