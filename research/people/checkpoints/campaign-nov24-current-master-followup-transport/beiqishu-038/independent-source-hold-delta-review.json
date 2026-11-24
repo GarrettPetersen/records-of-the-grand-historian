@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "chapterKey": "beiqishu/038",
+  "reviewerAgentId": "bc-4177a3cf-7dc4-46de-b186-fe649f9004d3",
+  "ownerAgentId": "bc-8514e599-6ea4-4fff-9f69-0cc0269184d8",
+  "ownerRevision": "23c956b4e03c7f9258c74e17b14c69e8e1efd842",
+  "proposalSha256": "sha256:3f3f8adbdff99b935986fb83009dfc342dabba8fe0c94cf3f1d2a9ed585a66de",
+  "priorIndependentReview": {
+    "reportHead": "fa3e52a01dc0c865a685b0f974a4232fe4832309",
+    "alignedHold": true,
+    "note": "Independent identity hold on case sha256:75b4cc39… matches owner diagnosis: s0062 has no 母 surface for p035 primary witness."
+  },
+  "decisions": [
+    {
+      "caseId": "sha256:75b4cc39c7fd9f18a6313fc4c1f126f07b8301002f8c6eca046df0f22bf5b09f",
+      "verdict": "approve-with-locator-corrections",
+      "operationsApproved": [
+        {
+          "index": 0,
+          "vocabulary": "translation-repair",
+          "unitId": "s0062",
+          "field": "literal",
+          "approved": true,
+          "note": "Verified Chinese 以天下方亂，遂解官侍養，隱於林慮山。 omits 母/父母; before English asserts mother without source support."
+        },
+        {
+          "index": 1,
+          "vocabulary": "translation-repair",
+          "unitId": "s0062",
+          "field": "idiomatic",
+          "approved": true,
+          "note": "Same source constraint as literal repair; 侍養 rendered as home filial care without naming mother."
+        },
+        {
+          "index": 2,
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:p035",
+          "predicate": "name",
+          "approved": true,
+          "expandedClaimId": "beiqishu:038:c0115",
+          "note": "Descriptive-kinship zh:母 on s0062 cannot be primary-witnessed."
+        },
+        {
+          "index": 3,
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:p035",
+          "predicate": "surface",
+          "approved": true,
+          "note": "English kinship-reference mother on s0062 has no Chinese counterpart in sealed unit."
+        },
+        {
+          "index": 4,
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:c0235",
+          "predicate": "sex",
+          "approved": true,
+          "proposalLocatorRejected": "beiqishu:038:c0005",
+          "note": "Female sex inferred only from unsupported mother kinship; host must retract c0235 not compact c0005."
+        },
+        {
+          "index": 5,
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:c0252",
+          "predicate": "family-relationship",
+          "approved": true,
+          "proposalLocatorRejected": "beiqishu:038:c0022",
+          "note": "Child-of p002→p035 with kinshipTerm 母 on s0062 lacks Chinese kinship witness; proposal c0022 names wrong compact row (parent-of p045)."
+        },
+        {
+          "index": 6,
+          "vocabulary": "claim-retraction",
+          "target": "beiqishu:038:c0326",
+          "predicate": "attestation",
+          "approved": true,
+          "proposalLocatorRejected": "beiqishu:038:c0096",
+          "note": "解官侍養 attestation documents p002 activity, not a separate mother person; retract c0326 not c0096."
+        },
+        {
+          "index": 7,
+          "vocabulary": "remove-local-person",
+          "localPersonId": "beiqishu:038:p035",
+          "approved": true,
+          "note": "No source-supported name, mention, or kinship witness remains on s0062 after retractions."
+        },
+        {
+          "index": 8,
+          "vocabulary": "extraction-metadata",
+          "target": "beiqishu:038:p002",
+          "field": "relations",
+          "approved": true,
+          "note": "Remove p035 from p002 compact relations array."
+        },
+        {
+          "index": 9,
+          "vocabulary": "extraction-metadata",
+          "target": "beiqishu:038:p002",
+          "field": "hints.activeDates",
+          "approved": true,
+          "note": "Informational only; no p002 chronology change required on s0062 beyond removing p035-linked intervals."
+        }
+      ],
+      "operationsRejected": [],
+      "sourceEvidence": {
+        "primaryUnit": {
+          "book": "beiqishu",
+          "chapter": "038",
+          "unitId": "s0062",
+          "quote": "以天下方亂，遂解官侍養，隱於林慮山。"
+        },
+        "englishFieldsVerified": {
+          "literalBefore": "As the realm was in turmoil, he resigned office to tend his mother and hid on Mount Linlü.",
+          "idiomaticBefore": "With the realm in turmoil, he resigned to care for his mother and lived in seclusion on Mount Linlü.",
+          "motherInChinese": false,
+          "distinctMotherActorNamed": false
+        },
+        "inferenceVsContradiction": "Removing p035 is descriptive-inference correction, not a merge/split contradiction with another named mother in this chapter; no other 文遙+母 unit in beiqishu 038 individuates this actor."
+      },
+      "dependencyImpact": {
+        "chronology": "Date audit entries hints-p035, p035 person-level check, and p035 attestation ownership on s0062 become stale; host must replay date audit on new extraction hash after apply.",
+        "identity": "Case per_EV6C88SX5D9KF76QJ01G loses sole chapter local beiqishu:038:p035; transport case should be withdrawn or re-planned post-apply—not re-approved on prior fingerprint.",
+        "p002Graph": "beiqishu:038:c0252 child-of edge removed; Yuan Wenyao (p002) explicit names on s0050 and other units unchanged.",
+        "unaffected": "Other 66 identity cases, transport parts, and audited p002 intervals not tied to retracted p035 attestation."
+      },
+      "remainingHold": {
+        "requiredAfterApply": false,
+        "repairPath": "After host applies approved deltas: rerun scoped extraction validation; refresh independent identity report part 003 (remove or replace held case); replay date audit if extraction hash changes."
+      }
+    }
+  ],
+  "reviewerNote": "Independent reviewer concurs with owner source-hold diagnosis and approves all ten proposed operations with three expanded claim-id corrections required at apply time."
+}
