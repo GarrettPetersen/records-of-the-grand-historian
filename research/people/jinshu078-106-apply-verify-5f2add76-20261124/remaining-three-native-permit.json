@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "verdict": "native-extraction-permits-original-precision-source-only-with-qualitative-no-western",
+  "bonaFideSemanticContradiction": false,
+  "explanation": "Owned Chinese already is qualitative reign-beginning (咸和初) or month–day without year (八月十五日書). No chapter-internal contradiction with a source-only representation that keeps that exact wording and adds native qualitative chronology without Western inference. The tip still carries unresolved researchHolds (policy hold / missing sealed Jin→Western year pin), not a schema contradiction. sourceDate-only dateContext without qualitative/unresolved/Western fails the nested attestation gate (demonstrated on claim-632); qualitative companion is required for a no-unresolved original-precision form.",
+  "citations": {
+    "s0127": "咸和初，遷尚書左丞，深為台中之所敬憚。",
+    "s0215": "得八月十五日書，知疾患轉篤，遂不起濟，悲恨傷楚，不能自勝。",
+    "s0224": "謹遣報答，並致薄祭，望足下降神饗之。」"
+  },
+  "liveUnresolvedForms": {
+    "claim-436": [
+      "p061",
+      "office",
+      {
+        "label": {
+          "en": "assistant director of the left of the masters of writing",
+          "zh": "尚書左丞"
+        },
+        "action": "appointed",
+        "dateContext": {
+          "sourceDate": {
+            "text": "咸和初"
+          },
+          "unresolved": true,
+          "unresolvedReason": "Packet supplies no reign map for 咸和; sealed assignment cannot convert the era.",
+          "event": "Promoted early in Xianhe"
+        }
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0127"
+      ]
+    ],
+    "claim-437": [
+      "p061",
+      "attestation",
+      {
+        "sourceDate": {
+          "text": "咸和初"
+        },
+        "unresolved": true,
+        "unresolvedReason": "Packet supplies no reign map for 咸和; sealed assignment cannot convert the era.",
+        "event": "Left assistant director at start of Su Jun crisis"
+      },
+      "explicit-event-contextual-date",
+      [
+        "s0127"
+      ]
+    ],
+    "claim-632": [
+      "p089",
+      "event-participation",
+      {
+        "kind": "ritual",
+        "role": "offerer",
+        "otherPersonId": "p087",
+        "action": "sent-sacrifice",
+        "dateContext": {
+          "sourceDate": {
+            "text": "八月十五日書"
+          },
+          "unresolved": true,
+          "unresolvedReason": "Month-day of Kong Tan's letter given without a year."
+        }
+      },
+      "explicit",
+      [
+        "s0215",
+        "s0224"
+      ]
+    ]
+  },
+  "nativePermitExperiments": {
+    "claim-437_sourceDate+qualitative_noWestern_noUnresolved": "PASS validate-people-extraction",
+    "claim-436_dateContext_sourceDate+qualitative_noWestern_noUnresolved": "PASS validate-people-extraction",
+    "claim-436_drop_dateContext": "PASS (but drops original 咸和初 precision from the row)",
+    "claim-632_sourceDate_only_noUnresolved": "FAIL — dateContext attestation needs Western | qualitative | unresolved sourceDate | undated",
+    "claim-632_sourceDate+qualitative_monthDay_noWestern_noUnresolved": "PASS validate-people-extraction",
+    "all_three_together_qualitative_noWestern_noUnresolved": "PASS validate-people-extraction"
+  },
+  "minimumNativeLegalOriginalPrecision": {
+    "claim-436": {
+      "dateContext": {
+        "sourceDate": {
+          "text": "咸和初"
+        },
+        "qualitative": "early Xianhe (咸和初)"
+      },
+      "forbid": [
+        "westernYear",
+        "westernInterval",
+        "westernBounds",
+        "undatedSourceAttestation"
+      ],
+      "note": "Clears nested attestation gate without Western; preserves exact reign-beginning wording."
+    },
+    "claim-437": {
+      "sourceDate": {
+        "text": "咸和初"
+      },
+      "qualitative": "early Xianhe (咸和初)",
+      "event": "Kong Tan promoted to left assistant director of the masters of writing early in Xianhe (咸和初).",
+      "forbid": [
+        "westernYear",
+        "westernInterval",
+        "westernBounds",
+        "undatedSourceAttestation"
+      ]
+    },
+    "claim-632": {
+      "dateContext": {
+        "sourceDate": {
+          "text": "八月十五日書"
+        },
+        "qualitative": "eighth-month fifteenth-day letter (year unstated in Chinese)"
+      },
+      "forbid": [
+        "westernYear",
+        "westernInterval",
+        "westernBounds",
+        "undatedSourceAttestation that drops 八月十五日"
+      ],
+      "note": "sourceDate alone is illegal; qualitative companion required for no-unresolved form."
+    }
+  },
+  "whatStillBlocksDateAuditSeal": [
+    "Tip rows still use unresolved:true (3 remaining) — PEOPLE_DATE_AUDIT treats that as blocking date approval until resolved or replaced.",
+    "No sealed Jin→Western pin for 咸和初 and no independent year for 八月十五日書 are present; inventing AD years remains forbidden.",
+    "This verify does not apply qualitative rewrites or assembleDateReview; reports native permission only."
+  ],
+  "missingCoverageForSeal": {
+    "unresolvedPacketIds": [
+      "claim-436",
+      "claim-437",
+      "claim-632"
+    ],
+    "count": 3,
+    "note": "No full chronology replay. Extraction validate passes on tip with these three unresolved. Date-audit seal coverage for these three remains open until qualitative source-only rewrite (native-legal) or sealed conversion pin."
+  },
+  "nativeCitation": {
+    "validator": "scripts/validate-people-extraction.mjs",
+    "attestationGate": "validateAttestationClaim: Western | qualitative | (sourceDate+unresolved) | undatedSourceAttestation",
+    "dateContextNesting": "prompt v6+ applies the same attestation gate to nested dateContext/startDate/endDate (line ~768-770)",
+    "peopleDateAudit": "PEOPLE_DATE_AUDIT.md: sourceDate+unresolved preserves work but blocks date approval; never invent Western dates"
+  },
+  "reviewedAt": "2026-11-24T02:20:40.083Z",
+  "candidateTip": "5f2add762ae53a329571ad25665cc6aee4191da0"
+}

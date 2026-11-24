@@ -70,3 +70,7 @@ See `research/people/jinshu078-seven-undated-verify-54d2e91c-20261124/`.
 ## Independent 28-group / 109 decisions @ 6bb589b7
 
 See `research/people/jinshu078-unresolved-109-group-decisions-20261124/`.
+
+## Verify 106 apply @ 5f2add76
+
+See `research/people/jinshu078-106-apply-verify-5f2add76-20261124/`.
