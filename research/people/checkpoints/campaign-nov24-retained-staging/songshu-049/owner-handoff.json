@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-staging-chapter-owner-handoff",
+  "scope": {
+    "book": "songshu",
+    "chapter": "049"
+  },
+  "ownerAgentId": "bc-6a74b3d1-5ce0-4540-9745-6315dc4ff727",
+  "worker": "cursor-nov24-retained-staging-w5-o5",
+  "idempotencyKey": "f2841825a0f34f983aad3d0066ca6cba7cb5e8d60ae79063582026877c267fd2",
+  "stagingBase": "a50a027ba2793c194f1114769516b3731fcb47d9",
+  "masterRevision": "e61eedae77bea163ec10120e88e806cde91315dd",
+  "baseBranch": "codex/people-glossary-staging-v2",
+  "branch": "cursor/nov24-retained-staging-owner-songshu-049-ff727",
+  "inputBlobWitness": {
+    "source": "63b3a8ba9e967fc25f45b88d626a289f1844dfbf",
+    "extraction": "12954c946f5bbf027b0b30c3425fefabb5b47172",
+    "dateAudit": "0994d37b001c49f5963bdfd43c111689ac400c50",
+    "editorial": "10da2337ed0d9ae81e66207fa0b118f8b9f8cd05"
+  },
+  "sealedInputs": {
+    "source": "sha256:8fe1f86fa22885f2dd2494b2a0fa8ae72688ef372d174d2c624cab4ccf0241eb",
+    "extraction": "sha256:7ed49772c52f7f4b991f8b0d751db55e2ca294e442ce679e3766397d24810e93",
+    "dateAudit": "sha256:9bd0682710cd3acb4c2de6ca8600587f834b395ff6c4d40f0768a13e11f8e3dc",
+    "editorial": "sha256:12de87ad8ec435c31434334ac5c9b8d425755b0d06426f21aff21eae570a0fb4"
+  },
+  "sealedDateAuditWitness": {
+    "contentSha256": "sha256:9bd0682710cd3acb4c2de6ca8600587f834b395ff6c4d40f0768a13e11f8e3dc",
+    "recordedStatus": "research-blocked",
+    "reviewedAt": "2026-09-23T07:42:19.882Z",
+    "findings": 1,
+    "preservedOriginalReportBytes": true
+  },
+  "sourceCoverage": {
+    "sentenceCount": 177,
+    "translatedCount": 177,
+    "bothFieldsComplete": true,
+    "missingUnits": []
+  },
+  "validation": {
+    "passed": true,
+    "command": "npm run people:validate -- --book songshu --chapter 049",
+    "summary": "Scoped person data validation passed for songshu/049: 1 extraction(s), 69 local people, 407 mentions, 570 claims, 0 proposed repair(s), 12 applied repair(s), 12 editorial decision(s), 2 claim retraction(s), 2 claim revision(s), 0 claim addition(s). Legacy temporal debt: 0 person record(s) without an attestation, 0 without an active-date hint. Legacy alias-disposition debt: 0 candidate(s) in 0 chapter(s). Corpus coverage: 2050/4099 chapter(s), 2049 remaining.",
+    "datesVerify": {
+      "command": "npm run people:dates:verify -- --book songshu --chapter 049",
+      "status": "research-blocked",
+      "findings": 1,
+      "reviewedAt": "2026-09-23T07:42:19.882Z",
+      "sealedReportStatus": "research-blocked",
+      "exitCodeNonZero": true
+    },
+    "editorialDecisionCount": 12
+  },
+  "substantiveFindings": "Biographies of Sun Chu, Kuai En, Liu Zhong, and Yu Qiujin: 69 people, 570 claims, twelve applied editorial repairs with two retractions/revisions reflected in extraction. Six-item chronology hold (claim-219, claim-289, hints-p004, hints-p060, p004, p060) correctly retains source-specific contexts after removal of unsupported broad Western intervals. people:dates:verify research-blocked at pinned audit bytes. No new English omission or concrete dependency change warranting scoped repair proposals.",
+  "definiteTranslationRepairs": [],
+  "scopedChronologyOrIdentityChanges": [],
+  "distinctHolds": [
+    {
+      "id": "date-audit-finding-1",
+      "kind": "chronology-research-hold",
+      "itemIds": [
+        "claim-219",
+        "claim-289",
+        "hints-p004",
+        "hints-p060",
+        "p004",
+        "p060"
+      ],
+      "people": [
+        "p004",
+        "p060"
+      ],
+      "problem": "Curation correctly removed unsupported broad Western personal intervals and active hints, but the cited Chinese contexts remain source-specific holds rather than independently qualified replacement Western chronology.",
+      "action": "Retain these holds and obtain independently source-qualified chronology before an audited approval.",
+      "sealedDateAuditStatus": "research-blocked",
+      "preservedOriginalReportBytes": true
+    }
+  ],
+  "chapterReady": false,
+  "canonicalEdits": false,
+  "reproduce": {
+    "validateChapter": "npm run people:validate -- --book songshu --chapter 049",
+    "datesVerify": "npm run people:dates:verify -- --book songshu --chapter 049"
+  },
+  "notes": "[CF-Pages-Skip] Retained-staging chapter owner handoff only; sealed inputs unchanged."
+}
